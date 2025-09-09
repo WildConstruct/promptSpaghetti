@@ -125,7 +125,10 @@ export class Epic1ExecutionEngine {
         '[ExecutionEngine] Graph edges:',
         this.graph.edges.length,
         'edges:',
-        this.graph.edges.map(e => `${e.source} --[${e.sourceHandle || 'output'}]--> ${e.target}[${e.targetHandle || 'input'}]`)
+        this.graph.edges.map(
+          e =>
+            `${e.source} --[${e.sourceHandle || 'output'}]--> ${e.target}[${e.targetHandle || 'input'}]`
+        )
       );
 
       if (outputNodes.length === 0) {
@@ -311,12 +314,17 @@ export class Epic1ExecutionEngine {
 
     // Substitute variables
     const substituted = this.context.substituteVariables(value);
-    
+
     // If there are inputs, prepend them to the output
     if (inputs.length > 0) {
-      const inputStr = inputs.map(i => String(i || '')).filter(s => s).join(' ');
+      const inputStr = inputs
+        .map(i => String(i || ''))
+        .filter(s => s)
+        .join(' ');
       const result = inputStr ? `${inputStr} ${substituted}` : substituted;
-      debugLogExecution(`[ExecutionEngine] TextBlock with input, output: "${result}"`);
+      debugLogExecution(
+        `[ExecutionEngine] TextBlock with input, output: "${result}"`
+      );
       return result;
     }
 
@@ -342,8 +350,13 @@ export class Epic1ExecutionEngine {
     // Process inputs first - concatenate them if there are any
     let inputStr = '';
     if (inputs.length > 0) {
-      inputStr = inputs.map(i => String(i || '')).filter(s => s).join(' ');
-      debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} input string: "${inputStr}"`);
+      inputStr = inputs
+        .map(i => String(i || ''))
+        .filter(s => s)
+        .join(' ');
+      debugLogExecution(
+        `[ExecutionEngine] WeightedChoice ${nodeId} input string: "${inputStr}"`
+      );
     }
 
     if (options.length === 0) {
@@ -358,7 +371,9 @@ export class Epic1ExecutionEngine {
     if (options.length === 1) {
       selectedText = this.context.substituteVariables(options[0].text);
       selectedIndex = 0;
-      debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} single option, selected: "${selectedText}"`);
+      debugLogExecution(
+        `[ExecutionEngine] WeightedChoice ${nodeId} single option, selected: "${selectedText}"`
+      );
     } else {
       // Calculate total weight
       const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
@@ -380,7 +395,9 @@ export class Epic1ExecutionEngine {
             // Substitute variables in the selected text
             selectedText = this.context.substituteVariables(option.text);
             selectedIndex = i;
-            debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} selected option ${i}: "${selectedText}"`);
+            debugLogExecution(
+              `[ExecutionEngine] WeightedChoice ${nodeId} selected option ${i}: "${selectedText}"`
+            );
             break;
           }
         }
@@ -395,11 +412,15 @@ export class Epic1ExecutionEngine {
 
     // Store which branch was selected for potential branch routing
     // This could be used later if we implement branch-specific outputs
-    debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} selected branch index: ${selectedIndex}`);
+    debugLogExecution(
+      `[ExecutionEngine] WeightedChoice ${nodeId} selected branch index: ${selectedIndex}`
+    );
 
     // Concatenate input with selected text
     const result = inputStr ? `${inputStr} ${selectedText}` : selectedText;
-    debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} final output: "${result}"`);
+    debugLogExecution(
+      `[ExecutionEngine] WeightedChoice ${nodeId} final output: "${result}"`
+    );
     return result;
   }
 
@@ -436,7 +457,7 @@ export class Epic1ExecutionEngine {
       `[ExecutionEngine] Concat node ${node.serialize().id} result:`,
       result
     );
-    
+
     return result;
   }
 
@@ -537,7 +558,7 @@ export class Epic1ExecutionEngine {
     incomingEdges.sort((a, b) => {
       const handleA = a.targetHandle || 'target';
       const handleB = b.targetHandle || 'target';
-      
+
       // Special handling for concat node inputs
       if (handleA.startsWith('input') && handleB.startsWith('input')) {
         // Extract numbers from handles like 'input1', 'input2'
@@ -545,7 +566,7 @@ export class Epic1ExecutionEngine {
         const numB = parseInt(handleB.replace('input', '')) || 0;
         return numA - numB;
       }
-      
+
       return handleA.localeCompare(handleB);
     });
 
@@ -596,9 +617,12 @@ export class Epic1ExecutionEngine {
       neighbors.push(edge.target);
       adjacency.set(edge.source, neighbors);
     });
-    
+
     debugLogExecution('[ExecutionEngine] Graph edges:', this.graph.edges);
-    debugLogExecution('[ExecutionEngine] Adjacency list:', Array.from(adjacency.entries()));
+    debugLogExecution(
+      '[ExecutionEngine] Adjacency list:',
+      Array.from(adjacency.entries())
+    );
 
     // DFS for topological sort
     const visit = (nodeId: string) => {
@@ -614,8 +638,11 @@ export class Epic1ExecutionEngine {
       const dependencies = this.graph.edges
         .filter(edge => edge.target === nodeId)
         .map(edge => edge.source);
-      
-      debugLogExecution(`[ExecutionEngine] Node ${nodeId} has dependencies:`, dependencies);
+
+      debugLogExecution(
+        `[ExecutionEngine] Node ${nodeId} has dependencies:`,
+        dependencies
+      );
 
       for (const dep of dependencies) {
         visit(dep);
@@ -639,7 +666,10 @@ export class Epic1ExecutionEngine {
     });
 
     this.executionOrder = order;
-    debugLogExecution('[ExecutionEngine] Final execution order:', this.executionOrder);
+    debugLogExecution(
+      '[ExecutionEngine] Final execution order:',
+      this.executionOrder
+    );
   }
 
   /**

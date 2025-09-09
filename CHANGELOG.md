@@ -8,12 +8,14 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [1.0.0-demo] - 2025-01-28
 
 ### 🎬 Demo Release
+
 This is the initial demo release for investor presentations and fundraising activities.
 
 ### Added
+
 - **Core Graph Engine**: Deterministic execution with seeded randomization
 - **Visual Editor**: Drag-and-drop node-based interface using React Flow
-- **Node Types**: 
+- **Node Types**:
   - WeightedChoice - Probabilistic selection with custom weights
   - Concat - String concatenation with separators
   - Output - Graph output collection
@@ -27,6 +29,7 @@ This is the initial demo release for investor presentations and fundraising acti
 - **Auto-save**: Automatic project saving to prevent data loss
 
 ### Technical Stack
+
 - React 18 with TypeScript
 - Vite for fast development
 - Fastify backend server
@@ -35,6 +38,7 @@ This is the initial demo release for investor presentations and fundraising acti
 - Jest for testing
 
 ### Known Issues
+
 - Performance optimization needed for graphs with 250+ nodes
 - Limited to text generation (image/audio nodes planned for future)
 - Collaboration features not yet implemented
@@ -42,6 +46,7 @@ This is the initial demo release for investor presentations and fundraising acti
 ## [0.9.0-beta] - 2024-12-15
 
 ### Added
+
 - Initial Epic 1 MVP implementation
 - Basic node system architecture
 - Graph validation framework
@@ -49,10 +54,12 @@ This is the initial demo release for investor presentations and fundraising acti
 - Export/import functionality
 
 ### Changed
+
 - Migrated from class-based to functional React components
 - Improved TypeScript strict mode compliance
 
 ### Fixed
+
 - Graph cycle detection
 - Memory leaks in preview modal
 - Edge connection validation
@@ -60,6 +67,7 @@ This is the initial demo release for investor presentations and fundraising acti
 ## [0.8.0-alpha] - 2024-11-01
 
 ### Added
+
 - Project initialization
 - Basic React Flow integration
 - Initial node type definitions
@@ -70,18 +78,21 @@ This is the initial demo release for investor presentations and fundraising acti
 ## Roadmap
 
 ### [1.1.0] - Q2 2025 (Planned)
+
 - **LLM Integration**: Connect to OpenAI, Claude, and local models
 - **Advanced Nodes**: Conditional, Sequential, Markov chains
 - **Performance**: GPU acceleration for large graphs
 - **Collaboration**: Real-time multi-user editing
 
 ### [1.2.0] - Q3 2025 (Planned)
+
 - **Film Pipeline Integration**: Maya, Houdini, Nuke plugins
 - **Asset Intelligence**: Automatic metadata extraction
 - **Version Control**: Built-in graph versioning
 - **Template Marketplace**: Share and sell graph templates
 
 ### [2.0.0] - Q4 2025 (Planned)
+
 - **Multi-modal Generation**: Image and audio nodes
 - **Cloud Rendering**: Distributed graph execution
 - **Enterprise Features**: SSO, audit logs, compliance
@@ -89,4 +100,4 @@ This is the initial demo release for investor presentations and fundraising acti
 
 ---
 
-*For questions or licensing inquiries, contact Brian Behm at wildconstruct@wildconstruct.com*
+_For questions or licensing inquiries, contact Brian Behm at wildconstruct@wildconstruct.com_

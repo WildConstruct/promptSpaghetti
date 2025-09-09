@@ -80,10 +80,17 @@
 **Update**: Add 'advanced' to categoryOrder and categoryLabels
 
 ```typescript
-const categoryOrder = ['text', 'logic', 'output', 'variable', 'advanced', 'other'];
+const categoryOrder = [
+  'text',
+  'logic',
+  'output',
+  'variable',
+  'advanced',
+  'other'
+];
 const categoryLabels = {
   // existing categories...
-  advanced: 'Advanced Nodes',
+  advanced: 'Advanced Nodes'
 };
 ```
 

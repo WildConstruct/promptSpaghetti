@@ -49,7 +49,10 @@ export interface EnhancedWorkspace extends Workspace {
   collaboration_settings: {
     max_concurrent_editors: number; // Default: 10
     auto_save_interval: number; // Milliseconds, default: 5000
-    conflict_resolution: 'last_writer_wins' | 'operational_transform' | 'manual';
+    conflict_resolution:
+      | 'last_writer_wins'
+      | 'operational_transform'
+      | 'manual';
     real_time_cursors: boolean; // Show live cursors
     allow_anonymous_viewers: boolean; // Guest access
     session_timeout: number; // Minutes, default: 30
@@ -83,7 +86,7 @@ export interface EnhancedWorkspace extends Workspace {
 export enum IsolationLevel {
   STRICT = 'strict', // Complete isolation (default)
   SHARED_READ = 'shared_read', // Cross-workspace read access
-  FEDERATED = 'federated', // Cross-workspace collaboration
+  FEDERATED = 'federated' // Cross-workspace collaboration
 }
 
 export interface WorkspaceIsolation {
@@ -122,7 +125,7 @@ export const COLLABORATIVE_PERMISSIONS = {
   MERGE_APPROVE: 1 << 30, // Can approve merge requests
 
   // Meta permissions
-  ALL_COLLABORATIVE: (1 << 31) - (1 << 21), // All collaborative permissions
+  ALL_COLLABORATIVE: (1 << 31) - (1 << 21) // All collaborative permissions
 } as const;
 
 export type Permission = keyof typeof COLLABORATIVE_PERMISSIONS;
@@ -154,13 +157,14 @@ export interface CollaborativeRole extends Role {
 export const COLLABORATIVE_SYSTEM_ROLES = {
   COLLABORATIVE_ADMIN: {
     name: 'Collaborative Admin',
-    permissions: PERMISSIONS.WORKSPACE_ADMIN | COLLABORATIVE_PERMISSIONS.ALL_COLLABORATIVE,
+    permissions:
+      PERMISSIONS.WORKSPACE_ADMIN | COLLABORATIVE_PERMISSIONS.ALL_COLLABORATIVE,
     collaboration_settings: {
       max_concurrent_edits: -1, // Unlimited
       priority_level: 'critical',
       auto_save_enabled: true,
-      session_duration_minutes: 480, // 8 hours
-    },
+      session_duration_minutes: 480 // 8 hours
+    }
   },
 
   COLLABORATIVE_EDITOR: {
@@ -174,8 +178,8 @@ export const COLLABORATIVE_SYSTEM_ROLES = {
       max_concurrent_edits: 5,
       priority_level: 'normal',
       auto_save_enabled: true,
-      session_duration_minutes: 240, // 4 hours
-    },
+      session_duration_minutes: 240 // 4 hours
+    }
   },
 
   COLLABORATIVE_REVIEWER: {
@@ -189,9 +193,9 @@ export const COLLABORATIVE_SYSTEM_ROLES = {
       max_concurrent_edits: 0, // Read-only real-time access
       priority_level: 'high',
       auto_save_enabled: false,
-      session_duration_minutes: 120, // 2 hours
-    },
-  },
+      session_duration_minutes: 120 // 2 hours
+    }
+  }
 } as const;
 ```
 
@@ -736,7 +740,10 @@ CREATE INDEX IF NOT EXISTS idx_workspaces_collaboration_settings
 
 ```typescript
 export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
-  async createCollaborativeWorkspace(data: CreateCollaborativeWorkspace, userId: string): Promise<EnhancedWorkspace> {
+  async createCollaborativeWorkspace(
+    data: CreateCollaborativeWorkspace,
+    userId: string
+  ): Promise<EnhancedWorkspace> {
     const workspace = await this.createWorkspace(data, userId);
 
     // Initialize collaborative features
@@ -775,7 +782,7 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
       ...row,
       session_info: JSON.parse(row.session_info),
       editing_state: JSON.parse(row.editing_state),
-      collaboration_metadata: JSON.parse(row.collaboration_metadata),
+      collaboration_metadata: JSON.parse(row.collaboration_metadata)
     }));
   }
 
@@ -783,7 +790,12 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
     workspaceId: string,
     quotaType: keyof ResourceQuotas,
     requestedUsage: number
-  ): Promise<{ allowed: boolean; reason?: string; current: number; limit: number }> {
+  ): Promise<{
+    allowed: boolean;
+    reason?: string;
+    current: number;
+    limit: number;
+  }> {
     const quotas = await this.getResourceQuotas(workspaceId);
     const currentKey = `current_${quotaType}` as keyof ResourceQuotas;
     const maxKey = `max_${quotaType}` as keyof ResourceQuotas;
@@ -796,7 +808,7 @@ export class CollaborativeWorkspaceDAO extends WorkspaceDAO {
         allowed: false,
         reason: `Would exceed ${quotaType} quota: ${current + requestedUsage} > ${max}`,
         current,
-        limit: max,
+        limit: max
       };
     }
 

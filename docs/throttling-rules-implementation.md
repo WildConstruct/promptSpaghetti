@@ -84,12 +84,12 @@ const rule: ThrottlingRule = {
     {
       type: 'endpoint',
       operator: 'contains',
-      value: '/api',
-    },
+      value: '/api'
+    }
   ],
   baseDelay: 100,
   maxDelay: 5000,
-  adaptiveMultiplier: 1.5,
+  adaptiveMultiplier: 1.5
   // ... other configurations
 };
 ```
@@ -104,7 +104,7 @@ const middleware = new AdaptiveThrottlingMiddleware(rateLimitingService, {
   maxDelayMs: 10000,
   enableMetricsCollection: true,
   systemMetricsInterval: 30000,
-  logThrottledRequests: true,
+  logThrottledRequests: true
 });
 ```
 
@@ -159,7 +159,7 @@ const engine = new AdaptiveThrottlingRulesEngine(rateLimitingService);
 await fastify.register(
   createAdaptiveThrottlingPlugin(rateLimitingService, {
     enabled: true,
-    logThrottledRequests: true,
+    logThrottledRequests: true
   })
 );
 

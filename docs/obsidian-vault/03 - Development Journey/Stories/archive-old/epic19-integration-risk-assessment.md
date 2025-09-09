@@ -80,11 +80,13 @@ const EPIC19_PERFORMANCE_IMPACT = {
   consentCheck: 50, // +50ms per user action
   dataClassification: 25, // +25ms per data operation
   auditLogging: 15, // +15ms per logged action
-  policyEvaluation: 100, // +100ms per policy check
+  policyEvaluation: 100 // +100ms per policy check
 };
 
 // Critical path impact
-const criticalPathDelayMs = EPIC19_PERFORMANCE_IMPACT.consentCheck + EPIC19_PERFORMANCE_IMPACT.policyEvaluation; // +150ms worst case
+const criticalPathDelayMs =
+  EPIC19_PERFORMANCE_IMPACT.consentCheck +
+  EPIC19_PERFORMANCE_IMPACT.policyEvaluation; // +150ms worst case
 ```
 
 ### 2.3 Security Risk Assessment
@@ -108,7 +110,7 @@ const SECURITY_CONCERNS = [
   'DataClassificationService.ts', // Data handling accuracy
   'PolicyAuthoringService.ts', // Policy enforcement correctness
   'AuditEvidenceMapper.ts', // Evidence chain integrity
-  'RetentionEnforcementService.ts', // Data deletion completeness
+  'RetentionEnforcementService.ts' // Data deletion completeness
 ];
 ```
 
@@ -211,7 +213,7 @@ const rollbackSequence = [
   'PRIVACY_AUDIT_LOGGING', // Medium impact
   'PRIVACY_DATA_GOVERNANCE', // Higher impact
   'PRIVACY_POLICY_MANAGEMENT', // High impact
-  'PRIVACY_CONSENT_BANNER', // Highest visibility
+  'PRIVACY_CONSENT_BANNER' // Highest visibility
 ];
 
 for (const feature of rollbackSequence) {
@@ -338,7 +340,7 @@ UPDATES: Every 10 minutes via status page
      promptGenerationTimeMs: 1500, // Alert if >1.5s
      uiResponseTimeMs: 200, // Alert if >200ms
      errorRatePercent: 2, // Alert if >2% errors
-     memoryUsageMB: 512, // Alert if >512MB
+     memoryUsageMB: 512 // Alert if >512MB
    };
    ```
 
@@ -425,7 +427,7 @@ UPDATES: Every 10 minutes via status page
      'policy_rule_precompilation', // Pre-compile policy rules
      'audit_log_batching', // Batch audit log writes
      'data_classification_memoization', // Memoize classification results
-     'privacy_feature_lazy_loading', // Load privacy UI on-demand
+     'privacy_feature_lazy_loading' // Load privacy UI on-demand
    ];
    ```
 
@@ -436,7 +438,7 @@ UPDATES: Every 10 minutes via status page
      INTERNAL: { percentage: 0, users: ['internal_team'] },
      BETA: { percentage: 5, users: ['beta_testers'] },
      ENTERPRISE: { percentage: 25, users: ['enterprise_customers'] },
-     GENERAL: { percentage: 100, users: ['all_users'] },
+     GENERAL: { percentage: 100, users: ['all_users'] }
    };
    ```
 

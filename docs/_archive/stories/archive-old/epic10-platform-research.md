@@ -245,7 +245,10 @@ abstract class PlatformAdaptor {
   abstract version: string;
   abstract capabilities(): PlatformCapabilities;
   abstract validate(graph: PromptGraph): ValidationResult[];
-  abstract transform(graph: PromptGraph, config?: AdaptorConfig): Promise<PlatformPrompt>;
+  abstract transform(
+    graph: PromptGraph,
+    config?: AdaptorConfig
+  ): Promise<PlatformPrompt>;
 }
 
 interface PlatformCapabilities {

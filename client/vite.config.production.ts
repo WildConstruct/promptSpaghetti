@@ -15,35 +15,39 @@ export default defineConfig({
       globals: {
         Buffer: true,
         global: true,
-        process: true,
-      },
-    }),
+        process: true
+      }
+    })
   ],
   build: {
     outDir: 'dist',
     sourcemap: true,
     commonjsOptions: {
-      include: [/zod/, /node_modules/],
+      include: [/zod/, /node_modules/]
     },
     rollupOptions: {
-      external: ['uuid', '@juliuste/react-vimeo', 'vite-plugin-node-polyfills/shims/process'],
+      external: [
+        'uuid',
+        '@juliuste/react-vimeo',
+        'vite-plugin-node-polyfills/shims/process'
+      ],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           flow: ['reactflow'],
-          utils: ['zod', 'zustand'],
-        },
-      },
-    },
+          utils: ['zod', 'zustand']
+        }
+      }
+    }
   },
   server: {
     port: 3000,
-    strictPort: true,
+    strictPort: true
   },
   resolve: {
     // No alias needed in production - core files are local
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand'],
-  },
+    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand']
+  }
 });

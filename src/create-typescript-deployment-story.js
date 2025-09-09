@@ -45,7 +45,13 @@ const typeScriptDeploymentStory = {
   wipClass: 'infrastructure',
   epic: 'TypeScript Infrastructure & Deployment',
   story: 'TYPESCRIPT-DEPLOYMENT-BLOCKERS',
-  tags: ['typescript', 'deployment', 'infrastructure', 'compilation', 'system-critical'],
+  tags: [
+    'typescript',
+    'deployment',
+    'infrastructure',
+    'compilation',
+    'system-critical'
+  ],
 
   acceptanceCriteria: [
     'All 200+ TypeScript compilation errors resolved across the codebase',
@@ -59,7 +65,7 @@ const typeScriptDeploymentStory = {
     'Module export conflicts resolved across all packages',
     'End-to-end compilation and deployment pipeline runs successfully',
     'No cascading type errors in dependent modules',
-    'Type safety maintained while resolving compilation issues',
+    'Type safety maintained while resolving compilation issues'
   ],
 
   businessValue:
@@ -79,8 +85,8 @@ const typeScriptDeploymentStory = {
         'Errors categorized by type: missing interfaces, export conflicts, type mismatches',
         'Dependency chains mapped to identify cascade resolution opportunities',
         'Resolution priority matrix created based on blocking impact',
-        'Strategic resolution plan with optimal task sequencing documented',
-      ],
+        'Strategic resolution plan with optimal task sequencing documented'
+      ]
     },
     {
       title: 'Implement Core Type Infrastructure Foundation',
@@ -95,8 +101,8 @@ const typeScriptDeploymentStory = {
         'Role and Permission type definitions implemented',
         'SecurityEventContext interface with all required properties (strictMode, error)',
         'Core type package structure established for reusability',
-        'All dependent modules can import core types without errors',
-      ],
+        'All dependent modules can import core types without errors'
+      ]
     },
     {
       title: 'Install Missing TypeScript Declaration Packages',
@@ -110,8 +116,8 @@ const typeScriptDeploymentStory = {
         '@types/fido2-lib package installed and configured',
         'All missing @types packages identified and installed',
         'TypeScript module resolution working for all external packages',
-        'No more "Cannot find module" errors for typed packages',
-      ],
+        'No more "Cannot find module" errors for typed packages'
+      ]
     },
     {
       title: 'Resolve Authentication System Type Integration',
@@ -126,8 +132,8 @@ const typeScriptDeploymentStory = {
         'Authentication middleware type safety implemented',
         'User session and JWT types properly integrated',
         'Authentication system compiles without type errors',
-        'Authentication routes fully typed and deployable',
-      ],
+        'Authentication routes fully typed and deployable'
+      ]
     },
     {
       title: 'Fix Template Parser and Expression System Types',
@@ -141,8 +147,8 @@ const typeScriptDeploymentStory = {
         'Expression evaluation system properly typed',
         'ExecutionPath vs ExecutionInput interface conflicts resolved',
         'Template variable resolution type safety implemented',
-        'Core engine compilation successful without template-related errors',
-      ],
+        'Core engine compilation successful without template-related errors'
+      ]
     },
     {
       title: 'Resolve VFX Export and Rendering Type Definitions',
@@ -155,8 +161,8 @@ const typeScriptDeploymentStory = {
         'VFXRenderingData interface properly defined with all required properties',
         'VFX export types resolved across all related modules',
         'Rendering pipeline types properly integrated',
-        'Advanced feature modules compile without VFX-related type errors',
-      ],
+        'Advanced feature modules compile without VFX-related type errors'
+      ]
     },
     {
       title: 'Resolve Module Export Conflicts and Dependencies',
@@ -170,8 +176,8 @@ const typeScriptDeploymentStory = {
         'Database model export issues fixed',
         'Circular dependency conflicts eliminated',
         'All module imports/exports properly typed and functional',
-        'No remaining export-related compilation errors',
-      ],
+        'No remaining export-related compilation errors'
+      ]
     },
     {
       title: 'Validate End-to-End Compilation and Deployment',
@@ -186,10 +192,10 @@ const typeScriptDeploymentStory = {
         'Authentication system successfully deploys and functions',
         'All advanced features compile and are deployment-ready',
         'Type safety maintained throughout resolution process',
-        'Deployment pipeline runs successfully end-to-end',
-      ],
-    },
-  ],
+        'Deployment pipeline runs successfully end-to-end'
+      ]
+    }
+  ]
 };
 
 // Utility functions
@@ -212,8 +218,8 @@ async function loadCurrentState() {
       stories: {},
       metadata: {
         created: new Date().toISOString(),
-        lastUpdated: new Date().toISOString(),
-      },
+        lastUpdated: new Date().toISOString()
+      }
     };
   }
 }
@@ -254,8 +260,8 @@ function createStoryObject(storyDef, storyId) {
       priority_level: 0, // Critical priority
       business_impact: 'critical',
       deployment_blocker: true,
-      epic_category: 'TypeScript Infrastructure',
-    },
+      epic_category: 'TypeScript Infrastructure'
+    }
   };
 }
 
@@ -278,7 +284,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
       tags: taskDef.tags,
       acceptanceCriteria: taskDef.acceptance,
       dependencies: index > 0 ? [createdTasks[index - 1].id] : [],
-      businessValue: 'Unblocks critical system deployment and maintains type safety',
+      businessValue:
+        'Unblocks critical system deployment and maintains type safety',
       assignee: 'Unassigned',
       created: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
@@ -289,8 +296,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
         priority_level: taskDef.priority === 'critical' ? 0 : 1,
         parent_story: storyId,
         sequence_order: index + 1,
-        compilation_blocker: true,
-      },
+        compilation_blocker: true
+      }
     };
 
     state.tasks[taskId] = task;
@@ -303,9 +310,13 @@ function createImplementationTasks(storyId, implementationTasks, state) {
 async function createTypeScriptDeploymentStory() {
   console.log('🚨 Creating Critical TypeScript Deployment Blockers Story...\n');
   console.log('📋 This addresses the system-wide compilation failures:');
-  console.log('   ISSUE: 200+ TypeScript compilation errors preventing deployment');
+  console.log(
+    '   ISSUE: 200+ TypeScript compilation errors preventing deployment'
+  );
   console.log('   IMPACT: Authentication system (100% complete) cannot deploy');
-  console.log('   SOLUTION: Systematic resolution of type infrastructure gaps\n');
+  console.log(
+    '   SOLUTION: Systematic resolution of type infrastructure gaps\n'
+  );
 
   try {
     // Load current state
@@ -323,7 +334,9 @@ async function createTypeScriptDeploymentStory() {
 
     // Check if story already exists
     if (storyExists(state, typeScriptDeploymentStory.title)) {
-      console.log('⏭️  Story already exists - updating with latest requirements...');
+      console.log(
+        '⏭️  Story already exists - updating with latest requirements...'
+      );
     }
 
     const storyId = generateTaskId('STORY-TYPESCRIPT');
@@ -333,7 +346,9 @@ async function createTypeScriptDeploymentStory() {
     storiesCreated++;
 
     // Create implementation tasks
-    console.log('📝 Creating Implementation Tasks with Strategic Sequencing...\n');
+    console.log(
+      '📝 Creating Implementation Tasks with Strategic Sequencing...\n'
+    );
 
     const implementationTasks = createImplementationTasks(
       storyId,
@@ -356,14 +371,18 @@ async function createTypeScriptDeploymentStory() {
     await saveState(state);
 
     console.log(`✅ Created Story: ${story.title}`);
-    console.log(`   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`);
+    console.log(
+      `   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`
+    );
     console.log(`   🎯 Business Value: ${story.businessValue}`);
     console.log('');
 
     // Show created implementation tasks
     implementationTasks.forEach((task, index) => {
       console.log(`✅ Created Task ${index + 1}: ${task.title}`);
-      console.log(`   ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`);
+      console.log(
+        `   ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`
+      );
       if (task.dependencies.length > 0) {
         console.log(`   🔗 Depends on: ${task.dependencies.join(', ')}`);
       }
@@ -375,22 +394,40 @@ async function createTypeScriptDeploymentStory() {
     console.log('='.repeat(70));
     console.log(`✅ Stories Created: ${storiesCreated}`);
     console.log(`✅ Implementation Tasks Created: ${tasksCreated}`);
-    console.log(`📋 Total Stories in System: ${Object.keys(state.stories).length}`);
-    console.log(`📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`);
+    console.log(
+      `📋 Total Stories in System: ${Object.keys(state.stories).length}`
+    );
+    console.log(
+      `📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`
+    );
 
     // Show business impact
     console.log('💰 BUSINESS IMPACT:\n');
     console.log('🚨 CRITICAL PROBLEMS SOLVED:');
-    console.log('   • Unblocks deployment of 100% functionally complete authentication system');
-    console.log('   • Enables demo-ready proof of concept for $2.3B Epic 8 opportunity');
-    console.log('   • Resolves system-wide compilation failures blocking all development');
-    console.log('   • Restores development velocity with type-safe infrastructure\n');
+    console.log(
+      '   • Unblocks deployment of 100% functionally complete authentication system'
+    );
+    console.log(
+      '   • Enables demo-ready proof of concept for $2.3B Epic 8 opportunity'
+    );
+    console.log(
+      '   • Resolves system-wide compilation failures blocking all development'
+    );
+    console.log(
+      '   • Restores development velocity with type-safe infrastructure\n'
+    );
 
     console.log('📈 EXPECTED OUTCOMES:');
-    console.log('   • Zero TypeScript compilation errors across entire codebase');
-    console.log('   • Successful deployment of authentication system and advanced features');
+    console.log(
+      '   • Zero TypeScript compilation errors across entire codebase'
+    );
+    console.log(
+      '   • Successful deployment of authentication system and advanced features'
+    );
     console.log('   • Type-safe development environment for all future work');
-    console.log('   • Unblocked development pipeline and deployment automation\n');
+    console.log(
+      '   • Unblocked development pipeline and deployment automation\n'
+    );
 
     // Show implementation sequence
     console.log('🔄 STRATEGIC IMPLEMENTATION SEQUENCE:\n');
@@ -398,51 +435,97 @@ async function createTypeScriptDeploymentStory() {
       console.log(`${index + 1}. ${task.title} (${task.estimate})`);
       console.log(`   🎯 Key Goal: ${task.acceptanceCriteria[0]}`);
       if (index === 0)
-        console.log('   📋 Foundation: Creates resolution strategy and identifies cascade opportunities');
-      if (index === 1) console.log('   🏗️  Infrastructure: Builds core type foundation preventing cascading errors');
-      if (index === 7) console.log('   ✅ Validation: Ensures complete resolution and deployment success');
+        console.log(
+          '   📋 Foundation: Creates resolution strategy and identifies cascade opportunities'
+        );
+      if (index === 1)
+        console.log(
+          '   🏗️  Infrastructure: Builds core type foundation preventing cascading errors'
+        );
+      if (index === 7)
+        console.log(
+          '   ✅ Validation: Ensures complete resolution and deployment success'
+        );
     });
     console.log('');
 
     // Technical guidance
     console.log('🔧 TECHNICAL RESOLUTION STRATEGY:\n');
     console.log('📊 Error Categories Identified:');
-    console.log('   1. Missing Core Interfaces (PaginatedResult<T>, Role/Permission types)');
-    console.log('   2. Package Declaration Gaps (@types/webauthn, @types/fido2-lib)');
-    console.log('   3. Authentication Integration Types (request.user, fastify.database)');
-    console.log('   4. Template Parser Scoping Issues (variable resolution, expressions)');
-    console.log('   5. VFX Export Type Definitions (VFXRenderingData interface)');
-    console.log('   6. Module Export Conflicts (LLM Randomizer, database models)\n');
+    console.log(
+      '   1. Missing Core Interfaces (PaginatedResult<T>, Role/Permission types)'
+    );
+    console.log(
+      '   2. Package Declaration Gaps (@types/webauthn, @types/fido2-lib)'
+    );
+    console.log(
+      '   3. Authentication Integration Types (request.user, fastify.database)'
+    );
+    console.log(
+      '   4. Template Parser Scoping Issues (variable resolution, expressions)'
+    );
+    console.log(
+      '   5. VFX Export Type Definitions (VFXRenderingData interface)'
+    );
+    console.log(
+      '   6. Module Export Conflicts (LLM Randomizer, database models)\n'
+    );
 
     console.log('⚡ CASCADE RESOLUTION APPROACH:');
-    console.log('   • Start with core type infrastructure to prevent downstream failures');
-    console.log('   • Install missing packages before attempting type integrations');
-    console.log('   • Resolve authentication types as highest business priority');
+    console.log(
+      '   • Start with core type infrastructure to prevent downstream failures'
+    );
+    console.log(
+      '   • Install missing packages before attempting type integrations'
+    );
+    console.log(
+      '   • Resolve authentication types as highest business priority'
+    );
     console.log('   • Fix template and VFX types for advanced feature support');
-    console.log('   • Eliminate module conflicts to prevent circular dependencies');
-    console.log('   • Validate comprehensive resolution with end-to-end testing\n');
+    console.log(
+      '   • Eliminate module conflicts to prevent circular dependencies'
+    );
+    console.log(
+      '   • Validate comprehensive resolution with end-to-end testing\n'
+    );
 
     // Agent instructions
     console.log('🤖 NEXT STEPS FOR AGENTS:\n');
-    console.log('1. 🔧 Development Agents should grab these tasks with dependencies in mind:');
+    console.log(
+      '1. 🔧 Development Agents should grab these tasks with dependencies in mind:'
+    );
     console.log(`   node src/grab-tasks.js <agent-id> 3 --story=${storyId}`);
-    console.log('2. 📊 Start with audit task to create strategic resolution plan');
+    console.log(
+      '2. 📊 Start with audit task to create strategic resolution plan'
+    );
     console.log('3. 🏗️  Implement core type infrastructure as foundation');
-    console.log('4. 📦 Install missing @types packages before integration work');
+    console.log(
+      '4. 📦 Install missing @types packages before integration work'
+    );
     console.log('5. 🔐 Fix authentication system types as business priority');
-    console.log('6. ✅ Validate complete resolution with end-to-end compilation testing\n');
+    console.log(
+      '6. ✅ Validate complete resolution with end-to-end compilation testing\n'
+    );
 
-    console.log('🚨 CRITICAL: This resolves deployment blockers for entire system!');
-    console.log('⏰ Timeline: 16 hours total - should be completed within 2 business days');
-    console.log('💡 Success Metric: Zero TypeScript errors + successful authentication deployment');
-    console.log('🎯 Business Goal: Demo-ready proof of concept for $2.3B Epic 8 opportunity');
+    console.log(
+      '🚨 CRITICAL: This resolves deployment blockers for entire system!'
+    );
+    console.log(
+      '⏰ Timeline: 16 hours total - should be completed within 2 business days'
+    );
+    console.log(
+      '💡 Success Metric: Zero TypeScript errors + successful authentication deployment'
+    );
+    console.log(
+      '🎯 Business Goal: Demo-ready proof of concept for $2.3B Epic 8 opportunity'
+    );
 
     return {
       story: story,
       tasks: implementationTasks,
       created: storiesCreated,
       tasksCreated: tasksCreated,
-      total: Object.keys(state.tasks).length,
+      total: Object.keys(state.tasks).length
     };
   } catch (error) {
     console.error('❌ Failed to create TypeScript deployment story:', error);
@@ -460,5 +543,5 @@ if (require.main === module) {
 
 module.exports = {
   createTypeScriptDeploymentStory,
-  typeScriptDeploymentStory,
+  typeScriptDeploymentStory
 };

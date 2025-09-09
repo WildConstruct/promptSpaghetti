@@ -75,9 +75,9 @@ export class PerformanceTestSuite {
         minThroughput: 10,
         maxErrorRate: 0.05,
         maxMemoryUsage: 512,
-        maxCpuUsage: 80,
+        maxCpuUsage: 80
       },
-      ...config,
+      ...config
     };
 
     this.outputDir = this.config.outputDir!;
@@ -105,7 +105,7 @@ export class PerformanceTestSuite {
       passed: true,
       results: {},
       thresholdViolations: [],
-      recommendations: [],
+      recommendations: []
     };
 
     try {
@@ -118,7 +118,8 @@ export class PerformanceTestSuite {
       // 2. Execute Infrastructure Performance Scenarios
       if (this.config.includeScenarios) {
         console.log('🏗️ Executing Infrastructure Performance Scenarios...');
-        result.results.infrastructureScenarios = await this.executeInfrastructureScenarios();
+        result.results.infrastructureScenarios =
+          await this.executeInfrastructureScenarios();
       }
 
       // 3. Execute User Workflow Performance Testing
@@ -171,7 +172,7 @@ export class PerformanceTestSuite {
       return {
         baseline: baselineResult,
         stress: stressResult,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       console.error('❌ Load tests failed:', error);
@@ -191,7 +192,7 @@ export class PerformanceTestSuite {
         'graph-execution-small',
         'graph-execution-large',
         'api-performance-baseline',
-        'memory-usage-monitoring',
+        'memory-usage-monitoring'
       ];
 
       const results = [];
@@ -211,9 +212,9 @@ export class PerformanceTestSuite {
         summary: {
           total: scenarios.length,
           passed: results.filter(r => r.success).length,
-          failed: results.filter(r => !r.success).length,
+          failed: results.filter(r => !r.success).length
         },
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       console.error('❌ Infrastructure scenarios failed:', error);
@@ -232,7 +233,7 @@ export class PerformanceTestSuite {
       const workflows = [
         UserPerformanceScenarios.getGraphExecutionPerformanceScenario(),
         UserPerformanceScenarios.getUIResponsivenessScenario(),
-        UserPerformanceScenarios.getMemoryPerformanceScenario(),
+        UserPerformanceScenarios.getMemoryPerformanceScenario()
       ];
 
       const results = [];
@@ -243,7 +244,11 @@ export class PerformanceTestSuite {
           results.push({ workflow: workflow.name, success: true, result });
         } catch (error) {
           console.warn(`  ⚠️ Workflow ${workflow.name} failed:`, error.message);
-          results.push({ workflow: workflow.name, success: false, error: error.message });
+          results.push({
+            workflow: workflow.name,
+            success: false,
+            error: error.message
+          });
         }
       }
 
@@ -252,9 +257,9 @@ export class PerformanceTestSuite {
         summary: {
           total: workflows.length,
           passed: results.filter(r => r.success).length,
-          failed: results.filter(r => !r.success).length,
+          failed: results.filter(r => !r.success).length
         },
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       console.error('❌ User workflows failed:', error);
@@ -277,12 +282,12 @@ export class PerformanceTestSuite {
         '--output',
         this.outputDir,
         '--format',
-        'json',
+        'json'
       ];
 
       const process = spawn('node', [runnerPath, ...args], {
         stdio: ['pipe', 'pipe', 'pipe'],
-        cwd: process.cwd(),
+        cwd: process.cwd()
       });
 
       this.runningProcesses.push(process);
@@ -303,20 +308,24 @@ export class PerformanceTestSuite {
       });
 
       process.on('close', code => {
-        this.runningProcesses = this.runningProcesses.filter(p => p !== process);
+        this.runningProcesses = this.runningProcesses.filter(
+          p => p !== process
+        );
 
         if (code === 0) {
           try {
             // Try to parse JSON results
             const results = stdout.includes('{')
-              ? JSON.parse(stdout.split('\n').find(line => line.includes('{')) || '{}')
+              ? JSON.parse(
+                  stdout.split('\n').find(line => line.includes('{')) || '{}'
+                )
               : {};
             resolve({
               success: true,
               exitCode: code,
               results,
               stdout: stdout.trim(),
-              stderr: stderr.trim(),
+              stderr: stderr.trim()
             });
           } catch (parseError) {
             resolve({
@@ -325,16 +334,22 @@ export class PerformanceTestSuite {
               results: {},
               stdout: stdout.trim(),
               stderr: stderr.trim(),
-              parseError: parseError.message,
+              parseError: parseError.message
             });
           }
         } else {
-          reject(new Error(`Performance runner failed with exit code ${code}\nStderr: ${stderr}`));
+          reject(
+            new Error(
+              `Performance runner failed with exit code ${code}\nStderr: ${stderr}`
+            )
+          );
         }
       });
 
       process.on('error', error => {
-        this.runningProcesses = this.runningProcesses.filter(p => p !== process);
+        this.runningProcesses = this.runningProcesses.filter(
+          p => p !== process
+        );
         reject(error);
       });
     });
@@ -345,7 +360,12 @@ export class PerformanceTestSuite {
    */
   private async runLoadTestScenario(scenarioName: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      const scenarioRunnerPath = path.join(process.cwd(), 'load-tests', 'scenarios', 'run-load-scenarios.js');
+      const scenarioRunnerPath = path.join(
+        process.cwd(),
+        'load-tests',
+        'scenarios',
+        'run-load-scenarios.js'
+      );
 
       const args = [
         '--scenario',
@@ -353,11 +373,11 @@ export class PerformanceTestSuite {
         '--base-url',
         this.config.baseUrl!,
         '--output',
-        path.join(this.outputDir, 'load-tests'),
+        path.join(this.outputDir, 'load-tests')
       ];
 
       const process = spawn('node', [scenarioRunnerPath, ...args], {
-        stdio: ['pipe', 'pipe', 'pipe'],
+        stdio: ['pipe', 'pipe', 'pipe']
       });
 
       this.runningProcesses.push(process);
@@ -374,23 +394,27 @@ export class PerformanceTestSuite {
       });
 
       process.on('close', code => {
-        this.runningProcesses = this.runningProcesses.filter(p => p !== process);
+        this.runningProcesses = this.runningProcesses.filter(
+          p => p !== process
+        );
 
         resolve({
           scenario: scenarioName,
           success: code === 0,
           exitCode: code,
           stdout: stdout.trim(),
-          stderr: stderr.trim(),
+          stderr: stderr.trim()
         });
       });
 
       process.on('error', error => {
-        this.runningProcesses = this.runningProcesses.filter(p => p !== process);
+        this.runningProcesses = this.runningProcesses.filter(
+          p => p !== process
+        );
         resolve({
           scenario: scenarioName,
           success: false,
-          error: error.message,
+          error: error.message
         });
       });
     });
@@ -435,7 +459,10 @@ export class PerformanceTestSuite {
         '- Reviewing algorithmic complexity'
       );
     } else {
-      result.recommendations.push('Performance tests passed!', 'System is performing within acceptable thresholds.');
+      result.recommendations.push(
+        'Performance tests passed!',
+        'System is performing within acceptable thresholds.'
+      );
     }
   }
 
@@ -446,15 +473,24 @@ export class PerformanceTestSuite {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 
     // Generate JSON report
-    const jsonReport = path.join(this.outputDir, `performance-suite-${timestamp}.json`);
+    const jsonReport = path.join(
+      this.outputDir,
+      `performance-suite-${timestamp}.json`
+    );
     await fs.writeFile(jsonReport, JSON.stringify(result, null, 2));
 
     // Generate HTML report
-    const htmlReport = path.join(this.outputDir, `performance-suite-${timestamp}.html`);
+    const htmlReport = path.join(
+      this.outputDir,
+      `performance-suite-${timestamp}.html`
+    );
     await fs.writeFile(htmlReport, this.generateHTMLReport(result));
 
     // Generate text summary
-    const textReport = path.join(this.outputDir, `performance-suite-summary-${timestamp}.txt`);
+    const textReport = path.join(
+      this.outputDir,
+      `performance-suite-summary-${timestamp}.txt`
+    );
     await fs.writeFile(textReport, this.generateTextSummary(result));
 
     console.log('📄 Reports generated:');
@@ -548,8 +584,12 @@ export class PerformanceTestSuite {
   private async setupOutputDirectory(): Promise<void> {
     try {
       await fs.mkdir(this.outputDir, { recursive: true });
-      await fs.mkdir(path.join(this.outputDir, 'load-tests'), { recursive: true });
-      await fs.mkdir(path.join(this.outputDir, 'scenarios'), { recursive: true });
+      await fs.mkdir(path.join(this.outputDir, 'load-tests'), {
+        recursive: true
+      });
+      await fs.mkdir(path.join(this.outputDir, 'scenarios'), {
+        recursive: true
+      });
     } catch (error) {
       console.warn('Warning: Failed to create output directories:', error);
     }
@@ -566,7 +606,9 @@ export class PerformanceTestSuite {
     console.log(`Duration: ${Math.ceil(result.duration / 1000)}s`);
 
     if (result.thresholdViolations.length > 0) {
-      console.log(`\n⚠️ Threshold Violations (${result.thresholdViolations.length}):`);
+      console.log(
+        `\n⚠️ Threshold Violations (${result.thresholdViolations.length}):`
+      );
       result.thresholdViolations.forEach(violation => {
         console.log(`  - ${violation}`);
       });
@@ -579,9 +621,12 @@ export class PerformanceTestSuite {
 
     console.log('\n📊 Test Components:');
     if (result.results.loadTests) console.log('  ✓ Load Testing Scenarios');
-    if (result.results.infrastructureScenarios) console.log('  ✓ Infrastructure Performance Scenarios');
-    if (result.results.userWorkflows) console.log('  ✓ User Workflow Performance Testing');
-    if (result.results.orchestration) console.log('  ✓ Main Performance Test Runner');
+    if (result.results.infrastructureScenarios)
+      console.log('  ✓ Infrastructure Performance Scenarios');
+    if (result.results.userWorkflows)
+      console.log('  ✓ User Workflow Performance Testing');
+    if (result.results.orchestration)
+      console.log('  ✓ Main Performance Test Runner');
 
     console.log('\n' + '='.repeat(80));
   }
@@ -606,7 +651,7 @@ if (require.main === module) {
     baseUrl: process.env.API_BASE_URL || 'http://localhost:8000',
     concurrency: parseInt(process.env.PERF_CONCURRENCY || '10'),
     duration: parseInt(process.env.PERF_DURATION || '60000'),
-    outputDir: process.env.PERF_OUTPUT_DIR || './performance-test-results',
+    outputDir: process.env.PERF_OUTPUT_DIR || './performance-test-results'
   };
 
   const suite = new PerformanceTestSuite(config);

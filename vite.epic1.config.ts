@@ -7,17 +7,17 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './client/src'),
-      '@core': path.resolve(__dirname, './packages/core'),
-    },
+      '@core': path.resolve(__dirname, './packages/core')
+    }
   },
-  
+
   build: {
     outDir: 'dist-epic1',
-    
+
     rollupOptions: {
       // Exclude deprecated components from bundle
       external: [
@@ -32,40 +32,40 @@ export default defineConfig({
         /.*\/payment\/.*/,
         /.*\/revenue\/.*/,
         /.*\/moderation\/.*/,
-        /.*\/deprecated\/.*/,
+        /.*\/deprecated\/.*/
       ],
-      
+
       input: {
-        main: path.resolve(__dirname, 'client/index.html'),
+        main: path.resolve(__dirname, 'client/index.html')
       },
-      
+
       output: {
         // Smaller chunks for faster loading
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-flow-renderer'],
           'core-engine': ['@core/runtime'],
-          'ui-components': ['@core/GraphEditor', '@core/PreviewModal'],
-        },
-      },
+          'ui-components': ['@core/GraphEditor', '@core/PreviewModal']
+        }
+      }
     },
-    
+
     // Aggressive tree-shaking
     treeshake: {
       preset: 'recommended',
-      moduleSideEffects: false,
+      moduleSideEffects: false
     },
-    
+
     // Optimize for production
     minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info'],
-      },
-    },
+        pure_funcs: ['console.log', 'console.info']
+      }
+    }
   },
-  
+
   // Optimize dependencies
   optimizeDeps: {
     include: [
@@ -74,18 +74,18 @@ export default defineConfig({
       'react-flow-renderer',
       'zustand',
       'zod',
-      'seedrandom',
+      'seedrandom'
     ],
     exclude: [
       // Exclude all non-MVP packages
       '@sentry/react',
       'firebase',
       '@stripe/stripe-js',
-      'analytics',
-    ],
+      'analytics'
+    ]
   },
-  
+
   server: {
-    port: 3000,
-  },
+    port: 3000
+  }
 });

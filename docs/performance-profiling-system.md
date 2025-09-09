@@ -116,8 +116,8 @@ const profiler = new PerformanceProfiler({
     cpuUsage: 80,
     memoryUsage: 85,
     responseTime: 2000,
-    errorRate: 5,
-  },
+    errorRate: 5
+  }
 });
 
 // Start profiling
@@ -140,7 +140,7 @@ await fastify.register(
     enabled: true,
     autoStartProfiling: true,
     trackAllRequests: true,
-    excludeRoutes: ['/health', '/favicon.ico'],
+    excludeRoutes: ['/health', '/favicon.ico']
   })
 );
 
@@ -155,14 +155,18 @@ fastify.get('/custom-route', async (request, reply) => {
 ### React Component Profiling
 
 ```tsx
-import { usePerformanceProfiler, withPerformanceTracking } from '../hooks/usePerformanceProfiler';
+import {
+  usePerformanceProfiler,
+  withPerformanceTracking
+} from '../hooks/usePerformanceProfiler';
 
 function MyComponent() {
-  const { trackRender, trackInteraction, addCustomMetric } = usePerformanceProfiler({
-    componentName: 'MyComponent',
-    autoStart: true,
-    alertOnSlowRender: true,
-  });
+  const { trackRender, trackInteraction, addCustomMetric } =
+    usePerformanceProfiler({
+      componentName: 'MyComponent',
+      autoStart: true,
+      alertOnSlowRender: true
+    });
 
   const handleClick = () => {
     const stopTimer = trackInteraction('button_click');
@@ -181,7 +185,7 @@ function MyComponent() {
 export default withPerformanceTracking(MyComponent, {
   componentName: 'MyComponent',
   trackRenders: true,
-  trackInteractions: true,
+  trackInteractions: true
 });
 ```
 
@@ -194,7 +198,11 @@ function App() {
   return (
     <div>
       {/* Other app components */}
-      <PerformanceDashboard showServerMetrics={true} showClientMetrics={true} refreshInterval={2000} />
+      <PerformanceDashboard
+        showServerMetrics={true}
+        showClientMetrics={true}
+        refreshInterval={2000}
+      />
     </div>
   );
 }
@@ -227,17 +235,17 @@ const orchestrator = new PerformanceTestOrchestrator({
       cpuUsage: 75,
       memoryUsage: 80,
       responseTime: 1500,
-      errorRate: 3,
-    },
+      errorRate: 3
+    }
   },
   loadTests: [
     {
       name: 'Custom Load Test',
       script: './my-load-test.js',
       concurrency: 20,
-      duration: 180000,
-    },
-  ],
+      duration: 180000
+    }
+  ]
 });
 
 orchestrator.runPerformanceTests();
@@ -486,7 +494,10 @@ localStorage.setItem('performance-debug', 'true');
 profiler.on('snapshot_collected', snapshot => {
   dogstatsd.gauge('app.cpu_usage', snapshot.cpu.percentage);
   dogstatsd.gauge('app.memory_usage', snapshot.memory.heapUtilization);
-  dogstatsd.gauge('app.response_time', snapshot.application.averageResponseTime);
+  dogstatsd.gauge(
+    'app.response_time',
+    snapshot.application.averageResponseTime
+  );
 });
 ```
 

@@ -146,9 +146,12 @@ Markov node creation has good defensive programming for empty states but could b
 
 ```typescript
 // Handle empty states by providing a minimal default configuration
-const states = node.states && node.states.length > 0 ? node.states : ['default'];
+const states =
+  node.states && node.states.length > 0 ? node.states : ['default'];
 const transitions =
-  node.transitions && Object.keys(node.transitions).length > 0 ? node.transitions : { default: { default: 1.0 } };
+  node.transitions && Object.keys(node.transitions).length > 0
+    ? node.transitions
+    : { default: { default: 1.0 } };
 ```
 
 ### Issue Details

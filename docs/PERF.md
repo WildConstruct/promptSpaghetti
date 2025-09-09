@@ -162,7 +162,7 @@ if (process.env.NODE_ENV === 'development') {
       console.log('Memory usage:', {
         used: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024),
         total: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024),
-        limit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024),
+        limit: Math.round(performance.memory.jsHeapSizeLimit / 1024 / 1024)
       });
     }
   }, 10000);

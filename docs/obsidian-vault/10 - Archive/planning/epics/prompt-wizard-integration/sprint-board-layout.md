@@ -53,26 +53,31 @@ Legend:
 ## Board Columns Explained
 
 ### 1. **BACKLOG**
+
 - Stories selected for the sprint but not yet started
 - Prioritized from top to bottom
 - Team pulls from here when ready
 
 ### 2. **TO DO**
+
 - Developer has committed to work on it next
 - All prerequisites are met
 - Story is "ready" by Definition of Ready
 
 ### 3. **IN PROGRESS**
+
 - Active development happening
 - Should have a developer assigned
 - WIP (Work In Progress) limits may apply
 
 ### 4. **TESTING/REVIEW**
+
 - Code complete, in QA or code review
 - Acceptance criteria being verified
 - May include peer review or user acceptance
 
 ### 5. **DONE**
+
 - Meets Definition of Done
 - Accepted by Product Owner
 - Ready for deployment/release
@@ -81,10 +86,12 @@ Legend:
 
 ```markdown
 # 🚀 Sprint 1: Wizard Foundation (Jan 13-24)
+
 **Goal:** Deliver parsing engine and basic UI panel
 **Capacity:** 21 points | **Committed:** 21 points
 
 ## 📊 Burndown
+
 Day 1: 21 points remaining
 Day 2: 21 points remaining
 Day 3: 16 points remaining ⬇️
@@ -92,41 +99,47 @@ Day 3: 16 points remaining ⬇️
 ## 🎯 Sprint Backlog
 
 ### TO DO (21 points)
+
 ┌─────────────────────────────┐
-│ **STORY-WIZ-MOCK** 🏷️ 5pts  │
-│ Create Mock Asset Service   │
-│ Assignee: None              │
-│ Labels: [backend][blocker]  │
+│ **STORY-WIZ-MOCK** 🏷️ 5pts │
+│ Create Mock Asset Service │
+│ Assignee: None │
+│ Labels: [backend][blocker] │
 └─────────────────────────────┘
 
 ┌─────────────────────────────┐
-│ **STORY-WIZ-001** 🏷️ 8pts   │
+│ **STORY-WIZ-001** 🏷️ 8pts │
 │ Basic Parsing Infrastructure│
-│ Assignee: None              │
-│ Labels: [algorithm][core]   │
+│ Assignee: None │
+│ Labels: [algorithm][core] │
 └─────────────────────────────┘
 
 ┌─────────────────────────────┐
-│ **STORY-WIZ-002A** 🏷️ 5pts  │
-│ Panel Structure             │
-│ Assignee: None              │
-│ Labels: [frontend][ui]      │
+│ **STORY-WIZ-002A** 🏷️ 5pts │
+│ Panel Structure │
+│ Assignee: None │
+│ Labels: [frontend][ui] │
 └─────────────────────────────┘
 
 ### IN PROGRESS (0 points)
-*No items*
+
+_No items_
 
 ### IN REVIEW (0 points)
-*No items*
+
+_No items_
 
 ### DONE (0 points)
-*No items*
+
+_No items_
 
 ## 🚧 Impediments
+
 - ❗ Need design mockups for WIZ-002A
 - ❗ Confirm parsing algorithm approach
 
 ## 📝 Notes
+
 - Daily standup: 9:30 AM
 - Sprint review: Jan 24, 2:00 PM
 ```
@@ -174,6 +187,7 @@ graph LR
 ## Digital Tools Options
 
 ### Popular Sprint Board Tools
+
 - **Jira** - Most comprehensive, enterprise-grade
 - **Trello** - Simple, visual, easy to learn
 - **GitHub Projects** - Integrated with code
@@ -182,7 +196,9 @@ graph LR
 - **Notion** - Flexible, good for documentation
 
 ### Physical Board Option
+
 Some teams prefer physical boards with sticky notes:
+
 - Whiteboard with columns drawn
 - Sticky notes for stories
 - Different colors for types
@@ -210,6 +226,7 @@ For the Wizard epic, I recommend:
    - WIP limits (max 2 per developer)
 
 Would you like me to:
+
 1. Create a specific board template for your team?
 2. Set up story cards with more detail?
 3. Design a burndown chart tracker?

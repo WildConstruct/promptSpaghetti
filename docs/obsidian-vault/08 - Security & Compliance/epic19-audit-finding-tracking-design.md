@@ -75,7 +75,7 @@ export enum FindingTrackingStatus {
   RESOLVED = 'resolved',
   CLOSED = 'closed',
   ESCALATED = 'escalated',
-  OVERDUE = 'overdue',
+  OVERDUE = 'overdue'
 }
 
 export interface BusinessImpactAssessment {
@@ -105,7 +105,7 @@ export enum SLAStatus {
   AT_RISK = 'at_risk', // < 20% time remaining
   OVERDUE = 'overdue',
   ESCALATED = 'escalated',
-  EXTENDED = 'extended',
+  EXTENDED = 'extended'
 }
 
 export interface EscalationRecord {
@@ -120,7 +120,12 @@ export interface EscalationRecord {
 }
 
 export interface EscalationTrigger {
-  type: 'sla_breach' | 'severity_increase' | 'manual' | 'risk_threshold' | 'regulatory_deadline';
+  type:
+    | 'sla_breach'
+    | 'severity_increase'
+    | 'manual'
+    | 'risk_threshold'
+    | 'regulatory_deadline';
   threshold?: number;
   condition: string;
   autoEscalate: boolean;
@@ -130,7 +135,12 @@ export interface EscalationTrigger {
 export interface StakeholderCommunication {
   communicationId: string;
   timestamp: Date;
-  type: 'initial_notification' | 'status_update' | 'escalation' | 'resolution' | 'ad_hoc';
+  type:
+    | 'initial_notification'
+    | 'status_update'
+    | 'escalation'
+    | 'resolution'
+    | 'ad_hoc';
   recipients: StakeholderGroup[];
   channel: 'email' | 'slack' | 'webhook' | 'dashboard' | 'sms';
   message: CommunicationMessage;
@@ -204,12 +214,27 @@ export class AuditFindingTrackingService {
   ) {}
 
   async trackNewFinding(finding: WorkflowFinding): Promise<AuditFindingTracker>;
-  async updateFindingStatus(findingId: string, status: FindingTrackingStatus): Promise<void>;
-  async escalateFinding(findingId: string, escalationType: EscalationTrigger): Promise<void>;
-  async assessBusinessImpact(findingId: string): Promise<BusinessImpactAssessment>;
-  async updateRemediationProgress(findingId: string, progress: RemediationProgress): Promise<void>;
-  async generateFindingReport(findingId: string): Promise<FindingTrackingReport>;
-  async getFindingsByStatus(status: FindingTrackingStatus[]): Promise<AuditFindingTracker[]>;
+  async updateFindingStatus(
+    findingId: string,
+    status: FindingTrackingStatus
+  ): Promise<void>;
+  async escalateFinding(
+    findingId: string,
+    escalationType: EscalationTrigger
+  ): Promise<void>;
+  async assessBusinessImpact(
+    findingId: string
+  ): Promise<BusinessImpactAssessment>;
+  async updateRemediationProgress(
+    findingId: string,
+    progress: RemediationProgress
+  ): Promise<void>;
+  async generateFindingReport(
+    findingId: string
+  ): Promise<FindingTrackingReport>;
+  async getFindingsByStatus(
+    status: FindingTrackingStatus[]
+  ): Promise<AuditFindingTracker[]>;
   async getOverdueFindings(): Promise<AuditFindingTracker[]>;
   async getEscalatedFindings(): Promise<AuditFindingTracker[]>;
 }
@@ -219,15 +244,27 @@ export class AuditFindingTrackingService {
 
 ```typescript
 export class FindingLifecycleManager {
-  async initializeFinding(finding: WorkflowFinding): Promise<AuditFindingTracker>;
-  async transitionStatus(findingId: string, newStatus: FindingTrackingStatus, reason: string): Promise<void>;
+  async initializeFinding(
+    finding: WorkflowFinding
+  ): Promise<AuditFindingTracker>;
+  async transitionStatus(
+    findingId: string,
+    newStatus: FindingTrackingStatus,
+    reason: string
+  ): Promise<void>;
   async validateStatusTransition(
     currentStatus: FindingTrackingStatus,
     newStatus: FindingTrackingStatus
   ): Promise<boolean>;
-  async executeStatusActions(finding: AuditFindingTracker, newStatus: FindingTrackingStatus): Promise<void>;
+  async executeStatusActions(
+    finding: AuditFindingTracker,
+    newStatus: FindingTrackingStatus
+  ): Promise<void>;
   async scheduleNextReview(findingId: string): Promise<void>;
-  async closeFinding(findingId: string, resolution: FindingResolution): Promise<void>;
+  async closeFinding(
+    findingId: string,
+    resolution: FindingResolution
+  ): Promise<void>;
 }
 ```
 
@@ -235,11 +272,23 @@ export class FindingLifecycleManager {
 
 ```typescript
 export class SLATrackingEngine {
-  async calculateSLADeadlines(finding: AuditFindingTracker): Promise<SLATracking>;
+  async calculateSLADeadlines(
+    finding: AuditFindingTracker
+  ): Promise<SLATracking>;
   async monitorSLACompliance(findingId: string): Promise<SLAStatus>;
-  async handleSLABreach(findingId: string, breachType: 'acknowledgment' | 'resolution'): Promise<void>;
-  async requestTimeExtension(findingId: string, extension: TimeExtension): Promise<void>;
-  async approveTimeExtension(findingId: string, extensionId: string, approved: boolean): Promise<void>;
+  async handleSLABreach(
+    findingId: string,
+    breachType: 'acknowledgment' | 'resolution'
+  ): Promise<void>;
+  async requestTimeExtension(
+    findingId: string,
+    extension: TimeExtension
+  ): Promise<void>;
+  async approveTimeExtension(
+    findingId: string,
+    extensionId: string,
+    approved: boolean
+  ): Promise<void>;
   async generateSLAReport(timeframe: DateRange): Promise<SLAComplianceReport>;
 }
 ```
@@ -248,12 +297,29 @@ export class SLATrackingEngine {
 
 ```typescript
 export class StakeholderCommunicationService {
-  async notifyStakeholders(findingId: string, communicationType: string, customMessage?: string): Promise<void>;
-  async sendStatusUpdate(findingId: string, recipients: StakeholderGroup[]): Promise<void>;
-  async escalationNotification(findingId: string, escalationLevel: number): Promise<void>;
-  async scheduleRegularUpdates(findingId: string, frequency: string): Promise<void>;
-  async trackCommunicationDelivery(communicationId: string): Promise<DeliveryStatus>;
-  async generateCommunicationReport(findingId: string): Promise<CommunicationReport>;
+  async notifyStakeholders(
+    findingId: string,
+    communicationType: string,
+    customMessage?: string
+  ): Promise<void>;
+  async sendStatusUpdate(
+    findingId: string,
+    recipients: StakeholderGroup[]
+  ): Promise<void>;
+  async escalationNotification(
+    findingId: string,
+    escalationLevel: number
+  ): Promise<void>;
+  async scheduleRegularUpdates(
+    findingId: string,
+    frequency: string
+  ): Promise<void>;
+  async trackCommunicationDelivery(
+    communicationId: string
+  ): Promise<DeliveryStatus>;
+  async generateCommunicationReport(
+    findingId: string
+  ): Promise<CommunicationReport>;
 }
 ```
 

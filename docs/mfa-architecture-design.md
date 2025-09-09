@@ -148,11 +148,22 @@ CREATE TABLE mfa_audit_log (
 ```typescript
 interface MFAService {
   // Enrollment
-  initiateEnrollment(userId: string, method: MFAMethod): Promise<EnrollmentResponse>;
-  confirmEnrollment(userId: string, token: string, code: string): Promise<boolean>;
+  initiateEnrollment(
+    userId: string,
+    method: MFAMethod
+  ): Promise<EnrollmentResponse>;
+  confirmEnrollment(
+    userId: string,
+    token: string,
+    code: string
+  ): Promise<boolean>;
 
   // Verification
-  verifyMFA(userId: string, code: string, method?: MFAMethod): Promise<VerificationResult>;
+  verifyMFA(
+    userId: string,
+    code: string,
+    method?: MFAMethod
+  ): Promise<VerificationResult>;
 
   // Management
   disableMFA(userId: string, confirmationCode: string): Promise<boolean>;

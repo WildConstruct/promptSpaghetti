@@ -30,12 +30,14 @@ export const GraphEditorWithTray: React.FC<GraphEditorWithTrayProps> = ({
   const { isOpen, height } = usePreviewTrayStore();
 
   return (
-    <div 
+    <div
       className="editor-with-tray-container"
       data-tray-open={isOpen}
-      style={{ 
-        '--tray-height': `${height}px`
-      } as React.CSSProperties}
+      style={
+        {
+          '--tray-height': `${height}px`
+        } as React.CSSProperties
+      }
     >
       <div className="editor-content-area">
         {/* Main editor area - PreviewTray is rendered inside EditorComponent */}

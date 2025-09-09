@@ -13,7 +13,8 @@ const epic1Stories = [
   {
     id: '1.0',
     title: 'Risk Mitigation & Brownfield Safety Framework',
-    description: 'Comprehensive risk mitigation and safety measures for brownfield rebuild',
+    description:
+      'Comprehensive risk mitigation and safety measures for brownfield rebuild',
     priority: 'CRITICAL',
     estimated_hours: 16,
     tags: 'risk-mitigation,brownfield,safety,analytics'
@@ -21,7 +22,8 @@ const epic1Stories = [
   {
     id: '1.1',
     title: 'Core Node Engine & File Format',
-    description: 'Implement foundational node system with inline-editable data structures',
+    description:
+      'Implement foundational node system with inline-editable data structures',
     priority: 'HIGH',
     estimated_hours: 24,
     tags: 'core,engine,file-format,foundation'
@@ -29,7 +31,8 @@ const epic1Stories = [
   {
     id: '1.2',
     title: 'Prompt Analysis & Node Generation',
-    description: 'Parse prompts and generate inline-editable nodes intelligently',
+    description:
+      'Parse prompts and generate inline-editable nodes intelligently',
     priority: 'HIGH',
     estimated_hours: 20,
     tags: 'parser,analysis,node-generation,ai'
@@ -94,7 +97,7 @@ epic1Stories.forEach(story => {
 
 console.log('\n==================');
 console.log(`Total Stories: ${epic1Stories.length}`);
-console.log(`Total Estimated Hours: ${totalHours} (${totalHours/8} days)`);
+console.log(`Total Estimated Hours: ${totalHours} (${totalHours / 8} days)`);
 console.log(`Timeline: 8 weeks (320 hours capacity for team of 1)`);
 
 // Create ticket data for task system

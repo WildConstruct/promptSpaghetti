@@ -50,12 +50,22 @@ const telemetrySetup = await CollaborationTelemetryFactory.initialize(
 );
 
 // Add telemetry routes
-const telemetryRoutes = CollaborationTelemetryFactory.createTelemetryRoutes(telemetrySetup);
+const telemetryRoutes =
+  CollaborationTelemetryFactory.createTelemetryRoutes(telemetrySetup);
 
 // Register routes with your Fastify server
-server.get('/api/collaboration/dashboard', telemetryRoutes['/api/collaboration/dashboard']);
-server.get('/api/collaboration/epic23/status', telemetryRoutes['/api/collaboration/epic23/status']);
-server.get('/api/collaboration/telemetry/health', telemetryRoutes['/api/collaboration/telemetry/health']);
+server.get(
+  '/api/collaboration/dashboard',
+  telemetryRoutes['/api/collaboration/dashboard']
+);
+server.get(
+  '/api/collaboration/epic23/status',
+  telemetryRoutes['/api/collaboration/epic23/status']
+);
+server.get(
+  '/api/collaboration/telemetry/health',
+  telemetryRoutes['/api/collaboration/telemetry/health']
+);
 
 // Cleanup on server shutdown
 process.on('SIGTERM', async () => {
@@ -200,7 +210,7 @@ await collaborationAnalytics.recordCollaborationEvent({
     sessionId: 'session_abc',
     userId: 'user_def',
     userRole: 'collaborator',
-    timestamp: new Date(),
+    timestamp: new Date()
   },
   data: {
     commentId: 'comment_123',
@@ -210,8 +220,8 @@ await collaborationAnalytics.recordCollaborationEvent({
     mentionedUsers: ['user_ghi'],
     attachmentCount: 1,
     isReply: false,
-    threadDepth: 1,
-  },
+    threadDepth: 1
+  }
 });
 ```
 
@@ -219,7 +229,11 @@ await collaborationAnalytics.recordCollaborationEvent({
 
 ```typescript
 // Record custom latency measurement
-await collaborationAnalytics.recordCollaborationLatency(context, latencyMs, 'custom_operation');
+await collaborationAnalytics.recordCollaborationLatency(
+  context,
+  latencyMs,
+  'custom_operation'
+);
 
 // Record conflict resolution
 await collaborationAnalytics.recordConflictResolution(context, {
@@ -228,7 +242,7 @@ await collaborationAnalytics.recordConflictResolution(context, {
   involvedUsers: ['user_1', 'user_2'],
   resolutionStrategy: 'operational_transform',
   resolutionTimeMs: 250,
-  success: true,
+  success: true
 });
 ```
 
@@ -338,8 +352,14 @@ const validatedEvent = schema.parse(event);
 ```typescript
 import { EPIC_23_SUCCESS_CRITERIA } from './analytics/CollaborationTelemetry';
 
-console.log('Latency target:', EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET);
-console.log('Conflict resolution target:', EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE);
+console.log(
+  'Latency target:',
+  EPIC_23_SUCCESS_CRITERIA.REAL_TIME_LATENCY_TARGET
+);
+console.log(
+  'Conflict resolution target:',
+  EPIC_23_SUCCESS_CRITERIA.CONFLICT_RESOLUTION_SUCCESS_RATE
+);
 ```
 
 This telemetry system provides comprehensive insights into Epic 23 collaboration features while maintaining performance and privacy standards.

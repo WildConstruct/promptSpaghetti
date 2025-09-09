@@ -36,7 +36,7 @@ export const handlers = [
       ctx.json({
         status: 'ok',
         timestamp: new Date().toISOString(),
-        version: '1.0.0',
+        version: '1.0.0'
       })
     );
   }),
@@ -49,11 +49,17 @@ export const handlers = [
       ctx.json({
         error: 'Not Found',
         message: `No handler found for ${req.method} ${req.url.pathname}`,
-        path: req.url.pathname,
+        path: req.url.pathname
       })
     );
-  }),
+  })
 ];
 
 // Export individual handler groups for selective mocking
-export { templateHandlers, authHandlers, userHandlers, categoryHandlers, analyticsHandlers };
+export {
+  templateHandlers,
+  authHandlers,
+  userHandlers,
+  categoryHandlers,
+  analyticsHandlers
+};

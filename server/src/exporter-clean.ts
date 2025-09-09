@@ -15,27 +15,27 @@ export const GeneratorBundleSchema = z.object({
     author: z.string().optional(),
     tags: z.array(z.string()).default([]),
     nodeCount: z.number(),
-    complexity: z.enum(['simple', 'moderate', 'complex']).default('simple'),
+    complexity: z.enum(['simple', 'moderate', 'complex']).default('simple')
   }),
   graph: z.object({
     nodes: z.array(z.any()),
     edges: z.array(z.any()).default([]),
     seed: z.number().optional(),
-    variables: z.record(z.string(), z.any()).default({}),
+    variables: z.record(z.string(), z.any()).default({})
   }),
   execution: z
     .object({
       deterministic: z.boolean().default(true),
       cacheEnabled: z.boolean().default(true),
       maxDepth: z.number().default(100),
-      timeoutMs: z.number().default(30000),
+      timeoutMs: z.number().default(30000)
     })
     .optional(),
   compatibility: z.object({
     engineVersion: z.string().default('basic'),
     nodeTypes: z.array(z.string()),
-    requiredFeatures: z.array(z.string()).default([]),
-  }),
+    requiredFeatures: z.array(z.string()).default([])
+  })
 });
 
 export type GeneratorBundle = z.infer<typeof GeneratorBundleSchema>;
@@ -43,15 +43,23 @@ export type GeneratorBundle = z.infer<typeof GeneratorBundleSchema>;
 /**
  * Convert a Graph to GeneratorBundle format
  */
-export function graphToBundle(graph: Graph, metadata?: Partial<GeneratorBundle['metadata']>): GeneratorBundle {
+export function graphToBundle(
+  graph: Graph,
+  metadata?: Partial<GeneratorBundle['metadata']>
+): GeneratorBundle {
   // Analyze graph complexity
   const nodeCount = graph.nodes?.length || 0;
-  const hasVariables = graph.nodes?.some(n => n.type === 'SetVariable' || n.type === 'GetVariable') || false;
-  const hasWeightedChoice = graph.nodes?.some(n => n.type === 'WeightedChoice') || false;
+  const hasVariables =
+    graph.nodes?.some(
+      n => n.type === 'SetVariable' || n.type === 'GetVariable'
+    ) || false;
+  const hasWeightedChoice =
+    graph.nodes?.some(n => n.type === 'WeightedChoice') || false;
 
   let complexity: 'simple' | 'moderate' | 'complex' = 'simple';
   if (nodeCount > 10 || hasVariables) complexity = 'moderate';
-  if (nodeCount > 20 || (hasVariables && hasWeightedChoice)) complexity = 'complex';
+  if (nodeCount > 20 || (hasVariables && hasWeightedChoice))
+    complexity = 'complex';
 
   // Extract node types
   const nodeTypes = [...new Set(graph.nodes?.map(n => n.type) || [])];
@@ -73,7 +81,7 @@ export function graphToBundle(graph: Graph, metadata?: Partial<GeneratorBundle['
             source: node.inputs[i],
             target: node.id,
             sourceHandle: 'output',
-            targetHandle: `input-${i}`,
+            targetHandle: `input-${i}`
           });
         }
       }
@@ -86,29 +94,30 @@ export function graphToBundle(graph: Graph, metadata?: Partial<GeneratorBundle['
     timestamp: new Date().toISOString(),
     metadata: {
       title: metadata?.title || `Graph Export ${Date.now()}`,
-      description: metadata?.description || `Exported graph with ${nodeCount} nodes`,
+      description:
+        metadata?.description || `Exported graph with ${nodeCount} nodes`,
       author: metadata?.author || 'PromptScape User',
       tags: metadata?.tags || ['graph', 'export'],
       nodeCount,
-      complexity,
+      complexity
     },
     graph: {
       nodes: graph.nodes || [],
       edges,
       seed: graph.seed,
-      variables: {},
+      variables: {}
     },
     execution: {
       deterministic: true,
       cacheEnabled: true,
       maxDepth: 100,
-      timeoutMs: 30000,
+      timeoutMs: 30000
     },
     compatibility: {
       engineVersion: 'basic',
       nodeTypes,
-      requiredFeatures,
-    },
+      requiredFeatures
+    }
   };
 }
 
@@ -132,7 +141,7 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
   // Rebuild nodes with inputs
   const nodes = bundle.graph.nodes.map(node => ({
     ...node,
-    inputs: nodeInputs.get(node.id) || [],
+    inputs: nodeInputs.get(node.id) || []
   }));
 
   return {
@@ -144,8 +153,8 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
       title: bundle.metadata.title,
       description: bundle.metadata.description,
       imported: true,
-      originalFormat: bundle.format,
-    },
+      originalFormat: bundle.format
+    }
   };
 }
 
@@ -170,7 +179,7 @@ export function exportGraph(
       return {
         data: JSON.stringify(bundle, null, 2),
         filename: `graph-bundle-${timestamp}.json`,
-        mimeType: 'application/json',
+        mimeType: 'application/json'
       };
     }
 
@@ -178,7 +187,7 @@ export function exportGraph(
       return {
         data: JSON.stringify(graph, null, 2),
         filename: `graph-${timestamp}.json`,
-        mimeType: 'application/json',
+        mimeType: 'application/json'
       };
     }
 
@@ -190,7 +199,7 @@ export function exportGraph(
         `# Nodes: ${graph.nodes?.length || 0}`,
         '',
         'graph:',
-        '  nodes:',
+        '  nodes:'
       ];
 
       if (graph.nodes) {
@@ -198,7 +207,9 @@ export function exportGraph(
           yamlData.push(`    - id: "${node.id}"`);
           yamlData.push(`      type: "${node.type}"`);
           if (node.inputs && node.inputs.length > 0) {
-            yamlData.push(`      inputs: [${node.inputs.map(id => `"${id}"`).join(', ')}]`);
+            yamlData.push(
+              `      inputs: [${node.inputs.map(id => `"${id}"`).join(', ')}]`
+            );
           }
           yamlData.push('');
         }
@@ -211,7 +222,7 @@ export function exportGraph(
       return {
         data: yamlData.join('\n'),
         filename: `graph-${timestamp}.yaml`,
-        mimeType: 'text/yaml',
+        mimeType: 'text/yaml'
       };
     }
 
@@ -224,7 +235,7 @@ export function exportGraph(
         `Seed: ${graph.seed || 'none'}`,
         '',
         'Node Structure:',
-        '---------------',
+        '---------------'
       ];
 
       if (graph.nodes) {
@@ -240,7 +251,7 @@ export function exportGraph(
       return {
         data: textData.join('\n'),
         filename: `graph-${timestamp}.txt`,
-        mimeType: 'text/plain',
+        mimeType: 'text/plain'
       };
     }
 
@@ -262,19 +273,34 @@ export function validateBundleCompatibility(bundle: GeneratorBundle): {
 
   // Check engine compatibility
   if (bundle.compatibility.engineVersion !== 'basic') {
-    warnings.push(`Bundle created for engine "${bundle.compatibility.engineVersion}", current engine is "basic"`);
+    warnings.push(
+      `Bundle created for engine "${bundle.compatibility.engineVersion}", current engine is "basic"`
+    );
   }
 
   // Check node type support
-  const supportedNodeTypes = ['WeightedChoice', 'Output', 'Concat', 'SetVariable', 'GetVariable', 'Include'];
-  const unsupportedTypes = bundle.compatibility.nodeTypes.filter(type => !supportedNodeTypes.includes(type));
+  const supportedNodeTypes = [
+    'WeightedChoice',
+    'Output',
+    'Concat',
+    'SetVariable',
+    'GetVariable',
+    'Include'
+  ];
+  const unsupportedTypes = bundle.compatibility.nodeTypes.filter(
+    type => !supportedNodeTypes.includes(type)
+  );
 
   if (unsupportedTypes.length > 0) {
     issues.push(`Unsupported node types: ${unsupportedTypes.join(', ')}`);
   }
 
   // Check required features
-  const supportedFeatures = ['variable-context', 'weighted-selection', 'deterministic-seeding'];
+  const supportedFeatures = [
+    'variable-context',
+    'weighted-selection',
+    'deterministic-seeding'
+  ];
   const unsupportedFeatures = bundle.compatibility.requiredFeatures.filter(
     feature => !supportedFeatures.includes(feature)
   );
@@ -291,7 +317,7 @@ export function validateBundleCompatibility(bundle: GeneratorBundle): {
   return {
     compatible: issues.length === 0,
     issues,
-    warnings,
+    warnings
   };
 }
 
@@ -315,13 +341,15 @@ export function getExportStats(graph: Graph): {
     }
   }
 
-  const hasVariables = (nodeTypes['SetVariable'] || 0) > 0 || (nodeTypes['GetVariable'] || 0) > 0;
+  const hasVariables =
+    (nodeTypes['SetVariable'] || 0) > 0 || (nodeTypes['GetVariable'] || 0) > 0;
   const hasWeightedChoice = (nodeTypes['WeightedChoice'] || 0) > 0;
   const outputCount = nodeTypes['Output'] || 0;
 
   let complexity: 'simple' | 'moderate' | 'complex' = 'simple';
   if (nodeCount > 10 || hasVariables) complexity = 'moderate';
-  if (nodeCount > 20 || (hasVariables && hasWeightedChoice)) complexity = 'complex';
+  if (nodeCount > 20 || (hasVariables && hasWeightedChoice))
+    complexity = 'complex';
 
   return {
     nodeCount,
@@ -329,6 +357,6 @@ export function getExportStats(graph: Graph): {
     hasVariables,
     hasWeightedChoice,
     complexity,
-    estimatedOutputs: Math.max(1, outputCount),
+    estimatedOutputs: Math.max(1, outputCount)
   };
 }

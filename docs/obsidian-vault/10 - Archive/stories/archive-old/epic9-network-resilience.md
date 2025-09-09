@@ -32,7 +32,7 @@ import { OfflineOperationQueue } from '@/network-resilience';
 const queue = new OfflineOperationQueue({
   maxQueueSize: 1000,
   maxRetries: 3,
-  persistToLocalStorage: true,
+  persistToLocalStorage: true
 });
 
 const operationId = queue.enqueue({
@@ -42,7 +42,7 @@ const operationId = queue.enqueue({
   documentId: 'doc1',
   userId: 'user1',
   requiresOrder: false,
-  maxRetries: 3,
+  maxRetries: 3
 });
 ```
 
@@ -108,7 +108,7 @@ const handler = new ReconnectionHandler({
   maxAttempts: 10,
   initialDelay: 1000,
   maxDelay: 30000,
-  enableCircuitBreaker: true,
+  enableCircuitBreaker: true
 });
 
 handler.setConnectionFactory(async () => {
@@ -142,10 +142,12 @@ import { SynchronizationRecovery } from '@/network-resilience';
 const recovery = new SynchronizationRecovery({
   conflictDetection: true,
   autoResolveConflicts: true,
-  validateIntegrity: true,
+  validateIntegrity: true
 });
 
-const delta = await recovery.startRecovery(documentId, localState, () => getServerState());
+const delta = await recovery.startRecovery(documentId, localState, () =>
+  getServerState()
+);
 ```
 
 ### 5. NetworkResilienceManager
@@ -173,8 +175,8 @@ const manager = new NetworkResilienceManager({
   notifications: {
     enabled: true,
     showOfflineIndicator: true,
-    showConnectionQuality: true,
-  },
+    showConnectionQuality: true
+  }
 });
 
 await manager.initialize('document-id', 'user-id');
@@ -186,7 +188,7 @@ const operationId = manager.queueOperation({
   payload: { nodeId: 'test', data: { title: 'Test' } },
   priority: 'high',
   requiresOrder: false,
-  maxRetries: 3,
+  maxRetries: 3
 });
 ```
 

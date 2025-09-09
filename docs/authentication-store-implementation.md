@@ -45,7 +45,11 @@ interface AuthState {
   returnUrl: string | null;
 
   // Authentication methods
-  login: (email: string, password: string, rememberMe?: boolean) => Promise<boolean>;
+  login: (
+    email: string,
+    password: string,
+    rememberMe?: boolean
+  ) => Promise<boolean>;
   logout: () => void;
   refreshTokens: () => Promise<boolean>;
   checkAuthStatus: () => Promise<boolean>;
@@ -69,7 +73,7 @@ login: async (email: string, password: string, rememberMe: boolean = false) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, rememberMe }),
+      body: JSON.stringify({ email, password, rememberMe })
     });
 
     if (!response.ok) {
@@ -87,7 +91,7 @@ login: async (email: string, password: string, rememberMe: boolean = false) => {
       accessToken: data.accessToken,
       refreshToken: data.refreshToken,
       tokenExpiration,
-      error: null,
+      error: null
     });
 
     return true;
@@ -99,7 +103,7 @@ login: async (email: string, password: string, rememberMe: boolean = false) => {
       user: null,
       accessToken: null,
       refreshToken: null,
-      tokenExpiration: null,
+      tokenExpiration: null
     });
     return false;
   }
@@ -124,7 +128,7 @@ register: async (userData: RegisterData) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(userData)
     });
 
     if (!response.ok) {
@@ -137,7 +141,7 @@ register: async (userData: RegisterData) => {
   } catch (error) {
     set({
       isLoading: false,
-      error: error instanceof Error ? error.message : 'Registration failed',
+      error: error instanceof Error ? error.message : 'Registration failed'
     });
     return false;
   }
@@ -155,13 +159,16 @@ oauthLogin: async (provider: string, returnUrl?: string) => {
   try {
     const queryParams = new URLSearchParams({
       provider,
-      ...(returnUrl && { returnUrl }),
+      ...(returnUrl && { returnUrl })
     });
 
-    const response = await fetch(`${API_BASE_URL}/api/auth/oauth/authorize?${queryParams.toString()}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/api/auth/oauth/authorize?${queryParams.toString()}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -174,7 +181,8 @@ oauthLogin: async (provider: string, returnUrl?: string) => {
   } catch (error) {
     set({
       isLoading: false,
-      error: error instanceof Error ? error.message : 'OAuth authorization failed',
+      error:
+        error instanceof Error ? error.message : 'OAuth authorization failed'
     });
     throw error;
   }
@@ -189,10 +197,13 @@ processOAuthCallback: async (provider: string, code: string, state: string) => {
 
   try {
     const queryParams = new URLSearchParams({ code, state });
-    const response = await fetch(`${API_BASE_URL}/api/auth/oauth/callback/${provider}?${queryParams.toString()}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const response = await fetch(
+      `${API_BASE_URL}/api/auth/oauth/callback/${provider}?${queryParams.toString()}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -209,7 +220,7 @@ processOAuthCallback: async (provider: string, code: string, state: string) => {
       accessToken: data.tokens.accessToken,
       refreshToken: data.tokens.refreshToken,
       tokenExpiration,
-      error: null,
+      error: null
     });
 
     return true;
@@ -221,7 +232,7 @@ processOAuthCallback: async (provider: string, code: string, state: string) => {
       user: null,
       accessToken: null,
       refreshToken: null,
-      tokenExpiration: null,
+      tokenExpiration: null
     });
     return false;
   }
@@ -250,7 +261,7 @@ refreshTokens: async () => {
     const response = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refreshToken }),
+      body: JSON.stringify({ refreshToken })
     });
 
     if (!response.ok) {
@@ -264,7 +275,7 @@ refreshTokens: async () => {
       accessToken: data.accessToken,
       refreshToken: data.refreshToken || refreshToken,
       tokenExpiration,
-      error: null,
+      error: null
     });
 
     return true;
@@ -281,7 +292,8 @@ refreshTokens: async () => {
 ```typescript
 export const setupTokenRefresh = (): (() => void) => {
   const checkAndRefresh = async () => {
-    const { isAuthenticated, tokenExpiration, refreshTokens } = useAuthStore.getState();
+    const { isAuthenticated, tokenExpiration, refreshTokens } =
+      useAuthStore.getState();
 
     if (isAuthenticated && tokenExpiration) {
       // Refresh token 5 minutes before expiration
@@ -331,8 +343,8 @@ checkAuthStatus: async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+        Authorization: `Bearer ${accessToken}`
+      }
     });
 
     if (!response.ok) {
@@ -342,7 +354,7 @@ checkAuthStatus: async () => {
     const userData = await response.json();
     set({
       user: userData,
-      isAuthenticated: true,
+      isAuthenticated: true
     });
 
     return true;
@@ -364,7 +376,7 @@ logout: () => {
     fetch(`${API_BASE_URL}/api/auth/logout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: undefined }),
+      body: JSON.stringify({ sessionId: undefined })
     }).catch(console.error); // Don't block logout on server error
   }
 
@@ -375,7 +387,7 @@ logout: () => {
     refreshToken: null,
     tokenExpiration: null,
     error: null,
-    returnUrl: null,
+    returnUrl: null
   });
 };
 ```
@@ -400,7 +412,7 @@ const API_ENDPOINTS = {
   OAUTH_AUTHORIZE: '/api/auth/oauth/authorize',
   OAUTH_CALLBACK: '/api/auth/oauth/callback/:provider',
   PASSWORD_RESET_REQUEST: '/api/auth/password-reset/request',
-  PASSWORD_RESET_CONFIRM: '/api/auth/password-reset/confirm',
+  PASSWORD_RESET_CONFIRM: '/api/auth/password-reset/confirm'
 };
 ```
 
@@ -448,25 +460,28 @@ export const getAuthHeaders = (): Record<string, string> => {
   if (accessToken) {
     return {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     };
   }
 
   return {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   };
 };
 
 // Make authenticated API calls with automatic retry
-export const authenticatedFetch = async (url: string, options: RequestInit = {}): Promise<Response> => {
+export const authenticatedFetch = async (
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> => {
   const authHeaders = getAuthHeaders();
 
   const response = await fetch(url, {
     ...options,
     headers: {
       ...authHeaders,
-      ...options.headers,
-    },
+      ...options.headers
+    }
   });
 
   // If token expired, try to refresh and retry
@@ -481,8 +496,8 @@ export const authenticatedFetch = async (url: string, options: RequestInit = {})
         ...options,
         headers: {
           ...newAuthHeaders,
-          ...options.headers,
-        },
+          ...options.headers
+        }
       });
     }
   }
@@ -546,7 +561,7 @@ try {
 } catch (error) {
   set({
     isLoading: false,
-    error: error instanceof Error ? error.message : 'Operation failed',
+    error: error instanceof Error ? error.message : 'Operation failed'
   });
   return false;
 }
@@ -694,8 +709,8 @@ describe('Authentication Store', () => {
           accessToken: 'token',
           refreshToken: 'refresh',
           user: { id: '1', email: 'test@example.com' },
-          expiresAt: new Date(Date.now() + 900000).toISOString(),
-        }),
+          expiresAt: new Date(Date.now() + 900000).toISOString()
+        })
     });
 
     const success = await result.current.login('test@example.com', 'password');
@@ -710,10 +725,13 @@ describe('Authentication Store', () => {
 
     mockFetch.mockResolvedValueOnce({
       ok: false,
-      json: () => Promise.resolve({ message: 'Invalid credentials' }),
+      json: () => Promise.resolve({ message: 'Invalid credentials' })
     });
 
-    const success = await result.current.login('test@example.com', 'wrong-password');
+    const success = await result.current.login(
+      'test@example.com',
+      'wrong-password'
+    );
 
     expect(success).toBe(false);
     expect(result.current.isAuthenticated).toBe(false);

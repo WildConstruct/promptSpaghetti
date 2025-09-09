@@ -32,7 +32,7 @@ export function usePreviewContent({
   enabled = true,
   onComplete,
   onError,
-  maxMemoryMB = MAX_MEMORY_MB_DEFAULT,
+  maxMemoryMB = MAX_MEMORY_MB_DEFAULT
 }: UsePreviewContentOptions) {
   const [results, setResults] = useState<PreviewResult[]>([]);
   const [isExecuting, setIsExecuting] = useState(false);
@@ -45,23 +45,27 @@ export function usePreviewContent({
     try {
       setIsExecuting(true);
       setError(null);
-      
+
       abortControllerRef.current = new AbortController();
-      
+
       const mockResults: PreviewResult[] = seeds.map((seed, index) => ({
         seed,
-        result: `Preview result for seed ${seed} - Generated output ${index + 1}`,
+        result: `Preview result for seed ${seed} - Generated output ${index + 1}`
       }));
-      
+
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       if (!abortControllerRef.current?.signal.aborted) {
         // Check memory usage and trim if necessary
         const memoryUsage = estimateMemoryUsage(mockResults);
         if (memoryUsage > maxMemoryMB) {
-          console.warn(`Preview results exceed memory threshold (${memoryUsage.toFixed(2)}MB > ${maxMemoryMB}MB). Trimming results.`);
+          console.warn(
+            `Preview results exceed memory threshold (${memoryUsage.toFixed(2)}MB > ${maxMemoryMB}MB). Trimming results.`
+          );
           // Keep only the most recent results that fit within the threshold
-          const trimmedResults = mockResults.slice(-Math.floor(mockResults.length * (maxMemoryMB / memoryUsage)));
+          const trimmedResults = mockResults.slice(
+            -Math.floor(mockResults.length * (maxMemoryMB / memoryUsage))
+          );
           setResults(trimmedResults);
           onComplete?.(trimmedResults);
         } else {
@@ -70,14 +74,24 @@ export function usePreviewContent({
         }
       }
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Preview execution failed');
+      const error =
+        err instanceof Error ? err : new Error('Preview execution failed');
       setError(error);
       onError?.(error);
     } finally {
       setIsExecuting(false);
       abortControllerRef.current = null;
     }
-  }, [seeds, nodes, edges, enabled, onComplete, onError, isExecuting, maxMemoryMB]);
+  }, [
+    seeds,
+    nodes,
+    edges,
+    enabled,
+    onComplete,
+    onError,
+    isExecuting,
+    maxMemoryMB
+  ]);
 
   const cancel = useCallback(() => {
     if (abortControllerRef.current) {
@@ -105,6 +119,6 @@ export function usePreviewContent({
     error,
     execute,
     cancel,
-    clear,
+    clear
   };
 }

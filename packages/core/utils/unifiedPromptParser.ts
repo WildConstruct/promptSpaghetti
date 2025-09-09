@@ -30,8 +30,8 @@ export interface ParseResult {
 // Advanced patterns for intelligent parsing
 const CHOICE_PATTERNS = [
   /\s+or\s+/gi,
-  /\s*\/\s*/g,  // Forward slash as alternative separator
-  /\s*\|\s*/g,  // Pipe as alternative separator
+  /\s*\/\s*/g, // Forward slash as alternative separator
+  /\s*\|\s*/g // Pipe as alternative separator
 ];
 
 const VARIABLE_PATTERN = /\$\{?(\w+)\}?/g;
@@ -63,7 +63,7 @@ export class UnifiedPromptParser {
    */
   private parseSegments(input: string): ParsedSegment[] {
     const segments: ParsedSegment[] = [];
-    
+
     // Split by commas for main segments
     const parts = input.split(',');
     let currentIndex = 0;
@@ -74,10 +74,10 @@ export class UnifiedPromptParser {
 
       const startIndex = input.indexOf(part, currentIndex);
       const endIndex = startIndex + part.length;
-      
+
       // Check if this segment contains alternatives
       const alternatives = this.findAlternatives(trimmed);
-      
+
       if (alternatives.length > 1) {
         segments.push({
           text: trimmed,
@@ -115,13 +115,19 @@ export class UnifiedPromptParser {
     // Check for list notation first [option1, option2, option3]
     const listMatch = LIST_PATTERN.exec(text);
     if (listMatch) {
-      return listMatch[1].split(',').map(s => s.trim()).filter(Boolean);
+      return listMatch[1]
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean);
     }
 
     // Check for various alternative patterns
     for (const pattern of CHOICE_PATTERNS) {
       if (pattern.test(text)) {
-        return text.split(pattern).map(s => s.trim()).filter(Boolean);
+        return text
+          .split(pattern)
+          .map(s => s.trim())
+          .filter(Boolean);
       }
     }
 
@@ -134,7 +140,7 @@ export class UnifiedPromptParser {
   private createNodes(segments: ParsedSegment[]): ParsedNode[] {
     const nodes: ParsedNode[] = [];
 
-    segments.forEach((segment) => {
+    segments.forEach(segment => {
       const nodeId = this.generateNodeId(segment.text);
 
       switch (segment.type) {
@@ -143,10 +149,11 @@ export class UnifiedPromptParser {
             id: nodeId,
             nodeType: 'Choice',
             content: segment.text,
-            options: segment.alternatives?.map(alt => ({
-              text: alt,
-              weight: Math.round(100 / (segment.alternatives?.length || 1))
-            })) || []
+            options:
+              segment.alternatives?.map(alt => ({
+                text: alt,
+                weight: Math.round(100 / (segment.alternatives?.length || 1))
+              })) || []
           });
           break;
 
@@ -182,7 +189,9 @@ export class UnifiedPromptParser {
   /**
    * Create edges to connect nodes in sequence
    */
-  private createEdges(nodes: ParsedNode[]): Array<{ source: string; target: string }> {
+  private createEdges(
+    nodes: ParsedNode[]
+  ): Array<{ source: string; target: string }> {
     const edges: Array<{ source: string; target: string }> = [];
 
     for (let i = 0; i < nodes.length - 1; i++) {
@@ -214,10 +223,10 @@ export class UnifiedPromptParser {
     // This could be extended with more sophisticated grammar rules
     // For now, it uses the same logic as parse() but could be enhanced
     const result = this.parse(input);
-    
+
     // Apply grammar-based enhancements
     result.nodes = this.applyGrammarRules(result.nodes);
-    
+
     return result;
   }
 
@@ -227,15 +236,15 @@ export class UnifiedPromptParser {
   private applyGrammarRules(nodes: ParsedNode[]): ParsedNode[] {
     // Look for patterns like "a [adjective] [noun]" and structure them appropriately
     // This is where we could add more sophisticated NLP-style parsing
-    
+
     return nodes.map(node => {
       if (node.nodeType === 'Text') {
         // Check for implicit choices in text
         const words = node.content.split(' ');
-        const hasImplicitChoice = words.some(word => 
-          word.includes('/') || word.includes('|')
+        const hasImplicitChoice = words.some(
+          word => word.includes('/') || word.includes('|')
         );
-        
+
         if (hasImplicitChoice) {
           // Convert to choice node
           const alternatives = this.findAlternatives(node.content);
@@ -251,7 +260,7 @@ export class UnifiedPromptParser {
           }
         }
       }
-      
+
       return node;
     });
   }

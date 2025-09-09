@@ -8,10 +8,9 @@ export const docsMap: Record<string, string> = {
   EnhancedBranchingNode: '/docs/nodes/weighted-choice.md',
   // Editor features
   Epic1GraphEditor: '/docs/editor/epic1-editor.md',
-  AssetBrowser: '/docs/asset-browser/overview.md',
+  AssetBrowser: '/docs/asset-browser/overview.md'
 };
 
 export function getDocUrl(key: string): string {
   return docsMap[key] || '/docs/index.md';
 }
-

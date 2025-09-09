@@ -122,7 +122,8 @@ const InspectorContext = createContext<InspectorContextValue>();
 // Core inspector functionality
 export function useInspector() {
   const context = useContext(InspectorContext);
-  if (!context) throw new Error('useInspector must be used within InspectorProvider');
+  if (!context)
+    throw new Error('useInspector must be used within InspectorProvider');
   return context;
 }
 
@@ -132,7 +133,7 @@ export function useValidation(nodeId: string) {
   return {
     errors: validationErrors[nodeId] || [],
     validate: (node: GraphNode) => validateNode(node),
-    isValid: !validationErrors[nodeId]?.length,
+    isValid: !validationErrors[nodeId]?.length
   };
 }
 
@@ -176,13 +177,22 @@ export function BaseNodeEditor<T extends GraphNode>({
 
 ```typescript
 // CollapsibleSection for organized UI
-export function CollapsibleSection({ title, defaultOpen = true, children }: CollapsibleSectionProps) {
+export function CollapsibleSection({
+  title,
+  defaultOpen = true,
+  children
+}: CollapsibleSectionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   // Implementation with smooth animations and keyboard support
 }
 
 // VariationList for managing text variations
-export function VariationList({ items, onChange, validation, placeholder }: VariationListProps) {
+export function VariationList({
+  items,
+  onChange,
+  validation,
+  placeholder
+}: VariationListProps) {
   // Drag-and-drop reordering, add/remove controls, validation display
 }
 ```

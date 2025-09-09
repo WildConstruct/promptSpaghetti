@@ -67,7 +67,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
       }
 
       setShowSuccessMessage(true);
-      
+
       // Note: Supabase may require email confirmation
       // The user object will be returned but session might not be active until confirmed
       setTimeout(() => {

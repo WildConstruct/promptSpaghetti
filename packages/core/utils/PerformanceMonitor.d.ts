@@ -35,7 +35,11 @@ export interface PerformanceReport {
   memory: { used: number; limit: number; percentage: number };
   fps: { current: number; average: number; drops: number };
   cacheStats: { hitRate: number; size: number };
-  workerStats: { queueLength: number; busyWorkers: number; averageTime: number };
+  workerStats: {
+    queueLength: number;
+    busyWorkers: number;
+    averageTime: number;
+  };
 }
 
 export declare class PerformanceMonitor {

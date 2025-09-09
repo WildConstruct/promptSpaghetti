@@ -1,6 +1,6 @@
 /**
  * 🧪 Quick Fix: Add Output Node Programmatically
- * 
+ *
  * Since drag & drop isn't working, this script adds an Output node directly
  * Run this in the browser console while the editor is open
  */
@@ -10,14 +10,17 @@ function addOutputNode() {
   // Find the React Flow instance
   const reactFlowWrapper = document.querySelector('.react-flow');
   if (!reactFlowWrapper) {
-    console.error('❌ React Flow editor not found. Make sure the editor is loaded.');
+    console.error(
+      '❌ React Flow editor not found. Make sure the editor is loaded.'
+    );
     return;
   }
 
   // Get React Flow instance from the wrapper
-  const reactFlowInstance = reactFlowWrapper.__reactInternalInstance || 
-                           reactFlowWrapper._reactInternalFiber;
-  
+  const reactFlowInstance =
+    reactFlowWrapper.__reactInternalInstance ||
+    reactFlowWrapper._reactInternalFiber;
+
   if (!reactFlowInstance) {
     console.error('❌ Could not access React Flow instance');
     return;
@@ -36,7 +39,7 @@ function addOutputNode() {
   };
 
   console.log('✅ Output node configuration:', newOutputNode);
-  
+
   // Try to dispatch the node addition through React DevTools
   // This is a workaround since direct manipulation isn't working
   console.log(`
@@ -52,12 +55,14 @@ To add the Output node manually:
 `);
 
   // Alternative approach using browser events
-  const addNodeEvent = new CustomEvent('addNode', { 
-    detail: newOutputNode 
+  const addNodeEvent = new CustomEvent('addNode', {
+    detail: newOutputNode
   });
   document.dispatchEvent(addNodeEvent);
-  
-  console.log('📤 Dispatched addNode event. If the editor listens for this event, the node will be added.');
+
+  console.log(
+    '📤 Dispatched addNode event. If the editor listens for this event, the node will be added.'
+  );
 }
 
 // More direct approach - simulate a drop event
@@ -74,38 +79,41 @@ function simulateOutputNodeDrop() {
     cancelable: true,
     dataTransfer: new DataTransfer()
   });
-  
+
   // Set the node type in the dataTransfer
   dropEvent.dataTransfer.setData('application/reactflow', 'output');
   dropEvent.dataTransfer.setData('application/node-type', 'output');
-  
+
   // Set drop coordinates (center of viewport)
   Object.defineProperty(dropEvent, 'clientX', { value: window.innerWidth / 2 });
-  Object.defineProperty(dropEvent, 'clientY', { value: window.innerHeight / 2 });
-  
+  Object.defineProperty(dropEvent, 'clientY', {
+    value: window.innerHeight / 2
+  });
+
   // Dispatch the drop event
   canvas.dispatchEvent(dropEvent);
-  
+
   console.log('✅ Simulated drop event for Output node');
 }
 
 // Quick diagnostic to check current nodes
 function checkForOutputNode() {
-  const hasOutput = Array.from(document.querySelectorAll('.epic1-editable-node'))
-    .some(node => node.classList.contains('output'));
-  
+  const hasOutput = Array.from(
+    document.querySelectorAll('.epic1-editable-node')
+  ).some(node => node.classList.contains('output'));
+
   if (hasOutput) {
     console.log('✅ Output node found in the graph');
-    
+
     // Check if it's connected
     const edges = document.querySelectorAll('.react-flow__edge');
     console.log(`📊 Total edges in graph: ${edges.length}`);
-    
+
     // Check preview panel
     const previewPanel = document.querySelector('.preview-panel');
     if (previewPanel) {
       console.log('✅ Preview panel is visible');
-      
+
       const results = previewPanel.querySelectorAll('.preview-result');
       if (results.length > 0) {
         console.log(`✅ Preview showing ${results.length} result(s)`);
@@ -118,7 +126,9 @@ function checkForOutputNode() {
     }
   } else {
     console.log('❌ No Output node in graph');
-    console.log('   → Run addOutputNode() or simulateOutputNodeDrop() to add one');
+    console.log(
+      '   → Run addOutputNode() or simulateOutputNodeDrop() to add one'
+    );
   }
 }
 
@@ -127,20 +137,20 @@ window.epic1Debug = {
   addOutputNode,
   simulateOutputNodeDrop,
   checkForOutputNode,
-  
+
   // Quick fix - adds Output node and checks status
-  quickFix: function() {
+  quickFix: function () {
     console.log('🔧 Running Epic1 Output Quick Fix...\n');
-    
+
     // First check current status
     this.checkForOutputNode();
-    
+
     // If no output node, try to add one
     const hasOutput = document.querySelector('.epic1-editable-node.output');
     if (!hasOutput) {
       console.log('\n🔄 Attempting to add Output node...');
       this.simulateOutputNodeDrop();
-      
+
       // Check again after a delay
       setTimeout(() => {
         console.log('\n📋 Final status check:');

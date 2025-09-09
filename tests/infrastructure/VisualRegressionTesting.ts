@@ -108,7 +108,9 @@ export class VisualRegressionTester {
   /**
    * Run a visual test suite
    */
-  async runVisualTestSuite(suite: VisualTestSuite): Promise<VisualTestResult[]> {
+  async runVisualTestSuite(
+    suite: VisualTestSuite
+  ): Promise<VisualTestResult[]> {
     const results: VisualTestResult[] = [];
 
     for (const testConfig of suite.tests) {
@@ -120,7 +122,7 @@ export class VisualRegressionTester {
           : testConfig.url,
         viewport: testConfig.viewport || suite.globalConfig?.viewport,
         threshold: testConfig.threshold ?? suite.globalConfig?.threshold,
-        waitFor: testConfig.waitFor ?? suite.globalConfig?.waitFor,
+        waitFor: testConfig.waitFor ?? suite.globalConfig?.waitFor
       };
 
       const testResults = await this.runVisualTest(mergedConfig);
@@ -159,13 +161,17 @@ export class VisualRegressionTester {
         total: results.length,
         passed: results.filter(r => r.passed).length,
         failed: results.filter(r => !r.passed).length,
-        avgCaptureTime: results.reduce((sum, r) => sum + r.metrics.captureTime, 0) / results.length,
-        avgComparisonTime: results.reduce((sum, r) => sum + r.metrics.comparisonTime, 0) / results.length,
+        avgCaptureTime:
+          results.reduce((sum, r) => sum + r.metrics.captureTime, 0) /
+          results.length,
+        avgComparisonTime:
+          results.reduce((sum, r) => sum + r.metrics.comparisonTime, 0) /
+          results.length
       },
       results: results.map(result => ({
         ...result,
-        timestamp: result.timestamp.toISOString(),
-      })),
+        timestamp: result.timestamp.toISOString()
+      }))
     };
 
     const reportPath = path.join(this.screenshotDir, 'report.json');
@@ -261,7 +267,11 @@ export class VisualRegressionTester {
       const baselineImagePath = path.join(this.baselineDir, `${testId}.png`);
       const comparisonStartTime = Date.now();
 
-      const comparisonResult = await this.compareImages(baselineImagePath, currentImagePath, config.threshold || 0.1);
+      const comparisonResult = await this.compareImages(
+        baselineImagePath,
+        currentImagePath,
+        config.threshold || 0.1
+      );
 
       const comparisonEndTime = Date.now();
 
@@ -277,8 +287,8 @@ export class VisualRegressionTester {
         metrics: {
           captureTime: captureEndTime - captureTime,
           comparisonTime: comparisonEndTime - comparisonStartTime,
-          imageSize,
-        },
+          imageSize
+        }
       };
     } catch (error) {
       return {
@@ -292,18 +302,21 @@ export class VisualRegressionTester {
         metrics: {
           captureTime: Date.now() - startTime,
           comparisonTime: 0,
-          imageSize: 0,
-        },
+          imageSize: 0
+        }
       };
     } finally {
       await page.close();
     }
   }
 
-  private async captureScreenshot(page: Page, config: VisualTestConfig): Promise<Buffer> {
+  private async captureScreenshot(
+    page: Page,
+    config: VisualTestConfig
+  ): Promise<Buffer> {
     const options: any = {
       type: 'png',
-      fullPage: !config.selector,
+      fullPage: !config.selector
     };
 
     if (config.selector) {
@@ -314,7 +327,10 @@ export class VisualRegressionTester {
     }
   }
 
-  private async executeActions(page: Page, actions: VisualTestConfig['actions']): Promise<void> {
+  private async executeActions(
+    page: Page,
+    actions: VisualTestConfig['actions']
+  ): Promise<void> {
     if (!actions) return;
 
     for (const action of actions) {
@@ -352,7 +368,7 @@ export class VisualRegressionTester {
   private async maskElements(page: Page, selectors: string[]): Promise<void> {
     for (const selector of selectors) {
       await page.addStyleTag({
-        content: `${selector} { opacity: 0 !important; }`,
+        content: `${selector} { opacity: 0 !important; }`
       });
     }
   }
@@ -367,7 +383,9 @@ export class VisualRegressionTester {
       await fs.access(baselinePath);
     } catch {
       // No baseline exists - consider this a pass for first run
-      console.log(`⚠️ No baseline found for ${path.basename(baselinePath)}, creating baseline`);
+      console.log(
+        `⚠️ No baseline found for ${path.basename(baselinePath)}, creating baseline`
+      );
       await fs.copyFile(currentPath, baselinePath);
       return { passed: true };
     }
@@ -383,7 +401,10 @@ export class VisualRegressionTester {
 
     // For now, any difference fails the test
     // TODO: Implement actual pixel-by-pixel comparison with threshold
-    const difference = this.calculateImageDifference(baselineBuffer, currentBuffer);
+    const difference = this.calculateImageDifference(
+      baselineBuffer,
+      currentBuffer
+    );
     const passed = difference <= threshold;
 
     let diffImagePath: string | undefined;
@@ -408,10 +429,16 @@ export class VisualRegressionTester {
       return differences / baseline.length;
     }
 
-    return Math.abs(baseline.length - current.length) / Math.max(baseline.length, current.length);
+    return (
+      Math.abs(baseline.length - current.length) /
+      Math.max(baseline.length, current.length)
+    );
   }
 
-  private async generateDiffImage(baselinePath: string, currentPath: string): Promise<string> {
+  private async generateDiffImage(
+    baselinePath: string,
+    currentPath: string
+  ): Promise<string> {
     const testId = path.basename(baselinePath, '.png');
     const diffPath = path.join(this.diffDir, `${testId}-diff.png`);
 
@@ -453,7 +480,9 @@ export class VisualRegressionTester {
       console.warn('Failed to launch WebKit:', error);
     }
 
-    console.log(`🚀 Launched ${this.browsers.size} browsers for visual testing`);
+    console.log(
+      `🚀 Launched ${this.browsers.size} browsers for visual testing`
+    );
   }
 
   private async generateHTMLReport(reportData: any): Promise<string> {
@@ -589,27 +618,27 @@ export const VisualTestSuites = {
       baseUrl: 'http://localhost:3000',
       viewport: { width: 1280, height: 720 },
       threshold: 0.1,
-      waitFor: 1000,
+      waitFor: 1000
     },
     tests: [
       {
         name: 'header-component',
         url: '/',
-        selector: 'header',
+        selector: 'header'
       },
       {
         name: 'navigation-menu',
         url: '/',
         selector: 'nav',
-        actions: [{ type: 'hover', selector: 'nav .menu-item:first-child' }],
+        actions: [{ type: 'hover', selector: 'nav .menu-item:first-child' }]
       },
       {
         name: 'graph-editor',
         url: '/editor',
         waitFor: '[data-testid="graph-canvas"]',
-        maskElements: ['.timestamp', '.user-avatar'],
-      },
-    ],
+        maskElements: ['.timestamp', '.user-avatar']
+      }
+    ]
   }),
 
   /**
@@ -619,21 +648,21 @@ export const VisualTestSuites = {
     suiteName: 'Cross-Browser Compatibility',
     globalConfig: {
       baseUrl: 'http://localhost:3000',
-      viewport: { width: 1280, height: 720 },
+      viewport: { width: 1280, height: 720 }
     },
     tests: [
       {
         name: 'landing-page',
         url: '/',
-        browserTypes: ['chromium', 'firefox', 'webkit'],
+        browserTypes: ['chromium', 'firefox', 'webkit']
       },
       {
         name: 'graph-editor',
         url: '/editor',
         browserTypes: ['chromium', 'firefox', 'webkit'],
-        waitFor: '[data-testid="graph-canvas"]',
-      },
-    ],
+        waitFor: '[data-testid="graph-canvas"]'
+      }
+    ]
   }),
 
   /**
@@ -642,26 +671,26 @@ export const VisualTestSuites = {
   responsive: (): VisualTestSuite => ({
     suiteName: 'Responsive Design',
     globalConfig: {
-      baseUrl: 'http://localhost:3000',
+      baseUrl: 'http://localhost:3000'
     },
     tests: [
       {
         name: 'mobile-portrait',
         url: '/',
-        viewport: { width: 375, height: 812 },
+        viewport: { width: 375, height: 812 }
       },
       {
         name: 'tablet-landscape',
         url: '/',
-        viewport: { width: 1024, height: 768 },
+        viewport: { width: 1024, height: 768 }
       },
       {
         name: 'desktop-large',
         url: '/',
-        viewport: { width: 1920, height: 1080 },
-      },
-    ],
-  }),
+        viewport: { width: 1920, height: 1080 }
+      }
+    ]
+  })
 };
 
 export default VisualRegressionTester;

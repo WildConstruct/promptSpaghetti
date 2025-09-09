@@ -1,4 +1,7 @@
-import { validateMinimalManifest, validateNpmStyleManifest } from './PresetValidator';
+import {
+  validateMinimalManifest,
+  validateNpmStyleManifest
+} from './PresetValidator';
 
 export type NormalizedPresetEntry = {
   id: string;
@@ -19,13 +22,13 @@ export function parseManifest(input: unknown): ParseResult {
     const m = validateMinimalManifest(input);
     return {
       type: 'minimal',
-      presets: m.presets.map((p) => ({
+      presets: m.presets.map(p => ({
         id: p.id,
         path: p.path,
         tags: p.tags ?? [],
         nodeTypes: p.nodeTypes ?? [],
-        thumbnail: p.thumbnail,
-      })),
+        thumbnail: p.thumbnail
+      }))
     };
   } catch {
     // fallthrough
@@ -35,12 +38,12 @@ export function parseManifest(input: unknown): ParseResult {
   const n = validateNpmStyleManifest(input);
   return {
     type: 'npm-style',
-    presets: n.presetLibrary.presets.map((p) => ({
+    presets: n.presetLibrary.presets.map(p => ({
       id: p.id,
       path: p.path,
       tags: p.tags ?? [],
       nodeTypes: p.nodeTypes ?? [],
-      thumbnail: p.thumbnail,
-    })),
+      thumbnail: p.thumbnail
+    }))
   };
 }

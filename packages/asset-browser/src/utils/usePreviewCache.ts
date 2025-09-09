@@ -11,6 +11,6 @@ export function usePreviewCache() {
     },
     has(key: string) {
       return ref.current.has(key);
-    },
+    }
   };
 }

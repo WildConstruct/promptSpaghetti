@@ -31,7 +31,7 @@ enum NodeLifecycleState {
 
   // Cleanup states
   DISPOSING = 'disposing', // Node being cleaned up
-  DISPOSED = 'disposed', // Node fully disposed
+  DISPOSED = 'disposed' // Node fully disposed
 }
 
 interface NodeLifecycleTransition {
@@ -60,7 +60,7 @@ enum LifecycleTrigger {
 
   // Cleanup triggers
   DISPOSE_REQUESTED = 'dispose:requested',
-  CLEANUP_COMPLETE = 'cleanup:complete',
+  CLEANUP_COMPLETE = 'cleanup:complete'
 }
 ```
 
@@ -73,7 +73,7 @@ const LIFECYCLE_TRANSITIONS: NodeLifecycleTransition[] = [
     from: NodeLifecycleState.INITIALIZING,
     to: NodeLifecycleState.READY,
     trigger: LifecycleTrigger.CONFIGURATION_COMPLETE,
-    hooks: ['onReady', 'onValidate'],
+    hooks: ['onReady', 'onValidate']
   },
 
   // Execution flow
@@ -82,21 +82,21 @@ const LIFECYCLE_TRANSITIONS: NodeLifecycleTransition[] = [
     to: NodeLifecycleState.EXECUTING,
     trigger: LifecycleTrigger.EXECUTION_REQUESTED,
     conditions: ['hasValidInputs', 'hasExecutionContext'],
-    hooks: ['onBeforeExecute', 'onExecutionStart'],
+    hooks: ['onBeforeExecute', 'onExecutionStart']
   },
 
   {
     from: NodeLifecycleState.EXECUTING,
     to: NodeLifecycleState.COMPLETED,
     trigger: LifecycleTrigger.EXECUTION_COMPLETE,
-    hooks: ['onExecutionComplete', 'onAfterExecute'],
+    hooks: ['onExecutionComplete', 'onAfterExecute']
   },
 
   {
     from: NodeLifecycleState.EXECUTING,
     to: NodeLifecycleState.FAILED,
     trigger: LifecycleTrigger.EXECUTION_ERROR,
-    hooks: ['onExecutionError', 'onErrorRecovery'],
+    hooks: ['onExecutionError', 'onErrorRecovery']
   },
 
   // Recovery flows
@@ -105,7 +105,7 @@ const LIFECYCLE_TRANSITIONS: NodeLifecycleTransition[] = [
     to: NodeLifecycleState.READY,
     trigger: LifecycleTrigger.RESUME_REQUESTED,
     conditions: ['errorResolved'],
-    hooks: ['onErrorClear', 'onRecovery'],
+    hooks: ['onErrorClear', 'onRecovery']
   },
 
   // Update flows
@@ -113,14 +113,14 @@ const LIFECYCLE_TRANSITIONS: NodeLifecycleTransition[] = [
     from: NodeLifecycleState.READY,
     to: NodeLifecycleState.UPDATING,
     trigger: LifecycleTrigger.UPDATE_REQUESTED,
-    hooks: ['onBeforeUpdate', 'onConfigurationChange'],
+    hooks: ['onBeforeUpdate', 'onConfigurationChange']
   },
 
   {
     from: NodeLifecycleState.UPDATING,
     to: NodeLifecycleState.READY,
     trigger: LifecycleTrigger.CONFIGURATION_COMPLETE,
-    hooks: ['onAfterUpdate', 'onValidate'],
+    hooks: ['onAfterUpdate', 'onValidate']
   },
 
   // Cleanup flows
@@ -128,15 +128,15 @@ const LIFECYCLE_TRANSITIONS: NodeLifecycleTransition[] = [
     from: NodeLifecycleState.READY,
     to: NodeLifecycleState.DISPOSING,
     trigger: LifecycleTrigger.DISPOSE_REQUESTED,
-    hooks: ['onBeforeDispose', 'onCleanup'],
+    hooks: ['onBeforeDispose', 'onCleanup']
   },
 
   {
     from: NodeLifecycleState.DISPOSING,
     to: NodeLifecycleState.DISPOSED,
     trigger: LifecycleTrigger.CLEANUP_COMPLETE,
-    hooks: ['onDisposed'],
-  },
+    hooks: ['onDisposed']
+  }
 ];
 ```
 
@@ -222,7 +222,7 @@ enum ExecutionPhase {
   EXECUTING = 'executing',
   POSTPROCESSING = 'postprocessing',
   COMPLETED = 'completed',
-  ERROR = 'error',
+  ERROR = 'error'
 }
 ```
 
@@ -249,7 +249,10 @@ interface StatePersistenceManager {
 
   // State synchronization
   syncStates(nodeIds: string[]): Promise<SyncResult>;
-  subscribeToStateChanges(nodeId: string, callback: StateChangeCallback): Subscription;
+  subscribeToStateChanges(
+    nodeId: string,
+    callback: StateChangeCallback
+  ): Subscription;
 }
 
 interface PersistencePolicy {
@@ -289,7 +292,7 @@ enum EvictionStrategy {
   LFU = 'lfu', // Least Frequently Used
   TTL = 'ttl', // Time To Live
   SIZE_BASED = 'size', // Based on memory usage
-  PRIORITY = 'priority', // Based on node priority
+  PRIORITY = 'priority' // Based on node priority
 }
 ```
 
@@ -357,7 +360,7 @@ enum StateChangeType {
   // Extension changes
   EXTENSION_LOADED = 'extension:loaded',
   EXTENSION_UNLOADED = 'extension:unloaded',
-  EXTENSION_STATE_CHANGE = 'extension:state',
+  EXTENSION_STATE_CHANGE = 'extension:state'
 }
 ```
 
@@ -372,7 +375,11 @@ interface LifecycleHookSystem {
   registerGlobalHook(hook: GlobalLifecycleHook): HookRegistration;
 
   // Hook execution
-  executeHooks(nodeId: string, trigger: LifecycleTrigger, context: HookContext): Promise<HookResult[]>;
+  executeHooks(
+    nodeId: string,
+    trigger: LifecycleTrigger,
+    context: HookContext
+  ): Promise<HookResult[]>;
 
   // Hook management
   enableHook(registrationId: string): void;
@@ -399,7 +406,10 @@ interface LifecycleHook {
   conditions?: HookCondition[];
 
   // Error handling
-  onError?: (error: Error, context: HookContext) => Promise<ErrorHandlingResult>;
+  onError?: (
+    error: Error,
+    context: HookContext
+  ) => Promise<ErrorHandlingResult>;
 
   // Hook metadata
   metadata?: HookMetadata;
@@ -427,7 +437,7 @@ enum HookResult {
   CONTINUE = 'continue', // Continue with transition
   ABORT = 'abort', // Abort the transition
   RETRY = 'retry', // Retry the transition
-  DEFER = 'defer', // Defer transition (async)
+  DEFER = 'defer' // Defer transition (async)
 }
 ```
 
@@ -449,20 +459,23 @@ class CoreLifecycleHooks {
         context.setState({
           configuration: {
             ...context.currentState.configuration,
-            validation,
-          },
+            validation
+          }
         });
         return HookResult.ABORT;
       }
       return HookResult.CONTINUE;
-    },
+    }
   };
 
   // Performance monitoring hooks
   static performanceTrackingHook: LifecycleHook = {
     id: 'core:performance',
     name: 'Performance Tracking',
-    triggers: [LifecycleTrigger.EXECUTION_REQUESTED, LifecycleTrigger.EXECUTION_COMPLETE],
+    triggers: [
+      LifecycleTrigger.EXECUTION_REQUESTED,
+      LifecycleTrigger.EXECUTION_COMPLETE
+    ],
     priority: 10,
     enabled: true,
 
@@ -472,14 +485,17 @@ class CoreLifecycleHooks {
       } else {
         return this.endPerformanceTracking(context);
       }
-    },
+    }
   };
 
   // Cache management hooks
   static cacheManagementHook: LifecycleHook = {
     id: 'core:cache',
     name: 'Cache Management',
-    triggers: [LifecycleTrigger.EXECUTION_COMPLETE, LifecycleTrigger.DISPOSE_REQUESTED],
+    triggers: [
+      LifecycleTrigger.EXECUTION_COMPLETE,
+      LifecycleTrigger.DISPOSE_REQUESTED
+    ],
     priority: 5,
     enabled: true,
 
@@ -494,7 +510,7 @@ class CoreLifecycleHooks {
       }
 
       return HookResult.CONTINUE;
-    },
+    }
   };
 }
 ```
@@ -506,14 +522,20 @@ class CoreLifecycleHooks {
 ```typescript
 interface StateOperationalTransform {
   // Transform operations for concurrent state changes
-  transform(operation: StateOperation, concurrent: StateOperation[]): TransformedStateOperation;
+  transform(
+    operation: StateOperation,
+    concurrent: StateOperation[]
+  ): TransformedStateOperation;
 
   // Merge compatible operations
   merge(operations: StateOperation[]): MergedStateOperation;
 
   // Conflict detection and resolution
   detectConflicts(operations: StateOperation[]): ConflictAnalysis;
-  resolveConflicts(conflicts: StateConflict[], strategy: ConflictResolutionStrategy): ResolvedStateOperation[];
+  resolveConflicts(
+    conflicts: StateConflict[],
+    strategy: ConflictResolutionStrategy
+  ): ResolvedStateOperation[];
 }
 
 interface StateOperation {
@@ -541,14 +563,16 @@ enum StateOperationType {
   APPEND = 'append', // Append to array
   PREPEND = 'prepend', // Prepend to array
   MOVE = 'move', // Move array element
-  PATCH = 'patch', // JSON Patch operation
+  PATCH = 'patch' // JSON Patch operation
 }
 
 class CollaborativeStateManager {
   private operationLog: OperationLog = new OperationLog();
   private conflictResolver: ConflictResolver = new ConflictResolver();
 
-  async applyStateOperation(operation: StateOperation): Promise<OperationResult> {
+  async applyStateOperation(
+    operation: StateOperation
+  ): Promise<OperationResult> {
     // Check for conflicts with concurrent operations
     const concurrentOps = this.operationLog.getConcurrentOperations(operation);
 
@@ -562,7 +586,9 @@ class CollaborativeStateManager {
     }
   }
 
-  private async executeOperation(operation: StateOperation): Promise<OperationResult> {
+  private async executeOperation(
+    operation: StateOperation
+  ): Promise<OperationResult> {
     const node = await this.getNode(operation.nodeId);
     const currentState = node.getState();
 
@@ -605,7 +631,9 @@ interface MemoryAwareStateManager {
   compactStateStorage(): Promise<CompactionResult>;
 
   // Memory pressure handling
-  handleMemoryPressure(level: MemoryPressureLevel): Promise<PressureHandlingResult>;
+  handleMemoryPressure(
+    level: MemoryPressureLevel
+  ): Promise<PressureHandlingResult>;
 
   // Memory monitoring
   getMemoryMetrics(): MemoryMetrics;
@@ -623,7 +651,7 @@ enum MemoryPressureLevel {
   MODERATE = 'moderate',
   HIGH = 'high',
   CRITICAL = 'critical',
-  EMERGENCY = 'emergency',
+  EMERGENCY = 'emergency'
 }
 
 class MemoryOptimizedStateStore {
@@ -645,7 +673,7 @@ class MemoryOptimizedStateStore {
       state: compressedState,
       lastAccess: Date.now(),
       accessCount: 1,
-      memorySize: this.calculateStateSize(compressedState),
+      memorySize: this.calculateStateSize(compressedState)
     });
 
     // Trigger eviction if over limits
@@ -698,25 +726,37 @@ class LifecycleAwareNode extends OptimizedRuntimeNode<string> {
 
   async executeCore(context: UnifiedExecutionContext): Promise<string> {
     // Transition to executing state
-    await this.transitionState(NodeLifecycleState.EXECUTING, LifecycleTrigger.EXECUTION_REQUESTED);
+    await this.transitionState(
+      NodeLifecycleState.EXECUTING,
+      LifecycleTrigger.EXECUTION_REQUESTED
+    );
 
     try {
       // Execute with performance tracking
       const result = await this.performExecution(context);
 
       // Transition to completed state
-      await this.transitionState(NodeLifecycleState.COMPLETED, LifecycleTrigger.EXECUTION_COMPLETE);
+      await this.transitionState(
+        NodeLifecycleState.COMPLETED,
+        LifecycleTrigger.EXECUTION_COMPLETE
+      );
 
       return result;
     } catch (error) {
       // Transition to failed state
-      await this.transitionState(NodeLifecycleState.FAILED, LifecycleTrigger.EXECUTION_ERROR);
+      await this.transitionState(
+        NodeLifecycleState.FAILED,
+        LifecycleTrigger.EXECUTION_ERROR
+      );
 
       throw error;
     }
   }
 
-  private async transitionState(newState: NodeLifecycleState, trigger: LifecycleTrigger): Promise<void> {
+  private async transitionState(
+    newState: NodeLifecycleState,
+    trigger: LifecycleTrigger
+  ): Promise<void> {
     const previousState = this.state.lifecycle;
 
     // Validate transition
@@ -729,7 +769,7 @@ class LifecycleAwareNode extends OptimizedRuntimeNode<string> {
       nodeId: this.id,
       trigger,
       currentState: this.state,
-      previousState: { ...this.state, lifecycle: previousState },
+      previousState: { ...this.state, lifecycle: previousState }
     });
 
     // Check if any hook aborted the transition
@@ -743,7 +783,7 @@ class LifecycleAwareNode extends OptimizedRuntimeNode<string> {
       timestamp: Date.now(),
       from: previousState,
       to: newState,
-      trigger,
+      trigger
     };
 
     // Persist state
@@ -757,7 +797,7 @@ class LifecycleAwareNode extends OptimizedRuntimeNode<string> {
       path: 'lifecycle',
       oldValue: previousState,
       newValue: newState,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     });
   }
 }
@@ -778,7 +818,7 @@ describe('Node Lifecycle Management', () => {
     hookSystem = new MockHookSystem();
     node = new LifecycleAwareNode('test-node', {
       schema: 'WeightedChoice',
-      data: { choices: ['a', 'b', 'c'] },
+      data: { choices: ['a', 'b', 'c'] }
     });
   });
 
@@ -809,7 +849,7 @@ describe('Node Lifecycle Management', () => {
         'core:validation',
         'user:custom:before',
         'core:performance:end',
-        'user:custom:after',
+        'user:custom:after'
       ]);
     });
   });
@@ -818,10 +858,14 @@ describe('Node Lifecycle Management', () => {
     it('should transition to FAILED state on execution error', async () => {
       // Given
       node.setState({ lifecycle: NodeLifecycleState.READY });
-      jest.spyOn(node, 'performExecution').mockRejectedValue(new Error('Test error'));
+      jest
+        .spyOn(node, 'performExecution')
+        .mockRejectedValue(new Error('Test error'));
 
       // When & Then
-      await expect(node.execute(createMockContext())).rejects.toThrow('Test error');
+      await expect(node.execute(createMockContext())).rejects.toThrow(
+        'Test error'
+      );
       expect(node.getState().lifecycle).toBe(NodeLifecycleState.FAILED);
     });
   });

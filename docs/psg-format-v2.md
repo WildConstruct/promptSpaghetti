@@ -230,8 +230,8 @@ Connections between nodes:
   "id": "edge-id",
   "source": "source-node-id",
   "target": "target-node-id",
-  "sourceHandle": "output",    // Optional
-  "targetHandle": "input",     // Optional
+  "sourceHandle": "output", // Optional
+  "targetHandle": "input", // Optional
   "type": "default",
   "animated": false,
   "style": {
@@ -239,8 +239,8 @@ Connections between nodes:
     "strokeWidth": 2,
     "strokeDasharray": "5,5"
   },
-  "label": "Connection Label",  // Optional
-  "data": { }                  // Optional custom data
+  "label": "Connection Label", // Optional
+  "data": {} // Optional custom data
 }
 ```
 
@@ -298,12 +298,14 @@ Optional section for demo content:
 ## Version Compatibility
 
 ### Version 2.0.0 (Current)
+
 - Full inline editing support
 - Enhanced metadata
 - Edit state tracking
 - Medieval demo support
 
 ### Version 1.x (Legacy)
+
 - Basic graph structure
 - Limited metadata
 - No inline editing support

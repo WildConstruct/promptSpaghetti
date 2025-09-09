@@ -4,39 +4,48 @@ export class PrivacyFilter {
   private patterns: Map<string, RegExp> = new Map([
     // Social Security Numbers
     ['ssn', /\b\d{3}-\d{2}-\d{4}\b|\b\d{9}\b/g],
-    
+
     // Email addresses
     ['email', /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g],
-    
+
     // Phone numbers (US format)
     ['phone', /\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g],
-    
+
     // Credit card numbers (basic pattern)
     ['creditCard', /\b(?:\d{4}[-\s]?){3}\d{4}\b/g],
-    
+
     // IP addresses
     ['ipAddress', /\b(?:\d{1,3}\.){3}\d{1,3}\b/g],
-    
+
     // Names (common patterns - this is imperfect)
-    ['name', /\b(?:Mr\.|Mrs\.|Ms\.|Dr\.|Prof\.)\s+[A-Z][a-z]+\s+[A-Z][a-z]+\b/g],
-    
+    [
+      'name',
+      /\b(?:Mr\.|Mrs\.|Ms\.|Dr\.|Prof\.)\s+[A-Z][a-z]+\s+[A-Z][a-z]+\b/g
+    ],
+
     // Addresses (street addresses)
-    ['address', /\b\d+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:St|Street|Ave|Avenue|Rd|Road|Blvd|Boulevard|Ln|Lane|Dr|Drive|Ct|Court)\b/gi],
-    
+    [
+      'address',
+      /\b\d+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+(?:St|Street|Ave|Avenue|Rd|Road|Blvd|Boulevard|Ln|Lane|Dr|Drive|Ct|Court)\b/gi
+    ],
+
     // Date of birth (various formats)
-    ['dob', /\b(?:\d{1,2}[-/]\d{1,2}[-/]\d{2,4}|\d{4}[-/]\d{1,2}[-/]\d{1,2})\b/g],
-    
+    [
+      'dob',
+      /\b(?:\d{1,2}[-/]\d{1,2}[-/]\d{2,4}|\d{4}[-/]\d{1,2}[-/]\d{1,2})\b/g
+    ],
+
     // Bank account numbers
     ['bankAccount', /\b[0-9]{8,17}\b/g],
-    
+
     // Passport numbers
-    ['passport', /\b[A-Z]{1,2}[0-9]{6,9}\b/g],
+    ['passport', /\b[A-Z]{1,2}[0-9]{6,9}\b/g]
   ]);
 
   private blocklist: Set<string> = new Set([
     // Inappropriate content keywords
     'offensive_term_1',
-    'offensive_term_2',
+    'offensive_term_2'
     // Add more as needed
   ]);
 
@@ -54,16 +63,19 @@ export class PrivacyFilter {
       if (matches && matches.length > 0) {
         hasPII = true;
         detectedTypes.push(type);
-        
+
         // Replace with placeholder
-        sanitized = sanitized.replace(pattern, `[REDACTED_${type.toUpperCase()}]`);
+        sanitized = sanitized.replace(
+          pattern,
+          `[REDACTED_${type.toUpperCase()}]`
+        );
       }
     }
 
     return {
       hasPII,
       detectedTypes,
-      sanitized,
+      sanitized
     };
   }
 
@@ -95,23 +107,32 @@ export class PrivacyFilter {
 
     return {
       sanitized,
-      warnings,
+      warnings
     };
   }
 
   private preventInjection(text: string): string {
     // Remove potential prompt injection patterns
     let cleaned = text;
-    
+
     // Remove instruction-like patterns
-    cleaned = cleaned.replace(/\b(ignore|forget|disregard)\s+(previous|above|all)\s+(instructions?|prompts?)/gi, '[FILTERED]');
-    
+    cleaned = cleaned.replace(
+      /\b(ignore|forget|disregard)\s+(previous|above|all)\s+(instructions?|prompts?)/gi,
+      '[FILTERED]'
+    );
+
     // Remove role-switching attempts
-    cleaned = cleaned.replace(/\b(you are now|act as|pretend to be|roleplay as)/gi, '[FILTERED]');
-    
+    cleaned = cleaned.replace(
+      /\b(you are now|act as|pretend to be|roleplay as)/gi,
+      '[FILTERED]'
+    );
+
     // Remove system prompt attempts
-    cleaned = cleaned.replace(/\[system\]|\[assistant\]|\[user\]/gi, '[FILTERED]');
-    
+    cleaned = cleaned.replace(
+      /\[system\]|\[assistant\]|\[user\]/gi,
+      '[FILTERED]'
+    );
+
     return cleaned;
   }
 
@@ -126,7 +147,9 @@ export class PrivacyFilter {
     // Check if response contains PII that wasn't in the input
     const piiCheck = this.detectPII(response);
     if (piiCheck.hasPII) {
-      issues.push(`Response contains PII: ${piiCheck.detectedTypes.join(', ')}`);
+      issues.push(
+        `Response contains PII: ${piiCheck.detectedTypes.join(', ')}`
+      );
       isValid = false;
     }
 
@@ -139,38 +162,45 @@ export class PrivacyFilter {
 
     return {
       isValid,
-      issues,
+      issues
     };
   }
 
   private detectHallucinations(text: string): string[] {
     const issues: string[] = [];
-    
+
     // Check for made-up URLs
     const urlPattern = /https?:\/\/[^\s]+/g;
     const urls = text.match(urlPattern);
     if (urls) {
       // Check if URLs look suspicious (e.g., made-up domains)
       for (const url of urls) {
-        if (url.includes('example.') || url.includes('fake.') || url.includes('test.')) {
+        if (
+          url.includes('example.') ||
+          url.includes('fake.') ||
+          url.includes('test.')
+        ) {
           issues.push(`Potentially hallucinated URL: ${url}`);
         }
       }
     }
-    
+
     // Check for specific dates in the future
     const futureYear = new Date().getFullYear() + 1;
-    const futurePattern = new RegExp(`\\b(${futureYear}|${futureYear + 1}|${futureYear + 2})\\b`, 'g');
+    const futurePattern = new RegExp(
+      `\\b(${futureYear}|${futureYear + 1}|${futureYear + 2})\\b`,
+      'g'
+    );
     if (futurePattern.test(text)) {
       issues.push('Response contains future dates');
     }
-    
+
     // Check for overly specific numbers that might be made up
     const suspiciousNumbers = /\b\d{10,}\b/g;
     if (suspiciousNumbers.test(text)) {
       issues.push('Response contains suspiciously specific numbers');
     }
-    
+
     return issues;
   }
 
@@ -191,7 +221,7 @@ export class PrivacyFilter {
   } {
     return {
       piiPatternsCount: this.patterns.size,
-      blocklistSize: this.blocklist.size,
+      blocklistSize: this.blocklist.size
     };
   }
 }

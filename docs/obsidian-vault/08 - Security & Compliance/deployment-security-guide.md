@@ -488,7 +488,7 @@ export const securityMiddleware = [
         scriptSrc: [
           "'self'",
           "'unsafe-eval'", // Required for React
-          'https://cdn.jsdelivr.net',
+          'https://cdn.jsdelivr.net'
         ],
         imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
         connectSrc: ["'self'", 'wss:', 'https://api.wildConstruct.com'],
@@ -497,26 +497,26 @@ export const securityMiddleware = [
         mediaSrc: ["'self'"],
         frameSrc: ["'none'"],
         childSrc: ["'none'"],
-        workerSrc: ["'self'"],
-      },
+        workerSrc: ["'self'"]
+      }
     },
 
     // Strict Transport Security
     hsts: {
       maxAge: 31536000, // 1 year
       includeSubDomains: true,
-      preload: true,
+      preload: true
     },
 
     // Expect Certificate Transparency
     expectCt: {
       maxAge: 30,
-      enforce: true,
+      enforce: true
     },
 
     // Referrer Policy
     referrerPolicy: {
-      policy: ['strict-origin-when-cross-origin'],
+      policy: ['strict-origin-when-cross-origin']
     },
 
     // Permissions Policy
@@ -525,9 +525,9 @@ export const securityMiddleware = [
         camera: ["'none'"],
         microphone: ["'none'"],
         geolocation: ["'none'"],
-        notifications: ["'self'"],
-      },
-    },
+        notifications: ["'self'"]
+      }
+    }
   }),
 
   // Rate limiting
@@ -546,7 +546,7 @@ export const securityMiddleware = [
     // Skip successful requests for authenticated users
     skip: req => {
       return req.user && req.rateLimit.remaining > 10;
-    },
+    }
   }),
 
   // Custom security headers
@@ -568,7 +568,7 @@ export const securityMiddleware = [
     }
 
     next();
-  },
+  }
 ];
 ```
 

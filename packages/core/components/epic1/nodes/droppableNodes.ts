@@ -45,5 +45,5 @@ export const droppableEpic1NodeTypes: NodeTypes = {
   postItNote: DroppablePostItNote,
   boundingBox: DroppableBoundingBox,
   enhancedBoundingBox: DroppableEnhancedBoundingBox,
-  group: DroppableGroupNode,
+  group: DroppableGroupNode
 };

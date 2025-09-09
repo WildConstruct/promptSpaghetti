@@ -1,10 +1,10 @@
 // Core LLM Service with OpenRouter Integration
 // Node-only shim import removed for browser bundling
 import OpenAI from 'openai';
-import { 
-  LLMRequest, 
-  LLMResponse, 
-  LLMServiceConfig, 
+import {
+  LLMRequest,
+  LLMResponse,
+  LLMServiceConfig,
   LLMMetrics,
   SuggestionResponse,
   MetadataResponse,
@@ -29,20 +29,19 @@ export class LLMService {
     this.config = config;
     this.modelSelector = new ModelSelector();
     this.cacheManager = new CacheManager();
-    this.tokenTracker = new TokenTracker(
-      config.dailyLimit,
-      config.costLimit
-    );
+    this.tokenTracker = new TokenTracker(config.dailyLimit, config.costLimit);
     this.privacyFilter = new PrivacyFilter();
 
     // Initialize OpenAI client for OpenRouter
     console.log('[LLMService] Constructor called with config:', {
       hasApiKey: !!config.apiKey,
-      apiKeyPrefix: config.apiKey ? config.apiKey.substring(0, 10) + '...' : 'none',
+      apiKeyPrefix: config.apiKey
+        ? config.apiKey.substring(0, 10) + '...'
+        : 'none',
       mode: config.mode,
       baseUrl: config.baseUrl
     });
-    
+
     if (config.apiKey) {
       console.log('[LLMService] Creating OpenAI client with API key');
       this.client = new OpenAI({
@@ -50,9 +49,9 @@ export class LLMService {
         baseURL: config.baseUrl || 'https://openrouter.ai/api/v1',
         defaultHeaders: {
           'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
-          'X-Title': 'Prompt Spaghetti',
+          'X-Title': 'Prompt Spaghetti'
         },
-        dangerouslyAllowBrowser: config.mode === 'development',
+        dangerouslyAllowBrowser: config.mode === 'development'
       });
       console.log('[LLMService] OpenAI client created successfully');
     } else {
@@ -70,7 +69,7 @@ export class LLMService {
         tokensOut: 0,
         cost: 0,
         cached: false,
-        error: 'Daily quota exceeded',
+        error: 'Daily quota exceeded'
       };
     }
 
@@ -81,7 +80,7 @@ export class LLMService {
 
     // Get models for task
     const models = this.modelSelector.getModelsForTask(request.taskType);
-    
+
     if (models.length === 0) {
       return {
         content: '',
@@ -90,7 +89,7 @@ export class LLMService {
         tokensOut: 0,
         cost: 0,
         cached: false,
-        error: 'No available models',
+        error: 'No available models'
       };
     }
 
@@ -108,17 +107,17 @@ export class LLMService {
           cacheHit: true,
           success: true,
           userId: this.userId,
-          consentVerified: true,
+          consentVerified: true
         });
         return cachedResponse;
       }
 
       try {
         const response = await this.callModel(model.id, request);
-        
+
         // Cache successful response
         this.cacheManager.set(request, model.id, response);
-        
+
         // Track usage
         this.tokenTracker.trackUsage(
           this.userId,
@@ -127,7 +126,7 @@ export class LLMService {
           response.tokensOut,
           response.cost
         );
-        
+
         return response;
       } catch (error) {
         console.error(`Model ${model.id} failed:`, error);
@@ -140,54 +139,58 @@ export class LLMService {
     return null;
   }
 
-  private async callModel(modelId: string, request: LLMRequest): Promise<LLMResponse> {
+  private async callModel(
+    modelId: string,
+    request: LLMRequest
+  ): Promise<LLMResponse> {
     if (!this.client) {
-      console.error('[LLMService] Client not initialized - no API key provided');
+      console.error(
+        '[LLMService] Client not initialized - no API key provided'
+      );
       throw new Error('LLM client not initialized - no API key configured');
     }
 
     const startTime = Date.now();
-    
+
     // Prepare prompt with compression
     const prompt = this.compressPrompt(request.prompt, request.context);
-    
+
     // Estimate tokens
     const tokensIn = this.tokenTracker.estimateTokens(prompt);
-    
+
     // Enforce token limits
     const maxTokens = Math.min(request.maxTokens || 200, 200);
-    
+
     try {
       // Create completion with timeout and retry logic
       const completion = await this.callWithRetry(
-        () => this.createCompletion(
-          modelId,
-          prompt,
-          maxTokens,
-          request.temperature,
-          request.responseFormat === 'json'
-        ),
+        () =>
+          this.createCompletion(
+            modelId,
+            prompt,
+            maxTokens,
+            request.temperature,
+            request.responseFormat === 'json'
+          ),
         3, // max retries
         3000 // 3 second timeout
       );
 
       const content = completion.choices[0]?.message?.content || '';
       const tokensOut = this.tokenTracker.estimateTokens(content);
-      
+
       // Validate JSON if required
       if (request.responseFormat === 'json') {
         this.validateJsonResponse(content, request.taskType);
       }
-      
+
       const model = this.modelSelector.getModelById(modelId);
-      const cost = model ? this.modelSelector.calculateCost(
-        modelId,
-        tokensIn,
-        tokensOut
-      ) : 0;
-      
+      const cost = model
+        ? this.modelSelector.calculateCost(modelId, tokensIn, tokensOut)
+        : 0;
+
       const latencyMs = Date.now() - startTime;
-      
+
       // Log metrics
       this.logMetrics({
         timestamp: Date.now(),
@@ -198,20 +201,20 @@ export class LLMService {
         cacheHit: false,
         success: true,
         userId: this.userId,
-        consentVerified: true,
+        consentVerified: true
       });
-      
+
       return {
         content,
         model: modelId,
         tokensIn,
         tokensOut,
         cost,
-        cached: false,
+        cached: false
       };
     } catch (error: any) {
       const latencyMs = Date.now() - startTime;
-      
+
       // Log error metrics
       this.logMetrics({
         timestamp: Date.now(),
@@ -223,9 +226,9 @@ export class LLMService {
         success: false,
         userId: this.userId,
         consentVerified: true,
-        error: error.message,
+        error: error.message
       });
-      
+
       throw error;
     }
   }
@@ -236,20 +239,20 @@ export class LLMService {
     timeout: number = 3000
   ): Promise<T> {
     let lastError: Error | null = null;
-    
+
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
         // Create promise with timeout
         const timeoutPromise = new Promise<never>((_, reject) => {
           setTimeout(() => reject(new Error('Request timeout')), timeout);
         });
-        
+
         // Race between actual call and timeout
         const result = await Promise.race([fn(), timeoutPromise]);
         return result;
       } catch (error: any) {
         lastError = error;
-        
+
         // Check if it's a rate limit error
         if (error.status === 429 || error.message?.includes('rate')) {
           // Exponential backoff: 1s, 2s, 4s
@@ -257,7 +260,9 @@ export class LLMService {
           console.log(`Rate limited, retrying in ${backoffMs}ms...`);
           await new Promise(resolve => setTimeout(resolve, backoffMs));
         } else if (error.message === 'Request timeout') {
-          console.log(`Request timed out after ${timeout}ms, attempt ${attempt + 1}/${maxRetries}`);
+          console.log(
+            `Request timed out after ${timeout}ms, attempt ${attempt + 1}/${maxRetries}`
+          );
           // Don't wait for timeout errors, try immediately
         } else {
           // For other errors, don't retry
@@ -265,7 +270,7 @@ export class LLMService {
         }
       }
     }
-    
+
     throw lastError || new Error('Max retries exceeded');
   }
 
@@ -279,21 +284,21 @@ export class LLMService {
     const messages = [
       {
         role: 'system' as const,
-        content: jsonMode 
+        content: jsonMode
           ? 'You are a helpful assistant that always responds with valid JSON. Be factual and avoid speculation.'
-          : 'You are a helpful assistant. Be factual and avoid speculation.',
+          : 'You are a helpful assistant. Be factual and avoid speculation.'
       },
       {
         role: 'user' as const,
-        content: prompt,
-      },
+        content: prompt
+      }
     ];
 
     const completionParams: any = {
       model,
       messages,
       max_tokens: maxTokens,
-      temperature: temperature || 0.7,
+      temperature: temperature || 0.7
     };
 
     // Add response format for JSON mode if supported
@@ -307,30 +312,31 @@ export class LLMService {
   private compressPrompt(prompt: string, context?: string): string {
     // Sanitize prompt first
     const { sanitized, warnings } = this.privacyFilter.sanitizePrompt(prompt);
-    
+
     if (warnings.length > 0) {
       console.warn('Privacy filter warnings:', warnings);
     }
-    
+
     let compressed = sanitized.trim().replace(/\s+/g, ' ');
-    
+
     if (context) {
-      const { sanitized: sanitizedContext } = this.privacyFilter.sanitizePrompt(context);
+      const { sanitized: sanitizedContext } =
+        this.privacyFilter.sanitizePrompt(context);
       compressed = `Context: ${sanitizedContext.trim().replace(/\s+/g, ' ')}\n\n${compressed}`;
     }
-    
+
     // Truncate if too long (500 token limit ≈ 2000 characters)
     if (compressed.length > 2000) {
       compressed = compressed.slice(0, 2000) + '...';
     }
-    
+
     return compressed;
   }
 
   private validateJsonResponse(content: string, taskType?: string): void {
     try {
       const parsed = JSON.parse(content);
-      
+
       // Validate based on task type
       switch (taskType) {
         case 'suggestion':
@@ -352,38 +358,49 @@ export class LLMService {
     if (!Array.isArray(data.choices)) {
       throw new Error('Suggestion response must have choices array');
     }
-    
+
     for (const choice of data.choices) {
-      if (typeof choice.text !== 'string' || typeof choice.weight !== 'number') {
+      if (
+        typeof choice.text !== 'string' ||
+        typeof choice.weight !== 'number'
+      ) {
         throw new Error('Each choice must have text and weight');
       }
     }
   }
 
   private validateMetadataResponse(data: any): void {
-    if (!Array.isArray(data.tags) || 
-        typeof data.subject !== 'string' || 
-        typeof data.intensity !== 'number') {
-      throw new Error('Metadata response must have tags, subject, and intensity');
+    if (
+      !Array.isArray(data.tags) ||
+      typeof data.subject !== 'string' ||
+      typeof data.intensity !== 'number'
+    ) {
+      throw new Error(
+        'Metadata response must have tags, subject, and intensity'
+      );
     }
   }
 
   private validateRefinementResponse(data: any): void {
-    if (typeof data.original !== 'string' || 
-        typeof data.refined !== 'string' || 
-        !Array.isArray(data.changes)) {
-      throw new Error('Refinement response must have original, refined, and changes');
+    if (
+      typeof data.original !== 'string' ||
+      typeof data.refined !== 'string' ||
+      !Array.isArray(data.changes)
+    ) {
+      throw new Error(
+        'Refinement response must have original, refined, and changes'
+      );
     }
   }
 
   private logMetrics(metrics: LLMMetrics): void {
     this.metrics.push(metrics);
-    
+
     // Keep only last 1000 metrics
     if (this.metrics.length > 1000) {
       this.metrics = this.metrics.slice(-1000);
     }
-    
+
     // Log to console in development
     if (this.config.mode === 'development') {
       console.log('LLM Metrics:', metrics);
@@ -412,7 +429,7 @@ export class LLMService {
       prompt,
       taskType: 'suggestion',
       responseFormat: 'json',
-      maxTokens: 200,
+      maxTokens: 200
     });
 
     if (response && response.content) {
@@ -422,7 +439,7 @@ export class LLMService {
         return null;
       }
     }
-    
+
     return null;
   }
 
@@ -435,7 +452,7 @@ export class LLMService {
       prompt,
       taskType: 'metadata',
       responseFormat: 'json',
-      maxTokens: 150,
+      maxTokens: 150
     });
 
     if (response && response.content) {
@@ -445,11 +462,14 @@ export class LLMService {
         return null;
       }
     }
-    
+
     return null;
   }
 
-  async refineText(text: string, style?: string): Promise<RefinementResponse | null> {
+  async refineText(
+    text: string,
+    style?: string
+  ): Promise<RefinementResponse | null> {
     const prompt = `Refine this text${style ? ` in ${style} style` : ''}: "${text}"
     
     Return JSON with format: {"original": "...", "refined": "...", "changes": [...]}`;
@@ -458,7 +478,7 @@ export class LLMService {
       prompt,
       taskType: 'refinement',
       responseFormat: 'json',
-      maxTokens: 200,
+      maxTokens: 200
     });
 
     if (response && response.content) {
@@ -468,7 +488,7 @@ export class LLMService {
         return null;
       }
     }
-    
+
     return null;
   }
 

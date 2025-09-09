@@ -41,7 +41,11 @@ client/src/utils/__tests__/
 // URL validation tests
 describe('URL Validation', () => {
   it('should block dangerous URLs', () => {
-    const dangerousUrls = ['javascript:alert(1)', 'data:text/html,<script>alert(1)</script>', 'vbscript:msgbox(1)'];
+    const dangerousUrls = [
+      'javascript:alert(1)',
+      'data:text/html,<script>alert(1)</script>',
+      'vbscript:msgbox(1)'
+    ];
 
     dangerousUrls.forEach(url => {
       expect(validateUrl(url)).toBeNull();
@@ -52,7 +56,11 @@ describe('URL Validation', () => {
 // Input validation tests
 describe('Input Validation', () => {
   it('should detect XSS attempts', () => {
-    const xssAttempts = ['<script>alert(1)</script>', 'javascript:alert(1)', 'eval(maliciousCode)'];
+    const xssAttempts = [
+      '<script>alert(1)</script>',
+      'javascript:alert(1)',
+      'eval(maliciousCode)'
+    ];
 
     xssAttempts.forEach(input => {
       const result = validateInput(input);
@@ -97,7 +105,11 @@ describe('Performance Monitoring', () => {
   it('should track API performance', async () => {
     const mockApiCall = () => Promise.resolve({ data: 'test' });
 
-    const result = await performanceMonitor.trackApiCall('/api/test', 'GET', mockApiCall);
+    const result = await performanceMonitor.trackApiCall(
+      '/api/test',
+      'GET',
+      mockApiCall
+    );
 
     expect(result.data).toBe('test');
   });
@@ -164,7 +176,9 @@ describe('FileService Integration', () => {
 
     // Verify all operations used proper authentication and logging
     expect(mockAuthProvider.getToken).toHaveBeenCalled();
-    expect(mockLogger.logs.filter(log => log.level === 'error')).toHaveLength(0);
+    expect(mockLogger.logs.filter(log => log.level === 'error')).toHaveLength(
+      0
+    );
   });
 });
 ```
@@ -325,7 +339,11 @@ export function checkPerformanceBaseline(report: TestSuiteResult): boolean {
   const maxAllowedDuration = 2000; // 2 seconds
   const minCoverage = 85; // 85%
 
-  return report.totalDuration <= maxAllowedDuration && report.coverage >= minCoverage && report.failedTests === 0;
+  return (
+    report.totalDuration <= maxAllowedDuration &&
+    report.coverage >= minCoverage &&
+    report.failedTests === 0
+  );
 }
 ```
 

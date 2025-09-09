@@ -6,32 +6,44 @@ interface ParsingLoaderProps {
   message?: string;
 }
 
-export default function ParsingLoader({ prompt = "", message = "Parsing your prompt..." }: ParsingLoaderProps) {
+export default function ParsingLoader({
+  prompt = '',
+  message = 'Parsing your prompt...'
+}: ParsingLoaderProps) {
   // Use the actual prompt text or fall back to the message
   const text = prompt.trim() || message;
-  
+
   // Split into words, limiting to avoid overflow
-  const words = text.split(/\s+/).filter(w => w.length > 0).slice(0, 8); // Limit to 8 words for display
-  const nodes = words.length > 0 ? words : message.split(" ");
-  
+  const words = text
+    .split(/\s+/)
+    .filter(w => w.length > 0)
+    .slice(0, 8); // Limit to 8 words for display
+  const nodes = words.length > 0 ? words : message.split(' ');
+
   const nodeRadius = 23;
   const nodeSpacing = 74;
   const width = Math.min(nodeSpacing * nodes.length, 800); // Cap width
   const height = 120;
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      gap: '30px',
-      padding: '60px 20px',
-      background: 'transparent',
-      minHeight: '300px',
-      width: '100%'
-    }}>
-      <svg width={width} height={height} style={{ display: 'block', margin: 'auto' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '30px',
+        padding: '60px 20px',
+        background: 'transparent',
+        minHeight: '300px',
+        width: '100%'
+      }}
+    >
+      <svg
+        width={width}
+        height={height}
+        style={{ display: 'block', margin: 'auto' }}
+      >
         {nodes.map((word, i) => (
           <React.Fragment key={i}>
             {/* Node with word pop-in */}
@@ -79,7 +91,10 @@ export default function ParsingLoader({ prompt = "", message = "Parsing your pro
                 y2={height / 2}
                 stroke="#8969e7"
                 strokeWidth={3}
-                animate={{ strokeDashoffset: [8, 0, 8], strokeDasharray: "8 8" }}
+                animate={{
+                  strokeDashoffset: [8, 0, 8],
+                  strokeDasharray: '8 8'
+                }}
                 transition={{
                   repeat: Infinity,
                   duration: 1.7,
@@ -92,11 +107,17 @@ export default function ParsingLoader({ prompt = "", message = "Parsing your pro
         {/* Shadow filter */}
         <defs>
           <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#988af9" floodOpacity="0.61" />
+            <feDropShadow
+              dx="0"
+              dy="2"
+              stdDeviation="2"
+              floodColor="#988af9"
+              floodOpacity="0.61"
+            />
           </filter>
         </defs>
       </svg>
-      
+
       {/* Loading message */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -114,7 +135,7 @@ export default function ParsingLoader({ prompt = "", message = "Parsing your pro
           transition={{
             repeat: Infinity,
             duration: 1.5,
-            ease: "easeInOut"
+            ease: 'easeInOut'
           }}
         >
           AI-Enhanced parsing in progress
@@ -124,7 +145,7 @@ export default function ParsingLoader({ prompt = "", message = "Parsing your pro
           transition={{
             repeat: Infinity,
             duration: 1.5,
-            ease: "easeInOut",
+            ease: 'easeInOut',
             delay: 0.5
           }}
           style={{ marginLeft: '2px' }}

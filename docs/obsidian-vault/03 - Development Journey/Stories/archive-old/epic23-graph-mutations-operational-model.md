@@ -312,7 +312,7 @@ enum ResolutionStrategy {
   ACCEPT_REMOTE = 'accept_remote',
   MERGE_CHANGES = 'merge_changes',
   CUSTOM_RESOLUTION = 'custom_resolution',
-  ROLLBACK_OPERATION = 'rollback_operation',
+  ROLLBACK_OPERATION = 'rollback_operation'
 }
 ```
 
@@ -406,13 +406,20 @@ interface StateVerificationMessage {
 #### Concurrent Node Creation
 
 ```typescript
-function transformNodeAdd(op1: NodeAddOperation, op2: NodeAddOperation): [NodeAddOperation, NodeAddOperation] {
+function transformNodeAdd(
+  op1: NodeAddOperation,
+  op2: NodeAddOperation
+): [NodeAddOperation, NodeAddOperation] {
   if (op1.nodeId === op2.nodeId) {
     // ID conflict - assign new ID to later operation
     const laterOp = op1.timestamp > op2.timestamp ? op1 : op2;
     return [
-      op1.timestamp <= op2.timestamp ? op1 : { ...op1, nodeId: generateUniqueId() },
-      op2.timestamp <= op1.timestamp ? op2 : { ...op2, nodeId: generateUniqueId() },
+      op1.timestamp <= op2.timestamp
+        ? op1
+        : { ...op1, nodeId: generateUniqueId() },
+      op2.timestamp <= op1.timestamp
+        ? op2
+        : { ...op2, nodeId: generateUniqueId() }
     ];
   }
   return [op1, op2]; // No conflict
@@ -436,7 +443,10 @@ function transformUpdateDelete(update: NodeUpdateOperation, delete: NodeRemoveOp
 #### Connection Racing
 
 ```typescript
-function transformEdgeAdd(op1: EdgeAddOperation, op2: EdgeAddOperation): [EdgeAddOperation, EdgeAddOperation] {
+function transformEdgeAdd(
+  op1: EdgeAddOperation,
+  op2: EdgeAddOperation
+): [EdgeAddOperation, EdgeAddOperation] {
   if (
     op1.sourceNodeId === op2.sourceNodeId &&
     op1.targetNodeId === op2.targetNodeId &&
@@ -522,7 +532,9 @@ class OperationHistory {
   }
 
   private cleanupOldOperations(): void {
-    const sortedOps = Array.from(this.operations.entries()).sort(([, a], [, b]) => b.timestamp - a.timestamp);
+    const sortedOps = Array.from(this.operations.entries()).sort(
+      ([, a], [, b]) => b.timestamp - a.timestamp
+    );
 
     // Keep only the most recent operations
     this.operations = new Map(sortedOps.slice(0, this.MAX_HISTORY));

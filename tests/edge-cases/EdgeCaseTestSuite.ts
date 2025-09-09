@@ -28,7 +28,7 @@ export enum EdgeCaseCategory {
   SECURITY_BOUNDARIES = 'security-boundaries',
   NETWORK_CONDITIONS = 'network-conditions',
   MEMORY_LIMITS = 'memory-limits',
-  CONCURRENT_ACCESS = 'concurrent-access',
+  CONCURRENT_ACCESS = 'concurrent-access'
 }
 
 export class EdgeCaseTestSuite {
@@ -61,14 +61,15 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.GRAPH_STRUCTURE,
         severity: 'high',
         description: 'Test execution of completely empty graph',
-        expectedBehavior: 'Should return empty result or appropriate error without crashing',
+        expectedBehavior:
+          'Should return empty result or appropriate error without crashing',
         testFn: async () => {
           const emptyGraph = testDataGenerator.generateGraph({
             nodeCount: 0,
             seed: 123,
             scenario: TestScenario.SIMPLE_LINEAR,
             complexity: 'simple',
-            includeAdvancedNodes: false,
+            includeAdvancedNodes: false
           });
 
           // Test should handle empty graph gracefully
@@ -77,22 +78,24 @@ export class EdgeCaseTestSuite {
             const result = await executeGraph.executeGraph(emptyGraph);
             expect(result).toBeDefined();
           }, 'empty-graph-execution');
-        },
+        }
       },
 
       {
         name: 'Circular Dependency Detection',
         category: EdgeCaseCategory.GRAPH_STRUCTURE,
         severity: 'critical',
-        description: 'Test detection and handling of circular dependencies in graph',
-        expectedBehavior: 'Should detect circular dependency and prevent infinite loops',
+        description:
+          'Test detection and handling of circular dependencies in graph',
+        expectedBehavior:
+          'Should detect circular dependency and prevent infinite loops',
         testFn: async () => {
           const circularGraph = testDataGenerator.generateGraph({
             nodeCount: 5,
             seed: 456,
             scenario: TestScenario.CIRCULAR_DEPENDENCY,
             complexity: 'moderate',
-            includeAdvancedNodes: false,
+            includeAdvancedNodes: false
           });
 
           await retry.test(async () => {
@@ -108,7 +111,7 @@ export class EdgeCaseTestSuite {
               expect(error.message).toMatch(/circular|cycle|dependency/i);
             }
           }, 'circular-dependency-detection');
-        },
+        }
       },
 
       {
@@ -116,14 +119,15 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.GRAPH_STRUCTURE,
         severity: 'medium',
         description: 'Test system behavior with maximum allowable nodes',
-        expectedBehavior: 'Should handle large graphs or fail gracefully with memory limits',
+        expectedBehavior:
+          'Should handle large graphs or fail gracefully with memory limits',
         testFn: async () => {
           const largeGraph = testDataGenerator.generateGraph({
             nodeCount: 1000,
             seed: 789,
             scenario: TestScenario.PERFORMANCE_STRESS,
             complexity: 'complex',
-            includeAdvancedNodes: true,
+            includeAdvancedNodes: true
           });
 
           await retry.test(async () => {
@@ -136,7 +140,7 @@ export class EdgeCaseTestSuite {
             expect(result).toBeDefined();
             expect(endMemory - startMemory).toBeLessThan(100 * 1024 * 1024); // < 100MB
           }, 'maximum-node-count-stress');
-        },
+        }
       },
 
       {
@@ -144,14 +148,15 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.GRAPH_STRUCTURE,
         severity: 'high',
         description: 'Test execution of graphs with excessive nesting depth',
-        expectedBehavior: 'Should handle deep nesting or prevent stack overflow',
+        expectedBehavior:
+          'Should handle deep nesting or prevent stack overflow',
         testFn: async () => {
           const deepGraph = testDataGenerator.generateGraph({
             nodeCount: 100,
             seed: 321,
             scenario: TestScenario.DEEP_NESTING,
             complexity: 'complex',
-            includeAdvancedNodes: true,
+            includeAdvancedNodes: true
           });
 
           await retry.test(async () => {
@@ -161,8 +166,8 @@ export class EdgeCaseTestSuite {
             const result = await executeGraph.executeGraph(deepGraph);
             expect(result).toBeDefined();
           }, 'deeply-nested-graph-execution');
-        },
-      },
+        }
+      }
     ];
 
     this.edgeCases.set(EdgeCaseCategory.GRAPH_STRUCTURE, graphEdgeCases);
@@ -178,7 +183,8 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.AUTHENTICATION,
         severity: 'critical',
         description: 'Test behavior when JWT token expires mid-request',
-        expectedBehavior: 'Should handle token expiration gracefully and redirect to login',
+        expectedBehavior:
+          'Should handle token expiration gracefully and redirect to login',
         testFn: async () => {
           await retry.test(async () => {
             // Create expired token
@@ -188,28 +194,30 @@ export class EdgeCaseTestSuite {
             // Mock API request with expired token
             const response = await fetch('/api/test', {
               headers: {
-                Authorization: `Bearer ${expiredToken}`,
-              },
+                Authorization: `Bearer ${expiredToken}`
+              }
             });
 
             expect([401, 403]).toContain(response.status);
           }, 'expired-token-handling');
-        },
+        }
       },
 
       {
         name: 'Concurrent Session Conflict',
         category: EdgeCaseCategory.AUTHENTICATION,
         severity: 'high',
-        description: 'Test handling of multiple concurrent sessions for same user',
-        expectedBehavior: 'Should handle concurrent sessions per security policy',
+        description:
+          'Test handling of multiple concurrent sessions for same user',
+        expectedBehavior:
+          'Should handle concurrent sessions per security policy',
         testFn: async () => {
           await retry.test(async () => {
             const user = testDataGenerator.generateUser({
               role: 'user',
               permissions: ['read'],
               isVerified: true,
-              mfaEnabled: false,
+              mfaEnabled: false
             });
 
             // Simulate multiple concurrent login attempts
@@ -219,8 +227,8 @@ export class EdgeCaseTestSuite {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   email: user.email,
-                  password: 'testpassword123',
-                }),
+                  password: 'testpassword123'
+                })
               });
             });
 
@@ -229,7 +237,7 @@ export class EdgeCaseTestSuite {
             // Should handle concurrent sessions appropriately
             expect(results.some(r => r.ok)).toBe(true);
           }, 'concurrent-session-conflict');
-        },
+        }
       },
 
       {
@@ -237,7 +245,8 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.AUTHENTICATION,
         severity: 'medium',
         description: 'Test handling of malformed or invalid auth headers',
-        expectedBehavior: 'Should reject invalid headers with appropriate error codes',
+        expectedBehavior:
+          'Should reject invalid headers with appropriate error codes',
         testFn: async () => {
           const malformedHeaders = [
             'Bearer ',
@@ -246,7 +255,7 @@ export class EdgeCaseTestSuite {
             'Token malformed',
             '',
             null,
-            undefined,
+            undefined
           ];
 
           for (const header of malformedHeaders) {
@@ -263,8 +272,8 @@ export class EdgeCaseTestSuite {
               `malformed-header-${header || 'null'}`
             );
           }
-        },
-      },
+        }
+      }
     ];
 
     this.edgeCases.set(EdgeCaseCategory.AUTHENTICATION, authEdgeCases);
@@ -280,7 +289,8 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.API_VALIDATION,
         severity: 'high',
         description: 'Test API handling of malformed JSON in request bodies',
-        expectedBehavior: 'Should return 400 Bad Request with clear error message',
+        expectedBehavior:
+          'Should return 400 Bad Request with clear error message',
         testFn: async () => {
           const malformedPayloads = [
             '{ invalid json',
@@ -290,7 +300,7 @@ export class EdgeCaseTestSuite {
             '}',
             '[]',
             'not json at all',
-            '',
+            ''
           ];
 
           for (const payload of malformedPayloads) {
@@ -299,7 +309,7 @@ export class EdgeCaseTestSuite {
                 const response = await fetch('/api/graphs', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: payload,
+                  body: payload
                 });
 
                 expect(response.status).toBe(400);
@@ -309,7 +319,7 @@ export class EdgeCaseTestSuite {
               `malformed-json-${payload.substring(0, 10)}`
             );
           }
-        },
+        }
       },
 
       {
@@ -317,23 +327,24 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.API_VALIDATION,
         severity: 'medium',
         description: 'Test handling of requests exceeding size limits',
-        expectedBehavior: 'Should reject oversized requests with 413 Payload Too Large',
+        expectedBehavior:
+          'Should reject oversized requests with 413 Payload Too Large',
         testFn: async () => {
           await retry.test(async () => {
             // Create oversized payload (10MB)
             const largePayload = {
-              data: new Array(10 * 1024 * 1024).fill('X').join(''),
+              data: new Array(10 * 1024 * 1024).fill('X').join('')
             };
 
             const response = await fetch('/api/graphs', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(largePayload),
+              body: JSON.stringify(largePayload)
             });
 
             expect([413, 400]).toContain(response.status);
           }, 'oversized-payload');
-        },
+        }
       },
 
       {
@@ -348,26 +359,30 @@ export class EdgeCaseTestSuite {
             "' OR '1'='1",
             "'; DELETE FROM graphs WHERE '1'='1'; --",
             "' UNION SELECT * FROM users --",
-            "'; INSERT INTO users VALUES ('hacker', 'password'); --",
+            "'; INSERT INTO users VALUES ('hacker', 'password'); --"
           ];
 
           for (const payload of sqlInjectionPayloads) {
             await retry.test(
               async () => {
-                const response = await fetch(`/api/graphs?search=${encodeURIComponent(payload)}`);
+                const response = await fetch(
+                  `/api/graphs?search=${encodeURIComponent(payload)}`
+                );
 
                 // Should not return 500 internal server error (indicating SQL error)
                 expect(response.status).not.toBe(500);
 
                 // Response should be sanitized/safe
                 const data = await response.json();
-                expect(JSON.stringify(data)).not.toMatch(/DROP|DELETE|INSERT|UNION/i);
+                expect(JSON.stringify(data)).not.toMatch(
+                  /DROP|DELETE|INSERT|UNION/i
+                );
               },
               `sql-injection-${payload.substring(0, 10)}`
             );
           }
-        },
-      },
+        }
+      }
     ];
 
     this.edgeCases.set(EdgeCaseCategory.API_VALIDATION, apiEdgeCases);
@@ -394,23 +409,29 @@ export class EdgeCaseTestSuite {
                   id: 'loop1',
                   type: 'Conditional',
                   data: {
-                    branches: [{ condition: 'true', output: 'continue', label: 'Always True' }],
-                    defaultOutput: 'continue',
-                  },
+                    branches: [
+                      {
+                        condition: 'true',
+                        output: 'continue',
+                        label: 'Always True'
+                      }
+                    ],
+                    defaultOutput: 'continue'
+                  }
                 },
                 {
                   id: 'loop2',
                   type: 'SetVariable',
                   data: {
                     variableName: 'counter',
-                    value: '1',
-                  },
-                },
+                    value: '1'
+                  }
+                }
               ],
               edges: [
                 { id: 'edge1', source: 'loop1', target: 'loop2' },
-                { id: 'edge2', source: 'loop2', target: 'loop1' },
-              ],
+                { id: 'edge2', source: 'loop2', target: 'loop1' }
+              ]
             };
 
             const executeGraph = await import('../../server/src/engine');
@@ -424,7 +445,7 @@ export class EdgeCaseTestSuite {
               expect(error.message).toMatch(/timeout|infinite|loop/i);
             }
           }, 'infinite-loop-detection');
-        },
+        }
       },
 
       {
@@ -440,7 +461,7 @@ export class EdgeCaseTestSuite {
               seed: 999,
               scenario: TestScenario.MEMORY_INTENSIVE,
               complexity: 'complex',
-              includeAdvancedNodes: true,
+              includeAdvancedNodes: true
             });
 
             const executeGraph = await import('../../server/src/engine');
@@ -460,7 +481,7 @@ export class EdgeCaseTestSuite {
             // Should not consume more than 500MB
             expect(memoryIncrease).toBeLessThan(500 * 1024 * 1024);
           }, 'memory-exhaustion-prevention');
-        },
+        }
       },
 
       {
@@ -468,7 +489,8 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.RUNTIME_EXECUTION,
         severity: 'medium',
         description: 'Test handling of references to non-existent variables',
-        expectedBehavior: 'Should handle undefined variables with default values or errors',
+        expectedBehavior:
+          'Should handle undefined variables with default values or errors',
         testFn: async () => {
           await retry.test(async () => {
             const graph = {
@@ -479,16 +501,16 @@ export class EdgeCaseTestSuite {
                   type: 'GetVariable',
                   data: {
                     variableName: 'nonExistentVariable',
-                    defaultValue: 'default',
-                  },
+                    defaultValue: 'default'
+                  }
                 },
                 {
                   id: 'output',
                   type: 'Output',
-                  data: {},
-                },
+                  data: {}
+                }
               ],
-              edges: [{ id: 'edge1', source: 'get-invalid', target: 'output' }],
+              edges: [{ id: 'edge1', source: 'get-invalid', target: 'output' }]
             };
 
             const executeGraph = await import('../../server/src/engine');
@@ -497,8 +519,8 @@ export class EdgeCaseTestSuite {
             // Should handle gracefully with default value
             expect(result).toBeDefined();
           }, 'invalid-variable-references');
-        },
-      },
+        }
+      }
     ];
 
     this.edgeCases.set(EdgeCaseCategory.RUNTIME_EXECUTION, runtimeEdgeCases);
@@ -514,7 +536,8 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.DATA_VALIDATION,
         severity: 'medium',
         description: 'Test handling of Unicode and special characters in data',
-        expectedBehavior: 'Should preserve Unicode characters and handle special chars safely',
+        expectedBehavior:
+          'Should preserve Unicode characters and handle special chars safely',
         testFn: async () => {
           const specialStrings = [
             '🎯🔥💡🚀✨', // Emojis
@@ -524,7 +547,7 @@ export class EdgeCaseTestSuite {
             '\\n\\t\\r', // Escape sequences
             '<script>alert("XSS")</script>', // XSS attempt
             '../../etc/passwd', // Path traversal
-            'null\\x00byte', // Null byte
+            'null\\x00byte' // Null byte
           ];
 
           for (const testString of specialStrings) {
@@ -538,16 +561,18 @@ export class EdgeCaseTestSuite {
                       type: 'SetVariable',
                       data: {
                         variableName: 'testVar',
-                        value: testString,
-                      },
+                        value: testString
+                      }
                     },
                     {
                       id: 'output',
                       type: 'Output',
-                      data: {},
-                    },
+                      data: {}
+                    }
                   ],
-                  edges: [{ id: 'edge1', source: 'test-node', target: 'output' }],
+                  edges: [
+                    { id: 'edge1', source: 'test-node', target: 'output' }
+                  ]
                 };
 
                 const executeGraph = await import('../../server/src/engine');
@@ -558,8 +583,8 @@ export class EdgeCaseTestSuite {
               `special-characters-${testString.substring(0, 10)}`
             );
           }
-        },
-      },
+        }
+      }
     ];
 
     this.edgeCases.set(EdgeCaseCategory.DATA_VALIDATION, dataEdgeCases);
@@ -575,7 +600,8 @@ export class EdgeCaseTestSuite {
         category: EdgeCaseCategory.PERFORMANCE_LIMITS,
         severity: 'high',
         description: 'Test API response times at performance boundaries',
-        expectedBehavior: 'Should meet performance budgets or timeout gracefully',
+        expectedBehavior:
+          'Should meet performance budgets or timeout gracefully',
         testFn: async () => {
           await retry.test(async () => {
             const startTime = Date.now();
@@ -589,9 +615,9 @@ export class EdgeCaseTestSuite {
                   seed: 789,
                   scenario: TestScenario.PERFORMANCE_STRESS,
                   complexity: 'complex',
-                  includeAdvancedNodes: true,
-                }),
-              }),
+                  includeAdvancedNodes: true
+                })
+              })
             });
 
             const duration = Date.now() - startTime;
@@ -600,11 +626,14 @@ export class EdgeCaseTestSuite {
             expect(duration).toBeLessThan(5000);
             expect(response.ok || response.status === 408).toBe(true);
           }, 'response-time-boundaries');
-        },
-      },
+        }
+      }
     ];
 
-    this.edgeCases.set(EdgeCaseCategory.PERFORMANCE_LIMITS, performanceEdgeCases);
+    this.edgeCases.set(
+      EdgeCaseCategory.PERFORMANCE_LIMITS,
+      performanceEdgeCases
+    );
   }
 
   /**
@@ -629,7 +658,9 @@ export class EdgeCaseTestSuite {
   /**
    * Run all edge case tests for a specific category
    */
-  async runCategoryTests(category: EdgeCaseCategory): Promise<EdgeCaseTestResults> {
+  async runCategoryTests(
+    category: EdgeCaseCategory
+  ): Promise<EdgeCaseTestResults> {
     const tests = this.edgeCases.get(category) || [];
     const results: EdgeCaseTestResults = {
       category,
@@ -639,7 +670,7 @@ export class EdgeCaseTestSuite {
       skippedTests: 0,
       testResults: [],
       duration: 0,
-      summary: '',
+      summary: ''
     };
 
     const startTime = Date.now();
@@ -651,7 +682,7 @@ export class EdgeCaseTestSuite {
         passed: false,
         error: null,
         duration: 0,
-        retryCount: 0,
+        retryCount: 0
       };
 
       const testStartTime = Date.now();
@@ -662,7 +693,8 @@ export class EdgeCaseTestSuite {
         results.passedTests++;
       } catch (error) {
         testResult.passed = false;
-        testResult.error = error instanceof Error ? error.message : String(error);
+        testResult.error =
+          error instanceof Error ? error.message : String(error);
         results.failedTests++;
       }
 
@@ -695,27 +727,36 @@ export class EdgeCaseTestSuite {
       categoryResults,
       overallSummary: summary,
       totalDuration,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
   }
 
   private generateCategorySummary(results: EdgeCaseTestResults): string {
-    const successRate = results.totalTests > 0 ? ((results.passedTests / results.totalTests) * 100).toFixed(1) : '0';
+    const successRate =
+      results.totalTests > 0
+        ? ((results.passedTests / results.totalTests) * 100).toFixed(1)
+        : '0';
 
     return `${results.category}: ${results.passedTests}/${results.totalTests} passed (${successRate}%) in ${results.duration}ms`;
   }
 
-  private generateOverallSummary(results: EdgeCaseTestResults[], duration: number): string {
+  private generateOverallSummary(
+    results: EdgeCaseTestResults[],
+    duration: number
+  ): string {
     const totals = results.reduce(
       (acc, result) => ({
         total: acc.total + result.totalTests,
         passed: acc.passed + result.passedTests,
-        failed: acc.failed + result.failedTests,
+        failed: acc.failed + result.failedTests
       }),
       { total: 0, passed: 0, failed: 0 }
     );
 
-    const successRate = totals.total > 0 ? ((totals.passed / totals.total) * 100).toFixed(1) : '0';
+    const successRate =
+      totals.total > 0
+        ? ((totals.passed / totals.total) * 100).toFixed(1)
+        : '0';
 
     return `Overall: ${totals.passed}/${totals.total} edge case tests passed (${successRate}%) in ${duration}ms`;
   }

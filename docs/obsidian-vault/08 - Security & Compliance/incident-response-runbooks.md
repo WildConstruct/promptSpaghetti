@@ -90,8 +90,8 @@ BreachNotification = {
   regulatory: {
     GDPR: '72 hours to supervisory authority',
     CCPA: 'Without unreasonable delay to Attorney General',
-    state_laws: 'Varies - check state requirements',
-  },
+    state_laws: 'Varies - check state requirements'
+  }
 };
 ```
 
@@ -267,21 +267,21 @@ ComplianceNotification = {
       'Categories of data subjects affected',
       'Approximate number of individuals',
       'Likely consequences',
-      'Measures taken or proposed',
-    ],
+      'Measures taken or proposed'
+    ]
   },
 
   CCPA: {
     attorney_general: 'Without unreasonable delay',
     consumer_notification: 'If sensitive personal information',
-    documentation: 'Maintain 24-month record',
+    documentation: 'Maintain 24-month record'
   },
 
   SOX: {
     materiality_assessment: 'Within discovery period',
     audit_committee: 'Quarterly or immediate if material',
-    external_auditor: 'Coordinate with audit firm',
-  },
+    external_auditor: 'Coordinate with audit firm'
+  }
 };
 ```
 
@@ -541,22 +541,22 @@ HotWashQuestions = {
     'What was the sequence of events?',
     'When did we first detect the incident?',
     'How long did containment take?',
-    'What was the total impact duration?',
+    'What was the total impact duration?'
   ],
 
   effectiveness: [
     'What response actions were most effective?',
     'Where did our procedures work well?',
     'What tools/resources were most valuable?',
-    'How was team communication and coordination?',
+    'How was team communication and coordination?'
   ],
 
   improvements: [
     'What slowed down our response?',
     'What information did we lack?',
     'Where did procedures break down?',
-    'What tools/capabilities do we need?',
-  ],
+    'What tools/capabilities do we need?'
+  ]
 };
 ```
 

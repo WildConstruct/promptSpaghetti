@@ -30,9 +30,18 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
   onHover,
   onClick,
   onChangeNodeType,
-  onDelete,
+  onDelete
 }) => {
-  const FALLBACK_COLORS = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#FFB347','#B19CD9'];
+  const FALLBACK_COLORS = [
+    '#FF6B6B',
+    '#4ECDC4',
+    '#45B7D1',
+    '#96CEB4',
+    '#FFEAA7',
+    '#DDA0DD',
+    '#FFB347',
+    '#B19CD9'
+  ];
   const hexToRgba = useCallback((hex?: string, alpha = 0.7) => {
     if (!hex) return `rgba(0,0,0,0)`;
     const h = hex.replace('#', '');
@@ -79,13 +88,17 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
 
-      const parentRect = containerRef.current.parentElement?.getBoundingClientRect();
+      const parentRect =
+        containerRef.current.parentElement?.getBoundingClientRect();
       if (!parentRect) return;
 
       // Calculate character position based on mouse position
       const relativeX = e.clientX - parentRect.left;
       const charWidth = parentRect.width / fullText.length; // Approximate character width
-      const charIndex = Math.max(0, Math.min(fullText.length, Math.floor(relativeX / charWidth)));
+      const charIndex = Math.max(
+        0,
+        Math.min(fullText.length, Math.floor(relativeX / charWidth))
+      );
 
       if (isDraggingStart) {
         // Don't let start go past end
@@ -114,7 +127,15 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDraggingStart, isDraggingEnd, localStart, localEnd, fullText.length, index, onSegmentUpdate]);
+  }, [
+    isDraggingStart,
+    isDraggingEnd,
+    localStart,
+    localEnd,
+    fullText.length,
+    index,
+    onSegmentUpdate
+  ]);
 
   const displayText = fullText.slice(localStart, localEnd);
   const ensureColor = (id?: string, color?: string) => {
@@ -138,7 +159,7 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
         boxShadow: `0 0 0 1px ${resolvedColor}55`,
         borderRadius: '3px',
         fontWeight: '600',
-        position: 'relative',
+        position: 'relative'
       }}
       onMouseEnter={() => onHover?.(true)}
       onMouseLeave={() => onHover?.(false)}
@@ -154,10 +175,10 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
           title="Drag to adjust start"
         />
       )}
-      
+
       {/* Text content */}
       {displayText || '[empty]'}
-      
+
       {/* Right resize handle */}
       {segment.nodeId && (
         <span
@@ -169,26 +190,36 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
 
       {/* Inline node type menu when selected or hovered */}
       {(isSelected || isHovered) && segment.nodeId && (
-        <span className="segment-inline-menu" onClick={(e) => e.stopPropagation()} style={{ pointerEvents: 'auto', zIndex: 100000 }}>
+        <span
+          className="segment-inline-menu"
+          onClick={e => e.stopPropagation()}
+          style={{ pointerEvents: 'auto', zIndex: 100000 }}
+        >
           <button
             className="segment-inline-btn"
             title="Set to Text"
             onClick={() => onChangeNodeType?.('Text')}
-          >T</button>
+          >
+            T
+          </button>
           <button
             className="segment-inline-btn"
             title="Set to Choice"
             onClick={() => onChangeNodeType?.('Choice')}
-          >C</button>
+          >
+            C
+          </button>
           <button
             className="segment-inline-btn"
             title="Delete segment mapping"
             aria-label="Delete segment"
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               onDelete?.();
             }}
-          >✕</button>
+          >
+            ✕
+          </button>
         </span>
       )}
     </span>

@@ -18,41 +18,47 @@ export const ControlNetParametersSchema = z.object({
           z.object({
             x: z.number(),
             y: z.number(),
-            confidence: z.number().min(0).max(1),
+            confidence: z.number().min(0).max(1)
           })
         )
-        .optional(),
+        .optional()
     })
     .optional(),
   depthMaps: z
     .object({
       enabled: z.boolean().default(false),
       strength: z.number().min(0).max(2).default(1.0),
-      preprocessor: z.enum(['depth_midas', 'depth_zoe', 'depth_leres']).default('depth_midas'),
+      preprocessor: z
+        .enum(['depth_midas', 'depth_zoe', 'depth_leres'])
+        .default('depth_midas')
     })
     .optional(),
   edgeDetection: z
     .object({
       enabled: z.boolean().default(false),
       strength: z.number().min(0).max(2).default(1.0),
-      preprocessor: z.enum(['canny', 'hed', 'scribble', 'pidinet']).default('canny'),
+      preprocessor: z
+        .enum(['canny', 'hed', 'scribble', 'pidinet'])
+        .default('canny'),
       lowThreshold: z.number().min(0).max(255).default(100),
-      highThreshold: z.number().min(0).max(255).default(200),
+      highThreshold: z.number().min(0).max(255).default(200)
     })
     .optional(),
   animationSequence: z
     .object({
       frameCount: z.number().min(1).max(10000).default(1),
       fps: z.number().min(1).max(60).default(24),
-      interpolationMethod: z.enum(['linear', 'cubic', 'bezier']).default('linear'),
+      interpolationMethod: z
+        .enum(['linear', 'cubic', 'bezier'])
+        .default('linear'),
       keyframes: z
         .array(
           z.object({
             frame: z.number(),
-            parameters: z.record(z.string(), z.unknown()),
+            parameters: z.record(z.string(), z.unknown())
           })
         )
-        .default([]),
+        .default([])
     })
     .optional(),
   cameraParameters: z
@@ -61,17 +67,19 @@ export const ControlNetParametersSchema = z.object({
       aspectRatio: z.number().min(0.1).max(10).default(1.777), // 16:9
       nearPlane: z.number().min(0.001).max(1000).default(0.1),
       farPlane: z.number().min(1).max(10000).default(1000),
-      position: z.tuple([z.number(), z.number(), z.number()]).default([0, 0, 5]),
-      rotation: z.tuple([z.number(), z.number(), z.number()]).default([0, 0, 0]),
+      position: z
+        .tuple([z.number(), z.number(), z.number()])
+        .default([0, 0, 5]),
+      rotation: z.tuple([z.number(), z.number(), z.number()]).default([0, 0, 0])
     })
     .optional(),
   billboardProjection: z
     .object({
       enabled: z.boolean().default(false),
       targetResolution: z.tuple([z.number(), z.number()]).default([1920, 1080]),
-      projectionMatrix: z.array(z.number()).length(16).optional(), // 4x4 matrix
+      projectionMatrix: z.array(z.number()).length(16).optional() // 4x4 matrix
     })
-    .optional(),
+    .optional()
 });
 /**
  * Epic 8.6 Task 3: Scene Data Integration Schema
@@ -82,74 +90,121 @@ export const SceneDataSchema = z.object({
     position: z.object({
       x: z.number().default(0),
       y: z.number().default(0),
-      z: z.number().default(5),
+      z: z.number().default(5)
     }),
     angle: z.object({
       pitch: z.number().min(-90).max(90).default(0), // degrees
       yaw: z.number().min(-180).max(180).default(0), // degrees
-      roll: z.number().min(-180).max(180).default(0), // degrees
+      roll: z.number().min(-180).max(180).default(0) // degrees
     }),
     distance: z.number().min(0.1).max(1000).default(5),
     lens: z
       .object({
         focalLength: z.number().min(10).max(500).default(50), // mm
         aperture: z.number().min(1).max(22).default(2.8), // f-stop
-        focusDistance: z.number().min(0.1).max(1000).default(10), // meters
+        focusDistance: z.number().min(0.1).max(1000).default(10) // meters
       })
       .optional(),
     movement: z
       .object({
-        type: z.enum(['static', 'pan', 'tilt', 'dolly', 'crane', 'handheld']).default('static'),
+        type: z
+          .enum(['static', 'pan', 'tilt', 'dolly', 'crane', 'handheld'])
+          .default('static'),
         speed: z.enum(['slow', 'medium', 'fast']).default('medium'),
-        smoothness: z.number().min(0).max(1).default(0.8),
+        smoothness: z.number().min(0).max(1).default(0.8)
       })
-      .optional(),
+      .optional()
   }),
   lighting: z
     .object({
       timeOfDay: z
-        .enum(['dawn', 'morning', 'noon', 'afternoon', 'dusk', 'night', 'golden-hour', 'blue-hour'])
+        .enum([
+          'dawn',
+          'morning',
+          'noon',
+          'afternoon',
+          'dusk',
+          'night',
+          'golden-hour',
+          'blue-hour'
+        ])
         .default('noon'),
-      weather: z.enum(['clear', 'cloudy', 'overcast', 'foggy', 'rainy', 'stormy', 'snowy']).default('clear'),
-      mood: z.enum(['bright', 'dramatic', 'soft', 'harsh', 'moody', 'ethereal', 'cinematic']).default('bright'),
+      weather: z
+        .enum([
+          'clear',
+          'cloudy',
+          'overcast',
+          'foggy',
+          'rainy',
+          'stormy',
+          'snowy'
+        ])
+        .default('clear'),
+      mood: z
+        .enum([
+          'bright',
+          'dramatic',
+          'soft',
+          'harsh',
+          'moody',
+          'ethereal',
+          'cinematic'
+        ])
+        .default('bright'),
       keyLight: z
         .object({
           intensity: z.number().min(0).max(100).default(80),
           temperature: z.number().min(2000).max(10000).default(5600), // Kelvin
-          angle: z.number().min(0).max(360).default(45), // degrees from subject
+          angle: z.number().min(0).max(360).default(45) // degrees from subject
         })
         .optional(),
       fillLight: z
         .object({
           intensity: z.number().min(0).max(100).default(40),
           temperature: z.number().min(2000).max(10000).default(3200), // Kelvin
-          angle: z.number().min(0).max(360).default(225), // degrees from subject
+          angle: z.number().min(0).max(360).default(225) // degrees from subject
         })
-        .optional(),
+        .optional()
     })
     .optional(),
   environment: z
     .object({
-      location: z.enum(['interior', 'exterior', 'studio', 'practical']).default('studio'),
-      atmosphere: z.enum(['clear', 'hazy', 'dusty', 'smoky', 'misty']).default('clear'),
+      location: z
+        .enum(['interior', 'exterior', 'studio', 'practical'])
+        .default('studio'),
+      atmosphere: z
+        .enum(['clear', 'hazy', 'dusty', 'smoky', 'misty'])
+        .default('clear'),
       temperature: z.number().min(-40).max(50).default(20), // Celsius
       windSpeed: z.number().min(0).max(100).default(0), // km/h
-      props: z.array(z.string()).default([]),
+      props: z.array(z.string()).default([])
     })
     .optional(),
   postProcessing: z
     .object({
       colorGrading: z
         .object({
-          style: z.enum(['natural', 'cinematic', 'vintage', 'modern', 'dramatic']).default('natural'),
+          style: z
+            .enum(['natural', 'cinematic', 'vintage', 'modern', 'dramatic'])
+            .default('natural'),
           contrast: z.number().min(-100).max(100).default(0),
           saturation: z.number().min(-100).max(100).default(0),
-          warmth: z.number().min(-100).max(100).default(0),
+          warmth: z.number().min(-100).max(100).default(0)
         })
         .optional(),
-      effects: z.array(z.enum(['bloom', 'vignette', 'film-grain', 'lens-flare', 'depth-of-field'])).default([]),
+      effects: z
+        .array(
+          z.enum([
+            'bloom',
+            'vignette',
+            'film-grain',
+            'lens-flare',
+            'depth-of-field'
+          ])
+        )
+        .default([])
     })
-    .optional(),
+    .optional()
 });
 /**
  * GeneratorBundle schema matching the Randomizer Engine's expected format
@@ -164,17 +219,21 @@ export const GeneratorBundleSchema = z.object({
     debug: z
       .object({
         seed: z.number().optional(),
-        originGraphGuid: z.string().optional(),
+        originGraphGuid: z.string().optional()
       })
       .optional(),
     // Epic 8.6: VFX pipeline metadata
     vfx: z
       .object({
-        exportFormat: z.literal('controlnet-compatible').default('controlnet-compatible'),
-        targetPipeline: z.enum(['stable-diffusion', 'midjourney', 'dalle', 'custom']).default('stable-diffusion'),
-        compatibilityVersion: z.string().default('1.0.0'),
+        exportFormat: z
+          .literal('controlnet-compatible')
+          .default('controlnet-compatible'),
+        targetPipeline: z
+          .enum(['stable-diffusion', 'midjourney', 'dalle', 'custom'])
+          .default('stable-diffusion'),
+        compatibilityVersion: z.string().default('1.0.0')
       })
-      .optional(),
+      .optional()
   }),
   variables: z.record(z.string(), z.unknown()),
   grammar: z.record(
@@ -184,7 +243,7 @@ export const GeneratorBundleSchema = z.object({
       z.array(
         z.object({
           text: z.string(),
-          weight: z.number().optional(),
+          weight: z.number().optional()
         })
       ),
       z.object({
@@ -192,40 +251,40 @@ export const GeneratorBundleSchema = z.object({
         cases: z.array(
           z.object({
             condition: z.string(),
-            value: z.string(),
+            value: z.string()
           })
-        ),
+        )
       }),
       z.object({
         type: z.literal('sequential'),
-        items: z.array(z.string()),
+        items: z.array(z.string())
       }),
       z.union([
         z.object({ $include: z.string() }),
         z.array(
           z.union([
             z.object({ _meta: z.record(z.string(), z.unknown()).optional() }),
-            z.object({ $include: z.string() }),
+            z.object({ $include: z.string() })
           ])
-        ),
+        )
       ]),
       z.object({
         type: z.literal('modifier_chain'),
         base: z.string(),
-        mods: z.array(z.string()),
-      }),
+        mods: z.array(z.string())
+      })
     ])
   ),
   entry_points: z.object({
     default: z.string(),
-    alternatives: z.array(z.string()).optional(),
+    alternatives: z.array(z.string()).optional()
   }),
   lockedValues: z.record(z.string(), z.string()).optional(),
   seed: z.number().optional(),
   // Epic 8.6: ControlNet integration parameters
   controlNet: ControlNetParametersSchema.optional(),
   // Epic 8.6 Task 3: Scene data integration
-  sceneData: SceneDataSchema.optional(),
+  sceneData: SceneDataSchema.optional()
 });
 /**
  * Epic 8.6: Extract ControlNet parameters from graph nodes
@@ -238,7 +297,11 @@ function extractControlNetParameters(graph) {
     // Check for camera-related variables
     if (node.type === 'SetVariable' && node.key) {
       const key = node.key.toLowerCase();
-      if (key.includes('camera') || key.includes('fov') || key.includes('position')) {
+      if (
+        key.includes('camera') ||
+        key.includes('fov') ||
+        key.includes('position')
+      ) {
         if (!controlNetParams.cameraParameters) {
           controlNetParams.cameraParameters = {
             fov: 70,
@@ -246,7 +309,7 @@ function extractControlNetParameters(graph) {
             nearPlane: 0.1,
             farPlane: 1000,
             position: [0, 0, 5],
-            rotation: [0, 0, 0],
+            rotation: [0, 0, 0]
           };
         }
         // Extract camera values from variable nodes
@@ -256,33 +319,43 @@ function extractControlNetParameters(graph) {
       }
     }
     // Check for animation-related configurations
-    if (node.type === 'Sequential' && node.sequence && node.sequence.length > 1) {
+    if (
+      node.type === 'Sequential' &&
+      node.sequence &&
+      node.sequence.length > 1
+    ) {
       controlNetParams.animationSequence = {
         frameCount: node.sequence.length,
         fps: 24,
         interpolationMethod: 'linear',
         keyframes: node.sequence.map((item, index) => ({
           frame: index,
-          parameters: { text: item },
-        })),
+          parameters: { text: item }
+        }))
       };
     }
     // Look for edge detection hints in node names/descriptions
-    if (node.id.toLowerCase().includes('edge') || node.id.toLowerCase().includes('canny')) {
+    if (
+      node.id.toLowerCase().includes('edge') ||
+      node.id.toLowerCase().includes('canny')
+    ) {
       controlNetParams.edgeDetection = {
         enabled: true,
         strength: 1.0,
         preprocessor: 'canny',
         lowThreshold: 100,
-        highThreshold: 200,
+        highThreshold: 200
       };
     }
     // Look for depth-related hints
-    if (node.id.toLowerCase().includes('depth') || node.id.toLowerCase().includes('3d')) {
+    if (
+      node.id.toLowerCase().includes('depth') ||
+      node.id.toLowerCase().includes('3d')
+    ) {
       controlNetParams.depthMaps = {
         enabled: true,
         strength: 1.0,
-        preprocessor: 'depth_midas',
+        preprocessor: 'depth_midas'
       };
     }
   });
@@ -297,19 +370,19 @@ function extractSceneData(graph) {
     camera: {
       position: { x: 0, y: 0, z: 5 },
       angle: { pitch: 0, yaw: 0, roll: 0 },
-      distance: 5,
+      distance: 5
     },
     lighting: {
       timeOfDay: 'noon',
       weather: 'clear',
-      mood: 'bright',
+      mood: 'bright'
     },
     environment: {
       setting: 'interior-studio',
       atmosphere: 'calm',
       scale: 'medium',
-      props: [],
-    },
+      props: []
+    }
   };
   // Extract scene data from variable nodes
   graph.nodes.forEach(node => {
@@ -346,12 +419,23 @@ function extractSceneData(graph) {
       }
       // Lighting conditions
       if (key.includes('time') || key.includes('lighting')) {
-        const timeKeywords = ['dawn', 'morning', 'noon', 'afternoon', 'dusk', 'night', 'golden', 'blue'];
+        const timeKeywords = [
+          'dawn',
+          'morning',
+          'noon',
+          'afternoon',
+          'dusk',
+          'night',
+          'golden',
+          'blue'
+        ];
         const stringValue = String(value).toLowerCase();
         for (const keyword of timeKeywords) {
           if (stringValue.includes(keyword)) {
-            if (keyword === 'golden') sceneData.lighting.timeOfDay = 'golden-hour';
-            else if (keyword === 'blue') sceneData.lighting.timeOfDay = 'blue-hour';
+            if (keyword === 'golden')
+              sceneData.lighting.timeOfDay = 'golden-hour';
+            else if (keyword === 'blue')
+              sceneData.lighting.timeOfDay = 'blue-hour';
             else sceneData.lighting.timeOfDay = keyword;
             break;
           }
@@ -359,7 +443,15 @@ function extractSceneData(graph) {
       }
       // Weather
       if (key.includes('weather')) {
-        const weatherKeywords = ['clear', 'cloudy', 'overcast', 'foggy', 'rainy', 'stormy', 'snowy'];
+        const weatherKeywords = [
+          'clear',
+          'cloudy',
+          'overcast',
+          'foggy',
+          'rainy',
+          'stormy',
+          'snowy'
+        ];
         const stringValue = String(value).toLowerCase();
         for (const keyword of weatherKeywords) {
           if (stringValue.includes(keyword)) {
@@ -370,7 +462,15 @@ function extractSceneData(graph) {
       }
       // Mood/atmosphere
       if (key.includes('mood') || key.includes('atmosphere')) {
-        const moodKeywords = ['bright', 'dramatic', 'soft', 'harsh', 'moody', 'ethereal', 'cinematic'];
+        const moodKeywords = [
+          'bright',
+          'dramatic',
+          'soft',
+          'harsh',
+          'moody',
+          'ethereal',
+          'cinematic'
+        ];
         const stringValue = String(value).toLowerCase();
         for (const keyword of moodKeywords) {
           if (stringValue.includes(keyword)) {
@@ -393,11 +493,14 @@ function extractSceneData(graph) {
           'exterior-forest',
           'exterior-desert',
           'exterior-space',
-          'abstract',
+          'abstract'
         ];
         const stringValue = String(value).toLowerCase();
         for (const keyword of settingKeywords) {
-          if (stringValue.includes(keyword.replace('-', '')) || stringValue.includes(keyword)) {
+          if (
+            stringValue.includes(keyword.replace('-', '')) ||
+            stringValue.includes(keyword)
+          ) {
             sceneData.environment.setting = keyword;
             break;
           }
@@ -414,11 +517,21 @@ function extractSceneData(graph) {
     const nodeContent = JSON.stringify(node).toLowerCase();
     // Camera movement hints
     if (nodeId.includes('pan') || nodeContent.includes('pan')) {
-      if (!sceneData.camera.movement) sceneData.camera.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
+      if (!sceneData.camera.movement)
+        sceneData.camera.movement = {
+          type: 'static',
+          speed: 'medium',
+          smoothness: 0.8
+        };
       sceneData.camera.movement.type = 'pan';
     }
     if (nodeId.includes('dolly') || nodeContent.includes('dolly')) {
-      if (!sceneData.camera.movement) sceneData.camera.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
+      if (!sceneData.camera.movement)
+        sceneData.camera.movement = {
+          type: 'static',
+          speed: 'medium',
+          smoothness: 0.8
+        };
       sceneData.camera.movement.type = 'dolly';
     }
     // Lighting hints from node content
@@ -450,7 +563,7 @@ function extractSceneData(graph) {
     sceneData.metadata = {
       sceneId: `scene-${Date.now()}`,
       takeNumber: 1,
-      notes: 'Auto-generated scene data from graph variables',
+      notes: 'Auto-generated scene data from graph variables'
     };
   }
   return sceneData;
@@ -470,16 +583,16 @@ export function graphToBundle(graph, options) {
     created: new Date().toISOString(),
     debug: {
       seed: typeof graph.seed === 'number' ? graph.seed : undefined,
-      originGraphGuid: undefined, // Could be added as an optional parameter if needed
+      originGraphGuid: undefined // Could be added as an optional parameter if needed
     },
     // Epic 8.6: VFX pipeline metadata
     vfx: options.controlNetEnabled
       ? {
           exportFormat: 'controlnet-compatible',
           targetPipeline: options.targetPipeline || 'stable-diffusion',
-          compatibilityVersion: '1.0.0',
+          compatibilityVersion: '1.0.0'
         }
-      : undefined,
+      : undefined
   };
   // Initialize bundle structure
   const bundle = {
@@ -488,9 +601,9 @@ export function graphToBundle(graph, options) {
     grammar: {},
     entry_points: {
       default: 'main',
-      alternatives: [],
+      alternatives: []
     },
-    seed: typeof graph.seed === 'number' ? graph.seed : undefined,
+    seed: typeof graph.seed === 'number' ? graph.seed : undefined
   };
   // Epic 8.6: Extract and apply ControlNet parameters if enabled
   if (options.controlNetEnabled) {
@@ -501,25 +614,25 @@ export function graphToBundle(graph, options) {
         enabled: false,
         strength: 1.0,
         startStep: 0,
-        endStep: 1000,
+        endStep: 1000
       },
       depthMaps: extractedParams.depthMaps || {
         enabled: false,
         strength: 1.0,
-        preprocessor: 'depth_midas',
+        preprocessor: 'depth_midas'
       },
       edgeDetection: extractedParams.edgeDetection || {
         enabled: false,
         strength: 1.0,
         preprocessor: 'canny',
         lowThreshold: 100,
-        highThreshold: 200,
+        highThreshold: 200
       },
       animationSequence: extractedParams.animationSequence || {
         frameCount: 1,
         fps: 24,
         interpolationMethod: 'linear',
-        keyframes: [],
+        keyframes: []
       },
       cameraParameters: extractedParams.cameraParameters || {
         fov: 70,
@@ -527,12 +640,12 @@ export function graphToBundle(graph, options) {
         nearPlane: 0.1,
         farPlane: 1000,
         position: [0, 0, 5],
-        rotation: [0, 0, 0],
+        rotation: [0, 0, 0]
       },
       billboardProjection: extractedParams.billboardProjection || {
         enabled: false,
-        targetResolution: [1920, 1080],
-      },
+        targetResolution: [1920, 1080]
+      }
     };
   }
   // Find all variable declarations in the graph
@@ -583,7 +696,7 @@ export function graphToVFXBundle(graph, options) {
     ...options,
     controlNetEnabled: true,
     includeSceneData: true, // Epic 8.6 Task 3: Always include scene data in VFX exports
-    targetPipeline: options.targetPipeline || 'stable-diffusion',
+    targetPipeline: options.targetPipeline || 'stable-diffusion'
   });
 }
 /**
@@ -595,24 +708,31 @@ export function validateVFXCompatibility(graph) {
   const recommendations = [];
   // Check for camera variables
   const hasCameraVars = graph.nodes.some(
-    node => node.type === 'SetVariable' && node.key?.toLowerCase().includes('camera')
+    node =>
+      node.type === 'SetVariable' && node.key?.toLowerCase().includes('camera')
   );
   if (hasCameraVars) features.push('Camera controls detected');
-  else recommendations.push('Add camera position/angle variables for 3D scenes');
+  else
+    recommendations.push('Add camera position/angle variables for 3D scenes');
   // Check for animation sequences
   const hasAnimation = graph.nodes.some(
-    node => node.type === 'Sequential' && node.sequence && node.sequence.length > 1
+    node =>
+      node.type === 'Sequential' && node.sequence && node.sequence.length > 1
   );
   if (hasAnimation) features.push('Animation sequence support');
   else recommendations.push('Use Sequential nodes for multi-frame animations');
   // Check for depth/3D hints
   const hasDepthHints = graph.nodes.some(
-    node => node.id.toLowerCase().includes('depth') || node.id.toLowerCase().includes('3d')
+    node =>
+      node.id.toLowerCase().includes('depth') ||
+      node.id.toLowerCase().includes('3d')
   );
   if (hasDepthHints) features.push('Depth processing hints');
   // Check for edge detection hints
   const hasEdgeHints = graph.nodes.some(
-    node => node.id.toLowerCase().includes('edge') || node.id.toLowerCase().includes('canny')
+    node =>
+      node.id.toLowerCase().includes('edge') ||
+      node.id.toLowerCase().includes('canny')
   );
   if (hasEdgeHints) features.push('Edge detection support');
   // Epic 8.6 Task 3: Check for scene data variables
@@ -626,8 +746,12 @@ export function validateVFXCompatibility(graph) {
         node.key.toLowerCase().includes('setting') ||
         node.key.toLowerCase().includes('mood'))
   );
-  if (hasSceneVars) features.push('Scene data variables (camera, lighting, environment)');
-  else recommendations.push('Add scene variables (camera_x, lighting_mood, weather_clear) for cinematic control');
+  if (hasSceneVars)
+    features.push('Scene data variables (camera, lighting, environment)');
+  else
+    recommendations.push(
+      'Add scene variables (camera_x, lighting_mood, weather_clear) for cinematic control'
+    );
   // Check for camera position controls
   const hasCameraControls = graph.nodes.some(
     node =>
@@ -647,7 +771,7 @@ export function validateVFXCompatibility(graph) {
   return {
     compatible,
     features,
-    recommendations,
+    recommendations
   };
 }
 /**
@@ -659,7 +783,7 @@ export function generateScenePromptFlow(sceneData) {
     cameraPrompt: '',
     lightingPrompt: '',
     environmentPrompt: '',
-    fullPrompt: '',
+    fullPrompt: ''
   };
   // Camera prompt generation
   if (sceneData.camera) {
@@ -677,8 +801,10 @@ export function generateScenePromptFlow(sceneData) {
     // Lens characteristics
     if (lens?.focalLength) {
       if (lens.focalLength < 35) prompts.cameraPrompt += 'wide angle lens, ';
-      else if (lens.focalLength > 85) prompts.cameraPrompt += 'telephoto lens, ';
-      if (lens.aperture < 2.8) prompts.cameraPrompt += 'shallow depth of field, ';
+      else if (lens.focalLength > 85)
+        prompts.cameraPrompt += 'telephoto lens, ';
+      if (lens.aperture < 2.8)
+        prompts.cameraPrompt += 'shallow depth of field, ';
       else if (lens.aperture > 8) prompts.cameraPrompt += 'deep focus, ';
     }
     // Camera movement
@@ -696,34 +822,48 @@ export function generateScenePromptFlow(sceneData) {
     prompts.lightingPrompt += `${mood} lighting mood, `;
     // Technical lighting
     if (keyLight?.intensity) {
-      if (keyLight.intensity > 80) prompts.lightingPrompt += 'strong key light, ';
-      else if (keyLight.intensity < 40) prompts.lightingPrompt += 'soft key light, ';
+      if (keyLight.intensity > 80)
+        prompts.lightingPrompt += 'strong key light, ';
+      else if (keyLight.intensity < 40)
+        prompts.lightingPrompt += 'soft key light, ';
     }
   }
   // Environment prompt generation
   if (sceneData.environment) {
     const { setting, atmosphere, scale, depth, props } = sceneData.environment;
     // Setting and scale
-    const settingDesc = setting.replace('-', ' ').replace('interior', 'inside').replace('exterior', 'outside');
+    const settingDesc = setting
+      .replace('-', ' ')
+      .replace('interior', 'inside')
+      .replace('exterior', 'outside');
     prompts.environmentPrompt += `${settingDesc} setting, `;
     prompts.environmentPrompt += `${scale} scale composition, `;
     // Atmosphere
     prompts.environmentPrompt += `${atmosphere} atmosphere, `;
     // Depth layers
-    if (depth?.foreground) prompts.environmentPrompt += `${depth.foreground} in foreground, `;
-    if (depth?.background) prompts.environmentPrompt += `${depth.background} in background, `;
+    if (depth?.foreground)
+      prompts.environmentPrompt += `${depth.foreground} in foreground, `;
+    if (depth?.background)
+      prompts.environmentPrompt += `${depth.background} in background, `;
     // Props
     if (props.length > 0) {
       prompts.environmentPrompt += `featuring ${props.join(', ')}, `;
     }
   }
   // Combine all prompts
-  prompts.fullPrompt = [prompts.cameraPrompt.trim(), prompts.lightingPrompt.trim(), prompts.environmentPrompt.trim()]
+  prompts.fullPrompt = [
+    prompts.cameraPrompt.trim(),
+    prompts.lightingPrompt.trim(),
+    prompts.environmentPrompt.trim()
+  ]
     .filter(p => p.length > 0)
     .join(' ');
   // Clean up trailing commas and spaces
   Object.keys(prompts).forEach(key => {
-    prompts[key] = prompts[key].replace(/,\s*$/, '').replace(/\s+/g, ' ').trim();
+    prompts[key] = prompts[key]
+      .replace(/,\s*$/, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   });
   return prompts;
 }
@@ -738,7 +878,7 @@ export function graphToSceneAwareBundle(graph, options) {
     const scenePromptFlow = generateScenePromptFlow(bundle.sceneData);
     return {
       ...bundle,
-      scenePromptFlow,
+      scenePromptFlow
     };
   }
   return bundle;
@@ -752,14 +892,14 @@ function convertNodeToRule(node, nodeMap) {
       // Convert to weighted array rule
       return node.choices.map(choice => ({
         text: choice.value,
-        weight: choice.weight,
+        weight: choice.weight
       }));
     case 'Concat':
       // If inputs exist, create a sequential rule
       if (node.inputs && node.inputs.length > 0) {
         return {
           type: 'sequential',
-          items: node.inputs,
+          items: node.inputs
         };
       }
       return ['']; // Empty concat gives empty string
@@ -809,7 +949,7 @@ export function bundleToGraph(bundle) {
   // Initialize the graph structure
   const graph = {
     nodes: [],
-    seed: bundle.seed,
+    seed: bundle.seed
   };
   // Track created nodes by ID to avoid duplicates
   const createdNodeIds = new Set();
@@ -820,7 +960,7 @@ export function bundleToGraph(bundle) {
       id: nodeId,
       type: 'SetVariable',
       key,
-      value,
+      value
     });
     createdNodeIds.add(nodeId);
   });
@@ -854,21 +994,26 @@ export function bundleToGraph(bundle) {
  */
 function convertRuleToNode(id, rule) {
   // Handle weighted array rule (WeightedChoice)
-  if (Array.isArray(rule) && rule.length > 0 && typeof rule[0] === 'object' && 'text' in rule[0]) {
+  if (
+    Array.isArray(rule) &&
+    rule.length > 0 &&
+    typeof rule[0] === 'object' &&
+    'text' in rule[0]
+  ) {
     return {
       id,
       type: 'WeightedChoice',
       choices: rule.map(item => ({
         value: item.text,
-        weight: item.weight || 1,
-      })),
+        weight: item.weight || 1
+      }))
     };
   }
   // Handle simple array rule (can be Output or Include depending on content)
   if (Array.isArray(rule) && rule.length > 0 && typeof rule[0] === 'string') {
     return {
       id,
-      type: 'Output',
+      type: 'Output'
     };
   }
   // Handle include rule
@@ -876,33 +1021,45 @@ function convertRuleToNode(id, rule) {
     return {
       id,
       type: 'Include',
-      name: rule.$include,
+      name: rule.$include
     };
   }
   // Handle sequential rule (Concat)
-  if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'sequential') {
+  if (
+    !Array.isArray(rule) &&
+    typeof rule === 'object' &&
+    rule.type === 'sequential'
+  ) {
     return {
       id,
-      type: 'Concat',
+      type: 'Concat'
     };
   }
   // Handle conditional rule
-  if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'conditional') {
+  if (
+    !Array.isArray(rule) &&
+    typeof rule === 'object' &&
+    rule.type === 'conditional'
+  ) {
     // For now, convert conditionals to weighted choices as a simplification
     return {
       id,
       type: 'WeightedChoice',
       choices: rule.cases.map(c => ({
         value: c.value,
-        weight: 1, // Equal weights as a default
-      })),
+        weight: 1 // Equal weights as a default
+      }))
     };
   }
   // Handle modifier chain (simplify to concat for now)
-  if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'modifier_chain') {
+  if (
+    !Array.isArray(rule) &&
+    typeof rule === 'object' &&
+    rule.type === 'modifier_chain'
+  ) {
     return {
       id,
-      type: 'Concat',
+      type: 'Concat'
     };
   }
   // Unknown rule type
@@ -915,7 +1072,11 @@ function convertRuleToNode(id, rule) {
 function findNodeReferences(rule) {
   const refs = [];
   // Handle sequential rule
-  if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'sequential') {
+  if (
+    !Array.isArray(rule) &&
+    typeof rule === 'object' &&
+    rule.type === 'sequential'
+  ) {
     return rule.items || [];
   }
   // Handle array rule that references other rules
@@ -927,7 +1088,11 @@ function findNodeReferences(rule) {
     });
   }
   // Handle modifier chain
-  if (!Array.isArray(rule) && typeof rule === 'object' && rule.type === 'modifier_chain') {
+  if (
+    !Array.isArray(rule) &&
+    typeof rule === 'object' &&
+    rule.type === 'modifier_chain'
+  ) {
     if (rule.base) refs.push(rule.base);
   }
   return refs;
@@ -942,17 +1107,19 @@ function ensureOutputNode(graph, entryPointId) {
     // Create a default output node
     graph.nodes.push({
       id: entryPointId,
-      type: 'Output',
+      type: 'Output'
     });
   } else {
     // If node exists but isn't an output, add an output node that references it
-    const isOutput = graph.nodes.some(n => n.id === entryPointId && n.type === 'Output');
+    const isOutput = graph.nodes.some(
+      n => n.id === entryPointId && n.type === 'Output'
+    );
     if (!isOutput) {
       const outputId = `output_${entryPointId}`;
       graph.nodes.push({
         id: outputId,
         type: 'Output',
-        inputs: [entryPointId],
+        inputs: [entryPointId]
       });
     }
   }
@@ -961,7 +1128,7 @@ function ensureOutputNode(graph, entryPointId) {
   if (!hasOutput) {
     graph.nodes.push({
       id: 'default_output',
-      type: 'Output',
+      type: 'Output'
     });
   }
 }
@@ -1024,7 +1191,7 @@ FADE IN:
     type: 'text',
     data: fountainContent,
     mimeType: 'text/plain',
-    shouldDownload: true,
+    shouldDownload: true
   };
 }
 // Final Draft Export
@@ -1058,7 +1225,7 @@ function exportFinalDraftScript(data, options) {
     type: 'text',
     data: fdxContent,
     mimeType: 'application/xml',
-    shouldDownload: true,
+    shouldDownload: true
   };
 }
 // ControlNet JSON Export
@@ -1087,17 +1254,17 @@ function exportControlNetJSON(data, options) {
         lowvram: false,
         processor_res: 512,
         threshold_a: 100,
-        threshold_b: 200,
+        threshold_b: 200
       },
-      metadata: result.metadata || {},
+      metadata: result.metadata || {}
     })),
-    exportedAt: new Date().toISOString(),
+    exportedAt: new Date().toISOString()
   };
   return {
     type: 'text',
     data: JSON.stringify(controlNetData, null, 2),
     mimeType: 'application/json',
-    shouldDownload: true,
+    shouldDownload: true
   };
 }
 // Stable Diffusion Bundle Export
@@ -1111,19 +1278,19 @@ function exportStableDiffusionBundle(data, options) {
       'settings.json': {
         pipeline: data.vfxData?.pipeline,
         resolution: data.vfxData?.resolution,
-        exportOptions: options,
+        exportOptions: options
       },
       'metadata.json': {
         exportedAt: new Date().toISOString(),
         resultCount: data.results.length,
-        source: 'PromptScape Epic 8.5',
-      },
-    },
+        source: 'PromptScape Epic 8.5'
+      }
+    }
   };
   return {
     type: 'binary', // Client will handle as ZIP download
     data: JSON.stringify(bundleData),
-    mimeType: 'application/zip',
+    mimeType: 'application/zip'
   };
 }
 // Scene Data Export
@@ -1138,26 +1305,27 @@ function exportSceneData(data, options) {
       camera: {
         position: { x: 0, y: 0, z: 5 },
         angle: { pitch: 0, yaw: 0, roll: 0 },
-        fov: 70,
+        fov: 70
       },
       lighting: {
         timeOfDay: 'noon',
-        mood: 'cinematic',
+        mood: 'cinematic'
       },
-      metadata: result.metadata || {},
+      metadata: result.metadata || {}
     })),
-    exportedAt: new Date().toISOString(),
+    exportedAt: new Date().toISOString()
   };
   return {
     type: 'text',
     data: JSON.stringify(sceneData, null, 2),
     mimeType: 'application/json',
-    shouldDownload: true,
+    shouldDownload: true
   };
 }
 // CSV Analysis Export
 function exportCSVAnalysis(data, options) {
-  let csvContent = 'Seed,Output,Word Count,Character Count,Execution Time (ms)\n';
+  let csvContent =
+    'Seed,Output,Word Count,Character Count,Execution Time (ms)\n';
   data.results.forEach(result => {
     const output = result.output || '';
     const wordCount = output.split(/\s+/).length;
@@ -1169,7 +1337,7 @@ function exportCSVAnalysis(data, options) {
     type: 'text',
     data: csvContent,
     mimeType: 'text/csv',
-    shouldDownload: true,
+    shouldDownload: true
   };
 }
 // Complete JSON Export
@@ -1178,13 +1346,13 @@ function exportCompleteJSON(data, options) {
     ...data,
     exportOptions: options,
     exportedAt: new Date().toISOString(),
-    version: '1.0.0',
+    version: '1.0.0'
   };
   return {
     type: 'text',
     data: JSON.stringify(completeData, null, 2),
     mimeType: 'application/json',
-    shouldDownload: true,
+    shouldDownload: true
   };
 }
 // Professional Report Export (would generate PDF in real implementation)
@@ -1197,23 +1365,31 @@ function exportProfessionalReport(data, options) {
     summary: {
       totalResults: data.results.length,
       averageWordCount:
-        data.results.reduce((sum, r) => sum + (r.output ? r.output.split(/\s+/).length : 0), 0) / data.results.length,
+        data.results.reduce(
+          (sum, r) => sum + (r.output ? r.output.split(/\s+/).length : 0),
+          0
+        ) / data.results.length,
       executionStats: {
-        totalTime: data.results.reduce((sum, r) => sum + (r.executionTimeMs || 0), 0),
-        averageTime: data.results.reduce((sum, r) => sum + (r.executionTimeMs || 0), 0) / data.results.length,
-      },
+        totalTime: data.results.reduce(
+          (sum, r) => sum + (r.executionTimeMs || 0),
+          0
+        ),
+        averageTime:
+          data.results.reduce((sum, r) => sum + (r.executionTimeMs || 0), 0) /
+          data.results.length
+      }
     },
     results: data.results,
     recommendations: [
       'Results show consistent generation quality',
       'Execution times are within acceptable ranges',
-      'Consider A/B testing different seed ranges',
-    ],
+      'Consider A/B testing different seed ranges'
+    ]
   };
   return {
     type: 'binary', // Client will format as PDF
     data: JSON.stringify(reportData),
-    mimeType: 'application/pdf',
+    mimeType: 'application/pdf'
   };
 }
 // Creative Brief Export (would generate DOCX in real implementation)
@@ -1228,18 +1404,19 @@ function exportCreativeBrief(data, options) {
     creativeDirection: [
       'Maintain consistency across generated variants',
       'Focus on narrative coherence',
-      'Consider visual storytelling opportunities',
+      'Consider visual storytelling opportunities'
     ],
     nextSteps: [
       'Review generated content with creative team',
       'Select strongest variants for development',
-      'Prepare for production pipeline',
-    ],
+      'Prepare for production pipeline'
+    ]
   };
   return {
     type: 'binary', // Client will format as DOCX
     data: JSON.stringify(briefData),
-    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    mimeType:
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   };
 }
 // === EPIC 8.6 TASK 7: HYBRID PROMPTING EXPORT FUNCTIONS ===
@@ -1252,28 +1429,32 @@ async function exportHybridPrompting(data, options) {
     // Convert data to graph format for hybrid export
     const graph = {
       nodes: data.graph?.nodes || [],
-      edges: data.graph?.edges || [],
+      edges: data.graph?.edges || []
     };
     const executionResults = {
       finalPrompt: data.results?.[0]?.output || '',
       variables: data.variables || {},
       executionTime: data.performance?.totalTime || 0,
       nodePerformance: data.performance?.byNode || {},
-      variants: data.results || [],
+      variants: data.results || []
     };
     // Generate hybrid export
-    const hybridExport = await hybridService.exportHybridPrompt(graph, executionResults, {
-      includeMARS: options?.includeMARS !== false,
-      includeZada: options?.includeZada !== false,
-      includeHollywoodProtocol: options?.includeHollywood !== false,
-      quality: options?.quality || 'production',
-      targetAudience: options?.targetAudience || 'mixed_crew',
-    });
+    const hybridExport = await hybridService.exportHybridPrompt(
+      graph,
+      executionResults,
+      {
+        includeMARS: options?.includeMARS !== false,
+        includeZada: options?.includeZada !== false,
+        includeHollywoodProtocol: options?.includeHollywood !== false,
+        quality: options?.quality || 'production',
+        targetAudience: options?.targetAudience || 'mixed_crew'
+      }
+    );
     return {
       type: 'text',
       data: JSON.stringify(hybridExport, null, 2),
       mimeType: 'application/json',
-      shouldDownload: true,
+      shouldDownload: true
     };
   } catch (error) {
     // Fallback to basic hybrid structure
@@ -1282,13 +1463,13 @@ async function exportHybridPrompting(data, options) {
         exportId: `hybrid_${Date.now()}`,
         version: '1.0.0',
         timestamp: new Date().toISOString(),
-        format: 'wild-construct-hybrid-v1',
+        format: 'wild-construct-hybrid-v1'
       },
       hybridPrompting: {
         mars: {
           framework: 'MARS-v1.0',
           tags: 'Basic MARS structure not available - analysis service error',
-          structured: 'Structured format generation failed',
+          structured: 'Structured format generation failed'
         },
         zada: {
           approach: 'screenplay-style',
@@ -1298,9 +1479,9 @@ async function exportHybridPrompting(data, options) {
               style: 'director_note',
               content: `Director's Note: ${data.results?.[0]?.output || 'Generated content'}`,
               accessibility_level: 'director',
-              human_readable_score: 8,
-            },
-          ],
+              human_readable_score: 8
+            }
+          ]
         },
         hollywood: {
           protocol: 'reproducibility-v1',
@@ -1312,18 +1493,18 @@ async function exportHybridPrompting(data, options) {
             version_compatibility: {
               generator_version: '1.0.0',
               node_version_map: {},
-              schema_version: 'wild-construct-v1',
-            },
-          },
-        },
+              schema_version: 'wild-construct-v1'
+            }
+          }
+        }
       },
-      original_data: data,
+      original_data: data
     };
     return {
       type: 'text',
       data: JSON.stringify(fallbackData, null, 2),
       mimeType: 'application/json',
-      shouldDownload: true,
+      shouldDownload: true
     };
   }
 }
@@ -1335,15 +1516,18 @@ async function exportMARSFramework(data, options) {
   try {
     const graph = {
       nodes: data.graph?.nodes || [],
-      edges: data.graph?.edges || [],
+      edges: data.graph?.edges || []
     };
     const executionResults = {
       finalPrompt: data.results?.[0]?.output || '',
       variables: data.variables || {},
-      executionTime: data.performance?.totalTime || 0,
+      executionTime: data.performance?.totalTime || 0
     };
     // Generate hybrid export and extract MARS data
-    const hybridExport = await hybridService.exportHybridPrompt(graph, executionResults);
+    const hybridExport = await hybridService.exportHybridPrompt(
+      graph,
+      executionResults
+    );
     const marsData = hybridExport.hybridPrompting.mars;
     // Create MARS-focused export
     const marsExport = {
@@ -1359,8 +1543,8 @@ async function exportMARSFramework(data, options) {
           angle: marsData.tags.CAM.angle,
           movement: marsData.tags.CAM.movement,
           lens: marsData.tags.CAM.lens,
-          depth_of_field: marsData.tags.CAM.depth_of_field,
-        },
+          depth_of_field: marsData.tags.CAM.depth_of_field
+        }
       },
       subject: {
         tag: `[SUBJ:${marsData.tags.SUBJ.primary}:${marsData.tags.SUBJ.emotion}:${marsData.tags.SUBJ.blocking}]`,
@@ -1369,8 +1553,8 @@ async function exportMARSFramework(data, options) {
           secondary: marsData.tags.SUBJ.secondary,
           interaction: marsData.tags.SUBJ.interaction,
           emotion: marsData.tags.SUBJ.emotion,
-          blocking: marsData.tags.SUBJ.blocking,
-        },
+          blocking: marsData.tags.SUBJ.blocking
+        }
       },
       effects: {
         tag: `[FX:${marsData.tags.FX.lighting}:${marsData.tags.FX.color_grade}:${marsData.tags.FX.atmosphere}]`,
@@ -1379,8 +1563,8 @@ async function exportMARSFramework(data, options) {
           color_grade: marsData.tags.FX.color_grade,
           atmosphere: marsData.tags.FX.atmosphere,
           special_fx: marsData.tags.FX.special_fx,
-          post_processing: marsData.tags.FX.post_processing,
-        },
+          post_processing: marsData.tags.FX.post_processing
+        }
       },
       focal: {
         tag: `!FOCAL[${marsData.tags.FOCAL.primary_focus}]`,
@@ -1388,27 +1572,35 @@ async function exportMARSFramework(data, options) {
           primary_focus: marsData.tags.FOCAL.primary_focus,
           secondary_focus: marsData.tags.FOCAL.secondary_focus,
           background_treatment: marsData.tags.FOCAL.background_treatment,
-          visual_hierarchy: marsData.tags.FOCAL.visual_hierarchy,
-        },
+          visual_hierarchy: marsData.tags.FOCAL.visual_hierarchy
+        }
       },
       // ControlNet Integration
       controlnet_mapping: marsData.structured.controlnet_mapping,
       // VFX Professional Notes
       vfx_notes: {
-        pipeline_integration: 'Use MARS tags for automated VFX parameter extraction',
-        controlnet_workflow: 'Map pose_guidance for character animation, depth_hints for 3D integration',
-        recommended_tools: ['ControlNet', 'Stable Diffusion', 'Midjourney', 'DALL-E'],
-        technical_requirements: 'Ensure pose data matches character rig, depth maps align with scene geometry',
+        pipeline_integration:
+          'Use MARS tags for automated VFX parameter extraction',
+        controlnet_workflow:
+          'Map pose_guidance for character animation, depth_hints for 3D integration',
+        recommended_tools: [
+          'ControlNet',
+          'Stable Diffusion',
+          'Midjourney',
+          'DALL-E'
+        ],
+        technical_requirements:
+          'Ensure pose data matches character rig, depth maps align with scene geometry'
       },
       // Original prompt for reference
       original_prompt: data.results?.[0]?.output || '',
-      variables_used: data.variables || {},
+      variables_used: data.variables || {}
     };
     return {
       type: 'text',
       data: JSON.stringify(marsExport, null, 2),
       mimeType: 'application/json',
-      shouldDownload: true,
+      shouldDownload: true
     };
   } catch (error) {
     // Fallback MARS format
@@ -1420,14 +1612,14 @@ async function exportMARSFramework(data, options) {
       original_prompt: data.results?.[0]?.output || '',
       error: 'MARS analysis service unavailable, using fallback structure',
       vfx_notes: {
-        note: 'This is a fallback MARS structure. For full analysis, please retry when services are available.',
-      },
+        note: 'This is a fallback MARS structure. For full analysis, please retry when services are available.'
+      }
     };
     return {
       type: 'text',
       data: JSON.stringify(fallbackMARS, null, 2),
       mimeType: 'application/json',
-      shouldDownload: true,
+      shouldDownload: true
     };
   }
 }
@@ -1439,15 +1631,18 @@ async function exportZadaNaturalLanguage(data, options) {
   try {
     const graph = {
       nodes: data.graph?.nodes || [],
-      edges: data.graph?.edges || [],
+      edges: data.graph?.edges || []
     };
     const executionResults = {
       finalPrompt: data.results?.[0]?.output || '',
       variables: data.variables || {},
-      executionTime: data.performance?.totalTime || 0,
+      executionTime: data.performance?.totalTime || 0
     };
     // Generate hybrid export and extract Zada data
-    const hybridExport = await hybridService.exportHybridPrompt(graph, executionResults);
+    const hybridExport = await hybridService.exportHybridPrompt(
+      graph,
+      executionResults
+    );
     const zadaData = hybridExport.hybridPrompting.zada;
     // Create Zada-focused export
     const zadaExport = {
@@ -1459,7 +1654,7 @@ async function exportZadaNaturalLanguage(data, options) {
         screenplay_style: zadaData.director_friendly.screenplay_style,
         shot_description: zadaData.director_friendly.shot_description,
         mood_direction: zadaData.director_friendly.mood_direction,
-        reference_notes: zadaData.director_friendly.reference_notes,
+        reference_notes: zadaData.director_friendly.reference_notes
       },
       // Multiple Natural Language Variants
       variants: zadaData.variants.map(variant => ({
@@ -1467,7 +1662,7 @@ async function exportZadaNaturalLanguage(data, options) {
         style: variant.style,
         accessibility_level: variant.accessibility_level,
         human_readable_score: variant.human_readable_score,
-        content: variant.content,
+        content: variant.content
       })),
       // Crew-Specific Notes
       crew_directions: zadaData.director_friendly.crew_notes,
@@ -1475,16 +1670,22 @@ async function exportZadaNaturalLanguage(data, options) {
       creative_context: {
         original_prompt: data.results?.[0]?.output || '',
         variables_context: data.variables || {},
-        accessibility_focus: 'Converts technical prompts into natural, director-friendly language',
-        target_audience: options?.targetAudience || 'Creative team members without technical AI background',
+        accessibility_focus:
+          'Converts technical prompts into natural, director-friendly language',
+        target_audience:
+          options?.targetAudience ||
+          'Creative team members without technical AI background'
       },
       // Usage Guidelines
       usage_notes: {
         director_workflow: 'Use screenplay_style for storyboard discussions',
-        crew_communication: 'Share variants with different crew members based on accessibility_level',
-        iteration_process: 'Modify mood_direction and reference_notes for creative iterations',
-        technical_bridge: 'Use alongside MARS framework for complete VFX pipeline integration',
-      },
+        crew_communication:
+          'Share variants with different crew members based on accessibility_level',
+        iteration_process:
+          'Modify mood_direction and reference_notes for creative iterations',
+        technical_bridge:
+          'Use alongside MARS framework for complete VFX pipeline integration'
+      }
     };
     // Format as readable document
     const readableContent = `# Director-Friendly Content Generation
@@ -1521,14 +1722,14 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
         type: 'text',
         data: readableContent,
         mimeType: 'text/markdown',
-        shouldDownload: true,
+        shouldDownload: true
       };
     } else {
       return {
         type: 'text',
         data: JSON.stringify(zadaExport, null, 2),
         mimeType: 'application/json',
-        shouldDownload: true,
+        shouldDownload: true
       };
     }
   } catch (error) {
@@ -1539,9 +1740,12 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
       timestamp: new Date().toISOString(),
       director_friendly: {
         screenplay_style: `FADE IN:\n\nINT. SCENE - DAY\n\n${originalPrompt}\n\nThe shot captures the essence of the described scene with natural, cinematic quality.`,
-        shot_description: 'Natural shot featuring the described elements with professional cinematic composition',
-        mood_direction: 'Create an authentic, engaging atmosphere that serves the story',
-        reference_notes: 'Focus on natural lighting and authentic character moments',
+        shot_description:
+          'Natural shot featuring the described elements with professional cinematic composition',
+        mood_direction:
+          'Create an authentic, engaging atmosphere that serves the story',
+        reference_notes:
+          'Focus on natural lighting and authentic character moments'
       },
       variants: [
         {
@@ -1549,17 +1753,18 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
           style: 'screenplay',
           accessibility_level: 'director',
           human_readable_score: 8,
-          content: `A screenplay-style interpretation of: ${originalPrompt}`,
-        },
+          content: `A screenplay-style interpretation of: ${originalPrompt}`
+        }
       ],
-      error: 'Zada natural language generation service unavailable, using fallback structure',
-      original_prompt: originalPrompt,
+      error:
+        'Zada natural language generation service unavailable, using fallback structure',
+      original_prompt: originalPrompt
     };
     return {
       type: 'text',
       data: JSON.stringify(fallbackZada, null, 2),
       mimeType: 'application/json',
-      shouldDownload: true,
+      shouldDownload: true
     };
   }
 }
@@ -1584,8 +1789,8 @@ async function exportSharedGraph(data, options) {
       author: {
         id: options?.authorId || 'anonymous',
         name: options?.authorName || 'Anonymous User',
-        email: options?.authorEmail,
-      },
+        email: options?.authorEmail
+      }
     };
     // Prepare metadata
     const metadata = {
@@ -1593,17 +1798,23 @@ async function exportSharedGraph(data, options) {
       description: options?.description || 'Graph shared via Wild Construct',
       versionControl: {
         tags: options?.tags || [],
-        branch: options?.branch || 'main',
-      },
+        branch: options?.branch || 'main'
+      }
     };
     // Create shared graph
-    const sharedGraph = await graphSharingService.exportForSharing(nodes, edges, annotations, metadata, sharingOptions);
+    const sharedGraph = await graphSharingService.exportForSharing(
+      nodes,
+      edges,
+      annotations,
+      metadata,
+      sharingOptions
+    );
     return {
       type: 'text',
       data: JSON.stringify(sharedGraph, null, 2),
       mimeType: 'application/json',
       shouldDownload: true,
-      filename: `shared-graph-${sharedGraph.metadata.exportId}.json`,
+      filename: `shared-graph-${sharedGraph.metadata.exportId}.json`
     };
   } catch (error) {
     // Fallback shared format
@@ -1615,53 +1826,53 @@ async function exportSharedGraph(data, options) {
         title: options?.title || 'Shared Graph (Fallback)',
         author: {
           id: 'fallback',
-          name: 'Unknown',
+          name: 'Unknown'
         },
         versionControl: {
           version: 1,
           changes: ['Fallback export due to service error'],
-          tags: [],
+          tags: []
         },
         sharing: {
           permissions: 'read_only',
-          collaborators: [],
-        },
+          collaborators: []
+        }
       },
       graph: {
         nodes: data.graph?.nodes || [],
         edges: data.graph?.edges || [],
         settings: {
           canvasPosition: { x: 0, y: 0, zoom: 1 },
-          readonly: true,
-        },
+          readonly: true
+        }
       },
       annotations: {
         connectionLabels: [],
         stickyNotes: [],
         nodeLabels: [],
         regions: [],
-        comments: [],
+        comments: []
       },
       collaboration: {
         changeHistory: [],
         conflicts: [],
         lastSync: new Date().toISOString(),
-        syncStatus: 'offline',
+        syncStatus: 'offline'
       },
       compatibility: {
         minVersion: '1.0.0',
         features: ['basic-sharing'],
         warnings: ['Generated in fallback mode due to service error'],
-        errors: [error instanceof Error ? error.message : 'Unknown error'],
+        errors: [error instanceof Error ? error.message : 'Unknown error']
       },
-      error: 'Sharing service unavailable, using fallback format',
+      error: 'Sharing service unavailable, using fallback format'
     };
     return {
       type: 'text',
       data: JSON.stringify(fallbackSharedGraph, null, 2),
       mimeType: 'application/json',
       shouldDownload: true,
-      filename: 'shared-graph-fallback.json',
+      filename: 'shared-graph-fallback.json'
     };
   }
 }
@@ -1679,7 +1890,7 @@ async function exportCollaborationFormat(data, options) {
       connectionLabels: extractConnectionLabels(edges),
       nodeLabels: extractNodeLabels(nodes),
       regions: data.annotations?.regions || [],
-      comments: data.annotations?.comments || [],
+      comments: data.annotations?.comments || []
     };
     const sharedGraph = await graphSharingService.exportForSharing(
       nodes,
@@ -1687,11 +1898,12 @@ async function exportCollaborationFormat(data, options) {
       annotations,
       {
         title: options?.title || 'Collaboration Graph',
-        description: options?.description || 'Graph prepared for team collaboration',
+        description:
+          options?.description || 'Graph prepared for team collaboration',
         versionControl: {
           tags: ['collaboration', ...(options?.tags || [])],
-          branch: options?.branch || 'collaboration',
-        },
+          branch: options?.branch || 'collaboration'
+        }
       },
       {
         includeHistory: true,
@@ -1700,8 +1912,8 @@ async function exportCollaborationFormat(data, options) {
         author: {
           id: options?.authorId || 'collaborator',
           name: options?.authorName || 'Team Member',
-          email: options?.authorEmail,
-        },
+          email: options?.authorEmail
+        }
       }
     );
     // Enhanced collaboration metadata
@@ -1713,20 +1925,20 @@ async function exportCollaborationFormat(data, options) {
         versionControl: true,
         commentSystem: true,
         permissionManagement: true,
-        changeTracking: true,
+        changeTracking: true
       },
       usage: {
         importInstructions: 'Use Wild Construct import function or share URL',
         supportedClients: ['Wild Construct Web', 'Wild Construct Desktop'],
-        apiVersion: '1.0.0',
-      },
+        apiVersion: '1.0.0'
+      }
     };
     return {
       type: 'text',
       data: JSON.stringify(collaborationExport, null, 2),
       mimeType: 'application/json',
       shouldDownload: true,
-      filename: `collaboration-${sharedGraph.metadata.exportId}.json`,
+      filename: `collaboration-${sharedGraph.metadata.exportId}.json`
     };
   } catch (error) {
     // Fallback collaboration format
@@ -1736,7 +1948,7 @@ async function exportCollaborationFormat(data, options) {
         version: '1.0.0',
         timestamp: new Date().toISOString(),
         title: options?.title || 'Collaboration Export (Fallback)',
-        format: 'collaboration-fallback',
+        format: 'collaboration-fallback'
       },
       graph: data.graph || { nodes: [], edges: [] },
       collaborationFeatures: {
@@ -1746,16 +1958,19 @@ async function exportCollaborationFormat(data, options) {
         commentSystem: false,
         permissionManagement: false,
         changeTracking: false,
-        fallbackMode: true,
+        fallbackMode: true
       },
-      error: error instanceof Error ? error.message : 'Collaboration service unavailable',
+      error:
+        error instanceof Error
+          ? error.message
+          : 'Collaboration service unavailable'
     };
     return {
       type: 'text',
       data: JSON.stringify(fallbackFormat, null, 2),
       mimeType: 'application/json',
       shouldDownload: true,
-      filename: 'collaboration-fallback.json',
+      filename: 'collaboration-fallback.json'
     };
   }
 }
@@ -1771,9 +1986,9 @@ function extractConnectionLabels(edges) {
       style: edge.labelStyle,
       position: {
         type: edge.labelPosition,
-        offset: edge.labelOffset,
+        offset: edge.labelOffset
       },
-      visible: edge.showLabel ?? true,
+      visible: edge.showLabel ?? true
     }));
 }
 /**
@@ -1787,9 +2002,12 @@ function extractNodeLabels(nodes) {
       description: node.data?.description,
       tags: Array.isArray(node.data?.tags) ? node.data.tags : [],
       color: node.data?.color,
-      notes: node.data?.notes,
+      notes: node.data?.notes
     }))
-    .filter(label => label.label || label.description || label.tags.length > 0 || label.notes);
+    .filter(
+      label =>
+        label.label || label.description || label.tags.length > 0 || label.notes
+    );
 }
 // Utility function to escape XML content
 function escapeXml(unsafe) {

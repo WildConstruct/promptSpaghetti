@@ -6,10 +6,10 @@ import { ProfessionalIntegration } from '../../packages/core';
 import type { Node, Edge } from 'reactflow';
 
 // Professional GraphEditor that uses modular architecture
-const ProfessionalGraphEditor: React.FC<{ initialNodes?: Node[]; initialEdges?: Edge[] }> = ({
-  initialNodes = [], 
-  initialEdges = [] 
-}) => {
+const ProfessionalGraphEditor: React.FC<{
+  initialNodes?: Node[];
+  initialEdges?: Edge[];
+}> = ({ initialNodes = [], initialEdges = [] }) => {
   return (
     <ProfessionalIntegration
       nodes={initialNodes}

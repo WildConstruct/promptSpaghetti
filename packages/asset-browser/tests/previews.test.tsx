@@ -20,7 +20,9 @@ describe('Details Drawer previews', () => {
     const drawer = await screen.findByLabelText('Details Drawer');
     expect(drawer).toHaveAttribute('aria-hidden', 'false');
 
-    const simulateBtn = await screen.findByRole('button', { name: /simulate/i });
+    const simulateBtn = await screen.findByRole('button', {
+      name: /simulate/i
+    });
     fireEvent.click(simulateBtn);
 
     // Expect results to appear (we render 3 seeds)
@@ -32,11 +34,15 @@ describe('Details Drawer previews', () => {
     render(<AssetBrowser />);
     openDrawer();
 
-    const toggleBtn = await screen.findByRole('button', { name: /toggle branch visualization/i });
+    const toggleBtn = await screen.findByRole('button', {
+      name: /toggle branch visualization/i
+    });
     fireEvent.click(toggleBtn);
 
     // SVG aria-label Branch visualization should appear
-    const svg = await screen.findByRole('img', { name: /branch visualization/i });
+    const svg = await screen.findByRole('img', {
+      name: /branch visualization/i
+    });
     expect(svg).toBeInTheDocument();
   });
 });

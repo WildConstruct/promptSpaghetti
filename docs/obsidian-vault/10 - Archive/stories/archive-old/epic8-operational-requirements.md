@@ -525,20 +525,28 @@ class PythonExecutorClient {
       const result = await this.httpClient.post('/v1/execute', {
         code,
         input,
-        execution_id: generateId(),
+        execution_id: generateId()
       });
       return result.data;
     } catch (error) {
       if (error.status === 503) {
         // Service temporarily unavailable
-        this.showUserMessage('Python execution is temporarily unavailable. Please try again in a moment.');
+        this.showUserMessage(
+          'Python execution is temporarily unavailable. Please try again in a moment.'
+        );
         return { success: false, error: 'Service unavailable', retry: true };
       }
 
       if (error.status === 429) {
         // Rate limited
-        this.showUserMessage('Too many requests. Please wait before trying again.');
-        return { success: false, error: 'Rate limited', retry_after: error.headers['retry-after'] };
+        this.showUserMessage(
+          'Too many requests. Please wait before trying again.'
+        );
+        return {
+          success: false,
+          error: 'Rate limited',
+          retry_after: error.headers['retry-after']
+        };
       }
 
       // Other errors

@@ -190,7 +190,7 @@ export const MFAStatusBadge: React.FC<MFAStatusBadgeProps> = ({
   variant = 'default',
   showIcon = true,
   clickable = false,
-  onClick,
+  onClick
 }) => {
   const config = getMFAStatusConfig(status);
 
@@ -202,7 +202,7 @@ export const MFAStatusBadge: React.FC<MFAStatusBadgeProps> = ({
         {
           'cursor-pointer hover:opacity-80': clickable,
           'px-2 py-1 text-xs': size === 'sm',
-          'px-4 py-2 text-base': size === 'lg',
+          'px-4 py-2 text-base': size === 'lg'
         },
         getStatusColorClasses(status)
       )}
@@ -211,12 +211,20 @@ export const MFAStatusBadge: React.FC<MFAStatusBadgeProps> = ({
       tabIndex={clickable ? 0 : undefined}
     >
       {showIcon && (
-        <Icon name={config.icon} className={cn('h-4 w-4', { 'h-3 w-3': size === 'sm', 'h-5 w-5': size === 'lg' })} />
+        <Icon
+          name={config.icon}
+          className={cn('h-4 w-4', {
+            'h-3 w-3': size === 'sm',
+            'h-5 w-5': size === 'lg'
+          })}
+        />
       )}
 
       <span>{config.text}</span>
 
-      {variant === 'detailed' && <span className="text-xs opacity-75">{config.description}</span>}
+      {variant === 'detailed' && (
+        <span className="text-xs opacity-75">{config.description}</span>
+      )}
     </div>
   );
 };
@@ -308,7 +316,7 @@ export const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
   error,
   loading = false,
   onComplete,
-  onResend,
+  onResend
 }) => {
   const [values, setValues] = useState<string[]>(new Array(length).fill(''));
   const [activeIndex, setActiveIndex] = useState(0);
@@ -319,7 +327,9 @@ export const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
 
     // Validate input based on type
     const sanitizedValue =
-      type === 'numeric' ? value.replace(/[^0-9]/g, '') : value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+      type === 'numeric'
+        ? value.replace(/[^0-9]/g, '')
+        : value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
 
     if (sanitizedValue.length <= 1) {
       const newValues = [...values];
@@ -333,7 +343,11 @@ export const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
       }
 
       // Auto-submit when complete
-      if (autoSubmit && newValues.every(v => v) && newValues.join('').length === length) {
+      if (
+        autoSubmit &&
+        newValues.every(v => v) &&
+        newValues.join('').length === length
+      ) {
         onComplete(newValues.join(''));
       }
     }
@@ -360,7 +374,9 @@ export const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text').slice(0, length);
     const sanitizedData =
-      type === 'numeric' ? pastedData.replace(/[^0-9]/g, '') : pastedData.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+      type === 'numeric'
+        ? pastedData.replace(/[^0-9]/g, '')
+        : pastedData.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
 
     const newValues = sanitizedData.split('').slice(0, length);
     while (newValues.length < length) {
@@ -396,7 +412,7 @@ export const VerificationCodeInput: React.FC<VerificationCodeInputProps> = ({
                 'border-gray-300': !error,
                 'border-red-500': error,
                 'bg-gray-50': disabled,
-                'cursor-not-allowed': disabled || loading,
+                'cursor-not-allowed': disabled || loading
               }
             )}
             onChange={e => handleInputChange(index, e.target.value)}
@@ -480,18 +496,22 @@ export const MFAMethodCard: React.FC<MFAMethodCardProps> = ({
   onSelect,
   onConfigure,
   onDisable,
-  variant = 'selection',
+  variant = 'selection'
 }) => {
   const methodConfig = getMFAMethodConfig(method);
 
   return (
     <div
-      className={cn('relative rounded-lg border-2 p-4 transition-all duration-200', 'cursor-pointer hover:shadow-md', {
-        'border-gray-200 hover:border-gray-300': !enabled && !recommended,
-        'border-blue-500 bg-blue-50': enabled,
-        'border-green-500 bg-green-50': recommended,
-        'border-green-200': configured,
-      })}
+      className={cn(
+        'relative rounded-lg border-2 p-4 transition-all duration-200',
+        'cursor-pointer hover:shadow-md',
+        {
+          'border-gray-200 hover:border-gray-300': !enabled && !recommended,
+          'border-blue-500 bg-blue-50': enabled,
+          'border-green-500 bg-green-50': recommended,
+          'border-green-200': configured
+        }
+      )}
       onClick={onSelect}
       role="button"
       tabIndex={0}
@@ -499,13 +519,23 @@ export const MFAMethodCard: React.FC<MFAMethodCardProps> = ({
     >
       {recommended && (
         <div className="absolute -top-2 left-4">
-          <span className="bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">Recommended</span>
+          <span className="bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+            Recommended
+          </span>
         </div>
       )}
 
       <div className="flex items-start gap-3">
-        <div className={cn('flex-shrink-0 rounded-full p-2', `bg-${methodConfig.color}-100`)}>
-          <Icon name={methodConfig.icon} className={cn('h-6 w-6', `text-${methodConfig.color}-600`)} />
+        <div
+          className={cn(
+            'flex-shrink-0 rounded-full p-2',
+            `bg-${methodConfig.color}-100`
+          )}
+        >
+          <Icon
+            name={methodConfig.icon}
+            className={cn('h-6 w-6', `text-${methodConfig.color}-600`)}
+          />
         </div>
 
         <div className="flex-1 min-w-0">
@@ -517,7 +547,9 @@ export const MFAMethodCard: React.FC<MFAMethodCardProps> = ({
           <p className="text-sm text-gray-600 mt-1">{description}</p>
 
           {lastUsed && variant === 'management' && (
-            <p className="text-xs text-gray-500 mt-2">Last used: {formatRelativeTime(lastUsed)}</p>
+            <p className="text-xs text-gray-500 mt-2">
+              Last used: {formatRelativeTime(lastUsed)}
+            </p>
           )}
 
           {variant === 'management' && (
@@ -557,10 +589,12 @@ export const MFAMethodCard: React.FC<MFAMethodCardProps> = ({
             <div
               className={cn('w-5 h-5 rounded-full border-2 transition-colors', {
                 'border-gray-300': !enabled,
-                'border-blue-500 bg-blue-500': enabled,
+                'border-blue-500 bg-blue-500': enabled
               })}
             >
-              {enabled && <Icon name="check" className="h-3 w-3 text-white m-0.5" />}
+              {enabled && (
+                <Icon name="check" className="h-3 w-3 text-white m-0.5" />
+              )}
             </div>
           </div>
         )}
@@ -644,13 +678,17 @@ interface MFASetupProgress {
     { id: 'method'; title: 'Choose Method'; completed: boolean },
     { id: 'configure'; title: 'Configure'; completed: boolean },
     { id: 'verify'; title: 'Verify'; completed: boolean },
-    { id: 'backup'; title: 'Save Backup Codes'; completed: boolean },
+    { id: 'backup'; title: 'Save Backup Codes'; completed: boolean }
   ];
   currentStep: string;
   allowJump?: boolean;
 }
 
-export const MFASetupProgress: React.FC<MFASetupProgressProps> = ({ steps, currentStep, allowJump = false }) => {
+export const MFASetupProgress: React.FC<MFASetupProgressProps> = ({
+  steps,
+  currentStep,
+  allowJump = false
+}) => {
   return (
     <nav aria-label="MFA setup progress">
       <ol className="flex items-center justify-between w-full">
@@ -669,20 +707,24 @@ export const MFASetupProgress: React.FC<MFASetupProgressProps> = ({ steps, curre
                     'bg-blue-600 text-white': isActive,
                     'bg-green-600 text-white': step.completed,
                     'bg-gray-200 text-gray-600': !isActive && !step.completed,
-                    'cursor-pointer hover:bg-blue-100': isAccessible,
+                    'cursor-pointer hover:bg-blue-100': isAccessible
                   }
                 )}
                 role={isAccessible ? 'button' : undefined}
                 tabIndex={isAccessible ? 0 : undefined}
               >
-                {step.completed ? <Icon name="check" className="h-4 w-4" /> : <span>{index + 1}</span>}
+                {step.completed ? (
+                  <Icon name="check" className="h-4 w-4" />
+                ) : (
+                  <span>{index + 1}</span>
+                )}
               </div>
 
               <span
                 className={cn('ml-2 text-sm font-medium', {
                   'text-blue-600': isActive,
                   'text-green-600': step.completed,
-                  'text-gray-500': !isActive && !step.completed,
+                  'text-gray-500': !isActive && !step.completed
                 })}
               >
                 {step.title}
@@ -693,7 +735,9 @@ export const MFASetupProgress: React.FC<MFASetupProgressProps> = ({ steps, curre
                   <div
                     className={cn(
                       'h-full transition-all duration-300',
-                      step.completed ? 'bg-green-600 w-full' : 'bg-transparent w-0'
+                      step.completed
+                        ? 'bg-green-600 w-full'
+                        : 'bg-transparent w-0'
                     )}
                   />
                 </div>
@@ -723,7 +767,7 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
   manualEntryCode,
   expiresAt,
   onRefresh,
-  showManualEntry = false,
+  showManualEntry = false
 }) => {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [showManual, setShowManual] = useState(showManualEntry);
@@ -775,7 +819,11 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
 
           {timeRemaining === 0 && (
             <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
-              <Button onClick={onRefresh} variant="outline" className="bg-white">
+              <Button
+                onClick={onRefresh}
+                variant="outline"
+                className="bg-white"
+              >
                 <Icon name="refresh-cw" className="h-4 w-4 mr-2" />
                 Get New Code
               </Button>
@@ -791,19 +839,27 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
           onClick={() => setShowManual(!showManual)}
           className="text-sm text-blue-600 hover:text-blue-700 underline"
         >
-          {showManual ? 'Hide manual entry code' : "Can't scan? Enter code manually"}
+          {showManual
+            ? 'Hide manual entry code'
+            : "Can't scan? Enter code manually"}
         </button>
       </div>
 
       {/* Manual Entry Code */}
       {showManual && (
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h4 className="text-sm font-medium text-gray-900 mb-2">Manual Entry Code</h4>
+          <h4 className="text-sm font-medium text-gray-900 mb-2">
+            Manual Entry Code
+          </h4>
           <div className="flex items-center gap-2">
             <code className="flex-1 bg-white px-3 py-2 rounded border text-sm font-mono">
               {manualEntryCode.match(/.{1,4}/g)?.join(' ')}
             </code>
-            <Button variant="outline" size="sm" onClick={() => navigator.clipboard?.writeText(manualEntryCode)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigator.clipboard?.writeText(manualEntryCode)}
+            >
               <Icon name="copy" className="h-4 w-4" />
             </Button>
           </div>
@@ -840,7 +896,7 @@ export const MFALoginChallenge: React.FC<MFALoginChallengeProps> = ({
   onVerify,
   onResend,
   error,
-  loading = false,
+  loading = false
 }) => {
   const currentMethod = availableMethods.find(m => m.id === selectedMethod);
 
@@ -851,14 +907,20 @@ export const MFALoginChallenge: React.FC<MFALoginChallengeProps> = ({
         <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
           <Icon name="shield-check" className="h-6 w-6 text-blue-600" />
         </div>
-        <h2 className="text-xl font-semibold text-gray-900">Two-Factor Authentication</h2>
-        <p className="text-sm text-gray-600 mt-1">Enter your verification code to continue</p>
+        <h2 className="text-xl font-semibold text-gray-900">
+          Two-Factor Authentication
+        </h2>
+        <p className="text-sm text-gray-600 mt-1">
+          Enter your verification code to continue
+        </p>
       </div>
 
       {/* Method Selection */}
       {availableMethods.length > 1 && (
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Verification method</label>
+          <label className="text-sm font-medium text-gray-700">
+            Verification method
+          </label>
           <div className="grid gap-2">
             {availableMethods.map(method => (
               <label
@@ -868,7 +930,8 @@ export const MFALoginChallenge: React.FC<MFALoginChallengeProps> = ({
                   'transition-colors duration-200',
                   {
                     'border-blue-500 bg-blue-50': method.id === selectedMethod,
-                    'border-gray-200 hover:border-gray-300': method.id !== selectedMethod,
+                    'border-gray-200 hover:border-gray-300':
+                      method.id !== selectedMethod
                   }
                 )}
               >
@@ -881,16 +944,26 @@ export const MFALoginChallenge: React.FC<MFALoginChallengeProps> = ({
                   className="sr-only"
                 />
                 <div
-                  className={cn('w-4 h-4 rounded-full border-2 transition-colors', {
-                    'border-blue-500 bg-blue-500': method.id === selectedMethod,
-                    'border-gray-300': method.id !== selectedMethod,
-                  })}
+                  className={cn(
+                    'w-4 h-4 rounded-full border-2 transition-colors',
+                    {
+                      'border-blue-500 bg-blue-500':
+                        method.id === selectedMethod,
+                      'border-gray-300': method.id !== selectedMethod
+                    }
+                  )}
                 >
-                  {method.id === selectedMethod && <div className="w-2 h-2 bg-white rounded-full m-0.5" />}
+                  {method.id === selectedMethod && (
+                    <div className="w-2 h-2 bg-white rounded-full m-0.5" />
+                  )}
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900">{method.title}</div>
-                  <div className="text-sm text-gray-600">{method.description}</div>
+                  <div className="font-medium text-gray-900">
+                    {method.title}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {method.description}
+                  </div>
                 </div>
               </label>
             ))}
@@ -916,7 +989,10 @@ export const MFALoginChallenge: React.FC<MFALoginChallengeProps> = ({
 
       {/* Help Links */}
       <div className="text-center space-y-2">
-        <button type="button" className="text-sm text-blue-600 hover:text-blue-700 underline">
+        <button
+          type="button"
+          className="text-sm text-blue-600 hover:text-blue-700 underline"
+        >
           Use a recovery code instead
         </button>
         <div className="text-xs text-gray-500">
@@ -992,7 +1068,9 @@ interface MFAContextValue {
   };
 }
 
-export const MFAProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const MFAProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
   const [state, setState] = useState<MFAComponentStates>(initialState);
 
   const actions = useMemo(
@@ -1006,16 +1084,16 @@ export const MFAProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             showingSetup: true,
             setupStep: 'configure',
             selectedMethod: method,
-            loading: false,
+            loading: false
           }));
         } catch (error) {
           setState(prev => ({
             ...prev,
             setupError: error.message,
-            loading: false,
+            loading: false
           }));
         }
-      },
+      }
 
       // ... other actions
     }),
@@ -1030,8 +1108,9 @@ export const MFAProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         formatMethod: (method: string) => methodLabels[method] || method,
         getMethodIcon: (method: string) => methodIcons[method] || 'circle',
         getSecurityLevel: () => calculateSecurityLevel(state),
-        isMethodConfigured: (method: string) => state.primaryMethod === method || state.backupMethods.includes(method),
-      },
+        isMethodConfigured: (method: string) =>
+          state.primaryMethod === method || state.backupMethods.includes(method)
+      }
     }),
     [state, actions]
   );
@@ -1085,7 +1164,9 @@ export const ResponsiveMFAMethodCard = ({ method, ...props }) => {
           <Icon name={method.icon} className="h-8 w-8" />
           <div className="flex-1 min-w-0">
             <h3 className="font-medium truncate">{method.title}</h3>
-            <p className="text-sm text-gray-600 truncate">{method.description}</p>
+            <p className="text-sm text-gray-600 truncate">
+              {method.description}
+            </p>
           </div>
           <MFAStatusBadge status={method.status} size="sm" />
         </div>
@@ -1155,7 +1236,12 @@ export const AccessibleMFAComponent = () => {
       </h1>
 
       {/* Live region for dynamic announcements */}
-      <div aria-live="polite" aria-atomic="true" className="sr-only" id="mfa-announcements" />
+      <div
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+        id="mfa-announcements"
+      />
 
       {/* Component content */}
     </div>
@@ -1224,7 +1310,7 @@ interface MFAComponentTests {
       'renders_correct_status',
       'shows_appropriate_colors',
       'handles_click_events',
-      'supports_keyboard_navigation',
+      'supports_keyboard_navigation'
     ];
 
     codeInput: [
@@ -1232,25 +1318,30 @@ interface MFAComponentTests {
       'rejects_invalid_characters',
       'handles_paste_events',
       'manages_focus_correctly',
-      'triggers_completion_callback',
+      'triggers_completion_callback'
     ];
 
     methodCard: [
       'displays_method_information',
       'shows_configuration_status',
       'handles_selection_events',
-      'supports_accessibility_features',
+      'supports_accessibility_features'
     ];
   };
 
   integration: {
-    setupFlow: ['completes_totp_setup', 'handles_setup_errors', 'validates_user_input', 'maintains_session_state'];
+    setupFlow: [
+      'completes_totp_setup',
+      'handles_setup_errors',
+      'validates_user_input',
+      'maintains_session_state'
+    ];
 
     loginChallenge: [
       'verifies_valid_codes',
       'handles_expired_codes',
       'switches_between_methods',
-      'provides_error_feedback',
+      'provides_error_feedback'
     ];
   };
 
@@ -1259,14 +1350,14 @@ interface MFAComponentTests {
       'announces_status_changes',
       'provides_element_descriptions',
       'maintains_focus_management',
-      'supports_keyboard_navigation',
+      'supports_keyboard_navigation'
     ];
 
     visuallyImpaired: [
       'high_contrast_support',
       'zoom_compatibility',
       'text_scaling_support',
-      'color_independent_information',
+      'color_independent_information'
     ];
   };
 }
@@ -1283,7 +1374,7 @@ interface MFAVisualTests {
     'verification_code_input',
     'error_states_display',
     'mobile_responsive_layout',
-    'dark_mode_compatibility',
+    'dark_mode_compatibility'
   ];
 
   browsers: ['Chrome', 'Firefox', 'Safari', 'Edge'];

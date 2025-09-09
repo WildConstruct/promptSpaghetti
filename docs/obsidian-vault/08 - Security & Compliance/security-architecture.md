@@ -84,9 +84,14 @@ interface AuthenticationArchitecture {
       'User login/logout orchestration',
       'Token generation and validation',
       'Session management',
-      'Security event logging',
+      'Security event logging'
     ];
-    dependencies: ['UserService', 'TokenService', 'AuditService', 'RateLimitService'];
+    dependencies: [
+      'UserService',
+      'TokenService',
+      'AuditService',
+      'RateLimitService'
+    ];
   };
 
   // Security Services
@@ -99,7 +104,13 @@ interface AuthenticationArchitecture {
 
   // Monitoring & Audit
   AuditService: {
-    events: ['LOGIN_SUCCESS', 'LOGIN_FAILED', 'PASSWORD_RESET_REQUESTED', 'EMAIL_VERIFIED', 'BRUTE_FORCE_ATTEMPT'];
+    events: [
+      'LOGIN_SUCCESS',
+      'LOGIN_FAILED',
+      'PASSWORD_RESET_REQUESTED',
+      'EMAIL_VERIFIED',
+      'BRUTE_FORCE_ATTEMPT'
+    ];
     storage: 'PostgreSQL';
     retention: '7 years';
   };
@@ -186,19 +197,26 @@ class ClientEncryption {
   private algorithm = 'AES-GCM';
   private keyLength = 256;
 
-  async encryptContent(content: string, key: CryptoKey): Promise<EncryptedContent> {
+  async encryptContent(
+    content: string,
+    key: CryptoKey
+  ): Promise<EncryptedContent> {
     const encoder = new TextEncoder();
     const data = encoder.encode(content);
     const iv = window.crypto.getRandomValues(new Uint8Array(12));
 
-    const encrypted = await window.crypto.subtle.encrypt({ name: this.algorithm, iv: iv }, key, data);
+    const encrypted = await window.crypto.subtle.encrypt(
+      { name: this.algorithm, iv: iv },
+      key,
+      data
+    );
 
     return {
       algorithm: this.algorithm,
       iv: Array.from(iv),
       data: Array.from(new Uint8Array(encrypted)),
       keyId: await this.getKeyId(key),
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
   }
 }
@@ -326,7 +344,7 @@ class ThreatDetector {
       new AccountTakeoverDetector(),
       new DataExfiltrationDetector(),
       new PrivilegeEscalationDetector(),
-      new MalwareDetector(),
+      new MalwareDetector()
     ];
 
     return detectors.flatMap(detector => detector.analyze(events));
@@ -336,7 +354,9 @@ class ThreatDetector {
 // Example: Brute Force Detection
 class BruteForceDetector {
   analyze(events: SecurityEvent[]): ThreatAssessment[] {
-    const loginFailures = events.filter(e => e.eventType === 'authentication' && e.details.success === false);
+    const loginFailures = events.filter(
+      e => e.eventType === 'authentication' && e.details.success === false
+    );
 
     const failuresByIP = this.groupByIP(loginFailures);
     const threats: ThreatAssessment[] = [];
@@ -348,7 +368,11 @@ class BruteForceDetector {
           threatType: 'brute_force_attack',
           severity: 'high',
           sourceIP: ip,
-          recommendedActions: ['block_ip_temporarily', 'require_captcha', 'notify_security_team'],
+          recommendedActions: [
+            'block_ip_temporarily',
+            'require_captcha',
+            'notify_security_team'
+          ]
         });
       }
     }
@@ -423,7 +447,10 @@ export interface WebSocketSecurityConfig {
 
 // WebSocket Security Middleware
 class WebSocketSecurityMiddleware {
-  async authenticateConnection(ws: WebSocket, request: IncomingMessage): Promise<AuthResult> {
+  async authenticateConnection(
+    ws: WebSocket,
+    request: IncomingMessage
+  ): Promise<AuthResult> {
     // 1. Validate origin
     const origin = request.headers.origin;
     if (!this.isAllowedOrigin(origin)) {

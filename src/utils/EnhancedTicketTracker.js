@@ -53,7 +53,7 @@ class EnhancedTicketTracker {
         refactoring: 0,
         documentation: 0,
         tests: 0,
-        infrastructure: 0,
+        infrastructure: 0
       },
 
       // Agent-specific data
@@ -73,7 +73,7 @@ class EnhancedTicketTracker {
       // Session info
       startTime: new Date(),
       lastUpdate: new Date(),
-      uptime: 0,
+      uptime: 0
     };
 
     // Enhanced configuration
@@ -89,7 +89,7 @@ class EnhancedTicketTracker {
         highProductivity: 50,
         mediumProductivity: 25,
         slowApprovalTime: 3600000, // 1 hour in ms
-        largeCommit: 10, // 10+ tickets
+        largeCommit: 10 // 10+ tickets
       },
 
       // Data collection settings
@@ -97,7 +97,7 @@ class EnhancedTicketTracker {
       collectAgentMetrics: true,
       collectTrendData: true,
       generateWeeklyReports: true,
-      generateMonthlyReports: true,
+      generateMonthlyReports: true
     };
 
     this.initialized = false;
@@ -153,7 +153,8 @@ class EnhancedTicketTracker {
 
       // Calculate processing time if available
       if (metadata.startTime) {
-        const processingTime = Date.now() - new Date(metadata.startTime).getTime();
+        const processingTime =
+          Date.now() - new Date(metadata.startTime).getTime();
         this.updateProcessingTime(processingTime);
       }
 
@@ -165,10 +166,12 @@ class EnhancedTicketTracker {
         metadata: {
           ...metadata,
           complexity: this.getComplexityFromEstimate(metadata.estimate),
-          ticketType: this.normalizeTicketType(metadata.type || metadata.wipClass),
+          ticketType: this.normalizeTicketType(
+            metadata.type || metadata.wipClass
+          ),
           story: metadata.story,
-          epic: metadata.epic,
-        },
+          epic: metadata.epic
+        }
       };
 
       this.currentDay.timeline.push(event);
@@ -177,7 +180,9 @@ class EnhancedTicketTracker {
       await this.saveCurrentDay();
 
       if (this.config.detailedLogging) {
-        console.log(`📋 Enhanced tracking - Approval: ${ticketId} by ${agentId} (${event.metadata.complexity})`);
+        console.log(
+          `📋 Enhanced tracking - Approval: ${ticketId} by ${agentId} (${event.metadata.complexity})`
+        );
       }
 
       await this.checkMilestones();
@@ -189,7 +194,12 @@ class EnhancedTicketTracker {
   /**
    * Track ticket push/commit with enhanced data
    */
-  async trackPush(ticketIds = [], agentId = 'unknown', commitHash = '', metadata = {}) {
+  async trackPush(
+    ticketIds = [],
+    agentId = 'unknown',
+    commitHash = '',
+    metadata = {}
+  ) {
     if (!this.config.trackingEnabled) return;
 
     try {
@@ -223,8 +233,8 @@ class EnhancedTicketTracker {
           commitSize: count,
           branch: metadata.branch || 'main',
           linesChanged: metadata.linesChanged,
-          filesChanged: metadata.filesChanged,
-        },
+          filesChanged: metadata.filesChanged
+        }
       };
 
       this.currentDay.timeline.push(event);
@@ -233,7 +243,9 @@ class EnhancedTicketTracker {
       await this.saveCurrentDay();
 
       if (this.config.detailedLogging) {
-        console.log(`🚀 Enhanced tracking - Push: ${count} ticket(s) by ${agentId} (${commitHash})`);
+        console.log(
+          `🚀 Enhanced tracking - Push: ${count} ticket(s) by ${agentId} (${commitHash})`
+        );
       }
 
       await this.checkMilestones();
@@ -250,11 +262,13 @@ class EnhancedTicketTracker {
 
     try {
       if (results.passed) {
-        this.currentDay.metrics.qaApproved += results.passed.length || results.passed;
+        this.currentDay.metrics.qaApproved +=
+          results.passed.length || results.passed;
       }
 
       if (results.failed) {
-        this.currentDay.metrics.qaFailed += results.failed.length || results.failed;
+        this.currentDay.metrics.qaFailed +=
+          results.failed.length || results.failed;
       }
 
       if (results.retries) {
@@ -270,14 +284,16 @@ class EnhancedTicketTracker {
           failed: results.failed,
           retries: results.retries,
           totalTests: results.totalTests,
-          duration: results.duration,
-        },
+          duration: results.duration
+        }
       };
 
       this.currentDay.timeline.push(event);
       await this.saveCurrentDay();
 
-      console.log(`🔍 Enhanced tracking - QA: ${results.passed || 0} passed, ${results.failed || 0} failed`);
+      console.log(
+        `🔍 Enhanced tracking - QA: ${results.passed || 0} passed, ${results.failed || 0} failed`
+      );
     } catch (error) {
       console.error('Error tracking QA activity:', error);
     }
@@ -298,7 +314,7 @@ class EnhancedTicketTracker {
         reviewer,
         requester,
         timestamp: new Date(),
-        metadata,
+        metadata
       };
 
       this.currentDay.timeline.push(event);
@@ -319,16 +335,21 @@ class EnhancedTicketTracker {
         total: (stats.approved || 0) + (stats.pushed || 0),
         productivity: this.calculateAgentProductivity(stats),
         avgProcessingTime:
-          stats.totalProcessingTime && stats.processedTickets ? stats.totalProcessingTime / stats.processedTickets : 0,
+          stats.totalProcessingTime && stats.processedTickets
+            ? stats.totalProcessingTime / stats.processedTickets
+            : 0
       };
     }
 
     const sessionDuration = Date.now() - this.currentDay.startTime.getTime();
     const hoursActive = sessionDuration / (1000 * 60 * 60);
-    const totalTickets = this.currentDay.metrics.approved + this.currentDay.metrics.pushed;
+    const totalTickets =
+      this.currentDay.metrics.approved + this.currentDay.metrics.pushed;
 
     // Find peak hours
-    const peakHour = this.currentDay.hourlyDistribution.indexOf(Math.max(...this.currentDay.hourlyDistribution));
+    const peakHour = this.currentDay.hourlyDistribution.indexOf(
+      Math.max(...this.currentDay.hourlyDistribution)
+    );
 
     return {
       date: this.currentDay.date,
@@ -343,15 +364,15 @@ class EnhancedTicketTracker {
         complexityDistribution: {
           simple: this.currentDay.metrics.simpleTickets,
           medium: this.currentDay.metrics.mediumTickets,
-          complex: this.currentDay.metrics.complexTickets,
-        },
+          complex: this.currentDay.metrics.complexTickets
+        }
       },
 
       // Agent breakdown
       agents: {
         count: this.currentDay.agents.size,
         breakdown: agentStats,
-        topPerformer: this.getTopPerformer(),
+        topPerformer: this.getTopPerformer()
       },
 
       // Time analysis
@@ -359,7 +380,7 @@ class EnhancedTicketTracker {
         sessionDuration,
         hoursActive: Math.round(hoursActive * 100) / 100,
         peakHour: peakHour >= 0 ? `${peakHour}:00` : 'No activity',
-        hourlyDistribution: this.currentDay.hourlyDistribution,
+        hourlyDistribution: this.currentDay.hourlyDistribution
       },
 
       // Story/Epic progress
@@ -368,7 +389,7 @@ class EnhancedTicketTracker {
 
       // Timeline
       timeline: this.currentDay.timeline,
-      lastUpdate: this.currentDay.lastUpdate,
+      lastUpdate: this.currentDay.lastUpdate
     };
   }
 
@@ -388,7 +409,7 @@ class EnhancedTicketTracker {
         productivity: currentStats.summary.productivity,
         qualityScore: currentStats.summary.qualityScore,
         activeAgents: currentStats.agents.count,
-        sessionHours: currentStats.timeAnalysis.hoursActive,
+        sessionHours: currentStats.timeAnalysis.hoursActive
       },
 
       // Detailed metrics
@@ -398,7 +419,7 @@ class EnhancedTicketTracker {
       agents: {
         count: currentStats.agents.count,
         topPerformer: currentStats.agents.topPerformer,
-        breakdown: currentStats.agents.breakdown,
+        breakdown: currentStats.agents.breakdown
       },
 
       // Complexity analysis
@@ -411,7 +432,7 @@ class EnhancedTicketTracker {
         refactoring: currentStats.metrics.refactoring,
         documentation: currentStats.metrics.documentation,
         tests: currentStats.metrics.tests,
-        infrastructure: currentStats.metrics.infrastructure,
+        infrastructure: currentStats.metrics.infrastructure
       },
 
       // Quality metrics
@@ -420,7 +441,7 @@ class EnhancedTicketTracker {
         qaFailed: currentStats.metrics.qaFailed,
         qaRetries: currentStats.metrics.qaRetries,
         qualityScore: currentStats.summary.qualityScore,
-        avgApprovalTime: currentStats.metrics.avgApprovalTime,
+        avgApprovalTime: currentStats.metrics.avgApprovalTime
       },
 
       // Time analysis
@@ -441,10 +462,10 @@ class EnhancedTicketTracker {
       // Story/Epic progress
       projectProgress: {
         stories: currentStats.storyProgress,
-        epics: currentStats.epicProgress,
+        epics: currentStats.epicProgress
       },
 
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     if (includeTimeline) {
@@ -470,29 +491,42 @@ class EnhancedTicketTracker {
       }
 
       const totalTickets = recentDays.reduce(
-        (sum, day) => sum + (day.metrics?.approved || 0) + (day.metrics?.pushed || 0),
+        (sum, day) =>
+          sum + (day.metrics?.approved || 0) + (day.metrics?.pushed || 0),
         0
       );
 
       const avgProductivity =
-        recentDays.reduce((sum, day) => sum + (day.summary?.productivity || 0), 0) / recentDays.length;
+        recentDays.reduce(
+          (sum, day) => sum + (day.summary?.productivity || 0),
+          0
+        ) / recentDays.length;
 
-      const avgQuality = recentDays.reduce((sum, day) => sum + (day.summary?.qualityScore || 0), 0) / recentDays.length;
+      const avgQuality =
+        recentDays.reduce(
+          (sum, day) => sum + (day.summary?.qualityScore || 0),
+          0
+        ) / recentDays.length;
 
       // Calculate week-over-week trend
       const thisWeek = recentDays.slice(-7);
       const lastWeek = recentDays.slice(-14, -7);
 
       const thisWeekTotal = thisWeek.reduce(
-        (sum, day) => sum + (day.metrics?.approved || 0) + (day.metrics?.pushed || 0),
+        (sum, day) =>
+          sum + (day.metrics?.approved || 0) + (day.metrics?.pushed || 0),
         0
       );
       const lastWeekTotal = lastWeek.reduce(
-        (sum, day) => sum + (day.metrics?.approved || 0) + (day.metrics?.pushed || 0),
+        (sum, day) =>
+          sum + (day.metrics?.approved || 0) + (day.metrics?.pushed || 0),
         0
       );
 
-      const weeklyTrend = lastWeekTotal > 0 ? (((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100).toFixed(1) : 0;
+      const weeklyTrend =
+        lastWeekTotal > 0
+          ? (((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100).toFixed(1)
+          : 0;
 
       return {
         days: recentDays.length,
@@ -505,8 +539,8 @@ class EnhancedTicketTracker {
           date: day.date,
           tickets: (day.metrics?.approved || 0) + (day.metrics?.pushed || 0),
           quality: day.summary?.qualityScore || 0,
-          agents: day.agents?.count || 0,
-        })),
+          agents: day.agents?.count || 0
+        }))
       };
     } catch (error) {
       console.error('Error getting historical stats:', error);
@@ -529,7 +563,7 @@ class EnhancedTicketTracker {
         ticketTypes: new Map(),
         complexityHandled: new Map(),
         lastActivity: new Date(),
-        sessionStart: new Date(),
+        sessionStart: new Date()
       });
     }
 
@@ -545,14 +579,22 @@ class EnhancedTicketTracker {
 
     // Track ticket types
     if (metadata.type || metadata.wipClass) {
-      const ticketType = this.normalizeTicketType(metadata.type || metadata.wipClass);
-      stats.ticketTypes.set(ticketType, (stats.ticketTypes.get(ticketType) || 0) + count);
+      const ticketType = this.normalizeTicketType(
+        metadata.type || metadata.wipClass
+      );
+      stats.ticketTypes.set(
+        ticketType,
+        (stats.ticketTypes.get(ticketType) || 0) + count
+      );
     }
 
     // Track complexity
     const complexity = this.getComplexityFromEstimate(metadata.estimate);
     if (complexity) {
-      stats.complexityHandled.set(complexity, (stats.complexityHandled.get(complexity) || 0) + count);
+      stats.complexityHandled.set(
+        complexity,
+        (stats.complexityHandled.get(complexity) || 0) + count
+      );
     }
   }
 
@@ -569,17 +611,26 @@ class EnhancedTicketTracker {
 
   trackTicketType(type) {
     const normalizedType = this.normalizeTicketType(type);
-    if (normalizedType && this.currentDay.metrics.hasOwnProperty(normalizedType)) {
+    if (
+      normalizedType &&
+      this.currentDay.metrics.hasOwnProperty(normalizedType)
+    ) {
       this.currentDay.metrics[normalizedType]++;
     }
   }
 
   trackStoryEpic(storyId, epicId) {
     if (storyId) {
-      this.currentDay.stories.set(storyId, (this.currentDay.stories.get(storyId) || 0) + 1);
+      this.currentDay.stories.set(
+        storyId,
+        (this.currentDay.stories.get(storyId) || 0) + 1
+      );
     }
     if (epicId) {
-      this.currentDay.epics.set(epicId, (this.currentDay.epics.get(epicId) || 0) + 1);
+      this.currentDay.epics.set(
+        epicId,
+        (this.currentDay.epics.get(epicId) || 0) + 1
+      );
     }
   }
 
@@ -595,7 +646,7 @@ class EnhancedTicketTracker {
       docs: 'documentation',
       test: 'tests',
       infra: 'infrastructure',
-      infrastructure: 'infrastructure',
+      infrastructure: 'infrastructure'
     };
 
     return typeMap[type.toLowerCase()] || 'features';
@@ -618,7 +669,8 @@ class EnhancedTicketTracker {
   }
 
   calculateQualityScore() {
-    const total = this.currentDay.metrics.qaApproved + this.currentDay.metrics.qaFailed;
+    const total =
+      this.currentDay.metrics.qaApproved + this.currentDay.metrics.qaFailed;
     if (total === 0) return 100; // No QA data yet
 
     return Math.round((this.currentDay.metrics.qaApproved / total) * 100);
@@ -629,7 +681,9 @@ class EnhancedTicketTracker {
     const hoursActive = sessionDuration / (1000 * 60 * 60);
     const totalTickets = (stats.approved || 0) + (stats.pushed || 0);
 
-    return hoursActive > 0 ? Math.round((totalTickets / hoursActive) * 100) / 100 : 0;
+    return hoursActive > 0
+      ? Math.round((totalTickets / hoursActive) * 100) / 100
+      : 0;
   }
 
   getTopPerformer() {
@@ -644,7 +698,7 @@ class EnhancedTicketTracker {
           agentId,
           score,
           approved: stats.approved || 0,
-          pushed: stats.pushed || 0,
+          pushed: stats.pushed || 0
         };
       }
     }
@@ -670,7 +724,7 @@ class EnhancedTicketTracker {
       avgProductivity: 0,
       avgQuality: 100,
       weeklyTrend: '0%',
-      dailyBreakdown: [],
+      dailyBreakdown: []
     };
   }
 
@@ -698,12 +752,14 @@ class EnhancedTicketTracker {
   updateProcessingTime(processingTime) {
     // Update average processing time
     const currentAvg = this.currentDay.metrics.avgProcessingTime;
-    const totalTickets = this.currentDay.metrics.approved + this.currentDay.metrics.pushed;
+    const totalTickets =
+      this.currentDay.metrics.approved + this.currentDay.metrics.pushed;
 
     if (totalTickets === 1) {
       this.currentDay.metrics.avgProcessingTime = processingTime;
     } else {
-      this.currentDay.metrics.avgProcessingTime = (currentAvg * (totalTickets - 1) + processingTime) / totalTickets;
+      this.currentDay.metrics.avgProcessingTime =
+        (currentAvg * (totalTickets - 1) + processingTime) / totalTickets;
     }
   }
 
@@ -715,7 +771,8 @@ class EnhancedTicketTracker {
     if (totalCommits === 1) {
       this.currentDay.metrics.avgCommitSize = count;
     } else {
-      this.currentDay.metrics.avgCommitSize = (currentAvg * (totalCommits - 1) + count) / totalCommits;
+      this.currentDay.metrics.avgCommitSize =
+        (currentAvg * (totalCommits - 1) + count) / totalCommits;
     }
   }
 
@@ -733,30 +790,43 @@ class EnhancedTicketTracker {
         return {
           productivity: 'insufficient_data',
           quality: 'insufficient_data',
-          complexity: 'insufficient_data',
+          complexity: 'insufficient_data'
         };
       }
 
       const last7Days = history.slice(-7);
       const previous7Days = history.slice(-14, -7);
 
-      const last7Productivity = last7Days.reduce((sum, day) => sum + (day.summary?.productivity || 0), 0) / 7;
-      const prev7Productivity = previous7Days.reduce((sum, day) => sum + (day.summary?.productivity || 0), 0) / 7;
+      const last7Productivity =
+        last7Days.reduce(
+          (sum, day) => sum + (day.summary?.productivity || 0),
+          0
+        ) / 7;
+      const prev7Productivity =
+        previous7Days.reduce(
+          (sum, day) => sum + (day.summary?.productivity || 0),
+          0
+        ) / 7;
 
       const productivityTrend =
-        prev7Productivity > 0 ? (((last7Productivity - prev7Productivity) / prev7Productivity) * 100).toFixed(1) : 0;
+        prev7Productivity > 0
+          ? (
+              ((last7Productivity - prev7Productivity) / prev7Productivity) *
+              100
+            ).toFixed(1)
+          : 0;
 
       return {
         productivity: `${productivityTrend > 0 ? '+' : ''}${productivityTrend}%`,
         quality: 'stable', // Simplified for now
-        complexity: 'balanced', // Simplified for now
+        complexity: 'balanced' // Simplified for now
       };
     } catch (error) {
       console.error('Error calculating trends:', error);
       return {
         productivity: 'error',
         quality: 'error',
-        complexity: 'error',
+        complexity: 'error'
       };
     }
   }
@@ -765,12 +835,13 @@ class EnhancedTicketTracker {
     return {
       avgTicketsPerHour:
         this.getCurrentStats().timeAnalysis.hoursActive > 0
-          ? (this.currentDay.metrics.approved + this.currentDay.metrics.pushed) /
+          ? (this.currentDay.metrics.approved +
+              this.currentDay.metrics.pushed) /
             this.getCurrentStats().timeAnalysis.hoursActive
           : 0,
       peakProductivityHour: this.getCurrentStats().timeAnalysis.peakHour,
       qualityTrend: 'stable',
-      bottlenecks: [],
+      bottlenecks: []
     };
   }
 
@@ -784,19 +855,24 @@ class EnhancedTicketTracker {
     else if (total >= 25) milestones.push('Strong Performance (25+)');
     else if (total >= 10) milestones.push('Good Progress (10+)');
 
-    if (stats.agents.count >= 5) milestones.push('Team Collaboration (5+ agents)');
-    if (stats.summary.productivity >= 10) milestones.push('Speed Demon (10+ per hour)');
+    if (stats.agents.count >= 5)
+      milestones.push('Team Collaboration (5+ agents)');
+    if (stats.summary.productivity >= 10)
+      milestones.push('Speed Demon (10+ per hour)');
 
     return milestones;
   }
 
   async checkMilestones() {
-    const total = this.currentDay.metrics.approved + this.currentDay.metrics.pushed;
+    const total =
+      this.currentDay.metrics.approved + this.currentDay.metrics.pushed;
     const milestones = [10, 25, 50, 75, 100];
 
     for (const milestone of milestones) {
       if (total === milestone && this.config.enableNotifications) {
-        console.log(`🎉 Milestone reached: ${milestone} tickets completed today!`);
+        console.log(
+          `🎉 Milestone reached: ${milestone} tickets completed today!`
+        );
         await this.logEvent('milestone', `${milestone} tickets completed`);
       }
     }
@@ -854,7 +930,7 @@ class EnhancedTicketTracker {
           stories: new Map(Object.entries(parsed.stories || {})),
           epics: new Map(Object.entries(parsed.epics || {})),
           startTime: new Date(parsed.startTime),
-          lastUpdate: new Date(parsed.lastUpdate),
+          lastUpdate: new Date(parsed.lastUpdate)
         };
       } else {
         // Different day, archive old data and start fresh
@@ -872,7 +948,7 @@ class EnhancedTicketTracker {
       ...this.currentDay,
       agents: Object.fromEntries(this.currentDay.agents),
       stories: Object.fromEntries(this.currentDay.stories),
-      epics: Object.fromEntries(this.currentDay.epics),
+      epics: Object.fromEntries(this.currentDay.epics)
     };
     await fs.writeFile(this.currentDayFile, JSON.stringify(data, null, 2));
   }
@@ -897,20 +973,25 @@ class EnhancedTicketTracker {
       date: dayData.date,
       metrics: dayData.metrics || {},
       summary: {
-        totalTickets: (dayData.metrics?.approved || 0) + (dayData.metrics?.pushed || 0),
+        totalTickets:
+          (dayData.metrics?.approved || 0) + (dayData.metrics?.pushed || 0),
         activeAgents: dayData.agents ? Object.keys(dayData.agents).length : 0,
         productivity: 0, // Calculate if needed
         qualityScore:
           dayData.metrics?.qaApproved && dayData.metrics?.qaFailed
-            ? Math.round((dayData.metrics.qaApproved / (dayData.metrics.qaApproved + dayData.metrics.qaFailed)) * 100)
-            : 100,
+            ? Math.round(
+                (dayData.metrics.qaApproved /
+                  (dayData.metrics.qaApproved + dayData.metrics.qaFailed)) *
+                  100
+              )
+            : 100
       },
       agents: {
         count: dayData.agents ? Object.keys(dayData.agents).length : 0,
-        breakdown: dayData.agents || {},
+        breakdown: dayData.agents || {}
       },
       timeline: dayData.timeline || [],
-      archivedAt: new Date(),
+      archivedAt: new Date()
     };
 
     // Remove existing entry for same date
@@ -928,7 +1009,7 @@ class EnhancedTicketTracker {
       timeZone: this.centralTimeZone,
       year: 'numeric',
       month: '2-digit',
-      day: '2-digit',
+      day: '2-digit'
     });
   }
 
@@ -948,7 +1029,10 @@ class EnhancedTicketTracker {
     const january = new Date(now.getFullYear(), 0, 1);
     const july = new Date(now.getFullYear(), 6, 1);
 
-    const stdTimezoneOffset = Math.max(january.getTimezoneOffset(), july.getTimezoneOffset());
+    const stdTimezoneOffset = Math.max(
+      january.getTimezoneOffset(),
+      july.getTimezoneOffset()
+    );
 
     const isDST = now.getTimezoneOffset() < stdTimezoneOffset;
     return isDST ? -5 * 3600000 : -6 * 3600000; // Convert hours to milliseconds
@@ -976,7 +1060,9 @@ class EnhancedTicketTracker {
 
   async resetDaily() {
     try {
-      console.log('🕛 Enhanced daily reset triggered - archiving current day...');
+      console.log(
+        '🕛 Enhanced daily reset triggered - archiving current day...'
+      );
 
       // Archive current day to history
       await this.archiveDay(this.currentDay);
@@ -1004,7 +1090,7 @@ class EnhancedTicketTracker {
           refactoring: 0,
           documentation: 0,
           tests: 0,
-          infrastructure: 0,
+          infrastructure: 0
         },
         agents: new Map(),
         timeline: [],
@@ -1014,13 +1100,15 @@ class EnhancedTicketTracker {
         peakHours: [],
         startTime: new Date(),
         lastUpdate: new Date(),
-        uptime: 0,
+        uptime: 0
       };
 
       // Save reset day
       await this.saveCurrentDay();
 
-      console.log(`✅ Enhanced daily reset complete - tracking for ${this.currentDay.date}`);
+      console.log(
+        `✅ Enhanced daily reset complete - tracking for ${this.currentDay.date}`
+      );
 
       // Log reset event
       await this.logEvent('system', 'Enhanced daily reset completed');

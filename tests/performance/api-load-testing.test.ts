@@ -7,7 +7,11 @@
  * authentication, graph operations, analytics, and security features.
  */
 
-import { LoadTestRunner, LoadTestConfig, VirtualUser } from '../../load-tests/LoadTestFramework';
+import {
+  LoadTestRunner,
+  LoadTestConfig,
+  VirtualUser
+} from '../../load-tests/LoadTestFramework';
 
 interface APIEndpointTestResult {
   endpoint: string;
@@ -58,11 +62,13 @@ class APILoadTester {
   /**
    * Generate sample graph data for testing
    */
-  generateSampleGraph(complexity: 'simple' | 'medium' | 'complex' = 'simple'): any {
+  generateSampleGraph(
+    complexity: 'simple' | 'medium' | 'complex' = 'simple'
+  ): any {
     const complexityConfig = {
       simple: { nodeCount: 3, variability: 2 },
       medium: { nodeCount: 10, variability: 5 },
-      complex: { nodeCount: 25, variability: 10 },
+      complex: { nodeCount: 25, variability: 10 }
     };
 
     const config = complexityConfig[complexity];
@@ -70,7 +76,13 @@ class APILoadTester {
     const edges = [];
 
     for (let i = 0; i < config.nodeCount; i++) {
-      const nodeTypes = ['WeightedChoice', 'Concat', 'Output', 'SetVariable', 'GetVariable'];
+      const nodeTypes = [
+        'WeightedChoice',
+        'Concat',
+        'Output',
+        'SetVariable',
+        'GetVariable'
+      ];
       const nodeType = nodeTypes[Math.floor(Math.random() * nodeTypes.length)];
 
       const nodeData = this.getNodeData(nodeType, i);
@@ -79,7 +91,7 @@ class APILoadTester {
         id: `node-${i}`,
         type: nodeType,
         data: nodeData,
-        position: { x: (i % 5) * 200, y: Math.floor(i / 5) * 150 },
+        position: { x: (i % 5) * 200, y: Math.floor(i / 5) * 150 }
       });
 
       // Create edges between nodes
@@ -89,7 +101,7 @@ class APILoadTester {
           source: `node-${Math.floor(Math.random() * i)}`,
           target: `node-${i}`,
           sourceHandle: 'output',
-          targetHandle: 'input',
+          targetHandle: 'input'
         });
       }
     }
@@ -105,7 +117,7 @@ class APILoadTester {
       case 'WeightedChoice':
         return {
           choices: [`Option ${index}A`, `Option ${index}B`, `Option ${index}C`],
-          weights: [0.4, 0.4, 0.2],
+          weights: [0.4, 0.4, 0.2]
         };
       case 'Concat':
         return { separator: ' | ' };
@@ -133,13 +145,13 @@ class APILoadTester {
         const requestData = {
           graph,
           runs: Math.floor(Math.random() * 5) + 1,
-          seedStart: Math.floor(Math.random() * 1000) + 1,
+          seedStart: Math.floor(Math.random() * 1000) + 1
         };
 
         await user.executeRequest('POST', '/preview', requestData, {
           'Content-Type': 'application/json',
           'x-session-id': `session-${user.id}`,
-          'x-user-id': user.id.toString(),
+          'x-user-id': user.id.toString()
         });
 
         await user.thinkTime();
@@ -165,12 +177,12 @@ class APILoadTester {
           options: {
             name: `TestGraph-${user.id}-${Date.now()}`,
             version: '1.0.0',
-            author: `LoadTester-${user.id}`,
-          },
+            author: `LoadTester-${user.id}`
+          }
         };
 
         await user.executeRequest('POST', '/export', requestData, {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         });
 
         await user.thinkTime();
@@ -219,7 +231,7 @@ class APILoadTester {
           '/api/analytics/events',
           '/api/analytics/metrics',
           '/api/analytics/dashboard',
-          '/api/randomizer/stats',
+          '/api/randomizer/stats'
         ];
 
         for (const endpoint of endpoints) {
@@ -276,7 +288,10 @@ class APILoadTester {
         await user.executeRequest('GET', '/api/audit/status');
 
         // Test anomaly detection status
-        await user.executeRequest('GET', '/api/security/anomaly-detection/status');
+        await user.executeRequest(
+          'GET',
+          '/api/security/anomaly-detection/status'
+        );
 
         await user.thinkTime();
       } catch (error) {
@@ -305,17 +320,19 @@ class APILoadTester {
         await user.thinkTime();
 
         // 3. Create/test graph (main workflow)
-        const graph = this.generateSampleGraph(['simple', 'medium', 'complex'][Math.floor(Math.random() * 3)] as any);
+        const graph = this.generateSampleGraph(
+          ['simple', 'medium', 'complex'][Math.floor(Math.random() * 3)] as any
+        );
         const previewData = {
           graph,
           runs: Math.floor(Math.random() * 3) + 2,
-          seedStart: Math.floor(Math.random() * 100) + 1,
+          seedStart: Math.floor(Math.random() * 100) + 1
         };
 
         await user.executeRequest('POST', '/preview', previewData, {
           'Content-Type': 'application/json',
           'x-session-id': `session-${user.id}`,
-          'x-user-id': user.id.toString(),
+          'x-user-id': user.id.toString()
         });
         await user.thinkTime();
 
@@ -326,12 +343,12 @@ class APILoadTester {
             options: {
               name: `UserGraph-${user.id}-${Date.now()}`,
               version: '1.0.0',
-              author: `User-${user.id}`,
-            },
+              author: `User-${user.id}`
+            }
           };
 
           await user.executeRequest('POST', '/export', exportData, {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           });
           await user.thinkTime();
         }
@@ -342,7 +359,10 @@ class APILoadTester {
           await user.thinkTime();
         }
       } catch (error) {
-        console.log(`Realistic scenario error for user ${user.id}:`, error.message);
+        console.log(
+          `Realistic scenario error for user ${user.id}:`,
+          error.message
+        );
       }
     }
   }
@@ -363,50 +383,78 @@ class APILoadTester {
         runner: this.testPreviewEndpoint.bind(this),
         concurrency: 15,
         duration: 45000,
-        expectedPerformance: { maxResponseTime: 2000, minSuccessRate: 95, minThroughput: 10 },
+        expectedPerformance: {
+          maxResponseTime: 2000,
+          minSuccessRate: 95,
+          minThroughput: 10
+        }
       },
       {
         name: 'Export Endpoint Load Test',
         runner: this.testExportEndpoint.bind(this),
         concurrency: 8,
         duration: 30000,
-        expectedPerformance: { maxResponseTime: 3000, minSuccessRate: 98, minThroughput: 5 },
+        expectedPerformance: {
+          maxResponseTime: 3000,
+          minSuccessRate: 98,
+          minThroughput: 5
+        }
       },
       {
         name: 'Health Endpoints Load Test',
         runner: this.testHealthEndpoints.bind(this),
         concurrency: 20,
         duration: 25000,
-        expectedPerformance: { maxResponseTime: 500, minSuccessRate: 99, minThroughput: 50 },
+        expectedPerformance: {
+          maxResponseTime: 500,
+          minSuccessRate: 99,
+          minThroughput: 50
+        }
       },
       {
         name: 'Analytics Endpoints Load Test',
         runner: this.testAnalyticsEndpoints.bind(this),
         concurrency: 10,
         duration: 30000,
-        expectedPerformance: { maxResponseTime: 1500, minSuccessRate: 90, minThroughput: 8 },
+        expectedPerformance: {
+          maxResponseTime: 1500,
+          minSuccessRate: 90,
+          minThroughput: 8
+        }
       },
       {
         name: 'Workspace Endpoints Load Test',
         runner: this.testWorkspaceEndpoints.bind(this),
         concurrency: 12,
         duration: 25000,
-        expectedPerformance: { maxResponseTime: 1000, minSuccessRate: 95, minThroughput: 15 },
+        expectedPerformance: {
+          maxResponseTime: 1000,
+          minSuccessRate: 95,
+          minThroughput: 15
+        }
       },
       {
         name: 'Security Endpoints Load Test',
         runner: this.testSecurityEndpoints.bind(this),
         concurrency: 6,
         duration: 20000,
-        expectedPerformance: { maxResponseTime: 800, minSuccessRate: 90, minThroughput: 10 },
+        expectedPerformance: {
+          maxResponseTime: 800,
+          minSuccessRate: 90,
+          minThroughput: 10
+        }
       },
       {
         name: 'Realistic User Scenario',
         runner: this.testRealisticUserScenario.bind(this),
         concurrency: 10,
         duration: 60000,
-        expectedPerformance: { maxResponseTime: 2500, minSuccessRate: 93, minThroughput: 5 },
-      },
+        expectedPerformance: {
+          maxResponseTime: 2500,
+          minSuccessRate: 93,
+          minThroughput: 5
+        }
+      }
     ];
 
     for (const scenario of scenarios) {
@@ -419,13 +467,16 @@ class APILoadTester {
         rampUpTime: Math.min(scenario.duration / 4, 10000), // Max 10s ramp-up
         timeout: 15000,
         thinkTime: { min: 100, max: 1000 },
-        reportInterval: 5000,
+        reportInterval: 5000
       });
 
       const runner = new LoadTestRunner(config);
 
       try {
-        const testResults = await runner.runLoadTest(scenario.runner, scenario.name);
+        const testResults = await runner.runLoadTest(
+          scenario.runner,
+          scenario.name
+        );
         const globalStats = testResults.global;
 
         // Calculate error summary
@@ -435,10 +486,12 @@ class APILoadTester {
           errorCounts[key] = (errorCounts[key] || 0) + 1;
         });
 
-        const errorSummary = Object.entries(errorCounts).map(([message, count]) => ({
-          message,
-          count: count as number,
-        }));
+        const errorSummary = Object.entries(errorCounts).map(
+          ([message, count]) => ({
+            message,
+            count: count as number
+          })
+        );
 
         const endpointResult: APIEndpointTestResult = {
           endpoint: scenario.name,
@@ -449,16 +502,19 @@ class APILoadTester {
           successRate: globalStats.successRate,
           requestsPerSecond: globalStats.requestsPerSecond,
           totalRequests: globalStats.totalRequests,
-          errors: errorSummary,
+          errors: errorSummary
         };
 
         results.push(endpointResult);
 
         // Check if performance expectations are met
         const passed =
-          globalStats.averageResponseTime <= scenario.expectedPerformance.maxResponseTime &&
-          globalStats.successRate >= scenario.expectedPerformance.minSuccessRate &&
-          globalStats.requestsPerSecond >= scenario.expectedPerformance.minThroughput;
+          globalStats.averageResponseTime <=
+            scenario.expectedPerformance.maxResponseTime &&
+          globalStats.successRate >=
+            scenario.expectedPerformance.minSuccessRate &&
+          globalStats.requestsPerSecond >=
+            scenario.expectedPerformance.minThroughput;
 
         console.log(
           `${passed ? '✅' : '❌'} ${scenario.name}: ${globalStats.requestsPerSecond.toFixed(1)} RPS, ${globalStats.successRate.toFixed(1)}% success, ${globalStats.averageResponseTime.toFixed(0)}ms avg`
@@ -483,7 +539,7 @@ class APILoadTester {
           successRate: 0,
           requestsPerSecond: 0,
           totalRequests: 0,
-          errors: [{ message: error.message, count: 1 }],
+          errors: [{ message: error.message, count: 1 }]
         });
       }
     }
@@ -498,7 +554,9 @@ class APILoadTester {
     let report = '\\n📊 API LOAD TESTING COMPREHENSIVE REPORT\\n';
     report += '='.repeat(80) + '\\n\\n';
 
-    const overallPassed = results.every(r => r.successRate >= 90 && r.requestsPerSecond > 0);
+    const overallPassed = results.every(
+      r => r.successRate >= 90 && r.requestsPerSecond > 0
+    );
     report += `Overall Status: ${overallPassed ? '✅ PASSED' : '❌ FAILED'}\\n\\n`;
 
     // Individual endpoint results
@@ -523,9 +581,15 @@ class APILoadTester {
 
     // Performance summary
     const totalRequests = results.reduce((sum, r) => sum + r.totalRequests, 0);
-    const avgThroughput = results.reduce((sum, r) => sum + r.requestsPerSecond, 0);
-    const avgSuccessRate = results.reduce((sum, r) => sum + r.successRate, 0) / results.length;
-    const avgResponseTime = results.reduce((sum, r) => sum + r.averageResponseTime, 0) / results.length;
+    const avgThroughput = results.reduce(
+      (sum, r) => sum + r.requestsPerSecond,
+      0
+    );
+    const avgSuccessRate =
+      results.reduce((sum, r) => sum + r.successRate, 0) / results.length;
+    const avgResponseTime =
+      results.reduce((sum, r) => sum + r.averageResponseTime, 0) /
+      results.length;
 
     report += 'Performance Summary:\\n';
     report += `   Total API Requests: ${totalRequests}\\n`;
@@ -544,7 +608,9 @@ describe('API Load Testing Suite', () => {
   let apiTester: APILoadTester;
 
   beforeAll(async () => {
-    apiTester = new APILoadTester(process.env.API_BASE_URL || 'http://localhost:8000');
+    apiTester = new APILoadTester(
+      process.env.API_BASE_URL || 'http://localhost:8000'
+    );
     await apiTester.authenticate();
   });
 
@@ -554,11 +620,14 @@ describe('API Load Testing Suite', () => {
       concurrency: 8,
       duration: 20000,
       rampUpTime: 5000,
-      timeout: 10000,
+      timeout: 10000
     });
 
     const runner = new LoadTestRunner(config);
-    const results = await runner.runLoadTest(apiTester.testPreviewEndpoint.bind(apiTester), 'Preview Load Test');
+    const results = await runner.runLoadTest(
+      apiTester.testPreviewEndpoint.bind(apiTester),
+      'Preview Load Test'
+    );
 
     expect(results.global.successRate).toBeGreaterThan(85);
     expect(results.global.requestsPerSecond).toBeGreaterThan(2);
@@ -575,11 +644,14 @@ describe('API Load Testing Suite', () => {
       concurrency: 5,
       duration: 15000,
       rampUpTime: 3000,
-      timeout: 10000,
+      timeout: 10000
     });
 
     const runner = new LoadTestRunner(config);
-    const results = await runner.runLoadTest(apiTester.testExportEndpoint.bind(apiTester), 'Export Load Test');
+    const results = await runner.runLoadTest(
+      apiTester.testExportEndpoint.bind(apiTester),
+      'Export Load Test'
+    );
 
     expect(results.global.successRate).toBeGreaterThan(90);
     expect(results.global.requestsPerSecond).toBeGreaterThan(1);
@@ -596,11 +668,14 @@ describe('API Load Testing Suite', () => {
       concurrency: 15,
       duration: 10000,
       rampUpTime: 2000,
-      timeout: 5000,
+      timeout: 5000
     });
 
     const runner = new LoadTestRunner(config);
-    const results = await runner.runLoadTest(apiTester.testHealthEndpoints.bind(apiTester), 'Health Load Test');
+    const results = await runner.runLoadTest(
+      apiTester.testHealthEndpoints.bind(apiTester),
+      'Health Load Test'
+    );
 
     expect(results.global.successRate).toBeGreaterThan(95);
     expect(results.global.requestsPerSecond).toBeGreaterThan(10);
@@ -617,7 +692,7 @@ describe('API Load Testing Suite', () => {
       concurrency: 6,
       duration: 30000,
       rampUpTime: 8000,
-      timeout: 12000,
+      timeout: 12000
     });
 
     const runner = new LoadTestRunner(config);
@@ -642,7 +717,9 @@ describe('API Load Testing Suite', () => {
     console.log(report);
 
     // Validate overall performance
-    const overallPassed = results.every(r => r.successRate >= 80 && r.requestsPerSecond > 0);
+    const overallPassed = results.every(
+      r => r.successRate >= 80 && r.requestsPerSecond > 0
+    );
     expect(overallPassed).toBe(true);
 
     // Validate individual critical endpoints
@@ -663,15 +740,21 @@ describe('API Load Testing Suite', () => {
       timestamp: new Date().toISOString(),
       overallPassed,
       totalEndpoints: results.length,
-      averageThroughput: results.reduce((sum, r) => sum + r.requestsPerSecond, 0),
-      averageSuccessRate: results.reduce((sum, r) => sum + r.successRate, 0) / results.length,
-      averageResponseTime: results.reduce((sum, r) => sum + r.averageResponseTime, 0) / results.length,
+      averageThroughput: results.reduce(
+        (sum, r) => sum + r.requestsPerSecond,
+        0
+      ),
+      averageSuccessRate:
+        results.reduce((sum, r) => sum + r.successRate, 0) / results.length,
+      averageResponseTime:
+        results.reduce((sum, r) => sum + r.averageResponseTime, 0) /
+        results.length,
       endpointResults: results.map(r => ({
         endpoint: r.endpoint,
         successRate: r.successRate,
         throughput: r.requestsPerSecond,
-        avgResponseTime: r.averageResponseTime,
-      })),
+        avgResponseTime: r.averageResponseTime
+      }))
     };
 
     expect(metricsData.averageSuccessRate).toBeGreaterThan(85);

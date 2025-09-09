@@ -5,6 +5,7 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 ## Directories to Remove
 
 ### Client Components (Not part of Epic 1 MVP):
+
 - `client/src/components/admin/` - Admin dashboards not needed for MVP
 - `client/src/components/auth/` - Authentication/authorization not in MVP scope
 - `client/src/components/marketplace/` - Marketplace features not in MVP
@@ -19,6 +20,7 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 - `client/src/components/approval/` - Approval workflows not in MVP
 
 ### Client Pages (Not part of Epic 1 MVP):
+
 - `client/src/pages/EmailVerificationPage.tsx`
 - `client/src/pages/LoginPage.tsx`
 - `client/src/pages/PasswordResetPage.tsx`
@@ -26,6 +28,7 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 - `client/src/pages/UnauthorizedPage.tsx`
 
 ### Client Hooks (Not part of Epic 1 MVP):
+
 - `client/src/hooks/useAuth.ts`
 - `client/src/hooks/useConsent.ts`
 - `client/src/hooks/useConsentAwareToggle.tsx`
@@ -41,16 +44,19 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 - `client/src/hooks/useRouteGuard.ts`
 
 ### Client Stores (Not part of Epic 1 MVP):
+
 - `client/src/stores/authStore.ts`
 - `client/src/stores/__tests__/authStore.test.ts`
 
 ### Client Types (Not part of Epic 1 MVP):
+
 - `client/src/types/MFATypes.ts`
 - `client/src/types/consent.ts`
 - `client/src/types/revenue.ts`
 - `client/src/types/security.ts`
 
 ### Core Package Components (Not part of Epic 1 MVP):
+
 - `packages/core/components/Admin/` - Admin features not in MVP
 - `packages/core/components/Analytics/` - Advanced analytics not in MVP
 - `packages/core/components/Community/` - Community features not in MVP
@@ -58,6 +64,7 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 - `packages/core/components/Contributions/` - Contribution system not in MVP
 
 ### Core Package Systems (Not part of Epic 1 MVP):
+
 - `packages/core/auth/` - Authentication system not in MVP
 - `packages/core/admin/` - Admin system not in MVP
 - `packages/core/analytics/` - Analytics system not in MVP (except basic preview)
@@ -67,6 +74,7 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 ## Files to Keep (Core Epic 1 MVP):
 
 ### Essential for Inline Editing:
+
 - `packages/core/components/epic1/` - All Epic 1 inline editing components
 - `packages/core/components/Inspector/` - Modified for inline editing support
 - `packages/core/GraphEditor.tsx` - Main editor component
@@ -78,6 +86,7 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 - `packages/core/graphSchema.ts` - Graph schemas
 
 ### Essential Client Components:
+
 - `client/src/components/EnhancedGraphEditor.tsx` - Enhanced editor
 - `client/src/components/BrowserSafeGraphEditor.tsx` - Browser-safe version
 - `client/src/components/GraphNode.tsx` - Node components
@@ -86,6 +95,7 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 - `client/src/components/file-browser/` - File management (keep for .psg files)
 
 ### Essential Hooks:
+
 - `client/src/hooks/useGraphVersions.ts` - Version management
 - `client/src/hooks/useFormAnalytics.ts` - Basic form analytics
 - `client/src/hooks/useNavigation.ts` - Navigation
@@ -96,6 +106,7 @@ Based on the Epic 1 MVP specification (inline editing focus), the following dire
 ## Summary
 
 The Epic 1 MVP focuses on:
+
 1. Inline editing capabilities (no side panels)
 2. Core node engine with deterministic execution
 3. Visual node editor with React Flow

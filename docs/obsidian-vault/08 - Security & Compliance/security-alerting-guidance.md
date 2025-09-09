@@ -253,7 +253,7 @@ interface AlertQualityMetrics {
 const qualityReport = await securityAlertingWorkflow.generateQualityReport({
   period: { days: 7 },
   includeRecommendations: true,
-  analyzePatterns: true,
+  analyzePatterns: true
 });
 
 // Review and action items
@@ -317,17 +317,17 @@ const ESCALATION_MATRIX = {
     level1: ['security-team@wildconstruct.com', 'on-call@wildconstruct.com'],
     level2: ['security-manager@wildconstruct.com', 'cto@wildconstruct.com'],
     level3: ['ciso@wildconstruct.com', 'ceo@wildconstruct.com'],
-    level4: ['board-security@wildconstruct.com'],
+    level4: ['board-security@wildconstruct.com']
   },
   HIGH: {
     level1: ['security-analysts@wildconstruct.com'],
     level2: ['security-team@wildconstruct.com'],
-    level3: ['security-manager@wildconstruct.com'],
+    level3: ['security-manager@wildconstruct.com']
   },
   MEDIUM: {
     level1: ['security-analysts@wildconstruct.com'],
-    level2: ['security-team@wildconstruct.com'],
-  },
+    level2: ['security-team@wildconstruct.com']
+  }
 };
 ```
 
@@ -442,7 +442,7 @@ const executiveDashboard = {
   systemHealth: dailyMetrics.securityPostureScore,
   complianceStatus: dailyMetrics.complianceScore,
   keyInsights: dailyMetrics.topInsights.slice(0, 3),
-  actionItems: dailyMetrics.criticalActionItems,
+  actionItems: dailyMetrics.criticalActionItems
 };
 
 // Send to executive team
@@ -497,7 +497,7 @@ tail -f /var/log/security/alerting-workflow.log
 const analysis = await securityAlertingWorkflow.analyzeFalsePositives({
   timeframe: { days: 30 },
   alertTypes: ['brute_force', 'anomaly_detection'],
-  minimumOccurrences: 10,
+  minimumOccurrences: 10
 });
 
 // Generate tuning recommendations
@@ -507,7 +507,9 @@ analysis.recommendations.forEach(rec => {
 });
 
 // Apply recommended changes
-await securityAlertingWorkflow.applyTuningRecommendations(analysis.recommendations);
+await securityAlertingWorkflow.applyTuningRecommendations(
+  analysis.recommendations
+);
 ```
 
 #### Performance Issues
@@ -584,7 +586,11 @@ interface AlertAccessRoles {
     restrictions: ['cannot_delete_alerts', 'cannot_modify_rules'];
   };
   security_manager: {
-    permissions: ['all_analyst_permissions', 'modify_rules', 'manage_escalations'];
+    permissions: [
+      'all_analyst_permissions',
+      'modify_rules',
+      'manage_escalations'
+    ];
     restrictions: ['cannot_delete_audit_logs'];
   };
   security_admin: {
@@ -609,7 +615,7 @@ const RETENTION_POLICIES = {
   resolved_alerts: '7_years', // SOX compliance
   alert_metrics: '3_years', // Trend analysis
   audit_logs: '10_years', // Legal requirements
-  performance_data: '2_years', // Optimization
+  performance_data: '2_years' // Optimization
 };
 ```
 
@@ -690,7 +696,7 @@ const siemIntegration = {
   endpoint: 'https://siem.wildconstruct.com/api/alerts',
   authentication: 'bearer_token',
   alertLevels: ['critical', 'high'],
-  formatVersion: '2.1',
+  formatVersion: '2.1'
 };
 
 // Configure alert forwarding
@@ -708,8 +714,8 @@ const ticketingIntegration = {
   priority: {
     critical: 'Highest',
     high: 'High',
-    medium: 'Medium',
-  },
+    medium: 'Medium'
+  }
 };
 
 await securityAlertingWorkflow.configureTicketing(ticketingIntegration);
@@ -723,12 +729,12 @@ const slackConfig = {
   channels: {
     critical: '#security-critical',
     high: '#security-high',
-    general: '#security-team',
+    general: '#security-team'
   },
   mentions: {
     critical: '@channel',
-    high: '@here',
-  },
+    high: '@here'
+  }
 };
 
 await securityAlertingWorkflow.configureSlack(slackConfig);

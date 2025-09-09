@@ -25,7 +25,13 @@ function createAutomationQuickWinsTicket() {
     assignee: 'claude-code-agent',
     wip_class: 'FEAT',
     priority: 'critical',
-    tags: ['automation', 'system-improvements', 'performance', 'reliability', 'quick-wins'],
+    tags: [
+      'automation',
+      'system-improvements',
+      'performance',
+      'reliability',
+      'quick-wins'
+    ],
     est: 9,
     created: new Date().toISOString(),
     updated: new Date().toISOString(),
@@ -48,7 +54,7 @@ Phase 1 implementation of the most critical automation infrastructure improvemen
       'Create comprehensive error recovery strategies for common failure scenarios',
       'Update finish-task.js and run-qa-agent.js to properly handle task lifecycle',
       'Validate that APPROVED tasks are marked as available for dependencies',
-      'Test automation improvements across multiple script types (QA, task management, epic creation)',
+      'Test automation improvements across multiple script types (QA, task management, epic creation)'
     ],
 
     technicalDetails: [
@@ -59,7 +65,7 @@ Phase 1 implementation of the most critical automation infrastructure improvemen
       '4. Config Management (2h): Centralize settings in src/config/automation-config.js',
       'Key Files: finish-task.js, run-qa-agent.js, grab-tasks.js, auto-qa-pipeline.js',
       'Infrastructure: StateLock.js, AutomationLogger.js, automation-config.js',
-      'Testing: Validate across QA pipeline, task grabbing, state management workflows',
+      'Testing: Validate across QA pipeline, task grabbing, state management workflows'
     ],
 
     businessValue: [
@@ -70,7 +76,7 @@ Phase 1 implementation of the most critical automation infrastructure improvemen
       'Much easier debugging and maintenance with unified logging',
       'Foundation for future automation improvements and reliability',
       'Prevents data corruption in state.json during concurrent operations',
-      'Enables confident scaling of agent coordination and task management',
+      'Enables confident scaling of agent coordination and task management'
     ],
 
     implementationPlan: [
@@ -96,16 +102,16 @@ Phase 1 implementation of the most critical automation infrastructure improvemen
       '  - Create src/config/automation-config.js with centralized settings',
       '  - Extract hardcoded timeouts, retry logic, and paths',
       '  - Add config validation and environment-specific settings',
-      '  - Update scripts to use centralized configuration',
+      '  - Update scripts to use centralized configuration'
     ],
 
     notes: [
       {
         ts: new Date().toISOString(),
         actor: 'claude-code-agent',
-        text: "Ticket created for critical automation infrastructure improvements. Starting with task completion workflow bug that's blocking agent productivity.",
-      },
-    ],
+        text: "Ticket created for critical automation infrastructure improvements. Starting with task completion workflow bug that's blocking agent productivity."
+      }
+    ]
   };
 
   // Add task to state
@@ -125,7 +131,9 @@ Phase 1 implementation of the most critical automation infrastructure improvemen
   console.log(`🔖 Tags: ${newTask.tags.join(', ')}`);
 
   console.log('\n🚨 CRITICAL FIRST PRIORITY:');
-  console.log('   Fix task completion workflow - APPROVED tasks not clearing from assignments');
+  console.log(
+    '   Fix task completion workflow - APPROVED tasks not clearing from assignments'
+  );
   console.log('   This is actively blocking agent productivity!');
 
   console.log('\n📋 Implementation Plan:');

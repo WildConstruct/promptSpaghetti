@@ -88,7 +88,7 @@ const SECURE_TOTP_CONFIG: TOTPSecurityConfig = {
   digits: 6,
   window: 1,
   secretLength: 20, // 160 bits
-  issuer: 'PromptScape',
+  issuer: 'PromptScape'
 };
 ```
 
@@ -169,7 +169,7 @@ const SECURE_SMS_CONFIG: SMSSecurityConfig = {
   codeExpiry: 300, // 5 minutes
   carrierValidation: true,
   internationalBlocking: ['high-risk-countries'],
-  deliveryTracking: true,
+  deliveryTracking: true
 };
 ```
 

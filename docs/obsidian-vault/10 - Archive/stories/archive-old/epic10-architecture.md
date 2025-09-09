@@ -135,7 +135,10 @@ interface ModelAdaptor {
   platform: Platform;
   capabilities(): Promise<Capabilities>;
   validate(graph: PromptGraph): ValidationResult[];
-  transform(graph: PromptGraph, options?: TransformOptions): Promise<TargetPrompt>;
+  transform(
+    graph: PromptGraph,
+    options?: TransformOptions
+  ): Promise<TargetPrompt>;
 }
 
 interface Capabilities {

@@ -9,17 +9,23 @@ import { ConnectionManager } from '../../server/src/websocket/ConnectionManager'
 import { GraphEngine } from '../../packages/graph-core/src/engine';
 import { Graph } from '../packages/core/graphSchema';
 import { generatePreviewOutputs } from '../../server/src/index';
-import { TestEnvironmentManager, AsyncTestingUtils } from '../utils/TestingUtilities';
+import {
+  TestEnvironmentManager,
+  AsyncTestingUtils
+} from '../utils/TestingUtilities';
 
 describe('Error Scenarios - Integration Tests', () => {
   let testEnv: any;
 
   beforeEach(async () => {
-    testEnv = await TestEnvironmentManager.createEnvironment('error-scenarios', {
-      seed: 'error-test-seed',
-      mockWebSocket: true,
-      mockLocalStorage: true,
-    });
+    testEnv = await TestEnvironmentManager.createEnvironment(
+      'error-scenarios',
+      {
+        seed: 'error-test-seed',
+        mockWebSocket: true,
+        mockLocalStorage: true
+      }
+    );
   });
 
   afterEach(async () => {
@@ -36,7 +42,7 @@ describe('Error Scenarios - Integration Tests', () => {
           maxConnections: 10,
           enableAuthentication: false,
           jwtSecret: 'test-secret',
-          corsOrigins: ['*'],
+          corsOrigins: ['*']
         };
 
         const manager = new ConnectionManager(config);
@@ -46,12 +52,12 @@ describe('Error Scenarios - Integration Tests', () => {
           ping: jest.fn(),
           send: jest.fn(),
           readyState: WebSocket.CONNECTING, // Simulating stuck connection
-          removeAllListeners: jest.fn(),
+          removeAllListeners: jest.fn()
         } as any;
 
         const request = {
           headers: { 'user-agent': 'test-agent' },
-          socket: { remoteAddress: '127.0.0.1' },
+          socket: { remoteAddress: '127.0.0.1' }
         };
 
         // Add connection and wait for timeout
@@ -75,7 +81,7 @@ describe('Error Scenarios - Integration Tests', () => {
           maxConnections: 10,
           enableAuthentication: false,
           jwtSecret: 'test-secret',
-          corsOrigins: ['*'],
+          corsOrigins: ['*']
         };
 
         const manager = new ConnectionManager(config);
@@ -91,12 +97,12 @@ describe('Error Scenarios - Integration Tests', () => {
           ping: jest.fn(),
           send: jest.fn(),
           readyState: WebSocket.OPEN,
-          removeAllListeners: jest.fn(),
+          removeAllListeners: jest.fn()
         } as any;
 
         const request = {
           headers: { 'user-agent': 'test-agent' },
-          socket: { remoteAddress: '127.0.0.1' },
+          socket: { remoteAddress: '127.0.0.1' }
         };
 
         const connectionId = manager.addConnection(mockWs, request);
@@ -121,7 +127,7 @@ describe('Error Scenarios - Integration Tests', () => {
           maxConnections: 2, // Small limit for testing
           enableAuthentication: false,
           jwtSecret: 'test-secret',
-          corsOrigins: ['*'],
+          corsOrigins: ['*']
         };
 
         const manager = new ConnectionManager(config);
@@ -135,13 +141,13 @@ describe('Error Scenarios - Integration Tests', () => {
             ping: jest.fn(),
             send: jest.fn(),
             readyState: WebSocket.OPEN,
-            removeAllListeners: jest.fn(),
+            removeAllListeners: jest.fn()
           });
         }
 
         const request = {
           headers: { 'user-agent': 'test-agent' },
-          socket: { remoteAddress: '127.0.0.1' },
+          socket: { remoteAddress: '127.0.0.1' }
         };
 
         // Add connections up to limit
@@ -174,7 +180,7 @@ describe('Error Scenarios - Integration Tests', () => {
         // Mock graph with invalid structure
         const invalidGraph = {
           nodes: null, // Invalid - should be array
-          edges: undefined,
+          edges: undefined
         } as unknown as Graph;
 
         try {
@@ -191,9 +197,9 @@ describe('Error Scenarios - Integration Tests', () => {
             {
               id: 'output1',
               type: 'Output',
-              inputs: [],
-            },
-          ],
+              inputs: []
+            }
+          ]
         };
 
         // Mock a slow engine execution
@@ -202,7 +208,7 @@ describe('Error Scenarios - Integration Tests', () => {
             return new Promise(resolve => {
               setTimeout(() => resolve(['Slow output']), 5000); // 5 second delay
             });
-          }),
+          })
         };
 
         // Test with timeout
@@ -223,8 +229,8 @@ describe('Error Scenarios - Integration Tests', () => {
         const circularGraph: Graph = {
           nodes: [
             { id: 'node1', type: 'WeightedChoice', inputs: ['node2'] },
-            { id: 'node2', type: 'Output', inputs: ['node1'] },
-          ],
+            { id: 'node2', type: 'Output', inputs: ['node1'] }
+          ]
         };
 
         const engine = new GraphEngine();
@@ -239,7 +245,7 @@ describe('Error Scenarios - Integration Tests', () => {
 
       it('should handle missing node references', async () => {
         const invalidGraph: Graph = {
-          nodes: [{ id: 'node1', type: 'Output', inputs: ['nonexistent-node'] }],
+          nodes: [{ id: 'node1', type: 'Output', inputs: ['nonexistent-node'] }]
         };
 
         const engine = new GraphEngine();
@@ -254,7 +260,7 @@ describe('Error Scenarios - Integration Tests', () => {
 
       it('should handle invalid node type errors', async () => {
         const invalidGraph: Graph = {
-          nodes: [{ id: 'node1', type: 'InvalidNodeType' as any, inputs: [] }],
+          nodes: [{ id: 'node1', type: 'InvalidNodeType' as any, inputs: [] }]
         };
 
         const engine = new GraphEngine();
@@ -270,7 +276,8 @@ describe('Error Scenarios - Integration Tests', () => {
 
     describe('Data Corruption Scenarios', () => {
       it('should handle corrupted graph data', async () => {
-        const corruptedData = '{"nodes": [{"id": "node1", "type": "Output", "data": {"corrupted": true';
+        const corruptedData =
+          '{"nodes": [{"id": "node1", "type": "Output", "data": {"corrupted": true';
 
         try {
           const graph = JSON.parse(corruptedData);
@@ -283,8 +290,8 @@ describe('Error Scenarios - Integration Tests', () => {
       it('should handle incomplete node data', async () => {
         const incompleteGraph: Graph = {
           nodes: [
-            { id: 'node1', type: 'WeightedChoice' } as any, // Missing required 'inputs' field
-          ],
+            { id: 'node1', type: 'WeightedChoice' } as any // Missing required 'inputs' field
+          ]
         };
 
         const engine = new GraphEngine();
@@ -305,10 +312,10 @@ describe('Error Scenarios - Integration Tests', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {
-                choices: 'invalid-type-should-be-array' as any,
-              },
-            },
-          ],
+                choices: 'invalid-type-should-be-array' as any
+              }
+            }
+          ]
         };
 
         const engine = new GraphEngine();
@@ -333,7 +340,7 @@ describe('Error Scenarios - Integration Tests', () => {
           maxConnections: 10,
           enableAuthentication: true,
           jwtSecret: 'test-secret',
-          corsOrigins: ['*'],
+          corsOrigins: ['*']
         };
 
         const manager = new ConnectionManager(config);
@@ -352,22 +359,24 @@ describe('Error Scenarios - Integration Tests', () => {
           ping: jest.fn(),
           send: jest.fn(),
           readyState: WebSocket.OPEN,
-          removeAllListeners: jest.fn(),
+          removeAllListeners: jest.fn()
         } as any;
 
         const request = {
           headers: {
             'user-agent': 'test-agent',
-            authorization: 'Bearer expired-token',
+            authorization: 'Bearer expired-token'
           },
-          socket: { remoteAddress: '127.0.0.1' },
+          socket: { remoteAddress: '127.0.0.1' }
         };
 
         const connectionId = manager.addConnection(mockWs, request);
 
         // Attempt authentication
         try {
-          await manager.authenticateConnection(connectionId, { token: 'expired-token' });
+          await manager.authenticateConnection(connectionId, {
+            token: 'expired-token'
+          });
           fail('Should have thrown expired token error');
         } catch (error) {
           expect(error.message).toContain('expired');
@@ -384,7 +393,7 @@ describe('Error Scenarios - Integration Tests', () => {
           maxConnections: 10,
           enableAuthentication: true,
           jwtSecret: 'test-secret',
-          corsOrigins: ['*'],
+          corsOrigins: ['*']
         };
 
         const manager = new ConnectionManager(config);
@@ -403,21 +412,23 @@ describe('Error Scenarios - Integration Tests', () => {
           ping: jest.fn(),
           send: jest.fn(),
           readyState: WebSocket.OPEN,
-          removeAllListeners: jest.fn(),
+          removeAllListeners: jest.fn()
         } as any;
 
         const request = {
           headers: {
             'user-agent': 'test-agent',
-            authorization: 'Bearer invalid-signature-token',
+            authorization: 'Bearer invalid-signature-token'
           },
-          socket: { remoteAddress: '127.0.0.1' },
+          socket: { remoteAddress: '127.0.0.1' }
         };
 
         const connectionId = manager.addConnection(mockWs, request);
 
         try {
-          await manager.authenticateConnection(connectionId, { token: 'invalid-signature-token' });
+          await manager.authenticateConnection(connectionId, {
+            token: 'invalid-signature-token'
+          });
           fail('Should have thrown invalid signature error');
         } catch (error) {
           expect(error.message).toContain('invalid signature');
@@ -433,7 +444,7 @@ describe('Error Scenarios - Integration Tests', () => {
         const limitedUser = {
           userId: 'user123',
           permissions: ['read'],
-          role: 'viewer',
+          role: 'viewer'
         };
 
         const config = {
@@ -443,7 +454,7 @@ describe('Error Scenarios - Integration Tests', () => {
           maxConnections: 10,
           enableAuthentication: true,
           jwtSecret: 'test-secret',
-          corsOrigins: ['*'],
+          corsOrigins: ['*']
         };
 
         const manager = new ConnectionManager(config);
@@ -457,19 +468,21 @@ describe('Error Scenarios - Integration Tests', () => {
           ping: jest.fn(),
           send: jest.fn(),
           readyState: WebSocket.OPEN,
-          removeAllListeners: jest.fn(),
+          removeAllListeners: jest.fn()
         } as any;
 
         const request = {
           headers: {
             'user-agent': 'test-agent',
-            authorization: 'Bearer valid-token',
+            authorization: 'Bearer valid-token'
           },
-          socket: { remoteAddress: '127.0.0.1' },
+          socket: { remoteAddress: '127.0.0.1' }
         };
 
         const connectionId = manager.addConnection(mockWs, request);
-        await manager.authenticateConnection(connectionId, { token: 'valid-token' });
+        await manager.authenticateConnection(connectionId, {
+          token: 'valid-token'
+        });
 
         // Try to perform an action requiring 'write' permission
         try {
@@ -495,15 +508,15 @@ describe('Error Scenarios - Integration Tests', () => {
               type: 'WeightedChoice',
               inputs: [],
               data: {
-                choices: new Array(1000000).fill({ value: 'test', weight: 1 }), // Large array
-              },
+                choices: new Array(1000000).fill({ value: 'test', weight: 1 }) // Large array
+              }
             },
             {
               id: 'output1',
               type: 'Output',
-              inputs: ['memory-hog'],
-            },
-          ],
+              inputs: ['memory-hog']
+            }
+          ]
         };
 
         const engine = new GraphEngine();
@@ -515,7 +528,7 @@ describe('Error Scenarios - Integration Tests', () => {
           heapUsed: 450000000, // 450MB used
           heapTotal: 500000000, // 500MB total - nearly full
           external: 10000000,
-          arrayBuffers: 5000000,
+          arrayBuffers: 5000000
         });
 
         try {
@@ -537,7 +550,7 @@ describe('Error Scenarios - Integration Tests', () => {
               id: `node${i}`,
               type: 'WeightedChoice',
               inputs: i > 0 ? [`node${i - 1}`] : [],
-              data: { choices: [{ value: `value${i}`, weight: 1 }] },
+              data: { choices: [{ value: `value${i}`, weight: 1 }] }
             });
           }
           return { nodes };
@@ -567,7 +580,9 @@ describe('Error Scenarios - Integration Tests', () => {
 
         try {
           // Attempt to store large data
-          const largeData = JSON.stringify({ data: new Array(100000).fill('large-data') });
+          const largeData = JSON.stringify({
+            data: new Array(100000).fill('large-data')
+          });
           mockStorage.setItem('large-key', largeData);
           fail('Should have thrown quota exceeded error');
         } catch (error) {
@@ -599,7 +614,7 @@ describe('Error Scenarios - Integration Tests', () => {
           maxConnections: 10,
           enableAuthentication: false,
           jwtSecret: 'test-secret',
-          corsOrigins: ['*'],
+          corsOrigins: ['*']
         };
 
         const manager = new ConnectionManager(config);
@@ -611,7 +626,7 @@ describe('Error Scenarios - Integration Tests', () => {
           ping: jest.fn(),
           send: jest.fn(),
           readyState: WebSocket.OPEN,
-          removeAllListeners: jest.fn(),
+          removeAllListeners: jest.fn()
         } as any;
 
         const mockWs2 = {
@@ -620,12 +635,12 @@ describe('Error Scenarios - Integration Tests', () => {
           ping: jest.fn(),
           send: jest.fn(),
           readyState: WebSocket.OPEN,
-          removeAllListeners: jest.fn(),
+          removeAllListeners: jest.fn()
         } as any;
 
         const request = {
           headers: { 'user-agent': 'test-agent' },
-          socket: { remoteAddress: '127.0.0.1' },
+          socket: { remoteAddress: '127.0.0.1' }
         };
 
         const conn1 = manager.addConnection(mockWs1, request);
@@ -655,7 +670,7 @@ describe('Error Scenarios - Integration Tests', () => {
         maxConnections: 10,
         enableAuthentication: false,
         jwtSecret: 'test-secret',
-        corsOrigins: ['*'],
+        corsOrigins: ['*']
       };
 
       const manager = new ConnectionManager(config);
@@ -669,15 +684,17 @@ describe('Error Scenarios - Integration Tests', () => {
           ping: jest.fn(),
           send: jest.fn(),
           readyState: WebSocket.OPEN,
-          removeAllListeners: jest.fn(),
+          removeAllListeners: jest.fn()
         } as any;
 
         const request = {
           headers: { 'user-agent': `agent-${i}` },
-          socket: { remoteAddress: '127.0.0.1' },
+          socket: { remoteAddress: '127.0.0.1' }
         };
 
-        promises.push(Promise.resolve().then(() => manager.addConnection(mockWs, request)));
+        promises.push(
+          Promise.resolve().then(() => manager.addConnection(mockWs, request))
+        );
       }
 
       const results = await Promise.allSettled(promises);

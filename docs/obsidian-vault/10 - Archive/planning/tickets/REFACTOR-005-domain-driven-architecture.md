@@ -237,7 +237,7 @@ export const DomainEvents = {
   // Runtime Events
   EXECUTION_STARTED: 'runtime:execution:started',
   EXECUTION_COMPLETED: 'runtime:execution:completed',
-  NODE_PROCESSED: 'runtime:node:processed',
+  NODE_PROCESSED: 'runtime:node:processed'
 };
 ```
 

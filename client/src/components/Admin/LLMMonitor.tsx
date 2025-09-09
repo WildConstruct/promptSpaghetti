@@ -8,12 +8,15 @@ interface UsageStats {
   totalTokensIn: number;
   totalTokensOut: number;
   totalCost: number;
-  modelBreakdown: Record<string, {
-    calls: number;
-    tokensIn: number;
-    tokensOut: number;
-    cost: number;
-  }>;
+  modelBreakdown: Record<
+    string,
+    {
+      calls: number;
+      tokensIn: number;
+      tokensOut: number;
+      cost: number;
+    }
+  >;
 }
 
 interface UserQuota {
@@ -66,7 +69,7 @@ export const LLMMonitor: React.FC = () => {
 
   useEffect(() => {
     fetchStats();
-    
+
     if (autoRefresh) {
       const interval = setInterval(fetchStats, refreshInterval * 1000);
       return () => clearInterval(interval);
@@ -76,7 +79,7 @@ export const LLMMonitor: React.FC = () => {
   const clearCache = async () => {
     try {
       const response = await fetch('/api/llm/cache/clear', {
-        method: 'POST',
+        method: 'POST'
       });
       if (response.ok) {
         alert('Cache cleared successfully');
@@ -112,7 +115,7 @@ export const LLMMonitor: React.FC = () => {
   const quotaPercentage = stats?.quota
     ? (stats.quota.dailyUsed / stats.quota.dailyLimit) * 100
     : 0;
-  
+
   const costPercentage = stats?.quota
     ? (stats.quota.costUsed / stats.quota.costLimit) * 100
     : 0;
@@ -133,14 +136,14 @@ export const LLMMonitor: React.FC = () => {
             <input
               type="checkbox"
               checked={autoRefresh}
-              onChange={(e) => setAutoRefresh(e.target.checked)}
+              onChange={e => setAutoRefresh(e.target.checked)}
             />
             Auto-refresh
           </label>
           {autoRefresh && (
             <select
               value={refreshInterval}
-              onChange={(e) => setRefreshInterval(Number(e.target.value))}
+              onChange={e => setRefreshInterval(Number(e.target.value))}
             >
               <option value={10}>10s</option>
               <option value={30}>30s</option>
@@ -154,7 +157,8 @@ export const LLMMonitor: React.FC = () => {
         </div>
         {error && (
           <div className="offline-banner">
-            Offline - Showing cached data from {new Date(Date.now()).toLocaleTimeString()}
+            Offline - Showing cached data from{' '}
+            {new Date(Date.now()).toLocaleTimeString()}
           </div>
         )}
       </div>
@@ -176,7 +180,9 @@ export const LLMMonitor: React.FC = () => {
                   )}
                 </div>
                 {stats.quota && (
-                  <div className={`progress-bar ${getQuotaClass(quotaPercentage)}`}>
+                  <div
+                    className={`progress-bar ${getQuotaClass(quotaPercentage)}`}
+                  >
                     <div
                       className="progress-fill"
                       style={{ width: `${Math.min(quotaPercentage, 100)}%` }}
@@ -210,7 +216,9 @@ export const LLMMonitor: React.FC = () => {
                   )}
                 </div>
                 {stats.quota && (
-                  <div className={`progress-bar ${getQuotaClass(costPercentage)}`}>
+                  <div
+                    className={`progress-bar ${getQuotaClass(costPercentage)}`}
+                  >
                     <div
                       className="progress-fill"
                       style={{ width: `${Math.min(costPercentage, 100)}%` }}
@@ -237,20 +245,24 @@ export const LLMMonitor: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(stats.usage.modelBreakdown).map(([model, data]) => (
-                    <tr key={model}>
-                      <td>{model}</td>
-                      <td>{data.calls}</td>
-                      <td>{data.tokensIn.toLocaleString()}</td>
-                      <td>{data.tokensOut.toLocaleString()}</td>
-                      <td>${data.cost.toFixed(4)}</td>
-                      <td>
-                        <span className={`model-type ${data.cost === 0 ? 'free' : 'paid'}`}>
-                          {data.cost === 0 ? 'FREE' : 'PAID'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {Object.entries(stats.usage.modelBreakdown).map(
+                    ([model, data]) => (
+                      <tr key={model}>
+                        <td>{model}</td>
+                        <td>{data.calls}</td>
+                        <td>{data.tokensIn.toLocaleString()}</td>
+                        <td>{data.tokensOut.toLocaleString()}</td>
+                        <td>${data.cost.toFixed(4)}</td>
+                        <td>
+                          <span
+                            className={`model-type ${data.cost === 0 ? 'free' : 'paid'}`}
+                          >
+                            {data.cost === 0 ? 'FREE' : 'PAID'}
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
@@ -290,7 +302,11 @@ export const LLMMonitor: React.FC = () => {
                 <div className="stat-label">Avg Tokens/Call</div>
                 <div className="stat-value">
                   {stats.usage.totalCalls > 0
-                    ? Math.round((stats.usage.totalTokensIn + stats.usage.totalTokensOut) / stats.usage.totalCalls)
+                    ? Math.round(
+                        (stats.usage.totalTokensIn +
+                          stats.usage.totalTokensOut) /
+                          stats.usage.totalCalls
+                      )
                     : 0}
                 </div>
               </div>
@@ -324,7 +340,9 @@ export const LLMMonitor: React.FC = () => {
                 </div>
                 <div className="quota-item">
                   <span>Resets At:</span>
-                  <span>{new Date(stats.quota.resetTime).toLocaleString()}</span>
+                  <span>
+                    {new Date(stats.quota.resetTime).toLocaleString()}
+                  </span>
                 </div>
               </div>
             </div>

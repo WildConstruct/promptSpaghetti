@@ -147,5 +147,8 @@ export declare function validateFileIntegrity(psgFile: PsgFile): boolean;
 /**
  * Creates a minimal .psg file for testing
  */
-export declare function createEmptyProject(name?: string, author?: string): PsgFile;
+export declare function createEmptyProject(
+  name?: string,
+  author?: string
+): PsgFile;
 //# sourceMappingURL=projectSerialization.d.ts.map

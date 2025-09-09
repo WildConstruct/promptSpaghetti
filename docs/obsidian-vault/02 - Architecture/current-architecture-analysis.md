@@ -148,7 +148,7 @@ const InspectorContext = createContext();
 ```typescript
 // Current Server Architecture
 const server = fastify({
-  logger: true, // ✅ Proper logging setup
+  logger: true // ✅ Proper logging setup
 });
 
 // Route Organization - Good Pattern
@@ -261,13 +261,13 @@ logger.info('Graph execution started', {
   graphId,
   userId,
   timestamp: Date.now(),
-  context: 'execution',
+  context: 'execution'
 });
 
 logger.error('Validation failed', {
   nodeId,
   errors: validationErrors,
-  severity: 'high',
+  severity: 'high'
 });
 ```
 

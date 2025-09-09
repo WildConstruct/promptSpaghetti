@@ -2,7 +2,10 @@
 // Provides intelligent asset discovery based on segment metadata
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { MetadataExtractor, SegmentMetadata } from '../../services/llm/MetadataExtractor';
+import {
+  MetadataExtractor,
+  SegmentMetadata
+} from '../../services/llm/MetadataExtractor';
 import './SmartAssetBrowser.css';
 
 export interface Asset {
@@ -34,7 +37,9 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [searchInput, setSearchInput] = useState(searchQuery);
   const [isLoading, setIsLoading] = useState(false);
-  const [matchCounts, setMatchCounts] = useState<Map<string, number>>(new Map());
+  const [matchCounts, setMatchCounts] = useState<Map<string, number>>(
+    new Map()
+  );
 
   // Parse search query for metadata filters
   const searchFilters = useMemo(() => {
@@ -47,24 +52,28 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
   // Filter and sort assets based on metadata matching
   const filteredAssets = useMemo(() => {
     let filtered = [...assets];
-    
+
     // Text search (if no smart match or as fallback)
     if (searchInput && !smartMatchEnabled) {
       const keywords = searchInput.toLowerCase().split(/\s+/);
       filtered = filtered.filter(asset => {
-        const searchableText = `${asset.name} ${asset.tags?.join(' ') || ''}`.toLowerCase();
+        const searchableText =
+          `${asset.name} ${asset.tags?.join(' ') || ''}`.toLowerCase();
         return keywords.every(keyword => searchableText.includes(keyword));
       });
     }
-    
+
     // Smart metadata filtering
-    if (smartMatchEnabled && (currentSegmentMetadata || searchFilters.filters)) {
+    if (
+      smartMatchEnabled &&
+      (currentSegmentMetadata || searchFilters.filters)
+    ) {
       const targetMetadata = currentSegmentMetadata || searchFilters.filters;
-      
+
       // Calculate relevance scores
       const scoredAssets = filtered.map(asset => {
         let score = 0;
-        
+
         if (asset.metadata && metadataExtractor) {
           score = metadataExtractor.calculateRelevance(
             asset.metadata,
@@ -72,32 +81,41 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
           );
         } else if (asset.tags && targetMetadata.tags) {
           // Fallback to simple tag matching
-          const matchingTags = asset.tags.filter(tag => 
+          const matchingTags = asset.tags.filter(tag =>
             targetMetadata.tags?.includes(tag)
           );
-          score = matchingTags.length / Math.max(asset.tags.length, targetMetadata.tags.length);
+          score =
+            matchingTags.length /
+            Math.max(asset.tags.length, targetMetadata.tags.length);
         }
-        
+
         return { asset, score };
       });
-      
+
       // Filter out zero matches and sort by score
       filtered = scoredAssets
         .filter(item => item.score > 0)
         .sort((a, b) => b.score - a.score)
         .map(item => item.asset);
-      
+
       // Update match count
       setMatchCounts(new Map([['smart', filtered.length]]));
     }
-    
+
     return filtered;
-  }, [assets, searchInput, smartMatchEnabled, currentSegmentMetadata, searchFilters, metadataExtractor]);
+  }, [
+    assets,
+    searchInput,
+    smartMatchEnabled,
+    currentSegmentMetadata,
+    searchFilters,
+    metadataExtractor
+  ]);
 
   // Extract metadata for assets without it (background process)
   useEffect(() => {
     if (!metadataExtractor || !smartMatchEnabled) return;
-    
+
     const extractMissingMetadata = async () => {
       for (const asset of assets) {
         if (!asset.metadata && asset.name) {
@@ -106,30 +124,41 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
         }
       }
     };
-    
+
     extractMissingMetadata();
   }, [assets, metadataExtractor, smartMatchEnabled]);
 
-  const handleAssetClick = useCallback((asset: Asset) => {
-    setSelectedAsset(asset);
-    onAssetSelect(asset);
-  }, [onAssetSelect]);
+  const handleAssetClick = useCallback(
+    (asset: Asset) => {
+      setSelectedAsset(asset);
+      onAssetSelect(asset);
+    },
+    [onAssetSelect]
+  );
 
   const handleSmartMatchToggle = useCallback(() => {
     setSmartMatchEnabled(prev => !prev);
   }, []);
 
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value);
-  }, []);
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchInput(e.target.value);
+    },
+    []
+  );
 
   const getAssetIcon = (type: string) => {
     switch (type) {
-      case 'image': return '🖼️';
-      case 'audio': return '🎵';
-      case 'fragment': return '📄';
-      case 'preset': return '📦';
-      default: return '📁';
+      case 'image':
+        return '🖼️';
+      case 'audio':
+        return '🎵';
+      case 'fragment':
+        return '📄';
+      case 'preset':
+        return '📦';
+      default:
+        return '📁';
     }
   };
 
@@ -150,7 +179,7 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
             </span>
           )}
         </div>
-        
+
         <div className="controls-section">
           <label className="smart-match-toggle">
             <input
@@ -177,7 +206,7 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
       <div className="assets-grid">
         {filteredAssets.length === 0 ? (
           <div className="no-results">
-            {smartMatchEnabled 
+            {smartMatchEnabled
               ? 'No matching assets found. Try disabling Smart Match.'
               : 'No assets found matching your search.'}
           </div>
@@ -190,22 +219,22 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
               title={asset.name}
             >
               {asset.thumbnail ? (
-                <img 
-                  src={asset.thumbnail} 
+                <img
+                  src={asset.thumbnail}
                   alt={asset.name}
                   className="asset-thumbnail"
                 />
               ) : (
-                <div className="asset-icon">
-                  {getAssetIcon(asset.type)}
-                </div>
+                <div className="asset-icon">{getAssetIcon(asset.type)}</div>
               )}
               <div className="asset-info">
                 <div className="asset-name">{asset.name}</div>
                 {asset.tags && asset.tags.length > 0 && (
                   <div className="asset-tags">
                     {asset.tags.slice(0, 3).map(tag => (
-                      <span key={tag} className="tag">{tag}</span>
+                      <span key={tag} className="tag">
+                        {tag}
+                      </span>
                     ))}
                   </div>
                 )}

@@ -163,7 +163,10 @@ class OAuthFrameworkService {
 
   async generateConfiguration(provider: string, requirements: any) {
     // Leverage existing OAuthGuidanceService
-    return await this.oauthGuidanceService.generateConfiguration(provider, requirements);
+    return await this.oauthGuidanceService.generateConfiguration(
+      provider,
+      requirements
+    );
   }
 
   async validateProvider(config: OAuthProviderConfig) {
@@ -200,14 +203,19 @@ class OAuthAPIClient {
   constructor(private authStore: AuthStore) {}
 
   async createConfiguration(config: OAuthConfiguration) {
-    return await this.authStore.authenticatedFetch('/api/oauth-guidance/generate-configuration', {
-      method: 'POST',
-      body: JSON.stringify(config),
-    });
+    return await this.authStore.authenticatedFetch(
+      '/api/oauth-guidance/generate-configuration',
+      {
+        method: 'POST',
+        body: JSON.stringify(config)
+      }
+    );
   }
 
   async getSecurityAssessment(configId: string) {
-    return await this.authStore.authenticatedFetch(`/api/oauth-guidance/security-assessment/${configId}`);
+    return await this.authStore.authenticatedFetch(
+      `/api/oauth-guidance/security-assessment/${configId}`
+    );
   }
 }
 ```
@@ -358,7 +366,10 @@ describe('OAuthConfigurationInterface', () => {
 describe('OAuth Framework Integration', () => {
   test('should integrate with existing OAuth service', async () => {
     const framework = new OAuthFrameworkService();
-    const config = await framework.generateConfiguration('google', requirements);
+    const config = await framework.generateConfiguration(
+      'google',
+      requirements
+    );
     expect(config.provider).toBe('google');
     expect(config.security.pkce).toBe(true);
   });
@@ -371,9 +382,13 @@ describe('OAuth Framework Integration', () => {
 
 ```typescript
 // Lazy load OAuth components
-const OAuthConfigurationInterface = lazy(() => import('./components/oauth/OAuthConfigurationInterface'));
+const OAuthConfigurationInterface = lazy(
+  () => import('./components/oauth/OAuthConfigurationInterface')
+);
 
-const OAuthSecurityDashboard = lazy(() => import('./components/oauth/OAuthSecurityDashboard'));
+const OAuthSecurityDashboard = lazy(
+  () => import('./components/oauth/OAuthSecurityDashboard')
+);
 ```
 
 #### B. Caching Strategy
@@ -424,8 +439,8 @@ class OAuthAuditIntegration {
       compliance: {
         frameworks: ['OAuth2.1', 'GDPR'],
         requirements: ['access_control', 'data_protection'],
-        evidenceLevel: 'STANDARD',
-      },
+        evidenceLevel: 'STANDARD'
+      }
     });
   }
 }

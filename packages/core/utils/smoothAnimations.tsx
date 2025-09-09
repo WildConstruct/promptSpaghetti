@@ -75,7 +75,9 @@ export function createSmoothTransition(
   easing: string = easingFunctions.cinema4d.professional
 ): React.CSSProperties {
   return {
-    transition: properties.map((prop) => `${prop} ${duration}ms ${easing}`).join(', '),
+    transition: properties
+      .map(prop => `${prop} ${duration}ms ${easing}`)
+      .join(', '),
     willChange: properties.join(', ')
   };
 }
@@ -121,7 +123,11 @@ export function useAnimation(initialState: boolean = false) {
 /**
  * Smooth scroll utilities
  */
-export function smoothScrollTo(element: HTMLElement, top: number, duration: number = animationDurations.smooth): void {
+export function smoothScrollTo(
+  element: HTMLElement,
+  top: number,
+  duration: number = animationDurations.smooth
+): void {
   const start = element.scrollTop;
   const change = top - start;
   const startTime = performance.now();
@@ -219,7 +225,10 @@ export function useSmoothHover(duration: number = animationDurations.micro) {
     setTimeout(() => setIsTransitioning(false), duration);
   }, [duration]);
 
-  const hoverProps = { onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave };
+  const hoverProps = {
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave
+  };
 
   return { isHovered, isTransitioning, hoverProps };
 }

@@ -56,7 +56,12 @@ value: z.any(),
 **Remediation**:
 
 ```typescript
-value: z.union([z.string().max(10000), z.number().finite(), z.boolean(), z.array(z.string()).max(100)]).refine(val => {
+value: z.union([
+  z.string().max(10000),
+  z.number().finite(),
+  z.boolean(),
+  z.array(z.string()).max(100)
+]).refine(val => {
   if (typeof val === 'string') {
     return !/(eval|constructor|prototype|__proto__)/i.test(val);
   }
@@ -95,7 +100,8 @@ condition: z.string()
   .max(500)
   .refine(expr => {
     const safePattern = /^[a-zA-Z0-9\s\.\(\)\[\]===!==<>=+\-*\/&&\|\|]+$/;
-    const dangerousPatterns = /(eval|constructor|prototype|__proto__|function|=\s*>|import|require)/i;
+    const dangerousPatterns =
+      /(eval|constructor|prototype|__proto__|function|=\s*>|import|require)/i;
     return safePattern.test(expr) && !dangerousPatterns.test(expr);
   }, 'Expression contains unsafe patterns');
 ```
@@ -130,7 +136,11 @@ const result = lookup[key];
 if (!lookup || typeof lookup !== 'object') {
   return ctx.variables.get('defaultText') || '';
 }
-if (!lookup.hasOwnProperty(key) || key.includes('__proto__') || key.includes('constructor')) {
+if (
+  !lookup.hasOwnProperty(key) ||
+  key.includes('__proto__') ||
+  key.includes('constructor')
+) {
   return ctx.variables.get('defaultText') || '';
 }
 const result = lookup[key];

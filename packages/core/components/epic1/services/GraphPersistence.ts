@@ -145,7 +145,10 @@ export class GraphPersistence {
   /**
    * Pop last history snapshot (undo)
    */
-  static popHistory(): { nodes: Node<EditableNodeData>[]; edges: Edge[] } | null {
+  static popHistory(): {
+    nodes: Node<EditableNodeData>[];
+    edges: Edge[];
+  } | null {
     try {
       const historyStr = localStorage.getItem(HISTORY_KEY);
       const history = historyStr ? JSON.parse(historyStr) : [];

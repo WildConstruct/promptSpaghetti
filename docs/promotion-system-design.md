@@ -136,7 +136,7 @@ enum LifecycleStage {
   ACTIVE = 'active',
   OPTIMIZING = 'optimizing',
   COMPLETED = 'completed',
-  ANALYZED = 'analyzed',
+  ANALYZED = 'analyzed'
 }
 ```
 
@@ -433,11 +433,20 @@ class CampaignService {
   manageCampaignLifecycle(id: string, action: LifecycleAction): Promise<void>;
 
   // Content Management
-  assignContent(campaignId: string, content: ContentAssignment[]): Promise<void>;
-  optimizeContent(campaignId: string, strategy: OptimizationStrategy): Promise<void>;
+  assignContent(
+    campaignId: string,
+    content: ContentAssignment[]
+  ): Promise<void>;
+  optimizeContent(
+    campaignId: string,
+    strategy: OptimizationStrategy
+  ): Promise<void>;
 
   // A/B Testing
-  createExperiment(campaignId: string, config: ExperimentConfig): Promise<Experiment>;
+  createExperiment(
+    campaignId: string,
+    config: ExperimentConfig
+  ): Promise<Experiment>;
   analyzeResults(experimentId: string): Promise<ExperimentResults>;
 }
 ```
@@ -448,15 +457,27 @@ class CampaignService {
 class ContentEngine {
   // Content Selection
   selectContent(criteria: SelectionCriteria): Promise<ContentSelection>;
-  rankContent(content: Template[], context: UserContext): Promise<RankedContent[]>;
+  rankContent(
+    content: Template[],
+    context: UserContext
+  ): Promise<RankedContent[]>;
 
   // Performance Analysis
-  analyzePerformance(contentId: string, timeframe: TimeRange): Promise<PerformanceAnalysis>;
-  predictPerformance(content: Template[], placement: PlacementSlot): Promise<PerformancePrediction>;
+  analyzePerformance(
+    contentId: string,
+    timeframe: TimeRange
+  ): Promise<PerformanceAnalysis>;
+  predictPerformance(
+    content: Template[],
+    placement: PlacementSlot
+  ): Promise<PerformancePrediction>;
 
   // Machine Learning
   trainRecommendationModel(trainingData: MLTrainingData): Promise<MLModel>;
-  applyPersonalization(userId: string, content: Template[]): Promise<PersonalizedContent[]>;
+  applyPersonalization(
+    userId: string,
+    content: Template[]
+  ): Promise<PersonalizedContent[]>;
 }
 ```
 
@@ -470,10 +491,15 @@ class AnalyticsService {
 
   // Historical Analysis
   generateReport(request: ReportRequest): Promise<AnalyticsReport>;
-  performCohortAnalysis(cohortDefinition: CohortDefinition): Promise<CohortAnalysis>;
+  performCohortAnalysis(
+    cohortDefinition: CohortDefinition
+  ): Promise<CohortAnalysis>;
 
   // Predictive Analytics
-  forecastPerformance(campaignId: string, horizon: number): Promise<PerformanceForecast>;
+  forecastPerformance(
+    campaignId: string,
+    horizon: number
+  ): Promise<PerformanceForecast>;
   detectAnomalies(metrics: MetricsStream): Promise<AnomalyDetection>;
 }
 ```
@@ -488,7 +514,10 @@ class AnalyticsService {
 interface MarketplaceIntegration {
   // Template Data Sync
   syncTemplateData(): Promise<SyncResult>;
-  updateTemplateMetrics(templateId: string, metrics: TemplateMetrics): Promise<void>;
+  updateTemplateMetrics(
+    templateId: string,
+    metrics: TemplateMetrics
+  ): Promise<void>;
 
   // Purchase Event Integration
   handlePurchaseEvent(event: PurchaseEvent): Promise<void>;
@@ -506,15 +535,24 @@ interface MarketplaceIntegration {
 interface UserIntegration {
   // User Segmentation
   getUserSegments(userId: string): Promise<UserSegment[]>;
-  updateUserPreferences(userId: string, preferences: UserPreferences): Promise<void>;
+  updateUserPreferences(
+    userId: string,
+    preferences: UserPreferences
+  ): Promise<void>;
 
   // Behavioral Tracking
   trackUserBehavior(userId: string, behavior: BehaviorEvent): Promise<void>;
-  analyzeUserJourney(userId: string, timeframe: TimeRange): Promise<UserJourney>;
+  analyzeUserJourney(
+    userId: string,
+    timeframe: TimeRange
+  ): Promise<UserJourney>;
 
   // Personalization
   getPersonalizationProfile(userId: string): Promise<PersonalizationProfile>;
-  updatePersonalizationModel(userId: string, interactions: Interaction[]): Promise<void>;
+  updatePersonalizationModel(
+    userId: string,
+    interactions: Interaction[]
+  ): Promise<void>;
 }
 ```
 
@@ -544,7 +582,10 @@ interface AdvertisingPlatformIntegration {
   syncCampaignToFacebookAds(campaign: Campaign): Promise<FacebookAdsCampaign>;
 
   // Performance Data Import
-  importPlatformMetrics(platform: string, campaignId: string): Promise<PlatformMetrics>;
+  importPlatformMetrics(
+    platform: string,
+    campaignId: string
+  ): Promise<PlatformMetrics>;
 
   // Audience Synchronization
   syncAudienceSegments(segments: UserSegment[]): Promise<AudienceSyncResult>;

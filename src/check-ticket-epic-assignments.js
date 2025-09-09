@@ -21,7 +21,7 @@ const examples = {
   story: [],
   tags: [],
   source: [],
-  untagged: [],
+  untagged: []
 };
 
 tasks.forEach(task => {
@@ -40,15 +40,23 @@ tasks.forEach(task => {
     if (examples.source.length < 5) examples.source.push(task);
   }
 
-  if (!task.story && (!task.tags || task.tags.length === 0) && (!task.metadata || !task.metadata.source)) {
+  if (
+    !task.story &&
+    (!task.tags || task.tags.length === 0) &&
+    (!task.metadata || !task.metadata.source)
+  ) {
     completelyUntagged++;
     if (examples.untagged.length < 10) examples.untagged.push(task);
   }
 });
 
 console.log('📊 EPIC ASSIGNMENT STATUS:');
-console.log(`   📖 Tasks with story field: ${withStoryField} (${Math.round((withStoryField / tasks.length) * 100)}%)`);
-console.log(`   🏷️  Tasks with tags field: ${withTagsField} (${Math.round((withTagsField / tasks.length) * 100)}%)`);
+console.log(
+  `   📖 Tasks with story field: ${withStoryField} (${Math.round((withStoryField / tasks.length) * 100)}%)`
+);
+console.log(
+  `   🏷️  Tasks with tags field: ${withTagsField} (${Math.round((withTagsField / tasks.length) * 100)}%)`
+);
 console.log(
   `   📋 Tasks with source field: ${withSourceField} (${Math.round((withSourceField / tasks.length) * 100)}%)`
 );
@@ -85,9 +93,13 @@ if (examples.source.length > 0) {
   console.log('');
 }
 
-console.log(`❌ UNTAGGED TASKS (${Math.min(examples.untagged.length, 10)} shown of ${completelyUntagged}):`);
+console.log(
+  `❌ UNTAGGED TASKS (${Math.min(examples.untagged.length, 10)} shown of ${completelyUntagged}):`
+);
 examples.untagged.forEach(task => {
-  console.log(`   • ${task.id}: ${(task.title || 'No title').substring(0, 60)}...`);
+  console.log(
+    `   • ${task.id}: ${(task.title || 'No title').substring(0, 60)}...`
+  );
 });
 
 console.log('\n🎯 DIAGNOSIS:');
@@ -95,8 +107,12 @@ if (completelyUntagged > tasks.length * 0.8) {
   console.log(
     `❌ MAJOR PROBLEM: ${Math.round((completelyUntagged / tasks.length) * 100)}% of tickets have no epic assignments!`
   );
-  console.log('   The tickets themselves are not properly tagged with their source epic.');
-  console.log("   This means agents can't filter by epic and the dashboard can't show proper categories.");
+  console.log(
+    '   The tickets themselves are not properly tagged with their source epic.'
+  );
+  console.log(
+    "   This means agents can't filter by epic and the dashboard can't show proper categories."
+  );
 } else if (completelyUntagged > tasks.length * 0.5) {
   console.log(
     `⚠️  MODERATE PROBLEM: ${Math.round((completelyUntagged / tasks.length) * 100)}% of tickets lack epic assignments.`
@@ -108,28 +124,48 @@ if (completelyUntagged > tasks.length * 0.8) {
 // Check if auth/file browser tasks exist with proper assignments
 const authTasks = tasks.filter(task => {
   const title = (task.title || '').toLowerCase();
-  return title.includes('auth') || title.includes('login') || title.includes('password');
+  return (
+    title.includes('auth') ||
+    title.includes('login') ||
+    title.includes('password')
+  );
 });
 
 const fileTasks = tasks.filter(task => {
   const title = (task.title || '').toLowerCase();
-  return title.includes('file') || title.includes('project') || title.includes('save');
+  return (
+    title.includes('file') ||
+    title.includes('project') ||
+    title.includes('save')
+  );
 });
 
 console.log('\n🔍 CONTENT ANALYSIS:');
 console.log(`   🔐 Auth-related titles: ${authTasks.length} tasks`);
 console.log(`   📁 File-related titles: ${fileTasks.length} tasks`);
 
-const properlyTaggedAuth = authTasks.filter(t => t.story || (t.tags && t.tags.length > 0));
-const properlyTaggedFile = fileTasks.filter(t => t.story || (t.tags && t.tags.length > 0));
+const properlyTaggedAuth = authTasks.filter(
+  t => t.story || (t.tags && t.tags.length > 0)
+);
+const properlyTaggedFile = fileTasks.filter(
+  t => t.story || (t.tags && t.tags.length > 0)
+);
 
-console.log(`   ✅ Auth tasks with epic tags: ${properlyTaggedAuth.length}/${authTasks.length}`);
-console.log(`   ✅ File tasks with epic tags: ${properlyTaggedFile.length}/${fileTasks.length}`);
+console.log(
+  `   ✅ Auth tasks with epic tags: ${properlyTaggedAuth.length}/${authTasks.length}`
+);
+console.log(
+  `   ✅ File tasks with epic tags: ${properlyTaggedFile.length}/${fileTasks.length}`
+);
 
 if (properlyTaggedAuth.length === 0 && authTasks.length > 0) {
-  console.log(`\n❌ AUTH ISSUE: Found ${authTasks.length} auth-related tasks but none have epic assignments!`);
+  console.log(
+    `\n❌ AUTH ISSUE: Found ${authTasks.length} auth-related tasks but none have epic assignments!`
+  );
 }
 
 if (properlyTaggedFile.length === 0 && fileTasks.length > 0) {
-  console.log(`\n❌ FILE ISSUE: Found ${fileTasks.length} file-related tasks but none have epic assignments!`);
+  console.log(
+    `\n❌ FILE ISSUE: Found ${fileTasks.length} file-related tasks but none have epic assignments!`
+  );
 }

@@ -15,7 +15,7 @@ console.log('🎯 Starting Ticketing Dashboard Server...\n');
 // Use Python's built-in HTTP server (available on most systems)
 const server = spawn('python3', ['-m', 'http.server', '8000'], {
   stdio: 'inherit',
-  cwd: __dirname,
+  cwd: __dirname
 });
 
 server.on('error', error => {
@@ -24,7 +24,7 @@ server.on('error', error => {
   // Fallback to python (Python 2 or systems where python3 is called python)
   const server2 = spawn('python', ['-m', 'SimpleHTTPServer', '8000'], {
     stdio: 'inherit',
-    cwd: __dirname,
+    cwd: __dirname
   });
 
   server2.on('error', error2 => {

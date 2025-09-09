@@ -224,12 +224,20 @@ class DataHandlingService {
     return requirements;
   }
 
-  validateHandling(data: any, classification: string, operation: string): ValidationResult {
+  validateHandling(
+    data: any,
+    classification: string,
+    operation: string
+  ): ValidationResult {
     const requirements = this.getHandlingRequirements(classification);
     return this.validateOperation(data, requirements, operation);
   }
 
-  enforceHandling(data: any, classification: string, context: OperationContext): Promise<void> {
+  enforceHandling(
+    data: any,
+    classification: string,
+    context: OperationContext
+  ): Promise<void> {
     const requirements = this.getHandlingRequirements(classification);
     return this.applyRequirements(data, requirements, context);
   }
@@ -252,7 +260,10 @@ class ClassificationEncryptionService {
         return this.aes256Encrypt(data, await this.getInternalKey());
 
       case 'CONFIDENTIAL':
-        return this.aes256EncryptWithRotation(data, await this.getConfidentialKey());
+        return this.aes256EncryptWithRotation(
+          data,
+          await this.getConfidentialKey()
+        );
 
       case 'RESTRICTED':
         return this.hsmEncrypt(data, await this.getRestrictedKey());
@@ -262,16 +273,30 @@ class ClassificationEncryptionService {
     }
   }
 
-  async decryptData(encryptedData: EncryptedData, classification: string): Promise<any> {
+  async decryptData(
+    encryptedData: EncryptedData,
+    classification: string
+  ): Promise<any> {
     // Implementation with appropriate decryption based on classification
   }
 
-  private getEncryptionRequirements(classification: string): EncryptionRequirements {
+  private getEncryptionRequirements(
+    classification: string
+  ): EncryptionRequirements {
     return {
       PUBLIC: { required: false },
       INTERNAL: { required: true, algorithm: 'AES-256-GCM', keyRotation: 365 },
-      CONFIDENTIAL: { required: true, algorithm: 'AES-256-GCM', keyRotation: 90 },
-      RESTRICTED: { required: true, algorithm: 'AES-256-GCM', keyRotation: 30, hsm: true },
+      CONFIDENTIAL: {
+        required: true,
+        algorithm: 'AES-256-GCM',
+        keyRotation: 90
+      },
+      RESTRICTED: {
+        required: true,
+        algorithm: 'AES-256-GCM',
+        keyRotation: 30,
+        hsm: true
+      }
     }[classification];
   }
 }
@@ -282,18 +307,30 @@ class ClassificationEncryptionService {
 ```typescript
 // Classification-based access control
 class ClassificationAccessControl {
-  async validateAccess(userId: string, dataId: string, operation: string): Promise<boolean> {
+  async validateAccess(
+    userId: string,
+    dataId: string,
+    operation: string
+  ): Promise<boolean> {
     const classification = await this.getDataClassification(dataId);
     const userPermissions = await this.getUserPermissions(userId);
     const requirements = this.getAccessRequirements(classification);
 
     // Check authentication level
-    if (!this.validateAuthenticationLevel(userPermissions.authLevel, requirements.authenticationLevel)) {
+    if (
+      !this.validateAuthenticationLevel(
+        userPermissions.authLevel,
+        requirements.authenticationLevel
+      )
+    ) {
       return false;
     }
 
     // Check authorization
-    if (requirements.authorizationRequired && !(await this.checkApproval(userId, dataId, operation))) {
+    if (
+      requirements.authorizationRequired &&
+      !(await this.checkApproval(userId, dataId, operation))
+    ) {
       return false;
     }
 
@@ -313,26 +350,26 @@ class ClassificationAccessControl {
         authenticationLevel: 'STANDARD',
         authorizationRequired: false,
         auditLogging: 'STANDARD',
-        exportRestrictions: false,
+        exportRestrictions: false
       },
       INTERNAL: {
         authenticationLevel: 'MFA',
         authorizationRequired: false,
         auditLogging: 'ENHANCED',
-        exportRestrictions: false,
+        exportRestrictions: false
       },
       CONFIDENTIAL: {
         authenticationLevel: 'STRONG_MFA',
         authorizationRequired: true,
         auditLogging: 'REALTIME',
-        exportRestrictions: true,
+        exportRestrictions: true
       },
       RESTRICTED: {
         authenticationLevel: 'BIOMETRIC',
         authorizationRequired: true,
         auditLogging: 'REALTIME',
-        exportRestrictions: true,
-      },
+        exportRestrictions: true
+      }
     }[classification];
   }
 }
@@ -397,8 +434,17 @@ class ClassificationMonitoringService {
     return {
       PUBLIC: { alerting: false, anomalyDetection: false },
       INTERNAL: { alerting: true, anomalyDetection: true, threshold: 'LOW' },
-      CONFIDENTIAL: { alerting: true, anomalyDetection: true, threshold: 'MEDIUM' },
-      RESTRICTED: { alerting: true, anomalyDetection: true, threshold: 'HIGH', realtime: true },
+      CONFIDENTIAL: {
+        alerting: true,
+        anomalyDetection: true,
+        threshold: 'MEDIUM'
+      },
+      RESTRICTED: {
+        alerting: true,
+        anomalyDetection: true,
+        threshold: 'HIGH',
+        realtime: true
+      }
     }[classification];
   }
 }
@@ -419,11 +465,14 @@ class ClassificationComplianceReporter {
       summary: {
         totalDataElements: classifications.length,
         violationCount: violations.length,
-        complianceScore: this.calculateComplianceScore(violations, classifications),
+        complianceScore: this.calculateComplianceScore(
+          violations,
+          classifications
+        )
       },
       byClassification: this.groupByClassification(classifications, violations),
       recommendations: this.generateRecommendations(violations),
-      trends: this.analyzeTrends(accessPatterns),
+      trends: this.analyzeTrends(accessPatterns)
     };
   }
 }

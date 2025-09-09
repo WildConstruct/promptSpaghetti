@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
 import type { Preset } from '../types';
-import { PreviewService, type BranchMap, type SimulateResult } from '../services/PreviewService';
+import {
+  PreviewService,
+  type BranchMap,
+  type SimulateResult
+} from '../services/PreviewService';
 
 type WorkerProxy = {
   simulate(p: Preset, opts: { seeds: number[] }): Promise<SimulateResult>;
@@ -14,16 +18,22 @@ function ensureWorker() {
 }
 
 export function usePreviewGenerator() {
-  const proxy = useMemo<WorkerProxy | null>(() => ensureWorker() as WorkerProxy | null, []);
+  const proxy = useMemo<WorkerProxy | null>(
+    () => ensureWorker() as WorkerProxy | null,
+    []
+  );
 
   return {
-    async simulate(preset: Preset, opts: { seeds: number[] }): Promise<SimulateResult> {
+    async simulate(
+      preset: Preset,
+      opts: { seeds: number[] }
+    ): Promise<SimulateResult> {
       if (proxy) return proxy.simulate(preset, opts);
       return PreviewService.simulate(preset, opts);
     },
     async branchMap(preset: Preset): Promise<BranchMap> {
       if (proxy) return proxy.branchMap(preset);
       return PreviewService.branchMap(preset);
-    },
+    }
   };
 }

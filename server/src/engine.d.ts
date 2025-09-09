@@ -20,5 +20,9 @@ export declare function executeGraph(
 /**
  * Legacy wrapper for backward compatibility - returns just the output strings
  */
-export declare function executeGraphLegacy(graph: Graph, sessionId?: string, userId?: number): Promise<string[]>;
+export declare function executeGraphLegacy(
+  graph: Graph,
+  sessionId?: string,
+  userId?: number
+): Promise<string[]>;
 //# sourceMappingURL=engine.d.ts.map

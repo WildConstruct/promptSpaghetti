@@ -154,7 +154,9 @@ User Journey: Method Selection
 
   <div class="step-actions">
     <button id="app-installed-btn" class="btn-primary">✅ App Installed</button>
-    <button id="different-method-btn" class="btn-secondary">Use Different Method</button>
+    <button id="different-method-btn" class="btn-secondary">
+      Use Different Method
+    </button>
   </div>
 </div>
 ```
@@ -226,7 +228,10 @@ User Journey: Method Selection
   <h3>🔐 Test Your Setup</h3>
 
   <div class="verification-test">
-    <p class="instruction">Open your authenticator app and enter the 6-digit code for <strong>YourApp</strong>:</p>
+    <p class="instruction">
+      Open your authenticator app and enter the 6-digit code for
+      <strong>YourApp</strong>:
+    </p>
 
     <div class="code-input-container">
       <div class="code-input-group">
@@ -239,12 +244,16 @@ User Journey: Method Selection
           placeholder="000000"
           autocomplete="one-time-code"
         />
-        <label for="verification-code" class="sr-only">6-digit verification code</label>
+        <label for="verification-code" class="sr-only"
+          >6-digit verification code</label
+        >
       </div>
 
       <div class="input-help">
         <p class="help-text">Enter the 6-digit number from your app</p>
-        <div class="code-refresh-timer">Code refreshes in: <span id="refresh-timer">25</span>s</div>
+        <div class="code-refresh-timer">
+          Code refreshes in: <span id="refresh-timer">25</span>s
+        </div>
       </div>
     </div>
 
@@ -268,7 +277,9 @@ User Journey: Method Selection
 
   <div class="sms-setup-container">
     <div class="phone-input-section">
-      <label for="phone-number" class="input-label"> 📱 Enter Your Mobile Number </label>
+      <label for="phone-number" class="input-label">
+        📱 Enter Your Mobile Number
+      </label>
 
       <div class="phone-input-group">
         <select id="country-code" class="country-select">
@@ -278,12 +289,20 @@ User Journey: Method Selection
           <!-- More country codes -->
         </select>
 
-        <input type="tel" id="phone-number" class="phone-input" placeholder="(555) 123-4567" autocomplete="tel" />
+        <input
+          type="tel"
+          id="phone-number"
+          class="phone-input"
+          placeholder="(555) 123-4567"
+          autocomplete="tel"
+        />
       </div>
 
       <div class="input-help">
         <p class="help-text">We'll send a verification code to this number</p>
-        <p class="security-notice">⚠️ SMS is less secure than authenticator apps</p>
+        <p class="security-notice">
+          ⚠️ SMS is less secure than authenticator apps
+        </p>
       </div>
     </div>
 
@@ -291,15 +310,20 @@ User Journey: Method Selection
       <div class="notice-card">
         <h4>🛡️ Fraud Protection Active</h4>
         <p>
-          We automatically detect suspicious activity. You may be asked to complete a CAPTCHA if fraud is suspected.
+          We automatically detect suspicious activity. You may be asked to
+          complete a CAPTCHA if fraud is suspected.
         </p>
       </div>
     </div>
   </div>
 
   <div class="step-actions">
-    <button id="send-sms-btn" class="btn-primary">📤 Send Verification Code</button>
-    <button id="different-method-btn" class="btn-secondary">Use Different Method</button>
+    <button id="send-sms-btn" class="btn-primary">
+      📤 Send Verification Code
+    </button>
+    <button id="different-method-btn" class="btn-secondary">
+      Use Different Method
+    </button>
   </div>
 </div>
 ```
@@ -315,30 +339,47 @@ User Journey: Method Selection
       <div class="warning-card">
         <h4>⚠️ Security Notice</h4>
         <p>
-          Email verification is the least secure MFA option. We recommend using an authenticator app for better
-          protection.
+          Email verification is the least secure MFA option. We recommend using
+          an authenticator app for better protection.
         </p>
-        <p><strong>Important:</strong> Make sure your email account has strong security (including its own MFA).</p>
+        <p>
+          <strong>Important:</strong> Make sure your email account has strong
+          security (including its own MFA).
+        </p>
       </div>
     </div>
 
     <div class="email-input-section">
-      <label for="email-address" class="input-label"> 📧 Confirm Your Email Address </label>
+      <label for="email-address" class="input-label">
+        📧 Confirm Your Email Address
+      </label>
 
       <div class="email-input-group">
-        <input type="email" id="email-address" class="email-input" value="user@example.com" readonly />
+        <input
+          type="email"
+          id="email-address"
+          class="email-input"
+          value="user@example.com"
+          readonly
+        />
         <button id="change-email-btn" class="btn-link">✏️ Change</button>
       </div>
 
       <div class="input-help">
-        <p class="help-text">Verification codes will be sent to this email address</p>
+        <p class="help-text">
+          Verification codes will be sent to this email address
+        </p>
       </div>
     </div>
   </div>
 
   <div class="step-actions">
-    <button id="setup-email-mfa-btn" class="btn-primary">📤 Set Up Email MFA</button>
-    <button id="upgrade-security-btn" class="btn-recommended">🔒 Use Authenticator Instead</button>
+    <button id="setup-email-mfa-btn" class="btn-primary">
+      📤 Set Up Email MFA
+    </button>
+    <button id="upgrade-security-btn" class="btn-recommended">
+      🔒 Use Authenticator Instead
+    </button>
   </div>
 </div>
 ```
@@ -351,13 +392,20 @@ User Journey: Method Selection
 
   <div class="recovery-setup-container">
     <div class="recovery-intro">
-      <p class="section-description">Choose backup methods in case you lose access to your primary MFA method:</p>
+      <p class="section-description">
+        Choose backup methods in case you lose access to your primary MFA
+        method:
+      </p>
     </div>
 
     <div class="recovery-options">
       <div class="recovery-option">
         <label class="option-card">
-          <input type="checkbox" name="recovery-method" value="recovery-codes" />
+          <input
+            type="checkbox"
+            name="recovery-method"
+            value="recovery-codes"
+          />
           <div class="option-content">
             <h4>🎫 Recovery Codes</h4>
             <p>One-time backup codes you can save securely</p>
@@ -393,8 +441,12 @@ User Journey: Method Selection
   </div>
 
   <div class="step-actions">
-    <button id="setup-recovery-btn" class="btn-primary">✅ Set Up Recovery</button>
-    <button id="skip-recovery-btn" class="btn-secondary">⏭️ Skip for Now</button>
+    <button id="setup-recovery-btn" class="btn-primary">
+      ✅ Set Up Recovery
+    </button>
+    <button id="skip-recovery-btn" class="btn-secondary">
+      ⏭️ Skip for Now
+    </button>
   </div>
 </div>
 ```
@@ -406,7 +458,9 @@ User Journey: Method Selection
   <div class="success-header">
     <div class="success-icon">🎉</div>
     <h2>MFA Setup Complete!</h2>
-    <p class="success-message">Your account is now more secure with multi-factor authentication.</p>
+    <p class="success-message">
+      Your account is now more secure with multi-factor authentication.
+    </p>
   </div>
 
   <div class="setup-summary">
@@ -456,8 +510,12 @@ User Journey: Method Selection
   </div>
 
   <div class="completion-actions">
-    <button id="continue-to-app-btn" class="btn-primary">🚀 Continue to App</button>
-    <button id="security-settings-btn" class="btn-secondary">⚙️ Security Settings</button>
+    <button id="continue-to-app-btn" class="btn-primary">
+      🚀 Continue to App
+    </button>
+    <button id="security-settings-btn" class="btn-secondary">
+      ⚙️ Security Settings
+    </button>
   </div>
 </div>
 ```
@@ -609,7 +667,9 @@ select:focus {
   <div class="error-icon">⚠️</div>
   <div class="error-content">
     <h3>Setup Issue Detected</h3>
-    <p class="error-message">We couldn't verify your authenticator app setup.</p>
+    <p class="error-message">
+      We couldn't verify your authenticator app setup.
+    </p>
     <div class="error-actions">
       <button class="btn-retry">🔄 Try Again</button>
       <button class="btn-alternative">📲 Use SMS Instead</button>
@@ -626,7 +686,7 @@ select:focus {
 const features = {
   camera: 'mediaDevices' in navigator,
   clipboard: 'clipboard' in navigator,
-  serviceWorker: 'serviceWorker' in navigator,
+  serviceWorker: 'serviceWorker' in navigator
 };
 
 // Provide alternatives for unsupported features
@@ -662,7 +722,7 @@ const mfaEnrollmentAPI = {
   POST: '/api/mfa/recovery/generate',
 
   // Complete enrollment
-  POST: '/api/mfa/enrollment/complete',
+  POST: '/api/mfa/enrollment/complete'
 };
 ```
 
@@ -674,7 +734,7 @@ const enrollmentRateLimit = {
   qrGeneration: '5 requests per 15 minutes',
   smsVerification: '3 requests per 15 minutes',
   emailVerification: '5 requests per 15 minutes',
-  totpVerification: '10 attempts per 15 minutes',
+  totpVerification: '10 attempts per 15 minutes'
 };
 
 // Session security
@@ -682,7 +742,7 @@ const enrollmentSession = {
   duration: '30 minutes',
   encryption: 'AES-256',
   csrfProtection: true,
-  secureHeaders: ['X-Frame-Options', 'X-Content-Type-Options'],
+  secureHeaders: ['X-Frame-Options', 'X-Content-Type-Options']
 };
 ```
 
@@ -700,7 +760,7 @@ const enrollmentMetrics = {
   method_selection_distribution: {
     totp: 0.45,
     sms: 0.4,
-    email: 0.15,
+    email: 0.15
   },
 
   // Drop-off points
@@ -708,8 +768,8 @@ const enrollmentMetrics = {
     method_selection: 0.05,
     app_installation: 0.12,
     qr_scanning: 0.08,
-    verification: 0.06,
-  },
+    verification: 0.06
+  }
 };
 ```
 

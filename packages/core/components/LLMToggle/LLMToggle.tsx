@@ -115,19 +115,19 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
   const [isEnabled, setIsEnabled] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [estimatedCost, setEstimatedCost] = useState<number>(0);
-  
+
   const llmService = getLLMService();
-  
+
   useEffect(() => {
     // Check if LLM service is available
     setIsEnabled(llmService.isEnabled());
   }, []);
-  
+
   const handleToggle = useCallback(() => {
     const newMode = mode === 'standard' ? 'llm-enhanced' : 'standard';
     setMode(newMode);
     onModeChange?.(newMode);
-    
+
     // Show cost estimate briefly when enabling LLM mode
     if (newMode === 'llm-enhanced') {
       const cost = llmService.estimateCost('sample prompt');
@@ -136,24 +136,40 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
       setTimeout(() => setShowTooltip(false), 3000);
     }
   }, [mode, onModeChange, llmService]);
-  
+
   const getModeIcon = () => {
     if (mode === 'llm-enhanced') {
       return (
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M8 2L10 6L14 7L11 10L12 14L8 12L4 14L5 10L2 7L6 6L8 2Z" 
-                fill="currentColor" stroke="currentColor" strokeWidth="1"/>
+          <path
+            d="M8 2L10 6L14 7L11 10L12 14L8 12L4 14L5 10L2 7L6 6L8 2Z"
+            fill="currentColor"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
         </svg>
       );
     }
     return (
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-        <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" fill="none"/>
-        <path d="M8 5V8L10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <circle
+          cx="8"
+          cy="8"
+          r="6"
+          stroke="currentColor"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d="M8 5V8L10 10"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
       </svg>
     );
   };
-  
+
   const buttonStyle = {
     ...styles.toggleButton,
     ...(mode === 'llm-enhanced' ? styles.toggleButtonLLM : {}),
@@ -167,17 +183,17 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
         onClick={handleToggle}
         disabled={!isEnabled}
         aria-label={`Parser mode: ${mode}`}
-        title={isEnabled ? `Switch to ${mode === 'standard' ? 'AI-Enhanced' : 'Standard'} parser` : 'AI parser not configured'}
+        title={
+          isEnabled
+            ? `Switch to ${mode === 'standard' ? 'AI-Enhanced' : 'Standard'} parser`
+            : 'AI parser not configured'
+        }
       >
         <span style={styles.icon}>{getModeIcon()}</span>
-        <span>
-          {mode === 'standard' ? 'Standard' : 'AI-Enhanced'}
-        </span>
-        {mode === 'llm-enhanced' && (
-          <span style={styles.indicator}></span>
-        )}
+        <span>{mode === 'standard' ? 'Standard' : 'AI-Enhanced'}</span>
+        {mode === 'llm-enhanced' && <span style={styles.indicator}></span>}
       </button>
-      
+
       {onConfigClick && (
         <button
           style={styles.configButton}
@@ -186,23 +202,33 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
           title="Configure AI settings"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 10C9.1 10 10 9.1 10 8C10 6.9 9.1 6 8 6C6.9 6 6 6.9 6 8C6 9.1 6.9 10 8 10Z" 
-                  stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M13 8L12 6L13 4L11 3L10 1L8 2L6 1L5 3L3 4L4 6L3 8L5 9L6 11L8 10L10 11L11 9L13 8Z" 
-                  stroke="currentColor" strokeWidth="1.5"/>
+            <path
+              d="M8 10C9.1 10 10 9.1 10 8C10 6.9 9.1 6 8 6C6.9 6 6 6.9 6 8C6 9.1 6.9 10 8 10Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M13 8L12 6L13 4L11 3L10 1L8 2L6 1L5 3L3 4L4 6L3 8L5 9L6 11L8 10L10 11L11 9L13 8Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
           </svg>
         </button>
       )}
-      
+
       {showTooltip && estimatedCost > 0 && (
         <div style={styles.tooltip}>
           <div style={styles.tooltipArrow}></div>
           <div>
-            <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>AI Mode Active</div>
+            <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
+              AI Mode Active
+            </div>
             <div>
               Enhanced parsing with AI assistance
               {estimatedCost > 0 && (
-                <div style={{ marginTop: '4px', fontSize: '12px', opacity: 0.9 }}>
+                <div
+                  style={{ marginTop: '4px', fontSize: '12px', opacity: 0.9 }}
+                >
                   Est. cost: ${estimatedCost.toFixed(6)}/parse
                 </div>
               )}
@@ -210,15 +236,18 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
           </div>
         </div>
       )}
-      
+
       {!isEnabled && (
         <div style={styles.statusBar}>
           <span>ℹ️</span>
           <span>AI parser not configured</span>
           {onConfigClick && (
-            <a 
-              href="#" 
-              onClick={(e) => { e.preventDefault(); onConfigClick(); }}
+            <a
+              href="#"
+              onClick={e => {
+                e.preventDefault();
+                onConfigClick();
+              }}
               style={styles.statusLink}
             >
               Configure

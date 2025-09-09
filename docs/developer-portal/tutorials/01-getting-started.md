@@ -81,7 +81,7 @@ import {
   CustomNodeConfig,
   CustomNodeRuntime,
   CustomNodeResult,
-  ValidationResult,
+  ValidationResult
 } from '@prompt-spaghetti/custom-node-sdk';
 
 /**
@@ -97,7 +97,7 @@ export class TextCapitalizer extends CustomNodeBase {
     return {
       valid: true,
       errors: [],
-      warnings: [],
+      warnings: []
     };
   }
 
@@ -113,8 +113,8 @@ export class TextCapitalizer extends CustomNodeBase {
 
       return {
         outputs: {
-          result,
-        },
+          result
+        }
       };
     } catch (error) {
       utils.log('error', 'Node execution failed', { error: error.message });
@@ -271,8 +271,8 @@ export const nodeMetadata = {
   version: '1.0.0',
   author: {
     name: 'Your Name',
-    email: 'your.email@example.com',
-  },
+    email: 'your.email@example.com'
+  }
 };
 
 // Export node schema
@@ -281,15 +281,15 @@ export const nodeSchema = {
     text: {
       type: 'string',
       required: true,
-      description: 'Text to capitalize',
-    },
+      description: 'Text to capitalize'
+    }
   },
   outputs: {
     result: {
       type: 'string',
-      description: 'Capitalized text',
-    },
-  },
+      description: 'Capitalized text'
+    }
+  }
 };
 ```
 

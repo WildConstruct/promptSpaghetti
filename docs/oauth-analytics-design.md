@@ -81,7 +81,12 @@ OAuth Analytics Framework
 interface OAuthUsageMetrics {
   providerId: string;
   timestamp: Date;
-  eventType: 'login_attempt' | 'login_success' | 'login_failure' | 'token_refresh' | 'logout';
+  eventType:
+    | 'login_attempt'
+    | 'login_success'
+    | 'login_failure'
+    | 'token_refresh'
+    | 'logout';
   userId: string;
   sessionId: string;
   ipAddress: string;
@@ -139,7 +144,11 @@ interface OAuthSecurityMetrics {
 }
 
 interface ThreatIndicator {
-  type: 'ip_reputation' | 'geolocation_anomaly' | 'device_anomaly' | 'behavioral_anomaly';
+  type:
+    | 'ip_reputation'
+    | 'geolocation_anomaly'
+    | 'device_anomaly'
+    | 'behavioral_anomaly';
   value: string;
   confidence: number;
   source: string;
@@ -216,7 +225,11 @@ interface ComplianceDetails {
 ```typescript
 interface PredictiveModel {
   modelId: string;
-  modelType: 'anomaly_detection' | 'usage_forecasting' | 'security_prediction' | 'performance_optimization';
+  modelType:
+    | 'anomaly_detection'
+    | 'usage_forecasting'
+    | 'security_prediction'
+    | 'performance_optimization';
   algorithm: 'lstm' | 'transformer' | 'isolation_forest' | 'autoencoder';
   trainingData: string;
   accuracy: number;
@@ -367,12 +380,12 @@ class OAuthAnalyticsStreamProcessor {
           this.processUsageEvent(event),
           this.processSecurityEvent(event),
           this.processComplianceEvent(event),
-          this.detectAnomalies(event),
+          this.detectAnomalies(event)
         ]);
 
         // Update real-time dashboards
         await this.updateDashboards(event);
-      },
+      }
     });
   }
 
@@ -384,7 +397,7 @@ class OAuthAnalyticsStreamProcessor {
         type: 'oauth_anomaly',
         severity: 'high',
         event,
-        anomalyScore,
+        anomalyScore
       });
     }
   }
@@ -497,7 +510,10 @@ interface DashboardSections {
 class OAuthAnomalyDetector {
   private models: Map<string, AnomalyModel> = new Map();
 
-  async trainModel(modelType: AnomalyModelType, trainingData: TrainingData): Promise<void> {
+  async trainModel(
+    modelType: AnomalyModelType,
+    trainingData: TrainingData
+  ): Promise<void> {
     const model = await this.createModel(modelType);
     await model.train(trainingData);
     this.models.set(modelType, model);
@@ -513,7 +529,7 @@ class OAuthAnomalyDetector {
         modelType,
         anomalyScore,
         threshold: model.threshold,
-        isAnomaly: anomalyScore > model.threshold,
+        isAnomaly: anomalyScore > model.threshold
       });
     }
 
@@ -529,7 +545,7 @@ class OAuthAnomalyDetector {
       responseTime: event.metrics.responseTime,
       successRate: event.metrics.successRate,
       geolocation: this.encodeGeolocation(event.dimensions.region),
-      deviceType: this.encodeDeviceType(event.dimensions.deviceType),
+      deviceType: this.encodeDeviceType(event.dimensions.deviceType)
     };
   }
 }
@@ -539,7 +555,10 @@ class OAuthAnomalyDetector {
 
 ```typescript
 class OAuthPredictiveAnalytics {
-  async forecastUsage(providerId: string, timeHorizon: TimeHorizon): Promise<UsageForecast> {
+  async forecastUsage(
+    providerId: string,
+    timeHorizon: TimeHorizon
+  ): Promise<UsageForecast> {
     const historicalData = await this.getHistoricalUsage(providerId);
     const model = this.models.get('usage_forecasting');
 
@@ -547,7 +566,7 @@ class OAuthPredictiveAnalytics {
       historical: historicalData,
       horizon: timeHorizon,
       seasonality: true,
-      trends: true,
+      trends: true
     });
 
     return {
@@ -557,7 +576,7 @@ class OAuthPredictiveAnalytics {
       confidence: forecast.confidence,
       seasonalPatterns: forecast.seasonality,
       trends: forecast.trends,
-      recommendations: this.generateRecommendations(forecast),
+      recommendations: this.generateRecommendations(forecast)
     };
   }
 
@@ -572,7 +591,7 @@ class OAuthPredictiveAnalytics {
       probability: prediction.probability,
       timeframe: prediction.timeframe,
       indicators: prediction.indicators,
-      mitigationStrategies: this.getMitigationStrategies(prediction.threatType),
+      mitigationStrategies: this.getMitigationStrategies(prediction.threatType)
     }));
   }
 }
@@ -591,7 +610,7 @@ export async function oauthAnalyticsRoutes(fastify: FastifyInstance) {
     const metrics = await analyticsService.getUsageMetrics({
       timeRange,
       providerId,
-      aggregation,
+      aggregation
     });
     return { success: true, data: metrics };
   });
@@ -602,7 +621,7 @@ export async function oauthAnalyticsRoutes(fastify: FastifyInstance) {
     const securityMetrics = await analyticsService.getSecurityMetrics({
       timeRange,
       severity,
-      resolved,
+      resolved
     });
     return { success: true, data: securityMetrics };
   });
@@ -619,7 +638,7 @@ export async function oauthAnalyticsRoutes(fastify: FastifyInstance) {
     const { predictionType, timeHorizon } = request.query;
     const predictions = await analyticsService.getPredictions({
       predictionType,
-      timeHorizon,
+      timeHorizon
     });
     return { success: true, data: predictions };
   });
@@ -630,7 +649,7 @@ export async function oauthAnalyticsRoutes(fastify: FastifyInstance) {
     const results = await analyticsService.executeCustomQuery({
       query,
       filters,
-      aggregations,
+      aggregations
     });
     return { success: true, data: results };
   });
@@ -681,7 +700,10 @@ class OptimizedAnalyticsProcessor {
   }
 
   // Efficient aggregation using time-bucketing
-  async createAggregations(events: OAuthAnalyticsEvent[], granularity: TimeGranularity): Promise<void> {
+  async createAggregations(
+    events: OAuthAnalyticsEvent[],
+    granularity: TimeGranularity
+  ): Promise<void> {
     const buckets = this.bucketByTime(events, granularity);
 
     for (const [bucket, bucketEvents] of buckets) {
@@ -726,7 +748,9 @@ class AnalyticsCacheManager {
 
 ```typescript
 class AnalyticsDataProtection {
-  async anonymizeUserData(event: OAuthAnalyticsEvent): Promise<OAuthAnalyticsEvent> {
+  async anonymizeUserData(
+    event: OAuthAnalyticsEvent
+  ): Promise<OAuthAnalyticsEvent> {
     return {
       ...event,
       userId: this.hashUserId(event.userId),
@@ -734,8 +758,8 @@ class AnalyticsDataProtection {
       dimensions: {
         ...event.dimensions,
         // Preserve analytics value while protecting privacy
-        region: this.generalizeRegion(event.dimensions.region),
-      },
+        region: this.generalizeRegion(event.dimensions.region)
+      }
     };
   }
 
@@ -783,7 +807,7 @@ class OAuthAnalyticsCollector extends AnalyticsCollector {
       dimensions: this.extractDimensions(metadata),
       metrics: this.extractMetrics(metadata),
       tags: this.extractTags(metadata),
-      metadata,
+      metadata
     };
 
     // Store in existing analytics database

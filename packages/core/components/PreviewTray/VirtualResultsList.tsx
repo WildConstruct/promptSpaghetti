@@ -11,7 +11,11 @@ interface VirtualResultsListProps {
   height: number;
 }
 
-const ResultRow: React.FC<ListChildComponentProps<ResultItem[]>> = ({ index, style, data }) => {
+const ResultRow: React.FC<ListChildComponentProps<ResultItem[]>> = ({
+  index,
+  style,
+  data
+}) => {
   const result = data[index];
   return (
     <div style={style} className="virtual-result-row">
@@ -21,7 +25,10 @@ const ResultRow: React.FC<ListChildComponentProps<ResultItem[]>> = ({ index, sty
   );
 };
 
-export const VirtualResultsList: React.FC<VirtualResultsListProps> = ({ results, height }) => {
+export const VirtualResultsList: React.FC<VirtualResultsListProps> = ({
+  results,
+  height
+}) => {
   if (results.length <= 100) {
     return (
       <div className="seed-tabs">

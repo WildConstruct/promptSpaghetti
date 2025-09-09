@@ -74,7 +74,7 @@ const performance = {
   multiUserLatency: '<100ms for 5 users',
   memoryUsage: '~1MB for 10k nodes',
   networkReduction: '66% vs JSON',
-  bundleSize: '~100KB minified',
+  bundleSize: '~100KB minified'
 };
 ```
 
@@ -125,7 +125,7 @@ const limitations = {
   memoryModel: 'stores all operations', // Storage/compute overhead
   conflictResolution: 'manual', // Requires custom algorithms
   offlineSupport: 'limited', // Depends on server connectivity
-  graphSupport: 'none built-in', // No graph-specific operations
+  graphSupport: 'none built-in' // No graph-specific operations
 };
 ```
 

@@ -7,10 +7,16 @@
 module.exports = {
   // Test environment and setup
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/tests/utils/globalTestSetup.ts', '<rootDir>/tests/integration/errorTestSetup.js'],
+  setupFilesAfterEnv: [
+    '<rootDir>/tests/utils/globalTestSetup.ts',
+    '<rootDir>/tests/integration/errorTestSetup.js'
+  ],
 
   // Test discovery
-  testMatch: ['<rootDir>/tests/integration/**/*.test.ts', '<rootDir>/tests/integration/**/*.test.js'],
+  testMatch: [
+    '<rootDir>/tests/integration/**/*.test.ts',
+    '<rootDir>/tests/integration/**/*.test.js'
+  ],
 
   // TypeScript support
   preset: 'ts-jest',
@@ -34,17 +40,17 @@ module.exports = {
             noEmit: true,
             resolveJsonModule: true,
             isolatedModules: true,
-            declaration: false,
-          },
-        },
-      },
-    ],
+            declaration: false
+          }
+        }
+      }
+    ]
   },
 
   // Module resolution
   moduleNameMapping: {
     '^@/(.*)$': '<rootDir>/$1',
-    '^~/(.*)$': '<rootDir>/$1',
+    '^~/(.*)$': '<rootDir>/$1'
   },
 
   // Coverage configuration
@@ -58,7 +64,7 @@ module.exports = {
     '!**/*.spec.{ts,js}',
     '!**/node_modules/**',
     '!**/dist/**',
-    '!**/build/**',
+    '!**/build/**'
   ],
   coverageReporters: ['text', 'lcov', 'html', 'json-summary'],
   coverageThreshold: {
@@ -66,21 +72,21 @@ module.exports = {
       branches: 70,
       functions: 70,
       lines: 70,
-      statements: 70,
+      statements: 70
     },
     // Higher thresholds for critical error handling code
     './server/src/websocket/': {
       branches: 85,
       functions: 85,
       lines: 85,
-      statements: 85,
+      statements: 85
     },
     './packages/core/': {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80,
-    },
+      statements: 80
+    }
   },
 
   // Test execution
@@ -108,8 +114,8 @@ module.exports = {
         expand: true,
         openReport: false,
         includeFailureMsg: true,
-        includeSuiteFailure: true,
-      },
+        includeSuiteFailure: true
+      }
     ],
     [
       'jest-junit',
@@ -121,19 +127,19 @@ module.exports = {
         suiteNameTemplate: '{filepath}',
         classNameTemplate: '{classname}',
         titleTemplate: '{title}',
-        includeConsoleOutput: true,
-      },
-    ],
+        includeConsoleOutput: true
+      }
+    ]
   ],
 
   // Global variables for tests
   globals: {
     'ts-jest': {
       useESM: false,
-      isolatedModules: true,
+      isolatedModules: true
     },
     __INTEGRATION_TEST_MODE__: true,
-    __ERROR_REPORTING_ENABLED__: true,
+    __ERROR_REPORTING_ENABLED__: true
   },
 
   // Test patterns and ignores
@@ -154,16 +160,19 @@ module.exports = {
   snapshotSerializers: [],
 
   // Watch mode configuration (for development)
-  watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname'
+  ],
 
   // Performance monitoring
   slowTestThreshold: 10, // Warn about tests taking longer than 10 seconds
 
   // Environment variables
   testEnvironmentOptions: {
-    NODE_ENV: 'test',
+    NODE_ENV: 'test'
   },
 
   // Custom result processor
-  testResultsProcessor: '<rootDir>/tests/integration/testResultProcessor.js',
+  testResultsProcessor: '<rootDir>/tests/integration/testResultProcessor.js'
 };

@@ -12,7 +12,9 @@ const path = require('path');
 
 async function showPriorityTasks() {
   console.log('🎯 PRIORITY TASKS DASHBOARD\n');
-  console.log('📋 Based on IMMEDIATE-PRIORITIES.md - Focus on business-critical features\n');
+  console.log(
+    '📋 Based on IMMEDIATE-PRIORITIES.md - Focus on business-critical features\n'
+  );
 
   try {
     // Load current state
@@ -37,13 +39,20 @@ async function showPriorityTasks() {
     );
 
     if (priorityTasks.length === 0) {
-      console.log('❌ No priority tasks found. Run: node src/create-priority-tickets.js');
+      console.log(
+        '❌ No priority tasks found. Run: node src/create-priority-tickets.js'
+      );
       return;
     }
 
     // Group by story - Epic 8 first, then existing priorities
     const epic8Tasks = priorityTasks
-      .filter(task => task.epic === 'Epic 8' || task.tags?.includes('epic-8') || task.tags?.includes('wild-construct'))
+      .filter(
+        task =>
+          task.epic === 'Epic 8' ||
+          task.tags?.includes('epic-8') ||
+          task.tags?.includes('wild-construct')
+      )
       .sort((a, b) => {
         // Sort by story order (8.1, 8.2, 8.3, etc)
         if (a.story && b.story) {
@@ -80,17 +89,25 @@ async function showPriorityTasks() {
       console.log('=' * 70);
       console.log('🎬 PRIORITY 1: EPIC 8 DEMO-READY PROOF OF CONCEPT');
       console.log('=' * 70);
-      console.log('🎯 Business Value: $2.3B Film Industry - Wild Construct Ecosystem Demo');
+      console.log(
+        '🎯 Business Value: $2.3B Film Industry - Wild Construct Ecosystem Demo'
+      );
       console.log('⏰ Timeline: 4-6 weeks to demo readiness');
-      console.log('🏆 Success: Filmmaker creates professional prompts in <2 minutes\n');
+      console.log(
+        '🏆 Success: Filmmaker creates professional prompts in <2 minutes\n'
+      );
 
       epic8Tasks.forEach((task, index) => {
         const statusIcon = getStatusIcon(task.state);
         const priorityIcon = getPriorityIcon(task.priority);
         const storyTitle = getEpic8StoryTitle(task.story);
 
-        console.log(`${index + 1}. ${statusIcon} ${priorityIcon} ${task.id}: ${task.title}`);
-        console.log(`   📊 Status: ${task.state} | ⏱️  Est: ${task.est} hours | 🏷️  Story: ${task.story}`);
+        console.log(
+          `${index + 1}. ${statusIcon} ${priorityIcon} ${task.id}: ${task.title}`
+        );
+        console.log(
+          `   📊 Status: ${task.state} | ⏱️  Est: ${task.est} hours | 🏷️  Story: ${task.story}`
+        );
         if (task.assignee) {
           console.log(`   👤 Assigned: ${task.assignee}`);
         }
@@ -103,7 +120,9 @@ async function showPriorityTasks() {
     console.log('=' * 70);
     console.log('🔐 PRIORITY 2: AUTHENTICATION TASKS (Story 20.1)');
     console.log('=' * 70);
-    console.log('📈 Business Value: Users can log in and access personal accounts\n');
+    console.log(
+      '📈 Business Value: Users can log in and access personal accounts\n'
+    );
 
     if (authTasks.length === 0) {
       console.log('   ❌ No authentication tasks available\n');
@@ -111,10 +130,17 @@ async function showPriorityTasks() {
       authTasks.forEach((task, index) => {
         const statusIcon = getStatusIcon(task.state);
         const priorityIcon = task.priority === 'high' ? '🔥' : '⚡';
-        const assigneeText = task.assignee === 'Unassigned' ? '🔓 Available' : `👤 ${task.assignee}`;
+        const assigneeText =
+          task.assignee === 'Unassigned'
+            ? '🔓 Available'
+            : `👤 ${task.assignee}`;
 
-        console.log(`${index + 1}. ${statusIcon} ${priorityIcon} ${task.id}: ${task.title}`);
-        console.log(`   📊 Status: ${task.state} | ⏱️  Est: ${task.estimate} | 🏷️  Class: ${task.wipClass}`);
+        console.log(
+          `${index + 1}. ${statusIcon} ${priorityIcon} ${task.id}: ${task.title}`
+        );
+        console.log(
+          `   📊 Status: ${task.state} | ⏱️  Est: ${task.estimate} | 🏷️  Class: ${task.wipClass}`
+        );
         console.log(`   👤 ${assigneeText}`);
         console.log(`   🎯 Value: ${task.businessValue}`);
         console.log(`   🏷️  Tags: ${task.tags.join(', ')}`);
@@ -129,7 +155,9 @@ async function showPriorityTasks() {
     console.log('=' * 70);
     console.log('📁 PRIORITY 2: FILE BROWSER TASKS (Story 20.2)');
     console.log('=' * 70);
-    console.log('📈 Business Value: Users can save/load projects and not lose work\n');
+    console.log(
+      '📈 Business Value: Users can save/load projects and not lose work\n'
+    );
 
     if (fileTasks.length === 0) {
       console.log('   ❌ No file browser tasks available\n');
@@ -137,10 +165,17 @@ async function showPriorityTasks() {
       fileTasks.forEach((task, index) => {
         const statusIcon = getStatusIcon(task.state);
         const priorityIcon = task.priority === 'high' ? '🔥' : '⚡';
-        const assigneeText = task.assignee === 'Unassigned' ? '🔓 Available' : `👤 ${task.assignee}`;
+        const assigneeText =
+          task.assignee === 'Unassigned'
+            ? '🔓 Available'
+            : `👤 ${task.assignee}`;
 
-        console.log(`${index + 1}. ${statusIcon} ${priorityIcon} ${task.id}: ${task.title}`);
-        console.log(`   📊 Status: ${task.state} | ⏱️  Est: ${task.estimate} | 🏷️  Class: ${task.wipClass}`);
+        console.log(
+          `${index + 1}. ${statusIcon} ${priorityIcon} ${task.id}: ${task.title}`
+        );
+        console.log(
+          `   📊 Status: ${task.state} | ⏱️  Est: ${task.estimate} | 🏷️  Class: ${task.wipClass}`
+        );
         console.log(`   👤 ${assigneeText}`);
         console.log(`   🎯 Value: ${task.businessValue}`);
         console.log(`   🏷️  Tags: ${task.tags.join(', ')}`);
@@ -156,42 +191,71 @@ async function showPriorityTasks() {
     const availableEpic8Tasks = epic8Tasks.filter(
       t => t.state === 'UNASSIGNED' && (!t.assignee || t.assignee === null)
     );
-    const availableAuthTasks = authTasks.filter(t => t.state === 'TODO' && t.assignee === 'Unassigned');
-    const availableFileTasks = fileTasks.filter(t => t.state === 'TODO' && t.assignee === 'Unassigned');
-    const totalAvailable = availableEpic8Tasks.length + availableAuthTasks.length + availableFileTasks.length;
+    const availableAuthTasks = authTasks.filter(
+      t => t.state === 'TODO' && t.assignee === 'Unassigned'
+    );
+    const availableFileTasks = fileTasks.filter(
+      t => t.state === 'TODO' && t.assignee === 'Unassigned'
+    );
+    const totalAvailable =
+      availableEpic8Tasks.length +
+      availableAuthTasks.length +
+      availableFileTasks.length;
 
     console.log('📊 SUMMARY STATISTICS');
     console.log('=' * 70);
     console.log(
       `🔓 Available Tasks: ${totalAvailable} (${availableEpic8Tasks.length} epic8 + ${availableAuthTasks.length} auth + ${availableFileTasks.length} file)`
     );
-    console.log(`🎬 Epic 8 Tasks: ${epic8Tasks.length} total (${availableEpic8Tasks.length} available)`);
+    console.log(
+      `🎬 Epic 8 Tasks: ${epic8Tasks.length} total (${availableEpic8Tasks.length} available)`
+    );
     console.log(`🔐 Authentication Tasks: ${authTasks.length} total`);
     console.log(`📁 File Browser Tasks: ${fileTasks.length} total`);
-    console.log(`⏱️  Total Estimated Time: ${calculateTotalTime(priorityTasks)}`);
+    console.log(
+      `⏱️  Total Estimated Time: ${calculateTotalTime(priorityTasks)}`
+    );
     console.log('');
 
     // Instructions for agents
     console.log('🤖 AGENT INSTRUCTIONS');
     console.log('=' * 70);
-    console.log('1. 🎯 FOCUS: Work on Epic 8 Demo-Ready Proof of Concept (HIGHEST PRIORITY)');
-    console.log('2. 🎬 Epic 8 tasks are TOP PRIORITY for Wild Construct film industry demo');
-    console.log('3. 🔐 Then Authentication tasks (Story 20.1) if no Epic 8 work available');
-    console.log('4. 📁 Then File Browser tasks (Story 20.2) for user retention');
-    console.log('5. 🚫 AVOID: Epic 19 privacy/compliance tasks (deprioritized per PM)');
+    console.log(
+      '1. 🎯 FOCUS: Work on Epic 8 Demo-Ready Proof of Concept (HIGHEST PRIORITY)'
+    );
+    console.log(
+      '2. 🎬 Epic 8 tasks are TOP PRIORITY for Wild Construct film industry demo'
+    );
+    console.log(
+      '3. 🔐 Then Authentication tasks (Story 20.1) if no Epic 8 work available'
+    );
+    console.log(
+      '4. 📁 Then File Browser tasks (Story 20.2) for user retention'
+    );
+    console.log(
+      '5. 🚫 AVOID: Epic 19 privacy/compliance tasks (deprioritized per PM)'
+    );
     console.log('');
     console.log('🔧 TO GRAB EPIC 8 TASKS (RECOMMENDED):');
     console.log('   node src/grab-tasks.js <your-agent-id> 3 --epic=8');
-    console.log('   node src/grab-tasks.js <your-agent-id> 2 --story=8.1  # Professional Interface');
-    console.log('   node src/grab-tasks.js <your-agent-id> 2 --story=8.2  # Director Variables');
+    console.log(
+      '   node src/grab-tasks.js <your-agent-id> 2 --story=8.1  # Professional Interface'
+    );
+    console.log(
+      '   node src/grab-tasks.js <your-agent-id> 2 --story=8.2  # Director Variables'
+    );
     console.log('');
     console.log('🔧 TO GRAB PRIORITY TASKS:');
-    console.log('   node src/grab-tasks.js <your-agent-id> <count> --priority-only');
+    console.log(
+      '   node src/grab-tasks.js <your-agent-id> <count> --priority-only'
+    );
     console.log('   (Now includes Epic 8 tasks as highest priority)');
     console.log('');
     console.log('🔍 EPIC 8 IS PRIORITIZED BY:');
     console.log('   - task.epic === "Epic 8" (automatic highest priority)');
-    console.log('   - task.tags.includes("epic-8") or task.tags.includes("wild-construct")');
+    console.log(
+      '   - task.tags.includes("epic-8") or task.tags.includes("wild-construct")'
+    );
     console.log('');
   } catch (error) {
     console.error('❌ Failed to show priority tasks:', error);
@@ -208,7 +272,7 @@ function getEpic8StoryTitle(story) {
     8.5: 'Real-Time Multi-Seed Preview - Sub-second generation with variance analysis',
     8.6: 'Structured Pipeline Export - VFX-ready JSON with ControlNet compatibility',
     8.7: 'Collaboration & Documentation Tools - Team workflow and template library',
-    8.8: 'Historical Data Integration Foundation - UTDG integration for authentic settings',
+    8.8: 'Historical Data Integration Foundation - UTDG integration for authentic settings'
   };
   return storyTitles[story] || `Epic 8 Story ${story}`;
 }
@@ -232,7 +296,7 @@ function getStatusIcon(status) {
     IN_PROGRESS: '⚠️',
     REVIEW: '👁️',
     DONE: '✅',
-    BLOCKED: '🚫',
+    BLOCKED: '🚫'
   };
   return icons[status] || '❓';
 }

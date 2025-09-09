@@ -8,12 +8,15 @@ import {
   IncludeNode,
   OutputNode,
   SetVariableNode,
-  WeightedChoiceNode,
+  WeightedChoiceNode
 } from '../../packages/core/runtime/index.js';
 // Import advanced capabilities separately
 import { AdvancedExecutionUtils } from '../../packages/core/runtime/advanced.js';
 // Epic 13 Analytics Integration
-import { AnalyticsCollector, AnalyticsEventType } from './analytics/AnalyticsCollector';
+import {
+  AnalyticsCollector,
+  AnalyticsEventType
+} from './analytics/AnalyticsCollector';
 import { AnalyticsDAO } from './database/analytics-dao';
 import { getDatabase } from './database/connection';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,14 +25,23 @@ import { GraphExecutionTracker } from '../../packages/core/execution/ExecutionTr
 // Import advanced nodes directly to avoid circular dependencies
 import { WeightedAdvancedNode } from '../../packages/core/runtime/nodes/WeightedAdvanced.js';
 import { ConditionalNode } from '../../packages/core/runtime/nodes/Conditional.js';
-import { SequentialNode, createSequencePattern } from '../../packages/core/runtime/nodes/Sequential.js';
-import { MarkovNode, createTransitionMatrix } from '../../packages/core/runtime/nodes/Markov.js';
+import {
+  SequentialNode,
+  createSequencePattern
+} from '../../packages/core/runtime/nodes/Sequential.js';
+import {
+  MarkovNode,
+  createTransitionMatrix
+} from '../../packages/core/runtime/nodes/Markov.js';
 // Temporarily disabled due to compilation issues
 // import { PythonTransformNode } from '../../packages/core/runtime/nodes/PythonTransform';
 // Epic 8.4 Extension System imports
 import { ExtensionLifecycleManager } from '../../packages/core/extensions/ExtensionLifecycleManager.js';
 // Epic 8.2 Template Processing imports
-import { parseTemplate, substituteVariables } from '../../packages/core/utils/templateParser.js';
+import {
+  parseTemplate,
+  substituteVariables
+} from '../../packages/core/utils/templateParser.js';
 // Global analytics collector instance
 let analyticsCollector = null;
 let analyticsDAO = null;
@@ -74,7 +86,10 @@ function processTemplateVariables(template, executionContext) {
       return substituteVariables(template, variableValues);
     }
   } catch (error) {
-    console.warn('Template processing failed, returning original template:', error);
+    console.warn(
+      'Template processing failed, returning original template:',
+      error
+    );
   }
   // Return original template if anything fails (backward compatibility)
   return template;
@@ -90,7 +105,7 @@ export function initializeAnalytics() {
     analyticsCollector = new AnalyticsCollector({
       enabled: process.env.ANALYTICS_ENABLED !== 'false',
       sampleRate: parseFloat(process.env.ANALYTICS_SAMPLE_RATE || '1.0'),
-      privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true',
+      privacyMode: process.env.ANALYTICS_PRIVACY_MODE === 'true'
     });
     // Set up event storage handler
     analyticsCollector.on('events_flushed', events => {
@@ -141,16 +156,23 @@ export async function executeGraph(graph, sessionId, userId) {
   const trackingId = tracker.startTracking(graph.seed ?? Date.now());
   // Record graph execution start
   if (analyticsCollector) {
-    analyticsCollector.recordGraphExecutionStart(graphId, graph.nodes.length, graph.edges?.length || 0, graph.seed);
+    analyticsCollector.recordGraphExecutionStart(
+      graphId,
+      graph.nodes.length,
+      graph.edges?.length || 0,
+      graph.seed
+    );
   }
   try {
     // Check if graph contains advanced nodes
-    const hasAdvancedNodes = graph.nodes.some(node => isAdvancedNodeType(node.type));
+    const hasAdvancedNodes = graph.nodes.some(node =>
+      isAdvancedNodeType(node.type)
+    );
     // Create appropriate execution context
     const executionContext = hasAdvancedNodes
       ? AdvancedExecutionUtils.enhanceContext({
           variables: {},
-          seed: graph.seed ?? Date.now(),
+          seed: graph.seed ?? Date.now()
         })
       : { variables: {}, seed: graph.seed ?? Date.now() };
     const nodeMap = new Map();
@@ -179,8 +201,8 @@ export async function executeGraph(graph, sessionId, userId) {
             nodeId,
             nodeType: node.type,
             graphId,
-            executionId,
-          },
+            executionId
+          }
         });
       }
       try {
@@ -196,12 +218,16 @@ export async function executeGraph(graph, sessionId, userId) {
             executionInputs.push({
               sourceNodeId: inId,
               value: inputValue,
-              inputIndex: i,
+              inputIndex: i
             });
           }
         }
         // Instantiate runtime node per type
-        const runtimeNode = createRuntimeNode(node, resolvedInputs, executionContext);
+        const runtimeNode = createRuntimeNode(
+          node,
+          resolvedInputs,
+          executionContext
+        );
         const result = await runtimeNode.run(executionContext); // Cast needed for context compatibility
         memo.set(nodeId, result);
         // Record successful node execution
@@ -215,11 +241,15 @@ export async function executeGraph(graph, sessionId, userId) {
           timestamp: nodeStartTime,
           executionTimeMs,
           inputs: executionInputs,
-          output: result,
+          output: result
         };
         // Check if this is a randomization node and capture choice info
         if (isRandomizationNode(node.type)) {
-          const randomChoice = extractRandomChoiceInfo(node, result, resolvedInputs);
+          const randomChoice = extractRandomChoiceInfo(
+            node,
+            result,
+            resolvedInputs
+          );
           if (randomChoice) {
             executionStep.randomChoice = randomChoice;
             tracker.recordRandomChoice(trackingId, randomChoice);
@@ -234,7 +264,7 @@ export async function executeGraph(graph, sessionId, userId) {
           graphId,
           executionTimeMs,
           success: true,
-          error: undefined,
+          error: undefined
         });
         return result;
       } catch (error) {
@@ -267,7 +297,10 @@ export async function executeGraph(graph, sessionId, userId) {
     // Record successful graph execution
     const endTime = Date.now();
     const executionTimeMs = endTime - startTime;
-    const totalOutputLength = outputs.reduce((sum, output) => sum + output.length, 0);
+    const totalOutputLength = outputs.reduce(
+      (sum, output) => sum + output.length,
+      0
+    );
     if (analyticsCollector) {
       analyticsCollector.recordGraphExecutionComplete(
         graphId,
@@ -291,16 +324,19 @@ export async function executeGraph(graph, sessionId, userId) {
         connectionCount: countGraphConnections(graph),
         success: true,
         outputLength: totalOutputLength,
-        seedValue: typeof graph.seed === 'number' ? graph.seed : undefined,
+        seedValue: typeof graph.seed === 'number' ? graph.seed : undefined
       });
     }
     // Epic 8.5: Finish execution tracking and get execution path
-    const executionPath = tracker.finishTracking(trackingId, outputs.join('\n'));
+    const executionPath = tracker.finishTracking(
+      trackingId,
+      outputs.join('\n')
+    );
     // PERFORMANCE OPTIMIZATION: Flush batched analytics before returning
     flushAnalytics();
     return {
       outputs,
-      executionPath,
+      executionPath
     };
   } catch (error) {
     // Record failed graph execution
@@ -329,7 +365,7 @@ export async function executeGraph(graph, sessionId, userId) {
         connectionCount: countGraphConnections(graph),
         success: false,
         errorMessage: error instanceof Error ? error.message : String(error),
-        seedValue: typeof graph.seed === 'number' ? graph.seed : undefined,
+        seedValue: typeof graph.seed === 'number' ? graph.seed : undefined
       });
     }
     throw error;
@@ -358,7 +394,12 @@ function countGraphConnections(graph) {
  * Check if a node type is an advanced node that requires AdvancedExecutionContext
  */
 function isAdvancedNodeType(nodeType) {
-  const advancedNodeTypes = ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov']; // PythonTransform temporarily disabled
+  const advancedNodeTypes = [
+    'WeightedAdvanced',
+    'Conditional',
+    'Sequential',
+    'Markov'
+  ]; // PythonTransform temporarily disabled
   // Check built-in advanced nodes
   if (advancedNodeTypes.includes(nodeType)) {
     return true;
@@ -391,7 +432,10 @@ function createRuntimeNode(node, resolvedInputs, executionContext) {
       // Process template if available, otherwise use first input (backward compatibility)
       let output = resolvedInputs[0];
       if (node.template && node.template.trim()) {
-        const processedTemplate = processTemplateVariables(node.template, executionContext);
+        const processedTemplate = processTemplateVariables(
+          node.template,
+          executionContext
+        );
         // Only use processed template if it's different and valid
         output = processedTemplate || output;
       }
@@ -403,7 +447,10 @@ function createRuntimeNode(node, resolvedInputs, executionContext) {
       // Process template if available, otherwise use node.value (backward compatibility)
       let value = node.value;
       if (node.template && node.template.trim()) {
-        const processedTemplate = processTemplateVariables(node.template, executionContext);
+        const processedTemplate = processTemplateVariables(
+          node.template,
+          executionContext
+        );
         // Only use processed template if it's different and valid
         value = processedTemplate || value;
       }
@@ -434,21 +481,32 @@ function createRuntimeNode(node, resolvedInputs, executionContext) {
         }
         config.customFunctions = funcs;
       }
-      return new ConditionalNode(node.id, node.branches || [], node.defaultOutput || '', config);
+      return new ConditionalNode(
+        node.id,
+        node.branches || [],
+        node.defaultOutput || '',
+        config
+      );
     }
     case 'Sequential':
       const patternConfig = node.pattern?.config || {};
-      const pattern = createSequencePattern(node.pattern?.type || 'linear', patternConfig);
+      const pattern = createSequencePattern(
+        node.pattern?.type || 'linear',
+        patternConfig
+      );
       return new SequentialNode(node.id, node.sequence || [], pattern);
     case 'Markov':
       // Handle empty states by providing a minimal default configuration
-      const states = node.states && node.states.length > 0 ? node.states : ['default'];
+      const states =
+        node.states && node.states.length > 0 ? node.states : ['default'];
       const transitions =
-        node.transitions && Object.keys(node.transitions).length > 0 ? node.transitions : { default: { default: 1.0 } };
+        node.transitions && Object.keys(node.transitions).length > 0
+          ? node.transitions
+          : { default: { default: 1.0 } };
       const transitionMatrix = createTransitionMatrix({
         states,
         transitions,
-        initialState: node.initialState || states[0],
+        initialState: node.initialState || states[0]
       });
       return new MarkovNode(node.id, transitionMatrix, node.markovConfig || {});
     // Epic 8 Python Integration - Temporarily disabled
@@ -456,7 +514,11 @@ function createRuntimeNode(node, resolvedInputs, executionContext) {
       throw new Error('PythonTransform node is not yet implemented');
     default:
       // Epic 8.4 Extension System - Try to find extension nodes
-      const extensionNode = tryCreateExtensionNode(node, resolvedInputs, executionContext);
+      const extensionNode = tryCreateExtensionNode(
+        node,
+        resolvedInputs,
+        executionContext
+      );
       if (extensionNode) {
         return extensionNode;
       }
@@ -468,7 +530,13 @@ function createRuntimeNode(node, resolvedInputs, executionContext) {
  * Check if a node type involves randomization for execution path tracking
  */
 function isRandomizationNode(nodeType) {
-  const randomizationTypes = ['WeightedChoice', 'WeightedAdvanced', 'Conditional', 'Sequential', 'Markov'];
+  const randomizationTypes = [
+    'WeightedChoice',
+    'WeightedAdvanced',
+    'Conditional',
+    'Sequential',
+    'Markov'
+  ];
   return randomizationTypes.includes(nodeType);
 }
 /**
@@ -484,14 +552,15 @@ function extractRandomChoiceInfo(node, result, resolvedInputs) {
         if (selectedIndex >= 0) {
           const weight = weights[selectedIndex] || 1;
           const totalWeight = weights.reduce((sum, w) => sum + w, 0);
-          const probability = totalWeight > 0 ? weight / totalWeight : 1 / choices.length;
+          const probability =
+            totalWeight > 0 ? weight / totalWeight : 1 / choices.length;
           return {
             choiceType: 'weighted',
             availableOptions: choices,
             selectedOption: result,
             selectionReason: `Selected "${result}" with weight ${weight}`,
             probability,
-            weight,
+            weight
           };
         }
         break;
@@ -503,7 +572,7 @@ function extractRandomChoiceInfo(node, result, resolvedInputs) {
             choiceType: 'weighted',
             availableOptions: choices,
             selectedOption: result,
-            selectionReason: `Advanced weighted selection of "${result}"`,
+            selectionReason: `Advanced weighted selection of "${result}"`
           };
         }
         break;
@@ -512,9 +581,11 @@ function extractRandomChoiceInfo(node, result, resolvedInputs) {
         const branches = node.branches || [];
         return {
           choiceType: 'conditional',
-          availableOptions: branches.map((b, i) => `Branch ${i + 1}: ${b.condition || 'default'}`),
+          availableOptions: branches.map(
+            (b, i) => `Branch ${i + 1}: ${b.condition || 'default'}`
+          ),
           selectedOption: result,
-          selectionReason: `Conditional evaluation resulted in "${result}"`,
+          selectionReason: `Conditional evaluation resulted in "${result}"`
         };
       }
       case 'Sequential': {
@@ -523,7 +594,7 @@ function extractRandomChoiceInfo(node, result, resolvedInputs) {
           choiceType: 'sequential',
           availableOptions: sequence,
           selectedOption: result,
-          selectionReason: `Sequential selection of "${result}"`,
+          selectionReason: `Sequential selection of "${result}"`
         };
       }
       case 'Markov': {
@@ -532,12 +603,15 @@ function extractRandomChoiceInfo(node, result, resolvedInputs) {
           choiceType: 'markov',
           availableOptions: states,
           selectedOption: result,
-          selectionReason: `Markov state transition to "${result}"`,
+          selectionReason: `Markov state transition to "${result}"`
         };
       }
     }
   } catch (error) {
-    console.warn(`Failed to extract random choice info for ${node.type}:`, error);
+    console.warn(
+      `Failed to extract random choice info for ${node.type}:`,
+      error
+    );
   }
   return null;
 }
@@ -558,7 +632,11 @@ function tryCreateExtensionNode(node, resolvedInputs, executionContext) {
           // Create the extension node instance
           // Convert node properties to config object (excluding id, type, and inputs)
           const { id, type, inputs, ...nodeConfig } = node;
-          const extensionNode = nodeExtension.createNode(node.type, node.id, nodeConfig);
+          const extensionNode = nodeExtension.createNode(
+            node.type,
+            node.id,
+            nodeConfig
+          );
           // Wrap in a RuntimeNode adapter if needed
           if (extensionNode && typeof extensionNode.run === 'function') {
             return extensionNode;
@@ -568,7 +646,10 @@ function tryCreateExtensionNode(node, resolvedInputs, executionContext) {
     }
     return null;
   } catch (error) {
-    console.warn(`Failed to create extension node for type ${node.type}:`, error);
+    console.warn(
+      `Failed to create extension node for type ${node.type}:`,
+      error
+    );
     return null;
   }
 }

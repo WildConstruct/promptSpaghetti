@@ -1,9 +1,11 @@
 # Deployment & Integration Guide
 
 ## Overview
+
 This guide walks through deploying the Prompt Spaghetti application with all features from Stories 1.22-1.28 integrated, including authentication, cloud storage, and advanced UI features.
 
 ## Prerequisites
+
 - Node.js 20.11.0+
 - pnpm 8.0.0+
 - Netlify account (for deployment)
@@ -12,10 +14,12 @@ This guide walks through deploying the Prompt Spaghetti application with all fea
 ## 1. Supabase Setup
 
 ### 1.1 Create Supabase Project
+
 1. Go to [supabase.com](https://supabase.com) and create a new project
 2. Note your project URL and anon key from Settings > API
 
 ### 1.2 Configure Authentication
+
 1. Navigate to Authentication > Providers
 2. Enable Email/Password authentication:
    - Enable email confirmations (recommended)
@@ -32,6 +36,7 @@ This guide walks through deploying the Prompt Spaghetti application with all fea
    - Add localhost for development: `http://localhost:3000`
 
 ### 1.3 Create Storage Bucket
+
 ```sql
 -- Run in Supabase SQL Editor
 CREATE POLICY "Authenticated users can upload PSG files"
@@ -51,6 +56,7 @@ USING (bucket_id = 'psg-files' AND auth.uid()::text = (storage.foldername(name))
 ```
 
 ### 1.4 Database Schema (Optional)
+
 ```sql
 -- For graph metadata and sharing features
 CREATE TABLE graphs (
@@ -82,7 +88,9 @@ USING (is_public = true);
 ## 2. Environment Configuration
 
 ### 2.1 Local Development (.env)
+
 Create `.env` file in project root:
+
 ```bash
 # Supabase Configuration
 VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
@@ -100,6 +108,7 @@ VITE_DEBUG_MODE=true
 ```
 
 ### 2.2 Netlify Environment Variables
+
 In Netlify Dashboard > Site Settings > Environment Variables:
 
 ```bash
@@ -126,49 +135,63 @@ NPM_CONFIG_LEGACY_PEER_DEPS=true
 ## 3. Feature Integration Verification
 
 ### 3.1 Authentication Components (Story 1.22)
+
 ✅ Components implemented:
+
 - `AuthModal` with login/signup tabs
 - `UserAvatar` with dropdown menu
 - Form validation with password strength
 - Loading states and error handling
 
 ### 3.2 Supabase Auth Integration (Story 1.23)
+
 ✅ Features implemented:
+
 - Session restoration on app load
 - Token refresh before expiration
 - Cross-tab synchronization
 - Offline queue for auth operations
 
 ### 3.3 Protected Features (Story 1.24)
+
 ✅ Feature gating implemented:
+
 - Anonymous mode with full editor access
 - Cloud features gated behind auth
 - Work preservation during auth transitions
 - Smart upgrade prompts
 
 ### 3.4 Post-it Notes (Story 1.25)
+
 ✅ Annotation system ready:
+
 - Note creation and editing
 - Markdown support
 - Color customization
 - Node attachment
 
 ### 3.5 Bounding Boxes (Story 1.26)
+
 ✅ Region system ready:
+
 - Box drawing with Alt+drag
 - Visual organization
 - Node containment
 - Style customization
 
 ### 3.6 Node Grouping (Story 1.27)
+
 ✅ Performance-optimized grouping:
+
 - Hierarchical groups
 - Batch operations
 - Virtual rendering
 - 60fps maintained
 
 ### 3.7 Edge Routing (Story 1.28)
+
 ✅ Advanced routing algorithms:
+
 - 5 routing algorithms
 - Control points
 - Auto-routing
@@ -177,6 +200,7 @@ NPM_CONFIG_LEGACY_PEER_DEPS=true
 ## 4. Deployment Steps
 
 ### 4.1 Pre-deployment Checklist
+
 ```bash
 # 1. Run tests
 pnpm test
@@ -192,6 +216,7 @@ node -e "console.log('Supabase URL:', process.env.VITE_SUPABASE_URL ? 'Set' : 'M
 ```
 
 ### 4.2 Deploy to Netlify
+
 1. Connect GitHub repository to Netlify
 2. Configure build settings:
    - Build command: `pnpm install && cd packages/asset-browser && npm run prebuild && cd ../.. && pnpm --filter client build`
@@ -203,6 +228,7 @@ node -e "console.log('Supabase URL:', process.env.VITE_SUPABASE_URL ? 'Set' : 'M
 4. Deploy site
 
 ### 4.3 Post-deployment Verification
+
 ```javascript
 // Test authentication flow
 1. Visit deployed site
@@ -229,6 +255,7 @@ node -e "console.log('Supabase URL:', process.env.VITE_SUPABASE_URL ? 'Set' : 'M
 ### 5.1 Common Issues & Solutions
 
 **Issue: Supabase connection fails**
+
 ```javascript
 // Check browser console for errors
 // Verify environment variables:
@@ -239,15 +266,17 @@ console.log('Supabase Config:', {
 ```
 
 **Issue: Authentication state not persisting**
+
 ```javascript
 // Check localStorage for session
-localStorage.getItem('supabase.auth.token')
+localStorage.getItem('supabase.auth.token');
 
 // Verify cross-tab sync
 // Open multiple tabs and test auth state
 ```
 
 **Issue: Build fails on Netlify**
+
 ```bash
 # Clear cache and retry
 # In Netlify: Deploy Settings > Clear cache and deploy
@@ -257,12 +286,13 @@ NETLIFY_CACHE_BUST = "v6-auth-integration"
 ```
 
 ### 5.2 Performance Monitoring
+
 ```javascript
 // Add to main app component
 useEffect(() => {
   // Monitor performance
   if ('PerformanceObserver' in window) {
-    const observer = new PerformanceObserver((list) => {
+    const observer = new PerformanceObserver(list => {
       for (const entry of list.getEntries()) {
         if (entry.entryType === 'measure') {
           console.log(`${entry.name}: ${entry.duration}ms`);
@@ -275,6 +305,7 @@ useEffect(() => {
 ```
 
 ### 5.3 Error Tracking
+
 ```javascript
 // Global error boundary
 window.addEventListener('unhandledrejection', event => {
@@ -297,6 +328,7 @@ window.addEventListener('unhandledrejection', event => {
 ## 7. Testing Integration
 
 ### Manual Testing Script
+
 ```bash
 # 1. Anonymous User Flow
 - Open app in incognito
@@ -320,6 +352,7 @@ window.addEventListener('unhandledrejection', event => {
 ```
 
 ### Automated Testing
+
 ```javascript
 // Run integration tests
 pnpm test -- --testPathPattern="integration"
@@ -331,6 +364,7 @@ pnpm test:e2e
 ## 8. Rollback Plan
 
 If deployment issues occur:
+
 1. Revert to previous deployment in Netlify
 2. Check Supabase logs for auth issues
 3. Review browser console for client errors
@@ -341,19 +375,23 @@ If deployment issues occur:
 ## Support & Troubleshooting
 
 ### Logs & Monitoring
+
 - Netlify Functions logs: Netlify Dashboard > Functions
 - Supabase logs: Supabase Dashboard > Logs
 - Client errors: Browser DevTools Console
 
 ### Debug Mode
+
 Enable debug mode for verbose logging:
+
 ```javascript
 // Set in environment
-VITE_DEBUG_MODE=true
-VITE_LOG_LEVEL=debug
+VITE_DEBUG_MODE = true;
+VITE_LOG_LEVEL = debug;
 ```
 
 ### Contact
+
 - GitHub Issues: Report bugs and feature requests
 - Documentation: `/docs/stories/` for feature details
 - Architecture: `/docs/technical-designs/` for system design

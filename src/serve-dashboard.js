@@ -21,7 +21,7 @@ const mimeTypes = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.gif': 'image/gif',
-  '.ico': 'image/x-icon',
+  '.ico': 'image/x-icon'
 };
 
 const server = http.createServer((req, res) => {
@@ -30,7 +30,10 @@ const server = http.createServer((req, res) => {
 
   // Enable CORS for all requests
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  );
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   // Handle CORS preflight
@@ -53,7 +56,7 @@ const server = http.createServer((req, res) => {
       const tasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
         ...task,
         id: id,
-        _loadedAt: new Date().toISOString(),
+        _loadedAt: new Date().toISOString()
       }));
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -62,7 +65,7 @@ const server = http.createServer((req, res) => {
           success: true,
           totalTasks: tasks.length,
           tasks: tasks,
-          loadedAt: new Date().toISOString(),
+          loadedAt: new Date().toISOString()
         })
       );
     } catch (error) {
@@ -72,7 +75,8 @@ const server = http.createServer((req, res) => {
         JSON.stringify({
           success: false,
           error: error.message,
-          suggestion: 'Make sure src/data/state.json exists and contains valid JSON',
+          suggestion:
+            'Make sure src/data/state.json exists and contains valid JSON'
         })
       );
     }
@@ -87,7 +91,10 @@ const server = http.createServer((req, res) => {
 
       // Update the HTML to use our API endpoint instead of direct file access
       const updatedHtml = html
-        .replace("const response = await fetch('./data/state.json');", "const response = await fetch('/api/tasks');")
+        .replace(
+          "const response = await fetch('./data/state.json');",
+          "const response = await fetch('/api/tasks');"
+        )
         .replace(
           'const state = await response.json();',
           `const apiResponse = await response.json();
@@ -119,7 +126,10 @@ const server = http.createServer((req, res) => {
   }
 
   // Serve static files
-  let filePath = path.join(__dirname, pathname === '/' ? 'complete-dashboard.html' : pathname);
+  let filePath = path.join(
+    __dirname,
+    pathname === '/' ? 'complete-dashboard.html' : pathname
+  );
 
   // Security check - prevent directory traversal
   if (!filePath.startsWith(__dirname)) {

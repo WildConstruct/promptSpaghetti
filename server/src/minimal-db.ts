@@ -6,7 +6,9 @@ let db: Database.Database | null = null;
 /**
  * Initialize database with minimal schema
  */
-export function initDatabase(databasePath: string = ':memory:'): Database.Database {
+export function initDatabase(
+  databasePath: string = ':memory:'
+): Database.Database {
   if (db) {
     return db;
   }

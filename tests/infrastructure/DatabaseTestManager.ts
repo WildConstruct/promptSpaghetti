@@ -42,7 +42,11 @@ export interface SeedDataSet {
 export interface TestTransaction {
   id: string;
   startTime: Date;
-  isolation: 'read_uncommitted' | 'read_committed' | 'repeatable_read' | 'serializable';
+  isolation:
+    | 'read_uncommitted'
+    | 'read_committed'
+    | 'repeatable_read'
+    | 'serializable';
   tables: Set<string>;
   snapshots: Map<string, any[]>;
 }
@@ -95,7 +99,10 @@ export class DatabaseTestManager {
   /**
    * Begin a test transaction with isolation
    */
-  async beginTransaction(testId: string, isolation: TestTransaction['isolation'] = 'read_committed'): Promise<string> {
+  async beginTransaction(
+    testId: string,
+    isolation: TestTransaction['isolation'] = 'read_committed'
+  ): Promise<string> {
     const transactionId = `tx_${testId}_${Date.now()}`;
 
     // Take snapshot before transaction
@@ -106,14 +113,18 @@ export class DatabaseTestManager {
       startTime: new Date(),
       isolation,
       tables: new Set(),
-      snapshots: new Map([['before', snapshot.tables]]),
+      snapshots: new Map([['before', snapshot.tables]])
     };
 
-    await this.executeQuery(`BEGIN TRANSACTION ISOLATION LEVEL ${isolation.toUpperCase()}`);
+    await this.executeQuery(
+      `BEGIN TRANSACTION ISOLATION LEVEL ${isolation.toUpperCase()}`
+    );
 
     this.activeTransactions.set(transactionId, transaction);
 
-    console.log(`🔄 Started transaction ${transactionId} with ${isolation} isolation`);
+    console.log(
+      `🔄 Started transaction ${transactionId} with ${isolation} isolation`
+    );
     return transactionId;
   }
 
@@ -182,7 +193,7 @@ export class DatabaseTestManager {
       id,
       timestamp: new Date(),
       tables,
-      metadata: { rowCounts, checksum },
+      metadata: { rowCounts, checksum }
     };
 
     this.snapshots.set(id, snapshot);
@@ -236,7 +247,10 @@ export class DatabaseTestManager {
     }
 
     const differences = [];
-    const allTables = new Set([...Object.keys(snapshot1.tables), ...Object.keys(snapshot2.tables)]);
+    const allTables = new Set([
+      ...Object.keys(snapshot1.tables),
+      ...Object.keys(snapshot2.tables)
+    ]);
 
     for (const tableName of allTables) {
       const data1 = snapshot1.tables[tableName] || [];
@@ -247,7 +261,7 @@ export class DatabaseTestManager {
           table: tableName,
           type: 'row_count' as const,
           before: data1.length,
-          after: data2.length,
+          after: data2.length
         });
       }
 
@@ -260,14 +274,14 @@ export class DatabaseTestManager {
           table: tableName,
           type: 'data' as const,
           before: checksum1,
-          after: checksum2,
+          after: checksum2
         });
       }
     }
 
     return {
       identical: differences.length === 0,
-      differences,
+      differences
     };
   }
 
@@ -304,13 +318,13 @@ export class DatabaseTestManager {
       return {
         valid: errors.length === 0,
         errors,
-        warnings,
+        warnings
       };
     } catch (error) {
       return {
         valid: false,
         errors: [`Integrity check failed: ${error}`],
-        warnings,
+        warnings
       };
     }
   }
@@ -318,7 +332,11 @@ export class DatabaseTestManager {
   /**
    * Generate test data for specific tables
    */
-  async generateTestData(tableName: string, count: number, template?: Record<string, any>): Promise<any[]> {
+  async generateTestData(
+    tableName: string,
+    count: number,
+    template?: Record<string, any>
+  ): Promise<any[]> {
     const tableSchema = await this.getTableSchema(tableName);
     const testData = [];
 
@@ -361,7 +379,8 @@ export class DatabaseTestManager {
       executionTimes.push(endTime - startTime);
     }
 
-    const avgExecutionTime = executionTimes.reduce((sum, time) => sum + time, 0) / iterations;
+    const avgExecutionTime =
+      executionTimes.reduce((sum, time) => sum + time, 0) / iterations;
     const minExecutionTime = Math.min(...executionTimes);
     const maxExecutionTime = Math.max(...executionTimes);
 
@@ -372,7 +391,7 @@ export class DatabaseTestManager {
       avgExecutionTime,
       minExecutionTime,
       maxExecutionTime,
-      executionPlan,
+      executionPlan
     };
   }
 
@@ -423,19 +442,31 @@ export class DatabaseTestManager {
   private async connectPostgres(): Promise<void> {
     // Mock PostgreSQL connection
     console.log('🔌 Connected to PostgreSQL database');
-    this.connection = { type: 'postgres', host: this.config.host, port: this.config.port };
+    this.connection = {
+      type: 'postgres',
+      host: this.config.host,
+      port: this.config.port
+    };
   }
 
   private async connectMySQL(): Promise<void> {
     // Mock MySQL connection
     console.log('🔌 Connected to MySQL database');
-    this.connection = { type: 'mysql', host: this.config.host, port: this.config.port };
+    this.connection = {
+      type: 'mysql',
+      host: this.config.host,
+      port: this.config.port
+    };
   }
 
   private async connectRedis(): Promise<void> {
     // Mock Redis connection
     console.log('🔌 Connected to Redis database');
-    this.connection = { type: 'redis', host: this.config.host, port: this.config.port };
+    this.connection = {
+      type: 'redis',
+      host: this.config.host,
+      port: this.config.port
+    };
   }
 
   private async loadMigrations(): Promise<void> {
@@ -505,7 +536,7 @@ export class DatabaseTestManager {
     return {
       users: [],
       projects: [],
-      rules: [],
+      rules: []
     };
   }
 
@@ -546,15 +577,20 @@ export class DatabaseTestManager {
   }
 
   private async getTableSchema(tableName: string): Promise<{
-    columns: Array<{ name: string; type: string; nullable: boolean; default?: any }>;
+    columns: Array<{
+      name: string;
+      type: string;
+      nullable: boolean;
+      default?: any;
+    }>;
   }> {
     // TODO: Implement actual schema retrieval
     return {
       columns: [
         { name: 'id', type: 'integer', nullable: false },
         { name: 'name', type: 'varchar', nullable: false },
-        { name: 'created_at', type: 'timestamp', nullable: false },
-      ],
+        { name: 'created_at', type: 'timestamp', nullable: false }
+      ]
     };
   }
 
@@ -603,15 +639,25 @@ export const DatabaseTestScenarios = {
     description: 'Basic CRUD operations test data',
     tables: {
       users: [
-        { id: 1, username: 'testuser1', email: 'test1@example.com', created_at: new Date() },
-        { id: 2, username: 'testuser2', email: 'test2@example.com', created_at: new Date() },
+        {
+          id: 1,
+          username: 'testuser1',
+          email: 'test1@example.com',
+          created_at: new Date()
+        },
+        {
+          id: 2,
+          username: 'testuser2',
+          email: 'test2@example.com',
+          created_at: new Date()
+        }
       ],
       projects: [
         { id: 1, name: 'Test Project 1', owner_id: 1, created_at: new Date() },
-        { id: 2, name: 'Test Project 2', owner_id: 2, created_at: new Date() },
-      ],
+        { id: 2, name: 'Test Project 2', owner_id: 2, created_at: new Date() }
+      ]
     },
-    cleanup: true,
+    cleanup: true
   },
 
   /**
@@ -623,7 +669,7 @@ export const DatabaseTestScenarios = {
     tables: {
       // Generate large datasets programmatically
     },
-    cleanup: true,
+    cleanup: true
   },
 
   /**
@@ -634,17 +680,22 @@ export const DatabaseTestScenarios = {
     description: 'Edge cases and boundary conditions',
     tables: {
       users: [
-        { id: 1, username: '', email: null, created_at: new Date('1970-01-01') },
+        {
+          id: 1,
+          username: '',
+          email: null,
+          created_at: new Date('1970-01-01')
+        },
         {
           id: 2,
           username: 'a'.repeat(1000),
           email: 'very.long.email@' + 'a'.repeat(100) + '.com',
-          created_at: new Date('2999-12-31'),
-        },
-      ],
+          created_at: new Date('2999-12-31')
+        }
+      ]
     },
-    cleanup: true,
-  },
+    cleanup: true
+  }
 };
 
 export default DatabaseTestManager;

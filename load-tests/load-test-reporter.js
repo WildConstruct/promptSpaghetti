@@ -31,8 +31,8 @@ class LoadTestReporter {
         responseTime: options.responseTime || 2000, // ms
         successRate: options.successRate || 95, // %
         requestsPerSecond: options.requestsPerSecond || 10,
-        errorRate: options.errorRate || 5, // %
-      },
+        errorRate: options.errorRate || 5 // %
+      }
     };
   }
 
@@ -52,7 +52,7 @@ class LoadTestReporter {
         json: await this.generateJSONReport(aggregatedData, reportName),
         html: await this.generateHTMLReport(aggregatedData, reportName),
         csv: await this.generateCSVReport(aggregatedData, reportName),
-        summary: await this.generateSummaryReport(aggregatedData, reportName),
+        summary: await this.generateSummaryReport(aggregatedData, reportName)
       };
 
       // Generate PDF if requested
@@ -66,7 +66,9 @@ class LoadTestReporter {
         await this.saveAlerts(alerts, reportName);
       }
 
-      console.log(`📊 Load test reports generated in: ${this.options.outputDir}`);
+      console.log(
+        `📊 Load test reports generated in: ${this.options.outputDir}`
+      );
       console.log(`📄 Available formats: ${Object.keys(reports).join(', ')}`);
 
       if (alerts.length > 0) {
@@ -76,7 +78,7 @@ class LoadTestReporter {
       return {
         reports,
         alerts,
-        aggregatedData,
+        aggregatedData
       };
     } catch (error) {
       console.error('❌ Failed to generate load test report:', error);
@@ -96,7 +98,7 @@ class LoadTestReporter {
       metadata: {
         generatedAt: new Date().toISOString(),
         totalTestRuns: testResults.length,
-        testPeriod: this.calculateTestPeriod(testResults),
+        testPeriod: this.calculateTestPeriod(testResults)
       },
       summary: {
         totalRequests: 0,
@@ -109,17 +111,17 @@ class LoadTestReporter {
         minResponseTime: Number.MAX_VALUE,
         totalDuration: 0,
         requestsPerSecond: 0,
-        concurrentUsers: 0,
+        concurrentUsers: 0
       },
       testBreakdown: [],
       performanceMetrics: {
         responseTimeDistribution: {},
         errorDistribution: {},
         throughputOverTime: [],
-        userLoadPattern: [],
+        userLoadPattern: []
       },
       alerts: [],
-      recommendations: [],
+      recommendations: []
     };
 
     let totalResponseTime = 0;
@@ -140,13 +142,18 @@ class LoadTestReporter {
 
       // Update summary metrics
       aggregated.summary.totalRequests += global.totalRequests || 0;
-      aggregated.summary.totalSuccessfulRequests += global.successfulRequests || 0;
+      aggregated.summary.totalSuccessfulRequests +=
+        global.successfulRequests || 0;
       aggregated.summary.totalFailedRequests += global.failedRequests || 0;
 
-      totalResponseTime += (global.averageResponseTime || 0) * (global.totalRequests || 0);
+      totalResponseTime +=
+        (global.averageResponseTime || 0) * (global.totalRequests || 0);
       allResponseTimes.push(...(global.responseTimes || []));
 
-      aggregated.summary.maxResponseTime = Math.max(aggregated.summary.maxResponseTime, global.maxResponseTime || 0);
+      aggregated.summary.maxResponseTime = Math.max(
+        aggregated.summary.maxResponseTime,
+        global.maxResponseTime || 0
+      );
 
       aggregated.summary.minResponseTime = Math.min(
         aggregated.summary.minResponseTime,
@@ -167,21 +174,27 @@ class LoadTestReporter {
           requestsPerSecond: global.requestsPerSecond || 0,
           duration: global.duration || 0,
           concurrency: global.concurrency || 0,
-          errors: global.errors || [],
+          errors: global.errors || []
         },
-        alerts: this.generateTestAlerts(global, testName),
+        alerts: this.generateTestAlerts(global, testName)
       });
 
       // Update performance distributions
-      this.updatePerformanceDistributions(aggregated.performanceMetrics, results);
+      this.updatePerformanceDistributions(
+        aggregated.performanceMetrics,
+        results
+      );
     });
 
     // Calculate final summary metrics
     if (aggregated.summary.totalRequests > 0) {
       aggregated.summary.overallSuccessRate =
-        (aggregated.summary.totalSuccessfulRequests / aggregated.summary.totalRequests) * 100;
+        (aggregated.summary.totalSuccessfulRequests /
+          aggregated.summary.totalRequests) *
+        100;
 
-      aggregated.summary.averageResponseTime = totalResponseTime / aggregated.summary.totalRequests;
+      aggregated.summary.averageResponseTime =
+        totalResponseTime / aggregated.summary.totalRequests;
     }
 
     if (allResponseTimes.length > 0) {
@@ -194,7 +207,8 @@ class LoadTestReporter {
     aggregated.summary.concurrentUsers = maxConcurrency;
 
     if (totalDuration > 0) {
-      aggregated.summary.requestsPerSecond = aggregated.summary.totalRequests / (totalDuration / 1000);
+      aggregated.summary.requestsPerSecond =
+        aggregated.summary.totalRequests / (totalDuration / 1000);
     }
 
     // Generate recommendations
@@ -509,7 +523,8 @@ class LoadTestReporter {
    * Generate CSV content
    */
   generateCSVContent(data) {
-    let csv = 'Test Name,Total Requests,Success Rate (%),Avg Response Time (ms),Requests/Second,Duration (s),Errors\n';
+    let csv =
+      'Test Name,Total Requests,Success Rate (%),Avg Response Time (ms),Requests/Second,Duration (s),Errors\n';
 
     data.testBreakdown.forEach(test => {
       csv += `"${test.testName}",${test.metrics.totalRequests},${test.metrics.successRate.toFixed(1)},${test.metrics.averageResponseTime.toFixed(0)},${test.metrics.requestsPerSecond.toFixed(1)},${(test.metrics.duration / 1000).toFixed(1)},"${test.metrics.errors.length}"\n`;
@@ -583,27 +598,33 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
         type: 'error',
         title: 'Low Success Rate',
         message: `Overall success rate of ${data.summary.overallSuccessRate.toFixed(1)}% is below threshold of ${this.options.thresholds.successRate}%`,
-        recommendation: 'Investigate error patterns and optimize error handling',
+        recommendation: 'Investigate error patterns and optimize error handling'
       });
     }
 
     // Check response time
-    if (data.summary.averageResponseTime > this.options.thresholds.responseTime) {
+    if (
+      data.summary.averageResponseTime > this.options.thresholds.responseTime
+    ) {
       alerts.push({
         type: 'warning',
         title: 'High Response Time',
         message: `Average response time of ${data.summary.averageResponseTime.toFixed(0)}ms exceeds threshold of ${this.options.thresholds.responseTime}ms`,
-        recommendation: 'Optimize database queries, implement caching, or scale infrastructure',
+        recommendation:
+          'Optimize database queries, implement caching, or scale infrastructure'
       });
     }
 
     // Check throughput
-    if (data.summary.requestsPerSecond < this.options.thresholds.requestsPerSecond) {
+    if (
+      data.summary.requestsPerSecond < this.options.thresholds.requestsPerSecond
+    ) {
       alerts.push({
         type: 'warning',
         title: 'Low Throughput',
         message: `Throughput of ${data.summary.requestsPerSecond.toFixed(2)} RPS is below threshold of ${this.options.thresholds.requestsPerSecond} RPS`,
-        recommendation: 'Scale application instances or optimize request processing',
+        recommendation:
+          'Scale application instances or optimize request processing'
       });
     }
 
@@ -617,11 +638,15 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
     const alerts = [];
 
     if (testResults.successRate < 90) {
-      alerts.push(`High failure rate in ${testName}: ${testResults.successRate.toFixed(1)}%`);
+      alerts.push(
+        `High failure rate in ${testName}: ${testResults.successRate.toFixed(1)}%`
+      );
     }
 
     if (testResults.averageResponseTime > 3000) {
-      alerts.push(`Slow response time in ${testName}: ${testResults.averageResponseTime.toFixed(0)}ms`);
+      alerts.push(
+        `Slow response time in ${testName}: ${testResults.averageResponseTime.toFixed(0)}ms`
+      );
     }
 
     return alerts;
@@ -634,23 +659,37 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
     const recommendations = [];
 
     if (data.summary.averageResponseTime > 2000) {
-      recommendations.push('Consider implementing response caching for frequently accessed endpoints');
-      recommendations.push('Review database query performance and add appropriate indexes');
+      recommendations.push(
+        'Consider implementing response caching for frequently accessed endpoints'
+      );
+      recommendations.push(
+        'Review database query performance and add appropriate indexes'
+      );
     }
 
     if (data.summary.overallSuccessRate < 95) {
-      recommendations.push('Implement better error handling and retry mechanisms');
-      recommendations.push('Add more comprehensive input validation to prevent errors');
+      recommendations.push(
+        'Implement better error handling and retry mechanisms'
+      );
+      recommendations.push(
+        'Add more comprehensive input validation to prevent errors'
+      );
     }
 
     if (data.summary.requestsPerSecond < 50) {
       recommendations.push('Consider horizontal scaling with load balancing');
-      recommendations.push('Optimize application code for better CPU utilization');
+      recommendations.push(
+        'Optimize application code for better CPU utilization'
+      );
     }
 
-    const errorTests = data.testBreakdown.filter(test => test.metrics.successRate < 90);
+    const errorTests = data.testBreakdown.filter(
+      test => test.metrics.successRate < 90
+    );
     if (errorTests.length > 0) {
-      recommendations.push(`Focus optimization efforts on: ${errorTests.map(t => t.testName).join(', ')}`);
+      recommendations.push(
+        `Focus optimization efforts on: ${errorTests.map(t => t.testName).join(', ')}`
+      );
     }
 
     return recommendations;
@@ -662,7 +701,9 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
   calculateTestPeriod(testResults) {
     if (testResults.length === 0) return 'N/A';
 
-    const timestamps = testResults.map(result => new Date(result.timestamp || Date.now())).sort();
+    const timestamps = testResults
+      .map(result => new Date(result.timestamp || Date.now()))
+      .sort();
 
     const start = timestamps[0];
     const end = timestamps[timestamps.length - 1];
@@ -683,7 +724,8 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
     if (results.global && results.global.responseTimes) {
       results.global.responseTimes.forEach(time => {
         const bucket = Math.floor(time / 100) * 100;
-        metrics.responseTimeDistribution[bucket] = (metrics.responseTimeDistribution[bucket] || 0) + 1;
+        metrics.responseTimeDistribution[bucket] =
+          (metrics.responseTimeDistribution[bucket] || 0) + 1;
       });
     }
   }
@@ -700,7 +742,7 @@ ${data.recommendations.map(rec => `- ${rec}`).join('\n')}
       JSON.stringify(
         {
           generatedAt: new Date().toISOString(),
-          alerts,
+          alerts
         },
         null,
         2
@@ -737,18 +779,31 @@ async function generateLoadTestReport(testResultsPattern, options = {}) {
       return;
     }
 
-    console.log(`📊 Generating report for ${testResults.length} test result(s)`);
+    console.log(
+      `📊 Generating report for ${testResults.length} test result(s)`
+    );
 
     // Generate comprehensive report
-    const reportData = await reporter.generateReport(testResults, 'comprehensive-load-test-report');
+    const reportData = await reporter.generateReport(
+      testResults,
+      'comprehensive-load-test-report'
+    );
 
     // Print summary to console
     console.log('\n📈 LOAD TEST SUMMARY');
     console.log('===================');
-    console.log(`Total Requests: ${reportData.aggregatedData.summary.totalRequests.toLocaleString()}`);
-    console.log(`Success Rate: ${reportData.aggregatedData.summary.overallSuccessRate.toFixed(2)}%`);
-    console.log(`Average Response Time: ${reportData.aggregatedData.summary.averageResponseTime.toFixed(0)}ms`);
-    console.log(`Requests/Second: ${reportData.aggregatedData.summary.requestsPerSecond.toFixed(2)}`);
+    console.log(
+      `Total Requests: ${reportData.aggregatedData.summary.totalRequests.toLocaleString()}`
+    );
+    console.log(
+      `Success Rate: ${reportData.aggregatedData.summary.overallSuccessRate.toFixed(2)}%`
+    );
+    console.log(
+      `Average Response Time: ${reportData.aggregatedData.summary.averageResponseTime.toFixed(0)}ms`
+    );
+    console.log(
+      `Requests/Second: ${reportData.aggregatedData.summary.requestsPerSecond.toFixed(2)}`
+    );
 
     if (reportData.alerts.length > 0) {
       console.log('\n🚨 PERFORMANCE ALERTS:');
@@ -773,7 +828,10 @@ async function loadTestResultFiles(pattern) {
   try {
     const files = await fs.readdir('./');
     const resultFiles = files.filter(
-      file => file.includes('load-test') && file.endsWith('.json') && !file.includes('report')
+      file =>
+        file.includes('load-test') &&
+        file.endsWith('.json') &&
+        !file.includes('report')
     );
 
     for (const file of resultFiles) {
@@ -784,7 +842,7 @@ async function loadTestResultFiles(pattern) {
           testName: data.testName || file.replace('.json', ''),
           results: data,
           filename: file,
-          timestamp: data.timestamp || Date.now(),
+          timestamp: data.timestamp || Date.now()
         });
       } catch (error) {
         console.warn(`⚠️  Failed to load result file ${file}:`, error.message);
@@ -801,7 +859,7 @@ async function loadTestResultFiles(pattern) {
 module.exports = {
   LoadTestReporter,
   generateLoadTestReport,
-  loadTestResultFiles,
+  loadTestResultFiles
 };
 
 // Run if called directly
@@ -811,6 +869,6 @@ if (require.main === module) {
 
   generateLoadTestReport(pattern, {
     generatePDF: args.includes('--pdf'),
-    includeCharts: !args.includes('--no-charts'),
+    includeCharts: !args.includes('--no-charts')
   }).catch(console.error);
 }

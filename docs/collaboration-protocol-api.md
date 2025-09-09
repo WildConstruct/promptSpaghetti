@@ -319,7 +319,7 @@ const updateCursor = (x: number, y: number, nodeId?: string) => {
   ws.send(
     JSON.stringify({
       type: 'cursor_update',
-      payload: { x, y, nodeId, viewportBounds: getViewportBounds() },
+      payload: { x, y, nodeId, viewportBounds: getViewportBounds() }
     })
   );
 };
@@ -339,8 +339,8 @@ const updateSelection = (nodeIds: string[], edgeIds: string[]) => {
       payload: {
         nodeIds,
         edgeIds,
-        selectionBox: calculateSelectionBounds(nodeIds, edgeIds),
-      },
+        selectionBox: calculateSelectionBounds(nodeIds, edgeIds)
+      }
     })
   );
 };
@@ -350,11 +350,15 @@ const updateSelection = (nodeIds: string[], edgeIds: string[]) => {
 
 ```typescript
 // Track user activity and tool usage
-const updateActivity = (activity: { currentTool: string; isTyping: boolean; focusedNodeId?: string }) => {
+const updateActivity = (activity: {
+  currentTool: string;
+  isTyping: boolean;
+  focusedNodeId?: string;
+}) => {
   ws.send(
     JSON.stringify({
       type: 'activity_update',
-      payload: activity,
+      payload: activity
     })
   );
 };
@@ -396,7 +400,7 @@ enum ConflictType {
   NODE_POSITION = 'node_position',
   EDGE_CREATION = 'edge_creation',
   EDGE_DELETION = 'edge_deletion',
-  EDGE_PROPERTIES = 'edge_properties',
+  EDGE_PROPERTIES = 'edge_properties'
 }
 ```
 
@@ -441,8 +445,8 @@ ws.send(
     type: 'verify_state',
     payload: {
       localChecksum: calculateDocumentChecksum(document),
-      localVersion: document.version,
-    },
+      localVersion: document.version
+    }
   })
 );
 ```
@@ -527,7 +531,7 @@ const PERMISSIONS = {
   PROJECT_CREATE: 1 << 6,
   RESOURCE_WRITE: 1 << 9,
   COMMENT_WRITE: 1 << 13,
-  USER_INVITE: 1 << 15,
+  USER_INVITE: 1 << 15
 };
 
 // Check user permissions
@@ -576,7 +580,7 @@ class CollaborationClient {
       userId: this.userId,
       documentId: this.documentId,
       userName: 'User Name',
-      token: getAuthToken(),
+      token: getAuthToken()
     });
   }
 
@@ -593,9 +597,12 @@ import { useEffect, useState } from 'react';
 import { CollaborationClient } from './collaboration-client';
 
 export const CollaborativeEditor = ({ documentId, userId }) => {
-  const [collaborationClient, setCollaborationClient] = useState<CollaborationClient>();
+  const [collaborationClient, setCollaborationClient] =
+    useState<CollaborationClient>();
   const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
-  const [userCursors, setUserCursors] = useState<Map<string, CursorData>>(new Map());
+  const [userCursors, setUserCursors] = useState<Map<string, CursorData>>(
+    new Map()
+  );
 
   useEffect(() => {
     const client = new CollaborationClient(documentId, userId);
@@ -620,7 +627,10 @@ export const CollaborativeEditor = ({ documentId, userId }) => {
   return (
     <div className="collaborative-editor">
       <UserPresenceIndicator users={connectedUsers} />
-      <GraphEditor onNodeUpdate={update => collaborationClient?.sendGraphUpdate(update)} cursors={userCursors} />
+      <GraphEditor
+        onNodeUpdate={update => collaborationClient?.sendGraphUpdate(update)}
+        cursors={userCursors}
+      />
     </div>
   );
 };
@@ -672,7 +682,7 @@ The system tracks key collaboration performance indicators:
 // Enable debug logging
 const client = new CollaborationClient(documentId, userId, {
   debug: true,
-  logLevel: 'verbose',
+  logLevel: 'verbose'
 });
 
 // Monitor connection health

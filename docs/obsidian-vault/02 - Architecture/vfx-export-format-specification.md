@@ -253,7 +253,11 @@ interface VFXExportFormat {
           "lastValue": 0.7234
         }
       },
-      "executionSequence": ["creature-selector", "setting-combiner", "final-output"]
+      "executionSequence": [
+        "creature-selector",
+        "setting-combiner",
+        "final-output"
+      ]
     }
   }
 }
@@ -380,7 +384,10 @@ interface VFXExportFormat {
           "demographics": {
             "totalPopulation": 50,
             "socialClasses": {
-              "peasants": { "percentage": 0.7, "occupations": ["farmer", "blacksmith"] },
+              "peasants": {
+                "percentage": 0.7,
+                "occupations": ["farmer", "blacksmith"]
+              },
               "nobles": { "percentage": 0.3, "occupations": ["knight", "lord"] }
             }
           }
@@ -466,7 +473,11 @@ The reproducibility system uses SHA-256 hashes to ensure data integrity:
 // Configuration hash calculation
 function calculateConfigurationHash(config: any): string {
   const configString = JSON.stringify(config, Object.keys(config).sort());
-  return crypto.createHash('sha256').update(configString).digest('hex').substring(0, 16);
+  return crypto
+    .createHash('sha256')
+    .update(configString)
+    .digest('hex')
+    .substring(0, 16);
 }
 
 // Reproducibility hash for entire export
@@ -474,10 +485,17 @@ function calculateReproducibilityHash(exportData: VFXExportFormat): string {
   const reproData = {
     masterSeed: exportData.execution.randomization.masterSeed,
     nodeSeed: exportData.execution.randomization.nodeSeed,
-    nodeConfigs: exportData.graph.nodes.map(n => ({ id: n.id, config: n.configuration })),
+    nodeConfigs: exportData.graph.nodes.map(n => ({
+      id: n.id,
+      config: n.configuration
+    }))
   };
   const reproString = JSON.stringify(reproData, Object.keys(reproData).sort());
-  return crypto.createHash('sha256').update(reproString).digest('hex').substring(0, 16);
+  return crypto
+    .createHash('sha256')
+    .update(reproString)
+    .digest('hex')
+    .substring(0, 16);
 }
 ```
 
@@ -533,7 +551,10 @@ function validateCompatibility(exportData: VFXExportFormat): ValidationResult {
   }
 
   // Check render engine support
-  if (!compatibility.renderEngines.cycles && !compatibility.renderEngines.octane) {
+  if (
+    !compatibility.renderEngines.cycles &&
+    !compatibility.renderEngines.octane
+  ) {
     issues.push('No supported render engines found');
   }
 
@@ -560,7 +581,11 @@ The VFX export format follows semantic versioning (MAJOR.MINOR.PATCH):
       "exportedFrom": "1.2.0",
       "canUpgradeTo": ["1.3.0", "2.0.0"],
       "deprecatedFeatures": ["legacy-node-types"],
-      "newFeatures": ["enhanced-reproducibility", "multi-platform-compatibility", "performance-optimization"]
+      "newFeatures": [
+        "enhanced-reproducibility",
+        "multi-platform-compatibility",
+        "performance-optimization"
+      ]
     }
   }
 }
@@ -589,7 +614,7 @@ const exportData = await exporter.exportGraph(graph, executionResults, {
   quality: 'production',
   includeDebugInfo: true,
   includeHistoricalData: true,
-  formatVersion: '1.2.0',
+  formatVersion: '1.2.0'
 });
 
 // Validate export
@@ -607,7 +632,9 @@ fs.writeFileSync('scene-42-dragon-encounter.vfx.json', exportJson);
 
 ```typescript
 // Load export data
-const exportData = JSON.parse(fs.readFileSync('scene-42-dragon-encounter.vfx.json', 'utf8'));
+const exportData = JSON.parse(
+  fs.readFileSync('scene-42-dragon-encounter.vfx.json', 'utf8')
+);
 
 // Validate reproducibility
 const reproductionCheck = exporter.validateReproducibility(exportData);
@@ -631,7 +658,7 @@ enum ValidationErrorCodes {
   MISSING_FINAL_PROMPT = 'MISSING_FINAL_PROMPT',
   EMPTY_GRAPH = 'EMPTY_GRAPH',
   MISSING_MASTER_SEED = 'MISSING_MASTER_SEED',
-  CONFIGURATION_HASH_MISMATCH = 'CONFIGURATION_HASH_MISMATCH',
+  CONFIGURATION_HASH_MISMATCH = 'CONFIGURATION_HASH_MISMATCH'
 }
 ```
 

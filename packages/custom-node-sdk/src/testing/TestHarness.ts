@@ -13,7 +13,7 @@ import { MockContext } from './MockContext';
  */
 export class TestHarness {
   private mockContext: MockContext;
-  
+
   constructor(seed?: string | number) {
     this.mockContext = new MockContext(seed);
   }
@@ -36,75 +36,72 @@ export class TestHarness {
   }> {
     // Set up context with inputs
     const ctx = this.mockContext.getContext();
-    
+
     if (config?.variables) {
       Object.assign(ctx.variables, config.variables);
     }
-    
+
     if (config?.state) {
       ctx.nodeStates.set('test-node', config.state);
     }
-    
+
     if (config?.cache) {
       ctx.cache = config.cache;
     }
-    
+
     // Store inputs in context variables
     Object.assign(ctx.variables, inputs);
-    
+
     // Create adapter and run node
-    const adapter = new CustomNodeAdapter(
-      'test-node',
-      node,
-      {
-        metadata: {
-          type: 'test-node',
-          version: '1.0.0',
-          displayName: 'Test Node',
-          description: 'Test node for harness',
-          category: 'test',
-          author: { name: 'Test' },
-        },
-        schema: {
-          inputs: Object.fromEntries(
-            Object.keys(inputs).map(key => [
-              key,
-              { type: 'any', required: false }
-            ])
-          ),
-          outputs: {
-            result: { type: 'any' }
-          },
-        },
-        deterministic: true,
-        cacheable: false,
-        stateful: false,
-      }
-    );
-    
+    const adapter = new CustomNodeAdapter('test-node', node, {
+      metadata: {
+        type: 'test-node',
+        version: '1.0.0',
+        displayName: 'Test Node',
+        description: 'Test node for harness',
+        category: 'test',
+        author: { name: 'Test' }
+      },
+      schema: {
+        inputs: Object.fromEntries(
+          Object.keys(inputs).map(key => [
+            key,
+            { type: 'any', required: false }
+          ])
+        ),
+        outputs: {
+          result: { type: 'any' }
+        }
+      },
+      deterministic: true,
+      cacheable: false,
+      stateful: false
+    });
+
     const output = await adapter.run(ctx);
-    
+
     // Create a mock runtime to get the result
     const runtime: CustomNodeRuntime = {
       context: ctx,
       inputs,
       utils: {
-        random: () => ctx.prng ? ctx.prng() : Math.random(),
+        random: () => (ctx.prng ? ctx.prng() : Math.random()),
         log: (level, message, data) => {
           console[level](`[test-node] ${message}`, data || '');
         },
         validate: () => ({ valid: true, errors: [], warnings: [] }),
-        getState: <T = unknown>() => ctx.nodeStates.get('test-node') as T | undefined,
-        setState: (state) => ctx.nodeStates.set('test-node', state),
-      },
+        getState: <T = unknown>() =>
+          ctx.nodeStates.get('test-node') as T | undefined,
+        setState: state => ctx.nodeStates.set('test-node', state)
+      }
     };
-    
+
     const result = await node.execute(runtime);
-    
+
     return {
       output,
       context: ctx,
-      result,
+      result
     };
   }
 
@@ -118,18 +115,20 @@ export class TestHarness {
     config?: {
       variables?: Record<string, any>;
     }
-  ): Promise<Array<{
-    seed: string | number;
-    output: unknown;
-  }>> {
+  ): Promise<
+    Array<{
+      seed: string | number;
+      output: unknown;
+    }>
+  > {
     const results = [];
-    
+
     for (const seed of seeds) {
       this.mockContext = new MockContext(seed);
       const { output } = await this.runNode(node, inputs, config);
       results.push({ seed, output });
     }
-    
+
     return results;
   }
 
@@ -146,19 +145,19 @@ export class TestHarness {
     outputs: unknown[];
   }> {
     const outputs = [];
-    
+
     for (let i = 0; i < runs; i++) {
       this.mockContext = new MockContext(seed);
       const { output } = await this.runNode(node, inputs);
       outputs.push(output);
     }
-    
+
     // Check if all outputs are identical
     const firstOutput = JSON.stringify(outputs[0]);
     const isDeterministic = outputs.every(
       output => JSON.stringify(output) === firstOutput
     );
-    
+
     return { isDeterministic, outputs };
   }
 
@@ -176,17 +175,17 @@ export class TestHarness {
     const states: unknown[] = [];
     const outputs: unknown[] = [];
     const ctx = this.mockContext.getContext();
-    
+
     for (let i = 0; i < iterations; i++) {
       const { output, context } = await this.runNode(node, inputs, {
-        state: i > 0 ? states[i - 1] : undefined,
+        state: i > 0 ? states[i - 1] : undefined
       });
-      
+
       const newState = context.nodeStates.get('test-node');
       states.push(newState);
       outputs.push(output);
     }
-    
+
     return { states, outputs };
   }
 
@@ -204,24 +203,24 @@ export class TestHarness {
     totalTime: number;
   }> {
     const times: number[] = [];
-    
+
     for (let i = 0; i < iterations; i++) {
       const start = Date.now();
       await this.runNode(node, inputs);
       const elapsed = Date.now() - start;
       times.push(elapsed);
     }
-    
+
     const totalTime = times.reduce((sum, t) => sum + t, 0);
     const averageTime = totalTime / iterations;
     const minTime = Math.min(...times);
     const maxTime = Math.max(...times);
-    
+
     return {
       averageTime,
       minTime,
       maxTime,
-      totalTime,
+      totalTime
     };
   }
 

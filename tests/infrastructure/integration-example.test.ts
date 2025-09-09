@@ -16,14 +16,18 @@ describe('Testing Infrastructure Integration', () => {
     // Initialize test harness with comprehensive configuration
     testHarness = new TestHarness({
       environment: TestEnvironment.INTEGRATION,
-      categories: [TestCategory.ENGINE, TestCategory.FRONTEND, TestCategory.BACKEND],
+      categories: [
+        TestCategory.ENGINE,
+        TestCategory.FRONTEND,
+        TestCategory.BACKEND
+      ],
       parallel: false,
       coverage: true,
       timeout: 15000,
       setupDatabase: false, // Set to true if database tests are needed
       setupEnvironment: true,
       generateReports: true,
-      outputDir: './test-results',
+      outputDir: './test-results'
     });
 
     // Initialize the test harness
@@ -122,7 +126,9 @@ describe('Testing Infrastructure Integration', () => {
       expect(Array.isArray(results)).toBe(true);
       results.forEach(result => {
         expect(result.category).toBe(TestCategory.ENGINE);
-        expect(['passed', 'failed', 'skipped', 'pending']).toContain(result.status);
+        expect(['passed', 'failed', 'skipped', 'pending']).toContain(
+          result.status
+        );
       });
     });
 
@@ -153,7 +159,7 @@ describe('Testing Infrastructure Integration', () => {
         testRunStarted: () => events.push('testRunStarted'),
         executionPlanCreated: () => events.push('executionPlanCreated'),
         testResult: () => events.push('testResult'),
-        testRunCompleted: () => events.push('testRunCompleted'),
+        testRunCompleted: () => events.push('testRunCompleted')
       };
 
       // Register event handlers
@@ -190,7 +196,9 @@ describe('Testing Infrastructure Integration', () => {
       const firstRunPromise = testHarness.runTests();
 
       // Try to start another run while first is running
-      await expect(testHarness.runTests()).rejects.toThrow('Tests are already running');
+      await expect(testHarness.runTests()).rejects.toThrow(
+        'Tests are already running'
+      );
 
       // Wait for first run to complete
       await firstRunPromise;
@@ -239,7 +247,7 @@ describe('Individual Component Testing', () => {
       const user = generator.generateUser({
         includeAuth: true,
         includeProfile: true,
-        roles: ['admin', 'user'],
+        roles: ['admin', 'user']
       });
 
       expect(user.id).toBeDefined();
@@ -288,7 +296,7 @@ describe('Individual Component Testing', () => {
       const customFixture = {
         category: 'graph' as const,
         data: { nodes: [], edges: [] },
-        metadata: { description: 'Custom test fixture' },
+        metadata: { description: 'Custom test fixture' }
       };
 
       fixtureManager.register('custom-test-fixture', customFixture);
@@ -302,10 +310,14 @@ describe('Individual Component Testing', () => {
 
   describe('Testing Framework', () => {
     it('should create and run test suites', async () => {
-      const { default: TestingFramework, TestEnvironment, TestCategory } = await import('./TestingFramework');
+      const {
+        default: TestingFramework,
+        TestEnvironment,
+        TestCategory
+      } = await import('./TestingFramework');
       const framework = new TestingFramework({
         environment: TestEnvironment.UNIT,
-        category: TestCategory.ENGINE,
+        category: TestCategory.ENGINE
       });
 
       const suite = framework.registerSuite('Test Suite');

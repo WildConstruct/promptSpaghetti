@@ -18,7 +18,7 @@ export class ScrumMasterAgent extends AgentRunner {
       'TASK_BLOCKED',
       'TASK_STUCK',
       'METRICS_PUBLISHED',
-      'TASK_APPROVED', // New: Monitor approved tasks for GitHub automation
+      'TASK_APPROVED' // New: Monitor approved tasks for GitHub automation
     ];
 
     return events.filter(ev => relevantTypes.includes(ev.type));
@@ -43,12 +43,13 @@ export class ScrumMasterAgent extends AgentRunner {
         const blockedTask = state.tasks[ev.payload.task_id];
         if (blockedTask) {
           // Check if task has been blocked too long
-          const blockedDuration = Date.now() - new Date(blockedTask.updated).getTime();
+          const blockedDuration =
+            Date.now() - new Date(blockedTask.updated).getTime();
           if (blockedDuration > 3600000) {
             // 1 hour
             return this.createEvent('TASK_NOTE_ADDED', {
               task_id: blockedTask.id,
-              note: 'Task has been blocked for over an hour. Consider breaking it down or getting help.',
+              note: 'Task has been blocked for over an hour. Consider breaking it down or getting help.'
             });
           }
         }
@@ -59,7 +60,7 @@ export class ScrumMasterAgent extends AgentRunner {
         return this.createEvent('METRICS_UPDATED', {
           metric: 'task_approved',
           task_id: ev.payload.task_id,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         });
 
       case 'METRICS_PUBLISHED':
@@ -90,11 +91,12 @@ export class ScrumMasterAgent extends AgentRunner {
       { title: 'Implement backend API', est: 3, wip_class: 'FEAT' },
       { title: 'Create frontend components', est: 2, wip_class: 'FEAT' },
       { title: 'Write unit tests', est: 1, wip_class: 'CHORE' },
-      { title: 'Update documentation', est: 1, wip_class: 'CHORE' },
+      { title: 'Update documentation', est: 1, wip_class: 'CHORE' }
     ];
 
     // Pick a random task template
-    const template = taskTemplates[Math.floor(Math.random() * taskTemplates.length)];
+    const template =
+      taskTemplates[Math.floor(Math.random() * taskTemplates.length)];
 
     const task = {
       id: `T-${Date.now()}`,
@@ -107,7 +109,7 @@ export class ScrumMasterAgent extends AgentRunner {
       created: new Date().toISOString(),
       updated: new Date().toISOString(),
       dependencies: [],
-      notes: [],
+      notes: []
     };
 
     return this.createEvent('TASK_CREATED', { task });
@@ -117,7 +119,9 @@ export class ScrumMasterAgent extends AgentRunner {
    * Check for stories that need tasks created
    */
   private checkStoriesNeedingTasks(state: any): any {
-    const storiesWithoutTasks = state.stories.filter((s: any) => s.status === 'READY' && s.tasks.length === 0);
+    const storiesWithoutTasks = state.stories.filter(
+      (s: any) => s.status === 'READY' && s.tasks.length === 0
+    );
 
     if (storiesWithoutTasks.length > 0) {
       const story = storiesWithoutTasks[0];
@@ -139,7 +143,7 @@ export class ScrumMasterAgent extends AgentRunner {
       return this.createEvent('ALERT_RAISED', {
         type: 'high_blocked_count',
         message: `${blockedTasks.length} tasks are currently blocked. Team intervention may be needed.`,
-        severity: 'warning',
+        severity: 'warning'
       });
     }
 
@@ -154,7 +158,7 @@ export class ScrumMasterAgent extends AgentRunner {
       return this.createEvent('ALERT_RAISED', {
         type: 'review_bottleneck',
         message: `${stuckInReview.length} tasks have been in review for over 24 hours.`,
-        severity: 'info',
+        severity: 'info'
       });
     }
 
@@ -177,7 +181,7 @@ export class ScrumMasterAgent extends AgentRunner {
       completed: completedTasks.length,
       approved: approvedTasks.length,
       velocity: velocity,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 }

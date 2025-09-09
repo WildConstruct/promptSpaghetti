@@ -3,9 +3,11 @@
 ## Important: How to Properly Create and Load Fragment Manifests
 
 ### The Problem
+
 The asset browser expects manifests in either "minimal" or "npm-style" format with specific fields (`path`, `nodeTypes`), but our fragment manifests use a different structure focused on prompt fragments with nodes and groups.
 
 ### Current Working Solution
+
 Instead of using the `scan()` method which expects the strict manifest format, we directly populate the asset browser store:
 
 ```typescript
@@ -13,7 +15,7 @@ Instead of using the `scan()` method which expects the strict manifest format, w
 await scan([manifestData]);
 
 // DO this - direct store update:
-useAssetBrowserStore.setState({ 
+useAssetBrowserStore.setState({
   presets: presets,
   filteredPresets: presets,
   availableTags: tags,
@@ -29,6 +31,7 @@ useAssetBrowserStore.setState({
 2. **Naming Convention**: Use descriptive names like `character-traits.psg`, `weather-conditions.psg`, etc.
 
 3. **Required Structure**:
+
 ```json
 {
   "version": "1.0.0",
@@ -67,6 +70,7 @@ useAssetBrowserStore.setState({
 ```
 
 4. **Add to Master Manifest**: Update `/assets/library/asset-fragments-manifest.json`:
+
 ```json
 {
   "version": "2.0.0",
@@ -106,12 +110,14 @@ useAssetBrowserStore.setState({
 - `/assets/library/*.psg` - Individual fragment files
 
 ### DO NOT:
+
 - Try to force fragment manifests through the `parseManifest()` function
 - Use the `scan()` method with fragment data
 - Mix fragment manifests with npm-style or minimal manifests
 - Change the core manifest parser to accommodate fragments (it will break other functionality)
 
 ### DO:
+
 - Create proper .psg files with the correct structure
 - Update the master manifest when adding new fragments
 - Use direct store updates when loading fragments
@@ -119,6 +125,7 @@ useAssetBrowserStore.setState({
 - Test that tags and search work after adding new fragments
 
 ### Testing Your Fragments
+
 1. Add your .psg file to `/assets/library/`
 2. Update the master manifest
 3. Make sure dev server serves from public: `cp -r assets/library client/public/assets/`

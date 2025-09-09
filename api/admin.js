@@ -4,7 +4,12 @@
  */
 
 export default function handler(req, res) {
-  // Basic admin HTML (simplified version)
+  // Redirect to enhanced admin panel
+  res.writeHead(302, { Location: '/api/admin-enhanced' });
+  res.end();
+  return;
+  
+  // Basic admin HTML (simplified version) - keeping for reference
   const adminHTML = `
 <!DOCTYPE html>
 <html lang="en">

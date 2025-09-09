@@ -415,19 +415,17 @@ describe('AutosaveIndicator Component', () => {
 
   it('should apply correct position styles', () => {
     // Ensure the indicator renders by mocking the autosave hook to be enabled
-    jest
-      .spyOn(require('../hooks/useAutosave'), 'useAutosave')
-      .mockReturnValue({
-        status: 'saved',
-        lastSaved: null,
-        error: null,
-        conflictDetected: false,
-        remoteVersion: null,
-        isEnabled: true,
-        saveNow: jest.fn(),
-        acceptRemoteChanges: jest.fn(),
-        keepLocalChanges: jest.fn()
-      });
+    jest.spyOn(require('../hooks/useAutosave'), 'useAutosave').mockReturnValue({
+      status: 'saved',
+      lastSaved: null,
+      error: null,
+      conflictDetected: false,
+      remoteVersion: null,
+      isEnabled: true,
+      saveNow: jest.fn(),
+      acceptRemoteChanges: jest.fn(),
+      keepLocalChanges: jest.fn()
+    });
 
     render(<AutosaveIndicator position="bottom-left" />);
 

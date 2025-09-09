@@ -8,7 +8,10 @@
  */
 
 // Core generators
-export { default as AdvancedGraphGenerator, GraphBatchGenerator } from './AdvancedGraphGenerator';
+export {
+  default as AdvancedGraphGenerator,
+  GraphBatchGenerator
+} from './AdvancedGraphGenerator';
 export { default as AuthenticationDataGenerator } from './AuthenticationDataGenerator';
 export { default as AnalyticsDataGenerator } from './AnalyticsDataGenerator';
 export { default as APIPayloadGenerator } from './APIPayloadGenerator';
@@ -17,14 +20,17 @@ export { default as APIPayloadGenerator } from './APIPayloadGenerator';
 export { testDataGenerator } from '../utils/TestDataGenerator';
 
 // Type exports
-export type { GraphGenerationOptions, GraphScenario } from './AdvancedGraphGenerator';
+export type {
+  GraphGenerationOptions,
+  GraphScenario
+} from './AdvancedGraphGenerator';
 
 export type {
   UserRole,
   Permission,
   TestUser,
   SessionData,
-  AuthenticationScenario,
+  AuthenticationScenario
 } from './AuthenticationDataGenerator';
 
 export type {
@@ -33,14 +39,14 @@ export type {
   PerformanceMetric,
   UserBehaviorData,
   TimeSeriesData,
-  RuleUsageAnalytics,
+  RuleUsageAnalytics
 } from './AnalyticsDataGenerator';
 
 export type {
   APITestPayload,
   AuthenticationPayload,
   GraphOperationPayload,
-  RuleManagementPayload,
+  RuleManagementPayload
 } from './APIPayloadGenerator';
 
 /**
@@ -95,7 +101,7 @@ export class TestDataGeneratorFactory {
       batchGraphGenerator: new GraphBatchGenerator(baseSeed + 1),
       authGenerator: new AuthenticationDataGenerator(baseSeed + 2),
       analyticsGenerator: new AnalyticsDataGenerator(baseSeed + 3),
-      apiPayloadGenerator: new APIPayloadGenerator(baseSeed + 4),
+      apiPayloadGenerator: new APIPayloadGenerator(baseSeed + 4)
     };
   }
 
@@ -111,7 +117,13 @@ export class TestDataGeneratorFactory {
       seed?: number;
     } = {}
   ) {
-    const { userCount = 50, graphCount = 20, ruleCount = 100, days = 30, seed = this.DEFAULT_SEED } = options;
+    const {
+      userCount = 50,
+      graphCount = 20,
+      ruleCount = 100,
+      days = 30,
+      seed = this.DEFAULT_SEED
+    } = options;
 
     const suite = this.createCompleteSuite(seed);
 
@@ -125,9 +137,15 @@ export class TestDataGeneratorFactory {
       graphScenarios.push(
         suite.graphGenerator.generateComplexScenario({
           nodeCount: 5 + i * 2,
-          complexity: ['simple', 'validation', 'performance', 'security', 'edge-case'][i % 5] as any,
+          complexity: [
+            'simple',
+            'validation',
+            'performance',
+            'security',
+            'edge-case'
+          ][i % 5] as any,
           seed: seed + i,
-          includeAdvancedNodes: i > 10,
+          includeAdvancedNodes: i > 10
         })
       );
     }
@@ -135,7 +153,7 @@ export class TestDataGeneratorFactory {
     const analyticsData = suite.analyticsGenerator.generateAnalyticsTestSuite({
       userCount,
       ruleCount,
-      days,
+      days
     });
 
     const apiPayloads = suite.apiPayloadGenerator.generateAPITestSuite();
@@ -171,9 +189,9 @@ export class TestDataGeneratorFactory {
           systemMetrics: analyticsData.systemMetrics.length,
           userEvents: analyticsData.userEvents.length,
           performanceMetrics: analyticsData.performanceMetrics.length,
-          apiTestCases: Object.values(apiPayloads).flat().length,
-        },
-      },
+          apiTestCases: Object.values(apiPayloads).flat().length
+        }
+      }
     };
   }
 }
@@ -185,14 +203,23 @@ export class TestDataUtils {
   /**
    * Generate deterministic test IDs
    */
-  static generateTestId(prefix: string, index: number, seed: number = 12345): string {
+  static generateTestId(
+    prefix: string,
+    index: number,
+    seed: number = 12345
+  ): string {
     return `${prefix}-${seed}-${index.toString().padStart(6, '0')}`;
   }
 
   /**
    * Generate realistic timestamps within a date range
    */
-  static generateTimestamps(count: number, startDate: Date, endDate: Date, seed: number = 12345): Date[] {
+  static generateTimestamps(
+    count: number,
+    startDate: Date,
+    endDate: Date,
+    seed: number = 12345
+  ): Date[] {
     const rng = require('seedrandom')(seed.toString());
     const timeRange = endDate.getTime() - startDate.getTime();
 
@@ -212,7 +239,7 @@ export class TestDataUtils {
       authentication: 'tests/data/auth',
       apiPayloads: 'tests/data/api',
       exports: 'tests/data/exports',
-      snapshots: 'tests/data/snapshots',
+      snapshots: 'tests/data/snapshots'
     };
   }
 
@@ -231,10 +258,14 @@ export class TestDataUtils {
     if (data.users && data.sessions) {
       const userIds = new Set(data.users.map((u: any) => u.id));
       const sessionUserIds = data.sessions.map((s: any) => s.userId);
-      const orphanedSessions = sessionUserIds.filter((id: string) => !userIds.has(id));
+      const orphanedSessions = sessionUserIds.filter(
+        (id: string) => !userIds.has(id)
+      );
 
       if (orphanedSessions.length > 0) {
-        errors.push(`Found ${orphanedSessions.length} sessions with invalid user IDs`);
+        errors.push(
+          `Found ${orphanedSessions.length} sessions with invalid user IDs`
+        );
       }
     }
 
@@ -249,7 +280,7 @@ export class TestDataUtils {
 
     return {
       isValid: errors.length === 0,
-      errors,
+      errors
     };
   }
 }

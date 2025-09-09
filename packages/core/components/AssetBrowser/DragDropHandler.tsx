@@ -41,7 +41,7 @@ export const DragDropHandler: React.FC<DragDropHandlerProps> = ({
   disabled = false
 }) => {
   const dragId = useRef<string>('');
-  
+
   const [{ isDragging }, drag, preview] = useDrag({
     type: 'ASSET',
     item: () => {
@@ -49,7 +49,7 @@ export const DragDropHandler: React.FC<DragDropHandlerProps> = ({
       performanceMonitor.startDragOperation(dragId.current);
       return asset;
     },
-    collect: (monitor) => ({
+    collect: monitor => ({
       isDragging: monitor.isDragging()
     }),
     canDrag: !disabled,
@@ -81,15 +81,15 @@ export const DragDropHandler: React.FC<DragDropHandlerProps> = ({
         border: 1px solid rgba(255, 255, 255, 0.2);
       `;
       document.body.appendChild(ghostEl);
-      
+
       const handleMouseMove = (e: MouseEvent) => {
         ghostEl.style.left = `${e.clientX + 10}px`;
         ghostEl.style.top = `${e.clientY + 10}px`;
         performanceMonitor.recordDragEvent(dragId.current, 'hover');
       };
-      
+
       document.addEventListener('mousemove', handleMouseMove);
-      
+
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         ghostEl.remove();
@@ -98,7 +98,7 @@ export const DragDropHandler: React.FC<DragDropHandlerProps> = ({
   }, [isDragging, asset.name]);
 
   return (
-    <div 
+    <div
       ref={drag}
       className={`draggable-asset ${isDragging ? 'dragging' : ''}`}
       style={{
@@ -113,14 +113,23 @@ export const DragDropHandler: React.FC<DragDropHandlerProps> = ({
 
 // Canvas Drop Target Component
 export interface CanvasDropTargetProps {
-  onDrop: (asset: DraggedAsset, position: { x: number; y: number }, targetNode?: string) => void;
+  onDrop: (
+    asset: DraggedAsset,
+    position: { x: number; y: number },
+    targetNode?: string
+  ) => void;
   onHover?: (isOver: boolean, canDrop: boolean) => void;
   children: React.ReactNode;
   acceptTypes?: string[];
   // Optional integration hooks to support ACs
   onInvalidDrop?: (error: any) => void;
   nodes?: Array<{ id: string; type: string }>;
-  edges?: Array<{ source: string; target: string; sourceHandle?: string; targetHandle?: string }>;
+  edges?: Array<{
+    source: string;
+    target: string;
+    sourceHandle?: string;
+    targetHandle?: string;
+  }>;
 }
 
 export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
@@ -133,7 +142,7 @@ export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
   edges
 }) => {
   const dropRef = useRef<HTMLDivElement>(null);
-  
+
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'ASSET',
     drop: (item: DraggedAsset, monitor) => {
@@ -146,16 +155,16 @@ export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
         };
 
         // Enforce 50px boundary rule
-        const tooCloseToEdge = (
+        const tooCloseToEdge =
           position.x < 50 ||
           position.y < 50 ||
           rect.width - position.x < 50 ||
-          rect.height - position.y < 50
-        );
+          rect.height - position.y < 50;
         if (tooCloseToEdge) {
           onInvalidDrop?.({
             type: 'invalid_position',
-            message: "Can't drop here - too close to edge. Move 50px inward or use grid snap (G key).",
+            message:
+              "Can't drop here - too close to edge. Move 50px inward or use grid snap (G key).",
             details: { requiredDistance: 50 }
           });
           return undefined;
@@ -175,7 +184,7 @@ export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
     canDrop: (item: DraggedAsset) => {
       return acceptTypes.includes(item.type);
     },
-    collect: (monitor) => ({
+    collect: monitor => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop()
     })
@@ -190,7 +199,7 @@ export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
   drop(dropRef);
 
   return (
-    <div 
+    <div
       ref={dropRef}
       className={`canvas-drop-target ${isOver ? 'drag-over' : ''} ${canDrop ? 'can-drop' : ''}`}
       style={{
@@ -205,18 +214,21 @@ export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
 };
 
 // Helper function to detect node at position
-function getNodeAtClientPoint(clientX: number, clientY: number): string | undefined {
+function getNodeAtClientPoint(
+  clientX: number,
+  clientY: number
+): string | undefined {
   // Integrates with React Flow DOM to detect nodes under the cursor
   const elements = document.elementsFromPoint(clientX, clientY);
-  const nodeElement = elements.find(el => el.classList.contains('react-flow__node'));
+  const nodeElement = elements.find(el =>
+    el.classList.contains('react-flow__node')
+  );
   return nodeElement?.getAttribute('data-id') || undefined;
 }
 
 // Wrapper component to provide DnD context
-export const AssetBrowserDndProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <DndProvider backend={HTML5Backend}>
-      {children}
-    </DndProvider>
-  );
+export const AssetBrowserDndProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
+  return <DndProvider backend={HTML5Backend}>{children}</DndProvider>;
 };

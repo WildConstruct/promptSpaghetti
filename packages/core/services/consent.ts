@@ -39,7 +39,10 @@ export const ConsentService = {
     settings.requireConsent = !!value;
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.setItem('consent.require', String(settings.requireConsent));
+        window.localStorage.setItem(
+          'consent.require',
+          String(settings.requireConsent)
+        );
       }
     } catch {
       // ignore storage errors
@@ -48,7 +51,8 @@ export const ConsentService = {
   check(asset: ConsentAssetMeta): ConsentResult {
     const flag = asset?.metadata?.consent;
     if (flag === true) return { allowed: true, status: 'granted' };
-    if (flag === false) return { allowed: !settings.requireConsent, status: 'denied' };
+    if (flag === false)
+      return { allowed: !settings.requireConsent, status: 'denied' };
     // unclear / missing
     return { allowed: !settings.requireConsent, status: 'unclear' };
   },

@@ -32,8 +32,11 @@ console.log('taskState:', taskState);
 console.log('taskTitle:', taskTitle);
 console.log('taskId_processed:', taskId_processed);
 
-const isAuth = taskTags.includes('auth') || (task.story && task.story.includes('20.1'));
-const isFile = taskTags.includes('file-browser') || (task.story && task.story.includes('20.2'));
+const isAuth =
+  taskTags.includes('auth') || (task.story && task.story.includes('20.1'));
+const isFile =
+  taskTags.includes('file-browser') ||
+  (task.story && task.story.includes('20.2'));
 const priorityClass = isAuth ? 'priority-auth' : isFile ? 'priority-file' : '';
 const stateClass = `state-${taskState.replace(/[^a-z0-9]/g, '-')}`;
 
@@ -109,7 +112,9 @@ try {
 console.log('\n=== RECOMMENDATIONS ===');
 
 if (!task.tags) {
-  console.log('⚠️  Task has undefined tags - this should be handled by the dashboard now');
+  console.log(
+    '⚠️  Task has undefined tags - this should be handled by the dashboard now'
+  );
 }
 
 if (!task.story) {

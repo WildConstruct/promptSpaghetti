@@ -3,7 +3,7 @@ import { PreviewService } from '../PreviewService';
 
 const api = {
   simulate: PreviewService.simulate,
-  branchMap: PreviewService.branchMap,
+  branchMap: PreviewService.branchMap
 };
 
 Comlink.expose(api);

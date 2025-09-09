@@ -6,16 +6,21 @@ interface KeyboardNavigatorContextValue {
   isWithinBounds: () => boolean;
 }
 
-export const KeyboardNavigatorContext = createContext<KeyboardNavigatorContextValue>({
-  toggleOpen: () => {},
-  isWithinBounds: () => false,
-});
+export const KeyboardNavigatorContext =
+  createContext<KeyboardNavigatorContextValue>({
+    toggleOpen: () => {},
+    isWithinBounds: () => false
+  });
 
-export function KeyboardNavigatorProvider({ children }: { children: React.ReactNode }) {
+export function KeyboardNavigatorProvider({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const open = useAssetBrowserStore((s) => s.detailsOpen);
-  const setOpen = useAssetBrowserStore((s) => s.setDetailsOpen);
-  const moveSelection = useAssetBrowserStore((s) => s.moveSelection);
+  const open = useAssetBrowserStore(s => s.detailsOpen);
+  const setOpen = useAssetBrowserStore(s => s.setDetailsOpen);
+  const moveSelection = useAssetBrowserStore(s => s.moveSelection);
   const toggleOpen = () => setOpen(!open);
 
   const isWithinBounds = () => {
@@ -31,13 +36,17 @@ export function KeyboardNavigatorProvider({ children }: { children: React.ReactN
 
       // Check if user is typing in an input field
       const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.contentEditable === 'true') {
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.contentEditable === 'true'
+      ) {
         return;
       }
 
       // Handle navigation keys with preventDefault for arrows
       let handled = true;
-      
+
       if (['ArrowUp', 'k'].includes(e.key)) {
         moveSelection('up');
       } else if (['ArrowDown', 'j'].includes(e.key)) {

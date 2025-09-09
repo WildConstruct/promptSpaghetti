@@ -18,7 +18,7 @@ export class QAAgent extends AgentRunner {
       'TASK_UPDATED',
       'PR_CREATED', // New: Monitor automated PR creation
       'PR_MERGED', // New: Track PR merges
-      'AUTO_PUSH_TRIGGERED', // New: Track auto-push events
+      'AUTO_PUSH_TRIGGERED' // New: Track auto-push events
     ];
 
     return events.filter(ev => {
@@ -53,7 +53,7 @@ export class QAAgent extends AgentRunner {
         // Log that PR was automatically created
         return this.createEvent('TASK_NOTE_ADDED', {
           task_id: ev.payload.task_id,
-          note: `GitHub PR #${ev.payload.pr_number} automatically created: ${ev.payload.pr_url}`,
+          note: `GitHub PR #${ev.payload.pr_number} automatically created: ${ev.payload.pr_url}`
         });
 
       case 'AUTO_PUSH_TRIGGERED':
@@ -61,7 +61,7 @@ export class QAAgent extends AgentRunner {
         return this.createEvent('METRICS_UPDATED', {
           metric: 'auto_push',
           commit_count: ev.payload.commit_count,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         });
     }
 
@@ -87,7 +87,7 @@ export class QAAgent extends AgentRunner {
       return this.createEvent('TASK_APPROVED', {
         task_id: task.id,
         approved_by: 'qa_agent',
-        notes: 'All tests passed, code quality good',
+        notes: 'All tests passed, code quality good'
         // The database webhook will automatically:
         // 1. Create a GitHub PR if enabled
         // 2. Increment commit counter
@@ -99,7 +99,7 @@ export class QAAgent extends AgentRunner {
       return this.createEvent('TASK_REJECTED', {
         task_id: task.id,
         reason: issues.join(', '),
-        changes_requested: true,
+        changes_requested: true
       });
     }
   }
@@ -108,7 +108,9 @@ export class QAAgent extends AgentRunner {
    * Check review queue for tasks needing attention
    */
   private checkReviewQueue(state: any): any {
-    const reviewTasks = Object.values(state.tasks).filter((t: any) => t.state === 'REVIEW');
+    const reviewTasks = Object.values(state.tasks).filter(
+      (t: any) => t.state === 'REVIEW'
+    );
 
     // Find oldest unreviewed task
     const unreviewed = reviewTasks.filter((t: any) => {
@@ -118,7 +120,10 @@ export class QAAgent extends AgentRunner {
 
     if (unreviewed.length > 0) {
       // Sort by age and review the oldest
-      unreviewed.sort((a: any, b: any) => new Date(a.updated).getTime() - new Date(b.updated).getTime());
+      unreviewed.sort(
+        (a: any, b: any) =>
+          new Date(a.updated).getTime() - new Date(b.updated).getTime()
+      );
 
       return this.performQAReview(unreviewed[0]);
     }
@@ -136,7 +141,7 @@ export class QAAgent extends AgentRunner {
       'Insufficient error handling',
       'Performance concerns',
       'Documentation needs updating',
-      'Edge case not handled',
+      'Edge case not handled'
     ];
 
     // Pick 1-3 random issues

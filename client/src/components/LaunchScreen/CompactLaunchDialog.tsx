@@ -10,7 +10,10 @@ interface CompactLaunchDialogProps {
 
 type TabType = 'new' | 'templates' | 'recent';
 
-export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaunch, onClose }) => {
+export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({
+  onLaunch,
+  onClose
+}) => {
   const [activeTab, setActiveTab] = useState<TabType>('new');
   const [promptText, setPromptText] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
@@ -31,14 +34,17 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
     if (selectedTemplate) {
       const template = quickStartTemplates[selectedTemplate];
       if (template) {
-        onLaunch({ kind: 'template', graph: { nodes: template.nodes, edges: template.edges } });
+        onLaunch({
+          kind: 'template',
+          graph: { nodes: template.nodes, edges: template.edges }
+        });
       }
     }
   }, [selectedTemplate, onLaunch]);
 
   return (
     <div className="launch-dialog-overlay" onClick={onClose}>
-      <div className="launch-dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="launch-dialog" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="launch-dialog-header">
           <h2>New Project</h2>
@@ -49,19 +55,19 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
 
         {/* Tab Navigation */}
         <div className="launch-tabs">
-          <button 
+          <button
             className={`tab ${activeTab === 'new' ? 'active' : ''}`}
             onClick={() => setActiveTab('new')}
           >
             New Composition
           </button>
-          <button 
+          <button
             className={`tab ${activeTab === 'templates' ? 'active' : ''}`}
             onClick={() => setActiveTab('templates')}
           >
             Templates
           </button>
-          <button 
+          <button
             className={`tab ${activeTab === 'recent' ? 'active' : ''}`}
             onClick={() => setActiveTab('recent')}
           >
@@ -75,8 +81,8 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
             <div className="new-project-tab">
               <div className="option-group">
                 <label>Project Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Untitled Project"
                   className="project-name-input"
                 />
@@ -85,25 +91,26 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
               <div className="option-group">
                 <label>Start With</label>
                 <div className="start-options">
-                  <button 
-                    className="start-option"
-                    onClick={handleNewProject}
-                  >
+                  <button className="start-option" onClick={handleNewProject}>
                     <div className="option-icon">📄</div>
                     <div className="option-text">
                       <div className="option-title">Blank Canvas</div>
-                      <div className="option-desc">Start with an empty graph</div>
+                      <div className="option-desc">
+                        Start with an empty graph
+                      </div>
                     </div>
                   </button>
-                  
-                  <button 
+
+                  <button
                     className="start-option"
                     onClick={() => setActiveTab('templates')}
                   >
                     <div className="option-icon">📚</div>
                     <div className="option-text">
                       <div className="option-title">From Template</div>
-                      <div className="option-desc">Choose a pre-built template</div>
+                      <div className="option-desc">
+                        Choose a pre-built template
+                      </div>
                     </div>
                   </button>
                 </div>
@@ -113,12 +120,12 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
                 <label>Quick Start from Prompt</label>
                 <textarea
                   value={promptText}
-                  onChange={(e) => setPromptText(e.target.value)}
+                  onChange={e => setPromptText(e.target.value)}
                   placeholder="Enter your prompt to generate a graph..."
                   className="prompt-input"
                   rows={3}
                 />
-                <button 
+                <button
                   className="generate-button"
                   onClick={handlePromptLaunch}
                   disabled={!promptText.trim()}
@@ -147,7 +154,7 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
           {activeTab === 'templates' && (
             <div className="templates-tab">
               <div className="template-grid">
-                {Object.keys(quickStartTemplates).map((id) => (
+                {Object.keys(quickStartTemplates).map(id => (
                   <button
                     key={id}
                     className={`template-card ${selectedTemplate === id ? 'selected' : ''}`}
@@ -160,7 +167,7 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
                 ))}
               </div>
               <div className="template-actions">
-                <button 
+                <button
                   className="primary-button"
                   onClick={handleTemplateLaunch}
                   disabled={!selectedTemplate}
@@ -177,7 +184,9 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
                 <div className="empty-recent">
                   <div className="empty-icon">📁</div>
                   <p>No recent files</p>
-                  <p className="empty-hint">Your recent projects will appear here</p>
+                  <p className="empty-hint">
+                    Your recent projects will appear here
+                  </p>
                 </div>
               </div>
             </div>
@@ -193,10 +202,7 @@ export const CompactLaunchDialog: React.FC<CompactLaunchDialogProps> = ({ onLaun
           </div>
           <div className="footer-right">
             {activeTab === 'new' && (
-              <button 
-                className="primary-button"
-                onClick={handleNewProject}
-              >
+              <button className="primary-button" onClick={handleNewProject}>
                 Create New Project
               </button>
             )}

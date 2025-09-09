@@ -1,17 +1,20 @@
 # Output Bar Architecture Technical Specification
 
 ## Overview
+
 The Output Bar is a resizable, collapsible panel that displays graph execution results. It must be repositioned as a sibling to the canvas (not a child) to prevent z-index conflicts and event propagation issues.
 
 ## Current Architecture Issues
 
 ### Problem: DOM Hierarchy
+
 ```html
 <!-- CURRENT (PROBLEMATIC) -->
 <div class="canvas-container">
   <ReactFlowCanvas>
     <!-- Graph nodes and edges -->
-    <OutputBar /> <!-- CHILD of canvas - causes issues -->
+    <OutputBar />
+    <!-- CHILD of canvas - causes issues -->
   </ReactFlowCanvas>
 </div>
 
@@ -22,13 +25,15 @@ The Output Bar is a resizable, collapsible panel that displays graph execution r
       <!-- Graph nodes and edges -->
     </ReactFlowCanvas>
   </div>
-  <OutputBar /> <!-- SIBLING of canvas -->
+  <OutputBar />
+  <!-- SIBLING of canvas -->
 </div>
 ```
 
 ## New Component Architecture
 
 ### File Structure
+
 ```
 packages/core/components/OutputBar/
 ├── OutputBar.tsx                 # Main component
@@ -46,15 +51,16 @@ packages/core/components/OutputBar/
 ```
 
 ### Component Interface
+
 ```typescript
 interface OutputBarProps {
   position?: 'bottom' | 'right' | 'floating';
   defaultHeight?: number;
   minHeight?: number;
   maxHeight?: number;
-  defaultWidth?: number;  // For right position
-  minWidth?: number;      // For right position
-  maxWidth?: number;      // For right position
+  defaultWidth?: number; // For right position
+  minWidth?: number; // For right position
+  maxWidth?: number; // For right position
   isOpen?: boolean;
   onToggle?: (isOpen: boolean) => void;
   onResize?: (dimensions: Dimensions) => void;
@@ -91,11 +97,12 @@ interface OutputEntry {
 ## State Management
 
 ### Zustand Store
+
 ```typescript
 interface OutputBarStore {
   // State
   state: OutputBarState;
-  
+
   // Actions
   minimize: () => void;
   maximize: () => void;
@@ -105,7 +112,7 @@ interface OutputBarStore {
   addOutput: (output: OutputEntry) => void;
   clearOutputs: () => void;
   setActiveTab: (tabId: string) => void;
-  
+
   // Persistence
   loadState: () => void;
   saveState: () => void;
@@ -115,7 +122,7 @@ const useOutputBarStore = create<OutputBarStore>(
   persist(
     (set, get) => ({
       state: defaultState,
-      
+
       minimize: () => {
         const { currentHeight, currentWidth } = get().state;
         set(state => ({
@@ -129,7 +136,7 @@ const useOutputBarStore = create<OutputBarStore>(
           }
         }));
       },
-      
+
       maximize: () => {
         set(state => ({
           state: {
@@ -141,7 +148,7 @@ const useOutputBarStore = create<OutputBarStore>(
           }
         }));
       },
-      
+
       restore: () => {
         const { previousHeight, previousWidth } = get().state;
         set(state => ({
@@ -157,7 +164,7 @@ const useOutputBarStore = create<OutputBarStore>(
     }),
     {
       name: 'output-bar-storage',
-      partialize: (state) => ({
+      partialize: state => ({
         position: state.state.position,
         previousHeight: state.state.previousHeight,
         previousWidth: state.state.previousWidth
@@ -170,19 +177,20 @@ const useOutputBarStore = create<OutputBarStore>(
 ## Layout System
 
 ### CSS Grid Layout
+
 ```css
 .app-workspace {
   display: grid;
   grid-template-areas:
-    "canvas canvas"
-    "output output";
+    'canvas canvas'
+    'output output';
   grid-template-rows: 1fr auto;
   height: 100vh;
   position: relative;
 }
 
 .app-workspace--output-right {
-  grid-template-areas: "canvas output";
+  grid-template-areas: 'canvas output';
   grid-template-columns: 1fr auto;
   grid-template-rows: 1fr;
 }
@@ -207,20 +215,21 @@ const useOutputBarStore = create<OutputBarStore>(
 ```
 
 ### Dimensions Configuration
+
 ```typescript
 const DIMENSIONS = {
   MINIMIZED_HEIGHT: 40,
   DEFAULT_HEIGHT: 300,
   MAX_HEIGHT_RATIO: 0.7, // 70% of viewport
   MIN_HEIGHT: 100,
-  
-  DEFAULT_WIDTH: 400,     // For right position
-  MAX_WIDTH_RATIO: 0.5,   // 50% of viewport
+
+  DEFAULT_WIDTH: 400, // For right position
+  MAX_WIDTH_RATIO: 0.5, // 50% of viewport
   MIN_WIDTH: 250,
-  
+
   HEADER_HEIGHT: 40,
   RESIZE_HANDLE_SIZE: 6,
-  
+
   ANIMATION_DURATION: 300,
   ANIMATION_EASING: 'cubic-bezier(0.4, 0, 0.2, 1)'
 };
@@ -229,6 +238,7 @@ const DIMENSIONS = {
 ## Resize System
 
 ### Resize Hook
+
 ```typescript
 function useResizable({
   onResize,
@@ -243,34 +253,40 @@ function useResizable({
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const startDimensions = useRef({ width: 0, height: 0 });
   const startPosition = useRef({ x: 0, y: 0 });
-  
-  const handleResizeStart = useCallback((e: MouseEvent) => {
-    setIsResizing(true);
-    startDimensions.current = { ...dimensions };
-    startPosition.current = { x: e.clientX, y: e.clientY };
-    
-    document.addEventListener('mousemove', handleResizeMove);
-    document.addEventListener('mouseup', handleResizeEnd);
-    document.body.style.cursor = 'ns-resize';
-    document.body.style.userSelect = 'none';
-  }, [dimensions]);
-  
-  const handleResizeMove = useCallback((e: MouseEvent) => {
-    const deltaY = startPosition.current.y - e.clientY;
-    let newHeight = startDimensions.current.height + deltaY;
-    
-    // Apply constraints
-    newHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
-    
-    // Snap to grid
-    if (snapToGrid) {
-      newHeight = Math.round(newHeight / gridSize) * gridSize;
-    }
-    
-    setDimensions(prev => ({ ...prev, height: newHeight }));
-    onResize?.({ height: newHeight });
-  }, [minHeight, maxHeight, snapToGrid, gridSize, onResize]);
-  
+
+  const handleResizeStart = useCallback(
+    (e: MouseEvent) => {
+      setIsResizing(true);
+      startDimensions.current = { ...dimensions };
+      startPosition.current = { x: e.clientX, y: e.clientY };
+
+      document.addEventListener('mousemove', handleResizeMove);
+      document.addEventListener('mouseup', handleResizeEnd);
+      document.body.style.cursor = 'ns-resize';
+      document.body.style.userSelect = 'none';
+    },
+    [dimensions]
+  );
+
+  const handleResizeMove = useCallback(
+    (e: MouseEvent) => {
+      const deltaY = startPosition.current.y - e.clientY;
+      let newHeight = startDimensions.current.height + deltaY;
+
+      // Apply constraints
+      newHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
+
+      // Snap to grid
+      if (snapToGrid) {
+        newHeight = Math.round(newHeight / gridSize) * gridSize;
+      }
+
+      setDimensions(prev => ({ ...prev, height: newHeight }));
+      onResize?.({ height: newHeight });
+    },
+    [minHeight, maxHeight, snapToGrid, gridSize, onResize]
+  );
+
   const handleResizeEnd = useCallback(() => {
     setIsResizing(false);
     document.removeEventListener('mousemove', handleResizeMove);
@@ -278,7 +294,7 @@ function useResizable({
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
   }, [handleResizeMove]);
-  
+
   return {
     isResizing,
     dimensions,
@@ -291,11 +307,13 @@ function useResizable({
 ## Animation System
 
 ### CSS Transitions
+
 ```css
 .output-bar {
-  transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1),
-              width 300ms cubic-bezier(0.4, 0, 0.2, 1),
-              transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    height 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .output-bar--minimizing {
@@ -333,6 +351,7 @@ function useResizable({
 ```
 
 ### Spring Animations (Optional)
+
 ```typescript
 import { useSpring, animated } from '@react-spring/web';
 
@@ -341,7 +360,7 @@ function useOutputBarAnimation(state: OutputBarState) {
     height: state.currentHeight,
     width: state.currentWidth,
     opacity: state.isMinimized ? 0.95 : 1,
-    transform: state.isMinimized 
+    transform: state.isMinimized
       ? `translateY(${state.currentHeight - MINIMIZED_HEIGHT}px)`
       : 'translateY(0px)',
     config: {
@@ -350,7 +369,7 @@ function useOutputBarAnimation(state: OutputBarState) {
       clamp: false
     }
   });
-  
+
   return springs;
 }
 ```
@@ -358,26 +377,27 @@ function useOutputBarAnimation(state: OutputBarState) {
 ## Event Handling
 
 ### Preventing Event Propagation
+
 ```typescript
 function OutputBar() {
   const handleMouseDown = (e: React.MouseEvent) => {
     // Prevent canvas interactions when clicking output bar
     e.stopPropagation();
   };
-  
+
   const handleWheel = (e: React.WheelEvent) => {
     // Prevent canvas zoom when scrolling in output bar
     e.stopPropagation();
   };
-  
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // Prevent canvas shortcuts when typing in output bar
-    if (e.target instanceof HTMLInputElement || 
+    if (e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement) {
       e.stopPropagation();
     }
   };
-  
+
   return (
     <div
       className="output-bar"
@@ -395,6 +415,7 @@ function OutputBar() {
 ## Header Controls
 
 ### Control Buttons
+
 ```typescript
 interface OutputBarControls {
   onMinimize: () => void;
@@ -412,7 +433,7 @@ function OutputBarHeader({ state, controls }: HeaderProps) {
       <div className="output-bar__title">
         Output ({state.outputs.length})
       </div>
-      
+
       <div className="output-bar__controls">
         <button
           onClick={state.isMinimized ? controls.onRestore : controls.onMinimize}
@@ -420,22 +441,22 @@ function OutputBarHeader({ state, controls }: HeaderProps) {
         >
           {state.isMinimized ? '⬆' : '⬇'}
         </button>
-        
+
         <button
           onClick={state.isMaximized ? controls.onRestore : controls.onMaximize}
           aria-label={state.isMaximized ? 'Restore' : 'Maximize'}
         >
           {state.isMaximized ? '⬇' : '⬆'}
         </button>
-        
+
         <button onClick={controls.onClear} aria-label="Clear outputs">
           🗑️
         </button>
-        
+
         <button onClick={controls.onCopy} aria-label="Copy output">
           📋
         </button>
-        
+
         <button onClick={controls.onExport} aria-label="Export outputs">
           💾
         </button>
@@ -448,6 +469,7 @@ function OutputBarHeader({ state, controls }: HeaderProps) {
 ## Content Display
 
 ### Tab System
+
 ```typescript
 interface OutputTab {
   id: string;
@@ -477,7 +499,7 @@ function OutputBarContent({ outputs, activeTab }: ContentProps) {
       content: <PerformanceMetrics />
     }
   ];
-  
+
   return (
     <div className="output-bar__content">
       <TabBar tabs={tabs} activeTab={activeTab} />
@@ -490,6 +512,7 @@ function OutputBarContent({ outputs, activeTab }: ContentProps) {
 ## Accessibility
 
 ### ARIA Attributes
+
 ```typescript
 <div
   role="region"
@@ -510,7 +533,7 @@ function OutputBarContent({ outputs, activeTab }: ContentProps) {
       </button>
     ))}
   </div>
-  
+
   <div
     role="tabpanel"
     id={`tabpanel-${activeTab}`}
@@ -522,13 +545,14 @@ function OutputBarContent({ outputs, activeTab }: ContentProps) {
 ```
 
 ### Keyboard Shortcuts
+
 ```typescript
 const KEYBOARD_SHORTCUTS = {
   'Ctrl+`': 'Toggle output bar',
   'Ctrl+Shift+C': 'Clear outputs',
   'Ctrl+Shift+M': 'Toggle maximize',
-  'Escape': 'Minimize output bar',
-  'Tab': 'Navigate between tabs',
+  Escape: 'Minimize output bar',
+  Tab: 'Navigate between tabs',
   'Ctrl+Tab': 'Next tab',
   'Ctrl+Shift+Tab': 'Previous tab'
 };
@@ -541,7 +565,7 @@ function useKeyboardShortcuts() {
       }
       // ... other shortcuts
     };
-    
+
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
@@ -551,6 +575,7 @@ function useKeyboardShortcuts() {
 ## Performance Optimizations
 
 ### Virtual Scrolling
+
 ```typescript
 import { FixedSizeList } from 'react-window';
 
@@ -573,6 +598,7 @@ function ResultsList({ outputs }: { outputs: OutputEntry[] }) {
 ```
 
 ### Memoization
+
 ```typescript
 const OutputItem = React.memo(({ output }: { output: OutputEntry }) => {
   return (
@@ -590,6 +616,7 @@ const OutputItem = React.memo(({ output }: { output: OutputEntry }) => {
 ## Testing Strategy
 
 ### Unit Tests
+
 ```typescript
 describe('OutputBar', () => {
   it('should render as sibling of canvas');
@@ -605,6 +632,7 @@ describe('OutputBar', () => {
 ```
 
 ### Integration Tests
+
 ```typescript
 describe('OutputBar Integration', () => {
   it('should not interfere with canvas interactions');
@@ -618,16 +646,19 @@ describe('OutputBar Integration', () => {
 ## Migration Plan
 
 ### Phase 1: Restructure DOM
+
 1. Move OutputBar out of ReactFlowCanvas
 2. Create new workspace container
 3. Update CSS grid layout
 
 ### Phase 2: Fix State Management
+
 1. Implement proper minimize/restore logic
 2. Fix maximize single-click behavior
 3. Add state persistence
 
 ### Phase 3: Polish UX
+
 1. Add smooth animations
 2. Implement resize functionality
 3. Add keyboard shortcuts

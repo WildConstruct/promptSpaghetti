@@ -17,13 +17,17 @@ Epic 1 represents a fundamental shift from traditional node editors. Instead of 
 ## Node Types
 
 ### TextBlockNode
+
 Simple text content that can be edited inline.
+
 ```typescript
 const node = new TextBlockNode('node-1', 'Your text here');
 ```
 
 ### WeightedChoiceNode
+
 Multiple options with probability weights.
+
 ```typescript
 const node = new WeightedChoiceNode('node-2', [
   { text: 'option1', weight: 50 },
@@ -32,20 +36,26 @@ const node = new WeightedChoiceNode('node-2', [
 ```
 
 ### ConcatNode
+
 Combines multiple inputs into a single output.
+
 ```typescript
 const node = new ConcatNode('node-3', ' '); // space separator
 ```
 
 ### VariableNode
+
 Get or set variables in the execution context.
+
 ```typescript
 const setNode = new VariableNode('node-4', 'varName', 'value', 'set');
 const getNode = new VariableNode('node-5', 'varName', null, 'get');
 ```
 
 ### OutputNode
+
 Terminal node that collects the final result.
+
 ```typescript
 const node = new OutputNode('node-6');
 ```
@@ -53,6 +63,7 @@ const node = new OutputNode('node-6');
 ## Usage
 
 ### Basic Execution
+
 ```typescript
 import { Epic1ExecutionEngine } from './Epic1ExecutionEngine';
 import { TextBlockNode, OutputNode } from './index';
@@ -72,6 +83,7 @@ console.log(result); // "Hello World"
 ```
 
 ### Prompt Parsing
+
 ```typescript
 import { promptParser } from './PromptParser';
 
@@ -94,6 +106,7 @@ const analysis = promptParser.parse(prompt);
 ## Testing
 
 Run tests:
+
 ```bash
 npm test packages/core/runtime/nodes/epic1
 ```

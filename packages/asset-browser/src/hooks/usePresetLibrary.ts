@@ -9,12 +9,12 @@ export type PresetIndexItem = {
 };
 
 export function usePresetLibrary() {
-  const presets = useAssetBrowserStore((s) => s.presets);
-  const filtered = useAssetBrowserStore((s) => s.filteredPresets);
-  const activeTags = useAssetBrowserStore((s) => s.activeTags);
-  const scanStatus = useAssetBrowserStore((s) => s.scanStatus);
-  const error = useAssetBrowserStore((s) => s.error);
-  const scan = useAssetBrowserStore((s) => s.scan);
+  const presets = useAssetBrowserStore(s => s.presets);
+  const filtered = useAssetBrowserStore(s => s.filteredPresets);
+  const activeTags = useAssetBrowserStore(s => s.activeTags);
+  const scanStatus = useAssetBrowserStore(s => s.scanStatus);
+  const error = useAssetBrowserStore(s => s.error);
+  const scan = useAssetBrowserStore(s => s.scan);
 
   const tags = useMemo(() => {
     const counts = new Map<string, number>();
@@ -33,6 +33,6 @@ export function usePresetLibrary() {
     activeTags,
     scanStatus,
     error,
-    scan,
+    scan
   };
 }

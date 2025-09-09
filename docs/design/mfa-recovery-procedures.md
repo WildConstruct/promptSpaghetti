@@ -78,7 +78,7 @@ const recoveryCodeSpecs = {
   entropy: 64, // Minimum 64 bits of entropy
   generator: 'CSPRNG', // Cryptographically secure random
   expiration: '1 year', // Maximum validity period
-  usage: 'single-use', // Each code valid for one use only
+  usage: 'single-use' // Each code valid for one use only
 };
 
 // Example generation function
@@ -89,7 +89,8 @@ function generateRecoveryCodes() {
   for (let i = 0; i < 10; i++) {
     let code = '';
     for (let j = 0; j < 12; j++) {
-      const randomIndex = crypto.getRandomValues(new Uint32Array(1))[0] % alphabet.length;
+      const randomIndex =
+        crypto.getRandomValues(new Uint32Array(1))[0] % alphabet.length;
       code += alphabet[randomIndex];
 
       // Add hyphen for readability every 4 characters
@@ -147,7 +148,9 @@ Security Features:
   </div>
 
   <div class="download-options">
-    <button id="download-txt" class="btn-secondary">📄 Download as Text File</button>
+    <button id="download-txt" class="btn-secondary">
+      📄 Download as Text File
+    </button>
     <button id="print-codes" class="btn-secondary">🖨️ Print Codes</button>
     <button id="copy-all" class="btn-secondary">📋 Copy All Codes</button>
   </div>
@@ -217,8 +220,15 @@ verification_process:
   <div class="email-input-section">
     <label for="backup-email">Backup Email Address:</label>
     <div class="input-group">
-      <input type="email" id="backup-email" placeholder="backup@different-provider.com" class="email-input" />
-      <button id="verify-backup-email" class="btn-verify">📤 Send Verification</button>
+      <input
+        type="email"
+        id="backup-email"
+        placeholder="backup@different-provider.com"
+        class="email-input"
+      />
+      <button id="verify-backup-email" class="btn-verify">
+        📤 Send Verification
+      </button>
     </div>
 
     <div class="provider-check" id="provider-check">
@@ -232,12 +242,22 @@ verification_process:
 
     <div class="code-input-group">
       <label for="backup-verification-code">Enter the 6-digit code:</label>
-      <input type="text" id="backup-verification-code" maxlength="6" pattern="[0-9]{6}" class="verification-input" />
+      <input
+        type="text"
+        id="backup-verification-code"
+        maxlength="6"
+        pattern="[0-9]{6}"
+        class="verification-input"
+      />
     </div>
 
     <div class="verification-actions">
-      <button id="verify-backup-code" class="btn-primary">✅ Verify Code</button>
-      <button id="resend-backup-code" class="btn-secondary">🔄 Resend Code</button>
+      <button id="verify-backup-code" class="btn-primary">
+        ✅ Verify Code
+      </button>
+      <button id="resend-backup-code" class="btn-secondary">
+        🔄 Resend Code
+      </button>
     </div>
   </div>
 </div>
@@ -318,8 +338,12 @@ flowchart TD
   <div class="additional-help">
     <h3>Still Can't Access Your Account?</h3>
     <div class="help-options">
-      <button class="btn-help" data-action="contact-support">📞 Contact Support</button>
-      <button class="btn-help" data-action="identity-verification">🆔 Identity Verification</button>
+      <button class="btn-help" data-action="contact-support">
+        📞 Contact Support
+      </button>
+      <button class="btn-help" data-action="identity-verification">
+        🆔 Identity Verification
+      </button>
     </div>
   </div>
 </div>
@@ -334,7 +358,7 @@ const comprehensiveLockoutRecovery = {
     'All MFA methods unavailable',
     'Suspected account compromise',
     'Multiple failed recovery attempts',
-    'User-requested account reset',
+    'User-requested account reset'
   ],
 
   procedure: {
@@ -343,7 +367,7 @@ const comprehensiveLockoutRecovery = {
     step3: 'Administrator Review',
     step4: 'Temporary Access Pass',
     step5: 'Complete MFA Re-enrollment',
-    step6: 'Security Audit Review',
+    step6: 'Security Audit Review'
   },
 
   identityVerification: {
@@ -351,15 +375,15 @@ const comprehensiveLockoutRecovery = {
       'Government-issued ID verification',
       'Biometric comparison (if previously enrolled)',
       'Knowledge verification (account history)',
-      'Third-party identity service verification',
+      'Third-party identity service verification'
     ],
 
     timeline: {
       business_hours: '2-4 hours',
       after_hours: '24-48 hours',
-      weekends: '48-72 hours',
-    },
-  },
+      weekends: '48-72 hours'
+    }
+  }
 };
 ```
 
@@ -376,7 +400,7 @@ const temporaryAccessPass = {
     entropy: 80,
     valid_duration: '24 hours',
     single_use: false,
-    max_uses: 5,
+    max_uses: 5
   },
 
   restrictions: {
@@ -384,15 +408,15 @@ const temporaryAccessPass = {
     ip_binding: true,
     session_duration: '30 minutes',
     privileged_actions: false,
-    data_access: 'read-only',
+    data_access: 'read-only'
   },
 
   monitoring: {
     all_actions_logged: true,
     security_team_alerts: true,
     usage_analytics: true,
-    anomaly_detection: true,
-  },
+    anomaly_detection: true
+  }
 };
 
 // Example TAP interface
@@ -406,7 +430,7 @@ function generateTemporaryAccessPass(userId, adminId, reason) {
     validUntil: new Date(Date.now() + 24 * 60 * 60 * 1000),
     usageCount: 0,
     maxUsage: 5,
-    restrictions: ['mfa-setup-only', 'ip-restricted', 'session-limited'],
+    restrictions: ['mfa-setup-only', 'ip-restricted', 'session-limited']
   };
 
   // Log issuance
@@ -415,7 +439,7 @@ function generateTemporaryAccessPass(userId, adminId, reason) {
     userId: userId,
     issuedBy: adminId,
     reason: reason,
-    validUntil: tap.validUntil,
+    validUntil: tap.validUntil
   });
 
   return tap;
@@ -433,7 +457,11 @@ function generateTemporaryAccessPass(userId, adminId, reason) {
 
     <div class="form-group">
       <label for="user-identifier">User Identifier:</label>
-      <input type="text" id="user-identifier" placeholder="email@example.com or user ID" />
+      <input
+        type="text"
+        id="user-identifier"
+        placeholder="email@example.com or user ID"
+      />
     </div>
 
     <div class="form-group">
@@ -459,7 +487,10 @@ function generateTemporaryAccessPass(userId, adminId, reason) {
 
     <div class="form-group">
       <label for="admin-notes">Administrator Notes:</label>
-      <textarea id="admin-notes" placeholder="Document verification steps taken..."></textarea>
+      <textarea
+        id="admin-notes"
+        placeholder="Document verification steps taken..."
+      ></textarea>
     </div>
 
     <div class="verification-checklist">
@@ -504,7 +535,9 @@ function generateTemporaryAccessPass(userId, adminId, reason) {
     </div>
 
     <div class="form-actions">
-      <button id="issue-tap" class="btn-primary">🎫 Issue Temporary Access Pass</button>
+      <button id="issue-tap" class="btn-primary">
+        🎫 Issue Temporary Access Pass
+      </button>
       <button id="cancel-recovery" class="btn-secondary">❌ Cancel</button>
     </div>
   </div>
@@ -522,34 +555,34 @@ const recoveryMonitoring = {
     multipleRecoveryAttempts: {
       threshold: 3,
       timeWindow: '1 hour',
-      action: 'lock_account_temporarily',
+      action: 'lock_account_temporarily'
     },
 
     unusualLocationRecovery: {
       geoLocation: 'different_country',
-      action: 'require_additional_verification',
+      action: 'require_additional_verification'
     },
 
     suspiciousPatterns: {
       rapidFireAttempts: true,
       invalidRecoveryCodes: 5,
-      action: 'security_team_alert',
-    },
+      action: 'security_team_alert'
+    }
   },
 
   automatedResponses: {
     accountLockout: {
       duration: '2 hours',
       escalation: 'security_team',
-      notification: 'user_email',
+      notification: 'user_email'
     },
 
     additionalVerification: {
       method: 'identity_proofing',
       approver: 'senior_admin',
-      timeout: '24 hours',
-    },
-  },
+      timeout: '24 hours'
+    }
+  }
 };
 ```
 
@@ -635,7 +668,7 @@ const recoveryTesting = {
     recoveryCodes: 'quarterly',
     backupEmail: 'monthly',
     adminProcedures: 'semi-annually',
-    userEducation: 'annually',
+    userEducation: 'annually'
   },
 
   testProcedures: {
@@ -643,23 +676,23 @@ const recoveryTesting = {
       testInvalidCodes: true,
       testExpiredCodes: true,
       testUsedCodes: true,
-      testRateLimiting: true,
+      testRateLimiting: true
     },
 
     backupEmailTesting: {
       deliverabilityTest: true,
       responseTimeTest: true,
       securityCheckTest: true,
-      userAccessTest: true,
+      userAccessTest: true
     },
 
     adminWorkflowTesting: {
       identityVerification: true,
       temporaryAccessPass: true,
       escalationProcedures: true,
-      auditTrailValidation: true,
-    },
-  },
+      auditTrailValidation: true
+    }
+  }
 };
 ```
 

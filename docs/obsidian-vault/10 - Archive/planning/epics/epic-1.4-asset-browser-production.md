@@ -14,18 +14,16 @@ Transform the restored ProAssetBrowser into a production-ready component with fu
 
 ### Enhancement Details
 
-- **What's being added/changed:** 
+- **What's being added/changed:**
   - Fragment format validation and file generation/mapping
   - Scrollbar implementation for overflow content
   - Panel and section resizing capabilities with persistence
   - Preview panel restoration and styling fixes
   - Performance optimizations for 60+ fragments
-  
-- **How it integrates:** 
+- **How it integrates:**
   - Maintains existing React-Flow drag-drop protocol
   - Uses localStorage for UI state persistence
   - Leverages existing Logic theme styling system
-  
 - **Success criteria:**
   - All fragments draggable into canvas
   - Responsive UI with resizable panels

@@ -37,7 +37,7 @@ const directoriesToRemove = [
   'client/src/components/AlertManagement',
   'client/src/components/Analytics',
   'client/src/components/ActivityManagement',
-  
+
   // Core package components not needed
   'packages/core/components/Admin',
   'packages/core/components/Analytics',
@@ -56,7 +56,7 @@ const directoriesToRemove = [
   'packages/core/components/notification',
   'packages/core/components/ActivityManagement',
   'packages/core/components/AlertManagement',
-  
+
   // Core subsystems not needed
   'packages/core/admin',
   'packages/core/analytics',
@@ -83,7 +83,7 @@ const directoriesToRemove = [
   'packages/core/transparency',
   'packages/core/usage',
   'packages/core/verification',
-  
+
   // Client subsystems not needed
   'client/src/services/analytics',
   'client/src/services/auth',
@@ -123,19 +123,19 @@ const filesToRemove = [
   'client/src/hooks/useEpic17Authorization.ts',
   'client/src/hooks/useDataAccess.ts',
   'client/src/hooks/useRouteGuard.ts',
-  
+
   // Service files not needed
   'client/src/services/analyticsService.ts',
   'client/src/services/DeviceFingerprintService.ts',
   'client/src/services/searchApiService.ts',
-  
+
   // Type files not needed
   'client/src/types/analytics.ts',
   'client/src/types/consent.ts',
   'client/src/types/revenue.ts',
   'client/src/types/security.ts',
   'client/src/types/MFATypes.ts',
-  
+
   // Utils not needed
   'client/src/utils/securityUtils.ts',
   'client/src/utils/__tests__/securityUtils.test.ts',

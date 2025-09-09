@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { FixedSizeGrid as Grid, type GridChildComponentProps } from 'react-window';
+import {
+  FixedSizeGrid as Grid,
+  type GridChildComponentProps
+} from 'react-window';
 import { useAssetBrowserStore } from '../stores/assetBrowserStore';
 import { PresetCard } from './PresetCard';
 import type { Preset } from '../types';
@@ -8,14 +11,14 @@ const CARD_W = 180;
 const CARD_H = 160;
 
 export function PresetGrid({ onInsert }: { onInsert?: (p: Preset) => void }) {
-  const presets = useAssetBrowserStore((s) => s.filteredPresets);
-  const scanStatus = useAssetBrowserStore((s) => s.scanStatus);
-  const error = useAssetBrowserStore((s) => s.error);
-  const select = useAssetBrowserStore((s) => s.selectPreset);
-  const focusArea = useAssetBrowserStore((s) => s.focusArea);
-  const focusIndex = useAssetBrowserStore((s) => s.focusIndex);
-  const setGridMetrics = useAssetBrowserStore((s) => s.setGridMetrics);
-  const setFocus = useAssetBrowserStore((s) => s.setFocus);
+  const presets = useAssetBrowserStore(s => s.filteredPresets);
+  const scanStatus = useAssetBrowserStore(s => s.scanStatus);
+  const error = useAssetBrowserStore(s => s.error);
+  const select = useAssetBrowserStore(s => s.selectPreset);
+  const focusArea = useAssetBrowserStore(s => s.focusArea);
+  const focusIndex = useAssetBrowserStore(s => s.focusIndex);
+  const setGridMetrics = useAssetBrowserStore(s => s.setGridMetrics);
+  const setFocus = useAssetBrowserStore(s => s.setFocus);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dims, setDims] = useState({ w: 900, h: 600 });
@@ -23,7 +26,8 @@ export function PresetGrid({ onInsert }: { onInsert?: (p: Preset) => void }) {
   useEffect(() => {
     if (!containerRef.current) return;
     const el = containerRef.current;
-    const update = () => setDims({ w: el.clientWidth || 900, h: el.clientHeight || 600 });
+    const update = () =>
+      setDims({ w: el.clientWidth || 900, h: el.clientHeight || 600 });
     update();
     if (typeof ResizeObserver === 'function') {
       const ro = new ResizeObserver(update);
@@ -45,13 +49,22 @@ export function PresetGrid({ onInsert }: { onInsert?: (p: Preset) => void }) {
   }, [columnCount, presets.length, setGridMetrics]);
 
   const Cell = useMemo(() => {
-    function GridCell({ columnIndex, rowIndex, style }: GridChildComponentProps) {
+    function GridCell({
+      columnIndex,
+      rowIndex,
+      style
+    }: GridChildComponentProps) {
       const index = rowIndex * columnCount + columnIndex;
       const p = presets[index];
       if (!p) return <div style={style} />;
       const isActive = focusArea === 'grid' && focusIndex === index;
       return (
-        <div style={style} data-grid-index={index} role="gridcell" aria-selected={isActive}>
+        <div
+          style={style}
+          data-grid-index={index}
+          role="gridcell"
+          aria-selected={isActive}
+        >
           <PresetCard
             preset={p}
             onClick={() => select(p.id)}
@@ -70,13 +83,26 @@ export function PresetGrid({ onInsert }: { onInsert?: (p: Preset) => void }) {
   const showError = scanStatus === 'error';
 
   return (
-    <div aria-label="Preset Grid" role="grid" ref={containerRef} style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+    <div
+      aria-label="Preset Grid"
+      role="grid"
+      ref={containerRef}
+      style={{ width: '100%', height: '100%', overflow: 'hidden' }}
+    >
       {showError ? (
-        <div role="alert" aria-live="assertive" style={{ padding: 16, color: '#b00' }}>
+        <div
+          role="alert"
+          aria-live="assertive"
+          style={{ padding: 16, color: '#b00' }}
+        >
           Failed to scan libraries: {error}
         </div>
       ) : showEmpty ? (
-        <div role="status" aria-live="polite" style={{ padding: 16, color: '#555' }}>
+        <div
+          role="status"
+          aria-live="polite"
+          style={{ padding: 16, color: '#555' }}
+        >
           No presets found. Adjust your search or filters.
         </div>
       ) : (

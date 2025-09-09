@@ -47,7 +47,7 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
           const stat = await fs.stat(filePath);
           const content = await fs.readFile(filePath, 'utf-8');
           const data = JSON.parse(content);
-          
+
           graphFiles.push({
             id: data.id || file.replace('.json', ''),
             name: data.name || file,
@@ -58,8 +58,9 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
         }
       }
 
-      return graphFiles.sort((a, b) => 
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      return graphFiles.sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
       );
     } catch (error) {
       console.error('Error listing graphs:', error);
@@ -70,7 +71,7 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
   // Load a specific graph
   fastify.get('/api/graphs/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
-    
+
     try {
       const filePath = path.join(STORAGE_DIR, `${id}.json`);
       const content = await fs.readFile(filePath, 'utf-8');
@@ -85,7 +86,7 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
     const { name, nodes, edges } = request.body as any;
     const id = uuidv4();
     const now = new Date().toISOString();
-    
+
     const graphData: GraphFile = {
       id,
       name: name || `Graph ${new Date().toLocaleDateString()}`,
@@ -95,15 +96,15 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
       nodes: nodes || [],
       edges: edges || []
     };
-    
+
     try {
       const filePath = path.join(STORAGE_DIR, `${id}.json`);
       const content = JSON.stringify(graphData, null, 2);
       await fs.writeFile(filePath, content);
-      
+
       graphData.size = content.length;
       await fs.writeFile(filePath, JSON.stringify(graphData, null, 2));
-      
+
       return graphData;
     } catch (error) {
       console.error('Error saving graph:', error);
@@ -115,12 +116,12 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
   fastify.put('/api/graphs/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
     const { name, nodes, edges } = request.body as any;
-    
+
     try {
       const filePath = path.join(STORAGE_DIR, `${id}.json`);
       const existing = await fs.readFile(filePath, 'utf-8');
       const existingData = JSON.parse(existing);
-      
+
       const graphData: GraphFile = {
         ...existingData,
         name: name || existingData.name,
@@ -128,11 +129,11 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
         nodes: nodes || [],
         edges: edges || []
       };
-      
+
       const content = JSON.stringify(graphData, null, 2);
       graphData.size = content.length;
       await fs.writeFile(filePath, content);
-      
+
       return graphData;
     } catch (error) {
       console.error('Error updating graph:', error);
@@ -143,7 +144,7 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
   // Delete a graph
   fastify.delete('/api/graphs/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
-    
+
     try {
       const filePath = path.join(STORAGE_DIR, `${id}.json`);
       await fs.unlink(filePath);

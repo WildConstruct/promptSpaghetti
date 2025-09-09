@@ -1,8 +1,8 @@
 import { Node } from 'reactflow';
-import { 
-  TextBlockNodeData, 
-  WeightedChoiceNodeData, 
-  OutputNodeData 
+import {
+  TextBlockNodeData,
+  WeightedChoiceNodeData,
+  OutputNodeData
 } from '../types';
 
 export interface ViewportDimensions {
@@ -23,7 +23,9 @@ export interface NodePositions {
   leftMiddle: { x: number; y: number };
 }
 
-export type TypedNode = Node<TextBlockNodeData | WeightedChoiceNodeData | OutputNodeData>;
+export type TypedNode = Node<
+  TextBlockNodeData | WeightedChoiceNodeData | OutputNodeData
+>;
 
 /**
  * Calculate viewport dimensions with sensible defaults
@@ -31,12 +33,15 @@ export type TypedNode = Node<TextBlockNodeData | WeightedChoiceNodeData | Output
 export const calculateViewportDimensions = (): ViewportDimensions => {
   const width = Math.max(800, (window.innerWidth || 1200) - 400);
   const height = Math.max(600, (window.innerHeight || 800) - 100);
-  
+
   if (isNaN(width) || isNaN(height)) {
-    console.error('[Epic1Editor] Invalid viewport dimensions!', { width, height });
+    console.error('[Epic1Editor] Invalid viewport dimensions!', {
+      width,
+      height
+    });
     return { width: 1200, height: 800 }; // Fallback dimensions
   }
-  
+
   return { width, height };
 };
 
@@ -50,27 +55,27 @@ export const calculateNodePositions = (
 ): NodePositions => {
   const { width: viewportWidth, height: viewportHeight } = viewport;
   const { width: nodeWidth, height: nodeHeight } = nodeDimensions;
-  
+
   return {
-    topCenter: { 
-      x: (viewportWidth - nodeWidth) / 2, 
-      y: edgePadding 
+    topCenter: {
+      x: (viewportWidth - nodeWidth) / 2,
+      y: edgePadding
     },
-    rightMiddle: { 
-      x: viewportWidth - nodeWidth - edgePadding, 
-      y: (viewportHeight - nodeHeight) / 2 
+    rightMiddle: {
+      x: viewportWidth - nodeWidth - edgePadding,
+      y: (viewportHeight - nodeHeight) / 2
     },
-    bottomRight: { 
-      x: viewportWidth - nodeWidth - edgePadding, 
-      y: viewportHeight - nodeHeight - edgePadding 
+    bottomRight: {
+      x: viewportWidth - nodeWidth - edgePadding,
+      y: viewportHeight - nodeHeight - edgePadding
     },
-    bottomCenter: { 
-      x: (viewportWidth - nodeWidth) / 2, 
-      y: viewportHeight - nodeHeight - edgePadding 
+    bottomCenter: {
+      x: (viewportWidth - nodeWidth) / 2,
+      y: viewportHeight - nodeHeight - edgePadding
     },
-    leftMiddle: { 
-      x: edgePadding, 
-      y: (viewportHeight - nodeHeight) / 2 
+    leftMiddle: {
+      x: edgePadding,
+      y: (viewportHeight - nodeHeight) / 2
     }
   };
 };
@@ -124,7 +129,8 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
       nodeType: 'textBlock',
       content: 'story. They are a',
       text: 'story. They are a',
-      label: 'Connector'    } as TextBlockNodeData
+      label: 'Connector'
+    } as TextBlockNodeData
   },
   {
     id: 'character-1',
@@ -156,7 +162,8 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     data: {
       nodeType: 'output',
       outputName: 'character_prompt',
-      label: 'Character Prompt'    } as OutputNodeData
+      label: 'Character Prompt'
+    } as OutputNodeData
   }
 ];
 
@@ -164,7 +171,7 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
  * Allow all nodes to be draggable - no longer enforcing frame edge positions
  */
 export const enforceFrameEdgePositions = (
-  nodes: Node[], 
+  nodes: Node[],
   originalNodes: Node[]
 ): Node[] => {
   // Simply return nodes as-is, allowing them to be dragged freely

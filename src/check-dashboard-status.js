@@ -20,14 +20,14 @@ function checkPort(port, host = 'localhost') {
         port: port,
         path: '/login',
         method: 'GET',
-        timeout: 5000,
+        timeout: 5000
       },
       res => {
         resolve({
           running: true,
           status: res.statusCode,
           port: port,
-          host: host,
+          host: host
         });
       }
     );
@@ -36,7 +36,7 @@ function checkPort(port, host = 'localhost') {
       resolve({
         running: false,
         port: port,
-        host: host,
+        host: host
       });
     });
 
@@ -46,7 +46,7 @@ function checkPort(port, host = 'localhost') {
         running: false,
         port: port,
         host: host,
-        error: 'timeout',
+        error: 'timeout'
       });
     });
 
@@ -72,7 +72,11 @@ async function checkDashboardStatus() {
 
       // Try to get network IP
       try {
-        const networkIP = execSync('hostname -I 2>/dev/null || hostname', { encoding: 'utf8' }).trim().split(' ')[0];
+        const networkIP = execSync('hostname -I 2>/dev/null || hostname', {
+          encoding: 'utf8'
+        })
+          .trim()
+          .split(' ')[0];
         if (networkIP && networkIP !== 'localhost') {
           console.log(`   Network: http://${networkIP}:${port}/login`);
         }
@@ -123,7 +127,10 @@ async function checkDashboardStatus() {
 // Process control check
 async function checkProcesses() {
   try {
-    const processes = execSync('ps aux | grep "secure-dashboard-server.js" | grep -v grep', { encoding: 'utf8' });
+    const processes = execSync(
+      'ps aux | grep "secure-dashboard-server.js" | grep -v grep',
+      { encoding: 'utf8' }
+    );
     if (processes.trim()) {
       console.log('\n🔄 Running Dashboard Processes:');
       const lines = processes.trim().split('\n');
@@ -152,7 +159,7 @@ function checkFiles() {
     'complete-dashboard.html',
     'package.json',
     'data/state.json',
-    'data/agent-broadcast.json',
+    'data/agent-broadcast.json'
   ];
 
   files.forEach(file => {
@@ -175,7 +182,7 @@ async function main() {
       running: isRunning,
       timestamp: new Date().toISOString(),
       port: DEFAULT_PORT,
-      host: DEFAULT_HOST,
+      host: DEFAULT_HOST
     };
     console.log(JSON.stringify(status, null, 2));
   }

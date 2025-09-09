@@ -9,7 +9,7 @@ class FormatValidator {
     const result = {
       isValid: true,
       errors: [],
-      warnings: [],
+      warnings: []
     };
     try {
       const parsed = this.parseContent(content);
@@ -21,10 +21,11 @@ class FormatValidator {
       result.errors.push({
         type: 'syntax',
         message: `Parse error: ${error.message}`,
-        severity: 'error',
+        severity: 'error'
       });
     }
-    result.isValid = result.errors.filter(e => e.severity === 'error').length === 0;
+    result.isValid =
+      result.errors.filter(e => e.severity === 'error').length === 0;
     return result;
   }
   static parseContent(content) {
@@ -32,7 +33,7 @@ class FormatValidator {
     const parsed = {
       version: '',
       nodes: [],
-      edges: [],
+      edges: []
     };
     let currentSection = 'header';
     let currentNode = null;
@@ -81,7 +82,7 @@ class FormatValidator {
           currentNode = {
             id: line.slice(0, -1),
             type: '',
-            props: {},
+            props: {}
           };
           currentProps = {};
           propsDepth = 0;
@@ -125,7 +126,10 @@ class FormatValidator {
         return value;
       }
     }
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
       return value.slice(1, -1);
     }
     if (/^\d+\.?\d*$/.test(value)) {
@@ -148,20 +152,20 @@ class FormatValidator {
       result.errors.push({
         type: 'schema',
         message: 'Missing required version field',
-        severity: 'error',
+        severity: 'error'
       });
     } else if (!this.SUPPORTED_VERSIONS.includes(parsed.version)) {
       result.errors.push({
         type: 'schema',
         message: `Unsupported version: ${parsed.version}. Supported versions: ${this.SUPPORTED_VERSIONS.join(', ')}`,
-        severity: 'error',
+        severity: 'error'
       });
     }
     if (parsed.nodes.length === 0) {
       result.errors.push({
         type: 'schema',
         message: 'Graph must contain at least one node',
-        severity: 'error',
+        severity: 'error'
       });
     }
     parsed.nodes.forEach(node => {
@@ -169,7 +173,7 @@ class FormatValidator {
         result.errors.push({
           type: 'schema',
           message: 'Node missing required id field',
-          severity: 'error',
+          severity: 'error'
         });
       }
       if (!node.type) {
@@ -177,14 +181,14 @@ class FormatValidator {
           type: 'schema',
           message: `Node ${node.id} missing required type field`,
           nodeId: node.id,
-          severity: 'error',
+          severity: 'error'
         });
       } else if (!this.VALID_NODE_TYPES.includes(node.type)) {
         result.errors.push({
           type: 'schema',
           message: `Node ${node.id} has invalid type: ${node.type}`,
           nodeId: node.id,
-          severity: 'error',
+          severity: 'error'
         });
       }
       if (node.id && !/^[a-zA-Z0-9_-]+$/.test(node.id)) {
@@ -192,20 +196,22 @@ class FormatValidator {
           type: 'schema',
           message: `Node ID ${node.id} contains invalid characters. Use only alphanumeric, underscore, and hyphen.`,
           nodeId: node.id,
-          severity: 'error',
+          severity: 'error'
         });
       }
     });
   }
   static validateSemantics(parsed, result) {
     const nodeIds = new Set(parsed.nodes.map(n => n.id));
-    const duplicates = parsed.nodes.map(n => n.id).filter((id, index, arr) => arr.indexOf(id) !== index);
+    const duplicates = parsed.nodes
+      .map(n => n.id)
+      .filter((id, index, arr) => arr.indexOf(id) !== index);
     duplicates.forEach(id => {
       result.errors.push({
         type: 'semantic',
         message: `Duplicate node ID: ${id}`,
         nodeId: id,
-        severity: 'error',
+        severity: 'error'
       });
     });
     parsed.edges.forEach(edge => {
@@ -213,14 +219,14 @@ class FormatValidator {
         result.errors.push({
           type: 'semantic',
           message: `Edge references non-existent source node: ${edge.source}`,
-          severity: 'error',
+          severity: 'error'
         });
       }
       if (!nodeIds.has(edge.target)) {
         result.errors.push({
           type: 'semantic',
           message: `Edge references non-existent target node: ${edge.target}`,
-          severity: 'error',
+          severity: 'error'
         });
       }
     });
@@ -232,7 +238,7 @@ class FormatValidator {
               type: 'semantic',
               message: `Node ${node.id} references non-existent input: ${inputId}`,
               nodeId: node.id,
-              severity: 'error',
+              severity: 'error'
             });
           }
         });
@@ -251,7 +257,7 @@ class FormatValidator {
           type: 'semantic',
           message: `Cycle detected: ${path.join(' -> ')} -> ${nodeId}`,
           nodeId: nodeId,
-          severity: 'error',
+          severity: 'error'
         });
         return true;
       }
@@ -287,7 +293,7 @@ class FormatValidator {
               type: 'schema',
               message: `${node.type} node ${node.id} missing required choices array`,
               nodeId: node.id,
-              severity: 'error',
+              severity: 'error'
             });
           } else {
             node.props.choices.forEach((choice, index) => {
@@ -296,7 +302,7 @@ class FormatValidator {
                   type: 'schema',
                   message: `${node.type} node ${node.id} choice ${index} missing value`,
                   nodeId: node.id,
-                  severity: 'error',
+                  severity: 'error'
                 });
               }
               if (typeof choice.weight !== 'number' || choice.weight < 0) {
@@ -304,7 +310,7 @@ class FormatValidator {
                   type: 'schema',
                   message: `${node.type} node ${node.id} choice ${index} has invalid weight`,
                   nodeId: node.id,
-                  severity: 'error',
+                  severity: 'error'
                 });
               }
             });
@@ -317,7 +323,7 @@ class FormatValidator {
               type: 'schema',
               message: `${node.type} node ${node.id} missing required key property`,
               nodeId: node.id,
-              severity: 'error',
+              severity: 'error'
             });
           }
           break;
@@ -327,7 +333,7 @@ class FormatValidator {
               type: 'schema',
               message: `Include node ${node.id} missing required name property`,
               nodeId: node.id,
-              severity: 'error',
+              severity: 'error'
             });
           }
           break;
@@ -341,12 +347,15 @@ class FormatValidator {
       connectedNodes.add(edge.target);
     });
     parsed.nodes.forEach(node => {
-      if (!connectedNodes.has(node.id) && (!node.inputs || node.inputs.length === 0)) {
+      if (
+        !connectedNodes.has(node.id) &&
+        (!node.inputs || node.inputs.length === 0)
+      ) {
         result.warnings.push({
           type: 'optimization',
           message: `Node ${node.id} appears to be isolated`,
           suggestion: 'Consider connecting this node or removing it',
-          nodeId: node.id,
+          nodeId: node.id
         });
       }
     });
@@ -355,7 +364,7 @@ class FormatValidator {
       result.warnings.push({
         type: 'best-practice',
         message: 'Graph has no Output nodes',
-        suggestion: 'Add at least one Output node to generate results',
+        suggestion: 'Add at least one Output node to generate results'
       });
     }
     this.checkReachability(parsed, result);
@@ -363,7 +372,9 @@ class FormatValidator {
   static checkReachability(parsed, result) {
     const nodeMap = new Map(parsed.nodes.map(n => [n.id, n]));
     const reachable = new Set();
-    const rootNodes = parsed.nodes.filter(node => !node.inputs || node.inputs.length === 0);
+    const rootNodes = parsed.nodes.filter(
+      node => !node.inputs || node.inputs.length === 0
+    );
     const dfs = nodeId => {
       if (reachable.has(nodeId)) return;
       reachable.add(nodeId);
@@ -380,7 +391,7 @@ class FormatValidator {
           type: 'optimization',
           message: `Node ${node.id} is unreachable from root nodes`,
           suggestion: 'Ensure this node is connected to the graph flow',
-          nodeId: node.id,
+          nodeId: node.id
         });
       }
     });

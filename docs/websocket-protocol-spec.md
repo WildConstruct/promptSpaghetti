@@ -17,7 +17,9 @@ This document provides the technical specification for PromptScape's WebSocket-b
 ### 1. Connection Establishment
 
 ```javascript
-const ws = new WebSocket('ws://localhost:8000', ['promptscape-collaboration-v1']);
+const ws = new WebSocket('ws://localhost:8000', [
+  'promptscape-collaboration-v1'
+]);
 
 ws.onopen = event => {
   console.log('WebSocket connection established');
@@ -141,7 +143,7 @@ const WSMessageSchema = z.object({
   timestamp: z.number().int().positive(),
   messageId: z.string().uuid(),
   documentId: z.string().uuid().optional(),
-  userId: z.string().optional(),
+  userId: z.string().optional()
 });
 ```
 
@@ -571,7 +573,7 @@ const throttledCursorUpdate = throttle((x, y) => {
       type: 'cursor_update',
       payload: { x, y },
       timestamp: Date.now(),
-      messageId: generateUUID(),
+      messageId: generateUUID()
     })
   );
 }, 50); // 50ms = 20 FPS

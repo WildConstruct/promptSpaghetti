@@ -8,7 +8,9 @@ const path = require('path');
 const fs = require('fs');
 
 // Initialize global error reporter
-const errorReporter = new EnhancedErrorReporter(path.join(process.cwd(), 'test-reports', 'errors'));
+const errorReporter = new EnhancedErrorReporter(
+  path.join(process.cwd(), 'test-reports', 'errors')
+);
 
 // Make error reporter globally available
 global.__errorReporter = errorReporter;
@@ -19,7 +21,7 @@ global.__testMetrics = {
   failedTests: 0,
   skippedTests: 0,
   totalDuration: 0,
-  errors: [],
+  errors: []
 };
 
 // Enhanced error handling
@@ -30,7 +32,7 @@ console.error = (...args) => {
     const error = new Error(args.join(' '));
     errorReporter.reportError(error, global.__currentTestContext, {
       tags: ['console-error'],
-      actualBehavior: args.join(' '),
+      actualBehavior: args.join(' ')
     });
   }
   return originalConsoleError.apply(console, args);
@@ -45,8 +47,8 @@ process.on('unhandledRejection', (reason, promise) => {
       tags: ['unhandled-rejection'],
       metadata: {
         promise: promise.toString(),
-        reason: String(reason),
-      },
+        reason: String(reason)
+      }
     });
   }
 
@@ -58,7 +60,7 @@ process.on('uncaughtException', error => {
   if (global.__currentTestContext) {
     errorReporter.reportError(error, global.__currentTestContext, {
       tags: ['uncaught-exception'],
-      severity: 'critical',
+      severity: 'critical'
     });
   }
 
@@ -76,7 +78,7 @@ beforeEach(function () {
     testCase: testName,
     timestamp: new Date().toISOString(),
     environment: 'integration-test',
-    executionId: `test-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+    executionId: `test-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`
   };
 
   global.__testMetrics.totalTests++;
@@ -92,26 +94,27 @@ afterEach(function () {
     const testFeedback = {
       testId: global.__currentTestContext.executionId,
       status: 'passed', // Will be updated if test failed
-      duration: Date.now() - new Date(global.__currentTestContext.timestamp).getTime(),
+      duration:
+        Date.now() - new Date(global.__currentTestContext.timestamp).getTime(),
       assertions: {
         total: testState.assertionCalls || 0,
         passed: testState.assertionCalls || 0,
-        failed: 0,
+        failed: 0
       },
       coverage: {
         statements: 0,
         branches: 0,
         functions: 0,
-        lines: 0,
+        lines: 0
       },
       performance: {
         memoryUsage: process.memoryUsage().heapUsed,
         cpuUsage: process.cpuUsage().user,
-        networkRequests: 0,
+        networkRequests: 0
       },
       errors: [],
       warnings: [],
-      suggestions: [],
+      suggestions: []
     };
 
     // Update global metrics
@@ -141,7 +144,7 @@ global.it = function (name, fn, timeout) {
           tags: ['test-failure'],
           reproducible: true,
           actualBehavior: error.message,
-          expectedBehavior: 'Test should pass without errors',
+          expectedBehavior: 'Test should pass without errors'
         });
       }
       throw error;
@@ -171,7 +174,9 @@ global.measurePerformance = function (name, fn) {
   const duration = Number(endTime - startTime) / 1000000; // Convert to milliseconds
   const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
 
-  console.log(`Performance [${name}]: ${duration.toFixed(2)}ms, Memory: ${memoryDelta} bytes`);
+  console.log(
+    `Performance [${name}]: ${duration.toFixed(2)}ms, Memory: ${memoryDelta} bytes`
+  );
 
   return { result, duration, memoryDelta };
 };
@@ -186,7 +191,7 @@ global.networkMonitor = {
       method,
       duration,
       status,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   },
 
@@ -200,7 +205,7 @@ global.networkMonitor = {
 
   getTotalDuration: function () {
     return this.requests.reduce((total, req) => total + req.duration, 0);
-  },
+  }
 };
 
 // Memory leak detection
@@ -212,14 +217,18 @@ global.detectMemoryLeaks = function (threshold = 50 * 1024 * 1024) {
     const warning = `Potential memory leak detected: ${Math.round(usage.heapUsed / 1024 / 1024)}MB heap used`;
 
     if (global.__currentTestContext) {
-      errorReporter.reportError(new Error(warning), global.__currentTestContext, {
-        tags: ['memory-leak', 'performance'],
-        severity: 'medium',
-        metadata: {
-          memoryUsage: usage,
-          threshold,
-        },
-      });
+      errorReporter.reportError(
+        new Error(warning),
+        global.__currentTestContext,
+        {
+          tags: ['memory-leak', 'performance'],
+          severity: 'medium',
+          metadata: {
+            memoryUsage: usage,
+            threshold
+          }
+        }
+      );
     }
 
     console.warn(warning);
@@ -253,7 +262,9 @@ global.validateTestEnvironment = function () {
   const missing = requiredEnvVars.filter(env => !process.env[env]);
 
   if (missing.length > 0) {
-    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+    throw new Error(
+      `Missing required environment variables: ${missing.join(', ')}`
+    );
   }
 
   // Ensure test isolation
@@ -291,7 +302,7 @@ global.simulateError = function (type, message = 'Simulated error') {
       const error = new Error('Internal server error');
       error.status = 500;
       return error;
-    },
+    }
   };
 
   const errorFactory = errorTypes[type];
@@ -323,13 +334,17 @@ afterAll(async () => {
   console.log(`Passed: ${global.__testMetrics.passedTests}`);
   console.log(`Failed: ${global.__testMetrics.failedTests}`);
   console.log(`Skipped: ${global.__testMetrics.skippedTests}`);
-  console.log(`Total Duration: ${(global.__testMetrics.totalDuration / 1000).toFixed(2)}s`);
+  console.log(
+    `Total Duration: ${(global.__testMetrics.totalDuration / 1000).toFixed(2)}s`
+  );
 
   // Generate error analytics
   const analytics = errorReporter.generateAnalytics();
   console.log('\nError Analytics:');
   console.log(`- Total Errors: ${analytics.totalErrors}`);
-  console.log(`- Error Rate: ${((analytics.totalErrors / global.__testMetrics.totalTests) * 100).toFixed(2)}%`);
+  console.log(
+    `- Error Rate: ${((analytics.totalErrors / global.__testMetrics.totalTests) * 100).toFixed(2)}%`
+  );
 
   if (analytics.totalErrors > 0) {
     console.log(

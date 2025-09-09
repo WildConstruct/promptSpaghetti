@@ -39,16 +39,16 @@ export interface ParseResult {
 function standardParse(prompt: string): ParseResult {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
-  
+
   // Split prompt into segments
   const segments = prompt.split(/[.!?]+/).filter(s => s.trim());
-  
+
   segments.forEach((segment, index) => {
     const nodeId = `node-${index}`;
-    
+
     // Detect variables like {character} or [setting]
     const hasVariable = /\{[^}]+\}|\[[^\]]+\]/.test(segment);
-    
+
     nodes.push({
       id: nodeId,
       type: hasVariable ? 'variable' : 'textBlock',
@@ -59,7 +59,7 @@ function standardParse(prompt: string): ParseResult {
         type: hasVariable ? 'variable' : 'textBlock'
       }
     });
-    
+
     // Connect to previous node
     if (index > 0) {
       edges.push({
@@ -70,7 +70,7 @@ function standardParse(prompt: string): ParseResult {
       });
     }
   });
-  
+
   // Add output node
   const outputId = `output-${nodes.length}`;
   nodes.push({
@@ -83,7 +83,7 @@ function standardParse(prompt: string): ParseResult {
       type: 'output'
     }
   });
-  
+
   if (nodes.length > 1) {
     edges.push({
       id: `edge-output`,
@@ -92,7 +92,7 @@ function standardParse(prompt: string): ParseResult {
       type: 'default'
     });
   }
-  
+
   return {
     nodes,
     edges,
@@ -113,9 +113,12 @@ interface MolecularChunk {
 }
 
 // Call OpenRouter API for actual LLM parsing
-async function callOpenRouterAPI(prompt: string, config: LLMConfig): Promise<ParseResult | null> {
+async function callOpenRouterAPI(
+  prompt: string,
+  config: LLMConfig
+): Promise<ParseResult | null> {
   const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
-  
+
   const systemPrompt = `You are a prompt parser that breaks down complex prompts into semantic nodes.
 Analyze the given prompt and return a JSON structure with nodes and edges.
 Each node should represent a semantic unit (phrase, concept, or variable).
@@ -150,7 +153,7 @@ Identify variables (enclosed in {}, [], or <>), choices (or patterns), and maint
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
+        Authorization: `Bearer ${config.apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'https://prompt-spaghetti.app',
         'X-Title': 'Prompt Spaghetti Parser'
@@ -159,7 +162,10 @@ Identify variables (enclosed in {}, [], or <>), choices (or patterns), and maint
         model: config.model || 'openai/gpt-3.5-turbo',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Parse this prompt into semantic nodes: "${prompt}"` }
+          {
+            role: 'user',
+            content: `Parse this prompt into semantic nodes: "${prompt}"`
+          }
         ],
         temperature: 0.3,
         max_tokens: config.maxTokens || 1000,
@@ -173,7 +179,7 @@ Identify variables (enclosed in {}, [], or <>), choices (or patterns), and maint
 
     const data = await response.json();
     const result = JSON.parse(data.choices[0].message.content);
-    
+
     // Add output node if not present
     const hasOutput = result.nodes.some((n: any) => n.type === 'output');
     if (!hasOutput) {
@@ -186,7 +192,7 @@ Identify variables (enclosed in {}, [], or <>), choices (or patterns), and maint
           content: ''
         }
       });
-      
+
       if (result.nodes.length > 1) {
         result.edges.push({
           id: `edge-output`,
@@ -196,7 +202,7 @@ Identify variables (enclosed in {}, [], or <>), choices (or patterns), and maint
         });
       }
     }
-    
+
     return {
       nodes: result.nodes,
       edges: result.edges,
@@ -215,7 +221,10 @@ Identify variables (enclosed in {}, [], or <>), choices (or patterns), and maint
 }
 
 // Enhanced LLM parse with molecular chunking and rich metadata
-async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<ParseResult> {
+async function llmEnhancedParse(
+  prompt: string,
+  config: LLMConfig
+): Promise<ParseResult> {
   // Try actual API call first if configured
   if (config.apiKey && config.apiKey !== 'demo') {
     const apiResult = await callOpenRouterAPI(prompt, config);
@@ -223,26 +232,26 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
       return apiResult;
     }
   }
-  
+
   // Fallback to local parsing with simulated delay
   await new Promise(resolve => setTimeout(resolve, 800));
-  
+
   const nodes: Node[] = [];
   const edges: Edge[] = [];
-  
+
   // Perform molecular chunking with POS tagging and semantic analysis
   const chunks = performMolecularChunking(prompt);
-  
+
   // Group chunks into semantic units for node creation
   const semanticGroups = groupChunksIntoSemanticUnits(chunks);
-  
+
   // Create nodes from semantic groups
   let nodeIndex = 0;
   let previousNodeId: string | null = null;
   const detectedVariables = new Set<string>();
   let hasChoices = false;
   let hasBranching = false;
-  
+
   semanticGroups.forEach((group, groupIndex) => {
     const nodeId = `node-${nodeIndex++}`;
     let nodeType = 'textBlock';
@@ -256,33 +265,38 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
         confidence: group.confidence
       }
     };
-    
+
     // Detect variables in molecular chunks
     const variablePattern = /\{([^}]+)\}|\[([^\]]+)\]|<([^>]+)>/g;
     const varMatches = group.text.matchAll(variablePattern);
     const foundVars = Array.from(varMatches);
-    
+
     if (foundVars.length > 0) {
       nodeType = 'variable';
       nodeData.type = 'variable';
-      nodeData.variableName = foundVars[0][1] || foundVars[0][2] || foundVars[0][3];
+      nodeData.variableName =
+        foundVars[0][1] || foundVars[0][2] || foundVars[0][3];
       detectedVariables.add(nodeData.variableName);
-      
+
       // Intelligent suggestions based on semantic analysis
-      nodeData.suggestions = generateSmartSuggestions(nodeData.variableName, group.chunks);
+      nodeData.suggestions = generateSmartSuggestions(
+        nodeData.variableName,
+        group.chunks
+      );
     }
-    
+
     // Detect choice patterns from POS analysis
-    const hasChoiceWords = group.chunks.some(chunk => 
-      chunk.pos === 'conjunction' && /\b(or|either)\b/i.test(chunk.text)
+    const hasChoiceWords = group.chunks.some(
+      chunk =>
+        chunk.pos === 'conjunction' && /\b(or|either)\b/i.test(chunk.text)
     );
-    
+
     if (hasChoiceWords || group.semanticRole === 'choice') {
       hasChoices = true;
       hasBranching = true;
       nodeType = 'weightedChoice';
       nodeData.type = 'weightedChoice';
-      
+
       // Extract options using molecular chunks
       const options = extractOptionsFromChunks(group.chunks);
       nodeData.options = options.map((opt, i) => ({
@@ -291,29 +305,30 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
         metadata: opt.metadata
       }));
     }
-    
+
     // Detect conditional patterns
-    const hasConditional = group.chunks.some(chunk => 
-      chunk.pos === 'conditional' || /\b(if|when|unless)\b/i.test(chunk.text)
+    const hasConditional = group.chunks.some(
+      chunk =>
+        chunk.pos === 'conditional' || /\b(if|when|unless)\b/i.test(chunk.text)
     );
-    
+
     if (hasConditional) {
       nodeType = 'conditional';
       nodeData.type = 'conditional';
       nodeData.condition = extractConditionFromChunks(group.chunks);
       hasBranching = true;
     }
-    
+
     // Smart positioning based on semantic structure
     const position = calculateSmartPosition(groupIndex, nodeType, hasBranching);
-    
+
     nodes.push({
       id: nodeId,
       type: nodeType,
       position,
       data: nodeData
     });
-    
+
     // Create intelligent edge connections
     if (previousNodeId) {
       edges.push({
@@ -324,14 +339,17 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
         animated: nodeType === 'variable' || nodeType === 'conditional',
         data: {
           label: getEdgeLabel(semanticGroups[groupIndex - 1], group),
-          confidence: Math.min(semanticGroups[groupIndex - 1].confidence, group.confidence)
+          confidence: Math.min(
+            semanticGroups[groupIndex - 1].confidence,
+            group.confidence
+          )
         }
       });
     }
-    
+
     previousNodeId = nodeId;
   });
-  
+
   // Add intelligent combination nodes if needed
   if (nodes.length > 2 && hasBranching) {
     const mergeId = `merge-${nodeIndex++}`;
@@ -346,7 +364,7 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
         mergeStrategy: 'intelligent'
       }
     });
-    
+
     // Connect branch endpoints to merge
     if (previousNodeId) {
       edges.push({
@@ -358,7 +376,7 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
     }
     previousNodeId = mergeId;
   }
-  
+
   // Add concatenation node for multi-part outputs
   if (nodes.length > 1 && detectedVariables.size > 0) {
     const concatId = `concat-${nodeIndex++}`;
@@ -374,7 +392,7 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
         preserveFormatting: true
       }
     });
-    
+
     if (previousNodeId) {
       edges.push({
         id: `edge-concat`,
@@ -385,7 +403,7 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
     }
     previousNodeId = concatId;
   }
-  
+
   // Add output node with rich metadata
   const outputId = `output-${nodeIndex}`;
   nodes.push({
@@ -404,7 +422,7 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
       }
     }
   });
-  
+
   if (previousNodeId) {
     edges.push({
       id: `edge-output`,
@@ -418,7 +436,7 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
       }
     });
   }
-  
+
   // Return with comprehensive metadata
   return {
     nodes,
@@ -432,7 +450,11 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
       intelligence: {
         detectedVariables: Array.from(detectedVariables),
         hasChoices,
-        structureType: hasBranching ? 'branching' : detectedVariables.size > 0 ? 'templated' : 'linear',
+        structureType: hasBranching
+          ? 'branching'
+          : detectedVariables.size > 0
+            ? 'templated'
+            : 'linear',
         confidence: 0.92
       }
     }
@@ -442,11 +464,14 @@ async function llmEnhancedParse(prompt: string, config: LLMConfig): Promise<Pars
 // Helper function: Perform molecular chunking with POS tagging
 function performMolecularChunking(prompt: string): MolecularChunk[] {
   const chunks: MolecularChunk[] = [];
-  
+
   // Tokenize into words and punctuation, but also capture whitespace
   // Updated pattern to keep compound terms like "8k", "3D", etc. together
-  const tokens = prompt.match(/\{[^}]+\}|\[[^\]]+\]|<[^>]+>|\b\d+[a-zA-Z]+\b|\b[a-zA-Z]+\d+\b|\b\w+-\w+\b|\b\w+\b|\s+|[^\w\s]/g) || [];
-  
+  const tokens =
+    prompt.match(
+      /\{[^}]+\}|\[[^\]]+\]|<[^>]+>|\b\d+[a-zA-Z]+\b|\b[a-zA-Z]+\d+\b|\b\w+-\w+\b|\b\w+\b|\s+|[^\w\s]/g
+    ) || [];
+
   tokens.forEach((token: string) => {
     // Skip pure whitespace tokens in chunk creation
     if (/^\s+$/.test(token)) {
@@ -458,11 +483,11 @@ function performMolecularChunking(prompt: string): MolecularChunk[] {
       });
       return;
     }
-    
+
     let pos = 'unknown';
     let description = '';
     let semanticRole = '';
-    
+
     // Variable detection
     if (/^\{[^}]+\}$|^\[[^\]]+\]$|^<[^>]+>$/.test(token)) {
       pos = 'variable';
@@ -476,43 +501,70 @@ function performMolecularChunking(prompt: string): MolecularChunk[] {
       semanticRole = 'modifier';
     }
     // Fashion/cinematic specific nouns
-    else if (/^(model|gown|couture|fashion|editorial|tiger|palace|hall|ceiling|chandelier|floor|mirror|lighting|texture|fabric|engraving|filigree|lacquer|ornament|runway)$/i.test(token)) {
+    else if (
+      /^(model|gown|couture|fashion|editorial|tiger|palace|hall|ceiling|chandelier|floor|mirror|lighting|texture|fabric|engraving|filigree|lacquer|ornament|runway)$/i.test(
+        token
+      )
+    ) {
       pos = 'domain-noun';
       description = `Fashion/cinematic domain noun`;
       semanticRole = 'entity';
     }
     // Common nouns
-    else if (/^(character|person|place|location|object|thing|time|day|night|eyes|body|light|energy|detail|render|setting)$/i.test(token)) {
+    else if (
+      /^(character|person|place|location|object|thing|time|day|night|eyes|body|light|energy|detail|render|setting)$/i.test(
+        token
+      )
+    ) {
       pos = 'noun';
       description = `Common noun identifying a ${token.toLowerCase()}`;
       semanticRole = 'entity';
     }
     // Hyphenated compound words and style descriptors
-    else if (/\w+-\w+/.test(token) || /^(hyper-real|cinematic|photoreal|editorial|regal|metallic|ornamental|intricate|translucent|baroque|golden|amber|warm|polished|dark-skinned|micro-detail)$/i.test(token)) {
+    else if (
+      /\w+-\w+/.test(token) ||
+      /^(hyper-real|cinematic|photoreal|editorial|regal|metallic|ornamental|intricate|translucent|baroque|golden|amber|warm|polished|dark-skinned|micro-detail)$/i.test(
+        token
+      )
+    ) {
       pos = 'compound-descriptor';
       description = `Compound or style descriptor`;
       semanticRole = 'style';
     }
     // Color adjectives
-    else if (/^(red|blue|green|yellow|black|white|dark-skinned|golden|amber|metallic)$/i.test(token)) {
+    else if (
+      /^(red|blue|green|yellow|black|white|dark-skinned|golden|amber|metallic)$/i.test(
+        token
+      )
+    ) {
       pos = 'color';
       description = `Color descriptor`;
       semanticRole = 'modifier';
     }
     // Size/Physical adjectives
-    else if (/^(tall|giant|gigantic|large|small|tiny|huge|micro|macro)$/i.test(token)) {
+    else if (
+      /^(tall|giant|gigantic|large|small|tiny|huge|micro|macro)$/i.test(token)
+    ) {
       pos = 'size';
       description = `Size or scale descriptor`;
       semanticRole = 'modifier';
     }
     // General adjectives
-    else if (/^(serene|beautiful|dark|bright|happy|sad|warm|perfect|vaulted)$/i.test(token)) {
+    else if (
+      /^(serene|beautiful|dark|bright|happy|sad|warm|perfect|vaulted)$/i.test(
+        token
+      )
+    ) {
       pos = 'adjective';
       description = `Descriptive adjective modifying appearance or mood`;
       semanticRole = 'modifier';
     }
     // Action verbs
-    else if (/^(walks|walking|move|moves|moving|shimmering|glowing|reflecting|embroidered|polished|sync)$/i.test(token)) {
+    else if (
+      /^(walks|walking|move|moves|moving|shimmering|glowing|reflecting|embroidered|polished|sync)$/i.test(
+        token
+      )
+    ) {
       pos = 'action-verb';
       description = `Action or movement verb`;
       semanticRole = 'action';
@@ -565,7 +617,7 @@ function performMolecularChunking(prompt: string): MolecularChunk[] {
       description = `Unclassified word, likely a noun or name`;
       semanticRole = 'entity';
     }
-    
+
     chunks.push({
       text: token,
       pos,
@@ -573,7 +625,7 @@ function performMolecularChunking(prompt: string): MolecularChunk[] {
       semanticRole
     });
   });
-  
+
   return chunks;
 }
 
@@ -586,19 +638,19 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
     semanticRole: 'descriptor',
     confidence: 1.0
   };
-  
+
   // More intelligent grouping based on semantic boundaries
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
     const nextChunk = chunks[i + 1];
     const prevChunk = chunks[i - 1];
-    
+
     // Add current chunk to group
     currentGroup.chunks.push(chunk);
-    
+
     // Determine if we should create a new group
     let shouldBreak = false;
-    
+
     // Major punctuation creates natural breaks
     if (chunk.pos === 'punctuation' && /[.!?]/.test(chunk.text)) {
       shouldBreak = true;
@@ -612,16 +664,29 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
       }
     }
     // Keep person descriptors together (avoid breaking "tall dark-skinned model")
-    else if (chunk.text.toLowerCase() === 'model' || chunk.text.toLowerCase() === 'person') {
+    else if (
+      chunk.text.toLowerCase() === 'model' ||
+      chunk.text.toLowerCase() === 'person'
+    ) {
       // Only break if the next chunk is not an adjective or related descriptor
-      if (nextChunk && nextChunk.pos !== 'adjective' && nextChunk.pos !== 'preposition') {
+      if (
+        nextChunk &&
+        nextChunk.pos !== 'adjective' &&
+        nextChunk.pos !== 'preposition'
+      ) {
         shouldBreak = true; // Break after the noun
       }
     }
     // Break after major noun phrases only if they are substantial
-    else if ((chunk.pos === 'domain-noun' || chunk.pos === 'noun') && nextChunk) {
+    else if (
+      (chunk.pos === 'domain-noun' || chunk.pos === 'noun') &&
+      nextChunk
+    ) {
       // Only break if we're transitioning to a new clause or action
-      if ((nextChunk.pos === 'action-verb' || nextChunk.text === '.') && currentGroup.chunks.length > 3) {
+      if (
+        (nextChunk.pos === 'action-verb' || nextChunk.text === '.') &&
+        currentGroup.chunks.length > 3
+      ) {
         shouldBreak = true;
       }
     }
@@ -630,7 +695,10 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
       // Break before 'or' to separate choices
       currentGroup.chunks.pop(); // Remove 'or' from current group
       if (currentGroup.chunks.length > 0) {
-        currentGroup.text = currentGroup.chunks.map(c => c.text).join(' ').trim();
+        currentGroup.text = currentGroup.chunks
+          .map(c => c.text)
+          .join(' ')
+          .trim();
         groups.push(currentGroup);
       }
       // Create 'or' as its own group
@@ -648,12 +716,19 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
       };
       shouldBreak = false;
     }
-    
+
     // Execute break if needed
     if (shouldBreak) {
       // Join chunks without adding spaces - preserve original spacing
-      currentGroup.text = currentGroup.chunks.map(c => c.text).join('').trim();
-      if (currentGroup.text && currentGroup.text !== '.' && !/^[.,;:!?]+$/.test(currentGroup.text)) {
+      currentGroup.text = currentGroup.chunks
+        .map(c => c.text)
+        .join('')
+        .trim();
+      if (
+        currentGroup.text &&
+        currentGroup.text !== '.' &&
+        !/^[.,;:!?]+$/.test(currentGroup.text)
+      ) {
         groups.push(currentGroup);
       }
       currentGroup = {
@@ -664,16 +739,20 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
       };
     }
   }
-  
+
   // Add final group - IMPORTANT: capture any remaining text
   if (currentGroup.chunks.length > 0) {
     // Join chunks without adding spaces - preserve original spacing
-    currentGroup.text = currentGroup.chunks.map(c => c.text).join('').trim();
-    if (currentGroup.text && currentGroup.text !== '.') {  // Don't create groups for standalone punctuation
+    currentGroup.text = currentGroup.chunks
+      .map(c => c.text)
+      .join('')
+      .trim();
+    if (currentGroup.text && currentGroup.text !== '.') {
+      // Don't create groups for standalone punctuation
       groups.push(currentGroup);
     }
   }
-  
+
   // Filter out any groups that are just punctuation
   return groups.filter(g => g.text && !/^[.,;:!?]+$/.test(g.text));
 }
@@ -684,7 +763,7 @@ function determineSemanticRole(chunks: MolecularChunk[]): string {
   const hasNoun = chunks.some(c => c.pos === 'noun');
   const hasVerb = chunks.some(c => c.pos === 'verb');
   const hasPreposition = chunks.some(c => c.pos === 'preposition');
-  
+
   if (hasAdjective && hasNoun) return 'descriptor';
   if (hasVerb) return 'action';
   if (hasPreposition) return 'relation';
@@ -693,21 +772,24 @@ function determineSemanticRole(chunks: MolecularChunk[]): string {
 }
 
 // Helper function: Generate smart suggestions based on semantic analysis
-function generateSmartSuggestions(varName: string, chunks: MolecularChunk[]): string[] {
+function generateSmartSuggestions(
+  varName: string,
+  chunks: MolecularChunk[]
+): string[] {
   const lowerName = varName.toLowerCase();
-  
+
   // Context-aware suggestions
   const hasAdjective = chunks.some(c => c.pos === 'adjective');
-  
+
   if (lowerName.includes('name') || lowerName.includes('character')) {
-    return hasAdjective ? 
-      ['Brave Knight', 'Wise Sage', 'Mysterious Stranger', 'Young Hero'] :
-      ['Alice', 'Marcus', 'Elena', 'Kai'];
+    return hasAdjective
+      ? ['Brave Knight', 'Wise Sage', 'Mysterious Stranger', 'Young Hero']
+      : ['Alice', 'Marcus', 'Elena', 'Kai'];
   }
   if (lowerName.includes('place') || lowerName.includes('location')) {
-    return hasAdjective ?
-      ['Enchanted Forest', 'Ancient Castle', 'Hidden Valley', 'Crystal Cave'] :
-      ['forest', 'castle', 'village', 'mountain'];
+    return hasAdjective
+      ? ['Enchanted Forest', 'Ancient Castle', 'Hidden Valley', 'Crystal Cave']
+      : ['forest', 'castle', 'village', 'mountain'];
   }
   if (lowerName.includes('mood') || lowerName.includes('emotion')) {
     return ['joyful', 'melancholic', 'anxious', 'serene', 'excited'];
@@ -718,7 +800,7 @@ function generateSmartSuggestions(varName: string, chunks: MolecularChunk[]): st
   if (lowerName.includes('time')) {
     return ['dawn', 'noon', 'dusk', 'midnight', 'twilight'];
   }
-  
+
   // Default contextual suggestions
   return ['option A', 'option B', 'option C', 'custom value'];
 }
@@ -727,7 +809,7 @@ function generateSmartSuggestions(varName: string, chunks: MolecularChunk[]): st
 function extractOptionsFromChunks(chunks: MolecularChunk[]): any[] {
   const options: any[] = [];
   let currentOption = '';
-  
+
   chunks.forEach(chunk => {
     if (chunk.pos === 'conjunction' && /^(or|,)$/i.test(chunk.text)) {
       if (currentOption.trim()) {
@@ -742,7 +824,7 @@ function extractOptionsFromChunks(chunks: MolecularChunk[]): any[] {
       currentOption += (currentOption ? ' ' : '') + chunk.text;
     }
   });
-  
+
   if (currentOption.trim()) {
     options.push({
       text: currentOption.trim(),
@@ -750,47 +832,56 @@ function extractOptionsFromChunks(chunks: MolecularChunk[]): any[] {
       metadata: { source: 'molecular_parsing' }
     });
   }
-  
-  return options.length > 0 ? options : [{ text: chunks.map(c => c.text).join(' '), weight: 1.0 }];
+
+  return options.length > 0
+    ? options
+    : [{ text: chunks.map(c => c.text).join(' '), weight: 1.0 }];
 }
 
 // Helper function: Extract condition from chunks
 function extractConditionFromChunks(chunks: MolecularChunk[]): string {
   const condStart = chunks.findIndex(c => c.pos === 'conditional');
   if (condStart >= 0) {
-    return chunks.slice(condStart).map(c => c.text).join(' ');
+    return chunks
+      .slice(condStart)
+      .map(c => c.text)
+      .join(' ');
   }
   return chunks.map(c => c.text).join(' ');
 }
 
 // Helper function: Calculate smart positioning for nodes
-function calculateSmartPosition(index: number, nodeType: string, hasBranching: boolean): { x: number, y: number } {
+function calculateSmartPosition(
+  index: number,
+  nodeType: string,
+  hasBranching: boolean
+): { x: number; y: number } {
   const baseX = 100;
   const baseY = 100;
   const xSpacing = hasBranching ? 300 : 250;
   const ySpacing = 150;
-  
+
   if (nodeType === 'conditional' || nodeType === 'weightedChoice') {
     return {
       x: baseX + (index % 2) * xSpacing * 1.5,
       y: baseY + Math.floor(index / 2) * ySpacing * 1.3
     };
   }
-  
+
   if (nodeType === 'merge' || nodeType === 'concat') {
     return {
       x: baseX + xSpacing * 2,
       y: baseY + index * ySpacing * 0.8
     };
   }
-  
+
   if (nodeType === 'output') {
     return {
       x: baseX + xSpacing * 3,
       y: baseY + ySpacing * 2
     };
   }
-  
+
   // Default positioning
   return {
     x: baseX + (index % 3) * xSpacing,
@@ -800,7 +891,10 @@ function calculateSmartPosition(index: number, nodeType: string, hasBranching: b
 
 // Helper function: Get edge label based on semantic relationship
 function getEdgeLabel(fromGroup: any, toGroup: any): string {
-  if (fromGroup.semanticRole === 'condition' && toGroup.semanticRole === 'statement') {
+  if (
+    fromGroup.semanticRole === 'condition' &&
+    toGroup.semanticRole === 'statement'
+  ) {
     return 'then';
   }
   if (fromGroup.semanticRole === 'choice') {
@@ -824,58 +918,73 @@ function generatePreview(prompt: string, chunks: MolecularChunk[]): string {
 // Helper function: Calculate complexity score
 function calculateComplexity(chunks: MolecularChunk[], groups: any[]): number {
   const varCount = chunks.filter(c => c.pos === 'variable').length;
-  const choiceCount = chunks.filter(c => c.pos === 'conjunction' && /or/i.test(c.text)).length;
+  const choiceCount = chunks.filter(
+    c => c.pos === 'conjunction' && /or/i.test(c.text)
+  ).length;
   const condCount = chunks.filter(c => c.pos === 'conditional').length;
-  
-  return Math.min(1.0, (varCount * 0.2 + choiceCount * 0.3 + condCount * 0.4 + groups.length * 0.1));
+
+  return Math.min(
+    1.0,
+    varCount * 0.2 + choiceCount * 0.3 + condCount * 0.4 + groups.length * 0.1
+  );
 }
 
 export class SimpleLLMService {
   private config: LLMConfig;
   private enabled: boolean = false;
-  
+
   constructor(config: LLMConfig = {}) {
     this.config = config;
     // Check if API key is configured
-    this.enabled = Boolean(config.apiKey || process.env.VITE_OPENROUTER_API_KEY);
+    this.enabled = Boolean(
+      config.apiKey || process.env.VITE_OPENROUTER_API_KEY
+    );
   }
-  
+
   isEnabled(): boolean {
     return this.enabled;
   }
-  
+
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
   }
-  
+
   updateConfig(config: Partial<LLMConfig>): void {
     this.config = { ...this.config, ...config };
-    this.enabled = Boolean(this.config.apiKey || process.env.VITE_OPENROUTER_API_KEY);
+    this.enabled = Boolean(
+      this.config.apiKey || process.env.VITE_OPENROUTER_API_KEY
+    );
   }
-  
-  async parse(prompt: string, options: ParseOptions = { mode: 'standard' }): Promise<ParseResult> {
+
+  async parse(
+    prompt: string,
+    options: ParseOptions = { mode: 'standard' }
+  ): Promise<ParseResult> {
     const startTime = Date.now();
-    
+
     if (options.mode === 'llm-enhanced' && this.enabled) {
       try {
         const result = await llmEnhancedParse(prompt, this.config);
         result.metadata.parseTime = Date.now() - startTime;
         return result;
       } catch (error) {
-        console.warn('LLM parse failed, falling back to standard parser:', error);
+        console.warn(
+          'LLM parse failed, falling back to standard parser:',
+          error
+        );
         // Fall back to standard parser
       }
     }
-    
+
     const result = standardParse(prompt);
     result.metadata.parseTime = Date.now() - startTime;
     return result;
   }
-  
+
   // Cost estimation
   estimateCost(prompt: string): number {
     if (!this.enabled) return 0;
-    
+
     // Simple token estimation (4 chars ≈ 1 token)
     const estimatedTokens = Math.ceil(prompt.length / 4);
     const costPerToken = 0.000001; // Mock cost
@@ -890,19 +999,23 @@ export function getLLMService(): SimpleLLMService {
   if (!serviceInstance) {
     // Check for API key in environment or localStorage
     let envApiKey: string | undefined;
-    
+
     // Check if we're in a browser with Vite
     if (typeof window !== 'undefined' && (window as any).__VITE__) {
       // In Vite environment, env vars are injected differently
       // We'll rely on localStorage config for now
     }
-    
-    const storedConfig = typeof localStorage !== 'undefined' ? localStorage.getItem('llm-config') : null;
+
+    const storedConfig =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem('llm-config')
+        : null;
     const parsedConfig = storedConfig ? JSON.parse(storedConfig) : {};
-    
+
     // Hardcode the API key from .env for now (will be replaced with proper env handling)
-    const defaultApiKey = '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';
-    
+    const defaultApiKey =
+      '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';
+
     serviceInstance = new SimpleLLMService({
       apiKey: parsedConfig.apiKey || defaultApiKey,
       provider: parsedConfig.provider || 'openrouter',

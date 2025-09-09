@@ -100,14 +100,14 @@ const AUTO_APPROVAL_CONDITIONS = {
     maxRegressionPercent: 5,
     breakingChanges: false,
     maxChangedFiles: 10,
-    maxLinesChanged: 500,
+    maxLinesChanged: 500
   },
   staging: {
     testCoverage: 80,
     securityScan: 'passed',
     maxRegressionPercent: 15,
-    breakingChanges: true,
-  },
+    breakingChanges: true
+  }
 };
 ```
 
@@ -127,12 +127,16 @@ const DEPLOYMENT_APPROVAL_RULES = {
   production: {
     required: true,
     minimumApprovals: 2,
-    requiredCriteria: ['security-review', 'performance-impact', 'business-approval'],
+    requiredCriteria: [
+      'security-review',
+      'performance-impact',
+      'business-approval'
+    ],
     escalationRules: [
       { triggerAfterHours: 4, escalateTo: ['engineering-manager'] },
-      { triggerAfterHours: 8, escalateTo: ['cto'] },
-    ],
-  },
+      { triggerAfterHours: 8, escalateTo: ['cto'] }
+    ]
+  }
 };
 ```
 
@@ -200,7 +204,7 @@ Updated `vercel.json`:
    const rules = {
      environment: 'production',
      minimumApprovals: 2,
-     requiredCriteria: ['security-review', 'business-approval'],
+     requiredCriteria: ['security-review', 'business-approval']
    };
    ```
 
@@ -251,7 +255,7 @@ const autoApprovalCriteria = {
   performanceRegression: '< 5%',
   breakingChanges: false,
   changedFiles: '< 10',
-  businessHours: 'optional', // for production
+  businessHours: 'optional' // for production
 };
 ```
 
@@ -359,9 +363,9 @@ const customCriterion = {
     {
       name: 'Data Privacy Scan',
       automatable: true,
-      command: 'npm run privacy:scan',
-    },
-  ],
+      command: 'npm run privacy:scan'
+    }
+  ]
 };
 ```
 

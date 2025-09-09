@@ -55,7 +55,7 @@ enum BenchmarkCategory {
   MEMORY_USAGE = 'memory-usage',
   SCHEMA_VALIDATION = 'schema-validation',
   CONTEXT_MANAGEMENT = 'context-management',
-  CACHING_PERFORMANCE = 'caching-performance',
+  CACHING_PERFORMANCE = 'caching-performance'
 }
 
 interface BenchmarkResult {
@@ -100,7 +100,9 @@ class PerformanceBenchmarkRunner {
         // Check for performance regression
         await this.checkRegression(result);
 
-        console.log(`    ✅ ${benchmark.name}: ${result.metrics.executionTime.average.toFixed(3)}ms avg`);
+        console.log(
+          `    ✅ ${benchmark.name}: ${result.metrics.executionTime.average.toFixed(3)}ms avg`
+        );
       }
     } finally {
       // Teardown
@@ -111,16 +113,18 @@ class PerformanceBenchmarkRunner {
       suite: suite.id,
       results,
       summary: this.generateSuiteSummary(results),
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
   }
 
-  private async runSingleBenchmark(benchmark: Benchmark): Promise<BenchmarkResult> {
+  private async runSingleBenchmark(
+    benchmark: Benchmark
+  ): Promise<BenchmarkResult> {
     const context = new BenchmarkContext();
     const metrics = {
       executionTimes: [],
       memorySnapshots: [],
-      throughputMeasurements: [],
+      throughputMeasurements: []
     };
 
     // Warmup
@@ -147,7 +151,7 @@ class PerformanceBenchmarkRunner {
       metrics.memorySnapshots.push({
         heapBefore: startMemory.heapUsed,
         heapAfter: endMemory.heapUsed,
-        delta: endMemory.heapUsed - startMemory.heapUsed,
+        delta: endMemory.heapUsed - startMemory.heapUsed
       });
     }
 
@@ -158,7 +162,7 @@ class PerformanceBenchmarkRunner {
       metrics: this.calculateMetrics(metrics),
       environment: context.getEnvironment(),
       timestamp: Date.now(),
-      success: true,
+      success: true
     };
   }
 }
@@ -184,11 +188,11 @@ const nodeExecutionSuite: BenchmarkSuite = {
         const node = new WeightedChoiceNode('test', [
           { value: 'A', weight: 0.5 },
           { value: 'B', weight: 0.3 },
-          { value: 'C', weight: 0.2 },
+          { value: 'C', weight: 0.2 }
         ]);
         return node.run(context.getExecutionContext());
       },
-      validate: result => ['A', 'B', 'C'].includes(result),
+      validate: result => ['A', 'B', 'C'].includes(result)
     },
 
     {
@@ -204,16 +208,16 @@ const nodeExecutionSuite: BenchmarkSuite = {
             { value: 'option1', weight: 1 },
             { value: 'option2', weight: 2 },
             { value: 'option3', weight: 3 },
-            { value: 'option4', weight: 4 },
+            { value: 'option4', weight: 4 }
           ],
           {
             type: 'exponential',
             parameters: { base: 2, scale: 1.5 },
-            normalize: true,
+            normalize: true
           }
         );
         return node.execute(context.getAdvancedExecutionContext());
-      },
+      }
     },
 
     {
@@ -231,15 +235,15 @@ const nodeExecutionSuite: BenchmarkSuite = {
           [
             { condition: 'getValue("counter") > 50', output: 'high' },
             { condition: 'getValue("counter") > 25', output: 'medium' },
-            { condition: 'getValue("counter") >= 0', output: 'low' },
+            { condition: 'getValue("counter") >= 0', output: 'low' }
           ],
           'default'
         );
 
         return node.execute(ctx);
-      },
-    },
-  ],
+      }
+    }
+  ]
 };
 ```
 
@@ -260,7 +264,7 @@ const graphProcessingSuite: BenchmarkSuite = {
       execute: async context => {
         const graph = context.createLinearGraph(10);
         return executeGraph(graph);
-      },
+      }
     },
 
     {
@@ -272,7 +276,7 @@ const graphProcessingSuite: BenchmarkSuite = {
       execute: async context => {
         const graph = context.createMixedGraph(100);
         return executeGraph(graph);
-      },
+      }
     },
 
     {
@@ -284,9 +288,9 @@ const graphProcessingSuite: BenchmarkSuite = {
       execute: async context => {
         const graph = context.createParallelGraph(1000);
         return executeGraphParallel(graph);
-      },
-    },
-  ],
+      }
+    }
+  ]
 };
 ```
 
@@ -319,7 +323,7 @@ const memoryUsageSuite: BenchmarkSuite = {
         }
 
         return pool.getStatistics();
-      },
+      }
     },
 
     {
@@ -340,14 +344,14 @@ const memoryUsageSuite: BenchmarkSuite = {
 
           results.push({
             size,
-            memoryUsed: afterMemory - beforeMemory,
+            memoryUsed: afterMemory - beforeMemory
           });
         }
 
         return results;
-      },
-    },
-  ],
+      }
+    }
+  ]
 };
 ```
 
@@ -370,19 +374,19 @@ class RegressionDetector {
     this.setThreshold('execution-time', {
       metric: 'executionTime.average',
       maxIncrease: 15, // 15% increase triggers regression
-      windowSize: 10,
+      windowSize: 10
     });
 
     this.setThreshold('memory-usage', {
       metric: 'memoryUsage.peak',
       maxIncrease: 20, // 20% memory increase triggers regression
-      windowSize: 5,
+      windowSize: 5
     });
 
     this.setThreshold('throughput', {
       metric: 'throughput.operationsPerSecond',
       maxDecrease: 10, // 10% throughput decrease triggers regression
-      windowSize: 5,
+      windowSize: 5
     });
   }
 
@@ -413,7 +417,7 @@ class RegressionDetector {
           currentValue,
           baseline,
           changePercent,
-          threshold: threshold.maxIncrease,
+          threshold: threshold.maxIncrease
         });
       }
 
@@ -424,7 +428,7 @@ class RegressionDetector {
           currentValue,
           baseline,
           changePercent,
-          threshold: threshold.maxDecrease,
+          threshold: threshold.maxDecrease
         });
       }
     }
@@ -432,7 +436,7 @@ class RegressionDetector {
     return {
       hasRegression: regressions.length > 0,
       regressions,
-      confidence: this.calculateConfidence(history.length),
+      confidence: this.calculateConfidence(history.length)
     };
   }
 
@@ -440,7 +444,9 @@ class RegressionDetector {
     // Use median to reduce impact of outliers
     const sorted = [...values].sort((a, b) => a - b);
     const mid = Math.floor(sorted.length / 2);
-    return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
+    return sorted.length % 2 === 0
+      ? (sorted[mid - 1] + sorted[mid]) / 2
+      : sorted[mid];
   }
 }
 ```
@@ -473,13 +479,14 @@ class PerformanceMonitor {
 
       // Check for regressions
       for (const benchmarkResult of result.results) {
-        const regression = await this.regressionDetector.checkRegression(benchmarkResult);
+        const regression =
+          await this.regressionDetector.checkRegression(benchmarkResult);
 
         if (regression.hasRegression) {
           await this.alertManager.sendRegressionAlert({
             benchmark: benchmarkResult.benchmark,
             regressions: regression.regressions,
-            timestamp: Date.now(),
+            timestamp: Date.now()
           });
         }
       }
@@ -520,14 +527,20 @@ class OptimizationTracker {
 
     // Run baseline benchmarks
     await beforeCallback();
-    const baselineSuite = await this.benchmarkRunner.runBenchmarkSuite('optimization-baseline');
+    const baselineSuite = await this.benchmarkRunner.runBenchmarkSuite(
+      'optimization-baseline'
+    );
 
     // Apply optimization
     await afterCallback();
-    const optimizedSuite = await this.benchmarkRunner.runBenchmarkSuite('optimization-test');
+    const optimizedSuite =
+      await this.benchmarkRunner.runBenchmarkSuite('optimization-test');
 
     // Calculate improvements
-    const improvements = this.calculateImprovements(baselineSuite, optimizedSuite);
+    const improvements = this.calculateImprovements(
+      baselineSuite,
+      optimizedSuite
+    );
 
     const result: OptimizationResult = {
       experiment: experimentId,
@@ -535,14 +548,17 @@ class OptimizationTracker {
       optimized: optimizedSuite,
       improvements,
       success: this.evaluateSuccess(experiment, improvements),
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
 
     this.storeOptimizationResult(experimentId, result);
 
     console.log(
       `📊 Experiment results: ${Object.entries(improvements)
-        .map(([metric, improvement]) => `${metric}: ${improvement > 0 ? '+' : ''}${improvement.toFixed(1)}%`)
+        .map(
+          ([metric, improvement]) =>
+            `${metric}: ${improvement > 0 ? '+' : ''}${improvement.toFixed(1)}%`
+        )
         .join(', ')}`
     );
 
@@ -556,22 +572,28 @@ class OptimizationTracker {
     const improvements: Record<string, number> = {};
 
     for (const baselineResult of baseline.results) {
-      const optimizedResult = optimized.results.find(r => r.benchmark === baselineResult.benchmark);
+      const optimizedResult = optimized.results.find(
+        r => r.benchmark === baselineResult.benchmark
+      );
       if (!optimizedResult) continue;
 
       // Calculate improvement for each metric
       const executionTimeImprovement =
-        ((baselineResult.metrics.executionTime.average - optimizedResult.metrics.executionTime.average) /
+        ((baselineResult.metrics.executionTime.average -
+          optimizedResult.metrics.executionTime.average) /
           baselineResult.metrics.executionTime.average) *
         100;
 
       const memoryImprovement =
-        ((baselineResult.metrics.memoryUsage.peak - optimizedResult.metrics.memoryUsage.peak) /
+        ((baselineResult.metrics.memoryUsage.peak -
+          optimizedResult.metrics.memoryUsage.peak) /
           baselineResult.metrics.memoryUsage.peak) *
         100;
 
-      improvements[`${baselineResult.benchmark}.executionTime`] = executionTimeImprovement;
-      improvements[`${baselineResult.benchmark}.memoryUsage`] = memoryImprovement;
+      improvements[`${baselineResult.benchmark}.executionTime`] =
+        executionTimeImprovement;
+      improvements[`${baselineResult.benchmark}.memoryUsage`] =
+        memoryImprovement;
     }
 
     return improvements;
@@ -612,7 +634,12 @@ export class PerformanceBenchmarkFramework {
     console.log('🚀 Running comprehensive performance benchmark suite...');
 
     const suiteResults = [];
-    const suiteIds = ['node-execution', 'graph-processing', 'memory-usage', 'schema-validation'];
+    const suiteIds = [
+      'node-execution',
+      'graph-processing',
+      'memory-usage',
+      'schema-validation'
+    ];
 
     for (const suiteId of suiteIds) {
       const result = await this.runner.runBenchmarkSuite(suiteId);
@@ -631,8 +658,8 @@ export class PerformanceBenchmarkFramework {
       alertThresholds: {
         executionTime: 15, // 15% regression
         memoryUsage: 20, // 20% memory increase
-        throughput: 10, // 10% throughput decrease
-      },
+        throughput: 10 // 10% throughput decrease
+      }
     });
   }
 
@@ -719,7 +746,9 @@ const framework = new PerformanceBenchmarkFramework();
 
 // Run specific benchmark
 const nodeResults = await framework.runBenchmarkSuite('node-execution');
-console.log(`Node execution average: ${nodeResults.summary.averageExecutionTime}ms`);
+console.log(
+  `Node execution average: ${nodeResults.summary.averageExecutionTime}ms`
+);
 
 // Run full suite
 const fullReport = await framework.runFullBenchmarkSuite();
@@ -740,8 +769,8 @@ framework.registerOptimizationExperiment({
   targetMetrics: ['executionTime.average', 'memoryUsage.peak'],
   expectedImprovement: {
     'executionTime.average': 40, // 40% improvement expected
-    'memoryUsage.peak': 25, // 25% memory reduction expected
-  },
+    'memoryUsage.peak': 25 // 25% memory reduction expected
+  }
 });
 
 const result = await framework.runOptimizationExperiment('context-pooling');

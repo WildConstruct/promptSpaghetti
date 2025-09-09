@@ -14,8 +14,8 @@ const users = [
     firstName: 'Test',
     lastName: 'User',
     isEmailVerified: true,
-    roles: ['user'],
-  },
+    roles: ['user']
+  }
 ];
 
 // Helper functions
@@ -24,7 +24,7 @@ const createMockToken = user => {
     JSON.stringify({
       userId: user.id,
       email: user.email,
-      exp: Date.now() + 15 * 60 * 1000,
+      exp: Date.now() + 15 * 60 * 1000
     })
   ).toString('base64');
 };
@@ -82,11 +82,11 @@ const server = http.createServer(async (req, res) => {
           firstName: user.firstName,
           lastName: user.lastName,
           isEmailVerified: user.isEmailVerified,
-          roles: user.roles,
+          roles: user.roles
         },
         accessToken,
         refreshToken: accessToken + '_refresh',
-        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
       })
     );
     return;
@@ -110,7 +110,7 @@ const server = http.createServer(async (req, res) => {
       firstName,
       lastName,
       isEmailVerified: false,
-      roles: ['user'],
+      roles: ['user']
     };
     users.push(newUser);
 
@@ -118,7 +118,13 @@ const server = http.createServer(async (req, res) => {
     res.end(
       JSON.stringify({
         message: 'Registration successful',
-        user: { id: newUser.id, email, firstName, lastName, isEmailVerified: false },
+        user: {
+          id: newUser.id,
+          email,
+          firstName,
+          lastName,
+          isEmailVerified: false
+        }
       })
     );
     return;
@@ -142,7 +148,7 @@ const server = http.createServer(async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         isEmailVerified: user.isEmailVerified,
-        roles: user.roles,
+        roles: user.roles
       })
     );
     return;
@@ -155,7 +161,7 @@ const server = http.createServer(async (req, res) => {
       JSON.stringify({
         status: 'ok',
         message: 'Simple Mock Auth Server',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       })
     );
     return;
@@ -170,5 +176,7 @@ const PORT = 8000;
 server.listen(PORT, () => {
   console.log(`🚀 Simple Mock Auth Server running on http://localhost:${PORT}`);
   console.log('🔐 Test login: test@example.com / password123');
-  console.log('📋 Endpoints: /api/auth/login, /api/auth/register, /api/auth/me, /api/health');
+  console.log(
+    '📋 Endpoints: /api/auth/login, /api/auth/register, /api/auth/me, /api/health'
+  );
 });

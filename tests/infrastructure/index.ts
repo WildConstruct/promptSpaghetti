@@ -15,7 +15,7 @@ export {
   TestSuite,
   TestCase,
   TestUtilities,
-  TestReporter,
+  TestReporter
 } from './TestingFramework';
 
 export type {
@@ -24,7 +24,7 @@ export type {
   CoverageData,
   TestSuiteConfig,
   TestContext,
-  TestReport,
+  TestReport
 } from './TestingFramework';
 
 // Test Data Generators
@@ -33,25 +33,34 @@ export {
   GraphDataGenerator,
   UserDataGenerator,
   APIDataGenerator,
-  PerformanceDataGenerator,
+  PerformanceDataGenerator
 } from './TestDataGenerators';
 
 export type {
   GeneratorOptions,
   GraphGeneratorOptions,
   UserGeneratorOptions,
-  APIGeneratorOptions,
+  APIGeneratorOptions
 } from './TestDataGenerators';
 
 // Test Fixtures and Management
-export { default as TestFixtureManager, TestDatabaseManager, TestEnvironmentManager } from './TestFixtures';
+export {
+  default as TestFixtureManager,
+  TestDatabaseManager,
+  TestEnvironmentManager
+} from './TestFixtures';
 
 export type { TestFixture, FixtureOptions } from './TestFixtures';
 
 // Test Harness (Main Orchestrator)
 export { default as TestHarness } from './TestHarness';
 
-export type { TestHarnessConfig, TestExecutionPlan, TestSuiteDefinition, TestDefinition } from './TestHarness';
+export type {
+  TestHarnessConfig,
+  TestExecutionPlan,
+  TestSuiteDefinition,
+  TestDefinition
+} from './TestHarness';
 
 // Version and Metadata
 export const TESTING_INFRASTRUCTURE_VERSION = '1.0.0';
@@ -60,7 +69,9 @@ export const EPIC_TASK_ID = 'E18-1753114562510-5E3421';
 /**
  * Quick setup helper for common testing scenarios
  */
-export const createTestHarness = (config?: Partial<Record<string, unknown>>) => {
+export const createTestHarness = (
+  config?: Partial<Record<string, unknown>>
+) => {
   const TestHarness = require('./TestHarness').default;
   return new TestHarness(config);
 };
@@ -73,14 +84,14 @@ export const createTestGenerators = (seed?: string) => {
     GraphDataGenerator,
     UserDataGenerator,
     APIDataGenerator,
-    PerformanceDataGenerator,
+    PerformanceDataGenerator
   } = require('./TestDataGenerators');
 
   return {
     graph: new GraphDataGenerator(seed),
     user: new UserDataGenerator(seed),
     api: new APIDataGenerator(seed),
-    performance: new PerformanceDataGenerator(seed),
+    performance: new PerformanceDataGenerator(seed)
   };
 };
 
@@ -102,13 +113,21 @@ export const INFRASTRUCTURE_INFO = {
     framework: 'Core test execution engine with suite management',
     generators: 'Deterministic data generation for repeatable tests',
     fixtures: 'Pre-configured test data and scenarios',
-    harness: 'Comprehensive test orchestration and management',
+    harness: 'Comprehensive test orchestration and management'
   },
   features: {
     environments: ['unit', 'integration', 'e2e', 'performance', 'security'],
-    categories: ['engine', 'frontend', 'backend', 'api', 'ui', 'workflow', 'accessibility'],
+    categories: [
+      'engine',
+      'frontend',
+      'backend',
+      'api',
+      'ui',
+      'workflow',
+      'accessibility'
+    ],
     dataTypes: ['graph', 'user', 'api', 'performance', 'security'],
-    reporting: ['coverage', 'performance', 'security', 'comprehensive'],
+    reporting: ['coverage', 'performance', 'security', 'comprehensive']
   },
   capabilities: {
     deterministicTesting: 'Seeded generators ensure reproducible results',
@@ -116,8 +135,8 @@ export const INFRASTRUCTURE_INFO = {
     securityTesting: 'Comprehensive security validation framework',
     eventDriven: 'Event-based architecture for extensibility',
     multiEnvironment: 'Support for different testing environments',
-    comprehensiveReporting: 'Detailed reports with coverage and metrics',
-  },
+    comprehensiveReporting: 'Detailed reports with coverage and metrics'
+  }
 } as const;
 
 export default {
@@ -127,5 +146,5 @@ export default {
   createTestHarness,
   createTestGenerators,
   createTestFixtures,
-  INFRASTRUCTURE_INFO,
+  INFRASTRUCTURE_INFO
 };

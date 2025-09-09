@@ -35,7 +35,9 @@ if (fs.existsSync(rootPkgPath)) {
   console.log(chalk.green(`  ✓ Root package.json found: ${rootPkg.name}`));
 
   if (rootPkg.workspaces) {
-    console.log(chalk.green(`  ✓ Workspaces configured: ${rootPkg.workspaces.join(', ')}`));
+    console.log(
+      chalk.green(`  ✓ Workspaces configured: ${rootPkg.workspaces.join(', ')}`)
+    );
   } else {
     console.log(chalk.red('  ✗ No workspaces configuration found!'));
   }
@@ -48,7 +50,7 @@ const deps = ['zod', 'zustand', 'reactflow', 'seedrandom'];
 const locations = {
   Root: './node_modules',
   Client: './client/node_modules',
-  Core: './packages/core/node_modules',
+  Core: './packages/core/node_modules'
 };
 
 const depVersions = {};
@@ -92,9 +94,13 @@ const checkPkgJson = (label, pkgPath) => {
   console.log(chalk.cyan(`\n  ${label}:`));
   deps.forEach(dep => {
     if (pkg.dependencies?.[dep]) {
-      console.log(chalk.green(`    ${dep}: ${pkg.dependencies[dep]} (dependencies)`));
+      console.log(
+        chalk.green(`    ${dep}: ${pkg.dependencies[dep]} (dependencies)`)
+      );
     } else if (pkg.devDependencies?.[dep]) {
-      console.log(chalk.blue(`    ${dep}: ${pkg.devDependencies[dep]} (devDependencies)`));
+      console.log(
+        chalk.blue(`    ${dep}: ${pkg.devDependencies[dep]} (devDependencies)`)
+      );
     } else {
       console.log(chalk.gray(`    ${dep}: not declared`));
     }
@@ -149,7 +155,11 @@ try {
 // Recommendations & summary
 console.log(chalk.yellow('\n💡 Recommendations:'));
 if (depVersions.zod && depVersions.zod.length > 1) {
-  console.log(chalk.red('  ⚠️  Multiple versions of zod detected! Consider aligning versions.'));
+  console.log(
+    chalk.red(
+      '  ⚠️  Multiple versions of zod detected! Consider aligning versions.'
+    )
+  );
 }
 
 console.log(chalk.blue.bold('\n📊 Summary:'));
@@ -157,7 +167,10 @@ const issues = [];
 if (!fs.existsSync(path.resolve('./client/node_modules/zod'))) {
   issues.push('Zod not installed in client/node_modules');
 }
-if (!fs.existsSync(rootPkgPath) || !JSON.parse(fs.readFileSync(rootPkgPath, 'utf8')).workspaces) {
+if (
+  !fs.existsSync(rootPkgPath) ||
+  !JSON.parse(fs.readFileSync(rootPkgPath, 'utf8')).workspaces
+) {
   issues.push('Workspaces configuration missing');
 }
 if (issues.length > 0) {

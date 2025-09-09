@@ -16,7 +16,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Interface property trailing comma',
     pattern: /(\w+):\s*([^;,]+?);,/g,
     replacement: '$1: $2;',
-    description: 'Fix property: type;, → property: type;',
+    description: 'Fix property: type;, → property: type;'
   },
 
   // Function parameter trailing comma with parenthesis
@@ -24,7 +24,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Function parameter malformed',
     pattern: /= \(\{,\)/g,
     replacement: '= ({',
-    description: 'Fix = ({,) → = ({',
+    description: 'Fix = ({,) → = ({'
   },
 
   // Malformed resolve/function calls
@@ -32,7 +32,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Malformed resolve calls',
     pattern: /(\w+)\(\{\)/g,
     replacement: '$1({',
-    description: 'Fix resolve({) → resolve({',
+    description: 'Fix resolve({) → resolve({'
   },
 
   // Switch case trailing commas
@@ -40,7 +40,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Switch case trailing comma',
     pattern: /case\s+(['"][\w-]+['"])\s*:\s*,/g,
     replacement: 'case $1:',
-    description: 'Fix case "value":, → case "value":',
+    description: 'Fix case "value":, → case "value":'
   },
 
   // Conditional expression malformed
@@ -48,7 +48,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Conditional expression malformed',
     pattern: /&&\s*\(\s*\)/g,
     replacement: '&& (',
-    description: 'Fix condition && () → condition && (',
+    description: 'Fix condition && () → condition && ('
   },
 
   // Function calls with semicolon inside
@@ -56,7 +56,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Function calls with semicolon',
     pattern: /(\w+)\(\s*;\s*\)/g,
     replacement: '$1(',
-    description: 'Fix functionName(;) → functionName(',
+    description: 'Fix functionName(;) → functionName('
   },
 
   // Malformed template literal
@@ -64,7 +64,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Template literal malformed',
     pattern: /=\s*`\s*;/g,
     replacement: '= `',
-    description: 'Fix = `; → = `',
+    description: 'Fix = `; → = `'
   },
 
   // Array type malformed
@@ -72,7 +72,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Array type malformed',
     pattern: /:\s*(\w+)\s*=\s*\[\]/g,
     replacement: ': $1[] = []',
-    description: 'Fix : Type = [] → : Type[] = []',
+    description: 'Fix : Type = [] → : Type[] = []'
   },
 
   // Return statement malformed
@@ -80,7 +80,7 @@ const CORRUPTION_PATTERNS = [
     name: 'Return statement malformed',
     pattern: /return\s*;(?=\s*$)/gm,
     replacement: 'return (',
-    description: 'Fix return; → return (',
+    description: 'Fix return; → return ('
   },
 
   // Missing opening parenthesis in exports
@@ -88,8 +88,8 @@ const CORRUPTION_PATTERNS = [
     name: 'Export component malformed',
     pattern: /export\s*const\s*(\w+):[^=]+=\s*\(\{/g,
     replacement: 'export const $1: React.FC<$1Props> = ({',
-    description: 'Fix export const Component = ({ → proper export',
-  },
+    description: 'Fix export const Component = ({ → proper export'
+  }
 ];
 
 class MassCorruptionFixer {
@@ -117,7 +117,7 @@ class MassCorruptionFixer {
         'packages/core/components/WorkflowStateManager.tsx',
         'packages/core/components/WorkflowTransitionControls.tsx',
         'packages/core/components/CorrectionsStatsDashboard.tsx',
-        'packages/core/components/MobileCorrectionsPanel.tsx',
+        'packages/core/components/MobileCorrectionsPanel.tsx'
       ];
     }
   }
@@ -200,7 +200,9 @@ class MassCorruptionFixer {
     console.log('\n🏗️ Testing build...');
     try {
       execSync('pnpm --filter client build', { stdio: 'inherit' });
-      console.log('\n🎉 SUCCESS! Cinema 4D Professional Interface System preserved!');
+      console.log(
+        '\n🎉 SUCCESS! Cinema 4D Professional Interface System preserved!'
+      );
       console.log('🚀 Deployment ready!');
     } catch (error) {
       console.log('\n⚠️ Some corruption may remain. Manual review needed.');

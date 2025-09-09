@@ -300,12 +300,12 @@ describe('Collaboration Client', () => {
     // Simulate incoming update
     client.handleMessage({
       type: 'graph_update',
-      payload: { operations: [mockOperation] },
+      payload: { operations: [mockOperation] }
     });
 
     expect(updateSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        operations: expect.arrayContaining([mockOperation]),
+        operations: expect.arrayContaining([mockOperation])
       })
     );
   });

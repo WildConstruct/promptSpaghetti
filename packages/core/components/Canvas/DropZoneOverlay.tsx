@@ -16,9 +16,12 @@ interface DropZoneOverlayProps {
   message?: string;
 }
 
-export const DropZoneOverlay: React.FC<DropZoneOverlayProps> = ({ state, message }) => {
+export const DropZoneOverlay: React.FC<DropZoneOverlayProps> = ({
+  state,
+  message
+}) => {
   const [visible, setVisible] = useState(false);
-  
+
   useEffect(() => {
     setVisible(state.isOver);
   }, [state.isOver]);
@@ -27,8 +30,10 @@ export const DropZoneOverlay: React.FC<DropZoneOverlayProps> = ({ state, message
 
   const overlayClass = state.canDrop ? 'valid-drop' : 'invalid-drop';
   const icon = state.canDrop ? '✓' : '✗';
-  const defaultMessage = state.canDrop 
-    ? (state.targetNode ? 'Replace node' : 'Drop to create')
+  const defaultMessage = state.canDrop
+    ? state.targetNode
+      ? 'Replace node'
+      : 'Drop to create'
     : 'Invalid drop zone';
 
   return (
@@ -38,7 +43,7 @@ export const DropZoneOverlay: React.FC<DropZoneOverlayProps> = ({ state, message
         <span className="drop-zone-message">{message || defaultMessage}</span>
       </div>
       {state.position && (
-        <div 
+        <div
           className="drop-position-marker"
           style={{
             left: state.position.x,

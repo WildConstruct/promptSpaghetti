@@ -14,11 +14,13 @@ Currently, we provide security updates for the following versions:
 We take the security of Prompt Spaghetti seriously. If you believe you have found a security vulnerability, please report it to us as described below.
 
 ### Please do NOT:
+
 - Open a public GitHub issue for security vulnerabilities
 - Post details on social media or public forums
 - Exploit the vulnerability beyond what's necessary to demonstrate it
 
 ### Please DO:
+
 - **Email us directly** at: security@promptspaghetti.com
 - **Include** in your report:
   - Type of vulnerability (e.g., XSS, SQL injection, authentication bypass)
@@ -51,18 +53,21 @@ We take the security of Prompt Spaghetti seriously. If you believe you have foun
 ### Known Security Considerations
 
 #### LLM Parser (Story 2.6)
+
 - Prompts are sanitized to remove injection patterns
 - Zod validation on all LLM responses
 - Token budget limits to prevent resource exhaustion
 - Output safety validation to block dangerous patterns
 
 #### Node Execution Engine
+
 - Sandboxed execution environment
 - No eval() or Function() constructor usage
 - Strict type validation on all inputs
 - Protection against prototype pollution
 
 #### File Upload/Import
+
 - File type validation
 - Size limits enforced
 - Content scanning for malicious patterns
@@ -85,11 +90,13 @@ Before submitting a PR, please ensure:
 ## Third-Party Security
 
 ### Dependencies
+
 - Regular Dependabot scans for known vulnerabilities
 - Weekly dependency updates reviewed by security team
 - High/Critical vulnerabilities addressed within 48 hours
 
 ### External Services
+
 - **OpenRouter API**: TLS encryption for all LLM calls
 - **Supabase**: SOC 2 compliant authentication service
 - **GitHub Actions**: Secrets stored securely, never logged
@@ -113,6 +120,7 @@ In case of a security incident:
 ## Bug Bounty Program
 
 We currently don't have a formal bug bounty program, but we deeply appreciate security researchers who responsibly disclose vulnerabilities. We're happy to:
+
 - Acknowledge your contribution publicly
 - Provide a letter of appreciation
 - Consider feature requests from security contributors
@@ -124,5 +132,5 @@ PGP Key: [Link to public key]
 
 ---
 
-*This security policy is reviewed quarterly and updated as needed.*
-*Last updated: January 2025*
+_This security policy is reviewed quarterly and updated as needed._
+_Last updated: January 2025_

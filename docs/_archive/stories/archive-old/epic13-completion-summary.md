@@ -235,7 +235,11 @@ import { AnalyticsClient } from '@/analytics/AnalyticsClient';
 
 const client = new AnalyticsClient({ apiUrl: '/api' });
 
-<AnalyticsDashboard analyticsClient={client} autoRefresh={true} refreshInterval={30000} />;
+<AnalyticsDashboard
+  analyticsClient={client}
+  autoRefresh={true}
+  refreshInterval={30000}
+/>;
 ```
 
 ### Real-time WebSocket Integration
@@ -244,7 +248,7 @@ const client = new AnalyticsClient({ apiUrl: '/api' });
 import { AnalyticsWebSocketClient } from '@/analytics/WebSocketClient';
 
 const wsClient = new AnalyticsWebSocketClient({
-  url: 'ws://localhost:8000/ws/analytics',
+  url: 'ws://localhost:8000/ws/analytics'
 });
 
 await wsClient.connect();

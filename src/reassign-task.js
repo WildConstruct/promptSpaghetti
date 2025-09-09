@@ -10,7 +10,9 @@ const newAssignee = process.argv[3];
 
 if (!taskId || !newAssignee) {
   console.error('Usage: node src/reassign-task.js <task-id> <new-assignee>');
-  console.error('Example: node src/reassign-task.js AUTH-985113-EC3E claude_dev_auth');
+  console.error(
+    'Example: node src/reassign-task.js AUTH-985113-EC3E claude_dev_auth'
+  );
   process.exit(1);
 }
 
@@ -27,9 +29,9 @@ async function reassignTaskSafely() {
       retries: {
         retries: 10,
         minTimeout: 100,
-        maxTimeout: 1000,
+        maxTimeout: 1000
       },
-      stale: 30000, // Lock expires after 30 seconds
+      stale: 30000 // Lock expires after 30 seconds
     });
 
     console.log('✅ Lock acquired');
@@ -117,7 +119,9 @@ async function reassignTaskSafely() {
     }
   } catch (error) {
     if (error.code === 'ELOCKED') {
-      console.error('🔒 Another process is currently accessing the state file. Please try again in a few seconds.');
+      console.error(
+        '🔒 Another process is currently accessing the state file. Please try again in a few seconds.'
+      );
       process.exit(1);
     } else {
       console.error('❌ Error:', error.message);

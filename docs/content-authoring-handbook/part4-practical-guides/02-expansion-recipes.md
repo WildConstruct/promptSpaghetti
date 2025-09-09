@@ -253,7 +253,10 @@ Main file reference:
 
 ```json
 {
-  "locations": [{ "_meta": { "uiLabel": "Locations" } }, { "$include": "./data/locations.json" }]
+  "locations": [
+    { "_meta": { "uiLabel": "Locations" } },
+    { "$include": "./data/locations.json" }
+  ]
 }
 ```
 
@@ -299,15 +302,33 @@ Required slots:
   },
   "device_materials": {
     "_meta": { "slot": "materials", "connector": "made of" },
-    "values": ["carbon fiber", "transparent aluminum", "bio-plastic", "quantum glass", "neo-steel"]
+    "values": [
+      "carbon fiber",
+      "transparent aluminum",
+      "bio-plastic",
+      "quantum glass",
+      "neo-steel"
+    ]
   },
   "device_displays": {
     "_meta": { "slot": "displays", "connector": "featuring" },
-    "values": ["holographic readouts", "neural interfaces", "quantum displays", "bio-feedback monitors", "AR overlays"]
+    "values": [
+      "holographic readouts",
+      "neural interfaces",
+      "quantum displays",
+      "bio-feedback monitors",
+      "AR overlays"
+    ]
   },
   "device_controls": {
     "_meta": { "slot": "controls", "connector": "controlled by" },
-    "values": ["gesture recognition", "voice commands", "neural link", "haptic panels", "eye tracking"]
+    "values": [
+      "gesture recognition",
+      "voice commands",
+      "neural link",
+      "haptic panels",
+      "eye tracking"
+    ]
   }
 }
 ```
@@ -475,7 +496,11 @@ Requirements:
     "type": "getVariable",
     "key": "basic_desc"
   },
-  "details": ["[detail1]", "[detail1] and [detail2]", "[detail1], [detail2], and [detail3]"]
+  "details": [
+    "[detail1]",
+    "[detail1] and [detail2]",
+    "[detail1], [detail2], and [detail3]"
+  ]
 }
 ```
 

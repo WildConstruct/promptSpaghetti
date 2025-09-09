@@ -133,8 +133,15 @@ We will implement a **modular dual-tier runtime architecture** with clear separa
 
 ```typescript
 export function detectRequiredContext(graph: Graph): 'basic' | 'advanced' {
-  const advancedNodeTypes = ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov'];
-  const hasAdvancedNodes = graph.nodes.some(node => advancedNodeTypes.includes(node.type));
+  const advancedNodeTypes = [
+    'WeightedAdvanced',
+    'Conditional',
+    'Sequential',
+    'Markov'
+  ];
+  const hasAdvancedNodes = graph.nodes.some(node =>
+    advancedNodeTypes.includes(node.type)
+  );
   return hasAdvancedNodes ? 'advanced' : 'basic';
 }
 ```

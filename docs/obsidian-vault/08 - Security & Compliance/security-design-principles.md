@@ -209,7 +209,7 @@ const securityDefaults = {
     sessionTimeout: 30, // minutes
     maxLoginAttempts: 3,
     lockoutDuration: 15, // minutes
-    passwordComplexity: 'high',
+    passwordComplexity: 'high'
   },
 
   // Network defaults
@@ -218,7 +218,7 @@ const securityDefaults = {
     corsPolicy: 'strict',
     httpsOnly: true,
     hstsEnabled: true,
-    certificateValidation: 'strict',
+    certificateValidation: 'strict'
   },
 
   // Data defaults
@@ -227,7 +227,7 @@ const securityDefaults = {
     encryptionInTransit: true,
     backupEncryption: true,
     dataRetentionDays: 90,
-    anonymizationRequired: true,
+    anonymizationRequired: true
   },
 
   // API defaults
@@ -236,7 +236,7 @@ const securityDefaults = {
     requestSizeLimit: '10MB',
     timeoutSeconds: 30,
     validationStrict: true,
-    auditLogging: true,
+    auditLogging: true
   },
 
   // Error handling defaults
@@ -244,8 +244,8 @@ const securityDefaults = {
     detailedErrors: false, // Don't expose internal details
     sanitizeErrorMessages: true,
     logAllErrors: true,
-    notifySecurityTeam: true, // For security-relevant errors
-  },
+    notifySecurityTeam: true // For security-relevant errors
+  }
 };
 
 // Fail-safe error handling
@@ -255,11 +255,14 @@ class SecureErrorHandler {
     this.auditLogger.logError(error, context);
 
     // Return sanitized error to client
-    if (context.user?.role === 'admin' && context.environment === 'development') {
+    if (
+      context.user?.role === 'admin' &&
+      context.environment === 'development'
+    ) {
       return {
         message: error.message,
         details: error.stack,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     }
 
@@ -267,7 +270,7 @@ class SecureErrorHandler {
     return {
       message: 'An error occurred. Please try again or contact support.',
       errorId: this.generateErrorId(),
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 }
@@ -293,15 +296,27 @@ class AccessMediator {
   ): Promise<AccessDecision> {
     // Step 1: Authenticate the subject
     if (!(await this.authenticateSubject(subject))) {
-      return this.denyAccess('Authentication failed', subject, resource, action);
+      return this.denyAccess(
+        'Authentication failed',
+        subject,
+        resource,
+        action
+      );
     }
 
     // Step 2: Evaluate all applicable policies
-    const applicablePolicies = this.policies.filter(policy => policy.appliesTo(subject, resource, action, context));
+    const applicablePolicies = this.policies.filter(policy =>
+      policy.appliesTo(subject, resource, action, context)
+    );
 
     // Step 3: Check each policy (fail-safe: deny if any policy denies)
     for (const policy of applicablePolicies) {
-      const decision = await policy.evaluate(subject, resource, action, context);
+      const decision = await policy.evaluate(
+        subject,
+        resource,
+        action,
+        context
+      );
 
       if (decision.result === 'DENY') {
         return this.denyAccess(decision.reason, subject, resource, action);
@@ -310,7 +325,12 @@ class AccessMediator {
 
     // Step 4: Verify resource accessibility
     if (!(await this.isResourceAccessible(resource, context))) {
-      return this.denyAccess('Resource not accessible', subject, resource, action);
+      return this.denyAccess(
+        'Resource not accessible',
+        subject,
+        resource,
+        action
+      );
     }
 
     // Step 5: Check rate limits
@@ -325,13 +345,13 @@ class AccessMediator {
       action: action.type,
       context: context,
       decision: 'ALLOW',
-      timestamp: new Date(),
+      timestamp: new Date()
     });
 
     return {
       result: 'ALLOW',
       permissions: this.calculatePermissions(subject, resource, action),
-      expiresAt: this.calculateExpiration(context),
+      expiresAt: this.calculateExpiration(context)
     };
   }
 
@@ -348,16 +368,21 @@ class AccessMediator {
       action: action.type,
       decision: 'DENY',
       reason: reason,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
 
     // Check for potential security threats
-    await this.threatDetector.analyzeFailedAccess(subject, resource, action, reason);
+    await this.threatDetector.analyzeFailedAccess(
+      subject,
+      resource,
+      action,
+      reason
+    );
 
     return {
       result: 'DENY',
       reason: reason,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
   }
 }
@@ -397,7 +422,7 @@ class SimpleSecureAuth {
     return {
       user: this.sanitizeUserData(user),
       token: token,
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
     };
   }
 
@@ -525,7 +550,7 @@ class PrivacyByDesignController {
       required: this.getMinimalRequiredData(userContext.purpose),
       optional: this.getOptionalData(userContext.preferences),
       prohibited: this.getProhibitedData(userContext.jurisdiction),
-      retention: this.calculateRetentionPeriod(userContext.purpose),
+      retention: this.calculateRetentionPeriod(userContext.purpose)
     };
   }
 
@@ -554,7 +579,10 @@ class PrivacyByDesignController {
   }
 
   // Data portability
-  exportUserData(userId: string, format: 'json' | 'csv' | 'xml'): Promise<DataExport> {
+  exportUserData(
+    userId: string,
+    format: 'json' | 'csv' | 'xml'
+  ): Promise<DataExport> {
     const userData = await this.aggregateUserData(userId);
     const sanitizedData = this.sanitizeForExport(userData);
 
@@ -564,19 +592,22 @@ class PrivacyByDesignController {
       generatedAt: new Date(),
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
       downloadCount: 0,
-      maxDownloads: 3,
+      maxDownloads: 3
     };
   }
 
   // Right to be forgotten
-  async deleteUserData(userId: string, reason: DeletionReason): Promise<DeletionReport> {
+  async deleteUserData(
+    userId: string,
+    reason: DeletionReason
+  ): Promise<DeletionReport> {
     const deletionPlan = await this.createDeletionPlan(userId);
 
     const results = await Promise.allSettled([
       this.deleteFromDatabase(userId, deletionPlan.database),
       this.deleteFromFileStorage(userId, deletionPlan.files),
       this.deleteFromBackups(userId, deletionPlan.backups),
-      this.deleteFromLogs(userId, deletionPlan.logs),
+      this.deleteFromLogs(userId, deletionPlan.logs)
     ]);
 
     return {
@@ -585,7 +616,7 @@ class PrivacyByDesignController {
       deletionDate: new Date(),
       itemsDeleted: results.filter(r => r.status === 'fulfilled').length,
       itemsFailed: results.filter(r => r.status === 'rejected').length,
-      verificationRequired: true,
+      verificationRequired: true
     };
   }
 }
@@ -631,7 +662,11 @@ interface SecurityControlSelection {
     low: ['basic_authentication', 'ssl_tls', 'input_validation'];
     medium: ['multi_factor_auth', 'encryption_at_rest', 'audit_logging'];
     high: ['advanced_threat_detection', 'zero_trust', 'continuous_monitoring'];
-    critical: ['hardware_security_modules', 'network_segmentation', 'incident_response_team'];
+    critical: [
+      'hardware_security_modules',
+      'network_segmentation',
+      'incident_response_team'
+    ];
   };
 }
 ```
@@ -647,7 +682,7 @@ class SecureConfigurationManager {
       allowInbound: [], // Empty by default - explicit allow required
       allowOutbound: ['https://api.wildConstruct.com'], // Minimal necessary
       enforceHttps: true,
-      hstsMaxAge: 31536000,
+      hstsMaxAge: 31536000
     },
 
     authentication: {
@@ -655,7 +690,7 @@ class SecureConfigurationManager {
       sessionTimeout: 1800, // 30 minutes
       passwordMinLength: 12,
       passwordComplexity: true,
-      accountLockoutThreshold: 3,
+      accountLockoutThreshold: 3
     },
 
     data: {
@@ -663,8 +698,8 @@ class SecureConfigurationManager {
       encryptInTransit: true,
       encryptBackups: true,
       dataRetentionDays: 90,
-      purgeDeletedData: true,
-    },
+      purgeDeletedData: true
+    }
   };
 
   applySecureDefaults(configuration: SystemConfig): SystemConfig {
@@ -676,8 +711,11 @@ class SecureConfigurationManager {
         ...this.secureDefaults.network,
         ...configuration.network,
         enforceHttps: true, // Always enforced
-        hstsMaxAge: Math.max(configuration.network?.hstsMaxAge || 0, this.secureDefaults.network.hstsMaxAge),
-      },
+        hstsMaxAge: Math.max(
+          configuration.network?.hstsMaxAge || 0,
+          this.secureDefaults.network.hstsMaxAge
+        )
+      }
     };
   }
 }

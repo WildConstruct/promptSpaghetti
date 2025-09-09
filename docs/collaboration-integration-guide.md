@@ -87,7 +87,7 @@ class CollaborationClient {
       userId: this.userId,
       documentId: this.documentId,
       userName: this.userName,
-      platform: 'web',
+      platform: 'web'
     });
   }
 
@@ -98,7 +98,7 @@ class CollaborationClient {
           type,
           payload,
           timestamp: Date.now(),
-          messageId: uuidv4(),
+          messageId: uuidv4()
         })
       );
     }
@@ -137,14 +137,14 @@ class CollaborationClient {
     this.send('graph_update', {
       documentId: this.documentId,
       operations,
-      version: this.getCurrentVersion(),
+      version: this.getCurrentVersion()
     });
   }
 
   sendCursorUpdate = throttle(50, (x: number, y: number) => {
     this.send('presence_update', {
       cursor: { x, y },
-      status: 'active',
+      status: 'active'
     });
   });
 
@@ -172,7 +172,11 @@ class CollaborationClient {
 ### 3. Basic Usage
 
 ```typescript
-const collaboration = new CollaborationClient('document-uuid-here', 'user-uuid-here', 'John Doe');
+const collaboration = new CollaborationClient(
+  'document-uuid-here',
+  'user-uuid-here',
+  'John Doe'
+);
 
 collaboration.onUserJoin = user => {
   console.log('User joined:', user.userName);
@@ -209,14 +213,14 @@ export const collaborationConfig: Record<string, CollaborationConfig> = {
     websocketUrl: 'ws://localhost:8000',
     reconnectAttempts: 5,
     heartbeatInterval: 30000,
-    cursorThrottle: 50,
+    cursorThrottle: 50
   },
   production: {
     websocketUrl: 'wss://api.promptscape.com/ws',
     reconnectAttempts: 3,
     heartbeatInterval: 30000,
-    cursorThrottle: 50,
-  },
+    cursorThrottle: 50
+  }
 };
 
 export const getConfig = (): CollaborationConfig => {
@@ -233,7 +237,7 @@ enum ConnectionState {
   CONNECTING = 'connecting',
   CONNECTED = 'connected',
   AUTHENTICATED = 'authenticated',
-  ERROR = 'error',
+  ERROR = 'error'
 }
 
 class ConnectionManager {
@@ -281,7 +285,12 @@ interface AuthConfig {
 class AuthenticatedCollaborationClient extends CollaborationClient {
   private authConfig: AuthConfig;
 
-  constructor(documentId: string, userId: string, userName: string, authConfig: AuthConfig) {
+  constructor(
+    documentId: string,
+    userId: string,
+    userName: string,
+    authConfig: AuthConfig
+  ) {
     super(documentId, userId, userName);
     this.authConfig = authConfig;
   }
@@ -295,7 +304,7 @@ class AuthenticatedCollaborationClient extends CollaborationClient {
         documentId: this.documentId,
         userName: this.userName,
         token: token,
-        platform: 'web',
+        platform: 'web'
       });
     } catch (error) {
       this.authConfig.onAuthError('Failed to get authentication token');
@@ -312,16 +321,21 @@ class AuthenticatedCollaborationClient extends CollaborationClient {
 }
 
 // Usage
-const authClient = new AuthenticatedCollaborationClient(documentId, userId, userName, {
-  getToken: async () => {
-    return localStorage.getItem('auth_token') || '';
-  },
-  onAuthError: error => {
-    console.error('Auth error:', error);
-    // Redirect to login page
-    window.location.href = '/login';
-  },
-});
+const authClient = new AuthenticatedCollaborationClient(
+  documentId,
+  userId,
+  userName,
+  {
+    getToken: async () => {
+      return localStorage.getItem('auth_token') || '';
+    },
+    onAuthError: error => {
+      console.error('Auth error:', error);
+      // Redirect to login page
+      window.location.href = '/login';
+    }
+  }
+);
 ```
 
 ### Permission Checking
@@ -339,7 +353,7 @@ class PermissionManager {
     canEdit: false,
     canComment: false,
     canInvite: false,
-    isAdmin: false,
+    isAdmin: false
   };
 
   updatePermissions(permissionsBitmask: number) {
@@ -347,7 +361,7 @@ class PermissionManager {
       canEdit: (permissionsBitmask & 0b10) !== 0,
       canComment: (permissionsBitmask & 0b1000000000000) !== 0,
       canInvite: (permissionsBitmask & 0b1000000000000000) !== 0,
-      isAdmin: (permissionsBitmask & 0b100) !== 0,
+      isAdmin: (permissionsBitmask & 0b100) !== 0
     };
   }
 
@@ -369,7 +383,13 @@ class PermissionManager {
 
 ```typescript
 interface GraphOperation {
-  type: 'node_add' | 'node_update' | 'node_remove' | 'edge_add' | 'edge_update' | 'edge_remove';
+  type:
+    | 'node_add'
+    | 'node_update'
+    | 'node_remove'
+    | 'edge_add'
+    | 'edge_update'
+    | 'edge_remove';
   nodeId?: string;
   edgeId?: string;
   data: any;
@@ -399,7 +419,7 @@ class GraphUpdateManager {
       nodeId: node.id,
       data: node,
       timestamp: Date.now(),
-      userId: this.collaborationClient.userId,
+      userId: this.collaborationClient.userId
     };
 
     this.applyLocalOperation(operation);
@@ -413,7 +433,7 @@ class GraphUpdateManager {
       data: newData,
       oldValue: oldData,
       timestamp: Date.now(),
-      userId: this.collaborationClient.userId,
+      userId: this.collaborationClient.userId
     };
 
     this.applyLocalOperation(operation);
@@ -426,7 +446,7 @@ class GraphUpdateManager {
       nodeId,
       data: null,
       timestamp: Date.now(),
-      userId: this.collaborationClient.userId,
+      userId: this.collaborationClient.userId
     };
 
     this.applyLocalOperation(operation);
@@ -488,15 +508,26 @@ class GraphUpdateManager {
 
 ```typescript
 class OperationalTransform {
-  static transform(op1: GraphOperation, op2: GraphOperation): [GraphOperation, GraphOperation] {
+  static transform(
+    op1: GraphOperation,
+    op2: GraphOperation
+  ): [GraphOperation, GraphOperation] {
     // Implement operational transform logic based on operation types
 
-    if (op1.type === 'node_update' && op2.type === 'node_update' && op1.nodeId === op2.nodeId) {
+    if (
+      op1.type === 'node_update' &&
+      op2.type === 'node_update' &&
+      op1.nodeId === op2.nodeId
+    ) {
       // Both operations update the same node - need to merge
       return OperationalTransform.transformNodeUpdate(op1, op2);
     }
 
-    if (op1.type === 'node_remove' && op2.type === 'node_update' && op1.nodeId === op2.nodeId) {
+    if (
+      op1.type === 'node_remove' &&
+      op2.type === 'node_update' &&
+      op1.nodeId === op2.nodeId
+    ) {
       // One removes, one updates - removal wins
       return [op1, { ...op2, type: 'node_remove' }];
     }
@@ -505,17 +536,20 @@ class OperationalTransform {
     return [op1, op2];
   }
 
-  private static transformNodeUpdate(op1: GraphOperation, op2: GraphOperation): [GraphOperation, GraphOperation] {
+  private static transformNodeUpdate(
+    op1: GraphOperation,
+    op2: GraphOperation
+  ): [GraphOperation, GraphOperation] {
     // Merge properties from both updates
     const mergedData = {
       ...op1.oldValue,
       ...op1.data,
-      ...op2.data,
+      ...op2.data
     };
 
     return [
       { ...op1, data: mergedData },
-      { ...op2, data: mergedData },
+      { ...op2, data: mergedData }
     ];
   }
 }
@@ -540,7 +574,13 @@ interface CursorData {
 class CursorManager {
   private cursors: Map<string, CursorData> = new Map();
   private collaborationClient: CollaborationClient;
-  private cursorColors: string[] = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
+  private cursorColors: string[] = [
+    '#FF6B6B',
+    '#4ECDC4',
+    '#45B7D1',
+    '#96CEB4',
+    '#FFEAA7'
+  ];
 
   constructor(collaborationClient: CollaborationClient) {
     this.collaborationClient = collaborationClient;
@@ -559,14 +599,15 @@ class CursorManager {
   }
 
   private addUser(user: any) {
-    const color = this.cursorColors[this.cursors.size % this.cursorColors.length];
+    const color =
+      this.cursorColors[this.cursors.size % this.cursorColors.length];
 
     this.cursors.set(user.userId, {
       x: 0,
       y: 0,
       userId: user.userId,
       userName: user.userName,
-      color: color,
+      color: color
     });
 
     this.renderCursors();
@@ -594,7 +635,9 @@ class CursorManager {
 
   private renderCursors() {
     // Remove existing cursor elements
-    document.querySelectorAll('.collaboration-cursor').forEach(el => el.remove());
+    document
+      .querySelectorAll('.collaboration-cursor')
+      .forEach(el => el.remove());
 
     // Render each cursor
     this.cursors.forEach(cursor => {
@@ -660,7 +703,7 @@ class SelectionManager {
   updateLocalSelection(selectedIds: string[]) {
     this.collaborationClient.send('selection_update', {
       nodeIds: selectedIds,
-      edgeIds: [],
+      edgeIds: []
     });
 
     this.renderSelections();
@@ -673,7 +716,9 @@ class SelectionManager {
 
   private renderSelections() {
     // Remove existing selection indicators
-    document.querySelectorAll('.collaboration-selection').forEach(el => el.remove());
+    document
+      .querySelectorAll('.collaboration-selection')
+      .forEach(el => el.remove());
 
     // Render each user's selection
     this.selections.forEach((selection, userId) => {
@@ -782,17 +827,24 @@ class ConflictResolver {
     document.body.appendChild(dialog);
 
     // Make resolution function globally available
-    (window as any).resolveConflict = (conflictId: string, strategy: string) => {
+    (window as any).resolveConflict = (
+      conflictId: string,
+      strategy: string
+    ) => {
       this.resolveConflict(conflictId, strategy);
       dialog.remove();
     };
   }
 
-  private resolveConflict(conflictId: string, strategy: string, userSelection?: any) {
+  private resolveConflict(
+    conflictId: string,
+    strategy: string,
+    userSelection?: any
+  ) {
     this.collaborationClient.send('resolve_conflict', {
       conflictId,
       strategy,
-      userSelection,
+      userSelection
     });
   }
 
@@ -862,14 +914,20 @@ interface UseCollaborationReturn {
   disconnect: () => void;
 }
 
-export const useCollaboration = (options: UseCollaborationOptions): UseCollaborationReturn => {
+export const useCollaboration = (
+  options: UseCollaborationOptions
+): UseCollaborationReturn => {
   const [client, setClient] = useState<CollaborationClient | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [connectedUsers, setConnectedUsers] = useState<any[]>([]);
   const [cursors, setCursors] = useState<Map<string, any>>(new Map());
 
   useEffect(() => {
-    const collaborationClient = new CollaborationClient(options.documentId, options.userId, options.userName);
+    const collaborationClient = new CollaborationClient(
+      options.documentId,
+      options.userId,
+      options.userName
+    );
 
     // Set up event handlers
     collaborationClient.onConnected = () => {
@@ -931,7 +989,7 @@ export const useCollaboration = (options: UseCollaborationOptions): UseCollabora
     cursors,
     sendGraphUpdate,
     sendCursorUpdate,
-    disconnect,
+    disconnect
   };
 };
 ```
@@ -948,13 +1006,21 @@ interface CollaborativeGraphEditorProps {
   userName: string;
 }
 
-export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> = ({ documentId, userId, userName }) => {
+export const CollaborativeGraphEditor: React.FC<
+  CollaborativeGraphEditorProps
+> = ({ documentId, userId, userName }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const { isConnected, connectedUsers, cursors, sendGraphUpdate, sendCursorUpdate } = useCollaboration({
+  const {
+    isConnected,
+    connectedUsers,
+    cursors,
+    sendGraphUpdate,
+    sendCursorUpdate
+  } = useCollaboration({
     documentId,
     userId,
-    userName,
+    userName
   });
 
   // Handle mouse movement for cursor sharing
@@ -987,7 +1053,7 @@ export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> =
           position: 'absolute',
           left: cursor.x,
           top: cursor.y,
-          pointerEvents: 'none',
+          pointerEvents: 'none'
         }}
       >
         <div className="cursor-pointer" />
@@ -1017,7 +1083,12 @@ export const CollaborativeGraphEditor: React.FC<CollaborativeGraphEditorProps> =
       </div>
 
       <div className="editor-container" style={{ position: 'relative' }}>
-        <canvas ref={canvasRef} width={800} height={600} style={{ border: '1px solid #ccc' }} />
+        <canvas
+          ref={canvasRef}
+          width={800}
+          height={600}
+          style={{ border: '1px solid #ccc' }}
+        />
         {renderCursors()}
       </div>
     </div>

@@ -36,18 +36,18 @@ const GOLDEN_TEST_CASES: GoldenTestCase[] = [
           choices: [
             { text: 'Option A', weight: 3 },
             { text: 'Option B', weight: 2 },
-            { text: 'Option C', weight: 1 },
-          ],
+            { text: 'Option C', weight: 1 }
+          ]
         },
         {
           id: 'output1',
           type: 'Output',
-          inputs: ['choice1'],
-        },
+          inputs: ['choice1']
+        }
       ],
-      edges: [{ id: 'e1', source: 'choice1', target: 'output1' }],
+      edges: [{ id: 'e1', source: 'choice1', target: 'output1' }]
     },
-    expectedSeeds: [12345, 67890, 11111, 99999],
+    expectedSeeds: [12345, 67890, 11111, 99999]
   },
 
   {
@@ -61,15 +61,15 @@ const GOLDEN_TEST_CASES: GoldenTestCase[] = [
           id: 'var1',
           type: 'SetVariable',
           key: 'subject',
-          value: 'regression testing',
+          value: 'regression testing'
         },
         {
           id: 'choice1',
           type: 'WeightedChoice',
           choices: [
             { text: 'Testing is', weight: 1 },
-            { text: 'Quality assurance is', weight: 1 },
-          ],
+            { text: 'Quality assurance is', weight: 1 }
+          ]
         },
         {
           id: 'choice2',
@@ -77,35 +77,35 @@ const GOLDEN_TEST_CASES: GoldenTestCase[] = [
           choices: [
             { text: 'essential', weight: 2 },
             { text: 'critical', weight: 1 },
-            { text: 'important', weight: 1 },
-          ],
+            { text: 'important', weight: 1 }
+          ]
         },
         {
           id: 'getVar1',
           type: 'GetVariable',
           key: 'subject',
-          inputs: ['var1'],
+          inputs: ['var1']
         },
         {
           id: 'concat1',
           type: 'Concat',
-          inputs: ['choice1', 'choice2', 'getVar1'],
+          inputs: ['choice1', 'choice2', 'getVar1']
         },
         {
           id: 'output1',
           type: 'Output',
-          inputs: ['concat1'],
-        },
+          inputs: ['concat1']
+        }
       ],
       edges: [
         { id: 'e1', source: 'var1', target: 'getVar1' },
         { id: 'e2', source: 'choice1', target: 'concat1' },
         { id: 'e3', source: 'choice2', target: 'concat1' },
         { id: 'e4', source: 'getVar1', target: 'concat1' },
-        { id: 'e5', source: 'concat1', target: 'output1' },
-      ],
+        { id: 'e5', source: 'concat1', target: 'output1' }
+      ]
     },
-    expectedSeeds: [54321, 98765, 13579, 24680],
+    expectedSeeds: [54321, 98765, 13579, 24680]
   },
 
   {
@@ -121,26 +121,26 @@ const GOLDEN_TEST_CASES: GoldenTestCase[] = [
           choices: [
             { text: 'Alpha', weight: 10 },
             { text: 'Beta', weight: 5 },
-            { text: 'Gamma', weight: 2 },
+            { text: 'Gamma', weight: 2 }
           ],
           distributionConfig: {
             type: 'exponential',
             normalize: true,
-            temperature: 1.0,
-          },
+            temperature: 1.0
+          }
         },
         {
           id: 'conditional1',
           type: 'Conditional',
           branches: [
             { condition: 'true', output: 'Condition met' },
-            { condition: 'false', output: 'Condition not met' },
+            { condition: 'false', output: 'Condition not met' }
           ],
           defaultOutput: 'Default output',
           conditionalConfig: {
             allowUnknownFunctions: false,
-            maxExpressionLength: 100,
-          },
+            maxExpressionLength: 100
+          }
         },
         {
           id: 'sequential1',
@@ -148,8 +148,8 @@ const GOLDEN_TEST_CASES: GoldenTestCase[] = [
           sequence: ['First', 'Second', 'Third', 'Fourth'],
           pattern: {
             type: 'cyclical',
-            config: { cycleLength: 3 },
-          },
+            config: { cycleLength: 3 }
+          }
         },
         {
           id: 'markov1',
@@ -158,44 +158,44 @@ const GOLDEN_TEST_CASES: GoldenTestCase[] = [
           transitions: {
             start: { middle: 0.7, end: 0.3 },
             middle: { middle: 0.4, end: 0.6 },
-            end: { start: 1.0 },
+            end: { start: 1.0 }
           },
           initialState: 'start',
           markovConfig: {
             maxSteps: 5,
-            terminationConditions: ['end'],
-          },
+            terminationConditions: ['end']
+          }
         },
         {
           id: 'output1',
           type: 'Output',
-          inputs: ['weightedAdv1'],
+          inputs: ['weightedAdv1']
         },
         {
           id: 'output2',
           type: 'Output',
-          inputs: ['conditional1'],
+          inputs: ['conditional1']
         },
         {
           id: 'output3',
           type: 'Output',
-          inputs: ['sequential1'],
+          inputs: ['sequential1']
         },
         {
           id: 'output4',
           type: 'Output',
-          inputs: ['markov1'],
-        },
+          inputs: ['markov1']
+        }
       ],
       edges: [
         { id: 'e1', source: 'weightedAdv1', target: 'output1' },
         { id: 'e2', source: 'conditional1', target: 'output2' },
         { id: 'e3', source: 'sequential1', target: 'output3' },
-        { id: 'e4', source: 'markov1', target: 'output4' },
-      ],
+        { id: 'e4', source: 'markov1', target: 'output4' }
+      ]
     },
-    expectedSeeds: [42, 123, 456, 789],
-  },
+    expectedSeeds: [42, 123, 456, 789]
+  }
 ];
 
 /**
@@ -243,7 +243,10 @@ export async function generateGoldenFiles(): Promise<void> {
         saveGoldenFile(testCase.name, seed, output);
         console.log(`  ✓ Saved golden file for seed ${seed}`);
       } catch (error) {
-        console.error(`  ✗ Failed to generate golden file for seed ${seed}:`, error);
+        console.error(
+          `  ✗ Failed to generate golden file for seed ${seed}:`,
+          error
+        );
         throw error;
       }
     }
@@ -328,13 +331,15 @@ describe('Core Engine Regression - Deterministic Execution', () => {
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['nonexistent'], // References non-existent node
-          },
+            inputs: ['nonexistent'] // References non-existent node
+          }
         ],
-        edges: [],
+        edges: []
       };
 
-      await expect(executeGraph(malformedGraph)).rejects.toThrow('Node nonexistent not found');
+      await expect(executeGraph(malformedGraph)).rejects.toThrow(
+        'Node nonexistent not found'
+      );
     });
 
     it('should handle invalid node types consistently', async () => {
@@ -345,18 +350,20 @@ describe('Core Engine Regression - Deterministic Execution', () => {
           {
             id: 'invalid1',
             type: 'InvalidType' as any,
-            inputs: [],
+            inputs: []
           },
           {
             id: 'output1',
             type: 'Output',
-            inputs: ['invalid1'],
-          },
+            inputs: ['invalid1']
+          }
         ],
-        edges: [{ id: 'e1', source: 'invalid1', target: 'output1' }],
+        edges: [{ id: 'e1', source: 'invalid1', target: 'output1' }]
       };
 
-      await expect(executeGraph(invalidGraph)).rejects.toThrow('Unsupported node type InvalidType');
+      await expect(executeGraph(invalidGraph)).rejects.toThrow(
+        'Unsupported node type InvalidType'
+      );
     });
   });
 

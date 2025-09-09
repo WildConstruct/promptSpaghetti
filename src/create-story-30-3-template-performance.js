@@ -43,7 +43,14 @@ const story303Definition = {
   wipClass: 'feature',
   epic: 'Epic 30 - Marketplace Analytics Integration',
   story: 'STORY-30-3-TEMPLATE-PERFORMANCE',
-  tags: ['marketplace', 'analytics', 'template-performance', 'quality-scoring', 'creator-dashboard', 'content-quality'],
+  tags: [
+    'marketplace',
+    'analytics',
+    'template-performance',
+    'quality-scoring',
+    'creator-dashboard',
+    'content-quality'
+  ],
 
   acceptanceCriteria: [
     'Template performance tracking with real-time metrics updates implemented',
@@ -55,7 +62,7 @@ const story303Definition = {
     'Template quality assessment algorithms with configurable weighting functional',
     'Template A/B testing and optimization framework integrated',
     'Quality-based template recommendation algorithms implemented',
-    'Creator performance alerts and notifications system active',
+    'Creator performance alerts and notifications system active'
   ],
 
   businessValue:
@@ -74,8 +81,8 @@ const story303Definition = {
         'Comprehensive template usage tracking schema created',
         'Template performance metrics and KPIs defined',
         'Template quality scoring algorithms implemented',
-        'Template lifecycle tracking and analytics established',
-      ],
+        'Template lifecycle tracking and analytics established'
+      ]
     },
     {
       title: '30.3.1 - Implement Template Analytics Collection',
@@ -88,8 +95,8 @@ const story303Definition = {
         'Template usage event tracking extending Epic 1 analytics built',
         'Template performance data aggregation pipelines created',
         'Real-time template metrics calculation implemented',
-        'Template analytics data validation and quality assurance added',
-      ],
+        'Template analytics data validation and quality assurance added'
+      ]
     },
     {
       title: '30.3.1 - Create Template Analytics API',
@@ -102,8 +109,8 @@ const story303Definition = {
         'RESTful endpoints for template performance queries built',
         'GraphQL schema for template analytics data implemented',
         'Template analytics data export and reporting capabilities added',
-        'Template performance comparison and benchmarking APIs created',
-      ],
+        'Template performance comparison and benchmarking APIs created'
+      ]
     },
     {
       title: '30.3.1 - Develop Template Recommendation Analytics',
@@ -111,13 +118,17 @@ const story303Definition = {
         'Build template popularity and trending algorithms with similarity clustering and performance prediction',
       estimate: '0.5 days',
       priority: 'medium',
-      tags: ['recommendation-algorithms', 'popularity-tracking', 'prediction-models'],
+      tags: [
+        'recommendation-algorithms',
+        'popularity-tracking',
+        'prediction-models'
+      ],
       acceptance: [
         'Template popularity and trending algorithms built',
         'Template similarity and clustering analytics created',
         'Template performance prediction models implemented',
-        'Template optimization recommendation system added',
-      ],
+        'Template optimization recommendation system added'
+      ]
     },
     {
       title: '30.3.2 - Design Template Analytics Interface',
@@ -130,8 +141,8 @@ const story303Definition = {
         'Template performance dashboard wireframes and layouts created',
         'Template creator analytics and insights views defined',
         'Template marketplace optimization recommendations planned',
-        'Template performance comparison and benchmarking tools designed',
-      ],
+        'Template performance comparison and benchmarking tools designed'
+      ]
     },
     {
       title: '30.3.2 - Implement Template Performance Visualizations',
@@ -144,8 +155,8 @@ const story303Definition = {
         'Template usage trends and analytics charts built',
         'Template popularity and ranking visualizations created',
         'Template quality score dashboards implemented',
-        'Template revenue and monetization analytics added',
-      ],
+        'Template revenue and monetization analytics added'
+      ]
     },
     {
       title: '30.3.2 - Create Advanced Template Analytics',
@@ -158,8 +169,8 @@ const story303Definition = {
         'Template A/B testing and optimization framework built',
         'Template performance anomaly detection implemented',
         'Template lifecycle analytics and optimization created',
-        'Template market opportunity and gap analysis added',
-      ],
+        'Template market opportunity and gap analysis added'
+      ]
     },
     {
       title: '30.3.2 - Integrate with Epic 16 Marketplace Creator Tools',
@@ -167,13 +178,17 @@ const story303Definition = {
         'Embed template analytics into creator dashboard and create optimization recommendations with performance alerts',
       estimate: '0.5 days',
       priority: 'medium',
-      tags: ['marketplace-integration', 'creator-dashboard', 'alerts-notifications'],
+      tags: [
+        'marketplace-integration',
+        'creator-dashboard',
+        'alerts-notifications'
+      ],
       acceptance: [
         'Template analytics embedded into creator dashboard',
         'Template optimization recommendations and insights created',
         'Template performance alerts and notifications added',
-        'Template marketplace positioning recommendations implemented',
-      ],
+        'Template marketplace positioning recommendations implemented'
+      ]
     },
     {
       title: '30.3.3 - Implement Content Quality Scoring',
@@ -186,8 +201,8 @@ const story303Definition = {
         'Automated content quality assessment algorithms created',
         'Template completeness and usability scoring built',
         'User feedback and rating analytics integration implemented',
-        'Content quality trend analysis and optimization added',
-      ],
+        'Content quality trend analysis and optimization added'
+      ]
     },
     {
       title: '30.3.3 - Create Quality Analytics Dashboard',
@@ -200,8 +215,8 @@ const story303Definition = {
         'Content quality metrics visualization built',
         'Quality improvement recommendation system created',
         'Quality benchmarking and comparison tools implemented',
-        'Quality-based template promotion and featuring analytics added',
-      ],
+        'Quality-based template promotion and featuring analytics added'
+      ]
     },
     {
       title: '30.3.3 - Develop Quality Optimization Tools',
@@ -209,13 +224,17 @@ const story303Definition = {
         'Create automated content quality improvement suggestions and build quality-based ranking with alert systems',
       estimate: '0.5 days',
       priority: 'medium',
-      tags: ['quality-optimization', 'automated-suggestions', 'ranking-algorithms'],
+      tags: [
+        'quality-optimization',
+        'automated-suggestions',
+        'ranking-algorithms'
+      ],
       acceptance: [
         'Automated content quality improvement suggestions created',
         'Quality-based template ranking and discovery built',
         'Quality alert and notification system implemented',
-        'Quality analytics integration with creator tools added',
-      ],
+        'Quality analytics integration with creator tools added'
+      ]
     },
     {
       title: '30.3.3 - Integrate Quality Metrics with Marketplace Algorithms',
@@ -223,15 +242,19 @@ const story303Definition = {
         'Create quality-weighted template recommendation algorithms and implement quality-based search optimization',
       estimate: '0.5 days',
       priority: 'medium',
-      tags: ['marketplace-algorithms', 'quality-weighted', 'search-optimization'],
+      tags: [
+        'marketplace-algorithms',
+        'quality-weighted',
+        'search-optimization'
+      ],
       acceptance: [
         'Quality-weighted template recommendation algorithms created',
         'Quality-based search and discovery optimization implemented',
         'Quality metrics added to marketplace ranking algorithms',
-        'Quality-driven marketplace curation automation created',
-      ],
-    },
-  ],
+        'Quality-driven marketplace curation automation created'
+      ]
+    }
+  ]
 };
 
 // Utility functions
@@ -254,8 +277,8 @@ async function loadCurrentState() {
       stories: {},
       metadata: {
         created: new Date().toISOString(),
-        lastUpdated: new Date().toISOString(),
-      },
+        lastUpdated: new Date().toISOString()
+      }
     };
   }
 }
@@ -297,20 +320,20 @@ function createStoryObject(storyDef, storyId) {
         phase: 'Planning',
         completedTasks: 0,
         totalTasks: storyDef.implementationTasks.length,
-        percentage: 0,
+        percentage: 0
       },
       dependencies: [
         'Epic 1 (Analytics Foundation) - COMPLETE',
         'Epic 16 (Marketplace System) - COMPLETE',
         'Story 30.1 (Revenue Analytics Foundation) - Required for revenue context',
-        'Story 30.2 (Conversion Funnel Analytics) - Required for user behavior context',
+        'Story 30.2 (Conversion Funnel Analytics) - Required for user behavior context'
       ],
       technicalNotes: [
         'Extend Epic 1 analytics capabilities for template-specific metrics',
         'Integrate with Epic 16 existing template and creator data models',
         'Implement quality scoring algorithms with configurable weighting',
-        'Ensure template analytics support A/B testing and experimentation',
-      ],
+        'Ensure template analytics support A/B testing and experimentation'
+      ]
     },
     created: new Date().toISOString(),
     lastUpdated: new Date().toISOString(),
@@ -324,8 +347,8 @@ function createStoryObject(storyDef, storyId) {
       story_number: '30.3',
       effort_days: 10,
       dependencies_complete: false, // Requires 30.1 and 30.2
-      ready_for_development: false, // Blocked by dependencies
-    },
+      ready_for_development: false // Blocked by dependencies
+    }
   };
 }
 
@@ -350,7 +373,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
       tags: taskDef.tags,
       acceptanceCriteria: taskDef.acceptance,
       dependencies: index > 0 ? [createdTasks[index - 1].id] : [],
-      businessValue: 'Enables template performance optimization and quality improvement for marketplace creators',
+      businessValue:
+        'Enables template performance optimization and quality improvement for marketplace creators',
       assignee: 'Unassigned',
       devAgentRecord: {
         assignedAgent: null,
@@ -362,8 +386,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
           estimated: taskDef.estimate,
           actual: null,
           started: null,
-          completed: null,
-        },
+          completed: null
+        }
       },
       created: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
@@ -376,8 +400,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
         sequence_order: index + 1,
         substory_group: taskDef.title.match(/30\.3\.(\d+)/)?.[1] || 'general',
         epic_number: 30,
-        story_number: '30.3',
-      },
+        story_number: '30.3'
+      }
     };
 
     state.tasks[taskId] = task;
@@ -390,8 +414,12 @@ function createImplementationTasks(storyId, implementationTasks, state) {
 async function createStory303() {
   console.log('📊 Creating Story 30.3 - Template Performance Analytics...\n');
   console.log('🎯 Epic 30: Marketplace Analytics Integration');
-  console.log('📈 Building template metrics, performance dashboards, and content quality analytics');
-  console.log('🔗 Dependencies: Epic 1 (Complete), Epic 16 (Complete), Story 30.1 & 30.2 (Required)\n');
+  console.log(
+    '📈 Building template metrics, performance dashboards, and content quality analytics'
+  );
+  console.log(
+    '🔗 Dependencies: Epic 1 (Complete), Epic 16 (Complete), Story 30.1 & 30.2 (Required)\n'
+  );
 
   try {
     // Load current state
@@ -409,7 +437,9 @@ async function createStory303() {
 
     // Check if story already exists
     if (storyExists(state, story303Definition.title)) {
-      console.log('⏭️  Story already exists - updating with latest requirements...');
+      console.log(
+        '⏭️  Story already exists - updating with latest requirements...'
+      );
     }
 
     const storyId = generateTaskId('STORY-30-3');
@@ -421,7 +451,11 @@ async function createStory303() {
     // Create implementation tasks
     console.log('📝 Creating Implementation Tasks...\n');
 
-    const implementationTasks = createImplementationTasks(storyId, story303Definition.implementationTasks, state);
+    const implementationTasks = createImplementationTasks(
+      storyId,
+      story303Definition.implementationTasks,
+      state
+    );
 
     tasksCreated = implementationTasks.length;
 
@@ -432,13 +466,16 @@ async function createStory303() {
     state.metadata.lastUpdated = new Date().toISOString();
     state.metadata.totalStories = Object.keys(state.stories).length;
     state.metadata.totalTasks = Object.keys(state.tasks).length;
-    state.metadata.epic30StoriesCreated = (state.metadata.epic30StoriesCreated || 0) + storiesCreated;
+    state.metadata.epic30StoriesCreated =
+      (state.metadata.epic30StoriesCreated || 0) + storiesCreated;
 
     // Save updated state
     await saveState(state);
 
     console.log(`✅ Created Story: ${story.title}`);
-    console.log(`   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`);
+    console.log(
+      `   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`
+    );
     console.log(`   🎯 Business Value: ${story.businessValue}`);
     console.log(`   📋 Status: ${story.status}`);
     console.log('');
@@ -447,15 +484,19 @@ async function createStory303() {
     const substoryGroups = {
       1: 'Template Metrics Collection Framework',
       2: 'Template Performance Dashboard',
-      3: 'Content Quality Analytics',
+      3: 'Content Quality Analytics'
     };
 
     Object.entries(substoryGroups).forEach(([group, name]) => {
       console.log(`📊 Substory 30.3.${group}: ${name}`);
-      const groupTasks = implementationTasks.filter(task => task.metadata.substory_group === group);
+      const groupTasks = implementationTasks.filter(
+        task => task.metadata.substory_group === group
+      );
       groupTasks.forEach(task => {
         console.log(`   ✅ ${task.title}`);
-        console.log(`      ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`);
+        console.log(
+          `      ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`
+        );
       });
       console.log('');
     });
@@ -465,21 +506,33 @@ async function createStory303() {
     console.log('='.repeat(60));
     console.log(`✅ Stories Created: ${storiesCreated}`);
     console.log(`✅ Implementation Tasks Created: ${tasksCreated}`);
-    console.log(`📋 Total Stories in System: ${Object.keys(state.stories).length}`);
-    console.log(`📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`);
+    console.log(
+      `📋 Total Stories in System: ${Object.keys(state.stories).length}`
+    );
+    console.log(
+      `📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`
+    );
 
     // Show business impact
     console.log('💰 BUSINESS IMPACT:\n');
     console.log('🎯 VALUE DELIVERED:');
-    console.log('   • Template performance tracking with real-time metrics updates');
-    console.log('   • Creator dashboard with actionable template optimization insights');
+    console.log(
+      '   • Template performance tracking with real-time metrics updates'
+    );
+    console.log(
+      '   • Creator dashboard with actionable template optimization insights'
+    );
     console.log('   • Quality scoring system with automated recommendations');
     console.log('   • Template analytics API with comprehensive data access');
-    console.log('   • Integration with Epic 16 marketplace ranking and discovery systems\n');
+    console.log(
+      '   • Integration with Epic 16 marketplace ranking and discovery systems\n'
+    );
 
     console.log('📈 EXPECTED OUTCOMES:');
     console.log('   • Improved template quality through data-driven insights');
-    console.log('   • Enhanced creator success with optimization recommendations');
+    console.log(
+      '   • Enhanced creator success with optimization recommendations'
+    );
     console.log('   • Better marketplace performance through quality scoring');
     console.log('   • Increased template discoverability and usage');
     console.log('   • Automated quality-based curation and promotion\n');
@@ -487,19 +540,31 @@ async function createStory303() {
     // Show technical foundation
     console.log('🔧 TECHNICAL FOUNDATION:\n');
     console.log('✅ Dependencies Complete:');
-    console.log('   • Epic 1 (Analytics Foundation) - Provides analytics infrastructure');
-    console.log('   • Epic 16 (Marketplace System) - Provides template and creator data');
+    console.log(
+      '   • Epic 1 (Analytics Foundation) - Provides analytics infrastructure'
+    );
+    console.log(
+      '   • Epic 16 (Marketplace System) - Provides template and creator data'
+    );
     console.log('📋 Required for Development:');
-    console.log('   • Story 30.1 (Revenue Analytics Foundation) - Revenue context for templates');
-    console.log('   • Story 30.2 (Conversion Funnel Analytics) - User behavior context\n');
+    console.log(
+      '   • Story 30.1 (Revenue Analytics Foundation) - Revenue context for templates'
+    );
+    console.log(
+      '   • Story 30.2 (Conversion Funnel Analytics) - User behavior context\n'
+    );
 
     // Show implementation sequence
     console.log('🔄 IMPLEMENTATION SEQUENCE:\n');
     Object.entries(substoryGroups).forEach(([group, name]) => {
       console.log(`📊 Phase ${group}: ${name}`);
-      const groupTasks = implementationTasks.filter(task => task.metadata.substory_group === group);
+      const groupTasks = implementationTasks.filter(
+        task => task.metadata.substory_group === group
+      );
       groupTasks.forEach((task, index) => {
-        console.log(`   ${index + 1}. ${task.title.replace(/30\.3\.\d+ - /, '')} (${task.estimate})`);
+        console.log(
+          `   ${index + 1}. ${task.title.replace(/30\.3\.\d+ - /, '')} (${task.estimate})`
+        );
       });
       console.log('');
     });
@@ -509,21 +574,33 @@ async function createStory303() {
     console.log('1. 🔧 Ensure Story 30.1 and 30.2 are complete first');
     console.log('2. 📋 Grab Story 30.3 tasks for development:');
     console.log(`   node src/grab-tasks.js <agent-id> 4 --story=${storyId}`);
-    console.log('3. 🏗️  Start with 30.3.1 Template Metrics Collection Framework');
-    console.log('4. 📊 Implement template analytics collection and API endpoints');
-    console.log('5. 🎨 Build template performance dashboard and visualizations');
-    console.log('6. 🏆 Implement content quality analytics and optimization tools\n');
+    console.log(
+      '3. 🏗️  Start with 30.3.1 Template Metrics Collection Framework'
+    );
+    console.log(
+      '4. 📊 Implement template analytics collection and API endpoints'
+    );
+    console.log(
+      '5. 🎨 Build template performance dashboard and visualizations'
+    );
+    console.log(
+      '6. 🏆 Implement content quality analytics and optimization tools\n'
+    );
 
-    console.log('📊 Story 30.3 provides comprehensive template performance analytics!');
+    console.log(
+      '📊 Story 30.3 provides comprehensive template performance analytics!'
+    );
     console.log('⏰ Timeline: 10 developer days (approximately 2 weeks)');
-    console.log('💡 Success Metrics: Real-time template metrics, quality scoring, creator insights');
+    console.log(
+      '💡 Success Metrics: Real-time template metrics, quality scoring, creator insights'
+    );
 
     return {
       story: story,
       tasks: implementationTasks,
       created: storiesCreated,
       tasksCreated: tasksCreated,
-      total: Object.keys(state.tasks).length,
+      total: Object.keys(state.tasks).length
     };
   } catch (error) {
     console.error('❌ Failed to create Story 30.3:', error);
@@ -541,5 +618,5 @@ if (require.main === module) {
 
 module.exports = {
   createStory303,
-  story303Definition,
+  story303Definition
 };

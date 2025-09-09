@@ -38,7 +38,7 @@ class DocumentationAutoGenerator {
           changelog: true, // Git-based changelog
           guides: true, // Development guides
           examples: true, // Code examples
-          troubleshooting: false, // Troubleshooting guides
+          troubleshooting: false // Troubleshooting guides
         },
 
         // Output formats
@@ -46,7 +46,7 @@ class DocumentationAutoGenerator {
           markdown: true, // Markdown files
           html: false, // HTML documentation site
           json: true, // Structured JSON data
-          pdf: false, // PDF documentation
+          pdf: false // PDF documentation
         },
 
         // Update strategies
@@ -59,8 +59,8 @@ class DocumentationAutoGenerator {
           onCommit: true, // Generate on git commit
           onPush: false, // Generate on git push
           scheduled: true, // Scheduled generation
-          manual: true, // Manual trigger support
-        },
+          manual: true // Manual trigger support
+        }
       },
 
       analysis: {
@@ -69,11 +69,19 @@ class DocumentationAutoGenerator {
           javascript: ['**/*.js', '**/*.jsx'],
           typescript: ['**/*.ts', '**/*.tsx'],
           documentation: ['**/*.md', '**/README*'],
-          config: ['**/*.json', '**/*.yml', '**/*.yaml'],
+          config: ['**/*.json', '**/*.yml', '**/*.yaml']
         },
 
         // Exclusion patterns
-        exclude: ['node_modules/**', 'dist/**', 'build/**', '.git/**', 'coverage/**', '**/*.test.js', '**/*.spec.js'],
+        exclude: [
+          'node_modules/**',
+          'dist/**',
+          'build/**',
+          '.git/**',
+          'coverage/**',
+          '**/*.test.js',
+          '**/*.spec.js'
+        ],
 
         // Analysis depth
         maxDepth: 10, // Maximum directory depth
@@ -84,15 +92,24 @@ class DocumentationAutoGenerator {
         extractComments: true, // Extract JSDoc comments
         extractTypes: true, // Extract TypeScript types
         extractExamples: true, // Extract code examples
-        extractAPIs: true, // Extract API definitions
+        extractAPIs: true // Extract API definitions
       },
 
       templates: {
         // Template configurations
         readme: {
-          sections: ['title', 'description', 'installation', 'usage', 'api', 'examples', 'contributing', 'license'],
+          sections: [
+            'title',
+            'description',
+            'installation',
+            'usage',
+            'api',
+            'examples',
+            'contributing',
+            'license'
+          ],
           autoGenerate: ['api', 'examples'],
-          preserveCustom: true,
+          preserveCustom: true
         },
 
         api: {
@@ -100,7 +117,7 @@ class DocumentationAutoGenerator {
           includePrivate: false, // Include private methods
           includeInternal: false, // Include internal APIs
           sortBy: 'alphabetical', // 'alphabetical', 'logical'
-          generateNavigation: true,
+          generateNavigation: true
         },
 
         changelog: {
@@ -108,9 +125,9 @@ class DocumentationAutoGenerator {
           includeAuthors: true, // Include commit authors
           linkIssues: true, // Link to issue tracker
           maxEntries: 100, // Maximum changelog entries
-          versionPattern: /^v?\d+\.\d+\.\d+/,
-        },
-      },
+          versionPattern: /^v?\d+\.\d+\.\d+/
+        }
+      }
     };
 
     // Documentation templates
@@ -151,7 +168,7 @@ class DocumentationAutoGenerator {
 ## License
 
 {{license}}
-`,
+`
       },
 
       api: {
@@ -208,7 +225,7 @@ class DocumentationAutoGenerator {
 {{example}}
 \`\`\`
 
-`,
+`
       },
 
       changelog: {
@@ -231,8 +248,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 {{changeList}}
 
-`,
-      },
+`
+      }
     };
   }
 
@@ -275,7 +292,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         fileHashes: {},
         generatedFiles: [],
         apiData: {},
-        projectInfo: {},
+        projectInfo: {}
       };
     }
   }
@@ -292,7 +309,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     const results = {
       generated: [],
       updated: [],
-      errors: [],
+      errors: []
     };
 
     try {
@@ -349,7 +366,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       results.errors.push({
         type: 'generation_failure',
         message: error.message,
-        stack: error.stack,
+        stack: error.stack
       });
       return results;
     }
@@ -368,7 +385,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       scripts: {},
       modules: [],
       apis: [],
-      examples: [],
+      examples: []
     };
 
     try {
@@ -410,7 +427,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       name: path.basename(dirPath),
       type: 'directory',
       children: [],
-      files: [],
+      files: []
     };
 
     try {
@@ -425,7 +442,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         }
 
         if (entry.isDirectory()) {
-          const childStructure = await this.analyzeFileStructure(fullPath, depth + 1);
+          const childStructure = await this.analyzeFileStructure(
+            fullPath,
+            depth + 1
+          );
           if (childStructure) {
             structure.children.push(childStructure);
           }
@@ -433,7 +453,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
           structure.files.push({
             name: entry.name,
             extension: path.extname(entry.name),
-            size: (await fs.stat(fullPath)).size,
+            size: (await fs.stat(fullPath)).size
           });
         }
       }
@@ -461,7 +481,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   // Simple pattern matching
   matchPattern(str, pattern) {
     // Convert glob pattern to regex
-    const regexPattern = pattern.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*').replace(/\?/g, '.');
+    const regexPattern = pattern
+      .replace(/\*\*/g, '.*')
+      .replace(/\*/g, '[^/]*')
+      .replace(/\?/g, '.');
 
     const regex = new RegExp(`^${regexPattern}$`);
     return regex.test(str);
@@ -496,7 +519,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
     const searchPatterns = [
       ...this.config.analysis.filePatterns.javascript,
-      ...this.config.analysis.filePatterns.typescript,
+      ...this.config.analysis.filePatterns.typescript
     ];
 
     for (const pattern of searchPatterns) {
@@ -529,7 +552,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         if (entry.isDirectory()) {
           const subFiles = await this.findFilesByPattern(fullPath, pattern);
           files.push(...subFiles);
-        } else if (entry.isFile() && this.matchPattern(entry.name, pattern.replace('**/', ''))) {
+        } else if (
+          entry.isFile() &&
+          this.matchPattern(entry.name, pattern.replace('**/', ''))
+        ) {
           files.push(fullPath);
         }
       }
@@ -551,7 +577,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       classes: [],
       functions: [],
       constants: [],
-      types: [],
+      types: []
     };
 
     // Extract JSDoc description
@@ -561,25 +587,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     }
 
     // Extract exports (simplified parsing)
-    const exportMatches = content.match(/export\s+(const|function|class|interface|type)\s+(\w+)/g);
+    const exportMatches = content.match(
+      /export\s+(const|function|class|interface|type)\s+(\w+)/g
+    );
     if (exportMatches) {
       moduleInfo.exports = exportMatches.map(match => {
-        const [, type, name] = match.match(/export\s+(const|function|class|interface|type)\s+(\w+)/);
+        const [, type, name] = match.match(
+          /export\s+(const|function|class|interface|type)\s+(\w+)/
+        );
         return { type, name };
       });
     }
 
     // Extract classes
-    const classMatches = content.match(/class\s+(\w+)(?:\s+extends\s+(\w+))?\s*{/g);
+    const classMatches = content.match(
+      /class\s+(\w+)(?:\s+extends\s+(\w+))?\s*{/g
+    );
     if (classMatches) {
       moduleInfo.classes = classMatches.map(match => {
-        const [, name, parent] = match.match(/class\s+(\w+)(?:\s+extends\s+(\w+))?\s*{/);
+        const [, name, parent] = match.match(
+          /class\s+(\w+)(?:\s+extends\s+(\w+))?\s*{/
+        );
         return { name, parent };
       });
     }
 
     // Extract functions
-    const functionMatches = content.match(/(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\([^)]*\)/g);
+    const functionMatches = content.match(
+      /(?:export\s+)?(?:async\s+)?function\s+(\w+)\s*\([^)]*\)/g
+    );
     if (functionMatches) {
       moduleInfo.functions = functionMatches.map(match => {
         const [, name] = match.match(/function\s+(\w+)/);
@@ -587,7 +623,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       });
     }
 
-    return moduleInfo.exports.length > 0 || moduleInfo.classes.length > 0 || moduleInfo.functions.length > 0
+    return moduleInfo.exports.length > 0 ||
+      moduleInfo.classes.length > 0 ||
+      moduleInfo.functions.length > 0
       ? moduleInfo
       : null;
   }
@@ -599,8 +637,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     const apis = [];
 
     // Look for server files and route definitions
-    const serverFiles = await this.findFilesByPattern(process.cwd(), '**/*server*.js');
-    const routeFiles = await this.findFilesByPattern(process.cwd(), '**/*route*.js');
+    const serverFiles = await this.findFilesByPattern(
+      process.cwd(),
+      '**/*server*.js'
+    );
+    const routeFiles = await this.findFilesByPattern(
+      process.cwd(),
+      '**/*route*.js'
+    );
 
     for (const filePath of [...serverFiles, ...routeFiles]) {
       try {
@@ -624,14 +668,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       file: filePath,
       description: '',
       baseUrl: '',
-      endpoints: [],
+      endpoints: []
     };
 
     // Extract API endpoints (simplified parsing for common patterns)
     const endpointPatterns = [
       /app\.(get|post|put|delete|patch)\s*\(\s*['"`]([^'"`]+)['"`]/g,
       /router\.(get|post|put|delete|patch)\s*\(\s*['"`]([^'"`]+)['"`]/g,
-      /\.route\s*\(\s*['"`]([^'"`]+)['"`]\s*\)\s*\.(get|post|put|delete|patch)/g,
+      /\.route\s*\(\s*['"`]([^'"`]+)['"`]\s*\)\s*\.(get|post|put|delete|patch)/g
     ];
 
     for (const pattern of endpointPatterns) {
@@ -641,7 +685,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         apiInfo.endpoints.push({
           method: method.toUpperCase(),
           path: path,
-          description: '', // Could extract from nearby comments
+          description: '' // Could extract from nearby comments
         });
       }
     }
@@ -663,7 +707,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
       try {
         await fs.access(exampleDir);
-        const exampleFiles = await this.findFilesByPattern(exampleDir, '**/*.js');
+        const exampleFiles = await this.findFilesByPattern(
+          exampleDir,
+          '**/*.js'
+        );
 
         for (const filePath of exampleFiles) {
           try {
@@ -672,7 +719,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
               name: path.basename(filePath, path.extname(filePath)),
               path: filePath,
               description: this.extractExampleDescription(content),
-              code: content,
+              code: content
             };
 
             examples.push(example);
@@ -722,7 +769,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       // Generate main API documentation
       let apiDoc = this.templates.api.moduleHeader
         .replace('{{moduleName}}', 'API Reference')
-        .replace('{{moduleDescription}}', 'Complete API documentation for all endpoints');
+        .replace(
+          '{{moduleDescription}}',
+          'Complete API documentation for all endpoints'
+        );
 
       for (const api of apis) {
         apiDoc += `\n## ${path.basename(api.file)}\n\n`;
@@ -753,7 +803,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       console.error('API documentation generation failed:', error);
       results.errors.push({
         type: 'api_generation_error',
-        message: error.message,
+        message: error.message
       });
     }
 
@@ -772,7 +822,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       // Generate main README
       let readme = this.templates.readme.header
         .replace('{{title}}', projectInfo.name || 'Project')
-        .replace('{{description}}', projectInfo.description || 'No description available')
+        .replace(
+          '{{description}}',
+          projectInfo.description || 'No description available'
+        )
         .replace('{{installCommand}}', this.generateInstallCommand(projectInfo))
         .replace('{{quickStart}}', this.generateQuickStart(projectInfo));
 
@@ -787,16 +840,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       // Add examples section if examples exist
       if (projectInfo.examples && projectInfo.examples.length > 0) {
         const examplesList = projectInfo.examples
-          .map(ex => `- [${ex.name}](${path.relative(process.cwd(), ex.path)}) - ${ex.description}`)
+          .map(
+            ex =>
+              `- [${ex.name}](${path.relative(process.cwd(), ex.path)}) - ${ex.description}`
+          )
           .join('\n');
 
-        readme += this.templates.readme.examplesSection.replace('{{examples}}', examplesList);
+        readme += this.templates.readme.examplesSection.replace(
+          '{{examples}}',
+          examplesList
+        );
       }
 
       // Add footer
       readme += this.templates.readme.footer
-        .replace('{{contributingGuidelines}}', 'Please read our contributing guidelines before submitting changes.')
-        .replace('{{license}}', 'This project is licensed under the MIT License.');
+        .replace(
+          '{{contributingGuidelines}}',
+          'Please read our contributing guidelines before submitting changes.'
+        )
+        .replace(
+          '{{license}}',
+          'This project is licensed under the MIT License.'
+        );
 
       // Write README
       const readmePath = path.join(process.cwd(), 'README.md');
@@ -817,7 +882,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       console.error('README generation failed:', error);
       results.errors.push({
         type: 'readme_generation_error',
-        message: error.message,
+        message: error.message
       });
     }
 
@@ -893,7 +958,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       console.error('Changelog generation failed:', error);
       results.errors.push({
         type: 'changelog_generation_error',
-        message: error.message,
+        message: error.message
       });
     }
 
@@ -905,7 +970,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     try {
       const output = execSync('git log --oneline --no-merges -100', {
         encoding: 'utf8',
-        cwd: process.cwd(),
+        cwd: process.cwd()
       });
 
       return output
@@ -915,7 +980,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
           const [hash, ...messageParts] = line.split(' ');
           return {
             hash: hash,
-            message: messageParts.join(' '),
+            message: messageParts.join(' ')
           };
         });
     } catch (error) {
@@ -937,7 +1002,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       refactor: [],
       test: [],
       chore: [],
-      other: [],
+      other: []
     };
 
     for (const commit of commits) {
@@ -958,7 +1023,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       refactor: 'Refactored',
       test: 'Tests',
       chore: 'Maintenance',
-      other: 'Other',
+      other: 'Other'
     };
 
     let hasChanges = false;
@@ -984,7 +1049,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
   // Parse commit type from conventional commit format
   parseCommitType(message) {
-    const match = message.match(/^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?:/);
+    const match = message.match(
+      /^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?:/
+    );
     return match ? match[1] : 'other';
   }
 
@@ -1048,7 +1115,7 @@ npm run build
     } catch (error) {
       results.errors.push({
         type: 'guide_generation_error',
-        message: error.message,
+        message: error.message
       });
     }
 
@@ -1094,7 +1161,7 @@ This document contains code examples for common use cases.
       console.error('Examples documentation generation failed:', error);
       results.errors.push({
         type: 'examples_generation_error',
-        message: error.message,
+        message: error.message
       });
     }
 

@@ -74,6 +74,7 @@ This architecture resolves the previous conflict where both systems were trying 
 ### 1. No Mixed Systems
 
 A node is **EITHER**:
+
 - In a fragment (has `parentNode`) **OR**
 - In a region box (position-based) **OR**
 - Free-standing
@@ -83,6 +84,7 @@ Never both. This prevents double movement and conflicting behaviors.
 ### 2. Clear Visual Distinction
 
 Users can immediately identify:
+
 - **Purple rounded** = Fragment Container (component)
 - **Teal dashed** = Region Box (manual group)
 
@@ -126,6 +128,7 @@ The FragmentContainer (`packages/core/components/epic1/nodes/FragmentContainer.t
 ### Automatic Detection
 
 The migration script detects graphs needing migration by checking for:
+
 - `enhancedBoundingBox` nodes with children (`parentNode`)
 - Nodes with both `parentNode` and region membership
 - Mixed system patterns
@@ -230,6 +233,7 @@ Key metrics to track:
 ### Compatibility
 
 The new system maintains backward compatibility through:
+
 - Migration script for existing graphs
 - Feature flag for gradual rollout
 - Automatic detection of old patterns

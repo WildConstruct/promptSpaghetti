@@ -22,7 +22,7 @@ class ArchitectureValidator {
       naming: [],
       dependencies: [],
       patterns: [],
-      security: [],
+      security: []
     };
 
     this.rules = {
@@ -31,8 +31,8 @@ class ArchitectureValidator {
         requiredDirectories: ['src', 'types', '__tests__'],
         prohibitedPatterns: [
           /.*\/utils\/.*\/utils\//, // Nested utils directories
-          /.*\/helpers\/.*\/helpers\//, // Nested helpers directories
-        ],
+          /.*\/helpers\/.*\/helpers\// // Nested helpers directories
+        ]
       },
 
       // Naming convention rules
@@ -46,24 +46,24 @@ class ArchitectureValidator {
           components: /^[A-Z][a-zA-Z0-9]*\.(tsx|ts)$/,
           services: /^[a-z][a-zA-Z0-9]*Service\.ts$/,
           types: /^[a-z][a-zA-Z0-9]*Types\.ts$/,
-          utils: /^[a-z][a-zA-Z0-9]*Utils\.ts$/,
-        },
+          utils: /^[a-z][a-zA-Z0-9]*Utils\.ts$/
+        }
       },
 
       // Dependency rules by package
       dependencies: {
         'packages/core': {
           allowed: ['zod', 'uuid', 'seedrandom'],
-          prohibited: ['react', 'express', '@mui/material', 'fastify'],
+          prohibited: ['react', 'express', '@mui/material', 'fastify']
         },
         'packages/ui-kit': {
           allowed: ['react', '@mui/material', '@emotion/react'],
-          prohibited: ['fastify', 'sqlite3', 'redis'],
+          prohibited: ['fastify', 'sqlite3', 'redis']
         },
         server: {
           allowed: ['fastify', 'sqlite3', 'redis', 'zod'],
-          prohibited: ['react', '@mui/material'],
-        },
+          prohibited: ['react', '@mui/material']
+        }
       },
 
       // Security patterns
@@ -73,18 +73,18 @@ class ArchitectureValidator {
           /Function\s*\(/g,
           /new\s+Function/g,
           /__proto__/g,
-          /constructor\.constructor/g,
+          /constructor\.constructor/g
         ],
         requiredPatterns: [
-          /SecureValidation\./g, // Must use security validation
-        ],
-      },
+          /SecureValidation\./g // Must use security validation
+        ]
+      }
     };
 
     this.stats = {
       filesAnalyzed: 0,
       violationsFound: 0,
-      rulesChecked: 0,
+      rulesChecked: 0
     };
   }
 
@@ -134,7 +134,7 @@ class ArchitectureValidator {
       'server/': ['src'],
       'client/': ['src'],
       'docs/': ['architecture'],
-      'tools/': [],
+      'tools/': []
     };
 
     for (const [directory, subdirs] of Object.entries(requiredStructure)) {
@@ -148,7 +148,7 @@ class ArchitectureValidator {
             this.violations.structural.push({
               type: 'missing_directory',
               message: `Required directory missing: ${directory}${subdir}`,
-              severity: 'error',
+              severity: 'error'
             });
           }
         }
@@ -156,7 +156,7 @@ class ArchitectureValidator {
         this.violations.structural.push({
           type: 'missing_directory',
           message: `Required top-level directory missing: ${directory}`,
-          severity: 'error',
+          severity: 'error'
         });
       }
     }
@@ -175,7 +175,7 @@ class ArchitectureValidator {
             type: 'prohibited_pattern',
             file: relativePath,
             message: `File organization violates pattern rule: ${pattern}`,
-            severity: 'warning',
+            severity: 'warning'
           });
         }
       }
@@ -183,7 +183,9 @@ class ArchitectureValidator {
       // Check co-location rules
       if (file.includes('__tests__')) {
         const testFile = file;
-        const sourceFile = testFile.replace('__tests__/', '').replace('.test.', '.');
+        const sourceFile = testFile
+          .replace('__tests__/', '')
+          .replace('.test.', '.');
 
         try {
           await fs.access(sourceFile);
@@ -192,7 +194,7 @@ class ArchitectureValidator {
             type: 'orphaned_test',
             file: relativePath,
             message: 'Test file has no corresponding source file',
-            severity: 'warning',
+            severity: 'warning'
           });
         }
       }
@@ -223,7 +225,7 @@ class ArchitectureValidator {
           type: 'file_naming',
           file: relativePath,
           message: `React component file should use PascalCase: ${fileName}`,
-          severity: 'error',
+          severity: 'error'
         });
       }
     }
@@ -234,7 +236,7 @@ class ArchitectureValidator {
           type: 'file_naming',
           file: relativePath,
           message: `Service file should follow camelCaseService.ts pattern: ${fileName}`,
-          severity: 'error',
+          severity: 'error'
         });
       }
     }
@@ -254,8 +256,8 @@ class ArchitectureValidator {
         sourceType: 'module',
         ecmaVersion: 2020,
         ecmaFeatures: {
-          jsx: true,
-        },
+          jsx: true
+        }
       });
     } catch (error) {
       // Fallback to simple regex-based validation
@@ -279,7 +281,7 @@ class ArchitectureValidator {
             type: 'interface_naming',
             file: filePath,
             message: `Interface should use PascalCase: ${interfaceName}`,
-            severity: 'error',
+            severity: 'error'
           });
         }
       });
@@ -295,7 +297,7 @@ class ArchitectureValidator {
             type: 'class_naming',
             file: filePath,
             message: `Class should use PascalCase: ${className}`,
-            severity: 'error',
+            severity: 'error'
           });
         }
       });
@@ -311,7 +313,7 @@ class ArchitectureValidator {
             type: 'function_naming',
             file: filePath,
             message: `Function should use camelCase: ${functionName}`,
-            severity: 'error',
+            severity: 'error'
           });
         }
       });
@@ -341,7 +343,7 @@ class ArchitectureValidator {
 
     const allDeps = {
       ...packageData.dependencies,
-      ...packageData.devDependencies,
+      ...packageData.devDependencies
     };
 
     // Check prohibited dependencies
@@ -352,7 +354,7 @@ class ArchitectureValidator {
           package: packagePath,
           dependency: prohibited,
           message: `Package ${packagePath} should not depend on ${prohibited}`,
-          severity: 'error',
+          severity: 'error'
         });
       }
     }
@@ -368,7 +370,11 @@ class ArchitectureValidator {
         if (importMatches) {
           importMatches.forEach(match => {
             const importPath = match.match(/from\s+['"]([^'"]+)['"]/)?.[1];
-            if (importPath && !importPath.startsWith('.') && !importPath.startsWith('/')) {
+            if (
+              importPath &&
+              !importPath.startsWith('.') &&
+              !importPath.startsWith('/')
+            ) {
               const packageName = importPath.split('/')[0];
               imports.add(packageName);
             }
@@ -387,7 +393,7 @@ class ArchitectureValidator {
           package: packagePath,
           dependency: importedPackage,
           message: `Package ${packagePath} imports ${importedPackage} but doesn't declare it as a dependency`,
-          severity: 'warning',
+          severity: 'warning'
         });
       }
     }
@@ -417,7 +423,7 @@ class ArchitectureValidator {
       'buffer',
       'child_process',
       'cluster',
-      'os',
+      'os'
     ];
     return builtins.includes(moduleName);
   }
@@ -430,7 +436,9 @@ class ArchitectureValidator {
         const content = await fs.readFile(file, 'utf8');
         await this.validatePatternsInFile(file, content);
       } catch (error) {
-        console.warn(`Could not validate patterns in ${file}: ${error.message}`);
+        console.warn(
+          `Could not validate patterns in ${file}: ${error.message}`
+        );
       }
     }
   }
@@ -439,7 +447,9 @@ class ArchitectureValidator {
     const relativePath = path.relative(this.baseDir, filePath);
 
     // Check for God objects (classes with too many methods)
-    const classMatches = content.match(/class\s+(\w+)[^{]*\{([^{}]*|\{[^{}]*\})*\}/gs);
+    const classMatches = content.match(
+      /class\s+(\w+)[^{]*\{([^{}]*|\{[^{}]*\})*\}/gs
+    );
     if (classMatches) {
       classMatches.forEach(match => {
         const methodMatches = match.match(/\w+\s*\([^)]*\)\s*\{/g);
@@ -449,7 +459,7 @@ class ArchitectureValidator {
             type: 'god_object',
             file: relativePath,
             message: `Class ${className} has too many methods (${methodMatches.length}). Consider splitting into smaller classes.`,
-            severity: 'warning',
+            severity: 'warning'
           });
         }
       });
@@ -460,8 +470,9 @@ class ArchitectureValidator {
       this.violations.patterns.push({
         type: 'singleton_pattern',
         file: relativePath,
-        message: 'Singleton pattern detected. Consider using dependency injection instead.',
-        severity: 'warning',
+        message:
+          'Singleton pattern detected. Consider using dependency injection instead.',
+        severity: 'warning'
       });
     }
 
@@ -473,8 +484,9 @@ class ArchitectureValidator {
       this.violations.patterns.push({
         type: 'missing_interfaces',
         file: relativePath,
-        message: 'Consider defining interfaces for better testability and abstraction.',
-        severity: 'info',
+        message:
+          'Consider defining interfaces for better testability and abstraction.',
+        severity: 'info'
       });
     }
   }
@@ -487,7 +499,9 @@ class ArchitectureValidator {
         const content = await fs.readFile(file, 'utf8');
         await this.validateSecurityInFile(file, content);
       } catch (error) {
-        console.warn(`Could not validate security in ${file}: ${error.message}`);
+        console.warn(
+          `Could not validate security in ${file}: ${error.message}`
+        );
       }
     }
   }
@@ -503,33 +517,42 @@ class ArchitectureValidator {
           file: relativePath,
           pattern: pattern.toString(),
           message: `Dangerous pattern detected: ${pattern}. Use safe alternatives.`,
-          severity: 'error',
+          severity: 'error'
         });
       }
     }
 
     // Check for user input handling
     if (content.includes('req.body') || content.includes('request.body')) {
-      if (!content.includes('SecureValidation') && !content.includes('.parse(')) {
+      if (
+        !content.includes('SecureValidation') &&
+        !content.includes('.parse(')
+      ) {
         this.violations.security.push({
           type: 'unvalidated_input',
           file: relativePath,
-          message: 'User input detected without validation. Use SecureValidation or schema validation.',
-          severity: 'error',
+          message:
+            'User input detected without validation. Use SecureValidation or schema validation.',
+          severity: 'error'
         });
       }
     }
 
     // Check for SQL injection risks
-    const sqlPatterns = [/query\s*\(\s*`.*\$\{/g, /query\s*\(\s*'.*'\s*\+/g, /query\s*\(\s*".*"\s*\+/g];
+    const sqlPatterns = [
+      /query\s*\(\s*`.*\$\{/g,
+      /query\s*\(\s*'.*'\s*\+/g,
+      /query\s*\(\s*".*"\s*\+/g
+    ];
 
     for (const pattern of sqlPatterns) {
       if (pattern.test(content)) {
         this.violations.security.push({
           type: 'sql_injection_risk',
           file: relativePath,
-          message: 'Potential SQL injection risk. Use parameterized queries or prepared statements.',
-          severity: 'error',
+          message:
+            'Potential SQL injection risk. Use parameterized queries or prepared statements.',
+          severity: 'error'
         });
       }
     }
@@ -541,18 +564,24 @@ class ArchitectureValidator {
       summary: {
         filesAnalyzed: this.stats.filesAnalyzed,
         violationsFound: this.getTotalViolations(),
-        ruleCategories: Object.keys(this.violations).length,
+        ruleCategories: Object.keys(this.violations).length
       },
       violations: this.violations,
       recommendations: this.generateRecommendations(),
-      complianceScore: this.calculateComplianceScore(),
+      complianceScore: this.calculateComplianceScore()
     };
 
-    await fs.writeFile(path.join(this.baseDir, 'architecture-validation-report.json'), JSON.stringify(report, null, 2));
+    await fs.writeFile(
+      path.join(this.baseDir, 'architecture-validation-report.json'),
+      JSON.stringify(report, null, 2)
+    );
 
     // Generate human-readable report
     const readableReport = this.generateReadableReport(report);
-    await fs.writeFile(path.join(this.baseDir, 'architecture-validation-report.md'), readableReport);
+    await fs.writeFile(
+      path.join(this.baseDir, 'architecture-validation-report.md'),
+      readableReport
+    );
   }
 
   generateRecommendations() {
@@ -563,7 +592,7 @@ class ArchitectureValidator {
       recommendations.push({
         category: 'Structure',
         priority: 'High',
-        action: 'Fix project structure violations to ensure proper organization',
+        action: 'Fix project structure violations to ensure proper organization'
       });
     }
 
@@ -572,7 +601,8 @@ class ArchitectureValidator {
       recommendations.push({
         category: 'Security',
         priority: 'Critical',
-        action: 'Address security violations immediately - they pose potential risks',
+        action:
+          'Address security violations immediately - they pose potential risks'
       });
     }
 
@@ -581,7 +611,8 @@ class ArchitectureValidator {
       recommendations.push({
         category: 'Dependencies',
         priority: 'Medium',
-        action: 'Clean up dependency violations to maintain proper layer separation',
+        action:
+          'Clean up dependency violations to maintain proper layer separation'
       });
     }
 
@@ -590,7 +621,7 @@ class ArchitectureValidator {
       recommendations.push({
         category: 'Design Patterns',
         priority: 'Low',
-        action: 'Improve design patterns for better maintainability',
+        action: 'Improve design patterns for better maintainability'
       });
     }
 
@@ -653,7 +684,10 @@ ${rec.action}
   }
 
   getTotalViolations() {
-    return Object.values(this.violations).reduce((sum, violations) => sum + violations.length, 0);
+    return Object.values(this.violations).reduce(
+      (sum, violations) => sum + violations.length,
+      0
+    );
   }
 
   printSummary() {
@@ -675,7 +709,9 @@ ${rec.action}
     console.log('  • architecture-validation-report.md');
 
     if (this.getTotalViolations() > 0) {
-      console.log(`\n⚠️  ${this.getTotalViolations()} architecture violations found. See report for details.`);
+      console.log(
+        `\n⚠️  ${this.getTotalViolations()} architecture violations found. See report for details.`
+      );
     } else {
       console.log('\n✅ No architecture violations found!');
     }
@@ -683,7 +719,13 @@ ${rec.action}
 
   async findSourceFiles(pattern = '**/*.{ts,tsx}') {
     const files = [];
-    const excludePatterns = ['node_modules', 'dist', 'build', '.turbo', 'coverage'];
+    const excludePatterns = [
+      'node_modules',
+      'dist',
+      'build',
+      '.turbo',
+      'coverage'
+    ];
 
     async function walkDir(dir) {
       try {
@@ -693,15 +735,23 @@ ${rec.action}
           const fullPath = path.join(dir, entry.name);
 
           if (entry.isDirectory()) {
-            const shouldSkip = excludePatterns.some(pattern => fullPath.includes(pattern));
+            const shouldSkip = excludePatterns.some(pattern =>
+              fullPath.includes(pattern)
+            );
 
             if (!shouldSkip) {
               await walkDir(fullPath);
             }
           } else {
-            if (pattern.includes('**/*.ts') && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
+            if (
+              pattern.includes('**/*.ts') &&
+              (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))
+            ) {
               files.push(fullPath);
-            } else if (typeof pattern === 'string' && entry.name.match(pattern)) {
+            } else if (
+              typeof pattern === 'string' &&
+              entry.name.match(pattern)
+            ) {
               files.push(fullPath);
             }
           }
@@ -728,7 +778,9 @@ ${rec.action}
           const fullPath = path.join(dir, entry.name);
 
           if (entry.isDirectory()) {
-            const shouldSkip = excludePatterns.some(pattern => fullPath.includes(pattern));
+            const shouldSkip = excludePatterns.some(pattern =>
+              fullPath.includes(pattern)
+            );
 
             if (!shouldSkip) {
               await walkDir(fullPath);

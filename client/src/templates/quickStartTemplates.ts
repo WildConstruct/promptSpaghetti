@@ -7,14 +7,14 @@ export type QuickStartTemplate = {
 
 // Simple prebuilt graphs for quick start
 const baseY = 100;
-const gapX = 350;  // Increased to accommodate wider weighted choice nodes
+const gapX = 350; // Increased to accommodate wider weighted choice nodes
 
 function lineGraph(labels: string[]): { nodes: Node[]; edges: Edge[] } {
   const nodes: Node[] = labels.map((label, i) => {
     // Determine node type based on label
     let nodeType = 'textBlock';
     let data: any = {};
-    
+
     if (label.toLowerCase() === 'output') {
       nodeType = 'output';
       data = {
@@ -28,7 +28,7 @@ function lineGraph(labels: string[]): { nodes: Node[]; edges: Edge[] } {
         nodeType: 'textBlock',
         content: 'Enter your prompt here...',
         text: 'Enter your prompt here...',
-        value: 'Enter your prompt here...',  // BaseEditableNode expects 'value'
+        value: 'Enter your prompt here...', // BaseEditableNode expects 'value'
         label: 'Prompt'
       };
     } else {
@@ -38,28 +38,28 @@ function lineGraph(labels: string[]): { nodes: Node[]; edges: Edge[] } {
         nodeType: 'textBlock',
         content: `${label} content goes here...`,
         text: `${label} content goes here...`,
-        value: `${label} content goes here...`,  // BaseEditableNode expects 'value'
+        value: `${label} content goes here...`, // BaseEditableNode expects 'value'
         label: label
       };
     }
-    
+
     return {
       id: `${label.toLowerCase().replace(/\s+/g, '-')}-${i}`,
       position: { x: 100 + i * gapX, y: baseY },
       data,
-      type: nodeType,
+      type: nodeType
     };
   });
-  
+
   const edges: Edge[] = labels.slice(0, -1).map((_, i) => ({
     id: `e-${i}`,
     source: nodes[i].id,
     target: nodes[i + 1].id,
     type: 'smoothstep',
     sourceHandle: 'source',
-    targetHandle: 'target',
+    targetHandle: 'target'
   }));
-  
+
   return { nodes, edges };
 }
 
@@ -74,7 +74,7 @@ const characterTemplate: QuickStartTemplate = {
         nodeType: 'textBlock',
         content: 'A brave adventurer',
         text: 'A brave adventurer',
-        value: 'A brave adventurer',  // BaseEditableNode expects 'value'
+        value: 'A brave adventurer', // BaseEditableNode expects 'value'
         label: 'Base Prompt'
       }
     },
@@ -90,7 +90,7 @@ const characterTemplate: QuickStartTemplate = {
           { id: 'opt-3', text: 'rogue', weight: 30, hasBranch: false }
         ],
         label: 'Class',
-        value: 'warrior'  // Default value for BaseEditableNode
+        value: 'warrior' // Default value for BaseEditableNode
       }
     },
     {
@@ -111,11 +111,21 @@ const characterTemplate: QuickStartTemplate = {
       data: {
         nodeType: 'weightedChoice',
         options: [
-          { id: 'opt-4', text: 'with a mysterious past', weight: 50, hasBranch: false },
-          { id: 'opt-5', text: 'seeking redemption', weight: 50, hasBranch: false }
+          {
+            id: 'opt-4',
+            text: 'with a mysterious past',
+            weight: 50,
+            hasBranch: false
+          },
+          {
+            id: 'opt-5',
+            text: 'seeking redemption',
+            weight: 50,
+            hasBranch: false
+          }
         ],
         label: 'Trait',
-        value: 'with a mysterious past'  // Default value
+        value: 'with a mysterious past' // Default value
       }
     },
     {
@@ -142,15 +152,50 @@ const characterTemplate: QuickStartTemplate = {
   ],
   edges: [
     // Prompt goes to first input of concat-1
-    { id: 'e-0', source: 'prompt-0', target: 'concat-1', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    {
+      id: 'e-0',
+      source: 'prompt-0',
+      target: 'concat-1',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
     // Class goes to second input of concat-1
-    { id: 'e-1', source: 'class-2', target: 'concat-1', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    {
+      id: 'e-1',
+      source: 'class-2',
+      target: 'concat-1',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
     // First concat goes to first input of concat-3
-    { id: 'e-2', source: 'concat-1', target: 'concat-3', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    {
+      id: 'e-2',
+      source: 'concat-1',
+      target: 'concat-3',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
     // Trait goes to second input of concat-3
-    { id: 'e-3', source: 'trait-4', target: 'concat-3', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    {
+      id: 'e-3',
+      source: 'trait-4',
+      target: 'concat-3',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
     // Second concat goes to output
-    { id: 'e-4', source: 'concat-3', target: 'output-5', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+    {
+      id: 'e-4',
+      source: 'concat-3',
+      target: 'output-5',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    }
   ]
 };
 
@@ -160,5 +205,5 @@ export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   story: lineGraph(['Prompt', 'Plot Idea', 'Character', 'Output']),
   product: lineGraph(['Prompt', 'Features', 'Benefits', 'Output']),
   art: lineGraph(['Prompt', 'Style', 'Palette', 'Output']),
-  food: lineGraph(['Prompt', 'Ingredients', 'Method', 'Output']),
+  food: lineGraph(['Prompt', 'Ingredients', 'Method', 'Output'])
 };

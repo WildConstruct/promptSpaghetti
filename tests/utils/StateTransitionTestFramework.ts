@@ -65,59 +65,69 @@ export class StateTransitionTestFramework {
         validTransitions: ['IN_PROGRESS', 'CANCELLED'],
         conditions: {
           canAssign: state => !state.assignee,
-          hasRequirements: state => state.title && state.epic,
-        },
+          hasRequirements: state => state.title && state.epic
+        }
       },
       {
         name: 'IN_PROGRESS',
         validTransitions: ['REVIEW', 'UNASSIGNED', 'CANCELLED'],
         conditions: {
           hasAssignee: state => !!state.assignee,
-          withinDeadline: state => !state.dueDate || new Date(state.dueDate) > new Date(),
+          withinDeadline: state =>
+            !state.dueDate || new Date(state.dueDate) > new Date()
         },
         actions: {
-          startWork: state => ({ ...state, startedAt: new Date().toISOString() }),
-        },
+          startWork: state => ({
+            ...state,
+            startedAt: new Date().toISOString()
+          })
+        }
       },
       {
         name: 'REVIEW',
         validTransitions: ['APPROVED', 'IN_PROGRESS', 'REJECTED'],
         conditions: {
           hasOutput: state => state.output && state.output.length > 0,
-          hasAssignee: state => !!state.assignee,
-        },
+          hasAssignee: state => !!state.assignee
+        }
       },
       {
         name: 'APPROVED',
         validTransitions: [],
         conditions: {
-          isComplete: state => state.completedAt,
+          isComplete: state => state.completedAt
         },
         actions: {
-          complete: state => ({ ...state, completedAt: new Date().toISOString() }),
-        },
+          complete: state => ({
+            ...state,
+            completedAt: new Date().toISOString()
+          })
+        }
       },
       {
         name: 'REJECTED',
         validTransitions: ['IN_PROGRESS', 'CANCELLED'],
         conditions: {
-          hasRejectionReason: state => state.rejectionReason,
-        },
+          hasRejectionReason: state => state.rejectionReason
+        }
       },
       {
         name: 'CANCELLED',
         validTransitions: ['UNASSIGNED'],
         conditions: {
-          canReopen: state => state.status !== 'APPROVED',
-        },
-      },
+          canReopen: state => state.status !== 'APPROVED'
+        }
+      }
     ]);
   }
 
   /**
    * Start a new state transition test
    */
-  async startTest(testName: string, config: Partial<StateTestConfig> = {}): Promise<void> {
+  async startTest(
+    testName: string,
+    config: Partial<StateTestConfig> = {}
+  ): Promise<void> {
     this.currentTest = testName;
     this.transitionHistory = [];
 
@@ -127,7 +137,7 @@ export class StateTransitionTestFramework {
       timeout: 30000,
       validateStateIntegrity: true,
       trackHistory: true,
-      ...config,
+      ...config
     };
 
     // Store test configuration in memory (skip TestDataManager for now)
@@ -137,7 +147,12 @@ export class StateTransitionTestFramework {
   /**
    * Test valid state transition
    */
-  async testValidTransition(taskId: string, fromState: string, toState: string, data?: any): Promise<TransitionEvent> {
+  async testValidTransition(
+    taskId: string,
+    fromState: string,
+    toState: string,
+    data?: any
+  ): Promise<TransitionEvent> {
     const timestamp = new Date().toISOString();
 
     try {
@@ -159,15 +174,21 @@ export class StateTransitionTestFramework {
         }
 
         if (task.status !== fromState) {
-          throw new Error(`Task ${taskId} is in state ${task.status}, expected ${fromState}`);
+          throw new Error(
+            `Task ${taskId} is in state ${task.status}, expected ${fromState}`
+          );
         }
 
         // Check conditions
         const stateDefinition = this.states.get(fromState);
         if (stateDefinition?.conditions) {
-          for (const [conditionName, conditionFn] of Object.entries(stateDefinition.conditions)) {
+          for (const [conditionName, conditionFn] of Object.entries(
+            stateDefinition.conditions
+          )) {
             if (!conditionFn(task)) {
-              throw new Error(`Condition ${conditionName} failed for transition ${fromState} -> ${toState}`);
+              throw new Error(
+                `Condition ${conditionName} failed for transition ${fromState} -> ${toState}`
+              );
             }
           }
         }
@@ -184,7 +205,9 @@ export class StateTransitionTestFramework {
         // Execute state actions
         const toStateDefinition = this.states.get(toState);
         if (toStateDefinition?.actions) {
-          for (const [actionName, actionFn] of Object.entries(toStateDefinition.actions)) {
+          for (const [actionName, actionFn] of Object.entries(
+            toStateDefinition.actions
+          )) {
             const result = actionFn(task);
             Object.assign(task, result);
           }
@@ -199,7 +222,7 @@ export class StateTransitionTestFramework {
         event: `${fromState}_TO_${toState}`,
         timestamp,
         data,
-        success: true,
+        success: true
       };
 
       this.transitionHistory.push(event);
@@ -212,7 +235,7 @@ export class StateTransitionTestFramework {
         timestamp,
         data,
         success: false,
-        error: error.message,
+        error: error.message
       };
 
       this.transitionHistory.push(event);
@@ -283,13 +306,17 @@ export class StateTransitionTestFramework {
       }
     }
 
-    const unreachableStates = allStates.filter(state => !reachableStates.has(state));
+    const unreachableStates = allStates.filter(
+      state => !reachableStates.has(state)
+    );
 
     // Validate transition targets exist
     for (const [stateName, stateDefinition] of this.states) {
       for (const targetState of stateDefinition.validTransitions) {
         if (!this.states.has(targetState)) {
-          issues.push(`State ${stateName} has invalid transition to non-existent state ${targetState}`);
+          issues.push(
+            `State ${stateName} has invalid transition to non-existent state ${targetState}`
+          );
         }
       }
     }
@@ -306,8 +333,8 @@ export class StateTransitionTestFramework {
         totalStates: allStates.length,
         totalTransitions,
         deadEndStates,
-        unreachableStates,
-      },
+        unreachableStates
+      }
     };
   }
 
@@ -323,7 +350,8 @@ export class StateTransitionTestFramework {
       const stateDefinition = this.states.get(fromState);
 
       for (const toState of allStates) {
-        matrix[fromState][toState] = stateDefinition?.validTransitions.includes(toState) || false;
+        matrix[fromState][toState] =
+          stateDefinition?.validTransitions.includes(toState) || false;
       }
     }
 
@@ -353,7 +381,7 @@ export class StateTransitionTestFramework {
         result: 'passed' | 'failed' | 'skipped';
         message: string;
         duration: number;
-      }>,
+      }>
     };
 
     const allStates = Array.from(this.states.keys());
@@ -370,7 +398,7 @@ export class StateTransitionTestFramework {
           test: 'State machine integrity',
           result: 'passed',
           message: `Valid state machine with ${integrity.statistics.totalStates} states and ${integrity.statistics.totalTransitions} transitions`,
-          duration,
+          duration
         });
       } else {
         results.failed++;
@@ -378,7 +406,7 @@ export class StateTransitionTestFramework {
           test: 'State machine integrity',
           result: 'failed',
           message: `Issues found: ${integrity.issues.join(', ')}`,
-          duration,
+          duration
         });
       }
     } catch (error) {
@@ -387,7 +415,7 @@ export class StateTransitionTestFramework {
         test: 'State machine integrity',
         result: 'failed',
         message: error.message,
-        duration: Date.now() - startTime,
+        duration: Date.now() - startTime
       });
     }
 
@@ -408,7 +436,7 @@ export class StateTransitionTestFramework {
             test: `Valid transition ${fromState} -> ${toState}`,
             result: 'passed',
             message: 'Transition completed successfully',
-            duration: Date.now() - testStart,
+            duration: Date.now() - testStart
           });
         } catch (error) {
           results.failed++;
@@ -416,7 +444,7 @@ export class StateTransitionTestFramework {
             test: `Valid transition ${fromState} -> ${toState}`,
             result: 'failed',
             message: error.message,
-            duration: Date.now() - testStart,
+            duration: Date.now() - testStart
           });
         }
       }
@@ -430,7 +458,11 @@ export class StateTransitionTestFramework {
           const testStart = Date.now();
           try {
             await this.createTestTask(taskId, fromState);
-            const result = await this.testInvalidTransition(taskId, fromState, toState);
+            const result = await this.testInvalidTransition(
+              taskId,
+              fromState,
+              toState
+            );
 
             if (result.blocked) {
               results.passed++;
@@ -438,7 +470,7 @@ export class StateTransitionTestFramework {
                 test: `Invalid transition ${fromState} -> ${toState}`,
                 result: 'passed',
                 message: `Correctly blocked: ${result.reason}`,
-                duration: Date.now() - testStart,
+                duration: Date.now() - testStart
               });
             } else {
               results.failed++;
@@ -446,7 +478,7 @@ export class StateTransitionTestFramework {
                 test: `Invalid transition ${fromState} -> ${toState}`,
                 result: 'failed',
                 message: 'Invalid transition was not blocked',
-                duration: Date.now() - testStart,
+                duration: Date.now() - testStart
               });
             }
           } catch (error) {
@@ -455,7 +487,7 @@ export class StateTransitionTestFramework {
               test: `Invalid transition ${fromState} -> ${toState}`,
               result: 'failed',
               message: error.message,
-              duration: Date.now() - testStart,
+              duration: Date.now() - testStart
             });
           }
         }
@@ -468,7 +500,10 @@ export class StateTransitionTestFramework {
   /**
    * Create test task in specific state
    */
-  private async createTestTask(taskId: string, initialState: string): Promise<void> {
+  private async createTestTask(
+    taskId: string,
+    initialState: string
+  ): Promise<void> {
     await this.stateLock.transaction(state => {
       state.tasks[taskId] = {
         id: taskId,
@@ -477,7 +512,7 @@ export class StateTransitionTestFramework {
         epic: 'TEST',
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
-        assignee: initialState === 'UNASSIGNED' ? null : 'test-agent',
+        assignee: initialState === 'UNASSIGNED' ? null : 'test-agent'
       };
     });
   }
@@ -502,27 +537,40 @@ export class StateTransitionTestFramework {
     averageTransitionTime: number;
   } {
     const statesVisited = [
-      ...new Set(this.transitionHistory.map(t => t.from).concat(this.transitionHistory.map(t => t.to))),
+      ...new Set(
+        this.transitionHistory
+          .map(t => t.from)
+          .concat(this.transitionHistory.map(t => t.to))
+      )
     ];
     const transitionsByState: Record<string, number> = {};
 
     for (const event of this.transitionHistory) {
-      transitionsByState[event.from] = (transitionsByState[event.from] || 0) + 1;
+      transitionsByState[event.from] =
+        (transitionsByState[event.from] || 0) + 1;
     }
 
     const transitionTimes = this.transitionHistory
-      .map((_, i, arr) => (i > 0 ? new Date(arr[i].timestamp).getTime() - new Date(arr[i - 1].timestamp).getTime() : 0))
+      .map((_, i, arr) =>
+        i > 0
+          ? new Date(arr[i].timestamp).getTime() -
+            new Date(arr[i - 1].timestamp).getTime()
+          : 0
+      )
       .filter(time => time > 0);
 
     return {
       testName: this.currentTest || 'Unknown',
       totalTransitions: this.transitionHistory.length,
-      successfulTransitions: this.transitionHistory.filter(t => t.success).length,
+      successfulTransitions: this.transitionHistory.filter(t => t.success)
+        .length,
       failedTransitions: this.transitionHistory.filter(t => !t.success).length,
       statesVisited,
       transitionsByState,
       averageTransitionTime:
-        transitionTimes.length > 0 ? transitionTimes.reduce((a, b) => a + b, 0) / transitionTimes.length : 0,
+        transitionTimes.length > 0
+          ? transitionTimes.reduce((a, b) => a + b, 0) / transitionTimes.length
+          : 0
     };
   }
 

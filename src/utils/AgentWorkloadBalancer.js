@@ -48,7 +48,7 @@ class AgentWorkloadBalancer {
         // Rebalancing
         autoRebalance: true, // Automatically rebalance workloads
         rebalanceInterval: 30 * 60 * 1000, // 30 minutes
-        rebalanceThreshold: 0.3, // Rebalance if load difference > 30%
+        rebalanceThreshold: 0.3 // Rebalance if load difference > 30%
       },
 
       agents: {
@@ -67,7 +67,7 @@ class AgentWorkloadBalancer {
           beginner: 1,
           intermediate: 2,
           advanced: 3,
-          expert: 4,
+          expert: 4
         },
 
         skillAreas: [
@@ -80,8 +80,8 @@ class AgentWorkloadBalancer {
           'performance',
           'mobile',
           'api',
-          'ui_ux',
-        ],
+          'ui_ux'
+        ]
       },
 
       tasks: {
@@ -92,7 +92,7 @@ class AgentWorkloadBalancer {
           newFeature: 1.5, // New feature multiplier
           bugfix: 0.8, // Bug fix multiplier
           refactor: 1.2, // Refactoring multiplier
-          testing: 0.7, // Testing task multiplier
+          testing: 0.7 // Testing task multiplier
         },
 
         // Priority weights for assignment
@@ -100,7 +100,7 @@ class AgentWorkloadBalancer {
           critical: 5,
           high: 3,
           medium: 2,
-          low: 1,
+          low: 1
         },
 
         // Effort estimation (in hours)
@@ -109,15 +109,15 @@ class AgentWorkloadBalancer {
 
         // Skill requirements matching
         requireExactMatch: false, // Allow lower skill levels with guidance
-        skillGapTolerance: 1, // Allow 1 skill level below requirement
+        skillGapTolerance: 1 // Allow 1 skill level below requirement
       },
 
       notifications: {
         overloadAlerts: true, // Alert when agents are overloaded
         rebalanceNotifications: true, // Notify when rebalancing occurs
         assignmentUpdates: true, // Notify on new assignments
-        capacityWarnings: true, // Warn when approaching capacity
-      },
+        capacityWarnings: true // Warn when approaching capacity
+      }
     };
 
     this.agents = new Map();
@@ -128,7 +128,7 @@ class AgentWorkloadBalancer {
       overloadedAgents: 0,
       underutilizedAgents: 0,
       skillMatchRate: 0,
-      lastRebalance: null,
+      lastRebalance: null
     };
     this.assignmentHistory = [];
   }
@@ -188,7 +188,7 @@ class AgentWorkloadBalancer {
 
       // Registration metadata
       registered: new Date().toISOString(),
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: new Date().toISOString()
     };
 
     // Calculate effective capacity based on skills and experience
@@ -197,7 +197,9 @@ class AgentWorkloadBalancer {
     this.agents.set(agent.id, agent);
     await this.saveAgents();
 
-    console.log(`👤 Agent ${agent.name} registered with capacity ${agent.effectiveCapacity}h`);
+    console.log(
+      `👤 Agent ${agent.name} registered with capacity ${agent.effectiveCapacity}h`
+    );
     return agent;
   }
 
@@ -227,21 +229,28 @@ class AgentWorkloadBalancer {
         estimatedEffort: taskAnalysis.estimatedEffort,
         priority: taskData.priority || 'medium',
         skillsRequired: taskAnalysis.skillsRequired,
-        skillsMatched: this.calculateSkillMatch(bestAgent, taskAnalysis.skillsRequired),
+        skillsMatched: this.calculateSkillMatch(
+          bestAgent,
+          taskAnalysis.skillsRequired
+        ),
         status: 'assigned',
 
         // Assignment reasoning
         assignmentReason: {
           strategy: this.config.balancing.strategy,
           capacityScore: this.calculateCapacityScore(bestAgent),
-          skillScore: this.calculateSkillScore(bestAgent, taskAnalysis.skillsRequired),
+          skillScore: this.calculateSkillScore(
+            bestAgent,
+            taskAnalysis.skillsRequired
+          ),
           performanceScore: this.calculatePerformanceScore(bestAgent),
-          totalScore: 0, // Will be calculated
-        },
+          totalScore: 0 // Will be calculated
+        }
       };
 
       // Calculate total assignment score
-      assignment.assignmentReason.totalScore = this.calculateTotalAssignmentScore(bestAgent, taskAnalysis);
+      assignment.assignmentReason.totalScore =
+        this.calculateTotalAssignmentScore(bestAgent, taskAnalysis);
 
       // Update agent workload
       await this.updateAgentWorkload(bestAgent.id, assignment);
@@ -257,7 +266,7 @@ class AgentWorkloadBalancer {
       this.assignmentHistory.push({
         ...assignment,
         agentName: bestAgent.name,
-        taskTitle: taskData.title,
+        taskTitle: taskData.title
       });
       await this.saveHistory();
 
@@ -268,7 +277,9 @@ class AgentWorkloadBalancer {
 
       console.log(`✅ Task ${taskData.id} assigned to ${bestAgent.name}`);
       console.log(`   Skill match: ${assignment.skillsMatched.toFixed(1)}%`);
-      console.log(`   Agent utilization: ${bestAgent.utilizationRate.toFixed(1)}%`);
+      console.log(
+        `   Agent utilization: ${bestAgent.utilizationRate.toFixed(1)}%`
+      );
 
       return assignment;
     } catch (error) {
@@ -294,14 +305,16 @@ class AgentWorkloadBalancer {
     // Update assignment
     assignment.status = 'completed';
     assignment.completedAt = new Date().toISOString();
-    assignment.actualEffort = completionData.actualEffort || assignment.estimatedEffort;
+    assignment.actualEffort =
+      completionData.actualEffort || assignment.estimatedEffort;
     assignment.qualityScore = completionData.qualityScore || 1.0;
     assignment.notes = completionData.notes || '';
 
     // Calculate completion time
     const assignedTime = new Date(assignment.assignedAt);
     const completedTime = new Date(assignment.completedAt);
-    assignment.completionTime = (completedTime - assignedTime) / (1000 * 60 * 60); // Hours
+    assignment.completionTime =
+      (completedTime - assignedTime) / (1000 * 60 * 60); // Hours
 
     // Update agent performance
     await this.updateAgentPerformance(agent, assignment);
@@ -332,7 +345,7 @@ class AgentWorkloadBalancer {
       priority: task.priority || 'medium',
       urgency: this.calculateUrgency(task),
       dependencies: task.dependencies || [],
-      tags: task.tags || [],
+      tags: task.tags || []
     };
 
     // Extract skills from task content
@@ -342,7 +355,10 @@ class AgentWorkloadBalancer {
     analysis.complexity = this.calculateTaskComplexity(task);
 
     // Adjust effort based on complexity
-    analysis.estimatedEffort = Math.min(analysis.estimatedEffort * analysis.complexity, this.config.tasks.maxEffort);
+    analysis.estimatedEffort = Math.min(
+      analysis.estimatedEffort * analysis.complexity,
+      this.config.tasks.maxEffort
+    );
 
     return analysis;
   }
@@ -352,7 +368,8 @@ class AgentWorkloadBalancer {
    */
   async findBestAgent(taskAnalysis) {
     const availableAgents = Array.from(this.agents.values()).filter(
-      agent => agent.availability === 'available' && !this.isAgentOverloaded(agent)
+      agent =>
+        agent.availability === 'available' && !this.isAgentOverloaded(agent)
     );
 
     if (availableAgents.length === 0) {
@@ -367,15 +384,18 @@ class AgentWorkloadBalancer {
         capacity: this.calculateCapacityScore(agent),
         skill: this.calculateSkillScore(agent, taskAnalysis.skillsRequired),
         performance: this.calculatePerformanceScore(agent),
-        availability: this.calculateAvailabilityScore(agent),
-      },
+        availability: this.calculateAvailabilityScore(agent)
+      }
     }));
 
     // Sort by score (highest first)
     agentScores.sort((a, b) => b.score - a.score);
 
     // Apply strategy-specific selection
-    const selectedAgent = this.applySelectionStrategy(agentScores, taskAnalysis);
+    const selectedAgent = this.applySelectionStrategy(
+      agentScores,
+      taskAnalysis
+    );
 
     return selectedAgent?.agent || null;
   }
@@ -385,7 +405,10 @@ class AgentWorkloadBalancer {
    */
   calculateTotalAssignmentScore(agent, taskAnalysis) {
     const capacityScore = this.calculateCapacityScore(agent);
-    const skillScore = this.calculateSkillScore(agent, taskAnalysis.skillsRequired);
+    const skillScore = this.calculateSkillScore(
+      agent,
+      taskAnalysis.skillsRequired
+    );
     const performanceScore = this.calculatePerformanceScore(agent);
     const availabilityScore = this.calculateAvailabilityScore(agent);
 
@@ -430,7 +453,10 @@ class AgentWorkloadBalancer {
       let matchScore = 0;
       if (agentLevel >= requiredLevel) {
         matchScore = 1.0; // Perfect match or better
-      } else if (agentLevel >= requiredLevel - this.config.tasks.skillGapTolerance) {
+      } else if (
+        agentLevel >=
+        requiredLevel - this.config.tasks.skillGapTolerance
+      ) {
         matchScore = 0.7; // Close match within tolerance
       } else {
         matchScore = agentLevel / requiredLevel; // Partial match
@@ -450,7 +476,10 @@ class AgentWorkloadBalancer {
     const velocityScore = Math.min(agent.performance.velocity / 1.0, 2.0) / 2.0;
     const qualityScore = Math.min(agent.qualityScore, 1.0);
 
-    return velocityScore * this.config.agents.velocityWeight + qualityScore * this.config.agents.qualityWeight;
+    return (
+      velocityScore * this.config.agents.velocityWeight +
+      qualityScore * this.config.agents.qualityWeight
+    );
   }
 
   /**
@@ -500,7 +529,9 @@ class AgentWorkloadBalancer {
    */
   selectRoundRobin(agentScores) {
     // Simple round-robin based on assignment count
-    const sortedByAssignments = agentScores.sort((a, b) => a.agent.assignedTasks.length - b.agent.assignedTasks.length);
+    const sortedByAssignments = agentScores.sort(
+      (a, b) => a.agent.assignedTasks.length - b.agent.assignedTasks.length
+    );
     return sortedByAssignments[0];
   }
 
@@ -511,7 +542,7 @@ class AgentWorkloadBalancer {
     // Combine score and load balancing
     const weighted = agentScores.map(item => ({
       ...item,
-      weightedScore: item.score * (2 - item.agent.utilizationRate),
+      weightedScore: item.score * (2 - item.agent.utilizationRate)
     }));
 
     weighted.sort((a, b) => b.weightedScore - a.weightedScore);
@@ -522,7 +553,9 @@ class AgentWorkloadBalancer {
    * Least loaded selection
    */
   selectLeastLoaded(agentScores) {
-    const sortedByLoad = agentScores.sort((a, b) => a.agent.utilizationRate - b.agent.utilizationRate);
+    const sortedByLoad = agentScores.sort(
+      (a, b) => a.agent.utilizationRate - b.agent.utilizationRate
+    );
     return sortedByLoad[0];
   }
 
@@ -533,7 +566,7 @@ class AgentWorkloadBalancer {
     // Prioritize skill match over other factors
     const skillFocused = agentScores.map(item => ({
       ...item,
-      skillFocusedScore: item.breakdown.skill * 0.7 + item.score * 0.3,
+      skillFocusedScore: item.breakdown.skill * 0.7 + item.score * 0.3
     }));
 
     skillFocused.sort((a, b) => b.skillFocusedScore - a.skillFocusedScore);
@@ -587,17 +620,22 @@ class AgentWorkloadBalancer {
 
     // Update average completion time
     const alpha = 0.1; // Exponential moving average factor
-    agent.averageCompletionTime = agent.averageCompletionTime * (1 - alpha) + assignment.completionTime * alpha;
+    agent.averageCompletionTime =
+      agent.averageCompletionTime * (1 - alpha) +
+      assignment.completionTime * alpha;
 
     // Update quality score
-    agent.qualityScore = agent.qualityScore * (1 - alpha) + assignment.qualityScore * alpha;
+    agent.qualityScore =
+      agent.qualityScore * (1 - alpha) + assignment.qualityScore * alpha;
 
     // Update velocity (tasks per hour)
     const velocity = 1 / assignment.completionTime;
-    agent.performance.velocity = agent.performance.velocity * (1 - alpha) + velocity * alpha;
+    agent.performance.velocity =
+      agent.performance.velocity * (1 - alpha) + velocity * alpha;
 
     // Update quality performance
-    agent.performance.quality = agent.performance.quality * (1 - alpha) + assignment.qualityScore * alpha;
+    agent.performance.quality =
+      agent.performance.quality * (1 - alpha) + assignment.qualityScore * alpha;
 
     agent.lastUpdated = new Date().toISOString();
     await this.saveAgents();
@@ -617,13 +655,19 @@ class AgentWorkloadBalancer {
     let capacity = agent.capacity;
 
     // Apply experience bonus
-    const experienceLevels = { beginner: 0, intermediate: 1, advanced: 2, expert: 3 };
+    const experienceLevels = {
+      beginner: 0,
+      intermediate: 1,
+      advanced: 2,
+      expert: 3
+    };
     const experienceLevel = experienceLevels[agent.experience] || 1;
     capacity *= 1 + experienceLevel * this.config.agents.experienceBonus;
 
     // Apply skill multiplier for specialized skills
     const skillCount = Object.keys(agent.skills).length;
-    const averageSkillLevel = Object.values(agent.skills).reduce((a, b) => a + b, 0) / skillCount || 1;
+    const averageSkillLevel =
+      Object.values(agent.skills).reduce((a, b) => a + b, 0) / skillCount || 1;
 
     if (averageSkillLevel >= 3) {
       // Advanced/Expert level
@@ -638,20 +682,51 @@ class AgentWorkloadBalancer {
    */
   extractRequiredSkills(task) {
     const skills = {};
-    const text = `${task.title || ''} ${task.description || ''} ${(task.tags || []).join(' ')}`.toLowerCase();
+    const text =
+      `${task.title || ''} ${task.description || ''} ${(task.tags || []).join(' ')}`.toLowerCase();
 
     // Skill keyword mapping
     const skillKeywords = {
-      frontend: ['frontend', 'react', 'vue', 'angular', 'javascript', 'css', 'html', 'ui'],
-      backend: ['backend', 'api', 'server', 'node', 'express', 'fastify', 'database'],
+      frontend: [
+        'frontend',
+        'react',
+        'vue',
+        'angular',
+        'javascript',
+        'css',
+        'html',
+        'ui'
+      ],
+      backend: [
+        'backend',
+        'api',
+        'server',
+        'node',
+        'express',
+        'fastify',
+        'database'
+      ],
       database: ['database', 'sql', 'mongodb', 'postgres', 'mysql', 'redis'],
-      testing: ['test', 'testing', 'jest', 'cypress', 'unit test', 'integration'],
+      testing: [
+        'test',
+        'testing',
+        'jest',
+        'cypress',
+        'unit test',
+        'integration'
+      ],
       devops: ['devops', 'docker', 'kubernetes', 'ci/cd', 'deployment', 'aws'],
-      security: ['security', 'auth', 'authentication', 'encryption', 'vulnerability'],
+      security: [
+        'security',
+        'auth',
+        'authentication',
+        'encryption',
+        'vulnerability'
+      ],
       performance: ['performance', 'optimization', 'speed', 'memory', 'cache'],
       mobile: ['mobile', 'react native', 'ios', 'android', 'app'],
       api: ['api', 'rest', 'graphql', 'endpoint', 'integration'],
-      ui_ux: ['ui', 'ux', 'design', 'interface', 'user experience'],
+      ui_ux: ['ui', 'ux', 'design', 'interface', 'user experience']
     };
 
     // Extract skill requirements and estimate levels
@@ -661,9 +736,17 @@ class AgentWorkloadBalancer {
           // Estimate required skill level based on task complexity
           let level = 2; // Default intermediate level
 
-          if (text.includes('complex') || text.includes('advanced') || text.includes('expert')) {
+          if (
+            text.includes('complex') ||
+            text.includes('advanced') ||
+            text.includes('expert')
+          ) {
             level = 3;
-          } else if (text.includes('simple') || text.includes('basic') || text.includes('beginner')) {
+          } else if (
+            text.includes('simple') ||
+            text.includes('basic') ||
+            text.includes('beginner')
+          ) {
             level = 1;
           }
 
@@ -697,11 +780,13 @@ class AgentWorkloadBalancer {
 
     // Adjust for dependencies
     const dependencies = task.dependencies || [];
-    complexity += dependencies.length * this.config.tasks.complexityFactors.dependencies;
+    complexity +=
+      dependencies.length * this.config.tasks.complexityFactors.dependencies;
 
     // Adjust for estimated lines of code (if provided)
     if (task.estimatedLOC) {
-      complexity += task.estimatedLOC * this.config.tasks.complexityFactors.linesOfCode;
+      complexity +=
+        task.estimatedLOC * this.config.tasks.complexityFactors.linesOfCode;
     }
 
     return Math.min(complexity, 3.0); // Cap at 3x complexity
@@ -763,7 +848,7 @@ class AgentWorkloadBalancer {
       PST: -8,
       UTC: 0,
       CET: 1,
-      JST: 9,
+      JST: 9
     };
 
     const offset = timezoneOffsets[agent.timezone] || 0;
@@ -791,7 +876,9 @@ class AgentWorkloadBalancer {
   async rebalanceWorkloads() {
     console.log('🔄 Checking for workload rebalancing...');
 
-    const agents = Array.from(this.agents.values()).filter(agent => agent.availability === 'available');
+    const agents = Array.from(this.agents.values()).filter(
+      agent => agent.availability === 'available'
+    );
 
     if (agents.length < 2) return;
 
@@ -807,12 +894,18 @@ class AgentWorkloadBalancer {
       return; // No rebalancing needed
     }
 
-    console.log(`⚖️  Load imbalance detected: ${(loadDifference * 100).toFixed(1)}%`);
+    console.log(
+      `⚖️  Load imbalance detected: ${(loadDifference * 100).toFixed(1)}%`
+    );
 
     // Find overloaded and underutilized agents
-    const overloadedAgents = agents.filter(agent => agent.utilizationRate > avgLoad + loadDifference / 2);
+    const overloadedAgents = agents.filter(
+      agent => agent.utilizationRate > avgLoad + loadDifference / 2
+    );
 
-    const underutilizedAgents = agents.filter(agent => agent.utilizationRate < avgLoad - loadDifference / 2);
+    const underutilizedAgents = agents.filter(
+      agent => agent.utilizationRate < avgLoad - loadDifference / 2
+    );
 
     // Attempt to reassign tasks
     let rebalanced = 0;
@@ -825,7 +918,10 @@ class AgentWorkloadBalancer {
         if (!assignment) continue;
 
         // Find suitable underutilized agent
-        const targetAgent = this.findBestReassignmentTarget(assignment, underutilizedAgents);
+        const targetAgent = this.findBestReassignmentTarget(
+          assignment,
+          underutilizedAgents
+        );
 
         if (targetAgent) {
           await this.reassignTask(assignment, targetAgent);
@@ -852,7 +948,11 @@ class AgentWorkloadBalancer {
     // Return tasks that haven't been started yet or are low priority
     return agent.assignedTasks.filter(taskId => {
       const assignment = this.assignments.get(taskId);
-      return assignment && assignment.status === 'assigned' && assignment.priority !== 'critical';
+      return (
+        assignment &&
+        assignment.status === 'assigned' &&
+        assignment.priority !== 'critical'
+      );
     });
   }
 
@@ -865,7 +965,9 @@ class AgentWorkloadBalancer {
     // Score candidates based on capacity and skill match
     const scored = candidateAgents.map(agent => ({
       agent,
-      score: this.calculateCapacityScore(agent) + this.calculateSkillScore(agent, assignment.skillsRequired || {}),
+      score:
+        this.calculateCapacityScore(agent) +
+        this.calculateSkillScore(agent, assignment.skillsRequired || {})
     }));
 
     scored.sort((a, b) => b.score - a.score);
@@ -888,7 +990,9 @@ class AgentWorkloadBalancer {
 
     await this.updateAgentWorkload(newAgent.id, assignment, 'add');
 
-    console.log(`📋 Task ${assignment.taskId} reassigned from ${oldAgent?.name} to ${newAgent.name}`);
+    console.log(
+      `📋 Task ${assignment.taskId} reassigned from ${oldAgent?.name} to ${newAgent.name}`
+    );
   }
 
   /**
@@ -896,26 +1000,37 @@ class AgentWorkloadBalancer {
    */
   async updateMetrics() {
     const agents = Array.from(this.agents.values());
-    const assignments = Array.from(this.assignments.values()).filter(a => a.status === 'assigned');
+    const assignments = Array.from(this.assignments.values()).filter(
+      a => a.status === 'assigned'
+    );
 
     // Calculate utilization statistics
     const utilizationRates = agents.map(agent => agent.utilizationRate);
-    const avgUtilization = utilizationRates.reduce((a, b) => a + b, 0) / utilizationRates.length || 0;
+    const avgUtilization =
+      utilizationRates.reduce((a, b) => a + b, 0) / utilizationRates.length ||
+      0;
 
     // Calculate load balance (lower is better)
     const loadVariance =
-      utilizationRates.reduce((sum, rate) => sum + Math.pow(rate - avgUtilization, 2), 0) / utilizationRates.length;
+      utilizationRates.reduce(
+        (sum, rate) => sum + Math.pow(rate - avgUtilization, 2),
+        0
+      ) / utilizationRates.length;
 
     this.metrics = {
       totalAssignments: assignments.length,
       averageUtilization: avgUtilization,
       loadBalance: 1 - Math.sqrt(loadVariance), // Convert variance to balance score
-      overloadedAgents: agents.filter(agent => agent.utilizationRate > this.config.balancing.overloadThreshold).length,
-      underutilizedAgents: agents.filter(agent => agent.utilizationRate < 0.3 && agent.availability === 'available')
-        .length,
+      overloadedAgents: agents.filter(
+        agent => agent.utilizationRate > this.config.balancing.overloadThreshold
+      ).length,
+      underutilizedAgents: agents.filter(
+        agent =>
+          agent.utilizationRate < 0.3 && agent.availability === 'available'
+      ).length,
       skillMatchRate: this.calculateAverageSkillMatch(assignments),
       lastUpdate: new Date().toISOString(),
-      lastRebalance: this.metrics.lastRebalance,
+      lastRebalance: this.metrics.lastRebalance
     };
 
     await this.saveMetrics();
@@ -927,7 +1042,9 @@ class AgentWorkloadBalancer {
   calculateAverageSkillMatch(assignments) {
     if (assignments.length === 0) return 0;
 
-    const matches = assignments.map(assignment => assignment.skillsMatched || 0);
+    const matches = assignments.map(
+      assignment => assignment.skillsMatched || 0
+    );
     return matches.reduce((a, b) => a + b, 0) / matches.length;
   }
 
@@ -938,7 +1055,9 @@ class AgentWorkloadBalancer {
   }
 
   async notifyOverload(agent) {
-    console.log(`⚠️  Overload alert: ${agent.name} at ${(agent.utilizationRate * 100).toFixed(1)}% capacity`);
+    console.log(
+      `⚠️  Overload alert: ${agent.name} at ${(agent.utilizationRate * 100).toFixed(1)}% capacity`
+    );
   }
 
   async notifyRebalancing(taskCount, loadDifference) {
@@ -990,7 +1109,10 @@ class AgentWorkloadBalancer {
 
   async saveAssignments() {
     const assignmentsData = Object.fromEntries(this.assignments);
-    await fs.writeFile(this.assignmentsFile, JSON.stringify(assignmentsData, null, 2));
+    await fs.writeFile(
+      this.assignmentsFile,
+      JSON.stringify(assignmentsData, null, 2)
+    );
   }
 
   async loadMetrics() {
@@ -1016,7 +1138,10 @@ class AgentWorkloadBalancer {
   }
 
   async saveHistory() {
-    await fs.writeFile(this.historyFile, JSON.stringify(this.assignmentHistory, null, 2));
+    await fs.writeFile(
+      this.historyFile,
+      JSON.stringify(this.assignmentHistory, null, 2)
+    );
   }
 
   /**
@@ -1024,32 +1149,37 @@ class AgentWorkloadBalancer {
    */
   async getStatistics() {
     const agents = Array.from(this.agents.values());
-    const activeAssignments = Array.from(this.assignments.values()).filter(a => a.status === 'assigned');
+    const activeAssignments = Array.from(this.assignments.values()).filter(
+      a => a.status === 'assigned'
+    );
 
     return {
       agents: {
         total: agents.length,
         available: agents.filter(a => a.availability === 'available').length,
         overloaded: this.metrics.overloadedAgents,
-        underutilized: this.metrics.underutilizedAgents,
+        underutilized: this.metrics.underutilizedAgents
       },
 
       assignments: {
         active: activeAssignments.length,
         total: this.metrics.totalAssignments,
-        averageSkillMatch: this.metrics.skillMatchRate.toFixed(1) + '%',
+        averageSkillMatch: this.metrics.skillMatchRate.toFixed(1) + '%'
       },
 
       performance: {
-        averageUtilization: (this.metrics.averageUtilization * 100).toFixed(1) + '%',
+        averageUtilization:
+          (this.metrics.averageUtilization * 100).toFixed(1) + '%',
         loadBalance: (this.metrics.loadBalance * 100).toFixed(1) + '%',
-        lastRebalance: this.metrics.lastRebalance,
+        lastRebalance: this.metrics.lastRebalance
       },
 
       history: {
         totalAssignments: this.assignmentHistory.length,
-        completedTasks: this.assignmentHistory.filter(a => a.status === 'completed').length,
-      },
+        completedTasks: this.assignmentHistory.filter(
+          a => a.status === 'completed'
+        ).length
+      }
     };
   }
 }
@@ -1071,7 +1201,7 @@ if (require.main === module) {
             id: args[1] || `agent-${Date.now()}`,
             name: args[2] || args[1],
             skills: JSON.parse(args[3] || '{}'),
-            capacity: parseInt(args[4]) || 40,
+            capacity: parseInt(args[4]) || 40
           };
 
           const agent = await balancer.registerAgent(agentData);
@@ -1083,22 +1213,29 @@ if (require.main === module) {
             id: args[1],
             title: args[2] || 'Test Task',
             priority: args[3] || 'medium',
-            estimate: parseInt(args[4]) || 4,
+            estimate: parseInt(args[4]) || 4
           };
 
           const assignment = await balancer.assignTask(taskData);
-          console.log(`✅ Task assigned: ${JSON.stringify(assignment, null, 2)}`);
+          console.log(
+            `✅ Task assigned: ${JSON.stringify(assignment, null, 2)}`
+          );
           break;
 
         case 'complete':
           const assignmentId = args[1];
           const completionData = {
             actualEffort: parseInt(args[2]) || null,
-            qualityScore: parseFloat(args[3]) || 1.0,
+            qualityScore: parseFloat(args[3]) || 1.0
           };
 
-          const completed = await balancer.completeTask(assignmentId, completionData);
-          console.log(`✅ Task completed: ${JSON.stringify(completed, null, 2)}`);
+          const completed = await balancer.completeTask(
+            assignmentId,
+            completionData
+          );
+          console.log(
+            `✅ Task completed: ${JSON.stringify(completed, null, 2)}`
+          );
           break;
 
         case 'rebalance':
@@ -1116,7 +1253,9 @@ if (require.main === module) {
           const agents = Array.from(balancer.agents.values());
           console.log('👥 Registered Agents:');
           agents.forEach(agent => {
-            console.log(`  ${agent.name}: ${(agent.utilizationRate * 100).toFixed(1)}% utilized`);
+            console.log(
+              `  ${agent.name}: ${(agent.utilizationRate * 100).toFixed(1)}% utilized`
+            );
           });
           break;
 

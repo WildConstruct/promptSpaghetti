@@ -311,7 +311,10 @@ const suggestions = dashboard.getOptimizationSuggestions();
 ### Performance Utilities
 
 ```typescript
-import { measureExecution, PerformanceTimer } from './packages/core/utils/performance';
+import {
+  measureExecution,
+  PerformanceTimer
+} from './packages/core/utils/performance';
 
 const timer = new PerformanceTimer();
 // ... operation

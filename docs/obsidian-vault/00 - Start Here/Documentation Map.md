@@ -18,14 +18,18 @@ This map shows all documentation organized by category and purpose.
 ## 🗂️ Section Overview
 
 ### 00 - Start Here 📍
-*You are here - Navigation and overview*
+
+_You are here - Navigation and overview_
+
 - [[README]] - Vault introduction
 - [[Project Timeline]] - Historical evolution
 - [[Key Decisions]] - Major choices made
 - [[Documentation Map]] - This document
 
 ### 01 - Project Overview 📋
-*Vision, requirements, and planning*
+
+_Vision, requirements, and planning_
+
 - Product Requirements Document (PRD)
 - Vision statements
 - User personas
@@ -33,7 +37,9 @@ This map shows all documentation organized by category and purpose.
 - Success metrics
 
 ### 02 - Architecture 🏗️
-*Technical design and system architecture*
+
+_Technical design and system architecture_
+
 - Architectural Decision Records (ADRs)
 - System diagrams
 - Component architecture
@@ -41,7 +47,9 @@ This map shows all documentation organized by category and purpose.
 - Security architecture
 
 ### 03 - Development Journey 📈
-*Sprint history and story evolution*
+
+_Sprint history and story evolution_
+
 - User stories (1.x, 2.x series)
 - Sprint retrospectives
 - Epic breakdowns
@@ -49,7 +57,9 @@ This map shows all documentation organized by category and purpose.
 - Lessons learned
 
 ### 04 - Technical Specs 🔧
-*Detailed technical specifications*
+
+_Detailed technical specifications_
+
 - PSG file format spec
 - Node type specifications
 - API contracts
@@ -57,7 +67,9 @@ This map shows all documentation organized by category and purpose.
 - Protocol definitions
 
 ### 05 - User Documentation 📖
-*End-user guides and tutorials*
+
+_End-user guides and tutorials_
+
 - Getting started guide
 - Feature documentation
 - Tutorials
@@ -65,7 +77,9 @@ This map shows all documentation organized by category and purpose.
 - Troubleshooting
 
 ### 06 - API Reference 🔌
-*Developer API documentation*
+
+_Developer API documentation_
+
 - REST endpoints
 - Request/response schemas
 - Authentication
@@ -73,7 +87,9 @@ This map shows all documentation organized by category and purpose.
 - Error codes
 
 ### 07 - Testing & QA 🧪
-*Quality assurance documentation*
+
+_Quality assurance documentation_
+
 - Test strategies
 - Test plans
 - Bug reports
@@ -81,7 +97,9 @@ This map shows all documentation organized by category and purpose.
 - Coverage reports
 
 ### 08 - Security & Compliance 🔒
-*Security and compliance docs*
+
+_Security and compliance docs_
+
 - Security policies
 - Compliance requirements
 - Audit logs
@@ -89,7 +107,9 @@ This map shows all documentation organized by category and purpose.
 - GDPR compliance
 
 ### 09 - Performance ⚡
-*Performance documentation*
+
+_Performance documentation_
+
 - Benchmarks
 - Optimization guides
 - Profiling results
@@ -97,7 +117,9 @@ This map shows all documentation organized by category and purpose.
 - Monitoring setup
 
 ### 10 - Archive 📦
-*Historical and deprecated docs*
+
+_Historical and deprecated docs_
+
 - Old planning documents
 - Deprecated features
 - Failed experiments
@@ -111,16 +133,19 @@ This map shows all documentation organized by category and purpose.
 ### By Type
 
 #### Planning Documents
+
 - PRDs → [[01 - Project Overview]]
 - Roadmaps → [[01 - Project Overview]]
 - Epics → [[03 - Development Journey/Epics]]
 
 #### Technical Documents
+
 - Architecture → [[02 - Architecture]]
 - APIs → [[06 - API Reference]]
 - Specs → [[04 - Technical Specs]]
 
 #### Process Documents
+
 - Stories → [[03 - Development Journey/Stories]]
 - Testing → [[07 - Testing & QA]]
 - Security → [[08 - Security & Compliance]]
@@ -128,25 +153,33 @@ This map shows all documentation organized by category and purpose.
 ### By Audience
 
 #### For Developers
+
 Start with:
+
 1. [[02 - Architecture/README]]
 2. [[04 - Technical Specs]]
 3. [[06 - API Reference]]
 
 #### For Product Managers
+
 Start with:
+
 1. [[01 - Project Overview]]
 2. [[03 - Development Journey]]
 3. [[00 - Start Here/Project Timeline]]
 
 #### For QA Engineers
+
 Start with:
+
 1. [[07 - Testing & QA]]
 2. [[09 - Performance]]
 3. [[08 - Security & Compliance]]
 
 #### For New Team Members
+
 Start with:
+
 1. [[00 - Start Here/README]]
 2. [[00 - Start Here/Project Timeline]]
 3. [[05 - User Documentation]]
@@ -158,6 +191,7 @@ Start with:
 Use these tags to find related documents:
 
 ### Feature Tags
+
 - `#node-system` - Node implementations
 - `#asset-browser` - Asset browser features
 - `#storage` - Storage and persistence
@@ -165,6 +199,7 @@ Use these tags to find related documents:
 - `#ui` - User interface
 
 ### Technical Tags
+
 - `#architecture` - System design
 - `#performance` - Performance related
 - `#security` - Security concerns
@@ -172,6 +207,7 @@ Use these tags to find related documents:
 - `#api` - API documentation
 
 ### Process Tags
+
 - `#story` - User stories
 - `#epic` - Epic documentation
 - `#sprint` - Sprint documents
@@ -179,6 +215,7 @@ Use these tags to find related documents:
 - `#retrospective` - Lessons learned
 
 ### Status Tags
+
 - `#current` - Active documentation
 - `#deprecated` - No longer valid
 - `#draft` - Work in progress
@@ -190,16 +227,19 @@ Use these tags to find related documents:
 ## 📈 Document Relationships
 
 ### Core Flow
+
 ```
 Vision → PRD → Stories → Implementation → Testing → Release
 ```
 
 ### Architecture Flow
+
 ```
 Requirements → Design → ADRs → Implementation → Documentation
 ```
 
 ### Story Flow
+
 ```
 Epic → Story → Tasks → Code → Tests → Documentation
 ```
@@ -209,6 +249,7 @@ Epic → Story → Tasks → Code → Tests → Documentation
 ## 🔄 Maintenance
 
 ### Keeping Docs Current
+
 1. Update after major decisions
 2. Archive deprecated content
 3. Review quarterly
@@ -216,6 +257,7 @@ Epic → Story → Tasks → Code → Tests → Documentation
 5. Maintain cross-references
 
 ### Adding New Documents
+
 1. Choose appropriate section
 2. Add to relevant index
 3. Include metadata tags
@@ -227,6 +269,7 @@ Epic → Story → Tasks → Code → Tests → Documentation
 ## 💡 Quick Tips
 
 ### Using Obsidian
+
 - Use `Ctrl/Cmd + O` to quick open files
 - Use `Ctrl/Cmd + Shift + F` to search all docs
 - Use Graph View to see connections
@@ -234,6 +277,7 @@ Epic → Story → Tasks → Code → Tests → Documentation
 - Create custom workspaces
 
 ### Best Practices
+
 - Read [[00 - Start Here/README]] first
 - Follow the numbered sections in order
 - Use backlinks `[[]]` for navigation
@@ -242,4 +286,4 @@ Epic → Story → Tasks → Code → Tests → Documentation
 
 ---
 
-*This map is maintained as part of the documentation governance process.*
+_This map is maintained as part of the documentation governance process._

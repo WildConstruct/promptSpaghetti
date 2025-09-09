@@ -64,7 +64,7 @@ enum KeyType {
   // Cryptographic Keys
   SYMMETRIC_KEY = 'symmetric_key',
   ASYMMETRIC_KEY = 'asymmetric_key',
-  HMAC_KEY = 'hmac_key',
+  HMAC_KEY = 'hmac_key'
 }
 ```
 
@@ -147,9 +147,9 @@ const keyPermission = {
     {
       field: 'ipAddress',
       operator: 'in',
-      value: ['10.0.0.0/8', '192.168.0.0/16'],
-    },
-  ],
+      value: ['10.0.0.0/8', '192.168.0.0/16']
+    }
+  ]
 };
 ```
 

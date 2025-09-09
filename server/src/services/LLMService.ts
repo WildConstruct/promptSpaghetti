@@ -28,10 +28,26 @@ export class LLMService {
 
   constructor(opts: LLMServiceOptions = {}) {
     this.opts = {
-      apiKey: opts.apiKey || process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY || '',
-      baseURL: opts.baseURL || process.env.OPENAI_BASE_URL || 'https://openrouter.ai/api/v1',
-      defaultModel: opts.defaultModel || process.env.OPENAI_DEFAULT_MODEL || 'openai/gpt-4o-mini',
-      requestTimeoutMs: opts.requestTimeoutMs || Number(process.env.LLM_TIMEOUT_MS || process.env.OPENAI_REQUEST_TIMEOUT_MS || 12_000),
+      apiKey:
+        opts.apiKey ||
+        process.env.OPENROUTER_API_KEY ||
+        process.env.OPENAI_API_KEY ||
+        '',
+      baseURL:
+        opts.baseURL ||
+        process.env.OPENAI_BASE_URL ||
+        'https://openrouter.ai/api/v1',
+      defaultModel:
+        opts.defaultModel ||
+        process.env.OPENAI_DEFAULT_MODEL ||
+        'openai/gpt-4o-mini',
+      requestTimeoutMs:
+        opts.requestTimeoutMs ||
+        Number(
+          process.env.LLM_TIMEOUT_MS ||
+            process.env.OPENAI_REQUEST_TIMEOUT_MS ||
+            12_000
+        )
     };
 
     this.client = this.opts.apiKey
@@ -40,8 +56,8 @@ export class LLMService {
           baseURL: this.opts.baseURL,
           defaultHeaders: {
             'HTTP-Referer': process.env.APP_URL || 'http://localhost:3000',
-            'X-Title': 'Prompt Spaghetti',
-          },
+            'X-Title': 'Prompt Spaghetti'
+          }
         })
       : null;
   }
@@ -63,7 +79,10 @@ export class LLMService {
     const tokensIn = Math.ceil(prompt.length / 4); // rough estimate
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), this.opts.requestTimeoutMs);
+    const timeout = setTimeout(
+      () => controller.abort(),
+      this.opts.requestTimeoutMs
+    );
     try {
       const completion = await this.client.chat.completions.create(
         {
@@ -72,8 +91,8 @@ export class LLMService {
           max_tokens: maxTokens,
           messages: [
             { role: 'system', content: 'You are a helpful assistant.' },
-            { role: 'user', content: prompt },
-          ],
+            { role: 'user', content: prompt }
+          ]
         },
         { signal: controller.signal as any }
       );
@@ -86,7 +105,7 @@ export class LLMService {
         content,
         model,
         tokensIn,
-        tokensOut,
+        tokensOut
       };
     } finally {
       clearTimeout(timeout);

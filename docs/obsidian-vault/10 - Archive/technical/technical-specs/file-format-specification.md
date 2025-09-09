@@ -11,12 +11,14 @@ This document defines the official file format specifications for the PromptScap
 **Purpose**: Reusable component groups or graph fragments that can be inserted into larger graphs.
 
 **Use Cases**:
+
 - Character aspect fragments (body, emotion, action)
 - Partial graph templates
 - Reusable node collections
 - Building blocks for complex graphs
 
 **Key Characteristics**:
+
 - Contains nodes, edges, and optional regions
 - Uses x/y coordinates for node positioning
 - Should NOT include Output nodes in fragments
@@ -27,12 +29,14 @@ This document defines the official file format specifications for the PromptScap
 **Purpose**: Complete, importable graph templates with full metadata and analytics tracking.
 
 **Use Cases**:
+
 - Full graph templates
 - Shareable presets
 - Marketplace items
 - Complete workflow definitions
 
 **Key Characteristics**:
+
 - Contains full graph structure with metadata
 - Uses position objects with x/y properties
 - Includes usage statistics and marketplace fields
@@ -44,9 +48,9 @@ This document defines the official file format specifications for the PromptScap
 
 ```typescript
 interface PSGFile {
-  version: string;              // Format version (e.g., "1.0.0")
-  name: string;                  // Fragment name
-  description?: string;          // Optional description
+  version: string; // Format version (e.g., "1.0.0")
+  name: string; // Fragment name
+  description?: string; // Optional description
   metadata?: {
     type?: 'MULTI-ASPECT' | 'SINGLE' | string;
     author?: string;
@@ -55,20 +59,20 @@ interface PSGFile {
   };
   nodes: PSGNode[];
   edges: PSGEdge[];
-  regions?: PSGRegion[];         // Optional region definitions
+  regions?: PSGRegion[]; // Optional region definitions
 }
 
 interface PSGNode {
-  id: string;                    // Unique node identifier
-  type: string;                  // Node type (e.g., "WeightedChoice")
-  name?: string;                 // Display name
+  id: string; // Unique node identifier
+  type: string; // Node type (e.g., "WeightedChoice")
+  name?: string; // Display name
   description?: string;
-  x: number;                     // X coordinate
-  y: number;                     // Y coordinate
-  options?: PSGNodeOption[];     // For WeightedChoice nodes
-  template?: string;             // For template-based nodes
-  value?: any;                   // Node-specific value
-  data?: Record<string, any>;    // Additional node data
+  x: number; // X coordinate
+  y: number; // Y coordinate
+  options?: PSGNodeOption[]; // For WeightedChoice nodes
+  template?: string; // For template-based nodes
+  value?: any; // Node-specific value
+  data?: Record<string, any>; // Additional node data
 }
 
 interface PSGNodeOption {
@@ -79,8 +83,8 @@ interface PSGNodeOption {
 
 interface PSGEdge {
   id: string;
-  source: string;                // Source node ID
-  target: string;                // Target node ID
+  source: string; // Source node ID
+  target: string; // Target node ID
 }
 
 interface PSGRegion {
@@ -88,10 +92,10 @@ interface PSGRegion {
   name: string;
   color?: string;
   color_comment?: string;
-  nodes: string[];               // Node IDs in this region
+  nodes: string[]; // Node IDs in this region
   description?: string;
   metadata?: Record<string, any>;
-  ports?: PSGPort[];             // Optional port definitions
+  ports?: PSGPort[]; // Optional port definitions
 }
 
 interface PSGPort {
@@ -108,8 +112,8 @@ interface PSGPort {
 
 ```typescript
 interface PSGLibFile {
-  fileType: 'psglib';           // Fixed identifier
-  formatVersion: string;         // Semantic version (e.g., "1.0.0")
+  fileType: 'psglib'; // Fixed identifier
+  formatVersion: string; // Semantic version (e.g., "1.0.0")
   metadata: PSGLibMetadata;
   graph: {
     nodes: PSGLibNode[];
@@ -117,48 +121,49 @@ interface PSGLibFile {
     settings?: Record<string, any>;
   };
   additionalData?: {
-    regions?: PSGRegion[];       // Preserved region data
+    regions?: PSGRegion[]; // Preserved region data
   };
 }
 
 interface PSGLibMetadata {
-  id: string;                    // Unique preset ID
+  id: string; // Unique preset ID
   name: string;
   description: string;
   author: string;
-  version: string;               // Preset version
+  version: string; // Preset version
   tags: string[];
-  nodeTypes: string[];           // List of node types used
-  thumbnail?: string;            // Base64 or URL
-  lastModified: string;          // ISO 8601 timestamp
+  nodeTypes: string[]; // List of node types used
+  thumbnail?: string; // Base64 or URL
+  lastModified: string; // ISO 8601 timestamp
   license: 'MIT' | 'CC-BY' | 'CC-BY-SA' | 'CC0' | 'proprietary' | 'custom';
   usageStats: {
     timesUsed: number;
     lastUsed: string | null;
     popularity: number;
   };
-  marketplace?: {                // Future marketplace support
+  marketplace?: {
+    // Future marketplace support
     price: number | null;
     rating: number | null;
     downloads: number;
   };
-  isFragment?: boolean;          // Indicates if converted from fragment
-  regions?: PSGRegion[];         // Original region data
+  isFragment?: boolean; // Indicates if converted from fragment
+  regions?: PSGRegion[]; // Original region data
 }
 
 interface PSGLibNode {
   id: string;
-  type: string;                  // Node type identifier
+  type: string; // Node type identifier
   position: {
     x: number;
     y: number;
   };
-  data: Record<string, any>;     // Node-specific data
+  data: Record<string, any>; // Node-specific data
   size?: {
     width: number;
     height: number;
   };
-  style?: Record<string, any>;   // Visual styling
+  style?: Record<string, any>; // Visual styling
   label?: string;
   description?: string;
   tags?: string[];
@@ -168,9 +173,9 @@ interface PSGLibEdge {
   id: string;
   source: string;
   target: string;
-  sourceHandle?: string;         // Source connection point
-  targetHandle?: string;         // Target connection point
-  type?: string;                 // Edge type
+  sourceHandle?: string; // Source connection point
+  targetHandle?: string; // Target connection point
+  type?: string; // Edge type
   data?: Record<string, any>;
 }
 ```
@@ -181,19 +186,19 @@ interface PSGLibEdge {
 
 The following mapping MUST be used consistently across all formats:
 
-| Display Name | PSG Type | PSGLib/React Flow Type | Class Name |
-|-------------|----------|------------------------|------------|
-| Weighted Choice | WeightedChoice | weightedChoice | WeightedChoiceNode |
-| Output | Output | output | OutputNode |
-| Concatenate | Concat | concat | ConcatNode |
-| Text Block | TextBlock | textBlock | TextBlockNode |
-| Variable | Variable | variable | VariableNode |
-| Include | Include | include | IncludeNode |
-| Set Variable | SetVariable | setVariable | SetVariableNode |
-| Get Variable | GetVariable | getVariable | GetVariableNode |
-| Subject | Subject | subject | SubjectNode |
-| Action | Action | action | ActionNode |
-| Enhanced Bounding Box | EnhancedBoundingBox | enhancedBoundingBox | EnhancedBoundingBox |
+| Display Name          | PSG Type            | PSGLib/React Flow Type | Class Name          |
+| --------------------- | ------------------- | ---------------------- | ------------------- |
+| Weighted Choice       | WeightedChoice      | weightedChoice         | WeightedChoiceNode  |
+| Output                | Output              | output                 | OutputNode          |
+| Concatenate           | Concat              | concat                 | ConcatNode          |
+| Text Block            | TextBlock           | textBlock              | TextBlockNode       |
+| Variable              | Variable            | variable               | VariableNode        |
+| Include               | Include             | include                | IncludeNode         |
+| Set Variable          | SetVariable         | setVariable            | SetVariableNode     |
+| Get Variable          | GetVariable         | getVariable            | GetVariableNode     |
+| Subject               | Subject             | subject                | SubjectNode         |
+| Action                | Action              | action                 | ActionNode          |
+| Enhanced Bounding Box | EnhancedBoundingBox | enhancedBoundingBox    | EnhancedBoundingBox |
 
 ### Naming Rules
 
@@ -304,9 +309,9 @@ enum PSGLibErrorType {
 
 ```typescript
 function detectFormatVersion(data: any): string {
-  if (data.formatVersion) return data.formatVersion;  // PSGLib
-  if (data.version) return data.version;              // PSG
-  return '1.0.0';                                      // Default
+  if (data.formatVersion) return data.formatVersion; // PSGLib
+  if (data.version) return data.version; // PSG
+  return '1.0.0'; // Default
 }
 ```
 
@@ -314,14 +319,14 @@ function detectFormatVersion(data: any): string {
 
 ### Required Metadata
 
-| Field | PSG | PSGLib | Description |
-|-------|-----|--------|-------------|
-| version/formatVersion | ✓ | ✓ | Format version |
-| name | ✓ | ✓ | Human-readable name |
-| id | - | ✓ | Unique identifier |
-| author | - | ✓ | Creator name |
-| nodeTypes | - | ✓ | List of node types |
-| lastModified | - | ✓ | ISO 8601 timestamp |
+| Field                 | PSG | PSGLib | Description         |
+| --------------------- | --- | ------ | ------------------- |
+| version/formatVersion | ✓   | ✓      | Format version      |
+| name                  | ✓   | ✓      | Human-readable name |
+| id                    | -   | ✓      | Unique identifier   |
+| author                | -   | ✓      | Creator name        |
+| nodeTypes             | -   | ✓      | List of node types  |
+| lastModified          | -   | ✓      | ISO 8601 timestamp  |
 
 ### Optional Metadata
 
@@ -367,6 +372,7 @@ function detectFormatVersion(data: any): string {
 ### Between PSG and PSGLib
 
 Use the provided conversion functions:
+
 - `convertPSGToPSGLib()`: Fragment to preset
 - `parsePSG()`: Parse PSG files
 - `parsePSGLib()`: Parse PSGLib files

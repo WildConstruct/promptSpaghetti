@@ -12,8 +12,8 @@ expect.extend(toHaveNoViolations);
 export const axe = configureAxe({
   rules: {
     // Color contrast requires real rendering context; often noisy under JSDOM
-    'color-contrast': { enabled: false },
-  },
+    'color-contrast': { enabled: false }
+  }
 });
 
 // Optional: make available globally for convenience in some tests

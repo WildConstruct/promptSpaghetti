@@ -37,7 +37,7 @@ class AgentProductivityDashboard {
         realtime: 1, // Last 1 hour
         daily: 24, // Last 24 hours
         weekly: 168, // Last 7 days
-        monthly: 720, // Last 30 days
+        monthly: 720 // Last 30 days
       },
 
       // Performance thresholds
@@ -47,7 +47,7 @@ class AgentProductivityDashboard {
         fastCompletion: 2, // Hours average
         slowCompletion: 24, // Hours average
         highUtilization: 0.8, // 80% time utilization
-        lowUtilization: 0.3, // 30% time utilization
+        lowUtilization: 0.3 // 30% time utilization
       },
 
       // Metrics to calculate
@@ -58,7 +58,7 @@ class AgentProductivityDashboard {
         qualityScore: true, // QA pass rate and revision requests
         specialization: true, // Skill/epic specialization analysis
         collaboration: true, // Cross-team interaction metrics
-        bottlenecks: true, // Blocking factors identification
+        bottlenecks: true // Blocking factors identification
       },
 
       // Dashboard features
@@ -66,8 +66,8 @@ class AgentProductivityDashboard {
         autoRefresh: 300, // Refresh every 5 minutes
         chartTypes: ['line', 'bar', 'pie', 'heatmap'],
         exportFormats: ['html', 'pdf', 'json'],
-        realTimeUpdates: true,
-      },
+        realTimeUpdates: true
+      }
     };
 
     this.agentMetrics = new Map();
@@ -86,7 +86,9 @@ class AgentProductivityDashboard {
       await this.loadHistoricalData();
 
       console.log('✅ Agent Productivity Dashboard initialized');
-      console.log(`📊 Tracking ${this.agentMetrics.size} agents with historical data`);
+      console.log(
+        `📊 Tracking ${this.agentMetrics.size} agents with historical data`
+      );
     } catch (error) {
       console.error('❌ Failed to initialize dashboard:', error);
       throw error;
@@ -110,7 +112,9 @@ class AgentProductivityDashboard {
         const metrics = await this.calculateAgentMetrics(agentId, agentData);
         this.agentMetrics.set(agentId, metrics);
 
-        console.log(`📈 ${agentId}: ${metrics.velocity.daily} tasks/day, ${metrics.avgCompletionTime}h avg completion`);
+        console.log(
+          `📈 ${agentId}: ${metrics.velocity.daily} tasks/day, ${metrics.avgCompletionTime}h avg completion`
+        );
       }
 
       // Calculate team-wide metrics
@@ -122,11 +126,13 @@ class AgentProductivityDashboard {
       // Save metrics
       await this.saveMetrics();
 
-      console.log(`\n✅ Metrics collected for ${this.agentMetrics.size} agents`);
+      console.log(
+        `\n✅ Metrics collected for ${this.agentMetrics.size} agents`
+      );
       return {
         agents: Object.fromEntries(this.agentMetrics),
         team: this.teamMetrics,
-        insights: this.insights,
+        insights: this.insights
       };
     } catch (error) {
       console.error('❌ Failed to collect metrics:', error);
@@ -148,19 +154,24 @@ class AgentProductivityDashboard {
         hourly: this.calculateVelocity(agentData.tasks, 1),
         daily: this.calculateVelocity(agentData.tasks, 24),
         weekly: this.calculateVelocity(agentData.tasks, 168),
-        monthly: this.calculateVelocity(agentData.tasks, 720),
+        monthly: this.calculateVelocity(agentData.tasks, 720)
       },
 
       // Time-based metrics
       avgCompletionTime: this.calculateAvgCompletionTime(agentData.tasks),
-      completionTimeDistribution: this.calculateCompletionDistribution(agentData.tasks),
+      completionTimeDistribution: this.calculateCompletionDistribution(
+        agentData.tasks
+      ),
 
       // Current workload
       currentWorkload: {
         assigned: agentData.assigned.length,
         inProgress: agentData.inProgress.length,
         inReview: agentData.inReview.length,
-        total: agentData.assigned.length + agentData.inProgress.length + agentData.inReview.length,
+        total:
+          agentData.assigned.length +
+          agentData.inProgress.length +
+          agentData.inReview.length
       },
 
       // Quality metrics
@@ -177,8 +188,8 @@ class AgentProductivityDashboard {
       performance: {
         velocityTrend: this.calculateVelocityTrend(agentData.tasks),
         efficiency: this.calculateEfficiency(agentData.tasks),
-        consistency: this.calculateConsistency(agentData.tasks),
-      },
+        consistency: this.calculateConsistency(agentData.tasks)
+      }
     };
 
     // Add performance classification
@@ -204,15 +215,20 @@ class AgentProductivityDashboard {
       totalVelocity: {
         daily: agents.reduce((sum, agent) => sum + agent.velocity.daily, 0),
         weekly: agents.reduce((sum, agent) => sum + agent.velocity.weekly, 0),
-        monthly: agents.reduce((sum, agent) => sum + agent.velocity.monthly, 0),
+        monthly: agents.reduce((sum, agent) => sum + agent.velocity.monthly, 0)
       },
 
       // Average performance
-      avgCompletionTime: agents.reduce((sum, agent) => sum + agent.avgCompletionTime, 0) / agents.length,
-      avgQualityScore: agents.reduce((sum, agent) => sum + agent.qualityScore, 0) / agents.length,
+      avgCompletionTime:
+        agents.reduce((sum, agent) => sum + agent.avgCompletionTime, 0) /
+        agents.length,
+      avgQualityScore:
+        agents.reduce((sum, agent) => sum + agent.qualityScore, 0) /
+        agents.length,
 
       // Team distribution
-      performanceDistribution: this.calculateTeamPerformanceDistribution(agents),
+      performanceDistribution:
+        this.calculateTeamPerformanceDistribution(agents),
       specializationCoverage: this.calculateSpecializationCoverage(agents),
 
       // Team health indicators
@@ -220,7 +236,7 @@ class AgentProductivityDashboard {
       collaborationIndex: this.calculateCollaborationIndex(agents),
 
       // Bottlenecks
-      bottlenecks: this.identifyTeamBottlenecks(agents),
+      bottlenecks: this.identifyTeamBottlenecks(agents)
     };
   }
 
@@ -233,7 +249,8 @@ class AgentProductivityDashboard {
 
     // Performance insights
     const topPerformer = agents.reduce(
-      (top, agent) => (agent.velocity.daily > (top?.velocity.daily || 0) ? agent : top),
+      (top, agent) =>
+        agent.velocity.daily > (top?.velocity.daily || 0) ? agent : top,
       null
     );
 
@@ -243,12 +260,14 @@ class AgentProductivityDashboard {
         level: 'positive',
         message: `${topPerformer.agentId} is the top performer with ${topPerformer.velocity.daily} tasks/day`,
         agent: topPerformer.agentId,
-        metric: 'velocity',
+        metric: 'velocity'
       });
     }
 
     // Bottleneck insights
-    const slowAgents = agents.filter(agent => agent.avgCompletionTime > this.config.thresholds.slowCompletion);
+    const slowAgents = agents.filter(
+      agent => agent.avgCompletionTime > this.config.thresholds.slowCompletion
+    );
 
     if (slowAgents.length > 0) {
       insights.push({
@@ -256,12 +275,14 @@ class AgentProductivityDashboard {
         level: 'warning',
         message: `${slowAgents.length} agents have slower than average completion times`,
         agents: slowAgents.map(a => a.agentId),
-        metric: 'completion_time',
+        metric: 'completion_time'
       });
     }
 
     // Workload insights
-    const overloadedAgents = agents.filter(agent => agent.currentWorkload.total > 5);
+    const overloadedAgents = agents.filter(
+      agent => agent.currentWorkload.total > 5
+    );
 
     if (overloadedAgents.length > 0) {
       insights.push({
@@ -269,7 +290,7 @@ class AgentProductivityDashboard {
         level: 'warning',
         message: `${overloadedAgents.length} agents may be overloaded with 5+ active tasks`,
         agents: overloadedAgents.map(a => a.agentId),
-        metric: 'workload',
+        metric: 'workload'
       });
     }
 
@@ -282,12 +303,14 @@ class AgentProductivityDashboard {
         level: 'warning',
         message: `${qualityIssues.length} agents have quality scores below 80%`,
         agents: qualityIssues.map(a => a.agentId),
-        metric: 'quality',
+        metric: 'quality'
       });
     }
 
     // Trend insights
-    const decliningAgents = agents.filter(agent => agent.performance.velocityTrend === 'declining');
+    const decliningAgents = agents.filter(
+      agent => agent.performance.velocityTrend === 'declining'
+    );
 
     if (decliningAgents.length > 0) {
       insights.push({
@@ -295,7 +318,7 @@ class AgentProductivityDashboard {
         level: 'attention',
         message: `${decliningAgents.length} agents show declining velocity trends`,
         agents: decliningAgents.map(a => a.agentId),
-        metric: 'velocity_trend',
+        metric: 'velocity_trend'
       });
     }
 
@@ -597,12 +620,16 @@ class AgentProductivityDashboard {
 
   calculateVelocity(tasks, hoursWindow) {
     const cutoff = new Date(Date.now() - hoursWindow * 60 * 60 * 1000);
-    const recentTasks = tasks.filter(task => task.completedAt && new Date(task.completedAt) >= cutoff);
+    const recentTasks = tasks.filter(
+      task => task.completedAt && new Date(task.completedAt) >= cutoff
+    );
     return recentTasks.length / (hoursWindow / 24); // Tasks per day
   }
 
   calculateAvgCompletionTime(tasks) {
-    const completedTasks = tasks.filter(task => task.completedAt && task.startedAt);
+    const completedTasks = tasks.filter(
+      task => task.completedAt && task.startedAt
+    );
 
     if (completedTasks.length === 0) return 0;
 
@@ -616,12 +643,16 @@ class AgentProductivityDashboard {
   }
 
   calculateCompletionDistribution(tasks) {
-    const completedTasks = tasks.filter(task => task.completedAt && task.startedAt);
+    const completedTasks = tasks.filter(
+      task => task.completedAt && task.startedAt
+    );
 
     const distribution = { fast: 0, medium: 0, slow: 0 };
 
     completedTasks.forEach(task => {
-      const hours = (new Date(task.completedAt) - new Date(task.startedAt)) / (1000 * 60 * 60);
+      const hours =
+        (new Date(task.completedAt) - new Date(task.startedAt)) /
+        (1000 * 60 * 60);
       if (hours <= 2) distribution.fast++;
       else if (hours <= 8) distribution.medium++;
       else distribution.slow++;
@@ -634,7 +665,10 @@ class AgentProductivityDashboard {
     const reviewedTasks = tasks.filter(task => task.qualityScore !== undefined);
     if (reviewedTasks.length === 0) return 0.9; // Default good score
 
-    return reviewedTasks.reduce((sum, task) => sum + task.qualityScore, 0) / reviewedTasks.length;
+    return (
+      reviewedTasks.reduce((sum, task) => sum + task.qualityScore, 0) /
+      reviewedTasks.length
+    );
   }
 
   calculateRevisionRate(tasks) {
@@ -660,7 +694,7 @@ class AgentProductivityDashboard {
 
     return {
       primary: specializations[0]?.epic || 'General',
-      distribution: specializations,
+      distribution: specializations
     };
   }
 
@@ -678,7 +712,7 @@ class AgentProductivityDashboard {
 
     return {
       peakHour,
-      hourlyDistribution: hourCounts,
+      hourlyDistribution: hourCounts
     };
   }
 
@@ -689,10 +723,15 @@ class AgentProductivityDashboard {
     const week2Start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
     const week1Tasks = tasks.filter(
-      task => task.completedAt && new Date(task.completedAt) >= week1Start && new Date(task.completedAt) < week2Start
+      task =>
+        task.completedAt &&
+        new Date(task.completedAt) >= week1Start &&
+        new Date(task.completedAt) < week2Start
     );
 
-    const week2Tasks = tasks.filter(task => task.completedAt && new Date(task.completedAt) >= week2Start);
+    const week2Tasks = tasks.filter(
+      task => task.completedAt && new Date(task.completedAt) >= week2Start
+    );
 
     if (week1Tasks.length === 0) return 'stable';
 
@@ -716,12 +755,20 @@ class AgentProductivityDashboard {
     // Consistency based on completion time variance
     const completionTimes = tasks
       .filter(task => task.completedAt && task.startedAt)
-      .map(task => (new Date(task.completedAt) - new Date(task.startedAt)) / (1000 * 60 * 60));
+      .map(
+        task =>
+          (new Date(task.completedAt) - new Date(task.startedAt)) /
+          (1000 * 60 * 60)
+      );
 
     if (completionTimes.length < 2) return 1;
 
-    const mean = completionTimes.reduce((sum, time) => sum + time, 0) / completionTimes.length;
-    const variance = completionTimes.reduce((sum, time) => sum + Math.pow(time - mean, 2), 0) / completionTimes.length;
+    const mean =
+      completionTimes.reduce((sum, time) => sum + time, 0) /
+      completionTimes.length;
+    const variance =
+      completionTimes.reduce((sum, time) => sum + Math.pow(time - mean, 2), 0) /
+      completionTimes.length;
     const stdDev = Math.sqrt(variance);
 
     // Convert to consistency score (lower variance = higher consistency)
@@ -745,7 +792,8 @@ class AgentProductivityDashboard {
           ? 1
           : 0;
 
-    const qualityScoreValue = qualityScore >= 0.9 ? 2 : qualityScore >= 0.7 ? 1 : 0;
+    const qualityScoreValue =
+      qualityScore >= 0.9 ? 2 : qualityScore >= 0.7 ? 1 : 0;
 
     const totalScore = velocityScore + timeScore + qualityScoreValue;
 
@@ -765,20 +813,25 @@ class AgentProductivityDashboard {
   calculateSpecializationCoverage(agents) {
     const allEpics = new Set();
     agents.forEach(agent => {
-      agent.specialization.distribution.forEach(spec => allEpics.add(spec.epic));
+      agent.specialization.distribution.forEach(spec =>
+        allEpics.add(spec.epic)
+      );
     });
     return Array.from(allEpics);
   }
 
   calculateWorkloadBalance(agents) {
     const workloads = agents.map(agent => agent.currentWorkload.total);
-    const mean = workloads.reduce((sum, load) => sum + load, 0) / workloads.length;
-    const variance = workloads.reduce((sum, load) => sum + Math.pow(load - mean, 2), 0) / workloads.length;
+    const mean =
+      workloads.reduce((sum, load) => sum + load, 0) / workloads.length;
+    const variance =
+      workloads.reduce((sum, load) => sum + Math.pow(load - mean, 2), 0) /
+      workloads.length;
 
     return {
       mean: mean,
       variance: variance,
-      balanced: variance < 2, // Low variance indicates good balance
+      balanced: variance < 2 // Low variance indicates good balance
     };
   }
 
@@ -797,7 +850,7 @@ class AgentProductivityDashboard {
       bottlenecks.push({
         type: 'workload',
         description: `${overloaded.length} agents overloaded`,
-        agents: overloaded.map(a => a.agentId),
+        agents: overloaded.map(a => a.agentId)
       });
     }
 
@@ -807,7 +860,7 @@ class AgentProductivityDashboard {
       bottlenecks.push({
         type: 'quality',
         description: `${qualityIssues.length} agents with quality concerns`,
-        agents: qualityIssues.map(a => a.agentId),
+        agents: qualityIssues.map(a => a.agentId)
       });
     }
 
@@ -838,7 +891,7 @@ class AgentProductivityDashboard {
           assigned: [],
           inProgress: [],
           inReview: [],
-          completed: [],
+          completed: []
         });
       }
 
@@ -893,7 +946,7 @@ class AgentProductivityDashboard {
       timestamp: new Date().toISOString(),
       agents: Object.fromEntries(this.agentMetrics),
       team: this.teamMetrics,
-      insights: this.insights,
+      insights: this.insights
     };
 
     await fs.writeFile(this.metricsFile, JSON.stringify(metricsData, null, 2));
@@ -903,9 +956,14 @@ class AgentProductivityDashboard {
 
     // Keep only last 30 days of history
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-    this.historicalData = this.historicalData.filter(data => new Date(data.timestamp) >= thirtyDaysAgo);
+    this.historicalData = this.historicalData.filter(
+      data => new Date(data.timestamp) >= thirtyDaysAgo
+    );
 
-    await fs.writeFile(this.trendsFile, JSON.stringify(this.historicalData, null, 2));
+    await fs.writeFile(
+      this.trendsFile,
+      JSON.stringify(this.historicalData, null, 2)
+    );
   }
 
   async ensureDataDirectory() {
@@ -924,7 +982,7 @@ class AgentProductivityDashboard {
       agents: Object.fromEntries(this.agentMetrics),
       team: this.teamMetrics,
       insights: this.insights,
-      exportedAt: new Date().toISOString(),
+      exportedAt: new Date().toISOString()
     };
 
     const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
@@ -958,7 +1016,7 @@ class AgentProductivityDashboard {
       'Quality Score',
       'Current Workload',
       'Performance Classification',
-      'Primary Specialization',
+      'Primary Specialization'
     ];
 
     const rows = agents.map(agent => [
@@ -968,7 +1026,7 @@ class AgentProductivityDashboard {
       (agent.qualityScore * 100).toFixed(1) + '%',
       agent.currentWorkload.total,
       agent.classification,
-      agent.specialization.primary,
+      agent.specialization.primary
     ]);
 
     return [headers, ...rows].map(row => row.join(',')).join('\n');
@@ -986,23 +1044,35 @@ class AgentProductivityDashboard {
 
     console.log('\n🎯 TEAM OVERVIEW:');
     console.log(`   Active Agents: ${this.teamMetrics.teamSize}`);
-    console.log(`   Total Daily Velocity: ${this.teamMetrics.totalVelocity?.daily?.toFixed(1) || 0} tasks/day`);
-    console.log(`   Average Completion Time: ${this.teamMetrics.avgCompletionTime?.toFixed(1) || 0} hours`);
-    console.log(`   Team Quality Score: ${((this.teamMetrics.avgQualityScore || 0) * 100).toFixed(1)}%`);
+    console.log(
+      `   Total Daily Velocity: ${this.teamMetrics.totalVelocity?.daily?.toFixed(1) || 0} tasks/day`
+    );
+    console.log(
+      `   Average Completion Time: ${this.teamMetrics.avgCompletionTime?.toFixed(1) || 0} hours`
+    );
+    console.log(
+      `   Team Quality Score: ${((this.teamMetrics.avgQualityScore || 0) * 100).toFixed(1)}%`
+    );
 
     if (agents.length > 0) {
       console.log('\n🏆 TOP PERFORMERS:');
-      const sortedAgents = agents.sort((a, b) => b.velocity.daily - a.velocity.daily);
+      const sortedAgents = agents.sort(
+        (a, b) => b.velocity.daily - a.velocity.daily
+      );
       sortedAgents.slice(0, 3).forEach((agent, index) => {
         const medal = ['🥇', '🥈', '🥉'][index];
-        console.log(`   ${medal} ${agent.agentId}: ${agent.velocity.daily.toFixed(1)} tasks/day`);
+        console.log(
+          `   ${medal} ${agent.agentId}: ${agent.velocity.daily.toFixed(1)} tasks/day`
+        );
       });
     }
 
     if (this.insights.length > 0) {
       console.log('\n💡 KEY INSIGHTS:');
       this.insights.slice(0, 3).forEach(insight => {
-        const icon = { positive: '✅', warning: '⚠️', attention: '📍' }[insight.level] || '•';
+        const icon =
+          { positive: '✅', warning: '⚠️', attention: '📍' }[insight.level] ||
+          '•';
         console.log(`   ${icon} ${insight.message}`);
       });
     }

@@ -9,6 +9,7 @@
 ## North Star Metric
 
 **Time to First Successful Preset (TTFSP)**
+
 - **Definition:** Time from opening wizard to successfully generating nodes that user keeps
 - **Current Baseline:** 10-15 minutes (manual)
 - **MVP Target:** <2 minutes
@@ -21,30 +22,30 @@
 
 ### 🎯 Level 1: Core Success (Must Hit for "Success")
 
-| Metric | Definition | Target | How to Measure | Review Frequency |
-|--------|------------|--------|----------------|-------------------|
-| **Adoption Rate** | % of Randomizer users who try wizard | >25% in first 2 weeks | Feature flag analytics | Daily |
-| **TTFSP** | Time to first successful preset | <2 min (p50) | Session timing | Daily |
-| **Parse Acceptance** | % of segments kept unchanged | >50% | Event tracking | Daily |
-| **Completion Rate** | % who finish after starting | >60% | Funnel analysis | Daily |
+| Metric               | Definition                           | Target                | How to Measure         | Review Frequency |
+| -------------------- | ------------------------------------ | --------------------- | ---------------------- | ---------------- |
+| **Adoption Rate**    | % of Randomizer users who try wizard | >25% in first 2 weeks | Feature flag analytics | Daily            |
+| **TTFSP**            | Time to first successful preset      | <2 min (p50)          | Session timing         | Daily            |
+| **Parse Acceptance** | % of segments kept unchanged         | >50%                  | Event tracking         | Daily            |
+| **Completion Rate**  | % who finish after starting          | >60%                  | Funnel analysis        | Daily            |
 
 ### 📊 Level 2: Quality Indicators (Should Hit)
 
-| Metric | Definition | Target | How to Measure | Review Frequency |
-|--------|------------|--------|----------------|-------------------|
-| **Return Usage** | % who use wizard 2+ times | >30% in week 1 | Cohort analysis | Weekly |
-| **Segments Per Prompt** | Avg segments detected | 4-8 | Parse analytics | Daily |
-| **Error Rate** | % of sessions with errors | <10% | Error logging | Daily |
-| **Time per Segment** | Avg time to review/edit segment | <10 sec | Interaction timing | Weekly |
+| Metric                  | Definition                      | Target         | How to Measure     | Review Frequency |
+| ----------------------- | ------------------------------- | -------------- | ------------------ | ---------------- |
+| **Return Usage**        | % who use wizard 2+ times       | >30% in week 1 | Cohort analysis    | Weekly           |
+| **Segments Per Prompt** | Avg segments detected           | 4-8            | Parse analytics    | Daily            |
+| **Error Rate**          | % of sessions with errors       | <10%           | Error logging      | Daily            |
+| **Time per Segment**    | Avg time to review/edit segment | <10 sec        | Interaction timing | Weekly           |
 
 ### 💫 Level 3: Delight Metrics (Nice to Have)
 
-| Metric | Definition | Target | How to Measure | Review Frequency |
-|--------|------------|--------|----------------|-------------------|
-| **User Satisfaction** | Survey score | >4.0/5.0 | In-app survey | Weekly |
-| **Recommendation** | Would recommend to others | >70% yes | NPS survey | Bi-weekly |
-| **Feature Requests** | Specific to wizard | <5/day | Support tickets | Weekly |
-| **Shareability** | Users who share presets | >10% | Share button clicks | Monthly |
+| Metric                | Definition                | Target   | How to Measure      | Review Frequency |
+| --------------------- | ------------------------- | -------- | ------------------- | ---------------- |
+| **User Satisfaction** | Survey score              | >4.0/5.0 | In-app survey       | Weekly           |
+| **Recommendation**    | Would recommend to others | >70% yes | NPS survey          | Bi-weekly        |
+| **Feature Requests**  | Specific to wizard        | <5/day   | Support tickets     | Weekly           |
+| **Shareability**      | Users who share presets   | >10%     | Share button clicks | Monthly          |
 
 ---
 
@@ -132,6 +133,7 @@ Funnel: Wizard Success Path
 ```
 
 **Drop-off Analysis:**
+
 - Identify biggest drop-off point
 - A/B test improvements at that stage
 - Target: <20% drop at each stage
@@ -176,25 +178,30 @@ Funnel: Wizard Success Path
 # Wizard MVP - Week 1 Report
 
 ## Executive Summary
+
 ✅ On track for success - 31% adoption exceeds 25% target
 
 ## Key Metrics
+
 - **Adoption:** 31% (TARGET: 25%) ✅
 - **TTFSP:** 1:47 (TARGET: <2:00) ✅
 - **Parse Accept:** 54% (TARGET: 50%) ✅
 - **Return Rate:** 28% (TARGET: 30%) ⚠️
 
 ## Top User Feedback
+
 1. Want asset integration (45% of feedback)
 2. Need better style detection (30%)
 3. Request keyboard shortcuts (20%)
 
 ## Recommendations
+
 - Continue rollout to 25% of users
 - Prioritize asset mock from backlog
 - Fix style parsing accuracy
 
 ## Next Week Focus
+
 - Improve return usage rate
 - Deploy parsing improvements
 - Begin user interviews
@@ -205,6 +212,7 @@ Funnel: Wizard Success Path
 ## A/B Testing Plan
 
 ### Test 1: Auto-Parse vs Manual Trigger
+
 - **Hypothesis:** Auto-parsing on paste increases completion
 - **Control:** "Analyze" button required
 - **Treatment:** Auto-parse immediately
@@ -213,6 +221,7 @@ Funnel: Wizard Success Path
 - **Sample Size:** 500 users minimum
 
 ### Test 2: Confidence Scores
+
 - **Hypothesis:** Showing confidence helps trust
 - **Control:** No confidence shown
 - **Treatment:** Show low/medium/high per segment
@@ -220,6 +229,7 @@ Funnel: Wizard Success Path
 - **Duration:** 1 week
 
 ### Test 3: Onboarding
+
 - **Hypothesis:** Tutorial increases success
 - **Control:** No tutorial
 - **Treatment:** 3-step interactive guide
@@ -231,18 +241,21 @@ Funnel: Wizard Success Path
 ## Alert Thresholds
 
 ### 🔴 Critical (Page immediately)
+
 - Error rate >25%
 - Parse time >2000ms (p50)
 - Adoption <5% after 3 days
 - Completion <30%
 
 ### 🟡 Warning (Check within hour)
+
 - Error rate 15-25%
 - Parse time 1000-2000ms
 - Adoption 5-15%
 - Completion 30-50%
 
 ### 🟢 Healthy
+
 - Error rate <15%
 - Parse time <1000ms
 - Adoption >15%
@@ -263,17 +276,20 @@ Funnel: Wizard Success Path
 ## Success Criteria Review Cadence
 
 ### Daily Standup (During MVP)
+
 - Review dashboard
 - Identify any alerts
 - Quick wins to implement
 
 ### Weekly Business Review
+
 - Full metrics review
 - User feedback themes
 - Go/no-go for next week
 - Backlog prioritization
 
 ### Sprint Retrospective
+
 - What metrics tell us
 - What we learned
 - What to change
@@ -284,12 +300,14 @@ Funnel: Wizard Success Path
 ## ROI Calculation
 
 ### Cost Side
+
 - Development: 3 developers × 3 sprints = ~$45,000
 - Design: 1 designer × 1 sprint = ~$5,000
 - PM/Research: 0.5 PM × 3 sprints = ~$7,500
 - **Total Investment: ~$57,500**
 
 ### Value Side (Annual)
+
 - Time Saved: 500 users × 8 min/session × 20 sessions/month × 12 months = 16,000 hours
 - Hour Value: $50/hour average
 - **Annual Value: $800,000**
@@ -301,6 +319,7 @@ Funnel: Wizard Success Path
 ## Kill Criteria (When to Stop)
 
 **Kill the MVP if after 2 weeks:**
+
 - Adoption <10% (target 25%)
 - TTFSP >5 minutes (target 2)
 - Completion <40% (target 60%)
@@ -308,6 +327,7 @@ Funnel: Wizard Success Path
 - Support tickets >50/week about wizard
 
 **Decision Framework:**
+
 1. If 3+ kill criteria met → Stop immediately
 2. If 2 met → One week to fix
 3. If 1 met → Iterate and retest
@@ -319,18 +339,21 @@ Funnel: Wizard Success Path
 If MVP succeeds, expand metrics to track:
 
 ### Advanced Usage
+
 - Assets bound per session
 - Keyboard shortcut usage
 - Advanced parsing accuracy
 - Template sharing rate
 
 ### Business Impact
+
 - Revenue per wizard user
 - Conversion to paid plans
 - Support cost reduction
 - User retention improvement
 
 ### Ecosystem
+
 - API usage
 - Third-party integrations
 - Community templates created
@@ -340,12 +363,12 @@ If MVP succeeds, expand metrics to track:
 
 ## Metric Ownership
 
-| Metric Category | Owner | Backup |
-|----------------|-------|---------|
-| Technical Performance | Engineering Lead | Senior Dev |
-| User Behavior | Product Analyst | PM |
-| Business Impact | PM | Head of Product |
-| Quality/Satisfaction | UX Researcher | PM |
+| Metric Category       | Owner            | Backup          |
+| --------------------- | ---------------- | --------------- |
+| Technical Performance | Engineering Lead | Senior Dev      |
+| User Behavior         | Product Analyst  | PM              |
+| Business Impact       | PM               | Head of Product |
+| Quality/Satisfaction  | UX Researcher    | PM              |
 
 ---
 

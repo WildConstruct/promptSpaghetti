@@ -8,9 +8,11 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
 
   test('gracefully handles null supabase client', async () => {
     jest.doMock('@promptscape/core/utils/supabaseClient', () => ({
-      supabase: null,
+      supabase: null
     }));
-    const { listUserGraphs, getUserGraph, putUserGraph } = await import('@promptscape/core/utils/psgStorage');
+    const { listUserGraphs, getUserGraph, putUserGraph } = await import(
+      '@promptscape/core/utils/psgStorage'
+    );
 
     const list = await listUserGraphs('u');
     expect(list.ok).toBe(false);
@@ -26,17 +28,22 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
   test('listUserGraphs uses prefix and filters .psg', async () => {
     const listMock = jest.fn().mockResolvedValue({
       data: [{ name: 'a.psg' }, { name: 'b.txt' }],
-      error: null,
+      error: null
     });
     const fromMock = jest.fn(() => ({ list: listMock }));
     jest.doMock('@promptscape/core/utils/supabaseClient', () => ({
-      supabase: { storage: { from: fromMock } },
+      supabase: { storage: { from: fromMock } }
     }));
-    const { listUserGraphs } = await import('@promptscape/core/utils/psgStorage');
+    const { listUserGraphs } = await import(
+      '@promptscape/core/utils/psgStorage'
+    );
     const res = await listUserGraphs('me');
 
     expect(fromMock).toHaveBeenCalledWith('graphs');
-    expect(listMock).toHaveBeenCalledWith('users/me/graphs/', expect.objectContaining({ limit: 100 }));
+    expect(listMock).toHaveBeenCalledWith(
+      'users/me/graphs/',
+      expect.objectContaining({ limit: 100 })
+    );
 
     expect(res.ok).toBe(true);
     if (res.ok) expect(res.data).toEqual([{ name: 'a.psg' }]);
@@ -44,10 +51,12 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
 
   test('getUserGraph downloads and returns text', async () => {
     const payload = JSON.stringify({ ok: true });
-    const downloadMock = jest.fn().mockResolvedValue({ data: { text: async () => payload }, error: null });
+    const downloadMock = jest
+      .fn()
+      .mockResolvedValue({ data: { text: async () => payload }, error: null });
     const fromMock = jest.fn(() => ({ download: downloadMock }));
     jest.doMock('@promptscape/core/utils/supabaseClient', () => ({
-      supabase: { storage: { from: fromMock } },
+      supabase: { storage: { from: fromMock } }
     }));
     const { getUserGraph } = await import('@promptscape/core/utils/psgStorage');
 
@@ -62,7 +71,7 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
     const uploadMock = jest.fn().mockResolvedValue({ data: null, error: null });
     const fromMock = jest.fn(() => ({ upload: uploadMock }));
     jest.doMock('@promptscape/core/utils/supabaseClient', () => ({
-      supabase: { storage: { from: fromMock } },
+      supabase: { storage: { from: fromMock } }
     }));
     const { putUserGraph } = await import('@promptscape/core/utils/psgStorage');
 
@@ -74,9 +83,11 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
     expect(args[0]).toBe('users/me/graphs/n.psg');
     const sentBlob: Blob = args[1];
     const opts = args[2];
-    expect(opts).toEqual(expect.objectContaining({ upsert: true, contentType: 'application/json' }));
+    expect(opts).toEqual(
+      expect.objectContaining({ upsert: true, contentType: 'application/json' })
+    );
 
-    const text = await new Promise<string>((resolve) => {
+    const text = await new Promise<string>(resolve => {
       const fr = new FileReader();
       fr.onload = () => resolve(String(fr.result || ''));
       fr.readAsText(sentBlob);

@@ -1,11 +1,13 @@
 # Plugin Manifest Specification
 
 ## Overview
+
 The Plugin Manifest defines the structure and requirements for PromptSpaghetti plugins, enabling third-party developers to create custom nodes, themes, and extensions without modifying core code.
 
 ## Manifest Structure
 
 ### plugin.manifest.json
+
 ```json
 {
   "manifestVersion": "1.0.0",
@@ -29,32 +31,29 @@ The Plugin Manifest defines the structure and requirements for PromptSpaghetti p
       "url": "https://github.com/example/custom-nodes/issues"
     }
   },
-  
+
   "compatibility": {
     "minVersion": "1.0.0",
     "maxVersion": "2.*",
     "platforms": ["browser", "electron", "vscode"],
     "nodeEngineVersion": ">=16.0.0"
   },
-  
+
   "assets": {
     "icon": "assets/icon.png",
     "banner": "assets/banner.jpg",
-    "screenshots": [
-      "assets/screenshot1.png",
-      "assets/screenshot2.png"
-    ],
+    "screenshots": ["assets/screenshot1.png", "assets/screenshot2.png"],
     "readme": "README.md",
     "changelog": "CHANGELOG.md"
   },
-  
+
   "entryPoints": {
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "styles": "dist/styles.css",
     "worker": "dist/worker.js"
   },
-  
+
   "nodeTypes": [
     {
       "id": "customNode1",
@@ -70,7 +69,7 @@ The Plugin Manifest defines the structure and requirements for PromptSpaghetti p
       "documentation": "docs/customNode1.md"
     }
   ],
-  
+
   "themes": [
     {
       "id": "dark-purple",
@@ -80,7 +79,7 @@ The Plugin Manifest defines the structure and requirements for PromptSpaghetti p
       "preview": "themes/dark-purple-preview.png"
     }
   ],
-  
+
   "extensions": [
     {
       "id": "export-handler",
@@ -91,20 +90,12 @@ The Plugin Manifest defines the structure and requirements for PromptSpaghetti p
       "mimeType": "application/x-custom"
     }
   ],
-  
+
   "permissions": {
-    "required": [
-      "node:create",
-      "node:execute",
-      "storage:read"
-    ],
-    "optional": [
-      "network:fetch",
-      "storage:write",
-      "clipboard:write"
-    ]
+    "required": ["node:create", "node:execute", "storage:read"],
+    "optional": ["network:fetch", "storage:write", "clipboard:write"]
   },
-  
+
   "dependencies": {
     "runtime": {
       "react": "^18.0.0",
@@ -117,19 +108,19 @@ The Plugin Manifest defines the structure and requirements for PromptSpaghetti p
       "lodash": "^4.17.0"
     }
   },
-  
+
   "configuration": {
     "schema": "config/schema.json",
     "defaults": "config/defaults.json",
     "ui": "config/ui.json"
   },
-  
+
   "localization": {
     "defaultLocale": "en",
     "locales": ["en", "es", "fr", "de", "ja"],
     "translations": "i18n/"
   },
-  
+
   "marketplace": {
     "price": 0,
     "currency": "USD",
@@ -141,13 +132,13 @@ The Plugin Manifest defines the structure and requirements for PromptSpaghetti p
     "rating": 4.5,
     "reviews": 23
   },
-  
+
   "telemetry": {
     "enabled": false,
     "endpoint": "https://telemetry.example.com",
     "events": ["install", "activate", "error"]
   },
-  
+
   "security": {
     "contentSecurityPolicy": "default-src 'self'",
     "sandboxed": true,
@@ -164,6 +155,7 @@ The Plugin Manifest defines the structure and requirements for PromptSpaghetti p
 ## Node Type Definition
 
 ### Node Schema (schemas/customNode.json)
+
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
@@ -217,27 +209,28 @@ The Plugin Manifest defines the structure and requirements for PromptSpaghetti p
 ## Plugin API Interface
 
 ### TypeScript Definition
+
 ```typescript
 // Plugin Interface
 export interface IPlugin {
   manifest: PluginManifest;
-  
+
   // Lifecycle hooks
   onInstall?: () => Promise<void>;
   onActivate?: (context: PluginContext) => Promise<void>;
   onDeactivate?: () => Promise<void>;
   onUninstall?: () => Promise<void>;
   onUpdate?: (previousVersion: string) => Promise<void>;
-  
+
   // Node registration
   registerNodes?: () => NodeTypeDefinition[];
-  
+
   // Theme registration
   registerThemes?: () => ThemeDefinition[];
-  
+
   // Extension registration
   registerExtensions?: () => ExtensionDefinition[];
-  
+
   // Configuration
   getConfiguration?: () => PluginConfiguration;
   onConfigurationChange?: (config: PluginConfiguration) => void;
@@ -250,16 +243,16 @@ export interface PluginContext {
   eventBus: IEventBus;
   storage: IStorage;
   ui: IUIRegistry;
-  
+
   // Plugin info
   pluginId: string;
   pluginPath: string;
   dataPath: string;
-  
+
   // Utilities
   logger: ILogger;
   http: IHttpClient;
-  
+
   // Permissions
   permissions: Permission[];
 }
@@ -268,13 +261,13 @@ export interface PluginContext {
 export interface NodeTypeDefinition {
   id: string;
   version: string;
-  
+
   // Factory
   createNode: (id: string, data: any) => INode;
-  
+
   // UI Component
   component: React.ComponentType<NodeProps>;
-  
+
   // Runtime
   runtime: {
     execute: (context: ExecutionContext) => Promise<any>;
@@ -282,7 +275,7 @@ export interface NodeTypeDefinition {
     serialize: (node: INode) => any;
     deserialize: (data: any) => INode;
   };
-  
+
   // Metadata
   metadata: {
     displayName: string;
@@ -292,11 +285,11 @@ export interface NodeTypeDefinition {
     tags?: string[];
     deprecated?: boolean;
   };
-  
+
   // Configuration
   configSchema?: JSONSchema;
   defaultConfig?: any;
-  
+
   // Ports
   inputs?: PortDefinition[];
   outputs?: PortDefinition[];
@@ -306,40 +299,41 @@ export interface NodeTypeDefinition {
 ## Plugin Loader
 
 ### Loading Process
+
 ```typescript
 class PluginLoader {
   private plugins: Map<string, IPlugin> = new Map();
   private manifests: Map<string, PluginManifest> = new Map();
-  
+
   async loadPlugin(manifestPath: string): Promise<void> {
     // 1. Load and validate manifest
     const manifest = await this.loadManifest(manifestPath);
     this.validateManifest(manifest);
-    
+
     // 2. Check compatibility
     if (!this.checkCompatibility(manifest)) {
       throw new Error(`Plugin ${manifest.plugin.id} is not compatible`);
     }
-    
+
     // 3. Check permissions
     await this.requestPermissions(manifest.permissions);
-    
+
     // 4. Load plugin code
     const pluginModule = await this.loadModule(manifest.entryPoints.main);
-    
+
     // 5. Create sandbox
     const sandbox = this.createSandbox(manifest);
-    
+
     // 6. Initialize plugin
     const plugin = await this.initializePlugin(pluginModule, sandbox);
-    
+
     // 7. Register plugin
     await this.registerPlugin(manifest.plugin.id, plugin, manifest);
-    
+
     // 8. Activate plugin
     await plugin.onActivate?.(this.createContext(manifest));
   }
-  
+
   private createSandbox(manifest: PluginManifest): Sandbox {
     return new Sandbox({
       permissions: manifest.permissions,
@@ -347,11 +341,11 @@ class PluginLoader {
       isolation: manifest.security.isolation
     });
   }
-  
+
   private async validateManifest(manifest: any): Promise<void> {
     const schema = await loadSchema('plugin-manifest.schema.json');
     const valid = validateAgainstSchema(manifest, schema);
-    
+
     if (!valid) {
       throw new Error('Invalid plugin manifest');
     }
@@ -362,6 +356,7 @@ class PluginLoader {
 ## Permission System
 
 ### Permission Types
+
 ```typescript
 enum PermissionType {
   // Node permissions
@@ -370,27 +365,27 @@ enum PermissionType {
   NODE_UPDATE = 'node:update',
   NODE_DELETE = 'node:delete',
   NODE_EXECUTE = 'node:execute',
-  
+
   // Storage permissions
   STORAGE_READ = 'storage:read',
   STORAGE_WRITE = 'storage:write',
   STORAGE_DELETE = 'storage:delete',
-  
+
   // Network permissions
   NETWORK_FETCH = 'network:fetch',
   NETWORK_WEBSOCKET = 'network:websocket',
-  
+
   // UI permissions
   UI_MODAL = 'ui:modal',
   UI_NOTIFICATION = 'ui:notification',
   UI_MENU = 'ui:menu',
   UI_TOOLBAR = 'ui:toolbar',
-  
+
   // System permissions
   SYSTEM_CLIPBOARD = 'system:clipboard',
   SYSTEM_FILE = 'system:file',
   SYSTEM_SHELL = 'system:shell',
-  
+
   // Advanced permissions
   ADVANCED_CRYPTO = 'advanced:crypto',
   ADVANCED_WASM = 'advanced:wasm',
@@ -407,22 +402,23 @@ interface Permission {
 ## Security Sandboxing
 
 ### Sandbox Implementation
+
 ```typescript
 class PluginSandbox {
   private iframe: HTMLIFrameElement;
   private worker: Worker;
   private permissions: Set<PermissionType>;
-  
+
   constructor(config: SandboxConfig) {
     this.permissions = new Set(config.permissions.required);
-    
+
     if (config.isolation === 'iframe') {
       this.iframe = this.createIframeSandbox(config);
     } else if (config.isolation === 'worker') {
       this.worker = this.createWorkerSandbox(config);
     }
   }
-  
+
   private createIframeSandbox(config: SandboxConfig): HTMLIFrameElement {
     const iframe = document.createElement('iframe');
     iframe.sandbox.add('allow-scripts');
@@ -444,15 +440,15 @@ class PluginSandbox {
     `;
     return iframe;
   }
-  
+
   async execute(code: string, context: any): Promise<any> {
     // Check permissions
     this.validatePermissions(context.requiredPermissions);
-    
+
     // Execute in sandbox
     return this.sandboxedEval(code, context);
   }
-  
+
   private sandboxedEval(code: string, context: any): any {
     // Create restricted global scope
     const restrictedGlobal = {
@@ -461,10 +457,10 @@ class PluginSandbox {
       setTimeout: undefined,
       setInterval: undefined,
       eval: undefined,
-      Function: undefined,
+      Function: undefined
       // ... other restrictions
     };
-    
+
     // Execute with restricted scope
     return new Function('context', 'global', code)(context, restrictedGlobal);
   }
@@ -474,6 +470,7 @@ class PluginSandbox {
 ## Plugin Distribution
 
 ### Package Structure
+
 ```
 custom-nodes-plugin/
 ├── plugin.manifest.json
@@ -506,6 +503,7 @@ custom-nodes-plugin/
 ```
 
 ### Publishing Process
+
 ```bash
 # Validate plugin
 npm run validate
@@ -520,6 +518,7 @@ npm run package
 ```
 
 ### Installation Methods
+
 ```bash
 # From marketplace
 promptspaghetti install com.example.custom-nodes
@@ -537,6 +536,7 @@ npm install @example/promptspaghetti-custom-nodes
 ## Marketplace Integration
 
 ### Submission Requirements
+
 1. Valid manifest with all required fields
 2. Security audit report (for verified badge)
 3. Comprehensive documentation
@@ -546,27 +546,28 @@ npm install @example/promptspaghetti-custom-nodes
 7. Appropriate licensing
 
 ### Marketplace API
+
 ```typescript
 interface MarketplaceAPI {
   // Discovery
   search(query: string, filters?: MarketplaceFilters): Promise<Plugin[]>;
   getFeatured(): Promise<Plugin[]>;
   getCategories(): Promise<Category[]>;
-  
+
   // Plugin details
   getPlugin(id: string): Promise<PluginDetails>;
   getReviews(pluginId: string): Promise<Review[]>;
   getVersions(pluginId: string): Promise<Version[]>;
-  
+
   // Installation
   install(pluginId: string, version?: string): Promise<void>;
   uninstall(pluginId: string): Promise<void>;
   update(pluginId: string, version: string): Promise<void>;
-  
+
   // Publishing
   publish(plugin: PluginPackage): Promise<void>;
   unpublish(pluginId: string): Promise<void>;
-  
+
   // Reviews
   submitReview(pluginId: string, review: Review): Promise<void>;
 }
@@ -575,6 +576,7 @@ interface MarketplaceAPI {
 ## Version Management
 
 ### Semantic Versioning
+
 ```json
 {
   "version": "MAJOR.MINOR.PATCH",
@@ -586,6 +588,7 @@ interface MarketplaceAPI {
 ```
 
 ### Migration Script
+
 ```typescript
 export async function migrate(
   fromVersion: string,
@@ -601,7 +604,7 @@ export async function migrate(
       oldField: undefined
     };
   }
-  
+
   return data;
 }
 ```
@@ -609,6 +612,7 @@ export async function migrate(
 ## Testing Requirements
 
 ### Plugin Validation Tests
+
 ```typescript
 describe('Plugin Validation', () => {
   it('should have valid manifest');

@@ -35,7 +35,11 @@ function PasswordForm() {
         placeholder="Enter your password"
       />
 
-      <PasswordStrengthIndicator password={password} showDetails={true} showSuggestions={true} />
+      <PasswordStrengthIndicator
+        password={password}
+        showDetails={true}
+        showSuggestions={true}
+      />
     </div>
   );
 }
@@ -44,14 +48,20 @@ function PasswordForm() {
 ### Advanced Implementation with Context
 
 ```tsx
-import { PasswordStrengthIndicator, PasswordComplexityValidator } from '@promptscape/core/auth';
+import {
+  PasswordStrengthIndicator,
+  PasswordComplexityValidator
+} from '@promptscape/core/auth';
 
 function AdvancedPasswordForm() {
   const [password, setPassword] = useState('');
   const [validationResult, setValidationResult] = useState(null);
 
   // Custom validator with strict rules
-  const validator = useMemo(() => new PasswordComplexityValidator({ mode: 'strict' }), []);
+  const validator = useMemo(
+    () => new PasswordComplexityValidator({ mode: 'strict' }),
+    []
+  );
 
   // User context for personal information checking
   const userContext = {
@@ -59,7 +69,7 @@ function AdvancedPasswordForm() {
     email: 'john.doe@example.com',
     firstName: 'John',
     lastName: 'Doe',
-    organizationName: 'Acme Corp',
+    organizationName: 'Acme Corp'
   };
 
   const handleValidationChange = result => {
@@ -71,7 +81,10 @@ function AdvancedPasswordForm() {
   return (
     <div className="space-y-4">
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700"
+        >
           Password
         </label>
         <input
@@ -98,7 +111,8 @@ function AdvancedPasswordForm() {
 
       {validationResult && (
         <div className="text-sm text-gray-600">
-          Password meets {validationResult.passedRules} of {validationResult.totalRules} requirements
+          Password meets {validationResult.passedRules} of{' '}
+          {validationResult.totalRules} requirements
         </div>
       )}
     </div>
@@ -195,8 +209,8 @@ const strictValidator = new PasswordComplexityValidator({
     PasswordRules.requireSpecialChars(2),
     PasswordRules.noPersonalInfo(),
     PasswordRules.notInHistory(10),
-    PasswordRules.minimumEntropy(60),
-  ],
+    PasswordRules.minimumEntropy(60)
+  ]
 });
 
 // Lenient consumer policy
@@ -207,8 +221,8 @@ const lenientValidator = new PasswordComplexityValidator({
     PasswordRules.minLength(6),
     PasswordRules.requireUppercase(1),
     PasswordRules.requireLowercase(1),
-    PasswordRules.requireDigits(1),
-  ],
+    PasswordRules.requireDigits(1)
+  ]
 });
 ```
 
@@ -253,7 +267,15 @@ import { usePasswordStrength } from '@promptscape/core/components/PasswordStreng
 function CustomPasswordField() {
   const [password, setPassword] = useState('');
 
-  const { result, isValidating, isValid, score, strength, suggestions, errors } = usePasswordStrength(password);
+  const {
+    result,
+    isValidating,
+    isValid,
+    score,
+    strength,
+    suggestions,
+    errors
+  } = usePasswordStrength(password);
 
   return (
     <div>
@@ -384,13 +406,21 @@ The component uses React.memo and useMemo for optimal performance:
 
 ```tsx
 // Validator is memoized
-const validator = useMemo(() => new PasswordComplexityValidator(config), [config]);
+const validator = useMemo(
+  () => new PasswordComplexityValidator(config),
+  [config]
+);
 
 // Theme detection is memoized
 const theme = useMemo(() => detectTheme(), []);
 
 // Results are cached until password changes
-const { result } = useDebounedValidation(password, validator, context, debounceMs);
+const { result } = useDebounedValidation(
+  password,
+  validator,
+  context,
+  debounceMs
+);
 ```
 
 ### Lazy Loading
@@ -400,7 +430,9 @@ For large applications, you can lazy load the component:
 ```tsx
 import { lazy, Suspense } from 'react';
 
-const PasswordStrengthIndicator = lazy(() => import('@promptscape/core/components/PasswordStrengthIndicator'));
+const PasswordStrengthIndicator = lazy(
+  () => import('@promptscape/core/components/PasswordStrengthIndicator')
+);
 
 function LazyPasswordForm() {
   return (
@@ -432,14 +464,20 @@ function RegistrationForm() {
           validate: async value => {
             const validator = new PasswordComplexityValidator();
             const result = await validator.validatePassword(value);
-            return result.valid || 'Password does not meet security requirements';
-          },
+            return (
+              result.valid || 'Password does not meet security requirements'
+            );
+          }
         }}
         render={({ field, fieldState: { error } }) => (
           <div>
             <input {...field} type="password" placeholder="Enter password" />
 
-            <PasswordStrengthIndicator password={field.value || ''} showDetails={true} showSuggestions={true} />
+            <PasswordStrengthIndicator
+              password={field.value || ''}
+              showDetails={true}
+              showSuggestions={true}
+            />
 
             {error && <span className="text-red-600">{error.message}</span>}
           </div>
@@ -469,7 +507,11 @@ function FormikPasswordForm() {
         <Form>
           <Field name="password" type="password" validate={validatePassword} />
 
-          <PasswordStrengthIndicator password={values.password} showDetails={true} showSuggestions={true} />
+          <PasswordStrengthIndicator
+            password={values.password}
+            showDetails={true}
+            showSuggestions={true}
+          />
         </Form>
       )}
     </Formik>
@@ -488,7 +530,7 @@ app.post('/api/validate-password', async (req, res) => {
 
   const validator = new PasswordComplexityValidator({
     mode: 'strict',
-    minimumScore: 80,
+    minimumScore: 80
   });
 
   try {
@@ -499,7 +541,7 @@ app.post('/api/validate-password', async (req, res) => {
       score: result.score,
       strength: result.strength,
       suggestions: result.suggestions,
-      errors: result.errors,
+      errors: result.errors
     });
   } catch (error) {
     res.status(500).json({ error: 'Validation failed' });
@@ -517,7 +559,7 @@ function RemoteValidationIndicator({ password }) {
       const response = await fetch('/api/validate-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password })
       });
 
       const result = await response.json();
@@ -552,7 +594,12 @@ import { PasswordStrengthIndicator } from '@promptscape/core/components/Password
 import { PasswordComplexityValidator } from '@promptscape/core/auth';
 
 test('shows strength indicator for valid password', async () => {
-  render(<PasswordStrengthIndicator password="StrongPassword123!" showDetails={true} />);
+  render(
+    <PasswordStrengthIndicator
+      password="StrongPassword123!"
+      showDetails={true}
+    />
+  );
 
   await waitFor(() => {
     expect(screen.getByText('Password Strength')).toBeInTheDocument();
@@ -575,10 +622,15 @@ test('shows suggestions for weak password', async () => {
 test('integrates with custom validator', async () => {
   const customValidator = new PasswordComplexityValidator({
     mode: 'strict',
-    minimumScore: 90,
+    minimumScore: 90
   });
 
-  render(<PasswordStrengthIndicator password="TestPassword123!" validator={customValidator} />);
+  render(
+    <PasswordStrengthIndicator
+      password="TestPassword123!"
+      validator={customValidator}
+    />
+  );
 
   await waitFor(() => {
     expect(screen.getByText('Password Strength')).toBeInTheDocument();
@@ -661,7 +713,7 @@ const validator = useMemo(() => new PasswordComplexityValidator(), []);
 <div
   style={{
     '--strength-good': '#22c55e',
-    '--strength-strong': '#16a34a',
+    '--strength-strong': '#16a34a'
   }}
 >
   <PasswordStrengthIndicator password={password} />
@@ -677,7 +729,7 @@ const context = {
   username: user.username?.toLowerCase(),
   email: user.email?.toLowerCase(),
   firstName: user.firstName?.toLowerCase(),
-  lastName: user.lastName?.toLowerCase(),
+  lastName: user.lastName?.toLowerCase()
 };
 
 <PasswordStrengthIndicator password={password} context={context} />;

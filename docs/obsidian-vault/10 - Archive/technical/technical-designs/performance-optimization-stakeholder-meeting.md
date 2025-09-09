@@ -13,6 +13,7 @@ Hi Sarah and team,
 During architectural review, QA identified critical performance concerns with Stories 1.27 (Node Grouping) and 1.28 (Edge Routing) that could severely impact user experience with real-world graphs.
 
 **Quick Summary:**
+
 - Both stories will cause performance degradation at scale (100+ nodes/edges)
 - Solution: 1-week performance infrastructure implementation first
 - ROI: 70% performance improvement, prevents customer-facing issues
@@ -27,6 +28,7 @@ Winston
 ## Slide Deck Content
 
 ### Slide 1: Performance Risk Assessment
+
 **Stories 1.27 & 1.28 - Architectural Review Findings**
 
 - ⚠️ **QA Status:** Approved with Critical Concerns
@@ -40,12 +42,13 @@ Winston
 
 **Without Performance Optimization:**
 
-| Story | Issue | User Impact |
-|-------|-------|------------|
-| 1.27 Grouping | O(n²) state complexity | 5+ second delays |
-| 1.28 Routing | No path caching | UI freezes during edits |
+| Story         | Issue                  | User Impact             |
+| ------------- | ---------------------- | ----------------------- |
+| 1.27 Grouping | O(n²) state complexity | 5+ second delays        |
+| 1.28 Routing  | No path caching        | UI freezes during edits |
 
 **Customer Scenario:**
+
 - Average customer graph: 200-500 nodes
 - Current approach: Unusable at this scale
 - Result: Feature rollback or emergency fixes
@@ -59,13 +62,14 @@ Winston
 ```
 Week 1: Performance Foundation
 ├── LRU Cache System (2 days)
-├── Web Worker Pool (2 days)  
+├── Web Worker Pool (2 days)
 └── Performance Monitoring (1 day)
 
 Result: 70% performance improvement
 ```
 
 **Key Components:**
+
 - ✅ Multi-level caching (85% calculation reduction)
 - ✅ Background processing (maintains 60fps)
 - ✅ Memory optimization (<200MB usage)
@@ -76,11 +80,11 @@ Result: 70% performance improvement
 
 **Investment vs. Return**
 
-| Approach | Time | Performance Gain | Risk | ROI |
-|----------|------|-----------------|------|-----|
-| No Optimization | 0 weeks | -50% degradation | High | -∞ |
-| **Optimize First** | **+1 week** | **+70%** | **Low** | **245%** |
-| Rewrite Later | +4 weeks | +70% | High | 61% |
+| Approach           | Time        | Performance Gain | Risk    | ROI      |
+| ------------------ | ----------- | ---------------- | ------- | -------- |
+| No Optimization    | 0 weeks     | -50% degradation | High    | -∞       |
+| **Optimize First** | **+1 week** | **+70%**         | **Low** | **245%** |
+| Rewrite Later      | +4 weeks    | +70%             | High    | 61%      |
 
 **Payback Period:** 2.1 months
 **Customer Retention:** Prevents churn from performance issues
@@ -114,14 +118,14 @@ gantt
 
 ```typescript
 // Before: Every render recalculates
-const path = calculatePath(edge) // 50ms blocking
+const path = calculatePath(edge); // 50ms blocking
 
-// After: Cached + background processing  
-const path = await cache.get(edge.id) || 
-             await worker.calculate(edge) // <5ms non-blocking
+// After: Cached + background processing
+const path = (await cache.get(edge.id)) || (await worker.calculate(edge)); // <5ms non-blocking
 ```
 
 **Performance Targets:**
+
 - 1000+ nodes: <200ms render
 - 500+ edges: <50ms routing
 - Interactions: 60fps maintained
@@ -133,11 +137,11 @@ const path = await cache.get(edge.id) ||
 
 **What If We Don't Optimize First?**
 
-| Risk | Probability | Impact | Mitigation Cost |
-|------|------------|--------|-----------------|
-| Customer complaints | High (80%) | High | 2x sprint effort |
-| Feature disabled | Medium (50%) | High | Lost sprint work |
-| Emergency hotfix | High (90%) | Medium | 1 week disruption |
+| Risk                | Probability  | Impact | Mitigation Cost   |
+| ------------------- | ------------ | ------ | ----------------- |
+| Customer complaints | High (80%)   | High   | 2x sprint effort  |
+| Feature disabled    | Medium (50%) | High   | Lost sprint work  |
+| Emergency hotfix    | High (90%)   | Medium | 1 week disruption |
 
 **Optimize First = Prevent Fire Drills**
 
@@ -148,12 +152,14 @@ const path = await cache.get(edge.id) ||
 **Recommendation: Approve 1-Week Performance Sprint**
 
 **Benefits:**
+
 - ✅ Prevents customer-facing issues
 - ✅ Enables all future graph features
 - ✅ Reduces technical debt
 - ✅ 245% ROI
 
 **Next Steps:**
+
 1. Approve performance sprint
 2. Adjust story timeline (+1 week)
 3. Assign developer to performance work

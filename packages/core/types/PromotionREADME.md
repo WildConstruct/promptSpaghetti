@@ -129,7 +129,7 @@ const discountPromotion: CreatePromotionRequest = {
     percentage: 25,
     currency: 'USD',
     compound_with_other_discounts: false,
-    apply_to_sale_items: true,
+    apply_to_sale_items: true
   },
 
   application_type: PromotionApplicationType.CODE_REQUIRED,
@@ -143,14 +143,14 @@ const discountPromotion: CreatePromotionRequest = {
         {
           field: 'user.industry',
           operator: 'equals',
-          value: 'film_production',
-        },
+          value: 'film_production'
+        }
       ],
-      operator: 'AND',
-    },
+      operator: 'AND'
+    }
   ],
 
-  created_by: 'admin-user-123',
+  created_by: 'admin-user-123'
 };
 
 const result = await promotionService.createPromotion(discountPromotion);
@@ -161,7 +161,8 @@ const result = await promotionService.createPromotion(discountPromotion);
 ```typescript
 import { IPromotionEligibilityService, EligibilityCheckRequest } from '@/types';
 
-const eligibilityService: IPromotionEligibilityService = new PromotionEligibilityService();
+const eligibilityService: IPromotionEligibilityService =
+  new PromotionEligibilityService();
 
 const eligibilityCheck: EligibilityCheckRequest = {
   promotion_id: 'promo-summer-2024',
@@ -173,9 +174,9 @@ const eligibilityCheck: EligibilityCheckRequest = {
     device_type: 'desktop',
     location: {
       country: 'US',
-      region: 'CA',
-    },
-  },
+      region: 'CA'
+    }
+  }
 };
 
 const eligibility = await eligibilityService.checkEligibility(eligibilityCheck);
@@ -203,7 +204,7 @@ const contentPromotion: CreateContentPromotionRequest = {
     method: 'automatic',
     automatic_refresh: true,
     refresh_interval_hours: 6,
-    performance_based_rotation: true,
+    performance_based_rotation: true
   },
 
   content_criteria: {
@@ -215,9 +216,9 @@ const contentPromotion: CreateContentPromotionRequest = {
       {
         attribute: 'creator',
         max_percentage: 30,
-        enforce_minimum_variety: true,
-      },
-    ],
+        enforce_minimum_variety: true
+      }
+    ]
   },
 
   display_config: {
@@ -226,7 +227,7 @@ const contentPromotion: CreateContentPromotionRequest = {
     max_visible_items: 4,
     show_badges: true,
     show_pricing: true,
-    cta_text: 'Shop Holiday Collection',
+    cta_text: 'Shop Holiday Collection'
   },
 
   rotation_config: {
@@ -234,9 +235,9 @@ const contentPromotion: CreateContentPromotionRequest = {
     performance_thresholds: {
       min_ctr: 0.05,
       min_conversions: 2,
-      max_time_minutes: 240,
-    },
-  },
+      max_time_minutes: 240
+    }
+  }
 };
 ```
 
@@ -255,15 +256,15 @@ const subscription: PromotionEventSubscription = {
   event_types: [
     PromotionEventType.PROMOTION_APPLIED,
     PromotionEventType.PROMOTION_PERFORMANCE_MILESTONE,
-    PromotionEventType.CAMPAIGN_BUDGET_EXHAUSTED,
+    PromotionEventType.CAMPAIGN_BUDGET_EXHAUSTED
   ],
 
   filters: [
     {
       field: 'data.promotion_type',
       operator: 'in',
-      value: ['percentage_discount', 'bundle_deal'],
-    },
+      value: ['percentage_discount', 'bundle_deal']
+    }
   ],
 
   delivery_method: EventDeliveryMethod.WEBHOOK,
@@ -271,14 +272,14 @@ const subscription: PromotionEventSubscription = {
     webhook_url: 'https://analytics.company.com/promotion-events',
     webhook_headers: {
       Authorization: 'Bearer token123',
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   },
 
   delivery_guarantee: 'at_least_once',
   batch_delivery: true,
   batch_size: 50,
-  batch_timeout_ms: 30000,
+  batch_timeout_ms: 30000
 };
 
 await eventBus.subscribe(subscription);
@@ -289,18 +290,25 @@ await eventBus.subscribe(subscription);
 ```typescript
 import { IPromotionAnalyticsService, DateRange } from '@/types';
 
-const analyticsService: IPromotionAnalyticsService = new PromotionAnalyticsService();
+const analyticsService: IPromotionAnalyticsService =
+  new PromotionAnalyticsService();
 
 const dateRange: DateRange = {
   start_date: new Date('2024-06-01'),
-  end_date: new Date('2024-08-31'),
+  end_date: new Date('2024-08-31')
 };
 
 // Get promotion performance report
-const performance = await analyticsService.getPromotionPerformance('promo-summer-2024', dateRange);
+const performance = await analyticsService.getPromotionPerformance(
+  'promo-summer-2024',
+  dateRange
+);
 
 console.log('ROI:', performance.data?.metrics.roi);
-console.log('Total Revenue:', performance.data?.metrics.total_revenue_generated_cents / 100);
+console.log(
+  'Total Revenue:',
+  performance.data?.metrics.total_revenue_generated_cents / 100
+);
 
 // Compare multiple promotions
 const comparison = await analyticsService.comparePromotions(
@@ -310,7 +318,8 @@ const comparison = await analyticsService.comparePromotions(
 );
 
 // Get optimization recommendations
-const recommendations = await analyticsService.getOptimizationRecommendations('promo-summer-2024');
+const recommendations =
+  await analyticsService.getOptimizationRecommendations('promo-summer-2024');
 ```
 
 ## Integration Points

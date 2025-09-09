@@ -32,7 +32,7 @@ const configManager = getConfigManager();
 const automationConfig = configManager.loadConfig('automation');
 const logger = getLogger('enhance-database-schema', {
   logLevel: automationConfig.logLevel,
-  enableLogging: automationConfig.enableLogging,
+  enableLogging: automationConfig.enableLogging
 });
 
 class DatabaseEnhancer {
@@ -56,7 +56,7 @@ class DatabaseEnhancer {
         currentState.schema = {
           version: this.schemaVersion,
           migrated: new Date().toISOString(),
-          features: ['epic_indexing', 'story_sorting', 'markdown_integration'],
+          features: ['epic_indexing', 'story_sorting', 'markdown_integration']
         };
       }
 
@@ -74,7 +74,7 @@ class DatabaseEnhancer {
               title: EPIC_METADATA[epicNum]?.title || `Epic ${epicNum}`,
               category: EPIC_METADATA[epicNum]?.category || 'unknown',
               planFile: `epic${epicNum}plan.md`,
-              detailsFile: `epic${epicNum}details.md`,
+              detailsFile: `epic${epicNum}details.md`
             };
             enhancedCount++;
           }
@@ -85,7 +85,9 @@ class DatabaseEnhancer {
           task.storyMeta = {
             number: task.story,
             fullId: `${task.epicMeta?.number || 'unknown'}.${task.story}`,
-            title: this.extractStoryTitle(task.epic, task.story) || `Story ${task.story}`,
+            title:
+              this.extractStoryTitle(task.epic, task.story) ||
+              `Story ${task.story}`
           };
         }
 
@@ -95,7 +97,7 @@ class DatabaseEnhancer {
             keywords: this.generateSearchKeywords(task),
             category: task.epicMeta?.category || 'unknown',
             complexity: this.categorizeComplexity(task.est || 0),
-            indexed: new Date().toISOString(),
+            indexed: new Date().toISOString()
           };
         }
 
@@ -107,7 +109,7 @@ class DatabaseEnhancer {
             categorySort: `${task.epicMeta?.category || 'zzz'}-${task.priority || 5}-${task.id}`,
             prioritySort: `${task.priority || 5}-${task.epicMeta?.number || 999}-${task.id}`,
             stateSort: `${task.state || 'ZZUNKNOWN'}-${task.updated || '1900-01-01'}`,
-            createdSort: `${task.created || '1900-01-01'}-${task.id}`,
+            createdSort: `${task.created || '1900-01-01'}-${task.id}`
           };
         }
 
@@ -120,13 +122,13 @@ class DatabaseEnhancer {
         byStory: this.buildStoryIndex(currentState.tasks),
         byCategory: this.buildCategoryIndex(currentState.tasks),
         byState: this.buildStateIndex(currentState.tasks),
-        lastUpdated: new Date().toISOString(),
+        lastUpdated: new Date().toISOString()
       };
 
       logger.success('Database migration completed', {
         migratedTasks: migratedCount,
         enhancedTasks: enhancedCount,
-        indexesBuilt: Object.keys(currentState.indexes).length - 1,
+        indexesBuilt: Object.keys(currentState.indexes).length - 1
       });
     });
 
@@ -153,15 +155,17 @@ class DatabaseEnhancer {
               byState: {},
               byPriority: {},
               totalEstimate: 0,
-              avgPriority: 0,
-            },
+              avgPriority: 0
+            }
           };
         }
 
         index[epicKey].tasks.push(task.id);
         index[epicKey].stats.total++;
-        index[epicKey].stats.byState[task.state] = (index[epicKey].stats.byState[task.state] || 0) + 1;
-        index[epicKey].stats.byPriority[task.priority] = (index[epicKey].stats.byPriority[task.priority] || 0) + 1;
+        index[epicKey].stats.byState[task.state] =
+          (index[epicKey].stats.byState[task.state] || 0) + 1;
+        index[epicKey].stats.byPriority[task.priority] =
+          (index[epicKey].stats.byPriority[task.priority] || 0) + 1;
         index[epicKey].stats.totalEstimate += task.est || 0;
 
         // Story grouping within epic
@@ -172,14 +176,15 @@ class DatabaseEnhancer {
               number: storyKey,
               title: task.storyMeta?.title || `Story ${storyKey}`,
               tasks: [],
-              stats: { total: 0, byState: {}, totalEstimate: 0 },
+              stats: { total: 0, byState: {}, totalEstimate: 0 }
             };
           }
 
           index[epicKey].stories[storyKey].tasks.push(task.id);
           index[epicKey].stories[storyKey].stats.total++;
           index[epicKey].stories[storyKey].stats.byState[task.state] =
-            (index[epicKey].stories[storyKey].stats.byState[task.state] || 0) + 1;
+            (index[epicKey].stories[storyKey].stats.byState[task.state] || 0) +
+            1;
           index[epicKey].stories[storyKey].stats.totalEstimate += task.est || 0;
         }
       }
@@ -189,8 +194,10 @@ class DatabaseEnhancer {
     Object.values(index).forEach(epic => {
       epic.stats.avgPriority =
         epic.stats.total > 0
-          ? Object.entries(epic.stats.byPriority).reduce((sum, [p, count]) => sum + parseInt(p) * count, 0) /
-            epic.stats.total
+          ? Object.entries(epic.stats.byPriority).reduce(
+              (sum, [p, count]) => sum + parseInt(p) * count,
+              0
+            ) / epic.stats.total
           : 0;
     });
 
@@ -211,13 +218,14 @@ class DatabaseEnhancer {
             storyNumber: task.story,
             title: task.storyMeta?.title || `Story ${task.story}`,
             tasks: [],
-            stats: { total: 0, byState: {}, totalEstimate: 0, avgPriority: 0 },
+            stats: { total: 0, byState: {}, totalEstimate: 0, avgPriority: 0 }
           };
         }
 
         index[storyKey].tasks.push(task.id);
         index[storyKey].stats.total++;
-        index[storyKey].stats.byState[task.state] = (index[storyKey].stats.byState[task.state] || 0) + 1;
+        index[storyKey].stats.byState[task.state] =
+          (index[storyKey].stats.byState[task.state] || 0) + 1;
         index[storyKey].stats.totalEstimate += task.est || 0;
       }
     });
@@ -236,13 +244,14 @@ class DatabaseEnhancer {
           name: category,
           epics: new Set(),
           tasks: [],
-          stats: { total: 0, byState: {}, totalEstimate: 0 },
+          stats: { total: 0, byState: {}, totalEstimate: 0 }
         };
       }
 
       index[category].tasks.push(task.id);
       index[category].stats.total++;
-      index[category].stats.byState[task.state] = (index[category].stats.byState[task.state] || 0) + 1;
+      index[category].stats.byState[task.state] =
+        (index[category].stats.byState[task.state] || 0) + 1;
       index[category].stats.totalEstimate += task.est || 0;
 
       if (task.epicMeta) {
@@ -270,7 +279,7 @@ class DatabaseEnhancer {
           tasks: [],
           epics: new Set(),
           categories: new Set(),
-          stats: { total: 0, totalEstimate: 0, avgPriority: 0 },
+          stats: { total: 0, totalEstimate: 0, avgPriority: 0 }
         };
       }
 
@@ -356,7 +365,7 @@ class DatabaseEnhancer {
       tasksWithEpicMeta: 0,
       tasksWithStoryMeta: 0,
       tasksWithIndexes: 0,
-      indexIntegrity: true,
+      indexIntegrity: true
     };
 
     // Validate task schema compliance
@@ -402,7 +411,9 @@ class DatabaseEnhancer {
     console.log(
       `Tasks with DB Indexes: ${stats.tasksWithIndexes} (${Math.round((stats.tasksWithIndexes / stats.totalTasks) * 100)}%)`
     );
-    console.log(`Index Integrity: ${stats.indexIntegrity ? '✅ Valid' : '❌ Issues Found'}`);
+    console.log(
+      `Index Integrity: ${stats.indexIntegrity ? '✅ Valid' : '❌ Issues Found'}`
+    );
 
     if (issues.length > 0) {
       console.log('\n⚠️  Issues Found:');
@@ -416,7 +427,7 @@ class DatabaseEnhancer {
 
     logger.success('Schema validation completed', {
       issues: issues.length,
-      coverage: Math.round((stats.tasksWithEpicMeta / stats.totalTasks) * 100),
+      coverage: Math.round((stats.tasksWithEpicMeta / stats.totalTasks) * 100)
     });
 
     return { valid: issues.length === 0, issues, stats };
@@ -432,13 +443,13 @@ class DatabaseEnhancer {
         byStory: this.buildStoryIndex(state.tasks),
         byCategory: this.buildCategoryIndex(state.tasks),
         byState: this.buildStateIndex(state.tasks),
-        lastUpdated: new Date().toISOString(),
+        lastUpdated: new Date().toISOString()
       };
 
       logger.success('Search indexes rebuilt', {
         epics: Object.keys(state.indexes.byEpic).length,
         stories: Object.keys(state.indexes.byStory).length,
-        categories: Object.keys(state.indexes.byCategory).length,
+        categories: Object.keys(state.indexes.byCategory).length
       });
     });
   }
@@ -451,7 +462,8 @@ class DatabaseEnhancer {
     // For now, create the API endpoints specification
     const apiEndpoints = {
       '/api/tasks/by-epic/:epicNumber': 'Get all tasks for specific epic',
-      '/api/tasks/by-story/:epicNumber/:storyNumber': 'Get tasks for specific story',
+      '/api/tasks/by-story/:epicNumber/:storyNumber':
+        'Get tasks for specific story',
       '/api/tasks/by-category/:category': 'Get tasks by category',
       '/api/epics': 'Get all epics with summary statistics',
       '/api/epics/:epicNumber': 'Get detailed epic information',
@@ -459,7 +471,7 @@ class DatabaseEnhancer {
       '/api/stories/:epicNumber/:storyNumber': 'Get story details',
       '/api/search': 'Search tasks by keywords, epic, story, category',
       '/api/analytics/epic-completion': 'Get epic completion analytics',
-      '/api/analytics/story-progress': 'Get story progress analytics',
+      '/api/analytics/story-progress': 'Get story progress analytics'
     };
 
     console.log('\n🚀 Enhanced API Endpoints Available:');
@@ -477,7 +489,9 @@ class DatabaseEnhancer {
     // Create sample API response structure
     await this.createAPIExamples();
 
-    logger.success('API server specification created - ready for dashboard integration');
+    logger.success(
+      'API server specification created - ready for dashboard integration'
+    );
   }
 
   // Create sample API responses for dashboard integration
@@ -496,11 +510,11 @@ class DatabaseEnhancer {
                 total: 757,
                 completed: 45,
                 inProgress: 23,
-                completion: 6.8,
-              },
-            },
-          ],
-        },
+                completion: 6.8
+              }
+            }
+          ]
+        }
       },
       'epic-detail': {
         endpoint: '/api/epics/10',
@@ -513,10 +527,10 @@ class DatabaseEnhancer {
             detailsFile: 'epic10details.md',
             stories: {
               10.1: { title: 'Cross-Model Export Architecture', tasks: 45 },
-              10.2: { title: 'Platform Adapters Implementation', tasks: 38 },
-            },
-          },
-        },
+              10.2: { title: 'Platform Adapters Implementation', tasks: 38 }
+            }
+          }
+        }
       },
       'story-tasks': {
         endpoint: '/api/tasks/by-story/10/10.1',
@@ -524,7 +538,7 @@ class DatabaseEnhancer {
           story: {
             id: '10.1',
             title: 'Cross-Model Export Architecture',
-            epic: 10,
+            epic: 10
           },
           tasks: [
             {
@@ -532,14 +546,17 @@ class DatabaseEnhancer {
               title: '[10.1] Research existing prompt translation approaches',
               state: 'COMPLETED',
               priority: 1,
-              est: 4,
-            },
-          ],
-        },
-      },
+              est: 4
+            }
+          ]
+        }
+      }
     };
 
-    await fs.writeFile(path.join(__dirname, 'api-examples.json'), JSON.stringify(examples, null, 2));
+    await fs.writeFile(
+      path.join(__dirname, 'api-examples.json'),
+      JSON.stringify(examples, null, 2)
+    );
 
     logger.debug('API examples created for dashboard integration reference');
   }
@@ -577,7 +594,9 @@ async function main() {
         console.log('  migrate    Run database schema migration to v2.0');
         console.log('  index      Rebuild search indexes for performance');
         console.log('  validate   Validate schema integrity and coverage');
-        console.log('  api        Display API endpoints for dashboard integration');
+        console.log(
+          '  api        Display API endpoints for dashboard integration'
+        );
         console.log('');
         console.log('Features:');
         console.log('  • Epic and story-based sorting and filtering');

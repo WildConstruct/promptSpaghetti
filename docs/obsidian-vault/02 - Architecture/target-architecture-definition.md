@@ -152,7 +152,12 @@ class NodeFramework extends EventEmitter {
 // Performance Monitor Integration
 class PerformanceMonitor extends EventEmitter {
   startExecution(nodeId: string, nodeType: string, context: Context): string;
-  endExecution(trackingId: string, context: Context, result?: any, error?: Error): Metrics;
+  endExecution(
+    trackingId: string,
+    context: Context,
+    result?: any,
+    error?: Error
+  ): Metrics;
   generateReport(timeRange?: TimeRange): PerformanceReport;
 }
 

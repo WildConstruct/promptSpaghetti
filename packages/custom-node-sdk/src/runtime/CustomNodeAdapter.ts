@@ -3,13 +3,18 @@
  * Wraps custom nodes to integrate with the AdvancedRuntimeNode system
  */
 
-import { 
-  AdvancedRuntimeNode, 
-  AdvancedExecutionContext, 
+import {
+  AdvancedRuntimeNode,
+  AdvancedExecutionContext,
   AdvancedNodeConfig,
   ValidationResult
 } from '@promptscape/core';
-import { CustomNodeBase, CustomNodeConfig, CustomNodeRuntime, CustomNodeResult } from '../types';
+import {
+  CustomNodeBase,
+  CustomNodeConfig,
+  CustomNodeRuntime,
+  CustomNodeResult
+} from '../types';
 import { SecurityManager } from './SecurityManager';
 import { ValidationEngine } from './ValidationEngine';
 
@@ -22,13 +27,17 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
   private validationEngine: ValidationEngine;
   private customConfig: CustomNodeConfig;
 
-  constructor(id: string, customNode: CustomNodeBase, customConfig: CustomNodeConfig) {
+  constructor(
+    id: string,
+    customNode: CustomNodeBase,
+    customConfig: CustomNodeConfig
+  ) {
     // Convert CustomNodeConfig to AdvancedNodeConfig
     const advancedConfig: AdvancedNodeConfig = {
       deterministic: customConfig.deterministic ?? true,
       cacheable: customConfig.cacheable ?? true,
       stateful: customConfig.stateful ?? false,
-      performanceHints: customConfig.performanceHints,
+      performanceHints: customConfig.performanceHints
     };
 
     super(id, advancedConfig);
@@ -64,13 +73,13 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       return {
         valid: true,
         errors: [],
-        warnings: [],
+        warnings: []
       };
     } catch (error) {
       return {
         valid: false,
         errors: [`Validation failed: ${(error as Error).message}`],
-        warnings: [],
+        warnings: []
       };
     }
   }
@@ -90,7 +99,9 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       const inputValidation = this.validationEngine.validateInputs(inputs);
 
       if (!inputValidation.valid) {
-        throw new Error(`Input validation failed: ${inputValidation.errors.join(', ')}`);
+        throw new Error(
+          `Input validation failed: ${inputValidation.errors.join(', ')}`
+        );
       }
 
       // Create runtime context for the custom node
@@ -105,9 +116,13 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       const result = await this.customNode.execute(runtime);
 
       // Validate outputs
-      const outputValidation = this.validationEngine.validateOutputs(result.outputs);
+      const outputValidation = this.validationEngine.validateOutputs(
+        result.outputs
+      );
       if (!outputValidation.valid) {
-        throw new Error(`Output validation failed: ${outputValidation.errors.join(', ')}`);
+        throw new Error(
+          `Output validation failed: ${outputValidation.errors.join(', ')}`
+        );
       }
 
       // Call lifecycle hook
@@ -154,21 +169,26 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
   /**
    * Create a CustomNodeRuntime instance for the custom node
    */
-  private createCustomRuntime(ctx: AdvancedExecutionContext, inputs: Record<string, any>): CustomNodeRuntime {
+  private createCustomRuntime(
+    ctx: AdvancedExecutionContext,
+    inputs: Record<string, any>
+  ): CustomNodeRuntime {
     const nodeId = this.id;
 
     return {
       context: ctx,
       inputs,
       utils: {
-        random: () => ctx.prng ? ctx.prng() : Math.random(),
+        random: () => (ctx.prng ? ctx.prng() : Math.random()),
         log: (level, message, data) => {
           console[level](`[${nodeId}] ${message}`, data || '');
         },
-        validate: (data, schema) => this.validationEngine.validateData(data, schema),
-        getState: <T = unknown>(): T | undefined => ctx.nodeStates.get(nodeId) as T | undefined,
-        setState: state => ctx.nodeStates.set(nodeId, state),
-      },
+        validate: (data, schema) =>
+          this.validationEngine.validateData(data, schema),
+        getState: <T = unknown>(): T | undefined =>
+          ctx.nodeStates.get(nodeId) as T | undefined,
+        setState: state => ctx.nodeStates.set(nodeId, state)
+      }
     };
   }
 
@@ -203,7 +223,9 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
   ): void {
     // Store execution stats in performance metrics if available
     if (ctx.performanceMetrics) {
-      const metrics = ctx.performanceMetrics.get(this.id) || { startTime: Date.now() - executionTime };
+      const metrics = ctx.performanceMetrics.get(this.id) || {
+        startTime: Date.now() - executionTime
+      };
       metrics.endTime = Date.now();
       ctx.performanceMetrics.set(this.id, metrics);
     }
@@ -213,7 +235,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       ctx.outputs[`${this.id}_metrics`] = {
         executionTime,
         memoryUsed: metadata.memoryUsed || 0,
-        customMetrics: metadata.metrics || {},
+        customMetrics: metadata.metrics || {}
       };
     }
   }
@@ -221,8 +243,15 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
   /**
    * Log execution errors with context
    */
-  private logExecutionError(ctx: AdvancedExecutionContext, error: Error, executionTime: number): void {
-    console.error(`[${this.id}] Execution failed after ${executionTime}ms:`, error);
+  private logExecutionError(
+    ctx: AdvancedExecutionContext,
+    error: Error,
+    executionTime: number
+  ): void {
+    console.error(
+      `[${this.id}] Execution failed after ${executionTime}ms:`,
+      error
+    );
 
     // Store error information in outputs if available
     if (ctx.outputs) {
@@ -234,7 +263,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
         nodeId: this.id,
         error: error.message,
         timestamp: new Date().toISOString(),
-        executionTime,
+        executionTime
       });
     }
   }
@@ -266,13 +295,13 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       data: {
         customConfig: this.customConfig,
         customNodeType: this.customNode.constructor.name,
-        metadata: this.customConfig.metadata,
+        metadata: this.customConfig.metadata
       },
       metadata: {
         version: this.customConfig.metadata?.version || '1.0.0',
         created: new Date().toISOString(),
-        lastModified: new Date().toISOString(),
-      },
+        lastModified: new Date().toISOString()
+      }
     };
   }
 }

@@ -3,7 +3,12 @@
  * Provides utility functions and mocks for comprehensive testing
  */
 
-import { CustomNodeBase, CustomNodeResult, CustomNodeRuntime, ValidationResult } from '../types';
+import {
+  CustomNodeBase,
+  CustomNodeResult,
+  CustomNodeRuntime,
+  ValidationResult
+} from '../types';
 import { z } from 'zod';
 
 /**
@@ -16,12 +21,12 @@ export function createMockNode(
     async execute(runtime: CustomNodeRuntime): Promise<CustomNodeResult> {
       return executeImpl(runtime);
     }
-    
+
     validate(): ValidationResult {
       return { valid: true, errors: [], warnings: [] };
     }
   }
-  
+
   const config = {
     metadata: {
       type: 'test-mock-node',
@@ -29,17 +34,17 @@ export function createMockNode(
       description: 'Mock node for testing',
       category: 'test',
       version: '1.0.0',
-      author: { name: 'Test' },
+      author: { name: 'Test' }
     },
     schema: {
       inputs: {},
-      outputs: { result: { type: 'any' as const, required: true } },
+      outputs: { result: { type: 'any' as const, required: true } }
     },
     deterministic: true,
     cacheable: false,
-    stateful: false,
+    stateful: false
   };
-  
+
   return new MockNode('mock-node', config);
 }
 
@@ -48,7 +53,10 @@ export function createMockNode(
  */
 export function createStatefulMockNode<TState = any>(
   initialState: TState,
-  executeImpl: (runtime: CustomNodeRuntime, state: TState) => Promise<{
+  executeImpl: (
+    runtime: CustomNodeRuntime,
+    state: TState
+  ) => Promise<{
     result: CustomNodeResult;
     newState: TState;
   }>
@@ -60,12 +68,12 @@ export function createStatefulMockNode<TState = any>(
       runtime.utils.setState(newState);
       return result;
     }
-    
+
     validate(): ValidationResult {
       return { valid: true, errors: [], warnings: [] };
     }
   }
-  
+
   const config = {
     metadata: {
       type: 'test-stateful-node',
@@ -73,59 +81,63 @@ export function createStatefulMockNode<TState = any>(
       description: 'Stateful mock node for testing',
       category: 'test',
       version: '1.0.0',
-      author: { name: 'Test' },
+      author: { name: 'Test' }
     },
     schema: {
       inputs: {},
-      outputs: { result: { type: 'any' as const, required: true } },
+      outputs: { result: { type: 'any' as const, required: true } }
     },
     deterministic: true,
     cacheable: false,
-    stateful: true,
+    stateful: true
   };
-  
+
   return new StatefulMockNode('stateful-mock-node', config);
 }
 
 /**
  * Create a mock node with lifecycle hooks
  */
-export function createLifecycleMockNode(
-  callbacks: {
-    beforeExecute?: (runtime: CustomNodeRuntime) => Promise<void>;
-    execute: (runtime: CustomNodeRuntime) => Promise<CustomNodeResult>;
-    afterExecute?: (runtime: CustomNodeRuntime, result: CustomNodeResult) => Promise<void>;
-    dispose?: () => Promise<void>;
-  }
-): CustomNodeBase {
+export function createLifecycleMockNode(callbacks: {
+  beforeExecute?: (runtime: CustomNodeRuntime) => Promise<void>;
+  execute: (runtime: CustomNodeRuntime) => Promise<CustomNodeResult>;
+  afterExecute?: (
+    runtime: CustomNodeRuntime,
+    result: CustomNodeResult
+  ) => Promise<void>;
+  dispose?: () => Promise<void>;
+}): CustomNodeBase {
   class LifecycleMockNode extends CustomNodeBase {
     async beforeExecute(runtime: CustomNodeRuntime): Promise<void> {
       if (callbacks.beforeExecute) {
         await callbacks.beforeExecute(runtime);
       }
     }
-    
+
     async execute(runtime: CustomNodeRuntime): Promise<CustomNodeResult> {
       return callbacks.execute(runtime);
     }
-    
-    async afterExecute(runtime: CustomNodeRuntime, result: CustomNodeResult): Promise<void> {
+
+    async afterExecute(
+      runtime: CustomNodeRuntime,
+      result: CustomNodeResult
+    ): Promise<void> {
       if (callbacks.afterExecute) {
         await callbacks.afterExecute(runtime, result);
       }
     }
-    
+
     async dispose(): Promise<void> {
       if (callbacks.dispose) {
         await callbacks.dispose();
       }
     }
-    
+
     validate(): ValidationResult {
       return { valid: true, errors: [], warnings: [] };
     }
   }
-  
+
   const config = {
     metadata: {
       type: 'test-lifecycle-node',
@@ -133,17 +145,17 @@ export function createLifecycleMockNode(
       description: 'Mock node with lifecycle hooks for testing',
       category: 'test',
       version: '1.0.0',
-      author: { name: 'Test' },
+      author: { name: 'Test' }
     },
     schema: {
       inputs: {},
-      outputs: { result: { type: 'any' as const, required: true } },
+      outputs: { result: { type: 'any' as const, required: true } }
     },
     deterministic: true,
     cacheable: false,
-    stateful: false,
+    stateful: false
   };
-  
+
   return new LifecycleMockNode('lifecycle-mock-node', config);
 }
 
@@ -158,7 +170,7 @@ export function createMockInputs(): Record<string, any> {
     array: [1, 2, 3],
     object: { key: 'value' },
     null: null,
-    undefined: undefined,
+    undefined: undefined
   };
 }
 
@@ -186,22 +198,26 @@ export function createMockResult(
 ): CustomNodeResult {
   return {
     outputs,
-    metadata: metadata || {},
+    metadata: metadata || {}
   };
 }
 
 /**
  * Assert that two objects are deeply equal
  */
-export function assertDeepEqual(actual: any, expected: any, path: string = ''): void {
+export function assertDeepEqual(
+  actual: any,
+  expected: any,
+  path: string = ''
+): void {
   if (actual === expected) return;
-  
+
   if (typeof actual !== typeof expected) {
     throw new Error(
       `Type mismatch at ${path || 'root'}: expected ${typeof expected}, got ${typeof actual}`
     );
   }
-  
+
   if (actual === null || expected === null) {
     if (actual !== expected) {
       throw new Error(
@@ -210,17 +226,17 @@ export function assertDeepEqual(actual: any, expected: any, path: string = ''): 
     }
     return;
   }
-  
+
   if (typeof actual === 'object') {
     const actualKeys = Object.keys(actual).sort();
     const expectedKeys = Object.keys(expected).sort();
-    
+
     if (actualKeys.length !== expectedKeys.length) {
       throw new Error(
         `Key count mismatch at ${path || 'root'}: expected ${expectedKeys.length} keys, got ${actualKeys.length}`
       );
     }
-    
+
     for (const key of actualKeys) {
       if (!expectedKeys.includes(key)) {
         throw new Error(`Unexpected key at ${path || 'root'}: ${key}`);
@@ -261,7 +277,7 @@ export class MockLogger {
       level,
       message,
       data,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
   }
 
@@ -298,8 +314,8 @@ export function createTestSchema() {
     enum: z.enum(['option1', 'option2', 'option3']),
     array: z.array(z.number()),
     object: z.object({
-      nested: z.string(),
-    }),
+      nested: z.string()
+    })
   };
 }
 
@@ -308,7 +324,7 @@ export function createTestSchema() {
  */
 export function generateTestData(seed: number = 0): Record<string, any> {
   const random = (max: number) => Math.floor((seed * 9973) % max);
-  
+
   return {
     id: `id-${seed}`,
     name: `name-${seed}`,
@@ -318,8 +334,8 @@ export function generateTestData(seed: number = 0): Record<string, any> {
     metadata: {
       created: new Date(2024, 0, 1 + random(365)).toISOString(),
       updated: new Date(2024, 6, 1 + random(180)).toISOString(),
-      version: `${random(3)}.${random(10)}.${random(100)}`,
-    },
+      version: `${random(3)}.${random(10)}.${random(100)}`
+    }
   };
 }
 
@@ -332,7 +348,7 @@ export class FunctionSpy<T extends (...args: any[]) => any> {
     result?: ReturnType<T>;
     error?: Error;
   }> = [];
-  
+
   constructor(
     private originalFn?: T,
     private mockImplementation?: T
@@ -340,8 +356,8 @@ export class FunctionSpy<T extends (...args: any[]) => any> {
 
   get fn(): T {
     return ((...args: Parameters<T>) => {
-      const call: typeof this.calls[0] = { args };
-      
+      const call: (typeof this.calls)[0] = { args };
+
       try {
         const impl = this.mockImplementation || this.originalFn;
         if (impl) {
@@ -367,8 +383,8 @@ export class FunctionSpy<T extends (...args: any[]) => any> {
   }
 
   wasCalledWith(...args: Parameters<T>): boolean {
-    return this.calls.some(call => 
-      JSON.stringify(call.args) === JSON.stringify(args)
+    return this.calls.some(
+      call => JSON.stringify(call.args) === JSON.stringify(args)
     );
   }
 

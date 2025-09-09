@@ -18,7 +18,7 @@ export class ProductOwnerAgent extends AgentRunner {
       'METRICS_ANALYZED',
       'TASK_COMPLETED',
       'TASK_APPROVED',
-      'PR_MERGED', // New: Track completed work via merged PRs
+      'PR_MERGED' // New: Track completed work via merged PRs
     ];
 
     return events.filter(ev => relevantTypes.includes(ev.type));
@@ -43,7 +43,7 @@ export class ProductOwnerAgent extends AgentRunner {
         if (metrics.velocity < 5) {
           return this.createEvent('PRIORITY_ADJUSTED', {
             reason: 'Low velocity detected, simplifying upcoming stories',
-            velocity: metrics.velocity,
+            velocity: metrics.velocity
           });
         }
         break;
@@ -53,7 +53,7 @@ export class ProductOwnerAgent extends AgentRunner {
         return this.createEvent('FEATURE_COMPLETED', {
           task_id: ev.payload.task_id,
           pr_number: ev.payload.pr_number,
-          completed_at: new Date().toISOString(),
+          completed_at: new Date().toISOString()
         });
     }
 
@@ -83,14 +83,19 @@ export class ProductOwnerAgent extends AgentRunner {
           'Users can register with email',
           'Users can login securely',
           'Password reset functionality',
-          'Session management',
+          'Session management'
         ],
-        priority: 1,
+        priority: 1
       },
       {
         title: 'Data visualization dashboard',
-        acceptance: ['Display key metrics', 'Interactive charts', 'Export functionality', 'Real-time updates'],
-        priority: 2,
+        acceptance: [
+          'Display key metrics',
+          'Interactive charts',
+          'Export functionality',
+          'Real-time updates'
+        ],
+        priority: 2
       },
       {
         title: 'API rate limiting',
@@ -98,14 +103,15 @@ export class ProductOwnerAgent extends AgentRunner {
           'Implement token bucket algorithm',
           'Per-user rate limits',
           'Admin override capability',
-          'Rate limit headers in responses',
+          'Rate limit headers in responses'
         ],
-        priority: 3,
-      },
+        priority: 3
+      }
     ];
 
     // Select a template
-    const template = storyTemplates[Math.floor(Math.random() * storyTemplates.length)];
+    const template =
+      storyTemplates[Math.floor(Math.random() * storyTemplates.length)];
 
     const story = {
       id: `S-${Date.now()}`,
@@ -114,7 +120,7 @@ export class ProductOwnerAgent extends AgentRunner {
       acceptance: template.acceptance,
       priority: template.priority,
       status: 'READY',
-      tasks: [], // Scrum Master will create tasks
+      tasks: [] // Scrum Master will create tasks
     };
 
     return this.createEvent('STORY_CREATED', { story });
@@ -126,11 +132,15 @@ export class ProductOwnerAgent extends AgentRunner {
   private checkStoryBacklog(state: any): any {
     const readyStories = state.stories.filter((s: any) => s.status === 'READY');
     const totalTasks = Object.keys(state.tasks).length;
-    const unassignedTasks = Object.values(state.tasks).filter((t: any) => t.state === 'UNASSIGNED').length;
+    const unassignedTasks = Object.values(state.tasks).filter(
+      (t: any) => t.state === 'UNASSIGNED'
+    ).length;
 
     // If we have few ready stories and most tasks are assigned, create more
     if (readyStories.length < 3 && unassignedTasks < 5) {
-      const activeGoals = state.product_goals.filter((g: any) => g.status === 'ACTIVE');
+      const activeGoals = state.product_goals.filter(
+        (g: any) => g.status === 'ACTIVE'
+      );
       if (activeGoals.length > 0) {
         // Pick a goal that needs more stories
         for (const goal of activeGoals) {
@@ -155,18 +165,28 @@ export class ProductOwnerAgent extends AgentRunner {
       const stories = this.getStoriesForGoal(state, goal.id);
       const completedStories = stories.filter((s: any) => {
         // Story is complete if all its tasks are completed or approved
-        const storyTasks = Object.values(state.tasks).filter((t: any) => t.story_id === s.id);
-        return storyTasks.length > 0 && storyTasks.every((t: any) => ['COMPLETED', 'APPROVED'].includes(t.state));
+        const storyTasks = Object.values(state.tasks).filter(
+          (t: any) => t.story_id === s.id
+        );
+        return (
+          storyTasks.length > 0 &&
+          storyTasks.every((t: any) =>
+            ['COMPLETED', 'APPROVED'].includes(t.state)
+          )
+        );
       });
 
-      const progress = stories.length > 0 ? (completedStories.length / stories.length) * 100 : 0;
+      const progress =
+        stories.length > 0
+          ? (completedStories.length / stories.length) * 100
+          : 0;
 
       if (progress >= 80) {
         return this.createEvent('GOAL_NEARING_COMPLETION', {
           goal_id: goal.id,
           progress: progress,
           completed_stories: completedStories.length,
-          total_stories: stories.length,
+          total_stories: stories.length
         });
       }
     }

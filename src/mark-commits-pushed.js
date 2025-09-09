@@ -9,7 +9,11 @@ const fs = require('fs');
 const path = require('path');
 
 function markCommitsPushed() {
-  const commitTrackingFile = path.join(__dirname, 'data', 'commit-tracking.json');
+  const commitTrackingFile = path.join(
+    __dirname,
+    'data',
+    'commit-tracking.json'
+  );
 
   if (!fs.existsSync(commitTrackingFile)) {
     console.log('No commit tracking file found - nothing to mark as pushed');
@@ -39,7 +43,7 @@ function markCommitsPushed() {
   commitData.pushedHistory.push({
     pushedAt: new Date().toISOString(),
     taskCount: unpushedCount,
-    tasks: commitData.unpushedApprovals,
+    tasks: commitData.unpushedApprovals
   });
 
   // Reset unpushed counter

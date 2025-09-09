@@ -18,7 +18,8 @@ const crypto = require('crypto');
 
 // Priority Story: Authentication System Resource Allocation
 const authSystemStory = {
-  title: 'Consolidate Authentication System Resources - Complete 80% Finished System',
+  title:
+    'Consolidate Authentication System Resources - Complete 80% Finished System',
   description: `Consolidate authentication system resources, fix conflicting assignments, and organize systematic completion of the 80% complete authentication system. QA has identified that Authentication tasks (Priority 2) have conflicting assignments with some auth tasks assigned to non-existent agents (test-agent-3) while OAuth, MFA, email integration await completion.
 
 **Current Status:**
@@ -44,7 +45,14 @@ const authSystemStory = {
   wipClass: 'authentication',
   epic: 'Authentication System',
   story: 'AUTH-SYSTEM-CONSOLIDATION',
-  tags: ['authentication', 'oauth', 'mfa', 'email-integration', 'resource-allocation', 'production-ready'],
+  tags: [
+    'authentication',
+    'oauth',
+    'mfa',
+    'email-integration',
+    'resource-allocation',
+    'production-ready'
+  ],
 
   acceptanceCriteria: [
     'All authentication tasks reassigned from non-existent agents to active developers',
@@ -55,7 +63,7 @@ const authSystemStory = {
     'Admin Dashboard user management interface completed (6-8 hours)',
     'Production Config with security headers and rate limiting configured (2-3 hours)',
     'Authentication system reaches 95% completion with production MVP readiness',
-    'Consolidated authentication work completed under dedicated developer sprint',
+    'Consolidated authentication work completed under dedicated developer sprint'
   ],
 
   businessValue:
@@ -64,7 +72,8 @@ const authSystemStory = {
   // Break down into specific implementable tasks
   implementationTasks: [
     {
-      title: 'Audit Authentication Task Assignments and Fix Conflicting Allocations',
+      title:
+        'Audit Authentication Task Assignments and Fix Conflicting Allocations',
       description:
         'Comprehensive audit of all authentication task assignments to identify conflicting assignments, non-existent agents, and scattered resources preventing systematic completion',
       estimate: '1 hour',
@@ -75,8 +84,8 @@ const authSystemStory = {
         'Identification of tasks assigned to non-existent agents (test-agent-3)',
         'Documentation of conflicting assignments and resource allocation issues',
         'Reassignment plan for consolidating authentication work under dedicated developer',
-        'Clear mapping of 80% complete vs remaining 20% authentication work',
-      ],
+        'Clear mapping of 80% complete vs remaining 20% authentication work'
+      ]
     },
     {
       title: 'Complete OAuth Integration Frontend Provider Configurations',
@@ -90,8 +99,8 @@ const authSystemStory = {
         'Frontend OAuth login buttons and flow integration completed',
         'OAuth callback handling and token management implemented',
         'OAuth user profile data mapping and account linking functional',
-        'OAuth integration testing with real provider configurations',
-      ],
+        'OAuth integration testing with real provider configurations'
+      ]
     },
     {
       title: 'Complete Multi-Factor Authentication Frontend Integration',
@@ -105,8 +114,8 @@ const authSystemStory = {
         'SMS-based MFA frontend flow with phone number verification',
         'Email-based MFA frontend integration with code verification',
         'MFA setup and management interface in user profile',
-        'MFA enforcement for sensitive operations and admin access',
-      ],
+        'MFA enforcement for sensitive operations and admin access'
+      ]
     },
     {
       title: 'Implement Email Services for Authentication System',
@@ -120,8 +129,8 @@ const authSystemStory = {
         'Password reset email notifications with secure reset links',
         'Account security alert emails for login attempts and changes',
         'Email template system with branding and customization',
-        'Email delivery monitoring and error handling',
-      ],
+        'Email delivery monitoring and error handling'
+      ]
     },
     {
       title: 'Polish User Profile Management System',
@@ -135,8 +144,8 @@ const authSystemStory = {
         'Security settings panel with password change and MFA management',
         'Account preferences and notification settings',
         'Profile picture upload and management',
-        'Account deletion and data export functionality',
-      ],
+        'Account deletion and data export functionality'
+      ]
     },
     {
       title: 'Build Admin Dashboard for User Management',
@@ -150,8 +159,8 @@ const authSystemStory = {
         'Role and permission management system with RBAC controls',
         'Authentication system monitoring and analytics dashboard',
         'Admin tools for password resets, account unlocking, and user impersonation',
-        'System health monitoring for authentication services',
-      ],
+        'System health monitoring for authentication services'
+      ]
     },
     {
       title: 'Configure Production Security Settings and Rate Limiting',
@@ -165,10 +174,10 @@ const authSystemStory = {
         'Rate limiting implemented for login attempts and API endpoints',
         'Authentication session security hardening',
         'Production environment configuration validation',
-        'Security audit and penetration testing preparation',
-      ],
-    },
-  ],
+        'Security audit and penetration testing preparation'
+      ]
+    }
+  ]
 };
 
 // Utility functions
@@ -191,8 +200,8 @@ async function loadCurrentState() {
       stories: {},
       metadata: {
         created: new Date().toISOString(),
-        lastUpdated: new Date().toISOString(),
-      },
+        lastUpdated: new Date().toISOString()
+      }
     };
   }
 }
@@ -230,12 +239,17 @@ function createStoryObject(storyDef, storyId) {
       source: 'qa-analysis',
       category: 'authentication-consolidation',
       automated: true,
-      priority_level: storyDef.priority === 'critical' ? 0 : storyDef.priority === 'high' ? 1 : 2,
+      priority_level:
+        storyDef.priority === 'critical'
+          ? 0
+          : storyDef.priority === 'high'
+            ? 1
+            : 2,
       business_impact: 'high',
       completion_percentage: 80,
       production_readiness: 'near-complete',
-      epic_category: 'Authentication System',
-    },
+      epic_category: 'Authentication System'
+    }
   };
 }
 
@@ -258,7 +272,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
       tags: taskDef.tags,
       acceptanceCriteria: taskDef.acceptance,
       dependencies: index === 0 ? [] : index < 2 ? [createdTasks[0].id] : [], // First task is audit, others can run in parallel after audit
-      businessValue: 'Completes production-ready authentication system enabling secure user management',
+      businessValue:
+        'Completes production-ready authentication system enabling secure user management',
       assignee: 'Unassigned',
       created: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
@@ -266,13 +281,18 @@ function createImplementationTasks(storyId, implementationTasks, state) {
         source: 'story-breakdown',
         category: 'authentication-completion',
         automated: true,
-        priority_level: taskDef.priority === 'critical' ? 0 : taskDef.priority === 'high' ? 1 : 2,
+        priority_level:
+          taskDef.priority === 'critical'
+            ? 0
+            : taskDef.priority === 'high'
+              ? 1
+              : 2,
         parent_story: storyId,
         sequence_order: index + 1,
         completion_percentage: index === 0 ? 0 : 80, // First task is audit, others start from 80%
         production_impact: 'high',
-        auth_component: taskDef.tags[0],
-      },
+        auth_component: taskDef.tags[0]
+      }
     };
 
     state.tasks[taskId] = task;
@@ -283,11 +303,21 @@ function createImplementationTasks(storyId, implementationTasks, state) {
 }
 
 async function createAuthSystemStory() {
-  console.log('🔐 Creating Authentication System Resource Allocation Story...\n');
-  console.log('📋 This addresses the authentication system resource consolidation:');
-  console.log('   ISSUE: 80% complete auth system with conflicting assignments and scattered resources');
-  console.log('   STATUS: Core login/registration/protected routes work perfectly');
-  console.log('   SOLUTION: Consolidate resources and complete remaining OAuth, MFA, email integration\n');
+  console.log(
+    '🔐 Creating Authentication System Resource Allocation Story...\n'
+  );
+  console.log(
+    '📋 This addresses the authentication system resource consolidation:'
+  );
+  console.log(
+    '   ISSUE: 80% complete auth system with conflicting assignments and scattered resources'
+  );
+  console.log(
+    '   STATUS: Core login/registration/protected routes work perfectly'
+  );
+  console.log(
+    '   SOLUTION: Consolidate resources and complete remaining OAuth, MFA, email integration\n'
+  );
 
   try {
     // Load current state
@@ -305,7 +335,9 @@ async function createAuthSystemStory() {
 
     // Check if story already exists
     if (storyExists(state, authSystemStory.title)) {
-      console.log('⏭️  Story already exists - updating with latest requirements...');
+      console.log(
+        '⏭️  Story already exists - updating with latest requirements...'
+      );
     }
 
     const storyId = generateTaskId('STORY-AUTH-SYSTEM');
@@ -317,7 +349,11 @@ async function createAuthSystemStory() {
     // Create implementation tasks
     console.log('📝 Creating Implementation Tasks...\n');
 
-    const implementationTasks = createImplementationTasks(storyId, authSystemStory.implementationTasks, state);
+    const implementationTasks = createImplementationTasks(
+      storyId,
+      authSystemStory.implementationTasks,
+      state
+    );
 
     tasksCreated = implementationTasks.length;
 
@@ -334,14 +370,18 @@ async function createAuthSystemStory() {
     await saveState(state);
 
     console.log(`✅ Created Story: ${story.title}`);
-    console.log(`   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`);
+    console.log(
+      `   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`
+    );
     console.log(`   🔐 Business Value: ${story.businessValue}`);
     console.log('');
 
     // Show created implementation tasks
     implementationTasks.forEach((task, index) => {
       console.log(`✅ Created Task ${index + 1}: ${task.title}`);
-      console.log(`   ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`);
+      console.log(
+        `   ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`
+      );
       if (task.dependencies.length > 0) {
         console.log(`   🔗 Depends on: ${task.dependencies.join(', ')}`);
       }
@@ -353,50 +393,98 @@ async function createAuthSystemStory() {
     console.log('='.repeat(65));
     console.log(`✅ Stories Created: ${storiesCreated}`);
     console.log(`✅ Implementation Tasks Created: ${tasksCreated}`);
-    console.log(`📋 Total Stories in System: ${Object.keys(state.stories).length}`);
-    console.log(`📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`);
+    console.log(
+      `📋 Total Stories in System: ${Object.keys(state.stories).length}`
+    );
+    console.log(
+      `📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`
+    );
 
     // Show authentication system status
     console.log('🔐 AUTHENTICATION SYSTEM STATUS:\n');
     console.log('✅ COMPLETE (80% - Production Ready):');
-    console.log('   • Backend Infrastructure - Complete auth service with JWT, rate limiting, audit logging');
-    console.log('   • Database Schema - 15+ tables for users, roles, sessions, OAuth, MFA');
-    console.log('   • API Endpoints - Full RESTful auth API with Zod validation');
-    console.log('   • Frontend Components - LoginForm, AuthProvider, PrivateRoute, RouteGuard');
-    console.log('   • Route Protection - Role-based access control (RBAC) working');
-    console.log('   • State Management - Zustand store with JWT token persistence');
-    console.log('   • Password Management - Reset, strength validation, rotation\n');
+    console.log(
+      '   • Backend Infrastructure - Complete auth service with JWT, rate limiting, audit logging'
+    );
+    console.log(
+      '   • Database Schema - 15+ tables for users, roles, sessions, OAuth, MFA'
+    );
+    console.log(
+      '   • API Endpoints - Full RESTful auth API with Zod validation'
+    );
+    console.log(
+      '   • Frontend Components - LoginForm, AuthProvider, PrivateRoute, RouteGuard'
+    );
+    console.log(
+      '   • Route Protection - Role-based access control (RBAC) working'
+    );
+    console.log(
+      '   • State Management - Zustand store with JWT token persistence'
+    );
+    console.log(
+      '   • Password Management - Reset, strength validation, rotation\n'
+    );
 
     console.log('🟡 PARTIALLY COMPLETE (Need 2-3 days):');
-    console.log('   • OAuth Integration - Backend ready, frontend needs provider configs (3-4 hours)');
-    console.log('   • Multi-Factor Auth - Backend complete, frontend integration needed (4-6 hours)');
-    console.log('   • User Profile Management - Basic functionality exists, needs polish (2-3 hours)\n');
+    console.log(
+      '   • OAuth Integration - Backend ready, frontend needs provider configs (3-4 hours)'
+    );
+    console.log(
+      '   • Multi-Factor Auth - Backend complete, frontend integration needed (4-6 hours)'
+    );
+    console.log(
+      '   • User Profile Management - Basic functionality exists, needs polish (2-3 hours)\n'
+    );
 
     console.log('🔴 MISSING (Production Polish):');
-    console.log('   • Email Services - Verification emails, password reset notifications (3-4 hours)');
+    console.log(
+      '   • Email Services - Verification emails, password reset notifications (3-4 hours)'
+    );
     console.log('   • Admin Dashboard - User management interface (6-8 hours)');
-    console.log('   • Production Config - Security headers, rate limiting config (2-3 hours)\n');
+    console.log(
+      '   • Production Config - Security headers, rate limiting config (2-3 hours)\n'
+    );
 
     // Show business impact
     console.log('💰 BUSINESS IMPACT:\n');
     console.log('🎯 PROBLEM SOLVED:');
-    console.log('   • Consolidates scattered authentication resources under dedicated developer');
-    console.log('   • Fixes conflicting assignments and non-existent agent allocations');
-    console.log('   • Completes 80% finished authentication system to 95% production ready');
-    console.log('   • Enables secure user management for entire application platform\n');
+    console.log(
+      '   • Consolidates scattered authentication resources under dedicated developer'
+    );
+    console.log(
+      '   • Fixes conflicting assignments and non-existent agent allocations'
+    );
+    console.log(
+      '   • Completes 80% finished authentication system to 95% production ready'
+    );
+    console.log(
+      '   • Enables secure user management for entire application platform\n'
+    );
 
     console.log('📈 EXPECTED OUTCOMES:');
-    console.log('   • Production-ready authentication system with OAuth, MFA, and email integration');
+    console.log(
+      '   • Production-ready authentication system with OAuth, MFA, and email integration'
+    );
     console.log('   • Complete admin dashboard for user and role management');
-    console.log('   • Hardened security configuration ready for production deployment');
-    console.log('   • Systematic completion of authentication work within 2-3 day sprint\n');
+    console.log(
+      '   • Hardened security configuration ready for production deployment'
+    );
+    console.log(
+      '   • Systematic completion of authentication work within 2-3 day sprint\n'
+    );
 
     // Show implementation sequence
     console.log('🔄 IMPLEMENTATION SEQUENCE:\n');
     implementationTasks.forEach((task, index) => {
       const timelinePhase =
-        index === 0 ? 'AUDIT PHASE' : index <= 3 ? 'CORE COMPLETION PHASE' : 'POLISH & PRODUCTION PHASE';
-      console.log(`${index + 1}. ${task.title} (${task.estimate}) - ${timelinePhase}`);
+        index === 0
+          ? 'AUDIT PHASE'
+          : index <= 3
+            ? 'CORE COMPLETION PHASE'
+            : 'POLISH & PRODUCTION PHASE';
+      console.log(
+        `${index + 1}. ${task.title} (${task.estimate}) - ${timelinePhase}`
+      );
       console.log(`   🎯 ${task.acceptanceCriteria[0]}`);
     });
     console.log('');
@@ -404,45 +492,83 @@ async function createAuthSystemStory() {
     // Resource allocation analysis
     console.log('📊 RESOURCE ALLOCATION ANALYSIS:\n');
     console.log('🚨 Current Issues:');
-    console.log('   • Authentication tasks assigned to non-existent agents (test-agent-3)');
-    console.log('   • OAuth, MFA, email integration work scattered across multiple incomplete assignments');
-    console.log('   • Near-complete system stalled at final implementation phase');
-    console.log('   • Core functionality complete but advanced features fragmented\n');
+    console.log(
+      '   • Authentication tasks assigned to non-existent agents (test-agent-3)'
+    );
+    console.log(
+      '   • OAuth, MFA, email integration work scattered across multiple incomplete assignments'
+    );
+    console.log(
+      '   • Near-complete system stalled at final implementation phase'
+    );
+    console.log(
+      '   • Core functionality complete but advanced features fragmented\n'
+    );
 
     console.log('✅ Consolidation Strategy:');
-    console.log('   • Reassign all authentication tasks to dedicated developer for 2-3 day sprint');
-    console.log('   • Prioritize OAuth and MFA frontend integration (highest user value)');
-    console.log('   • Complete email services and admin dashboard for production readiness');
+    console.log(
+      '   • Reassign all authentication tasks to dedicated developer for 2-3 day sprint'
+    );
+    console.log(
+      '   • Prioritize OAuth and MFA frontend integration (highest user value)'
+    );
+    console.log(
+      '   • Complete email services and admin dashboard for production readiness'
+    );
     console.log('   • Configure production security settings for deployment\n');
 
     // Agent instructions
     console.log('🤖 NEXT STEPS FOR AGENTS:\n');
-    console.log('1. 🔧 Development Agent should grab these authentication consolidation tasks:');
+    console.log(
+      '1. 🔧 Development Agent should grab these authentication consolidation tasks:'
+    );
     console.log(`   node src/grab-tasks.js <agent-id> 7 --story=${storyId}`);
-    console.log('2. 📊 Start with authentication task assignment audit and resource reallocation');
-    console.log('3. 🔐 Focus on OAuth provider configuration and MFA frontend integration');
-    console.log('4. 📧 Implement email services for verification and password reset workflows');
-    console.log('5. 👥 Build admin dashboard for user management and system monitoring');
-    console.log('6. 🔒 Configure production security settings and rate limiting\n');
+    console.log(
+      '2. 📊 Start with authentication task assignment audit and resource reallocation'
+    );
+    console.log(
+      '3. 🔐 Focus on OAuth provider configuration and MFA frontend integration'
+    );
+    console.log(
+      '4. 📧 Implement email services for verification and password reset workflows'
+    );
+    console.log(
+      '5. 👥 Build admin dashboard for user management and system monitoring'
+    );
+    console.log(
+      '6. 🔒 Configure production security settings and rate limiting\n'
+    );
 
     console.log('🎯 CRITICAL SUCCESS FACTORS:');
-    console.log('   • Dedicated developer assignment for systematic completion');
-    console.log('   • Focus on user-facing features (OAuth, MFA) before admin tools');
-    console.log('   • Production security hardening as final deployment preparation');
+    console.log(
+      '   • Dedicated developer assignment for systematic completion'
+    );
+    console.log(
+      '   • Focus on user-facing features (OAuth, MFA) before admin tools'
+    );
+    console.log(
+      '   • Production security hardening as final deployment preparation'
+    );
     console.log('   • 80% → 95% completion within dedicated 2-3 day sprint\n');
 
     console.log('🚀 PRODUCTION READINESS TIMELINE:');
     console.log('   Day 1: Resource audit + OAuth/MFA frontend completion');
-    console.log('   Day 2: Email services + User profile polish + Admin dashboard start');
-    console.log('   Day 3: Admin dashboard completion + Production config + Security hardening');
-    console.log('   Result: Production-ready authentication system with 95% feature completion');
+    console.log(
+      '   Day 2: Email services + User profile polish + Admin dashboard start'
+    );
+    console.log(
+      '   Day 3: Admin dashboard completion + Production config + Security hardening'
+    );
+    console.log(
+      '   Result: Production-ready authentication system with 95% feature completion'
+    );
 
     return {
       story: story,
       tasks: implementationTasks,
       created: storiesCreated,
       tasksCreated: tasksCreated,
-      total: Object.keys(state.tasks).length,
+      total: Object.keys(state.tasks).length
     };
   } catch (error) {
     console.error('❌ Failed to create authentication system story:', error);
@@ -460,5 +586,5 @@ if (require.main === module) {
 
 module.exports = {
   createAuthSystemStory,
-  authSystemStory,
+  authSystemStory
 };

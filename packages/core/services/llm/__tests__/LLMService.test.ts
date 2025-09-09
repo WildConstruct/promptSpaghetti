@@ -9,12 +9,7 @@ import { CacheManager } from '../CacheManager';
 import { TokenTracker } from '../TokenTracker';
 import { PrivacyFilter } from '../PrivacyFilter';
 import OpenAI from 'openai';
-import { 
-  LLMRequest, 
-  LLMServiceConfig,
-  TaskType,
-  ModelInfo
-} from '../types';
+import { LLMRequest, LLMServiceConfig, TaskType, ModelInfo } from '../types';
 
 // Mock all dependencies
 jest.mock('openai');
@@ -35,7 +30,7 @@ describe('LLMService', () => {
   beforeEach(() => {
     // Clear all mocks
     jest.clearAllMocks();
-    
+
     // Setup mock config
     mockConfig = {
       apiKey: 'test-api-key-123',
@@ -56,12 +51,17 @@ describe('LLMService', () => {
         }
       }
     };
-    (OpenAI as jest.MockedClass<typeof OpenAI>).mockImplementation(() => mockOpenAIClient);
+    (OpenAI as jest.MockedClass<typeof OpenAI>).mockImplementation(
+      () => mockOpenAIClient
+    );
 
     // Setup mock dependencies
     mockModelSelector = new ModelSelector() as jest.Mocked<ModelSelector>;
     mockCacheManager = new CacheManager() as jest.Mocked<CacheManager>;
-    mockTokenTracker = new TokenTracker(100000, 10) as jest.Mocked<TokenTracker>;
+    mockTokenTracker = new TokenTracker(
+      100000,
+      10
+    ) as jest.Mocked<TokenTracker>;
     mockPrivacyFilter = new PrivacyFilter() as jest.Mocked<PrivacyFilter>;
 
     // Create service instance
@@ -76,9 +76,9 @@ describe('LLMService', () => {
         baseURL: 'https://openrouter.ai/api/v1',
         defaultHeaders: {
           'HTTP-Referer': 'http://localhost:3000',
-          'X-Title': 'Prompt Spaghetti',
+          'X-Title': 'Prompt Spaghetti'
         },
-        dangerouslyAllowBrowser: true,
+        dangerouslyAllowBrowser: true
       });
     });
 
@@ -96,7 +96,7 @@ describe('LLMService', () => {
       new LLMService(prodConfig);
       expect(OpenAI).toHaveBeenCalledWith(
         expect.objectContaining({
-          dangerouslyAllowBrowser: false,
+          dangerouslyAllowBrowser: false
         })
       );
     });
@@ -137,10 +137,12 @@ describe('LLMService', () => {
 
     it('should complete a request successfully', async () => {
       mockOpenAIClient.chat.completions.create.mockResolvedValue({
-        choices: [{
-          message: { content: 'Test response' },
-          finish_reason: 'stop'
-        }],
+        choices: [
+          {
+            message: { content: 'Test response' },
+            finish_reason: 'stop'
+          }
+        ],
         usage: {
           prompt_tokens: 100,
           completion_tokens: 50,
@@ -164,7 +166,7 @@ describe('LLMService', () => {
         model: 'anthropic/claude-3-haiku',
         messages: [{ role: 'user', content: 'Test prompt' }],
         max_tokens: 1000,
-        temperature: 0.7,
+        temperature: 0.7
       });
     });
 
@@ -197,7 +199,7 @@ describe('LLMService', () => {
         tokensOut: 0,
         cost: 0,
         cached: false,
-        error: 'Daily quota exceeded',
+        error: 'Daily quota exceeded'
       });
       expect(mockOpenAIClient.chat.completions.create).not.toHaveBeenCalled();
     });
@@ -224,7 +226,7 @@ describe('LLMService', () => {
         tokensOut: 0,
         cost: 0,
         cached: false,
-        error: 'No available models',
+        error: 'No available models'
       });
     });
 
@@ -242,7 +244,7 @@ describe('LLMService', () => {
         tokensOut: 0,
         cost: 0,
         cached: false,
-        error: 'API Error: Rate limit exceeded',
+        error: 'API Error: Rate limit exceeded'
       });
     });
 
@@ -252,16 +254,21 @@ describe('LLMService', () => {
         id: 'openai/gpt-3.5-turbo',
         name: 'GPT-3.5 Turbo'
       };
-      mockModelSelector.getModelsForTask.mockReturnValue([mockModel, fallbackModel]);
-      
+      mockModelSelector.getModelsForTask.mockReturnValue([
+        mockModel,
+        fallbackModel
+      ]);
+
       // First model fails
       mockOpenAIClient.chat.completions.create
         .mockRejectedValueOnce(new Error('Model overloaded'))
         .mockResolvedValueOnce({
-          choices: [{
-            message: { content: 'Fallback response' },
-            finish_reason: 'stop'
-          }],
+          choices: [
+            {
+              message: { content: 'Fallback response' },
+              finish_reason: 'stop'
+            }
+          ],
           usage: {
             prompt_tokens: 90,
             completion_tokens: 45,
@@ -285,19 +292,23 @@ describe('LLMService', () => {
 
     it('should filter sensitive data from requests', async () => {
       mockPrivacyFilter.filterRequest.mockReturnValue('Filtered prompt');
-      
+
       mockOpenAIClient.chat.completions.create.mockResolvedValue({
-        choices: [{
-          message: { content: 'Response' },
-          finish_reason: 'stop'
-        }],
+        choices: [
+          {
+            message: { content: 'Response' },
+            finish_reason: 'stop'
+          }
+        ],
         usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
         model: 'anthropic/claude-3-haiku'
       });
 
       await service.complete(mockRequest);
 
-      expect(mockPrivacyFilter.filterRequest).toHaveBeenCalledWith('Test prompt');
+      expect(mockPrivacyFilter.filterRequest).toHaveBeenCalledWith(
+        'Test prompt'
+      );
       expect(mockOpenAIClient.chat.completions.create).toHaveBeenCalledWith(
         expect.objectContaining({
           messages: [{ role: 'user', content: 'Filtered prompt' }]
@@ -307,27 +318,35 @@ describe('LLMService', () => {
 
     it('should filter sensitive data from responses', async () => {
       mockOpenAIClient.chat.completions.create.mockResolvedValue({
-        choices: [{
-          message: { content: 'Sensitive response with SSN: 123-45-6789' },
-          finish_reason: 'stop'
-        }],
+        choices: [
+          {
+            message: { content: 'Sensitive response with SSN: 123-45-6789' },
+            finish_reason: 'stop'
+          }
+        ],
         usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
         model: 'anthropic/claude-3-haiku'
       });
-      mockPrivacyFilter.filterResponse.mockReturnValue('Sensitive response with SSN: [REDACTED]');
+      mockPrivacyFilter.filterResponse.mockReturnValue(
+        'Sensitive response with SSN: [REDACTED]'
+      );
 
       const response = await service.complete(mockRequest);
 
-      expect(mockPrivacyFilter.filterResponse).toHaveBeenCalledWith('Sensitive response with SSN: 123-45-6789');
+      expect(mockPrivacyFilter.filterResponse).toHaveBeenCalledWith(
+        'Sensitive response with SSN: 123-45-6789'
+      );
       expect(response?.content).toBe('Sensitive response with SSN: [REDACTED]');
     });
 
     it('should store response in cache when enabled', async () => {
       mockOpenAIClient.chat.completions.create.mockResolvedValue({
-        choices: [{
-          message: { content: 'Response to cache' },
-          finish_reason: 'stop'
-        }],
+        choices: [
+          {
+            message: { content: 'Response to cache' },
+            finish_reason: 'stop'
+          }
+        ],
         usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
         model: 'anthropic/claude-3-haiku'
       });
@@ -347,10 +366,12 @@ describe('LLMService', () => {
 
     it('should track token usage', async () => {
       mockOpenAIClient.chat.completions.create.mockResolvedValue({
-        choices: [{
-          message: { content: 'Response' },
-          finish_reason: 'stop'
-        }],
+        choices: [
+          {
+            message: { content: 'Response' },
+            finish_reason: 'stop'
+          }
+        ],
         usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
         model: 'anthropic/claude-3-haiku'
       });
@@ -487,21 +508,23 @@ describe('LLMService', () => {
 
     it('should return metrics after requests', async () => {
       mockTokenTracker.isQuotaExceeded.mockReturnValue(false);
-      mockModelSelector.getModelsForTask.mockReturnValue([{
-        id: 'test-model',
-        name: 'Test Model',
-        provider: 'test',
-        contextWindow: 4096,
-        maxOutput: 1024,
-        costPer1kInput: 0.001,
-        costPer1kOutput: 0.002,
-        capabilities: [],
-        recommended: []
-      }]);
+      mockModelSelector.getModelsForTask.mockReturnValue([
+        {
+          id: 'test-model',
+          name: 'Test Model',
+          provider: 'test',
+          contextWindow: 4096,
+          maxOutput: 1024,
+          costPer1kInput: 0.001,
+          costPer1kOutput: 0.002,
+          capabilities: [],
+          recommended: []
+        }
+      ]);
       mockCacheManager.get.mockReturnValue(null);
       mockPrivacyFilter.filterRequest.mockImplementation(s => s);
       mockPrivacyFilter.filterResponse.mockImplementation(s => s);
-      
+
       mockOpenAIClient.chat.completions.create.mockResolvedValue({
         choices: [{ message: { content: 'Response' }, finish_reason: 'stop' }],
         usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
@@ -548,7 +571,7 @@ describe('LLMService', () => {
       });
 
       const stats = service.getUsageStats('default');
-      
+
       expect(stats).toEqual({
         userId: 'default',
         tokensUsed: 5000,
@@ -570,19 +593,21 @@ describe('LLMService', () => {
   describe('error handling', () => {
     it('should handle network errors', async () => {
       mockTokenTracker.isQuotaExceeded.mockReturnValue(false);
-      mockModelSelector.getModelsForTask.mockReturnValue([{
-        id: 'test-model',
-        name: 'Test Model',
-        provider: 'test',
-        contextWindow: 4096,
-        maxOutput: 1024,
-        costPer1kInput: 0.001,
-        costPer1kOutput: 0.002,
-        capabilities: [],
-        recommended: []
-      }]);
+      mockModelSelector.getModelsForTask.mockReturnValue([
+        {
+          id: 'test-model',
+          name: 'Test Model',
+          provider: 'test',
+          contextWindow: 4096,
+          maxOutput: 1024,
+          costPer1kInput: 0.001,
+          costPer1kOutput: 0.002,
+          capabilities: [],
+          recommended: []
+        }
+      ]);
       mockCacheManager.get.mockReturnValue(null);
-      
+
       const networkError = new Error('Network request failed');
       mockOpenAIClient.chat.completions.create.mockRejectedValue(networkError);
 
@@ -605,19 +630,21 @@ describe('LLMService', () => {
 
     it('should handle malformed API responses', async () => {
       mockTokenTracker.isQuotaExceeded.mockReturnValue(false);
-      mockModelSelector.getModelsForTask.mockReturnValue([{
-        id: 'test-model',
-        name: 'Test Model',
-        provider: 'test',
-        contextWindow: 4096,
-        maxOutput: 1024,
-        costPer1kInput: 0.001,
-        costPer1kOutput: 0.002,
-        capabilities: [],
-        recommended: []
-      }]);
+      mockModelSelector.getModelsForTask.mockReturnValue([
+        {
+          id: 'test-model',
+          name: 'Test Model',
+          provider: 'test',
+          contextWindow: 4096,
+          maxOutput: 1024,
+          costPer1kInput: 0.001,
+          costPer1kOutput: 0.002,
+          capabilities: [],
+          recommended: []
+        }
+      ]);
       mockCacheManager.get.mockReturnValue(null);
-      
+
       // Malformed response missing required fields
       mockOpenAIClient.chat.completions.create.mockResolvedValue({
         choices: [],
@@ -639,7 +666,7 @@ describe('LLMService', () => {
   describe('initialization without client', () => {
     it('should handle operations without API key', async () => {
       const serviceWithoutKey = new LLMService({ ...mockConfig, apiKey: '' });
-      
+
       const response = await serviceWithoutKey.complete({
         prompt: 'Test',
         taskType: 'suggestion',

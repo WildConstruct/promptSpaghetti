@@ -89,10 +89,14 @@ describe('Graph Validation', () => {
     // Arrange
     const graph: Graph = {
       nodes: [
-        { id: 'node1', type: 'WeightedChoice', choices: [{ value: 'A', weight: 1 }] },
-        { id: 'node2', type: 'Output', template: '{{node1}}' },
+        {
+          id: 'node1',
+          type: 'WeightedChoice',
+          choices: [{ value: 'A', weight: 1 }]
+        },
+        { id: 'node2', type: 'Output', template: '{{node1}}' }
       ],
-      edges: [{ id: 'edge1', source: 'node1', target: 'node2' }],
+      edges: [{ id: 'edge1', source: 'node1', target: 'node2' }]
     };
 
     // Act
@@ -126,14 +130,22 @@ it('should validate email format and reject invalid addresses', () => {});
 it('should execute graph correctly', () => {
   const graph = {
     nodes: [
-      { id: 'n1', type: 'WeightedChoice', choices: [{ value: 'Hello', weight: 1 }] },
-      { id: 'n2', type: 'WeightedChoice', choices: [{ value: 'World', weight: 1 }] },
-      { id: 'output', type: 'Output', template: '{{n1}} {{n2}}' },
+      {
+        id: 'n1',
+        type: 'WeightedChoice',
+        choices: [{ value: 'Hello', weight: 1 }]
+      },
+      {
+        id: 'n2',
+        type: 'WeightedChoice',
+        choices: [{ value: 'World', weight: 1 }]
+      },
+      { id: 'output', type: 'Output', template: '{{n1}} {{n2}}' }
     ],
     edges: [
       { id: 'e1', source: 'n1', target: 'n2' },
-      { id: 'e2', source: 'n2', target: 'output' },
-    ],
+      { id: 'e2', source: 'n2', target: 'output' }
+    ]
   };
   // ... test continues
 });
@@ -143,22 +155,25 @@ const GraphBuilder = {
   simple: () => ({
     nodes: [
       TestNodeBuilder.weightedChoice('n1', [{ value: 'Hello', weight: 1 }]),
-      TestNodeBuilder.output('output', '{{n1}}'),
+      TestNodeBuilder.output('output', '{{n1}}')
     ],
-    edges: [TestEdgeBuilder.connect('n1', 'output')],
+    edges: [TestEdgeBuilder.connect('n1', 'output')]
   }),
 
   complex: () => ({
     nodes: [
       TestNodeBuilder.weightedChoice('choice1', [
         { value: 'Option A', weight: 2 },
-        { value: 'Option B', weight: 1 },
+        { value: 'Option B', weight: 1 }
       ]),
       TestNodeBuilder.variable('var1', 'testValue'),
-      TestNodeBuilder.output('output', '{{choice1}} - {{var1}}'),
+      TestNodeBuilder.output('output', '{{choice1}} - {{var1}}')
     ],
-    edges: [TestEdgeBuilder.connect('choice1', 'output'), TestEdgeBuilder.connect('var1', 'output')],
-  }),
+    edges: [
+      TestEdgeBuilder.connect('choice1', 'output'),
+      TestEdgeBuilder.connect('var1', 'output')
+    ]
+  })
 };
 
 it('should execute simple graph correctly', () => {
@@ -194,7 +209,7 @@ describe('GraphExecutionService', () => {
     expect(mockLogger.info).toHaveBeenCalledWith(
       expect.stringContaining('Graph execution completed'),
       expect.objectContaining({
-        executionTime: expect.any(Number),
+        executionTime: expect.any(Number)
       })
     );
   });
@@ -267,7 +282,10 @@ describe('Graph API Integration', () => {
       const graph = GraphBuilder.simple();
 
       // Act
-      const response = await request.post('/graphs/execute').send({ graph }).expect(200);
+      const response = await request
+        .post('/graphs/execute')
+        .send({ graph })
+        .expect(200);
 
       // Assert
       expect(response.body).toMatchObject({
@@ -275,8 +293,8 @@ describe('Graph API Integration', () => {
         results: expect.arrayContaining([expect.stringMatching(/Hello/)]),
         metadata: expect.objectContaining({
           executionTime: expect.any(Number),
-          nodeCount: graph.nodes.length,
-        }),
+          nodeCount: graph.nodes.length
+        })
       });
     });
 
@@ -285,7 +303,10 @@ describe('Graph API Integration', () => {
       const invalidGraph = { nodes: [], edges: [] };
 
       // Act & Assert
-      const response = await request.post('/graphs/execute').send({ graph: invalidGraph }).expect(400);
+      const response = await request
+        .post('/graphs/execute')
+        .send({ graph: invalidGraph })
+        .expect(400);
 
       expect(response.body).toMatchObject({
         success: false,
@@ -293,9 +314,9 @@ describe('Graph API Integration', () => {
         details: expect.arrayContaining([
           expect.objectContaining({
             message: expect.any(String),
-            path: expect.any(String),
-          }),
-        ]),
+            path: expect.any(String)
+          })
+        ])
       });
     });
   });
@@ -420,7 +441,7 @@ describe('Graph Execution Performance', () => {
   const PERFORMANCE_THRESHOLDS = {
     SMALL_GRAPH: 50, // ms
     MEDIUM_GRAPH: 200, // ms
-    LARGE_GRAPH: 1000, // ms
+    LARGE_GRAPH: 1000 // ms
   };
 
   it('should execute small graph within performance threshold', async () => {
@@ -451,7 +472,8 @@ describe('Graph Execution Performance', () => {
     const results = await Promise.all(promises);
 
     // Assert
-    const avgExecutionTime = results.reduce((sum, r) => sum + r.executionTime, 0) / results.length;
+    const avgExecutionTime =
+      results.reduce((sum, r) => sum + r.executionTime, 0) / results.length;
     expect(avgExecutionTime).toBeLessThan(PERFORMANCE_THRESHOLDS.MEDIUM_GRAPH);
 
     // No execution should be more than 2x the average
@@ -504,12 +526,14 @@ describe('Error Handling', () => {
       {},
       { nodes: null },
       { nodes: [], edges: null },
-      { nodes: [{ invalid: 'node' }], edges: [] },
+      { nodes: [{ invalid: 'node' }], edges: [] }
     ];
 
     // Act & Assert
     for (const input of malformedInputs) {
-      await expect(executeGraph(input as any)).rejects.toThrow(/validation|invalid|malformed/i);
+      await expect(executeGraph(input as any)).rejects.toThrow(
+        /validation|invalid|malformed/i
+      );
     }
   });
 
@@ -517,13 +541,21 @@ describe('Error Handling', () => {
     // Arrange
     const circularGraph = {
       nodes: [
-        { id: 'a', type: 'WeightedChoice', choices: [{ value: 'A', weight: 1 }] },
-        { id: 'b', type: 'WeightedChoice', choices: [{ value: 'B', weight: 1 }] },
+        {
+          id: 'a',
+          type: 'WeightedChoice',
+          choices: [{ value: 'A', weight: 1 }]
+        },
+        {
+          id: 'b',
+          type: 'WeightedChoice',
+          choices: [{ value: 'B', weight: 1 }]
+        }
       ],
       edges: [
         { id: 'ab', source: 'a', target: 'b' },
-        { id: 'ba', source: 'b', target: 'a' }, // Creates cycle
-      ],
+        { id: 'ba', source: 'b', target: 'a' } // Creates cycle
+      ]
     };
 
     // Act & Assert
@@ -540,7 +572,7 @@ describe('Boundary Values', () => {
     expect(calculateTotal(0, 0)).toBe(0);
     expect(validateGraph({ nodes: [], edges: [] })).toMatchObject({
       isValid: false,
-      errors: expect.arrayContaining([expect.stringContaining('empty')]),
+      errors: expect.arrayContaining([expect.stringContaining('empty')])
     });
   });
 
@@ -570,7 +602,7 @@ describe('Security - Input Sanitization', () => {
     'javascript:alert("xss")',
     '${process.exit(1)}',
     'eval("1+1")',
-    '__proto__.polluted = true',
+    '__proto__.polluted = true'
   ];
 
   it('should sanitize malicious input in node templates', () => {
@@ -589,11 +621,13 @@ describe('Security - Input Sanitization', () => {
     const dangerousExpressions = [
       'eval("process.exit(1)")',
       'this.constructor.constructor("return process")().exit(1)',
-      'require("child_process").exec("rm -rf /")',
+      'require("child_process").exec("rm -rf /")'
     ];
 
     for (const expression of dangerousExpressions) {
-      expect(() => evaluateExpression(expression, {})).toThrow(/unsafe|forbidden|blocked/i);
+      expect(() => evaluateExpression(expression, {})).toThrow(
+        /unsafe|forbidden|blocked/i
+      );
     }
   });
 });
@@ -604,7 +638,10 @@ describe('Security - Input Sanitization', () => {
 ```typescript
 describe('Security - Authentication', () => {
   it('should require valid authentication token', async () => {
-    const response = await request.post('/graphs/execute').send({ graph: GraphBuilder.simple() }).expect(401);
+    const response = await request
+      .post('/graphs/execute')
+      .send({ graph: GraphBuilder.simple() })
+      .expect(401);
 
     expect(response.body.error).toMatch(/authentication|unauthorized/i);
   });
@@ -717,12 +754,12 @@ const testMetrics = {
     statements: results.coverageMap.getCoverageSummary().statements.pct,
     branches: results.coverageMap.getCoverageSummary().branches.pct,
     functions: results.coverageMap.getCoverageSummary().functions.pct,
-    lines: results.coverageMap.getCoverageSummary().lines.pct,
+    lines: results.coverageMap.getCoverageSummary().lines.pct
   },
   slowTests: results.testResults
     .flatMap(r => r.testResults)
     .filter(t => t.duration > 1000)
-    .map(t => ({ name: t.fullName, duration: t.duration })),
+    .map(t => ({ name: t.fullName, duration: t.duration }))
 };
 
 // Store metrics for trend analysis

@@ -71,7 +71,7 @@ export const ConsentBanner: React.FC = () => {
           question: 'Did the consent banner interfere with your workflow?',
           options: ['Not at all', 'Slightly', 'Significantly'],
           context: 'consent_banner_dismissal',
-          followUp: 'Any suggestions for improvement?',
+          followUp: 'Any suggestions for improvement?'
         });
         setFeedbackShown(true);
       }
@@ -92,8 +92,8 @@ export const JustInTimeConsentPrompt: React.FC = () => {
         type: 'rating',
         scale: 5,
         followUp: 'What could we improve?',
-        context: `jit_consent_${granted ? 'granted' : 'denied'}`,
-      },
+        context: `jit_consent_${granted ? 'granted' : 'denied'}`
+      }
     });
   };
 };
@@ -121,7 +121,7 @@ export const PerformanceAwareComponent: React.FC = ({ children }) => {
             question: 'Did you notice any slowdown in the last action?',
             context: entry.name,
             duration: entry.duration,
-            options: ['No change', 'Slightly slower', 'Much slower'],
+            options: ['No change', 'Slightly slower', 'Much slower']
           });
         }
       });
@@ -150,7 +150,7 @@ export const GraphEditor: React.FC = () => {
           question: 'Prompt generation felt slower than usual?',
           options: ['No difference', 'A bit slower', 'Much slower'],
           context: 'prompt_generation_performance',
-          actualDuration: Math.round(duration),
+          actualDuration: Math.round(duration)
         });
       }, 5000);
     }
@@ -186,8 +186,8 @@ export const PolicyPreviewDashboard: React.FC = () => {
           followUpQuestions: [
             'What was most confusing?',
             'What features are missing?',
-            'Any suggestions for improvement?',
-          ],
+            'Any suggestions for improvement?'
+          ]
         });
       }
     };
@@ -206,8 +206,8 @@ export const UserDataTransparencyDashboard: React.FC = () => {
         question: 'Did you find all the data transparency info you needed?',
         options: ['Yes, complete', 'Mostly', 'Missing important info'],
         followUp: 'What additional transparency would be helpful?',
-        context: 'data_transparency_completeness',
-      },
+        context: 'data_transparency_completeness'
+      }
     });
   };
 };
@@ -347,25 +347,41 @@ interface FeedbackCategory {
   USABILITY_ISSUES: {
     priority: 'high';
     actionRequired: 'UX improvement within 2 weeks';
-    examples: ['Consent banner too intrusive', 'Policy dashboard confusing', 'Too many privacy prompts'];
+    examples: [
+      'Consent banner too intrusive',
+      'Policy dashboard confusing',
+      'Too many privacy prompts'
+    ];
   };
 
   FEATURE_REQUESTS: {
     priority: 'medium';
     actionRequired: 'Evaluate for roadmap inclusion';
-    examples: ['Bulk consent management', 'Advanced policy templates', 'Custom compliance reporting'];
+    examples: [
+      'Bulk consent management',
+      'Advanced policy templates',
+      'Custom compliance reporting'
+    ];
   };
 
   PERFORMANCE_COMPLAINTS: {
     priority: 'high';
     actionRequired: 'Performance optimization immediately';
-    examples: ['Slower prompt generation', 'Privacy dashboard loading slowly', 'Consent checks causing delays'];
+    examples: [
+      'Slower prompt generation',
+      'Privacy dashboard loading slowly',
+      'Consent checks causing delays'
+    ];
   };
 
   COMPLIANCE_GAPS: {
     priority: 'critical';
     actionRequired: 'Legal review and immediate fix';
-    examples: ['GDPR consent not sufficient', 'Data deletion not complete', 'Audit trail missing information'];
+    examples: [
+      'GDPR consent not sufficient',
+      'Data deletion not complete',
+      'Audit trail missing information'
+    ];
   };
 }
 ```
@@ -476,7 +492,7 @@ export const ConsentOptimizationFramework = {
     variant_a: 'Traditional bottom banner',
     variant_b: 'Top notification bar',
     variant_c: 'Center modal overlay',
-    variant_d: 'Contextual just-in-time only',
+    variant_d: 'Contextual just-in-time only'
   },
 
   // Test consent prompt timing
@@ -484,7 +500,7 @@ export const ConsentOptimizationFramework = {
     immediate: 'Show on first page load',
     delayed: 'Show after 30 seconds on site',
     interaction_based: 'Show on first feature interaction',
-    progressive: 'Show minimal first, expand on request',
+    progressive: 'Show minimal first, expand on request'
   },
 
   // Measure optimization success
@@ -492,8 +508,8 @@ export const ConsentOptimizationFramework = {
     consentGrantRate: 'target >60%',
     dismissalRate: 'target <30%',
     completionRate: 'target >85%',
-    userSatisfaction: 'target >4.0/5.0',
-  },
+    userSatisfaction: 'target >4.0/5.0'
+  }
 };
 
 // Consent Flow Feedback Collection
@@ -504,7 +520,9 @@ export const ConsentFeedbackCollector: React.FC = () => {
       trigger: 'consent_flow_completed',
       question: 'How was that consent experience?',
       options: ['😊 Great', '😐 OK', '😞 Frustrating'],
-      followUp: flow.granted ? 'Any suggestions to make this smoother?' : 'What made you choose not to consent?',
+      followUp: flow.granted
+        ? 'Any suggestions to make this smoother?'
+        : 'What made you choose not to consent?'
     });
 
     // Analyze flow performance
@@ -525,7 +543,7 @@ interface ComplianceFeedbackFramework {
       'consent_mechanism_validity',
       'data_subject_rights_completeness',
       'lawful_basis_clarity',
-      'retention_period_accuracy',
+      'retention_period_accuracy'
     ];
     feedbackMethod: 'Legal team validation + user testing';
     validationFrequency: 'Monthly compliance review';
@@ -536,7 +554,7 @@ interface ComplianceFeedbackFramework {
       'audit_trail_completeness',
       'evidence_collection_accuracy',
       'reporting_usefulness',
-      'compliance_officer_satisfaction',
+      'compliance_officer_satisfaction'
     ];
     feedbackMethod: 'Compliance officer interviews';
     validationFrequency: 'Quarterly audit preparation';
@@ -547,7 +565,7 @@ interface ComplianceFeedbackFramework {
       'policy_creation_ease',
       'policy_distribution_effectiveness',
       'policy_compliance_monitoring',
-      'policy_update_workflow_efficiency',
+      'policy_update_workflow_efficiency'
     ];
     feedbackMethod: 'Administrative user testing';
     validationFrequency: 'Bi-weekly admin feedback sessions';
@@ -562,10 +580,10 @@ export const ComplianceGapFeedback: React.FC = () => {
         'What compliance requirements are we missing?',
         'Which regulations need better support?',
         'What compliance processes are still manual?',
-        'What audit evidence is hard to collect?',
+        'What audit evidence is hard to collect?'
       ],
       targetAudience: 'compliance_officers',
-      method: 'structured_interview',
+      method: 'structured_interview'
     });
 
     return prioritizeComplianceImprovements(feedback);
@@ -659,7 +677,7 @@ const reviewFeedbackProgram = async () => {
   return {
     currentPerformance: metrics,
     recommendedImprovements: improvements,
-    nextMonthPriorities: prioritizeImprovements(improvements),
+    nextMonthPriorities: prioritizeImprovements(improvements)
   };
 };
 ```
@@ -677,7 +695,7 @@ export const FeedbackSystemOptimizer = {
       feedbackChannelPreferences: surveyFeedbackChannelUsage(),
       feedbackProcessSatisfaction: measureFeedbackProcessUX(),
       suggestionsForFeedbackImprovement: collectMetaFeedback(),
-      responseTimeExpectations: understandUserExpectations(),
+      responseTimeExpectations: understandUserExpectations()
     };
   },
 
@@ -687,7 +705,7 @@ export const FeedbackSystemOptimizer = {
       adjustSurveyTiming: optimizeSurveyTriggers(analysisResults),
       improveFeedbackUI: enhanceFeedbackInterface(analysisResults),
       personalizeRequests: customizeFeedbackRequests(analysisResults),
-      reduceOverfeedback: preventFeedbackFatigue(analysisResults),
+      reduceOverfeedback: preventFeedbackFatigue(analysisResults)
     };
   },
 
@@ -701,9 +719,9 @@ export const FeedbackSystemOptimizer = {
       totalROI: (improvementValue + retentionImpact) / implementationCost,
       userSatisfactionGain: improvementValue,
       retentionImprovement: retentionImpact,
-      programEfficiency: improvementValue / implementationCost,
+      programEfficiency: improvementValue / implementationCost
     };
-  },
+  }
 };
 ```
 

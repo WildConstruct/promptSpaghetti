@@ -58,7 +58,7 @@ export const ParserToggle: React.FC<ParserToggleProps> = ({
     // Check if user is signed in (would need auth context in real impl)
     const projectId = (window as any).currentProjectId || 'default';
     const userId = (window as any).currentUserId;
-    
+
     if (userId) {
       return `parser-mode-${userId}-${projectId}`;
     }
@@ -88,25 +88,21 @@ export const ParserToggle: React.FC<ParserToggleProps> = ({
             tabIndex={0}
           >
             <div className="toggle-track">
-              <span className="toggle-option standard-option">
-                Standard
-              </span>
-              <span className="toggle-option llm-option">
-                LLM-Enhanced
-              </span>
+              <span className="toggle-option standard-option">Standard</span>
+              <span className="toggle-option llm-option">LLM-Enhanced</span>
               <div className="toggle-thumb" />
             </div>
           </button>
-          
+
           {loading && (
             <div className="toggle-loading">
               <svg className="spinner" viewBox="0 0 24 24">
-                <circle 
+                <circle
                   className="spinner-circle"
-                  cx="12" 
-                  cy="12" 
-                  r="10" 
-                  fill="none" 
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
                   strokeWidth="2"
                 />
               </svg>
@@ -125,15 +121,13 @@ export const ParserToggle: React.FC<ParserToggleProps> = ({
         tabIndex={0}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm0-3H7V4h2v6z"/>
+          <path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm0-3H7V4h2v6z" />
         </svg>
       </button>
 
       {showTooltip && (
         <div className="parser-tooltip" role="tooltip">
-          <div className="tooltip-content">
-            {getTooltipContent()}
-          </div>
+          <div className="tooltip-content">{getTooltipContent()}</div>
           <div className="tooltip-arrow" />
         </div>
       )}

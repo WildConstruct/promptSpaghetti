@@ -179,7 +179,7 @@ export enum AuditActivityType {
   POLICY_REVIEW = 'policy_review',
   TRAINING_SESSION = 'training_session',
   INCIDENT_REVIEW = 'incident_review',
-  RETENTION_CLEANUP = 'retention_cleanup',
+  RETENTION_CLEANUP = 'retention_cleanup'
 }
 ```
 
@@ -194,7 +194,7 @@ export enum RecurrencePattern {
   QUARTERLY = 'quarterly',
   SEMI_ANNUAL = 'semi_annual',
   ANNUAL = 'annual',
-  CUSTOM = 'custom',
+  CUSTOM = 'custom'
 }
 ```
 
@@ -214,7 +214,7 @@ export const AuditCalendarDashboard: React.FC = () => {
     selectedDate: moment(),
     upcomingDeadlines: [],
     overdueSchedules: [],
-    calendarEvents: [],
+    calendarEvents: []
   });
 
   // Real-time data loading and monitoring
@@ -329,9 +329,9 @@ const schedule = auditCalendarSystem.createSchedule({
     {
       timing: NotificationTiming.ONE_WEEK,
       recipients: ['security-team@company.com'],
-      channels: ['email', 'dashboard'],
-    },
-  ],
+      channels: ['email', 'dashboard']
+    }
+  ]
 });
 ```
 
@@ -347,7 +347,7 @@ const result = await auditCalendarSystem.querySchedules({
   start_date: new Date('2025-07-01'),
   end_date: new Date('2025-12-31'),
   assignee_ids: ['security-lead'],
-  compliance_frameworks: ['sox'],
+  compliance_frameworks: ['sox']
 });
 ```
 
@@ -361,13 +361,13 @@ const calendarView = auditCalendarSystem.generateCalendarView({
   end_date: new Date('2025-08-31'),
   filters: {
     activity_types: [AuditActivityType.COMPLIANCE_REVIEW],
-    priorities: [SchedulePriority.HIGH],
+    priorities: [SchedulePriority.HIGH]
   },
   display_options: {
     show_completed: true,
     show_cancelled: false,
-    color_by: 'priority',
-  },
+    color_by: 'priority'
+  }
 });
 ```
 
@@ -387,7 +387,7 @@ const overdue = auditCalendarSystem.getOverdueSchedules();
 // Analytics Generation
 const analytics = auditCalendarSystem.generateScheduleAnalytics({
   start: new Date('2025-07-01'),
-  end: new Date('2025-07-31'),
+  end: new Date('2025-07-31')
 });
 ```
 
@@ -399,13 +399,13 @@ import {
   createAuditSchedule,
   queryAuditSchedules,
   generateCalendarView,
-  auditCalendarSystem,
+  auditCalendarSystem
 } from './AuditCalendarSystem';
 
 // Create schedule using utility
 const newSchedule = createAuditSchedule({
   title: 'Monthly Compliance Check',
-  activity_type: AuditActivityType.COMPLIANCE_REVIEW,
+  activity_type: AuditActivityType.COMPLIANCE_REVIEW
   // ... other properties
 });
 
@@ -413,7 +413,7 @@ const newSchedule = createAuditSchedule({
 const schedules = await queryAuditSchedules({
   page: 1,
   limit: 20,
-  priorities: [SchedulePriority.HIGH],
+  priorities: [SchedulePriority.HIGH]
 });
 ```
 
@@ -477,7 +477,7 @@ export class AuditCalendarSystem {
     // Creates corresponding audit events
     const auditEvent = this.auditManagement.createAuditEvent({
       event_type: AuditEventType.SYSTEM_EVENT,
-      title: `Schedule Created: ${data.title}`,
+      title: `Schedule Created: ${data.title}`
       // Maps schedule data to audit events
     });
 
@@ -496,7 +496,7 @@ const handleCreateSchedule = (scheduleData: any) => {
   const schedule = auditCalendarSystem.createSchedule({
     ...scheduleData,
     created_by: currentUser.id,
-    updated_by: currentUser.id,
+    updated_by: currentUser.id
   });
 };
 ```
@@ -526,13 +526,13 @@ notifications: [
   {
     timing: NotificationTiming.ONE_WEEK,
     recipients: ['compliance-team@company.com'],
-    channels: ['email', 'slack', 'dashboard'],
+    channels: ['email', 'slack', 'dashboard']
   },
   {
     timing: NotificationTiming.ONE_DAY,
     recipients: ['audit-lead@company.com'],
-    channels: ['sms', 'email'],
-  },
+    channels: ['sms', 'email']
+  }
 ];
 ```
 
@@ -559,7 +559,7 @@ describe('Schedule Creation', () => {
   it('should create basic audit schedule', () => {
     const schedule = calendarSystem.createSchedule({
       title: 'Security Audit Review',
-      activity_type: AuditActivityType.SECURITY_AUDIT,
+      activity_type: AuditActivityType.SECURITY_AUDIT
       // ... other properties
     });
 
@@ -572,7 +572,10 @@ describe('Schedule Creation', () => {
 // Recurring Schedule Tests
 describe('Recurring Schedules', () => {
   it('should generate daily recurring instances', () => {
-    const instances = calendarSystem.generateRecurringInstances(scheduleId, endDate);
+    const instances = calendarSystem.generateRecurringInstances(
+      scheduleId,
+      endDate
+    );
 
     expect(instances.length).toBeGreaterThan(0);
     // Verify proper spacing between instances
@@ -680,7 +683,7 @@ export const AuditScheduleSchema = z.object({
   activity_type: z.nativeEnum(AuditActivityType),
   priority: z.nativeEnum(SchedulePriority),
   scheduled_start: z.date(),
-  scheduled_end: z.date(),
+  scheduled_end: z.date()
   // ... additional validations
 });
 ```
@@ -698,7 +701,7 @@ const createSchedule = (scheduleData: AuditScheduleData) => {
 
   return auditCalendarSystem.createSchedule({
     ...scheduleData,
-    created_by: currentUser.id,
+    created_by: currentUser.id
   });
 };
 ```
@@ -769,7 +772,7 @@ const config = {
   maxRecurringInstances: process.env.MAX_RECURRING_INSTANCES || 100,
   notificationRetries: process.env.NOTIFICATION_RETRIES || 3,
   monitoringIntervalMs: process.env.MONITORING_INTERVAL_MS || 3600000,
-  defaultRetentionDays: process.env.DEFAULT_RETENTION_DAYS || 2555,
+  defaultRetentionDays: process.env.DEFAULT_RETENTION_DAYS || 2555
 };
 ```
 
@@ -784,13 +787,13 @@ const getSystemHealth = () => ({
   components: {
     schedule_storage: { status: 'healthy' },
     notification_service: { status: 'healthy' },
-    recurring_processor: { status: 'healthy' },
+    recurring_processor: { status: 'healthy' }
   },
   metrics: {
     active_schedules: auditCalendarSystem.getActiveSchedulesCount(),
     overdue_schedules: auditCalendarSystem.getOverdueSchedules().length,
-    notifications_sent_today: getNotificationsSentToday(),
-  },
+    notifications_sent_today: getNotificationsSentToday()
+  }
 });
 ```
 

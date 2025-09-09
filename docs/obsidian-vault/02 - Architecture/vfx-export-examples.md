@@ -118,10 +118,20 @@ This document showcases practical implementations of Wild Construct VFX exports 
         "category": "logic",
         "purpose": "Randomly selects character clothing",
         "configuration": {
-          "choices": ["earth-toned robes", "leather vest", "woven cloak", "simple tunic"],
+          "choices": [
+            "earth-toned robes",
+            "leather vest",
+            "woven cloak",
+            "simple tunic"
+          ],
           "weights": [40, 25, 20, 15],
           "weightedChoiceData": {
-            "choices": ["earth-toned robes", "leather vest", "woven cloak", "simple tunic"],
+            "choices": [
+              "earth-toned robes",
+              "leather vest",
+              "woven cloak",
+              "simple tunic"
+            ],
             "weights": [40, 25, 20, 15],
             "weightDistribution": {
               "percentages": [40.0, 25.0, 20.0, 15.0],
@@ -146,7 +156,12 @@ This document showcases practical implementations of Wild Construct VFX exports 
         "dataType": "text"
       }
     ],
-    "executionPath": ["character_base", "clothing_choice", "prop_choice", "final_output"],
+    "executionPath": [
+      "character_base",
+      "clothing_choice",
+      "prop_choice",
+      "final_output"
+    ],
     "criticalPath": ["character_base", "final_output"],
     "analysis": {
       "complexity": "moderate",
@@ -173,13 +188,26 @@ This document showcases practical implementations of Wild Construct VFX exports 
           "lastValue": 0.7234
         }
       },
-      "executionSequence": ["character_base", "clothing_choice", "prop_choice", "final_output"]
+      "executionSequence": [
+        "character_base",
+        "clothing_choice",
+        "prop_choice",
+        "final_output"
+      ]
     },
     "performance": {
       "totalTime": 298,
       "nodePerformance": {
-        "character_base": { "executionTime": 45, "cacheHits": 0, "cacheMisses": 1 },
-        "clothing_choice": { "executionTime": 23, "cacheHits": 2, "cacheMisses": 0 }
+        "character_base": {
+          "executionTime": 45,
+          "cacheHits": 0,
+          "cacheMisses": 1
+        },
+        "clothing_choice": {
+          "executionTime": 23,
+          "cacheHits": 2,
+          "cacheMisses": 0
+        }
       }
     },
     "reproduction": {

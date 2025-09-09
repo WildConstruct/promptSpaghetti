@@ -31,14 +31,14 @@ class StaleTaskCleanup {
         IN_PROGRESS: 4, // 4 hours for in-progress tasks (autonomous agents work quickly)
         ASSIGNED: 4, // 4 hours for newly assigned tasks (should start immediately)
         REVIEW: 48, // 48 hours for review tasks (longer grace period)
-        BLOCKED: 72, // 72 hours for blocked tasks (even longer)
+        BLOCKED: 72 // 72 hours for blocked tasks (even longer)
       },
 
       // Grace periods for different task types/priorities
       gracePeriods: {
         high: 6, // High priority gets 6 extra hours
         medium: 0, // No extra time for medium
-        low: -6, // Low priority gets 6 hours less (18 hours total)
+        low: -6 // Low priority gets 6 hours less (18 hours total)
       },
 
       // Actions to take
@@ -46,7 +46,7 @@ class StaleTaskCleanup {
         reassignToAvailable: true,
         notifyOriginalAssignee: true,
         logDetailed: true,
-        dryRun: false,
+        dryRun: false
       },
 
       // Exclusions
@@ -55,8 +55,8 @@ class StaleTaskCleanup {
         skipPatterns: ['URGENT', 'HOTFIX', 'CRITICAL', 'PRODUCTION'],
 
         // Skip specific agents (e.g., long-running bots)
-        skipAgents: ['build-bot', 'deploy-agent', 'monitoring-service'],
-      },
+        skipAgents: ['build-bot', 'deploy-agent', 'monitoring-service']
+      }
     };
 
     this.initialized = false;
@@ -101,7 +101,9 @@ class StaleTaskCleanup {
       const tasks = Object.entries(state.tasks);
       const staleTask = this.findStaleTasks(tasks);
 
-      console.log(`📊 Found ${staleTask.length} stale tasks out of ${tasks.length} total tasks`);
+      console.log(
+        `📊 Found ${staleTask.length} stale tasks out of ${tasks.length} total tasks`
+      );
 
       if (staleTask.length === 0) {
         console.log('✅ No stale tasks found - all tasks are current');
@@ -116,7 +118,10 @@ class StaleTaskCleanup {
 
       if (this.config.actions.dryRun) {
         console.log('\n🔍 DRY RUN MODE - No changes will be made');
-        await this.log('INFO', `Dry run: found ${staleTask.length} stale tasks`);
+        await this.log(
+          'INFO',
+          `Dry run: found ${staleTask.length} stale tasks`
+        );
       } else {
         console.log(`\n🔄 Processing ${staleTask.length} stale tasks...`);
 
@@ -127,8 +132,14 @@ class StaleTaskCleanup {
             console.log(`✅ Cleaned up task ${taskId}`);
           } catch (error) {
             errorCount++;
-            console.error(`❌ Failed to cleanup task ${taskId}:`, error.message);
-            await this.log('ERROR', `Failed to cleanup task ${taskId}: ${error.message}`);
+            console.error(
+              `❌ Failed to cleanup task ${taskId}:`,
+              error.message
+            );
+            await this.log(
+              'ERROR',
+              `Failed to cleanup task ${taskId}: ${error.message}`
+            );
           }
         }
 
@@ -141,7 +152,7 @@ class StaleTaskCleanup {
         processed: tasks.length,
         cleaned: cleanedCount,
         errors: errorCount,
-        staleTasks: staleTask.length,
+        staleTasks: staleTask.length
       };
 
       await this.log('SUMMARY', `Cleanup complete: ${JSON.stringify(summary)}`);
@@ -196,7 +207,7 @@ class StaleTaskCleanup {
           task,
           lastUpdate,
           staleDuration: timeSinceUpdate,
-          thresholdHours: staleThresholdHours,
+          thresholdHours: staleThresholdHours
         });
       }
     }
@@ -212,7 +223,8 @@ class StaleTaskCleanup {
    */
   shouldSkipTask(task) {
     // Check skip patterns
-    const textToCheck = `${task.title || ''} ${task.description || ''}`.toLowerCase();
+    const textToCheck =
+      `${task.title || ''} ${task.description || ''}`.toLowerCase();
     for (const pattern of this.config.exclusions.skipPatterns) {
       if (textToCheck.includes(pattern.toLowerCase())) {
         return true;
@@ -242,7 +254,13 @@ class StaleTaskCleanup {
    */
   getLastUpdateTime(task) {
     // Try various timestamp fields
-    const timeFields = ['lastUpdated', 'lastModified', 'updatedAt', 'assignedAt', 'created'];
+    const timeFields = [
+      'lastUpdated',
+      'lastModified',
+      'updatedAt',
+      'assignedAt',
+      'created'
+    ];
 
     for (const field of timeFields) {
       if (task[field]) {
@@ -265,14 +283,19 @@ class StaleTaskCleanup {
     console.log('\n📋 STALE TASKS FOUND:');
     console.log('═'.repeat(100));
     console.log(
-      'ID'.padEnd(20) + 'Assignee'.padEnd(15) + 'State'.padEnd(12) + 'Stale For'.padEnd(12) + 'Title'.padEnd(35)
+      'ID'.padEnd(20) +
+        'Assignee'.padEnd(15) +
+        'State'.padEnd(12) +
+        'Stale For'.padEnd(12) +
+        'Title'.padEnd(35)
     );
     console.log('-'.repeat(100));
 
     for (const { taskId, task, staleDuration, thresholdHours } of staleTask) {
       const staleHours = Math.floor(staleDuration / (1000 * 60 * 60));
       const staleDays = Math.floor(staleHours / 24);
-      const staleDisplay = staleDays > 0 ? `${staleDays}d ${staleHours % 24}h` : `${staleHours}h`;
+      const staleDisplay =
+        staleDays > 0 ? `${staleDays}d ${staleHours % 24}h` : `${staleHours}h`;
 
       console.log(
         taskId.padEnd(20) +
@@ -299,7 +322,7 @@ class StaleTaskCleanup {
       originalState: task.state,
       staleHours,
       cleanupTime: new Date().toISOString(),
-      reason: 'Stale task cleanup - no activity for 24+ hours',
+      reason: 'Stale task cleanup - no activity for 24+ hours'
     };
 
     // Update task
@@ -314,7 +337,10 @@ class StaleTaskCleanup {
     );
 
     // Log the action
-    await this.log('CLEANUP', `Task ${taskId} reassigned from ${originalAssignee} (stale for ${staleHours}h)`);
+    await this.log(
+      'CLEANUP',
+      `Task ${taskId} reassigned from ${originalAssignee} (stale for ${staleHours}h)`
+    );
 
     // Notify if enabled
     if (this.config.actions.notifyOriginalAssignee) {
@@ -337,12 +363,17 @@ class StaleTaskCleanup {
         taskTitle: task.title,
         staleHours,
         message: `Task ${taskId} ("${task.title}") has been reassigned due to ${staleHours} hours of inactivity. If you were still working on this task, please reassign it to yourself.`,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       // For now, just log the notification
-      await this.log('NOTIFICATION', `Notification queued for ${assignee}: ${notification.message}`);
-      console.log(`📧 Notification queued for ${assignee} about task ${taskId}`);
+      await this.log(
+        'NOTIFICATION',
+        `Notification queued for ${assignee}: ${notification.message}`
+      );
+      console.log(
+        `📧 Notification queued for ${assignee} about task ${taskId}`
+      );
     } catch (error) {
       console.warn(`⚠️  Failed to notify ${assignee}:`, error.message);
     }
@@ -360,7 +391,11 @@ class StaleTaskCleanup {
         period: `${days} days`,
         totalCleanups: cleanupEvents.length,
         affectedAgents: [
-          ...new Set(cleanupEvents.map(event => event.message.match(/from (\w+)/)?.[1]).filter(Boolean)),
+          ...new Set(
+            cleanupEvents
+              .map(event => event.message.match(/from (\w+)/)?.[1])
+              .filter(Boolean)
+          )
         ],
         avgStaleHours:
           cleanupEvents.length > 0
@@ -368,7 +403,7 @@ class StaleTaskCleanup {
                 const hours = event.message.match(/\((\d+)h stale\)/)?.[1];
                 return sum + (parseInt(hours) || 0);
               }, 0) / cleanupEvents.length
-            : 0,
+            : 0
       };
 
       return stats;
@@ -420,7 +455,7 @@ class StaleTaskCleanup {
     const logEntry = {
       timestamp: new Date().toISOString(),
       type,
-      message,
+      message
     };
 
     try {
@@ -449,7 +484,7 @@ class StaleTaskCleanup {
           return {
             timestamp: new Date(match[1]),
             type: match[2],
-            message: match[3],
+            message: match[3]
           };
         })
         .filter(log => log && log.timestamp >= cutoffDate);
@@ -467,17 +502,22 @@ class StaleTaskCleanup {
     const readline = require('readline');
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout,
+      output: process.stdout
     });
 
-    const ask = question => new Promise(resolve => rl.question(question, resolve));
+    const ask = question =>
+      new Promise(resolve => rl.question(question, resolve));
 
     try {
       console.log('Current configuration:');
-      console.log(`- Stale timeout for IN_PROGRESS: ${this.config.staleTimeouts.IN_PROGRESS} hours`);
+      console.log(
+        `- Stale timeout for IN_PROGRESS: ${this.config.staleTimeouts.IN_PROGRESS} hours`
+      );
       console.log(`- Dry run mode: ${this.config.actions.dryRun}`);
 
-      const action = await ask('\nChoose action: (c)leanup, (s)tats, (d)ry-run, (q)uit: ');
+      const action = await ask(
+        '\nChoose action: (c)leanup, (s)tats, (d)ry-run, (q)uit: '
+      );
 
       switch (action.toLowerCase()) {
         case 'c':

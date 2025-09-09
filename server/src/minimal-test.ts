@@ -36,14 +36,14 @@ server.get('/health', async (request, reply) => {
       status: dbHealthy ? 'healthy' : 'unhealthy',
       database: dbHealthy ? 'connected' : 'disconnected',
       mode: 'minimal',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   } catch (error) {
     return {
       status: 'unhealthy',
       database: 'error',
       error: error.message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 });
@@ -58,7 +58,7 @@ server.post('/preview', async (request, reply) => {
     if (!validation.valid) {
       return reply.code(400).send({
         error: 'Invalid graph',
-        details: validation.errors,
+        details: validation.errors
       });
     }
 
@@ -71,13 +71,13 @@ server.post('/preview', async (request, reply) => {
       metadata: {
         nodeCount: graph.nodes?.length || 0,
         seed: graph.seed,
-        mode: 'stub',
-      },
+        mode: 'stub'
+      }
     };
   } catch (error) {
     return reply.code(500).send({
       error: 'Graph execution failed',
-      message: error.message,
+      message: error.message
     });
   }
 });

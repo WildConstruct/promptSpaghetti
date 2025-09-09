@@ -43,7 +43,7 @@ export class NodeIntelligenceService {
   private extractVariables(text: string): VariableInfo[] {
     const variables: VariableInfo[] = [];
     let match;
-    
+
     while ((match = this.variablePattern.exec(text)) !== null) {
       variables.push({
         name: match[1],
@@ -51,7 +51,7 @@ export class NodeIntelligenceService {
         placeholder: match[0]
       });
     }
-    
+
     return variables;
   }
 
@@ -62,17 +62,22 @@ export class NodeIntelligenceService {
     variables: VariableInfo[]
   ): string {
     let result = generatedText;
-    
+
     // Re-insert variables if they were removed
     for (const variable of variables) {
       if (!result.includes(variable.placeholder)) {
         // Try to insert at a reasonable position
         const words = result.split(' ');
         const insertPos = Math.min(variable.position, result.length);
-        result = result.slice(0, insertPos) + ' ' + variable.placeholder + ' ' + result.slice(insertPos);
+        result =
+          result.slice(0, insertPos) +
+          ' ' +
+          variable.placeholder +
+          ' ' +
+          result.slice(insertPos);
       }
     }
-    
+
     return result.trim();
   }
 
@@ -86,7 +91,7 @@ export class NodeIntelligenceService {
       // Extract variables to preserve
       const variables = this.extractVariables(nodeText);
       const variableNames = variables.map(v => v.placeholder).join(', ');
-      
+
       const prompt = `Generate ${count} creative variations for this text segment: "${nodeText}"
       
       Context of full prompt: "${context}"
@@ -100,8 +105,12 @@ export class NodeIntelligenceService {
       - Maintain similar length and style
       - Be creative but relevant`;
 
-      const response = await this.llmService.populateChoices(context, nodeText, count);
-      
+      const response = await this.llmService.populateChoices(
+        context,
+        nodeText,
+        count
+      );
+
       if (response && response.choices) {
         // Preserve variables in each choice
         return response.choices.map(choice => ({
@@ -118,7 +127,7 @@ export class NodeIntelligenceService {
         willFallback: true
       });
     }
-    
+
     // Fallback to offline suggestions
     console.warn('[NodeIntelligence] Falling back to offline suggestions');
     return this.getOfflineSuggestions(nodeText, count);
@@ -132,7 +141,7 @@ export class NodeIntelligenceService {
     try {
       const lockedChoices = choices.filter(c => c.locked);
       const unlocked = choices.filter(c => !c.locked);
-      
+
       if (unlocked.length === 0) {
         return {
           original: choices,
@@ -166,7 +175,7 @@ export class NodeIntelligenceService {
         try {
           const parsed = JSON.parse(response.content);
           const optimized = [...choices];
-          
+
           if (parsed.weights) {
             for (const update of parsed.weights) {
               if (update.index < unlocked.length) {
@@ -180,7 +189,7 @@ export class NodeIntelligenceService {
               }
             }
           }
-          
+
           return {
             original: choices,
             optimized,
@@ -193,7 +202,7 @@ export class NodeIntelligenceService {
     } catch (error) {
       console.error('Failed to optimize weights:', error);
     }
-    
+
     // Return original on failure
     return {
       original: choices,
@@ -242,7 +251,7 @@ export class NodeIntelligenceService {
     } catch (error) {
       console.error('Failed to get inspiration:', error);
     }
-    
+
     // Fallback to offline inspiration
     return this.getOfflineInspiration(upstreamContext);
   }
@@ -250,7 +259,7 @@ export class NodeIntelligenceService {
   // Load offline suggestions for fallback
   private loadOfflineSuggestions(): Map<string, Choice[]> {
     const suggestions = new Map<string, Choice[]>();
-    
+
     // Common patterns for different contexts
     suggestions.set('action', [
       { text: 'running frantically', weight: 7 },
@@ -259,7 +268,7 @@ export class NodeIntelligenceService {
       { text: 'stumbling backwards', weight: 6 },
       { text: 'scrambling away', weight: 7 }
     ]);
-    
+
     suggestions.set('emotion', [
       { text: 'terrified', weight: 8 },
       { text: 'shocked', weight: 7 },
@@ -267,7 +276,7 @@ export class NodeIntelligenceService {
       { text: 'panicked', weight: 9 },
       { text: 'stunned', weight: 6 }
     ]);
-    
+
     suggestions.set('environment', [
       { text: 'debris-filled streets', weight: 7 },
       { text: 'smoke-filled air', weight: 8 },
@@ -275,7 +284,7 @@ export class NodeIntelligenceService {
       { text: 'chaotic scene', weight: 9 },
       { text: 'war-torn landscape', weight: 7 }
     ]);
-    
+
     suggestions.set('time', [
       { text: 'at dawn', weight: 6 },
       { text: 'at dusk', weight: 7 },
@@ -283,7 +292,7 @@ export class NodeIntelligenceService {
       { text: 'under harsh midday sun', weight: 5 },
       { text: 'during golden hour', weight: 7 }
     ]);
-    
+
     suggestions.set('weather', [
       { text: 'heavy rain', weight: 7 },
       { text: 'thick fog', weight: 6 },
@@ -291,17 +300,17 @@ export class NodeIntelligenceService {
       { text: 'clear skies', weight: 5 },
       { text: 'storm approaching', weight: 7 }
     ]);
-    
+
     return suggestions;
   }
 
   // Get offline suggestions based on text analysis
   private getOfflineSuggestions(text: string, count: number): Choice[] {
     const lowerText = text.toLowerCase();
-    
+
     // Detect category from keywords
     let category = 'action'; // default
-    
+
     if (lowerText.includes('feel') || lowerText.includes('emotion')) {
       category = 'emotion';
     } else if (lowerText.includes('scene') || lowerText.includes('place')) {
@@ -311,7 +320,7 @@ export class NodeIntelligenceService {
     } else if (lowerText.includes('weather') || lowerText.includes('sky')) {
       category = 'weather';
     }
-    
+
     const suggestions = this.offlineSuggestions.get(category) || [];
     return suggestions.slice(0, count);
   }
@@ -319,9 +328,9 @@ export class NodeIntelligenceService {
   // Get offline inspiration themes
   private getOfflineInspiration(context: string): InspirationSuggestion[] {
     const lowerContext = context.toLowerCase();
-    
+
     const suggestions: InspirationSuggestion[] = [];
-    
+
     // Always provide these three themes
     suggestions.push({
       theme: 'Character Reactions',
@@ -332,7 +341,7 @@ export class NodeIntelligenceService {
         { text: 'help others', weight: 5 }
       ]
     });
-    
+
     suggestions.push({
       theme: 'Environmental Details',
       choices: [
@@ -342,7 +351,7 @@ export class NodeIntelligenceService {
         { text: 'glass shattering', weight: 7 }
       ]
     });
-    
+
     suggestions.push({
       theme: 'Time Variations',
       choices: [
@@ -352,7 +361,7 @@ export class NodeIntelligenceService {
         { text: 'dead of night', weight: 8 }
       ]
     });
-    
+
     return suggestions;
   }
 

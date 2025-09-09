@@ -31,7 +31,7 @@ tasksToGrab.forEach(task => {
   task.status = 'IN_PROGRESS';
   task.assignedTo = agentId;
   task.updatedAt = new Date().toISOString();
-  
+
   console.log(`✓ ${task.id}: ${task.title}`);
   console.log(`  Story: ${task.storyId} - ${task.storyTitle}`);
   console.log(`  Priority: ${task.priority}, Est: ${task.estimatedHours}h`);
@@ -46,12 +46,20 @@ db.lastUpdated = new Date().toISOString();
 // Save database
 fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
 
-console.log(`✅ Successfully assigned ${tasksToGrab.length} task(s) to ${agentId}`);
-console.log(`📋 Total assignments for ${agentId}: ${db.tasks.filter(t => t.assignedTo === agentId).length} tasks`);
+console.log(
+  `✅ Successfully assigned ${tasksToGrab.length} task(s) to ${agentId}`
+);
+console.log(
+  `📋 Total assignments for ${agentId}: ${db.tasks.filter(t => t.assignedTo === agentId).length} tasks`
+);
 
 // Show story file for first task
 if (tasksToGrab.length > 0) {
   const firstTask = tasksToGrab[0];
-  console.log(`\n📄 Story file for your first task: docs/stories/${firstTask.storyFile}`);
-  console.log(`   Use: code docs/stories/${firstTask.storyFile} to open the story`);
+  console.log(
+    `\n📄 Story file for your first task: docs/stories/${firstTask.storyFile}`
+  );
+  console.log(
+    `   Use: code docs/stories/${firstTask.storyFile} to open the story`
+  );
 }

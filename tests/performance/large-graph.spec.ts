@@ -71,7 +71,7 @@ test.describe('Large Graph Performance', () => {
     // Test panning
     await canvas.dragTo(canvas, {
       sourcePosition: { x: 100, y: 100 },
-      targetPosition: { x: 200, y: 200 },
+      targetPosition: { x: 200, y: 200 }
     });
 
     // Test zooming
@@ -124,7 +124,14 @@ function generateLargeGraph(nodeCount: number) {
   const nodes = [];
   const edges = [];
 
-  const nodeTypes = ['WeightedChoice', 'Concat', 'Output', 'Include', 'SetVariable', 'GetVariable'];
+  const nodeTypes = [
+    'WeightedChoice',
+    'Concat',
+    'Output',
+    'Include',
+    'SetVariable',
+    'GetVariable'
+  ];
 
   for (let i = 0; i < nodeCount; i++) {
     const nodeType = nodeTypes[i % nodeTypes.length];
@@ -138,9 +145,9 @@ function generateLargeGraph(nodeCount: number) {
       position: { x, y },
       data: {
         label: `${nodeType}-${i}`,
-        ...getDefaultNodeData(nodeType),
+        ...getDefaultNodeData(nodeType)
       },
-      selected: false,
+      selected: false
     });
 
     // Create some edges to test edge rendering performance
@@ -149,7 +156,7 @@ function generateLargeGraph(nodeCount: number) {
         id: `edge-${i}`,
         source: `node-${i - 1}`,
         target: `node-${i}`,
-        type: 'default',
+        type: 'default'
       });
     }
   }

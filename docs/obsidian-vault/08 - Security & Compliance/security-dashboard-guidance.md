@@ -239,20 +239,20 @@ const statusTransitions = {
     description: 'Alert created, awaiting initial response',
     sla: 'Acknowledge within target time',
     color: 'bg-red-100 text-red-800',
-    actions: ['acknowledge', 'investigate', 'escalate'],
+    actions: ['acknowledge', 'investigate', 'escalate']
   },
   investigating: {
     description: 'Alert acknowledged, investigation in progress',
     sla: 'Provide updates every 30 minutes for critical',
     color: 'bg-yellow-100 text-yellow-800',
-    actions: ['update', 'resolve', 'escalate'],
+    actions: ['update', 'resolve', 'escalate']
   },
   resolved: {
     description: 'Alert investigated and resolved',
     sla: 'Document resolution within 24 hours',
     color: 'bg-green-100 text-green-800',
-    actions: ['reopen', 'create_knowledge_article'],
-  },
+    actions: ['reopen', 'create_knowledge_article']
+  }
 };
 ```
 
@@ -306,14 +306,15 @@ const analyzeAlertTiming = (alerts: AlertTiming[]) => {
     business_hours: alerts.filter(a => isBusinessHours(a.timestamp)),
     after_hours: alerts.filter(a => !isBusinessHours(a.timestamp)),
     weekends: alerts.filter(a => isWeekend(a.timestamp)),
-    holidays: alerts.filter(a => isHoliday(a.timestamp)),
+    holidays: alerts.filter(a => isHoliday(a.timestamp))
   };
 
   return {
-    suspiciousPatterns: patterns.after_hours.length > patterns.business_hours.length,
+    suspiciousPatterns:
+      patterns.after_hours.length > patterns.business_hours.length,
     weekendActivity: patterns.weekends.length > 0,
     holidayActivity: patterns.holidays.length > 0,
-    recommendations: generateTimingRecommendations(patterns),
+    recommendations: generateTimingRecommendations(patterns)
   };
 };
 ```
@@ -691,7 +692,7 @@ const keyboardShortcuts = {
   'Alt+Q': 'Focus on quick actions',
   Escape: 'Close modal/return to main view',
   Enter: 'Activate selected item',
-  Space: 'Toggle item state',
+  Space: 'Toggle item state'
 };
 ```
 
@@ -724,25 +725,33 @@ Access Controls:
 ```typescript
 const complianceMapping = {
   GDPR: {
-    requirements: ['data_minimization', 'purpose_limitation', 'consent_management'],
+    requirements: [
+      'data_minimization',
+      'purpose_limitation',
+      'consent_management'
+    ],
     implementation: 'Privacy-by-design dashboard features',
-    monitoring: 'Automated compliance reporting',
+    monitoring: 'Automated compliance reporting'
   },
   SOX: {
     requirements: ['audit_trails', 'access_controls', 'data_integrity'],
     implementation: 'Financial control monitoring',
-    monitoring: 'SOX compliance dashboard section',
+    monitoring: 'SOX compliance dashboard section'
   },
   HIPAA: {
     requirements: ['access_logs', 'encryption', 'minimum_necessary'],
     implementation: 'Healthcare data protection controls',
-    monitoring: 'PHI access monitoring',
+    monitoring: 'PHI access monitoring'
   },
   PCI_DSS: {
-    requirements: ['access_monitoring', 'vulnerability_management', 'secure_networks'],
+    requirements: [
+      'access_monitoring',
+      'vulnerability_management',
+      'secure_networks'
+    ],
     implementation: 'Payment data security controls',
-    monitoring: 'PCI compliance metrics',
-  },
+    monitoring: 'PCI compliance metrics'
+  }
 };
 ```
 
@@ -843,22 +852,26 @@ interface ExecutiveDashboardSummary {
 }
 
 // Generate executive summary
-const generateExecutiveSummary = async (): Promise<ExecutiveDashboardSummary> => {
-  const metrics = await securityDashboard.getMetrics({ period: '7d' });
-  const alerts = await securityDashboard.getAlerts({ period: '7d', status: 'all' });
+const generateExecutiveSummary =
+  async (): Promise<ExecutiveDashboardSummary> => {
+    const metrics = await securityDashboard.getMetrics({ period: '7d' });
+    const alerts = await securityDashboard.getAlerts({
+      period: '7d',
+      status: 'all'
+    });
 
-  return {
-    period: 'Last 7 Days',
-    securityPosture: {
-      overallScore: calculateOverallScore(metrics),
-      trendDirection: analyzeTrend(metrics.historical),
-      keyMetrics: extractKeyMetrics(metrics),
-    },
-    riskAssessment: assessCurrentRisk(metrics, alerts),
-    alertSummary: summarizeAlerts(alerts),
-    recommendations: generateRecommendations(metrics, alerts),
+    return {
+      period: 'Last 7 Days',
+      securityPosture: {
+        overallScore: calculateOverallScore(metrics),
+        trendDirection: analyzeTrend(metrics.historical),
+        keyMetrics: extractKeyMetrics(metrics)
+      },
+      riskAssessment: assessCurrentRisk(metrics, alerts),
+      alertSummary: summarizeAlerts(alerts),
+      recommendations: generateRecommendations(metrics, alerts)
+    };
   };
-};
 ```
 
 ### Custom Dashboard Views
@@ -870,20 +883,24 @@ const dashboardViews = {
     sections: ['metrics', 'alerts', 'quick_actions'],
     metrics: ['threats', 'blocked_threats', 'active_incidents'],
     alerts: ['all_severities'],
-    permissions: ['investigate', 'acknowledge', 'escalate'],
+    permissions: ['investigate', 'acknowledge', 'escalate']
   },
   security_manager: {
     sections: ['metrics', 'alerts', 'quick_actions', 'trends'],
     metrics: ['all'],
     alerts: ['all_severities'],
-    permissions: ['all_analyst_permissions', 'modify_thresholds', 'generate_reports'],
+    permissions: [
+      'all_analyst_permissions',
+      'modify_thresholds',
+      'generate_reports'
+    ]
   },
   executive: {
     sections: ['executive_summary', 'risk_overview', 'key_incidents'],
     metrics: ['risk_score', 'major_incidents', 'compliance_status'],
     alerts: ['critical_only'],
-    permissions: ['view_only', 'generate_executive_reports'],
-  },
+    permissions: ['view_only', 'generate_executive_reports']
+  }
 };
 ```
 
@@ -989,8 +1006,8 @@ class SecurityDashboardAPI {
     const response = await fetch(`${this.apiBase}/api/security/metrics`, {
       headers: {
         Authorization: `Bearer ${this.authToken}`,
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     if (!response.ok) {
@@ -1002,12 +1019,15 @@ class SecurityDashboardAPI {
 
   async getAlerts(filters?: AlertFilters): Promise<SecurityAlert[]> {
     const queryParams = new URLSearchParams(filters);
-    const response = await fetch(`${this.apiBase}/api/security/alerts?${queryParams}`, {
-      headers: {
-        Authorization: `Bearer ${this.authToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${this.apiBase}/api/security/alerts?${queryParams}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
 
     return response.json();
   }
@@ -1017,8 +1037,8 @@ class SecurityDashboardAPI {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${this.authToken}`,
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
   }
 }

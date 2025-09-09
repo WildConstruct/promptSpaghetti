@@ -26,7 +26,10 @@ export async function llmRoutes(app: FastifyInstance) {
   });
 
   app.post('/api/llm/suggest', async (_req, reply) => {
-    return reply.send({ suggestions: ['Alpha', 'Beta', 'Gamma'], model: 'stub' });
+    return reply.send({
+      suggestions: ['Alpha', 'Beta', 'Gamma'],
+      model: 'stub'
+    });
   });
 
   app.post('/api/llm/metadata', async (_req, reply) => {
@@ -37,4 +40,3 @@ export async function llmRoutes(app: FastifyInstance) {
     return reply.send({ refined: true, model: 'stub' });
   });
 }
-

@@ -11,7 +11,10 @@ const http = require('http');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
-const { showEpicCompletion, EPIC_ANALYSIS } = require('./show-epic-completion.js');
+const {
+  showEpicCompletion,
+  EPIC_ANALYSIS
+} = require('./show-epic-completion.js');
 
 const PORT = 8080;
 

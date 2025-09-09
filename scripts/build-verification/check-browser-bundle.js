@@ -15,7 +15,9 @@ function scanFile(file) {
   const content = fs.readFileSync(file, 'utf8');
   for (const bad of forbidden) {
     if (content.includes(bad)) {
-      throw new Error(`Forbidden pattern "${bad}" found in ${path.basename(file)}`);
+      throw new Error(
+        `Forbidden pattern "${bad}" found in ${path.basename(file)}`
+      );
     }
   }
 }

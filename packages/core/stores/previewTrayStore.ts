@@ -9,16 +9,16 @@ interface PreviewTrayState {
   height: number;
   isPinned: boolean;
   minimized: boolean;
-  
+
   // View preferences
   viewMode: ViewMode;
   defaultView: ViewMode;
-  
+
   // Content state
   activeTab: number;
   scrollPosition: number;
   selectedResults: Set<string>;
-  
+
   // Actions
   setOpen: (open: boolean) => void;
   toggleTray: () => void;
@@ -36,9 +36,9 @@ interface PreviewTrayState {
 
 export const usePreviewTrayStore = create<PreviewTrayState>()(
   persist(
-    (set) => ({
+    set => ({
       // Initial state
-      isOpen: false,  // Start with tray closed
+      isOpen: false, // Start with tray closed
       height: 250,
       isPinned: false,
       minimized: false,
@@ -49,43 +49,47 @@ export const usePreviewTrayStore = create<PreviewTrayState>()(
       selectedResults: new Set(),
 
       // Actions
-      setOpen: (open) => set({ isOpen: open }),
-      toggleTray: () => set((state) => ({ isOpen: !state.isOpen })),
-      
-      setHeight: (height) => set({ height: Math.min(Math.max(height, 100), window.innerHeight * 0.6) }),
-      
-      togglePin: () => set((state) => ({ isPinned: !state.isPinned })),
-      
-      setMinimized: (minimized) => set({ minimized }),
-      toggleMinimized: () => set((state) => ({ minimized: !state.minimized })),
-      
-      switchView: (mode) => set({ viewMode: mode }),
-      
-      setDefaultView: (mode) => set({ defaultView: mode, viewMode: mode }),
-      
-      setActiveTab: (index) => set({ activeTab: index }),
-      
-      setScrollPosition: (position) => set({ scrollPosition: position }),
-      
-      toggleResultSelection: (resultId) => set((state) => {
-        const newSelection = new Set(state.selectedResults);
-        if (newSelection.has(resultId)) {
-          newSelection.delete(resultId);
-        } else {
-          newSelection.add(resultId);
-        }
-        return { selectedResults: newSelection };
-      }),
-      
-      clearSelection: () => set({ selectedResults: new Set() }),
+      setOpen: open => set({ isOpen: open }),
+      toggleTray: () => set(state => ({ isOpen: !state.isOpen })),
+
+      setHeight: height =>
+        set({
+          height: Math.min(Math.max(height, 100), window.innerHeight * 0.6)
+        }),
+
+      togglePin: () => set(state => ({ isPinned: !state.isPinned })),
+
+      setMinimized: minimized => set({ minimized }),
+      toggleMinimized: () => set(state => ({ minimized: !state.minimized })),
+
+      switchView: mode => set({ viewMode: mode }),
+
+      setDefaultView: mode => set({ defaultView: mode, viewMode: mode }),
+
+      setActiveTab: index => set({ activeTab: index }),
+
+      setScrollPosition: position => set({ scrollPosition: position }),
+
+      toggleResultSelection: resultId =>
+        set(state => {
+          const newSelection = new Set(state.selectedResults);
+          if (newSelection.has(resultId)) {
+            newSelection.delete(resultId);
+          } else {
+            newSelection.add(resultId);
+          }
+          return { selectedResults: newSelection };
+        }),
+
+      clearSelection: () => set({ selectedResults: new Set() })
     }),
     {
       name: 'preview-tray-preferences',
-      partialize: (state) => ({
+      partialize: state => ({
         height: state.height,
         isPinned: state.isPinned,
-        defaultView: state.defaultView,
-      }),
+        defaultView: state.defaultView
+      })
     }
   )
 );

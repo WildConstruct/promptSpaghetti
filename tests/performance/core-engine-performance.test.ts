@@ -8,7 +8,10 @@
  */
 
 import { ExecutionContext, RuntimeNode } from '../packages/core/runtime/index';
-import { AdvancedExecutionContext, AdvancedRuntimeNode } from '../packages/core/runtime/advanced';
+import {
+  AdvancedExecutionContext,
+  AdvancedRuntimeNode
+} from '../packages/core/runtime/advanced';
 import { WeightedAdvanced } from '../packages/core/runtime/nodes/WeightedAdvanced';
 import { Conditional } from '../packages/core/runtime/nodes/Conditional';
 import { Sequential } from '../packages/core/runtime/nodes/Sequential';
@@ -58,7 +61,9 @@ class CoreEnginePerformanceTester {
   /**
    * Measure execution time for a function
    */
-  async measureExecution<T>(fn: () => Promise<T> | T): Promise<{ result: T; time: number }> {
+  async measureExecution<T>(
+    fn: () => Promise<T> | T
+  ): Promise<{ result: T; time: number }> {
     const start = process.hrtime.bigint();
     const result = await fn();
     const end = process.hrtime.bigint();
@@ -69,10 +74,15 @@ class CoreEnginePerformanceTester {
   /**
    * Create a simple weighted choice node for testing
    */
-  createWeightedChoiceNode(id: string, choices: string[], weights?: number[]): RuntimeNode {
+  createWeightedChoiceNode(
+    id: string,
+    choices: string[],
+    weights?: number[]
+  ): RuntimeNode {
     return new (class extends RuntimeNode {
       async execute(context: ExecutionContext): Promise<string> {
-        const effectiveWeights = weights || choices.map(() => 1 / choices.length);
+        const effectiveWeights =
+          weights || choices.map(() => 1 / choices.length);
         const random = context.random();
         let sum = 0;
         for (let i = 0; i < effectiveWeights.length; i++) {
@@ -99,7 +109,11 @@ class CoreEnginePerformanceTester {
       switch (nodeType) {
         case 0:
           nodes.push(
-            this.createWeightedChoiceNode(nodeId, [`choice-${i}-1`, `choice-${i}-2`, `choice-${i}-3`], [0.5, 0.3, 0.2])
+            this.createWeightedChoiceNode(
+              nodeId,
+              [`choice-${i}-1`, `choice-${i}-2`, `choice-${i}-3`],
+              [0.5, 0.3, 0.2]
+            )
           );
           break;
         case 1:
@@ -140,23 +154,33 @@ class CoreEnginePerformanceTester {
   /**
    * Benchmark simple node execution
    */
-  async benchmarkSimpleExecution(iterations: number = 1000): Promise<BenchmarkResult> {
+  async benchmarkSimpleExecution(
+    iterations: number = 1000
+  ): Promise<BenchmarkResult> {
     this.recordMemoryBaseline();
 
-    const node = this.createWeightedChoiceNode('test-node', ['A', 'B', 'C'], [0.4, 0.4, 0.2]);
+    const node = this.createWeightedChoiceNode(
+      'test-node',
+      ['A', 'B', 'C'],
+      [0.4, 0.4, 0.2]
+    );
     const context = new ExecutionContext(12345);
 
     const executionTimes: number[] = [];
     let totalTime = 0;
 
-    const { result, time: setupTime } = await this.measureExecution(async () => {
-      for (let i = 0; i < iterations; i++) {
-        const { time } = await this.measureExecution(() => node.execute(context));
-        executionTimes.push(time);
-        totalTime += time;
+    const { result, time: setupTime } = await this.measureExecution(
+      async () => {
+        for (let i = 0; i < iterations; i++) {
+          const { time } = await this.measureExecution(() =>
+            node.execute(context)
+          );
+          executionTimes.push(time);
+          totalTime += time;
+        }
+        return 'completed';
       }
-      return 'completed';
-    });
+    );
 
     const memoryUsed = this.getCurrentMemoryUsage();
     const operationsPerSecond = iterations / (totalTime / 1000);
@@ -169,21 +193,24 @@ class CoreEnginePerformanceTester {
       maxNodeExecutionTime: Math.max(...executionTimes),
       minNodeExecutionTime: Math.min(...executionTimes),
       totalNodes: 1,
-      totalExecutions: iterations,
+      totalExecutions: iterations
     };
 
     return {
       testName: 'Simple Node Execution',
       metrics,
       passed: operationsPerSecond > 1000 && memoryUsed < 50, // Should handle 1000+ ops/sec with <50MB
-      details: { executionTimes: executionTimes.slice(0, 10) }, // Sample of first 10
+      details: { executionTimes: executionTimes.slice(0, 10) } // Sample of first 10
     };
   }
 
   /**
    * Benchmark complex graph execution
    */
-  async benchmarkComplexGraphExecution(nodeCount: number = 100, iterations: number = 100): Promise<BenchmarkResult> {
+  async benchmarkComplexGraphExecution(
+    nodeCount: number = 100,
+    iterations: number = 100
+  ): Promise<BenchmarkResult> {
     this.recordMemoryBaseline();
 
     const nodes = this.createComplexGraph(nodeCount);
@@ -192,19 +219,21 @@ class CoreEnginePerformanceTester {
     const executionTimes: number[] = [];
     let totalTime = 0;
 
-    const { result, time: setupTime } = await this.measureExecution(async () => {
-      for (let i = 0; i < iterations; i++) {
-        const { time } = await this.measureExecution(async () => {
-          // Execute all nodes in sequence to simulate graph execution
-          for (const node of nodes) {
-            await node.execute(context);
-          }
-        });
-        executionTimes.push(time);
-        totalTime += time;
+    const { result, time: setupTime } = await this.measureExecution(
+      async () => {
+        for (let i = 0; i < iterations; i++) {
+          const { time } = await this.measureExecution(async () => {
+            // Execute all nodes in sequence to simulate graph execution
+            for (const node of nodes) {
+              await node.execute(context);
+            }
+          });
+          executionTimes.push(time);
+          totalTime += time;
+        }
+        return 'completed';
       }
-      return 'completed';
-    });
+    );
 
     const memoryUsed = this.getCurrentMemoryUsage();
     const operationsPerSecond = (iterations * nodeCount) / (totalTime / 1000);
@@ -217,21 +246,23 @@ class CoreEnginePerformanceTester {
       maxNodeExecutionTime: Math.max(...executionTimes),
       minNodeExecutionTime: Math.min(...executionTimes),
       totalNodes: nodeCount,
-      totalExecutions: iterations,
+      totalExecutions: iterations
     };
 
     return {
       testName: `Complex Graph Execution (${nodeCount} nodes)`,
       metrics,
       passed: operationsPerSecond > 100 && memoryUsed < 100, // Should handle 100+ node ops/sec with <100MB
-      details: { nodeCount, iterations },
+      details: { nodeCount, iterations }
     };
   }
 
   /**
    * Benchmark advanced node performance
    */
-  async benchmarkAdvancedNodes(iterations: number = 500): Promise<BenchmarkResult> {
+  async benchmarkAdvancedNodes(
+    iterations: number = 500
+  ): Promise<BenchmarkResult> {
     this.recordMemoryBaseline();
 
     const context = new AdvancedExecutionContext(12345);
@@ -241,18 +272,18 @@ class CoreEnginePerformanceTester {
       choices: ['choice1', 'choice2', 'choice3'],
       weights: [1, 2, 3],
       algorithm: 'exponential',
-      parameters: { base: 2, scale: 1.5 },
+      parameters: { base: 2, scale: 1.5 }
     });
 
     const conditional = new Conditional('conditional', {
       condition: 'getValue("test") > 5',
       trueBranch: 'true-result',
-      falseBranch: 'false-result',
+      falseBranch: 'false-result'
     });
 
     const sequential = new Sequential('sequential', {
       pattern: 'linear',
-      items: ['seq1', 'seq2', 'seq3', 'seq4'],
+      items: ['seq1', 'seq2', 'seq3', 'seq4']
     });
 
     const markov = new Markov('markov', {
@@ -260,32 +291,35 @@ class CoreEnginePerformanceTester {
       transitions: {
         state1: { state2: 0.7, state3: 0.3 },
         state2: { state1: 0.4, state3: 0.6 },
-        state3: { state1: 0.5, state2: 0.5 },
+        state3: { state1: 0.5, state2: 0.5 }
       },
-      initialState: 'state1',
+      initialState: 'state1'
     });
 
     const nodes = [weightedAdvanced, conditional, sequential, markov];
     const executionTimes: number[] = [];
     let totalTime = 0;
 
-    const { result, time: setupTime } = await this.measureExecution(async () => {
-      for (let i = 0; i < iterations; i++) {
-        context.setVariable('test', Math.random() * 10);
+    const { result, time: setupTime } = await this.measureExecution(
+      async () => {
+        for (let i = 0; i < iterations; i++) {
+          context.setVariable('test', Math.random() * 10);
 
-        const { time } = await this.measureExecution(async () => {
-          for (const node of nodes) {
-            await node.execute(context);
-          }
-        });
-        executionTimes.push(time);
-        totalTime += time;
+          const { time } = await this.measureExecution(async () => {
+            for (const node of nodes) {
+              await node.execute(context);
+            }
+          });
+          executionTimes.push(time);
+          totalTime += time;
+        }
+        return 'completed';
       }
-      return 'completed';
-    });
+    );
 
     const memoryUsed = this.getCurrentMemoryUsage();
-    const operationsPerSecond = (iterations * nodes.length) / (totalTime / 1000);
+    const operationsPerSecond =
+      (iterations * nodes.length) / (totalTime / 1000);
 
     const metrics: PerformanceMetrics = {
       executionTime: totalTime,
@@ -295,14 +329,16 @@ class CoreEnginePerformanceTester {
       maxNodeExecutionTime: Math.max(...executionTimes),
       minNodeExecutionTime: Math.min(...executionTimes),
       totalNodes: nodes.length,
-      totalExecutions: iterations,
+      totalExecutions: iterations
     };
 
     return {
       testName: 'Advanced Nodes Execution',
       metrics,
       passed: operationsPerSecond > 50 && memoryUsed < 150, // Advanced nodes are more complex
-      details: { nodeTypes: ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov'] },
+      details: {
+        nodeTypes: ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov']
+      }
     };
   }
 
@@ -331,13 +367,15 @@ class CoreEnginePerformanceTester {
         nodeCount,
         memoryUsed,
         executionTime: time,
-        memoryPerNode: memoryUsed / nodeCount,
+        memoryPerNode: memoryUsed / nodeCount
       });
     }
 
     // Check if memory scaling is reasonable (should be roughly linear)
-    const memoryGrowthRate = results[results.length - 1].memoryUsed / results[0].memoryUsed;
-    const nodeGrowthRate = results[results.length - 1].nodeCount / results[0].nodeCount;
+    const memoryGrowthRate =
+      results[results.length - 1].memoryUsed / results[0].memoryUsed;
+    const nodeGrowthRate =
+      results[results.length - 1].nodeCount / results[0].nodeCount;
     const scalingRatio = memoryGrowthRate / nodeGrowthRate;
 
     const metrics: PerformanceMetrics = {
@@ -348,21 +386,24 @@ class CoreEnginePerformanceTester {
       maxNodeExecutionTime: Math.max(...results.map(r => r.executionTime)),
       minNodeExecutionTime: Math.min(...results.map(r => r.executionTime)),
       totalNodes: results.reduce((sum, r) => sum + r.nodeCount, 0),
-      totalExecutions: results.length,
+      totalExecutions: results.length
     };
 
     return {
       testName: 'Memory Scaling Analysis',
       metrics,
-      passed: scalingRatio < 3.0 && results[results.length - 1].memoryUsed < 500, // Memory growth should be reasonable
-      details: { results, scalingRatio, memoryGrowthRate, nodeGrowthRate },
+      passed:
+        scalingRatio < 3.0 && results[results.length - 1].memoryUsed < 500, // Memory growth should be reasonable
+      details: { results, scalingRatio, memoryGrowthRate, nodeGrowthRate }
     };
   }
 
   /**
    * Benchmark deterministic execution consistency
    */
-  async benchmarkDeterministicConsistency(iterations: number = 100): Promise<BenchmarkResult> {
+  async benchmarkDeterministicConsistency(
+    iterations: number = 100
+  ): Promise<BenchmarkResult> {
     this.recordMemoryBaseline();
 
     const nodes = this.createComplexGraph(20);
@@ -397,7 +438,7 @@ class CoreEnginePerformanceTester {
       maxNodeExecutionTime: 0, // Not measured individually
       minNodeExecutionTime: 0, // Not measured individually
       totalNodes: nodes.length,
-      totalExecutions: iterations,
+      totalExecutions: iterations
     };
 
     return {
@@ -407,8 +448,8 @@ class CoreEnginePerformanceTester {
       details: {
         allIdentical,
         uniqueResults: new Set(results).size,
-        sampleResult: results[0].substring(0, 100),
-      },
+        sampleResult: results[0].substring(0, 100)
+      }
     };
   }
 
@@ -468,9 +509,15 @@ class CoreEnginePerformanceTester {
     }
 
     // Performance summary
-    const totalOperations = results.reduce((sum, r) => sum + r.metrics.operationsPerSecond, 0);
+    const totalOperations = results.reduce(
+      (sum, r) => sum + r.metrics.operationsPerSecond,
+      0
+    );
     const maxMemory = Math.max(...results.map(r => r.metrics.memoryUsed));
-    const totalTime = results.reduce((sum, r) => sum + r.metrics.executionTime, 0);
+    const totalTime = results.reduce(
+      (sum, r) => sum + r.metrics.executionTime,
+      0
+    );
 
     report += 'Performance Summary:\\n';
     report += `   Total Operations/sec: ${totalOperations.toFixed(0)}\\n`;
@@ -531,7 +578,9 @@ describe('Core Engine Performance Tests', () => {
     expect(result.passed).toBe(true);
     expect(result.details.scalingRatio).toBeLessThan(3.0);
 
-    console.log(`Memory scaling ratio: ${result.details.scalingRatio.toFixed(2)}`);
+    console.log(
+      `Memory scaling ratio: ${result.details.scalingRatio.toFixed(2)}`
+    );
   }, 60000);
 
   test('Deterministic execution consistency', async () => {
@@ -541,7 +590,9 @@ describe('Core Engine Performance Tests', () => {
     expect(result.details.allIdentical).toBe(true);
     expect(result.details.uniqueResults).toBe(1);
 
-    console.log(`Deterministic consistency: ${result.details.allIdentical ? 'PASS' : 'FAIL'}`);
+    console.log(
+      `Deterministic consistency: ${result.details.allIdentical ? 'PASS' : 'FAIL'}`
+    );
   }, 30000);
 
   test('Full performance test suite', async () => {
@@ -559,8 +610,8 @@ describe('Core Engine Performance Tests', () => {
       results: results.map(r => ({
         testName: r.testName,
         passed: r.passed,
-        metrics: r.metrics,
-      })),
+        metrics: r.metrics
+      }))
     };
 
     // This would normally save to a file in CI/CD pipeline

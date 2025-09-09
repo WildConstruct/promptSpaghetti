@@ -2,7 +2,12 @@
  * Asset Validator Tests
  */
 
-import { validateAsset, formatValidationResult, ValidationErrorCode, ValidationWarningCode } from '../../validation/assetValidator';
+import {
+  validateAsset,
+  formatValidationResult,
+  ValidationErrorCode,
+  ValidationWarningCode
+} from '../../validation/assetValidator';
 
 describe('AssetValidator', () => {
   describe('PSG Format Validation', () => {
@@ -37,15 +42,15 @@ describe('AssetValidator', () => {
           }
         ]
       });
-      
+
       const result = await validateAsset(validPSG);
-      
+
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
       expect(result.metadata?.format).toBe('psg');
       expect(result.metadata?.nodeCount).toBe(1);
     });
-    
+
     it('should detect Output nodes in fragments', async () => {
       const fragmentWithOutput = JSON.stringify({
         version: '1.0.0',
@@ -61,9 +66,9 @@ describe('AssetValidator', () => {
         ],
         edges: []
       });
-      
+
       const result = await validateAsset(fragmentWithOutput);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
@@ -72,7 +77,7 @@ describe('AssetValidator', () => {
         })
       );
     });
-    
+
     it('should detect duplicate node IDs', async () => {
       const duplicateNodes = JSON.stringify({
         version: '1.0.0',
@@ -83,9 +88,9 @@ describe('AssetValidator', () => {
         ],
         edges: []
       });
-      
+
       const result = await validateAsset(duplicateNodes);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
@@ -93,21 +98,17 @@ describe('AssetValidator', () => {
         })
       );
     });
-    
+
     it('should detect invalid edge references', async () => {
       const invalidEdges = JSON.stringify({
         version: '1.0.0',
         name: 'Invalid Edges',
-        nodes: [
-          { id: 'node-1', type: 'TextBlock', x: 0, y: 0 }
-        ],
-        edges: [
-          { id: 'edge-1', source: 'node-1', target: 'non-existent' }
-        ]
+        nodes: [{ id: 'node-1', type: 'TextBlock', x: 0, y: 0 }],
+        edges: [{ id: 'edge-1', source: 'node-1', target: 'non-existent' }]
       });
-      
+
       const result = await validateAsset(invalidEdges);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
@@ -115,7 +116,7 @@ describe('AssetValidator', () => {
         })
       );
     });
-    
+
     it('should warn about disconnected nodes', async () => {
       const disconnectedNode = JSON.stringify({
         version: '1.0.0',
@@ -126,9 +127,9 @@ describe('AssetValidator', () => {
         ],
         edges: []
       });
-      
+
       const result = await validateAsset(disconnectedNode);
-      
+
       expect(result.valid).toBe(true); // Warnings don't make it invalid
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
@@ -137,7 +138,7 @@ describe('AssetValidator', () => {
       );
     });
   });
-  
+
   describe('PSGLib Format Validation', () => {
     it('should validate a valid PSGLib preset', async () => {
       const validPSGLib = JSON.stringify({
@@ -166,23 +167,21 @@ describe('AssetValidator', () => {
               type: 'weightedChoice',
               position: { x: 100, y: 200 },
               data: {
-                options: [
-                  { id: 'opt-1', text: 'Option 1', weight: 1 }
-                ]
+                options: [{ id: 'opt-1', text: 'Option 1', weight: 1 }]
               }
             }
           ],
           edges: []
         }
       });
-      
+
       const result = await validateAsset(validPSGLib);
-      
+
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
       expect(result.metadata?.format).toBe('psglib');
     });
-    
+
     it('should validate version compatibility', async () => {
       const futureVersion = JSON.stringify({
         fileType: 'psglib',
@@ -201,9 +200,9 @@ describe('AssetValidator', () => {
         },
         graph: { nodes: [], edges: [] }
       });
-      
+
       const result = await validateAsset(futureVersion);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
@@ -211,7 +210,7 @@ describe('AssetValidator', () => {
         })
       );
     });
-    
+
     it('should warn about missing author', async () => {
       const noAuthor = JSON.stringify({
         fileType: 'psglib',
@@ -230,9 +229,9 @@ describe('AssetValidator', () => {
         },
         graph: { nodes: [], edges: [] }
       });
-      
+
       const result = await validateAsset(noAuthor);
-      
+
       expect(result.valid).toBe(true);
       expect(result.warnings).toContainEqual(
         expect.objectContaining({
@@ -241,7 +240,7 @@ describe('AssetValidator', () => {
       );
     });
   });
-  
+
   describe('Format Detection', () => {
     it('should detect PSG format', async () => {
       const psgFile = JSON.stringify({
@@ -250,11 +249,11 @@ describe('AssetValidator', () => {
         nodes: [],
         edges: []
       });
-      
+
       const result = await validateAsset(psgFile);
       expect(result.metadata?.format).toBe('psg');
     });
-    
+
     it('should detect PSGLib format', async () => {
       const psgLibFile = JSON.stringify({
         fileType: 'psglib',
@@ -273,18 +272,18 @@ describe('AssetValidator', () => {
         },
         graph: { nodes: [], edges: [] }
       });
-      
+
       const result = await validateAsset(psgLibFile);
       expect(result.metadata?.format).toBe('psglib');
     });
-    
+
     it('should reject unknown formats', async () => {
       const unknownFormat = JSON.stringify({
         someField: 'value'
       });
-      
+
       const result = await validateAsset(unknownFormat);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
@@ -294,28 +293,24 @@ describe('AssetValidator', () => {
       );
     });
   });
-  
+
   describe('Error Formatting', () => {
     it('should format validation results nicely', async () => {
       const invalidFile = JSON.stringify({
         version: '1.0.0',
         name: 'Test',
-        nodes: [
-          { id: 'node-1', type: 'UnknownType', x: 0, y: 0 }
-        ],
-        edges: [
-          { id: 'edge-1', source: 'node-1', target: 'missing' }
-        ]
+        nodes: [{ id: 'node-1', type: 'UnknownType', x: 0, y: 0 }],
+        edges: [{ id: 'edge-1', source: 'node-1', target: 'missing' }]
       });
-      
+
       const result = await validateAsset(invalidFile);
       const formatted = formatValidationResult(result);
-      
+
       expect(formatted).toContain('❌ Asset validation failed');
       expect(formatted).toContain('🚫 Errors:');
       expect(formatted).toContain('⚠️  Warnings:');
     });
-    
+
     it('should show success message for valid files', async () => {
       const validFile = JSON.stringify({
         version: '1.0.0',
@@ -323,14 +318,14 @@ describe('AssetValidator', () => {
         nodes: [],
         edges: []
       });
-      
+
       const result = await validateAsset(validFile);
       const formatted = formatValidationResult(result);
-      
+
       expect(formatted).toContain('✅ Asset validation passed');
     });
   });
-  
+
   describe('Circular Dependency Detection', () => {
     it('should detect simple cycles', async () => {
       const cyclicGraph = JSON.stringify({
@@ -347,9 +342,9 @@ describe('AssetValidator', () => {
           { id: 'e3', source: 'C', target: 'A' } // Creates cycle
         ]
       });
-      
+
       const result = await validateAsset(cyclicGraph);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
@@ -358,15 +353,13 @@ describe('AssetValidator', () => {
       );
     });
   });
-  
+
   describe('Region Validation', () => {
     it('should validate region node references', async () => {
       const invalidRegion = JSON.stringify({
         version: '1.0.0',
         name: 'Invalid Region',
-        nodes: [
-          { id: 'node-1', type: 'TextBlock', x: 0, y: 0 }
-        ],
+        nodes: [{ id: 'node-1', type: 'TextBlock', x: 0, y: 0 }],
         edges: [],
         regions: [
           {
@@ -376,9 +369,9 @@ describe('AssetValidator', () => {
           }
         ]
       });
-      
+
       const result = await validateAsset(invalidRegion);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
@@ -386,7 +379,7 @@ describe('AssetValidator', () => {
         })
       );
     });
-    
+
     it('should validate port definitions', async () => {
       const invalidPorts = JSON.stringify({
         version: '1.0.0',
@@ -404,9 +397,9 @@ describe('AssetValidator', () => {
           }
         ]
       });
-      
+
       const result = await validateAsset(invalidPorts);
-      
+
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({

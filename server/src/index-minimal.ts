@@ -28,7 +28,7 @@ server.get('/health', async () => {
 server.post('/preview', async (request, reply) => {
   try {
     const { graph, runs = 3, seedStart = 1 } = request.body as any;
-    
+
     if (!graph || !graph.nodes) {
       return reply.status(400).send({ error: 'Invalid graph structure' });
     }
@@ -63,15 +63,13 @@ server.post('/preview', async (request, reply) => {
 server.post('/api/llm/parse', async (request, reply) => {
   try {
     const { prompt, mode = 'standard' } = request.body as any;
-    
+
     // For now, return a mock response
     // TODO: Wire to actual PromptParser service
     return {
       success: true,
       mode,
-      nodes: [
-        { type: 'TextBlock', content: prompt, id: 'node-1' }
-      ],
+      nodes: [{ type: 'TextBlock', content: prompt, id: 'node-1' }],
       edges: []
     };
   } catch (error) {
@@ -84,7 +82,7 @@ server.post('/api/llm/parse', async (request, reply) => {
 server.post('/api/llm/complete', async (request, reply) => {
   try {
     const { prompt, model = 'default' } = request.body as any;
-    
+
     // Mock response for demo
     return {
       success: true,

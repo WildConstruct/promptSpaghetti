@@ -21,6 +21,7 @@
 ## 1. Happy Path Test Scenarios
 
 ### Scenario 1.1: Basic Prompt to Randomizer Flow
+
 **Persona:** Creative Director (first-time user)  
 **Goal:** Convert a simple prompt into a randomizable preset
 
@@ -46,6 +47,7 @@ And the preview should show the assembled prompt with {beach|forest|backyard|sun
 ```
 
 ### Scenario 1.2: Complex Cinematic Prompt
+
 **Persona:** Film Director  
 **Goal:** Create sophisticated randomization with asset binding
 
@@ -85,6 +87,7 @@ And re-opening should restore all settings
 ```
 
 ### Scenario 1.3: Quick Randomization Setup
+
 **Persona:** Content Creator (power user)  
 **Goal:** Rapidly set up variations using keyboard only
 
@@ -112,6 +115,7 @@ And all changes should be reflected in the preview
 ## 2. Edge Case Scenarios
 
 ### Scenario 2.1: Malformed Input
+
 **Test:** Parser resilience to problematic text
 
 ```gherkin
@@ -131,13 +135,14 @@ And reasonable spans should be detected or appropriate message shown
 ```
 
 ### Scenario 2.2: Boundary Adjustment Limits
+
 **Test:** Span editing constraints
 
 ```gherkin
 Given a span "vintage camera"
 When I try to adjust boundaries:
   - Drag left boundary past previous span
-  - Drag right boundary past next span  
+  - Drag right boundary past next span
   - Shrink to zero length
   - Expand beyond prompt bounds
 
@@ -149,6 +154,7 @@ Then the system should:
 ```
 
 ### Scenario 2.3: Asset Binding Conflicts
+
 **Test:** Conflicting asset selections
 
 ```gherkin
@@ -170,6 +176,7 @@ Then the system should:
 ## 3. Error Scenarios
 
 ### Scenario 3.1: Parser Timeout
+
 **Test:** Graceful degradation under load
 
 ```gherkin
@@ -184,6 +191,7 @@ Then:
 ```
 
 ### Scenario 3.2: Asset Service Unavailable
+
 **Test:** Offline functionality
 
 ```gherkin
@@ -197,6 +205,7 @@ Then:
 ```
 
 ### Scenario 3.3: Worker Crash Recovery
+
 **Test:** Web Worker failure handling
 
 ```gherkin
@@ -215,6 +224,7 @@ Then:
 ## 4. Performance Test Scenarios
 
 ### Scenario 4.1: Rapid Sequential Parsing
+
 **Test:** Cache effectiveness
 
 ```gherkin
@@ -223,7 +233,7 @@ When measuring performance:
   - First parse: < 150ms
   - Subsequent unique: < 150ms
   - Cached repeats: < 10ms
-  
+
 Then:
   - Cache hit rate > 60%
   - No memory leaks detected
@@ -231,6 +241,7 @@ Then:
 ```
 
 ### Scenario 4.2: Large Asset Index Search
+
 **Test:** Search scalability
 
 ```gherkin
@@ -246,6 +257,7 @@ And UI should not freeze during search
 ```
 
 ### Scenario 4.3: Concurrent Operations
+
 **Test:** Multi-threading effectiveness
 
 ```gherkin
@@ -268,6 +280,7 @@ Then:
 ## 5. Accessibility Test Scenarios
 
 ### Scenario 5.1: Keyboard-Only Navigation
+
 **Test:** Full functionality without mouse
 
 ```gherkin
@@ -289,6 +302,7 @@ And no keyboard traps should exist
 ```
 
 ### Scenario 5.2: Screen Reader Compatibility
+
 **Test:** NVDA/JAWS support
 
 ```gherkin
@@ -305,6 +319,7 @@ And landmark regions should be properly defined
 ```
 
 ### Scenario 5.3: High Contrast Mode
+
 **Test:** Visual accessibility
 
 ```gherkin
@@ -325,6 +340,7 @@ And ≥ 3:1 for large text and UI components
 ## 6. Integration Test Scenarios
 
 ### Scenario 6.1: Wizard to Graph Editor Sync
+
 **Test:** Component communication
 
 ```gherkin
@@ -342,6 +358,7 @@ Then the wizard should show "Graph manually edited" warning
 ```
 
 ### Scenario 6.2: Preset Library Integration
+
 **Test:** Save and load functionality
 
 ```gherkin
@@ -360,6 +377,7 @@ Then:
 ```
 
 ### Scenario 6.3: Undo/Redo System Integration
+
 **Test:** State management
 
 ```gherkin
@@ -384,49 +402,49 @@ And the undo stack should persist across panel close/open
 
 ```yaml
 simple_prompts:
-  - "A red car on a sunny day"
-  - "Portrait of a smiling child"
-  - "Landscape with mountains and lake"
+  - 'A red car on a sunny day'
+  - 'Portrait of a smiling child'
+  - 'Landscape with mountains and lake'
 
 medium_prompts:
-  - "Fashion photography in urban setting with neon lights and rain"
-  - "Still life of vintage objects on rustic wooden table"
-  - "Action shot of athlete in motion with dramatic lighting"
+  - 'Fashion photography in urban setting with neon lights and rain'
+  - 'Still life of vintage objects on rustic wooden table'
+  - 'Action shot of athlete in motion with dramatic lighting'
 
 complex_prompts:
-  - "Ethereal fantasy scene with floating islands..."
-  - "Cyberpunk cityscape with multiple subjects..."
-  - "Historical recreation with period-accurate details..."
+  - 'Ethereal fantasy scene with floating islands...'
+  - 'Cyberpunk cityscape with multiple subjects...'
+  - 'Historical recreation with period-accurate details...'
 
 edge_cases:
   - "Text with 'quotes' and (parentheses) and special-chars"
-  - "MIXED case WITH ran.dom PUNCTU!ATION???"
-  - "Very long prompt with 500+ tokens..."
+  - 'MIXED case WITH ran.dom PUNCTU!ATION???'
+  - 'Very long prompt with 500+ tokens...'
   - "Prompt with\ttabs\nand\nnewlines"
-  - "Émoji 🎨 and únicode characters 中文"
+  - 'Émoji 🎨 and únicode characters 中文'
 
 malformed:
-  - ",,,multiple,,,commas,,,"
-  - "   excessive   whitespace   "
-  - "incomplete sentence without"
-  - "••• bullet points • everywhere •••"
+  - ',,,multiple,,,commas,,,'
+  - '   excessive   whitespace   '
+  - 'incomplete sentence without'
+  - '••• bullet points • everywhere •••'
 ```
 
 ### Expected Parse Results
 
 ```yaml
 test_expectations:
-  "A red car on a sunny day":
+  'A red car on a sunny day':
     spans: 2
-    types: ["Subject", "Background/Location"]
-    
-  "Portrait of a smiling child":
+    types: ['Subject', 'Background/Location']
+
+  'Portrait of a smiling child':
     spans: 2
-    types: ["Composition", "Subject"]
-    
-  "Shot on Leica with 50mm lens":
+    types: ['Composition', 'Subject']
+
+  'Shot on Leica with 50mm lens':
     spans: 2
-    types: ["Optics", "Optics"]
+    types: ['Optics', 'Optics']
     asset_matches: true
 ```
 
@@ -462,20 +480,23 @@ test.describe('Prompt Wizard', () => {
   test('should parse and display spans quickly', async ({ page }) => {
     await page.goto('/randomizer');
     await page.click('button:has-text("+ Paste prompt")');
-    
+
     const prompt = 'Cinematic portrait with dramatic lighting';
     await page.fill('[data-testid="prompt-input"]', prompt);
-    
+
     // Wait for spans to appear
-    await page.waitForSelector('[data-testid="span"]', { 
+    await page.waitForSelector('[data-testid="span"]', {
       timeout: 200 // Should appear within 200ms
     });
-    
+
     const spans = await page.$$('[data-testid="span"]');
     expect(spans.length).toBeGreaterThan(0);
-    
+
     // Verify parse time
-    const parseTime = await page.getAttribute('[data-testid="parse-time"]', 'data-value');
+    const parseTime = await page.getAttribute(
+      '[data-testid="parse-time"]',
+      'data-value'
+    );
     expect(parseInt(parseTime)).toBeLessThan(150);
   });
 });
@@ -486,6 +507,7 @@ test.describe('Prompt Wizard', () => {
 ## Success Metrics
 
 ### Quantitative Metrics
+
 - Parse accuracy: > 75% F1 score
 - Parse performance: < 150ms @ p95
 - User task completion: > 80%
@@ -493,6 +515,7 @@ test.describe('Prompt Wizard', () => {
 - Accessibility score: 100% WCAG AA
 
 ### Qualitative Metrics
+
 - User satisfaction: > 4.0/5.0
 - Learning curve: < 5 minutes
 - Feature adoption: > 40% of users
@@ -503,17 +526,20 @@ test.describe('Prompt Wizard', () => {
 ## Test Environment Requirements
 
 ### Browser Matrix
+
 - Chrome 100+ (primary)
 - Firefox 100+
 - Safari 15+
 - Edge 100+
 
 ### Device Matrix
+
 - Desktop: 1920x1080, 1366x768
 - Tablet: iPad Pro, iPad Mini
 - Accessibility: Screen readers, keyboard-only
 
 ### Performance Baseline
+
 - CPU: 2.4GHz dual-core (minimum)
 - RAM: 4GB available
 - Network: 3G minimum (for asset search)
@@ -521,6 +547,7 @@ test.describe('Prompt Wizard', () => {
 ---
 
 **Next Steps:**
+
 1. Set up test automation framework
 2. Create test data fixtures
 3. Implement performance monitoring

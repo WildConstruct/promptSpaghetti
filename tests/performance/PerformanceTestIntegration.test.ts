@@ -9,7 +9,7 @@
 import {
   PerformanceTestIntegration,
   IntegratedPerformanceReport,
-  PerformanceTestConfig,
+  PerformanceTestConfig
 } from './PerformanceTestIntegration';
 import { Logger } from '../../server/src/logging/Logger';
 
@@ -27,8 +27,8 @@ describe('Performance Test Integration', () => {
         maxExecutionTime: 2000, // 2 seconds for tests
         maxMemoryUsage: 1024, // 1GB for tests
         minThroughput: 50, // 50 ops/sec
-        maxErrorRate: 0.1, // 10%
-      },
+        maxErrorRate: 0.1 // 10%
+      }
     };
 
     performanceTestIntegration = new PerformanceTestIntegration(testConfig);
@@ -36,7 +36,8 @@ describe('Performance Test Integration', () => {
 
   describe('Integrated Performance Testing', () => {
     it('should execute comprehensive performance test suite', async () => {
-      const report = await performanceTestIntegration.executeComprehensivePerformanceTest();
+      const report =
+        await performanceTestIntegration.executeComprehensivePerformanceTest();
 
       expect(report).toBeDefined();
       expect(report.timestamp).toBeInstanceOf(Date);
@@ -56,15 +57,20 @@ describe('Performance Test Integration', () => {
 
       // Verify data lifecycle performance was tested
       expect(report.dataLifecyclePerformance).toBeDefined();
-      expect(typeof report.dataLifecyclePerformance.recordsProcessed).toBe('number');
+      expect(typeof report.dataLifecyclePerformance.recordsProcessed).toBe(
+        'number'
+      );
       expect(typeof report.dataLifecyclePerformance.throughput).toBe('number');
 
-      console.log(`Performance test completed with score: ${report.overallScore}/100`);
+      console.log(
+        `Performance test completed with score: ${report.overallScore}/100`
+      );
       console.log(`Recommendations: ${report.recommendations.length}`);
     }, 60000);
 
     it('should generate meaningful performance recommendations', async () => {
-      const report = await performanceTestIntegration.executeComprehensivePerformanceTest();
+      const report =
+        await performanceTestIntegration.executeComprehensivePerformanceTest();
 
       expect(report.recommendations.length).toBeGreaterThan(0);
 
@@ -76,14 +82,18 @@ describe('Performance Test Integration', () => {
     }, 45000);
 
     it('should calculate reasonable overall score', async () => {
-      const report = await performanceTestIntegration.executeComprehensivePerformanceTest();
+      const report =
+        await performanceTestIntegration.executeComprehensivePerformanceTest();
 
       // Score should be between 0 and 100
       expect(report.overallScore).toBeGreaterThanOrEqual(0);
       expect(report.overallScore).toBeLessThanOrEqual(100);
 
       // If execution benchmarks passed and error rates are low, score should be high
-      if (report.executionBenchmarks.passed && report.dataLifecyclePerformance.errorRate < 0.05) {
+      if (
+        report.executionBenchmarks.passed &&
+        report.dataLifecyclePerformance.errorRate < 0.05
+      ) {
         expect(report.overallScore).toBeGreaterThan(70);
       }
     }, 45000);
@@ -94,7 +104,9 @@ describe('Performance Test Integration', () => {
       const healthCheck = await performanceTestIntegration.quickHealthCheck();
 
       expect(healthCheck).toBeDefined();
-      expect(['HEALTHY', 'WARNING', 'CRITICAL'].includes(healthCheck.status)).toBe(true);
+      expect(
+        ['HEALTHY', 'WARNING', 'CRITICAL'].includes(healthCheck.status)
+      ).toBe(true);
       expect(Array.isArray(healthCheck.issues)).toBe(true);
       expect(typeof healthCheck.metrics).toBe('object');
 
@@ -113,8 +125,8 @@ describe('Performance Test Integration', () => {
           maxExecutionTime: 500,
           maxMemoryUsage: 256,
           minThroughput: 200,
-          maxErrorRate: 0.02,
-        },
+          maxErrorRate: 0.02
+        }
       };
 
       const customIntegration = new PerformanceTestIntegration(customConfig);
@@ -131,12 +143,13 @@ describe('Performance Test Integration', () => {
           maxExecutionTime: 50, // Very strict
           maxMemoryUsage: 10, // Very strict
           minThroughput: 1000, // Very high
-          maxErrorRate: 0.001, // Very low
-        },
+          maxErrorRate: 0.001 // Very low
+        }
       };
 
       const strictIntegration = new PerformanceTestIntegration(strictConfig);
-      const report = await strictIntegration.executeComprehensivePerformanceTest();
+      const report =
+        await strictIntegration.executeComprehensivePerformanceTest();
 
       // With strict thresholds, we expect the score to be lower
       expect(report.overallScore).toBeLessThan(100);
@@ -144,10 +157,12 @@ describe('Performance Test Integration', () => {
     }, 45000);
 
     it('should detect performance regressions', async () => {
-      const baselineReport = await performanceTestIntegration.executeComprehensivePerformanceTest();
+      const baselineReport =
+        await performanceTestIntegration.executeComprehensivePerformanceTest();
 
       // Simulate a second run (in real scenario, this would be after code changes)
-      const currentReport = await performanceTestIntegration.executeComprehensivePerformanceTest();
+      const currentReport =
+        await performanceTestIntegration.executeComprehensivePerformanceTest();
 
       // Both reports should have valid structures
       expect(baselineReport.overallScore).toBeGreaterThanOrEqual(0);
@@ -167,11 +182,12 @@ describe('Performance Test Integration', () => {
         enableLoadTesting: false,
         enableSystemMonitoring: true,
         enableDataLifecycleTesting: true,
-        alertThresholds: testConfig.alertThresholds,
+        alertThresholds: testConfig.alertThresholds
       };
 
       const limitedIntegration = new PerformanceTestIntegration(limitedConfig);
-      const report = await limitedIntegration.executeComprehensivePerformanceTest();
+      const report =
+        await limitedIntegration.executeComprehensivePerformanceTest();
 
       expect(report).toBeDefined();
       expect(report.loadTestResults.scenariosExecuted).toBe(0);
@@ -189,7 +205,8 @@ describe('Performance Test Integration', () => {
 
   describe('Reporting and Output', () => {
     it('should generate comprehensive report structure', async () => {
-      const report = await performanceTestIntegration.executeComprehensivePerformanceTest();
+      const report =
+        await performanceTestIntegration.executeComprehensivePerformanceTest();
 
       // Verify all required report sections
       expect(report.timestamp).toBeInstanceOf(Date);
@@ -211,8 +228,12 @@ describe('Performance Test Integration', () => {
       expect(typeof report.systemPerformance.diskIO).toBe('number');
       expect(typeof report.systemPerformance.networkIO).toBe('number');
 
-      expect(typeof report.dataLifecyclePerformance.recordsProcessed).toBe('number');
-      expect(typeof report.dataLifecyclePerformance.averageProcessingTime).toBe('number');
+      expect(typeof report.dataLifecyclePerformance.recordsProcessed).toBe(
+        'number'
+      );
+      expect(typeof report.dataLifecyclePerformance.averageProcessingTime).toBe(
+        'number'
+      );
       expect(typeof report.dataLifecyclePerformance.throughput).toBe('number');
       expect(typeof report.dataLifecyclePerformance.errorRate).toBe('number');
     }, 45000);
@@ -225,7 +246,7 @@ describe('Performance Test Integration', () => {
         enableLoadTesting: false,
         enableSystemMonitoring: false,
         enableDataLifecycleTesting: false,
-        alertThresholds: testConfig.alertThresholds,
+        alertThresholds: testConfig.alertThresholds
       };
 
       const integration = new PerformanceTestIntegration(config);
@@ -248,15 +269,21 @@ describe('Performance Test Integration', () => {
         enableLoadTesting: false,
         enableSystemMonitoring: false,
         enableDataLifecycleTesting: true,
-        alertThresholds: testConfig.alertThresholds,
+        alertThresholds: testConfig.alertThresholds
       };
 
       const integration = new PerformanceTestIntegration(config);
       const report = await integration.executeComprehensivePerformanceTest();
 
-      expect(report.dataLifecyclePerformance.recordsProcessed).toBeGreaterThanOrEqual(0);
-      expect(report.dataLifecyclePerformance.throughput).toBeGreaterThanOrEqual(0);
-      expect(report.dataLifecyclePerformance.errorRate).toBeGreaterThanOrEqual(0);
+      expect(
+        report.dataLifecyclePerformance.recordsProcessed
+      ).toBeGreaterThanOrEqual(0);
+      expect(report.dataLifecyclePerformance.throughput).toBeGreaterThanOrEqual(
+        0
+      );
+      expect(report.dataLifecyclePerformance.errorRate).toBeGreaterThanOrEqual(
+        0
+      );
       expect(report.dataLifecyclePerformance.errorRate).toBeLessThanOrEqual(1);
     }, 30000);
 
@@ -266,7 +293,7 @@ describe('Performance Test Integration', () => {
         enableLoadTesting: false,
         enableSystemMonitoring: true,
         enableDataLifecycleTesting: false,
-        alertThresholds: testConfig.alertThresholds,
+        alertThresholds: testConfig.alertThresholds
       };
 
       const integration = new PerformanceTestIntegration(config);

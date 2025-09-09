@@ -30,7 +30,7 @@ The Prompt Parsing Algorithm is responsible for converting natural language prom
 │  │  - Error handling                    │               │
 │  └──────┬───────────────────────────────┘               │
 └─────────┼────────────────────────────────────────────────┘
-          │ 
+          │
           ▼ Web Worker Boundary
 ┌─────────────────────────────────────────────────────────┐
 │                    Worker Thread                         │
@@ -67,13 +67,20 @@ interface Token {
 
 class Tokenizer {
   private static readonly CONJUNCTIONS = new Set([
-    'and', 'or', 'but', 'nor', 'for', 'yet', 'so',
-    'with', 'without', 'against', 'versus'
+    'and',
+    'or',
+    'but',
+    'nor',
+    'for',
+    'yet',
+    'so',
+    'with',
+    'without',
+    'against',
+    'versus'
   ]);
 
-  private static readonly ARTICLES = new Set([
-    'a', 'an', 'the'
-  ]);
+  private static readonly ARTICLES = new Set(['a', 'an', 'the']);
 
   tokenize(text: string): Token[] {
     const tokens: Token[] = [];
@@ -82,7 +89,7 @@ class Tokenizer {
 
     while ((match = regex.exec(text)) !== null) {
       const [fullMatch, word, quoted, punct, space] = match;
-      
+
       let type: Token['type'];
       if (word) type = 'word';
       else if (quoted) type = 'quote';
@@ -137,16 +144,16 @@ class Segmenter {
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
       const nextToken = tokens[i + 1];
-      
+
       currentSegment.push(token);
 
       // Check for split conditions
       const shouldSplit = this.shouldSplit(token, nextToken, currentSegment);
-      
+
       if (shouldSplit.split) {
         // Filter out pure whitespace/punctuation segments
-        const meaningfulTokens = currentSegment.filter(t => 
-          t.type === 'word' || t.type === 'quote'
+        const meaningfulTokens = currentSegment.filter(
+          t => t.type === 'word' || t.type === 'quote'
         );
 
         if (meaningfulTokens.length >= Segmenter.MIN_SEGMENT_LENGTH) {
@@ -166,10 +173,10 @@ class Segmenter {
 
     // Handle remaining tokens
     if (currentSegment.length > 0) {
-      const meaningfulTokens = currentSegment.filter(t => 
-        t.type === 'word' || t.type === 'quote'
+      const meaningfulTokens = currentSegment.filter(
+        t => t.type === 'word' || t.type === 'quote'
       );
-      
+
       if (meaningfulTokens.length >= Segmenter.MIN_SEGMENT_LENGTH) {
         segments.push({
           tokens: currentSegment,
@@ -184,11 +191,10 @@ class Segmenter {
   }
 
   private shouldSplit(
-    current: Token, 
+    current: Token,
     next: Token | undefined,
     segment: Token[]
   ): { split: boolean; confidence: number; reason?: Segment['splitReason'] } {
-    
     // Don't split quoted text
     if (current.type === 'quote') {
       return { split: false, confidence: 1.0 };
@@ -224,11 +230,11 @@ class Segmenter {
 
   private mergeShortSegments(segments: Segment[]): Segment[] {
     const merged: Segment[] = [];
-    
+
     for (let i = 0; i < segments.length; i++) {
       const current = segments[i];
       const next = segments[i + 1];
-      
+
       // Merge single-word segments with neighbors
       if (current.tokens.filter(t => t.type === 'word').length === 1 && next) {
         next.tokens = [...current.tokens, ...next.tokens];
@@ -238,7 +244,7 @@ class Segmenter {
         merged.push(current);
       }
     }
-    
+
     return merged;
   }
 }
@@ -247,16 +253,16 @@ class Segmenter {
 ### 3.3 Classification Phase
 
 ```typescript
-type SpanType = 
-  | 'Subject' 
-  | 'Style' 
-  | 'Lighting' 
-  | 'Optics' 
+type SpanType =
+  | 'Subject'
+  | 'Style'
+  | 'Lighting'
+  | 'Optics'
   | 'Color/Tonality'
-  | 'Composition' 
-  | 'Mood' 
-  | 'Background/Location' 
-  | 'Era/Reference' 
+  | 'Composition'
+  | 'Mood'
+  | 'Background/Location'
+  | 'Era/Reference'
   | 'Process/Medium';
 
 interface ClassificationRule {
@@ -269,18 +275,39 @@ interface ClassificationRule {
 class Classifier {
   private static readonly RULES: ClassificationRule[] = [
     {
-      keywords: ['portrait', 'man', 'woman', 'person', 'people', 'face', 'figure'],
+      keywords: [
+        'portrait',
+        'man',
+        'woman',
+        'person',
+        'people',
+        'face',
+        'figure'
+      ],
       patterns: [/\b(young|old|elderly|child|baby)\s+\w+/i],
       type: 'Subject',
       weight: 1.0
     },
     {
-      keywords: ['cinematic', 'artistic', 'documentary', 'fashion', 'editorial'],
+      keywords: [
+        'cinematic',
+        'artistic',
+        'documentary',
+        'fashion',
+        'editorial'
+      ],
       type: 'Style',
       weight: 0.9
     },
     {
-      keywords: ['lighting', 'light', 'bright', 'dark', 'shadows', 'highlights'],
+      keywords: [
+        'lighting',
+        'light',
+        'bright',
+        'dark',
+        'shadows',
+        'highlights'
+      ],
       patterns: [/\b(soft|hard|natural|artificial)\s+light/i],
       type: 'Lighting',
       weight: 0.9
@@ -298,18 +325,39 @@ class Classifier {
       weight: 0.85
     },
     {
-      keywords: ['composition', 'angle', 'close-up', 'wide', 'medium', 'profile'],
+      keywords: [
+        'composition',
+        'angle',
+        'close-up',
+        'wide',
+        'medium',
+        'profile'
+      ],
       patterns: [/\b(low|high|dutch)\s+angle/i],
       type: 'Composition',
       weight: 0.8
     },
     {
-      keywords: ['mood', 'feeling', 'emotion', 'happy', 'sad', 'dramatic', 'peaceful'],
+      keywords: [
+        'mood',
+        'feeling',
+        'emotion',
+        'happy',
+        'sad',
+        'dramatic',
+        'peaceful'
+      ],
       type: 'Mood',
       weight: 0.75
     },
     {
-      keywords: ['background', 'backdrop', 'location', 'setting', 'environment'],
+      keywords: [
+        'background',
+        'backdrop',
+        'location',
+        'setting',
+        'environment'
+      ],
       patterns: [/\b(indoor|outdoor|studio)\b/i],
       type: 'Background/Location',
       weight: 0.8
@@ -399,12 +447,19 @@ interface Span {
 
 class SpanAssembler {
   private static readonly RANDOMIZE_KEYWORDS = new Set([
-    'various', 'different', 'multiple', 'diverse', 'mixed',
-    'random', 'any', 'some', 'several'
+    'various',
+    'different',
+    'multiple',
+    'diverse',
+    'mixed',
+    'random',
+    'any',
+    'some',
+    'several'
   ]);
 
   assemble(
-    segments: Segment[], 
+    segments: Segment[],
     classifications: Map<Segment, { type: SpanType; confidence: number }>,
     originalText: string
   ): Span[] {
@@ -413,7 +468,7 @@ class SpanAssembler {
     segments.forEach((segment, index) => {
       const classification = classifications.get(segment)!;
       const text = this.extractText(segment, originalText);
-      
+
       const span: Span = {
         id: `span_${index + 1}`,
         text: text.trim(),
@@ -450,8 +505,8 @@ class SpanAssembler {
 
     // Certain types are more likely to be randomized
     const randomizableTypes: SpanType[] = [
-      'Optics', 
-      'Color/Tonality', 
+      'Optics',
+      'Color/Tonality',
       'Process/Medium',
       'Mood'
     ];
@@ -461,26 +516,30 @@ class SpanAssembler {
 
   private mergeAdjacentSpans(spans: Span[]): Span[] {
     const merged: Span[] = [];
-    
+
     for (let i = 0; i < spans.length; i++) {
       const current = spans[i];
       const next = spans[i + 1];
-      
+
       // Merge adjacent spans of the same type
-      if (next && 
-          current.type === next.type && 
-          current.end === next.start &&
-          current.randomize === next.randomize) {
-        
+      if (
+        next &&
+        current.type === next.type &&
+        current.end === next.start &&
+        current.randomize === next.randomize
+      ) {
         next.text = current.text + next.text;
         next.start = current.start;
         next.confidence = Math.min(current.confidence, next.confidence);
-        next.metadata.tokens = [...current.metadata.tokens, ...next.metadata.tokens];
+        next.metadata.tokens = [
+          ...current.metadata.tokens,
+          ...next.metadata.tokens
+        ];
       } else {
         merged.push(current);
       }
     }
-    
+
     return merged;
   }
 }
@@ -508,24 +567,24 @@ class PromptParser {
     try {
       // Step 1: Tokenization
       const tokens = this.tokenizer.tokenize(prompt);
-      
+
       // Step 2: Segmentation
       const segments = this.segmenter.segment(tokens);
-      
+
       // Step 3: Classification
       const classifications = new Map();
       for (const segment of segments) {
         classifications.set(segment, this.classifier.classify(segment));
       }
-      
+
       // Step 4: Assembly
       const spans = this.assembler.assemble(segments, classifications, prompt);
-      
+
       // Step 5: Validation
       const validated = this.validate(spans, prompt);
-      
+
       const endTime = performance.now();
-      
+
       return {
         success: true,
         spans: validated,
@@ -551,10 +610,10 @@ class PromptParser {
     // Remove overlapping spans
     const sorted = [...spans].sort((a, b) => a.start - b.start);
     const validated: Span[] = [];
-    
+
     for (const span of sorted) {
       const lastValid = validated[validated.length - 1];
-      
+
       // Check for overlap
       if (!lastValid || span.start >= lastValid.end) {
         validated.push(span);
@@ -563,15 +622,17 @@ class PromptParser {
         validated[validated.length - 1] = span;
       }
     }
-    
+
     // Ensure spans cover significant portion of text
     const coverage = validated.reduce((sum, s) => sum + (s.end - s.start), 0);
     const minCoverage = originalText.length * 0.3;
-    
+
     if (coverage < minCoverage) {
-      console.warn(`Low coverage: ${coverage}/${originalText.length} characters`);
+      console.warn(
+        `Low coverage: ${coverage}/${originalText.length} characters`
+      );
     }
-    
+
     return validated;
   }
 }
@@ -587,7 +648,7 @@ class PromptParser {
 // parser.worker.ts
 let parser: PromptParser | null = null;
 
-self.addEventListener('message', async (event) => {
+self.addEventListener('message', async event => {
   const { type, payload, id } = event.data;
 
   switch (type) {
@@ -598,10 +659,10 @@ self.addEventListener('message', async (event) => {
 
     case 'PARSE':
       if (!parser) {
-        self.postMessage({ 
-          type: 'ERROR', 
+        self.postMessage({
+          type: 'ERROR',
           error: 'Parser not initialized',
-          id 
+          id
         });
         return;
       }
@@ -635,25 +696,25 @@ class ParserCache {
   get(prompt: string): ParseResult | null {
     const key = this.hash(prompt);
     const result = this.cache.get(key);
-    
+
     if (result) {
       // Update access order for LRU
       this.accessOrder = this.accessOrder.filter(k => k !== key);
       this.accessOrder.push(key);
     }
-    
+
     return result || null;
   }
 
   set(prompt: string, result: ParseResult): void {
     const key = this.hash(prompt);
-    
+
     // Evict least recently used if at capacity
     if (this.cache.size >= this.maxSize) {
       const lru = this.accessOrder.shift();
       if (lru) this.cache.delete(lru);
     }
-    
+
     this.cache.set(key, result);
     this.accessOrder.push(key);
   }
@@ -663,7 +724,7 @@ class ParserCache {
     let hash = 0;
     for (let i = 0; i < prompt.length; i++) {
       const char = prompt.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32bit integer
     }
     return hash.toString(36);
@@ -677,26 +738,26 @@ class ParserCache {
 
 ### Target Metrics
 
-| Metric | Target | Measured | Status |
-|--------|--------|----------|--------|
-| Parse time (100 tokens) | < 50ms | TBD | 🟡 |
-| Parse time (400 tokens) | < 150ms | TBD | 🟡 |
-| Memory usage | < 10MB | TBD | 🟡 |
-| Cache hit rate | > 60% | TBD | 🟡 |
-| Accuracy (F1 score) | > 0.75 | TBD | 🟡 |
+| Metric                  | Target  | Measured | Status |
+| ----------------------- | ------- | -------- | ------ |
+| Parse time (100 tokens) | < 50ms  | TBD      | 🟡     |
+| Parse time (400 tokens) | < 150ms | TBD      | 🟡     |
+| Memory usage            | < 10MB  | TBD      | 🟡     |
+| Cache hit rate          | > 60%   | TBD      | 🟡     |
+| Accuracy (F1 score)     | > 0.75  | TBD      | 🟡     |
 
 ### Test Prompts
 
 ```typescript
 const TEST_PROMPTS = [
   // Simple (< 50 tokens)
-  "A happy dog playing in the park during sunset",
-  
+  'A happy dog playing in the park during sunset',
+
   // Medium (100-200 tokens)
-  "Cinematic portrait of a young woman in vintage clothing, soft natural lighting, shot on 35mm film with shallow depth of field, warm color grading",
-  
+  'Cinematic portrait of a young woman in vintage clothing, soft natural lighting, shot on 35mm film with shallow depth of field, warm color grading',
+
   // Complex (300-400 tokens)
-  "Ethereal fashion photography of an elegant model in flowing white silk dress with delicate embroidery, standing in a misty forest at dawn, surrounded by ancient trees with gnarled branches reaching toward a pale sky, soft diffused lighting filtering through the fog creating a dreamlike atmosphere, shot on medium format Hasselblad with 80mm lens at f/2.8 for creamy bokeh, subtle grain and vintage color processing reminiscent of 1970s editorial photography, with muted earth tones and desaturated highlights"
+  'Ethereal fashion photography of an elegant model in flowing white silk dress with delicate embroidery, standing in a misty forest at dawn, surrounded by ancient trees with gnarled branches reaching toward a pale sky, soft diffused lighting filtering through the fog creating a dreamlike atmosphere, shot on medium format Hasselblad with 80mm lens at f/2.8 for creamy bokeh, subtle grain and vintage color processing reminiscent of 1970s editorial photography, with muted earth tones and desaturated highlights'
 ];
 ```
 
@@ -763,7 +824,9 @@ describe('PromptParser', () => {
     it('should preserve quoted phrases', () => {
       const text = 'Use "exact phrase", then continue';
       const segments = segmenter.segment(tokenizer.tokenize(text));
-      expect(segments[0].tokens.some(t => t.text === '"exact phrase"')).toBe(true);
+      expect(segments[0].tokens.some(t => t.text === '"exact phrase"')).toBe(
+        true
+      );
     });
   });
 
@@ -783,12 +846,14 @@ describe('PromptParser', () => {
 ## 8. Future Enhancements
 
 ### Phase 2 (v1.1)
+
 - Machine learning model for classification
 - Semantic similarity matching
 - Multi-language support
 - Custom training on user corrections
 
 ### Phase 3 (v2.0)
+
 - Contextual understanding (relationships between spans)
 - Style transfer detection
 - Automatic alternative generation
@@ -812,6 +877,7 @@ describe('PromptParser', () => {
 ---
 
 **Next Steps:**
+
 1. Review with engineering team
 2. Prototype tokenizer and segmenter
 3. Gather test prompt dataset

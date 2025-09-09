@@ -17,10 +17,14 @@ export {
   ComponentTestingUtils,
   AsyncTestingUtils,
   MockDataUtils,
-  PerformanceTestingUtils,
+  PerformanceTestingUtils
 } from './TestingUtilities';
 
-export { MigrationTestHelper, LegacySystemMock, RefactoringValidator } from './RefactoringTestUtils';
+export {
+  MigrationTestHelper,
+  LegacySystemMock,
+  RefactoringValidator
+} from './RefactoringTestUtils';
 
 export { registerCustomMatchers } from './CustomMatchers';
 

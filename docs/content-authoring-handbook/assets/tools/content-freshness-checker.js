@@ -20,13 +20,13 @@ class ContentFreshnessChecker {
       'part3-engine-reference',
       'part4-practical-guides',
       'part5-advanced-topics',
-      'part6-reference-materials',
+      'part6-reference-materials'
     ];
     this.reportsDir = path.join(this.rootDir, 'reports');
     this.maxAge = {
       critical: 30, // days
       warning: 60, // days
-      stale: 90, // days
+      stale: 90 // days
     };
 
     this.ensureDirectoryExists(this.reportsDir);
@@ -70,7 +70,7 @@ class ContentFreshnessChecker {
           size: stat.size,
           modified: stat.mtime,
           accessed: stat.atime,
-          category: this.categorizeFile(itemPath),
+          category: this.categorizeFile(itemPath)
         });
       }
     });
@@ -85,11 +85,16 @@ class ContentFreshnessChecker {
     const relativePath = path.relative(this.rootDir, filePath);
 
     if (relativePath.includes('part1-foundation')) return 'foundation';
-    if (relativePath.includes('part2-content-development')) return 'content-development';
-    if (relativePath.includes('part3-engine-reference')) return 'engine-reference';
-    if (relativePath.includes('part4-practical-guides')) return 'practical-guides';
-    if (relativePath.includes('part5-advanced-topics')) return 'advanced-topics';
-    if (relativePath.includes('part6-reference-materials')) return 'reference-materials';
+    if (relativePath.includes('part2-content-development'))
+      return 'content-development';
+    if (relativePath.includes('part3-engine-reference'))
+      return 'engine-reference';
+    if (relativePath.includes('part4-practical-guides'))
+      return 'practical-guides';
+    if (relativePath.includes('part5-advanced-topics'))
+      return 'advanced-topics';
+    if (relativePath.includes('part6-reference-materials'))
+      return 'reference-materials';
     if (relativePath.includes('assets/examples')) return 'examples';
 
     return 'other';
@@ -107,7 +112,7 @@ class ContentFreshnessChecker {
       aging: 0,
       stale: 0,
       critical: 0,
-      files: [],
+      files: []
     };
 
     files.forEach(file => {
@@ -120,7 +125,7 @@ class ContentFreshnessChecker {
         agingStatus: agingStatus,
         freshness: this.calculateFreshness(ageInDays, file.category),
         priority: this.getPriority(file.category),
-        recommendations: this.getRecommendations(ageInDays, file.category),
+        recommendations: this.getRecommendations(ageInDays, file.category)
       };
 
       analysis.files.push(fileAnalysis);
@@ -160,7 +165,7 @@ class ContentFreshnessChecker {
       'practical-guides': 45, // Practical guides need frequent updates
       'advanced-topics': 90, // Advanced topics need moderate updates
       'reference-materials': 120, // Reference materials are more stable
-      examples: 30, // Examples should be very current
+      examples: 30 // Examples should be very current
     };
 
     return categoryAges[category] || 90;
@@ -177,7 +182,7 @@ class ContentFreshnessChecker {
       'practical-guides': 'critical',
       'advanced-topics': 'medium',
       'reference-materials': 'low',
-      examples: 'critical',
+      examples: 'critical'
     };
 
     return priorities[category] || 'medium';
@@ -229,7 +234,7 @@ class ContentFreshnessChecker {
       fresh: 1.0,
       aging: 0.7,
       stale: 0.4,
-      critical: 0.1,
+      critical: 0.1
     };
 
     const weightedScore =
@@ -252,7 +257,8 @@ class ContentFreshnessChecker {
       recommendations.push({
         priority: 'critical',
         action: `Immediately review ${analysis.critical} critical files`,
-        description: 'These files are significantly outdated and may contain incorrect information',
+        description:
+          'These files are significantly outdated and may contain incorrect information'
       });
     }
 
@@ -260,7 +266,7 @@ class ContentFreshnessChecker {
       recommendations.push({
         priority: 'high',
         action: `Review ${analysis.stale} stale files`,
-        description: 'These files should be reviewed for accuracy and relevance',
+        description: 'These files should be reviewed for accuracy and relevance'
       });
     }
 
@@ -268,7 +274,8 @@ class ContentFreshnessChecker {
       recommendations.push({
         priority: 'medium',
         action: `Monitor ${analysis.aging} aging files`,
-        description: 'These files are approaching staleness and should be reviewed soon',
+        description:
+          'These files are approaching staleness and should be reviewed soon'
       });
     }
 
@@ -279,7 +286,7 @@ class ContentFreshnessChecker {
         recommendations.push({
           priority: this.getPriority(category),
           action: `Review ${category} content`,
-          description: `${category} files have an average age of ${stats.avgAge} days`,
+          description: `${category} files have an average age of ${stats.avgAge} days`
         });
       }
     });
@@ -302,7 +309,7 @@ class ContentFreshnessChecker {
           count: 0,
           totalAge: 0,
           avgAge: 0,
-          freshness: 0,
+          freshness: 0
         };
       }
 
@@ -339,21 +346,21 @@ class ContentFreshnessChecker {
           fresh: analysis.fresh,
           aging: analysis.aging,
           stale: analysis.stale,
-          critical: analysis.critical,
+          critical: analysis.critical
         },
         percentages: {
           fresh: Math.round((analysis.fresh / analysis.total) * 100),
           aging: Math.round((analysis.aging / analysis.total) * 100),
           stale: Math.round((analysis.stale / analysis.total) * 100),
-          critical: Math.round((analysis.critical / analysis.total) * 100),
-        },
+          critical: Math.round((analysis.critical / analysis.total) * 100)
+        }
       },
       categoryStats: categoryStats,
       recommendations: recommendations,
       criticalFiles: analysis.files.filter(f => f.agingStatus === 'critical'),
       staleFiles: analysis.files.filter(f => f.agingStatus === 'stale'),
       agingFiles: analysis.files.filter(f => f.agingStatus === 'aging'),
-      allFiles: analysis.files,
+      allFiles: analysis.files
     };
 
     return report;
@@ -510,10 +517,18 @@ class ContentFreshnessChecker {
     console.log('===============================');
     console.log(`Overall Score: ${report.summary.freshnessScore}%`);
     console.log(`Total Files: ${report.summary.totalFiles}`);
-    console.log(`Fresh: ${report.summary.distribution.fresh} (${report.summary.percentages.fresh}%)`);
-    console.log(`Aging: ${report.summary.distribution.aging} (${report.summary.percentages.aging}%)`);
-    console.log(`Stale: ${report.summary.distribution.stale} (${report.summary.percentages.stale}%)`);
-    console.log(`Critical: ${report.summary.distribution.critical} (${report.summary.percentages.critical}%)`);
+    console.log(
+      `Fresh: ${report.summary.distribution.fresh} (${report.summary.percentages.fresh}%)`
+    );
+    console.log(
+      `Aging: ${report.summary.distribution.aging} (${report.summary.percentages.aging}%)`
+    );
+    console.log(
+      `Stale: ${report.summary.distribution.stale} (${report.summary.percentages.stale}%)`
+    );
+    console.log(
+      `Critical: ${report.summary.distribution.critical} (${report.summary.percentages.critical}%)`
+    );
     console.log('===============================');
 
     if (report.recommendations.length > 0) {

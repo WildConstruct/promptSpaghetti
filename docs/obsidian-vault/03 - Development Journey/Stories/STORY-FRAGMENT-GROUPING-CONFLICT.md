@@ -1,7 +1,9 @@
 # STORY: Fragment Grouping System Conflict
 
 ## Status: IN_PROGRESS - Partial Fix Applied
+
 ## Priority: CRITICAL
+
 ## Created: 2025-01-25
 
 ## Problem Statement
@@ -19,6 +21,7 @@ The application has TWO conflicting grouping systems that are both trying to man
    - Position is absolute in canvas space
 
 When fragments are dropped, BOTH systems are activated simultaneously, causing:
+
 - Triple node creation (amalgam node, region box, actual nodes)
 - Nodes jumping to cover amalgam node when clicked
 - Double movement when both parent and region box move
@@ -39,16 +42,19 @@ When fragments are dropped, BOTH systems are activated simultaneously, causing:
 ## Root Cause Analysis
 
 ### File: `/packages/core/fileFormats/psg.ts`
+
 - Creates BOTH a parent box AND sets parentNode on children
 - Lines 105-164: Creates enhancedBoundingBox
 - Lines 214-223: Sets parentNode on children nodes
 
 ### File: `/packages/core/components/epic1/nodes/EnhancedBoundingBox.tsx`
+
 - Lines 141-168: Manually moves nodes when locked
 - Lines 100-134: Uses BOTH parentNode check AND position check
 - Conflict: Tries to handle both systems simultaneously
 
 ### File: React Flow Internal
+
 - Automatically moves children when parent moves
 - Expects relative positioning for children
 - No awareness of our Region Box system
@@ -66,6 +72,7 @@ When fragments are dropped, BOTH systems are activated simultaneously, causing:
 We need to choose ONE system:
 
 ### Option A: Pure Parent-Child (React Flow Native)
+
 - Remove Region Box creation for fragments
 - Use only parentNode relationships
 - Fragments are self-contained components
@@ -73,6 +80,7 @@ We need to choose ONE system:
 - CON: Loses Region Box visual/UX
 
 ### Option B: Pure Region Box (Custom System)
+
 - Remove parentNode relationships
 - Use only position-based containment
 - Region Box handles all grouping
@@ -80,6 +88,7 @@ We need to choose ONE system:
 - CON: Fights React Flow's design
 
 ### Option C: Hybrid with Clear Separation
+
 - Fragments use parentNode (are components)
 - Region Boxes for manual grouping only
 - Never mix the two systems
@@ -157,26 +166,29 @@ We need to choose ONE system:
 
 ## Risk Assessment
 
-| Risk | Impact | Likelihood | Mitigation |
-|------|--------|------------|------------|
-| Breaking existing graphs | HIGH | MEDIUM | Migration script + backward compatibility layer |
-| Performance degradation | MEDIUM | LOW | Performance testing before merge |
-| User confusion with two systems | MEDIUM | MEDIUM | Clear visual distinction + documentation |
-| Incomplete fragment conversion | HIGH | LOW | Comprehensive test suite |
-| React Flow version conflicts | HIGH | LOW | Lock React Flow version, test thoroughly |
+| Risk                            | Impact | Likelihood | Mitigation                                      |
+| ------------------------------- | ------ | ---------- | ----------------------------------------------- |
+| Breaking existing graphs        | HIGH   | MEDIUM     | Migration script + backward compatibility layer |
+| Performance degradation         | MEDIUM | LOW        | Performance testing before merge                |
+| User confusion with two systems | MEDIUM | MEDIUM     | Clear visual distinction + documentation        |
+| Incomplete fragment conversion  | HIGH   | LOW        | Comprehensive test suite                        |
+| React Flow version conflicts    | HIGH   | LOW        | Lock React Flow version, test thoroughly        |
 
 ## Dependencies & Blockers
 
 ### Blocks:
+
 - All fragment-related feature work
 - Asset Browser enhancements
 - Region Box improvements
 - Graph serialization updates
 
 ### Depends On:
+
 - None (this is foundational)
 
 ### Technical Dependencies:
+
 - React Flow 11.x (current version locked)
 - Current nodeRegistry architecture
 - Existing graph serialization format
@@ -192,16 +204,19 @@ We need to choose ONE system:
 ## Migration Strategy
 
 ### Phase 1: Detection (Sprint 1)
+
 - [ ] Scan all saved graphs for mixed-system usage
 - [ ] Log statistics on affected graphs
 - [ ] Identify edge cases
 
 ### Phase 2: Conversion (Sprint 1-2)
+
 - [ ] Create automated migration script
 - [ ] Test on sample graphs
 - [ ] Create backup of all graphs before migration
 
 ### Phase 3: Validation (Sprint 2)
+
 - [ ] Verify all migrated graphs load correctly
 - [ ] User acceptance testing
 - [ ] Performance benchmarking
@@ -209,29 +224,34 @@ We need to choose ONE system:
 ## Implementation Breakdown
 
 ### Task 1: Create FragmentContainer Node Type (8 points)
+
 - Design component architecture
 - Implement collapse/expand logic
 - Handle parent-child relationships
 - Add visual styling (purple rounded container)
 
 ### Task 2: Refactor PSG Parser (5 points)
+
 - Remove Region Box creation for fragments
 - Update to use FragmentContainer
 - Maintain backward compatibility flag
 - Add migration detection
 
 ### Task 3: Update EnhancedBoundingBox (3 points)
+
 - Remove fragment-specific handling
 - Clean up dual-system checks
 - Optimize position-based detection
 
 ### Task 4: Testing Suite (5 points)
+
 - Unit tests for FragmentContainer
 - Integration tests for drag-drop flow
 - Migration script tests
 - Performance benchmarks
 
 ### Task 5: Documentation & Migration (3 points)
+
 - Update architecture docs
 - Create migration guide
 - Update Asset Browser docs
@@ -274,12 +294,14 @@ We need to choose ONE system:
 ### Key Metrics to Track
 
 #### Performance Metrics
+
 - **Fragment Load Time**: P50, P95, P99 latencies for fragment instantiation
 - **Render Performance**: Frame rate during expand/collapse operations
 - **Memory Usage**: Heap size before/after fragment operations
 - **Movement Latency**: Time from drag start to position update
 
 #### System Health Metrics
+
 - **Error Rates by Type**:
   - Parent node not found errors
   - Invalid fragment structure errors
@@ -292,6 +314,7 @@ We need to choose ONE system:
   - Most commonly used fragments
 
 #### User Behavior Metrics
+
 - **Interaction Patterns**:
   - Time to first fragment use
   - Expand/collapse frequency
@@ -322,12 +345,17 @@ enum GroupingTelemetry {
 // Performance marks
 performance.mark('fragment-load-start');
 performance.mark('fragment-load-end');
-performance.measure('fragment-load-time', 'fragment-load-start', 'fragment-load-end');
+performance.measure(
+  'fragment-load-time',
+  'fragment-load-start',
+  'fragment-load-end'
+);
 ```
 
 ### Dashboard Requirements
 
 Create monitoring dashboard with:
+
 1. **Real-time view**: Current active fragments and region boxes
 2. **Performance graphs**: Load times, render performance over time
 3. **Error tracking**: Grouping-related errors with stack traces
@@ -336,17 +364,18 @@ Create monitoring dashboard with:
 
 ### Alert Thresholds
 
-| Metric | Warning | Critical | Action |
-|--------|---------|----------|--------|
-| Fragment Load Time P95 | > 100ms | > 500ms | Investigate performance regression |
-| Error Rate | > 1% | > 5% | Rollback feature flag |
-| Migration Failure Rate | > 5% | > 10% | Pause migration, investigate |
-| Orphaned Nodes/Hour | > 10 | > 50 | Check for state corruption |
-| Memory Leak Growth | > 5MB/hour | > 20MB/hour | Emergency fix required |
+| Metric                 | Warning    | Critical    | Action                             |
+| ---------------------- | ---------- | ----------- | ---------------------------------- |
+| Fragment Load Time P95 | > 100ms    | > 500ms     | Investigate performance regression |
+| Error Rate             | > 1%       | > 5%        | Rollback feature flag              |
+| Migration Failure Rate | > 5%       | > 10%       | Pause migration, investigate       |
+| Orphaned Nodes/Hour    | > 10       | > 50        | Check for state corruption         |
+| Memory Leak Growth     | > 5MB/hour | > 20MB/hour | Emergency fix required             |
 
 ### A/B Test Metrics
 
 Track for feature flag comparison:
+
 - User satisfaction scores
 - Task completion time
 - Error rates between systems
@@ -356,6 +385,7 @@ Track for feature flag comparison:
 ### Long-term Success Metrics
 
 After 30 days, evaluate:
+
 - **Adoption Rate**: % of users using fragments successfully
 - **Performance Improvement**: Reduction in render time
 - **Error Reduction**: Decrease in grouping-related errors
@@ -381,9 +411,11 @@ After 30 days, evaluate:
 ## Dev Agent Record
 
 ### Agent Model Used
+
 - Claude 3 Opus (claude-opus-4-1-20250805)
 
 ### File List
+
 - `/packages/core/components/epic1/nodes/FragmentContainer.tsx` - NEW: Fragment container component
 - `/packages/core/components/epic1/nodes/nodeTypes.ts` - MODIFIED: Added FragmentContainer registration
 - `/packages/core/runtime/nodeRegistry.ts` - MODIFIED: Added FragmentContainer node type definition
@@ -396,6 +428,7 @@ After 30 days, evaluate:
 - `/docs/fragment-system-architecture.md` - NEW: Architecture documentation
 
 ### Change Log
+
 1. Created FragmentContainer component with purple styling and parent-child relationships
 2. Refactored PSG parser to create FragmentContainer instead of EnhancedBoundingBox for fragments
 3. Added filtering of Output nodes from fragments
@@ -405,6 +438,7 @@ After 30 days, evaluate:
 7. Documented new architecture and separation principles
 
 ### Completion Notes
+
 - ✅ Implemented Option C (Hybrid with Clear Separation) as recommended
 - ✅ Fragment containers use React Flow's native parent-child system
 - ✅ Region boxes use position-based containment only
@@ -414,6 +448,7 @@ After 30 days, evaluate:
 - ✅ Complete documentation of new architecture
 
 ### Debug Log References
+
 - Fragment container properly handles collapse/expand with hidden state
 - Parent-child relationships maintained through parentNode property
 - Position-based containment excludes all nodes with parentNode

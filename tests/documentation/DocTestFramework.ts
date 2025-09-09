@@ -182,8 +182,19 @@ export class DocTestFramework {
       enabled: true,
       verbose: false,
 
-      documentationPaths: ['README.md', 'docs/**/*.md', 'packages/**/README.md', '**/*.md'],
-      excludePatterns: ['node_modules/**', 'dist/**', 'build/**', '.git/**', 'coverage/**'],
+      documentationPaths: [
+        'README.md',
+        'docs/**/*.md',
+        'packages/**/README.md',
+        '**/*.md'
+      ],
+      excludePatterns: [
+        'node_modules/**',
+        'dist/**',
+        'build/**',
+        '.git/**',
+        'coverage/**'
+      ],
 
       validateCodeBlocks: true,
       validateApiExamples: true,
@@ -202,11 +213,11 @@ export class DocTestFramework {
           noEmit: true,
           skipLibCheck: true,
           allowSyntheticDefaultImports: true,
-          esModuleInterop: true,
+          esModuleInterop: true
         },
         allowUndeclaredImports: true,
         validateSyntax: true,
-        validateTypes: false,
+        validateTypes: false
       },
 
       api: {
@@ -214,14 +225,27 @@ export class DocTestFramework {
         timeout: 5000,
         validateRequests: true,
         validateResponses: true,
-        skipNetworkRequests: true,
+        skipNetworkRequests: true
       },
 
       cli: {
         validateSyntax: true,
         validateCommands: true,
-        allowedCommands: ['npm', 'pnpm', 'node', 'npx', 'git', 'curl', 'ls', 'cd', 'mkdir', 'jest', 'tsc', 'eslint'],
-        skipExecution: true,
+        allowedCommands: [
+          'npm',
+          'pnpm',
+          'node',
+          'npx',
+          'git',
+          'curl',
+          'ls',
+          'cd',
+          'mkdir',
+          'jest',
+          'tsc',
+          'eslint'
+        ],
+        skipExecution: true
       },
 
       maxConcurrentFiles: 5,
@@ -232,7 +256,7 @@ export class DocTestFramework {
       reportPath: './test-results/documentation',
       reportFormat: 'json',
 
-      ...config,
+      ...config
     };
 
     this.codeBlockExtractor = new CodeBlockExtractor();
@@ -263,12 +287,16 @@ export class DocTestFramework {
       const results: DocTestResult[] = [];
       for (let i = 0; i < files.length; i += this.config.maxConcurrentFiles) {
         const batch = files.slice(i, i + this.config.maxConcurrentFiles);
-        const batchResults = await Promise.all(batch.map(file => this.testDocumentationFile(file)));
+        const batchResults = await Promise.all(
+          batch.map(file => this.testDocumentationFile(file))
+        );
         results.push(...batchResults);
 
         if (this.config.verbose && batch.length > 1) {
           const batchNum = Math.floor(i / this.config.maxConcurrentFiles) + 1;
-          const totalBatches = Math.ceil(files.length / this.config.maxConcurrentFiles);
+          const totalBatches = Math.ceil(
+            files.length / this.config.maxConcurrentFiles
+          );
           console.log(`Completed batch ${batchNum}/${totalBatches}`);
         }
       }
@@ -283,7 +311,9 @@ export class DocTestFramework {
 
       return summary;
     } catch (error) {
-      throw new Error(`Documentation testing failed: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Documentation testing failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
@@ -309,8 +339,8 @@ export class DocTestFramework {
           errors: [
             {
               type: 'file',
-              message: `File size (${fileStats.size} bytes) exceeds maximum (${this.config.maxFileSize} bytes)`,
-            },
+              message: `File size (${fileStats.size} bytes) exceeds maximum (${this.config.maxFileSize} bytes)`
+            }
           ],
           warnings: [],
           stats: {
@@ -319,8 +349,8 @@ export class DocTestFramework {
             totalApiExamples: 0,
             validApiExamples: 0,
             totalLinks: 0,
-            validLinks: 0,
-          },
+            validLinks: 0
+          }
         };
       }
 
@@ -354,7 +384,9 @@ export class DocTestFramework {
               result = await this.typeScriptValidator.validateCodeBlock(block);
             } else if (
               this.config.validateCliCommands &&
-              (block.language === 'bash' || block.language === 'sh' || block.language === 'shell')
+              (block.language === 'bash' ||
+                block.language === 'sh' ||
+                block.language === 'shell')
             ) {
               result = await this.cliValidator.validateCodeBlock(block);
             } else {
@@ -365,7 +397,7 @@ export class DocTestFramework {
                 lineNumber: block.lineNumber,
                 passed: true,
                 errors: [],
-                validationType: 'syntax',
+                validationType: 'syntax'
               };
             }
 
@@ -377,8 +409,8 @@ export class DocTestFramework {
               location: {
                 line: block.lineNumber,
                 column: 0,
-                file: filePath,
-              },
+                file: filePath
+              }
             });
           }
         }
@@ -395,7 +427,7 @@ export class DocTestFramework {
         } catch (error) {
           errors.push({
             type: 'validation',
-            message: `API validation failed: ${error instanceof Error ? error.message : String(error)}`,
+            message: `API validation failed: ${error instanceof Error ? error.message : String(error)}`
           });
         }
       }
@@ -411,7 +443,7 @@ export class DocTestFramework {
         } catch (error) {
           errors.push({
             type: 'validation',
-            message: `Link validation failed: ${error instanceof Error ? error.message : String(error)}`,
+            message: `Link validation failed: ${error instanceof Error ? error.message : String(error)}`
           });
         }
       }
@@ -423,7 +455,7 @@ export class DocTestFramework {
         totalApiExamples: apiResults.length,
         validApiExamples: apiResults.filter(r => r.passed).length,
         totalLinks: linkResults.length,
-        validLinks: linkResults.filter(r => r.passed).length,
+        validLinks: linkResults.filter(r => r.passed).length
       };
 
       // Determine overall pass/fail status
@@ -443,7 +475,7 @@ export class DocTestFramework {
         executionTime: Date.now() - startTime,
         errors,
         warnings,
-        stats,
+        stats
       };
     } catch (error) {
       return {
@@ -457,8 +489,8 @@ export class DocTestFramework {
         errors: [
           {
             type: 'file',
-            message: `Failed to process file: ${error instanceof Error ? error.message : String(error)}`,
-          },
+            message: `Failed to process file: ${error instanceof Error ? error.message : String(error)}`
+          }
         ],
         warnings: [],
         stats: {
@@ -467,8 +499,8 @@ export class DocTestFramework {
           totalApiExamples: 0,
           validApiExamples: 0,
           totalLinks: 0,
-          validLinks: 0,
-        },
+          validLinks: 0
+        }
       };
     }
   }
@@ -484,12 +516,14 @@ export class DocTestFramework {
       try {
         const matches = await glob(pattern, {
           ignore: this.config.excludePatterns,
-          absolute: true,
+          absolute: true
         });
         matches.forEach(file => allFiles.add(file));
       } catch (error) {
         if (this.config.verbose) {
-          console.warn(`Failed to match pattern ${pattern}: ${error instanceof Error ? error.message : String(error)}`);
+          console.warn(
+            `Failed to match pattern ${pattern}: ${error instanceof Error ? error.message : String(error)}`
+          );
         }
       }
     }
@@ -502,8 +536,16 @@ export class DocTestFramework {
    */
   private extractLinks(
     markdown: string
-  ): Array<{ url: string; text: string; type: 'internal' | 'external' | 'anchor' }> {
-    const links: Array<{ url: string; text: string; type: 'internal' | 'external' | 'anchor' }> = [];
+  ): Array<{
+    url: string;
+    text: string;
+    type: 'internal' | 'external' | 'anchor';
+  }> {
+    const links: Array<{
+      url: string;
+      text: string;
+      type: 'internal' | 'external' | 'anchor';
+    }> = [];
 
     // Match markdown links: [text](url)
     const linkRegex = /\[([^\]]*)\]\(([^)]+)\)/g;
@@ -531,7 +573,11 @@ export class DocTestFramework {
    * Validate a link
    */
   private async validateLink(
-    link: { url: string; text: string; type: 'internal' | 'external' | 'anchor' },
+    link: {
+      url: string;
+      text: string;
+      type: 'internal' | 'external' | 'anchor';
+    },
     filePath: string
   ): Promise<LinkTestResult> {
     try {
@@ -541,7 +587,7 @@ export class DocTestFramework {
           return {
             url: link.url,
             type: link.type,
-            passed: true, // Assume external links are valid to avoid network dependencies
+            passed: true // Assume external links are valid to avoid network dependencies
           };
         }
 
@@ -550,7 +596,7 @@ export class DocTestFramework {
           url: link.url,
           type: link.type,
           passed: true,
-          statusCode: 200,
+          statusCode: 200
         };
       } else if (link.type === 'internal') {
         // Validate internal file links
@@ -560,14 +606,14 @@ export class DocTestFramework {
           return {
             url: link.url,
             type: link.type,
-            passed: true,
+            passed: true
           };
         } catch {
           return {
             url: link.url,
             type: link.type,
             passed: false,
-            error: 'File not found',
+            error: 'File not found'
           };
         }
       } else {
@@ -575,7 +621,7 @@ export class DocTestFramework {
         return {
           url: link.url,
           type: link.type,
-          passed: true, // Basic implementation - could be enhanced to check actual anchors
+          passed: true // Basic implementation - could be enhanced to check actual anchors
         };
       }
     } catch (error) {
@@ -583,7 +629,7 @@ export class DocTestFramework {
         url: link.url,
         type: link.type,
         passed: false,
-        error: error instanceof Error ? error.message : String(error),
+        error: error instanceof Error ? error.message : String(error)
       };
     }
   }
@@ -591,16 +637,31 @@ export class DocTestFramework {
   /**
    * Generate test summary from results
    */
-  private generateSummary(results: DocTestResult[], executionTime: number): DocTestSummary {
+  private generateSummary(
+    results: DocTestResult[],
+    executionTime: number
+  ): DocTestSummary {
     const totalFiles = results.length;
     const passedFiles = results.filter(r => r.passed).length;
     const failedFiles = totalFiles - passedFiles;
 
     // Calculate totals
-    const totalCodeBlocks = results.reduce((sum, r) => sum + r.stats.totalCodeBlocks, 0);
-    const passedCodeBlocks = results.reduce((sum, r) => sum + r.stats.validCodeBlocks, 0);
-    const totalApiExamples = results.reduce((sum, r) => sum + r.stats.totalApiExamples, 0);
-    const passedApiExamples = results.reduce((sum, r) => sum + r.stats.validApiExamples, 0);
+    const totalCodeBlocks = results.reduce(
+      (sum, r) => sum + r.stats.totalCodeBlocks,
+      0
+    );
+    const passedCodeBlocks = results.reduce(
+      (sum, r) => sum + r.stats.validCodeBlocks,
+      0
+    );
+    const totalApiExamples = results.reduce(
+      (sum, r) => sum + r.stats.totalApiExamples,
+      0
+    );
+    const passedApiExamples = results.reduce(
+      (sum, r) => sum + r.stats.validApiExamples,
+      0
+    );
     const totalLinks = results.reduce((sum, r) => sum + r.stats.totalLinks, 0);
     const passedLinks = results.reduce((sum, r) => sum + r.stats.validLinks, 0);
 
@@ -639,7 +700,11 @@ export class DocTestFramework {
       .slice(0, 10);
 
     const warnings = Array.from(warningMap.entries())
-      .map(([warning, data]) => ({ warning, count: data.count, files: data.files }))
+      .map(([warning, data]) => ({
+        warning,
+        count: data.count,
+        files: data.files
+      }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
 
@@ -655,28 +720,31 @@ export class DocTestFramework {
         codeBlocks: {
           total: totalCodeBlocks,
           passed: passedCodeBlocks,
-          failed: totalCodeBlocks - passedCodeBlocks,
+          failed: totalCodeBlocks - passedCodeBlocks
         },
         apiExamples: {
           total: totalApiExamples,
           passed: passedApiExamples,
-          failed: totalApiExamples - passedApiExamples,
+          failed: totalApiExamples - passedApiExamples
         },
         links: {
           total: totalLinks,
           passed: passedLinks,
-          failed: totalLinks - passedLinks,
-        },
+          failed: totalLinks - passedLinks
+        }
       },
       commonErrors,
-      warnings,
+      warnings
     };
   }
 
   /**
    * Generate detailed test report
    */
-  private async generateReport(summary: DocTestSummary, results: DocTestResult[]): Promise<void> {
+  private async generateReport(
+    summary: DocTestSummary,
+    results: DocTestResult[]
+  ): Promise<void> {
     try {
       // Ensure report directory exists
       await fs.mkdir(path.dirname(this.config.reportPath), { recursive: true });
@@ -689,30 +757,48 @@ export class DocTestFramework {
           // Limit code block content for readability
           codeBlockResults: result.codeBlockResults.map(cb => ({
             ...cb,
-            content: cb.content.length > 200 ? cb.content.substring(0, 200) + '...' : cb.content,
-          })),
-        })),
+            content:
+              cb.content.length > 200
+                ? cb.content.substring(0, 200) + '...'
+                : cb.content
+          }))
+        }))
       };
 
       if (this.config.reportFormat === 'json') {
-        await fs.writeFile(`${this.config.reportPath}.json`, JSON.stringify(reportData, null, 2), 'utf-8');
+        await fs.writeFile(
+          `${this.config.reportPath}.json`,
+          JSON.stringify(reportData, null, 2),
+          'utf-8'
+        );
       } else if (this.config.reportFormat === 'markdown') {
         const markdownReport = this.generateMarkdownReport(summary, results);
-        await fs.writeFile(`${this.config.reportPath}.md`, markdownReport, 'utf-8');
+        await fs.writeFile(
+          `${this.config.reportPath}.md`,
+          markdownReport,
+          'utf-8'
+        );
       }
 
       if (this.config.verbose) {
-        console.log(`Report generated: ${this.config.reportPath}.${this.config.reportFormat}`);
+        console.log(
+          `Report generated: ${this.config.reportPath}.${this.config.reportFormat}`
+        );
       }
     } catch (error) {
-      console.warn(`Failed to generate report: ${error instanceof Error ? error.message : String(error)}`);
+      console.warn(
+        `Failed to generate report: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
   }
 
   /**
    * Generate markdown report
    */
-  private generateMarkdownReport(summary: DocTestSummary, results: DocTestResult[]): string {
+  private generateMarkdownReport(
+    summary: DocTestSummary,
+    results: DocTestResult[]
+  ): string {
     const date = new Date().toLocaleDateString();
     const time = new Date().toLocaleTimeString();
 
@@ -732,21 +818,32 @@ export class DocTestFramework {
     report += '|-----------|-------|--------|---------|--------------|\n';
     const codeBlocksRate =
       summary.breakdown.codeBlocks.total > 0
-        ? ((summary.breakdown.codeBlocks.passed / summary.breakdown.codeBlocks.total) * 100).toFixed(1)
+        ? (
+            (summary.breakdown.codeBlocks.passed /
+              summary.breakdown.codeBlocks.total) *
+            100
+          ).toFixed(1)
         : 0;
     report +=
       `| Code Blocks | ${summary.breakdown.codeBlocks.total} | ` +
       `${summary.breakdown.codeBlocks.passed} | ${summary.breakdown.codeBlocks.failed} | ${codeBlocksRate}% |\n`;
     const apiExamplesRate =
       summary.breakdown.apiExamples.total > 0
-        ? ((summary.breakdown.apiExamples.passed / summary.breakdown.apiExamples.total) * 100).toFixed(1)
+        ? (
+            (summary.breakdown.apiExamples.passed /
+              summary.breakdown.apiExamples.total) *
+            100
+          ).toFixed(1)
         : 0;
     report +=
       `| API Examples | ${summary.breakdown.apiExamples.total} | ` +
       `${summary.breakdown.apiExamples.passed} | ${summary.breakdown.apiExamples.failed} | ${apiExamplesRate}% |\n`;
     const linksRate =
       summary.breakdown.links.total > 0
-        ? ((summary.breakdown.links.passed / summary.breakdown.links.total) * 100).toFixed(1)
+        ? (
+            (summary.breakdown.links.passed / summary.breakdown.links.total) *
+            100
+          ).toFixed(1)
         : 0;
     report +=
       `| Links | ${summary.breakdown.links.total} | ` +

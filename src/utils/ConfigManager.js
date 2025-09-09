@@ -21,33 +21,33 @@ class ConfigManager {
         timeout: 30000,
         batchSize: 10,
         enableLogging: true,
-        logLevel: 'INFO',
+        logLevel: 'INFO'
       },
       qa: {
         passThreshold: 3.0,
         autoApproveThreshold: 4.5,
         maxIssuesPerReject: 3,
         reviewTimeout: 300000,
-        enableBatchProcessing: true,
+        enableBatchProcessing: true
       },
       state: {
         stateFile: path.join(__dirname, '..', 'data', 'state.json'),
         backupCount: 5,
         lockTimeout: 30000,
-        atomicWrites: true,
+        atomicWrites: true
       },
       github: {
         autoCreatePR: true,
         prTemplate: 'default',
         enableWebhooks: false,
-        maxCommitsPerPR: 10,
+        maxCommitsPerPR: 10
       },
       performance: {
         enableMetrics: true,
         metricsFile: path.join(__dirname, '..', 'logs', 'performance.json'),
         cacheSize: 1000,
-        enableProfiling: false,
-      },
+        enableProfiling: false
+      }
     };
   }
 
@@ -74,7 +74,9 @@ class ConfigManager {
         config = JSON.parse(fileContent);
         this.logger.debug(`Configuration loaded from file: ${configFile}`);
       } else {
-        this.logger.debug(`Configuration file not found: ${configFile}, using defaults`);
+        this.logger.debug(
+          `Configuration file not found: ${configFile}, using defaults`
+        );
       }
 
       // Merge with defaults
@@ -94,14 +96,14 @@ class ConfigManager {
       this.logger.info(`Configuration loaded successfully: ${configName}`, {
         source: fs.existsSync(configFile) ? 'file' : 'defaults',
         envOverrides: Object.keys(envConfig).length,
-        configKeys: Object.keys(finalConfig),
+        configKeys: Object.keys(finalConfig)
       });
 
       return finalConfig;
     } catch (error) {
       this.logger.error(`Failed to load configuration: ${configName}`, {
         error: error.message,
-        configPath: this.configPath,
+        configPath: this.configPath
       });
 
       // Return defaults if loading fails
@@ -120,7 +122,10 @@ class ConfigManager {
 
     Object.keys(process.env).forEach(key => {
       if (key.startsWith(envPrefix)) {
-        const configKey = key.substring(envPrefix.length).toLowerCase().replace(/_/g, '');
+        const configKey = key
+          .substring(envPrefix.length)
+          .toLowerCase()
+          .replace(/_/g, '');
 
         let value = process.env[key];
 
@@ -145,7 +150,7 @@ class ConfigManager {
 
     if (Object.keys(envConfig).length > 0) {
       this.logger.debug(`Environment overrides loaded for ${configName}`, {
-        keys: Object.keys(envConfig),
+        keys: Object.keys(envConfig)
       });
     }
 
@@ -166,7 +171,11 @@ class ConfigManager {
         if (cfg.retryDelay < 100 || cfg.retryDelay > 10000) {
           throw new Error('retryDelay must be between 100ms and 10s');
         }
-        if (!['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'].includes(cfg.logLevel)) {
+        if (
+          !['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'].includes(
+            cfg.logLevel
+          )
+        ) {
           throw new Error('Invalid logLevel');
         }
       },
@@ -190,7 +199,7 @@ class ConfigManager {
         if (cfg.cacheSize < 10 || cfg.cacheSize > 10000) {
           throw new Error('cacheSize must be between 10 and 10000');
         }
-      },
+      }
     };
 
     if (validators[configName]) {
@@ -199,7 +208,7 @@ class ConfigManager {
         this.logger.debug(`Configuration validation passed: ${configName}`);
       } catch (error) {
         this.logger.error(`Configuration validation failed: ${configName}`, {
-          error: error.message,
+          error: error.message
         });
         throw error;
       }
@@ -233,11 +242,11 @@ class ConfigManager {
 
       this.logger.info(`Configuration saved: ${configName}`, {
         file: configFile,
-        keys: Object.keys(config),
+        keys: Object.keys(config)
       });
     } catch (error) {
       this.logger.error(`Failed to save configuration: ${configName}`, {
-        error: error.message,
+        error: error.message
       });
       throw error;
     }
@@ -261,7 +270,9 @@ class ConfigManager {
         configs.push(...files.filter(f => !configs.includes(f)));
       }
     } catch (error) {
-      this.logger.warn('Failed to read config directory', { error: error.message });
+      this.logger.warn('Failed to read config directory', {
+        error: error.message
+      });
     }
 
     return configs.sort();
@@ -314,7 +325,7 @@ class ConfigManager {
       configPath: this.configPath,
       cacheSize: this.cache.size,
       availableConfigs: this.getAvailableConfigs(),
-      loadedConfigs: Array.from(this.cache.keys()),
+      loadedConfigs: Array.from(this.cache.keys())
     };
   }
 }
@@ -333,5 +344,5 @@ module.exports = {
   ConfigManager,
   getConfigManager,
   // Convenience exports
-  config: getConfigManager(),
+  config: getConfigManager()
 };

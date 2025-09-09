@@ -73,7 +73,7 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<
       normalizeWeights: true,
       showPercentages: true,
       allowAddRemove: true,
-      minOptions: 1,  // Allow single options
+      minOptions: 1, // Allow single options
       ...config
     };
   }

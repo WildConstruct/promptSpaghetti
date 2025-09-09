@@ -2,7 +2,10 @@
 // Shows extracted metadata and provides manual re-extraction controls
 
 import React, { useState, useCallback, useEffect } from 'react';
-import { SegmentMetadata, MetadataExtractor } from '../../services/llm/MetadataExtractor';
+import {
+  SegmentMetadata,
+  MetadataExtractor
+} from '../../services/llm/MetadataExtractor';
 import './MetadataInspector.css';
 
 interface MetadataInspectorProps {
@@ -30,37 +33,40 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
   // Update cache stats periodically
   useEffect(() => {
     if (!metadataExtractor || !developerMode) return;
-    
+
     const updateStats = () => {
       const stats = metadataExtractor.getCacheStats();
       setCacheStats(stats);
     };
-    
+
     updateStats();
     const interval = setInterval(updateStats, 5000);
-    
+
     return () => clearInterval(interval);
   }, [metadataExtractor, developerMode]);
 
   const handleManualExtraction = useCallback(async () => {
     if (!metadataExtractor || !text) return;
-    
+
     setIsExtracting(true);
     const startTime = performance.now();
-    
+
     try {
-      setExtractionLog(prev => [...prev, `[${new Date().toISOString()}] Starting extraction for node ${nodeId}`]);
-      
+      setExtractionLog(prev => [
+        ...prev,
+        `[${new Date().toISOString()}] Starting extraction for node ${nodeId}`
+      ]);
+
       const result = await metadataExtractor.extract(text);
       const extractionTime = performance.now() - startTime;
-      
+
       setExtractionLog(prev => [
         ...prev,
         `[${new Date().toISOString()}] Extraction completed in ${extractionTime.toFixed(2)}ms`,
         `[${new Date().toISOString()}] From cache: ${result.fromCache}`,
         `[${new Date().toISOString()}] Tags extracted: ${result.metadata.tags.join(', ') || 'none'}`
       ]);
-      
+
       if (onMetadataUpdate) {
         onMetadataUpdate(result.metadata);
       }
@@ -78,13 +84,19 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
     if (onMetadataUpdate) {
       onMetadataUpdate({ tags: [] });
     }
-    setExtractionLog(prev => [...prev, `[${new Date().toISOString()}] Metadata cleared for node ${nodeId}`]);
+    setExtractionLog(prev => [
+      ...prev,
+      `[${new Date().toISOString()}] Metadata cleared for node ${nodeId}`
+    ]);
   }, [nodeId, onMetadataUpdate]);
 
   const handleClearCache = useCallback(() => {
     if (metadataExtractor) {
       metadataExtractor.clearCache();
-      setExtractionLog(prev => [...prev, `[${new Date().toISOString()}] Cache cleared`]);
+      setExtractionLog(prev => [
+        ...prev,
+        `[${new Date().toISOString()}] Cache cleared`
+      ]);
       setCacheStats({ size: 0, hitRate: 0 });
     }
   }, [metadataExtractor]);
@@ -99,7 +111,9 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
         <h3>Metadata Debug</h3>
         <div className="cache-stats">
           <span className="stat">Cache: {cacheStats.size} items</span>
-          <span className="stat">Hit Rate: {(cacheStats.hitRate * 100).toFixed(0)}%</span>
+          <span className="stat">
+            Hit Rate: {(cacheStats.hitRate * 100).toFixed(0)}%
+          </span>
         </div>
       </div>
 
@@ -135,12 +149,14 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
                 <span className="field-label">Intensity:</span>
                 <span className="field-value">
                   <div className="intensity-bar">
-                    <div 
+                    <div
                       className="intensity-fill"
                       style={{ width: `${metadata.intensity * 10}%` }}
                     />
                   </div>
-                  <span className="intensity-value">{metadata.intensity}/10</span>
+                  <span className="intensity-value">
+                    {metadata.intensity}/10
+                  </span>
                 </span>
               </div>
             )}
@@ -149,7 +165,9 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
                 <span className="field-label">Tags:</span>
                 <div className="tags-list">
                   {metadata.tags.map(tag => (
-                    <span key={tag} className="tag-chip">{tag}</span>
+                    <span key={tag} className="tag-chip">
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -184,10 +202,7 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
             >
               {isExtracting ? 'Extracting...' : 'Re-extract'}
             </button>
-            <button
-              onClick={handleClearMetadata}
-              className="action-btn danger"
-            >
+            <button onClick={handleClearMetadata} className="action-btn danger">
               Clear Metadata
             </button>
             <button
@@ -225,7 +240,9 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
           <h4>Extraction Log</h4>
           <div className="log-content">
             {extractionLog.slice(-10).map((log, i) => (
-              <div key={i} className="log-entry">{log}</div>
+              <div key={i} className="log-entry">
+                {log}
+              </div>
             ))}
           </div>
         </div>

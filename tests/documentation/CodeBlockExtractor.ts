@@ -74,14 +74,14 @@ export class CodeBlockExtractor {
         'ruby',
         'swift',
         'kotlin',
-        'scala',
+        'scala'
       ],
       includeUnknownLanguages: true,
       preserveIndentation: true,
       extractMetadata: true,
       minContentLength: 1,
       maxContentLength: 10000,
-      ...options,
+      ...options
     };
   }
 
@@ -108,7 +108,7 @@ export class CodeBlockExtractor {
             language,
             lineNumber: lineIndex + 1,
             startColumn: line.indexOf('```'),
-            originalBlock: line,
+            originalBlock: line
           };
           blockContent = [];
 
@@ -126,12 +126,19 @@ export class CodeBlockExtractor {
         if (this.isValidCodeBlockContent(content)) {
           const completeBlock: CodeBlock = {
             language: currentBlock.language!,
-            content: this.options.preserveIndentation ? content : content.trim(),
+            content: this.options.preserveIndentation
+              ? content
+              : content.trim(),
             lineNumber: currentBlock.lineNumber!,
             startColumn: currentBlock.startColumn!,
             endColumn: line.indexOf('```'),
-            originalBlock: currentBlock.originalBlock + '\n' + blockContent.join('\n') + '\n' + line,
-            metadata: currentBlock.metadata,
+            originalBlock:
+              currentBlock.originalBlock +
+              '\n' +
+              blockContent.join('\n') +
+              '\n' +
+              line,
+            metadata: currentBlock.metadata
           };
 
           codeBlocks.push(completeBlock);
@@ -146,7 +153,9 @@ export class CodeBlockExtractor {
 
         // Safety check for runaway blocks
         if (blockContent.length > 1000) {
-          console.warn(`Code block starting at line ${currentBlock.lineNumber} is too long, skipping`);
+          console.warn(
+            `Code block starting at line ${currentBlock.lineNumber} is too long, skipping`
+          );
           currentBlock = null;
           blockContent = [];
         }
@@ -163,8 +172,9 @@ export class CodeBlockExtractor {
           lineNumber: currentBlock.lineNumber!,
           startColumn: currentBlock.startColumn!,
           endColumn: 0,
-          originalBlock: currentBlock.originalBlock + '\n' + blockContent.join('\n'),
-          metadata: currentBlock.metadata,
+          originalBlock:
+            currentBlock.originalBlock + '\n' + blockContent.join('\n'),
+          metadata: currentBlock.metadata
         };
 
         codeBlocks.push(completeBlock);
@@ -177,8 +187,14 @@ export class CodeBlockExtractor {
   /**
    * Extract inline code snippets (not full blocks)
    */
-  extractInlineCode(markdown: string): Array<{ content: string; lineNumber: number; column: number }> {
-    const inlineCode: Array<{ content: string; lineNumber: number; column: number }> = [];
+  extractInlineCode(
+    markdown: string
+  ): Array<{ content: string; lineNumber: number; column: number }> {
+    const inlineCode: Array<{
+      content: string;
+      lineNumber: number;
+      column: number;
+    }> = [];
     const lines = markdown.split('\n');
 
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
@@ -195,7 +211,7 @@ export class CodeBlockExtractor {
           inlineCode.push({
             content: content.trim(),
             lineNumber: lineIndex + 1,
-            column: match.index,
+            column: match.index
           });
         }
       }
@@ -221,7 +237,8 @@ export class CodeBlockExtractor {
 
     codeBlocks.forEach(block => {
       // Update language distribution
-      languageDistribution[block.language] = (languageDistribution[block.language] || 0) + 1;
+      languageDistribution[block.language] =
+        (languageDistribution[block.language] || 0) + 1;
 
       // Count lines
       const lines = block.content.split('\n').length;
@@ -233,14 +250,15 @@ export class CodeBlockExtractor {
       }
     });
 
-    const averageBlockSize = codeBlocks.length > 0 ? totalLinesOfCode / codeBlocks.length : 0;
+    const averageBlockSize =
+      codeBlocks.length > 0 ? totalLinesOfCode / codeBlocks.length : 0;
 
     return {
       totalBlocks: codeBlocks.length,
       languageDistribution,
       averageBlockSize: Math.round(averageBlockSize * 100) / 100,
       largestBlock,
-      totalLinesOfCode,
+      totalLinesOfCode
     };
   }
 
@@ -248,15 +266,21 @@ export class CodeBlockExtractor {
    * Filter code blocks by language
    */
   filterByLanguage(codeBlocks: CodeBlock[], languages: string[]): CodeBlock[] {
-    const normalizedLanguages = languages.map(lang => this.normalizeLanguage(lang));
-    return codeBlocks.filter(block => normalizedLanguages.includes(this.normalizeLanguage(block.language)));
+    const normalizedLanguages = languages.map(lang =>
+      this.normalizeLanguage(lang)
+    );
+    return codeBlocks.filter(block =>
+      normalizedLanguages.includes(this.normalizeLanguage(block.language))
+    );
   }
 
   /**
    * Filter code blocks by content patterns
    */
   filterByPattern(codeBlocks: CodeBlock[], patterns: RegExp[]): CodeBlock[] {
-    return codeBlocks.filter(block => patterns.some(pattern => pattern.test(block.content)));
+    return codeBlocks.filter(block =>
+      patterns.some(pattern => pattern.test(block.content))
+    );
   }
 
   /**
@@ -291,7 +315,9 @@ export class CodeBlockExtractor {
     }
 
     // Look for line highlighting
-    const highlightMatch = fence.match(/highlight[=:"]\s*(\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*)/i);
+    const highlightMatch = fence.match(
+      /highlight[=:"]\s*(\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*)/i
+    );
     if (highlightMatch) {
       metadata.highlightLines = this.parseHighlightLines(highlightMatch[1]);
     }
@@ -315,7 +341,9 @@ export class CodeBlockExtractor {
       const trimmed = part.trim();
       if (trimmed.includes('-')) {
         // Range: 1-5
-        const [start, end] = trimmed.split('-').map(n => parseInt(n.trim(), 10));
+        const [start, end] = trimmed
+          .split('-')
+          .map(n => parseInt(n.trim(), 10));
         if (!isNaN(start) && !isNaN(end)) {
           for (let i = start; i <= end; i++) {
             lines.push(i);
@@ -352,7 +380,7 @@ export class CodeBlockExtractor {
       md: 'markdown',
       jsonc: 'json',
       cxx: 'cpp',
-      'c++': 'cpp',
+      'c++': 'cpp'
     };
 
     return aliases[normalized] || normalized;
@@ -413,7 +441,8 @@ export class CodeBlockAnalyzer {
 
     codeBlocks.forEach(block => {
       const lang = block.language;
-      languageCounts[lang] = (languageCounts[lang] || 0) + block.content.split('\n').length;
+      languageCounts[lang] =
+        (languageCounts[lang] || 0) + block.content.split('\n').length;
     });
 
     // Find language with most lines of code
@@ -442,18 +471,22 @@ export class CodeBlockAnalyzer {
       /tutorial/i,
       /getting.?started/i,
       /quickstart/i,
-      /how.?to/i,
+      /how.?to/i
     ];
 
     return codeBlocks.filter(block => {
       // Check metadata for example indicators
       if (block.metadata?.title) {
-        return exampleIndicators.some(pattern => pattern.test(block.metadata!.title!));
+        return exampleIndicators.some(pattern =>
+          pattern.test(block.metadata!.title!)
+        );
       }
 
       // Check if filename suggests it's an example
       if (block.metadata?.filename) {
-        return exampleIndicators.some(pattern => pattern.test(block.metadata!.filename!));
+        return exampleIndicators.some(pattern =>
+          pattern.test(block.metadata!.filename!)
+        );
       }
 
       // Check content for example patterns
@@ -477,10 +510,12 @@ export class CodeBlockAnalyzer {
       /\[your.+here\]/i,
       /<your.+here>/i,
       /replace.with/i,
-      /fill.in/i,
+      /fill.in/i
     ];
 
-    return codeBlocks.filter(block => incompleteIndicators.some(pattern => pattern.test(block.content)));
+    return codeBlocks.filter(block =>
+      incompleteIndicators.some(pattern => pattern.test(block.content))
+    );
   }
 
   /**
@@ -488,8 +523,18 @@ export class CodeBlockAnalyzer {
    */
   static extractImports(
     codeBlocks: CodeBlock[]
-  ): Array<{ module: string; type: 'import' | 'require'; language: string; lineNumber: number }> {
-    const imports: Array<{ module: string; type: 'import' | 'require'; language: string; lineNumber: number }> = [];
+  ): Array<{
+    module: string;
+    type: 'import' | 'require';
+    language: string;
+    lineNumber: number;
+  }> {
+    const imports: Array<{
+      module: string;
+      type: 'import' | 'require';
+      language: string;
+      lineNumber: number;
+    }> = [];
 
     codeBlocks.forEach(block => {
       const lines = block.content.split('\n');
@@ -498,13 +543,15 @@ export class CodeBlockAnalyzer {
         const trimmed = line.trim();
 
         // ES6 imports
-        const importMatch = trimmed.match(/^import\s+.*?\s+from\s+['"]([^'"]+)['"]/);
+        const importMatch = trimmed.match(
+          /^import\s+.*?\s+from\s+['"]([^'"]+)['"]/
+        );
         if (importMatch) {
           imports.push({
             module: importMatch[1],
             type: 'import',
             language: block.language,
-            lineNumber: block.lineNumber + index,
+            lineNumber: block.lineNumber + index
           });
         }
 
@@ -515,7 +562,7 @@ export class CodeBlockAnalyzer {
             module: requireMatch[1],
             type: 'require',
             language: block.language,
-            lineNumber: block.lineNumber + index,
+            lineNumber: block.lineNumber + index
           });
         }
       });

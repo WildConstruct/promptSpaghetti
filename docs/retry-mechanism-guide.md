@@ -51,7 +51,7 @@ const result = await RetryUtils.execute(
     retryableErrors: [/timeout/i, /connection/i, 500, 503],
     onAttempt: (attempt, error) => {
       console.log(`Attempt ${attempt} failed: ${error.message}`);
-    },
+    }
   }
 );
 ```
@@ -83,12 +83,14 @@ class ExternalAPIService {
   @retryableHttp({
     maxAttempts: 4,
     baseDelay: 1000,
-    retryableErrors: [500, 502, 503, 504, 408, 429],
+    retryableErrors: [500, 502, 503, 504, 408, 429]
   })
   async callExternalAPI(endpoint: string): Promise<any> {
     const response = await fetch(endpoint);
     if (!response.ok) {
-      const error = new Error(`HTTP ${response.status}: ${response.statusText}`) as any;
+      const error = new Error(
+        `HTTP ${response.status}: ${response.statusText}`
+      ) as any;
       error.status = response.status;
       throw error;
     }
@@ -108,7 +110,10 @@ const filePath = await RetryPatterns.fileOperation(async () => {
 });
 
 // API calls with service identification
-const apiData = await RetryPatterns.apiCall(() => this.fetchDataFromAPI(), 'user-service');
+const apiData = await RetryPatterns.apiCall(
+  () => this.fetchDataFromAPI(),
+  'user-service'
+);
 
 // Log analysis operations
 await RetryPatterns.logAnalysis(async () => {
@@ -129,7 +134,7 @@ const result = await RetryUtils.executeWithCircuitBreaker(
   'unreliable-service-key',
   {
     maxAttempts: 3,
-    baseDelay: 1000,
+    baseDelay: 1000
   }
 );
 ```
@@ -147,7 +152,9 @@ const result = await RetryUtils.executeWithResult(
 );
 
 if (result.success) {
-  console.log(`Operation succeeded after ${result.attempts} attempts in ${result.totalTime}ms`);
+  console.log(
+    `Operation succeeded after ${result.attempts} attempts in ${result.totalTime}ms`
+  );
   console.log('Result:', result.result);
 } else {
   console.error(`Operation failed after ${result.attempts} attempts:`);
@@ -273,7 +280,7 @@ The retry system automatically classifies errors:
     /timeout/i, // Regex pattern
     'ECONNRESET', // String match
     500, // HTTP status code
-    /analysis.*failed/i, // Custom pattern
+    /analysis.*failed/i // Custom pattern
   ];
 }
 ```
@@ -337,7 +344,10 @@ retryableErrors: []; // This retries ALL errors
 
 ```typescript
 // Protect against cascading failures
-await RetryUtils.executeWithCircuitBreaker(() => externalService.call(), 'external-service-key');
+await RetryUtils.executeWithCircuitBreaker(
+  () => externalService.call(),
+  'external-service-key'
+);
 ```
 
 ### 5. Monitor and Alert on Retry Patterns

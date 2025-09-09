@@ -5,9 +5,11 @@ This directory contains example graphs and templates to help you get started wit
 ## 🎯 Quick Start Examples
 
 ### 1. Character Generator (`character-generator.psg`)
+
 A complete character generation system for film and game production.
 
 **Features:**
+
 - Name generation with cultural variations
 - Personality traits with weighted probabilities
 - Physical descriptions
@@ -16,9 +18,11 @@ A complete character generation system for film and game production.
 **Use Case:** Pre-production character development, NPC generation, casting descriptions
 
 ### 2. Scene Description (`scene-description.psg`)
+
 Dynamic scene and location descriptions for scripts and storyboards.
 
 **Features:**
+
 - Location atmospherics
 - Time of day variations
 - Weather conditions
@@ -27,9 +31,11 @@ Dynamic scene and location descriptions for scripts and storyboards.
 **Use Case:** Script writing, storyboard annotations, VFX planning
 
 ### 3. Dialogue Variations (`dialogue-variations.psg`)
+
 Generate multiple takes on the same dialogue.
 
 **Features:**
+
 - Emotion-based variations
 - Character voice modulation
 - Formality levels
@@ -38,9 +44,11 @@ Generate multiple takes on the same dialogue.
 **Use Case:** Script doctoring, ADR alternatives, localization
 
 ### 4. Marketing Copy (`marketing-copy.psg`)
+
 Film marketing and promotional content generator.
 
 **Features:**
+
 - Tagline generation
 - Synopsis variations
 - Social media posts
@@ -51,16 +59,19 @@ Film marketing and promotional content generator.
 ## 🎬 Film Industry Templates
 
 ### VFX Shot Descriptions
+
 - `vfx-shot-simple.psg` - Basic VFX shot notation
 - `vfx-shot-complex.psg` - Detailed technical breakdowns
 - `vfx-shot-review.psg` - Director's notes generator
 
 ### Production Documents
+
 - `call-sheet-notes.psg` - Daily call sheet annotations
 - `location-scout.psg` - Location scouting reports
 - `continuity-notes.psg` - Script supervisor notes
 
 ### Creative Development
+
 - `pitch-generator.psg` - Elevator pitch variations
 - `logline-builder.psg` - One-sentence story summaries
 - `treatment-outline.psg` - Treatment structure templates
@@ -75,6 +86,7 @@ Film marketing and promotional content generator.
    - Select a `.psg` file to load
 
 2. **Via Command Line:**
+
    ```bash
    npx promptgraph exec examples/character-generator.psg --seed 42
    ```
@@ -87,6 +99,7 @@ Film marketing and promotional content generator.
 ### Understanding the Structure
 
 Each example includes:
+
 - **Input nodes**: Starting points for generation
 - **Processing nodes**: Logic and randomization
 - **Output nodes**: Final generated text
@@ -113,6 +126,7 @@ To create your own examples:
 ## 📦 Example Data Files
 
 Some examples use external data files located in `examples/data/`:
+
 - `names.json` - Character name databases
 - `locations.json` - Location descriptions
 - `traits.json` - Character traits and attributes
@@ -121,6 +135,7 @@ Some examples use external data files located in `examples/data/`:
 ## 🤝 Contributing Examples
 
 We welcome example contributions! Please:
+
 1. Ensure your example works with seeds 1-10
 2. Include clear node labels
 3. Add a description to this README
@@ -130,11 +145,12 @@ We welcome example contributions! Please:
 ## 📧 Questions?
 
 For questions about these examples or to submit your own:
+
 - **Contact**: Brian Behm, CEO
 - **Email**: wildconstruct@wildconstruct.com
 - **GitHub**: Submit a PR with your examples
 
 ---
 
-*These examples are part of Prompt Spaghetti's professional film industry toolset.*
-*© 2024-2025 Wild Construct. All rights reserved.*
+_These examples are part of Prompt Spaghetti's professional film industry toolset._
+_© 2024-2025 Wild Construct. All rights reserved._

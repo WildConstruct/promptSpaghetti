@@ -50,23 +50,23 @@ Object.defineProperties(global.HTMLElement.prototype, {
   offsetHeight: {
     get() {
       return parseFloat(this.style.height) || 600;
-    },
+    }
   },
   offsetWidth: {
     get() {
       return parseFloat(this.style.width) || 800;
-    },
+    }
   },
   scrollWidth: {
     get() {
       return parseFloat(this.style.width) || 800;
-    },
+    }
   },
   scrollHeight: {
     get() {
       return parseFloat(this.style.height) || 600;
-    },
-  },
+    }
+  }
 });
 
 // SVG getBBox mock for ReactFlow
@@ -74,7 +74,7 @@ global.SVGElement.prototype.getBBox = () => ({
   x: 0,
   y: 0,
   width: 100,
-  height: 50,
+  height: 50
 });
 
 // Enhanced MouseEvent and DragEvent for better event simulation
@@ -89,7 +89,7 @@ Object.defineProperty(global, 'MouseEvent', {
       this.button = eventInit.button || 0;
       this.buttons = eventInit.buttons || 1;
     }
-  },
+  }
 });
 
 // Mock getComputedStyle for better CSS testing
@@ -104,7 +104,7 @@ global.getComputedStyle = element => {
           return element.style[prop];
         }
         return target[prop];
-      },
+      }
     });
   }
   return computed;
@@ -120,7 +120,8 @@ jest.mock(
     return {
       __esModule: true,
       default: {
-        click: async el => el.dispatchEvent(new mockMouseEvent('click', { bubbles: true })),
+        click: async el =>
+          el.dispatchEvent(new mockMouseEvent('click', { bubbles: true })),
         type: async (el, text) => {
           el.value = (el.value || '') + text;
           el.dispatchEvent(new mockEvent('input', { bubbles: true }));
@@ -128,8 +129,8 @@ jest.mock(
         clear: async el => {
           el.value = '';
           el.dispatchEvent(new mockEvent('input', { bubbles: true }));
-        },
-      },
+        }
+      }
     };
   },
   { virtual: true }
@@ -152,6 +153,6 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: jest.fn(), // deprecated
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
+    dispatchEvent: jest.fn()
+  }))
 });

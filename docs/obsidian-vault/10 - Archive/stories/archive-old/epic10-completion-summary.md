@@ -169,7 +169,10 @@ interface ModelAdaptor {
   readonly platform: Platform;
   capabilities(): Promise<Capabilities>;
   validate(graph: PromptGraph): Promise<ValidationResult[]>;
-  transform(graph: PromptGraph, options?: TransformOptions): Promise<TargetPrompt>;
+  transform(
+    graph: PromptGraph,
+    options?: TransformOptions
+  ): Promise<TargetPrompt>;
 }
 ```
 
@@ -184,7 +187,10 @@ const cacheKey = `translation:${platform}:${adaptorVersion}:${graphHash}:${optio
 
 ```typescript
 // Multi-platform validation with auto-fix suggestions
-const report = await validator.validateGraph(graph, [gptAdaptor, midjourneyAdaptor]);
+const report = await validator.validateGraph(graph, [
+  gptAdaptor,
+  midjourneyAdaptor
+]);
 // Returns: compatibility analysis, quality scores, auto-fix suggestions
 ```
 
@@ -192,7 +198,9 @@ const report = await validator.validateGraph(graph, [gptAdaptor, midjourneyAdapt
 
 ```typescript
 // Parallel processing with efficient algorithms
-const results = await Promise.all(branches.map(branch => processBranch(branch)));
+const results = await Promise.all(
+  branches.map(branch => processBranch(branch))
+);
 ```
 
 ## Next Phase Recommendations

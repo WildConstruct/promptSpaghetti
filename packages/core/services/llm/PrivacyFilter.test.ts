@@ -16,14 +16,18 @@ describe('PrivacyFilter', () => {
   describe('detectPII', () => {
     describe('Email Detection', () => {
       it('should detect and sanitize email addresses', () => {
-        const result = filter.detectPII('Contact me at john.doe@example.com for details');
+        const result = filter.detectPII(
+          'Contact me at john.doe@example.com for details'
+        );
         expect(result.hasPII).toBe(true);
         expect(result.detectedTypes).toContain('email');
         expect(result.sanitized).toBe('Contact me at [EMAIL] for details');
       });
 
       it('should detect multiple email addresses', () => {
-        const result = filter.detectPII('Primary: admin@company.com, Secondary: support@company.org');
+        const result = filter.detectPII(
+          'Primary: admin@company.com, Secondary: support@company.org'
+        );
         expect(result.hasPII).toBe(true);
         expect(result.detectedTypes).toContain('email');
         expect(result.sanitized).toBe('Primary: [EMAIL], Secondary: [EMAIL]');
@@ -194,13 +198,16 @@ describe('PrivacyFilter', () => {
 
     describe('Multiple PII Types', () => {
       it('should detect and sanitize multiple PII types', () => {
-        const text = 'Email: test@example.com, Phone: 555-1234, SSN: 123-45-6789';
+        const text =
+          'Email: test@example.com, Phone: 555-1234, SSN: 123-45-6789';
         const result = filter.detectPII(text);
         expect(result.hasPII).toBe(true);
         expect(result.detectedTypes).toContain('email');
         expect(result.detectedTypes).toContain('phone');
         expect(result.detectedTypes).toContain('ssn');
-        expect(result.sanitized).toBe('Email: [EMAIL], Phone: [PHONE], SSN: [SSN]');
+        expect(result.sanitized).toBe(
+          'Email: [EMAIL], Phone: [PHONE], SSN: [SSN]'
+        );
       });
 
       it('should handle complex documents', () => {
@@ -231,10 +238,14 @@ describe('PrivacyFilter', () => {
       });
 
       it('should handle text with no PII', () => {
-        const result = filter.detectPII('This is a normal message with no sensitive data');
+        const result = filter.detectPII(
+          'This is a normal message with no sensitive data'
+        );
         expect(result.hasPII).toBe(false);
         expect(result.detectedTypes).toEqual([]);
-        expect(result.sanitized).toBe('This is a normal message with no sensitive data');
+        expect(result.sanitized).toBe(
+          'This is a normal message with no sensitive data'
+        );
       });
 
       it('should handle special characters', () => {
@@ -272,7 +283,9 @@ describe('PrivacyFilter', () => {
 
   describe('filterResponse', () => {
     it('should filter response text', () => {
-      const filtered = filter.filterResponse('Response contains SSN: 123-45-6789');
+      const filtered = filter.filterResponse(
+        'Response contains SSN: 123-45-6789'
+      );
       expect(filtered).toBe('Response contains SSN: [SSN]');
     });
 
@@ -305,7 +318,9 @@ describe('PrivacyFilter', () => {
   describe('addToBlocklist', () => {
     it('should add terms to blocklist', () => {
       filter.addToBlocklist('newbadword');
-      const hasBlocked = filter.containsBlockedContent('This contains newbadword');
+      const hasBlocked = filter.containsBlockedContent(
+        'This contains newbadword'
+      );
       expect(hasBlocked).toBe(true);
     });
 
@@ -337,10 +352,10 @@ describe('PrivacyFilter', () => {
 
     it('should cache pattern matches', () => {
       const text = 'email@test.com';
-      
+
       // First call
       filter.detectPII(text);
-      
+
       // Subsequent calls should be faster
       const startTime = Date.now();
       for (let i = 0; i < 100; i++) {

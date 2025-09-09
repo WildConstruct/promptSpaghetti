@@ -108,7 +108,10 @@ export class PerformanceRegressionDetector {
   /**
    * Update baseline for a metric
    */
-  async updateBaseline(metricName: string, forceRecalculation: boolean = false): Promise<void> {
+  async updateBaseline(
+    metricName: string,
+    forceRecalculation: boolean = false
+  ): Promise<void> {
     const metrics = await this.loadMetrics();
     const metricValues = metrics
       .filter(m => m.name === metricName)
@@ -116,7 +119,9 @@ export class PerformanceRegressionDetector {
       .slice(-100); // Use last 100 values for baseline
 
     if (metricValues.length < 10) {
-      console.warn(`Insufficient data points for baseline calculation: ${metricValues.length} < 10`);
+      console.warn(
+        `Insufficient data points for baseline calculation: ${metricValues.length} < 10`
+      );
       return;
     }
 
@@ -129,7 +134,8 @@ export class PerformanceRegressionDetector {
       const newStdDev = this.calculateStandardDeviation(metricValues, newMean);
 
       existingBaseline.mean = (existingBaseline.mean + newMean) / 2;
-      existingBaseline.standardDeviation = (existingBaseline.standardDeviation + newStdDev) / 2;
+      existingBaseline.standardDeviation =
+        (existingBaseline.standardDeviation + newStdDev) / 2;
       existingBaseline.min = Math.min(existingBaseline.min, ...metricValues);
       existingBaseline.max = Math.max(existingBaseline.max, ...metricValues);
       existingBaseline.sampleCount += metricValues.length;
@@ -149,8 +155,8 @@ export class PerformanceRegressionDetector {
         lastUpdated: new Date().toISOString(),
         thresholds: {
           warning: 15, // 15% deviation triggers warning
-          critical: 30, // 30% deviation triggers critical alert
-        },
+          critical: 30 // 30% deviation triggers critical alert
+        }
       };
 
       if (existingBaseline) {
@@ -166,12 +172,17 @@ export class PerformanceRegressionDetector {
   /**
    * Detect regressions in recent performance metrics
    */
-  async detectRegressions(environment: string = 'development', lookbackHours: number = 24): Promise<RegressionReport> {
+  async detectRegressions(
+    environment: string = 'development',
+    lookbackHours: number = 24
+  ): Promise<RegressionReport> {
     const metrics = await this.loadMetrics();
     const baselines = await this.loadBaselines();
 
     const cutoffTime = new Date(Date.now() - lookbackHours * 60 * 60 * 1000);
-    const recentMetrics = metrics.filter(m => new Date(m.timestamp) > cutoffTime);
+    const recentMetrics = metrics.filter(
+      m => new Date(m.timestamp) > cutoffTime
+    );
 
     if (recentMetrics.length === 0) {
       throw new Error('No recent metrics found for regression detection');
@@ -194,7 +205,12 @@ export class PerformanceRegressionDetector {
       const currentValue = metricList[metricList.length - 1].value;
       const trend = this.calculateTrend(metricList.slice(-10)); // Last 10 values
 
-      const result = this.analyzeMetricRegression(metricName, currentValue, baseline, trend);
+      const result = this.analyzeMetricRegression(
+        metricName,
+        currentValue,
+        baseline,
+        trend
+      );
 
       results.push(result);
     }
@@ -208,10 +224,10 @@ export class PerformanceRegressionDetector {
         totalMetrics: results.length,
         regressions: results.filter(r => r.isRegression).length,
         warnings: results.filter(r => r.severity === 'warning').length,
-        improvements: results.filter(r => r.deviationPercent < -5).length, // 5% improvement
+        improvements: results.filter(r => r.deviationPercent < -5).length // 5% improvement
       },
       results,
-      recommendations: this.generateRecommendations(results),
+      recommendations: this.generateRecommendations(results)
     };
 
     await this.saveRegressionReport(report);
@@ -227,7 +243,8 @@ export class PerformanceRegressionDetector {
     baseline: PerformanceBaseline,
     trend: 'improving' | 'stable' | 'degrading'
   ): RegressionDetectionResult {
-    const deviationPercent = ((currentValue - baseline.mean) / baseline.mean) * 100;
+    const deviationPercent =
+      ((currentValue - baseline.mean) / baseline.mean) * 100;
 
     let severity: 'ok' | 'warning' | 'critical' = 'ok';
     let isRegression = false;
@@ -247,11 +264,14 @@ export class PerformanceRegressionDetector {
       deviationPercent,
       severity,
       isRegression,
-      trend,
+      trend
     };
 
     if (isRegression) {
-      result.recommendation = this.generateMetricRecommendation(metricName, deviationPercent);
+      result.recommendation = this.generateMetricRecommendation(
+        metricName,
+        deviationPercent
+      );
     }
 
     return result;
@@ -260,11 +280,17 @@ export class PerformanceRegressionDetector {
   /**
    * Generate recommendations based on regression results
    */
-  private generateRecommendations(results: RegressionDetectionResult[]): string[] {
+  private generateRecommendations(
+    results: RegressionDetectionResult[]
+  ): string[] {
     const recommendations: string[] = [];
 
-    const criticalRegressions = results.filter(r => r.severity === 'critical' && r.isRegression);
-    const warningRegressions = results.filter(r => r.severity === 'warning' && r.isRegression);
+    const criticalRegressions = results.filter(
+      r => r.severity === 'critical' && r.isRegression
+    );
+    const warningRegressions = results.filter(
+      r => r.severity === 'warning' && r.isRegression
+    );
 
     if (criticalRegressions.length > 0) {
       recommendations.push(
@@ -289,7 +315,9 @@ export class PerformanceRegressionDetector {
     }
 
     // Add specific metric recommendations
-    const responseTimeRegression = results.find(r => r.metric.includes('response') && r.isRegression);
+    const responseTimeRegression = results.find(
+      r => r.metric.includes('response') && r.isRegression
+    );
     if (responseTimeRegression) {
       recommendations.push(
         'Response time regression detected - check database queries and caching',
@@ -297,7 +325,9 @@ export class PerformanceRegressionDetector {
       );
     }
 
-    const memoryRegression = results.find(r => r.metric.includes('memory') && r.isRegression);
+    const memoryRegression = results.find(
+      r => r.metric.includes('memory') && r.isRegression
+    );
     if (memoryRegression) {
       recommendations.push(
         'Memory usage regression detected - check for memory leaks',
@@ -311,7 +341,10 @@ export class PerformanceRegressionDetector {
   /**
    * Generate metric-specific recommendation
    */
-  private generateMetricRecommendation(metricName: string, deviationPercent: number): string {
+  private generateMetricRecommendation(
+    metricName: string,
+    deviationPercent: number
+  ): string {
     const metricType = metricName.toLowerCase();
 
     if (metricType.includes('response') || metricType.includes('latency')) {
@@ -336,12 +369,19 @@ export class PerformanceRegressionDetector {
   /**
    * Calculate trend from recent values
    */
-  private calculateTrend(values: PerformanceMetric[]): 'improving' | 'stable' | 'degrading' {
+  private calculateTrend(
+    values: PerformanceMetric[]
+  ): 'improving' | 'stable' | 'degrading' {
     if (values.length < 3) return 'stable';
 
     const numericValues = values.map(v => v.value);
-    const firstHalf = numericValues.slice(0, Math.floor(numericValues.length / 2));
-    const secondHalf = numericValues.slice(Math.floor(numericValues.length / 2));
+    const firstHalf = numericValues.slice(
+      0,
+      Math.floor(numericValues.length / 2)
+    );
+    const secondHalf = numericValues.slice(
+      Math.floor(numericValues.length / 2)
+    );
 
     const firstAvg = this.calculateMean(firstHalf);
     const secondAvg = this.calculateMean(secondHalf);
@@ -356,7 +396,9 @@ export class PerformanceRegressionDetector {
   /**
    * Group metrics by name
    */
-  private groupMetricsByName(metrics: PerformanceMetric[]): Map<string, PerformanceMetric[]> {
+  private groupMetricsByName(
+    metrics: PerformanceMetric[]
+  ): Map<string, PerformanceMetric[]> {
     const groups = new Map<string, PerformanceMetric[]>();
 
     for (const metric of metrics) {
@@ -456,19 +498,21 @@ export class PerformanceRegressionDetector {
 
       return {
         hasRegressions: report.summary.regressions > 0,
-        criticalCount: report.results.filter(r => r.severity === 'critical').length,
-        warningCount: report.results.filter(r => r.severity === 'warning').length,
+        criticalCount: report.results.filter(r => r.severity === 'critical')
+          .length,
+        warningCount: report.results.filter(r => r.severity === 'warning')
+          .length,
         summary:
           report.summary.regressions > 0
             ? `${report.summary.regressions} regressions detected`
-            : 'No regressions detected',
+            : 'No regressions detected'
       };
     } catch (error) {
       return {
         hasRegressions: false,
         criticalCount: 0,
         warningCount: 0,
-        summary: 'Unable to detect regressions: ' + error.message,
+        summary: 'Unable to detect regressions: ' + error.message
       };
     }
   }

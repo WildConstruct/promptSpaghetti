@@ -45,11 +45,15 @@ class EvidenceAccessAuditService {
   ): Promise<EvidenceAccessAuditEntry>;
 
   // Query and reporting
-  async getAuditTrail(query: AuditTrailQuery): Promise<EvidenceAccessAuditEntry[]>;
+  async getAuditTrail(
+    query: AuditTrailQuery
+  ): Promise<EvidenceAccessAuditEntry[]>;
   async generateAuditReport(query: AuditTrailQuery): Promise<AuditTrailReport>;
 
   // Integrity verification
-  async verifyAuditIntegrity(evidenceId: string): Promise<IntegrityVerificationResult>;
+  async verifyAuditIntegrity(
+    evidenceId: string
+  ): Promise<IntegrityVerificationResult>;
 }
 ```
 
@@ -379,8 +383,10 @@ await auditService.auditBatchEvidenceAccess(
   operations.map(op => ({
     evidenceId: op.evidenceId,
     action: op.action,
-    outcome: op.success ? EvidenceAccessOutcome.SUCCESS : EvidenceAccessOutcome.ERROR,
-    metadata: op.metadata,
+    outcome: op.success
+      ? EvidenceAccessOutcome.SUCCESS
+      : EvidenceAccessOutcome.ERROR,
+    metadata: op.metadata
   })),
   sharedContext
 );
@@ -393,7 +399,7 @@ await auditService.auditBatchEvidenceAccess(
 const report = await auditService.generateAuditReport({
   dateFrom: startOfMonth,
   dateTo: endOfMonth,
-  riskLevel: 'HIGH',
+  riskLevel: 'HIGH'
 });
 
 // Export to different formats

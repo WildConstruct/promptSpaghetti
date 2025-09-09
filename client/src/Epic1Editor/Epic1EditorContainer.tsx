@@ -147,7 +147,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
     // Clear core editor's persisted state so it won't auto-restore an old graph
     // over the freshly provided LaunchScreen analysis/graph.
-    if ((initialGraph && initialGraph.nodes && initialGraph.edges) || (initialAnalysis && initialAnalysis.nodes)) {
+    if (
+      (initialGraph && initialGraph.nodes && initialGraph.edges) ||
+      (initialAnalysis && initialAnalysis.nodes)
+    ) {
       try {
         // Clear core editor's persistence key used by Epic1GraphEditor
         localStorage.removeItem('promptgraph:state:v1');
@@ -160,24 +163,35 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       try {
         // Convert initial React Flow graph to PSG and load programmatically
         const positions = Object.fromEntries(
-          (initialGraph.nodes || []).map(n => [n.id, n.position || { x: 0, y: 0 }])
+          (initialGraph.nodes || []).map(n => [
+            n.id,
+            n.position || { x: 0, y: 0 }
+          ])
         );
-        const psgNodes: GraphNode[] = (initialGraph.nodes || []).map((n) => {
+        const psgNodes: GraphNode[] = (initialGraph.nodes || []).map(n => {
           const type = n.type ?? 'textBlock';
           const dataRaw = (n.data ?? {}) as Record<string, unknown>;
-          const labelFromData = typeof dataRaw['label'] === 'string' ? (dataRaw['label'] as string) : undefined;
+          const labelFromData =
+            typeof dataRaw['label'] === 'string'
+              ? (dataRaw['label'] as string)
+              : undefined;
           const label = labelFromData;
           let data: Record<string, unknown> = {};
           switch (type) {
             case 'textBlock': {
               const contentVal = dataRaw['content'];
               const textVal = dataRaw['text'];
-              const content = typeof contentVal === 'string' ? contentVal : typeof textVal === 'string' ? textVal : (label ?? '');
+              const content =
+                typeof contentVal === 'string'
+                  ? contentVal
+                  : typeof textVal === 'string'
+                    ? textVal
+                    : (label ?? '');
               // Ensure content is preserved in all necessary fields
-              data = { 
+              data = {
                 content: content,
-                text: content,  // Store in both fields for compatibility
-                value: content,  // BaseEditableNode expects 'value'
+                text: content, // Store in both fields for compatibility
+                value: content, // BaseEditableNode expects 'value'
                 nodeType: 'textBlock'
               };
               break;
@@ -185,7 +199,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             case 'weightedChoice': {
               const optionsVal = dataRaw['options'];
               const options = Array.isArray(optionsVal) ? optionsVal : [];
-              data = { 
+              data = {
                 options: options,
                 nodeType: 'weightedChoice'
               };
@@ -194,7 +208,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             case 'output': {
               const outVal = dataRaw['outputName'];
               const outputName = typeof outVal === 'string' ? outVal : 'output';
-              data = { 
+              data = {
                 outputName: outputName,
                 nodeType: 'output'
               };
@@ -206,19 +220,41 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           }
           return { id: n.id, type: String(type), label, data };
         });
-        const psgEdges: GraphEdge[] = (initialGraph.edges || []).map((e, i) => ({ id: e.id || `e-${i}`, source: e.source, target: e.target }));
-        const graph: Graph = { nodes: psgNodes, edges: psgEdges, layout: { positions } };
+        const psgEdges: GraphEdge[] = (initialGraph.edges || []).map(
+          (e, i) => ({
+            id: e.id || `e-${i}`,
+            source: e.source,
+            target: e.target
+          })
+        );
+        const graph: Graph = {
+          nodes: psgNodes,
+          edges: psgEdges,
+          layout: { positions }
+        };
         const psg = fromLegacyGraph('Unsaved Graph', graph);
         const psgText = writePsg(psg);
         loadFromPsgContent(psgText);
       } catch (e) {
-        console.warn('[Epic1Editor] Failed to convert initialGraph to PSG; falling back to direct load', e);
+        console.warn(
+          '[Epic1Editor] Failed to convert initialGraph to PSG; falling back to direct load',
+          e
+        );
         setCurrentNodes(initialGraph.nodes);
         setCurrentEdges(initialGraph.edges);
         try {
-          localStorage.setItem('epic1-graph', JSON.stringify({ nodes: initialGraph.nodes, edges: initialGraph.edges }));
+          localStorage.setItem(
+            'epic1-graph',
+            JSON.stringify({
+              nodes: initialGraph.nodes,
+              edges: initialGraph.edges
+            })
+          );
         } catch (err) {
-          console.warn('[Epic1Editor] Failed to persist initialGraph to localStorage', err);
+          console.warn(
+            '[Epic1Editor] Failed to persist initialGraph to localStorage',
+            err
+          );
         }
         setEditorKey(prev => prev + 1);
       }
@@ -230,7 +266,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       const nodes: Node[] = [];
       const edges: Edge[] = [];
       const horizontalSpacing = 350; // Increased spacing to prevent overlap
-      const verticalSpacing = 200;   // Increased vertical spacing
+      const verticalSpacing = 200; // Increased vertical spacing
 
       initialAnalysis.nodes.forEach((genNode: GeneratedNode, index: number) => {
         const row = Math.floor(index / 3);
@@ -247,25 +283,33 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             editorType = 'textBlock';
             data = {
               nodeType: 'textBlock',
-              content: content,  // Use the actual content
-              text: content,      // Store in both fields for compatibility
-              value: content,     // BaseEditableNode expects 'value'
-              label: content.length > 30 ? content.substring(0, 27) + '...' : content
+              content: content, // Use the actual content
+              text: content, // Store in both fields for compatibility
+              value: content, // BaseEditableNode expects 'value'
+              label:
+                content.length > 30 ? content.substring(0, 27) + '...' : content
             };
             break;
           }
           case 'Choice': {
             editorType = 'weightedChoice';
             // For choices, split the content by "or" to create options
-            const options = content.includes(' or ') 
+            const options = content.includes(' or ')
               ? content.split(' or ').map((opt, i) => ({
                   id: `opt-${index}-${i}`,
                   text: opt.trim(),
                   weight: 100,
                   hasBranch: false
                 }))
-              : [{ id: `opt-${index}`, text: content, weight: 100, hasBranch: false }];
-            
+              : [
+                  {
+                    id: `opt-${index}`,
+                    text: content,
+                    weight: 100,
+                    hasBranch: false
+                  }
+                ];
+
             data = {
               nodeType: 'weightedChoice',
               options: options,
@@ -298,8 +342,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             editorType = 'concat';
             data = {
               nodeType: 'concat',
-              separator: ', ',  // Default separator
-              value: ', ',       // BaseEditableNode expects 'value'
+              separator: ', ', // Default separator
+              value: ', ', // BaseEditableNode expects 'value'
               label: 'Concat'
             };
             break;
@@ -312,7 +356,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
         nodes.push({
           id: n.id,
-          position: { x: col * horizontalSpacing + 200, y: row * verticalSpacing + 120 },
+          position: {
+            x: col * horizontalSpacing + 200,
+            y: row * verticalSpacing + 120
+          },
           data,
           type: editorType
         });
@@ -336,17 +383,25 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         const positions = Object.fromEntries(
           nodes.map(n => [n.id, n.position || { x: 0, y: 0 }])
         );
-        const psgNodes: GraphNode[] = nodes.map((n) => {
+        const psgNodes: GraphNode[] = nodes.map(n => {
           const type = n.type ?? 'textBlock';
           const dataRaw = (n.data ?? {}) as Record<string, unknown>;
-          const labelFromData = typeof dataRaw['label'] === 'string' ? (dataRaw['label'] as string) : undefined;
+          const labelFromData =
+            typeof dataRaw['label'] === 'string'
+              ? (dataRaw['label'] as string)
+              : undefined;
           const label = labelFromData;
           let data: Record<string, unknown> = {};
           switch (type) {
             case 'textBlock': {
               const contentVal = dataRaw['content'];
               const textVal = dataRaw['text'];
-              const content = typeof contentVal === 'string' ? contentVal : typeof textVal === 'string' ? textVal : (label ?? '');
+              const content =
+                typeof contentVal === 'string'
+                  ? contentVal
+                  : typeof textVal === 'string'
+                    ? textVal
+                    : (label ?? '');
               data = { content };
               break;
             }
@@ -368,19 +423,33 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           }
           return { id: n.id, type: String(type), label, data };
         });
-        const psgEdges: GraphEdge[] = edges.map((e, i) => ({ id: e.id || `init-e-${i}`, source: e.source, target: e.target }));
-        const graph: Graph = { nodes: psgNodes, edges: psgEdges, layout: { positions } };
+        const psgEdges: GraphEdge[] = edges.map((e, i) => ({
+          id: e.id || `init-e-${i}`,
+          source: e.source,
+          target: e.target
+        }));
+        const graph: Graph = {
+          nodes: psgNodes,
+          edges: psgEdges,
+          layout: { positions }
+        };
         const psg = fromLegacyGraph('Unsaved Graph', graph);
         const psgText = writePsg(psg);
         loadFromPsgContent(psgText);
       } catch (e) {
-        console.warn('[Epic1Editor] Failed to convert analysis graph to PSG; falling back to direct load', e);
+        console.warn(
+          '[Epic1Editor] Failed to convert analysis graph to PSG; falling back to direct load',
+          e
+        );
         setCurrentNodes(nodes);
         setCurrentEdges(edges);
         try {
           localStorage.setItem('epic1-graph', JSON.stringify({ nodes, edges }));
         } catch (err) {
-          console.warn('[Epic1Editor] Failed to persist graph to localStorage', err);
+          console.warn(
+            '[Epic1Editor] Failed to persist graph to localStorage',
+            err
+          );
         }
         setEditorKey(prev => prev + 1);
       }
@@ -391,7 +460,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       setEditorReady(true);
     }
   }, [initialGraph, initialAnalysis, hasInitialInput, loadFromPsgContent]);
-  
 
   // View state
   const [gridVisible, setGridVisible] = useState(true);
@@ -400,8 +468,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'cinema'>(
     'cinema'
   );
-
-  
 
   // Edit operations hook
   const {
@@ -785,112 +851,112 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       >
         {showMenuBar && MenuBarComponent && (
           <MenuBarComponent
-          // File operations
-          onNew={() => handleNew(demoNodes, demoEdges)}
-          onOpen={handleOpen}
-          onSave={() => handleSave(currentNodes, currentEdges)}
-          onSaveAs={() => handleSaveAs(currentNodes, currentEdges)}
-          onImport={handleImport}
-          onExport={handleExport}
-          onQuit={() => handleQuit(currentNodes, currentEdges)}
-          // Edit operations
-          onUndo={handleUndo}
-          onRedo={handleRedo}
-          onCut={handleCut}
-          onCopy={handleCopy}
-          onPaste={handlePaste}
-          onSelectAll={handleSelectAll}
-          onFind={handleFind}
-          onPreferences={handlePreferences}
-          // View operations
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-          onFitView={handleFitView}
-          onToggleGrid={handleToggleGrid}
-          onToggleMinimap={handleToggleMinimap}
-          onToggleInspector={handleToggleInspector}
-          onToggleAssetLibrary={handleToggleAssetLibrary}
-          onToggleFullscreen={handleToggleFullscreen}
-          onToggleTheme={handleToggleTheme}
-          // Debug operations
-          onDevTools={handleDevTools}
-          onValidateGraph={handleValidateGraph}
-          onPerformanceMonitor={handlePerformanceMonitor}
-          onConsoleToggle={handleConsoleToggle}
-          // Help operations
-          onDocumentation={handleDocumentation}
-          onKeyboardShortcuts={handleKeyboardShortcuts}
-          onAbout={handleAbout}
-          onSupport={handleSupport}
-          onReportBug={handleReportBug}
-          // State
-          canUndo={canUndo}
-          canRedo={canRedo}
-          hasSelection={hasSelection}
-          nodes={currentNodes}
-          edges={currentEdges}
-          gridVisible={gridVisible}
-          minimapVisible={minimapVisible}
-          inspectorVisible={inspectorVisible}
-          assetLibraryVisible={assetLibraryVisible}
-          theme={currentTheme}
-        />
-      )}
-
-      <div style={{ flex: 1, position: 'relative', display: 'flex' }}>
-        {editorReady && (
-          <GraphEditorWithTray
-            EditorComponent={EditorComponent}
-            editorKey={editorKey}
-            currentNodes={currentNodes}
-            currentEdges={currentEdges}
-            showPreview={showPreview}
+            // File operations
+            onNew={() => handleNew(demoNodes, demoEdges)}
+            onOpen={handleOpen}
+            onSave={() => handleSave(currentNodes, currentEdges)}
+            onSaveAs={() => handleSaveAs(currentNodes, currentEdges)}
+            onImport={handleImport}
+            onExport={handleExport}
+            onQuit={() => handleQuit(currentNodes, currentEdges)}
+            // Edit operations
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+            onCut={handleCut}
+            onCopy={handleCopy}
+            onPaste={handlePaste}
+            onSelectAll={handleSelectAll}
+            onFind={handleFind}
+            onPreferences={handlePreferences}
+            // View operations
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onFitView={handleFitView}
+            onToggleGrid={handleToggleGrid}
+            onToggleMinimap={handleToggleMinimap}
+            onToggleInspector={handleToggleInspector}
+            onToggleAssetLibrary={handleToggleAssetLibrary}
+            onToggleFullscreen={handleToggleFullscreen}
+            onToggleTheme={handleToggleTheme}
+            // Debug operations
+            onDevTools={handleDevTools}
+            onValidateGraph={handleValidateGraph}
+            onPerformanceMonitor={handlePerformanceMonitor}
+            onConsoleToggle={handleConsoleToggle}
+            // Help operations
+            onDocumentation={handleDocumentation}
+            onKeyboardShortcuts={handleKeyboardShortcuts}
+            onAbout={handleAbout}
+            onSupport={handleSupport}
+            onReportBug={handleReportBug}
+            // State
+            canUndo={canUndo}
+            canRedo={canRedo}
+            hasSelection={hasSelection}
+            nodes={currentNodes}
+            edges={currentEdges}
+            gridVisible={gridVisible}
+            minimapVisible={minimapVisible}
+            inspectorVisible={inspectorVisible}
             assetLibraryVisible={assetLibraryVisible}
-            assetLibraryPosition={assetLibraryPosition}
-            onNodesChange={handleNodesChange}
-            onEdgesChange={handleEdgesChange}
+            theme={currentTheme}
           />
         )}
+
+        <div style={{ flex: 1, position: 'relative', display: 'flex' }}>
+          {editorReady && (
+            <GraphEditorWithTray
+              EditorComponent={EditorComponent}
+              editorKey={editorKey}
+              currentNodes={currentNodes}
+              currentEdges={currentEdges}
+              showPreview={showPreview}
+              assetLibraryVisible={assetLibraryVisible}
+              assetLibraryPosition={assetLibraryPosition}
+              onNodesChange={handleNodesChange}
+              onEdgesChange={handleEdgesChange}
+            />
+          )}
+        </div>
+
+        <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+
+        {/* Supabase Dialogs */}
+        <SupabaseOpenDialog
+          isOpen={showOpenDialog}
+          onClose={() => setShowOpenDialog(false)}
+          graphs={savedGraphs}
+          onLoad={loadGraph}
+          onDelete={deleteGraph}
+          isLoading={isLoading}
+          isAuthenticated={isAuthenticated}
+          onLocalOpen={handleLocalOpen}
+        />
+
+        <SupabaseSaveDialog
+          isOpen={showSaveDialog}
+          onClose={() => setShowSaveDialog(false)}
+          onSave={(name, description, isPublic, tags) => {
+            handleSupabaseSave(
+              currentNodes,
+              currentEdges,
+              name,
+              description,
+              isPublic
+            );
+          }}
+          isLoading={isLoading}
+          isAuthenticated={isAuthenticated}
+          currentNodes={currentNodes}
+          currentEdges={currentEdges}
+        />
+
+        <NewDocumentModal
+          isOpen={showNewDocumentModal}
+          onConfirm={confirmNewDocument}
+          onCancel={cancelNewDocument}
+        />
       </div>
-
-      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
-
-      {/* Supabase Dialogs */}
-      <SupabaseOpenDialog
-        isOpen={showOpenDialog}
-        onClose={() => setShowOpenDialog(false)}
-        graphs={savedGraphs}
-        onLoad={loadGraph}
-        onDelete={deleteGraph}
-        isLoading={isLoading}
-        isAuthenticated={isAuthenticated}
-        onLocalOpen={handleLocalOpen}
-      />
-
-      <SupabaseSaveDialog
-        isOpen={showSaveDialog}
-        onClose={() => setShowSaveDialog(false)}
-        onSave={(name, description, isPublic, tags) => {
-          handleSupabaseSave(
-            currentNodes,
-            currentEdges,
-            name,
-            description,
-            isPublic
-          );
-        }}
-        isLoading={isLoading}
-        isAuthenticated={isAuthenticated}
-        currentNodes={currentNodes}
-        currentEdges={currentEdges}
-      />
-      
-      <NewDocumentModal
-        isOpen={showNewDocumentModal}
-        onConfirm={confirmNewDocument}
-        onCancel={cancelNewDocument}
-      />
-    </div>
     </IntelligenceProvider>
   );
 };

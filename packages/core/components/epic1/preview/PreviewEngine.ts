@@ -358,8 +358,12 @@ export class PreviewEngine {
         );
       });
 
-      const result = await Promise.race([engine.execute(), timeoutPromise, abortPromise]);
-      
+      const result = await Promise.race([
+        engine.execute(),
+        timeoutPromise,
+        abortPromise
+      ]);
+
       // Add the seed to the result
       return {
         ...result,
@@ -442,7 +446,7 @@ export class PreviewEngine {
   setSeeds(seeds: (string | number)[]): void {
     this.seeds = seeds;
   }
-  
+
   /**
    * Update seeds (alias for setSeeds)
    */

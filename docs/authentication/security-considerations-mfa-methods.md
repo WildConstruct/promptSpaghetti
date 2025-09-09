@@ -30,7 +30,7 @@ const rateLimiter = {
   maxAttempts: 3,
   windowMinutes: 15,
   maxEmailsSent: 5,
-  emailWindowMinutes: 60,
+  emailWindowMinutes: 60
 };
 ```
 
@@ -53,7 +53,10 @@ const rateLimiter = {
 function generateMagicLink(userId, action) {
   const token = crypto.randomBytes(32).toString('hex');
   const payload = `${userId}:${action}:${Date.now()}`;
-  const signature = crypto.createHmac('sha256', SECRET_KEY).update(payload).digest('hex');
+  const signature = crypto
+    .createHmac('sha256', SECRET_KEY)
+    .update(payload)
+    .digest('hex');
 
   return `${BASE_URL}/verify?token=${token}&sig=${signature}`;
 }
@@ -101,8 +104,8 @@ const smsValidation = {
   locationChecks: true,
   velocityLimits: {
     maxPerNumber: 5,
-    windowMinutes: 60,
-  },
+    windowMinutes: 60
+  }
 };
 ```
 
@@ -147,12 +150,15 @@ const totpConfig = {
   digits: 6,
   period: 30,
   window: 1, // Allow 1 period before/after
-  secretLength: 32, // 256-bit secret
+  secretLength: 32 // 256-bit secret
 };
 
 // Device binding
 function bindDevice(userId, deviceFingerprint) {
-  return crypto.createHash('sha256').update(`${userId}:${deviceFingerprint}:${BINDING_SECRET}`).digest('hex');
+  return crypto
+    .createHash('sha256')
+    .update(`${userId}:${deviceFingerprint}:${BINDING_SECRET}`)
+    .digest('hex');
 }
 ```
 
@@ -233,7 +239,7 @@ const behavioralFactors = {
   mouseMovements: true,
   deviceOrientation: true,
   networkFingerprinting: true,
-  timeBasedPatterns: true,
+  timeBasedPatterns: true
 };
 ```
 
@@ -282,7 +288,11 @@ const EXPIRY_MINUTES = 10;
 
 function generateSecureCode() {
   const entropy = crypto.randomBytes(32);
-  return crypto.createHash('sha256').update(entropy).digest('hex').substring(0, CODE_LENGTH);
+  return crypto
+    .createHash('sha256')
+    .update(entropy)
+    .digest('hex')
+    .substring(0, CODE_LENGTH);
 }
 ```
 

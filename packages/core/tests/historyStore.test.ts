@@ -5,7 +5,10 @@ import { act } from '@testing-library/react';
 import { useHistoryStore } from '../stores/historyStore';
 
 function snap(nc: number, ec: number) {
-  return { nodes: Array.from({ length: nc }, (_, i) => ({ id: `n${i}` })), edges: Array.from({ length: ec }, (_, i) => ({ id: `e${i}` })) };
+  return {
+    nodes: Array.from({ length: nc }, (_, i) => ({ id: `n${i}` })),
+    edges: Array.from({ length: ec }, (_, i) => ({ id: `e${i}` }))
+  };
 }
 
 describe('useHistoryStore ring buffer', () => {
@@ -73,4 +76,3 @@ describe('useHistoryStore ring buffer', () => {
     expect(st.entries.length).toBe(3);
   });
 });
-

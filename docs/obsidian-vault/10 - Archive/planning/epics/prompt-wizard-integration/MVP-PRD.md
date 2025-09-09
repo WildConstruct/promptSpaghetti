@@ -18,19 +18,23 @@ The Prompt Wizard MVP is a focused experiment to validate whether users want aut
 ## Problem Statement
 
 ### User Problem
+
 Creative professionals spend 10-15 minutes manually creating randomizable presets by:
+
 1. Identifying variable parts of their prompts
 2. Creating individual nodes for each element
 3. Connecting nodes properly
 4. Testing variations
 
 ### Current Pain Points
+
 - High cognitive load for non-technical users
 - Time-consuming manual process
 - Error-prone node connections
 - Unclear which parts should vary
 
 ### MVP Focus
+
 Test whether automated parsing solves the core problem before adding complexity.
 
 ---
@@ -40,12 +44,14 @@ Test whether automated parsing solves the core problem before adding complexity.
 ### What We're Building (Sprint 1)
 
 **Core Features:**
+
 1. **Paste & Parse** - Auto-detect segments using simple rules
 2. **Review & Toggle** - Lock/randomize each segment
 3. **Generate** - Create PSG nodes automatically
 4. **Preview** - See the assembled result
 
 **Explicitly Excluded from MVP:**
+
 - ❌ Asset binding/search
 - ❌ Keyboard shortcuts beyond basics (Esc, Space)
 - ❌ Advanced parsing (NLP, semantic understanding)
@@ -70,20 +76,20 @@ Test whether automated parsing solves the core problem before adding complexity.
 
 ### Primary Metrics (Must Hit)
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Adoption Rate | >25% of Randomizer users try it | Feature analytics |
-| Time to First Success | <2 minutes | Session recording |
-| Parse Acceptance | >50% segments unchanged | Event tracking |
-| Return Usage | >30% use it twice in first week | User cohort |
+| Metric                | Target                          | Measurement       |
+| --------------------- | ------------------------------- | ----------------- |
+| Adoption Rate         | >25% of Randomizer users try it | Feature analytics |
+| Time to First Success | <2 minutes                      | Session recording |
+| Parse Acceptance      | >50% segments unchanged         | Event tracking    |
+| Return Usage          | >30% use it twice in first week | User cohort       |
 
 ### Secondary Metrics (Nice to Have)
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| User Satisfaction | >3.5/5.0 | In-app survey |
-| Support Tickets | -10% "how to randomize" | Support system |
-| Parse Accuracy | >60% correct type detection | Manual review |
+| Metric            | Target                      | Measurement    |
+| ----------------- | --------------------------- | -------------- |
+| User Satisfaction | >3.5/5.0                    | In-app survey  |
+| Support Tickets   | -10% "how to randomize"     | Support system |
+| Parse Accuracy    | >60% correct type detection | Manual review  |
 
 ### Kill Criteria (Stop if)
 
@@ -129,16 +135,19 @@ Test whether automated parsing solves the core problem before adding complexity.
 ### Sprint 1: MVP (15 points)
 
 **Week 1:**
+
 - STORY-WIZ-001-MVP: Simple Parser (5 pts)
 - STORY-WIZ-002A-MVP: Basic Panel (5 pts)
 
 **Week 2:**
+
 - STORY-WIZ-004-MVP: Node Generation (5 pts)
 - Testing & Bug Fixes
 
 ### Sprint 2: Measure & Learn
 
 **Week 3-4:**
+
 - Deploy behind feature flag (10% users)
 - Collect metrics
 - User interviews (5 minimum)
@@ -147,6 +156,7 @@ Test whether automated parsing solves the core problem before adding complexity.
 ### Sprint 3: Decide
 
 Based on metrics:
+
 - **Success:** Expand scope from backlog
 - **Mixed:** Iterate on parser accuracy
 - **Failure:** Pivot or kill
@@ -155,20 +165,21 @@ Based on metrics:
 
 ## Risks & Mitigations
 
-| Risk | Mitigation |
-|------|------------|
-| Parser too simple | Set expectations: "Beta - Basic parsing" |
-| Users want manual control | Keep manual option prominent |
-| Confusing UI | Add "?" help tooltip |
-| Performance issues | Cache parsed results |
+| Risk                      | Mitigation                               |
+| ------------------------- | ---------------------------------------- |
+| Parser too simple         | Set expectations: "Beta - Basic parsing" |
+| Users want manual control | Keep manual option prominent             |
+| Confusing UI              | Add "?" help tooltip                     |
+| Performance issues        | Cache parsed results                     |
 
 ---
 
 ## Out of Scope (See Backlog)
 
 All advanced features moved to backlog:
+
 - Asset integration
-- Advanced keyboard navigation  
+- Advanced keyboard navigation
 - Semantic parsing
 - Conflict detection
 - Polish and animations
@@ -179,16 +190,19 @@ All advanced features moved to backlog:
 ## Release Strategy
 
 ### Phase 1: Internal Testing (Day 1-3)
+
 - Team dogfooding
 - Basic QA pass
 - Performance baseline
 
 ### Phase 2: Beta Release (Day 4-14)
+
 - 10% of users (feature flag)
 - In-app feedback widget
 - Daily metrics review
 
 ### Phase 3: Decision Point (Day 15)
+
 - Review success criteria
 - User feedback analysis
 - Go/No-Go decision

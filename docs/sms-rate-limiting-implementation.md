@@ -54,14 +54,14 @@ const messageId = await service.queueSMS({
   message: 'Your verification code is 123456',
   type: SMSMessageType.VERIFICATION,
   userId: 'user123',
-  tenantId: 'tenant456',
+  tenantId: 'tenant456'
 });
 
 // Send critical SMS immediately
 const success = await service.sendSMSImmediate({
   to: '+1234567890',
   message: 'Security alert: Unauthorized login detected',
-  type: SMSMessageType.SECURITY_ALERT,
+  type: SMSMessageType.SECURITY_ALERT
 });
 ```
 
@@ -219,7 +219,7 @@ export enum SMSMessageType {
   SUPPORT = 'support', // Priority: 6
   NOTIFICATION = 'notification', // Priority: 5
   REMINDER = 'reminder', // Priority: 3
-  MARKETING = 'marketing', // Priority: 1 (Lowest)
+  MARKETING = 'marketing' // Priority: 1 (Lowest)
 }
 ```
 
@@ -476,7 +476,7 @@ const priorities = {
   [SMSMessageType.SUPPORT]: 6, // Customer support messages
   [SMSMessageType.NOTIFICATION]: 5, // General notifications
   [SMSMessageType.REMINDER]: 3, // Appointment reminders
-  [SMSMessageType.MARKETING]: 1, // Promotional messages
+  [SMSMessageType.MARKETING]: 1 // Promotional messages
 };
 ```
 
@@ -674,7 +674,7 @@ const messageId = await smsService.queueSMS({
   to: '+1234567890',
   message: 'Welcome to our service!',
   type: SMSMessageType.NOTIFICATION,
-  userId: 'user123',
+  userId: 'user123'
 });
 
 console.log(`Message queued with ID: ${messageId}`);
@@ -691,8 +691,8 @@ const success = await smsService.sendSMSImmediate({
   userId: 'user123',
   metadata: {
     alertLevel: 'HIGH',
-    loginLocation: 'Unknown Location',
-  },
+    loginLocation: 'Unknown Location'
+  }
 });
 
 if (success) {
@@ -714,19 +714,21 @@ const messages = users.map(user => ({
   userId: user.id,
   metadata: {
     orderId: user.currentOrder.id,
-    trackingNumber: user.currentOrder.tracking,
-  },
+    trackingNumber: user.currentOrder.tracking
+  }
 }));
 
 // Send through API
 const response = await fetch('/sms/send/batch', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ messages }),
+  body: JSON.stringify({ messages })
 });
 
 const result = await response.json();
-console.log(`Batch send result: ${result.summary.queued}/${result.summary.total} queued`);
+console.log(
+  `Batch send result: ${result.summary.queued}/${result.summary.total} queued`
+);
 ```
 
 ### 4. Rate Limit Checking
@@ -739,8 +741,8 @@ const canSend = await fetch('/sms/rate-limits/check', {
   body: JSON.stringify({
     to: '+1234567890',
     type: 'marketing',
-    userId: 'user123',
-  }),
+    userId: 'user123'
+  })
 });
 
 const checkResult = await canSend.json();
@@ -769,9 +771,9 @@ await service.registerConsentMappings([
       burstCapacity: 2, // Allow 2 immediate sends
       refillRate: 0.001, // Very slow refill
       priority: 3,
-      enabled: true,
-    },
-  },
+      enabled: true
+    }
+  }
 ]);
 ```
 
@@ -784,13 +786,13 @@ smsService.on('rate_limit_exceeded', data => {
     configId: data.configId,
     userId: data.message.userId,
     messageType: data.message.type,
-    retryAfter: data.result.retryAfter,
+    retryAfter: data.result.retryAfter
   });
 
   // Send to monitoring system
   metrics.increment('sms.rate_limit_exceeded', {
     config: data.configId,
-    type: data.message.type,
+    type: data.message.type
   });
 });
 
@@ -798,7 +800,7 @@ smsService.on('message_failed', data => {
   console.error('Message failed:', {
     messageId: data.message.id,
     error: data.error,
-    retryAttempt: data.message.retryCount,
+    retryAttempt: data.message.retryCount
   });
 
   // Alert if too many failures
@@ -854,9 +856,9 @@ app.get('/health', async (request, reply) => {
       sms: {
         healthy: smsHealth.queueHealthScore > 80,
         queueSize: smsHealth.pending,
-        healthScore: smsHealth.queueHealthScore,
-      },
-    },
+        healthScore: smsHealth.queueHealthScore
+      }
+    }
   };
 });
 ```

@@ -65,9 +65,11 @@ export interface AdvancedExecutionContext extends ExecutionContext {
  * Abstract base class for all advanced rule nodes in Epic 7
  * Extends the proven RuntimeNode architecture with enhanced capabilities
  */
-export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode<TOutput> {
+export abstract class AdvancedRuntimeNode<
+  TOutput = unknown
+> extends RuntimeNode<TOutput> {
   protected config: AdvancedNodeConfig;
-  
+
   constructor(id: string, config: AdvancedNodeConfig) {
     super(id);
     this.config = config;
@@ -109,7 +111,10 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
    * Create a seeded random number generator for this node
    * Uses node ID and execution context for deterministic behavior
    */
-  protected createSeededRNG(seed: string | number, nodeSpecificSeed?: string): () => number {
+  protected createSeededRNG(
+    seed: string | number,
+    nodeSpecificSeed?: string
+  ): () => number {
     const combinedSeed = nodeSpecificSeed
       ? `${seed}-${this.id}-${nodeSpecificSeed}`
       : `${seed}-${this.id}`;
@@ -127,12 +132,12 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
     if (!this.config.cacheable) {
       return computation();
     }
-    
+
     const cacheKey = `${this.id}-${key}`;
     if (ctx.cache.has(cacheKey)) {
       return ctx.cache.get(cacheKey) as T;
     }
-    
+
     const result = computation();
     ctx.cache.set(cacheKey, result);
     return result;
@@ -164,19 +169,24 @@ export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode
    */
   protected getExecutionTime(ctx: AdvancedExecutionContext): number | null {
     if (!ctx.performanceMetrics) return null;
-    
+
     const metrics = ctx.performanceMetrics.get(this.id);
     if (!metrics || !metrics.endTime) return null;
-    
+
     return metrics.endTime - metrics.startTime;
   }
 
   /**
    * Check if execution depth exceeds maximum (cycle detection)
    */
-  protected checkExecutionDepth(ctx: AdvancedExecutionContext, maxDepth = 100): void {
+  protected checkExecutionDepth(
+    ctx: AdvancedExecutionContext,
+    maxDepth = 100
+  ): void {
     if (ctx.evaluationDepth > maxDepth) {
-      throw new Error(`Maximum execution depth (${maxDepth}) exceeded - possible cycle detected`);
+      throw new Error(
+        `Maximum execution depth (${maxDepth}) exceeded - possible cycle detected`
+      );
     }
   }
 }
@@ -188,7 +198,12 @@ export class ValidationHelpers {
   /**
    * Validate that a value is within a numeric range
    */
-  static validateRange(value: number, min: number, max: number, fieldName: string): ValidationResult {
+  static validateRange(
+    value: number,
+    min: number,
+    max: number,
+    fieldName: string
+  ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -205,7 +220,11 @@ export class ValidationHelpers {
   /**
    * Validate that a string matches a pattern
    */
-  static validatePattern(value: string, pattern: RegExp, fieldName: string): ValidationResult {
+  static validatePattern(
+    value: string,
+    pattern: RegExp,
+    fieldName: string
+  ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -219,12 +238,19 @@ export class ValidationHelpers {
   /**
    * Validate that required fields are present
    */
-  static validateRequired(data: Record<string, unknown>, requiredFields: string[]): ValidationResult {
+  static validateRequired(
+    data: Record<string, unknown>,
+    requiredFields: string[]
+  ): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
     for (const field of requiredFields) {
-      if (!(field in data) || data[field] === null || data[field] === undefined) {
+      if (
+        !(field in data) ||
+        data[field] === null ||
+        data[field] === undefined
+      ) {
         errors.push(`Required field '${field}' is missing`);
       }
     }

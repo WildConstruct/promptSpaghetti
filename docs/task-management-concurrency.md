@@ -36,9 +36,9 @@ release = await lockfile.lock(statePath, {
   retries: {
     retries: 10,
     minTimeout: 100,
-    maxTimeout: 1000,
+    maxTimeout: 1000
   },
-  stale: 30000, // Lock expires after 30 seconds
+  stale: 30000 // Lock expires after 30 seconds
 });
 ```
 
@@ -107,7 +107,9 @@ npm install proper-lockfile
 
 ```javascript
 if (error.code === 'ELOCKED') {
-  console.error('🔒 Another agent is currently assigning tasks. Please try again in a few seconds.');
+  console.error(
+    '🔒 Another agent is currently assigning tasks. Please try again in a few seconds.'
+  );
   process.exit(1);
 }
 ```

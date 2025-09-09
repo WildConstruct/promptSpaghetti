@@ -41,7 +41,13 @@ export interface TestEnvironmentConfig {
 export interface TestEnvironmentInstance {
   id: string;
   config: TestEnvironmentConfig;
-  status: 'provisioning' | 'ready' | 'running' | 'stopping' | 'stopped' | 'failed';
+  status:
+    | 'provisioning'
+    | 'ready'
+    | 'running'
+    | 'stopping'
+    | 'stopped'
+    | 'failed';
   startTime: Date;
   endTime?: Date;
   services: Map<string, ServiceInstance>;
@@ -76,7 +82,9 @@ export class TestEnvironmentManager {
   /**
    * Create and provision a new test environment
    */
-  async createEnvironment(config: TestEnvironmentConfig): Promise<TestEnvironmentInstance> {
+  async createEnvironment(
+    config: TestEnvironmentConfig
+  ): Promise<TestEnvironmentInstance> {
     const instance: TestEnvironmentInstance = {
       id: config.id,
       config,
@@ -86,7 +94,7 @@ export class TestEnvironmentManager {
       ports: new Map(),
       processes: [],
       tempDirs: [],
-      healthChecks: new Map(),
+      healthChecks: new Map()
     };
 
     this.environments.set(config.id, instance);
@@ -236,7 +244,9 @@ export class TestEnvironmentManager {
 
     const uptime = Date.now() - instance.startTime.getTime();
     const serviceCount = instance.services.size;
-    const healthyServices = Array.from(instance.healthChecks.values()).filter(Boolean).length;
+    const healthyServices = Array.from(instance.healthChecks.values()).filter(
+      Boolean
+    ).length;
 
     return {
       uptime,
@@ -244,11 +254,13 @@ export class TestEnvironmentManager {
       healthyServices,
       // TODO: Add actual memory/CPU monitoring
       memoryUsage: undefined,
-      cpuUsage: undefined,
+      cpuUsage: undefined
     };
   }
 
-  private async createTempDirectories(instance: TestEnvironmentInstance): Promise<void> {
+  private async createTempDirectories(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     const tempDir = path.join(process.cwd(), 'temp', `test-env-${instance.id}`);
     await fs.mkdir(tempDir, { recursive: true });
     instance.tempDirs.push(tempDir);
@@ -261,7 +273,9 @@ export class TestEnvironmentManager {
     }
   }
 
-  private async setupDatabase(instance: TestEnvironmentInstance): Promise<void> {
+  private async setupDatabase(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     const { database } = instance.config;
     if (!database) return;
 
@@ -278,7 +292,9 @@ export class TestEnvironmentManager {
     }
   }
 
-  private async setupSQLiteDatabase(instance: TestEnvironmentInstance): Promise<void> {
+  private async setupSQLiteDatabase(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     const tempDir = instance.tempDirs[0];
     const dbPath = path.join(tempDir, 'data', 'test.db');
 
@@ -289,7 +305,9 @@ export class TestEnvironmentManager {
     console.log(`📦 SQLite database created at ${dbPath}`);
   }
 
-  private async setupPostgresDatabase(instance: TestEnvironmentInstance): Promise<void> {
+  private async setupPostgresDatabase(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     const port = this.allocatePort();
     if (!port) {
       throw new Error('No available ports for PostgreSQL');
@@ -300,7 +318,9 @@ export class TestEnvironmentManager {
     instance.ports.set('postgres', port);
   }
 
-  private async setupRedisDatabase(instance: TestEnvironmentInstance): Promise<void> {
+  private async setupRedisDatabase(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     const port = this.allocatePort();
     if (!port) {
       throw new Error('No available ports for Redis');
@@ -311,11 +331,13 @@ export class TestEnvironmentManager {
     instance.ports.set('redis', port);
   }
 
-  private async startServices(instance: TestEnvironmentInstance): Promise<void> {
+  private async startServices(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     for (const serviceConfig of instance.config.services) {
       const service: ServiceInstance = {
         name: serviceConfig.name,
-        status: 'starting',
+        status: 'starting'
       };
 
       const port = serviceConfig.port || this.allocatePort();
@@ -359,11 +381,15 @@ export class TestEnvironmentManager {
     config: any
   ): Promise<void> {
     // TODO: Start service in container
-    console.log(`🐳 Starting container for ${service.name} on port ${service.port}`);
+    console.log(
+      `🐳 Starting container for ${service.name} on port ${service.port}`
+    );
     service.status = 'ready';
   }
 
-  private async waitForHealthChecks(instance: TestEnvironmentInstance): Promise<void> {
+  private async waitForHealthChecks(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     const timeout = 30000; // 30 seconds
     const interval = 1000; // 1 second
     const maxAttempts = timeout / interval;
@@ -397,12 +423,16 @@ export class TestEnvironmentManager {
     throw new Error('Health checks timed out');
   }
 
-  private async stopContainers(instance: TestEnvironmentInstance): Promise<void> {
+  private async stopContainers(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     // TODO: Implement container cleanup
     console.log(`🛑 Stopping containers for environment ${instance.id}`);
   }
 
-  private async cleanupTempDirectories(instance: TestEnvironmentInstance): Promise<void> {
+  private async cleanupTempDirectories(
+    instance: TestEnvironmentInstance
+  ): Promise<void> {
     for (const tempDir of instance.tempDirs) {
       try {
         await fs.rm(tempDir, { recursive: true, force: true });
@@ -444,7 +474,7 @@ export const EnvironmentTemplates = {
     resources: {},
     services: [],
     timeout: 300000, // 5 minutes
-    cleanup: true,
+    cleanup: true
   }),
 
   integration: (): TestEnvironmentConfig => ({
@@ -453,21 +483,21 @@ export const EnvironmentTemplates = {
     type: 'integration',
     isolation: 'process',
     resources: {
-      memory: '512MB',
+      memory: '512MB'
     },
     services: [
       {
         name: 'test-server',
         port: 8080,
-        healthCheck: 'http://localhost:8080/health',
-      },
+        healthCheck: 'http://localhost:8080/health'
+      }
     ],
     database: {
       type: 'sqlite',
-      seedData: ['test-data.sql'],
+      seedData: ['test-data.sql']
     },
     timeout: 900000, // 15 minutes
-    cleanup: true,
+    cleanup: true
   }),
 
   e2e: (): TestEnvironmentConfig => ({
@@ -478,27 +508,27 @@ export const EnvironmentTemplates = {
     resources: {
       cpu: '1',
       memory: '1GB',
-      network: true,
+      network: true
     },
     services: [
       {
         name: 'web-app',
         port: 3000,
-        healthCheck: 'http://localhost:3000',
+        healthCheck: 'http://localhost:3000'
       },
       {
         name: 'api-server',
         port: 8000,
-        healthCheck: 'http://localhost:8000/api/health',
-      },
+        healthCheck: 'http://localhost:8000/api/health'
+      }
     ],
     database: {
       type: 'postgres',
       migrations: ['migrations/*.sql'],
-      seedData: ['e2e-test-data.sql'],
+      seedData: ['e2e-test-data.sql']
     },
     timeout: 1800000, // 30 minutes
-    cleanup: true,
+    cleanup: true
   }),
 
   performance: (): TestEnvironmentConfig => ({
@@ -509,26 +539,26 @@ export const EnvironmentTemplates = {
     resources: {
       cpu: '2',
       memory: '2GB',
-      network: true,
+      network: true
     },
     services: [
       {
         name: 'app-under-test',
         port: 3000,
-        healthCheck: 'http://localhost:3000/health',
+        healthCheck: 'http://localhost:3000/health'
       },
       {
         name: 'load-generator',
-        port: 8080,
-      },
+        port: 8080
+      }
     ],
     database: {
       type: 'postgres',
-      seedData: ['performance-test-data.sql'],
+      seedData: ['performance-test-data.sql']
     },
     timeout: 3600000, // 1 hour
-    cleanup: true,
-  }),
+    cleanup: true
+  })
 };
 
 export default TestEnvironmentManager;

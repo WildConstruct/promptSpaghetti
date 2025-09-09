@@ -10,8 +10,19 @@ import '@testing-library/jest-dom';
 global.fetch = jest.fn();
 
 // Create mock component to avoid import.meta issues
-type PresetItem = { id: string; name: string; category?: string; tags?: string[] };
-type FragmentItem = { id: string; name: string; category?: string; path?: string; tags?: string[] };
+type PresetItem = {
+  id: string;
+  name: string;
+  category?: string;
+  tags?: string[];
+};
+type FragmentItem = {
+  id: string;
+  name: string;
+  category?: string;
+  path?: string;
+  tags?: string[];
+};
 
 const MockProAssetBrowser = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -26,10 +37,10 @@ const MockProAssetBrowser = () => {
     if (savedWidth) {
       setPanelWidth(parseInt(savedWidth));
     }
-    
+
     // Load mock data
     const loadData = async () => {
-      // Load presets manifest  
+      // Load presets manifest
       try {
         const response = await fetch('/presets/manifest.json');
         if (response.ok) {
@@ -65,7 +76,10 @@ const MockProAssetBrowser = () => {
   };
 
   const filteredPresets = presets.filter(p => {
-    if (searchQuery && !p.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+    if (
+      searchQuery &&
+      !p.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
       return false;
     }
     if (selectedCategory !== 'All' && p.category !== selectedCategory) {
@@ -75,7 +89,10 @@ const MockProAssetBrowser = () => {
   });
 
   const filteredFragments = fragments.filter(f => {
-    if (searchQuery && !f.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+    if (
+      searchQuery &&
+      !f.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
       return false;
     }
     return true;
@@ -88,12 +105,15 @@ const MockProAssetBrowser = () => {
           type="text"
           placeholder="search"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={e => setSearchQuery(e.target.value)}
         />
         <button onClick={() => setSelectedCategory('face')}>face</button>
         <button onClick={() => setSelectedCategory('hair')}>hair</button>
       </div>
-      <div className="preset-list-container" style={{ overflowY: 'auto', width: panelWidth }}>
+      <div
+        className="preset-list-container"
+        style={{ overflowY: 'auto', width: panelWidth }}
+      >
         {filteredPresets.map(p => (
           <button key={p.id} draggable="true">
             {p.name}
@@ -105,8 +125,8 @@ const MockProAssetBrowser = () => {
           </button>
         ))}
       </div>
-      <div 
-        className="resize-handle" 
+      <div
+        className="resize-handle"
         onMouseDown={() => {
           const handleMouseMove = (e: MouseEvent) => handleResize(e);
           const handleMouseUp = () => {
@@ -151,7 +171,7 @@ describe('ProAssetBrowser', () => {
         ]
       };
 
-      (fetch as jest.Mock).mockImplementation((url) => {
+      (fetch as jest.Mock).mockImplementation(url => {
         if (url.includes('asset-fragments-manifest.json')) {
           return Promise.resolve({
             ok: true,
@@ -185,7 +205,7 @@ describe('ProAssetBrowser', () => {
         ]
       };
 
-      (fetch as jest.Mock).mockImplementation((url) => {
+      (fetch as jest.Mock).mockImplementation(url => {
         if (url.includes('asset-fragments-manifest.json')) {
           return Promise.resolve({
             ok: true,
@@ -201,7 +221,9 @@ describe('ProAssetBrowser', () => {
 
       await waitFor(() => {
         const items = screen.getAllByRole('button');
-        const fragment = items.find(item => item.textContent?.includes('Test Fragment'));
+        const fragment = items.find(item =>
+          item.textContent?.includes('Test Fragment')
+        );
         expect(fragment).toHaveAttribute('draggable', 'true');
       });
     });
@@ -210,7 +232,7 @@ describe('ProAssetBrowser', () => {
   describe('Scrollbar functionality', () => {
     it('should have scrollable containers', () => {
       render(<MockProAssetBrowser />);
-      
+
       // Check that keyword-buttons-section has overflow-y: auto
       const keywordSection = document.querySelector('.keyword-buttons-section');
       if (keywordSection) {
@@ -230,7 +252,7 @@ describe('ProAssetBrowser', () => {
   describe('Panel resizing', () => {
     it('should persist panel width to localStorage', async () => {
       render(<MockProAssetBrowser />);
-      
+
       // Simulate resize
       const resizeHandle = document.querySelector('.resize-handle');
       if (resizeHandle) {
@@ -247,10 +269,12 @@ describe('ProAssetBrowser', () => {
 
     it('should load saved panel width from localStorage', () => {
       (localStorage.getItem as jest.Mock).mockReturnValue('400');
-      
+
       render(<MockProAssetBrowser />);
-      
-      expect(localStorage.getItem).toHaveBeenCalledWith('assetBrowser.panelWidth');
+
+      expect(localStorage.getItem).toHaveBeenCalledWith(
+        'assetBrowser.panelWidth'
+      );
     });
   });
 
@@ -262,7 +286,7 @@ describe('ProAssetBrowser', () => {
         { id: '3', name: 'Hair Style', category: 'hair', tags: [] }
       ];
 
-      (fetch as jest.Mock).mockImplementation((url) => {
+      (fetch as jest.Mock).mockImplementation(url => {
         if (url.includes('presets/manifest.json')) {
           return Promise.resolve({
             ok: true,
@@ -289,10 +313,12 @@ describe('ProAssetBrowser', () => {
 
       await waitFor(() => {
         const buttons = screen.getAllByRole('button');
-        const smileButton = buttons.find(b => b.textContent === 'Smile Variation');
+        const smileButton = buttons.find(
+          b => b.textContent === 'Smile Variation'
+        );
         const eyeButton = buttons.find(b => b.textContent === 'Eye Color');
         const hairButton = buttons.find(b => b.textContent === 'Hair Style');
-        
+
         expect(smileButton).toBeInTheDocument();
         expect(eyeButton).not.toBeInTheDocument();
         expect(hairButton).not.toBeInTheDocument();
@@ -305,7 +331,7 @@ describe('ProAssetBrowser', () => {
         { id: '2', name: 'Hair Item', category: 'hair', tags: [] }
       ];
 
-      (fetch as jest.Mock).mockImplementation((url) => {
+      (fetch as jest.Mock).mockImplementation(url => {
         if (url.includes('presets/manifest.json')) {
           return Promise.resolve({
             ok: true,
@@ -334,7 +360,7 @@ describe('ProAssetBrowser', () => {
         const buttons = screen.getAllByRole('button');
         const faceItem = buttons.find(b => b.textContent === 'Face Item');
         const hairItem = buttons.find(b => b.textContent === 'Hair Item');
-        
+
         expect(faceItem).toBeInTheDocument();
         expect(hairItem).not.toBeInTheDocument();
       });

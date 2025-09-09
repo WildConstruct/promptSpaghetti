@@ -29,7 +29,7 @@ server.get('/', async (request, reply) => {
     status: 'PromptScape API running',
     mode: 'production',
     engine: 'basic',
-    features: ['graph-execution', 'deterministic-seeding', 'core-nodes'],
+    features: ['graph-execution', 'deterministic-seeding', 'core-nodes']
   };
 });
 
@@ -41,14 +41,14 @@ server.get('/health', async (request, reply) => {
       status: dbHealthy ? 'healthy' : 'unhealthy',
       database: dbHealthy ? 'connected' : 'disconnected',
       engine: 'basic',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   } catch (error) {
     return reply.code(500).send({
       status: 'unhealthy',
       database: 'error',
       error: error.message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -63,7 +63,7 @@ server.post('/preview', async (request, reply) => {
     if (!validation.valid) {
       return reply.code(400).send({
         error: 'Invalid graph',
-        details: validation.errors,
+        details: validation.errors
       });
     }
 
@@ -77,14 +77,21 @@ server.post('/preview', async (request, reply) => {
         nodeCount: graph.nodes?.length || 0,
         seed: graph.seed,
         engine: 'basic',
-        features: ['WeightedChoice', 'Output', 'Concat', 'SetVariable', 'GetVariable', 'Include'],
-      },
+        features: [
+          'WeightedChoice',
+          'Output',
+          'Concat',
+          'SetVariable',
+          'GetVariable',
+          'Include'
+        ]
+      }
     };
   } catch (error) {
     console.error('Graph execution error:', error);
     return reply.code(500).send({
       error: 'Graph execution failed',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -96,7 +103,9 @@ const start = async () => {
     await server.listen({ port, host: '0.0.0.0' });
     console.log(`🚀 Main server running on port ${port}`);
     console.log('✅ Engine: Basic with core node types');
-    console.log('✅ Features: Graph execution, deterministic seeding, variables');
+    console.log(
+      '✅ Features: Graph execution, deterministic seeding, variables'
+    );
     console.log('🎯 Ready for production use!');
   } catch (err) {
     console.error('❌ Server start failed:', err);

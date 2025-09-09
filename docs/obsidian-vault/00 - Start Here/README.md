@@ -5,6 +5,7 @@ Welcome to the comprehensive documentation vault for Prompt Spaghetti. This Obsi
 ## 📚 Vault Organization
 
 ### [[Project Overview Map|00 - Quick Navigation]]
+
 - **[[00 - Start Here/Project Timeline]]** - How we got here
 - **[[00 - Start Here/Key Decisions]]** - Major architectural choices
 - **[[00 - Start Here/Technology Evolution]]** - Tech stack changes over time
@@ -64,12 +65,15 @@ Welcome to the comprehensive documentation vault for Prompt Spaghetti. This Obsi
 ## 🔍 How to Navigate
 
 ### By Timeline
+
 - Start with [[00 - Start Here/Project Timeline]] to understand the chronological evolution
 
 ### By Feature
+
 - Use [[00 - Start Here/Feature Map]] to find documentation by specific features
 
 ### By Role
+
 - **Developers**: Start with [[02 - Architecture/README]]
 - **Users**: Start with [[05 - User Documentation/README]]
 - **Project Managers**: Start with [[03 - Development Journey/README]]
@@ -102,4 +106,4 @@ Welcome to the comprehensive documentation vault for Prompt Spaghetti. This Obsi
 
 ---
 
-*This vault is designed for use with [Obsidian](https://obsidian.md/). Install Obsidian and open this folder as a vault for the best experience with graph view, backlinks, and search.*
+_This vault is designed for use with [Obsidian](https://obsidian.md/). Install Obsidian and open this folder as a vault for the best experience with graph view, backlinks, and search._

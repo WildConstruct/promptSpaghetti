@@ -36,7 +36,9 @@ export interface AdvancedExecutionContext extends ExecutionContext {
   cache: Map<string, any>; // For performance optimization
 }
 
-export abstract class AdvancedRuntimeNode<TOutput = unknown> extends RuntimeNode<TOutput> {
+export abstract class AdvancedRuntimeNode<
+  TOutput = unknown
+> extends RuntimeNode<TOutput> {
   protected config: AdvancedNodeConfig;
 
   constructor(id: string, config: AdvancedNodeConfig) {
@@ -118,7 +120,10 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
     return this.defaultBranch || '';
   }
 
-  private evaluateCondition(expr: string, ctx: AdvancedExecutionContext): boolean {
+  private evaluateCondition(
+    expr: string,
+    ctx: AdvancedExecutionContext
+  ): boolean {
     // Expression evaluation engine (variables, comparisons, etc.)
     return ConditionEvaluator.evaluate(expr, ctx.variables);
   }
@@ -149,7 +154,7 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
 
     this.setState(ctx, {
       index: state.index + 1,
-      history: [...state.history, result],
+      history: [...state.history, result]
     });
 
     return result;
@@ -158,7 +163,11 @@ export class SequentialNode extends AdvancedRuntimeNode<string> {
 
 export interface SequencePattern {
   type: 'linear' | 'cyclical' | 'random' | 'weighted';
-  getNext(sequence: string[], state: any, ctx: AdvancedExecutionContext): string;
+  getNext(
+    sequence: string[],
+    state: any,
+    ctx: AdvancedExecutionContext
+  ): string;
 }
 ```
 
@@ -179,8 +188,9 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
 
     if (!state) {
       state = {
-        currentState: this.initialState || this.transitionMatrix.getInitialState(),
-        history: [],
+        currentState:
+          this.initialState || this.transitionMatrix.getInitialState(),
+        history: []
       };
     }
 
@@ -191,7 +201,7 @@ export class MarkovNode extends AdvancedRuntimeNode<string> {
 
     this.setState(ctx, {
       currentState: nextState,
-      history: [...state.history, nextState],
+      history: [...state.history, nextState]
     });
 
     return nextState;
@@ -223,7 +233,7 @@ export const NodeTypeEnum = z.enum([
   'WeightedAdvanced',
   'Conditional',
   'Sequential',
-  'Markov',
+  'Markov'
 ]);
 
 export const WeightedAdvancedNodeSchema = BaseNode.extend({
@@ -231,8 +241,8 @@ export const WeightedAdvancedNodeSchema = BaseNode.extend({
   distribution: z.object({
     type: z.enum(['linear', 'exponential', 'gaussian', 'custom']),
     values: z.array(z.object({ value: z.string(), weight: z.number() })),
-    parameters: z.record(z.number()).optional(),
-  }),
+    parameters: z.record(z.number()).optional()
+  })
 });
 
 export const ConditionalNodeSchema = BaseNode.extend({
@@ -240,10 +250,10 @@ export const ConditionalNodeSchema = BaseNode.extend({
   conditions: z.array(
     z.object({
       condition: z.string(),
-      output: z.string(),
+      output: z.string()
     })
   ),
-  defaultBranch: z.string().optional(),
+  defaultBranch: z.string().optional()
 });
 
 export const SequentialNodeSchema = BaseNode.extend({
@@ -251,15 +261,15 @@ export const SequentialNodeSchema = BaseNode.extend({
   sequence: z.array(z.string()),
   pattern: z.object({
     type: z.enum(['linear', 'cyclical', 'random', 'weighted']),
-    config: z.record(z.any()).optional(),
-  }),
+    config: z.record(z.any()).optional()
+  })
 });
 
 export const MarkovNodeSchema = BaseNode.extend({
   type: z.literal('Markov'),
   states: z.array(z.string()),
   transitions: z.record(z.record(z.number())),
-  initialState: z.string().optional(),
+  initialState: z.string().optional()
 });
 ```
 
@@ -277,9 +287,17 @@ function createRuntime(node: Node, resolvedInputs: any[]): RuntimeNode<any> {
     case 'Conditional':
       return new ConditionalNode(node.id, node.conditions, node.defaultBranch);
     case 'Sequential':
-      return new SequentialNode(node.id, node.sequence, createSequencePattern(node.pattern));
+      return new SequentialNode(
+        node.id,
+        node.sequence,
+        createSequencePattern(node.pattern)
+      );
     case 'Markov':
-      return new MarkovNode(node.id, createTransitionMatrix(node), node.initialState);
+      return new MarkovNode(
+        node.id,
+        createTransitionMatrix(node),
+        node.initialState
+      );
 
     default:
       const _exhaustive: never = node;
@@ -294,7 +312,7 @@ export async function executeGraphAdvanced(graph: Graph): Promise<string[]> {
     seed: graph.seed ?? Date.now(),
     nodeStates: new Map(),
     evaluationDepth: 0,
-    cache: new Map(),
+    cache: new Map()
   };
   // ... rest of execution logic
 }

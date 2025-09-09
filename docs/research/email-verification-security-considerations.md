@@ -198,7 +198,7 @@ function sendVerificationEmail(user, attempt) {
     attempt: attempt,
     timestamp: new Date(),
     ipAddress: req.ip,
-    userAgent: req.get('User-Agent'),
+    userAgent: req.get('User-Agent')
   });
 
   if (attempt > 3) {
@@ -316,13 +316,13 @@ class VerificationTokenManager {
         email,
         purpose,
         iat: Math.floor(Date.now() / 1000),
-        jti: crypto.randomUUID(), // Unique token ID
+        jti: crypto.randomUUID() // Unique token ID
       },
       process.env.JWT_SECRET,
       {
         expiresIn: '15m',
         issuer: 'your-app',
-        audience: 'email-verification',
+        audience: 'email-verification'
       }
     );
   }
@@ -331,7 +331,7 @@ class VerificationTokenManager {
     try {
       return jwt.verify(token, process.env.JWT_SECRET, {
         issuer: 'your-app',
-        audience: 'email-verification',
+        audience: 'email-verification'
       });
     } catch (error) {
       return null;
@@ -352,7 +352,7 @@ const emailRateLimit = rateLimit({
   message: 'Too many verification emails sent',
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: req => req.user.id || req.ip,
+  keyGenerator: req => req.user.id || req.ip
 });
 
 // Code verification rate limit
@@ -360,7 +360,7 @@ const verificationRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10, // 10 attempts per window
   message: 'Too many verification attempts',
-  skipSuccessfulRequests: true,
+  skipSuccessfulRequests: true
 });
 ```
 
@@ -373,19 +373,19 @@ const transporter = nodemailer.createTransporter({
   service: 'SendGrid',
   auth: {
     user: process.env.SENDGRID_USERNAME,
-    pass: process.env.SENDGRID_PASSWORD,
+    pass: process.env.SENDGRID_PASSWORD
   },
   secure: true,
   tls: {
-    rejectUnauthorized: true,
-  },
+    rejectUnauthorized: true
+  }
 });
 
 // Email template with security considerations
 const createVerificationEmail = (code, userEmail) => ({
   from: {
     name: 'Your App Security',
-    address: 'security@yourapp.com',
+    address: 'security@yourapp.com'
   },
   to: userEmail,
   subject: 'Email Verification Required',
@@ -400,8 +400,8 @@ const createVerificationEmail = (code, userEmail) => ({
   `,
   headers: {
     'X-Priority': '1',
-    'X-MSMail-Priority': 'High',
-  },
+    'X-MSMail-Priority': 'High'
+  }
 });
 ```
 
@@ -419,7 +419,7 @@ const verificationSchema = {
   attempts: 'INTEGER DEFAULT 0',
   createdAt: 'TIMESTAMP DEFAULT NOW()',
   ipAddress: 'INET',
-  userAgent: 'TEXT',
+  userAgent: 'TEXT'
 };
 
 // Hashing codes before storage

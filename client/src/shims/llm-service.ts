@@ -1,7 +1,10 @@
 // Browser build stub for LLMService to avoid pulling in OpenAI SDK.
 type AnyObj = Record<string, any>;
 
-const API_BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_API_URL) || '';
+const API_BASE =
+  (typeof import.meta !== 'undefined' &&
+    (import.meta as any).env?.VITE_API_URL) ||
+  '';
 
 function withBase(path: string): string {
   if (!path) return path;

@@ -60,7 +60,7 @@ import { GraphEditor } from './GraphEditor';
 
 const nodes = [
   { id: '1', data: { label: 'A' }, position: { x: 0, y: 0 }, type: 'default' },
-  { id: '2', data: { label: 'B' }, position: { x: 100, y: 0 }, type: 'default' },
+  { id: '2', data: { label: 'B' }, position: { x: 100, y: 0 }, type: 'default' }
 ];
 const edges = [{ id: 'e1-2', source: '1', target: '2' }];
 
@@ -68,7 +68,13 @@ const edges = [{ id: 'e1-2', source: '1', target: '2' }];
 const validateConnection = (edges, nodes) => [];
 
 export default function App() {
-  return <GraphEditor initialNodes={nodes} initialEdges={edges} validateConnection={validateConnection} />;
+  return (
+    <GraphEditor
+      initialNodes={nodes}
+      initialEdges={edges}
+      validateConnection={validateConnection}
+    />
+  );
 }
 ```
 
@@ -117,10 +123,12 @@ The core package exposes a typed Supabase client and helpers for listing, readin
   - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
 
 Behavior:
+
 - If env vars are present, `supabase` is initialized and storage helpers operate normally.
 - If missing, `supabase` is `null` and helpers return discriminated error results (no throws). In development, a once-per-session warning logs to the console.
 
 Storage conventions:
+
 - Bucket: `graphs`
 - Object path: `users/{userId}/graphs/{name}`
 - Uploads use `contentType: application/json` and `upsert: true`.

@@ -3,7 +3,13 @@ import type { Edge, Node } from 'reactflow';
 // Local, minimal type definitions to avoid broken upstream imports.
 // These mirror the shapes used by the editor and collaboration features.
 
-export type StickyNoteColor = 'yellow' | 'blue' | 'green' | 'red' | 'purple' | 'orange';
+export type StickyNoteColor =
+  | 'yellow'
+  | 'blue'
+  | 'green'
+  | 'red'
+  | 'purple'
+  | 'orange';
 
 export interface StickyNote {
   id: string;
@@ -17,9 +23,19 @@ export interface StickyNote {
   zIndex?: number;
 }
 
-export type NodeLabelDisplayMode = 'always' | 'hover' | 'focus' | 'selected' | 'never';
+export type NodeLabelDisplayMode =
+  | 'always'
+  | 'hover'
+  | 'focus'
+  | 'selected'
+  | 'never';
 export type NodeLabelPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
-export type NodeLabelStyle = 'default' | 'minimal' | 'professional' | 'colorful' | 'outline';
+export type NodeLabelStyle =
+  | 'default'
+  | 'minimal'
+  | 'professional'
+  | 'colorful'
+  | 'outline';
 
 export interface NodeLabelConfig {
   id: string;
@@ -58,11 +74,21 @@ export const DEFAULT_NODE_LABEL_PREFERENCES: NodeLabelPreferences = {
   enableAutoSave: true,
   enableLabelHistory: false,
   maxLabelLength: 120,
-  showLabelTooltips: true,
+  showLabelTooltips: true
 };
 
-export type RegionGroupStyle = 'solid' | 'dashed' | 'dotted' | 'rounded' | 'modern';
-export type RegionGroupVisibility = 'always' | 'hover' | 'selected' | 'editing' | 'collapsed';
+export type RegionGroupStyle =
+  | 'solid'
+  | 'dashed'
+  | 'dotted'
+  | 'rounded'
+  | 'modern';
+export type RegionGroupVisibility =
+  | 'always'
+  | 'hover'
+  | 'selected'
+  | 'editing'
+  | 'collapsed';
 
 export interface RegionGroupBounds {
   x: number;
@@ -122,12 +148,22 @@ export const DEFAULT_REGION_GROUP_PREFERENCES: RegionGroupPreferences = {
   enableAutoGrouping: false,
   autoGroupThreshold: 4,
   snapToGrid: true,
-  gridSize: 10,
+  gridSize: 10
 };
 
 export type ConnectionLabelPosition = 'start' | 'middle' | 'end' | 'custom';
-export type ConnectionLabelStyle = 'default' | 'badge' | 'arrow' | 'highlight' | 'minimal';
-export type ConnectionVisualStyle = 'solid' | 'dashed' | 'dotted' | 'animated' | 'gradient';
+export type ConnectionLabelStyle =
+  | 'default'
+  | 'badge'
+  | 'arrow'
+  | 'highlight'
+  | 'minimal';
+export type ConnectionVisualStyle =
+  | 'solid'
+  | 'dashed'
+  | 'dotted'
+  | 'animated'
+  | 'gradient';
 
 export interface ConnectionLabel {
   id: string;
@@ -184,19 +220,20 @@ export interface ConnectionAnnotationPreferences {
   highlightOnHover: boolean;
 }
 
-export const DEFAULT_CONNECTION_ANNOTATION_PREFERENCES: ConnectionAnnotationPreferences = {
-  defaultLabelStyle: 'default',
-  defaultVisualStyle: 'solid',
-  defaultColor: '#64748b',
-  defaultPosition: 'middle',
-  enableInlineEditing: true,
-  showTooltips: true,
-  autoPositioning: true,
-  snapToPath: true,
-  showDirectionArrows: false,
-  maxLabelLength: 80,
-  highlightOnHover: true,
-};
+export const DEFAULT_CONNECTION_ANNOTATION_PREFERENCES: ConnectionAnnotationPreferences =
+  {
+    defaultLabelStyle: 'default',
+    defaultVisualStyle: 'solid',
+    defaultColor: '#64748b',
+    defaultPosition: 'middle',
+    enableInlineEditing: true,
+    showTooltips: true,
+    autoPositioning: true,
+    snapToPath: true,
+    showDirectionArrows: false,
+    maxLabelLength: 80,
+    highlightOnHover: true
+  };
 
 export interface GraphAnnotations {
   stickyNotes: StickyNote[];
@@ -208,7 +245,12 @@ export interface GraphAnnotations {
   labelPreferences: NodeLabelPreferences;
   regionGroupPreferences: RegionGroupPreferences;
   connectionAnnotationPreferences: ConnectionAnnotationPreferences;
-  metadata: { author: string; created: string; modified: string; version: string };
+  metadata: {
+    author: string;
+    created: string;
+    modified: string;
+    version: string;
+  };
 }
 
 export interface ProjectMetadata {
@@ -252,8 +294,16 @@ export interface GraphState {
   // Variations on node.data.variations (string[])
   addVariation: (nodeId: string, variation: string) => void;
   removeVariation: (nodeId: string, variationIndex: number) => void;
-  updateVariation: (nodeId: string, variationIndex: number, newValue: string) => void;
-  reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void;
+  updateVariation: (
+    nodeId: string,
+    variationIndex: number,
+    newValue: string
+  ) => void;
+  reorderVariations: (
+    nodeId: string,
+    fromIndex: number,
+    toIndex: number
+  ) => void;
 
   duplicateNode: (nodeId: string) => void;
   deleteNode: (nodeId: string) => void;
@@ -267,7 +317,10 @@ export interface GraphState {
   // Node labels
   setNodeLabelConfigs: (configs: Record<string, NodeLabelConfig>) => void;
   addNodeLabelConfig: (config: NodeLabelConfig) => void;
-  updateNodeLabelConfig: (labelId: string, updates: Partial<NodeLabelConfig>) => void;
+  updateNodeLabelConfig: (
+    labelId: string,
+    updates: Partial<NodeLabelConfig>
+  ) => void;
   deleteNodeLabelConfig: (labelId: string) => void;
   setLabelPreferences: (preferences: Partial<NodeLabelPreferences>) => void;
 
@@ -276,19 +329,29 @@ export interface GraphState {
   addRegionGroup: (group: RegionGroup) => void;
   updateRegionGroup: (groupId: string, updates: Partial<RegionGroup>) => void;
   deleteRegionGroup: (groupId: string) => void;
-  setRegionGroupPreferences: (preferences: Partial<RegionGroupPreferences>) => void;
+  setRegionGroupPreferences: (
+    preferences: Partial<RegionGroupPreferences>
+  ) => void;
 
   // Connection annotations
   setConnectionLabels: (labels: ConnectionLabel[]) => void;
   addConnectionLabel: (label: ConnectionLabel) => void;
-  updateConnectionLabel: (labelId: string, updates: Partial<ConnectionLabel>) => void;
+  updateConnectionLabel: (
+    labelId: string,
+    updates: Partial<ConnectionLabel>
+  ) => void;
   removeConnectionLabel: (labelId: string) => void;
 
   setConnectionAnnotations: (annotations: ConnectionAnnotation[]) => void;
   addConnectionAnnotation: (annotation: ConnectionAnnotation) => void;
-  updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) => void;
+  updateConnectionAnnotation: (
+    annotationId: string,
+    updates: Partial<ConnectionAnnotation>
+  ) => void;
   removeConnectionAnnotation: (annotationId: string) => void;
-  setConnectionAnnotationPreferences: (preferences: Partial<ConnectionAnnotationPreferences>) => void;
+  setConnectionAnnotationPreferences: (
+    preferences: Partial<ConnectionAnnotationPreferences>
+  ) => void;
 
   // Project operations (local only)
   newProject: () => void;
@@ -320,8 +383,8 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       author: 'system',
       created: new Date().toISOString(),
       modified: new Date().toISOString(),
-      version: '1.0.0',
-    },
+      version: '1.0.0'
+    }
   },
   currentProject: null,
   projectSettings: {
@@ -329,19 +392,21 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     autoSaveInterval: 30000,
     backupCount: 5,
     compressionEnabled: true,
-    encryptionEnabled: false,
+    encryptionEnabled: false
   },
   hasUnsavedChanges: false,
   isAutoSaveEnabled: true,
 
   // Graph operations
-  setNodes: (nodes) => set({ nodes, hasUnsavedChanges: true }),
-  setEdges: (edges) => set({ edges, hasUnsavedChanges: true }),
-  addNode: (node) => set((state) => ({ nodes: [...state.nodes, node], hasUnsavedChanges: true })),
-  addEdge: (edge) => set((state) => ({ edges: [...state.edges, edge], hasUnsavedChanges: true })),
+  setNodes: nodes => set({ nodes, hasUnsavedChanges: true }),
+  setEdges: edges => set({ edges, hasUnsavedChanges: true }),
+  addNode: node =>
+    set(state => ({ nodes: [...state.nodes, node], hasUnsavedChanges: true })),
+  addEdge: edge =>
+    set(state => ({ edges: [...state.edges, edge], hasUnsavedChanges: true })),
   updateNode: (nodeId, updates) =>
-    set((state) => ({
-      nodes: state.nodes.map((n) => {
+    set(state => ({
+      nodes: state.nodes.map(n => {
         if (n.id !== nodeId) return n;
         const merged: Node = { ...n, ...updates } as Node;
         if ((updates as any)?.data) {
@@ -349,13 +414,13 @@ export const useGraphStore = create<GraphState>((set, get) => ({
         }
         return merged;
       }),
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
 
   // Variations
   addVariation: (nodeId, variation) =>
-    set((state) => ({
-      nodes: state.nodes.map((n) =>
+    set(state => ({
+      nodes: state.nodes.map(n =>
         n.id === nodeId
           ? ({
               ...n,
@@ -365,17 +430,17 @@ export const useGraphStore = create<GraphState>((set, get) => ({
                   ...((Array.isArray((n as any).data?.variations)
                     ? (n as any).data.variations
                     : []) as string[]),
-                  variation,
-                ],
-              },
+                  variation
+                ]
+              }
             } as Node)
           : n
       ),
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
   removeVariation: (nodeId, variationIndex) =>
-    set((state) => ({
-      nodes: state.nodes.map((n) => {
+    set(state => ({
+      nodes: state.nodes.map(n => {
         if (n.id !== nodeId) return n;
         const arr: string[] = Array.isArray((n as any).data?.variations)
           ? ((n as any).data.variations as string[])
@@ -384,15 +449,15 @@ export const useGraphStore = create<GraphState>((set, get) => ({
           ...n,
           data: {
             ...(n as any).data,
-            variations: arr.filter((_, i) => i !== variationIndex),
-          },
+            variations: arr.filter((_, i) => i !== variationIndex)
+          }
         } as Node;
       }),
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
   updateVariation: (nodeId, variationIndex, newValue) =>
-    set((state) => ({
-      nodes: state.nodes.map((n) => {
+    set(state => ({
+      nodes: state.nodes.map(n => {
         if (n.id !== nodeId) return n;
         const arr: string[] = Array.isArray((n as any).data?.variations)
           ? [...((n as any).data.variations as string[])]
@@ -400,112 +465,147 @@ export const useGraphStore = create<GraphState>((set, get) => ({
         arr[variationIndex] = newValue;
         return { ...n, data: { ...(n as any).data, variations: arr } } as Node;
       }),
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
   reorderVariations: (nodeId, fromIndex, toIndex) =>
-    set((state) => ({
-      nodes: state.nodes.map((n) => {
+    set(state => ({
+      nodes: state.nodes.map(n => {
         if (n.id !== nodeId) return n;
         const arr: string[] = Array.isArray((n as any).data?.variations)
           ? [...((n as any).data.variations as string[])]
           : [];
-        if (fromIndex < 0 || fromIndex >= arr.length || toIndex < 0 || toIndex >= arr.length) return n;
+        if (
+          fromIndex < 0 ||
+          fromIndex >= arr.length ||
+          toIndex < 0 ||
+          toIndex >= arr.length
+        )
+          return n;
         const [moved] = arr.splice(fromIndex, 1);
         arr.splice(toIndex, 0, moved);
         return { ...n, data: { ...(n as any).data, variations: arr } } as Node;
       }),
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
 
-  duplicateNode: (nodeId) =>
-    set((state) => {
-      const src = state.nodes.find((n) => n.id === nodeId);
+  duplicateNode: nodeId =>
+    set(state => {
+      const src = state.nodes.find(n => n.id === nodeId);
       if (!src) return state;
       const copy: Node = {
         ...src,
         id: `${src.id}-copy-${Date.now()}`,
-        position: { x: (src as any).position?.x + 100 || 100, y: (src as any).position?.y + 100 || 100 },
-        data: { ...(src as any).data },
+        position: {
+          x: (src as any).position?.x + 100 || 100,
+          y: (src as any).position?.y + 100 || 100
+        },
+        data: { ...(src as any).data }
       } as Node;
       return { nodes: [...state.nodes, copy], hasUnsavedChanges: true };
     }),
-  deleteNode: (nodeId) =>
-    set((state) => ({
-      nodes: state.nodes.filter((n) => n.id !== nodeId),
-      edges: state.edges.filter((e) => (e as any).source !== nodeId && (e as any).target !== nodeId),
-      hasUnsavedChanges: true,
+  deleteNode: nodeId =>
+    set(state => ({
+      nodes: state.nodes.filter(n => n.id !== nodeId),
+      edges: state.edges.filter(
+        e => (e as any).source !== nodeId && (e as any).target !== nodeId
+      ),
+      hasUnsavedChanges: true
     })),
 
   // Sticky notes
-  setStickyNotes: (notes) =>
-    set((state) => ({
+  setStickyNotes: notes =>
+    set(state => ({
       stickyNotes: notes,
       annotations: {
         ...state.annotations,
         stickyNotes: notes,
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  addStickyNote: (note) =>
-    set((state) => ({
+  addStickyNote: note =>
+    set(state => ({
       stickyNotes: [...state.stickyNotes, note],
       annotations: {
         ...state.annotations,
         stickyNotes: [...state.annotations.stickyNotes, note],
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
   updateStickyNote: (noteId, updates) =>
-    set((state) => {
-      const upd = (arr: StickyNote[]) => arr.map((n) => (n.id === noteId ? { ...n, ...updates } : n));
+    set(state => {
+      const upd = (arr: StickyNote[]) =>
+        arr.map(n => (n.id === noteId ? { ...n, ...updates } : n));
       const updated = upd(state.stickyNotes);
       return {
         stickyNotes: updated,
         annotations: {
           ...state.annotations,
           stickyNotes: upd(state.annotations.stickyNotes),
-          metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+          metadata: {
+            ...state.annotations.metadata,
+            modified: new Date().toISOString()
+          }
         },
-        hasUnsavedChanges: true,
+        hasUnsavedChanges: true
       };
     }),
-  deleteStickyNote: (noteId) =>
-    set((state) => {
-      const filtered = state.stickyNotes.filter((n) => n.id !== noteId);
+  deleteStickyNote: noteId =>
+    set(state => {
+      const filtered = state.stickyNotes.filter(n => n.id !== noteId);
       return {
         stickyNotes: filtered,
         annotations: {
           ...state.annotations,
-          stickyNotes: state.annotations.stickyNotes.filter((n) => n.id !== noteId),
-          metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+          stickyNotes: state.annotations.stickyNotes.filter(
+            n => n.id !== noteId
+          ),
+          metadata: {
+            ...state.annotations.metadata,
+            modified: new Date().toISOString()
+          }
         },
-        hasUnsavedChanges: true,
+        hasUnsavedChanges: true
       };
     }),
 
   // Node labels
-  setNodeLabelConfigs: (configs) =>
-    set((state) => ({
+  setNodeLabelConfigs: configs =>
+    set(state => ({
       annotations: {
         ...state.annotations,
         nodeLabelConfigs: { ...configs },
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  addNodeLabelConfig: (config) =>
-    set((state) => ({
+  addNodeLabelConfig: config =>
+    set(state => ({
       annotations: {
         ...state.annotations,
-        nodeLabelConfigs: { ...state.annotations.nodeLabelConfigs, [config.id]: config },
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        nodeLabelConfigs: {
+          ...state.annotations.nodeLabelConfigs,
+          [config.id]: config
+        },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
   updateNodeLabelConfig: (labelId, updates) =>
-    set((state) => {
+    set(state => {
       const existing = state.annotations.nodeLabelConfigs[labelId];
       if (!existing) return state;
       return {
@@ -513,179 +613,260 @@ export const useGraphStore = create<GraphState>((set, get) => ({
           ...state.annotations,
           nodeLabelConfigs: {
             ...state.annotations.nodeLabelConfigs,
-            [labelId]: { ...existing, ...updates, timestamp: new Date().toISOString() },
+            [labelId]: {
+              ...existing,
+              ...updates,
+              timestamp: new Date().toISOString()
+            }
           },
-          metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+          metadata: {
+            ...state.annotations.metadata,
+            modified: new Date().toISOString()
+          }
         },
-        hasUnsavedChanges: true,
+        hasUnsavedChanges: true
       };
     }),
-  deleteNodeLabelConfig: (labelId) =>
-    set((state) => {
-      const entries = Object.entries(state.annotations.nodeLabelConfigs).filter(([k]) => k !== labelId);
+  deleteNodeLabelConfig: labelId =>
+    set(state => {
+      const entries = Object.entries(state.annotations.nodeLabelConfigs).filter(
+        ([k]) => k !== labelId
+      );
       const rest = Object.fromEntries(entries);
       return {
         annotations: {
           ...state.annotations,
           nodeLabelConfigs: rest,
-          metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+          metadata: {
+            ...state.annotations.metadata,
+            modified: new Date().toISOString()
+          }
         },
-        hasUnsavedChanges: true,
+        hasUnsavedChanges: true
       };
     }),
-  setLabelPreferences: (preferences) =>
-    set((state) => ({
+  setLabelPreferences: preferences =>
+    set(state => ({
       annotations: {
         ...state.annotations,
-        labelPreferences: { ...state.annotations.labelPreferences, ...preferences },
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        labelPreferences: {
+          ...state.annotations.labelPreferences,
+          ...preferences
+        },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
 
   // Region groups
-  setRegionGroups: (groups) =>
-    set((state) => ({
+  setRegionGroups: groups =>
+    set(state => ({
       annotations: {
         ...state.annotations,
         regionGroups: [...groups],
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  addRegionGroup: (group) =>
-    set((state) => ({
+  addRegionGroup: group =>
+    set(state => ({
       annotations: {
         ...state.annotations,
         regionGroups: [...state.annotations.regionGroups, group],
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
   updateRegionGroup: (groupId, updates) =>
-    set((state) => ({
+    set(state => ({
       annotations: {
         ...state.annotations,
-        regionGroups: state.annotations.regionGroups.map((g) =>
-          g.id === groupId ? { ...g, ...updates, lastModified: new Date().toISOString() } : g
+        regionGroups: state.annotations.regionGroups.map(g =>
+          g.id === groupId
+            ? { ...g, ...updates, lastModified: new Date().toISOString() }
+            : g
         ),
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  deleteRegionGroup: (groupId) =>
-    set((state) => ({
+  deleteRegionGroup: groupId =>
+    set(state => ({
       annotations: {
         ...state.annotations,
-        regionGroups: state.annotations.regionGroups.filter((g) => g.id !== groupId),
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        regionGroups: state.annotations.regionGroups.filter(
+          g => g.id !== groupId
+        ),
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  setRegionGroupPreferences: (preferences) =>
-    set((state) => ({
+  setRegionGroupPreferences: preferences =>
+    set(state => ({
       annotations: {
         ...state.annotations,
-        regionGroupPreferences: { ...state.annotations.regionGroupPreferences, ...preferences },
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        regionGroupPreferences: {
+          ...state.annotations.regionGroupPreferences,
+          ...preferences
+        },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
 
   // Connection labels + annotations
-  setConnectionLabels: (labels) =>
-    set((state) => ({
+  setConnectionLabels: labels =>
+    set(state => ({
       annotations: {
         ...state.annotations,
         connectionLabels: [...labels],
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  addConnectionLabel: (label) =>
-    set((state) => ({
+  addConnectionLabel: label =>
+    set(state => ({
       annotations: {
         ...state.annotations,
-        connectionLabels: [...(state.annotations.connectionLabels || []), label],
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        connectionLabels: [
+          ...(state.annotations.connectionLabels || []),
+          label
+        ],
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
   updateConnectionLabel: (labelId, updates) =>
-    set((state) => ({
+    set(state => ({
       annotations: {
         ...state.annotations,
-        connectionLabels: (state.annotations.connectionLabels || []).map((l) =>
-          l.id === labelId ? { ...l, ...updates, lastModified: new Date().toISOString() } : l
+        connectionLabels: (state.annotations.connectionLabels || []).map(l =>
+          l.id === labelId
+            ? { ...l, ...updates, lastModified: new Date().toISOString() }
+            : l
         ),
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  removeConnectionLabel: (labelId) =>
-    set((state) => ({
+  removeConnectionLabel: labelId =>
+    set(state => ({
       annotations: {
         ...state.annotations,
-        connectionLabels: (state.annotations.connectionLabels || []).filter((l) => l.id !== labelId),
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        connectionLabels: (state.annotations.connectionLabels || []).filter(
+          l => l.id !== labelId
+        ),
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
 
-  setConnectionAnnotations: (annotations) =>
-    set((state) => ({
+  setConnectionAnnotations: annotations =>
+    set(state => ({
       annotations: {
         ...state.annotations,
         connectionAnnotations: [...annotations],
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  addConnectionAnnotation: (annotation) =>
-    set((state) => ({
+  addConnectionAnnotation: annotation =>
+    set(state => ({
       annotations: {
         ...state.annotations,
-        connectionAnnotations: [...state.annotations.connectionAnnotations, annotation],
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        connectionAnnotations: [
+          ...state.annotations.connectionAnnotations,
+          annotation
+        ],
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
   updateConnectionAnnotation: (annotationId, updates) =>
-    set((state) => ({
+    set(state => ({
       annotations: {
         ...state.annotations,
-        connectionAnnotations: state.annotations.connectionAnnotations.map((a) =>
-          a.id === annotationId ? { ...a, ...updates, lastModified: new Date().toISOString() } : a
+        connectionAnnotations: state.annotations.connectionAnnotations.map(a =>
+          a.id === annotationId
+            ? { ...a, ...updates, lastModified: new Date().toISOString() }
+            : a
         ),
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  removeConnectionAnnotation: (annotationId) =>
-    set((state) => ({
+  removeConnectionAnnotation: annotationId =>
+    set(state => ({
       annotations: {
         ...state.annotations,
-        connectionAnnotations: state.annotations.connectionAnnotations.filter((a) => a.id !== annotationId),
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        connectionAnnotations: state.annotations.connectionAnnotations.filter(
+          a => a.id !== annotationId
+        ),
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
-  setConnectionAnnotationPreferences: (preferences) =>
-    set((state) => ({
+  setConnectionAnnotationPreferences: preferences =>
+    set(state => ({
       annotations: {
         ...state.annotations,
         connectionAnnotationPreferences: {
           ...state.annotations.connectionAnnotationPreferences,
-          ...preferences,
+          ...preferences
         },
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
-      hasUnsavedChanges: true,
+      hasUnsavedChanges: true
     })),
 
   // Project operations (local only)
   newProject: () =>
-    set((state) => ({
+    set(state => ({
       nodes: [],
       edges: [],
       stickyNotes: [],
@@ -696,14 +877,21 @@ export const useGraphStore = create<GraphState>((set, get) => ({
         regionGroups: [],
         connectionLabels: [],
         connectionAnnotations: [],
-        metadata: { ...state.annotations.metadata, modified: new Date().toISOString() },
+        metadata: {
+          ...state.annotations.metadata,
+          modified: new Date().toISOString()
+        }
       },
       currentProject: null,
-      hasUnsavedChanges: false,
+      hasUnsavedChanges: false
     })),
-  setCurrentProject: (metadata) => set(() => ({ currentProject: metadata, hasUnsavedChanges: true })),
-  updateProjectSettings: (settings) =>
-    set((state) => ({ projectSettings: { ...state.projectSettings, ...settings }, hasUnsavedChanges: true })),
+  setCurrentProject: metadata =>
+    set(() => ({ currentProject: metadata, hasUnsavedChanges: true })),
+  updateProjectSettings: settings =>
+    set(state => ({
+      projectSettings: { ...state.projectSettings, ...settings },
+      hasUnsavedChanges: true
+    })),
   markProjectSaved: () => set(() => ({ hasUnsavedChanges: false })),
   markProjectModified: () => set(() => ({ hasUnsavedChanges: true })),
 
@@ -712,5 +900,6 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     const { nodes, edges } = get();
     return { nodes, edges };
   },
-  loadGraphData: (nodes, edges) => set(() => ({ nodes, edges, hasUnsavedChanges: true })),
+  loadGraphData: (nodes, edges) =>
+    set(() => ({ nodes, edges, hasUnsavedChanges: true }))
 }));

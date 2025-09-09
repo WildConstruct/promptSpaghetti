@@ -12,7 +12,11 @@ interface ToastProps {
   duration?: number;
 }
 
-export const Toast: React.FC<ToastProps> = ({ message, onDismiss, duration = 3000 }) => {
+export const Toast: React.FC<ToastProps> = ({
+  message,
+  onDismiss,
+  duration = 3000
+}) => {
   useEffect(() => {
     const timer = setTimeout(onDismiss, duration);
     return () => clearTimeout(timer);
@@ -41,8 +45,11 @@ export const Toast: React.FC<ToastProps> = ({ message, onDismiss, duration = 300
         gap: '10px',
         minWidth: '200px',
         maxWidth: '400px',
-        animation: 'slideIn 0.3s ease, fadeOut 0.3s ease ' + (duration - 300) + 'ms forwards',
-        zIndex: 10000,
+        animation:
+          'slideIn 0.3s ease, fadeOut 0.3s ease ' +
+          (duration - 300) +
+          'ms forwards',
+        zIndex: 10000
       }}
     >
       <span style={{ flex: 1 }}>{message.message}</span>
@@ -55,10 +62,10 @@ export const Toast: React.FC<ToastProps> = ({ message, onDismiss, duration = 300
           cursor: 'pointer',
           padding: '4px',
           fontSize: '18px',
-          opacity: 0.8,
+          opacity: 0.8
         }}
-        onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-        onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+        onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+        onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
       >
         ×
       </button>
@@ -84,10 +91,10 @@ export const Toast: React.FC<ToastProps> = ({ message, onDismiss, duration = 300
   );
 };
 
-export const ToastContainer: React.FC<{ toasts: ToastMessage[], onDismiss: (id: string) => void }> = ({ 
-  toasts, 
-  onDismiss 
-}) => {
+export const ToastContainer: React.FC<{
+  toasts: ToastMessage[];
+  onDismiss: (id: string) => void;
+}> = ({ toasts, onDismiss }) => {
   return (
     <>
       {toasts.map((toast, index) => (
@@ -97,13 +104,10 @@ export const ToastContainer: React.FC<{ toasts: ToastMessage[], onDismiss: (id: 
             position: 'fixed',
             bottom: `${20 + index * 70}px`,
             right: '20px',
-            zIndex: 10000 + index,
+            zIndex: 10000 + index
           }}
         >
-          <Toast
-            message={toast}
-            onDismiss={() => onDismiss(toast.id)}
-          />
+          <Toast message={toast} onDismiss={() => onDismiss(toast.id)} />
         </div>
       ))}
     </>

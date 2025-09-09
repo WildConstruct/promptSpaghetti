@@ -28,11 +28,13 @@
 
 ```typescript
 // BEFORE: Object recreated on every render
-const routeAccess = access || DEFAULT_ROUTE_ACCESS[location.pathname] || { requireAuth: true };
+const routeAccess = access ||
+  DEFAULT_ROUTE_ACCESS[location.pathname] || { requireAuth: true };
 
 // AFTER: Stabilized with useMemo
 const routeAccess = useMemo(
-  () => access || DEFAULT_ROUTE_ACCESS[location.pathname] || { requireAuth: true },
+  () =>
+    access || DEFAULT_ROUTE_ACCESS[location.pathname] || { requireAuth: true },
   [access, location.pathname]
 );
 ```
@@ -44,14 +46,14 @@ const routeAccess = useMemo(
 ```typescript
 // BEFORE: Array recreated on every render
 const mockUsers: User[] = [
-  { id: '1', name: 'John' },
+  { id: '1', name: 'John' }
   // ... static data
 ];
 
 // AFTER: Wrapped in useMemo
 const mockUsers: User[] = useMemo(
   () => [
-    { id: '1', name: 'John' },
+    { id: '1', name: 'John' }
     // ... static data
   ],
   []
@@ -66,7 +68,7 @@ const mockUsers: User[] = useMemo(
 // BEFORE: Object uses dynamic value but recreates constantly
 const mockUser: UserProfile = {
   id: userId || 'user-1',
-  name: 'John Smith',
+  name: 'John Smith'
   // ... other static properties
 };
 
@@ -74,7 +76,7 @@ const mockUser: UserProfile = {
 const mockUser: UserProfile = useMemo(
   () => ({
     id: userId || 'user-1',
-    name: 'John Smith',
+    name: 'John Smith'
     // ... other static properties
   }),
   [userId]
@@ -220,7 +222,7 @@ pnpm lint 2>&1 | grep -E "(error|warning)" | wc -l
 // PROBLEM: Function recreated on every render
 const fetchData = async () => {
   const response = await fetch(`/api/data/${userId}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}` }
   });
   setData(await response.json());
 };
@@ -232,7 +234,7 @@ useEffect(() => {
 // SOLUTION: Wrap in useCallback
 const fetchData = useCallback(async () => {
   const response = await fetch(`/api/data/${userId}`, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}` }
   });
   setData(await response.json());
 }, [userId, token]); // Include all dependencies
@@ -249,7 +251,10 @@ useEffect(() => {
 const config = { ...defaultConfig, ...userConfig };
 
 // SOLUTION: Stabilize with useMemo
-const config = useMemo(() => ({ ...defaultConfig, ...userConfig }), [userConfig]);
+const config = useMemo(
+  () => ({ ...defaultConfig, ...userConfig }),
+  [userConfig]
+);
 ```
 
 ### **Common Scenario: Mock Data Arrays**
@@ -258,14 +263,14 @@ const config = useMemo(() => ({ ...defaultConfig, ...userConfig }), [userConfig]
 // PROBLEM: Array recreated on every render
 const mockData = [
   { id: 1, name: 'Item 1' },
-  { id: 2, name: 'Item 2' },
+  { id: 2, name: 'Item 2' }
 ];
 
 // SOLUTION: Wrap in useMemo
 const mockData = useMemo(
   () => [
     { id: 1, name: 'Item 1' },
-    { id: 2, name: 'Item 2' },
+    { id: 2, name: 'Item 2' }
   ],
   []
 ); // Empty deps for static data

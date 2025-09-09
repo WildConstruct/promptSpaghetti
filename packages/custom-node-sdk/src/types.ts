@@ -3,7 +3,10 @@
  * Defines the contract for creating custom nodes and extensions
  */
 
-import type { AdvancedExecutionContext, AdvancedNodeConfig } from '@promptscape/core';
+import type {
+  AdvancedExecutionContext,
+  AdvancedNodeConfig
+} from '@promptscape/core';
 
 /**
  * Validation result for custom node operations
@@ -119,7 +122,10 @@ export interface CustomNodeRegistration {
 /**
  * Constructor type for custom nodes
  */
-export type CustomNodeConstructor = new (id: string, config: CustomNodeConfig) => CustomNodeBase;
+export type CustomNodeConstructor = new (
+  id: string,
+  config: CustomNodeConfig
+) => CustomNodeBase;
 
 /**
  * Runtime information passed to custom nodes during execution
@@ -134,7 +140,11 @@ export interface CustomNodeRuntime {
     /** Generate a deterministic random number */
     random: () => number;
     /** Log a message (respects execution environment) */
-    log: (level: 'debug' | 'info' | 'warn' | 'error', message: string, data?: any) => void;
+    log: (
+      level: 'debug' | 'info' | 'warn' | 'error',
+      message: string,
+      data?: any
+    ) => void;
     /** Validate data against a schema */
     validate: (data: any, schema: any) => ValidationResult;
     /** Access node state (for stateful nodes) */
@@ -199,7 +209,9 @@ export abstract class CustomNodeBase {
    * @param runtime Runtime information including context, inputs, and utilities
    * @returns Promise resolving to the node's outputs
    */
-  abstract execute(runtime: CustomNodeRuntime): Promise<CustomNodeResult> | CustomNodeResult;
+  abstract execute(
+    runtime: CustomNodeRuntime
+  ): Promise<CustomNodeResult> | CustomNodeResult;
 
   /**
    * Optional lifecycle hook called before execution
@@ -209,7 +221,10 @@ export abstract class CustomNodeBase {
   /**
    * Optional lifecycle hook called after execution
    */
-  afterExecute?(runtime: CustomNodeRuntime, result: CustomNodeResult): Promise<void> | void;
+  afterExecute?(
+    runtime: CustomNodeRuntime,
+    result: CustomNodeResult
+  ): Promise<void> | void;
 
   /**
    * Optional lifecycle hook called when the node is disposed
@@ -222,7 +237,11 @@ export abstract class CustomNodeBase {
  */
 export interface AdvancedCustomNode extends CustomNodeBase {
   /** Handle dynamic input changes */
-  onInputChanged?(inputName: string, newValue: any, runtime: CustomNodeRuntime): Promise<void> | void;
+  onInputChanged?(
+    inputName: string,
+    newValue: any,
+    runtime: CustomNodeRuntime
+  ): Promise<void> | void;
 
   /** Handle node configuration changes */
   onConfigChanged?(newConfig: Partial<CustomNodeConfig>): Promise<void> | void;

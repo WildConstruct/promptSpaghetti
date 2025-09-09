@@ -96,13 +96,13 @@ const graph = {
   seed: 123,
   nodes: [
     // Node definitions...
-  ],
+  ]
 };
 
 const bundle = graphToBundle(graph, {
   name: 'My Generated Bundle',
   version: '1.0.0',
-  author: 'PromptScape User',
+  author: 'PromptScape User'
 });
 ```
 

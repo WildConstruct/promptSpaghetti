@@ -30,7 +30,9 @@ describe('Drag and keyboard insert', () => {
   test('Insert button triggers onInsert callback', async () => {
     const onInsert = jest.fn();
     render(<AssetBrowser onInsert={onInsert} />);
-    const insertButtons = await screen.findAllByRole('button', { name: /insert preset/i });
+    const insertButtons = await screen.findAllByRole('button', {
+      name: /insert preset/i
+    });
     expect(insertButtons.length).toBeGreaterThan(0);
     fireEvent.click(insertButtons[0]);
     expect(onInsert).toHaveBeenCalledTimes(1);

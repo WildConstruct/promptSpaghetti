@@ -26,8 +26,8 @@ class StaleTaskIntegration {
       triggers: {
         onTaskOverflow: true, // Run when too many assigned tasks
         onAgentInactive: true, // Run when agents go inactive
-        maxAssignedTasks: 50, // Trigger if more than 50 assigned tasks
-      },
+        maxAssignedTasks: 50 // Trigger if more than 50 assigned tasks
+      }
     };
   }
 
@@ -118,10 +118,15 @@ class StaleTaskIntegration {
       if (!state.tasks) return false;
 
       const tasks = Object.values(state.tasks);
-      const assignedTasks = tasks.filter(task => task.assignee && task.assignee !== 'Unassigned');
+      const assignedTasks = tasks.filter(
+        task => task.assignee && task.assignee !== 'Unassigned'
+      );
 
       // Check if we have too many assigned tasks
-      if (this.config.triggers.onTaskOverflow && assignedTasks.length > this.config.triggers.maxAssignedTasks) {
+      if (
+        this.config.triggers.onTaskOverflow &&
+        assignedTasks.length > this.config.triggers.maxAssignedTasks
+      ) {
         return true;
       }
 
@@ -131,13 +136,17 @@ class StaleTaskIntegration {
         const lastUpdate = task.lastUpdated ? new Date(task.lastUpdated) : null;
         if (!lastUpdate) return false;
 
-        const ageHours = (now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60);
+        const ageHours =
+          (now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60);
         return ageHours > 48; // Consider 48+ hour old tasks as definitely needing cleanup
       });
 
       return veryOldTasks.length > 0;
     } catch (error) {
-      console.warn('Warning: Could not check cleanup conditions:', error.message);
+      console.warn(
+        'Warning: Could not check cleanup conditions:',
+        error.message
+      );
       return true; // Default to running cleanup if we can't check
     }
   }
@@ -160,7 +169,9 @@ class StaleTaskIntegration {
 
     if (!this.config.quietMode) {
       const intervalHours = this.config.runInterval / (1000 * 60 * 60);
-      console.log(`⏰ Scheduled automatic cleanup every ${intervalHours} hours`);
+      console.log(
+        `⏰ Scheduled automatic cleanup every ${intervalHours} hours`
+      );
     }
   }
 
@@ -191,7 +202,10 @@ class StaleTaskIntegration {
    * Trigger cleanup when an agent becomes inactive
    */
   async onAgentInactive(agentId, inactiveDuration) {
-    if (this.config.triggers.onAgentInactive && inactiveDuration > 24 * 60 * 60 * 1000) {
+    if (
+      this.config.triggers.onAgentInactive &&
+      inactiveDuration > 24 * 60 * 60 * 1000
+    ) {
       // Agent has been inactive for more than 24 hours
       await this.runCleanup({ source: 'agent_inactive', agentId });
     }
@@ -205,7 +219,7 @@ class StaleTaskIntegration {
 
     return await this.runCleanup({
       source: force ? 'forced' : 'manual',
-      dryRun,
+      dryRun
     });
   }
 
@@ -221,9 +235,9 @@ class StaleTaskIntegration {
         autoRunEnabled: this.config.autoRunEnabled,
         runInterval: this.config.runInterval / (1000 * 60 * 60), // hours
         lastRun: lastRun?.timestamp || null,
-        lastResult: lastRun?.result || null,
+        lastResult: lastRun?.result || null
       },
-      cleanup: cleanupStats,
+      cleanup: cleanupStats
     };
   }
 
@@ -239,26 +253,34 @@ class StaleTaskIntegration {
       tasksProcessed: result.processed,
       tasksCleaned: result.cleaned,
       errors: result.errors,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     // This could be extended to send to Slack, email, etc.
     if (!this.config.quietMode) {
-      console.log(`📧 Cleanup notification: ${result.cleaned} tasks cleaned from ${source} trigger`);
+      console.log(
+        `📧 Cleanup notification: ${result.cleaned} tasks cleaned from ${source} trigger`
+      );
     }
 
     // Save notification to log
-    await this.cleanup.log('NOTIFICATION', `Cleanup completed: ${JSON.stringify(notification)}`);
+    await this.cleanup.log(
+      'NOTIFICATION',
+      `Cleanup completed: ${JSON.stringify(notification)}`
+    );
   }
 
   /**
    * Update last run information
    */
   async updateLastRun(result) {
-    const lastRunFile = path.join(__dirname, '../data/stale-cleanup-last-run.json');
+    const lastRunFile = path.join(
+      __dirname,
+      '../data/stale-cleanup-last-run.json'
+    );
     const lastRun = {
       timestamp: new Date().toISOString(),
-      result,
+      result
     };
 
     try {
@@ -272,7 +294,10 @@ class StaleTaskIntegration {
    * Get last run information
    */
   async getLastRun() {
-    const lastRunFile = path.join(__dirname, '../data/stale-cleanup-last-run.json');
+    const lastRunFile = path.join(
+      __dirname,
+      '../data/stale-cleanup-last-run.json'
+    );
     try {
       const data = await fs.readFile(lastRunFile, 'utf8');
       return JSON.parse(data);
@@ -344,5 +369,5 @@ module.exports = {
   manualCleanup,
   getStats,
   onTaskAssigned,
-  onAgentInactive,
+  onAgentInactive
 };

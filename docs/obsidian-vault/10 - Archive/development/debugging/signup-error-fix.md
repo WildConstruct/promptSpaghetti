@@ -1,29 +1,35 @@
 # Signup Error Debugging & Fix Guide
 
 ## Issue
+
 Users receiving "An error occurred. Please try again" when attempting to sign up.
 
 ## Root Causes Identified
 
 ### 1. Missing Supabase Configuration (Most Likely)
+
 The application needs these environment variables:
+
 ```bash
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 **Quick Check:**
+
 ```javascript
 // In browser console:
 console.log('Supabase enabled:', !!window.supabase);
 ```
 
 ### 2. Better Error Visibility Needed
+
 The current error handling is too generic. The actual error is being swallowed.
 
 ## Immediate Fixes
 
 ### Fix 1: Add Detailed Error Logging (Temporary)
+
 In `packages/core/components/auth/SignupForm.tsx`, modify the catch block:
 
 ```typescript
@@ -35,6 +41,7 @@ In `packages/core/components/auth/SignupForm.tsx`, modify the catch block:
 ```
 
 ### Fix 2: Better Error Messages
+
 In `packages/core/hooks/useAuthValidation.ts`, update the error mapping:
 
 ```typescript
@@ -43,14 +50,17 @@ const errorMap: Record<string, string> = {
   'Email not confirmed': 'Please check your email to confirm your account',
   'User already registered': 'An account with this email already exists',
   'Password should be at least 6 characters': 'Password is too short',
-  'Authentication service is not available': 'Signup is temporarily unavailable. Please try again later.',
+  'Authentication service is not available':
+    'Signup is temporarily unavailable. Please try again later.',
   // Add more specific mappings
   'Database error': 'Unable to create account. Please try again.',
-  'Network request failed': 'Connection error. Please check your internet connection.',
+  'Network request failed':
+    'Connection error. Please check your internet connection.'
 };
 ```
 
 ### Fix 3: Add Fallback for Missing Supabase
+
 In `packages/core/components/auth/SignupForm.tsx`, add better handling:
 
 ```typescript
@@ -93,7 +103,9 @@ const handleSubmit = async (e: FormEvent) => {
 ## Long-term Solutions
 
 ### 1. Add Development Mode Bypass
+
 For local development without Supabase:
+
 ```typescript
 // In development, show a clear message
 if (process.env.NODE_ENV === 'development' && !supabase) {
@@ -107,7 +119,9 @@ if (process.env.NODE_ENV === 'development' && !supabase) {
 ```
 
 ### 2. Implement Mock Authentication
+
 Create a mock auth service for development:
+
 ```typescript
 class MockAuthService {
   async signUp(email: string, password: string) {
@@ -121,36 +135,42 @@ class MockAuthService {
 ```
 
 ### 3. Add Telemetry
+
 Track signup attempts and errors:
+
 ```typescript
 // Track signup attempts
 analytics.track('signup_attempted', {
   timestamp: new Date(),
-  hasSupabase: !!supabase,
+  hasSupabase: !!supabase
 });
 
 // Track errors
 analytics.track('signup_error', {
   error: err.message,
-  code: err.code,
+  code: err.code
 });
 ```
 
 ## User Communication
 
 Until fixed, add a banner or notification:
+
 ```jsx
-{!supabase && (
-  <div className="alert alert-info">
-    Account creation is currently in beta. 
-    Please email support@example.com for early access.
-  </div>
-)}
+{
+  !supabase && (
+    <div className="alert alert-info">
+      Account creation is currently in beta. Please email support@example.com
+      for early access.
+    </div>
+  );
+}
 ```
 
 ## Verification Steps
 
 1. Add `.env.local` file with:
+
 ```
 VITE_SUPABASE_URL=https://xxxxx.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGc...

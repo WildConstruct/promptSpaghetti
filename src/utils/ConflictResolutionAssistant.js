@@ -31,10 +31,27 @@ class ConflictResolutionAssistant {
     this.config = {
       detection: {
         // File patterns to monitor for overlaps
-        watchPatterns: ['**/*.js', '**/*.ts', '**/*.jsx', '**/*.tsx', '**/*.json', '**/*.md', '**/*.css', '**/*.scss'],
+        watchPatterns: [
+          '**/*.js',
+          '**/*.ts',
+          '**/*.jsx',
+          '**/*.tsx',
+          '**/*.json',
+          '**/*.md',
+          '**/*.css',
+          '**/*.scss'
+        ],
 
         // Ignore patterns
-        ignorePatterns: ['node_modules/**', '.git/**', 'dist/**', 'build/**', 'coverage/**', '.turbo/**', '.next/**'],
+        ignorePatterns: [
+          'node_modules/**',
+          '.git/**',
+          'dist/**',
+          'build/**',
+          'coverage/**',
+          '.turbo/**',
+          '.next/**'
+        ],
 
         // Overlap detection sensitivity
         overlapThreshold: 0.3, // 30% line overlap to flag
@@ -43,7 +60,7 @@ class ConflictResolutionAssistant {
 
         // Time windows for conflict detection
         activeTaskWindow: 24 * 60 * 60 * 1000, // 24 hours
-        preventionWindow: 4 * 60 * 60 * 1000, // 4 hours ahead
+        preventionWindow: 4 * 60 * 60 * 1000 // 4 hours ahead
       },
 
       resolution: {
@@ -53,14 +70,14 @@ class ConflictResolutionAssistant {
           imports: true, // Import statement conflicts
           comments: true, // Comment-only conflicts
           formatting: true, // Code formatting conflicts
-          dependencies: true, // Package.json dependency conflicts
+          dependencies: true // Package.json dependency conflicts
         },
 
         // Merge strategies
         strategies: {
           conservative: 'Manual review required for all conflicts',
           balanced: 'Auto-resolve simple conflicts, manual review for complex',
-          aggressive: 'Auto-resolve all recognizable patterns',
+          aggressive: 'Auto-resolve all recognizable patterns'
         },
 
         defaultStrategy: 'balanced',
@@ -68,15 +85,15 @@ class ConflictResolutionAssistant {
         // Safety checks
         requireBackup: true,
         requireReview: true,
-        testBeforeCommit: true,
+        testBeforeCommit: true
       },
 
       notification: {
         alertOnConflict: true,
         preventiveWarnings: true,
         resolutionSummary: true,
-        slackIntegration: false, // Can be enabled for team notifications
-      },
+        slackIntegration: false // Can be enabled for team notifications
+      }
     };
 
     this.detectedConflicts = new Map();
@@ -95,10 +112,15 @@ class ConflictResolutionAssistant {
       await this.setupGitHooks();
 
       console.log('✅ Conflict Resolution Assistant initialized');
-      console.log(`📊 Loaded ${this.detectedConflicts.size} existing conflicts`);
+      console.log(
+        `📊 Loaded ${this.detectedConflicts.size} existing conflicts`
+      );
       console.log(`📋 ${this.resolutionHistory.length} historical resolutions`);
     } catch (error) {
-      console.error('❌ Failed to initialize Conflict Resolution Assistant:', error);
+      console.error(
+        '❌ Failed to initialize Conflict Resolution Assistant:',
+        error
+      );
       throw error;
     }
   }
@@ -129,8 +151,12 @@ class ConflictResolutionAssistant {
 
       console.log('\n✅ Conflict scan complete:');
       console.log(`⚠️  Found ${analyzedConflicts.length} potential conflicts`);
-      console.log(`🔥 ${analyzedConflicts.filter(c => c.severity === 'high').length} high-severity conflicts`);
-      console.log(`⚡ ${analyzedConflicts.filter(c => c.autoResolvable).length} auto-resolvable conflicts`);
+      console.log(
+        `🔥 ${analyzedConflicts.filter(c => c.severity === 'high').length} high-severity conflicts`
+      );
+      console.log(
+        `⚡ ${analyzedConflicts.filter(c => c.autoResolvable).length} auto-resolvable conflicts`
+      );
 
       return analyzedConflicts;
     } catch (error) {
@@ -149,13 +175,17 @@ class ConflictResolutionAssistant {
 
       if (!state.tasks) return [];
 
-      const cutoffTime = new Date(Date.now() - this.config.detection.activeTaskWindow);
+      const cutoffTime = new Date(
+        Date.now() - this.config.detection.activeTaskWindow
+      );
 
       return Object.entries(state.tasks)
         .filter(([id, task]) => {
           // Task is in progress or recently updated
-          const isActive = task.state === 'IN_PROGRESS' || task.assignee !== 'Unassigned';
-          const isRecent = task.lastUpdated && new Date(task.lastUpdated) > cutoffTime;
+          const isActive =
+            task.state === 'IN_PROGRESS' || task.assignee !== 'Unassigned';
+          const isRecent =
+            task.lastUpdated && new Date(task.lastUpdated) > cutoffTime;
 
           return isActive && isRecent;
         })
@@ -189,13 +219,16 @@ class ConflictResolutionAssistant {
             files: Array.from(allFiles),
             extractedFiles: files,
             gitFiles: gitChanges,
-            lastUpdate: task.lastUpdated,
+            lastUpdate: task.lastUpdated
           });
 
           console.log(`📂 ${task.id}: Found ${allFiles.size} files`);
         }
       } catch (error) {
-        console.warn(`Could not analyze files for task ${task.id}:`, error.message);
+        console.warn(
+          `Could not analyze files for task ${task.id}:`,
+          error.message
+        );
       }
     }
 
@@ -213,7 +246,7 @@ class ConflictResolutionAssistant {
     const patterns = [
       /(?:src|packages|client|server)\/[a-zA-Z0-9\/._-]+\.(js|ts|jsx|tsx|json|css|scss|md)/g,
       /[a-zA-Z][a-zA-Z0-9]*\.(?:js|ts|jsx|tsx|json|css|scss|md)/g,
-      /[a-zA-Z][a-zA-Z0-9]*\/[a-zA-Z][a-zA-Z0-9]*\.(js|ts|jsx|tsx)/g,
+      /[a-zA-Z][a-zA-Z0-9]*\/[a-zA-Z][a-zA-Z0-9]*\.(js|ts|jsx|tsx)/g
     ];
 
     for (const pattern of patterns) {
@@ -247,7 +280,7 @@ class ConflictResolutionAssistant {
         // Get changed files in this branch
         const output = execSync(`git diff --name-only main...${taskRef}`, {
           stdio: 'pipe',
-          encoding: 'utf8',
+          encoding: 'utf8'
         });
 
         return output
@@ -257,10 +290,13 @@ class ConflictResolutionAssistant {
       } catch {
         // No specific branch, try to find recent commits mentioning the task
         try {
-          const commitOutput = execSync(`git log --oneline --since="24 hours ago" --grep="${task.id}"`, {
-            stdio: 'pipe',
-            encoding: 'utf8',
-          });
+          const commitOutput = execSync(
+            `git log --oneline --since="24 hours ago" --grep="${task.id}"`,
+            {
+              stdio: 'pipe',
+              encoding: 'utf8'
+            }
+          );
 
           if (commitOutput.trim()) {
             const commits = commitOutput
@@ -271,10 +307,13 @@ class ConflictResolutionAssistant {
 
             for (const commit of commits.slice(0, 5)) {
               // Last 5 commits
-              const filesOutput = execSync(`git diff-tree --no-commit-id --name-only -r ${commit}`, {
-                stdio: 'pipe',
-                encoding: 'utf8',
-              });
+              const filesOutput = execSync(
+                `git diff-tree --no-commit-id --name-only -r ${commit}`,
+                {
+                  stdio: 'pipe',
+                  encoding: 'utf8'
+                }
+              );
 
               filesOutput
                 .trim()
@@ -311,14 +350,22 @@ class ConflictResolutionAssistant {
         const taskB = tasks[j];
 
         // Find file overlaps
-        const overlappingFiles = taskA.files.filter(file => taskB.files.includes(file));
+        const overlappingFiles = taskA.files.filter(file =>
+          taskB.files.includes(file)
+        );
 
         if (overlappingFiles.length > 0) {
           // Analyze the overlap
-          const conflict = await this.analyzeFileOverlap(taskA, taskB, overlappingFiles);
+          const conflict = await this.analyzeFileOverlap(
+            taskA,
+            taskB,
+            overlappingFiles
+          );
           if (conflict) {
             conflicts.push(conflict);
-            console.log(`⚠️  Conflict detected: ${taskA.task.id} ↔ ${taskB.task.id}`);
+            console.log(
+              `⚠️  Conflict detected: ${taskA.task.id} ↔ ${taskB.task.id}`
+            );
             console.log(`   Files: ${overlappingFiles.join(', ')}`);
           }
         }
@@ -342,7 +389,7 @@ class ConflictResolutionAssistant {
       type: 'file_overlap',
       autoResolvable: false,
       strategies: [],
-      details: {},
+      details: {}
     };
 
     // Analyze each overlapping file
@@ -383,7 +430,7 @@ class ConflictResolutionAssistant {
       functionOverlap: 0,
       severity: 'low',
       autoResolvable: false,
-      conflictTypes: [],
+      conflictTypes: []
     };
 
     try {
@@ -410,9 +457,14 @@ class ConflictResolutionAssistant {
       }
 
       // Determine severity
-      if (analysis.functionOverlap > this.config.detection.functionOverlapThreshold) {
+      if (
+        analysis.functionOverlap >
+        this.config.detection.functionOverlapThreshold
+      ) {
         analysis.severity = 'high';
-      } else if (analysis.lineOverlap > this.config.detection.overlapThreshold) {
+      } else if (
+        analysis.lineOverlap > this.config.detection.overlapThreshold
+      ) {
         analysis.severity = 'medium';
       }
 
@@ -441,24 +493,32 @@ class ConflictResolutionAssistant {
     analysis.imports = imports.length;
 
     // Check for likely modification areas based on task descriptions
-    const taskAContent = `${taskA.task.title || ''} ${taskA.task.description || ''}`.toLowerCase();
-    const taskBContent = `${taskB.task.title || ''} ${taskB.task.description || ''}`.toLowerCase();
+    const taskAContent =
+      `${taskA.task.title || ''} ${taskA.task.description || ''}`.toLowerCase();
+    const taskBContent =
+      `${taskB.task.title || ''} ${taskB.task.description || ''}`.toLowerCase();
 
     // Look for function name mentions
     let functionConflicts = 0;
     for (const func of functions) {
-      if (taskAContent.includes(func.toLowerCase()) && taskBContent.includes(func.toLowerCase())) {
+      if (
+        taskAContent.includes(func.toLowerCase()) &&
+        taskBContent.includes(func.toLowerCase())
+      ) {
         functionConflicts++;
       }
     }
 
-    analysis.functionOverlap = functions.length > 0 ? functionConflicts / functions.length : 0;
+    analysis.functionOverlap =
+      functions.length > 0 ? functionConflicts / functions.length : 0;
 
     // Detect specific conflict types
     if (imports.length > 5) analysis.conflictTypes.push('import_heavy');
     if (functions.length > 10) analysis.conflictTypes.push('function_heavy');
-    if (content.includes('export default')) analysis.conflictTypes.push('default_export');
-    if (content.includes('module.exports')) analysis.conflictTypes.push('commonjs_export');
+    if (content.includes('export default'))
+      analysis.conflictTypes.push('default_export');
+    if (content.includes('module.exports'))
+      analysis.conflictTypes.push('commonjs_export');
   }
 
   /**
@@ -496,7 +556,8 @@ class ConflictResolutionAssistant {
    * Analyze CSS/SCSS files
    */
   async analyzeStyleFile(content, analysis, taskA, taskB) {
-    const selectors = content.match(/\.[a-zA-Z][a-zA-Z0-9_-]*|\#[a-zA-Z][a-zA-Z0-9_-]*/g) || [];
+    const selectors =
+      content.match(/\.[a-zA-Z][a-zA-Z0-9_-]*|\#[a-zA-Z][a-zA-Z0-9_-]*/g) || [];
     const variables = content.match(/\$[a-zA-Z][a-zA-Z0-9_-]*/g) || [];
 
     analysis.selectors = selectors.length;
@@ -518,7 +579,10 @@ class ConflictResolutionAssistant {
     // Check against auto-resolution patterns
     const config = this.config.resolution.autoResolvePatterns;
 
-    if (config.dependencies && analysis.conflictTypes.includes('dependencies')) {
+    if (
+      config.dependencies &&
+      analysis.conflictTypes.includes('dependencies')
+    ) {
       return true;
     }
 
@@ -551,31 +615,36 @@ class ConflictResolutionAssistant {
       description: 'Complete one task before starting the other',
       effort: 'low',
       risk: 'low',
-      recommendation: conflict.severity === 'high',
+      recommendation: conflict.severity === 'high'
     });
 
     // Strategy 2: File splitting
-    if (conflict.files.length === 1 && conflict.details[conflict.files[0]]?.functions > 5) {
+    if (
+      conflict.files.length === 1 &&
+      conflict.details[conflict.files[0]]?.functions > 5
+    ) {
       strategies.push({
         type: 'file_splitting',
         description: 'Split the conflicting file into smaller modules',
         effort: 'medium',
         risk: 'medium',
-        recommendation: conflict.severity === 'medium',
+        recommendation: conflict.severity === 'medium'
       });
     }
 
     // Strategy 3: Feature flagging
     if (
       conflict.details.some &&
-      Object.values(conflict.details).some(d => d.conflictTypes.includes('function_heavy'))
+      Object.values(conflict.details).some(d =>
+        d.conflictTypes.includes('function_heavy')
+      )
     ) {
       strategies.push({
         type: 'feature_flags',
         description: 'Use feature flags to isolate changes',
         effort: 'medium',
         risk: 'low',
-        recommendation: true,
+        recommendation: true
       });
     }
 
@@ -586,7 +655,8 @@ class ConflictResolutionAssistant {
         description: 'Automatically merge using conflict resolution rules',
         effort: 'low',
         risk: 'low',
-        recommendation: this.config.resolution.defaultStrategy !== 'conservative',
+        recommendation:
+          this.config.resolution.defaultStrategy !== 'conservative'
       });
     }
 
@@ -596,7 +666,7 @@ class ConflictResolutionAssistant {
       description: 'Use separate feature branches with planned merge',
       effort: 'low',
       risk: 'medium',
-      recommendation: conflict.files.length > 3,
+      recommendation: conflict.files.length > 3
     });
 
     return strategies.sort((a, b) => {
@@ -624,7 +694,11 @@ class ConflictResolutionAssistant {
       conflict.taskBPriority = taskB?.priority || 'medium';
 
       // Calculate urgency score
-      conflict.urgencyScore = this.calculateUrgencyScore(conflict, taskA, taskB);
+      conflict.urgencyScore = this.calculateUrgencyScore(
+        conflict,
+        taskA,
+        taskB
+      );
 
       // Add prevention suggestions
       conflict.prevention = this.generatePreventionSuggestions(conflict);
@@ -677,7 +751,9 @@ class ConflictResolutionAssistant {
     }
 
     if (conflict.severity === 'high') {
-      suggestions.push('Establish communication between agents working on related tasks');
+      suggestions.push(
+        'Establish communication between agents working on related tasks'
+      );
     }
 
     return suggestions;
@@ -690,7 +766,9 @@ class ConflictResolutionAssistant {
     return this.resolutionHistory
       .filter(resolved => {
         // Check for file overlap
-        const fileOverlap = conflict.files.some(f => resolved.files?.includes(f));
+        const fileOverlap = conflict.files.some(f =>
+          resolved.files?.includes(f)
+        );
         // Check for similar conflict types
         const typeMatch = resolved.type === conflict.type;
 
@@ -718,15 +796,22 @@ class ConflictResolutionAssistant {
             ...conflict,
             resolution,
             resolvedAt: new Date().toISOString(),
-            method: 'automatic',
+            method: 'automatic'
           });
 
-          console.log(`✅ Auto-resolved conflict in files: ${conflict.files.join(', ')}`);
+          console.log(
+            `✅ Auto-resolved conflict in files: ${conflict.files.join(', ')}`
+          );
         } else {
-          console.log(`⚠️  Auto-resolution failed for ${conflict.id}: ${resolution.error}`);
+          console.log(
+            `⚠️  Auto-resolution failed for ${conflict.id}: ${resolution.error}`
+          );
         }
       } catch (error) {
-        console.error(`❌ Auto-resolution error for ${conflict.id}:`, error.message);
+        console.error(
+          `❌ Auto-resolution error for ${conflict.id}:`,
+          error.message
+        );
       }
     }
 
@@ -742,7 +827,7 @@ class ConflictResolutionAssistant {
       method: 'auto',
       actions: [],
       success: false,
-      filesModified: [],
+      filesModified: []
     };
 
     try {
@@ -879,7 +964,10 @@ class ConflictResolutionAssistant {
 
     let inImportSection = true;
     for (const line of lines) {
-      if (line.trim().startsWith('import ') || (line.trim().startsWith('const ') && line.includes('require('))) {
+      if (
+        line.trim().startsWith('import ') ||
+        (line.trim().startsWith('const ') && line.includes('require('))
+      ) {
         if (inImportSection) {
           importLines.push(line);
         } else {
@@ -998,7 +1086,10 @@ class ConflictResolutionAssistant {
   }
 
   extractFunctions(content) {
-    const matches = content.match(/(?:function\s+(\w+)|(\w+)\s*[:=]\s*(?:function|\([^)]*\)\s*=>))/g) || [];
+    const matches =
+      content.match(
+        /(?:function\s+(\w+)|(\w+)\s*[:=]\s*(?:function|\([^)]*\)\s*=>))/g
+      ) || [];
     return matches.map(match => {
       const nameMatch = match.match(/(?:function\s+(\w+)|(\w+)\s*[:=])/);
       return nameMatch ? nameMatch[1] || nameMatch[2] : 'anonymous';
@@ -1011,7 +1102,10 @@ class ConflictResolutionAssistant {
   }
 
   extractExports(content) {
-    const matches = content.match(/export\s+(?:default\s+)?(?:class|function|const|let|var)?\s*(\w+)?/g) || [];
+    const matches =
+      content.match(
+        /export\s+(?:default\s+)?(?:class|function|const|let|var)?\s*(\w+)?/g
+      ) || [];
     return matches;
   }
 
@@ -1029,7 +1123,9 @@ class ConflictResolutionAssistant {
         totalConflicts: conflicts.length,
         highSeverity: conflicts.filter(c => c.severity === 'high').length,
         autoResolvable: conflicts.filter(c => c.autoResolvable).length,
-        averageUrgency: conflicts.reduce((sum, c) => sum + c.urgencyScore, 0) / conflicts.length || 0,
+        averageUrgency:
+          conflicts.reduce((sum, c) => sum + c.urgencyScore, 0) /
+            conflicts.length || 0
       },
       conflicts: conflicts.map(c => ({
         id: c.id,
@@ -1038,12 +1134,15 @@ class ConflictResolutionAssistant {
         severity: c.severity,
         urgencyScore: c.urgencyScore,
         autoResolvable: c.autoResolvable,
-        recommendedStrategy: c.strategies[0]?.type || 'manual',
+        recommendedStrategy: c.strategies[0]?.type || 'manual'
       })),
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
-    const reportFile = path.join(this.dataDir, `conflict-report-${Date.now()}.json`);
+    const reportFile = path.join(
+      this.dataDir,
+      `conflict-report-${Date.now()}.json`
+    );
     await fs.writeFile(reportFile, JSON.stringify(report, null, 2));
 
     console.log(`📊 Conflict report saved to: ${reportFile}`);
@@ -1060,10 +1159,11 @@ class ConflictResolutionAssistant {
       activeConflicts: activeConflicts.length,
       resolvedConflicts: this.resolutionHistory.length,
       autoResolutionRate:
-        this.resolutionHistory.filter(r => r.method === 'automatic').length / this.resolutionHistory.length || 0,
+        this.resolutionHistory.filter(r => r.method === 'automatic').length /
+          this.resolutionHistory.length || 0,
       averageResolutionTime: this.calculateAverageResolutionTime(),
       commonConflictTypes: this.getCommonConflictTypes(),
-      lastScan: this.lastScanTime,
+      lastScan: this.lastScanTime
     };
   }
 
@@ -1109,8 +1209,12 @@ if (require.main === module) {
           const autoResolve = args.includes('--auto');
           if (autoResolve) {
             console.log('🔧 Auto-resolving conflicts...\n');
-            const resolutions = await assistant.autoResolveConflicts(Array.from(assistant.detectedConflicts.values()));
-            console.log(`Resolved ${resolutions.length} conflicts automatically`);
+            const resolutions = await assistant.autoResolveConflicts(
+              Array.from(assistant.detectedConflicts.values())
+            );
+            console.log(
+              `Resolved ${resolutions.length} conflicts automatically`
+            );
           } else {
             console.log('Manual resolution mode not implemented in CLI');
           }

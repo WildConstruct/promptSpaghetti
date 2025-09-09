@@ -97,7 +97,10 @@ Received length: 0
 ```typescript
 // Add debugging to test:
 console.log('Config:', logger.config);
-console.log('Should skip READ?', logger.shouldSkipOperation(AuditOperation.READ));
+console.log(
+  'Should skip READ?',
+  logger.shouldSkipOperation(AuditOperation.READ)
+);
 console.log('Storage backend:', logger.storageBackend);
 ```
 

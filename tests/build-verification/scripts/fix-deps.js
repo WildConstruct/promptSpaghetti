@@ -13,7 +13,10 @@ const fixes = {
     name: 'Clean install with workspaces',
     run: () => {
       console.log(chalk.yellow('Removing all node_modules...'));
-      execSync('rm -rf node_modules client/node_modules packages/*/node_modules', { stdio: 'inherit' });
+      execSync(
+        'rm -rf node_modules client/node_modules packages/*/node_modules',
+        { stdio: 'inherit' }
+      );
 
       console.log(chalk.yellow('\nInstalling root dependencies...'));
       execSync('npm install', { stdio: 'inherit' });
@@ -22,14 +25,14 @@ const fixes = {
         console.log(chalk.yellow('\nInstalling client dependencies...'));
         execSync('cd client && npm install', { stdio: 'inherit' });
       }
-    },
+    }
   },
   2: {
     name: 'Add missing zod dependency to client',
     run: () => {
       console.log(chalk.yellow('Adding zod@^3.22.4 to client...'));
       execSync('cd client && npm install zod@^3.22.4', { stdio: 'inherit' });
-    },
+    }
   },
   3: {
     name: 'Inject optimizeDeps into Vite config',
@@ -50,7 +53,7 @@ const fixes = {
       );
       fs.writeFileSync(vitePath, content);
       console.log(chalk.green('optimizeDeps injected into Vite config.'));
-    },
+    }
   },
   4: {
     name: 'Add missing workspaces configuration',
@@ -64,13 +67,15 @@ const fixes = {
       pkg.workspaces = ['client', 'packages/*', 'server'];
       fs.writeFileSync(rootPkgPath, JSON.stringify(pkg, null, 2));
       console.log(chalk.green('workspaces field added to package.json'));
-    },
-  },
+    }
+  }
 };
 
 console.log(chalk.blue.bold('\n🔧 Dependency Fix Tool\n'));
 console.log('Available fixes:');
-Object.entries(fixes).forEach(([num, fix]) => console.log(`  ${num}. ${fix.name}`));
+Object.entries(fixes).forEach(([num, fix]) =>
+  console.log(`  ${num}. ${fix.name}`)
+);
 
 const sel = process.argv[2];
 if (!sel) {

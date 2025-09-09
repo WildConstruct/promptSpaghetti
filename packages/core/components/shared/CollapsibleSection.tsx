@@ -20,20 +20,20 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
   disabled = false
 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
-  
+
   const handleToggle = () => {
     if (!disabled) {
       setIsExpanded(!isExpanded);
     }
   };
-  
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
       e.preventDefault();
       handleToggle();
     }
   };
-  
+
   return (
     <div className={`collapsible-section ${disabled ? 'disabled' : ''}`}>
       <button
@@ -45,7 +45,11 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
         disabled={disabled}
       >
         <div className="header-content">
-          {icon && <span className="section-icon" aria-hidden="true">{icon}</span>}
+          {icon && (
+            <span className="section-icon" aria-hidden="true">
+              {icon}
+            </span>
+          )}
           <span className="section-title">{title}</span>
         </div>
         <svg
@@ -62,15 +66,13 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
           />
         </svg>
       </button>
-      
+
       <div
         className={`section-content ${isExpanded ? 'expanded' : 'collapsed'}`}
         id={`section-${title.replace(/\s+/g, '-').toLowerCase()}`}
         aria-hidden={!isExpanded}
       >
-        <div className="content-inner">
-          {children}
-        </div>
+        <div className="content-inner">{children}</div>
       </div>
     </div>
   );

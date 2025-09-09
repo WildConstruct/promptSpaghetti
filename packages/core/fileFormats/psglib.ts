@@ -340,11 +340,13 @@ export function regenerateNodeIds(
 ): { nodes: PSGLibNode[]; edges: PSGLibEdge[] } {
   const idMap = new Map<string, string>();
   // Use high-resolution timestamp with crypto for better uniqueness
-  const timestamp = typeof performance !== 'undefined' ? 
-    Math.floor(performance.now() * 1000000) : Date.now() * 1000;
+  const timestamp =
+    typeof performance !== 'undefined'
+      ? Math.floor(performance.now() * 1000000)
+      : Date.now() * 1000;
   const random = Math.random().toString(36).substring(2, 15);
-  const processId = Math.random().toString(36).substring(2, 8); 
-  
+  const processId = Math.random().toString(36).substring(2, 8);
+
   // Add a small delay counter to guarantee uniqueness even in tight loops
   let delayCounter = 0;
 

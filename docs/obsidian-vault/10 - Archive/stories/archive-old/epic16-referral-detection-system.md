@@ -496,9 +496,15 @@ function calculateLastTouchAttribution(referral: Referral): number {
 #### Time Decay Attribution
 
 ```typescript
-function calculateTimeDecayAttribution(referral: Referral, halfLifeDays: number = 7): number {
-  const hoursSinceClick = (Date.now() - referral.clickedAt.getTime()) / (1000 * 60 * 60);
-  const decayFactor = Math.exp((-hoursSinceClick / (halfLifeDays * 24)) * Math.LN2);
+function calculateTimeDecayAttribution(
+  referral: Referral,
+  halfLifeDays: number = 7
+): number {
+  const hoursSinceClick =
+    (Date.now() - referral.clickedAt.getTime()) / (1000 * 60 * 60);
+  const decayFactor = Math.exp(
+    (-hoursSinceClick / (halfLifeDays * 24)) * Math.LN2
+  );
 
   return Math.max(0.1, Math.min(1.0, decayFactor));
 }
@@ -844,7 +850,7 @@ Referral Clicks → Unique Visitors → Signups → Conversions → Paid Rewards
      maxRetentionDays: 2555, // 7 years
      encryptionEnabled: true,
      complianceMode: 'strict',
-     automaticVerification: true,
+     automaticVerification: true
    });
    ```
 
@@ -880,11 +886,13 @@ const referral = await service.trackReferral('REF-12345', userId, {
   utmCampaign: 'summer-promo',
   ipAddress: req.ip,
   userAgent: req.headers['user-agent'],
-  landingPage: 'https://marketplace.com/templates/123',
+  landingPage: 'https://marketplace.com/templates/123'
 });
 
 console.log(`Referral tracked: ${referral.id}`);
-console.log(`Fraud risk: ${referral.fraudRiskLevel} (${referral.fraudRiskScore})`);
+console.log(
+  `Fraud risk: ${referral.fraudRiskLevel} (${referral.fraudRiskScore})`
+);
 ```
 
 ### Conversion Tracking
@@ -895,10 +903,13 @@ const conversionData = {
   conversionEvent: 'purchase',
   conversionValue: 150.0,
   conversionDate: new Date(),
-  referredUserId: newUserId,
+  referredUserId: newUserId
 };
 
-const updatedReferral = await service.updateReferralConversion(referralId, conversionData);
+const updatedReferral = await service.updateReferralConversion(
+  referralId,
+  conversionData
+);
 
 // Calculate and process reward
 const reward = await service.calculateReward(referralId);
@@ -921,11 +932,11 @@ const campaign = await service.createCampaign({
   tiers: [
     { minValue: 0, maxValue: 49.99, reward: 10.0 },
     { minValue: 50, maxValue: 99.99, reward: 20.0 },
-    { minValue: 100, maxValue: null, reward: 35.0 },
+    { minValue: 100, maxValue: null, reward: 35.0 }
   ],
   startDate: new Date('2024-11-29'),
   endDate: new Date('2024-12-02'),
-  maxRewardPerReferrer: 500.0,
+  maxRewardPerReferrer: 500.0
 });
 
 console.log(`Campaign created: ${campaign.id}`);
@@ -938,26 +949,28 @@ console.log(`Campaign created: ${campaign.id}`);
 const analytics = await service.generateAnalytics({
   startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
   endDate: new Date(),
-  campaignId: 'specific-campaign-uuid', // optional
+  campaignId: 'specific-campaign-uuid' // optional
 });
 
 console.log('Analytics Summary:');
 console.log(`Total Referrals: ${analytics.summary.totalReferrals}`);
 console.log(`Conversion Rate: ${analytics.summary.conversionRate}%`);
 console.log(`Total Revenue: $${analytics.summary.totalConversionValue}`);
-console.log(`Fraud Rate: ${(analytics.summary.fraudAttempts / analytics.summary.totalReferrals) * 100}%`);
+console.log(
+  `Fraud Rate: ${(analytics.summary.fraudAttempts / analytics.summary.totalReferrals) * 100}%`
+);
 
 // Generate compliance report
 const complianceReport = await service.generateComplianceReport(
   'gdpr',
   {
     start: new Date('2024-01-01'),
-    end: new Date('2024-12-31'),
+    end: new Date('2024-12-31')
   },
   {
     includeUserData: false,
     anonymizeData: true,
-    exportFormat: 'json',
+    exportFormat: 'json'
   }
 );
 
@@ -971,7 +984,7 @@ console.log(`Compliance report generated: ${complianceReport.reportId}`);
 const fraudAnalysis = await service.analyzeFraudPatterns({
   timeRange: '24h',
   riskThreshold: 40,
-  includeIndicators: true,
+  includeIndicators: true
 });
 
 console.log('Fraud Analysis:');
@@ -982,7 +995,7 @@ console.log(`Top fraud indicators:`, fraudAnalysis.topIndicators);
 await service.updateFraudRule('ip-velocity-check', {
   threshold: 15, // Increase threshold
   timeWindow: '2h', // Extend time window
-  enabled: true,
+  enabled: true
 });
 ```
 
@@ -1179,7 +1192,7 @@ const mockReferralData = {
   deviceFingerprint: 'test-device-hash',
   country: 'US',
   conversionValue: 150.0,
-  conversionEvent: 'purchase',
+  conversionEvent: 'purchase'
 };
 ```
 
@@ -1259,7 +1272,7 @@ app.use('/api/referrals', (req, res, next) => {
     metrics.recordRequestDuration('referral_api', duration);
     metrics.incrementCounter('referral_requests_total', {
       method: req.method,
-      status: res.statusCode.toString(),
+      status: res.statusCode.toString()
     });
   });
 
@@ -1344,7 +1357,7 @@ const referralSchema = z.object({
   ipAddress: z.string().ip(),
   conversionValue: z.number().min(0).max(100000),
   utmSource: z.string().max(100).optional(),
-  customData: z.record(z.unknown()).optional(),
+  customData: z.record(z.unknown()).optional()
 });
 ```
 
@@ -1366,13 +1379,27 @@ const referralSchema = z.object({
       ]
     },
     "campaign_manager": {
-      "permissions": ["campaigns:read", "campaigns:write", "analytics:campaign_access", "referrals:read"]
+      "permissions": [
+        "campaigns:read",
+        "campaigns:write",
+        "analytics:campaign_access",
+        "referrals:read"
+      ]
     },
     "fraud_analyst": {
-      "permissions": ["fraud:read", "fraud:review", "referrals:read", "analytics:fraud_access"]
+      "permissions": [
+        "fraud:read",
+        "fraud:review",
+        "referrals:read",
+        "analytics:fraud_access"
+      ]
     },
     "referrer": {
-      "permissions": ["referrals:own_data", "rewards:own_data", "analytics:personal"]
+      "permissions": [
+        "referrals:own_data",
+        "rewards:own_data",
+        "analytics:personal"
+      ]
     }
   }
 }

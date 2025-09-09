@@ -45,7 +45,8 @@ interface MemoryThresholds {
 class MemoryOptimizationTester {
   private snapshots: MemorySnapshot[] = [];
   private memoryPressureEvents = 0;
-  private gcStats: Array<{ before: number; after: number; reduction: number }> = [];
+  private gcStats: Array<{ before: number; after: number; reduction: number }> =
+    [];
 
   /**
    * Take a memory snapshot
@@ -58,7 +59,7 @@ class MemoryOptimizationTester {
       heapTotal: usage.heapTotal / 1024 / 1024,
       external: usage.external / 1024 / 1024,
       arrayBuffers: usage.arrayBuffers / 1024 / 1024,
-      rss: usage.rss / 1024 / 1024,
+      rss: usage.rss / 1024 / 1024
     };
 
     this.snapshots.push(snapshot);
@@ -68,7 +69,11 @@ class MemoryOptimizationTester {
   /**
    * Force garbage collection and measure effectiveness
    */
-  async forceGarbageCollection(): Promise<{ before: number; after: number; reduction: number }> {
+  async forceGarbageCollection(): Promise<{
+    before: number;
+    after: number;
+    reduction: number;
+  }> {
     const beforeGC = process.memoryUsage().heapUsed / 1024 / 1024;
 
     if (global.gc) {
@@ -101,7 +106,10 @@ class MemoryOptimizationTester {
     // Monitor for sudden memory increases
     const memoryCheckInterval = setInterval(() => {
       const current = process.memoryUsage().heapUsed / 1024 / 1024;
-      const previous = this.snapshots.length > 0 ? this.snapshots[this.snapshots.length - 1].heapUsed : current;
+      const previous =
+        this.snapshots.length > 0
+          ? this.snapshots[this.snapshots.length - 1].heapUsed
+          : current;
 
       if (current - previous > 50) {
         // 50MB sudden increase
@@ -116,7 +124,10 @@ class MemoryOptimizationTester {
   /**
    * Create memory-intensive execution contexts
    */
-  createMemoryIntensiveContext(seed: number, variableCount: number = 1000): ExecutionContext {
+  createMemoryIntensiveContext(
+    seed: number,
+    variableCount: number = 1000
+  ): ExecutionContext {
     const context = new ExecutionContext(seed);
 
     // Pre-populate with many variables to test memory usage
@@ -130,7 +141,9 @@ class MemoryOptimizationTester {
   /**
    * Test memory usage with repeated executions
    */
-  async testRepeatedExecutions(iterations: number = 1000): Promise<MemoryTestResult> {
+  async testRepeatedExecutions(
+    iterations: number = 1000
+  ): Promise<MemoryTestResult> {
     console.log(`🧪 Testing repeated executions (${iterations} iterations)`);
 
     this.startMemoryPressureMonitoring();
@@ -155,7 +168,7 @@ class MemoryOptimizationTester {
       const node = new WeightedAdvanced('test-node', {
         choices: [`choice_${i}_A`, `choice_${i}_B`],
         weights: [Math.random(), Math.random()],
-        algorithm: 'exponential',
+        algorithm: 'exponential'
       });
 
       const advancedContext = new AdvancedExecutionContext(i);
@@ -184,14 +197,17 @@ class MemoryOptimizationTester {
     const memoryLeakDetected = memoryGrowth > 50; // More than 50MB growth indicates potential leak
 
     const avgGcReduction =
-      this.gcStats.length > 0 ? this.gcStats.reduce((sum, stat) => sum + stat.reduction, 0) / this.gcStats.length : 0;
+      this.gcStats.length > 0
+        ? this.gcStats.reduce((sum, stat) => sum + stat.reduction, 0) /
+          this.gcStats.length
+        : 0;
     const gcEfficiency = Math.max(0, Math.min(1, avgGcReduction / 20)); // Normalize to 0-1
 
     const thresholds: MemoryThresholds = {
       maxMemoryGrowth: 30,
       maxLeakTolerance: 50,
       minGcEfficiency: 0.3,
-      maxPeakMemory: 200,
+      maxPeakMemory: 200
     };
 
     const passed =
@@ -214,8 +230,8 @@ class MemoryOptimizationTester {
         iterations,
         avgGcReduction,
         gcStats: this.gcStats.slice(-5), // Last 5 GC stats
-        thresholds,
-      },
+        thresholds
+      }
     };
   }
 
@@ -249,7 +265,7 @@ class MemoryOptimizationTester {
 
       scalingData.push({
         contextSize,
-        memoryUsage: snapshot.heapUsed - baselineMemory.heapUsed,
+        memoryUsage: snapshot.heapUsed - baselineMemory.heapUsed
       });
 
       // Clean up
@@ -268,7 +284,10 @@ class MemoryOptimizationTester {
     const memoryGrowth = finalMemory.heapUsed - baselineMemory.heapUsed;
     const memoryLeakDetected = memoryGrowth > 20; // Should clean up well
 
-    const gcEfficiency = this.gcStats.length > 0 ? Math.max(...this.gcStats.map(stat => stat.reduction)) / 50 : 0;
+    const gcEfficiency =
+      this.gcStats.length > 0
+        ? Math.max(...this.gcStats.map(stat => stat.reduction)) / 50
+        : 0;
 
     const passed =
       scalingEfficiency < 2.0 && // Memory should scale roughly linearly
@@ -289,8 +308,8 @@ class MemoryOptimizationTester {
         scalingData,
         scalingEfficiency,
         memoryScalingRatio,
-        contextScalingRatio,
-      },
+        contextScalingRatio
+      }
     };
   }
 
@@ -310,21 +329,23 @@ class MemoryOptimizationTester {
     const nodes = [
       new Sequential('seq1', {
         pattern: 'cyclical',
-        items: Array.from({ length: 1000 }, (_, i) => `item_${i}`),
+        items: Array.from({ length: 1000 }, (_, i) => `item_${i}`)
       }),
       new Markov('markov1', {
         states: Array.from({ length: 50 }, (_, i) => `state_${i}`),
         transitions: {
-          state_0: Object.fromEntries(Array.from({ length: 10 }, (_, i) => [`state_${i + 1}`, 0.1])),
+          state_0: Object.fromEntries(
+            Array.from({ length: 10 }, (_, i) => [`state_${i + 1}`, 0.1])
+          )
         },
-        initialState: 'state_0',
+        initialState: 'state_0'
       }),
       new WeightedAdvanced('weighted1', {
         choices: Array.from({ length: 500 }, (_, i) => `choice_${i}`),
         weights: Array.from({ length: 500 }, () => Math.random()),
         algorithm: 'gaussian',
-        parameters: { mean: 250, stdDev: 100 },
-      }),
+        parameters: { mean: 250, stdDev: 100 }
+      })
     ];
 
     // Execute nodes multiple times to test state management
@@ -360,7 +381,10 @@ class MemoryOptimizationTester {
     const memoryLeakDetected = memoryGrowth > 100; // Advanced nodes may use more memory
 
     const avgGcReduction =
-      this.gcStats.length > 0 ? this.gcStats.reduce((sum, stat) => sum + stat.reduction, 0) / this.gcStats.length : 0;
+      this.gcStats.length > 0
+        ? this.gcStats.reduce((sum, stat) => sum + stat.reduction, 0) /
+          this.gcStats.length
+        : 0;
     const gcEfficiency = Math.max(0, Math.min(1, avgGcReduction / 30));
 
     const passed =
@@ -382,8 +406,8 @@ class MemoryOptimizationTester {
       details: {
         nodeTypes: nodes.map(n => n.constructor.name),
         avgGcReduction,
-        executionCycles: 200,
-      },
+        executionCycles: 200
+      }
     };
   }
 
@@ -413,14 +437,17 @@ class MemoryOptimizationTester {
 
       // Add substantial data
       for (let i = 0; i < 100; i++) {
-        context.setVariable(`temp_${i}`, `data_${iterations}_${i}_${Math.random()}`);
+        context.setVariable(
+          `temp_${i}`,
+          `data_${iterations}_${i}_${Math.random()}`
+        );
       }
 
       // Execute some operations
       const node = new WeightedAdvanced(`node_${iterations}`, {
         choices: ['A', 'B', 'C'],
         weights: [1, 1, 1],
-        algorithm: 'linear',
+        algorithm: 'linear'
       });
 
       await node.execute(context);
@@ -453,7 +480,10 @@ class MemoryOptimizationTester {
     const memoryLeakDetected = memoryTrend > 0.5 || memoryGrowth > 50;
 
     const avgGcReduction =
-      this.gcStats.length > 0 ? this.gcStats.reduce((sum, stat) => sum + stat.reduction, 0) / this.gcStats.length : 0;
+      this.gcStats.length > 0
+        ? this.gcStats.reduce((sum, stat) => sum + stat.reduction, 0) /
+          this.gcStats.length
+        : 0;
     const gcEfficiency = Math.max(0, Math.min(1, avgGcReduction / 25));
 
     const passed =
@@ -477,8 +507,8 @@ class MemoryOptimizationTester {
         iterations,
         memoryTrend,
         memoryHistory: memoryHistory.slice(-10), // Last 10 samples
-        avgGcReduction,
-      },
+        avgGcReduction
+      }
     };
   }
 
@@ -525,8 +555,12 @@ class MemoryOptimizationTester {
     }
 
     // Overall memory statistics
-    const totalGrowth = results.reduce((sum, r) => sum + Math.max(0, r.memoryGrowth), 0);
-    const avgGcEfficiency = results.reduce((sum, r) => sum + r.gcEfficiency, 0) / results.length;
+    const totalGrowth = results.reduce(
+      (sum, r) => sum + Math.max(0, r.memoryGrowth),
+      0
+    );
+    const avgGcEfficiency =
+      results.reduce((sum, r) => sum + r.gcEfficiency, 0) / results.length;
     const leakCount = results.filter(r => r.memoryLeakDetected).length;
     const maxPeakMemory = Math.max(...results.map(r => r.peakMemory.heapUsed));
 
@@ -552,7 +586,9 @@ describe('Memory Optimization Tests', () => {
     if (global.gc) {
       console.log('✅ Garbage collection enabled for memory tests');
     } else {
-      console.warn('⚠️ Garbage collection not available - some tests may be less accurate');
+      console.warn(
+        '⚠️ Garbage collection not available - some tests may be less accurate'
+      );
     }
   });
 
@@ -576,7 +612,9 @@ describe('Memory Optimization Tests', () => {
     expect(result.memoryLeakDetected).toBe(false);
     expect(result.details.scalingEfficiency).toBeLessThan(2.0);
 
-    console.log(`Context scaling: ${result.details.scalingEfficiency.toFixed(2)}x scaling efficiency`);
+    console.log(
+      `Context scaling: ${result.details.scalingEfficiency.toFixed(2)}x scaling efficiency`
+    );
   }, 45000);
 
   test('Advanced node memory management', async () => {
@@ -628,7 +666,7 @@ describe('Memory Optimization Tests', () => {
       const node = new WeightedAdvanced(`stress_node_${i}`, {
         choices: Array.from({ length: 20 }, (_, k) => `choice_${i}_${k}`),
         weights: Array.from({ length: 20 }, () => Math.random()),
-        algorithm: 'gaussian',
+        algorithm: 'gaussian'
       });
 
       nodes.push(node);
@@ -655,7 +693,9 @@ describe('Memory Optimization Tests', () => {
     expect(memoryGrowth).toBeLessThan(50); // Should clean up well
     expect(peakMemoryUsage).toBeLessThan(200); // Peak should be reasonable
 
-    console.log(`Memory stress: ${peakMemoryUsage.toFixed(2)}MB peak, ${memoryGrowth.toFixed(2)}MB final growth`);
+    console.log(
+      `Memory stress: ${peakMemoryUsage.toFixed(2)}MB peak, ${memoryGrowth.toFixed(2)}MB final growth`
+    );
   }, 45000);
 
   test('Complete memory optimization suite', async () => {
@@ -663,7 +703,7 @@ describe('Memory Optimization Tests', () => {
       await tester.testRepeatedExecutions(300),
       await tester.testContextScaling(),
       await tester.testAdvancedNodeMemory(),
-      await tester.testLongRunningMemoryLeaks(),
+      await tester.testLongRunningMemoryLeaks()
     ];
 
     const report = tester.generateMemoryReport(results);
@@ -685,15 +725,16 @@ describe('Memory Optimization Tests', () => {
         memoryGrowth: r.memoryGrowth,
         memoryLeakDetected: r.memoryLeakDetected,
         gcEfficiency: r.gcEfficiency,
-        peakMemoryUsage: r.peakMemory.heapUsed,
+        peakMemoryUsage: r.peakMemory.heapUsed
       })),
       summary: {
         totalTests: results.length,
         passedTests: results.filter(r => r.passed).length,
         leakCount: results.filter(r => r.memoryLeakDetected).length,
-        avgGcEfficiency: results.reduce((sum, r) => sum + r.gcEfficiency, 0) / results.length,
-        maxPeakMemory: Math.max(...results.map(r => r.peakMemory.heapUsed)),
-      },
+        avgGcEfficiency:
+          results.reduce((sum, r) => sum + r.gcEfficiency, 0) / results.length,
+        maxPeakMemory: Math.max(...results.map(r => r.peakMemory.heapUsed))
+      }
     };
 
     expect(metricsData.overallPassed).toBe(true);
@@ -702,4 +743,9 @@ describe('Memory Optimization Tests', () => {
   }, 180000);
 });
 
-export { MemoryOptimizationTester, MemorySnapshot, MemoryTestResult, MemoryThresholds };
+export {
+  MemoryOptimizationTester,
+  MemorySnapshot,
+  MemoryTestResult,
+  MemoryThresholds
+};

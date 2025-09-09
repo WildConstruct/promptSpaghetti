@@ -98,11 +98,11 @@ Power Dynamics – looming authority, fragile defiance, mutual respect balance
 Moral Alignment Hints – tarnished halo, enshrouding darkness, ambiguous gray zone
 Narrative Beats – inciting spark, midpoint reversal, cathartic release
 91 – 100 · Utility & Wildcards
-Prompt Variables – {character_name}, {emotion_level}, {lighting_style}
+Prompt Variables – {character*name}, {emotion_level}, {lighting_style}
 Randomizer Seeds – [adjective] [animal] codewords (e.g., “Cobalt Falcon”)
 Grammar Switches – tense toggles, POV flips, formality sliders
 Token-Efficient Synonyms – concise swap-ins for pricey descriptors
-Style Transfer Anchors – “in the style of ____” safe-list phrases
+Style Transfer Anchors – “in the style of \_\_\_\_” safe-list phrases
 Negative Prompt Blocks – avoid blur, no extra limbs, prevent duplicate faces
 Safety Toggles – PG-13 filter, union-compliant language, no trademarked IP
 Locale Packages – Tex-Mex streetscape, Kyoto bamboo grove, Alpine chalet
@@ -231,7 +231,7 @@ Spatial-Fold Textures — Möbius fabric, Klein-corridor, Escher-stair skin
 211 – 220 · Digital Glitch & Signal Noise
 Bit-Crush Noise Patterns — 8-bit shards, pixel crumble, stepped gradient
 Datamosh Smears — motion-comb, frame-bleed, macroblock drift
-ASCII Overlay Glyphs — ░▒▓█ shading, <div> tags, ^_^ bursts
+ASCII Overlay Glyphs — ░▒▓█ shading, <div> tags, ^*^ bursts
 Compression-Artifact Halos — DCT blocks, ringing edges, color ghosts
 Signal-Loss Aesthetics — RF snow, tape warble, VHS tracking tear
 UI-Glitch Widgets — duplicate cursor, phantom tooltip, menu echo

@@ -1,11 +1,18 @@
 /**
  * Compression Service - Epic 17 Implementation
  * Task: E17-1753114397281-ACAEC8 - Implement compression
- * 
+ *
  * Comprehensive compression utility service supporting multiple compression
  * algorithms for data storage, transfer, and performance optimization.
  */
-import { gzip, gunzip, deflate, inflate, brotliCompress, brotliDecompress } from 'zlib';
+import {
+  gzip,
+  gunzip,
+  deflate,
+  inflate,
+  brotliCompress,
+  brotliDecompress
+} from 'zlib';
 import { promisify } from 'util';
 import { z } from 'zod';
 
@@ -57,9 +64,6 @@ export interface CompressionOptions {
   includeMetadata?: boolean; // Include compression metadata in output
 }
 
-
-
-
 export interface CompressionResult {
   success: boolean;
   originalSize: number;
@@ -73,9 +77,6 @@ export interface CompressionResult {
   error?: string;
 }
 
-
-
-
 export interface CompressionMetadata {
   algorithm: CompressionAlgorithm;
   level: CompressionLevel;
@@ -85,9 +86,6 @@ export interface CompressionMetadata {
   checksum?: string;
   version: string; // Compression service version
 }
-
-
-
 
 export interface CompressionStats {
   totalCompressions: number;
@@ -100,8 +98,6 @@ export interface CompressionStats {
   algorithmStats: Map<CompressionAlgorithm, AlgorithmStats>;
 }
 
-
-
 export interface AlgorithmStats {
   algorithm: CompressionAlgorithm;
   usageCount: number;
@@ -110,9 +106,6 @@ export interface AlgorithmStats {
   averageCompressionRatio: number;
   averageSpeed: number; // bytes per millisecond
 }
-
-
-
 
 export interface StreamCompressionOptions extends CompressionOptions {
   bufferSize?: number;
@@ -126,7 +119,11 @@ export const CompressionOptionsSchema = z.object({
   level: z.nativeEnum(CompressionLevel),
   dataType: z.nativeEnum(DataType),
   threshold: z.number().min(0).optional(),
-  chunkSize: z.number().min(1024).max(1024 * 1024).optional(), // 1KB - 1MB
+  chunkSize: z
+    .number()
+    .min(1024)
+    .max(1024 * 1024)
+    .optional(), // 1KB - 1MB
   includeMetadata: z.boolean().optional()
 });
 
@@ -165,7 +162,6 @@ export class CompressionService {
     data: string | Buffer | object,
     options: Partial<CompressionOptions> = {}
   ): Promise<CompressionResult> {
-
     const startTime = performance.now();
     const opts = { ...this.defaultOptions, ...options };
     try {
@@ -190,7 +186,8 @@ export class CompressionService {
       // Get appropriate compression processor
       const processor = this.algorithmMap.get(opts.algorithm);
       if (!processor) {
-        throw new Error(`Unsupported compression algorithm: ${opts.algorithm}`);}
+        throw new Error(`Unsupported compression algorithm: ${opts.algorithm}`);
+      }
       // Perform compression
       const compressedData = await processor.compress(inputBuffer, opts);
       const compressedSize = compressedData.length;
@@ -210,7 +207,12 @@ export class CompressionService {
         };
       }
       // Update statistics
-      this.updateCompressionStats(opts.algorithm, originalSize, compressedSize, compressionTime);
+      this.updateCompressionStats(
+        opts.algorithm,
+        originalSize,
+        compressedSize,
+        compressionTime
+      );
       const result: CompressionResult = {
         success: true,
         originalSize,
@@ -234,7 +236,8 @@ export class CompressionService {
         level: opts.level,
         compressionTime,
         data: Buffer.alloc(0),
-        error: error instanceof Error ? error.message : 'Unknown compression error'
+        error:
+          error instanceof Error ? error.message : 'Unknown compression error'
       };
     }
   }
@@ -246,30 +249,40 @@ export class CompressionService {
     algorithm?: CompressionAlgorithm,
     metadata?: CompressionMetadata
   ): Promise<Buffer> {
-
     const startTime = performance.now();
     try {
       // Determine algorithm from metadata or parameter
-      const algo = algorithm || metadata?.algorithm || CompressionAlgorithm.GZIP;
+      const algo =
+        algorithm || metadata?.algorithm || CompressionAlgorithm.GZIP;
       // Get appropriate processor
       const processor = this.algorithmMap.get(algo);
       if (!processor) {
-        throw new Error(`Unsupported decompression algorithm: ${algo}`);}
+        throw new Error(`Unsupported decompression algorithm: ${algo}`);
+      }
       // Perform decompression
       const decompressedData = await processor.decompress(data);
       const decompressionTime = performance.now() - startTime;
       // Update statistics
-      this.updateDecompressionStats(algo, data.length, decompressedData.length, decompressionTime);
+      this.updateDecompressionStats(
+        algo,
+        data.length,
+        decompressedData.length,
+        decompressionTime
+      );
       // Verify checksum if available
       if (metadata?.checksum) {
         const calculatedChecksum = this.calculateChecksum(decompressedData);
         if (calculatedChecksum !== metadata.checksum) {
-          throw new Error('Decompressed data checksum mismatch - data may be corrupted');
+          throw new Error(
+            'Decompressed data checksum mismatch - data may be corrupted'
+          );
         }
       }
       return decompressedData;
     } catch (error) {
-      throw new Error(`Decompression failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Decompression failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
   // =============================================================================
@@ -278,7 +291,10 @@ export class CompressionService {
   /**
    * Compress JSON data with optimized settings
    */
-  async compressJSON(data: object, level: CompressionLevel = CompressionLevel.BALANCED): Promise<CompressionResult> {
+  async compressJSON(
+    data: object,
+    level: CompressionLevel = CompressionLevel.BALANCED
+  ): Promise<CompressionResult> {
     return this.compress(data, {
       algorithm: CompressionAlgorithm.GZIP,
       level,
@@ -290,14 +306,20 @@ export class CompressionService {
   /**
    * Decompress JSON data and parse
    */
-  async decompressJSON<T = unknown>(data: Buffer, metadata?: CompressionMetadata): Promise<T> {
+  async decompressJSON<T = unknown>(
+    data: Buffer,
+    metadata?: CompressionMetadata
+  ): Promise<T> {
     const decompressed = await this.decompress(data, undefined, metadata);
     return JSON.parse(decompressed.toString('utf8'));
   }
   /**
-  * Compress text with optimal settings
-  */
-  async compressText(text: string, algorithm: CompressionAlgorithm = CompressionAlgorithm.GZIP): Promise<CompressionResult> {
+   * Compress text with optimal settings
+   */
+  async compressText(
+    text: string,
+    algorithm: CompressionAlgorithm = CompressionAlgorithm.GZIP
+  ): Promise<CompressionResult> {
     return this.compress(text, {
       algorithm,
       level: CompressionLevel.BALANCED,
@@ -308,14 +330,20 @@ export class CompressionService {
   /**
    * Decompress and return text
    */
-  async decompressText(data: Buffer, algorithm?: CompressionAlgorithm): Promise<string> {
+  async decompressText(
+    data: Buffer,
+    algorithm?: CompressionAlgorithm
+  ): Promise<string> {
     const decompressed = await this.decompress(data, algorithm);
     return decompressed.toString('utf8');
   }
   /**
-  * Compress HTML with Brotli for optimal web delivery
-  */
-  async compressHTML(html: string, level: CompressionLevel = CompressionLevel.BEST): Promise<CompressionResult> {
+   * Compress HTML with Brotli for optimal web delivery
+   */
+  async compressHTML(
+    html: string,
+    level: CompressionLevel = CompressionLevel.BEST
+  ): Promise<CompressionResult> {
     return this.compress(html, {
       algorithm: CompressionAlgorithm.BROTLI,
       level,
@@ -355,7 +383,6 @@ export class CompressionService {
     data: Buffer,
     options: StreamCompressionOptions
   ): Promise<CompressionResult> {
-
     const startTime = performance.now();
     const opts = { ...this.defaultOptions, ...options };
     const chunks: Buffer[] = [];
@@ -382,8 +409,8 @@ export class CompressionService {
           }
         }
       }
-  const finalData = Buffer.concat(chunks);
-  const compressionTime = performance.now() - startTime;
+      const finalData = Buffer.concat(chunks);
+      const compressionTime = performance.now() - startTime;
       return {
         success: true,
         originalSize: data.length,
@@ -404,7 +431,10 @@ export class CompressionService {
         level: opts.level,
         compressionTime: performance.now() - startTime,
         data: Buffer.alloc(0),
-        error: error instanceof Error ? error.message : 'Streaming compression failed'
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Streaming compression failed'
       };
     }
   }
@@ -427,20 +457,24 @@ export class CompressionService {
     switch (dataType) {
       case DataType.JSON:
       case DataType.TEXT:
-        return inputBuffer.length > 50000 ? CompressionAlgorithm.BROTLI : CompressionAlgorithm.GZIP;
+        return inputBuffer.length > 50000
+          ? CompressionAlgorithm.BROTLI
+          : CompressionAlgorithm.GZIP;
       case DataType.HTML:
       case DataType.CSS:
       case DataType.JAVASCRIPT:
         return CompressionAlgorithm.BROTLI;
       case DataType.BINARY:
-        return inputBuffer.length > 100000 ? CompressionAlgorithm.DEFLATE : CompressionAlgorithm.GZIP;
+        return inputBuffer.length > 100000
+          ? CompressionAlgorithm.DEFLATE
+          : CompressionAlgorithm.GZIP;
       default:
         return CompressionAlgorithm.GZIP;
     }
   }
   /**
-  * Benchmark different algorithms on sample data
-  */
+   * Benchmark different algorithms on sample data
+   */
   async benchmarkAlgorithms(
     data: string | Buffer | object,
     dataType: DataType
@@ -483,8 +517,8 @@ export class CompressionService {
     this.stats = this.initializeStats();
   }
   /**
-  * Get algorithm-specific statistics
-  */
+   * Get algorithm-specific statistics
+   */
   getAlgorithmStats(algorithm: CompressionAlgorithm): AlgorithmStats | null {
     return this.stats.algorithmStats.get(algorithm) || null;
   }
@@ -499,11 +533,20 @@ export class CompressionService {
     recommendedSettings: CompressionOptions;
   } {
     const totalOriginal = this.stats.totalBytesCompressed;
-    const totalCompressed = Array.from(this.stats.algorithmStats.values())
-      .reduce((sum, stat) => sum + (stat.totalBytesProcessed * (1 - stat.averageCompressionRatio)), 0);
-    const bestAlgorithm = Array.from(this.stats.algorithmStats.entries())
-      .reduce((best, [algo, stat]) =>
-        stat.averageCompressionRatio < best[1].averageCompressionRatio ? [algo, stat] : best)[0];
+    const totalCompressed = Array.from(
+      this.stats.algorithmStats.values()
+    ).reduce(
+      (sum, stat) =>
+        sum + stat.totalBytesProcessed * (1 - stat.averageCompressionRatio),
+      0
+    );
+    const bestAlgorithm = Array.from(
+      this.stats.algorithmStats.entries()
+    ).reduce((best, [algo, stat]) =>
+      stat.averageCompressionRatio < best[1].averageCompressionRatio
+        ? [algo, stat]
+        : best
+    )[0];
     return {
       totalSpaceSaved: totalOriginal - totalCompressed,
       averageCompressionRatio: this.stats.averageCompressionRatio,
@@ -520,7 +563,10 @@ export class CompressionService {
   // =============================================================================
   // Private Helper Methods
   // =============================================================================
-  private prepareInputBuffer(data: string | Buffer | object, dataType: DataType): Buffer {
+  private prepareInputBuffer(
+    data: string | Buffer | object,
+    dataType: DataType
+  ): Buffer {
     if (Buffer.isBuffer(data)) {
       return data;
     }
@@ -555,16 +601,18 @@ export class CompressionService {
     timeMs: number
   ): void {
     this.stats.totalCompressions++;
-  this.stats.totalBytesCompressed += originalSize;
-  this.stats.totalCompressionTime += timeMs;
-  // Update average compression ratio
-  const totalCompressed = this.stats.totalBytesCompressed;
-  const ratio = compressedSize / originalSize;
-  this.stats.averageCompressionRatio =
-  (this.stats.averageCompressionRatio * (this.stats.totalCompressions - 1) + ratio) / this.stats.totalCompressions;
-  // Update algorithm-specific stats
-  let algorithmStat = this.stats.algorithmStats.get(algorithm);
-  if (!algorithmStat) {
+    this.stats.totalBytesCompressed += originalSize;
+    this.stats.totalCompressionTime += timeMs;
+    // Update average compression ratio
+    const totalCompressed = this.stats.totalBytesCompressed;
+    const ratio = compressedSize / originalSize;
+    this.stats.averageCompressionRatio =
+      (this.stats.averageCompressionRatio * (this.stats.totalCompressions - 1) +
+        ratio) /
+      this.stats.totalCompressions;
+    // Update algorithm-specific stats
+    let algorithmStat = this.stats.algorithmStats.get(algorithm);
+    if (!algorithmStat) {
       algorithmStat = {
         algorithm,
         usageCount: 0,
@@ -578,9 +626,12 @@ export class CompressionService {
     algorithmStat.usageCount++;
     algorithmStat.totalBytesProcessed += originalSize;
     algorithmStat.totalProcessingTime += timeMs;
-    algorithmStat.averageCompressionRatio = 
-      (algorithmStat.averageCompressionRatio * (algorithmStat.usageCount - 1) + ratio) / algorithmStat.usageCount;
-    algorithmStat.averageSpeed = algorithmStat.totalBytesProcessed / algorithmStat.totalProcessingTime;
+    algorithmStat.averageCompressionRatio =
+      (algorithmStat.averageCompressionRatio * (algorithmStat.usageCount - 1) +
+        ratio) /
+      algorithmStat.usageCount;
+    algorithmStat.averageSpeed =
+      algorithmStat.totalBytesProcessed / algorithmStat.totalProcessingTime;
   }
 
   private updateDecompressionStats(
@@ -607,7 +658,7 @@ class GzipProcessor extends AlgorithmProcessor {
   async compress(data: Buffer, options: CompressionOptions): Promise<Buffer> {
     return gzipAsync(data, { level: options.level });
   }
-  
+
   async decompress(data: Buffer): Promise<Buffer> {
     return gunzipAsync(data);
   }
@@ -631,14 +682,12 @@ class BrotliProcessor extends AlgorithmProcessor {
     });
   }
   async decompress(data: Buffer): Promise<Buffer> {
-
     return brotliDecompressAsync(data);
   }
 }
 
 class NoCompressionProcessor extends AlgorithmProcessor {
   async compress(data: Buffer): Promise<Buffer> {
-
     return data;
   }
   async decompress(data: Buffer): Promise<Buffer> {

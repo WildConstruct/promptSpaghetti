@@ -90,7 +90,7 @@ interface VendorSecurityAssessment {
      userInfoURL: 'https://www.googleapis.com/oauth2/v2/userinfo',
      scopes: ['openid', 'email', 'profile'], // Minimal scopes only
      pkceRequired: true,
-     stateValidation: true,
+     stateValidation: true
    };
    ```
 
@@ -104,7 +104,7 @@ interface VendorSecurityAssessment {
      userInfoURL: 'https://api.github.com/user',
      scopes: ['user:email'], // No repo access
      pkceRequired: true,
-     stateValidation: true,
+     stateValidation: true
    };
    ```
 
@@ -112,13 +112,14 @@ interface VendorSecurityAssessment {
    ```typescript
    const microsoftOAuthConfig = {
      provider: 'microsoft',
-     authorizationURL: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+     authorizationURL:
+       'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
      tokenURL: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
      userInfoURL: 'https://graph.microsoft.com/v1.0/me',
      scopes: ['openid', 'email', 'profile'],
      pkceRequired: true,
      stateValidation: true,
-     tenantValidation: true, // For enterprise customers
+     tenantValidation: true // For enterprise customers
    };
    ```
 
@@ -136,14 +137,17 @@ class SecureOAuthHandler {
     // Generate cryptographically secure state
     const state = crypto.randomBytes(32).toString('hex');
     const codeVerifier = crypto.randomBytes(32).toString('base64url');
-    const codeChallenge = crypto.createHash('sha256').update(codeVerifier).digest('base64url');
+    const codeChallenge = crypto
+      .createHash('sha256')
+      .update(codeVerifier)
+      .digest('base64url');
 
     // Store state and PKCE verifier
     await this.stateStore.store(state, {
       userId,
       codeVerifier,
       timestamp: Date.now(),
-      expiresIn: 600000, // 10 minutes
+      expiresIn: 600000 // 10 minutes
     });
 
     // Build authorization URL
@@ -167,11 +171,16 @@ class SecureOAuthHandler {
     }
 
     // Exchange code for tokens
-    const tokenResponse = await this.exchangeCodeForTokens(code, stateData.codeVerifier);
+    const tokenResponse = await this.exchangeCodeForTokens(
+      code,
+      stateData.codeVerifier
+    );
 
     // Encrypt and store refresh token
     if (tokenResponse.refresh_token) {
-      const encryptedToken = await this.tokenEncryption.encrypt(tokenResponse.refresh_token);
+      const encryptedToken = await this.tokenEncryption.encrypt(
+        tokenResponse.refresh_token
+      );
       await this.storeRefreshToken(stateData.userId, encryptedToken);
     }
 
@@ -183,7 +192,7 @@ class SecureOAuthHandler {
       expires_in: tokenResponse.expires_in,
       token_type: tokenResponse.token_type,
       // Don't return refresh token in response
-      user_info: await this.fetchUserInfo(tokenResponse.access_token),
+      user_info: await this.fetchUserInfo(tokenResponse.access_token)
     };
   }
 }
@@ -205,11 +214,15 @@ class OAuthStateManager {
       userId,
       provider,
       timestamp: Date.now(),
-      nonce: crypto.randomBytes(16).toString('hex'),
+      nonce: crypto.randomBytes(16).toString('hex')
     };
 
     // Store with 10-minute expiration
-    await this.redis.setex(`oauth:state:${state}`, 600, JSON.stringify(stateData));
+    await this.redis.setex(
+      `oauth:state:${state}`,
+      600,
+      JSON.stringify(stateData)
+    );
 
     return state;
   }
@@ -221,7 +234,9 @@ class OAuthStateManager {
     const parsed = JSON.parse(stateData);
 
     // Verify state hasn't expired and belongs to correct user
-    const isValid = parsed.userId === expectedUserId && parsed.timestamp + 600000 > Date.now();
+    const isValid =
+      parsed.userId === expectedUserId &&
+      parsed.timestamp + 600000 > Date.now();
 
     // Delete state after validation (one-time use)
     await this.redis.del(`oauth:state:${state}`);
@@ -242,7 +257,9 @@ class OAuthTokenManager {
   async storeTokens(userId: string, tokens: OAuthTokens): Promise<void> {
     // Never store access tokens (short-lived)
     if (tokens.refresh_token) {
-      const encryptedRefreshToken = await this.encryption.encrypt(tokens.refresh_token);
+      const encryptedRefreshToken = await this.encryption.encrypt(
+        tokens.refresh_token
+      );
 
       await this.db.query(
         `
@@ -251,7 +268,12 @@ class OAuthTokenManager {
         ON CONFLICT (user_id, provider) 
         DO UPDATE SET refresh_token_encrypted = $3, expires_at = $4
       `,
-        [userId, tokens.provider, encryptedRefreshToken, new Date(Date.now() + 86400000 * 7)]
+        [
+          userId,
+          tokens.provider,
+          encryptedRefreshToken,
+          new Date(Date.now() + 86400000 * 7)
+        ]
       );
     }
   }
@@ -269,7 +291,9 @@ class OAuthTokenManager {
       throw new Error('No valid refresh token found');
     }
 
-    const refreshToken = await this.encryption.decrypt(tokenRecord.rows[0].refresh_token_encrypted);
+    const refreshToken = await this.encryption.decrypt(
+      tokenRecord.rows[0].refresh_token_encrypted
+    );
 
     // Exchange refresh token for new access token
     const newTokens = await this.exchangeRefreshToken(refreshToken, provider);
@@ -306,15 +330,15 @@ class SecureHttpClient {
       headers: {
         'User-Agent': `PromptScape/1.0 (+https://promptscape.app)`,
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       httpsAgent: new https.Agent({
         rejectUnauthorized: true, // Validate SSL certificates
         minVersion: 'TLSv1.2', // Minimum TLS 1.2
-        ciphers: 'ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM', // Secure ciphers only
+        ciphers: 'ECDHE+AESGCM:ECDHE+CHACHA20:DHE+AESGCM' // Secure ciphers only
       }),
       maxRedirects: 3,
-      validateStatus: status => status >= 200 && status < 300,
+      validateStatus: status => status >= 200 && status < 300
     });
 
     this.setupInterceptors();
@@ -338,7 +362,7 @@ class SecureHttpClient {
         logger.info('External API request', {
           url: config.url,
           method: config.method,
-          headers: this.sanitizeHeaders(config.headers),
+          headers: this.sanitizeHeaders(config.headers)
         });
 
         return config;
@@ -353,7 +377,8 @@ class SecureHttpClient {
         logger.info('External API response', {
           url: response.config.url,
           status: response.status,
-          duration: Date.now() - parseInt(response.config.headers['X-Timestamp']),
+          duration:
+            Date.now() - parseInt(response.config.headers['X-Timestamp'])
         });
 
         return response;
@@ -363,7 +388,7 @@ class SecureHttpClient {
         logger.error('External API error', {
           url: error.config?.url,
           status: error.response?.status,
-          error: error.message,
+          error: error.message
         });
 
         return Promise.reject(new APIError(error));
@@ -416,7 +441,10 @@ class RequestSigner implements AuthenticationStrategy {
   authenticate(config: AxiosRequestConfig): AxiosRequestConfig {
     const timestamp = Date.now().toString();
     const payload = `${config.method?.toUpperCase()}${config.url}${timestamp}${config.data || ''}`;
-    const signature = crypto.createHmac('sha256', this.secretKey).update(payload).digest('hex');
+    const signature = crypto
+      .createHmac('sha256', this.secretKey)
+      .update(payload)
+      .digest('hex');
 
     config.headers['X-Timestamp'] = timestamp;
     config.headers['X-Signature'] = signature;
@@ -441,9 +469,9 @@ class SecureGraphQLClient {
     this.client = new GraphQLClient(endpoint, {
       headers: {
         'User-Agent': 'PromptScape/1.0',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      timeout: 30000,
+      timeout: 30000
     });
 
     this.queryValidator = new GraphQLQueryValidator({
@@ -452,7 +480,7 @@ class SecureGraphQLClient {
       scalarCost: 1,
       objectCost: 2,
       listFactor: 10,
-      forbiddenFields: ['__schema', '__type'], // Prevent introspection
+      forbiddenFields: ['__schema', '__type'] // Prevent introspection
     });
   }
 
@@ -505,14 +533,20 @@ class WebhookSignatureVerifier {
     }
 
     // Calculate expected signature
-    const expectedSignature = crypto.createHmac(algorithm, secret).update(payload, 'utf8').digest('hex');
+    const expectedSignature = crypto
+      .createHmac(algorithm, secret)
+      .update(payload, 'utf8')
+      .digest('hex');
 
     // Extract signature from header (remove algorithm prefix if present)
     const providedSignature = signature.replace(`${algorithm}=`, '');
 
     // Timing-safe comparison
     try {
-      return crypto.timingSafeEqual(Buffer.from(expectedSignature, 'hex'), Buffer.from(providedSignature, 'hex'));
+      return crypto.timingSafeEqual(
+        Buffer.from(expectedSignature, 'hex'),
+        Buffer.from(providedSignature, 'hex')
+      );
     } catch (error) {
       return false;
     }
@@ -542,7 +576,8 @@ class SecureWebhookHandler {
 
       // Extract webhook data
       const payload = JSON.stringify(req.body);
-      const signature = req.get('X-Hub-Signature-256') || req.get('X-Signature');
+      const signature =
+        req.get('X-Hub-Signature-256') || req.get('X-Signature');
       const timestamp = req.get('X-Timestamp');
       const provider = this.identifyProvider(req);
 
@@ -559,7 +594,11 @@ class SecureWebhookHandler {
 
       // Verify timestamp if provided
       if (timestamp && !this.verifier.verifyTimestamp(timestamp)) {
-        logger.warn('Webhook timestamp too old', { provider, timestamp, ip: req.ip });
+        logger.warn('Webhook timestamp too old', {
+          provider,
+          timestamp,
+          ip: req.ip
+        });
         return res.status(400).json({ error: 'Request too old' });
       }
 
@@ -570,11 +609,17 @@ class SecureWebhookHandler {
       await this.processWebhook(validatedPayload, provider);
 
       // Log successful webhook
-      logger.info('Webhook processed successfully', { provider, type: validatedPayload.type });
+      logger.info('Webhook processed successfully', {
+        provider,
+        type: validatedPayload.type
+      });
 
       res.status(200).json({ status: 'success' });
     } catch (error) {
-      logger.error('Webhook processing failed', { error: error.message, provider });
+      logger.error('Webhook processing failed', {
+        error: error.message,
+        provider
+      });
       res.status(500).json({ error: 'Internal server error' });
     }
   }
@@ -592,7 +637,11 @@ class SecureWebhookDelivery {
   private readonly httpClient: SecureHttpClient;
   private readonly signer: RequestSigner;
 
-  async deliverWebhook(url: string, payload: any, options: WebhookDeliveryOptions): Promise<WebhookDeliveryResult> {
+  async deliverWebhook(
+    url: string,
+    payload: any,
+    options: WebhookDeliveryOptions
+  ): Promise<WebhookDeliveryResult> {
     const deliveryId = crypto.randomUUID();
 
     try {
@@ -604,7 +653,7 @@ class SecureWebhookDelivery {
         id: deliveryId,
         timestamp: Date.now(),
         data: payload,
-        version: '1.0',
+        version: '1.0'
       };
 
       // Sign request
@@ -616,44 +665,50 @@ class SecureWebhookDelivery {
           'Content-Type': 'application/json',
           'User-Agent': 'PromptScape-Webhooks/1.0',
           'X-Webhook-ID': deliveryId,
-          'X-Webhook-Timestamp': webhookPayload.timestamp.toString(),
-        },
+          'X-Webhook-Timestamp': webhookPayload.timestamp.toString()
+        }
       });
 
       // Deliver with retry logic
-      const result = await this.deliverWithRetry(signedConfig, options.retryOptions);
+      const result = await this.deliverWithRetry(
+        signedConfig,
+        options.retryOptions
+      );
 
       // Log delivery
       logger.info('Webhook delivered successfully', {
         id: deliveryId,
         url: this.sanitizeURL(url),
         status: result.status,
-        duration: result.duration,
+        duration: result.duration
       });
 
       return {
         id: deliveryId,
         status: 'delivered',
         httpStatus: result.status,
-        duration: result.duration,
+        duration: result.duration
       };
     } catch (error) {
       logger.error('Webhook delivery failed', {
         id: deliveryId,
         url: this.sanitizeURL(url),
-        error: error.message,
+        error: error.message
       });
 
       return {
         id: deliveryId,
         status: 'failed',
         error: error.message,
-        retryCount: error.retryCount || 0,
+        retryCount: error.retryCount || 0
       };
     }
   }
 
-  private async deliverWithRetry(config: AxiosRequestConfig, retryOptions: RetryOptions): Promise<DeliveryResult> {
+  private async deliverWithRetry(
+    config: AxiosRequestConfig,
+    retryOptions: RetryOptions
+  ): Promise<DeliveryResult> {
     let lastError: Error;
 
     for (let attempt = 0; attempt <= retryOptions.maxRetries; attempt++) {
@@ -663,13 +718,16 @@ class SecureWebhookDelivery {
 
         return {
           status: response.status,
-          duration: Date.now() - startTime,
+          duration: Date.now() - startTime
         };
       } catch (error) {
         lastError = error;
 
         if (attempt < retryOptions.maxRetries) {
-          const delay = this.calculateRetryDelay(attempt, retryOptions.backoffStrategy);
+          const delay = this.calculateRetryDelay(
+            attempt,
+            retryOptions.backoffStrategy
+          );
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       }
@@ -711,7 +769,7 @@ class SecurePostgreSQLConnection {
         rejectUnauthorized: true,
         ca: config.sslCA,
         key: config.sslKey,
-        cert: config.sslCert,
+        cert: config.sslCert
       },
 
       // Connection Pool Security
@@ -725,7 +783,7 @@ class SecurePostgreSQLConnection {
       query_timeout: 30000,
 
       // Application Name for Monitoring
-      application_name: 'promptscape-app',
+      application_name: 'promptscape-app'
     });
 
     this.setupEventHandlers();
@@ -739,7 +797,7 @@ class SecurePostgreSQLConnection {
       // Log query (sanitized)
       logger.debug('Database query', {
         query: this.sanitizeQuery(text),
-        duration: Date.now() - startTime,
+        duration: Date.now() - startTime
       });
 
       const result = await client.query(text, params);
@@ -749,7 +807,7 @@ class SecurePostgreSQLConnection {
       logger.error('Database query failed', {
         error: error.message,
         query: this.sanitizeQuery(text),
-        duration: Date.now() - startTime,
+        duration: Date.now() - startTime
       });
       throw error;
     } finally {
@@ -777,7 +835,7 @@ class SecureRedisConnection {
       tls: config.tls
         ? {
             servername: config.host,
-            rejectUnauthorized: true,
+            rejectUnauthorized: true
           }
         : undefined,
 
@@ -793,7 +851,7 @@ class SecureRedisConnection {
 
       // Error Handling
       lazyConnect: true,
-      maxLoadingTimeout: 5000,
+      maxLoadingTimeout: 5000
     });
 
     this.setupEventHandlers();
@@ -842,7 +900,10 @@ class SecureFileUploadHandler {
     this.virusScanner = new VirusScanner(config.scannerConfig);
   }
 
-  async handleUpload(file: UploadedFile, userId: string): Promise<FileUploadResult> {
+  async handleUpload(
+    file: UploadedFile,
+    userId: string
+  ): Promise<FileUploadResult> {
     const uploadId = crypto.randomUUID();
 
     try {
@@ -859,14 +920,18 @@ class SecureFileUploadHandler {
       const secureFilename = this.generateSecureFilename(file.originalname);
 
       // Upload to secure storage
-      const storageResult = await this.uploadToSecureStorage(file, secureFilename, userId);
+      const storageResult = await this.uploadToSecureStorage(
+        file,
+        secureFilename,
+        userId
+      );
 
       // Log successful upload
       logger.info('File uploaded successfully', {
         uploadId,
         filename: secureFilename,
         size: file.size,
-        userId,
+        userId
       });
 
       return {
@@ -874,13 +939,13 @@ class SecureFileUploadHandler {
         filename: secureFilename,
         size: file.size,
         url: storageResult.url,
-        contentType: file.mimetype,
+        contentType: file.mimetype
       };
     } catch (error) {
       logger.error('File upload failed', {
         uploadId,
         error: error.message,
-        userId,
+        userId
       });
 
       throw new FileUploadError(error.message);
@@ -890,7 +955,9 @@ class SecureFileUploadHandler {
   private async validateFile(file: UploadedFile): Promise<void> {
     // Size validation
     if (file.size > this.maxFileSize) {
-      throw new Error(`File size exceeds maximum allowed size of ${this.maxFileSize} bytes`);
+      throw new Error(
+        `File size exceeds maximum allowed size of ${this.maxFileSize} bytes`
+      );
     }
 
     // MIME type validation
@@ -949,7 +1016,7 @@ class IntegrationHealthChecker {
           status: result.isHealthy ? 'healthy' : 'unhealthy',
           responseTime: duration,
           details: result.details,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         });
 
         // Alert on unhealthy integrations
@@ -958,7 +1025,7 @@ class IntegrationHealthChecker {
             level: 'warning',
             service: name,
             message: `Integration ${name} is unhealthy: ${result.details}`,
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
       } catch (error) {
@@ -966,7 +1033,7 @@ class IntegrationHealthChecker {
           name,
           status: 'error',
           error: error.message,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         });
 
         // Alert on integration errors
@@ -974,7 +1041,7 @@ class IntegrationHealthChecker {
           level: 'critical',
           service: name,
           message: `Integration ${name} health check failed: ${error.message}`,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
     }
@@ -982,7 +1049,7 @@ class IntegrationHealthChecker {
     return {
       overall: this.calculateOverallHealth(results),
       services: Object.fromEntries(results),
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 }
@@ -996,19 +1063,24 @@ class IntegrationHealthChecker {
 class IntegrationPerformanceMonitor {
   private readonly metrics: MetricsCollector;
 
-  recordAPICall(service: string, endpoint: string, duration: number, status: number): void {
+  recordAPICall(
+    service: string,
+    endpoint: string,
+    duration: number,
+    status: number
+  ): void {
     // Record response time
     this.metrics.histogram('integration_response_time', duration, {
       service,
       endpoint,
-      status_code: status.toString(),
+      status_code: status.toString()
     });
 
     // Record request count
     this.metrics.counter('integration_requests_total', 1, {
       service,
       endpoint,
-      status_code: status.toString(),
+      status_code: status.toString()
     });
 
     // Record error rate
@@ -1016,12 +1088,16 @@ class IntegrationPerformanceMonitor {
       this.metrics.counter('integration_errors_total', 1, {
         service,
         endpoint,
-        status_code: status.toString(),
+        status_code: status.toString()
       });
     }
   }
 
-  recordWebhookDelivery(url: string, status: 'success' | 'failed', duration?: number): void {
+  recordWebhookDelivery(
+    url: string,
+    status: 'success' | 'failed',
+    duration?: number
+  ): void {
     this.metrics.counter('webhook_deliveries_total', 1, { status });
 
     if (duration) {
@@ -1048,7 +1124,9 @@ describe('Integration Security Tests', () => {
       const handler = new OAuthHandler();
 
       // Test with invalid state
-      await expect(handler.handleCallback('valid-code', 'invalid-state')).rejects.toThrow('Invalid OAuth state');
+      await expect(
+        handler.handleCallback('valid-code', 'invalid-state')
+      ).rejects.toThrow('Invalid OAuth state');
     });
 
     it('should implement PKCE', async () => {
@@ -1066,14 +1144,16 @@ describe('Integration Security Tests', () => {
       const client = new SecureHttpClient('https://api.example.com');
 
       // Mock error response
-      nock('https://api.example.com').get('/test').reply(500, { error: 'Internal server error' });
+      nock('https://api.example.com')
+        .get('/test')
+        .reply(500, { error: 'Internal server error' });
 
       await expect(client.get('/test')).rejects.toThrow(APIError);
     });
 
     it('should implement rate limiting', async () => {
       const client = new SecureHttpClient('https://api.example.com', {
-        rateLimit: { requests: 1, window: 1000 },
+        rateLimit: { requests: 1, window: 1000 }
       });
 
       // First request should succeed

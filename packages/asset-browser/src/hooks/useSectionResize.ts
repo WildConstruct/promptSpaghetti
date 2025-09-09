@@ -25,20 +25,23 @@ function throttle<T extends (...args: any[]) => any>(
 ): (...args: Parameters<T>) => void {
   let lastCall = 0;
   let timeout: NodeJS.Timeout | null = null;
-  
+
   return (...args: Parameters<T>) => {
     const now = Date.now();
-    
+
     if (now - lastCall >= delay) {
       lastCall = now;
       func(...args);
     } else {
       // Schedule the final call
       if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        lastCall = Date.now();
-        func(...args);
-      }, delay - (now - lastCall));
+      timeout = setTimeout(
+        () => {
+          lastCall = Date.now();
+          func(...args);
+        },
+        delay - (now - lastCall)
+      );
     }
   };
 }
@@ -51,7 +54,7 @@ export function useSectionResize({
   // Load saved heights from localStorage
   const getSavedHeights = (): Record<string, SectionState> => {
     if (typeof window === 'undefined') return {};
-    
+
     const saved = localStorage.getItem(storageKey);
     if (saved) {
       try {
@@ -60,7 +63,7 @@ export function useSectionResize({
         // Invalid JSON, return empty
       }
     }
-    
+
     // Return default heights
     const defaults: Record<string, SectionState> = {};
     sections.forEach(section => {
@@ -72,39 +75,46 @@ export function useSectionResize({
     return defaults;
   };
 
-  const [sectionStates, setSectionStates] = useState<Record<string, SectionState>>(getSavedHeights);
+  const [sectionStates, setSectionStates] =
+    useState<Record<string, SectionState>>(getSavedHeights);
   const [resizingSection, setResizingSection] = useState<string | null>(null);
   const [tempHeight, setTempHeight] = useState<number | null>(null);
-  
+
   const dragStartYRef = useRef(0);
   const dragStartHeightRef = useRef(0);
   const dragTargetSectionRef = useRef<string>('');
   const rafRef = useRef<number>();
 
   // Save heights to localStorage
-  const saveHeights = useCallback((states: Record<string, SectionState>) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(storageKey, JSON.stringify(states));
-    }
-  }, [storageKey]);
+  const saveHeights = useCallback(
+    (states: Record<string, SectionState>) => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(storageKey, JSON.stringify(states));
+      }
+    },
+    [storageKey]
+  );
 
   // Handle resize start
-  const handleResizeStart = useCallback((e: React.MouseEvent, sectionId: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    setResizingSection(sectionId);
-    dragStartYRef.current = e.clientY;
-    dragStartHeightRef.current = sectionStates[sectionId]?.height || 200;
-    dragTargetSectionRef.current = sectionId;
-    setTempHeight(dragStartHeightRef.current);
-    
-    document.body.style.cursor = 'ns-resize';
-    document.body.style.userSelect = 'none';
-    // Prevent text selection during drag
-    document.body.style.webkitUserSelect = 'none';
-    (document.body.style as any).msUserSelect = 'none';
-  }, [sectionStates]);
+  const handleResizeStart = useCallback(
+    (e: React.MouseEvent, sectionId: string) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      setResizingSection(sectionId);
+      dragStartYRef.current = e.clientY;
+      dragStartHeightRef.current = sectionStates[sectionId]?.height || 200;
+      dragTargetSectionRef.current = sectionId;
+      setTempHeight(dragStartHeightRef.current);
+
+      document.body.style.cursor = 'ns-resize';
+      document.body.style.userSelect = 'none';
+      // Prevent text selection during drag
+      document.body.style.webkitUserSelect = 'none';
+      (document.body.style as any).msUserSelect = 'none';
+    },
+    [sectionStates]
+  );
 
   // Throttled height update for visual feedback
   const updateTempHeight = useCallback(
@@ -115,38 +125,41 @@ export function useSectionResize({
   );
 
   // Handle resize move with RAF for smooth performance
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!resizingSection) return;
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!resizingSection) return;
 
-    // Cancel any pending RAF
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-    }
+      // Cancel any pending RAF
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
 
-    rafRef.current = requestAnimationFrame(() => {
-      const section = sections.find(s => s.id === resizingSection);
-      if (!section) return;
+      rafRef.current = requestAnimationFrame(() => {
+        const section = sections.find(s => s.id === resizingSection);
+        if (!section) return;
 
-      const deltaY = e.clientY - dragStartYRef.current;
-      const newHeight = Math.max(
-        dragStartHeightRef.current + deltaY,
-        section.minHeight
-      );
+        const deltaY = e.clientY - dragStartYRef.current;
+        const newHeight = Math.max(
+          dragStartHeightRef.current + deltaY,
+          section.minHeight
+        );
 
-      // Update temporary height for visual feedback
-      updateTempHeight(resizingSection, newHeight);
-    });
-  }, [resizingSection, sections, updateTempHeight]);
+        // Update temporary height for visual feedback
+        updateTempHeight(resizingSection, newHeight);
+      });
+    },
+    [resizingSection, sections, updateTempHeight]
+  );
 
   // Handle resize end
   const handleMouseUp = useCallback(() => {
     if (!resizingSection || tempHeight === null) return;
-    
+
     // Cancel any pending RAF
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }
-    
+
     // Commit the final height
     setSectionStates(prev => {
       const newStates = {
@@ -159,9 +172,9 @@ export function useSectionResize({
       saveHeights(newStates);
       return newStates;
     });
-    
+
     onHeightChange?.(resizingSection, tempHeight);
-    
+
     // Clean up
     setResizingSection(null);
     setTempHeight(null);
@@ -172,37 +185,50 @@ export function useSectionResize({
   }, [resizingSection, tempHeight, saveHeights, onHeightChange]);
 
   // Toggle section collapse
-  const toggleCollapse = useCallback((sectionId: string) => {
-    setSectionStates(prev => {
-      const newStates = {
-        ...prev,
-        [sectionId]: {
-          ...prev[sectionId],
-          collapsed: !prev[sectionId]?.collapsed
-        }
-      };
-      saveHeights(newStates);
-      return newStates;
-    });
-  }, [saveHeights]);
+  const toggleCollapse = useCallback(
+    (sectionId: string) => {
+      setSectionStates(prev => {
+        const newStates = {
+          ...prev,
+          [sectionId]: {
+            ...prev[sectionId],
+            collapsed: !prev[sectionId]?.collapsed
+          }
+        };
+        saveHeights(newStates);
+        return newStates;
+      });
+    },
+    [saveHeights]
+  );
 
   // Get section height - use temp height during resize for smooth updates
-  const getSectionHeight = useCallback((sectionId: string): number => {
-    const state = sectionStates[sectionId];
-    if (state?.collapsed) return 30; // Collapsed header height
-    
-    // Use temp height during resize for smooth visual feedback
-    if (resizingSection === sectionId && tempHeight !== null) {
-      return tempHeight;
-    }
-    
-    return state?.height || sections.find(s => s.id === sectionId)?.defaultHeight || 200;
-  }, [sectionStates, sections, resizingSection, tempHeight]);
+  const getSectionHeight = useCallback(
+    (sectionId: string): number => {
+      const state = sectionStates[sectionId];
+      if (state?.collapsed) return 30; // Collapsed header height
+
+      // Use temp height during resize for smooth visual feedback
+      if (resizingSection === sectionId && tempHeight !== null) {
+        return tempHeight;
+      }
+
+      return (
+        state?.height ||
+        sections.find(s => s.id === sectionId)?.defaultHeight ||
+        200
+      );
+    },
+    [sectionStates, sections, resizingSection, tempHeight]
+  );
 
   // Check if section is collapsed
-  const isSectionCollapsed = useCallback((sectionId: string): boolean => {
-    return sectionStates[sectionId]?.collapsed || false;
-  }, [sectionStates]);
+  const isSectionCollapsed = useCallback(
+    (sectionId: string): boolean => {
+      return sectionStates[sectionId]?.collapsed || false;
+    },
+    [sectionStates]
+  );
 
   // Set up global mouse listeners with passive option for better performance
   useEffect(() => {
@@ -210,14 +236,14 @@ export function useSectionResize({
       // Use passive: false for mousemove to allow preventDefault if needed
       const moveOptions = { passive: false, capture: true };
       const upOptions = { passive: true, capture: true };
-      
+
       document.addEventListener('mousemove', handleMouseMove, moveOptions);
       document.addEventListener('mouseup', handleMouseUp, upOptions);
-      
+
       return () => {
         document.removeEventListener('mousemove', handleMouseMove, moveOptions);
         document.removeEventListener('mouseup', handleMouseUp, upOptions);
-        
+
         // Clean up any pending RAF
         if (rafRef.current) {
           cancelAnimationFrame(rafRef.current);
@@ -230,7 +256,7 @@ export function useSectionResize({
   useEffect(() => {
     const currentIds = Object.keys(sectionStates);
     const newSections = sections.filter(s => !currentIds.includes(s.id));
-    
+
     if (newSections.length > 0) {
       setSectionStates(prev => {
         const updated = { ...prev };

@@ -131,7 +131,7 @@ const contentMetrics = {
   // Quality assurance
   spellCheckErrors: 0, // count
   brokenLinks: 1, // count
-  accessibilityScore: 94, // % compliance
+  accessibilityScore: 94 // % compliance
 };
 ```
 
@@ -159,7 +159,7 @@ const analyticsCollector = {
       category: category,
       timestamp: Date.now(),
       userAgent: navigator.userAgent,
-      referrer: document.referrer,
+      referrer: document.referrer
     };
 
     this.sendAnalyticsEvent(event);
@@ -172,7 +172,7 @@ const analyticsCollector = {
       query: query,
       resultCount: results.length,
       selectedResult: selectedResult,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
 
     this.sendAnalyticsEvent(event);
@@ -184,11 +184,11 @@ const analyticsCollector = {
       type: 'example_usage',
       exampleId: exampleId,
       action: action, // 'view', 'copy', 'modify', 'run'
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
 
     this.sendAnalyticsEvent(event);
-  },
+  }
 };
 ```
 
@@ -204,7 +204,7 @@ const performanceMonitor = {
       duration: duration,
       outputSize: size,
       timestamp: Date.now(),
-      version: getCurrentVersion(),
+      version: getCurrentVersion()
     };
 
     this.storeBuildMetrics(metrics);
@@ -217,11 +217,11 @@ const performanceMonitor = {
       FCP: performance.getEntriesByName('first-contentful-paint')[0]?.startTime,
       LCP: this.getLargestContentfulPaint(),
       FID: this.getFirstInputDelay(),
-      CLS: this.getCumulativeLayoutShift(),
+      CLS: this.getCumulativeLayoutShift()
     };
 
     this.sendUXMetrics(metrics);
-  },
+  }
 };
 ```
 
@@ -277,7 +277,7 @@ const contentFreshnessChecker = {
         staleContent.push({
           file: file,
           age: ageInDays,
-          lastModified: stats.mtime,
+          lastModified: stats.mtime
         });
       }
     });
@@ -292,12 +292,15 @@ const contentFreshnessChecker = {
       staleFiles: staleContent.length,
       staleContent: staleContent,
       freshnessScore: this.calculateFreshnessScore(),
-      recommendations: this.generateRecommendations(staleContent),
+      recommendations: this.generateRecommendations(staleContent)
     };
 
-    fs.writeFileSync('reports/content-freshness.json', JSON.stringify(report, null, 2));
+    fs.writeFileSync(
+      'reports/content-freshness.json',
+      JSON.stringify(report, null, 2)
+    );
     return report;
-  },
+  }
 };
 ```
 

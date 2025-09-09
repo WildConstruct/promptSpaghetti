@@ -11,25 +11,25 @@ The Plugin Architecture enables developers to extend the PromptScape Randomizer 
 ```typescript
 interface INodePlugin {
   // Identification
-  id: string;                     // Unique plugin ID
-  name: string;                   // Display name
-  version: string;                // Semantic version
-  author: string;                 // Plugin author
-  description: string;            // Plugin description
-  
+  id: string; // Unique plugin ID
+  name: string; // Display name
+  version: string; // Semantic version
+  author: string; // Plugin author
+  description: string; // Plugin description
+
   // Compatibility
-  engineVersion: string;          // Required engine version
-  dependencies?: string[];        // Other plugin dependencies
-  
+  engineVersion: string; // Required engine version
+  dependencies?: string[]; // Other plugin dependencies
+
   // Node Types
-  nodeTypes: INodeType[];         // Node types provided by plugin
-  
+  nodeTypes: INodeType[]; // Node types provided by plugin
+
   // Lifecycle
-  initialize(): Promise<void>;    // Plugin initialization
-  activate(): Promise<void>;      // Plugin activation
-  deactivate(): Promise<void>;    // Plugin deactivation
-  validate(): boolean;            // Validate plugin integrity
-  
+  initialize(): Promise<void>; // Plugin initialization
+  activate(): Promise<void>; // Plugin activation
+  deactivate(): Promise<void>; // Plugin deactivation
+  validate(): boolean; // Validate plugin integrity
+
   // Optional hooks
   onGraphLoad?: (graph: any) => void;
   onGraphSave?: (graph: any) => void;
@@ -54,10 +54,7 @@ Every plugin must include a `plugin.json` manifest file:
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": [],
-  "permissions": [
-    "node:create",
-    "node:execute"
-  ],
+  "permissions": ["node:create", "node:execute"],
   "nodeTypes": [
     {
       "id": "customNode",
@@ -82,7 +79,7 @@ class PluginManager {
   private plugins: Map<string, INodePlugin> = new Map();
   private loadedPlugins: Set<string> = new Set();
   private pluginPaths: string[] = [];
-  
+
   constructor(config: PluginConfig) {
     this.pluginPaths = config.pluginPaths || [
       './plugins',
@@ -90,77 +87,79 @@ class PluginManager {
       './node_modules/@promptscape'
     ];
   }
-  
+
   async loadPlugin(pluginPath: string): Promise<void> {
     // 1. Read manifest
     const manifest = await this.readManifest(pluginPath);
-    
+
     // 2. Validate manifest
     if (!this.validateManifest(manifest)) {
       throw new Error(`Invalid plugin manifest: ${pluginPath}`);
     }
-    
+
     // 3. Check compatibility
     if (!this.checkCompatibility(manifest)) {
       throw new Error(`Incompatible plugin version: ${manifest.engineVersion}`);
     }
-    
+
     // 4. Load plugin module
     const PluginClass = await import(path.join(pluginPath, manifest.main));
     const plugin = new PluginClass.default(manifest);
-    
+
     // 5. Validate plugin
     if (!plugin.validate()) {
       throw new Error(`Plugin validation failed: ${manifest.id}`);
     }
-    
+
     // 6. Initialize plugin
     await plugin.initialize();
-    
+
     // 7. Register node types
     plugin.nodeTypes.forEach(nodeType => {
       nodeRegistry.register(nodeType);
     });
-    
+
     // 8. Store plugin
     this.plugins.set(manifest.id, plugin);
     this.loadedPlugins.add(manifest.id);
-    
+
     // 9. Activate plugin
     await plugin.activate();
   }
-  
+
   async unloadPlugin(pluginId: string): Promise<void> {
     const plugin = this.plugins.get(pluginId);
     if (!plugin) return;
-    
+
     // 1. Deactivate plugin
     await plugin.deactivate();
-    
+
     // 2. Unregister node types
     // Note: This needs careful handling of existing nodes
-    
+
     // 3. Remove from registry
     this.plugins.delete(pluginId);
     this.loadedPlugins.delete(pluginId);
   }
-  
+
   async discoverPlugins(): Promise<PluginManifest[]> {
     const plugins: PluginManifest[] = [];
-    
+
     for (const pluginPath of this.pluginPaths) {
       if (await fs.exists(pluginPath)) {
         const dirs = await fs.readdir(pluginPath);
         for (const dir of dirs) {
           const manifestPath = path.join(pluginPath, dir, 'plugin.json');
           if (await fs.exists(manifestPath)) {
-            const manifest = await this.readManifest(path.join(pluginPath, dir));
+            const manifest = await this.readManifest(
+              path.join(pluginPath, dir)
+            );
             plugins.push(manifest);
           }
         }
       }
     }
-    
+
     return plugins;
   }
 }
@@ -180,7 +179,7 @@ export default class MyPlugin implements INodePlugin {
   author = 'Developer';
   description = 'My custom plugin';
   engineVersion = '^1.0.0';
-  
+
   nodeTypes: INodeType[] = [
     {
       id: 'myCustomNode',
@@ -201,22 +200,22 @@ export default class MyPlugin implements INodePlugin {
       tags: ['custom', 'special']
     }
   ];
-  
+
   async initialize(): Promise<void> {
     // Load resources, connect to services, etc.
     console.log(`Initializing ${this.name}`);
   }
-  
+
   async activate(): Promise<void> {
     // Start plugin functionality
     console.log(`Activating ${this.name}`);
   }
-  
+
   async deactivate(): Promise<void> {
     // Clean up resources
     console.log(`Deactivating ${this.name}`);
   }
-  
+
   validate(): boolean {
     // Validate plugin integrity
     return true;
@@ -234,22 +233,25 @@ export class MyCustomNode extends BaseNode {
     super(id);
     this.config = config;
   }
-  
-  async execute(inputs: Map<string, any>, context: ExecutionContext): Promise<any> {
+
+  async execute(
+    inputs: Map<string, any>,
+    context: ExecutionContext
+  ): Promise<any> {
     // Custom execution logic
     const input = inputs.get('input') || '';
-    
+
     // Do something special
     const result = this.processInput(input);
-    
+
     return result;
   }
-  
+
   private processInput(input: string): string {
     // Custom processing
     return `Processed: ${input}`;
   }
-  
+
   serialize(): object {
     return {
       id: this.id,
@@ -257,7 +259,7 @@ export class MyCustomNode extends BaseNode {
       config: this.config
     };
   }
-  
+
   static deserialize(data: any): MyCustomNode {
     return new MyCustomNode(data.id, data.config);
   }
@@ -274,7 +276,7 @@ Plugins run in a sandboxed environment with restricted access:
 class PluginSandbox {
   private vm: VM;
   private permissions: Set<string>;
-  
+
   constructor(permissions: string[]) {
     this.permissions = new Set(permissions);
     this.vm = new VM({
@@ -282,7 +284,7 @@ class PluginSandbox {
       sandbox: this.createSandbox()
     });
   }
-  
+
   private createSandbox(): object {
     return {
       console: {
@@ -295,25 +297,25 @@ class PluginSandbox {
       require: this.createRestrictedRequire()
     };
   }
-  
+
   private createRestrictedFetch() {
     return async (url: string, options?: any) => {
       if (!this.permissions.has('network:fetch')) {
         throw new Error('Network access denied');
       }
-      
+
       // Only allow specific domains
       const allowedDomains = ['api.promptscape.com'];
       const urlObj = new URL(url);
-      
+
       if (!allowedDomains.includes(urlObj.hostname)) {
         throw new Error(`Access to ${urlObj.hostname} denied`);
       }
-      
+
       return fetch(url, options);
     };
   }
-  
+
   executePlugin(code: string): any {
     return this.vm.run(code);
   }
@@ -328,18 +330,18 @@ enum PluginPermission {
   NODE_CREATE = 'node:create',
   NODE_DELETE = 'node:delete',
   NODE_EXECUTE = 'node:execute',
-  
+
   // Graph operations
   GRAPH_READ = 'graph:read',
   GRAPH_WRITE = 'graph:write',
-  
+
   // File system
   FS_READ = 'fs:read',
   FS_WRITE = 'fs:write',
-  
+
   // Network
   NETWORK_FETCH = 'network:fetch',
-  
+
   // UI
   UI_DIALOG = 'ui:dialog',
   UI_NOTIFICATION = 'ui:notification'
@@ -368,30 +370,30 @@ interface PluginRegistryEntry {
 
 class PluginRegistry {
   private registryUrl = 'https://registry.promptscape.com';
-  
+
   async search(query: string): Promise<PluginRegistryEntry[]> {
     const response = await fetch(`${this.registryUrl}/search?q=${query}`);
     return response.json();
   }
-  
+
   async getPlugin(id: string): Promise<PluginRegistryEntry> {
     const response = await fetch(`${this.registryUrl}/plugins/${id}`);
     return response.json();
   }
-  
+
   async installPlugin(id: string): Promise<void> {
     const entry = await this.getPlugin(id);
-    
+
     // Download plugin
     const response = await fetch(entry.downloadUrl);
     const buffer = await response.arrayBuffer();
-    
+
     // Verify checksum
     const checksum = await this.calculateChecksum(buffer);
     if (checksum !== entry.checksum) {
       throw new Error('Plugin checksum mismatch');
     }
-    
+
     // Extract and install
     await this.extractPlugin(buffer);
   }
@@ -484,7 +486,7 @@ export default class MathPlugin implements INodePlugin {
     {
       id: 'mathAdd',
       displayName: 'Add',
-      execute: async (inputs) => {
+      execute: async inputs => {
         const a = inputs.get('a') || 0;
         const b = inputs.get('b') || 0;
         return a + b;
@@ -493,7 +495,7 @@ export default class MathPlugin implements INodePlugin {
     {
       id: 'mathMultiply',
       displayName: 'Multiply',
-      execute: async (inputs) => {
+      execute: async inputs => {
         const a = inputs.get('a') || 0;
         const b = inputs.get('b') || 0;
         return a * b;
@@ -513,7 +515,12 @@ export default class APIPlugin implements INodePlugin {
       displayName: 'API Call',
       configOptions: [
         { id: 'url', label: 'URL', type: 'text' },
-        { id: 'method', label: 'Method', type: 'select', options: ['GET', 'POST'] }
+        {
+          id: 'method',
+          label: 'Method',
+          type: 'select',
+          options: ['GET', 'POST']
+        }
       ],
       execute: async (inputs, config) => {
         const response = await fetch(config.url, {

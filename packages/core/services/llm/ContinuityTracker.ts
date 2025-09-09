@@ -69,22 +69,29 @@ export class ContinuityTracker {
   private validationCache: Map<string, ValidationResult> = new Map();
 
   // Create or update an extra profile
-  async createOrUpdateProfile(profile: Partial<ExtraProfile>): Promise<ExtraProfile> {
-    const existingProfile = profile.extra_id ? this.profiles.get(profile.extra_id) : null;
-    
+  async createOrUpdateProfile(
+    profile: Partial<ExtraProfile>
+  ): Promise<ExtraProfile> {
+    const existingProfile = profile.extra_id
+      ? this.profiles.get(profile.extra_id)
+      : null;
+
     const updatedProfile: ExtraProfile = {
       extra_id: profile.extra_id || this.generateExtraId(),
       name: profile.name || existingProfile?.name || 'Unnamed Extra',
-      appearance_traits: profile.appearance_traits || existingProfile?.appearance_traits || [],
-      wardrobe_history: profile.wardrobe_history || existingProfile?.wardrobe_history || [],
-      action_history: profile.action_history || existingProfile?.action_history || [],
+      appearance_traits:
+        profile.appearance_traits || existingProfile?.appearance_traits || [],
+      wardrobe_history:
+        profile.wardrobe_history || existingProfile?.wardrobe_history || [],
+      action_history:
+        profile.action_history || existingProfile?.action_history || [],
       metadata: profile.metadata || existingProfile?.metadata,
       last_position: profile.last_position || existingProfile?.last_position,
       last_updated: new Date().toISOString(),
       locked: profile.locked ?? existingProfile?.locked ?? false,
       tags: profile.tags || existingProfile?.tags || []
     };
-    
+
     this.profiles.set(updatedProfile.extra_id, updatedProfile);
     return updatedProfile;
   }
@@ -99,66 +106,76 @@ export class ContinuityTracker {
     if (!profile) {
       return {
         valid: false,
-        issues: [{
-          type: 'position',
-          severity: 'high',
-          description: `Extra ${extra_id} not found in continuity system`,
-          affected_extras: [extra_id],
-          auto_fixable: false
-        }],
+        issues: [
+          {
+            type: 'position',
+            severity: 'high',
+            description: `Extra ${extra_id} not found in continuity system`,
+            affected_extras: [extra_id],
+            auto_fixable: false
+          }
+        ],
         score: 0,
         timestamp: new Date().toISOString()
       };
     }
-    
+
     const issues: ContinuityIssue[] = [];
-    
+
     // Check wardrobe continuity
     const wardrobeIssues = this.checkWardrobeContinuity(profile, newScene);
     issues.push(...wardrobeIssues);
-    
+
     // Check position/movement logic
     if (proposedAction) {
-      const positionIssues = this.checkPositionContinuity(profile, newScene, proposedAction);
+      const positionIssues = this.checkPositionContinuity(
+        profile,
+        newScene,
+        proposedAction
+      );
       issues.push(...positionIssues);
     }
-    
+
     // Check time progression
     const timeIssues = this.checkTimeProgression(profile, newScene);
     issues.push(...timeIssues);
-    
+
     // Check weather consistency
     const weatherIssues = this.checkWeatherConsistency(profile, newScene);
     issues.push(...weatherIssues);
-    
+
     // Calculate continuity score
     const score = this.calculateContinuityScore(issues);
-    
+
     const result: ValidationResult = {
       valid: issues.filter(i => i.severity === 'high').length === 0,
       issues,
       score,
       timestamp: new Date().toISOString()
     };
-    
+
     // Cache the validation result
     const cacheKey = `${extra_id}_${newScene.scene_id}`;
     this.validationCache.set(cacheKey, result);
-    
+
     return result;
   }
 
   // Check wardrobe continuity
-  private checkWardrobeContinuity(profile: ExtraProfile, newScene: SceneContext): ContinuityIssue[] {
+  private checkWardrobeContinuity(
+    profile: ExtraProfile,
+    newScene: SceneContext
+  ): ContinuityIssue[] {
     const issues: ContinuityIssue[] = [];
-    
+
     if (profile.wardrobe_history.length === 0) return issues;
-    
-    const lastWardrobe = profile.wardrobe_history[profile.wardrobe_history.length - 1];
+
+    const lastWardrobe =
+      profile.wardrobe_history[profile.wardrobe_history.length - 1];
     const lastScene = this.sceneContexts.get(lastWardrobe.scene);
-    
+
     if (!lastScene) return issues;
-    
+
     // Check for impossible wardrobe changes
     if (this.isConsecutiveScene(lastScene, newScene)) {
       // Can't change clothes between consecutive scenes without a break
@@ -174,7 +191,7 @@ export class ContinuityTracker {
         });
       }
     }
-    
+
     // Check weather-appropriate clothing
     if (newScene.weather === 'rainy' && !this.hasRainGear(lastWardrobe)) {
       issues.push({
@@ -186,7 +203,7 @@ export class ContinuityTracker {
         auto_fixable: true
       });
     }
-    
+
     return issues;
   }
 
@@ -197,17 +214,24 @@ export class ContinuityTracker {
     proposedAction: ActionHistory
   ): ContinuityIssue[] {
     const issues: ContinuityIssue[] = [];
-    
+
     if (profile.action_history.length === 0) return issues;
-    
-    const lastAction = profile.action_history[profile.action_history.length - 1];
-    const timeDiff = this.calculateTimeDifference(lastAction.timestamp, proposedAction.timestamp);
-    const distance = this.estimateDistance(lastAction.position, proposedAction.position);
-    
+
+    const lastAction =
+      profile.action_history[profile.action_history.length - 1];
+    const timeDiff = this.calculateTimeDifference(
+      lastAction.timestamp,
+      proposedAction.timestamp
+    );
+    const distance = this.estimateDistance(
+      lastAction.position,
+      proposedAction.position
+    );
+
     // Check for impossible movements
     const maxSpeed = 5; // m/s (fast walk)
     const possibleDistance = maxSpeed * timeDiff;
-    
+
     if (distance > possibleDistance) {
       issues.push({
         type: 'position',
@@ -218,9 +242,12 @@ export class ContinuityTracker {
         auto_fixable: false
       });
     }
-    
+
     // Check for logical position progression
-    if (lastAction.action === 'exiting' && proposedAction.position === lastAction.position) {
+    if (
+      lastAction.action === 'exiting' &&
+      proposedAction.position === lastAction.position
+    ) {
       issues.push({
         type: 'position',
         severity: 'medium',
@@ -230,19 +257,22 @@ export class ContinuityTracker {
         auto_fixable: true
       });
     }
-    
+
     return issues;
   }
 
   // Check time-of-day progression
-  private checkTimeProgression(profile: ExtraProfile, newScene: SceneContext): ContinuityIssue[] {
+  private checkTimeProgression(
+    profile: ExtraProfile,
+    newScene: SceneContext
+  ): ContinuityIssue[] {
     const issues: ContinuityIssue[] = [];
-    
+
     const recentScenes = this.getRecentScenes(profile, 3);
     if (recentScenes.length === 0) return issues;
-    
+
     const lastScene = recentScenes[recentScenes.length - 1];
-    
+
     // Check for backwards time progression
     if (this.isTimeBackwards(lastScene.time_of_day, newScene.time_of_day)) {
       issues.push({
@@ -254,19 +284,22 @@ export class ContinuityTracker {
         auto_fixable: false
       });
     }
-    
+
     return issues;
   }
 
   // Check weather consistency
-  private checkWeatherConsistency(profile: ExtraProfile, newScene: SceneContext): ContinuityIssue[] {
+  private checkWeatherConsistency(
+    profile: ExtraProfile,
+    newScene: SceneContext
+  ): ContinuityIssue[] {
     const issues: ContinuityIssue[] = [];
-    
+
     const recentScenes = this.getRecentScenes(profile, 2);
     if (recentScenes.length === 0 || !newScene.weather) return issues;
-    
+
     const lastScene = recentScenes[recentScenes.length - 1];
-    
+
     // Check for impossible weather changes
     if (lastScene.weather && this.isConsecutiveScene(lastScene, newScene)) {
       if (lastScene.weather === 'sunny' && newScene.weather === 'snowy') {
@@ -280,7 +313,7 @@ export class ContinuityTracker {
         });
       }
     }
-    
+
     return issues;
   }
 
@@ -290,7 +323,7 @@ export class ContinuityTracker {
     newScene: SceneContext
   ): Promise<Map<string, ValidationResult>> {
     const results = new Map<string, ValidationResult>();
-    
+
     // Process in parallel with limit
     const batchSize = 10;
     for (let i = 0; i < extra_ids.length; i += batchSize) {
@@ -298,26 +331,28 @@ export class ContinuityTracker {
       const batchResults = await Promise.all(
         batch.map(id => this.validateContinuity(id, newScene))
       );
-      
+
       batch.forEach((id, index) => {
         results.set(id, batchResults[index]);
       });
     }
-    
+
     return results;
   }
 
   // Auto-fix continuity issues
-  async autoFixIssues(issues: ContinuityIssue[]): Promise<{ fixed: number; failed: number }> {
+  async autoFixIssues(
+    issues: ContinuityIssue[]
+  ): Promise<{ fixed: number; failed: number }> {
     let fixed = 0;
     let failed = 0;
-    
+
     for (const issue of issues) {
       if (!issue.auto_fixable) {
         failed++;
         continue;
       }
-      
+
       try {
         switch (issue.type) {
           case 'wardrobe':
@@ -336,7 +371,7 @@ export class ContinuityTracker {
         failed++;
       }
     }
-    
+
     return { fixed, failed };
   }
 
@@ -344,16 +379,16 @@ export class ContinuityTracker {
   generateContinuityReport(scene_ids: string[]): string {
     const report: string[] = ['# Continuity Report\n'];
     report.push(`Generated: ${new Date().toISOString()}\n\n`);
-    
+
     for (const scene_id of scene_ids) {
       const scene = this.sceneContexts.get(scene_id);
       if (!scene) continue;
-      
+
       report.push(`## Scene ${scene_id}\n`);
       report.push(`- Location: ${scene.location}\n`);
       report.push(`- Time: ${scene.time_of_day}\n`);
       report.push(`- Weather: ${scene.weather || 'Not specified'}\n\n`);
-      
+
       // List extras in scene
       const extrasInScene = this.getExtrasInScene(scene_id);
       if (extrasInScene.length > 0) {
@@ -371,18 +406,21 @@ export class ContinuityTracker {
         report.push('\n');
       }
     }
-    
+
     return report.join('');
   }
 
   // Helper methods
-  
+
   private generateExtraId(): string {
     const count = this.profiles.size + 1;
     return `extra_${count.toString().padStart(4, '0')}`;
   }
 
-  private isConsecutiveScene(scene1: SceneContext, scene2: SceneContext): boolean {
+  private isConsecutiveScene(
+    scene1: SceneContext,
+    scene2: SceneContext
+  ): boolean {
     // Simple heuristic - scenes are consecutive if less than 5 minutes apart
     return true; // Simplified for now
   }
@@ -393,9 +431,10 @@ export class ContinuityTracker {
   }
 
   private hasRainGear(wardrobe: WardrobeHistory): boolean {
-    return wardrobe.items.some(item => 
-      item.toLowerCase().includes('umbrella') || 
-      item.toLowerCase().includes('raincoat')
+    return wardrobe.items.some(
+      item =>
+        item.toLowerCase().includes('umbrella') ||
+        item.toLowerCase().includes('raincoat')
     );
   }
 
@@ -418,11 +457,12 @@ export class ContinuityTracker {
     return timeOrder.indexOf(time1) > timeOrder.indexOf(time2);
   }
 
-  private getRecentScenes(profile: ExtraProfile, count: number): SceneContext[] {
-    const sceneIds = profile.action_history
-      .slice(-count)
-      .map(a => a.scene);
-    
+  private getRecentScenes(
+    profile: ExtraProfile,
+    count: number
+  ): SceneContext[] {
+    const sceneIds = profile.action_history.slice(-count).map(a => a.scene);
+
     return sceneIds
       .map(id => this.sceneContexts.get(id))
       .filter(s => s !== undefined) as SceneContext[];
@@ -430,20 +470,20 @@ export class ContinuityTracker {
 
   private getExtrasInScene(scene_id: string): string[] {
     const extras: string[] = [];
-    
+
     for (const [extra_id, profile] of this.profiles.entries()) {
       const inScene = profile.action_history.some(a => a.scene === scene_id);
       if (inScene) {
         extras.push(extra_id);
       }
     }
-    
+
     return extras;
   }
 
   private calculateContinuityScore(issues: ContinuityIssue[]): number {
     let score = 100;
-    
+
     for (const issue of issues) {
       switch (issue.severity) {
         case 'high':
@@ -457,7 +497,7 @@ export class ContinuityTracker {
           break;
       }
     }
-    
+
     return Math.max(0, score);
   }
 

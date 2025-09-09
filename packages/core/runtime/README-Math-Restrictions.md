@@ -91,13 +91,19 @@ import { SafeExpressionEvaluator } from './expression-evaluator';
 // Create safe context with Math restrictions
 const context = SafeExpressionEvaluator.createSafeContext({
   temperature: 25,
-  threshold: 30,
+  threshold: 30
 });
 
 // Safe Math expressions
-const result1 = SafeExpressionEvaluator.evaluate('Math.min(temperature, threshold)', context); // 25
+const result1 = SafeExpressionEvaluator.evaluate(
+  'Math.min(temperature, threshold)',
+  context
+); // 25
 
-const result2 = SafeExpressionEvaluator.evaluate('Math.abs(temperature - threshold)', context); // 5
+const result2 = SafeExpressionEvaluator.evaluate(
+  'Math.abs(temperature - threshold)',
+  context
+); // 5
 
 // Blocked Math expressions throw errors
 try {
@@ -115,12 +121,12 @@ const conditional = new ConditionalNode(
   [
     {
       condition: 'Math.abs(temperature - target) < 5',
-      output: 'Temperature is within range',
+      output: 'Temperature is within range'
     },
     {
       condition: 'temperature > Math.max(limit1, limit2)',
-      output: 'Temperature exceeds limits',
-    },
+      output: 'Temperature exceeds limits'
+    }
   ],
   'Temperature is normal'
 );

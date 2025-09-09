@@ -168,7 +168,11 @@ Create `manifest.json`:
 Create `src/TextUppercaseNode.ts`:
 
 ```typescript
-import { AdvancedRuntimeNode, IOSpecBuilder, ValidationHelpers } from '@prompt-spaghetti/core';
+import {
+  AdvancedRuntimeNode,
+  IOSpecBuilder,
+  ValidationHelpers
+} from '@prompt-spaghetti/core';
 
 export class TextUppercaseNode extends AdvancedRuntimeNode {
   protected getIOSpec() {
@@ -202,7 +206,7 @@ export class TextUppercaseNode extends AdvancedRuntimeNode {
       displayName: 'Text Uppercase',
       description: 'Converts input text to uppercase',
       category: 'Text Processing',
-      icon: '🔤',
+      icon: '🔤'
     };
   }
 }
@@ -213,7 +217,10 @@ export class TextUppercaseNode extends AdvancedRuntimeNode {
 Create `src/index.ts`:
 
 ```typescript
-import { NodeExtension, ExtensionLifecycleManager } from '@prompt-spaghetti/core';
+import {
+  NodeExtension,
+  ExtensionLifecycleManager
+} from '@prompt-spaghetti/core';
 import { TextUppercaseNode } from './TextUppercaseNode';
 
 export class TextUppercaseExtension implements NodeExtension {
@@ -484,7 +491,9 @@ class ValidationHelpers {
   static lengthConstraint(min?: number, max?: number): ValidationConstraint;
   static rangeConstraint(min?: number, max?: number): ValidationConstraint;
   static patternConstraint(pattern: RegExp): ValidationConstraint;
-  static customConstraint(validator: (value: any) => boolean): ValidationConstraint;
+  static customConstraint(
+    validator: (value: any) => boolean
+  ): ValidationConstraint;
 }
 ```
 
@@ -725,11 +734,13 @@ describe('TextUppercaseNode', () => {
 ```typescript
 it('should handle real-world text', async () => {
   const inputs = {
-    text: 'The quick brown fox jumps over the lazy dog. 123!@#',
+    text: 'The quick brown fox jumps over the lazy dog. 123!@#'
   };
   const result = await node.execute(inputs, {});
 
-  expect(result.result).toBe('THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG. 123!@#');
+  expect(result.result).toBe(
+    'THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG. 123!@#'
+  );
 });
 ```
 
@@ -777,7 +788,7 @@ export class MyExtension implements NodeExtension {
     return {
       state: this.currentState,
       performance: this.performanceMetrics,
-      lastError: this.lastError,
+      lastError: this.lastError
     };
   }
 }
@@ -961,13 +972,13 @@ export const MyButtonComponent: ExtensionComponent = ({ config, onAction }) => {
 export class StatefulNode extends AdvancedRuntimeNode {
   private state: NodeState = {
     counter: 0,
-    history: [],
+    history: []
   };
 
   protected initializeState(): NodeState {
     return {
       counter: 0,
-      history: [],
+      history: []
     };
   }
 
@@ -975,12 +986,12 @@ export class StatefulNode extends AdvancedRuntimeNode {
     // Update state
     this.updateState({
       counter: this.state.counter + 1,
-      history: [...this.state.history, inputs.data],
+      history: [...this.state.history, inputs.data]
     });
 
     return {
       count: this.state.counter,
-      lastItems: this.state.history.slice(-5),
+      lastItems: this.state.history.slice(-5)
     };
   }
 }
@@ -1051,7 +1062,7 @@ import { ExtensionMessaging } from '@prompt-spaghetti/core';
 // Send message to another extension
 ExtensionMessaging.send('other-extension-id', {
   type: 'data-request',
-  payload: { query: 'user data' },
+  payload: { query: 'user data' }
 });
 
 // Listen for messages
@@ -1080,7 +1091,8 @@ export class DataProcessingService {
 ServiceRegistry.register('data-processing', new DataProcessingService());
 
 // In another extension
-const dataService = ServiceRegistry.get<DataProcessingService>('data-processing');
+const dataService =
+  ServiceRegistry.get<DataProcessingService>('data-processing');
 const result = await dataService.processData(myData);
 ```
 

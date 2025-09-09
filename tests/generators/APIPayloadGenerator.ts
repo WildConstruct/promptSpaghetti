@@ -95,11 +95,11 @@ export class APIPayloadGenerator {
         body: {
           email: 'test@example.com',
           password: 'validPassword123!',
-          rememberMe: true,
+          rememberMe: true
         },
         expectedStatus: 200,
         expectedBehavior: 'success',
-        testCategory: 'valid',
+        testCategory: 'valid'
       },
 
       // Graph operations
@@ -110,12 +110,12 @@ export class APIPayloadGenerator {
         endpoint: '/api/graphs',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: this.generateSimpleGraph(),
         expectedStatus: 201,
         expectedBehavior: 'success',
-        testCategory: 'valid',
+        testCategory: 'valid'
       },
 
       {
@@ -125,19 +125,19 @@ export class APIPayloadGenerator {
         endpoint: '/api/graphs/execute',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           graph: this.generateSimpleGraph(),
           seeds: [123, 456, 789],
           options: {
             timeout: 5000,
-            maxOutputs: 10,
-          },
+            maxOutputs: 10
+          }
         },
         expectedStatus: 200,
         expectedBehavior: 'success',
-        testCategory: 'valid',
+        testCategory: 'valid'
       },
 
       // Rule management
@@ -148,7 +148,7 @@ export class APIPayloadGenerator {
         endpoint: '/api/rules',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           name: 'Test Rule',
@@ -157,11 +157,11 @@ export class APIPayloadGenerator {
           isRegex: false,
           priority: 1,
           category: 'spelling',
-          tags: ['common', 'typo'],
+          tags: ['common', 'typo']
         },
         expectedStatus: 201,
         expectedBehavior: 'success',
-        testCategory: 'valid',
+        testCategory: 'valid'
       },
 
       // Analytics endpoints
@@ -173,12 +173,12 @@ export class APIPayloadGenerator {
         headers: { Authorization: 'Bearer valid-token' },
         queryParams: {
           period: '30d',
-          metrics: 'usage,performance,errors',
+          metrics: 'usage,performance,errors'
         },
         expectedStatus: 200,
         expectedBehavior: 'success',
-        testCategory: 'valid',
-      },
+        testCategory: 'valid'
+      }
     ];
   }
 
@@ -195,11 +195,11 @@ export class APIPayloadGenerator {
         endpoint: '/api/auth/login',
         headers: { 'Content-Type': 'application/json' },
         body: {
-          email: 'test@example.com',
+          email: 'test@example.com'
         },
         expectedStatus: 400,
         expectedBehavior: 'error',
-        testCategory: 'invalid',
+        testCategory: 'invalid'
       },
 
       // Invalid data types
@@ -210,16 +210,16 @@ export class APIPayloadGenerator {
         endpoint: '/api/graphs',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           seed: 'not-a-number',
           nodes: [],
-          edges: [],
+          edges: []
         },
         expectedStatus: 400,
         expectedBehavior: 'error',
-        testCategory: 'invalid',
+        testCategory: 'invalid'
       },
 
       // Malformed JSON
@@ -230,12 +230,12 @@ export class APIPayloadGenerator {
         endpoint: '/api/rules',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: '{ "name": "test", "pattern": }', // Malformed JSON
         expectedStatus: 400,
         expectedBehavior: 'error',
-        testCategory: 'invalid',
+        testCategory: 'invalid'
       },
 
       // Resource not found
@@ -247,7 +247,7 @@ export class APIPayloadGenerator {
         headers: { Authorization: 'Bearer valid-token' },
         expectedStatus: 404,
         expectedBehavior: 'error',
-        testCategory: 'invalid',
+        testCategory: 'invalid'
       },
 
       // Invalid authorization
@@ -259,8 +259,8 @@ export class APIPayloadGenerator {
         headers: { Authorization: 'Bearer invalid-token' },
         expectedStatus: 401,
         expectedBehavior: 'error',
-        testCategory: 'invalid',
-      },
+        testCategory: 'invalid'
+      }
     ];
   }
 
@@ -278,11 +278,11 @@ export class APIPayloadGenerator {
         headers: { 'Content-Type': 'application/json' },
         body: {
           email: "admin'; DROP TABLE users; --",
-          password: 'password',
+          password: 'password'
         },
         expectedStatus: 400,
         expectedBehavior: 'error',
-        testCategory: 'security',
+        testCategory: 'security'
       },
 
       // XSS attempts
@@ -293,17 +293,17 @@ export class APIPayloadGenerator {
         endpoint: '/api/rules',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           name: '<script>alert("XSS")</script>',
           pattern: 'test',
           replacement: 'safe',
-          isRegex: false,
+          isRegex: false
         },
         expectedStatus: 400,
         expectedBehavior: 'error',
-        testCategory: 'security',
+        testCategory: 'security'
       },
 
       // Command injection
@@ -314,17 +314,17 @@ export class APIPayloadGenerator {
         endpoint: '/api/rules',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           name: 'Malicious Rule',
           pattern: '; rm -rf / #',
           replacement: 'safe',
-          isRegex: true,
+          isRegex: true
         },
         expectedStatus: 400,
         expectedBehavior: 'error',
-        testCategory: 'security',
+        testCategory: 'security'
       },
 
       // Path traversal
@@ -335,16 +335,16 @@ export class APIPayloadGenerator {
         endpoint: '/api/export',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           filename: '../../../etc/passwd',
           format: 'json',
-          data: {},
+          data: {}
         },
         expectedStatus: 400,
         expectedBehavior: 'error',
-        testCategory: 'security',
+        testCategory: 'security'
       },
 
       // Large payload attack
@@ -355,7 +355,7 @@ export class APIPayloadGenerator {
         endpoint: '/api/graphs',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           seed: 123,
@@ -364,15 +364,15 @@ export class APIPayloadGenerator {
             type: 'WeightedChoice',
             choices: Array.from({ length: 1000 }, () => ({
               text: 'A'.repeat(10000), // Very large text
-              weight: 1,
-            })),
+              weight: 1
+            }))
           })),
-          edges: [],
+          edges: []
         },
         expectedStatus: 413,
         expectedBehavior: 'error',
-        testCategory: 'security',
-      },
+        testCategory: 'security'
+      }
     ];
   }
 
@@ -389,17 +389,17 @@ export class APIPayloadGenerator {
         endpoint: '/api/graphs/execute',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           graph: this.generateComplexGraph(100),
           seeds: Array.from({ length: 50 }, (_, i) => i + 1),
-          options: { timeout: 30000 },
+          options: { timeout: 30000 }
         },
         expectedStatus: 200,
         expectedBehavior: 'success',
         testCategory: 'performance',
-        timeout: 30000,
+        timeout: 30000
       },
 
       // Large data processing
@@ -410,7 +410,7 @@ export class APIPayloadGenerator {
         endpoint: '/api/rules/bulk',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           rules: Array.from({ length: 1000 }, (_, i) => ({
@@ -419,13 +419,13 @@ export class APIPayloadGenerator {
             replacement: `replacement${i}`,
             isRegex: i % 2 === 0,
             priority: i % 10,
-            category: `category${i % 5}`,
-          })),
+            category: `category${i % 5}`
+          }))
         },
         expectedStatus: 202,
         expectedBehavior: 'success',
         testCategory: 'performance',
-        timeout: 60000,
+        timeout: 60000
       },
 
       // Memory intensive operation
@@ -436,7 +436,7 @@ export class APIPayloadGenerator {
         endpoint: '/api/export',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           format: 'json',
@@ -444,15 +444,15 @@ export class APIPayloadGenerator {
           includeHistory: true,
           dateRange: {
             start: '2020-01-01',
-            end: '2024-12-31',
+            end: '2024-12-31'
           },
-          compression: false,
+          compression: false
         },
         expectedStatus: 200,
         expectedBehavior: 'success',
         testCategory: 'performance',
-        timeout: 120000,
-      },
+        timeout: 120000
+      }
     ];
   }
 
@@ -469,16 +469,16 @@ export class APIPayloadGenerator {
         endpoint: '/api/graphs',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           seed: 123,
           nodes: [],
-          edges: [],
+          edges: []
         },
         expectedStatus: 201,
         expectedBehavior: 'success',
-        testCategory: 'edge_case',
+        testCategory: 'edge_case'
       },
 
       // Unicode and special characters
@@ -489,18 +489,18 @@ export class APIPayloadGenerator {
         endpoint: '/api/rules',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           name: '🎯 Unicode Rule 测试 ñoël',
           pattern: 'émoticon',
           replacement: '😊',
           isRegex: false,
-          priority: 1,
+          priority: 1
         },
         expectedStatus: 201,
         expectedBehavior: 'success',
-        testCategory: 'edge_case',
+        testCategory: 'edge_case'
       },
 
       // Boundary values
@@ -511,7 +511,7 @@ export class APIPayloadGenerator {
         endpoint: '/api/graphs',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           seed: Number.MAX_SAFE_INTEGER,
@@ -519,14 +519,14 @@ export class APIPayloadGenerator {
             {
               id: 'test-node',
               type: 'WeightedChoice',
-              choices: [{ text: 'Test', weight: 1 }],
-            },
+              choices: [{ text: 'Test', weight: 1 }]
+            }
           ],
-          edges: [],
+          edges: []
         },
         expectedStatus: 201,
         expectedBehavior: 'success',
-        testCategory: 'edge_case',
+        testCategory: 'edge_case'
       },
 
       // Null values in optional fields
@@ -537,7 +537,7 @@ export class APIPayloadGenerator {
         endpoint: '/api/rules',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer valid-token',
+          Authorization: 'Bearer valid-token'
         },
         body: {
           name: 'Null Test Rule',
@@ -546,12 +546,12 @@ export class APIPayloadGenerator {
           isRegex: false,
           priority: null,
           category: null,
-          tags: null,
+          tags: null
         },
         expectedStatus: 201,
         expectedBehavior: 'success',
-        testCategory: 'edge_case',
-      },
+        testCategory: 'edge_case'
+      }
     ];
   }
 
@@ -565,9 +565,9 @@ export class APIPayloadGenerator {
         type: 'login',
         credentials: {
           email: 'user@example.com',
-          password: 'validPassword123!',
+          password: 'validPassword123!'
         },
-        expectedOutcome: 'success',
+        expectedOutcome: 'success'
       },
 
       // MFA required scenario
@@ -575,9 +575,9 @@ export class APIPayloadGenerator {
         type: 'login',
         credentials: {
           email: 'mfa-user@example.com',
-          password: 'validPassword123!',
+          password: 'validPassword123!'
         },
-        expectedOutcome: 'mfa_required',
+        expectedOutcome: 'mfa_required'
       },
 
       // Invalid credentials
@@ -585,9 +585,9 @@ export class APIPayloadGenerator {
         type: 'login',
         credentials: {
           email: 'user@example.com',
-          password: 'wrongPassword',
+          password: 'wrongPassword'
         },
-        expectedOutcome: 'failure',
+        expectedOutcome: 'failure'
       },
 
       // Rate limited login
@@ -595,18 +595,18 @@ export class APIPayloadGenerator {
         type: 'login',
         credentials: {
           email: 'rate-limited@example.com',
-          password: 'password',
+          password: 'password'
         },
-        expectedOutcome: 'rate_limited',
+        expectedOutcome: 'rate_limited'
       },
 
       // Token refresh
       {
         type: 'refresh',
         credentials: {
-          token: 'valid-refresh-token',
+          token: 'valid-refresh-token'
         },
-        expectedOutcome: 'success',
+        expectedOutcome: 'success'
       },
 
       // Registration
@@ -615,10 +615,10 @@ export class APIPayloadGenerator {
         credentials: {
           username: 'newuser',
           email: 'newuser@example.com',
-          password: 'strongPassword123!',
+          password: 'strongPassword123!'
         },
-        expectedOutcome: 'success',
-      },
+        expectedOutcome: 'success'
+      }
     ];
   }
 
@@ -631,22 +631,22 @@ export class APIPayloadGenerator {
           type: 'WeightedChoice',
           choices: [
             { text: 'Option A', weight: 1 },
-            { text: 'Option B', weight: 1 },
-          ],
+            { text: 'Option B', weight: 1 }
+          ]
         },
         {
           id: 'output1',
           type: 'Output',
-          inputs: ['choice1'],
-        },
+          inputs: ['choice1']
+        }
       ],
       edges: [
         {
           id: 'e1',
           source: 'choice1',
-          target: 'output1',
-        },
-      ],
+          target: 'output1'
+        }
+      ]
     };
   }
 
@@ -661,7 +661,7 @@ export class APIPayloadGenerator {
         nodes.push({
           id: `node${i}`,
           type: 'Output',
-          inputs: [`node${i - 1}`],
+          inputs: [`node${i - 1}`]
         });
       } else if (i % 3 === 0) {
         // Weighted choice nodes
@@ -670,15 +670,15 @@ export class APIPayloadGenerator {
           type: 'WeightedChoice',
           choices: Array.from({ length: 10 }, (_, j) => ({
             text: `Choice ${i}_${j}`,
-            weight: this.rng() * 5,
-          })),
+            weight: this.rng() * 5
+          }))
         });
       } else {
         // Concat nodes
         nodes.push({
           id: `node${i}`,
           type: 'Concat',
-          inputs: i > 0 ? [`node${i - 1}`] : [],
+          inputs: i > 0 ? [`node${i - 1}`] : []
         });
       }
 
@@ -687,7 +687,7 @@ export class APIPayloadGenerator {
         edges.push({
           id: `edge${i}`,
           source: `node${i - 1}`,
-          target: `node${i}`,
+          target: `node${i}`
         });
       }
     }
@@ -695,7 +695,7 @@ export class APIPayloadGenerator {
     return {
       seed: 456,
       nodes,
-      edges,
+      edges
     };
   }
 
@@ -716,7 +716,7 @@ export class APIPayloadGenerator {
       securityPayloads: this.generateSecurityPayloads(),
       performancePayloads: this.generatePerformancePayloads(),
       edgeCasePayloads: this.generateEdgeCasePayloads(),
-      authenticationPayloads: this.generateAuthenticationPayloads(),
+      authenticationPayloads: this.generateAuthenticationPayloads()
     };
   }
 }

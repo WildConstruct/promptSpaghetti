@@ -35,12 +35,12 @@ export enum ConnectionLineType {
   Bezier = 'default',
   Straight = 'straight',
   Step = 'step',
-  SmoothStep = 'smoothstep',
+  SmoothStep = 'smoothstep'
 }
 
 export enum MarkerType {
   Arrow = 'arrow',
-  ArrowClosed = 'arrowclosed',
+  ArrowClosed = 'arrowclosed'
 }
 
 // Position enum removed - using const object below instead to avoid duplication
@@ -78,7 +78,7 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
   onPaneClick,
   children,
   style,
-  className,
+  className
   // Additional props are accepted but not used in mock
 }) => {
   const handleDrop = (e: React.DragEvent) => {
@@ -116,11 +116,15 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
                   cursor: 'pointer',
                   position: 'absolute',
                   left: node.position.x,
-                  top: node.position.y,
+                  top: node.position.y
                 }}
               >
                 {node.data?.label || node.id}
-                {node.data?.nodeType && <div data-testid={`node-type-${node.id}`}>{node.data.nodeType}</div>}
+                {node.data?.nodeType && (
+                  <div data-testid={`node-type-${node.id}`}>
+                    {node.data.nodeType}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -138,12 +142,18 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
   );
 };
 
-export const Background: React.FC = () => <div data-testid="reactflow-background">Background</div>;
-export const MiniMap: React.FC = () => <div data-testid="reactflow-minimap">MiniMap</div>;
-export const Controls: React.FC = () => <div data-testid="reactflow-controls">Controls</div>;
-export const ReactFlowProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div data-testid="reactflow-provider">{children}</div>
+export const Background: React.FC = () => (
+  <div data-testid="reactflow-background">Background</div>
 );
+export const MiniMap: React.FC = () => (
+  <div data-testid="reactflow-minimap">MiniMap</div>
+);
+export const Controls: React.FC = () => (
+  <div data-testid="reactflow-controls">Controls</div>
+);
+export const ReactFlowProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => <div data-testid="reactflow-provider">{children}</div>;
 
 export const useReactFlow = () => ({
   project: (pos: XYPosition) => pos,
@@ -158,14 +168,14 @@ export const useReactFlow = () => ({
   fitView: () => {},
   zoomTo: () => {},
   zoomIn: () => {},
-  zoomOut: () => {},
+  zoomOut: () => {}
 });
 
 export const Position = {
   Left: 'left',
   Right: 'right',
   Top: 'top',
-  Bottom: 'bottom',
+  Bottom: 'bottom'
 } as const;
 
 export type PositionEnum = (typeof Position)[keyof typeof Position];
@@ -187,7 +197,7 @@ export const Handle: React.FC<{
       'connectable',
       'connectablestart',
       'connectableend',
-      'connectionindicator',
+      'connectionindicator'
     ].join(' ')}
     data-handlepos={position}
     data-id={`null-null-${type}`}
@@ -212,16 +222,22 @@ export interface NodeProps {
 // Add missing enum exports
 export const ConnectionMode = {
   Strict: 'strict',
-  Loose: 'loose',
+  Loose: 'loose'
 } as const;
 
 // Add utility functions
 export const addEdge = jest.fn((connection: Connection, edges: Edge[]) => [
   ...edges,
-  { ...connection, id: `e-${Date.now()}` },
+  { ...connection, id: `e-${Date.now()}` }
 ]);
-export const useNodesState = jest.fn((initialNodes: Node[]) => [initialNodes, jest.fn<unknown[], unknown>()]);
-export const useEdgesState = jest.fn((initialEdges: Edge[]) => [initialEdges, jest.fn<unknown[], unknown>()]);
+export const useNodesState = jest.fn((initialNodes: Node[]) => [
+  initialNodes,
+  jest.fn<unknown[], unknown>()
+]);
+export const useEdgesState = jest.fn((initialEdges: Edge[]) => [
+  initialEdges,
+  jest.fn<unknown[], unknown>()
+]);
 
 // Default export fallback
 export default {
@@ -237,5 +253,5 @@ export default {
   ConnectionMode,
   addEdge,
   useNodesState,
-  useEdgesState,
+  useEdgesState
 };

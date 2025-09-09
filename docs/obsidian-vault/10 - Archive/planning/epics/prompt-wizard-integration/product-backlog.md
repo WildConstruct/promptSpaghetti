@@ -9,6 +9,7 @@
 ## Backlog Organization
 
 Items are organized by:
+
 - **Priority**: P0 (Critical), P1 (Important), P2 (Nice to Have), P3 (Future)
 - **Confidence**: 🟢 High, 🟡 Medium, 🔴 Low (needs validation)
 - **Dependencies**: What must be built first
@@ -19,11 +20,13 @@ Items are organized by:
 ## P0 - Next After MVP (If Successful)
 
 ### 1. Asset Browser Integration
+
 **Confidence:** 🟡 Medium  
 **Value:** 8 | **Effort:** 8  
-**Dependencies:** Asset Browser API or mock service  
+**Dependencies:** Asset Browser API or mock service
 
 Features:
+
 - Search assets while highlighting spans
 - Bind assets to locked spans
 - Seed alternatives for randomized spans
@@ -35,11 +38,13 @@ Features:
 ---
 
 ### 2. Improved Parser Accuracy
+
 **Confidence:** 🟢 High  
 **Value:** 9 | **Effort:** 6  
-**Dependencies:** MVP metrics showing <60% accuracy  
+**Dependencies:** MVP metrics showing <60% accuracy
 
 Features:
+
 - NP-chunking for better phrase detection
 - Preserve quoted strings
 - Handle parentheticals properly
@@ -51,11 +56,13 @@ Features:
 ---
 
 ### 3. Span Type Classification
+
 **Confidence:** 🟡 Medium  
 **Value:** 6 | **Effort:** 4  
-**Dependencies:** Basic parser working  
+**Dependencies:** Basic parser working
 
 Features:
+
 - Auto-detect: Subject, Style, Lighting, Mood, etc.
 - Confidence scores per classification
 - Type-specific UI hints
@@ -68,11 +75,13 @@ Features:
 ## P1 - Enhanced Experience
 
 ### 4. Keyboard Power User Features
+
 **Confidence:** 🟢 High  
 **Value:** 7 | **Effort:** 5  
-**Dependencies:** Core wizard stable  
+**Dependencies:** Core wizard stable
 
 From original Story-07:
+
 - Full keyboard navigation (Tab through spans)
 - Quick type selection (1-9 keys)
 - Boundary adjustment (Arrow keys)
@@ -84,11 +93,13 @@ From original Story-07:
 ---
 
 ### 5. Visual Polish & Animations
+
 **Confidence:** 🟢 High  
 **Value:** 5 | **Effort:** 3  
-**Dependencies:** Core features complete  
+**Dependencies:** Core features complete
 
 From original Story-02C:
+
 - Spring animations for panel
 - Smooth transitions
 - Theme support (light/dark)
@@ -100,11 +111,13 @@ From original Story-02C:
 ---
 
 ### 6. Preview Variations
+
 **Confidence:** 🟡 Medium  
 **Value:** 7 | **Effort:** 4  
-**Dependencies:** Node generation working  
+**Dependencies:** Node generation working
 
 From original Story-08:
+
 - Live preview panel
 - "Randomize Preview" button
 - Show {alt1|alt2} syntax
@@ -118,11 +131,13 @@ From original Story-08:
 ## P2 - Advanced Features
 
 ### 7. Conflict Detection & Grouping
+
 **Confidence:** 🔴 Low  
 **Value:** 5 | **Effort:** 6  
-**Dependencies:** Classification working well  
+**Dependencies:** Classification working well
 
 From original Story-09:
+
 - Detect conflicting options (B&W vs Color)
 - Suggest alternative groupings
 - Mutual exclusivity rules
@@ -133,11 +148,13 @@ From original Story-09:
 ---
 
 ### 8. Save as Preset Library
+
 **Confidence:** 🟡 Medium  
 **Value:** 6 | **Effort:** 4  
-**Dependencies:** MVP successful  
+**Dependencies:** MVP successful
 
 Features:
+
 - Named preset saving
 - Categorization/tags
 - Search saved presets
@@ -149,11 +166,13 @@ Features:
 ---
 
 ### 9. Batch Processing
+
 **Confidence:** 🔴 Low  
 **Value:** 4 | **Effort:** 5  
-**Dependencies:** Single prompt working perfectly  
+**Dependencies:** Single prompt working perfectly
 
 Features:
+
 - Paste multiple prompts
 - Bulk operations
 - Common patterns detection
@@ -164,11 +183,13 @@ Features:
 ---
 
 ### 10. Smart Suggestions
+
 **Confidence:** 🔴 Low  
 **Value:** 6 | **Effort:** 7  
-**Dependencies:** ML infrastructure  
+**Dependencies:** ML infrastructure
 
 Features:
+
 - "Users who randomized X also randomized Y"
 - Suggest additional variations
 - Auto-complete alternatives
@@ -181,10 +202,12 @@ Features:
 ## P3 - Future Vision
 
 ### 11. Collaborative Editing
+
 **Confidence:** 🔴 Low  
-**Value:** 5 | **Effort:** 9  
+**Value:** 5 | **Effort:** 9
 
 Features:
+
 - Real-time collaboration
 - Comments on spans
 - Suggestion mode
@@ -193,10 +216,12 @@ Features:
 ---
 
 ### 12. Template Marketplace
+
 **Confidence:** 🔴 Low  
-**Value:** 7 | **Effort:** 10  
+**Value:** 7 | **Effort:** 10
 
 Features:
+
 - Share wizard templates
 - Browse community creations
 - Ratings and reviews
@@ -205,10 +230,12 @@ Features:
 ---
 
 ### 13. AI-Powered Enhancement
+
 **Confidence:** 🔴 Low  
-**Value:** 8 | **Effort:** 10  
+**Value:** 8 | **Effort:** 10
 
 Features:
+
 - "Make this more creative"
 - Style transfer from reference
 - Automatic variation generation
@@ -217,10 +244,12 @@ Features:
 ---
 
 ### 14. Multi-Language Support
+
 **Confidence:** 🟡 Medium  
-**Value:** 6 | **Effort:** 8  
+**Value:** 6 | **Effort:** 8
 
 Features:
+
 - Parse non-English prompts
 - Language-specific rules
 - RTL support
@@ -229,10 +258,12 @@ Features:
 ---
 
 ### 15. Integration Ecosystem
+
 **Confidence:** 🔴 Low  
-**Value:** 5 | **Effort:** 7  
+**Value:** 5 | **Effort:** 7
 
 Features:
+
 - Import from other tools
 - Export to various formats
 - API for external access
@@ -289,11 +320,11 @@ Before promoting any P1+ item:
 
 ## Decision Log
 
-| Date | Decision | Rationale |
-|------|----------|-----------|
+| Date       | Decision                 | Rationale                             |
+| ---------- | ------------------------ | ------------------------------------- |
 | 2025-01-09 | Defer all asset features | Reduce MVP scope, validate core first |
-| 2025-01-09 | Defer keyboard shortcuts | Not essential for validation |
-| 2025-01-09 | Defer animations | Focus on functionality over polish |
+| 2025-01-09 | Defer keyboard shortcuts | Not essential for validation          |
+| 2025-01-09 | Defer animations         | Focus on functionality over polish    |
 
 ---
 

@@ -34,34 +34,34 @@ const PERFORMANCE_BENCHMARKS: PerformanceBenchmark[] = [
           type: 'WeightedChoice',
           choices: [
             { text: 'Fast', weight: 1 },
-            { text: 'Quick', weight: 1 },
-          ],
+            { text: 'Quick', weight: 1 }
+          ]
         },
         {
           id: 'choice2',
           type: 'WeightedChoice',
           choices: [
             { text: 'execution', weight: 1 },
-            { text: 'processing', weight: 1 },
-          ],
+            { text: 'processing', weight: 1 }
+          ]
         },
         {
           id: 'concat1',
           type: 'Concat',
-          inputs: ['choice1', 'choice2'],
+          inputs: ['choice1', 'choice2']
         },
         {
           id: 'output1',
           type: 'Output',
-          inputs: ['concat1'],
-        },
+          inputs: ['concat1']
+        }
       ],
       edges: [
         { id: 'e1', source: 'choice1', target: 'concat1' },
         { id: 'e2', source: 'choice2', target: 'concat1' },
-        { id: 'e3', source: 'concat1', target: 'output1' },
-      ],
-    },
+        { id: 'e3', source: 'concat1', target: 'output1' }
+      ]
+    }
   },
 
   {
@@ -79,62 +79,62 @@ const PERFORMANCE_BENCHMARKS: PerformanceBenchmark[] = [
           type: 'WeightedChoice' as const,
           choices: [
             { text: `Option ${i + 1}A`, weight: 1 },
-            { text: `Option ${i + 1}B`, weight: 1 },
-          ],
+            { text: `Option ${i + 1}B`, weight: 1 }
+          ]
         })),
         // Create 3 concat nodes
         {
           id: 'concat1',
           type: 'Concat' as const,
-          inputs: ['choice1', 'choice2', 'choice3', 'choice4', 'choice5'],
+          inputs: ['choice1', 'choice2', 'choice3', 'choice4', 'choice5']
         },
         {
           id: 'concat2',
           type: 'Concat' as const,
-          inputs: ['choice6', 'choice7', 'choice8', 'choice9', 'choice10'],
+          inputs: ['choice6', 'choice7', 'choice8', 'choice9', 'choice10']
         },
         {
           id: 'concat3',
           type: 'Concat' as const,
-          inputs: ['choice11', 'choice12', 'choice13', 'choice14', 'choice15'],
+          inputs: ['choice11', 'choice12', 'choice13', 'choice14', 'choice15']
         },
         // Final output
         {
           id: 'finalConcat',
           type: 'Concat' as const,
-          inputs: ['concat1', 'concat2', 'concat3'],
+          inputs: ['concat1', 'concat2', 'concat3']
         },
         {
           id: 'output1',
           type: 'Output' as const,
-          inputs: ['finalConcat'],
-        },
+          inputs: ['finalConcat']
+        }
       ],
       edges: [
         // Connect choices to concat nodes
         ...Array.from({ length: 5 }, (_, i) => ({
           id: `e${i + 1}`,
           source: `choice${i + 1}`,
-          target: 'concat1',
+          target: 'concat1'
         })),
         ...Array.from({ length: 5 }, (_, i) => ({
           id: `e${i + 6}`,
           source: `choice${i + 6}`,
-          target: 'concat2',
+          target: 'concat2'
         })),
         ...Array.from({ length: 5 }, (_, i) => ({
           id: `e${i + 11}`,
           source: `choice${i + 11}`,
-          target: 'concat3',
+          target: 'concat3'
         })),
         // Connect concat nodes to final concat
         { id: 'e16', source: 'concat1', target: 'finalConcat' },
         { id: 'e17', source: 'concat2', target: 'finalConcat' },
         { id: 'e18', source: 'concat3', target: 'finalConcat' },
         // Connect to output
-        { id: 'e19', source: 'finalConcat', target: 'output1' },
-      ],
-    },
+        { id: 'e19', source: 'finalConcat', target: 'output1' }
+      ]
+    }
   },
 
   {
@@ -151,13 +151,13 @@ const PERFORMANCE_BENCHMARKS: PerformanceBenchmark[] = [
           type: 'WeightedAdvanced',
           choices: Array.from({ length: 20 }, (_, i) => ({
             text: `Advanced option ${i + 1}`,
-            weight: Math.random() * 10,
+            weight: Math.random() * 10
           })),
           distributionConfig: {
             type: 'exponential',
             normalize: true,
-            temperature: 2.0,
-          },
+            temperature: 2.0
+          }
         },
         {
           id: 'sequential1',
@@ -166,9 +166,9 @@ const PERFORMANCE_BENCHMARKS: PerformanceBenchmark[] = [
           pattern: {
             type: 'weighted',
             config: {
-              weights: Array.from({ length: 50 }, () => Math.random()),
-            },
-          },
+              weights: Array.from({ length: 50 }, () => Math.random())
+            }
+          }
         },
         {
           id: 'markov1',
@@ -179,59 +179,63 @@ const PERFORMANCE_BENCHMARKS: PerformanceBenchmark[] = [
             state2: { state1: 0.2, state3: 0.3, state4: 0.3, state5: 0.2 },
             state3: { state1: 0.1, state2: 0.2, state4: 0.4, state5: 0.3 },
             state4: { state1: 0.3, state2: 0.2, state3: 0.2, state5: 0.3 },
-            state5: { state1: 0.4, state2: 0.3, state3: 0.2, state4: 0.1 },
+            state5: { state1: 0.4, state2: 0.3, state3: 0.2, state4: 0.1 }
           },
           initialState: 'state1',
           markovConfig: {
             maxSteps: 20,
-            terminationConditions: ['state5'],
-          },
+            terminationConditions: ['state5']
+          }
         },
         {
           id: 'conditional1',
           type: 'Conditional',
           branches: [
             { condition: 'true', output: 'Condition A' },
-            { condition: 'false', output: 'Condition B' },
+            { condition: 'false', output: 'Condition B' }
           ],
-          defaultOutput: 'Default condition',
+          defaultOutput: 'Default condition'
         },
         {
           id: 'output1',
           type: 'Output',
-          inputs: ['weightedAdv1'],
+          inputs: ['weightedAdv1']
         },
         {
           id: 'output2',
           type: 'Output',
-          inputs: ['sequential1'],
+          inputs: ['sequential1']
         },
         {
           id: 'output3',
           type: 'Output',
-          inputs: ['markov1'],
+          inputs: ['markov1']
         },
         {
           id: 'output4',
           type: 'Output',
-          inputs: ['conditional1'],
-        },
+          inputs: ['conditional1']
+        }
       ],
       edges: [
         { id: 'e1', source: 'weightedAdv1', target: 'output1' },
         { id: 'e2', source: 'sequential1', target: 'output2' },
         { id: 'e3', source: 'markov1', target: 'output3' },
-        { id: 'e4', source: 'conditional1', target: 'output4' },
-      ],
-    },
-  },
+        { id: 'e4', source: 'conditional1', target: 'output4' }
+      ]
+    }
+  }
 ];
 
 describe('Performance Regression Tests - Execution Benchmarks', () => {
   beforeAll(() => {
     // Warm up V8 JIT compiler
     const warmupGraph = PERFORMANCE_BENCHMARKS[0].graph;
-    return Promise.all([executeGraph(warmupGraph), executeGraph(warmupGraph), executeGraph(warmupGraph)]);
+    return Promise.all([
+      executeGraph(warmupGraph),
+      executeGraph(warmupGraph),
+      executeGraph(warmupGraph)
+    ]);
   });
 
   describe('Individual Benchmark Tests', () => {
@@ -257,8 +261,10 @@ describe('Performance Regression Tests - Execution Benchmarks', () => {
             executionTimes.push(executionTime);
           }
 
-          const averageTime = executionTimes.reduce((a, b) => a + b) / executionTimes.length;
-          const maxVariation = Math.max(...executionTimes) - Math.min(...executionTimes);
+          const averageTime =
+            executionTimes.reduce((a, b) => a + b) / executionTimes.length;
+          const maxVariation =
+            Math.max(...executionTimes) - Math.min(...executionTimes);
 
           // Variation should be less than 50% of average time
           expect(maxVariation).toBeLessThan(averageTime * 0.5);
@@ -293,7 +299,9 @@ describe('Performance Regression Tests - Execution Benchmarks', () => {
 
       const startTime = performance.now();
 
-      const promises = Array.from({ length: concurrentExecutions }, () => executeGraph(simpleGraph));
+      const promises = Array.from({ length: concurrentExecutions }, () =>
+        executeGraph(simpleGraph)
+      );
 
       const results = await Promise.all(promises);
 
@@ -337,16 +345,16 @@ describe('Performance Regression Tests - Execution Benchmarks', () => {
           type: 'WeightedChoice' as const,
           choices: [
             { text: `Choice ${i}A`, weight: 1 },
-            { text: `Choice ${i}B`, weight: 1 },
-          ],
+            { text: `Choice ${i}B`, weight: 1 }
+          ]
         })).concat([
           {
             id: 'output1',
             type: 'Output' as const,
-            inputs: ['node0'], // Just connect to first node for simplicity
-          },
+            inputs: ['node0'] // Just connect to first node for simplicity
+          }
         ]),
-        edges: [{ id: 'e1', source: 'node0', target: 'output1' }],
+        edges: [{ id: 'e1', source: 'node0', target: 'output1' }]
       };
 
       const initialMemory = process.memoryUsage().heapUsed;
@@ -377,7 +385,9 @@ describe('Performance Regression Tests - Execution Benchmarks', () => {
       console.log('Performance Benchmark Results:', performanceResults);
 
       // All benchmarks should complete
-      expect(Object.keys(performanceResults)).toHaveLength(PERFORMANCE_BENCHMARKS.length);
+      expect(Object.keys(performanceResults)).toHaveLength(
+        PERFORMANCE_BENCHMARKS.length
+      );
     });
   });
 });

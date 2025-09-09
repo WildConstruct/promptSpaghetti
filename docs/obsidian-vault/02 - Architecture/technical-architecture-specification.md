@@ -31,7 +31,12 @@ export class NodeFramework extends EventEmitter {
   public readonly validationService: NodeValidationService;
 
   // Core Methods
-  async createNode(type: string, id: string, config: AdvancedNodeConfig, data: any): Promise<FrameworkNode>;
+  async createNode(
+    type: string,
+    id: string,
+    config: AdvancedNodeConfig,
+    data: any
+  ): Promise<FrameworkNode>;
   getNode(id: string): FrameworkNode | undefined;
   async destroyNode(id: string): Promise<void>;
   registerLifecycleHooks(type: string, hooks: NodeLifecycleHooks): void;
@@ -40,7 +45,10 @@ export class NodeFramework extends EventEmitter {
   getMetrics(): NodeFrameworkMetrics;
   getAllNodes(): FrameworkNode[];
   getNodesByType(type: string): FrameworkNode[];
-  async executeNodeBatch(nodeIds: string[], context: AdvancedExecutionContext): Promise<any[]>;
+  async executeNodeBatch(
+    nodeIds: string[],
+    context: AdvancedExecutionContext
+  ): Promise<any[]>;
   async shutdown(): Promise<void>;
 }
 ```
@@ -64,9 +72,17 @@ export class NodeFactory {
     data: any,
     options?: NodeCreationOptions
   ): Promise<FrameworkNode>;
-  async createFromTemplate(templateId: string, nodeId: string, overrides?: Partial<NodeConfig>): Promise<FrameworkNode>;
+  async createFromTemplate(
+    templateId: string,
+    nodeId: string,
+    overrides?: Partial<NodeConfig>
+  ): Promise<FrameworkNode>;
   async createNodeBatch(specs: NodeCreationSpec[]): Promise<FrameworkNode[]>;
-  async cloneNode(sourceId: string, newId: string, overrides?: NodeOverrides): Promise<FrameworkNode>;
+  async cloneNode(
+    sourceId: string,
+    newId: string,
+    overrides?: NodeOverrides
+  ): Promise<FrameworkNode>;
 
   // Template Management
   registerTemplate(template: NodeTemplate): void;
@@ -75,7 +91,12 @@ export class NodeFactory {
 
   // Statistics & Optimization
   getStatistics(): FactoryStatistics;
-  createOptimizedNode(type: string, id: string, config: AdvancedNodeConfig, data: any): Promise<FrameworkNode>;
+  createOptimizedNode(
+    type: string,
+    id: string,
+    config: AdvancedNodeConfig,
+    data: any
+  ): Promise<FrameworkNode>;
 }
 ```
 
@@ -100,7 +121,9 @@ export class NodeValidationFramework {
   addTypeRule(rule: TypeValidationRule): void;
 
   // Batch Operations
-  async validateNodeBatch(nodes: AdvancedNodeData[]): Promise<NodeValidationResult[]>;
+  async validateNodeBatch(
+    nodes: AdvancedNodeData[]
+  ): Promise<NodeValidationResult[]>;
 
   // Statistics
   getValidationStatistics(): ValidationStatistics;
@@ -155,7 +178,11 @@ export interface PerformanceMonitorConfig {
 }
 
 export class PerformanceMonitor extends EventEmitter {
-  startExecution(nodeId: string, nodeType: string, context: AdvancedExecutionContext): string;
+  startExecution(
+    nodeId: string,
+    nodeType: string,
+    context: AdvancedExecutionContext
+  ): string;
   endExecution(
     trackingId: string,
     context: AdvancedExecutionContext,
@@ -361,13 +388,20 @@ type Query {
   graph(id: ID!): Graph
   graphs(filter: GraphFilter): [Graph!]!
 
-  performanceMetrics(nodeType: String, timeRange: TimeRange, limit: Int = 50): [NodePerformanceMetrics!]!
+  performanceMetrics(
+    nodeType: String
+    timeRange: TimeRange
+    limit: Int = 50
+  ): [NodePerformanceMetrics!]!
 
   performanceReport(graphId: ID, timeRange: TimeRange): PerformanceReport!
 
   validationReport(graphId: ID!): ValidationReport!
 
-  performanceInsights(category: InsightCategory, limit: Int = 10): [PerformanceInsight!]!
+  performanceInsights(
+    category: InsightCategory
+    limit: Int = 10
+  ): [PerformanceInsight!]!
 }
 
 # Mutations
@@ -936,15 +970,19 @@ interface RBACConfiguration {
         'graphs:write',
         'graphs:delete', // Own graphs only
         'templates:read',
-        'analytics:read', // Own data only
+        'analytics:read' // Own data only
       ];
-      restrictions: ['maxGraphs: 100', 'maxNodesPerGraph: 500', 'maxExecutionsPerHour: 1000'];
+      restrictions: [
+        'maxGraphs: 100',
+        'maxNodesPerGraph: 500',
+        'maxExecutionsPerHour: 1000'
+      ];
     };
 
     viewer: {
       permissions: [
         'graphs:read', // Shared graphs only
-        'templates:read',
+        'templates:read'
       ];
       restrictions: ['maxExecutionsPerHour: 100'];
     };
@@ -1000,7 +1038,11 @@ interface EncryptionConfiguration {
   dataInTransit: {
     tls: {
       minVersion: '1.3';
-      cipherSuites: ['TLS_AES_256_GCM_SHA384', 'TLS_CHACHA20_POLY1305_SHA256', 'TLS_AES_128_GCM_SHA256'];
+      cipherSuites: [
+        'TLS_AES_256_GCM_SHA384',
+        'TLS_CHACHA20_POLY1305_SHA256',
+        'TLS_AES_128_GCM_SHA256'
+      ];
       certificateValidation: 'strict';
     };
 
@@ -1112,7 +1154,12 @@ interface TestCoverageRequirements {
     performance: 90;
   };
 
-  exemptions: ['src/**/*.test.ts', 'src/**/*.spec.ts', 'src/**/test-utils.ts', 'src/**/mocks/**'];
+  exemptions: [
+    'src/**/*.test.ts',
+    'src/**/*.spec.ts',
+    'src/**/test-utils.ts',
+    'src/**/mocks/**'
+  ];
 }
 
 interface TestTypeRequirements {
@@ -1220,22 +1267,32 @@ interface MockNodeFramework {
 interface MockPerformanceMonitor {
   startExecution: jest.MockedFunction<PerformanceMonitor['startExecution']>;
   endExecution: jest.MockedFunction<PerformanceMonitor['endExecution']>;
-  getStatisticsSummary: jest.MockedFunction<PerformanceMonitor['getStatisticsSummary']>;
+  getStatisticsSummary: jest.MockedFunction<
+    PerformanceMonitor['getStatisticsSummary']
+  >;
 }
 
 // Validation Framework Mocks
 interface MockValidationFramework {
   validateNode: jest.MockedFunction<NodeValidationFramework['validateNode']>;
-  validateContext: jest.MockedFunction<ContextValidationFramework['validateContext']>;
+  validateContext: jest.MockedFunction<
+    ContextValidationFramework['validateContext']
+  >;
 }
 
 // Test Data Factories
 interface TestDataFactories {
   graph: (overrides?: Partial<Graph>) => Graph;
   node: (type: NodeType, overrides?: Partial<Node>) => Node;
-  executionContext: (overrides?: Partial<AdvancedExecutionContext>) => AdvancedExecutionContext;
-  performanceMetrics: (overrides?: Partial<PerformanceMetrics>) => PerformanceMetrics;
-  validationResult: (overrides?: Partial<NodeValidationResult>) => NodeValidationResult;
+  executionContext: (
+    overrides?: Partial<AdvancedExecutionContext>
+  ) => AdvancedExecutionContext;
+  performanceMetrics: (
+    overrides?: Partial<PerformanceMetrics>
+  ) => PerformanceMetrics;
+  validationResult: (
+    overrides?: Partial<NodeValidationResult>
+  ) => NodeValidationResult;
 }
 ```
 
@@ -1533,7 +1590,7 @@ interface MonitoringConfiguration {
         'PerformanceAlerts',
         'ActiveUsers',
         'ErrorRate',
-        'ResponseTime',
+        'ResponseTime'
       ];
 
       dimensions: ['Environment', 'Service', 'NodeType', 'UserTier'];
@@ -1559,7 +1616,7 @@ interface MonitoringConfiguration {
           comparison: 'GreaterThanThreshold';
           period: 300;
           evaluationPeriods: 2;
-        },
+        }
       ];
     };
   };
@@ -1585,7 +1642,11 @@ interface MonitoringConfiguration {
     enabled: true;
     samplingRate: 0.1; // 10%
 
-    services: ['prompt-spaghetti-api', 'prompt-spaghetti-worker', 'prompt-spaghetti-scheduler'];
+    services: [
+      'prompt-spaghetti-api',
+      'prompt-spaghetti-worker',
+      'prompt-spaghetti-scheduler'
+    ];
 
     customTags: ['user.id', 'graph.id', 'node.type', 'execution.id'];
   };

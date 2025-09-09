@@ -12,14 +12,6 @@
     "resolveJsonModule": true,
     "types": []
   },
-  "include": [
-    "src/engine-basic.ts",
-    "src/server-minimal.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/engine-basic.ts", "src/server-minimal.ts"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }

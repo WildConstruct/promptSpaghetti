@@ -9,7 +9,14 @@
  * Epic: 17 - Backstage Admin Controls (Story 17.4.5 - Health Check System)
  */
 
-import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import {
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  jest
+} from '@jest/globals';
 import { Database } from '../../server/src/database';
 import { AuditService } from '../../server/src/auth/services/AuditService';
 import { DiagnosticService } from '../../server/src/admin/DiagnosticService';
@@ -23,21 +30,21 @@ import {
   HealthCheckType,
   HealthStatus,
   ComparisonOperator,
-  createExampleHealthChecks,
+  createExampleHealthChecks
 } from '../packages/core/admin/HealthCheckDefinitionModel';
 
 // Mock dependencies
 const mockDatabase = {
-  query: jest.fn(),
+  query: jest.fn()
 } as unknown as Database;
 
 const mockAuditService = {
-  logAction: jest.fn(),
+  logAction: jest.fn()
 } as unknown as AuditService;
 
 const mockDiagnosticService = {
   runDiagnosticSuite: jest.fn(),
-  runSingleDiagnostic: jest.fn(),
+  runSingleDiagnostic: jest.fn()
 } as unknown as DiagnosticService;
 
 describe('Health Check Definition System', () => {
@@ -46,7 +53,11 @@ describe('Health Check Definition System', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
 
-    healthCheckService = new HealthCheckDefinitionService(mockDatabase, mockAuditService, mockDiagnosticService);
+    healthCheckService = new HealthCheckDefinitionService(
+      mockDatabase,
+      mockAuditService,
+      mockDiagnosticService
+    );
 
     await healthCheckService.initialize();
   });
@@ -57,7 +68,10 @@ describe('Health Check Definition System', () => {
 
   describe('HealthCheckDefinitionBuilder', () => {
     test('should build a basic HTTP endpoint health check', () => {
-      const healthCheck = new HealthCheckDefinitionBuilder('test_api', 'Test API Health Check')
+      const healthCheck = new HealthCheckDefinitionBuilder(
+        'test_api',
+        'Test API Health Check'
+      )
         .description('Tests the API endpoint for availability')
         .category(HealthCheckCategory.INTEGRATION)
         .priority(HealthCheckPriority.HIGH)
@@ -69,8 +83,10 @@ describe('Health Check Definition System', () => {
           timeout: 5000,
           responseValidation: {
             contentType: ['application/json'],
-            jsonPath: [{ path: '$.status', expectedValue: 'ok', required: true }],
-          },
+            jsonPath: [
+              { path: '$.status', expectedValue: 'ok', required: true }
+            ]
+          }
         })
         .schedule('*/5 * * * *', 'UTC')
         .alerting({
@@ -81,24 +97,24 @@ describe('Health Check Definition System', () => {
               critical: 5000,
               unit: 'ms',
               evaluationWindow: 300,
-              evaluationMethod: 'average',
+              evaluationMethod: 'average'
             },
             errorRate: {
               warning: 5,
               critical: 10,
               unit: '%',
               evaluationWindow: 300,
-              evaluationMethod: 'average',
+              evaluationMethod: 'average'
             },
             availability: {
               warning: 99,
               critical: 95,
               unit: '%',
               evaluationWindow: 300,
-              evaluationMethod: 'average',
+              evaluationMethod: 'average'
             },
-            custom: {},
-          },
+            custom: {}
+          }
         })
         .validation({
           output: {
@@ -108,10 +124,10 @@ describe('Health Check Definition System', () => {
                 field: 'status',
                 operator: ComparisonOperator.EQUALS,
                 value: 'ok',
-                description: 'API returns healthy status',
-              },
-            ],
-          },
+                description: 'API returns healthy status'
+              }
+            ]
+          }
         })
         .build();
 
@@ -121,26 +137,34 @@ describe('Health Check Definition System', () => {
       expect(healthCheck.priority).toBe(HealthCheckPriority.HIGH);
       expect(healthCheck.tags).toContain('api');
       expect(healthCheck.config.type).toBe(HealthCheckType.HTTP_ENDPOINT);
-      expect(healthCheck.config.endpoint?.url).toBe('https://api.example.com/health');
-      expect(healthCheck.execution?.schedule?.cronExpression).toBe('*/5 * * * *');
+      expect(healthCheck.config.endpoint?.url).toBe(
+        'https://api.example.com/health'
+      );
+      expect(healthCheck.execution?.schedule?.cronExpression).toBe(
+        '*/5 * * * *'
+      );
       expect(healthCheck.alerting?.enabled).toBe(true);
     });
 
     test('should build a database query health check with validation', () => {
-      const healthCheck = new HealthCheckDefinitionBuilder('db_check', 'Database Health Check')
+      const healthCheck = new HealthCheckDefinitionBuilder(
+        'db_check',
+        'Database Health Check'
+      )
         .description('Validates database connectivity and performance')
         .category(HealthCheckCategory.DATABASE)
         .priority(HealthCheckPriority.CRITICAL)
         .tags('database', 'infrastructure')
         .databaseQuery({
           database: 'main',
-          query: 'SELECT COUNT(*) as count FROM health_check_table WHERE status = $1',
+          query:
+            'SELECT COUNT(*) as count FROM health_check_table WHERE status = $1',
           timeout: 3000,
           expectedResults: {
             minRows: 1,
             exactRows: 1,
-            columns: ['count'],
-          },
+            columns: ['count']
+          }
         })
         .parameter('status', {
           name: 'status',
@@ -149,23 +173,27 @@ describe('Health Check Definition System', () => {
           required: true,
           defaultValue: 'active',
           validation: {
-            enumValues: ['active', 'inactive', 'pending'],
-          },
+            enumValues: ['active', 'inactive', 'pending']
+          }
         })
         .validation({
           security: {
             requiresAuthentication: true,
             requiredPermissions: ['database:read'],
-            auditLevel: 'detailed',
-          },
+            auditLevel: 'detailed'
+          }
         })
         .build();
 
       expect(healthCheck.config.type).toBe(HealthCheckType.DATABASE_QUERY);
       expect(healthCheck.config.query?.database).toBe('main');
       expect(healthCheck.config.parameters['status']).toBeDefined();
-      expect(healthCheck.config.parameters['status'].defaultValue).toBe('active');
-      expect(healthCheck.validation?.security?.requiresAuthentication).toBe(true);
+      expect(healthCheck.config.parameters['status'].defaultValue).toBe(
+        'active'
+      );
+      expect(healthCheck.validation?.security?.requiresAuthentication).toBe(
+        true
+      );
     });
 
     test('should fail to build with missing required fields', () => {
@@ -175,7 +203,10 @@ describe('Health Check Definition System', () => {
     });
 
     test('should support method chaining', () => {
-      const builder = new HealthCheckDefinitionBuilder('chain_test', 'Chain Test')
+      const builder = new HealthCheckDefinitionBuilder(
+        'chain_test',
+        'Chain Test'
+      )
         .description('Test method chaining')
         .category(HealthCheckCategory.SYSTEM)
         .priority(HealthCheckPriority.MEDIUM)
@@ -184,15 +215,20 @@ describe('Health Check Definition System', () => {
           url: 'http://localhost/health',
           method: 'GET',
           expectedStatusCodes: [200],
-          timeout: 1000,
+          timeout: 1000
         })
         .validation({
           output: {
             expectedFormat: 'json',
             successConditions: [
-              { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Simple health check' },
-            ],
-          },
+              {
+                field: 'status',
+                operator: ComparisonOperator.EQUALS,
+                value: 'ok',
+                description: 'Simple health check'
+              }
+            ]
+          }
         });
 
       expect(builder).toBeDefined();
@@ -202,7 +238,10 @@ describe('Health Check Definition System', () => {
 
   describe('HealthCheckDefinitionValidator', () => {
     test('should validate a correct health check definition', () => {
-      const validDefinition = new HealthCheckDefinitionBuilder('valid_check', 'Valid Health Check')
+      const validDefinition = new HealthCheckDefinitionBuilder(
+        'valid_check',
+        'Valid Health Check'
+      )
         .description('A properly configured health check')
         .category(HealthCheckCategory.SYSTEM)
         .priority(HealthCheckPriority.HIGH)
@@ -210,15 +249,15 @@ describe('Health Check Definition System', () => {
           url: 'http://example.com/health',
           method: 'GET',
           expectedStatusCodes: [200],
-          timeout: 5000,
+          timeout: 5000
         })
         .validation({
           runtime: {
             maxExecutionTime: 4000,
             networkAccessRequired: true,
             fileSystemAccessRequired: false,
-            privilegedAccessRequired: false,
-          },
+            privilegedAccessRequired: false
+          }
         })
         .build();
 
@@ -245,8 +284,8 @@ describe('Health Check Definition System', () => {
           retries: {
             maxAttempts: 3,
             backoffStrategy: 'exponential',
-            initialDelay: 1000,
-          },
+            initialDelay: 1000
+          }
         },
         validation: {
           input: { required: [], customValidators: [] },
@@ -254,41 +293,52 @@ describe('Health Check Definition System', () => {
             expectedFormat: 'json',
             successConditions: [],
             warningConditions: [],
-            errorConditions: [],
+            errorConditions: []
           },
           runtime: {
             maxExecutionTime: 1000,
             networkAccessRequired: false,
             fileSystemAccessRequired: false,
-            privilegedAccessRequired: false,
+            privilegedAccessRequired: false
           }, // Greater than timeout
           security: {
             requiresAuthentication: false,
             requiredPermissions: [],
             sensitiveDataHandling: 'none',
-            auditLevel: 'basic',
-          },
+            auditLevel: 'basic'
+          }
         },
         execution: undefined,
         alerting: undefined,
         createdBy: 'test',
         createdAt: new Date(),
         updatedAt: new Date(),
-        isActive: true,
+        isActive: true
       } as HealthCheckDefinition;
 
       const result = HealthCheckDefinitionValidator.validate(invalidDefinition);
 
       expect(result.isValid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(e => e.includes('ID must be at least 3 characters'))).toBe(true);
-      expect(result.errors.some(e => e.includes('name must be at least 5 characters'))).toBe(true);
-      expect(result.warnings.some(w => w.includes('Timeout less than 1 second'))).toBe(true);
+      expect(
+        result.errors.some(e => e.includes('ID must be at least 3 characters'))
+      ).toBe(true);
+      expect(
+        result.errors.some(e =>
+          e.includes('name must be at least 5 characters')
+        )
+      ).toBe(true);
+      expect(
+        result.warnings.some(w => w.includes('Timeout less than 1 second'))
+      ).toBe(true);
       expect(result.score).toBeLessThan(50);
     });
 
     test('should validate cron expressions', () => {
-      const validCronDefinition = new HealthCheckDefinitionBuilder('cron_test', 'Cron Test Check')
+      const validCronDefinition = new HealthCheckDefinitionBuilder(
+        'cron_test',
+        'Cron Test Check'
+      )
         .description('Test cron validation')
         .category(HealthCheckCategory.SYSTEM)
         .priority(HealthCheckPriority.LOW)
@@ -296,7 +346,7 @@ describe('Health Check Definition System', () => {
           url: 'http://localhost/test',
           method: 'GET',
           expectedStatusCodes: [200],
-          timeout: 5000,
+          timeout: 5000
         })
         .schedule('0 */6 * * *') // Every 6 hours
         .validation({
@@ -307,20 +357,21 @@ describe('Health Check Definition System', () => {
                 field: 'status',
                 operator: ComparisonOperator.EQUALS,
                 value: 'ok',
-                description: 'Cron test health check',
-              },
-            ],
+                description: 'Cron test health check'
+              }
+            ]
           },
           runtime: {
             maxExecutionTime: 4000,
             networkAccessRequired: true,
             fileSystemAccessRequired: false,
-            privilegedAccessRequired: false,
-          },
+            privilegedAccessRequired: false
+          }
         })
         .build();
 
-      const result = HealthCheckDefinitionValidator.validate(validCronDefinition);
+      const result =
+        HealthCheckDefinitionValidator.validate(validCronDefinition);
 
       // Debug validation errors if any
       if (!result.isValid) {
@@ -332,18 +383,26 @@ describe('Health Check Definition System', () => {
 
       // Test invalid cron
       const invalidCronDefinition = { ...validCronDefinition };
-      invalidCronDefinition.execution!.schedule!.cronExpression = 'invalid cron';
+      invalidCronDefinition.execution!.schedule!.cronExpression =
+        'invalid cron';
 
-      const invalidResult = HealthCheckDefinitionValidator.validate(invalidCronDefinition);
+      const invalidResult = HealthCheckDefinitionValidator.validate(
+        invalidCronDefinition
+      );
       expect(invalidResult.isValid).toBe(false);
-      expect(invalidResult.errors.some(e => e.includes('Invalid cron expression'))).toBe(true);
+      expect(
+        invalidResult.errors.some(e => e.includes('Invalid cron expression'))
+      ).toBe(true);
     });
   });
 
   describe('HealthCheckDefinitionService', () => {
     describe('Definition Management', () => {
       test('should create a new health check definition', async () => {
-        const definition = new HealthCheckDefinitionBuilder('service_test', 'Service Test Check')
+        const definition = new HealthCheckDefinitionBuilder(
+          'service_test',
+          'Service Test Check'
+        )
           .description('Test health check for service testing')
           .category(HealthCheckCategory.INTEGRATION)
           .priority(HealthCheckPriority.MEDIUM)
@@ -351,7 +410,7 @@ describe('Health Check Definition System', () => {
             url: 'http://test.example.com/health',
             method: 'GET',
             expectedStatusCodes: [200],
-            timeout: 3000,
+            timeout: 3000
           })
           .validation({
             output: {
@@ -361,20 +420,23 @@ describe('Health Check Definition System', () => {
                   field: 'status',
                   operator: ComparisonOperator.EQUALS,
                   value: 'ok',
-                  description: 'Service test health check',
-                },
-              ],
+                  description: 'Service test health check'
+                }
+              ]
             },
             runtime: {
               maxExecutionTime: 2000, // Less than the 3000ms timeout
               networkAccessRequired: true,
               fileSystemAccessRequired: false,
-              privilegedAccessRequired: false,
-            },
+              privilegedAccessRequired: false
+            }
           })
           .build();
 
-        const result = await healthCheckService.createDefinition(definition, 'test-user');
+        const result = await healthCheckService.createDefinition(
+          definition,
+          'test-user'
+        );
 
         expect(result).toBeDefined();
         expect(result.id).toBe('service_test');
@@ -383,13 +445,16 @@ describe('Health Check Definition System', () => {
         expect(mockAuditService.logAction).toHaveBeenCalledWith(
           expect.objectContaining({
             action: 'health_check_definition_created',
-            userId: 'test-user',
+            userId: 'test-user'
           })
         );
       });
 
       test('should prevent creating duplicate health check definitions', async () => {
-        const definition = new HealthCheckDefinitionBuilder('duplicate_test', 'Duplicate Test')
+        const definition = new HealthCheckDefinitionBuilder(
+          'duplicate_test',
+          'Duplicate Test'
+        )
           .description('Test duplicate prevention')
           .category(HealthCheckCategory.SYSTEM)
           .priority(HealthCheckPriority.LOW)
@@ -397,7 +462,7 @@ describe('Health Check Definition System', () => {
             url: 'http://localhost/test',
             method: 'GET',
             expectedStatusCodes: [200],
-            timeout: 1000,
+            timeout: 1000
           })
           .validation({
             output: {
@@ -407,26 +472,31 @@ describe('Health Check Definition System', () => {
                   field: 'status',
                   operator: ComparisonOperator.EQUALS,
                   value: 'ok',
-                  description: 'Duplicate test check',
-                },
-              ],
+                  description: 'Duplicate test check'
+                }
+              ]
             },
             runtime: {
               maxExecutionTime: 800, // Less than the 1000ms timeout
               networkAccessRequired: true,
               fileSystemAccessRequired: false,
-              privilegedAccessRequired: false,
-            },
+              privilegedAccessRequired: false
+            }
           })
           .build();
 
         await healthCheckService.createDefinition(definition, 'test-user');
 
-        await expect(healthCheckService.createDefinition(definition, 'test-user')).rejects.toThrow('already exists');
+        await expect(
+          healthCheckService.createDefinition(definition, 'test-user')
+        ).rejects.toThrow('already exists');
       });
 
       test('should update existing health check definition', async () => {
-        const originalDefinition = new HealthCheckDefinitionBuilder('update_test', 'Update Test')
+        const originalDefinition = new HealthCheckDefinitionBuilder(
+          'update_test',
+          'Update Test'
+        )
           .description('Original description')
           .category(HealthCheckCategory.SYSTEM)
           .priority(HealthCheckPriority.LOW)
@@ -434,53 +504,7 @@ describe('Health Check Definition System', () => {
             url: 'http://localhost/original',
             method: 'GET',
             expectedStatusCodes: [200],
-            timeout: 1000,
-          })
-          .validation({
-            output: {
-              expectedFormat: 'json',
-              successConditions: [
-                { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Update test check' },
-              ],
-            },
-            runtime: {
-              maxExecutionTime: 800, // Less than the 1000ms timeout
-              networkAccessRequired: true,
-              fileSystemAccessRequired: false,
-              privilegedAccessRequired: false,
-            },
-          })
-          .build();
-
-        await healthCheckService.createDefinition(originalDefinition, 'test-user');
-
-        const updates = {
-          description: 'Updated description',
-          priority: HealthCheckPriority.HIGH,
-        };
-
-        const updatedDefinition = await healthCheckService.updateDefinition('update_test', updates, 'test-user');
-
-        expect(updatedDefinition.description).toBe('Updated description');
-        expect(updatedDefinition.priority).toBe(HealthCheckPriority.HIGH);
-        expect(updatedDefinition.updatedAt).toBeInstanceOf(Date);
-        expect(mockAuditService.logAction).toHaveBeenCalledWith(
-          expect.objectContaining({
-            action: 'health_check_definition_updated',
-          })
-        );
-      });
-
-      test('should delete health check definition', async () => {
-        const definition = new HealthCheckDefinitionBuilder('delete_test', 'Delete Test')
-          .description('Test deletion')
-          .category(HealthCheckCategory.SYSTEM)
-          .priority(HealthCheckPriority.LOW)
-          .httpEndpoint({
-            url: 'http://localhost/delete',
-            method: 'GET',
-            expectedStatusCodes: [200],
-            timeout: 1000,
+            timeout: 1000
           })
           .validation({
             output: {
@@ -490,16 +514,77 @@ describe('Health Check Definition System', () => {
                   field: 'status',
                   operator: ComparisonOperator.EQUALS,
                   value: 'ok',
-                  description: 'Delete test check',
-                },
-              ],
+                  description: 'Update test check'
+                }
+              ]
             },
             runtime: {
               maxExecutionTime: 800, // Less than the 1000ms timeout
               networkAccessRequired: true,
               fileSystemAccessRequired: false,
-              privilegedAccessRequired: false,
+              privilegedAccessRequired: false
+            }
+          })
+          .build();
+
+        await healthCheckService.createDefinition(
+          originalDefinition,
+          'test-user'
+        );
+
+        const updates = {
+          description: 'Updated description',
+          priority: HealthCheckPriority.HIGH
+        };
+
+        const updatedDefinition = await healthCheckService.updateDefinition(
+          'update_test',
+          updates,
+          'test-user'
+        );
+
+        expect(updatedDefinition.description).toBe('Updated description');
+        expect(updatedDefinition.priority).toBe(HealthCheckPriority.HIGH);
+        expect(updatedDefinition.updatedAt).toBeInstanceOf(Date);
+        expect(mockAuditService.logAction).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: 'health_check_definition_updated'
+          })
+        );
+      });
+
+      test('should delete health check definition', async () => {
+        const definition = new HealthCheckDefinitionBuilder(
+          'delete_test',
+          'Delete Test'
+        )
+          .description('Test deletion')
+          .category(HealthCheckCategory.SYSTEM)
+          .priority(HealthCheckPriority.LOW)
+          .httpEndpoint({
+            url: 'http://localhost/delete',
+            method: 'GET',
+            expectedStatusCodes: [200],
+            timeout: 1000
+          })
+          .validation({
+            output: {
+              expectedFormat: 'json',
+              successConditions: [
+                {
+                  field: 'status',
+                  operator: ComparisonOperator.EQUALS,
+                  value: 'ok',
+                  description: 'Delete test check'
+                }
+              ]
             },
+            runtime: {
+              maxExecutionTime: 800, // Less than the 1000ms timeout
+              networkAccessRequired: true,
+              fileSystemAccessRequired: false,
+              privilegedAccessRequired: false
+            }
           })
           .build();
 
@@ -507,11 +592,12 @@ describe('Health Check Definition System', () => {
 
         await healthCheckService.deleteDefinition('delete_test', 'test-user');
 
-        const deletedDefinition = await healthCheckService.getDefinition('delete_test');
+        const deletedDefinition =
+          await healthCheckService.getDefinition('delete_test');
         expect(deletedDefinition).toBeNull();
         expect(mockAuditService.logAction).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'health_check_definition_deleted',
+            action: 'health_check_definition_deleted'
           })
         );
       });
@@ -528,7 +614,7 @@ describe('Health Check Definition System', () => {
               url: 'http://localhost/test1',
               method: 'GET',
               expectedStatusCodes: [200],
-              timeout: 1000,
+              timeout: 1000
             })
             .validation({
               output: {
@@ -538,16 +624,16 @@ describe('Health Check Definition System', () => {
                     field: 'status',
                     operator: ComparisonOperator.EQUALS,
                     value: 'ok',
-                    description: 'Check status is ok',
-                  },
-                ],
+                    description: 'Check status is ok'
+                  }
+                ]
               },
               runtime: {
                 maxExecutionTime: 800, // Less than the 1000ms timeout
                 networkAccessRequired: true,
                 fileSystemAccessRequired: false,
-                privilegedAccessRequired: false,
-              },
+                privilegedAccessRequired: false
+              }
             })
             .build(),
 
@@ -559,7 +645,7 @@ describe('Health Check Definition System', () => {
             .databaseQuery({
               database: 'test',
               query: 'SELECT 1',
-              timeout: 2000,
+              timeout: 2000
             })
             .validation({
               output: {
@@ -569,18 +655,18 @@ describe('Health Check Definition System', () => {
                     field: 'result',
                     operator: ComparisonOperator.EQUALS,
                     value: 1,
-                    description: 'Check database result is 1',
-                  },
-                ],
+                    description: 'Check database result is 1'
+                  }
+                ]
               },
               runtime: {
                 maxExecutionTime: 1500, // Less than the 2000ms timeout
                 networkAccessRequired: false,
                 fileSystemAccessRequired: false,
-                privilegedAccessRequired: false,
-              },
+                privilegedAccessRequired: false
+              }
             })
-            .build(),
+            .build()
         ];
 
         for (const def of definitions) {
@@ -589,21 +675,21 @@ describe('Health Check Definition System', () => {
 
         // Test filtering by category
         const systemChecks = await healthCheckService.listDefinitions({
-          category: HealthCheckCategory.SYSTEM,
+          category: HealthCheckCategory.SYSTEM
         });
         expect(systemChecks).toHaveLength(1);
         expect(systemChecks[0].id).toBe('list_test_1');
 
         // Test filtering by priority
         const highPriorityChecks = await healthCheckService.listDefinitions({
-          priority: HealthCheckPriority.HIGH,
+          priority: HealthCheckPriority.HIGH
         });
         expect(highPriorityChecks).toHaveLength(1);
         expect(highPriorityChecks[0].priority).toBe(HealthCheckPriority.HIGH);
 
         // Test filtering by tags
         const criticalChecks = await healthCheckService.listDefinitions({
-          tags: ['critical'],
+          tags: ['critical']
         });
         expect(criticalChecks).toHaveLength(1);
         expect(criticalChecks[0].tags).toContain('critical');
@@ -616,7 +702,10 @@ describe('Health Check Definition System', () => {
 
     describe('Health Check Execution', () => {
       test('should execute HTTP endpoint health check', async () => {
-        const definition = new HealthCheckDefinitionBuilder('execute_http_test', 'Execute HTTP Test')
+        const definition = new HealthCheckDefinitionBuilder(
+          'execute_http_test',
+          'Execute HTTP Test'
+        )
           .description('Test HTTP execution')
           .category(HealthCheckCategory.INTEGRATION)
           .priority(HealthCheckPriority.MEDIUM)
@@ -624,7 +713,7 @@ describe('Health Check Definition System', () => {
             url: 'http://example.com/health',
             method: 'GET',
             expectedStatusCodes: [200],
-            timeout: 5000,
+            timeout: 5000
           })
           .validation({
             output: {
@@ -634,48 +723,58 @@ describe('Health Check Definition System', () => {
                   field: 'status',
                   operator: ComparisonOperator.EQUALS,
                   value: 'ok',
-                  description: 'HTTP execution test check',
-                },
-              ],
+                  description: 'HTTP execution test check'
+                }
+              ]
             },
             runtime: {
               maxExecutionTime: 4000,
               networkAccessRequired: true,
               fileSystemAccessRequired: false,
-              privilegedAccessRequired: false,
-            },
+              privilegedAccessRequired: false
+            }
           })
           .build();
 
         await healthCheckService.createDefinition(definition, 'test-user');
 
-        const result = await healthCheckService.executeHealthCheck('execute_http_test', 'test-user');
+        const result = await healthCheckService.executeHealthCheck(
+          'execute_http_test',
+          'test-user'
+        );
 
         expect(result).toBeDefined();
         expect(result.checkId).toBe('execute_http_test');
         expect(result.executionId).toBeTruthy();
         expect(result.timestamp).toBeInstanceOf(Date);
-        expect([HealthStatus.HEALTHY, HealthStatus.UNHEALTHY, HealthStatus.ERROR]).toContain(result.status);
+        expect([
+          HealthStatus.HEALTHY,
+          HealthStatus.UNHEALTHY,
+          HealthStatus.ERROR
+        ]).toContain(result.status);
         expect(result.score).toBeGreaterThanOrEqual(0);
         expect(result.score).toBeLessThanOrEqual(100);
         expect(result.metrics).toBeDefined();
         expect(result.metadata).toBeDefined();
         expect(mockAuditService.logAction).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'health_check_executed',
+            action: 'health_check_executed'
           })
         );
       });
 
       test('should execute database query health check', async () => {
-        const definition = new HealthCheckDefinitionBuilder('execute_db_test', 'Execute DB Test')
+        const definition = new HealthCheckDefinitionBuilder(
+          'execute_db_test',
+          'Execute DB Test'
+        )
           .description('Test database execution')
           .category(HealthCheckCategory.DATABASE)
           .priority(HealthCheckPriority.HIGH)
           .databaseQuery({
             database: 'test_db',
             query: 'SELECT COUNT(*) FROM users',
-            timeout: 3000,
+            timeout: 3000
           })
           .validation({
             output: {
@@ -685,22 +784,25 @@ describe('Health Check Definition System', () => {
                   field: 'count',
                   operator: ComparisonOperator.GREATER_THAN,
                   value: 0,
-                  description: 'DB execution test check',
-                },
-              ],
+                  description: 'DB execution test check'
+                }
+              ]
             },
             runtime: {
               maxExecutionTime: 2500,
               networkAccessRequired: false,
               fileSystemAccessRequired: false,
-              privilegedAccessRequired: false,
-            },
+              privilegedAccessRequired: false
+            }
           })
           .build();
 
         await healthCheckService.createDefinition(definition, 'test-user');
 
-        const result = await healthCheckService.executeHealthCheck('execute_db_test', 'test-user');
+        const result = await healthCheckService.executeHealthCheck(
+          'execute_db_test',
+          'test-user'
+        );
 
         expect(result.checkId).toBe('execute_db_test');
         expect(result.details.affectedComponents).toContain('database');
@@ -708,7 +810,10 @@ describe('Health Check Definition System', () => {
       });
 
       test('should handle health check execution errors gracefully', async () => {
-        const definition = new HealthCheckDefinitionBuilder('error_test', 'Error Test')
+        const definition = new HealthCheckDefinitionBuilder(
+          'error_test',
+          'Error Test'
+        )
           .description('Test error handling')
           .category(HealthCheckCategory.SYSTEM)
           .priority(HealthCheckPriority.LOW)
@@ -716,36 +821,48 @@ describe('Health Check Definition System', () => {
             url: 'http://invalid-url-that-will-fail.example.com',
             method: 'GET',
             expectedStatusCodes: [200],
-            timeout: 1000,
+            timeout: 1000
           })
           .validation({
             output: {
               expectedFormat: 'json',
               successConditions: [
-                { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Error test check' },
-              ],
+                {
+                  field: 'status',
+                  operator: ComparisonOperator.EQUALS,
+                  value: 'ok',
+                  description: 'Error test check'
+                }
+              ]
             },
             runtime: {
               maxExecutionTime: 800,
               networkAccessRequired: true,
               fileSystemAccessRequired: false,
-              privilegedAccessRequired: false,
-            },
+              privilegedAccessRequired: false
+            }
           })
           .build();
 
         await healthCheckService.createDefinition(definition, 'test-user');
 
-        const result = await healthCheckService.executeHealthCheck('error_test', 'test-user');
+        const result = await healthCheckService.executeHealthCheck(
+          'error_test',
+          'test-user'
+        );
 
         // The service returns a status based on expected status codes
         expect(result).toBeDefined();
-        expect([HealthStatus.HEALTHY, HealthStatus.UNHEALTHY, HealthStatus.ERROR]).toContain(result.status);
+        expect([
+          HealthStatus.HEALTHY,
+          HealthStatus.UNHEALTHY,
+          HealthStatus.ERROR
+        ]).toContain(result.status);
         expect(result.checkId).toBe('error_test');
 
         expect(mockAuditService.logAction).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'health_check_executed',
+            action: 'health_check_executed'
           })
         );
       });
@@ -755,7 +872,10 @@ describe('Health Check Definition System', () => {
         const checkIds = ['bulk_test_1', 'bulk_test_2', 'bulk_test_3'];
 
         for (let i = 0; i < checkIds.length; i++) {
-          const definition = new HealthCheckDefinitionBuilder(checkIds[i], `Bulk Test ${i + 1}`)
+          const definition = new HealthCheckDefinitionBuilder(
+            checkIds[i],
+            `Bulk Test ${i + 1}`
+          )
             .description(`Test bulk execution ${i + 1}`)
             .category(HealthCheckCategory.SYSTEM)
             .priority(HealthCheckPriority.MEDIUM)
@@ -763,7 +883,7 @@ describe('Health Check Definition System', () => {
               url: `http://example.com/health${i + 1}`,
               method: 'GET',
               expectedStatusCodes: [200],
-              timeout: 2000,
+              timeout: 2000
             })
             .validation({
               output: {
@@ -773,16 +893,16 @@ describe('Health Check Definition System', () => {
                     field: 'status',
                     operator: ComparisonOperator.EQUALS,
                     value: 'ok',
-                    description: `Bulk test ${i + 1} check`,
-                  },
-                ],
+                    description: `Bulk test ${i + 1} check`
+                  }
+                ]
               },
               runtime: {
                 maxExecutionTime: 1500,
                 networkAccessRequired: true,
                 fileSystemAccessRequired: false,
-                privilegedAccessRequired: false,
-              },
+                privilegedAccessRequired: false
+              }
             })
             .build();
 
@@ -801,16 +921,19 @@ describe('Health Check Definition System', () => {
         expect(bulkResult.totalChecks).toBe(3);
         expect(bulkResult.results).toHaveLength(3);
         expect(bulkResult.executionId).toBeTruthy();
-        expect([HealthStatus.HEALTHY, HealthStatus.DEGRADED, HealthStatus.UNHEALTHY, HealthStatus.ERROR]).toContain(
-          bulkResult.overallStatus
-        );
+        expect([
+          HealthStatus.HEALTHY,
+          HealthStatus.DEGRADED,
+          HealthStatus.UNHEALTHY,
+          HealthStatus.ERROR
+        ]).toContain(bulkResult.overallStatus);
 
         // Parallel execution should be faster than sequential
         expect(executionTime).toBeLessThan(5000);
 
         expect(mockAuditService.logAction).toHaveBeenCalledWith(
           expect.objectContaining({
-            action: 'bulk_health_check_executed',
+            action: 'bulk_health_check_executed'
           })
         );
       });
@@ -819,7 +942,10 @@ describe('Health Check Definition System', () => {
         const checkIds = ['seq_test_1', 'seq_test_2'];
 
         for (let i = 0; i < checkIds.length; i++) {
-          const definition = new HealthCheckDefinitionBuilder(checkIds[i], `Sequential Test ${i + 1}`)
+          const definition = new HealthCheckDefinitionBuilder(
+            checkIds[i],
+            `Sequential Test ${i + 1}`
+          )
             .description(`Test sequential execution ${i + 1}`)
             .category(HealthCheckCategory.INTEGRATION)
             .priority(HealthCheckPriority.LOW)
@@ -827,7 +953,7 @@ describe('Health Check Definition System', () => {
               url: `http://example.com/seq${i + 1}`,
               method: 'GET',
               expectedStatusCodes: [200],
-              timeout: 1000,
+              timeout: 1000
             })
             .validation({
               output: {
@@ -837,16 +963,16 @@ describe('Health Check Definition System', () => {
                     field: 'status',
                     operator: ComparisonOperator.EQUALS,
                     value: 'ok',
-                    description: `Sequential test ${i + 1} check`,
-                  },
-                ],
+                    description: `Sequential test ${i + 1} check`
+                  }
+                ]
               },
               runtime: {
                 maxExecutionTime: 800,
                 networkAccessRequired: true,
                 fileSystemAccessRequired: false,
-                privilegedAccessRequired: false,
-              },
+                privilegedAccessRequired: false
+              }
             })
             .build();
 
@@ -896,7 +1022,10 @@ describe('Health Check Definition System', () => {
         const examples = createExampleHealthChecks();
 
         for (const example of examples) {
-          const created = await healthCheckService.createDefinition(example, 'system');
+          const created = await healthCheckService.createDefinition(
+            example,
+            'system'
+          );
           expect(created.id).toBe(example.id);
           expect(created.createdBy).toBe('system');
         }
@@ -912,7 +1041,10 @@ describe('Health Check Definition System', () => {
       // This test would verify that health check definitions can be converted
       // to diagnostic definitions and executed through the diagnostic service
 
-      const healthCheckDef = new HealthCheckDefinitionBuilder('integration_test', 'Integration Test')
+      const healthCheckDef = new HealthCheckDefinitionBuilder(
+        'integration_test',
+        'Integration Test'
+      )
         .description('Test diagnostic service integration')
         .category(HealthCheckCategory.SYSTEM)
         .priority(HealthCheckPriority.HIGH)
@@ -920,7 +1052,7 @@ describe('Health Check Definition System', () => {
           url: 'http://localhost/diagnostic-integration',
           method: 'GET',
           expectedStatusCodes: [200],
-          timeout: 2000,
+          timeout: 2000
         })
         .validation({
           output: {
@@ -930,16 +1062,16 @@ describe('Health Check Definition System', () => {
                 field: 'status',
                 operator: ComparisonOperator.EQUALS,
                 value: 'ok',
-                description: 'Integration test check',
-              },
-            ],
+                description: 'Integration test check'
+              }
+            ]
           },
           runtime: {
             maxExecutionTime: 1500,
             networkAccessRequired: true,
             fileSystemAccessRequired: false,
-            privilegedAccessRequired: false,
-          },
+            privilegedAccessRequired: false
+          }
         })
         .build();
 
@@ -947,7 +1079,10 @@ describe('Health Check Definition System', () => {
 
       // Verify that the health check can be executed and produces results
       // that are compatible with the diagnostic system format
-      const result = await healthCheckService.executeHealthCheck('integration_test', 'test-user');
+      const result = await healthCheckService.executeHealthCheck(
+        'integration_test',
+        'test-user'
+      );
 
       expect(result.checkId).toBe('integration_test');
       expect(result.status).toBeDefined();
@@ -967,7 +1102,10 @@ describe('Health Check Definition System', () => {
       // Create 50 health check definitions
       const promises = [];
       for (let i = 0; i < 50; i++) {
-        const definition = new HealthCheckDefinitionBuilder(`perf_test_${i}`, `Performance Test ${i}`)
+        const definition = new HealthCheckDefinitionBuilder(
+          `perf_test_${i}`,
+          `Performance Test ${i}`
+        )
           .description(`Performance test definition ${i}`)
           .category(HealthCheckCategory.SYSTEM)
           .priority(HealthCheckPriority.LOW)
@@ -975,7 +1113,7 @@ describe('Health Check Definition System', () => {
             url: `http://example.com/perf${i}`,
             method: 'GET',
             expectedStatusCodes: [200],
-            timeout: 1000,
+            timeout: 1000
           })
           .validation({
             output: {
@@ -985,20 +1123,22 @@ describe('Health Check Definition System', () => {
                   field: 'status',
                   operator: ComparisonOperator.EQUALS,
                   value: 'ok',
-                  description: `Performance test ${i} check`,
-                },
-              ],
+                  description: `Performance test ${i} check`
+                }
+              ]
             },
             runtime: {
               maxExecutionTime: 800,
               networkAccessRequired: true,
               fileSystemAccessRequired: false,
-              privilegedAccessRequired: false,
-            },
+              privilegedAccessRequired: false
+            }
           })
           .build();
 
-        promises.push(healthCheckService.createDefinition(definition, 'perf-test'));
+        promises.push(
+          healthCheckService.createDefinition(definition, 'perf-test')
+        );
       }
 
       await Promise.all(promises);
@@ -1019,7 +1159,10 @@ describe('Health Check Definition System', () => {
 
   describe('Error Handling and Edge Cases', () => {
     test('should handle inactive health checks', async () => {
-      const definition = new HealthCheckDefinitionBuilder('inactive_test', 'Inactive Test')
+      const definition = new HealthCheckDefinitionBuilder(
+        'inactive_test',
+        'Inactive Test'
+      )
         .description('Test inactive handling')
         .category(HealthCheckCategory.SYSTEM)
         .priority(HealthCheckPriority.LOW)
@@ -1027,60 +1170,7 @@ describe('Health Check Definition System', () => {
           url: 'http://example.com/inactive',
           method: 'GET',
           expectedStatusCodes: [200],
-          timeout: 1000,
-        })
-        .validation({
-          output: {
-            expectedFormat: 'json',
-            successConditions: [
-              { field: 'status', operator: ComparisonOperator.EQUALS, value: 'ok', description: 'Inactive test check' },
-            ],
-          },
-          runtime: {
-            maxExecutionTime: 800,
-            networkAccessRequired: true,
-            fileSystemAccessRequired: false,
-            privilegedAccessRequired: false,
-          },
-        })
-        .build();
-
-      // Mark as inactive
-      definition.isActive = false;
-
-      await healthCheckService.createDefinition(definition, 'test-user');
-
-      await expect(healthCheckService.executeHealthCheck('inactive_test', 'test-user')).rejects.toThrow('inactive');
-    });
-
-    test('should handle missing health check definition', async () => {
-      await expect(healthCheckService.executeHealthCheck('nonexistent_check', 'test-user')).rejects.toThrow(
-        'not found'
-      );
-
-      await expect(healthCheckService.updateDefinition('nonexistent_check', {}, 'test-user')).rejects.toThrow(
-        'not found'
-      );
-
-      await expect(healthCheckService.deleteDefinition('nonexistent_check', 'test-user')).rejects.toThrow('not found');
-    });
-
-    test('should handle malformed health check parameters', async () => {
-      const definition = new HealthCheckDefinitionBuilder('malformed_test', 'Malformed Test')
-        .description('Test malformed parameter handling')
-        .category(HealthCheckCategory.SYSTEM)
-        .priority(HealthCheckPriority.LOW)
-        .httpEndpoint({
-          url: 'http://example.com/malformed',
-          method: 'GET',
-          expectedStatusCodes: [200],
-          timeout: 1000,
-        })
-        .parameter('required_param', {
-          name: 'required_param',
-          type: 'string',
-          description: 'A required parameter',
-          required: true,
+          timeout: 1000
         })
         .validation({
           output: {
@@ -1090,16 +1180,85 @@ describe('Health Check Definition System', () => {
                 field: 'status',
                 operator: ComparisonOperator.EQUALS,
                 value: 'ok',
-                description: 'Malformed test check',
-              },
-            ],
+                description: 'Inactive test check'
+              }
+            ]
           },
           runtime: {
             maxExecutionTime: 800,
             networkAccessRequired: true,
             fileSystemAccessRequired: false,
-            privilegedAccessRequired: false,
+            privilegedAccessRequired: false
+          }
+        })
+        .build();
+
+      // Mark as inactive
+      definition.isActive = false;
+
+      await healthCheckService.createDefinition(definition, 'test-user');
+
+      await expect(
+        healthCheckService.executeHealthCheck('inactive_test', 'test-user')
+      ).rejects.toThrow('inactive');
+    });
+
+    test('should handle missing health check definition', async () => {
+      await expect(
+        healthCheckService.executeHealthCheck('nonexistent_check', 'test-user')
+      ).rejects.toThrow('not found');
+
+      await expect(
+        healthCheckService.updateDefinition(
+          'nonexistent_check',
+          {},
+          'test-user'
+        )
+      ).rejects.toThrow('not found');
+
+      await expect(
+        healthCheckService.deleteDefinition('nonexistent_check', 'test-user')
+      ).rejects.toThrow('not found');
+    });
+
+    test('should handle malformed health check parameters', async () => {
+      const definition = new HealthCheckDefinitionBuilder(
+        'malformed_test',
+        'Malformed Test'
+      )
+        .description('Test malformed parameter handling')
+        .category(HealthCheckCategory.SYSTEM)
+        .priority(HealthCheckPriority.LOW)
+        .httpEndpoint({
+          url: 'http://example.com/malformed',
+          method: 'GET',
+          expectedStatusCodes: [200],
+          timeout: 1000
+        })
+        .parameter('required_param', {
+          name: 'required_param',
+          type: 'string',
+          description: 'A required parameter',
+          required: true
+        })
+        .validation({
+          output: {
+            expectedFormat: 'json',
+            successConditions: [
+              {
+                field: 'status',
+                operator: ComparisonOperator.EQUALS,
+                value: 'ok',
+                description: 'Malformed test check'
+              }
+            ]
           },
+          runtime: {
+            maxExecutionTime: 800,
+            networkAccessRequired: true,
+            fileSystemAccessRequired: false,
+            privilegedAccessRequired: false
+          }
         })
         .build();
 

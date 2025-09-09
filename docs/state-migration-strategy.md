@@ -69,7 +69,8 @@ import { useGraphStore } from '@/graphStore';
 import { useGraphStateMigration } from '@/state/migration/GraphStoreBridge';
 
 function MyNewComponent() {
-  const { stateContainer, isNewState } = useGraphStateMigration('MyNewComponent');
+  const { stateContainer, isNewState } =
+    useGraphStateMigration('MyNewComponent');
   // Use new state container
 }
 ```

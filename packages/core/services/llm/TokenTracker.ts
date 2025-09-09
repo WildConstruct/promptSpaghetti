@@ -8,13 +8,10 @@ export class TokenTracker {
   private defaultDailyLimit: number;
   private defaultCostLimit: number;
 
-  constructor(
-    defaultDailyLimit: number = 100,
-    defaultCostLimit: number = 0.10
-  ) {
+  constructor(defaultDailyLimit: number = 100, defaultCostLimit: number = 0.1) {
     this.defaultDailyLimit = defaultDailyLimit;
     this.defaultCostLimit = defaultCostLimit;
-    
+
     // Schedule daily reset at midnight UTC
     this.scheduleDailyReset();
   }
@@ -24,15 +21,18 @@ export class TokenTracker {
     const tomorrow = new Date(now);
     tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
     tomorrow.setUTCHours(0, 0, 0, 0);
-    
+
     const msUntilMidnight = tomorrow.getTime() - now.getTime();
-    
+
     setTimeout(() => {
       this.resetDailyQuotas();
       // Schedule next reset
-      setInterval(() => {
-        this.resetDailyQuotas();
-      }, 24 * 60 * 60 * 1000);
+      setInterval(
+        () => {
+          this.resetDailyQuotas();
+        },
+        24 * 60 * 60 * 1000
+      );
     }, msUntilMidnight);
   }
 
@@ -43,7 +43,7 @@ export class TokenTracker {
       quota.costUsed = 0;
       quota.resetTime = Date.now() + 24 * 60 * 60 * 1000;
     }
-    
+
     // Clear old usage data (keep last 7 days)
     const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
     this.usage = this.usage.filter(u => u.timestamp > sevenDaysAgo);
@@ -61,11 +61,11 @@ export class TokenTracker {
       tokensIn,
       tokensOut,
       cost,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
-    
+
     this.usage.push(usage);
-    
+
     // Update user quota
     const quota = this.getUserQuota(userId);
     quota.dailyUsed++;
@@ -79,18 +79,14 @@ export class TokenTracker {
         dailyUsed: 0,
         costLimit: this.defaultCostLimit,
         costUsed: 0,
-        resetTime: Date.now() + 24 * 60 * 60 * 1000,
+        resetTime: Date.now() + 24 * 60 * 60 * 1000
       });
     }
-    
+
     return this.quotas.get(userId)!;
   }
 
-  setUserQuota(
-    userId: string,
-    dailyLimit?: number,
-    costLimit?: number
-  ): void {
+  setUserQuota(userId: string, dailyLimit?: number, costLimit?: number): void {
     const quota = this.getUserQuota(userId);
     if (dailyLimit !== undefined) {
       quota.dailyLimit = dailyLimit;
@@ -102,7 +98,9 @@ export class TokenTracker {
 
   isQuotaExceeded(userId: string): boolean {
     const quota = this.getUserQuota(userId);
-    return quota.dailyUsed >= quota.dailyLimit || quota.costUsed >= quota.costLimit;
+    return (
+      quota.dailyUsed >= quota.dailyLimit || quota.costUsed >= quota.costLimit
+    );
   }
 
   getQuotaPercentage(userId: string): {
@@ -112,7 +110,7 @@ export class TokenTracker {
     const quota = this.getUserQuota(userId);
     return {
       callsPercentage: (quota.dailyUsed / quota.dailyLimit) * 100,
-      costPercentage: (quota.costUsed / quota.costLimit) * 100,
+      costPercentage: (quota.costUsed / quota.costLimit) * 100
     };
   }
 
@@ -126,50 +124,53 @@ export class TokenTracker {
     totalTokensIn: number;
     totalTokensOut: number;
     totalCost: number;
-    modelBreakdown: Map<string, {
-      calls: number;
-      tokensIn: number;
-      tokensOut: number;
-      cost: number;
-    }>;
+    modelBreakdown: Map<
+      string,
+      {
+        calls: number;
+        tokensIn: number;
+        tokensOut: number;
+        cost: number;
+      }
+    >;
   } {
     const cutoff = Date.now() - hours * 60 * 60 * 1000;
     const recentUsage = this.usage.filter(u => u.timestamp > cutoff);
-    
+
     const modelBreakdown = new Map();
     let totalCalls = 0;
     let totalTokensIn = 0;
     let totalTokensOut = 0;
     let totalCost = 0;
-    
+
     for (const usage of recentUsage) {
       totalCalls++;
       totalTokensIn += usage.tokensIn;
       totalTokensOut += usage.tokensOut;
       totalCost += usage.cost;
-      
+
       if (!modelBreakdown.has(usage.model)) {
         modelBreakdown.set(usage.model, {
           calls: 0,
           tokensIn: 0,
           tokensOut: 0,
-          cost: 0,
+          cost: 0
         });
       }
-      
+
       const modelStats = modelBreakdown.get(usage.model)!;
       modelStats.calls++;
       modelStats.tokensIn += usage.tokensIn;
       modelStats.tokensOut += usage.tokensOut;
       modelStats.cost += usage.cost;
     }
-    
+
     return {
       totalCalls,
       totalTokensIn,
       totalTokensOut,
       totalCost,
-      modelBreakdown,
+      modelBreakdown
     };
   }
 
@@ -182,11 +183,15 @@ export class TokenTracker {
 
   // Export usage data for analysis
   exportUsageData(): string {
-    return JSON.stringify({
-      usage: this.usage,
-      quotas: Array.from(this.quotas.entries()),
-      timestamp: Date.now(),
-    }, null, 2);
+    return JSON.stringify(
+      {
+        usage: this.usage,
+        quotas: Array.from(this.quotas.entries()),
+        timestamp: Date.now()
+      },
+      null,
+      2
+    );
   }
 
   // Cost projection based on current usage

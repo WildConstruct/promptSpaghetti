@@ -3,31 +3,38 @@
 ## Issues Fixed
 
 ### 1. ✅ Output Node Not Showing Results
+
 **Problem:** Output nodes were not being recognized by the ExecutionEngine, preventing results from displaying in the preview panel.
 
 **Root Cause:** Case mismatch - `OutputNode.getNodeType()` returned `'output'` (lowercase) but `Epic1NodeType.Output` was `'Output'` (capital O).
 
 **Fix Applied:**
+
 - Changed `OutputNode.getNodeType()` to return `'Output'` instead of `'output'`
 - File: `packages/core/runtime/nodes/epic1/OutputNode.ts`
 
-### 2. ✅ Node Resizing When Dragging from Right Side  
+### 2. ✅ Node Resizing When Dragging from Right Side
+
 **Problem:** Nodes were experiencing "massive resizing" when dragged from the right side (handle area).
 
-**Root Causes:** 
+**Root Causes:**
+
 - CSS scale transform on handle hover was causing layout shifts
 - Pulse animations were scaling too aggressively
 
 **Fixes Applied:**
-- Removed `scale(1.2)` transform from `.epic1-handle:hover` 
+
+- Removed `scale(1.2)` transform from `.epic1-handle:hover`
 - Reduced pulse animation scale from 1.5x to 1.2x with opacity changes
 - Added `box-sizing: border-box` to prevent layout shifts
 - Files: `packages/core/components/epic1/nodes/BaseEditableNode.css`, `packages/core/components/epic1/nodes/VisualFeedbackEnhancements.css`
 
 ### 3. ⚠️ Duplicate Nodes Issue (Needs Further Investigation)
+
 **Problem:** User reports seeing 6 nodes when there should only be 3.
 
 **Debugging Added:**
+
 - Added extensive logging to track node creation and state changes
 - Added duplicate ID detection
 - Added logging for node type selection (droppable vs regular)

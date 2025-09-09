@@ -15,7 +15,10 @@ The Security API Integration Platform is a comprehensive security analytics and 
 The main platform class that orchestrates all security integration functionality:
 
 ```typescript
-import { SecurityAPIIntegrationPlatform, SecurityAPIConfig } from './services/SecurityAPIIntegrationPlatform';
+import {
+  SecurityAPIIntegrationPlatform,
+  SecurityAPIConfig
+} from './services/SecurityAPIIntegrationPlatform';
 
 const platform = new SecurityAPIIntegrationPlatform(config, analyticsService);
 await platform.initialize();
@@ -60,7 +63,7 @@ const config: SecurityAPIConfig = {
     enabled: true,
     max_requests_per_minute: 1000,
     burst_limit: 200,
-    window_size_ms: 60000,
+    window_size_ms: 60000
   },
   external_integrations: {
     siem_tools: {
@@ -68,41 +71,41 @@ const config: SecurityAPIConfig = {
       supported_platforms: ['splunk', 'elastic', 'qradar', 'sentinel'],
       webhook_endpoints: ['https://siem.company.com/webhook'],
       api_keys: { splunk: 'key123', elastic: 'key456' },
-      data_format: 'json',
+      data_format: 'json'
     },
     threat_intelligence: {
       enabled: true,
       providers: ['virustotal', 'threatcrowd', 'otx'],
       update_interval_minutes: 30,
-      confidence_threshold: 0.7,
+      confidence_threshold: 0.7
     },
     vulnerability_scanners: {
       enabled: true,
       supported_scanners: ['nessus', 'openvas', 'qualys'],
-      scan_schedules: { daily: '0 2 * * *' },
-    },
+      scan_schedules: { daily: '0 2 * * *' }
+    }
   },
   real_time_processing: {
     enabled: true,
     stream_buffer_size: 1000,
     processing_threads: 4,
     batch_processing_interval_ms: 2000,
-    priority_queue_enabled: true,
+    priority_queue_enabled: true
   },
   data_streaming: {
     enabled: true,
     kafka_brokers: ['kafka1:9092', 'kafka2:9092'],
     redis_streams: ['security:events'],
     websocket_enabled: true,
-    compression_enabled: true,
+    compression_enabled: true
   },
   microservices: {
     enabled: true,
     service_discovery_enabled: true,
     load_balancing_strategy: 'least_connections',
     health_check_interval_ms: 30000,
-    circuit_breaker_enabled: true,
-  },
+    circuit_breaker_enabled: true
+  }
 };
 ```
 
@@ -116,7 +119,7 @@ const tool: ExternalSecurityTool = {
   api_endpoint: 'https://splunk.company.com/services/collector',
   authentication: {
     type: 'api_key',
-    credentials: { token: 'your-hec-token' },
+    credentials: { token: 'your-hec-token' }
   },
   capabilities: ['event_forwarding', 'alert_management', 'log_analysis'],
   data_format: 'json',
@@ -125,8 +128,8 @@ const tool: ExternalSecurityTool = {
   configuration: {
     index: 'security_events',
     source_type: 'json',
-    batch_size: 100,
-  },
+    batch_size: 100
+  }
 };
 
 await platform.registerExternalTool(tool);
@@ -269,8 +272,8 @@ const splunkTool: ExternalSecurityTool = {
     type: 'api_key',
     credentials: {
       token: 'your-hec-token',
-      authorization: 'Splunk your-hec-token',
-    },
+      authorization: 'Splunk your-hec-token'
+    }
   },
   capabilities: ['event_forwarding', 'real_time_indexing'],
   data_format: 'json',
@@ -282,8 +285,8 @@ const splunkTool: ExternalSecurityTool = {
     host: 'security-platform',
     validate_ssl: true,
     batch_size: 100,
-    flush_interval_ms: 5000,
-  },
+    flush_interval_ms: 5000
+  }
 };
 
 await platform.registerExternalTool(splunkTool);
@@ -300,7 +303,7 @@ const virusTotalTool: ExternalSecurityTool = {
   api_endpoint: 'https://www.virustotal.com/vtapi/v2',
   authentication: {
     type: 'api_key',
-    credentials: { apikey: 'your-vt-api-key' },
+    credentials: { apikey: 'your-vt-api-key' }
   },
   capabilities: ['hash_lookup', 'url_scanning', 'domain_analysis'],
   data_format: 'json',
@@ -309,8 +312,8 @@ const virusTotalTool: ExternalSecurityTool = {
   configuration: {
     rate_limit_per_minute: 4,
     scan_timeout_seconds: 300,
-    confidence_threshold: 0.8,
-  },
+    confidence_threshold: 0.8
+  }
 };
 
 await platform.registerExternalTool(virusTotalTool);
@@ -329,10 +332,14 @@ const nessusScanner: ExternalSecurityTool = {
     type: 'api_key',
     credentials: {
       access_key: 'your-access-key',
-      secret_key: 'your-secret-key',
-    },
+      secret_key: 'your-secret-key'
+    }
   },
-  capabilities: ['vulnerability_scanning', 'compliance_checking', 'asset_discovery'],
+  capabilities: [
+    'vulnerability_scanning',
+    'compliance_checking',
+    'asset_discovery'
+  ],
   data_format: 'json',
   status: 'active',
   last_sync: Date.now(),
@@ -340,10 +347,10 @@ const nessusScanner: ExternalSecurityTool = {
     scan_policies: ['basic_network_scan', 'credentialed_patch_audit'],
     scan_schedules: {
       weekly_scan: '0 2 * * 0',
-      monthly_compliance: '0 3 1 * *',
+      monthly_compliance: '0 3 1 * *'
     },
-    severity_threshold: 'medium',
-  },
+    severity_threshold: 'medium'
+  }
 };
 
 await platform.registerExternalTool(nessusScanner);
@@ -368,9 +375,9 @@ const securityEvent: SecurityEvent = {
     protocol: 'TCP',
     port: 4444,
     rule_id: 'IDS_001',
-    signature: 'Possible reverse shell activity',
+    signature: 'Possible reverse shell activity'
   },
-  mitigation_status: 'pending',
+  mitigation_status: 'pending'
 };
 
 await platform.processSecurityEvent(securityEvent);

@@ -71,7 +71,7 @@ export abstract class AgentRunner {
       type,
       timestamp: new Date().toISOString(),
       payload,
-      agent_id: this.agentId,
+      agent_id: this.agentId
     };
   }
 
@@ -79,8 +79,9 @@ export abstract class AgentRunner {
    * Get count of active tasks for a developer
    */
   protected getActiveTaskCount(state: State, devId: string): number {
-    return Object.values(state.tasks).filter(t => t.assignee === devId && ['IN_PROGRESS', 'REVIEW'].includes(t.state))
-      .length;
+    return Object.values(state.tasks).filter(
+      t => t.assignee === devId && ['IN_PROGRESS', 'REVIEW'].includes(t.state)
+    ).length;
   }
 
   /**
@@ -145,7 +146,7 @@ export abstract class AgentRunner {
       review: tasks.filter(t => t.state === 'REVIEW').length,
       approved: tasks.filter(t => t.state === 'APPROVED').length,
       completed: tasks.filter(t => t.state === 'COMPLETED').length,
-      blocked: tasks.filter(t => t.state === 'BLOCKED').length,
+      blocked: tasks.filter(t => t.state === 'BLOCKED').length
     };
   }
 }

@@ -11,13 +11,24 @@ export type SaveGraphDialogProps = {
   // Supabase save (gated)
   userId?: string;
   enableSupabase?: boolean;
-  supabasePut?: (userId: string, name: string, content: string) => Promise<{ ok: true; data: { path: string } } | { ok: false; error: { message: string } }>;
+  supabasePut?: (
+    userId: string,
+    name: string,
+    content: string
+  ) => Promise<
+    | { ok: true; data: { path: string } }
+    | { ok: false; error: { message: string } }
+  >;
   // Callback to let parent refresh the Open dialog Supabase tab, etc.
   onSupabaseSaved?: (name: string, path?: string) => void;
 };
 
 function Spinner() {
-  return <span aria-label="saving" role="status">Saving…</span>;
+  return (
+    <span aria-label="saving" role="status">
+      Saving…
+    </span>
+  );
 }
 
 const DEFAULT_NAME = 'graph';
@@ -33,7 +44,16 @@ function ensurePsg(name: string): string {
   return name.toLowerCase().endsWith('.psg') ? name : `${name}.psg`;
 }
 
-export function SaveGraphDialog({ isOpen, onClose, graph, onSaveBlob, enableSupabase, userId, supabasePut, onSupabaseSaved }: SaveGraphDialogProps): JSX.Element | null {
+export function SaveGraphDialog({
+  isOpen,
+  onClose,
+  graph,
+  onSaveBlob,
+  enableSupabase,
+  userId,
+  supabasePut,
+  onSupabaseSaved
+}: SaveGraphDialogProps): JSX.Element | null {
   const { userId: ctxUserId } = useUserId();
   const [name, setName] = React.useState<string>(DEFAULT_NAME);
   const [error, setError] = React.useState<string | null>(null);
@@ -55,10 +75,13 @@ export function SaveGraphDialog({ isOpen, onClose, graph, onSaveBlob, enableSupa
   // Enforce max 64 chars before extension per Story 1.13
   const base64 = base.slice(0, 64);
   const finalName = ensurePsg(base64 || DEFAULT_NAME);
-  const isValid = Boolean(base64) && !base64.startsWith('.') && !base64.endsWith('.');
+  const isValid =
+    Boolean(base64) && !base64.startsWith('.') && !base64.endsWith('.');
   const effectiveUserId = userId ?? ctxUserId ?? null;
   const supabaseEnabled = enableSupabase ?? deriveEnableSupabaseProp();
-  const canSaveToSupabase = Boolean(supabaseEnabled && effectiveUserId && supabasePut);
+  const canSaveToSupabase = Boolean(
+    supabaseEnabled && effectiveUserId && supabasePut
+  );
 
   async function handleSaveSupabase() {
     if (!isValid || !canSaveToSupabase) {
@@ -121,11 +144,22 @@ export function SaveGraphDialog({ isOpen, onClose, graph, onSaveBlob, enableSupa
   }
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Save Graph" style={styles.backdrop}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Save Graph"
+      style={styles.backdrop}
+    >
       <div style={styles.dialog}>
         <header style={styles.header}>
           <h2 style={{ margin: 0 }}>Save</h2>
-          <button type="button" onClick={onClose} aria-label="Close Save Dialog">✕</button>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close Save Dialog"
+          >
+            ✕
+          </button>
         </header>
         <section style={{ padding: 12, display: 'grid', gap: 8 }}>
           <label style={{ display: 'grid', gap: 4 }}>
@@ -137,15 +171,25 @@ export function SaveGraphDialog({ isOpen, onClose, graph, onSaveBlob, enableSupa
               onChange={onChange}
               placeholder="graph"
             />
-            <div aria-live="polite" style={{ fontSize: 12, color: '#555' }}>Will save as: <code>{finalName}</code></div>
+            <div aria-live="polite" style={{ fontSize: 12, color: '#555' }}>
+              Will save as: <code>{finalName}</code>
+            </div>
           </label>
           {error && (
-            <div role="alert" aria-live="assertive" style={{ color: '#b00' }}>{error}</div>
+            <div role="alert" aria-live="assertive" style={{ color: '#b00' }}>
+              {error}
+            </div>
           )}
         </section>
         <footer style={styles.footer}>
-          <button type="button" onClick={onClose}>Cancel</button>
-          <button type="button" disabled={!isValid || saving} onClick={handleSave}>
+          <button type="button" onClick={onClose}>
+            Cancel
+          </button>
+          <button
+            type="button"
+            disabled={!isValid || saving}
+            onClick={handleSave}
+          >
             {saving ? <Spinner /> : 'Save'}
           </button>
           {canSaveToSupabase && (
@@ -165,8 +209,32 @@ export function SaveGraphDialog({ isOpen, onClose, graph, onSaveBlob, enableSupa
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  backdrop: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-  dialog: { background: '#fff', width: 520, maxWidth: '95vw', borderRadius: 8, boxShadow: '0 6px 20px rgba(0,0,0,0.3)' },
-  header: { display: 'flex', justifyContent: 'space-between', padding: 12, borderBottom: '1px solid #eee' },
-  footer: { display: 'flex', gap: 8, justifyContent: 'flex-end', padding: 12, borderTop: '1px solid #eee' },
+  backdrop: {
+    position: 'fixed',
+    inset: 0,
+    background: 'rgba(0,0,0,0.35)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  dialog: {
+    background: '#fff',
+    width: 520,
+    maxWidth: '95vw',
+    borderRadius: 8,
+    boxShadow: '0 6px 20px rgba(0,0,0,0.3)'
+  },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderBottom: '1px solid #eee'
+  },
+  footer: {
+    display: 'flex',
+    gap: 8,
+    justifyContent: 'flex-end',
+    padding: 12,
+    borderTop: '1px solid #eee'
+  }
 };

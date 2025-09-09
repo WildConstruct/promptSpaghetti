@@ -64,19 +64,21 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
   };
 
   const hasConnectionLoss = info.connectionImpact.lost > 0;
-  const allConnectionsPreserved = info.connectionImpact.lost === 0 && 
-                                  info.connectionImpact.preserved > 0;
+  const allConnectionsPreserved =
+    info.connectionImpact.lost === 0 && info.connectionImpact.preserved > 0;
 
   return (
     <>
-      <div 
+      <div
         className={`modal-backdrop ${isAnimating ? 'visible' : ''}`}
         onClick={handleClose}
       />
       <div className={`node-replacement-modal ${isAnimating ? 'visible' : ''}`}>
         <div className="modal-header">
           <h3>Replace Node</h3>
-          <button className="modal-close" onClick={handleClose}>×</button>
+          <button className="modal-close" onClick={handleClose}>
+            ×
+          </button>
         </div>
 
         <div className="modal-body">
@@ -96,25 +98,33 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
 
           <div className="connection-impact">
             <h4>Connection Impact</h4>
-            
+
             {allConnectionsPreserved && (
               <div className="impact-item success">
                 <span className="impact-icon">✓</span>
-                <span>All {info.connectionImpact.preserved} connections will be preserved</span>
+                <span>
+                  All {info.connectionImpact.preserved} connections will be
+                  preserved
+                </span>
               </div>
             )}
 
             {info.connectionImpact.preserved > 0 && hasConnectionLoss && (
               <div className="impact-item success">
                 <span className="impact-icon">✓</span>
-                <span>{info.connectionImpact.preserved} connections will be preserved</span>
+                <span>
+                  {info.connectionImpact.preserved} connections will be
+                  preserved
+                </span>
               </div>
             )}
 
             {hasConnectionLoss && (
               <div className="impact-item warning">
                 <span className="impact-icon">⚠️</span>
-                <span>{info.connectionImpact.lost} connections will be lost</span>
+                <span>
+                  {info.connectionImpact.lost} connections will be lost
+                </span>
                 {info.connectionImpact.incompatible.length > 0 && (
                   <ul className="incompatible-list">
                     {info.connectionImpact.incompatible.map((conn, idx) => (
@@ -125,12 +135,13 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
               </div>
             )}
 
-            {info.connectionImpact.preserved === 0 && info.connectionImpact.lost === 0 && (
-              <div className="impact-item info">
-                <span className="impact-icon">ℹ️</span>
-                <span>This node has no connections</span>
-              </div>
-            )}
+            {info.connectionImpact.preserved === 0 &&
+              info.connectionImpact.lost === 0 && (
+                <div className="impact-item info">
+                  <span className="impact-icon">ℹ️</span>
+                  <span>This node has no connections</span>
+                </div>
+              )}
           </div>
 
           <div className="modal-hint">
@@ -140,42 +151,63 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
         </div>
 
         <div className="modal-footer">
-          <button 
-            className="modal-button cancel" 
-            onClick={handleClose}
-          >
+          <button className="modal-button cancel" onClick={handleClose}>
             Cancel
           </button>
-          <button 
+          <button
             className={`modal-button replace ${hasConnectionLoss ? 'warning' : 'success'}`}
             onClick={handleReplace}
           >
             {hasConnectionLoss ? 'Replace Anyway' : 'Replace Node'}
           </button>
         </div>
-        <div className="modal-advanced" style={{ padding: '12px 16px', borderTop: '1px dashed rgba(255,255,255,0.15)', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div
+          className="modal-advanced"
+          style={{
+            padding: '12px 16px',
+            borderTop: '1px dashed rgba(255,255,255,0.15)',
+            display: 'flex',
+            gap: 8,
+            flexWrap: 'wrap'
+          }}
+        >
           {advancedActions?.onMergeChoices && (
-            <button className="modal-button" onClick={advancedActions.onMergeChoices}>
+            <button
+              className="modal-button"
+              onClick={advancedActions.onMergeChoices}
+            >
               Merge Choices
             </button>
           )}
           {advancedActions?.onCreateVariant && (
-            <button className="modal-button" onClick={advancedActions.onCreateVariant}>
+            <button
+              className="modal-button"
+              onClick={advancedActions.onCreateVariant}
+            >
               Create Variant
             </button>
           )}
           {advancedActions?.onSmartSwap && (
-            <button className="modal-button" onClick={advancedActions.onSmartSwap}>
+            <button
+              className="modal-button"
+              onClick={advancedActions.onSmartSwap}
+            >
               Smart Swap
             </button>
           )}
           {advancedActions?.onReplaceAllSimilar && (
-            <button className="modal-button" onClick={advancedActions.onReplaceAllSimilar}>
+            <button
+              className="modal-button"
+              onClick={advancedActions.onReplaceAllSimilar}
+            >
               Replace All Similar
             </button>
           )}
           {advancedActions?.onReplaceAllSelected && (
-            <button className="modal-button" onClick={advancedActions.onReplaceAllSelected}>
+            <button
+              className="modal-button"
+              onClick={advancedActions.onReplaceAllSelected}
+            >
               Replace All Selected
             </button>
           )}
@@ -194,14 +226,16 @@ export class ConnectionValidator {
   ): ReplacementInfo['connectionImpact'] {
     const incomingEdges = edges.filter(e => e.target === currentNode.id);
     const outgoingEdges = edges.filter(e => e.source === currentNode.id);
-    
+
     let preserved = 0;
     let lost = 0;
     const incompatible: string[] = [];
 
     // Check incoming connections
     incomingEdges.forEach(edge => {
-      if (this.isCompatibleConnection(edge.sourceHandle, newNodeType, 'input')) {
+      if (
+        this.isCompatibleConnection(edge.sourceHandle, newNodeType, 'input')
+      ) {
         preserved++;
       } else {
         lost++;
@@ -211,7 +245,9 @@ export class ConnectionValidator {
 
     // Check outgoing connections
     outgoingEdges.forEach(edge => {
-      if (this.isCompatibleConnection(newNodeType, edge.targetHandle, 'output')) {
+      if (
+        this.isCompatibleConnection(newNodeType, edge.targetHandle, 'output')
+      ) {
         preserved++;
       } else {
         lost++;
@@ -229,11 +265,11 @@ export class ConnectionValidator {
   ): boolean {
     // Simple compatibility matrix for MVP
     const compatibilityMatrix: Record<string, string[]> = {
-      'WeightedChoice': ['TextBlock', 'Output', 'Concat', 'WeightedChoice'],
-      'TextBlock': ['Output', 'Concat', 'WeightedChoice'],
-      'Output': [],
-      'Concat': ['Output', 'Concat', 'WeightedChoice'],
-      'Variable': ['TextBlock', 'Output', 'Concat']
+      WeightedChoice: ['TextBlock', 'Output', 'Concat', 'WeightedChoice'],
+      TextBlock: ['Output', 'Concat', 'WeightedChoice'],
+      Output: [],
+      Concat: ['Output', 'Concat', 'WeightedChoice'],
+      Variable: ['TextBlock', 'Output', 'Concat']
     };
 
     if (direction === 'output') {

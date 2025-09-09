@@ -41,7 +41,7 @@ export enum DataProtectionEventType {
   COMPLIANCE_RULE_TRIGGERED = 'compliance_rule_triggered',
   REGULATORY_ALERT = 'regulatory_alert',
   POLICY_UPDATE_APPLIED = 'policy_update_applied',
-  COMPLIANCE_AUDIT_ACCESS = 'compliance_audit_access',
+  COMPLIANCE_AUDIT_ACCESS = 'compliance_audit_access'
 }
 ```
 
@@ -51,7 +51,12 @@ export enum DataProtectionEventType {
 
 ```typescript
 export interface AuthenticationSecurityEvent {
-  eventType: 'login_attempt' | 'mfa_challenge' | 'session_created' | 'session_expired' | 'oauth_grant';
+  eventType:
+    | 'login_attempt'
+    | 'mfa_challenge'
+    | 'session_created'
+    | 'session_expired'
+    | 'oauth_grant';
   userId?: string;
   sessionId: string;
   ipAddress: string;
@@ -96,7 +101,11 @@ export interface DataAccessSecurityEvent {
 
 ```typescript
 export interface DataDeletionEvent {
-  eventType: 'deletion_scheduled' | 'deletion_executed' | 'deletion_failed' | 'deletion_exception';
+  eventType:
+    | 'deletion_scheduled'
+    | 'deletion_executed'
+    | 'deletion_failed'
+    | 'deletion_exception';
   deletionJobId: string;
   scheduledTime: Date;
   executionTime?: Date;

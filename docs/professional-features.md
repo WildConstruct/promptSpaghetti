@@ -329,8 +329,11 @@ import { ProfessionalIntegration } from './components/CommandPalette/Professiona
 **Primary Font Stack:**
 
 ```css
---font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Helvetica, Arial, sans-serif;
---font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+--font-family-primary:
+  -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Helvetica,
+  Arial, sans-serif;
+--font-family-mono:
+  'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
 ```
 
 **Transitions:**

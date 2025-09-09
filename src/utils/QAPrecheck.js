@@ -15,8 +15,14 @@ const { execSync, spawn } = require('child_process');
 class QAPrecheck {
   constructor() {
     this.projectRoot = process.cwd();
-    this.configFile = path.join(this.projectRoot, 'src/data/qa-precheck-config.json');
-    this.resultsFile = path.join(this.projectRoot, 'src/data/qa-precheck-results.json');
+    this.configFile = path.join(
+      this.projectRoot,
+      'src/data/qa-precheck-config.json'
+    );
+    this.resultsFile = path.join(
+      this.projectRoot,
+      'src/data/qa-precheck-results.json'
+    );
 
     // Default configuration
     this.config = {
@@ -29,7 +35,7 @@ class QAPrecheck {
         security: true,
         dependencies: true,
         fileSize: true,
-        codeComplexity: true,
+        codeComplexity: true
       },
 
       thresholds: {
@@ -37,7 +43,7 @@ class QAPrecheck {
         maxFileSize: 1000, // Maximum lines per file
         maxCyclomaticComplexity: 10,
         maxFunctionLength: 50,
-        maxParameterCount: 5,
+        maxParameterCount: 5
       },
 
       security: {
@@ -54,7 +60,7 @@ class QAPrecheck {
           'localStorage\\.',
           'sessionStorage\\.',
           'btoa\\(',
-          'atob\\(',
+          'atob\\('
         ],
 
         // Secrets patterns
@@ -63,13 +69,21 @@ class QAPrecheck {
           'api[_-]?key\\s*[:=]\\s*["\']\\w+',
           'secret\\s*[:=]\\s*["\']\\w+',
           'token\\s*[:=]\\s*["\']\\w+',
-          'auth\\s*[:=]\\s*["\']\\w+',
-        ],
+          'auth\\s*[:=]\\s*["\']\\w+'
+        ]
       },
 
-      ignorePaths: ['node_modules', '.git', 'dist', 'build', '.next', 'coverage', '.turbo'],
+      ignorePaths: [
+        'node_modules',
+        '.git',
+        'dist',
+        'build',
+        '.next',
+        'coverage',
+        '.turbo'
+      ],
 
-      strictMode: false, // When true, any failure fails the entire check
+      strictMode: false // When true, any failure fails the entire check
     };
 
     this.results = {
@@ -80,11 +94,11 @@ class QAPrecheck {
         passed: 0,
         failed: 0,
         warnings: 0,
-        total: 0,
+        total: 0
       },
       blockers: [],
       warnings: [],
-      recommendations: [],
+      recommendations: []
     };
   }
 
@@ -117,7 +131,9 @@ class QAPrecheck {
         .filter(([, enabled]) => enabled)
         .map(([checkName]) => checkName);
 
-      console.log(`Running ${checksToRun.length} checks: ${checksToRun.join(', ')}`);
+      console.log(
+        `Running ${checksToRun.length} checks: ${checksToRun.join(', ')}`
+      );
 
       // Run each check
       for (const checkName of checksToRun) {
@@ -183,19 +199,27 @@ class QAPrecheck {
           result = await this.checkComplexity(files);
           break;
         default:
-          result = { status: 'skipped', message: `Unknown check: ${checkName}` };
+          result = {
+            status: 'skipped',
+            message: `Unknown check: ${checkName}`
+          };
       }
 
       this.results.checks[checkName] = result;
       this.updateSummary(result);
 
-      const statusIcon = result.status === 'passed' ? '✅' : result.status === 'failed' ? '❌' : '⚠️';
+      const statusIcon =
+        result.status === 'passed'
+          ? '✅'
+          : result.status === 'failed'
+            ? '❌'
+            : '⚠️';
       console.log(`${statusIcon} ${checkName}: ${result.message}`);
     } catch (error) {
       const failureResult = {
         status: 'failed',
         message: `Check failed: ${error.message}`,
-        error: error.message,
+        error: error.message
       };
 
       this.results.checks[checkName] = failureResult;
@@ -208,14 +232,17 @@ class QAPrecheck {
    * Check JavaScript/TypeScript syntax
    */
   async checkSyntax(files = []) {
-    const filesToCheck = files.length > 0 ? files : await this.findSourceFiles();
+    const filesToCheck =
+      files.length > 0 ? files : await this.findSourceFiles();
     const errors = [];
 
     for (const file of filesToCheck) {
       try {
         if (file.endsWith('.ts') || file.endsWith('.tsx')) {
           // Use TypeScript compiler for syntax check
-          execSync(`npx tsc --noEmit --skipLibCheck "${file}"`, { stdio: 'pipe' });
+          execSync(`npx tsc --noEmit --skipLibCheck "${file}"`, {
+            stdio: 'pipe'
+          });
         } else if (file.endsWith('.js') || file.endsWith('.jsx')) {
           // Use Node.js syntax check
           execSync(`node --check "${file}"`, { stdio: 'pipe' });
@@ -223,7 +250,7 @@ class QAPrecheck {
       } catch (error) {
         errors.push({
           file,
-          error: error.stderr ? error.stderr.toString() : error.message,
+          error: error.stderr ? error.stderr.toString() : error.message
         });
       }
     }
@@ -234,7 +261,7 @@ class QAPrecheck {
         errors.length === 0
           ? `Syntax check passed for ${filesToCheck.length} files`
           : `Syntax errors found in ${errors.length} files`,
-      details: { errors, filesChecked: filesToCheck.length },
+      details: { errors, filesChecked: filesToCheck.length }
     };
   }
 
@@ -252,13 +279,15 @@ class QAPrecheck {
 
       return {
         status: 'passed',
-        message: 'TypeScript compilation successful',
+        message: 'TypeScript compilation successful'
       };
     } catch (error) {
       return {
         status: 'failed',
         message: 'TypeScript compilation errors found',
-        details: { error: error.stderr ? error.stderr.toString() : error.message },
+        details: {
+          error: error.stderr ? error.stderr.toString() : error.message
+        }
       };
     }
   }
@@ -268,13 +297,19 @@ class QAPrecheck {
    */
   async checkESLint(files = []) {
     try {
-      const eslintCmd = files.length > 0 ? `npx eslint ${files.join(' ')}` : 'npx eslint src --ext .js,.jsx,.ts,.tsx';
+      const eslintCmd =
+        files.length > 0
+          ? `npx eslint ${files.join(' ')}`
+          : 'npx eslint src --ext .js,.jsx,.ts,.tsx';
 
-      const output = execSync(eslintCmd, { stdio: 'pipe', cwd: this.projectRoot });
+      const output = execSync(eslintCmd, {
+        stdio: 'pipe',
+        cwd: this.projectRoot
+      });
 
       return {
         status: 'passed',
-        message: 'ESLint check passed - no violations found',
+        message: 'ESLint check passed - no violations found'
       };
     } catch (error) {
       const output = error.stdout ? error.stdout.toString() : '';
@@ -284,7 +319,7 @@ class QAPrecheck {
       return {
         status: errorCount > 0 ? 'failed' : 'warning',
         message: `ESLint found ${errorCount} errors and ${warningCount} warnings`,
-        details: { errors: errorCount, warnings: warningCount, output },
+        details: { errors: errorCount, warnings: warningCount, output }
       };
     }
   }
@@ -295,18 +330,22 @@ class QAPrecheck {
   async checkTests() {
     try {
       // Check if jest is configured
-      const jestConfig = await this.findFile(['jest.config.js', 'jest.config.ts', 'package.json']);
+      const jestConfig = await this.findFile([
+        'jest.config.js',
+        'jest.config.ts',
+        'package.json'
+      ]);
       if (!jestConfig) {
         return {
           status: 'warning',
-          message: 'No Jest configuration found',
+          message: 'No Jest configuration found'
         };
       }
 
       // Run tests
       const testOutput = execSync('npm test -- --passWithNoTests', {
         stdio: 'pipe',
-        cwd: this.projectRoot,
+        cwd: this.projectRoot
       }).toString();
 
       const testResults = this.parseJestOutput(testOutput);
@@ -314,13 +353,13 @@ class QAPrecheck {
       return {
         status: testResults.failed === 0 ? 'passed' : 'failed',
         message: `Tests: ${testResults.passed} passed, ${testResults.failed} failed`,
-        details: testResults,
+        details: testResults
       };
     } catch (error) {
       return {
         status: 'failed',
         message: 'Test execution failed',
-        details: { error: error.message },
+        details: { error: error.message }
       };
     }
   }
@@ -330,10 +369,13 @@ class QAPrecheck {
    */
   async checkTestCoverage() {
     try {
-      const coverageOutput = execSync('npm test -- --coverage --passWithNoTests', {
-        stdio: 'pipe',
-        cwd: this.projectRoot,
-      }).toString();
+      const coverageOutput = execSync(
+        'npm test -- --coverage --passWithNoTests',
+        {
+          stdio: 'pipe',
+          cwd: this.projectRoot
+        }
+      ).toString();
 
       const coverage = this.parseCoverageOutput(coverageOutput);
       const threshold = this.config.thresholds.testCoverage;
@@ -341,13 +383,13 @@ class QAPrecheck {
       return {
         status: coverage.total >= threshold ? 'passed' : 'failed',
         message: `Test coverage: ${coverage.total}% (threshold: ${threshold}%)`,
-        details: coverage,
+        details: coverage
       };
     } catch (error) {
       return {
         status: 'warning',
         message: 'Could not determine test coverage',
-        details: { error: error.message },
+        details: { error: error.message }
       };
     }
   }
@@ -356,7 +398,8 @@ class QAPrecheck {
    * Check for security issues
    */
   async checkSecurity(files = []) {
-    const filesToCheck = files.length > 0 ? files : await this.findSourceFiles();
+    const filesToCheck =
+      files.length > 0 ? files : await this.findSourceFiles();
     const issues = [];
 
     for (const file of filesToCheck) {
@@ -372,7 +415,7 @@ class QAPrecheck {
               file,
               type: 'dangerous_pattern',
               pattern,
-              matches: matches.length,
+              matches: matches.length
             });
           }
         }
@@ -386,7 +429,7 @@ class QAPrecheck {
               file,
               type: 'potential_secret',
               pattern,
-              matches: matches.length,
+              matches: matches.length
             });
           }
         }
@@ -397,8 +440,11 @@ class QAPrecheck {
 
     return {
       status: issues.length === 0 ? 'passed' : 'failed',
-      message: issues.length === 0 ? 'No security issues detected' : `Found ${issues.length} potential security issues`,
-      details: { issues, filesChecked: filesToCheck.length },
+      message:
+        issues.length === 0
+          ? 'No security issues detected'
+          : `Found ${issues.length} potential security issues`,
+      details: { issues, filesChecked: filesToCheck.length }
     };
   }
 
@@ -413,21 +459,24 @@ class QAPrecheck {
       // Run npm audit
       const auditOutput = execSync('npm audit --audit-level=moderate', {
         stdio: 'pipe',
-        cwd: this.projectRoot,
+        cwd: this.projectRoot
       }).toString();
 
       return {
         status: 'passed',
-        message: 'No dependency vulnerabilities found',
+        message: 'No dependency vulnerabilities found'
       };
     } catch (error) {
       const output = error.stdout ? error.stdout.toString() : '';
       const vulnerabilities = this.parseAuditOutput(output);
 
       return {
-        status: vulnerabilities.high > 0 || vulnerabilities.critical > 0 ? 'failed' : 'warning',
+        status:
+          vulnerabilities.high > 0 || vulnerabilities.critical > 0
+            ? 'failed'
+            : 'warning',
         message: `Dependencies: ${vulnerabilities.total} vulnerabilities found`,
-        details: vulnerabilities,
+        details: vulnerabilities
       };
     }
   }
@@ -436,7 +485,8 @@ class QAPrecheck {
    * Check file sizes
    */
   async checkFileSize(files = []) {
-    const filesToCheck = files.length > 0 ? files : await this.findSourceFiles();
+    const filesToCheck =
+      files.length > 0 ? files : await this.findSourceFiles();
     const threshold = this.config.thresholds.maxFileSize;
     const largeFiles = [];
 
@@ -459,7 +509,7 @@ class QAPrecheck {
         largeFiles.length === 0
           ? `All files under ${threshold} lines`
           : `${largeFiles.length} files exceed ${threshold} line limit`,
-      details: { largeFiles, threshold },
+      details: { largeFiles, threshold }
     };
   }
 
@@ -467,12 +517,18 @@ class QAPrecheck {
    * Check code complexity
    */
   async checkComplexity(files = []) {
-    const filesToCheck = files.length > 0 ? files : await this.findSourceFiles();
+    const filesToCheck =
+      files.length > 0 ? files : await this.findSourceFiles();
     const complexFunctions = [];
 
     for (const file of filesToCheck) {
       try {
-        if (!file.endsWith('.js') && !file.endsWith('.ts') && !file.endsWith('.jsx') && !file.endsWith('.tsx')) {
+        if (
+          !file.endsWith('.js') &&
+          !file.endsWith('.ts') &&
+          !file.endsWith('.jsx') &&
+          !file.endsWith('.tsx')
+        ) {
           continue;
         }
 
@@ -499,7 +555,7 @@ class QAPrecheck {
         complexFunctions.length === 0
           ? 'Code complexity within acceptable limits'
           : `${complexFunctions.length} functions exceed complexity thresholds`,
-      details: { complexFunctions },
+      details: { complexFunctions }
     };
   }
 
@@ -513,13 +569,17 @@ class QAPrecheck {
       await fs.access(srcDir);
       const files = await this.getAllFiles(srcDir);
       return files.filter(
-        file => /\.(js|jsx|ts|tsx)$/.test(file) && !this.config.ignorePaths.some(ignore => file.includes(ignore))
+        file =>
+          /\.(js|jsx|ts|tsx)$/.test(file) &&
+          !this.config.ignorePaths.some(ignore => file.includes(ignore))
       );
     } catch {
       // Fallback to current directory
       const files = await this.getAllFiles(this.projectRoot);
       return files.filter(
-        file => /\.(js|jsx|ts|tsx)$/.test(file) && !this.config.ignorePaths.some(ignore => file.includes(ignore))
+        file =>
+          /\.(js|jsx|ts|tsx)$/.test(file) &&
+          !this.config.ignorePaths.some(ignore => file.includes(ignore))
       );
     }
   }
@@ -569,7 +629,13 @@ class QAPrecheck {
 
   parseAuditOutput(output) {
     const lines = output.split('\n');
-    let vulnerabilities = { low: 0, moderate: 0, high: 0, critical: 0, total: 0 };
+    let vulnerabilities = {
+      low: 0,
+      moderate: 0,
+      high: 0,
+      critical: 0,
+      total: 0
+    };
 
     for (const line of lines) {
       if (line.includes('vulnerabilities')) {
@@ -589,7 +655,8 @@ class QAPrecheck {
 
   extractFunctions(content) {
     // Simplified function extraction - could be enhanced with AST parsing
-    const functionRegex = /(?:function\s+(\w+)|(\w+)\s*[:=]\s*(?:function|\([^)]*\)\s*=>))/g;
+    const functionRegex =
+      /(?:function\s+(\w+)|(\w+)\s*[:=]\s*(?:function|\([^)]*\)\s*=>))/g;
     const functions = [];
     let match;
 
@@ -639,7 +706,16 @@ class QAPrecheck {
 
   calculateCyclomaticComplexity(code) {
     // Count decision points (simplified)
-    const patterns = [/if\s*\(/g, /else/g, /while\s*\(/g, /for\s*\(/g, /case\s+/g, /catch\s*\(/g, /&&/g, /\|\|/g];
+    const patterns = [
+      /if\s*\(/g,
+      /else/g,
+      /while\s*\(/g,
+      /for\s*\(/g,
+      /case\s+/g,
+      /catch\s*\(/g,
+      /&&/g,
+      /\|\|/g
+    ];
     let complexity = 1; // Base complexity
 
     for (const pattern of patterns) {
@@ -698,15 +774,21 @@ class QAPrecheck {
 
     // Analyze results and generate specific recommendations
     if (this.results.checks.testCoverage?.status === 'failed') {
-      recommendations.push('Increase test coverage by adding tests for uncovered code paths');
+      recommendations.push(
+        'Increase test coverage by adding tests for uncovered code paths'
+      );
     }
 
     if (this.results.checks.security?.status === 'failed') {
-      recommendations.push('Review and fix security issues before submitting to QA');
+      recommendations.push(
+        'Review and fix security issues before submitting to QA'
+      );
     }
 
     if (this.results.checks.eslint?.status === 'failed') {
-      recommendations.push('Fix ESLint errors to maintain code quality standards');
+      recommendations.push(
+        'Fix ESLint errors to maintain code quality standards'
+      );
     }
 
     if (this.results.checks.typescript?.status === 'failed') {
@@ -721,9 +803,16 @@ class QAPrecheck {
     console.log('📊 QA PRE-CHECK SUMMARY');
     console.log('='.repeat(60));
 
-    const statusIcon = this.results.overall === 'passed' ? '✅' : this.results.overall === 'failed' ? '❌' : '⚠️';
+    const statusIcon =
+      this.results.overall === 'passed'
+        ? '✅'
+        : this.results.overall === 'failed'
+          ? '❌'
+          : '⚠️';
 
-    console.log(`Overall Status: ${statusIcon} ${this.results.overall.toUpperCase()}`);
+    console.log(
+      `Overall Status: ${statusIcon} ${this.results.overall.toUpperCase()}`
+    );
     console.log(`Checks Run: ${this.results.summary.total}`);
     console.log(`✅ Passed: ${this.results.summary.passed}`);
     console.log(`❌ Failed: ${this.results.summary.failed}`);

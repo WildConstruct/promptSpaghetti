@@ -60,8 +60,8 @@ export const useAdminApi = () => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          ...options.headers,
-        },
+          ...options.headers
+        }
       });
 
       if (!response.ok) throw new Error(response.statusText);

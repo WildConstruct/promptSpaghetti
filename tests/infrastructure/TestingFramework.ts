@@ -11,7 +11,7 @@ export enum TestEnvironment {
   INTEGRATION = 'integration',
   E2E = 'e2e',
   PERFORMANCE = 'performance',
-  SECURITY = 'security',
+  SECURITY = 'security'
 }
 
 export enum TestCategory {
@@ -21,7 +21,7 @@ export enum TestCategory {
   API = 'api',
   UI = 'ui',
   WORKFLOW = 'workflow',
-  ACCESSIBILITY = 'accessibility',
+  ACCESSIBILITY = 'accessibility'
 }
 
 export interface TestResult {
@@ -95,7 +95,7 @@ export class TestingFramework extends EventEmitter {
       retries: 0,
       parallel: false,
       coverage: true,
-      ...config,
+      ...config
     };
 
     this.context = {
@@ -103,14 +103,17 @@ export class TestingFramework extends EventEmitter {
       mocks: new Map(),
       utilities: new TestUtilities(),
       environment: this.globalConfig.environment,
-      category: this.globalConfig.category,
+      category: this.globalConfig.category
     };
   }
 
   /**
    * Register a new test suite
    */
-  registerSuite(name: string, config: Partial<TestSuiteConfig> = {}): TestSuite {
+  registerSuite(
+    name: string,
+    config: Partial<TestSuiteConfig> = {}
+  ): TestSuite {
     const suiteConfig = { ...this.globalConfig, ...config, name };
     const suite = new TestSuite(suiteConfig, this.context);
 
@@ -240,8 +243,17 @@ export class TestSuite extends EventEmitter {
   /**
    * Register a test case
    */
-  test(name: string, testFn: (context: TestContext) => void | Promise<void>, config?: Partial<TestSuiteConfig>): void {
-    const testCase = new TestCase(name, testFn, { ...this.config, ...config }, this.context);
+  test(
+    name: string,
+    testFn: (context: TestContext) => void | Promise<void>,
+    config?: Partial<TestSuiteConfig>
+  ): void {
+    const testCase = new TestCase(
+      name,
+      testFn,
+      { ...this.config, ...config },
+      this.context
+    );
 
     testCase.on('complete', (result: TestResult) => {
       this.emit('testComplete', result);
@@ -311,7 +323,7 @@ export class TestCase extends EventEmitter {
       environment: this.config.environment,
       status: 'pending',
       duration: 0,
-      assertions: [],
+      assertions: []
     };
 
     try {
@@ -333,12 +345,18 @@ export class TestCase extends EventEmitter {
     return result;
   }
 
-  private async runWithTimeout<T>(promise: Promise<T>, timeout: number): Promise<T> {
+  private async runWithTimeout<T>(
+    promise: Promise<T>,
+    timeout: number
+  ): Promise<T> {
     return Promise.race([
       promise,
       new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error(`Test timeout after ${timeout}ms`)), timeout);
-      }),
+        setTimeout(
+          () => reject(new Error(`Test timeout after ${timeout}ms`)),
+          timeout
+        );
+      })
     ]);
   }
 }
@@ -350,7 +368,9 @@ export class TestUtilities {
   /**
    * Create a mock function with Jest-like interface
    */
-  createMock<T extends (...args: any[]) => any>(implementation?: T): jest.MockedFunction<T> {
+  createMock<T extends (...args: any[]) => any>(
+    implementation?: T
+  ): jest.MockedFunction<T> {
     const mockFn = jest.fn(implementation) as jest.MockedFunction<T>;
     return mockFn;
   }
@@ -365,7 +385,11 @@ export class TestUtilities {
   /**
    * Wait for a condition to be true
    */
-  async waitFor(condition: () => boolean | Promise<boolean>, timeout = 5000, interval = 100): Promise<void> {
+  async waitFor(
+    condition: () => boolean | Promise<boolean>,
+    timeout = 5000,
+    interval = 100
+  ): Promise<void> {
     const startTime = Date.now();
 
     while (Date.now() - startTime < timeout) {
@@ -381,12 +405,18 @@ export class TestUtilities {
   /**
    * Generate random test data
    */
-  generateData(type: 'string' | 'number' | 'boolean' | 'array' | 'object', options?: any): any {
+  generateData(
+    type: 'string' | 'number' | 'boolean' | 'array' | 'object',
+    options?: any
+  ): any {
     switch (type) {
       case 'string':
         return this.generateRandomString(options?.length || 10);
       case 'number':
-        return Math.floor(Math.random() * (options?.max || 1000)) + (options?.min || 0);
+        return (
+          Math.floor(Math.random() * (options?.max || 1000)) +
+          (options?.min || 0)
+        );
       case 'boolean':
         return Math.random() > 0.5;
       case 'array':
@@ -406,7 +436,8 @@ export class TestUtilities {
   }
 
   private generateRandomString(length: number): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -425,18 +456,22 @@ export class TestUtilities {
         passed,
         expected,
         actual,
-        error: passed ? undefined : `Expected: ${expected}, Actual: ${actual}`,
+        error: passed ? undefined : `Expected: ${expected}, Actual: ${actual}`
       };
     },
 
-    deepEqual: (actual: any, expected: any, message?: string): AssertionResult => {
+    deepEqual: (
+      actual: any,
+      expected: any,
+      message?: string
+    ): AssertionResult => {
       const passed = JSON.stringify(actual) === JSON.stringify(expected);
       return {
         description: message || 'Expected deep equality',
         passed,
         expected,
         actual,
-        error: passed ? undefined : 'Objects are not deeply equal',
+        error: passed ? undefined : 'Objects are not deeply equal'
       };
     },
 
@@ -446,7 +481,7 @@ export class TestUtilities {
         description: message || 'Expected value to be truthy',
         passed,
         actual: value,
-        error: passed ? undefined : `Expected truthy value, got: ${value}`,
+        error: passed ? undefined : `Expected truthy value, got: ${value}`
       };
     },
 
@@ -456,9 +491,9 @@ export class TestUtilities {
         description: message || 'Expected value to be falsy',
         passed,
         actual: value,
-        error: passed ? undefined : `Expected falsy value, got: ${value}`,
+        error: passed ? undefined : `Expected falsy value, got: ${value}`
       };
-    },
+    }
   };
 }
 
@@ -480,19 +515,21 @@ export class TestReporter {
         failed,
         skipped,
         duration: totalDuration,
-        passRate: totalTests > 0 ? (passed / totalTests) * 100 : 0,
+        passRate: totalTests > 0 ? (passed / totalTests) * 100 : 0
       },
       results,
       config,
       timestamp: new Date(),
-      coverage: this.calculateCoverage(results),
+      coverage: this.calculateCoverage(results)
     };
 
     return report;
   }
 
   private calculateCoverage(results: TestResult[]): CoverageData {
-    const coverageResults = results.map(r => r.coverage).filter(c => c !== undefined) as CoverageData[];
+    const coverageResults = results
+      .map(r => r.coverage)
+      .filter(c => c !== undefined) as CoverageData[];
 
     if (coverageResults.length === 0) {
       return {
@@ -500,7 +537,7 @@ export class TestReporter {
         statements: 0,
         functions: 0,
         branches: 0,
-        percentage: 0,
+        percentage: 0
       };
     }
 
@@ -510,7 +547,7 @@ export class TestReporter {
         statements: acc.statements + coverage.statements,
         functions: acc.functions + coverage.functions,
         branches: acc.branches + coverage.branches,
-        percentage: acc.percentage + coverage.percentage,
+        percentage: acc.percentage + coverage.percentage
       }),
       { lines: 0, statements: 0, functions: 0, branches: 0, percentage: 0 }
     );
@@ -520,7 +557,7 @@ export class TestReporter {
       statements: Math.round(totalCoverage.statements / coverageResults.length),
       functions: Math.round(totalCoverage.functions / coverageResults.length),
       branches: Math.round(totalCoverage.branches / coverageResults.length),
-      percentage: Math.round(totalCoverage.percentage / coverageResults.length),
+      percentage: Math.round(totalCoverage.percentage / coverageResults.length)
     };
   }
 }

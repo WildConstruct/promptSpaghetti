@@ -50,7 +50,7 @@ This guide provides practical, step-by-step instructions for implementing the fa
 const baselineCollector = new BaselineMetricsCollector({
   systems: ['auth', 'input_validation', 'rate_limiting', 'anomaly_detection'],
   measurementPeriod: 7 * 24 * 60 * 60 * 1000, // 7 days
-  granularity: 'hourly',
+  granularity: 'hourly'
 });
 
 await baselineCollector.collectBaseline();
@@ -98,7 +98,7 @@ export class EmergencyBypassService {
       operation: request.operation,
       expiresAt: new Date(Date.now() + request.estimatedDuration * 60000),
       approvedBy: 'system', // Can be overridden for manual approvals
-      restrictions: this.getOperationRestrictions(request.operation),
+      restrictions: this.getOperationRestrictions(request.operation)
     });
 
     // Log bypass creation for audit
@@ -109,9 +109,9 @@ export class EmergencyBypassService {
         operation: request.operation,
         justification: request.businessJustification,
         urgency: request.urgencyLevel,
-        tokenId: token.id,
+        tokenId: token.id
       },
-      severity: request.urgencyLevel === 'critical' ? 'high' : 'medium',
+      severity: request.urgencyLevel === 'critical' ? 'high' : 'medium'
     });
 
     return token;
@@ -124,7 +124,10 @@ export class EmergencyBypassService {
       return false;
     }
 
-    if (token.operation !== operation && !token.restrictions.allowAllOperations) {
+    if (
+      token.operation !== operation &&
+      !token.restrictions.allowAllOperations
+    ) {
       return false;
     }
 
@@ -135,8 +138,8 @@ export class EmergencyBypassService {
       details: {
         tokenId: token.id,
         operation: operation,
-        remainingTime: token.expiresAt.getTime() - Date.now(),
-      },
+        remainingTime: token.expiresAt.getTime() - Date.now()
+      }
     });
 
     return true;
@@ -149,7 +152,10 @@ export class EmergencyBypassService {
 ```typescript
 // Add to security middleware
 export class SecurityMiddleware {
-  async processSecurityCheck(request: SecurityRequest, check: SecurityCheck): Promise<SecurityResponse> {
+  async processSecurityCheck(
+    request: SecurityRequest,
+    check: SecurityCheck
+  ): Promise<SecurityResponse> {
     const result = await this.executeSecurityCheck(request, check);
 
     // If blocking action, provide feedback mechanism
@@ -158,17 +164,17 @@ export class SecurityMiddleware {
         reportFalsePositive: {
           url: `/api/security/feedback/${result.checkId}`,
           method: 'POST',
-          message: 'Think this is a mistake? Report it here.',
+          message: 'Think this is a mistake? Report it here.'
         },
         requestBypass: {
           url: `/api/security/bypass/request`,
           method: 'POST',
-          message: 'Need immediate access? Request emergency bypass.',
+          message: 'Need immediate access? Request emergency bypass.'
         },
         contactSupport: {
           url: '/support/security-help',
-          message: 'Need help? Contact our security team.',
-        },
+          message: 'Need help? Contact our security team.'
+        }
       };
     }
 
@@ -200,7 +206,8 @@ export class AdaptiveThresholdManager {
     const operationFactor = this.calculateOperationFactor(operationContext);
 
     // Apply adjustments with bounds checking
-    const adjustedThreshold = baseThreshold * userFactor * timeFactor * operationFactor;
+    const adjustedThreshold =
+      baseThreshold * userFactor * timeFactor * operationFactor;
 
     // Ensure threshold stays within reasonable bounds
     const minThreshold = baseThreshold * 0.1; // Never go below 10% of base
@@ -244,12 +251,15 @@ export class FalsePositivePredictionService {
         'time_context',
         'location_context',
         'device_context',
-        'historical_fp_rate',
-      ],
+        'historical_fp_rate'
+      ]
     });
   }
 
-  async predictFalsePositive(securityEvent: SecurityEvent, userContext: UserContext): Promise<FalsePositivePrediction> {
+  async predictFalsePositive(
+    securityEvent: SecurityEvent,
+    userContext: UserContext
+  ): Promise<FalsePositivePrediction> {
     // Extract features from event and context
     const features = await this.extractFeatures(securityEvent, userContext);
 
@@ -260,7 +270,7 @@ export class FalsePositivePredictionService {
       isFalsePositive: prediction.probability > 0.7,
       confidence: prediction.probability,
       reasoning: prediction.featureImportance,
-      recommendedAction: this.getRecommendedAction(prediction),
+      recommendedAction: this.getRecommendedAction(prediction)
     };
   }
 
@@ -283,7 +293,10 @@ export class FalsePositivePredictionService {
     userFeedback?: UserFeedback
   ): Promise<void> {
     const event = await this.getSecurityEvent(eventId);
-    const features = await this.extractFeatures(event.securityEvent, event.userContext);
+    const features = await this.extractFeatures(
+      event.securityEvent,
+      event.userContext
+    );
 
     // Add to training data
     await this.model.addTrainingData({
@@ -293,8 +306,8 @@ export class FalsePositivePredictionService {
       metadata: {
         eventId,
         feedbackSource: userFeedback ? 'user' : 'admin',
-        timestamp: new Date(),
-      },
+        timestamp: new Date()
+      }
     });
 
     // Trigger model retraining if enough new data
@@ -311,35 +324,57 @@ export class FalsePositivePredictionService {
 ```typescript
 // Enhanced security checker with context awareness
 export class ContextAwareSecurityChecker {
-  async checkSecurity(operation: SecurityOperation, context: SecurityContext): Promise<SecurityCheckResult> {
+  async checkSecurity(
+    operation: SecurityOperation,
+    context: SecurityContext
+  ): Promise<SecurityCheckResult> {
     // Gather comprehensive context
     const enrichedContext = await this.enrichContext(context);
 
     // Apply context-specific rules
-    const applicableRules = await this.getApplicableRules(operation, enrichedContext);
+    const applicableRules = await this.getApplicableRules(
+      operation,
+      enrichedContext
+    );
 
     // Execute checks with context awareness
-    const results = await Promise.all(applicableRules.map(rule => this.executeContextualRule(rule, enrichedContext)));
+    const results = await Promise.all(
+      applicableRules.map(rule =>
+        this.executeContextualRule(rule, enrichedContext)
+      )
+    );
 
     // Aggregate results with confidence scoring
     const aggregatedResult = this.aggregateResults(results, enrichedContext);
 
     // Apply false positive prediction
-    const fpPrediction = await this.falsePositivePredictionService.predictFalsePositive(operation, enrichedContext);
+    const fpPrediction =
+      await this.falsePositivePredictionService.predictFalsePositive(
+        operation,
+        enrichedContext
+      );
 
     // Adjust final decision based on FP prediction
     return this.adjustDecisionWithFPPrediction(aggregatedResult, fpPrediction);
   }
 
-  private async enrichContext(context: SecurityContext): Promise<EnrichedSecurityContext> {
+  private async enrichContext(
+    context: SecurityContext
+  ): Promise<EnrichedSecurityContext> {
     return {
       ...context,
       userProfile: await this.userProfileService.getProfile(context.userId),
-      deviceContext: await this.deviceService.getDeviceContext(context.deviceId),
-      locationContext: await this.locationService.getLocationContext(context.ipAddress),
+      deviceContext: await this.deviceService.getDeviceContext(
+        context.deviceId
+      ),
+      locationContext: await this.locationService.getLocationContext(
+        context.ipAddress
+      ),
       timeContext: this.getTimeContext(),
-      recentActivity: await this.activityService.getRecentActivity(context.userId),
-      systemContext: await this.systemService.getCurrentSystemState(),
+      recentActivity: await this.activityService.getRecentActivity(
+        context.userId
+      ),
+      systemContext: await this.systemService.getCurrentSystemState()
     };
   }
 
@@ -375,7 +410,7 @@ export class FalsePositiveMonitoringService {
   async generateDashboard(): Promise<FPDashboard> {
     const timeRange = {
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days
-      end: new Date(),
+      end: new Date()
     };
 
     return {
@@ -383,17 +418,20 @@ export class FalsePositiveMonitoringService {
       systemBreakdown: await this.getSystemBreakdown(timeRange),
       trendAnalysis: await this.getTrendAnalysis(timeRange),
       userImpactAnalysis: await this.getUserImpactAnalysis(timeRange),
-      recommendations: await this.generateRecommendations(timeRange),
+      recommendations: await this.generateRecommendations(timeRange)
     };
   }
 
-  private async getOverviewMetrics(timeRange: TimeRange): Promise<OverviewMetrics> {
-    const [totalAlerts, falsePositives, userComplaints, resolutionTimes] = await Promise.all([
-      this.getTotalAlerts(timeRange),
-      this.getFalsePositives(timeRange),
-      this.getUserComplaints(timeRange),
-      this.getResolutionTimes(timeRange),
-    ]);
+  private async getOverviewMetrics(
+    timeRange: TimeRange
+  ): Promise<OverviewMetrics> {
+    const [totalAlerts, falsePositives, userComplaints, resolutionTimes] =
+      await Promise.all([
+        this.getTotalAlerts(timeRange),
+        this.getFalsePositives(timeRange),
+        this.getUserComplaints(timeRange),
+        this.getResolutionTimes(timeRange)
+      ]);
 
     return {
       totalAlerts,
@@ -401,7 +439,7 @@ export class FalsePositiveMonitoringService {
       falsePositiveRate: (falsePositives.length / totalAlerts) * 100,
       userComplaintRate: (userComplaints.length / totalAlerts) * 100,
       averageResolutionTime: this.calculateAverage(resolutionTimes),
-      trendDirection: await this.calculateTrend(timeRange),
+      trendDirection: await this.calculateTrend(timeRange)
     };
   }
 
@@ -412,7 +450,7 @@ export class FalsePositiveMonitoringService {
       condition: 'false_positive_rate > 5%',
       timeWindow: '1 hour',
       severity: 'warning',
-      actions: ['notify_security_team', 'auto_adjust_thresholds'],
+      actions: ['notify_security_team', 'auto_adjust_thresholds']
     });
 
     await this.alertManager.createAlert({
@@ -420,7 +458,7 @@ export class FalsePositiveMonitoringService {
       condition: 'false_positive_rate increases by 200% compared to baseline',
       timeWindow: '15 minutes',
       severity: 'critical',
-      actions: ['emergency_escalation', 'disable_problematic_rules'],
+      actions: ['emergency_escalation', 'disable_problematic_rules']
     });
 
     await this.alertManager.createAlert({
@@ -428,7 +466,7 @@ export class FalsePositiveMonitoringService {
       condition: 'user_complaints > 10 per hour',
       timeWindow: '1 hour',
       severity: 'high',
-      actions: ['notify_support_team', 'enable_bypass_mode'],
+      actions: ['notify_support_team', 'enable_bypass_mode']
     });
   }
 }
@@ -457,11 +495,13 @@ export class AutomatedOptimizationService {
     return {
       systemResults: results,
       overallImprovement: this.calculateOverallImprovement(results),
-      recommendedActions: this.generateRecommendedActions(results),
+      recommendedActions: this.generateRecommendedActions(results)
     };
   }
 
-  private async optimizeSystemThresholds(system: SecuritySystem): Promise<SystemOptimizationResult> {
+  private async optimizeSystemThresholds(
+    system: SecuritySystem
+  ): Promise<SystemOptimizationResult> {
     // Get historical data for optimization
     const historicalData = await this.getHistoricalData(system, 30); // 30 days
 
@@ -481,7 +521,7 @@ export class AutomatedOptimizationService {
       populationSize: 50,
       generations: 100,
       mutationRate: 0.1,
-      crossoverRate: 0.8,
+      crossoverRate: 0.8
     });
 
     const optimizedThresholds = await optimizer.optimize(
@@ -491,8 +531,14 @@ export class AutomatedOptimizationService {
     );
 
     // Calculate improvement
-    const currentMetrics = this.simulateMetrics(historicalData, system.currentThresholds);
-    const optimizedMetrics = this.simulateMetrics(historicalData, optimizedThresholds);
+    const currentMetrics = this.simulateMetrics(
+      historicalData,
+      system.currentThresholds
+    );
+    const optimizedMetrics = this.simulateMetrics(
+      historicalData,
+      optimizedThresholds
+    );
 
     return {
       system: system.name,
@@ -501,7 +547,10 @@ export class AutomatedOptimizationService {
       currentMetrics,
       optimizedMetrics,
       improvement: optimizedMetrics.overallScore - currentMetrics.overallScore,
-      confidence: this.calculateOptimizationConfidence(historicalData, optimizedThresholds),
+      confidence: this.calculateOptimizationConfidence(
+        historicalData,
+        optimizedThresholds
+      )
     };
   }
 }
@@ -553,9 +602,10 @@ describe('False Positive Prevention', () => {
       const token = await service.requestBypass({
         userId: 'test-user',
         operation: 'critical_data_access',
-        businessJustification: 'Emergency customer data access for legal compliance',
+        businessJustification:
+          'Emergency customer data access for legal compliance',
         urgencyLevel: 'critical',
-        estimatedDuration: 30,
+        estimatedDuration: 30
       });
 
       expect(token).toBeDefined();
@@ -571,13 +621,16 @@ describe('False Positive Prevention', () => {
         operation: 'data_access',
         businessJustification: 'Test bypass',
         urgencyLevel: 'low',
-        estimatedDuration: 5,
+        estimatedDuration: 5
       });
 
       const isValid = await service.validateBypass(token.id, 'data_access');
       expect(isValid).toBe(true);
 
-      const isValidDifferentOp = await service.validateBypass(token.id, 'different_operation');
+      const isValidDifferentOp = await service.validateBypass(
+        token.id,
+        'different_operation'
+      );
       expect(isValidDifferentOp).toBe(false);
     });
   });
@@ -594,7 +647,7 @@ describe('False Positive Handling Integration', () => {
     const securityCheck = await securityService.checkOperation({
       userId: 'trusted-user-123',
       operation: 'bulk_data_export',
-      context: { isBusinessHours: true, fromTrustedDevice: true },
+      context: { isBusinessHours: true, fromTrustedDevice: true }
     });
 
     // 2. Should be flagged initially
@@ -604,7 +657,7 @@ describe('False Positive Handling Integration', () => {
     const feedbackResult = await feedbackService.reportFalsePositive({
       checkId: securityCheck.id,
       userId: 'trusted-user-123',
-      reasoning: 'Legitimate bulk export for monthly report',
+      reasoning: 'Legitimate bulk export for monthly report'
     });
 
     expect(feedbackResult.success).toBe(true);
@@ -616,7 +669,7 @@ describe('False Positive Handling Integration', () => {
     const similarCheck = await securityService.checkOperation({
       userId: 'trusted-user-123',
       operation: 'bulk_data_export',
-      context: { isBusinessHours: true, fromTrustedDevice: true },
+      context: { isBusinessHours: true, fromTrustedDevice: true }
     });
 
     expect(similarCheck.severity).toBeLessThan(securityCheck.severity);
@@ -696,11 +749,14 @@ const testToken = await emergencyBypassService.requestBypass({
   operation: 'test',
   businessJustification: 'Health check',
   urgencyLevel: 'low',
-  estimatedDuration: 5,
+  estimatedDuration: 5
 });
 
 // Test token validation
-const isValid = await emergencyBypassService.validateBypass(testToken.id, 'test');
+const isValid = await emergencyBypassService.validateBypass(
+  testToken.id,
+  'test'
+);
 console.log('Token validation result:', isValid);
 ```
 

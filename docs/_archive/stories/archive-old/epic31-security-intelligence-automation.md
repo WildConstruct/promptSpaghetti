@@ -122,7 +122,7 @@ enum ConditionType {
   FREQUENCY = 'frequency', // Event frequency analysis
   PATTERN_MATCH = 'pattern_match', // Regex pattern matching
   ML_PREDICTION = 'ml_prediction', // ML model predictions
-  CUSTOM_FUNCTION = 'custom_function', // Custom evaluation functions
+  CUSTOM_FUNCTION = 'custom_function' // Custom evaluation functions
 }
 ```
 
@@ -178,7 +178,7 @@ enum PlaybookStepType {
   APPROVAL_GATE = 'approval_gate', // Manual approval checkpoint
   DATA_COLLECTION = 'data_collection', // Information gathering
   ANALYSIS_STEP = 'analysis_step', // Data analysis and enrichment
-  NOTIFICATION_STEP = 'notification_step', // Communication and alerts
+  NOTIFICATION_STEP = 'notification_step' // Communication and alerts
 }
 ```
 
@@ -237,7 +237,7 @@ enum AutomationActionType {
   FILE_OPERATION = 'file_operation', // File system operations
   NETWORK_ISOLATION = 'network_isolation', // Network containment
   USER_ACCOUNT_ACTION = 'user_account_action', // Identity management
-  SYSTEM_COMMAND = 'system_command', // System-level commands
+  SYSTEM_COMMAND = 'system_command' // System-level commands
 }
 ```
 
@@ -265,8 +265,8 @@ const criticalThreatRule: AutomationRule = {
       type: ConditionType.EVENT_FIELD,
       field: 'severity',
       operator: ConditionOperator.EQUALS,
-      value: SecurityEventSeverity.CRITICAL,
-    },
+      value: SecurityEventSeverity.CRITICAL
+    }
   ],
   actions: [
     {
@@ -274,17 +274,17 @@ const criticalThreatRule: AutomationRule = {
       parameters: {
         priority: 'critical',
         auto_assign: true,
-        escalate_immediately: true,
-      },
+        escalate_immediately: true
+      }
     },
     {
       type: AutomationActionType.SLACK_NOTIFICATION,
       parameters: {
         channel: '#security-alerts',
-        mention: '@security-team',
-      },
-    },
-  ],
+        mention: '@security-team'
+      }
+    }
+  ]
 };
 ```
 
@@ -301,24 +301,24 @@ const malwareContainmentRule: AutomationRule = {
       type: ConditionType.EVENT_FIELD,
       field: 'event_type',
       operator: ConditionOperator.EQUALS,
-      value: SecurityEventType.MALWARE_DETECTION,
-    },
+      value: SecurityEventType.MALWARE_DETECTION
+    }
   ],
   actions: [
     {
       type: AutomationActionType.NETWORK_ISOLATION,
       parameters: {
         isolation_type: 'endpoint',
-        duration_minutes: 60,
-      },
+        duration_minutes: 60
+      }
     },
     {
       type: AutomationActionType.SCRIPT_EXECUTION,
       parameters: {
-        script: 'collect_malware_forensics.sh',
-      },
-    },
-  ],
+        script: 'collect_malware_forensics.sh'
+      }
+    }
+  ]
 };
 ```
 
@@ -338,9 +338,9 @@ const dataBreachPlaybook: SecurityPlaybook = {
         type: AutomationActionType.SCRIPT_EXECUTION,
         parameters: {
           script: 'assess_data_breach.py',
-          parameters: ['--scope', 'full'],
-        },
-      },
+          parameters: ['--scope', 'full']
+        }
+      }
     },
     {
       name: 'Breach Containment',
@@ -348,9 +348,9 @@ const dataBreachPlaybook: SecurityPlaybook = {
       action: {
         type: AutomationActionType.SCRIPT_EXECUTION,
         parameters: {
-          script: 'contain_breach.py',
-        },
-      },
+          script: 'contain_breach.py'
+        }
+      }
     },
     {
       name: 'Stakeholder Notification',
@@ -359,11 +359,11 @@ const dataBreachPlaybook: SecurityPlaybook = {
       action: {
         type: AutomationActionType.EMAIL_NOTIFICATION,
         parameters: {
-          recipients: ['legal@company.com', 'compliance@company.com'],
-        },
-      },
-    },
-  ],
+          recipients: ['legal@company.com', 'compliance@company.com']
+        }
+      }
+    }
+  ]
 };
 ```
 
@@ -871,7 +871,7 @@ Query Parameters:
      type: 'event_field',
      field: 'severity',
      operator: 'equals',
-     value: 'critical',
+     value: 'critical'
    };
 
    // Bad: Overly broad conditions
@@ -879,7 +879,7 @@ Query Parameters:
      type: 'event_field',
      field: 'event_type',
      operator: 'contains',
-     value: 'security',
+     value: 'security'
    };
    ```
 
@@ -892,11 +892,11 @@ Query Parameters:
      parameters: {
        priority: 'high',
        assignee: 'security-team',
-       template: 'critical_threat',
+       template: 'critical_threat'
      },
      timeout_ms: 30000,
      retry_attempts: 3,
-     on_failure: 'escalate',
+     on_failure: 'escalate'
    };
    ```
 
@@ -925,20 +925,20 @@ Query Parameters:
        {
          id: 'assessment',
          name: 'Initial Assessment',
-         depends_on: [],
+         depends_on: []
        },
        {
          id: 'containment',
          name: 'Threat Containment',
-         depends_on: ['assessment'],
+         depends_on: ['assessment']
        },
        {
          id: 'notification',
          name: 'Stakeholder Notification',
          depends_on: ['containment'],
-         parallel_execution: true,
-       },
-     ],
+         parallel_execution: true
+       }
+     ]
    };
    ```
 

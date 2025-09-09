@@ -225,7 +225,10 @@ interface UserListingAPI {
   deleteUser(id: string): Promise<void>;
 
   // Bulk Operations
-  bulkUpdateUsers(userIds: string[], updates: BulkUpdateRequest): Promise<BulkOperationResult>;
+  bulkUpdateUsers(
+    userIds: string[],
+    updates: BulkUpdateRequest
+  ): Promise<BulkOperationResult>;
   bulkDeleteUsers(userIds: string[]): Promise<BulkOperationResult>;
 
   // Search & Filter
@@ -256,7 +259,7 @@ $breakpoints: (
   mobile: 0,
   tablet: 768px,
   desktop: 1024px,
-  wide: 1440px,
+  wide: 1440px
 );
 
 // Layout Adaptations
@@ -328,7 +331,7 @@ const keyboardShortcuts = {
   Escape: 'clearSelection',
   Enter: 'openUserDetails',
   Tab: 'navigateElements',
-  Space: 'toggleUserSelection',
+  Space: 'toggleUserSelection'
 };
 ```
 

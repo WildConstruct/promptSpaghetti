@@ -8,8 +8,12 @@ import './App.css';
 
 function App() {
   const [showLaunchScreen, setShowLaunchScreen] = useState(true);
-  const [initialAnalysis, setInitialAnalysis] = useState<PromptAnalysis | undefined>();
-  const [initialGraph, setInitialGraph] = useState<{ nodes: Node[]; edges: Edge[] } | undefined>();
+  const [initialAnalysis, setInitialAnalysis] = useState<
+    PromptAnalysis | undefined
+  >();
+  const [initialGraph, setInitialGraph] = useState<
+    { nodes: Node[]; edges: Edge[] } | undefined
+  >();
 
   const handleLaunch = (payload: LaunchPayload) => {
     if (payload.kind === 'analysis') {
@@ -31,7 +35,7 @@ function App() {
 
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
-      <Epic1EditorContainer 
+      <Epic1EditorContainer
         showPreview={true}
         showAssetLibrary={true}
         assetLibraryPosition="right"

@@ -18,7 +18,7 @@ class ExtensionTestFramework {
       retries: 0,
       parallel: false,
       coverage: false,
-      verbose: false,
+      verbose: false
     };
   }
 
@@ -70,7 +70,7 @@ class ExtensionTestFramework {
       path.join(extensionPath, 'test'),
       path.join(extensionPath, 'tests'),
       path.join(extensionPath, '__tests__'),
-      path.join(extensionPath, 'src', '__tests__'),
+      path.join(extensionPath, 'src', '__tests__')
     ];
 
     for (const testDir of testDirs) {
@@ -106,7 +106,7 @@ class ExtensionTestFramework {
       summary: { passed: 0, failed: 0, skipped: 0, total: 0 },
       tests: [],
       coverage: null,
-      duration: 0,
+      duration: 0
     };
 
     const startTime = Date.now();
@@ -134,7 +134,7 @@ class ExtensionTestFramework {
           skipped: 0,
           total: 1,
           error: error.message,
-          tests: [],
+          tests: []
         });
         results.summary.failed += 1;
         results.summary.total += 1;
@@ -157,7 +157,7 @@ class ExtensionTestFramework {
       register: () => Promise.resolve(),
       unregister: () => Promise.resolve(),
       getExtension: () => null,
-      isEnabled: () => true,
+      isEnabled: () => true
     };
 
     // Mock console if not verbose
@@ -181,7 +181,7 @@ class ExtensionTestFramework {
       skipped: 0,
       total: 0,
       tests: [],
-      duration: 0,
+      duration: 0
     };
 
     const startTime = Date.now();
@@ -206,7 +206,7 @@ class ExtensionTestFramework {
         name: 'Test file execution',
         status: 'failed',
         error: error.message,
-        duration: 0,
+        duration: 0
       });
     }
 
@@ -216,7 +216,11 @@ class ExtensionTestFramework {
 
   isJestTest(testFile) {
     const content = fs.readFileSync(testFile, 'utf8');
-    return content.includes('describe(') || content.includes('test(') || content.includes('it(');
+    return (
+      content.includes('describe(') ||
+      content.includes('test(') ||
+      content.includes('it(')
+    );
   }
 
   isMochaTest(testFile) {
@@ -228,7 +232,7 @@ class ExtensionTestFramework {
     return new Promise((resolve, reject) => {
       const jest = spawn('npx', ['jest', testFile, '--json'], {
         cwd: path.dirname(testFile),
-        stdio: ['pipe', 'pipe', 'pipe'],
+        stdio: ['pipe', 'pipe', 'pipe']
       });
 
       let output = '';
@@ -272,7 +276,10 @@ class ExtensionTestFramework {
       testContext.passed = fileResult.numPassingTests || 0;
       testContext.failed = fileResult.numFailingTests || 0;
       testContext.skipped = fileResult.numPendingTests || 0;
-      testContext.total = fileResult.numPassingTests + fileResult.numFailingTests + fileResult.numPendingTests;
+      testContext.total =
+        fileResult.numPassingTests +
+        fileResult.numFailingTests +
+        fileResult.numPendingTests;
 
       // Parse individual test results
       if (fileResult.assertionResults) {
@@ -280,7 +287,7 @@ class ExtensionTestFramework {
           name: test.title,
           status: test.status,
           duration: test.duration || 0,
-          error: test.failureMessages ? test.failureMessages.join('\n') : null,
+          error: test.failureMessages ? test.failureMessages.join('\n') : null
         }));
       }
     }
@@ -290,7 +297,7 @@ class ExtensionTestFramework {
     return new Promise((resolve, reject) => {
       const mocha = spawn('npx', ['mocha', testFile, '--reporter', 'json'], {
         cwd: path.dirname(testFile),
-        stdio: ['pipe', 'pipe', 'pipe'],
+        stdio: ['pipe', 'pipe', 'pipe']
       });
 
       let output = '';
@@ -339,7 +346,7 @@ class ExtensionTestFramework {
         name: test.title,
         status: test.pending ? 'skipped' : test.err ? 'failed' : 'passed',
         duration: test.duration || 0,
-        error: test.err ? test.err.message : null,
+        error: test.err ? test.err.message : null
       }));
     }
   }
@@ -372,9 +379,9 @@ class ExtensionTestFramework {
           statements: 95.0,
           branches: 88.0,
           functions: 100.0,
-          lines: 96.0,
-        },
-      ],
+          lines: 96.0
+        }
+      ]
     };
   }
 
@@ -390,7 +397,10 @@ class ExtensionTestFramework {
     console.log(`⏭️ Skipped: ${summary.skipped}`);
     console.log(`⏱️ Duration: ${results.duration}ms`);
 
-    const successRate = summary.total > 0 ? ((summary.passed / summary.total) * 100).toFixed(1) : 0;
+    const successRate =
+      summary.total > 0
+        ? ((summary.passed / summary.total) * 100).toFixed(1)
+        : 0;
     console.log(`📈 Success Rate: ${successRate}%`);
 
     // Show failed tests
@@ -441,7 +451,7 @@ class ExtensionTestFramework {
           slowTests.push({
             name: test.name,
             file: testFile.file,
-            duration: test.duration,
+            duration: test.duration
           });
         }
       }
@@ -459,7 +469,8 @@ class ExtensionTestFramework {
       console.log('✅ All tests completed quickly');
     }
 
-    const avgTestTime = results.summary.total > 0 ? totalDuration / results.summary.total : 0;
+    const avgTestTime =
+      results.summary.total > 0 ? totalDuration / results.summary.total : 0;
     console.log(`Average test time: ${avgTestTime.toFixed(1)}ms`);
   }
 
@@ -493,7 +504,10 @@ class ExtensionTestFramework {
     }
 
     // Failure rate recommendations
-    const failureRate = results.summary.total > 0 ? results.summary.failed / results.summary.total : 0;
+    const failureRate =
+      results.summary.total > 0
+        ? results.summary.failed / results.summary.total
+        : 0;
     if (failureRate > 0.1) {
       recommendations.push('Fix failing tests to improve reliability');
     }
@@ -533,7 +547,10 @@ class ExtensionTestFramework {
 
   discoverBenchmarks(extensionPath) {
     const benchmarkFiles = [];
-    const benchmarkDirs = [path.join(extensionPath, 'benchmarks'), path.join(extensionPath, 'bench')];
+    const benchmarkDirs = [
+      path.join(extensionPath, 'benchmarks'),
+      path.join(extensionPath, 'bench')
+    ];
 
     for (const benchmarkDir of benchmarkDirs) {
       if (fs.existsSync(benchmarkDir)) {
@@ -600,8 +617,8 @@ class ExtensionTestFramework {
         max: max.toFixed(2),
         avg: avg.toFixed(2),
         median: median.toFixed(2),
-        p95: p95.toFixed(2),
-      },
+        p95: p95.toFixed(2)
+      }
     };
   }
 

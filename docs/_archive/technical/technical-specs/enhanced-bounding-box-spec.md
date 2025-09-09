@@ -1,11 +1,13 @@
 # Enhanced Bounding Box Component Technical Specification
 
 ## Overview
+
 The EnhancedBoundingBox is a React Flow custom node that provides visual grouping, collapse/expand functionality, and port management for contained nodes. It acts as both a visual container and a logical grouping mechanism.
 
 ## Component Architecture
 
 ### File Structure
+
 ```
 packages/core/components/epic1/nodes/
 ├── EnhancedBoundingBox.tsx      # Main component
@@ -16,6 +18,7 @@ packages/core/components/epic1/nodes/
 ```
 
 ### Component Props Interface
+
 ```typescript
 interface EnhancedBoundingBoxProps extends NodeProps {
   data: EnhancedBoundingBoxData;
@@ -31,28 +34,28 @@ interface EnhancedBoundingBoxData {
   // Visual Properties
   title: string;
   description?: string;
-  backgroundColor: string;      // Hex color
-  opacity: number;              // 0-1
-  borderColor: string;          // Hex color
+  backgroundColor: string; // Hex color
+  opacity: number; // 0-1
+  borderColor: string; // Hex color
   borderStyle: 'solid' | 'dashed' | 'dotted';
-  borderWidth: number;          // pixels
-  borderRadius?: number;        // pixels
-  
+  borderWidth: number; // pixels
+  borderRadius?: number; // pixels
+
   // Functional Properties
-  locked: boolean;              // Prevent editing
-  width?: number;               // Initial/current width
-  height?: number;              // Initial/current height
-  isCollapsed?: boolean;        // Collapse state
-  autoLayout?: boolean;         // Auto-arrange contained nodes
-  
+  locked: boolean; // Prevent editing
+  width?: number; // Initial/current width
+  height?: number; // Initial/current height
+  isCollapsed?: boolean; // Collapse state
+  autoLayout?: boolean; // Auto-arrange contained nodes
+
   // Port System
-  ports?: Port[];               // Explicit connection points
-  autoDetectPorts?: boolean;    // Auto-detect from edges
-  
+  ports?: Port[]; // Explicit connection points
+  autoDetectPorts?: boolean; // Auto-detect from edges
+
   // Metadata
-  category?: string;            // For theming
-  tags?: string[];             // For filtering
-  zIndex?: number;             // Layer ordering
+  category?: string; // For theming
+  tags?: string[]; // For filtering
+  zIndex?: number; // Layer ordering
 }
 
 interface Port {
@@ -60,16 +63,17 @@ interface Port {
   label: string;
   type: 'string' | 'number' | 'choice' | 'any';
   direction: 'input' | 'output';
-  position: Position;           // Top, Right, Bottom, Left
-  nodeId?: string;             // Connected internal node
-  color?: string;              // Visual indicator
-  required?: boolean;          // Validation
+  position: Position; // Top, Right, Bottom, Left
+  nodeId?: string; // Connected internal node
+  color?: string; // Visual indicator
+  required?: boolean; // Validation
 }
 ```
 
 ## State Management
 
 ### Internal State
+
 ```typescript
 const [isEditingTitle, setIsEditingTitle] = useState(false);
 const [title, setTitle] = useState(data.title);
@@ -88,16 +92,15 @@ const boxRef = useRef<HTMLDivElement>(null);
 ```
 
 ### React Flow Integration
+
 ```typescript
 const { setNodes, getNodes, getEdges } = useReactFlow();
 
 // Update node data in React Flow store
 const updateNodeData = (updates: Partial<EnhancedBoundingBoxData>) => {
-  setNodes((nodes) =>
-    nodes.map((node) =>
-      node.id === id
-        ? { ...node, data: { ...node.data, ...updates } }
-        : node
+  setNodes(nodes =>
+    nodes.map(node =>
+      node.id === id ? { ...node, data: { ...node.data, ...updates } } : node
     )
   );
 };
@@ -106,6 +109,7 @@ const updateNodeData = (updates: Partial<EnhancedBoundingBoxData>) => {
 ## Layout System
 
 ### Collapse/Expand Behavior
+
 ```typescript
 // Collapsed dimensions
 const COLLAPSED_HEIGHT = 80;
@@ -123,6 +127,7 @@ const ANIMATION_EASING = 'ease-in-out';
 ```
 
 ### Auto-Layout Algorithm
+
 ```typescript
 interface LayoutOptions {
   strategy: 'grid' | 'flow' | 'tree' | 'force';
@@ -152,6 +157,7 @@ function autoLayoutNodes(
 ## Resize System
 
 ### Resize Handle Positions
+
 ```typescript
 enum ResizeHandle {
   TopLeft = 'tl',
@@ -175,6 +181,7 @@ interface ResizeState {
 ```
 
 ### Resize Constraints
+
 ```typescript
 const RESIZE_CONSTRAINTS = {
   minWidth: 200,
@@ -191,18 +198,16 @@ const RESIZE_CONSTRAINTS = {
 ## Port Management
 
 ### Port Detection Algorithm
+
 ```typescript
-function detectPorts(
-  containedNodes: Node[],
-  edges: Edge[]
-): Port[] {
+function detectPorts(containedNodes: Node[], edges: Edge[]): Port[] {
   const detectedPorts: Port[] = [];
   const containedIds = new Set(containedNodes.map(n => n.id));
-  
+
   edges.forEach(edge => {
     const sourceInside = containedIds.has(edge.source);
     const targetInside = containedIds.has(edge.target);
-    
+
     // Edge crosses boundary
     if (sourceInside !== targetInside) {
       if (sourceInside) {
@@ -214,16 +219,17 @@ function detectPorts(
       }
     }
   });
-  
+
   return mergeDuplicatePorts(detectedPorts);
 }
 ```
 
 ### Port Rendering
+
 ```typescript
 function renderPort(port: Port, index: number): JSX.Element {
   const position = calculatePortPosition(port, index);
-  
+
   return (
     <Handle
       key={port.id}
@@ -252,11 +258,20 @@ function renderPort(port: Port, index: number): JSX.Element {
 ## CSS Architecture
 
 ### BEM Naming Convention
+
 ```css
-.enhanced-bounding-box { /* Block */ }
-.enhanced-bounding-box__header { /* Element */ }
-.enhanced-bounding-box--collapsed { /* Modifier */ }
-.enhanced-bounding-box--selected { /* Modifier */ }
+.enhanced-bounding-box {
+  /* Block */
+}
+.enhanced-bounding-box__header {
+  /* Element */
+}
+.enhanced-bounding-box--collapsed {
+  /* Modifier */
+}
+.enhanced-bounding-box--selected {
+  /* Modifier */
+}
 
 /* Component structure */
 .enhanced-bounding-box {
@@ -330,20 +345,22 @@ function renderPort(port: Port, index: number): JSX.Element {
 ```
 
 ## Z-Index Hierarchy
+
 ```typescript
 const Z_INDEX = {
-  BACKGROUND: -1,      // Bounding box background
-  CONTAINED_NODES: 0,  // Normal nodes inside
-  BOUNDING_BOX: 1,     // Box border and header
-  PORTS: 10,           // Connection ports
-  RESIZE_HANDLES: 11,  // Resize handles
-  TOOLTIPS: 100        // Tooltips and labels
+  BACKGROUND: -1, // Bounding box background
+  CONTAINED_NODES: 0, // Normal nodes inside
+  BOUNDING_BOX: 1, // Box border and header
+  PORTS: 10, // Connection ports
+  RESIZE_HANDLES: 11, // Resize handles
+  TOOLTIPS: 100 // Tooltips and labels
 };
 ```
 
 ## Performance Optimizations
 
 ### Memoization
+
 ```typescript
 const containedNodes = useMemo(
   () => getContainedNodes(),
@@ -357,28 +374,40 @@ const detectedPorts = useMemo(
 
 const backgroundStyle = useMemo(
   () => ({
-    backgroundColor: getBackgroundWithOpacity(data.backgroundColor, data.opacity),
+    backgroundColor: getBackgroundWithOpacity(
+      data.backgroundColor,
+      data.opacity
+    ),
     borderColor: data.borderColor,
     borderStyle: data.borderStyle,
     borderWidth: `${data.borderWidth}px`
   }),
-  [data.backgroundColor, data.opacity, data.borderColor, data.borderStyle, data.borderWidth]
+  [
+    data.backgroundColor,
+    data.opacity,
+    data.borderColor,
+    data.borderStyle,
+    data.borderWidth
+  ]
 );
 ```
 
 ### Debouncing
+
 ```typescript
 const debouncedResize = useMemo(
-  () => debounce((newSize: Size) => {
-    updateNodeData({ width: newSize.width, height: newSize.height });
-  }, 100),
+  () =>
+    debounce((newSize: Size) => {
+      updateNodeData({ width: newSize.width, height: newSize.height });
+    }, 100),
   [id]
 );
 
 const debouncedAutoLayout = useMemo(
-  () => debounce(() => {
-    autoLayoutNodes();
-  }, 300),
+  () =>
+    debounce(() => {
+      autoLayoutNodes();
+    }, 300),
   []
 );
 ```
@@ -386,6 +415,7 @@ const debouncedAutoLayout = useMemo(
 ## Accessibility
 
 ### ARIA Attributes
+
 ```tsx
 <div
   role="group"
@@ -398,7 +428,7 @@ const debouncedAutoLayout = useMemo(
     aria-label={isCollapsed ? 'Expand' : 'Collapse'}
     onClick={handleCollapseToggle}
   />
-  
+
   <input
     aria-label="Bounding box title"
     value={title}
@@ -408,9 +438,10 @@ const debouncedAutoLayout = useMemo(
 ```
 
 ### Keyboard Navigation
+
 ```typescript
 const handleKeyDown = (e: React.KeyboardEvent) => {
-  switch(e.key) {
+  switch (e.key) {
     case 'Enter':
       if (e.ctrlKey) toggleCollapse();
       break;
@@ -430,6 +461,7 @@ const handleKeyDown = (e: React.KeyboardEvent) => {
 ## Testing Requirements
 
 ### Unit Tests
+
 ```typescript
 describe('EnhancedBoundingBox', () => {
   it('should render with default props');
@@ -444,6 +476,7 @@ describe('EnhancedBoundingBox', () => {
 ```
 
 ### Integration Tests
+
 ```typescript
 describe('EnhancedBoundingBox Integration', () => {
   it('should work with React Flow');
@@ -457,6 +490,7 @@ describe('EnhancedBoundingBox Integration', () => {
 ## Migration Path
 
 ### From Legacy BoundingBox
+
 ```typescript
 function migrateLegacyBoundingBox(legacyData: any): EnhancedBoundingBoxData {
   return {

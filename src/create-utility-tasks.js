@@ -27,8 +27,8 @@ const utilityTasks = [
       'Policy violation detection in real-time',
       'Configurable alert thresholds and routing',
       'Compliance reporting dashboard',
-      'Integration with existing logging systems',
-    ],
+      'Integration with existing logging systems'
+    ]
   },
   {
     title: 'Build automated QA pre-check utility',
@@ -44,8 +44,8 @@ const utilityTasks = [
       'Syntax and TypeScript error detection',
       'Test coverage validation with configurable thresholds',
       'Security pattern scanning',
-      'Detailed reporting with recommendations',
-    ],
+      'Detailed reporting with recommendations'
+    ]
   },
   {
     title: 'Create agent productivity dashboard',
@@ -61,8 +61,8 @@ const utilityTasks = [
       'Real-time agent productivity metrics',
       'Task completion rate tracking',
       'Bottleneck identification and visualization',
-      'Team performance comparisons and trends',
-    ],
+      'Team performance comparisons and trends'
+    ]
   },
   {
     title: 'Build task dependency resolver',
@@ -78,8 +78,8 @@ const utilityTasks = [
       'Automatic dependency detection between tasks',
       'Visual dependency chain mapping',
       'Blocker identification and alerts',
-      'Optimal task ordering recommendations',
-    ],
+      'Optimal task ordering recommendations'
+    ]
   },
   {
     title: 'Create conflict resolution assistant',
@@ -95,8 +95,8 @@ const utilityTasks = [
       'Code overlap detection between concurrent tasks',
       'Merge strategy recommendations',
       'Automated resolution for simple conflicts',
-      'Conflict prevention suggestions',
-    ],
+      'Conflict prevention suggestions'
+    ]
   },
   {
     title: 'Build test case generator',
@@ -112,8 +112,8 @@ const utilityTasks = [
       'Requirement parsing and analysis',
       'Automated test case generation',
       'Test coverage optimization',
-      'Integration with Jest and testing frameworks',
-    ],
+      'Integration with Jest and testing frameworks'
+    ]
   },
   {
     title: 'Build code quality scanner',
@@ -129,8 +129,8 @@ const utilityTasks = [
       'Pre-commit quality checks and hooks',
       'Code smell detection and reporting',
       'Performance optimization suggestions',
-      'Integration with CI/CD pipeline',
-    ],
+      'Integration with CI/CD pipeline'
+    ]
   },
   {
     title: 'Create agent workload balancer',
@@ -146,8 +146,8 @@ const utilityTasks = [
       'Agent capacity and skill monitoring',
       'Intelligent task distribution algorithms',
       'Load balancing across team members',
-      'Workload optimization recommendations',
-    ],
+      'Workload optimization recommendations'
+    ]
   },
   {
     title: 'Create integration health monitor',
@@ -163,8 +163,8 @@ const utilityTasks = [
       'Automated system health monitoring',
       'Failure detection and alerting',
       'Health metrics dashboard',
-      'Integration status tracking',
-    ],
+      'Integration status tracking'
+    ]
   },
   {
     title: 'Create knowledge base indexer',
@@ -180,8 +180,8 @@ const utilityTasks = [
       'Pattern extraction from completed tasks',
       'Searchable knowledge base with FAQ',
       'Automated solution indexing',
-      'Similar problem detection and suggestions',
-    ],
+      'Similar problem detection and suggestions'
+    ]
   },
   {
     title: 'Create environment setup automator',
@@ -197,8 +197,8 @@ const utilityTasks = [
       'One-command environment setup',
       'Automatic dependency resolution',
       'Containerized development environments',
-      'Cross-platform compatibility',
-    ],
+      'Cross-platform compatibility'
+    ]
   },
   {
     title: 'Build task estimation improver',
@@ -214,8 +214,8 @@ const utilityTasks = [
       'Historical time vs estimate analysis',
       'Improved estimation algorithms',
       'Predictive time modeling',
-      'Estimation accuracy tracking',
-    ],
+      'Estimation accuracy tracking'
+    ]
   },
   {
     title: 'Build documentation auto-generator',
@@ -231,9 +231,9 @@ const utilityTasks = [
       'Automated API documentation generation',
       'README file maintenance and updates',
       'Automatic changelog creation from commits',
-      'Documentation synchronization with code changes',
-    ],
-  },
+      'Documentation synchronization with code changes'
+    ]
+  }
 ];
 
 async function createUtilityTasks() {
@@ -253,8 +253,8 @@ async function createUtilityTasks() {
         tasks: {},
         metadata: {
           created: new Date().toISOString(),
-          lastUpdated: new Date().toISOString(),
-        },
+          lastUpdated: new Date().toISOString()
+        }
       };
     }
 
@@ -271,11 +271,14 @@ async function createUtilityTasks() {
 
       // Check if similar task already exists
       const existingTask = Object.values(state.tasks).find(
-        task => task.title && task.title.toLowerCase() === taskDef.title.toLowerCase()
+        task =>
+          task.title && task.title.toLowerCase() === taskDef.title.toLowerCase()
       );
 
       if (existingTask) {
-        console.log(`⏭️  Skipping "${taskDef.title}" - similar task exists (${existingTask.id || 'unknown ID'})`);
+        console.log(
+          `⏭️  Skipping "${taskDef.title}" - similar task exists (${existingTask.id || 'unknown ID'})`
+        );
         tasksSkipped++;
         continue;
       }
@@ -299,15 +302,17 @@ async function createUtilityTasks() {
         metadata: {
           source: 'utility-automation',
           category: 'agent-productivity',
-          automated: true,
-        },
+          automated: true
+        }
       };
 
       // Add task to state
       state.tasks[taskId] = task;
 
       console.log(`✅ Created task ${taskId}: "${taskDef.title}"`);
-      console.log(`   Priority: ${taskDef.priority} | Estimate: ${taskDef.estimate} | Epic: ${taskDef.epic}`);
+      console.log(
+        `   Priority: ${taskDef.priority} | Estimate: ${taskDef.estimate} | Epic: ${taskDef.epic}`
+      );
 
       tasksCreated++;
     }
@@ -328,7 +333,9 @@ async function createUtilityTasks() {
     console.log(`📋 Total tasks in system: ${Object.keys(state.tasks).length}`);
 
     // Show created tasks by priority
-    const createdTasks = Object.values(state.tasks).filter(task => task.metadata?.source === 'utility-automation');
+    const createdTasks = Object.values(state.tasks).filter(
+      task => task.metadata?.source === 'utility-automation'
+    );
 
     console.log('\n📋 Created Utility Tasks by Priority:');
     const byPriority = createdTasks.reduce((acc, task) => {
@@ -339,20 +346,26 @@ async function createUtilityTasks() {
 
     ['high', 'medium', 'low'].forEach(priority => {
       if (byPriority[priority]) {
-        console.log(`\n🔥 ${priority.toUpperCase()} PRIORITY (${byPriority[priority].length} tasks):`);
+        console.log(
+          `\n🔥 ${priority.toUpperCase()} PRIORITY (${byPriority[priority].length} tasks):`
+        );
         byPriority[priority].forEach(task => {
           console.log(`   ${task.id}: ${task.title}`);
         });
       }
     });
 
-    console.log('\n🎉 Utility tasks have been added to the task management system!');
-    console.log('📝 Agents can now grab these tasks using: node src/grab-tasks.js');
+    console.log(
+      '\n🎉 Utility tasks have been added to the task management system!'
+    );
+    console.log(
+      '📝 Agents can now grab these tasks using: node src/grab-tasks.js'
+    );
 
     return {
       created: tasksCreated,
       skipped: tasksSkipped,
-      total: Object.keys(state.tasks).length,
+      total: Object.keys(state.tasks).length
     };
   } catch (error) {
     console.error('❌ Failed to create utility tasks:', error);

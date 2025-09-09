@@ -260,7 +260,7 @@ const response = await fetch('/api/roles/clone', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${token}`
   },
   body: JSON.stringify({
     sourceRoleId: 'role_admin',
@@ -268,8 +268,12 @@ const response = await fetch('/api/roles/clone', {
     targetDescription: 'Custom project management role',
     targetScope: 'organization',
     organizationId: 'org_123',
-    includePermissions: ['perm_read_projects', 'perm_edit_projects', 'perm_share_projects'],
-  }),
+    includePermissions: [
+      'perm_read_projects',
+      'perm_edit_projects',
+      'perm_share_projects'
+    ]
+  })
 });
 
 const result = await response.json();
@@ -292,7 +296,7 @@ const cloneRequest = {
   targetScope: 'team',
   organizationId: 'org_456',
   includePermissions: ['perm_read_projects', 'perm_edit_projects'],
-  excludePermissions: ['perm_delete_projects'],
+  excludePermissions: ['perm_delete_projects']
 };
 
 const result = await roleCloneService.cloneRole(cloneRequest, userId);

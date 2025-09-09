@@ -1,4 +1,12 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 
 // Step identifiers for boot milestones
 export type BootStepId = 'supabase' | 'presets' | 'graphs';
@@ -25,7 +33,9 @@ export type BootProgressState = {
   start: () => void;
 };
 
-const BootProgressContext = createContext<BootProgressState | undefined>(undefined);
+const BootProgressContext = createContext<BootProgressState | undefined>(
+  undefined
+);
 
 function useIsMounted() {
   const ref = useRef(true);
@@ -50,18 +60,24 @@ async function fetchFirstJson(urls: string[]): Promise<unknown> {
   throw new Error('All sources failed');
 }
 
-export const BootProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const BootProgressProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
   const [steps, setSteps] = useState<BootStep[]>([
-    { id: 'supabase', label: 'Checking Supabase configuration', status: 'pending' },
+    {
+      id: 'supabase',
+      label: 'Checking Supabase configuration',
+      status: 'pending'
+    },
     { id: 'presets', label: 'Loading preset manifest', status: 'pending' },
-    { id: 'graphs', label: 'Loading graph manifest', status: 'pending' },
+    { id: 'graphs', label: 'Loading graph manifest', status: 'pending' }
   ]);
   const [results, setResults] = useState<BootResults>({});
   const [started, setStarted] = useState(false);
   const isMounted = useIsMounted();
 
   const updateStep = useCallback((id: BootStepId, patch: Partial<BootStep>) => {
-    setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
+    setSteps(prev => prev.map(s => (s.id === id ? { ...s, ...patch } : s)));
   }, []);
 
   const run = useCallback(async () => {
@@ -69,7 +85,10 @@ export const BootProgressProvider: React.FC<{ children: React.ReactNode }> = ({ 
     try {
       updateStep('supabase', { status: 'in-progress' });
       const core = await import('@promptscape/core');
-      const cfg = typeof core.getSupabaseConfig === 'function' ? core.getSupabaseConfig() : { enabled: false };
+      const cfg =
+        typeof core.getSupabaseConfig === 'function'
+          ? core.getSupabaseConfig()
+          : { enabled: false };
       if ((cfg as { enabled?: boolean }).enabled) {
         // Ensure client is initialized (side effect on import)
         await import('@promptscape/core');
@@ -89,10 +108,10 @@ export const BootProgressProvider: React.FC<{ children: React.ReactNode }> = ({ 
       const presets = await fetchFirstJson([
         // Try likely paths used elsewhere in the app
         '/presets/manifest.json',
-        '/asset-browser/presets/manifest.json',
+        '/asset-browser/presets/manifest.json'
       ]);
       if (isMounted.current) {
-        setResults((prev) => ({ ...prev, presets }));
+        setResults(prev => ({ ...prev, presets }));
       }
       updateStep('presets', { status: 'done' });
     } catch (e: unknown) {
@@ -105,10 +124,10 @@ export const BootProgressProvider: React.FC<{ children: React.ReactNode }> = ({ 
       updateStep('graphs', { status: 'in-progress' });
       const graphs = await fetchFirstJson([
         '/graphs/manifest.json',
-        '/asset-browser/graphs/manifest.json',
+        '/asset-browser/graphs/manifest.json'
       ]);
       if (isMounted.current) {
-        setResults((prev) => ({ ...prev, graphs }));
+        setResults(prev => ({ ...prev, graphs }));
       }
       updateStep('graphs', { status: 'done' });
     } catch (e: unknown) {
@@ -131,28 +150,37 @@ export const BootProgressProvider: React.FC<{ children: React.ReactNode }> = ({ 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const completed = useMemo(() => steps.filter((s) => s.status === 'done' || s.status === 'error').length, [steps]);
+  const completed = useMemo(
+    () => steps.filter(s => s.status === 'done' || s.status === 'error').length,
+    [steps]
+  );
   const total = steps.length;
   const percent = total > 0 ? completed / total : 1;
   const complete = completed >= total;
 
-  const value = useMemo<BootProgressState>(() => ({
-    steps,
-    total,
-    completed,
-    percent,
-    results,
-    complete,
-    start,
-  }), [completed, complete, percent, results, start, steps, total]);
+  const value = useMemo<BootProgressState>(
+    () => ({
+      steps,
+      total,
+      completed,
+      percent,
+      results,
+      complete,
+      start
+    }),
+    [completed, complete, percent, results, start, steps, total]
+  );
 
   return (
-    <BootProgressContext.Provider value={value}>{children}</BootProgressContext.Provider>
+    <BootProgressContext.Provider value={value}>
+      {children}
+    </BootProgressContext.Provider>
   );
 };
 
 export function useBootProgress(): BootProgressState {
   const ctx = useContext(BootProgressContext);
-  if (!ctx) throw new Error('useBootProgress must be used within BootProgressProvider');
+  if (!ctx)
+    throw new Error('useBootProgress must be used within BootProgressProvider');
   return ctx;
 }

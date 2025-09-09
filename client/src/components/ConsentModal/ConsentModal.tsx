@@ -6,7 +6,10 @@ interface ConsentModalProps {
   onConsent: (consent: boolean) => void;
 }
 
-export const ConsentModal: React.FC<ConsentModalProps> = ({ isOpen, onConsent }) => {
+export const ConsentModal: React.FC<ConsentModalProps> = ({
+  isOpen,
+  onConsent
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -14,14 +17,28 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ isOpen, onConsent })
       <div className="consent-modal">
         <h2>Enable AI-Powered Features?</h2>
         <div className="consent-content">
-          <p>We can enhance your prompt building experience with AI-powered suggestions:</p>
+          <p>
+            We can enhance your prompt building experience with AI-powered
+            suggestions:
+          </p>
           <ul>
-            <li>✨ <strong>Smart Suggestions</strong> - Generate contextual choice options</li>
-            <li>⚖️ <strong>Weight Optimization</strong> - AI-optimized probability weights</li>
-            <li>💡 <strong>Creative Inspiration</strong> - Themed content suggestions</li>
-            <li>📝 <strong>Text Refinement</strong> - Improve and expand your text</li>
+            <li>
+              ✨ <strong>Smart Suggestions</strong> - Generate contextual choice
+              options
+            </li>
+            <li>
+              ⚖️ <strong>Weight Optimization</strong> - AI-optimized probability
+              weights
+            </li>
+            <li>
+              💡 <strong>Creative Inspiration</strong> - Themed content
+              suggestions
+            </li>
+            <li>
+              📝 <strong>Text Refinement</strong> - Improve and expand your text
+            </li>
           </ul>
-          
+
           <div className="consent-privacy">
             <h3>Privacy & Data Usage</h3>
             <ul>
@@ -34,16 +51,10 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ isOpen, onConsent })
         </div>
 
         <div className="consent-actions">
-          <button 
-            className="consent-accept"
-            onClick={() => onConsent(true)}
-          >
+          <button className="consent-accept" onClick={() => onConsent(true)}>
             Enable AI Features
           </button>
-          <button 
-            className="consent-decline"
-            onClick={() => onConsent(false)}
-          >
+          <button className="consent-decline" onClick={() => onConsent(false)}>
             Continue Without AI
           </button>
         </div>

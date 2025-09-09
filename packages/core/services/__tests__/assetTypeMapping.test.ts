@@ -1,12 +1,26 @@
-import { mapAssetToNodeType, mapReactFlowTypeToCompat, canConnect } from '../assetTypeMapping';
+import {
+  mapAssetToNodeType,
+  mapReactFlowTypeToCompat,
+  canConnect
+} from '../assetTypeMapping';
 
 describe('assetTypeMapping', () => {
   test('mapAssetToNodeType maps by name/keywords', () => {
-    expect(mapAssetToNodeType({ id: '1', name: 'Character Choice' }).reactFlowType).toBe('weightedChoice');
-    expect(mapAssetToNodeType({ id: '2', name: 'Combine Traits' }).reactFlowType).toBe('concat');
-    expect(mapAssetToNodeType({ id: '3', name: 'Final Output' }).reactFlowType).toBe('output');
-    expect(mapAssetToNodeType({ id: '4', name: 'Role Variable' }).reactFlowType).toBe('variable');
-    expect(mapAssetToNodeType({ id: '5', name: 'Some Text' }).reactFlowType).toBe('textBlock');
+    expect(
+      mapAssetToNodeType({ id: '1', name: 'Character Choice' }).reactFlowType
+    ).toBe('weightedChoice');
+    expect(
+      mapAssetToNodeType({ id: '2', name: 'Combine Traits' }).reactFlowType
+    ).toBe('concat');
+    expect(
+      mapAssetToNodeType({ id: '3', name: 'Final Output' }).reactFlowType
+    ).toBe('output');
+    expect(
+      mapAssetToNodeType({ id: '4', name: 'Role Variable' }).reactFlowType
+    ).toBe('variable');
+    expect(
+      mapAssetToNodeType({ id: '5', name: 'Some Text' }).reactFlowType
+    ).toBe('textBlock');
   });
 
   test('compatibility matrix behaves as expected', () => {
@@ -24,4 +38,3 @@ describe('assetTypeMapping', () => {
     expect(canConnect(OUT, TB)).toBe(false);
   });
 });
-

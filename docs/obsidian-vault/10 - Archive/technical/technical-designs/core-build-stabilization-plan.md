@@ -1,11 +1,13 @@
 # Core Build Stabilization Technical Design
 
 ## Overview
+
 This document provides technical implementation guidance for Story 1.30: Core Build Stabilization. It details the current issues, root causes, and step-by-step remediation plan.
 
 ## Current State Analysis
 
 ### Build Errors Identified
+
 ```
 1. "number only refers to a type, but is being used as a value"
    - Location: packages/core/index.ts
@@ -21,9 +23,11 @@ This document provides technical implementation guidance for Story 1.30: Core Bu
 ```
 
 ### Shim Inventory
+
 Current workarounds that need removal after fix:
 
 1. **Asset Browser Jest Config**
+
 ```javascript
 // packages/asset-browser/jest.config.cjs
 moduleNameMapper: {
@@ -33,6 +37,7 @@ moduleNameMapper: {
 ```
 
 2. **TypeScript Path Mappings** (if present)
+
 ```json
 // tsconfig.json paths
 "paths": {
@@ -44,6 +49,7 @@ moduleNameMapper: {
 ## Implementation Plan
 
 ### Phase 1: Discovery & Assessment
+
 ```bash
 # Audit current build output
 pnpm -w --filter @promptscape/core build 2>&1 | tee build-errors.log
@@ -58,6 +64,7 @@ cat packages/core/package.json | jq .exports
 ### Phase 2: TypeScript Configuration Alignment
 
 #### Target Configuration Structure
+
 ```json
 // packages/core/tsconfig.json (base)
 {
@@ -164,6 +171,7 @@ console.log('✅ All required exports present');
 ## Testing Strategy
 
 ### Local Validation
+
 ```bash
 # 1. Build core package
 cd packages/core
@@ -178,6 +186,7 @@ pnpm test --no-coverage
 ```
 
 ### CI Integration Test
+
 ```yaml
 # .github/workflows/ci.yml addition
 - name: Validate Core Exports
@@ -220,10 +229,11 @@ After core stabilization is complete, each downstream package needs:
    - Delete paths entries for @promptscape/core
 
 3. **Update imports** (if needed)
+
    ```typescript
    // Before (with shim)
    import { someUtil } from '../../../core/utils/someUtil';
-   
+
    // After (clean import)
    import { someUtil } from '@promptscape/core/utils';
    ```
@@ -237,10 +247,13 @@ After core stabilization is complete, each downstream package needs:
 ## Communication Plan
 
 ### For 1.18 Agent
+
 "Continue with current shims. Story 1.30 will handle the cleanup after you ship."
 
 ### For Team
+
 "Core build stabilization planned for post-1.18. Shims are temporary and documented."
 
 ### Post-Implementation
+
 "Core exports stabilized. Please remove shims from your packages per migration checklist."

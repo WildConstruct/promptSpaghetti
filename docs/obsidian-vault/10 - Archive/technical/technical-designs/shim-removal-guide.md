@@ -1,11 +1,13 @@
 # Shim Removal Guide
 
 ## Purpose
+
 This guide documents all temporary shims/workarounds in the codebase and provides instructions for their removal after Story 1.30 completes.
 
 ## Current Shims Inventory
 
 ### 1. Asset Browser Jest Configuration
+
 **Location:** `packages/asset-browser/jest.config.cjs`
 **Purpose:** Maps @promptscape/core/utils imports to source files directly
 **Added:** During Story 1.18 implementation
@@ -27,6 +29,7 @@ module.exports = {
 ```
 
 ### 2. TypeScript Path Mappings (if present)
+
 **Location:** Various `tsconfig.json` files
 **Purpose:** Redirects TypeScript to find core utils
 **Check:** `grep -r "@promptscape/core" --include="tsconfig.json"`
@@ -42,6 +45,7 @@ module.exports = {
 ## Removal Process
 
 ### Step 1: Verify Core Build Success
+
 ```bash
 # Ensure core builds cleanly first
 pnpm -w --filter @promptscape/core build
@@ -51,6 +55,7 @@ ls -la packages/core/dist/
 ### Step 2: Remove Shims Package by Package
 
 #### For each package with shims:
+
 1. Remove Jest moduleNameMapper entries
 2. Remove TypeScript path mappings
 3. Run tests to verify
@@ -99,15 +104,12 @@ pnpm test
   - [ ] Remove jest.config.cjs moduleNameMapper
   - [ ] Check tsconfig.json for path mappings
   - [ ] Run tests
-  
 - [ ] packages/cli (if using core)
   - [ ] Check for any workarounds
   - [ ] Validate imports
-  
 - [ ] client/ (if using core)
   - [ ] Check vite.config.ts for aliases
   - [ ] Check tsconfig.json
-  
 - [ ] server/ (if using core)
   - [ ] Check tsconfig.json
   - [ ] Validate runtime imports
@@ -129,6 +131,7 @@ grep -r "'\.\./.*core/" packages/ --include="*.ts" --include="*.tsx"
 ## Expected Outcome
 
 After shim removal:
+
 - ✅ All packages import from `@promptscape/core` using package exports
 - ✅ No moduleNameMapper entries for core
 - ✅ No TypeScript path mappings for core
@@ -153,6 +156,7 @@ git checkout main
 ## Communication Template
 
 ### PR Description
+
 ```
 ## Shim Removal - Post Story 1.30
 

@@ -21,7 +21,7 @@ export function useColumnResize({
   // Load saved widths from localStorage
   const getSavedWidths = (): Record<string, number> => {
     if (typeof window === 'undefined') return {};
-    
+
     const saved = localStorage.getItem(storageKey);
     if (saved) {
       try {
@@ -30,7 +30,7 @@ export function useColumnResize({
         // Invalid JSON, return empty
       }
     }
-    
+
     // Return default widths
     const defaults: Record<string, number> = {};
     columns.forEach(column => {
@@ -39,59 +39,69 @@ export function useColumnResize({
     return defaults;
   };
 
-  const [columnWidths, setColumnWidths] = useState<Record<string, number>>(getSavedWidths);
+  const [columnWidths, setColumnWidths] =
+    useState<Record<string, number>>(getSavedWidths);
   const [resizingColumn, setResizingColumn] = useState<string | null>(null);
-  
+
   const dragStartXRef = useRef(0);
   const dragStartWidthRef = useRef(0);
 
   // Save widths to localStorage
-  const saveWidths = useCallback((widths: Record<string, number>) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(storageKey, JSON.stringify(widths));
-    }
-  }, [storageKey]);
+  const saveWidths = useCallback(
+    (widths: Record<string, number>) => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(storageKey, JSON.stringify(widths));
+      }
+    },
+    [storageKey]
+  );
 
   // Handle resize start
-  const handleResizeStart = useCallback((e: React.MouseEvent, columnId: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setResizingColumn(columnId);
-    dragStartXRef.current = e.clientX;
-    dragStartWidthRef.current = columnWidths[columnId] || 200;
-    
-    document.body.style.cursor = 'ew-resize';
-    document.body.style.userSelect = 'none';
-  }, [columnWidths]);
+  const handleResizeStart = useCallback(
+    (e: React.MouseEvent, columnId: string) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setResizingColumn(columnId);
+      dragStartXRef.current = e.clientX;
+      dragStartWidthRef.current = columnWidths[columnId] || 200;
+
+      document.body.style.cursor = 'ew-resize';
+      document.body.style.userSelect = 'none';
+    },
+    [columnWidths]
+  );
 
   // Handle resize move
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!resizingColumn) return;
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!resizingColumn) return;
 
-    const column = columns.find(c => c.id === resizingColumn);
-    if (!column) return;
+      const column = columns.find(c => c.id === resizingColumn);
+      if (!column) return;
 
-    const deltaX = e.clientX - dragStartXRef.current;
-    let newWidth = dragStartWidthRef.current + deltaX;
-    
-    // Apply min/max constraints
-    newWidth = Math.max(newWidth, column.minWidth);
-    if (column.maxWidth) {
-      newWidth = Math.min(newWidth, column.maxWidth);
-    }
+      const deltaX = e.clientX - dragStartXRef.current;
+      let newWidth = dragStartWidthRef.current + deltaX;
 
-    setColumnWidths(prev => ({
-      ...prev,
-      [resizingColumn]: newWidth
-    }));
+      // Apply min/max constraints
+      newWidth = Math.max(newWidth, column.minWidth);
+      if (column.maxWidth) {
+        newWidth = Math.min(newWidth, column.maxWidth);
+      }
 
-    onWidthChange?.(resizingColumn, newWidth);
-  }, [resizingColumn, columns, onWidthChange]);
+      setColumnWidths(prev => ({
+        ...prev,
+        [resizingColumn]: newWidth
+      }));
+
+      onWidthChange?.(resizingColumn, newWidth);
+    },
+    [resizingColumn, columns, onWidthChange]
+  );
 
   // Handle resize end
   const handleMouseUp = useCallback(() => {
     if (!resizingColumn) return;
-    
+
     setResizingColumn(null);
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
@@ -99,9 +109,16 @@ export function useColumnResize({
   }, [resizingColumn, columnWidths, saveWidths]);
 
   // Get column width
-  const getColumnWidth = useCallback((columnId: string): number => {
-    return columnWidths[columnId] || columns.find(c => c.id === columnId)?.defaultWidth || 200;
-  }, [columnWidths, columns]);
+  const getColumnWidth = useCallback(
+    (columnId: string): number => {
+      return (
+        columnWidths[columnId] ||
+        columns.find(c => c.id === columnId)?.defaultWidth ||
+        200
+      );
+    },
+    [columnWidths, columns]
+  );
 
   // Set up global mouse listeners
   useEffect(() => {
@@ -119,7 +136,7 @@ export function useColumnResize({
   useEffect(() => {
     const currentIds = Object.keys(columnWidths);
     const newColumns = columns.filter(c => !currentIds.includes(c.id));
-    
+
     if (newColumns.length > 0) {
       setColumnWidths(prev => {
         const updated = { ...prev };

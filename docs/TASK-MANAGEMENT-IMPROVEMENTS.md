@@ -380,7 +380,8 @@ if (storyFilter) {
 // Updated assignment verification
 const isStillAvailable =
   (currentTask.state === 'UNASSIGNED' && !currentTask.assignee) ||
-  (currentTask.state === 'TODO' && (!currentTask.assignee || currentTask.assignee === 'Unassigned'));
+  (currentTask.state === 'TODO' &&
+    (!currentTask.assignee || currentTask.assignee === 'Unassigned'));
 ```
 
 **Validation Results**:

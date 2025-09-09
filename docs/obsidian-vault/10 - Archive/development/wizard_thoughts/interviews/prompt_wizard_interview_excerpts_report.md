@@ -1,7 +1,9 @@
 # Prompt Wizard – Interview Excerpts Report
+
 **Sample size:** 50 qualified Randomizer users (Power/Regular/New mix)
 
 **Context highlights**
+
 - **Time to preset >10 min:** 42%
 - **Reuse prompts daily/weekly:** 72%
 - **Reaction to auto-parse — Excited:** 40% | **Skeptical:** 14%
@@ -11,6 +13,7 @@
 ---
 
 ## Current Workflow Snapshots
+
 > "Drafted in notes, pasted to Randomizer, marked variables, wired nodes; validated with 2–3 preview seeds."
 >
 > — Quinn Baker — Art Director (Power) _Workflow summary | Cautiously optimistic · Trust with review_
@@ -51,7 +54,9 @@
 ---
 
 ## Top Pain Points (with excerpts)
+
 ### Identifying variable parts cleanly
+
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Briar Davis — Motion Designer (Power) _Related note | Excited · Trust with review_
@@ -67,7 +72,9 @@
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Quinn Baker — Concept Artist (New) _Related note | Cautiously optimistic · Prefer manual control_
+
 ### Connecting nodes/wiring logic
+
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Reese Davis — Director (Power) _Related note | Excited · Trust if explainable_
@@ -86,7 +93,9 @@
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Shawn Rivera — Motion Designer (New) _Related note | Excited · Trust if explainable_
+
 ### Asset binding/search is clunky
+
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Bellamy Adams — VFX Artist (Power) _Related note | Cautiously optimistic · Trust with review_
@@ -109,7 +118,9 @@
 ---
 
 ## Reaction to Auto-Parsing Concept
+
 ### Excited
+
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Arden Davis — Director (Power) _Mock feedback | Excited · Trust with review_
@@ -137,7 +148,9 @@
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Arden Hall — Motion Designer (New) _Mock feedback | Excited · Trust if explainable_
+
 ### Cautiously Optimistic
+
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Bellamy Adams — VFX Artist (Power) _Mock feedback | Cautiously optimistic · Trust with review_
@@ -165,7 +178,9 @@
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Ash Clark — Director (New) _Mock feedback | Cautiously optimistic · Trust with review_
+
 ### Skeptical
+
 > "No, must be >80% accurate"
 >
 > — Jamie Adams — Artist (Power) _Tolerance & concern | Skeptical · Prefer manual control_
@@ -188,6 +203,7 @@
 ---
 
 ## Trust & Control
+
 > "Always-on suggestions that distract; Auto-changes that overwrite manual work"
 >
 > — Quinn Baker — Art Director (Power) _Trust posture & guardrails | Cautiously optimistic · Trust with review_
@@ -246,6 +262,7 @@
 ---
 
 ## Magic Wand Requests
+
 > "Auto-parse and segment variables"
 >
 > — Quinn Baker — Art Director (Power) _If they could fix one thing | Cautiously optimistic · Trust with review_
@@ -304,6 +321,7 @@
 ---
 
 ## Feature Priorities & Placement
+
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Quinn Baker — Art Director (Power) _Priority: Live preview of variations | Placement: Both (contextual) | Cautiously optimistic · Trust with review_
@@ -362,6 +380,7 @@
 ---
 
 ## Red Flags & Potential Failure Modes
+
 > "Modal wizard that blocks the canvas; Always-on suggestions that distract"
 >
 > — Jamie Adams — Artist (Power) _Concern | Skeptical · Prefer manual control_
@@ -414,6 +433,7 @@
 ---
 
 ## What We Didn’t Ask (Blind Spots Called Out)
+
 > "How this plays with history/undo and team presets."
 >
 > — Quinn Baker — Art Director (Power) _Missing | Cautiously optimistic · Trust with review_
@@ -454,6 +474,7 @@
 ---
 
 ## Likelihood to Use (50% Time Savings)
+
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Bellamy Adams — VFX Artist (Power) _Would use at 50% time savings | Cautiously optimistic · Trust with review_
@@ -490,4 +511,3 @@
 > "Toggle-on segments are clear; want inline add/remove and quick group merge."
 >
 > — Finley Rivera — Motion Designer (New) _Would use at 50% time savings | Cautiously optimistic · Trust if explainable_
-

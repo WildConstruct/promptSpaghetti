@@ -361,7 +361,7 @@ enum PrivacyEvent {
   CONSENT_GRANTED = 'privacy:consent_granted',
   CONSENT_REVOKED = 'privacy:consent_revoked',
   POLICY_UPDATED = 'privacy:policy_updated',
-  DATA_REQUESTED = 'privacy:data_requested',
+  DATA_REQUESTED = 'privacy:data_requested'
 }
 
 // Core components can listen to privacy events
@@ -374,8 +374,15 @@ const GraphEditor: React.FC = () => {
       }
     };
 
-    PrivacyEventBus.subscribe(PrivacyEvent.CONSENT_GRANTED, handleConsentChange);
-    return () => PrivacyEventBus.unsubscribe(PrivacyEvent.CONSENT_GRANTED, handleConsentChange);
+    PrivacyEventBus.subscribe(
+      PrivacyEvent.CONSENT_GRANTED,
+      handleConsentChange
+    );
+    return () =>
+      PrivacyEventBus.unsubscribe(
+        PrivacyEvent.CONSENT_GRANTED,
+        handleConsentChange
+      );
   }, []);
 };
 ```
@@ -435,17 +442,17 @@ module.exports = {
         core: {
           name: 'core',
           test: /[\\/]src[\\/](core|components[\\/](GraphNode|StatusBar))[\\/]/,
-          priority: 30,
+          priority: 30
         },
         // Privacy features (lazy loaded)
         privacy: {
           name: 'privacy',
           test: /[\\/]src[\\/]components[\\/](consent|policy|transparency)[\\/]/,
-          priority: 20,
-        },
-      },
-    },
-  },
+          priority: 20
+        }
+      }
+    }
+  }
 };
 ```
 
@@ -459,9 +466,12 @@ export const PerformanceAwarePrivacyComponent: React.FC = () => {
   const { measurePrivacyOperation } = usePrivacyPerformance();
 
   const handleConsentCheck = async () => {
-    const measurement = await measurePrivacyOperation('consent_check', async () => {
-      return await checkUserConsent();
-    });
+    const measurement = await measurePrivacyOperation(
+      'consent_check',
+      async () => {
+        return await checkUserConsent();
+      }
+    );
 
     // Alert if privacy operations slow down core functionality
     if (measurement.duration > 100) {
@@ -638,7 +648,7 @@ export const migratePrivacyState = (version: string) => {
       return {
         consent: getDefaultConsentState(),
         preferences: getDefaultPreferences(),
-        version: '1.0',
+        version: '1.0'
       };
     case '0.9':
       // Rollback privacy state if needed

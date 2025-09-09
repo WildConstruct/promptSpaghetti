@@ -123,7 +123,7 @@ class DebtPrioritizationEngine {
       impact: 0.4,
       risk: 0.3,
       effort: 0.2,
-      strategic: 0.1,
+      strategic: 0.1
     };
 
     this.scoringRules = {
@@ -132,55 +132,55 @@ class DebtPrioritizationEngine {
         high: 7,
         medium: 5,
         low: 3,
-        minimal: 1,
+        minimal: 1
       },
       technicalImpact: {
         critical: 10,
         high: 7,
         medium: 5,
         low: 3,
-        minimal: 1,
+        minimal: 1
       },
       securityRisk: {
         critical: 10,
         high: 7,
         medium: 5,
         low: 3,
-        minimal: 1,
+        minimal: 1
       },
       reliabilityRisk: {
         critical: 10,
         high: 7,
         medium: 5,
         low: 3,
-        minimal: 1,
+        minimal: 1
       },
       developmentEffort: {
         xs: 10,
         s: 7,
         m: 5,
         l: 3,
-        xl: 1,
+        xl: 1
       },
       testingEffort: {
         low: 10,
         medium: 7,
         high: 5,
         critical: 3,
-        extensive: 1,
+        extensive: 1
       },
       architectureAlignment: {
         high: 10,
         medium: 7,
         low: 5,
-        negative: 1,
+        negative: 1
       },
       businessAlignment: {
         high: 10,
         medium: 7,
         low: 5,
-        negative: 1,
-      },
+        negative: 1
+      }
     };
   }
 
@@ -203,29 +203,38 @@ class DebtPrioritizationEngine {
   }
 
   calculateImpactScore(debtItem) {
-    const businessImpact = this.scoringRules.businessImpact[debtItem.businessImpact] || 1;
-    const technicalImpact = this.scoringRules.technicalImpact[debtItem.technicalImpact] || 1;
+    const businessImpact =
+      this.scoringRules.businessImpact[debtItem.businessImpact] || 1;
+    const technicalImpact =
+      this.scoringRules.technicalImpact[debtItem.technicalImpact] || 1;
 
     return (businessImpact + technicalImpact) / 2;
   }
 
   calculateRiskScore(debtItem) {
-    const securityRisk = this.scoringRules.securityRisk[debtItem.securityRisk] || 1;
-    const reliabilityRisk = this.scoringRules.reliabilityRisk[debtItem.reliabilityRisk] || 1;
+    const securityRisk =
+      this.scoringRules.securityRisk[debtItem.securityRisk] || 1;
+    const reliabilityRisk =
+      this.scoringRules.reliabilityRisk[debtItem.reliabilityRisk] || 1;
 
     return (securityRisk + reliabilityRisk) / 2;
   }
 
   calculateEffortScore(debtItem) {
-    const developmentEffort = this.scoringRules.developmentEffort[debtItem.effort] || 1;
-    const testingEffort = this.scoringRules.testingEffort[debtItem.testingEffort] || 7;
+    const developmentEffort =
+      this.scoringRules.developmentEffort[debtItem.effort] || 1;
+    const testingEffort =
+      this.scoringRules.testingEffort[debtItem.testingEffort] || 7;
 
     return developmentEffort * 0.75 + testingEffort * 0.25;
   }
 
   calculateStrategicScore(debtItem) {
-    const architectureAlignment = this.scoringRules.architectureAlignment[debtItem.architectureAlignment] || 5;
-    const businessAlignment = this.scoringRules.businessAlignment[debtItem.businessAlignment] || 5;
+    const architectureAlignment =
+      this.scoringRules.architectureAlignment[debtItem.architectureAlignment] ||
+      5;
+    const businessAlignment =
+      this.scoringRules.businessAlignment[debtItem.businessAlignment] || 5;
 
     return (architectureAlignment + businessAlignment) / 2;
   }
@@ -263,7 +272,7 @@ class DebtPrioritizationEngine {
     const scoredItems = debtItems.map(item => ({
       ...item,
       priorityScore: this.calculateScore(item),
-      calculatedPriority: this.assignPriority(this.calculateScore(item)),
+      calculatedPriority: this.assignPriority(this.calculateScore(item))
     }));
 
     return scoredItems.sort((a, b) => b.priorityScore - a.priorityScore);
@@ -284,7 +293,7 @@ class DebtVisualization {
       P1: '#FF8800',
       P2: '#FFAA00',
       P3: '#88AA00',
-      P4: '#44AA44',
+      P4: '#44AA44'
     };
   }
 
@@ -294,7 +303,7 @@ class DebtVisualization {
       P1: 0,
       P2: 0,
       P3: 0,
-      P4: 0,
+      P4: 0
     };
 
     scoredItems.forEach(item => {
@@ -308,19 +317,21 @@ class DebtVisualization {
         datasets: [
           {
             data: Object.values(priorityDistribution),
-            backgroundColor: Object.keys(priorityDistribution).map(p => this.chartColors[p]),
-          },
-        ],
+            backgroundColor: Object.keys(priorityDistribution).map(
+              p => this.chartColors[p]
+            )
+          }
+        ]
       },
       options: {
         responsive: true,
         plugins: {
           title: {
             display: true,
-            text: 'Technical Debt Priority Distribution',
-          },
-        },
-      },
+            text: 'Technical Debt Priority Distribution'
+          }
+        }
+      }
     };
   }
 
@@ -329,7 +340,7 @@ class DebtVisualization {
       x: item.estimatedHours,
       y: item.priorityScore,
       label: item.title,
-      priority: item.calculatedPriority,
+      priority: item.calculatedPriority
     }));
 
     return {
@@ -339,9 +350,11 @@ class DebtVisualization {
           {
             label: 'Technical Debt Items',
             data: chartData,
-            backgroundColor: chartData.map(item => this.chartColors[item.priority]),
-          },
-        ],
+            backgroundColor: chartData.map(
+              item => this.chartColors[item.priority]
+            )
+          }
+        ]
       },
       options: {
         responsive: true,
@@ -349,23 +362,23 @@ class DebtVisualization {
           x: {
             title: {
               display: true,
-              text: 'Effort (Hours)',
-            },
+              text: 'Effort (Hours)'
+            }
           },
           y: {
             title: {
               display: true,
-              text: 'Priority Score',
-            },
-          },
+              text: 'Priority Score'
+            }
+          }
         },
         plugins: {
           title: {
             display: true,
-            text: 'Technical Debt: Effort vs Priority',
-          },
-        },
-      },
+            text: 'Technical Debt: Effort vs Priority'
+          }
+        }
+      }
     };
   }
 
@@ -379,7 +392,7 @@ class DebtVisualization {
           totalScore: 0,
           averageScore: 0,
           totalEffort: 0,
-          priorities: { P0: 0, P1: 0, P2: 0, P3: 0, P4: 0 },
+          priorities: { P0: 0, P1: 0, P2: 0, P3: 0, P4: 0 }
         };
       }
 
@@ -617,18 +630,22 @@ class DebtDashboard {
 
   async renderDashboard() {
     const debtItems = await this.loadDebtInventory();
-    const prioritizedItems = this.prioritizationEngine.generatePrioritizedList(debtItems);
+    const prioritizedItems =
+      this.prioritizationEngine.generatePrioritizedList(debtItems);
 
     // Render priority distribution chart
-    const priorityChart = this.visualization.generatePriorityChart(prioritizedItems);
+    const priorityChart =
+      this.visualization.generatePriorityChart(prioritizedItems);
     this.renderChart('priority-chart', priorityChart);
 
     // Render effort vs impact scatter plot
-    const effortChart = this.visualization.generateEffortVsImpactChart(prioritizedItems);
+    const effortChart =
+      this.visualization.generateEffortVsImpactChart(prioritizedItems);
     this.renderChart('effort-chart', effortChart);
 
     // Render category breakdown
-    const categoryStats = this.visualization.generateCategoryBreakdown(prioritizedItems);
+    const categoryStats =
+      this.visualization.generateCategoryBreakdown(prioritizedItems);
     this.renderCategoryTable(categoryStats);
 
     // Render top priority items

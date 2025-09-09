@@ -15,12 +15,14 @@ If you're part of the development team or have been granted contributor access:
 ### Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/WildConstruct/prompt_spaghetti_the_revenge.git
    cd prompt_spaghetti_the_revenge
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
@@ -33,6 +35,7 @@ If you're part of the development team or have been granted contributor access:
 ### Development Workflow
 
 1. **Create a feature branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -43,6 +46,7 @@ If you're part of the development team or have been granted contributor access:
    - Update documentation as needed
 
 3. **Test your changes**
+
    ```bash
    pnpm test
    pnpm lint
@@ -64,6 +68,7 @@ If you're part of the development team or have been granted contributor access:
 ### Commit Message Format
 
 We follow conventional commits:
+
 - `feat:` New feature
 - `fix:` Bug fix
 - `docs:` Documentation changes
@@ -96,6 +101,7 @@ prompt-spaghetti/
 ## 🐛 Reporting Issues
 
 For internal team members:
+
 1. Check existing issues first
 2. Create detailed bug reports with:
    - Steps to reproduce
@@ -107,6 +113,7 @@ For internal team members:
 ## 💡 Feature Requests
 
 Feature requests should be discussed with the product team before implementation:
+
 1. Create an issue with the `enhancement` label
 2. Describe the use case
 3. Provide mockups if applicable
@@ -128,6 +135,7 @@ Feature requests should be discussed with the product team before implementation
 ## 📧 Contact
 
 For questions about contributing:
+
 - **Brian Behm**, CEO and Head Creative
 - **Wild Construct**
 - **Email**: wildconstruct@wildconstruct.com
@@ -135,10 +143,11 @@ For questions about contributing:
 ## ⚖️ Legal
 
 All contributions are subject to our proprietary license. By submitting code, you agree that:
+
 1. Your contributions become the property of Wild Construct
 2. You have the right to submit the contributions
 3. You waive any claims to the contributed code
 
 ---
 
-*This is a living document and will be updated as our development process evolves.*
+_This is a living document and will be updated as our development process evolves._

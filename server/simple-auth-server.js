@@ -17,7 +17,7 @@ const users = [
     firstName: 'Test',
     lastName: 'User',
     isEmailVerified: true,
-    roles: ['user'],
+    roles: ['user']
   },
   {
     id: '2',
@@ -26,8 +26,8 @@ const users = [
     firstName: 'Admin',
     lastName: 'User',
     isEmailVerified: true,
-    roles: ['admin', 'user'],
-  },
+    roles: ['admin', 'user']
+  }
 ];
 
 // Mock JWT token creation
@@ -37,7 +37,7 @@ const createMockToken = user => {
       userId: user.id,
       email: user.email,
       roles: user.roles,
-      exp: Date.now() + 15 * 60 * 1000, // 15 minutes
+      exp: Date.now() + 15 * 60 * 1000 // 15 minutes
     })
   ).toString('base64');
 };
@@ -65,7 +65,7 @@ const sendJSON = (res, statusCode, data) => {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
   });
   res.end(JSON.stringify(data));
 };
@@ -79,7 +79,7 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(200, {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
     });
     res.end();
     return;
@@ -91,7 +91,9 @@ const server = http.createServer(async (req, res) => {
       const { email, password } = await parseJSON(req);
       console.log('🔐 Login request:', { email });
 
-      const user = users.find(u => u.email === email && u.password === password);
+      const user = users.find(
+        u => u.email === email && u.password === password
+      );
 
       if (!user) {
         return sendJSON(res, 401, { message: 'Invalid email or password' });
@@ -107,11 +109,11 @@ const server = http.createServer(async (req, res) => {
           firstName: user.firstName,
           lastName: user.lastName,
           isEmailVerified: user.isEmailVerified,
-          roles: user.roles,
+          roles: user.roles
         },
         accessToken,
         refreshToken,
-        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
       });
     }
 
@@ -121,7 +123,9 @@ const server = http.createServer(async (req, res) => {
       console.log('📝 Register request:', { email });
 
       if (users.find(u => u.email === email)) {
-        return sendJSON(res, 400, { message: 'User with this email already exists' });
+        return sendJSON(res, 400, {
+          message: 'User with this email already exists'
+        });
       }
 
       const newUser = {
@@ -131,21 +135,22 @@ const server = http.createServer(async (req, res) => {
         firstName,
         lastName,
         isEmailVerified: false,
-        roles: ['user'],
+        roles: ['user']
       };
 
       users.push(newUser);
 
       sendJSON(res, 200, {
-        message: 'Registration successful. Please check your email for verification.',
+        message:
+          'Registration successful. Please check your email for verification.',
         user: {
           id: newUser.id,
           email: newUser.email,
           firstName: newUser.firstName,
           lastName: newUser.lastName,
           isEmailVerified: newUser.isEmailVerified,
-          roles: newUser.roles,
-        },
+          roles: newUser.roles
+        }
       });
     }
 
@@ -172,7 +177,7 @@ const server = http.createServer(async (req, res) => {
           firstName: user.firstName,
           lastName: user.lastName,
           isEmailVerified: user.isEmailVerified,
-          roles: user.roles,
+          roles: user.roles
         });
       } catch {
         sendJSON(res, 401, { message: 'Invalid token' });
@@ -191,7 +196,7 @@ const server = http.createServer(async (req, res) => {
       sendJSON(res, 200, {
         accessToken: createMockToken(mockUser),
         refreshToken: refreshToken,
-        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
       });
     }
 
@@ -206,7 +211,7 @@ const server = http.createServer(async (req, res) => {
       sendJSON(res, 200, {
         status: 'ok',
         message: 'Simple Auth Server Running',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -220,12 +225,12 @@ const server = http.createServer(async (req, res) => {
           'GET /api/auth/me',
           'POST /api/auth/refresh',
           'POST /api/auth/logout',
-          'GET /api/health',
+          'GET /api/health'
         ],
         testCredentials: [
           { email: 'test@example.com', password: 'password123', role: 'user' },
-          { email: 'admin@example.com', password: 'admin123', role: 'admin' },
-        ],
+          { email: 'admin@example.com', password: 'admin123', role: 'admin' }
+        ]
       });
     }
 

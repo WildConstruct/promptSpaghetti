@@ -4,10 +4,7 @@
     "no-restricted-imports": [
       "error",
       {
-        "patterns": [
-          "**/_quarantined/**",
-          "**/Epic1GraphEditorFinal*"
-        ],
+        "patterns": ["**/_quarantined/**", "**/Epic1GraphEditorFinal*"],
         "paths": [
           {
             "name": "./_quarantined/Epic1GraphEditorFinal.quarantined",

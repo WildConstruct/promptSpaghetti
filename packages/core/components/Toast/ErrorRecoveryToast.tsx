@@ -5,7 +5,11 @@ import React, { useEffect, useState } from 'react';
 import './ErrorRecoveryToast.css';
 
 export interface DropError {
-  type: 'type_incompatibility' | 'connection_conflict' | 'invalid_position' | 'general';
+  type:
+    | 'type_incompatibility'
+    | 'connection_conflict'
+    | 'invalid_position'
+    | 'general';
   message: string;
   details?: {
     sourceType?: string;
@@ -46,7 +50,7 @@ export const ErrorRecoveryToast: React.FC<ErrorRecoveryToastProps> = ({
             onDismiss();
             return 0;
           }
-          return prev - (100 / (autoHideDelay / 100));
+          return prev - 100 / (autoHideDelay / 100);
         });
       }, 100);
 
@@ -69,7 +73,9 @@ export const ErrorRecoveryToast: React.FC<ErrorRecoveryToastProps> = ({
         }
       }
       if (e.key === '?') {
-        const act = actions.find(a => a.label.toLowerCase().includes('compatibility'));
+        const act = actions.find(a =>
+          a.label.toLowerCase().includes('compatibility')
+        );
         if (act) {
           e.preventDefault();
           act.action();
@@ -81,7 +87,7 @@ export const ErrorRecoveryToast: React.FC<ErrorRecoveryToastProps> = ({
   }, [actions, onDismiss]);
 
   return (
-    <div 
+    <div
       className={`error-recovery-toast error-${error.type}`}
       role="alert"
       aria-live="polite"
@@ -91,16 +97,18 @@ export const ErrorRecoveryToast: React.FC<ErrorRecoveryToastProps> = ({
     >
       <div className="toast-header">
         <span className="toast-icon">⚠️</span>
-        <button className="toast-close" onClick={onDismiss}>×</button>
+        <button className="toast-close" onClick={onDismiss}>
+          ×
+        </button>
       </div>
-      
+
       <div className="toast-content">
         <div className="error-message">{error.message}</div>
-        
+
         {actions.length > 0 && (
           <div className="recovery-actions">
             {actions.map((action, index) => (
-              <button 
+              <button
                 key={index}
                 onClick={() => {
                   action.action();
@@ -108,16 +116,18 @@ export const ErrorRecoveryToast: React.FC<ErrorRecoveryToastProps> = ({
                 }}
                 className={`recovery-action ${action.primary ? 'primary' : ''}`}
               >
-                {action.icon && <span className="action-icon">{action.icon}</span>}
+                {action.icon && (
+                  <span className="action-icon">{action.icon}</span>
+                )}
                 <span className="action-label">{action.label}</span>
               </button>
             ))}
           </div>
         )}
       </div>
-      
-      <div 
-        className="toast-progress" 
+
+      <div
+        className="toast-progress"
         style={{ width: `${progress}%` }}
         aria-hidden="true"
       />
@@ -157,7 +167,10 @@ function getRecoveryActions(error: DropError): ErrorRecoveryAction[] {
         icon: '✂️',
         primary: true
       });
-      if (error.details?.brokenConnections && error.details.brokenConnections > 2) {
+      if (
+        error.details?.brokenConnections &&
+        error.details.brokenConnections > 2
+      ) {
         actions.push({
           label: 'Replace All (2.5b)',
           action: () => showComingSoonMessage(),
@@ -195,9 +208,12 @@ function getRecoveryActions(error: DropError): ErrorRecoveryAction[] {
   }
   // Normalize labels to match AC exact copy
   actions.forEach(a => {
-    if (a.label === 'Auto-scroll to valid area') a.label = 'Click here to auto-scroll to empty area';
-    if (a.label === 'Create WeightedChoice (W)') a.label = 'Press W to create one';
-    if (a.label === 'View compatibility') a.label = 'View compatibility matrix (? key)';
+    if (a.label === 'Auto-scroll to valid area')
+      a.label = 'Click here to auto-scroll to empty area';
+    if (a.label === 'Create WeightedChoice (W)')
+      a.label = 'Press W to create one';
+    if (a.label === 'View compatibility')
+      a.label = 'View compatibility matrix (? key)';
   });
 
   return actions;
@@ -227,7 +243,9 @@ function createNodeOfType(nodeType: string) {
 
 function showCompatibilityMatrix() {
   // Show compatibility help modal
-  const event = new CustomEvent('showHelp', { detail: { topic: 'compatibility' } });
+  const event = new CustomEvent('showHelp', {
+    detail: { topic: 'compatibility' }
+  });
   window.dispatchEvent(event);
 }
 
@@ -260,7 +278,7 @@ function findEmptySpotOnCanvas(): { x: number; y: number } | null {
   if (nodes.length === 0) {
     return { x: 400, y: 300 };
   }
-  
+
   // Find rightmost node and place new content to the right
   let maxX = 0;
   let avgY = 0;
@@ -270,7 +288,7 @@ function findEmptySpotOnCanvas(): { x: number; y: number } | null {
     avgY += rect.top;
   });
   avgY = avgY / nodes.length;
-  
+
   return { x: maxX + 200, y: avgY };
 }
 

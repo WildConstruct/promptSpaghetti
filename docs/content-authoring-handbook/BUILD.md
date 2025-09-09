@@ -192,7 +192,7 @@ const builder = new HandbookBuilder({
   author: 'Your Name',
   version: '2.0.0',
   outputDir: './custom-build',
-  baseUrl: 'https://your-domain.com',
+  baseUrl: 'https://your-domain.com'
 });
 
 await builder.build('web');
@@ -214,8 +214,8 @@ Create custom templates for different output formats:
    ```javascript
    const builder = new HandbookBuilder({
      templates: {
-       web: './assets/templates/custom-template.html',
-     },
+       web: './assets/templates/custom-template.html'
+     }
    });
    ```
 

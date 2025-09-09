@@ -236,7 +236,9 @@ class ValidationHelpers {
   static lengthConstraint(min?: number, max?: number): ValidationConstraint;
   static rangeConstraint(min?: number, max?: number): ValidationConstraint;
   static patternConstraint(pattern: RegExp): ValidationConstraint;
-  static customConstraint(validator: (value: any) => boolean): ValidationConstraint;
+  static customConstraint(
+    validator: (value: any) => boolean
+  ): ValidationConstraint;
 }
 ```
 
@@ -440,7 +442,13 @@ export class TextTransformExtension implements TransformExtension {
       name: 'Text Transform',
       description: 'Transform text data',
       supportedTypes: ['string', 'array'],
-      options: [{ name: 'mode', type: 'string', values: ['uppercase', 'lowercase', 'reverse'] }],
+      options: [
+        {
+          name: 'mode',
+          type: 'string',
+          values: ['uppercase', 'lowercase', 'reverse']
+        }
+      ]
     };
   }
 }
@@ -507,7 +515,9 @@ export class FileStorageProvider implements StorageProvider {
 
   async list(): Promise<string[]> {
     const files = await fs.promises.readdir(this.basePath);
-    return files.filter(f => f.endsWith('.json')).map(f => f.replace('.json', ''));
+    return files
+      .filter(f => f.endsWith('.json'))
+      .map(f => f.replace('.json', ''));
   }
 
   async exists(key: string): Promise<boolean> {
@@ -543,7 +553,10 @@ Inter-extension communication system.
 
 ```typescript
 class ExtensionMessaging {
-  static send(targetExtensionId: string, message: ExtensionMessage): Promise<any>;
+  static send(
+    targetExtensionId: string,
+    message: ExtensionMessage
+  ): Promise<any>;
   static onMessage(handler: MessageHandler): void;
   static removeMessageHandler(handler: MessageHandler): void;
   static broadcast(message: ExtensionMessage): void;
@@ -565,7 +578,7 @@ type MessageHandler = (message: ExtensionMessage, sender: string) => any;
 // Send a message to another extension
 const response = await ExtensionMessaging.send('other-extension', {
   type: 'data-request',
-  payload: { query: 'user-data' },
+  payload: { query: 'user-data' }
 });
 
 // Listen for messages

@@ -34,8 +34,8 @@ const result = await service.evaluateToggle('analytics_feature', {
   userId: 'user123',
   consents: {
     [ConsentType.ANALYTICS]: ConsentStatus.GRANTED,
-    [ConsentType.MARKETING]: ConsentStatus.DENIED,
-  },
+    [ConsentType.MARKETING]: ConsentStatus.DENIED
+  }
 });
 ```
 
@@ -98,12 +98,18 @@ React hooks for seamless feature toggle integration:
 
 ```typescript
 // Single toggle evaluation
-const { result, isLoading, consentInfo } = useConsentAwareToggle('analytics_feature', {
-  autoRefreshOnConsentChange: true,
-});
+const { result, isLoading, consentInfo } = useConsentAwareToggle(
+  'analytics_feature',
+  {
+    autoRefreshOnConsentChange: true
+  }
+);
 
 // Batch toggle evaluation
-const { results, getToggle } = useBatchConsentAwareToggle(['analytics_feature', 'marketing_feature']);
+const { results, getToggle } = useBatchConsentAwareToggle([
+  'analytics_feature',
+  'marketing_feature'
+]);
 ```
 
 **React Component Integration**:
@@ -139,7 +145,11 @@ const consents = await adapter.getConsents('user123', 'session456');
 const hasAnalytics = await adapter.hasConsent(ConsentType.ANALYTICS, 'user123');
 
 // Check multiple consents
-const hasRequired = await adapter.hasConsents([ConsentType.ANALYTICS, ConsentType.PERSONALIZATION], 'AND', 'user123');
+const hasRequired = await adapter.hasConsents(
+  [ConsentType.ANALYTICS, ConsentType.PERSONALIZATION],
+  'AND',
+  'user123'
+);
 ```
 
 ## Feature-Consent Mapping System
@@ -154,7 +164,8 @@ const mapping: FeatureConsentMapping = {
   requiredConsents: [ConsentType.PERSONALIZATION, ConsentType.ANALYTICS],
   requiredConsentLogic: 'AND',
   fallbackBehavior: 'minimal',
-  consentExplanation: 'Personalized recommendations require personalization and analytics consent',
+  consentExplanation:
+    'Personalized recommendations require personalization and analytics consent'
 };
 ```
 
@@ -286,7 +297,7 @@ if (!this.config.strictMode) {
 // Strict mode: deny access on consent errors
 return {
   enabled: false,
-  reason: 'Consent evaluation error (strict mode)',
+  reason: 'Consent evaluation error (strict mode)'
 };
 ```
 
@@ -336,7 +347,7 @@ return {
 // Initialize service
 const service = new ConsentFeatureToggleService(dao, {
   enableConsentChecking: true,
-  strictMode: process.env.NODE_ENV === 'production',
+  strictMode: process.env.NODE_ENV === 'production'
 });
 
 // Register feature mappings
@@ -345,14 +356,14 @@ service.registerConsentMappings([
     featureKey: 'advanced_analytics',
     requiredConsents: [ConsentType.ANALYTICS, ConsentType.PERFORMANCE],
     requiredConsentLogic: 'AND',
-    fallbackBehavior: 'minimal',
-  },
+    fallbackBehavior: 'minimal'
+  }
 ]);
 
 // Evaluate feature
 const result = await service.evaluateToggle('advanced_analytics', {
   userId: 'user123',
-  sessionId: 'session456',
+  sessionId: 'session456'
 });
 
 if (result.enabled) {
@@ -395,7 +406,11 @@ function AnalyticsDashboard() {
 ```typescript
 // Automatically updates when consent changes
 function useFeatureAvailability() {
-  const { results } = useBatchConsentAwareToggle(['analytics_tracking', 'personalized_content', 'marketing_features']);
+  const { results } = useBatchConsentAwareToggle([
+    'analytics_tracking',
+    'personalized_content',
+    'marketing_features'
+  ]);
 
   useEffect(() => {
     // Configure services based on available features
@@ -456,7 +471,7 @@ const service = new ConsentFeatureToggleService(dao, {
   strictMode: process.env.CONSENT_STRICT_MODE === 'true',
   defaultConsentStatus: ConsentStatus.DENIED,
   auditConsentUsage: process.env.CONSENT_AUDIT_ENABLED === 'true',
-  consentCacheTimeout: parseInt(process.env.CONSENT_CACHE_TIMEOUT) || 15,
+  consentCacheTimeout: parseInt(process.env.CONSENT_CACHE_TIMEOUT) || 15
 });
 ```
 

@@ -40,10 +40,10 @@ export class LLMResponseProcessor {
           originalVariables,
           options.allowInferredVariables
         );
-        
+
         validVariables.forEach(varName => {
           variableIntegrity.add(varName);
-          
+
           // Create variable nodes if they don't exist
           if (!this.hasVariableNode(nodes, varName)) {
             const varNode = this.createVariableNode(varName, nodes.length);
@@ -68,7 +68,10 @@ export class LLMResponseProcessor {
 
       // Add variable reference edges
       if (options.preserveVariables) {
-        const varEdges = this.createVariableReferenceEdges(nodes, variableIntegrity);
+        const varEdges = this.createVariableReferenceEdges(
+          nodes,
+          variableIntegrity
+        );
         edges.push(...varEdges);
       }
     }
@@ -154,7 +157,7 @@ export class LLMResponseProcessor {
    */
   private createVariableNode(varName: string, index: number): Node {
     const nodeId = this.generateNodeId();
-    
+
     return {
       id: nodeId,
       type: 'variable',
@@ -189,7 +192,10 @@ export class LLMResponseProcessor {
   /**
    * Create edges for variable references
    */
-  private createVariableReferenceEdges(nodes: Node[], variables: Set<string>): Edge[] {
+  private createVariableReferenceEdges(
+    nodes: Node[],
+    variables: Set<string>
+  ): Edge[] {
     const edges: Edge[] = [];
     const varNodes = new Map<string, Node>();
 
@@ -203,8 +209,10 @@ export class LLMResponseProcessor {
     // Connect nodes that reference variables
     nodes.forEach(node => {
       if (!node.data.isVariable && node.data.content) {
-        const referencedVars = this.extractVariablesFromContent(node.data.content);
-        
+        const referencedVars = this.extractVariablesFromContent(
+          node.data.content
+        );
+
         referencedVars.forEach(varName => {
           const varNode = varNodes.get(varName);
           if (varNode && varNode.id !== node.id) {
@@ -227,7 +235,9 @@ export class LLMResponseProcessor {
 
     // Mark broken references
     nodes.forEach(node => {
-      const referencedVars = this.extractVariablesFromContent(node.data.content || '');
+      const referencedVars = this.extractVariablesFromContent(
+        node.data.content || ''
+      );
       referencedVars.forEach(varName => {
         if (!varNodes.has(varName)) {
           node.data.metadata = {
@@ -257,13 +267,14 @@ export class LLMResponseProcessor {
 
     // Only keep variables that exist in the original prompt
     return variables.filter(varName => {
-      const exists = originalPrompt.includes(`{${varName}}`) || 
-                    originalVariables.has(varName);
-      
+      const exists =
+        originalPrompt.includes(`{${varName}}`) ||
+        originalVariables.has(varName);
+
       if (!exists) {
         console.warn(`Hallucinated variable detected and removed: ${varName}`);
       }
-      
+
       return exists;
     });
   }
@@ -273,9 +284,15 @@ export class LLMResponseProcessor {
    */
   private validateEdge(edgeData: any, nodeCount: number): boolean {
     // Check valid indices
-    if (edgeData.source < 0 || edgeData.source >= nodeCount ||
-        edgeData.target < 0 || edgeData.target >= nodeCount) {
-      console.warn(`Invalid edge indices: ${edgeData.source} -> ${edgeData.target}`);
+    if (
+      edgeData.source < 0 ||
+      edgeData.source >= nodeCount ||
+      edgeData.target < 0 ||
+      edgeData.target >= nodeCount
+    ) {
+      console.warn(
+        `Invalid edge indices: ${edgeData.source} -> ${edgeData.target}`
+      );
       return false;
     }
 
@@ -302,7 +319,8 @@ export class LLMResponseProcessor {
     });
 
     edges.forEach(edge => {
-      if (!edge.data?.isVariableReference) { // Skip variable reference edges for layout
+      if (!edge.data?.isVariableReference) {
+        // Skip variable reference edges for layout
         adjacency.get(edge.source)?.push(edge.target);
         inDegree.set(edge.target, (inDegree.get(edge.target) || 0) + 1);
       }
@@ -326,7 +344,7 @@ export class LLMResponseProcessor {
       adjacency.get(nodeId)?.forEach(neighbor => {
         const newDegree = (inDegree.get(neighbor) || 1) - 1;
         inDegree.set(neighbor, newDegree);
-        
+
         if (newDegree === 0) {
           queue.push(neighbor);
         }
@@ -352,7 +370,7 @@ export class LLMResponseProcessor {
       if (node) {
         const row = Math.floor(index / nodesPerRow);
         const col = index % nodesPerRow;
-        
+
         layouted.push({
           ...node,
           position: {
@@ -385,12 +403,10 @@ export class LLMResponseProcessor {
       return 0.0;
     }
 
-    const intersection = new Set(
-      [...original].filter(x => extracted.has(x))
-    );
-    
+    const intersection = new Set([...original].filter(x => extracted.has(x)));
+
     const union = new Set([...original, ...extracted]);
-    
+
     return intersection.size / union.size;
   }
 
@@ -401,11 +417,11 @@ export class LLMResponseProcessor {
     const variables = new Set<string>();
     const pattern = /\{([^}]+)\}/g;
     let match;
-    
+
     while ((match = pattern.exec(content)) !== null) {
       variables.add(match[1]);
     }
-    
+
     return variables;
   }
 
@@ -413,8 +429,8 @@ export class LLMResponseProcessor {
    * Check if a variable node already exists
    */
   private hasVariableNode(nodes: Node[], varName: string): boolean {
-    return nodes.some(node => 
-      node.data.isVariable && node.data.name === varName
+    return nodes.some(
+      node => node.data.isVariable && node.data.name === varName
     );
   }
 
@@ -423,12 +439,12 @@ export class LLMResponseProcessor {
    */
   private mapNodeType(llmType: string): string {
     const typeMap: Record<string, string> = {
-      'Variable': 'variable',
-      'WeightedChoice': 'weightedChoice',
-      'TextBlock': 'textBlock',
-      'Sequential': 'sequential'
+      Variable: 'variable',
+      WeightedChoice: 'weightedChoice',
+      TextBlock: 'textBlock',
+      Sequential: 'sequential'
     };
-    
+
     return typeMap[llmType] || 'textBlock';
   }
 
@@ -439,8 +455,8 @@ export class LLMResponseProcessor {
     switch (nodeData.type) {
       case 'WeightedChoice':
         // Parse choices from content or metadata
-        const choices = nodeData.metadata?.alternatives || 
-                       nodeData.content.split(/\s*\|\s*/);
+        const choices =
+          nodeData.metadata?.alternatives || nodeData.content.split(/\s*\|\s*/);
         return {
           options: choices.map((choice: string, i: number) => ({
             id: `opt-${i}`,
@@ -448,20 +464,20 @@ export class LLMResponseProcessor {
             weight: 100 / choices.length
           }))
         };
-      
+
       case 'Variable':
         const varName = nodeData.content.replace(/[{}]/g, '');
         return {
           name: varName,
           isVariable: true
         };
-      
+
       case 'Sequential':
         return {
           sequence: nodeData.metadata?.sequence || 'linear',
           step: nodeData.metadata?.step || 0
         };
-      
+
       default:
         return {};
     }
@@ -474,10 +490,10 @@ export class LLMResponseProcessor {
     const horizontalSpacing = 200;
     const verticalSpacing = 120;
     const nodesPerRow = 4;
-    
+
     const row = Math.floor(index / nodesPerRow);
     const col = index % nodesPerRow;
-    
+
     return {
       x: col * horizontalSpacing + 100,
       y: row * verticalSpacing + 100

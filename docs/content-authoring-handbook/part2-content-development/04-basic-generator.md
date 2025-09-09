@@ -152,7 +152,11 @@ Building complex outputs from simple parts:
   "grammar": {
     "start": "[setup]. [conflict]. [resolution].",
 
-    "setup": ["Once upon a time in [location]", "Long ago in [location]", "In the distant land of [location]"],
+    "setup": [
+      "Once upon a time in [location]",
+      "Long ago in [location]",
+      "In the distant land of [location]"
+    ],
 
     "location": ["a magical forest", "an ancient kingdom", "a hidden valley"],
 
@@ -178,7 +182,11 @@ Some outputs need more detail than others:
 ```json
 {
   "grammar": {
-    "character": ["[name]", "[name] the [adjective]", "[name] the [adjective] [profession]"],
+    "character": [
+      "[name]",
+      "[name] the [adjective]",
+      "[name] the [adjective] [profession]"
+    ],
 
     "name": ["Alex", "Morgan", "Jordan", "Casey"],
     "adjective": ["brave", "clever", "mysterious"],
@@ -359,9 +367,27 @@ Let's create a more sophisticated generator step by step:
 
     "quality": ["Common", "Uncommon", "Rare", "Legendary"],
 
-    "item": ["sword", "shield", "potion", "scroll", "ring", "amulet", "cloak", "boots"],
+    "item": [
+      "sword",
+      "shield",
+      "potion",
+      "scroll",
+      "ring",
+      "amulet",
+      "cloak",
+      "boots"
+    ],
 
-    "property": ["fire", "ice", "lightning", "healing", "strength", "wisdom", "speed", "protection"],
+    "property": [
+      "fire",
+      "ice",
+      "lightning",
+      "healing",
+      "strength",
+      "wisdom",
+      "speed",
+      "protection"
+    ],
 
     "price": ["10", "25", "50", "100", "250", "500", "1000", "5000"]
   }
@@ -387,7 +413,11 @@ Let's create a more sophisticated generator step by step:
       "[quality] [item] with [enhancement]"
     ],
 
-    "price_line": ["Price: [price] gold", "Cost: [price] gold pieces", "Yours for only [price] gold!"],
+    "price_line": [
+      "Price: [price] gold",
+      "Cost: [price] gold pieces",
+      "Yours for only [price] gold!"
+    ],
 
     "quality": ["Common", "Uncommon", "Rare", "Epic", "Legendary"],
 
@@ -406,7 +436,16 @@ Let's create a more sophisticated generator step by step:
       "bow"
     ],
 
-    "material": ["iron", "steel", "silver", "gold", "mithril", "adamantine", "crystal", "dragon scale"],
+    "material": [
+      "iron",
+      "steel",
+      "silver",
+      "gold",
+      "mithril",
+      "adamantine",
+      "crystal",
+      "dragon scale"
+    ],
 
     "property": [
       "fire",
@@ -436,7 +475,18 @@ Let's create a more sophisticated generator step by step:
       "fey-crafted"
     ],
 
-    "price": ["10", "25", "50", "100", "250", "500", "1000", "2500", "5000", "10000"]
+    "price": [
+      "10",
+      "25",
+      "50",
+      "100",
+      "250",
+      "500",
+      "1000",
+      "2500",
+      "5000",
+      "10000"
+    ]
   }
 }
 ```

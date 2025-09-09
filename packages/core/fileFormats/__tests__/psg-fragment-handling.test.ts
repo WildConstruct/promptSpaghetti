@@ -9,20 +9,20 @@ describe('PSG Fragment Handling', () => {
         description: 'A test fragment',
         metadata: {
           type: 'ASSET_FRAGMENT',
-          source: 'test.psg',
+          source: 'test.psg'
         },
         nodes: [
           { id: 'node1', type: 'WeightedChoice', x: 100, y: 100 },
-          { id: 'node2', type: 'Concat', x: 200, y: 100 },
+          { id: 'node2', type: 'Concat', x: 200, y: 100 }
         ],
         edges: [],
         regions: [
           {
             id: 'region1',
             name: 'Test Region',
-            nodes: ['node1', 'node2'],
-          },
-        ],
+            nodes: ['node1', 'node2']
+          }
+        ]
       };
 
       const result = convertPSGToPSGLib(psgContent);
@@ -41,23 +41,25 @@ describe('PSG Fragment Handling', () => {
         version: '1.0.0',
         name: 'Test Fragment',
         metadata: {
-          type: 'MULTI-ASPECT',
+          type: 'MULTI-ASPECT'
         },
-        nodes: [
-          { id: 'node1', type: 'TextBlock', x: 100, y: 100 },
-        ],
+        nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
         edges: [],
-        regions: [],
+        regions: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
 
       // Should not have any enhancedBoundingBox nodes
-      const boundingBoxes = result.nodes.filter((n: any) => n.type === 'enhancedBoundingBox');
+      const boundingBoxes = result.nodes.filter(
+        (n: any) => n.type === 'enhancedBoundingBox'
+      );
       expect(boundingBoxes).toHaveLength(0);
 
       // Should have a fragment container
-      const fragmentContainers = result.nodes.filter((n: any) => n.type === 'fragmentContainer');
+      const fragmentContainers = result.nodes.filter(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(fragmentContainers).toHaveLength(1);
     });
   });
@@ -68,21 +70,21 @@ describe('PSG Fragment Handling', () => {
         version: '1.0.0',
         name: 'Fragment with Output',
         metadata: {
-          type: 'ASSET_FRAGMENT',
+          type: 'ASSET_FRAGMENT'
         },
         nodes: [
           { id: 'node1', type: 'WeightedChoice', x: 100, y: 100 },
           { id: 'output1', type: 'Output', x: 200, y: 100 },
-          { id: 'node2', type: 'Concat', x: 300, y: 100 },
+          { id: 'node2', type: 'Concat', x: 300, y: 100 }
         ],
-        edges: [],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
 
       // Should only have container + 2 nodes (Output filtered out)
       expect(result.nodes).toHaveLength(3); // Container + 2 nodes (no Output)
-      
+
       const outputNodes = result.nodes.filter((n: any) => n.type === 'output');
       expect(outputNodes).toHaveLength(0);
 
@@ -99,16 +101,16 @@ describe('PSG Fragment Handling', () => {
         name: 'Regular Graph',
         nodes: [
           { id: 'node1', type: 'WeightedChoice', x: 100, y: 100 },
-          { id: 'output1', type: 'Output', x: 200, y: 100 },
+          { id: 'output1', type: 'Output', x: 200, y: 100 }
         ],
-        edges: [],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
 
       // Should have both nodes (no filtering for non-fragments)
       expect(result.nodes).toHaveLength(2);
-      
+
       const outputNodes = result.nodes.filter((n: any) => n.type === 'output');
       expect(outputNodes).toHaveLength(1);
     });
@@ -120,19 +122,23 @@ describe('PSG Fragment Handling', () => {
         version: '1.0.0',
         name: 'Fragment Test',
         metadata: {
-          type: 'ASSET_FRAGMENT',
+          type: 'ASSET_FRAGMENT'
         },
         nodes: [
           { id: 'node1', type: 'WeightedChoice', x: 100, y: 100 },
-          { id: 'node2', type: 'Concat', x: 200, y: 150 },
+          { id: 'node2', type: 'Concat', x: 200, y: 150 }
         ],
-        edges: [],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
 
-      const container = result.nodes.find((n: any) => n.type === 'fragmentContainer');
-      const childNodes = result.nodes.filter((n: any) => n.type !== 'fragmentContainer');
+      const container = result.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
+      const childNodes = result.nodes.filter(
+        (n: any) => n.type !== 'fragmentContainer'
+      );
 
       // All non-container nodes should have the container as parent
       childNodes.forEach((node: any) => {
@@ -146,18 +152,20 @@ describe('PSG Fragment Handling', () => {
         version: '1.0.0',
         name: 'Fragment Position Test',
         metadata: {
-          type: 'ASSET_FRAGMENT',
+          type: 'ASSET_FRAGMENT'
         },
         nodes: [
           { id: 'node1', type: 'WeightedChoice', x: 100, y: 100 },
-          { id: 'node2', type: 'Concat', x: 200, y: 150 },
+          { id: 'node2', type: 'Concat', x: 200, y: 150 }
         ],
-        edges: [],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
 
-      const childNodes = result.nodes.filter((n: any) => n.type !== 'fragmentContainer');
+      const childNodes = result.nodes.filter(
+        (n: any) => n.type !== 'fragmentContainer'
+      );
 
       // Positions should be relative to the container
       childNodes.forEach((node: any) => {
@@ -173,16 +181,16 @@ describe('PSG Fragment Handling', () => {
         version: '1.0.0',
         name: 'Multi-Aspect Fragment',
         metadata: {
-          type: 'MULTI-ASPECT',
+          type: 'MULTI-ASPECT'
         },
-        nodes: [
-          { id: 'node1', type: 'TextBlock', x: 100, y: 100 },
-        ],
-        edges: [],
+        nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
-      const container = result.nodes.find((n: any) => n.type === 'fragmentContainer');
+      const container = result.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(container).toBeDefined();
     });
 
@@ -191,16 +199,16 @@ describe('PSG Fragment Handling', () => {
         version: '1.0.0',
         name: 'Asset Fragment',
         metadata: {
-          type: 'ASSET_FRAGMENT',
+          type: 'ASSET_FRAGMENT'
         },
-        nodes: [
-          { id: 'node1', type: 'TextBlock', x: 100, y: 100 },
-        ],
-        edges: [],
+        nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
-      const container = result.nodes.find((n: any) => n.type === 'fragmentContainer');
+      const container = result.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(container).toBeDefined();
     });
 
@@ -208,21 +216,21 @@ describe('PSG Fragment Handling', () => {
       const psgContent = {
         version: '1.0.0',
         name: 'Region Fragment',
-        nodes: [
-          { id: 'node1', type: 'TextBlock', x: 100, y: 100 },
-        ],
+        nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
         edges: [],
         regions: [
           {
             id: 'region1',
             name: 'Test Region',
-            nodes: ['node1'],
-          },
-        ],
+            nodes: ['node1']
+          }
+        ]
       };
 
       const result = convertPSGToPSGLib(psgContent);
-      const container = result.nodes.find((n: any) => n.type === 'fragmentContainer');
+      const container = result.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(container).toBeDefined();
     });
 
@@ -230,14 +238,14 @@ describe('PSG Fragment Handling', () => {
       const psgContent = {
         version: '1.0.0',
         name: 'Regular Graph',
-        nodes: [
-          { id: 'node1', type: 'TextBlock', x: 100, y: 100 },
-        ],
-        edges: [],
+        nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
-      const container = result.nodes.find((n: any) => n.type === 'fragmentContainer');
+      const container = result.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(container).toBeUndefined();
     });
   });
@@ -250,11 +258,13 @@ describe('PSG Fragment Handling', () => {
         metadata: { type: 'ASSET_FRAGMENT' },
         nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
         edges: [],
-        regions: [{ id: 'r1', name: 'Region Name', nodes: ['node1'] }],
+        regions: [{ id: 'r1', name: 'Region Name', nodes: ['node1'] }]
       };
 
       const result1 = convertPSGToPSGLib(psgWithRegion);
-      const container1 = result1.nodes.find((n: any) => n.type === 'fragmentContainer');
+      const container1 = result1.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(container1.data.title).toBe('Region Name'); // Prefer region name
 
       const psgWithoutRegion = {
@@ -262,11 +272,13 @@ describe('PSG Fragment Handling', () => {
         name: 'Fragment Name',
         metadata: { type: 'ASSET_FRAGMENT' },
         nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
-        edges: [],
+        edges: []
       };
 
       const result2 = convertPSGToPSGLib(psgWithoutRegion);
-      const container2 = result2.nodes.find((n: any) => n.type === 'fragmentContainer');
+      const container2 = result2.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(container2.data.title).toBe('Fragment Name'); // Fall back to PSG name
     });
 
@@ -276,14 +288,16 @@ describe('PSG Fragment Handling', () => {
         name: 'Test Fragment',
         metadata: {
           type: 'ASSET_FRAGMENT',
-          source: 'components/character.psg',
+          source: 'components/character.psg'
         },
         nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
-        edges: [],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
-      const container = result.nodes.find((n: any) => n.type === 'fragmentContainer');
+      const container = result.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(container.data.fragmentSource).toBe('components/character.psg');
     });
 
@@ -293,11 +307,13 @@ describe('PSG Fragment Handling', () => {
         name: 'Test Fragment',
         metadata: { type: 'ASSET_FRAGMENT' },
         nodes: [{ id: 'node1', type: 'TextBlock', x: 100, y: 100 }],
-        edges: [],
+        edges: []
       };
 
       const result = convertPSGToPSGLib(psgContent);
-      const container = result.nodes.find((n: any) => n.type === 'fragmentContainer');
+      const container = result.nodes.find(
+        (n: any) => n.type === 'fragmentContainer'
+      );
       expect(container.data.isCollapsed).toBe(true);
     });
   });

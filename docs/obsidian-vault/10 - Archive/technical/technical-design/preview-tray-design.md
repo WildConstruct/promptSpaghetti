@@ -1,11 +1,13 @@
 # Technical Design: Preview Output Bottom Tray
 
 ## Overview
+
 This document outlines the technical design for implementing a bottom tray component to display preview outputs in the Prompt Spaghetti Graph application.
 
 ## Architecture
 
 ### Component Hierarchy
+
 ```
 App
 ├── GraphEditor
@@ -27,6 +29,7 @@ App
 ## Component Mockups
 
 ### Collapsed State (Minimized)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     Graph Editor Canvas                      │
@@ -42,6 +45,7 @@ App
 ```
 
 ### Expanded State (Default - 250px)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     Graph Editor Canvas                      │
@@ -64,6 +68,7 @@ App
 ```
 
 ### Maximized State (60% viewport)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │         Graph Editor Canvas (40% viewport)                   │
@@ -94,6 +99,7 @@ App
 ## State Management
 
 ### Zustand Store Schema
+
 ```typescript
 interface PreviewTrayState {
   // Tray state
@@ -101,16 +107,16 @@ interface PreviewTrayState {
   height: number;
   mode: 'minimized' | 'normal' | 'maximized';
   isPinned: boolean;
-  
+
   // View preferences
   viewMode: 'tray' | 'modal';
   defaultView: 'tray' | 'modal';
-  
+
   // Content state
   activeTab: number;
   scrollPosition: number;
   selectedResults: Set<string>;
-  
+
   // Actions
   toggleTray: () => void;
   setHeight: (height: number) => void;
@@ -121,6 +127,7 @@ interface PreviewTrayState {
 ```
 
 ### LocalStorage Schema
+
 ```json
 {
   "previewTrayPreferences": {
@@ -136,6 +143,7 @@ interface PreviewTrayState {
 ## API Design
 
 ### PreviewTray Component Props
+
 ```typescript
 interface PreviewTrayProps {
   // Data
@@ -143,22 +151,23 @@ interface PreviewTrayProps {
   results: PreviewResult[];
   isExecuting: boolean;
   error?: Error;
-  
+
   // Callbacks
   onExecute: () => void;
   onCancel: () => void;
   onCopy: (text: string) => void;
   onExport: (format: 'json' | 'csv') => void;
-  
+
   // Configuration
-  minHeight?: number;        // default: 100
-  maxHeight?: number;        // default: 60vh
-  defaultHeight?: number;    // default: 250
+  minHeight?: number; // default: 100
+  maxHeight?: number; // default: 60vh
+  defaultHeight?: number; // default: 250
   virtualizeThreshold?: number; // default: 100
 }
 ```
 
 ### Shared Hook for Preview Logic
+
 ```typescript
 // Extract from PreviewModal to share with PreviewTray
 interface UsePreviewContentOptions {
@@ -171,10 +180,10 @@ function usePreviewContent(options: UsePreviewContentOptions) {
   const [results, setResults] = useState<PreviewResult[]>([]);
   const [isExecuting, setIsExecuting] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  
+
   // Existing preview logic from PreviewModal
   // ...
-  
+
   return {
     results,
     isExecuting,
@@ -189,24 +198,28 @@ function usePreviewContent(options: UsePreviewContentOptions) {
 ## Implementation Phases
 
 ### Phase 1: Core Structure (2 hours)
+
 1. Create PreviewTray component structure
 2. Implement basic open/close functionality
 3. Add to App layout as sibling to GraphEditor
 4. Wire up basic state management
 
 ### Phase 2: Resize & Controls (1.5 hours)
+
 1. Implement drag-to-resize with constraints
 2. Add control buttons (minimize, maximize, close)
 3. Add smooth animations and transitions
 4. Test across different viewports
 
 ### Phase 3: Content Integration (1.5 hours)
+
 1. Extract shared logic from PreviewModal
 2. Implement tabbed interface for seeds
 3. Add virtual scrolling for large results
 4. Ensure data format consistency
 
 ### Phase 4: Polish & Testing (1 hour)
+
 1. Add keyboard shortcuts
 2. Implement localStorage persistence
 3. Add accessibility features
@@ -215,6 +228,7 @@ function usePreviewContent(options: UsePreviewContentOptions) {
 ## CSS Design
 
 ### Layout Strategy - Flexbox
+
 ```css
 .preview-tray {
   display: flex;
@@ -245,6 +259,7 @@ function usePreviewContent(options: UsePreviewContentOptions) {
 ```
 
 ### Professional Theme Variables
+
 ```css
 .preview-tray {
   --tray-bg: var(--color-surface-elevated);
@@ -252,7 +267,7 @@ function usePreviewContent(options: UsePreviewContentOptions) {
   --tray-shadow: var(--shadow-elevated);
   --tray-handle-color: var(--color-text-tertiary);
   --tray-transition: all 200ms var(--ease-out);
-  
+
   /* Heights */
   --tray-min-height: 100px;
   --tray-default-height: 250px;
@@ -263,6 +278,7 @@ function usePreviewContent(options: UsePreviewContentOptions) {
 ```
 
 ### Animation Classes
+
 ```css
 .preview-tray-enter {
   transform: translateY(100%);
@@ -286,6 +302,7 @@ function usePreviewContent(options: UsePreviewContentOptions) {
 ## Performance Considerations
 
 ### Virtual Scrolling Strategy
+
 ```typescript
 // Use react-window for results > 100
 import { FixedSizeList } from 'react-window';
@@ -294,7 +311,7 @@ function VirtualizedResults({ results, height }) {
   if (results.length <= 100) {
     return <RegularResultsList results={results} />;
   }
-  
+
   return (
     <FixedSizeList
       height={height}
@@ -309,6 +326,7 @@ function VirtualizedResults({ results, height }) {
 ```
 
 ### Memory Management
+
 ```typescript
 // Auto-clear old results when memory limit reached
 const MAX_RESULTS_MEMORY = 50 * 1024 * 1024; // 50MB
@@ -326,6 +344,7 @@ function checkMemoryUsage(results: PreviewResult[]) {
 ## Testing Strategy
 
 ### Unit Tests
+
 ```typescript
 describe('PreviewTray', () => {
   it('should render in minimized state by default');
@@ -337,6 +356,7 @@ describe('PreviewTray', () => {
 ```
 
 ### Integration Tests
+
 ```typescript
 describe('PreviewTray Integration', () => {
   it('should display results from graph execution');
@@ -349,6 +369,7 @@ describe('PreviewTray Integration', () => {
 ## Migration Path
 
 ### Feature Flag Implementation
+
 ```typescript
 // Enable gradual rollout
 const FEATURE_FLAGS = {
@@ -361,6 +382,7 @@ const FEATURE_FLAGS = {
 ```
 
 ### Backwards Compatibility
+
 ```typescript
 // Ensure old saved graphs still work
 function handlePreviewTrigger(preferTray: boolean) {
@@ -390,4 +412,4 @@ function handlePreviewTrigger(preferTray: boolean) {
 
 ---
 
-*This technical design provides a comprehensive blueprint for implementing the preview output bottom tray feature.*
+_This technical design provides a comprehensive blueprint for implementing the preview output bottom tray feature._

@@ -87,7 +87,11 @@ const result = lookup[key];
 if (!lookup || typeof lookup !== 'object') {
   return ctx.variables.get('defaultText') || '';
 }
-if (!lookup.hasOwnProperty(key) || key.includes('__proto__') || key.includes('constructor')) {
+if (
+  !lookup.hasOwnProperty(key) ||
+  key.includes('__proto__') ||
+  key.includes('constructor')
+) {
   return ctx.variables.get('defaultText') || '';
 }
 const result = lookup[key];

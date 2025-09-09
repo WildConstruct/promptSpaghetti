@@ -16,7 +16,11 @@ The central class responsible for loading, managing, and rendering email templat
 import { EmailTemplateManager } from '@promptscape/core/templates/EmailTemplateManager';
 
 const templateManager = new EmailTemplateManager();
-const result = templateManager.renderTemplate('mfa-verification', variables, 'html');
+const result = templateManager.renderTemplate(
+  'mfa-verification',
+  variables,
+  'html'
+);
 ```
 
 #### 2. Template Engine
@@ -138,7 +142,9 @@ Built-in template processing engine with support for:
 
 ```html
 {{#if securityWarning}}
-<div class="security-warning"><strong>Security Alert:</strong> {{securityWarning}}</div>
+<div class="security-warning">
+  <strong>Security Alert:</strong> {{securityWarning}}
+</div>
 {{/if}}
 ```
 
@@ -163,23 +169,34 @@ const variables = {
   displayName: 'John Doe',
   emailAddress: 'john.doe@example.com',
   code: '123456',
-  expiryMinutes: '10',
+  expiryMinutes: '10'
 };
 
 // Render HTML version
-const htmlResult = templateManager.renderTemplate('mfa-verification', variables, 'html');
+const htmlResult = templateManager.renderTemplate(
+  'mfa-verification',
+  variables,
+  'html'
+);
 console.log(htmlResult.subject); // "PromptScape - Your Verification Code"
 console.log(htmlResult.content); // Full HTML email
 
 // Render text version
-const textResult = templateManager.renderTemplate('mfa-verification', variables, 'text');
+const textResult = templateManager.renderTemplate(
+  'mfa-verification',
+  variables,
+  'text'
+);
 console.log(textResult.content); // Plain text email
 ```
 
 ### Template Validation
 
 ```typescript
-const validation = templateManager.validateTemplate('mfa-verification', variables);
+const validation = templateManager.validateTemplate(
+  'mfa-verification',
+  variables
+);
 
 if (!validation.valid) {
   console.error('Template validation failed:', validation.errors);
@@ -193,11 +210,16 @@ if (validation.warnings.length > 0) {
 ### Advanced Rendering Options
 
 ```typescript
-const result = templateManager.renderTemplate('mfa-verification', variables, 'html', {
-  minify: true, // Minify HTML output
-  stripComments: true, // Remove HTML comments
-  validateVariables: true, // Validate all variables present
-});
+const result = templateManager.renderTemplate(
+  'mfa-verification',
+  variables,
+  'html',
+  {
+    minify: true, // Minify HTML output
+    stripComments: true, // Remove HTML comments
+    validateVariables: true // Validate all variables present
+  }
+);
 ```
 
 ### Template Preview
@@ -235,7 +257,7 @@ const customTemplate: EmailTemplate = {
   `,
   variables: ['displayName', 'eventType', 'message'],
   description: 'Custom notification template',
-  category: 'notification',
+  category: 'notification'
 };
 
 templateManager.addTemplate('custom-notification', customTemplate);
@@ -245,7 +267,8 @@ templateManager.addTemplate('custom-notification', customTemplate);
 
 ```typescript
 // Get templates by category
-const verificationTemplates = templateManager.getTemplatesByCategory('verification');
+const verificationTemplates =
+  templateManager.getTemplatesByCategory('verification');
 const securityTemplates = templateManager.getTemplatesByCategory('security');
 
 // List all available templates
@@ -373,10 +396,14 @@ const testVariables = {
   emailAddress: 'test@example.com',
   code: '999999',
   expiryMinutes: '5',
-  securityWarning: 'Test security warning',
+  securityWarning: 'Test security warning'
 };
 
-const result = templateManager.renderTemplate('mfa-verification', testVariables, 'html');
+const result = templateManager.renderTemplate(
+  'mfa-verification',
+  testVariables,
+  'html'
+);
 // Save result.content to file for browser testing
 ```
 
@@ -400,14 +427,21 @@ pnpm test -- EmailTemplateManager.test.ts
 
 ```typescript
 // Minify HTML for production
-const result = templateManager.renderTemplate('mfa-verification', variables, 'html', {
-  minify: true,
-  stripComments: true,
-});
+const result = templateManager.renderTemplate(
+  'mfa-verification',
+  variables,
+  'html',
+  {
+    minify: true,
+    stripComments: true
+  }
+);
 
 // Batch template operations
 const templates = ['mfa-verification', 'security-alert'];
-const results = templates.map(templateName => templateManager.renderTemplate(templateName, variables, 'html'));
+const results = templates.map(templateName =>
+  templateManager.renderTemplate(templateName, variables, 'html')
+);
 ```
 
 ### Memory Management
@@ -431,7 +465,7 @@ const results = templates.map(templateName => templateManager.renderTemplate(tem
 const safeVariables = {
   displayName: escapeHtml(userInput.displayName),
   emailAddress: validateEmail(userInput.emailAddress),
-  code: generateSecureCode(),
+  code: generateSecureCode()
 };
 ```
 
@@ -447,13 +481,15 @@ const safeVariables = {
 
 ```typescript
 // Initialize with production configuration
-const templateManager = new EmailTemplateManager(process.env.TEMPLATE_DIRECTORY);
+const templateManager = new EmailTemplateManager(
+  process.env.TEMPLATE_DIRECTORY
+);
 
 // Enable production optimizations
 const productionOptions = {
   minify: true,
   stripComments: true,
-  validateVariables: true,
+  validateVariables: true
 };
 ```
 
@@ -479,7 +515,7 @@ logger.info('Template rendered', {
   templateName,
   format,
   renderTime,
-  contentLength: result?.content.length,
+  contentLength: result?.content.length
 });
 ```
 
@@ -529,7 +565,9 @@ logger.info('Template rendered', {
 // Check for missing variables before rendering
 const validation = templateManager.validateTemplate(templateName, variables);
 if (!validation.valid) {
-  throw new Error(`Template validation failed: ${validation.errors.join(', ')}`);
+  throw new Error(
+    `Template validation failed: ${validation.errors.join(', ')}`
+  );
 }
 ```
 
@@ -547,7 +585,11 @@ if (!template) {
 
 ```typescript
 try {
-  const result = templateManager.renderTemplate(templateName, variables, format);
+  const result = templateManager.renderTemplate(
+    templateName,
+    variables,
+    format
+  );
   if (!result) {
     throw new Error('Template rendering failed');
   }

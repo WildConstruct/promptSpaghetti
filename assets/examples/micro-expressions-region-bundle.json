@@ -16,18 +16,90 @@
       "data": {
         "label": "Micro-Expression",
         "choices": [
-          { "id": "eyebrow_flash", "text": "fleeting eyebrow flash", "weight": 2, "muted": false, "solo": false },
-          { "id": "lip_purse", "text": "subtle lip purse", "weight": 1.5, "muted": false, "solo": false },
-          { "id": "eye_dart", "text": "quick eye dart", "weight": 1.5, "muted": false, "solo": false },
-          { "id": "nostril_flare", "text": "brief nostril flare", "weight": 1, "muted": false, "solo": false },
-          { "id": "jaw_clench", "text": "momentary jaw clench", "weight": 1, "muted": false, "solo": false },
-          { "id": "eye_narrow", "text": "slight eye narrowing", "weight": 1.5, "muted": false, "solo": false },
-          { "id": "mouth_twitch", "text": "corner mouth twitch", "weight": 1, "muted": false, "solo": false },
-          { "id": "brow_furrow", "text": "micro brow furrow", "weight": 1.5, "muted": false, "solo": false },
-          { "id": "chin_raise", "text": "subtle chin raise", "weight": 0.8, "muted": false, "solo": false },
-          { "id": "lip_bite", "text": "quick inner lip bite", "weight": 1.2, "muted": false, "solo": false },
-          { "id": "eye_roll", "text": "suppressed eye roll", "weight": 0.8, "muted": false, "solo": false },
-          { "id": "smile_suppress", "text": "fighting back a smile", "weight": 1.5, "muted": false, "solo": false }
+          {
+            "id": "eyebrow_flash",
+            "text": "fleeting eyebrow flash",
+            "weight": 2,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "lip_purse",
+            "text": "subtle lip purse",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "eye_dart",
+            "text": "quick eye dart",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "nostril_flare",
+            "text": "brief nostril flare",
+            "weight": 1,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "jaw_clench",
+            "text": "momentary jaw clench",
+            "weight": 1,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "eye_narrow",
+            "text": "slight eye narrowing",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "mouth_twitch",
+            "text": "corner mouth twitch",
+            "weight": 1,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "brow_furrow",
+            "text": "micro brow furrow",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "chin_raise",
+            "text": "subtle chin raise",
+            "weight": 0.8,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "lip_bite",
+            "text": "quick inner lip bite",
+            "weight": 1.2,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "eye_roll",
+            "text": "suppressed eye roll",
+            "weight": 0.8,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "smile_suppress",
+            "text": "fighting back a smile",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          }
         ]
       }
     },
@@ -38,11 +110,41 @@
       "data": {
         "label": "Intensity",
         "choices": [
-          { "id": "barely", "text": "barely perceptible", "weight": 2, "muted": false, "solo": false },
-          { "id": "fleeting", "text": "fleeting", "weight": 3, "muted": false, "solo": false },
-          { "id": "subtle", "text": "subtle but noticeable", "weight": 2, "muted": false, "solo": false },
-          { "id": "suppressed", "text": "quickly suppressed", "weight": 1.5, "muted": false, "solo": false },
-          { "id": "involuntary", "text": "involuntary", "weight": 1, "muted": false, "solo": false }
+          {
+            "id": "barely",
+            "text": "barely perceptible",
+            "weight": 2,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "fleeting",
+            "text": "fleeting",
+            "weight": 3,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "subtle",
+            "text": "subtle but noticeable",
+            "weight": 2,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "suppressed",
+            "text": "quickly suppressed",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "involuntary",
+            "text": "involuntary",
+            "weight": 1,
+            "muted": false,
+            "solo": false
+          }
         ]
       }
     },
@@ -53,10 +155,34 @@
       "data": {
         "label": "Context",
         "choices": [
-          { "id": "hiding", "text": "trying to hide", "weight": 2, "muted": false, "solo": false },
-          { "id": "revealing", "text": "revealing", "weight": 1.5, "muted": false, "solo": false },
-          { "id": "betraying", "text": "betraying their", "weight": 2, "muted": false, "solo": false },
-          { "id": "suggesting", "text": "suggesting", "weight": 1, "muted": false, "solo": false }
+          {
+            "id": "hiding",
+            "text": "trying to hide",
+            "weight": 2,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "revealing",
+            "text": "revealing",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "betraying",
+            "text": "betraying their",
+            "weight": 2,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "suggesting",
+            "text": "suggesting",
+            "weight": 1,
+            "muted": false,
+            "solo": false
+          }
         ]
       }
     },
@@ -67,12 +193,48 @@
       "data": {
         "label": "Emotion",
         "choices": [
-          { "id": "discomfort", "text": "discomfort", "weight": 2, "muted": false, "solo": false },
-          { "id": "interest", "text": "interest", "weight": 1.5, "muted": false, "solo": false },
-          { "id": "skepticism", "text": "skepticism", "weight": 2, "muted": false, "solo": false },
-          { "id": "amusement", "text": "amusement", "weight": 1.5, "muted": false, "solo": false },
-          { "id": "contempt", "text": "contempt", "weight": 1, "muted": false, "solo": false },
-          { "id": "anxiety", "text": "anxiety", "weight": 1.5, "muted": false, "solo": false }
+          {
+            "id": "discomfort",
+            "text": "discomfort",
+            "weight": 2,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "interest",
+            "text": "interest",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "skepticism",
+            "text": "skepticism",
+            "weight": 2,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "amusement",
+            "text": "amusement",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "contempt",
+            "text": "contempt",
+            "weight": 1,
+            "muted": false,
+            "solo": false
+          },
+          {
+            "id": "anxiety",
+            "text": "anxiety",
+            "weight": 1.5,
+            "muted": false,
+            "solo": false
+          }
         ]
       }
     },
@@ -87,10 +249,26 @@
     }
   ],
   "edges": [
-    { "id": "e1", "source": "micro_expression_selector", "target": "micro_expression_output" },
-    { "id": "e2", "source": "intensity_modifier", "target": "micro_expression_output" },
-    { "id": "e3", "source": "context_modifier", "target": "micro_expression_output" },
-    { "id": "e4", "source": "emotion_target", "target": "micro_expression_output" }
+    {
+      "id": "e1",
+      "source": "micro_expression_selector",
+      "target": "micro_expression_output"
+    },
+    {
+      "id": "e2",
+      "source": "intensity_modifier",
+      "target": "micro_expression_output"
+    },
+    {
+      "id": "e3",
+      "source": "context_modifier",
+      "target": "micro_expression_output"
+    },
+    {
+      "id": "e4",
+      "source": "emotion_target",
+      "target": "micro_expression_output"
+    }
   ],
   "keywords": {
     "primary": "character",

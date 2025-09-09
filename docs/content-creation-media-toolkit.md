@@ -468,7 +468,7 @@ class ContentValidationService {
     return {
       isValid: errors.length === 0,
       errors,
-      warnings: this.generateWarnings(input),
+      warnings: this.generateWarnings(input)
     };
   }
 }
@@ -482,19 +482,27 @@ When advanced features fail, the toolkit falls back to simpler alternatives:
 
 ```typescript
 // Character Development with fallback
-async function generateCharacterProfile(config: CharacterConfig): Promise<CharacterProfile> {
+async function generateCharacterProfile(
+  config: CharacterConfig
+): Promise<CharacterProfile> {
   try {
     // Attempt advanced character generation
     return await advancedCharacterGeneration(config);
   } catch (error) {
-    this.logger.warn('Advanced character generation failed, using basic template', error);
+    this.logger.warn(
+      'Advanced character generation failed, using basic template',
+      error
+    );
 
     try {
       // Fallback to basic character template
       return await basicCharacterGeneration(config);
     } catch (fallbackError) {
       // Final fallback to minimal character data
-      this.logger.error('All character generation methods failed', fallbackError);
+      this.logger.error(
+        'All character generation methods failed',
+        fallbackError
+      );
       return createMinimalCharacterProfile(config);
     }
   }
@@ -534,7 +542,7 @@ class ContentQualityGuard {
       passed: issues.length === 0,
       issues,
       quality: this.calculateQualityScore(content),
-      recommendations: this.generateImprovementSuggestions(content),
+      recommendations: this.generateImprovementSuggestions(content)
     };
   }
 }
@@ -559,7 +567,7 @@ app.use('/api/content-toolkit/*', (error, req, res, next) => {
   const errorResponse: ContentToolkitError = {
     code: error.code || 'UNKNOWN_ERROR',
     message: error.message || 'An unexpected error occurred',
-    retryable: error.retryable || false,
+    retryable: error.retryable || false
   };
 
   // Add context-specific error details
@@ -569,7 +577,7 @@ app.use('/api/content-toolkit/*', (error, req, res, next) => {
       errorResponse.suggestions = [
         'Check input parameters against API documentation',
         'Ensure all required fields are provided',
-        'Validate data types and ranges',
+        'Validate data types and ranges'
       ];
       break;
 
@@ -577,7 +585,7 @@ app.use('/api/content-toolkit/*', (error, req, res, next) => {
       errorResponse.suggestions = [
         'Try simplifying the request parameters',
         'Reduce content length requirements',
-        'Check for conflicting style requirements',
+        'Check for conflicting style requirements'
       ];
       errorResponse.retryable = true;
       break;
@@ -586,7 +594,7 @@ app.use('/api/content-toolkit/*', (error, req, res, next) => {
       errorResponse.suggestions = [
         'Implement request throttling',
         'Use batch processing for multiple requests',
-        'Consider upgrading API plan for higher limits',
+        'Consider upgrading API plan for higher limits'
       ];
       errorResponse.retryable = true;
       break;
@@ -629,7 +637,7 @@ describe('PlotGenerationNode', () => {
         genre: '',
         themes: ['adventure'],
         complexity: 'simple',
-        length: 'short story',
+        length: 'short story'
       };
 
       const result = ContentValidationService.validatePlotInput(input);
@@ -643,7 +651,7 @@ describe('PlotGenerationNode', () => {
         genre: 'fantasy',
         themes: Array(15).fill('theme'), // Too many themes
         complexity: 'simple',
-        length: 'short story',
+        length: 'short story'
       };
 
       const result = ContentValidationService.validatePlotInput(input);
@@ -657,7 +665,7 @@ describe('PlotGenerationNode', () => {
         genre: 'sci-fi',
         themes: ['technology'],
         complexity: 'invalid_complexity',
-        length: 'novella',
+        length: 'novella'
       };
 
       const result = ContentValidationService.validatePlotInput(input);
@@ -673,7 +681,7 @@ describe('PlotGenerationNode', () => {
         genre: 'mystery',
         themes: ['justice', 'redemption'],
         complexity: 'simple',
-        length: 'short story',
+        length: 'short story'
       };
 
       const plot = await plotGenerator.generate(input);
@@ -690,7 +698,7 @@ describe('PlotGenerationNode', () => {
         genre: 'epic fantasy',
         themes: ['good vs evil', 'coming of age', 'sacrifice', 'friendship'],
         complexity: 'complex',
-        length: 'series',
+        length: 'series'
       };
 
       const plot = await plotGenerator.generate(input);
@@ -705,13 +713,15 @@ describe('PlotGenerationNode', () => {
   describe('Error Handling', () => {
     it('handles API failures gracefully', async () => {
       // Mock API failure
-      jest.spyOn(plotGenerator, 'callGenerationAPI').mockRejectedValue(new Error('API connection failed'));
+      jest
+        .spyOn(plotGenerator, 'callGenerationAPI')
+        .mockRejectedValue(new Error('API connection failed'));
 
       const input = {
         genre: 'romance',
         themes: ['love'],
         complexity: 'simple',
-        length: 'short story',
+        length: 'short story'
       };
 
       const plot = await plotGenerator.generate(input);
@@ -727,10 +737,12 @@ describe('PlotGenerationNode', () => {
         genre: null,
         themes: [],
         complexity: 'invalid',
-        length: '',
+        length: ''
       };
 
-      await expect(plotGenerator.generate(invalidInput)).rejects.toThrow('Invalid input parameters provided');
+      await expect(plotGenerator.generate(invalidInput)).rejects.toThrow(
+        'Invalid input parameters provided'
+      );
     });
   });
 
@@ -740,7 +752,7 @@ describe('PlotGenerationNode', () => {
         genre: 'thriller',
         themes: ['suspense'],
         complexity: 'moderate',
-        length: 'short story',
+        length: 'short story'
       };
 
       const startTime = Date.now();
@@ -772,7 +784,7 @@ describe('ScreenplayTemplate', () => {
         genre: 'drama',
         length: 'full sequence',
         characters: ['JOHN', 'MARY'],
-        setting: 'contemporary',
+        setting: 'contemporary'
       };
 
       const script = await scriptGenerator.generate(config);
@@ -798,36 +810,48 @@ describe('ScreenplayTemplate', () => {
         characters: ['DETECTIVE', 'WITNESS'],
         setting: 'police station interrogation room',
         mood: 'tense',
-        plot_point: 'witness reveals crucial information',
+        plot_point: 'witness reveals crucial information'
       };
 
       const dialogue = await scriptGenerator.generateDialogue(scene);
 
       expect(dialogue).toBeDefined();
       expect(dialogue.lines.length).toBeGreaterThan(0);
-      expect(dialogue.lines.some(line => line.character === 'DETECTIVE')).toBe(true);
-      expect(dialogue.lines.some(line => line.character === 'WITNESS')).toBe(true);
+      expect(dialogue.lines.some(line => line.character === 'DETECTIVE')).toBe(
+        true
+      );
+      expect(dialogue.lines.some(line => line.character === 'WITNESS')).toBe(
+        true
+      );
     });
 
     it('maintains character voice consistency', async () => {
       const characterVoices = {
         PROFESSOR: { tone: 'academic', vocabulary: 'formal' },
-        STUDENT: { tone: 'casual', vocabulary: 'informal' },
+        STUDENT: { tone: 'casual', vocabulary: 'informal' }
       };
 
       const scene = {
         characters: ['PROFESSOR', 'STUDENT'],
         setting: 'university office',
-        characterVoices,
+        characterVoices
       };
 
       const dialogue = await scriptGenerator.generateDialogue(scene);
-      const professorLines = dialogue.lines.filter(line => line.character === 'PROFESSOR');
-      const studentLines = dialogue.lines.filter(line => line.character === 'STUDENT');
+      const professorLines = dialogue.lines.filter(
+        line => line.character === 'PROFESSOR'
+      );
+      const studentLines = dialogue.lines.filter(
+        line => line.character === 'STUDENT'
+      );
 
-      expect(professorLines.every(line => this.analyzeTone(line.text) === 'academic')).toBe(true);
+      expect(
+        professorLines.every(line => this.analyzeTone(line.text) === 'academic')
+      ).toBe(true);
 
-      expect(studentLines.every(line => this.analyzeTone(line.text) === 'casual')).toBe(true);
+      expect(
+        studentLines.every(line => this.analyzeTone(line.text) === 'casual')
+      ).toBe(true);
     });
   });
 });
@@ -850,7 +874,7 @@ describe('AltTextGenerator', () => {
         type: 'photograph',
         context: 'blog post about nature',
         detailLevel: 'standard',
-        content: 'landscape with mountains and lake',
+        content: 'landscape with mountains and lake'
       };
 
       const altText = await altTextGenerator.generate(imageData);
@@ -865,17 +889,17 @@ describe('AltTextGenerator', () => {
       const baseImage = {
         type: 'photograph',
         context: 'website header',
-        content: 'city skyline at sunset',
+        content: 'city skyline at sunset'
       };
 
       const briefAlt = await altTextGenerator.generate({
         ...baseImage,
-        detailLevel: 'brief',
+        detailLevel: 'brief'
       });
 
       const comprehensiveAlt = await altTextGenerator.generate({
         ...baseImage,
-        detailLevel: 'comprehensive',
+        detailLevel: 'comprehensive'
       });
 
       expect(briefAlt.length).toBeLessThan(comprehensiveAlt.length);
@@ -890,14 +914,14 @@ describe('AltTextGenerator', () => {
         type: 'chart',
         context: 'educational material',
         detailLevel: 'comprehensive',
-        content: 'bar chart showing quarterly sales data',
+        content: 'bar chart showing quarterly sales data'
       };
 
       const socialImage = {
         type: 'meme',
         context: 'social media',
         detailLevel: 'brief',
-        content: 'humorous cat photo with text overlay',
+        content: 'humorous cat photo with text overlay'
       };
 
       const eduAlt = await altTextGenerator.generate(educationalImage);
@@ -912,22 +936,26 @@ describe('AltTextGenerator', () => {
   describe('Error Handling', () => {
     it('handles missing image data gracefully', async () => {
       const incompleteData = {
-        type: 'photograph',
+        type: 'photograph'
         // Missing required fields
       };
 
-      await expect(altTextGenerator.generate(incompleteData)).rejects.toThrow('Insufficient image data provided');
+      await expect(altTextGenerator.generate(incompleteData)).rejects.toThrow(
+        'Insufficient image data provided'
+      );
     });
 
     it('provides fallback descriptions for analysis failures', async () => {
       // Mock analysis failure
-      jest.spyOn(altTextGenerator, 'analyzeImage').mockRejectedValue(new Error('Image analysis failed'));
+      jest
+        .spyOn(altTextGenerator, 'analyzeImage')
+        .mockRejectedValue(new Error('Image analysis failed'));
 
       const imageData = {
         type: 'illustration',
         context: 'website',
         detailLevel: 'standard',
-        content: 'abstract artwork',
+        content: 'abstract artwork'
       };
 
       const altText = await altTextGenerator.generate(imageData);
@@ -953,20 +981,32 @@ describe('Content Creation Workflow Integration', () => {
       topic: 'sustainable living tips',
       target_audience: 'young professionals',
       word_count: 1500,
-      seo_keywords: ['sustainability', 'eco-friendly', 'green living'],
+      seo_keywords: ['sustainability', 'eco-friendly', 'green living']
     };
 
     // Test each workflow step
-    const headline = await workflowEngine.executeStep('headline_generation', workflowConfig);
+    const headline = await workflowEngine.executeStep(
+      'headline_generation',
+      workflowConfig
+    );
     expect(headline).toMatch(/sustainable|eco|green/i);
 
-    const outline = await workflowEngine.executeStep('outline_creation', { ...workflowConfig, headline });
+    const outline = await workflowEngine.executeStep('outline_creation', {
+      ...workflowConfig,
+      headline
+    });
     expect(outline.sections).toHaveLength(4); // Intro, 3 main sections
 
-    const content = await workflowEngine.executeStep('content_writing', { ...workflowConfig, outline });
+    const content = await workflowEngine.executeStep('content_writing', {
+      ...workflowConfig,
+      outline
+    });
     expect(content.word_count).toBeCloseTo(1500, 200);
 
-    const conclusion = await workflowEngine.executeStep('conclusion_cta', { ...workflowConfig, content });
+    const conclusion = await workflowEngine.executeStep('conclusion_cta', {
+      ...workflowConfig,
+      content
+    });
     expect(conclusion).toContain('call-to-action');
 
     // Verify complete workflow integrity
@@ -988,7 +1028,7 @@ describe('Content Generation Performance', () => {
     plot_generation: 3000, // 3 seconds
     script_formatting: 2000, // 2 seconds
     alt_text_generation: 1500, // 1.5 seconds
-    tone_adaptation: 2500, // 2.5 seconds
+    tone_adaptation: 2500 // 2.5 seconds
   };
 
   Object.entries(PERFORMANCE_THRESHOLDS).forEach(([operation, threshold]) => {
@@ -1037,11 +1077,13 @@ describe('Content Toolkit Edge Cases', () => {
       const result = await toneShifter.adapt({
         sourceContent: maxLengthInput,
         targetTone: 'professional',
-        intensity: 'moderate',
+        intensity: 'moderate'
       });
 
       expect(result).toBeDefined();
-      expect(result.warnings).toContain('Content length exceeds recommended limit');
+      expect(result.warnings).toContain(
+        'Content length exceeds recommended limit'
+      );
     });
 
     it('handles minimal viable input', async () => {
@@ -1049,7 +1091,7 @@ describe('Content Toolkit Edge Cases', () => {
         genre: 'drama',
         themes: ['loss'],
         complexity: 'simple',
-        length: 'short story',
+        length: 'short story'
       };
 
       const plot = await plotGenerator.generate(minimalInput);
@@ -1067,10 +1109,12 @@ describe('Content Toolkit Edge Cases', () => {
       const adaptedContent = await toneShifter.adapt({
         sourceContent: mixedContent,
         targetTone: 'formal',
-        culturalContext: 'global',
+        culturalContext: 'global'
       });
 
-      expect(adaptedContent.warnings).toContain('Mixed language content detected');
+      expect(adaptedContent.warnings).toContain(
+        'Mixed language content detected'
+      );
       expect(adaptedContent.confidence).toBeLessThan(0.9);
     });
 
@@ -1084,7 +1128,7 @@ describe('Content Toolkit Edge Cases', () => {
       const adapted = await audienceAdapter.adapt({
         content: technicalContent,
         targetAudience: 'general public',
-        educationLevel: 'high school',
+        educationLevel: 'high school'
       });
 
       expect(adapted.simplified_terms).toBeDefined();

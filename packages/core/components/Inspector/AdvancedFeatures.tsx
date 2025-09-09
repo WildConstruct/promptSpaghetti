@@ -3,13 +3,13 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
-import { 
-  TextRefinementService, 
-  RefinementMode, 
+import {
+  TextRefinementService,
+  RefinementMode,
   RefinementResult,
-  DiffSegment 
+  DiffSegment
 } from '../../services/llm/TextRefinementService';
-import { 
+import {
   GraphAnalyzer,
   Conflict,
   ComplexityReport,
@@ -65,16 +65,16 @@ export const TextRefinement: React.FC<TextRefinementProps> = ({
   return (
     <div className="text-refinement">
       <div className="refinement-controls">
-        <select 
-          value={mode} 
-          onChange={(e) => setMode(e.target.value as RefinementMode)}
+        <select
+          value={mode}
+          onChange={e => setMode(e.target.value as RefinementMode)}
           disabled={loading}
         >
           <option value="expand">Expand</option>
           <option value="contract">Contract</option>
           <option value="correct">Correct</option>
         </select>
-        <button 
+        <button
           onClick={handleRefine}
           disabled={loading || !text}
           className="refine-btn"
@@ -91,7 +91,7 @@ export const TextRefinement: React.FC<TextRefinementProps> = ({
               {result.confidence} confidence
             </span>
           </div>
-          
+
           <div className="diff-content">
             <div className="original-text">
               <h5>Original:</h5>
@@ -165,18 +165,25 @@ export const ConflictDetector: React.FC<ConflictDetectorProps> = ({
     }
   }, [nodes, edges, autoCheck, detectConflicts]);
 
-  const handleConflictClick = useCallback((conflict: Conflict) => {
-    if (onConflictSelect) {
-      onConflictSelect(conflict.nodeIds);
-    }
-  }, [onConflictSelect]);
+  const handleConflictClick = useCallback(
+    (conflict: Conflict) => {
+      if (onConflictSelect) {
+        onConflictSelect(conflict.nodeIds);
+      }
+    },
+    [onConflictSelect]
+  );
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'error': return '❌';
-      case 'warning': return '⚠️';
-      case 'info': return 'ℹ️';
-      default: return '•';
+      case 'error':
+        return '❌';
+      case 'warning':
+        return '⚠️';
+      case 'info':
+        return 'ℹ️';
+      default:
+        return '•';
     }
   };
 
@@ -188,11 +195,11 @@ export const ConflictDetector: React.FC<ConflictDetectorProps> = ({
           <input
             type="checkbox"
             checked={autoCheck}
-            onChange={(e) => setAutoCheck(e.target.checked)}
+            onChange={e => setAutoCheck(e.target.checked)}
           />
           Auto-check
         </label>
-        <button 
+        <button
           onClick={detectConflicts}
           disabled={loading}
           className="check-btn"
@@ -202,13 +209,11 @@ export const ConflictDetector: React.FC<ConflictDetectorProps> = ({
       </div>
 
       {conflicts.length === 0 ? (
-        <div className="no-conflicts">
-          ✅ No conflicts detected
-        </div>
+        <div className="no-conflicts">✅ No conflicts detected</div>
       ) : (
         <div className="conflicts-list">
           {conflicts.map((conflict, i) => (
-            <div 
+            <div
               key={i}
               className={`conflict-item ${conflict.severity}`}
               onClick={() => handleConflictClick(conflict)}
@@ -226,9 +231,7 @@ export const ConflictDetector: React.FC<ConflictDetectorProps> = ({
               </div>
               <p className="conflict-description">{conflict.description}</p>
               {conflict.suggestion && (
-                <p className="conflict-suggestion">
-                  💡 {conflict.suggestion}
-                </p>
+                <p className="conflict-suggestion">💡 {conflict.suggestion}</p>
               )}
               <div className="affected-nodes">
                 Affects: {conflict.nodeIds.join(', ')}
@@ -270,10 +273,7 @@ export const ComplexityAnalysis: React.FC<ComplexityAnalysisProps> = ({
 
   return (
     <div className="complexity-analysis">
-      <button 
-        onClick={analyzeComplexity}
-        className="analyze-btn"
-      >
+      <button onClick={analyzeComplexity} className="analyze-btn">
         📊 Analyze Complexity
       </button>
 
@@ -281,10 +281,7 @@ export const ComplexityAnalysis: React.FC<ComplexityAnalysisProps> = ({
         <div className="complexity-report">
           <div className="report-header">
             <h3>Complexity Report</h3>
-            <button 
-              onClick={() => setExpanded(false)}
-              className="close-btn"
-            >
+            <button onClick={() => setExpanded(false)} className="close-btn">
               ×
             </button>
           </div>
@@ -321,12 +318,14 @@ export const ComplexityAnalysis: React.FC<ComplexityAnalysisProps> = ({
             <div className="node-breakdown">
               <h4>Node Types</h4>
               <div className="breakdown-list">
-                {Array.from(report.nodeTypeBreakdown.entries()).map(([type, count]) => (
-                  <div key={type} className="breakdown-item">
-                    <span className="type-name">{type}</span>
-                    <span className="type-count">{count}</span>
-                  </div>
-                ))}
+                {Array.from(report.nodeTypeBreakdown.entries()).map(
+                  ([type, count]) => (
+                    <div key={type} className="breakdown-item">
+                      <span className="type-name">{type}</span>
+                      <span className="type-count">{count}</span>
+                    </div>
+                  )
+                )}
               </div>
             </div>
           )}
@@ -390,11 +389,11 @@ export const PreviewGenerator: React.FC<PreviewGeneratorProps> = ({
             min="1"
             max="10"
             value={count}
-            onChange={(e) => setCount(parseInt(e.target.value) || 3)}
+            onChange={e => setCount(parseInt(e.target.value) || 3)}
           />
           previews
         </label>
-        <button 
+        <button
           onClick={generatePreviews}
           disabled={loading}
           className="generate-btn"
@@ -441,7 +440,7 @@ export const SmartSplit: React.FC<SmartSplitProps> = ({
 
   const getSplitSuggestions = useCallback(async () => {
     if (!selectedText) return;
-    
+
     setLoading(true);
     try {
       const result = await analyzer.generateSplitSuggestions(selectedText);
@@ -453,16 +452,19 @@ export const SmartSplit: React.FC<SmartSplitProps> = ({
     }
   }, [selectedText, analyzer]);
 
-  const applySplit = useCallback((segments: string[]) => {
-    onSplit(segments);
-    setSuggestions(null);
-  }, [onSplit]);
+  const applySplit = useCallback(
+    (segments: string[]) => {
+      onSplit(segments);
+      setSuggestions(null);
+    },
+    [onSplit]
+  );
 
   if (!selectedText) return null;
 
   return (
     <div className="smart-split">
-      <button 
+      <button
         onClick={getSplitSuggestions}
         disabled={loading}
         className="split-btn"
@@ -488,7 +490,7 @@ export const SmartSplit: React.FC<SmartSplitProps> = ({
                   </span>
                 ))}
               </div>
-              <button 
+              <button
                 onClick={() => applySplit(strategy.segments)}
                 className="apply-split-btn"
               >

@@ -148,7 +148,7 @@ const webVitals = new WebVitalsIntegration({
   samplingRate: 1.0,
   enableConsoleLogging: true,
   enableAnalytics: true,
-  analyticsEndpoint: '/api/analytics/web-vitals',
+  analyticsEndpoint: '/api/analytics/web-vitals'
 });
 
 // Start monitoring
@@ -167,7 +167,10 @@ webVitals.on('poor-performance', metric => {
 ### 2. Performance Measurement
 
 ```typescript
-import { measureExecution, PerformanceTracker } from './packages/core/utils/performance';
+import {
+  measureExecution,
+  PerformanceTracker
+} from './packages/core/utils/performance';
 
 // Measure function execution
 const { result, metrics } = await measureExecution(
@@ -177,7 +180,9 @@ const { result, metrics } = await measureExecution(
   { operation: 'complex-calculation' }
 );
 
-console.log(`Operation took ${metrics.duration}ms and used ${metrics.memory}MB`);
+console.log(
+  `Operation took ${metrics.duration}ms and used ${metrics.memory}MB`
+);
 
 // Track multiple operations
 const tracker = new PerformanceTracker();
@@ -213,8 +218,8 @@ const dashboard = new PerformanceMonitoringDashboard({
   autoOptimize: false, // Manual optimization
   alertThresholds: {
     violations: 3, // Alert after 3 violations
-    score: 70, // Alert below score 70
-  },
+    score: 70 // Alert below score 70
+  }
 });
 
 // Start monitoring
@@ -402,11 +407,14 @@ npm run perf:monitor
 
 ```typescript
 // Create custom performance observer
-const observer = webVitals.createPerformanceObserver(['navigation', 'resource', 'paint'], entries => {
-  entries.forEach(entry => {
-    console.log(`${entry.entryType}: ${entry.name} took ${entry.duration}ms`);
-  });
-});
+const observer = webVitals.createPerformanceObserver(
+  ['navigation', 'resource', 'paint'],
+  entries => {
+    entries.forEach(entry => {
+      console.log(`${entry.entryType}: ${entry.name} took ${entry.duration}ms`);
+    });
+  }
+);
 ```
 
 ### Memory Profiling
@@ -418,7 +426,7 @@ const memoryObserver = setInterval(() => {
   console.log({
     used: Math.round(memory.usedJSHeapSize / 1024 / 1024),
     total: Math.round(memory.totalJSHeapSize / 1024 / 1024),
-    limit: Math.round(memory.jsHeapSizeLimit / 1024 / 1024),
+    limit: Math.round(memory.jsHeapSizeLimit / 1024 / 1024)
   });
 }, 5000);
 ```
@@ -434,8 +442,8 @@ const profiler = new PerformanceProfiler({
   alertThresholds: {
     cpuUsage: 80,
     memoryUsage: 80,
-    responseTime: 1000,
-  },
+    responseTime: 1000
+  }
 });
 
 profiler.startMonitoring();

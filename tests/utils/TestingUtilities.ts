@@ -14,7 +14,10 @@ export class TestEnvironmentManager {
   private static environments: Map<string, Record<string, unknown>> = new Map();
   private static cleanup: Map<string, () => Promise<void>> = new Map();
 
-  static async setupEnvironment(name: string, config: Record<string, unknown>): Promise<void> {
+  static async setupEnvironment(
+    name: string,
+    config: Record<string, unknown>
+  ): Promise<void> {
     this.environments.set(name, config);
 
     // Setup environment variables
@@ -23,7 +26,10 @@ export class TestEnvironmentManager {
     }
   }
 
-  static async createEnvironment(name: string, config: Record<string, unknown>): Promise<Record<string, unknown>> {
+  static async createEnvironment(
+    name: string,
+    config: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
     // Create comprehensive environment object with mocks and fixtures
     const environment = {
       name,
@@ -33,7 +39,7 @@ export class TestEnvironmentManager {
       cleanup: async () => {
         await this.cleanupEnvironment(name);
       },
-      createdAt: Date.now(),
+      createdAt: Date.now()
     };
 
     // Setup ReactFlow mocks if configured
@@ -44,21 +50,23 @@ export class TestEnvironmentManager {
           getNodes: jest.fn(() => []),
           getEdges: jest.fn(() => []),
           setNodes: jest.fn<unknown[], unknown>(),
-          setEdges: jest.fn<unknown[], unknown>(),
+          setEdges: jest.fn<unknown[], unknown>()
         })),
         useNodesState: jest.fn(() => [[], jest.fn<unknown[], unknown>()]),
-        useEdgesState: jest.fn(() => [[], jest.fn<unknown[], unknown>()]),
+        useEdgesState: jest.fn(() => [[], jest.fn<unknown[], unknown>()])
       });
     }
 
     // Setup WebSocket mocks if configured
     if (config.mockWebSocket) {
-      const WebSocketMock = jest.fn<unknown[], unknown>().mockImplementation(() => ({
-        send: jest.fn<unknown[], unknown>(),
-        close: jest.fn<unknown[], unknown>(),
-        addEventListener: jest.fn<unknown[], unknown>(),
-        removeEventListener: jest.fn<unknown[], unknown>(),
-      }));
+      const WebSocketMock = jest
+        .fn<unknown[], unknown>()
+        .mockImplementation(() => ({
+          send: jest.fn<unknown[], unknown>(),
+          close: jest.fn<unknown[], unknown>(),
+          addEventListener: jest.fn<unknown[], unknown>(),
+          removeEventListener: jest.fn<unknown[], unknown>()
+        }));
 
       environment.mocks.set('WebSocket', WebSocketMock);
       Object.defineProperty(global, 'WebSocket', { value: WebSocketMock });
@@ -70,10 +78,12 @@ export class TestEnvironmentManager {
         getItem: jest.fn<unknown[], unknown>(),
         setItem: jest.fn<unknown[], unknown>(),
         removeItem: jest.fn<unknown[], unknown>(),
-        clear: jest.fn<unknown[], unknown>(),
+        clear: jest.fn<unknown[], unknown>()
       };
       environment.mocks.set('localStorage', localStorageMock);
-      Object.defineProperty(global, 'localStorage', { value: localStorageMock });
+      Object.defineProperty(global, 'localStorage', {
+        value: localStorageMock
+      });
     }
 
     this.environments.set(name, environment);
@@ -256,7 +266,10 @@ export class TestAssertionHelpers {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  static async expectToThrowAsync(fn: () => Promise<unknown>, expectedError?: string | RegExp): Promise<void> {
+  static async expectToThrowAsync(
+    fn: () => Promise<unknown>,
+    expectedError?: string | RegExp
+  ): Promise<void> {
     let thrown = false;
     try {
       await fn();
@@ -281,7 +294,11 @@ export class TestAssertionHelpers {
     expect(JSON.stringify(actual)).toBe(JSON.stringify(expected));
   }
 
-  static expectApproximately(actual: number, expected: number, tolerance: number = 0.01): void {
+  static expectApproximately(
+    actual: number,
+    expected: number,
+    tolerance: number = 0.01
+  ): void {
     expect(Math.abs(actual - expected)).toBeLessThanOrEqual(tolerance);
   }
 }
@@ -298,7 +315,7 @@ export class MockFactory {
       role: 'user',
       isActive: true,
       createdAt: new Date().toISOString(),
-      ...overrides,
+      ...overrides
     };
   }
 
@@ -310,36 +327,45 @@ export class MockFactory {
       name: 'Mock Graph',
       description: 'A mock graph for testing',
       createdAt: new Date().toISOString(),
-      ...overrides,
+      ...overrides
     };
   }
 
-  static createMockNode(type: string = 'test', overrides: Record<string, unknown> = {}): unknown {
+  static createMockNode(
+    type: string = 'test',
+    overrides: Record<string, unknown> = {}
+  ): unknown {
     return {
       id: `mock-node-${Date.now()}`,
       type,
       data: {},
       position: { x: 0, y: 0 },
-      ...overrides,
+      ...overrides
     };
   }
 
-  static createMockEdge(source: string = 'node1', target: string = 'node2'): unknown {
+  static createMockEdge(
+    source: string = 'node1',
+    target: string = 'node2'
+  ): unknown {
     return {
       id: `edge-${source}-${target}`,
       source,
       target,
-      type: 'default',
+      type: 'default'
     };
   }
 
-  static createMockAPIResponse(data: unknown = {}, status: number = 200): unknown {
+  static createMockAPIResponse(
+    data: unknown = {},
+    status: number = 200
+  ): unknown {
     return {
       status,
       ok: status >= 200 && status < 300,
       data,
       headers: {},
-      statusText: status === 200 ? 'OK' : 'Error',
+      statusText: status === 200 ? 'OK' : 'Error'
     };
   }
 }
@@ -367,7 +393,7 @@ export class PerformanceTestUtils {
       peak: endMemory.heapUsed,
       average: (startMemory.heapUsed + endMemory.heapUsed) / 2,
       gcCount: 0, // Would need more sophisticated tracking
-      gcTime: 0,
+      gcTime: 0
     };
 
     return { result, executionTime, memoryUsage };
@@ -380,7 +406,7 @@ export class PerformanceTestUtils {
     return {
       concurrency,
       iterations,
-      totalOperations: concurrency * iterations,
+      totalOperations: concurrency * iterations
     };
   }
 }
@@ -399,7 +425,7 @@ export const testUtils = {
   expectDeepEqual: TestAssertionHelpers.expectDeepEqual,
   expectApproximately: TestAssertionHelpers.expectApproximately,
   measureExecution: PerformanceTestUtils.measureExecution,
-  generateLoadTest: PerformanceTestUtils.generateLoadTest,
+  generateLoadTest: PerformanceTestUtils.generateLoadTest
 };
 
 // Export AsyncTestingUtils as an alias for TestAssertionHelpers to maintain compatibility
@@ -422,5 +448,5 @@ export default {
   TestAssertionHelpers,
   MockFactory,
   PerformanceTestUtils,
-  testUtils,
+  testUtils
 };

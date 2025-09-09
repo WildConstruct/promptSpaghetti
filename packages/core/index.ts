@@ -4,21 +4,21 @@ export * from './public';
 
 // Shared types and engine placeholder
 
-export interface Node { 
+export interface Node {
   id: string;
   type: string;
   data: Record<string, unknown>;
   position: { x: number; y: number };
 }
 
-export interface Edge { 
+export interface Edge {
   id: string;
   source: string;
   target: string;
   type?: string;
 }
 
-export interface Graph { 
+export interface Graph {
   nodes: Node[];
   edges: Edge[];
   meta: {};
@@ -34,7 +34,7 @@ export interface Graph {
 // export * from './utils/nodeDataUtils';
 // Temporarily disabled - Epic1GraphEditor uses import.meta which Jest doesn't support
 // export { Epic1GraphEditor as GraphEditor } from './components/epic1/Epic1GraphEditor';
-// Legacy InspectorSidebar removed - use InspectorPanel from ./components/Inspector instead  
+// Legacy InspectorSidebar removed - use InspectorPanel from ./components/Inspector instead
 // export { NodePalette as Palette } from './components/epic1/NodePalette';
 // export { PreviewPanel as PreviewModal } from './components/epic1/preview/PreviewPanel';
 export { nodeSchemas } from './nodeSchemas';
@@ -43,7 +43,11 @@ export { useGraphStore } from './graphStore';
 // Epic 2 LLM components
 export { LLMToggle } from './components/LLMToggle/LLMToggle';
 export { SimpleLLMService, getLLMService } from './services/SimpleLLMService';
-export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMService';
+export type {
+  LLMConfig,
+  ParseOptions,
+  ParseResult
+} from './services/SimpleLLMService';
 
 // Professional Interface Integration - DISABLED (components don't exist)
 // export { ProfessionalIntegration } from './components/CommandPalette/ProfessionalIntegration';
@@ -96,13 +100,13 @@ export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMS
 // Project Management System exports - DISABLED (projectSerialization dependency missing)
 // export { ProjectManager } from './projectManager';
 // export { ServerProjectManager } from './serverProjectManager';
-// export type { 
+// export type {
 //   ProjectMetadata,
 //   PSGFile,
 //   ProjectSettings,
 //   SaveProjectOptions,
 //   LoadProjectResult,
-//   SaveProjectResult 
+//   SaveProjectResult
 // }
 //  from './projectManager';
 // export type { ServerProjectMetadata, ServerProject, ProjectListResponse, ProjectQuery } from './serverProjectManager';
@@ -123,7 +127,7 @@ export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMS
 // Epic 8.4 - Extension System Architecture exports - DISABLED (extensions directory doesn't exist)
 // export { ExtensionLifecycleManager } from './extensions/ExtensionLifecycleManager';
 // export { ExtensionPointRegistry } from './extensions/ExtensionPointRegistry';
-// export { 
+// export {
 //   BaseExtension,
 //   ExtensionHealthStatus,
 //   ExtensionContext,
@@ -140,13 +144,13 @@ export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMS
 //   ExtensionError,
 //   ExtensionValidationResult,
 //   ExtensionManifestSchema,
-//   ExtensionManifest 
+//   ExtensionManifest
 // }
 //  from './extensions/interfaces/ExtensionInterfaces';
 // DISABLED - extensions directory doesn't exist
-// export { 
+// export {
 //   NodeExtension,
-//   NodeCategory 
+//   NodeCategory
 // }
 //   // Skip NodeDefinition to avoid conflict
 //  from './extensions/interfaces/NodeExtension';
@@ -158,21 +162,21 @@ export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMS
 // Epic 9.1.2 - Collaborative Editing exports - DISABLED (collaboration directory doesn't exist)
 // export { GraphCRDTAdapter, createCollaborativeGraph } from './collaboration/GraphCRDTAdapter';
 // export type { CollaborativeGraphOptions } from './collaboration/GraphCRDTAdapter';
-// export { 
+// export {
 //   useCollaborativeGraphStore,
 //   useCollaborationEnabled,
 //   useConnectedUsers,
 //   useConnectionStatus,
 //   useLocalPresence,
 //   useCollaborativeGraph,
-//   useCollaborativeActions 
+//   useCollaborativeActions
 // }
 //  from './collaboration/collaborativeGraphStore';
 // export type { UserPresence, CollaborativeGraphState } from './collaboration/collaborativeGraphStore';
-// export { 
+// export {
 //   useCollaborativeReactFlow,
 //   useNodeCollaborators,
-//   useCollaborationStatus 
+//   useCollaborationStatus
 // }
 //  from './collaboration/useCollaborativeReactFlow';
 // export { CollaborativePresence, CollaborationStatus, UserAvatars } from './collaboration/CollaborativePresence';
@@ -195,17 +199,17 @@ export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMS
 // } from './stores/workflowStore';
 
 // Epic 12 - LLM Agent Randomizer System exports - DISABLED (llm-randomizer directory doesn't exist)
-// export { 
+// export {
 //   RandomizerPanel,
 //   GraphPreview,
 //   RandomizerWorkflow,
 //   RandomizerSystem,
-//   LLMRandomizerSystem 
+//   LLMRandomizerSystem
 // }
 //  from './llm-randomizer';
 
 // Epic 19 - Security and Audit Logging exports - DISABLED (security directory doesn't exist)
-// export { 
+// export {
 //   AuditLogger,
 //   createAuditLogger,
 //   AuditOperation,
@@ -216,67 +220,68 @@ export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMS
 //   type AuditStorageBackend,
 //   type AuditQueryCriteria,
 //   type AlertThresholds,
-//   type AuditStatistics 
+//   type AuditStatistics
 // }
 //  from './security/AuditLogger';
-// 
+//
 // export { AuditIntegration, createAuditIntegration, type ComplianceReport } from './security/AuditIntegration';
-// 
-// export { 
+//
+// export {
 //   DataClassifier,
 //   createDataClassifier,
 //   type DataClassificationResult,
 //   type ClassificationPattern,
 //   type ClassificationConfig,
-//   type ComplianceValidationResult 
+//   type ComplianceValidationResult
 // }
 //  from './security/DataClassifier';
-// 
-// export { 
+//
+// export {
 //   ClassificationEnforcer,
 //   createClassificationEnforcer,
 //   type EnforcementResult,
 //   type ClassificationHandlingRequirements,
-//   type ClassificationEnforcementConfig 
+//   type ClassificationEnforcementConfig
 // }
 //  from './security/ClassificationEnforcer';
 
 // DISABLED - security directory doesn't exist
-// export { 
+// export {
 //   ClassificationEnforcementMiddleware,
-//   createClassificationMiddleware 
+//   createClassificationMiddleware
 // }
 //  from './security/ClassificationEnforcementMiddleware';
 
-export { DataClassificationLevel, type OperationContext, type ValidationResult } from './types/DataClassification';
+export {
+  DataClassificationLevel,
+  type OperationContext,
+  type ValidationResult
+} from './types/DataClassification';
 
 // Epic 8.8 - UTDG Historical Data Integration Foundation exports - DISABLED (historical directory doesn't exist)
 // export { UTDGManager } from './historical/UTDGManager';
-// 
+//
 // export { ConstraintValidator } from './historical/ConstraintValidator';
-// 
+//
 // export { ExternalDataService } from './historical/ExternalDataService';
-// 
-// export { 
+//
+// export {
 //   MedievalDemoDatabase,
 //   MEDIEVAL_DEMO_CONSTRAINTS,
 //   MEDIEVAL_PERIODS,
 //   MEDIEVAL_REGIONS,
 //   MEDIEVAL_FABRICS,
-//   MEDIEVAL_COLORS 
+//   MEDIEVAL_COLORS
 // }
 //  from './historical/MedievalDemo';
 
 // UTDG types removed - file deleted
 
 // Runtime system exports
-export type { 
-  ExecutionContext,
-  RuntimeNode
-} from './runtime';
+export type { ExecutionContext, RuntimeNode } from './runtime';
 
 // Export both types and classes for Advanced runtime
-export { 
+export {
   AdvancedRuntimeNode,
   type AdvancedExecutionContext,
   type AdvancedNodeConfig,

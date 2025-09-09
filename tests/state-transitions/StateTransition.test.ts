@@ -15,13 +15,19 @@ describe('State Transition Tests', () => {
 
   beforeEach(async () => {
     // Create temporary state file for testing
-    testStateFile = path.join(__dirname, '..', '..', 'test-data', `test-state-${Date.now()}.json`);
+    testStateFile = path.join(
+      __dirname,
+      '..',
+      '..',
+      'test-data',
+      `test-state-${Date.now()}.json`
+    );
     await fs.mkdir(path.dirname(testStateFile), { recursive: true });
 
     const initialState = {
       meta: { cycle: 1, updated: new Date().toISOString() },
       tasks: {},
-      assignments: {},
+      assignments: {}
     };
 
     await fs.writeFile(testStateFile, JSON.stringify(initialState, null, 2));
@@ -83,13 +89,18 @@ describe('State Transition Tests', () => {
           title: 'Test Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
-      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
-        assignee: 'test-agent',
-      });
+      const event = await framework.testValidTransition(
+        taskId,
+        'UNASSIGNED',
+        'IN_PROGRESS',
+        {
+          assignee: 'test-agent'
+        }
+      );
 
       expect(event.success).toBe(true);
       expect(event.from).toBe('UNASSIGNED');
@@ -111,13 +122,18 @@ describe('State Transition Tests', () => {
           status: 'IN_PROGRESS',
           epic: 'E18',
           assignee: 'test-agent',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
-      const event = await framework.testValidTransition(taskId, 'IN_PROGRESS', 'REVIEW', {
-        output: 'Task completed successfully',
-      });
+      const event = await framework.testValidTransition(
+        taskId,
+        'IN_PROGRESS',
+        'REVIEW',
+        {
+          output: 'Task completed successfully'
+        }
+      );
 
       expect(event.success).toBe(true);
 
@@ -137,11 +153,15 @@ describe('State Transition Tests', () => {
           epic: 'E18',
           assignee: 'test-agent',
           output: 'Complete implementation',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
-      const event = await framework.testValidTransition(taskId, 'REVIEW', 'APPROVED');
+      const event = await framework.testValidTransition(
+        taskId,
+        'REVIEW',
+        'APPROVED'
+      );
 
       expect(event.success).toBe(true);
 
@@ -161,13 +181,18 @@ describe('State Transition Tests', () => {
           epic: 'E18',
           assignee: 'test-agent',
           output: 'Initial attempt',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
-      const event = await framework.testValidTransition(taskId, 'REVIEW', 'IN_PROGRESS', {
-        revisionReason: 'Needs improvement',
-      });
+      const event = await framework.testValidTransition(
+        taskId,
+        'REVIEW',
+        'IN_PROGRESS',
+        {
+          revisionReason: 'Needs improvement'
+        }
+      );
 
       expect(event.success).toBe(true);
 
@@ -187,11 +212,15 @@ describe('State Transition Tests', () => {
           title: 'Test Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
-      const result = await framework.testInvalidTransition(taskId, 'UNASSIGNED', 'APPROVED');
+      const result = await framework.testInvalidTransition(
+        taskId,
+        'UNASSIGNED',
+        'APPROVED'
+      );
 
       expect(result.blocked).toBe(true);
       expect(result.reason).toContain('Invalid transition');
@@ -207,18 +236,26 @@ describe('State Transition Tests', () => {
           status: 'APPROVED',
           epic: 'E18',
           completedAt: new Date().toISOString(),
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
-      const result = await framework.testInvalidTransition(taskId, 'APPROVED', 'IN_PROGRESS');
+      const result = await framework.testInvalidTransition(
+        taskId,
+        'APPROVED',
+        'IN_PROGRESS'
+      );
 
       expect(result.blocked).toBe(true);
       expect(result.reason).toContain('Invalid transition');
     });
 
     it('should handle transition from non-existent task', async () => {
-      const result = await framework.testInvalidTransition('non-existent-task', 'UNASSIGNED', 'IN_PROGRESS');
+      const result = await framework.testInvalidTransition(
+        'non-existent-task',
+        'UNASSIGNED',
+        'IN_PROGRESS'
+      );
 
       expect(result.blocked).toBe(true);
       expect(result.reason).toContain('not found');
@@ -235,11 +272,13 @@ describe('State Transition Tests', () => {
           title: 'Test Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
-      await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'test-agent' });
+      await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test-agent'
+      });
 
       const state = await stateLock.readState();
       expect(state.tasks[taskId].startedAt).toBeDefined();
@@ -255,7 +294,7 @@ describe('State Transition Tests', () => {
           title: 'Test Task',
           status: 'IN_PROGRESS',
           epic: 'E18',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
           // Missing assignee
         };
       });
@@ -273,15 +312,17 @@ describe('State Transition Tests', () => {
     it('should run all transition tests successfully', async () => {
       await framework.startTest('comprehensive-suite');
 
-      const results = await framework.runComprehensiveTests('comprehensive-test-task');
+      const results = await framework.runComprehensiveTests(
+        'comprehensive-test-task'
+      );
 
       expect(results.passed).toBeGreaterThan(0);
       expect(results.details).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             test: 'State machine integrity',
-            result: 'passed',
-          }),
+            result: 'passed'
+          })
         ])
       );
 
@@ -303,8 +344,12 @@ describe('State Transition Tests', () => {
       const taskId = 'report-test-task';
 
       // Perform several transitions
-      await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'test' });
-      await framework.testValidTransition(taskId, 'IN_PROGRESS', 'REVIEW', { output: 'done' });
+      await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+        assignee: 'test'
+      });
+      await framework.testValidTransition(taskId, 'IN_PROGRESS', 'REVIEW', {
+        output: 'done'
+      });
       await framework.testValidTransition(taskId, 'REVIEW', 'APPROVED');
 
       const report = framework.generateTestReport();
@@ -328,14 +373,18 @@ describe('State Transition Tests', () => {
           title: 'Concurrent Test Task',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
       // Attempt concurrent transitions (should be serialized by StateLock)
       const transitions = [
-        framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: 'agent1' }),
-        framework.testValidTransition(taskId, 'UNASSIGNED', 'CANCELLED', { reason: 'concurrent cancel' }),
+        framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
+          assignee: 'agent1'
+        }),
+        framework.testValidTransition(taskId, 'UNASSIGNED', 'CANCELLED', {
+          reason: 'concurrent cancel'
+        })
       ];
 
       const results = await Promise.allSettled(transitions);
@@ -364,13 +413,23 @@ describe('State Transition Tests', () => {
                 title: `Load Test Task ${i}`,
                 status: 'UNASSIGNED',
                 epic: 'E18',
-                created: new Date().toISOString(),
+                created: new Date().toISOString()
               };
             });
 
             // Perform transition sequence
-            await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', { assignee: `agent-${i}` });
-            await framework.testValidTransition(taskId, 'IN_PROGRESS', 'REVIEW', { output: `Output ${i}` });
+            await framework.testValidTransition(
+              taskId,
+              'UNASSIGNED',
+              'IN_PROGRESS',
+              { assignee: `agent-${i}` }
+            );
+            await framework.testValidTransition(
+              taskId,
+              'IN_PROGRESS',
+              'REVIEW',
+              { output: `Output ${i}` }
+            );
             await framework.testValidTransition(taskId, 'REVIEW', 'APPROVED');
           })()
         );
@@ -380,7 +439,9 @@ describe('State Transition Tests', () => {
 
       // Verify all tasks ended up in APPROVED state
       const finalState = await stateLock.readState();
-      const approvedTasks = Object.values(finalState.tasks).filter((task: any) => task.status === 'APPROVED');
+      const approvedTasks = Object.values(finalState.tasks).filter(
+        (task: any) => task.status === 'APPROVED'
+      );
 
       expect(approvedTasks).toHaveLength(numTasks);
     }, 30000);
@@ -392,7 +453,11 @@ describe('State Transition Tests', () => {
       await fs.writeFile(testStateFile, 'invalid json');
 
       try {
-        await framework.testValidTransition('any-task', 'UNASSIGNED', 'IN_PROGRESS');
+        await framework.testValidTransition(
+          'any-task',
+          'UNASSIGNED',
+          'IN_PROGRESS'
+        );
         fail('Should have thrown error for corrupted state');
       } catch (error) {
         expect(error.message).toContain('JSON');
@@ -411,14 +476,19 @@ describe('State Transition Tests', () => {
           title: 'Timeout Test',
           status: 'UNASSIGNED',
           epic: 'E18',
-          created: new Date().toISOString(),
+          created: new Date().toISOString()
         };
       });
 
       // Normal transition should work
-      const event = await framework.testValidTransition(taskId, 'UNASSIGNED', 'IN_PROGRESS', {
-        assignee: 'test-agent',
-      });
+      const event = await framework.testValidTransition(
+        taskId,
+        'UNASSIGNED',
+        'IN_PROGRESS',
+        {
+          assignee: 'test-agent'
+        }
+      );
 
       expect(event.success).toBe(true);
     });

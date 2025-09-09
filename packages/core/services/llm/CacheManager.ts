@@ -7,7 +7,7 @@ function simpleHash(str: string): string {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32bit integer
   }
   return Math.abs(hash).toString(36);
@@ -31,9 +31,9 @@ export class CacheManager {
       maxTokens: request.maxTokens,
       temperature: request.temperature,
       responseFormat: request.responseFormat,
-      taskType: request.taskType,
+      taskType: request.taskType
     };
-    
+
     return simpleHash(JSON.stringify(keyData));
   }
 
@@ -62,7 +62,7 @@ export class CacheManager {
 
     return {
       ...entry.response,
-      cached: true,
+      cached: true
     };
   }
 
@@ -73,7 +73,7 @@ export class CacheManager {
     ttl?: number
   ): void {
     const key = this.generateKey(request, model);
-    
+
     // Enforce max entries with LRU eviction
     if (this.cache.size >= this.maxEntries) {
       const firstKey = this.cache.keys().next().value;
@@ -94,7 +94,7 @@ export class CacheManager {
       key,
       response,
       timestamp: Date.now(),
-      ttl: cacheTTL,
+      ttl: cacheTTL
     };
 
     this.cache.set(key, entry);
@@ -133,7 +133,7 @@ export class CacheManager {
     return {
       size: this.cache.size,
       maxSize: this.maxEntries,
-      hitRate: 0, // Would need to track hits/misses for this
+      hitRate: 0 // Would need to track hits/misses for this
     };
   }
 
@@ -141,7 +141,7 @@ export class CacheManager {
   export(): string {
     const entries = Array.from(this.cache.entries()).map(([key, entry]) => ({
       key,
-      entry,
+      entry
     }));
     return JSON.stringify(entries);
   }
@@ -151,11 +151,11 @@ export class CacheManager {
     try {
       const entries = JSON.parse(data);
       this.cache.clear();
-      
+
       for (const { key, entry } of entries) {
         this.cache.set(key, entry);
       }
-      
+
       // Clean up expired entries after import
       this.cleanup();
     } catch (error) {

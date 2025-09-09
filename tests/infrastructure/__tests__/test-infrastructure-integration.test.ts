@@ -7,8 +7,15 @@
  */
 
 import TestHarness, { TestHarnessConfig } from '../TestHarness';
-import PerformanceScenarios, { PerformanceCategory } from '../performance-scenarios';
-import { TestEnvironmentManager, TestDataUtils, MockFactory, PerformanceTestUtils } from '../../utils/TestingUtilities';
+import PerformanceScenarios, {
+  PerformanceCategory
+} from '../performance-scenarios';
+import {
+  TestEnvironmentManager,
+  TestDataUtils,
+  MockFactory,
+  PerformanceTestUtils
+} from '../../utils/TestingUtilities';
 
 describe('Test Infrastructure Integration', () => {
   let testHarness: TestHarness;
@@ -22,7 +29,7 @@ describe('Test Infrastructure Integration', () => {
       coverage: true,
       timeout: 10000,
       generateReports: true,
-      outputDir: './test-results',
+      outputDir: './test-results'
     };
 
     testHarness = new TestHarness(config);
@@ -73,7 +80,9 @@ describe('Test Infrastructure Integration', () => {
 
   describe('Performance Scenarios Integration', () => {
     it('should execute performance scenarios with test harness', async () => {
-      const scenario = await performanceScenarios.executeScenario('graph-small-execution');
+      const scenario = await performanceScenarios.executeScenario(
+        'graph-small-execution'
+      );
 
       expect(scenario).toBeDefined();
       expect(scenario.result.executionTime).toBeGreaterThan(0);
@@ -103,8 +112,11 @@ describe('Test Infrastructure Integration', () => {
   describe('Custom Matchers Integration', () => {
     it('should use custom matchers in test infrastructure', () => {
       const mockGraph = MockFactory.createMockGraph({
-        nodes: [MockFactory.createMockNode('test'), MockFactory.createMockNode('output')],
-        edges: [MockFactory.createMockEdge('node1', 'node2')],
+        nodes: [
+          MockFactory.createMockNode('test'),
+          MockFactory.createMockNode('output')
+        ],
+        edges: [MockFactory.createMockEdge('node1', 'node2')]
       });
 
       expect(mockGraph.nodes).toEqual(expect.any(Array));
@@ -119,7 +131,7 @@ describe('Test Infrastructure Integration', () => {
       await TestEnvironmentManager.setupEnvironment('test-env', {
         NODE_ENV: 'test',
         API_PORT: '3001',
-        TEST_MODE: 'true',
+        TEST_MODE: 'true'
       });
 
       const environments = TestEnvironmentManager.listEnvironments();
@@ -157,8 +169,12 @@ describe('Test Infrastructure Integration', () => {
     });
 
     it('should create comprehensive mock objects', () => {
-      const mockUser = MockFactory.createMockUser({ name: 'Integration Test User' });
-      const mockGraph = MockFactory.createMockGraph({ name: 'Integration Test Graph' });
+      const mockUser = MockFactory.createMockUser({
+        name: 'Integration Test User'
+      });
+      const mockGraph = MockFactory.createMockGraph({
+        name: 'Integration Test Graph'
+      });
       const mockNode = MockFactory.createMockNode('weighted');
 
       expect(mockUser.name).toBe('Integration Test User');
@@ -178,7 +194,7 @@ describe('Test Infrastructure Integration', () => {
       const loadTest = {
         concurrency: 5,
         iterations: 10,
-        totalOperations: 50,
+        totalOperations: 50
       };
 
       expect(loadTest.concurrency).toBe(5);
@@ -203,14 +219,16 @@ describe('Test Infrastructure Integration', () => {
     });
 
     it('should measure comprehensive performance metrics', async () => {
-      const measurement = await PerformanceTestUtils.measureExecution(async () => {
-        // Simulate complex operation
-        const data = [];
-        for (let i = 0; i < 100; i++) {
-          data.push(Math.random() * i);
+      const measurement = await PerformanceTestUtils.measureExecution(
+        async () => {
+          // Simulate complex operation
+          const data = [];
+          for (let i = 0; i < 100; i++) {
+            data.push(Math.random() * i);
+          }
+          return data.reduce((sum, val) => sum + val, 0);
         }
-        return data.reduce((sum, val) => sum + val, 0);
-      });
+      );
 
       expect(measurement.result).toBeGreaterThan(0);
       expect(measurement.executionTime).toBeGreaterThan(0);

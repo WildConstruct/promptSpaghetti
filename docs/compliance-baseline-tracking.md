@@ -91,7 +91,7 @@ await complianceBaselineTracker.recordMeasurement(
   92, // Current measurement value
   {
     component: 'data_processor',
-    environment: 'production',
+    environment: 'production'
   },
   'Monthly compliance review measurement'
 );
@@ -106,8 +106,14 @@ import { enhancedComplianceMonitor } from './services/ComplianceMonitor';
 const dashboard = await enhancedComplianceMonitor.generateEnhancedDashboard();
 
 console.log('Overall Health:', dashboard.overallScore);
-console.log('Baseline Health:', dashboard.baselineTracking.overallBaselineHealth);
-console.log('Critical Deviations:', dashboard.baselineTracking.criticalDeviations);
+console.log(
+  'Baseline Health:',
+  dashboard.baselineTracking.overallBaselineHealth
+);
+console.log(
+  'Critical Deviations:',
+  dashboard.baselineTracking.criticalDeviations
+);
 console.log('Forecast Alerts:', dashboard.historicalTrends.forecastAlerts);
 ```
 
@@ -138,7 +144,9 @@ const forecast = await complianceHistoricalAnalyzer.generateForecast(
 );
 
 forecast.predictedValues.forEach(prediction => {
-  console.log(`${prediction.date}: ${prediction.predictedValue}% (Risk: ${prediction.riskLevel})`);
+  console.log(
+    `${prediction.date}: ${prediction.predictedValue}% (Risk: ${prediction.riskLevel})`
+  );
 });
 ```
 
@@ -150,10 +158,15 @@ The baseline tracker automatically integrates with the existing `ComplianceMonit
 
 ```typescript
 // Recording measurements updates both systems
-await enhancedComplianceMonitor.recordComplianceMeasurement('GDPR', 'data_protection', 94, {
-  source: 'automated_scan',
-  scan_id: '12345',
-});
+await enhancedComplianceMonitor.recordComplianceMeasurement(
+  'GDPR',
+  'data_protection',
+  94,
+  {
+    source: 'automated_scan',
+    scan_id: '12345'
+  }
+);
 ```
 
 ### Authentication Service Integration
@@ -165,11 +178,16 @@ The system can be integrated with the authentication service for compliance-rela
 import { enhancedComplianceMonitor } from '../../../packages/core/services/ComplianceMonitor';
 
 // Record authentication-related compliance measurements
-await enhancedComplianceMonitor.recordComplianceMeasurement('SOC2', 'access_control', 99.2, {
-  event: 'mfa_enforcement_check',
-  total_users: 1000,
-  mfa_enabled: 992,
-});
+await enhancedComplianceMonitor.recordComplianceMeasurement(
+  'SOC2',
+  'access_control',
+  99.2,
+  {
+    event: 'mfa_enforcement_check',
+    total_users: 1000,
+    mfa_enabled: 992
+  }
+);
 ```
 
 ## Director-Friendly Features
@@ -235,7 +253,7 @@ await complianceBaselineTracker.createCustomBaseline({
   toleranceThreshold: 3,
   measurementUnit: 'percentage',
   measurementFrequency: 'daily',
-  isActive: true,
+  isActive: true
 });
 ```
 
@@ -246,7 +264,7 @@ Baseline thresholds can be updated to match organizational requirements:
 ```typescript
 await complianceBaselineTracker.updateBaseline('gdpr_data_protection_score', {
   targetValue: 97, // Increase target from 95% to 97%
-  toleranceThreshold: 2, // Reduce tolerance from 5% to 2%
+  toleranceThreshold: 2 // Reduce tolerance from 5% to 2%
 });
 ```
 

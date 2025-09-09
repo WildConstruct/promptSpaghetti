@@ -77,24 +77,24 @@ const challengeMiddleware = new ChallengeMiddleware({
       conditions: [
         {
           type: 'failedAttempts',
-          threshold: 3,
-        },
-      ],
+          threshold: 3
+        }
+      ]
     },
     {
       path: '/auth/register',
       method: 'POST',
       challengeType: ChallengeType.TEXT_CAPTCHA,
       difficulty: ChallengeDifficulty.MEDIUM,
-      riskThreshold: 0.2,
+      riskThreshold: 0.2
     },
     {
       path: '/auth/password-reset',
       method: 'POST',
       challengeType: ChallengeType.RECAPTCHA_V2,
-      riskThreshold: 0.1,
-    },
-  ],
+      riskThreshold: 0.1
+    }
+  ]
 });
 ```
 
@@ -154,8 +154,8 @@ const response = await fetch('/auth/challenge/generate', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     type: 'text_captcha',
-    difficulty: 'medium',
-  }),
+    difficulty: 'medium'
+  })
 });
 
 const { challenge } = await response.json();
@@ -166,8 +166,8 @@ const validateResponse = await fetch('/auth/challenge/validate', {
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     challengeId: challenge.id,
-    solution: userInput,
-  }),
+    solution: userInput
+  })
 });
 
 const { valid, token } = await validateResponse.json();
@@ -186,8 +186,8 @@ const loginResponse = await fetch('/auth/login', {
     email: 'user@example.com',
     password: 'password',
     challengeId: 'ch_xxx',
-    challengeSolution: 'solution',
-  }),
+    challengeSolution: 'solution'
+  })
 });
 
 // Option 2: In headers
@@ -196,8 +196,8 @@ const apiResponse = await fetch('/api/protected', {
   headers: {
     Authorization: 'Bearer xxx',
     'X-Challenge-Id': 'ch_xxx',
-    'X-Challenge-Token': 'solution',
-  },
+    'X-Challenge-Token': 'solution'
+  }
 });
 ```
 

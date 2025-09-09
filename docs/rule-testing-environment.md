@@ -136,7 +136,9 @@ npm run rule-test benchmark --duration 120
 ### Programmatic Usage
 
 ```typescript
-import RuleTestingEnvironment, { TestEnvironmentConfig } from './server/src/services/RuleTestingEnvironment';
+import RuleTestingEnvironment, {
+  TestEnvironmentConfig
+} from './server/src/services/RuleTestingEnvironment';
 
 const config: TestEnvironmentConfig = {
   name: 'Custom Test Environment',
@@ -146,18 +148,18 @@ const config: TestEnvironmentConfig = {
   performance: {
     maxExecutionTime: 30000,
     maxRuleCount: 1000,
-    maxConcurrency: 5,
+    maxConcurrency: 5
   },
   data: {
     generateSyntheticData: true,
     datasetSize: 'medium',
-    includeEdgeCases: true,
+    includeEdgeCases: true
   },
   reporting: {
     enableRealTimeReporting: true,
     generateDetailedReports: true,
-    exportResults: true,
-  },
+    exportResults: true
+  }
 };
 
 // Initialize and setup

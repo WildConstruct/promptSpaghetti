@@ -1,5 +1,10 @@
 import React from 'react';
-import { EdgeProps, getBezierPath, EdgeLabelRenderer, BaseEdge } from 'reactflow';
+import {
+  EdgeProps,
+  getBezierPath,
+  EdgeLabelRenderer,
+  BaseEdge
+} from 'reactflow';
 
 // Custom edge component to force rendering
 export const CustomEdge: React.FC<EdgeProps> = ({
@@ -11,7 +16,7 @@ export const CustomEdge: React.FC<EdgeProps> = ({
   sourcePosition,
   targetPosition,
   style = {},
-  markerEnd,
+  markerEnd
 }) => {
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -19,19 +24,19 @@ export const CustomEdge: React.FC<EdgeProps> = ({
     sourcePosition,
     targetX,
     targetY,
-    targetPosition,
+    targetPosition
   });
 
   return (
     <>
-      <BaseEdge 
-        id={id} 
-        path={edgePath} 
-        markerEnd={markerEnd} 
+      <BaseEdge
+        id={id}
+        path={edgePath}
+        markerEnd={markerEnd}
         style={{
           ...style,
           stroke: '#ff0000',
-          strokeWidth: 5,
+          strokeWidth: 5
         }}
       />
       <EdgeLabelRenderer>
@@ -43,7 +48,7 @@ export const CustomEdge: React.FC<EdgeProps> = ({
             padding: 2,
             borderRadius: 3,
             fontSize: 10,
-            fontWeight: 700,
+            fontWeight: 700
           }}
         >
           {id}
@@ -57,5 +62,5 @@ export const CustomEdge: React.FC<EdgeProps> = ({
 export const customEdgeTypes = {
   default: CustomEdge,
   smoothstep: CustomEdge,
-  custom: CustomEdge,
+  custom: CustomEdge
 };

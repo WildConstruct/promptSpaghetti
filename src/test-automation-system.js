@@ -12,7 +12,7 @@ async function testCompleteAutomationSystem() {
   const logger = getLogger('automation-system-test', {
     logLevel: 'INFO',
     enableConsole: true,
-    enableFile: false,
+    enableFile: false
   });
 
   logger.start('Complete automation system test');
@@ -32,13 +32,13 @@ async function testCompleteAutomationSystem() {
       automation: {
         maxRetries: automationConfig.maxRetries,
         logLevel: automationConfig.logLevel,
-        timeout: automationConfig.timeout,
+        timeout: automationConfig.timeout
       },
       qa: {
         passThreshold: qaConfig.passThreshold,
         autoApproveThreshold: qaConfig.autoApproveThreshold,
-        enableBatchProcessing: qaConfig.enableBatchProcessing,
-      },
+        enableBatchProcessing: qaConfig.enableBatchProcessing
+      }
     });
 
     // Test 2: State management workflow simulation
@@ -58,7 +58,7 @@ async function testCompleteAutomationSystem() {
         assignee: 'automation-test-agent',
         priority: 2,
         created: new Date().toISOString(),
-        updated: new Date().toISOString(),
+        updated: new Date().toISOString()
       };
 
       logger.taskStart(testTaskId, 'Created test task');
@@ -73,7 +73,11 @@ async function testCompleteAutomationSystem() {
       task.completion_notes = 'Implementation completed successfully';
     });
 
-    logger.taskComplete(testTaskId, { state: 'COMPLETED' }, 'Task marked as completed');
+    logger.taskComplete(
+      testTaskId,
+      { state: 'COMPLETED' },
+      'Task marked as completed'
+    );
 
     // Test 3: QA workflow simulation with configuration
     logger.info('✅ Simulating QA evaluation process');
@@ -93,7 +97,11 @@ async function testCompleteAutomationSystem() {
       // Clear assignment
       await stateLock.clearTaskAssignment(testTaskId, 'automation-test-agent');
 
-      logger.qaApprove(testTaskId, qaScore, 'Automated approval based on score threshold');
+      logger.qaApprove(
+        testTaskId,
+        qaScore,
+        'Automated approval based on score threshold'
+      );
     } else {
       // Reject and send back
       await stateLock.updateTask(testTaskId, task => {
@@ -108,27 +116,33 @@ async function testCompleteAutomationSystem() {
     // Test 4: Performance measurement with configuration
     logger.info('📊 Testing performance monitoring');
 
-    const performanceResult = await logger.measureTimeAsync('state-intensive-operation', async () => {
-      // Simulate multiple state operations
-      const operations = [];
-      const batchSize = automationConfig.batchSize || 10;
+    const performanceResult = await logger.measureTimeAsync(
+      'state-intensive-operation',
+      async () => {
+        // Simulate multiple state operations
+        const operations = [];
+        const batchSize = automationConfig.batchSize || 10;
 
-      for (let i = 0; i < Math.min(batchSize, 5); i++) {
-        operations.push(
-          stateLock.readState().then(state => ({
-            taskCount: Object.keys(state.tasks || {}).length,
-            assignmentCount: Object.keys(state.assignments || {}).length,
-          }))
-        );
+        for (let i = 0; i < Math.min(batchSize, 5); i++) {
+          operations.push(
+            stateLock.readState().then(state => ({
+              taskCount: Object.keys(state.tasks || {}).length,
+              assignmentCount: Object.keys(state.assignments || {}).length
+            }))
+          );
+        }
+
+        const results = await Promise.all(operations);
+        return results;
       }
-
-      const results = await Promise.all(operations);
-      return results;
-    });
+    );
 
     logger.success('Performance test completed', {
       operations: performanceResult.length,
-      avgTaskCount: Math.round(performanceResult.reduce((sum, r) => sum + r.taskCount, 0) / performanceResult.length),
+      avgTaskCount: Math.round(
+        performanceResult.reduce((sum, r) => sum + r.taskCount, 0) /
+          performanceResult.length
+      )
     });
 
     // Test 5: Error handling and recovery
@@ -139,13 +153,13 @@ async function testCompleteAutomationSystem() {
     } catch (error) {
       const errorReport = logger.handleError(error, {
         operation: 'update-nonexistent-task',
-        expectedBehavior: 'error-for-missing-task',
+        expectedBehavior: 'error-for-missing-task'
       });
 
       if (error.message.includes('not found')) {
         logger.success('Error handling working correctly', {
           errorType: 'task-not-found',
-          handled: true,
+          handled: true
         });
       }
     }
@@ -159,7 +173,7 @@ async function testCompleteAutomationSystem() {
     } catch (error) {
       logger.success('Configuration validation working', {
         rejectedInvalidConfig: true,
-        error: error.message,
+        error: error.message
       });
     }
 
@@ -184,17 +198,17 @@ async function testCompleteAutomationSystem() {
       config: {
         availableConfigs: configStatus.availableConfigs.length,
         loadedConfigs: configStatus.loadedConfigs.length,
-        cacheSize: configStatus.cacheSize,
+        cacheSize: configStatus.cacheSize
       },
       state: {
         lockExists: lockStatus.exists,
-        lockStale: lockStatus.stale || false,
+        lockStale: lockStatus.stale || false
       },
       logging: {
         scriptName: loggerStats.scriptName,
         uptime: loggerStats.uptime,
-        logLevel: loggerStats.logLevel,
-      },
+        logLevel: loggerStats.logLevel
+      }
     });
 
     logger.finish('Complete automation system test successful');
@@ -216,17 +230,19 @@ async function testCompleteAutomationSystem() {
       testsFailed: 0,
       configsLoaded: configStatus.availableConfigs.length,
       performanceOptimal: true,
-      productionReady: true,
+      productionReady: true
     };
 
     return systemSummary;
   } catch (error) {
     const errorReport = logger.handleError(error, {
-      testPhase: 'complete-automation-system-test',
+      testPhase: 'complete-automation-system-test'
     });
 
     console.error('\n❌ Automation system test failed:', error.message);
-    console.error('This indicates a critical issue that must be resolved before production use.');
+    console.error(
+      'This indicates a critical issue that must be resolved before production use.'
+    );
 
     throw error;
   }

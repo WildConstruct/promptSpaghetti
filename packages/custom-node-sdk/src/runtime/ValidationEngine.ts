@@ -34,27 +34,42 @@ export class ValidationEngine {
       // Validate input specifications
       for (const [inputName, inputSpec] of Object.entries(this.schema.inputs)) {
         if (!this.isValidType(inputSpec.type)) {
-          errors.push(`Input '${inputName}' has invalid type: ${inputSpec.type}`);
+          errors.push(
+            `Input '${inputName}' has invalid type: ${inputSpec.type}`
+          );
         }
 
         if (inputSpec.validation) {
-          const validationErrors = this.validateValidationRules(inputName, inputSpec.validation, inputSpec.type);
+          const validationErrors = this.validateValidationRules(
+            inputName,
+            inputSpec.validation,
+            inputSpec.type
+          );
           errors.push(...validationErrors);
         }
 
         // Check for default value type compatibility
         if (inputSpec.default !== undefined) {
-          const defaultValidation = this.validateValueType(inputSpec.default, inputSpec.type);
+          const defaultValidation = this.validateValueType(
+            inputSpec.default,
+            inputSpec.type
+          );
           if (!defaultValidation.valid) {
-            errors.push(`Input '${inputName}' default value doesn't match specified type`);
+            errors.push(
+              `Input '${inputName}' default value doesn't match specified type`
+            );
           }
         }
       }
 
       // Validate output specifications
-      for (const [outputName, outputSpec] of Object.entries(this.schema.outputs)) {
+      for (const [outputName, outputSpec] of Object.entries(
+        this.schema.outputs
+      )) {
         if (!this.isValidType(outputSpec.type)) {
-          errors.push(`Output '${outputName}' has invalid type: ${outputSpec.type}`);
+          errors.push(
+            `Output '${outputName}' has invalid type: ${outputSpec.type}`
+          );
         }
       }
 
@@ -71,23 +86,29 @@ export class ValidationEngine {
       const reservedNames = ['id', 'type', 'config', 'metadata'];
       for (const inputName of Object.keys(this.schema.inputs)) {
         if (reservedNames.includes(inputName)) {
-          warnings.push(`Input name '${inputName}' is reserved and may cause conflicts`);
+          warnings.push(
+            `Input name '${inputName}' is reserved and may cause conflicts`
+          );
         }
       }
 
       for (const outputName of Object.keys(this.schema.outputs)) {
         if (reservedNames.includes(outputName)) {
-          warnings.push(`Output name '${outputName}' is reserved and may cause conflicts`);
+          warnings.push(
+            `Output name '${outputName}' is reserved and may cause conflicts`
+          );
         }
       }
     } catch (error) {
-      errors.push(`Schema validation failed: ${error instanceof Error ? error.message : String(error)}`);
+      errors.push(
+        `Schema validation failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     return {
       valid: errors.length === 0,
       errors,
-      warnings,
+      warnings
     };
   }
 
@@ -114,10 +135,16 @@ export class ValidationEngine {
               validator.parse(inputs[inputName]);
             } catch (validationError) {
               if (validationError instanceof z.ZodError) {
-                const messages = validationError.errors.map(err => err.message).join(', ');
-                errors.push(`Input '${inputName}' validation failed: ${messages}`);
+                const messages = validationError.errors
+                  .map(err => err.message)
+                  .join(', ');
+                errors.push(
+                  `Input '${inputName}' validation failed: ${messages}`
+                );
               } else {
-                errors.push(`Input '${inputName}' validation failed: ${validationError instanceof Error ? validationError.message : String(validationError)}`);
+                errors.push(
+                  `Input '${inputName}' validation failed: ${validationError instanceof Error ? validationError.message : String(validationError)}`
+                );
               }
             }
           }
@@ -131,13 +158,15 @@ export class ValidationEngine {
         }
       }
     } catch (error) {
-      errors.push(`Input validation failed: ${error instanceof Error ? error.message : String(error)}`);
+      errors.push(
+        `Input validation failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     return {
       valid: errors.length === 0,
       errors,
-      warnings,
+      warnings
     };
   }
 
@@ -162,10 +191,16 @@ export class ValidationEngine {
             validator.parse(outputValue);
           } catch (validationError) {
             if (validationError instanceof z.ZodError) {
-              const messages = validationError.errors.map(err => err.message).join(', ');
-              errors.push(`Output '${outputName}' validation failed: ${messages}`);
+              const messages = validationError.errors
+                .map(err => err.message)
+                .join(', ');
+              errors.push(
+                `Output '${outputName}' validation failed: ${messages}`
+              );
             } else {
-              errors.push(`Output '${outputName}' validation failed: ${validationError instanceof Error ? validationError.message : String(validationError)}`);
+              errors.push(
+                `Output '${outputName}' validation failed: ${validationError instanceof Error ? validationError.message : String(validationError)}`
+              );
             }
           }
         }
@@ -178,13 +213,15 @@ export class ValidationEngine {
         }
       }
     } catch (error) {
-      errors.push(`Output validation failed: ${error instanceof Error ? error.message : String(error)}`);
+      errors.push(
+        `Output validation failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     return {
       valid: errors.length === 0,
       errors,
-      warnings,
+      warnings
     };
   }
 
@@ -206,7 +243,11 @@ export class ValidationEngine {
         const messages = error.errors.map(err => err.message);
         return { valid: false, errors: messages, warnings: [] };
       } else {
-        return { valid: false, errors: [error instanceof Error ? error.message : String(error)], warnings: [] };
+        return {
+          valid: false,
+          errors: [error instanceof Error ? error.message : String(error)],
+          warnings: []
+        };
       }
     }
   }
@@ -217,12 +258,18 @@ export class ValidationEngine {
   private buildValidators(): void {
     // Build input validators
     for (const [inputName, inputSpec] of Object.entries(this.schema.inputs)) {
-      const validator = this.buildZodSchema(inputSpec.type, inputSpec.validation, inputSpec.required);
+      const validator = this.buildZodSchema(
+        inputSpec.type,
+        inputSpec.validation,
+        inputSpec.required
+      );
       this.inputValidators.set(inputName, validator);
     }
 
     // Build output validators
-    for (const [outputName, outputSpec] of Object.entries(this.schema.outputs)) {
+    for (const [outputName, outputSpec] of Object.entries(
+      this.schema.outputs
+    )) {
       const validator = this.buildZodSchema(outputSpec.type, undefined, true);
       this.outputValidators.set(outputName, validator);
     }
@@ -231,23 +278,34 @@ export class ValidationEngine {
   /**
    * Build a Zod schema from type and validation specifications
    */
-  private buildZodSchema(type: string, validation?: any, required: boolean = true): z.ZodSchema {
+  private buildZodSchema(
+    type: string,
+    validation?: any,
+    required: boolean = true
+  ): z.ZodSchema {
     let schema: z.ZodSchema;
 
     // Base schema based on type
     switch (type) {
       case 'string':
         schema = z.string();
-        if (validation?.minLength) schema = (schema as z.ZodString).min(validation.minLength);
-        if (validation?.maxLength) schema = (schema as z.ZodString).max(validation.maxLength);
-        if (validation?.pattern) schema = (schema as z.ZodString).regex(new RegExp(validation.pattern));
+        if (validation?.minLength)
+          schema = (schema as z.ZodString).min(validation.minLength);
+        if (validation?.maxLength)
+          schema = (schema as z.ZodString).max(validation.maxLength);
+        if (validation?.pattern)
+          schema = (schema as z.ZodString).regex(
+            new RegExp(validation.pattern)
+          );
         if (validation?.enum) schema = z.enum(validation.enum);
         break;
 
       case 'number':
         schema = z.number();
-        if (validation?.min !== undefined) schema = (schema as z.ZodNumber).min(validation.min);
-        if (validation?.max !== undefined) schema = (schema as z.ZodNumber).max(validation.max);
+        if (validation?.min !== undefined)
+          schema = (schema as z.ZodNumber).min(validation.min);
+        if (validation?.max !== undefined)
+          schema = (schema as z.ZodNumber).max(validation.max);
         break;
 
       case 'boolean':
@@ -256,8 +314,10 @@ export class ValidationEngine {
 
       case 'array':
         schema = z.array(z.any());
-        if (validation?.minLength) schema = (schema as z.ZodArray<any>).min(validation.minLength);
-        if (validation?.maxLength) schema = (schema as z.ZodArray<any>).max(validation.maxLength);
+        if (validation?.minLength)
+          schema = (schema as z.ZodArray<any>).min(validation.minLength);
+        if (validation?.maxLength)
+          schema = (schema as z.ZodArray<any>).max(validation.maxLength);
         break;
 
       case 'object':
@@ -282,30 +342,52 @@ export class ValidationEngine {
    * Check if a type string is valid
    */
   private isValidType(type: string): boolean {
-    const validTypes = ['string', 'number', 'boolean', 'array', 'object', 'any'];
+    const validTypes = [
+      'string',
+      'number',
+      'boolean',
+      'array',
+      'object',
+      'any'
+    ];
     return validTypes.includes(type);
   }
 
   /**
    * Validate validation rules for consistency
    */
-  private validateValidationRules(inputName: string, validation: any, type: string): string[] {
+  private validateValidationRules(
+    inputName: string,
+    validation: any,
+    type: string
+  ): string[] {
     const errors: string[] = [];
 
     if (type === 'string') {
       if (validation.min !== undefined || validation.max !== undefined) {
-        errors.push(`Input '${inputName}': use minLength/maxLength for strings, not min/max`);
+        errors.push(
+          `Input '${inputName}': use minLength/maxLength for strings, not min/max`
+        );
       }
     } else if (type === 'number') {
-      if (validation.minLength !== undefined || validation.maxLength !== undefined) {
-        errors.push(`Input '${inputName}': use min/max for numbers, not minLength/maxLength`);
+      if (
+        validation.minLength !== undefined ||
+        validation.maxLength !== undefined
+      ) {
+        errors.push(
+          `Input '${inputName}': use min/max for numbers, not minLength/maxLength`
+        );
       }
       if (validation.pattern) {
-        errors.push(`Input '${inputName}': pattern validation is only valid for strings`);
+        errors.push(
+          `Input '${inputName}': pattern validation is only valid for strings`
+        );
       }
     } else if (type === 'array') {
       if (validation.min !== undefined || validation.max !== undefined) {
-        errors.push(`Input '${inputName}': use minLength/maxLength for arrays, not min/max`);
+        errors.push(
+          `Input '${inputName}': use minLength/maxLength for arrays, not min/max`
+        );
       }
     }
 
@@ -333,7 +415,8 @@ export class ValidationEngine {
         valid = Array.isArray(value);
         break;
       case 'object':
-        valid = typeof value === 'object' && value !== null && !Array.isArray(value);
+        valid =
+          typeof value === 'object' && value !== null && !Array.isArray(value);
         break;
       case 'any':
         valid = true; // Any type is always valid

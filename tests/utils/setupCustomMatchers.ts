@@ -14,7 +14,7 @@ beforeAll(async () => {
   // Initialize test environment if not already done
   await TestEnvironmentManager.setupEnvironment('default', {
     NODE_ENV: 'test',
-    LOG_LEVEL: 'error',
+    LOG_LEVEL: 'error'
   });
 });
 
@@ -30,7 +30,10 @@ jest.setTimeout(30000); // 30 seconds
 const originalError = console.error;
 beforeAll(() => {
   console.error = (...args) => {
-    if (args[0]?.includes?.('Warning') || process.env.SHOW_TEST_ERRORS === 'true') {
+    if (
+      args[0]?.includes?.('Warning') ||
+      process.env.SHOW_TEST_ERRORS === 'true'
+    ) {
       originalError(...args);
     }
   };

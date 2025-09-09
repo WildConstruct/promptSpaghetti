@@ -14,10 +14,7 @@ export { SimilarityEngine } from './SimilarityEngine';
 export { BulkOperationsManager } from './BulkOperationsManager';
 export { ComplianceAuditSystem } from './ComplianceAuditSystem';
 
-export type {
-  SegmentMetadata,
-  ExtractionResult,
-} from './MetadataExtractor';
+export type { SegmentMetadata, ExtractionResult } from './MetadataExtractor';
 
 export type {
   ExtraProfile,
@@ -25,21 +22,21 @@ export type {
   ValidationResult,
   SceneContext,
   WardrobeHistory,
-  ActionHistory,
+  ActionHistory
 } from './ContinuityTracker';
 
 export type {
   SimilarAsset,
   AssetEmbedding,
   ClusterInfo,
-  SimilarityOptions,
+  SimilarityOptions
 } from './SimilarityEngine';
 
 export type {
   BulkOperation,
   BulkOperationOptions,
   StyleTemplate,
-  NaturalLanguageQuery,
+  NaturalLanguageQuery
 } from './BulkOperationsManager';
 
 export type {
@@ -47,20 +44,20 @@ export type {
   ConsentRecord,
   DataRetentionPolicy,
   ComplianceReport,
-  DeletionRequest,
+  DeletionRequest
 } from './ComplianceAuditSystem';
 
 export type {
   Choice,
   WeightOptimizationResult,
   InspirationSuggestion,
-  VariableInfo,
+  VariableInfo
 } from './NodeIntelligence';
 
 export type {
   RefinementMode,
   RefinementResult,
-  DiffSegment,
+  DiffSegment
 } from './TextRefinementService';
 
 export type {
@@ -68,7 +65,7 @@ export type {
   MergeSuggestion,
   SplitSuggestion,
   ComplexityReport,
-  PreviewVariation,
+  PreviewVariation
 } from './GraphAnalyzer';
 
 export type {
@@ -83,5 +80,5 @@ export type {
   SuggestionResponse,
   MetadataResponse,
   RefinementResponse,
-  StructuredOutputSchema,
+  StructuredOutputSchema
 } from './types';

@@ -9,7 +9,7 @@ export const PresetMetaSchema = z.object({
   thumbnail: z.string().optional(),
   lastModified: z.union([z.string(), z.number()]).optional(),
   author: z.string().optional(),
-  outputType: z.string().optional(),
+  outputType: z.string().optional()
 });
 
 export type PresetMeta = z.infer<typeof PresetMetaSchema>;
@@ -21,9 +21,9 @@ export const MinimalManifestSchema = z.object({
       path: z.string().min(1),
       tags: z.array(z.string()).optional(),
       nodeTypes: z.array(z.string()).optional(),
-      thumbnail: z.string().optional(),
+      thumbnail: z.string().optional()
     })
-  ),
+  )
 });
 
 export const NpmStyleManifestSchema = z.object({
@@ -36,10 +36,10 @@ export const NpmStyleManifestSchema = z.object({
         path: z.string().min(1),
         tags: z.array(z.string()).optional(),
         nodeTypes: z.array(z.string()).optional(),
-        thumbnail: z.string().optional(),
+        thumbnail: z.string().optional()
       })
-    ),
-  }),
+    )
+  })
 });
 
 export type MinimalManifest = z.infer<typeof MinimalManifestSchema>;

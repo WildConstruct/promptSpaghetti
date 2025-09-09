@@ -8,7 +8,7 @@ import 'reactflow/dist/style.css';
  */
 
 const nodeTypes = {
-  enhancedBoundingBox: EnhancedBoundingBox,
+  enhancedBoundingBox: EnhancedBoundingBox
 };
 
 // Example nodes for micro-expression bundle
@@ -20,7 +20,8 @@ const initialNodes: Node[] = [
     position: { x: 100, y: 100 },
     data: {
       title: 'Micro-Expressions',
-      description: 'Subtle facial expressions with intensity and context modifiers',
+      description:
+        'Subtle facial expressions with intensity and context modifiers',
       backgroundColor: '#FF5252', // Character-Emotion color
       opacity: 0.3,
       borderColor: '#FF5252',
@@ -45,7 +46,7 @@ const initialNodes: Node[] = [
       choices: [
         { text: 'fleeting eyebrow flash', weight: 2 },
         { text: 'subtle lip purse', weight: 1.8 },
-        { text: 'quick eye dart', weight: 1.8 },
+        { text: 'quick eye dart', weight: 1.8 }
       ]
     }
   },
@@ -60,7 +61,7 @@ const initialNodes: Node[] = [
       choices: [
         { text: 'barely perceptible', weight: 2 },
         { text: 'fleeting', weight: 3 },
-        { text: 'subtle but noticeable', weight: 2 },
+        { text: 'subtle but noticeable', weight: 2 }
       ]
     }
   },
@@ -75,7 +76,7 @@ const initialNodes: Node[] = [
       choices: [
         { text: 'betraying', weight: 2.5 },
         { text: 'revealing', weight: 2 },
-        { text: 'trying to hide', weight: 2 },
+        { text: 'trying to hide', weight: 2 }
       ]
     }
   },
@@ -87,7 +88,8 @@ const initialNodes: Node[] = [
     data: {
       label: 'Complete Expression',
       type: 'Output',
-      template: 'A {{intensity}} {{micro_expression}}, {{context}} their true feelings'
+      template:
+        'A {{intensity}} {{micro_expression}}, {{context}} their true feelings'
     }
   }
 ];
@@ -96,22 +98,22 @@ const initialNodes: Node[] = [
 const initialEdges: Edge[] = [
   { id: 'e1', source: 'micro_expression', target: 'output' },
   { id: 'e2', source: 'intensity', target: 'output' },
-  { id: 'e3', source: 'context', target: 'output' },
+  { id: 'e3', source: 'context', target: 'output' }
 ];
 
 export const EnhancedRegionExample: React.FC = () => {
   const [nodes, setNodes] = React.useState(initialNodes);
   const [edges, setEdges] = React.useState(initialEdges);
-  
+
   return (
     <div style={{ width: '100%', height: '600px' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={(changes) => {
+        onNodesChange={changes => {
           // Handle node changes
         }}
-        onEdgesChange={(changes) => {
+        onEdgesChange={changes => {
           // Handle edge changes
         }}
         nodeTypes={nodeTypes}
@@ -126,28 +128,28 @@ export const EnhancedRegionExample: React.FC = () => {
 
 /**
  * Usage Instructions:
- * 
+ *
  * 1. COLLAPSE/EXPAND:
  *    - Click the ▼/▶ button in the top-left corner
  *    - When collapsed, only the region header and ports are visible
  *    - Internal nodes are hidden but connections preserved
- * 
+ *
  * 2. AUTO-LAYOUT:
  *    - Click the 📐 button to auto-arrange contained nodes
  *    - Prevents overlapping and ensures readability
- * 
+ *
  * 3. PORTS (when collapsed):
  *    - Input ports appear on the left (blue)
  *    - Output ports appear on the right (green)
  *    - Hover to see port labels
  *    - Connect to these ports as if connecting to the internal nodes
- * 
+ *
  * 4. COLOR CODING:
  *    - Red (#FF5252) = Character/Emotion
  *    - Teal (#4ECDC4) = Environment
  *    - Green (#95E77E) = Narrative
  *    - Yellow (#FFE66D) = Dialogue
- * 
+ *
  * 5. COPY/PASTE REGIONS:
  *    - Select the region
  *    - Ctrl+C to copy entire bundle

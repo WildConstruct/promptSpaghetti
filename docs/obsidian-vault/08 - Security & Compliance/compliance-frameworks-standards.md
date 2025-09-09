@@ -37,26 +37,26 @@ ComplianceStatus = {
     status: 'COMPLIANT',
     last_assessment: '2025-Q1',
     next_review: '2025-Q3',
-    certification: 'Self-Assessment Complete',
+    certification: 'Self-Assessment Complete'
   },
   CCPA: {
     status: 'COMPLIANT',
     last_assessment: '2025-Q1',
     next_review: '2025-Q3',
-    certification: 'Legal Review Complete',
+    certification: 'Legal Review Complete'
   },
   SOX: {
     status: 'COMPLIANT',
     last_assessment: '2024-Q4',
     next_review: '2025-Q2',
-    certification: 'External Audit Passed',
+    certification: 'External Audit Passed'
   },
   ISO27001: {
     status: 'ALIGNED',
     last_assessment: '2025-Q1',
     next_review: '2025-Q4',
-    certification: 'Preparation for Certification',
-  },
+    certification: 'Preparation for Certification'
+  }
 };
 ```
 
@@ -88,8 +88,8 @@ ComplianceJurisdictions = {
       'Data subject rights',
       'Privacy by design',
       'Breach notification (72 hours)',
-      'Data Protection Officer',
-    ],
+      'Data Protection Officer'
+    ]
   },
 
   california_usa: {
@@ -99,8 +99,8 @@ ComplianceJurisdictions = {
       'Consumer disclosure rights',
       'Opt-out of sale',
       'Data deletion rights',
-      'Non-discrimination provisions',
-    ],
+      'Non-discrimination provisions'
+    ]
   },
 
   united_states_federal: {
@@ -110,8 +110,8 @@ ComplianceJurisdictions = {
       'Internal control assessment',
       'Management certification',
       'External auditor attestation',
-      'Documentation requirements',
-    ],
+      'Documentation requirements'
+    ]
   },
 
   international_standards: {
@@ -121,9 +121,9 @@ ComplianceJurisdictions = {
       'Risk assessment and treatment',
       'Security controls implementation',
       'Continuous improvement',
-      'Management review',
-    ],
-  },
+      'Management review'
+    ]
+  }
 };
 ```
 
@@ -141,8 +141,8 @@ ComplianceArchitecture = {
     compliance_events: 'Real-time compliance event logging',
     audit_trails: 'Chain-hashed integrity verification',
     assessments: 'Periodic compliance assessment results',
-    remediation_plans: 'Action plans for compliance gaps',
-  },
+    remediation_plans: 'Action plans for compliance gaps'
+  }
 };
 ```
 
@@ -169,15 +169,15 @@ GDPRLawfulness = {
     'legal_obligation', // Compliance with legal obligations
     'vital_interests', // Protection of vital interests
     'public_task', // Performance of public task
-    'legitimate_interests', // Legitimate interests assessment
+    'legitimate_interests' // Legitimate interests assessment
   ],
 
   transparency_measures: [
     'Privacy notice at collection',
     'Clear and plain language',
     'Easily accessible information',
-    'Regular privacy notice updates',
-  ],
+    'Regular privacy notice updates'
+  ]
 };
 ```
 
@@ -200,15 +200,15 @@ DataMinimization = {
     'Collect only necessary data fields',
     'Use progressive profiling techniques',
     'Regular data audits for necessity',
-    'Automated data field validation',
+    'Automated data field validation'
   ],
 
   retention_controls: [
     'Purpose-based retention periods',
     'Automated deletion schedules',
     'Data archival procedures',
-    'Legal hold exception handling',
-  ],
+    'Legal hold exception handling'
+  ]
 };
 ```
 
@@ -241,14 +241,14 @@ DataRectification = {
     'Validate rectification request',
     'Update inaccurate/incomplete data',
     'Notify third parties if applicable',
-    'Document rectification action',
+    'Document rectification action'
   ],
 
   technical_implementation: {
     api_endpoint: 'PUT /api/users/{id}/rectify',
     audit_logging: 'Log all data modification requests',
-    third_party_sync: 'Update shared data with partners',
-  },
+    third_party_sync: 'Update shared data with partners'
+  }
 };
 ```
 
@@ -269,13 +269,17 @@ DataRectification = {
 ```typescript
 DataPortability = {
   export_formats: ['JSON', 'CSV', 'XML'],
-  data_scope: ['User-provided data', 'System-observed data', 'Derived/inferred data (where applicable)'],
+  data_scope: [
+    'User-provided data',
+    'System-observed data',
+    'Derived/inferred data (where applicable)'
+  ],
 
   technical_implementation: {
     export_api: 'GET /api/users/{id}/export',
     data_validation: 'Integrity checks on exported data',
-    secure_delivery: 'Encrypted download links',
-  },
+    secure_delivery: 'Encrypted download links'
+  }
 };
 ```
 
@@ -290,10 +294,15 @@ BreachDetection = {
     'Mass data exports/downloads',
     'Failed authentication spikes',
     'System configuration changes',
-    'Database integrity violations',
+    'Database integrity violations'
   ],
 
-  manual_reporting: ['Employee incident reports', 'Customer complaints', 'Third-party notifications', 'Media reports'],
+  manual_reporting: [
+    'Employee incident reports',
+    'Customer complaints',
+    'Third-party notifications',
+    'Media reports'
+  ]
 };
 ```
 
@@ -320,7 +329,7 @@ DPOResponsibilities = {
   advice: 'Data protection advice to organization',
   cooperation: 'Act as contact point for supervisory authority',
   training: 'Data protection awareness and training',
-  assessments: 'Data Protection Impact Assessments (DPIAs)',
+  assessments: 'Data Protection Impact Assessments (DPIAs)'
 };
 ```
 
@@ -332,15 +341,15 @@ PrivacyByDesign = {
     'Encryption at rest and in transit',
     'Access controls and authentication',
     'Data pseudonymization/anonymization',
-    'Secure software development lifecycle',
+    'Secure software development lifecycle'
   ],
 
   organizational_measures: [
     'Privacy-first policy development',
     'Staff training and awareness',
     'Regular privacy assessments',
-    'Vendor privacy requirements',
-  ],
+    'Vendor privacy requirements'
+  ]
 };
 ```
 
@@ -366,14 +375,14 @@ CCPADisclosure = {
     'Commercial information (purchase history)',
     'Internet activity (browsing behavior)',
     'Professional information (job title)',
-    'Inference data (preferences, characteristics)',
+    'Inference data (preferences, characteristics)'
   ],
 
   sources: [
     'Directly from consumers',
     'From consumer devices and browsers',
     'From third-party service providers',
-    'From business partners',
+    'From business partners'
   ],
 
   business_purposes: [
@@ -381,8 +390,8 @@ CCPADisclosure = {
     'Security and fraud prevention',
     'Customer support',
     'Product improvement',
-    'Marketing communications',
-  ],
+    'Marketing communications'
+  ]
 };
 ```
 
@@ -414,20 +423,21 @@ COMMIT;
 
 ```typescript
 OptOutImplementation = {
-  sale_definition: 'Sharing personal information for monetary/valuable consideration',
+  sale_definition:
+    'Sharing personal information for monetary/valuable consideration',
 
   opt_out_mechanisms: [
     'Do Not Sell My Personal Information link',
     'Opt-out preference signals (Global Privacy Control)',
     'Email/written requests',
-    'Phone requests',
+    'Phone requests'
   ],
 
   technical_implementation: {
     preference_center: 'User preference management interface',
     signal_detection: 'Automated GPC signal recognition',
-    third_party_notification: 'Partner opt-out synchronization',
-  },
+    third_party_notification: 'Partner opt-out synchronization'
+  }
 };
 ```
 
@@ -451,20 +461,20 @@ VerificationProcedures = {
   low_risk_requests: {
     method: 'Email verification',
     data_points: 'Email address match',
-    timeline: '10 business days',
+    timeline: '10 business days'
   },
 
   high_risk_requests: {
     method: 'Multi-factor verification',
     data_points: 'Email + 2 additional identifying data points',
-    timeline: '10 business days for verification + response time',
+    timeline: '10 business days for verification + response time'
   },
 
   sensitive_data_requests: {
     method: 'Signed declaration under penalty of perjury',
     requirements: 'Notarized identity verification',
-    timeline: 'Extended verification period allowed',
-  },
+    timeline: 'Extended verification period allowed'
+  }
 };
 ```
 
@@ -508,15 +518,15 @@ Section302Requirements = {
     quarterly: 'Certify accuracy of financial statements',
     internal_controls: 'Assess effectiveness of disclosure controls',
     material_changes: 'Report significant control changes',
-    deficiencies: 'Disclose control deficiencies to auditors',
+    deficiencies: 'Disclose control deficiencies to auditors'
   },
 
   implementation: {
     documentation: 'Document certification process',
     review_procedures: 'Quarterly management review meetings',
     sign_off_process: 'Formal executive certification',
-    change_management: 'Track and report control changes',
-  },
+    change_management: 'Track and report control changes'
+  }
 };
 ```
 
@@ -543,14 +553,14 @@ ITGCAccessControls = {
     provisioning: 'Role-based access provisioning',
     reviews: 'Quarterly access reviews',
     terminations: 'Immediate access revocation for terminated users',
-    privileged_access: 'Enhanced controls for administrative access',
+    privileged_access: 'Enhanced controls for administrative access'
   },
 
   segregation_of_duties: {
     development_production: 'Separation of dev/prod environments',
     change_approval: 'Independent change approval process',
-    database_access: 'Segregated database administration',
-  },
+    database_access: 'Segregated database administration'
+  }
 };
 ```
 
@@ -575,15 +585,15 @@ BackupRecovery = {
     frequency: 'Daily automated backups',
     testing: 'Monthly backup restoration tests',
     offsite_storage: 'Secure offsite backup storage',
-    retention: 'Seven-year retention for financial data',
+    retention: 'Seven-year retention for financial data'
   },
 
   disaster_recovery: {
     rto: 'Recovery Time Objective: 4 hours',
     rpo: 'Recovery Point Objective: 1 hour',
     testing: 'Semi-annual DR testing',
-    documentation: 'Detailed DR procedures',
-  },
+    documentation: 'Detailed DR procedures'
+  }
 };
 ```
 
@@ -642,27 +652,27 @@ PDCACycle = {
     scope: 'Define ISMS scope and boundaries',
     policy: 'Establish information security policy',
     risk_assessment: 'Conduct risk assessment and treatment',
-    objectives: 'Set information security objectives',
+    objectives: 'Set information security objectives'
   },
 
   do: {
     implementation: 'Implement risk treatment plan',
     training: 'Provide information security awareness training',
     communication: 'Internal and external communication',
-    documentation: 'Maintain documented information',
+    documentation: 'Maintain documented information'
   },
 
   check: {
     monitoring: 'Monitor and measure security performance',
     audit: 'Conduct internal audits',
-    review: 'Management review of ISMS',
+    review: 'Management review of ISMS'
   },
 
   act: {
     improvement: 'Continual improvement actions',
     corrective_actions: 'Address nonconformities',
-    updates: 'Update ISMS based on review findings',
-  },
+    updates: 'Update ISMS based on review findings'
+  }
 };
 ```
 
@@ -690,7 +700,7 @@ ISO27001Controls = {
     'A.5 Information security policies',
     'A.6 Organization of information security',
     'A.7 Human resource security',
-    'A.8 Asset management',
+    'A.8 Asset management'
   ],
 
   technical: [
@@ -698,7 +708,7 @@ ISO27001Controls = {
     'A.10 Cryptography',
     'A.12 Operations security',
     'A.13 Communications security',
-    'A.14 System acquisition, development and maintenance',
+    'A.14 System acquisition, development and maintenance'
   ],
 
   physical: ['A.11 Physical and environmental security'],
@@ -707,8 +717,8 @@ ISO27001Controls = {
     'A.15 Supplier relationships',
     'A.16 Information security incident management',
     'A.17 Information security aspects of business continuity management',
-    'A.18 Compliance',
-  ],
+    'A.18 Compliance'
+  ]
 };
 ```
 
@@ -719,20 +729,20 @@ AccessControlImplementation = {
   'A.9.1': {
     title: 'Access control policy',
     implementation: 'Documented access control policy with regular reviews',
-    evidence: 'Access control policy document, review records',
+    evidence: 'Access control policy document, review records'
   },
 
   'A.9.2': {
     title: 'Access to networks and network services',
     implementation: 'Network access controls with authentication/authorization',
-    evidence: 'Network access control configurations, access logs',
+    evidence: 'Network access control configurations, access logs'
   },
 
   'A.9.3': {
     title: 'User access management',
     implementation: 'User provisioning/deprovisioning procedures',
-    evidence: 'User access management procedures, access review records',
-  },
+    evidence: 'User access management procedures, access review records'
+  }
 };
 ```
 
@@ -746,22 +756,22 @@ SecurityMetrics = {
     'Number of security incidents per month',
     'Mean time to detect (MTTD)',
     'Mean time to respond (MTTR)',
-    'Incident severity distribution',
+    'Incident severity distribution'
   ],
 
   control_effectiveness: [
     'Control testing results',
     'Compliance assessment scores',
     'Audit finding trends',
-    'Risk assessment updates',
+    'Risk assessment updates'
   ],
 
   training_awareness: [
     'Security training completion rates',
     'Phishing simulation results',
     'Security awareness survey scores',
-    'Incident reporting rates',
-  ],
+    'Incident reporting rates'
+  ]
 };
 ```
 
@@ -779,7 +789,7 @@ MPACompliance = {
     encryption: 'AES-256 encryption for content at rest and in transit',
     drm: 'Digital Rights Management integration',
     watermarking: 'Forensic watermarking for content tracking',
-    access_control: 'Role-based content access controls',
+    access_control: 'Role-based content access controls'
   },
 
   security_controls: [
@@ -787,8 +797,8 @@ MPACompliance = {
     'Comprehensive audit logging',
     'Regular security assessments',
     'Incident response procedures',
-    'Secure development practices',
-  ],
+    'Secure development practices'
+  ]
 };
 ```
 
@@ -804,8 +814,8 @@ PCIDSSReadiness = {
     'Secure coding practices',
     'Access control measures',
     'Regular security testing',
-    'Information security policy',
-  ],
+    'Information security policy'
+  ]
 };
 ```
 
@@ -825,15 +835,15 @@ ComplianceMonitoring = {
     'Data retention policy compliance',
     'Access control effectiveness',
     'Encryption status verification',
-    'Audit trail integrity validation',
+    'Audit trail integrity validation'
   ],
 
   alert_triggers: [
     'Compliance threshold violations',
     'Policy exception approvals needed',
     'Regulatory deadline approaching',
-    'Control effectiveness degradation',
-  ],
+    'Control effectiveness degradation'
+  ]
 };
 ```
 
@@ -931,7 +941,7 @@ AuditProgram = {
     GDPR: 'Semi-annual',
     CCPA: 'Annual',
     SOX: 'Quarterly (controls testing)',
-    ISO27001: 'Annual (full ISMS review)',
+    ISO27001: 'Annual (full ISMS review)'
   },
 
   audit_types: [
@@ -939,14 +949,14 @@ AuditProgram = {
     'Control effectiveness testing',
     'Process walkthroughs',
     'Technical configuration reviews',
-    'Documentation reviews',
+    'Documentation reviews'
   ],
 
   audit_team: {
     internal_auditors: 'Cross-functional audit team',
     external_consultants: 'Specialized compliance experts',
-    management_involvement: 'Executive oversight and support',
-  },
+    management_involvement: 'Executive oversight and support'
+  }
 };
 ```
 
@@ -975,22 +985,22 @@ ExternalAssessments = {
     frequency: 'Annual',
     provider: 'External legal counsel',
     scope: 'GDPR, CCPA, privacy law compliance',
-    deliverables: ['Legal opinion', 'Gap analysis', 'Recommendations'],
+    deliverables: ['Legal opinion', 'Gap analysis', 'Recommendations']
   },
 
   security_assessment: {
     frequency: 'Annual',
     provider: 'Third-party security firm',
     scope: 'ISO 27001 alignment, security controls',
-    deliverables: ['Assessment report', 'Control matrix', 'Improvement plan'],
+    deliverables: ['Assessment report', 'Control matrix', 'Improvement plan']
   },
 
   sox_audit: {
     frequency: 'Annual',
     provider: 'External audit firm',
     scope: 'SOX 404 internal controls',
-    deliverables: ['Management letter', 'Deficiency reports', 'Attestation'],
-  },
+    deliverables: ['Management letter', 'Deficiency reports', 'Attestation']
+  }
 };
 ```
 
@@ -1010,9 +1020,9 @@ ComplianceTraining = {
       'Data protection fundamentals',
       'Privacy rights awareness',
       'Incident reporting procedures',
-      'Code of conduct',
+      'Code of conduct'
     ],
-    delivery: 'Online training modules with assessments',
+    delivery: 'Online training modules with assessments'
   },
 
   managers_supervisors: {
@@ -1021,9 +1031,9 @@ ComplianceTraining = {
       'Privacy law requirements',
       'Incident response procedures',
       'Employee privacy training',
-      'Compliance oversight responsibilities',
+      'Compliance oversight responsibilities'
     ],
-    delivery: 'Instructor-led workshops and online modules',
+    delivery: 'Instructor-led workshops and online modules'
   },
 
   technical_teams: {
@@ -1032,9 +1042,9 @@ ComplianceTraining = {
       'Privacy by design principles',
       'Technical controls implementation',
       'Security best practices',
-      'Compliance testing procedures',
+      'Compliance testing procedures'
     ],
-    delivery: 'Technical workshops and hands-on training',
+    delivery: 'Technical workshops and hands-on training'
   },
 
   compliance_team: {
@@ -1043,10 +1053,10 @@ ComplianceTraining = {
       'Regulatory updates and changes',
       'Advanced compliance techniques',
       'Audit and assessment methodologies',
-      'Industry best practices',
+      'Industry best practices'
     ],
-    delivery: 'Professional development and certification programs',
-  },
+    delivery: 'Professional development and certification programs'
+  }
 };
 ```
 
@@ -1128,22 +1138,22 @@ DocumentManagement = {
     system: 'Git-based version control',
     branching: 'Feature branches for document updates',
     approval: 'Pull request review process',
-    tagging: 'Semantic versioning for releases',
+    tagging: 'Semantic versioning for releases'
   },
 
   review_schedule: {
     policies: 'Annual review with quarterly updates',
     procedures: 'Semi-annual review',
     training_materials: 'Annual review or regulatory change',
-    assessment_reports: 'Upon completion',
+    assessment_reports: 'Upon completion'
   },
 
   approval_workflow: {
     author: 'Document author/subject matter expert',
     reviewer: 'Compliance team review',
     approver: 'Legal counsel and management approval',
-    distribution: 'Stakeholder notification of updates',
-  },
+    distribution: 'Stakeholder notification of updates'
+  }
 };
 ```
 

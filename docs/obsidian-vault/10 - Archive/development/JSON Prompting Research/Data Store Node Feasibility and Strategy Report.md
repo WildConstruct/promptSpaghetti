@@ -8,10 +8,10 @@ proliferating, each with varying support for structured data. **Table
 capabilities, validation features, and pricing:
 
 | **Tool**                                                                                                                                                                                                                                                                          | **Structured JSON Composition**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | **Validation & Transform**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | **Pricing (Structured Data)**                                                                                                                                                                                                                                                                                                                                                                                                 |
-|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Flowise** (open-source AI flow builder)[\[1\]](https://flowiseai.com/#:~:text=Free)[\[2\]](https://docs.flowiseai.com/integrations/langchain/tools/custom-tool#:~:text=)                                                                                                        | Schema-driven inputs for LLM tools (e.g. define an Input Schema and get JSON outputs)[\[2\]](https://docs.flowiseai.com/integrations/langchain/tools/custom-tool#:~:text=); general nodes pass JSON between steps. UI is block-based but JSON editing is mainly via form fields or code.                                                                                                                                                                                                                                                                                                                  | No dedicated JSON editor UI; relies on TypeScript code nodes or preset schema. Function calling schemas are supported, and JSON output is auto-validated by LLM (OpenAI functions)[\[3\]](https://docs.flowiseai.com/integrations/langchain/tools/custom-tool#:~:text=With%20the%20new%20OpenAI%20Function,arguments%20to%20call%20those%20functions)[\[2\]](https://docs.flowiseai.com/integrations/langchain/tools/custom-tool#:~:text=).                                                                                                      | **Free tier:** Yes (2 flows, 100 calls)[\[1\]](https://flowiseai.com/#:~:text=Free). **Paid:** Starter \$35/mo (unlimited flows)[\[4\]](https://flowiseai.com/#:~:text=%2435%2Fmonth); higher plans increase usage limits. All core features (including structured data) available in free self-hosted.                                                                                                                       |
-| **PromptChainer** (research prototype)[\[5\]](https://blog.promptlayer.com/prompt-chainer/#:~:text=development,Pipelines%3A%20Connects)[\[6\]](https://blog.promptlayer.com/prompt-chainer/#:~:text=visually%2C%20integrating%20AI%20and%20traditional,Code%20Editor%3A%20Online) | Graphical interface to chain prompts; supports multi-model flows and presumably passing structured outputs between nodes. Focus on visual chaining, but JSON composition details are limited in published sources (likely manual formatting in text nodes).                                                                                                                                                                                                                                                                                                                                               | Emphasizes *transforming intermediate outputs*[\[7\]](https://arxiv.org/abs/2203.06566#:~:text=non,fi%20chain%20prototyping); may require manual formatting or custom nodes for JSON. No known schema validation -- it\'s a research tool.                                                                                                                                                                                                                                                                                                       | **Open-source research** (no commercial pricing). Not a commercial product, but informs UX patterns (visual prompt flows).                                                                                                                                                                                                                                                                                                    |
-| **n8n** (workflow automation)[\[8\]](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/#:~:text=%5B%20%7B%20,10)[\[9\]](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/#:~:text=%7B%20,%7D)                                          | Represents data as JSON throughout. Offers a *Set* node to build JSON objects visually or via expressions[\[10\]](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/#:~:text=7%208%209). Lacks a dedicated "JSON editor" node -- users add fields via UI or write code.                                                                                                                                                                                                                                                                                                              | Basic validation (e.g. JSON syntax errors highlighted). Community nodes exist for JSON schema validation[\[11\]](https://github.com/Bartmr/n8n-nodes-data-validation#:~:text=n8n%20node%20to%20validate%20input,to%20describe%20your%20validation) (using Ajv). Transformation via Function nodes or JMESPath queries; learning curve is noted (many users "struggle with JSON" in n8n[\[12\]](https://www.youtube.com/watch?v=l10M1xoVTE4#:~:text=Why%2090,and%20troubleshoot%20JSON%20data)).                                                  | **Free:** Self-host unlimited. Cloud: Free tier (basic workflows), paid from \~\$20/mo for 2,500 ops[\[13\]](https://www.baytechconsulting.com/blog/n8n-overview-2025#:~:text=2025%20www,g). No features explicitly paywalled around JSON (advanced features like user management are paid[\[14\]](https://metaflow.life/blog/the-hidden-costs-of-n8n#:~:text=Feature,features%20discoverable%20only%20after%20integration)). |
+| **PromptChainer** (research prototype)[\[5\]](https://blog.promptlayer.com/prompt-chainer/#:~:text=development,Pipelines%3A%20Connects)[\[6\]](https://blog.promptlayer.com/prompt-chainer/#:~:text=visually%2C%20integrating%20AI%20and%20traditional,Code%20Editor%3A%20Online) | Graphical interface to chain prompts; supports multi-model flows and presumably passing structured outputs between nodes. Focus on visual chaining, but JSON composition details are limited in published sources (likely manual formatting in text nodes).                                                                                                                                                                                                                                                                                                                                               | Emphasizes _transforming intermediate outputs_[\[7\]](https://arxiv.org/abs/2203.06566#:~:text=non,fi%20chain%20prototyping); may require manual formatting or custom nodes for JSON. No known schema validation -- it\'s a research tool.                                                                                                                                                                                                                                                                                                       | **Open-source research** (no commercial pricing). Not a commercial product, but informs UX patterns (visual prompt flows).                                                                                                                                                                                                                                                                                                    |
+| **n8n** (workflow automation)[\[8\]](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/#:~:text=%5B%20%7B%20,10)[\[9\]](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/#:~:text=%7B%20,%7D)                                          | Represents data as JSON throughout. Offers a _Set_ node to build JSON objects visually or via expressions[\[10\]](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/#:~:text=7%208%209). Lacks a dedicated "JSON editor" node -- users add fields via UI or write code.                                                                                                                                                                                                                                                                                                              | Basic validation (e.g. JSON syntax errors highlighted). Community nodes exist for JSON schema validation[\[11\]](https://github.com/Bartmr/n8n-nodes-data-validation#:~:text=n8n%20node%20to%20validate%20input,to%20describe%20your%20validation) (using Ajv). Transformation via Function nodes or JMESPath queries; learning curve is noted (many users "struggle with JSON" in n8n[\[12\]](https://www.youtube.com/watch?v=l10M1xoVTE4#:~:text=Why%2090,and%20troubleshoot%20JSON%20data)).                                                  | **Free:** Self-host unlimited. Cloud: Free tier (basic workflows), paid from \~\$20/mo for 2,500 ops[\[13\]](https://www.baytechconsulting.com/blog/n8n-overview-2025#:~:text=2025%20www,g). No features explicitly paywalled around JSON (advanced features like user management are paid[\[14\]](https://metaflow.life/blog/the-hidden-costs-of-n8n#:~:text=Feature,features%20discoverable%20only%20after%20integration)). |
 | **Retool** (internal app builder)                                                                                                                                                                                                                                                 | Form-based JSON construction: developers bind UI components to JSON fields. JSON is often handled in Javascript queries in-app. No explicit visual JSON composer, but any API resource's body can be defined via key-value editors or code.                                                                                                                                                                                                                                                                                                                                                               | No out-of-the-box JSON schema validation for inputs -- relies on developer to handle errors. Data can be transformed with JS scripts. Strong typing only via optional TypeScript in code.                                                                                                                                                                                                                                                                                                                                                        | **Free:** Limited (up to 5 apps with 1 user). **Team:** \~\$10--\$50/user/mo (advanced data sources, auth). JSON handling features available on all plans (no paywall on JSON).                                                                                                                                                                                                                                               |
 | **Make.com** (formerly Integromat)                                                                                                                                                                                                                                                | Flowchart interface; JSON passed between modules. Provides **JSON aggregator** and **parser** modules. Users map fields visually using drag-and-drop mapping; can also input raw JSON templates.                                                                                                                                                                                                                                                                                                                                                                                                          | Validates JSON for HTTP modules (must be well-formed). Some modules support JSON schema import for mapping. Transformation is via functions or iterators. Errors (e.g. invalid JSON) are shown in module run logs.                                                                                                                                                                                                                                                                                                                               | **Free:** 1,000 ops/month, limited features. **Paid:** from \~\$9/mo (10,000 ops, premium modules). Higher tiers needed for complex scenarios but JSON support itself is available even in free.                                                                                                                                                                                                                              |
 | **Zapier** (workflow automation)                                                                                                                                                                                                                                                  | Primarily form-based field mapping; no direct JSON editor. Complex structured data often requires a **Code by Zapier** step (in JS/Python) to compose or parse JSON[\[15\]](https://www.reddit.com/r/zapier/comments/1ffq7xz/getting_a_json_into_zapier/#:~:text=You%20can%20configure%20Parsio%20to,parse%20the%20entire%20JSON)[\[16\]](https://community.zapier.com/code-webhooks-52/formatting-json-data-from-webhook-into-text-21947#:~:text=Formatting%20json%20data%20from%20webhook,parse%28%29%20method). Zapier tends to flatten JSON objects into simple fields unless using line-item arrays. | Minimal native validation -- if a webhook expects JSON, Zapier will send whatever string is provided. Users resort to custom code for JSON parsing/formatting[\[15\]](https://www.reddit.com/r/zapier/comments/1ffq7xz/getting_a_json_into_zapier/#:~:text=You%20can%20configure%20Parsio%20to,parse%20the%20entire%20JSON)[\[16\]](https://community.zapier.com/code-webhooks-52/formatting-json-data-from-webhook-into-text-21947#:~:text=Formatting%20json%20data%20from%20webhook,parse%28%29%20method). No first-class JSON schema support. | **Free:** 100 tasks/month (single-step zaps). **Paid:** from \$19.99/mo (multi-step, premium apps). JSON handling is not a gated feature, but advanced usage effectively requires paid (multi-step and code steps).                                                                                                                                                                                                           |
@@ -35,11 +35,11 @@ For example, Flowise offers its full feature set (including JSON-based
 function calling) even on the free tier, but caps the number of
 executions[\[1\]](https://flowiseai.com/#:~:text=Free). We should follow
 suit: provide basic Data Store functionality free, while perhaps
-reserving *advanced* capabilities (like large data volumes or
+reserving _advanced_ capabilities (like large data volumes or
 collaboration features) for premium plans.
 
 **Market Size (TAM):** The broader no-code AI tooling market is sizable
-and growing rapidly. The *global no-code AI platform market* was
+and growing rapidly. The _global no-code AI platform market_ was
 \~\$3.8 billion in 2023 and projected to reach \$24 billion by
 2030[\[17\]](https://www.grandviewresearch.com/industry-analysis/no-code-ai-platform-market-report#:~:text=No).
 Within that, visual prompt engineering tools (our segment) are emerging
@@ -73,9 +73,9 @@ currently handle these, and the pain points they encounter:
   nested fields for each control
   unit[\[20\]](https://www.reddit.com/r/StableDiffusion/comments/13dsx46/how_to_use_controlnet_via_api/#:~:text=,Crop%20and%20Resize)[\[21\]](https://www.reddit.com/r/StableDiffusion/comments/13dsx46/how_to_use_controlnet_via_api/#:~:text=,512).
   Many artists are not programmers, so they struggle with this flat-text
-  JSON editing. A Reddit user even lamented *"I wish there was a way to
+  JSON editing. A Reddit user even lamented _"I wish there was a way to
   capture web UI settings as a JSON payload\... That would be
-  ideal."*[\[22\]](https://www.reddit.com/r/StableDiffusion/comments/13dsx46/how_to_use_controlnet_via_api/#:~:text=%E2%80%A2).
+  ideal."_[\[22\]](https://www.reddit.com/r/StableDiffusion/comments/13dsx46/how_to_use_controlnet_via_api/#:~:text=%E2%80%A2).
   Pain points include ensuring the JSON is valid, guessing parameter
   names, and adjusting nested fields by trial-and-error. Common
   workarounds are copying example JSON snippets from
@@ -109,7 +109,7 @@ currently handle these, and the pain points they encounter:
   format. Pain points include ensuring the LLM's output exactly matches
   the expected JSON (brackets and quotes all in place) -- many have seen
   LLMs produce slight format errors that break downstream parsing.
-  Workarounds: some use *very strict instructions* or post-processing
+  Workarounds: some use _very strict instructions_ or post-processing
   code to fix JSON (indeed, open-source "JSON fixer" tools
   exist[\[24\]](https://docs.flowiseai.com/integrations/langchain/tools/custom-tool#:~:text=Custom%20Tool%20%7C%20FlowiseAI%20,JSON%20object%20like%20below%3A%20Copy)).
   They also use external JSON validators or manually eyeball outputs.
@@ -128,8 +128,8 @@ currently handle these, and the pain points they encounter:
   structures[\[15\]](https://www.reddit.com/r/zapier/comments/1ffq7xz/getting_a_json_into_zapier/#:~:text=You%20can%20configure%20Parsio%20to,parse%20the%20entire%20JSON)[\[16\]](https://community.zapier.com/code-webhooks-52/formatting-json-data-from-webhook-into-text-21947#:~:text=Formatting%20json%20data%20from%20webhook,parse%28%29%20method).
   They resort to writing short JavaScript in Zapier's code step to
   reshape data or using multiple steps to build nested fields one level
-  at a time -- a cumbersome process. These users need an *easy UI to
-  construct JSON* (drag-and-drop fields, toggle arrays/objects) and to
+  at a time -- a cumbersome process. These users need an _easy UI to
+  construct JSON_ (drag-and-drop fields, toggle arrays/objects) and to
   validate that JSON meets the target API's schema before the API call
   is made (to avoid runtime errors).
 
@@ -157,16 +157,16 @@ parse JSON output. These hacks indicate latent demand for an integrated
 solution.
 
 **Personas in Need:** From the above, we identify a few key personas who
-would get outsized benefit from a Data Store node: - *"The AI Multimedia
-Artist"* -- Focused on images/videos, needs to visually manage multiple
+would get outsized benefit from a Data Store node: - _"The AI Multimedia
+Artist"_ -- Focused on images/videos, needs to visually manage multiple
 input parameters (images, prompts, effects) as one structured prompt. -
-*"The Prompt Power User"* -- Often a prompt engineer or hobbyist who
+_"The Prompt Power User"_ -- Often a prompt engineer or hobbyist who
 pushes tools to their limits (e.g. chaining GPT outputs into stable
 diffusion). They need reliability and less hassle in managing structured
-prompt data. - *"The LLM Integrator"* -- A developer or analyst
+prompt data. - _"The LLM Integrator"_ -- A developer or analyst
 incorporating AI into business workflows, who needs to ensure data
-passed between AI and systems is structured and validated. - *"The
-Automation Builder"* -- A non-engineer automating tasks with AI via
+passed between AI and systems is structured and validated. - _"The
+Automation Builder"_ -- A non-engineer automating tasks with AI via
 services like Zapier/Make, who needs a friendlier way to construct JSON
 for API calls or complex prompts without writing code.
 
@@ -194,13 +194,13 @@ the structured payload. For example, a node's JSON might look like:
       "type": "DataStore",
       "position": {"x": 250, "y": 100},
       "data": {
-         "schema": null, 
+         "schema": null,
          "value": { /* arbitrary JSON object */ }
       }
     }
 
-The engine must handle this node by essentially *storing and outputting
-data* rather than performing a transformation. In execution, the Data
+The engine must handle this node by essentially _storing and outputting
+data_ rather than performing a transformation. In execution, the Data
 Store node behaves somewhat like a constant/provider: any downstream
 node that needs the JSON can connect to it and receive the object. This
 implies minimal changes to execution order (it has no active
@@ -254,7 +254,7 @@ type-mismatch connections (or highlight them). A **weakly typed
 (dynamic)** approach would allow any connection, and it's up to the
 runtime to handle or error if incompatible.
 
-In low-code tools, we see both models. *Node-RED*, for example, uses a
+In low-code tools, we see both models. _Node-RED_, for example, uses a
 convention that messages are JavaScript objects and doesn't enforce
 types on wires -- it's up to nodes to parse expected fields (weak
 typing). Conversely, some AI workflow tools (like **Mirascope** in
@@ -262,7 +262,7 @@ Python) use type hints (via Pydantic) to validate inputs/outputs
 automatically[\[29\]](https://blog.promptlayer.com/prompt-chainer/#:~:text=input%2Foutput%20validation,Open%20Source),
 which is closer to strong typing.
 
-For our use case, *strong typing with JSON schemas* could greatly help
+For our use case, _strong typing with JSON schemas_ could greatly help
 users. We can have the Data Store node optionally carry a **JSON
 Schema** for its data. If present, downstream nodes can validate that
 the received data matches the schema (at runtime or even design-time if
@@ -274,7 +274,7 @@ quick prototypes).
 A balanced approach is **gradual typing**: allow users to specify
 types/schemas if they want (then do validation and show warnings), but
 do not block connections if types are unspecified. For instance, the
-Data Store node could have an optional *schema definition*. If provided,
+Data Store node could have an optional _schema definition_. If provided,
 the editor could visually mark outputs with that schema, and any node
 connecting that expects a certain structure could check compatibility.
 If mismatched or unknown, we show a warning icon on the edge but still
@@ -301,7 +301,7 @@ provide info tips from the schema descriptions. - **OpenAPI**: Many AI
 services (e.g. Stability's API or others) publish OpenAPI specs. We can
 parse an OpenAPI schema to extract the JSON schema for a particular
 endpoint's request or response. For example, if a user is integrating
-with *Runway Gen-2 API*, they could import the OpenAPI and select the
+with _Runway Gen-2 API_, they could import the OpenAPI and select the
 endpoint "generate video"; the Data Store node could automatically load
 the expected JSON structure for that request. This ensures correctness
 and saves time. It's a powerful feature for enterprise users who work
@@ -400,8 +400,8 @@ export feature for compatibility.
 In summary, from a technical standpoint, adding a Data Store node is
 feasible and can be done cleanly. The PSG format is flexible enough to
 include it, and modern JSON libraries can provide the needed validation
-and type safety. The key is to implement it in a way that is *opt-in
-strong-typing* (help users with schema if they want, but don't force it)
+and type safety. The key is to implement it in a way that is _opt-in
+strong-typing_ (help users with schema if they want, but don't force it)
 and to be mindful of performance for large data. With these
 considerations, the Data Store node can enhance our platform's
 capabilities without compromising stability or speed.
@@ -427,10 +427,10 @@ for UI, error handling, and reducing cognitive load:
   entire text at once. An example is shown below, where JSON is
   visualized as a collapsible tree of nodes rather than a block of text:
 
-*JSON visualized as an interactive graph/tree, from JSONCrack. The
+_JSON visualized as an interactive graph/tree, from JSONCrack. The
 hierarchy of objects and arrays is clearly shown, helping users
 understand nested structured
-data[\[31\]](https://jsoncrack.com/#:~:text=Visualize%20your%20JSON).*
+data[\[31\]](https://jsoncrack.com/#:~:text=Visualize%20your%20JSON)._
 
 In our node editor, we might not use the exact graph style as JSONCrack
 (which is more for viewing than editing), but we can implement a
@@ -534,7 +534,7 @@ which we can take inspiration from.
   view[\[36\]](https://jsonhero.io/#:~:text=Images%20are%20more%20than%20just,strings)[\[39\]](https://jsonhero.io/#:~:text=Properties)).
 
 - **Inspiration from JSON Hero & JSON Crack:** JSON Hero takes an
-  interesting approach to *enhance understanding*: it detects certain
+  interesting approach to _enhance understanding_: it detects certain
   patterns (like if a string is a URL, it shows a preview of the image
   or
   content)[\[36\]](https://jsonhero.io/#:~:text=Images%20are%20more%20than%20just,strings).
@@ -552,8 +552,8 @@ which we can take inspiration from.
   a similar gesture) to bring up a detailed editor panel, since editing
   JSON directly in a tiny node box would be impractical. In that panel
   (which could slide out or be a modal), they get the full-featured JSON
-  editor UI we've described. Quick idea: we could also allow *inline
-  preview* on the node -- e.g. show a short summary of the JSON content
+  editor UI we've described. Quick idea: we could also allow _inline
+  preview_ on the node -- e.g. show a short summary of the JSON content
   on the node body (like "{key1: 123, key2: 'abc', ...}"), truncated for
   brevity. This helps users see at a glance on the canvas what data is
   in there without opening it. It should update when the content
@@ -570,7 +570,7 @@ which we can take inspiration from.
   unfamiliar with structured prompts. A short tooltip or help text "Data
   Store nodes let you create structured prompts (JSON) for APIs or
   complex AI inputs" can help frame why they'd use it. Also, consider
-  *templates*: clicking "Add Data Store" could prompt "Do you want to
+  _templates_: clicking "Add Data Store" could prompt "Do you want to
   start from a template?" and offer common ones (for each use case in
   our research). This reduces the cognitive load of starting from
   scratch and also implicitly teaches the user the structure by example.
@@ -580,8 +580,8 @@ intuitive as filling out a form or mind map, rather than writing code.
 By providing a clear tree structure view, real-time validation with
 helpful errors, and schema-driven forms, we can significantly lower the
 barrier for non-technical users while still satisfying advanced users
-who want precision. The design should make the JSON *visual*,
-*interactive*, and *self-explanatory*, turning what used to be
+who want precision. The design should make the JSON _visual_,
+_interactive_, and _self-explanatory_, turning what used to be
 "frustrating JSON prompt hacking" into a guided and even
 confidence-inspiring experience.
 
@@ -618,7 +618,7 @@ populate common module names), checkboxes for booleans like
 ensuring the image dimensions fields match the actual image or the main
 image's dimensions).
 
-This turns a cryptic JSON snippet into a *fill-in-the-blanks* exercise.
+This turns a cryptic JSON snippet into a _fill-in-the-blanks_ exercise.
 The user benefit is huge: no more guessing JSON format; the UI ensures
 all required fields (like `input_image` or `model`) are present,
 preventing the common "KeyError" or server error responses.
@@ -691,7 +691,7 @@ warnings like "Total duration of scenes = 20s (model max is 30s)" to
 guide them.
 
 In essence, for multi-scene video prompts, the Data Store node turns a
-*scary JSON array* into a **user-friendly timeline form**, improving
+_scary JSON array_ into a **user-friendly timeline form**, improving
 both the experience and the outcome (because correct formatting means
 the model gets exactly what it needs).
 
@@ -804,7 +804,7 @@ it, we broaden the appeal of our platform beyond interactive single
 prompts to automated pipelines.
 
 **In all the above use cases**, a common theme is that structured visual
-prompts *add value by managing complexity*. They do so by: - Making the
+prompts _add value by managing complexity_. They do so by: - Making the
 **implicit structure explicit** (the user can see the "shape" of the
 prompt). - **Validating** to catch mistakes early. - **Streamlining
 edits** (one tweak in a form vs multiple text edits). - **Encouraging
@@ -1076,7 +1076,7 @@ justifies upsell to higher tiers in terms of usage: - **Pro tier**: no
 or high limits on Data Store size and advanced validations, vs Free
 maybe has basic. This could drive serious users (who hit the limits or
 want the convenience of bigger features) to upgrade. - **Enterprise
-tier**: offer features like Single Sign-On, team collaboration *plus*
+tier**: offer features like Single Sign-On, team collaboration _plus_
 the ability to manage libraries of Data Store templates or enforce
 organization-wide schemas (for governance). This could be a selling
 point for enterprises that care about consistent data formats across

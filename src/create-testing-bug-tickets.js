@@ -7,7 +7,9 @@ const Database = require('better-sqlite3');
 const path = require('path');
 
 function createTestingBugTickets() {
-  console.log('🧪 Creating tickets for testing suite bug fixes identified by QA...\n');
+  console.log(
+    '🧪 Creating tickets for testing suite bug fixes identified by QA...\n'
+  );
 
   // Initialize database
   const dbPath = path.join(__dirname, 'data/tasks.db');
@@ -66,7 +68,7 @@ function createTestingBugTickets() {
 Class extension errors in compiled JavaScript files where RuntimeNode is undefined during import.
 
 **Solution:**
-Fix import/export chains and ensure proper module resolution for RuntimeNode base class.`,
+Fix import/export chains and ensure proper module resolution for RuntimeNode base class.`
     },
     {
       id: `T-TEST-${timestamp}-002`,
@@ -83,11 +85,12 @@ packages/core/components/Inspector/SelectEditor.js:58:44 - Cannot read propertie
 - packages/core/__tests__/inspector-components.test.tsx
 
 **Solution:**
-Add null checks and proper error handling in SelectEditor component reduce logic.`,
+Add null checks and proper error handling in SelectEditor component reduce logic.`
     },
     {
       id: `T-TEST-${timestamp}-003`,
-      title: 'Fix GraphCRDTAdapter method mocking issues in collaboration tests',
+      title:
+        'Fix GraphCRDTAdapter method mocking issues in collaboration tests',
       priority: 'medium',
       est: 2,
       tags: ['testing', 'collaboration', 'mocking', 'crdt'],
@@ -100,7 +103,7 @@ Add null checks and proper error handling in SelectEditor component reduce logic
 Test mocks not properly defining yGraph methods that are called by the adapter.
 
 **Solution:**
-Update test mocks to include all required yGraph methods with proper implementations.`,
+Update test mocks to include all required yGraph methods with proper implementations.`
     },
     {
       id: `T-TEST-${timestamp}-004`,
@@ -118,7 +121,7 @@ Received: resource_id=resource-1?lock_type=edit
 - packages/core/__tests__/stores/workflowStore.test.ts
 
 **Solution:**
-Fix query parameter concatenation logic in workflow store API calls.`,
+Fix query parameter concatenation logic in workflow store API calls.`
     },
     {
       id: `T-TEST-${timestamp}-005`,
@@ -138,7 +141,7 @@ SyntaxError: Invalid or unexpected token at @(0, security_audit_logger_1.auditSe
 Decorator syntax or import/export issues in compiled security audit logger.
 
 **Solution:**
-Fix decorator syntax and ensure proper compilation of security audit decorators.`,
+Fix decorator syntax and ensure proper compilation of security audit decorators.`
     },
     {
       id: `T-TEST-${timestamp}-006`,
@@ -156,8 +159,8 @@ Received: {"success": true}
 - packages/core/__tests__/stores/workflowStore.test.ts
 
 **Solution:**
-Update test expectation or API response to match expected return type.`,
-    },
+Update test expectation or API response to match expected return type.`
+    }
   ];
 
   // Add each ticket to the database
@@ -165,13 +168,18 @@ Update test expectation or API response to match expected return type.`,
     const metadata = JSON.stringify({
       source: 'qa-testing-analysis',
       category: 'bug-fix',
-      severity: bug.priority === 'high' ? 'major' : bug.priority === 'medium' ? 'moderate' : 'minor',
+      severity:
+        bug.priority === 'high'
+          ? 'major'
+          : bug.priority === 'medium'
+            ? 'moderate'
+            : 'minor',
       acceptanceCriteria: [
         'Test suite runs without errors',
         'All affected test cases pass',
         'No regression in existing functionality',
-        'Code follows existing project patterns',
-      ],
+        'Code follows existing project patterns'
+      ]
     });
 
     // Insert task into database
@@ -191,7 +199,9 @@ Update test expectation or API response to match expected return type.`,
     );
 
     tickets.push(bug);
-    console.log(`✅ Created ${bug.priority.toUpperCase()} priority ticket: ${bug.id}`);
+    console.log(
+      `✅ Created ${bug.priority.toUpperCase()} priority ticket: ${bug.id}`
+    );
     console.log(`   📝 ${bug.title}`);
     console.log(`   ⏱️  Est: ${bug.est} hours`);
     console.log(`   🏷️  Tags: ${bug.tags.join(', ')}`);
@@ -202,15 +212,27 @@ Update test expectation or API response to match expected return type.`,
 
   console.log('📊 SUMMARY:');
   console.log(`   🎫 Total Tickets Created: ${tickets.length}`);
-  console.log(`   🔥 High Priority: ${tickets.filter(t => t.priority === 'high').length}`);
-  console.log(`   ⚡ Medium Priority: ${tickets.filter(t => t.priority === 'medium').length}`);
-  console.log(`   📋 Low Priority: ${tickets.filter(t => t.priority === 'low').length}`);
-  console.log(`   ⏱️  Total Estimated Time: ${tickets.reduce((sum, t) => sum + t.est, 0)} hours`);
+  console.log(
+    `   🔥 High Priority: ${tickets.filter(t => t.priority === 'high').length}`
+  );
+  console.log(
+    `   ⚡ Medium Priority: ${tickets.filter(t => t.priority === 'medium').length}`
+  );
+  console.log(
+    `   📋 Low Priority: ${tickets.filter(t => t.priority === 'low').length}`
+  );
+  console.log(
+    `   ⏱️  Total Estimated Time: ${tickets.reduce((sum, t) => sum + t.est, 0)} hours`
+  );
   console.log('   📈 All tickets set to REVIEW status for QA approval');
   console.log('\n🎯 Next Steps:');
   console.log('   1. Review tickets with: node src/run-qa-agent.js');
-  console.log('   2. Grab approved tickets with: node src/grab-tasks.js <dev-id> <count>');
-  console.log('   3. Work on fixes and call: node src/finish-task.js <task-id>');
+  console.log(
+    '   2. Grab approved tickets with: node src/grab-tasks.js <dev-id> <count>'
+  );
+  console.log(
+    '   3. Work on fixes and call: node src/finish-task.js <task-id>'
+  );
 }
 
 if (require.main === module) {

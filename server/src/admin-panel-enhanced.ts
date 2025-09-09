@@ -101,18 +101,53 @@ Return as JSON.`,
 // Available models
 const AVAILABLE_MODELS = [
   { id: 'openai/gpt-4', name: 'GPT-4', provider: 'OpenAI', cost: 'High' },
-  { id: 'openai/gpt-4o-mini', name: 'GPT-4 Mini', provider: 'OpenAI', cost: 'Low' },
-  { id: 'anthropic/claude-3-opus', name: 'Claude 3 Opus', provider: 'Anthropic', cost: 'High' },
-  { id: 'anthropic/claude-3-haiku', name: 'Claude 3 Haiku', provider: 'Anthropic', cost: 'Low' },
-  { id: 'deepseek/deepseek-r1:free', name: 'DeepSeek R1 (Free)', provider: 'DeepSeek', cost: 'Free' },
-  { id: 'mistral/mistral-medium-3.1:free', name: 'Mistral Medium (Free)', provider: 'Mistral', cost: 'Free' },
-  { id: 'qwen/qwen-262k:free', name: 'Qwen 262K (Free)', provider: 'Qwen', cost: 'Free' },
+  {
+    id: 'openai/gpt-4o-mini',
+    name: 'GPT-4 Mini',
+    provider: 'OpenAI',
+    cost: 'Low'
+  },
+  {
+    id: 'anthropic/claude-3-opus',
+    name: 'Claude 3 Opus',
+    provider: 'Anthropic',
+    cost: 'High'
+  },
+  {
+    id: 'anthropic/claude-3-haiku',
+    name: 'Claude 3 Haiku',
+    provider: 'Anthropic',
+    cost: 'Low'
+  },
+  {
+    id: 'deepseek/deepseek-r1:free',
+    name: 'DeepSeek R1 (Free)',
+    provider: 'DeepSeek',
+    cost: 'Free'
+  },
+  {
+    id: 'mistral/mistral-medium-3.1:free',
+    name: 'Mistral Medium (Free)',
+    provider: 'Mistral',
+    cost: 'Free'
+  },
+  {
+    id: 'qwen/qwen-262k:free',
+    name: 'Qwen 262K (Free)',
+    provider: 'Qwen',
+    cost: 'Free'
+  }
 ];
 
 /**
  * Enhanced HTML admin panel
  */
-const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: Message, status?: AdminStatus) => {
+const getEnhancedAdminHTML = (
+  config: any,
+  prompts: PromptTemplate[],
+  message?: Message,
+  status?: AdminStatus
+) => {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -328,7 +363,8 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
                     <div class="form-group">
                         <label>Primary Model</label>
                         <div class="model-grid">
-                            ${AVAILABLE_MODELS.map(model => `
+                            ${AVAILABLE_MODELS.map(
+                              model => `
                                 <div class="model-card ${config.PRIMARY_MODEL === model.id ? 'selected' : ''}" 
                                      data-model="${model.id}" 
                                      onclick="selectModel('${model.id}')">
@@ -338,7 +374,8 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
                                         <span>${model.cost}</span>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `
+                            ).join('')}
                         </div>
                         <input type="hidden" id="selected_model" name="primary_model" value="${config.PRIMARY_MODEL || 'openai/gpt-4o-mini'}" />
                     </div>
@@ -395,7 +432,9 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
                     These are the prompt templates used by the LLM system. Edit them to customize behavior.
                 </p>
                 
-                ${prompts.map(prompt => `
+                ${prompts
+                  .map(
+                    prompt => `
                     <div class="prompt-card">
                         <div class="prompt-header">
                             <span class="prompt-title">${prompt.name}</span>
@@ -418,7 +457,9 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
                             </div>
                         </form>
                     </div>
-                `).join('')}
+                `
+                  )
+                  .join('')}
             </div>
         </div>
         
@@ -429,9 +470,11 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
                 <div class="form-group">
                     <label for="test-model">Test Model</label>
                     <select id="test-model">
-                        ${AVAILABLE_MODELS.map(model => `
+                        ${AVAILABLE_MODELS.map(
+                          model => `
                             <option value="${model.id}">${model.name}</option>
-                        `).join('')}
+                        `
+                        ).join('')}
                     </select>
                 </div>
                 
@@ -529,68 +572,92 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
   const checkAdminAuth = (request: FastifyRequest, reply: FastifyReply) => {
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
     const authHeader = request.headers.authorization;
-    
+
     if (!authHeader) {
       reply.header('WWW-Authenticate', 'Basic realm="Admin Panel"');
       reply.status(401).send('Authentication required');
       return false;
     }
-    
+
     const [type, credentials] = authHeader.split(' ');
     if (type !== 'Basic') {
       reply.status(401).send('Invalid authentication type');
       return false;
     }
-    
-    const [username, password] = Buffer.from(credentials, 'base64').toString().split(':');
+
+    const [username, password] = Buffer.from(credentials, 'base64')
+      .toString()
+      .split(':');
     if (username !== 'admin' || password !== adminPassword) {
       reply.status(401).send('Invalid credentials');
       return false;
     }
-    
+
     return true;
   };
-  
+
   // Enhanced admin panel HTML page
   server.get('/admin', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     const config = {
       SUPABASE_URL: process.env.SUPABASE_URL,
-      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8) : '',
-      OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? '***' + process.env.OPENROUTER_API_KEY.slice(-8) : '',
-      OPENROUTER_BASE_URL: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+        ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8)
+        : '',
+      OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY
+        ? '***' + process.env.OPENROUTER_API_KEY.slice(-8)
+        : '',
+      OPENROUTER_BASE_URL:
+        process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
       DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
       PRIMARY_MODEL: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
-      FALLBACK_MODELS: process.env.FALLBACK_MODELS || 'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
+      FALLBACK_MODELS:
+        process.env.FALLBACK_MODELS ||
+        'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
       MAX_TOKENS: process.env.MAX_TOKENS || '200',
       TEMPERATURE: process.env.TEMPERATURE || '0.7',
       NODE_ENV: process.env.NODE_ENV,
-      ENABLE_ADMIN: process.env.ENABLE_ADMIN,
+      ENABLE_ADMIN: process.env.ENABLE_ADMIN
     };
-    
+
     const prompts = loadPrompts();
-    
+
     // Compute connection status
     const status = await (async (): Promise<AdminStatus> => {
       const supabaseUrl = process.env.SUPABASE_URL;
-      const orBase = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
-      const orKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+      const orBase =
+        process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+      const orKey =
+        process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
       // Supabase: try /auth/v1/health
-      const supabase: ConnectionStatus = { configured: !!supabaseUrl, reachable: false, status: null };
+      const supabase: ConnectionStatus = {
+        configured: !!supabaseUrl,
+        reachable: false,
+        status: null
+      };
       if (supabaseUrl) {
         try {
           const controller = new AbortController();
           const to = setTimeout(() => controller.abort(), 4000);
-          let res = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`, { signal: controller.signal as any });
+          let res = await fetch(
+            `${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`,
+            { signal: controller.signal as any }
+          );
           clearTimeout(to);
           if (res.status === 401 && process.env.SUPABASE_ANON_KEY) {
             const controller2 = new AbortController();
             const to2 = setTimeout(() => controller2.abort(), 4000);
-            res = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`, {
-              headers: { apikey: process.env.SUPABASE_ANON_KEY, Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY}` },
-              signal: controller2.signal as any,
-            });
+            res = await fetch(
+              `${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`,
+              {
+                headers: {
+                  apikey: process.env.SUPABASE_ANON_KEY,
+                  Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY}`
+                },
+                signal: controller2.signal as any
+              }
+            );
             clearTimeout(to2);
           }
           supabase.status = res.status;
@@ -602,14 +669,18 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
         // (client-side script for status buttons is injected in HTML template <script>)
       }
       // OpenRouter: GET /models with Authorization if key present
-      const openrouter: ConnectionStatus = { configured: !!orKey, reachable: false, status: null };
+      const openrouter: ConnectionStatus = {
+        configured: !!orKey,
+        reachable: false,
+        status: null
+      };
       if (orKey) {
         try {
           const controller = new AbortController();
           const to = setTimeout(() => controller.abort(), 5000);
           const res = await fetch(`${orBase.replace(/\/$/, '')}/models`, {
             headers: { Authorization: `Bearer ${orKey}` },
-            signal: controller.signal as any,
+            signal: controller.signal as any
           });
           clearTimeout(to);
           openrouter.status = res.status;
@@ -622,8 +693,13 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
     })();
 
     // Add stricter CSP for admin (no inline styles/scripts)
-    reply.header('Content-Security-Policy', "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';");
-    reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, undefined, status));
+    reply.header(
+      'Content-Security-Policy',
+      "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';"
+    );
+    reply
+      .type('text/html')
+      .send(getEnhancedAdminHTML(config, prompts, undefined, status));
   });
 
   // Serve admin assets (CSS/JS)
@@ -654,15 +730,40 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
   server.get('/admin/connection-status', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
     const supabaseUrl = process.env.SUPABASE_URL;
-    const orBase = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+    const orBase =
+      process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
     const orKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
-    const supabase: ConnectionStatus = { configured: !!supabaseUrl, reachable: false, status: null };
+    const supabase: ConnectionStatus = {
+      configured: !!supabaseUrl,
+      reachable: false,
+      status: null
+    };
     if (supabaseUrl) {
-      try { const r = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`); supabase.status = r.status; supabase.reachable = r.ok; } catch (e: any) { supabase.error = e?.message; }
+      try {
+        const r = await fetch(
+          `${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`
+        );
+        supabase.status = r.status;
+        supabase.reachable = r.ok;
+      } catch (e: any) {
+        supabase.error = e?.message;
+      }
     }
-    const openrouter: ConnectionStatus = { configured: !!orKey, reachable: false, status: null };
+    const openrouter: ConnectionStatus = {
+      configured: !!orKey,
+      reachable: false,
+      status: null
+    };
     if (orKey) {
-      try { const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, { headers: { Authorization: `Bearer ${orKey}` } }); openrouter.status = r.status; openrouter.reachable = r.ok; } catch (e: any) { openrouter.error = e?.message; }
+      try {
+        const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, {
+          headers: { Authorization: `Bearer ${orKey}` }
+        });
+        openrouter.status = r.status;
+        openrouter.reachable = r.ok;
+      } catch (e: any) {
+        openrouter.error = e?.message;
+      }
     }
     return { supabase, openrouter } as AdminStatus;
   });
@@ -676,53 +777,81 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
     }
     if (provider === 'supabase') {
       const supabaseUrl = process.env.SUPABASE_URL;
-      const status: ConnectionStatus = { configured: !!supabaseUrl, reachable: false, status: null };
+      const status: ConnectionStatus = {
+        configured: !!supabaseUrl,
+        reachable: false,
+        status: null
+      };
       if (supabaseUrl) {
-        try { const r = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`); status.status = r.status; status.reachable = r.ok; } catch (e: any) { status.error = e?.message; }
+        try {
+          const r = await fetch(
+            `${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`
+          );
+          status.status = r.status;
+          status.reachable = r.ok;
+        } catch (e: any) {
+          status.error = e?.message;
+        }
       }
       return status;
     } else {
-      const orBase = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
-      const orKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
-      const status: ConnectionStatus = { configured: !!orKey, reachable: false, status: null };
+      const orBase =
+        process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+      const orKey =
+        process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+      const status: ConnectionStatus = {
+        configured: !!orKey,
+        reachable: false,
+        status: null
+      };
       if (orKey) {
-        try { const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, { headers: { Authorization: `Bearer ${orKey}` } }); status.status = r.status; status.reachable = r.ok; } catch (e: any) { status.error = e?.message; }
+        try {
+          const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, {
+            headers: { Authorization: `Bearer ${orKey}` }
+          });
+          status.status = r.status;
+          status.reachable = r.ok;
+        } catch (e: any) {
+          status.error = e?.message;
+        }
       }
       return status;
     }
   });
-  
+
   // Handle config updates
   server.post('/admin/config', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     const body = request.body as any;
     const envPath = path.join(__dirname, '../.env');
-    
+
     try {
       // Read current .env file
       let envContent = '';
       if (fs.existsSync(envPath)) {
         envContent = fs.readFileSync(envPath, 'utf-8');
       }
-      
+
       // Update the values
       const updates: Record<string, string> = {};
-      
+
       // Collect all possible updates
       const fields = [
-        'supabase_url', 'supabase_anon_key',
-        'openrouter_api_key', 'openrouter_base_url', 
+        'supabase_url',
+        'supabase_anon_key',
+        'openrouter_api_key',
+        'openrouter_base_url',
         'daily_cost_limit'
       ];
-      
+
       fields.forEach(field => {
         if (body[field]) {
           const envKey = field.toUpperCase();
           updates[envKey] = body[field];
         }
       });
-      
+
       // Apply updates to env content
       for (const [key, value] of Object.entries(updates)) {
         const regex = new RegExp(`^${key}=.*$`, 'gm');
@@ -731,50 +860,88 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
         } else {
           envContent += `\n${key}=${value}`;
         }
-        
+
         // Also update process.env for current session
         process.env[key] = value;
       }
-      
+
       // Write back to .env file
       fs.writeFileSync(envPath, envContent);
-      
+
       // Redirect back with success message
       const config = {
         SUPABASE_URL: process.env.SUPABASE_URL,
-        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8) : '',
-        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? '***' + process.env.OPENROUTER_API_KEY.slice(-8) : '',
-        OPENROUTER_BASE_URL: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+          ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8)
+          : '',
+        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY
+          ? '***' + process.env.OPENROUTER_API_KEY.slice(-8)
+          : '',
+        OPENROUTER_BASE_URL:
+          process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
         DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
         PRIMARY_MODEL: process.env.PRIMARY_MODEL,
         FALLBACK_MODELS: process.env.FALLBACK_MODELS,
         MAX_TOKENS: process.env.MAX_TOKENS,
         TEMPERATURE: process.env.TEMPERATURE,
         NODE_ENV: process.env.NODE_ENV,
-        ENABLE_ADMIN: process.env.ENABLE_ADMIN,
+        ENABLE_ADMIN: process.env.ENABLE_ADMIN
       };
-      
+
       const prompts = loadPrompts();
       // refresh status
       const status = await (async (): Promise<AdminStatus> => {
         const supabaseUrl = process.env.SUPABASE_URL;
-        const orBase = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
-        const orKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
-        const supabase: ConnectionStatus = { configured: !!supabaseUrl, reachable: false, status: null };
+        const orBase =
+          process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+        const orKey =
+          process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+        const supabase: ConnectionStatus = {
+          configured: !!supabaseUrl,
+          reachable: false,
+          status: null
+        };
         if (supabaseUrl) {
-          try { const r = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`); supabase.status = r.status; supabase.reachable = r.ok; } catch (e: any) { supabase.error = e?.message; }
+          try {
+            const r = await fetch(
+              `${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`
+            );
+            supabase.status = r.status;
+            supabase.reachable = r.ok;
+          } catch (e: any) {
+            supabase.error = e?.message;
+          }
         }
-        const openrouter: ConnectionStatus = { configured: !!orKey, reachable: false, status: null };
+        const openrouter: ConnectionStatus = {
+          configured: !!orKey,
+          reachable: false,
+          status: null
+        };
         if (orKey) {
-          try { const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, { headers: { Authorization: `Bearer ${orKey}` } }); openrouter.status = r.status; openrouter.reachable = r.ok; } catch (e: any) { openrouter.error = e?.message; }
+          try {
+            const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, {
+              headers: { Authorization: `Bearer ${orKey}` }
+            });
+            openrouter.status = r.status;
+            openrouter.reachable = r.ok;
+          } catch (e: any) {
+            openrouter.error = e?.message;
+          }
         }
         return { supabase, openrouter };
       })();
 
-      reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, {
-        type: 'success',
-        text: 'Configuration updated successfully!'
-      }, status));
+      reply.type('text/html').send(
+        getEnhancedAdminHTML(
+          config,
+          prompts,
+          {
+            type: 'success',
+            text: 'Configuration updated successfully!'
+          },
+          status
+        )
+      );
     } catch (error) {
       console.error('Error updating config:', error);
       reply.status(500).send('Failed to update configuration');
@@ -786,7 +953,11 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
     if (!checkAdminAuth(request, reply)) return;
 
     const { key_name, confirmation } = (request.body as any) || {};
-    const allowed = new Set(['SUPABASE_ANON_KEY', 'OPENROUTER_API_KEY', 'OPENAI_API_KEY']);
+    const allowed = new Set([
+      'SUPABASE_ANON_KEY',
+      'OPENROUTER_API_KEY',
+      'OPENAI_API_KEY'
+    ]);
     const envPath = path.join(__dirname, '../.env');
 
     if (!key_name || !allowed.has(key_name)) {
@@ -795,25 +966,50 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
     if (confirmation !== 'Yes I want to delete this key') {
       const config = {
         SUPABASE_URL: process.env.SUPABASE_URL,
-        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8) : '',
-        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? '***' + process.env.OPENROUTER_API_KEY.slice(-8) : '',
-        OPENROUTER_BASE_URL: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+          ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8)
+          : '',
+        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY
+          ? '***' + process.env.OPENROUTER_API_KEY.slice(-8)
+          : '',
+        OPENROUTER_BASE_URL:
+          process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
         DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
         PRIMARY_MODEL: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
-        FALLBACK_MODELS: process.env.FALLBACK_MODELS || 'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
+        FALLBACK_MODELS:
+          process.env.FALLBACK_MODELS ||
+          'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
         MAX_TOKENS: process.env.MAX_TOKENS || '200',
         TEMPERATURE: process.env.TEMPERATURE || '0.7',
         NODE_ENV: process.env.NODE_ENV,
-        ENABLE_ADMIN: process.env.ENABLE_ADMIN,
+        ENABLE_ADMIN: process.env.ENABLE_ADMIN
       };
       const prompts = loadPrompts();
-      const status = { supabase: { configured: !!process.env.SUPABASE_URL, reachable: false }, openrouter: { configured: !!(process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY), reachable: false } } as AdminStatus;
-      return reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, { type: 'error', text: 'Confirmation phrase mismatch.' }, status));
+      const status = {
+        supabase: { configured: !!process.env.SUPABASE_URL, reachable: false },
+        openrouter: {
+          configured: !!(
+            process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY
+          ),
+          reachable: false
+        }
+      } as AdminStatus;
+      return reply
+        .type('text/html')
+        .send(
+          getEnhancedAdminHTML(
+            config,
+            prompts,
+            { type: 'error', text: 'Confirmation phrase mismatch.' },
+            status
+          )
+        );
     }
 
     try {
       let envContent = '';
-      if (fs.existsSync(envPath)) envContent = fs.readFileSync(envPath, 'utf-8');
+      if (fs.existsSync(envPath))
+        envContent = fs.readFileSync(envPath, 'utf-8');
       const lineRegex = new RegExp(`^${key_name}=.*$\\r?\\n?`, 'gm');
       envContent = envContent.replace(lineRegex, '');
       fs.writeFileSync(envPath, envContent);
@@ -821,50 +1017,74 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
       const config = {
         SUPABASE_URL: process.env.SUPABASE_URL,
-        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8) : '',
-        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? '***' + process.env.OPENROUTER_API_KEY.slice(-8) : '',
-        OPENROUTER_BASE_URL: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+          ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8)
+          : '',
+        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY
+          ? '***' + process.env.OPENROUTER_API_KEY.slice(-8)
+          : '',
+        OPENROUTER_BASE_URL:
+          process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
         DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
         PRIMARY_MODEL: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
-        FALLBACK_MODELS: process.env.FALLBACK_MODELS || 'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
+        FALLBACK_MODELS:
+          process.env.FALLBACK_MODELS ||
+          'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
         MAX_TOKENS: process.env.MAX_TOKENS || '200',
         TEMPERATURE: process.env.TEMPERATURE || '0.7',
         NODE_ENV: process.env.NODE_ENV,
-        ENABLE_ADMIN: process.env.ENABLE_ADMIN,
+        ENABLE_ADMIN: process.env.ENABLE_ADMIN
       };
       const prompts = loadPrompts();
       const status = await (async (): Promise<AdminStatus> => {
-        const supabase: ConnectionStatus = { configured: !!process.env.SUPABASE_URL, reachable: false };
-        const openrouter: ConnectionStatus = { configured: !!(process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY), reachable: false };
+        const supabase: ConnectionStatus = {
+          configured: !!process.env.SUPABASE_URL,
+          reachable: false
+        };
+        const openrouter: ConnectionStatus = {
+          configured: !!(
+            process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY
+          ),
+          reachable: false
+        };
         return { supabase, openrouter };
       })();
-      reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, { type: 'success', text: `${key_name} deleted.` }, status));
+      reply
+        .type('text/html')
+        .send(
+          getEnhancedAdminHTML(
+            config,
+            prompts,
+            { type: 'success', text: `${key_name} deleted.` },
+            status
+          )
+        );
     } catch (err) {
       console.error('Error deleting key:', err);
       reply.status(500).send('Failed to delete key');
     }
   });
-  
+
   // Handle model configuration
   server.post('/admin/models', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     const body = request.body as any;
     const envPath = path.join(__dirname, '../.env');
-    
+
     try {
       let envContent = '';
       if (fs.existsSync(envPath)) {
         envContent = fs.readFileSync(envPath, 'utf-8');
       }
-      
+
       const updates: Record<string, string> = {};
-      
+
       if (body.primary_model) updates.PRIMARY_MODEL = body.primary_model;
       if (body.fallback_models) updates.FALLBACK_MODELS = body.fallback_models;
       if (body.max_tokens) updates.MAX_TOKENS = body.max_tokens;
       if (body.temperature) updates.TEMPERATURE = body.temperature;
-      
+
       for (const [key, value] of Object.entries(updates)) {
         const regex = new RegExp(`^${key}=.*$`, 'gm');
         if (regex.test(envContent)) {
@@ -874,45 +1094,45 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
         }
         process.env[key] = value;
       }
-      
+
       fs.writeFileSync(envPath, envContent);
-      
+
       reply.redirect('/admin');
     } catch (error) {
       console.error('Error updating models:', error);
       reply.status(500).send('Failed to update model configuration');
     }
   });
-  
+
   // Handle prompt updates
   server.post('/admin/prompt/:id', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     const { id } = request.params as { id: string };
     const body = request.body as any;
-    
+
     try {
       const prompts = loadPrompts();
       const promptIndex = prompts.findIndex(p => p.id === id);
-      
+
       if (promptIndex >= 0) {
         prompts[promptIndex].template = body.template;
         savePrompts(prompts);
       }
-      
+
       reply.redirect('/admin#prompts');
     } catch (error) {
       console.error('Error updating prompt:', error);
       reply.status(500).send('Failed to update prompt');
     }
   });
-  
+
   // Test LLM endpoint
   server.post('/admin/test-llm', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     const { prompt, model } = request.body as any;
-    
+
     // Mock test for now - would connect to actual LLM service
     return {
       success: true,
@@ -927,17 +1147,17 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
       timestamp: new Date().toISOString()
     };
   });
-  
+
   // Admin metrics endpoint (JSON)
   server.get('/admin/metrics', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     return {
       timestamp: new Date().toISOString(),
       server: {
         uptime: process.uptime(),
         memory: process.memoryUsage(),
-        port: process.env.PORT || 8002,
+        port: process.env.PORT || 8002
       },
       llm: {
         calls_today: 42,
@@ -951,7 +1171,7 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
       },
       supabase: {
         configured: !!process.env.SUPABASE_URL,
-        url: process.env.SUPABASE_URL || 'Not configured',
+        url: process.env.SUPABASE_URL || 'Not configured'
       }
     };
   });

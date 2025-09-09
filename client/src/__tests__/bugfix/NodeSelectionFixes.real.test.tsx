@@ -1,23 +1,37 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { jest } from '@jest/globals';
 import App from '../../App';
 
 // Helper to create proper drag events with coordinates
-const createDragEvent = (type: string, clientX: number, clientY: number, dataTransferData: string) => {
+const createDragEvent = (
+  type: string,
+  clientX: number,
+  clientY: number,
+  dataTransferData: string
+) => {
   const event = new MouseEvent(type, {
-  bubbles: true,
-  cancelable: true,
-  clientX,
-  clientY
-}) as MouseEvent & { dataTransfer: DataTransfer };
+    bubbles: true,
+    cancelable: true,
+    clientX,
+    clientY
+  }) as MouseEvent & { dataTransfer: DataTransfer };
   // Add dataTransfer for drag events
   event.dataTransfer = {
-  getData: (format: string) => {
-  if (format === 'application/reactflow' || format === 'application/node-type') {
-  return dataTransferData;
-}
+    getData: (format: string) => {
+      if (
+        format === 'application/reactflow' ||
+        format === 'application/node-type'
+      ) {
+        return dataTransferData;
+      }
       return '';
     },
     setData: jest.fn(),
@@ -127,7 +141,8 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
         expect(nodes.length).toBe(1);
         const node = nodes[0] as HTMLElement;
         // Real ReactFlow should position the node (either via transform or absolute positioning)
-        const hasTransform = node.style.transform && node.style.transform !== '';
+        const hasTransform =
+          node.style.transform && node.style.transform !== '';
         const hasAbsolutePosition = node.style.position === 'absolute';
         expect(hasTransform || hasAbsolutePosition).toBe(true);
       },
@@ -221,7 +236,8 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       expect(node).toBeInTheDocument();
       const element = node as HTMLElement;
       // ReactFlow positions nodes via transform or absolute positioning
-      const hasPositioning = element.style.transform || element.style.position === 'absolute';
+      const hasPositioning =
+        element.style.transform || element.style.position === 'absolute';
       expect(hasPositioning).toBeTruthy();
       // Second node should be offset from first (our logic adds 120px x, 60px y per existing node)
       if (index === 1) {

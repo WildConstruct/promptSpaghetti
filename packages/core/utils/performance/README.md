@@ -7,6 +7,7 @@ This directory contains the complete performance infrastructure implementation f
 ## Components
 
 ### 1. LRU Cache (`LRUCache.ts`)
+
 - **Purpose**: Fast in-memory caching with automatic eviction
 - **Features**:
   - Configurable size (default: 500 items)
@@ -16,6 +17,7 @@ This directory contains the complete performance infrastructure implementation f
   - O(1) get/set operations
 
 ### 2. Multi-Level Cache (`MultiLevelCache.ts`)
+
 - **Purpose**: Three-tier caching system for optimal performance
 - **Levels**:
   - L1: Memory (Hot) - LRU Cache
@@ -27,6 +29,7 @@ This directory contains the complete performance infrastructure implementation f
   - Pattern-based invalidation across all levels
 
 ### 3. Worker Pool (`WorkerPool.ts`)
+
 - **Purpose**: Offload heavy computations to background threads
 - **Features**:
   - Dynamic pool sizing (2-8 workers based on CPU cores)
@@ -40,6 +43,7 @@ This directory contains the complete performance infrastructure implementation f
   - Edge routing optimization
 
 ### 4. Performance Monitor (`PerformanceMonitor.ts`)
+
 - **Purpose**: Track and analyze application performance
 - **Features**:
   - Real-time FPS monitoring
@@ -53,7 +57,10 @@ This directory contains the complete performance infrastructure implementation f
 ### Basic Setup
 
 ```typescript
-import { initializePerformance, getPerformanceInfrastructure } from '@/packages/core/utils/performance';
+import {
+  initializePerformance,
+  getPerformanceInfrastructure
+} from '@/packages/core/utils/performance';
 
 // Initialize on app start
 await initializePerformance({
@@ -68,18 +75,22 @@ const { cache, workerPool, perfMonitor } = getPerformanceInfrastructure();
 ### React Integration
 
 ```typescript
-import { usePerformance, useCachedData, useWorkerTask } from '@/packages/core/hooks/usePerformance';
+import {
+  usePerformance,
+  useCachedData,
+  useWorkerTask
+} from '@/packages/core/hooks/usePerformance';
 
 function MyComponent() {
   const { cache, workerPool, perfMonitor } = usePerformance();
-  
+
   // Use cached data
   const { data, isLoading } = useCachedData(
     'my-key',
     async () => fetchExpensiveData(),
     { ttl: 60000 }
   );
-  
+
   // Use worker for heavy computation
   const { result } = useWorkerTask({
     type: 'CALCULATE_PATH',
@@ -118,6 +129,7 @@ pnpm test -- --testPathPattern="performance"
 ## Integration Examples
 
 See `example-integration.tsx` for complete examples of integrating the performance infrastructure into:
+
 - Edge routing components
 - Group calculations
 - Graph editor operations
@@ -134,6 +146,7 @@ See `example-integration.tsx` for complete examples of integrating the performan
 To integrate into existing components:
 
 1. **Wrap expensive operations** with performance monitoring:
+
 ```typescript
 const { measure } = useRenderPerformance('ComponentName');
 measure('operation-name', () => {
@@ -142,12 +155,14 @@ measure('operation-name', () => {
 ```
 
 2. **Cache frequently accessed data**:
+
 ```typescript
 await cache.set('key', data, { ttl: 60000 });
 const cached = await cache.get('key');
 ```
 
 3. **Offload heavy computations** to workers:
+
 ```typescript
 if (nodes.length > 50) {
   const result = await workerPool.execute({
@@ -160,6 +175,7 @@ if (nodes.length > 50) {
 ## Performance Monitoring
 
 The infrastructure automatically tracks:
+
 - Operation timings
 - Cache hit rates
 - Worker utilization
@@ -177,16 +193,19 @@ console.log('Average FPS:', report.fps.average);
 ## Troubleshooting
 
 ### Low Cache Hit Rate
+
 - Increase cache size in initialization
 - Review cache key generation strategy
 - Check TTL values (may be too short)
 
 ### Worker Pool Congestion
+
 - Increase max workers if CPU allows
 - Prioritize critical tasks
 - Consider batching small operations
 
 ### Memory Issues
+
 - Monitor with Performance Dashboard
 - Reduce cache sizes
 - Implement more aggressive eviction

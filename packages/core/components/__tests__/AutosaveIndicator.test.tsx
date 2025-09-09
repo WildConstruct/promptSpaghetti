@@ -8,7 +8,7 @@ describe('AutosaveIndicator', () => {
     lastSaved: null as Date | null,
     isSaving: false,
     hasChanges: false,
-    error: null as string | null,
+    error: null as string | null
   };
 
   beforeEach(() => {
@@ -59,13 +59,17 @@ describe('AutosaveIndicator', () => {
 
     it('should show seconds ago for recent saves', () => {
       const thirtySecondsAgo = new Date(Date.now() - 30000);
-      render(<AutosaveIndicator {...defaultProps} lastSaved={thirtySecondsAgo} />);
+      render(
+        <AutosaveIndicator {...defaultProps} lastSaved={thirtySecondsAgo} />
+      );
       expect(screen.getByText(/30 seconds ago/i)).toBeInTheDocument();
     });
 
     it('should show minutes ago for older saves', () => {
       const fiveMinutesAgo = new Date(Date.now() - 5 * 60000);
-      render(<AutosaveIndicator {...defaultProps} lastSaved={fiveMinutesAgo} />);
+      render(
+        <AutosaveIndicator {...defaultProps} lastSaved={fiveMinutesAgo} />
+      );
       expect(screen.getByText(/5 minutes ago/i)).toBeInTheDocument();
     });
 
@@ -78,24 +82,30 @@ describe('AutosaveIndicator', () => {
     it('should show date for saves older than 24 hours', () => {
       const yesterday = new Date(Date.now() - 25 * 3600000);
       render(<AutosaveIndicator {...defaultProps} lastSaved={yesterday} />);
-      expect(screen.getByText(yesterday.toLocaleDateString())).toBeInTheDocument();
+      expect(
+        screen.getByText(yesterday.toLocaleDateString())
+      ).toBeInTheDocument();
     });
   });
 
   describe('Auto-update Timer', () => {
     it('should update time display automatically', async () => {
       const oneMinuteAgo = new Date(Date.now() - 60000);
-      const { rerender } = render(<AutosaveIndicator {...defaultProps} lastSaved={oneMinuteAgo} />);
-      
+      const { rerender } = render(
+        <AutosaveIndicator {...defaultProps} lastSaved={oneMinuteAgo} />
+      );
+
       expect(screen.getByText(/1 minute ago/i)).toBeInTheDocument();
-      
+
       // Advance time by 1 minute
       act(() => {
         jest.advanceTimersByTime(60000);
       });
-      
-      rerender(<AutosaveIndicator {...defaultProps} lastSaved={oneMinuteAgo} />);
-      
+
+      rerender(
+        <AutosaveIndicator {...defaultProps} lastSaved={oneMinuteAgo} />
+      );
+
       await waitFor(() => {
         expect(screen.getByText(/2 minutes ago/i)).toBeInTheDocument();
       });
@@ -103,10 +113,12 @@ describe('AutosaveIndicator', () => {
 
     it('should clean up timer on unmount', () => {
       const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
-      const { unmount } = render(<AutosaveIndicator {...defaultProps} lastSaved={new Date()} />);
-      
+      const { unmount } = render(
+        <AutosaveIndicator {...defaultProps} lastSaved={new Date()} />
+      );
+
       unmount();
-      
+
       expect(clearIntervalSpy).toHaveBeenCalled();
     });
   });
@@ -141,54 +153,86 @@ describe('AutosaveIndicator', () => {
     it('should show detailed save time in tooltip', () => {
       const saveTime = new Date('2025-01-28T10:30:00');
       render(<AutosaveIndicator {...defaultProps} lastSaved={saveTime} />);
-      
+
       const indicator = screen.getByTestId('autosave-indicator');
-      expect(indicator).toHaveAttribute('title', expect.stringContaining('10:30'));
+      expect(indicator).toHaveAttribute(
+        'title',
+        expect.stringContaining('10:30')
+      );
     });
 
     it('should show error details in tooltip when error', () => {
-      render(<AutosaveIndicator {...defaultProps} error="Network error: Connection refused" />);
-      
+      render(
+        <AutosaveIndicator
+          {...defaultProps}
+          error="Network error: Connection refused"
+        />
+      );
+
       const indicator = screen.getByTestId('autosave-indicator');
-      expect(indicator).toHaveAttribute('title', 'Network error: Connection refused');
+      expect(indicator).toHaveAttribute(
+        'title',
+        'Network error: Connection refused'
+      );
     });
 
     it('should show keyboard shortcut in tooltip', () => {
       render(<AutosaveIndicator {...defaultProps} hasChanges={true} />);
-      
+
       const indicator = screen.getByTestId('autosave-indicator');
-      expect(indicator).toHaveAttribute('title', expect.stringContaining('Ctrl+S'));
+      expect(indicator).toHaveAttribute(
+        'title',
+        expect.stringContaining('Ctrl+S')
+      );
     });
   });
 
   describe('Click Actions', () => {
     it('should trigger manual save on click when has changes', () => {
       const onManualSave = jest.fn();
-      render(<AutosaveIndicator {...defaultProps} hasChanges={true} onManualSave={onManualSave} />);
-      
+      render(
+        <AutosaveIndicator
+          {...defaultProps}
+          hasChanges={true}
+          onManualSave={onManualSave}
+        />
+      );
+
       const indicator = screen.getByTestId('autosave-indicator');
       indicator.click();
-      
+
       expect(onManualSave).toHaveBeenCalled();
     });
 
     it('should not trigger save when already saving', () => {
       const onManualSave = jest.fn();
-      render(<AutosaveIndicator {...defaultProps} isSaving={true} onManualSave={onManualSave} />);
-      
+      render(
+        <AutosaveIndicator
+          {...defaultProps}
+          isSaving={true}
+          onManualSave={onManualSave}
+        />
+      );
+
       const indicator = screen.getByTestId('autosave-indicator');
       indicator.click();
-      
+
       expect(onManualSave).not.toHaveBeenCalled();
     });
 
     it('should retry on click when error', () => {
       const onRetry = jest.fn();
-      render(<AutosaveIndicator {...defaultProps} error="Save failed" onRetry={onRetry} />);
-      
+      render(
+        <AutosaveIndicator
+          {...defaultProps}
+          error="Save failed"
+          onRetry={onRetry}
+        />
+      );
+
       const indicator = screen.getByTestId('autosave-indicator');
       indicator.click();
-      
+
       expect(onRetry).toHaveBeenCalled();
     });
   });
@@ -196,7 +240,7 @@ describe('AutosaveIndicator', () => {
   describe('Accessibility', () => {
     it('should have appropriate ARIA attributes', () => {
       render(<AutosaveIndicator {...defaultProps} isSaving={true} />);
-      
+
       const indicator = screen.getByTestId('autosave-indicator');
       expect(indicator).toHaveAttribute('role', 'status');
       expect(indicator).toHaveAttribute('aria-live', 'polite');
@@ -204,24 +248,38 @@ describe('AutosaveIndicator', () => {
     });
 
     it('should announce save completion', async () => {
-      const { rerender } = render(<AutosaveIndicator {...defaultProps} isSaving={true} />);
-      
-      rerender(<AutosaveIndicator {...defaultProps} isSaving={false} lastSaved={new Date()} />);
-      
+      const { rerender } = render(
+        <AutosaveIndicator {...defaultProps} isSaving={true} />
+      );
+
+      rerender(
+        <AutosaveIndicator
+          {...defaultProps}
+          isSaving={false}
+          lastSaved={new Date()}
+        />
+      );
+
       const announcement = screen.getByRole('status');
       expect(announcement).toHaveTextContent(/Saved/i);
     });
 
     it('should have keyboard support', () => {
       const onManualSave = jest.fn();
-      render(<AutosaveIndicator {...defaultProps} hasChanges={true} onManualSave={onManualSave} />);
-      
+      render(
+        <AutosaveIndicator
+          {...defaultProps}
+          hasChanges={true}
+          onManualSave={onManualSave}
+        />
+      );
+
       const indicator = screen.getByTestId('autosave-indicator');
       indicator.focus();
-      
+
       const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
       indicator.dispatchEvent(enterEvent);
-      
+
       expect(onManualSave).toHaveBeenCalled();
     });
   });
@@ -229,12 +287,14 @@ describe('AutosaveIndicator', () => {
   describe('Performance', () => {
     it('should debounce rapid state changes', async () => {
       const { rerender } = render(<AutosaveIndicator {...defaultProps} />);
-      
+
       // Rapid state changes
       for (let i = 0; i < 10; i++) {
-        rerender(<AutosaveIndicator {...defaultProps} hasChanges={i % 2 === 0} />);
+        rerender(
+          <AutosaveIndicator {...defaultProps} hasChanges={i % 2 === 0} />
+        );
       }
-      
+
       // Should only show final state
       expect(screen.getByText('No changes')).toBeInTheDocument();
     });
@@ -245,31 +305,39 @@ describe('AutosaveIndicator', () => {
         renderSpy();
         return <AutosaveIndicator {...props} />;
       };
-      
+
       const { rerender } = render(<TestWrapper {...defaultProps} />);
-      
+
       // Same props should not trigger re-render
       rerender(<TestWrapper {...defaultProps} />);
-      
+
       expect(renderSpy).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Error Recovery', () => {
     it('should clear error after successful save', () => {
-      const { rerender } = render(<AutosaveIndicator {...defaultProps} error="Save failed" />);
-      
+      const { rerender } = render(
+        <AutosaveIndicator {...defaultProps} error="Save failed" />
+      );
+
       expect(screen.getByText('Save failed')).toBeInTheDocument();
-      
+
       rerender(<AutosaveIndicator {...defaultProps} lastSaved={new Date()} />);
-      
+
       expect(screen.queryByText('Save failed')).not.toBeInTheDocument();
       expect(screen.getByText(/Saved/i)).toBeInTheDocument();
     });
 
     it('should show retry count for repeated failures', () => {
-      render(<AutosaveIndicator {...defaultProps} error="Save failed" retryCount={3} />);
-      
+      render(
+        <AutosaveIndicator
+          {...defaultProps}
+          error="Save failed"
+          retryCount={3}
+        />
+      );
+
       expect(screen.getByText(/Save failed.*3 retries/i)).toBeInTheDocument();
     });
   });

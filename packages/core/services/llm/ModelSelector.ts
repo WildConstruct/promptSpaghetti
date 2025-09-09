@@ -11,7 +11,7 @@ export class ModelSelector {
       costPerMillion: 0,
       maxTokens: 8192,
       isFree: true,
-      priority: 1,
+      priority: 1
     },
     {
       id: 'mistral/mistral-medium-3.1:free',
@@ -20,7 +20,7 @@ export class ModelSelector {
       costPerMillion: 0,
       maxTokens: 4096,
       isFree: true,
-      priority: 2,
+      priority: 2
     },
     {
       id: 'qwen/qwen-262k:free',
@@ -29,7 +29,7 @@ export class ModelSelector {
       costPerMillion: 0,
       maxTokens: 262144,
       isFree: true,
-      priority: 3,
+      priority: 3
     },
     {
       id: 'openai/gpt-4o-mini',
@@ -38,8 +38,8 @@ export class ModelSelector {
       costPerMillion: 0.05,
       maxTokens: 16384,
       isFree: false,
-      priority: 4,
-    },
+      priority: 4
+    }
   ];
 
   private failedModels: Set<string> = new Set();
@@ -47,7 +47,7 @@ export class ModelSelector {
     ['metadata', 'mistral/mistral-medium-3.1:free'],
     ['suggestion', 'deepseek/deepseek-r1:free'],
     ['refinement', 'deepseek/deepseek-r1:free'],
-    ['general', 'deepseek/deepseek-r1:free'],
+    ['general', 'deepseek/deepseek-r1:free']
   ]);
 
   getModelsForTask(taskType?: string): ModelConfig[] {
@@ -55,13 +55,15 @@ export class ModelSelector {
     if (taskType && this.taskModelMap.has(taskType)) {
       const preferredModelId = this.taskModelMap.get(taskType)!;
       const preferredModel = this.models.find(m => m.id === preferredModelId);
-      
+
       if (preferredModel && !this.failedModels.has(preferredModel.id)) {
         // Return preferred model first, then fallbacks
         const otherModels = this.models
-          .filter(m => m.id !== preferredModelId && !this.failedModels.has(m.id))
+          .filter(
+            m => m.id !== preferredModelId && !this.failedModels.has(m.id)
+          )
           .sort((a, b) => a.priority - b.priority);
-        
+
         return [preferredModel, ...otherModels];
       }
     }
@@ -74,11 +76,14 @@ export class ModelSelector {
 
   markModelFailed(modelId: string): void {
     this.failedModels.add(modelId);
-    
+
     // Clear failed models after 5 minutes
-    setTimeout(() => {
-      this.failedModels.delete(modelId);
-    }, 5 * 60 * 1000);
+    setTimeout(
+      () => {
+        this.failedModels.delete(modelId);
+      },
+      5 * 60 * 1000
+    );
   }
 
   resetFailedModels(): void {
@@ -92,7 +97,7 @@ export class ModelSelector {
   calculateCost(modelId: string, tokensIn: number, tokensOut: number): number {
     const model = this.getModelById(modelId);
     if (!model) return 0;
-    
+
     const totalTokens = tokensIn + tokensOut;
     return (totalTokens / 1_000_000) * model.costPerMillion;
   }

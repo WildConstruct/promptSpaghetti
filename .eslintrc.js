@@ -4,15 +4,15 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    jest: true,
+    jest: true
   },
   extends: ['eslint:recommended'],
   parserOptions: {
     ecmaVersion: 2021,
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true,
-    },
+      jsx: true
+    }
   },
   overrides: [
     {
@@ -23,31 +23,31 @@ module.exports = {
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:react/recommended',
-        'plugin:react-hooks/recommended',
+        'plugin:react-hooks/recommended'
       ],
       parserOptions: {
         ecmaVersion: 2021,
         sourceType: 'module',
         ecmaFeatures: {
-          jsx: true,
-        },
-      },
+          jsx: true
+        }
+      }
     },
     {
       files: ['**/*.js', '**/*.mjs'],
       parserOptions: {
         ecmaVersion: 2021,
-        sourceType: 'module',
-      },
+        sourceType: 'module'
+      }
     },
     {
       files: ['**/*.test.ts', '**/*.test.tsx', '**/__tests__/**/*'],
       rules: {
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
-        'no-unused-vars': 'off',
-      },
-    },
+        'no-unused-vars': 'off'
+      }
+    }
   ],
   rules: {
     // Development-friendly rules - prioritize productivity over perfection
@@ -77,12 +77,12 @@ module.exports = {
     // Only keep critical rules that prevent actual bugs
     'no-debugger': 'warn',
     'no-console': 'off', // Allow console statements
-    'no-alert': 'warn',
+    'no-alert': 'warn'
   },
   settings: {
     react: {
-      version: 'detect',
-    },
+      version: 'detect'
+    }
   },
   ignorePatterns: [
     'dist/',
@@ -116,6 +116,6 @@ module.exports = {
     '**/ConnectionLabel.tsx',
     // Ignore files that were auto-fixed incorrectly
     '**/components/activity/*.tsx',
-    '**/components/Annotations/*.tsx',
-  ],
+    '**/components/Annotations/*.tsx'
+  ]
 };

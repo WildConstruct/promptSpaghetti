@@ -78,7 +78,9 @@ class DailyTrackerCLI {
       return;
     }
 
-    const ticketIds = ticketsInput.includes(',') ? ticketsInput.split(',').map(id => id.trim()) : [ticketsInput];
+    const ticketIds = ticketsInput.includes(',')
+      ? ticketsInput.split(',').map(id => id.trim())
+      : [ticketsInput];
 
     await this.tracker.trackPush(ticketIds, agentId, commitHash);
     console.log(`🚀 Tracked push: ${ticketIds.length} ticket(s) by ${agentId}`);
@@ -107,15 +109,23 @@ class DailyTrackerCLI {
       // Complexity breakdown
       console.log('\n📊 COMPLEXITY DISTRIBUTION:');
       console.log('-'.repeat(30));
-      console.log(`Simple (<1hr): ${stats.summary.complexityDistribution.simple}`);
-      console.log(`Medium (1-4hr): ${stats.summary.complexityDistribution.medium}`);
-      console.log(`Complex (>4hr): ${stats.summary.complexityDistribution.complex}`);
+      console.log(
+        `Simple (<1hr): ${stats.summary.complexityDistribution.simple}`
+      );
+      console.log(
+        `Medium (1-4hr): ${stats.summary.complexityDistribution.medium}`
+      );
+      console.log(
+        `Complex (>4hr): ${stats.summary.complexityDistribution.complex}`
+      );
 
       if (stats.agents.count > 0) {
         console.log('\n👥 AGENT BREAKDOWN:');
         console.log('-'.repeat(30));
         Object.entries(stats.agents.breakdown).forEach(([agent, data]) => {
-          console.log(`${agent}: ${data.total} total (${data.approved} approved, ${data.pushed} pushed)`);
+          console.log(
+            `${agent}: ${data.total} total (${data.approved} approved, ${data.pushed} pushed)`
+          );
         });
       }
 
@@ -195,8 +205,13 @@ class DailyTrackerCLI {
       report.timeline.forEach(event => {
         const time = new Date(event.timestamp).toLocaleTimeString();
         const type = event.type === 'approval' ? '📋' : '🚀';
-        const details = event.type === 'push' && event.count > 1 ? ` (${event.count} tickets)` : '';
-        console.log(`${time} ${type} ${event.type} by ${event.agentId}${details}`);
+        const details =
+          event.type === 'push' && event.count > 1
+            ? ` (${event.count} tickets)`
+            : '';
+        console.log(
+          `${time} ${type} ${event.type} by ${event.agentId}${details}`
+        );
       });
     }
 
@@ -233,7 +248,7 @@ class DailyTrackerCLI {
     const readline = require('readline');
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout,
+      output: process.stdout
     });
 
     const answer = await new Promise(resolve => {

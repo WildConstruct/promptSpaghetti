@@ -173,19 +173,22 @@ export class RealTimeStateManager {
     const subscription = {
       domain,
       callback,
-      filters: ['user_actions', 'system_events', 'security_events'],
+      filters: ['user_actions', 'system_events', 'security_events']
     };
 
     this.stateSubscriptions.set(domain, subscription);
     this.wsConnection.send({
       type: 'SUBSCRIBE',
       domain,
-      filters: subscription.filters,
+      filters: subscription.filters
     });
   }
 
   // Optimistic updates with automatic rollback
-  async optimisticUpdate(domain: string, mutation: StateMutation): Promise<void> {
+  async optimisticUpdate(
+    domain: string,
+    mutation: StateMutation
+  ): Promise<void> {
     const rollbackFn = this.applyOptimisticUpdate(mutation);
     const updateId = generateUpdateId();
 
@@ -208,24 +211,33 @@ export class RealTimeStateManager {
 ```typescript
 export class StateConflictResolver {
   // Operational Transform for graph modifications
-  resolveGraphConflicts(localChanges: GraphMutation[], remoteChanges: GraphMutation[]): ResolvedMutation[] {
+  resolveGraphConflicts(
+    localChanges: GraphMutation[],
+    remoteChanges: GraphMutation[]
+  ): ResolvedMutation[] {
     return this.operationalTransform(localChanges, remoteChanges, {
       strategy: 'last_writer_wins_with_merge',
-      conflictFields: ['position', 'data', 'connections'],
+      conflictFields: ['position', 'data', 'connections']
     });
   }
 
   // Security-first conflict resolution
-  resolveSecurityConflicts(localPermissions: Permission[], remotePermissions: Permission[]): Permission[] {
+  resolveSecurityConflicts(
+    localPermissions: Permission[],
+    remotePermissions: Permission[]
+  ): Permission[] {
     // Security conflicts always favor more restrictive permissions
     return this.mergeRestrictive(localPermissions, remotePermissions);
   }
 
   // Dashboard layout conflict resolution
-  resolveDashboardConflicts(localLayout: DashboardLayout, remoteLayout: DashboardLayout): DashboardLayout {
+  resolveDashboardConflicts(
+    localLayout: DashboardLayout,
+    remoteLayout: DashboardLayout
+  ): DashboardLayout {
     return this.mergeLayoutChanges(localLayout, remoteLayout, {
       strategy: 'spatial_merge',
-      preserveUserCustomizations: true,
+      preserveUserCustomizations: true
     });
   }
 }
@@ -263,23 +275,33 @@ export class SelectiveStateManager {
   // Granular state updates - only update affected components
   updateState(path: string, value: any): void {
     const affectedComponents = this.getDependentComponents(path);
-    const batchUpdate = this.createBatchUpdate(affectedComponents, { [path]: value });
+    const batchUpdate = this.createBatchUpdate(affectedComponents, {
+      [path]: value
+    });
 
     // Use React's scheduler for optimal timing
-    this.scheduleUpdate(batchUpdate, { priority: this.calculatePriority(path) });
+    this.scheduleUpdate(batchUpdate, {
+      priority: this.calculatePriority(path)
+    });
   }
 
   // Memoized state selectors with dependency tracking
-  createSelector<T>(selector: (state: GlobalState) => T, dependencies: string[]): StateSelector<T> {
+  createSelector<T>(
+    selector: (state: GlobalState) => T,
+    dependencies: string[]
+  ): StateSelector<T> {
     return memoize(selector, {
       dependencies,
       invalidateOn: dependencies.map(dep => `state.${dep}`),
-      maxCacheSize: 1000,
+      maxCacheSize: 1000
     });
   }
 
   // State subscription with automatic cleanup
-  subscribe<T>(selector: StateSelector<T>, callback: (value: T, prevValue: T) => void): UnsubscribeFn {
+  subscribe<T>(
+    selector: StateSelector<T>,
+    callback: (value: T, prevValue: T) => void
+  ): UnsubscribeFn {
     const subscription = new StateSubscription(selector, callback);
     return this.stateGraph.addSubscription(subscription);
   }
@@ -299,7 +321,7 @@ export class StatePersistenceManager {
       storage: 'INDEXED_DB',
       compression: true,
       encryption: false,
-      conflictResolution: 'operational_transform',
+      conflictResolution: 'operational_transform'
     });
 
     // Admin Dashboard: Debounced updates for performance
@@ -308,7 +330,7 @@ export class StatePersistenceManager {
       debounceMs: 1000,
       storage: 'LOCAL_STORAGE',
       ttl: '24h',
-      maxSize: '10MB',
+      maxSize: '10MB'
     });
 
     // Security: Append-only with server sync
@@ -317,7 +339,7 @@ export class StatePersistenceManager {
       storage: 'SERVER_SYNC',
       encryption: true,
       auditTrail: true,
-      retention: '7_years',
+      retention: '7_years'
     });
 
     // Runtime: In-memory with periodic snapshots
@@ -325,7 +347,7 @@ export class StatePersistenceManager {
       strategy: 'SNAPSHOT',
       interval: '5_minutes',
       storage: 'MEMORY',
-      persistOnShutdown: true,
+      persistOnShutdown: true
     });
   }
 }
@@ -358,7 +380,10 @@ export class StateDevTools {
 
   // Time-travel debugging with state reconstruction
   replayStateChanges(fromTimestamp: number, toTimestamp: number): void {
-    const relevantChanges = this.getStateChangesBetween(fromTimestamp, toTimestamp);
+    const relevantChanges = this.getStateChangesBetween(
+      fromTimestamp,
+      toTimestamp
+    );
 
     // Create isolated environment for replay
     const replayEnvironment = this.createReplayEnvironment();
@@ -368,7 +393,7 @@ export class StateDevTools {
       environment: replayEnvironment,
       stepDelay: 100,
       highlightChanges: true,
-      showDiff: true,
+      showDiff: true
     });
   }
 
@@ -378,7 +403,7 @@ export class StateDevTools {
       includeComponents: true,
       includeSelectors: true,
       includeCrossDomainLinks: true,
-      layout: 'hierarchical',
+      layout: 'hierarchical'
     });
   }
 
@@ -388,7 +413,7 @@ export class StateDevTools {
       measureRenderTime: true,
       detectMemoryLeaks: true,
       identifyHeavySelectors: true,
-      suggestOptimizations: true,
+      suggestOptimizations: true
     });
   }
 }
@@ -468,14 +493,18 @@ export class StateOrchestrator {
   async handleCrossDomainEvent(event: DomainEvent): Promise<void> {
     const affectedDomains = this.getAffectedDomains(event);
 
-    const updates = await Promise.all(affectedDomains.map(domain => this.prepareDomainUpdate(domain, event)));
+    const updates = await Promise.all(
+      affectedDomains.map(domain => this.prepareDomainUpdate(domain, event))
+    );
 
     // Apply updates atomically or rollback all
     await this.atomicCrossDomainUpdate(updates);
   }
 
   // Domain state synchronization
-  private async synchronizeDomains(changes: CrossDomainChange[]): Promise<void> {
+  private async synchronizeDomains(
+    changes: CrossDomainChange[]
+  ): Promise<void> {
     // Ensure consistency across all affected domains
     const transactionId = generateTransactionId();
 

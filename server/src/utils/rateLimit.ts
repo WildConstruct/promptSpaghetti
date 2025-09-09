@@ -5,9 +5,13 @@ const buckets = new Map<string, Bucket>();
 
 export function rateLimiter({
   key = 'global',
-  limitPerMinute = 60,
+  limitPerMinute = 60
 }: { key?: string; limitPerMinute?: number } = {}) {
-  return function preHandler(req: FastifyRequest, reply: FastifyReply, done: (err?: Error) => void) {
+  return function preHandler(
+    req: FastifyRequest,
+    reply: FastifyReply,
+    done: (err?: Error) => void
+  ) {
     try {
       const now = Date.now();
       const ip = (req as any).ip || 'unknown';
@@ -30,4 +34,3 @@ export function rateLimiter({
     }
   };
 }
-

@@ -242,7 +242,10 @@ interface ResolutionContext {
   timeConstraints: TimeConstraints;
 }
 
-function resolveWithContext(conflicts: Conflict[], context: ResolutionContext): Resolution {
+function resolveWithContext(
+  conflicts: Conflict[],
+  context: ResolutionContext
+): Resolution {
   // Apply context-specific resolution logic
   // Consider jurisdiction-specific requirements
   // Factor in business process criticality

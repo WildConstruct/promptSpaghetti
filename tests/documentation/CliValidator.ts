@@ -42,7 +42,7 @@ export class CliValidator {
       safetyChecks: true,
       shellPath: '/bin/bash',
       timeout: 10000,
-      ...options,
+      ...options
     };
   }
 
@@ -62,7 +62,7 @@ export class CliValidator {
           lineNumber: codeBlock.lineNumber,
           passed: false,
           errors: [`Unsupported shell language: ${codeBlock.language}`],
-          validationType: 'syntax',
+          validationType: 'syntax'
         };
       }
 
@@ -107,7 +107,7 @@ export class CliValidator {
         lineNumber: codeBlock.lineNumber,
         passed: errors.length === 0,
         errors,
-        validationType,
+        validationType
       };
     } catch (error) {
       return {
@@ -115,8 +115,10 @@ export class CliValidator {
         content: codeBlock.content,
         lineNumber: codeBlock.lineNumber,
         passed: false,
-        errors: [`CLI validation failed: ${error instanceof Error ? error.message : String(error)}`],
-        validationType: 'syntax',
+        errors: [
+          `CLI validation failed: ${error instanceof Error ? error.message : String(error)}`
+        ],
+        validationType: 'syntax'
       };
     }
   }
@@ -124,8 +126,20 @@ export class CliValidator {
   /**
    * Parse commands from shell script content
    */
-  private parseCommands(content: string): Array<{ command: string; args: string[]; line: number; fullLine: string }> {
-    const commands: Array<{ command: string; args: string[]; line: number; fullLine: string }> = [];
+  private parseCommands(
+    content: string
+  ): Array<{
+    command: string;
+    args: string[];
+    line: number;
+    fullLine: string;
+  }> {
+    const commands: Array<{
+      command: string;
+      args: string[];
+      line: number;
+      fullLine: string;
+    }> = [];
     const lines = content.split('\n');
 
     for (let i = 0; i < lines.length; i++) {
@@ -183,7 +197,9 @@ export class CliValidator {
   /**
    * Parse a single command line
    */
-  private parseCommandLine(line: string): { command: string; args: string[] } | null {
+  private parseCommandLine(
+    line: string
+  ): { command: string; args: string[] } | null {
     // Remove shell operators and pipes for basic parsing
     const cleaned = line
       .replace(/\s*[;&|]+\s*$/, '') // Remove trailing operators
@@ -203,7 +219,7 @@ export class CliValidator {
 
     return {
       command: parts[0],
-      args: parts.slice(1),
+      args: parts.slice(1)
     };
   }
 
@@ -307,14 +323,18 @@ export class CliValidator {
     // Invalid redirections
     const invalidRedirections = this.findInvalidRedirections(fullLine);
     if (invalidRedirections.length > 0) {
-      errors.push(`Line ${commandInfo.line}: Invalid redirections: ${invalidRedirections.join(', ')}`);
+      errors.push(
+        `Line ${commandInfo.line}: Invalid redirections: ${invalidRedirections.join(', ')}`
+      );
     }
 
     // Potentially dangerous patterns
     if (this.options.safetyChecks) {
       const dangerousPatterns = this.findDangerousPatterns(fullLine);
       if (dangerousPatterns.length > 0) {
-        errors.push(`Line ${commandInfo.line}: Potentially dangerous patterns: ${dangerousPatterns.join(', ')}`);
+        errors.push(
+          `Line ${commandInfo.line}: Potentially dangerous patterns: ${dangerousPatterns.join(', ')}`
+        );
       }
     }
 
@@ -338,8 +358,13 @@ export class CliValidator {
     }
 
     // Check if command is in allowed list
-    if (this.options.allowedCommands.length > 0 && !this.options.allowedCommands.includes(command)) {
-      errors.push(`Line ${commandInfo.line}: Command not in allowed list: ${command}`);
+    if (
+      this.options.allowedCommands.length > 0 &&
+      !this.options.allowedCommands.includes(command)
+    ) {
+      errors.push(
+        `Line ${commandInfo.line}: Command not in allowed list: ${command}`
+      );
       return errors;
     }
 
@@ -386,29 +411,45 @@ export class CliValidator {
       'halt',
       'poweroff',
       'kill',
-      'killall',
+      'killall'
     ];
 
     if (dangerousCommands.includes(command)) {
       // Check for particularly dangerous usage
       if (command === 'rm' && (args.includes('-rf') || args.includes('-r'))) {
-        errors.push(`Line ${commandInfo.line}: Potentially destructive command: rm -rf`);
+        errors.push(
+          `Line ${commandInfo.line}: Potentially destructive command: rm -rf`
+        );
       } else if (command === 'chmod' && args.includes('777')) {
         errors.push(`Line ${commandInfo.line}: Overly permissive chmod 777`);
       } else if (['sudo', 'su'].includes(command)) {
-        errors.push(`Line ${commandInfo.line}: Privilege escalation command: ${command}`);
+        errors.push(
+          `Line ${commandInfo.line}: Privilege escalation command: ${command}`
+        );
       } else {
-        errors.push(`Line ${commandInfo.line}: Potentially dangerous command: ${command}`);
+        errors.push(
+          `Line ${commandInfo.line}: Potentially dangerous command: ${command}`
+        );
       }
     }
 
     // Check for wildcards in dangerous contexts
     if (fullLine.includes('*') && ['rm', 'chmod', 'chown'].includes(command)) {
-      errors.push(`Line ${commandInfo.line}: Wildcard usage with potentially dangerous command`);
+      errors.push(
+        `Line ${commandInfo.line}: Wildcard usage with potentially dangerous command`
+      );
     }
 
     // Network operations
-    const networkCommands = ['curl', 'wget', 'ssh', 'scp', 'rsync', 'ftp', 'sftp'];
+    const networkCommands = [
+      'curl',
+      'wget',
+      'ssh',
+      'scp',
+      'rsync',
+      'ftp',
+      'sftp'
+    ];
     if (networkCommands.includes(command)) {
       // This is just a warning for documentation
       // In real validation, you might want to check for HTTPS, etc.
@@ -447,7 +488,7 @@ export class CliValidator {
     return new Promise((resolve, reject) => {
       const child = spawn(command, args, {
         timeout: this.options.timeout,
-        stdio: ['ignore', 'pipe', 'pipe'],
+        stdio: ['ignore', 'pipe', 'pipe']
       });
 
       let stdout = '';
@@ -475,7 +516,15 @@ export class CliValidator {
    * Check if language is supported shell language
    */
   private isSupportedShellLanguage(language: string): boolean {
-    const shellLanguages = ['bash', 'sh', 'shell', 'zsh', 'fish', 'csh', 'tcsh'];
+    const shellLanguages = [
+      'bash',
+      'sh',
+      'shell',
+      'zsh',
+      'fish',
+      'csh',
+      'tcsh'
+    ];
     return shellLanguages.includes(language.toLowerCase());
   }
 
@@ -532,7 +581,7 @@ export class CliValidator {
       'function',
       'time',
       'coproc',
-      'select',
+      'select'
     ];
 
     return builtins.includes(command);
@@ -552,7 +601,7 @@ export class CliValidator {
       less: 'more',
       grep: 'rg',
       find: 'fd',
-      ls: 'exa',
+      ls: 'exa'
     };
 
     return alternatives[command];
@@ -698,11 +747,13 @@ export class CliAnalyzer {
           validateSyntax: false,
           validateCommands: false,
           allowedCommands: [],
-          skipExecution: true,
+          skipExecution: true
         });
 
         const parsedCommands = (
-          validator as unknown as { parseCommands: (content: string) => unknown[] }
+          validator as unknown as {
+            parseCommands: (content: string) => unknown[];
+          }
         ).parseCommands(block.content);
 
         for (const cmd of parsedCommands) {
@@ -711,7 +762,7 @@ export class CliAnalyzer {
             language: block.language,
             file: 'unknown',
             lineNumber: block.lineNumber + cmd.line - 1,
-            context: block.content,
+            context: block.content
           });
         }
       }
@@ -730,20 +781,24 @@ export class CliAnalyzer {
     languageDistribution: Record<string, number>;
     mostCommonCommands: Array<{ command: string; count: number }>;
   } {
-    const shellBlocks = codeBlocks.filter(block => this.isShellLanguage(block.language));
+    const shellBlocks = codeBlocks.filter(block =>
+      this.isShellLanguage(block.language)
+    );
     const commandFrequency: Record<string, number> = {};
     const languageDistribution: Record<string, number> = {};
     let totalCommands = 0;
 
     for (const block of shellBlocks) {
-      languageDistribution[block.language] = (languageDistribution[block.language] || 0) + 1;
+      languageDistribution[block.language] =
+        (languageDistribution[block.language] || 0) + 1;
 
       const commands = this.extractAllCommands([block]);
       totalCommands += commands.length;
 
       for (const cmd of commands) {
         const baseCommand = cmd.command.split(' ')[0];
-        commandFrequency[baseCommand] = (commandFrequency[baseCommand] || 0) + 1;
+        commandFrequency[baseCommand] =
+          (commandFrequency[baseCommand] || 0) + 1;
       }
     }
 
@@ -757,7 +812,7 @@ export class CliAnalyzer {
       totalCommands,
       commandFrequency,
       languageDistribution,
-      mostCommonCommands,
+      mostCommonCommands
     };
   }
 
@@ -765,7 +820,15 @@ export class CliAnalyzer {
    * Check if language is a shell language
    */
   private static isShellLanguage(language: string): boolean {
-    const shellLanguages = ['bash', 'sh', 'shell', 'zsh', 'fish', 'csh', 'tcsh'];
+    const shellLanguages = [
+      'bash',
+      'sh',
+      'shell',
+      'zsh',
+      'fish',
+      'csh',
+      'tcsh'
+    ];
     return shellLanguages.includes(language.toLowerCase());
   }
 }

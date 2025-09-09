@@ -12,34 +12,34 @@ Object.defineProperty(window, 'localStorage', {
   value: {
     getItem: jest.fn(() => 'test-user-123'),
     setItem: jest.fn<unknown[], unknown>(),
-    removeItem: jest.fn<unknown[], unknown>(),
+    removeItem: jest.fn<unknown[], unknown>()
   },
-  writable: true,
+  writable: true
 });
 
 Object.defineProperty(window, 'sessionStorage', {
   value: {
     getItem: jest.fn<unknown[], unknown>(),
-    setItem: jest.fn<unknown[], unknown>(),
+    setItem: jest.fn<unknown[], unknown>()
   },
-  writable: true,
+  writable: true
 });
 
 Object.defineProperty(navigator, 'userAgent', {
   value: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-  writable: true,
+  writable: true
 });
 
 Object.defineProperty(document, 'referrer', {
   value: 'https://example.com',
-  writable: true,
+  writable: true
 });
 
 // Mock conversion tracker
 jest.mock('../packages/core/analytics/ConversionTracker', () => ({
   conversionTracker: {
-    trackEvent: jest.fn<unknown[], unknown>(),
-  },
+    trackEvent: jest.fn<unknown[], unknown>()
+  }
 }));
 
 describe('MarketplaceMetrics', () => {
@@ -67,7 +67,7 @@ describe('MarketplaceMetrics', () => {
       expect(event.entityType).toBe('template');
       expect(event.properties).toEqual({
         category: 'Pre-Production',
-        user_role: 'director',
+        user_role: 'director'
       });
     });
 
@@ -90,7 +90,7 @@ describe('MarketplaceMetrics', () => {
       marketplaceMetrics.trackEvent('search_performed', {
         query: 'character development',
         results_count: 12,
-        user_role: 'director',
+        user_role: 'director'
       });
 
       const event = marketplaceMetrics['events'][0];
@@ -104,7 +104,7 @@ describe('MarketplaceMetrics', () => {
         { type: 'marketplace_visited', expectedCategory: 'discovery' },
         { type: 'template_favorited', expectedCategory: 'engagement' },
         { type: 'template_purchased', expectedCategory: 'monetization' },
-        { type: 'recommendation_shown', expectedCategory: 'recommendation' },
+        { type: 'recommendation_shown', expectedCategory: 'recommendation' }
       ];
 
       testCases.forEach(({ type, expectedCategory }) => {
@@ -118,25 +118,42 @@ describe('MarketplaceMetrics', () => {
   describe('Template Metrics Updates', () => {
     test('updates template views correctly', () => {
       const templateId = 'tpl-character-dev-001';
-      const initialTemplate = marketplaceMetrics.getTemplateAnalytics(templateId);
+      const initialTemplate =
+        marketplaceMetrics.getTemplateAnalytics(templateId);
       const initialViews = initialTemplate?.metrics.views || 0;
 
-      marketplaceMetrics.trackEvent('template_viewed', {}, templateId, 'template');
+      marketplaceMetrics.trackEvent(
+        'template_viewed',
+        {},
+        templateId,
+        'template'
+      );
 
-      const updatedTemplate = marketplaceMetrics.getTemplateAnalytics(templateId);
+      const updatedTemplate =
+        marketplaceMetrics.getTemplateAnalytics(templateId);
       expect(updatedTemplate?.metrics.views).toBe(initialViews + 1);
     });
 
     test('updates template revenue on purchase', () => {
       const templateId = 'tpl-character-dev-001';
-      const initialTemplate = marketplaceMetrics.getTemplateAnalytics(templateId);
+      const initialTemplate =
+        marketplaceMetrics.getTemplateAnalytics(templateId);
       const initialRevenue = initialTemplate?.metrics.revenue.total || 0;
       const purchaseAmount = 24.99;
 
-      marketplaceMetrics.trackEvent('template_purchased', {}, templateId, 'template', purchaseAmount);
+      marketplaceMetrics.trackEvent(
+        'template_purchased',
+        {},
+        templateId,
+        'template',
+        purchaseAmount
+      );
 
-      const updatedTemplate = marketplaceMetrics.getTemplateAnalytics(templateId);
-      expect(updatedTemplate?.metrics.revenue.total).toBe(initialRevenue + purchaseAmount);
+      const updatedTemplate =
+        marketplaceMetrics.getTemplateAnalytics(templateId);
+      expect(updatedTemplate?.metrics.revenue.total).toBe(
+        initialRevenue + purchaseAmount
+      );
       expect(updatedTemplate?.metrics.purchases).toBeGreaterThan(0);
     });
 
@@ -144,12 +161,29 @@ describe('MarketplaceMetrics', () => {
       const templateId = 'tpl-character-dev-001';
 
       // Track views and previews
-      marketplaceMetrics.trackEvent('template_viewed', {}, templateId, 'template');
-      marketplaceMetrics.trackEvent('template_viewed', {}, templateId, 'template');
-      marketplaceMetrics.trackEvent('template_previewed', {}, templateId, 'template');
+      marketplaceMetrics.trackEvent(
+        'template_viewed',
+        {},
+        templateId,
+        'template'
+      );
+      marketplaceMetrics.trackEvent(
+        'template_viewed',
+        {},
+        templateId,
+        'template'
+      );
+      marketplaceMetrics.trackEvent(
+        'template_previewed',
+        {},
+        templateId,
+        'template'
+      );
 
       const template = marketplaceMetrics.getTemplateAnalytics(templateId);
-      expect(template?.metrics.conversionRates.viewToPreview).toBeGreaterThan(0);
+      expect(template?.metrics.conversionRates.viewToPreview).toBeGreaterThan(
+        0
+      );
     });
   });
 
@@ -184,7 +218,9 @@ describe('MarketplaceMetrics', () => {
       const categories = dashboardData.trends.topCategories;
 
       for (let i = 1; i < categories.length; i++) {
-        expect(categories[i - 1].revenue).toBeGreaterThanOrEqual(categories[i].revenue);
+        expect(categories[i - 1].revenue).toBeGreaterThanOrEqual(
+          categories[i].revenue
+        );
       }
     });
   });
@@ -202,27 +238,44 @@ describe('MarketplaceMetrics', () => {
     });
 
     test('returns null for non-existent template', () => {
-      const analytics = marketplaceMetrics.getTemplateAnalytics('non-existent-template');
+      const analytics = marketplaceMetrics.getTemplateAnalytics(
+        'non-existent-template'
+      );
       expect(analytics).toBeNull();
     });
 
     test('gets top performing templates by revenue', () => {
-      const topTemplates = marketplaceMetrics.getTopPerformingTemplates('revenue', 5);
+      const topTemplates = marketplaceMetrics.getTopPerformingTemplates(
+        'revenue',
+        5
+      );
 
       expect(topTemplates).toHaveLength(3); // Based on sample data
-      expect(topTemplates[0].metrics.revenue.total).toBeGreaterThanOrEqual(topTemplates[1].metrics.revenue.total);
+      expect(topTemplates[0].metrics.revenue.total).toBeGreaterThanOrEqual(
+        topTemplates[1].metrics.revenue.total
+      );
     });
 
     test('gets top performing templates by downloads', () => {
-      const topTemplates = marketplaceMetrics.getTopPerformingTemplates('downloads', 5);
+      const topTemplates = marketplaceMetrics.getTopPerformingTemplates(
+        'downloads',
+        5
+      );
 
-      expect(topTemplates[0].metrics.downloads).toBeGreaterThanOrEqual(topTemplates[1].metrics.downloads);
+      expect(topTemplates[0].metrics.downloads).toBeGreaterThanOrEqual(
+        topTemplates[1].metrics.downloads
+      );
     });
 
     test('gets top performing templates by rating', () => {
-      const topTemplates = marketplaceMetrics.getTopPerformingTemplates('rating', 5);
+      const topTemplates = marketplaceMetrics.getTopPerformingTemplates(
+        'rating',
+        5
+      );
 
-      expect(topTemplates[0].metrics.ratings.average).toBeGreaterThanOrEqual(topTemplates[1].metrics.ratings.average);
+      expect(topTemplates[0].metrics.ratings.average).toBeGreaterThanOrEqual(
+        topTemplates[1].metrics.ratings.average
+      );
     });
   });
 
@@ -239,7 +292,9 @@ describe('MarketplaceMetrics', () => {
     });
 
     test('returns null for non-existent creator', () => {
-      const analytics = marketplaceMetrics.getCreatorAnalytics('non-existent-creator');
+      const analytics = marketplaceMetrics.getCreatorAnalytics(
+        'non-existent-creator'
+      );
       expect(analytics).toBeNull();
     });
   });
@@ -290,7 +345,9 @@ describe('MarketplaceMetrics', () => {
         expect(insight).toHaveProperty('impact');
         expect(insight).toHaveProperty('action');
 
-        expect(['opportunity', 'trend', 'optimization']).toContain(insight.type);
+        expect(['opportunity', 'trend', 'optimization']).toContain(
+          insight.type
+        );
         expect(['high', 'medium', 'low']).toContain(insight.impact);
       });
     });
@@ -309,7 +366,13 @@ describe('MarketplaceMetrics', () => {
 
   describe('Conversion Tracking Integration', () => {
     test('integrates with conversion tracker for purchases', () => {
-      marketplaceMetrics.trackEvent('template_purchased', { user_role: 'director' }, 'template-123', 'template', 29.99);
+      marketplaceMetrics.trackEvent(
+        'template_purchased',
+        { user_role: 'director' },
+        'template-123',
+        'template',
+        29.99
+      );
 
       expect(conversionTracker.trackEvent).toHaveBeenCalledWith(
         'subscription_upgraded',
@@ -318,20 +381,25 @@ describe('MarketplaceMetrics', () => {
           original_event: 'template_purchased',
           entity_id: 'template-123',
           entity_type: 'template',
-          user_role: 'director',
+          user_role: 'director'
         }),
         29.99
       );
     });
 
     test('integrates with conversion tracker for downloads', () => {
-      marketplaceMetrics.trackEvent('template_downloaded', { user_role: 'director' }, 'template-123', 'template');
+      marketplaceMetrics.trackEvent(
+        'template_downloaded',
+        { user_role: 'director' },
+        'template-123',
+        'template'
+      );
 
       expect(conversionTracker.trackEvent).toHaveBeenCalledWith(
         'first_project_created',
         expect.objectContaining({
           marketplace_event: true,
-          original_event: 'template_downloaded',
+          original_event: 'template_downloaded'
         }),
         undefined
       );
@@ -344,7 +412,12 @@ describe('MarketplaceMetrics', () => {
 
       // Track 1000 events
       for (let i = 0; i < 1000; i++) {
-        marketplaceMetrics.trackEvent('template_viewed', { iteration: i }, `template-${i % 10}`, 'template');
+        marketplaceMetrics.trackEvent(
+          'template_viewed',
+          { iteration: i },
+          `template-${i % 10}`,
+          'template'
+        );
       }
 
       const endTime = performance.now();
@@ -358,8 +431,19 @@ describe('MarketplaceMetrics', () => {
     test('dashboard data generation scales with data size', () => {
       // Generate events for multiple templates
       for (let i = 0; i < 100; i++) {
-        marketplaceMetrics.trackEvent('template_viewed', {}, `template-${i}`, 'template');
-        marketplaceMetrics.trackEvent('template_purchased', {}, `template-${i}`, 'template', 19.99);
+        marketplaceMetrics.trackEvent(
+          'template_viewed',
+          {},
+          `template-${i}`,
+          'template'
+        );
+        marketplaceMetrics.trackEvent(
+          'template_purchased',
+          {},
+          `template-${i}`,
+          'template',
+          19.99
+        );
       }
 
       const startTime = performance.now();
@@ -373,7 +457,12 @@ describe('MarketplaceMetrics', () => {
 
   describe('Data Validation', () => {
     test('validates event data structure', () => {
-      marketplaceMetrics.trackEvent('template_viewed', { test: 'data' }, 'template-123', 'template');
+      marketplaceMetrics.trackEvent(
+        'template_viewed',
+        { test: 'data' },
+        'template-123',
+        'template'
+      );
 
       const event = marketplaceMetrics['events'][0];
 
@@ -393,7 +482,13 @@ describe('MarketplaceMetrics', () => {
     test('handles edge cases gracefully', () => {
       // Test with undefined/null values
       expect(() => {
-        marketplaceMetrics.trackEvent('template_viewed', {}, undefined, undefined, undefined);
+        marketplaceMetrics.trackEvent(
+          'template_viewed',
+          {},
+          undefined,
+          undefined,
+          undefined
+        );
       }).not.toThrow();
 
       // Test with empty properties
@@ -406,9 +501,25 @@ describe('MarketplaceMetrics', () => {
       const templateId = 'consistency-test-template';
 
       // Perform multiple operations
-      marketplaceMetrics.trackEvent('template_viewed', {}, templateId, 'template');
-      marketplaceMetrics.trackEvent('template_previewed', {}, templateId, 'template');
-      marketplaceMetrics.trackEvent('template_purchased', {}, templateId, 'template', 25.0);
+      marketplaceMetrics.trackEvent(
+        'template_viewed',
+        {},
+        templateId,
+        'template'
+      );
+      marketplaceMetrics.trackEvent(
+        'template_previewed',
+        {},
+        templateId,
+        'template'
+      );
+      marketplaceMetrics.trackEvent(
+        'template_purchased',
+        {},
+        templateId,
+        'template',
+        25.0
+      );
 
       const template = marketplaceMetrics.getTemplateAnalytics(templateId);
       const dashboardData = marketplaceMetrics.getDashboardData();
@@ -425,7 +536,10 @@ describe('MarketplaceMetrics', () => {
 describe('MarketplaceMetrics React Integration', () => {
   test('can be imported and used in React components', () => {
     // This test ensures the module structure is compatible with React
-    const { MarketplaceMetrics, marketplaceMetrics } = require('../packages/core/analytics/MarketplaceMetrics');
+    const {
+      MarketplaceMetrics,
+      marketplaceMetrics
+    } = require('../packages/core/analytics/MarketplaceMetrics');
 
     expect(MarketplaceMetrics).toBeDefined();
     expect(marketplaceMetrics).toBeDefined();

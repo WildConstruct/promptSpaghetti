@@ -41,7 +41,7 @@ export class TypeScriptValidator {
     this.options = {
       skipLibCheck: true,
       allowJavaScript: true,
-      ...options,
+      ...options
     };
   }
 
@@ -61,7 +61,7 @@ export class TypeScriptValidator {
           lineNumber: codeBlock.lineNumber,
           passed: false,
           errors: [`Unsupported language: ${codeBlock.language}`],
-          validationType: 'syntax',
+          validationType: 'syntax'
         };
       }
 
@@ -86,7 +86,11 @@ export class TypeScriptValidator {
       }
 
       // Type validation (if TypeScript)
-      if (errors.length === 0 && this.options.validateTypes && this.isTypeScriptLike(codeBlock.language)) {
+      if (
+        errors.length === 0 &&
+        this.options.validateTypes &&
+        this.isTypeScriptLike(codeBlock.language)
+      ) {
         const typeErrors = this.validateTypes(codeBlock);
         errors.push(...typeErrors);
 
@@ -101,7 +105,7 @@ export class TypeScriptValidator {
         lineNumber: codeBlock.lineNumber,
         passed: errors.length === 0,
         errors,
-        validationType,
+        validationType
       };
     } catch (error) {
       return {
@@ -109,8 +113,10 @@ export class TypeScriptValidator {
         content: codeBlock.content,
         lineNumber: codeBlock.lineNumber,
         passed: false,
-        errors: [`Validation failed: ${error instanceof Error ? error.message : String(error)}`],
-        validationType: 'syntax',
+        errors: [
+          `Validation failed: ${error instanceof Error ? error.message : String(error)}`
+        ],
+        validationType: 'syntax'
       };
     }
   }
@@ -139,16 +145,25 @@ export class TypeScriptValidator {
 
       diagnostics.forEach(diagnostic => {
         if (diagnostic.file) {
-          const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
-          const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+          const { line, character } =
+            diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+          const message = ts.flattenDiagnosticMessageText(
+            diagnostic.messageText,
+            '\n'
+          );
           errors.push(`Line ${line + 1}, Col ${character + 1}: ${message}`);
         } else {
-          const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+          const message = ts.flattenDiagnosticMessageText(
+            diagnostic.messageText,
+            '\n'
+          );
           errors.push(message);
         }
       });
     } catch (error) {
-      errors.push(`Syntax validation failed: ${error instanceof Error ? error.message : String(error)}`);
+      errors.push(
+        `Syntax validation failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     return errors;
@@ -171,11 +186,15 @@ export class TypeScriptValidator {
         const result = await this.validateImport(importStatement.module);
 
         if (!result.exists && result.type !== 'unknown') {
-          errors.push(`Import not found: ${importStatement.module} (Line ${importStatement.line})`);
+          errors.push(
+            `Import not found: ${importStatement.module} (Line ${importStatement.line})`
+          );
         }
       }
     } catch (error) {
-      errors.push(`Import validation failed: ${error instanceof Error ? error.message : String(error)}`);
+      errors.push(
+        `Import validation failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     return errors;
@@ -198,7 +217,12 @@ export class TypeScriptValidator {
       const host: ts.CompilerHost = {
         getSourceFile: fileName => {
           if (files.has(fileName)) {
-            return ts.createSourceFile(fileName, files.get(fileName)!, ts.ScriptTarget.Latest, true);
+            return ts.createSourceFile(
+              fileName,
+              files.get(fileName)!,
+              ts.ScriptTarget.Latest,
+              true
+            );
           }
           return undefined;
         },
@@ -210,27 +234,40 @@ export class TypeScriptValidator {
         getCanonicalFileName: fileName => fileName,
         useCaseSensitiveFileNames: () => true,
         getNewLine: () => '\n',
-        resolveModuleNames: () => [],
+        resolveModuleNames: () => []
       };
 
       // Create program
-      const program = ts.createProgram([tempFileName], this.options.compilerOptions, host);
+      const program = ts.createProgram(
+        [tempFileName],
+        this.options.compilerOptions,
+        host
+      );
 
       // Get diagnostics
       const diagnostics = ts.getPreEmitDiagnostics(program);
 
       diagnostics.forEach(diagnostic => {
         if (diagnostic.file && diagnostic.start !== undefined) {
-          const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
-          const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+          const { line, character } =
+            diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+          const message = ts.flattenDiagnosticMessageText(
+            diagnostic.messageText,
+            '\n'
+          );
           errors.push(`Line ${line + 1}, Col ${character + 1}: ${message}`);
         } else {
-          const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+          const message = ts.flattenDiagnosticMessageText(
+            diagnostic.messageText,
+            '\n'
+          );
           errors.push(message);
         }
       });
     } catch (error) {
-      errors.push(`Type validation failed: ${error instanceof Error ? error.message : String(error)}`);
+      errors.push(
+        `Type validation failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     return errors;
@@ -239,40 +276,52 @@ export class TypeScriptValidator {
   /**
    * Extract import statements from code
    */
-  private extractImports(code: string): Array<{ module: string; line: number; type: 'import' | 'require' }> {
-    const imports: Array<{ module: string; line: number; type: 'import' | 'require' }> = [];
+  private extractImports(
+    code: string
+  ): Array<{ module: string; line: number; type: 'import' | 'require' }> {
+    const imports: Array<{
+      module: string;
+      line: number;
+      type: 'import' | 'require';
+    }> = [];
     const lines = code.split('\n');
 
     lines.forEach((line, index) => {
       const trimmed = line.trim();
 
       // ES6 imports: import ... from 'module'
-      const importMatch = trimmed.match(/^import\s+(?:.*?\s+from\s+)?['"`]([^'"`]+)['"`]/);
+      const importMatch = trimmed.match(
+        /^import\s+(?:.*?\s+from\s+)?['"`]([^'"`]+)['"`]/
+      );
       if (importMatch) {
         imports.push({
           module: importMatch[1],
           line: index + 1,
-          type: 'import',
+          type: 'import'
         });
       }
 
       // CommonJS requires: require('module')
-      const requireMatch = trimmed.match(/require\s*\(\s*['"`]([^'"`]+)['"`]\s*\)/);
+      const requireMatch = trimmed.match(
+        /require\s*\(\s*['"`]([^'"`]+)['"`]\s*\)/
+      );
       if (requireMatch) {
         imports.push({
           module: requireMatch[1],
           line: index + 1,
-          type: 'require',
+          type: 'require'
         });
       }
 
       // Dynamic imports: import('module')
-      const dynamicImportMatch = trimmed.match(/import\s*\(\s*['"`]([^'"`]+)['"`]\s*\)/);
+      const dynamicImportMatch = trimmed.match(
+        /import\s*\(\s*['"`]([^'"`]+)['"`]\s*\)/
+      );
       if (dynamicImportMatch) {
         imports.push({
           module: dynamicImportMatch[1],
           line: index + 1,
-          type: 'import',
+          type: 'import'
         });
       }
     });
@@ -283,7 +332,9 @@ export class TypeScriptValidator {
   /**
    * Validate a single import/require statement
    */
-  private async validateImport(moduleName: string): Promise<ImportValidationResult> {
+  private async validateImport(
+    moduleName: string
+  ): Promise<ImportValidationResult> {
     try {
       // Built-in Node.js modules
       const builtinModules = [
@@ -319,14 +370,17 @@ export class TypeScriptValidator {
         'zlib',
         'inspector',
         'perf_hooks',
-        'async_hooks',
+        'async_hooks'
       ];
 
-      if (builtinModules.includes(moduleName) || moduleName.startsWith('node:')) {
+      if (
+        builtinModules.includes(moduleName) ||
+        moduleName.startsWith('node:')
+      ) {
         return {
           module: moduleName,
           exists: true,
-          type: 'builtin',
+          type: 'builtin'
         };
       }
 
@@ -335,7 +389,7 @@ export class TypeScriptValidator {
         return {
           module: moduleName,
           exists: true, // Assume local imports are valid for documentation
-          type: 'local',
+          type: 'local'
         };
       }
 
@@ -345,14 +399,14 @@ export class TypeScriptValidator {
       return {
         module: moduleName,
         exists: packageExists,
-        type: packageExists ? 'npm' : 'unknown',
+        type: packageExists ? 'npm' : 'unknown'
       };
     } catch (error) {
       return {
         module: moduleName,
         exists: false,
         type: 'unknown',
-        error: error instanceof Error ? error.message : String(error),
+        error: error instanceof Error ? error.message : String(error)
       };
     }
   }
@@ -373,7 +427,8 @@ export class TypeScriptValidator {
 
     try {
       // Check if package is listed in dependencies
-      const packageJsonExists = await this.isPackageInDependencies(cleanPackageName);
+      const packageJsonExists =
+        await this.isPackageInDependencies(cleanPackageName);
       if (packageJsonExists) {
         this.nodeModulesCache.set(cleanPackageName, true);
         return true;
@@ -393,7 +448,7 @@ export class TypeScriptValidator {
       const workspaceLocations = [
         path.resolve('packages', cleanPackageName),
         path.resolve('apps', cleanPackageName),
-        path.resolve('libs', cleanPackageName),
+        path.resolve('libs', cleanPackageName)
       ];
 
       for (const location of workspaceLocations) {
@@ -433,7 +488,12 @@ export class TypeScriptValidator {
       const rootPackageJson = this.packageJsonCache.get('root')!;
 
       // Check all dependency types
-      const depTypes = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+      const depTypes = [
+        'dependencies',
+        'devDependencies',
+        'peerDependencies',
+        'optionalDependencies'
+      ];
       for (const depType of depTypes) {
         if (rootPackageJson[depType] && rootPackageJson[depType][packageName]) {
           return true;
@@ -450,7 +510,14 @@ export class TypeScriptValidator {
    * Check if language is supported by this validator
    */
   private isSupportedLanguage(language: string): boolean {
-    const supportedLanguages = ['typescript', 'javascript', 'tsx', 'jsx', 'ts', 'js'];
+    const supportedLanguages = [
+      'typescript',
+      'javascript',
+      'tsx',
+      'jsx',
+      'ts',
+      'js'
+    ];
     return supportedLanguages.includes(language.toLowerCase());
   }
 
@@ -518,7 +585,12 @@ export class TypeScriptAnalyzer {
     interfaces: number;
     imports: number;
   } {
-    const sourceFile = ts.createSourceFile('temp.ts', code, ts.ScriptTarget.Latest, true);
+    const sourceFile = ts.createSourceFile(
+      'temp.ts',
+      code,
+      ts.ScriptTarget.Latest,
+      true
+    );
 
     let cyclomaticComplexity = 1; // Base complexity
     let functions = 0;
@@ -562,7 +634,9 @@ export class TypeScriptAnalyzer {
 
     visit(sourceFile);
 
-    const linesOfCode = code.split('\n').filter(line => line.trim().length > 0).length;
+    const linesOfCode = code
+      .split('\n')
+      .filter(line => line.trim().length > 0).length;
 
     return {
       cyclomaticComplexity,
@@ -570,7 +644,7 @@ export class TypeScriptAnalyzer {
       functions,
       classes,
       interfaces,
-      imports,
+      imports
     };
   }
 
@@ -583,7 +657,12 @@ export class TypeScriptAnalyzer {
     properties?: string[];
     methods?: string[];
   }> {
-    const sourceFile = ts.createSourceFile('temp.ts', code, ts.ScriptTarget.Latest, true);
+    const sourceFile = ts.createSourceFile(
+      'temp.ts',
+      code,
+      ts.ScriptTarget.Latest,
+      true
+    );
 
     const types: Array<{
       name: string;
@@ -608,12 +687,12 @@ export class TypeScriptAnalyzer {
           name: node.name.getText(),
           kind: 'interface',
           properties,
-          methods,
+          methods
         });
       } else if (ts.isTypeAliasDeclaration(node)) {
         types.push({
           name: node.name.getText(),
-          kind: 'type',
+          kind: 'type'
         });
       } else if (ts.isClassDeclaration(node)) {
         const properties = node.members
@@ -630,7 +709,7 @@ export class TypeScriptAnalyzer {
           name: node.name?.getText() || 'unknown',
           kind: 'class',
           properties,
-          methods,
+          methods
         });
       } else if (ts.isEnumDeclaration(node)) {
         const properties = node.members
@@ -640,7 +719,7 @@ export class TypeScriptAnalyzer {
         types.push({
           name: node.name.getText(),
           kind: 'enum',
-          properties,
+          properties
         });
       }
 

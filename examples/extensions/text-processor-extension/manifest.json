@@ -16,7 +16,11 @@
   "permissions": ["data-processing"],
   "runtime": {
     "entry_point": "dist/index.js",
-    "node_types": ["TextProcessorNode", "RegexProcessorNode", "TextAnalyzerNode"]
+    "node_types": [
+      "TextProcessorNode",
+      "RegexProcessorNode",
+      "TextAnalyzerNode"
+    ]
   },
   "security": {
     "sandbox": {

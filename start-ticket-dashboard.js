@@ -15,7 +15,7 @@ console.log('🎯 Starting Ticketing System Dashboard...\n');
 const serverPath = path.join(__dirname, 'src/ticket-dashboard-server.js');
 const server = spawn('node', [serverPath], {
   stdio: 'inherit',
-  cwd: __dirname,
+  cwd: __dirname
 });
 
 server.on('error', error => {

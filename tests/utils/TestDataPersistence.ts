@@ -55,7 +55,7 @@ export class TestDataPersistence {
       encryption: false,
       maxFileSize: 10 * 1024 * 1024, // 10MB
       backupRetention: 7,
-      ...config,
+      ...config
     };
 
     this.memoryStore = new Map();
@@ -68,7 +68,11 @@ export class TestDataPersistence {
   /**
    * Store test data
    */
-  async store(key: string, data: unknown, options: { tags?: string[]; ttl?: number } = {}): Promise<string> {
+  async store(
+    key: string,
+    data: unknown,
+    options: { tags?: string[]; ttl?: number } = {}
+  ): Promise<string> {
     const id = this.generateId();
     const now = new Date().toISOString();
     const serializedData = this.serialize(data);
@@ -83,9 +87,11 @@ export class TestDataPersistence {
         accessCount: 0,
         size: this.calculateSize(serializedData),
         checksum: this.calculateChecksum(serializedData),
-        tags: options.tags || [],
+        tags: options.tags || []
       },
-      expiry: options.ttl ? new Date(Date.now() + options.ttl * 1000).toISOString() : undefined,
+      expiry: options.ttl
+        ? new Date(Date.now() + options.ttl * 1000).toISOString()
+        : undefined
     };
 
     switch (this.config.storage) {
@@ -148,7 +154,11 @@ export class TestDataPersistence {
   /**
    * Update existing test data
    */
-  async update(key: string, data: unknown, options: { tags?: string[] } = {}): Promise<boolean> {
+  async update(
+    key: string,
+    data: unknown,
+    options: { tags?: string[] } = {}
+  ): Promise<boolean> {
     const existing = await this.getStoredData(key);
     if (!existing) {
       return false;
@@ -163,8 +173,8 @@ export class TestDataPersistence {
         updatedAt: new Date().toISOString(),
         size: this.calculateSize(serializedData),
         checksum: this.calculateChecksum(serializedData),
-        tags: options.tags || existing.metadata.tags,
-      },
+        tags: options.tags || existing.metadata.tags
+      }
     };
 
     switch (this.config.storage) {
@@ -254,14 +264,18 @@ export class TestDataPersistence {
    */
   async backup(): Promise<string> {
     const backupId = `backup_${Date.now()}`;
-    const backupPath = path.join(this.config.directory, 'backups', `${backupId}.json`);
+    const backupPath = path.join(
+      this.config.directory,
+      'backups',
+      `${backupId}.json`
+    );
 
     const allData = await this.query();
     const backup = {
       id: backupId,
       createdAt: new Date().toISOString(),
       count: allData.length,
-      data: allData,
+      data: allData
     };
 
     await fs.mkdir(path.dirname(backupPath), { recursive: true });
@@ -283,7 +297,7 @@ export class TestDataPersistence {
     for (const stored of backupData.data) {
       try {
         await this.store(stored.key, this.deserialize(stored.data), {
-          tags: stored.metadata.tags,
+          tags: stored.metadata.tags
         });
         restoredCount++;
       } catch (error) {
@@ -306,10 +320,15 @@ export class TestDataPersistence {
     averageSize: number;
   }> {
     const allData = await this.query();
-    const totalSize = allData.reduce((sum, item) => sum + item.metadata.size, 0);
+    const totalSize = allData.reduce(
+      (sum, item) => sum + item.metadata.size,
+      0
+    );
 
     const sortedByDate = allData.sort(
-      (a, b) => new Date(a.metadata.createdAt).getTime() - new Date(b.metadata.createdAt).getTime()
+      (a, b) =>
+        new Date(a.metadata.createdAt).getTime() -
+        new Date(b.metadata.createdAt).getTime()
     );
 
     return {
@@ -317,8 +336,10 @@ export class TestDataPersistence {
       totalSize,
       storageType: this.config.storage,
       oldestItem: sortedByDate[0]?.metadata.createdAt || '',
-      newestItem: sortedByDate[sortedByDate.length - 1]?.metadata.createdAt || '',
-      averageSize: allData.length > 0 ? Math.round(totalSize / allData.length) : 0,
+      newestItem:
+        sortedByDate[sortedByDate.length - 1]?.metadata.createdAt || '',
+      averageSize:
+        allData.length > 0 ? Math.round(totalSize / allData.length) : 0
     };
   }
 
@@ -379,7 +400,11 @@ export class TestDataPersistence {
   // File storage methods
 
   private async storeToFile(storedData: StoredTestData): Promise<void> {
-    const filePath = path.join(this.config.directory, 'files', `${storedData.key}.json`);
+    const filePath = path.join(
+      this.config.directory,
+      'files',
+      `${storedData.key}.json`
+    );
     await fs.mkdir(path.dirname(filePath), { recursive: true });
     await fs.writeFile(filePath, JSON.stringify(storedData, null, 2));
   }
@@ -448,7 +473,8 @@ export class TestDataPersistence {
   // SQLite storage methods
 
   private async initializeSQLite(): Promise<void> {
-    const dbPath = this.config.dbPath || path.join(this.config.directory, 'testdata.db');
+    const dbPath =
+      this.config.dbPath || path.join(this.config.directory, 'testdata.db');
     await fs.mkdir(path.dirname(dbPath), { recursive: true });
 
     this.sqliteDb = new sqlite3.Database(dbPath);
@@ -470,7 +496,9 @@ export class TestDataPersistence {
     `);
 
     await run('CREATE INDEX IF NOT EXISTS idx_key ON test_data(key)');
-    await run('CREATE INDEX IF NOT EXISTS idx_created ON test_data(created_at)');
+    await run(
+      'CREATE INDEX IF NOT EXISTS idx_created ON test_data(created_at)'
+    );
     await run('CREATE INDEX IF NOT EXISTS idx_tags ON test_data(tags)');
   }
 
@@ -494,16 +522,20 @@ export class TestDataPersistence {
         storedData.metadata.size,
         storedData.metadata.checksum,
         JSON.stringify(storedData.metadata.tags),
-        storedData.expiry || null,
+        storedData.expiry || null
       ]
     );
   }
 
-  private async retrieveFromSQLite(key: string): Promise<StoredTestData | null> {
+  private async retrieveFromSQLite(
+    key: string
+  ): Promise<StoredTestData | null> {
     if (!this.sqliteDb) return null;
 
     const get = promisify(this.sqliteDb.get.bind(this.sqliteDb));
-    const row = (await get('SELECT * FROM test_data WHERE key = ?', [key])) as unknown;
+    const row = (await get('SELECT * FROM test_data WHERE key = ?', [
+      key
+    ])) as unknown;
 
     if (!row) return null;
 
@@ -517,9 +549,9 @@ export class TestDataPersistence {
         accessCount: row.access_count,
         size: row.size,
         checksum: row.checksum,
-        tags: JSON.parse(row.tags || '[]'),
+        tags: JSON.parse(row.tags || '[]')
       },
-      expiry: row.expiry,
+      expiry: row.expiry
     };
   }
 
@@ -531,7 +563,9 @@ export class TestDataPersistence {
     if (!this.sqliteDb) return false;
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
-    const result = (await run('DELETE FROM test_data WHERE key = ?', [key])) as unknown;
+    const result = (await run('DELETE FROM test_data WHERE key = ?', [
+      key
+    ])) as unknown;
     return result.changes > 0;
   }
 
@@ -551,9 +585,9 @@ export class TestDataPersistence {
         accessCount: row.access_count,
         size: row.size,
         checksum: row.checksum,
-        tags: JSON.parse(row.tags || '[]'),
+        tags: JSON.parse(row.tags || '[]')
       },
-      expiry: row.expiry,
+      expiry: row.expiry
     }));
   }
 
@@ -579,7 +613,10 @@ export class TestDataPersistence {
     }
   }
 
-  private async updateMetadata(key: string, metadata: StoredTestData['metadata']): Promise<void> {
+  private async updateMetadata(
+    key: string,
+    metadata: StoredTestData['metadata']
+  ): Promise<void> {
     const existing = await this.getStoredData(key);
     if (existing) {
       existing.metadata = metadata;
@@ -597,11 +634,16 @@ export class TestDataPersistence {
     }
   }
 
-  private applyFilters(results: StoredTestData[], options: QueryOptions): StoredTestData[] {
+  private applyFilters(
+    results: StoredTestData[],
+    options: QueryOptions
+  ): StoredTestData[] {
     return results.filter(item => {
       // Filter by tags
       if (options.tags && options.tags.length > 0) {
-        const hasMatchingTag = options.tags.some(tag => item.metadata.tags.includes(tag));
+        const hasMatchingTag = options.tags.some(tag =>
+          item.metadata.tags.includes(tag)
+        );
         if (!hasMatchingTag) return false;
       }
 
@@ -625,7 +667,10 @@ export class TestDataPersistence {
     });
   }
 
-  private applySorting(results: StoredTestData[], orderBy: string): StoredTestData[] {
+  private applySorting(
+    results: StoredTestData[],
+    orderBy: string
+  ): StoredTestData[] {
     return results.sort((a, b) => {
       let dateA: Date;
       let dateB: Date;
@@ -658,7 +703,9 @@ export class TestDataPersistence {
     const backupsDir = path.join(this.config.directory, 'backups');
     try {
       const files = await fs.readdir(backupsDir);
-      const backupFiles = files.filter(f => f.startsWith('backup_') && f.endsWith('.json'));
+      const backupFiles = files.filter(
+        f => f.startsWith('backup_') && f.endsWith('.json')
+      );
 
       if (backupFiles.length > this.config.backupRetention) {
         // Sort by creation time (extracted from filename)
@@ -669,7 +716,10 @@ export class TestDataPersistence {
         });
 
         // Remove oldest files
-        const toRemove = sorted.slice(0, sorted.length - this.config.backupRetention);
+        const toRemove = sorted.slice(
+          0,
+          sorted.length - this.config.backupRetention
+        );
         for (const file of toRemove) {
           await fs.unlink(path.join(backupsDir, file));
         }

@@ -22,7 +22,7 @@ describe('Asset Browser ↔ Metadata Integration', () => {
       }
     },
     {
-      id: 'asset-2', 
+      id: 'asset-2',
       name: 'Sci-Fi Setting',
       type: 'fragment',
       path: '/assets/scifi-setting.psg',
@@ -38,13 +38,13 @@ describe('Asset Browser ↔ Metadata Integration', () => {
     mockLLMService = {
       complete: jest.fn(),
       extractMetadata: jest.fn(),
-      isReady: jest.fn().mockReturnValue(true),
+      isReady: jest.fn().mockReturnValue(true)
     } as any;
   });
 
   it('should render without crashing', () => {
     const handleAssetSelect = jest.fn();
-    
+
     render(
       <MetadataAssetBridge
         assets={mockAssets}
@@ -57,15 +57,24 @@ describe('Asset Browser ↔ Metadata Integration', () => {
 
   it('should show metadata extraction indicator when processing', async () => {
     const handleAssetSelect = jest.fn();
-    
+
     // Mock slow LLM response that returns proper metadata
     mockLLMService.extractMetadata.mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve({
-        themes: [{ name: 'battle', confidence: 0.9 }],
-        entities: [{ name: 'warrior', type: 'character', confidence: 0.95 }],
-        style: ['action', 'fantasy'],
-        tags: ['combat', 'dragon']
-      }), 100))
+      () =>
+        new Promise(resolve =>
+          setTimeout(
+            () =>
+              resolve({
+                themes: [{ name: 'battle', confidence: 0.9 }],
+                entities: [
+                  { name: 'warrior', type: 'character', confidence: 0.95 }
+                ],
+                style: ['action', 'fantasy'],
+                tags: ['combat', 'dragon']
+              }),
+            100
+          )
+        )
     );
 
     render(
@@ -78,11 +87,18 @@ describe('Asset Browser ↔ Metadata Integration', () => {
       />
     );
 
-    expect(screen.getByText('Analyzing content for smart suggestions...')).toBeInTheDocument();
-    
-    await waitFor(() => {
-      expect(screen.queryByText('Analyzing content for smart suggestions...')).not.toBeInTheDocument();
-    }, { timeout: 3000 });
+    expect(
+      screen.getByText('Analyzing content for smart suggestions...')
+    ).toBeInTheDocument();
+
+    await waitFor(
+      () => {
+        expect(
+          screen.queryByText('Analyzing content for smart suggestions...')
+        ).not.toBeInTheDocument();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it('should show debug metadata in development mode', async () => {
@@ -90,7 +106,7 @@ describe('Asset Browser ↔ Metadata Integration', () => {
     process.env.NODE_ENV = 'development';
 
     const handleAssetSelect = jest.fn();
-    
+
     // Ensure LLM returns metadata immediately
     mockLLMService.extractMetadata.mockResolvedValue({
       themes: [{ name: 'fantasy', confidence: 0.9 }],
@@ -98,7 +114,7 @@ describe('Asset Browser ↔ Metadata Integration', () => {
       style: ['adventure'],
       tags: ['fantasy']
     });
-    
+
     render(
       <MetadataAssetBridge
         assets={mockAssets}
@@ -111,23 +127,25 @@ describe('Asset Browser ↔ Metadata Integration', () => {
 
     // Wait for metadata extraction to complete
     await waitFor(() => {
-      expect(screen.getByText('Extracted Metadata (Debug)')).toBeInTheDocument();
+      expect(
+        screen.getByText('Extracted Metadata (Debug)')
+      ).toBeInTheDocument();
     });
-    
+
     process.env.NODE_ENV = originalEnv;
   });
 
   it('should call metadata extraction when segment content changes', async () => {
     const handleAssetSelect = jest.fn();
     const handleMetadataExtracted = jest.fn();
-    
+
     mockLLMService.extractMetadata.mockResolvedValue({
       themes: [],
       entities: [],
       style: [],
       tags: []
     });
-    
+
     const { rerender } = render(
       <MetadataAssetBridge
         assets={mockAssets}
@@ -162,7 +180,7 @@ describe('Asset Browser ↔ Metadata Integration', () => {
 
   it('should calculate match scores correctly', async () => {
     const handleAssetSelect = jest.fn();
-    
+
     // Mock LLM to return fantasy-themed metadata
     mockLLMService.extractMetadata.mockResolvedValue({
       themes: [{ name: 'fantasy', confidence: 0.9 }],
@@ -170,7 +188,7 @@ describe('Asset Browser ↔ Metadata Integration', () => {
       style: ['quest', 'adventure'],
       tags: ['fantasy', 'warrior', 'quest']
     });
-    
+
     render(
       <MetadataAssetBridge
         assets={mockAssets}
@@ -183,20 +201,22 @@ describe('Asset Browser ↔ Metadata Integration', () => {
 
     // Wait for metadata extraction to complete
     await waitFor(() => {
-      expect(screen.queryByText('Analyzing content for smart suggestions...')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Analyzing content for smart suggestions...')
+      ).not.toBeInTheDocument();
     });
 
     // Click on asset with fantasy theme
     const fantasyAsset = screen.getByTitle('Fantasy Character');
     fireEvent.click(fantasyAsset);
-    
+
     // Verify asset selection was called
     expect(handleAssetSelect).toHaveBeenCalled();
   });
 
   it('should handle missing LLM service gracefully', () => {
     const handleAssetSelect = jest.fn();
-    
+
     // Render without LLM service
     expect(() => {
       render(
@@ -210,6 +230,8 @@ describe('Asset Browser ↔ Metadata Integration', () => {
     }).not.toThrow();
 
     // Should not show extraction indicator without LLM service
-    expect(screen.queryByText('Analyzing content for smart suggestions...')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Analyzing content for smart suggestions...')
+    ).not.toBeInTheDocument();
   });
 });

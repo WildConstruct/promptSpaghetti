@@ -9,6 +9,7 @@ This section contains all architectural documentation, decisions, and technical 
 ## 📐 Architecture Layers
 
 ### Frontend Architecture
+
 - **Framework**: React 18 with TypeScript
 - **State Management**: Zustand
 - **Graph Visualization**: React Flow
@@ -16,6 +17,7 @@ This section contains all architectural documentation, decisions, and technical 
 - **Build Tool**: Vite
 
 ### Backend Architecture
+
 - **Runtime**: Node.js 18+
 - **Framework**: Fastify
 - **Database**: SQLite (local) + Supabase (cloud)
@@ -23,6 +25,7 @@ This section contains all architectural documentation, decisions, and technical 
 - **Authentication**: Supabase Auth
 
 ### Core Engine
+
 - **Execution**: Deterministic graph traversal
 - **Randomization**: Seeded PRNG
 - **Node System**: Extensible base classes
@@ -33,6 +36,7 @@ This section contains all architectural documentation, decisions, and technical 
 ## 📚 Key Documents
 
 ### Architectural Decision Records (ADRs)
+
 - [[ADR-001-repository-pattern]] - Repository pattern implementation
 - [[ADR-002-typescript-strict-mode]] - TypeScript configuration
 - [[ADR-009-Core-Engine-Refactoring-Architecture]] - Engine redesign
@@ -40,6 +44,7 @@ This section contains all architectural documentation, decisions, and technical 
 - [[ADR-011-Component-Modernization-Strategy]] - UI component strategy
 
 ### System Design
+
 - [[core-subsystems]] - Core subsystem breakdown
 - [[node-architecture-design]] - Node system architecture
 - [[node-lifecycle-design]] - Node execution lifecycle
@@ -47,12 +52,14 @@ This section contains all architectural documentation, decisions, and technical 
 - [[target-architecture-definition]] - Target architecture vision
 
 ### Technical Specifications
+
 - [[technical-architecture-specification]] - Detailed tech specs
 - [[integration-guide]] - Integration patterns
 - [[plugin-extension-system]] - Plugin architecture (future)
 - [[template-parsing-specification]] - Template parsing system
 
 ### Governance & Standards
+
 - [[architecture-governance-framework]] - Governance processes
 - [[architecture-rules]] - Architecture principles
 - [[coding-standards]] - Code style guide
@@ -63,6 +70,7 @@ This section contains all architectural documentation, decisions, and technical 
 ## 🔧 Core Components
 
 ### 1. Graph Engine
+
 ```
 packages/core/runtime/
 ├── index.ts           # Core runtime
@@ -72,6 +80,7 @@ packages/core/runtime/
 ```
 
 ### 2. Visual Editor
+
 ```
 client/src/
 ├── components/       # React components
@@ -80,6 +89,7 @@ client/src/
 ```
 
 ### 3. Asset Browser
+
 ```
 packages/asset-browser/
 ├── components/      # Browser UI
@@ -121,6 +131,7 @@ graph LR
 ## 📊 Performance Considerations
 
 ### Optimization Strategies
+
 - React.memo for component optimization
 - Virtual scrolling for large graphs
 - Debounced operations
@@ -128,6 +139,7 @@ graph LR
 - Code splitting
 
 ### Benchmarks
+
 - Graph execution: <1s for 5 variants
 - Large graphs: 45 FPS with 250 nodes
 - Bundle size: 2.8MB gzipped
@@ -138,11 +150,13 @@ graph LR
 ## 🔌 Integration Points
 
 ### External Services
+
 - **Supabase**: Authentication & storage
 - **Vercel**: Deployment platform
 - **GitHub**: Version control & CI/CD
 
 ### API Interfaces
+
 - REST API for graph operations
 - WebSocket for real-time updates (future)
 - File import/export (PSG format)
@@ -152,11 +166,13 @@ graph LR
 ## 📈 Evolution Path
 
 ### Current Architecture (v1.0)
+
 - Monolithic frontend
 - REST API backend
 - Local + cloud storage
 
 ### Future Architecture (v2.0)
+
 - Micro-frontends
 - GraphQL federation
 - Plugin marketplace
@@ -184,4 +200,4 @@ graph LR
 
 ---
 
-*For implementation details, see the source code in `packages/core/` and `client/src/`*
+_For implementation details, see the source code in `packages/core/` and `client/src/`_

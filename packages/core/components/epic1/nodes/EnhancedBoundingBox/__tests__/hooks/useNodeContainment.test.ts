@@ -12,21 +12,23 @@ import { PerformanceMonitor } from '../../../../../utils/performance/Performance
 jest.mock('../../../../../utils/performance/PerformanceMonitor', () => ({
   PerformanceMonitor: {
     getInstance: jest.fn(() => ({
-      record: jest.fn(),
-    })),
-  },
+      record: jest.fn()
+    }))
+  }
 }));
 
 describe('useNodeContainment', () => {
   const mockPerfMonitor = {
-    record: jest.fn(),
+    record: jest.fn()
   };
-  
+
   beforeEach(() => {
     jest.clearAllMocks();
-    (PerformanceMonitor.getInstance as jest.Mock).mockReturnValue(mockPerfMonitor);
+    (PerformanceMonitor.getInstance as jest.Mock).mockReturnValue(
+      mockPerfMonitor
+    );
   });
-  
+
   const createMockNodes = (count: number): Node[] => {
     return Array.from({ length: count }, (_, i) => ({
       id: `node-${i}`,
@@ -34,10 +36,10 @@ describe('useNodeContainment', () => {
       position: { x: i * 100, y: i * 50 },
       data: {},
       width: 150,
-      height: 50,
+      height: 50
     }));
   };
-  
+
   describe('containment detection', () => {
     it('should correctly identify contained nodes', () => {
       const nodes = [
@@ -45,7 +47,7 @@ describe('useNodeContainment', () => {
           id: 'box-1',
           type: 'enhancedBoundingBox',
           position: { x: 0, y: 0 },
-          data: {},
+          data: {}
         },
         {
           id: 'node-1',
@@ -53,7 +55,7 @@ describe('useNodeContainment', () => {
           position: { x: 50, y: 50 },
           width: 100,
           height: 40,
-          data: {},
+          data: {}
         },
         {
           id: 'node-2',
@@ -61,10 +63,10 @@ describe('useNodeContainment', () => {
           position: { x: 500, y: 500 }, // Outside box
           width: 100,
           height: 40,
-          data: {},
-        },
+          data: {}
+        }
       ] as Node[];
-      
+
       const { result } = renderHook(() =>
         useNodeContainment(
           'box-1',
@@ -75,18 +77,18 @@ describe('useNodeContainment', () => {
           false
         )
       );
-      
+
       expect(result.current.containedNodes).toHaveLength(1);
       expect(result.current.containedNodes[0].id).toBe('node-1');
     });
-    
+
     it('should exclude other bounding boxes from containment', () => {
       const nodes = [
         {
           id: 'box-1',
           type: 'enhancedBoundingBox',
           position: { x: 0, y: 0 },
-          data: {},
+          data: {}
         },
         {
           id: 'box-2',
@@ -94,10 +96,10 @@ describe('useNodeContainment', () => {
           position: { x: 50, y: 50 },
           width: 100,
           height: 100,
-          data: {},
-        },
+          data: {}
+        }
       ] as Node[];
-      
+
       const { result } = renderHook(() =>
         useNodeContainment(
           'box-1',
@@ -108,17 +110,17 @@ describe('useNodeContainment', () => {
           false
         )
       );
-      
+
       expect(result.current.containedNodes).toHaveLength(0);
     });
-    
+
     it('should use expanded size when collapsed', () => {
       const nodes = [
         {
           id: 'box-1',
           type: 'enhancedBoundingBox',
           position: { x: 0, y: 0 },
-          data: {},
+          data: {}
         },
         {
           id: 'node-1',
@@ -126,10 +128,10 @@ describe('useNodeContainment', () => {
           position: { x: 50, y: 50 },
           width: 100,
           height: 40,
-          data: {},
-        },
+          data: {}
+        }
       ] as Node[];
-      
+
       const { result } = renderHook(() =>
         useNodeContainment(
           'box-1',
@@ -140,16 +142,16 @@ describe('useNodeContainment', () => {
           true // isCollapsed
         )
       );
-      
+
       // Should still detect the node using expanded size
       expect(result.current.containedNodes).toHaveLength(1);
     });
   });
-  
+
   describe('caching behavior', () => {
     it('should cache results and report cache hits', () => {
       const nodes = createMockNodes(5);
-      
+
       const { result, rerender } = renderHook(
         ({ x, y }) =>
           useNodeContainment(
@@ -161,23 +163,29 @@ describe('useNodeContainment', () => {
             false
           ),
         {
-          initialProps: { x: 0, y: 0 },
+          initialProps: { x: 0, y: 0 }
         }
       );
-      
+
       // First call - cache miss
-      expect(mockPerfMonitor.record).toHaveBeenCalledWith('boundingBox.cacheMiss', 1);
-      
+      expect(mockPerfMonitor.record).toHaveBeenCalledWith(
+        'boundingBox.cacheMiss',
+        1
+      );
+
       // Same position - should be cached
       rerender({ x: 0, y: 0 });
-      expect(mockPerfMonitor.record).toHaveBeenCalledWith('boundingBox.cacheHit', 1);
-      
+      expect(mockPerfMonitor.record).toHaveBeenCalledWith(
+        'boundingBox.cacheHit',
+        1
+      );
+
       expect(result.current.cacheHitRate).toBeGreaterThan(0);
     });
-    
+
     it('should invalidate cache when position changes', () => {
       const nodes = createMockNodes(5);
-      
+
       const { rerender } = renderHook(
         ({ x, y }) =>
           useNodeContainment(
@@ -189,23 +197,23 @@ describe('useNodeContainment', () => {
             false
           ),
         {
-          initialProps: { x: 0, y: 0 },
+          initialProps: { x: 0, y: 0 }
         }
       );
-      
+
       // Change position - should cause cache miss
       rerender({ x: 100, y: 100 });
-      
+
       const calls = mockPerfMonitor.record.mock.calls;
       const cacheMissCalls = calls.filter(
         ([metric]) => metric === 'boundingBox.cacheMiss'
       );
       expect(cacheMissCalls.length).toBeGreaterThan(1);
     });
-    
+
     it('should force recalculation when recalculate is called', () => {
       const nodes = createMockNodes(5);
-      
+
       const { result } = renderHook(() =>
         useNodeContainment(
           'box-1',
@@ -216,11 +224,11 @@ describe('useNodeContainment', () => {
           false
         )
       );
-      
+
       act(() => {
         result.current.recalculate();
       });
-      
+
       // Should trigger a new calculation
       expect(mockPerfMonitor.record).toHaveBeenCalledWith(
         'boundingBox.containmentCalc',
@@ -228,11 +236,11 @@ describe('useNodeContainment', () => {
       );
     });
   });
-  
+
   describe('performance tracking', () => {
     it('should track calculation time', () => {
       const nodes = createMockNodes(100); // Large number of nodes
-      
+
       renderHook(() =>
         useNodeContainment(
           'box-1',
@@ -243,16 +251,16 @@ describe('useNodeContainment', () => {
           false
         )
       );
-      
+
       expect(mockPerfMonitor.record).toHaveBeenCalledWith(
         'boundingBox.containmentCalc',
         expect.any(Number)
       );
     });
-    
+
     it('should report cache hit rate', () => {
       const nodes = createMockNodes(5);
-      
+
       const { result, rerender } = renderHook(
         ({ x }) =>
           useNodeContainment(
@@ -264,21 +272,21 @@ describe('useNodeContainment', () => {
             false
           ),
         {
-          initialProps: { x: 0 },
+          initialProps: { x: 0 }
         }
       );
-      
+
       // Generate some cache hits
       rerender({ x: 0 }); // Hit
       rerender({ x: 0 }); // Hit
       rerender({ x: 1 }); // Miss
       rerender({ x: 0 }); // Hit
-      
+
       // Should have 3 hits out of 5 total calls (60% hit rate)
       expect(result.current.cacheHitRate).toBeCloseTo(60, 0);
     });
   });
-  
+
   describe('edge cases', () => {
     it('should handle empty node list', () => {
       const { result } = renderHook(() =>
@@ -291,13 +299,13 @@ describe('useNodeContainment', () => {
           false
         )
       );
-      
+
       expect(result.current.containedNodes).toEqual([]);
     });
-    
+
     it('should handle missing bounding box node', () => {
       const nodes = createMockNodes(5);
-      
+
       const { result } = renderHook(() =>
         useNodeContainment(
           'non-existent-box',
@@ -308,27 +316,27 @@ describe('useNodeContainment', () => {
           false
         )
       );
-      
+
       expect(result.current.containedNodes).toEqual([]);
     });
-    
+
     it('should handle nodes without width/height', () => {
       const nodes = [
         {
           id: 'box-1',
           type: 'enhancedBoundingBox',
           position: { x: 0, y: 0 },
-          data: {},
+          data: {}
         },
         {
           id: 'node-1',
           type: 'default',
           position: { x: 50, y: 50 },
           // No width/height specified
-          data: {},
-        },
+          data: {}
+        }
       ] as Node[];
-      
+
       const { result } = renderHook(() =>
         useNodeContainment(
           'box-1',
@@ -339,7 +347,7 @@ describe('useNodeContainment', () => {
           false
         )
       );
-      
+
       // Should use default dimensions (150x50)
       expect(result.current.containedNodes).toHaveLength(1);
     });

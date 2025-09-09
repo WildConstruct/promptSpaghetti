@@ -142,7 +142,15 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
       </div>
 
       {/* Asset Browser */}
-      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+      <div
+        style={{
+          flex: 1,
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0
+        }}
+      >
         {componentsLoaded && TabbedAssetBrowser && UserProvider ? (
           <UserProvider>
             <TabbedAssetBrowser onInsert={handleInsertPreset} />

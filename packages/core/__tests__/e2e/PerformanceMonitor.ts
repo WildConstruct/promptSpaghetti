@@ -45,17 +45,17 @@ export class PerformanceMonitor {
   private cacheMisses: number = 0;
   private totalCost: number = 0;
   private operationCosts: Map<string, number> = new Map();
-  
+
   constructor() {
     this.startTime = Date.now();
   }
-  
+
   // Track a metric
   track(operation: string, duration: number, metadata?: any): void {
     if (!this.metrics.has(operation)) {
       this.metrics.set(operation, []);
     }
-    
+
     this.metrics.get(operation)!.push({
       duration,
       timestamp: Date.now(),
@@ -63,7 +63,7 @@ export class PerformanceMonitor {
       metadata
     });
   }
-  
+
   // Track cache hit/miss
   trackCache(hit: boolean): void {
     if (hit) {
@@ -72,7 +72,7 @@ export class PerformanceMonitor {
       this.cacheMisses++;
     }
   }
-  
+
   // Track cost
   trackCost(operation: string, cost: number): void {
     this.totalCost += cost;
@@ -81,59 +81,62 @@ export class PerformanceMonitor {
       (this.operationCosts.get(operation) || 0) + cost
     );
   }
-  
+
   // Calculate percentile
   private calculatePercentile(values: number[], percentile: number): number {
     if (values.length === 0) return 0;
-    
+
     const sorted = [...values].sort((a, b) => a - b);
     const index = Math.ceil((percentile / 100) * sorted.length) - 1;
     return sorted[Math.max(0, index)];
   }
-  
+
   // Get percentile latency for an operation
   getP95(operation: string): number {
     const metrics = this.metrics.get(operation) || [];
     const durations = metrics.map(m => m.duration);
     return this.calculatePercentile(durations, 95);
   }
-  
+
   getP50(operation: string): number {
     const metrics = this.metrics.get(operation) || [];
     const durations = metrics.map(m => m.duration);
     return this.calculatePercentile(durations, 50);
   }
-  
+
   getP99(operation: string): number {
     const metrics = this.metrics.get(operation) || [];
     const durations = metrics.map(m => m.duration);
     return this.calculatePercentile(durations, 99);
   }
-  
+
   // Calculate cache hit rate
   calculateCacheRate(): number {
     const total = this.cacheHits + this.cacheMisses;
     if (total === 0) return 0;
     return this.cacheHits / total;
   }
-  
+
   // Calculate average cost per operation
   calculateCostPerOperation(): number {
-    const totalOps = Array.from(this.metrics.values())
-      .reduce((sum, metrics) => sum + metrics.length, 0);
-    
+    const totalOps = Array.from(this.metrics.values()).reduce(
+      (sum, metrics) => sum + metrics.length,
+      0
+    );
+
     if (totalOps === 0) return 0;
     return this.totalCost / totalOps;
   }
-  
+
   // Analyze bottlenecks
   analyzeBottlenecks(): Bottleneck[] {
     const bottlenecks: Bottleneck[] = [];
-    
+
     for (const [operation, metrics] of this.metrics.entries()) {
       const p95 = this.getP95(operation);
-      const avg = metrics.reduce((sum, m) => sum + m.duration, 0) / metrics.length;
-      
+      const avg =
+        metrics.reduce((sum, m) => sum + m.duration, 0) / metrics.length;
+
       // Check for high latency
       if (p95 > 2000) {
         bottlenecks.push({
@@ -143,7 +146,7 @@ export class PerformanceMonitor {
           recommendation: 'Consider caching or optimizing this operation'
         });
       }
-      
+
       // Check for high variance
       const variance = p95 / avg;
       if (variance > 3) {
@@ -154,7 +157,7 @@ export class PerformanceMonitor {
           recommendation: 'Investigate inconsistent performance'
         });
       }
-      
+
       // Check for failures
       const failures = metrics.filter(m => m.metadata?.failed).length;
       const failureRate = failures / metrics.length;
@@ -167,7 +170,7 @@ export class PerformanceMonitor {
         });
       }
     }
-    
+
     // Check cache effectiveness
     const cacheRate = this.calculateCacheRate();
     if (cacheRate < 0.4 && this.cacheMisses > 100) {
@@ -178,7 +181,7 @@ export class PerformanceMonitor {
         recommendation: 'Increase cache TTL or improve cache key strategy'
       });
     }
-    
+
     // Check cost efficiency
     const costPerOp = this.calculateCostPerOperation();
     if (costPerOp > 0.01) {
@@ -189,22 +192,22 @@ export class PerformanceMonitor {
         recommendation: 'Use cheaper models or increase caching'
       });
     }
-    
+
     return bottlenecks;
   }
-  
+
   // Generate recommendations
   generateRecommendations(): string[] {
     const recommendations: string[] = [];
     const bottlenecks = this.analyzeBottlenecks();
-    
+
     // Add bottleneck recommendations
     for (const bottleneck of bottlenecks) {
       if (bottleneck.severity === 'high') {
         recommendations.push(`⚠️ ${bottleneck.recommendation}`);
       }
     }
-    
+
     // Cache recommendations
     const cacheRate = this.calculateCacheRate();
     if (cacheRate < 0.3) {
@@ -212,70 +215,74 @@ export class PerformanceMonitor {
     } else if (cacheRate < 0.5) {
       recommendations.push('Consider increasing cache TTL for better hit rate');
     }
-    
+
     // Cost recommendations
     const costPerOp = this.calculateCostPerOperation();
     if (costPerOp > 0.005) {
-      recommendations.push('Consider using cheaper models for non-critical operations');
+      recommendations.push(
+        'Consider using cheaper models for non-critical operations'
+      );
     }
-    
+
     // Latency recommendations
     const allMetrics = Array.from(this.metrics.values()).flat();
     const globalP95 = this.calculatePercentile(
       allMetrics.map(m => m.duration),
       95
     );
-    
+
     if (globalP95 > 3000) {
       recommendations.push('Implement request batching to reduce latency');
     }
-    
+
     // Concurrency recommendations
     const totalDuration = Date.now() - this.startTime;
     const totalOps = allMetrics.length;
     const opsPerSecond = totalOps / (totalDuration / 1000);
-    
+
     if (opsPerSecond < 5 && totalOps > 100) {
       recommendations.push('Increase concurrency for bulk operations');
     }
-    
+
     return recommendations;
   }
-  
+
   // Generate comprehensive report
   generateReport(): PerformanceReport {
     const allMetrics = Array.from(this.metrics.values()).flat();
     const durations = allMetrics.map(m => m.duration);
-    
+
     // Calculate global percentiles
     const p95Latency = this.calculatePercentile(durations, 95);
     const p50Latency = this.calculatePercentile(durations, 50);
     const p99Latency = this.calculatePercentile(durations, 99);
-    
+
     // Calculate averages
-    const averageLatency = durations.length > 0
-      ? durations.reduce((sum, d) => sum + d, 0) / durations.length
-      : 0;
-    
+    const averageLatency =
+      durations.length > 0
+        ? durations.reduce((sum, d) => sum + d, 0) / durations.length
+        : 0;
+
     const maxLatency = durations.length > 0 ? Math.max(...durations) : 0;
     const minLatency = durations.length > 0 ? Math.min(...durations) : 0;
-    
+
     // Build operation breakdown
     const operationBreakdown: Record<string, OperationStats> = {};
-    
+
     for (const [operation, metrics] of this.metrics.entries()) {
       const opDurations = metrics.map(m => m.duration);
       const failures = metrics.filter(m => m.metadata?.failed).length;
-      
+
       operationBreakdown[operation] = {
         count: metrics.length,
         totalDuration: opDurations.reduce((sum, d) => sum + d, 0),
-        averageDuration: opDurations.reduce((sum, d) => sum + d, 0) / opDurations.length,
+        averageDuration:
+          opDurations.reduce((sum, d) => sum + d, 0) / opDurations.length,
         p95Duration: this.calculatePercentile(opDurations, 95),
         failures
       };
     }
-    
+
     return {
       p95Latency,
       p50Latency,
@@ -291,7 +298,7 @@ export class PerformanceMonitor {
       bottlenecks: this.analyzeBottlenecks()
     };
   }
-  
+
   // Export metrics to JSON
   exportMetrics(): string {
     const report = this.generateReport();
@@ -304,14 +311,14 @@ export class PerformanceMonitor {
         metrics: metrics.slice(0, 100) // Limit to first 100 for size
       }))
     };
-    
+
     return JSON.stringify(exportData, null, 2);
   }
-  
+
   // Generate performance summary
   generateSummary(): string {
     const report = this.generateReport();
-    
+
     return `
 Performance Summary
 ==================
@@ -327,7 +334,10 @@ Top Operations by Count:
 ${Object.entries(report.operationBreakdown)
   .sort((a, b) => b[1].count - a[1].count)
   .slice(0, 5)
-  .map(([op, stats]) => `  - ${op}: ${stats.count} ops (avg: ${stats.averageDuration.toFixed(0)}ms)`)
+  .map(
+    ([op, stats]) =>
+      `  - ${op}: ${stats.count} ops (avg: ${stats.averageDuration.toFixed(0)}ms)`
+  )
   .join('\n')}
 
 Bottlenecks Detected: ${report.bottlenecks.length}
@@ -340,7 +350,7 @@ Recommendations:
 ${report.recommendations.map(r => `  • ${r}`).join('\n')}
     `.trim();
   }
-  
+
   // Reset all metrics
   reset(): void {
     this.metrics.clear();

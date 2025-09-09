@@ -6,13 +6,13 @@ This document outlines the rollback procedures for the Epic 1 Prompt Spaghetti M
 
 ## Rollback Decision Matrix
 
-| Condition | Threshold | Action | Time Limit |
-|-----------|-----------|---------|------------|
-| Error Rate | >1% | Automatic rollback | Immediate |
-| Performance Degradation | >50% | Alert + Manual decision | 5 minutes |
-| User Complaints | >10 in 1 hour | Investigate + Decide | 15 minutes |
-| System Crash | Any | Immediate rollback | Immediate |
-| Data Corruption | Any detected | Immediate rollback + Recovery | Immediate |
+| Condition               | Threshold     | Action                        | Time Limit |
+| ----------------------- | ------------- | ----------------------------- | ---------- |
+| Error Rate              | >1%           | Automatic rollback            | Immediate  |
+| Performance Degradation | >50%          | Alert + Manual decision       | 5 minutes  |
+| User Complaints         | >10 in 1 hour | Investigate + Decide          | 15 minutes |
+| System Crash            | Any           | Immediate rollback            | Immediate  |
+| Data Corruption         | Any detected  | Immediate rollback + Recovery | Immediate  |
 
 ## Pre-Rollback Checklist
 
@@ -40,10 +40,10 @@ aws s3 cp s3://prompt-spaghetti-prod/releases/previous/index.html \
          s3://prompt-spaghetti-prod/index.html
 
 # 3. Clear service worker cache
-echo "self.addEventListener('activate', e => { 
-  e.waitUntil(caches.keys().then(keys => 
+echo "self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys =>
     Promise.all(keys.map(key => caches.delete(key)))
-  )); 
+  ));
 });" > clear-cache.js
 
 # 4. Verify rollback
@@ -94,12 +94,12 @@ BACKUP DATABASE prompt_spaghetti TO '/backups/emergency_rollback.bak';
 
 -- 3. Restore from previous backup
 BEGIN TRANSACTION;
-  RESTORE DATABASE prompt_spaghetti 
+  RESTORE DATABASE prompt_spaghetti
   FROM '/backups/pre_deployment.bak'
   WITH REPLACE, NORECOVERY;
-  
+
   -- Apply transaction logs up to deployment time
-  RESTORE LOG prompt_spaghetti 
+  RESTORE LOG prompt_spaghetti
   FROM '/backups/logs/deployment_point.trn'
   WITH STOPAT = '2025-08-01 00:00:00';
 COMMIT;
@@ -125,21 +125,21 @@ const rollbackFeatures = async () => {
   flags.setFlag('epic1-inline-editing', false);
   flags.setFlag('epic1-new-engine', false);
   flags.setFlag('epic1-preview-system', false);
-  
+
   // 2. Notify connected clients
   await broadcastToClients({
     type: 'FEATURE_FLAG_UPDATE',
-    flags: flags.getAllFlags(),
+    flags: flags.getAllFlags()
   });
-  
+
   // 3. Clear client caches
   await redis.del('feature_flags:*');
-  
+
   // 4. Log rollback
   await auditLog.record({
     action: 'FEATURE_FLAG_ROLLBACK',
     timestamp: new Date(),
-    flags: flags.getAllFlags(),
+    flags: flags.getAllFlags()
   });
 };
 ```
@@ -271,6 +271,7 @@ fi
 ## Communication Templates
 
 ### Status Page Update
+
 ```
 We are currently experiencing issues with [COMPONENT].
 Our team has initiated a rollback to restore service stability.
@@ -279,6 +280,7 @@ Updates will be posted every 15 minutes.
 ```
 
 ### User Notification
+
 ```
 Subject: Brief Service Interruption - Action May Be Required
 
@@ -290,6 +292,7 @@ We apologize for any inconvenience.
 ```
 
 ### Internal Alert
+
 ```
 ROLLBACK EXECUTED
 Type: [ROLLBACK_TYPE]
@@ -316,7 +319,7 @@ for type in frontend backend database feature; do
   echo "Testing $type rollback..."
   ./auto-rollback.sh $type "Monthly drill test"
   sleep 60
-  
+
   # Verify recovery
   if curl -f https://staging.promptspaghetti.com/health; then
     echo "✓ $type rollback successful"

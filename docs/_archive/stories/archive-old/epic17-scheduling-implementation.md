@@ -205,11 +205,11 @@ const schedule = {
   recurrence: {
     type: 'weekly',
     interval: 1,
-    daysOfWeek: [0], // Sunday
+    daysOfWeek: [0] // Sunday
   },
   actionConfig: {},
   priority: 1,
-  conflictResolution: 'override',
+  conflictResolution: 'override'
 };
 ```
 
@@ -228,11 +228,11 @@ const rolloutSchedule = {
     gradualRollout: {
       startPercentage: 10,
       endPercentage: 100,
-      incrementMinutes: 120, // Increase every 2 hours
-    },
+      incrementMinutes: 120 // Increase every 2 hours
+    }
   },
   priority: 2,
-  conflictResolution: 'skip',
+  conflictResolution: 'skip'
 };
 ```
 

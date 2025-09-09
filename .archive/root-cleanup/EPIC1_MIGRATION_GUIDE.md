@@ -7,12 +7,14 @@ Epic 1 introduces a fundamentally different approach to node editing in Prompt S
 ## Key Differences
 
 ### Before (Traditional Approach)
+
 - Select node → Edit in inspector panel
 - Separate UI for editing
 - Modal dialogs for complex edits
 - Mouse-heavy workflow
 
 ### After (Epic 1 Inline Editing)
+
 - Edit directly on canvas
 - Keyboard-first navigation
 - Visual feedback during editing
@@ -36,17 +38,18 @@ const analysis = promptParser.parse('Your prompt text here');
 
 ### 2. Keyboard Navigation
 
-| Action | Shortcut | Description |
-|--------|----------|-------------|
-| Next Node | `Tab` | Move to next editable node |
-| Previous Node | `Shift+Tab` | Move to previous node |
-| Confirm & Next | `Enter` | Save current, move to next |
-| Cancel All | `Escape` | Cancel all edits |
-| Confirm All | Click canvas | Save all edits |
+| Action         | Shortcut     | Description                |
+| -------------- | ------------ | -------------------------- |
+| Next Node      | `Tab`        | Move to next editable node |
+| Previous Node  | `Shift+Tab`  | Move to previous node      |
+| Confirm & Next | `Enter`      | Save current, move to next |
+| Cancel All     | `Escape`     | Cancel all edits           |
+| Confirm All    | Click canvas | Save all edits             |
 
 ### 3. Visual Indicators
 
 The new system shows:
+
 - Which text generated which nodes (color coding)
 - Hover connections between text and nodes
 - Edit mode indicators (green ring)
@@ -63,7 +66,7 @@ import { promptParser } from '@packages/core/runtime/nodes/epic1';
 function MyEditor() {
   const [prompt, setPrompt] = useState('');
   const analysis = promptParser.parse(prompt);
-  
+
   return (
     <KeyboardNavigableEditor
       promptAnalysis={analysis}
@@ -77,10 +80,10 @@ function MyEditor() {
 ### Direct Node Creation
 
 ```typescript
-import { 
-  TextBlockNode, 
+import {
+  TextBlockNode,
   WeightedChoiceNode,
-  Epic1ExecutionEngine 
+  Epic1ExecutionEngine
 } from '@packages/core/runtime/nodes/epic1';
 
 // Create nodes with inline editing support
@@ -95,14 +98,14 @@ const choiceNode = new WeightedChoiceNode('2', [
 
 ## Feature Comparison
 
-| Feature | Old System | Epic 1 System |
-|---------|------------|---------------|
-| Edit Location | Inspector Panel | Canvas |
-| Navigation | Mouse clicks | Tab/Shift+Tab |
-| Bulk Edits | Individual saves | Canvas click saves all |
-| Visual Feedback | Limited | Rich indicators |
-| Prompt Import | Manual | Automatic parsing |
-| Undo/Redo | Per action | Escape cancels all |
+| Feature         | Old System       | Epic 1 System          |
+| --------------- | ---------------- | ---------------------- |
+| Edit Location   | Inspector Panel  | Canvas                 |
+| Navigation      | Mouse clicks     | Tab/Shift+Tab          |
+| Bulk Edits      | Individual saves | Canvas click saves all |
+| Visual Feedback | Limited          | Rich indicators        |
+| Prompt Import   | Manual           | Automatic parsing      |
+| Undo/Redo       | Per action       | Escape cancels all     |
 
 ## Migration Checklist
 

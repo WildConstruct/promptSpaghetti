@@ -221,7 +221,11 @@ interface AuditService {
     };
   }): Promise<void>;
 
-  generateComplianceReport(startDate: Date, endDate: Date, format: 'SOC2' | 'GDPR' | 'NIST'): Promise<Buffer>;
+  generateComplianceReport(
+    startDate: Date,
+    endDate: Date,
+    format: 'SOC2' | 'GDPR' | 'NIST'
+  ): Promise<Buffer>;
 }
 ```
 
@@ -282,7 +286,9 @@ CREATE TABLE mfa_verification_attempts (
 
 ```typescript
 // Enhanced login flow with MFA
-async function authenticateUser(credentials: LoginCredentials): Promise<AuthResult> {
+async function authenticateUser(
+  credentials: LoginCredentials
+): Promise<AuthResult> {
   // Step 1: Validate primary credentials
   const user = await validateCredentials(credentials);
   if (!user) throw new Error('Invalid credentials');
@@ -299,7 +305,7 @@ async function authenticateUser(credentials: LoginCredentials): Promise<AuthResu
     success: false,
     requiresMFA: true,
     methods: availableMethods,
-    mfaToken: generateMFAToken(user.id),
+    mfaToken: generateMFAToken(user.id)
   };
 }
 ```

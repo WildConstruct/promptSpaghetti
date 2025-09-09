@@ -110,8 +110,20 @@ Query by text; filter by categories.
 ```json
 {
   "results": [
-    {"id":"lens_leica_m_summicron_50_v1","type":"lens","name":"Leica M Summicron 50mm (v1)","score":0.93,"thumb":"/t/lens-50.jpg"},
-    {"id":"lens_nikkor_58_1_4","type":"lens","name":"Nikkor 58mm f/1.4","score":0.88,"thumb":"/t/lens-58.jpg"}
+    {
+      "id": "lens_leica_m_summicron_50_v1",
+      "type": "lens",
+      "name": "Leica M Summicron 50mm (v1)",
+      "score": 0.93,
+      "thumb": "/t/lens-50.jpg"
+    },
+    {
+      "id": "lens_nikkor_58_1_4",
+      "type": "lens",
+      "name": "Nikkor 58mm f/1.4",
+      "score": 0.88,
+      "thumb": "/t/lens-58.jpg"
+    }
   ]
 }
 ```
@@ -178,7 +190,7 @@ Fetch full metadata for binding.
 3. **Add alternatives** (randomized span)
 
 - User presses **Space** to toggle Randomize, then **Enter** to edit options.
-- Typeahead suggests: *Summicron 50 v1*, *Nikkor 58/1.4*, *Warm Tones 01* (filtered to optics-first).
+- Typeahead suggests: _Summicron 50 v1_, _Nikkor 58/1.4_, _Warm Tones 01_ (filtered to optics-first).
 - Selecting an item inserts `{ text: "Summicron 50mm v1", weight: 1, assetRef: { id:"lens_leica_m_summicron_50_v1", type:"lens" } }`.
 
 4. **Conflict hinting**
@@ -206,14 +218,32 @@ Fetch full metadata for binding.
 
 ```ts
 interface WizardSpan {
-  id: string
-  span_start: number
-  span_end: number
-  text: string
-  type: 'Subject'|'Style'|'Lighting'|'Optics'|'Color/Tonality'|'Composition'|'Mood'|'Background/Location'|'Era/Reference'|'Process/Medium'
-  randomize: boolean
-  choices?: Array<{ text: string; weight?: number; assetRef?: { id: string; type: string } }>
-  meta?: { assetRef?: { id: string; type: string }; confidence?: number; tokens?: number[] }
+  id: string;
+  span_start: number;
+  span_end: number;
+  text: string;
+  type:
+    | 'Subject'
+    | 'Style'
+    | 'Lighting'
+    | 'Optics'
+    | 'Color/Tonality'
+    | 'Composition'
+    | 'Mood'
+    | 'Background/Location'
+    | 'Era/Reference'
+    | 'Process/Medium';
+  randomize: boolean;
+  choices?: Array<{
+    text: string;
+    weight?: number;
+    assetRef?: { id: string; type: string };
+  }>;
+  meta?: {
+    assetRef?: { id: string; type: string };
+    confidence?: number;
+    tokens?: number[];
+  };
 }
 ```
 
@@ -223,11 +253,19 @@ interface WizardSpan {
 {
   "id": "n_lens_choice",
   "type": "WeightedChoice",
-  "position": {"x": 300, "y": 140},
+  "position": { "x": 300, "y": 140 },
   "data": {
     "choices": [
-      {"text": "Summicron 50mm v1", "weight": 1, "assetRef": {"id": "lens_leica_m_summicron_50_v1", "type": "lens"}},
-      {"text": "Nikkor 58mm f/1.4", "weight": 1, "assetRef": {"id": "lens_nikkor_58_1_4", "type": "lens"}}
+      {
+        "text": "Summicron 50mm v1",
+        "weight": 1,
+        "assetRef": { "id": "lens_leica_m_summicron_50_v1", "type": "lens" }
+      },
+      {
+        "text": "Nikkor 58mm f/1.4",
+        "weight": 1,
+        "assetRef": { "id": "lens_nikkor_58_1_4", "type": "lens" }
+      }
     ]
   }
 }
@@ -239,9 +277,9 @@ interface WizardSpan {
 {
   "id": "n_camera",
   "type": "TextBlock",
-  "position": {"x": 200, "y": 140},
-  "data": {"value": "Leica M Monochrom"},
-  "meta": {"assetRef": {"id": "camera_leica_monochrom", "type": "camera"}}
+  "position": { "x": 200, "y": 140 },
+  "data": { "value": "Leica M Monochrom" },
+  "meta": { "assetRef": { "id": "camera_leica_monochrom", "type": "camera" } }
 }
 ```
 
@@ -273,4 +311,3 @@ interface WizardSpan {
 - **Resolve All** (auto-bind high-confidence matches across spans with a review sheet).
 - **Requires** relationships (option-level dependency linking).
 - **Org/Cloud index** opt-in with hashed session IDs and no raw prompt text.
-

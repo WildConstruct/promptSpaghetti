@@ -430,8 +430,8 @@ This checklist validates all features and ensures quality standards for the v0.1
 
 ---
 
-**QA Sign-off**: ********\_******** Date: ********\_********
+**QA Sign-off**: **\*\*\*\***\_**\*\*\*\*** Date: **\*\*\*\***\_**\*\*\*\***
 
-**Technical Sign-off**: ********\_******** Date: ********\_********
+**Technical Sign-off**: **\*\*\*\***\_**\*\*\*\*** Date: **\*\*\*\***\_**\*\*\*\***
 
-**Product Sign-off**: ********\_******** Date: ********\_********
+**Product Sign-off**: **\*\*\*\***\_**\*\*\*\*** Date: **\*\*\*\***\_**\*\*\*\***

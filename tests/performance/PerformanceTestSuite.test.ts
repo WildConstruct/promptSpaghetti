@@ -40,12 +40,14 @@ describe('Performance Test Suite - E18', () => {
       max: times[times.length - 1],
       p95: times[Math.floor(times.length * 0.95)],
       p99: times[Math.floor(times.length * 0.99)],
-      result: result!,
+      result: result!
     };
   };
 
   // Test data generators
-  const generateSimpleGraph = (nodeCount: number = 5): { nodes: Node[]; edges: Edge[] } => {
+  const generateSimpleGraph = (
+    nodeCount: number = 5
+  ): { nodes: Node[]; edges: Edge[] } => {
     const nodes: Node[] = [];
     const edges: Edge[] = [];
 
@@ -57,9 +59,10 @@ describe('Performance Test Suite - E18', () => {
         position: { x: i * 100, y: 100 },
         data: {
           nodeType: i === 0 ? 'WeightedChoice' : 'Output',
-          variations: i === 0 ? ['Option A', 'Option B', 'Option C'] : [`Output ${i}`],
-          weights: i === 0 ? [1, 1, 1] : undefined,
-        },
+          variations:
+            i === 0 ? ['Option A', 'Option B', 'Option C'] : [`Output ${i}`],
+          weights: i === 0 ? [1, 1, 1] : undefined
+        }
       });
     }
 
@@ -70,17 +73,25 @@ describe('Performance Test Suite - E18', () => {
         source: `node-${i}`,
         target: `node-${i + 1}`,
         sourceHandle: 'output',
-        targetHandle: 'input',
+        targetHandle: 'input'
       });
     }
 
     return { nodes, edges };
   };
 
-  const generateComplexGraph = (nodeCount: number = 50): { nodes: Node[]; edges: Edge[] } => {
+  const generateComplexGraph = (
+    nodeCount: number = 50
+  ): { nodes: Node[]; edges: Edge[] } => {
     const nodes: Node[] = [];
     const edges: Edge[] = [];
-    const nodeTypes = ['WeightedChoice', 'Conditional', 'Sequential', 'Concat', 'Output'];
+    const nodeTypes = [
+      'WeightedChoice',
+      'Conditional',
+      'Sequential',
+      'Concat',
+      'Output'
+    ];
 
     // Create nodes with varied complexity
     for (let i = 0; i < nodeCount; i++) {
@@ -96,9 +107,12 @@ describe('Performance Test Suite - E18', () => {
             nodeType === 'WeightedChoice'
               ? Array.from({ length: 5 }, (_, j) => `Complex option ${i}-${j}`)
               : [`Complex output ${i}`],
-          weights: nodeType === 'WeightedChoice' ? Array.from({ length: 5 }, () => Math.random()) : undefined,
-          condition: nodeType === 'Conditional' ? 'variable > 0.5' : undefined,
-        },
+          weights:
+            nodeType === 'WeightedChoice'
+              ? Array.from({ length: 5 }, () => Math.random())
+              : undefined,
+          condition: nodeType === 'Conditional' ? 'variable > 0.5' : undefined
+        }
       });
     }
 
@@ -111,7 +125,7 @@ describe('Performance Test Suite - E18', () => {
           source: `complex-node-${i}`,
           target: `complex-node-${i + 1}`,
           sourceHandle: 'output',
-          targetHandle: 'input',
+          targetHandle: 'input'
         });
       }
 
@@ -122,7 +136,7 @@ describe('Performance Test Suite - E18', () => {
           source: `complex-node-${i}`,
           target: `complex-node-${i + 3}`,
           sourceHandle: 'output',
-          targetHandle: 'input',
+          targetHandle: 'input'
         });
       }
     }
@@ -144,7 +158,7 @@ describe('Performance Test Suite - E18', () => {
             x: node.position.x,
             y: node.position.y,
             width: 150,
-            height: 40,
+            height: 40
           };
           // Simulate layout calculations
           bbox.x + bbox.width;
@@ -187,7 +201,7 @@ describe('Performance Test Suite - E18', () => {
             x: node.position.x,
             y: node.position.y,
             width: 200,
-            height: 60,
+            height: 60
           };
           // Complex node rendering simulation
           bbox.x + bbox.width;
@@ -227,7 +241,7 @@ describe('Performance Test Suite - E18', () => {
         const previewData = {
           nodes,
           edges,
-          seedCount: 3,
+          seedCount: 3
         };
 
         // Mock graph validation
@@ -256,7 +270,7 @@ describe('Performance Test Suite - E18', () => {
       const contexts = [
         { nodeCount: 0, edgeCount: 0, selectedNodeType: null },
         { nodeCount: 5, edgeCount: 4, selectedNodeType: 'WeightedChoice' },
-        { nodeCount: 15, edgeCount: 12, selectedNodeType: 'Conditional' },
+        { nodeCount: 15, edgeCount: 12, selectedNodeType: 'Conditional' }
       ];
 
       contexts.forEach((context, index) => {
@@ -285,7 +299,10 @@ describe('Performance Test Suite - E18', () => {
           return performance.now() - startTime;
         }, 100);
 
-        console.log(`Contextual Help Performance (Context ${index + 1}):`, results);
+        console.log(
+          `Contextual Help Performance (Context ${index + 1}):`,
+          results
+        );
 
         // Performance goals: Context analysis < 50ms
         expect(results.p95).toBeLessThan(50);
@@ -299,7 +316,7 @@ describe('Performance Test Suite - E18', () => {
       const testCases = [
         { type: 'Output', content: 'Simple output text' },
         { type: 'Concat', parts: ['Part 1', 'Part 2', 'Part 3'] },
-        { type: 'WeightedChoice', options: ['A', 'B', 'C'], weights: [1, 2, 1] },
+        { type: 'WeightedChoice', options: ['A', 'B', 'C'], weights: [1, 2, 1] }
       ];
 
       testCases.forEach(testCase => {
@@ -312,7 +329,10 @@ describe('Performance Test Suite - E18', () => {
           } else if (testCase.type === 'Concat') {
             return (testCase as any).parts.join(' ');
           } else if (testCase.type === 'WeightedChoice') {
-            const totalWeight = (testCase as any).weights.reduce((a: number, b: number) => a + b, 0);
+            const totalWeight = (testCase as any).weights.reduce(
+              (a: number, b: number) => a + b,
+              0
+            );
             const random = Math.random() * totalWeight;
             let currentWeight = 0;
             for (let i = 0; i < (testCase as any).weights.length; i++) {
@@ -344,13 +364,13 @@ describe('Performance Test Suite - E18', () => {
           condition: 'variable > 0.5',
           variables: { variable: 0.7 },
           trueBranch: 'True result',
-          falseBranch: 'False result',
+          falseBranch: 'False result'
         },
         {
           type: 'Sequential',
           pattern: 'linear',
           items: ['Step 1', 'Step 2', 'Step 3', 'Step 4', 'Step 5'],
-          currentStep: 2,
+          currentStep: 2
         },
         {
           type: 'Markov',
@@ -358,10 +378,10 @@ describe('Performance Test Suite - E18', () => {
           transitions: {
             A: { B: 0.6, C: 0.4 },
             B: { A: 0.3, C: 0.7 },
-            C: { A: 0.5, B: 0.5 },
+            C: { A: 0.5, B: 0.5 }
           },
-          currentState: 'A',
-        },
+          currentState: 'A'
+        }
       ];
 
       advancedTestCases.forEach(testCase => {
@@ -371,7 +391,9 @@ describe('Performance Test Suite - E18', () => {
           // Mock advanced node execution
           if (testCase.type === 'Conditional') {
             const conditionResult = (testCase as any).variables.variable > 0.5;
-            return conditionResult ? (testCase as any).trueBranch : (testCase as any).falseBranch;
+            return conditionResult
+              ? (testCase as any).trueBranch
+              : (testCase as any).falseBranch;
           } else if (testCase.type === 'Sequential') {
             const tc = testCase as any;
             return tc.items[tc.currentStep % tc.items.length];
@@ -381,7 +403,9 @@ describe('Performance Test Suite - E18', () => {
             const random = Math.random();
             let cumulativeProbability = 0;
 
-            for (const [nextState, probability] of Object.entries(currentTransitions)) {
+            for (const [nextState, probability] of Object.entries(
+              currentTransitions
+            )) {
               cumulativeProbability += probability as number;
               if (random <= cumulativeProbability) {
                 return nextState;
@@ -431,14 +455,17 @@ describe('Performance Test Suite - E18', () => {
             results.push({
               seed,
               output: output.trim(),
-              executionTime: Math.random() * 100, // Mock execution time
+              executionTime: Math.random() * 100 // Mock execution time
             });
           }
 
           return performance.now() - startTime;
         }, 50);
 
-        console.log(`Multi-seed Generation Performance (${seedCount} seeds):`, results);
+        console.log(
+          `Multi-seed Generation Performance (${seedCount} seeds):`,
+          results
+        );
 
         // Performance goals: 5 seeds in < 1 second, 8 seeds in < 2 seconds
         if (seedCount <= 5) {
@@ -535,7 +562,7 @@ describe('Performance Test Suite - E18', () => {
         // Simulate graph operations
         const modifiedNodes = nodes.map(node => ({
           ...node,
-          position: { x: node.position.x + 1, y: node.position.y + 1 },
+          position: { x: node.position.x + 1, y: node.position.y + 1 }
         }));
 
         // Simulate edge operations
@@ -554,7 +581,9 @@ describe('Performance Test Suite - E18', () => {
       const finalMemory = process.memoryUsage().heapUsed;
       const memoryIncrease = finalMemory - initialMemory;
 
-      console.log(`Memory increase: ${(memoryIncrease / 1024 / 1024).toFixed(2)} MB`);
+      console.log(
+        `Memory increase: ${(memoryIncrease / 1024 / 1024).toFixed(2)} MB`
+      );
 
       // Memory goal: < 100MB for reasonable operations
       expect(memoryIncrease).toBeLessThan(100 * 1024 * 1024); // 100MB
@@ -570,7 +599,10 @@ describe('Performance Test Suite - E18', () => {
         const mockPreview = {
           results: Array.from({ length: 5 }, (_, j) => `Result ${i}-${j}`),
           timestamp: Date.now(),
-          metadata: { seeds: [1, 2, 3, 4, 5], executionTime: Math.random() * 1000 },
+          metadata: {
+            seeds: [1, 2, 3, 4, 5],
+            executionTime: Math.random() * 1000
+          }
         };
 
         previewCache.set(key, mockPreview);
@@ -595,30 +627,36 @@ describe('Performance Test Suite - E18', () => {
       const startTime = performance.now();
 
       // Simulate concurrent preview requests
-      const promises = Array.from({ length: concurrentRequests }, async (_, i) => {
-        const requestStart = performance.now();
+      const promises = Array.from(
+        { length: concurrentRequests },
+        async (_, i) => {
+          const requestStart = performance.now();
 
-        // Mock async preview generation
-        await new Promise(resolve => setTimeout(resolve, Math.random() * 500 + 100));
+          // Mock async preview generation
+          await new Promise(resolve =>
+            setTimeout(resolve, Math.random() * 500 + 100)
+          );
 
-        // Mock graph execution
-        const mockResults = Array.from({ length: 5 }, (_, j) => ({
-          seed: i * 1000 + j,
-          output: `Concurrent result ${i}-${j}`,
-          executionTime: Math.random() * 200,
-        }));
+          // Mock graph execution
+          const mockResults = Array.from({ length: 5 }, (_, j) => ({
+            seed: i * 1000 + j,
+            output: `Concurrent result ${i}-${j}`,
+            executionTime: Math.random() * 200
+          }));
 
-        return {
-          requestId: i,
-          duration: performance.now() - requestStart,
-          results: mockResults,
-        };
-      });
+          return {
+            requestId: i,
+            duration: performance.now() - requestStart,
+            results: mockResults
+          };
+        }
+      );
 
       const results = await Promise.all(promises);
       const totalTime = performance.now() - startTime;
 
-      const avgResponseTime = results.reduce((sum, r) => sum + r.duration, 0) / results.length;
+      const avgResponseTime =
+        results.reduce((sum, r) => sum + r.duration, 0) / results.length;
       const maxResponseTime = Math.max(...results.map(r => r.duration));
 
       console.log('Concurrent Load Test Results:');
@@ -638,7 +676,7 @@ describe('Performance Test Suite - E18', () => {
         simpleNodeExecution: 0.5, // ms
         complexNodeExecution: 15, // ms
         graphValidation: 30, // ms
-        previewGeneration: 400, // ms
+        previewGeneration: 400 // ms
       };
 
       // Run current performance tests
@@ -664,12 +702,13 @@ describe('Performance Test Suite - E18', () => {
         previewGeneration: measurePerformance(() => {
           // Mock preview generation
           Array.from({ length: 5 }, () => Math.random().toString(36));
-        }, 20).average,
+        }, 20).average
       };
 
       console.log('Performance Comparison:');
       Object.keys(baselineMetrics).forEach(metric => {
-        const baseline = baselineMetrics[metric as keyof typeof baselineMetrics];
+        const baseline =
+          baselineMetrics[metric as keyof typeof baselineMetrics];
         const current = currentMetrics[metric as keyof typeof currentMetrics];
         const regression = ((current - baseline) / baseline) * 100;
 

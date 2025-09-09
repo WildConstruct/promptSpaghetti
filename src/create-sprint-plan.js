@@ -17,40 +17,130 @@ const SPRINT_CONFIG = {
   sprintDurationWeeks: 2,
   velocityPointsPerSprint: 120, // Estimated based on team capacity
   hoursToPoints: 8, // 1 point = 8 hours of work
-  maxTasksPerSprint: 50, // To prevent sprint overload
+  maxTasksPerSprint: 50 // To prevent sprint overload
 };
 
 // Epic Priority Matrix based on dependencies and business value
 const EPIC_PRIORITIES = {
   // Foundation Layer (Must complete first)
   foundation: [
-    { epic: 6, name: 'Performance & Scalability', priority: 1, tasks: 173, dependencies: [] },
-    { epic: 7, name: 'Advanced Node Capabilities', priority: 1, tasks: 226, dependencies: [6] },
-    { epic: 9, name: 'Error Handling & User Experience', priority: 1, tasks: 111, dependencies: [6] },
+    {
+      epic: 6,
+      name: 'Performance & Scalability',
+      priority: 1,
+      tasks: 173,
+      dependencies: []
+    },
+    {
+      epic: 7,
+      name: 'Advanced Node Capabilities',
+      priority: 1,
+      tasks: 226,
+      dependencies: [6]
+    },
+    {
+      epic: 9,
+      name: 'Error Handling & User Experience',
+      priority: 1,
+      tasks: 111,
+      dependencies: [6]
+    }
   ],
 
   // Core Infrastructure (Next priority)
   infrastructure: [
-    { epic: 11, name: 'User Management & RBAC', priority: 2, tasks: 352, dependencies: [6, 9] },
-    { epic: 14, name: 'Advanced Security & Authentication', priority: 2, tasks: 465, dependencies: [11] },
-    { epic: 12, name: 'Data Integration & Pipeline Management', priority: 2, tasks: 424, dependencies: [6, 7] },
-    { epic: 13, name: 'Performance Monitoring & Optimization', priority: 2, tasks: 473, dependencies: [6, 10] },
+    {
+      epic: 11,
+      name: 'User Management & RBAC',
+      priority: 2,
+      tasks: 352,
+      dependencies: [6, 9]
+    },
+    {
+      epic: 14,
+      name: 'Advanced Security & Authentication',
+      priority: 2,
+      tasks: 465,
+      dependencies: [11]
+    },
+    {
+      epic: 12,
+      name: 'Data Integration & Pipeline Management',
+      priority: 2,
+      tasks: 424,
+      dependencies: [6, 7]
+    },
+    {
+      epic: 13,
+      name: 'Performance Monitoring & Optimization',
+      priority: 2,
+      tasks: 473,
+      dependencies: [6, 10]
+    }
   ],
 
   // Business Logic & Features (Core value)
   businessLogic: [
-    { epic: 10, name: 'Advanced Analytics & Intelligence', priority: 3, tasks: 754, dependencies: [6, 7, 12] },
-    { epic: 17, name: 'Advanced Workflow & Automation', priority: 3, tasks: 554, dependencies: [7, 11, 12] },
-    { epic: 18, name: 'Policy & Compliance Management', priority: 3, tasks: 513, dependencies: [11, 14] },
-    { epic: 19, name: 'Policy Assignment & Configuration', priority: 3, tasks: 46, dependencies: [18] },
+    {
+      epic: 10,
+      name: 'Advanced Analytics & Intelligence',
+      priority: 3,
+      tasks: 754,
+      dependencies: [6, 7, 12]
+    },
+    {
+      epic: 17,
+      name: 'Advanced Workflow & Automation',
+      priority: 3,
+      tasks: 554,
+      dependencies: [7, 11, 12]
+    },
+    {
+      epic: 18,
+      name: 'Policy & Compliance Management',
+      priority: 3,
+      tasks: 513,
+      dependencies: [11, 14]
+    },
+    {
+      epic: 19,
+      name: 'Policy Assignment & Configuration',
+      priority: 3,
+      tasks: 46,
+      dependencies: [18]
+    }
   ],
 
   // Advanced Features (Enhancement value)
   advanced: [
-    { epic: 15, name: 'Internationalization & Localization', priority: 4, tasks: 450, dependencies: [9, 11] },
-    { epic: 16, name: 'Advanced Testing & QA', priority: 4, tasks: 405, dependencies: [6, 7, 13] },
-    { epic: 20, name: 'Advanced Monitoring & Observability', priority: 4, tasks: 1, dependencies: [13] },
-    { epic: 22, name: 'Advanced Visualization & Graph Navigation', priority: 4, tasks: 2, dependencies: [6, 7] },
+    {
+      epic: 15,
+      name: 'Internationalization & Localization',
+      priority: 4,
+      tasks: 450,
+      dependencies: [9, 11]
+    },
+    {
+      epic: 16,
+      name: 'Advanced Testing & QA',
+      priority: 4,
+      tasks: 405,
+      dependencies: [6, 7, 13]
+    },
+    {
+      epic: 20,
+      name: 'Advanced Monitoring & Observability',
+      priority: 4,
+      tasks: 1,
+      dependencies: [13]
+    },
+    {
+      epic: 22,
+      name: 'Advanced Visualization & Graph Navigation',
+      priority: 4,
+      tasks: 2,
+      dependencies: [6, 7]
+    }
   ],
 
   // Collaboration & Integration (User experience)
@@ -60,25 +150,55 @@ const EPIC_PRIORITIES = {
       name: 'Collaborative Workspaces & Real-time Co-editing',
       priority: 5,
       tasks: 41,
-      dependencies: [11, 22],
+      dependencies: [11, 22]
     },
-    { epic: 24, name: 'Custom Node & Extension Framework', priority: 5, tasks: 0, dependencies: [7, 14] },
-    { epic: 25, name: 'Multi-model Orchestration & Chain Management', priority: 5, tasks: 0, dependencies: [12, 22] },
+    {
+      epic: 24,
+      name: 'Custom Node & Extension Framework',
+      priority: 5,
+      tasks: 0,
+      dependencies: [7, 14]
+    },
+    {
+      epic: 25,
+      name: 'Multi-model Orchestration & Chain Management',
+      priority: 5,
+      tasks: 0,
+      dependencies: [12, 22]
+    }
   ],
 
   // Cutting Edge & Research (Future innovation)
   research: [
-    { epic: 26, name: 'AI Model & Training Management', priority: 6, tasks: 0, dependencies: [12, 14, 20] },
-    { epic: 27, name: 'Prompt Graph Execution Runtime', priority: 6, tasks: 0, dependencies: [6, 10, 13] },
-    { epic: 28, name: 'Domain-Specific Toolkits & Templates', priority: 6, tasks: 1, dependencies: [24, 25] },
+    {
+      epic: 26,
+      name: 'AI Model & Training Management',
+      priority: 6,
+      tasks: 0,
+      dependencies: [12, 14, 20]
+    },
+    {
+      epic: 27,
+      name: 'Prompt Graph Execution Runtime',
+      priority: 6,
+      tasks: 0,
+      dependencies: [6, 10, 13]
+    },
+    {
+      epic: 28,
+      name: 'Domain-Specific Toolkits & Templates',
+      priority: 6,
+      tasks: 1,
+      dependencies: [24, 25]
+    },
     {
       epic: 29,
       name: 'Advanced LLM Research & Experimental Features',
       priority: 6,
       tasks: 0,
-      dependencies: [25, 26, 27],
-    },
-  ],
+      dependencies: [25, 26, 27]
+    }
+  ]
 };
 
 // Sprint Themes and Focus Areas
@@ -87,19 +207,31 @@ const SPRINT_THEMES = [
   { phase: 1, theme: 'Core Foundation', sprints: [1, 2, 3, 4] },
 
   // Phase 2: Infrastructure (Sprints 5-10)
-  { phase: 2, theme: 'Infrastructure & Security', sprints: [5, 6, 7, 8, 9, 10] },
+  {
+    phase: 2,
+    theme: 'Infrastructure & Security',
+    sprints: [5, 6, 7, 8, 9, 10]
+  },
 
   // Phase 3: Business Logic (Sprints 11-18)
-  { phase: 3, theme: 'Core Business Features', sprints: [11, 12, 13, 14, 15, 16, 17, 18] },
+  {
+    phase: 3,
+    theme: 'Core Business Features',
+    sprints: [11, 12, 13, 14, 15, 16, 17, 18]
+  },
 
   // Phase 4: Advanced Features (Sprints 19-24)
-  { phase: 4, theme: 'Advanced Capabilities', sprints: [19, 20, 21, 22, 23, 24] },
+  {
+    phase: 4,
+    theme: 'Advanced Capabilities',
+    sprints: [19, 20, 21, 22, 23, 24]
+  },
 
   // Phase 5: Collaboration (Sprints 25-28)
   { phase: 5, theme: 'Collaboration & Integration', sprints: [25, 26, 27, 28] },
 
   // Phase 6: Research & Innovation (Sprints 29-32)
-  { phase: 6, theme: 'Research & Future Innovation', sprints: [29, 30, 31, 32] },
+  { phase: 6, theme: 'Research & Future Innovation', sprints: [29, 30, 31, 32] }
 ];
 
 async function loadCurrentState() {
@@ -128,7 +260,7 @@ function analyzeTasksByEpic(state) {
         lowPriorityTasks: 0,
         totalEstimatedHours: 0,
         totalStoryPoints: 0,
-        tasks: [],
+        tasks: []
       };
     });
 
@@ -178,7 +310,7 @@ function generateSprintPlan(epicAnalysis) {
       ...epic,
       analysis: epicAnalysis[epic.epic],
       completed: false,
-      assigned: false,
+      assigned: false
     };
   });
 
@@ -199,17 +331,20 @@ function generateSprintPlan(epicAnalysis) {
         totalTasks: 0,
         totalHours: 0,
         focus: '',
-        keyDeliverables: [],
+        keyDeliverables: []
       };
 
       // Find epics ready for this sprint (dependencies satisfied)
       const availableEpics = allEpics.filter(epic => {
         const epicData = dependencyGraph[epic.epic];
-        if (epicData.assigned || epicData.analysis.totalTasks === 0) return false;
+        if (epicData.assigned || epicData.analysis.totalTasks === 0)
+          return false;
 
         // Check if all dependencies are completed
         const depsCompleted = epic.dependencies.every(
-          dep => dependencyGraph[dep]?.completed || dependencyGraph[dep]?.analysis.totalTasks === 0
+          dep =>
+            dependencyGraph[dep]?.completed ||
+            dependencyGraph[dep]?.analysis.totalTasks === 0
         );
 
         return depsCompleted && epic.priority <= phase.phase + 2; // Allow some flexibility
@@ -227,8 +362,14 @@ function generateSprintPlan(epicAnalysis) {
       availableEpics.forEach(epic => {
         const analysis = epicAnalysis[epic.epic];
         if (analysis && analysis.totalStoryPoints > 0) {
-          const epicPortionPoints = Math.min(analysis.totalStoryPoints, remainingCapacity);
-          const epicPortionTasks = Math.ceil((epicPortionPoints / analysis.totalStoryPoints) * analysis.totalTasks);
+          const epicPortionPoints = Math.min(
+            analysis.totalStoryPoints,
+            remainingCapacity
+          );
+          const epicPortionTasks = Math.ceil(
+            (epicPortionPoints / analysis.totalStoryPoints) *
+              analysis.totalTasks
+          );
 
           if (epicPortionPoints >= 10) {
             // Minimum viable chunk
@@ -237,12 +378,13 @@ function generateSprintPlan(epicAnalysis) {
               name: epic.name,
               portionStoryPoints: epicPortionPoints,
               portionTasks: epicPortionTasks,
-              isPartial: epicPortionPoints < analysis.totalStoryPoints,
+              isPartial: epicPortionPoints < analysis.totalStoryPoints
             });
 
             sprint.totalStoryPoints += epicPortionPoints;
             sprint.totalTasks += epicPortionTasks;
-            sprint.totalHours += epicPortionPoints * SPRINT_CONFIG.hoursToPoints;
+            sprint.totalHours +=
+              epicPortionPoints * SPRINT_CONFIG.hoursToPoints;
 
             remainingCapacity -= epicPortionPoints;
 
@@ -289,22 +431,44 @@ function generateKeyDeliverables(sprint) {
   const deliverables = [];
 
   sprint.epics.forEach(epic => {
-    if (epic.epic === 6) deliverables.push('Performance optimization framework', 'Scalability architecture');
-    else if (epic.epic === 7) deliverables.push('Advanced node system', 'Node execution engine');
-    else if (epic.epic === 9) deliverables.push('Error handling system', 'User experience improvements');
-    else if (epic.epic === 10) deliverables.push('Analytics dashboard', 'Intelligence features');
-    else if (epic.epic === 11) deliverables.push('User management system', 'RBAC implementation');
-    else if (epic.epic === 12) deliverables.push('Data integration pipelines', 'ETL framework');
-    else if (epic.epic === 13) deliverables.push('Performance monitoring', 'Optimization tools');
-    else if (epic.epic === 14) deliverables.push('Security framework', 'Authentication system');
-    else if (epic.epic === 15) deliverables.push('I18n/L10n system', 'Multi-language support');
-    else if (epic.epic === 16) deliverables.push('Testing framework', 'QA automation');
-    else if (epic.epic === 17) deliverables.push('Workflow engine', 'Automation features');
-    else if (epic.epic === 18) deliverables.push('Policy management', 'Compliance tools');
-    else if (epic.epic === 19) deliverables.push('Policy configuration', 'Assignment tools');
-    else if (epic.epic === 20) deliverables.push('Advanced monitoring', 'Observability tools');
-    else if (epic.epic === 22) deliverables.push('Graph visualization', 'Navigation tools');
-    else if (epic.epic === 23) deliverables.push('Real-time collaboration', 'Workspace features');
+    if (epic.epic === 6)
+      deliverables.push(
+        'Performance optimization framework',
+        'Scalability architecture'
+      );
+    else if (epic.epic === 7)
+      deliverables.push('Advanced node system', 'Node execution engine');
+    else if (epic.epic === 9)
+      deliverables.push(
+        'Error handling system',
+        'User experience improvements'
+      );
+    else if (epic.epic === 10)
+      deliverables.push('Analytics dashboard', 'Intelligence features');
+    else if (epic.epic === 11)
+      deliverables.push('User management system', 'RBAC implementation');
+    else if (epic.epic === 12)
+      deliverables.push('Data integration pipelines', 'ETL framework');
+    else if (epic.epic === 13)
+      deliverables.push('Performance monitoring', 'Optimization tools');
+    else if (epic.epic === 14)
+      deliverables.push('Security framework', 'Authentication system');
+    else if (epic.epic === 15)
+      deliverables.push('I18n/L10n system', 'Multi-language support');
+    else if (epic.epic === 16)
+      deliverables.push('Testing framework', 'QA automation');
+    else if (epic.epic === 17)
+      deliverables.push('Workflow engine', 'Automation features');
+    else if (epic.epic === 18)
+      deliverables.push('Policy management', 'Compliance tools');
+    else if (epic.epic === 19)
+      deliverables.push('Policy configuration', 'Assignment tools');
+    else if (epic.epic === 20)
+      deliverables.push('Advanced monitoring', 'Observability tools');
+    else if (epic.epic === 22)
+      deliverables.push('Graph visualization', 'Navigation tools');
+    else if (epic.epic === 23)
+      deliverables.push('Real-time collaboration', 'Workspace features');
     else deliverables.push(`${epic.name} core features`);
   });
 
@@ -314,7 +478,9 @@ function generateKeyDeliverables(sprint) {
 async function createSprintPlan() {
   console.log('📋 PROMPT-SPAGHETTI SPRINT PLANNING ORGANIZATION');
   console.log('='.repeat(80));
-  console.log('🎯 Organizing 5,900 tasks across 29 epics into focused sprints\n');
+  console.log(
+    '🎯 Organizing 5,900 tasks across 29 epics into focused sprints\n'
+  );
 
   try {
     // Load current state
@@ -325,7 +491,9 @@ async function createSprintPlan() {
     const epicAnalysis = analyzeTasksByEpic(state);
 
     // Generate sprint plan
-    console.log('🗓️  Generating sprint plan with dependencies and priorities...\n');
+    console.log(
+      '🗓️  Generating sprint plan with dependencies and priorities...\n'
+    );
     const sprints = generateSprintPlan(epicAnalysis);
 
     // Output comprehensive sprint plan
@@ -333,7 +501,9 @@ async function createSprintPlan() {
     console.log('='.repeat(80));
 
     sprints.forEach(sprint => {
-      console.log(`\n📅 SPRINT ${sprint.number} (Phase ${sprint.phase}): ${sprint.theme}`);
+      console.log(
+        `\n📅 SPRINT ${sprint.number} (Phase ${sprint.phase}): ${sprint.theme}`
+      );
       console.log('-'.repeat(60));
       console.log(`🎯 Focus: ${sprint.focus}`);
       console.log(
@@ -344,7 +514,9 @@ async function createSprintPlan() {
       sprint.epics.forEach(epic => {
         const status = epic.isPartial ? '(PARTIAL)' : '(COMPLETE)';
         console.log(`   • Epic ${epic.epic}: ${epic.name} ${status}`);
-        console.log(`     └─ ${epic.portionTasks} tasks, ${epic.portionStoryPoints} story points`);
+        console.log(
+          `     └─ ${epic.portionTasks} tasks, ${epic.portionStoryPoints} story points`
+        );
       });
 
       console.log('\n🎯 KEY DELIVERABLES:');
@@ -357,7 +529,10 @@ async function createSprintPlan() {
 
     // Summary statistics
     const totalSprints = sprints.length;
-    const totalStoryPoints = sprints.reduce((sum, s) => sum + s.totalStoryPoints, 0);
+    const totalStoryPoints = sprints.reduce(
+      (sum, s) => sum + s.totalStoryPoints,
+      0
+    );
     const totalTasksPlanned = sprints.reduce((sum, s) => sum + s.totalTasks, 0);
     const totalHoursPlanned = sprints.reduce((sum, s) => sum + s.totalHours, 0);
     const estimatedWeeks = totalSprints * SPRINT_CONFIG.sprintDurationWeeks;
@@ -366,30 +541,50 @@ async function createSprintPlan() {
     console.log('\n📈 SPRINT PLAN SUMMARY');
     console.log('='.repeat(60));
     console.log(`📅 Total Sprints: ${totalSprints}`);
-    console.log(`⏱️  Estimated Duration: ${estimatedWeeks} weeks (${estimatedMonths} months)`);
+    console.log(
+      `⏱️  Estimated Duration: ${estimatedWeeks} weeks (${estimatedMonths} months)`
+    );
     console.log(`📊 Total Story Points: ${totalStoryPoints}`);
     console.log(`📋 Total Tasks: ${totalTasksPlanned} of 5,900`);
     console.log(`⏰ Total Hours: ${totalHoursPlanned}`);
-    console.log(`👥 Team Velocity: ${SPRINT_CONFIG.velocityPointsPerSprint} points per sprint`);
+    console.log(
+      `👥 Team Velocity: ${SPRINT_CONFIG.velocityPointsPerSprint} points per sprint`
+    );
 
     console.log('\n🎯 PHASE BREAKDOWN:');
     SPRINT_THEMES.forEach(phase => {
       const phaseSprints = sprints.filter(s => s.phase === phase.phase);
-      const phasePoints = phaseSprints.reduce((sum, s) => sum + s.totalStoryPoints, 0);
-      const phaseWeeks = phaseSprints.length * SPRINT_CONFIG.sprintDurationWeeks;
+      const phasePoints = phaseSprints.reduce(
+        (sum, s) => sum + s.totalStoryPoints,
+        0
+      );
+      const phaseWeeks =
+        phaseSprints.length * SPRINT_CONFIG.sprintDurationWeeks;
       console.log(
         `   Phase ${phase.phase}: ${phase.theme} - ${phaseSprints.length} sprints, ${phaseWeeks} weeks, ${phasePoints} points`
       );
     });
 
     console.log('\n🚀 RECOMMENDED NEXT ACTIONS:');
-    console.log('1. 🎯 Start Sprint 1: Focus on Epic 6 (Performance & Scalability)');
-    console.log('2. 🔄 Use: `node src/grab-tasks.js <agent-id>` to assign Epic 6 tasks');
-    console.log('3. 📋 Filter by tags: "performance", "scalability", "optimization"');
-    console.log('4. ⏰ Sprint cadence: 2-week sprints with regular retrospectives');
-    console.log('5. 📊 Track velocity and adjust capacity planning based on team performance');
+    console.log(
+      '1. 🎯 Start Sprint 1: Focus on Epic 6 (Performance & Scalability)'
+    );
+    console.log(
+      '2. 🔄 Use: `node src/grab-tasks.js <agent-id>` to assign Epic 6 tasks'
+    );
+    console.log(
+      '3. 📋 Filter by tags: "performance", "scalability", "optimization"'
+    );
+    console.log(
+      '4. ⏰ Sprint cadence: 2-week sprints with regular retrospectives'
+    );
+    console.log(
+      '5. 📊 Track velocity and adjust capacity planning based on team performance'
+    );
 
-    console.log('\n✨ Sprint planning complete! Ready for systematic execution.');
+    console.log(
+      '\n✨ Sprint planning complete! Ready for systematic execution.'
+    );
 
     return {
       totalSprints,
@@ -397,7 +592,7 @@ async function createSprintPlan() {
       totalStoryPoints,
       totalTasksPlanned,
       sprints,
-      phases: SPRINT_THEMES.length,
+      phases: SPRINT_THEMES.length
     };
   } catch (error) {
     console.error('❌ Failed to create sprint plan:', error);
@@ -417,5 +612,5 @@ module.exports = {
   createSprintPlan,
   EPIC_PRIORITIES,
   SPRINT_THEMES,
-  SPRINT_CONFIG,
+  SPRINT_CONFIG
 };

@@ -11,4 +11,3 @@ describe('Node Registry Source of Truth', () => {
     expect(registryImpl).toBe(WeightedChoiceNode);
   });
 });
-

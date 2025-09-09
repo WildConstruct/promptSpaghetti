@@ -276,8 +276,14 @@ export interface CrossPlatformAuth {
 ```typescript
 export class EncryptionService {
   // Client-side encryption before sync
-  async encryptDocument(doc: GraphDocument, key: Uint8Array): Promise<EncryptedDoc>;
-  async decryptDocument(encrypted: EncryptedDoc, key: Uint8Array): Promise<GraphDocument>;
+  async encryptDocument(
+    doc: GraphDocument,
+    key: Uint8Array
+  ): Promise<EncryptedDoc>;
+  async decryptDocument(
+    encrypted: EncryptedDoc,
+    key: Uint8Array
+  ): Promise<GraphDocument>;
 
   // Key management (Epic 11 integration)
   async deriveKey(userToken: AuthToken, projectId: string): Promise<Uint8Array>;
@@ -301,7 +307,9 @@ export class PerformanceMonitor {
   private memoryTracker: MemoryTracker;
 
   async measureRenderingPerformance(): Promise<PerformanceMetrics>;
-  async optimizeForDevice(deviceCapabilities: DeviceInfo): Promise<OptimizationConfig>;
+  async optimizeForDevice(
+    deviceCapabilities: DeviceInfo
+  ): Promise<OptimizationConfig>;
 }
 ```
 
@@ -314,7 +322,10 @@ export class SyncOptimizer {
   batchOperations(ops: SyncOperation[]): BatchedOperation;
 
   // Conflict optimization
-  predictConflicts(localOps: Operation[], remoteOps: Operation[]): ConflictPrediction[];
+  predictConflicts(
+    localOps: Operation[],
+    remoteOps: Operation[]
+  ): ConflictPrediction[];
   optimizeResolution(conflicts: Conflict[]): ResolutionStrategy;
 }
 ```
@@ -463,7 +474,7 @@ export enum ErrorCategory {
   AUTH_ERROR = 'auth',
   STORAGE_ERROR = 'storage',
   NETWORK_ERROR = 'network',
-  PLATFORM_ERROR = 'platform',
+  PLATFORM_ERROR = 'platform'
 }
 
 export interface ErrorHandler {

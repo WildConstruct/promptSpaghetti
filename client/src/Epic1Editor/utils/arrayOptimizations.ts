@@ -87,7 +87,7 @@ export function unique<T, K = T>(
 ): T[] {
   const seen = new Set<K>();
   const result: T[] = [];
-  
+
   for (const item of array) {
     const key = keySelector ? keySelector(item) : (item as unknown as K);
     if (!seen.has(key)) {
@@ -95,7 +95,7 @@ export function unique<T, K = T>(
       result.push(item);
     }
   }
-  
+
   return result;
 }
 
@@ -109,7 +109,7 @@ export function partition<T>(
 ): [T[], T[]] {
   const truthy: T[] = [];
   const falsy: T[] = [];
-  
+
   for (let i = 0; i < array.length; i++) {
     if (predicate(array[i], i)) {
       truthy.push(array[i]);
@@ -117,7 +117,7 @@ export function partition<T>(
       falsy.push(array[i]);
     }
   }
-  
+
   return [truthy, falsy];
 }
 
@@ -135,19 +135,19 @@ export function aggregate<T>(
   }
 ): Record<string, any> {
   const result: Record<string, any> = {};
-  
+
   // Initialize
   for (const key in aggregators) {
     result[key] = aggregators[key].initial;
   }
-  
+
   // Single pass
   for (let i = 0; i < array.length; i++) {
     for (const key in aggregators) {
       result[key] = aggregators[key].reducer(result[key], array[i], i);
     }
   }
-  
+
   return result;
 }
 
@@ -178,25 +178,25 @@ export function memoizeArrayOp<T, Args extends any[], R>(
   keyGenerator?: (array: T[], ...args: Args) => string
 ): (array: T[], ...args: Args) => R {
   const cache = new Map<string, R>();
-  
+
   return (array: T[], ...args: Args): R => {
-    const key = keyGenerator 
+    const key = keyGenerator
       ? keyGenerator(array, ...args)
       : JSON.stringify({ length: array.length, args });
-    
+
     if (cache.has(key)) {
       return cache.get(key)!;
     }
-    
+
     const result = operation(array, ...args);
     cache.set(key, result);
-    
+
     // Limit cache size
     if (cache.size > 100) {
       const firstKey = cache.keys().next().value;
       cache.delete(firstKey);
     }
-    
+
     return result;
   };
 }

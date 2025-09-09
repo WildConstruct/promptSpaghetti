@@ -144,13 +144,15 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
   onClose,
   onSave
 }) => {
-  const [provider, setProvider] = useState<'openrouter' | 'openai' | 'anthropic'>('openrouter');
+  const [provider, setProvider] = useState<
+    'openrouter' | 'openai' | 'anthropic'
+  >('openrouter');
   const [apiKey, setApiKey] = useState('');
   const [model, setModel] = useState('openai/gpt-3.5-turbo');
   const [temperature, setTemperature] = useState(0.7);
   const [maxTokens, setMaxTokens] = useState(500);
   const [showApiKey, setShowApiKey] = useState(false);
-  
+
   const handleSave = useCallback(() => {
     const config = {
       provider,
@@ -159,41 +161,47 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
       temperature,
       maxTokens
     };
-    
+
     // Update the service
     const llmService = getLLMService();
     llmService.updateConfig(config);
-    
+
     // Save to localStorage for persistence
     localStorage.setItem('llm-config', JSON.stringify(config));
-    
+
     onSave?.(config);
     onClose();
   }, [provider, apiKey, model, temperature, maxTokens, onSave, onClose]);
-  
+
   if (!isOpen) return null;
-  
+
   return (
     <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.dialog} onClick={(e) => e.stopPropagation()}>
+      <div style={styles.dialog} onClick={e => e.stopPropagation()}>
         <div style={styles.header}>
           <h2 style={{ margin: 0 }}>AI Parser Configuration</h2>
-          <button style={styles.closeButton} onClick={onClose}>×</button>
+          <button style={styles.closeButton} onClick={onClose}>
+            ×
+          </button>
         </div>
-        
+
         <div style={styles.body}>
           <div style={styles.section}>
             <h3 style={styles.sectionTitle}>Provider Settings</h3>
-            
+
             <div style={styles.formGroup}>
               <label style={styles.label}>Provider</label>
-              <select style={styles.select} value={provider} onChange={(e) => setProvider(e.target.value as any)}>
+              <select
+                style={styles.select}
+                value={provider}
+                onChange={e => setProvider(e.target.value as any)}
+              >
                 <option value="openrouter">OpenRouter</option>
                 <option value="openai">OpenAI</option>
                 <option value="anthropic">Anthropic</option>
               </select>
             </div>
-            
+
             <div style={styles.formGroup}>
               <label style={styles.label}>API Key</label>
               <div style={styles.apiKeyInput}>
@@ -201,7 +209,7 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
                   style={{ ...styles.input, flex: 1 }}
                   type={showApiKey ? 'text' : 'password'}
                   value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
+                  onChange={e => setApiKey(e.target.value)}
                   placeholder="sk-..."
                 />
                 <button
@@ -211,12 +219,18 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
                   {showApiKey ? '🙈' : '👁️'}
                 </button>
               </div>
-              <small style={styles.small}>Your API key is stored locally and never sent to our servers</small>
+              <small style={styles.small}>
+                Your API key is stored locally and never sent to our servers
+              </small>
             </div>
-            
+
             <div style={styles.formGroup}>
               <label style={styles.label}>Model</label>
-              <select style={styles.select} value={model} onChange={(e) => setModel(e.target.value)}>
+              <select
+                style={styles.select}
+                value={model}
+                onChange={e => setModel(e.target.value)}
+              >
                 {provider === 'openrouter' && (
                   <>
                     <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
@@ -241,12 +255,14 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
               </select>
             </div>
           </div>
-          
+
           <div style={styles.section}>
             <h3 style={styles.sectionTitle}>Generation Settings</h3>
-            
+
             <div style={styles.formGroup}>
-              <label style={styles.label}>Temperature: {temperature.toFixed(1)}</label>
+              <label style={styles.label}>
+                Temperature: {temperature.toFixed(1)}
+              </label>
               <input
                 style={{ ...styles.input, cursor: 'pointer' }}
                 type="range"
@@ -254,11 +270,13 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
                 max="2"
                 step="0.1"
                 value={temperature}
-                onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                onChange={e => setTemperature(parseFloat(e.target.value))}
               />
-              <small style={styles.small}>Higher values make output more creative</small>
+              <small style={styles.small}>
+                Higher values make output more creative
+              </small>
             </div>
-            
+
             <div style={styles.formGroup}>
               <label style={styles.label}>Max Tokens</label>
               <input
@@ -267,12 +285,14 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
                 min="50"
                 max="2000"
                 value={maxTokens}
-                onChange={(e) => setMaxTokens(parseInt(e.target.value))}
+                onChange={e => setMaxTokens(parseInt(e.target.value))}
               />
-              <small style={styles.small}>Maximum length of generated content</small>
+              <small style={styles.small}>
+                Maximum length of generated content
+              </small>
             </div>
           </div>
-          
+
           <div style={styles.section}>
             <h3 style={styles.sectionTitle}>Cost Estimation</h3>
             <div style={styles.costInfo}>
@@ -287,10 +307,14 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
             </div>
           </div>
         </div>
-        
+
         <div style={styles.footer}>
-          <button style={styles.btnSecondary} onClick={onClose}>Cancel</button>
-          <button style={styles.btnPrimary} onClick={handleSave}>Save Configuration</button>
+          <button style={styles.btnSecondary} onClick={onClose}>
+            Cancel
+          </button>
+          <button style={styles.btnPrimary} onClick={handleSave}>
+            Save Configuration
+          </button>
         </div>
       </div>
     </div>

@@ -59,10 +59,14 @@ program
       console.log(chalk.green('\n✅ Custom node scaffolded successfully!'));
       console.log(chalk.gray(`📁 Location: ${outputDir}`));
       console.log(chalk.gray('\n📖 Next steps:'));
-      console.log(chalk.gray('  1. cd ' + path.relative(process.cwd(), outputDir)));
+      console.log(
+        chalk.gray('  1. cd ' + path.relative(process.cwd(), outputDir))
+      );
       console.log(chalk.gray('  2. npm install'));
       console.log(chalk.gray('  3. npm test'));
-      console.log(chalk.gray('  4. Edit the generated files to implement your node logic'));
+      console.log(
+        chalk.gray('  4. Edit the generated files to implement your node logic')
+      );
     } catch (error) {
       console.error(chalk.red('❌ Error:'), (error as Error).message);
       process.exit(1);
@@ -77,21 +81,24 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
       message: 'Node type identifier (e.g., my-company.text-processor):',
       validate: (input: string) => {
         if (!input.trim()) return 'Name is required';
-        if (!/^[a-zA-Z0-9.-]+$/.test(input)) return 'Name must contain only alphanumeric characters, dots, and hyphens';
+        if (!/^[a-zA-Z0-9.-]+$/.test(input))
+          return 'Name must contain only alphanumeric characters, dots, and hyphens';
         return true;
-      },
+      }
     },
     {
       type: 'input',
       name: 'displayName',
       message: 'Display name:',
-      validate: (input: string) => (input.trim() ? true : 'Display name is required'),
+      validate: (input: string) =>
+        input.trim() ? true : 'Display name is required'
     },
     {
       type: 'input',
       name: 'description',
       message: 'Description:',
-      validate: (input: string) => (input.trim() ? true : 'Description is required'),
+      validate: (input: string) =>
+        input.trim() ? true : 'Description is required'
     },
     {
       type: 'list',
@@ -104,44 +111,45 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
         'External APIs',
         'Math & Computation',
         'Utilities',
-        'Custom',
-      ],
+        'Custom'
+      ]
     },
     {
       type: 'input',
       name: 'author',
       message: 'Author name:',
-      validate: (input: string) => (input.trim() ? true : 'Author name is required'),
+      validate: (input: string) =>
+        input.trim() ? true : 'Author name is required'
     },
     {
       type: 'input',
       name: 'email',
-      message: 'Author email (optional):',
+      message: 'Author email (optional):'
     },
     {
       type: 'confirm',
       name: 'stateful',
       message: 'Does this node maintain state between executions?',
-      default: false,
+      default: false
     },
     {
       type: 'confirm',
       name: 'cacheable',
       message: 'Can results be cached for performance?',
-      default: true,
+      default: true
     },
     {
       type: 'confirm',
       name: 'allowFileAccess',
       message: 'Does this node need file system access?',
-      default: false,
+      default: false
     },
     {
       type: 'confirm',
       name: 'allowNetworkAccess',
       message: 'Does this node need network access?',
-      default: false,
-    },
+      default: false
+    }
   ]);
 
   // Prompt for inputs
@@ -153,8 +161,8 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
       {
         type: 'input',
         name: 'name',
-        message: 'Input name (leave empty to stop adding inputs):',
-      },
+        message: 'Input name (leave empty to stop adding inputs):'
+      }
     ]);
 
     if (!inputConfig.name.trim()) {
@@ -167,26 +175,26 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
         type: 'list',
         name: 'type',
         message: 'Input type:',
-        choices: ['string', 'number', 'boolean', 'array', 'object', 'any'],
+        choices: ['string', 'number', 'boolean', 'array', 'object', 'any']
       },
       {
         type: 'confirm',
         name: 'required',
         message: 'Is this input required?',
-        default: true,
+        default: true
       },
       {
         type: 'input',
         name: 'description',
-        message: 'Input description (optional):',
-      },
+        message: 'Input description (optional):'
+      }
     ]);
 
     inputs.push({
       name: inputConfig.name,
       type: inputDetails.type,
       required: inputDetails.required,
-      description: inputDetails.description || undefined,
+      description: inputDetails.description || undefined
     });
   }
 
@@ -199,8 +207,8 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
       {
         type: 'input',
         name: 'name',
-        message: 'Output name (leave empty to stop adding outputs):',
-      },
+        message: 'Output name (leave empty to stop adding outputs):'
+      }
     ]);
 
     if (!outputConfig.name.trim()) {
@@ -213,24 +221,29 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
         type: 'list',
         name: 'type',
         message: 'Output type:',
-        choices: ['string', 'number', 'boolean', 'array', 'object', 'any'],
+        choices: ['string', 'number', 'boolean', 'array', 'object', 'any']
       },
       {
         type: 'input',
         name: 'description',
-        message: 'Output description (optional):',
-      },
+        message: 'Output description (optional):'
+      }
     ]);
 
     outputs.push({
       name: outputConfig.name,
       type: outputDetails.type,
-      description: outputDetails.description || undefined,
+      description: outputDetails.description || undefined
     });
   }
 
   if (inputs.length === 0) {
-    inputs.push({ name: 'input', type: 'any', required: true, description: 'Main input' });
+    inputs.push({
+      name: 'input',
+      type: 'any',
+      required: true,
+      description: 'Main input'
+    });
   }
 
   if (outputs.length === 0) {
@@ -250,8 +263,8 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
     cacheable: answers.cacheable,
     security: {
       allowFileAccess: answers.allowFileAccess,
-      allowNetworkAccess: answers.allowNetworkAccess,
-    },
+      allowNetworkAccess: answers.allowNetworkAccess
+    }
   };
 }
 
@@ -262,18 +275,23 @@ function getDefaultConfig(): NodeScaffoldConfig {
     description: 'An example custom node implementation',
     category: 'Utilities',
     author: 'Developer',
-    inputs: [{ name: 'input', type: 'any', required: true, description: 'Main input' }],
+    inputs: [
+      { name: 'input', type: 'any', required: true, description: 'Main input' }
+    ],
     outputs: [{ name: 'result', type: 'any', description: 'Main output' }],
     stateful: false,
     cacheable: true,
     security: {
       allowFileAccess: false,
-      allowNetworkAccess: false,
-    },
+      allowNetworkAccess: false
+    }
   };
 }
 
-async function scaffoldNode(config: NodeScaffoldConfig, outputDir: string): Promise<void> {
+async function scaffoldNode(
+  config: NodeScaffoldConfig,
+  outputDir: string
+): Promise<void> {
   // Create directory
   await fs.mkdir(outputDir, { recursive: true });
 
@@ -286,7 +304,10 @@ async function scaffoldNode(config: NodeScaffoldConfig, outputDir: string): Prom
   await generateJestConfig(outputDir);
 }
 
-async function generatePackageJson(config: NodeScaffoldConfig, outputDir: string): Promise<void> {
+async function generatePackageJson(
+  config: NodeScaffoldConfig,
+  outputDir: string
+): Promise<void> {
   const packageJson = {
     name: config.name.replace(/\./g, '-'),
     version: '1.0.0',
@@ -297,26 +318,36 @@ async function generatePackageJson(config: NodeScaffoldConfig, outputDir: string
       build: 'tsc',
       test: 'jest',
       'test:watch': 'jest --watch',
-      dev: 'tsc --watch',
+      dev: 'tsc --watch'
     },
     dependencies: {
-      '@prompt-spaghetti/custom-node-sdk': '^0.1.0',
+      '@prompt-spaghetti/custom-node-sdk': '^0.1.0'
     },
     devDependencies: {
       '@types/jest': '^29.0.0',
       '@types/node': '^20.0.0',
       jest: '^29.0.0',
       'ts-jest': '^29.0.0',
-      typescript: '^5.0.0',
+      typescript: '^5.0.0'
     },
     author: config.email ? `${config.author} <${config.email}>` : config.author,
-    keywords: ['promptscape', 'custom-node', config.category.toLowerCase().replace(/\s+/g, '-')],
+    keywords: [
+      'promptscape',
+      'custom-node',
+      config.category.toLowerCase().replace(/\s+/g, '-')
+    ]
   };
 
-  await fs.writeFile(path.join(outputDir, 'package.json'), JSON.stringify(packageJson, null, 2));
+  await fs.writeFile(
+    path.join(outputDir, 'package.json'),
+    JSON.stringify(packageJson, null, 2)
+  );
 }
 
-async function generateNodeImplementation(config: NodeScaffoldConfig, outputDir: string): Promise<void> {
+async function generateNodeImplementation(
+  config: NodeScaffoldConfig,
+  outputDir: string
+): Promise<void> {
   const className = config.displayName.replace(/[^a-zA-Z0-9]/g, '');
 
   const content = `import {
@@ -356,7 +387,10 @@ export class ${className} extends CustomNodeBase {
         config.outputs.length === 1 && config.outputs[0].name === 'result'
           ? 'const result = inputs.input; // Replace with actual logic'
           : config.outputs
-              .map(output => `const ${output.name} = undefined; // TODO: Implement logic for ${output.name}`)
+              .map(
+                output =>
+                  `const ${output.name} = undefined; // TODO: Implement logic for ${output.name}`
+              )
               .join('\n      ')
       }
 
@@ -411,7 +445,10 @@ export const nodeSchema = {
   await fs.writeFile(path.join(outputDir, 'index.ts'), content);
 }
 
-async function generateTests(config: NodeScaffoldConfig, outputDir: string): Promise<void> {
+async function generateTests(
+  config: NodeScaffoldConfig,
+  outputDir: string
+): Promise<void> {
   const className = config.displayName.replace(/[^a-zA-Z0-9]/g, '');
 
   const content = `import { ${className}, nodeMetadata, nodeSchema } from './index';
@@ -536,7 +573,10 @@ function getTestValue(type: string): any {
   await fs.writeFile(path.join(outputDir, 'index.test.ts'), content);
 }
 
-async function generateReadme(config: NodeScaffoldConfig, outputDir: string): Promise<void> {
+async function generateReadme(
+  config: NodeScaffoldConfig,
+  outputDir: string
+): Promise<void> {
   const content = `# ${config.displayName}
 
 ${config.description}
@@ -618,13 +658,16 @@ async function generateTsConfig(outputDir: string): Promise<void> {
       strict: true,
       esModuleInterop: true,
       skipLibCheck: true,
-      forceConsistentCasingInFileNames: true,
+      forceConsistentCasingInFileNames: true
     },
     include: ['*.ts'],
-    exclude: ['dist', 'node_modules', '**/*.test.ts'],
+    exclude: ['dist', 'node_modules', '**/*.test.ts']
   };
 
-  await fs.writeFile(path.join(outputDir, 'tsconfig.json'), JSON.stringify(tsConfig, null, 2));
+  await fs.writeFile(
+    path.join(outputDir, 'tsconfig.json'),
+    JSON.stringify(tsConfig, null, 2)
+  );
 }
 
 async function generateJestConfig(outputDir: string): Promise<void> {

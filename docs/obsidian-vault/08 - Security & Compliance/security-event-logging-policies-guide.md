@@ -220,7 +220,7 @@ enum SecurityEventSeverity {
   HIGH = 'high', // Urgent attention needed
   MEDIUM = 'medium', // Standard response timeline
   LOW = 'low', // Routine monitoring
-  INFO = 'info', // Informational logging
+  INFO = 'info' // Informational logging
 }
 ```
 
@@ -397,7 +397,7 @@ Escalation: Security analyst (if persistent)
 const securityEvent: SecurityEvent = {
   event_id: crypto.randomUUID(),
   event_type: SecurityEventType.CODE_INJECTION_ATTEMPT,
-  severity: SecurityEventSeverity.CRITICAL,
+  severity: SecurityEventSeverity.CRITICAL
   // ... event details
 };
 
@@ -424,26 +424,26 @@ securityEventPolicyEngine.registerPolicy({
   detection_rules: {
     conditions: [{ field: 'request_rate', operator: 'gt', value: 100 }],
     time_window: 60000,
-    frequency_threshold: 5,
+    frequency_threshold: 5
   },
   response_actions: {
     immediate_actions: ['rate_limit', 'generate_alert'],
     escalation_actions: ['notify_api_team'],
     notification_channels: ['slack', 'email'],
-    automated_containment: true,
+    automated_containment: true
   },
   compliance_mapping: {
     frameworks: [ComplianceFramework.NIST],
     requirements: ['api_security'],
     retention_period: 365,
-    requires_encryption: false,
+    requires_encryption: false
   },
   reporting: {
     real_time_alerts: true,
     periodic_reports: ['daily'],
     stakeholders: ['api_team'],
-    external_reporting: false,
-  },
+    external_reporting: false
+  }
 });
 ```
 
@@ -543,12 +543,12 @@ const soxMapping = {
     'ITGC-01: Change Management Controls',
     'ITGC-02: Logical Access Controls',
     'ITGC-03: System Development Controls',
-    'ITGC-04: Computer Operations Controls',
+    'ITGC-04: Computer Operations Controls'
   ],
   retention_period: 2555, // 7 years
   requires_encryption: true,
   external_reporting: true,
-  notification_timeline: 'immediate',
+  notification_timeline: 'immediate'
 };
 
 // GDPR Data Protection Mapping
@@ -558,12 +558,12 @@ const gdprMapping = {
     'Article 15: Right of Access',
     'Article 17: Right to Erasure',
     'Article 20: Right to Data Portability',
-    'Article 33: Breach Notification',
+    'Article 33: Breach Notification'
   ],
   retention_period: 2190, // 6 years
   requires_encryption: true,
   external_reporting: true,
-  notification_timeline: '72 hours', // For breaches
+  notification_timeline: '72 hours' // For breaches
 };
 ```
 
@@ -715,7 +715,11 @@ securityEventPolicyEngine.setPolicyEnabled(policyId, enabled);
 
 ```typescript
 // Generate compliance report for framework
-const report = securityEventPolicyEngine.generateComplianceReport(ComplianceFramework.SOX, startDate, endDate);
+const report = securityEventPolicyEngine.generateComplianceReport(
+  ComplianceFramework.SOX,
+  startDate,
+  endDate
+);
 
 // Returns comprehensive compliance analysis
 interface ComplianceReport {
@@ -921,7 +925,7 @@ if (event.event_type === SecurityEventType.GDPR_DATA_SUBJECT_REQUEST) {
     compliance_framework: 'gdpr',
     // Enhanced with policy engine context
     policy_id: 'GDPR_001',
-    automated_response: event.automated_response,
+    automated_response: event.automated_response
   });
 }
 ```
@@ -938,11 +942,11 @@ const siemChannel: NotificationChannel = {
   endpoint: process.env.SIEM_ENDPOINT,
   credentials: {
     api_key: process.env.SIEM_API_KEY,
-    tenant_id: process.env.SIEM_TENANT_ID,
+    tenant_id: process.env.SIEM_TENANT_ID
   },
   enabled: true,
   severity_filter: Object.values(SecurityEventSeverity),
-  rate_limit: { max_per_minute: 100, burst_limit: 200 },
+  rate_limit: { max_per_minute: 100, burst_limit: 200 }
 };
 ```
 
@@ -1033,18 +1037,18 @@ const securityConfig = {
   encryption: {
     enabled: true,
     algorithm: 'AES-256-GCM',
-    key_rotation_days: 90,
+    key_rotation_days: 90
   },
   authentication: {
     required: true,
     token_expiry: 3600, // 1 hour
-    refresh_threshold: 300, // 5 minutes
+    refresh_threshold: 300 // 5 minutes
   },
   rate_limiting: {
     enabled: true,
     max_requests_per_minute: 1000,
-    burst_capacity: 2000,
-  },
+    burst_capacity: 2000
+  }
 };
 ```
 
@@ -1061,14 +1065,14 @@ const getSystemHealth = () => ({
     policy_engine: { status: 'healthy', policies_loaded: 8 },
     notification_channels: { status: 'healthy', active_channels: 5 },
     audit_integration: { status: 'healthy', events_processed: 1247 },
-    compliance_reporting: { status: 'healthy', frameworks_supported: 10 },
+    compliance_reporting: { status: 'healthy', frameworks_supported: 10 }
   },
   metrics: {
     events_processed_last_hour: 156,
     average_processing_time_ms: 145,
     false_positive_rate: 2.3,
-    policy_effectiveness_score: 94.7,
-  },
+    policy_effectiveness_score: 94.7
+  }
 });
 ```
 
@@ -1080,17 +1084,17 @@ const performanceMetrics = {
   response_times: {
     p50: 95, // milliseconds
     p95: 280, // milliseconds
-    p99: 450, // milliseconds
+    p99: 450 // milliseconds
   },
   throughput: {
     events_per_second: 45,
-    peak_events_per_second: 120,
+    peak_events_per_second: 120
   },
   reliability: {
     uptime_percentage: 99.97,
     error_rate: 0.03,
-    false_positive_rate: 2.3,
-  },
+    false_positive_rate: 2.3
+  }
 };
 ```
 

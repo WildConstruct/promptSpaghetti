@@ -24,6 +24,7 @@ The Asset Fragment Manifest System is a separate manifest type specifically for 
 ## Asset Fragment Structure
 
 ### Directory Layout
+
 ```
 assets/
 ├── generated/          # Raw output from asset generator
@@ -94,6 +95,7 @@ When adding new asset fragments:
 ## Integration with Asset Browser
 
 The asset browser should:
+
 - Read `asset-fragments-manifest.json` separately from other manifests
 - Display fragments as draggable components
 - Support collapsing to single region when dropped
@@ -115,5 +117,5 @@ The asset browser should:
 
 ---
 
-*Last Updated: 2025-01-15*
-*Maintained by: Aspen (Asset Generator Agent)*
+_Last Updated: 2025-01-15_
+_Maintained by: Aspen (Asset Generator Agent)_

@@ -76,12 +76,12 @@ export class ComplianceAuditSystem {
   private retentionPolicies: Map<string, DataRetentionPolicy> = new Map();
   private deletionRequests: Map<string, DeletionRequest> = new Map();
   private sessionId: string;
-  
+
   constructor() {
     this.sessionId = this.generateSessionId();
     this.initializeDefaultPolicies();
   }
-  
+
   // Initialize default retention policies
   private initializeDefaultPolicies(): void {
     this.retentionPolicies.set('metadata', {
@@ -90,14 +90,14 @@ export class ComplianceAuditSystem {
       auto_delete: false,
       archive_before_delete: true
     });
-    
+
     this.retentionPolicies.set('audit', {
       type: 'audit',
       retention_days: 2555, // 7 years for compliance
       auto_delete: false,
       archive_before_delete: true
     });
-    
+
     this.retentionPolicies.set('consent', {
       type: 'consent',
       retention_days: 2555, // 7 years for legal requirements
@@ -105,24 +105,26 @@ export class ComplianceAuditSystem {
       archive_before_delete: true
     });
   }
-  
+
   // Log an audit entry
-  async logAudit(entry: Omit<AuditEntry, 'id' | 'timestamp' | 'session_id'>): Promise<AuditEntry> {
+  async logAudit(
+    entry: Omit<AuditEntry, 'id' | 'timestamp' | 'session_id'>
+  ): Promise<AuditEntry> {
     const auditEntry: AuditEntry = {
       id: this.generateAuditId(),
       timestamp: new Date().toISOString(),
       session_id: this.sessionId,
       ...entry
     };
-    
+
     this.auditLog.set(auditEntry.id, auditEntry);
-    
+
     // In production, this would persist to a database
     await this.persistAuditEntry(auditEntry);
-    
+
     return auditEntry;
   }
-  
+
   // Record consent
   async recordConsent(
     entity_id: string,
@@ -140,9 +142,9 @@ export class ComplianceAuditSystem {
       purposes,
       expiry_date: this.calculateExpiryDate()
     };
-    
+
     this.consentRecords.set(record.id, record);
-    
+
     // Log the consent action
     await this.logAudit({
       action: consent_given ? 'consent_granted' : 'consent_refused',
@@ -153,29 +155,33 @@ export class ComplianceAuditSystem {
       success: true,
       details: { purposes }
     });
-    
+
     return record;
   }
-  
+
   // Check consent status
   async checkConsent(entity_id: string): Promise<ConsentRecord | null> {
     // Find most recent consent record for entity
     const records = Array.from(this.consentRecords.values())
       .filter(r => r.entity_id === entity_id && !r.withdrawal_date)
-      .sort((a, b) => new Date(b.consent_date).getTime() - new Date(a.consent_date).getTime());
-    
+      .sort(
+        (a, b) =>
+          new Date(b.consent_date).getTime() -
+          new Date(a.consent_date).getTime()
+      );
+
     if (records.length === 0) return null;
-    
+
     const record = records[0];
-    
+
     // Check if consent has expired
     if (record.expiry_date && new Date(record.expiry_date) < new Date()) {
       return null;
     }
-    
+
     return record;
   }
-  
+
   // Process deletion request (Right to be Forgotten)
   async processDeletionRequest(
     entity_id: string,
@@ -192,9 +198,9 @@ export class ComplianceAuditSystem {
       reason,
       status: 'pending'
     };
-    
+
     this.deletionRequests.set(request.id, request);
-    
+
     // Log the deletion request
     await this.logAudit({
       action: 'deletion_requested',
@@ -204,32 +210,32 @@ export class ComplianceAuditSystem {
       success: true,
       details: { reason }
     });
-    
+
     // Process the deletion asynchronously
     this.executeDelection(request);
-    
+
     return request;
   }
-  
+
   // Execute deletion
   private async executeDelection(request: DeletionRequest): Promise<void> {
     request.status = 'processing';
     const deletedItems: string[] = [];
-    
+
     try {
       // In production, this would delete from all systems
       // For now, simulate deletion process
       await this.simulateDelay(1000);
-      
+
       // Mark related data for deletion
       deletedItems.push(`metadata_${request.entity_id}`);
       deletedItems.push(`assets_${request.entity_id}`);
       deletedItems.push(`history_${request.entity_id}`);
-      
+
       request.deleted_items = deletedItems;
       request.status = 'completed';
       request.completion_date = new Date().toISOString();
-      
+
       // Log successful deletion
       await this.logAudit({
         action: 'deletion_completed',
@@ -242,7 +248,7 @@ export class ComplianceAuditSystem {
     } catch (error) {
       request.status = 'failed';
       request.error = String(error);
-      
+
       // Log failed deletion
       await this.logAudit({
         action: 'deletion_failed',
@@ -254,7 +260,7 @@ export class ComplianceAuditSystem {
       });
     }
   }
-  
+
   // Generate compliance report
   async generateComplianceReport(
     report_type: ComplianceReport['report_type'],
@@ -264,35 +270,47 @@ export class ComplianceAuditSystem {
   ): Promise<ComplianceReport> {
     const startDate = new Date(period_start);
     const endDate = new Date(period_end);
-    
+
     // Filter audit entries for the period
-    const periodAuditEntries = Array.from(this.auditLog.values()).filter(entry => {
-      const entryDate = new Date(entry.timestamp);
-      return entryDate >= startDate && entryDate <= endDate;
-    });
-    
+    const periodAuditEntries = Array.from(this.auditLog.values()).filter(
+      entry => {
+        const entryDate = new Date(entry.timestamp);
+        return entryDate >= startDate && entryDate <= endDate;
+      }
+    );
+
     // Filter consent records for the period
-    const periodConsents = Array.from(this.consentRecords.values()).filter(record => {
-      const recordDate = new Date(record.consent_date);
-      return recordDate >= startDate && recordDate <= endDate;
-    });
-    
+    const periodConsents = Array.from(this.consentRecords.values()).filter(
+      record => {
+        const recordDate = new Date(record.consent_date);
+        return recordDate >= startDate && recordDate <= endDate;
+      }
+    );
+
     // Calculate summary statistics
     const summary = {
       total_extras: new Set(periodAuditEntries.map(e => e.target)).size,
       consented: periodConsents.filter(c => c.consent_given).length,
       pending_consent: periodConsents.filter(c => !c.consent_given).length,
-      data_processed: periodAuditEntries.filter(e => e.action === 'metadata_extracted').length,
-      deletion_requests: Array.from(this.deletionRequests.values()).filter(r => {
-        const reqDate = new Date(r.requested_date);
-        return reqDate >= startDate && reqDate <= endDate;
-      }).length,
+      data_processed: periodAuditEntries.filter(
+        e => e.action === 'metadata_extracted'
+      ).length,
+      deletion_requests: Array.from(this.deletionRequests.values()).filter(
+        r => {
+          const reqDate = new Date(r.requested_date);
+          return reqDate >= startDate && reqDate <= endDate;
+        }
+      ).length,
       audit_entries: periodAuditEntries.length
     };
-    
+
     // Generate detailed report based on type
-    const details = this.generateReportDetails(report_type, periodAuditEntries, periodConsents);
-    
+    const details = this.generateReportDetails(
+      report_type,
+      periodAuditEntries,
+      periodConsents
+    );
+
     const report: ComplianceReport = {
       id: this.generateReportId(),
       report_type,
@@ -303,7 +321,7 @@ export class ComplianceAuditSystem {
       details,
       format
     };
-    
+
     // Log report generation
     await this.logAudit({
       action: 'compliance_report_generated',
@@ -313,10 +331,10 @@ export class ComplianceAuditSystem {
       success: true,
       details: { report_type, format }
     });
-    
+
     return report;
   }
-  
+
   // Generate report details based on type
   private generateReportDetails(
     type: ComplianceReport['report_type'],
@@ -340,7 +358,7 @@ export class ComplianceAuditSystem {
             objection: 0
           }
         };
-      
+
       case 'sag':
         return {
           union_compliance: true,
@@ -354,7 +372,7 @@ export class ComplianceAuditSystem {
           safety_protocols: ['covid_compliance', 'stunt_coordination'],
           consent_forms: consentRecords.length
         };
-      
+
       default:
         return {
           audit_entries: auditEntries.length,
@@ -363,16 +381,19 @@ export class ComplianceAuditSystem {
         };
     }
   }
-  
+
   // Apply retention policies
-  async applyRetentionPolicies(): Promise<{ deleted: number; archived: number }> {
+  async applyRetentionPolicies(): Promise<{
+    deleted: number;
+    archived: number;
+  }> {
     let deleted = 0;
     let archived = 0;
-    
+
     for (const policy of this.retentionPolicies.values()) {
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - policy.retention_days);
-      
+
       // Check audit entries
       if (policy.type === 'audit') {
         for (const [id, entry] of this.auditLog.entries()) {
@@ -388,7 +409,7 @@ export class ComplianceAuditSystem {
           }
         }
       }
-      
+
       // Check consent records
       if (policy.type === 'consent') {
         for (const [id, record] of this.consentRecords.entries()) {
@@ -405,26 +426,36 @@ export class ComplianceAuditSystem {
         }
       }
     }
-    
+
     return { deleted, archived };
   }
-  
+
   // Get audit trail for an entity
   getAuditTrail(entity_id: string): AuditEntry[] {
     return Array.from(this.auditLog.values())
       .filter(entry => entry.target === entity_id)
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      .sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      );
   }
-  
+
   // Export audit log
   exportAuditLog(format: 'json' | 'csv'): string {
     const entries = Array.from(this.auditLog.values());
-    
+
     if (format === 'json') {
       return JSON.stringify(entries, null, 2);
     } else {
       // CSV format
-      const headers = ['id', 'timestamp', 'action', 'user', 'target', 'success'];
+      const headers = [
+        'id',
+        'timestamp',
+        'action',
+        'user',
+        'target',
+        'success'
+      ];
       const rows = entries.map(e => [
         e.id,
         e.timestamp,
@@ -433,39 +464,39 @@ export class ComplianceAuditSystem {
         e.target,
         e.success.toString()
       ]);
-      
+
       return [headers, ...rows].map(row => row.join(',')).join('\n');
     }
   }
-  
+
   // Helper methods
-  
+
   private generateSessionId(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  
+
   private generateAuditId(): string {
     return `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  
+
   private generateConsentId(): string {
     return `consent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  
+
   private generateDeletionId(): string {
     return `del_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  
+
   private generateReportId(): string {
     return `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  
+
   private calculateExpiryDate(): string {
     const date = new Date();
     date.setFullYear(date.getFullYear() + 1); // 1 year default
     return date.toISOString();
   }
-  
+
   private async persistAuditEntry(entry: AuditEntry): Promise<void> {
     // In production, this would write to a database
     // For now, just log to console in development
@@ -473,17 +504,17 @@ export class ComplianceAuditSystem {
       console.debug('Audit:', entry);
     }
   }
-  
+
   private async archiveAuditEntry(entry: AuditEntry): Promise<void> {
     // In production, this would move to cold storage
     console.debug('Archiving audit entry:', entry.id);
   }
-  
+
   private async archiveConsentRecord(record: ConsentRecord): Promise<void> {
     // In production, this would move to cold storage
     console.debug('Archiving consent record:', record.id);
   }
-  
+
   private groupByAction(entries: AuditEntry[]): Record<string, number> {
     const grouped: Record<string, number> = {};
     for (const entry of entries) {
@@ -491,7 +522,7 @@ export class ComplianceAuditSystem {
     }
     return grouped;
   }
-  
+
   private classifyExtras(entries: AuditEntry[]): Record<string, number> {
     // Classify extras based on their roles/usage
     return {
@@ -500,7 +531,7 @@ export class ComplianceAuditSystem {
       special_ability: 5
     };
   }
-  
+
   private async simulateDelay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }

@@ -34,48 +34,58 @@ declare global {
 export function registerCustomMatchers(): void {
   expect.extend({
     toHavePerformanceWithin(received: any, maxTime: number) {
-      const pass = typeof received.executionTime === 'number' && received.executionTime <= maxTime;
+      const pass =
+        typeof received.executionTime === 'number' &&
+        received.executionTime <= maxTime;
       if (pass) {
         return {
-          message: () => `expected execution time ${received.executionTime}ms not to be within ${maxTime}ms`,
-          pass: true,
+          message: () =>
+            `expected execution time ${received.executionTime}ms not to be within ${maxTime}ms`,
+          pass: true
         };
       } else {
         return {
-          message: () => `expected execution time ${received.executionTime}ms to be within ${maxTime}ms`,
-          pass: false,
+          message: () =>
+            `expected execution time ${received.executionTime}ms to be within ${maxTime}ms`,
+          pass: false
         };
       }
     },
 
     toHaveMemoryUsageBelow(received: any, maxMemory: number) {
-      const memoryUsage = received.memoryUsage?.peak || received.peak || received;
+      const memoryUsage =
+        received.memoryUsage?.peak || received.peak || received;
       const pass = typeof memoryUsage === 'number' && memoryUsage <= maxMemory;
       if (pass) {
         return {
-          message: () => `expected memory usage ${memoryUsage}MB not to be below ${maxMemory}MB`,
-          pass: true,
+          message: () =>
+            `expected memory usage ${memoryUsage}MB not to be below ${maxMemory}MB`,
+          pass: true
         };
       } else {
         return {
-          message: () => `expected memory usage ${memoryUsage}MB to be below ${maxMemory}MB`,
-          pass: false,
+          message: () =>
+            `expected memory usage ${memoryUsage}MB to be below ${maxMemory}MB`,
+          pass: false
         };
       }
     },
 
     toHaveThroughputAbove(received: any, minThroughput: number) {
       const throughput = received.throughput || received;
-      const pass = typeof throughput === 'number' && throughput >= minThroughput;
+      const pass =
+        typeof throughput === 'number' && throughput >= minThroughput;
       if (pass) {
         return {
-          message: () => `expected throughput ${throughput} not to be above ${minThroughput}`,
-          pass: true,
+          message: () =>
+            `expected throughput ${throughput} not to be above ${minThroughput}`,
+          pass: true
         };
       } else {
         return {
-          message: () => `expected throughput ${throughput} to be above ${minThroughput}`,
-          pass: false,
+          message: () =>
+            `expected throughput ${throughput} to be above ${minThroughput}`,
+          pass: false
         };
       }
     },
@@ -88,12 +98,12 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => 'expected object not to be a valid graph',
-          pass: true,
+          pass: true
         };
       } else {
         return {
           message: () => 'expected object to have nodes and edges arrays',
-          pass: false,
+          pass: false
         };
       }
     },
@@ -107,12 +117,13 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => 'expected object not to be a valid node',
-          pass: true,
+          pass: true
         };
       } else {
         return {
-          message: () => 'expected object to have id, type, and data properties',
-          pass: false,
+          message: () =>
+            'expected object to have id, type, and data properties',
+          pass: false
         };
       }
     },
@@ -126,12 +137,13 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => 'expected object not to be a valid edge',
-          pass: true,
+          pass: true
         };
       } else {
         return {
-          message: () => 'expected object to have id, source, and target properties',
-          pass: false,
+          message: () =>
+            'expected object to have id, source, and target properties',
+          pass: false
         };
       }
     },
@@ -145,18 +157,18 @@ export function registerCustomMatchers(): void {
         if (pass) {
           return {
             message: () => 'expected object not to have valid schema',
-            pass: true,
+            pass: true
           };
         } else {
           return {
             message: () => 'expected object to have valid schema',
-            pass: false,
+            pass: false
           };
         }
       } catch (error) {
         return {
           message: () => `schema validation failed: ${error}`,
-          pass: false,
+          pass: false
         };
       }
     },
@@ -170,31 +182,33 @@ export function registerCustomMatchers(): void {
       if (pass) {
         return {
           message: () => 'expected code not to be security compliant',
-          pass: true,
+          pass: true
         };
       } else {
         return {
-          message: () => 'expected code to be security compliant (no eval, innerHTML)',
-          pass: false,
+          message: () =>
+            'expected code to be security compliant (no eval, innerHTML)',
+          pass: false
         };
       }
     },
 
     toHaveAccessibilityCompliance(received: any) {
       // Basic accessibility checks for UI components
-      const hasAriaLabel = received.props?.['aria-label'] || received['aria-label'];
+      const hasAriaLabel =
+        received.props?.['aria-label'] || received['aria-label'];
       const hasRole = received.props?.role || received.role;
       const pass = hasAriaLabel || hasRole || received.tagName === 'DIV'; // Basic check
 
       if (pass) {
         return {
           message: () => 'expected element not to be accessibility compliant',
-          pass: true,
+          pass: true
         };
       } else {
         return {
           message: () => 'expected element to have accessibility attributes',
-          pass: false,
+          pass: false
         };
       }
     },
@@ -202,53 +216,62 @@ export function registerCustomMatchers(): void {
     toHaveValidationErrors(received: any, expectedCount?: number) {
       const errors = received.errors || received.validationErrors || [];
       const hasErrors = Array.isArray(errors) && errors.length > 0;
-      const correctCount = expectedCount === undefined || errors.length === expectedCount;
+      const correctCount =
+        expectedCount === undefined || errors.length === expectedCount;
       const pass = hasErrors && correctCount;
 
       if (pass) {
         return {
-          message: () => `expected not to have validation errors${expectedCount ? ` (count: ${expectedCount})` : ''}`,
-          pass: true,
+          message: () =>
+            `expected not to have validation errors${expectedCount ? ` (count: ${expectedCount})` : ''}`,
+          pass: true
         };
       } else {
         return {
           message: () =>
             `expected to have validation errors${expectedCount ? ` (expected: ${expectedCount}, got: ${errors.length})` : ''}`,
-          pass: false,
+          pass: false
         };
       }
     },
 
     toBeWithinRange(received: number, min: number, max: number) {
-      const pass = typeof received === 'number' && received >= min && received <= max;
+      const pass =
+        typeof received === 'number' && received >= min && received <= max;
 
       if (pass) {
         return {
-          message: () => `expected ${received} not to be within range [${min}, ${max}]`,
-          pass: true,
+          message: () =>
+            `expected ${received} not to be within range [${min}, ${max}]`,
+          pass: true
         };
       } else {
         return {
-          message: () => `expected ${received} to be within range [${min}, ${max}]`,
-          pass: false,
+          message: () =>
+            `expected ${received} to be within range [${min}, ${max}]`,
+          pass: false
         };
       }
     },
 
     toBeExecutableGraph(received: any) {
-      const isValidGraph = Array.isArray(received.nodes) && Array.isArray(received.edges);
-      const hasOutputNode = received.nodes?.some((node: any) => node.type === 'output');
+      const isValidGraph =
+        Array.isArray(received.nodes) && Array.isArray(received.edges);
+      const hasOutputNode = received.nodes?.some(
+        (node: any) => node.type === 'output'
+      );
       const pass = isValidGraph && hasOutputNode;
 
       if (pass) {
         return {
           message: () => 'expected graph not to be executable',
-          pass: true,
+          pass: true
         };
       } else {
         return {
-          message: () => 'expected graph to be executable (needs nodes, edges, and output node)',
-          pass: false,
+          message: () =>
+            'expected graph to be executable (needs nodes, edges, and output node)',
+          pass: false
         };
       }
     },
@@ -256,21 +279,23 @@ export function registerCustomMatchers(): void {
     toHaveValidDeterministicOutput(received: any) {
       // Check if output is deterministic by ensuring it's not random
       const hasOutput = received.output !== undefined;
-      const isNotRandom = typeof received.seed === 'string' || typeof received.seed === 'number';
+      const isNotRandom =
+        typeof received.seed === 'string' || typeof received.seed === 'number';
       const pass = hasOutput && isNotRandom;
 
       if (pass) {
         return {
           message: () => 'expected output not to be deterministic',
-          pass: true,
+          pass: true
         };
       } else {
         return {
-          message: () => 'expected output to be deterministic (needs output and seed)',
-          pass: false,
+          message: () =>
+            'expected output to be deterministic (needs output and seed)',
+          pass: false
         };
       }
-    },
+    }
   });
 }
 

@@ -34,20 +34,26 @@ export interface ParseResult {
 }
 
 // LLM response schema with strict validation
-export const LLMResponseSchema = z.object({
-  version: z.literal('psg-parse-v1'),
-  nodes: z.array(z.object({
-    type: z.enum(['Variable', 'WeightedChoice', 'TextBlock', 'Sequential']),
-    content: z.string(),
-    metadata: z.record(z.any()).optional(),
-    variables: z.array(z.string()).optional()
-  })),
-  edges: z.array(z.object({
-    source: z.number(),
-    target: z.number(),
-    label: z.string().optional()
-  }))
-}).strict();
+export const LLMResponseSchema = z
+  .object({
+    version: z.literal('psg-parse-v1'),
+    nodes: z.array(
+      z.object({
+        type: z.enum(['Variable', 'WeightedChoice', 'TextBlock', 'Sequential']),
+        content: z.string(),
+        metadata: z.record(z.any()).optional(),
+        variables: z.array(z.string()).optional()
+      })
+    ),
+    edges: z.array(
+      z.object({
+        source: z.number(),
+        target: z.number(),
+        label: z.string().optional()
+      })
+    )
+  })
+  .strict();
 
 export type LLMParseResponse = z.infer<typeof LLMResponseSchema>;
 
@@ -85,8 +91,11 @@ export class PromptParser {
       try {
         // Check cache first
         const cacheKey = this.getCacheKey(sanitizedPrompt, options);
-        const cached = this.cacheManager.get({ prompt: cacheKey } as any, 'parser');
-        
+        const cached = this.cacheManager.get(
+          { prompt: cacheKey } as any,
+          'parser'
+        );
+
         if (cached) {
           return {
             ...cached,
@@ -99,11 +108,15 @@ export class PromptParser {
         }
 
         // Try LLM parsing with retries
-        const result = await this.llmEnhancedParse(sanitizedPrompt, prompt, options);
-        
+        const result = await this.llmEnhancedParse(
+          sanitizedPrompt,
+          prompt,
+          options
+        );
+
         // Cache successful result
         this.cacheManager.set({ prompt: cacheKey } as any, 'parser', result);
-        
+
         return {
           ...result,
           metadata: {
@@ -114,7 +127,11 @@ export class PromptParser {
         };
       } catch (error) {
         console.warn('LLM parse failed, falling back to standard', error);
-        return await this.fallback.handleLLMFailure(prompt, error as Error, options);
+        return await this.fallback.handleLLMFailure(
+          prompt,
+          error as Error,
+          options
+        );
       }
     }
 
@@ -133,12 +150,12 @@ export class PromptParser {
 
     // Prepare the system prompt with instructions
     const systemPrompt = this.buildSystemPrompt();
-    
+
     // Track variable integrity
     const originalVariables = this.extractVariables(originalPrompt);
 
     let lastError: Error | null = null;
-    
+
     // Retry logic with exponential backoff
     for (let attempt = 0; attempt <= this.retryCount; attempt++) {
       try {
@@ -186,7 +203,7 @@ export class PromptParser {
       } catch (error) {
         lastError = error as Error;
         console.warn(`LLM parse attempt ${attempt + 1} failed:`, error);
-        
+
         if (attempt === this.retryCount) {
           // All retries exhausted
           throw lastError;
@@ -233,11 +250,11 @@ export class PromptParser {
   private standardParse(prompt: string, options: ParserOptions): ParseResult {
     // Use existing standard parser
     const analysis = standardParser.parse(prompt);
-    
+
     // Convert to React Flow format
     const nodes: Node[] = [];
     const edges: Edge[] = [];
-    
+
     // Convert nodes from analysis
     analysis.nodes.forEach((genNode, index) => {
       const serialized = genNode.node.serialize();
@@ -331,25 +348,25 @@ Example Output:
     const variables = new Set<string>();
     const pattern = /\{([^}]+)\}/g;
     let match;
-    
+
     while ((match = pattern.exec(text)) !== null) {
       variables.add(match[1]);
     }
-    
+
     return variables;
   }
 
   private mapNodeType(epicType: string): string {
     // Map Epic1 node types to React Flow types
     const typeMap: Record<string, string> = {
-      'TextBlock': 'textBlock',
-      'WeightedChoice': 'weightedChoice',
-      'Variable': 'variable',
-      'Sequential': 'sequential',
-      'Output': 'output',
-      'Concat': 'concat'
+      TextBlock: 'textBlock',
+      WeightedChoice: 'weightedChoice',
+      Variable: 'variable',
+      Sequential: 'sequential',
+      Output: 'output',
+      Concat: 'concat'
     };
-    
+
     return typeMap[epicType] || 'textBlock';
   }
 

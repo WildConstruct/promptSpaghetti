@@ -52,9 +52,9 @@
     Permissions-Policy = "accelerometer=(), camera=(), microphone=(), geolocation=(), gyroscope=(), magnetometer=(), payment=(), usb=()"
     Cache-Control = "public, max-age=0, must-revalidate"
     # Balanced CSP: allow style attributes but disallow inline <style> tags
-    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://promptspaghettiserver-6mmw5eupj-wildconstructs-projects.vercel.app https://*.vercel.app; frame-ancestors 'none';"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://promptspaghettiserver-4ufybwvo6-wildconstructs-projects.vercel.app https://*.vercel.app; frame-ancestors 'none';"
     # Dry-run stricter CSP to surface any remaining violations (optional)
-    Content-Security-Policy-Report-Only = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://promptspaghettiserver-6mmw5eupj-wildconstructs-projects.vercel.app https://*.vercel.app; frame-ancestors 'none';"
+    Content-Security-Policy-Report-Only = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://promptspaghettiserver-4ufybwvo6-wildconstructs-projects.vercel.app https://*.vercel.app; frame-ancestors 'none';"
     # To further tighten CSP (requires hashing/nonces for inline styles/scripts), consider:
     # Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';"
 
@@ -81,18 +81,25 @@
 # Proxy API calls to the Vercel backend
 [[redirects]]
   from = "/api/*"
-  to = "https://promptspaghettiserver-6mmw5eupj-wildconstructs-projects.vercel.app/api/:splat"
+  to = "https://promptspaghettiserver-4ufybwvo6-wildconstructs-projects.vercel.app/api/:splat"
   status = 200
   force = true
 
-# Optional: expose backend admin via app domain
+# Expose enhanced admin panel
 [[redirects]]
   from = "/admin"
-  to = "https://promptspaghettiserver-6mmw5eupj-wildconstructs-projects.vercel.app/api/admin"
+  to = "https://promptspaghettiserver-4ufybwvo6-wildconstructs-projects.vercel.app/api/admin-enhanced"
+  status = 200
+  force = true
+
+# Handle admin panel routes
+[[redirects]]
+  from = "/admin/*"
+  to = "https://promptspaghettiserver-4ufybwvo6-wildconstructs-projects.vercel.app/api/admin-:splat"
   status = 200
   force = true
 # Stricter CSP for admin routes (no inline styles/scripts)
 [[headers]]
   for = "/admin/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://promptspaghettiserver-6mmw5eupj-wildconstructs-projects.vercel.app https://*.vercel.app; frame-ancestors 'none';"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://promptspaghettiserver-4ufybwvo6-wildconstructs-projects.vercel.app https://*.vercel.app; frame-ancestors 'none';"

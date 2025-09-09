@@ -324,15 +324,15 @@ window.location.href = authUrl.toString();
 const tokenResponse = await fetch('https://auth.example.com/oauth/token', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'application/x-www-form-urlencoded'
   },
   body: new URLSearchParams({
     grant_type: 'authorization_code',
     client_id: 'your-client-id',
     code: authorizationCode,
     redirect_uri: 'https://your-app.com/callback',
-    code_verifier: codeVerifier,
-  }),
+    code_verifier: codeVerifier
+  })
 });
 
 const tokens = await tokenResponse.json();
@@ -346,12 +346,12 @@ const tokenResponse = await fetch('https://auth.example.com/oauth/token', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
-    Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+    Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`
   },
   body: new URLSearchParams({
     grant_type: 'client_credentials',
-    scope: 'api:read api:write',
-  }),
+    scope: 'api:read api:write'
+  })
 });
 ```
 

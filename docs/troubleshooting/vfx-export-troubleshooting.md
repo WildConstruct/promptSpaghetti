@@ -79,7 +79,9 @@ if (cycles.length > 0) {
    ```javascript
    // Remove invalid edges
    const invalidEdges = graph.edges.filter(
-     edge => !graph.nodes.find(n => n.id === edge.source) || !graph.nodes.find(n => n.id === edge.target)
+     edge =>
+       !graph.nodes.find(n => n.id === edge.source) ||
+       !graph.nodes.find(n => n.id === edge.target)
    );
 
    invalidEdges.forEach(edge => {
@@ -124,7 +126,7 @@ if (cycles.length > 0) {
 // Check RNG state capture
 const exportData = await exporter.exportGraph(graph, executionResults, {
   quality: 'debug',
-  includeDebugInfo: true,
+  includeDebugInfo: true
 });
 
 if (!exportData.execution.randomization.rngState) {
@@ -151,7 +153,7 @@ console.log('Seedrandom state support:', typeof testRng.state === 'function');
    const exportOptions = {
      quality: 'production',
      includeDebugInfo: true, // Required for RNG state capture
-     includeHistoricalData: true,
+     includeHistoricalData: true
    };
    ```
 
@@ -292,17 +294,18 @@ async function diagnoseReproducibility(exportData) {
     seedConsistency: false,
     configurationIntegrity: false,
     environmentMatch: false,
-    versionCompatibility: false,
+    versionCompatibility: false
   };
 
   // Check seed consistency
   const originalSeed = exportData.execution.randomization.masterSeed;
   const testExport = await exporter.exportGraph(graph, null, {
     seed: originalSeed,
-    quality: 'production',
+    quality: 'production'
   });
 
-  diagnosis.seedConsistency = testExport.execution.randomization.masterSeed === originalSeed;
+  diagnosis.seedConsistency =
+    testExport.execution.randomization.masterSeed === originalSeed;
 
   // Check configuration hashes
   const validator = ReproducibilityValidator.getInstance();
@@ -313,12 +316,13 @@ async function diagnoseReproducibility(exportData) {
   // Check environment
   const currentEnv = {
     nodeVersion: process.version,
-    platform: process.platform,
+    platform: process.platform
   };
 
   const exportEnv = exportData.execution.reproduction.environment;
   diagnosis.environmentMatch =
-    currentEnv.nodeVersion === exportEnv.nodeVersion && currentEnv.platform === exportEnv.platform;
+    currentEnv.nodeVersion === exportEnv.nodeVersion &&
+    currentEnv.platform === exportEnv.platform;
 
   // Check version compatibility
   diagnosis.versionCompatibility = validation.integrity.versionCompatible;
@@ -353,6 +357,7 @@ async function diagnoseReproducibility(exportData) {
    ```
 
 3. **Seed Isolation**:
+
    ```javascript
    // Ensure proper seed isolation
    class IsolatedRandomGenerator {
@@ -388,7 +393,7 @@ class ExportProfiler {
   startTimer(label) {
     this.timers.set(label, {
       start: Date.now(),
-      memory: process.memoryUsage(),
+      memory: process.memoryUsage()
     });
   }
 
@@ -396,9 +401,12 @@ class ExportProfiler {
     const timer = this.timers.get(label);
     if (timer) {
       const duration = Date.now() - timer.start;
-      const memoryDelta = process.memoryUsage().heapUsed - timer.memory.heapUsed;
+      const memoryDelta =
+        process.memoryUsage().heapUsed - timer.memory.heapUsed;
 
-      console.log(`${label}: ${duration}ms (Memory: +${Math.round(memoryDelta / 1024 / 1024)}MB)`);
+      console.log(
+        `${label}: ${duration}ms (Memory: +${Math.round(memoryDelta / 1024 / 1024)}MB)`
+      );
 
       return { duration, memoryDelta };
     }
@@ -420,13 +428,16 @@ class ExportProfiler {
         profiler.endTimer('graph_processing');
 
         profiler.startTimer('execution_data');
-        const executionData = await this.buildExecutionData(executionResults, options);
+        const executionData = await this.buildExecutionData(
+          executionResults,
+          options
+        );
         profiler.endTimer('execution_data');
 
         const result = {
           metadata,
           graph: graphData,
-          execution: executionData,
+          execution: executionData
         };
 
         const totalTime = profiler.endTimer('total_export');
@@ -453,13 +464,15 @@ class ExportProfiler {
        nodeCount: graph.nodes.length,
        edgeCount: graph.edges.length,
        maxDepth: calculateMaxDepth(graph),
-       cyclomaticComplexity: calculateCyclomaticComplexity(graph),
+       cyclomaticComplexity: calculateCyclomaticComplexity(graph)
      };
 
      // Identify expensive nodes
      const expensiveNodes = graph.nodes.filter(node => {
        return (
-         node.type === 'WeightedAdvanced' || node.type === 'Markov' || (node.data && node.data.complexity === 'high')
+         node.type === 'WeightedAdvanced' ||
+         node.type === 'Markov' ||
+         (node.data && node.data.complexity === 'high')
        );
      });
 
@@ -470,6 +483,7 @@ class ExportProfiler {
    ```
 
 2. **Caching Implementation**:
+
    ```javascript
    // Node-level caching
    class NodeCache {
@@ -519,11 +533,13 @@ class MemoryLeakDetector {
     this.snapshots.push({
       label,
       timestamp: Date.now(),
-      ...usage,
+      ...usage
     });
 
     if (usage.heapUsed > this.threshold) {
-      console.warn(`High memory usage detected: ${Math.round(usage.heapUsed / 1024 / 1024)}MB`);
+      console.warn(
+        `High memory usage detected: ${Math.round(usage.heapUsed / 1024 / 1024)}MB`
+      );
     }
   }
 
@@ -539,15 +555,19 @@ class MemoryLeakDetector {
         from: previous.label,
         to: current.label,
         heapGrowth: current.heapUsed - previous.heapUsed,
-        externalGrowth: current.external - previous.external,
+        externalGrowth: current.external - previous.external
       });
     }
 
-    const suspiciousGrowth = growth.filter(g => g.heapGrowth > 10 * 1024 * 1024); // 10MB+
+    const suspiciousGrowth = growth.filter(
+      g => g.heapGrowth > 10 * 1024 * 1024
+    ); // 10MB+
     if (suspiciousGrowth.length > 0) {
       console.warn('Potential memory leaks detected:');
       suspiciousGrowth.forEach(g => {
-        console.warn(`${g.from} -> ${g.to}: +${Math.round(g.heapGrowth / 1024 / 1024)}MB`);
+        console.warn(
+          `${g.from} -> ${g.to}: +${Math.round(g.heapGrowth / 1024 / 1024)}MB`
+        );
       });
     }
   }
@@ -615,7 +635,7 @@ class FileIntegrityChecker {
       validJSON: false,
       schemaValid: false,
       checksumValid: false,
-      size: 0,
+      size: 0
     };
 
     try {
@@ -637,7 +657,8 @@ class FileIntegrityChecker {
       // Check checksum if present
       if (exportData.metadata && exportData.metadata.checksum) {
         const calculatedChecksum = await this.calculateChecksum(content);
-        results.checksumValid = calculatedChecksum === exportData.metadata.checksum;
+        results.checksumValid =
+          calculatedChecksum === exportData.metadata.checksum;
       } else {
         results.checksumValid = true; // No checksum to validate
       }
@@ -661,7 +682,10 @@ class FileIntegrityChecker {
 
 ```javascript
 // comprehensive-health-check.js
-const { VFXExportValidator, ReproducibilityValidator } = require('./validators');
+const {
+  VFXExportValidator,
+  ReproducibilityValidator
+} = require('./validators');
 
 async function runHealthCheck(exportPath, options = {}) {
   const report = {
@@ -669,7 +693,7 @@ async function runHealthCheck(exportPath, options = {}) {
     exportPath,
     checks: [],
     overallStatus: 'unknown',
-    score: 0,
+    score: 0
   };
 
   const checks = [
@@ -678,7 +702,7 @@ async function runHealthCheck(exportPath, options = {}) {
     { name: 'Reproducibility', weight: 20, func: checkReproducibility },
     { name: 'Performance', weight: 15, func: checkPerformance },
     { name: 'Compatibility', weight: 10, func: checkCompatibility },
-    { name: 'Security', weight: 10, func: checkSecurity },
+    { name: 'Security', weight: 10, func: checkSecurity }
   ];
 
   let totalScore = 0;
@@ -694,7 +718,7 @@ async function runHealthCheck(exportPath, options = {}) {
         status: result.status,
         score: result.score,
         issues: result.issues || [],
-        recommendations: result.recommendations || [],
+        recommendations: result.recommendations || []
       });
 
       totalScore += result.score * check.weight;
@@ -705,13 +729,14 @@ async function runHealthCheck(exportPath, options = {}) {
         status: 'error',
         score: 0,
         issues: [error.message],
-        recommendations: ['Fix the underlying error and retry'],
+        recommendations: ['Fix the underlying error and retry']
       });
     }
   }
 
   report.score = Math.round(totalScore / totalWeight);
-  report.overallStatus = report.score >= 80 ? 'good' : report.score >= 60 ? 'warning' : 'error';
+  report.overallStatus =
+    report.score >= 80 ? 'good' : report.score >= 60 ? 'warning' : 'error';
 
   return report;
 }
@@ -737,7 +762,7 @@ async function checkFileIntegrity(exportPath) {
   return {
     status: score === 100 ? 'pass' : issues.length > 2 ? 'fail' : 'warning',
     score,
-    issues,
+    issues
   };
 }
 
@@ -749,7 +774,8 @@ runHealthCheck('scene.vfx.json', { verbose: true })
     console.log(`Score: ${report.score}/100`);
 
     report.checks.forEach(check => {
-      const statusIcon = check.status === 'pass' ? '✓' : check.status === 'warning' ? '⚠' : '✗';
+      const statusIcon =
+        check.status === 'pass' ? '✓' : check.status === 'warning' ? '⚠' : '✗';
       console.log(`${statusIcon} ${check.name}: ${check.score}/100`);
 
       if (check.issues.length > 0) {
@@ -801,12 +827,14 @@ class ExportRepairTool {
     if (validation.isValid) {
       // Save repaired export
       await fs.writeFile(exportPath, JSON.stringify(exportData, null, 2));
-      console.log(`Export repaired successfully. ${this.repairs.length} issues fixed.`);
+      console.log(
+        `Export repaired successfully. ${this.repairs.length} issues fixed.`
+      );
 
       return {
         success: true,
         repairsApplied: this.repairs,
-        backupPath: options.backup !== false ? backupPath : null,
+        backupPath: options.backup !== false ? backupPath : null
       };
     } else {
       throw new Error(`Repair failed: ${validation.errors.join(', ')}`);
@@ -833,7 +861,7 @@ class ExportRepairTool {
     if (!exportData.execution.randomization) {
       exportData.execution.randomization = {
         masterSeed: Math.floor(Math.random() * 1000000),
-        nodeSeed: {},
+        nodeSeed: {}
       };
       this.repairs.push('Generated missing randomization data');
     }
@@ -841,14 +869,19 @@ class ExportRepairTool {
 
   async repairInvalidValues(exportData) {
     // Fix invalid values
-    if (exportData.metadata.version && !/^\d+\.\d+\.\d+$/.test(exportData.metadata.version)) {
+    if (
+      exportData.metadata.version &&
+      !/^\d+\.\d+\.\d+$/.test(exportData.metadata.version)
+    ) {
       exportData.metadata.version = '1.2.0';
       this.repairs.push('Fixed invalid version format');
     }
 
     // Ensure numeric values are numbers
     if (typeof exportData.execution.randomization.masterSeed === 'string') {
-      exportData.execution.randomization.masterSeed = parseInt(exportData.execution.randomization.masterSeed);
+      exportData.execution.randomization.masterSeed = parseInt(
+        exportData.execution.randomization.masterSeed
+      );
       this.repairs.push('Converted master seed to number');
     }
   }
@@ -861,8 +894,8 @@ class ExportRepairTool {
       generator: {
         name: 'Wild Construct Prompt Generator',
         version: '1.0.0',
-        build: 'repair-tool',
-      },
+        build: 'repair-tool'
+      }
     };
   }
 
@@ -870,20 +903,20 @@ class ExportRepairTool {
     return {
       randomization: {
         masterSeed: Math.floor(Math.random() * 1000000),
-        nodeSeed: {},
+        nodeSeed: {}
       },
       performance: {
         totalTime: 0,
-        nodePerformance: {},
+        nodePerformance: {}
       },
       reproduction: {
         environment: {
           nodeVersion: process.version,
-          platform: process.platform,
+          platform: process.platform
         },
         exactReproduction: false,
-        approximateReproduction: true,
-      },
+        approximateReproduction: true
+      }
     };
   }
 }

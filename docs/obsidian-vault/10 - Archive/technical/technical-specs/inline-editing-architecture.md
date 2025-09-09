@@ -23,23 +23,23 @@ interface EditableNodeData {
   id: string;
   type: NodeType;
   value: any;
-  
+
   // Edit state
   editState: {
     isEditing: boolean;
-    editBuffer: any;           // Temporary edit value
-    originalValue: any;        // For cancellation
+    editBuffer: any; // Temporary edit value
+    originalValue: any; // For cancellation
     validationErrors: string[];
     cursorPosition?: number;
     selection?: [number, number];
   };
-  
+
   // Display state
   displayState: {
     isHovered: boolean;
     isSelected: boolean;
     isAnimating: boolean;
-    previewHash?: string;      // For preview caching
+    previewHash?: string; // For preview caching
   };
 }
 
@@ -107,7 +107,7 @@ const EditableNode: FC<NodeProps> = ({ data, selected, id }) => {
   const { editState, displayState } = data;
   const [localEdit, setLocalEdit] = useState(editState.editBuffer);
   const inputRef = useRef<HTMLInputElement>(null);
-  
+
   // Auto-focus on edit mode
   useEffect(() => {
     if (editState.isEditing && inputRef.current) {
@@ -115,23 +115,23 @@ const EditableNode: FC<NodeProps> = ({ data, selected, id }) => {
       inputRef.current.select();
     }
   }, [editState.isEditing]);
-  
+
   // Handle edit lifecycle
   const handleEdit = useCallback((value: any) => {
     setLocalEdit(value);
     debouncedPreview(value); // 300ms debounce
   }, []);
-  
+
   const handleCommit = useCallback(() => {
     if (validate(localEdit)) {
       updateNodeData(id, { value: localEdit });
       exitEditMode(id);
     }
   }, [localEdit, id]);
-  
+
   // Render edit UI inline
   return (
-    <NodeContainer 
+    <NodeContainer
       editing={editState.isEditing}
       hasErrors={editState.validationErrors.length > 0}
     >
@@ -145,7 +145,7 @@ const EditableNode: FC<NodeProps> = ({ data, selected, id }) => {
           errors={editState.validationErrors}
         />
       ) : (
-        <NodeDisplay 
+        <NodeDisplay
           value={data.value}
           onClick={() => enterEditMode(id)}
         />
@@ -161,11 +161,11 @@ const EditableNode: FC<NodeProps> = ({ data, selected, id }) => {
 
 ```typescript
 // Text node inline editor
-const TextNodeEditor: FC<InlineEditorProps> = ({ 
-  value, 
-  onChange, 
-  onCommit, 
-  onCancel 
+const TextNodeEditor: FC<InlineEditorProps> = ({
+  value,
+  onChange,
+  onCommit,
+  onCancel
 }) => (
   <AutosizeInput
     value={value}
@@ -181,9 +181,9 @@ const TextNodeEditor: FC<InlineEditorProps> = ({
 );
 
 // Weighted choice inline editor
-const WeightedChoiceEditor: FC<InlineEditorProps> = ({ 
-  value, 
-  onChange 
+const WeightedChoiceEditor: FC<InlineEditorProps> = ({
+  value,
+  onChange
 }) => (
   <div className="weighted-choice-editor">
     {value.options.map((option, index) => (
@@ -214,25 +214,31 @@ const WeightedChoiceEditor: FC<InlineEditorProps> = ({
 class KeyboardNavigationManager {
   private nodeOrder: string[] = [];
   private currentIndex: number = -1;
-  
+
   constructor(private reactFlowInstance: ReactFlowInstance) {
     this.setupKeyboardHandlers();
   }
-  
+
   private setupKeyboardHandlers() {
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', e => {
       // Global shortcuts
       if (e.metaKey || e.ctrlKey) {
-        switch(e.key) {
-          case 'Enter': this.commitAllEdits(); break;
-          case 'k': this.quickAddNode(); break;
-          case 'z': this.undo(); break;
+        switch (e.key) {
+          case 'Enter':
+            this.commitAllEdits();
+            break;
+          case 'k':
+            this.quickAddNode();
+            break;
+          case 'z':
+            this.undo();
+            break;
         }
         return;
       }
-      
+
       // Navigation
-      switch(e.key) {
+      switch (e.key) {
         case 'Tab':
           e.preventDefault();
           this.navigateToNext(e.shiftKey);
@@ -252,23 +258,23 @@ class KeyboardNavigationManager {
       }
     });
   }
-  
+
   private navigateToNext(reverse: boolean = false) {
     const nodes = this.reactFlowInstance.getNodes();
     this.nodeOrder = this.calculateNodeOrder(nodes);
-    
+
     if (reverse) {
       this.currentIndex = Math.max(0, this.currentIndex - 1);
     } else {
       this.currentIndex = Math.min(
-        this.nodeOrder.length - 1, 
+        this.nodeOrder.length - 1,
         this.currentIndex + 1
       );
     }
-    
+
     this.focusNode(this.nodeOrder[this.currentIndex]);
   }
-  
+
   private calculateNodeOrder(nodes: Node[]): string[] {
     // Sort by reading order: top-to-bottom, left-to-right
     return nodes
@@ -289,7 +295,7 @@ class KeyboardNavigationManager {
 const VirtualEditingSystem = {
   // Only create edit UI for visible nodes
   visibleNodes: new Set<string>(),
-  
+
   updateVisibleNodes(viewport: Viewport, nodes: Node[]) {
     this.visibleNodes.clear();
     nodes.forEach(node => {
@@ -298,7 +304,7 @@ const VirtualEditingSystem = {
       }
     });
   },
-  
+
   shouldRenderEditor(nodeId: string): boolean {
     return this.visibleNodes.has(nodeId);
   }
@@ -308,25 +314,28 @@ const VirtualEditingSystem = {
 const PreviewSystem = {
   cache: new Map<string, PreviewResult>(),
   pending: new Map<string, TimeoutID>(),
-  
+
   requestPreview(graphHash: string, callback: (result) => void) {
     // Check cache first
     if (this.cache.has(graphHash)) {
       callback(this.cache.get(graphHash));
       return;
     }
-    
+
     // Debounce requests
     if (this.pending.has(graphHash)) {
       clearTimeout(this.pending.get(graphHash));
     }
-    
-    this.pending.set(graphHash, setTimeout(() => {
-      this.generatePreview(graphHash).then(result => {
-        this.cache.set(graphHash, result);
-        callback(result);
-      });
-    }, 300));
+
+    this.pending.set(
+      graphHash,
+      setTimeout(() => {
+        this.generatePreview(graphHash).then(result => {
+          this.cache.set(graphHash, result);
+          callback(result);
+        });
+      }, 300)
+    );
   }
 };
 ```
@@ -342,8 +351,9 @@ const PreviewSystem = {
 
 .node-container.editing {
   transform: scale(1.05);
-  box-shadow: 0 0 0 2px var(--primary-color),
-              0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 0 0 2px var(--primary-color),
+    0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 
@@ -369,9 +379,16 @@ const PreviewSystem = {
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
 }
 ```
 
@@ -389,11 +406,11 @@ interface EditAction {
 class InlineEditHistory {
   private history: EditAction[] = [];
   private currentIndex: number = -1;
-  
+
   recordEdit(nodeId: string, oldValue: any, newValue: any) {
     // Remove any actions after current index (branching)
     this.history = this.history.slice(0, this.currentIndex + 1);
-    
+
     // Add new action
     this.history.push({
       type: 'EDIT_NODE',
@@ -402,23 +419,23 @@ class InlineEditHistory {
       newValue,
       timestamp: Date.now()
     });
-    
+
     this.currentIndex++;
-    
+
     // Limit history size
     if (this.history.length > 100) {
       this.history.shift();
       this.currentIndex--;
     }
   }
-  
+
   undo(): EditAction | null {
     if (this.currentIndex < 0) return null;
     const action = this.history[this.currentIndex];
     this.currentIndex--;
     return action;
   }
-  
+
   redo(): EditAction | null {
     if (this.currentIndex >= this.history.length - 1) return null;
     this.currentIndex++;
@@ -430,21 +447,25 @@ class InlineEditHistory {
 ## Implementation Phases
 
 ### Phase 1: Basic Text Editing (Week 1)
+
 - Simple text nodes with inline input
 - Enter/Escape/Tab navigation
 - Basic validation
 
 ### Phase 2: Complex Editors (Week 2)
+
 - Weighted choice with sliders
 - Multi-field nodes
 - Validation with error display
 
 ### Phase 3: Performance & Polish (Week 3)
+
 - Virtual editing for large graphs
 - Smooth animations
 - Keyboard navigation refinements
 
 ### Phase 4: Advanced Features (Week 4)
+
 - Undo/redo integration
 - Copy/paste between nodes
 - Bulk editing operations
@@ -467,4 +488,4 @@ class InlineEditHistory {
 
 ---
 
-*Technical specification by Sarah (PO) for developer reference*
+_Technical specification by Sarah (PO) for developer reference_

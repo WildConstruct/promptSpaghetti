@@ -88,7 +88,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
       enableRealTimeUpdates: true,
       updateIntervalMs: 5000,
       enableNotifications: false,
-      ...config,
+      ...config
     };
 
     this.setupDefaultThresholds();
@@ -110,35 +110,35 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         operator: 'gt',
         value: 1000,
         severity: 'warning',
-        description: 'Engine execution time exceeds 1 second',
+        description: 'Engine execution time exceeds 1 second'
       },
       {
         metric: 'engine.execution_time',
         operator: 'gt',
         value: 2000,
         severity: 'error',
-        description: 'Engine execution time exceeds 2 seconds',
+        description: 'Engine execution time exceeds 2 seconds'
       },
       {
         metric: 'engine.memory_usage',
         operator: 'gt',
         value: 100,
         severity: 'warning',
-        description: 'Engine memory usage exceeds 100MB',
+        description: 'Engine memory usage exceeds 100MB'
       },
       {
         metric: 'engine.memory_usage',
         operator: 'gt',
         value: 200,
         severity: 'error',
-        description: 'Engine memory usage exceeds 200MB',
+        description: 'Engine memory usage exceeds 200MB'
       },
       {
         metric: 'engine.operations_per_second',
         operator: 'lt',
         value: 100,
         severity: 'warning',
-        description: 'Engine throughput below 100 ops/sec',
+        description: 'Engine throughput below 100 ops/sec'
       },
 
       // API Performance Thresholds
@@ -147,35 +147,35 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         operator: 'gt',
         value: 2000,
         severity: 'warning',
-        description: 'API response time exceeds 2 seconds',
+        description: 'API response time exceeds 2 seconds'
       },
       {
         metric: 'api.response_time',
         operator: 'gt',
         value: 5000,
         severity: 'error',
-        description: 'API response time exceeds 5 seconds',
+        description: 'API response time exceeds 5 seconds'
       },
       {
         metric: 'api.success_rate',
         operator: 'lt',
         value: 95,
         severity: 'warning',
-        description: 'API success rate below 95%',
+        description: 'API success rate below 95%'
       },
       {
         metric: 'api.success_rate',
         operator: 'lt',
         value: 90,
         severity: 'error',
-        description: 'API success rate below 90%',
+        description: 'API success rate below 90%'
       },
       {
         metric: 'api.requests_per_second',
         operator: 'lt',
         value: 10,
         severity: 'warning',
-        description: 'API throughput below 10 RPS',
+        description: 'API throughput below 10 RPS'
       },
 
       // Memory Performance Thresholds
@@ -184,22 +184,22 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         operator: 'eq',
         value: 1,
         severity: 'critical',
-        description: 'Memory leak detected',
+        description: 'Memory leak detected'
       },
       {
         metric: 'memory.gc_efficiency',
         operator: 'lt',
         value: 0.3,
         severity: 'warning',
-        description: 'Garbage collection efficiency below 30%',
+        description: 'Garbage collection efficiency below 30%'
       },
       {
         metric: 'memory.peak_usage',
         operator: 'gt',
         value: 500,
         severity: 'error',
-        description: 'Peak memory usage exceeds 500MB',
-      },
+        description: 'Peak memory usage exceeds 500MB'
+      }
     ];
   }
 
@@ -209,9 +209,15 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   private async setupOutputDirectory(): Promise<void> {
     try {
       await fs.mkdir(this.config.outputDir, { recursive: true });
-      await fs.mkdir(path.join(this.config.outputDir, 'reports'), { recursive: true });
-      await fs.mkdir(path.join(this.config.outputDir, 'metrics'), { recursive: true });
-      await fs.mkdir(path.join(this.config.outputDir, 'alerts'), { recursive: true });
+      await fs.mkdir(path.join(this.config.outputDir, 'reports'), {
+        recursive: true
+      });
+      await fs.mkdir(path.join(this.config.outputDir, 'metrics'), {
+        recursive: true
+      });
+      await fs.mkdir(path.join(this.config.outputDir, 'alerts'), {
+        recursive: true
+      });
     } catch (error) {
       console.error('Failed to setup output directory:', error);
     }
@@ -235,7 +241,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
       value,
       unit,
       tags,
-      metadata,
+      metadata
     };
 
     this.metrics.push(performanceMetric);
@@ -250,12 +256,42 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    * Record performance summary from test results
    */
   recordPerformanceSummary(summary: PerformanceSummary): void {
-    this.recordMetric(summary.testSuite, 'execution_time', summary.executionTime, 'ms');
-    this.recordMetric(summary.testSuite, 'memory_usage', summary.memoryUsage, 'MB');
-    this.recordMetric(summary.testSuite, 'throughput', summary.throughput, 'ops/sec');
-    this.recordMetric(summary.testSuite, 'success_rate', summary.successRate, '%');
-    this.recordMetric(summary.testSuite, 'avg_response_time', summary.averageResponseTime, 'ms');
-    this.recordMetric(summary.testSuite, 'error_count', summary.errors, 'count');
+    this.recordMetric(
+      summary.testSuite,
+      'execution_time',
+      summary.executionTime,
+      'ms'
+    );
+    this.recordMetric(
+      summary.testSuite,
+      'memory_usage',
+      summary.memoryUsage,
+      'MB'
+    );
+    this.recordMetric(
+      summary.testSuite,
+      'throughput',
+      summary.throughput,
+      'ops/sec'
+    );
+    this.recordMetric(
+      summary.testSuite,
+      'success_rate',
+      summary.successRate,
+      '%'
+    );
+    this.recordMetric(
+      summary.testSuite,
+      'avg_response_time',
+      summary.averageResponseTime,
+      'ms'
+    );
+    this.recordMetric(
+      summary.testSuite,
+      'error_count',
+      summary.errors,
+      'count'
+    );
   }
 
   /**
@@ -263,7 +299,9 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    */
   private checkThresholds(metric: PerformanceMetric): void {
     const relevantThresholds = this.thresholds.filter(
-      t => metric.metric.includes(t.metric.split('.')[1]) || `${metric.testSuite}.${metric.metric}`.includes(t.metric)
+      t =>
+        metric.metric.includes(t.metric.split('.')[1]) ||
+        `${metric.testSuite}.${metric.metric}`.includes(t.metric)
     );
 
     for (const threshold of relevantThresholds) {
@@ -278,7 +316,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
           testSuite: metric.testSuite,
           severity: threshold.severity,
           message: `${threshold.description}. Actual: ${metric.value}${metric.unit}, Threshold: ${threshold.value}`,
-          resolved: false,
+          resolved: false
         };
 
         this.alerts.push(alert);
@@ -294,7 +332,10 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Evaluate if a threshold is violated
    */
-  private evaluateThreshold(value: number, threshold: PerformanceThreshold): boolean {
+  private evaluateThreshold(
+    value: number,
+    threshold: PerformanceThreshold
+  ): boolean {
     switch (threshold.operator) {
       case 'gt':
         return value > threshold.value;
@@ -327,11 +368,14 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         timestamp: new Date(alert.timestamp).toISOString(),
         metric: alert.threshold.metric,
         actualValue: alert.actualValue,
-        thresholdValue: alert.threshold.value,
+        thresholdValue: alert.threshold.value
       };
 
       // In a real implementation, you'd send this to Slack, Discord, etc.
-      console.log('📧 Notification would be sent:', JSON.stringify(payload, null, 2));
+      console.log(
+        '📧 Notification would be sent:',
+        JSON.stringify(payload, null, 2)
+      );
     } catch (error) {
       console.error('Failed to send notification:', error);
     }
@@ -340,7 +384,12 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Get metrics for a specific time range
    */
-  getMetrics(testSuite?: string, metric?: string, startTime?: number, endTime?: number): PerformanceMetric[] {
+  getMetrics(
+    testSuite?: string,
+    metric?: string,
+    startTime?: number,
+    endTime?: number
+  ): PerformanceMetric[] {
     return this.metrics.filter(m => {
       if (testSuite && m.testSuite !== testSuite) return false;
       if (metric && m.metric !== metric) return false;
@@ -353,7 +402,9 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Get active alerts
    */
-  getActiveAlerts(severity?: 'warning' | 'error' | 'critical'): PerformanceAlert[] {
+  getActiveAlerts(
+    severity?: 'warning' | 'error' | 'critical'
+  ): PerformanceAlert[] {
     return this.alerts.filter(a => {
       if (a.resolved) return false;
       if (severity && a.severity !== severity) return false;
@@ -364,9 +415,15 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Analyze performance trends
    */
-  analyzeTrends(metric: string, testSuite?: string, windowHours: number = 24): TrendAnalysis[] {
+  analyzeTrends(
+    metric: string,
+    testSuite?: string,
+    windowHours: number = 24
+  ): TrendAnalysis[] {
     const cutoffTime = Date.now() - windowHours * 60 * 60 * 1000;
-    const relevantMetrics = this.getMetrics(testSuite, metric, cutoffTime).sort((a, b) => a.timestamp - b.timestamp);
+    const relevantMetrics = this.getMetrics(testSuite, metric, cutoffTime).sort(
+      (a, b) => a.timestamp - b.timestamp
+    );
 
     if (relevantMetrics.length < 3) {
       return [];
@@ -386,7 +443,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     const hourlyAverages = Array.from(hourlyData.entries())
       .map(([hour, values]) => ({
         hour,
-        average: values.reduce((sum, val) => sum + val, 0) / values.length,
+        average: values.reduce((sum, val) => sum + val, 0) / values.length
       }))
       .sort((a, b) => a.hour - b.hour);
 
@@ -395,11 +452,18 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     }
 
     // Calculate trend
-    const firstHalf = hourlyAverages.slice(0, Math.floor(hourlyAverages.length / 2));
-    const secondHalf = hourlyAverages.slice(Math.floor(hourlyAverages.length / 2));
+    const firstHalf = hourlyAverages.slice(
+      0,
+      Math.floor(hourlyAverages.length / 2)
+    );
+    const secondHalf = hourlyAverages.slice(
+      Math.floor(hourlyAverages.length / 2)
+    );
 
-    const firstHalfAvg = firstHalf.reduce((sum, h) => sum + h.average, 0) / firstHalf.length;
-    const secondHalfAvg = secondHalf.reduce((sum, h) => sum + h.average, 0) / secondHalf.length;
+    const firstHalfAvg =
+      firstHalf.reduce((sum, h) => sum + h.average, 0) / firstHalf.length;
+    const secondHalfAvg =
+      secondHalf.reduce((sum, h) => sum + h.average, 0) / secondHalf.length;
 
     const changePercent = ((secondHalfAvg - firstHalfAvg) / firstHalfAvg) * 100;
     const absChangePercent = Math.abs(changePercent);
@@ -408,9 +472,12 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     let recommendation: string | undefined;
 
     // For metrics where lower is better (response time, memory usage)
-    const lowerIsBetter = ['response_time', 'execution_time', 'memory_usage', 'error_count'].some(m =>
-      metric.includes(m)
-    );
+    const lowerIsBetter = [
+      'response_time',
+      'execution_time',
+      'memory_usage',
+      'error_count'
+    ].some(m => metric.includes(m));
 
     if (absChangePercent < 5) {
       trend = 'stable';
@@ -433,15 +500,17 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         changePercent,
         confidence: Math.min(100, hourlyAverages.length * 10), // Simple confidence calculation
         dataPoints: relevantMetrics.length,
-        recommendation,
-      },
+        recommendation
+      }
     ];
   }
 
   /**
    * Generate performance report
    */
-  async generateReport(format: 'json' | 'html' | 'markdown' = 'json'): Promise<string> {
+  async generateReport(
+    format: 'json' | 'html' | 'markdown' = 'json'
+  ): Promise<string> {
     const now = Date.now();
     const last24Hours = now - 24 * 60 * 60 * 1000;
     const last7Days = now - 7 * 24 * 60 * 60 * 1000;
@@ -458,24 +527,38 @@ class PerformanceMonitoringDashboard extends EventEmitter {
       ...this.analyzeTrends('execution_time', undefined, 24),
       ...this.analyzeTrends('memory_usage', undefined, 24),
       ...this.analyzeTrends('response_time', undefined, 24),
-      ...this.analyzeTrends('success_rate', undefined, 24),
+      ...this.analyzeTrends('success_rate', undefined, 24)
     ];
 
     // Calculate summary statistics
     const testSuites = [...new Set(recentMetrics.map(m => m.testSuite))];
     const summaryStats = testSuites.map(suite => {
       const suiteMetrics = recentMetrics.filter(m => m.testSuite === suite);
-      const executionTimes = suiteMetrics.filter(m => m.metric.includes('execution_time')).map(m => m.value);
-      const memoryUsages = suiteMetrics.filter(m => m.metric.includes('memory')).map(m => m.value);
-      const successRates = suiteMetrics.filter(m => m.metric.includes('success_rate')).map(m => m.value);
+      const executionTimes = suiteMetrics
+        .filter(m => m.metric.includes('execution_time'))
+        .map(m => m.value);
+      const memoryUsages = suiteMetrics
+        .filter(m => m.metric.includes('memory'))
+        .map(m => m.value);
+      const successRates = suiteMetrics
+        .filter(m => m.metric.includes('success_rate'))
+        .map(m => m.value);
 
       return {
         testSuite: suite,
         avgExecutionTime:
-          executionTimes.length > 0 ? executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length : 0,
-        avgMemoryUsage: memoryUsages.length > 0 ? memoryUsages.reduce((a, b) => a + b, 0) / memoryUsages.length : 0,
-        avgSuccessRate: successRates.length > 0 ? successRates.reduce((a, b) => a + b, 0) / successRates.length : 0,
-        metricCount: suiteMetrics.length,
+          executionTimes.length > 0
+            ? executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length
+            : 0,
+        avgMemoryUsage:
+          memoryUsages.length > 0
+            ? memoryUsages.reduce((a, b) => a + b, 0) / memoryUsages.length
+            : 0,
+        avgSuccessRate:
+          successRates.length > 0
+            ? successRates.reduce((a, b) => a + b, 0) / successRates.length
+            : 0,
+        metricCount: suiteMetrics.length
       };
     });
 
@@ -485,25 +568,25 @@ class PerformanceMonitoringDashboard extends EventEmitter {
         last24Hours: {
           start: new Date(last24Hours).toISOString(),
           end: new Date(now).toISOString(),
-          metricCount: recentMetrics.length,
+          metricCount: recentMetrics.length
         },
         last7Days: {
           start: new Date(last7Days).toISOString(),
           end: new Date(now).toISOString(),
-          metricCount: weeklyMetrics.length,
-        },
+          metricCount: weeklyMetrics.length
+        }
       },
       activeAlerts: {
         total: activeAlerts.length,
         critical: activeAlerts.filter(a => a.severity === 'critical').length,
         error: activeAlerts.filter(a => a.severity === 'error').length,
         warning: activeAlerts.filter(a => a.severity === 'warning').length,
-        alerts: activeAlerts.slice(0, 10), // Top 10 most recent
+        alerts: activeAlerts.slice(0, 10) // Top 10 most recent
       },
       trends: trendAnalysis,
       testSuiteSummary: summaryStats,
       overallHealth: this.calculateOverallHealth(summaryStats, activeAlerts),
-      recommendations: this.generateRecommendations(trendAnalysis, activeAlerts),
+      recommendations: this.generateRecommendations(trendAnalysis, activeAlerts)
     };
 
     // Save report
@@ -583,7 +666,10 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Generate actionable recommendations
    */
-  private generateRecommendations(trends: TrendAnalysis[], alerts: PerformanceAlert[]): string[] {
+  private generateRecommendations(
+    trends: TrendAnalysis[],
+    alerts: PerformanceAlert[]
+  ): string[] {
     const recommendations: string[] = [];
 
     // Trend-based recommendations
@@ -602,13 +688,19 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     }
 
     if (errorAlerts.length > 2) {
-      recommendations.push('Review system capacity and optimize resource allocation');
+      recommendations.push(
+        'Review system capacity and optimize resource allocation'
+      );
     }
 
     // Memory-specific recommendations
-    const memoryAlerts = alerts.filter(a => a.threshold.metric.includes('memory'));
+    const memoryAlerts = alerts.filter(a =>
+      a.threshold.metric.includes('memory')
+    );
     if (memoryAlerts.length > 0) {
-      recommendations.push('Investigate memory leaks and optimize garbage collection');
+      recommendations.push(
+        'Investigate memory leaks and optimize garbage collection'
+      );
     }
 
     // API-specific recommendations
@@ -619,7 +711,9 @@ class PerformanceMonitoringDashboard extends EventEmitter {
 
     // Default recommendations if no specific issues
     if (recommendations.length === 0) {
-      recommendations.push('Performance is stable - maintain current monitoring practices');
+      recommendations.push(
+        'Performance is stable - maintain current monitoring practices'
+      );
     }
 
     return [...new Set(recommendations)]; // Remove duplicates
@@ -670,7 +764,9 @@ class PerformanceMonitoringDashboard extends EventEmitter {
             ${
               report.overallHealth.factors.length > 0
                 ? '<p><strong>Contributing Factors:</strong></p><ul>' +
-                  report.overallHealth.factors.map(f => `<li>${f}</li>`).join('') +
+                  report.overallHealth.factors
+                    .map(f => `<li>${f}</li>`)
+                    .join('') +
                   '</ul>'
                 : ''
             }
@@ -752,7 +848,9 @@ class PerformanceMonitoringDashboard extends EventEmitter {
 
 ${
   report.overallHealth.factors.length > 0
-    ? '**Contributing Factors:**\n' + report.overallHealth.factors.map(f => `- ${f}`).join('\n') + '\n'
+    ? '**Contributing Factors:**\n' +
+      report.overallHealth.factors.map(f => `- ${f}`).join('\n') +
+      '\n'
     : ''
 }
 
@@ -803,7 +901,8 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
       this.emit('dashboard_update', {
         timestamp: Date.now(),
         activeAlerts: this.getActiveAlerts().length,
-        recentMetrics: this.getMetrics(undefined, undefined, Date.now() - 60000).length,
+        recentMetrics: this.getMetrics(undefined, undefined, Date.now() - 60000)
+          .length
       });
     }, this.config.updateIntervalMs);
   }
@@ -812,10 +911,14 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
    * Cleanup old metrics and alerts
    */
   private cleanupOldMetrics(): void {
-    const metricsRetentionCutoff = Date.now() - this.config.metricsRetentionDays * 24 * 60 * 60 * 1000;
-    const alertsRetentionCutoff = Date.now() - this.config.alertRetentionDays * 24 * 60 * 60 * 1000;
+    const metricsRetentionCutoff =
+      Date.now() - this.config.metricsRetentionDays * 24 * 60 * 60 * 1000;
+    const alertsRetentionCutoff =
+      Date.now() - this.config.alertRetentionDays * 24 * 60 * 60 * 1000;
 
-    this.metrics = this.metrics.filter(m => m.timestamp >= metricsRetentionCutoff);
+    this.metrics = this.metrics.filter(
+      m => m.timestamp >= metricsRetentionCutoff
+    );
     this.alerts = this.alerts.filter(a => a.timestamp >= alertsRetentionCutoff);
   }
 
@@ -840,7 +943,7 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
       alerts: this.alerts,
       thresholds: this.thresholds,
       config: this.config,
-      exportedAt: new Date().toISOString(),
+      exportedAt: new Date().toISOString()
     };
 
     const filename = `dashboard-state-${Date.now()}.json`;
@@ -876,5 +979,5 @@ export {
   PerformanceAlert,
   PerformanceSummary,
   TrendAnalysis,
-  DashboardConfig,
+  DashboardConfig
 };

@@ -1,10 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 // Preview smoke test: ensure the app loads and no console errors are emitted.
-test('preview loads without console errors and becomes ready', async ({ page }) => {
+test('preview loads without console errors and becomes ready', async ({
+  page
+}) => {
   const errors: string[] = [];
 
-  page.on('console', (msg) => {
+  page.on('console', msg => {
     if (msg.type() === 'error') {
       errors.push(msg.text());
     }
@@ -17,7 +19,10 @@ test('preview loads without console errors and becomes ready', async ({ page }) 
   const loadingSelector = '.loading-message';
   const hasLoading = await page.locator(loadingSelector).count();
   if (hasLoading > 0) {
-    await page.locator(loadingSelector).waitFor({ state: 'detached', timeout: 20_000 }).catch(() => {});
+    await page
+      .locator(loadingSelector)
+      .waitFor({ state: 'detached', timeout: 20_000 })
+      .catch(() => {});
   }
 
   // Expect that an error screen is not shown.
@@ -27,5 +32,8 @@ test('preview loads without console errors and becomes ready', async ({ page }) 
   await expect(page.locator('div.App')).toHaveCount(1);
 
   // Ensure no console errors were logged during boot.
-  expect(errors, `Console errors encountered: \n${errors.join('\n')}`).toHaveLength(0);
+  expect(
+    errors,
+    `Console errors encountered: \n${errors.join('\n')}`
+  ).toHaveLength(0);
 });

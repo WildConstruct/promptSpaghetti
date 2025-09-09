@@ -29,11 +29,14 @@ interface CacheEntry {
 
 export class MetadataExtractor {
   private cache = new Map<string, CacheEntry>();
-  private extractionQueue: Array<{ text: string; resolve: (result: ExtractionResult) => void }> = [];
+  private extractionQueue: Array<{
+    text: string;
+    resolve: (result: ExtractionResult) => void;
+  }> = [];
   private isProcessing = false;
   private llmService: LLMService | null = null;
   private offlineCache = new Map<string, SegmentMetadata>();
-  
+
   constructor(llmService?: LLMService) {
     this.llmService = llmService || null;
     this.initializeOfflineCache();
@@ -49,7 +52,7 @@ export class MetadataExtractor {
       intensity: 9,
       tags: ['urban', 'chaos', 'crowd']
     });
-    
+
     this.offlineCache.set('desert scene', {
       subject: 'landscape',
       action: null,
@@ -58,7 +61,7 @@ export class MetadataExtractor {
       intensity: 3,
       tags: ['desert', 'outdoor', 'landscape']
     });
-    
+
     this.offlineCache.set('crowd panic', {
       subject: 'crowd',
       action: 'panic',
@@ -67,7 +70,7 @@ export class MetadataExtractor {
       intensity: 10,
       tags: ['crowd', 'panic', 'emergency']
     });
-    
+
     this.offlineCache.set('car drifting', {
       subject: 'sports car',
       action: 'drifting',
@@ -88,7 +91,7 @@ export class MetadataExtractor {
 
   async extract(text: string): Promise<ExtractionResult> {
     const startTime = performance.now();
-    
+
     // Check cache first
     const cached = this.checkCache(text);
     if (cached) {
@@ -98,7 +101,7 @@ export class MetadataExtractor {
         fromCache: true
       };
     }
-    
+
     // Try offline matching for common patterns
     const offlineMetadata = this.matchOfflinePattern(text);
     if (offlineMetadata) {
@@ -109,7 +112,7 @@ export class MetadataExtractor {
         fromCache: false
       };
     }
-    
+
     // Use LLM if available
     if (this.llmService) {
       try {
@@ -124,7 +127,7 @@ export class MetadataExtractor {
         console.debug('LLM extraction failed, using fallback:', error);
       }
     }
-    
+
     // Fallback to basic extraction
     const fallbackMetadata = this.extractBasic(text);
     this.cacheMetadata(text, fallbackMetadata, 1800000); // 30 min for fallback
@@ -139,7 +142,7 @@ export class MetadataExtractor {
     if (!this.llmService) {
       throw new Error('LLM service not available');
     }
-    
+
     const prompt = `Extract key metadata from this text segment. Output JSON only:
     
 Text: "${text}"
@@ -162,13 +165,13 @@ Keep tags limited to 3 maximum. Be concise.`;
       responseFormat: 'json',
       taskType: 'metadata'
     });
-    
+
     if (!response?.content) {
       throw new Error('No response from LLM');
     }
-    
+
     const parsed = JSON.parse(response.content);
-    
+
     return {
       subject: parsed.subject || undefined,
       action: parsed.action || undefined,
@@ -185,7 +188,7 @@ Keep tags limited to 3 maximum. Be concise.`;
   private extractBasic(text: string): SegmentMetadata {
     const words = text.toLowerCase().split(/\s+/);
     const tags: string[] = [];
-    
+
     // Basic keyword detection
     if (words.some(w => ['car', 'vehicle', 'truck'].includes(w))) {
       tags.push('vehicle');
@@ -202,22 +205,24 @@ Keep tags limited to 3 maximum. Be concise.`;
     if (words.some(w => ['crowd', 'people', 'group'].includes(w))) {
       tags.push('crowd');
     }
-    
+
     // Detect mood from keywords
     let mood: string | undefined;
     let intensity = 5;
-    
+
     if (words.some(w => ['panic', 'chaos', 'frantic'].includes(w))) {
       mood = 'frantic';
       intensity = 9;
     } else if (words.some(w => ['calm', 'peaceful', 'serene'].includes(w))) {
       mood = 'peaceful';
       intensity = 2;
-    } else if (words.some(w => ['intense', 'extreme', 'dramatic'].includes(w))) {
+    } else if (
+      words.some(w => ['intense', 'extreme', 'dramatic'].includes(w))
+    ) {
       mood = 'intense';
       intensity = 8;
     }
-    
+
     return {
       tags: tags.slice(0, 3),
       mood,
@@ -230,7 +235,7 @@ Keep tags limited to 3 maximum. Be concise.`;
 
   private matchOfflinePattern(text: string): SegmentMetadata | null {
     const lowerText = text.toLowerCase();
-    
+
     // Check for exact or partial matches in offline cache
     for (const [pattern, metadata] of this.offlineCache.entries()) {
       if (lowerText.includes(pattern)) {
@@ -242,30 +247,34 @@ Keep tags limited to 3 maximum. Be concise.`;
         };
       }
     }
-    
+
     return null;
   }
 
   private checkCache(text: string): SegmentMetadata | null {
     const entry = this.cache.get(text);
     if (!entry) return null;
-    
+
     const now = Date.now();
     if (now - entry.timestamp > entry.ttl) {
       this.cache.delete(text);
       return null;
     }
-    
+
     return entry.metadata;
   }
 
-  private cacheMetadata(text: string, metadata: SegmentMetadata, ttl: number): void {
+  private cacheMetadata(
+    text: string,
+    metadata: SegmentMetadata,
+    ttl: number
+  ): void {
     // Limit cache size
     if (this.cache.size > 100) {
       const firstKey = this.cache.keys().next().value;
       if (firstKey) this.cache.delete(firstKey);
     }
-    
+
     this.cache.set(text, {
       metadata,
       timestamp: Date.now(),
@@ -276,9 +285,7 @@ Keep tags limited to 3 maximum. Be concise.`;
   async extractBatch(texts: string[]): Promise<ExtractionResult[]> {
     // Process up to 5 texts in batch
     const batch = texts.slice(0, 5);
-    const results = await Promise.all(
-      batch.map(text => this.extract(text))
-    );
+    const results = await Promise.all(batch.map(text => this.extract(text)));
     return results;
   }
 
@@ -295,18 +302,21 @@ Keep tags limited to 3 maximum. Be concise.`;
   }
 
   // Search enhancement - convert natural language to metadata filters
-  parseSearchQuery(query: string): { filters: Partial<SegmentMetadata>; keywords: string[] } {
+  parseSearchQuery(query: string): {
+    filters: Partial<SegmentMetadata>;
+    keywords: string[];
+  } {
     const lowerQuery = query.toLowerCase();
     const filters: Partial<SegmentMetadata> = {};
     const keywords: string[] = [];
-    
+
     // Extract location filters
     if (lowerQuery.includes('urban') || lowerQuery.includes('city')) {
       filters.location = 'urban';
     } else if (lowerQuery.includes('desert')) {
       filters.location = 'desert';
     }
-    
+
     // Extract mood filters
     if (lowerQuery.includes('intense') || lowerQuery.includes('dramatic')) {
       filters.mood = 'intense';
@@ -315,35 +325,55 @@ Keep tags limited to 3 maximum. Be concise.`;
     } else if (lowerQuery.includes('tense') || lowerQuery.includes('frantic')) {
       filters.mood = 'frantic';
     }
-    
+
     // Extract action keywords
     if (lowerQuery.includes('action')) {
       filters.action = '*'; // Wildcard for any action
     }
-    
+
     // Extract remaining keywords
-    const words = query.split(/\s+/).filter(word => 
-      !['urban', 'city', 'desert', 'intense', 'dramatic', 'calm', 
-        'peaceful', 'tense', 'frantic', 'action', 'scene', 'with'].includes(word.toLowerCase())
-    );
+    const words = query
+      .split(/\s+/)
+      .filter(
+        word =>
+          ![
+            'urban',
+            'city',
+            'desert',
+            'intense',
+            'dramatic',
+            'calm',
+            'peaceful',
+            'tense',
+            'frantic',
+            'action',
+            'scene',
+            'with'
+          ].includes(word.toLowerCase())
+      );
     keywords.push(...words);
-    
+
     return { filters, keywords };
   }
 
   // Calculate relevance score for search results
-  calculateRelevance(metadata: SegmentMetadata, filters: Partial<SegmentMetadata>): number {
+  calculateRelevance(
+    metadata: SegmentMetadata,
+    filters: Partial<SegmentMetadata>
+  ): number {
     let score = 0;
     let maxScore = 0;
-    
+
     // Subject match
     if (filters.subject) {
       maxScore += 3;
-      if (metadata.subject?.toLowerCase().includes(filters.subject.toLowerCase())) {
+      if (
+        metadata.subject?.toLowerCase().includes(filters.subject.toLowerCase())
+      ) {
         score += 3;
       }
     }
-    
+
     // Location match
     if (filters.location) {
       maxScore += 2;
@@ -351,7 +381,7 @@ Keep tags limited to 3 maximum. Be concise.`;
         score += 2;
       }
     }
-    
+
     // Mood match
     if (filters.mood) {
       maxScore += 2;
@@ -359,7 +389,7 @@ Keep tags limited to 3 maximum. Be concise.`;
         score += 2;
       }
     }
-    
+
     // Action match (wildcard support)
     if (filters.action) {
       maxScore += 2;
@@ -369,7 +399,7 @@ Keep tags limited to 3 maximum. Be concise.`;
         score += 2;
       }
     }
-    
+
     // Tag matches
     if (filters.tags && metadata.tags) {
       maxScore += filters.tags.length;
@@ -379,7 +409,7 @@ Keep tags limited to 3 maximum. Be concise.`;
         }
       }
     }
-    
-    return maxScore > 0 ? (score / maxScore) : 0;
+
+    return maxScore > 0 ? score / maxScore : 0;
   }
 }

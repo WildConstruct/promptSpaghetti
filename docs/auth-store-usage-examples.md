@@ -449,7 +449,7 @@ async function updateUserProfile(profileData: any) {
     const response = await fetch('/api/user/profile', {
       method: 'PATCH',
       headers,
-      body: JSON.stringify(profileData),
+      body: JSON.stringify(profileData)
     });
 
     if (!response.ok) {

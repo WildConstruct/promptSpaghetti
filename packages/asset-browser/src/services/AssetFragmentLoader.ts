@@ -36,7 +36,9 @@ export type AssetFragmentManifest = {
  * Loads the asset fragment manifest from /assets/library/asset-fragments-manifest.json
  * Returns the parsed manifest with categories and fragments
  */
-export async function loadAssetFragments(baseUrl: string = ''): Promise<AssetFragmentManifest | null> {
+export async function loadAssetFragments(
+  baseUrl: string = ''
+): Promise<AssetFragmentManifest | null> {
   const candidates = [
     '/assets/library/asset-fragments-manifest.json',
     `${baseUrl}/assets/library/asset-fragments-manifest.json`,
@@ -47,18 +49,18 @@ export async function loadAssetFragments(baseUrl: string = ''): Promise<AssetFra
     try {
       const res = await fetch(url);
       if (!res.ok) continue;
-      
+
       const data = await res.json();
-      
+
       // Validate it's an asset fragment manifest
       if (data?.type !== 'asset-fragments') continue;
-      
+
       return data as AssetFragmentManifest;
     } catch (err) {
       console.warn(`Failed to load asset fragments from ${url}:`, err);
       continue;
     }
   }
-  
+
   return null;
 }

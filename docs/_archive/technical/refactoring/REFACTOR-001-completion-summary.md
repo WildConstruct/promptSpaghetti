@@ -158,8 +158,8 @@ export const newTemplate: NodeTemplate = {
     label: 'New Feature',
     description: 'Description of new feature',
     category: 'logic',
-    options: [{ label: 'Option 1', value: 'option1', weight: 1 }],
-  },
+    options: [{ label: 'Option 1', value: 'option1', weight: 1 }]
+  }
 };
 ```
 
@@ -170,7 +170,7 @@ export const newTemplate: NodeTemplate = {
 const factory = NodeFactory.getInstance();
 const newNode = factory.createNode('archetype-2', {
   position: { x: 100, y: 100 },
-  customId: 'my-panel-node',
+  customId: 'my-panel-node'
 });
 ```
 

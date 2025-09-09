@@ -77,7 +77,7 @@ This document analyzes the performance characteristics of the Prompt Targeting S
 const cacheConfig = {
   defaultTTL: 3600, // 1 hour for most content
   enableCompression: true, // For large graphs
-  compressionThreshold: 1024, // Compress values > 1KB
+  compressionThreshold: 1024 // Compress values > 1KB
 };
 ```
 
@@ -95,7 +95,7 @@ const cacheConfig = {
 const mappingConfig = {
   maxConcurrency: 10, // Balance throughput vs resource usage
   translationTimeout: 30000, // Prevent hanging requests
-  enableLogging: false, // Reduce I/O overhead in production
+  enableLogging: false // Reduce I/O overhead in production
 };
 ```
 
@@ -384,7 +384,9 @@ function traverseGraphIterative(startNode: PromptNode): string {
 async function processGraphParallel(graph: PromptGraph): Promise<string> {
   const branches = identifyIndependentBranches(graph);
 
-  const results = await Promise.all(branches.map(branch => processBranch(branch)));
+  const results = await Promise.all(
+    branches.map(branch => processBranch(branch))
+  );
 
   return combineResults(results);
 }
@@ -532,7 +534,9 @@ class CompressedCache implements CacheInterface {
 import { trace, metrics } from '@opentelemetry/api';
 
 class InstrumentedMappingEngine extends DefaultMappingEngine {
-  private translationDuration = metrics.createHistogram('translation_duration_ms');
+  private translationDuration = metrics.createHistogram(
+    'translation_duration_ms'
+  );
   private cacheHitRate = metrics.createCounter('cache_hits_total');
 
   async translate(graph: any, platform: string, config?: AdaptorConfig) {
@@ -545,7 +549,7 @@ class InstrumentedMappingEngine extends DefaultMappingEngine {
       // Record metrics
       this.translationDuration.record(Date.now() - startTime, {
         platform,
-        cached: !!result.metadata.cached,
+        cached: !!result.metadata.cached
       });
 
       return result;
@@ -564,13 +568,13 @@ const translationDuration = new promClient.Histogram({
   name: 'prompt_targeting_translation_duration_seconds',
   help: 'Time taken to translate prompts',
   labelNames: ['platform', 'adaptor_id', 'cached'],
-  buckets: [0.001, 0.01, 0.1, 1, 10, 30],
+  buckets: [0.001, 0.01, 0.1, 1, 10, 30]
 });
 
 const cacheHitRate = new promClient.Counter({
   name: 'prompt_targeting_cache_hits_total',
   help: 'Number of cache hits',
-  labelNames: ['platform'],
+  labelNames: ['platform']
 });
 ```
 
@@ -667,14 +671,14 @@ const productionConfig = {
   cache: {
     enabled: true,
     defaultTTL: 7200, // 2 hours
-    enableCompression: true,
+    enableCompression: true
   },
   mapping: {
     maxConcurrency: 50, // High concurrency
     translationTimeout: 15000, // Shorter timeout
-    enableLogging: false, // Reduce I/O overhead
+    enableLogging: false // Reduce I/O overhead
   },
-  enableLogging: false,
+  enableLogging: false
 };
 ```
 
@@ -685,14 +689,14 @@ const reliabilityConfig = {
   cache: {
     enabled: true,
     defaultTTL: 1800, // 30 minutes (fresher data)
-    enableCompression: false, // Faster access
+    enableCompression: false // Faster access
   },
   mapping: {
     maxConcurrency: 10, // Conservative concurrency
     translationTimeout: 60000, // Longer timeout
-    enableLogging: true, // Full observability
+    enableLogging: true // Full observability
   },
-  enableLogging: true,
+  enableLogging: true
 };
 ```
 

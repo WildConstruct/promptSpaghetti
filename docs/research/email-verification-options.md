@@ -91,11 +91,11 @@ const createVerificationToken = (email, code) => {
     {
       email,
       code,
-      purpose: 'email_verification',
+      purpose: 'email_verification'
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: '15m',
+      expiresIn: '15m'
     }
   );
 };
@@ -111,7 +111,7 @@ const generateEmailTOTP = userSecret => {
     secret: userSecret,
     encoding: 'base32',
     window: 1, // 30-second window
-    step: 30,
+    step: 30
   });
 };
 ```
@@ -123,11 +123,11 @@ const generateMagicLink = userId => {
   const token = jwt.sign(
     {
       userId,
-      purpose: 'magic_link',
+      purpose: 'magic_link'
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: '1h',
+      expiresIn: '1h'
     }
   );
 

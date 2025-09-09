@@ -23,8 +23,11 @@ server.get('/health', async (request, reply) => {
 
 // Preview endpoint - execute graph with multiple seeds
 server.post('/preview', async (request, reply) => {
-  const { graph, numSeeds = 5 } = request.body as { graph: Graph; numSeeds?: number };
-  
+  const { graph, numSeeds = 5 } = request.body as {
+    graph: Graph;
+    numSeeds?: number;
+  };
+
   if (!graph) {
     return reply.status(400).send({ error: 'Graph is required' });
   }
@@ -35,7 +38,7 @@ server.post('/preview', async (request, reply) => {
   for (let i = 0; i < numSeeds; i++) {
     const seed = Math.floor(Math.random() * 1000000);
     seeds.push(seed);
-    
+
     try {
       const graphWithSeed = { ...graph, seed };
       const result = await executeGraph(graphWithSeed);
@@ -51,7 +54,7 @@ server.post('/preview', async (request, reply) => {
 
 // Export endpoint (placeholder for now)
 server.post('/export', async (request, reply) => {
-  return reply.status(501).send({ 
+  return reply.status(501).send({
     error: 'Export functionality not available in minimal mode',
     message: 'The exporter module needs to be fixed first'
   });

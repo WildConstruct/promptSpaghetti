@@ -34,7 +34,12 @@ export interface EventData {
 
 export interface PerformanceMetric {
   id: string;
-  metricType: 'execution_time' | 'memory_usage' | 'throughput' | 'error_rate' | 'latency';
+  metricType:
+    | 'execution_time'
+    | 'memory_usage'
+    | 'throughput'
+    | 'error_rate'
+    | 'latency';
   value: number;
   unit: string;
   component: string;
@@ -112,10 +117,16 @@ export class AnalyticsDataGenerator {
       { name: 'active_connections', unit: 'count', range: [100, 5000] },
       { name: 'request_rate', unit: 'requests_per_second', range: [10, 500] },
       { name: 'error_rate', unit: 'percent', range: [0, 5] },
-      { name: 'response_time', unit: 'ms', range: [50, 2000] },
+      { name: 'response_time', unit: 'ms', range: [50, 2000] }
     ];
 
-    const components = ['web_server', 'database', 'cache', 'message_queue', 'background_worker'];
+    const components = [
+      'web_server',
+      'database',
+      'cache',
+      'message_queue',
+      'background_worker'
+    ];
 
     for (let day = 0; day < days; day++) {
       const date = new Date(Date.now() - day * 24 * 60 * 60 * 1000);
@@ -126,11 +137,16 @@ export class AnalyticsDataGenerator {
 
         metricTypes.forEach(metricType => {
           components.forEach(component => {
-            const baseValue = metricType.range[0] + this.rng() * (metricType.range[1] - metricType.range[0]);
+            const baseValue =
+              metricType.range[0] +
+              this.rng() * (metricType.range[1] - metricType.range[0]);
 
             // Add time-based variations (higher load during business hours)
             const timeMultiplier = hour >= 9 && hour <= 17 ? 1.3 : 0.8;
-            const value = Math.max(0, baseValue * timeMultiplier * (0.8 + this.rng() * 0.4));
+            const value = Math.max(
+              0,
+              baseValue * timeMultiplier * (0.8 + this.rng() * 0.4)
+            );
 
             metrics.push({
               id: `${metricType.name}_${component}_${timestamp.getTime()}`,
@@ -141,13 +157,15 @@ export class AnalyticsDataGenerator {
               tags: {
                 component,
                 environment: 'production',
-                datacenter: ['us-east-1', 'us-west-2', 'eu-west-1'][Math.floor(this.rng() * 3)],
-                instance: `instance-${Math.floor(this.rng() * 5) + 1}`,
+                datacenter: ['us-east-1', 'us-west-2', 'eu-west-1'][
+                  Math.floor(this.rng() * 3)
+                ],
+                instance: `instance-${Math.floor(this.rng() * 5) + 1}`
               },
               metadata: {
                 collection_method: 'automated',
-                accuracy: 0.95 + this.rng() * 0.05,
-              },
+                accuracy: 0.95 + this.rng() * 0.05
+              }
             });
           });
         });
@@ -172,7 +190,7 @@ export class AnalyticsDataGenerator {
       { category: 'project', action: 'create', source: 'web_app' },
       { category: 'project', action: 'share', source: 'web_app' },
       { category: 'export', action: 'download', source: 'api' },
-      { category: 'settings', action: 'update', source: 'web_app' },
+      { category: 'settings', action: 'update', source: 'web_app' }
     ];
 
     for (let day = 0; day < days; day++) {
@@ -183,8 +201,11 @@ export class AnalyticsDataGenerator {
         const eventCount = Math.floor(this.rng() * 25) + 5;
 
         for (let i = 0; i < eventCount; i++) {
-          const eventType = eventTypes[Math.floor(this.rng() * eventTypes.length)];
-          const timestamp = new Date(date.getTime() + this.rng() * 24 * 60 * 60 * 1000);
+          const eventType =
+            eventTypes[Math.floor(this.rng() * eventTypes.length)];
+          const timestamp = new Date(
+            date.getTime() + this.rng() * 24 * 60 * 60 * 1000
+          );
 
           events.push({
             id: `event_${userId}_${day}_${i}`,
@@ -195,7 +216,7 @@ export class AnalyticsDataGenerator {
             timestamp,
             userId,
             sessionId: `session_${userId}_${Math.floor(day / 3)}_${Math.floor(i / 10)}`,
-            source: eventType.source,
+            source: eventType.source
           });
         }
       });
@@ -212,13 +233,20 @@ export class AnalyticsDataGenerator {
     const properties: Record<string, unknown> = {
       source: eventType.source,
       timestamp: new Date().toISOString(),
-      session_duration: Math.floor(this.rng() * 3600) + 300, // 5 minutes to 1 hour
+      session_duration: Math.floor(this.rng() * 3600) + 300 // 5 minutes to 1 hour
     };
 
     switch (eventType.category) {
       case 'rule':
-        properties.rule_type = ['WeightedChoice', 'Conditional', 'Sequential', 'Markov'][Math.floor(this.rng() * 4)];
-        properties.complexity = ['simple', 'moderate', 'complex'][Math.floor(this.rng() * 3)];
+        properties.rule_type = [
+          'WeightedChoice',
+          'Conditional',
+          'Sequential',
+          'Markov'
+        ][Math.floor(this.rng() * 4)];
+        properties.complexity = ['simple', 'moderate', 'complex'][
+          Math.floor(this.rng() * 3)
+        ];
         if (eventType.action === 'execute') {
           properties.execution_time = Math.floor(this.rng() * 1000) + 10;
           properties.success = this.rng() > 0.05; // 95% success rate
@@ -226,7 +254,9 @@ export class AnalyticsDataGenerator {
         break;
 
       case 'project':
-        properties.project_size = ['small', 'medium', 'large'][Math.floor(this.rng() * 3)];
+        properties.project_size = ['small', 'medium', 'large'][
+          Math.floor(this.rng() * 3)
+        ];
         properties.collaboration = this.rng() > 0.6;
         break;
 
@@ -236,8 +266,12 @@ export class AnalyticsDataGenerator {
         break;
 
       case 'user':
-        properties.device_type = ['desktop', 'mobile', 'tablet'][Math.floor(this.rng() * 3)];
-        properties.browser = ['chrome', 'firefox', 'safari', 'edge'][Math.floor(this.rng() * 4)];
+        properties.device_type = ['desktop', 'mobile', 'tablet'][
+          Math.floor(this.rng() * 3)
+        ];
+        properties.browser = ['chrome', 'firefox', 'safari', 'edge'][
+          Math.floor(this.rng() * 4)
+        ];
         break;
     }
 
@@ -249,8 +283,23 @@ export class AnalyticsDataGenerator {
    */
   generatePerformanceMetrics(days: number = 30): PerformanceMetric[] {
     const metrics: PerformanceMetric[] = [];
-    const components = ['graph_engine', 'validation', 'export', 'api', 'database', 'cache'];
-    const operations = ['execute', 'validate', 'export', 'query', 'insert', 'update', 'delete'];
+    const components = [
+      'graph_engine',
+      'validation',
+      'export',
+      'api',
+      'database',
+      'cache'
+    ];
+    const operations = [
+      'execute',
+      'validate',
+      'export',
+      'query',
+      'insert',
+      'update',
+      'delete'
+    ];
 
     for (let day = 0; day < days; day++) {
       const date = new Date(Date.now() - day * 24 * 60 * 60 * 1000);
@@ -267,7 +316,7 @@ export class AnalyticsDataGenerator {
               'memory_usage',
               'throughput',
               'error_rate',
-              'latency',
+              'latency'
             ];
 
             metricTypes.forEach(metricType => {
@@ -309,8 +358,8 @@ export class AnalyticsDataGenerator {
                   environment: 'production',
                   version: '1.0.0',
                   load_factor: this.rng(),
-                  concurrent_users: Math.floor(this.rng() * 500) + 50,
-                },
+                  concurrent_users: Math.floor(this.rng() * 500) + 50
+                }
               });
             });
           });
@@ -338,7 +387,7 @@ export class AnalyticsDataGenerator {
       'run_preview',
       'export_data',
       'share_project',
-      'invite_user',
+      'invite_user'
     ];
 
     const targets = [
@@ -350,14 +399,18 @@ export class AnalyticsDataGenerator {
       'rule_list',
       'project_list',
       'user_profile',
-      'export_modal',
+      'export_modal'
     ];
 
     users.forEach(userId => {
       for (let day = 0; day < days; day++) {
         // 70% chance user is active on any given day
         if (this.rng() > 0.3) {
-          const sessionStart = new Date(Date.now() - day * 24 * 60 * 60 * 1000 + this.rng() * 24 * 60 * 60 * 1000);
+          const sessionStart = new Date(
+            Date.now() -
+              day * 24 * 60 * 60 * 1000 +
+              this.rng() * 24 * 60 * 60 * 1000
+          );
           const sessionDuration = (this.rng() * 3600 + 300) * 1000; // 5 minutes to 1 hour
           const sessionEnd = new Date(sessionStart.getTime() + sessionDuration);
 
@@ -365,7 +418,9 @@ export class AnalyticsDataGenerator {
           const actionCount = Math.floor(this.rng() * 50) + 10; // 10-60 actions per session
 
           for (let i = 0; i < actionCount; i++) {
-            const actionTimestamp = new Date(sessionStart.getTime() + (i * sessionDuration) / actionCount);
+            const actionTimestamp = new Date(
+              sessionStart.getTime() + (i * sessionDuration) / actionCount
+            );
             const action = actions[Math.floor(this.rng() * actions.length)];
             const target = targets[Math.floor(this.rng() * targets.length)];
 
@@ -373,12 +428,17 @@ export class AnalyticsDataGenerator {
               action,
               target,
               timestamp: actionTimestamp,
-              duration: action.includes('edit') ? Math.floor(this.rng() * 300) + 30 : undefined, // Edit actions have duration
+              duration: action.includes('edit')
+                ? Math.floor(this.rng() * 300) + 30
+                : undefined, // Edit actions have duration
               metadata: {
                 scroll_depth: this.rng(),
-                click_position: { x: Math.floor(this.rng() * 1920), y: Math.floor(this.rng() * 1080) },
-                referrer: this.rng() > 0.8 ? 'external' : 'internal',
-              },
+                click_position: {
+                  x: Math.floor(this.rng() * 1920),
+                  y: Math.floor(this.rng() * 1080)
+                },
+                referrer: this.rng() > 0.8 ? 'external' : 'internal'
+              }
             });
           }
 
@@ -389,7 +449,7 @@ export class AnalyticsDataGenerator {
             sessionStart,
             sessionEnd,
             deviceInfo: this.generateDeviceInfo(),
-            geolocation: this.generateGeolocation(),
+            geolocation: this.generateGeolocation()
           });
         }
       }
@@ -406,7 +466,7 @@ export class AnalyticsDataGenerator {
       'Mobile - iPhone 14 Pro',
       'Mobile - Samsung Galaxy S23',
       'Tablet - iPad Pro 12.9"',
-      'Tablet - Surface Pro 9',
+      'Tablet - Surface Pro 9'
     ];
     return devices[Math.floor(this.rng() * devices.length)];
   }
@@ -419,7 +479,7 @@ export class AnalyticsDataGenerator {
       { country: 'DE', region: 'Bavaria', city: 'Munich' },
       { country: 'JP', region: 'Tokyo', city: 'Tokyo' },
       { country: 'AU', region: 'New South Wales', city: 'Sydney' },
-      { country: 'CA', region: 'Ontario', city: 'Toronto' },
+      { country: 'CA', region: 'Ontario', city: 'Toronto' }
     ];
     return locations[Math.floor(this.rng() * locations.length)];
   }
@@ -462,52 +522,70 @@ export class AnalyticsDataGenerator {
     const trend = (this.rng() - 0.5) * 0.1; // -5% to +5% trend
 
     for (let i = 0; i < pointCount; i++) {
-      const timestamp = new Date(Date.now() - (pointCount - i - 1) * intervalMs);
+      const timestamp = new Date(
+        Date.now() - (pointCount - i - 1) * intervalMs
+      );
       const noise = (this.rng() - 0.5) * 0.3; // ±15% noise
       const seasonality = Math.sin((i / pointCount) * 2 * Math.PI) * 0.2; // Seasonal variation
 
-      const value = Math.max(0, baseValue * (1 + trend * i + noise + seasonality));
+      const value = Math.max(
+        0,
+        baseValue * (1 + trend * i + noise + seasonality)
+      );
 
       dataPoints.push({
         timestamp,
         value: Math.round(value * 100) / 100,
         tags: {
           source: 'system',
-          quality: this.rng() > 0.95 ? 'estimated' : 'measured',
-        },
+          quality: this.rng() > 0.95 ? 'estimated' : 'measured'
+        }
       });
     }
 
     return {
       metric,
       dataPoints,
-      aggregation: ['sum', 'avg', 'min', 'max', 'count'][Math.floor(this.rng() * 5)] as any,
-      interval,
+      aggregation: ['sum', 'avg', 'min', 'max', 'count'][
+        Math.floor(this.rng() * 5)
+      ] as any,
+      interval
     };
   }
 
   /**
    * Generate rule usage analytics
    */
-  generateRuleUsageAnalytics(ruleIds: string[], days: number = 30): RuleUsageAnalytics[] {
+  generateRuleUsageAnalytics(
+    ruleIds: string[],
+    days: number = 30
+  ): RuleUsageAnalytics[] {
     return ruleIds.map(ruleId => {
       const ruleName = `Rule ${ruleId.split('-')[1]}`;
       const applications = Math.floor(this.rng() * 10000) + 100;
       const successRate = 0.85 + this.rng() * 0.14; // 85-99% success rate
       const avgExecutionTime = Math.floor(this.rng() * 500) + 50; // 50-550ms
-      const charactersProcessed = applications * (Math.floor(this.rng() * 1000) + 100);
+      const charactersProcessed =
+        applications * (Math.floor(this.rng() * 1000) + 100);
       const errorCount = Math.floor(applications * (1 - successRate));
-      const lastUsed = new Date(Date.now() - this.rng() * days * 24 * 60 * 60 * 1000);
+      const lastUsed = new Date(
+        Date.now() - this.rng() * days * 24 * 60 * 60 * 1000
+      );
 
       // Generate user ratings (1-5 stars)
       const ratingCount = Math.floor(this.rng() * 50) + 5;
-      const userRatings = Array.from({ length: ratingCount }, () => Math.floor(this.rng() * 5) + 1);
+      const userRatings = Array.from(
+        { length: ratingCount },
+        () => Math.floor(this.rng() * 5) + 1
+      );
 
       // Generate trend data
       const trendData = [];
       for (let day = 0; day < days; day++) {
         const date = new Date(Date.now() - day * 24 * 60 * 60 * 1000);
-        const dailyApplications = Math.floor((applications / days) * (0.7 + this.rng() * 0.6));
+        const dailyApplications = Math.floor(
+          (applications / days) * (0.7 + this.rng() * 0.6)
+        );
         const dailySuccessRate = successRate * (0.95 + this.rng() * 0.1);
         const dailyAvgTime = avgExecutionTime * (0.8 + this.rng() * 0.4);
 
@@ -515,7 +593,7 @@ export class AnalyticsDataGenerator {
           date,
           applications: dailyApplications,
           successRate: Math.min(1, dailySuccessRate),
-          avgExecutionTime: dailyAvgTime,
+          avgExecutionTime: dailyAvgTime
         });
       }
 
@@ -529,7 +607,7 @@ export class AnalyticsDataGenerator {
         errorCount,
         lastUsed,
         userRatings,
-        trendData: trendData.reverse(), // Oldest to newest
+        trendData: trendData.reverse() // Oldest to newest
       };
     });
   }
@@ -553,8 +631,14 @@ export class AnalyticsDataGenerator {
   } {
     const { userCount = 100, ruleCount = 50, days = 30 } = options;
 
-    const users = Array.from({ length: userCount }, (_, i) => `user-${i.toString().padStart(4, '0')}`);
-    const ruleIds = Array.from({ length: ruleCount }, (_, i) => `rule-${i.toString().padStart(4, '0')}`);
+    const users = Array.from(
+      { length: userCount },
+      (_, i) => `user-${i.toString().padStart(4, '0')}`
+    );
+    const ruleIds = Array.from(
+      { length: ruleCount },
+      (_, i) => `rule-${i.toString().padStart(4, '0')}`
+    );
 
     const metrics = [
       'cpu_usage',
@@ -563,7 +647,7 @@ export class AnalyticsDataGenerator {
       'error_rate',
       'rule_executions',
       'user_sessions',
-      'data_processed',
+      'data_processed'
     ];
 
     return {
@@ -571,8 +655,10 @@ export class AnalyticsDataGenerator {
       userEvents: this.generateUserEvents(users, days),
       performanceMetrics: this.generatePerformanceMetrics(days),
       userBehavior: this.generateUserBehavior(users, days),
-      timeSeriesData: metrics.map(metric => this.generateTimeSeriesData(metric, days)),
-      ruleAnalytics: this.generateRuleUsageAnalytics(ruleIds, days),
+      timeSeriesData: metrics.map(metric =>
+        this.generateTimeSeriesData(metric, days)
+      ),
+      ruleAnalytics: this.generateRuleUsageAnalytics(ruleIds, days)
     };
   }
 }

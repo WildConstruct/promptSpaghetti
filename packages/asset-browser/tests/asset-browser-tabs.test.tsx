@@ -15,9 +15,16 @@ describe('AssetBrowserTabs', () => {
   it('defaults to Library tab and switches to Server', async () => {
     // Mock server manifest
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (global as any).fetch = jest.fn(async () => ({ ok: true, json: async () => ([
-      { filename: 'a.psg', title: 'Alpha', updatedAt: new Date().toISOString() },
-    ]) })) as any;
+    (global as any).fetch = jest.fn(async () => ({
+      ok: true,
+      json: async () => [
+        {
+          filename: 'a.psg',
+          title: 'Alpha',
+          updatedAt: new Date().toISOString()
+        }
+      ]
+    })) as any;
 
     render(<AssetBrowserTabs libraryView={<LibraryStub />} />);
 

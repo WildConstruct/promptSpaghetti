@@ -23,23 +23,23 @@ const directoriesToRemove = [
   'client/src/components/transparency',
   'client/src/components/consent',
   'client/src/components/approval',
-  
+
   // Client pages not in MVP
   'client/src/pages',
-  
+
   // Core package components not in MVP
   'packages/core/components/Admin',
   'packages/core/components/Analytics',
   'packages/core/components/Community',
   'packages/core/components/Audit',
   'packages/core/components/Contributions',
-  
+
   // Core package systems not in MVP
   'packages/core/auth',
   'packages/core/admin',
   'packages/core/analytics',
   'packages/core/audit',
-  'packages/core/community',
+  'packages/core/community'
 ];
 
 // Individual files to remove
@@ -58,16 +58,16 @@ const filesToRemove = [
   'client/src/hooks/useRegistration.ts',
   'client/src/hooks/useRevenueAnalytics.ts',
   'client/src/hooks/useRouteGuard.ts',
-  
+
   // Client stores not in MVP
   'client/src/stores/authStore.ts',
   'client/src/stores/__tests__/authStore.test.ts',
-  
+
   // Client types not in MVP
   'client/src/types/MFATypes.ts',
   'client/src/types/consent.ts',
   'client/src/types/revenue.ts',
-  'client/src/types/security.ts',
+  'client/src/types/security.ts'
 ];
 
 let removedCount = 0;
@@ -83,7 +83,7 @@ directoriesToRemove.forEach(dir => {
     if (fs.existsSync(fullPath)) {
       // Count files before removal
       const fileCount = countFiles(fullPath);
-      
+
       // Use git rm to properly remove from git
       try {
         execSync(`git rm -r "${fullPath}"`, { stdio: 'ignore' });
@@ -92,7 +92,9 @@ directoriesToRemove.forEach(dir => {
       } catch (gitError) {
         // Fallback to regular removal if not in git
         fs.rmSync(fullPath, { recursive: true, force: true });
-        console.log(`✅ Removed ${dir} (${fileCount} files) - not tracked in git`);
+        console.log(
+          `✅ Removed ${dir} (${fileCount} files) - not tracked in git`
+        );
         removedCount += fileCount;
       }
     } else {
@@ -176,7 +178,7 @@ function cleanEmptyDirs(dir) {
   try {
     if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
       const items = fs.readdirSync(fullPath);
-      
+
       // Recursively clean subdirectories
       items.forEach(item => {
         const itemPath = path.join(fullPath, item);
@@ -184,7 +186,7 @@ function cleanEmptyDirs(dir) {
           cleanEmptyDirs(path.join(dir, item));
         }
       });
-      
+
       // Check if directory is now empty
       const remainingItems = fs.readdirSync(fullPath);
       if (remainingItems.length === 0) {

@@ -38,7 +38,7 @@ class EnvironmentSetupAutomator {
           minimal: 'Minimal setup for basic development',
           standard: 'Standard setup with all common tools',
           full: 'Full setup including optional tools and integrations',
-          custom: 'Custom setup based on user preferences',
+          custom: 'Custom setup based on user preferences'
         },
 
         // Platform detection
@@ -55,14 +55,14 @@ class EnvironmentSetupAutomator {
           'setup_databases',
           'configure_tools',
           'validate_setup',
-          'generate_report',
+          'generate_report'
         ],
 
         // Timeout settings
         commandTimeout: 300000, // 5 minutes for individual commands
         totalTimeout: 1800000, // 30 minutes for total setup
         retryAttempts: 3,
-        retryDelay: 5000,
+        retryDelay: 5000
       },
 
       dependencies: {
@@ -74,8 +74,8 @@ class EnvironmentSetupAutomator {
               windows: 'winget install OpenJS.NodeJS',
               macos: 'brew install node',
               linux:
-                'curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - && sudo apt-get install -y nodejs',
-            },
+                'curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - && sudo apt-get install -y nodejs'
+            }
           },
 
           git: {
@@ -83,8 +83,8 @@ class EnvironmentSetupAutomator {
             installer: {
               windows: 'winget install Git.Git',
               macos: 'brew install git',
-              linux: 'sudo apt-get install git',
-            },
+              linux: 'sudo apt-get install git'
+            }
           },
 
           docker: {
@@ -92,17 +92,18 @@ class EnvironmentSetupAutomator {
             installer: {
               windows: 'winget install Docker.DockerDesktop',
               macos: 'brew install --cask docker',
-              linux: 'curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh',
+              linux:
+                'curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh'
             },
-            optional: true,
+            optional: true
           },
 
           pnpm: {
             version: '>=8.0.0',
             installer: {
-              all: 'npm install -g pnpm',
-            },
-          },
+              all: 'npm install -g pnpm'
+            }
+          }
         },
 
         // Development tools
@@ -112,15 +113,15 @@ class EnvironmentSetupAutomator {
             installer: {
               windows: 'winget install Microsoft.VisualStudioCode',
               macos: 'brew install --cask visual-studio-code',
-              linux: 'snap install code --classic',
+              linux: 'snap install code --classic'
             },
             optional: true,
             extensions: [
               'ms-vscode.vscode-typescript-next',
               'esbenp.prettier-vscode',
               'bradlc.vscode-tailwindcss',
-              'ms-vscode.vscode-json',
-            ],
+              'ms-vscode.vscode-json'
+            ]
           },
 
           chrome: {
@@ -129,18 +130,18 @@ class EnvironmentSetupAutomator {
               windows: 'winget install Google.Chrome',
               macos: 'brew install --cask google-chrome',
               linux:
-                'wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list && sudo apt-get update && sudo apt-get install google-chrome-stable',
+                'wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list && sudo apt-get update && sudo apt-get install google-chrome-stable'
             },
-            optional: true,
-          },
+            optional: true
+          }
         },
 
         // Package managers by platform
         packageManagers: {
           windows: 'winget',
           macos: 'brew',
-          linux: 'apt-get',
-        },
+          linux: 'apt-get'
+        }
       },
 
       environment: {
@@ -149,14 +150,14 @@ class EnvironmentSetupAutomator {
           NODE_ENV: 'development',
           DEBUG: '*',
           PORT: '3000',
-          API_PORT: '8000',
+          API_PORT: '8000'
         },
 
         // Configuration files to create/update
         configFiles: {
           '.env.local': {
             template: '.env.example',
-            required: true,
+            required: true
           },
 
           '.vscode/settings.json': {
@@ -169,10 +170,10 @@ class EnvironmentSetupAutomator {
                 '**/.git': true,
                 '**/.DS_Store': true,
                 '**/dist': true,
-                '**/.turbo': true,
-              },
+                '**/.turbo': true
+              }
             },
-            optional: true,
+            optional: true
           },
 
           '.gitconfig': {
@@ -180,11 +181,11 @@ class EnvironmentSetupAutomator {
               'core.autocrlf': process.platform === 'win32' ? 'true' : 'input',
               'core.editor': 'code --wait',
               'push.default': 'simple',
-              'pull.rebase': 'false',
+              'pull.rebase': 'false'
             },
             global: true,
-            optional: true,
-          },
+            optional: true
+          }
         },
 
         // Database setup
@@ -195,8 +196,8 @@ class EnvironmentSetupAutomator {
             setup: {
               createDatabase: true,
               runMigrations: true,
-              seedData: false,
-            },
+              seedData: false
+            }
           },
 
           redis: {
@@ -204,10 +205,10 @@ class EnvironmentSetupAutomator {
             version: '>=6.0.0',
             setup: {
               startService: true,
-              configureMemory: true,
-            },
-          },
-        },
+              configureMemory: true
+            }
+          }
+        }
       },
 
       validation: {
@@ -216,44 +217,44 @@ class EnvironmentSetupAutomator {
           {
             name: 'Node.js Installation',
             command: 'node --version',
-            expectedPattern: /v\d+\.\d+\.\d+/,
+            expectedPattern: /v\d+\.\d+\.\d+/
           },
           {
             name: 'npm/pnpm Installation',
             command: 'pnpm --version',
-            expectedPattern: /\d+\.\d+\.\d+/,
+            expectedPattern: /\d+\.\d+\.\d+/
           },
           {
             name: 'Git Installation',
             command: 'git --version',
-            expectedPattern: /git version/,
+            expectedPattern: /git version/
           },
           {
             name: 'Project Dependencies',
             command: 'pnpm install --dry-run',
-            cwd: process.cwd(),
+            cwd: process.cwd()
           },
           {
             name: 'TypeScript Compilation',
             command: 'pnpm typecheck',
             cwd: process.cwd(),
-            optional: true,
+            optional: true
           },
           {
             name: 'Linting',
             command: 'pnpm lint --max-warnings 0',
             cwd: process.cwd(),
-            optional: true,
-          },
+            optional: true
+          }
         ],
 
         // Performance benchmarks
         benchmarks: {
           installTime: 300, // Max install time in seconds
           buildTime: 120, // Max build time in seconds
-          testTime: 60, // Max test time in seconds
-        },
-      },
+          testTime: 60 // Max test time in seconds
+        }
+      }
     };
 
     this.setupHistory = [];
@@ -332,7 +333,10 @@ class EnvironmentSetupAutomator {
    * Save setup history
    */
   async saveSetupHistory() {
-    await fs.writeFile(this.historyFile, JSON.stringify(this.setupHistory, null, 2));
+    await fs.writeFile(
+      this.historyFile,
+      JSON.stringify(this.setupHistory, null, 2)
+    );
   }
 
   /**
@@ -353,25 +357,35 @@ class EnvironmentSetupAutomator {
       await this.runStep('detect_environment', () => this.detectEnvironment());
 
       // Step 2: Validate system requirements
-      await this.runStep('validate_system', () => this.validateSystemRequirements());
+      await this.runStep('validate_system', () =>
+        this.validateSystemRequirements()
+      );
 
       // Step 3: Install dependencies
-      await this.runStep('install_dependencies', () => this.installDependencies(mode, options));
+      await this.runStep('install_dependencies', () =>
+        this.installDependencies(mode, options)
+      );
 
       // Step 4: Configure environment
-      await this.runStep('configure_environment', () => this.configureEnvironment(options));
+      await this.runStep('configure_environment', () =>
+        this.configureEnvironment(options)
+      );
 
       // Step 5: Setup databases (if enabled)
       await this.runStep('setup_databases', () => this.setupDatabases(options));
 
       // Step 6: Configure development tools
-      await this.runStep('configure_tools', () => this.configureTools(mode, options));
+      await this.runStep('configure_tools', () =>
+        this.configureTools(mode, options)
+      );
 
       // Step 7: Validate setup
       await this.runStep('validate_setup', () => this.validateSetup());
 
       // Step 8: Generate setup report
-      await this.runStep('generate_report', () => this.generateSetupReport(setupId));
+      await this.runStep('generate_report', () =>
+        this.generateSetupReport(setupId)
+      );
 
       const duration = Date.now() - this.startTime;
 
@@ -386,20 +400,24 @@ class EnvironmentSetupAutomator {
         errors: this.errors,
         warnings: this.warnings,
         platform: this.config.setup.platform,
-        nodeVersion: this.config.setup.nodeVersion,
+        nodeVersion: this.config.setup.nodeVersion
       };
 
       this.setupHistory.push(setupRecord);
       await this.saveSetupHistory();
 
       if (this.errors.length === 0) {
-        console.log(`✅ Environment setup completed successfully in ${Math.round(duration / 1000)}s`);
+        console.log(
+          `✅ Environment setup completed successfully in ${Math.round(duration / 1000)}s`
+        );
         console.log("🎉 You're ready to start developing!");
 
         // Show next steps
         this.showNextSteps();
       } else {
-        console.log(`❌ Environment setup completed with ${this.errors.length} errors`);
+        console.log(
+          `❌ Environment setup completed with ${this.errors.length} errors`
+        );
         this.showTroubleshootingSteps();
       }
 
@@ -407,7 +425,10 @@ class EnvironmentSetupAutomator {
     } catch (error) {
       const duration = Date.now() - this.startTime;
 
-      console.error(`❌ Environment setup failed after ${Math.round(duration / 1000)}s:`, error.message);
+      console.error(
+        `❌ Environment setup failed after ${Math.round(duration / 1000)}s:`,
+        error.message
+      );
 
       // Record failed setup
       const setupRecord = {
@@ -421,7 +442,7 @@ class EnvironmentSetupAutomator {
         warnings: this.warnings,
         platform: this.config.setup.platform,
         nodeVersion: this.config.setup.nodeVersion,
-        failedStep: this.currentStep,
+        failedStep: this.currentStep
       };
 
       this.setupHistory.push(setupRecord);
@@ -436,7 +457,9 @@ class EnvironmentSetupAutomator {
    */
   async runStep(stepName, stepFunction) {
     this.currentStep = stepName;
-    console.log(`📋 ${stepName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`);
+    console.log(
+      `📋 ${stepName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`
+    );
 
     try {
       await stepFunction();
@@ -447,7 +470,9 @@ class EnvironmentSetupAutomator {
 
       // Continue with non-critical steps
       if (!this.isCriticalStep(stepName)) {
-        this.warnings.push(`Non-critical step ${stepName} failed: ${error.message}`);
+        this.warnings.push(
+          `Non-critical step ${stepName} failed: ${error.message}`
+        );
       } else {
         throw error;
       }
@@ -458,7 +483,12 @@ class EnvironmentSetupAutomator {
    * Check if a step is critical for setup
    */
   isCriticalStep(stepName) {
-    const criticalSteps = ['detect_environment', 'validate_system', 'install_dependencies', 'configure_environment'];
+    const criticalSteps = [
+      'detect_environment',
+      'validate_system',
+      'install_dependencies',
+      'configure_environment'
+    ];
     return criticalSteps.includes(stepName);
   }
 
@@ -477,7 +507,7 @@ class EnvironmentSetupAutomator {
       shell: process.env.SHELL || process.env.COMSPEC,
       user: os.userInfo().username,
       memory: Math.round(os.totalmem() / 1024 / 1024 / 1024) + 'GB',
-      cpus: os.cpus().length,
+      cpus: os.cpus().length
     };
 
     // Try to get npm/pnpm version
@@ -518,16 +548,26 @@ class EnvironmentSetupAutomator {
         if (tool === 'node') {
           const version = process.version;
           if (!this.satisfiesVersion(version, config.version)) {
-            issues.push(`Node.js version ${version} does not satisfy requirement ${config.version}`);
+            issues.push(
+              `Node.js version ${version} does not satisfy requirement ${config.version}`
+            );
           }
         } else {
           // Try to run the tool to check if it's installed
-          const output = execSync(`${tool} --version`, { encoding: 'utf8', timeout: 5000 });
+          const output = execSync(`${tool} --version`, {
+            encoding: 'utf8',
+            timeout: 5000
+          });
 
           if (config.version) {
             const versionMatch = output.match(/(\d+\.\d+\.\d+)/);
-            if (versionMatch && !this.satisfiesVersion(versionMatch[1], config.version)) {
-              issues.push(`${tool} version ${versionMatch[1]} does not satisfy requirement ${config.version}`);
+            if (
+              versionMatch &&
+              !this.satisfiesVersion(versionMatch[1], config.version)
+            ) {
+              issues.push(
+                `${tool} version ${versionMatch[1]} does not satisfy requirement ${config.version}`
+              );
             }
           }
         }
@@ -558,7 +598,11 @@ class EnvironmentSetupAutomator {
     const versionParts = cleanVersion.split('.').map(Number);
     const requirementParts = cleanRequirement.split('.').map(Number);
 
-    for (let i = 0; i < Math.max(versionParts.length, requirementParts.length); i++) {
+    for (
+      let i = 0;
+      i < Math.max(versionParts.length, requirementParts.length);
+      i++
+    ) {
       const vPart = versionParts[i] || 0;
       const rPart = requirementParts[i] || 0;
 
@@ -634,7 +678,7 @@ class EnvironmentSetupAutomator {
       console.log(`Running: ${installer}`);
       execSync(installer, {
         stdio: 'inherit',
-        timeout: this.config.setup.commandTimeout,
+        timeout: this.config.setup.commandTimeout
       });
 
       // Install VS Code extensions if this is VS Code
@@ -642,9 +686,13 @@ class EnvironmentSetupAutomator {
         for (const extension of config.extensions) {
           try {
             console.log(`Installing VS Code extension: ${extension}`);
-            execSync(`code --install-extension ${extension}`, { stdio: 'inherit' });
+            execSync(`code --install-extension ${extension}`, {
+              stdio: 'inherit'
+            });
           } catch (error) {
-            this.warnings.push(`Failed to install VS Code extension ${extension}: ${error.message}`);
+            this.warnings.push(
+              `Failed to install VS Code extension ${extension}: ${error.message}`
+            );
           }
         }
       }
@@ -657,17 +705,21 @@ class EnvironmentSetupAutomator {
    * Install project dependencies
    */
   async installProjectDependencies() {
-    const packageManager = (await this.isToolInstalled('pnpm')) ? 'pnpm' : 'npm';
+    const packageManager = (await this.isToolInstalled('pnpm'))
+      ? 'pnpm'
+      : 'npm';
 
     try {
       console.log(`Installing dependencies with ${packageManager}...`);
       execSync(`${packageManager} install`, {
         stdio: 'inherit',
         cwd: process.cwd(),
-        timeout: this.config.setup.commandTimeout,
+        timeout: this.config.setup.commandTimeout
       });
     } catch (error) {
-      throw new Error(`Failed to install project dependencies: ${error.message}`);
+      throw new Error(
+        `Failed to install project dependencies: ${error.message}`
+      );
     }
   }
 
@@ -676,11 +728,16 @@ class EnvironmentSetupAutomator {
    */
   async configureEnvironment(options) {
     // Set up environment variables
-    const envVars = { ...this.config.environment.variables, ...options.envVars };
+    const envVars = {
+      ...this.config.environment.variables,
+      ...options.envVars
+    };
     await this.setupEnvironmentVariables(envVars);
 
     // Create/update configuration files
-    for (const [filePath, config] of Object.entries(this.config.environment.configFiles)) {
+    for (const [filePath, config] of Object.entries(
+      this.config.environment.configFiles
+    )) {
       if (config.optional && !options.includeOptional) continue;
 
       await this.setupConfigFile(filePath, config);
@@ -714,12 +771,18 @@ class EnvironmentSetupAutomator {
       }
 
       if (newVars.length > 0) {
-        const content = existingContent + (existingContent ? '\n' : '') + newVars.join('\n') + '\n';
+        const content =
+          existingContent +
+          (existingContent ? '\n' : '') +
+          newVars.join('\n') +
+          '\n';
         await fs.writeFile(envFile, content);
         console.log(`✓ Environment variables added to ${envFile}`);
       }
     } catch (error) {
-      this.warnings.push(`Failed to set up environment variables: ${error.message}`);
+      this.warnings.push(
+        `Failed to set up environment variables: ${error.message}`
+      );
     }
   }
 
@@ -746,15 +809,22 @@ class EnvironmentSetupAutomator {
         }
       } else if (config.content) {
         // Use provided content
-        content = typeof config.content === 'string' ? config.content : JSON.stringify(config.content, null, 2);
+        content =
+          typeof config.content === 'string'
+            ? config.content
+            : JSON.stringify(config.content, null, 2);
       } else if (config.settings) {
         // Git config settings
         for (const [key, value] of Object.entries(config.settings)) {
           try {
             const scope = config.global ? '--global' : '--local';
-            execSync(`git config ${scope} ${key} "${value}"`, { stdio: 'ignore' });
+            execSync(`git config ${scope} ${key} "${value}"`, {
+              stdio: 'ignore'
+            });
           } catch (error) {
-            this.warnings.push(`Failed to set git config ${key}: ${error.message}`);
+            this.warnings.push(
+              `Failed to set git config ${key}: ${error.message}`
+            );
           }
         }
         return;
@@ -777,7 +847,9 @@ class EnvironmentSetupAutomator {
         console.log(`✓ Created ${filePath}`);
       }
     } catch (error) {
-      this.warnings.push(`Failed to set up config file ${filePath}: ${error.message}`);
+      this.warnings.push(
+        `Failed to set up config file ${filePath}: ${error.message}`
+      );
     }
   }
 
@@ -785,7 +857,8 @@ class EnvironmentSetupAutomator {
    * Configure git with recommended settings
    */
   async configureGit() {
-    const gitSettings = this.config.environment.configFiles['.gitconfig']?.settings || {};
+    const gitSettings =
+      this.config.environment.configFiles['.gitconfig']?.settings || {};
 
     for (const [key, value] of Object.entries(gitSettings)) {
       try {
@@ -853,7 +926,9 @@ class EnvironmentSetupAutomator {
           execSync('pnpm db:migrate', { stdio: 'inherit', cwd: process.cwd() });
           console.log('✓ Database migrations completed');
         } catch (error) {
-          this.warnings.push('Failed to run database migrations - they might not be set up yet');
+          this.warnings.push(
+            'Failed to run database migrations - they might not be set up yet'
+          );
         }
       }
     } catch (error) {
@@ -928,7 +1003,9 @@ exit 0
 
       console.log('✓ Git hooks configured');
     } catch (error) {
-      this.warnings.push('Failed to set up git hooks - not in a git repository?');
+      this.warnings.push(
+        'Failed to set up git hooks - not in a git repository?'
+      );
     }
   }
 
@@ -1008,7 +1085,7 @@ esac
         const options = {
           encoding: 'utf8',
           timeout: 30000,
-          cwd: check.cwd || process.cwd(),
+          cwd: check.cwd || process.cwd()
         };
 
         const output = execSync(check.command, options);
@@ -1020,14 +1097,24 @@ esac
         results.push({ name: check.name, success: true, output });
         console.log(`✅ ${check.name} - OK`);
       } catch (error) {
-        results.push({ name: check.name, success: false, error: error.message });
+        results.push({
+          name: check.name,
+          success: false,
+          error: error.message
+        });
 
         if (check.optional) {
           console.log(`⚠ ${check.name} - Failed (optional): ${error.message}`);
-          this.warnings.push(`Optional validation ${check.name} failed: ${error.message}`);
+          this.warnings.push(
+            `Optional validation ${check.name} failed: ${error.message}`
+          );
         } else {
           console.log(`❌ ${check.name} - Failed: ${error.message}`);
-          this.errors.push({ step: 'validation', check: check.name, error: error.message });
+          this.errors.push({
+            step: 'validation',
+            check: check.name,
+            error: error.message
+          });
         }
       }
     }
@@ -1049,13 +1136,21 @@ esac
     // Test build time
     try {
       const startTime = Date.now();
-      execSync('pnpm build', { stdio: 'ignore', cwd: process.cwd(), timeout: benchmarks.buildTime * 1000 });
+      execSync('pnpm build', {
+        stdio: 'ignore',
+        cwd: process.cwd(),
+        timeout: benchmarks.buildTime * 1000
+      });
       const buildTime = (Date.now() - startTime) / 1000;
 
       if (buildTime > benchmarks.buildTime) {
-        this.warnings.push(`Build time ${buildTime}s exceeds benchmark ${benchmarks.buildTime}s`);
+        this.warnings.push(
+          `Build time ${buildTime}s exceeds benchmark ${benchmarks.buildTime}s`
+        );
       } else {
-        console.log(`✅ Build time: ${buildTime}s (target: <${benchmarks.buildTime}s)`);
+        console.log(
+          `✅ Build time: ${buildTime}s (target: <${benchmarks.buildTime}s)`
+        );
       }
     } catch (error) {
       this.warnings.push('Failed to run build benchmark');
@@ -1067,14 +1162,18 @@ esac
       execSync('pnpm test --passWithNoTests', {
         stdio: 'ignore',
         cwd: process.cwd(),
-        timeout: benchmarks.testTime * 1000,
+        timeout: benchmarks.testTime * 1000
       });
       const testTime = (Date.now() - startTime) / 1000;
 
       if (testTime > benchmarks.testTime) {
-        this.warnings.push(`Test time ${testTime}s exceeds benchmark ${benchmarks.testTime}s`);
+        this.warnings.push(
+          `Test time ${testTime}s exceeds benchmark ${benchmarks.testTime}s`
+        );
       } else {
-        console.log(`✅ Test time: ${testTime}s (target: <${benchmarks.testTime}s)`);
+        console.log(
+          `✅ Test time: ${testTime}s (target: <${benchmarks.testTime}s)`
+        );
       }
     } catch (error) {
       this.warnings.push('Failed to run test benchmark');
@@ -1098,10 +1197,11 @@ esac
       summary: {
         totalSteps: this.config.setup.defaultSteps.length,
         completedSteps:
-          this.config.setup.defaultSteps.length - this.errors.filter(e => this.isCriticalStep(e.step)).length,
+          this.config.setup.defaultSteps.length -
+          this.errors.filter(e => this.isCriticalStep(e.step)).length,
         errorCount: this.errors.length,
-        warningCount: this.warnings.length,
-      },
+        warningCount: this.warnings.length
+      }
     };
 
     // Save report
@@ -1268,11 +1368,17 @@ ${Object.entries(report.environment)
   showTroubleshootingSteps() {
     console.log('\n🔧 Troubleshooting:');
     console.log('1. Check the setup report for detailed error information');
-    console.log('2. Ensure you have the latest versions of Node.js and npm/pnpm');
-    console.log('3. Try running setup again with elevated permissions if needed');
+    console.log(
+      '2. Ensure you have the latest versions of Node.js and npm/pnpm'
+    );
+    console.log(
+      '3. Try running setup again with elevated permissions if needed'
+    );
     console.log('4. Check your internet connection for dependency downloads');
     console.log('5. Review the error messages above for specific issues');
-    console.log('\n📞 Need help? Check the project documentation or open an issue');
+    console.log(
+      '\n📞 Need help? Check the project documentation or open an issue'
+    );
   }
 
   /**
@@ -1286,16 +1392,20 @@ ${Object.entries(report.environment)
       successfulSetups: this.setupHistory.filter(s => s.success).length,
       averageDuration:
         this.setupHistory.length > 0
-          ? Math.round(this.setupHistory.reduce((sum, s) => sum + s.duration, 0) / this.setupHistory.length / 1000)
+          ? Math.round(
+              this.setupHistory.reduce((sum, s) => sum + s.duration, 0) /
+                this.setupHistory.length /
+                1000
+            )
           : 0,
       platforms: [...new Set(this.setupHistory.map(s => s.platform))],
       commonErrors: this.getCommonErrors(),
-      recentSetups: this.setupHistory.slice(-10).reverse(),
+      recentSetups: this.setupHistory.slice(-10).reverse()
     };
 
     return {
       history: this.setupHistory,
-      statistics: stats,
+      statistics: stats
     };
   }
 
@@ -1330,14 +1440,17 @@ ${Object.entries(report.environment)
       tools: {},
       projects: {},
       network: {},
-      performance: {},
+      performance: {}
     };
 
     // Check installed tools
     const tools = ['node', 'npm', 'pnpm', 'git', 'docker', 'code'];
     for (const tool of tools) {
       try {
-        const version = execSync(`${tool} --version`, { encoding: 'utf8', timeout: 5000 }).trim();
+        const version = execSync(`${tool} --version`, {
+          encoding: 'utf8',
+          timeout: 5000
+        }).trim();
         diagnostics.tools[tool] = { installed: true, version };
       } catch (error) {
         diagnostics.tools[tool] = { installed: false, error: error.message };
@@ -1356,7 +1469,10 @@ ${Object.entries(report.environment)
 
     // Check network connectivity
     try {
-      execSync('ping -c 1 registry.npmjs.org', { stdio: 'ignore', timeout: 5000 });
+      execSync('ping -c 1 registry.npmjs.org', {
+        stdio: 'ignore',
+        timeout: 5000
+      });
       diagnostics.network.npm = true;
     } catch (error) {
       diagnostics.network.npm = false;
@@ -1372,7 +1488,10 @@ ${Object.entries(report.environment)
     }
 
     // Save diagnostics
-    await fs.writeFile(this.diagnosticsFile, JSON.stringify(diagnostics, null, 2));
+    await fs.writeFile(
+      this.diagnosticsFile,
+      JSON.stringify(diagnostics, null, 2)
+    );
 
     console.log('📊 Diagnostics completed');
     this.displayDiagnostics(diagnostics);
@@ -1387,7 +1506,9 @@ ${Object.entries(report.environment)
     console.log('\n=== Environment Diagnostics ===\n');
 
     console.log('System Information:');
-    console.log(`  Platform: ${diagnostics.system.platform} ${diagnostics.system.architecture}`);
+    console.log(
+      `  Platform: ${diagnostics.system.platform} ${diagnostics.system.architecture}`
+    );
     console.log(`  Node.js: ${diagnostics.system.nodeVersion}`);
     console.log(`  Memory: ${diagnostics.system.memory}`);
     console.log(`  CPUs: ${diagnostics.system.cpus}`);
@@ -1401,18 +1522,24 @@ ${Object.entries(report.environment)
 
     console.log('\nProject Status:');
     if (diagnostics.projects.name) {
-      console.log(`  Project: ${diagnostics.projects.name} v${diagnostics.projects.version}`);
+      console.log(
+        `  Project: ${diagnostics.projects.name} v${diagnostics.projects.version}`
+      );
       console.log(`  Scripts: ${diagnostics.projects.scripts.join(', ')}`);
     } else {
       console.log(`  ❌ ${diagnostics.projects.error}`);
     }
 
     console.log('\nNetwork Connectivity:');
-    console.log(`  NPM Registry: ${diagnostics.network.npm ? '✅ Available' : '❌ Unavailable'}`);
+    console.log(
+      `  NPM Registry: ${diagnostics.network.npm ? '✅ Available' : '❌ Unavailable'}`
+    );
 
     console.log('\nPerformance:');
     if (diagnostics.performance.dependencyCheck > 0) {
-      console.log(`  Dependency Check: ${diagnostics.performance.dependencyCheck}ms`);
+      console.log(
+        `  Dependency Check: ${diagnostics.performance.dependencyCheck}ms`
+      );
     } else {
       console.log('  Dependency Check: ❌ Failed');
     }
@@ -1435,7 +1562,7 @@ if (require.main === module) {
         const options = {
           includeOptional: args.includes('--include-optional'),
           configureGit: !args.includes('--no-git'),
-          databases: {},
+          databases: {}
         };
 
         if (args.includes('--with-postgres')) {

@@ -8,7 +8,17 @@ describe('GraphManifestLoader', () => {
 
   it('returns list when fetch succeeds with array', async () => {
     // @ts-expect-error: assign test stub to global.fetch
-    global.fetch = jest.fn(async () => ({ ok: true, json: async () => ([{ filename: 'a.psg', title: 'A', updatedAt: new Date().toISOString(), tags: [] }]) }));
+    global.fetch = jest.fn(async () => ({
+      ok: true,
+      json: async () => [
+        {
+          filename: 'a.psg',
+          title: 'A',
+          updatedAt: new Date().toISOString(),
+          tags: []
+        }
+      ]
+    }));
     const list = await loadServerGraphs('');
     expect(Array.isArray(list)).toBe(true);
     expect(list[0].filename).toBe('a.psg');

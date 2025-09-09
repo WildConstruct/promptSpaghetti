@@ -38,6 +38,7 @@ This plan summarizes what is implemented, what remains, and the step-by-step wor
 ## Registry & APIs (Keep These Interfaces)
 
 - Asset registry (global):
+
   ```js
   // publish asset list
   window.assetRegistry.update([{ id, name, type: 'psglib'|'psg', metadata: {...} }, ...])
@@ -56,29 +57,29 @@ This plan summarizes what is implemented, what remains, and the step-by-step wor
 
 ## Plan — Phases to Finish Epic 2 + Integrations
 
-1) Autosave/Restore + Download JSON (Phase 1)
+1. Autosave/Restore + Download JSON (Phase 1)
    - Add autosave on node/edge change (throttled).
    - On init, prompt to restore autosave.
    - Add “Download JSON” in GraphControls.
 
-2) Node Library UI polish (Phase 2)
+2. Node Library UI polish (Phase 2)
    - Palette tooltips and param summaries (nodeTypes metadata extended: title, summary, params).
    - Display summary/params in inspector headers.
 
-3) Connections & Validation (Phase 3)
+3. Connections & Validation (Phase 3)
    - `useValidation` hook scans edges/nodes for basic type/required-input errors.
    - Edge/node error highlights; status bar with error/warning counters.
 
-4) Inspector Forms (Phase 4)
+4. Inspector Forms (Phase 4)
    - Schema registry (zod/json-schema) for node types.
    - `SchemaForm` component with debounced onChange and inline validation.
    - Hook validation results into status bar.
 
-5) Preview-5 Modal (Phase 5)
+5. Preview-5 Modal (Phase 5)
    - Preview button (Ctrl/Cmd+P) opens PreviewModal.
    - Wire to preview engine stub or mock `/preview`; degrade gracefully.
 
-6) AC7/AC8 Enhancements (Phase 6)
+6. AC7/AC8 Enhancements (Phase 6)
    - Integrated browser feeds real assets via `assetRegistry.update` (hook onAssetsLoaded if available in ProAssetBrowser).
    - RelationshipView: add simple adjacency (SVG) for top pairs.
 
@@ -99,4 +100,3 @@ This plan summarizes what is implemented, what remains, and the step-by-step wor
 ## After Epic 2
 
 - Once Epic 2 items are complete, review AC9 performance gating (CI perf job) and add a minimal perf regression test suite.
-

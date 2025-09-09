@@ -32,7 +32,11 @@ export interface QueryResult {
 export interface TransactionContext {
   id: string;
   startTime: Date;
-  isolation: 'READ_UNCOMMITTED' | 'READ_COMMITTED' | 'REPEATABLE_READ' | 'SERIALIZABLE';
+  isolation:
+    | 'READ_UNCOMMITTED'
+    | 'READ_COMMITTED'
+    | 'REPEATABLE_READ'
+    | 'SERIALIZABLE';
   savepoints: string[];
   status: 'active' | 'committed' | 'rolled_back';
 }
@@ -60,7 +64,12 @@ export class DatabaseMockService {
   private tables: Map<string, MockTable> = new Map();
   private connections: Map<string, DatabaseConnection> = new Map();
   private transactions: Map<string, TransactionContext> = new Map();
-  private queryLog: Array<{ _sql: string; params?: unknown[]; timestamp: Date; duration: number }> = [];
+  private queryLog: Array<{
+    _sql: string;
+    params?: unknown[];
+    timestamp: Date;
+    duration: number;
+  }> = [];
 
   constructor(config: MockConfig = {}) {
     this.factory = new MockFactory(config);
@@ -80,61 +89,90 @@ export class DatabaseMockService {
       connected: true,
 
       // Query methods
-      query: async (_sql: string, params?: unknown[]) => this.executeQuery(_connectionId, _sql, params),
+      query: async (_sql: string, params?: unknown[]) =>
+        this.executeQuery(_connectionId, _sql, params),
 
       // Transaction methods
-      beginTransaction: async (isolation?: string) => this.beginTransaction(_connectionId, isolation),
-      commit: async (transactionId: string) => this.commitTransaction(transactionId),
-      rollback: async (transactionId: string) => this.rollbackTransaction(transactionId),
-      savepoint: async (transactionId: string, name: string) => this.createSavepoint(transactionId, name),
-      rollbackToSavepoint: async (transactionId: string, name: string) => this.rollbackToSavepoint(transactionId, name),
+      beginTransaction: async (isolation?: string) =>
+        this.beginTransaction(_connectionId, isolation),
+      commit: async (transactionId: string) =>
+        this.commitTransaction(transactionId),
+      rollback: async (transactionId: string) =>
+        this.rollbackTransaction(transactionId),
+      savepoint: async (transactionId: string, name: string) =>
+        this.createSavepoint(transactionId, name),
+      rollbackToSavepoint: async (transactionId: string, name: string) =>
+        this.rollbackToSavepoint(transactionId, name),
 
       // Utility methods
-      ping: async () => ({ success: true, latency: Math.floor(this.rng() * 10) + 1 }),
+      ping: async () => ({
+        success: true,
+        latency: Math.floor(this.rng() * 10) + 1
+      }),
       close: async () => this.closeConnection(_connectionId),
       getStats: () => this.getConnectionStats(_connectionId),
 
       // Table operations
-      createTable: async (name: string, schema: unknown) => this.createTable(name, schema),
+      createTable: async (name: string, schema: unknown) =>
+        this.createTable(name, schema),
       dropTable: async (name: string) => this.dropTable(name),
       truncateTable: async (name: string) => this.truncateTable(name),
 
       // Specialized query methods
       select: async (table: string, conditions?: unknown, options?: unknown) =>
         this.selectRecords(table, conditions, options),
-      insert: async (table: string, data: unknown) => this.insertRecord(table, data),
-      update: async (table: string, data: unknown, conditions?: unknown) => this.updateRecords(table, data, conditions),
-      delete: async (table: string, conditions?: unknown) => this.deleteRecords(table, conditions),
+      insert: async (table: string, data: unknown) =>
+        this.insertRecord(table, data),
+      update: async (table: string, data: unknown, conditions?: unknown) =>
+        this.updateRecords(table, data, conditions),
+      delete: async (table: string, conditions?: unknown) =>
+        this.deleteRecords(table, conditions),
 
       // Batch operations
-      bulkInsert: async (table: string, records: unknown[]) => this.bulkInsert(table, records),
-      bulkUpdate: async (table: string, updates: Array<{ data: unknown; conditions: unknown }>) =>
-        this.bulkUpdate(table, updates),
+      bulkInsert: async (table: string, records: unknown[]) =>
+        this.bulkInsert(table, records),
+      bulkUpdate: async (
+        table: string,
+        updates: Array<{ data: unknown; conditions: unknown }>
+      ) => this.bulkUpdate(table, updates),
 
       // Schema operations
       describeTable: async (name: string) => this.describeTable(name),
       listTables: async () => Array.from(this.tables.keys()),
-      createIndex: async (table: string, columns: string[], name?: string) => this.createIndex(table, columns, name),
+      createIndex: async (table: string, columns: string[], name?: string) =>
+        this.createIndex(table, columns, name),
 
       // Redis-specific operations (if type is redis)
-      ...(config.type === 'redis' ? this.createRedisOperations(_connectionId) : {}),
+      ...(config.type === 'redis'
+        ? this.createRedisOperations(_connectionId)
+        : {}),
 
       // PostgreSQL-specific operations
-      ...(config.type === 'postgres' ? this.createPostgresOperations(_connectionId) : {}),
+      ...(config.type === 'postgres'
+        ? this.createPostgresOperations(_connectionId)
+        : {})
     };
 
-    console.log(`🔌 Created ${config.type} database connection: ${_connectionId}`);
+    console.log(
+      `🔌 Created ${config.type} database connection: ${_connectionId}`
+    );
     return connection;
   }
 
   /**
    * Execute a raw SQL query
    */
-  private async executeQuery(_connectionId: string, _sql: string, _params: unknown[] = []): Promise<QueryResult> {
+  private async executeQuery(
+    _connectionId: string,
+    _sql: string,
+    _params: unknown[] = []
+  ): Promise<QueryResult> {
     const startTime = Date.now();
 
     // Simulate query execution time
-    await new Promise(resolve => setTimeout(resolve, Math.floor(this.rng() * 50) + 5));
+    await new Promise(resolve =>
+      setTimeout(resolve, Math.floor(this.rng() * 50) + 5)
+    );
 
     const executionTime = Date.now() - startTime;
 
@@ -143,7 +181,7 @@ export class DatabaseMockService {
       _sql: _sql,
       params: _params,
       timestamp: new Date(),
-      duration: executionTime,
+      duration: executionTime
     });
 
     // Parse and execute the SQL (simplified mock implementation)
@@ -151,21 +189,24 @@ export class DatabaseMockService {
 
     return {
       ...result,
-      executionTime,
+      executionTime
     };
   }
 
   /**
    * Begin a database transaction
    */
-  private async beginTransaction(_connectionId: string, isolation?: string): Promise<string> {
+  private async beginTransaction(
+    _connectionId: string,
+    isolation?: string
+  ): Promise<string> {
     const transactionId = this.generateId();
     const transaction: TransactionContext = {
       id: transactionId,
       startTime: new Date(),
       isolation: (isolation as string) || 'READ_COMMITTED',
       savepoints: [],
-      status: 'active',
+      status: 'active'
     };
 
     this.transactions.set(transactionId, transaction);
@@ -203,11 +244,16 @@ export class DatabaseMockService {
   /**
    * Create a savepoint within a transaction
    */
-  private async createSavepoint(transactionId: string, name: string): Promise<void> {
+  private async createSavepoint(
+    transactionId: string,
+    name: string
+  ): Promise<void> {
     const transaction = this.transactions.get(transactionId);
     if (transaction && transaction.status === 'active') {
       transaction.savepoints.push(name);
-      console.log(`📍 Created savepoint '${name}' in transaction: ${transactionId}`);
+      console.log(
+        `📍 Created savepoint '${name}' in transaction: ${transactionId}`
+      );
     } else {
       throw new Error(`Transaction ${transactionId} not found or not active`);
     }
@@ -216,15 +262,25 @@ export class DatabaseMockService {
   /**
    * Rollback to a specific savepoint
    */
-  private async rollbackToSavepoint(transactionId: string, name: string): Promise<void> {
+  private async rollbackToSavepoint(
+    transactionId: string,
+    name: string
+  ): Promise<void> {
     const transaction = this.transactions.get(transactionId);
     if (transaction && transaction.status === 'active') {
       const savepointIndex = transaction.savepoints.indexOf(name);
       if (savepointIndex >= 0) {
-        transaction.savepoints = transaction.savepoints.slice(0, savepointIndex);
-        console.log(`↪️ Rolled back to savepoint '${name}' in transaction: ${transactionId}`);
+        transaction.savepoints = transaction.savepoints.slice(
+          0,
+          savepointIndex
+        );
+        console.log(
+          `↪️ Rolled back to savepoint '${name}' in transaction: ${transactionId}`
+        );
       } else {
-        throw new Error(`Savepoint '${name}' not found in transaction: ${transactionId}`);
+        throw new Error(
+          `Savepoint '${name}' not found in transaction: ${transactionId}`
+        );
       }
     } else {
       throw new Error(`Transaction ${transactionId} not found or not active`);
@@ -316,21 +372,26 @@ export class DatabaseMockService {
       rows: records,
       rowCount: records.length,
       fields: fields || Object.keys(table.schema),
-      executionTime: Math.floor(this.rng() * 50) + 5,
+      executionTime: Math.floor(this.rng() * 50) + 5
     };
   }
 
   /**
    * Insert a record into a table
    */
-  private async insertRecord(tableName: string, data: unknown): Promise<QueryResult> {
+  private async insertRecord(
+    tableName: string,
+    data: unknown
+  ): Promise<QueryResult> {
     const table = this.tables.get(tableName);
     if (!table) {
       throw new Error(`Table '${tableName}' not found`);
     }
 
     // Generate ID if not provided and table has a primary key
-    const pkField = Object.entries(table.schema).find(([, spec]) => spec.primaryKey)?.[0];
+    const pkField = Object.entries(table.schema).find(
+      ([, spec]) => spec.primaryKey
+    )?.[0];
     if (pkField && !data[pkField]) {
       data[pkField] = this.generateId();
     }
@@ -341,7 +402,10 @@ export class DatabaseMockService {
       if (!(field in record)) {
         if (spec.default !== undefined) {
           record[field] = spec.default;
-        } else if (field.includes('created_at') || field.includes('updated_at')) {
+        } else if (
+          field.includes('created_at') ||
+          field.includes('updated_at')
+        ) {
           record[field] = new Date().toISOString();
         }
       }
@@ -358,14 +422,18 @@ export class DatabaseMockService {
       rows: [record],
       rowCount: 1,
       executionTime: Math.floor(this.rng() * 20) + 5,
-      insertId: id,
+      insertId: id
     };
   }
 
   /**
    * Update records in a table
    */
-  private async updateRecords(tableName: string, data: unknown, conditions: unknown = {}): Promise<QueryResult> {
+  private async updateRecords(
+    tableName: string,
+    data: unknown,
+    conditions: unknown = {}
+  ): Promise<QueryResult> {
     const table = this.tables.get(tableName);
     if (!table) {
       throw new Error(`Table '${tableName}' not found`);
@@ -375,13 +443,15 @@ export class DatabaseMockService {
     const updatedRecords = [];
 
     for (const [id, record] of table.data.entries()) {
-      const matches = Object.entries(conditions).every(([key, value]) => record[key] === value);
+      const matches = Object.entries(conditions).every(
+        ([key, value]) => record[key] === value
+      );
 
       if (matches) {
         const updatedRecord = {
           ...record,
           ...data,
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         };
 
         table.data.set(id, updatedRecord);
@@ -395,14 +465,17 @@ export class DatabaseMockService {
       rows: updatedRecords,
       rowCount: updatedRecords.length,
       affectedRows,
-      executionTime: Math.floor(this.rng() * 30) + 5,
+      executionTime: Math.floor(this.rng() * 30) + 5
     };
   }
 
   /**
    * Delete records from a table
    */
-  private async deleteRecords(tableName: string, conditions: unknown = {}): Promise<QueryResult> {
+  private async deleteRecords(
+    tableName: string,
+    conditions: unknown = {}
+  ): Promise<QueryResult> {
     const table = this.tables.get(tableName);
     if (!table) {
       throw new Error(`Table '${tableName}' not found`);
@@ -413,7 +486,9 @@ export class DatabaseMockService {
     const toDelete = [];
 
     for (const [id, record] of table.data.entries()) {
-      const matches = Object.entries(conditions).every(([key, value]) => record[key] === value);
+      const matches = Object.entries(conditions).every(
+        ([key, value]) => record[key] === value
+      );
 
       if (matches) {
         deletedRecords.push(record);
@@ -432,7 +507,7 @@ export class DatabaseMockService {
       rows: deletedRecords,
       rowCount: deletedRecords.length,
       affectedRows,
-      executionTime: Math.floor(this.rng() * 25) + 5,
+      executionTime: Math.floor(this.rng() * 25) + 5
     };
   }
 
@@ -448,7 +523,7 @@ export class DatabaseMockService {
       name,
       schema,
       data: new Map(),
-      indexes: new Map(),
+      indexes: new Map()
     };
 
     this.tables.set(name, table);
@@ -483,7 +558,10 @@ export class DatabaseMockService {
   /**
    * Bulk insert records
    */
-  private async bulkInsert(tableName: string, records: unknown[]): Promise<QueryResult> {
+  private async bulkInsert(
+    tableName: string,
+    records: unknown[]
+  ): Promise<QueryResult> {
     const results = [];
     let totalAffected = 0;
 
@@ -497,7 +575,7 @@ export class DatabaseMockService {
       rows: results,
       rowCount: results.length,
       affectedRows: totalAffected,
-      executionTime: Math.floor(this.rng() * 100) + records.length * 2,
+      executionTime: Math.floor(this.rng() * 100) + records.length * 2
     };
   }
 
@@ -521,7 +599,7 @@ export class DatabaseMockService {
       rows: results,
       rowCount: results.length,
       affectedRows: totalAffected,
-      executionTime: Math.floor(this.rng() * 150) + updates.length * 3,
+      executionTime: Math.floor(this.rng() * 150) + updates.length * 3
     };
   }
 
@@ -534,7 +612,10 @@ export class DatabaseMockService {
     return {
       // String operations
       set: async (key: string, value: unknown, ttl?: number) => {
-        redisData.set(key, { value, expires: ttl ? Date.now() + ttl * 1000 : null });
+        redisData.set(key, {
+          value,
+          expires: ttl ? Date.now() + ttl * 1000 : null
+        });
         return 'OK';
       },
       get: async (key: string) => {
@@ -563,7 +644,10 @@ export class DatabaseMockService {
           redisData.set(key, { type: 'hash', data: new Map() });
         }
         const hash = redisData.get(key);
-        if (hash.type !== 'hash') throw new Error('WRONGTYPE Operation against a key holding the wrong kind of value');
+        if (hash.type !== 'hash')
+          throw new Error(
+            'WRONGTYPE Operation against a key holding the wrong kind of value'
+          );
         return hash.data.set(field, value) ? 1 : 0;
       },
       hget: async (key: string, field: string) => {
@@ -624,7 +708,7 @@ export class DatabaseMockService {
       },
       info: async (_section?: string) => {
         return `# Redis Mock\nredis_version:6.0.0\nuptime_in_seconds:${Math.floor(this.rng() * 86400)}`;
-      },
+      }
     };
   }
 
@@ -634,20 +718,33 @@ export class DatabaseMockService {
   private createPostgresOperations(_connectionId: string) {
     return {
       // Array operations
-      arrayAppend: async (table: string, field: string, value: unknown, conditions: unknown) => {
+      arrayAppend: async (
+        table: string,
+        field: string,
+        value: unknown,
+        conditions: unknown
+      ) => {
         const updateData = {};
         updateData[field] = { $push: value };
         return this.updateRecords(table, updateData, conditions);
       },
 
       // JSON operations
-      jsonExtract: async (table: string, field: string, path: string, conditions: unknown) => {
+      jsonExtract: async (
+        table: string,
+        field: string,
+        path: string,
+        conditions: unknown
+      ) => {
         const records = await this.selectRecords(table, conditions);
         return {
           ...records,
           rows: records.rows.map(row => {
             try {
-              const json = typeof row[field] === 'string' ? JSON.parse(row[field]) : row[field];
+              const json =
+                typeof row[field] === 'string'
+                  ? JSON.parse(row[field])
+                  : row[field];
               const pathParts = path.split('.');
               let result = json;
               for (const part of pathParts) {
@@ -657,7 +754,7 @@ export class DatabaseMockService {
             } catch {
               return { ...row, [field]: null };
             }
-          }),
+          })
         };
       },
 
@@ -666,7 +763,7 @@ export class DatabaseMockService {
         const conditions = {};
         conditions[field] = { $like: query };
         return this.selectRecords(table, conditions);
-      },
+      }
     };
   }
 
@@ -680,7 +777,7 @@ export class DatabaseMockService {
       password_hash: { type: 'varchar', nullable: false },
       role: { type: 'varchar', default: 'user' },
       created_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
-      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
+      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' }
     });
 
     // Projects table
@@ -688,9 +785,13 @@ export class DatabaseMockService {
       id: { type: 'integer', primaryKey: true, nullable: false },
       name: { type: 'varchar', nullable: false },
       description: { type: 'text', nullable: true },
-      owner_id: { type: 'integer', nullable: false, references: { table: 'users', column: 'id' } },
+      owner_id: {
+        type: 'integer',
+        nullable: false,
+        references: { table: 'users', column: 'id' }
+      },
       created_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
-      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
+      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' }
     });
 
     // Graphs table
@@ -698,15 +799,22 @@ export class DatabaseMockService {
       id: { type: 'varchar', primaryKey: true, nullable: false },
       name: { type: 'varchar', nullable: false },
       data: { type: 'json', nullable: false },
-      project_id: { type: 'integer', nullable: true, references: { table: 'projects', column: 'id' } },
+      project_id: {
+        type: 'integer',
+        nullable: true,
+        references: { table: 'projects', column: 'id' }
+      },
       created_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
-      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' },
+      updated_at: { type: 'timestamp', default: 'CURRENT_TIMESTAMP' }
     });
 
     console.log('📊 Initialized default database tables');
   }
 
-  private parseSQLAndExecute(_sql: string, _params: unknown[] = []): QueryResult {
+  private parseSQLAndExecute(
+    _sql: string,
+    _params: unknown[] = []
+  ): QueryResult {
     // Simplified SQL parser for common operations
     const sql = _sql.trim().toLowerCase();
 
@@ -723,7 +831,7 @@ export class DatabaseMockService {
       return {
         rows: [],
         rowCount: 0,
-        executionTime: Math.floor(this.rng() * 20) + 5,
+        executionTime: Math.floor(this.rng() * 20) + 5
       };
     }
   }
@@ -742,7 +850,7 @@ export class DatabaseMockService {
     return {
       rows,
       rowCount: rows.length,
-      executionTime: Math.floor(this.rng() * 50) + 5,
+      executionTime: Math.floor(this.rng() * 50) + 5
     };
   }
 
@@ -757,7 +865,7 @@ export class DatabaseMockService {
       rows: [record],
       rowCount: 1,
       executionTime: Math.floor(this.rng() * 20) + 5,
-      insertId: id,
+      insertId: id
     };
   }
 
@@ -767,7 +875,7 @@ export class DatabaseMockService {
       rows: [],
       rowCount: 0,
       affectedRows,
-      executionTime: Math.floor(this.rng() * 30) + 5,
+      executionTime: Math.floor(this.rng() * 30) + 5
     };
   }
 
@@ -777,7 +885,7 @@ export class DatabaseMockService {
       rows: [],
       rowCount: 0,
       affectedRows,
-      executionTime: Math.floor(this.rng() * 25) + 5,
+      executionTime: Math.floor(this.rng() * 25) + 5
     };
   }
 
@@ -788,24 +896,28 @@ export class DatabaseMockService {
           email: `user${Math.floor(this.rng() * 1000)}@example.com`,
           username: `user${Math.floor(this.rng() * 1000)}`,
           role: 'user',
-          created_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
         };
       case 'projects':
         return {
           name: `Project ${Math.floor(this.rng() * 100)}`,
           description: 'Mock project description',
           owner_id: Math.floor(this.rng() * 10) + 1,
-          created_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
         };
       default:
         return {
           name: `Mock ${tableName} record`,
-          created_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
         };
     }
   }
 
-  private updateIndexes(tableName: string, record: unknown, operation: 'insert' | 'update' | 'delete'): void {
+  private updateIndexes(
+    tableName: string,
+    record: unknown,
+    operation: 'insert' | 'update' | 'delete'
+  ): void {
     const table = this.tables.get(tableName);
     if (!table) return;
 
@@ -832,7 +944,11 @@ export class DatabaseMockService {
     });
   }
 
-  private createIndex(tableName: string, columns: string[], name?: string): void {
+  private createIndex(
+    tableName: string,
+    columns: string[],
+    name?: string
+  ): void {
     const table = this.tables.get(tableName);
     if (!table) {
       throw new Error(`Table '${tableName}' not found`);
@@ -848,7 +964,9 @@ export class DatabaseMockService {
     }
 
     table.indexes.set(indexName, index);
-    console.log(`📇 Created index ${indexName} on ${tableName}(${columns.join(', ')})`);
+    console.log(
+      `📇 Created index ${indexName} on ${tableName}(${columns.join(', ')})`
+    );
   }
 
   private describeTable(name: string): unknown {
@@ -861,7 +979,7 @@ export class DatabaseMockService {
       name,
       schema: table.schema,
       recordCount: table.data.size,
-      indexes: Array.from(table.indexes.keys()),
+      indexes: Array.from(table.indexes.keys())
     };
   }
 
@@ -879,8 +997,13 @@ export class DatabaseMockService {
       connected: true,
       queryCount: this.queryLog.length,
       averageQueryTime:
-        this.queryLog.length > 0 ? this.queryLog.reduce((sum, log) => sum + log.duration, 0) / this.queryLog.length : 0,
-      activeTransactions: Array.from(this.transactions.values()).filter(t => t.status === 'active').length,
+        this.queryLog.length > 0
+          ? this.queryLog.reduce((sum, log) => sum + log.duration, 0) /
+            this.queryLog.length
+          : 0,
+      activeTransactions: Array.from(this.transactions.values()).filter(
+        t => t.status === 'active'
+      ).length
     };
   }
 
@@ -913,7 +1036,9 @@ export class DatabaseMockService {
    * Get active transactions
    */
   getActiveTransactions(): TransactionContext[] {
-    return Array.from(this.transactions.values()).filter(t => t.status === 'active');
+    return Array.from(this.transactions.values()).filter(
+      t => t.status === 'active'
+    );
   }
 
   /**

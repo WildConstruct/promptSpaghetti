@@ -19,7 +19,7 @@ function initializeBroadcastFile() {
   if (!fs.existsSync(BROADCAST_FILE)) {
     const initialData = {
       messages: [],
-      lastUpdate: new Date().toISOString(),
+      lastUpdate: new Date().toISOString()
     };
     fs.writeFileSync(BROADCAST_FILE, JSON.stringify(initialData, null, 2));
   }
@@ -36,7 +36,7 @@ function postBroadcast(message) {
     message: message,
     timestamp: new Date().toISOString(),
     priority: 'normal',
-    acknowledged: [],
+    acknowledged: []
   };
 
   data.messages.unshift(newMessage);
@@ -69,7 +69,9 @@ function checkBroadcasts() {
   console.log('='.repeat(50));
 
   data.messages.forEach((msg, index) => {
-    const age = Math.round((new Date() - new Date(msg.timestamp)) / (1000 * 60));
+    const age = Math.round(
+      (new Date() - new Date(msg.timestamp)) / (1000 * 60)
+    );
     console.log(`${index + 1}. [${msg.id}] (${age}m ago)`);
     console.log(`   📝 ${msg.message}`);
     console.log(`   🕐 ${msg.timestamp}`);
@@ -95,7 +97,7 @@ function acknowledgeBroadcast(messageId, agentId = 'claude-agent') {
 function clearBroadcasts() {
   const data = {
     messages: [],
-    lastUpdate: new Date().toISOString(),
+    lastUpdate: new Date().toISOString()
   };
   fs.writeFileSync(BROADCAST_FILE, JSON.stringify(data, null, 2));
   console.log('🗑️  All broadcast messages cleared');

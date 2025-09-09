@@ -7,6 +7,7 @@
 ## Story Readiness Assessment
 
 ### ✅ STORY-WIZ-001: Basic Parsing Infrastructure
+
 - [x] **Clear description** - Purpose and outcome defined
 - [x] **Acceptance criteria** - 6 measurable criteria with Given/When/Then
 - [x] **Technical notes** - Implementation approach specified
@@ -15,7 +16,8 @@
 - [x] **Estimated** - 8 points
 - **Status: READY FOR SPRINT** ✅
 
-### ⚠️ STORY-WIZ-002: Wizard UI Panel Component  
+### ⚠️ STORY-WIZ-002: Wizard UI Panel Component
+
 - [x] **Clear description** - UI component well-defined
 - [x] **Acceptance criteria** - 8 detailed criteria
 - [ ] **Visual mockups** - Missing, mentioned in validation
@@ -26,6 +28,7 @@
 - **Action Required:** Get mockups from design team or create wireframes
 
 ### ✅ STORY-WIZ-003: Span Interaction & Editing
+
 - [x] **Clear description** - Interaction patterns defined
 - [x] **Acceptance criteria** - 8 criteria covering all interactions
 - [x] **Keyboard shortcuts** - Comprehensive mapping
@@ -35,6 +38,7 @@
 - **Status: READY FOR SPRINT** ✅
 
 ### ✅ STORY-WIZ-004: Node Generation Pipeline
+
 - [x] **Clear description** - Conversion process clear
 - [x] **Acceptance criteria** - 8 criteria with validation rules
 - [x] **Technical notes** - Algorithm approach defined
@@ -44,6 +48,7 @@
 - **Status: READY FOR SPRINT** ✅
 
 ### 🔴 STORY-WIZ-005: Basic Asset Matching & Search
+
 - [x] **Clear description** - Search functionality defined
 - [x] **Acceptance criteria** - 7 measurable criteria
 - [x] **Technical notes** - IndexedDB and Fuse.js specified
@@ -54,6 +59,7 @@
 - **Blocker:** Needs STORY-WIZ-MOCK completed first
 
 ### 🔴 STORY-WIZ-006: Asset Binding UI & Popover
+
 - [x] **Clear description** - UI interaction defined
 - [x] **Acceptance criteria** - 8 UI behavior criteria
 - [x] **Technical notes** - Floating UI, virtualization specified
@@ -64,6 +70,7 @@
 - **Blocker:** Depends on STORY-WIZ-005
 
 ### ✅ STORY-WIZ-MOCK: Mock Asset Service
+
 - [x] **Clear description** - Purpose as unblocker defined
 - [x] **Acceptance criteria** - 7 measurable criteria
 - [x] **Implementation details** - Architecture fully specified
@@ -76,16 +83,19 @@
 ## Sprint Planning Recommendations
 
 ### Sprint 1 (21 points)
+
 1. **STORY-WIZ-MOCK** (5 points) - Start immediately to unblock
 2. **STORY-WIZ-001** (8 points) - Core parsing logic
 3. **STORY-WIZ-002a** (8 points) - Basic UI structure only
 
-### Sprint 2 (21 points)  
+### Sprint 2 (21 points)
+
 1. **STORY-WIZ-002b** (5 points) - Visual polish and animations
 2. **STORY-WIZ-003** (8 points) - Span interactions
 3. **STORY-WIZ-004** (8 points) - Node generation
 
 ### Sprint 3 (24 points)
+
 1. **STORY-WIZ-005** (8 points) - Asset search (now unblocked)
 2. **STORY-WIZ-006** (8 points) - Asset binding UI
 3. **STORY-WIZ-007** (5 points) - Keyboard shortcuts
@@ -127,6 +137,7 @@
 ## Definition of Ready Checklist
 
 For each story to enter sprint:
+
 - [x] Acceptance criteria defined
 - [x] Dependencies identified
 - [ ] Design assets available (where needed)
@@ -138,12 +149,12 @@ For each story to enter sprint:
 
 ## Risk Assessment
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| Parsing performance issues | Medium | High | Start with simple algorithm, optimize later |
-| Mock service inadequate | Low | Medium | Over-engineer mock to match real API exactly |
-| UI complexity underestimated | Medium | Medium | Split story, focus on MVP first |
-| Team lacks parsing expertise | Medium | High | Pair programming, research spike first |
+| Risk                         | Probability | Impact | Mitigation                                   |
+| ---------------------------- | ----------- | ------ | -------------------------------------------- |
+| Parsing performance issues   | Medium      | High   | Start with simple algorithm, optimize later  |
+| Mock service inadequate      | Low         | Medium | Over-engineer mock to match real API exactly |
+| UI complexity underestimated | Medium      | Medium | Split story, focus on MVP first              |
+| Team lacks parsing expertise | Medium      | High   | Pair programming, research spike first       |
 
 ## Next Actions
 

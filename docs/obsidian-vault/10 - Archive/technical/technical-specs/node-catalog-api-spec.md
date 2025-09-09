@@ -1,16 +1,19 @@
 # Node Catalog API Technical Specification
 
 ## Overview
+
 The Node Catalog API provides a centralized, versioned registry of all available node types in the PromptSpaghetti system. It serves as the single source of truth for node discovery, validation, and compatibility checking.
 
 ## API Endpoints
 
 ### 1. Get Full Catalog
+
 ```http
 GET /api/catalog/nodes
 ```
 
 **Response:**
+
 ```json
 {
   "version": "2.0.0",
@@ -91,32 +94,38 @@ GET /api/catalog/nodes
 ```
 
 ### 2. Get Node by ID
+
 ```http
 GET /api/catalog/nodes/:nodeId
 ```
 
 **Parameters:**
+
 - `nodeId` (string): The unique identifier of the node type
 
 **Response:** Single node object from catalog
 
 ### 3. Search Nodes
+
 ```http
 GET /api/catalog/nodes/search?q=:query&category=:category&tags=:tags
 ```
 
 **Query Parameters:**
+
 - `q` (string): Search query for name/description
 - `category` (string): Filter by category
 - `tags` (string[]): Filter by tags (comma-separated)
 - `includeDeprecated` (boolean): Include deprecated nodes
 
 ### 4. Get Node Compatibility
+
 ```http
 GET /api/catalog/nodes/:nodeId/compatibility
 ```
 
 **Response:**
+
 ```json
 {
   "nodeId": "weightedChoice",
@@ -136,11 +145,13 @@ GET /api/catalog/nodes/:nodeId/compatibility
 ```
 
 ### 5. Agent-Optimized Endpoint
+
 ```http
 GET /api/catalog/agent
 ```
 
 **Response:** Simplified, flattened structure optimized for AI consumption
+
 ```json
 {
   "nodes": {
@@ -158,22 +169,23 @@ GET /api/catalog/agent
 ```
 
 ### 6. Validate Node Configuration
+
 ```http
 POST /api/catalog/nodes/:nodeId/validate
 ```
 
 **Request Body:**
+
 ```json
 {
   "configuration": {
-    "options": [
-      { "text": "option1", "weight": 50 }
-    ]
+    "options": [{ "text": "option1", "weight": 50 }]
   }
 }
 ```
 
 **Response:**
+
 ```json
 {
   "valid": true,
@@ -184,6 +196,7 @@ POST /api/catalog/nodes/:nodeId/validate
 ```
 
 ### 7. Get Node Registry Updates
+
 ```http
 GET /api/catalog/updates?since=:timestamp
 ```
@@ -220,25 +233,25 @@ ws://localhost:8000/catalog/stream
 class NodeRegistry {
   // Register a new node type
   register(nodeType: INodeType): void;
-  
+
   // Get node definition
   getNode(id: string): NodeDefinition | null;
-  
+
   // List all nodes
   listNodes(filter?: NodeFilter): NodeDefinition[];
-  
+
   // Check if node exists
   hasNode(id: string): boolean;
-  
+
   // Validate node configuration
   validateConfig(nodeId: string, config: any): ValidationResult;
-  
+
   // Get node factory
   getFactory(nodeId: string): NodeFactory | null;
-  
+
   // Auto-discover nodes from codebase
   discover(path: string): NodeDefinition[];
-  
+
   // Generate catalog
   generateCatalog(): NodeCatalog;
 }
@@ -248,16 +261,16 @@ interface INodeType {
   id: string;
   version: string;
   metadata: NodeMetadata;
-  
+
   // Factory method
   create(id: string, config: any): RuntimeNode;
-  
+
   // Validation
   validate(config: any): ValidationResult;
-  
+
   // Migration
   migrate?(fromVersion: string, config: any): any;
-  
+
   // Serialization
   serialize(node: RuntimeNode): any;
   deserialize(data: any): RuntimeNode;
@@ -267,11 +280,13 @@ interface INodeType {
 ## Catalog Generation Process
 
 1. **Build-time Generation:**
+
 ```bash
 npm run generate:catalog
 ```
 
 2. **Auto-discovery Decorators:**
+
 ```typescript
 @NodeType({
   id: 'customNode',
@@ -282,19 +297,20 @@ npm run generate:catalog
 export class CustomNode extends BaseNode {
   @Input({ type: 'string', required: true })
   inputText: string;
-  
+
   @Output({ type: 'string' })
   outputText: string;
-  
-  @Config({ 
+
+  @Config({
     type: 'object',
-    schema: ConfigSchema 
+    schema: ConfigSchema
   })
   configuration: CustomConfig;
 }
 ```
 
 3. **Catalog Output Files:**
+
 - `/public/catalog/nodes.json` - Static JSON catalog
 - `/src/types/catalog.d.ts` - TypeScript definitions
 - `/docs/node-catalog.md` - Markdown documentation
@@ -318,17 +334,20 @@ All API endpoints return consistent error responses:
 ```
 
 ## Rate Limiting
+
 - General endpoints: 100 requests/minute
 - Agent endpoint: 500 requests/minute
 - WebSocket: 1 connection per client
 
 ## Caching Strategy
+
 - Full catalog: Cache for 5 minutes
 - Individual nodes: Cache for 10 minutes
 - Search results: Cache for 1 minute
 - Agent endpoint: Cache for 30 seconds
 
 ## Security Considerations
+
 - CORS enabled for approved domains
 - API key required for write operations (future)
 - Input validation on all endpoints

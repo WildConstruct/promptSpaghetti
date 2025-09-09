@@ -15,7 +15,7 @@ import {
   GraphDataGenerator,
   UserDataGenerator,
   APIDataGenerator,
-  PerformanceDataGenerator,
+  PerformanceDataGenerator
 } from './TestDataGenerators';
 import { TestFixture } from './TestFixtures';
 
@@ -37,7 +37,7 @@ export enum PerformanceCategory {
   MEMORY_USAGE = 'memory-usage',
   USER_WORKFLOW = 'user-workflow',
   STRESS_TESTING = 'stress-testing',
-  SCALABILITY = 'scalability',
+  SCALABILITY = 'scalability'
 }
 
 export interface PerformanceResult {
@@ -92,7 +92,7 @@ export class PerformanceScenarios {
       graph: new GraphDataGenerator(seed),
       user: new UserDataGenerator(seed),
       api: new APIDataGenerator(seed),
-      performance: new PerformanceDataGenerator(seed),
+      performance: new PerformanceDataGenerator(seed)
     };
 
     this.initializeScenarios();
@@ -115,14 +115,15 @@ export class PerformanceScenarios {
         maxMemoryUsage: 50,
         minThroughput: 100,
         maxLatency: 100,
-        maxCpuUsage: 30,
-      },
+        maxCpuUsage: 30
+      }
     });
 
     this.registerScenario({
       id: 'graph-medium-execution',
       name: 'Medium Graph Execution Performance',
-      description: 'Test execution performance with medium graphs (50-200 nodes)',
+      description:
+        'Test execution performance with medium graphs (50-200 nodes)',
       category: PerformanceCategory.GRAPH_EXECUTION,
       setup: async () => {},
       execute: async () => this.executeMediumGraphScenario(),
@@ -131,14 +132,15 @@ export class PerformanceScenarios {
         maxMemoryUsage: 150,
         minThroughput: 50,
         maxLatency: 500,
-        maxCpuUsage: 60,
-      },
+        maxCpuUsage: 60
+      }
     });
 
     this.registerScenario({
       id: 'graph-large-execution',
       name: 'Large Graph Execution Performance',
-      description: 'Test execution performance with large graphs (200-1000 nodes)',
+      description:
+        'Test execution performance with large graphs (200-1000 nodes)',
       category: PerformanceCategory.GRAPH_EXECUTION,
       setup: async () => {},
       execute: async () => this.executeLargeGraphScenario(),
@@ -147,15 +149,16 @@ export class PerformanceScenarios {
         maxMemoryUsage: 500,
         minThroughput: 10,
         maxLatency: 2000,
-        maxCpuUsage: 80,
-      },
+        maxCpuUsage: 80
+      }
     });
 
     // Frontend Rendering Scenarios
     this.registerScenario({
       id: 'frontend-initial-render',
       name: 'Initial Graph Render Performance',
-      description: 'Test initial rendering performance for graphs of varying sizes',
+      description:
+        'Test initial rendering performance for graphs of varying sizes',
       category: PerformanceCategory.FRONTEND_RENDERING,
       setup: async () => {},
       execute: async () => this.executeInitialRenderScenario(),
@@ -164,14 +167,15 @@ export class PerformanceScenarios {
         maxMemoryUsage: 100,
         minThroughput: 60, // FPS
         maxLatency: 16, // Target 60fps = 16ms per frame
-        maxCpuUsage: 50,
-      },
+        maxCpuUsage: 50
+      }
     });
 
     this.registerScenario({
       id: 'frontend-real-time-updates',
       name: 'Real-time Graph Updates Performance',
-      description: 'Test performance during continuous graph updates and re-renders',
+      description:
+        'Test performance during continuous graph updates and re-renders',
       category: PerformanceCategory.FRONTEND_RENDERING,
       setup: async () => {},
       execute: async () => this.executeRealTimeUpdatesScenario(),
@@ -180,8 +184,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 200,
         minThroughput: 30, // Updates per second
         maxLatency: 33, // Target 30fps = 33ms per frame
-        maxCpuUsage: 70,
-      },
+        maxCpuUsage: 70
+      }
     });
 
     // API Performance Scenarios
@@ -197,8 +201,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 300,
         minThroughput: 100, // Requests per second
         maxLatency: 1000,
-        maxCpuUsage: 80,
-      },
+        maxCpuUsage: 80
+      }
     });
 
     this.registerScenario({
@@ -213,8 +217,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 200,
         minThroughput: 50,
         maxLatency: 500,
-        maxCpuUsage: 60,
-      },
+        maxCpuUsage: 60
+      }
     });
 
     // Memory Usage Scenarios
@@ -230,8 +234,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 400,
         minThroughput: 1,
         maxLatency: 5000,
-        maxCpuUsage: 50,
-      },
+        maxCpuUsage: 50
+      }
     });
 
     this.registerScenario({
@@ -246,8 +250,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 600,
         minThroughput: 5,
         maxLatency: 1000,
-        maxCpuUsage: 40,
-      },
+        maxCpuUsage: 40
+      }
     });
 
     // User Workflow Scenarios
@@ -263,8 +267,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 250,
         minThroughput: 2,
         maxLatency: 3000,
-        maxCpuUsage: 70,
-      },
+        maxCpuUsage: 70
+      }
     });
 
     this.registerScenario({
@@ -279,8 +283,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 400,
         minThroughput: 10,
         maxLatency: 1500,
-        maxCpuUsage: 80,
-      },
+        maxCpuUsage: 80
+      }
     });
 
     // Stress Testing Scenarios
@@ -296,8 +300,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 1000,
         minThroughput: 1,
         maxLatency: 10000,
-        maxCpuUsage: 95,
-      },
+        maxCpuUsage: 95
+      }
     });
 
     this.registerScenario({
@@ -312,8 +316,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 800,
         minThroughput: 5,
         maxLatency: 5000,
-        maxCpuUsage: 70,
-      },
+        maxCpuUsage: 70
+      }
     });
 
     // Scalability Scenarios
@@ -329,8 +333,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 600,
         minThroughput: 20,
         maxLatency: 2000,
-        maxCpuUsage: 85,
-      },
+        maxCpuUsage: 85
+      }
     });
 
     this.registerScenario({
@@ -345,8 +349,8 @@ export class PerformanceScenarios {
         maxMemoryUsage: 700,
         minThroughput: 15,
         maxLatency: 3000,
-        maxCpuUsage: 80,
-      },
+        maxCpuUsage: 80
+      }
     });
   }
 
@@ -361,7 +365,9 @@ export class PerformanceScenarios {
    * Get all scenarios by category
    */
   getScenariosByCategory(category: PerformanceCategory): PerformanceScenario[] {
-    return Array.from(this.scenarios.values()).filter(s => s.category === category);
+    return Array.from(this.scenarios.values()).filter(
+      s => s.category === category
+    );
   }
 
   /**
@@ -376,7 +382,11 @@ export class PerformanceScenarios {
    */
   async executeScenario(
     scenarioId: string
-  ): Promise<{ scenario: PerformanceScenario; result: PerformanceResult; passed: boolean }> {
+  ): Promise<{
+    scenario: PerformanceScenario;
+    result: PerformanceResult;
+    passed: boolean;
+  }> {
     const scenario = this.scenarios.get(scenarioId);
     if (!scenario) {
       throw new Error(`Scenario not found: ${scenarioId}`);
@@ -399,7 +409,13 @@ export class PerformanceScenarios {
    */
   async executeCategoryScenarios(
     category: PerformanceCategory
-  ): Promise<Array<{ scenario: PerformanceScenario; result: PerformanceResult; passed: boolean }>> {
+  ): Promise<
+    Array<{
+      scenario: PerformanceScenario;
+      result: PerformanceResult;
+      passed: boolean;
+    }>
+  > {
     const scenarios = this.getScenariosByCategory(category);
     const results = [];
 
@@ -414,7 +430,11 @@ export class PerformanceScenarios {
    * Execute all scenarios
    */
   async executeAllScenarios(): Promise<
-    Array<{ scenario: PerformanceScenario; result: PerformanceResult; passed: boolean }>
+    Array<{
+      scenario: PerformanceScenario;
+      result: PerformanceResult;
+      passed: boolean;
+    }>
   > {
     const results = [];
 
@@ -431,23 +451,32 @@ export class PerformanceScenarios {
   getResultsSummary(): any {
     if (this.results.length === 0) return null;
 
-    const avgExecutionTime = this.results.reduce((sum, r) => sum + r.executionTime, 0) / this.results.length;
-    const avgMemoryUsage = this.results.reduce((sum, r) => sum + r.memoryUsage.average, 0) / this.results.length;
-    const avgThroughput = this.results.reduce((sum, r) => sum + r.throughput, 0) / this.results.length;
+    const avgExecutionTime =
+      this.results.reduce((sum, r) => sum + r.executionTime, 0) /
+      this.results.length;
+    const avgMemoryUsage =
+      this.results.reduce((sum, r) => sum + r.memoryUsage.average, 0) /
+      this.results.length;
+    const avgThroughput =
+      this.results.reduce((sum, r) => sum + r.throughput, 0) /
+      this.results.length;
 
     return {
       totalScenarios: this.results.length,
       averageExecutionTime: avgExecutionTime,
       averageMemoryUsage: avgMemoryUsage,
       averageThroughput: avgThroughput,
-      totalResults: this.results.length,
+      totalResults: this.results.length
     };
   }
 
   // Private execution methods for each scenario
 
   private async executeSmallGraphScenario(): Promise<PerformanceResult> {
-    const graph = this.generators.graph.generateGraph({ nodeCount: 25, complexity: 'simple' });
+    const graph = this.generators.graph.generateGraph({
+      nodeCount: 25,
+      complexity: 'simple'
+    });
 
     const startTime = Date.now();
     const startMemory = this.getMemoryUsage();
@@ -465,20 +494,23 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 20,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 3),
-        gcTime: Math.random() * 10,
+        gcTime: Math.random() * 10
       },
       throughput: graph.nodes.length / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(50, 100),
       resourceUsage: {
         cpu: Math.random() * 30,
         network: Math.random() * 10,
-        disk: Math.random() * 5,
-      },
+        disk: Math.random() * 5
+      }
     };
   }
 
   private async executeMediumGraphScenario(): Promise<PerformanceResult> {
-    const graph = this.generators.graph.generateGraph({ nodeCount: 125, complexity: 'medium' });
+    const graph = this.generators.graph.generateGraph({
+      nodeCount: 125,
+      complexity: 'medium'
+    });
 
     const startTime = Date.now();
     const startMemory = this.getMemoryUsage();
@@ -496,15 +528,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 50,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 5) + 2,
-        gcTime: Math.random() * 25,
+        gcTime: Math.random() * 25
       },
       throughput: graph.nodes.length / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(200, 500),
       resourceUsage: {
         cpu: Math.random() * 30 + 30,
         network: Math.random() * 20 + 5,
-        disk: Math.random() * 15 + 5,
-      },
+        disk: Math.random() * 15 + 5
+      }
     };
   }
 
@@ -527,15 +559,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 100,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 8) + 5,
-        gcTime: Math.random() * 50 + 25,
+        gcTime: Math.random() * 50 + 25
       },
       throughput: graph.nodes.length / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(800, 2000),
       resourceUsage: {
         cpu: Math.random() * 30 + 50,
         network: Math.random() * 40 + 10,
-        disk: Math.random() * 30 + 10,
-      },
+        disk: Math.random() * 30 + 10
+      }
     };
   }
 
@@ -543,7 +575,7 @@ export class PerformanceScenarios {
     const scenarios = [
       { nodeCount: 10, complexity: 'simple' },
       { nodeCount: 50, complexity: 'medium' },
-      { nodeCount: 100, complexity: 'complex' },
+      { nodeCount: 100, complexity: 'complex' }
     ];
 
     const startTime = Date.now();
@@ -565,15 +597,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 60,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 4),
-        gcTime: Math.random() * 15,
+        gcTime: Math.random() * 15
       },
       throughput: 60, // Target FPS
       latency: this.generateLatencyMetrics(10, 20),
       resourceUsage: {
         cpu: Math.random() * 20 + 30,
         network: Math.random() * 5,
-        disk: Math.random() * 10,
-      },
+        disk: Math.random() * 10
+      }
     };
   }
 
@@ -596,15 +628,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 40,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 6) + 2,
-        gcTime: Math.random() * 20,
+        gcTime: Math.random() * 20
       },
       throughput: updateCount / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(20, 40),
       resourceUsage: {
         cpu: Math.random() * 30 + 40,
         network: Math.random() * 15 + 5,
-        disk: Math.random() * 8 + 2,
-      },
+        disk: Math.random() * 8 + 2
+      }
     };
   }
 
@@ -613,7 +645,9 @@ export class PerformanceScenarios {
     const startTime = Date.now();
     const startMemory = this.getMemoryUsage();
 
-    const promises = Array.from({ length: concurrentRequests }, () => this.simulateAPIRequest());
+    const promises = Array.from({ length: concurrentRequests }, () =>
+      this.simulateAPIRequest()
+    );
 
     await Promise.all(promises);
 
@@ -627,15 +661,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 80,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 8) + 3,
-        gcTime: Math.random() * 30,
+        gcTime: Math.random() * 30
       },
       throughput: concurrentRequests / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(100, 800),
       resourceUsage: {
         cpu: Math.random() * 20 + 60,
         network: Math.random() * 50 + 20,
-        disk: Math.random() * 25 + 10,
-      },
+        disk: Math.random() * 25 + 10
+      }
     };
   }
 
@@ -647,7 +681,8 @@ export class PerformanceScenarios {
     const startMemory = this.getMemoryUsage();
 
     for (let i = 0; i < operationCount; i++) {
-      const operation = operations[Math.floor(Math.random() * operations.length)];
+      const operation =
+        operations[Math.floor(Math.random() * operations.length)];
       await this.simulateGraphAPIOperation(operation);
     }
 
@@ -661,15 +696,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 60,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 6) + 1,
-        gcTime: Math.random() * 25,
+        gcTime: Math.random() * 25
       },
       throughput: operationCount / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(150, 400),
       resourceUsage: {
         cpu: Math.random() * 20 + 40,
         network: Math.random() * 30 + 10,
-        disk: Math.random() * 20 + 5,
-      },
+        disk: Math.random() * 20 + 5
+      }
     };
   }
 
@@ -680,7 +715,9 @@ export class PerformanceScenarios {
 
     for (let i = 0; i < graphCount; i++) {
       // Create graph
-      const graph = this.generators.graph.generateGraph({ nodeCount: 50 + Math.random() * 100 });
+      const graph = this.generators.graph.generateGraph({
+        nodeCount: 50 + Math.random() * 100
+      });
 
       // Execute graph
       await this.simulateGraphExecution(graph.nodes.length, 300);
@@ -699,15 +736,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 120,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 12) + 5,
-        gcTime: Math.random() * 60 + 20,
+        gcTime: Math.random() * 60 + 20
       },
       throughput: graphCount / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(500, 2000),
       resourceUsage: {
         cpu: Math.random() * 20 + 30,
         network: Math.random() * 20,
-        disk: Math.random() * 30 + 10,
-      },
+        disk: Math.random() * 30 + 10
+      }
     };
   }
 
@@ -718,10 +755,14 @@ export class PerformanceScenarios {
 
     for (let i = 0; i < cycleCount; i++) {
       // Create memory pressure
-      const largeData = new Array(10000).fill(0).map(() => ({ data: Math.random() }));
+      const largeData = new Array(10000)
+        .fill(0)
+        .map(() => ({ data: Math.random() }));
 
       // Simulate processing
-      await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 200));
+      await new Promise(resolve =>
+        setTimeout(resolve, 200 + Math.random() * 200)
+      );
 
       // Force cleanup simulation
       largeData.length = 0;
@@ -737,15 +778,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 200,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 15) + 10,
-        gcTime: Math.random() * 80 + 40,
+        gcTime: Math.random() * 80 + 40
       },
       throughput: cycleCount / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(300, 1000),
       resourceUsage: {
         cpu: Math.random() * 15 + 25,
         network: Math.random() * 10,
-        disk: Math.random() * 15,
-      },
+        disk: Math.random() * 15
+      }
     };
   }
 
@@ -770,15 +811,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 80,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 8) + 2,
-        gcTime: Math.random() * 35,
+        gcTime: Math.random() * 35
       },
       throughput: 1, // Workflows per second
       latency: this.generateLatencyMetrics(1000, 3000),
       resourceUsage: {
         cpu: Math.random() * 30 + 40,
         network: Math.random() * 35 + 15,
-        disk: Math.random() * 25 + 10,
-      },
+        disk: Math.random() * 25 + 10
+      }
     };
   }
 
@@ -806,15 +847,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 150,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 10) + 5,
-        gcTime: Math.random() * 45,
+        gcTime: Math.random() * 45
       },
       throughput: userCount / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(500, 1500),
       resourceUsage: {
         cpu: Math.random() * 25 + 55,
         network: Math.random() * 60 + 20,
-        disk: Math.random() * 20 + 5,
-      },
+        disk: Math.random() * 20 + 5
+      }
     };
   }
 
@@ -824,11 +865,17 @@ export class PerformanceScenarios {
     const startMemory = this.getMemoryUsage();
 
     // Create extreme load conditions
-    const extremeGraph = this.generators.performance.generateLargeGraph(2000, 0.9);
+    const extremeGraph = this.generators.performance.generateLargeGraph(
+      2000,
+      0.9
+    );
     const concurrentUsers = 20;
 
     const promises = Array.from({ length: concurrentUsers }, async () => {
-      await this.simulateGraphExecution(extremeGraph.nodes.length / concurrentUsers, 2000);
+      await this.simulateGraphExecution(
+        extremeGraph.nodes.length / concurrentUsers,
+        2000
+      );
     });
 
     await Promise.all(promises);
@@ -843,15 +890,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 300,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 20) + 10,
-        gcTime: Math.random() * 100 + 50,
+        gcTime: Math.random() * 100 + 50
       },
       throughput: extremeGraph.nodes.length / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(2000, 8000),
       resourceUsage: {
         cpu: Math.random() * 15 + 80,
         network: Math.random() * 80 + 15,
-        disk: Math.random() * 60 + 20,
-      },
+        disk: Math.random() * 60 + 20
+      }
     };
   }
 
@@ -865,7 +912,7 @@ export class PerformanceScenarios {
       memoryChunks.push(
         new Array(50000).fill(0).map(() => ({
           id: Math.random(),
-          data: 'x'.repeat(1000),
+          data: 'x'.repeat(1000)
         }))
       );
 
@@ -885,15 +932,15 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 400,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 25) + 15,
-        gcTime: Math.random() * 120 + 60,
+        gcTime: Math.random() * 120 + 60
       },
       throughput: 50 / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(1000, 4000),
       resourceUsage: {
         cpu: Math.random() * 20 + 50,
         network: Math.random() * 20,
-        disk: Math.random() * 40 + 20,
-      },
+        disk: Math.random() * 40 + 20
+      }
     };
   }
 
@@ -903,7 +950,9 @@ export class PerformanceScenarios {
     const startMemory = this.getMemoryUsage();
 
     for (const userCount of userGrowthSteps) {
-      const promises = Array.from({ length: userCount }, () => this.simulateUserSession());
+      const promises = Array.from({ length: userCount }, () =>
+        this.simulateUserSession()
+      );
 
       await Promise.all(promises);
       await new Promise(resolve => setTimeout(resolve, 500)); // Stabilization period
@@ -919,15 +968,17 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 200,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 15) + 8,
-        gcTime: Math.random() * 70,
+        gcTime: Math.random() * 70
       },
-      throughput: userGrowthSteps.reduce((a, b) => a + b, 0) / ((endTime - startTime) / 1000),
+      throughput:
+        userGrowthSteps.reduce((a, b) => a + b, 0) /
+        ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(800, 2000),
       resourceUsage: {
         cpu: Math.random() * 25 + 60,
         network: Math.random() * 70 + 15,
-        disk: Math.random() * 30 + 10,
-      },
+        disk: Math.random() * 30 + 10
+      }
     };
   }
 
@@ -937,7 +988,10 @@ export class PerformanceScenarios {
     const startMemory = this.getMemoryUsage();
 
     for (const nodeCount of dataSizes) {
-      const graph = this.generators.performance.generateLargeGraph(nodeCount, 0.7);
+      const graph = this.generators.performance.generateLargeGraph(
+        nodeCount,
+        0.7
+      );
       await this.simulateGraphExecution(graph.nodes.length, 1000);
       await new Promise(resolve => setTimeout(resolve, 300)); // Processing time
     }
@@ -952,27 +1006,35 @@ export class PerformanceScenarios {
         peak: Math.max(startMemory, endMemory) + Math.random() * 250,
         average: (startMemory + endMemory) / 2,
         gcCount: Math.floor(Math.random() * 18) + 10,
-        gcTime: Math.random() * 80 + 30,
+        gcTime: Math.random() * 80 + 30
       },
-      throughput: dataSizes.reduce((a, b) => a + b, 0) / ((endTime - startTime) / 1000),
+      throughput:
+        dataSizes.reduce((a, b) => a + b, 0) / ((endTime - startTime) / 1000),
       latency: this.generateLatencyMetrics(1000, 3000),
       resourceUsage: {
         cpu: Math.random() * 25 + 55,
         network: Math.random() * 40 + 20,
-        disk: Math.random() * 50 + 15,
-      },
+        disk: Math.random() * 50 + 15
+      }
     };
   }
 
   // Helper simulation methods
 
-  private async simulateGraphExecution(nodeCount: number, baseDelay: number): Promise<void> {
+  private async simulateGraphExecution(
+    nodeCount: number,
+    baseDelay: number
+  ): Promise<void> {
     const delay = baseDelay + nodeCount * Math.random() * 5;
     await new Promise(resolve => setTimeout(resolve, delay));
   }
 
-  private async simulateRendering(nodeCount: number, complexity: string): Promise<void> {
-    const complexityMultiplier = complexity === 'simple' ? 1 : complexity === 'medium' ? 2 : 3;
+  private async simulateRendering(
+    nodeCount: number,
+    complexity: string
+  ): Promise<void> {
+    const complexityMultiplier =
+      complexity === 'simple' ? 1 : complexity === 'medium' ? 2 : 3;
     const delay = nodeCount * complexityMultiplier * 10;
     await new Promise(resolve => setTimeout(resolve, delay));
   }
@@ -982,7 +1044,9 @@ export class PerformanceScenarios {
   }
 
   private async simulateAPIRequest(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 300));
+    await new Promise(resolve =>
+      setTimeout(resolve, 100 + Math.random() * 300)
+    );
   }
 
   private async simulateGraphAPIOperation(operation: string): Promise<void> {
@@ -990,39 +1054,55 @@ export class PerformanceScenarios {
       create: 200,
       read: 50,
       update: 150,
-      delete: 100,
+      delete: 100
     };
 
     const baseDelay = (operationDelays as any)[operation] || 100;
-    await new Promise(resolve => setTimeout(resolve, baseDelay + Math.random() * 100));
+    await new Promise(resolve =>
+      setTimeout(resolve, baseDelay + Math.random() * 100)
+    );
   }
 
   private async simulateUserLogin(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 200));
+    await new Promise(resolve =>
+      setTimeout(resolve, 300 + Math.random() * 200)
+    );
   }
 
   private async simulateGraphCreation(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 300));
+    await new Promise(resolve =>
+      setTimeout(resolve, 500 + Math.random() * 300)
+    );
   }
 
   private async simulateGraphEditing(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 600));
+    await new Promise(resolve =>
+      setTimeout(resolve, 800 + Math.random() * 600)
+    );
   }
 
   private async simulateGraphSaving(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 150));
+    await new Promise(resolve =>
+      setTimeout(resolve, 200 + Math.random() * 150)
+    );
   }
 
   private async simulateCollaborativeEditing(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 400 + Math.random() * 300));
+    await new Promise(resolve =>
+      setTimeout(resolve, 400 + Math.random() * 300)
+    );
   }
 
   private async simulateRealTimeSync(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 150 + Math.random() * 100));
+    await new Promise(resolve =>
+      setTimeout(resolve, 150 + Math.random() * 100)
+    );
   }
 
   private async simulateUserSession(): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 400));
+    await new Promise(resolve =>
+      setTimeout(resolve, 600 + Math.random() * 400)
+    );
   }
 
   private getMemoryUsage(): number {
@@ -1031,7 +1111,10 @@ export class PerformanceScenarios {
   }
 
   private generateLatencyMetrics(minLatency: number, maxLatency: number): any {
-    const latencies = Array.from({ length: 20 }, () => minLatency + Math.random() * (maxLatency - minLatency));
+    const latencies = Array.from(
+      { length: 20 },
+      () => minLatency + Math.random() * (maxLatency - minLatency)
+    );
 
     latencies.sort((a, b) => a - b);
 
@@ -1040,11 +1123,14 @@ export class PerformanceScenarios {
       max: Math.max(...latencies),
       average: latencies.reduce((sum, l) => sum + l, 0) / latencies.length,
       p95: latencies[Math.floor(latencies.length * 0.95)],
-      p99: latencies[Math.floor(latencies.length * 0.99)],
+      p99: latencies[Math.floor(latencies.length * 0.99)]
     };
   }
 
-  private evaluateThresholds(result: PerformanceResult, thresholds: PerformanceThresholds): boolean {
+  private evaluateThresholds(
+    result: PerformanceResult,
+    thresholds: PerformanceThresholds
+  ): boolean {
     return (
       result.executionTime <= thresholds.maxExecutionTime &&
       result.memoryUsage.peak <= thresholds.maxMemoryUsage &&

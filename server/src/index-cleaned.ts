@@ -9,7 +9,7 @@ import {
   exportGraph,
   validateBundleCompatibility,
   getExportStats,
-  ExportFormat,
+  ExportFormat
 } from './exporter-standalone';
 import { validateGraph } from './graphValidator';
 import { initDatabase, healthCheck } from './minimal-db';
@@ -49,9 +49,16 @@ server.get('/', async (request, reply) => {
       'deterministic-seeding',
       'variable-context',
       'analytics-tracking',
-      'health-monitoring',
+      'health-monitoring'
     ],
-    nodeTypes: ['WeightedChoice', 'Output', 'Concat', 'SetVariable', 'GetVariable', 'Include'],
+    nodeTypes: [
+      'WeightedChoice',
+      'Output',
+      'Concat',
+      'SetVariable',
+      'GetVariable',
+      'Include'
+    ]
   };
 });
 
@@ -68,16 +75,16 @@ server.get('/health', async (request, reply) => {
       services: {
         database: dbHealthy ? 'connected' : 'disconnected',
         analytics: analyticsHealthy ? 'active' : 'inactive',
-        engine: 'basic',
+        engine: 'basic'
       },
       timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
+      uptime: process.uptime()
     };
   } catch (error) {
     return reply.code(500).send({
       status: 'unhealthy',
       error: error.message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -93,7 +100,7 @@ server.post('/preview', async (request, reply) => {
       return reply.code(400).send({
         error: 'Invalid graph structure',
         details: validation.errors,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     }
 
@@ -113,8 +120,8 @@ server.post('/preview', async (request, reply) => {
         seed: graph.seed,
         engine: 'basic',
         executionTime: result.executionPath?.executionTimeMs || 0,
-        timestamp: new Date().toISOString(),
-      },
+        timestamp: new Date().toISOString()
+      }
     };
   } catch (error) {
     console.error('Graph execution error:', error);
@@ -128,7 +135,7 @@ server.post('/preview', async (request, reply) => {
       success: false,
       error: 'Graph execution failed',
       message: error.message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -150,7 +157,7 @@ server.post('/export', async (request, reply) => {
       return reply.code(400).send({
         success: false,
         error: 'Invalid graph for export',
-        details: validation.errors,
+        details: validation.errors
       });
     }
 
@@ -167,21 +174,21 @@ server.post('/export', async (request, reply) => {
         filename: exportResult.filename,
         mimeType: exportResult.mimeType,
         format,
-        stats,
+        stats
       },
       metadata: {
         timestamp: new Date().toISOString(),
         nodeCount: stats.nodeCount,
         complexity: stats.complexity,
-        estimatedOutputs: stats.estimatedOutputs,
-      },
+        estimatedOutputs: stats.estimatedOutputs
+      }
     };
   } catch (error) {
     return reply.code(500).send({
       success: false,
       error: 'Export failed',
       message: error.message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -199,7 +206,7 @@ server.post('/import', async (request, reply) => {
         success: false,
         error: 'Incompatible bundle',
         issues: compatibility.issues,
-        warnings: compatibility.warnings,
+        warnings: compatibility.warnings
       });
     }
 
@@ -212,7 +219,7 @@ server.post('/import', async (request, reply) => {
       return reply.code(400).send({
         success: false,
         error: 'Imported graph is invalid',
-        details: validation.errors,
+        details: validation.errors
       });
     }
 
@@ -222,19 +229,19 @@ server.post('/import', async (request, reply) => {
       compatibility: {
         warnings: compatibility.warnings,
         bundleFormat: (bundle as any).format,
-        engineVersion: (bundle as any).compatibility?.engineVersion,
+        engineVersion: (bundle as any).compatibility?.engineVersion
       },
       metadata: {
         timestamp: new Date().toISOString(),
-        importedNodes: graph.nodes?.length || 0,
-      },
+        importedNodes: graph.nodes?.length || 0
+      }
     };
   } catch (error) {
     return reply.code(500).send({
       success: false,
       error: 'Import failed',
       message: error.message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });
@@ -244,7 +251,7 @@ server.get('/analytics/summary', async (request, reply) => {
   try {
     if (!analyticsEnabled) {
       return reply.code(503).send({
-        error: 'Analytics service not available',
+        error: 'Analytics service not available'
       });
     }
 
@@ -253,12 +260,12 @@ server.get('/analytics/summary', async (request, reply) => {
       status: 'Analytics available',
       collector: analyticsEnabled ? 'active' : 'inactive',
       mode: 'basic',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   } catch (error) {
     return reply.code(500).send({
       error: 'Analytics summary failed',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -296,7 +303,9 @@ const start = async () => {
     console.log(`🚀 PromptScape Server running on port ${port}`);
     console.log('✅ Production ready with core functionality');
     console.log('📊 Analytics tracking enabled');
-    console.log('🎯 Endpoints: /, /health, /preview, /export, /import, /analytics/summary');
+    console.log(
+      '🎯 Endpoints: /, /health, /preview, /export, /import, /analytics/summary'
+    );
     console.log('🔧 Engine: Basic with deterministic execution');
   } catch (err) {
     console.error('❌ Server startup failed:', err);

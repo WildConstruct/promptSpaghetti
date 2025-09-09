@@ -8,7 +8,7 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
   const testCases = [
     { name: 'chromium', device: devices['Desktop Chrome'] },
     { name: 'firefox', device: devices['Desktop Firefox'] },
-    { name: 'webkit', device: devices['Desktop Safari'] },
+    { name: 'webkit', device: devices['Desktop Safari'] }
   ];
 
   testCases.forEach(({ name, device }) => {
@@ -17,13 +17,17 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
 
       test.beforeEach(async ({ page }) => {
         await page.goto('/');
-        await page.waitForSelector('[data-testid="react-flow-canvas"]', { timeout: 10000 });
+        await page.waitForSelector('[data-testid="react-flow-canvas"]', {
+          timeout: 10000
+        });
       });
 
       test(`${name}: Basic node creation and connection`, async ({ page }) => {
         // Add a WeightedChoice node
         await page.click('[data-testid="palette-WeightedChoice"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 200, y: 200 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 200, y: 200 }
+        });
 
         // Verify node was created
         const node1 = page.locator('[data-testid^="node-"]').first();
@@ -31,7 +35,9 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
 
         // Add an Output node
         await page.click('[data-testid="palette-Output"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 400, y: 200 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 400, y: 200 }
+        });
 
         // Verify second node was created
         const node2 = page.locator('[data-testid^="node-"]').nth(1);
@@ -51,7 +57,9 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
       test(`${name}: Inspector panel functionality`, async ({ page }) => {
         // Create a node
         await page.click('[data-testid="palette-WeightedChoice"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 300, y: 300 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 300, y: 300 }
+        });
 
         // Select the node
         const node = page.locator('[data-testid^="node-"]').first();
@@ -62,7 +70,9 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
         await expect(inspector).toBeVisible();
 
         // Test form interactions
-        const choiceInput = inspector.locator('input[placeholder*="choice"]').first();
+        const choiceInput = inspector
+          .locator('input[placeholder*="choice"]')
+          .first();
         await choiceInput.fill(`Test choice for ${name}`);
 
         // Verify the input was filled
@@ -72,25 +82,33 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
       test(`${name}: Graph execution and preview`, async ({ page }) => {
         // Create a simple graph: WeightedChoice -> Output
         await page.click('[data-testid="palette-WeightedChoice"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 200, y: 200 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 200, y: 200 }
+        });
 
         const node1 = page.locator('[data-testid^="node-"]').first();
         await node1.click();
 
         // Configure WeightedChoice
         const inspector = page.locator('[data-testid="inspector-panel"]');
-        const choiceInput = inspector.locator('input[placeholder*="choice"]').first();
+        const choiceInput = inspector
+          .locator('input[placeholder*="choice"]')
+          .first();
         await choiceInput.fill('Option A');
 
         const addChoiceBtn = inspector.locator('button:has-text("Add Choice")');
         await addChoiceBtn.click();
 
-        const choiceInput2 = inspector.locator('input[placeholder*="choice"]').nth(1);
+        const choiceInput2 = inspector
+          .locator('input[placeholder*="choice"]')
+          .nth(1);
         await choiceInput2.fill('Option B');
 
         // Add Output node
         await page.click('[data-testid="palette-Output"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 400, y: 200 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 400, y: 200 }
+        });
 
         // Connect nodes
         const handle1 = node1.locator('[data-testid="handle-source"]');
@@ -110,17 +128,21 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
         await expect(results).toContainText(/Option [AB]/);
       });
 
-      test(`${name}: Canvas interactions (pan, zoom, select)`, async ({ page }) => {
+      test(`${name}: Canvas interactions (pan, zoom, select)`, async ({
+        page
+      }) => {
         // Create multiple nodes for interaction testing
         const positions = [
           { x: 200, y: 200 },
           { x: 400, y: 200 },
-          { x: 300, y: 350 },
+          { x: 300, y: 350 }
         ];
 
         for (const pos of positions) {
           await page.click('[data-testid="palette-WeightedChoice"]');
-          await page.click('[data-testid="react-flow-canvas"]', { position: pos });
+          await page.click('[data-testid="react-flow-canvas"]', {
+            position: pos
+          });
         }
 
         const canvas = page.locator('[data-testid="react-flow-canvas"]');
@@ -130,12 +152,12 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
           // Safari requires different interaction
           await canvas.dragTo(canvas, {
             sourcePosition: { x: 300, y: 300 },
-            targetPosition: { x: 350, y: 350 },
+            targetPosition: { x: 350, y: 350 }
           });
         } else {
           await canvas.dragTo(canvas, {
             sourcePosition: { x: 100, y: 100 },
-            targetPosition: { x: 150, y: 150 },
+            targetPosition: { x: 150, y: 150 }
           });
         }
 
@@ -170,14 +192,18 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
       test(`${name}: Local storage and persistence`, async ({ page }) => {
         // Create a graph
         await page.click('[data-testid="palette-WeightedChoice"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 250, y: 250 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 250, y: 250 }
+        });
 
         // Configure the node
         const node = page.locator('[data-testid^="node-"]').first();
         await node.click();
 
         const inspector = page.locator('[data-testid="inspector-panel"]');
-        const choiceInput = inspector.locator('input[placeholder*="choice"]').first();
+        const choiceInput = inspector
+          .locator('input[placeholder*="choice"]')
+          .first();
         await choiceInput.fill(`Browser test ${name}`);
 
         // Wait for autosave
@@ -188,7 +214,9 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
         await page.waitForSelector('[data-testid="react-flow-canvas"]');
 
         // Check for restore prompt (if autosave worked)
-        const restorePrompt = page.locator('[data-testid="restore-draft-modal"]');
+        const restorePrompt = page.locator(
+          '[data-testid="restore-draft-modal"]'
+        );
         if (await restorePrompt.isVisible()) {
           await page.click('button:has-text("Restore")');
 
@@ -198,7 +226,9 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
 
           // Verify the configuration was preserved
           await restoredNode.click();
-          const restoredInput = inspector.locator('input[placeholder*="choice"]').first();
+          const restoredInput = inspector
+            .locator('input[placeholder*="choice"]')
+            .first();
           await expect(restoredInput).toHaveValue(`Browser test ${name}`);
         }
       });
@@ -206,14 +236,18 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
       test(`${name}: File import/export functionality`, async ({ page }) => {
         // Create a simple graph
         await page.click('[data-testid="palette-Output"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 300, y: 300 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 300, y: 300 }
+        });
 
         // Configure Output node
         const node = page.locator('[data-testid^="node-"]').first();
         await node.click();
 
         const inspector = page.locator('[data-testid="inspector-panel"]');
-        const templateInput = inspector.locator('textarea[placeholder*="template"]');
+        const templateInput = inspector.locator(
+          'textarea[placeholder*="template"]'
+        );
         await templateInput.fill(`Test template for ${name} browser`);
 
         // Test export functionality
@@ -232,10 +266,14 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
       test(`${name}: Error handling and validation`, async ({ page }) => {
         // Create nodes that would create a cycle
         await page.click('[data-testid="palette-WeightedChoice"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 200, y: 200 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 200, y: 200 }
+        });
 
         await page.click('[data-testid="palette-WeightedChoice"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 400, y: 200 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 400, y: 200 }
+        });
 
         const node1 = page.locator('[data-testid^="node-"]').first();
         const node2 = page.locator('[data-testid^="node-"]').nth(1);
@@ -263,15 +301,21 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
         await page.setViewportSize({ width: 1024, height: 768 });
 
         // Verify main components are visible
-        await expect(page.locator('[data-testid="palette-panel"]')).toBeVisible();
-        await expect(page.locator('[data-testid="react-flow-canvas"]')).toBeVisible();
+        await expect(
+          page.locator('[data-testid="palette-panel"]')
+        ).toBeVisible();
+        await expect(
+          page.locator('[data-testid="react-flow-canvas"]')
+        ).toBeVisible();
 
         // Test smaller viewport (tablet)
         await page.setViewportSize({ width: 768, height: 1024 });
 
         // Components should still be functional
         await page.click('[data-testid="palette-WeightedChoice"]');
-        await page.click('[data-testid="react-flow-canvas"]', { position: { x: 200, y: 200 } });
+        await page.click('[data-testid="react-flow-canvas"]', {
+          position: { x: 200, y: 200 }
+        });
 
         const node = page.locator('[data-testid^="node-"]').first();
         await expect(node).toBeVisible();
@@ -280,7 +324,9 @@ test.describe('Cross-Browser Graph Editor Tests', () => {
         await page.setViewportSize({ width: 375, height: 667 });
 
         // Verify the app is still usable (might have different layout)
-        await expect(page.locator('[data-testid="react-flow-canvas"]')).toBeVisible();
+        await expect(
+          page.locator('[data-testid="react-flow-canvas"]')
+        ).toBeVisible();
       });
     });
   });

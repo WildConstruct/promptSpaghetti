@@ -313,14 +313,14 @@ async function runPerformanceAudit() {
   const result = await lighthouse('http://localhost:3000', {
     port: 9222,
     output: 'json',
-    logLevel: 'info',
+    logLevel: 'info'
   });
 
   // Extract performance metrics
   const metrics = {
     firstContentfulPaint: result.audits['first-contentful-paint'].numericValue,
     timeToInteractive: result.audits['interactive'].numericValue,
-    performanceScore: result.categories.performance.score,
+    performanceScore: result.categories.performance.score
   };
 
   console.log('Performance Audit Results:', metrics);

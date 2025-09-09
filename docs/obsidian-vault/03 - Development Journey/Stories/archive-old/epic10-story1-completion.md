@@ -206,7 +206,7 @@ Integration Tests: Comprehensive example suite
 ```typescript
 const response = await engine.translate({
   graph: simpleTextGraph,
-  targetPlatform: 'openai-gpt',
+  targetPlatform: 'openai-gpt'
 });
 // Result: Chat completion format with optimized parameters
 ```
@@ -216,7 +216,7 @@ const response = await engine.translate({
 ```typescript
 const response = await engine.translate({
   graph: complexDragonSceneGraph,
-  targetPlatform: 'midjourney',
+  targetPlatform: 'midjourney'
 });
 // Result: "A majestic dragon perched on a mountain peak at sunset, fantasy art, highly detailed, cinematic lighting --ar 16:9 --s 250 --q 2"
 ```
@@ -224,7 +224,10 @@ const response = await engine.translate({
 ### 3. Validation & Quality Assessment
 
 ```typescript
-const report = await validator.validateGraph(graph, [gptAdaptor, midjourneyAdaptor]);
+const report = await validator.validateGraph(graph, [
+  gptAdaptor,
+  midjourneyAdaptor
+]);
 // Result: Comprehensive validation with quality scores, compatibility analysis, and auto-fix suggestions
 ```
 

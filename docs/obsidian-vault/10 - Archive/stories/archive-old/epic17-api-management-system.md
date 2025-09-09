@@ -395,22 +395,22 @@ const DEFAULT_CONFIG = {
     defaultLimits: {
       requestsPerMinute: 100,
       requestsPerHour: 3000,
-      requestsPerDay: 50000,
-    },
+      requestsPerDay: 50000
+    }
   },
   security: {
     keyRotationPolicy: {
       warningDays: 30,
       enforceRotation: true,
-      maxKeyAge: 365,
-    },
+      maxKeyAge: 365
+    }
   },
   features: {
     ipWhitelisting: true,
     scopeBasedAccess: true,
     usageAnalytics: true,
-    realTimeMonitoring: true,
-  },
+    realTimeMonitoring: true
+  }
 };
 ```
 

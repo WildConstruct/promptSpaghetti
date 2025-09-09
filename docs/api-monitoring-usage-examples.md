@@ -25,7 +25,7 @@ const registerFinancialData = async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         externalId: 'TXN-123456789',
@@ -38,8 +38,8 @@ const registerFinancialData = async () => {
         currency: 'USD',
         transactionDate: '2025-07-21T10:30:00.000Z',
         institutionName: 'Example Bank',
-        retentionPeriodYears: 7,
-      }),
+        retentionPeriodYears: 7
+      })
     });
 
     const result = await response.json();
@@ -60,20 +60,23 @@ const registerFinancialData = async () => {
 // Execute deletion workflow with monitoring
 const executeDeletionWorkflow = async workflowId => {
   try {
-    const response = await fetch('/api/financial-services/deletion-workflows/execute', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwtToken}`,
-      },
-      body: JSON.stringify({
-        workflowId: workflowId,
-        overrides: {
-          batchSize: 25,
-          requireApproval: true,
+    const response = await fetch(
+      '/api/financial-services/deletion-workflows/execute',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwtToken}`
         },
-      }),
-    });
+        body: JSON.stringify({
+          workflowId: workflowId,
+          overrides: {
+            batchSize: 25,
+            requireApproval: true
+          }
+        })
+      }
+    );
 
     const result = await response.json();
 
@@ -82,7 +85,7 @@ const executeDeletionWorkflow = async workflowId => {
         batchId: result.data.batchId,
         processed: result.data.recordsProcessed,
         deleted: result.data.recordsDeleted,
-        failed: result.data.recordsFailed,
+        failed: result.data.recordsFailed
       });
 
       // Monitor execution results for compliance reporting
@@ -118,19 +121,22 @@ class DeletionWorkflowMonitor {
       metadata: {
         workflowId,
         overrides,
-        operationId,
-      },
+        operationId
+      }
     });
 
     try {
-      const response = await fetch('/api/financial-services/deletion-workflows/execute', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.getAuthToken()}`,
-        },
-        body: JSON.stringify({ workflowId, overrides }),
-      });
+      const response = await fetch(
+        '/api/financial-services/deletion-workflows/execute',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.getAuthToken()}`
+          },
+          body: JSON.stringify({ workflowId, overrides })
+        }
+      );
 
       const result = await response.json();
       const executionTime = performance.now() - startTime;
@@ -148,8 +154,8 @@ class DeletionWorkflowMonitor {
           recordsProcessed: result.data?.recordsProcessed || 0,
           recordsDeleted: result.data?.recordsDeleted || 0,
           recordsFailed: result.data?.recordsFailed || 0,
-          success: result.success,
-        },
+          success: result.success
+        }
       });
 
       return result;
@@ -167,8 +173,8 @@ class DeletionWorkflowMonitor {
           operationId,
           executionTimeMs: executionTime,
           errorMessage: error.message,
-          success: false,
-        },
+          success: false
+        }
       });
 
       throw error;
@@ -203,7 +209,12 @@ class GraphExecutionMonitor {
     const startTime = performance.now();
 
     // Record execution start
-    this.analytics.recordGraphExecutionStart(graphId, graph.nodes.length, graph.edges?.length || 0, seedStart);
+    this.analytics.recordGraphExecutionStart(
+      graphId,
+      graph.nodes.length,
+      graph.edges?.length || 0,
+      seedStart
+    );
 
     try {
       const response = await fetch('/preview', {
@@ -211,9 +222,9 @@ class GraphExecutionMonitor {
         headers: {
           'Content-Type': 'application/json',
           'X-Session-Id': this.analytics.currentSessionId,
-          'X-User-Id': this.getCurrentUserId(),
+          'X-User-Id': this.getCurrentUserId()
         },
-        body: JSON.stringify({ graph, runs, seedStart }),
+        body: JSON.stringify({ graph, runs, seedStart })
       });
 
       const result = await response.json();
@@ -221,7 +232,10 @@ class GraphExecutionMonitor {
 
       if (result.results && result.results.length > 0) {
         // Calculate total output length
-        const totalOutputLength = result.results.reduce((sum, r) => sum + r.output.length, 0);
+        const totalOutputLength = result.results.reduce(
+          (sum, r) => sum + r.output.length,
+          0
+        );
 
         // Record successful completion
         this.analytics.recordGraphExecutionComplete(
@@ -281,7 +295,7 @@ class GraphExecutionMonitor {
 const graphMonitor = new GraphExecutionMonitor(analyticsCollector);
 const results = await graphMonitor.executeGraphWithMonitoring(myGraph, {
   runs: 10,
-  seedStart: 42,
+  seedStart: 42
 });
 ```
 
@@ -292,7 +306,9 @@ const results = await graphMonitor.executeGraphWithMonitoring(myGraph, {
 const performanceMonitoringMiddleware = analyticsCollector => {
   return (req, res, next) => {
     const startTime = performance.now();
-    const requestId = req.headers['x-request-id'] || `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const requestId =
+      req.headers['x-request-id'] ||
+      `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
     // Record API call start
     analyticsCollector.recordEvent({
@@ -305,8 +321,8 @@ const performanceMonitoringMiddleware = analyticsCollector => {
         method: req.method,
         path: req.path,
         userAgent: req.headers['user-agent'],
-        requestId,
-      },
+        requestId
+      }
     });
 
     // Override res.end to capture completion metrics
@@ -327,8 +343,8 @@ const performanceMonitoringMiddleware = analyticsCollector => {
           statusCode: res.statusCode,
           executionTimeMs: executionTime,
           requestId,
-          success: res.statusCode < 400,
-        },
+          success: res.statusCode < 400
+        }
       });
 
       // Record performance metrics
@@ -367,7 +383,7 @@ class CanvasInteractionTracker {
     this.analytics.recordUserInteraction('node_created', graphId, {
       nodeType,
       canvasPosition: position,
-      interactionType: 'creation',
+      interactionType: 'creation'
     });
   }
 
@@ -376,7 +392,7 @@ class CanvasInteractionTracker {
       nodeId,
       nodeType,
       changes: Object.keys(changes),
-      interactionType: 'property_update',
+      interactionType: 'property_update'
     });
   }
 
@@ -384,7 +400,7 @@ class CanvasInteractionTracker {
     this.analytics.recordUserInteraction('connection_created', graphId, {
       sourceNodeId,
       targetNodeId,
-      interactionType: 'connection',
+      interactionType: 'connection'
     });
   }
 
@@ -394,8 +410,8 @@ class CanvasInteractionTracker {
       viewport: {
         x: viewport.x,
         y: viewport.y,
-        zoom: viewport.zoom,
-      },
+        zoom: viewport.zoom
+      }
     });
   }
 }
@@ -446,8 +462,8 @@ class ComplianceMetricsTracker {
         eventType: 'policy_acceptance',
         policyId,
         policyVersion: version,
-        complianceCategory: 'data_protection',
-      },
+        complianceCategory: 'data_protection'
+      }
     });
   }
 
@@ -462,8 +478,8 @@ class ComplianceMetricsTracker {
         dataId,
         classification,
         confidenceScore: confidence,
-        category: 'data_protection',
-      },
+        category: 'data_protection'
+      }
     });
   }
 
@@ -478,8 +494,8 @@ class ComplianceMetricsTracker {
         recordCount,
         dataCategory,
         outcome, // 'success', 'partial', 'failed'
-        complianceCategory: 'data_retention',
-      },
+        complianceCategory: 'data_retention'
+      }
     });
   }
 }
@@ -510,7 +526,7 @@ class WebSocketMonitor {
     this.messageStats = {
       sent: 0,
       received: 0,
-      errors: 0,
+      errors: 0
     };
   }
 
@@ -524,7 +540,7 @@ class WebSocketMonitor {
       documentId: connectionInfo.documentId,
       messagesSent: 0,
       messagesReceived: 0,
-      lastActivity: startTime,
+      lastActivity: startTime
     });
 
     // Record current connection metrics
@@ -559,8 +575,9 @@ class WebSocketMonitor {
       // Record session metrics
       this.metrics.recordCollaborationMetrics({
         sessionDuration,
-        messagesExchanged: connection.messagesReceived + connection.messagesSent,
-        documentId: connection.documentId,
+        messagesExchanged:
+          connection.messagesReceived + connection.messagesSent,
+        documentId: connection.documentId
       });
 
       this.connections.delete(connectionId);
@@ -575,29 +592,35 @@ class WebSocketMonitor {
     if (connection) {
       // Record error metrics
       this.metrics.recordWebSocketMetrics({
-        errorRate: (this.messageStats.errors / (this.messageStats.sent + this.messageStats.received)) * 100,
+        errorRate:
+          (this.messageStats.errors /
+            (this.messageStats.sent + this.messageStats.received)) *
+          100,
         lastError: error.message,
-        connectionId,
+        connectionId
       });
     }
   }
 
   updateConnectionMetrics() {
-    const activeDocuments = new Set(Array.from(this.connections.values()).map(c => c.documentId)).size;
+    const activeDocuments = new Set(
+      Array.from(this.connections.values()).map(c => c.documentId)
+    ).size;
 
-    const averageUsersPerDocument = activeDocuments > 0 ? this.connections.size / activeDocuments : 0;
+    const averageUsersPerDocument =
+      activeDocuments > 0 ? this.connections.size / activeDocuments : 0;
 
     this.metrics.recordWebSocketMetrics({
       connectionCount: this.connections.size,
       activeDocuments,
       averageUsersPerDocument,
-      bytesTransferred: this.calculateBytesTransferred(),
+      bytesTransferred: this.calculateBytesTransferred()
     });
   }
 
   recordMessageLatency(latency) {
     this.metrics.recordWebSocketMetrics({
-      messageLatency: latency,
+      messageLatency: latency
     });
   }
 
@@ -609,9 +632,11 @@ class WebSocketMonitor {
   getConnectionMetrics() {
     return {
       totalConnections: this.connections.size,
-      activeDocuments: new Set(Array.from(this.connections.values()).map(c => c.documentId)).size,
+      activeDocuments: new Set(
+        Array.from(this.connections.values()).map(c => c.documentId)
+      ).size,
       messageStats: this.messageStats,
-      avgSessionDuration: this.calculateAverageSessionDuration(),
+      avgSessionDuration: this.calculateAverageSessionDuration()
     };
   }
 
@@ -636,7 +661,7 @@ wss.on('connection', (ws, req) => {
     connectionId: generateConnectionId(),
     userId: extractUserId(req),
     documentId: extractDocumentId(req),
-    connectedAt: Date.now(),
+    connectedAt: Date.now()
   };
 
   wsMonitor.onConnection(ws, connectionInfo);
@@ -655,7 +680,13 @@ class AuthenticationMonitor {
     this.audit = auditService;
   }
 
-  async trackLoginAttempt(username, ipAddress, userAgent, success, mfaRequired = false) {
+  async trackLoginAttempt(
+    username,
+    ipAddress,
+    userAgent,
+    success,
+    mfaRequired = false
+  ) {
     const eventId = `login-attempt-${Date.now()}`;
 
     // Analytics event
@@ -669,8 +700,8 @@ class AuthenticationMonitor {
         ipAddress: this.hashIpAddress(ipAddress),
         userAgent: this.hashUserAgent(userAgent),
         mfaRequired,
-        attemptType: 'password_login',
-      },
+        attemptType: 'password_login'
+      }
     });
 
     // Audit trail
@@ -683,9 +714,9 @@ class AuthenticationMonitor {
         ipAddress,
         userAgent,
         mfaRequired,
-        timestamp: Date.now(),
+        timestamp: Date.now()
       },
-      severity: success ? 'info' : 'warn',
+      severity: success ? 'info' : 'warn'
     });
 
     // Track consecutive failures for anomaly detection
@@ -706,8 +737,8 @@ class AuthenticationMonitor {
       metadata: {
         method, // 'totp', 'sms', 'email'
         deviceTrustScore: deviceTrust,
-        success,
-      },
+        success
+      }
     });
 
     await this.audit.logEvent({
@@ -717,9 +748,9 @@ class AuthenticationMonitor {
       resourceId: eventId,
       details: {
         method,
-        deviceTrustScore: deviceTrust,
+        deviceTrustScore: deviceTrust
       },
-      severity: success ? 'info' : 'warn',
+      severity: success ? 'info' : 'warn'
     });
   }
 
@@ -736,8 +767,9 @@ class AuthenticationMonitor {
         activityType, // 'impossible_travel', 'unusual_device', 'off_hours_access'
         riskScore,
         context,
-        severity: riskScore > 80 ? 'critical' : riskScore > 50 ? 'high' : 'medium',
-      },
+        severity:
+          riskScore > 80 ? 'critical' : riskScore > 50 ? 'high' : 'medium'
+      }
     });
 
     await this.audit.logEvent({
@@ -749,9 +781,9 @@ class AuthenticationMonitor {
         activityType,
         riskScore,
         context,
-        detectionTime: Date.now(),
+        detectionTime: Date.now()
       },
-      severity: riskScore > 80 ? 'critical' : 'warn',
+      severity: riskScore > 80 ? 'critical' : 'warn'
     });
   }
 
@@ -766,17 +798,29 @@ class AuthenticationMonitor {
 
   hashUsername(username) {
     // Simple hash for privacy protection
-    return require('crypto').createHash('sha256').update(username).digest('hex').substr(0, 8);
+    return require('crypto')
+      .createHash('sha256')
+      .update(username)
+      .digest('hex')
+      .substr(0, 8);
   }
 
   hashIpAddress(ip) {
     // Hash IP address for privacy while maintaining uniqueness for analysis
-    return require('crypto').createHash('sha256').update(ip).digest('hex').substr(0, 12);
+    return require('crypto')
+      .createHash('sha256')
+      .update(ip)
+      .digest('hex')
+      .substr(0, 12);
   }
 
   hashUserAgent(userAgent) {
     // Hash user agent string
-    return require('crypto').createHash('sha256').update(userAgent).digest('hex').substr(0, 10);
+    return require('crypto')
+      .createHash('sha256')
+      .update(userAgent)
+      .digest('hex')
+      .substr(0, 10);
   }
 }
 
@@ -792,7 +836,13 @@ app.post('/auth/login', async (req, res) => {
   try {
     const user = await authenticateUser(username, password);
 
-    await authMonitor.trackLoginAttempt(username, ipAddress, userAgent, true, user.mfaEnabled);
+    await authMonitor.trackLoginAttempt(
+      username,
+      ipAddress,
+      userAgent,
+      true,
+      user.mfaEnabled
+    );
 
     if (user.mfaEnabled) {
       // Handle MFA flow
@@ -830,7 +880,7 @@ class HealthCheckService {
       timestamp: new Date().toISOString(),
       version: process.env.APP_VERSION || '1.0.0',
       uptime: process.uptime(),
-      checks: {},
+      checks: {}
     };
 
     try {
@@ -878,13 +928,13 @@ class HealthCheckService {
       return {
         status: 'healthy',
         responseTime: Math.round(responseTime),
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         error: error.message,
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     }
   }
@@ -902,13 +952,13 @@ class HealthCheckService {
       return {
         status: 'healthy',
         responseTime: Math.round(responseTime),
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         error: error.message,
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     }
   }
@@ -923,13 +973,13 @@ class HealthCheckService {
         connections: metrics.totalConnections,
         activeDocuments: metrics.activeDocuments,
         uptime: metrics.uptime,
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         error: error.message,
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     }
   }
@@ -943,13 +993,13 @@ class HealthCheckService {
         status: 'healthy',
         serviceVersion: '1.0.0',
         lastChecked: new Date().toISOString(),
-        ...testResult,
+        ...testResult
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         error: error.message,
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     }
   }
@@ -967,20 +1017,20 @@ class HealthCheckService {
         memory: {
           used: Math.round(memUsage.heapUsed / 1024 / 1024), // MB
           total: Math.round(memUsage.heapTotal / 1024 / 1024), // MB
-          percentage: Math.round(memoryUsagePercent),
+          percentage: Math.round(memoryUsagePercent)
         },
         process: {
           pid: process.pid,
           uptime: Math.round(process.uptime()),
-          nodeVersion: process.version,
+          nodeVersion: process.version
         },
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         error: error.message,
-        lastChecked: new Date().toISOString(),
+        lastChecked: new Date().toISOString()
       };
     }
   }
@@ -992,7 +1042,9 @@ class HealthCheckService {
       return 'unhealthy';
     } else if (statuses.includes('degraded')) {
       return 'degraded';
-    } else if (statuses.every(status => status === 'healthy' || status === 'disabled')) {
+    } else if (
+      statuses.every(status => status === 'healthy' || status === 'disabled')
+    ) {
       return 'healthy';
     } else {
       return 'unknown';
@@ -1005,18 +1057,19 @@ class HealthCheckService {
 
     // Add additional monitoring-specific metrics
     const currentMetrics = this.metricsCollector.getCurrentMetrics();
-    const performanceSummary = this.metricsCollector.getPerformanceSummary(300000); // Last 5 minutes
+    const performanceSummary =
+      this.metricsCollector.getPerformanceSummary(300000); // Last 5 minutes
 
     return {
       ...basicHealth,
       performance: {
         current: currentMetrics,
-        summary: performanceSummary,
+        summary: performanceSummary
       },
       monitoring: {
         activeAlerts: this.metricsCollector.getActiveAlerts(),
-        lastMetricUpdate: currentMetrics.system?.timestamp || null,
-      },
+        lastMetricUpdate: currentMetrics.system?.timestamp || null
+      }
     };
   }
 }
@@ -1028,7 +1081,7 @@ app.get('/health', async (req, res) => {
     redis: redisService,
     wsServer: webSocketServer,
     metricsCollector,
-    financialService,
+    financialService
   });
 
   const health = await healthService.getHealthStatus();
@@ -1044,7 +1097,7 @@ app.get('/health/detailed', async (req, res) => {
     redis: redisService,
     wsServer: webSocketServer,
     metricsCollector,
-    financialService,
+    financialService
   });
 
   const health = await healthService.getDetailedHealth();
@@ -1075,8 +1128,8 @@ class BusinessMetricsCollector {
       metadata: {
         feature: 'compliance_framework',
         framework, // 'GDPR', 'CCPA', 'SOX', 'HIPAA'
-        ...featureUsage,
-      },
+        ...featureUsage
+      }
     });
 
     // Record framework-specific performance metrics
@@ -1091,7 +1144,12 @@ class BusinessMetricsCollector {
   }
 
   // Track data retention effectiveness
-  trackDataRetentionEffectiveness(category, totalRecords, retentionCompliant, overdue) {
+  trackDataRetentionEffectiveness(
+    category,
+    totalRecords,
+    retentionCompliant,
+    overdue
+  ) {
     const complianceRate = (retentionCompliant / totalRecords) * 100;
     const overdueRate = (overdue / totalRecords) * 100;
 
@@ -1125,15 +1183,21 @@ class BusinessMetricsCollector {
         retentionCompliant,
         overdue,
         complianceRate,
-        overdueRate,
-      },
+        overdueRate
+      }
     });
   }
 
   // Track financial data lifecycle efficiency
   trackFinancialDataLifecycleMetrics(workflowId, executionMetrics) {
-    const { recordsProcessed, recordsDeleted, recordsFailed, executionTimeMs, verificationSteps, safetyChecks } =
-      executionMetrics;
+    const {
+      recordsProcessed,
+      recordsDeleted,
+      recordsFailed,
+      executionTimeMs,
+      verificationSteps,
+      safetyChecks
+    } = executionMetrics;
 
     const successRate = (recordsDeleted / recordsProcessed) * 100;
     const failureRate = (recordsFailed / recordsProcessed) * 100;
@@ -1181,8 +1245,8 @@ class BusinessMetricsCollector {
         throughput,
         recordsProcessed,
         verificationSteps: verificationSteps.completed,
-        safetyChecks: safetyChecks.passed,
-      },
+        safetyChecks: safetyChecks.passed
+      }
     });
   }
 
@@ -1198,8 +1262,8 @@ class BusinessMetricsCollector {
         eventType: 'privacy_feature_adoption',
         feature, // 'data_export', 'data_deletion', 'consent_management'
         adoptionStage, // 'discovered', 'trial', 'adopted', 'expert'
-        category: 'privacy_controls',
-      },
+        category: 'privacy_controls'
+      }
     });
   }
 
@@ -1209,33 +1273,41 @@ class BusinessMetricsCollector {
     const endTime = Date.now();
     const startTime = endTime - timeWindow;
 
-    const analyticsWindow = this.analytics.getAnalyticsWindow(startTime, endTime);
+    const analyticsWindow = this.analytics.getAnalyticsWindow(
+      startTime,
+      endTime
+    );
     const performanceWindow = this.metrics.getMetricsWindow(startTime, endTime);
 
     return {
       timeWindow: {
         start: new Date(startTime).toISOString(),
         end: new Date(endTime).toISOString(),
-        durationMs: timeWindow,
+        durationMs: timeWindow
       },
       compliance: {
         frameworkUsage: this.summarizeComplianceUsage(analyticsWindow.events),
-        retentionEffectiveness: this.summarizeRetentionMetrics(performanceWindow),
+        retentionEffectiveness:
+          this.summarizeRetentionMetrics(performanceWindow)
       },
       financialServices: {
-        lifecycleEfficiency: this.summarizeFinancialMetrics(analyticsWindow.events),
-        operationalMetrics: this.summarizeOperationalMetrics(performanceWindow),
+        lifecycleEfficiency: this.summarizeFinancialMetrics(
+          analyticsWindow.events
+        ),
+        operationalMetrics: this.summarizeOperationalMetrics(performanceWindow)
       },
       privacy: {
         featureAdoption: this.summarizePrivacyAdoption(analyticsWindow.events),
-        userEngagement: this.summarizeUserEngagement(analyticsWindow.events),
-      },
+        userEngagement: this.summarizeUserEngagement(analyticsWindow.events)
+      }
     };
   }
 
   summarizeComplianceUsage(events) {
     const complianceEvents = events.filter(
-      e => e.metadata?.feature === 'compliance_framework' || e.metadata?.category === 'compliance'
+      e =>
+        e.metadata?.feature === 'compliance_framework' ||
+        e.metadata?.category === 'compliance'
     );
 
     const frameworkCounts = {};
@@ -1247,34 +1319,55 @@ class BusinessMetricsCollector {
     return {
       totalUsage: complianceEvents.length,
       frameworkBreakdown: frameworkCounts,
-      activeFrameworks: Object.keys(frameworkCounts).length,
+      activeFrameworks: Object.keys(frameworkCounts).length
     };
   }
 
   summarizeRetentionMetrics(metricsWindow) {
     // Implementation to analyze retention effectiveness metrics
-    const retentionMetrics = metricsWindow.systemMetrics.filter(m => m.component === 'retention_service');
+    const retentionMetrics = metricsWindow.systemMetrics.filter(
+      m => m.component === 'retention_service'
+    );
 
     return {
-      averageComplianceRate: this.calculateAverage(retentionMetrics, 'complianceRate'),
-      totalRecordsProcessed: this.calculateSum(retentionMetrics, 'recordsProcessed'),
-      retentionTrends: this.calculateTrends(retentionMetrics),
+      averageComplianceRate: this.calculateAverage(
+        retentionMetrics,
+        'complianceRate'
+      ),
+      totalRecordsProcessed: this.calculateSum(
+        retentionMetrics,
+        'recordsProcessed'
+      ),
+      retentionTrends: this.calculateTrends(retentionMetrics)
     };
   }
 
   summarizeFinancialMetrics(events) {
-    const financialEvents = events.filter(e => e.metadata?.eventType === 'financial_data_lifecycle_execution');
+    const financialEvents = events.filter(
+      e => e.metadata?.eventType === 'financial_data_lifecycle_execution'
+    );
 
     return {
       totalExecutions: financialEvents.length,
-      averageSuccessRate: this.calculateAverageFromEvents(financialEvents, 'successRate'),
-      averageThroughput: this.calculateAverageFromEvents(financialEvents, 'throughput'),
-      totalRecordsProcessed: this.calculateSumFromEvents(financialEvents, 'recordsProcessed'),
+      averageSuccessRate: this.calculateAverageFromEvents(
+        financialEvents,
+        'successRate'
+      ),
+      averageThroughput: this.calculateAverageFromEvents(
+        financialEvents,
+        'throughput'
+      ),
+      totalRecordsProcessed: this.calculateSumFromEvents(
+        financialEvents,
+        'recordsProcessed'
+      )
     };
   }
 
   summarizePrivacyAdoption(events) {
-    const privacyEvents = events.filter(e => e.metadata?.eventType === 'privacy_feature_adoption');
+    const privacyEvents = events.filter(
+      e => e.metadata?.eventType === 'privacy_feature_adoption'
+    );
 
     const featureCounts = {};
     const stageCounts = {};
@@ -1290,29 +1383,38 @@ class BusinessMetricsCollector {
     return {
       totalAdoptionEvents: privacyEvents.length,
       featureBreakdown: featureCounts,
-      adoptionStageBreakdown: stageCounts,
+      adoptionStageBreakdown: stageCounts
     };
   }
 
   calculateAverageFromEvents(events, property) {
     if (events.length === 0) return 0;
-    const sum = events.reduce((acc, event) => acc + (event.metadata?.[property] || 0), 0);
+    const sum = events.reduce(
+      (acc, event) => acc + (event.metadata?.[property] || 0),
+      0
+    );
     return sum / events.length;
   }
 
   calculateSumFromEvents(events, property) {
-    return events.reduce((acc, event) => acc + (event.metadata?.[property] || 0), 0);
+    return events.reduce(
+      (acc, event) => acc + (event.metadata?.[property] || 0),
+      0
+    );
   }
 }
 
 // Usage example
-const businessMetrics = new BusinessMetricsCollector(analyticsCollector, metricsCollector);
+const businessMetrics = new BusinessMetricsCollector(
+  analyticsCollector,
+  metricsCollector
+);
 
 // Track compliance framework usage
 businessMetrics.trackComplianceFrameworkUsage('GDPR', 'org-123', {
   rulesEvaluated: 45,
   policiesCreated: 3,
-  dataSubjectsProcessed: 1200,
+  dataSubjectsProcessed: 1200
 });
 
 // Track data retention effectiveness
@@ -1325,7 +1427,7 @@ businessMetrics.trackFinancialDataLifecycleMetrics('workflow-456', {
   recordsFailed: 50,
   executionTimeMs: 45000,
   verificationSteps: { completed: 3, averageTimeMs: 250 },
-  safetyChecks: { passed: 5, failed: 0 },
+  safetyChecks: { passed: 5, failed: 0 }
 });
 
 // Generate business summary
@@ -1350,8 +1452,8 @@ class MonitoringDataClient {
     const response = await fetch(`${this.baseUrl}/api/monitoring/current`, {
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
 
     return response.json();
@@ -1361,24 +1463,30 @@ class MonitoringDataClient {
   async getMetricsWindow(startTime, endTime) {
     const params = new URLSearchParams({
       start: startTime.toISOString(),
-      end: endTime.toISOString(),
+      end: endTime.toISOString()
     });
 
-    const response = await fetch(`${this.baseUrl}/api/monitoring/window?${params}`, {
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${this.baseUrl}/api/monitoring/window?${params}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
 
     return response.json();
   }
 
   // Subscribe to real-time metrics via WebSocket
   subscribeToMetrics(onMetrics, onError) {
-    const ws = new WebSocket(`${this.baseUrl.replace('http', 'ws')}/monitoring/stream`, {
-      headers: { Authorization: `Bearer ${this.apiKey}` },
-    });
+    const ws = new WebSocket(
+      `${this.baseUrl.replace('http', 'ws')}/monitoring/stream`,
+      {
+        headers: { Authorization: `Bearer ${this.apiKey}` }
+      }
+    );
 
     ws.on('message', data => {
       try {
@@ -1393,7 +1501,7 @@ class MonitoringDataClient {
 
     return {
       close: () => ws.close(),
-      ws,
+      ws
     };
   }
 
@@ -1402,14 +1510,17 @@ class MonitoringDataClient {
     const endTime = new Date();
     const startTime = new Date(endTime.getTime() - timeWindow);
 
-    const response = await fetch(`${this.baseUrl}/api/monitoring/financial-services`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ startTime, endTime }),
-    });
+    const response = await fetch(
+      `${this.baseUrl}/api/monitoring/financial-services`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ startTime, endTime })
+      }
+    );
 
     return response.json();
   }
@@ -1419,14 +1530,17 @@ class MonitoringDataClient {
     const params = new URLSearchParams({
       start: startTime.toISOString(),
       end: endTime.toISOString(),
-      format,
+      format
     });
 
-    const response = await fetch(`${this.baseUrl}/api/monitoring/export?${params}`, {
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-      },
-    });
+    const response = await fetch(
+      `${this.baseUrl}/api/monitoring/export?${params}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`
+        }
+      }
+    );
 
     if (format === 'json') {
       return response.json();
@@ -1437,7 +1551,10 @@ class MonitoringDataClient {
 }
 
 // Usage example for monitoring dashboard
-const monitoringClient = new MonitoringDataClient('https://api.promptscape.com', 'your-api-key');
+const monitoringClient = new MonitoringDataClient(
+  'https://api.promptscape.com',
+  'your-api-key'
+);
 
 // Real-time monitoring dashboard
 class MonitoringDashboard {
@@ -1470,9 +1587,12 @@ class MonitoringDashboard {
     if (!systemMetrics) return;
 
     // Update system health indicators
-    document.getElementById('cpu-usage').textContent = `${systemMetrics.cpu.mean?.toFixed(1)}%`;
-    document.getElementById('memory-usage').textContent = `${systemMetrics.memory.mean?.toFixed(1)}%`;
-    document.getElementById('health-score').textContent = systemMetrics.healthScore;
+    document.getElementById('cpu-usage').textContent =
+      `${systemMetrics.cpu.mean?.toFixed(1)}%`;
+    document.getElementById('memory-usage').textContent =
+      `${systemMetrics.memory.mean?.toFixed(1)}%`;
+    document.getElementById('health-score').textContent =
+      systemMetrics.healthScore;
 
     // Update health status color
     const healthElement = document.getElementById('health-status');
@@ -1491,7 +1611,9 @@ class MonitoringDashboard {
     // Update performance charts (assuming Chart.js or similar)
     if (this.responseTimeChart) {
       this.responseTimeChart.data.labels.push(new Date().toLocaleTimeString());
-      this.responseTimeChart.data.datasets[0].data.push(performanceMetrics.averageResponseTime);
+      this.responseTimeChart.data.datasets[0].data.push(
+        performanceMetrics.averageResponseTime
+      );
 
       // Keep only last 20 data points
       if (this.responseTimeChart.data.labels.length > 20) {
@@ -1531,7 +1653,8 @@ class MonitoringDashboard {
       `${financialMetrics.deletionSuccessRate?.toFixed(1)}%`;
     document.getElementById('retention-compliance').textContent =
       `${financialMetrics.retentionCompliance?.toFixed(1)}%`;
-    document.getElementById('active-workflows').textContent = financialMetrics.activeWorkflows || 0;
+    document.getElementById('active-workflows').textContent =
+      financialMetrics.activeWorkflows || 0;
   }
 
   handleError(error) {
@@ -1557,7 +1680,11 @@ class MonitoringDashboard {
     const startTime = new Date(endTime.getTime() - timeRange);
 
     try {
-      const reportData = await this.client.exportMetrics(startTime, endTime, 'json');
+      const reportData = await this.client.exportMetrics(
+        startTime,
+        endTime,
+        'json'
+      );
       this.downloadReport(reportData, startTime, endTime);
     } catch (error) {
       this.handleError(error);
@@ -1566,7 +1693,9 @@ class MonitoringDashboard {
 
   downloadReport(data, startTime, endTime) {
     const filename = `monitoring-report-${startTime.toISOString().split('T')[0]}-to-${endTime.toISOString().split('T')[0]}.json`;
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: 'application/json'
+    });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');

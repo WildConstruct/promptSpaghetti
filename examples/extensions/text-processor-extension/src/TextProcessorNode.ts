@@ -8,7 +8,7 @@ import {
   IOSpecBuilder,
   ValidationHelpers,
   ValidationResult,
-  NodeState,
+  NodeState
 } from '@prompt-spaghetti/core';
 
 export interface TextProcessorOptions {
@@ -36,7 +36,9 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
       .description('Processing operation to perform')
       .constraint(
         ValidationHelpers.customConstraint(value =>
-          ['uppercase', 'lowercase', 'title', 'reverse', 'clean'].includes(value)
+          ['uppercase', 'lowercase', 'title', 'reverse', 'clean'].includes(
+            value
+          )
         )
       )
       .input('options', 'object')
@@ -54,7 +56,7 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     return {
       processedCount: 0,
       totalCharacters: 0,
-      operationHistory: [],
+      operationHistory: []
     };
   }
 
@@ -71,9 +73,17 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     }
 
     // Validate operation
-    const validOperations = ['uppercase', 'lowercase', 'title', 'reverse', 'clean'];
+    const validOperations = [
+      'uppercase',
+      'lowercase',
+      'title',
+      'reverse',
+      'clean'
+    ];
     if (!validOperations.includes(inputs.operation)) {
-      errors.push(`Invalid operation. Must be one of: ${validOperations.join(', ')}`);
+      errors.push(
+        `Invalid operation. Must be one of: ${validOperations.join(', ')}`
+      );
     }
 
     // Validate options if provided
@@ -83,7 +93,7 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
 
     return {
       valid: errors.length === 0,
-      errors,
+      errors
     };
   }
 
@@ -108,7 +118,7 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     this.updateState({
       processedCount: currentState.processedCount + 1,
       totalCharacters: currentState.totalCharacters + text.length,
-      operationHistory: [...currentState.operationHistory.slice(-9), operation], // Keep last 10
+      operationHistory: [...currentState.operationHistory.slice(-9), operation] // Keep last 10
     });
 
     // Generate metadata
@@ -120,13 +130,17 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
       processingTime: Math.round(processingTime * 100) / 100,
       charactersDiff: result.length - text.length,
       totalProcessed: (this.getState() as TextProcessorState).processedCount,
-      operationHistory: (this.getState() as TextProcessorState).operationHistory,
+      operationHistory: (this.getState() as TextProcessorState).operationHistory
     };
 
     return { result, metadata };
   }
 
-  private async processText(text: string, operation: string, options: Partial<TextProcessorOptions>): Promise<string> {
+  private async processText(
+    text: string,
+    operation: string,
+    options: Partial<TextProcessorOptions>
+  ): Promise<string> {
     switch (operation) {
       case 'uppercase':
         return this.processUppercase(text, options);
@@ -148,21 +162,30 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     }
   }
 
-  private processUppercase(text: string, options: Partial<TextProcessorOptions>): string {
+  private processUppercase(
+    text: string,
+    options: Partial<TextProcessorOptions>
+  ): string {
     if (options.preserveWhitespace === false) {
       return text.replace(/\s+/g, ' ').trim().toUpperCase();
     }
     return text.toUpperCase();
   }
 
-  private processLowercase(text: string, options: Partial<TextProcessorOptions>): string {
+  private processLowercase(
+    text: string,
+    options: Partial<TextProcessorOptions>
+  ): string {
     if (options.preserveWhitespace === false) {
       return text.replace(/\s+/g, ' ').trim().toLowerCase();
     }
     return text.toLowerCase();
   }
 
-  private processTitleCase(text: string, options: Partial<TextProcessorOptions>): string {
+  private processTitleCase(
+    text: string,
+    options: Partial<TextProcessorOptions>
+  ): string {
     let result = text.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
 
     if (options.preserveWhitespace === false) {
@@ -172,7 +195,10 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     return result;
   }
 
-  private processReverse(text: string, options: Partial<TextProcessorOptions>): string {
+  private processReverse(
+    text: string,
+    options: Partial<TextProcessorOptions>
+  ): string {
     if (options.preserveWhitespace === false) {
       // Reverse words, not characters
       return text.trim().split(/\s+/).reverse().join(' ');
@@ -182,7 +208,10 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     return text.split('').reverse().join('');
   }
 
-  private processClean(text: string, options: Partial<TextProcessorOptions>): string {
+  private processClean(
+    text: string,
+    options: Partial<TextProcessorOptions>
+  ): string {
     let result = text;
 
     // Remove extra whitespace
@@ -205,7 +234,10 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
   }
 
   // Override state change handler for logging
-  protected onStateChange(newState: TextProcessorState, oldState: TextProcessorState): void {
+  protected onStateChange(
+    newState: TextProcessorState,
+    oldState: TextProcessorState
+  ): void {
     if (newState.processedCount > oldState.processedCount) {
       console.log(
         `TextProcessor: Processed ${newState.processedCount} texts, ${newState.totalCharacters} total characters`
@@ -218,7 +250,8 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     return {
       type: 'TextProcessorNode',
       displayName: 'Text Processor',
-      description: 'Advanced text processing with multiple transformation options',
+      description:
+        'Advanced text processing with multiple transformation options',
       category: 'Text Processing',
       icon: '📝',
       version: '1.0.0',
@@ -229,29 +262,29 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
           name: 'Convert to uppercase',
           inputs: {
             text: 'hello world',
-            operation: 'uppercase',
+            operation: 'uppercase'
           },
           expectedOutput: {
-            result: 'HELLO WORLD',
-          },
+            result: 'HELLO WORLD'
+          }
         },
         {
           name: 'Title case with whitespace cleaning',
           inputs: {
             text: 'hello   world   example',
             operation: 'title',
-            options: { preserveWhitespace: false },
+            options: { preserveWhitespace: false }
           },
           expectedOutput: {
-            result: 'Hello World Example',
-          },
-        },
+            result: 'Hello World Example'
+          }
+        }
       ],
       performance: {
         averageExecutionTime: '< 1ms',
         memoryUsage: 'Low',
-        scalability: 'Excellent',
-      },
+        scalability: 'Excellent'
+      }
     };
   }
 }

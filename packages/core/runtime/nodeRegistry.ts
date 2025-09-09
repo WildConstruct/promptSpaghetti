@@ -36,40 +36,40 @@ export interface NodeConfigOption {
  */
 export interface INodeType {
   // Identification
-  id: string;                    // Unique identifier (e.g., "weightedChoice")
-  displayName: string;            // Human-readable name (e.g., "Weighted Choice")
-  category: NodeCategory;         // Category for organization
-  version: string;                // Node type version
-  
+  id: string; // Unique identifier (e.g., "weightedChoice")
+  displayName: string; // Human-readable name (e.g., "Weighted Choice")
+  category: NodeCategory; // Category for organization
+  version: string; // Node type version
+
   // Type mappings
-  psgType: string;               // PSG format type (e.g., "WeightedChoice")
-  reactFlowType: string;         // React Flow type (e.g., "weightedChoice")
-  className: string;             // Runtime class name (e.g., "WeightedChoiceNode")
-  
+  psgType: string; // PSG format type (e.g., "WeightedChoice")
+  reactFlowType: string; // React Flow type (e.g., "weightedChoice")
+  className: string; // Runtime class name (e.g., "WeightedChoiceNode")
+
   // Description
-  description: string;           // Brief description
-  documentation?: string;        // Detailed documentation/help text
-  icon?: string;                // Icon identifier or emoji
-  
+  description: string; // Brief description
+  documentation?: string; // Detailed documentation/help text
+  icon?: string; // Icon identifier or emoji
+
   // Ports
-  inputs: NodePort[];           // Input port definitions
-  outputs: NodePort[];          // Output port definitions
-  
+  inputs: NodePort[]; // Input port definitions
+  outputs: NodePort[]; // Output port definitions
+
   // Configuration
   configOptions?: NodeConfigOption[]; // Configuration options
-  
+
   // Behavior
-  isExecutable: boolean;        // Can be executed in runtime
-  isVisualOnly?: boolean;       // UI-only node (e.g., bounding box)
-  canHaveBranches?: boolean;    // Supports branching logic
-  
+  isExecutable: boolean; // Can be executed in runtime
+  isVisualOnly?: boolean; // UI-only node (e.g., bounding box)
+  canHaveBranches?: boolean; // Supports branching logic
+
   // Metadata
-  tags: string[];               // Searchable tags
-  deprecated?: boolean;         // Is deprecated
-  replacedBy?: string;          // ID of replacement node type
-  
+  tags: string[]; // Searchable tags
+  deprecated?: boolean; // Is deprecated
+  replacedBy?: string; // ID of replacement node type
+
   // Examples
-  examples?: NodeExample[];     // Usage examples
+  examples?: NodeExample[]; // Usage examples
 }
 
 /**
@@ -104,17 +104,17 @@ class NodeTypeRegistry {
   private psgTypeMap: Map<string, string> = new Map(); // PSG type -> registry ID
   private reactFlowTypeMap: Map<string, string> = new Map(); // React Flow type -> registry ID
   private categories: Map<NodeCategory, Set<string>> = new Map();
-  
+
   constructor() {
     // Initialize categories
     Object.values(NodeCategory).forEach(category => {
       this.categories.set(category as NodeCategory, new Set());
     });
-    
+
     // Register built-in node types
     this.registerBuiltInTypes();
   }
-  
+
   /**
    * Register a node type
    */
@@ -123,7 +123,7 @@ class NodeTypeRegistry {
     if (this.nodeTypes.has(nodeType.id)) {
       throw new Error(`Node type ${nodeType.id} is already registered`);
     }
-    
+
     // Check for conflicts
     if (this.psgTypeMap.has(nodeType.psgType)) {
       const existingId = this.psgTypeMap.get(nodeType.psgType);
@@ -131,33 +131,33 @@ class NodeTypeRegistry {
         `PSG type ${nodeType.psgType} is already mapped to ${existingId}`
       );
     }
-    
+
     if (this.reactFlowTypeMap.has(nodeType.reactFlowType)) {
       const existingId = this.reactFlowTypeMap.get(nodeType.reactFlowType);
       throw new Error(
         `React Flow type ${nodeType.reactFlowType} is already mapped to ${existingId}`
       );
     }
-    
+
     // Register the node type
     this.nodeTypes.set(nodeType.id, nodeType);
     this.psgTypeMap.set(nodeType.psgType, nodeType.id);
     this.reactFlowTypeMap.set(nodeType.reactFlowType, nodeType.id);
-    
+
     // Add to category
     const categorySet = this.categories.get(nodeType.category);
     if (categorySet) {
       categorySet.add(nodeType.id);
     }
   }
-  
+
   /**
    * Get a node type by ID
    */
   get(id: string): INodeType | undefined {
     return this.nodeTypes.get(id);
   }
-  
+
   /**
    * Get node type by PSG type name
    */
@@ -165,7 +165,7 @@ class NodeTypeRegistry {
     const id = this.psgTypeMap.get(psgType);
     return id ? this.nodeTypes.get(id) : undefined;
   }
-  
+
   /**
    * Get node type by React Flow type name
    */
@@ -173,26 +173,26 @@ class NodeTypeRegistry {
     const id = this.reactFlowTypeMap.get(reactFlowType);
     return id ? this.nodeTypes.get(id) : undefined;
   }
-  
+
   /**
    * Get all node types
    */
   getAll(): INodeType[] {
     return Array.from(this.nodeTypes.values());
   }
-  
+
   /**
    * Get node types by category
    */
   getByCategory(category: NodeCategory): INodeType[] {
     const ids = this.categories.get(category);
     if (!ids) return [];
-    
+
     return Array.from(ids)
       .map(id => this.nodeTypes.get(id))
       .filter((type): type is INodeType => type !== undefined);
   }
-  
+
   /**
    * Search node types by tags
    */
@@ -201,30 +201,36 @@ class NodeTypeRegistry {
       tags.some(tag => nodeType.tags.includes(tag))
     );
   }
-  
+
   /**
    * Get executable node types only
    */
   getExecutableTypes(): INodeType[] {
-    return this.getAll().filter(type => type.isExecutable && !type.isVisualOnly);
+    return this.getAll().filter(
+      type => type.isExecutable && !type.isVisualOnly
+    );
   }
-  
+
   /**
    * Convert PSG type to React Flow type
    */
   convertPsgToReactFlow(psgType: string): string {
     const nodeType = this.getByPsgType(psgType);
-    return nodeType ? nodeType.reactFlowType : psgType.charAt(0).toLowerCase() + psgType.slice(1);
+    return nodeType
+      ? nodeType.reactFlowType
+      : psgType.charAt(0).toLowerCase() + psgType.slice(1);
   }
-  
+
   /**
    * Convert React Flow type to PSG type
    */
   convertReactFlowToPsg(reactFlowType: string): string {
     const nodeType = this.getByReactFlowType(reactFlowType);
-    return nodeType ? nodeType.psgType : reactFlowType.charAt(0).toUpperCase() + reactFlowType.slice(1);
+    return nodeType
+      ? nodeType.psgType
+      : reactFlowType.charAt(0).toUpperCase() + reactFlowType.slice(1);
   }
-  
+
   /**
    * Export registry as JSON for documentation/agents
    */
@@ -254,7 +260,7 @@ class NodeTypeRegistry {
       }
     };
   }
-  
+
   /**
    * Register built-in node types
    */
@@ -269,7 +275,8 @@ class NodeTypeRegistry {
       reactFlowType: 'weightedChoice',
       className: 'WeightedChoiceNode',
       description: 'Randomly selects from weighted options',
-      documentation: 'Selects one option based on relative weights. Higher weights have higher probability of selection.',
+      documentation:
+        'Selects one option based on relative weights. Higher weights have higher probability of selection.',
       icon: '🎲',
       inputs: [
         { id: 'target', label: 'Input', type: 'input', dataType: 'any' }
@@ -304,7 +311,7 @@ class NodeTypeRegistry {
         }
       ]
     });
-    
+
     // Output Node
     this.register({
       id: 'output',
@@ -315,10 +322,17 @@ class NodeTypeRegistry {
       reactFlowType: 'output',
       className: 'OutputNode',
       description: 'Final output of the graph',
-      documentation: 'Collects and outputs the final result of the graph execution.',
+      documentation:
+        'Collects and outputs the final result of the graph execution.',
       icon: '📤',
       inputs: [
-        { id: 'target', label: 'Input', type: 'input', dataType: 'string', required: true }
+        {
+          id: 'target',
+          label: 'Input',
+          type: 'input',
+          dataType: 'string',
+          required: true
+        }
       ],
       outputs: [
         { id: 'output', label: 'Output', type: 'output', dataType: 'string' }
@@ -326,7 +340,7 @@ class NodeTypeRegistry {
       isExecutable: true,
       tags: ['output', 'result', 'final']
     });
-    
+
     // Concatenate Node
     this.register({
       id: 'concat',
@@ -337,10 +351,17 @@ class NodeTypeRegistry {
       reactFlowType: 'concat',
       className: 'ConcatNode',
       description: 'Joins multiple inputs into one',
-      documentation: 'Concatenates multiple input strings with an optional separator.',
+      documentation:
+        'Concatenates multiple input strings with an optional separator.',
       icon: '🔗',
       inputs: [
-        { id: 'target', label: 'Input', type: 'input', dataType: 'string', multiple: true }
+        {
+          id: 'target',
+          label: 'Input',
+          type: 'input',
+          dataType: 'string',
+          multiple: true
+        }
       ],
       outputs: [
         { id: 'main', label: 'Output', type: 'output', dataType: 'string' }
@@ -362,7 +383,7 @@ class NodeTypeRegistry {
       isExecutable: true,
       tags: ['join', 'concatenate', 'merge', 'text']
     });
-    
+
     // Text Block Node
     this.register({
       id: 'textBlock',
@@ -391,7 +412,7 @@ class NodeTypeRegistry {
       isExecutable: true,
       tags: ['text', 'static', 'content']
     });
-    
+
     // Variable Node
     this.register({
       id: 'variable',
@@ -439,7 +460,7 @@ class NodeTypeRegistry {
       isExecutable: true,
       tags: ['variable', 'state', 'memory']
     });
-    
+
     // Include Node
     this.register({
       id: 'include',
@@ -469,7 +490,7 @@ class NodeTypeRegistry {
       isExecutable: true,
       tags: ['include', 'subgraph', 'import']
     });
-    
+
     // Subject Node
     this.register({
       id: 'subject',
@@ -489,7 +510,7 @@ class NodeTypeRegistry {
       isExecutable: true,
       tags: ['character', 'subject', 'person']
     });
-    
+
     // Action Node
     this.register({
       id: 'action',
@@ -509,7 +530,7 @@ class NodeTypeRegistry {
       isExecutable: true,
       tags: ['action', 'verb', 'movement']
     });
-    
+
     // Enhanced Bounding Box (Visual Only)
     this.register({
       id: 'enhancedBoundingBox',
@@ -563,7 +584,7 @@ class NodeTypeRegistry {
 
     // Fragment Container removed - using EnhancedBoundingBox for fragments instead
     // This was causing duplicate containers with conflicting systems
-    
+
     // Post-It Note (Visual Only)
     this.register({
       id: 'postItNote',
@@ -613,11 +634,16 @@ export function getNodeTypeByPsg(psgType: string): INodeType | undefined {
   return nodeRegistry.getByPsgType(psgType);
 }
 
-export function getNodeTypeByReactFlow(reactFlowType: string): INodeType | undefined {
+export function getNodeTypeByReactFlow(
+  reactFlowType: string
+): INodeType | undefined {
   return nodeRegistry.getByReactFlowType(reactFlowType);
 }
 
-export function convertNodeType(type: string, from: 'psg' | 'reactflow'): string {
+export function convertNodeType(
+  type: string,
+  from: 'psg' | 'reactflow'
+): string {
   if (from === 'psg') {
     return nodeRegistry.convertPsgToReactFlow(type);
   } else {

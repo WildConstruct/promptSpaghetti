@@ -126,18 +126,18 @@ export function useKeyboardHandlers({
         event.preventDefault();
         const selectedNodes = nodes.filter(n => n.selected);
         const selectedEdges = edges.filter(e => e.selected);
-        
+
         if (selectedNodes.length > 0) {
           handleDelete(selectedNodes);
         }
-        
+
         // Also handle edge deletion
         if (selectedEdges.length > 0) {
           setEdges(eds => eds.filter(e => !e.selected));
           showToast('info', `Deleted ${selectedEdges.length} edge(s)`);
         }
       }
-      
+
       // Cmd+Shift+L for layout cleanup
       if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'l') {
         event.preventDefault();

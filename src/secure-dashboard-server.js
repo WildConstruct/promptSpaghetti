@@ -23,9 +23,10 @@ const CONFIG = {
   // Default credentials (change these!)
   defaultUsername: process.env.DASHBOARD_USERNAME || 'admin',
   defaultPassword: process.env.DASHBOARD_PASSWORD || 'dashboard123',
-  sessionSecret: process.env.SESSION_SECRET || 'change-this-secret-key-' + Math.random(),
+  sessionSecret:
+    process.env.SESSION_SECRET || 'change-this-secret-key-' + Math.random(),
   maxLoginAttempts: 5,
-  lockoutDuration: 15 * 60 * 1000, // 15 minutes
+  lockoutDuration: 15 * 60 * 1000 // 15 minutes
 };
 
 // In-memory storage for demo (use database in production)
@@ -39,7 +40,7 @@ async function initializeUsers() {
     username: CONFIG.defaultUsername,
     password: hashedPassword,
     role: 'admin',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
   };
 
   console.log('📋 Default admin user created:');
@@ -53,10 +54,10 @@ const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: CONFIG.maxLoginAttempts, // Limit each IP to 5 requests per windowMs
   message: {
-    error: 'Too many login attempts, please try again in 15 minutes',
+    error: 'Too many login attempts, please try again in 15 minutes'
   },
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 
 // Middleware
@@ -72,8 +73,8 @@ app.use(
     cookie: {
       secure: false, // Set to true if using HTTPS
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    },
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
   })
 );
 
@@ -104,7 +105,10 @@ function isLockedOut(ip) {
   if (!attempts) return false;
 
   const now = Date.now();
-  return attempts.count >= CONFIG.maxLoginAttempts && now - attempts.lastAttempt < CONFIG.lockoutDuration;
+  return (
+    attempts.count >= CONFIG.maxLoginAttempts &&
+    now - attempts.lastAttempt < CONFIG.lockoutDuration
+  );
 }
 
 // Record login attempt
@@ -276,7 +280,8 @@ app.post('/login', loginLimiter, async (req, res) => {
 
   if (isLockedOut(clientIp)) {
     return res.status(429).json({
-      error: 'Account temporarily locked due to too many failed attempts. Try again in 15 minutes.',
+      error:
+        'Account temporarily locked due to too many failed attempts. Try again in 15 minutes.'
     });
   }
 
@@ -376,7 +381,7 @@ app.post('/api/broadcasts', requireAuth, (req, res) => {
       timestamp: new Date().toISOString(),
       priority: priority,
       acknowledged: [],
-      author: req.session.username,
+      author: req.session.username
     };
 
     data.messages.unshift(newMessage);
@@ -450,7 +455,9 @@ async function startServer() {
     console.log('🔐 Security Features:');
     console.log('   ✅ Password authentication');
     console.log('   ✅ Session management');
-    console.log(`   ✅ Rate limiting (${CONFIG.maxLoginAttempts} attempts per 15 min)`);
+    console.log(
+      `   ✅ Rate limiting (${CONFIG.maxLoginAttempts} attempts per 15 min)`
+    );
     console.log('   ✅ Account lockout protection');
     console.log('   ✅ Protected API endpoints');
     console.log('');

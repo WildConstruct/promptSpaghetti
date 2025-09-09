@@ -10,12 +10,12 @@ export const BOUNDING_BOX_CONSTANTS = {
     MIN_EXPANDED_HEIGHT: 200,
     MIN_EXPANDED_WIDTH: 300,
     DEFAULT_WIDTH: 400,
-    DEFAULT_HEIGHT: 300,
+    DEFAULT_HEIGHT: 300
   },
   spacing: {
     NODE_SPACING: 30,
     PADDING: 20,
-    HEADER_HEIGHT: 40,
+    HEADER_HEIGHT: 40
   },
   animation: {
     COLLAPSE_DURATION: 200,
@@ -23,13 +23,13 @@ export const BOUNDING_BOX_CONSTANTS = {
     CLEANUP_DELAY: 400,
     TRANSITION_DURATION: 100,
     FADE_DURATION: 350,
-    EASING: 'ease-in-out',
+    EASING: 'ease-in-out'
   },
   performance: {
     CACHE_SIZE: 100,
     CACHE_TTL: 60000,
     DEBOUNCE_RESIZE: 16,
-    WORKER_THRESHOLD: 50,
+    WORKER_THRESHOLD: 50
   },
   ui: {
     RESIZE_HANDLE_SIZE: 10,
@@ -40,14 +40,14 @@ export const BOUNDING_BOX_CONSTANTS = {
     BORDER_RADIUS: 8,
     PORT_SIZE: 12,
     PORT_SPACING: 20,
-    PORT_OFFSET: 30,
+    PORT_OFFSET: 30
   },
   zIndex: {
     BOUNDING_BOX: 0,
     BACKGROUND: 0,
     CONTROLS: 10,
-    RESIZE_HANDLES: 1000,
-  },
+    RESIZE_HANDLES: 1000
+  }
 };
 
 // Default color palette for regions
@@ -59,7 +59,7 @@ export const DEFAULT_REGION_COLORS = [
   '#A8E6CF', // Worldbuilding-Mint
   '#C7CEEA', // Items-Periwinkle
   '#FFDAB9', // Gameplay-Peach
-  '#E0E0E0', // Experimental-Gray
+  '#E0E0E0' // Experimental-Gray
 ];
 
 // Resize cursor mappings
@@ -71,7 +71,7 @@ export const RESIZE_CURSORS = {
   s: 's-resize',
   sw: 'sw-resize',
   w: 'w-resize',
-  nw: 'nw-resize',
+  nw: 'nw-resize'
 } as const;
 
 // Animation timings for smooth transitions
@@ -80,5 +80,5 @@ export const ANIMATION_TIMINGS = {
   fast: 100,
   normal: 200,
   slow: 350,
-  verySlow: 500,
+  verySlow: 500
 } as const;

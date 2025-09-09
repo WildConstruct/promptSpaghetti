@@ -7,6 +7,7 @@ This document establishes naming conventions for feature flags in the Prompt Spa
 ## Naming Structure
 
 Feature flags follow this pattern:
+
 ```
 [epic]-[feature]-[variant]
 ```
@@ -31,6 +32,7 @@ Feature flags follow this pattern:
 ## Examples
 
 ### Good Examples ✅
+
 ```typescript
 epic1-inline-editing          // Clear, follows convention
 epic1-new-engine             // Specific to engine replacement
@@ -40,6 +42,7 @@ epic8-vfx-metadata          // Different epic, same convention
 ```
 
 ### Bad Examples ❌
+
 ```typescript
 inlineEditing               // Missing epic identifier, wrong case
 EPIC1_NEW_FEATURE           // Wrong case, not descriptive
@@ -53,11 +56,13 @@ flag1                       // Not descriptive at all
 Each feature flag should have associated metadata:
 
 ### Required Tags
+
 - **Epic**: `epic1`, `epic2`, etc.
 - **Category**: `editor`, `engine`, `ui`, `api`, `performance`
 - **Risk Level**: `low`, `medium`, `high`, `critical`
 
 ### Optional Tags
+
 - **Team**: `frontend`, `backend`, `fullstack`
 - **Customer Segment**: `internal`, `beta`, `enterprise`, `public`
 - **Experiment**: `experiment-id` for A/B tests
@@ -100,27 +105,31 @@ interface KillSwitchConfig {
   flag: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   autoDisableOn: {
-    errorRate?: number;      // e.g., 0.01 for 1%
-    latency?: number;        // e.g., 5000 for 5s
-    customMetric?: string;   // e.g., 'memory_usage > 1GB'
+    errorRate?: number; // e.g., 0.01 for 1%
+    latency?: number; // e.g., 5000 for 5s
+    customMetric?: string; // e.g., 'memory_usage > 1GB'
   };
-  notifyChannels: string[];  // ['slack', 'pagerduty', 'email']
+  notifyChannels: string[]; // ['slack', 'pagerduty', 'email']
 }
 ```
 
 ### Kill Switch Naming
+
 Kill switches use the prefix `kill-`:
+
 ```
 kill-[epic]-[feature]
 ```
 
 Examples:
+
 - `kill-epic1-inline-editing`
 - `kill-epic1-new-engine`
 
 ## Configuration Management
 
 ### Development
+
 ```json
 {
   "epic1-inline-editing": {
@@ -134,6 +143,7 @@ Examples:
 ```
 
 ### Staging
+
 ```json
 {
   "epic1-inline-editing": {
@@ -146,6 +156,7 @@ Examples:
 ```
 
 ### Production
+
 ```json
 {
   "epic1-inline-editing": {
@@ -164,19 +175,21 @@ Examples:
 ## Code Usage Examples
 
 ### React Components
+
 ```typescript
 const MyComponent = () => {
   const isInlineEditingEnabled = useFeatureFlag('epic1-inline-editing');
-  
+
   if (isInlineEditingEnabled) {
     return <InlineEditor />;
   }
-  
+
   return <LegacyEditor />;
 };
 ```
 
 ### With Fallback
+
 ```typescript
 <FeatureFlag flag="epic1-preview-system" fallback={<LegacyPreview />}>
   <ModernPreview />
@@ -184,16 +197,17 @@ const MyComponent = () => {
 ```
 
 ### API Routes
+
 ```typescript
 app.post('/api/execute', async (req, res) => {
   const useNewEngine = await featureFlags.isEnabled(
     'epic1-new-engine',
     req.user.id
   );
-  
+
   const engine = useNewEngine ? newEngine : legacyEngine;
   const result = await engine.execute(req.body);
-  
+
   res.json(result);
 });
 ```
@@ -203,16 +217,18 @@ app.post('/api/execute', async (req, res) => {
 Every feature flag should track:
 
 1. **Adoption Metrics**
+
    ```typescript
    analytics.track('feature_flag_exposure', {
      flag: 'epic1-inline-editing',
      variant: 'enabled',
      userId: user.id,
-     timestamp: Date.now(),
+     timestamp: Date.now()
    });
    ```
 
 2. **Performance Impact**
+
    ```typescript
    const timer = monitoring.startTimer('epic1-new-engine');
    const result = await executeWithNewEngine();
@@ -238,6 +254,7 @@ Feature flags must be removed when:
 3. **Experiment Concluded** with decision made
 
 ### Removal Process
+
 1. Set flag to deprecated state
 2. Monitor for 2 weeks
 3. Remove flag code
@@ -249,6 +266,7 @@ Feature flags must be removed when:
 Each feature flag must have:
 
 1. **Code Comments**
+
    ```typescript
    /**
     * Feature Flag: epic1-inline-editing
@@ -260,8 +278,10 @@ Each feature flag must have:
    ```
 
 2. **README Entry**
+
    ```markdown
    ### Active Feature Flags
+
    - `epic1-inline-editing`: Inline node editing (Beta)
    - `epic1-new-engine`: Deterministic execution engine (GA)
    ```

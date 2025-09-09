@@ -4,7 +4,7 @@ import { AssetBrowser } from '../src/components/AssetBrowser';
 
 function getActiveGridcell() {
   const cells = screen.queryAllByRole('gridcell');
-  return cells.find((el) => el.getAttribute('aria-selected') === 'true') || null;
+  return cells.find(el => el.getAttribute('aria-selected') === 'true') || null;
 }
 
 describe('Keyboard navigation and drawer', () => {

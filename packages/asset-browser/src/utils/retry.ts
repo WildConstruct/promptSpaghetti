@@ -7,14 +7,17 @@ export type RetryOptions = {
   isRetryable?: (err: unknown) => boolean;
 };
 
-export async function retryWithBackoff<T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> {
+export async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  options: RetryOptions = {}
+): Promise<T> {
   const {
     retries = 2,
     minDelayMs = 200,
     maxDelayMs = 1500,
     factor = 2,
     jitter = true,
-    isRetryable = () => true,
+    isRetryable = () => true
   } = options;
 
   let attempt = 0;
@@ -27,7 +30,7 @@ export async function retryWithBackoff<T>(fn: () => Promise<T>, options: RetryOp
       if (!shouldRetry) throw err;
       const base = Math.min(maxDelayMs, minDelayMs * Math.pow(factor, attempt));
       const delay = jitter ? base * (0.5 + Math.random()) : base;
-      await new Promise((r) => setTimeout(r, delay));
+      await new Promise(r => setTimeout(r, delay));
       attempt += 1;
     }
   }

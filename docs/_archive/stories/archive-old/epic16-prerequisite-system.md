@@ -65,12 +65,15 @@ node scripts/epic16-prerequisites.js --skip ssl_certificates,cloudfront_cdn
 ### Programmatic Usage
 
 ```typescript
-import { Epic16PrerequisiteSystem, Epic16PrerequisiteRunner } from '@/services/Epic16PrerequisiteSystem';
+import {
+  Epic16PrerequisiteSystem,
+  Epic16PrerequisiteRunner
+} from '@/services/Epic16PrerequisiteSystem';
 
 // Basic system usage
 const system = new Epic16PrerequisiteSystem({
   environment: 'production',
-  autoFixEnabled: true,
+  autoFixEnabled: true
 });
 
 const report = await system.runAllChecks();
@@ -80,7 +83,7 @@ console.log('Overall status:', report.overall.passed);
 const runner = new Epic16PrerequisiteRunner({
   format: 'json',
   autoFix: true,
-  verbose: true,
+  verbose: true
 });
 
 const result = await runner.run();
@@ -413,7 +416,7 @@ import { Epic16PrerequisiteSystem } from './Epic16PrerequisiteSystem';
 describe('Epic16PrerequisiteSystem', () => {
   it('should validate Epic 11 auth service', async () => {
     const system = new Epic16PrerequisiteSystem({
-      services: { authService: 'https://test-auth.example.com' },
+      services: { authService: 'https://test-auth.example.com' }
     });
 
     const results = await system.runChecks(['epic11_auth_service']);

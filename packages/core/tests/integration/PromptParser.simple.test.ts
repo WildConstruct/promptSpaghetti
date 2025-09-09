@@ -10,7 +10,7 @@ describe('Story 2.6 QA: PromptParser Core Integration', () => {
   });
 
   it('should successfully parse in standard mode', async () => {
-    const prompt = "A brave warrior fights the dragon.";
+    const prompt = 'A brave warrior fights the dragon.';
     const options: ParserOptions = { mode: 'standard' };
 
     const result = await parser.parse(prompt, options);
@@ -24,7 +24,7 @@ describe('Story 2.6 QA: PromptParser Core Integration', () => {
   });
 
   it('should fallback to standard mode when no LLM service available', async () => {
-    const prompt = "Test LLM fallback functionality.";
+    const prompt = 'Test LLM fallback functionality.';
     const options: ParserOptions = { mode: 'llm-enhanced' };
 
     const result = await parser.parse(prompt, options);
@@ -36,7 +36,7 @@ describe('Story 2.6 QA: PromptParser Core Integration', () => {
   });
 
   it('should handle empty prompts gracefully', async () => {
-    const prompt = "";
+    const prompt = '';
     const options: ParserOptions = { mode: 'standard' };
 
     const result = await parser.parse(prompt, options);
@@ -47,7 +47,7 @@ describe('Story 2.6 QA: PromptParser Core Integration', () => {
   });
 
   it('should process prompts with variable syntax', async () => {
-    const prompt = "A {hero_name} saves the {location}.";
+    const prompt = 'A {hero_name} saves the {location}.';
     const options: ParserOptions = { mode: 'standard' };
 
     const result = await parser.parse(prompt, options);
@@ -60,7 +60,7 @@ describe('Story 2.6 QA: PromptParser Core Integration', () => {
   });
 
   it('should include metadata information', async () => {
-    const prompt = "Test metadata collection.";
+    const prompt = 'Test metadata collection.';
     const options: ParserOptions = { mode: 'standard' };
 
     const result = await parser.parse(prompt, options);

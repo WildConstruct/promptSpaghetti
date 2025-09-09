@@ -21,7 +21,7 @@ process.env.NODE_ENV = 'test';
 jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
   existsSync: jest.fn(),
-  readFileSync: jest.fn(),
+  readFileSync: jest.fn()
 }));
 
 // Mock the engine-wrapper module with a more controllable implementation
@@ -31,7 +31,7 @@ jest.mock('../engine-wrapper', () => ({
       return Promise.reject(new Error('Graph file not found'));
     }
     return Promise.resolve(['hi', 'there']);
-  }),
+  })
 }));
 
 // Import the CLI main function
@@ -52,10 +52,10 @@ describe('promptgraph CLI', () => {
   const mockGraphContent = JSON.stringify({
     nodes: [
       { id: 'node1', type: 'ConstantNode', value: 'hi' },
-      { id: 'node2', type: 'ConstantNode', value: 'there' },
+      { id: 'node2', type: 'ConstantNode', value: 'there' }
     ],
     edges: [],
-    seed: 123,
+    seed: 123
   });
 
   beforeAll(() => {
@@ -153,7 +153,9 @@ describe('promptgraph CLI', () => {
     });
 
     it('throws error when graph file is missing', async () => {
-      await expect(executeGraphFromFile(missingPath)).rejects.toThrow('Graph file not found');
+      await expect(executeGraphFromFile(missingPath)).rejects.toThrow(
+        'Graph file not found'
+      );
     });
 
     it('applies seed value when provided', async () => {
@@ -185,7 +187,12 @@ describe('promptgraph CLI', () => {
       expect(consoleOutput.length).toBeGreaterThan(0);
       // Just verify we get some expected content from the help text
       expect(
-        consoleOutput.some(text => text.includes('Command') || text.includes('Options') || text.includes('exec'))
+        consoleOutput.some(
+          text =>
+            text.includes('Command') ||
+            text.includes('Options') ||
+            text.includes('exec')
+        )
       ).toBe(true);
     });
 
@@ -211,30 +218,36 @@ describe('promptgraph CLI', () => {
 
     it('passes options to engine wrapper', async () => {
       // Set up a special mock for this test to verify options passing
-      (executeGraphFromFile as jest.Mock).mockImplementation((path, options) => {
-        // This will help us verify the options were passed correctly
-        consoleOutput.push(`Seed used: ${options?.seed || 'default'}`);
-        return Promise.resolve(['hi', 'there']);
-      });
+      (executeGraphFromFile as jest.Mock).mockImplementation(
+        (path, options) => {
+          // This will help us verify the options were passed correctly
+          consoleOutput.push(`Seed used: ${options?.seed || 'default'}`);
+          return Promise.resolve(['hi', 'there']);
+        }
+      );
 
       // Test with standard option format
       const mockArgv = ['node', 'cli.js', 'exec', graphPath, '--seed', '789'];
       const result = await main(mockArgv);
 
       // Verify the option was passed and logged
-      expect(consoleOutput.some(text => text.includes('Seed used:'))).toBe(true);
+      expect(consoleOutput.some(text => text.includes('Seed used:'))).toBe(
+        true
+      );
       // Verify we got output from the mocked function
       expect(result.outputs).toEqual(['hi', 'there']);
     });
 
     it('handles various option formats', async () => {
       // Reset the mock for this test
-      (executeGraphFromFile as jest.Mock).mockImplementation((path, options) => {
-        // Track which format was used
-        const seedValue = options?.seed || 'none';
-        consoleOutput.push(`Option format test - seed: ${seedValue}`);
-        return Promise.resolve(['test output']);
-      });
+      (executeGraphFromFile as jest.Mock).mockImplementation(
+        (path, options) => {
+          // Track which format was used
+          const seedValue = options?.seed || 'none';
+          consoleOutput.push(`Option format test - seed: ${seedValue}`);
+          return Promise.resolve(['test output']);
+        }
+      );
 
       // Test both with and without options to see if the code handles it
       const mockArgv1 = ['node', 'cli.js', 'exec', graphPath];

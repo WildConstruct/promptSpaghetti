@@ -44,16 +44,19 @@
 ## Module Breakdown
 
 ### 1. **Contexts** (State Management)
+
 - `GraphEditorContext` - Core graph state and operations
 - `NotificationContext` - Toast/alert system
 - `PreviewContext` - Preview engine management
 
 ### 2. **Components** (UI Presentation)
+
 - `GraphCanvas` - ReactFlow wrapper and canvas
 - `GraphControls` - Toolbars, buttons, palettes
 - `GraphOverlays` - Modals, toasts, menus
 
 ### 3. **Hooks** (Business Logic)
+
 - `useGraphState` - Node/edge state management
 - `useKeyboardHandlers` - Keyboard shortcuts
 - `usePreviewEngine` - Preview execution
@@ -61,6 +64,7 @@
 - `useContextMenu` - Context menu state
 
 ### 4. **Services** (Pure Functions)
+
 - `GraphConverter` - Graph format conversion
 - `GraphPersistence` - Save/load operations
 - `NodeFactory` - Node creation utilities
@@ -68,13 +72,16 @@
 ## Benefits Achieved
 
 ### 1. **Separation of Concerns** ✅
+
 Each module has a single, clear responsibility:
+
 - Contexts manage state
 - Components handle presentation
 - Hooks encapsulate logic
 - Services provide utilities
 
 ### 2. **Testability** ✅
+
 ```typescript
 // Before: Testing nightmare
 test('Epic1GraphEditor', () => {
@@ -96,6 +103,7 @@ test('NodeFactory', () => {
 ```
 
 ### 3. **Reusability** ✅
+
 ```typescript
 // Use hooks in other components
 import { useGraphState } from './hooks';
@@ -112,12 +120,14 @@ const runtime = GraphConverter.convertToRuntimeGraph(nodes, edges);
 ```
 
 ### 4. **Performance** ✅
+
 - **Reduced re-renders**: State is isolated in contexts
 - **Better memoization**: Smaller components = effective memos
 - **Code splitting**: Can lazy-load heavy components
 - **Bundle size**: ~20% reduction after tree-shaking
 
 ### 5. **Developer Experience** ✅
+
 - **Find code faster**: Clear module organization
 - **Less merge conflicts**: Work on different modules
 - **Easier onboarding**: Clear architecture
@@ -126,68 +136,72 @@ const runtime = GraphConverter.convertToRuntimeGraph(nodes, edges);
 ## Migration Path
 
 ### Phase 1: Hooks ✅
+
 - Extract state management
 - No visual changes
 - Low risk
 
 ### Phase 2: Services ✅
+
 - Extract pure functions
 - Improve testability
 - Zero UI impact
 
 ### Phase 3: Components ✅
+
 - Split UI into modules
 - Same functionality
 - Better organization
 
 ### Phase 4: Contexts ✅
+
 - Centralize state
 - Reduce prop drilling
 - Clean component tree
 
 ## File Size Comparison
 
-| File | Before | After | Reduction |
-|------|--------|-------|-----------|
-| Main Component | 1,103 lines | 200 lines | 82% |
-| Total New Code | - | 1,475 lines | - |
-| Average File Size | 1,103 lines | 135 lines | 88% |
+| File              | Before      | After       | Reduction |
+| ----------------- | ----------- | ----------- | --------- |
+| Main Component    | 1,103 lines | 200 lines   | 82%       |
+| Total New Code    | -           | 1,475 lines | -         |
+| Average File Size | 1,103 lines | 135 lines   | 88%       |
 
 ## Complexity Metrics
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Cyclomatic Complexity | 127 | 8 | 94% |
-| Cognitive Complexity | 89 | 5 | 94% |
-| Dependencies | 45 | 12 | 73% |
-| Depth of Inheritance | 1 | 3 | Better structure |
+| Metric                | Before | After | Improvement      |
+| --------------------- | ------ | ----- | ---------------- |
+| Cyclomatic Complexity | 127    | 8     | 94%              |
+| Cognitive Complexity  | 89     | 5     | 94%              |
+| Dependencies          | 45     | 12    | 73%              |
+| Depth of Inheritance  | 1      | 3     | Better structure |
 
 ## Testing Coverage
 
-| Module | Lines | Coverage | Tests |
-|--------|-------|----------|-------|
-| Hooks | 565 | Target: 95% | 25 tests |
-| Services | 410 | Target: 100% | 20 tests |
-| Components | 370 | Target: 90% | 15 tests |
-| Contexts | 280 | Target: 85% | 10 tests |
+| Module     | Lines | Coverage     | Tests    |
+| ---------- | ----- | ------------ | -------- |
+| Hooks      | 565   | Target: 95%  | 25 tests |
+| Services   | 410   | Target: 100% | 20 tests |
+| Components | 370   | Target: 90%  | 15 tests |
+| Contexts   | 280   | Target: 85%  | 10 tests |
 
 ## Performance Benchmarks
 
-| Operation | Before | After | Improvement |
-|-----------|--------|-------|-------------|
-| Initial Render | 145ms | 89ms | 39% faster |
-| Node Addition | 23ms | 12ms | 48% faster |
-| Graph Update | 67ms | 31ms | 54% faster |
-| Memory Usage | 12.3MB | 9.8MB | 20% less |
+| Operation      | Before | After | Improvement |
+| -------------- | ------ | ----- | ----------- |
+| Initial Render | 145ms  | 89ms  | 39% faster  |
+| Node Addition  | 23ms   | 12ms  | 48% faster  |
+| Graph Update   | 67ms   | 31ms  | 54% faster  |
+| Memory Usage   | 12.3MB | 9.8MB | 20% less    |
 
 ## Code Quality Scores
 
-| Tool | Before | After |
-|------|--------|-------|
-| ESLint Issues | 23 | 0 |
-| TypeScript Errors | 0 | 0 |
-| Maintainability Index | 42 | 87 |
-| Technical Debt | 3.2 days | 0.4 days |
+| Tool                  | Before   | After    |
+| --------------------- | -------- | -------- |
+| ESLint Issues         | 23       | 0        |
+| TypeScript Errors     | 0        | 0        |
+| Maintainability Index | 42       | 87       |
+| Technical Debt        | 3.2 days | 0.4 days |
 
 ## Future Enhancements
 

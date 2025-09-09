@@ -64,21 +64,26 @@ Comprehensive test orchestration providing:
 
 ```typescript
 import TestHarness from './tests/infrastructure/TestHarness';
-import { TestEnvironment, TestCategory } from './tests/infrastructure/TestingFramework';
+import {
+  TestEnvironment,
+  TestCategory
+} from './tests/infrastructure/TestingFramework';
 
 // Initialize test harness
 const harness = new TestHarness({
   environment: TestEnvironment.INTEGRATION,
   categories: [TestCategory.ENGINE, TestCategory.FRONTEND],
   parallel: false,
-  coverage: true,
+  coverage: true
 });
 
 // Initialize and run tests
 await harness.initialize();
 const report = await harness.runTests();
 
-console.log(`Tests completed: ${report.summary.passed}/${report.summary.total} passed`);
+console.log(
+  `Tests completed: ${report.summary.passed}/${report.summary.total} passed`
+);
 
 // Cleanup
 await harness.cleanup();
@@ -100,21 +105,24 @@ const securityResults = await harness.runSecurityTests();
 ### Using Data Generators
 
 ```typescript
-import { GraphDataGenerator, UserDataGenerator } from './tests/infrastructure/TestDataGenerators';
+import {
+  GraphDataGenerator,
+  UserDataGenerator
+} from './tests/infrastructure/TestDataGenerators';
 
 // Generate test graph
 const graphGen = new GraphDataGenerator('my-seed-123');
 const graph = graphGen.generateGraph({
   nodeCount: 10,
   edgeCount: 8,
-  complexity: 'medium',
+  complexity: 'medium'
 });
 
 // Generate test users
 const userGen = new UserDataGenerator();
 const users = userGen.generateUsers(5, {
   includeAuth: true,
-  roles: ['admin', 'user'],
+  roles: ['admin', 'user']
 });
 ```
 
@@ -186,7 +194,9 @@ The infrastructure includes comprehensive security testing:
 
 ```typescript
 const securityResults = await harness.runSecurityTests();
-console.log(`XSS Protection: ${securityResults.xssProtection.protectionRate}% blocked`);
+console.log(
+  `XSS Protection: ${securityResults.xssProtection.protectionRate}% blocked`
+);
 ```
 
 ### SQL Injection Testing
@@ -194,7 +204,9 @@ console.log(`XSS Protection: ${securityResults.xssProtection.protectionRate}% bl
 ```typescript
 // Uses predefined SQL injection payloads
 const sqlResults = securityResults.sqlInjectionProtection;
-console.log(`SQL Injection blocked: ${sqlResults.blockedPayloads}/${sqlResults.totalPayloads}`);
+console.log(
+  `SQL Injection blocked: ${sqlResults.blockedPayloads}/${sqlResults.totalPayloads}`
+);
 ```
 
 ### Authentication Security
@@ -396,7 +408,7 @@ export class CustomDataGenerator extends BaseTestDataGenerator {
 ```typescript
 export enum TestCategory {
   // ... existing categories
-  CUSTOM = 'custom',
+  CUSTOM = 'custom'
 }
 ```
 
@@ -408,7 +420,7 @@ fixtures.register('custom-scenario', {
   data: {
     /* custom test data */
   },
-  metadata: { description: 'Custom test scenario' },
+  metadata: { description: 'Custom test scenario' }
 });
 ```
 

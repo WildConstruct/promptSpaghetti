@@ -1,27 +1,22 @@
 // packages/core/utils/templateParser.ts
 // Director-friendly template parsing system for {variable} syntax
 
-
 export interface ExtractedVariable {
-  name: string;          // Variable name (without braces)
-  placeholder: string;   // Full placeholder text {name}
-  startIndex: number;    // Start position in template
-  endIndex: number;      // End position in template
-  isValid: boolean;      // Whether the variable name is valid
+  name: string; // Variable name (without braces)
+  placeholder: string; // Full placeholder text {name}
+  startIndex: number; // Start position in template
+  endIndex: number; // End position in template
+  isValid: boolean; // Whether the variable name is valid
   inferredType?: VariableType; // Auto-inferred type from context
   defaultValue?: string; // Default value based on type inference
 }
-
 
 export interface TemplateParseResult {
   variables: ExtractedVariable[];
   errors: TemplateError[];
   isValid: boolean;
-  processedTemplate: string;  // Template with highlighted variables
+  processedTemplate: string; // Template with highlighted variables
 }
-
-
-
 
 export interface TemplateError {
   type: 'unclosed_brace' | 'empty_variable' | 'invalid_name' | 'nested_braces';
@@ -30,9 +25,13 @@ export interface TemplateError {
   severity: 'error' | 'warning';
 }
 
-
-export type VariableType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'auto';
-
+export type VariableType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'array'
+  | 'object'
+  | 'auto';
 
 export interface VariableTypeInference {
   type: VariableType;
@@ -41,12 +40,19 @@ export interface VariableTypeInference {
   defaultValue: string; // Suggested default value
 }
 
-
-
-
 export interface VariableSuggestion {
   name: string;
-  category: 'character' | 'setting' | 'action' | 'mood' | 'object' | 'cinematic' | 'temporal' | 'descriptive' | 'narrative' | 'custom';
+  category:
+    | 'character'
+    | 'setting'
+    | 'action'
+    | 'mood'
+    | 'object'
+    | 'cinematic'
+    | 'temporal'
+    | 'descriptive'
+    | 'narrative'
+    | 'custom';
   description: string;
   examples: string[];
   priority?: number; // For ranking suggestions (1-10, 10 = highest)
@@ -66,8 +72,6 @@ const COMMON_VARIABLES: VariableSuggestion[] = [
     nodeTypes: ['subject', 'output'],
     relatedVariables: ['action', 'location', 'mood']
   },
-
-
 
   {
     name: 'creature',
@@ -330,7 +334,7 @@ const COMMON_VARIABLES: VariableSuggestion[] = [
     name: 'camera',
     category: 'cinematic',
     description: 'Camera perspective',
-    examples: ['close-up', 'wide shot', 'bird\'s eye view'],
+    examples: ['close-up', 'wide shot', "bird's eye view"],
     priority: 7,
     nodeTypes: ['output']
   },
@@ -497,7 +501,7 @@ const COMMON_VARIABLES: VariableSuggestion[] = [
 class TemplateParser {
   private static instance: TemplateParser;
   private parseCache = new Map<string, TemplateParseResult>();
-  
+
   static getInstance(): TemplateParser {
     if (!TemplateParser.instance) {
       TemplateParser.instance = new TemplateParser();
@@ -521,7 +525,7 @@ class TemplateParser {
     this.parseCache.set(template, result);
     return result;
   }
-  
+
   private performParse(template: string): TemplateParseResult {
     const variables: ExtractedVariable[] = [];
     const errors: TemplateError[] = [];
@@ -535,7 +539,11 @@ class TemplateParser {
       // Validate variable name
       const validation = this.validateVariableName(variableName);
       if (validation.isValid) {
-        const inference = this.inferVariableType(variableName.trim(), template, this.currentNodeType);
+        const inference = this.inferVariableType(
+          variableName.trim(),
+          template,
+          this.currentNodeType
+        );
         variables.push({
           name: variableName.trim(),
           placeholder: fullMatch,
@@ -572,7 +580,11 @@ class TemplateParser {
       processedTemplate: this.highlightVariables(template, variables)
     };
   }
-  private validateVariableName(name: string): { isValid: boolean; errorType?: TemplateError['type']; errorMessage?: string } {
+  private validateVariableName(name: string): {
+    isValid: boolean;
+    errorType?: TemplateError['type'];
+    errorMessage?: string;
+  } {
     const trimmed = name.trim();
     if (trimmed === '') {
       return {
@@ -634,7 +646,10 @@ class TemplateParser {
     }
   }
 
-  private highlightVariables(template: string, variables: ExtractedVariable[]): string {
+  private highlightVariables(
+    template: string,
+    variables: ExtractedVariable[]
+  ): string {
     // This would be used by the UI to highlight variables
     // For now, return template as-is since highlighting is done in React
     return template;
@@ -643,14 +658,30 @@ class TemplateParser {
   /**
    * Infer variable type from name patterns and context
    */
-  private inferVariableType(variableName: string, template: string, context?: string): VariableTypeInference {
+  private inferVariableType(
+    variableName: string,
+    template: string,
+    context?: string
+  ): VariableTypeInference {
     const name = variableName.toLowerCase();
     // Number patterns
-    if (name.includes('count') || name.includes('number') || name.includes('qty') || 
-        name.includes('amount') || name.includes('total') || name.includes('sum') ||
-        name.includes('age') || name.includes('year') || name.includes('day') ||
-        name.includes('hour') || name.includes('minute') || name.includes('price') ||
-        name.includes('cost') || name.includes('rate') || name.includes('score')) {
+    if (
+      name.includes('count') ||
+      name.includes('number') ||
+      name.includes('qty') ||
+      name.includes('amount') ||
+      name.includes('total') ||
+      name.includes('sum') ||
+      name.includes('age') ||
+      name.includes('year') ||
+      name.includes('day') ||
+      name.includes('hour') ||
+      name.includes('minute') ||
+      name.includes('price') ||
+      name.includes('cost') ||
+      name.includes('rate') ||
+      name.includes('score')
+    ) {
       return {
         type: 'number',
         confidence: 0.8,
@@ -659,10 +690,20 @@ class TemplateParser {
       };
     }
     // Boolean patterns
-    if (name.startsWith('is') || name.startsWith('has') || name.startsWith('can') ||
-        name.startsWith('should') || name.startsWith('will') || name.includes('enabled') ||
-        name.includes('active') || name.includes('visible') || name.includes('checked') ||
-        name.includes('selected') || name.includes('open') || name.includes('closed')) {
+    if (
+      name.startsWith('is') ||
+      name.startsWith('has') ||
+      name.startsWith('can') ||
+      name.startsWith('should') ||
+      name.startsWith('will') ||
+      name.includes('enabled') ||
+      name.includes('active') ||
+      name.includes('visible') ||
+      name.includes('checked') ||
+      name.includes('selected') ||
+      name.includes('open') ||
+      name.includes('closed')
+    ) {
       return {
         type: 'boolean',
         confidence: 0.9,
@@ -671,9 +712,16 @@ class TemplateParser {
       };
     }
     // Array/List patterns
-    if (name.includes('list') || name.includes('items') || name.includes('options') ||
-        name.includes('choices') || name.includes('tags') || name.includes('categories') ||
-        name.endsWith('s') && (name.includes('name') || name.includes('type') || name.includes('id'))) {
+    if (
+      name.includes('list') ||
+      name.includes('items') ||
+      name.includes('options') ||
+      name.includes('choices') ||
+      name.includes('tags') ||
+      name.includes('categories') ||
+      (name.endsWith('s') &&
+        (name.includes('name') || name.includes('type') || name.includes('id')))
+    ) {
       return {
         type: 'array',
         confidence: 0.7,
@@ -682,9 +730,15 @@ class TemplateParser {
       };
     }
     // Object patterns
-    if (name.includes('config') || name.includes('settings') || name.includes('options') ||
-        name.includes('props') || name.includes('params') || name.includes('meta') ||
-        name.includes('data') && !name.includes('date')) {
+    if (
+      name.includes('config') ||
+      name.includes('settings') ||
+      name.includes('options') ||
+      name.includes('props') ||
+      name.includes('params') ||
+      name.includes('meta') ||
+      (name.includes('data') && !name.includes('date'))
+    ) {
       return {
         type: 'object',
         confidence: 0.7,
@@ -696,7 +750,11 @@ class TemplateParser {
     if (context) {
       const contextLower = context.toLowerCase();
       // If context mentions numbers, arrays, or objects
-      if (contextLower.includes('number') || contextLower.includes('count') || contextLower.includes('quantity')) {
+      if (
+        contextLower.includes('number') ||
+        contextLower.includes('count') ||
+        contextLower.includes('quantity')
+      ) {
         return {
           type: 'number',
           confidence: 0.6,
@@ -704,7 +762,11 @@ class TemplateParser {
           defaultValue: '1'
         };
       }
-      if (contextLower.includes('list') || contextLower.includes('array') || contextLower.includes('multiple')) {
+      if (
+        contextLower.includes('list') ||
+        contextLower.includes('array') ||
+        contextLower.includes('multiple')
+      ) {
         return {
           type: 'array',
           confidence: 0.6,
@@ -714,7 +776,10 @@ class TemplateParser {
       }
     }
     // Template context analysis
-    const surroundingText = this.extractSurroundingContext(variableName, template);
+    const surroundingText = this.extractSurroundingContext(
+      variableName,
+      template
+    );
     if (surroundingText) {
       // Look for numeric context clues
       if (/\b(count|number|amount|total|sum|\d+)\b/i.test(surroundingText)) {
@@ -726,7 +791,11 @@ class TemplateParser {
         };
       }
       // Look for boolean context clues
-      if (/\b(is|has|can|should|will|enabled|disabled|active|inactive)\b/i.test(surroundingText)) {
+      if (
+        /\b(is|has|can|should|will|enabled|disabled|active|inactive)\b/i.test(
+          surroundingText
+        )
+      ) {
         return {
           type: 'boolean',
           confidence: 0.6,
@@ -736,20 +805,30 @@ class TemplateParser {
       }
     }
     // Creative/filmmaker-specific patterns (most variables in creative templates are strings)
-    if (name.includes('character') || name.includes('creature') || name.includes('location') ||
-        name.includes('setting') || name.includes('action') || name.includes('mood') ||
-        name.includes('style') || name.includes('color') || name.includes('texture') ||
-        name.includes('lighting') || name.includes('weather') || name.includes('atmosphere') ||
-        name.includes('genre') || name.includes('theme') || name.includes('tone')) {
+    if (
+      name.includes('character') ||
+      name.includes('creature') ||
+      name.includes('location') ||
+      name.includes('setting') ||
+      name.includes('action') ||
+      name.includes('mood') ||
+      name.includes('style') ||
+      name.includes('color') ||
+      name.includes('texture') ||
+      name.includes('lighting') ||
+      name.includes('weather') ||
+      name.includes('atmosphere') ||
+      name.includes('genre') ||
+      name.includes('theme') ||
+      name.includes('tone')
+    ) {
       // Find matching suggestion for more contextual defaults
-      const matchingSuggestion = COMMON_VARIABLES.find(s => 
-        s.name === name || 
-        s.name.includes(name) || 
-        name.includes(s.name)
+      const matchingSuggestion = COMMON_VARIABLES.find(
+        s => s.name === name || s.name.includes(name) || name.includes(s.name)
       );
-      const defaultValue = matchingSuggestion ? 
-        matchingSuggestion.examples[0] : 
-        `sample ${name}`;
+      const defaultValue = matchingSuggestion
+        ? matchingSuggestion.examples[0]
+        : `sample ${name}`;
       return {
         type: 'string',
         confidence: 0.9,
@@ -758,12 +837,14 @@ class TemplateParser {
       };
     }
     // Default to string with lower confidence - try to find a good example
-    const genericSuggestion = COMMON_VARIABLES.find(s => 
-      s.category === 'descriptive' || (s.priority !== undefined && s.priority >= 7)
+    const genericSuggestion = COMMON_VARIABLES.find(
+      s =>
+        s.category === 'descriptive' ||
+        (s.priority !== undefined && s.priority >= 7)
     );
-    const defaultValue = genericSuggestion ? 
-      genericSuggestion.examples[0] : 
-      `sample ${name}`;
+    const defaultValue = genericSuggestion
+      ? genericSuggestion.examples[0]
+      : `sample ${name}`;
     return {
       type: 'string',
       confidence: 0.5,
@@ -771,11 +852,14 @@ class TemplateParser {
       defaultValue
     };
   }
-  
+
   /**
    * Extract surrounding context for better type inference
    */
-  private extractSurroundingContext(variableName: string, template: string): string {
+  private extractSurroundingContext(
+    variableName: string,
+    template: string
+  ): string {
     const placeholder = `{${variableName}}`;
     const index = template.indexOf(placeholder);
     if (index === -1) return '';
@@ -783,7 +867,7 @@ class TemplateParser {
     const end = Math.min(template.length, index + placeholder.length + 30);
     return template.slice(start, end);
   }
-  
+
   // User history storage for custom suggestions
   private userHistory = new Map<string, { count: number; lastUsed: Date }>();
   private currentNodeType?: string;
@@ -795,12 +879,15 @@ class TemplateParser {
     this.currentNodeType = nodeType;
     this.currentVariables = existingVariables;
   }
-  
+
   /**
    * Track variable usage for user history
    */
   trackVariableUsage(variableName: string): void {
-    const current = this.userHistory.get(variableName) || { count: 0, lastUsed: new Date() };
+    const current = this.userHistory.get(variableName) || {
+      count: 0,
+      lastUsed: new Date()
+    };
     this.userHistory.set(variableName, {
       count: current.count + 1,
       lastUsed: new Date()
@@ -813,7 +900,8 @@ class TemplateParser {
     const historySuggestions: VariableSuggestion[] = [];
     for (const [variableName, history] of this.userHistory.entries()) {
       // Only include variables used more than once and recently
-      const daysSinceUsed = (Date.now() - history.lastUsed.getTime()) / (1000 * 60 * 60 * 24);
+      const daysSinceUsed =
+        (Date.now() - history.lastUsed.getTime()) / (1000 * 60 * 60 * 24);
       if (history.count > 1 && daysSinceUsed < 30) {
         // Check if it's not already in common variables
         const isCommon = COMMON_VARIABLES.some(v => v.name === variableName);
@@ -829,7 +917,9 @@ class TemplateParser {
         }
       }
     }
-    return historySuggestions.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+    return historySuggestions.sort(
+      (a, b) => (b.priority || 0) - (a.priority || 0)
+    );
   }
   /**
    * Find related variables based on co-occurrence patterns
@@ -846,24 +936,28 @@ class TemplateParser {
     let contextualSuggestions: VariableSuggestion[] = [];
     // Node type context
     if (this.currentNodeType) {
-      contextualSuggestions = COMMON_VARIABLES.filter(suggestion => 
+      contextualSuggestions = COMMON_VARIABLES.filter(suggestion =>
         suggestion.nodeTypes?.includes(this.currentNodeType)
       );
     }
     // Related variable context
     if (this.currentVariables.length > 0) {
-      const relatedSuggestions = COMMON_VARIABLES.filter(suggestion => 
-        suggestion.relatedVariables?.some(related => 
-          this.currentVariables.includes(related)
-        ) && !this.currentVariables.includes(suggestion.name)
+      const relatedSuggestions = COMMON_VARIABLES.filter(
+        suggestion =>
+          suggestion.relatedVariables?.some(related =>
+            this.currentVariables.includes(related)
+          ) && !this.currentVariables.includes(suggestion.name)
       );
       contextualSuggestions.push(...relatedSuggestions);
     }
     // Remove duplicates and sort by priority
-    const uniqueSuggestions = contextualSuggestions.filter((suggestion, index, self) =>
-      index === self.findIndex(s => s.name === suggestion.name)
+    const uniqueSuggestions = contextualSuggestions.filter(
+      (suggestion, index, self) =>
+        index === self.findIndex(s => s.name === suggestion.name)
     );
-    return uniqueSuggestions.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+    return uniqueSuggestions.sort(
+      (a, b) => (b.priority || 0) - (a.priority || 0)
+    );
   }
   /**
    * Get variable suggestions for auto-completion with enhanced contextual support
@@ -885,8 +979,9 @@ class TemplateParser {
     // Add common variables
     allSuggestions.push(...COMMON_VARIABLES);
     // Remove duplicates
-    const uniqueSuggestions = allSuggestions.filter((suggestion, index, self) =>
-      index === self.findIndex(s => s.name === suggestion.name)
+    const uniqueSuggestions = allSuggestions.filter(
+      (suggestion, index, self) =>
+        index === self.findIndex(s => s.name === suggestion.name)
     );
     // Filter by partial name match
     const filtered = uniqueSuggestions.filter(suggestion => {
@@ -895,7 +990,9 @@ class TemplateParser {
       return (
         suggestion.name.toLowerCase().includes(searchTerm) ||
         suggestion.description.toLowerCase().includes(searchTerm) ||
-        suggestion.examples.some(example => example.toLowerCase().includes(searchTerm))
+        suggestion.examples.some(example =>
+          example.toLowerCase().includes(searchTerm)
+        )
       );
     });
     // Sort by relevance and priority
@@ -922,7 +1019,10 @@ class TemplateParser {
   /**
    * Substitute variables in template with actual values
    */
-  substituteVariables(template: string, values: Record<string, string>): string {
+  substituteVariables(
+    template: string,
+    values: Record<string, string>
+  ): string {
     let result = template;
     for (const [varName, value] of Object.entries(values)) {
       const regex = new RegExp(`{${varName}}`, 'g');
@@ -933,16 +1033,19 @@ class TemplateParser {
   /**
    * Get preview with sample values
    */
-  getPreviewWithSamples(template: string): { preview: string; usedSamples: Record<string, string> } {
+  getPreviewWithSamples(template: string): {
+    preview: string;
+    usedSamples: Record<string, string>;
+  } {
     const parseResult = this.parseTemplate(template);
     const sampleValues: Record<string, string> = {};
     for (const variable of parseResult.variables) {
       if (variable.isValid) {
         // Find matching suggestion or use generic sample
         const suggestion = COMMON_VARIABLES.find(s => s.name === variable.name);
-        sampleValues[variable.name] = suggestion ? 
-          suggestion.examples[0] : 
-          `[${variable.name}]`;
+        sampleValues[variable.name] = suggestion
+          ? suggestion.examples[0]
+          : `[${variable.name}]`;
       }
     }
     return {
@@ -963,7 +1066,7 @@ class TemplateParser {
 export const templateParser = TemplateParser.getInstance();
 
 // Export utility functions
-export const parseTemplate = (template: string): TemplateParseResult => 
+export const parseTemplate = (template: string): TemplateParseResult =>
   templateParser.parseTemplate(template);
 
 export const getVariableSuggestions = (
@@ -973,8 +1076,10 @@ export const getVariableSuggestions = (
 ): VariableSuggestion[] =>
   templateParser.getVariableSuggestions(partialName, context, includeHistory);
 
-export const substituteVariables = (template: string, values: Record<string, string>): string =>
-  templateParser.substituteVariables(template, values);
+export const substituteVariables = (
+  template: string,
+  values: Record<string, string>
+): string => templateParser.substituteVariables(template, values);
 
 export const getPreviewWithSamples = (template: string) =>
   templateParser.getPreviewWithSamples(template);
@@ -989,16 +1094,26 @@ export const clearCache = (): void => templateParser.clearCache();
 
 // Variable categories for UI filtering
 export const VARIABLE_CATEGORIES = [
-  'character', 'setting', 'action', 'mood', 'object',
-  'cinematic', 'temporal', 'descriptive', 'narrative', 'custom'
+  'character',
+  'setting',
+  'action',
+  'mood',
+  'object',
+  'cinematic',
+  'temporal',
+  'descriptive',
+  'narrative',
+  'custom'
 ] as const;
 
-export type VariableCategory = typeof VARIABLE_CATEGORIES[number];
+export type VariableCategory = (typeof VARIABLE_CATEGORIES)[number];
 
 /**
  * Generate smart default values for a template based on its variables
  */
-export const generateSmartDefaults = (template: string): Record<string, string> => {
+export const generateSmartDefaults = (
+  template: string
+): Record<string, string> => {
   const defaults: Record<string, string> = {};
   const parseResult = parseTemplate(template);
   parseResult.variables
@@ -1009,7 +1124,9 @@ export const generateSmartDefaults = (template: string): Record<string, string> 
       } else {
         // Fallback to pattern matching
         const suggestion = COMMON_VARIABLES.find(s => s.name === variable.name);
-        defaults[variable.name] = suggestion ? suggestion.examples[0] : `sample ${variable.name}`;
+        defaults[variable.name] = suggestion
+          ? suggestion.examples[0]
+          : `sample ${variable.name}`;
       }
     });
   return defaults;
@@ -1024,19 +1141,28 @@ export const getContextualDefault = (
   template?: string
 ): string => {
   if (nodeType === 'subject' || nodeType === 'character') {
-    if (name.includes('hero') || name.includes('protagonist')) return 'brave warrior';
-    if (name.includes('villain') || name.includes('antagonist')) return 'dark sorcerer';
-    if (name.includes('companion') || name.includes('sidekick')) return 'loyal friend';
+    if (name.includes('hero') || name.includes('protagonist'))
+      return 'brave warrior';
+    if (name.includes('villain') || name.includes('antagonist'))
+      return 'dark sorcerer';
+    if (name.includes('companion') || name.includes('sidekick'))
+      return 'loyal friend';
   }
   if (nodeType === 'action') {
-    if (name.includes('movement') || name.includes('motion')) return 'running swiftly';
-    if (name.includes('combat') || name.includes('fight')) return 'fierce battle';
-    if (name.includes('travel') || name.includes('journey')) return 'long voyage';
+    if (name.includes('movement') || name.includes('motion'))
+      return 'running swiftly';
+    if (name.includes('combat') || name.includes('fight'))
+      return 'fierce battle';
+    if (name.includes('travel') || name.includes('journey'))
+      return 'long voyage';
   }
   // Template context analysis
   if (template) {
     const templateLower = template.toLowerCase();
-    if (templateLower.includes('cinematic') || templateLower.includes('camera')) {
+    if (
+      templateLower.includes('cinematic') ||
+      templateLower.includes('camera')
+    ) {
       if (name.includes('shot') || name.includes('angle')) return 'wide shot';
       if (name.includes('lighting')) return 'golden hour';
       if (name.includes('mood')) return 'dramatic';

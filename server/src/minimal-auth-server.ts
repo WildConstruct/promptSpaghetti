@@ -10,13 +10,16 @@ import { authRoutes } from './auth/routes';
 
 const server = Fastify({
   logger: true,
-  trustProxy: true,
+  trustProxy: true
 });
 
 // Simple CORS handling
 server.addHook('onRequest', async (request, reply) => {
   reply.header('Access-Control-Allow-Origin', '*');
-  reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  reply.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  );
   reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (request.method === 'OPTIONS') {
@@ -34,7 +37,10 @@ server.get('/api/health', async (request, reply) => {
 
 // Root endpoint
 server.get('/', async (request, reply) => {
-  return { message: 'Minimal Auth Server Running', endpoints: ['/api/auth/*', '/api/health'] };
+  return {
+    message: 'Minimal Auth Server Running',
+    endpoints: ['/api/auth/*', '/api/health']
+  };
 });
 
 const start = async () => {
@@ -44,7 +50,9 @@ const start = async () => {
 
     await server.listen({ port, host });
     console.log(`🚀 Minimal Auth Server running on http://localhost:${port}`);
-    console.log(`🔐 Authentication endpoints available at http://localhost:${port}/api/auth/*`);
+    console.log(
+      `🔐 Authentication endpoints available at http://localhost:${port}/api/auth/*`
+    );
   } catch (err) {
     server.log.error(err);
     process.exit(1);

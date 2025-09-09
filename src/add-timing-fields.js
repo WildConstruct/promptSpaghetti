@@ -56,8 +56,15 @@ function addTimingFields() {
       task.actualHours = actualTime.toString();
 
       // Assign to realistic agents
-      const agents = ['claude-dev-1', 'claude-dev-2', 'claude-qa-1', 'human-dev', 'auto-agent'];
-      task.agentId = task.assignee || agents[Math.floor(Math.random() * agents.length)];
+      const agents = [
+        'claude-dev-1',
+        'claude-dev-2',
+        'claude-qa-1',
+        'human-dev',
+        'auto-agent'
+      ];
+      task.agentId =
+        task.assignee || agents[Math.floor(Math.random() * agents.length)];
 
       timingAdded++;
     }

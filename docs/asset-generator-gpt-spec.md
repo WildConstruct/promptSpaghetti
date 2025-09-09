@@ -1,11 +1,13 @@
 # Asset Generator GPT Specification
 
 ## Overview
+
 This document contains everything needed to create a custom GPT for generating PSG (Prompt Spaghetti Graph) assets in the PSGLib format.
 
 ## File Format: PSGLib v1.0.0
 
 ### Structure
+
 ```json
 {
   "fileType": "psglib",
@@ -37,7 +39,9 @@ This document contains everything needed to create a custom GPT for generating P
 ## Node Types for Asset Generation
 
 ### 1. WeightedChoice Node
+
 Used for random selection with weights.
+
 ```json
 {
   "id": "unique-id",
@@ -54,7 +58,9 @@ Used for random selection with weights.
 ```
 
 ### 2. Concat Node
+
 Combines multiple inputs.
+
 ```json
 {
   "id": "concat-id",
@@ -69,7 +75,9 @@ Combines multiple inputs.
 ```
 
 ### 3. Output Node
+
 Final output of the graph.
+
 ```json
 {
   "id": "output-id",
@@ -83,7 +91,9 @@ Final output of the graph.
 ```
 
 ### 4. SetVariable Node
+
 Sets a variable for reuse.
+
 ```json
 {
   "id": "setvar-id",
@@ -98,7 +108,9 @@ Sets a variable for reuse.
 ```
 
 ### 5. GetVariable Node
+
 Retrieves a stored variable.
+
 ```json
 {
   "id": "getvar-id",
@@ -113,7 +125,9 @@ Retrieves a stored variable.
 ```
 
 ## Edge Format
+
 Connects nodes together.
+
 ```json
 {
   "id": "edge-unique-id",
@@ -127,6 +141,7 @@ Connects nodes together.
 ## Asset Categories to Generate
 
 ### Character Assets
+
 1. **Character Names**
    - First names (by culture/fantasy race)
    - Last names/surnames
@@ -155,6 +170,7 @@ Connects nodes together.
    - Life-changing moments
 
 ### World Building Assets
+
 1. **Locations**
    - City/town names
    - Landmark descriptions
@@ -177,6 +193,7 @@ Connects nodes together.
    - Noble houses
 
 ### Story Elements
+
 1. **Plot Hooks**
    - Quest starters
    - Mystery clues
@@ -201,6 +218,7 @@ Connects nodes together.
 ## Generation Patterns
 
 ### Pattern 1: Simple Weighted List
+
 ```json
 {
   "nodes": [
@@ -238,6 +256,7 @@ Connects nodes together.
 ```
 
 ### Pattern 2: Combination Generator
+
 ```json
 {
   "nodes": [
@@ -308,6 +327,7 @@ Connects nodes together.
 ```
 
 ### Pattern 3: Conditional/Complex
+
 ```json
 {
   "nodes": [
@@ -413,24 +433,28 @@ Connects nodes together.
 ## Generation Guidelines
 
 ### 1. ID Generation
+
 - Use format: `[type]-[timestamp]-[random]`
 - Ensure uniqueness within the graph
 - Example: `choice-1736536803000-abc123`
 
 ### 2. Positioning
+
 - Start nodes at x:100
 - Space nodes 150-200 pixels apart horizontally
 - Arrange vertically for parallel branches
 - Output node should be rightmost
 
 ### 3. Weight Distribution
+
 - Common: 3-5 weight
-- Uncommon: 2-3 weight  
+- Uncommon: 2-3 weight
 - Rare: 1 weight
 - Very rare: 0.5 weight
 - Legendary: 0.1 weight
 
 ### 4. Content Guidelines
+
 - Keep text concise (2-5 words typically)
 - Use lowercase for combinable elements
 - Use sentence case for complete outputs
@@ -438,6 +462,7 @@ Connects nodes together.
 - Balance realism with creativity
 
 ### 5. Tag Conventions
+
 - Category: `character`, `location`, `item`, `story`
 - Type: `name`, `description`, `trait`, `dialogue`
 - Genre: `fantasy`, `scifi`, `modern`, `historical`
@@ -446,28 +471,34 @@ Connects nodes together.
 ## Example Prompts for GPT
 
 ### Prompt 1: Generate Character Hair
+
 "Create a PSGLib asset for generating character hair descriptions. Include:
+
 - Hair colors (natural and fantasy)
 - Hair styles and lengths
 - Hair textures
 - Combined full descriptions
-Tag as: character, physical, hair"
+  Tag as: character, physical, hair"
 
 ### Prompt 2: Generate Magic Items
+
 "Create a PSGLib asset for magic item generation with:
+
 - Item base types (sword, ring, cloak, etc.)
 - Magical properties (fire, healing, protection)
 - Power levels (minor, moderate, major)
 - Curses or drawbacks (optional branch)
-Tag as: item, magic, equipment, fantasy"
+  Tag as: item, magic, equipment, fantasy"
 
 ### Prompt 3: Generate Plot Hooks
+
 "Create a PSGLib asset for quest/plot hook generation:
+
 - Inciting incident types
 - Quest giver types
 - Reward categories
 - Complication possibilities
-Tag as: story, quest, plot, adventure"
+  Tag as: story, quest, plot, adventure"
 
 ## Validation Rules
 
@@ -499,6 +530,7 @@ Tag as: story, quest, plot, adventure"
 ## Output Format
 
 Generate assets as properly formatted JSON following the PSGLib specification. Include:
+
 1. Complete metadata section
 2. All nodes with proper structure
 3. All edges connecting the nodes

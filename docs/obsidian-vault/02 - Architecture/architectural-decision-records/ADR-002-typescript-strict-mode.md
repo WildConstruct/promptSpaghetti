@@ -103,7 +103,12 @@ function executeGraph(graph: Graph): Promise<ExecutionResult> {
 
 // ✅ Required: Type guards for runtime checks
 function isWeightedChoiceNode(node: unknown): node is WeightedChoiceNode {
-  return typeof node === 'object' && node !== null && 'type' in node && node.type === 'WeightedChoice';
+  return (
+    typeof node === 'object' &&
+    node !== null &&
+    'type' in node &&
+    node.type === 'WeightedChoice'
+  );
 }
 ```
 
@@ -145,7 +150,9 @@ type ApiResponse<T> = T extends string ? { message: T } : { data: T };
 
 ```typescript
 // ✅ Required: Result types for operations that can fail
-type Result<T, E = Error> = { success: true; data: T } | { success: false; error: E };
+type Result<T, E = Error> =
+  | { success: true; data: T }
+  | { success: false; error: E };
 
 async function executeGraph(graph: Graph): Promise<Result<ExecutionResult>> {
   try {
@@ -154,7 +161,7 @@ async function executeGraph(graph: Graph): Promise<Result<ExecutionResult>> {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error : new Error(String(error)),
+      error: error instanceof Error ? error : new Error(String(error))
     };
   }
 }
@@ -181,15 +188,18 @@ async function executeGraph(graph: Graph): Promise<Result<ExecutionResult>> {
 
 ```javascript
 module.exports = {
-  extends: ['@typescript-eslint/recommended', '@typescript-eslint/recommended-requiring-type-checking'],
+  extends: [
+    '@typescript-eslint/recommended',
+    '@typescript-eslint/recommended-requiring-type-checking'
+  ],
   rules: {
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unsafe-member-access': 'error',
     '@typescript-eslint/no-unsafe-call': 'error',
     '@typescript-eslint/explicit-function-return-type': 'warn',
     '@typescript-eslint/prefer-nullish-coalescing': 'error',
-    '@typescript-eslint/prefer-optional-chain': 'error',
-  },
+    '@typescript-eslint/prefer-optional-chain': 'error'
+  }
 };
 ```
 

@@ -12,7 +12,12 @@ export class DevAgent extends AgentRunner {
    * Filter for developer-relevant events
    */
   filterRelevant(events: any[]): any[] {
-    const relevantTypes = ['TASK_NOTE_ADDED', 'TASK_BLOCKED', 'TASK_UNBLOCKED', 'TASK_REVIEW_REQUESTED'];
+    const relevantTypes = [
+      'TASK_NOTE_ADDED',
+      'TASK_BLOCKED',
+      'TASK_UNBLOCKED',
+      'TASK_REVIEW_REQUESTED'
+    ];
 
     return events.filter(ev => {
       // Only interested in tasks assigned to this developer
@@ -39,7 +44,7 @@ export class DevAgent extends AgentRunner {
           await this.sleep(2000); // Simulate investigation
           return this.createEvent('TASK_NOTE_ADDED', {
             task_id: ev.payload.task_id,
-            note: `Investigating blocker: ${ev.payload.reason || 'dependency issue'}`,
+            note: `Investigating blocker: ${ev.payload.reason || 'dependency issue'}`
           });
         }
         break;
@@ -47,11 +52,14 @@ export class DevAgent extends AgentRunner {
       case 'TASK_REVIEW_REQUESTED':
         // Respond to review feedback
         const reviewTask = state.tasks[ev.payload.task_id];
-        if (reviewTask?.assignee === this.devId && ev.payload.changes_requested) {
+        if (
+          reviewTask?.assignee === this.devId &&
+          ev.payload.changes_requested
+        ) {
           await this.sleep(1000);
           return this.createEvent('TASK_NOTE_ADDED', {
             task_id: ev.payload.task_id,
-            note: 'Addressing review feedback',
+            note: 'Addressing review feedback'
           });
         }
         break;
@@ -71,7 +79,9 @@ export class DevAgent extends AgentRunner {
    */
   private checkTasksNeedingUpdate(state: any): any {
     // Get all tasks assigned to this developer
-    const myTasks = Object.values(state.tasks).filter((t: any) => t.assignee === this.devId);
+    const myTasks = Object.values(state.tasks).filter(
+      (t: any) => t.assignee === this.devId
+    );
 
     // Check for tasks that might need attention
     for (const task of myTasks) {
@@ -82,7 +92,7 @@ export class DevAgent extends AgentRunner {
         // 5 minutes
         return this.createEvent('TASK_NOTE_ADDED', {
           task_id: task.id,
-          note: 'Still working on implementation, making good progress',
+          note: 'Still working on implementation, making good progress'
         });
       }
     }

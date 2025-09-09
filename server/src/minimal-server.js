@@ -14,7 +14,7 @@ app.get('/health', (req, res) => {
 // Preview endpoint
 app.post('/preview', (req, res) => {
   const { nodes = [], edges = [], seeds = [1234], maxLength = 1000 } = req.body;
-  
+
   // Return empty result for now - just to keep the app functional
   const results = seeds.map(seed => ({
     seed,
@@ -22,7 +22,7 @@ app.post('/preview', (req, res) => {
     error: null,
     duration: 0
   }));
-  
+
   res.json({ results });
 });
 

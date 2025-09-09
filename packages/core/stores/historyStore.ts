@@ -22,11 +22,14 @@ export const useHistoryStore = create<HistoryState>()((set, get) => ({
   index: -1,
   capacity: 50,
 
-  push: (snap) => {
+  push: snap => {
     const { entries, index, capacity } = get();
     const base = index >= 0 ? entries.slice(0, index + 1) : entries.slice();
-    const next = base.concat([{ ...snap, timestamp: snap.timestamp ?? Date.now() }]);
-    const trimmed = next.length > capacity ? next.slice(next.length - capacity) : next;
+    const next = base.concat([
+      { ...snap, timestamp: snap.timestamp ?? Date.now() }
+    ]);
+    const trimmed =
+      next.length > capacity ? next.slice(next.length - capacity) : next;
     const nextIndex = Math.min(trimmed.length - 1, capacity - 1);
     set({ entries: trimmed, index: nextIndex });
   },
@@ -47,13 +50,12 @@ export const useHistoryStore = create<HistoryState>()((set, get) => ({
     return get().entries[nextIndex];
   },
 
-  select: (i) => {
+  select: i => {
     const { entries } = get();
     if (i < 0 || i >= entries.length) return null;
     set({ index: i });
     return entries[i];
   },
 
-  clear: () => set({ entries: [], index: -1 }),
+  clear: () => set({ entries: [], index: -1 })
 }));
-

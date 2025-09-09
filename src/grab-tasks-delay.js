@@ -15,7 +15,9 @@ if (!devId) {
 
 // Random delay to reduce race conditions (0-3 seconds)
 const delay = Math.random() * 3000;
-console.log(`⏳ ${devId} waiting ${Math.round(delay)}ms to reduce conflicts...`);
+console.log(
+  `⏳ ${devId} waiting ${Math.round(delay)}ms to reduce conflicts...`
+);
 
 setTimeout(() => {
   // File paths
@@ -41,11 +43,18 @@ setTimeout(() => {
     }
 
     // Convert tasks to array
-    const tasks = Object.entries(state.tasks || {}).map(([id, task]) => ({ ...task, id }));
+    const tasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
+      ...task,
+      id
+    }));
 
     // Find TRULY unassigned tasks with double verification
     const unassignedTasks = tasks
-      .filter(task => task.state === 'UNASSIGNED' && (!task.assignee || task.assignee === null))
+      .filter(
+        task =>
+          task.state === 'UNASSIGNED' &&
+          (!task.assignee || task.assignee === null)
+      )
       .slice(0, taskCount);
 
     if (unassignedTasks.length === 0) {
@@ -53,7 +62,9 @@ setTimeout(() => {
       process.exit(0);
     }
 
-    console.log(`\n🎯 Assigning ${unassignedTasks.length} task(s) to ${devId}:\n`);
+    console.log(
+      `\n🎯 Assigning ${unassignedTasks.length} task(s) to ${devId}:\n`
+    );
 
     // Update tasks with verification
     const assignedTaskIds = [];
@@ -61,7 +72,11 @@ setTimeout(() => {
 
     unassignedTasks.forEach(task => {
       // Final verification before assignment
-      if (state.tasks[task.id] && state.tasks[task.id].state === 'UNASSIGNED' && !state.tasks[task.id].assignee) {
+      if (
+        state.tasks[task.id] &&
+        state.tasks[task.id].state === 'UNASSIGNED' &&
+        !state.tasks[task.id].assignee
+      ) {
         state.tasks[task.id].state = 'IN_PROGRESS';
         state.tasks[task.id].assignee = devId;
         state.tasks[task.id].updated = timestamp;
@@ -69,7 +84,9 @@ setTimeout(() => {
         assignedTaskIds.push(task.id);
 
         console.log(`✓ ${task.id}: ${task.title}`);
-        console.log(`  Story: ${task.story_id}, WIP Class: ${task.wip_class}, Est: ${task.est} hours`);
+        console.log(
+          `  Story: ${task.story_id}, WIP Class: ${task.wip_class}, Est: ${task.est} hours`
+        );
         console.log('  Status: UNASSIGNED → IN_PROGRESS');
         console.log();
       }
@@ -92,7 +109,9 @@ setTimeout(() => {
         : state.assignments[devId].split(',').filter(id => id.length > 0);
     }
 
-    const newAssignments = [...new Set([...currentAssignments, ...assignedTaskIds])];
+    const newAssignments = [
+      ...new Set([...currentAssignments, ...assignedTaskIds])
+    ];
     state.assignments[devId] = newAssignments;
 
     // Update metadata
@@ -106,8 +125,12 @@ setTimeout(() => {
     fs.writeFileSync(tempPath, JSON.stringify(state, null, 2));
     fs.renameSync(tempPath, statePath);
 
-    console.log(`✅ Successfully assigned ${assignedTaskIds.length} task(s) to ${devId}`);
-    console.log(`📋 Total assignments for ${devId}: ${newAssignments.length} tasks`);
+    console.log(
+      `✅ Successfully assigned ${assignedTaskIds.length} task(s) to ${devId}`
+    );
+    console.log(
+      `📋 Total assignments for ${devId}: ${newAssignments.length} tasks`
+    );
   } catch (error) {
     console.error('❌ Error:', error.message);
     process.exit(1);

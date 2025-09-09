@@ -16,7 +16,7 @@ describe('LLMService browser adapter', () => {
   it('posts to /api/llm/complete and returns JSON', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ success: true, completion: 'Hello', model: 'stub' }),
+      json: async () => ({ success: true, completion: 'Hello', model: 'stub' })
     });
 
     const svc = new LLMService({});
@@ -30,9 +30,13 @@ describe('LLMService browser adapter', () => {
   });
 
   it('throws on non-OK response', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: false, status: 500 });
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 500
+    });
     const svc = new LLMService({});
-    await expect(svc.complete({ prompt: 'Hi' })).rejects.toThrow('LLM endpoint error');
+    await expect(svc.complete({ prompt: 'Hi' })).rejects.toThrow(
+      'LLM endpoint error'
+    );
   });
 });
-

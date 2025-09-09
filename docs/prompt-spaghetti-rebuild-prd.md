@@ -12,6 +12,7 @@ The existing Prompt Spaghetti is a visual node-based graph editor for AI prompt 
 ### Available Documentation Analysis
 
 **Available Documentation:**
+
 - ✓ Tech Stack Documentation (partial - in CLAUDE.md)
 - ✓ Source Tree/Architecture (visible in codebase)
 - ✓ Coding Standards (partial - in CLAUDE.md)
@@ -24,8 +25,9 @@ The existing Prompt Spaghetti is a visual node-based graph editor for AI prompt 
 ### Enhancement Scope Definition
 
 **Enhancement Type:**
+
 - ✓ Major Feature Modification
-- ✓ UI/UX Overhaul  
+- ✓ UI/UX Overhaul
 - ✓ Technology Stack Upgrade (cleaner TypeScript implementation)
 - ✓ Bug Fix and Stability Improvements
 
@@ -33,11 +35,13 @@ The existing Prompt Spaghetti is a visual node-based graph editor for AI prompt 
 Complete rebuild of Prompt Spaghetti maintaining the core visual node-graph concept while implementing a cleaner architecture, fixing TypeScript issues, and adding essential missing features like file persistence, preset browser, and core operator nodes.
 
 **Impact Assessment:**
+
 - ✓ Major Impact (architectural changes required)
 
 ### Goals and Background Context
 
 **Goals:**
+
 - Deliver a working MVP with core node types in 8 weeks
 - Create a plugin-ready architecture for future extensibility
 - Implement deterministic execution with seed control
@@ -48,9 +52,10 @@ Complete rebuild of Prompt Spaghetti maintaining the core visual node-graph conc
 The current implementation has accumulated significant technical debt, particularly around TypeScript configuration and missing core features. A brownfield rebuild allows us to maintain the validated concept while implementing a cleaner, more maintainable architecture. The target users - filmmakers and VFX artists - need a reliable tool for managing complex prompt variations without losing creative control.
 
 ### Change Log
-| Change | Date | Version | Description | Author |
-|--------|------|---------|-------------|---------|
-| Initial PRD | 2025-08-01 | 0.1 | Created brownfield PRD for rebuild | John (PM) |
+
+| Change      | Date       | Version | Description                        | Author    |
+| ----------- | ---------- | ------- | ---------------------------------- | --------- |
+| Initial PRD | 2025-08-01 | 0.1     | Created brownfield PRD for rebuild | John (PM) |
 
 ## Requirements
 
@@ -129,7 +134,8 @@ The current implementation has accumulated significant technical debt, particula
 
 **Epic Goal**: Deliver a polished, demo-ready prompt manipulation tool that showcases instant prompt analysis, visual node editing, and deterministic variation generation - compelling enough to secure funding.
 
-**Integration Requirements**: 
+**Integration Requirements**:
+
 - Clean greenfield codebase (no legacy integration needed)
 - Must export ComfyUI-compatible JSON from day one
 - File format designed for future preset marketplace
@@ -142,6 +148,7 @@ I want to implement the foundational node system and file format,
 so that all subsequent features can build on a solid architecture.
 
 **Acceptance Criteria:**
+
 1. Define .psg file format schema (YAML) with node types, connections, metadata
 2. Implement base node classes: TextBlock, WeightedChoice, Concat, Variable
 3. Create deterministic execution engine with seedable random
@@ -149,6 +156,7 @@ so that all subsequent features can build on a solid architecture.
 5. Ensure medieval demo nodes are fully supported
 
 **Integration Verification:**
+
 - IV1: Generated file format is human-readable and version-control friendly
 - IV2: Execution engine produces identical output for same seed (10 test runs)
 - IV3: Performance benchmark: 100-node graph executes in <50ms
@@ -160,6 +168,7 @@ I want to paste a prompt and see it intelligently broken into nodes,
 so that I can immediately start creating variations.
 
 **Acceptance Criteria:**
+
 1. Implement prompt parser that identifies semantic units
 2. Create visual range indicators showing text-to-node mapping
 3. Generate appropriate node types based on content (nouns → text, lists → weighted)
@@ -167,6 +176,7 @@ so that I can immediately start creating variations.
 5. Handle malformed/unusual prompts gracefully
 
 **Integration Verification:**
+
 - IV1: Medieval prompt "A weary merchant in tattered robes" generates correct nodes
 - IV2: Character ranges accurately map to source text
 - IV3: Parse time <500ms for typical prompts
@@ -178,6 +188,7 @@ I want to visually connect and arrange nodes,
 so that I can understand and control my prompt structure.
 
 **Acceptance Criteria:**
+
 1. Integrate React Flow with custom node components
 2. Implement drag-drop node creation from palette
 3. Create connection validation (type compatibility)
@@ -185,6 +196,7 @@ so that I can understand and control my prompt structure.
 5. Include pan/zoom controls familiar to AE users
 
 **Integration Verification:**
+
 - IV1: Can recreate medieval demo graph through UI only
 - IV2: Performance stays smooth with 50+ nodes
 - IV3: All interactions feel responsive (<100ms feedback)
@@ -196,6 +208,7 @@ I want to drag presets from a library onto nodes,
 so that I can quickly explore variations.
 
 **Acceptance Criteria:**
+
 1. Build asset library UI with categorized presets
 2. Implement drag-drop preset replacement
 3. Create tag-based compatibility checking
@@ -203,6 +216,7 @@ so that I can quickly explore variations.
 5. Include medieval character/setting presets
 
 **Integration Verification:**
+
 - IV1: Dragging "Fantasy Occupations" onto merchant node shows variations
 - IV2: Incompatible presets show visual feedback
 - IV3: Library loads without affecting app startup time
@@ -214,6 +228,7 @@ I want to see multiple variations of my prompt instantly,
 so that I can find the perfect option.
 
 **Acceptance Criteria:**
+
 1. Build preview panel showing 10-20 variations
 2. Implement seed control for reproducible results
 3. Create one-click copy for any variation
@@ -221,6 +236,7 @@ so that I can find the perfect option.
 5. Display execution timing for performance confidence
 
 **Integration Verification:**
+
 - IV1: Medieval demo generates 20 variations in <1 second
 - IV2: Same seed always produces identical results
 - IV3: Export format works with ComfyUI test endpoint
@@ -232,6 +248,7 @@ I want the app to feel professional and delightful,
 so that investors see we can build world-class products.
 
 **Acceptance Criteria:**
+
 1. Implement smooth animations and transitions
 2. Add keyboard shortcuts for power users
 3. Create loading states and error handling
@@ -239,6 +256,7 @@ so that investors see we can build world-class products.
 5. Optimize medieval demo for live presentation
 
 **Integration Verification:**
+
 - IV1: Demo runs flawlessly 10 times in a row
 - IV2: App handles network failures gracefully
 - IV3: First-time user can create variations within 30 seconds

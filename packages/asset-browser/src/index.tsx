@@ -5,7 +5,10 @@ import { ServerTab } from './components/ServerTab';
 import { TabbedAssetBrowser } from './components/TabbedAssetBrowser';
 import { OpenGraphDialog } from './components/OpenGraphDialog';
 import { SaveGraphDialog } from './components/SaveGraphDialog';
-import { UserProvider as OriginalUserProvider, useUserId } from './user/UserProvider';
+import {
+  UserProvider as OriginalUserProvider,
+  useUserId
+} from './user/UserProvider';
 
 // Enhanced components
 import { EnhancedAssetBrowser } from './components/EnhancedAssetBrowser';
@@ -15,7 +18,11 @@ import { ProAssetBrowser } from './components/ProAssetBrowser';
 
 // Services
 import { FragmentManifestLoader } from './services/FragmentManifestLoader';
-export type { FragmentManifest, FragmentCategory, FragmentEntry } from './services/FragmentManifestLoader';
+export type {
+  FragmentManifest,
+  FragmentCategory,
+  FragmentEntry
+} from './services/FragmentManifestLoader';
 
 // Our new UserProvider wrapper for compatibility
 import { UserProvider } from './providers/UserProvider';

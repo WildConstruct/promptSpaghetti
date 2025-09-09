@@ -24,13 +24,15 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   // node overrides
-  const [nodeOverrides, setNodeOverrides] = useState<Record<string, { nodeType: 'Text' | 'Choice' }>>({}); 
+  const [nodeOverrides, setNodeOverrides] = useState<
+    Record<string, { nodeType: 'Text' | 'Choice' }>
+  >({});
 
   // Handle prompt text changes
   const handlePromptChange = useCallback((text: string) => {
     const trimmed = text.trim();
     setPromptText(text);
-    
+
     // Clear analysis when prompt is cleared
     if (trimmed.length === 0) {
       setAnalysis(null);
@@ -50,14 +52,14 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   // merge overrides into analysis so UI and launch use the swapped types
   const mergedAnalysis = useMemo(() => {
     if (!analysis) return null;
-    const newNodes = analysis.nodes.map((gen) => {
+    const newNodes = analysis.nodes.map(gen => {
       const ov = nodeOverrides[gen.node.id];
       if (!ov) return gen;
       return {
         node: {
           ...gen.node,
-          nodeType: ov.nodeType,
-        },
+          nodeType: ov.nodeType
+        }
       };
     });
     return { ...analysis, nodes: newNodes } as PromptAnalysis;
@@ -66,7 +68,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   // Handle launching the editor
   const handleLaunchEditor = useCallback(() => {
     setIsTransitioning(true);
-    
+
     // Delay to allow animation
     setTimeout(() => {
       if (mergedAnalysis) {
@@ -78,18 +80,24 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   }, [mergedAnalysis, onLaunch]);
 
   // Handle quick action selection
-  const handleQuickAction = useCallback((templateId: string) => {
-    // Launch directly with a prebuilt graph
-    const tmpl = quickStartTemplates[templateId];
-    if (!tmpl) return;
-    setIsTransitioning(true);
-    setIsAnalyzing(false);
-    setSelectedNodeId(null);
-    setPromptText('');
-    setTimeout(() => {
-      onLaunch({ kind: 'template', graph: { nodes: tmpl.nodes, edges: tmpl.edges } });
-    }, 300);
-  }, [onLaunch]);
+  const handleQuickAction = useCallback(
+    (templateId: string) => {
+      // Launch directly with a prebuilt graph
+      const tmpl = quickStartTemplates[templateId];
+      if (!tmpl) return;
+      setIsTransitioning(true);
+      setIsAnalyzing(false);
+      setSelectedNodeId(null);
+      setPromptText('');
+      setTimeout(() => {
+        onLaunch({
+          kind: 'template',
+          graph: { nodes: tmpl.nodes, edges: tmpl.edges }
+        });
+      }, 300);
+    },
+    [onLaunch]
+  );
 
   // Handle node selection in preview
   const handleNodeSelect = useCallback((nodeId: string | null) => {
@@ -110,29 +118,31 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   }, [mergedAnalysis, handleLaunchEditor]);
 
   // node actions: swap type helpers
-  const applyNodeType = useCallback((type: 'Text' | 'Choice') => {
-    if (!selectedNodeId) return;
-    if (selectedNodeId === 'output') return; // don't edit Output node
-    setNodeOverrides((prev) => ({
-      ...prev,
-      [selectedNodeId]: {
-        nodeType: type,
-      },
-    }));
-  }, [selectedNodeId]);
+  const applyNodeType = useCallback(
+    (type: 'Text' | 'Choice') => {
+      if (!selectedNodeId) return;
+      if (selectedNodeId === 'output') return; // don't edit Output node
+      setNodeOverrides(prev => ({
+        ...prev,
+        [selectedNodeId]: {
+          nodeType: type
+        }
+      }));
+    },
+    [selectedNodeId]
+  );
 
   // Variable name change handler removed - no longer supporting Variables
 
   const resetNodeOverride = useCallback(() => {
     if (!selectedNodeId) return;
     if (selectedNodeId === 'output') return; // don't edit Output node
-    setNodeOverrides((prev) => {
+    setNodeOverrides(prev => {
       const next = { ...prev };
       delete next[selectedNodeId!];
       return next;
     });
   }, [selectedNodeId]);
-
 
   return (
     <div className={`launch-screen ${isTransitioning ? 'transitioning' : ''}`}>
@@ -140,7 +150,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       <header className="launch-header">
         <div className="launch-logo">
           <h1>Prompt Spaghetti</h1>
-          <p className="launch-tagline">Transform your prompts into powerful node graphs</p>
+          <p className="launch-tagline">
+            Transform your prompts into powerful node graphs
+          </p>
         </div>
       </header>
 
@@ -163,7 +175,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
               />
             </PromptDissectorErrorBoundary>
           </div>
-          
+
           {/* Analysis Status */}
           {isAnalyzing && (
             <div className="analysis-status" role="status" aria-live="polite">
@@ -185,7 +197,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           </div>
 
           {/* Node Actions are now persistent and placed near Launch Editor */}
-          
+
           {/* Launch Button */}
           <div className="launch-actions">
             <button
@@ -201,13 +213,34 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
             <div className="launch-inline-actions">
               {(() => {
-                const selNode = mergedAnalysis?.nodes.find(n => n.node.id === selectedNodeId)?.node;
-                const disabled = !selectedNodeId || !selNode || selNode.nodeType === 'Output';
+                const selNode = mergedAnalysis?.nodes.find(
+                  n => n.node.id === selectedNodeId
+                )?.node;
+                const disabled =
+                  !selectedNodeId || !selNode || selNode.nodeType === 'Output';
                 return (
                   <div className="launch-inline-actions-row">
-                    <button className="launch-button-secondary" onClick={() => applyNodeType('Text')} disabled={disabled}>Make Text</button>
-                    <button className="launch-button-secondary" onClick={() => applyNodeType('Choice')} disabled={disabled}>Make Choice</button>
-                    <button className="launch-button-tertiary" onClick={resetNodeOverride} disabled={disabled}>Reset</button>
+                    <button
+                      className="launch-button-secondary"
+                      onClick={() => applyNodeType('Text')}
+                      disabled={disabled}
+                    >
+                      Make Text
+                    </button>
+                    <button
+                      className="launch-button-secondary"
+                      onClick={() => applyNodeType('Choice')}
+                      disabled={disabled}
+                    >
+                      Make Choice
+                    </button>
+                    <button
+                      className="launch-button-tertiary"
+                      onClick={resetNodeOverride}
+                      disabled={disabled}
+                    >
+                      Reset
+                    </button>
                   </div>
                 );
               })()}
@@ -221,14 +254,16 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             <h2>Quick Start Templates</h2>
             <QuickActions onSelectTemplate={handleQuickAction} />
           </div>
-          
+
           {/* Tips */}
           <div className="launch-tips">
             <h3>Pro Tips</h3>
             <ul>
               <li>Use &quot;or&quot; to create variations</li>
               <li>Separate concepts with commas</li>
-              <li>Add descriptors with &quot;with&quot; or &quot;wearing&quot;</li>
+              <li>
+                Add descriptors with &quot;with&quot; or &quot;wearing&quot;
+              </li>
               <li>Drag nodes in the preview to rearrange</li>
             </ul>
           </div>

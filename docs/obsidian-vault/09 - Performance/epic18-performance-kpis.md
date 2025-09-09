@@ -238,8 +238,8 @@ const monitoring = new KPIMonitoringService({
   monitoringInterval: 30000, // 30 seconds
   alertingEnabled: true,
   kpiFilters: {
-    priorities: ['critical', 'high'], // Monitor only critical and high priority KPIs
-  },
+    priorities: ['critical', 'high'] // Monitor only critical and high priority KPIs
+  }
 });
 
 const dashboard = new KPIDashboard(monitoring, baseline);
@@ -256,7 +256,7 @@ dashboard.startAutoRefresh('executive-summary');
 const baseline = await baseline.captureBaseline({
   graphComplexity: 'complex',
   dataSize: 'large',
-  concurrentUsers: 10,
+  concurrentUsers: 10
 });
 
 console.log(`Captured ${baseline.kpiSnapshots.length} KPI measurements`);
@@ -283,7 +283,7 @@ const targets = getAdjustedTargets({
   environment: 'production',
   userSegment: 'power-users',
   deviceProfile: 'high-end',
-  networkProfile: 'fast',
+  networkProfile: 'fast'
 });
 
 console.log(`FCP Target: ${targets.runtime_fcp.target}ms`);

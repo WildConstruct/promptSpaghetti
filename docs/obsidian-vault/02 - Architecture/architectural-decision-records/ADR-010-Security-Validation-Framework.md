@@ -77,7 +77,13 @@ We will implement a **comprehensive security validation framework** with multipl
 ```typescript
 // Variable name validation
 const VARIABLE_NAME_PATTERN = /^[a-zA-Z][a-zA-Z0-9_]*$/;
-const RESERVED_KEYWORDS = ['__proto__', 'constructor', 'prototype', 'eval', 'Function'];
+const RESERVED_KEYWORDS = [
+  '__proto__',
+  'constructor',
+  'prototype',
+  'eval',
+  'Function'
+];
 
 function validateVariableName(name: string): boolean {
   if (!VARIABLE_NAME_PATTERN.test(name)) return false;
@@ -107,7 +113,7 @@ const DANGEROUS_NODE_TYPES = [
   'AssignmentExpression', // Blocks assignments
   'UpdateExpression', // Blocks increment/decrement
   'FunctionExpression', // Blocks function definitions
-  'ArrowFunctionExpression',
+  'ArrowFunctionExpression'
 ];
 ```
 
@@ -171,7 +177,7 @@ const SAFE_UTILITIES = {
 
   // Type checking
   getType: (value: any) => typeof value,
-  isArray: Array.isArray,
+  isArray: Array.isArray
 };
 ```
 
@@ -196,7 +202,7 @@ function logSecurityViolation(error: SecurityViolationError): void {
     message: error.message,
     context: error.context,
     timestamp: new Date(),
-    stackTrace: error.stack,
+    stackTrace: error.stack
   });
 }
 ```

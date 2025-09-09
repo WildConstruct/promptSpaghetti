@@ -210,7 +210,14 @@ interface ComplianceFramework {
 interface EvidenceType {
   id: string;
   name: string;
-  category: 'log' | 'snapshot' | 'transaction' | 'configuration' | 'policy' | 'procedure' | 'report';
+  category:
+    | 'log'
+    | 'snapshot'
+    | 'transaction'
+    | 'configuration'
+    | 'policy'
+    | 'procedure'
+    | 'report';
   format: string[];
   retention_period: string;
   collection_method: 'automatic' | 'manual' | 'triggered';

@@ -34,10 +34,10 @@ const PreviewRequestSchema = z.object({
   graph: z.object({
     nodes: z.array(z.any()),
     edges: z.array(z.any()).optional(),
-    seed: z.number().optional(),
+    seed: z.number().optional()
   }),
   runs: z.number().int().min(1).max(50).default(5),
-  seedStart: z.number().int().min(1).default(1),
+  seedStart: z.number().int().min(1).default(1)
 });
 ```
 
@@ -167,7 +167,7 @@ Import rules schema accepts `z.any()` for rules array, allowing arbitrary data t
 ```typescript
 const ImportRulesSchema = z.object({
   rules: z.array(z.any()), // ⚠️ No validation
-  userId: z.number().int().positive().optional().default(1),
+  userId: z.number().int().positive().optional().default(1)
 });
 ```
 
@@ -230,7 +230,7 @@ const LoginSchema = z.object({
   email: z.string().email(),
   password: z.string(),
   rememberMe: z.boolean().optional(),
-  deviceInfo: z.record(z.any()).optional(), // ⚠️ Arbitrary data
+  deviceInfo: z.record(z.any()).optional() // ⚠️ Arbitrary data
 });
 ```
 

@@ -43,17 +43,29 @@ export const SecurityValidation = {
     z
       .string()
       .max(maxLength)
-      .refine(val => !DANGEROUS_PATTERNS.test(val), 'String contains dangerous patterns'),
+      .refine(
+        val => !DANGEROUS_PATTERNS.test(val),
+        'String contains dangerous patterns'
+      ),
 
   // Safe expression validation for conditionals
   safeExpression: () =>
     z
       .string()
       .max(500)
-      .refine(val => SAFE_EXPRESSION_PATTERN.test(val), 'Expression contains unsafe syntax'),
+      .refine(
+        val => SAFE_EXPRESSION_PATTERN.test(val),
+        'Expression contains unsafe syntax'
+      ),
 
   // Safe value types for variables
-  safeValue: () => z.union([z.string().max(10000), z.number().finite(), z.boolean(), z.array(z.primitive()).max(100)]),
+  safeValue: () =>
+    z.union([
+      z.string().max(10000),
+      z.number().finite(),
+      z.boolean(),
+      z.array(z.primitive()).max(100)
+    ])
 };
 
 // 2. Migrate schemas (Day 2)
@@ -100,7 +112,7 @@ export class SafeExpressionEvaluator {
     'includes',
     'length',
     'toLowerCase',
-    'toUpperCase',
+    'toUpperCase'
   ]);
 
   evaluate(expression: string, context: Record<string, any>): any {
@@ -140,20 +152,21 @@ export class SafeExpressionEvaluator {
 ```typescript
 // server/src/middleware/security.ts
 export const securityMiddleware = {
-  validateRequest: (schema: ZodSchema) => async (req: FastifyRequest, reply: FastifyReply) => {
-    try {
-      req.body = await schema.parseAsync(req.body);
-    } catch (error) {
-      reply.status(400).send({
-        error: 'Invalid request data',
-        details: error.errors,
-      });
-    }
-  },
+  validateRequest:
+    (schema: ZodSchema) => async (req: FastifyRequest, reply: FastifyReply) => {
+      try {
+        req.body = await schema.parseAsync(req.body);
+      } catch (error) {
+        reply.status(400).send({
+          error: 'Invalid request data',
+          details: error.errors
+        });
+      }
+    },
 
   sanitizeInput: () => async (req: FastifyRequest, reply: FastifyReply) => {
     // Implement input sanitization
-  },
+  }
 };
 ```
 
@@ -299,7 +312,11 @@ export class ValidationError extends GraphError {
 
 // Error recovery
 export class ErrorRecovery {
-  static async tryWithFallback<T>(operation: () => Promise<T>, fallback: () => T, context: string): Promise<T> {
+  static async tryWithFallback<T>(
+    operation: () => Promise<T>,
+    fallback: () => T,
+    context: string
+  ): Promise<T> {
     try {
       return await operation();
     } catch (error) {
@@ -494,7 +511,7 @@ export class ErrorRecovery {
 export const FeatureFlags = {
   USE_NODE_REGISTRY: process.env.FF_NODE_REGISTRY === 'true',
   STRICT_VALIDATION: process.env.FF_STRICT_VALIDATION === 'true',
-  NEW_ERROR_HANDLING: process.env.FF_ERROR_HANDLING === 'true',
+  NEW_ERROR_HANDLING: process.env.FF_ERROR_HANDLING === 'true'
 };
 ```
 

@@ -50,7 +50,7 @@ class TaskEstimationImprover {
         // Model validation
         testDataPercentage: 0.2, // 20% of data for testing
         crossValidationFolds: 5, // K-fold cross validation
-        minimumAccuracy: 0.6, // Minimum acceptable model accuracy
+        minimumAccuracy: 0.6 // Minimum acceptable model accuracy
       },
 
       features: {
@@ -66,7 +66,7 @@ class TaskEstimationImprover {
           'newFeatureFlag', // Boolean: is this a new feature
           'bugFixFlag', // Boolean: is this a bug fix
           'refactorFlag', // Boolean: is this refactoring
-          'testingFlag', // Boolean: is this testing work
+          'testingFlag' // Boolean: is this testing work
         ],
 
         // Agent characteristics
@@ -76,7 +76,7 @@ class TaskEstimationImprover {
           'velocityScore', // Historical velocity score
           'accuracyScore', // Historical estimation accuracy
           'currentWorkload', // Current task load
-          'recentPerformance', // Recent performance trend
+          'recentPerformance' // Recent performance trend
         ],
 
         // Contextual features
@@ -86,8 +86,8 @@ class TaskEstimationImprover {
           'quarterOfYear', // Business quarter
           'teamVelocity', // Current team velocity
           'projectPhase', // Project phase (planning, dev, testing, etc.)
-          'pressureLevel', // Time pressure level
-        ],
+          'pressureLevel' // Time pressure level
+        ]
       },
 
       models: {
@@ -95,24 +95,24 @@ class TaskEstimationImprover {
         primary: 'ensemble', // Primary model type
         ensemble: {
           models: ['linear', 'polynomial', 'exponential'],
-          weights: [0.4, 0.4, 0.2], // Weights for ensemble combination
+          weights: [0.4, 0.4, 0.2] // Weights for ensemble combination
         },
 
         // Model parameters
         linearRegression: {
           regularization: 0.01, // L2 regularization factor
-          maxIterations: 1000,
+          maxIterations: 1000
         },
 
         polynomialRegression: {
           degree: 2, // Polynomial degree
-          regularization: 0.05,
+          regularization: 0.05
         },
 
         exponentialModel: {
           baseRate: 1.1, // Base exponential rate
-          smoothingFactor: 0.3,
-        },
+          smoothingFactor: 0.3
+        }
       },
 
       suggestions: {
@@ -120,14 +120,14 @@ class TaskEstimationImprover {
         confidenceLevels: {
           high: 0.85, // High confidence threshold
           medium: 0.65, // Medium confidence threshold
-          low: 0.45, // Low confidence threshold
+          low: 0.45 // Low confidence threshold
         },
 
         // Adjustment factors
         adjustmentFactors: {
           complexity: [0.7, 1.0, 1.3, 1.6, 2.0], // Multipliers by complexity level
           experience: [1.4, 1.2, 1.0, 0.9, 0.8], // Multipliers by experience level
-          workload: [0.9, 1.0, 1.1, 1.3, 1.5], // Multipliers by workload level
+          workload: [0.9, 1.0, 1.1, 1.3, 1.5] // Multipliers by workload level
         },
 
         // Output formatting
@@ -135,8 +135,8 @@ class TaskEstimationImprover {
         minimumEstimate: 0.5, // Minimum estimate (30 minutes)
         maximumEstimate: 40, // Maximum estimate (40 hours)
         includeRange: true, // Include estimate range (min-max)
-        includeRecommendations: true, // Include improvement recommendations
-      },
+        includeRecommendations: true // Include improvement recommendations
+      }
     };
 
     this.models = new Map();
@@ -144,7 +144,7 @@ class TaskEstimationImprover {
     this.patterns = {
       agentPatterns: new Map(),
       taskPatterns: new Map(),
-      contextPatterns: new Map(),
+      contextPatterns: new Map()
     };
     this.metrics = {
       overallAccuracy: 0,
@@ -152,7 +152,7 @@ class TaskEstimationImprover {
       improvementTrend: [],
       lastTraining: null,
       totalPredictions: 0,
-      accuratePredictions: 0,
+      accuratePredictions: 0
     };
   }
 
@@ -169,8 +169,12 @@ class TaskEstimationImprover {
       this.scheduleRetraining();
 
       console.log('✅ Task Estimation Improver initialized');
-      console.log(`📊 Loaded ${this.estimationHistory.length} historical estimates`);
-      console.log(`🎯 Overall accuracy: ${(this.metrics.overallAccuracy * 100).toFixed(1)}%`);
+      console.log(
+        `📊 Loaded ${this.estimationHistory.length} historical estimates`
+      );
+      console.log(
+        `🎯 Overall accuracy: ${(this.metrics.overallAccuracy * 100).toFixed(1)}%`
+      );
     } catch (error) {
       console.error('❌ Failed to initialize Task Estimation Improver:', error);
       throw error;
@@ -194,13 +198,19 @@ class TaskEstimationImprover {
       const ensemblePrediction = this.calculateEnsemblePrediction(predictions);
 
       // Apply adjustments and constraints
-      const adjustedEstimate = this.applyAdjustments(ensemblePrediction, features);
+      const adjustedEstimate = this.applyAdjustments(
+        ensemblePrediction,
+        features
+      );
 
       // Calculate confidence score
       const confidence = this.calculateConfidence(predictions, features);
 
       // Generate estimate range
-      const estimateRange = this.calculateEstimateRange(adjustedEstimate, confidence);
+      const estimateRange = this.calculateEstimateRange(
+        adjustedEstimate,
+        confidence
+      );
 
       // Create suggestion object
       const suggestion = {
@@ -208,27 +218,38 @@ class TaskEstimationImprover {
         estimatedHours: this.roundEstimate(adjustedEstimate),
         range: {
           min: this.roundEstimate(estimateRange.min),
-          max: this.roundEstimate(estimateRange.max),
+          max: this.roundEstimate(estimateRange.max)
         },
         confidence: confidence,
         confidenceLevel: this.getConfidenceLevel(confidence),
         features: features,
         predictions: predictions,
-        reasoning: this.generateReasoning(features, adjustedEstimate, confidence),
+        reasoning: this.generateReasoning(
+          features,
+          adjustedEstimate,
+          confidence
+        ),
         recommendations: this.generateRecommendations(features, confidence),
         timestamp: new Date().toISOString(),
-        modelVersion: this.getModelVersion(),
+        modelVersion: this.getModelVersion()
       };
 
       // Store suggestion for future learning
       await this.storeSuggestion(suggestion);
 
-      console.log(`📈 Estimate: ${suggestion.estimatedHours}h (${suggestion.range.min}-${suggestion.range.max}h)`);
-      console.log(`🎯 Confidence: ${(confidence * 100).toFixed(1)}% (${suggestion.confidenceLevel})`);
+      console.log(
+        `📈 Estimate: ${suggestion.estimatedHours}h (${suggestion.range.min}-${suggestion.range.max}h)`
+      );
+      console.log(
+        `🎯 Confidence: ${(confidence * 100).toFixed(1)}% (${suggestion.confidenceLevel})`
+      );
 
       return suggestion;
     } catch (error) {
-      console.error(`❌ Failed to generate estimation for task ${taskData.id}:`, error);
+      console.error(
+        `❌ Failed to generate estimation for task ${taskData.id}:`,
+        error
+      );
       throw error;
     }
   }
@@ -241,7 +262,9 @@ class TaskEstimationImprover {
 
     try {
       // Find the original suggestion
-      const suggestion = this.estimationHistory.find(s => s.taskId === taskId && s.type === 'suggestion');
+      const suggestion = this.estimationHistory.find(
+        s => s.taskId === taskId && s.type === 'suggestion'
+      );
 
       // Create completion record
       const completion = {
@@ -250,14 +273,16 @@ class TaskEstimationImprover {
         agentId,
         completedAt: new Date().toISOString(),
         metadata,
-        type: 'completion',
+        type: 'completion'
       };
 
       // Calculate accuracy if we had a suggestion
       if (suggestion) {
         const estimatedHours = suggestion.estimatedHours;
         const accuracy = this.calculateAccuracy(estimatedHours, actualHours);
-        const withinRange = actualHours >= suggestion.range.min && actualHours <= suggestion.range.max;
+        const withinRange =
+          actualHours >= suggestion.range.min &&
+          actualHours <= suggestion.range.max;
 
         completion.originalEstimate = estimatedHours;
         completion.estimateRange = suggestion.range;
@@ -287,7 +312,10 @@ class TaskEstimationImprover {
 
       return completion;
     } catch (error) {
-      console.error(`❌ Failed to record completion for task ${taskId}:`, error);
+      console.error(
+        `❌ Failed to record completion for task ${taskId}:`,
+        error
+      );
       throw error;
     }
   }
@@ -312,7 +340,9 @@ class TaskEstimationImprover {
       // Split data into training and testing sets
       const { trainSet, testSet } = this.splitTrainingData(trainingData);
 
-      console.log(`📚 Training with ${trainSet.length} samples, testing with ${testSet.length} samples`);
+      console.log(
+        `📚 Training with ${trainSet.length} samples, testing with ${testSet.length} samples`
+      );
 
       // Train each model type
       const modelResults = {};
@@ -321,10 +351,16 @@ class TaskEstimationImprover {
       modelResults.linear = await this.trainLinearModel(trainSet, testSet);
 
       // Polynomial regression model
-      modelResults.polynomial = await this.trainPolynomialModel(trainSet, testSet);
+      modelResults.polynomial = await this.trainPolynomialModel(
+        trainSet,
+        testSet
+      );
 
       // Exponential model
-      modelResults.exponential = await this.trainExponentialModel(trainSet, testSet);
+      modelResults.exponential = await this.trainExponentialModel(
+        trainSet,
+        testSet
+      );
 
       // Evaluate model performance
       const evaluation = this.evaluateModels(modelResults, testSet);
@@ -344,10 +380,18 @@ class TaskEstimationImprover {
       await this.saveMetrics();
 
       console.log('✅ Model training complete:');
-      console.log(`   Linear model accuracy: ${(evaluation.linear.accuracy * 100).toFixed(1)}%`);
-      console.log(`   Polynomial model accuracy: ${(evaluation.polynomial.accuracy * 100).toFixed(1)}%`);
-      console.log(`   Exponential model accuracy: ${(evaluation.exponential.accuracy * 100).toFixed(1)}%`);
-      console.log(`   Ensemble accuracy: ${(evaluation.ensemble.accuracy * 100).toFixed(1)}%`);
+      console.log(
+        `   Linear model accuracy: ${(evaluation.linear.accuracy * 100).toFixed(1)}%`
+      );
+      console.log(
+        `   Polynomial model accuracy: ${(evaluation.polynomial.accuracy * 100).toFixed(1)}%`
+      );
+      console.log(
+        `   Exponential model accuracy: ${(evaluation.exponential.accuracy * 100).toFixed(1)}%`
+      );
+      console.log(
+        `   Ensemble accuracy: ${(evaluation.ensemble.accuracy * 100).toFixed(1)}%`
+      );
 
       return true;
     } catch (error) {
@@ -363,8 +407,12 @@ class TaskEstimationImprover {
     const features = {};
 
     // Task features
-    features.wordCount = this.countWords(taskData.title + ' ' + (taskData.description || ''));
-    features.acceptanceCriteriaCount = (taskData.acceptanceCriteria || []).length;
+    features.wordCount = this.countWords(
+      taskData.title + ' ' + (taskData.description || '')
+    );
+    features.acceptanceCriteriaCount = (
+      taskData.acceptanceCriteria || []
+    ).length;
     features.tagCount = (taskData.tags || []).length;
     features.priorityLevel = this.encodePriority(taskData.priority);
     features.epicComplexity = this.calculateEpicComplexity(taskData.epic);
@@ -372,16 +420,29 @@ class TaskEstimationImprover {
     features.fileCount = this.estimateFileCount(taskData);
 
     // Task type flags
-    const description = (taskData.title + ' ' + (taskData.description || '')).toLowerCase();
-    features.newFeatureFlag = description.includes('new') || description.includes('feature') ? 1 : 0;
-    features.bugFixFlag = description.includes('bug') || description.includes('fix') ? 1 : 0;
-    features.refactorFlag = description.includes('refactor') || description.includes('improve') ? 1 : 0;
-    features.testingFlag = description.includes('test') || description.includes('testing') ? 1 : 0;
+    const description = (
+      taskData.title +
+      ' ' +
+      (taskData.description || '')
+    ).toLowerCase();
+    features.newFeatureFlag =
+      description.includes('new') || description.includes('feature') ? 1 : 0;
+    features.bugFixFlag =
+      description.includes('bug') || description.includes('fix') ? 1 : 0;
+    features.refactorFlag =
+      description.includes('refactor') || description.includes('improve')
+        ? 1
+        : 0;
+    features.testingFlag =
+      description.includes('test') || description.includes('testing') ? 1 : 0;
 
     // Agent features (if provided)
     if (agentData) {
       features.experienceLevel = this.encodeExperience(agentData.experience);
-      features.domainExpertise = this.calculateDomainExpertise(agentData, taskData);
+      features.domainExpertise = this.calculateDomainExpertise(
+        agentData,
+        taskData
+      );
       features.velocityScore = agentData.performance?.velocity || 1.0;
       features.accuracyScore = agentData.accuracyScore || 1.0;
       features.currentWorkload = agentData.utilizationRate || 0.5;
@@ -452,7 +513,10 @@ class TaskEstimationImprover {
       const modelName = models[i];
       const weight = weights[i];
 
-      if (predictions[modelName] !== undefined && !isNaN(predictions[modelName])) {
+      if (
+        predictions[modelName] !== undefined &&
+        !isNaN(predictions[modelName])
+      ) {
         weightedSum += predictions[modelName] * weight;
         totalWeight += weight;
       }
@@ -480,18 +544,21 @@ class TaskEstimationImprover {
 
     // Apply complexity adjustment
     const complexityLevel = this.determineComplexityLevel(features);
-    adjusted *= this.config.suggestions.adjustmentFactors.complexity[complexityLevel];
+    adjusted *=
+      this.config.suggestions.adjustmentFactors.complexity[complexityLevel];
 
     // Apply experience adjustment
     const experienceLevel = Math.round(features.experienceLevel) - 1;
     if (experienceLevel >= 0 && experienceLevel < 5) {
-      adjusted *= this.config.suggestions.adjustmentFactors.experience[experienceLevel];
+      adjusted *=
+        this.config.suggestions.adjustmentFactors.experience[experienceLevel];
     }
 
     // Apply workload adjustment
     const workloadLevel = Math.floor(features.currentWorkload * 5);
     if (workloadLevel >= 0 && workloadLevel < 5) {
-      adjusted *= this.config.suggestions.adjustmentFactors.workload[workloadLevel];
+      adjusted *=
+        this.config.suggestions.adjustmentFactors.workload[workloadLevel];
     }
 
     // Apply constraints
@@ -510,7 +577,9 @@ class TaskEstimationImprover {
     if (values.length === 0) return 0.5;
 
     const mean = values.reduce((a, b) => a + b, 0) / values.length;
-    const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
+    const variance =
+      values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) /
+      values.length;
     const standardDeviation = Math.sqrt(variance);
     const coefficientOfVariation = standardDeviation / mean;
 
@@ -538,7 +607,7 @@ class TaskEstimationImprover {
 
     return {
       min: Math.max(this.config.suggestions.minimumEstimate, estimate - range),
-      max: Math.min(this.config.suggestions.maximumEstimate, estimate + range),
+      max: Math.min(this.config.suggestions.maximumEstimate, estimate + range)
     };
   }
 
@@ -550,7 +619,7 @@ class TaskEstimationImprover {
       type: 'linear',
       weights: {},
       intercept: 0,
-      trained: new Date().toISOString(),
+      trained: new Date().toISOString()
     };
 
     // Simple linear regression implementation
@@ -588,7 +657,8 @@ class TaskEstimationImprover {
 
       // Update weights
       features.forEach(feature => {
-        model.weights[feature] -= (learningRate * gradients[feature]) / trainSet.length;
+        model.weights[feature] -=
+          (learningRate * gradients[feature]) / trainSet.length;
       });
       model.intercept -= (learningRate * interceptGradient) / trainSet.length;
 
@@ -610,23 +680,26 @@ class TaskEstimationImprover {
     // Extend features with polynomial terms
     const extendedTrainSet = trainSet.map(sample => ({
       features: this.createPolynomialFeatures(sample.features),
-      target: sample.target,
+      target: sample.target
     }));
 
     const extendedTestSet = testSet.map(sample => ({
       features: this.createPolynomialFeatures(sample.features),
-      target: sample.target,
+      target: sample.target
     }));
 
     // Train linear model on extended features
-    const baseModel = await this.trainLinearModel(extendedTrainSet, extendedTestSet);
+    const baseModel = await this.trainLinearModel(
+      extendedTrainSet,
+      extendedTestSet
+    );
 
     return {
       type: 'polynomial',
       baseModel,
       degree: this.config.models.polynomialRegression.degree,
       trained: new Date().toISOString(),
-      accuracy: baseModel.accuracy,
+      accuracy: baseModel.accuracy
     };
   }
 
@@ -639,7 +712,7 @@ class TaskEstimationImprover {
       baseRate: this.config.models.exponentialModel.baseRate,
       complexityFactor: 1.2,
       experienceFactor: 0.8,
-      trained: new Date().toISOString(),
+      trained: new Date().toISOString()
     };
 
     // Simple parameter optimization
@@ -648,9 +721,22 @@ class TaskEstimationImprover {
 
     // Grid search over parameter space
     for (let baseRate = 1.05; baseRate <= 1.2; baseRate += 0.05) {
-      for (let complexityFactor = 1.1; complexityFactor <= 1.4; complexityFactor += 0.1) {
-        for (let experienceFactor = 0.7; experienceFactor <= 0.9; experienceFactor += 0.1) {
-          const testModel = { ...model, baseRate, complexityFactor, experienceFactor };
+      for (
+        let complexityFactor = 1.1;
+        complexityFactor <= 1.4;
+        complexityFactor += 0.1
+      ) {
+        for (
+          let experienceFactor = 0.7;
+          experienceFactor <= 0.9;
+          experienceFactor += 0.1
+        ) {
+          const testModel = {
+            ...model,
+            baseRate,
+            complexityFactor,
+            experienceFactor
+          };
           const accuracy = this.testExponentialModel(testModel, testSet);
 
           if (accuracy > bestAccuracy) {
@@ -699,7 +785,8 @@ class TaskEstimationImprover {
     const complexity = this.determineComplexityLevel(features);
     const experience = features.experienceLevel || 3;
 
-    let estimate = Math.pow(model.baseRate, complexity) * model.complexityFactor;
+    let estimate =
+      Math.pow(model.baseRate, complexity) * model.complexityFactor;
     estimate *= Math.pow(model.experienceFactor, experience - 1);
 
     return estimate;
@@ -712,7 +799,10 @@ class TaskEstimationImprover {
     if (similarTasks.length === 0) return 4; // Default
 
     // Average the completion times of similar tasks
-    const totalHours = similarTasks.reduce((sum, task) => sum + task.actualHours, 0);
+    const totalHours = similarTasks.reduce(
+      (sum, task) => sum + task.actualHours,
+      0
+    );
     return totalHours / similarTasks.length;
   }
 
@@ -748,7 +838,13 @@ class TaskEstimationImprover {
   }
 
   encodeExperience(experience) {
-    const levels = { beginner: 1, intermediate: 2, advanced: 3, expert: 4, senior: 5 };
+    const levels = {
+      beginner: 1,
+      intermediate: 2,
+      advanced: 3,
+      expert: 4,
+      senior: 5
+    };
     return levels[experience] || 2;
   }
 
@@ -756,12 +852,23 @@ class TaskEstimationImprover {
     // Simple epic complexity scoring
     if (!epic) return 1;
 
-    const complexEpics = ['security', 'performance', 'architecture', 'migration'];
-    return complexEpics.some(keyword => epic.toLowerCase().includes(keyword)) ? 3 : 2;
+    const complexEpics = [
+      'security',
+      'performance',
+      'architecture',
+      'migration'
+    ];
+    return complexEpics.some(keyword => epic.toLowerCase().includes(keyword))
+      ? 3
+      : 2;
   }
 
   estimateFileCount(taskData) {
-    const description = (taskData.title + ' ' + (taskData.description || '')).toLowerCase();
+    const description = (
+      taskData.title +
+      ' ' +
+      (taskData.description || '')
+    ).toLowerCase();
 
     // Simple heuristics for file count estimation
     if (description.includes('new feature')) return 5;
@@ -791,8 +898,21 @@ class TaskEstimationImprover {
   }
 
   extractTaskDomains(taskData) {
-    const text = (taskData.title + ' ' + (taskData.description || '')).toLowerCase();
-    const domains = ['frontend', 'backend', 'database', 'testing', 'devops', 'mobile', 'api', 'ui'];
+    const text = (
+      taskData.title +
+      ' ' +
+      (taskData.description || '')
+    ).toLowerCase();
+    const domains = [
+      'frontend',
+      'backend',
+      'database',
+      'testing',
+      'devops',
+      'mobile',
+      'api',
+      'ui'
+    ];
 
     return domains.filter(domain => text.includes(domain));
   }
@@ -859,9 +979,13 @@ class TaskEstimationImprover {
     // Task complexity reasoning
     const complexity = this.determineComplexityLevel(features);
     if (complexity >= 3) {
-      reasons.push('High task complexity detected based on description length and requirements');
+      reasons.push(
+        'High task complexity detected based on description length and requirements'
+      );
     } else if (complexity <= 1) {
-      reasons.push('Low task complexity suggests straightforward implementation');
+      reasons.push(
+        'Low task complexity suggests straightforward implementation'
+      );
     }
 
     // Agent experience reasoning
@@ -880,7 +1004,9 @@ class TaskEstimationImprover {
 
     // Historical data reasoning
     if (this.estimationHistory.length > 50) {
-      reasons.push(`Based on analysis of ${this.estimationHistory.length} historical tasks`);
+      reasons.push(
+        `Based on analysis of ${this.estimationHistory.length} historical tasks`
+      );
     }
 
     // Confidence reasoning
@@ -898,7 +1024,9 @@ class TaskEstimationImprover {
 
     // Confidence-based recommendations
     if (confidence < 0.6) {
-      recommendations.push('Consider breaking down into smaller, more estimatable tasks');
+      recommendations.push(
+        'Consider breaking down into smaller, more estimatable tasks'
+      );
       recommendations.push('Gather more detailed requirements before starting');
     }
 
@@ -928,7 +1056,9 @@ class TaskEstimationImprover {
 
   prepareTrainingData() {
     const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - this.config.learning.trainingWindowDays);
+    cutoffDate.setDate(
+      cutoffDate.getDate() - this.config.learning.trainingWindowDays
+    );
 
     // Get completion records with original estimates
     const completions = this.estimationHistory.filter(
@@ -940,23 +1070,26 @@ class TaskEstimationImprover {
 
     return completions.map(completion => {
       // Reconstruct features (simplified)
-      const features = completion.features || this.reconstructFeatures(completion);
+      const features =
+        completion.features || this.reconstructFeatures(completion);
 
       return {
         features,
         target: completion.actualHours,
-        weight: this.calculateSampleWeight(completion),
+        weight: this.calculateSampleWeight(completion)
       };
     });
   }
 
   splitTrainingData(data) {
-    const testSize = Math.floor(data.length * this.config.learning.testDataPercentage);
+    const testSize = Math.floor(
+      data.length * this.config.learning.testDataPercentage
+    );
     const shuffled = [...data].sort(() => Math.random() - 0.5);
 
     return {
       trainSet: shuffled.slice(testSize),
-      testSet: shuffled.slice(0, testSize),
+      testSet: shuffled.slice(0, testSize)
     };
   }
 
@@ -968,19 +1101,25 @@ class TaskEstimationImprover {
       evaluation[modelName] = {
         accuracy: model.accuracy,
         mse: this.calculateMSE(model, testSet),
-        mae: this.calculateMAE(model, testSet),
+        mae: this.calculateMAE(model, testSet)
       };
     }
 
     // Evaluate ensemble
     const ensemblePredictions = testSet.map(sample => {
       const predictions = {};
-      predictions.linear = this.predictLinearSample(sample.features, modelResults.linear);
+      predictions.linear = this.predictLinearSample(
+        sample.features,
+        modelResults.linear
+      );
       predictions.polynomial = this.predictLinearSample(
         this.createPolynomialFeatures(sample.features),
         modelResults.polynomial.baseModel
       );
-      predictions.exponential = this.predictExponentialSample(sample.features, modelResults.exponential);
+      predictions.exponential = this.predictExponentialSample(
+        sample.features,
+        modelResults.exponential
+      );
 
       return this.calculateEnsemblePrediction(predictions);
     });
@@ -999,7 +1138,7 @@ class TaskEstimationImprover {
       mae: this.calculateMAEFromPredictions(
         ensemblePredictions,
         testSet.map(s => s.target)
-      ),
+      )
     };
 
     return evaluation;
@@ -1015,7 +1154,8 @@ class TaskEstimationImprover {
   }
 
   calculateAccuracyFromPredictions(predictions, actuals) {
-    if (predictions.length !== actuals.length || predictions.length === 0) return 0;
+    if (predictions.length !== actuals.length || predictions.length === 0)
+      return 0;
 
     let totalAccuracy = 0;
     for (let i = 0; i < predictions.length; i++) {
@@ -1078,7 +1218,10 @@ class TaskEstimationImprover {
       case 'linear':
         return this.predictLinearSample(features, model);
       case 'polynomial':
-        return this.predictLinearSample(this.createPolynomialFeatures(features), model.baseModel);
+        return this.predictLinearSample(
+          this.createPolynomialFeatures(features),
+          model.baseModel
+        );
       case 'exponential':
         return this.predictExponentialSample(features, model);
       default:
@@ -1090,21 +1233,26 @@ class TaskEstimationImprover {
     const complexity = this.determineComplexityLevel(features);
     const experience = features.experienceLevel || 3;
 
-    let estimate = Math.pow(model.baseRate, complexity) * model.complexityFactor;
+    let estimate =
+      Math.pow(model.baseRate, complexity) * model.complexityFactor;
     estimate *= Math.pow(model.experienceFactor, experience - 1);
 
     return estimate;
   }
 
   testLinearModel(model, testSet) {
-    const predictions = testSet.map(sample => this.predictLinearSample(sample.features, model));
+    const predictions = testSet.map(sample =>
+      this.predictLinearSample(sample.features, model)
+    );
     const actuals = testSet.map(sample => sample.target);
 
     return this.calculateAccuracyFromPredictions(predictions, actuals);
   }
 
   testExponentialModel(model, testSet) {
-    const predictions = testSet.map(sample => this.predictExponentialSample(sample.features, model));
+    const predictions = testSet.map(sample =>
+      this.predictExponentialSample(sample.features, model)
+    );
     const actuals = testSet.map(sample => sample.target);
 
     return this.calculateAccuracyFromPredictions(predictions, actuals);
@@ -1132,8 +1280,12 @@ class TaskEstimationImprover {
         const feature1 = keyFeatures[i];
         const feature2 = keyFeatures[j];
 
-        if (features[feature1] !== undefined && features[feature2] !== undefined) {
-          polynomial[`${feature1}_x_${feature2}`] = features[feature1] * features[feature2];
+        if (
+          features[feature1] !== undefined &&
+          features[feature2] !== undefined
+        ) {
+          polynomial[`${feature1}_x_${feature2}`] =
+            features[feature1] * features[feature2];
         }
       }
     }
@@ -1155,7 +1307,8 @@ class TaskEstimationImprover {
 
   calculateSampleWeight(completion) {
     // Weight samples based on recency and confidence
-    const daysAgo = (Date.now() - new Date(completion.completedAt)) / (1000 * 60 * 60 * 24);
+    const daysAgo =
+      (Date.now() - new Date(completion.completedAt)) / (1000 * 60 * 60 * 24);
     const timeWeight = Math.exp(-daysAgo / 30); // Exponential decay over 30 days
 
     const confidenceWeight = completion.confidence || 0.5;
@@ -1188,7 +1341,7 @@ class TaskEstimationImprover {
       quarterOfYear: 2,
       teamVelocity: 1.0,
       projectPhase: 'development',
-      pressureLevel: 2,
+      pressureLevel: 2
     };
   }
 
@@ -1197,7 +1350,10 @@ class TaskEstimationImprover {
     const threshold = 0.7;
     return this.estimationHistory
       .filter(record => record.type === 'completion' && record.features)
-      .filter(record => this.calculateSimilarity(features, record.features) > threshold)
+      .filter(
+        record =>
+          this.calculateSimilarity(features, record.features) > threshold
+      )
       .slice(-10); // Last 10 similar tasks
   }
 
@@ -1206,7 +1362,7 @@ class TaskEstimationImprover {
       .filter(record => record.type === 'completion' && record.features)
       .map(record => ({
         ...record,
-        similarity: this.calculateSimilarity(features, record.features),
+        similarity: this.calculateSimilarity(features, record.features)
       }))
       .sort((a, b) => b.similarity - a.similarity)
       .slice(0, k);
@@ -1215,7 +1371,10 @@ class TaskEstimationImprover {
   }
 
   calculateSimilarity(features1, features2) {
-    const keys = new Set([...Object.keys(features1), ...Object.keys(features2)]);
+    const keys = new Set([
+      ...Object.keys(features1),
+      ...Object.keys(features2)
+    ]);
     let similarity = 0;
     let count = 0;
 
@@ -1237,7 +1396,8 @@ class TaskEstimationImprover {
   assessDataQuality(features) {
     // Assess quality of feature data
     const completeness =
-      Object.values(features).filter(v => v !== undefined && v !== null).length / Object.keys(features).length;
+      Object.values(features).filter(v => v !== undefined && v !== null)
+        .length / Object.keys(features).length;
 
     // Check for reasonable feature values
     const reasonableness = this.checkFeatureReasonableness(features);
@@ -1250,7 +1410,8 @@ class TaskEstimationImprover {
 
     // Check for unreasonable values
     if (features.wordCount > 1000) score -= 0.1; // Very long description
-    if (features.experienceLevel > 5 || features.experienceLevel < 1) score -= 0.2;
+    if (features.experienceLevel > 5 || features.experienceLevel < 1)
+      score -= 0.2;
     if (features.currentWorkload > 1.5) score -= 0.1; // Overloaded
 
     return Math.max(0, score);
@@ -1259,7 +1420,8 @@ class TaskEstimationImprover {
   updateAccuracyMetrics(accuracy) {
     this.metrics.totalPredictions++;
     this.metrics.accuratePredictions += accuracy;
-    this.metrics.overallAccuracy = this.metrics.accuratePredictions / this.metrics.totalPredictions;
+    this.metrics.overallAccuracy =
+      this.metrics.accuratePredictions / this.metrics.totalPredictions;
   }
 
   async updatePatterns(completion, suggestion) {
@@ -1269,7 +1431,7 @@ class TaskEstimationImprover {
         this.patterns.agentPatterns.set(completion.agentId, {
           accuracyHistory: [],
           velocityHistory: [],
-          complexityPreference: {},
+          complexityPreference: {}
         });
       }
 
@@ -1279,7 +1441,7 @@ class TaskEstimationImprover {
           estimated: suggestion.estimatedHours,
           actual: completion.actualHours,
           accuracy: completion.accuracy,
-          timestamp: completion.completedAt,
+          timestamp: completion.completedAt
         });
       }
     }
@@ -1291,11 +1453,14 @@ class TaskEstimationImprover {
     const newCompletions = this.estimationHistory.filter(
       record =>
         record.type === 'completion' &&
-        new Date(record.completedAt) > new Date(this.metrics.lastTraining || '1970-01-01')
+        new Date(record.completedAt) >
+          new Date(this.metrics.lastTraining || '1970-01-01')
     ).length;
 
     if (newCompletions >= this.config.learning.minimumSamples) {
-      console.log(`🧠 Triggering model retraining (${newCompletions} new completions)`);
+      console.log(
+        `🧠 Triggering model retraining (${newCompletions} new completions)`
+      );
       await this.trainModels();
     }
   }
@@ -1317,7 +1482,7 @@ class TaskEstimationImprover {
   async storeSuggestion(suggestion) {
     this.estimationHistory.push({
       ...suggestion,
-      type: 'suggestion',
+      type: 'suggestion'
     });
 
     await this.saveHistory();
@@ -1369,7 +1534,10 @@ class TaskEstimationImprover {
   }
 
   async saveHistory() {
-    await fs.writeFile(this.historyFile, JSON.stringify(this.estimationHistory, null, 2));
+    await fs.writeFile(
+      this.historyFile,
+      JSON.stringify(this.estimationHistory, null, 2)
+    );
   }
 
   async saveModels() {
@@ -1385,10 +1553,13 @@ class TaskEstimationImprover {
     const patternsData = {
       agentPatterns: Array.from(this.patterns.agentPatterns.entries()),
       taskPatterns: Array.from(this.patterns.taskPatterns.entries()),
-      contextPatterns: Array.from(this.patterns.contextPatterns.entries()),
+      contextPatterns: Array.from(this.patterns.contextPatterns.entries())
     };
 
-    await fs.writeFile(this.patternsFile, JSON.stringify(patternsData, null, 2));
+    await fs.writeFile(
+      this.patternsFile,
+      JSON.stringify(patternsData, null, 2)
+    );
   }
 
   /**
@@ -1402,28 +1573,36 @@ class TaskEstimationImprover {
       return recordDate > thirtyDaysAgo;
     });
 
-    const suggestions = this.estimationHistory.filter(r => r.type === 'suggestion');
-    const completions = this.estimationHistory.filter(r => r.type === 'completion');
+    const suggestions = this.estimationHistory.filter(
+      r => r.type === 'suggestion'
+    );
+    const completions = this.estimationHistory.filter(
+      r => r.type === 'completion'
+    );
 
     return {
       overview: {
         totalPredictions: this.metrics.totalPredictions,
         overallAccuracy: (this.metrics.overallAccuracy * 100).toFixed(1) + '%',
         modelsAvailable: this.models.size,
-        lastTraining: this.metrics.lastTraining,
+        lastTraining: this.metrics.lastTraining
       },
 
       recentActivity: {
-        recentSuggestions: recentHistory.filter(r => r.type === 'suggestion').length,
-        recentCompletions: recentHistory.filter(r => r.type === 'completion').length,
-        averageAccuracy: this.calculateRecentAccuracy(recentHistory),
+        recentSuggestions: recentHistory.filter(r => r.type === 'suggestion')
+          .length,
+        recentCompletions: recentHistory.filter(r => r.type === 'completion')
+          .length,
+        averageAccuracy: this.calculateRecentAccuracy(recentHistory)
       },
 
       modelPerformance: {
         linearAccuracy: this.metrics.modelPerformance?.linear?.accuracy || 0,
-        polynomialAccuracy: this.metrics.modelPerformance?.polynomial?.accuracy || 0,
-        exponentialAccuracy: this.metrics.modelPerformance?.exponential?.accuracy || 0,
-        ensembleAccuracy: this.metrics.modelPerformance?.ensemble?.accuracy || 0,
+        polynomialAccuracy:
+          this.metrics.modelPerformance?.polynomial?.accuracy || 0,
+        exponentialAccuracy:
+          this.metrics.modelPerformance?.exponential?.accuracy || 0,
+        ensembleAccuracy: this.metrics.modelPerformance?.ensemble?.accuracy || 0
       },
 
       dataQuality: {
@@ -1431,20 +1610,27 @@ class TaskEstimationImprover {
         totalCompletions: completions.length,
         dataCompletenessRate:
           completions.length > 0
-            ? ((completions.filter(c => c.originalEstimate !== undefined).length / completions.length) * 100).toFixed(
-                1
-              ) + '%'
-            : '0%',
-      },
+            ? (
+                (completions.filter(c => c.originalEstimate !== undefined)
+                  .length /
+                  completions.length) *
+                100
+              ).toFixed(1) + '%'
+            : '0%'
+      }
     };
   }
 
   calculateRecentAccuracy(recentHistory) {
-    const recentCompletions = recentHistory.filter(r => r.type === 'completion' && r.accuracy !== undefined);
+    const recentCompletions = recentHistory.filter(
+      r => r.type === 'completion' && r.accuracy !== undefined
+    );
 
     if (recentCompletions.length === 0) return '0%';
 
-    const averageAccuracy = recentCompletions.reduce((sum, r) => sum + r.accuracy, 0) / recentCompletions.length;
+    const averageAccuracy =
+      recentCompletions.reduce((sum, r) => sum + r.accuracy, 0) /
+      recentCompletions.length;
     return (averageAccuracy * 100).toFixed(1) + '%';
   }
 }
@@ -1467,7 +1653,7 @@ if (require.main === module) {
             title: args[2] || 'Test Task',
             description: args[3] || 'A test task for estimation',
             priority: args[4] || 'medium',
-            tags: (args[5] || '').split(',').filter(t => t.trim()),
+            tags: (args[5] || '').split(',').filter(t => t.trim())
           };
 
           console.log('🔮 Generating estimation...\n');
@@ -1475,17 +1661,25 @@ if (require.main === module) {
 
           console.log('\n📋 Estimation Suggestion:');
           console.log(`   Estimated Hours: ${suggestion.estimatedHours}`);
-          console.log(`   Range: ${suggestion.range.min} - ${suggestion.range.max} hours`);
-          console.log(`   Confidence: ${(suggestion.confidence * 100).toFixed(1)}% (${suggestion.confidenceLevel})`);
+          console.log(
+            `   Range: ${suggestion.range.min} - ${suggestion.range.max} hours`
+          );
+          console.log(
+            `   Confidence: ${(suggestion.confidence * 100).toFixed(1)}% (${suggestion.confidenceLevel})`
+          );
 
           if (suggestion.reasoning.length > 0) {
             console.log('\n💭 Reasoning:');
-            suggestion.reasoning.forEach(reason => console.log(`   • ${reason}`));
+            suggestion.reasoning.forEach(reason =>
+              console.log(`   • ${reason}`)
+            );
           }
 
           if (suggestion.recommendations.length > 0) {
             console.log('\n💡 Recommendations:');
-            suggestion.recommendations.forEach(rec => console.log(`   • ${rec}`));
+            suggestion.recommendations.forEach(rec =>
+              console.log(`   • ${rec}`)
+            );
           }
           break;
 
@@ -1495,15 +1689,23 @@ if (require.main === module) {
           const agentId = args[3] || null;
 
           if (!taskId || isNaN(actualHours)) {
-            console.error('Usage: node TaskEstimationImprover.js record <taskId> <actualHours> [agentId]');
+            console.error(
+              'Usage: node TaskEstimationImprover.js record <taskId> <actualHours> [agentId]'
+            );
             process.exit(1);
           }
 
           console.log(`📝 Recording completion: ${taskId} = ${actualHours}h`);
-          const completion = await improver.recordCompletion(taskId, actualHours, agentId);
+          const completion = await improver.recordCompletion(
+            taskId,
+            actualHours,
+            agentId
+          );
 
           if (completion.accuracy !== undefined) {
-            console.log(`📊 Estimation accuracy: ${(completion.accuracy * 100).toFixed(1)}%`);
+            console.log(
+              `📊 Estimation accuracy: ${(completion.accuracy * 100).toFixed(1)}%`
+            );
           }
           break;
 

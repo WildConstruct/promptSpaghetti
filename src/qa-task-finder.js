@@ -7,7 +7,9 @@ const path = require('path');
 console.log('🔍 QA Task Finder - Helping locate task-related changes\n');
 
 // Read current state
-const state = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'state.json'), 'utf8'));
+const state = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'data', 'state.json'), 'utf8')
+);
 
 function findTaskById(taskId) {
   return state.tasks[taskId];
@@ -15,7 +17,9 @@ function findTaskById(taskId) {
 
 function findTasksByPattern(pattern) {
   return Object.values(state.tasks).filter(
-    task => task.title.toLowerCase().includes(pattern.toLowerCase()) || task.id.includes(pattern)
+    task =>
+      task.title.toLowerCase().includes(pattern.toLowerCase()) ||
+      task.id.includes(pattern)
   );
 }
 
@@ -35,9 +39,13 @@ function getQAGuidanceForTask(taskId) {
 
   if (task.qa_metadata) {
     console.log('\n🔍 QA Guidance:');
-    console.log(`   Files to check: ${task.qa_metadata.target_files.join(', ')}`);
+    console.log(
+      `   Files to check: ${task.qa_metadata.target_files.join(', ')}`
+    );
     console.log(`   Testing approach: ${task.qa_metadata.qa_guidance}`);
-    console.log(`   Requirements: ${task.qa_metadata.testing_requirements.join('; ')}`);
+    console.log(
+      `   Requirements: ${task.qa_metadata.testing_requirements.join('; ')}`
+    );
   } else {
     console.log('\n⚠️ Legacy task - no QA metadata available');
     console.log('   💡 Look for files related to:');
@@ -48,12 +56,16 @@ function getQAGuidanceForTask(taskId) {
       console.log('   📁 **/__tests__/**/*security*.test.*');
     }
     if (task.title.toLowerCase().includes('setvariable')) {
-      console.log('   📁 packages/core/components/Inspector/editors/SetVariableEditor.tsx');
+      console.log(
+        '   📁 packages/core/components/Inspector/editors/SetVariableEditor.tsx'
+      );
       console.log('   📁 packages/core/runtime/index.ts');
     }
     if (task.title.toLowerCase().includes('conditional')) {
       console.log('   📁 packages/core/runtime/nodes/Conditional.ts');
-      console.log('   📁 packages/core/components/Inspector/editors/ConditionalEditor.tsx');
+      console.log(
+        '   📁 packages/core/components/Inspector/editors/ConditionalEditor.tsx'
+      );
     }
     if (task.title.toLowerCase().includes('test')) {
       console.log('   📁 **/__tests__/**/*.test.*');
@@ -66,7 +78,9 @@ function getQAGuidanceForTask(taskId) {
 
 function suggestFilesForSecurityTasks() {
   console.log('🔒 Security Task File Suggestions:');
-  console.log('   📁 packages/core/validation/security.ts - Main security validation');
+  console.log(
+    '   📁 packages/core/validation/security.ts - Main security validation'
+  );
   console.log('   📁 packages/core/graphSchema.ts - Schema validation');
   console.log('   📁 packages/core/runtime/index.ts - Runtime execution');
   console.log('   📁 packages/core/__tests__/ - Test files');
@@ -89,7 +103,9 @@ function findRecentSecurityChanges() {
 
   securityTasks.forEach(task => {
     console.log(`📋 ${task.id}: ${task.title}`);
-    console.log(`   Status: ${task.state} | Assignee: ${task.assignee || 'Unassigned'}`);
+    console.log(
+      `   Status: ${task.state} | Assignee: ${task.assignee || 'Unassigned'}`
+    );
     console.log(`   Updated: ${task.updated}`);
     console.log('');
   });

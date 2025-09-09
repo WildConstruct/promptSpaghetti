@@ -337,7 +337,7 @@ enum ThreatDetectionModel {
   RISK_SCORER = 'risk_scorer',
   FRAUD_DETECTOR = 'fraud_detector',
   INTRUSION_DETECTOR = 'intrusion_detector',
-  DATA_EXFILTRATION_DETECTOR = 'data_exfiltration_detector',
+  DATA_EXFILTRATION_DETECTOR = 'data_exfiltration_detector'
 }
 ```
 
@@ -570,6 +570,7 @@ interface MLSecurityFramework {
    ```
 
 2. **Configuration Management**
+
    ```yaml
    # Production ML Configuration
    ml_security_analytics_config:
@@ -926,7 +927,7 @@ Query Parameters:
        completeness: checkDataCompleteness(data),
        consistency: validateDataConsistency(data),
        accuracy: assessDataAccuracy(data),
-       timeliness: validateDataFreshness(data),
+       timeliness: validateDataFreshness(data)
      };
    };
    ```
@@ -940,7 +941,7 @@ Query Parameters:
        temporal_features: extractTimeBasedFeatures(event),
        network_features: extractNetworkFeatures(event),
        behavioral_features: extractBehavioralFeatures(event),
-       statistical_features: extractStatisticalFeatures(event),
+       statistical_features: extractStatisticalFeatures(event)
      };
    };
    ```
@@ -948,12 +949,14 @@ Query Parameters:
 3. **Model Validation**
    ```typescript
    // Good: Comprehensive model evaluation
-   const evaluateModelRobustness = async (model: MLModel): Promise<RobustnessReport> => {
+   const evaluateModelRobustness = async (
+     model: MLModel
+   ): Promise<RobustnessReport> => {
      return {
        cross_validation: await performCrossValidation(model),
        adversarial_testing: await testAdversarialRobustness(model),
        bias_analysis: await analyzeBias(model),
-       fairness_metrics: await calculateFairnessMetrics(model),
+       fairness_metrics: await calculateFairnessMetrics(model)
      };
    };
    ```
@@ -984,7 +987,9 @@ Query Parameters:
 
    ```typescript
    // Good: Secure model deployment
-   const deployModelSecurely = async (model: MLModel): Promise<DeploymentResult> => {
+   const deployModelSecurely = async (
+     model: MLModel
+   ): Promise<DeploymentResult> => {
      await validateModelIntegrity(model);
      await encryptModelArtifacts(model);
      await configureAccessControls(model);

@@ -68,11 +68,11 @@ class GraphExecutionBenchmarker {
           i % 2 === 0
             ? {
                 choices: [`option-${i}-A`, `option-${i}-B`],
-                weights: [0.6, 0.4],
+                weights: [0.6, 0.4]
               }
             : {
-                separator: ' ',
-              },
+                separator: ' '
+              }
       });
 
       if (i > 0) {
@@ -81,7 +81,7 @@ class GraphExecutionBenchmarker {
           source: `node-${i - 1}`,
           target: nodeId,
           sourceHandle: 'output',
-          targetHandle: 'input',
+          targetHandle: 'input'
         });
       }
     }
@@ -104,8 +104,8 @@ class GraphExecutionBenchmarker {
       type: 'WeightedChoice',
       data: {
         choices: ['start-A', 'start-B'],
-        weights: [0.5, 0.5],
-      },
+        weights: [0.5, 0.5]
+      }
     });
 
     // Create branches recursively
@@ -121,12 +121,15 @@ class GraphExecutionBenchmarker {
           type: isChoice ? 'WeightedChoice' : 'Concat',
           data: isChoice
             ? {
-                choices: [`branch-${currentDepth}-${i}-A`, `branch-${currentDepth}-${i}-B`],
-                weights: [Math.random(), Math.random()],
+                choices: [
+                  `branch-${currentDepth}-${i}-A`,
+                  `branch-${currentDepth}-${i}-B`
+                ],
+                weights: [Math.random(), Math.random()]
               }
             : {
-                separator: '-',
-              },
+                separator: '-'
+              }
         });
 
         edges.push({
@@ -134,7 +137,7 @@ class GraphExecutionBenchmarker {
           source: parentId,
           target: nodeId,
           sourceHandle: 'output',
-          targetHandle: 'input',
+          targetHandle: 'input'
         });
 
         createBranch(nodeId, currentDepth + 1);
@@ -155,52 +158,82 @@ class GraphExecutionBenchmarker {
         type: 'WeightedChoice',
         data: {
           choices: ['path-A', 'path-B', 'path-C'],
-          weights: [0.4, 0.4, 0.2],
-        },
+          weights: [0.4, 0.4, 0.2]
+        }
       },
       {
         id: 'concat-1',
         type: 'Concat',
-        data: { separator: ' | ' },
+        data: { separator: ' | ' }
       },
       {
         id: 'setvar-1',
         type: 'SetVariable',
         data: {
           variableName: 'counter',
-          value: '1',
-        },
+          value: '1'
+        }
       },
       {
         id: 'getvar-1',
         type: 'GetVariable',
         data: {
-          variableName: 'counter',
-        },
+          variableName: 'counter'
+        }
       },
       {
         id: 'choice-2',
         type: 'WeightedChoice',
         data: {
           choices: ['result-X', 'result-Y'],
-          weights: [0.7, 0.3],
-        },
+          weights: [0.7, 0.3]
+        }
       },
       {
         id: 'output-1',
         type: 'Output',
         data: {
-          template: 'Final: {{value}}',
-        },
-      },
+          template: 'Final: {{value}}'
+        }
+      }
     ];
 
     const edges = [
-      { id: 'e1', source: 'choice-1', target: 'concat-1', sourceHandle: 'output', targetHandle: 'input' },
-      { id: 'e2', source: 'concat-1', target: 'setvar-1', sourceHandle: 'output', targetHandle: 'input' },
-      { id: 'e3', source: 'setvar-1', target: 'getvar-1', sourceHandle: 'output', targetHandle: 'input' },
-      { id: 'e4', source: 'getvar-1', target: 'choice-2', sourceHandle: 'output', targetHandle: 'input' },
-      { id: 'e5', source: 'choice-2', target: 'output-1', sourceHandle: 'output', targetHandle: 'input' },
+      {
+        id: 'e1',
+        source: 'choice-1',
+        target: 'concat-1',
+        sourceHandle: 'output',
+        targetHandle: 'input'
+      },
+      {
+        id: 'e2',
+        source: 'concat-1',
+        target: 'setvar-1',
+        sourceHandle: 'output',
+        targetHandle: 'input'
+      },
+      {
+        id: 'e3',
+        source: 'setvar-1',
+        target: 'getvar-1',
+        sourceHandle: 'output',
+        targetHandle: 'input'
+      },
+      {
+        id: 'e4',
+        source: 'getvar-1',
+        target: 'choice-2',
+        sourceHandle: 'output',
+        targetHandle: 'input'
+      },
+      {
+        id: 'e5',
+        source: 'choice-2',
+        target: 'output-1',
+        sourceHandle: 'output',
+        targetHandle: 'input'
+      }
     ];
 
     return { nodes, edges };
@@ -209,7 +242,10 @@ class GraphExecutionBenchmarker {
   /**
    * Execute graph with specific seed and measure performance
    */
-  async executeGraphWithSeed(graph: GraphType, seed: number): Promise<GraphExecutionMetrics> {
+  async executeGraphWithSeed(
+    graph: GraphType,
+    seed: number
+  ): Promise<GraphExecutionMetrics> {
     this.recordMemoryBaseline();
 
     const context = new ExecutionContext(seed);
@@ -245,11 +281,17 @@ class GraphExecutionBenchmarker {
             result = `concat-${seed}`;
             break;
           case 'SetVariable':
-            context.setVariable(node.data.variableName || 'var', node.data.value || 'value');
+            context.setVariable(
+              node.data.variableName || 'var',
+              node.data.value || 'value'
+            );
             result = node.data.value || 'set';
             break;
           case 'GetVariable':
-            result = (context.getVariable(node.data.variableName || 'var') as string) || 'undefined';
+            result =
+              (context.getVariable(
+                node.data.variableName || 'var'
+              ) as string) || 'undefined';
             break;
           case 'Output':
             const template = node.data.template || '{{value}}';
@@ -276,7 +318,7 @@ class GraphExecutionBenchmarker {
       outputLength: outputs.join('').length,
       nodeExecutions,
       uniqueOutputs: [...new Set(outputs)],
-      errors,
+      errors
     };
   }
 
@@ -320,14 +362,19 @@ class GraphExecutionBenchmarker {
     const executionTimes = allMetrics.map(m => m.executionTime);
     const memoryUsages = allMetrics.map(m => m.memoryDelta);
 
-    const averageExecutionTime = executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length;
+    const averageExecutionTime =
+      executionTimes.reduce((a, b) => a + b, 0) / executionTimes.length;
     const maxExecutionTime = Math.max(...executionTimes);
     const minExecutionTime = Math.min(...executionTimes);
 
-    const averageMemoryUsage = memoryUsages.reduce((a, b) => a + b, 0) / memoryUsages.length;
+    const averageMemoryUsage =
+      memoryUsages.reduce((a, b) => a + b, 0) / memoryUsages.length;
     const maxMemoryUsage = Math.max(...memoryUsages);
 
-    const totalNodeExecutions = allMetrics.reduce((sum, m) => sum + m.nodeExecutions, 0);
+    const totalNodeExecutions = allMetrics.reduce(
+      (sum, m) => sum + m.nodeExecutions,
+      0
+    );
 
     // Calculate determinism score (same seed should produce same output)
     const seedGroups = new Map<number, GraphExecutionMetrics[]>();
@@ -348,12 +395,14 @@ class GraphExecutionBenchmarker {
     });
 
     const determinismScore = deterministicSeeds / totalSeeds;
-    const throughput = allMetrics.length / (executionTimes.reduce((a, b) => a + b, 0) / 1000);
+    const throughput =
+      allMetrics.length / (executionTimes.reduce((a, b) => a + b, 0) / 1000);
 
     const uniqueOutputsPerSeed =
       seedGroups.size > 0
         ? Array.from(seedGroups.values()).reduce(
-            (sum, metrics) => sum + new Set(metrics.flatMap(m => m.uniqueOutputs)).size,
+            (sum, metrics) =>
+              sum + new Set(metrics.flatMap(m => m.uniqueOutputs)).size,
             0
           ) / seedGroups.size
         : 0;
@@ -377,8 +426,8 @@ class GraphExecutionBenchmarker {
         uniqueOutputsPerSeed,
         determinismScore,
         throughput,
-        passed,
-      },
+        passed
+      }
     };
   }
 
@@ -414,9 +463,16 @@ class GraphExecutionBenchmarker {
     }
 
     // Performance summary across all benchmarks
-    const totalThroughput = results.reduce((sum, r) => sum + r.summary.throughput, 0);
-    const avgDeterminism = results.reduce((sum, r) => sum + r.summary.determinismScore, 0) / results.length;
-    const maxMemoryAcrossAll = Math.max(...results.map(r => r.summary.maxMemoryUsage));
+    const totalThroughput = results.reduce(
+      (sum, r) => sum + r.summary.throughput,
+      0
+    );
+    const avgDeterminism =
+      results.reduce((sum, r) => sum + r.summary.determinismScore, 0) /
+      results.length;
+    const maxMemoryAcrossAll = Math.max(
+      ...results.map(r => r.summary.maxMemoryUsage)
+    );
 
     report += 'Overall Performance Summary:\\n';
     report += `   Total Throughput: ${totalThroughput.toFixed(1)} exec/sec\\n`;
@@ -446,17 +502,23 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
       expectedPerformance: {
         maxExecutionTime: 50, // 50ms
         maxMemoryUsage: 20, // 20MB
-        minThroughput: 100, // 100 exec/sec
-      },
+        minThroughput: 100 // 100 exec/sec
+      }
     };
 
     const result = await benchmarker.runMultiSeedBenchmark(config);
 
     expect(result.summary.passed).toBe(true);
     expect(result.summary.determinismScore).toBeGreaterThan(0.95);
-    expect(result.summary.averageExecutionTime).toBeLessThan(config.expectedPerformance.maxExecutionTime);
-    expect(result.summary.maxMemoryUsage).toBeLessThan(config.expectedPerformance.maxMemoryUsage);
-    expect(result.summary.throughput).toBeGreaterThan(config.expectedPerformance.minThroughput);
+    expect(result.summary.averageExecutionTime).toBeLessThan(
+      config.expectedPerformance.maxExecutionTime
+    );
+    expect(result.summary.maxMemoryUsage).toBeLessThan(
+      config.expectedPerformance.maxMemoryUsage
+    );
+    expect(result.summary.throughput).toBeGreaterThan(
+      config.expectedPerformance.minThroughput
+    );
 
     console.log(
       `Linear graph: ${result.summary.throughput.toFixed(1)} exec/sec, ${(result.summary.determinismScore * 100).toFixed(1)}% deterministic`
@@ -472,8 +534,8 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
       expectedPerformance: {
         maxExecutionTime: 100, // 100ms (more complex)
         maxMemoryUsage: 30, // 30MB
-        minThroughput: 50, // 50 exec/sec
-      },
+        minThroughput: 50 // 50 exec/sec
+      }
     };
 
     const result = await benchmarker.runMultiSeedBenchmark(config);
@@ -495,8 +557,8 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
       expectedPerformance: {
         maxExecutionTime: 30, // 30ms (fewer nodes but more complexity)
         maxMemoryUsage: 15, // 15MB
-        minThroughput: 200, // 200 exec/sec
-      },
+        minThroughput: 200 // 200 exec/sec
+      }
     };
 
     const result = await benchmarker.runMultiSeedBenchmark(config);
@@ -521,8 +583,8 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
       expectedPerformance: {
         maxExecutionTime: 50,
         maxMemoryUsage: 25,
-        minThroughput: 100,
-      },
+        minThroughput: 100
+      }
     };
 
     const result = await benchmarker.runMultiSeedBenchmark(config);
@@ -540,7 +602,9 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
     const uniqueOutputs = new Set(seedOutputs.values()).size;
     expect(uniqueOutputs).toBeGreaterThan(1); // Different seeds should produce different outputs
 
-    console.log(`Seed variation: ${uniqueOutputs} unique outputs from ${seeds.length} seeds`);
+    console.log(
+      `Seed variation: ${uniqueOutputs} unique outputs from ${seeds.length} seeds`
+    );
   }, 45000);
 
   test('Performance scaling with graph size', async () => {
@@ -555,8 +619,8 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
         expectedPerformance: {
           maxExecutionTime: nodeCount * 5, // Scale with node count
           maxMemoryUsage: nodeCount * 2, // Scale with node count
-          minThroughput: Math.max(50, 500 / nodeCount), // Inverse scale
-        },
+          minThroughput: Math.max(50, 500 / nodeCount) // Inverse scale
+        }
       };
 
       const result = await benchmarker.runMultiSeedBenchmark(config);
@@ -566,7 +630,7 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
         nodeCount,
         executionTime: result.summary.averageExecutionTime,
         memoryUsage: result.summary.averageMemoryUsage,
-        throughput: result.summary.throughput,
+        throughput: result.summary.throughput
       });
     }
 
@@ -574,13 +638,16 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
     const firstResult = results[0];
     const lastResult = results[results.length - 1];
 
-    const executionTimeGrowth = lastResult.executionTime / firstResult.executionTime;
+    const executionTimeGrowth =
+      lastResult.executionTime / firstResult.executionTime;
     const nodeCountGrowth = lastResult.nodeCount / firstResult.nodeCount;
 
     // Execution time growth should be roughly linear with node count
     expect(executionTimeGrowth / nodeCountGrowth).toBeLessThan(2.0);
 
-    console.log(`Scaling analysis: ${executionTimeGrowth.toFixed(2)}x time growth for ${nodeCountGrowth}x nodes`);
+    console.log(
+      `Scaling analysis: ${executionTimeGrowth.toFixed(2)}x time growth for ${nodeCountGrowth}x nodes`
+    );
   }, 60000);
 
   test('Full benchmark suite', async () => {
@@ -590,22 +657,34 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
         graph: benchmarker.createLinearGraph(10),
         seeds: [12345, 67890, 11111],
         iterations: 5,
-        expectedPerformance: { maxExecutionTime: 25, maxMemoryUsage: 10, minThroughput: 200 },
+        expectedPerformance: {
+          maxExecutionTime: 25,
+          maxMemoryUsage: 10,
+          minThroughput: 200
+        }
       },
       {
         name: 'Quick Branching Test',
         graph: benchmarker.createBranchingGraph(2, 2),
         seeds: [12345, 67890],
         iterations: 5,
-        expectedPerformance: { maxExecutionTime: 50, maxMemoryUsage: 15, minThroughput: 100 },
+        expectedPerformance: {
+          maxExecutionTime: 50,
+          maxMemoryUsage: 15,
+          minThroughput: 100
+        }
       },
       {
         name: 'Quick Complex Test',
         graph: benchmarker.createComplexGraph(),
         seeds: [12345, 67890, 11111],
         iterations: 8,
-        expectedPerformance: { maxExecutionTime: 20, maxMemoryUsage: 10, minThroughput: 300 },
-      },
+        expectedPerformance: {
+          maxExecutionTime: 20,
+          maxMemoryUsage: 10,
+          minThroughput: 300
+        }
+      }
     ];
 
     const results = [];
@@ -631,8 +710,8 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
         averageExecutionTime: r.summary.averageExecutionTime,
         maxMemoryUsage: r.summary.maxMemoryUsage,
         throughput: r.summary.throughput,
-        determinismScore: r.summary.determinismScore,
-      })),
+        determinismScore: r.summary.determinismScore
+      }))
     };
 
     expect(metricsData.overallPassed).toBe(true);
@@ -640,4 +719,8 @@ describe('Graph Execution Benchmarks with Multiple Seeds', () => {
   }, 90000);
 });
 
-export { GraphExecutionBenchmarker, GraphExecutionMetrics, BenchmarkConfiguration };
+export {
+  GraphExecutionBenchmarker,
+  GraphExecutionMetrics,
+  BenchmarkConfiguration
+};

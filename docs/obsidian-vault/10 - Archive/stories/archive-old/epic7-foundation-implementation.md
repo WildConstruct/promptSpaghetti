@@ -140,7 +140,7 @@ class MyAdvancedNode extends AdvancedRuntimeNode<string> {
     super(id, {
       deterministic: true,
       cacheable: true,
-      stateful: false,
+      stateful: false
     });
   }
 
@@ -154,11 +154,18 @@ class MyAdvancedNode extends AdvancedRuntimeNode<string> {
 
   validate(): ValidationResult {
     const errors = ValidationHelpers.validateRequired(this.value, 'value');
-    return errors.length > 0 ? ValidationHelpers.createInvalidResult(errors) : ValidationHelpers.createValidResult();
+    return errors.length > 0
+      ? ValidationHelpers.createInvalidResult(errors)
+      : ValidationHelpers.createValidResult();
   }
 
   serialize(): AdvancedNodeData {
-    return SerializationHelpers.createAdvancedNodeData(this.id, 'MyAdvanced', this.config, { value: this.value });
+    return SerializationHelpers.createAdvancedNodeData(
+      this.id,
+      'MyAdvanced',
+      this.config,
+      { value: this.value }
+    );
   }
 }
 ```
@@ -174,7 +181,7 @@ class CounterNode extends AdvancedRuntimeNode<number> {
     super(id, {
       deterministic: true,
       cacheable: false,
-      stateful: true,
+      stateful: true
     });
   }
 
@@ -194,7 +201,11 @@ class CounterNode extends AdvancedRuntimeNode<number> {
 
 ```typescript
 // Advanced nodes export from packages/core/runtime/index.ts
-import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedExecutionUtils } from '@promptscape/core/runtime';
+import {
+  AdvancedRuntimeNode,
+  AdvancedExecutionContext,
+  AdvancedExecutionUtils
+} from '@promptscape/core/runtime';
 ```
 
 ### Engine Integration
@@ -203,7 +214,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedExecutionUtils }
 // Enhanced context creation in server/src/engine.ts
 const ctx: AdvancedExecutionContext = AdvancedExecutionUtils.enhanceContext({
   variables: {},
-  seed: graph.seed ?? Date.now(),
+  seed: graph.seed ?? Date.now()
 });
 ```
 

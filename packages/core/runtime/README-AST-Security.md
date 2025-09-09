@@ -75,7 +75,7 @@ const customFilter = new ASTNodeWhitelistFilter({
   maxDepth: 15,
   maxNodes: 50,
   additionalSafeTypes: ['CustomNodeType'],
-  blockedSafeTypes: ['CallExpression'],
+  blockedSafeTypes: ['CallExpression']
 });
 ```
 

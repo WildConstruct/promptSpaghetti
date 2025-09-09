@@ -8,11 +8,14 @@ import { useAssetBrowserStore } from '../stores/assetBrowserStore';
 import type { AssetBrowserProps } from '../index';
 
 export function AssetBrowser({ onInsert }: AssetBrowserProps) {
-  const selectedId = useAssetBrowserStore((s) => s.selectedPresetId);
-  const open = useAssetBrowserStore((s) => s.detailsOpen);
+  const selectedId = useAssetBrowserStore(s => s.selectedPresetId);
+  const open = useAssetBrowserStore(s => s.detailsOpen);
   return (
     <KeyboardNavigatorProvider>
-      <div className="asset-browser" style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }}>
+      <div
+        className="asset-browser"
+        style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }}
+      >
         <Sidebar />
         <div>
           <PresetGrid onInsert={onInsert} />

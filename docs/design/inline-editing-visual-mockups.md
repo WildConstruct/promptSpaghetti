@@ -11,11 +11,13 @@ Inline editing in Prompt Spaghetti follows the Teenage Engineering principle of 
 ### 1. Node States
 
 #### Idle State
+
 ```
 ┌─────────────────┐
 │ medieval knight │  ← Clean, minimal border
 └─────────────────┘  ← Subtle shadow (2px blur)
 ```
+
 - **Border**: 1px solid #E5E5E5
 - **Background**: #FFFFFF
 - **Text**: #1A1A1A (16px, Inter Medium)
@@ -23,24 +25,28 @@ Inline editing in Prompt Spaghetti follows the Teenage Engineering principle of 
 - **Corners**: 8px radius
 
 #### Hover State
+
 ```
 ┌─────────────────┐
 │ medieval knight │  ← Border transitions to primary
 └─────────────────┘  ← Shadow deepens slightly
     ↑ cursor: text
 ```
+
 - **Border**: 1px solid #4F46E5 (200ms ease)
 - **Shadow**: 0 2px 4px rgba(0,0,0,0.08)
 - **Cursor**: Changes to text cursor
 - **Transition**: All properties 200ms cubic-bezier(0.4, 0, 0.2, 1)
 
 #### Edit State
+
 ```
 ┌─────────────────────┐
 │ medieval knight│    │  ← Node expands, cursor visible
 └─────────────────────┘  ← Glow effect + elevated shadow
          ↑ blinking cursor
 ```
+
 - **Border**: 2px solid #4F46E5
 - **Shadow**: 0 0 0 3px rgba(79, 70, 229, 0.1), 0 4px 8px rgba(0,0,0,0.1)
 - **Scale**: 1.02 (subtle growth)
@@ -50,6 +56,7 @@ Inline editing in Prompt Spaghetti follows the Teenage Engineering principle of 
 ### 2. Text Node Editing
 
 #### Single-Line Text
+
 ```
 Before Click:
 ┌──────────────┐
@@ -63,6 +70,7 @@ During Edit:
 ```
 
 #### Multi-Line Text (Auto-Expand)
+
 ```
 ┌─────────────────────────┐
 │ A weary merchant        │
@@ -73,6 +81,7 @@ During Edit:
 ### 3. Weighted Choice Node
 
 #### Display Mode
+
 ```
 ┌─────────────────────────┐
 │ ▼ Character Type        │  ← Collapsed by default
@@ -84,6 +93,7 @@ During Edit:
 ```
 
 #### Edit Mode
+
 ```
 ┌─────────────────────────────┐
 │ ▼ Character Type            │
@@ -96,6 +106,7 @@ During Edit:
 ```
 
 **Slider Design**:
+
 - **Track**: 40px wide, 4px tall, #E5E5E5
 - **Fill**: #4F46E5
 - **Handle**: 12px circle, white with primary border
@@ -105,6 +116,7 @@ During Edit:
 ### 4. Variable Node
 
 #### Display Mode
+
 ```
 ┌─────────────────┐
 │ $role = knight  │  ← Variable syntax highlighted
@@ -112,6 +124,7 @@ During Edit:
 ```
 
 #### Edit Mode
+
 ```
 ┌───────────────────────┐
 │ $role = knight       │|  ← Both parts editable
@@ -122,16 +135,19 @@ During Edit:
 ### 5. Connection Points
 
 #### Standard Handle
+
 ```
      ○  ← 8px circle, #E5E5E5 border
 ```
 
 #### Hover/Active Handle
+
 ```
      ◉  ← Filled with primary color
 ```
 
 #### During Connection Drag
+
 ```
      ◉ ～～～～ ○  ← Animated dash line
 ```
@@ -139,6 +155,7 @@ During Edit:
 ### 6. Visual Feedback
 
 #### Successful Edit
+
 ```
 ┌─────────────────┐
 │ ✓ saved         │  ← Green flash, fades after 1s
@@ -146,6 +163,7 @@ During Edit:
 ```
 
 #### Validation Error
+
 ```
 ┌─────────────────┐
 │ merchant xyz    │  ← Red border, shake animation
@@ -154,6 +172,7 @@ During Edit:
 ```
 
 #### Live Preview Update Indicator
+
 ```
 ┌─────────────────┐
 │ medieval knight │ ← Pulse animation on connected nodes
@@ -166,6 +185,7 @@ During Edit:
 ## Interaction Patterns
 
 ### Click to Edit Flow
+
 ```
 1. Hover → Cursor changes to text
 2. Click → Smooth scale to 1.02, border highlights
@@ -175,6 +195,7 @@ During Edit:
 ```
 
 ### Keyboard Navigation Visual Cues
+
 ```
 ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
 │ Node A          │  │ Node B          │  │ Node C          │
@@ -184,9 +205,10 @@ During Edit:
 ```
 
 ### Drag & Drop from Asset Library
+
 ```
 [Asset Library]          [Canvas]
-┌──────────┐            
+┌──────────┐
 │ Merchant │ ～～～→    ┌─────────────────┐
 │ Preset   │            │ merchant│       │  ← Drops in edit mode
 └──────────┘            └─────────────────┘
@@ -195,6 +217,7 @@ During Edit:
 ## Color Palette
 
 ### Primary Colors
+
 - **Primary**: #4F46E5 (Indigo 600)
 - **Primary Light**: rgba(79, 70, 229, 0.1)
 - **Text**: #1A1A1A
@@ -203,12 +226,14 @@ During Edit:
 - **Background Hover**: #FAFAFA
 
 ### Semantic Colors
+
 - **Success**: #10B981 (Emerald 500)
 - **Error**: #EF4444 (Red 500)
 - **Warning**: #F59E0B (Amber 500)
 - **Info**: #3B82F6 (Blue 500)
 
 ### Shadows
+
 - **Idle**: 0 1px 2px rgba(0,0,0,0.04)
 - **Hover**: 0 2px 4px rgba(0,0,0,0.08)
 - **Active**: 0 4px 8px rgba(0,0,0,0.1)
@@ -217,12 +242,14 @@ During Edit:
 ## Typography
 
 ### Node Text
+
 - **Font**: Inter
 - **Size**: 16px (default), 14px (secondary)
 - **Weight**: 500 (medium) for primary, 400 (regular) for secondary
 - **Line Height**: 1.5
 
 ### Input Fields
+
 - **Font**: Inter
 - **Size**: 16px (prevents zoom on mobile)
 - **Weight**: 400 (regular)
@@ -231,11 +258,13 @@ During Edit:
 ## Animations
 
 ### Timing Functions
+
 - **Ease Out**: cubic-bezier(0.4, 0, 0.2, 1) - For entrances
 - **Ease In Out**: cubic-bezier(0.4, 0, 0.6, 1) - For state changes
 - **Spring**: cubic-bezier(0.34, 1.56, 0.64, 1) - For delightful feedback
 
 ### Durations
+
 - **Instant**: 0ms - Direct manipulation
 - **Fast**: 150ms - Hover states
 - **Normal**: 200ms - Mode transitions
@@ -244,11 +273,13 @@ During Edit:
 ## Responsive Considerations
 
 ### Touch Targets
+
 - Minimum 44x44px tap targets
 - Extra padding on mobile for handles
 - Long-press to edit on touch devices
 
 ### Mobile Editing
+
 ```
 ┌─────────────────────────┐
 │                         │
@@ -256,6 +287,7 @@ During Edit:
 │                         │
 └─────────────────────────┘
 ```
+
 - Nodes expand more on mobile
 - Virtual keyboard doesn't obscure
 - Pinch to zoom supported
@@ -263,6 +295,7 @@ During Edit:
 ## Accessibility
 
 ### Focus Indicators
+
 ```
 ┌═════════════════┐
 ║ medieval knight ║  ← 2px solid outline
@@ -270,11 +303,13 @@ During Edit:
 ```
 
 ### Screen Reader Announcements
+
 - "Text node, medieval knight, press Enter to edit"
 - "Editing medieval knight, type new value"
 - "Edit saved, medieval knight"
 
 ### High Contrast Mode
+
 - Borders increase to 2px
 - Colors adjust for WCAG AAA
 - Focus indicators more prominent
@@ -297,4 +332,4 @@ During Edit:
 
 ---
 
-*Visual design specification by Sarah (PO) for design team reference*
+_Visual design specification by Sarah (PO) for design team reference_

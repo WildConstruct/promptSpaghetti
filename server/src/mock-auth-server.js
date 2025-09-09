@@ -22,8 +22,8 @@ const users = [
     firstName: 'Test',
     lastName: 'User',
     isEmailVerified: true,
-    roles: ['user'],
-  },
+    roles: ['user']
+  }
 ];
 
 // Mock JWT token (not real JWT, just for testing)
@@ -32,7 +32,7 @@ const createMockToken = user => {
     JSON.stringify({
       userId: user.id,
       email: user.email,
-      exp: Date.now() + 15 * 60 * 1000, // 15 minutes
+      exp: Date.now() + 15 * 60 * 1000 // 15 minutes
     })
   ).toString('base64');
 };
@@ -48,7 +48,7 @@ app.post('/api/auth/login', (req, res) => {
 
   if (!user) {
     return res.status(401).json({
-      message: 'Invalid email or password',
+      message: 'Invalid email or password'
     });
   }
 
@@ -63,11 +63,11 @@ app.post('/api/auth/login', (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       isEmailVerified: user.isEmailVerified,
-      roles: user.roles,
+      roles: user.roles
     },
     accessToken,
     refreshToken,
-    expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+    expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
   });
 });
 
@@ -80,7 +80,7 @@ app.post('/api/auth/register', (req, res) => {
   // Check if user exists
   if (users.find(u => u.email === email)) {
     return res.status(400).json({
-      message: 'User with this email already exists',
+      message: 'User with this email already exists'
     });
   }
 
@@ -92,20 +92,21 @@ app.post('/api/auth/register', (req, res) => {
     firstName,
     lastName,
     isEmailVerified: false,
-    roles: ['user'],
+    roles: ['user']
   };
 
   users.push(newUser);
 
   res.json({
-    message: 'Registration successful. Please check your email for verification.',
+    message:
+      'Registration successful. Please check your email for verification.',
     user: {
       id: newUser.id,
       email: newUser.email,
       firstName: newUser.firstName,
       lastName: newUser.lastName,
-      isEmailVerified: newUser.isEmailVerified,
-    },
+      isEmailVerified: newUser.isEmailVerified
+    }
   });
 });
 
@@ -132,7 +133,7 @@ app.get('/api/auth/me', (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       isEmailVerified: user.isEmailVerified,
-      roles: user.roles,
+      roles: user.roles
     });
   } catch (error) {
     res.status(401).json({ message: 'Invalid token' });
@@ -153,7 +154,7 @@ app.post('/api/auth/refresh', (req, res) => {
   res.json({
     accessToken: createMockToken(mockUser),
     refreshToken: refreshToken, // Return same refresh token
-    expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+    expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
   });
 });
 
@@ -168,7 +169,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
     message: 'Mock Auth Server Running',
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 });
 

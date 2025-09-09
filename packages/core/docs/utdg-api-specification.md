@@ -350,7 +350,11 @@ ws://api.wildconstruct.com/utdg/v1/ws?token={auth_token}
 
 ```typescript
 interface WebSocketEvent {
-  type: 'constraint_violation' | 'validation_complete' | 'export_ready' | 'system_status';
+  type:
+    | 'constraint_violation'
+    | 'validation_complete'
+    | 'export_ready'
+    | 'system_status';
   data: any;
   timestamp: string;
   sessionId: string;

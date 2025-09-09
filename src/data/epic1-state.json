@@ -18,11 +18,7 @@
       "actualHours": 3.5,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T05:05:06.299Z",
       "blockedBy": [],
@@ -48,11 +44,7 @@
       "actualHours": 3.5,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T05:10:33.012Z",
       "blockedBy": [],
@@ -78,11 +70,7 @@
       "actualHours": 4,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T05:18:28.203Z",
       "blockedBy": [],
@@ -108,11 +96,7 @@
       "actualHours": null,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T05:45:32.593Z",
       "blockedBy": [],
@@ -138,11 +122,7 @@
       "actualHours": null,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T15:02:57.596Z",
       "blockedBy": [],
@@ -168,11 +148,7 @@
       "actualHours": 2.5,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T15:14:57.152Z",
       "blockedBy": [],
@@ -198,11 +174,7 @@
       "actualHours": 2,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T15:30:00.000Z",
       "blockedBy": [],
@@ -228,11 +200,7 @@
       "actualHours": 3,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T16:00:00.000Z",
       "blockedBy": [],
@@ -258,11 +226,7 @@
       "actualHours": 2,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T15:51:29.837Z",
       "blockedBy": [],
@@ -288,11 +252,7 @@
       "actualHours": 2,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T16:03:38.436Z",
       "blockedBy": [],
@@ -318,11 +278,7 @@
       "actualHours": 2,
       "assignedTo": "dev-claude",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T18:00:00.000Z",
       "blockedBy": [],
@@ -348,11 +304,7 @@
       "actualHours": 2,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T20:30:00.000Z",
       "blockedBy": [],
@@ -378,11 +330,7 @@
       "actualHours": 3,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T22:00:00.000Z",
       "blockedBy": [],
@@ -408,11 +356,7 @@
       "actualHours": 1,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T23:30:00.000Z",
       "blockedBy": [],
@@ -438,11 +382,7 @@
       "actualHours": 1,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T23:30:00.000Z",
       "blockedBy": [],
@@ -468,11 +408,7 @@
       "actualHours": 2,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T23:00:00.000Z",
       "blockedBy": [],
@@ -498,11 +434,7 @@
       "actualHours": 2,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T00:00:00.000Z",
       "blockedBy": [],
@@ -528,11 +460,7 @@
       "actualHours": 2,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T01:00:00.000Z",
       "blockedBy": [],
@@ -558,11 +486,7 @@
       "actualHours": 3,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T03:30:00.000Z",
       "blockedBy": [],
@@ -588,11 +512,7 @@
       "actualHours": 5,
       "assignedTo": "dev-james",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T03:15:00.000Z",
       "blockedBy": [],
@@ -618,11 +538,7 @@
       "actualHours": 5.5,
       "assignedTo": "dev-james",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T04:00:00.000Z",
       "blockedBy": [],
@@ -648,11 +564,7 @@
       "actualHours": 6,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T19:17:53.506Z",
       "blockedBy": [],
@@ -678,11 +590,7 @@
       "actualHours": 0,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T04:15:00.000Z",
       "blockedBy": [],
@@ -708,11 +616,7 @@
       "actualHours": 0,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T04:15:00.000Z",
       "blockedBy": [],
@@ -738,11 +642,7 @@
       "actualHours": 3,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T19:29:02.803Z",
       "blockedBy": [],
@@ -768,11 +668,7 @@
       "actualHours": 2.5,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T19:40:27.875Z",
       "blockedBy": [],
@@ -798,11 +694,7 @@
       "actualHours": 3.5,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T19:51:56.826Z",
       "blockedBy": [],
@@ -828,11 +720,7 @@
       "actualHours": 3.5,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T08:30:00.000Z",
       "blockedBy": [],
@@ -858,11 +746,7 @@
       "actualHours": 3.5,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T20:15:24.441Z",
       "blockedBy": [],
@@ -888,11 +772,7 @@
       "actualHours": 5,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T09:30:00.000Z",
       "blockedBy": [],
@@ -918,11 +798,7 @@
       "actualHours": 3.5,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T10:00:00.000Z",
       "blockedBy": [],
@@ -948,11 +824,7 @@
       "actualHours": 3,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-02T11:00:00.000Z",
       "blockedBy": [],
@@ -978,11 +850,7 @@
       "actualHours": 2,
       "assignedTo": "james-dev",
       "epic": "Epic 1",
-      "tags": [
-        "epic1",
-        "mvp",
-        "inline-editing"
-      ],
+      "tags": ["epic1", "mvp", "inline-editing"],
       "createdAt": "2025-08-01T04:57:39.883Z",
       "updatedAt": "2025-08-01T12:30:00.000Z",
       "blockedBy": [],

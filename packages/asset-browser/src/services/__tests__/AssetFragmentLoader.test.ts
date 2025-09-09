@@ -3,7 +3,12 @@
  * Target Coverage: 90%+
  */
 
-import { loadAssetFragments, AssetFragmentManifest, FragmentCategory, FragmentEntry } from '../AssetFragmentLoader';
+import {
+  loadAssetFragments,
+  AssetFragmentManifest,
+  FragmentCategory,
+  FragmentEntry
+} from '../AssetFragmentLoader';
 
 // Mock fetch globally
 global.fetch = jest.fn();
@@ -15,7 +20,7 @@ describe('AssetFragmentLoader', () => {
     name: 'Test Asset Fragments',
     description: 'Test manifest for asset fragments',
     categories: {
-      'characters': {
+      characters: {
         name: 'Characters',
         description: 'Character fragments',
         icon: '👤',
@@ -44,7 +49,7 @@ describe('AssetFragmentLoader', () => {
           }
         ]
       },
-      'environments': {
+      environments: {
         name: 'Environments',
         description: 'Environment fragments',
         icon: '🌍',
@@ -91,12 +96,14 @@ describe('AssetFragmentLoader', () => {
       const result = await loadAssetFragments();
 
       expect(result).toEqual(mockManifest);
-      expect(global.fetch).toHaveBeenCalledWith('/assets/library/asset-fragments-manifest.json');
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/assets/library/asset-fragments-manifest.json'
+      );
     });
 
     it('should load manifest with custom baseUrl', async () => {
       const baseUrl = 'https://cdn.example.com';
-      
+
       (global.fetch as jest.Mock)
         .mockResolvedValueOnce({ ok: false }) // First path fails
         .mockResolvedValueOnce({
@@ -107,8 +114,12 @@ describe('AssetFragmentLoader', () => {
       const result = await loadAssetFragments(baseUrl);
 
       expect(result).toEqual(mockManifest);
-      expect(global.fetch).toHaveBeenCalledWith('/assets/library/asset-fragments-manifest.json');
-      expect(global.fetch).toHaveBeenCalledWith(`${baseUrl}/assets/library/asset-fragments-manifest.json`);
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/assets/library/asset-fragments-manifest.json'
+      );
+      expect(global.fetch).toHaveBeenCalledWith(
+        `${baseUrl}/assets/library/asset-fragments-manifest.json`
+      );
     });
 
     it('should try fallback paths when primary fails', async () => {
@@ -124,7 +135,9 @@ describe('AssetFragmentLoader', () => {
 
       expect(result).toEqual(mockManifest);
       expect(global.fetch).toHaveBeenCalledTimes(3);
-      expect(global.fetch).toHaveBeenLastCalledWith('/asset-fragments-manifest.json');
+      expect(global.fetch).toHaveBeenLastCalledWith(
+        '/asset-fragments-manifest.json'
+      );
     });
 
     it('should return null when all paths fail', async () => {
@@ -141,7 +154,7 @@ describe('AssetFragmentLoader', () => {
 
     it('should handle network errors gracefully', async () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
-      
+
       (global.fetch as jest.Mock)
         .mockRejectedValueOnce(new Error('Network error'))
         .mockRejectedValueOnce(new Error('Timeout'))
@@ -161,7 +174,7 @@ describe('AssetFragmentLoader', () => {
 
     it('should handle invalid JSON gracefully', async () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
-      
+
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         ok: true,
         json: async () => {
@@ -227,7 +240,7 @@ describe('AssetFragmentLoader', () => {
 
       expect(result).not.toBeNull();
       const heroFragment = result!.categories.characters.fragments[0];
-      
+
       expect(heroFragment).toMatchObject({
         file: 'hero.psg',
         id: 'hero-001',

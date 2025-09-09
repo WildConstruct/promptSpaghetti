@@ -24,10 +24,15 @@ try {
   delete state.meta.phase;
 
   // Convert tasks object to array with IDs
-  const tasks = Object.entries(state.tasks || {}).map(([id, task]) => ({ ...task, id }));
+  const tasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
+    ...task,
+    id
+  }));
 
   // Find unassigned tasks
-  const unassignedTasks = tasks.filter(task => task.state === 'UNASSIGNED').slice(0, taskCount);
+  const unassignedTasks = tasks
+    .filter(task => task.state === 'UNASSIGNED')
+    .slice(0, taskCount);
 
   if (unassignedTasks.length === 0) {
     console.log('No unassigned tasks available.');
@@ -47,7 +52,9 @@ try {
     assignedTaskIds.push(task.id);
 
     console.log(`✓ ${task.id}: ${task.title}`);
-    console.log(`  Story: ${task.story_id}, WIP Class: ${task.wip_class}, Est: ${task.est} hours`);
+    console.log(
+      `  Story: ${task.story_id}, WIP Class: ${task.wip_class}, Est: ${task.est} hours`
+    );
     console.log('  Status: UNASSIGNED → IN_PROGRESS');
     console.log();
   });
@@ -58,8 +65,12 @@ try {
   }
 
   // Add new task IDs to developer's assignment list
-  const currentAssignments = state.assignments[devId] ? state.assignments[devId].split(',') : [];
-  const newAssignments = [...new Set([...currentAssignments, ...assignedTaskIds])];
+  const currentAssignments = state.assignments[devId]
+    ? state.assignments[devId].split(',')
+    : [];
+  const newAssignments = [
+    ...new Set([...currentAssignments, ...assignedTaskIds])
+  ];
   state.assignments[devId] = newAssignments.join(',');
 
   // Update metadata
@@ -68,11 +79,20 @@ try {
   // Write back to file
   fs.writeFileSync(statePath, JSON.stringify(state, null, 2));
 
-  console.log(`Successfully assigned ${unassignedTasks.length} task(s) to ${devId}`);
-  console.log('\nCurrent assignments for', devId + ':', newAssignments.length, 'total tasks');
+  console.log(
+    `Successfully assigned ${unassignedTasks.length} task(s) to ${devId}`
+  );
+  console.log(
+    '\nCurrent assignments for',
+    devId + ':',
+    newAssignments.length,
+    'total tasks'
+  );
 
   // Show summary of developer's current tasks
-  const devTasks = tasks.filter(t => t.assignee === devId && t.state === 'IN_PROGRESS');
+  const devTasks = tasks.filter(
+    t => t.assignee === devId && t.state === 'IN_PROGRESS'
+  );
   if (devTasks.length > 0) {
     console.log('\nYour IN_PROGRESS tasks:');
     devTasks.forEach(task => {

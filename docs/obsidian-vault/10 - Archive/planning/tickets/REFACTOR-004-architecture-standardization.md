@@ -83,7 +83,9 @@ export interface StatefulComponentProps extends BaseComponentProps {
 }
 
 // Eliminate 'any' types completely
-export type StrictEventHandler<T = void> = (event: MouseEvent | KeyboardEvent) => T;
+export type StrictEventHandler<T = void> = (
+  event: MouseEvent | KeyboardEvent
+) => T;
 ```
 
 ### State Management Standards

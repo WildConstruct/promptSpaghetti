@@ -1,7 +1,7 @@
 /**
  * Canvas Performance Optimization Utilities
  * Epic 8.1: Task 4 - Optimize canvas rendering for smooth 60fps interactions
- * 
+ *
  * Professional canvas optimization for large graph performance
  */
 import React from 'react';
@@ -39,7 +39,7 @@ export class CanvasOptimizer {
       animationFrameThrottle: 16,
       renderDebounce: 100,
       memoryCleanupInterval: 30000,
-      ...config,
+      ...config
     };
 
     this.metrics = {
@@ -48,7 +48,7 @@ export class CanvasOptimizer {
       nodeCount: 0,
       visibleNodes: 0,
       memoryUsage: 0,
-      lastUpdateTime: Date.now(),
+      lastUpdateTime: Date.now()
     };
 
     this.startFPSMonitoring();
@@ -62,7 +62,9 @@ export class CanvasOptimizer {
         const delta = now - this.lastFrameTime;
         this.frameDurations.push(delta);
         if (this.frameDurations.length > 60) this.frameDurations.shift();
-        const avg = this.frameDurations.reduce((a, b) => a + b, 0) / this.frameDurations.length;
+        const avg =
+          this.frameDurations.reduce((a, b) => a + b, 0) /
+          this.frameDurations.length;
         this.metrics.fps = Math.round(1000 / Math.max(avg, 1));
       }
       this.lastFrameTime = now;
@@ -89,10 +91,11 @@ export class CanvasOptimizer {
   }
 
   private updateMemoryMetrics(): void {
-    const perf: any = (typeof performance !== 'undefined') ? performance : null;
+    const perf: any = typeof performance !== 'undefined' ? performance : null;
     if (perf && perf.memory) {
       const used = perf.memory.usedJSHeapSize;
-      const total = perf.memory.totalJSHeapSize || perf.memory.jsHeapSizeLimit || used;
+      const total =
+        perf.memory.totalJSHeapSize || perf.memory.jsHeapSizeLimit || used;
       if (total > 0) {
         this.metrics.memoryUsage = Math.min(1, used / total);
       }
@@ -113,7 +116,10 @@ export class CanvasOptimizer {
     const visibleNodes = this.cullInvisibleNodes(nodes, viewport, canvasSize);
     this.metrics.visibleNodes = visibleNodes.length;
     if (visibleNodes.length > this.config.maxVisibleNodes) {
-      return this.prioritizeNodes(visibleNodes).slice(0, this.config.maxVisibleNodes);
+      return this.prioritizeNodes(visibleNodes).slice(
+        0,
+        this.config.maxVisibleNodes
+      );
     }
     return visibleNodes;
   }
@@ -129,19 +135,26 @@ export class CanvasOptimizer {
       left: -x / zoom - t * canvasSize.width,
       top: -y / zoom - t * canvasSize.height,
       right: (-x + canvasSize.width) / zoom + t * canvasSize.width,
-      bottom: (-y + canvasSize.height) / zoom + t * canvasSize.height,
+      bottom: (-y + canvasSize.height) / zoom + t * canvasSize.height
     };
-    return nodes.filter((node) => {
+    return nodes.filter(node => {
       const nx = (node as any).position?.x ?? 0;
       const ny = (node as any).position?.y ?? 0;
       const w = (node as any).width ?? 200;
       const h = (node as any).height ?? 100;
-      return nx + w >= bounds.left && nx <= bounds.right && ny + h >= bounds.top && ny <= bounds.bottom;
+      return (
+        nx + w >= bounds.left &&
+        nx <= bounds.right &&
+        ny + h >= bounds.top &&
+        ny <= bounds.bottom
+      );
     });
   }
 
   private prioritizeNodes(nodes: Node[]): Node[] {
-    return [...nodes].sort((a, b) => this.getNodeImportance(b) - this.getNodeImportance(a));
+    return [...nodes].sort(
+      (a, b) => this.getNodeImportance(b) - this.getNodeImportance(a)
+    );
   }
 
   private getNodeImportance(node: Node): number {
@@ -154,15 +167,25 @@ export class CanvasOptimizer {
     return score;
   }
 
-  optimizeEdges(edges: Edge[], visibleNodes: Node[], viewport: Viewport): Edge[] {
-    const visibleIds = new Set(visibleNodes.map((n) => n.id));
-    const filtered = edges.filter((e) => visibleIds.has(e.source) && visibleIds.has(e.target));
-    return viewport.zoom < 0.5 ? this.simplifyEdgesForZoom(filtered, viewport.zoom) : filtered;
+  optimizeEdges(
+    edges: Edge[],
+    visibleNodes: Node[],
+    viewport: Viewport
+  ): Edge[] {
+    const visibleIds = new Set(visibleNodes.map(n => n.id));
+    const filtered = edges.filter(
+      e => visibleIds.has(e.source) && visibleIds.has(e.target)
+    );
+    return viewport.zoom < 0.5
+      ? this.simplifyEdgesForZoom(filtered, viewport.zoom)
+      : filtered;
   }
 
   private simplifyEdgesForZoom(edges: Edge[], zoom: number): Edge[] {
     if (zoom < 0.3) {
-      return edges.filter((e) => (e as any).selected || (e as any).data?.important);
+      return edges.filter(
+        e => (e as any).selected || (e as any).data?.important
+      );
     }
     return edges;
   }
@@ -178,11 +201,14 @@ export class CanvasOptimizer {
       fitViewOnInit: nodeCount < 50,
       animateTransitions: nodeCount < 100 && zoom > 0.5,
       connectionLineType: zoom > 0.5 ? 'smoothstep' : 'straight',
-      quality: zoom > 0.8 ? 'high' : zoom > 0.4 ? 'medium' : 'low',
+      quality: zoom > 0.8 ? 'high' : zoom > 0.4 ? 'medium' : 'low'
     } as const;
   }
 
-  createThrottledRenderer<T extends (...args: any[]) => void>(fn: T, delay: number = this.config.renderDebounce): T {
+  createThrottledRenderer<T extends (...args: any[]) => void>(
+    fn: T,
+    delay: number = this.config.renderDebounce
+  ): T {
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     let lastArgs: Parameters<T> | null = null;
     const wrapper = ((...args: Parameters<T>) => {
@@ -257,10 +283,15 @@ export class CanvasOptimizer {
 // Hook to expose optimizer and live metrics
 export function useCanvasOptimization(config?: Partial<PerformanceConfig>) {
   const [optimizer] = React.useState(() => new CanvasOptimizer(config));
-  const [metrics, setMetrics] = React.useState<CanvasMetrics>(optimizer.getMetrics());
+  const [metrics, setMetrics] = React.useState<CanvasMetrics>(
+    optimizer.getMetrics()
+  );
 
   React.useEffect(() => {
-    const interval = setInterval(() => setMetrics(optimizer.getMetrics()), 1000);
+    const interval = setInterval(
+      () => setMetrics(optimizer.getMetrics()),
+      1000
+    );
     return () => {
       clearInterval(interval);
       optimizer.cleanup();
@@ -271,7 +302,7 @@ export function useCanvasOptimization(config?: Partial<PerformanceConfig>) {
     optimizer,
     metrics,
     isPerformanceGood: optimizer.isPerformanceGood(),
-    recommendations: optimizer.getPerformanceRecommendations(),
+    recommendations: optimizer.getPerformanceRecommendations()
   } as const;
 }
 
@@ -281,8 +312,13 @@ export interface PerformanceMonitorProps {
   visible?: boolean;
 }
 
-export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({ optimizer, visible = true }) => {
-  const [metrics, setMetrics] = React.useState<CanvasMetrics>(optimizer.getMetrics());
+export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
+  optimizer,
+  visible = true
+}) => {
+  const [metrics, setMetrics] = React.useState<CanvasMetrics>(
+    optimizer.getMetrics()
+  );
 
   React.useEffect(() => {
     if (!visible) return;
@@ -303,7 +339,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({ optimize
     fontFamily: 'monospace',
     fontSize: 12,
     zIndex: 10000,
-    backdropFilter: 'blur(4px)',
+    backdropFilter: 'blur(4px)'
   };
 
   return (

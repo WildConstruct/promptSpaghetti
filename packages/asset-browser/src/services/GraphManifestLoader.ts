@@ -9,8 +9,12 @@ export type GraphEntry = {
  * Loads the server graph manifest from /graphs/manifest.json.
  * Returns an array of GraphEntry. Consumers decide empty/error UI.
  */
-export async function loadServerGraphs(baseUrl: string = ''): Promise<GraphEntry[]> {
-  const url = baseUrl ? `${baseUrl.replace(/\/$/, '')}/graphs/manifest.json` : '/graphs/manifest.json';
+export async function loadServerGraphs(
+  baseUrl: string = ''
+): Promise<GraphEntry[]> {
+  const url = baseUrl
+    ? `${baseUrl.replace(/\/$/, '')}/graphs/manifest.json`
+    : '/graphs/manifest.json';
   const res = await fetch(url);
   if (!res.ok) {
     // Surface to caller so they can render an Error state with retry.
@@ -19,5 +23,7 @@ export async function loadServerGraphs(baseUrl: string = ''): Promise<GraphEntry
   const data = await res.json();
   if (!Array.isArray(data)) return [];
   // Minimal shape validation
-  return data.filter((e) => typeof e?.filename === 'string' && typeof e?.title === 'string');
+  return data.filter(
+    e => typeof e?.filename === 'string' && typeof e?.title === 'string'
+  );
 }

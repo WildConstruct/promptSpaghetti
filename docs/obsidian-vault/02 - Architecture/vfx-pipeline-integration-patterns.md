@@ -52,14 +52,17 @@ interface PipelineServices {
 
 // Service Integration Example
 class WildConstructService {
-  async generatePromptVariants(shotData: ShotMetadata, styleGuide: ProjectStyleGuide): Promise<VFXExportFormat[]> {
+  async generatePromptVariants(
+    shotData: ShotMetadata,
+    styleGuide: ProjectStyleGuide
+  ): Promise<VFXExportFormat[]> {
     const graph = await this.buildGraphFromShot(shotData);
     const exporter = WildConstructVFXExporter.getInstance();
 
     return Promise.all([
       exporter.exportGraph(graph, { seed: shotData.seed }),
       exporter.exportGraph(graph, { seed: shotData.seed + 1 }),
-      exporter.exportGraph(graph, { seed: shotData.seed + 2 }),
+      exporter.exportGraph(graph, { seed: shotData.seed + 2 })
     ]);
   }
 }
@@ -78,10 +81,14 @@ class WildConstructService {
 class PreVisualizationPipeline {
   async generatePreVisPrompts(scene: SceneData): Promise<PreVisPackage> {
     // 1. Generate prompt variations
-    const exportData = await this.wildConstruct.exportGraph(scene.graph, scene.executionData, {
-      quality: 'preview',
-      includeDebugInfo: false,
-    });
+    const exportData = await this.wildConstruct.exportGraph(
+      scene.graph,
+      scene.executionData,
+      {
+        quality: 'preview',
+        includeDebugInfo: false
+      }
+    );
 
     // 2. Create preview renders
     const previews = await this.renderPreViews(exportData);
@@ -93,17 +100,19 @@ class PreVisualizationPipeline {
       metadata: {
         scene: scene.id,
         variants: exportData.prompt.variants.length,
-        estimatedRenderTime: this.calculateRenderTime(exportData),
-      },
+        estimatedRenderTime: this.calculateRenderTime(exportData)
+      }
     };
   }
 
-  private async renderPreViews(exportData: VFXExportFormat): Promise<PreviewRender[]> {
+  private async renderPreViews(
+    exportData: VFXExportFormat
+  ): Promise<PreviewRender[]> {
     return exportData.prompt.variants.map(async variant => ({
       id: variant.id,
       prompt: variant.prompt,
       thumbnail: await this.generateThumbnail(variant),
-      metadata: variant.metadata,
+      metadata: variant.metadata
     }));
   }
 }
@@ -118,7 +127,9 @@ class PreVisualizationPipeline {
 ```typescript
 // Production Pipeline Pattern
 class ProductionPipeline {
-  async executeProductionRender(exportData: VFXExportFormat): Promise<ProductionRender> {
+  async executeProductionRender(
+    exportData: VFXExportFormat
+  ): Promise<ProductionRender> {
     // 1. Validate export quality
     const validation = this.validator.validateReproducibility(exportData);
     if (!validation.exactReproducible) {
@@ -133,7 +144,7 @@ class ProductionPipeline {
       scene: this.buildMayaScene(exportData),
       config: renderConfig,
       priority: 'high',
-      reproducibilityData: exportData.execution.randomization,
+      reproducibilityData: exportData.execution.randomization
     });
 
     // 4. Monitor and validate output
@@ -151,8 +162,8 @@ class ProductionPipeline {
       arnold: {
         samples: rendering.quality.samples,
         denoising: rendering.quality.denoising ? 'optix' : 'none',
-        adaptiveSampling: true,
-      },
+        adaptiveSampling: true
+      }
     };
   }
 }
@@ -195,18 +206,20 @@ class RealTimePipeline {
         // Convert Wild Construct lighting to Unreal's system
         directionalLight: {
           intensity: exportData.rendering.lighting.exposure * 10,
-          color: this.temperatureToRGB(exportData.rendering.lighting.temperature),
-        },
+          color: this.temperatureToRGB(
+            exportData.rendering.lighting.temperature
+          )
+        }
       },
       camera: {
         fov: exportData.rendering.camera.fov,
         location: exportData.rendering.camera.position,
-        rotation: exportData.rendering.camera.rotation,
+        rotation: exportData.rendering.camera.rotation
       },
       environment: {
         skybox: this.inferSkyboxFromPrompt(exportData.prompt.finalPrompt),
-        weather: exportData.rendering.lighting.weather,
-      },
+        weather: exportData.rendering.lighting.weather
+      }
     };
   }
 }
@@ -449,9 +462,13 @@ class BatchProcessor {
 
   private async processSingleShot(shot: ShotData): Promise<BatchResult> {
     try {
-      const exportData = await this.wildConstruct.exportGraph(shot.graph, shot.executionData, {
-        quality: 'production',
-      });
+      const exportData = await this.wildConstruct.exportGraph(
+        shot.graph,
+        shot.executionData,
+        {
+          quality: 'production'
+        }
+      );
 
       // Validate before processing
       const validation = this.validator.validateExport(exportData);
@@ -466,13 +483,13 @@ class BatchProcessor {
         shotId: shot.id,
         success: true,
         exportData,
-        renderJobId: renderJob.id,
+        renderJobId: renderJob.id
       };
     } catch (error) {
       return {
         shotId: shot.id,
         success: false,
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -507,8 +524,8 @@ class RealTimeStreamer {
       data: {
         metadata: exportData.metadata,
         rendering: exportData.rendering,
-        reproducibility: exportData.execution.randomization,
-      },
+        reproducibility: exportData.execution.randomization
+      }
     };
 
     this.websocket.send(JSON.stringify(streamData));
@@ -519,7 +536,7 @@ class RealTimeStreamer {
       type: 'PARAMETER_UPDATE',
       parameter,
       value,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
 
     this.websocket.send(JSON.stringify(updateData));
@@ -600,14 +617,18 @@ class RenderFarmOrchestrator {
   private farmAPI: RenderFarmAPI;
   private statusMonitor: StatusMonitor;
 
-  async submitProductionBatch(exports: VFXExportFormat[]): Promise<RenderJobResult[]> {
+  async submitProductionBatch(
+    exports: VFXExportFormat[]
+  ): Promise<RenderJobResult[]> {
     const jobs: RenderJob[] = [];
 
     // Phase 1: Validation and Preparation
     for (const exportData of exports) {
       const validation = await this.validateForProduction(exportData);
       if (!validation.approved) {
-        throw new Error(`Export ${exportData.metadata.exportId} failed validation: ${validation.issues}`);
+        throw new Error(
+          `Export ${exportData.metadata.exportId} failed validation: ${validation.issues}`
+        );
       }
 
       jobs.push(this.createRenderJob(exportData));
@@ -623,7 +644,7 @@ class RenderFarmOrchestrator {
       jobResults.push({
         exportId: job.exportId,
         farmJobId: farmJob.id,
-        estimatedCompletion: farmJob.estimatedCompletion,
+        estimatedCompletion: farmJob.estimatedCompletion
       });
 
       // Setup monitoring
@@ -643,15 +664,15 @@ class RenderFarmOrchestrator {
         resolution: exportData.rendering.resolution,
         quality: exportData.rendering.quality,
         engine: this.selectRenderEngine(exportData),
-        frames: this.calculateFrameRange(exportData),
+        frames: this.calculateFrameRange(exportData)
       },
       reproducibilityData: exportData.execution.randomization,
       dependencies: this.extractDependencies(exportData),
       metadata: {
         project: exportData.metadata.project,
         scene: exportData.metadata.project.scene,
-        shot: exportData.metadata.project.shot,
-      },
+        shot: exportData.metadata.project.shot
+      }
     };
   }
 
@@ -689,7 +710,7 @@ class QualityAssurancePipeline {
       timestamp: new Date().toISOString(),
       validationResults: [],
       overallScore: 0,
-      recommendations: [],
+      recommendations: []
     };
 
     // Run all validators
@@ -702,7 +723,9 @@ class QualityAssurancePipeline {
     report.overallScore = this.calculateQualityScore(report.validationResults);
 
     // Generate recommendations
-    report.recommendations = this.generateRecommendations(report.validationResults);
+    report.recommendations = this.generateRecommendations(
+      report.validationResults
+    );
 
     // Store report
     this.reports.push(report);
@@ -716,7 +739,7 @@ class QualityAssurancePipeline {
       new PerformanceValidator(),
       new CompatibilityValidator(),
       new DataIntegrityValidator(),
-      new SecurityValidator(),
+      new SecurityValidator()
     ];
   }
 
@@ -726,7 +749,7 @@ class QualityAssurancePipeline {
       performance: 0.2,
       compatibility: 0.2,
       dataIntegrity: 0.2,
-      security: 0.1,
+      security: 0.1
     };
 
     let weightedScore = 0;
@@ -757,7 +780,10 @@ class PerformanceValidator implements Validator {
     }
 
     // Check memory usage
-    if (performance.memoryUsage && performance.memoryUsage > 100 * 1024 * 1024) {
+    if (
+      performance.memoryUsage &&
+      performance.memoryUsage > 100 * 1024 * 1024
+    ) {
       // 100MB
       issues.push('High memory usage detected');
       score -= 15;
@@ -774,7 +800,7 @@ class PerformanceValidator implements Validator {
       category: 'performance',
       score: Math.max(score, 0),
       issues,
-      recommendations: this.generatePerformanceRecommendations(issues),
+      recommendations: this.generatePerformanceRecommendations(issues)
     };
   }
 
@@ -782,7 +808,9 @@ class PerformanceValidator implements Validator {
     const recommendations: string[] = [];
 
     if (issues.some(issue => issue.includes('execution time'))) {
-      recommendations.push('Consider simplifying graph structure or optimizing node configurations');
+      recommendations.push(
+        'Consider simplifying graph structure or optimizing node configurations'
+      );
     }
 
     if (issues.some(issue => issue.includes('memory usage'))) {
@@ -848,8 +876,14 @@ class VFXExportCache {
   }
 
   generateCacheKey(graph: any, options: any): string {
-    const graphHash = crypto.createHash('md5').update(JSON.stringify(graph)).digest('hex');
-    const optionsHash = crypto.createHash('md5').update(JSON.stringify(options)).digest('hex');
+    const graphHash = crypto
+      .createHash('md5')
+      .update(JSON.stringify(graph))
+      .digest('hex');
+    const optionsHash = crypto
+      .createHash('md5')
+      .update(JSON.stringify(options))
+      .digest('hex');
     return `vfx-export:${graphHash}:${optionsHash}`;
   }
 }
@@ -868,7 +902,9 @@ class ParallelExportProcessor {
     this.loadBalancer = new LoadBalancer();
   }
 
-  async processMultipleExports(exports: Array<{ graph: any; options: any }>): Promise<VFXExportFormat[]> {
+  async processMultipleExports(
+    exports: Array<{ graph: any; options: any }>
+  ): Promise<VFXExportFormat[]> {
     // Distribute work across available workers
     const chunks = this.chunkArray(exports, this.workerPool.size);
 
@@ -903,12 +939,18 @@ class ExportWorker {
     this.exporter = WildConstructVFXExporter.getInstance();
   }
 
-  async processChunk(exports: Array<{ graph: any; options: any }>): Promise<VFXExportFormat[]> {
+  async processChunk(
+    exports: Array<{ graph: any; options: any }>
+  ): Promise<VFXExportFormat[]> {
     const results: VFXExportFormat[] = [];
 
     for (const { graph, options } of exports) {
       try {
-        const exportData = await this.exporter.exportGraph(graph, null, options);
+        const exportData = await this.exporter.exportGraph(
+          graph,
+          null,
+          options
+        );
         results.push(exportData);
       } catch (error) {
         console.error(`Export failed: ${error.message}`);
@@ -931,10 +973,13 @@ class RobustPipelineIntegration {
   private retryPolicy = {
     maxRetries: 3,
     backoffMultiplier: 2,
-    initialDelay: 1000,
+    initialDelay: 1000
   };
 
-  async executeWithRetry<T>(operation: () => Promise<T>, context: string): Promise<T> {
+  async executeWithRetry<T>(
+    operation: () => Promise<T>,
+    context: string
+  ): Promise<T> {
     let lastError: Error;
 
     for (let attempt = 1; attempt <= this.retryPolicy.maxRetries; attempt++) {
@@ -947,14 +992,20 @@ class RobustPipelineIntegration {
           break; // Don't wait after the last attempt
         }
 
-        const delay = this.retryPolicy.initialDelay * Math.pow(this.retryPolicy.backoffMultiplier, attempt - 1);
+        const delay =
+          this.retryPolicy.initialDelay *
+          Math.pow(this.retryPolicy.backoffMultiplier, attempt - 1);
 
-        console.warn(`${context} failed (attempt ${attempt}), retrying in ${delay}ms: ${error.message}`);
+        console.warn(
+          `${context} failed (attempt ${attempt}), retrying in ${delay}ms: ${error.message}`
+        );
         await this.delay(delay);
       }
     }
 
-    throw new Error(`${context} failed after ${this.retryPolicy.maxRetries} attempts: ${lastError.message}`);
+    throw new Error(
+      `${context} failed after ${this.retryPolicy.maxRetries} attempts: ${lastError.message}`
+    );
   }
 
   private delay(ms: number): Promise<void> {
@@ -976,7 +1027,10 @@ class PipelineMonitor {
     this.alerts = new AlertManager();
   }
 
-  async monitorExportOperation(exportId: string, operation: () => Promise<VFXExportFormat>): Promise<VFXExportFormat> {
+  async monitorExportOperation(
+    exportId: string,
+    operation: () => Promise<VFXExportFormat>
+  ): Promise<VFXExportFormat> {
     const startTime = Date.now();
 
     try {
@@ -997,14 +1051,16 @@ class PipelineMonitor {
     } catch (error) {
       // Record error metrics
       this.metrics.incrementCounter('vfx_export_failed');
-      this.metrics.incrementCounter(`vfx_export_error_${error.constructor.name}`);
+      this.metrics.incrementCounter(
+        `vfx_export_error_${error.constructor.name}`
+      );
 
       // Send alert for critical errors
       if (this.isCriticalError(error)) {
         await this.alerts.sendAlert({
           severity: 'critical',
           message: `VFX Export ${exportId} failed: ${error.message}`,
-          context: { exportId, duration: Date.now() - startTime },
+          context: { exportId, duration: Date.now() - startTime }
         });
       }
 
@@ -1013,7 +1069,11 @@ class PipelineMonitor {
   }
 
   private isCriticalError(error: Error): boolean {
-    const criticalPatterns = [/validation.*failed/i, /reproducibility.*error/i, /corruption.*detected/i];
+    const criticalPatterns = [
+      /validation.*failed/i,
+      /reproducibility.*error/i,
+      /corruption.*detected/i
+    ];
 
     return criticalPatterns.some(pattern => pattern.test(error.message));
   }

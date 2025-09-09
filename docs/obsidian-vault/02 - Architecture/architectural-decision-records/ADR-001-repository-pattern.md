@@ -75,7 +75,13 @@ class DatabaseGraphRepository implements GraphRepository {
       INSERT OR REPLACE INTO graphs (id, user_id, name, data, updated_at)
       VALUES (?, ?, ?, ?, ?)
     `);
-    stmt.run(graph.id, graph.userId, graph.name, JSON.stringify(graph), Date.now());
+    stmt.run(
+      graph.id,
+      graph.userId,
+      graph.name,
+      JSON.stringify(graph),
+      Date.now()
+    );
     return graph.id;
   }
 
@@ -95,7 +101,10 @@ class GraphService {
     private logger: Logger
   ) {}
 
-  async createGraph(userId: UserId, request: CreateGraphRequest): Promise<Graph> {
+  async createGraph(
+    userId: UserId,
+    request: CreateGraphRequest
+  ): Promise<Graph> {
     // Verify user exists
     const user = await this.userRepository.findById(userId);
     if (!user) {
@@ -170,7 +179,11 @@ class GraphService {
       await this.graphRepository.saveWithTransaction(graph, tx);
 
       // Update user's graph count
-      await this.userRepository.updateGraphCountWithTransaction(newUserId, +1, tx);
+      await this.userRepository.updateGraphCountWithTransaction(
+        newUserId,
+        +1,
+        tx
+      );
 
       await tx.commit();
     } catch (error) {

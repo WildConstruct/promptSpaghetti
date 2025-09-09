@@ -64,7 +64,7 @@ const integrationTasks = [
     tags: 'palette,ui,advanced-nodes,quick-fix',
     estimated_hours: 1,
     work_class: 'integration',
-    business_value: 'Advanced nodes visible in organized palette categories',
+    business_value: 'Advanced nodes visible in organized palette categories'
   },
 
   {
@@ -92,7 +92,8 @@ const integrationTasks = [
     tags: 'export,ui,dialog,formats',
     estimated_hours: 3,
     work_class: 'feature',
-    business_value: 'Professional export formats for user presentations/documentation',
+    business_value:
+      'Professional export formats for user presentations/documentation'
   },
 
   {
@@ -124,8 +125,8 @@ const integrationTasks = [
     tags: 'backend,api,projects,persistence',
     estimated_hours: 4,
     work_class: 'backend',
-    business_value: 'Users can save/load projects without losing work',
-  },
+    business_value: 'Users can save/load projects without losing work'
+  }
 ];
 
 // Insert tasks
@@ -155,7 +156,9 @@ for (const task of integrationTasks) {
 
     console.log(`✅ Created: ${task.id}`);
     console.log(`   Title: ${task.title}`);
-    console.log(`   Priority: ${task.priority} | Est: ${task.estimated_hours}h`);
+    console.log(
+      `   Priority: ${task.priority} | Est: ${task.estimated_hours}h`
+    );
     console.log(`   Tags: ${task.tags}\n`);
     created++;
   } catch (error) {
@@ -165,7 +168,9 @@ for (const task of integrationTasks) {
 
 console.log('📊 Summary:');
 console.log(`   Created: ${created} integration tasks`);
-console.log(`   Total effort: ${integrationTasks.reduce((sum, t) => sum + t.estimated_hours, 0)} hours`);
+console.log(
+  `   Total effort: ${integrationTasks.reduce((sum, t) => sum + t.estimated_hours, 0)} hours`
+);
 
 console.log('\n🚀 Next steps:');
 console.log('   1. node src/grab-tasks.js <your-dev-id> 2 --priority-only');

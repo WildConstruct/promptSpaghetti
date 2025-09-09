@@ -49,7 +49,7 @@ class IntegrationHealthMonitor {
         // Retry configuration
         maxRetries: 3,
         retryDelay: 1000, // 1 second
-        timeoutDuration: 10000, // 10 seconds
+        timeoutDuration: 10000 // 10 seconds
       },
 
       systems: {
@@ -62,7 +62,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'file_exists',
             file: '../utils/DailyTicketTracker.js',
             dependencies: ['file_system'],
-            criticality: 'medium',
+            criticality: 'medium'
           },
           {
             name: 'Stale Task Cleanup',
@@ -71,7 +71,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'file_exists',
             file: '../utils/StaleTaskCleanup.js',
             dependencies: ['file_system', 'task_management'],
-            criticality: 'high',
+            criticality: 'high'
           },
           {
             name: 'QA Precheck',
@@ -80,7 +80,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'executable',
             command: 'node src/utils/QAPrecheck.js --version',
             dependencies: ['node', 'npm'],
-            criticality: 'high',
+            criticality: 'high'
           },
           {
             name: 'Agent Productivity Dashboard',
@@ -89,7 +89,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'file_exists',
             file: '../utils/AgentProductivityDashboard.js',
             dependencies: ['file_system'],
-            criticality: 'medium',
+            criticality: 'medium'
           },
           {
             name: 'Task Dependency Resolver',
@@ -98,7 +98,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'file_exists',
             file: '../utils/TaskDependencyResolver.js',
             dependencies: ['file_system'],
-            criticality: 'medium',
+            criticality: 'medium'
           },
           {
             name: 'Conflict Resolution Assistant',
@@ -107,7 +107,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'file_exists',
             file: '../utils/ConflictResolutionAssistant.js',
             dependencies: ['git', 'file_system'],
-            criticality: 'medium',
+            criticality: 'medium'
           },
           {
             name: 'Test Case Generator',
@@ -116,7 +116,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'file_exists',
             file: '../utils/TestCaseGenerator.js',
             dependencies: ['file_system'],
-            criticality: 'low',
+            criticality: 'low'
           },
           {
             name: 'Code Quality Scanner',
@@ -125,7 +125,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'executable',
             command: 'node src/utils/CodeQualityScanner.js --version',
             dependencies: ['node', 'eslint'],
-            criticality: 'high',
+            criticality: 'high'
           },
           {
             name: 'Agent Workload Balancer',
@@ -134,8 +134,8 @@ class IntegrationHealthMonitor {
             checkMethod: 'file_exists',
             file: '../utils/AgentWorkloadBalancer.js',
             dependencies: ['file_system'],
-            criticality: 'high',
-          },
+            criticality: 'high'
+          }
         ],
 
         // External dependencies
@@ -146,7 +146,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'version_check',
             command: 'node --version',
             expectedPattern: /v\d+\.\d+\.\d+/,
-            criticality: 'critical',
+            criticality: 'critical'
           },
           {
             name: 'NPM',
@@ -154,7 +154,7 @@ class IntegrationHealthMonitor {
             checkMethod: 'version_check',
             command: 'npm --version',
             expectedPattern: /\d+\.\d+\.\d+/,
-            criticality: 'critical',
+            criticality: 'critical'
           },
           {
             name: 'Git',
@@ -162,23 +162,23 @@ class IntegrationHealthMonitor {
             checkMethod: 'version_check',
             command: 'git --version',
             expectedPattern: /git version/,
-            criticality: 'high',
+            criticality: 'high'
           },
           {
             name: 'File System',
             type: 'infrastructure',
             checkMethod: 'disk_space',
             path: '.',
-            criticality: 'critical',
+            criticality: 'critical'
           },
           {
             name: 'Task Management System',
             type: 'database',
             checkMethod: 'file_exists',
             file: '../data/state.json',
-            criticality: 'critical',
-          },
-        ],
+            criticality: 'critical'
+          }
+        ]
       },
 
       alerts: {
@@ -188,7 +188,7 @@ class IntegrationHealthMonitor {
           file: { enabled: true, path: this.alertsFile },
           email: { enabled: false, recipients: [] },
           slack: { enabled: false, webhook: null },
-          webhook: { enabled: false, url: null },
+          webhook: { enabled: false, url: null }
         },
 
         // Alert thresholds
@@ -196,15 +196,15 @@ class IntegrationHealthMonitor {
           critical: { immediate: true, retryInterval: 30000 }, // 30 seconds
           high: { immediate: true, retryInterval: 60000 }, // 1 minute
           medium: { immediate: false, retryInterval: 300000 }, // 5 minutes
-          low: { immediate: false, retryInterval: 900000 }, // 15 minutes
+          low: { immediate: false, retryInterval: 900000 } // 15 minutes
         },
 
         // Suppression rules
         suppression: {
           enabled: true,
           maxAlertsPerHour: 10,
-          similarAlertWindow: 300000, // 5 minutes
-        },
+          similarAlertWindow: 300000 // 5 minutes
+        }
       },
 
       recovery: {
@@ -215,8 +215,8 @@ class IntegrationHealthMonitor {
           cooldownPeriod: 300000, // 5 minutes
           restartCommands: {
             service: ['systemctl restart', 'service restart'],
-            process: ['pkill -f', 'killall'],
-          },
+            process: ['pkill -f', 'killall']
+          }
         },
 
         // Self-healing capabilities
@@ -225,9 +225,9 @@ class IntegrationHealthMonitor {
           diskCleanup: true,
           logRotation: true,
           cacheClearing: true,
-          tempFileCleanup: true,
-        },
-      },
+          tempFileCleanup: true
+        }
+      }
     };
 
     this.healthStatus = new Map();
@@ -239,7 +239,7 @@ class IntegrationHealthMonitor {
       averageResponseTime: 0,
       uptimePercentage: 100,
       lastFullCheck: null,
-      incidents: [],
+      incidents: []
     };
 
     this.alerts = [];
@@ -258,10 +258,17 @@ class IntegrationHealthMonitor {
       await this.loadExistingData();
 
       console.log('✅ Integration Health Monitor initialized');
-      console.log(`🔍 Monitoring ${this.config.systems.utilities.length} utilities`);
-      console.log(`📊 Tracking ${this.config.systems.dependencies.length} dependencies`);
+      console.log(
+        `🔍 Monitoring ${this.config.systems.utilities.length} utilities`
+      );
+      console.log(
+        `📊 Tracking ${this.config.systems.dependencies.length} dependencies`
+      );
     } catch (error) {
-      console.error('❌ Failed to initialize Integration Health Monitor:', error);
+      console.error(
+        '❌ Failed to initialize Integration Health Monitor:',
+        error
+      );
       throw error;
     }
   }
@@ -354,7 +361,8 @@ class IntegrationHealthMonitor {
     }
 
     // Calculate overall health
-    const healthPercentage = totalChecks > 0 ? (successfulChecks / totalChecks) * 100 : 100;
+    const healthPercentage =
+      totalChecks > 0 ? (successfulChecks / totalChecks) * 100 : 100;
     const checkDuration = Date.now() - startTime;
 
     // Update metrics
@@ -365,7 +373,7 @@ class IntegrationHealthMonitor {
       totalChecks,
       successfulChecks,
       averageResponseTime: checkDuration / totalChecks,
-      lastFullCheck: new Date().toISOString(),
+      lastFullCheck: new Date().toISOString()
     };
 
     await this.saveMetrics();
@@ -389,13 +397,15 @@ class IntegrationHealthMonitor {
       responseTime: 0,
       lastChecked: new Date().toISOString(),
       error: null,
-      details: {},
+      details: {}
     };
 
     try {
       switch (utility.checkMethod) {
         case 'file_exists':
-          result.status = (await this.checkFileExists(utility.file)) ? 'healthy' : 'unhealthy';
+          result.status = (await this.checkFileExists(utility.file))
+            ? 'healthy'
+            : 'unhealthy';
           if (result.status === 'healthy') {
             // Additional checks for file integrity
             const stats = await fs.stat(path.resolve(__dirname, utility.file));
@@ -405,17 +415,25 @@ class IntegrationHealthMonitor {
           break;
 
         case 'executable':
-          result.status = (await this.checkExecutable(utility.command)) ? 'healthy' : 'unhealthy';
+          result.status = (await this.checkExecutable(utility.command))
+            ? 'healthy'
+            : 'unhealthy';
           break;
 
         case 'http_endpoint':
-          const httpResult = await this.checkHttpEndpoint(utility.healthEndpoint);
+          const httpResult = await this.checkHttpEndpoint(
+            utility.healthEndpoint
+          );
           result.status = httpResult.status;
           result.details = httpResult.details;
           break;
 
         case 'process_running':
-          result.status = (await this.checkProcessRunning(utility.processPattern)) ? 'healthy' : 'unhealthy';
+          result.status = (await this.checkProcessRunning(
+            utility.processPattern
+          ))
+            ? 'healthy'
+            : 'unhealthy';
           break;
 
         default:
@@ -442,13 +460,16 @@ class IntegrationHealthMonitor {
       responseTime: 0,
       lastChecked: new Date().toISOString(),
       error: null,
-      details: {},
+      details: {}
     };
 
     try {
       switch (dependency.checkMethod) {
         case 'version_check':
-          const versionResult = await this.checkVersion(dependency.command, dependency.expectedPattern);
+          const versionResult = await this.checkVersion(
+            dependency.command,
+            dependency.expectedPattern
+          );
           result.status = versionResult.success ? 'healthy' : 'unhealthy';
           result.details.version = versionResult.version;
           if (!versionResult.success) {
@@ -457,12 +478,17 @@ class IntegrationHealthMonitor {
           break;
 
         case 'file_exists':
-          result.status = (await this.checkFileExists(dependency.file)) ? 'healthy' : 'unhealthy';
+          result.status = (await this.checkFileExists(dependency.file))
+            ? 'healthy'
+            : 'unhealthy';
           break;
 
         case 'disk_space':
           const diskResult = await this.checkDiskSpace(dependency.path);
-          result.status = diskResult.usage < this.config.monitoring.diskThreshold ? 'healthy' : 'unhealthy';
+          result.status =
+            diskResult.usage < this.config.monitoring.diskThreshold
+              ? 'healthy'
+              : 'unhealthy';
           result.details.diskUsage = diskResult.usage;
           result.details.freeSpace = diskResult.free;
           if (result.status === 'unhealthy') {
@@ -472,7 +498,10 @@ class IntegrationHealthMonitor {
 
         case 'memory_check':
           const memoryResult = await this.checkMemoryUsage();
-          result.status = memoryResult.usage < this.config.monitoring.memoryThreshold ? 'healthy' : 'unhealthy';
+          result.status =
+            memoryResult.usage < this.config.monitoring.memoryThreshold
+              ? 'healthy'
+              : 'unhealthy';
           result.details.memoryUsage = memoryResult.usage;
           result.details.freeMemory = memoryResult.free;
           if (result.status === 'unhealthy') {
@@ -507,7 +536,7 @@ class IntegrationHealthMonitor {
       details: result.details,
       detectedAt: new Date().toISOString(),
       resolvedAt: null,
-      autoRecoveryAttempts: 0,
+      autoRecoveryAttempts: 0
     };
 
     this.incidents.push(incident);
@@ -520,7 +549,7 @@ class IntegrationHealthMonitor {
       criticality: system.criticality,
       message: `${system.name} health check failed: ${result.error || 'Unknown error'}`,
       timestamp: new Date().toISOString(),
-      acknowledged: false,
+      acknowledged: false
     };
 
     this.alerts.push(alert);
@@ -532,7 +561,8 @@ class IntegrationHealthMonitor {
     if (
       this.config.recovery.autoRestart.enabled &&
       system.criticality !== 'low' &&
-      incident.autoRecoveryAttempts < this.config.recovery.autoRestart.maxAttempts
+      incident.autoRecoveryAttempts <
+        this.config.recovery.autoRestart.maxAttempts
     ) {
       await this.attemptAutoRecovery(system, incident);
     }
@@ -561,7 +591,9 @@ class IntegrationHealthMonitor {
         // For file-based utilities, check if file is accessible
         const fileAccessible = await this.checkFileExists(system.file);
         if (!fileAccessible) {
-          console.log(`📁 File ${system.file} not accessible - checking parent directory`);
+          console.log(
+            `📁 File ${system.file} not accessible - checking parent directory`
+          );
         }
       }
 
@@ -585,7 +617,7 @@ class IntegrationHealthMonitor {
           criticality: 'low',
           message: `${system.name} auto-recovery successful`,
           timestamp: new Date().toISOString(),
-          acknowledged: false,
+          acknowledged: false
         };
 
         this.alerts.push(recoveryAlert);
@@ -667,12 +699,18 @@ class IntegrationHealthMonitor {
   async runBasicHealthChecks() {
     // Check only critical systems for basic checks
     const criticalSystems = [
-      ...this.config.systems.utilities.filter(u => u.criticality === 'critical'),
-      ...this.config.systems.dependencies.filter(d => d.criticality === 'critical'),
+      ...this.config.systems.utilities.filter(
+        u => u.criticality === 'critical'
+      ),
+      ...this.config.systems.dependencies.filter(
+        d => d.criticality === 'critical'
+      )
     ];
 
     for (const system of criticalSystems) {
-      const result = system.file ? await this.checkUtilityHealth(system) : await this.checkDependencyHealth(system);
+      const result = system.file
+        ? await this.checkUtilityHealth(system)
+        : await this.checkDependencyHealth(system);
 
       this.healthStatus.set(system.name, result);
 
@@ -699,7 +737,7 @@ class IntegrationHealthMonitor {
         memory: memoryResult,
         disk: diskResult,
         responseTime: this.metrics.averageResponseTime,
-        uptime: this.calculateUptime(),
+        uptime: this.calculateUptime()
       };
 
       // Store performance data for trending
@@ -716,14 +754,16 @@ class IntegrationHealthMonitor {
     const dashboardData = {
       timestamp: new Date().toISOString(),
       overallHealth: this.metrics.overallHealth,
-      systems: Array.from(this.healthStatus.entries()).map(([name, status]) => ({
-        name,
-        ...status,
-      })),
+      systems: Array.from(this.healthStatus.entries()).map(
+        ([name, status]) => ({
+          name,
+          ...status
+        })
+      ),
       metrics: this.metrics,
       alerts: this.alerts.slice(-10), // Last 10 alerts
       incidents: this.incidents.filter(i => i.status === 'open'),
-      performance: await this.getPerformanceTrends(),
+      performance: await this.getPerformanceTrends()
     };
 
     const html = this.generateDashboardHTML(dashboardData);
@@ -1011,7 +1051,10 @@ class IntegrationHealthMonitor {
 
   async checkExecutable(command) {
     try {
-      execSync(command, { stdio: 'pipe', timeout: this.config.monitoring.timeoutDuration });
+      execSync(command, {
+        stdio: 'pipe',
+        timeout: this.config.monitoring.timeoutDuration
+      });
       return true;
     } catch {
       return false;
@@ -1023,23 +1066,30 @@ class IntegrationHealthMonitor {
       const startTime = Date.now();
       const client = url.startsWith('https') ? https : http;
 
-      const req = client.get(url, { timeout: this.config.monitoring.timeoutDuration }, res => {
-        const responseTime = Date.now() - startTime;
+      const req = client.get(
+        url,
+        { timeout: this.config.monitoring.timeoutDuration },
+        res => {
+          const responseTime = Date.now() - startTime;
 
-        resolve({
-          status: res.statusCode >= 200 && res.statusCode < 300 ? 'healthy' : 'unhealthy',
-          details: {
-            statusCode: res.statusCode,
-            responseTime,
-            headers: res.headers,
-          },
-        });
-      });
+          resolve({
+            status:
+              res.statusCode >= 200 && res.statusCode < 300
+                ? 'healthy'
+                : 'unhealthy',
+            details: {
+              statusCode: res.statusCode,
+              responseTime,
+              headers: res.headers
+            }
+          });
+        }
+      );
 
       req.on('error', error => {
         resolve({
           status: 'unhealthy',
-          details: { error: error.message },
+          details: { error: error.message }
         });
       });
 
@@ -1047,7 +1097,7 @@ class IntegrationHealthMonitor {
         req.destroy();
         resolve({
           status: 'unhealthy',
-          details: { error: 'Request timeout' },
+          details: { error: 'Request timeout' }
         });
       });
     });
@@ -1067,20 +1117,20 @@ class IntegrationHealthMonitor {
       const output = execSync(command, {
         stdio: 'pipe',
         encoding: 'utf8',
-        timeout: this.config.monitoring.timeoutDuration,
+        timeout: this.config.monitoring.timeoutDuration
       });
 
       const match = expectedPattern.test(output);
       return {
         success: match,
         version: output.trim(),
-        error: match ? null : "Version output doesn't match expected pattern",
+        error: match ? null : "Version output doesn't match expected pattern"
       };
     } catch (error) {
       return {
         success: false,
         version: null,
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -1092,13 +1142,13 @@ class IntegrationHealthMonitor {
       return {
         usage: 0.1, // Mock 10% usage
         free: '900GB',
-        total: '1TB',
+        total: '1TB'
       };
     } catch (error) {
       return {
         usage: 1.0, // Assume full if can't check
         free: '0GB',
-        total: 'Unknown',
+        total: 'Unknown'
       };
     }
   }
@@ -1113,13 +1163,13 @@ class IntegrationHealthMonitor {
       return {
         usage,
         free: total - used.heapUsed,
-        total,
+        total
       };
     } catch (error) {
       return {
         usage: 0,
         free: 0,
-        total: 0,
+        total: 0
       };
     }
   }
@@ -1174,7 +1224,9 @@ class IntegrationHealthMonitor {
   async clearCaches() {
     try {
       // Clear Node.js require cache for non-core modules
-      const cacheKeys = Object.keys(require.cache).filter(key => !key.includes('node_modules') && key.includes('src/'));
+      const cacheKeys = Object.keys(require.cache).filter(
+        key => !key.includes('node_modules') && key.includes('src/')
+      );
 
       for (const key of cacheKeys) {
         delete require.cache[key];
@@ -1194,7 +1246,9 @@ class IntegrationHealthMonitor {
     // Console output
     if (channels.console.enabled) {
       const icon = this.getAlertIcon(alert.criticality);
-      console.log(`${icon} ALERT [${alert.criticality.toUpperCase()}]: ${alert.message}`);
+      console.log(
+        `${icon} ALERT [${alert.criticality.toUpperCase()}]: ${alert.message}`
+      );
     }
 
     // File logging
@@ -1223,7 +1277,7 @@ class IntegrationHealthMonitor {
       critical: '🔥',
       high: '⚠️',
       medium: '⚡',
-      low: 'ℹ️',
+      low: 'ℹ️'
     };
     return icons[criticality] || 'ℹ️';
   }
@@ -1235,7 +1289,7 @@ class IntegrationHealthMonitor {
         level: alert.criticality.toUpperCase(),
         system: alert.system,
         message: alert.message,
-        incidentId: alert.incidentId,
+        incidentId: alert.incidentId
       };
 
       const logLine = JSON.stringify(logEntry) + '\n';
@@ -1297,7 +1351,10 @@ class IntegrationHealthMonitor {
 
   async getPerformanceTrends() {
     try {
-      const performanceFile = path.join(this.dataDir, 'performance-history.json');
+      const performanceFile = path.join(
+        this.dataDir,
+        'performance-history.json'
+      );
       const data = await fs.readFile(performanceFile, 'utf8');
       return JSON.parse(data).slice(-24); // Last 24 entries
     } catch {
@@ -1360,15 +1417,22 @@ class IntegrationHealthMonitor {
   }
 
   async saveIncidents() {
-    await fs.writeFile(this.incidentsFile, JSON.stringify(this.incidents, null, 2));
+    await fs.writeFile(
+      this.incidentsFile,
+      JSON.stringify(this.incidents, null, 2)
+    );
   }
 
   /**
    * Get health statistics
    */
   async getStatistics() {
-    const healthySystems = Array.from(this.healthStatus.values()).filter(s => s.status === 'healthy');
-    const unhealthySystems = Array.from(this.healthStatus.values()).filter(s => s.status === 'unhealthy');
+    const healthySystems = Array.from(this.healthStatus.values()).filter(
+      s => s.status === 'healthy'
+    );
+    const unhealthySystems = Array.from(this.healthStatus.values()).filter(
+      s => s.status === 'unhealthy'
+    );
     const openIncidents = this.incidents.filter(i => i.status === 'open');
 
     return {
@@ -1377,7 +1441,7 @@ class IntegrationHealthMonitor {
         totalSystems: this.healthStatus.size,
         healthySystems: healthySystems.length,
         unhealthySystems: unhealthySystems.length,
-        criticalFailures: this.metrics.criticalFailures,
+        criticalFailures: this.metrics.criticalFailures
       },
 
       performance: {
@@ -1386,31 +1450,40 @@ class IntegrationHealthMonitor {
         totalChecks: this.metrics.totalChecks,
         successRate:
           this.metrics.totalChecks > 0
-            ? ((this.metrics.successfulChecks / this.metrics.totalChecks) * 100).toFixed(2) + '%'
-            : '0%',
+            ? (
+                (this.metrics.successfulChecks / this.metrics.totalChecks) *
+                100
+              ).toFixed(2) + '%'
+            : '0%'
       },
 
       incidents: {
         open: openIncidents.length,
         total: this.incidents.length,
         recentAlerts: this.alerts.slice(-10).length,
-        autoRecoverySuccessRate: this.calculateAutoRecoverySuccessRate(),
+        autoRecoverySuccessRate: this.calculateAutoRecoverySuccessRate()
       },
 
       monitoring: {
         active: this.monitoringActive,
         lastFullCheck: this.metrics.lastFullCheck,
-        dashboardPath: this.dashboardFile,
-      },
+        dashboardPath: this.dashboardFile
+      }
     };
   }
 
   calculateAutoRecoverySuccessRate() {
-    const recoveryAttempts = this.incidents.filter(i => i.autoRecoveryAttempts > 0);
-    const successfulRecoveries = recoveryAttempts.filter(i => i.status === 'resolved');
+    const recoveryAttempts = this.incidents.filter(
+      i => i.autoRecoveryAttempts > 0
+    );
+    const successfulRecoveries = recoveryAttempts.filter(
+      i => i.status === 'resolved'
+    );
 
     return recoveryAttempts.length > 0
-      ? ((successfulRecoveries.length / recoveryAttempts.length) * 100).toFixed(1) + '%'
+      ? ((successfulRecoveries.length / recoveryAttempts.length) * 100).toFixed(
+          1
+        ) + '%'
       : '0%';
   }
 }
@@ -1476,14 +1549,22 @@ if (require.main === module) {
 
         case 'incidents':
           console.log('🔥 Open Incidents:');
-          const openIncidents = monitor.incidents.filter(i => i.status === 'open');
+          const openIncidents = monitor.incidents.filter(
+            i => i.status === 'open'
+          );
           if (openIncidents.length === 0) {
             console.log('✅ No open incidents');
           } else {
             openIncidents.forEach(incident => {
-              console.log(`🔥 ${incident.system} (${incident.criticality}): ${incident.error}`);
-              console.log(`   Detected: ${new Date(incident.detectedAt).toLocaleString()}`);
-              console.log(`   Recovery attempts: ${incident.autoRecoveryAttempts}`);
+              console.log(
+                `🔥 ${incident.system} (${incident.criticality}): ${incident.error}`
+              );
+              console.log(
+                `   Detected: ${new Date(incident.detectedAt).toLocaleString()}`
+              );
+              console.log(
+                `   Recovery attempts: ${incident.autoRecoveryAttempts}`
+              );
             });
           }
           break;

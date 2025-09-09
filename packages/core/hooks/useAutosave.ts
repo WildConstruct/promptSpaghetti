@@ -194,9 +194,13 @@ export function useAutosave(options: AutosaveOptions = {}) {
 
           // Check if it's a quota error
           if (errorMessage.includes('QuotaExceeded')) {
-            interface StorageQuotaInfo { percentage?: number }
+            interface StorageQuotaInfo {
+              percentage?: number;
+            }
             const quota: StorageQuotaInfo | undefined =
-              typeof checkStorageQuota === 'function' ? (checkStorageQuota() as StorageQuotaInfo) : undefined;
+              typeof checkStorageQuota === 'function'
+                ? (checkStorageQuota() as StorageQuotaInfo)
+                : undefined;
             const percentage =
               quota && typeof quota.percentage === 'number'
                 ? Math.round(quota.percentage)

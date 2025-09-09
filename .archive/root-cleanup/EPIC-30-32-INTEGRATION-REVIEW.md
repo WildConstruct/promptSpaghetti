@@ -36,7 +36,9 @@ export class AnalyticsDAO {
   // Unified event tracking across revenue, security, and user interactions
   storeEvent(event: AnalyticsEvent): void;
   getAnalyticsSummary(filters: AnalyticsFilters): AnalyticsSummary;
-  getHeatMapData(filters: AnalyticsFilters): Array<{ x: number; y: number; intensity: number }>;
+  getHeatMapData(
+    filters: AnalyticsFilters
+  ): Array<{ x: number; y: number; intensity: number }>;
 }
 ```
 
@@ -62,7 +64,9 @@ export class AnalyticsDAO {
 ```typescript
 // server/src/marketplace/RevenueAnalyticsService.ts - Comprehensive revenue analytics
 export class RevenueAnalyticsService {
-  async generateRevenueAnalytics(timeRange: TimeRange): Promise<RevenueAnalytics>;
+  async generateRevenueAnalytics(
+    timeRange: TimeRange
+  ): Promise<RevenueAnalytics>;
   async getCreatorRevenueAnalytics(creatorId: string): Promise<any>;
   async getTemplateRevenueAnalytics(templateId: string): Promise<any>;
 }
@@ -90,7 +94,10 @@ export class RevenueAnalyticsService {
 ```typescript
 // packages/core/components/Admin/AdminIncidentDashboard.tsx
 interface AdminIncidentDashboardProps {
-  onPlaybookExecute?: (playbookId: string, options: ExecutionOptions) => Promise<void>;
+  onPlaybookExecute?: (
+    playbookId: string,
+    options: ExecutionOptions
+  ) => Promise<void>;
   onIncidentCreate?: (incident: IncidentCreationData) => Promise<void>;
 }
 ```
@@ -135,8 +142,12 @@ interface AdminIncidentDashboardProps {
 ```typescript
 // Proposed unified analytics correlation service
 interface UnifiedAnalyticsCorrelation {
-  correlateRevenueWithSecurity(timeRange: TimeRange): Promise<CorrelationAnalysis>;
-  analyzeUserJourneySecurityPatterns(userId: string): Promise<SecurityBehaviorPattern>;
+  correlateRevenueWithSecurity(
+    timeRange: TimeRange
+  ): Promise<CorrelationAnalysis>;
+  analyzeUserJourneySecurityPatterns(
+    userId: string
+  ): Promise<SecurityBehaviorPattern>;
   detectRevenueSecurityAnomalies(): Promise<AnomalyAlert[]>;
 }
 ```

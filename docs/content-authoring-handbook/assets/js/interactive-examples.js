@@ -12,7 +12,7 @@ class InteractiveExample {
       defaultSeed: '12345',
       autoRun: true,
       syntaxHighlight: true,
-      ...options,
+      ...options
     };
 
     this.editor = null;
@@ -85,7 +85,9 @@ class InteractiveExample {
   }
 
   setupEditor() {
-    const editorEl = this.container.querySelector(`#${this.container.id}-editor`);
+    const editorEl = this.container.querySelector(
+      `#${this.container.id}-editor`
+    );
 
     // Use Monaco Editor if available, fallback to textarea
     if (window.monaco) {
@@ -98,7 +100,7 @@ class InteractiveExample {
         fontSize: 14,
         lineNumbers: 'on',
         renderWhitespace: 'selection',
-        automaticLayout: true,
+        automaticLayout: true
       });
 
       // Real-time validation
@@ -127,7 +129,7 @@ class InteractiveExample {
         setValue: val => {
           textarea.value = val;
         },
-        focus: () => textarea.focus(),
+        focus: () => textarea.focus()
       };
     }
 
@@ -175,7 +177,7 @@ class InteractiveExample {
     this.preview = {
       output: this.container.querySelector('.preview-output'),
       variations: this.container.querySelector('.preview-variations'),
-      error: this.container.querySelector('.error-display'),
+      error: this.container.querySelector('.error-display')
     };
 
     const previewContent = this.container.querySelector('.preview-content');
@@ -193,12 +195,12 @@ class InteractiveExample {
       {
         meta: {
           name: 'Example Generator',
-          version: '1.0.0',
+          version: '1.0.0'
         },
         grammar: {
           start: 'Hello, [subject]!',
-          subject: ['world', 'friend', 'there'],
-        },
+          subject: ['world', 'friend', 'there']
+        }
       },
       null,
       2
@@ -286,7 +288,7 @@ class InteractiveExample {
     return {
       output,
       path: 'start',
-      seed,
+      seed
     };
   }
 
@@ -345,7 +347,8 @@ class InteractiveExample {
   }
 
   updateStats(charCount, execTime) {
-    this.container.querySelector('.char-count').textContent = `${charCount} characters`;
+    this.container.querySelector('.char-count').textContent =
+      `${charCount} characters`;
     this.container.querySelector('.exec-time').textContent = `${execTime}ms`;
   }
 
@@ -389,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: el.dataset.title,
       initialCode: el.dataset.code,
       showVariations: el.dataset.variations === 'true',
-      ...JSON.parse(el.dataset.options || '{}'),
+      ...JSON.parse(el.dataset.options || '{}')
     };
 
     new InteractiveExample(el.id, options);

@@ -25,7 +25,7 @@ function createTicketViaScript(title, description, priority = 'high') {
       `./scripts/github-automation.sh create-ticket "${escapedTitle}" "${escapedDescription}" "${priority}" "epic-integration"`,
       {
         encoding: 'utf8',
-        cwd: '/Users/brianbehm/CascadeProjects/prompt-spaghetti',
+        cwd: '/Users/brianbehm/CascadeProjects/prompt-spaghetti'
       }
     );
 
@@ -69,7 +69,7 @@ const integrationTickets = [
 **Business Value**: Makes 3+ months of Epic 7 development work visible to users
 **Impact**: HIGH - Users get access to advanced workflow capabilities
 **Effort**: 2-3 hours`,
-    priority: 'high',
+    priority: 'high'
   },
 
   {
@@ -99,7 +99,7 @@ const integrationTickets = [
 **Business Value**: Users can configure advanced nodes with specialized settings
 **Impact**: MEDIUM - Completes Epic 7 UI integration
 **Effort**: 4-5 hours`,
-    priority: 'high',
+    priority: 'high'
   },
 
   {
@@ -130,7 +130,7 @@ const integrationTickets = [
 **Business Value**: Users get professional export capabilities for presentations/documentation
 **Impact**: MEDIUM-HIGH - Exposes Epic 3 export system
 **Effort**: 2-3 hours`,
-    priority: 'high',
+    priority: 'high'
   },
 
   {
@@ -164,7 +164,7 @@ const integrationTickets = [
 **Business Value**: Users can save and load named projects (critical for user retention)
 **Impact**: HIGH - Prevents work loss, improves user experience  
 **Effort**: 3-4 hours`,
-    priority: 'high',
+    priority: 'high'
   },
 
   {
@@ -191,8 +191,8 @@ const integrationTickets = [
 **Business Value**: Users can execute Python code within graph workflows
 **Impact**: MEDIUM - Completes Epic 8 integration
 **Effort**: 1-2 hours`,
-    priority: 'medium',
-  },
+    priority: 'medium'
+  }
 ];
 
 // Create tickets
@@ -200,7 +200,11 @@ console.log('🎯 Creating Epic Integration Tickets...\n');
 
 let created = 0;
 for (const ticket of integrationTickets) {
-  const ticketId = createTicketViaScript(ticket.title, ticket.description, ticket.priority);
+  const ticketId = createTicketViaScript(
+    ticket.title,
+    ticket.description,
+    ticket.priority
+  );
 
   if (ticketId) {
     console.log(`✅ Created: ${ticketId}`);
@@ -214,7 +218,9 @@ for (const ticket of integrationTickets) {
 
 console.log('📊 Summary:');
 console.log(`   Created: ${created} integration tickets`);
-console.log('   Expected impact: 6+ months of hidden work made visible to users');
+console.log(
+  '   Expected impact: 6+ months of hidden work made visible to users'
+);
 
 console.log('\n🚀 Next steps:');
 console.log('   1. node src/grab-tasks.js <your-dev-id> 2 --priority-only');

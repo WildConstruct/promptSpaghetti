@@ -1,6 +1,7 @@
 # Mobile Design Strategy for Prompt Spaghetti
 
 ## Current State
+
 - Users are discovering the app works on mobile devices
 - Current experience is not optimized for small screens
 - Node-based editors are traditionally desktop-focused
@@ -9,6 +10,7 @@
 ## Design Approaches for Mobile
 
 ### Option 1: Simplified Linear Flow
+
 - Transform free-form canvas into **vertical stack** of nodes
 - Swipe gestures for adding connections
 - Collapsible node cards for space efficiency
@@ -19,6 +21,7 @@
 **Cons:** Loses visual graph representation, may feel limiting
 
 ### Option 2: Focus Mode
+
 - Display **one node at a time** with full-screen editing
 - Breadcrumb trail or mini-map for context
 - Swipe between connected nodes
@@ -29,6 +32,7 @@
 **Cons:** Loss of overall graph context, harder to understand flow
 
 ### Option 3: List/Form View
+
 - Transform graph into **linear workflow list**
 - Each node becomes a form section
 - Accordion-style expansion
@@ -39,6 +43,7 @@
 **Cons:** Complete departure from graph metaphor
 
 ### Option 4: Hybrid Approach
+
 - **Mode switching** between simplified graph and list view
 - Zoom levels: Overview → Group → Node
 - Context-aware UI that adapts to current task
@@ -50,6 +55,7 @@
 ## Mobile-Specific Features Required
 
 ### Touch Interactions
+
 - **Pinch to zoom** for canvas navigation
 - **Pan gestures** for moving around
 - **Long-press** for context menus
@@ -58,6 +64,7 @@
 - Minimum touch target size: 44px (iOS) / 48px (Android)
 
 ### UI Adaptations
+
 - **Floating Action Button (FAB)** for adding nodes
 - **Bottom sheet** for node palette and inspector
 - **Collapsible toolbar** that hides on scroll
@@ -65,6 +72,7 @@
 - **Gesture hints** and onboarding for first-time users
 
 ### Layout Considerations
+
 - **Portrait optimization** as primary orientation
 - **Landscape support** for tablets and foldables
 - **Safe areas** for notches and system UI
@@ -77,6 +85,7 @@
 ## Technical Considerations
 
 ### Performance
+
 - Reduce node rendering complexity on mobile
 - Implement virtualization for large graphs
 - Optimize touch event handling
@@ -84,6 +93,7 @@
 - Progressive loading of node types
 
 ### Platform Differences
+
 - iOS: Respect system gestures, safe areas
 - Android: Back button navigation, material design patterns
 - PWA considerations for app-like experience
@@ -159,4 +169,4 @@ Please provide specific examples, case studies, and implementation recommendatio
 
 ---
 
-*Note: The bottom drawer preview mentioned in user feedback actually aligns well with mobile patterns - it's similar to Google Maps, Apple Maps, and many other mobile apps with persistent bottom sheets.*
+_Note: The bottom drawer preview mentioned in user feedback actually aligns well with mobile patterns - it's similar to Google Maps, Apple Maps, and many other mobile apps with persistent bottom sheets._

@@ -64,7 +64,7 @@
     },
     {
       "id": "eye-color",
-      "type": "WeightedChoice", 
+      "type": "WeightedChoice",
       "name": "Eye Color",
       "x": 100,
       "y": 300,
@@ -92,12 +92,12 @@
 
 ### Node Types Reference
 
-| Node Type | Purpose | Key Properties |
-|-----------|---------|----------------|
+| Node Type        | Purpose                       | Key Properties                           |
+| ---------------- | ----------------------------- | ---------------------------------------- |
 | `WeightedChoice` | Random selection from options | `options` array with `text` and `weight` |
-| `Concat` | Combine multiple inputs | `separator` (default: " ") |
-| `Variable` | Store/retrieve values | `variableName`, `mode` |
-| `TextBlock` | Static text | `template` or `text` |
+| `Concat`         | Combine multiple inputs       | `separator` (default: " ")               |
+| `Variable`       | Store/retrieve values         | `variableName`, `mode`                   |
+| `TextBlock`      | Static text                   | `template` or `text`                     |
 
 ### Edge Structure
 
@@ -119,8 +119,8 @@
 {
   "id": "region-id",
   "name": "Display Name",
-  "color": "#9370DB",  // Optional: border color
-  "nodes": ["node1", "node2", "node3"],  // ALL node IDs in this region
+  "color": "#9370DB", // Optional: border color
+  "nodes": ["node1", "node2", "node3"], // ALL node IDs in this region
   "description": "What this region does"
 }
 ```
@@ -128,12 +128,14 @@
 ### Layout Best Practices
 
 1. **Vertical Stacking** (Recommended for 2-5 nodes)
+
    ```
    x: 100 for all nodes
    y: 100, 300, 500, 700... (200px spacing)
    ```
 
 2. **Grid Layout** (For 6+ nodes)
+
    ```
    Column 1: x=100, y=100, 300, 500
    Column 2: x=600, y=100, 300, 500
@@ -159,12 +161,14 @@ Before submitting a fragment, verify:
 ### Testing Your Fragment
 
 1. **Validate JSON syntax**
+
    ```bash
    # Check if JSON is valid
    cat your-fragment.psg | jq '.'
    ```
 
 2. **Run validation script**
+
    ```bash
    node scripts/validate-psg-fragments.js
    ```
@@ -183,6 +187,7 @@ Before submitting a fragment, verify:
 ### Common Mistakes to Avoid
 
 ❌ **DON'T include Output nodes in fragments**
+
 ```json
 // WRONG - Fragment with Output
 {
@@ -194,6 +199,7 @@ Before submitting a fragment, verify:
 ```
 
 ❌ **DON'T forget edges**
+
 ```json
 // WRONG - Nodes without edges
 {
@@ -203,6 +209,7 @@ Before submitting a fragment, verify:
 ```
 
 ❌ **DON'T forget regions**
+
 ```json
 // WRONG - Fragment without region
 {
@@ -213,6 +220,7 @@ Before submitting a fragment, verify:
 ```
 
 ✅ **DO connect nodes in logical flow**
+
 ```json
 // CORRECT - Connected nodes with edges
 {
@@ -225,6 +233,7 @@ Before submitting a fragment, verify:
 ### File Organization
 
 Place fragments in appropriate category folders:
+
 ```
 assets/library/
 ├── facial-features/

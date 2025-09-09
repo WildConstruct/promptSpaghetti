@@ -181,7 +181,10 @@ node scripts/collect-performance-baselines.js
 #### Comprehensive Collection (Production)
 
 ```typescript
-import { collectSystemBaselines, TestEnvironment } from './packages/core/performance/BaselineMeasurementCollector';
+import {
+  collectSystemBaselines,
+  TestEnvironment
+} from './packages/core/performance/BaselineMeasurementCollector';
 
 const results = await collectSystemBaselines(
   TestEnvironment.PRODUCTION,
@@ -434,14 +437,14 @@ enum BaselineCategory {
   MEMORY_USAGE = 'memory_usage',
   BUILD_PERFORMANCE = 'build_performance',
   API_PERFORMANCE = 'api_performance',
-  UI_RENDERING = 'ui_rendering',
+  UI_RENDERING = 'ui_rendering'
 }
 
 enum MeasurementType {
   DURATION = 'duration', // milliseconds
   THROUGHPUT = 'throughput', // operations per second
   MEMORY = 'memory', // bytes/MB
-  PERCENTAGE = 'percentage', // 0-100
+  PERCENTAGE = 'percentage' // 0-100
 }
 ```
 
@@ -558,7 +561,7 @@ setInterval(() => {
   const usage = process.memoryUsage();
   console.log('Memory:', {
     heap: Math.round(usage.heapUsed / 1024 / 1024) + 'MB',
-    rss: Math.round(usage.rss / 1024 / 1024) + 'MB',
+    rss: Math.round(usage.rss / 1024 / 1024) + 'MB'
   });
 }, 1000);
 

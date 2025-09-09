@@ -52,7 +52,7 @@ class RequestMetrics {
       statusCode,
       responseTime,
       success: statusCode >= 200 && statusCode < 400,
-      error,
+      error
     };
 
     this.requests.push(request);
@@ -60,7 +60,7 @@ class RequestMetrics {
     if (error || statusCode >= 400) {
       this.errors.push({
         ...request,
-        errorMessage: error ? error.message : `HTTP ${statusCode}`,
+        errorMessage: error ? error.message : `HTTP ${statusCode}`
       });
     }
   }
@@ -75,19 +75,26 @@ class RequestMetrics {
       totalRequests,
       successfulRequests,
       failedRequests,
-      successRate: totalRequests > 0 ? (successfulRequests / totalRequests) * 100 : 0,
+      successRate:
+        totalRequests > 0 ? (successfulRequests / totalRequests) * 100 : 0,
       errorRate: totalRequests > 0 ? (failedRequests / totalRequests) * 100 : 0,
       averageResponseTime:
-        responseTimes.length > 0 ? responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length : 0,
-      minResponseTime: responseTimes.length > 0 ? Math.min(...responseTimes) : 0,
-      maxResponseTime: responseTimes.length > 0 ? Math.max(...responseTimes) : 0,
+        responseTimes.length > 0
+          ? responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length
+          : 0,
+      minResponseTime:
+        responseTimes.length > 0 ? Math.min(...responseTimes) : 0,
+      maxResponseTime:
+        responseTimes.length > 0 ? Math.max(...responseTimes) : 0,
       p50: this.percentile(responseTimes, 50),
       p90: this.percentile(responseTimes, 90),
       p95: this.percentile(responseTimes, 95),
       p99: this.percentile(responseTimes, 99),
       requestsPerSecond: this.getRequestsPerSecond(),
       errors: this.errors,
-      testDuration: this.endTime ? this.endTime - this.startTime : Date.now() - this.startTime,
+      testDuration: this.endTime
+        ? this.endTime - this.startTime
+        : Date.now() - this.startTime
     };
 
     return stats;
@@ -144,9 +151,9 @@ class HttpClient {
           'Content-Type': 'application/json',
           'User-Agent': 'LoadTest/1.0',
           ...this.headers,
-          ...headers,
+          ...headers
         },
-        timeout: this.timeout,
+        timeout: this.timeout
       };
 
       // Add cookies
@@ -160,7 +167,8 @@ class HttpClient {
       let requestData = '';
       if (data) {
         requestData = typeof data === 'string' ? data : JSON.stringify(data);
-        requestOptions.headers['Content-Length'] = Buffer.byteLength(requestData);
+        requestOptions.headers['Content-Length'] =
+          Buffer.byteLength(requestData);
       }
 
       const startTime = Date.now();
@@ -198,7 +206,7 @@ class HttpClient {
             headers: res.headers,
             data: parsedData,
             responseTime,
-            rawData: responseData,
+            rawData: responseData
           });
         });
       });
@@ -256,9 +264,19 @@ class VirtualUser extends EventEmitter {
 
   async executeRequest(method, path, data = null, headers = {}) {
     try {
-      const response = await this.client.makeRequest(method, path, data, headers);
+      const response = await this.client.makeRequest(
+        method,
+        path,
+        data,
+        headers
+      );
 
-      this.metrics.recordRequest(method, path, response.statusCode, response.responseTime);
+      this.metrics.recordRequest(
+        method,
+        path,
+        response.statusCode,
+        response.responseTime
+      );
 
       this.emit('request', {
         userId: this.id,
@@ -266,19 +284,25 @@ class VirtualUser extends EventEmitter {
         path,
         statusCode: response.statusCode,
         responseTime: response.responseTime,
-        success: response.statusCode >= 200 && response.statusCode < 400,
+        success: response.statusCode >= 200 && response.statusCode < 400
       });
 
       return response;
     } catch (error) {
-      this.metrics.recordRequest(method, path, 0, error.responseTime || 0, error.error || error);
+      this.metrics.recordRequest(
+        method,
+        path,
+        0,
+        error.responseTime || 0,
+        error.error || error
+      );
 
       this.emit('error', {
         userId: this.id,
         method,
         path,
         error: error.error || error,
-        responseTime: error.responseTime || 0,
+        responseTime: error.responseTime || 0
       });
 
       throw error;
@@ -321,7 +345,8 @@ class VirtualUser extends EventEmitter {
 class LoadTestRunner extends EventEmitter {
   constructor(config) {
     super();
-    this.config = config instanceof LoadTestConfig ? config : new LoadTestConfig(config);
+    this.config =
+      config instanceof LoadTestConfig ? config : new LoadTestConfig(config);
     this.users = [];
     this.globalMetrics = new RequestMetrics();
     this.isRunning = false;
@@ -379,18 +404,31 @@ class LoadTestRunner extends EventEmitter {
 
   spawnUser(userId, testScenario) {
     const userCredentials =
-      this.config.userPool.length > 0 ? this.config.userPool[userId % this.config.userPool.length] : null;
+      this.config.userPool.length > 0
+        ? this.config.userPool[userId % this.config.userPool.length]
+        : null;
 
     const user = new VirtualUser(userId, this.config, userCredentials);
 
     // Forward user events to global metrics
     user.on('request', data => {
-      this.globalMetrics.recordRequest(data.method, data.path, data.statusCode, data.responseTime);
+      this.globalMetrics.recordRequest(
+        data.method,
+        data.path,
+        data.statusCode,
+        data.responseTime
+      );
       this.emit('request', data);
     });
 
     user.on('error', data => {
-      this.globalMetrics.recordRequest(data.method, data.path, 0, data.responseTime, data.error);
+      this.globalMetrics.recordRequest(
+        data.method,
+        data.path,
+        0,
+        data.responseTime,
+        data.error
+      );
       this.emit('userError', data);
     });
 
@@ -406,7 +444,10 @@ class LoadTestRunner extends EventEmitter {
   async waitForUsersToFinish(timeout = 30000) {
     const startTime = Date.now();
 
-    while (this.users.some(user => user.isRunning) && Date.now() - startTime < timeout) {
+    while (
+      this.users.some(user => user.isRunning) &&
+      Date.now() - startTime < timeout
+    ) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
   }
@@ -443,8 +484,11 @@ class LoadTestRunner extends EventEmitter {
         totalUsers: this.users.length,
         completedUsers: userStats.filter(u => u.testDuration > 0).length,
         averageUserRequests:
-          userStats.length > 0 ? userStats.reduce((sum, u) => sum + u.totalRequests, 0) / userStats.length : 0,
-      },
+          userStats.length > 0
+            ? userStats.reduce((sum, u) => sum + u.totalRequests, 0) /
+              userStats.length
+            : 0
+      }
     };
   }
 
@@ -452,8 +496,12 @@ class LoadTestRunner extends EventEmitter {
     const { global } = stats;
 
     console.log(`📊 Total Requests: ${global.totalRequests}`);
-    console.log(`✅ Successful: ${global.successfulRequests} (${global.successRate.toFixed(1)}%)`);
-    console.log(`❌ Failed: ${global.failedRequests} (${global.errorRate.toFixed(1)}%)`);
+    console.log(
+      `✅ Successful: ${global.successfulRequests} (${global.successRate.toFixed(1)}%)`
+    );
+    console.log(
+      `❌ Failed: ${global.failedRequests} (${global.errorRate.toFixed(1)}%)`
+    );
     console.log(`⚡ Requests/sec: ${global.requestsPerSecond.toFixed(2)}`);
     console.log('⏱️  Response Times:');
     console.log(`   - Average: ${global.averageResponseTime.toFixed(0)}ms`);
@@ -480,7 +528,9 @@ class LoadTestRunner extends EventEmitter {
         });
     }
 
-    console.log(`\n⏱️  Test Duration: ${(global.testDuration / 1000).toFixed(1)}s`);
+    console.log(
+      `\n⏱️  Test Duration: ${(global.testDuration / 1000).toFixed(1)}s`
+    );
   }
 
   // Export results to JSON
@@ -492,7 +542,7 @@ class LoadTestRunner extends EventEmitter {
     const exportData = {
       timestamp: new Date().toISOString(),
       config: this.config,
-      results: stats,
+      results: stats
     };
 
     fs.writeFileSync(finalFilename, JSON.stringify(exportData, null, 2));
@@ -507,5 +557,5 @@ module.exports = {
   LoadTestRunner,
   VirtualUser,
   HttpClient,
-  RequestMetrics,
+  RequestMetrics
 };

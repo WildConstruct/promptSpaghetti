@@ -142,22 +142,102 @@
     }
   ],
   "edges": [
-    { "id": "e1-2", "source": "start-1", "target": "archetype-2", "type": "smoothstep" },
-    { "id": "e1-3", "source": "start-1", "target": "aesthetic-3", "type": "smoothstep" },
-    { "id": "e1-8", "source": "start-1", "target": "screen-8", "type": "smoothstep" },
-    { "id": "e2-4", "source": "archetype-2", "target": "faction-4", "type": "smoothstep" },
-    { "id": "e3-5", "source": "aesthetic-3", "target": "wear-5", "type": "smoothstep" },
-    { "id": "e3-6", "source": "aesthetic-3", "target": "colors-6", "type": "smoothstep" },
-    { "id": "e4-7", "source": "faction-4", "target": "materials-7", "type": "smoothstep" },
-    { "id": "e5-7", "source": "wear-5", "target": "materials-7", "type": "smoothstep" },
-    { "id": "e6-10", "source": "colors-6", "target": "greeble-10", "type": "smoothstep" },
-    { "id": "e7-11", "source": "materials-7", "target": "labeling-11", "type": "smoothstep" },
-    { "id": "e8-9", "source": "screen-8", "target": "controls-9", "type": "smoothstep" },
-    { "id": "e9-12", "source": "controls-9", "target": "lighting-12", "type": "smoothstep" },
-    { "id": "e10-13", "source": "greeble-10", "target": "function-13", "type": "smoothstep" },
-    { "id": "e11-final", "source": "labeling-11", "target": "output-final", "type": "smoothstep" },
-    { "id": "e12-13", "source": "lighting-12", "target": "function-13", "type": "smoothstep" },
-    { "id": "e13-final", "source": "function-13", "target": "output-final", "type": "smoothstep" }
+    {
+      "id": "e1-2",
+      "source": "start-1",
+      "target": "archetype-2",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e1-3",
+      "source": "start-1",
+      "target": "aesthetic-3",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e1-8",
+      "source": "start-1",
+      "target": "screen-8",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e2-4",
+      "source": "archetype-2",
+      "target": "faction-4",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e3-5",
+      "source": "aesthetic-3",
+      "target": "wear-5",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e3-6",
+      "source": "aesthetic-3",
+      "target": "colors-6",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e4-7",
+      "source": "faction-4",
+      "target": "materials-7",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e5-7",
+      "source": "wear-5",
+      "target": "materials-7",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e6-10",
+      "source": "colors-6",
+      "target": "greeble-10",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e7-11",
+      "source": "materials-7",
+      "target": "labeling-11",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e8-9",
+      "source": "screen-8",
+      "target": "controls-9",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e9-12",
+      "source": "controls-9",
+      "target": "lighting-12",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e10-13",
+      "source": "greeble-10",
+      "target": "function-13",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e11-final",
+      "source": "labeling-11",
+      "target": "output-final",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e12-13",
+      "source": "lighting-12",
+      "target": "function-13",
+      "type": "smoothstep"
+    },
+    {
+      "id": "e13-final",
+      "source": "function-13",
+      "target": "output-final",
+      "type": "smoothstep"
+    }
   ],
   "timestamp": "2025-07-23T11:30:00.000Z"
 }

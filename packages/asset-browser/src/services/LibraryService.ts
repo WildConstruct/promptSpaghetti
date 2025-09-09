@@ -5,9 +5,14 @@ export const LibraryService = {
   async listPresets(): Promise<Preset[]> {
     // stubbed data until wired to real manifest
     return [
-      { id: 'p1', name: 'Medieval Castle', tags: ['demo', 'medieval'], type: 'image' },
+      {
+        id: 'p1',
+        name: 'Medieval Castle',
+        tags: ['demo', 'medieval'],
+        type: 'image'
+      },
       { id: 'p2', name: 'Forest Path', tags: ['nature'], type: 'image' },
-      { id: 'p3', name: 'Ocean Waves', tags: ['nature', 'demo'], type: 'video' },
+      { id: 'p3', name: 'Ocean Waves', tags: ['nature', 'demo'], type: 'video' }
     ];
   },
   async scanLibraries(manifests: unknown[]): Promise<NormalizedPresetEntry[]> {
@@ -25,5 +30,5 @@ export const LibraryService = {
       throw new Error(`${errors.length} error(s) during scan`);
     }
     return entries;
-  },
+  }
 };

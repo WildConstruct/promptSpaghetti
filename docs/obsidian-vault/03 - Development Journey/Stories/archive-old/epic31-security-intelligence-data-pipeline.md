@@ -142,7 +142,7 @@ const fieldMappings = {
   hash: 'threat_indicators.0.value',
   severity: 'severity',
   event_time: 'timestamp',
-  alert_name: 'event_type',
+  alert_name: 'event_type'
 };
 ```
 
@@ -403,7 +403,7 @@ interface SecurityPipelineAlert {
     'storage_failure',
     'integration_failure',
     'performance_degradation',
-    'security_breach',
+    'security_breach'
   ];
   escalation: {
     immediate: string[]; // Email addresses

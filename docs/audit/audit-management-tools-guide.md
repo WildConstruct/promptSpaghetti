@@ -181,14 +181,14 @@ export enum AuditEventType {
   AUTHENTICATION = 'authentication',
   AUTHORIZATION = 'authorization',
   DATA_MODIFICATION = 'data_modification',
-  EXPORT_IMPORT = 'export_import',
+  EXPORT_IMPORT = 'export_import'
 }
 
 export enum AuditSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical',
+  CRITICAL = 'critical'
 }
 
 export enum ComplianceFramework {
@@ -197,7 +197,7 @@ export enum ComplianceFramework {
   SOX = 'sox',
   ISO27001 = 'iso27001',
   HIPAA = 'hipaa',
-  PCI_DSS = 'pci_dss',
+  PCI_DSS = 'pci_dss'
 }
 ```
 
@@ -310,7 +310,7 @@ export const CreateAuditEventRequest = z.object({
   title: z.string().min(1).max(200),
   description: z.string().min(1).max(2000),
   risk_score: z.number().min(0).max(10),
-  compliance_frameworks: z.array(z.nativeEnum(ComplianceFramework)),
+  compliance_frameworks: z.array(z.nativeEnum(ComplianceFramework))
   // ... additional fields
 });
 
@@ -319,13 +319,13 @@ export const AuditQueryResponse = z.object({
   pagination: z.object({
     page: z.number(),
     total_count: z.number(),
-    total_pages: z.number(),
+    total_pages: z.number()
   }),
   analytics: z.object({
     total_events: z.number(),
     severity_distribution: z.record(z.number()),
-    average_risk_score: z.number(),
-  }),
+    average_risk_score: z.number()
+  })
 });
 ```
 
@@ -721,7 +721,7 @@ class AuditManagementSystem {
       user_id: eventData.user_id,
       action: eventData.title,
       details: eventData.description,
-      risk_score: eventData.risk_score,
+      risk_score: eventData.risk_score
     });
 
     return event;
@@ -748,7 +748,7 @@ class SecurityBridge implements SecuritySystemIntegration {
         event_type: AuditEventType.SECURITY_INCIDENT,
         severity: this.mapSeverity(event.severity),
         title: event.title,
-        description: event.description,
+        description: event.description
         // ... additional mapping
       });
     });
@@ -770,7 +770,7 @@ class ComplianceBridge {
         title: `Compliance Violation: ${violation.framework}`,
         description: violation.details,
         compliance_frameworks: [violation.framework],
-        regulatory_impact: true,
+        regulatory_impact: true
       });
     });
   }
@@ -882,7 +882,7 @@ describe('Event Creation', () => {
     const event = auditSystem.createAuditEvent({
       event_type: AuditEventType.USER_ACTION,
       severity: AuditSeverity.MEDIUM,
-      title: 'User Login Attempt',
+      title: 'User Login Attempt'
       // ... additional properties
     });
 
@@ -896,7 +896,7 @@ describe('Event Creation', () => {
       event_type: AuditEventType.SECURITY_INCIDENT,
       severity: AuditSeverity.CRITICAL,
       risk_score: 9.2,
-      alert_triggered: true,
+      alert_triggered: true
     });
 
     expect(event.severity).toBe(AuditSeverity.CRITICAL);
@@ -911,7 +911,7 @@ describe('Event Creation', () => {
 describe('Event Querying', () => {
   it('should filter events by severity', async () => {
     const result = await auditSystem.queryAuditEvents({
-      severities: [AuditSeverity.CRITICAL],
+      severities: [AuditSeverity.CRITICAL]
     });
 
     expect(result.events).toHaveLength(1);
@@ -936,7 +936,7 @@ describe('Analytics Generation', () => {
   it('should generate basic analytics', () => {
     const analytics = auditSystem.generateAuditAnalytics({
       timeframe: 'day',
-      metrics: ['event_count', 'severity_distribution', 'risk_score_average'],
+      metrics: ['event_count', 'severity_distribution', 'risk_score_average']
     });
 
     expect(analytics.total_events).toBeGreaterThan(0);
@@ -955,12 +955,14 @@ describe('Anomaly Detection', () => {
     for (let i = 0; i < 12; i++) {
       auditSystem.createAuditEvent({
         event_type: AuditEventType.AUTHENTICATION,
-        metadata: { success: false },
+        metadata: { success: false }
       });
     }
 
     const patterns = auditSystem.detectAnomalousPatterns();
-    const loginPattern = patterns.find(p => p.type === 'suspicious_login_activity');
+    const loginPattern = patterns.find(
+      p => p.type === 'suspicious_login_activity'
+    );
 
     expect(loginPattern).toBeDefined();
     expect(loginPattern.severity).toBe('high');
@@ -998,7 +1000,7 @@ class AuditManagementSystem {
     byType: new Map<AuditEventType, string[]>(),
     bySeverity: new Map<AuditSeverity, string[]>(),
     byCompliance: new Map<ComplianceFramework, string[]>(),
-    byTimeRange: new Map<string, string[]>(),
+    byTimeRange: new Map<string, string[]>()
   };
 
   // O(1) index updates on event creation
@@ -1050,7 +1052,7 @@ class AnalyticsCache {
   set(key: string, data: any): void {
     this.cache.set(key, {
       data,
-      expiry: Date.now() + this.CACHE_TTL,
+      expiry: Date.now() + this.CACHE_TTL
     });
   }
 }
@@ -1070,7 +1072,9 @@ interface PartitioningStrategy {
   partitionByRisk(events: AuditEvent[]): Map<'low' | 'high', AuditEvent[]>;
 
   // Compliance-based partitioning
-  partitionByCompliance(events: AuditEvent[]): Map<ComplianceFramework, AuditEvent[]>;
+  partitionByCompliance(
+    events: AuditEvent[]
+  ): Map<ComplianceFramework, AuditEvent[]>;
 }
 ```
 
@@ -1093,7 +1097,7 @@ class EventStreamProcessor {
     // Real-time notifications
     this.eventStream.dispatchEvent(
       new CustomEvent('auditEvent', {
-        detail: event,
+        detail: event
       })
     );
   }
@@ -1139,7 +1143,7 @@ class DataProtection {
       return {
         ...event,
         description: this.maskPII(event.description),
-        metadata: this.maskMetadata(event.metadata),
+        metadata: this.maskMetadata(event.metadata)
       };
     }
     return event;
@@ -1150,7 +1154,7 @@ class DataProtection {
     return {
       ...event,
       user_id: event.user_id ? this.encrypt(event.user_id) : undefined,
-      ip_address: event.ip_address ? this.hashIP(event.ip_address) : undefined,
+      ip_address: event.ip_address ? this.hashIP(event.ip_address) : undefined
     };
   }
 }
@@ -1319,19 +1323,19 @@ class AuditMetrics {
   private eventsCreated = new Counter({
     name: 'audit_events_created_total',
     help: 'Total number of audit events created',
-    labelNames: ['event_type', 'severity'],
+    labelNames: ['event_type', 'severity']
   });
 
   private queryDuration = new Histogram({
     name: 'audit_query_duration_seconds',
     help: 'Time taken to execute audit queries',
-    labelNames: ['query_type'],
+    labelNames: ['query_type']
   });
 
   private activeEvents = new Gauge({
     name: 'audit_active_events',
     help: 'Number of active audit events',
-    labelNames: ['severity'],
+    labelNames: ['severity']
   });
 
   recordEventCreation(eventType: string, severity: string): void {

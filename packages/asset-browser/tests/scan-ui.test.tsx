@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { AssetBrowser } from '../src/components/AssetBrowser';
 import { useAssetBrowserStore } from '../src/stores/assetBrowserStore';
@@ -15,7 +21,9 @@ describe('Scan UI states', () => {
 
     await waitFor(() => {
       const statuses = screen.getAllByRole('status');
-      expect(statuses.some(s => /No presets found/i.test(s.textContent || ''))).toBe(true);
+      expect(
+        statuses.some(s => /No presets found/i.test(s.textContent || ''))
+      ).toBe(true);
     });
   });
 
@@ -28,16 +36,20 @@ describe('Scan UI states', () => {
 
     await waitFor(() => {
       const alerts = screen.getAllByRole('alert');
-      expect(alerts.some(a => /Failed to scan libraries/i.test(a.textContent || ''))).toBe(true);
+      expect(
+        alerts.some(a => /Failed to scan libraries/i.test(a.textContent || ''))
+      ).toBe(true);
     });
   });
 
   test('tag filtering works after scan', async () => {
     render(<AssetBrowser />);
-    const ok = { presets: [
-      { id: 'a', path: 'a.psglib', tags: ['x'] },
-      { id: 'b', path: 'b.psglib', tags: ['y'] },
-    ]};
+    const ok = {
+      presets: [
+        { id: 'a', path: 'a.psglib', tags: ['x'] },
+        { id: 'b', path: 'b.psglib', tags: ['y'] }
+      ]
+    };
     await act(async () => {
       await useAssetBrowserStore.getState().scan([ok]);
     });

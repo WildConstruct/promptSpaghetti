@@ -98,7 +98,7 @@ const methodOptions: MethodOption[] = [
     securityLevel: 'High',
     setupDifficulty: 'Easy',
     requirements: ['Smartphone', 'Authenticator app'],
-    recommended: true,
+    recommended: true
   },
   {
     methodType: 'email',
@@ -107,7 +107,7 @@ const methodOptions: MethodOption[] = [
     securityLevel: 'Medium',
     setupDifficulty: 'Easy',
     requirements: ['Email access'],
-    recommended: false,
+    recommended: false
   },
   {
     methodType: 'sms',
@@ -116,7 +116,7 @@ const methodOptions: MethodOption[] = [
     securityLevel: 'Medium',
     setupDifficulty: 'Easy',
     requirements: ['Mobile phone'],
-    recommended: false,
+    recommended: false
   },
   {
     methodType: 'hardware',
@@ -125,8 +125,8 @@ const methodOptions: MethodOption[] = [
     securityLevel: 'High',
     setupDifficulty: 'Advanced',
     requirements: ['Hardware security key'],
-    recommended: false,
-  },
+    recommended: false
+  }
 ];
 ```
 
@@ -136,7 +136,13 @@ const methodOptions: MethodOption[] = [
 
 ```typescript
 interface TOTPEnrollmentFlow {
-  steps: ['app_download', 'qr_code_display', 'manual_entry_fallback', 'verification_test', 'backup_codes_generation'];
+  steps: [
+    'app_download',
+    'qr_code_display',
+    'manual_entry_fallback',
+    'verification_test',
+    'backup_codes_generation'
+  ];
 }
 ```
 
@@ -197,7 +203,7 @@ class TOTPEnrollment {
       qrCodeSVG,
       manualEntryCode: this.formatSecretForDisplay(secret),
       accountName,
-      issuer,
+      issuer
     };
   }
 }
@@ -212,7 +218,9 @@ class TOTPEnrollment {
     <div class="manual-entry-content">
       <p>Account: user@example.com</p>
       <p>Key: <code class="secret-key">JBSW Y3DP EHPK 3PXP</code></p>
-      <button class="copy-btn" onclick="copyToClipboard('.secret-key')">Copy Key</button>
+      <button class="copy-btn" onclick="copyToClipboard('.secret-key')">
+        Copy Key
+      </button>
     </div>
   </details>
 </div>
@@ -235,8 +243,12 @@ class TOTPEnrollment {
   </div>
 
   <div class="verification-feedback">
-    <div class="error-message" style="display: none;">Code incorrect. Please try again.</div>
-    <div class="success-message" style="display: none;">Perfect! Your authenticator is working correctly.</div>
+    <div class="error-message" style="display: none;">
+      Code incorrect. Please try again.
+    </div>
+    <div class="success-message" style="display: none;">
+      Perfect! Your authenticator is working correctly.
+    </div>
   </div>
 
   <button class="verify-btn">Verify Code</button>
@@ -247,7 +259,10 @@ class TOTPEnrollment {
 
 ```typescript
 class EmailEnrollment {
-  async enrollEmail(userId: string, emailAddress: string): Promise<EnrollmentResult> {
+  async enrollEmail(
+    userId: string,
+    emailAddress: string
+  ): Promise<EnrollmentResult> {
     // Validate email format
     if (!this.isValidEmail(emailAddress)) {
       throw new Error('Invalid email format');
@@ -268,7 +283,7 @@ class EmailEnrollment {
 
     return {
       status: 'pending_verification',
-      message: 'Verification email sent',
+      message: 'Verification email sent'
     };
   }
 }
@@ -278,7 +293,10 @@ class EmailEnrollment {
 
 ```typescript
 class SMSEnrollment {
-  async enrollSMS(userId: string, phoneNumber: string): Promise<EnrollmentResult> {
+  async enrollSMS(
+    userId: string,
+    phoneNumber: string
+  ): Promise<EnrollmentResult> {
     // Validate and format phone number
     const formattedNumber = this.formatPhoneNumber(phoneNumber);
 
@@ -294,7 +312,7 @@ class SMSEnrollment {
 
     return {
       status: 'pending_verification',
-      message: 'Verification code sent via SMS',
+      message: 'Verification code sent via SMS'
     };
   }
 }
@@ -365,19 +383,19 @@ const enrollmentPhases: EnrollmentPhase[] = [
   {
     phase: 'primary',
     required: true,
-    canSkip: false,
+    canSkip: false
   },
   {
     phase: 'backup',
     required: false,
     canSkip: true,
-    deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
   },
   {
     phase: 'recovery',
     required: false,
-    canSkip: true,
-  },
+    canSkip: true
+  }
 ];
 ```
 
@@ -385,13 +403,16 @@ const enrollmentPhases: EnrollmentPhase[] = [
 
 ```typescript
 class EnrollmentReminder {
-  async scheduleReminders(userId: string, phase: EnrollmentPhase): Promise<void> {
+  async scheduleReminders(
+    userId: string,
+    phase: EnrollmentPhase
+  ): Promise<void> {
     if (!phase.canSkip) return;
 
     const reminders = [
       { days: 1, message: "Don't forget to set up backup authentication" },
       { days: 3, message: 'Secure your account with backup methods' },
-      { days: 6, message: 'Final reminder: Complete your MFA setup' },
+      { days: 6, message: 'Final reminder: Complete your MFA setup' }
     ];
 
     for (const reminder of reminders) {
@@ -458,8 +479,12 @@ const errorHandlers = {
     recoveryActions: [
       { label: 'Try Again', action: () => retryVerification(), primary: true },
       { label: 'Resend Code', action: () => resendCode(), primary: false },
-      { label: 'Use Different Method', action: () => switchMethod(), primary: false },
-    ],
+      {
+        label: 'Use Different Method',
+        action: () => switchMethod(),
+        primary: false
+      }
+    ]
   },
 
   CODE_EXPIRED: {
@@ -467,8 +492,12 @@ const errorHandlers = {
     message: 'This code has expired. Please request a new one.',
     recoveryActions: [
       { label: 'Get New Code', action: () => generateNewCode(), primary: true },
-      { label: 'Try Different Method', action: () => switchMethod(), primary: false },
-    ],
+      {
+        label: 'Try Different Method',
+        action: () => switchMethod(),
+        primary: false
+      }
+    ]
   },
 
   RATE_LIMITED: {
@@ -476,9 +505,13 @@ const errorHandlers = {
     message: 'Too many attempts. Please wait before trying again.',
     recoveryActions: [
       { label: 'Wait and Retry', action: () => showWaitTimer(), primary: true },
-      { label: 'Contact Support', action: () => contactSupport(), primary: false },
-    ],
-  },
+      {
+        label: 'Contact Support',
+        action: () => contactSupport(),
+        primary: false
+      }
+    ]
+  }
 };
 ```
 
@@ -584,14 +617,17 @@ interface EnrollmentMetrics {
 }
 
 class EnrollmentAnalytics {
-  async trackEnrollmentEvent(userId: string, event: EnrollmentEvent): Promise<void> {
+  async trackEnrollmentEvent(
+    userId: string,
+    event: EnrollmentEvent
+  ): Promise<void> {
     const eventData = {
       userId,
       event: event.type,
       step: event.step,
       method: event.method,
       timestamp: new Date(),
-      metadata: event.metadata,
+      metadata: event.metadata
     };
 
     await this.analyticsService.track('mfa_enrollment', eventData);
@@ -614,14 +650,14 @@ const enrollmentVariants: EnrollmentVariant[] = [
     name: 'standard',
     description: 'Standard enrollment flow',
     config: { showBenefits: true, progressIndicator: true },
-    weight: 50,
+    weight: 50
   },
   {
     name: 'simplified',
     description: 'Simplified single-page enrollment',
     config: { showBenefits: false, progressIndicator: false },
-    weight: 50,
-  },
+    weight: 50
+  }
 ];
 ```
 
@@ -634,12 +670,24 @@ const enrollmentVariants: EnrollmentVariant[] = [
 <fieldset class="method-selection">
   <legend>Choose your preferred authentication method</legend>
 
-  <div class="method-options" role="radiogroup" aria-labelledby="method-selection-heading">
+  <div
+    class="method-options"
+    role="radiogroup"
+    aria-labelledby="method-selection-heading"
+  >
     <label class="method-option" for="totp-method">
-      <input type="radio" id="totp-method" name="auth-method" value="totp" aria-describedby="totp-description" />
+      <input
+        type="radio"
+        id="totp-method"
+        name="auth-method"
+        value="totp"
+        aria-describedby="totp-description"
+      />
       <div class="method-content">
         <h3>Authenticator App</h3>
-        <p id="totp-description">Most secure option using an app on your phone</p>
+        <p id="totp-description">
+          Most secure option using an app on your phone
+        </p>
       </div>
     </label>
   </div>
@@ -686,7 +734,9 @@ class KeyboardNavigation {
 
 ```typescript
 class EnrollmentSecurity {
-  async createSecureEnrollmentSession(userId: string): Promise<EnrollmentSession> {
+  async createSecureEnrollmentSession(
+    userId: string
+  ): Promise<EnrollmentSession> {
     const sessionToken = crypto.randomBytes(32).toString('hex');
     const session: EnrollmentSession = {
       sessionId: sessionToken,
@@ -696,7 +746,7 @@ class EnrollmentSecurity {
       currentStep: 'method_selection',
       verificationAttempts: 0,
       ipAddress: this.getCurrentIP(),
-      userAgent: this.getUserAgent(),
+      userAgent: this.getUserAgent()
     };
 
     await this.redis.setex(
@@ -716,7 +766,7 @@ class EnrollmentSecurity {
 const enrollmentRateLimits = {
   codeGeneration: { maxAttempts: 5, windowMinutes: 60 },
   codeVerification: { maxAttempts: 5, windowMinutes: 15 },
-  methodSwitching: { maxAttempts: 10, windowMinutes: 60 },
+  methodSwitching: { maxAttempts: 10, windowMinutes: 60 }
 };
 ```
 

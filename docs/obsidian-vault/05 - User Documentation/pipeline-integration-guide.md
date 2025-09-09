@@ -827,7 +827,7 @@ const exporter = WildConstructVFXExporter.getInstance();
 exporter.enableCache({
   memoryLimit: 100 * 1024 * 1024, // 100MB
   diskCache: '/tmp/wc-cache',
-  ttl: 3600, // 1 hour
+  ttl: 3600 // 1 hour
 });
 
 // Use streaming for large files

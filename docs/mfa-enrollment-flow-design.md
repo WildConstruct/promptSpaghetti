@@ -104,7 +104,7 @@ interface MFAMethodSelection {
       description: 'Works on any device';
       icon: 'mail';
       note: 'Less secure than other options';
-    },
+    }
   ];
   footer: 'You can add multiple methods and change your preference later';
 }
@@ -117,13 +117,13 @@ interface SecurityEducation {
   benefits: [
     'Protects against password theft and data breaches',
     'Prevents unauthorized access even with stolen passwords',
-    'Required for accessing sensitive account features',
+    'Required for accessing sensitive account features'
   ];
   process: [
     "We'll generate a unique secret for your account",
     "You'll scan a QR code with your authenticator app",
     'Enter a code from your app to verify setup',
-    'Save backup codes in case you lose your device',
+    'Save backup codes in case you lose your device'
   ];
   time: 'Setup takes about 2 minutes';
 }
@@ -134,7 +134,9 @@ interface SecurityEducation {
 #### Server-Side Process
 
 ```typescript
-async function initiateTOTPEnrollment(userId: string): Promise<TOTPEnrollmentResponse> {
+async function initiateTOTPEnrollment(
+  userId: string
+): Promise<TOTPEnrollmentResponse> {
   // Generate cryptographically secure secret
   const secret = generateTOTPSecret(); // 160-bit secret
 
@@ -142,7 +144,7 @@ async function initiateTOTPEnrollment(userId: string): Promise<TOTPEnrollmentRes
   const enrollmentToken = await createEnrollmentSession(userId, {
     method: 'totp',
     secret: encryptSecret(secret),
-    expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+    expiresAt: new Date(Date.now() + 10 * 60 * 1000)
   });
 
   // Generate QR code URL
@@ -153,14 +155,14 @@ async function initiateTOTPEnrollment(userId: string): Promise<TOTPEnrollmentRes
     userId,
     action: 'mfa_enrollment_started',
     method: 'totp',
-    sessionId: enrollmentToken,
+    sessionId: enrollmentToken
   });
 
   return {
     enrollmentToken,
     qrCodeDataUrl: await generateQRCodeImage(qrCodeUrl),
     backupSecret: formatSecretForManualEntry(secret),
-    expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+    expiresAt: new Date(Date.now() + 10 * 60 * 1000)
   };
 }
 ```
@@ -186,7 +188,7 @@ interface TOTPSetupScreen {
     "Tap the '+' or 'Add' button",
     "Select 'Scan QR code' or 'Scan barcode'",
     'Point your camera at this QR code',
-    'Enter the 6-digit code from your app below',
+    'Enter the 6-digit code from your app below'
   ];
 
   manualEntry: {
@@ -197,7 +199,7 @@ interface TOTPSetupScreen {
       "In your authenticator app, select 'Manual entry'",
       'Enter account name: PromptScape',
       'Enter the key above',
-      "Ensure 'Time-based' is selected",
+      "Ensure 'Time-based' is selected"
     ];
   };
 
@@ -246,7 +248,7 @@ async function verifyTOTPEnrollment(
       userId,
       action: 'mfa_enrollment_verification_failed',
       method: 'totp',
-      sessionId: enrollmentToken,
+      sessionId: enrollmentToken
     });
     throw new Error('Invalid verification code');
   }
@@ -281,13 +283,13 @@ async function verifyTOTPEnrollment(
     userId,
     action: 'mfa_enrollment_completed',
     method: 'totp',
-    sessionId: enrollmentToken,
+    sessionId: enrollmentToken
   });
 
   return {
     success: true,
     recoveryCodes: recoveryCodes,
-    nextStep: 'backup_codes_display',
+    nextStep: 'backup_codes_display'
   };
 }
 ```
@@ -311,7 +313,7 @@ interface RecoveryCodesScreen {
       'Each code can only be used once',
       'Store them in a secure password manager',
       "Don't share them or store them in plain text",
-      "You'll need these if you lose your authenticator device",
+      "You'll need these if you lose your authenticator device"
     ];
   };
 
@@ -326,7 +328,7 @@ interface RecoveryCodesScreen {
       'WXYZ-ABCD',
       'EFGH-IJKL',
       'MNOP-QRST',
-      'UVWX-YZAB',
+      'UVWX-YZAB'
     ];
     actions: {
       download: 'Download as text file';
@@ -353,7 +355,7 @@ interface RecoveryCodesScreen {
         title: 'Physical Storage';
         description: 'Print and store in a safe place';
         icon: 'printer';
-      },
+      }
     ];
   };
 
@@ -408,7 +410,7 @@ interface EnrollmentSuccessScreen {
       description: 'Enable 2FA on your other important accounts';
       action: 'Learn More';
       optional: true;
-    },
+    }
   ];
 
   securityTips: {
@@ -417,7 +419,7 @@ interface EnrollmentSuccessScreen {
       'Keep your authenticator app updated',
       'Back up your authenticator app if it supports it',
       "Don't share screenshots of QR codes or backup codes",
-      'Contact support if you lose access to your device',
+      'Contact support if you lose access to your device'
     ];
   };
 
@@ -456,7 +458,7 @@ interface SMSEnrollmentScreen {
     details: [
       'Vulnerable to SIM swapping attacks',
       'Depends on cellular network availability',
-      'We recommend using an authenticator app instead',
+      'We recommend using an authenticator app instead'
     ];
     action: 'Switch to Authenticator App';
   };
@@ -499,7 +501,7 @@ interface SMSVerificationScreen {
       'Check your spam/junk folder',
       'Ensure you have cellular signal',
       'Try a different phone number',
-      'Use an authenticator app instead',
+      'Use an authenticator app instead'
     ];
   };
 
@@ -535,7 +537,7 @@ interface EmailEnrollmentScreen {
     details: [
       'Vulnerable if your email account is compromised',
       'Depends on email delivery reliability',
-      'Consider using an authenticator app for better security',
+      'Consider using an authenticator app for better security'
     ];
     action: 'Switch to Authenticator App';
   };
@@ -546,7 +548,7 @@ interface EmailEnrollmentScreen {
       'Enable 2FA on your email account',
       'Use a strong, unique password',
       'Keep your email app updated',
-      "Don't access email on public Wi-Fi",
+      "Don't access email on public Wi-Fi"
     ];
   };
 
@@ -596,7 +598,7 @@ interface MultiMethodEnrollmentScreen {
         title: 'Recovery Codes';
         status: 'completed';
         description: '10 codes saved securely';
-      },
+      }
     ];
   };
 
@@ -625,7 +627,7 @@ interface SessionExpiredScreen {
     details: [
       'This prevents unauthorized access to your setup process',
       'You can restart the setup process safely',
-      'Your account remains secure',
+      'Your account remains secure'
     ];
   };
 
@@ -663,7 +665,7 @@ interface InvalidCodeScreen {
       {
         problem: 'Wrong app account';
         solution: "Make sure you're using the code for PromptScape";
-      },
+      }
     ];
   };
 
@@ -732,7 +734,7 @@ interface MobileQRCodeScreen {
       'Open your authenticator app',
       "Tap 'Add account' or '+'",
       "Choose 'Scan QR code'",
-      'Point camera at code above',
+      'Point camera at code above'
     ];
     illustrations: true;
   };
@@ -823,13 +825,13 @@ interface KeyboardSupport {
     { key: 'Escape'; action: 'close-modal' },
     { key: 'Enter'; action: 'primary-action' },
     { key: 'Tab'; action: 'next-element' },
-    { key: 'Shift+Tab'; action: 'previous-element' },
+    { key: 'Shift+Tab'; action: 'previous-element' }
   ];
 
   skipLinks: [
     { target: '#main-content'; text: 'Skip to main content' },
     { target: '#qr-code'; text: 'Skip to QR code' },
-    { target: '#manual-entry'; text: 'Skip to manual entry' },
+    { target: '#manual-entry'; text: 'Skip to manual entry' }
   ];
 }
 ```
@@ -850,12 +852,24 @@ interface EnrollmentAnalytics {
     'recovery_codes_displayed',
     'recovery_codes_confirmed',
     'enrollment_completed',
-    'enrollment_abandoned',
+    'enrollment_abandoned'
   ];
 
-  metrics: ['completion_rate', 'method_preference', 'time_to_complete', 'error_frequency', 'abandonment_points'];
+  metrics: [
+    'completion_rate',
+    'method_preference',
+    'time_to_complete',
+    'error_frequency',
+    'abandonment_points'
+  ];
 
-  segmentation: ['user_type', 'device_type', 'browser_type', 'enrollment_trigger', 'time_of_day'];
+  segmentation: [
+    'user_type',
+    'device_type',
+    'browser_type',
+    'enrollment_trigger',
+    'time_of_day'
+  ];
 }
 ```
 
@@ -869,7 +883,7 @@ interface ErrorTracking {
     'network_error',
     'qr_generation_failed',
     'secret_encryption_error',
-    'database_error',
+    'database_error'
   ];
 
   alerting: {
@@ -964,7 +978,7 @@ interface UATScenarios {
     'successful_totp_enrollment',
     'successful_sms_enrollment',
     'successful_email_enrollment',
-    'multi_method_setup',
+    'multi_method_setup'
   ];
 
   errorCases: [
@@ -972,17 +986,22 @@ interface UATScenarios {
     'session_expiry',
     'network_failure',
     'phone_number_invalid',
-    'email_delivery_failure',
+    'email_delivery_failure'
   ];
 
   edgeCases: [
     'concurrent_enrollments',
     'browser_refresh_during_setup',
     'multiple_tab_enrollment',
-    'device_time_incorrect',
+    'device_time_incorrect'
   ];
 
-  accessibility: ['screen_reader_navigation', 'keyboard_only_operation', 'high_contrast_mode', 'zoom_functionality'];
+  accessibility: [
+    'screen_reader_navigation',
+    'keyboard_only_operation',
+    'high_contrast_mode',
+    'zoom_functionality'
+  ];
 }
 ```
 
@@ -995,17 +1014,21 @@ interface SecurityTesting {
     'qr_code_interception',
     'secret_extraction_attempts',
     'replay_attack_simulation',
-    'timing_attack_analysis',
+    'timing_attack_analysis'
   ];
 
   vulnerabilityScans: [
     'xss_in_enrollment_forms',
     'csrf_protection_validation',
     'injection_attack_prevention',
-    'sensitive_data_exposure',
+    'sensitive_data_exposure'
   ];
 
-  complianceTests: ['nist_800_63b_requirements', 'owasp_authentication_guidelines', 'soc2_type2_controls'];
+  complianceTests: [
+    'nist_800_63b_requirements',
+    'owasp_authentication_guidelines',
+    'soc2_type2_controls'
+  ];
 }
 ```
 

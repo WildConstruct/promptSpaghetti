@@ -562,7 +562,14 @@ This document defines the visual design system for Multi-Factor Authentication (
       <div class="score-circle" data-score="85">
         <svg class="progress-ring" width="60" height="60">
           <circle class="progress-ring-background" cx="30" cy="30" r="25" />
-          <circle class="progress-ring-progress" cx="30" cy="30" r="25" stroke-dasharray="157" stroke-dashoffset="24" />
+          <circle
+            class="progress-ring-progress"
+            cx="30"
+            cy="30"
+            r="25"
+            stroke-dasharray="157"
+            stroke-dashoffset="24"
+          />
         </svg>
         <div class="score-text">85%</div>
       </div>
@@ -802,7 +809,9 @@ This document defines the visual design system for Multi-Factor Authentication (
     <div class="toast-icon">✅</div>
     <div class="toast-content">
       <div class="toast-title">MFA Setup Complete</div>
-      <div class="toast-message">Your account is now protected with multi-factor authentication.</div>
+      <div class="toast-message">
+        Your account is now protected with multi-factor authentication.
+      </div>
     </div>
     <button class="toast-close">×</button>
   </div>
@@ -811,7 +820,9 @@ This document defines the visual design system for Multi-Factor Authentication (
     <div class="toast-icon">⚠️</div>
     <div class="toast-content">
       <div class="toast-title">Backup Recommended</div>
-      <div class="toast-message">Consider adding a backup authentication method.</div>
+      <div class="toast-message">
+        Consider adding a backup authentication method.
+      </div>
     </div>
     <div class="toast-actions">
       <button class="toast-action">Add Backup</button>
@@ -1016,13 +1027,22 @@ This document defines the visual design system for Multi-Factor Authentication (
   </div>
 
   <div class="status-content">
-    <span class="status-label" aria-describedby="status-description"> MFA Active </span>
-    <span id="status-description" class="status-description"> 2 methods configured </span>
+    <span class="status-label" aria-describedby="status-description">
+      MFA Active
+    </span>
+    <span id="status-description" class="status-description">
+      2 methods configured
+    </span>
   </div>
 </div>
 
 <!-- Live region for dynamic updates -->
-<div id="mfa-announcements" class="sr-only" aria-live="polite" aria-atomic="true">
+<div
+  id="mfa-announcements"
+  class="sr-only"
+  aria-live="polite"
+  aria-atomic="true"
+>
   <!-- Dynamic status updates announced here -->
 </div>
 ```
@@ -1222,7 +1242,9 @@ class MFAStatusController {
     }, 5000);
 
     // Bind close event
-    toast.querySelector('.toast-close').addEventListener('click', this.closeToast.bind(this));
+    toast
+      .querySelector('.toast-close')
+      .addEventListener('click', this.closeToast.bind(this));
   }
 
   closeToast(event) {
@@ -1236,7 +1258,7 @@ class MFAStatusController {
       success: '✅',
       warning: '⚠️',
       danger: '❌',
-      info: 'ℹ️',
+      info: 'ℹ️'
     };
     return icons[type] || icons.info;
   }
@@ -1276,22 +1298,22 @@ const mfaComponentConfig = {
     size: 'small' | 'medium' | 'large',
     showPulse: boolean,
     clickable: boolean,
-    showDescription: boolean,
+    showDescription: boolean
   },
 
   statusGrid: {
     columns: 'auto' | number,
     compactMode: boolean,
     showActions: boolean,
-    sortable: boolean,
+    sortable: boolean
   },
 
   dashboard: {
     showSecurityScore: boolean,
     showQuickActions: boolean,
     updateInterval: number,
-    theme: 'light' | 'dark',
-  },
+    theme: 'light' | 'dark'
+  }
 };
 ```
 

@@ -29,7 +29,7 @@ Create the directory structure for project dialog components including save, ope
     epic: 'File Browser & Project Management',
     story: 'File Browser Interface & Project Management UI',
     phase: 'Save/Open Dialog Components',
-    step_number: 6,
+    step_number: 6
   },
   {
     title: 'Create SaveProjectDialog.tsx with form validation',
@@ -52,7 +52,7 @@ Create the save project dialog with form validation for project naming and save 
     epic: 'File Browser & Project Management',
     story: 'File Browser Interface & Project Management UI',
     phase: 'Save/Open Dialog Components',
-    step_number: 7,
+    step_number: 7
   },
   // Continue with remaining Story 2 tasks...
 
@@ -78,8 +78,8 @@ Create the core auto-save module that handles automatic saving of project state 
     epic: 'File Browser & Project Management',
     story: 'Auto-Recovery & Recent Files Features',
     phase: 'Auto-Save Infrastructure',
-    step_number: 1,
-  },
+    step_number: 1
+  }
   // ... Continue with all remaining 55 tasks
 ];
 

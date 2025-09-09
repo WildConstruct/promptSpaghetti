@@ -310,61 +310,67 @@ export async function registerAdminRoutes(server: FastifyInstance) {
   const checkAdminAuth = (request: FastifyRequest, reply: FastifyReply) => {
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
     const authHeader = request.headers.authorization;
-    
+
     if (!authHeader) {
       reply.header('WWW-Authenticate', 'Basic realm="Admin Panel"');
       reply.status(401).send('Authentication required');
       return false;
     }
-    
+
     const [type, credentials] = authHeader.split(' ');
     if (type !== 'Basic') {
       reply.status(401).send('Invalid authentication type');
       return false;
     }
-    
-    const [username, password] = Buffer.from(credentials, 'base64').toString().split(':');
+
+    const [username, password] = Buffer.from(credentials, 'base64')
+      .toString()
+      .split(':');
     if (username !== 'admin' || password !== adminPassword) {
       reply.status(401).send('Invalid credentials');
       return false;
     }
-    
+
     return true;
   };
-  
+
   // Admin panel HTML page
   server.get('/admin', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     const config = {
       SUPABASE_URL: process.env.SUPABASE_URL,
-      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8) : '',
-      OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? '***' + process.env.OPENROUTER_API_KEY.slice(-8) : '',
+      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+        ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8)
+        : '',
+      OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY
+        ? '***' + process.env.OPENROUTER_API_KEY.slice(-8)
+        : '',
       DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
       NODE_ENV: process.env.NODE_ENV,
-      ENABLE_ADMIN: process.env.ENABLE_ADMIN,
+      ENABLE_ADMIN: process.env.ENABLE_ADMIN
     };
-    
+
     reply.type('text/html').send(getAdminHTML(config));
   });
-  
+
   // Handle config updates
   server.post('/admin/config', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     const body = request.body as any;
     const envPath = path.join(__dirname, '../.env');
-    
+
     try {
       // Read current .env file
       let envContent = '';
       if (fs.existsSync(envPath)) {
         envContent = fs.readFileSync(envPath, 'utf-8');
       }
-      
+
       // Update the values
       const updates: Record<string, string> = {};
-      
+
       if (body.supabase_url) {
         updates.SUPABASE_URL = body.supabase_url;
       }
@@ -377,7 +383,7 @@ export async function registerAdminRoutes(server: FastifyInstance) {
       if (body.daily_cost_limit) {
         updates.DAILY_COST_LIMIT = body.daily_cost_limit;
       }
-      
+
       // Apply updates to env content
       for (const [key, value] of Object.entries(updates)) {
         const regex = new RegExp(`^${key}=.*$`, 'gm');
@@ -386,45 +392,51 @@ export async function registerAdminRoutes(server: FastifyInstance) {
         } else {
           envContent += `\n${key}=${value}`;
         }
-        
+
         // Also update process.env for current session
         process.env[key] = value;
       }
-      
+
       // Write back to .env file
       fs.writeFileSync(envPath, envContent);
-      
+
       // Redirect back with success message
       const config = {
         SUPABASE_URL: process.env.SUPABASE_URL,
-        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8) : '',
-        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? '***' + process.env.OPENROUTER_API_KEY.slice(-8) : '',
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+          ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8)
+          : '',
+        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY
+          ? '***' + process.env.OPENROUTER_API_KEY.slice(-8)
+          : '',
         DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
         NODE_ENV: process.env.NODE_ENV,
-        ENABLE_ADMIN: process.env.ENABLE_ADMIN,
+        ENABLE_ADMIN: process.env.ENABLE_ADMIN
       };
-      
-      reply.type('text/html').send(getAdminHTML(config, {
-        type: 'success',
-        text: 'Configuration updated successfully!'
-      }));
+
+      reply.type('text/html').send(
+        getAdminHTML(config, {
+          type: 'success',
+          text: 'Configuration updated successfully!'
+        })
+      );
     } catch (error) {
       console.error('Error updating config:', error);
       reply.status(500).send('Failed to update configuration');
     }
   });
-  
+
   // Admin metrics endpoint (JSON)
   server.get('/admin/metrics', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) return;
-    
+
     // Return actual or mock metrics
     return {
       timestamp: new Date().toISOString(),
       server: {
         uptime: process.uptime(),
         memory: process.memoryUsage(),
-        port: process.env.PORT || 8000,
+        port: process.env.PORT || 8000
       },
       llm: {
         calls_today: 42,
@@ -438,7 +450,7 @@ export async function registerAdminRoutes(server: FastifyInstance) {
       },
       supabase: {
         configured: !!process.env.SUPABASE_URL,
-        url: process.env.SUPABASE_URL || 'Not configured',
+        url: process.env.SUPABASE_URL || 'Not configured'
       }
     };
   });

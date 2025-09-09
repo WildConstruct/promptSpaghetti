@@ -26,7 +26,7 @@ Epic 18.2 has successfully implemented critical security fixes for the 3 deploym
 export const SetVariableNodeSchema = BaseNode.extend({
   type: z.literal('SetVariable'),
   key: z.string(),
-  value: z.any(), // ❌ DANGEROUS: Accepts any value type
+  value: z.any() // ❌ DANGEROUS: Accepts any value type
 });
 ```
 
@@ -37,7 +37,7 @@ export const SetVariableNodeSchema = BaseNode.extend({
 export const SetVariableNodeSchema = BaseNode.extend({
   type: z.literal('SetVariable'),
   key: SecureValidation.safePropertyKey(),
-  value: SecureValidation.safeValue(), // ✅ SECURE: Validates all values
+  value: SecureValidation.safeValue() // ✅ SECURE: Validates all values
 });
 ```
 
@@ -66,10 +66,10 @@ export const ConditionalNodeSchema = BaseNode.extend({
       z.object({
         condition: z.string(), // ❌ DANGEROUS: Accepts any expression
         output: z.string(),
-        label: z.string().optional(),
+        label: z.string().optional()
       })
     )
-    .optional(),
+    .optional()
 });
 ```
 
@@ -84,10 +84,10 @@ export const ConditionalNodeSchema = BaseNode.extend({
       z.object({
         condition: SecureValidation.safeExpression(), // ✅ SECURE: Validates expressions
         output: SecureValidation.safeString(),
-        label: SecureValidation.safeString().optional(),
+        label: SecureValidation.safeString().optional()
       })
     )
-    .optional(),
+    .optional()
 });
 ```
 

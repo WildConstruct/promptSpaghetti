@@ -41,7 +41,7 @@ class BackupCodeGenerator {
         code: code,
         userId,
         used: false,
-        generatedAt: new Date(),
+        generatedAt: new Date()
       });
     }
 
@@ -105,7 +105,7 @@ interface MFAMethodPriority {
 const recoveryPriority: MFAMethodPriority = {
   primary: ['totp', 'hardware_token'],
   backup: ['email', 'sms'],
-  emergency: ['backup_codes', 'recovery_email'],
+  emergency: ['backup_codes', 'recovery_email']
 };
 ```
 
@@ -197,26 +197,26 @@ const standardRecoveryWorkflow: RecoveryWorkflow[] = [
     step: 1,
     description: 'Verify recovery email/phone',
     required: true,
-    timeLimit: 15,
+    timeLimit: 15
   },
   {
     step: 2,
     description: 'Answer security questions',
     required: true,
-    timeLimit: 10,
+    timeLimit: 10
   },
   {
     step: 3,
     description: 'Provide account information',
     required: true,
-    timeLimit: 30,
+    timeLimit: 30
   },
   {
     step: 4,
     description: 'Wait for verification (1-24 hours)',
     required: true,
-    timeLimit: 1440,
-  },
+    timeLimit: 1440
+  }
 ];
 ```
 
@@ -250,18 +250,18 @@ const escalationRules: EscalationRule[] = [
   {
     trigger: 'High-value account locked > 4 hours',
     escalateTo: 'Security Team',
-    timeLimit: 4,
+    timeLimit: 4
   },
   {
     trigger: 'Multiple failed recovery attempts',
     escalateTo: 'Fraud Prevention',
-    timeLimit: 1,
+    timeLimit: 1
   },
   {
     trigger: 'Corporate account recovery request',
     escalateTo: 'Enterprise Support',
-    timeLimit: 2,
-  },
+    timeLimit: 2
+  }
 ];
 ```
 
@@ -270,19 +270,23 @@ const escalationRules: EscalationRule[] = [
 ### Backup Code Generation Email
 
 ```html
-Subject: Important: Your MFA Backup Codes Dear [Name], You have successfully generated new backup codes for your
-account. These codes can be used to access your account if your primary MFA method is unavailable. IMPORTANT: Save these
-codes in a secure location. Each code can only be used once. [Backup Codes List] Security Tips: - Store codes separately
-from your password - Do not share codes with anyone - Generate new codes if you suspect compromise - Keep codes updated
+Subject: Important: Your MFA Backup Codes Dear [Name], You have successfully
+generated new backup codes for your account. These codes can be used to access
+your account if your primary MFA method is unavailable. IMPORTANT: Save these
+codes in a secure location. Each code can only be used once. [Backup Codes List]
+Security Tips: - Store codes separately from your password - Do not share codes
+with anyone - Generate new codes if you suspect compromise - Keep codes updated
 and accessible Questions? Contact support at [email]
 ```
 
 ### Recovery Process Initiated
 
 ```html
-Subject: Account Recovery Request Started We received a request to recover access to your account using backup
-procedures. Recovery Method: [Method] Request Time: [Timestamp] IP Address: [IP] If you did not request this recovery,
-please contact security immediately. Expected completion time: [Timeframe] Reference ID: [ID]
+Subject: Account Recovery Request Started We received a request to recover
+access to your account using backup procedures. Recovery Method: [Method]
+Request Time: [Timestamp] IP Address: [IP] If you did not request this recovery,
+please contact security immediately. Expected completion time: [Timeframe]
+Reference ID: [ID]
 ```
 
 ## Security Measures

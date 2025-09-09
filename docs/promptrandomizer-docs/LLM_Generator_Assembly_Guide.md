@@ -40,9 +40,9 @@ A generator JSON file has four required sections:
   "metadata": { "name": "Hello World", "version": "1.0.0" },
   "grammar": {
     "greeting": ["Hello", "Hi", "Hey"],
-    "default": ["#greeting# world!"],
+    "default": ["#greeting# world!"]
   },
-  "entry_points": { "default": "default" },
+  "entry_points": { "default": "default" }
 }
 ```
 
@@ -199,13 +199,13 @@ When inventing a brand-new slot, add it to `slot_taxonomy.md` first, then refere
   "metadata": {
     "name": "New Generator",
     "version": "0.1.0",
-    "description": "…",
+    "description": "…"
   },
   "variables": {},
   "grammar": {
-    "placeholder": ["example"],
+    "placeholder": ["example"]
   },
-  "entry_points": { "default": "placeholder" },
+  "entry_points": { "default": "placeholder" }
 }
 ```
 

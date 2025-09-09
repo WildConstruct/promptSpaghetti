@@ -26,20 +26,29 @@ const deploymentBlockerTasks = [
     wipClass: 'infrastructure',
     epic: 'TypeScript Infrastructure',
     story: 'Deployment Blocker Resolution',
-    tags: ['typescript', 'database', 'types', 'infrastructure', 'deployment-blocker', 'foundational'],
+    tags: [
+      'typescript',
+      'database',
+      'types',
+      'infrastructure',
+      'deployment-blocker',
+      'foundational'
+    ],
     acceptanceCriteria: [
       'Create packages/core/database/types.ts file',
       'Implement PaginatedResult<T> generic interface',
       'Implement PaginationOptions interface with limit, offset, sort fields',
       'Define Role and Permission types for RBAC system',
       'Ensure types compile without errors',
-      'Document interfaces with JSDoc comments',
+      'Document interfaces with JSDoc comments'
     ],
     dependencies: [],
-    businessValue: 'Resolves 1000+ cascading TypeScript errors blocking authentication deployment',
-    technicalImpact: 'FOUNDATIONAL - Other deployment blocker tasks depend on this',
+    businessValue:
+      'Resolves 1000+ cascading TypeScript errors blocking authentication deployment',
+    technicalImpact:
+      'FOUNDATIONAL - Other deployment blocker tasks depend on this',
     blockedBy: [],
-    blocks: ['FASTIFY-PLUGIN-001', 'SECURITY-TYPES-001', 'EXPORT-CONFLICTS-001'],
+    blocks: ['FASTIFY-PLUGIN-001', 'SECURITY-TYPES-001', 'EXPORT-CONFLICTS-001']
   },
   {
     title: 'Install and Configure WebAuthn Type Packages',
@@ -51,19 +60,27 @@ const deploymentBlockerTasks = [
     wipClass: 'infrastructure',
     epic: 'TypeScript Infrastructure',
     story: 'Deployment Blocker Resolution',
-    tags: ['typescript', 'webauthn', 'types', 'installation', 'deployment-blocker', 'auth'],
+    tags: [
+      'typescript',
+      'webauthn',
+      'types',
+      'installation',
+      'deployment-blocker',
+      'auth'
+    ],
     acceptanceCriteria: [
       'Install @types/webauthn package as dev dependency',
       'Install @types/fido2-lib package as dev dependency',
       'Verify WebAuthn types are accessible in TypeScript',
       'Update tsconfig.json if needed for type resolution',
-      'Ensure authentication imports compile without type errors',
+      'Ensure authentication imports compile without type errors'
     ],
     dependencies: [],
-    businessValue: 'Enables WebAuthn authentication system to compile and deploy',
+    businessValue:
+      'Enables WebAuthn authentication system to compile and deploy',
     technicalImpact: 'FOUNDATIONAL - Required for FASTIFY-PLUGIN-001',
     blockedBy: [],
-    blocks: ['FASTIFY-PLUGIN-001'],
+    blocks: ['FASTIFY-PLUGIN-001']
   },
   {
     title: 'Fix Fastify Authentication Plugin Integration',
@@ -75,20 +92,29 @@ const deploymentBlockerTasks = [
     wipClass: 'integration',
     epic: 'TypeScript Infrastructure',
     story: 'Deployment Blocker Resolution',
-    tags: ['fastify', 'plugins', 'authentication', 'integration', 'deployment-blocker', 'backend'],
+    tags: [
+      'fastify',
+      'plugins',
+      'authentication',
+      'integration',
+      'deployment-blocker',
+      'backend'
+    ],
     acceptanceCriteria: [
       'Fix request.user property missing error in auth middleware',
       'Implement fastify.database property registration',
       'Complete AuditService.logAction method implementation',
       'Resolve AuthenticatorTransport type definitions',
       'Ensure all Fastify auth plugins register correctly',
-      'Test authentication flow compiles and works',
+      'Test authentication flow compiles and works'
     ],
     dependencies: ['TYPES-DB-001', 'TYPES-AUTH-001'],
-    businessValue: 'Enables authentication system to integrate with Fastify server',
-    technicalImpact: 'CRITICAL - Authentication system cannot function without this',
+    businessValue:
+      'Enables authentication system to integrate with Fastify server',
+    technicalImpact:
+      'CRITICAL - Authentication system cannot function without this',
     blockedBy: ['TYPES-DB-001', 'TYPES-AUTH-001'],
-    blocks: [],
+    blocks: []
   },
   {
     title: 'Repair Template Parsing Variable Scoping',
@@ -100,20 +126,28 @@ const deploymentBlockerTasks = [
     wipClass: 'bug-fix',
     epic: 'TypeScript Infrastructure',
     story: 'Deployment Blocker Resolution',
-    tags: ['template-parser', 'variable-scoping', 'bug-fix', 'deployment-blocker', 'vfx'],
+    tags: [
+      'template-parser',
+      'variable-scoping',
+      'bug-fix',
+      'deployment-blocker',
+      'vfx'
+    ],
     acceptanceCriteria: [
       'Fix variable scoping issues in packages/core/utils/templateParser.ts',
       'Resolve "variable template out of scope" compilation errors',
       'Complete broken function signature repairs',
       'Ensure template variable extraction system works',
       'Fix {variable} syntax processing in Epic 8 UX abstraction',
-      'Add comprehensive tests for template parsing functionality',
+      'Add comprehensive tests for template parsing functionality'
     ],
     dependencies: [],
-    businessValue: 'Enables template-based variable system and VFX export functionality',
-    technicalImpact: 'BLOCKS - VFX export and advanced node template functionality',
+    businessValue:
+      'Enables template-based variable system and VFX export functionality',
+    technicalImpact:
+      'BLOCKS - VFX export and advanced node template functionality',
     blockedBy: [],
-    blocks: ['VFX-TYPES-001'],
+    blocks: ['VFX-TYPES-001']
   },
   {
     title: 'Complete VFXRenderingData Interface Definition',
@@ -125,20 +159,28 @@ const deploymentBlockerTasks = [
     wipClass: 'feature',
     epic: 'TypeScript Infrastructure',
     story: 'Deployment Blocker Resolution',
-    tags: ['vfx', 'export', 'interface', 'types', 'deployment-blocker', 'rendering'],
+    tags: [
+      'vfx',
+      'export',
+      'interface',
+      'types',
+      'deployment-blocker',
+      'rendering'
+    ],
     acceptanceCriteria: [
       'Complete VFXRenderingData interface definition',
       'Fix return statement syntax errors in VFXExporter.ts',
       'Complete weights property type definitions',
       'Ensure VFX export system compiles without errors',
       'Add proper TypeScript types for all VFX-related data structures',
-      'Test VFX export generation works correctly',
+      'Test VFX export generation works correctly'
     ],
     dependencies: ['TEMPLATE-PARSER-001'],
     businessValue: 'Enables VFX export system for film industry integration',
-    technicalImpact: 'FEATURE - VFX export cannot function without proper type definitions',
+    technicalImpact:
+      'FEATURE - VFX export cannot function without proper type definitions',
     blockedBy: ['TEMPLATE-PARSER-001'],
-    blocks: [],
+    blocks: []
   },
   {
     title: 'Fix Rate Limiting and Security Interface Types',
@@ -150,20 +192,28 @@ const deploymentBlockerTasks = [
     wipClass: 'security',
     epic: 'TypeScript Infrastructure',
     story: 'Deployment Blocker Resolution',
-    tags: ['security', 'rate-limiting', 'interfaces', 'types', 'deployment-blocker', 'middleware'],
+    tags: [
+      'security',
+      'rate-limiting',
+      'interfaces',
+      'types',
+      'deployment-blocker',
+      'middleware'
+    ],
     acceptanceCriteria: [
       'Add missing statusCode property to RateLimitAction interface',
       'Resolve RateLimitStrategy enum/class naming conflicts',
       'Fix duplicate function conflicts in AdaptiveThrottlingRules.ts',
       'Rename conflicting updateSystemMetrics methods',
       'Fix export assignment syntax errors in security modules',
-      'Complete SecurityEventContext interface with strictMode and error properties',
+      'Complete SecurityEventContext interface with strictMode and error properties'
     ],
     dependencies: ['TYPES-DB-001'],
     businessValue: 'Enables security middleware and rate limiting protection',
-    technicalImpact: 'SECURITY - Rate limiting and security features cannot deploy without this',
+    technicalImpact:
+      'SECURITY - Rate limiting and security features cannot deploy without this',
     blockedBy: ['TYPES-DB-001'],
-    blocks: [],
+    blocks: []
   },
   {
     title: 'Resolve Module Export and Import Conflicts',
@@ -175,21 +225,29 @@ const deploymentBlockerTasks = [
     wipClass: 'infrastructure',
     epic: 'TypeScript Infrastructure',
     story: 'Deployment Blocker Resolution',
-    tags: ['modules', 'exports', 'imports', 'dependencies', 'deployment-blocker', 'resolution'],
+    tags: [
+      'modules',
+      'exports',
+      'imports',
+      'dependencies',
+      'deployment-blocker',
+      'resolution'
+    ],
     acceptanceCriteria: [
       'Fix SerializedGraph → serializeGraph export mismatch in LLM Randomizer',
       'Resolve ValidationResult export conflicts',
       'Complete serialization module exports',
       'Add missing Role, Permission exports to workspace-models.ts',
       'Fix PaginatedResult, PaginationOptions exports in template-models.ts',
-      'Resolve Zod namespace import issues across modules',
+      'Resolve Zod namespace import issues across modules'
     ],
     dependencies: ['TYPES-DB-001'],
     businessValue: 'Enables proper module loading and dependency resolution',
-    technicalImpact: 'INFRASTRUCTURE - Module system cannot function without proper exports',
+    technicalImpact:
+      'INFRASTRUCTURE - Module system cannot function without proper exports',
     blockedBy: ['TYPES-DB-001'],
-    blocks: [],
-  },
+    blocks: []
+  }
 ];
 
 // Utility functions
@@ -211,8 +269,8 @@ async function loadCurrentState() {
       tasks: {},
       metadata: {
         created: new Date().toISOString(),
-        lastUpdated: new Date().toISOString(),
-      },
+        lastUpdated: new Date().toISOString()
+      }
     };
   }
 }
@@ -224,7 +282,9 @@ async function saveState(state) {
 
 function taskExists(state, taskCode) {
   return Object.values(state.tasks).some(
-    task => task.metadata?.taskCode === taskCode || (task.title && task.title.toLowerCase() === taskCode.toLowerCase())
+    task =>
+      task.metadata?.taskCode === taskCode ||
+      (task.title && task.title.toLowerCase() === taskCode.toLowerCase())
   );
 }
 
@@ -255,14 +315,16 @@ function createTaskObject(taskDef, taskId) {
       epic: 'TypeScript Infrastructure',
       technicalImpact: taskDef.technicalImpact,
       blockedBy: taskDef.blockedBy || [],
-      blocks: taskDef.blocks || [],
-    },
+      blocks: taskDef.blocks || []
+    }
   };
 }
 
 async function createDeploymentBlockerTasks() {
   console.log('🚨 Creating PRIORITY 0 Deployment Blocker Tasks...\n');
-  console.log('💥 CRITICAL: 5000+ TypeScript errors blocking authentication deployment');
+  console.log(
+    '💥 CRITICAL: 5000+ TypeScript errors blocking authentication deployment'
+  );
   console.log('⚡ These 7 tasks MUST be completed before system can deploy\n');
 
   try {
@@ -276,7 +338,9 @@ async function createDeploymentBlockerTasks() {
     let tasksCreated = 0;
     let tasksSkipped = 0;
 
-    console.log('🔥 Creating TypeScript Infrastructure Tasks (PRIORITY 0)...\n');
+    console.log(
+      '🔥 Creating TypeScript Infrastructure Tasks (PRIORITY 0)...\n'
+    );
 
     for (const taskDef of deploymentBlockerTasks) {
       if (taskExists(state, taskDef.taskCode)) {
@@ -290,8 +354,12 @@ async function createDeploymentBlockerTasks() {
 
       state.tasks[taskId] = task;
 
-      console.log(`🚨 Created ${taskId}: ${taskDef.taskCode} - "${taskDef.title}"`);
-      console.log(`   ⚡ Priority: ${taskDef.priority} | ⏱️  Estimate: ${taskDef.estimate}`);
+      console.log(
+        `🚨 Created ${taskId}: ${taskDef.taskCode} - "${taskDef.title}"`
+      );
+      console.log(
+        `   ⚡ Priority: ${taskDef.priority} | ⏱️  Estimate: ${taskDef.estimate}`
+      );
       console.log(`   💥 Technical Impact: ${taskDef.technicalImpact}`);
       console.log(`   🎯 Business Value: ${taskDef.businessValue}`);
       if (taskDef.dependencies.length > 0) {
@@ -326,41 +394,71 @@ async function createDeploymentBlockerTasks() {
     // Show dependency chain
     console.log('🔗 CRITICAL DEPENDENCY CHAIN:\n');
     console.log('📍 FOUNDATIONAL (Must be completed first):');
-    console.log('   1. TYPES-DB-001: Core database types (2h) - BLOCKS 3 other tasks');
-    console.log('   2. TYPES-AUTH-001: WebAuthn packages (1h) - BLOCKS Fastify plugin\n');
+    console.log(
+      '   1. TYPES-DB-001: Core database types (2h) - BLOCKS 3 other tasks'
+    );
+    console.log(
+      '   2. TYPES-AUTH-001: WebAuthn packages (1h) - BLOCKS Fastify plugin\n'
+    );
 
     console.log('📍 INFRASTRUCTURE (Depends on foundation):');
-    console.log('   3. FASTIFY-PLUGIN-001: Auth plugin integration (2h) - Needs DB + Auth types');
-    console.log('   4. SECURITY-TYPES-001: Security interfaces (3h) - Needs DB types');
-    console.log('   5. EXPORT-CONFLICTS-001: Module exports (2h) - Needs DB types\n');
+    console.log(
+      '   3. FASTIFY-PLUGIN-001: Auth plugin integration (2h) - Needs DB + Auth types'
+    );
+    console.log(
+      '   4. SECURITY-TYPES-001: Security interfaces (3h) - Needs DB types'
+    );
+    console.log(
+      '   5. EXPORT-CONFLICTS-001: Module exports (2h) - Needs DB types\n'
+    );
 
     console.log('📍 FEATURES (Can be parallel):');
-    console.log('   6. TEMPLATE-PARSER-001: Template parsing (3h) - Independent');
-    console.log('   7. VFX-TYPES-001: VFX interfaces (2h) - Needs template parser\n');
+    console.log(
+      '   6. TEMPLATE-PARSER-001: Template parsing (3h) - Independent'
+    );
+    console.log(
+      '   7. VFX-TYPES-001: VFX interfaces (2h) - Needs template parser\n'
+    );
 
     // Show task assignment strategy
     console.log('🤖 RECOMMENDED ASSIGNMENT STRATEGY:\n');
-    console.log('👨‍💻 Developer 1: TYPES-DB-001 → SECURITY-TYPES-001 → EXPORT-CONFLICTS-001');
+    console.log(
+      '👨‍💻 Developer 1: TYPES-DB-001 → SECURITY-TYPES-001 → EXPORT-CONFLICTS-001'
+    );
     console.log('👩‍💻 Developer 2: TYPES-AUTH-001 → FASTIFY-PLUGIN-001');
     console.log('👨‍💻 Developer 3: TEMPLATE-PARSER-001 → VFX-TYPES-001\n');
 
-    console.log('⏰ TOTAL ESTIMATED TIME: 15 hours across 3 developers = ~5-6 hours parallel\n');
+    console.log(
+      '⏰ TOTAL ESTIMATED TIME: 15 hours across 3 developers = ~5-6 hours parallel\n'
+    );
 
     // Agent instructions
     console.log('🤖 IMMEDIATE AGENT INSTRUCTIONS:\n');
-    console.log('1. 🔥 ALL agents must prioritize deployment blockers over ANY other work');
-    console.log('2. 📍 Start with TYPES-DB-001 and TYPES-AUTH-001 (foundational)');
-    console.log('3. 📝 Use: `node src/grab-tasks.js <agent-id> 1 --tags="deployment-blocker"`');
+    console.log(
+      '1. 🔥 ALL agents must prioritize deployment blockers over ANY other work'
+    );
+    console.log(
+      '2. 📍 Start with TYPES-DB-001 and TYPES-AUTH-001 (foundational)'
+    );
+    console.log(
+      '3. 📝 Use: `node src/grab-tasks.js <agent-id> 1 --tags="deployment-blocker"`'
+    );
     console.log('4. 🚫 STOP all Epic 19 and non-critical work immediately');
-    console.log('5. ✅ Run `node src/finish-task.js <task-id>` when complete\n');
+    console.log(
+      '5. ✅ Run `node src/finish-task.js <task-id>` when complete\n'
+    );
 
     console.log('⚡ SUCCESS CRITERIA:');
     console.log('   🎯 TypeScript compilation completes without errors');
     console.log('   🚀 Authentication system can deploy to production');
-    console.log('   🔐 Login/registration flows work in deployed environment\n');
+    console.log(
+      '   🔐 Login/registration flows work in deployed environment\n'
+    );
 
     console.log('💥 CRITICAL: These tasks have PRIORITY 0 - highest urgency');
-    console.log('🚨 Authentication system is 100% functionally complete but blocked by these type issues');
+    console.log(
+      '🚨 Authentication system is 100% functionally complete but blocked by these type issues'
+    );
     console.log('✨ Deployment blocker tasks created successfully!');
 
     return {
@@ -369,7 +467,7 @@ async function createDeploymentBlockerTasks() {
       total: Object.keys(state.tasks).length,
       foundationalTasks: 2, // TYPES-DB-001, TYPES-AUTH-001
       infrastructureTasks: 3, // FASTIFY, SECURITY, EXPORTS
-      featureTasks: 2, // TEMPLATE, VFX
+      featureTasks: 2 // TEMPLATE, VFX
     };
   } catch (error) {
     console.error('❌ Failed to create deployment blocker tasks:', error);
@@ -387,5 +485,5 @@ if (require.main === module) {
 
 module.exports = {
   createDeploymentBlockerTasks,
-  deploymentBlockerTasks,
+  deploymentBlockerTasks
 };

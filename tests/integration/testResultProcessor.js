@@ -27,7 +27,7 @@ function processResults(results) {
       testRunId: `run-${Date.now()}`,
       environment: process.env.NODE_ENV || 'test',
       jestVersion: results.jestVersion || 'unknown',
-      totalTime: results.runTime,
+      totalTime: results.runTime
     },
     summary: {
       numTotalTests: results.numTotalTests,
@@ -36,7 +36,7 @@ function processResults(results) {
       numPendingTests: results.numPendingTests,
       numTodoTests: results.numTodoTests,
       testRunTime: results.runTime,
-      success: results.success,
+      success: results.success
     },
     coverage: extractCoverageData(results),
     testSuites: [],
@@ -45,9 +45,9 @@ function processResults(results) {
       errorsByType: {},
       criticalErrors: [],
       performanceIssues: [],
-      flaky_tests: [],
+      flaky_tests: []
     },
-    recommendations: [],
+    recommendations: []
   };
 
   // Process individual test suites
@@ -63,7 +63,10 @@ function processResults(results) {
   generateRecommendations(processedResults);
 
   // Save processed results
-  const resultFilePath = path.join(reportDir, `processed-results-${Date.now()}.json`);
+  const resultFilePath = path.join(
+    reportDir,
+    `processed-results-${Date.now()}.json`
+  );
   fs.writeFileSync(resultFilePath, JSON.stringify(processedResults, null, 2));
 
   // Generate summary report
@@ -89,15 +92,15 @@ function processTestSuite(testResult) {
       total: testResult.testResults.length,
       passed: testResult.testResults.filter(t => t.status === 'passed').length,
       failed: testResult.testResults.filter(t => t.status === 'failed').length,
-      skipped: testResult.testResults.filter(t => t.status === 'pending').length,
+      skipped: testResult.testResults.filter(t => t.status === 'pending').length
     },
     errors: [],
     performance: {
       slowTests: [],
       memoryUsage: null,
-      avgTestDuration: 0,
+      avgTestDuration: 0
     },
-    coverage: null,
+    coverage: null
   };
 
   // Process individual tests
@@ -110,7 +113,7 @@ function processTestSuite(testResult) {
       suiteResult.performance.slowTests.push({
         name: test.title,
         duration: test.duration,
-        fullName: test.fullName,
+        fullName: test.fullName
       });
     }
 
@@ -122,13 +125,14 @@ function processTestSuite(testResult) {
           message: failure,
           type: classifyError(failure),
           severity: determineSeverity(failure),
-          stack: extractStack(failure),
+          stack: extractStack(failure)
         });
       });
     }
   });
 
-  suiteResult.performance.avgTestDuration = totalDuration / testResult.testResults.length;
+  suiteResult.performance.avgTestDuration =
+    totalDuration / testResult.testResults.length;
 
   return suiteResult;
 }
@@ -146,9 +150,9 @@ function extractCoverageData(results) {
       statements: 0,
       branches: 0,
       functions: 0,
-      lines: 0,
+      lines: 0
     },
-    files: [],
+    files: []
   };
 
   // This would process the coverage map if available
@@ -190,10 +194,17 @@ function classifyError(errorMessage) {
 function determineSeverity(errorMessage) {
   const message = errorMessage.toLowerCase();
 
-  if (message.includes('critical') || message.includes('fatal') || message.includes('security')) {
+  if (
+    message.includes('critical') ||
+    message.includes('fatal') ||
+    message.includes('security')
+  ) {
     return 'critical';
   }
-  if (message.includes('error') && (message.includes('server') || message.includes('system'))) {
+  if (
+    message.includes('error') &&
+    (message.includes('server') || message.includes('system'))
+  ) {
     return 'high';
   }
   if (message.includes('timeout') || message.includes('connection')) {
@@ -225,14 +236,15 @@ function aggregateErrorAnalysis(errorAnalysis, suiteResult) {
     errorAnalysis.totalErrors++;
 
     // Count by type
-    errorAnalysis.errorsByType[error.type] = (errorAnalysis.errorsByType[error.type] || 0) + 1;
+    errorAnalysis.errorsByType[error.type] =
+      (errorAnalysis.errorsByType[error.type] || 0) + 1;
 
     // Track critical errors
     if (error.severity === 'critical') {
       errorAnalysis.criticalErrors.push({
         suite: suiteResult.name,
         test: error.testName,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -242,7 +254,7 @@ function aggregateErrorAnalysis(errorAnalysis, suiteResult) {
     errorAnalysis.performanceIssues.push({
       suite: suiteResult.name,
       test: slowTest.name,
-      duration: slowTest.duration,
+      duration: slowTest.duration
     });
   });
 }
@@ -254,7 +266,8 @@ function generateRecommendations(results) {
   const recommendations = results.recommendations;
 
   // High failure rate recommendation
-  const failureRate = results.summary.numFailedTests / results.summary.numTotalTests;
+  const failureRate =
+    results.summary.numFailedTests / results.summary.numTotalTests;
   if (failureRate > 0.1) {
     // >10% failure rate
     recommendations.push({
@@ -262,12 +275,15 @@ function generateRecommendations(results) {
       priority: 'high',
       title: 'High Test Failure Rate Detected',
       description: `${(failureRate * 100).toFixed(1)}% of tests are failing. Consider reviewing test stability and fixing fundamental issues.`,
-      action: 'Review and fix failing tests, check for environmental issues',
+      action: 'Review and fix failing tests, check for environmental issues'
     });
   }
 
   // Performance recommendations
-  const slowTests = results.testSuites.reduce((acc, suite) => acc + suite.performance.slowTests.length, 0);
+  const slowTests = results.testSuites.reduce(
+    (acc, suite) => acc + suite.performance.slowTests.length,
+    0
+  );
 
   if (slowTests > 0) {
     recommendations.push({
@@ -275,12 +291,15 @@ function generateRecommendations(results) {
       priority: 'medium',
       title: 'Slow Test Detection',
       description: `${slowTests} tests are running slower than 5 seconds. Consider optimizing these tests.`,
-      action: 'Review slow tests and optimize by reducing setup time, using mocks, or splitting large tests',
+      action:
+        'Review slow tests and optimize by reducing setup time, using mocks, or splitting large tests'
     });
   }
 
   // Error pattern recommendations
-  const topErrorType = Object.entries(results.errorAnalysis.errorsByType).sort(([, a], [, b]) => b - a)[0];
+  const topErrorType = Object.entries(results.errorAnalysis.errorsByType).sort(
+    ([, a], [, b]) => b - a
+  )[0];
 
   if (topErrorType && topErrorType[1] > 5) {
     const [type, count] = topErrorType;
@@ -289,7 +308,7 @@ function generateRecommendations(results) {
       priority: 'high',
       title: `Frequent ${type.charAt(0).toUpperCase() + type.slice(1)} Errors`,
       description: `${count} tests failed due to ${type} errors. This suggests a systemic issue.`,
-      action: `Focus on fixing ${type} related issues. Consider improving error handling and resilience.`,
+      action: `Focus on fixing ${type} related issues. Consider improving error handling and resilience.`
     });
   }
 
@@ -300,7 +319,8 @@ function generateRecommendations(results) {
       priority: 'critical',
       title: 'Critical Errors Detected',
       description: `${results.errorAnalysis.criticalErrors.length} critical errors found. These need immediate attention.`,
-      action: 'Address critical errors immediately as they may indicate security or data integrity issues.',
+      action:
+        'Address critical errors immediately as they may indicate security or data integrity issues.'
     });
   }
 }
@@ -377,12 +397,14 @@ function generateErrorTrendAnalysis(results, reportDir) {
     runId: results.metadata.testRunId,
     metrics: {
       totalTests: results.summary.numTotalTests,
-      failureRate: results.summary.numFailedTests / results.summary.numTotalTests,
-      avgTestDuration: results.summary.testRunTime / results.summary.numTotalTests,
+      failureRate:
+        results.summary.numFailedTests / results.summary.numTotalTests,
+      avgTestDuration:
+        results.summary.testRunTime / results.summary.numTotalTests,
       errorCount: results.errorAnalysis.totalErrors,
-      criticalErrors: results.errorAnalysis.criticalErrors.length,
+      criticalErrors: results.errorAnalysis.criticalErrors.length
     },
-    errorTypes: results.errorAnalysis.errorsByType,
+    errorTypes: results.errorAnalysis.errorsByType
   };
 
   // Append to trend history

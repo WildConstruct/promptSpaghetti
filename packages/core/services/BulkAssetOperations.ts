@@ -7,7 +7,12 @@ import { TreeBuilder } from './TreeBuilder';
 
 export interface BulkOperation {
   id: string;
-  type: 'add_choices' | 'create_sequence' | 'build_parallel' | 'replace_multiple' | 'apply_metadata';
+  type:
+    | 'add_choices'
+    | 'create_sequence'
+    | 'build_parallel'
+    | 'replace_multiple'
+    | 'apply_metadata';
   assets: Asset[];
   targetNodes?: string[];
   status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -29,7 +34,7 @@ export class BulkAssetOperations {
   private operations: Map<string, BulkOperation> = new Map();
   private treeBuilder: TreeBuilder;
   private concurrencyLimit: number = 10;
-  
+
   constructor(treeBuilder?: TreeBuilder) {
     this.treeBuilder = treeBuilder || new TreeBuilder();
   }
@@ -40,8 +45,10 @@ export class BulkAssetOperations {
     targetNodeId: string,
     existingNodes: Node[]
   ): Promise<BulkOperationResult> {
-    const operationId = this.createOperation('add_choices', assets, [targetNodeId]);
-    
+    const operationId = this.createOperation('add_choices', assets, [
+      targetNodeId
+    ]);
+
     try {
       const targetNode = existingNodes.find(n => n.id === targetNodeId);
       if (!targetNode || targetNode.type !== 'weightedchoice') {
@@ -58,9 +65,9 @@ export class BulkAssetOperations {
 
       // Update node with new choices
       targetNode.data.choices = [...choices, ...newChoices];
-      
+
       this.updateOperationProgress(operationId, 100);
-      
+
       return {
         success: true,
         nodesCreated: [],
@@ -89,7 +96,7 @@ export class BulkAssetOperations {
     const operationId = this.createOperation('create_sequence', assets);
     const nodes: Node[] = [];
     const edges: Edge[] = [];
-    
+
     try {
       let currentX = startPosition.x;
       let currentY = startPosition.y;
@@ -98,7 +105,7 @@ export class BulkAssetOperations {
       for (let i = 0; i < assets.length; i++) {
         const asset = assets[i];
         this.updateOperationProgress(operationId, (i / assets.length) * 100);
-        
+
         // Create node based on asset type
         const nodeId = `${asset.type}-${Date.now()}-${i}`;
         const node: Node = {
@@ -110,9 +117,9 @@ export class BulkAssetOperations {
             ...asset.metadata
           }
         };
-        
+
         nodes.push(node);
-        
+
         // Create edge from previous node
         if (previousNodeId) {
           edges.push({
@@ -121,11 +128,11 @@ export class BulkAssetOperations {
             target: nodeId
           });
         }
-        
+
         previousNodeId = nodeId;
         currentY += 120; // Vertical spacing
       }
-      
+
       // Add final output node
       const outputId = `output-${Date.now()}`;
       nodes.push({
@@ -134,7 +141,7 @@ export class BulkAssetOperations {
         position: { x: currentX, y: currentY },
         data: { label: 'Sequence Output' }
       });
-      
+
       if (previousNodeId) {
         edges.push({
           id: `edge-${previousNodeId}-${outputId}`,
@@ -142,9 +149,9 @@ export class BulkAssetOperations {
           target: outputId
         });
       }
-      
+
       this.updateOperationProgress(operationId, 100);
-      
+
       return {
         success: true,
         nodesCreated: nodes,
@@ -172,7 +179,7 @@ export class BulkAssetOperations {
     const operationId = this.createOperation('build_parallel', assets);
     const nodes: Node[] = [];
     const edges: Edge[] = [];
-    
+
     try {
       // Create a split node (WeightedChoice)
       const splitNodeId = `split-${Date.now()}`;
@@ -182,7 +189,7 @@ export class BulkAssetOperations {
         position: startPosition,
         data: { label: 'Branch Selection', choices: [] }
       });
-      
+
       // Create concat node to merge branches
       const mergeNodeId = `merge-${Date.now()}`;
       const mergeY = startPosition.y + 300;
@@ -192,18 +199,19 @@ export class BulkAssetOperations {
         position: { x: startPosition.x, y: mergeY },
         data: { label: 'Merge Branches' }
       });
-      
+
       // Create parallel branches
       const branchSpacing = 200;
-      const startX = startPosition.x - ((assets.length - 1) * branchSpacing) / 2;
-      
+      const startX =
+        startPosition.x - ((assets.length - 1) * branchSpacing) / 2;
+
       for (let i = 0; i < assets.length; i++) {
         const asset = assets[i];
         this.updateOperationProgress(operationId, (i / assets.length) * 100);
-        
-        const branchX = startX + (i * branchSpacing);
+
+        const branchX = startX + i * branchSpacing;
         const branchY = startPosition.y + 150;
-        
+
         // Create branch node
         const branchNodeId = `branch-${Date.now()}-${i}`;
         nodes.push({
@@ -215,14 +223,14 @@ export class BulkAssetOperations {
             ...asset.metadata
           }
         });
-        
+
         // Connect from split to branch
         edges.push({
           id: `edge-split-${i}`,
           source: splitNodeId,
           target: branchNodeId
         });
-        
+
         // Connect from branch to merge
         edges.push({
           id: `edge-merge-${i}`,
@@ -230,7 +238,7 @@ export class BulkAssetOperations {
           target: mergeNodeId
         });
       }
-      
+
       // Add output
       const outputId = `output-${Date.now()}`;
       nodes.push({
@@ -239,15 +247,15 @@ export class BulkAssetOperations {
         position: { x: startPosition.x, y: mergeY + 100 },
         data: { label: 'Parallel Output' }
       });
-      
+
       edges.push({
         id: `edge-output`,
         source: mergeNodeId,
         target: outputId
       });
-      
+
       this.updateOperationProgress(operationId, 100);
-      
+
       return {
         success: true,
         nodesCreated: nodes,
@@ -275,50 +283,59 @@ export class BulkAssetOperations {
   ): Promise<BulkOperationResult> {
     const assets = nodeAssetPairs.map(p => p.asset);
     const nodeIds = nodeAssetPairs.map(p => p.nodeId);
-    const operationId = this.createOperation('replace_multiple', assets, nodeIds);
-    
+    const operationId = this.createOperation(
+      'replace_multiple',
+      assets,
+      nodeIds
+    );
+
     const modifiedNodes: string[] = [];
     const errors: string[] = [];
     const rollbackData: any[] = [];
-    
+
     try {
       // Process replacements in parallel batches
       const batchSize = this.concurrencyLimit;
       for (let i = 0; i < nodeAssetPairs.length; i += batchSize) {
         const batch = nodeAssetPairs.slice(i, i + batchSize);
-        
-        await Promise.all(batch.map(async ({ nodeId, asset }) => {
-          try {
-            const node = existingNodes.find(n => n.id === nodeId);
-            if (!node) {
-              errors.push(`Node ${nodeId} not found`);
-              return;
+
+        await Promise.all(
+          batch.map(async ({ nodeId, asset }) => {
+            try {
+              const node = existingNodes.find(n => n.id === nodeId);
+              if (!node) {
+                errors.push(`Node ${nodeId} not found`);
+                return;
+              }
+
+              // Store original data for rollback
+              rollbackData.push({
+                nodeId,
+                originalData: { ...node.data },
+                originalType: node.type
+              });
+
+              // Update node with asset data
+              node.type = this.getNodeTypeFromAsset(asset);
+              node.data = {
+                ...node.data,
+                label: asset.name,
+                ...asset.metadata
+              };
+
+              modifiedNodes.push(nodeId);
+            } catch (error) {
+              errors.push(`Failed to replace ${nodeId}: ${error.message}`);
             }
-            
-            // Store original data for rollback
-            rollbackData.push({
-              nodeId,
-              originalData: { ...node.data },
-              originalType: node.type
-            });
-            
-            // Update node with asset data
-            node.type = this.getNodeTypeFromAsset(asset);
-            node.data = {
-              ...node.data,
-              label: asset.name,
-              ...asset.metadata
-            };
-            
-            modifiedNodes.push(nodeId);
-          } catch (error) {
-            errors.push(`Failed to replace ${nodeId}: ${error.message}`);
-          }
-        }));
-        
-        this.updateOperationProgress(operationId, ((i + batch.length) / nodeAssetPairs.length) * 100);
+          })
+        );
+
+        this.updateOperationProgress(
+          operationId,
+          ((i + batch.length) / nodeAssetPairs.length) * 100
+        );
       }
-      
+
       return {
         success: errors.length === 0,
         nodesCreated: [],
@@ -349,33 +366,36 @@ export class BulkAssetOperations {
     const modifiedNodes: string[] = [];
     const errors: string[] = [];
     const rollbackData: any[] = [];
-    
+
     try {
       for (let i = 0; i < nodeIds.length; i++) {
         const nodeId = nodeIds[i];
         const node = existingNodes.find(n => n.id === nodeId);
-        
+
         if (!node) {
           errors.push(`Node ${nodeId} not found`);
           continue;
         }
-        
+
         // Store original metadata
         rollbackData.push({
           nodeId,
           originalMetadata: { ...node.data.metadata }
         });
-        
+
         // Apply new metadata
         node.data.metadata = {
           ...node.data.metadata,
           ...metadata
         };
-        
+
         modifiedNodes.push(nodeId);
-        this.updateOperationProgress(operationId, ((i + 1) / nodeIds.length) * 100);
+        this.updateOperationProgress(
+          operationId,
+          ((i + 1) / nodeIds.length) * 100
+        );
       }
-      
+
       return {
         success: errors.length === 0,
         nodesCreated: [],
@@ -400,12 +420,12 @@ export class BulkAssetOperations {
   private getNodeTypeFromAsset(asset: Asset): string {
     // Map asset types to node types
     const typeMap: Record<string, string> = {
-      'text': 'textblock',
-      'choice': 'weightedchoice',
-      'variable': 'variable',
-      'template': 'concat'
+      text: 'textblock',
+      choice: 'weightedchoice',
+      variable: 'variable',
+      template: 'concat'
     };
-    
+
     const assetCategory = asset.metadata?.category?.toLowerCase() || '';
     return typeMap[assetCategory] || 'textblock';
   }
@@ -424,7 +444,7 @@ export class BulkAssetOperations {
       status: 'processing',
       progress: 0
     };
-    
+
     this.operations.set(id, operation);
     return id;
   }
@@ -439,7 +459,11 @@ export class BulkAssetOperations {
     }
   }
 
-  private updateOperationStatus(operationId: string, status: BulkOperation['status'], error?: string): void {
+  private updateOperationStatus(
+    operationId: string,
+    status: BulkOperation['status'],
+    error?: string
+  ): void {
     const operation = this.operations.get(operationId);
     if (operation) {
       operation.status = status;
@@ -473,17 +497,19 @@ export class BulkAssetOperations {
   ): Promise<boolean> {
     const operation = this.operations.get(operationId);
     if (!operation || !rollbackData) return false;
-    
+
     try {
       // Restore original state based on operation type
       switch (operation.type) {
         case 'add_choices':
-          const targetNode = nodes.find(n => n.id === operation.targetNodes?.[0]);
+          const targetNode = nodes.find(
+            n => n.id === operation.targetNodes?.[0]
+          );
           if (targetNode && rollbackData.originalChoices) {
             targetNode.data.choices = rollbackData.originalChoices;
           }
           break;
-          
+
         case 'replace_multiple':
           rollbackData.forEach((item: any) => {
             const node = nodes.find(n => n.id === item.nodeId);
@@ -493,7 +519,7 @@ export class BulkAssetOperations {
             }
           });
           break;
-          
+
         case 'apply_metadata':
           rollbackData.forEach((item: any) => {
             const node = nodes.find(n => n.id === item.nodeId);
@@ -503,7 +529,7 @@ export class BulkAssetOperations {
           });
           break;
       }
-      
+
       return true;
     } catch (error) {
       console.error('Rollback failed:', error);

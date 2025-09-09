@@ -1,6 +1,7 @@
 # Technical Design: Autosave System Architecture
 
 ## Overview
+
 This document details the technical design for the autosave system that provides automatic, non-intrusive saving of graph state with visual feedback and conflict resolution.
 
 ## System Architecture
@@ -11,39 +12,39 @@ This document details the technical design for the autosave system that provides
 // packages/core/autosave/AutosaveManager.ts
 interface AutosaveManager {
   // Lifecycle
-  start(): void
-  stop(): void
-  pause(): void
-  resume(): void
-  
+  start(): void;
+  stop(): void;
+  pause(): void;
+  resume(): void;
+
   // Operations
-  triggerSave(): Promise<void>
-  forceSave(): Promise<void>
-  cancelPending(): void
-  
+  triggerSave(): Promise<void>;
+  forceSave(): Promise<void>;
+  cancelPending(): void;
+
   // Status
-  getStatus(): AutosaveStatus
-  getLastSaved(): Date | null
-  getPendingChanges(): boolean
-  
+  getStatus(): AutosaveStatus;
+  getLastSaved(): Date | null;
+  getPendingChanges(): boolean;
+
   // Events
-  on(event: AutosaveEvent, handler: Handler): () => void
+  on(event: AutosaveEvent, handler: Handler): () => void;
 }
 
-type AutosaveStatus = 
+type AutosaveStatus =
   | 'idle'
   | 'pending'
   | 'saving'
   | 'saved'
   | 'error'
-  | 'paused'
+  | 'paused';
 
 type AutosaveEvent =
   | 'save-started'
   | 'save-completed'
   | 'save-failed'
   | 'status-changed'
-  | 'conflict-detected'
+  | 'conflict-detected';
 ```
 
 ### 2. Change Detection System
@@ -51,50 +52,50 @@ type AutosaveEvent =
 ```typescript
 // packages/core/autosave/ChangeDetector.ts
 interface ChangeDetector {
-  track<T>(value: T): void
-  hasChanges(): boolean
-  getChanges(): ChangeSet
-  reset(): void
+  track<T>(value: T): void;
+  hasChanges(): boolean;
+  getChanges(): ChangeSet;
+  reset(): void;
 }
 
 interface ChangeSet {
-  timestamp: number
-  changes: Change[]
-  significance: 'minor' | 'major' | 'critical'
+  timestamp: number;
+  changes: Change[];
+  significance: 'minor' | 'major' | 'critical';
 }
 
 interface Change {
-  path: string[]
-  type: 'add' | 'update' | 'delete'
-  oldValue?: unknown
-  newValue?: unknown
-  timestamp: number
+  path: string[];
+  type: 'add' | 'update' | 'delete';
+  oldValue?: unknown;
+  newValue?: unknown;
+  timestamp: number;
 }
 
 export class DeepChangeDetector implements ChangeDetector {
-  private baseline: unknown = null
-  private changes: Change[] = []
-  private lastCheck: number = Date.now()
-  
+  private baseline: unknown = null;
+  private changes: Change[] = [];
+  private lastCheck: number = Date.now();
+
   track<T>(value: T): void {
     if (!this.baseline) {
-      this.baseline = this.deepClone(value)
-      return
+      this.baseline = this.deepClone(value);
+      return;
     }
-    
-    const newChanges = this.detectChanges(this.baseline, value)
-    this.changes.push(...newChanges)
-    this.baseline = this.deepClone(value)
-    this.lastCheck = Date.now()
+
+    const newChanges = this.detectChanges(this.baseline, value);
+    this.changes.push(...newChanges);
+    this.baseline = this.deepClone(value);
+    this.lastCheck = Date.now();
   }
-  
+
   private detectChanges(old: unknown, current: unknown): Change[] {
-    const changes: Change[] = []
-    
+    const changes: Change[] = [];
+
     // Deep diff algorithm
     const diff = (a: any, b: any, path: string[] = []) => {
-      if (a === b) return
-      
+      if (a === b) return;
+
       if (typeof a !== typeof b) {
         changes.push({
           path,
@@ -102,13 +103,13 @@ export class DeepChangeDetector implements ChangeDetector {
           oldValue: a,
           newValue: b,
           timestamp: Date.now()
-        })
-        return
+        });
+        return;
       }
-      
+
       if (typeof a === 'object' && a !== null && b !== null) {
-        const keys = new Set([...Object.keys(a), ...Object.keys(b)])
-        
+        const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+
         for (const key of keys) {
           if (!(key in a)) {
             changes.push({
@@ -116,16 +117,16 @@ export class DeepChangeDetector implements ChangeDetector {
               type: 'add',
               newValue: b[key],
               timestamp: Date.now()
-            })
+            });
           } else if (!(key in b)) {
             changes.push({
               path: [...path, key],
               type: 'delete',
               oldValue: a[key],
               timestamp: Date.now()
-            })
+            });
           } else {
-            diff(a[key], b[key], [...path, key])
+            diff(a[key], b[key], [...path, key]);
           }
         }
       } else if (a !== b) {
@@ -135,33 +136,31 @@ export class DeepChangeDetector implements ChangeDetector {
           oldValue: a,
           newValue: b,
           timestamp: Date.now()
-        })
+        });
       }
-    }
-    
-    diff(old, current)
-    return changes
+    };
+
+    diff(old, current);
+    return changes;
   }
-  
+
   getSignificance(changes: Change[]): 'minor' | 'major' | 'critical' {
     // Structural changes are critical
     if (changes.some(c => c.type === 'delete' && c.path.length === 1)) {
-      return 'critical'
+      return 'critical';
     }
-    
+
     // Many changes are major
     if (changes.length > 10) {
-      return 'major'
+      return 'major';
     }
-    
+
     // Node/edge changes are major
-    if (changes.some(c => 
-      c.path[0] === 'nodes' || c.path[0] === 'edges'
-    )) {
-      return 'major'
+    if (changes.some(c => c.path[0] === 'nodes' || c.path[0] === 'edges')) {
+      return 'major';
     }
-    
-    return 'minor'
+
+    return 'minor';
   }
 }
 ```
@@ -171,78 +170,78 @@ export class DeepChangeDetector implements ChangeDetector {
 ```typescript
 // packages/core/autosave/SaveQueue.ts
 interface SaveQueue {
-  enqueue(task: SaveTask): void
-  process(): Promise<void>
-  clear(): void
-  getPending(): SaveTask[]
-  setPriority(taskId: string, priority: number): void
+  enqueue(task: SaveTask): void;
+  process(): Promise<void>;
+  clear(): void;
+  getPending(): SaveTask[];
+  setPriority(taskId: string, priority: number): void;
 }
 
 interface SaveTask {
-  id: string
-  data: GraphState
-  priority: number
-  timestamp: number
-  retries: number
-  maxRetries: number
+  id: string;
+  data: GraphState;
+  priority: number;
+  timestamp: number;
+  retries: number;
+  maxRetries: number;
 }
 
 export class PrioritySaveQueue implements SaveQueue {
-  private queue: SaveTask[] = []
-  private processing = false
-  private maxConcurrent = 1
-  
+  private queue: SaveTask[] = [];
+  private processing = false;
+  private maxConcurrent = 1;
+
   enqueue(task: SaveTask): void {
     // Remove older saves of same data
-    this.queue = this.queue.filter(t => t.id !== task.id)
-    
+    this.queue = this.queue.filter(t => t.id !== task.id);
+
     // Add new task
-    this.queue.push(task)
-    
+    this.queue.push(task);
+
     // Sort by priority
-    this.queue.sort((a, b) => b.priority - a.priority)
-    
+    this.queue.sort((a, b) => b.priority - a.priority);
+
     // Process if not already processing
     if (!this.processing) {
-      this.process()
+      this.process();
     }
   }
-  
+
   async process(): Promise<void> {
     if (this.processing || this.queue.length === 0) {
-      return
+      return;
     }
-    
-    this.processing = true
-    
+
+    this.processing = true;
+
     while (this.queue.length > 0) {
-      const task = this.queue.shift()!
-      
+      const task = this.queue.shift()!;
+
       try {
-        await this.executeSave(task)
+        await this.executeSave(task);
       } catch (error) {
         if (task.retries < task.maxRetries) {
-          task.retries++
-          task.priority = Math.max(0, task.priority - 10)
-          this.enqueue(task)
+          task.retries++;
+          task.priority = Math.max(0, task.priority - 10);
+          this.enqueue(task);
         } else {
-          console.error('Save task failed after retries:', error)
-          this.onTaskFailed(task, error)
+          console.error('Save task failed after retries:', error);
+          this.onTaskFailed(task, error);
         }
       }
     }
-    
-    this.processing = false
+
+    this.processing = false;
   }
-  
+
   private async executeSave(task: SaveTask): Promise<void> {
     // Actual save implementation
-    const start = performance.now()
-    
-    await persistenceManager.save(task.data)
-    
-    const duration = performance.now() - start
-    this.onTaskCompleted(task, duration)
+    const start = performance.now();
+
+    await persistenceManager.save(task.data);
+
+    const duration = performance.now() - start;
+    this.onTaskCompleted(task, duration);
   }
 }
 ```
@@ -252,75 +251,75 @@ export class PrioritySaveQueue implements SaveQueue {
 ```typescript
 // packages/core/autosave/DebouncedAutosave.ts
 export class DebouncedAutosave {
-  private timer: NodeJS.Timeout | null = null
-  private pendingChanges = false
-  private lastSave = Date.now()
-  
+  private timer: NodeJS.Timeout | null = null;
+  private pendingChanges = false;
+  private lastSave = Date.now();
+
   constructor(
     private saveFunction: () => Promise<void>,
     private config: {
-      delay: number
-      maxWait: number
-      immediate: boolean
+      delay: number;
+      maxWait: number;
+      immediate: boolean;
     }
   ) {}
-  
+
   trigger(): void {
-    this.pendingChanges = true
-    
+    this.pendingChanges = true;
+
     // Clear existing timer
     if (this.timer) {
-      clearTimeout(this.timer)
+      clearTimeout(this.timer);
     }
-    
+
     // Immediate save if configured
     if (this.config.immediate && !this.timer) {
-      this.executeSave()
-      return
+      this.executeSave();
+      return;
     }
-    
+
     // Check if max wait exceeded
-    const timeSinceLastSave = Date.now() - this.lastSave
+    const timeSinceLastSave = Date.now() - this.lastSave;
     if (timeSinceLastSave > this.config.maxWait) {
-      this.executeSave()
-      return
+      this.executeSave();
+      return;
     }
-    
+
     // Schedule debounced save
     this.timer = setTimeout(() => {
-      this.executeSave()
-    }, this.config.delay)
+      this.executeSave();
+    }, this.config.delay);
   }
-  
+
   private async executeSave(): Promise<void> {
-    if (!this.pendingChanges) return
-    
-    this.pendingChanges = false
-    this.timer = null
-    this.lastSave = Date.now()
-    
+    if (!this.pendingChanges) return;
+
+    this.pendingChanges = false;
+    this.timer = null;
+    this.lastSave = Date.now();
+
     try {
-      await this.saveFunction()
+      await this.saveFunction();
     } catch (error) {
-      console.error('Autosave failed:', error)
+      console.error('Autosave failed:', error);
       // Re-trigger save after error
-      this.pendingChanges = true
-      this.trigger()
+      this.pendingChanges = true;
+      this.trigger();
     }
   }
-  
+
   cancel(): void {
     if (this.timer) {
-      clearTimeout(this.timer)
-      this.timer = null
+      clearTimeout(this.timer);
+      this.timer = null;
     }
-    this.pendingChanges = false
+    this.pendingChanges = false;
   }
-  
+
   async flush(): Promise<void> {
-    this.cancel()
+    this.cancel();
     if (this.pendingChanges) {
-      await this.executeSave()
+      await this.executeSave();
     }
   }
 }
@@ -347,21 +346,21 @@ export const AutosaveIndicator: React.FC<AutosaveIndicatorProps> = ({
 }) => {
   const { status, lastSaved, pendingChanges, error } = useAutosave()
   const [relativeTime, setRelativeTime] = useState<string>('')
-  
+
   // Update relative time every second
   useEffect(() => {
     if (!lastSaved) return
-    
+
     const updateTime = () => {
       setRelativeTime(formatRelativeTime(lastSaved))
     }
-    
+
     updateTime()
     const interval = setInterval(updateTime, 1000)
-    
+
     return () => clearInterval(interval)
   }, [lastSaved])
-  
+
   const getStatusIcon = () => {
     switch (status) {
       case 'saved':
@@ -376,7 +375,7 @@ export const AutosaveIndicator: React.FC<AutosaveIndicatorProps> = ({
         return ''
     }
   }
-  
+
   const getStatusColor = () => {
     switch (status) {
       case 'saved':
@@ -391,7 +390,7 @@ export const AutosaveIndicator: React.FC<AutosaveIndicatorProps> = ({
         return 'text-gray-600'
     }
   }
-  
+
   const getStatusText = () => {
     switch (status) {
       case 'saved':
@@ -406,7 +405,7 @@ export const AutosaveIndicator: React.FC<AutosaveIndicatorProps> = ({
         return ''
     }
   }
-  
+
   return (
     <div
       className={`autosave-indicator ${position} ${className}`}
@@ -420,13 +419,13 @@ export const AutosaveIndicator: React.FC<AutosaveIndicatorProps> = ({
       <span className="status-text">
         {getStatusText()}
       </span>
-      
+
       {showDetails && pendingChanges && (
         <span className="pending-count">
           ({pendingChanges} changes)
         </span>
       )}
-      
+
       {status === 'error' && (
         <button
           onClick={() => autosaveManager.forceSave()}
@@ -498,109 +497,111 @@ const styles = `
 ```typescript
 // packages/core/autosave/ConflictManager.ts
 interface ConflictManager {
-  detectConflict(local: GraphState, remote: GraphState): Conflict | null
-  resolveConflict(conflict: Conflict, strategy: Strategy): GraphState
-  showConflictUI(conflict: Conflict): Promise<Strategy>
+  detectConflict(local: GraphState, remote: GraphState): Conflict | null;
+  resolveConflict(conflict: Conflict, strategy: Strategy): GraphState;
+  showConflictUI(conflict: Conflict): Promise<Strategy>;
 }
 
 interface Conflict {
-  id: string
-  localVersion: VersionInfo
-  remoteVersion: VersionInfo
-  differences: Difference[]
-  severity: 'low' | 'medium' | 'high'
+  id: string;
+  localVersion: VersionInfo;
+  remoteVersion: VersionInfo;
+  differences: Difference[];
+  severity: 'low' | 'medium' | 'high';
 }
 
 interface VersionInfo {
-  timestamp: number
-  author?: string
-  changeCount: number
-  checksum: string
+  timestamp: number;
+  author?: string;
+  changeCount: number;
+  checksum: string;
 }
 
-type Strategy = 'keep-mine' | 'use-theirs' | 'merge' | 'manual'
+type Strategy = 'keep-mine' | 'use-theirs' | 'merge' | 'manual';
 
 export class SmartConflictManager implements ConflictManager {
   detectConflict(local: GraphState, remote: GraphState): Conflict | null {
     // Quick check - same checksum means no conflict
     if (this.checksum(local) === this.checksum(remote)) {
-      return null
+      return null;
     }
-    
+
     // Version-based check
     if (local.version === remote.version) {
-      return null
+      return null;
     }
-    
+
     // Find actual differences
-    const differences = this.findDifferences(local, remote)
-    
+    const differences = this.findDifferences(local, remote);
+
     if (differences.length === 0) {
-      return null
+      return null;
     }
-    
+
     return {
       id: crypto.randomUUID(),
       localVersion: this.getVersionInfo(local),
       remoteVersion: this.getVersionInfo(remote),
       differences,
       severity: this.calculateSeverity(differences)
-    }
+    };
   }
-  
-  private calculateSeverity(differences: Difference[]): 'low' | 'medium' | 'high' {
+
+  private calculateSeverity(
+    differences: Difference[]
+  ): 'low' | 'medium' | 'high' {
     // High severity: structural changes
-    if (differences.some(d => 
-      d.path[0] === 'nodes' && d.type === 'delete'
-    )) {
-      return 'high'
+    if (differences.some(d => d.path[0] === 'nodes' && d.type === 'delete')) {
+      return 'high';
     }
-    
+
     // Medium severity: multiple changes
     if (differences.length > 5) {
-      return 'medium'
+      return 'medium';
     }
-    
+
     // Low severity: minor property changes
-    return 'low'
+    return 'low';
   }
-  
+
   async resolveConflict(
-    conflict: Conflict, 
+    conflict: Conflict,
     strategy: Strategy
   ): Promise<GraphState> {
     switch (strategy) {
       case 'keep-mine':
-        return this.local
-        
+        return this.local;
+
       case 'use-theirs':
-        return this.remote
-        
+        return this.remote;
+
       case 'merge':
-        return this.autoMerge(conflict)
-        
+        return this.autoMerge(conflict);
+
       case 'manual':
-        return await this.manualMerge(conflict)
+        return await this.manualMerge(conflict);
     }
   }
-  
+
   private autoMerge(conflict: Conflict): GraphState {
     // Three-way merge algorithm
-    const merged = { ...this.local }
-    
+    const merged = { ...this.local };
+
     for (const diff of conflict.differences) {
       // Apply non-conflicting changes
       if (this.isNonConflicting(diff)) {
-        this.applyChange(merged, diff)
+        this.applyChange(merged, diff);
       } else {
         // For conflicts, use most recent
-        if (conflict.remoteVersion.timestamp > conflict.localVersion.timestamp) {
-          this.applyChange(merged, diff)
+        if (
+          conflict.remoteVersion.timestamp > conflict.localVersion.timestamp
+        ) {
+          this.applyChange(merged, diff);
         }
       }
     }
-    
-    return merged
+
+    return merged;
   }
 }
 ```
@@ -610,12 +611,12 @@ export class SmartConflictManager implements ConflictManager {
 ```typescript
 // packages/core/hooks/useAutosave.ts
 interface UseAutosaveOptions {
-  enabled?: boolean
-  delay?: number
-  maxWait?: number
-  onSave?: () => Promise<void>
-  onError?: (error: Error) => void
-  onConflict?: (conflict: Conflict) => void
+  enabled?: boolean;
+  delay?: number;
+  maxWait?: number;
+  onSave?: () => Promise<void>;
+  onError?: (error: Error) => void;
+  onConflict?: (conflict: Conflict) => void;
 }
 
 export function useAutosave(options: UseAutosaveOptions = {}) {
@@ -626,96 +627,97 @@ export function useAutosave(options: UseAutosaveOptions = {}) {
     onSave,
     onError,
     onConflict
-  } = options
-  
-  const [status, setStatus] = useState<AutosaveStatus>('idle')
-  const [lastSaved, setLastSaved] = useState<Date | null>(null)
-  const [error, setError] = useState<Error | null>(null)
-  const [pendingChanges, setPendingChanges] = useState(0)
-  
-  const store = useGraphStore()
-  const previousState = useRef(store.getState())
-  
+  } = options;
+
+  const [status, setStatus] = useState<AutosaveStatus>('idle');
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [pendingChanges, setPendingChanges] = useState(0);
+
+  const store = useGraphStore();
+  const previousState = useRef(store.getState());
+
   // Initialize autosave manager
   const manager = useMemo(() => {
     return new AutosaveManager({
       saveFunction: async () => {
-        setStatus('saving')
+        setStatus('saving');
         try {
           if (onSave) {
-            await onSave()
+            await onSave();
           } else {
-            await persistenceManager.save(store.getState())
+            await persistenceManager.save(store.getState());
           }
-          setStatus('saved')
-          setLastSaved(new Date())
-          setError(null)
-          setPendingChanges(0)
+          setStatus('saved');
+          setLastSaved(new Date());
+          setError(null);
+          setPendingChanges(0);
         } catch (err) {
-          setStatus('error')
-          setError(err as Error)
-          onError?.(err as Error)
+          setStatus('error');
+          setError(err as Error);
+          onError?.(err as Error);
         }
       },
       delay,
       maxWait
-    })
-  }, [delay, maxWait, onSave, onError])
-  
+    });
+  }, [delay, maxWait, onSave, onError]);
+
   // Track changes
   useEffect(() => {
-    if (!enabled) return
-    
-    const unsubscribe = store.subscribe((state) => {
-      const changes = detectChanges(previousState.current, state)
-      
+    if (!enabled) return;
+
+    const unsubscribe = store.subscribe(state => {
+      const changes = detectChanges(previousState.current, state);
+
       if (changes.length > 0) {
-        setPendingChanges(prev => prev + changes.length)
-        setStatus('pending')
-        manager.trigger()
-        previousState.current = state
+        setPendingChanges(prev => prev + changes.length);
+        setStatus('pending');
+        manager.trigger();
+        previousState.current = state;
       }
-    })
-    
+    });
+
     return () => {
-      unsubscribe()
-      manager.stop()
-    }
-  }, [enabled, manager, store])
-  
+      unsubscribe();
+      manager.stop();
+    };
+  }, [enabled, manager, store]);
+
   // Handle tab visibility
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
         // Save immediately when tab becomes hidden
-        manager.flush()
+        manager.flush();
       } else {
         // Check for conflicts when tab becomes visible
-        manager.checkConflicts()
+        manager.checkConflicts();
       }
-    }
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
-  }, [manager])
-  
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [manager]);
+
   // Handle before unload
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (pendingChanges > 0) {
-        e.preventDefault()
-        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
+        e.preventDefault();
+        e.returnValue =
+          'You have unsaved changes. Are you sure you want to leave?';
       }
-    }
-    
-    window.addEventListener('beforeunload', handleBeforeUnload)
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-  }, [pendingChanges])
-  
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [pendingChanges]);
+
   return {
     status,
     lastSaved,
@@ -724,7 +726,7 @@ export function useAutosave(options: UseAutosaveOptions = {}) {
     forceSave: () => manager.forceSave(),
     pause: () => manager.pause(),
     resume: () => manager.resume()
-  }
+  };
 }
 ```
 
@@ -734,53 +736,53 @@ export function useAutosave(options: UseAutosaveOptions = {}) {
 
 ```typescript
 class IdleAutosave {
-  private handle: number | null = null
-  
+  private handle: number | null = null;
+
   scheduleSave(data: GraphState, callback: () => void): void {
     if (this.handle) {
-      cancelIdleCallback(this.handle)
+      cancelIdleCallback(this.handle);
     }
-    
+
     this.handle = requestIdleCallback(
-      async (deadline) => {
+      async deadline => {
         // Check if we have enough time
         if (deadline.timeRemaining() > 10) {
-          await this.performSave(data)
-          callback()
+          await this.performSave(data);
+          callback();
         } else {
           // Reschedule if not enough time
-          this.scheduleSave(data, callback)
+          this.scheduleSave(data, callback);
         }
       },
       { timeout: 5000 } // Max 5 seconds wait
-    )
+    );
   }
-  
+
   private async performSave(data: GraphState): Promise<void> {
-    const start = performance.now()
-    
+    const start = performance.now();
+
     // Break save into chunks for large graphs
     if (data.nodes.length > 1000) {
-      await this.chunkedSave(data)
+      await this.chunkedSave(data);
     } else {
-      await persistenceManager.save(data)
+      await persistenceManager.save(data);
     }
-    
-    const duration = performance.now() - start
-    console.debug(`Autosave completed in ${duration}ms`)
+
+    const duration = performance.now() - start;
+    console.debug(`Autosave completed in ${duration}ms`);
   }
-  
+
   private async chunkedSave(data: GraphState): Promise<void> {
     // Save in chunks to avoid blocking
-    const chunks = this.chunkData(data, 100)
-    
+    const chunks = this.chunkData(data, 100);
+
     for (const chunk of chunks) {
       await new Promise(resolve => {
         requestIdleCallback(() => {
-          persistenceManager.saveChunk(chunk)
-          resolve(undefined)
-        })
-      })
+          persistenceManager.saveChunk(chunk);
+          resolve(undefined);
+        });
+      });
     }
   }
 }
@@ -790,50 +792,50 @@ class IdleAutosave {
 
 ```typescript
 class AutosavePerformanceMonitor {
-  private metrics: PerformanceMetric[] = []
-  
+  private metrics: PerformanceMetric[] = [];
+
   recordSave(duration: number, size: number): void {
     this.metrics.push({
       timestamp: Date.now(),
       duration,
       size,
       type: 'save'
-    })
-    
+    });
+
     // Keep only last 100 metrics
     if (this.metrics.length > 100) {
-      this.metrics.shift()
+      this.metrics.shift();
     }
-    
+
     // Warn if performance degrading
     if (this.isPerformanceDegrading()) {
-      console.warn('Autosave performance degrading', this.getStats())
+      console.warn('Autosave performance degrading', this.getStats());
     }
   }
-  
+
   getStats(): PerformanceStats {
-    const recent = this.metrics.slice(-10)
-    
+    const recent = this.metrics.slice(-10);
+
     return {
       averageDuration: average(recent.map(m => m.duration)),
       maxDuration: Math.max(...recent.map(m => m.duration)),
       minDuration: Math.min(...recent.map(m => m.duration)),
       averageSize: average(recent.map(m => m.size)),
       savesPerMinute: this.getSavesPerMinute()
-    }
+    };
   }
-  
+
   private isPerformanceDegrading(): boolean {
-    if (this.metrics.length < 10) return false
-    
-    const recent = this.metrics.slice(-5)
-    const previous = this.metrics.slice(-10, -5)
-    
-    const recentAvg = average(recent.map(m => m.duration))
-    const previousAvg = average(previous.map(m => m.duration))
-    
+    if (this.metrics.length < 10) return false;
+
+    const recent = this.metrics.slice(-5);
+    const previous = this.metrics.slice(-10, -5);
+
+    const recentAvg = average(recent.map(m => m.duration));
+    const previousAvg = average(previous.map(m => m.duration));
+
     // Performance degraded if recent is 50% slower
-    return recentAvg > previousAvg * 1.5
+    return recentAvg > previousAvg * 1.5;
   }
 }
 ```
@@ -841,61 +843,63 @@ class AutosavePerformanceMonitor {
 ## Testing Strategy
 
 ### Unit Tests
+
 ```typescript
 describe('AutosaveManager', () => {
   it('should debounce rapid changes', async () => {
-    const save = jest.fn()
-    const manager = new AutosaveManager({ save, delay: 100 })
-    
+    const save = jest.fn();
+    const manager = new AutosaveManager({ save, delay: 100 });
+
     // Trigger multiple times rapidly
-    manager.trigger()
-    manager.trigger()
-    manager.trigger()
-    
+    manager.trigger();
+    manager.trigger();
+    manager.trigger();
+
     // Should only save once
-    await wait(150)
-    expect(save).toHaveBeenCalledTimes(1)
-  })
-  
+    await wait(150);
+    expect(save).toHaveBeenCalledTimes(1);
+  });
+
   it('should force save after maxWait', async () => {
-    const save = jest.fn()
-    const manager = new AutosaveManager({ 
-      save, 
-      delay: 1000, 
-      maxWait: 100 
-    })
-    
-    manager.trigger()
-    await wait(50)
-    manager.trigger() // Should force save due to maxWait
-    
-    await wait(10)
-    expect(save).toHaveBeenCalledTimes(1)
-  })
-})
+    const save = jest.fn();
+    const manager = new AutosaveManager({
+      save,
+      delay: 1000,
+      maxWait: 100
+    });
+
+    manager.trigger();
+    await wait(50);
+    manager.trigger(); // Should force save due to maxWait
+
+    await wait(10);
+    expect(save).toHaveBeenCalledTimes(1);
+  });
+});
 ```
 
 ### Integration Tests
+
 ```typescript
 describe('Autosave Integration', () => {
   it('should persist changes across page reload', async () => {
-    const { result } = renderHook(() => useAutosave())
-    
+    const { result } = renderHook(() => useAutosave());
+
     // Make changes
     act(() => {
-      graphStore.addNode({ id: 'test', type: 'Output' })
-    })
-    
+      graphStore.addNode({ id: 'test', type: 'Output' });
+    });
+
     // Wait for autosave
     await waitFor(() => {
-      expect(result.current.status).toBe('saved')
-    })
-    
+      expect(result.current.status).toBe('saved');
+    });
+
     // Simulate reload
-    const stored = localStorage.getItem('promptgraph:state:v1')
-    expect(stored).toContain('test')
-  })
-})
+    const stored = localStorage.getItem('promptgraph:state:v1');
+    expect(stored).toContain('test');
+  });
+});
 ```
 
 ## Implementation Checklist

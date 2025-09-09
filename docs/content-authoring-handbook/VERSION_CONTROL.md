@@ -118,7 +118,7 @@ const versionTracker = {
       timestamp: new Date().toISOString(),
       changes: diffLines(oldContent, newContent),
       author: getGitAuthor(),
-      version: getCurrentVersion(),
+      version: getCurrentVersion()
     };
 
     updateChangeLog(changes);
@@ -129,7 +129,7 @@ const versionTracker = {
   generateChangeLog: () => {
     const changes = getRecentChanges();
     return markdownChangeLog(changes);
-  },
+  }
 };
 ```
 
@@ -190,11 +190,11 @@ const updateNotifier = {
     const notification = createNotification({
       title: 'Handbook Updated',
       message: `New version ${updateInfo.version} available`,
-      actions: ['View Changes', 'Update Now'],
+      actions: ['View Changes', 'Update Now']
     });
 
     document.body.appendChild(notification);
-  },
+  }
 };
 ```
 

@@ -44,38 +44,40 @@ const HIGHLIGHT_COLORS = [
   '#FFEAA7',
   '#DDA0DD',
   '#FFB347',
-  '#B19CD9',
+  '#B19CD9'
 ];
 
-function tokenize(input: string): Array<{ text: string; start: number; end: number }> {
+function tokenize(
+  input: string
+): Array<{ text: string; start: number; end: number }> {
   const tokens: Array<{ text: string; start: number; end: number }> = [];
-  
+
   // Parse as semantic phrases rather than comma-separated segments
   // This better matches the wizard's grammar-based approach
-  
+
   // Split on commas but treat them as phrase boundaries
   const parts = input.split(',').map((p, idx, arr) => ({
     text: p.trim(),
     hasCommaAfter: idx < arr.length - 1
   }));
-  
+
   let currentPos = 0;
-  parts.forEach((part) => {
+  parts.forEach(part => {
     if (part.text.length > 0) {
       // Find the actual position in the original string
       const startIndex = input.indexOf(part.text, currentPos);
       const endIndex = startIndex + part.text.length;
-      
-      tokens.push({ 
+
+      tokens.push({
         text: part.text,
-        start: startIndex, 
-        end: endIndex 
+        start: startIndex,
+        end: endIndex
       });
-      
+
       currentPos = endIndex;
     }
   });
-  
+
   return tokens;
 }
 
@@ -84,7 +86,7 @@ function splitAlternatives(text: string): string[] {
   // keep order; filter empties
   return text
     .split(/\s+(?:or|and)\s+/gi)
-    .map((t) => t.trim())
+    .map(t => t.trim())
     .filter(Boolean);
 }
 
@@ -114,25 +116,30 @@ export const simplePromptParser = {
     const segmentNodeGroups: GeneratedNode[][] = [];
 
     coarse.forEach((seg, idx) => {
-      segments.push({ text: seg.text, startIndex: seg.start, endIndex: seg.end });
+      segments.push({
+        text: seg.text,
+        startIndex: seg.start,
+        endIndex: seg.end
+      });
 
       // Enhanced alternative detection
       const alts = splitAlternatives(seg.text);
       const segmentNodes: GeneratedNode[] = [];
-      
+
       // Smart detection: if we find patterns like "X or Y" or "X/Y" or "X|Y", treat as choice
       const hasExplicitChoice = /\s+(or|and)\s+|[/|]/i.test(seg.text);
-      
+
       alts.forEach((alt, altIdx) => {
         const nodeId = `node-${hashString(
           `${seg.text.toLowerCase()}|${alt.toLowerCase()}|${altIdx}`
         )}`;
-        const color = HIGHLIGHT_COLORS[(idx + altIdx) % HIGHLIGHT_COLORS.length];
+        const color =
+          HIGHLIGHT_COLORS[(idx + altIdx) % HIGHLIGHT_COLORS.length];
         const node: GeneratedNodeInternal = {
           id: nodeId,
           // Enhanced logic: detect choice based on alternatives or explicit patterns
-          nodeType: (alts.length > 1 || hasExplicitChoice) ? 'Choice' : 'Text',
-          getPreviewText: () => alt,
+          nodeType: alts.length > 1 || hasExplicitChoice ? 'Choice' : 'Text',
+          getPreviewText: () => alt
         };
         segmentNodes.push({ node });
 
@@ -142,13 +149,13 @@ export const simplePromptParser = {
         const endIndex = startIndex + alt.length;
         mappings.push({ nodeId, startIndex, endIndex, highlightColor: color });
       });
-      
+
       segmentNodeGroups.push(segmentNodes);
     });
 
     // Add all segment nodes without concat nodes
     // The commas will be preserved in the text content itself
-    segmentNodeGroups.forEach((group) => {
+    segmentNodeGroups.forEach(group => {
       nodes.push(...group);
     });
 
@@ -158,10 +165,10 @@ export const simplePromptParser = {
       node: {
         id: outputId,
         nodeType: 'Output',
-        getPreviewText: () => 'Output',
-      },
+        getPreviewText: () => 'Output'
+      }
     });
 
     return { segments, nodes, mappings };
-  },
+  }
 };

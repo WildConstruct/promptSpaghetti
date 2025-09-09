@@ -191,14 +191,14 @@ class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
         id: 'values',
         label: 'Values',
         dataType: 'stringArray',
-        required: true,
+        required: true
       })
       .addInput({
         id: 'weights',
         label: 'Weights',
         dataType: 'numberArray',
         required: false,
-        defaultValue: [],
+        defaultValue: []
       })
       .addTextOutput('result', 'Selected Value')
       .build();
@@ -239,8 +239,8 @@ const advancedSpec = new IOSpecBuilder()
     constraints: {
       pattern: '^[^@]+@[^@]+\\.[^@]+$',
       minLength: 5,
-      maxLength: 100,
-    },
+      maxLength: 100
+    }
   })
   .addInput({
     id: 'age',
@@ -252,11 +252,15 @@ const advancedSpec = new IOSpecBuilder()
       max: 120,
       customValidator: value => {
         if (value % 1 !== 0) {
-          return { valid: false, errors: ['Age must be a whole number'], warnings: [] };
+          return {
+            valid: false,
+            errors: ['Age must be a whole number'],
+            warnings: []
+          };
         }
         return { valid: true, errors: [], warnings: [] };
-      },
-    },
+      }
+    }
   })
   .build();
 ```
@@ -267,7 +271,11 @@ const advancedSpec = new IOSpecBuilder()
 
 ```typescript
 // Enhanced advanced nodes export I/O system
-import { AdvancedIOHandler, IOSpecBuilder, TypedInputs } from '@promptscape/core/runtime';
+import {
+  AdvancedIOHandler,
+  IOSpecBuilder,
+  TypedInputs
+} from '@promptscape/core/runtime';
 ```
 
 ### **Engine Integration**

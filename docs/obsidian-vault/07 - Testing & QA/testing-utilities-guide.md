@@ -19,7 +19,7 @@ const env = await TestEnvironmentManager.createEnvironment('integration-test', {
   mockReactFlow: true,
   mockWebSocket: true,
   mockLocalStorage: true,
-  timeout: 10000,
+  timeout: 10000
 });
 
 // Use the environment
@@ -86,15 +86,21 @@ Utilities for handling async operations in tests.
 import { AsyncTestingUtils } from '../tests/utils';
 
 // Wait for a condition to be met
-await AsyncTestingUtils.waitForCondition(() => document.querySelector('.loaded') !== null, {
-  timeout: 5000,
-  interval: 100,
-});
+await AsyncTestingUtils.waitForCondition(
+  () => document.querySelector('.loaded') !== null,
+  {
+    timeout: 5000,
+    interval: 100
+  }
+);
 
 // Wait for element to appear
-const element = await AsyncTestingUtils.waitForElement(() => document.getElementById('dynamic-element'), {
-  timeout: 3000,
-});
+const element = await AsyncTestingUtils.waitForElement(
+  () => document.getElementById('dynamic-element'),
+  {
+    timeout: 3000
+  }
+);
 
 // Test async hooks
 await AsyncTestingUtils.testAsyncHook(
@@ -111,7 +117,11 @@ await AsyncTestingUtils.testAsyncHook(
 await AsyncTestingUtils.delay(500);
 
 // Test with timeout protection
-const result = await AsyncTestingUtils.withTimeout(longRunningOperation(), 10000, 'Operation took too long');
+const result = await AsyncTestingUtils.withTimeout(
+  longRunningOperation(),
+  10000,
+  'Operation took too long'
+);
 ```
 
 ### 4. MockDataUtils
@@ -125,19 +135,25 @@ import { MockDataUtils } from '../tests/utils';
 const user = MockDataUtils.createMockUser({
   name: 'Test Admin',
   role: 'admin',
-  preferences: { theme: 'dark' },
+  preferences: { theme: 'dark' }
 });
 
 // Create mock graph
 const graph = MockDataUtils.createMockGraph({
-  nodes: [{ id: 'custom-node', type: 'WeightedChoice', data: { choices: [] } }],
+  nodes: [{ id: 'custom-node', type: 'WeightedChoice', data: { choices: [] } }]
 });
 
 // Create mock API responses
-const response = MockDataUtils.createMockApiResponse({ users: [user] }, { status: 200, delay: 100 });
+const response = MockDataUtils.createMockApiResponse(
+  { users: [user] },
+  { status: 200, delay: 100 }
+);
 
 // Create batches of data
-const users = MockDataUtils.createBatch(index => MockDataUtils.createMockUser({ name: `User ${index}` }), 10);
+const users = MockDataUtils.createBatch(
+  index => MockDataUtils.createMockUser({ name: `User ${index}` }),
+  10
+);
 ```
 
 ### 5. PerformanceTestingUtils
@@ -197,12 +213,12 @@ const migrationSteps: MigrationStep[] = [
     name: 'Add version field to schema',
     execute: async state => ({
       ...state,
-      version: '2.0.0',
+      version: '2.0.0'
     }),
     rollback: async state => {
       const { version, ...rolledBack } = state;
       return rolledBack;
-    },
+    }
   },
   {
     id: 'migrate-node-types',
@@ -211,14 +227,18 @@ const migrationSteps: MigrationStep[] = [
       ...state,
       nodes: state.nodes.map(node => ({
         ...node,
-        nodeType: node.type, // Rename field
-      })),
-    }),
-  },
+        nodeType: node.type // Rename field
+      }))
+    })
+  }
 ];
 
 // Test complete migration path
-const result = await MigrationTestHelper.testMigrationPath('v1-to-v2-migration', migrationSteps, initialState);
+const result = await MigrationTestHelper.testMigrationPath(
+  'v1-to-v2-migration',
+  migrationSteps,
+  initialState
+);
 
 if (result.success) {
   console.log('Migration completed successfully');
@@ -233,10 +253,14 @@ if (result.success) {
 }
 
 // Test backward compatibility
-const compatibilityResult = MigrationTestHelper.testBackwardCompatibility(oldAPI, newAPI, [
-  { name: 'test-method', methodName: 'processGraph', args: [graph] },
-  { name: 'test-property', propertyName: 'version' },
-]);
+const compatibilityResult = MigrationTestHelper.testBackwardCompatibility(
+  oldAPI,
+  newAPI,
+  [
+    { name: 'test-method', methodName: 'processGraph', args: [graph] },
+    { name: 'test-property', propertyName: 'version' }
+  ]
+);
 ```
 
 ### 2. LegacySystemMock
@@ -275,21 +299,25 @@ Validate that refactored code maintains expected behavior.
 import { RefactoringValidator } from '../tests/utils';
 
 // Compare function implementations
-const comparisonResult = await RefactoringValidator.compareFunctionBehavior(oldFunction, newFunction, [
-  { name: 'basic test', args: [1, 2], expectedResult: 3 },
-  { name: 'edge case', args: [0, 0], expectedResult: 0 },
-  {
-    name: 'custom validation',
-    args: ['input'],
-    validator: (oldResult, newResult) => {
-      // Custom logic to determine if results are equivalent
-      return {
-        valid: oldResult?.length === newResult?.length,
-        message: 'Results should have same length',
-      };
-    },
-  },
-]);
+const comparisonResult = await RefactoringValidator.compareFunctionBehavior(
+  oldFunction,
+  newFunction,
+  [
+    { name: 'basic test', args: [1, 2], expectedResult: 3 },
+    { name: 'edge case', args: [0, 0], expectedResult: 0 },
+    {
+      name: 'custom validation',
+      args: ['input'],
+      validator: (oldResult, newResult) => {
+        // Custom logic to determine if results are equivalent
+        return {
+          valid: oldResult?.length === newResult?.length,
+          message: 'Results should have same length'
+        };
+      }
+    }
+  ]
+);
 
 if (!comparisonResult.success) {
   comparisonResult.results.forEach(test => {
@@ -325,7 +353,7 @@ expect(performanceMetrics).toMeetPerformanceBudget({
   loadTime: 2000,
   renderTime: 100,
   bundleSize: 1024,
-  memoryUsage: 50,
+  memoryUsage: 50
 });
 
 // Test response times
@@ -343,7 +371,7 @@ expect(codeMetrics).toMeetCodeQualityStandards({
   minCoverage: 80,
   maxComplexity: 10,
   maxDuplication: 5,
-  maxViolations: 0,
+  maxViolations: 0
 });
 
 // Test complexity
@@ -361,14 +389,14 @@ expect(codebase).toFollowArchitecturalRules([
   {
     name: 'no-direct-db-access',
     description: 'UI components should not directly access database',
-    validate: code => !code.includes('SELECT * FROM'),
-  },
+    validate: code => !code.includes('SELECT * FROM')
+  }
 ]);
 
 // Test layer boundaries
 expect(dependencyGraph).toMaintainLayerBoundaries([
   { from: 'UI', to: 'Database', layer: 'presentation', allowed: false },
-  { from: 'UI', to: 'Service', layer: 'presentation', allowed: true },
+  { from: 'UI', to: 'Service', layer: 'presentation', allowed: true }
 ]);
 ```
 
@@ -381,7 +409,7 @@ expect(newImplementation).toBeBackwardCompatible(oldImplementation);
 // Test API compatibility
 expect(newAPI).toMaintainApiCompatibility(oldAPI, [
   { method: 'processGraph', args: [testGraph] },
-  { method: 'validateSchema', args: [testSchema] },
+  { method: 'validateSchema', args: [testSchema] }
 ]);
 ```
 
@@ -407,10 +435,10 @@ expect(conflictResolver).toHandleConflictsCorrectly([
     name: 'simultaneous edit',
     operations: [
       { user: 'user1', operation: 'update', data: { value: 'A' } },
-      { user: 'user2', operation: 'update', data: { value: 'B' } },
+      { user: 'user2', operation: 'update', data: { value: 'B' } }
     ],
-    expectedResolution: { value: 'B' }, // Later timestamp wins
-  },
+    expectedResolution: { value: 'B' } // Later timestamp wins
+  }
 ]);
 ```
 
@@ -425,7 +453,7 @@ import { TestEnvironmentManager } from '../tests/utils';
 import { TestFixtureManager } from '../tests/infrastructure';
 
 const env = await TestEnvironmentManager.createEnvironment('integration-test', {
-  seed: 'test-seed-123',
+  seed: 'test-seed-123'
 });
 
 // Fixtures are automatically available in environment
@@ -436,12 +464,15 @@ const conflictScenarios = env.fixtures.get('collaboration-conflict-scenarios');
 ### With Testing Framework
 
 ```typescript
-import { TestEnvironmentManager, PerformanceTestingUtils } from '../tests/utils';
+import {
+  TestEnvironmentManager,
+  PerformanceTestingUtils
+} from '../tests/utils';
 import { TestingFramework } from '../tests/infrastructure';
 
 const framework = new TestingFramework({
   environment: 'integration',
-  categories: ['performance', 'migration'],
+  categories: ['performance', 'migration']
 });
 
 // Use utilities within framework tests
@@ -466,7 +497,10 @@ afterEach(async () => {
 });
 
 // Use descriptive environment names
-const env = await TestEnvironmentManager.createEnvironment('user-authentication-integration-test', config);
+const env = await TestEnvironmentManager.createEnvironment(
+  'user-authentication-integration-test',
+  config
+);
 ```
 
 ### 2. Performance Testing
@@ -480,7 +514,7 @@ const thoroughTest = await PerformanceTestingUtils.measureExecution(func, 20);
 expect(metrics).toMeetPerformanceBudget({
   loadTime: 3000, // 3 seconds is reasonable for complex operations
   renderTime: 16, // 60fps = ~16ms per frame
-  memoryUsage: 50, // 50MB limit
+  memoryUsage: 50 // 50MB limit
 });
 ```
 
@@ -488,7 +522,11 @@ expect(metrics).toMeetPerformanceBudget({
 
 ```typescript
 // Test both forward and backward migrations
-const forwardResult = await MigrationTestHelper.testMigrationPath('forward-migration', forwardSteps, initialState);
+const forwardResult = await MigrationTestHelper.testMigrationPath(
+  'forward-migration',
+  forwardSteps,
+  initialState
+);
 
 const backwardResult = await MigrationTestHelper.testMigrationPath(
   'backward-migration',
@@ -508,7 +546,7 @@ const fixtures = new TestFixtureManager('deterministic-seed');
 // Create realistic but minimal data
 const minimalUser = MockDataUtils.createMockUser({
   name: 'Test User',
-  role: 'user',
+  role: 'user'
   // Only include fields needed for test
 });
 ```
@@ -528,7 +566,7 @@ const minimalUser = MockDataUtils.createMockUser({
 // Enable verbose logging
 const env = await TestEnvironmentManager.createEnvironment('debug-env', {
   seed: 'debug-seed',
-  timeout: 30000, // Longer timeout for debugging
+  timeout: 30000 // Longer timeout for debugging
 });
 
 // Use performance benchmarks for detailed timing

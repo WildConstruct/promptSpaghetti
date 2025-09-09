@@ -27,16 +27,16 @@ export interface MockContextConfig {
  */
 export class MockContext {
   private config: MockContextConfig;
-  
+
   constructor(seed?: string | number) {
     this.config = {
       seed: String(seed || 'test-seed'),
       variables: {},
       nodeStates: {},
-      trackPerformance: true,
+      trackPerformance: true
     };
   }
-  
+
   getContext(): AdvancedExecutionContext {
     return MockContextFactory.create(this.config);
   }
@@ -47,7 +47,13 @@ export class MockContextFactory {
    * Create a mock AdvancedExecutionContext for testing
    */
   static create(config: MockContextConfig = {}): AdvancedExecutionContext {
-    const { seed = 'test-seed', variables = {}, nodeStates = {}, maxDepth = 10, trackPerformance = true } = config;
+    const {
+      seed = 'test-seed',
+      variables = {},
+      nodeStates = {},
+      maxDepth = 10,
+      trackPerformance = true
+    } = config;
 
     const prng = seedrandom(seed);
     const stateMap = new Map(Object.entries(nodeStates));
@@ -62,17 +68,19 @@ export class MockContextFactory {
       evaluationDepth: 0,
       cache: new Map(),
       prng,
-      performanceMetrics: trackPerformance ? new Map() : undefined,
+      performanceMetrics: trackPerformance ? new Map() : undefined
     };
   }
 
   /**
    * Create a minimal context with just the essentials
    */
-  static createMinimal(variables: Record<string, any> = {}): AdvancedExecutionContext {
+  static createMinimal(
+    variables: Record<string, any> = {}
+  ): AdvancedExecutionContext {
     return this.create({
       variables,
-      trackPerformance: false,
+      trackPerformance: false
     });
   }
 
@@ -86,7 +94,7 @@ export class MockContextFactory {
     return this.create({
       variables,
       nodeStates: initialStates,
-      trackPerformance: true,
+      trackPerformance: true
     });
   }
 
@@ -120,9 +128,9 @@ export class TestScenarios {
       variables: {
         input,
         text: input,
-        content: input,
+        content: input
       },
-      seed: 'string-test',
+      seed: 'string-test'
     });
   }
 
@@ -135,24 +143,28 @@ export class TestScenarios {
         numbers,
         values: numbers,
         data: numbers,
-        input: numbers[0] || 0,
+        input: numbers[0] || 0
       },
-      seed: 'numeric-test',
+      seed: 'numeric-test'
     });
   }
 
   /**
    * Create a scenario for testing conditional logic nodes
    */
-  static conditionalLogic(condition: boolean, trueValue: any, falseValue: any): AdvancedExecutionContext {
+  static conditionalLogic(
+    condition: boolean,
+    trueValue: any,
+    falseValue: any
+  ): AdvancedExecutionContext {
     return MockContextFactory.create({
       variables: {
         condition,
         trueValue,
         falseValue,
-        input: condition,
+        input: condition
       },
-      seed: 'conditional-test',
+      seed: 'conditional-test'
     });
   }
 
@@ -165,23 +177,25 @@ export class TestScenarios {
         items,
         array: items,
         list: items,
-        input: items,
+        input: items
       },
-      seed: 'array-test',
+      seed: 'array-test'
     });
   }
 
   /**
    * Create a scenario for testing object manipulation nodes
    */
-  static objectManipulation(object: Record<string, any>): AdvancedExecutionContext {
+  static objectManipulation(
+    object: Record<string, any>
+  ): AdvancedExecutionContext {
     return MockContextFactory.create({
       variables: {
         object,
         data: object,
-        input: object,
+        input: object
       },
-      seed: 'object-test',
+      seed: 'object-test'
     });
   }
 
@@ -193,9 +207,9 @@ export class TestScenarios {
       variables: {
         shouldError,
         throwError: shouldError,
-        simulateError: shouldError,
+        simulateError: shouldError
       },
-      seed: 'error-test',
+      seed: 'error-test'
     });
   }
 }

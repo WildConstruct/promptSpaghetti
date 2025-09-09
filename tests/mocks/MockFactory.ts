@@ -39,7 +39,15 @@ export interface MockBehavior {
   statusCode?: number;
 }
 
-export type MockType = 'api' | 'database' | 'service' | 'component' | 'filesystem' | 'network' | 'auth' | 'analytics';
+export type MockType =
+  | 'api'
+  | 'database'
+  | 'service'
+  | 'component'
+  | 'filesystem'
+  | 'network'
+  | 'auth'
+  | 'analytics';
 
 export class MockFactory extends EventEmitter {
   private mocks: Map<string, MockInstance> = new Map();
@@ -55,23 +63,30 @@ export class MockFactory extends EventEmitter {
       enableLogging: false,
       persistence: false,
       environment: 'test',
-      ..._config,
+      ..._config
     };
 
     this.rng = seedrandom(this.globalConfig.seed?.toString() || '12345');
 
     if (this.globalConfig.enableLogging) {
-      console.log('🏭 Mock Factory initialized with config:', this.globalConfig);
+      console.log(
+        '🏭 Mock Factory initialized with config:',
+        this.globalConfig
+      );
     }
   }
 
   /**
    * Create a new mock instance
    */
-  createMock<T>(type: MockType, id: string, config: Partial<MockConfig> = {}): T {
+  createMock<T>(
+    type: MockType,
+    id: string,
+    config: Partial<MockConfig> = {}
+  ): T {
     const mockConfig: MockConfig = {
       ...this.globalConfig,
-      ...config,
+      ...config
     };
 
     const mockInstance: MockInstance = {
@@ -80,7 +95,7 @@ export class MockFactory extends EventEmitter {
       config: mockConfig,
       active: true,
       createdAt: new Date(),
-      callCount: 0,
+      callCount: 0
     };
 
     // Create specific mock based on type
@@ -106,7 +121,11 @@ export class MockFactory extends EventEmitter {
     if (instance && instance.active) {
       instance.lastUsed = new Date();
       instance.callCount++;
-      return this.createSpecificMock<T>(instance.type as MockType, id, instance.config);
+      return this.createSpecificMock<T>(
+        instance.type as MockType,
+        id,
+        instance.config
+      );
     }
     return undefined;
   }
@@ -198,11 +217,16 @@ export class MockFactory extends EventEmitter {
     if (behavior.statusCode) {
       response = {
         ...response,
-        statusCode: behavior.statusCode,
+        statusCode: behavior.statusCode
       };
     }
 
-    this.emit('behaviorExecuted', { mockId, behavior: behavior.name, request, response });
+    this.emit('behaviorExecuted', {
+      mockId,
+      behavior: behavior.name,
+      request,
+      response
+    });
 
     return response;
   }
@@ -238,7 +262,8 @@ export class MockFactory extends EventEmitter {
       activeMocks: activeMocks.length,
       mocksByType,
       totalCalls,
-      averageCallsPerMock: activeMocks.length > 0 ? totalCalls / activeMocks.length : 0,
+      averageCallsPerMock:
+        activeMocks.length > 0 ? totalCalls / activeMocks.length : 0
     };
   }
 
@@ -275,7 +300,11 @@ export class MockFactory extends EventEmitter {
   /**
    * Create specific mock based on type
    */
-  private createSpecificMock<T>(type: MockType, id: string, _config: MockConfig): T {
+  private createSpecificMock<T>(
+    type: MockType,
+    id: string,
+    _config: MockConfig
+  ): T {
     switch (type) {
       case 'api':
         return this.createAPIMock(id, _config) as T;
@@ -302,11 +331,16 @@ export class MockFactory extends EventEmitter {
     return {
       id,
       type: 'api',
-      get: async (path: string, params?: unknown) => this.executeBehavior(id, { method: 'GET', path, params }),
-      post: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'POST', path, data }),
-      put: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'PUT', path, data }),
-      delete: async (path: string) => this.executeBehavior(id, { method: 'DELETE', path }),
-      patch: async (path: string, data?: unknown) => this.executeBehavior(id, { method: 'PATCH', path, data }),
+      get: async (path: string, params?: unknown) =>
+        this.executeBehavior(id, { method: 'GET', path, params }),
+      post: async (path: string, data?: unknown) =>
+        this.executeBehavior(id, { method: 'POST', path, data }),
+      put: async (path: string, data?: unknown) =>
+        this.executeBehavior(id, { method: 'PUT', path, data }),
+      delete: async (path: string) =>
+        this.executeBehavior(id, { method: 'DELETE', path }),
+      patch: async (path: string, data?: unknown) =>
+        this.executeBehavior(id, { method: 'PATCH', path, data })
     };
   }
 
@@ -316,8 +350,10 @@ export class MockFactory extends EventEmitter {
     return {
       id,
       type: 'database',
-      query: async (sql: string, params?: unknown[]) => this.executeBehavior(id, { type: 'query', sql, params }),
-      find: async (table: string, conditions: unknown) => this.executeBehavior(id, { type: 'find', table, conditions }),
+      query: async (sql: string, params?: unknown[]) =>
+        this.executeBehavior(id, { type: 'query', sql, params }),
+      find: async (table: string, conditions: unknown) =>
+        this.executeBehavior(id, { type: 'find', table, conditions }),
       insert: async (table: string, data: unknown) => {
         if (config.deterministic) {
           const key = `${table}_${JSON.stringify(data)}`;
@@ -330,7 +366,7 @@ export class MockFactory extends EventEmitter {
       update: async (table: string, conditions: unknown, data: unknown) =>
         this.executeBehavior(id, { type: 'update', table, conditions, data }),
       delete: async (table: string, conditions: unknown) =>
-        this.executeBehavior(id, { type: 'delete', table, conditions }),
+        this.executeBehavior(id, { type: 'delete', table, conditions })
     };
   }
 
@@ -338,9 +374,13 @@ export class MockFactory extends EventEmitter {
     return {
       id,
       type: 'service',
-      call: async (method: string, args?: unknown[]) => this.executeBehavior(id, { method, args }),
+      call: async (method: string, args?: unknown[]) =>
+        this.executeBehavior(id, { method, args }),
       isAvailable: () => true,
-      getStatus: () => ({ status: 'active', uptime: Date.now() - this.mocks.get(id)!.createdAt.getTime() }),
+      getStatus: () => ({
+        status: 'active',
+        uptime: Date.now() - this.mocks.get(id)!.createdAt.getTime()
+      })
     };
   }
 
@@ -353,11 +393,12 @@ export class MockFactory extends EventEmitter {
       type: 'component',
       props: mockProps,
       methods: mockMethods,
-      trigger: async (event: string, data?: unknown) => this.executeBehavior(id, { event, data }),
+      trigger: async (event: string, data?: unknown) =>
+        this.executeBehavior(id, { event, data }),
       setState: (state: unknown) => {
         mockProps.state = { ...mockProps.state, ...state };
       },
-      getState: () => mockProps.state || {},
+      getState: () => mockProps.state || {}
     };
   }
 
@@ -378,7 +419,11 @@ export class MockFactory extends EventEmitter {
           mockFiles.set(path, content);
           return { success: true, path, size: JSON.stringify(content).length };
         }
-        return this.executeBehavior(id, { operation: 'writeFile', path, content });
+        return this.executeBehavior(id, {
+          operation: 'writeFile',
+          path,
+          content
+        });
       },
       exists: async (path: string) => {
         if (config.deterministic) {
@@ -393,7 +438,7 @@ export class MockFactory extends EventEmitter {
           return { success: true, existed };
         }
         return this.executeBehavior(id, { operation: 'delete', path });
-      },
+      }
     };
   }
 
@@ -401,12 +446,15 @@ export class MockFactory extends EventEmitter {
     return {
       id,
       type: 'network',
-      fetch: async (url: string, options?: RequestInit) => this.executeBehavior(id, { type: 'fetch', url, options }),
+      fetch: async (url: string, options?: RequestInit) =>
+        this.executeBehavior(id, { type: 'fetch', url, options }),
       websocket: {
-        connect: async (url: string) => this.executeBehavior(id, { type: 'websocket_connect', url }),
-        send: async (data: unknown) => this.executeBehavior(id, { type: 'websocket_send', data }),
-        close: async () => this.executeBehavior(id, { type: 'websocket_close' }),
-      },
+        connect: async (url: string) =>
+          this.executeBehavior(id, { type: 'websocket_connect', url }),
+        send: async (data: unknown) =>
+          this.executeBehavior(id, { type: 'websocket_send', data }),
+        close: async () => this.executeBehavior(id, { type: 'websocket_close' })
+      }
     };
   }
 
@@ -419,9 +467,18 @@ export class MockFactory extends EventEmitter {
       login: async (credentials: { email: string; password: string }) => {
         if (config.deterministic) {
           const sessionId = this.generateId();
-          const user = { id: this.generateId(), email: credentials.email, role: 'user' };
+          const user = {
+            id: this.generateId(),
+            email: credentials.email,
+            role: 'user'
+          };
           sessions.set(sessionId, { user, createdAt: new Date() });
-          return { success: true, sessionId, user, token: `mock_token_${sessionId}` };
+          return {
+            success: true,
+            sessionId,
+            user,
+            token: `mock_token_${sessionId}`
+          };
         }
         return this.executeBehavior(id, { type: 'login', credentials });
       },
@@ -440,7 +497,8 @@ export class MockFactory extends EventEmitter {
         }
         return this.executeBehavior(id, { type: 'validateToken', token });
       },
-      refreshToken: async (refreshToken: string) => this.executeBehavior(id, { type: 'refreshToken', refreshToken }),
+      refreshToken: async (refreshToken: string) =>
+        this.executeBehavior(id, { type: 'refreshToken', refreshToken })
     };
   }
 
@@ -459,8 +517,9 @@ export class MockFactory extends EventEmitter {
       },
       identify: async (userId: string, traits?: unknown) =>
         this.executeBehavior(id, { type: 'identify', userId, traits }),
-      page: async (name: string, properties?: unknown) => this.executeBehavior(id, { type: 'page', name, properties }),
-      getEvents: () => (config.deterministic ? events : []),
+      page: async (name: string, properties?: unknown) =>
+        this.executeBehavior(id, { type: 'page', name, properties }),
+      getEvents: () => (config.deterministic ? events : [])
     };
   }
 
@@ -477,22 +536,22 @@ export class MockFactory extends EventEmitter {
         seed: 12345,
         deterministic: true,
         enableLogging: false,
-        environment: 'test',
+        environment: 'test'
       }),
 
       development: new MockFactory({
         seed: Date.now(),
         deterministic: false,
         enableLogging: true,
-        environment: 'development',
+        environment: 'development'
       }),
 
       performance: new MockFactory({
         seed: 12345,
         deterministic: true,
         enableLogging: false,
-        environment: 'test',
-      }),
+        environment: 'test'
+      })
     };
   }
 }

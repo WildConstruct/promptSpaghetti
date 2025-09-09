@@ -7,7 +7,9 @@
  * Task: E18-1753114562159-0BC5A0
  */
 
-import AdvancedGraphGenerator, { GraphBatchGenerator } from '../AdvancedGraphGenerator';
+import AdvancedGraphGenerator, {
+  GraphBatchGenerator
+} from '../AdvancedGraphGenerator';
 import AuthenticationDataGenerator from '../AuthenticationDataGenerator';
 import AnalyticsDataGenerator from '../AnalyticsDataGenerator';
 import APIPayloadGenerator from '../APIPayloadGenerator';
@@ -25,14 +27,14 @@ describe('Test Data Generators', () => {
       const graph1 = generator.generateComplexScenario({
         nodeCount: 5,
         complexity: 'simple',
-        seed: 123,
+        seed: 123
       });
 
       const generator2 = new AdvancedGraphGenerator(12345);
       const graph2 = generator2.generateComplexScenario({
         nodeCount: 5,
         complexity: 'simple',
-        seed: 123,
+        seed: 123
       });
 
       expect(graph1.graph.nodes).toHaveLength(graph2.graph.nodes.length);
@@ -43,26 +45,32 @@ describe('Test Data Generators', () => {
     it('should generate simple scenarios correctly', () => {
       const scenario = generator.generateComplexScenario({
         nodeCount: 5,
-        complexity: 'simple',
+        complexity: 'simple'
       });
 
       expect(scenario.expectedBehavior).toBe('success');
       expect(scenario.graph.nodes).toHaveLength(5);
       expect(scenario.performanceThresholds).toBeDefined();
-      expect(scenario.performanceThresholds!.maxExecutionTimeMs).toBeLessThan(200);
+      expect(scenario.performanceThresholds!.maxExecutionTimeMs).toBeLessThan(
+        200
+      );
     });
 
     it('should generate validation scenarios with errors', () => {
       const scenario = generator.generateComplexScenario({
         nodeCount: 3,
-        complexity: 'validation',
+        complexity: 'validation'
       });
 
       expect(scenario.expectedBehavior).toBe('error');
       expect(
-        ['self-loop', 'disconnected', 'circular-dependency', 'missing-input', 'duplicate-edges'].some(type =>
-          scenario.name.includes(type)
-        )
+        [
+          'self-loop',
+          'disconnected',
+          'circular-dependency',
+          'missing-input',
+          'duplicate-edges'
+        ].some(type => scenario.name.includes(type))
       ).toBe(true);
     });
 
@@ -70,25 +78,30 @@ describe('Test Data Generators', () => {
       const scenario = generator.generateComplexScenario({
         nodeCount: 100,
         complexity: 'performance',
-        includeAdvancedNodes: true,
+        includeAdvancedNodes: true
       });
 
       expect(scenario.expectedBehavior).toBe('performance');
       expect(scenario.graph.nodes.length).toBeGreaterThanOrEqual(100);
-      expect(scenario.performanceThresholds!.maxExecutionTimeMs).toBeGreaterThan(500);
+      expect(
+        scenario.performanceThresholds!.maxExecutionTimeMs
+      ).toBeGreaterThan(500);
     });
 
     it('should generate security scenarios with malicious patterns', () => {
       const scenario = generator.generateComplexScenario({
         nodeCount: 5,
-        complexity: 'security',
+        complexity: 'security'
       });
 
       expect(scenario.expectedBehavior).toBe('error');
       expect(
-        ['malicious-expression', 'prototype-pollution', 'code-injection', 'resource-exhaustion'].some(type =>
-          scenario.name.includes(type)
-        )
+        [
+          'malicious-expression',
+          'prototype-pollution',
+          'code-injection',
+          'resource-exhaustion'
+        ].some(type => scenario.name.includes(type))
       ).toBe(true);
     });
 
@@ -96,13 +109,17 @@ describe('Test Data Generators', () => {
       const scenario = generator.generateComplexScenario({
         nodeCount: 1,
         complexity: 'edge-case',
-        maxDepth: 50,
+        maxDepth: 50
       });
 
       expect(
-        ['empty', 'single-node', 'large-weights', 'zero-weights', 'deep-nesting'].some(type =>
-          scenario.name.includes(type)
-        )
+        [
+          'empty',
+          'single-node',
+          'large-weights',
+          'zero-weights',
+          'deep-nesting'
+        ].some(type => scenario.name.includes(type))
       ).toBe(true);
     });
 
@@ -110,9 +127,15 @@ describe('Test Data Generators', () => {
       const testSuite = generator.generateTestSuite();
 
       expect(testSuite).toHaveLength(7);
-      expect(testSuite.some(scenario => scenario.expectedBehavior === 'success')).toBe(true);
-      expect(testSuite.some(scenario => scenario.expectedBehavior === 'performance')).toBe(true);
-      expect(testSuite.some(scenario => scenario.expectedBehavior === 'error')).toBe(true);
+      expect(
+        testSuite.some(scenario => scenario.expectedBehavior === 'success')
+      ).toBe(true);
+      expect(
+        testSuite.some(scenario => scenario.expectedBehavior === 'performance')
+      ).toBe(true);
+      expect(
+        testSuite.some(scenario => scenario.expectedBehavior === 'error')
+      ).toBe(true);
     });
   });
 
@@ -138,14 +161,18 @@ describe('Test Data Generators', () => {
 
       expect(benchmarks).toHaveLength(5);
       expect(benchmarks.some(b => b.graph.nodes.length >= 1000)).toBe(true);
-      expect(benchmarks.some(b => b.expectedBehavior === 'performance')).toBe(true);
+      expect(benchmarks.some(b => b.expectedBehavior === 'performance')).toBe(
+        true
+      );
     });
 
     it('should generate security test matrix', () => {
       const securityTests = batchGenerator.generateSecurityTestMatrix();
 
       expect(securityTests).toHaveLength(10);
-      expect(securityTests.every(test => test.expectedBehavior === 'error')).toBe(true);
+      expect(
+        securityTests.every(test => test.expectedBehavior === 'error')
+      ).toBe(true);
     });
   });
 
@@ -166,7 +193,9 @@ describe('Test Data Generators', () => {
       // Verify permissions inheritance
       const adminRole = roles.find(r => r.id === 'admin');
       const viewerRole = roles.find(r => r.id === 'viewer');
-      expect(adminRole?.permissions.length).toBeGreaterThan(viewerRole?.permissions.length || 0);
+      expect(adminRole?.permissions.length).toBeGreaterThan(
+        viewerRole?.permissions.length || 0
+      );
     });
 
     it('should generate comprehensive permissions', () => {
@@ -216,7 +245,9 @@ describe('Test Data Generators', () => {
       // Verify different scenario types
       expect(scenarios.some(s => s.expectedBehavior === 'success')).toBe(true);
       expect(scenarios.some(s => s.expectedBehavior === 'failure')).toBe(true);
-      expect(scenarios.some(s => s.expectedBehavior === 'conditional')).toBe(true);
+      expect(scenarios.some(s => s.expectedBehavior === 'conditional')).toBe(
+        true
+      );
 
       // Verify test actions are defined
       expect(scenarios.every(s => s.testActions.length > 0)).toBe(true);
@@ -244,7 +275,9 @@ describe('Test Data Generators', () => {
       expect(metrics.length).toBeGreaterThan(1000); // 7 days × 24 hours × multiple metrics
 
       // Verify metric structure
-      expect(metrics.every(m => m.id && m.name && typeof m.value === 'number')).toBe(true);
+      expect(
+        metrics.every(m => m.id && m.name && typeof m.value === 'number')
+      ).toBe(true);
       expect(metrics.every(m => m.timestamp instanceof Date)).toBe(true);
       expect(metrics.every(m => m.tags && m.tags.component)).toBe(true);
     });
@@ -260,7 +293,9 @@ describe('Test Data Generators', () => {
       expect(timestamps).toEqual([...timestamps].sort((a, b) => a - b));
 
       // Verify event structure
-      expect(events.every(e => e.id && e.type && e.category && e.action)).toBe(true);
+      expect(events.every(e => e.id && e.type && e.category && e.action)).toBe(
+        true
+      );
       expect(events.every(e => users.includes(e.userId!))).toBe(true);
     });
 
@@ -276,7 +311,9 @@ describe('Test Data Generators', () => {
       expect(metricTypes.has('throughput')).toBe(true);
 
       // Verify units are appropriate
-      const executionTimeMetrics = metrics.filter(m => m.metricType === 'execution_time');
+      const executionTimeMetrics = metrics.filter(
+        m => m.metricType === 'execution_time'
+      );
       expect(executionTimeMetrics.every(m => m.unit === 'ms')).toBe(true);
     });
 
@@ -287,39 +324,61 @@ describe('Test Data Generators', () => {
       expect(behaviorData.length).toBeGreaterThan(0);
 
       // Verify session structure
-      expect(behaviorData.every(b => b.userId && b.sessionId && b.actions.length > 0)).toBe(true);
-      expect(behaviorData.every(b => b.sessionStart instanceof Date)).toBe(true);
+      expect(
+        behaviorData.every(b => b.userId && b.sessionId && b.actions.length > 0)
+      ).toBe(true);
+      expect(behaviorData.every(b => b.sessionStart instanceof Date)).toBe(
+        true
+      );
       expect(behaviorData.every(b => b.deviceInfo && b.geolocation)).toBe(true);
 
       // Verify actions are sorted by timestamp
       behaviorData.forEach(session => {
-        const actionTimestamps = session.actions.map(a => a.timestamp.getTime());
-        expect(actionTimestamps).toEqual([...actionTimestamps].sort((a, b) => a - b));
+        const actionTimestamps = session.actions.map(a =>
+          a.timestamp.getTime()
+        );
+        expect(actionTimestamps).toEqual(
+          [...actionTimestamps].sort((a, b) => a - b)
+        );
       });
     });
 
     it('should generate time series data', () => {
-      const timeSeries = analyticsGenerator.generateTimeSeriesData('cpu_usage', 30);
+      const timeSeries = analyticsGenerator.generateTimeSeriesData(
+        'cpu_usage',
+        30
+      );
 
       expect(timeSeries.metric).toBe('cpu_usage');
       expect(timeSeries.dataPoints.length).toBeGreaterThan(0);
-      expect(['sum', 'avg', 'min', 'max', 'count'].includes(timeSeries.aggregation)).toBe(true);
-      expect(['minute', 'hour', 'day', 'week', 'month'].includes(timeSeries.interval)).toBe(true);
+      expect(
+        ['sum', 'avg', 'min', 'max', 'count'].includes(timeSeries.aggregation)
+      ).toBe(true);
+      expect(
+        ['minute', 'hour', 'day', 'week', 'month'].includes(timeSeries.interval)
+      ).toBe(true);
 
       // Verify data points are sorted by timestamp
-      const timestamps = timeSeries.dataPoints.map(dp => dp.timestamp.getTime());
+      const timestamps = timeSeries.dataPoints.map(dp =>
+        dp.timestamp.getTime()
+      );
       expect(timestamps).toEqual([...timestamps].sort((a, b) => a - b));
     });
 
     it('should generate rule usage analytics', () => {
       const ruleIds = ['rule1', 'rule2', 'rule3'];
-      const analytics = analyticsGenerator.generateRuleUsageAnalytics(ruleIds, 14);
+      const analytics = analyticsGenerator.generateRuleUsageAnalytics(
+        ruleIds,
+        14
+      );
 
       expect(analytics).toHaveLength(3);
 
       // Verify analytics structure
       expect(analytics.every(a => a.ruleId && a.ruleName)).toBe(true);
-      expect(analytics.every(a => a.successRate >= 0 && a.successRate <= 1)).toBe(true);
+      expect(
+        analytics.every(a => a.successRate >= 0 && a.successRate <= 1)
+      ).toBe(true);
       expect(analytics.every(a => a.trendData.length === 14)).toBe(true); // 14 days
       expect(analytics.every(a => a.userRatings.length > 0)).toBe(true);
     });
@@ -328,7 +387,7 @@ describe('Test Data Generators', () => {
       const suite = analyticsGenerator.generateAnalyticsTestSuite({
         userCount: 10,
         ruleCount: 5,
-        days: 7,
+        days: 7
       });
 
       expect(suite.systemMetrics.length).toBeGreaterThan(0);
@@ -353,7 +412,9 @@ describe('Test Data Generators', () => {
       expect(payloads.length).toBeGreaterThan(3);
       expect(payloads.every(p => p.testCategory === 'valid')).toBe(true);
       expect(payloads.every(p => p.expectedBehavior === 'success')).toBe(true);
-      expect(payloads.every(p => p.expectedStatus >= 200 && p.expectedStatus < 300)).toBe(true);
+      expect(
+        payloads.every(p => p.expectedStatus >= 200 && p.expectedStatus < 300)
+      ).toBe(true);
     });
 
     it('should generate invalid API payloads', () => {
@@ -374,7 +435,9 @@ describe('Test Data Generators', () => {
 
       // Verify security patterns
       const payloadBodies = payloads.map(p => JSON.stringify(p.body));
-      expect(payloadBodies.some(body => body.includes('DROP TABLE'))).toBe(true); // SQL injection
+      expect(payloadBodies.some(body => body.includes('DROP TABLE'))).toBe(
+        true
+      ); // SQL injection
       expect(payloadBodies.some(body => body.includes('<script>'))).toBe(true); // XSS
     });
 
@@ -436,13 +499,13 @@ describe('Test Data Generators', () => {
       const graph1 = suite1.graphGenerator.generateComplexScenario({
         nodeCount: 5,
         complexity: 'simple',
-        seed: 123,
+        seed: 123
       });
 
       const graph2 = suite2.graphGenerator.generateComplexScenario({
         nodeCount: 5,
         complexity: 'simple',
-        seed: 123,
+        seed: 123
       });
 
       expect(graph1.graph.nodes.length).toBe(graph2.graph.nodes.length);
@@ -454,7 +517,7 @@ describe('Test Data Generators', () => {
         graphCount: 5,
         ruleCount: 20,
         days: 7,
-        seed: 12345,
+        seed: 12345
       });
 
       expect(dataset.users).toHaveLength(10);
@@ -483,10 +546,17 @@ describe('Test Data Generators', () => {
     it('should generate sorted timestamps within range', () => {
       const startDate = new Date('2024-01-01');
       const endDate = new Date('2024-01-31');
-      const timestamps = TestDataUtils.generateTimestamps(10, startDate, endDate, 12345);
+      const timestamps = TestDataUtils.generateTimestamps(
+        10,
+        startDate,
+        endDate,
+        12345
+      );
 
       expect(timestamps).toHaveLength(10);
-      expect(timestamps.every(ts => ts >= startDate && ts <= endDate)).toBe(true);
+      expect(timestamps.every(ts => ts >= startDate && ts <= endDate)).toBe(
+        true
+      );
 
       // Verify sorting
       const timestampMs = timestamps.map(ts => ts.getTime());
@@ -498,7 +568,7 @@ describe('Test Data Generators', () => {
         metadata: { generatedAt: new Date() },
         users: [{ id: 'user1' }, { id: 'user2' }],
         sessions: [{ userId: 'user1' }, { userId: 'user2' }],
-        graphScenarios: [{ graph: { nodes: [], edges: [] } }],
+        graphScenarios: [{ graph: { nodes: [], edges: [] } }]
       };
 
       const result = TestDataUtils.validateTestData(validData);
@@ -509,7 +579,7 @@ describe('Test Data Generators', () => {
       const invalidData = {
         users: [{ id: 'user1' }],
         sessions: [{ userId: 'nonexistent' }],
-        graphScenarios: [{ graph: {} }], // Missing nodes/edges
+        graphScenarios: [{ graph: {} }] // Missing nodes/edges
       };
 
       const invalidResult = TestDataUtils.validateTestData(invalidData);

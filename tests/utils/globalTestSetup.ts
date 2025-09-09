@@ -34,7 +34,7 @@ beforeAll(() => {
     debug: jest.fn<unknown[], unknown>(),
     info: jest.fn<unknown[], unknown>(),
     warn: jest.fn<unknown[], unknown>(),
-    error: jest.fn<unknown[], unknown>(),
+    error: jest.fn<unknown[], unknown>()
   };
 });
 
@@ -51,13 +51,13 @@ afterAll(() => {
     role: 'user',
     isActive: true,
     createdAt: new Date().toISOString(),
-    ...overrides,
+    ...overrides
   }),
 
   createMockGraph: (overrides = {}) => ({
     nodes: [],
     edges: [],
-    ...overrides,
+    ...overrides
   }),
 
   waitFor: (condition: () => boolean, timeout = 5000) => {
@@ -76,7 +76,7 @@ afterAll(() => {
     });
   },
 
-  delay: (ms: number) => new Promise(resolve => setTimeout(resolve, ms)),
+  delay: (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 };
 
 export {};

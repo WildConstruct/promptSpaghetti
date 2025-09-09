@@ -11,10 +11,15 @@ export function useLocalStorageToggle(key: string, defaultValue: boolean) {
     }
   });
 
-  const set = useCallback((next: boolean) => {
-    setValue(next);
-    try { window?.localStorage?.setItem(key, String(next)); } catch {}
-  }, [key]);
+  const set = useCallback(
+    (next: boolean) => {
+      setValue(next);
+      try {
+        window?.localStorage?.setItem(key, String(next));
+      } catch {}
+    },
+    [key]
+  );
 
   useEffect(() => {
     const handler = (e: StorageEvent) => {
@@ -26,4 +31,3 @@ export function useLocalStorageToggle(key: string, defaultValue: boolean) {
 
   return [value, set] as const;
 }
-

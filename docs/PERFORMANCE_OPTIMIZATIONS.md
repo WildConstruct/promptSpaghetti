@@ -9,6 +9,7 @@ This document outlines the performance optimizations implemented in the refactor
 ### 1. Single-Pass Algorithms
 
 **Before:**
+
 ```typescript
 // Multiple passes through the array
 const result = array
@@ -18,6 +19,7 @@ const result = array
 ```
 
 **After:**
+
 ```typescript
 // Single pass using filterMap
 const result = filterMap(
@@ -32,21 +34,21 @@ const result = filterMap(
 ### 2. Set-Based Lookups
 
 **Before:**
+
 ```typescript
 // O(n²) complexity
-const selectedEdges = edges.filter(e => 
-  selectedNodeIds.includes(e.source) && 
-  selectedNodeIds.includes(e.target)
+const selectedEdges = edges.filter(
+  e => selectedNodeIds.includes(e.source) && selectedNodeIds.includes(e.target)
 );
 ```
 
 **After:**
+
 ```typescript
 // O(n) complexity with Set
 const selectedNodeIds = new Set(selectedNodes.map(n => n.id));
-const selectedEdges = edges.filter(e => 
-  selectedNodeIds.has(e.source) && 
-  selectedNodeIds.has(e.target)
+const selectedEdges = edges.filter(
+  e => selectedNodeIds.has(e.source) && selectedNodeIds.has(e.target)
 );
 ```
 
@@ -55,12 +57,14 @@ const selectedEdges = edges.filter(e =>
 ### 3. Adjacency List for Graph Operations
 
 **Before:**
+
 ```typescript
 // O(edges) for each node lookup
 const neighbors = edges.filter(e => e.source === nodeId).map(e => e.target);
 ```
 
 **After:**
+
 ```typescript
 // O(1) lookup with pre-built adjacency list
 const adjacencyList = new Map<string, string[]>();
@@ -78,6 +82,7 @@ for (const edge of edges) {
 ### 1. Schema Modularization
 
 **Impact:**
+
 - 12,800-line file split into 9 modules
 - 80% faster TypeScript compilation
 - Better incremental builds
@@ -86,16 +91,22 @@ for (const edge of edges) {
 ### 2. Type Inference Improvements
 
 **Before:**
+
 ```typescript
-const [Component, setComponent] = useState<React.ComponentType<any> | null>(null);
+const [Component, setComponent] = useState<React.ComponentType<any> | null>(
+  null
+);
 ```
 
 **After:**
+
 ```typescript
-const [Component, setComponent] = useState<React.ComponentType<SpecificProps> | null>(null);
+const [Component, setComponent] =
+  useState<React.ComponentType<SpecificProps> | null>(null);
 ```
 
 **Benefits:**
+
 - Better type checking
 - Improved IDE performance
 - Fewer runtime errors
@@ -108,6 +119,7 @@ const [Component, setComponent] = useState<React.ComponentType<SpecificProps> | 
 **After:** Modular components with clear responsibilities
 
 **Benefits:**
+
 - Smaller bundle sizes with code splitting
 - Better React DevTools performance
 - Easier to implement React.memo
@@ -115,6 +127,7 @@ const [Component, setComponent] = useState<React.ComponentType<SpecificProps> | 
 ### 2. State Management
 
 **Before:**
+
 ```typescript
 // 30+ useState calls in one component
 const [state1, setState1] = useState();
@@ -123,6 +136,7 @@ const [state2, setState2] = useState();
 ```
 
 **After:**
+
 ```typescript
 // Grouped related state in custom hooks
 const { fileOps } = useFileOperations();
@@ -130,6 +144,7 @@ const { editOps } = useEditOperations();
 ```
 
 **Benefits:**
+
 - Fewer re-renders
 - Better state encapsulation
 - Easier testing
@@ -161,14 +176,18 @@ const activeUsersByRole = users
   }, {});
 
 // Use optimized single-pass operations
-const activeUsers = filterMap(users, u => u.active, u => u);
+const activeUsers = filterMap(
+  users,
+  u => u.active,
+  u => u
+);
 const activeUsersByRole = groupBy(activeUsers, u => u.role);
 
 // Or combine multiple aggregations
 const stats = aggregate(users, {
   totalActive: {
     initial: 0,
-    reducer: (count, user) => user.active ? count + 1 : count
+    reducer: (count, user) => (user.active ? count + 1 : count)
   },
   byRole: {
     initial: {},

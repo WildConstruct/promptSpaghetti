@@ -2,9 +2,9 @@
 
 ## Change Log
 
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-08-05 | 1.0 | Initial architecture document | Sarah (PO) |
+| Date       | Version | Description                   | Author     |
+| ---------- | ------- | ----------------------------- | ---------- |
+| 2025-08-05 | 1.0     | Initial architecture document | Sarah (PO) |
 
 ## Template and Framework Selection
 
@@ -58,18 +58,21 @@ prompt-spaghetti/
 ### Framework Rationale
 
 **Why React:**
+
 - Seamless integration with existing React Flow editor
 - Shared component libraries and utilities
 - Consistent developer experience
 - Mature ecosystem for virtual scrolling
 
 **Why Semi-Independent:**
+
 - Allows standalone testing and development
 - Enables future extraction if needed
 - Isolates browser-specific dependencies
 - Supports "side-car first" principle from plan
 
 **Why Not Alternatives:**
+
 - Web Components: Complex React Flow integration
 - Separate framework: Maintenance overhead
 - Electron: Deployment complexity
@@ -81,24 +84,24 @@ Based on the framework decision and requirements from the Asset Browser plan, he
 
 ### Technology Stack Table
 
-| Category | Technology | Version | Purpose | Rationale |
-|----------|------------|---------|----------|-----------|
-| Framework | React | 18.x | UI framework | Consistency with main app, excellent ecosystem |
-| UI Library | React Flow | 11.x | Graph integration | Already in use, drag-drop target |
-| State Management | Zustand | 4.x | Browser state | Lightweight, TypeScript-first, already in codebase |
-| Routing | None | - | Single-view component | Browser is embedded, no routing needed |
-| Build Tool | Vite | 5.x | Fast bundling | Already in monorepo, excellent DX |
-| Styling | CSS Modules + Theme | - | Scoped styles | Isolation from main app, theme sharing |
-| Testing | Jest + RTL | 29.x | Unit/integration tests | Established in monorepo |
-| Component Library | Custom + Radix UI | 1.x | Accessible primitives | Lightweight, unstyled, accessible |
-| Form Handling | Native + Zod | 3.x | Search/filter forms | Minimal forms, Zod already used |
-| Animation | CSS + Framer Motion | 11.x | Smooth interactions | Drag animations, drawer transitions |
-| Dev Tools | React DevTools + Vite | Latest | Development efficiency | Standard React tooling |
+| Category          | Technology            | Version | Purpose                | Rationale                                          |
+| ----------------- | --------------------- | ------- | ---------------------- | -------------------------------------------------- |
+| Framework         | React                 | 18.x    | UI framework           | Consistency with main app, excellent ecosystem     |
+| UI Library        | React Flow            | 11.x    | Graph integration      | Already in use, drag-drop target                   |
+| State Management  | Zustand               | 4.x     | Browser state          | Lightweight, TypeScript-first, already in codebase |
+| Routing           | None                  | -       | Single-view component  | Browser is embedded, no routing needed             |
+| Build Tool        | Vite                  | 5.x     | Fast bundling          | Already in monorepo, excellent DX                  |
+| Styling           | CSS Modules + Theme   | -       | Scoped styles          | Isolation from main app, theme sharing             |
+| Testing           | Jest + RTL            | 29.x    | Unit/integration tests | Established in monorepo                            |
+| Component Library | Custom + Radix UI     | 1.x     | Accessible primitives  | Lightweight, unstyled, accessible                  |
+| Form Handling     | Native + Zod          | 3.x     | Search/filter forms    | Minimal forms, Zod already used                    |
+| Animation         | CSS + Framer Motion   | 11.x    | Smooth interactions    | Drag animations, drawer transitions                |
+| Dev Tools         | React DevTools + Vite | Latest  | Development efficiency | Standard React tooling                             |
 
 ### Additional Browser-Specific Dependencies
 
 - **react-window** (1.8.x) - Virtual scrolling for preset grid
-- **comlink** (4.x) - Web Worker communication for previews  
+- **comlink** (4.x) - Web Worker communication for previews
 - **fuse.js** (7.x) - Fuzzy search for presets
 - **react-intersection-observer** (9.x) - Lazy loading thumbnails
 - **@dnd-kit/sortable** (8.x) - Accessible drag-drop
@@ -289,6 +292,7 @@ PresetCard.displayName = 'PresetCard';
 ### Naming Conventions
 
 **Files & Folders:**
+
 - Components: `PascalCase.tsx` (e.g., `PresetCard.tsx`)
 - Hooks: `camelCase.ts` starting with `use` (e.g., `usePresetLibrary.ts`)
 - Services: `PascalCase.ts` with `Service` suffix (e.g., `LibraryService.ts`)
@@ -297,6 +301,7 @@ PresetCard.displayName = 'PresetCard';
 - Types: `camelCase.types.ts` for domain types
 
 **Code Conventions:**
+
 - Interfaces: `PascalCase` with descriptive names (e.g., `PresetCardProps`)
 - Types: `PascalCase` for unions/aliases (e.g., `PresetType`)
 - Enums: `PascalCase` with `UPPER_SNAKE` values
@@ -304,6 +309,7 @@ PresetCard.displayName = 'PresetCard';
 - Functions: `camelCase` with verb prefixes (`handleClick`, `fetchPresets`)
 
 **Component Patterns:**
+
 - Always use `FC<Props>` for type annotations
 - Always export named exports (no default exports)
 - Always include `displayName` for debugging
@@ -343,21 +349,21 @@ interface AssetBrowserState {
   selectedPresetId: string | null;
   loadingState: 'idle' | 'loading' | 'error';
   error: string | null;
-  
+
   // UI State
   sidebarCollapsed: boolean;
   detailsDrawerOpen: boolean;
   viewMode: 'grid' | 'list';
-  
+
   // Filtering & Search
   filterState: FilterState;
   searchQuery: string;
   activeLibraryId: string | null;
-  
+
   // Caching
   thumbnailCache: Map<string, string>;
   previewCache: Map<string, string[]>;
-  
+
   // Actions
   loadLibraries: () => Promise<void>;
   selectPreset: (presetId: string | null) => void;
@@ -366,14 +372,14 @@ interface AssetBrowserState {
   toggleSidebar: () => void;
   toggleDetailsDrawer: () => void;
   setViewMode: (mode: 'grid' | 'list') => void;
-  
+
   // Cache Management
   cacheThumbnail: (presetId: string, dataUrl: string) => void;
   cachePreview: (presetId: string, previews: string[]) => void;
-  
+
   // Keyboard Navigation
   navigatePresets: (direction: 'up' | 'down' | 'left' | 'right') => void;
-  
+
   // Computed Values (via selectors)
   getFilteredPresets: () => Preset[];
   getSelectedPreset: () => Preset | null;
@@ -395,105 +401,113 @@ export const useAssetBrowserStore = create<AssetBrowserState>()(
         tags: [],
         nodeTypes: [],
         authors: [],
-        dateRange: null,
+        dateRange: null
       },
       searchQuery: '',
       activeLibraryId: null,
       thumbnailCache: new Map(),
       previewCache: new Map(),
-      
+
       // Actions
       loadLibraries: async () => {
-        set((state) => {
+        set(state => {
           state.loadingState = 'loading';
           state.error = null;
         });
-        
+
         try {
           const response = await fetch('/api/asset-browser/libraries');
           const data = await response.json();
-          
-          set((state) => {
+
+          set(state => {
             state.libraries = data.libraries;
             state.presets = data.presets;
             state.loadingState = 'idle';
           });
         } catch (error) {
-          set((state) => {
+          set(state => {
             state.loadingState = 'error';
-            state.error = error instanceof Error ? error.message : 'Failed to load libraries';
+            state.error =
+              error instanceof Error
+                ? error.message
+                : 'Failed to load libraries';
           });
         }
       },
-      
-      selectPreset: (presetId) => {
-        set((state) => {
+
+      selectPreset: presetId => {
+        set(state => {
           state.selectedPresetId = presetId;
           state.detailsDrawerOpen = presetId !== null;
         });
       },
-      
-      setSearchQuery: (query) => {
-        set((state) => {
+
+      setSearchQuery: query => {
+        set(state => {
           state.searchQuery = query;
         });
       },
-      
-      setFilterState: (filters) => {
-        set((state) => {
+
+      setFilterState: filters => {
+        set(state => {
           state.filterState = { ...state.filterState, ...filters };
         });
       },
-      
+
       toggleSidebar: () => {
-        set((state) => {
+        set(state => {
           state.sidebarCollapsed = !state.sidebarCollapsed;
         });
       },
-      
+
       toggleDetailsDrawer: () => {
-        set((state) => {
+        set(state => {
           state.detailsDrawerOpen = !state.detailsDrawerOpen;
         });
       },
-      
-      setViewMode: (mode) => {
-        set((state) => {
+
+      setViewMode: mode => {
+        set(state => {
           state.viewMode = mode;
         });
       },
-      
+
       cacheThumbnail: (presetId, dataUrl) => {
-        set((state) => {
+        set(state => {
           state.thumbnailCache.set(presetId, dataUrl);
         });
       },
-      
+
       cachePreview: (presetId, previews) => {
-        set((state) => {
+        set(state => {
           state.previewCache.set(presetId, previews);
         });
       },
-      
-      navigatePresets: (direction) => {
+
+      navigatePresets: direction => {
         const state = get();
         const filteredPresets = state.getFilteredPresets();
-        const currentIndex = filteredPresets.findIndex(p => p.id === state.selectedPresetId);
-        
+        const currentIndex = filteredPresets.findIndex(
+          p => p.id === state.selectedPresetId
+        );
+
         if (currentIndex === -1 && filteredPresets.length > 0) {
           state.selectPreset(filteredPresets[0].id);
           return;
         }
-        
+
         const gridCols = state.viewMode === 'grid' ? 4 : 1; // Assuming 4 columns
         let newIndex = currentIndex;
-        
+
         switch (direction) {
           case 'up':
             newIndex = Math.max(0, currentIndex - gridCols);
             break;
           case 'down':
-            newIndex = Math.min(filteredPresets.length - 1, currentIndex + gridCols);
+            newIndex = Math.min(
+              filteredPresets.length - 1,
+              currentIndex + gridCols
+            );
             break;
           case 'left':
             newIndex = Math.max(0, currentIndex - 1);
@@ -502,12 +516,12 @@ export const useAssetBrowserStore = create<AssetBrowserState>()(
             newIndex = Math.min(filteredPresets.length - 1, currentIndex + 1);
             break;
         }
-        
+
         if (newIndex !== currentIndex && filteredPresets[newIndex]) {
           state.selectPreset(filteredPresets[newIndex].id);
         }
       },
-      
+
       // Computed Values
       getFilteredPresets: () => {
         const state = get();
@@ -515,46 +529,51 @@ export const useAssetBrowserStore = create<AssetBrowserState>()(
           // Search query
           if (state.searchQuery) {
             const query = state.searchQuery.toLowerCase();
-            const matchesSearch = 
+            const matchesSearch =
               preset.metadata.name.toLowerCase().includes(query) ||
-              preset.metadata.tags.some(tag => tag.toLowerCase().includes(query));
+              preset.metadata.tags.some(tag =>
+                tag.toLowerCase().includes(query)
+              );
             if (!matchesSearch) return false;
           }
-          
+
           // Tag filters
           if (state.filterState.tags.length > 0) {
-            const hasTag = state.filterState.tags.some(tag => 
+            const hasTag = state.filterState.tags.some(tag =>
               preset.metadata.tags.includes(tag)
             );
             if (!hasTag) return false;
           }
-          
+
           // Library filter
-          if (state.activeLibraryId && preset.libraryId !== state.activeLibraryId) {
+          if (
+            state.activeLibraryId &&
+            preset.libraryId !== state.activeLibraryId
+          ) {
             return false;
           }
-          
+
           return true;
         });
       },
-      
+
       getSelectedPreset: () => {
         const state = get();
         return state.presets.find(p => p.id === state.selectedPresetId) || null;
-      },
+      }
     }))
   )
 );
 
 // Selectors for performance
-export const useFilteredPresets = () => 
+export const useFilteredPresets = () =>
   useAssetBrowserStore(state => state.getFilteredPresets());
 
-export const useSelectedPreset = () => 
+export const useSelectedPreset = () =>
   useAssetBrowserStore(state => state.getSelectedPreset());
 
 // Subscribe to specific state slices
-export const useSearchQuery = () => 
+export const useSearchQuery = () =>
   useAssetBrowserStore(state => state.searchQuery);
 ```
 
@@ -587,7 +606,7 @@ class LibraryService {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paths }),
-        signal: controller.signal,
+        signal: controller.signal
       });
 
       if (!response.ok) {
@@ -606,7 +625,7 @@ class LibraryService {
    */
   async loadPreset(presetId: string): Promise<Preset> {
     const response = await fetch(`${this.baseUrl}/presets/${presetId}`);
-    
+
     if (!response.ok) {
       throw new Error(`Failed to load preset: ${response.statusText}`);
     }
@@ -637,7 +656,7 @@ class LibraryService {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ presetId, ...options }),
-        signal: controller.signal,
+        signal: controller.signal
       });
 
       if (!response.ok) {
@@ -657,11 +676,14 @@ class LibraryService {
     presetId: string,
     metadata: Partial<Preset['metadata']>
   ): Promise<Preset> {
-    const response = await fetch(`${this.baseUrl}/presets/${presetId}/metadata`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(metadata),
-    });
+    const response = await fetch(
+      `${this.baseUrl}/presets/${presetId}/metadata`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(metadata)
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Failed to update metadata: ${response.statusText}`);
@@ -680,7 +702,7 @@ class LibraryService {
     const response = await fetch(`${this.baseUrl}/presets/${presetId}/export`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ format }),
+      body: JSON.stringify({ format })
     });
 
     if (!response.ok) {
@@ -749,39 +771,36 @@ export class ApiError extends Error {
 
 class ApiClient {
   private config: ApiConfig;
-  
+
   constructor(config: ApiConfig) {
     this.config = config;
   }
 
-  async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
+  async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.config.baseUrl}${endpoint}`;
     const timeout = this.config.timeout || 30000;
-    
+
     // Create timeout promise
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => reject(new Error('Request timeout')), timeout);
     });
-    
+
     // Create request with default headers
     const requestOptions: RequestInit = {
       ...options,
       headers: {
         ...this.config.headers,
-        ...options.headers,
-      },
+        ...options.headers
+      }
     };
-    
+
     try {
       // Race between request and timeout
-      const response = await Promise.race([
+      const response = (await Promise.race([
         fetch(url, requestOptions),
-        timeoutPromise,
-      ]) as Response;
-      
+        timeoutPromise
+      ])) as Response;
+
       // Handle non-OK responses
       if (!response.ok) {
         const error = new ApiError(
@@ -789,63 +808,65 @@ class ApiClient {
           response.statusText,
           await response.json().catch(() => null)
         );
-        
+
         // Call error handler if provided
         this.config.onError?.(error);
-        
+
         throw error;
       }
-      
+
       // Parse JSON response
       const contentType = response.headers.get('content-type');
       if (contentType?.includes('application/json')) {
         return await response.json();
       }
-      
+
       // Return text for non-JSON responses
-      return await response.text() as any;
-      
+      return (await response.text()) as any;
     } catch (error) {
       // Handle network errors
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
         toast.error('Network error. Please check your connection.');
-      } else if (error instanceof Error && error.message === 'Request timeout') {
+      } else if (
+        error instanceof Error &&
+        error.message === 'Request timeout'
+      ) {
         toast.error('Request timed out. Please try again.');
       }
-      
+
       throw error;
     }
   }
-  
+
   // Convenience methods
   get<T>(endpoint: string, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'GET' });
   }
-  
+
   post<T>(endpoint: string, data?: any, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...options?.headers,
+        ...options?.headers
       },
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : undefined
     });
   }
-  
+
   patch<T>(endpoint: string, data?: any, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        ...options?.headers,
+        ...options?.headers
       },
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : undefined
     });
   }
-  
+
   delete<T>(endpoint: string, options?: RequestInit): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'DELETE' });
   }
@@ -856,9 +877,9 @@ export const apiClient = new ApiClient({
   baseUrl: '/api/asset-browser',
   timeout: 30000,
   headers: {
-    'X-Requested-With': 'XMLHttpRequest',
+    'X-Requested-With': 'XMLHttpRequest'
   },
-  onError: (error) => {
+  onError: error => {
     // Global error handling
     if (error.status === 401) {
       // Handle authentication
@@ -866,7 +887,7 @@ export const apiClient = new ApiClient({
     } else if (error.status >= 500) {
       toast.error('Server error. Please try again later.');
     }
-  },
+  }
 });
 
 // Re-export for use in services
@@ -897,11 +918,11 @@ interface RouteState {
  */
 export const useAssetBrowserRouting = () => {
   const store = useAssetBrowserStore();
-  
+
   // Parse URL params to state
   const parseUrlToState = useCallback((): RouteState => {
     const params = new URLSearchParams(window.location.search);
-    
+
     return {
       preset: params.get('preset') || undefined,
       library: params.get('library') || undefined,
@@ -910,41 +931,41 @@ export const useAssetBrowserRouting = () => {
       view: (params.get('view') as 'grid' | 'list') || undefined,
     };
   }, []);
-  
+
   // Update URL from state
   const updateUrlFromState = useCallback(() => {
     const params = new URLSearchParams();
     const state = useAssetBrowserStore.getState();
-    
+
     if (state.selectedPresetId) {
       params.set('preset', state.selectedPresetId);
     }
-    
+
     if (state.activeLibraryId) {
       params.set('library', state.activeLibraryId);
     }
-    
+
     if (state.searchQuery) {
       params.set('search', state.searchQuery);
     }
-    
+
     if (state.filterState.tags.length > 0) {
       params.set('tags', state.filterState.tags.join(','));
     }
-    
+
     if (state.viewMode !== 'grid') {
       params.set('view', state.viewMode);
     }
-    
+
     // Update URL without page reload
     const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
     window.history.replaceState({}, '', newUrl);
   }, []);
-  
+
   // Navigate to preset with history
   const navigateToPreset = useCallback((presetId: string | null) => {
     store.selectPreset(presetId);
-    
+
     // Push to history for back button support
     const params = new URLSearchParams(window.location.search);
     if (presetId) {
@@ -952,48 +973,48 @@ export const useAssetBrowserRouting = () => {
     } else {
       params.delete('preset');
     }
-    
+
     const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
     window.history.pushState({}, '', newUrl);
   }, [store]);
-  
+
   // Handle browser back/forward
   useEffect(() => {
     const handlePopState = () => {
       const state = parseUrlToState();
-      
+
       // Update store from URL
       if (state.preset !== store.selectedPresetId) {
         store.selectPreset(state.preset || null);
       }
-      
+
       if (state.library !== store.activeLibraryId) {
         store.setActiveLibrary(state.library || null);
       }
-      
+
       if (state.search !== store.searchQuery) {
         store.setSearchQuery(state.search || '');
       }
-      
+
       if (state.tags && state.tags.join(',') !== store.filterState.tags.join(',')) {
         store.setFilterState({ tags: state.tags });
       }
-      
+
       if (state.view && state.view !== store.viewMode) {
         store.setViewMode(state.view);
       }
     };
-    
+
     window.addEventListener('popstate', handlePopState);
-    
+
     // Initial load from URL
     handlePopState();
-    
+
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
   }, [parseUrlToState, store]);
-  
+
   // Subscribe to store changes
   useEffect(() => {
     const unsubscribe = useAssetBrowserStore.subscribe(
@@ -1008,10 +1029,10 @@ export const useAssetBrowserRouting = () => {
         updateUrlFromState();
       }
     );
-    
+
     return unsubscribe;
   }, [updateUrlFromState]);
-  
+
   return {
     navigateToPreset,
     parseUrlToState,
@@ -1019,16 +1040,16 @@ export const useAssetBrowserRouting = () => {
 };
 
 // Protected route wrapper for future authentication
-export const AssetBrowserRoute: React.FC<{ children: React.ReactNode }> = ({ 
-  children 
+export const AssetBrowserRoute: React.FC<{ children: React.ReactNode }> = ({
+  children
 }) => {
   // Future: Add authentication check here
   const isAuthenticated = true; // Placeholder
-  
+
   if (!isAuthenticated) {
     return <div>Please log in to access the asset browser.</div>;
   }
-  
+
   return <>{children}</>;
 };
 ```
@@ -1043,11 +1064,11 @@ import { useAssetBrowserRouting } from '@packages/asset-browser/hooks/useAssetBr
 export const App: React.FC = () => {
   // Enable URL-based routing for asset browser
   useAssetBrowserRouting();
-  
+
   return (
     <div className="app">
       <GraphEditor />
-      <AssetBrowser 
+      <AssetBrowser
         onPresetSelect={(preset) => {
           // Handle preset drag into graph
           console.log('Selected preset:', preset);
@@ -1071,75 +1092,76 @@ The Asset Browser uses CSS Modules for component isolation combined with a share
   --color-primary: #0066cc;
   --color-primary-hover: #0052a3;
   --color-primary-active: #004080;
-  
+
   --color-secondary: #6c757d;
   --color-success: #28a745;
   --color-warning: #ffc107;
   --color-danger: #dc3545;
-  
+
   --color-bg-primary: #ffffff;
   --color-bg-secondary: #f8f9fa;
   --color-bg-tertiary: #e9ecef;
-  
+
   --color-text-primary: #212529;
   --color-text-secondary: #6c757d;
   --color-text-muted: #adb5bd;
-  
+
   --color-border: #dee2e6;
   --color-border-light: #e9ecef;
   --color-border-dark: #adb5bd;
-  
+
   /* Spacing System */
-  --space-xs: 0.25rem;  /* 4px */
-  --space-sm: 0.5rem;   /* 8px */
-  --space-md: 1rem;     /* 16px */
-  --space-lg: 1.5rem;   /* 24px */
-  --space-xl: 2rem;     /* 32px */
-  --space-2xl: 3rem;    /* 48px */
-  
+  --space-xs: 0.25rem; /* 4px */
+  --space-sm: 0.5rem; /* 8px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-2xl: 3rem; /* 48px */
+
   /* Typography */
-  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-base:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  
-  --font-size-xs: 0.75rem;   /* 12px */
-  --font-size-sm: 0.875rem;  /* 14px */
-  --font-size-base: 1rem;    /* 16px */
-  --font-size-lg: 1.125rem;  /* 18px */
-  --font-size-xl: 1.25rem;   /* 20px */
-  
+
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  
+
   --line-height-tight: 1.25;
   --line-height-base: 1.5;
   --line-height-relaxed: 1.75;
-  
+
   /* Layout */
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 48px;
   --details-drawer-width: 320px;
   --header-height: 48px;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-base: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
-  
+
   /* Border Radius */
   --radius-sm: 0.25rem;
   --radius-base: 0.375rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --radius-full: 9999px;
-  
+
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
   --transition-base: 200ms ease-in-out;
   --transition-slow: 300ms ease-in-out;
-  
+
   /* Z-index Scale */
   --z-base: 0;
   --z-dropdown: 1000;
@@ -1152,23 +1174,23 @@ The Asset Browser uses CSS Modules for component isolation combined with a share
 }
 
 /* Dark Mode */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --color-primary: #4d94ff;
   --color-primary-hover: #66a3ff;
   --color-primary-active: #3385ff;
-  
+
   --color-bg-primary: #1a1a1a;
   --color-bg-secondary: #2d2d2d;
   --color-bg-tertiary: #3a3a3a;
-  
+
   --color-text-primary: #ffffff;
   --color-text-secondary: #b3b3b3;
   --color-text-muted: #808080;
-  
+
   --color-border: #404040;
   --color-border-light: #333333;
   --color-border-dark: #4d4d4d;
-  
+
   /* Adjusted shadows for dark mode */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-base: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -1183,62 +1205,150 @@ The Asset Browser uses CSS Modules for component isolation combined with a share
 /* styles/utilities.css - Reusable utility classes */
 
 /* Layout Utilities */
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.flex-row { flex-direction: row; }
-.items-center { align-items: center; }
-.items-start { align-items: flex-start; }
-.items-end { align-items: flex-end; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.justify-end { justify-content: flex-end; }
-.flex-1 { flex: 1; }
-.flex-shrink-0 { flex-shrink: 0; }
-.gap-xs { gap: var(--space-xs); }
-.gap-sm { gap: var(--space-sm); }
-.gap-md { gap: var(--space-md); }
-.gap-lg { gap: var(--space-lg); }
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.flex-row {
+  flex-direction: row;
+}
+.items-center {
+  align-items: center;
+}
+.items-start {
+  align-items: flex-start;
+}
+.items-end {
+  align-items: flex-end;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+.gap-xs {
+  gap: var(--space-xs);
+}
+.gap-sm {
+  gap: var(--space-sm);
+}
+.gap-md {
+  gap: var(--space-md);
+}
+.gap-lg {
+  gap: var(--space-lg);
+}
 
 /* Spacing Utilities */
-.p-xs { padding: var(--space-xs); }
-.p-sm { padding: var(--space-sm); }
-.p-md { padding: var(--space-md); }
-.p-lg { padding: var(--space-lg); }
-.px-sm { padding-left: var(--space-sm); padding-right: var(--space-sm); }
-.py-sm { padding-top: var(--space-sm); padding-bottom: var(--space-sm); }
-.m-0 { margin: 0; }
-.mt-sm { margin-top: var(--space-sm); }
-.mb-sm { margin-bottom: var(--space-sm); }
+.p-xs {
+  padding: var(--space-xs);
+}
+.p-sm {
+  padding: var(--space-sm);
+}
+.p-md {
+  padding: var(--space-md);
+}
+.p-lg {
+  padding: var(--space-lg);
+}
+.px-sm {
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+}
+.py-sm {
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-sm);
+}
+.m-0 {
+  margin: 0;
+}
+.mt-sm {
+  margin-top: var(--space-sm);
+}
+.mb-sm {
+  margin-bottom: var(--space-sm);
+}
 
 /* Typography Utilities */
-.text-xs { font-size: var(--font-size-xs); }
-.text-sm { font-size: var(--font-size-sm); }
-.text-base { font-size: var(--font-size-base); }
-.text-lg { font-size: var(--font-size-lg); }
-.font-medium { font-weight: var(--font-weight-medium); }
-.font-semibold { font-weight: var(--font-weight-semibold); }
-.text-primary { color: var(--color-text-primary); }
-.text-secondary { color: var(--color-text-secondary); }
-.text-muted { color: var(--color-text-muted); }
-.truncate { 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  white-space: nowrap; 
+.text-xs {
+  font-size: var(--font-size-xs);
+}
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+.text-base {
+  font-size: var(--font-size-base);
+}
+.text-lg {
+  font-size: var(--font-size-lg);
+}
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+.font-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+.text-primary {
+  color: var(--color-text-primary);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Visual Utilities */
-.rounded-sm { border-radius: var(--radius-sm); }
-.rounded { border-radius: var(--radius-base); }
-.rounded-lg { border-radius: var(--radius-lg); }
-.shadow-sm { box-shadow: var(--shadow-sm); }
-.shadow { box-shadow: var(--shadow-base); }
-.shadow-md { box-shadow: var(--shadow-md); }
-.border { border: 1px solid var(--color-border); }
-.border-b { border-bottom: 1px solid var(--color-border); }
+.rounded-sm {
+  border-radius: var(--radius-sm);
+}
+.rounded {
+  border-radius: var(--radius-base);
+}
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+.shadow {
+  box-shadow: var(--shadow-base);
+}
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+.border {
+  border: 1px solid var(--color-border);
+}
+.border-b {
+  border-bottom: 1px solid var(--color-border);
+}
 
 /* Interactive Utilities */
-.cursor-pointer { cursor: pointer; }
-.select-none { user-select: none; }
+.cursor-pointer {
+  cursor: pointer;
+}
+.select-none {
+  user-select: none;
+}
 .transition-colors {
   transition-property: background-color, border-color, color;
   transition-duration: var(--transition-fast);
@@ -1337,10 +1447,10 @@ describe('PresetCard', () => {
 
   it('renders preset information correctly', () => {
     renderWithProviders(<PresetCard {...defaultProps} />);
-    
+
     expect(screen.getByText(mockPreset.metadata.name)).toBeInTheDocument();
     expect(screen.getByLabelText(`Preset: ${mockPreset.metadata.name}`)).toBeInTheDocument();
-    
+
     // Check tags are rendered (max 3)
     const displayedTags = mockPreset.metadata.tags.slice(0, 3);
     displayedTags.forEach(tag => {
@@ -1351,10 +1461,10 @@ describe('PresetCard', () => {
   it('handles click interaction', async () => {
     const user = userEvent.setup();
     renderWithProviders(<PresetCard {...defaultProps} />);
-    
+
     const card = screen.getByRole('button');
     await user.click(card);
-    
+
     expect(defaultProps.onSelect).toHaveBeenCalledWith(mockPreset);
     expect(defaultProps.onSelect).toHaveBeenCalledTimes(1);
   });
@@ -1362,17 +1472,17 @@ describe('PresetCard', () => {
   it('handles double-click interaction', async () => {
     const user = userEvent.setup();
     renderWithProviders(<PresetCard {...defaultProps} />);
-    
+
     const card = screen.getByRole('button');
     await user.dblClick(card);
-    
+
     expect(defaultProps.onDoubleClick).toHaveBeenCalledWith(mockPreset);
     expect(defaultProps.onDoubleClick).toHaveBeenCalledTimes(1);
   });
 
   it('applies selected styles when selected', () => {
     renderWithProviders(<PresetCard {...defaultProps} isSelected />);
-    
+
     const card = screen.getByRole('button');
     expect(card).toHaveAttribute('aria-selected', 'true');
     expect(card).toHaveClass('selected');
@@ -1381,13 +1491,13 @@ describe('PresetCard', () => {
   it('supports keyboard navigation', async () => {
     const user = userEvent.setup();
     renderWithProviders(<PresetCard {...defaultProps} />);
-    
+
     const card = screen.getByRole('button');
     card.focus();
-    
+
     await user.keyboard('{Enter}');
     expect(defaultProps.onSelect).toHaveBeenCalledWith(mockPreset);
-    
+
     await user.keyboard(' ');
     expect(defaultProps.onSelect).toHaveBeenCalledTimes(2);
   });
@@ -1404,7 +1514,7 @@ describe('PresetCard', () => {
     });
 
     renderWithProviders(<PresetCard {...defaultProps} />);
-    
+
     await waitFor(() => {
       expect(screen.getByAltText(mockPreset.metadata.name)).toBeInTheDocument();
     });
@@ -1419,7 +1529,7 @@ describe('PresetCard', () => {
     }));
 
     renderWithProviders(<PresetCard {...defaultProps} />);
-    
+
     expect(screen.queryByAltText(mockPreset.metadata.name)).not.toBeInTheDocument();
     expect(screen.getByTestId(`preset-card-${mockPreset.id}`).querySelector('.placeholder')).toBeInTheDocument();
   });
@@ -1427,13 +1537,13 @@ describe('PresetCard', () => {
   describe('Drag and Drop', () => {
     it('can be dragged', async () => {
       renderWithProviders(<PresetCard {...defaultProps} />);
-      
+
       const card = screen.getByRole('button');
-      
+
       // Simulate drag start
       fireEvent.dragStart(card);
       expect(card).toHaveClass('dragging');
-      
+
       // Simulate drag end
       fireEvent.dragEnd(card);
       expect(card).not.toHaveClass('dragging');
@@ -1446,10 +1556,10 @@ describe('PresetCard', () => {
       };
 
       renderWithProviders(<PresetCard {...defaultProps} />);
-      
+
       const card = screen.getByRole('button');
       fireEvent.dragStart(card, { dataTransfer: mockDataTransfer });
-      
+
       expect(mockDataTransfer.setData).toHaveBeenCalledWith(
         'application/json',
         JSON.stringify({ type: 'preset', data: mockPreset })
@@ -1460,7 +1570,7 @@ describe('PresetCard', () => {
   describe('Accessibility', () => {
     it('has proper ARIA attributes', () => {
       renderWithProviders(<PresetCard {...defaultProps} />);
-      
+
       const card = screen.getByRole('button');
       expect(card).toHaveAttribute('tabIndex', '0');
       expect(card).toHaveAttribute('aria-selected', 'false');
@@ -1469,10 +1579,10 @@ describe('PresetCard', () => {
 
     it('announces selection state changes', () => {
       const { rerender } = renderWithProviders(<PresetCard {...defaultProps} />);
-      
+
       const card = screen.getByRole('button');
       expect(card).toHaveAttribute('aria-selected', 'false');
-      
+
       rerender(<PresetCard {...defaultProps} isSelected />);
       expect(card).toHaveAttribute('aria-selected', 'true');
     });
@@ -1539,30 +1649,30 @@ interface ImportMetaEnv {
   // API Configuration
   readonly VITE_API_BASE_URL: string;
   readonly VITE_API_TIMEOUT: string;
-  
+
   // Asset Browser Settings
   readonly VITE_ASSET_BROWSER_ENABLED: string;
   readonly VITE_MAX_PRESET_COUNT: string;
   readonly VITE_PREVIEW_GENERATION_TIMEOUT: string;
   readonly VITE_THUMBNAIL_CACHE_SIZE: string;
-  
+
   // File System Paths
   readonly VITE_DEFAULT_LIBRARY_PATH: string;
   readonly VITE_CACHE_PATH: string;
   readonly VITE_TEMP_PATH: string;
-  
+
   // Feature Flags
   readonly VITE_ENABLE_PREVIEW_GENERATION: string;
   readonly VITE_ENABLE_BRANCH_VISUALIZATION: string;
   readonly VITE_ENABLE_MULTI_LENGTH_VARIANTS: string;
   readonly VITE_ENABLE_PRESET_NODE_NESTING: string;
-  
+
   // Performance Settings
   readonly VITE_VIRTUAL_SCROLL_BUFFER: string;
   readonly VITE_LAZY_LOAD_DELAY: string;
   readonly VITE_DEBOUNCE_SEARCH: string;
   readonly VITE_PREVIEW_QUEUE_SIZE: string;
-  
+
   // Development Settings
   readonly VITE_MOCK_API: string;
   readonly VITE_LOG_LEVEL: string;
@@ -1581,62 +1691,67 @@ interface ImportMeta {
 export const config = {
   api: {
     baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
-    timeout: Number(import.meta.env.VITE_API_TIMEOUT) || 30000,
+    timeout: Number(import.meta.env.VITE_API_TIMEOUT) || 30000
   },
-  
+
   assetBrowser: {
     enabled: import.meta.env.VITE_ASSET_BROWSER_ENABLED === 'true',
     maxPresetCount: Number(import.meta.env.VITE_MAX_PRESET_COUNT) || 500,
-    previewTimeout: Number(import.meta.env.VITE_PREVIEW_GENERATION_TIMEOUT) || 10000,
-    thumbnailCacheSize: Number(import.meta.env.VITE_THUMBNAIL_CACHE_SIZE) || 100,
+    previewTimeout:
+      Number(import.meta.env.VITE_PREVIEW_GENERATION_TIMEOUT) || 10000,
+    thumbnailCacheSize: Number(import.meta.env.VITE_THUMBNAIL_CACHE_SIZE) || 100
   },
-  
+
   paths: {
     defaultLibrary: import.meta.env.VITE_DEFAULT_LIBRARY_PATH || './libraries',
     cache: import.meta.env.VITE_CACHE_PATH || './Cache',
-    temp: import.meta.env.VITE_TEMP_PATH || './tmp',
+    temp: import.meta.env.VITE_TEMP_PATH || './tmp'
   },
-  
+
   features: {
-    previewGeneration: import.meta.env.VITE_ENABLE_PREVIEW_GENERATION !== 'false',
-    branchVisualization: import.meta.env.VITE_ENABLE_BRANCH_VISUALIZATION !== 'false',
-    multiLengthVariants: import.meta.env.VITE_ENABLE_MULTI_LENGTH_VARIANTS === 'true',
-    presetNodeNesting: import.meta.env.VITE_ENABLE_PRESET_NODE_NESTING === 'true',
+    previewGeneration:
+      import.meta.env.VITE_ENABLE_PREVIEW_GENERATION !== 'false',
+    branchVisualization:
+      import.meta.env.VITE_ENABLE_BRANCH_VISUALIZATION !== 'false',
+    multiLengthVariants:
+      import.meta.env.VITE_ENABLE_MULTI_LENGTH_VARIANTS === 'true',
+    presetNodeNesting:
+      import.meta.env.VITE_ENABLE_PRESET_NODE_NESTING === 'true'
   },
-  
+
   performance: {
-    virtualScrollBuffer: Number(import.meta.env.VITE_VIRTUAL_SCROLL_BUFFER) || 5,
+    virtualScrollBuffer:
+      Number(import.meta.env.VITE_VIRTUAL_SCROLL_BUFFER) || 5,
     lazyLoadDelay: Number(import.meta.env.VITE_LAZY_LOAD_DELAY) || 200,
     debounceSearch: Number(import.meta.env.VITE_DEBOUNCE_SEARCH) || 300,
-    previewQueueSize: Number(import.meta.env.VITE_PREVIEW_QUEUE_SIZE) || 5,
+    previewQueueSize: Number(import.meta.env.VITE_PREVIEW_QUEUE_SIZE) || 5
   },
-  
+
   development: {
     mockApi: import.meta.env.VITE_MOCK_API === 'true',
     logLevel: import.meta.env.VITE_LOG_LEVEL || 'info',
-    enableDevtools: import.meta.env.VITE_ENABLE_DEVTOOLS !== 'false',
-  },
+    enableDevtools: import.meta.env.VITE_ENABLE_DEVTOOLS !== 'false'
+  }
 } as const;
 
 // Validate required configuration
 export function validateConfig(): void {
-  const required = [
-    'api.baseUrl',
-    'paths.defaultLibrary',
-  ];
-  
+  const required = ['api.baseUrl', 'paths.defaultLibrary'];
+
   for (const path of required) {
-    const value = path.split('.').reduce((obj, key) => obj?.[key], config as any);
+    const value = path
+      .split('.')
+      .reduce((obj, key) => obj?.[key], config as any);
     if (!value) {
       throw new Error(`Missing required configuration: ${path}`);
     }
   }
-  
+
   // Validate numeric ranges
   if (config.assetBrowser.maxPresetCount < 1) {
     throw new Error('VITE_MAX_PRESET_COUNT must be at least 1');
   }
-  
+
   if (config.performance.virtualScrollBuffer < 1) {
     throw new Error('VITE_VIRTUAL_SCROLL_BUFFER must be at least 1');
   }
@@ -1657,7 +1772,7 @@ export const PreviewSection: FC<PreviewSectionProps> = ({ preset }) => {
       </div>
     );
   }
-  
+
   // Regular component logic
   return (
     <div className={styles.preview}>
@@ -1849,6 +1964,7 @@ This Frontend Architecture Document provides a comprehensive blueprint for imple
 - **Maintainability** through modular architecture and clear standards
 
 The document addresses all gaps identified in the PO checklist:
+
 - Explicit project setup and development environment
 - Performance criteria and acceptance standards
 - Comprehensive testing strategy

@@ -14,6 +14,7 @@
 ## Step 2: Get Your API Keys
 
 Once project is created:
+
 1. Go to Settings (gear icon) > API
 2. Copy these values:
    - **Project URL**: `https://YOUR-PROJECT-ID.supabase.co`
@@ -51,6 +52,7 @@ Once project is created:
 3. Click "New policy" > "For full customization"
 
 **Upload Policy:**
+
 ```sql
 -- Name: Authenticated users can upload
 -- Allowed operation: INSERT
@@ -60,28 +62,31 @@ Once project is created:
 ```
 
 **View Policy:**
+
 ```sql
 -- Name: Users can view own files
 -- Allowed operation: SELECT
 -- Target roles: authenticated
 
-(bucket_id = 'psg-files'::text) AND 
+(bucket_id = 'psg-files'::text) AND
 (auth.uid()::text = (storage.foldername(name))[1])
 ```
 
 **Delete Policy:**
+
 ```sql
 -- Name: Users can delete own files
 -- Allowed operation: DELETE
 -- Target roles: authenticated
 
-(bucket_id = 'psg-files'::text) AND 
+(bucket_id = 'psg-files'::text) AND
 (auth.uid()::text = (storage.foldername(name))[1])
 ```
 
 ## Step 6: Local Development Setup
 
 1. Create `.env` file in project root:
+
 ```bash
 # Supabase Configuration
 VITE_SUPABASE_URL=https://YOUR-PROJECT-ID.supabase.co
@@ -92,11 +97,12 @@ VITE_FEATURE_AUTH=true
 VITE_FEATURE_SUPABASE=true
 VITE_AUTH_OPTIONAL=true
 
-# API Configuration  
+# API Configuration
 VITE_API_URL=http://localhost:8000
 ```
 
 2. Test connection:
+
 ```bash
 # Start dev server
 pnpm dev
@@ -126,6 +132,7 @@ VITE_API_URL=https://api.promptscape.app # Or your API URL
 ## Step 8: Verify Integration
 
 ### Test Authentication:
+
 1. Open your deployed site
 2. Click "Sign In"
 3. Create a test account
@@ -133,6 +140,7 @@ VITE_API_URL=https://api.promptscape.app # Or your API URL
 5. Verify you can log in/out
 
 ### Test Storage:
+
 1. Create a graph while logged in
 2. Save to cloud
 3. Refresh page
@@ -142,21 +150,25 @@ VITE_API_URL=https://api.promptscape.app # Or your API URL
 ## Common Issues & Solutions
 
 ### "Supabase client is null"
+
 - Check environment variables are set
-- Verify VITE_ prefix for Vite projects
+- Verify VITE\_ prefix for Vite projects
 - Check browser console for specific errors
 
 ### "Invalid API key"
+
 - Verify you copied the full anon key
 - Check for extra spaces or line breaks
 - Ensure using anon key, not service key
 
 ### "Email not sending"
+
 - Check spam folder
 - Verify email settings in Supabase
 - Use "Resend confirmation" option
 
 ### "Storage upload fails"
+
 - Check bucket policies are correct
 - Verify user is authenticated
 - Check file size limits (default 50MB)

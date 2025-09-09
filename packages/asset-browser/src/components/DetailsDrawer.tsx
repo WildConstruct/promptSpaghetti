@@ -5,12 +5,21 @@ import { BranchVisualization } from './branch/BranchVisualization';
 import { usePreviewGenerator } from '../hooks/usePreviewGenerator';
 import { usePreviewCache } from '../utils/usePreviewCache';
 
-export function DetailsDrawer({ open, selectedId }: { open: boolean; selectedId?: string | null }) {
-  const presets = useAssetBrowserStore((s) => s.filteredPresets);
-  const preset = presets.find((p) => p.id === selectedId) || null;
+export function DetailsDrawer({
+  open,
+  selectedId
+}: {
+  open: boolean;
+  selectedId?: string | null;
+}) {
+  const presets = useAssetBrowserStore(s => s.filteredPresets);
+  const preset = presets.find(p => p.id === selectedId) || null;
   const [simLoading, setSimLoading] = useState(false);
   const [simError, setSimError] = useState<string | null>(null);
-  const [simResults, setSimResults] = useState<Array<{ seed: number; text: string }> | null>(null);
+  const [simResults, setSimResults] = useState<Array<{
+    seed: number;
+    text: string;
+  }> | null>(null);
   const [showBranch, setShowBranch] = useState(false);
   const [branchLoading, setBranchLoading] = useState(false);
   const [branchError, setBranchError] = useState<string | null>(null);
@@ -71,15 +80,25 @@ export function DetailsDrawer({ open, selectedId }: { open: boolean; selectedId?
         transition: 'width 150ms',
         borderLeft: '1px solid #eee',
         background: '#fff',
-        padding: open ? 12 : 0,
+        padding: open ? 12 : 0
       }}
     >
       {open && (
         <div>
-          <h3 style={{ marginTop: 0 }}>Details {preset ? `— ${preset.name}` : ''}</h3>
+          <h3 style={{ marginTop: 0 }}>
+            Details {preset ? `— ${preset.name}` : ''}
+          </h3>
           <section aria-labelledby="simulate-title" aria-busy={simLoading}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h4 id="simulate-title" style={{ margin: '8px 0' }}>Sample Outputs</h4>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <h4 id="simulate-title" style={{ margin: '8px 0' }}>
+                Sample Outputs
+              </h4>
               <button
                 type="button"
                 onClick={onSimulate}
@@ -89,19 +108,41 @@ export function DetailsDrawer({ open, selectedId }: { open: boolean; selectedId?
                 {simLoading ? 'Simulating…' : 'Simulate'}
               </button>
             </div>
-            {simError && <div role="status" aria-live="polite" style={{ color: 'crimson' }}>{simError}</div>}
+            {simError && (
+              <div
+                role="status"
+                aria-live="polite"
+                style={{ color: 'crimson' }}
+              >
+                {simError}
+              </div>
+            )}
             {simResults && (
               <ul>
-                {simResults.map((r) => (
-                  <li key={r.seed}><code>#{r.seed}</code> {r.text}</li>
+                {simResults.map(r => (
+                  <li key={r.seed}>
+                    <code>#{r.seed}</code> {r.text}
+                  </li>
                 ))}
               </ul>
             )}
           </section>
 
-          <section aria-labelledby="branch-title" aria-busy={branchLoading} style={{ marginTop: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h4 id="branch-title" style={{ margin: '8px 0' }}>Branch Viz</h4>
+          <section
+            aria-labelledby="branch-title"
+            aria-busy={branchLoading}
+            style={{ marginTop: 16 }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <h4 id="branch-title" style={{ margin: '8px 0' }}>
+                Branch Viz
+              </h4>
               <button
                 type="button"
                 onClick={onToggleBranch}
@@ -111,7 +152,15 @@ export function DetailsDrawer({ open, selectedId }: { open: boolean; selectedId?
                 {showBranch ? 'Hide' : 'Show'}
               </button>
             </div>
-            {branchError && <div role="status" aria-live="polite" style={{ color: 'crimson' }}>{branchError}</div>}
+            {branchError && (
+              <div
+                role="status"
+                aria-live="polite"
+                style={{ color: 'crimson' }}
+              >
+                {branchError}
+              </div>
+            )}
             {showBranch && branchData && (
               <BranchVisualization data={branchData} />
             )}

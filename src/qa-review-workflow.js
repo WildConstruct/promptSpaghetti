@@ -11,7 +11,9 @@ const logger = getLogger('qa-review-workflow');
 console.log('🔍 QA Review Workflow - Processing submitted work\n');
 
 // Load current state
-const state = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'state.json'), 'utf8'));
+const state = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'data', 'state.json'), 'utf8')
+);
 
 class QAReviewWorkflow {
   constructor() {
@@ -20,7 +22,9 @@ class QAReviewWorkflow {
 
   // Find tasks that are completed but not yet in review
   getCompletedTasks() {
-    return Object.values(state.tasks).filter(task => task.state === 'COMPLETED');
+    return Object.values(state.tasks).filter(
+      task => task.state === 'COMPLETED'
+    );
   }
 
   // Find tasks currently in review
@@ -38,7 +42,9 @@ class QAReviewWorkflow {
       return 0;
     }
 
-    console.log(`📋 Found ${completedTasks.length} completed tasks to move to review:\n`);
+    console.log(
+      `📋 Found ${completedTasks.length} completed tasks to move to review:\n`
+    );
 
     completedTasks.forEach(task => {
       console.log(`🔄 Moving to REVIEW: ${task.id}`);
@@ -54,7 +60,7 @@ class QAReviewWorkflow {
       task.notes.push({
         timestamp: new Date().toISOString(),
         author: this.agentId,
-        content: 'Task moved to REVIEW status for QA evaluation',
+        content: 'Task moved to REVIEW status for QA evaluation'
       });
 
       movedCount++;
@@ -85,7 +91,7 @@ class QAReviewWorkflow {
       return {
         action: 'APPROVED',
         task_id: task.id,
-        reason: reviewResult.reason,
+        reason: reviewResult.reason
       };
     } else {
       console.log(`❌ REJECTED: ${task.id}`);
@@ -97,7 +103,7 @@ class QAReviewWorkflow {
       return {
         action: 'REJECTED',
         task_id: task.id,
-        issues: reviewResult.issues,
+        issues: reviewResult.issues
       };
     }
   }
@@ -128,7 +134,7 @@ class QAReviewWorkflow {
       testing: this.evaluateTesting(task),
       security: this.evaluateSecurity(task),
       documentation: this.evaluateDocumentation(task),
-      integration: this.evaluateIntegration(task),
+      integration: this.evaluateIntegration(task)
     };
 
     if (passed) {
@@ -136,14 +142,14 @@ class QAReviewWorkflow {
       return {
         passed: true,
         reason: `All QA checks passed. ${strengths}`,
-        checks,
+        checks
       };
     } else {
       const issues = this.generateSpecificIssues(task);
       return {
         passed: false,
         issues,
-        checks,
+        checks
       };
     }
   }
@@ -151,16 +157,25 @@ class QAReviewWorkflow {
   // Evaluate different aspects of the task
   evaluateCodeQuality(task) {
     if (task.wip_class === 'FEAT') {
-      return { status: 'good', notes: 'Implementation follows coding standards' };
+      return {
+        status: 'good',
+        notes: 'Implementation follows coding standards'
+      };
     } else if (task.wip_class === 'CHORE') {
-      return { status: 'adequate', notes: 'Maintenance work completed properly' };
+      return {
+        status: 'adequate',
+        notes: 'Maintenance work completed properly'
+      };
     }
     return { status: 'acceptable', notes: 'Code quality meets requirements' };
   }
 
   evaluateTesting(task) {
     if (task.title.toLowerCase().includes('test')) {
-      return { status: 'excellent', notes: 'Comprehensive test coverage implemented' };
+      return {
+        status: 'excellent',
+        notes: 'Comprehensive test coverage implemented'
+      };
     }
     return { status: 'adequate', notes: 'Appropriate testing for task scope' };
   }
@@ -177,14 +192,23 @@ class QAReviewWorkflow {
   }
 
   evaluateDocumentation(task) {
-    if (task.title.toLowerCase().includes('document') || task.title.toLowerCase().includes('design')) {
-      return { status: 'complete', notes: 'Documentation is clear and comprehensive' };
+    if (
+      task.title.toLowerCase().includes('document') ||
+      task.title.toLowerCase().includes('design')
+    ) {
+      return {
+        status: 'complete',
+        notes: 'Documentation is clear and comprehensive'
+      };
     }
     return { status: 'adequate', notes: 'Sufficient documentation provided' };
   }
 
   evaluateIntegration(task) {
-    return { status: 'compatible', notes: 'Integrates well with existing codebase' };
+    return {
+      status: 'compatible',
+      notes: 'Integrates well with existing codebase'
+    };
   }
 
   // Get task strengths for approval message
@@ -204,7 +228,9 @@ class QAReviewWorkflow {
       strengths.push('Feature implementation complete');
     }
 
-    return strengths.length > 0 ? strengths.join(', ') : 'Good implementation quality';
+    return strengths.length > 0
+      ? strengths.join(', ')
+      : 'Good implementation quality';
   }
 
   // Generate specific issues based on task content
@@ -213,29 +239,29 @@ class QAReviewWorkflow {
       security: [
         'Security validation needs strengthening',
         'Missing input sanitization',
-        'Insufficient error handling for security edge cases',
+        'Insufficient error handling for security edge cases'
       ],
       design: [
         'Design specifications need clarification',
         'User experience flow needs improvement',
-        'Missing accessibility considerations',
+        'Missing accessibility considerations'
       ],
       mfa: [
         'MFA implementation missing edge case handling',
         'Backup authentication method needs definition',
-        'User enrollment flow needs improvement',
+        'User enrollment flow needs improvement'
       ],
       documentation: [
         'Documentation needs more detail',
         'Missing implementation examples',
-        'Technical specifications incomplete',
+        'Technical specifications incomplete'
       ],
       general: [
         'Code style inconsistencies',
         'Missing unit tests',
         'Performance considerations needed',
-        'Error handling incomplete',
-      ],
+        'Error handling incomplete'
+      ]
     };
 
     // Select relevant issue categories
@@ -259,7 +285,8 @@ class QAReviewWorkflow {
     const selectedIssues = [];
 
     for (let i = 0; i < count; i++) {
-      const issue = applicableIssues[Math.floor(Math.random() * applicableIssues.length)];
+      const issue =
+        applicableIssues[Math.floor(Math.random() * applicableIssues.length)];
       if (!selectedIssues.includes(issue)) {
         selectedIssues.push(issue);
       }
@@ -326,7 +353,7 @@ class QAReviewWorkflow {
       task.notes.push({
         timestamp: new Date().toISOString(),
         author: this.agentId,
-        content: `QA Review Failed: ${issues.join('; ')}. Please address these issues and resubmit.`,
+        content: `QA Review Failed: ${issues.join('; ')}. Please address these issues and resubmit.`
       });
 
       console.log('   🔄 Task sent back to developer for fixes\n');
@@ -336,7 +363,10 @@ class QAReviewWorkflow {
   // Save state to file
   saveState() {
     state.meta.updated = new Date().toISOString();
-    fs.writeFileSync(path.join(__dirname, 'data', 'state.json'), JSON.stringify(state, null, 2));
+    fs.writeFileSync(
+      path.join(__dirname, 'data', 'state.json'),
+      JSON.stringify(state, null, 2)
+    );
   }
 
   // Sleep utility
@@ -361,12 +391,14 @@ class QAReviewWorkflow {
 
     if (tasksToReview.length === 0) {
       console.log('📝 No tasks in REVIEW status to process.\n');
-      logger.finish('QA workflow completed - no tasks to review', { moved: movedCount });
+      logger.finish('QA workflow completed - no tasks to review', {
+        moved: movedCount
+      });
       return {
         moved: movedCount,
         reviewed: 0,
         approved: 0,
-        rejected: 0,
+        rejected: 0
       };
     }
 
@@ -399,7 +431,9 @@ class QAReviewWorkflow {
     console.log(`   ❌ Rejected: ${rejected}`);
 
     if (approved > 0) {
-      console.log(`\n🚀 ${approved} tasks approved - GitHub PRs will be created automatically!`);
+      console.log(
+        `\n🚀 ${approved} tasks approved - GitHub PRs will be created automatically!`
+      );
     }
 
     if (rejected > 0) {
@@ -410,7 +444,7 @@ class QAReviewWorkflow {
       moved: movedCount,
       reviewed: results.length,
       approved,
-      rejected,
+      rejected
     });
 
     return {
@@ -418,7 +452,7 @@ class QAReviewWorkflow {
       reviewed: results.length,
       approved: approved,
       rejected: rejected,
-      results: results,
+      results: results
     };
   }
 }
@@ -431,7 +465,9 @@ async function main() {
     const summary = await workflow.runWorkflow();
 
     if (summary.moved === 0 && summary.reviewed === 0) {
-      console.log('💡 No work submitted for review. Developers can submit work using:');
+      console.log(
+        '💡 No work submitted for review. Developers can submit work using:'
+      );
       console.log('   node finish-task.js <task-id> REVIEW');
     }
   } catch (error) {

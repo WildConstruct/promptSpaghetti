@@ -23,7 +23,7 @@ try {
 } catch (error) {
   const output = error.stdout || '';
   const errorLines = output.split('\n');
-  
+
   errorLines.forEach(line => {
     const match = line.match(/\((\d+),(\d+)\): error (TS\d+): (.+)$/);
     if (match) {
@@ -58,24 +58,24 @@ console.log('\n🔍 First 5 errors with context:\n');
 errors.slice(0, 5).forEach((error, index) => {
   console.log(`Error ${index + 1}: Line ${error.line}, Column ${error.column}`);
   console.log(`Type: ${error.code} - ${error.message}`);
-  
+
   // Show the problematic line with context
   const startLine = Math.max(0, error.line - 3);
   const endLine = Math.min(lines.length - 1, error.line + 1);
-  
+
   console.log('\nCode context:');
   for (let i = startLine; i <= endLine; i++) {
     const marker = i === error.line - 1 ? '>>> ' : '    ';
     console.log(`${marker}${i + 1}: ${lines[i]}`);
   }
-  
+
   // Show the specific error position
   if (error.line - 1 < lines.length) {
     const errorLine = lines[error.line - 1];
     const pointer = ' '.repeat(error.column + 7) + '^';
     console.log(pointer);
   }
-  
+
   console.log('\n' + '-'.repeat(60) + '\n');
 });
 
@@ -86,29 +86,36 @@ let fixedContent = content;
 let fixCount = 0;
 
 // Fix 1: Common syntax patterns
-if (errorTypes['TS1005']) { // Punctuation expected
+if (errorTypes['TS1005']) {
+  // Punctuation expected
   console.log('Fixing punctuation errors...');
-  
+
   // Fix missing commas in interfaces
-  fixedContent = fixedContent.replace(/(\w+):\s*(\w+)\s*\n\s*(\w+):/g, '$1: $2,\n  $3:');
-  
+  fixedContent = fixedContent.replace(
+    /(\w+):\s*(\w+)\s*\n\s*(\w+):/g,
+    '$1: $2,\n  $3:'
+  );
+
   // Fix missing semicolons
   fixedContent = fixedContent.replace(/}\s*\n\s*const\s+/g, '};\n\nconst ');
   fixedContent = fixedContent.replace(/}\s*\n\s*export\s+/g, '};\n\nexport ');
-  
+
   fixCount += errorTypes['TS1005'].length;
 }
 
-if (errorTypes['TS1128']) { // Declaration or statement expected
+if (errorTypes['TS1128']) {
+  // Declaration or statement expected
   console.log('Fixing declaration errors...');
-  
+
   // Remove extra closing braces
-  const braceBalance = (fixedContent.match(/{/g) || []).length - (fixedContent.match(/}/g) || []).length;
+  const braceBalance =
+    (fixedContent.match(/{/g) || []).length -
+    (fixedContent.match(/}/g) || []).length;
   if (braceBalance < 0) {
     // Remove trailing closing braces
     fixedContent = fixedContent.replace(/}\s*}\s*}\s*$/, '}}');
   }
-  
+
   fixCount += Math.min(5, errorTypes['TS1128'].length);
 }
 

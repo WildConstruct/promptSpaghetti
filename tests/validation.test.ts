@@ -10,7 +10,7 @@ function mkEdge(id: string, source: string, target: string): Edge {
     target,
     sourceHandle: null,
     targetHandle: null,
-    type: 'default',
+    type: 'default'
   } as unknown as Edge;
 }
 

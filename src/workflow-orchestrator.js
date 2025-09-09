@@ -33,7 +33,7 @@ const configManager = getConfigManager();
 const automationConfig = configManager.loadConfig('automation');
 const logger = getLogger('workflow-orchestrator', {
   logLevel: automationConfig.logLevel,
-  enableLogging: automationConfig.enableLogging,
+  enableLogging: automationConfig.enableLogging
 });
 
 class WorkflowOrchestrator {
@@ -44,7 +44,7 @@ class WorkflowOrchestrator {
       continueOnError: options.continueOnError || true,
       maxRetries: options.maxRetries || automationConfig.maxRetries || 3,
       checkpointInterval: options.checkpointInterval || 5,
-      ...options,
+      ...options
     };
 
     this.stateLock = new StateLock();
@@ -54,7 +54,7 @@ class WorkflowOrchestrator {
       steps: [],
       checkpoints: [],
       errors: [],
-      performance: {},
+      performance: {}
     };
 
     // Predefined workflows
@@ -65,12 +65,12 @@ class WorkflowOrchestrator {
       'health-check': this.createHealthCheckWorkflow(),
       'full-automation': this.createFullAutomationWorkflow(),
       'priority-setup': this.createPrioritySetupWorkflow(),
-      'epic8-demo-ready': this.createEpic8DemoReadyWorkflow(),
+      'epic8-demo-ready': this.createEpic8DemoReadyWorkflow()
     };
 
     logger.info('Workflow orchestrator initialized', {
       workflows: Object.keys(this.workflows),
-      options: this.options,
+      options: this.options
     });
   }
 
@@ -87,37 +87,37 @@ class WorkflowOrchestrator {
           command: 'node src/fix-system.js --health-check',
           timeout: 30000,
           continueOnError: true,
-          conditions: [],
+          conditions: []
         },
         {
           id: 'fix-violations',
           name: 'Fix Workflow Violations',
           command: 'node src/fix-system.js --all',
           timeout: 120000,
-          conditions: ['health-check.violations > 0'],
+          conditions: ['health-check.violations > 0']
         },
         {
           id: 'epic-assignments',
           name: 'Update Epic Assignments',
           command: 'node src/fix-system.js --module epic-assignments',
           timeout: 60000,
-          continueOnError: true,
+          continueOnError: true
         },
         {
           id: 'qa-review',
           name: 'Process QA Reviews',
           command: 'node src/run-qa-agent.js',
           timeout: 180000,
-          conditions: ['system.review_tasks > 0'],
+          conditions: ['system.review_tasks > 0']
         },
         {
           id: 'monitor-report',
           name: 'Generate Monitoring Report',
           command: 'node src/monitor-system.js --export',
           timeout: 30000,
-          continueOnError: true,
-        },
-      ],
+          continueOnError: true
+        }
+      ]
     };
   }
 
@@ -125,41 +125,42 @@ class WorkflowOrchestrator {
   createEpicCompletionWorkflow() {
     return {
       name: 'Epic Completion Workflow',
-      description: 'Complete workflow for finishing epic tasks and documentation',
+      description:
+        'Complete workflow for finishing epic tasks and documentation',
       parallel: false,
       steps: [
         {
           id: 'analyze-progress',
           name: 'Analyze Epic Progress',
           command: 'node src/analyze-system.js epics',
-          timeout: 45000,
+          timeout: 45000
         },
         {
           id: 'complete-tasks',
           name: 'Move Completed Tasks to Review',
           command: 'node src/fix-system.js --module completed-tasks',
-          timeout: 90000,
+          timeout: 90000
         },
         {
           id: 'qa-processing',
           name: 'Process QA Reviews',
           command: 'node src/qa-review-workflow.js',
-          timeout: 300000,
+          timeout: 300000
         },
         {
           id: 'update-documentation',
           name: 'Update Epic Documentation',
           command: 'node src/create-documentation-ticket.js',
           timeout: 60000,
-          conditions: ['qa-processing.approved > 0'],
+          conditions: ['qa-processing.approved > 0']
         },
         {
           id: 'final-report',
           name: 'Generate Epic Completion Report',
           command: 'node src/monitor-system.js --mode epics',
-          timeout: 30000,
-        },
-      ],
+          timeout: 30000
+        }
+      ]
     };
   }
 
@@ -167,42 +168,43 @@ class WorkflowOrchestrator {
   createQAPipelineWorkflow() {
     return {
       name: 'QA Automation Pipeline',
-      description: 'Complete QA processing pipeline with validation and reporting',
+      description:
+        'Complete QA processing pipeline with validation and reporting',
       parallel: false,
       steps: [
         {
           id: 'detect-completed',
           name: 'Detect Completed Tasks',
           command: 'node src/fix-system.js --module completed-tasks --dry-run',
-          timeout: 60000,
+          timeout: 60000
         },
         {
           id: 'move-to-review',
           name: 'Move Tasks to Review',
           command: 'node src/fix-system.js --module completed-tasks',
           timeout: 90000,
-          conditions: ['detect-completed.fixed > 0'],
+          conditions: ['detect-completed.fixed > 0']
         },
         {
           id: 'qa-reviews',
           name: 'Execute QA Reviews',
           command: 'node src/qa-review-workflow.js',
-          timeout: 600000,
+          timeout: 600000
         },
         {
           id: 'process-rejections',
           name: 'Process Rejected Tasks',
           command: 'node src/fix-system.js --module rejected-tasks',
           timeout: 120000,
-          conditions: ['qa-reviews.rejected > 0'],
+          conditions: ['qa-reviews.rejected > 0']
         },
         {
           id: 'validation-report',
           name: 'Generate Validation Report',
           command: 'node src/monitor-system.js --mode agents',
-          timeout: 30000,
-        },
-      ],
+          timeout: 30000
+        }
+      ]
     };
   }
 
@@ -210,43 +212,44 @@ class WorkflowOrchestrator {
   createHealthCheckWorkflow() {
     return {
       name: 'System Health Check & Repair',
-      description: 'Comprehensive system health assessment and automated repairs',
+      description:
+        'Comprehensive system health assessment and automated repairs',
       parallel: false,
       steps: [
         {
           id: 'health-assessment',
           name: 'Comprehensive Health Assessment',
           command: 'node src/fix-system.js --health-check',
-          timeout: 45000,
+          timeout: 45000
         },
         {
           id: 'data-integrity',
           name: 'Fix Data Integrity Issues',
           command: 'node src/fix-system.js --module data-integrity',
           timeout: 90000,
-          conditions: ['health-assessment.issues > 0'],
+          conditions: ['health-assessment.issues > 0']
         },
         {
           id: 'assignment-fixes',
           name: 'Fix Assignment Inconsistencies',
           command: 'node src/fix-system.js --module epic-assignments',
           timeout: 120000,
-          conditions: ['health-assessment.warnings > 1'],
+          conditions: ['health-assessment.warnings > 1']
         },
         {
           id: 'workflow-compliance',
           name: 'Restore Workflow Compliance',
           command: 'node src/fix-system.js --all',
           timeout: 180000,
-          conditions: ['health-assessment.healthScore < 90'],
+          conditions: ['health-assessment.healthScore < 90']
         },
         {
           id: 'final-health-check',
           name: 'Verify System Health',
           command: 'node src/fix-system.js --health-check',
-          timeout: 45000,
-        },
-      ],
+          timeout: 45000
+        }
+      ]
     };
   }
 
@@ -261,35 +264,35 @@ class WorkflowOrchestrator {
           id: 'system-analysis',
           name: 'System Analysis',
           command: 'node src/analyze-system.js overview',
-          timeout: 60000,
+          timeout: 60000
         },
         {
           id: 'epic-tasks-creation',
           name: 'Create Epic Tasks',
           command: 'node src/create-epic-batch-manager.js --dry-run',
-          timeout: 90000,
+          timeout: 90000
         },
         {
           id: 'health-maintenance',
           name: 'Health Maintenance',
           command: 'node src/workflow-orchestrator.js --workflow health-check',
           timeout: 600000,
-          subprocess: true,
+          subprocess: true
         },
         {
           id: 'qa-processing',
           name: 'QA Processing',
           command: 'node src/workflow-orchestrator.js --workflow qa-pipeline',
           timeout: 800000,
-          subprocess: true,
+          subprocess: true
         },
         {
           id: 'monitoring-report',
           name: 'Final Monitoring Report',
           command: 'node src/monitor-system.js --export',
-          timeout: 45000,
-        },
-      ],
+          timeout: 45000
+        }
+      ]
     };
   }
 
@@ -305,21 +308,21 @@ class WorkflowOrchestrator {
           id: 'priority-tickets',
           name: 'Create Priority Tickets',
           command: 'node src/create-priority-tickets.js',
-          timeout: 120000,
+          timeout: 120000
         },
         {
           id: 'epic-assignments',
           name: 'Update Epic Assignments',
           command: 'node src/fix-system.js --module epic-assignments',
-          timeout: 90000,
+          timeout: 90000
         },
         {
           id: 'task-analysis',
           name: 'Analyze Available Tasks',
           command: 'node src/monitor-system.js --mode tasks',
-          timeout: 30000,
-        },
-      ],
+          timeout: 30000
+        }
+      ]
     };
   }
 
@@ -327,7 +330,8 @@ class WorkflowOrchestrator {
   createEpic8DemoReadyWorkflow() {
     return {
       name: 'Epic 8 Demo-Ready Proof of Concept',
-      description: 'Wild Construct film industry integration - comprehensive Epic 8 development coordination',
+      description:
+        'Wild Construct film industry integration - comprehensive Epic 8 development coordination',
       parallel: false,
       steps: [
         {
@@ -335,34 +339,34 @@ class WorkflowOrchestrator {
           name: 'Ensure Epic 8 Tasks Available',
           command: 'node src/create-epic8-demo-tasks.js',
           timeout: 60000,
-          continueOnError: true,
+          continueOnError: true
         },
         {
           id: 'system-health',
           name: 'Verify System Health for Epic 8',
           command: 'node src/fix-system.js --health-check',
-          timeout: 45000,
+          timeout: 45000
         },
         {
           id: 'epic8-task-analysis',
           name: 'Analyze Epic 8 Task Distribution',
           command: 'node src/monitor-system.js --mode tasks',
-          timeout: 30000,
+          timeout: 30000
         },
         {
           id: 'priority-alignment',
           name: 'Align System Priorities with Epic 8',
           command: 'node src/fix-system.js --module epic-assignments',
           timeout: 90000,
-          conditions: ['system-health.healthScore >= 85'],
+          conditions: ['system-health.healthScore >= 85']
         },
         {
           id: 'epic8-progress-report',
           name: 'Generate Epic 8 Progress Report',
           command: 'node src/analyze-system.js epics',
-          timeout: 60000,
-        },
-      ],
+          timeout: 60000
+        }
+      ]
     };
   }
 
@@ -385,13 +389,15 @@ class WorkflowOrchestrator {
       performance: {
         totalTime: 0,
         stepTimes: {},
-        successRate: 0,
-      },
+        successRate: 0
+      }
     };
 
     console.log(`🚀 Starting workflow: ${workflow.name}`);
     console.log(`📋 Description: ${workflow.description}`);
-    console.log(`⚙️  Mode: ${workflow.parallel ? 'Parallel' : 'Sequential'} execution`);
+    console.log(
+      `⚙️  Mode: ${workflow.parallel ? 'Parallel' : 'Sequential'} execution`
+    );
     console.log(`🔄 Steps: ${workflow.steps.length}`);
     console.log('');
 
@@ -399,20 +405,25 @@ class WorkflowOrchestrator {
       let results;
 
       if (workflow.parallel) {
-        results = await this.executeParallelSteps(workflow.steps, workflow.maxParallel);
+        results = await this.executeParallelSteps(
+          workflow.steps,
+          workflow.maxParallel
+        );
       } else {
         results = await this.executeSequentialSteps(workflow.steps);
       }
 
-      this.workflowState.performance.totalTime = Date.now() - this.workflowState.startTime.getTime();
-      this.workflowState.performance.successRate = this.calculateSuccessRate(results);
+      this.workflowState.performance.totalTime =
+        Date.now() - this.workflowState.startTime.getTime();
+      this.workflowState.performance.successRate =
+        this.calculateSuccessRate(results);
 
       this.generateExecutionReport(workflow, results);
 
       logger.finish(`Workflow '${workflow.name}' completed`, {
         totalTime: this.workflowState.performance.totalTime,
         successRate: this.workflowState.performance.successRate,
-        steps: results.length,
+        steps: results.length
       });
 
       return {
@@ -420,7 +431,7 @@ class WorkflowOrchestrator {
         success: true,
         results,
         performance: this.workflowState.performance,
-        errors: this.workflowState.errors,
+        errors: this.workflowState.errors
       };
     } catch (error) {
       logger.handleError(error, { workflow: workflowName });
@@ -434,7 +445,9 @@ class WorkflowOrchestrator {
 
   // Execute steps in parallel
   async executeParallelSteps(steps, maxParallel = 5) {
-    console.log(`⚡ Executing ${steps.length} steps in parallel (max ${maxParallel})`);
+    console.log(
+      `⚡ Executing ${steps.length} steps in parallel (max ${maxParallel})`
+    );
 
     const results = [];
     const chunks = this.chunkArray(steps, maxParallel);
@@ -453,13 +466,13 @@ class WorkflowOrchestrator {
             name: step.name,
             success: false,
             error: result.reason.message,
-            duration: 0,
+            duration: 0
           };
           results.push(errorResult);
           this.workflowState.errors.push({
             step: step.id,
             error: result.reason.message,
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
       });
@@ -479,14 +492,19 @@ class WorkflowOrchestrator {
       const step = steps[i];
 
       // Check conditions
-      if (step.conditions && !this.evaluateConditions(step.conditions, systemState, results)) {
-        console.log(`⏭️  Skipping step ${i + 1}: ${step.name} (conditions not met)`);
+      if (
+        step.conditions &&
+        !this.evaluateConditions(step.conditions, systemState, results)
+      ) {
+        console.log(
+          `⏭️  Skipping step ${i + 1}: ${step.name} (conditions not met)`
+        );
         results.push({
           stepId: step.id,
           name: step.name,
           success: true,
           skipped: true,
-          duration: 0,
+          duration: 0
         });
         continue;
       }
@@ -506,7 +524,7 @@ class WorkflowOrchestrator {
         this.workflowState.errors.push({
           step: step.id,
           error: error.message,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
 
         if (!this.options.continueOnError && !step.continueOnError) {
@@ -514,13 +532,15 @@ class WorkflowOrchestrator {
           throw error;
         }
 
-        console.log(`⚠️  Step failed but continuing: ${step.name} - ${error.message}`);
+        console.log(
+          `⚠️  Step failed but continuing: ${step.name} - ${error.message}`
+        );
         results.push({
           stepId: step.id,
           name: step.name,
           success: false,
           error: error.message,
-          duration: 0,
+          duration: 0
         });
       }
     }
@@ -539,7 +559,7 @@ class WorkflowOrchestrator {
         name: step.name,
         success: true,
         dryRun: true,
-        duration: 100,
+        duration: 100
       };
     }
 
@@ -557,7 +577,7 @@ class WorkflowOrchestrator {
           cwd: process.cwd(),
           timeout: step.timeout || 120000,
           encoding: 'utf8',
-          stdio: ['pipe', 'pipe', 'pipe'],
+          stdio: ['pipe', 'pipe', 'pipe']
         });
         result = { stdout: output };
       }
@@ -572,7 +592,7 @@ class WorkflowOrchestrator {
         name: step.name,
         success: true,
         duration,
-        output: this.parseStepOutput(result.stdout),
+        output: this.parseStepOutput(result.stdout)
       };
 
       this.workflowState.steps.push(stepResult);
@@ -599,7 +619,7 @@ class WorkflowOrchestrator {
       const [command, ...args] = step.command.split(' ');
       const process = spawn(command, args, {
         cwd: process.cwd(),
-        stdio: ['pipe', 'pipe', 'pipe'],
+        stdio: ['pipe', 'pipe', 'pipe']
       });
 
       let stdout = '';
@@ -739,7 +759,7 @@ class WorkflowOrchestrator {
         unassigned_tasks: tasks.filter(t => t.state === 'UNASSIGNED').length,
         approved_tasks: tasks.filter(t => t.state === 'APPROVED').length,
         completed_tasks: tasks.filter(t => t.state === 'COMPLETED').length,
-        agents_count: Object.keys(state.assignments || {}).length,
+        agents_count: Object.keys(state.assignments || {}).length
       };
     } catch (error) {
       return {};
@@ -752,7 +772,7 @@ class WorkflowOrchestrator {
       timestamp: new Date(),
       stepIndex,
       resultsCount: results.length,
-      systemState: await this.getSystemState(),
+      systemState: await this.getSystemState()
     };
 
     this.workflowState.checkpoints.push(checkpoint);
@@ -771,7 +791,9 @@ class WorkflowOrchestrator {
     console.log(`\n📊 Workflow Execution Report: ${workflow.name}`);
     console.log('================================================');
     console.log(`Total Time: ${this.workflowState.performance.totalTime}ms`);
-    console.log(`Success Rate: ${this.workflowState.performance.successRate.toFixed(1)}%`);
+    console.log(
+      `Success Rate: ${this.workflowState.performance.successRate.toFixed(1)}%`
+    );
     console.log(`Steps Executed: ${results.length}`);
     console.log(`Errors: ${this.workflowState.errors.length}`);
     console.log(`Checkpoints: ${this.workflowState.checkpoints.length}`);
@@ -800,12 +822,17 @@ class WorkflowOrchestrator {
   // Handle workflow failure
   handleWorkflowFailure(workflow, error) {
     console.log('\n🔄 Failure Recovery Options:');
-    console.log('1. Fix the issue and run: node workflow-orchestrator.js --resume');
+    console.log(
+      '1. Fix the issue and run: node workflow-orchestrator.js --resume'
+    );
     console.log('2. Run individual steps manually');
     console.log('3. Run with --continue-on-error flag');
 
     if (this.workflowState.checkpoints.length > 0) {
-      const lastCheckpoint = this.workflowState.checkpoints[this.workflowState.checkpoints.length - 1];
+      const lastCheckpoint =
+        this.workflowState.checkpoints[
+          this.workflowState.checkpoints.length - 1
+        ];
       console.log(`\n💾 Last checkpoint: Step ${lastCheckpoint.stepIndex}`);
       console.log('   Use --from-checkpoint to resume from there');
     }
@@ -835,7 +862,9 @@ class WorkflowOrchestrator {
       console.log(`   Description: ${workflow.description}`);
       console.log(`   Steps: ${workflow.steps.length}`);
       console.log(`   Mode: ${workflow.parallel ? 'Parallel' : 'Sequential'}`);
-      console.log(`   Command: node workflow-orchestrator.js --workflow ${key}`);
+      console.log(
+        `   Command: node workflow-orchestrator.js --workflow ${key}`
+      );
     });
 
     console.log('\n🎯 Quick Commands:');
@@ -855,7 +884,7 @@ async function main() {
   const options = {
     dryRun: args.includes('--dry-run'),
     parallel: args.includes('--parallel'),
-    continueOnError: args.includes('--continue-on-error'),
+    continueOnError: args.includes('--continue-on-error')
   };
 
   const workflowIndex = args.findIndex(arg => arg === '--workflow');
@@ -873,12 +902,20 @@ async function main() {
     console.log('  node workflow-orchestrator.js --list');
     console.log('');
     console.log('Options:');
-    console.log('  --dry-run              Preview execution without running commands');
-    console.log('  --continue-on-error    Continue workflow even if steps fail');
-    console.log('  --parallel             Force parallel execution (where applicable)');
+    console.log(
+      '  --dry-run              Preview execution without running commands'
+    );
+    console.log(
+      '  --continue-on-error    Continue workflow even if steps fail'
+    );
+    console.log(
+      '  --parallel             Force parallel execution (where applicable)'
+    );
     console.log('');
     console.log('Workflows:');
-    console.log('  epic8-demo-ready      Epic 8 Demo-Ready Proof of Concept (NEW)');
+    console.log(
+      '  epic8-demo-ready      Epic 8 Demo-Ready Proof of Concept (NEW)'
+    );
     console.log('  daily-maintenance      System health and maintenance');
     console.log('  epic-completion        Complete epic workflow');
     console.log('  qa-pipeline           QA automation pipeline');
@@ -903,7 +940,9 @@ async function main() {
       const result = await orchestrator.executeWorkflow(workflowName);
 
       console.log(`\n🎉 Workflow '${workflowName}' completed successfully!`);
-      console.log(`⚡ Success rate: ${result.performance.successRate.toFixed(1)}%`);
+      console.log(
+        `⚡ Success rate: ${result.performance.successRate.toFixed(1)}%`
+      );
       console.log(`⏱️  Total time: ${result.performance.totalTime}ms`);
 
       process.exit(result.errors.length > 0 ? 1 : 0);
@@ -914,14 +953,19 @@ async function main() {
       const workflowFile = args[customIndex + 1];
       const customWorkflow = JSON.parse(fs.readFileSync(workflowFile, 'utf8'));
 
-      const result = await orchestrator.executeWorkflow('custom', customWorkflow);
+      const result = await orchestrator.executeWorkflow(
+        'custom',
+        customWorkflow
+      );
 
       console.log('\n🎉 Custom workflow completed successfully!');
       process.exit(result.errors.length > 0 ? 1 : 0);
     }
 
     // No workflow specified
-    console.log('❌ No workflow specified. Use --list to see available workflows or --help for usage.');
+    console.log(
+      '❌ No workflow specified. Use --list to see available workflows or --help for usage.'
+    );
     process.exit(1);
   } catch (error) {
     logger.handleError(error, { args });

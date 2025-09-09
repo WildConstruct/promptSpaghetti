@@ -30,14 +30,14 @@ export const env: EnvironmentConfig = {
   // Feature flags
   ANALYTICS_ENABLED: getBoolEnvVar('VITE_ANALYTICS_ENABLED', true),
   DEBUG_MODE: getBoolEnvVar('VITE_DEBUG_MODE', false),
-  FEATURE_FLAGS_ENABLED: getBoolEnvVar('VITE_FEATURE_FLAGS_ENABLED', true),
+  FEATURE_FLAGS_ENABLED: getBoolEnvVar('VITE_FEATURE_FLAGS_ENABLED', true)
 };
 
 // Validate required environment variables in production
 if (import.meta.env.PROD) {
   const requiredVars = ['VITE_API_URL'];
   const missingVars = requiredVars.filter(key => !import.meta.env[key]);
-  
+
   if (missingVars.length > 0) {
     console.error('Missing required environment variables:', missingVars);
   }

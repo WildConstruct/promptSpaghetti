@@ -22,10 +22,12 @@ try {
   dotenv.config({ path: serverEnv, override: true });
 } catch {}
 
-const bodyLimit = process.env.BODY_LIMIT_BYTES ? parseInt(process.env.BODY_LIMIT_BYTES) : 1_000_000;
+const bodyLimit = process.env.BODY_LIMIT_BYTES
+  ? parseInt(process.env.BODY_LIMIT_BYTES)
+  : 1_000_000;
 const server = Fastify({
   logger: true,
-  bodyLimit, // cap request body to mitigate abuse
+  bodyLimit // cap request body to mitigate abuse
 });
 
 // Accept classic HTML form posts from the admin panel
@@ -52,7 +54,7 @@ if (process.env.APP_ORIGIN) defaultOrigins.push(process.env.APP_ORIGIN);
 defaultOrigins.push('https://ps.wildconstruct.com');
 const corsOrigins = (process.env.CORS_ORIGINS || defaultOrigins.join(','))
   .split(',')
-  .map((s) => s.trim())
+  .map(s => s.trim())
   .filter(Boolean);
 
 server.register(cors, {
@@ -62,7 +64,7 @@ server.register(cors, {
     const allowed = corsOrigins.includes(origin);
     cb(null, allowed);
   },
-  credentials: true,
+  credentials: true
 });
 
 // Add conservative security headers to all responses (complements Netlify)
@@ -94,42 +96,55 @@ server.get('/api/healthz', async () => {
 import { rateLimiter } from './utils/rateLimit';
 import { metrics } from './utils/metrics';
 
-server.post('/preview', { preHandler: rateLimiter({ key: 'preview', limitPerMinute: Number(process.env.PREVIEW_RATE_LIMIT_PER_MINUTE || 60) }) }, async (request, reply) => {
-  try {
-    const { graph, runs = 3, seedStart = 1 } = request.body as any;
-    
-    if (!graph || !graph.nodes) {
-      return reply.status(400).send({ error: 'Invalid graph structure' });
-    }
+server.post(
+  '/preview',
+  {
+    preHandler: rateLimiter({
+      key: 'preview',
+      limitPerMinute: Number(process.env.PREVIEW_RATE_LIMIT_PER_MINUTE || 60)
+    })
+  },
+  async (request, reply) => {
+    try {
+      const { graph, runs = 3, seedStart = 1 } = request.body as any;
 
-    metrics.mark('preview.request');
-    const results = [] as Array<{ seed: number; output: string; error?: string }>;
-    for (let i = 0; i < runs; i++) {
-      const seed = seedStart + i;
-      try {
-        const result = await executeGraph(graph, `session-${seed}`);
-        results.push({
-          seed,
-          output: result.outputs.join('\n')
-        });
-      } catch (error) {
-        console.error(`Error executing graph with seed ${seed}:`, error);
-        metrics.markError('preview.error');
-        results.push({
-          seed,
-          output: '',
-          error: 'Execution failed'
-        });
+      if (!graph || !graph.nodes) {
+        return reply.status(400).send({ error: 'Invalid graph structure' });
       }
-    }
 
-    return { results };
-  } catch (error) {
-    console.error('Preview error:', error);
-    metrics.markError('preview.fatal');
-    return reply.status(500).send({ error: 'Internal server error' });
+      metrics.mark('preview.request');
+      const results = [] as Array<{
+        seed: number;
+        output: string;
+        error?: string;
+      }>;
+      for (let i = 0; i < runs; i++) {
+        const seed = seedStart + i;
+        try {
+          const result = await executeGraph(graph, `session-${seed}`);
+          results.push({
+            seed,
+            output: result.outputs.join('\n')
+          });
+        } catch (error) {
+          console.error(`Error executing graph with seed ${seed}:`, error);
+          metrics.markError('preview.error');
+          results.push({
+            seed,
+            output: '',
+            error: 'Execution failed'
+          });
+        }
+      }
+
+      return { results };
+    } catch (error) {
+      console.error('Preview error:', error);
+      metrics.markError('preview.fatal');
+      return reply.status(500).send({ error: 'Internal server error' });
+    }
   }
-});
+);
 
 // LLM endpoints for Epic 2
 import { z } from 'zod';
@@ -137,90 +152,113 @@ import { rateLimiter } from './utils/rateLimit';
 
 const LLMParseSchema = z.object({
   prompt: z.string().min(1).max(4000),
-  mode: z.string().default('standard').optional(),
+  mode: z.string().default('standard').optional()
 });
 
-server.post('/api/llm/parse', { preHandler: rateLimiter({ key: 'llm:parse', limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60) }) }, async (request, reply) => {
-  try {
-    const parsed = LLMParseSchema.safeParse((request as any).body);
-    if (!parsed.success) return reply.status(400).send({ error: 'Invalid payload' });
-    metrics.mark('llm.parse');
-    const { prompt, mode = 'standard' } = parsed.data as any;
-    // For now, return a mock response
-    return {
-      success: true,
-      mode,
-      nodes: [
-        { type: 'TextBlock', content: prompt, id: 'node-1' }
-      ],
-      edges: []
-    };
-  } catch (error) {
-    console.error('LLM parse error:', error);
-    metrics.markError('llm.parse');
-    return reply.status(500).send({ error: 'Parse failed' });
+server.post(
+  '/api/llm/parse',
+  {
+    preHandler: rateLimiter({
+      key: 'llm:parse',
+      limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60)
+    })
+  },
+  async (request, reply) => {
+    try {
+      const parsed = LLMParseSchema.safeParse((request as any).body);
+      if (!parsed.success)
+        return reply.status(400).send({ error: 'Invalid payload' });
+      metrics.mark('llm.parse');
+      const { prompt, mode = 'standard' } = parsed.data as any;
+      // For now, return a mock response
+      return {
+        success: true,
+        mode,
+        nodes: [{ type: 'TextBlock', content: prompt, id: 'node-1' }],
+        edges: []
+      };
+    } catch (error) {
+      console.error('LLM parse error:', error);
+      metrics.markError('llm.parse');
+      return reply.status(500).send({ error: 'Parse failed' });
+    }
   }
-});
+);
 
 const LLMCompleteSchema = z.object({
   prompt: z.string().min(1).max(8000),
-  model: z.string().min(1).max(200).optional(),
+  model: z.string().min(1).max(200).optional()
 });
 
-server.post('/api/llm/complete', { preHandler: rateLimiter({ key: 'llm:complete', limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60) }) }, async (request, reply) => {
-  try {
-    const parsed = LLMCompleteSchema.safeParse((request as any).body);
-    if (!parsed.success) return reply.status(400).send({ error: 'Invalid payload' });
-    metrics.mark('llm.complete');
-    const { prompt, model } = parsed.data;
+server.post(
+  '/api/llm/complete',
+  {
+    preHandler: rateLimiter({
+      key: 'llm:complete',
+      limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60)
+    })
+  },
+  async (request, reply) => {
+    try {
+      const parsed = LLMCompleteSchema.safeParse((request as any).body);
+      if (!parsed.success)
+        return reply.status(400).send({ error: 'Invalid payload' });
+      metrics.mark('llm.complete');
+      const { prompt, model } = parsed.data;
 
-    const llm = new LLMService();
-    if (!llm.available()) {
-      // Fallback demo response when no API key present
+      const llm = new LLMService();
+      if (!llm.available()) {
+        // Fallback demo response when no API key present
+        return {
+          success: true,
+          completion: `Enhanced: ${redactPII(prompt)}`,
+          model: model || 'stub',
+          tokens: { input: Math.ceil((prompt?.length || 0) / 4), output: 5 },
+          note: 'LLM unavailable (no API key) - returning stubbed completion'
+        };
+      }
+
+      // LLMService has its own timeout; optionally override via env
+      if (process.env.LLM_TIMEOUT_MS) {
+        // not changing signature; environment config applies inside service
+        process.env.OPENAI_REQUEST_TIMEOUT_MS = process.env.LLM_TIMEOUT_MS;
+      }
+      const result = await llm.complete({ prompt: redactPII(prompt), model });
       return {
         success: true,
-        completion: `Enhanced: ${redactPII(prompt)}`,
-        model: model || 'stub',
-        tokens: { input: Math.ceil((prompt?.length || 0) / 4), output: 5 },
-        note: 'LLM unavailable (no API key) - returning stubbed completion',
+        completion: redactPII(result.content),
+        model: result.model,
+        tokens: { input: result.tokensIn, output: result.tokensOut }
       };
+    } catch (error: any) {
+      const aborted =
+        error && (error.name === 'AbortError' || error.code === 'ABORT_ERR');
+      if (aborted) {
+        metrics.markError('llm.timeout');
+        return reply.status(504).send({ error: 'LLM timeout' });
+      }
+      console.error('LLM complete error:', error);
+      metrics.markError('llm.complete');
+      return reply.status(500).send({ error: 'Completion failed' });
     }
-
-    // LLMService has its own timeout; optionally override via env
-    if (process.env.LLM_TIMEOUT_MS) {
-      // not changing signature; environment config applies inside service
-      process.env.OPENAI_REQUEST_TIMEOUT_MS = process.env.LLM_TIMEOUT_MS;
-    }
-    const result = await llm.complete({ prompt: redactPII(prompt), model });
-    return {
-      success: true,
-      completion: redactPII(result.content),
-      model: result.model,
-      tokens: { input: result.tokensIn, output: result.tokensOut },
-    };
-  } catch (error: any) {
-    const aborted = (error && (error.name === 'AbortError' || error.code === 'ABORT_ERR'));
-    if (aborted) {
-      metrics.markError('llm.timeout');
-      return reply.status(504).send({ error: 'LLM timeout' });
-    }
-    console.error('LLM complete error:', error);
-    metrics.markError('llm.complete');
-    return reply.status(500).send({ error: 'Completion failed' });
   }
-});
+);
 
 // Admin metrics endpoint
 // Combined metrics snapshot for admin dashboard
-server.get('/api/admin/metrics', { preHandler: rateLimiter({ key: 'admin:metrics', limitPerMinute: 30 }) }, async () => {
-  return metrics.snapshot();
-});
+server.get(
+  '/api/admin/metrics',
+  { preHandler: rateLimiter({ key: 'admin:metrics', limitPerMinute: 30 }) },
+  async () => {
+    return metrics.snapshot();
+  }
+);
 
 // Register enhanced admin panel routes
 registerEnhancedAdminRoutes(server);
 
 // Register file routes (Supabase-backed)
-server.register(async (app) => filesRoutes(app));
+server.register(async app => filesRoutes(app));
 
 // Start server
 const start = async () => {
@@ -230,7 +268,9 @@ const start = async () => {
     console.log(`Server running on port ${port}`);
   } catch (err) {
     if (Sentry) {
-      try { (Sentry as any).captureException(err); } catch {}
+      try {
+        (Sentry as any).captureException(err);
+      } catch {}
     }
     server.log.error(err);
     process.exit(1);

@@ -7,7 +7,7 @@
     "client/src/App.tsx",
     "client/src/main.tsx",
     "client/src/components/GraphNode.tsx",
-    "client/src/components/NodePalette.tsx", 
+    "client/src/components/NodePalette.tsx",
     "client/src/components/NodePrototype.tsx",
     "client/src/components/StatusBar.tsx",
     "client/src/components/GraphTemplates/**/*",
@@ -41,7 +41,7 @@
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/__tests__/**",
-    
+
     // Explicitly exclude non-MVP components
     "client/src/components/auth/**",
     "client/src/components/admin/**",
@@ -61,7 +61,7 @@
     "client/src/components/quality/**",
     "client/src/components/reports/**",
     "client/src/components/transparency/**",
-    
+
     "client/src/pages/**",
     "client/src/hooks/use*Auth*.ts",
     "client/src/hooks/use*Analytics.ts",
@@ -71,7 +71,7 @@
     "client/src/services/analyticsService.ts",
     "client/src/services/DeviceFingerprintService.ts",
     "client/src/services/searchApiService.ts",
-    
+
     "packages/core/auth/**",
     "packages/core/admin/**",
     "packages/core/analytics/**",

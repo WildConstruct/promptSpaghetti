@@ -208,7 +208,7 @@ const benchmarkCriteria = {
 
   // Optimization targets
   bundleSize: 50_000_000, // <50MB preferred
-  memoryUsage: 200_000_000, // <200MB preferred
+  memoryUsage: 200_000_000 // <200MB preferred
 };
 ```
 
@@ -284,7 +284,7 @@ export class GraphCRDT {
     return {
       ...local,
       position: this.resolvePositionConflict(local.position, remote.position),
-      properties: this.mergeProperties(local.properties, remote.properties),
+      properties: this.mergeProperties(local.properties, remote.properties)
     };
   }
 }
@@ -311,7 +311,7 @@ export class NATSSyncTransport {
     // Persistent delivery with exactly-once semantics
     await this.jetstream.publish(`sync.${channel}`, update, {
       msgId: generateUniqueId(),
-      expect: { lastSequence: this.lastSequence },
+      expect: { lastSequence: this.lastSequence }
     });
   }
 }

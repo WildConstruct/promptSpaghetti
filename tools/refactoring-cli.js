@@ -20,7 +20,7 @@ class RefactoringCLI {
   constructor() {
     this.rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout,
+      output: process.stdout
     });
 
     this.commands = {
@@ -31,14 +31,14 @@ class RefactoringCLI {
       plan: this.planCommand.bind(this),
       interactive: this.interactiveCommand.bind(this),
       help: this.helpCommand.bind(this),
-      status: this.statusCommand.bind(this),
+      status: this.statusCommand.bind(this)
     };
 
     this.session = {
       analysisResults: null,
       currentPlan: null,
       safeMode: true,
-      dryRun: false,
+      dryRun: false
     };
   }
 
@@ -84,11 +84,17 @@ class RefactoringCLI {
       structural: structuralAnalysis,
       modernization: modernizationAnalysis,
       timestamp: new Date().toISOString(),
-      summary: this.createAnalysisSummary(structuralAnalysis, modernizationAnalysis),
+      summary: this.createAnalysisSummary(
+        structuralAnalysis,
+        modernizationAnalysis
+      )
     };
 
     // Save detailed analysis
-    await fs.writeFile('refactoring-analysis.json', JSON.stringify(this.session.analysisResults, null, 2));
+    await fs.writeFile(
+      'refactoring-analysis.json',
+      JSON.stringify(this.session.analysisResults, null, 2)
+    );
 
     console.log('\n📋 Analysis Summary:');
     console.log('===================');
@@ -113,12 +119,16 @@ class RefactoringCLI {
         console.log('🔍 DRY RUN MODE - No files will be changed\n');
         // Show what would be migrated
         const analysisResults = await framework.analyzeLegacyCode();
-        console.log(`📁 Would migrate ${analysisResults.jsFiles.length} JavaScript files:`);
+        console.log(
+          `📁 Would migrate ${analysisResults.jsFiles.length} JavaScript files:`
+        );
         analysisResults.jsFiles.forEach(file => {
           console.log(`   • ${path.relative(process.cwd(), file)}`);
         });
       } else {
-        await framework.migrateJavaScriptToTypeScript(this.session.analysisResults?.structural?.jsFiles || []);
+        await framework.migrateJavaScriptToTypeScript(
+          this.session.analysisResults?.structural?.jsFiles || []
+        );
       }
     }
   }
@@ -145,7 +155,12 @@ class RefactoringCLI {
   async validateCommand(options) {
     console.log('✅ Validating refactoring results...\n');
 
-    const validations = [this.validateTypeScript(), this.validateESLint(), this.validateTests(), this.validateBuild()];
+    const validations = [
+      this.validateTypeScript(),
+      this.validateESLint(),
+      this.validateTests(),
+      this.validateBuild()
+    ];
 
     const results = await Promise.allSettled(validations);
 
@@ -155,14 +170,18 @@ class RefactoringCLI {
     const validationNames = ['TypeScript', 'ESLint', 'Tests', 'Build'];
     results.forEach((result, index) => {
       if (result.status === 'fulfilled') {
-        console.log(`✅ ${validationNames[index]}: ${result.value.passed ? 'PASSED' : 'FAILED'}`);
+        console.log(
+          `✅ ${validationNames[index]}: ${result.value.passed ? 'PASSED' : 'FAILED'}`
+        );
         if (!result.value.passed && result.value.errors) {
           result.value.errors.forEach(error => {
             console.log(`   ❌ ${error}`);
           });
         }
       } else {
-        console.log(`❌ ${validationNames[index]}: ERROR - ${result.reason.message}`);
+        console.log(
+          `❌ ${validationNames[index]}: ERROR - ${result.reason.message}`
+        );
       }
     });
   }
@@ -264,8 +283,12 @@ Examples:
   async statusCommand(options) {
     console.log('📊 Refactoring Session Status\n');
 
-    console.log(`Session Mode: ${this.session.safeMode ? '🔒 Safe' : '⚠️ Unrestricted'}`);
-    console.log(`Dry Run: ${this.session.dryRun ? '🔍 Enabled' : '💾 Disabled'}`);
+    console.log(
+      `Session Mode: ${this.session.safeMode ? '🔒 Safe' : '⚠️ Unrestricted'}`
+    );
+    console.log(
+      `Dry Run: ${this.session.dryRun ? '🔍 Enabled' : '💾 Disabled'}`
+    );
 
     if (this.session.analysisResults) {
       console.log('\n📈 Analysis Results Available:');
@@ -279,7 +302,9 @@ Examples:
     if (this.session.currentPlan) {
       console.log('\n📋 Active Refactoring Plan:');
       console.log(`   Phases: ${this.session.currentPlan.phases.length}`);
-      console.log(`   Estimated Days: ${this.session.currentPlan.totalEstimatedDays}`);
+      console.log(
+        `   Estimated Days: ${this.session.currentPlan.totalEstimatedDays}`
+      );
     } else {
       console.log('\n❌ No refactoring plan available');
       console.log('   Run "plan" command to create one');
@@ -302,14 +327,17 @@ Examples:
   // Helper methods
   createAnalysisSummary(structural, modernization) {
     return {
-      totalFiles: (structural.jsFiles?.length || 0) + (modernization.fileAnalysis?.size || 0),
+      totalFiles:
+        (structural.jsFiles?.length || 0) +
+        (modernization.fileAnalysis?.size || 0),
       jsFilesToMigrate: structural.jsFiles?.length || 0,
       duplicatesFound: structural.duplicates?.length || 0,
       securityIssues: structural.securityIssues?.length || 0,
       legacyPatterns: modernization.legacyPatterns?.length || 0,
       codeSmells: modernization.codeSmells?.length || 0,
       performanceIssues: modernization.performanceIssues?.length || 0,
-      modernizationOpportunities: modernization.modernizationOpportunities?.length || 0,
+      modernizationOpportunities:
+        modernization.modernizationOpportunities?.length || 0
     };
   }
 
@@ -321,7 +349,9 @@ Examples:
     console.log(`⚡ Legacy Patterns: ${summary.legacyPatterns}`);
     console.log(`💨 Code Smells: ${summary.codeSmells}`);
     console.log(`🚀 Performance Issues: ${summary.performanceIssues}`);
-    console.log(`✨ Modernization Opportunities: ${summary.modernizationOpportunities}`);
+    console.log(
+      `✨ Modernization Opportunities: ${summary.modernizationOpportunities}`
+    );
   }
 
   async suggestNextSteps() {
@@ -337,14 +367,18 @@ Examples:
     }
 
     if (this.session.analysisResults.summary.performanceIssues > 0) {
-      console.log('🚀 Fix performance issues: node refactoring-cli.js modernize');
+      console.log(
+        '🚀 Fix performance issues: node refactoring-cli.js modernize'
+      );
     }
 
     if (this.session.analysisResults.summary.codeSmells > 0) {
       console.log('💨 Address code quality: node refactoring-cli.js modernize');
     }
 
-    console.log('📋 Create execution plan: node refactoring-cli.js plan --execute');
+    console.log(
+      '📋 Create execution plan: node refactoring-cli.js plan --execute'
+    );
     console.log('✅ Validate results: node refactoring-cli.js validate');
   }
 
@@ -354,7 +388,7 @@ Examples:
       phases: [],
       totalEstimatedDays: 0,
       risks: [],
-      prerequisites: [],
+      prerequisites: []
     };
 
     // Phase 1: Security and Critical Issues
@@ -363,8 +397,10 @@ Examples:
         name: 'Security Fixes',
         priority: 1,
         estimatedDays: 1,
-        tasks: [`Fix ${analysisResults.summary.securityIssues} security issues`],
-        validation: ['Security scan', 'Manual review'],
+        tasks: [
+          `Fix ${analysisResults.summary.securityIssues} security issues`
+        ],
+        validation: ['Security scan', 'Manual review']
       });
     }
 
@@ -374,40 +410,51 @@ Examples:
         name: 'TypeScript Migration',
         priority: 2,
         estimatedDays: Math.ceil(analysisResults.summary.jsFilesToMigrate / 10),
-        tasks: [`Migrate ${analysisResults.summary.jsFilesToMigrate} JS files to TS`],
-        validation: ['Type checking', 'Build validation'],
+        tasks: [
+          `Migrate ${analysisResults.summary.jsFilesToMigrate} JS files to TS`
+        ],
+        validation: ['Type checking', 'Build validation']
       });
     }
 
     // Phase 3: Performance and Modernization
-    if (analysisResults.summary.performanceIssues > 0 || analysisResults.summary.modernizationOpportunities > 0) {
+    if (
+      analysisResults.summary.performanceIssues > 0 ||
+      analysisResults.summary.modernizationOpportunities > 0
+    ) {
       plan.phases.push({
         name: 'Modernization',
         priority: 3,
         estimatedDays: 3,
         tasks: [
           `Address ${analysisResults.summary.performanceIssues} performance issues`,
-          `Apply ${analysisResults.summary.modernizationOpportunities} modernization opportunities`,
+          `Apply ${analysisResults.summary.modernizationOpportunities} modernization opportunities`
         ],
-        validation: ['Performance tests', 'Code review'],
+        validation: ['Performance tests', 'Code review']
       });
     }
 
     // Phase 4: Code Quality
-    if (analysisResults.summary.codeSmells > 0 || analysisResults.summary.duplicatesFound > 0) {
+    if (
+      analysisResults.summary.codeSmells > 0 ||
+      analysisResults.summary.duplicatesFound > 0
+    ) {
       plan.phases.push({
         name: 'Code Quality',
         priority: 4,
         estimatedDays: 2,
         tasks: [
           `Fix ${analysisResults.summary.codeSmells} code smells`,
-          `Remove ${analysisResults.summary.duplicatesFound} duplicate code blocks`,
+          `Remove ${analysisResults.summary.duplicatesFound} duplicate code blocks`
         ],
-        validation: ['Code coverage', 'Lint checks'],
+        validation: ['Code coverage', 'Lint checks']
       });
     }
 
-    plan.totalEstimatedDays = plan.phases.reduce((sum, phase) => sum + phase.estimatedDays, 0);
+    plan.totalEstimatedDays = plan.phases.reduce(
+      (sum, phase) => sum + phase.estimatedDays,
+      0
+    );
 
     return plan;
   }
@@ -420,7 +467,9 @@ Examples:
       console.log('   Tasks:');
       phase.tasks.forEach(task => console.log(`     • ${task}`));
       console.log('   Validation:');
-      phase.validation.forEach(validation => console.log(`     ✓ ${validation}`));
+      phase.validation.forEach(validation =>
+        console.log(`     ✓ ${validation}`)
+      );
     });
 
     console.log(`\n⏱️  Total Estimated Time: ${plan.totalEstimatedDays} days`);
@@ -467,7 +516,7 @@ Examples:
     } catch (error) {
       return {
         passed: false,
-        errors: [error.stdout || error.message],
+        errors: [error.stdout || error.message]
       };
     }
   }
@@ -483,7 +532,7 @@ Examples:
     } catch (error) {
       return {
         passed: false,
-        errors: [error.stdout || error.message],
+        errors: [error.stdout || error.message]
       };
     }
   }
@@ -499,7 +548,7 @@ Examples:
     } catch (error) {
       return {
         passed: false,
-        errors: [error.stdout || error.message],
+        errors: [error.stdout || error.message]
       };
     }
   }
@@ -515,7 +564,7 @@ Examples:
     } catch (error) {
       return {
         passed: false,
-        errors: [error.stdout || error.message],
+        errors: [error.stdout || error.message]
       };
     }
   }

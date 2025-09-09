@@ -13,7 +13,7 @@ async function testUnifiedInfrastructure() {
   const logger = getLogger('unified-test', {
     enableConsole: true,
     enableFile: false,
-    logLevel: 'DEBUG',
+    logLevel: 'DEBUG'
   });
   const stateLock = new StateLock();
   const configManager = getConfigManager();
@@ -27,13 +27,13 @@ async function testUnifiedInfrastructure() {
     const automationConfig = configManager.loadConfig('automation');
     logger.success('Configuration loaded successfully', {
       keys: Object.keys(automationConfig).length,
-      maxRetries: automationConfig.maxRetries,
+      maxRetries: automationConfig.maxRetries
     });
 
     const qaConfig = configManager.loadConfig('qa');
     logger.success('QA configuration loaded', {
       passThreshold: qaConfig.passThreshold,
-      autoApproveThreshold: qaConfig.autoApproveThreshold,
+      autoApproveThreshold: qaConfig.autoApproveThreshold
     });
 
     // Test 2: State Management with Locking
@@ -47,7 +47,7 @@ async function testUnifiedInfrastructure() {
 
       logger.debug('State analysis completed', {
         tasks: taskCount,
-        assignments: assignmentCount,
+        assignments: assignmentCount
       });
 
       return { taskCount, assignmentCount };
@@ -69,7 +69,7 @@ async function testUnifiedInfrastructure() {
 
     logger.success('Performance measurement completed', {
       result: performanceResult,
-      type: 'computational',
+      type: 'computational'
     });
 
     // Test 4: Error Handling
@@ -80,11 +80,11 @@ async function testUnifiedInfrastructure() {
     } catch (error) {
       const errorReport = logger.handleError(error, {
         component: 'test-suite',
-        operation: 'error-handling-demo',
+        operation: 'error-handling-demo'
       });
 
       logger.info('Error handling successful', {
-        errorCaptured: errorReport.success === false,
+        errorCaptured: errorReport.success === false
       });
     }
 
@@ -93,11 +93,14 @@ async function testUnifiedInfrastructure() {
 
     logger.qaStart(5, 'Test QA processing');
     logger.qaApprove('TEST-123', 4.5, 'Excellent implementation quality');
-    logger.qaReject('TEST-124', 2.8, ['Missing error handling', 'Insufficient testing']);
+    logger.qaReject('TEST-124', 2.8, [
+      'Missing error handling',
+      'Insufficient testing'
+    ]);
     logger.qaFinish({
       processed: 5,
       approved: 3,
-      rejected: 2,
+      rejected: 2
     });
 
     // Test 6: Task Management Logging
@@ -105,7 +108,11 @@ async function testUnifiedInfrastructure() {
 
     logger.taskStart('TEST-125', 'Processing test task');
     logger.assignmentAdd('TEST-125', 'test-agent');
-    logger.taskComplete('TEST-125', { status: 'success' }, 'Task processing completed');
+    logger.taskComplete(
+      'TEST-125',
+      { status: 'success' },
+      'Task processing completed'
+    );
     logger.assignmentClear('TEST-125', 'test-agent');
 
     // Test 7: Configuration Status
@@ -119,7 +126,7 @@ async function testUnifiedInfrastructure() {
       configsAvailable: configStatus.availableConfigs.length,
       configsCached: configStatus.cacheSize,
       lockExists: lockStatus.exists,
-      loggerUptime: loggerStats.uptime,
+      loggerUptime: loggerStats.uptime
     });
 
     // Summary
@@ -133,10 +140,12 @@ async function testUnifiedInfrastructure() {
     console.log('✅ Error Handling: Working');
     console.log('✅ QA Workflow Integration: Working');
     console.log('✅ Task Management Integration: Working');
-    console.log('\n🎉 All automation infrastructure components are functioning correctly!');
+    console.log(
+      '\n🎉 All automation infrastructure components are functioning correctly!'
+    );
   } catch (error) {
     const errorReport = logger.handleError(error, {
-      testPhase: 'unified-infrastructure-test',
+      testPhase: 'unified-infrastructure-test'
     });
 
     console.error('\n❌ Infrastructure test failed:', error.message);

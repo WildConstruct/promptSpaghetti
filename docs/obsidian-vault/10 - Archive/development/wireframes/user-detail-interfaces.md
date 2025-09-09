@@ -540,7 +540,13 @@ interface UserDetailComponents {
 interface UserDetailState {
   user: User | null;
   loading: boolean;
-  activeTab: 'profile' | 'permissions' | 'activity' | 'team' | 'settings' | 'security';
+  activeTab:
+    | 'profile'
+    | 'permissions'
+    | 'activity'
+    | 'team'
+    | 'settings'
+    | 'security';
   editMode: boolean;
   permissions: Permission[];
   activityLog: ActivityEvent[];
@@ -558,10 +564,16 @@ interface UserDetailAPI {
   getUser(id: string): Promise<User>;
   updateUser(id: string, updates: Partial<User>): Promise<User>;
   getUserPermissions(id: string): Promise<Permission[]>;
-  getUserActivity(id: string, filters: ActivityFilter): Promise<ActivityEvent[]>;
+  getUserActivity(
+    id: string,
+    filters: ActivityFilter
+  ): Promise<ActivityEvent[]>;
   getUserTeams(id: string): Promise<TeamMembership[]>;
   getUserSecurityEvents(id: string): Promise<SecurityEvent[]>;
-  performQuickAction(userId: string, action: QuickActionType): Promise<ActionResult>;
+  performQuickAction(
+    userId: string,
+    action: QuickActionType
+  ): Promise<ActionResult>;
 }
 ```
 

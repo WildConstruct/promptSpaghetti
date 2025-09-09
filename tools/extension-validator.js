@@ -40,7 +40,7 @@ class ExtensionValidator {
         valid: this.errors.length === 0,
         errors: this.errors,
         warnings: this.warnings,
-        info: this.info,
+        info: this.info
       };
     } catch (error) {
       this.errors.push(`Failed to validate extension: ${error.message}`);
@@ -48,7 +48,7 @@ class ExtensionValidator {
         valid: false,
         errors: this.errors,
         warnings: this.warnings,
-        info: this.info,
+        info: this.info
       };
     }
   }
@@ -68,7 +68,13 @@ class ExtensionValidator {
 
   validateManifestStructure(manifest) {
     // Required fields
-    const requiredFields = ['manifest_version', 'id', 'name', 'version', 'extension_type'];
+    const requiredFields = [
+      'manifest_version',
+      'id',
+      'name',
+      'version',
+      'extension_type'
+    ];
 
     for (const field of requiredFields) {
       if (!manifest[field]) {
@@ -78,12 +84,16 @@ class ExtensionValidator {
 
     // Validate manifest version
     if (manifest.manifest_version !== '1.0') {
-      this.errors.push(`Unsupported manifest version: ${manifest.manifest_version}`);
+      this.errors.push(
+        `Unsupported manifest version: ${manifest.manifest_version}`
+      );
     }
 
     // Validate extension ID
     if (manifest.id && !/^[a-z0-9-]+$/.test(manifest.id)) {
-      this.errors.push('Extension ID must contain only lowercase letters, numbers, and hyphens');
+      this.errors.push(
+        'Extension ID must contain only lowercase letters, numbers, and hyphens'
+      );
     }
 
     // Validate version format (semantic versioning)
@@ -93,8 +103,13 @@ class ExtensionValidator {
 
     // Validate extension type
     const validTypes = ['node', 'ui', 'transform', 'storage'];
-    if (manifest.extension_type && !validTypes.includes(manifest.extension_type)) {
-      this.errors.push(`Invalid extension type: ${manifest.extension_type}. Valid types: ${validTypes.join(', ')}`);
+    if (
+      manifest.extension_type &&
+      !validTypes.includes(manifest.extension_type)
+    ) {
+      this.errors.push(
+        `Invalid extension type: ${manifest.extension_type}. Valid types: ${validTypes.join(', ')}`
+      );
     }
 
     // Validate runtime configuration
@@ -118,33 +133,48 @@ class ExtensionValidator {
     if (manifest.dependencies) {
       // Check system version
       if (manifest.dependencies.system_version) {
-        if (!/^[\^~]?\d+\.\d+\.\d+/.test(manifest.dependencies.system_version)) {
-          this.warnings.push('System version should use semantic versioning with range indicators');
+        if (
+          !/^[\^~]?\d+\.\d+\.\d+/.test(manifest.dependencies.system_version)
+        ) {
+          this.warnings.push(
+            'System version should use semantic versioning with range indicators'
+          );
         }
       }
 
       // Check extension dependencies
       if (manifest.dependencies.extensions) {
-        for (const [depId, version] of Object.entries(manifest.dependencies.extensions)) {
+        for (const [depId, version] of Object.entries(
+          manifest.dependencies.extensions
+        )) {
           if (!/^[\^~]?\d+\.\d+\.\d+/.test(version)) {
-            this.warnings.push(`Extension dependency ${depId} should use semantic versioning`);
+            this.warnings.push(
+              `Extension dependency ${depId} should use semantic versioning`
+            );
           }
         }
       }
     }
 
     // Check package.json consistency
-    const packageJsonPath = path.join(path.dirname(manifestPath), 'package.json');
+    const packageJsonPath = path.join(
+      path.dirname(manifestPath),
+      'package.json'
+    );
     if (fs.existsSync(packageJsonPath)) {
       try {
-        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        const packageJson = JSON.parse(
+          fs.readFileSync(packageJsonPath, 'utf8')
+        );
 
         if (packageJson.name !== manifest.id) {
           this.warnings.push('package.json name should match manifest id');
         }
 
         if (packageJson.version !== manifest.version) {
-          this.warnings.push('package.json version should match manifest version');
+          this.warnings.push(
+            'package.json version should match manifest version'
+          );
         }
       } catch (error) {
         this.warnings.push('Failed to read package.json for consistency check');
@@ -162,10 +192,15 @@ class ExtensionValidator {
         'ui-components',
         'extensions-api',
         'system-info',
-        'data-storage',
+        'data-storage'
       ];
 
-      const dangerousPermissions = ['file-system-write', 'network', 'extensions-api', 'system-info'];
+      const dangerousPermissions = [
+        'file-system-write',
+        'network',
+        'extensions-api',
+        'system-info'
+      ];
 
       for (const permission of manifest.permissions) {
         if (!validPermissions.includes(permission)) {
@@ -194,14 +229,18 @@ class ExtensionValidator {
         }
 
         if (!csp.includes('default-src') && !csp.includes('script-src')) {
-          this.warnings.push('Content Security Policy should include default-src or script-src');
+          this.warnings.push(
+            'Content Security Policy should include default-src or script-src'
+          );
         }
       }
 
       // Validate sandbox
       if (manifest.security.sandbox) {
         if (!manifest.security.sandbox.enabled) {
-          this.warnings.push('Sandbox is disabled - consider enabling for security');
+          this.warnings.push(
+            'Sandbox is disabled - consider enabling for security'
+          );
         }
       } else {
         this.info.push('No sandbox configuration specified');
@@ -211,7 +250,9 @@ class ExtensionValidator {
       if (manifest.security.trusted_domains) {
         for (const domain of manifest.security.trusted_domains) {
           if (domain === '*') {
-            this.warnings.push('Wildcard trusted domain (*) is not recommended');
+            this.warnings.push(
+              'Wildcard trusted domain (*) is not recommended'
+            );
           }
 
           if (!this.isValidDomain(domain)) {
@@ -229,22 +270,31 @@ class ExtensionValidator {
 
     // Check if entry point exists
     if (manifest.runtime && manifest.runtime.entry_point) {
-      const entryPointPath = path.join(extensionDir, manifest.runtime.entry_point);
+      const entryPointPath = path.join(
+        extensionDir,
+        manifest.runtime.entry_point
+      );
 
       if (!fs.existsSync(entryPointPath)) {
-        this.errors.push(`Entry point file not found: ${manifest.runtime.entry_point}`);
+        this.errors.push(
+          `Entry point file not found: ${manifest.runtime.entry_point}`
+        );
       }
     }
 
     // Check for TypeScript configuration
     const tsconfigPath = path.join(extensionDir, 'tsconfig.json');
     if (!fs.existsSync(tsconfigPath)) {
-      this.warnings.push('No tsconfig.json found - TypeScript development recommended');
+      this.warnings.push(
+        'No tsconfig.json found - TypeScript development recommended'
+      );
     }
 
     // Check for tests
     const testDirs = ['test', 'tests', '__tests__', 'src/__tests__'];
-    const hasTests = testDirs.some(dir => fs.existsSync(path.join(extensionDir, dir)));
+    const hasTests = testDirs.some(dir =>
+      fs.existsSync(path.join(extensionDir, dir))
+    );
 
     if (!hasTests) {
       this.warnings.push('No test directory found - testing is recommended');
@@ -252,7 +302,9 @@ class ExtensionValidator {
 
     // Check for README
     const readmeFiles = ['README.md', 'readme.md', 'README.txt'];
-    const hasReadme = readmeFiles.some(file => fs.existsSync(path.join(extensionDir, file)));
+    const hasReadme = readmeFiles.some(file =>
+      fs.existsSync(path.join(extensionDir, file))
+    );
 
     if (!hasReadme) {
       this.warnings.push('No README file found - documentation is recommended');
@@ -261,7 +313,8 @@ class ExtensionValidator {
 
   isValidDomain(domain) {
     // Basic domain validation
-    const domainRegex = /^([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$|^localhost$|^\d+\.\d+\.\d+\.\d+$/;
+    const domainRegex =
+      /^([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$|^localhost$|^\d+\.\d+\.\d+\.\d+$/;
     return domainRegex.test(domain);
   }
 
@@ -309,12 +362,19 @@ class ExtensionValidator {
     // Check permissions
     if (manifest.permissions) {
       const dangerousPerms = manifest.permissions.filter(p =>
-        ['file-system-write', 'network', 'extensions-api', 'system-info'].includes(p)
+        [
+          'file-system-write',
+          'network',
+          'extensions-api',
+          'system-info'
+        ].includes(p)
       );
 
       if (dangerousPerms.length > 0) {
         securityScore -= dangerousPerms.length * 15;
-        securityIssues.push(`Requests ${dangerousPerms.length} dangerous permission(s)`);
+        securityIssues.push(
+          `Requests ${dangerousPerms.length} dangerous permission(s)`
+        );
       }
     }
 
@@ -336,7 +396,8 @@ class ExtensionValidator {
       securityIssues.push('Uses wildcard trusted domain');
     }
 
-    const securityLevel = securityScore >= 80 ? 'Good' : securityScore >= 60 ? 'Moderate' : 'Poor';
+    const securityLevel =
+      securityScore >= 80 ? 'Good' : securityScore >= 60 ? 'Moderate' : 'Poor';
 
     console.log(`   Security Score: ${securityScore}/100 (${securityLevel})`);
 
@@ -360,7 +421,9 @@ class ExtensionValidator {
         break;
       case 'ui':
         if (!manifest.ui) {
-          recommendations.push('Add ui configuration with themes or components');
+          recommendations.push(
+            'Add ui configuration with themes or components'
+          );
         }
         break;
     }
@@ -399,7 +462,7 @@ class ExtensionProfiler {
       initTime: null,
       activationTime: null,
       memoryUsage: null,
-      performance: [],
+      performance: []
     };
   }
 
@@ -460,9 +523,15 @@ class ExtensionProfiler {
     console.log(`Activation Time: ${this.metrics.activationTime.toFixed(2)}ms`);
 
     console.log('\n💾 Memory Usage:');
-    console.log(`RSS: ${(this.metrics.memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`);
-    console.log(`Heap Used: ${(this.metrics.memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`);
-    console.log(`Heap Total: ${(this.metrics.memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`);
+    console.log(
+      `RSS: ${(this.metrics.memoryUsage.rss / 1024 / 1024).toFixed(2)} MB`
+    );
+    console.log(
+      `Heap Used: ${(this.metrics.memoryUsage.heapUsed / 1024 / 1024).toFixed(2)} MB`
+    );
+    console.log(
+      `Heap Total: ${(this.metrics.memoryUsage.heapTotal / 1024 / 1024).toFixed(2)} MB`
+    );
 
     // Performance recommendations
     console.log('\n📈 Performance Recommendations:');

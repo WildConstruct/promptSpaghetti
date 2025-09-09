@@ -148,7 +148,7 @@ enum SecurityEventType {
   VULNERABILITY_EXPLOIT = 'vulnerability_exploit',
   BEHAVIORAL_ANOMALY = 'behavioral_anomaly',
   COMPLIANCE_VIOLATION = 'compliance_violation',
-  SECURITY_POLICY_VIOLATION = 'security_policy_violation',
+  SECURITY_POLICY_VIOLATION = 'security_policy_violation'
 }
 ```
 
@@ -190,7 +190,7 @@ enum IOCType {
   EMAIL = 'email',
   REGISTRY_KEY = 'registry_key',
   MUTEX = 'mutex',
-  CERTIFICATE = 'certificate',
+  CERTIFICATE = 'certificate'
 }
 ```
 
@@ -223,7 +223,7 @@ enum IncidentSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical',
+  CRITICAL = 'critical'
 }
 
 enum IncidentStatus {
@@ -231,7 +231,7 @@ enum IncidentStatus {
   ASSIGNED = 'assigned',
   IN_PROGRESS = 'in_progress',
   RESOLVED = 'resolved',
-  CLOSED = 'closed',
+  CLOSED = 'closed'
 }
 ```
 

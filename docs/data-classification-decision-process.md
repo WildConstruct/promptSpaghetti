@@ -233,8 +233,13 @@ interface ClassificationApproval {
 ```typescript
 // Classification service interface
 interface ClassificationService {
-  classifyData(data: any, context: ClassificationContext): Promise<Classification>;
-  validateClassification(classification: Classification): Promise<ValidationResult>;
+  classifyData(
+    data: any,
+    context: ClassificationContext
+  ): Promise<Classification>;
+  validateClassification(
+    classification: Classification
+  ): Promise<ValidationResult>;
   getHandlingRequirements(classification: string): HandlingRequirements;
   auditClassificationAccess(userId: string, dataId: string): Promise<void>;
 }
@@ -251,7 +256,7 @@ const classificationRules = {
     email: 'CONFIDENTIAL',
     api_key: 'RESTRICTED',
     user_id: 'INTERNAL',
-    'public_.*': 'PUBLIC',
+    'public_.*': 'PUBLIC'
   },
 
   // Content patterns
@@ -259,7 +264,7 @@ const classificationRules = {
     'credit card': 'RESTRICTED',
     'social security': 'RESTRICTED',
     'phone number': 'CONFIDENTIAL',
-    'ip address': 'CONFIDENTIAL',
+    'ip address': 'CONFIDENTIAL'
   },
 
   // Context rules
@@ -267,8 +272,8 @@ const classificationRules = {
     authentication: 'RESTRICTED',
     audit_log: 'CONFIDENTIAL',
     public_api: 'PUBLIC',
-    internal_metrics: 'INTERNAL',
-  },
+    internal_metrics: 'INTERNAL'
+  }
 };
 ```
 

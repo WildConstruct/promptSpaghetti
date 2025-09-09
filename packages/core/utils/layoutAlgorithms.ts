@@ -32,14 +32,16 @@ export function applyDagreLayout(
 
   let {
     direction = 'LR',
-    nodeSpacing = 150,  // Increased default spacing
-    rankSpacing = 200,  // Increased default spacing
+    nodeSpacing = 150, // Increased default spacing
+    rankSpacing = 200 // Increased default spacing
   } = options;
-  
+
   // Auto-detect best direction if not specified
   if (!options.direction) {
     // Check if we have an output node (should be at the end)
-    const hasOutput = nodes.some(n => n.type === 'output' || n.data?.nodeType === 'output');
+    const hasOutput = nodes.some(
+      n => n.type === 'output' || n.data?.nodeType === 'output'
+    );
     // For prompt graphs, LR (left-right) usually works best
     direction = hasOutput ? 'LR' : 'TB';
   }
@@ -47,14 +49,14 @@ export function applyDagreLayout(
   try {
     // Create a new directed graph
     const g = new dagre.graphlib.Graph();
-    
+
     // Set graph options
     g.setGraph({
       rankdir: direction,
       nodesep: nodeSpacing,
       ranksep: rankSpacing,
       marginx: 20,
-      marginy: 20,
+      marginy: 20
     });
 
     // Default node label - must return an object
@@ -62,11 +64,11 @@ export function applyDagreLayout(
 
     // Add nodes to the graph with validation
     const validNodeIds = new Set<string>();
-    nodes.forEach((node) => {
+    nodes.forEach(node => {
       if (node && node.id) {
         // Ensure node has required properties - WeightedChoice nodes are taller
-        const defaultWidth = 250;  // Wider default for WeightedChoice nodes
-        const defaultHeight = node.type === 'weightedChoice' ? 200 : 100;  // Taller for WeightedChoice
+        const defaultWidth = 250; // Wider default for WeightedChoice nodes
+        const defaultHeight = node.type === 'weightedChoice' ? 200 : 100; // Taller for WeightedChoice
         const nodeConfig = {
           width: node.width || node.measured?.width || defaultWidth,
           height: node.height || node.measured?.height || defaultHeight,
@@ -79,57 +81,71 @@ export function applyDagreLayout(
 
     // Add edges to the graph with validation
     if (edges && Array.isArray(edges)) {
-      edges.forEach((edge) => {
+      edges.forEach(edge => {
         // Only add edge if both source and target exist in our valid nodes
-        if (edge && edge.source && edge.target && 
-            validNodeIds.has(edge.source) && validNodeIds.has(edge.target)) {
+        if (
+          edge &&
+          edge.source &&
+          edge.target &&
+          validNodeIds.has(edge.source) &&
+          validNodeIds.has(edge.target)
+        ) {
           try {
             // Add edge with empty label object
             g.setEdge(edge.source, edge.target, {});
           } catch (e) {
-            console.warn(`Failed to add edge ${edge.source} -> ${edge.target}:`, e);
+            console.warn(
+              `Failed to add edge ${edge.source} -> ${edge.target}:`,
+              e
+            );
           }
         } else if (edge) {
-          console.warn(`Skipping edge ${edge.source} -> ${edge.target}: nodes not in graph`);
+          console.warn(
+            `Skipping edge ${edge.source} -> ${edge.target}: nodes not in graph`
+          );
         }
       });
     }
-    
+
     // Log graph structure for debugging
-    console.log(`[Dagre] Layout graph with ${g.nodeCount()} nodes and ${g.edgeCount()} edges`);
+    console.log(
+      `[Dagre] Layout graph with ${g.nodeCount()} nodes and ${g.edgeCount()} edges`
+    );
 
     // Calculate the layout
     dagre.layout(g);
 
     // Apply the calculated positions to nodes
-    return nodes.map((node) => {
+    return nodes.map(node => {
       if (!node || !node.id) return node;
-      
+
       try {
         const nodeWithPosition = g.node(node.id);
-        
+
         // If dagre didn't calculate position, keep original or use fallback
-        if (!nodeWithPosition || 
-            typeof nodeWithPosition.x !== 'number' || 
-            typeof nodeWithPosition.y !== 'number') {
+        if (
+          !nodeWithPosition ||
+          typeof nodeWithPosition.x !== 'number' ||
+          typeof nodeWithPosition.y !== 'number'
+        ) {
           return {
             ...node,
             position: node.position || { x: 100, y: 100 }
           };
         }
-        
+
         const defaultWidth = 250;
         const defaultHeight = node.type === 'weightedChoice' ? 200 : 100;
         const width = node.width || node.measured?.width || defaultWidth;
         const height = node.height || node.measured?.height || defaultHeight;
-        
+
         return {
           ...node,
           position: {
             // Dagre gives center position, we need top-left
             x: nodeWithPosition.x - width / 2,
-            y: nodeWithPosition.y - height / 2,
-          },
+            y: nodeWithPosition.y - height / 2
+          }
         };
       } catch (e) {
         console.warn(`Failed to get layout for node ${node.id}:`, e);
@@ -162,20 +178,22 @@ export function applyForceLayout(
 
   try {
     // Prepare nodes with current positions
-    const simulationNodes = nodes.map((node) => ({
+    const simulationNodes = nodes.map(node => ({
       ...node,
       id: node.id,
       x: node.position?.x || 100,
-      y: node.position?.y || 100,
+      y: node.position?.y || 100
     }));
 
     // Prepare links for simulation with validation
     const nodeIds = new Set(nodes.map(n => n.id));
     const simulationLinks = (edges || [])
-      .filter(edge => edge && nodeIds.has(edge.source) && nodeIds.has(edge.target))
-      .map((edge) => ({
+      .filter(
+        edge => edge && nodeIds.has(edge.source) && nodeIds.has(edge.target)
+      )
+      .map(edge => ({
         source: edge.source,
-        target: edge.target,
+        target: edge.target
       }));
 
     // Create force simulation
@@ -198,7 +216,7 @@ export function applyForceLayout(
 
     // Apply calculated positions
     return simulationNodes.map((simNode: any) => {
-      const originalNode = nodes.find((n) => n.id === simNode.id);
+      const originalNode = nodes.find(n => n.id === simNode.id);
       if (!originalNode) {
         return simNode;
       }
@@ -206,8 +224,8 @@ export function applyForceLayout(
         ...originalNode,
         position: {
           x: isFinite(simNode.x) ? simNode.x : originalNode.position?.x || 100,
-          y: isFinite(simNode.y) ? simNode.y : originalNode.position?.y || 100,
-        },
+          y: isFinite(simNode.y) ? simNode.y : originalNode.position?.y || 100
+        }
       };
     });
   } catch (error) {
@@ -236,8 +254,12 @@ export function applyGridLayout(
 
   // Ensure startPos is valid
   const validStartPos = {
-    x: typeof startPos?.x === 'number' && isFinite(startPos.x) ? startPos.x : 100,
-    y: typeof startPos?.y === 'number' && isFinite(startPos.y) ? startPos.y : 100
+    x:
+      typeof startPos?.x === 'number' && isFinite(startPos.x)
+        ? startPos.x
+        : 100,
+    y:
+      typeof startPos?.y === 'number' && isFinite(startPos.y) ? startPos.y : 100
   };
 
   return nodes.map((node, index) => {
@@ -248,8 +270,8 @@ export function applyGridLayout(
       ...node,
       position: {
         x: validStartPos.x + col * nodeSpacing,
-        y: validStartPos.y + row * nodeSpacing,
-      },
+        y: validStartPos.y + row * nodeSpacing
+      }
     };
   });
 }
@@ -290,12 +312,12 @@ function checkIfHierarchical(nodes: Node[], edges: Edge[]): boolean {
   const inDegree = new Map<string, number>();
   const outDegree = new Map<string, number>();
 
-  nodes.forEach((node) => {
+  nodes.forEach(node => {
     inDegree.set(node.id, 0);
     outDegree.set(node.id, 0);
   });
 
-  edges.forEach((edge) => {
+  edges.forEach(edge => {
     inDegree.set(edge.target, (inDegree.get(edge.target) || 0) + 1);
     outDegree.set(edge.source, (outDegree.get(edge.source) || 0) + 1);
   });
@@ -305,7 +327,7 @@ function checkIfHierarchical(nodes: Node[], edges: Edge[]): boolean {
   let sinks = 0;
   let intermediate = 0;
 
-  nodes.forEach((node) => {
+  nodes.forEach(node => {
     const inCount = inDegree.get(node.id) || 0;
     const outCount = outDegree.get(node.id) || 0;
 
@@ -345,12 +367,12 @@ export function applyLayoutWithAnimation(
 
   // Add transition style for smooth animation
   if (options.animate) {
-    layoutedNodes = layoutedNodes.map((node) => ({
+    layoutedNodes = layoutedNodes.map(node => ({
       ...node,
       style: {
         ...node.style,
-        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-      },
+        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+      }
     }));
   }
 
@@ -370,44 +392,52 @@ export function layoutNewNodes(
   if (!newNodes || !Array.isArray(newNodes) || newNodes.length === 0) {
     return [];
   }
-  
+
   // Ensure dropPosition is valid
   const validDropPosition = {
     x: typeof dropPosition?.x === 'number' ? dropPosition.x : 100,
     y: typeof dropPosition?.y === 'number' ? dropPosition.y : 100
   };
-  
+
   // Single node - just place at drop position
   if (newNodes.length === 1) {
-    return [{
-      ...newNodes[0],
-      position: validDropPosition,
-    }];
+    return [
+      {
+        ...newNodes[0],
+        position: validDropPosition
+      }
+    ];
   }
 
   // For multiple nodes, apply layout
   try {
     let layoutedNodes: Node[];
-    
+
     // If we have edges, use dagre for hierarchical layout
     if (edges && edges.length > 0) {
-      console.log('[Layout] Using dagre for', newNodes.length, 'nodes with', edges.length, 'edges');
-      
+      console.log(
+        '[Layout] Using dagre for',
+        newNodes.length,
+        'nodes with',
+        edges.length,
+        'edges'
+      );
+
       // Ensure nodes have valid positions before layout
       const nodesForLayout = newNodes.map((node, index) => ({
         ...node,
-        position: node.position || { 
-          x: validDropPosition.x + (index * 100), 
-          y: validDropPosition.y + (index * 100) 
+        position: node.position || {
+          x: validDropPosition.x + index * 100,
+          y: validDropPosition.y + index * 100
         }
       }));
-      
+
       layoutedNodes = applyDagreLayout(nodesForLayout, edges, {
-        direction: 'LR',  // Left-Right for prompt graphs
-        nodeSpacing: 200,  // Increased spacing between nodes
-        rankSpacing: 300,  // Increased spacing between ranks
+        direction: 'LR', // Left-Right for prompt graphs
+        nodeSpacing: 200, // Increased spacing between nodes
+        rankSpacing: 300 // Increased spacing between ranks
       });
-      
+
       // If dagre failed, try grid layout
       if (!layoutedNodes || layoutedNodes.length === 0) {
         console.warn('[Layout] Dagre failed, falling back to grid');
@@ -417,9 +447,13 @@ export function layoutNewNodes(
       }
     } else {
       // No edges, use simple grid layout
-      console.log('[Layout] Using grid for', newNodes.length, 'nodes without edges');
+      console.log(
+        '[Layout] Using grid for',
+        newNodes.length,
+        'nodes without edges'
+      );
       layoutedNodes = applyGridLayout(newNodes, validDropPosition, {
-        nodeSpacing: 300  // Increased spacing for grid layout
+        nodeSpacing: 300 // Increased spacing for grid layout
       });
     }
 
@@ -429,8 +463,8 @@ export function layoutNewNodes(
       return newNodes.map((node, index) => ({
         ...node,
         position: {
-          x: validDropPosition.x + (index * 100),
-          y: validDropPosition.y + (index * 50)
+          x: validDropPosition.x + index * 100,
+          y: validDropPosition.y + index * 50
         }
       }));
     }
@@ -443,25 +477,29 @@ export function layoutNewNodes(
         const defaultHeight = node.type === 'weightedChoice' ? 200 : 100;
         const width = node.width || node.measured?.width || defaultWidth;
         const height = node.height || node.measured?.height || defaultHeight;
-        
+
         return {
           minX: Math.min(acc.minX, pos.x),
           minY: Math.min(acc.minY, pos.y),
           maxX: Math.max(acc.maxX, pos.x + width),
-          maxY: Math.max(acc.maxY, pos.y + height),
+          maxY: Math.max(acc.maxY, pos.y + height)
         };
       },
       {
         minX: Infinity,
         minY: Infinity,
         maxX: -Infinity,
-        maxY: -Infinity,
+        maxY: -Infinity
       }
     );
 
     // Check if bounds are valid
-    if (isFinite(bounds.minX) && isFinite(bounds.minY) && 
-        isFinite(bounds.maxX) && isFinite(bounds.maxY)) {
+    if (
+      isFinite(bounds.minX) &&
+      isFinite(bounds.minY) &&
+      isFinite(bounds.maxX) &&
+      isFinite(bounds.maxY)
+    ) {
       // Center the layout at drop position
       const centerX = (bounds.minX + bounds.maxX) / 2;
       const centerY = (bounds.minY + bounds.maxY) / 2;
@@ -469,18 +507,17 @@ export function layoutNewNodes(
       const offsetY = validDropPosition.y - centerY;
 
       // Apply offset to center at drop position
-      return layoutedNodes.map((node) => ({
+      return layoutedNodes.map(node => ({
         ...node,
         position: {
           x: (node.position?.x || 0) + offsetX,
-          y: (node.position?.y || 0) + offsetY,
-        },
+          y: (node.position?.y || 0) + offsetY
+        }
       }));
     }
 
     // Bounds invalid, return layouted nodes as is
     return layoutedNodes;
-    
   } catch (error) {
     console.error('[Layout] Unexpected error:', error);
     // Emergency fallback - simple spacing

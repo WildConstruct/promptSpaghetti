@@ -5,7 +5,11 @@
 
 import { z } from 'zod';
 import { PSGFileSchema, PSGFile, parsePSG } from '../fileFormats/psg';
-import { PSGLibFileSchema, PSGLibFile, parsePSGLib } from '../fileFormats/psglib';
+import {
+  PSGLibFileSchema,
+  PSGLibFile,
+  parsePSGLib
+} from '../fileFormats/psglib';
 import { nodeRegistry, INodeType } from '../runtime/nodeRegistry';
 
 /**
@@ -61,33 +65,33 @@ export interface ValidationSuggestion {
 export enum ValidationErrorCode {
   // JSON errors
   INVALID_JSON = 'INVALID_JSON',
-  
+
   // Schema errors
   INVALID_SCHEMA = 'INVALID_SCHEMA',
   MISSING_REQUIRED_FIELD = 'MISSING_REQUIRED_FIELD',
   INVALID_FIELD_TYPE = 'INVALID_FIELD_TYPE',
-  
+
   // Version errors
   UNSUPPORTED_VERSION = 'UNSUPPORTED_VERSION',
   VERSION_TOO_OLD = 'VERSION_TOO_OLD',
   VERSION_TOO_NEW = 'VERSION_TOO_NEW',
-  
+
   // Node errors
   UNKNOWN_NODE_TYPE = 'UNKNOWN_NODE_TYPE',
   INVALID_NODE_ID = 'INVALID_NODE_ID',
   DUPLICATE_NODE_ID = 'DUPLICATE_NODE_ID',
   OUTPUT_IN_FRAGMENT = 'OUTPUT_IN_FRAGMENT',
-  
+
   // Edge errors
   INVALID_EDGE_SOURCE = 'INVALID_EDGE_SOURCE',
   INVALID_EDGE_TARGET = 'INVALID_EDGE_TARGET',
   DUPLICATE_EDGE_ID = 'DUPLICATE_EDGE_ID',
   CIRCULAR_DEPENDENCY = 'CIRCULAR_DEPENDENCY',
-  
+
   // Region errors
   INVALID_REGION_NODES = 'INVALID_REGION_NODES',
   EMPTY_REGION = 'EMPTY_REGION',
-  
+
   // Port errors
   INVALID_PORT_DIRECTION = 'INVALID_PORT_DIRECTION',
   DUPLICATE_PORT_ID = 'DUPLICATE_PORT_ID'
@@ -111,7 +115,7 @@ export enum ValidationWarningCode {
  */
 export class AssetValidator {
   private nodeRegistry = nodeRegistry;
-  
+
   /**
    * Validate an asset file (auto-detects format)
    */
@@ -119,7 +123,7 @@ export class AssetValidator {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const suggestions: ValidationSuggestion[] = [];
-    
+
     // Step 1: Parse JSON
     let data: any;
     try {
@@ -132,7 +136,7 @@ export class AssetValidator {
       });
       return { valid: false, errors, warnings, suggestions };
     }
-    
+
     // Step 2: Detect format
     const format = this.detectFormat(data);
     if (!format) {
@@ -142,7 +146,7 @@ export class AssetValidator {
       });
       return { valid: false, errors, warnings, suggestions };
     }
-    
+
     // Step 3: Validate based on format
     if (format === 'psglib') {
       return this.validatePSGLib(data);
@@ -150,7 +154,7 @@ export class AssetValidator {
       return this.validatePSG(data);
     }
   }
-  
+
   /**
    * Validate PSG format file
    */
@@ -158,7 +162,7 @@ export class AssetValidator {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const suggestions: ValidationSuggestion[] = [];
-    
+
     // Schema validation
     const schemaResult = PSGFileSchema.safeParse(data);
     if (!schemaResult.success) {
@@ -172,39 +176,46 @@ export class AssetValidator {
       });
       return { valid: false, errors, warnings, suggestions };
     }
-    
+
     const psgFile = schemaResult.data;
-    
+
     // Version validation
     const versionErrors = this.validateVersion(psgFile.version, '1.0.0');
     errors.push(...versionErrors);
-    
+
     // Node validation
-    const nodeResults = this.validateNodes(psgFile.nodes, psgFile.metadata?.type === 'MULTI-ASPECT');
+    const nodeResults = this.validateNodes(
+      psgFile.nodes,
+      psgFile.metadata?.type === 'MULTI-ASPECT'
+    );
     errors.push(...nodeResults.errors);
     warnings.push(...nodeResults.warnings);
-    
+
     // Edge validation
     const edgeResults = this.validateEdges(psgFile.edges, psgFile.nodes);
     errors.push(...edgeResults.errors);
     warnings.push(...edgeResults.warnings);
-    
+
     // Region validation
     if (psgFile.regions) {
-      const regionResults = this.validateRegions(psgFile.regions, psgFile.nodes);
+      const regionResults = this.validateRegions(
+        psgFile.regions,
+        psgFile.nodes
+      );
       errors.push(...regionResults.errors);
       warnings.push(...regionResults.warnings);
     }
-    
+
     // Suggestions
     if (!psgFile.description) {
       suggestions.push({
         code: 'ADD_DESCRIPTION',
         message: 'Consider adding a description',
-        recommendation: 'Add a description field to help users understand this fragment'
+        recommendation:
+          'Add a description field to help users understand this fragment'
       });
     }
-    
+
     // Metadata
     const metadata = {
       format: 'psg' as const,
@@ -213,7 +224,7 @@ export class AssetValidator {
       edgeCount: psgFile.edges.length,
       nodeTypes: [...new Set(psgFile.nodes.map(n => n.type))]
     };
-    
+
     return {
       valid: errors.length === 0,
       errors,
@@ -222,7 +233,7 @@ export class AssetValidator {
       metadata
     };
   }
-  
+
   /**
    * Validate PSGLib format file
    */
@@ -230,7 +241,7 @@ export class AssetValidator {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const suggestions: ValidationSuggestion[] = [];
-    
+
     // Schema validation
     const schemaResult = PSGLibFileSchema.safeParse(data);
     if (!schemaResult.success) {
@@ -244,13 +255,16 @@ export class AssetValidator {
       });
       return { valid: false, errors, warnings, suggestions };
     }
-    
+
     const psgLibFile = schemaResult.data;
-    
+
     // Version validation
-    const versionErrors = this.validateVersion(psgLibFile.formatVersion, '1.0.0');
+    const versionErrors = this.validateVersion(
+      psgLibFile.formatVersion,
+      '1.0.0'
+    );
     errors.push(...versionErrors);
-    
+
     // Node validation (PSGLib uses different format)
     const nodeResults = this.validatePSGLibNodes(
       psgLibFile.graph.nodes,
@@ -258,7 +272,7 @@ export class AssetValidator {
     );
     errors.push(...nodeResults.errors);
     warnings.push(...nodeResults.warnings);
-    
+
     // Edge validation
     const edgeResults = this.validatePSGLibEdges(
       psgLibFile.graph.edges,
@@ -266,15 +280,18 @@ export class AssetValidator {
     );
     errors.push(...edgeResults.errors);
     warnings.push(...edgeResults.warnings);
-    
+
     // Metadata validation
-    if (!psgLibFile.metadata.author || psgLibFile.metadata.author === 'Unknown') {
+    if (
+      !psgLibFile.metadata.author ||
+      psgLibFile.metadata.author === 'Unknown'
+    ) {
       warnings.push({
         code: ValidationWarningCode.MISSING_AUTHOR,
         message: 'Author field is missing or set to "Unknown"'
       });
     }
-    
+
     // Suggestions
     if (psgLibFile.metadata.tags.length === 0) {
       suggestions.push({
@@ -283,7 +300,7 @@ export class AssetValidator {
         recommendation: 'Add relevant tags to help users find this preset'
       });
     }
-    
+
     // Metadata
     const metadata = {
       format: 'psglib' as const,
@@ -292,7 +309,7 @@ export class AssetValidator {
       edgeCount: psgLibFile.graph.edges.length,
       nodeTypes: psgLibFile.metadata.nodeTypes
     };
-    
+
     return {
       valid: errors.length === 0,
       errors,
@@ -301,15 +318,18 @@ export class AssetValidator {
       metadata
     };
   }
-  
+
   /**
    * Validate nodes (PSG format)
    */
-  private validateNodes(nodes: any[], isFragment: boolean): { errors: ValidationError[], warnings: ValidationWarning[] } {
+  private validateNodes(
+    nodes: any[],
+    isFragment: boolean
+  ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const nodeIds = new Set<string>();
-    
+
     nodes.forEach((node, index) => {
       // Check for duplicate IDs
       if (nodeIds.has(node.id)) {
@@ -320,7 +340,7 @@ export class AssetValidator {
         });
       }
       nodeIds.add(node.id);
-      
+
       // Check for Output nodes in fragments
       if (isFragment && node.type === 'Output') {
         errors.push({
@@ -330,7 +350,7 @@ export class AssetValidator {
           details: { nodeId: node.id }
         });
       }
-      
+
       // Validate node type exists in registry
       const nodeType = this.nodeRegistry.getByPsgType(node.type);
       if (!nodeType) {
@@ -347,7 +367,7 @@ export class AssetValidator {
           path: `nodes[${index}]`
         });
       }
-      
+
       // Check for valid coordinates
       if (typeof node.x !== 'number' || typeof node.y !== 'number') {
         errors.push({
@@ -357,18 +377,21 @@ export class AssetValidator {
         });
       }
     });
-    
+
     return { errors, warnings };
   }
-  
+
   /**
    * Validate nodes (PSGLib format)
    */
-  private validatePSGLibNodes(nodes: any[], isFragment?: boolean): { errors: ValidationError[], warnings: ValidationWarning[] } {
+  private validatePSGLibNodes(
+    nodes: any[],
+    isFragment?: boolean
+  ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const nodeIds = new Set<string>();
-    
+
     nodes.forEach((node, index) => {
       // Check for duplicate IDs
       if (nodeIds.has(node.id)) {
@@ -379,7 +402,7 @@ export class AssetValidator {
         });
       }
       nodeIds.add(node.id);
-      
+
       // Check for Output nodes in fragments
       if (isFragment && node.type === 'output') {
         errors.push({
@@ -389,7 +412,7 @@ export class AssetValidator {
           details: { nodeId: node.id }
         });
       }
-      
+
       // Validate node type exists in registry (PSGLib uses React Flow types)
       const nodeType = this.nodeRegistry.getByReactFlowType(node.type);
       if (!nodeType && node.type !== 'enhancedBoundingBox') {
@@ -406,9 +429,13 @@ export class AssetValidator {
           path: `graph.nodes[${index}]`
         });
       }
-      
+
       // Check for valid position
-      if (!node.position || typeof node.position.x !== 'number' || typeof node.position.y !== 'number') {
+      if (
+        !node.position ||
+        typeof node.position.x !== 'number' ||
+        typeof node.position.y !== 'number'
+      ) {
         errors.push({
           code: ValidationErrorCode.INVALID_FIELD_TYPE,
           message: 'Node must have position object with numeric x and y',
@@ -416,20 +443,23 @@ export class AssetValidator {
         });
       }
     });
-    
+
     return { errors, warnings };
   }
-  
+
   /**
    * Validate edges (PSG format)
    */
-  private validateEdges(edges: any[], nodes: any[]): { errors: ValidationError[], warnings: ValidationWarning[] } {
+  private validateEdges(
+    edges: any[],
+    nodes: any[]
+  ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const edgeIds = new Set<string>();
     const nodeIds = new Set(nodes.map(n => n.id));
     const connectedNodes = new Set<string>();
-    
+
     edges.forEach((edge, index) => {
       // Check for duplicate IDs
       if (edgeIds.has(edge.id)) {
@@ -440,7 +470,7 @@ export class AssetValidator {
         });
       }
       edgeIds.add(edge.id);
-      
+
       // Validate source exists
       if (!nodeIds.has(edge.source)) {
         errors.push({
@@ -449,7 +479,7 @@ export class AssetValidator {
           path: `edges[${index}]`
         });
       }
-      
+
       // Validate target exists
       if (!nodeIds.has(edge.target)) {
         errors.push({
@@ -458,12 +488,12 @@ export class AssetValidator {
           path: `edges[${index}]`
         });
       }
-      
+
       // Track connected nodes
       connectedNodes.add(edge.source);
       connectedNodes.add(edge.target);
     });
-    
+
     // Check for disconnected nodes
     nodes.forEach(node => {
       if (!connectedNodes.has(node.id) && node.type !== 'Output') {
@@ -474,7 +504,7 @@ export class AssetValidator {
         });
       }
     });
-    
+
     // Check for circular dependencies
     const cycles = this.detectCycles(edges);
     if (cycles.length > 0) {
@@ -484,19 +514,22 @@ export class AssetValidator {
         details: { cycles }
       });
     }
-    
+
     return { errors, warnings };
   }
-  
+
   /**
    * Validate edges (PSGLib format)
    */
-  private validatePSGLibEdges(edges: any[], nodes: any[]): { errors: ValidationError[], warnings: ValidationWarning[] } {
+  private validatePSGLibEdges(
+    edges: any[],
+    nodes: any[]
+  ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     // Similar to validateEdges but with PSGLib path structure
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const nodeIds = new Set(nodes.map(n => n.id));
-    
+
     edges.forEach((edge, index) => {
       if (!nodeIds.has(edge.source)) {
         errors.push({
@@ -505,7 +538,7 @@ export class AssetValidator {
           path: `graph.edges[${index}]`
         });
       }
-      
+
       if (!nodeIds.has(edge.target)) {
         errors.push({
           code: ValidationErrorCode.INVALID_EDGE_TARGET,
@@ -514,18 +547,21 @@ export class AssetValidator {
         });
       }
     });
-    
+
     return { errors, warnings };
   }
-  
+
   /**
    * Validate regions
    */
-  private validateRegions(regions: any[], nodes: any[]): { errors: ValidationError[], warnings: ValidationWarning[] } {
+  private validateRegions(
+    regions: any[],
+    nodes: any[]
+  ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const nodeIds = new Set(nodes.map(n => n.id));
-    
+
     regions.forEach((region, index) => {
       // Check if region is empty
       if (!region.nodes || region.nodes.length === 0) {
@@ -535,7 +571,7 @@ export class AssetValidator {
           path: `regions[${index}]`
         });
       }
-      
+
       // Validate all nodes in region exist
       region.nodes?.forEach((nodeId: string) => {
         if (!nodeIds.has(nodeId)) {
@@ -546,7 +582,7 @@ export class AssetValidator {
           });
         }
       });
-      
+
       // Validate ports if present
       if (region.ports) {
         const portIds = new Set<string>();
@@ -559,7 +595,7 @@ export class AssetValidator {
             });
           }
           portIds.add(port.id);
-          
+
           if (port.direction !== 'input' && port.direction !== 'output') {
             errors.push({
               code: ValidationErrorCode.INVALID_PORT_DIRECTION,
@@ -570,20 +606,23 @@ export class AssetValidator {
         });
       }
     });
-    
+
     return { errors, warnings };
   }
-  
+
   /**
    * Validate version compatibility
    */
-  private validateVersion(version: string, currentVersion: string): ValidationError[] {
+  private validateVersion(
+    version: string,
+    currentVersion: string
+  ): ValidationError[] {
     const errors: ValidationError[] = [];
-    
+
     // Parse versions
     const versionParts = version.split('.').map(Number);
     const currentParts = currentVersion.split('.').map(Number);
-    
+
     if (versionParts.length !== 3) {
       errors.push({
         code: ValidationErrorCode.UNSUPPORTED_VERSION,
@@ -591,10 +630,10 @@ export class AssetValidator {
       });
       return errors;
     }
-    
+
     const [major, minor, patch] = versionParts;
     const [currentMajor] = currentParts;
-    
+
     // Check major version compatibility
     if (major > currentMajor) {
       errors.push({
@@ -607,10 +646,10 @@ export class AssetValidator {
         message: `File version ${version} is too old. Minimum supported version is ${currentMajor - 1}.0.0`
       });
     }
-    
+
     return errors;
   }
-  
+
   /**
    * Detect format from data
    */
@@ -623,13 +662,13 @@ export class AssetValidator {
     }
     return null;
   }
-  
+
   /**
    * Detect circular dependencies in edges
    */
   private detectCycles(edges: any[]): string[][] {
     const adjacency = new Map<string, Set<string>>();
-    
+
     // Build adjacency list
     edges.forEach(edge => {
       if (!adjacency.has(edge.source)) {
@@ -637,15 +676,15 @@ export class AssetValidator {
       }
       adjacency.get(edge.source)!.add(edge.target);
     });
-    
+
     const cycles: string[][] = [];
     const visited = new Set<string>();
     const recursionStack: string[] = [];
-    
+
     function dfs(node: string): boolean {
       visited.add(node);
       recursionStack.push(node);
-      
+
       const neighbors = adjacency.get(node) || new Set();
       for (const neighbor of neighbors) {
         if (!visited.has(neighbor)) {
@@ -659,18 +698,18 @@ export class AssetValidator {
           return true;
         }
       }
-      
+
       recursionStack.pop();
       return false;
     }
-    
+
     // Check all nodes
     for (const [node] of adjacency) {
       if (!visited.has(node)) {
         dfs(node);
       }
     }
-    
+
     return cycles;
   }
 }
@@ -681,7 +720,9 @@ export const assetValidator = new AssetValidator();
 /**
  * Validate an asset file
  */
-export async function validateAsset(content: string): Promise<ValidationResult> {
+export async function validateAsset(
+  content: string
+): Promise<ValidationResult> {
   return assetValidator.validate(content);
 }
 
@@ -690,19 +731,23 @@ export async function validateAsset(content: string): Promise<ValidationResult> 
  */
 export function formatValidationResult(result: ValidationResult): string {
   const lines: string[] = [];
-  
+
   if (result.valid) {
     lines.push('✅ Asset validation passed');
   } else {
     lines.push('❌ Asset validation failed');
   }
-  
+
   if (result.metadata) {
-    lines.push(`\nFormat: ${result.metadata.format.toUpperCase()} v${result.metadata.version}`);
-    lines.push(`Nodes: ${result.metadata.nodeCount}, Edges: ${result.metadata.edgeCount}`);
+    lines.push(
+      `\nFormat: ${result.metadata.format.toUpperCase()} v${result.metadata.version}`
+    );
+    lines.push(
+      `Nodes: ${result.metadata.nodeCount}, Edges: ${result.metadata.edgeCount}`
+    );
     lines.push(`Node Types: ${result.metadata.nodeTypes.join(', ')}`);
   }
-  
+
   if (result.errors.length > 0) {
     lines.push('\n🚫 Errors:');
     result.errors.forEach(error => {
@@ -712,14 +757,14 @@ export function formatValidationResult(result: ValidationResult): string {
       }
     });
   }
-  
+
   if (result.warnings.length > 0) {
     lines.push('\n⚠️  Warnings:');
     result.warnings.forEach(warning => {
       lines.push(`  - ${warning.message} [${warning.code}]`);
     });
   }
-  
+
   if (result.suggestions.length > 0) {
     lines.push('\n💡 Suggestions:');
     result.suggestions.forEach(suggestion => {
@@ -727,6 +772,6 @@ export function formatValidationResult(result: ValidationResult): string {
       lines.push(`    ${suggestion.recommendation}`);
     });
   }
-  
+
   return lines.join('\n');
 }

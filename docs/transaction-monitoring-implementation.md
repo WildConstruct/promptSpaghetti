@@ -155,7 +155,13 @@ The transaction monitoring system provides comprehensive admin capabilities for:
   "amount_threshold_high": 500000,
   "behavior_threshold": 3,
   "payment_method_sharing_threshold": 5,
-  "enabled_patterns": ["velocity", "amount", "behavior", "payment_method", "time"]
+  "enabled_patterns": [
+    "velocity",
+    "amount",
+    "behavior",
+    "payment_method",
+    "time"
+  ]
 }
 ```
 

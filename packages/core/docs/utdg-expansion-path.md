@@ -61,7 +61,7 @@ const PHASE_1_ERAS = [
   'High Middle Ages',
   'Late Middle Ages',
   'Renaissance',
-  'Baroque Period',
+  'Baroque Period'
 ];
 ```
 

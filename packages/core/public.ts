@@ -4,13 +4,13 @@
 export type { GraphNode, GraphEdge, Graph, PSGFile } from './types/graph';
 
 // Runtime system exports - commented out to fix Netlify build
-// export type { 
+// export type {
 //   ExecutionContext,
 //   RuntimeNode
 // } from './runtime';
 
-// Export both types and classes for Advanced runtime - commented out to fix Netlify build  
-// export { 
+// Export both types and classes for Advanced runtime - commented out to fix Netlify build
+// export {
 //   AdvancedRuntimeNode,
 //   type AdvancedExecutionContext,
 //   type AdvancedNodeConfig,

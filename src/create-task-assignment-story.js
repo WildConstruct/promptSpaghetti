@@ -38,7 +38,13 @@ const taskAssignmentSystemStory = {
   wipClass: 'infrastructure',
   epic: 'Task Management & Coordination System',
   story: 'TASK-ASSIGNMENT-FIX',
-  tags: ['task-management', 'priority-system', 'automation', 'business-alignment', 'qa-blocker'],
+  tags: [
+    'task-management',
+    'priority-system',
+    'automation',
+    'business-alignment',
+    'qa-blocker'
+  ],
 
   acceptanceCriteria: [
     'Epic 19 tasks are completely excluded from --priority-only flag results',
@@ -48,7 +54,7 @@ const taskAssignmentSystemStory = {
     'Epic 19 tasks remain in database but are not assigned to developers through automation',
     'Business priority alignment is validated through automated tests',
     'Task assignment audit log shows alignment with business priorities',
-    'QA validation confirms Epic 19 work stops being auto-assigned',
+    'QA validation confirms Epic 19 work stops being auto-assigned'
   ],
 
   businessValue:
@@ -67,8 +73,8 @@ const taskAssignmentSystemStory = {
         'Current priority filtering logic documented',
         'Epic 19 task inclusion root cause identified',
         'Business priority mapping gaps found',
-        'Scope of required fixes determined',
-      ],
+        'Scope of required fixes determined'
+      ]
     },
     {
       title: 'Implement Epic 19 Exclusion in Priority Filtering',
@@ -81,8 +87,8 @@ const taskAssignmentSystemStory = {
         'Epic 19 tasks excluded from --priority-only results',
         'Exclusion logic handles all Epic 19 task variations',
         'Business deprioritization rules implemented in code',
-        'Priority filtering respects IMMEDIATE-PRIORITIES.md',
-      ],
+        'Priority filtering respects IMMEDIATE-PRIORITIES.md'
+      ]
     },
     {
       title: 'Add Business Priority Mapping System',
@@ -95,8 +101,8 @@ const taskAssignmentSystemStory = {
         'Business priority mapping system created',
         'IMMEDIATE-PRIORITIES.md requirements integrated into code',
         'Epic 8, authentication, and file browser tasks marked as business-critical',
-        'Dynamic priority adjustment based on business document changes',
-      ],
+        'Dynamic priority adjustment based on business document changes'
+      ]
     },
     {
       title: 'Create Task Assignment Audit System',
@@ -109,10 +115,10 @@ const taskAssignmentSystemStory = {
         'Task assignment audit log implemented',
         'Business priority alignment tracking functional',
         'Epic 19 assignment attempts logged and blocked',
-        'Audit report shows task distribution aligns with business priorities',
-      ],
-    },
-  ],
+        'Audit report shows task distribution aligns with business priorities'
+      ]
+    }
+  ]
 };
 
 // Utility functions
@@ -135,8 +141,8 @@ async function loadCurrentState() {
       stories: {},
       metadata: {
         created: new Date().toISOString(),
-        lastUpdated: new Date().toISOString(),
-      },
+        lastUpdated: new Date().toISOString()
+      }
     };
   }
 }
@@ -177,8 +183,8 @@ function createStoryObject(storyDef, storyId) {
       priority_level: storyDef.priority === 'critical' ? 0 : 1,
       business_impact: 'high',
       qa_blocker: true,
-      epic_category: 'Task Management System',
-    },
+      epic_category: 'Task Management System'
+    }
   };
 }
 
@@ -201,7 +207,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
       tags: taskDef.tags,
       acceptanceCriteria: taskDef.acceptance,
       dependencies: index > 0 ? [createdTasks[index - 1].id] : [],
-      businessValue: 'Ensures developer resources focus on business-critical work',
+      businessValue:
+        'Ensures developer resources focus on business-critical work',
       assignee: 'Unassigned',
       created: new Date().toISOString(),
       lastUpdated: new Date().toISOString(),
@@ -211,8 +218,8 @@ function createImplementationTasks(storyId, implementationTasks, state) {
         automated: true,
         priority_level: taskDef.priority === 'critical' ? 0 : 1,
         parent_story: storyId,
-        sequence_order: index + 1,
-      },
+        sequence_order: index + 1
+      }
     };
 
     state.tasks[taskId] = task;
@@ -223,11 +230,19 @@ function createImplementationTasks(storyId, implementationTasks, state) {
 }
 
 async function createTaskAssignmentStory() {
-  console.log('🚨 Creating Critical QA Blocker Story: Task Assignment System Fix...\n');
+  console.log(
+    '🚨 Creating Critical QA Blocker Story: Task Assignment System Fix...\n'
+  );
   console.log('📋 This addresses the highest priority QA blocker:');
-  console.log('   ISSUE: --priority-only flag assigns Epic 19 tasks despite business deprioritization');
-  console.log('   IMPACT: Wasted developer effort on non-business-critical privacy features');
-  console.log('   SOLUTION: Fix priority filtering to align with IMMEDIATE-PRIORITIES.md\n');
+  console.log(
+    '   ISSUE: --priority-only flag assigns Epic 19 tasks despite business deprioritization'
+  );
+  console.log(
+    '   IMPACT: Wasted developer effort on non-business-critical privacy features'
+  );
+  console.log(
+    '   SOLUTION: Fix priority filtering to align with IMMEDIATE-PRIORITIES.md\n'
+  );
 
   try {
     // Load current state
@@ -245,7 +260,9 @@ async function createTaskAssignmentStory() {
 
     // Check if story already exists
     if (storyExists(state, taskAssignmentSystemStory.title)) {
-      console.log('⏭️  Story already exists - updating with latest requirements...');
+      console.log(
+        '⏭️  Story already exists - updating with latest requirements...'
+      );
     }
 
     const storyId = generateTaskId('STORY-TASK-ASSIGNMENT');
@@ -278,14 +295,18 @@ async function createTaskAssignmentStory() {
     await saveState(state);
 
     console.log(`✅ Created Story: ${story.title}`);
-    console.log(`   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`);
+    console.log(
+      `   📊 Priority: ${story.priority} | ⏱️  Estimate: ${story.estimate}`
+    );
     console.log(`   🎯 Business Value: ${story.businessValue}`);
     console.log('');
 
     // Show created implementation tasks
     implementationTasks.forEach((task, index) => {
       console.log(`✅ Created Task ${index + 1}: ${task.title}`);
-      console.log(`   ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`);
+      console.log(
+        `   ID: ${task.id} | ⏱️  ${task.estimate} | 📊 ${task.priority} priority`
+      );
       if (task.dependencies.length > 0) {
         console.log(`   🔗 Depends on: ${task.dependencies.join(', ')}`);
       }
@@ -297,14 +318,22 @@ async function createTaskAssignmentStory() {
     console.log('='.repeat(60));
     console.log(`✅ Stories Created: ${storiesCreated}`);
     console.log(`✅ Implementation Tasks Created: ${tasksCreated}`);
-    console.log(`📋 Total Stories in System: ${Object.keys(state.stories).length}`);
-    console.log(`📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`);
+    console.log(
+      `📋 Total Stories in System: ${Object.keys(state.stories).length}`
+    );
+    console.log(
+      `📋 Total Tasks in System: ${Object.keys(state.tasks).length}\n`
+    );
 
     // Show business impact
     console.log('💰 BUSINESS IMPACT:\n');
     console.log('🎯 PROBLEM SOLVED:');
-    console.log('   • Stops wasting developer time on deprioritized Epic 19 privacy features');
-    console.log('   • Redirects effort to $2.3B Epic 8 film industry opportunity');
+    console.log(
+      '   • Stops wasting developer time on deprioritized Epic 19 privacy features'
+    );
+    console.log(
+      '   • Redirects effort to $2.3B Epic 8 film industry opportunity'
+    );
     console.log('   • Completes 80% finished authentication system faster');
     console.log('   • Aligns technical execution with business strategy\n');
 
@@ -324,23 +353,39 @@ async function createTaskAssignmentStory() {
 
     // Agent instructions
     console.log('🤖 NEXT STEPS FOR AGENTS:\n');
-    console.log('1. 🔧 Development Agents should grab these tasks immediately:');
+    console.log(
+      '1. 🔧 Development Agents should grab these tasks immediately:'
+    );
     console.log(`   node src/grab-tasks.js <agent-id> 4 --story=${storyId}`);
-    console.log('2. 📝 Start with analysis task to understand current priority filtering logic');
-    console.log('3. 🚫 Implement Epic 19 exclusion in grab-tasks.js --priority-only flag');
-    console.log('4. ✅ Test that Epic 19 tasks are no longer auto-assigned to developers');
-    console.log('5. 📊 Validate business priority alignment through audit system\n');
+    console.log(
+      '2. 📝 Start with analysis task to understand current priority filtering logic'
+    );
+    console.log(
+      '3. 🚫 Implement Epic 19 exclusion in grab-tasks.js --priority-only flag'
+    );
+    console.log(
+      '4. ✅ Test that Epic 19 tasks are no longer auto-assigned to developers'
+    );
+    console.log(
+      '5. 📊 Validate business priority alignment through audit system\n'
+    );
 
-    console.log('🚨 CRITICAL: This fixes the highest priority QA blocker preventing proper task assignment!');
-    console.log('⏰ Timeline: 6 hours total - should be completed within 1 business day');
-    console.log('💡 Success Metric: Zero Epic 19 tasks assigned via --priority-only automation');
+    console.log(
+      '🚨 CRITICAL: This fixes the highest priority QA blocker preventing proper task assignment!'
+    );
+    console.log(
+      '⏰ Timeline: 6 hours total - should be completed within 1 business day'
+    );
+    console.log(
+      '💡 Success Metric: Zero Epic 19 tasks assigned via --priority-only automation'
+    );
 
     return {
       story: story,
       tasks: implementationTasks,
       created: storiesCreated,
       tasksCreated: tasksCreated,
-      total: Object.keys(state.tasks).length,
+      total: Object.keys(state.tasks).length
     };
   } catch (error) {
     console.error('❌ Failed to create task assignment story:', error);
@@ -358,5 +403,5 @@ if (require.main === module) {
 
 module.exports = {
   createTaskAssignmentStory,
-  taskAssignmentSystemStory,
+  taskAssignmentSystemStory
 };

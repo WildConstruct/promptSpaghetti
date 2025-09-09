@@ -63,20 +63,23 @@ export class TestDataManager {
         directory: 'test-data',
         cleanup: true,
         retentionDays: 7,
-        ...config.persistence,
+        ...config.persistence
       },
       generation: {
         deterministic: true,
         maxCacheSize: 1000,
         batchSize: 100,
-        ...config.generation,
-      },
+        ...config.generation
+      }
     };
 
     this.cache = new Map();
     this.snapshots = new Map();
     this.generators = new Map();
-    this.dataDirectory = path.join(process.cwd(), this.config.persistence.directory);
+    this.dataDirectory = path.join(
+      process.cwd(),
+      this.config.persistence.directory
+    );
     this.currentSeed = this.config.seed!;
 
     this.initializeGenerators();
@@ -95,7 +98,9 @@ export class TestDataManager {
         name: `Test User ${i + 1}`,
         role: options.role || 'user',
         active: options.active !== false,
-        createdAt: new Date(Date.now() - Math.random() * 86400000).toISOString(),
+        createdAt: new Date(
+          Date.now() - Math.random() * 86400000
+        ).toISOString(),
         permissions: options.permissions || ['read'],
         profile: {
           avatar: `https://api.dicebear.com/6.x/personas/svg?seed=user${i + 1}`,
@@ -103,9 +108,9 @@ export class TestDataManager {
           preferences: {
             theme: ['light', 'dark'][i % 2],
             notifications: true,
-            language: 'en',
-          },
-        },
+            language: 'en'
+          }
+        }
       }));
     });
 
@@ -128,8 +133,8 @@ export class TestDataManager {
             nodeCount: baseGraph.nodes.length,
             edgeCount: baseGraph.edges.length,
             complexity: this.calculateGraphComplexity(baseGraph),
-            testGenerated: true,
-          },
+            testGenerated: true
+          }
         };
       });
     });
@@ -145,13 +150,13 @@ export class TestDataManager {
         headers: {
           'content-type': 'application/json',
           'x-request-id': this.generateId('req'),
-          ...options.headers,
+          ...options.headers
         },
         metadata: {
           responseTime: Math.floor(Math.random() * 100) + 50,
           cached: false,
-          testGenerated: true,
-        },
+          testGenerated: true
+        }
       }));
     });
 
@@ -165,13 +170,15 @@ export class TestDataManager {
           name: `test-file-${i + 1}.${ext}`,
           size: Math.floor(Math.random() * 10000) + 1000,
           type: `application/${ext}`,
-          lastModified: new Date(Date.now() - Math.random() * 86400000).toISOString(),
+          lastModified: new Date(
+            Date.now() - Math.random() * 86400000
+          ).toISOString(),
           content: this.generateFileContent(ext, options),
           metadata: {
             checksum: randomBytes(16).toString('hex'),
             encoding: 'utf-8',
-            testGenerated: true,
-          },
+            testGenerated: true
+          }
         };
       });
     });
@@ -185,7 +192,7 @@ export class TestDataManager {
           executionTime: Math.floor(Math.random() * 1000) + 100,
           memoryUsage: Math.floor(Math.random() * 100) + 10,
           cpuUsage: Math.random() * 100,
-          networkLatency: Math.floor(Math.random() * 50) + 10,
+          networkLatency: Math.floor(Math.random() * 50) + 10
         },
         timestamp: new Date().toISOString(),
         environment: this.config.environment,
@@ -193,30 +200,37 @@ export class TestDataManager {
           executionTime: 500,
           memoryUsage: 50,
           cpuUsage: 30,
-          networkLatency: 20,
+          networkLatency: 20
         },
         passed: options.passed !== false,
-        testGenerated: true,
+        testGenerated: true
       }));
     });
 
     // Error data generator
     this.registerGenerator('error', (count = 1, options = {}) => {
-      const errorTypes = ['ValidationError', 'NetworkError', 'AuthenticationError', 'NotFoundError'];
+      const errorTypes = [
+        'ValidationError',
+        'NetworkError',
+        'AuthenticationError',
+        'NotFoundError'
+      ];
       return Array.from({ length: count }, (_, i) => ({
         id: this.generateId('error'),
         name: options.name || errorTypes[i % errorTypes.length],
         message: options.message || `Test error message ${i + 1}`,
         code: options.code || `E${1000 + i}`,
         statusCode: options.statusCode || 400,
-        stack: this.generateStackTrace(options.name || errorTypes[i % errorTypes.length]),
+        stack: this.generateStackTrace(
+          options.name || errorTypes[i % errorTypes.length]
+        ),
         timestamp: new Date().toISOString(),
         context: options.context || {
           operation: `test-operation-${i + 1}`,
           userId: this.generateId('user'),
-          requestId: this.generateId('req'),
+          requestId: this.generateId('req')
         },
-        testGenerated: true,
+        testGenerated: true
       }));
     });
   }
@@ -265,7 +279,9 @@ export class TestDataManager {
   /**
    * Generate batch of different data types
    */
-  async generateBatch(requests: TestDataRequest[]): Promise<Record<string, any[]>> {
+  async generateBatch(
+    requests: TestDataRequest[]
+  ): Promise<Record<string, any[]>> {
     const results: Record<string, any[]> = {};
 
     for (const request of requests) {
@@ -278,7 +294,10 @@ export class TestDataManager {
   /**
    * Create a data snapshot for a test suite
    */
-  async createSnapshot(testSuite: string, data: Record<string, any>): Promise<string> {
+  async createSnapshot(
+    testSuite: string,
+    data: Record<string, any>
+  ): Promise<string> {
     const snapshot: TestDataSnapshot = {
       id: this.generateId('snapshot'),
       timestamp: new Date().toISOString(),
@@ -288,8 +307,8 @@ export class TestDataManager {
         seed: this.currentSeed,
         environment: this.config.environment,
         testCount: Object.keys(data).length,
-        generatedBy: 'TestDataManager',
-      },
+        generatedBy: 'TestDataManager'
+      }
     };
 
     this.snapshots.set(snapshot.id, snapshot);
@@ -340,7 +359,11 @@ export class TestDataManager {
    */
   async createTestDatabase(name: string, schema?: any): Promise<string> {
     const dbId = this.generateId('db');
-    const dbPath = path.join(this.dataDirectory, 'databases', `${name}_${dbId}.json`);
+    const dbPath = path.join(
+      this.dataDirectory,
+      'databases',
+      `${name}_${dbId}.json`
+    );
 
     const database = {
       id: dbId,
@@ -348,7 +371,7 @@ export class TestDataManager {
       schema: schema || {},
       tables: {},
       createdAt: new Date().toISOString(),
-      testGenerated: true,
+      testGenerated: true
     };
 
     await fs.mkdir(path.dirname(dbPath), { recursive: true });
@@ -360,7 +383,10 @@ export class TestDataManager {
   /**
    * Seed test database with data
    */
-  async seedDatabase(dbId: string, tableData: Record<string, any[]>): Promise<void> {
+  async seedDatabase(
+    dbId: string,
+    tableData: Record<string, any[]>
+  ): Promise<void> {
     const dbPath = path.join(this.dataDirectory, 'databases', `*_${dbId}.json`);
     const files = await this.globFiles(dbPath);
 
@@ -378,7 +404,9 @@ export class TestDataManager {
   /**
    * Clean up test data
    */
-  async cleanup(options: { olderThan?: Date; testSuite?: string; force?: boolean } = {}): Promise<void> {
+  async cleanup(
+    options: { olderThan?: Date; testSuite?: string; force?: boolean } = {}
+  ): Promise<void> {
     const { olderThan, testSuite, force = false } = options;
 
     // Clear memory cache
@@ -428,7 +456,7 @@ export class TestDataManager {
       currentSeed: this.currentSeed,
       environment: this.config.environment,
       persistenceEnabled: this.config.persistence.enabled,
-      dataDirectory: this.dataDirectory,
+      dataDirectory: this.dataDirectory
     };
   }
 
@@ -440,10 +468,14 @@ export class TestDataManager {
       config: this.config,
       snapshots: Array.from(this.snapshots.values()),
       statistics: this.getStatistics(),
-      exportedAt: new Date().toISOString(),
+      exportedAt: new Date().toISOString()
     };
 
-    const exportPath = path.join(this.dataDirectory, 'exports', `test-data-export-${Date.now()}.${format}`);
+    const exportPath = path.join(
+      this.dataDirectory,
+      'exports',
+      `test-data-export-${Date.now()}.${format}`
+    );
     await fs.mkdir(path.dirname(exportPath), { recursive: true });
 
     if (format === 'json') {
@@ -519,7 +551,11 @@ export class TestDataManager {
   private generateFileContent(type: string, options: any): string {
     switch (type) {
       case 'json':
-        return JSON.stringify({ test: true, data: options.data || 'sample' }, null, 2);
+        return JSON.stringify(
+          { test: true, data: options.data || 'sample' },
+          null,
+          2
+        );
       case 'csv':
         return 'id,name,value\n1,test1,100\n2,test2,200\n3,test3,300';
       case 'txt':
@@ -536,19 +572,29 @@ export class TestDataManager {
       `${errorName}: Test error occurred`,
       '    at TestFunction (test-file.js:10:5)',
       '    at TestSuite (test-suite.js:25:10)',
-      '    at TestRunner (test-runner.js:50:15)',
+      '    at TestRunner (test-runner.js:50:15)'
     ].join('\n');
   }
 
   private async saveSnapshot(snapshot: TestDataSnapshot): Promise<void> {
-    const snapshotPath = path.join(this.dataDirectory, 'snapshots', `${snapshot.id}.json`);
+    const snapshotPath = path.join(
+      this.dataDirectory,
+      'snapshots',
+      `${snapshot.id}.json`
+    );
     await fs.mkdir(path.dirname(snapshotPath), { recursive: true });
     await fs.writeFile(snapshotPath, JSON.stringify(snapshot, null, 2));
   }
 
-  private async loadSnapshotFromDisk(snapshotId: string): Promise<TestDataSnapshot | null> {
+  private async loadSnapshotFromDisk(
+    snapshotId: string
+  ): Promise<TestDataSnapshot | null> {
     try {
-      const snapshotPath = path.join(this.dataDirectory, 'snapshots', `${snapshotId}.json`);
+      const snapshotPath = path.join(
+        this.dataDirectory,
+        'snapshots',
+        `${snapshotId}.json`
+      );
       const data = await fs.readFile(snapshotPath, 'utf8');
       return JSON.parse(data);
     } catch {
@@ -558,16 +604,26 @@ export class TestDataManager {
 
   private async deleteSnapshotFromDisk(snapshotId: string): Promise<void> {
     try {
-      const snapshotPath = path.join(this.dataDirectory, 'snapshots', `${snapshotId}.json`);
+      const snapshotPath = path.join(
+        this.dataDirectory,
+        'snapshots',
+        `${snapshotId}.json`
+      );
       await fs.unlink(snapshotPath);
     } catch {
       // Ignore errors when deleting
     }
   }
 
-  private async cleanupPersistentData(options: { olderThan?: Date }): Promise<void> {
+  private async cleanupPersistentData(options: {
+    olderThan?: Date;
+  }): Promise<void> {
     const { olderThan } = options;
-    const cutoffDate = olderThan || new Date(Date.now() - this.config.persistence.retentionDays * 24 * 60 * 60 * 1000);
+    const cutoffDate =
+      olderThan ||
+      new Date(
+        Date.now() - this.config.persistence.retentionDays * 24 * 60 * 60 * 1000
+      );
 
     const directories = ['snapshots', 'databases', 'exports'];
 
@@ -610,7 +666,13 @@ export class TestDataManager {
 
     for (const snapshot of data.snapshots) {
       rows.push(
-        ['Snapshot', snapshot.id, snapshot.timestamp, snapshot.testSuite, Object.keys(snapshot.data).length].join(',')
+        [
+          'Snapshot',
+          snapshot.id,
+          snapshot.timestamp,
+          snapshot.testSuite,
+          Object.keys(snapshot.data).length
+        ].join(',')
       );
     }
 
@@ -624,7 +686,9 @@ let globalTestDataManager: TestDataManager | null = null;
 /**
  * Get or create global test data manager instance
  */
-export function getTestDataManager(config?: Partial<TestDataConfig>): TestDataManager {
+export function getTestDataManager(
+  config?: Partial<TestDataConfig>
+): TestDataManager {
   if (!globalTestDataManager) {
     globalTestDataManager = new TestDataManager(config);
   }
@@ -643,40 +707,47 @@ export const testData = {
   /**
    * Generate users for testing
    */
-  users: (count = 1, options = {}) => getTestDataManager().generate({ type: 'user', count, options }),
+  users: (count = 1, options = {}) =>
+    getTestDataManager().generate({ type: 'user', count, options }),
 
   /**
    * Generate graphs for testing
    */
-  graphs: (count = 1, options = {}) => getTestDataManager().generate({ type: 'graph', count, options }),
+  graphs: (count = 1, options = {}) =>
+    getTestDataManager().generate({ type: 'graph', count, options }),
 
   /**
    * Generate API responses for testing
    */
-  apiResponses: (count = 1, options = {}) => getTestDataManager().generate({ type: 'apiResponse', count, options }),
+  apiResponses: (count = 1, options = {}) =>
+    getTestDataManager().generate({ type: 'apiResponse', count, options }),
 
   /**
    * Generate files for testing
    */
-  files: (count = 1, options = {}) => getTestDataManager().generate({ type: 'file', count, options }),
+  files: (count = 1, options = {}) =>
+    getTestDataManager().generate({ type: 'file', count, options }),
 
   /**
    * Generate performance data for testing
    */
-  performance: (count = 1, options = {}) => getTestDataManager().generate({ type: 'performance', count, options }),
+  performance: (count = 1, options = {}) =>
+    getTestDataManager().generate({ type: 'performance', count, options }),
 
   /**
    * Generate errors for testing
    */
-  errors: (count = 1, options = {}) => getTestDataManager().generate({ type: 'error', count, options }),
+  errors: (count = 1, options = {}) =>
+    getTestDataManager().generate({ type: 'error', count, options }),
 
   /**
    * Create snapshot of test data
    */
-  snapshot: (testSuite: string, data: Record<string, any>) => getTestDataManager().createSnapshot(testSuite, data),
+  snapshot: (testSuite: string, data: Record<string, any>) =>
+    getTestDataManager().createSnapshot(testSuite, data),
 
   /**
    * Clean up test data
    */
-  cleanup: (options = {}) => getTestDataManager().cleanup(options),
+  cleanup: (options = {}) => getTestDataManager().cleanup(options)
 };

@@ -18,7 +18,13 @@ export interface ErrorContext {
 }
 
 export interface ErrorDetails {
-  type: 'network' | 'validation' | 'authentication' | 'system' | 'performance' | 'unknown';
+  type:
+    | 'network'
+    | 'validation'
+    | 'authentication'
+    | 'system'
+    | 'performance'
+    | 'unknown';
   severity: 'critical' | 'high' | 'medium' | 'low';
   code: string;
   message: string;
@@ -96,23 +102,41 @@ export interface ErrorMetrics {
 // Error Classification System
 export class ErrorClassifier {
   private static patterns = {
-    network: [/connection.*refused/i, /timeout/i, /network.*error/i, /fetch.*failed/i, /websocket.*error/i],
-    validation: [/validation.*error/i, /invalid.*input/i, /schema.*mismatch/i, /type.*error/i, /missing.*required/i],
-    authentication: [/auth.*failed/i, /token.*expired/i, /unauthorized/i, /forbidden/i, /invalid.*credentials/i],
+    network: [
+      /connection.*refused/i,
+      /timeout/i,
+      /network.*error/i,
+      /fetch.*failed/i,
+      /websocket.*error/i
+    ],
+    validation: [
+      /validation.*error/i,
+      /invalid.*input/i,
+      /schema.*mismatch/i,
+      /type.*error/i,
+      /missing.*required/i
+    ],
+    authentication: [
+      /auth.*failed/i,
+      /token.*expired/i,
+      /unauthorized/i,
+      /forbidden/i,
+      /invalid.*credentials/i
+    ],
     system: [
       /out.*of.*memory/i,
       /stack.*overflow/i,
       /resource.*exhausted/i,
       /system.*error/i,
-      /internal.*server.*error/i,
+      /internal.*server.*error/i
     ],
     performance: [
       /performance.*degraded/i,
       /slow.*response/i,
       /high.*latency/i,
       /resource.*contention/i,
-      /bottleneck/i,
-    ],
+      /bottleneck/i
+    ]
   };
 
   static classifyError(error: Error): ErrorDetails['type'] {
@@ -129,7 +153,10 @@ export class ErrorClassifier {
     return 'unknown';
   }
 
-  static determineSeverity(error: Error, context: ErrorContext): ErrorDetails['severity'] {
+  static determineSeverity(
+    error: Error,
+    context: ErrorContext
+  ): ErrorDetails['severity'] {
     const message = error.message.toLowerCase();
 
     // Critical errors
@@ -153,7 +180,11 @@ export class ErrorClassifier {
     }
 
     // Medium severity
-    if (message.includes('validation') || message.includes('network') || context.testSuite.includes('api')) {
+    if (
+      message.includes('validation') ||
+      message.includes('network') ||
+      context.testSuite.includes('api')
+    ) {
       return 'medium';
     }
 
@@ -222,7 +253,7 @@ export class EnhancedErrorReporter {
       code: '',
       message: error.message,
       stack: error.stack,
-      metadata: options.metadata,
+      metadata: options.metadata
     };
 
     errorDetails.code = ErrorClassifier.generateErrorCode(errorDetails);
@@ -238,7 +269,7 @@ export class EnhancedErrorReporter {
       workaround: options.workaround,
       resolution: undefined,
       tags: options.tags ?? [],
-      attachments: [],
+      attachments: []
     };
 
     this.reports.push(report);
@@ -250,7 +281,10 @@ export class EnhancedErrorReporter {
   reportTestResult(feedback: TestFeedback): void {
     if (!this.reportingEnabled) return;
 
-    const reportPath = join(this.outputDirectory, `test-feedback-${Date.now()}.json`);
+    const reportPath = join(
+      this.outputDirectory,
+      `test-feedback-${Date.now()}.json`
+    );
     writeFileSync(reportPath, JSON.stringify(feedback, null, 2));
 
     console.log(`Test feedback saved: ${reportPath}`);
@@ -262,22 +296,38 @@ export class EnhancedErrorReporter {
     const oneDay = 24 * oneHour;
     const oneWeek = 7 * oneDay;
 
-    const recentReports = this.reports.filter(report => new Date(report.context.timestamp).getTime() > now - oneWeek);
+    const recentReports = this.reports.filter(
+      report => new Date(report.context.timestamp).getTime() > now - oneWeek
+    );
 
     // Error counts by type
     const errorsByType: Record<string, number> = {};
     const errorsBySeverity: Record<string, number> = {};
 
     recentReports.forEach(report => {
-      errorsByType[report.error.type] = (errorsByType[report.error.type] || 0) + 1;
-      errorsBySeverity[report.error.severity] = (errorsBySeverity[report.error.severity] || 0) + 1;
+      errorsByType[report.error.type] =
+        (errorsByType[report.error.type] || 0) + 1;
+      errorsBySeverity[report.error.severity] =
+        (errorsBySeverity[report.error.severity] || 0) + 1;
     });
 
     // Error trends
     const errorTrends = [
-      { timeframe: '1h', count: this.getErrorCountInTimeframe(oneHour), growth: 0 },
-      { timeframe: '24h', count: this.getErrorCountInTimeframe(oneDay), growth: 0 },
-      { timeframe: '7d', count: this.getErrorCountInTimeframe(oneWeek), growth: 0 },
+      {
+        timeframe: '1h',
+        count: this.getErrorCountInTimeframe(oneHour),
+        growth: 0
+      },
+      {
+        timeframe: '24h',
+        count: this.getErrorCountInTimeframe(oneDay),
+        growth: 0
+      },
+      {
+        timeframe: '7d',
+        count: this.getErrorCountInTimeframe(oneWeek),
+        growth: 0
+      }
     ];
 
     // Calculate growth rates
@@ -286,27 +336,43 @@ export class EnhancedErrorReporter {
     errorTrends[2].growth = this.calculateGrowthRate(oneWeek, oneWeek * 2);
 
     // Top errors by frequency
-    const errorCodeCounts: Record<string, { count: number; lastOccurrence: string }> = {};
+    const errorCodeCounts: Record<
+      string,
+      { count: number; lastOccurrence: string }
+    > = {};
 
     recentReports.forEach(report => {
       const code = report.error.code;
       if (!errorCodeCounts[code]) {
-        errorCodeCounts[code] = { count: 0, lastOccurrence: report.context.timestamp };
+        errorCodeCounts[code] = {
+          count: 0,
+          lastOccurrence: report.context.timestamp
+        };
       }
       errorCodeCounts[code].count++;
-      if (new Date(report.context.timestamp) > new Date(errorCodeCounts[code].lastOccurrence)) {
+      if (
+        new Date(report.context.timestamp) >
+        new Date(errorCodeCounts[code].lastOccurrence)
+      ) {
         errorCodeCounts[code].lastOccurrence = report.context.timestamp;
       }
     });
 
     const topErrors = Object.entries(errorCodeCounts)
-      .map(([code, data]) => ({ code, count: data.count, lastOccurrence: data.lastOccurrence }))
+      .map(([code, data]) => ({
+        code,
+        count: data.count,
+        lastOccurrence: data.lastOccurrence
+      }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
 
     // Resolution metrics
     const resolvedReports = this.reports.filter(r => r.resolution);
-    const resolutionRate = this.reports.length > 0 ? resolvedReports.length / this.reports.length : 0;
+    const resolutionRate =
+      this.reports.length > 0
+        ? resolvedReports.length / this.reports.length
+        : 0;
 
     const resolutionTimes = resolvedReports.map(report => {
       const errorTime = new Date(report.context.timestamp).getTime();
@@ -315,7 +381,10 @@ export class EnhancedErrorReporter {
     });
 
     const averageResolutionTime =
-      resolutionTimes.length > 0 ? resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length : 0;
+      resolutionTimes.length > 0
+        ? resolutionTimes.reduce((sum, time) => sum + time, 0) /
+          resolutionTimes.length
+        : 0;
 
     this.analytics = {
       totalErrors: recentReports.length,
@@ -324,7 +393,7 @@ export class EnhancedErrorReporter {
       errorTrends,
       topErrors,
       resolutionRate,
-      averageResolutionTime,
+      averageResolutionTime
     };
 
     return this.analytics;
@@ -332,12 +401,18 @@ export class EnhancedErrorReporter {
 
   private getErrorCountInTimeframe(timeframe: number): number {
     const cutoff = Date.now() - timeframe;
-    return this.reports.filter(report => new Date(report.context.timestamp).getTime() > cutoff).length;
+    return this.reports.filter(
+      report => new Date(report.context.timestamp).getTime() > cutoff
+    ).length;
   }
 
-  private calculateGrowthRate(currentTimeframe: number, previousTimeframe: number): number {
+  private calculateGrowthRate(
+    currentTimeframe: number,
+    previousTimeframe: number
+  ): number {
     const currentCount = this.getErrorCountInTimeframe(currentTimeframe);
-    const previousCount = this.getErrorCountInTimeframe(previousTimeframe) - currentCount;
+    const previousCount =
+      this.getErrorCountInTimeframe(previousTimeframe) - currentCount;
 
     if (previousCount === 0) return currentCount > 0 ? 100 : 0;
     return ((currentCount - previousCount) / previousCount) * 100;
@@ -353,7 +428,8 @@ export class EnhancedErrorReporter {
 
     return this.reports.filter(report => {
       if (filter.type && report.error.type !== filter.type) return false;
-      if (filter.severity && report.error.severity !== filter.severity) return false;
+      if (filter.severity && report.error.severity !== filter.severity)
+        return false;
       if (filter.code && report.error.code !== filter.code) return false;
       return true;
     });
@@ -375,10 +451,10 @@ export class EnhancedErrorReporter {
       metadata: {
         exportTime: new Date().toISOString(),
         totalReports: this.reports.length,
-        format,
+        format
       },
       analytics,
-      reports: this.reports,
+      reports: this.reports
     };
 
     const fileName = `error-export-${Date.now()}.${format}`;
@@ -409,7 +485,7 @@ export class EnhancedErrorReporter {
       'Message',
       'Reproducible',
       'Resolution',
-      'Tags',
+      'Tags'
     ];
 
     const rows = reports.map(report => [
@@ -423,7 +499,7 @@ export class EnhancedErrorReporter {
       `"${report.error.message.replace(/"/g, '""')}"`,
       report.reproducible,
       report.resolution || '',
-      report.tags.join(';'),
+      report.tags.join(';')
     ]);
 
     return [headers, ...rows].map(row => row.join(',')).join('\n');
@@ -490,13 +566,18 @@ export class EnhancedErrorReporter {
 
   // Helper method for test assertions
   static expectNoErrors(testSuite: string): void {
-    const reporter = (global as Record<string, unknown>).__errorReporter as EnhancedErrorReporter;
+    const reporter = (global as Record<string, unknown>)
+      .__errorReporter as EnhancedErrorReporter;
     if (!reporter) return;
 
-    const errors = reporter.getReports().filter(report => report.context.testSuite === testSuite);
+    const errors = reporter
+      .getReports()
+      .filter(report => report.context.testSuite === testSuite);
 
     if (errors.length > 0) {
-      const errorMessages = errors.map(e => `${e.error.code}: ${e.error.message}`);
+      const errorMessages = errors.map(
+        e => `${e.error.code}: ${e.error.message}`
+      );
       throw new Error(
         `Expected no errors in test suite "${testSuite}", but found ${errors.length} errors:\n` +
           errorMessages.join('\n')
@@ -505,13 +586,17 @@ export class EnhancedErrorReporter {
   }
 
   // Utility for creating error context
-  static createContext(testSuite: string, testCase: string, environment = 'test'): ErrorContext {
+  static createContext(
+    testSuite: string,
+    testCase: string,
+    environment = 'test'
+  ): ErrorContext {
     return {
       testSuite,
       testCase,
       timestamp: new Date().toISOString(),
       environment,
-      executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+      executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`
     };
   }
 }
@@ -523,5 +608,5 @@ export const globalErrorReporter = new EnhancedErrorReporter();
 export default {
   EnhancedErrorReporter,
   ErrorClassifier,
-  globalErrorReporter,
+  globalErrorReporter
 };

@@ -126,7 +126,7 @@ Comprehensive regression testing suite implemented to prevent critical functiona
 
 #### **Prototype Pollution Prevention**
 
-- ****proto** access blocking**: Prevents prototype chain manipulation
+- \***\*proto** access blocking\*\*: Prevents prototype chain manipulation
 - **Constructor pollution blocking**: Prevents constructor property pollution
 
 #### **Input Sanitization**

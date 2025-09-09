@@ -40,40 +40,49 @@ export function useResizable({
   const startWidthRef = useRef(width);
 
   // Save width to localStorage
-  const saveWidth = useCallback((newWidth: number) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(storageKey, String(newWidth));
-    }
-  }, [storageKey]);
+  const saveWidth = useCallback(
+    (newWidth: number) => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(storageKey, String(newWidth));
+      }
+    },
+    [storageKey]
+  );
 
   // Handle resize start
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsResizing(true);
-    startXRef.current = e.clientX;
-    startWidthRef.current = width;
-    document.body.style.cursor = 'ew-resize';
-    document.body.style.userSelect = 'none';
-  }, [width]);
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      setIsResizing(true);
+      startXRef.current = e.clientX;
+      startWidthRef.current = width;
+      document.body.style.cursor = 'ew-resize';
+      document.body.style.userSelect = 'none';
+    },
+    [width]
+  );
 
   // Handle resize move
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isResizing) return;
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isResizing) return;
 
-    const deltaX = e.clientX - startXRef.current;
-    const newWidth = Math.min(
-      Math.max(startWidthRef.current + deltaX, minWidth),
-      maxWidth
-    );
+      const deltaX = e.clientX - startXRef.current;
+      const newWidth = Math.min(
+        Math.max(startWidthRef.current + deltaX, minWidth),
+        maxWidth
+      );
 
-    setWidth(newWidth);
-    onResize?.(newWidth);
-  }, [isResizing, minWidth, maxWidth, onResize]);
+      setWidth(newWidth);
+      onResize?.(newWidth);
+    },
+    [isResizing, minWidth, maxWidth, onResize]
+  );
 
   // Handle resize end
   const handleMouseUp = useCallback(() => {
     if (!isResizing) return;
-    
+
     setIsResizing(false);
     document.body.style.cursor = '';
     document.body.style.userSelect = '';

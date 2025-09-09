@@ -83,24 +83,24 @@ const vfxPolicy: UnifiedPolicy = {
           timeBasedRules: [
             {
               timePeriods: ['ancient', 'medieval', 'renaissance'],
-              historicalContext: true,
-            },
+              historicalContext: true
+            }
           ],
           contentBasedRules: [
             {
               contentTypes: ['vfx', 'historical_recreation'],
-              historicalAccuracy: true,
-            },
-          ],
-        },
-      },
-    ],
+              historicalAccuracy: true
+            }
+          ]
+        }
+      }
+    ]
   },
   historicalAccuracy: {
     timePeriods: ['ancient', 'medieval', 'renaissance'],
     accuracyLevel: 'STRICT',
-    expertValidationRequired: true,
-  },
+    expertValidationRequired: true
+  }
 };
 ```
 
@@ -115,14 +115,14 @@ const context: PolicyEvaluationContext = {
   entityId: 'template-456',
   operation: {
     type: 'historical_accuracy_check',
-    parameters: { period: 'medieval', region: 'europe' },
+    parameters: { period: 'medieval', region: 'europe' }
   },
   contentContext: {
     historicalPeriod: 'medieval',
     culturalContext: 'european',
     accuracyLevel: 'STRICT',
-    expertReviewed: false,
-  },
+    expertReviewed: false
+  }
 };
 
 const results = await policyManager.evaluatePolicies(context);
@@ -275,13 +275,19 @@ Export policies in various formats (JSON, YAML, CSV).
 import { usePolicyManagement } from '@/hooks/usePolicyManagement';
 
 function PolicyComponent() {
-  const { policies, evaluatePolicies, checkVFXHistoricalAccuracy, isLoading, error } = usePolicyManagement();
+  const {
+    policies,
+    evaluatePolicies,
+    checkVFXHistoricalAccuracy,
+    isLoading,
+    error
+  } = usePolicyManagement();
 
   const handleEvaluate = async () => {
     const results = await evaluatePolicies({
       entityType: 'TEMPLATE',
       entityId: 'template-123',
-      operation: { type: 'validate', parameters: {} },
+      operation: { type: 'validate', parameters: {} }
     });
 
     console.log('Policy results:', results);
@@ -329,25 +335,25 @@ const historicalAccuracyPolicy = {
           field: 'contentContext.historicalPeriod',
           operator: 'CUSTOM',
           value: null,
-          customFunction: 'validateHistoricalAccuracy',
+          customFunction: 'validateHistoricalAccuracy'
         },
         context: {
           timeBasedRules: [
             {
               timePeriods: ['ancient', 'medieval', 'renaissance'],
-              historicalContext: true,
-            },
+              historicalContext: true
+            }
           ],
           contentBasedRules: [
             {
               contentTypes: ['vfx', 'historical_recreation'],
-              historicalAccuracy: true,
-            },
-          ],
+              historicalAccuracy: true
+            }
+          ]
         },
         weight: 1.0,
-        enabled: true,
-      },
+        enabled: true
+      }
     ],
     actions: [
       {
@@ -356,22 +362,22 @@ const historicalAccuracyPolicy = {
         actionType: 'ESCALATE',
         configuration: {
           parameters: { reviewType: 'historical_expert' },
-          executionMode: 'IMMEDIATE',
-        },
-      },
-    ],
+          executionMode: 'IMMEDIATE'
+        }
+      }
+    ]
   },
   enforcement: {
     mode: 'ENFORCE',
     severity: 'HIGH',
     automated: false,
-    reviewRequired: true,
+    reviewRequired: true
   },
   historicalAccuracy: {
     timePeriods: ['ancient', 'medieval', 'renaissance'],
     accuracyLevel: 'STRICT',
-    expertValidationRequired: true,
-  },
+    expertValidationRequired: true
+  }
 };
 ```
 
@@ -392,9 +398,9 @@ const dataProtectionPolicy = {
         logic: {
           field: 'operation.parameters.dataClassification',
           operator: 'NOT_EQUALS',
-          value: null,
-        },
-      },
+          value: null
+        }
+      }
     ],
     actions: [
       {
@@ -402,22 +408,22 @@ const dataProtectionPolicy = {
         actionType: 'RESTRICT',
         configuration: {
           parameters: { protectionLevel: 'high' },
-          executionMode: 'IMMEDIATE',
-        },
-      },
-    ],
+          executionMode: 'IMMEDIATE'
+        }
+      }
+    ]
   },
   enforcement: {
     mode: 'ENFORCE',
     severity: 'CRITICAL',
     automated: true,
-    reviewRequired: false,
+    reviewRequired: false
   },
   compliance: {
     frameworks: [ComplianceFramework.GDPR, ComplianceFramework.ISO_27001],
     requirements: ['data_protection', 'asset_security'],
-    auditRequired: true,
-  },
+    auditRequired: true
+  }
 };
 ```
 

@@ -51,7 +51,7 @@ export class ApiValidator {
     this.options = {
       retryAttempts: 3,
       retryDelay: 1000,
-      ...options,
+      ...options
     };
   }
 
@@ -66,29 +66,46 @@ export class ApiValidator {
       const line = lines[i];
 
       // Look for HTTP method patterns
-      const httpMethodMatch = line.match(/^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)/i);
+      const httpMethodMatch = line.match(
+        /^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)/i
+      );
       if (httpMethodMatch) {
         const [, method, endpoint] = httpMethodMatch;
 
         // Extract additional information from following lines
-        const example = this.parseApiExample(lines, i, method.toUpperCase(), endpoint.trim());
+        const example = this.parseApiExample(
+          lines,
+          i,
+          method.toUpperCase(),
+          endpoint.trim()
+        );
         if (example) {
           examples.push(example);
         }
       }
 
       // Look for curl examples
-      const curlMatch = line.match(/curl\s+-X\s+(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)/i);
+      const curlMatch = line.match(
+        /curl\s+-X\s+(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)/i
+      );
       if (curlMatch) {
         const [, method, endpoint] = curlMatch;
-        const example = this.parseCurlExample(lines, i, method.toUpperCase(), endpoint.trim());
+        const example = this.parseCurlExample(
+          lines,
+          i,
+          method.toUpperCase(),
+          endpoint.trim()
+        );
         if (example) {
           examples.push(example);
         }
       }
 
       // Look for fetch/axios examples in code blocks
-      if (line.trim().startsWith('```') && (line.includes('javascript') || line.includes('typescript'))) {
+      if (
+        line.trim().startsWith('```') &&
+        (line.includes('javascript') || line.includes('typescript'))
+      ) {
         const codeBlock = this.extractCodeBlock(lines, i);
         if (codeBlock) {
           const jsExamples = this.parseJavaScriptApiExamples(codeBlock, i + 1);
@@ -108,7 +125,7 @@ export class ApiValidator {
               endpoint: methodLine.endpoint,
               responseBody: this.parseJsonSafely(jsonBlock.content),
               lineNumber: i + 1,
-              description: this.extractDescription(lines, i - 5, i),
+              description: this.extractDescription(lines, i - 5, i)
             };
             examples.push(example);
           }
@@ -141,7 +158,7 @@ export class ApiValidator {
           example,
           passed: false,
           errors,
-          validationType: 'format',
+          validationType: 'format'
         };
       }
 
@@ -176,7 +193,7 @@ export class ApiValidator {
         responseTime,
         statusCode,
         actualResponse,
-        validationType,
+        validationType
       };
     } catch (error) {
       return {
@@ -184,8 +201,10 @@ export class ApiValidator {
         method: example.method,
         example,
         passed: false,
-        errors: [`Validation failed: ${error instanceof Error ? error.message : String(error)}`],
-        validationType,
+        errors: [
+          `Validation failed: ${error instanceof Error ? error.message : String(error)}`
+        ],
+        validationType
       };
     }
   }
@@ -193,15 +212,24 @@ export class ApiValidator {
   /**
    * Parse API example from HTTP method line
    */
-  private parseApiExample(lines: string[], startIndex: number, method: string, endpoint: string): ApiExample | null {
+  private parseApiExample(
+    lines: string[],
+    startIndex: number,
+    method: string,
+    endpoint: string
+  ): ApiExample | null {
     const example: ApiExample = {
       method,
       endpoint,
-      lineNumber: startIndex + 1,
+      lineNumber: startIndex + 1
     };
 
     // Look for additional information in following lines
-    for (let i = startIndex + 1; i < Math.min(startIndex + 10, lines.length); i++) {
+    for (
+      let i = startIndex + 1;
+      i < Math.min(startIndex + 10, lines.length);
+      i++
+    ) {
       const line = lines[i].trim();
 
       // Headers
@@ -263,7 +291,7 @@ export class ApiValidator {
       endpoint: this.extractEndpointFromCurl(fullCommand),
       lineNumber: startIndex + 1,
       headers: this.extractHeadersFromCurl(fullCommand),
-      requestBody: this.extractRequestBodyFromCurl(fullCommand),
+      requestBody: this.extractRequestBodyFromCurl(fullCommand)
     };
 
     return example;
@@ -272,12 +300,17 @@ export class ApiValidator {
   /**
    * Parse JavaScript/TypeScript API examples (fetch, axios)
    */
-  private parseJavaScriptApiExamples(codeBlock: { content: string }, startLine: number): ApiExample[] {
+  private parseJavaScriptApiExamples(
+    codeBlock: { content: string },
+    startLine: number
+  ): ApiExample[] {
     const examples: ApiExample[] = [];
     const content = codeBlock.content;
 
     // Match fetch() calls
-    const fetchMatches = content.matchAll(/fetch\s*\(\s*['"`]([^'"`]+)['"`]\s*(?:,\s*(\{[^}]*\}))?\s*\)/g);
+    const fetchMatches = content.matchAll(
+      /fetch\s*\(\s*['"`]([^'"`]+)['"`]\s*(?:,\s*(\{[^}]*\}))?\s*\)/g
+    );
     for (const match of fetchMatches) {
       const [, url, optionsStr] = match;
 
@@ -291,7 +324,7 @@ export class ApiValidator {
           requestBody: options.body ? JSON.parse(options.body) : undefined,
           headers: options.headers || {},
           lineNumber: startLine,
-          description: 'JavaScript fetch example',
+          description: 'JavaScript fetch example'
         };
 
         examples.push(example);
@@ -315,7 +348,7 @@ export class ApiValidator {
           endpoint: url,
           requestBody: data,
           lineNumber: startLine,
-          description: 'Axios example',
+          description: 'Axios example'
         };
 
         examples.push(example);
@@ -330,7 +363,10 @@ export class ApiValidator {
   /**
    * Extract code block content
    */
-  private extractCodeBlock(lines: string[], startIndex: number): { content: string } | null {
+  private extractCodeBlock(
+    lines: string[],
+    startIndex: number
+  ): { content: string } | null {
     const blockLines: string[] = [];
     let foundEnd = false;
 
@@ -373,12 +409,14 @@ export class ApiValidator {
         'id',
         'userId',
         'token',
-        'timestamp',
+        'timestamp'
       ];
 
       if (typeof parsed === 'object' && parsed !== null) {
         const keys = Object.keys(parsed);
-        return responseIndicators.some(indicator => keys.some(key => key.toLowerCase().includes(indicator)));
+        return responseIndicators.some(indicator =>
+          keys.some(key => key.toLowerCase().includes(indicator))
+        );
       }
 
       return false;
@@ -390,15 +428,20 @@ export class ApiValidator {
   /**
    * Find previous HTTP method in lines
    */
-  private findPreviousHttpMethod(lines: string[], currentIndex: number): { method: string; endpoint: string } | null {
+  private findPreviousHttpMethod(
+    lines: string[],
+    currentIndex: number
+  ): { method: string; endpoint: string } | null {
     for (let i = currentIndex - 1; i >= Math.max(0, currentIndex - 10); i--) {
       const line = lines[i].trim();
 
-      const methodMatch = line.match(/^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)/i);
+      const methodMatch = line.match(
+        /^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(.+)/i
+      );
       if (methodMatch) {
         return {
           method: methodMatch[1].toUpperCase(),
-          endpoint: methodMatch[2].trim(),
+          endpoint: methodMatch[2].trim()
         };
       }
     }
@@ -409,13 +452,26 @@ export class ApiValidator {
   /**
    * Extract description from surrounding lines
    */
-  private extractDescription(lines: string[], startIndex: number, endIndex: number): string | undefined {
+  private extractDescription(
+    lines: string[],
+    startIndex: number,
+    endIndex: number
+  ): string | undefined {
     const descriptionLines: string[] = [];
 
-    for (let i = Math.max(0, startIndex); i < Math.min(lines.length, endIndex); i++) {
+    for (
+      let i = Math.max(0, startIndex);
+      i < Math.min(lines.length, endIndex);
+      i++
+    ) {
       const line = lines[i].trim();
 
-      if (line && !line.startsWith('#') && !line.startsWith('```') && !line.match(/^(GET|POST|PUT|PATCH|DELETE)/i)) {
+      if (
+        line &&
+        !line.startsWith('#') &&
+        !line.startsWith('```') &&
+        !line.match(/^(GET|POST|PUT|PATCH|DELETE)/i)
+      ) {
         descriptionLines.push(line);
       }
     }
@@ -431,7 +487,15 @@ export class ApiValidator {
     const errors: string[] = [];
 
     // Validate HTTP method
-    const validMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
+    const validMethods = [
+      'GET',
+      'POST',
+      'PUT',
+      'PATCH',
+      'DELETE',
+      'HEAD',
+      'OPTIONS'
+    ];
     if (!validMethods.includes(example.method.toUpperCase())) {
       errors.push(`Invalid HTTP method: ${example.method}`);
     }
@@ -439,7 +503,10 @@ export class ApiValidator {
     // Validate endpoint format
     if (!example.endpoint || example.endpoint.trim() === '') {
       errors.push('Empty endpoint');
-    } else if (!example.endpoint.startsWith('/') && !example.endpoint.startsWith('http')) {
+    } else if (
+      !example.endpoint.startsWith('/') &&
+      !example.endpoint.startsWith('http')
+    ) {
       errors.push(`Invalid endpoint format: ${example.endpoint}`);
     }
 
@@ -461,7 +528,10 @@ export class ApiValidator {
     }
 
     // Validate status code
-    if (example.statusCode && (example.statusCode < 100 || example.statusCode >= 600)) {
+    if (
+      example.statusCode &&
+      (example.statusCode < 100 || example.statusCode >= 600)
+    ) {
       errors.push(`Invalid status code: ${example.statusCode}`);
     }
 
@@ -490,29 +560,42 @@ export class ApiValidator {
     const startTime = Date.now();
 
     try {
-      const url = example.endpoint.startsWith('http') ? example.endpoint : `${this.options.baseUrl}${example.endpoint}`;
+      const url = example.endpoint.startsWith('http')
+        ? example.endpoint
+        : `${this.options.baseUrl}${example.endpoint}`;
 
       const requestOptions: RequestInit = {
         method: example.method,
         headers: {
           'Content-Type': 'application/json',
           ...this.options.authHeaders,
-          ...example.headers,
-        },
+          ...example.headers
+        }
       };
 
-      if (example.requestBody && ['POST', 'PUT', 'PATCH'].includes(example.method)) {
+      if (
+        example.requestBody &&
+        ['POST', 'PUT', 'PATCH'].includes(example.method)
+      ) {
         requestOptions.body =
-          typeof example.requestBody === 'string' ? example.requestBody : JSON.stringify(example.requestBody);
+          typeof example.requestBody === 'string'
+            ? example.requestBody
+            : JSON.stringify(example.requestBody);
       }
 
       // Add timeout
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Request timeout')), this.options.timeout);
+        setTimeout(
+          () => reject(new Error('Request timeout')),
+          this.options.timeout
+        );
       });
 
       const fetchPromise = fetch(url, requestOptions);
-      const response = (await Promise.race([fetchPromise, timeoutPromise])) as Response;
+      const response = (await Promise.race([
+        fetchPromise,
+        timeoutPromise
+      ])) as Response;
 
       const responseTime = Date.now() - startTime;
       const statusCode = response.status;
@@ -534,7 +617,10 @@ export class ApiValidator {
 
       // Validate response body structure if specified in example
       if (example.responseBody && this.options.validateResponses) {
-        const bodyErrors = this.compareResponseBodies(example.responseBody, responseBody);
+        const bodyErrors = this.compareResponseBodies(
+          example.responseBody,
+          responseBody
+        );
         errors.push(...bodyErrors);
       }
 
@@ -542,7 +628,7 @@ export class ApiValidator {
         responseTime,
         statusCode,
         response: responseBody,
-        errors,
+        errors
       };
     } catch (error) {
       const responseTime = Date.now() - startTime;
@@ -551,7 +637,9 @@ export class ApiValidator {
         responseTime,
         statusCode: 0,
         response: null,
-        errors: [`Network request failed: ${error instanceof Error ? error.message : String(error)}`],
+        errors: [
+          `Network request failed: ${error instanceof Error ? error.message : String(error)}`
+        ]
       };
     }
   }
@@ -565,7 +653,9 @@ export class ApiValidator {
     try {
       // Simple structure comparison
       if (typeof expected !== typeof actual) {
-        errors.push(`Response type mismatch: expected ${typeof expected}, got ${typeof actual}`);
+        errors.push(
+          `Response type mismatch: expected ${typeof expected}, got ${typeof actual}`
+        );
         return errors;
       }
 
@@ -575,7 +665,11 @@ export class ApiValidator {
       }
 
       // Check for required fields in object responses
-      if (typeof expected === 'object' && expected !== null && actual !== null) {
+      if (
+        typeof expected === 'object' &&
+        expected !== null &&
+        actual !== null
+      ) {
         const expectedKeys = Object.keys(expected);
 
         for (const key of expectedKeys) {
@@ -585,7 +679,9 @@ export class ApiValidator {
         }
       }
     } catch (error) {
-      errors.push(`Response comparison failed: ${error instanceof Error ? error.message : String(error)}`);
+      errors.push(
+        `Response comparison failed: ${error instanceof Error ? error.message : String(error)}`
+      );
     }
 
     return errors;
@@ -605,7 +701,10 @@ export class ApiValidator {
   /**
    * Extract JSON from line and following lines
    */
-  private extractJsonFromLine(lines: string[], startIndex: number): string | null {
+  private extractJsonFromLine(
+    lines: string[],
+    startIndex: number
+  ): string | null {
     const jsonLines: string[] = [];
     let braceCount = 0;
     let bracketCount = 0;
@@ -647,7 +746,8 @@ export class ApiValidator {
       if (
         braceCount === 0 &&
         bracketCount === 0 &&
-        (jsonLines[0].trim().startsWith('{') || jsonLines[0].trim().startsWith('['))
+        (jsonLines[0].trim().startsWith('{') ||
+          jsonLines[0].trim().startsWith('['))
       ) {
         const jsonContent = jsonLines.join('\n');
         try {
@@ -670,7 +770,10 @@ export class ApiValidator {
   /**
    * Extract full curl command (may span multiple lines)
    */
-  private extractFullCurlCommand(lines: string[], startIndex: number): string | null {
+  private extractFullCurlCommand(
+    lines: string[],
+    startIndex: number
+  ): string | null {
     const commandLines: string[] = [];
 
     for (let i = startIndex; i < Math.min(startIndex + 10, lines.length); i++) {

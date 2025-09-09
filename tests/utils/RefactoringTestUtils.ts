@@ -57,7 +57,7 @@ export class MigrationTestHelper {
       afterState: actualAfterState,
       rollbackSuccessful,
       executionTime: executionTime > 0 ? executionTime : 0.1, // Ensure positive value
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     return result;
@@ -103,7 +103,7 @@ export class MigrationTestHelper {
       totalSteps: steps.length,
       completedSteps: stepResults.filter(r => r.success).length,
       executionTime: Date.now() - startTime,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     this.migrationResults.set(migrationId, result);
@@ -173,7 +173,7 @@ export class MigrationTestHelper {
       results.push({
         testCase,
         compatible,
-        error,
+        error
       });
 
       if (!compatible) {
@@ -186,14 +186,16 @@ export class MigrationTestHelper {
       results,
       totalTests: testCases.length,
       passedTests: results.filter(r => r.compatible).length,
-      failedTests: results.filter(r => !r.compatible).length,
+      failedTests: results.filter(r => !r.compatible).length
     };
   }
 
   /**
    * Get migration results
    */
-  static getMigrationResults(migrationId?: string): MigrationResult | MigrationResult[] {
+  static getMigrationResults(
+    migrationId?: string
+  ): MigrationResult | MigrationResult[] {
     if (migrationId) {
       return this.migrationResults.get(migrationId)!;
     }
@@ -271,7 +273,13 @@ export class LegacySystemMock {
       behavior.supportsAsync = false;
     } else if (version.startsWith('2.')) {
       behavior.executionEngine = 'v2';
-      behavior.nodeTypes = ['basic', 'weighted', 'output', 'variable', 'include'];
+      behavior.nodeTypes = [
+        'basic',
+        'weighted',
+        'output',
+        'variable',
+        'include'
+      ];
       behavior.hasVariableSupport = true;
       behavior.supportsAsync = true;
     }
@@ -289,7 +297,9 @@ export class LegacySystemMock {
       return this.executeV2(graph, options);
     }
 
-    throw new Error(`Unknown execution engine: ${this.behavior.executionEngine}`);
+    throw new Error(
+      `Unknown execution engine: ${this.behavior.executionEngine}`
+    );
   }
 
   /**
@@ -328,7 +338,7 @@ export class LegacySystemMock {
     return {
       result,
       variables: {}, // V1 doesn't support variables
-      executionTime: Math.random() * 100 + 50, // Simulate slower execution
+      executionTime: Math.random() * 100 + 50 // Simulate slower execution
     };
   }
 
@@ -361,7 +371,7 @@ export class LegacySystemMock {
     return {
       result,
       variables,
-      executionTime: Math.random() * 50 + 20, // Simulate faster execution
+      executionTime: Math.random() * 50 + 20 // Simulate faster execution
     };
   }
 
@@ -469,7 +479,7 @@ export class RefactoringValidator {
         oldResult,
         newResult,
         oldError,
-        newError,
+        newError
       });
 
       if (!success) {
@@ -482,7 +492,7 @@ export class RefactoringValidator {
       results,
       totalTests: testCases.length,
       passedTests: results.filter(r => r.success).length,
-      failedTests: results.filter(r => !r.success).length,
+      failedTests: results.filter(r => !r.success).length
     };
   }
 
@@ -502,7 +512,9 @@ export class RefactoringValidator {
     for (const methodName of requiredMethods) {
       if (typeof oldObject[methodName] === 'function') {
         if (typeof newObject[methodName] !== 'function') {
-          issues.push(`Required method '${methodName}' is missing or not a function`);
+          issues.push(
+            `Required method '${methodName}' is missing or not a function`
+          );
         }
       }
     }
@@ -540,15 +552,18 @@ export class RefactoringValidator {
       issues,
       warnings,
       addedMembers: addedKeys,
-      removedMembers: removedKeys,
+      removedMembers: removedKeys
     };
   }
 
   private static deepEqual(a: any, b: any): boolean {
     if (a === b) return true;
-    if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();
-    if (!a || !b || (typeof a !== 'object' && typeof b !== 'object')) return a === b;
-    if (a === null || a === undefined || b === null || b === undefined) return false;
+    if (a instanceof Date && b instanceof Date)
+      return a.getTime() === b.getTime();
+    if (!a || !b || (typeof a !== 'object' && typeof b !== 'object'))
+      return a === b;
+    if (a === null || a === undefined || b === null || b === undefined)
+      return false;
     if (a.prototype !== b.prototype) return false;
 
     const keys = Object.keys(a);
@@ -667,5 +682,5 @@ export interface InterfaceCompatibilityResult {
 export default {
   MigrationTestHelper,
   LegacySystemMock,
-  RefactoringValidator,
+  RefactoringValidator
 };

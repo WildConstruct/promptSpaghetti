@@ -34,6 +34,7 @@ Week 2:
 ## Key Technical Decisions
 
 ### Parser (MVP-001)
+
 - **Web Worker** with main thread fallback
 - Split on commas and conjunctions (and, or, but)
 - Keep "quoted strings" together
@@ -41,24 +42,28 @@ Week 2:
 - Target: <200ms for 400 words
 
 ### UI (MVP-002)
+
 - 480px fixed-width panel
 - Slide from right (200ms ease-out)
 - Three span states: locked (gray), random (green), focused (blue)
 - Icons: Lock and Dice1 from lucide-react
 
 ### Preview (MVP-003)
+
 - Fixed 120px height at bottom
 - Monospace font
 - Show `{option}` notation for randomized
 - Real-time updates (<50ms)
 
 ### Keyboard (MVP-004A & 004B)
+
 - **Basic**: Tab (navigate), Space (toggle), Escape (close)
 - **Arrows**: Move boundaries by token
 - **Shift+Arrow**: Move by word
 - **Alt+Arrow**: Move opposite boundary
 
 ### Generation (MVP-005)
+
 - Locked → TextBlock
 - Random → WeightedChoice
 - All → Concat → Output
@@ -69,23 +74,27 @@ Week 2:
 ## Error States to Handle
 
 ### Parser Errors
+
 ```typescript
-type ParserError = 
-  | { type: 'empty', message: 'Please paste a prompt' }
-  | { type: 'too_long', message: 'Limited to 1000 words' }
-  | { type: 'timeout', message: 'Taking too long, using simple mode' }
-  | { type: 'failed', message: 'Could not parse, try simplifying' }
+type ParserError =
+  | { type: 'empty'; message: 'Please paste a prompt' }
+  | { type: 'too_long'; message: 'Limited to 1000 words' }
+  | { type: 'timeout'; message: 'Taking too long, using simple mode' }
+  | { type: 'failed'; message: 'Could not parse, try simplifying' };
 ```
 
 ### UI States
+
 - **Loading**: Spinner + "Analyzing..."
 - **Error**: Red background + retry button
 - **Empty**: "No variations detected"
 
 ### Preview Fallback
+
 - If preview fails: "Preview unavailable (X segments detected)"
 
 ### Generation Validation
+
 - Check unique IDs
 - Validate PSG schema
 - Handle graph integration failures
@@ -94,18 +103,19 @@ type ParserError =
 
 ## Performance Targets
 
-| Operation | Target | Kill if |
-|-----------|--------|---------|
-| Parse 400 words | <200ms | >3000ms |
-| Preview update | <50ms | >100ms (then debounce) |
-| Boundary adjust | <50ms | >100ms |
-| Generate nodes | <100ms | >500ms |
+| Operation       | Target | Kill if                |
+| --------------- | ------ | ---------------------- |
+| Parse 400 words | <200ms | >3000ms                |
+| Preview update  | <50ms  | >100ms (then debounce) |
+| Boundary adjust | <50ms  | >100ms                 |
+| Generate nodes  | <100ms | >500ms                 |
 
 ---
 
 ## Quick Testing Checklist
 
 ### Parser Tests
+
 - [ ] Empty string
 - [ ] 1500+ words (truncation)
 - [ ] Multiple commas `,,,,`
@@ -113,6 +123,7 @@ type ParserError =
 - [ ] Web Worker failure
 
 ### UI Tests
+
 - [ ] Panel slides smoothly
 - [ ] All three span states visible
 - [ ] Loading state shows
@@ -120,6 +131,7 @@ type ParserError =
 - [ ] Escape closes panel
 
 ### Keyboard Tests
+
 - [ ] Tab cycles through spans
 - [ ] Space toggles state
 - [ ] Arrows adjust boundaries
@@ -127,6 +139,7 @@ type ParserError =
 - [ ] Screen reader compatible
 
 ### Integration Tests
+
 - [ ] Parse → UI → Preview flow
 - [ ] Keyboard → Preview updates
 - [ ] Generate → Graph appears
@@ -136,6 +149,7 @@ type ParserError =
 ## Code Snippets
 
 ### Token Detection
+
 ```typescript
 function tokenize(text: string): Token[] {
   // Split on word boundaries and punctuation
@@ -155,6 +169,7 @@ function tokenize(text: string): Token[] {
 ```
 
 ### Unique ID Generation
+
 ```typescript
 function generateNodeId(type: string): string {
   const timestamp = Date.now();
@@ -164,6 +179,7 @@ function generateNodeId(type: string): string {
 ```
 
 ### Boundary Collision Check
+
 ```typescript
 function canMoveBoundary(
   spanIndex: number,
@@ -172,24 +188,23 @@ function canMoveBoundary(
   spans: Span[]
 ): boolean {
   const span = spans[spanIndex];
-  const newPos = boundary === 'left' 
-    ? span.start + direction 
-    : span.end + direction;
-    
+  const newPos =
+    boundary === 'left' ? span.start + direction : span.end + direction;
+
   // Check text boundaries
   if (newPos < 0 || newPos > textLength) return false;
-  
+
   // Check adjacent spans
   const prev = spans[spanIndex - 1];
   const next = spans[spanIndex + 1];
-  
+
   if (boundary === 'left' && prev && newPos <= prev.end) return false;
   if (boundary === 'right' && next && newPos >= next.start) return false;
-  
+
   // Check minimum span size
   if (boundary === 'left' && newPos >= span.end) return false;
   if (boundary === 'right' && newPos <= span.start) return false;
-  
+
   return true;
 }
 ```
@@ -218,7 +233,8 @@ function canMoveBoundary(
 
 ---
 
-## Success = 
+## Success =
+
 Users can paste → see highlights → adjust with arrows → preview live → generate in <2 minutes
 
 **Build this and 94% of users will thank you!**

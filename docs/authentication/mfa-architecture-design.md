@@ -69,9 +69,19 @@ External Services:
 
 ```typescript
 interface MFAController {
-  initiateChallenge(userId: string, method: AuthMethod): Promise<ChallengeResponse>;
-  verifyChallenge(challengeId: string, response: string): Promise<VerificationResult>;
-  enrollMethod(userId: string, method: AuthMethod, config: MethodConfig): Promise<void>;
+  initiateChallenge(
+    userId: string,
+    method: AuthMethod
+  ): Promise<ChallengeResponse>;
+  verifyChallenge(
+    challengeId: string,
+    response: string
+  ): Promise<VerificationResult>;
+  enrollMethod(
+    userId: string,
+    method: AuthMethod,
+    config: MethodConfig
+  ): Promise<void>;
   revokeMethod(userId: string, methodId: string): Promise<void>;
   assessRisk(context: AuthContext): Promise<RiskLevel>;
 }
@@ -154,7 +164,7 @@ class RiskAssessmentEngine {
       this.assessDevice(context.deviceFingerprint, context.userId),
       this.assessBehavior(context.userAgent, context.userId),
       this.assessNetwork(context.ip),
-      this.assessVelocity(context.userId),
+      this.assessVelocity(context.userId)
     ]);
 
     return this.calculateOverallRisk(factors);
@@ -348,9 +358,21 @@ interface RateLimitConfig {
 }
 
 const rateLimits = {
-  codeGeneration: { maxAttempts: 5, windowMinutes: 60, blockDurationMinutes: 15 },
-  codeVerification: { maxAttempts: 3, windowMinutes: 15, blockDurationMinutes: 30 },
-  methodEnrollment: { maxAttempts: 3, windowMinutes: 24 * 60, blockDurationMinutes: 60 },
+  codeGeneration: {
+    maxAttempts: 5,
+    windowMinutes: 60,
+    blockDurationMinutes: 15
+  },
+  codeVerification: {
+    maxAttempts: 3,
+    windowMinutes: 15,
+    blockDurationMinutes: 30
+  },
+  methodEnrollment: {
+    maxAttempts: 3,
+    windowMinutes: 24 * 60,
+    blockDurationMinutes: 60
+  }
 };
 ```
 
@@ -368,7 +390,10 @@ interface MFASession {
 }
 
 class SessionManager {
-  async createMFASession(userId: string, riskScore: number): Promise<MFASession> {
+  async createMFASession(
+    userId: string,
+    riskScore: number
+  ): Promise<MFASession> {
     const session: MFASession = {
       sessionId: crypto.randomUUID(),
       userId,
@@ -376,7 +401,7 @@ class SessionManager {
       completedMethods: [],
       riskScore,
       expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
-      requiresAdditionalVerification: riskScore > 70,
+      requiresAdditionalVerification: riskScore > 70
     };
 
     await this.redis.setex(
@@ -430,10 +455,10 @@ const defaultPolicy: MFAPolicy = {
   minimumMethods: 1,
   riskThresholds: {
     requireAdditional: 60,
-    blockAccess: 85,
+    blockAccess: 85
   },
   sessionTimeout: 600, // 10 minutes
-  rememberDeviceDays: 30,
+  rememberDeviceDays: 30
 };
 ```
 

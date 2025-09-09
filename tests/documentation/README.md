@@ -35,11 +35,13 @@ const docTest = new DocTestFramework({
   validateCodeBlocks: true,
   validateApiExamples: true,
   validateLinks: true,
-  generateReport: true,
+  generateReport: true
 });
 
 const summary = await docTest.runTests();
-console.log(`Tested ${summary.totalFiles} files with ${summary.passedTests}/${summary.totalTests} passing tests`);
+console.log(
+  `Tested ${summary.totalFiles} files with ${summary.passedTests}/${summary.totalTests} passing tests`
+);
 ```
 
 ## Framework Components
@@ -109,7 +111,7 @@ const config: DocTestConfig = {
 
   // Reporting
   generateReport: true,
-  reportFormat: 'json',
+  reportFormat: 'json'
 };
 ```
 
@@ -122,10 +124,10 @@ const advancedConfig: DocTestConfig = {
     compilerOptions: {
       target: ts.ScriptTarget.ES2020,
       strict: false,
-      skipLibCheck: true,
+      skipLibCheck: true
     },
     validateTypes: true,
-    allowUndeclaredImports: false,
+    allowUndeclaredImports: false
   },
 
   // API validation
@@ -133,7 +135,7 @@ const advancedConfig: DocTestConfig = {
     baseUrl: 'http://localhost:8000',
     skipNetworkRequests: false,
     validateResponses: true,
-    timeout: 5000,
+    timeout: 5000
   },
 
   // CLI validation
@@ -141,8 +143,8 @@ const advancedConfig: DocTestConfig = {
     allowedCommands: ['npm', 'pnpm', 'git', 'node'],
     validateCommands: true,
     skipExecution: true,
-    safetyChecks: true,
-  },
+    safetyChecks: true
+  }
 };
 ```
 
@@ -162,7 +164,7 @@ const createUser = (userData: Partial<User>): User => {
   return {
     id: Date.now(),
     name: userData.name || 'Anonymous',
-    email: userData.email || 'no-email@example.com',
+    email: userData.email || 'no-email@example.com'
   };
 };
 ```
@@ -288,7 +290,7 @@ npm run build
 // ✅ Good: Specific language, complete example
 const config = {
   apiUrl: 'https://api.example.com',
-  timeout: 5000,
+  timeout: 5000
 };
 
 // ❌ Bad: Generic language, incomplete code
@@ -358,7 +360,7 @@ Creates a new user
 const docTest = new DocTestFramework({
   verbose: true,
   generateReport: true,
-  reportFormat: 'markdown',
+  reportFormat: 'markdown'
 });
 
 // Enable detailed logging

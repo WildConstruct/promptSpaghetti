@@ -287,13 +287,13 @@ The Randomizer web app automatically stores a small snippet of user state in `lo
   "generator": "televangelist", // id of last selected generator (string | null)
   "lockedValues": {
     // values the user locked via Advanced Options
-    "preacher_name": "Reverend Bob",
+    "preacher_name": "Reverend Bob"
   },
   "lastPrompt": {
-    "raw": "Beloved congregation …", // full text of last generated prompt
+    "raw": "Beloved congregation …" // full text of last generated prompt
   },
   "theme": "light", // reserved for future use
-  "seed": 123456789, // optional future deterministic mode
+  "seed": 123456789 // optional future deterministic mode
 }
 ```
 

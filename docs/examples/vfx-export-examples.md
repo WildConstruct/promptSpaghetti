@@ -131,7 +131,13 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
         "metadata": {
           "generationTime": 245,
           "nodesExecuted": 8,
-          "variablesUsed": ["dragon_type", "dragon_age", "scale_texture", "lighting_time", "atmosphere"]
+          "variablesUsed": [
+            "dragon_type",
+            "dragon_age",
+            "scale_texture",
+            "lighting_time",
+            "atmosphere"
+          ]
         }
       },
       {
@@ -142,7 +148,13 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
         "metadata": {
           "generationTime": 251,
           "nodesExecuted": 8,
-          "variablesUsed": ["dragon_type", "dragon_age", "scale_texture", "lighting_time", "atmosphere"]
+          "variablesUsed": [
+            "dragon_type",
+            "dragon_age",
+            "scale_texture",
+            "lighting_time",
+            "atmosphere"
+          ]
         }
       },
       {
@@ -153,7 +165,13 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
         "metadata": {
           "generationTime": 238,
           "nodesExecuted": 8,
-          "variablesUsed": ["dragon_type", "dragon_age", "scale_texture", "lighting_time", "atmosphere"]
+          "variablesUsed": [
+            "dragon_type",
+            "dragon_age",
+            "scale_texture",
+            "lighting_time",
+            "atmosphere"
+          ]
         }
       }
     ],
@@ -317,7 +335,12 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
         },
         "executionOrder": 8,
         "executionTime": 18,
-        "dependsOn": ["dragon-description-builder", "atmosphere-integration", "lighting-setup", "technical-specs"],
+        "dependsOn": [
+          "dragon-description-builder",
+          "atmosphere-integration",
+          "lighting-setup",
+          "technical-specs"
+        ],
         "affects": []
       }
     ],
@@ -325,14 +348,20 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
       {
         "id": "conn-dragon-to-desc",
         "source": { "nodeId": "dragon-type-selector", "port": "output" },
-        "target": { "nodeId": "dragon-description-builder", "port": "dragon_type" },
+        "target": {
+          "nodeId": "dragon-description-builder",
+          "port": "dragon_type"
+        },
         "dataType": "text",
         "label": "dragon_type"
       },
       {
         "id": "conn-scales-to-desc",
         "source": { "nodeId": "scale-texture-selector", "port": "output" },
-        "target": { "nodeId": "dragon-description-builder", "port": "scale_texture" },
+        "target": {
+          "nodeId": "dragon-description-builder",
+          "port": "scale_texture"
+        },
         "dataType": "text",
         "label": "scale_texture"
       },
@@ -346,25 +375,37 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
       {
         "id": "conn-dragon-desc-to-final",
         "source": { "nodeId": "dragon-description-builder", "port": "output" },
-        "target": { "nodeId": "final-prompt-assembly", "port": "dragon_description" },
+        "target": {
+          "nodeId": "final-prompt-assembly",
+          "port": "dragon_description"
+        },
         "dataType": "text"
       },
       {
         "id": "conn-atmosphere-desc-to-final",
         "source": { "nodeId": "atmosphere-integration", "port": "output" },
-        "target": { "nodeId": "final-prompt-assembly", "port": "atmosphere_description" },
+        "target": {
+          "nodeId": "final-prompt-assembly",
+          "port": "atmosphere_description"
+        },
         "dataType": "text"
       },
       {
         "id": "conn-lighting-to-final",
         "source": { "nodeId": "lighting-setup", "port": "output" },
-        "target": { "nodeId": "final-prompt-assembly", "port": "lighting_description" },
+        "target": {
+          "nodeId": "final-prompt-assembly",
+          "port": "lighting_description"
+        },
         "dataType": "text"
       },
       {
         "id": "conn-tech-to-final",
         "source": { "nodeId": "technical-specs", "port": "output" },
-        "target": { "nodeId": "final-prompt-assembly", "port": "technical_specs" },
+        "target": {
+          "nodeId": "final-prompt-assembly",
+          "port": "technical_specs"
+        },
         "dataType": "text"
       }
     ],
@@ -378,7 +419,11 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
       "technical-specs",
       "final-prompt-assembly"
     ],
-    "criticalPath": ["dragon-type-selector", "dragon-description-builder", "final-prompt-assembly"],
+    "criticalPath": [
+      "dragon-type-selector",
+      "dragon-description-builder",
+      "final-prompt-assembly"
+    ],
     "analysis": {
       "complexity": "moderate",
       "variabilityScore": 0.75,
@@ -494,8 +539,12 @@ This document provides comprehensive real-world examples of Wild Construct VFX e
           "timestamp": "2025-07-24T14:25:00.000Z",
           "type": "node_modified",
           "nodeId": "dragon-type-selector",
-          "before": { "choices": [{ "text": "ancient red dragon", "weight": 3 }] },
-          "after": { "choices": [{ "text": "ancient red dragon", "weight": 4 }] },
+          "before": {
+            "choices": [{ "text": "ancient red dragon", "weight": 3 }]
+          },
+          "after": {
+            "choices": [{ "text": "ancient red dragon", "weight": 4 }]
+          },
           "userNote": "Director wants more red dragons in variations"
         }
       ]
@@ -820,7 +869,11 @@ shader dragon_scales(
       },
       "engine_color": {
         "value": "glowing blue engines",
-        "alternatives": ["plasma red thrusters", "ion white drives", "quantum purple trail"]
+        "alternatives": [
+          "plasma red thrusters",
+          "ion white drives",
+          "quantum purple trail"
+        ]
       },
       "environment_hazard": {
         "value": "dense asteroid field",
@@ -950,11 +1003,19 @@ def create_asteroid_geometry(parent, seed):
       },
       "time_period": {
         "value": "dawn light breaking through morning mist",
-        "alternatives": ["noon harsh sunlight", "dusk golden hour", "stormy overcast"]
+        "alternatives": [
+          "noon harsh sunlight",
+          "dusk golden hour",
+          "stormy overcast"
+        ]
       },
       "military_activity": {
         "value": "siege camps",
-        "alternatives": ["peaceful courtyard", "battle aftermath", "construction work"]
+        "alternatives": [
+          "peaceful courtyard",
+          "battle aftermath",
+          "construction work"
+        ]
       }
     }
   },
@@ -1008,10 +1069,22 @@ def create_asteroid_geometry(parent, seed):
   "prompt": {
     "finalPrompt": "Grotesque aquatic creature with translucent flesh and multiple eyes emerging from murky water, dramatic single light source creating harsh shadows, bioluminescent details glowing softly, water droplets catching light, horror movie cinematography, photorealistic creature effects",
     "components": {
-      "subject": ["grotesque aquatic creature", "translucent flesh", "multiple eyes"],
+      "subject": [
+        "grotesque aquatic creature",
+        "translucent flesh",
+        "multiple eyes"
+      ],
       "action": ["emerging from murky water"],
-      "mood": ["dramatic single light source", "harsh shadows", "horror movie cinematography"],
-      "technical": ["bioluminescent details", "water droplets", "photorealistic creature effects"]
+      "mood": [
+        "dramatic single light source",
+        "harsh shadows",
+        "horror movie cinematography"
+      ],
+      "technical": [
+        "bioluminescent details",
+        "water droplets",
+        "photorealistic creature effects"
+      ]
     }
   },
   "rendering": {

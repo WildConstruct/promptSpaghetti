@@ -91,7 +91,7 @@ The groundwork laid out for the UTDG is solid and comprehensive. It smartly taps
 
 The UTDG’s vision of nodes as materials (with attributes) and edges as relationships is powerful. We can refine this model for clarity and flexibility:
 
-**Structured Node Types:** Instead of monolithic “material\@era” nodes (e.g. a single node “medieval linen”), consider a schema with **Material nodes** and related context nodes for Era and Region. For example, a base node “Linen” can have properties like fiber type (flax), typical texture (“smooth, crisp”), etc., and then connect to an **Era node** “Medieval Europe” via an edge like _USED_IN_PERIOD_ or a property “common_in: Medieval Europe”. This way, we don’t duplicate “linen” for every era; we attach era-specific attributes as needed. If certain attributes only apply in a given era (e.g. medieval linen often being coarser and unbleached), we can model that either by a sub-node or as a conditional attribute. One approach: have child nodes that represent specific variants, like “Linen (Medieval European)” as a subtype of the Linen node, with an _ERA_ property = medieval, and an edge _SUBCLASS_OF_ -> Linen. This allows queries at multiple granularities (all linen vs. linen in medieval context). It also aligns with ontologies like Getty AAT or CIDOC CRM where materials are concepts and time periods are linked separately.
+**Structured Node Types:** Instead of monolithic “material\@era” nodes (e.g. a single node “medieval linen”), consider a schema with **Material nodes** and related context nodes for Era and Region. For example, a base node “Linen” can have properties like fiber type (flax), typical texture (“smooth, crisp”), etc., and then connect to an **Era node** “Medieval Europe” via an edge like _USED_IN_PERIOD_ or a property “common*in: Medieval Europe”. This way, we don’t duplicate “linen” for every era; we attach era-specific attributes as needed. If certain attributes only apply in a given era (e.g. medieval linen often being coarser and unbleached), we can model that either by a sub-node or as a conditional attribute. One approach: have child nodes that represent specific variants, like “Linen (Medieval European)” as a subtype of the Linen node, with an \_ERA* property = medieval, and an edge _SUBCLASS_OF_ -> Linen. This allows queries at multiple granularities (all linen vs. linen in medieval context). It also aligns with ontologies like Getty AAT or CIDOC CRM where materials are concepts and time periods are linked separately.
 
 **Edge Types and Relationships:** The suggestion of edges for _compatible_ vs _incompatible combinations_ is great. We can expand the relationship vocabulary:
 
@@ -657,7 +657,11 @@ Low    = OCR/scraped, no date, or conflicting material tags
     "era": "14th century",
     "region": ["Northern Europe"],
     "confidence": "high",
-    "visual_hint": { "color": "#EDEBD7", "roughness": 0.8, "pattern": "plain weave" }
+    "visual_hint": {
+      "color": "#EDEBD7",
+      "roughness": 0.8,
+      "pattern": "plain weave"
+    }
   },
   "natural_language_description": {
     "simple": "rough medieval linen",
@@ -667,7 +671,9 @@ Low    = OCR/scraped, no date, or conflicting material tags
     { "desc": "coarse homespun", "weight": 0.7 },
     { "desc": "finer bleached", "weight": 0.3 }
   ],
-  "sources": [{ "url": "https://collections.vam.ac.uk/O354620", "license": "CC0" }]
+  "sources": [
+    { "url": "https://collections.vam.ac.uk/O354620", "license": "CC0" }
+  ]
 }
 ```
 
@@ -1002,7 +1008,11 @@ _Secondary Goal_
     "cultural_context": ["lower‑class"],
     "confidence": "high",
     "synthetic": false,
-    "visual_hint": { "color": "#EDEBD7", "roughness": 0.8, "pattern": "plain weave" }
+    "visual_hint": {
+      "color": "#EDEBD7",
+      "roughness": 0.8,
+      "pattern": "plain weave"
+    }
   },
   "natural_language_description": {
     "simple": "rough medieval linen",
@@ -1012,7 +1022,9 @@ _Secondary Goal_
     { "desc": "coarse homespun", "weight": 0.7 },
     { "desc": "finer bleached", "weight": 0.3 }
   ],
-  "sources": [{ "url": "https://collections.vam.ac.uk/O354620", "license": "CC0" }]
+  "sources": [
+    { "url": "https://collections.vam.ac.uk/O354620", "license": "CC0" }
+  ]
 }
 ```
 
@@ -1046,7 +1058,7 @@ function buildOutfit(root, era) {
   candidates = filterByConstraints(candidates, era);
   return {
     prompt: scaffold(candidates),
-    hints: candidates.map(v => v.attributes.visual_hint),
+    hints: candidates.map(v => v.attributes.visual_hint)
   };
 }
 ```
@@ -1375,7 +1387,11 @@ Added fields `bias_flag` and `synthetic`.
     "confidence": "high",
     "synthetic": false,
     "bias_flag": [],
-    "visual_hint": { "color": "#EDEBD7", "roughness": 0.8, "pattern": "plain weave" }
+    "visual_hint": {
+      "color": "#EDEBD7",
+      "roughness": 0.8,
+      "pattern": "plain weave"
+    }
   },
   "variants": [
     { "desc": "coarse homespun", "weight": 0.7 },
@@ -1385,7 +1401,9 @@ Added fields `bias_flag` and `synthetic`.
     "simple": "rough medieval linen",
     "rich": "homespun linen with a coarse, breathable texture typical of 14th‑century Europe"
   },
-  "sources": [{ "url": "https://collections.vam.ac.uk/O354620", "license": "CC0" }]
+  "sources": [
+    { "url": "https://collections.vam.ac.uk/O354620", "license": "CC0" }
+  ]
 }
 ```
 
@@ -1422,7 +1440,7 @@ function buildOutfit(root, era) {
   nodes = sampleVariants(nodes); // weight‑based pick
   return {
     prompt: scaffold(nodes),
-    hints: nodes.map(n => n.attributes.visual_hint),
+    hints: nodes.map(n => n.attributes.visual_hint)
   };
 }
 ```

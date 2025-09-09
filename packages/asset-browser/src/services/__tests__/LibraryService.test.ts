@@ -24,9 +24,19 @@ describe('LibraryService', () => {
 
       expect(presets).toHaveLength(3);
       expect(presets).toEqual([
-        { id: 'p1', name: 'Medieval Castle', tags: ['demo', 'medieval'], type: 'image' },
+        {
+          id: 'p1',
+          name: 'Medieval Castle',
+          tags: ['demo', 'medieval'],
+          type: 'image'
+        },
         { id: 'p2', name: 'Forest Path', tags: ['nature'], type: 'image' },
-        { id: 'p3', name: 'Ocean Waves', tags: ['nature', 'demo'], type: 'video' },
+        {
+          id: 'p3',
+          name: 'Ocean Waves',
+          tags: ['nature', 'demo'],
+          type: 'video'
+        }
       ]);
     });
 
@@ -120,8 +130,8 @@ describe('LibraryService', () => {
     it('should handle single manifest', async () => {
       const mockManifest = { version: '1.0', presets: ['preset1'] };
 
-      (parseManifest as jest.Mock).mockReturnValueOnce({ 
-        presets: [mockPreset1] 
+      (parseManifest as jest.Mock).mockReturnValueOnce({
+        presets: [mockPreset1]
       });
 
       const result = await LibraryService.scanLibraries([mockManifest]);
@@ -132,7 +142,7 @@ describe('LibraryService', () => {
 
     it('should accumulate presets from multiple manifests', async () => {
       const mockManifests = [{}, {}, {}];
-      
+
       (parseManifest as jest.Mock)
         .mockReturnValueOnce({ presets: [mockPreset1] })
         .mockReturnValueOnce({ presets: [] })
@@ -144,10 +154,7 @@ describe('LibraryService', () => {
     });
 
     it('should throw error when parseManifest fails', async () => {
-      const mockManifests = [
-        { version: '1.0' },
-        { invalid: 'manifest' }
-      ];
+      const mockManifests = [{ version: '1.0' }, { invalid: 'manifest' }];
 
       (parseManifest as jest.Mock)
         .mockReturnValueOnce({ presets: [mockPreset1] })
@@ -155,8 +162,9 @@ describe('LibraryService', () => {
           throw new Error('Invalid manifest format');
         });
 
-      await expect(LibraryService.scanLibraries(mockManifests))
-        .rejects.toThrow('1 error(s) during scan');
+      await expect(LibraryService.scanLibraries(mockManifests)).rejects.toThrow(
+        '1 error(s) during scan'
+      );
 
       expect(parseManifest).toHaveBeenCalledTimes(2);
     });
@@ -173,8 +181,9 @@ describe('LibraryService', () => {
         })
         .mockReturnValueOnce({ presets: [mockPreset1] });
 
-      await expect(LibraryService.scanLibraries(mockManifests))
-        .rejects.toThrow('2 error(s) during scan');
+      await expect(LibraryService.scanLibraries(mockManifests)).rejects.toThrow(
+        '2 error(s) during scan'
+      );
     });
 
     it('should handle non-Error exceptions', async () => {
@@ -184,8 +193,9 @@ describe('LibraryService', () => {
         throw 'String error';
       });
 
-      await expect(LibraryService.scanLibraries(mockManifests))
-        .rejects.toThrow('1 error(s) during scan');
+      await expect(LibraryService.scanLibraries(mockManifests)).rejects.toThrow(
+        '1 error(s) during scan'
+      );
     });
 
     it('should handle undefined thrown values', async () => {
@@ -195,8 +205,9 @@ describe('LibraryService', () => {
         throw undefined;
       });
 
-      await expect(LibraryService.scanLibraries(mockManifests))
-        .rejects.toThrow('1 error(s) during scan');
+      await expect(LibraryService.scanLibraries(mockManifests)).rejects.toThrow(
+        '1 error(s) during scan'
+      );
     });
 
     it('should continue processing after encountering errors', async () => {
@@ -209,8 +220,9 @@ describe('LibraryService', () => {
         .mockReturnValueOnce({ presets: [mockPreset1] })
         .mockReturnValueOnce({ presets: [mockPreset2] });
 
-      await expect(LibraryService.scanLibraries(mockManifests))
-        .rejects.toThrow('1 error(s) during scan');
+      await expect(LibraryService.scanLibraries(mockManifests)).rejects.toThrow(
+        '1 error(s) during scan'
+      );
 
       expect(parseManifest).toHaveBeenCalledTimes(3);
     });
@@ -272,8 +284,9 @@ describe('LibraryService', () => {
         throw complexError;
       });
 
-      await expect(LibraryService.scanLibraries(mockManifests))
-        .rejects.toThrow('1 error(s) during scan');
+      await expect(LibraryService.scanLibraries(mockManifests)).rejects.toThrow(
+        '1 error(s) during scan'
+      );
     });
 
     it('should handle null and undefined in manifests array', async () => {
@@ -303,8 +316,9 @@ describe('LibraryService', () => {
         throw error;
       });
 
-      await expect(LibraryService.scanLibraries([{}]))
-        .rejects.toThrow('1 error(s) during scan');
+      await expect(LibraryService.scanLibraries([{}])).rejects.toThrow(
+        '1 error(s) during scan'
+      );
     });
 
     it('should handle promise rejection in parseManifest', async () => {
@@ -313,8 +327,7 @@ describe('LibraryService', () => {
       });
 
       // Since parseManifest is called synchronously, this would actually throw
-      await expect(LibraryService.scanLibraries([{}]))
-        .rejects.toThrow();
+      await expect(LibraryService.scanLibraries([{}])).rejects.toThrow();
     });
   });
 });

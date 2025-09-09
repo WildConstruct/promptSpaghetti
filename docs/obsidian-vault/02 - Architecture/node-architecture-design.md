@@ -68,7 +68,7 @@ enum ContextCapability {
   CACHING = 'cache',
   SECURITY_AUDIT = 'security',
   DEBUGGING = 'debugging',
-  HOT_RELOAD = 'hotReload',
+  HOT_RELOAD = 'hotReload'
 }
 ```
 
@@ -108,7 +108,9 @@ abstract class OptimizedRuntimeNode<TOutput> {
   }
 
   // Memory-aware execution
-  private async executeWithMemoryManagement(context: UnifiedExecutionContext): Promise<TOutput> {
+  private async executeWithMemoryManagement(
+    context: UnifiedExecutionContext
+  ): Promise<TOutput> {
     // Check memory usage periodically
     if (this.shouldCheckMemory()) {
       await this.optimizeMemoryUsage();
@@ -117,7 +119,9 @@ abstract class OptimizedRuntimeNode<TOutput> {
     return this.executeCore(context);
   }
 
-  protected abstract executeCore(context: UnifiedExecutionContext): Promise<TOutput>;
+  protected abstract executeCore(
+    context: UnifiedExecutionContext
+  ): Promise<TOutput>;
 }
 ```
 
@@ -150,7 +154,9 @@ class HotReloadExtensionManager {
   async enableHotReload(extensionId: string): Promise<void> {
     const extension = this.getExtension(extensionId);
     if (!extension.canHotReload) {
-      throw new Error(`Extension ${extensionId} does not support hot reloading`);
+      throw new Error(
+        `Extension ${extensionId} does not support hot reloading`
+      );
     }
 
     // Set up file watching
@@ -223,11 +229,14 @@ enum SchemaCompilationTarget {
   UI_GENERATION = 'ui',
   TYPESCRIPT_TYPES = 'types',
   DOCUMENTATION = 'docs',
-  TEST_FIXTURES = 'tests',
+  TEST_FIXTURES = 'tests'
 }
 
 class UnifiedSchemaCompiler {
-  compile<T>(schema: UnifiedNodeSchema<T>, target: SchemaCompilationTarget): CompiledSchema {
+  compile<T>(
+    schema: UnifiedNodeSchema<T>,
+    target: SchemaCompilationTarget
+  ): CompiledSchema {
     switch (target) {
       case SchemaCompilationTarget.RUNTIME_VALIDATION:
         return this.compileForRuntime(schema);
@@ -243,12 +252,14 @@ class UnifiedSchemaCompiler {
     }
   }
 
-  private compileForRuntime<T>(schema: UnifiedNodeSchema<T>): RuntimeCompiledSchema<T> {
+  private compileForRuntime<T>(
+    schema: UnifiedNodeSchema<T>
+  ): RuntimeCompiledSchema<T> {
     return {
       validate: schema.validation.parse.bind(schema.validation),
       validateAsync: schema.validation.parseAsync.bind(schema.validation),
       optimizationHints: schema.runtime,
-      securityRules: this.extractSecurityRules(schema),
+      securityRules: this.extractSecurityRules(schema)
     };
   }
 }
@@ -295,7 +306,7 @@ enum StepMode {
   STEP_OVER = 'over', // Execute current node, pause at next
   STEP_INTO = 'into', // Step into node execution
   STEP_OUT = 'out', // Step out of current execution context
-  CONTINUE = 'continue', // Run until next breakpoint
+  CONTINUE = 'continue' // Run until next breakpoint
 }
 
 class VisualNodeDebugger implements NodeDebugger {
@@ -325,7 +336,7 @@ class VisualNodeDebugger implements NodeDebugger {
       executionGraph: this.buildExecutionGraph(),
       performanceHeatmap: this.generatePerformanceHeatmap(),
       memoryUsageTimeline: this.generateMemoryTimeline(),
-      variableFlowDiagram: this.generateVariableFlow(),
+      variableFlowDiagram: this.generateVariableFlow()
     };
   }
 }
@@ -359,7 +370,10 @@ interface ExecutionWorker {
   maxConcurrency: number;
 
   // Execution interface
-  executeNode<T>(node: RuntimeNode<T>, context: UnifiedExecutionContext): Promise<T>;
+  executeNode<T>(
+    node: RuntimeNode<T>,
+    context: UnifiedExecutionContext
+  ): Promise<T>;
 
   // Health monitoring
   getHealthStatus(): WorkerHealthStatus;
@@ -390,7 +404,9 @@ class WorkerPool {
     options: DistributionOptions
   ): Promise<ExecutionWorker> {
     const availableWorkers = this.workers.filter(
-      worker => worker.currentLoad < worker.maxConcurrency && this.workerMeetsRequirements(worker, requirements)
+      worker =>
+        worker.currentLoad < worker.maxConcurrency &&
+        this.workerMeetsRequirements(worker, requirements)
     );
 
     if (availableWorkers.length === 0) {
@@ -399,7 +415,11 @@ class WorkerPool {
     }
 
     // Load balancing strategy
-    return this.loadBalancer.selectWorker(availableWorkers, requirements, options);
+    return this.loadBalancer.selectWorker(
+      availableWorkers,
+      requirements,
+      options
+    );
   }
 }
 ```
@@ -444,18 +464,24 @@ enum OperationType {
   EDGE_CREATE = 'edge:create',
   EDGE_DELETE = 'edge:delete',
   VARIABLE_SET = 'variable:set',
-  VARIABLE_DELETE = 'variable:delete',
+  VARIABLE_DELETE = 'variable:delete'
 }
 
 class OperationalTransformEngine {
   // Transform operations for concurrent editing
-  transform(operation: GraphOperation, concurrent: GraphOperation[]): TransformedOperation {
+  transform(
+    operation: GraphOperation,
+    concurrent: GraphOperation[]
+  ): TransformedOperation {
     // Operational transformation algorithm
     return this.applyTransformRules(operation, concurrent);
   }
 
   // Conflict resolution strategies
-  resolveConflict(conflictingOps: GraphOperation[], strategy: ConflictResolutionStrategy): ResolvedOperation {
+  resolveConflict(
+    conflictingOps: GraphOperation[],
+    strategy: ConflictResolutionStrategy
+  ): ResolvedOperation {
     switch (strategy) {
       case ConflictResolutionStrategy.LAST_WRITER_WINS:
         return this.lastWriterWins(conflictingOps);

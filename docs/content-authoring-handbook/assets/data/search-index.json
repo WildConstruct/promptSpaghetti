@@ -397,7 +397,16 @@
     "type": "example",
     "difficulty": "beginner",
     "part": "examples",
-    "keywords": ["simple", "greeting", "basic", "fundamental", "beginner", "example", "grammar", "structure"]
+    "keywords": [
+      "simple",
+      "greeting",
+      "basic",
+      "fundamental",
+      "beginner",
+      "example",
+      "grammar",
+      "structure"
+    ]
   },
   {
     "title": "Character Generator",
@@ -425,6 +434,16 @@
     "type": "example",
     "difficulty": "advanced",
     "part": "examples",
-    "keywords": ["story", "prompt", "advanced", "conditionals", "complex", "epic7", "markov", "sequential", "patterns"]
+    "keywords": [
+      "story",
+      "prompt",
+      "advanced",
+      "conditionals",
+      "complex",
+      "epic7",
+      "markov",
+      "sequential",
+      "patterns"
+    ]
   }
 ]

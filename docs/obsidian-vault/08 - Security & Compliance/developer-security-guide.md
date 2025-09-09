@@ -72,7 +72,13 @@ const StatusBar: React.FC<StatusBarProps> = ({
 ```typescript
 // WebSocketStatus.tsx - Connection security monitoring
 interface ConnectionState {
-  status: 'connected' | 'authenticated' | 'connecting' | 'authenticating' | 'disconnected' | 'error';
+  status:
+    | 'connected'
+    | 'authenticated'
+    | 'connecting'
+    | 'authenticating'
+    | 'disconnected'
+    | 'error';
   lastConnected?: number;
   reconnectAttempts: number;
   error?: string;
@@ -91,13 +97,13 @@ const WebSocketClient = {
       headers: {
         Authorization: `Bearer ${options.token}`,
         'X-Client-Version': VERSION,
-        'X-Security-Level': options.securityLevel,
-      },
+        'X-Security-Level': options.securityLevel
+      }
     });
 
     // Implement connection security checks
     this.setupSecurityHandlers(ws, options);
-  },
+  }
 };
 ```
 
@@ -142,8 +148,8 @@ class AuthenticationManager {
       body: JSON.stringify({ refreshToken }),
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-Token': await this.getCSRFToken(),
-      },
+        'X-CSRF-Token': await this.getCSRFToken()
+      }
     });
 
     const { accessToken, refreshToken: newRefreshToken } = response;
@@ -171,7 +177,7 @@ export const parseTemplate = (template: string): TemplateParseResult => {
       variables: [],
       errors: ['Invalid template format'],
       isValid: false,
-      processedTemplate: '',
+      processedTemplate: ''
     };
   }
 
@@ -183,7 +189,7 @@ export const parseTemplate = (template: string): TemplateParseResult => {
     /eval\s*\(/gi,
     /Function\s*\(/gi,
     /setTimeout\s*\(/gi,
-    /setInterval\s*\(/gi,
+    /setInterval\s*\(/gi
   ];
 
   for (const pattern of dangerousPatterns) {
@@ -192,7 +198,7 @@ export const parseTemplate = (template: string): TemplateParseResult => {
         variables: [],
         errors: ['Template contains potentially dangerous content'],
         isValid: false,
-        processedTemplate: '',
+        processedTemplate: ''
       };
     }
   }
@@ -211,7 +217,7 @@ export const parseTemplate = (template: string): TemplateParseResult => {
         name: variableName,
         startIndex: match.index,
         endIndex: match.index + match[0].length,
-        isValid: true,
+        isValid: true
       });
     } else {
       variables.push({
@@ -219,16 +225,18 @@ export const parseTemplate = (template: string): TemplateParseResult => {
         startIndex: match.index,
         endIndex: match.index + match[0].length,
         isValid: false,
-        error: 'Invalid variable name format',
+        error: 'Invalid variable name format'
       });
     }
   }
 
   return {
     variables,
-    errors: variables.filter(v => !v.isValid).map(v => v.error || 'Invalid variable'),
+    errors: variables
+      .filter(v => !v.isValid)
+      .map(v => v.error || 'Invalid variable'),
     isValid: variables.every(v => v.isValid),
-    processedTemplate: template,
+    processedTemplate: template
   };
 };
 ```
@@ -257,7 +265,10 @@ class SecurityUtils {
     return div.innerHTML;
   }
 
-  static validateFileContent(content: string, maxSize: number = 50 * 1024 * 1024): boolean {
+  static validateFileContent(
+    content: string,
+    maxSize: number = 50 * 1024 * 1024
+  ): boolean {
     // Size validation
     if (content.length > maxSize) {
       throw new Error('File content exceeds maximum size limit');
@@ -283,7 +294,12 @@ class SecurityUtils {
 interface SecurityEvent {
   eventId: string;
   timestamp: number;
-  eventType: 'authentication' | 'authorization' | 'encryption' | 'data_access' | 'system';
+  eventType:
+    | 'authentication'
+    | 'authorization'
+    | 'encryption'
+    | 'data_access'
+    | 'system';
   severity: 'low' | 'medium' | 'high' | 'critical';
   userId?: string;
   sessionId?: string;
@@ -300,7 +316,7 @@ class SecurityLogger {
     const securityEvent: SecurityEvent = {
       ...event,
       eventId: this.generateEventId(),
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
 
     // Store event
@@ -318,7 +334,10 @@ class SecurityLogger {
 
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
-      console.log(`[SECURITY] ${event.severity.toUpperCase()}: ${event.eventType}`, event.details);
+      console.log(
+        `[SECURITY] ${event.severity.toUpperCase()}: ${event.eventType}`,
+        event.details
+      );
     }
   }
 
@@ -328,9 +347,9 @@ class SecurityLogger {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${await this.getApiToken()}`,
+          Authorization: `Bearer ${await this.getApiToken()}`
         },
-        body: JSON.stringify(event),
+        body: JSON.stringify(event)
       });
     } catch (error) {
       console.error('Failed to send security alert:', error);
@@ -347,7 +366,11 @@ class ThreatDetector {
   private failedLoginAttempts = new Map<string, number>();
   private suspiciousActivityThreshold = 10;
 
-  analyzeAuthenticationAttempt(ipAddress: string, userId: string, success: boolean): ThreatAssessment {
+  analyzeAuthenticationAttempt(
+    ipAddress: string,
+    userId: string,
+    success: boolean
+  ): ThreatAssessment {
     const key = `${ipAddress}:${userId}`;
 
     if (!success) {
@@ -359,7 +382,7 @@ class ThreatDetector {
           threatLevel: 'high',
           action: 'block',
           reason: 'Excessive failed login attempts',
-          recommendedResponse: 'Temporary IP block and account notification',
+          recommendedResponse: 'Temporary IP block and account notification'
         };
       }
     } else {
@@ -370,11 +393,15 @@ class ThreatDetector {
     return {
       threatLevel: 'low',
       action: 'allow',
-      reason: 'Normal authentication pattern',
+      reason: 'Normal authentication pattern'
     };
   }
 
-  analyzeDataAccess(userId: string, dataSize: number, timeOfDay: number): ThreatAssessment {
+  analyzeDataAccess(
+    userId: string,
+    dataSize: number,
+    timeOfDay: number
+  ): ThreatAssessment {
     // Check for unusual data access patterns
     const isOffHours = timeOfDay < 6 || timeOfDay > 22;
     const isLargeDataAccess = dataSize > 100 * 1024 * 1024; // 100MB
@@ -384,14 +411,14 @@ class ThreatDetector {
         threatLevel: 'medium',
         action: 'monitor',
         reason: 'Large data access during off-hours',
-        recommendedResponse: 'Enhanced monitoring and user verification',
+        recommendedResponse: 'Enhanced monitoring and user verification'
       };
     }
 
     return {
       threatLevel: 'low',
       action: 'allow',
-      reason: 'Normal data access pattern',
+      reason: 'Normal data access pattern'
     };
   }
 }
@@ -411,14 +438,17 @@ class ClientEncryption {
     return await window.crypto.subtle.generateKey(
       {
         name: this.algorithm,
-        length: this.keyLength,
+        length: this.keyLength
       },
       true, // extractable
       ['encrypt', 'decrypt']
     );
   }
 
-  async encryptContent(content: string, key: CryptoKey): Promise<EncryptedContent> {
+  async encryptContent(
+    content: string,
+    key: CryptoKey
+  ): Promise<EncryptedContent> {
     const encoder = new TextEncoder();
     const data = encoder.encode(content);
 
@@ -429,7 +459,7 @@ class ClientEncryption {
     const encrypted = await window.crypto.subtle.encrypt(
       {
         name: this.algorithm,
-        iv: iv,
+        iv: iv
       },
       key,
       data
@@ -440,11 +470,14 @@ class ClientEncryption {
       iv: Array.from(iv),
       data: Array.from(new Uint8Array(encrypted)),
       keyId: await this.getKeyId(key),
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
   }
 
-  async decryptContent(encryptedContent: EncryptedContent, key: CryptoKey): Promise<string> {
+  async decryptContent(
+    encryptedContent: EncryptedContent,
+    key: CryptoKey
+  ): Promise<string> {
     const iv = new Uint8Array(encryptedContent.iv);
     const data = new Uint8Array(encryptedContent.data);
 
@@ -452,7 +485,7 @@ class ClientEncryption {
     const decrypted = await window.crypto.subtle.decrypt(
       {
         name: encryptedContent.algorithm,
-        iv: iv,
+        iv: iv
       },
       key,
       data
@@ -488,7 +521,9 @@ describe('Security Validation', () => {
       const result = parseTemplate(maliciousTemplate);
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain('Template contains potentially dangerous content');
+      expect(result.errors).toContain(
+        'Template contains potentially dangerous content'
+      );
     });
 
     it('should sanitize variable names', () => {
@@ -567,14 +602,14 @@ app.use(
         fontSrc: ["'self'"],
         objectSrc: ["'none'"],
         mediaSrc: ["'self'"],
-        frameSrc: ["'none'"],
-      },
+        frameSrc: ["'none'"]
+      }
     },
     hsts: {
       maxAge: 31536000,
       includeSubDomains: true,
-      preload: true,
-    },
+      preload: true
+    }
   })
 );
 
@@ -582,7 +617,7 @@ app.use(
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP',
+  message: 'Too many requests from this IP'
 });
 
 app.use('/api/', apiLimiter);

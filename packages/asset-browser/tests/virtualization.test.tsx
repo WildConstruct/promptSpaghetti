@@ -7,7 +7,11 @@ import { AssetBrowser } from '../src/components/AssetBrowser';
 
 describe('Virtualized grid behavior', () => {
   test('grid renders a subset of cells based on viewport size', async () => {
-    const { container } = render(<div style={{ width: 200, height: 170 }}><AssetBrowser /></div>);
+    const { container } = render(
+      <div style={{ width: 200, height: 170 }}>
+        <AssetBrowser />
+      </div>
+    );
 
     const grid = await screen.findByRole('grid');
     expect(grid).toBeTruthy();

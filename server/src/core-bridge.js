@@ -12,11 +12,17 @@ async function loadCoreModules() {
   if (!coreModules) {
     try {
       // Load core runtime modules
-      coreModules = await import('../../../../packages/core/dist/packages/core/runtime/index.js');
-      advancedModules = await import('../../../../packages/core/dist/packages/core/runtime/advanced.js');
+      coreModules = await import(
+        '../../../../packages/core/dist/packages/core/runtime/index.js'
+      );
+      advancedModules = await import(
+        '../../../../packages/core/dist/packages/core/runtime/advanced.js'
+      );
 
       // Load execution tracking
-      executionTracker = await import('../../../../packages/core/dist/packages/core/execution/ExecutionTracker.js');
+      executionTracker = await import(
+        '../../../../packages/core/dist/packages/core/execution/ExecutionTracker.js'
+      );
 
       // Load advanced nodes
       advancedNodes.WeightedAdvanced = await import(
@@ -28,13 +34,19 @@ async function loadCoreModules() {
       advancedNodes.Sequential = await import(
         '../../../../packages/core/dist/packages/core/runtime/nodes/Sequential.js'
       );
-      advancedNodes.Markov = await import('../../../../packages/core/dist/packages/core/runtime/nodes/Markov.js');
+      advancedNodes.Markov = await import(
+        '../../../../packages/core/dist/packages/core/runtime/nodes/Markov.js'
+      );
 
       // Load extension system
-      extensions = await import('../../../../packages/core/dist/packages/core/extensions/ExtensionLifecycleManager.js');
+      extensions = await import(
+        '../../../../packages/core/dist/packages/core/extensions/ExtensionLifecycleManager.js'
+      );
 
       // Load templates
-      templates = await import('../../../../packages/core/dist/packages/core/utils/templateParser.js');
+      templates = await import(
+        '../../../../packages/core/dist/packages/core/utils/templateParser.js'
+      );
     } catch (error) {
       console.error('Failed to load core modules:', error);
       throw error;
@@ -72,7 +84,7 @@ async function loadCoreModules() {
 
     // Templates
     parseTemplate: templates.parseTemplate,
-    substituteVariables: templates.substituteVariables,
+    substituteVariables: templates.substituteVariables
   };
 }
 

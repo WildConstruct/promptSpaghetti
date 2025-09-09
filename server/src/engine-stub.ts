@@ -20,21 +20,27 @@ export async function executeGraph(
   outputs: string[];
   executionPath?: any;
 }> {
-
-  console.log(`[STUB] executeGraph called with ${graph.nodes?.length || 0} nodes`);
+  console.log(
+    `[STUB] executeGraph called with ${graph.nodes?.length || 0} nodes`
+  );
 
   // Return minimal stub response
   return {
-    outputs: ['Stub output - server is running but graph execution is disabled'],
-    executionPath: null,
+    outputs: [
+      'Stub output - server is running but graph execution is disabled'
+    ],
+    executionPath: null
   };
 }
 
 /**
  * Legacy wrapper for backward compatibility
  */
-export async function executeGraphLegacy(graph: Graph, sessionId?: string, userId?: number): Promise<string[]> {
-
+export async function executeGraphLegacy(
+  graph: Graph,
+  sessionId?: string,
+  userId?: number
+): Promise<string[]> {
   const result = await executeGraph(graph, sessionId, userId);
   return result.outputs;
 }

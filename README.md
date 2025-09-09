@@ -10,7 +10,7 @@
 > A powerful node-based visual editor for creating deterministic prompt generation graphs. Designed specifically for film production pipelines, VFX workflows, and creative development teams. Build complex branching narratives, character generators, and scene descriptions with an intuitive drag-and-drop interface, then execute them with reproducible results.
 
 ![Prompt Spaghetti Editor](docs/images/editor-screenshot.png)
-*Visual node-based editor for professional content creation*
+_Visual node-based editor for professional content creation_
 
 ## 🎬 Why Prompt Spaghetti?
 
@@ -125,7 +125,9 @@ For the best development experience:
 4. Run `pnpm dev` in the integrated terminal
 
 ## 📖 Usage
+
 Related documentation:
+
 - Supabase storage setup: `docs/setup/supabase-storage.md`
 - In-app file browser epic stories: `docs/stories/`
 
@@ -231,9 +233,9 @@ NEXT_PUBLIC_FEATURE_DEV_USER=0   # set 1 to enable local dev userId stub
 
 ## 📦 Graph Manifest & Demo Graphs
 
-- __Public graphs folder__: `packages/asset-browser/public/graphs/`
-- __Add demo graphs__: drop `*.psg` files into that folder.
-- __Generate manifest__: creates `public/graphs/manifest.json` used by the Asset Browser.
+- **Public graphs folder**: `packages/asset-browser/public/graphs/`
+- **Add demo graphs**: drop `*.psg` files into that folder.
+- **Generate manifest**: creates `public/graphs/manifest.json` used by the Asset Browser.
 
 ```bash
 # From repo root
@@ -243,17 +245,17 @@ pnpm run generate:manifest
 pnpm --filter @prompt/asset-browser build
 ```
 
-- __Runtime__: `packages/asset-browser/src/services/GraphManifestLoader.ts` loads `/graphs/manifest.json`.
-- __Validation__: the generator validates `.psg` via `packages/core/utils/psgCodec.ts` when available; invalid files are skipped with warnings.
-- __Sample demos included__: `city-plaza.psg`, `forest-path.psg`, `medieval-market.psg` in `packages/asset-browser/public/graphs/`.
-- __CI__: see workflow step "Generate graph manifest" in `.github/workflows/ci.yml`.
+- **Runtime**: `packages/asset-browser/src/services/GraphManifestLoader.ts` loads `/graphs/manifest.json`.
+- **Validation**: the generator validates `.psg` via `packages/core/utils/psgCodec.ts` when available; invalid files are skipped with warnings.
+- **Sample demos included**: `city-plaza.psg`, `forest-path.psg`, `medieval-market.psg` in `packages/asset-browser/public/graphs/`.
+- **CI**: see workflow step "Generate graph manifest" in `.github/workflows/ci.yml`.
 
 ### Tips: Demos, Local Files, Supabase
 
-- __Open demos__: uses `/graphs/manifest.json` from the public folder.
-- __Open local files__: load `.psg` directly via the file dialog (no manifest needed).
-- __Save locally__: exports `.psg` to your machine.
-- __Save to Supabase__: requires `NEXT_PUBLIC_SUPABASE_URL/ANON_KEY` or `VITE_SUPABASE_URL/ANON_KEY` set; bucket path convention `users/{userId}/graphs/*`.
+- **Open demos**: uses `/graphs/manifest.json` from the public folder.
+- **Open local files**: load `.psg` directly via the file dialog (no manifest needed).
+- **Save locally**: exports `.psg` to your machine.
+- **Save to Supabase**: requires `NEXT_PUBLIC_SUPABASE_URL/ANON_KEY` or `VITE_SUPABASE_URL/ANON_KEY` set; bucket path convention `users/{userId}/graphs/*`.
 - For bucket/policy setup, see `docs/setup/supabase-storage.md`.
 
 ## 📊 Performance
@@ -378,6 +380,7 @@ Local backlog
 **This is proprietary software.** All rights reserved by Wild Construct.
 
 For licensing inquiries, please contact:
+
 - **Brian Behm**, CEO and Head Creative
 - **Wild Construct**
 - **Email**: wildconstruct@wildconstruct.com
@@ -387,12 +390,14 @@ See the [LICENSE](LICENSE) file for full terms.
 ## 🎯 Use Cases
 
 ### Film Production
+
 - **Script Development**: Generate dialogue variations and scene descriptions
 - **Casting**: Create detailed character profiles and backstories
 - **VFX Planning**: Standardize shot descriptions and technical notes
 - **Marketing**: Generate taglines, synopses, and social media content
 
 ### Game Development
+
 - **NPC Generation**: Create diverse character personalities
 - **Quest Design**: Build branching narrative structures
 - **World Building**: Generate location descriptions and lore
@@ -414,11 +419,12 @@ Wild Construct is pioneering the next generation of creative tools for the film 
 **© 2024-2025 Wild Construct. All Rights Reserved.**
 
 _Professional tools for professional creators._
+
 ## Deploying to Netlify (Option A: Proxy /api)
 
 This app is configured to use relative API paths in production and have Netlify proxy them to your backend.
 
-1) Netlify redirect (already added in `netlify.toml`)
+1. Netlify redirect (already added in `netlify.toml`)
 
 ```
 [[redirects]]
@@ -435,13 +441,13 @@ This app is configured to use relative API paths in production and have Netlify 
   force = true
 ```
 
-2) Client env (Netlify UI → Site settings → Build & deploy → Environment)
+2. Client env (Netlify UI → Site settings → Build & deploy → Environment)
 
 - `VITE_SUPABASE_URL` = `https://YOUR-PROJECT.supabase.co`
 - `VITE_SUPABASE_ANON_KEY` = `<anon key>`
 - Do NOT set `VITE_API_URL` (keep requests relative so the redirect handles routing)
 
-3) Backend CORS
+3. Backend CORS
 
 On the backend, include your app origin in `CORS_ORIGINS` (comma-separated list):
 
@@ -449,7 +455,7 @@ On the backend, include your app origin in `CORS_ORIGINS` (comma-separated list)
 CORS_ORIGINS="https://ps.wildconstruct.com"
 ```
 
-4) Alternate (Option B)
+4. Alternate (Option B)
 
 If you prefer absolute API calls, set `VITE_API_URL` to your backend origin and remove the Netlify redirect. Ensure CORS is configured accordingly.
 

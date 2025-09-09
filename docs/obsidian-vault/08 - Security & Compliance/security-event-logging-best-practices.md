@@ -51,13 +51,13 @@ securityLogger.logAccountLocked(lockout, {
     deviceId: extractDeviceFingerprint(request),
     deviceType: detectDeviceType(request),
     platform: detectPlatform(request),
-    browser: detectBrowser(request),
+    browser: detectBrowser(request)
   },
   threatContext: {
     riskScore: await calculateRiskScore(request),
     attackVector: detectAttackVector(request),
-    indicators: getSecurityIndicators(request),
-  },
+    indicators: getSecurityIndicators(request)
+  }
 });
 ```
 
@@ -82,7 +82,7 @@ securityLogger.logSecurityAlert(
     requiredPermissions: requiredPerms,
     userPermissions: userPerms,
     accessDecision: 'denied',
-    policyViolation: true,
+    policyViolation: true
   },
   context
 );
@@ -110,7 +110,7 @@ securityLogger.createAuditTrail(
   {
     before: null,
     after: { classification: 'sensitive', retention: 2555 },
-    fields: ['classification', 'retention'],
+    fields: ['classification', 'retention']
   },
   'Automated classification update',
   context
@@ -138,9 +138,9 @@ securityLogger.logSecurityAlert(
     metrics: {
       requestVolume: currentVolume,
       baselineVolume: baseline,
-      deviationFactor: deviation,
+      deviationFactor: deviation
     },
-    mitigationActions: ['rate_limiting_enabled', 'monitoring_enhanced'],
+    mitigationActions: ['rate_limiting_enabled', 'monitoring_enhanced']
   },
   context
 );
@@ -263,7 +263,7 @@ class SamplingSecurityLogger extends SecurityLogger {
     [SecurityEventType.ACCOUNT_LOCKED, 1.0], // Log all lockouts
     [SecurityEventType.SECURITY_ALERT, 1.0], // Log all alerts
     [SecurityEventType.AUDIT_LOG_ACCESS, 0.1], // Sample 10% of access logs
-    [SecurityEventType.POLICY_VIOLATION, 1.0], // Log all violations
+    [SecurityEventType.POLICY_VIOLATION, 1.0] // Log all violations
   ]);
 
   public shouldLog(eventType: SecurityEventType): boolean {
@@ -293,17 +293,23 @@ const STORAGE_POLICIES: Record<ComplianceFramework, StoragePolicy[]> = {
       retentionDays: 90,
       compressionEnabled: false,
       encryptionRequired: true,
-      accessFrequency: 'immediate',
+      accessFrequency: 'immediate'
     },
     {
       tier: 'warm',
       retentionDays: 365,
       compressionEnabled: true,
       encryptionRequired: true,
-      accessFrequency: 'minutes',
+      accessFrequency: 'minutes'
     },
-    { tier: 'cold', retentionDays: 2555, compressionEnabled: true, encryptionRequired: true, accessFrequency: 'hours' },
-  ],
+    {
+      tier: 'cold',
+      retentionDays: 2555,
+      compressionEnabled: true,
+      encryptionRequired: true,
+      accessFrequency: 'hours'
+    }
+  ]
   // ... other frameworks
 };
 ```
@@ -335,7 +341,14 @@ class LogLifecycleManager {
 ```typescript
 class DataSanitizer {
   static sanitizeLogData(data: any): any {
-    const sensitive = ['password', 'token', 'secret', 'key', 'ssn', 'creditcard'];
+    const sensitive = [
+      'password',
+      'token',
+      'secret',
+      'key',
+      'ssn',
+      'creditcard'
+    ];
 
     return this.deepSanitize(data, (key, value) => {
       if (sensitive.some(s => key.toLowerCase().includes(s))) {
@@ -347,7 +360,11 @@ class DataSanitizer {
 
   static maskSensitiveData(value: string): string {
     if (value.length <= 8) return '*'.repeat(value.length);
-    return value.substring(0, 2) + '*'.repeat(value.length - 4) + value.substring(value.length - 2);
+    return (
+      value.substring(0, 2) +
+      '*'.repeat(value.length - 4) +
+      value.substring(value.length - 2)
+    );
   }
 }
 ```
@@ -362,7 +379,7 @@ class LogIntegrityManager {
       timestamp: entry.timestamp.toISOString(),
       eventType: entry.eventType,
       actor: entry.actor.id,
-      target: entry.target?.id,
+      target: entry.target?.id
     };
 
     return crypto
@@ -373,7 +390,10 @@ class LogIntegrityManager {
 
   static verifyChecksum(entry: SecurityLogEntry): boolean {
     const expectedChecksum = this.generateChecksum(entry);
-    return crypto.timingSafeEqual(Buffer.from(entry.metadata.checksum, 'hex'), Buffer.from(expectedChecksum, 'hex'));
+    return crypto.timingSafeEqual(
+      Buffer.from(entry.metadata.checksum, 'hex'),
+      Buffer.from(expectedChecksum, 'hex')
+    );
   }
 }
 ```
@@ -390,16 +410,26 @@ interface LogAccessPolicy {
 }
 
 class LogAccessController {
-  static async authorizeLogAccess(user: User, query: LogQuery): Promise<boolean> {
+  static async authorizeLogAccess(
+    user: User,
+    query: LogQuery
+  ): Promise<boolean> {
     const policy = await this.getUserLogAccessPolicy(user);
 
     // Check event type permissions
-    if (query.eventTypes && !query.eventTypes.every(type => policy.allowedEventTypes.includes(type))) {
+    if (
+      query.eventTypes &&
+      !query.eventTypes.every(type => policy.allowedEventTypes.includes(type))
+    ) {
       return false;
     }
 
     // Check time window restrictions
-    if (policy.timeWindow && query.startTime && query.startTime < policy.timeWindow.start) {
+    if (
+      policy.timeWindow &&
+      query.startTime &&
+      query.startTime < policy.timeWindow.start
+    ) {
       return false;
     }
 
@@ -451,7 +481,7 @@ const ALERT_THRESHOLDS = {
   // Medium Priority Alerts (1-hour response)
   EVENT_VOLUME_DEVIATION: 200, // % above baseline
   LOG_PROCESSING_LATENCY: 10000, // ms
-  STORAGE_UTILIZATION: 85, // %
+  STORAGE_UTILIZATION: 85 // %
 };
 ```
 
@@ -470,19 +500,26 @@ const AUTOMATED_RESPONSES: AutomatedResponse[] = [
     actions: [
       { type: 'rate_limit', target: 'authentication', factor: 2 },
       { type: 'notify', recipients: ['security-team@company.com'] },
-      { type: 'log', level: 'critical', message: 'High failed login rate detected' },
+      {
+        type: 'log',
+        level: 'critical',
+        message: 'High failed login rate detected'
+      }
     ],
-    cooldownPeriod: 300,
+    cooldownPeriod: 300
   },
   {
     trigger: { type: 'pattern', pattern: 'privilege_escalation' },
     actions: [
       { type: 'disable_user', duration: 3600 },
-      { type: 'notify', recipients: ['security-team@company.com', 'admin-team@company.com'] },
-      { type: 'escalate', severity: 'critical' },
+      {
+        type: 'notify',
+        recipients: ['security-team@company.com', 'admin-team@company.com']
+      },
+      { type: 'escalate', severity: 'critical' }
     ],
-    cooldownPeriod: 0, // No cooldown for security incidents
-  },
+    cooldownPeriod: 0 // No cooldown for security incidents
+  }
 ];
 ```
 
@@ -499,13 +536,16 @@ class BehaviorAnalyzer {
     const analysis = {
       riskScore: this.calculateRiskScore(baseline, recentActivity),
       anomalies: this.detectAnomalies(baseline, recentActivity),
-      recommendations: this.generateRecommendations(baseline, recentActivity),
+      recommendations: this.generateRecommendations(baseline, recentActivity)
     };
 
     return analysis;
   }
 
-  private static detectAnomalies(baseline: UserBaseline, activity: SecurityLogEntry[]): Anomaly[] {
+  private static detectAnomalies(
+    baseline: UserBaseline,
+    activity: SecurityLogEntry[]
+  ): Anomaly[] {
     const anomalies: Anomaly[] = [];
 
     // Time-based anomalies
@@ -515,7 +555,7 @@ class BehaviorAnalyzer {
         type: 'temporal',
         severity: 'medium',
         description: `Access at unusual hours: ${unusualHours.join(', ')}`,
-        evidence: unusualHours,
+        evidence: unusualHours
       });
     }
 
@@ -526,7 +566,7 @@ class BehaviorAnalyzer {
         type: 'geolocation',
         severity: 'high',
         description: `Access from unusual locations: ${unusualLocations.join(', ')}`,
-        evidence: unusualLocations,
+        evidence: unusualLocations
       });
     }
 
@@ -539,7 +579,9 @@ class BehaviorAnalyzer {
 
 ```typescript
 class ThreatPatternDetector {
-  static async detectPatterns(logs: SecurityLogEntry[]): Promise<ThreatPattern[]> {
+  static async detectPatterns(
+    logs: SecurityLogEntry[]
+  ): Promise<ThreatPattern[]> {
     const patterns: ThreatPattern[] = [];
 
     // Brute force detection
@@ -557,15 +599,22 @@ class ThreatPatternDetector {
     return patterns;
   }
 
-  private static async detectBruteForce(logs: SecurityLogEntry[]): Promise<ThreatPattern | null> {
+  private static async detectBruteForce(
+    logs: SecurityLogEntry[]
+  ): Promise<ThreatPattern | null> {
     const failedLogins = logs.filter(
-      log => log.eventType === SecurityEventType.ACCOUNT_LOCKED && log.details.reason === 'EXCESSIVE_FAILED_ATTEMPTS'
+      log =>
+        log.eventType === SecurityEventType.ACCOUNT_LOCKED &&
+        log.details.reason === 'EXCESSIVE_FAILED_ATTEMPTS'
     );
 
     if (failedLogins.length < 5) return null;
 
     // Group by IP address
-    const ipGroups = this.groupBy(failedLogins, log => log.context.ipAddress || 'unknown');
+    const ipGroups = this.groupBy(
+      failedLogins,
+      log => log.context.ipAddress || 'unknown'
+    );
 
     for (const [ip, attempts] of Object.entries(ipGroups)) {
       if (attempts.length >= 5) {
@@ -577,9 +626,13 @@ class ThreatPatternDetector {
             sourceIp: ip,
             attemptCount: attempts.length,
             timeWindow: this.calculateTimeWindow(attempts),
-            targetAccounts: [...new Set(attempts.map(a => a.context.userEmail))],
+            targetAccounts: [...new Set(attempts.map(a => a.context.userEmail))]
           },
-          mitigations: ['Block source IP', 'Implement progressive delays', 'Enable CAPTCHA verification'],
+          mitigations: [
+            'Block source IP',
+            'Implement progressive delays',
+            'Enable CAPTCHA verification'
+          ]
         };
       }
     }
@@ -636,7 +689,10 @@ class SIEMIntegration {
 
     // Send to multiple SIEM systems for redundancy
     if (entry.severity === 'critical') {
-      await Promise.all([this.siemClient.sendEvent(siemFormat), this.backupSIEMClient.sendEvent(siemFormat)]);
+      await Promise.all([
+        this.siemClient.sendEvent(siemFormat),
+        this.backupSIEMClient.sendEvent(siemFormat)
+      ]);
     }
   }
 }
@@ -646,10 +702,16 @@ class SIEMIntegration {
 
 ```typescript
 class LogAggregationService {
-  static async aggregateToElasticsearch(entries: SecurityLogEntry[]): Promise<void> {
+  static async aggregateToElasticsearch(
+    entries: SecurityLogEntry[]
+  ): Promise<void> {
     const bulkBody = entries.flatMap(entry => [
-      { index: { _index: `security-logs-${new Date().toISOString().slice(0, 7)}` } },
-      entry,
+      {
+        index: {
+          _index: `security-logs-${new Date().toISOString().slice(0, 7)}`
+        }
+      },
+      entry
     ]);
 
     await this.elasticsearchClient.bulk({ body: bulkBody });
@@ -661,7 +723,7 @@ class LogAggregationService {
         time: entry.timestamp.getTime() / 1000,
         source: entry.metadata.source,
         sourcetype: 'security_event',
-        event: entry,
+        event: entry
       });
     }
   }

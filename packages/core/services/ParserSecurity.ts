@@ -5,10 +5,11 @@ export class ParserSecurity {
   // PII patterns to detect and mask
   private readonly piiPatterns = {
     email: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
-    phone: /\b(?:\+?1[-.\s]?)?\(?[0-9]\d{2}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b\d{3}-\d{4}\b/g,
+    phone:
+      /\b(?:\+?1[-.\s]?)?\(?[0-9]\d{2}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b\d{3}-\d{4}\b/g,
     ssn: /\b\d{3}-\d{2}-\d{4}\b/g,
     creditCard: /\b(?:\d{4}[-\s]?){3}\d{4}\b/g,
-    ipAddress: /\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/g,
+    ipAddress: /\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/g
   };
 
   // Prompt injection patterns to remove
@@ -23,7 +24,7 @@ export class ParserSecurity {
     /<\|im_end\|>/gi,
     /\{\{system\}\}/gi,
     /assistant\s*:/gi,
-    /user\s*:/gi,
+    /user\s*:/gi
   ];
 
   // Dangerous code patterns in LLM output
@@ -40,7 +41,7 @@ export class ParserSecurity {
     '<script',
     'javascript:',
     'onclick=',
-    'onerror=',
+    'onerror='
   ];
 
   /**
@@ -131,7 +132,7 @@ export class ParserSecurity {
     // Don't escape variables in curly braces
     const variablePattern = /\{[^}]+\}/g;
     const variables: string[] = [];
-    
+
     // Extract variables first
     let match;
     while ((match = variablePattern.exec(text)) !== null) {
@@ -146,7 +147,7 @@ export class ParserSecurity {
 
     // Escape other special patterns
     escaped = escaped
-      .replace(/```[\s\S]*?```/g, (match) => {
+      .replace(/```[\s\S]*?```/g, match => {
         // Preserve code blocks but mark them
         return `[CODE_BLOCK]${match}[/CODE_BLOCK]`;
       })
@@ -171,7 +172,7 @@ export class ParserSecurity {
       /javascript:/gi,
       /on\w+\s*=/gi, // Event handlers
       /eval\s*\(/gi,
-      /new\s+Function\s*\(/gi,
+      /new\s+Function\s*\(/gi
     ];
 
     for (const pattern of codePatterns) {
@@ -204,8 +205,12 @@ export class ParserSecurity {
       }
 
       // Check that source and target are valid node indices
-      if (edge.source < 0 || edge.source >= response.nodes.length ||
-          edge.target < 0 || edge.target >= response.nodes.length) {
+      if (
+        edge.source < 0 ||
+        edge.source >= response.nodes.length ||
+        edge.target < 0 ||
+        edge.target >= response.nodes.length
+      ) {
         return false;
       }
 
@@ -229,8 +234,10 @@ export class ParserSecurity {
    * Check if edges form a cycle
    */
   private hasCycles(edges: any[], nodeCount: number): boolean {
-    const adjacency: number[][] = Array(nodeCount).fill(null).map(() => []);
-    
+    const adjacency: number[][] = Array(nodeCount)
+      .fill(null)
+      .map(() => []);
+
     for (const edge of edges) {
       adjacency[edge.source].push(edge.target);
     }

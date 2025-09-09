@@ -21,7 +21,7 @@ const epicFiles = [
   'epic26plan.md',
   'epic27plan.md',
   'epic28plan.md',
-  'epic29plan.md',
+  'epic29plan.md'
 ];
 
 function parseEpicPlan(filePath) {
@@ -53,7 +53,7 @@ function parseEpicPlan(filePath) {
           epic: storyMatch[1].split('.')[0],
           title: storyMatch[2].trim(),
           status: 'READY',
-          tasks: [],
+          tasks: []
         };
       }
     }
@@ -68,12 +68,14 @@ function parseEpicPlan(filePath) {
           title: taskTitle,
           state: 'UNASSIGNED',
           assignee: null,
-          wip_class: taskTitle.toLowerCase().includes('test') ? 'CHORE' : 'FEAT',
+          wip_class: taskTitle.toLowerCase().includes('test')
+            ? 'CHORE'
+            : 'FEAT',
           est: estimateTaskHours(taskTitle),
           created: new Date().toISOString(),
           updated: new Date().toISOString(),
           dependencies: [],
-          notes: [],
+          notes: []
         };
         tasks.push(task);
       }
@@ -93,17 +95,30 @@ function estimateTaskHours(taskTitle) {
   const title = taskTitle.toLowerCase();
 
   // Complex tasks
-  if (title.includes('implement') || title.includes('build') || title.includes('create') || title.includes('design')) {
+  if (
+    title.includes('implement') ||
+    title.includes('build') ||
+    title.includes('create') ||
+    title.includes('design')
+  ) {
     return 4;
   }
 
   // Medium tasks
-  if (title.includes('integrate') || title.includes('configure') || title.includes('setup')) {
+  if (
+    title.includes('integrate') ||
+    title.includes('configure') ||
+    title.includes('setup')
+  ) {
     return 3;
   }
 
   // Testing and documentation
-  if (title.includes('test') || title.includes('document') || title.includes('research')) {
+  if (
+    title.includes('test') ||
+    title.includes('document') ||
+    title.includes('research')
+  ) {
     return 2;
   }
 
@@ -123,11 +138,11 @@ function createStoryEvent(story) {
         acceptance: [`Complete Epic ${story.epic} story: ${story.title}`],
         priority: parseInt(story.epic) <= 22 ? 1 : 2, // Higher priority for 19-22
         status: 'READY',
-        tasks: story.tasks.map(t => t.id),
-      },
+        tasks: story.tasks.map(t => t.id)
+      }
     },
     version: 1,
-    ts: Date.now() / 1000,
+    ts: Date.now() / 1000
   };
 
   return event;
@@ -139,7 +154,7 @@ function createTaskEvent(task) {
     actor: 'epic_processor_script',
     payload: { task },
     version: 1,
-    ts: Date.now() / 1000,
+    ts: Date.now() / 1000
   };
 
   return event;
@@ -151,7 +166,13 @@ function insertEvent(event) {
     VALUES (?, ?, ?, ?, ?)
   `);
 
-  stmt.run(event.type, event.actor, JSON.stringify(event.payload), event.version, event.ts);
+  stmt.run(
+    event.type,
+    event.actor,
+    JSON.stringify(event.payload),
+    event.version,
+    event.ts
+  );
 }
 
 // Main processing
@@ -169,7 +190,9 @@ epicFiles.forEach(filename => {
   try {
     const { stories, tasks } = parseEpicPlan(filePath);
 
-    console.log(`   Found ${stories.length} stories with ${tasks.length} tasks`);
+    console.log(
+      `   Found ${stories.length} stories with ${tasks.length} tasks`
+    );
 
     // Create events for stories and tasks
     stories.forEach(story => {

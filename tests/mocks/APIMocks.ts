@@ -71,36 +71,87 @@ export class APIMockService {
     const handlers = [
       // Authentication endpoints
       rest.post(`${this.baseUrl}/api/auth/login`, this.handleLogin.bind(this)),
-      rest.post(`${this.baseUrl}/api/auth/logout`, this.handleLogout.bind(this)),
-      rest.post(`${this.baseUrl}/api/auth/refresh`, this.handleRefreshToken.bind(this)),
-      rest.get(`${this.baseUrl}/api/auth/me`, this.handleGetCurrentUser.bind(this)),
-      rest.post(`${this.baseUrl}/api/auth/register`, this.handleRegister.bind(this)),
+      rest.post(
+        `${this.baseUrl}/api/auth/logout`,
+        this.handleLogout.bind(this)
+      ),
+      rest.post(
+        `${this.baseUrl}/api/auth/refresh`,
+        this.handleRefreshToken.bind(this)
+      ),
+      rest.get(
+        `${this.baseUrl}/api/auth/me`,
+        this.handleGetCurrentUser.bind(this)
+      ),
+      rest.post(
+        `${this.baseUrl}/api/auth/register`,
+        this.handleRegister.bind(this)
+      ),
 
       // Graph operations
-      rest.post(`${this.baseUrl}/api/graphs/execute`, this.handleGraphExecution.bind(this)),
-      rest.post(`${this.baseUrl}/api/graphs`, this.handleCreateGraph.bind(this)),
-      rest.get(`${this.baseUrl}/api/graphs/:id`, this.handleGetGraph.bind(this)),
-      rest.put(`${this.baseUrl}/api/graphs/:id`, this.handleUpdateGraph.bind(this)),
-      rest.delete(`${this.baseUrl}/api/graphs/:id`, this.handleDeleteGraph.bind(this)),
-      rest.post(`${this.baseUrl}/api/graphs/:id/export`, this.handleExportGraph.bind(this)),
+      rest.post(
+        `${this.baseUrl}/api/graphs/execute`,
+        this.handleGraphExecution.bind(this)
+      ),
+      rest.post(
+        `${this.baseUrl}/api/graphs`,
+        this.handleCreateGraph.bind(this)
+      ),
+      rest.get(
+        `${this.baseUrl}/api/graphs/:id`,
+        this.handleGetGraph.bind(this)
+      ),
+      rest.put(
+        `${this.baseUrl}/api/graphs/:id`,
+        this.handleUpdateGraph.bind(this)
+      ),
+      rest.delete(
+        `${this.baseUrl}/api/graphs/:id`,
+        this.handleDeleteGraph.bind(this)
+      ),
+      rest.post(
+        `${this.baseUrl}/api/graphs/:id/export`,
+        this.handleExportGraph.bind(this)
+      ),
 
       // Preview endpoint
       rest.post(`${this.baseUrl}/api/preview`, this.handlePreview.bind(this)),
 
       // Database operations
-      rest.post(`${this.baseUrl}/api/database/query`, this.handleDatabaseQuery.bind(this)),
-      rest.get(`${this.baseUrl}/api/database/health`, this.handleDatabaseHealth.bind(this)),
+      rest.post(
+        `${this.baseUrl}/api/database/query`,
+        this.handleDatabaseQuery.bind(this)
+      ),
+      rest.get(
+        `${this.baseUrl}/api/database/health`,
+        this.handleDatabaseHealth.bind(this)
+      ),
 
       // Analytics endpoints
-      rest.post(`${this.baseUrl}/api/analytics/track`, this.handleAnalyticsTrack.bind(this)),
-      rest.get(`${this.baseUrl}/api/analytics/dashboard`, this.handleAnalyticsDashboard.bind(this)),
+      rest.post(
+        `${this.baseUrl}/api/analytics/track`,
+        this.handleAnalyticsTrack.bind(this)
+      ),
+      rest.get(
+        `${this.baseUrl}/api/analytics/dashboard`,
+        this.handleAnalyticsDashboard.bind(this)
+      ),
 
       // File operations
-      rest.post(`${this.baseUrl}/api/files/upload`, this.handleFileUpload.bind(this)),
-      rest.get(`${this.baseUrl}/api/files/:id`, this.handleFileDownload.bind(this)),
+      rest.post(
+        `${this.baseUrl}/api/files/upload`,
+        this.handleFileUpload.bind(this)
+      ),
+      rest.get(
+        `${this.baseUrl}/api/files/:id`,
+        this.handleFileDownload.bind(this)
+      ),
 
       // WebSocket fallback for testing
-      rest.get(`${this.baseUrl}/ws/collaboration`, this.handleWebSocketConnection.bind(this)),
+      rest.get(
+        `${this.baseUrl}/ws/collaboration`,
+        this.handleWebSocketConnection.bind(this)
+      )
     ];
 
     this.server = setupServer(...handlers);
@@ -111,7 +162,7 @@ export class APIMockService {
    */
   start(): void {
     this.server.listen({
-      onUnhandledRequest: 'warn',
+      onUnhandledRequest: 'warn'
     });
     console.log('🚀 API Mock Server started');
   }
@@ -144,7 +195,11 @@ export class APIMockService {
 
   // Authentication Handlers
   private async handleLogin(req: unknown, res: unknown, ctx: unknown) {
-    const reqBody = await (req as { json: () => Promise<{ email: string; password: string; mfa?: string }> }).json();
+    const reqBody = await (
+      req as {
+        json: () => Promise<{ email: string; password: string; mfa?: string }>;
+      }
+    ).json();
     const { email, password } = reqBody;
 
     // Simulate authentication logic
@@ -154,7 +209,7 @@ export class APIMockService {
         email,
         role: 'admin',
         permissions: ['read', 'write', 'admin'],
-        verified: true,
+        verified: true
       };
 
       const sessionId = this.generateId();
@@ -165,7 +220,7 @@ export class APIMockService {
       this.mockData.set(`session_${sessionId}`, {
         user,
         createdAt: new Date(),
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
       });
 
       return res(
@@ -176,8 +231,8 @@ export class APIMockService {
             user,
             token,
             refreshToken,
-            sessionId,
-          },
+            sessionId
+          }
         })
       );
     } else {
@@ -185,7 +240,7 @@ export class APIMockService {
         ctx.status(401),
         ctx.json({
           success: false,
-          error: 'Invalid credentials',
+          error: 'Invalid credentials'
         })
       );
     }
@@ -204,7 +259,7 @@ export class APIMockService {
       ctx.status(200),
       ctx.json({
         success: true,
-        message: 'Logged out successfully',
+        message: 'Logged out successfully'
       })
     );
   }
@@ -218,7 +273,7 @@ export class APIMockService {
         id: 'user_123',
         email: 'test@example.com',
         role: 'admin',
-        permissions: ['read', 'write', 'admin'],
+        permissions: ['read', 'write', 'admin']
       };
 
       const sessionId = this.generateId();
@@ -231,8 +286,8 @@ export class APIMockService {
           success: true,
           data: {
             token: newToken,
-            refreshToken: newRefreshToken,
-          },
+            refreshToken: newRefreshToken
+          }
         })
       );
     }
@@ -241,7 +296,7 @@ export class APIMockService {
       ctx.status(401),
       ctx.json({
         success: false,
-        error: 'Invalid refresh token',
+        error: 'Invalid refresh token'
       })
     );
   }
@@ -253,7 +308,7 @@ export class APIMockService {
         ctx.status(401),
         ctx.json({
           success: false,
-          error: 'No authorization header',
+          error: 'No authorization header'
         })
       );
     }
@@ -266,7 +321,7 @@ export class APIMockService {
         ctx.status(200),
         ctx.json({
           success: true,
-          data: session.user,
+          data: session.user
         })
       );
     }
@@ -275,29 +330,37 @@ export class APIMockService {
       ctx.status(401),
       ctx.json({
         success: false,
-        error: 'Invalid or expired token',
+        error: 'Invalid or expired token'
       })
     );
   }
 
   private async handleRegister(req: unknown, res: unknown, ctx: unknown) {
     const reqBody = await (
-      req as { json: () => Promise<{ email: string; password: string; username: string }> }
+      req as {
+        json: () => Promise<{
+          email: string;
+          password: string;
+          username: string;
+        }>;
+      }
     ).json();
     const { email, username } = reqBody;
 
     // Check if user already exists
-    const existingUser = Array.from(this.mockData.values()).find((value: unknown) => {
-      const typedValue = value as { user?: { email: string } };
-      return typedValue.user && typedValue.user.email === email;
-    });
+    const existingUser = Array.from(this.mockData.values()).find(
+      (value: unknown) => {
+        const typedValue = value as { user?: { email: string } };
+        return typedValue.user && typedValue.user.email === email;
+      }
+    );
 
     if (existingUser) {
       return res(
         ctx.status(409),
         ctx.json({
           success: false,
-          error: 'User already exists',
+          error: 'User already exists'
         })
       );
     }
@@ -310,7 +373,7 @@ export class APIMockService {
       role: 'user',
       permissions: ['read'],
       verified: false,
-      createdAt: new Date(),
+      createdAt: new Date()
     };
 
     const sessionId = this.generateId();
@@ -320,7 +383,7 @@ export class APIMockService {
     this.mockData.set(`session_${sessionId}`, {
       user,
       createdAt: new Date(),
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
     });
 
     return res(
@@ -330,8 +393,8 @@ export class APIMockService {
         data: {
           user,
           token,
-          message: 'User registered successfully',
-        },
+          message: 'User registered successfully'
+        }
       })
     );
   }
@@ -347,7 +410,7 @@ export class APIMockService {
           seed,
           output: this.simulateGraphExecution(request.graph, seed),
           executionTime: Math.floor(this.rng() * 1000) + 50, // 50-1050ms
-          memoryUsed: Math.floor(this.rng() * 50) + 10, // 10-60MB
+          memoryUsed: Math.floor(this.rng() * 50) + 10 // 10-60MB
         };
       }) || [];
 
@@ -355,10 +418,16 @@ export class APIMockService {
       success: true,
       data: {
         results,
-        totalExecutionTime: results.reduce((sum, r) => sum + r.executionTime, 0),
+        totalExecutionTime: results.reduce(
+          (sum, r) => sum + r.executionTime,
+          0
+        ),
         averageExecutionTime:
-          results.length > 0 ? results.reduce((sum, r) => sum + r.executionTime, 0) / results.length : 0,
-      },
+          results.length > 0
+            ? results.reduce((sum, r) => sum + r.executionTime, 0) /
+              results.length
+            : 0
+      }
     };
 
     return res(ctx.status(200), ctx.json(response));
@@ -371,7 +440,7 @@ export class APIMockService {
       id: this.generateId(),
       ...graphData,
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     this.mockData.set(`graph_${graph.id}`, graph);
@@ -380,7 +449,7 @@ export class APIMockService {
       ctx.status(201),
       ctx.json({
         success: true,
-        data: graph,
+        data: graph
       })
     );
   }
@@ -394,7 +463,7 @@ export class APIMockService {
         ctx.status(200),
         ctx.json({
           success: true,
-          data: graph,
+          data: graph
         })
       );
     }
@@ -403,7 +472,7 @@ export class APIMockService {
       ctx.status(404),
       ctx.json({
         success: false,
-        error: 'Graph not found',
+        error: 'Graph not found'
       })
     );
   }
@@ -417,7 +486,7 @@ export class APIMockService {
       const updatedGraph = {
         ...graph,
         ...updates,
-        updatedAt: new Date(),
+        updatedAt: new Date()
       };
 
       this.mockData.set(`graph_${id}`, updatedGraph);
@@ -426,7 +495,7 @@ export class APIMockService {
         ctx.status(200),
         ctx.json({
           success: true,
-          data: updatedGraph,
+          data: updatedGraph
         })
       );
     }
@@ -435,7 +504,7 @@ export class APIMockService {
       ctx.status(404),
       ctx.json({
         success: false,
-        error: 'Graph not found',
+        error: 'Graph not found'
       })
     );
   }
@@ -448,7 +517,7 @@ export class APIMockService {
       ctx.status(existed ? 200 : 404),
       ctx.json({
         success: existed,
-        message: existed ? 'Graph deleted successfully' : 'Graph not found',
+        message: existed ? 'Graph deleted successfully' : 'Graph not found'
       })
     );
   }
@@ -478,8 +547,8 @@ export class APIMockService {
           data: {
             format,
             content: exportData,
-            filename: `graph-${id}.${format}`,
-          },
+            filename: `graph-${id}.${format}`
+          }
         })
       );
     }
@@ -488,7 +557,7 @@ export class APIMockService {
       ctx.status(404),
       ctx.json({
         success: false,
-        error: 'Graph not found',
+        error: 'Graph not found'
       })
     );
   }
@@ -499,14 +568,14 @@ export class APIMockService {
     // Simulate preview generation
     const previews = (request.seeds || [123, 456, 789]).map((seed: number) => ({
       seed,
-      result: this.simulateGraphExecution(request.graph, seed),
+      result: this.simulateGraphExecution(request.graph, seed)
     }));
 
     return res(
       ctx.status(200),
       ctx.json({
         success: true,
-        previews,
+        previews
       })
     );
   }
@@ -522,25 +591,25 @@ export class APIMockService {
         result = {
           rows: this.generateMockTableData(5),
           count: 5,
-          executionTime: Math.floor(this.rng() * 100) + 10,
+          executionTime: Math.floor(this.rng() * 100) + 10
         };
         break;
       case 'insert':
         result = {
           id: this.generateId(),
           ...request.data,
-          created_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
         };
         break;
       case 'update':
         result = {
           affected: Math.floor(this.rng() * 5) + 1,
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         };
         break;
       case 'delete':
         result = {
-          affected: Math.floor(this.rng() * 3) + 1,
+          affected: Math.floor(this.rng() * 3) + 1
         };
         break;
     }
@@ -549,7 +618,7 @@ export class APIMockService {
       ctx.status(200),
       ctx.json({
         success: true,
-        data: result,
+        data: result
       })
     );
   }
@@ -564,14 +633,14 @@ export class APIMockService {
           connections: {
             active: 5,
             idle: 10,
-            max: 20,
+            max: 20
           },
           performance: {
             avgQueryTime: Math.floor(this.rng() * 50) + 20,
-            slowQueries: Math.floor(this.rng() * 3),
+            slowQueries: Math.floor(this.rng() * 3)
           },
-          uptime: Math.floor(this.rng() * 86400) + 3600, // 1-24 hours
-        },
+          uptime: Math.floor(this.rng() * 86400) + 3600 // 1-24 hours
+        }
       })
     );
   }
@@ -585,7 +654,7 @@ export class APIMockService {
       event,
       properties,
       userId,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     // Store event data
@@ -600,13 +669,17 @@ export class APIMockService {
         success: true,
         data: {
           eventId: eventData.id,
-          message: 'Event tracked successfully',
-        },
+          message: 'Event tracked successfully'
+        }
       })
     );
   }
 
-  private async handleAnalyticsDashboard(req: unknown, res: unknown, ctx: unknown) {
+  private async handleAnalyticsDashboard(
+    req: unknown,
+    res: unknown,
+    ctx: unknown
+  ) {
     const events = this.mockData.get('analytics_events') || [];
 
     return res(
@@ -620,9 +693,9 @@ export class APIMockService {
           metrics: {
             dailyActiveUsers: Math.floor(this.rng() * 1000) + 100,
             sessionDuration: Math.floor(this.rng() * 3600) + 300,
-            bounceRate: this.rng() * 0.4 + 0.1,
-          },
-        },
+            bounceRate: this.rng() * 0.4 + 0.1
+          }
+        }
       })
     );
   }
@@ -635,7 +708,7 @@ export class APIMockService {
       filename: 'uploaded-file.json',
       size: Math.floor(this.rng() * 10000) + 1000,
       mimeType: 'application/json',
-      uploadedAt: new Date().toISOString(),
+      uploadedAt: new Date().toISOString()
     };
 
     this.mockData.set(`file_${file.id}`, file);
@@ -644,7 +717,7 @@ export class APIMockService {
       ctx.status(201),
       ctx.json({
         success: true,
-        data: file,
+        data: file
       })
     );
   }
@@ -657,7 +730,10 @@ export class APIMockService {
       return res(
         ctx.status(200),
         ctx.set('Content-Type', file.mimeType),
-        ctx.set('Content-Disposition', `attachment; filename="${file.filename}"`),
+        ctx.set(
+          'Content-Disposition',
+          `attachment; filename="${file.filename}"`
+        ),
         ctx.text('Mock file content')
       );
     }
@@ -666,12 +742,16 @@ export class APIMockService {
       ctx.status(404),
       ctx.json({
         success: false,
-        error: 'File not found',
+        error: 'File not found'
       })
     );
   }
 
-  private async handleWebSocketConnection(req: unknown, res: unknown, ctx: unknown) {
+  private async handleWebSocketConnection(
+    req: unknown,
+    res: unknown,
+    ctx: unknown
+  ) {
     // Simulate WebSocket connection response
     return res(
       ctx.status(200),
@@ -680,8 +760,8 @@ export class APIMockService {
         data: {
           connectionId: this.generateId(),
           status: 'connected',
-          protocols: ['collaboration', 'presence'],
-        },
+          protocols: ['collaboration', 'presence']
+        }
       })
     );
   }
@@ -708,7 +788,7 @@ export class APIMockService {
       role: user.role,
       permissions: user.permissions,
       sessionId,
-      expiresAt: Date.now() + 24 * 60 * 60 * 1000,
+      expiresAt: Date.now() + 24 * 60 * 60 * 1000
     };
 
     // Simple mock JWT (not secure, just for testing)
@@ -735,7 +815,7 @@ export class APIMockService {
       'Generated creative content B',
       'Generated creative content C',
       'Alternative creative output',
-      'Unique generated result',
+      'Unique generated result'
     ];
     return outputs[Math.floor(rng() * outputs.length)];
   }
@@ -747,7 +827,7 @@ export class APIMockService {
         id: this.generateId(),
         name: `Mock Entry ${i + 1}`,
         value: Math.floor(this.rng() * 1000),
-        created_at: new Date(Date.now() - this.rng() * 86400000).toISOString(),
+        created_at: new Date(Date.now() - this.rng() * 86400000).toISOString()
       });
     }
     return data;

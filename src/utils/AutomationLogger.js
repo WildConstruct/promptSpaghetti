@@ -12,7 +12,8 @@ class AutomationLogger {
     this.logLevel = options.logLevel || 'INFO';
     this.enableConsole = options.enableConsole !== false;
     this.enableFile = options.enableFile || false;
-    this.logFile = options.logFile || path.join(__dirname, '..', 'logs', 'automation.log');
+    this.logFile =
+      options.logFile || path.join(__dirname, '..', 'logs', 'automation.log');
     this.maxFileSize = options.maxFileSize || 10 * 1024 * 1024; // 10MB
     this.context = options.context || {};
 
@@ -31,7 +32,7 @@ class AutomationLogger {
       INFO: 2,
       WARN: 3,
       ERROR: 4,
-      FATAL: 5,
+      FATAL: 5
     };
 
     // Emojis for different log levels
@@ -45,7 +46,7 @@ class AutomationLogger {
       SUCCESS: '✅',
       PROGRESS: '🔄',
       START: '🚀',
-      FINISH: '🏁',
+      FINISH: '🏁'
     };
 
     this.startTime = Date.now();
@@ -73,7 +74,7 @@ class AutomationLogger {
       script: this.scriptName,
       message,
       ...(data && { data }),
-      ...(Object.keys(this.context).length > 0 && { context: this.context }),
+      ...(Object.keys(this.context).length > 0 && { context: this.context })
     };
 
     // Console format (human readable)
@@ -149,7 +150,11 @@ class AutomationLogger {
 
   // Special methods for automation workflows
   success(message, data = null) {
-    const { logEntry, consoleMsg } = this.formatMessage('SUCCESS', message, data);
+    const { logEntry, consoleMsg } = this.formatMessage(
+      'SUCCESS',
+      message,
+      data
+    );
     if (this.enableConsole) {
       console.log(consoleMsg.replace('SUCCESS', 'INFO')); // Use INFO level for file logging
     }
@@ -158,7 +163,11 @@ class AutomationLogger {
   }
 
   progress(message, data = null) {
-    const { logEntry, consoleMsg } = this.formatMessage('PROGRESS', message, data);
+    const { logEntry, consoleMsg } = this.formatMessage(
+      'PROGRESS',
+      message,
+      data
+    );
     if (this.enableConsole) {
       console.log(consoleMsg.replace('PROGRESS', 'INFO'));
     }
@@ -181,7 +190,11 @@ class AutomationLogger {
     const finalData = { ...data, durationMs: duration };
     const finalMessage = `${message} (${duration}ms)`;
 
-    const { logEntry, consoleMsg } = this.formatMessage('FINISH', finalMessage, finalData);
+    const { logEntry, consoleMsg } = this.formatMessage(
+      'FINISH',
+      finalMessage,
+      finalData
+    );
     if (this.enableConsole) {
       console.log(consoleMsg.replace('FINISH', 'INFO'));
     }
@@ -195,7 +208,11 @@ class AutomationLogger {
   }
 
   taskComplete(taskId, result, message = 'Task completed') {
-    this.success(`${message}: ${taskId}`, { taskId, result, action: 'complete' });
+    this.success(`${message}: ${taskId}`, {
+      taskId,
+      result,
+      action: 'complete'
+    });
   }
 
   taskError(taskId, error, message = 'Task failed') {
@@ -203,13 +220,16 @@ class AutomationLogger {
       taskId,
       error: error.message || error,
       stack: error.stack,
-      action: 'error',
+      action: 'error'
     });
   }
 
   // QA-specific logging methods
   qaStart(taskCount, message = 'Starting QA processing') {
-    this.start(`${message} for ${taskCount} tasks`, { taskCount, phase: 'qa_start' });
+    this.start(`${message} for ${taskCount} tasks`, {
+      taskCount,
+      phase: 'qa_start'
+    });
   }
 
   qaApprove(taskId, score, reason) {
@@ -217,7 +237,7 @@ class AutomationLogger {
       taskId,
       score,
       reason,
-      action: 'qa_approve',
+      action: 'qa_approve'
     });
   }
 
@@ -226,7 +246,7 @@ class AutomationLogger {
       taskId,
       score,
       issues,
-      action: 'qa_reject',
+      action: 'qa_reject'
     });
   }
 
@@ -239,7 +259,7 @@ class AutomationLogger {
     this.info(`Cleared assignment: ${taskId} from ${agentId}`, {
       taskId,
       agentId,
-      action: 'assignment_clear',
+      action: 'assignment_clear'
     });
   }
 
@@ -247,7 +267,7 @@ class AutomationLogger {
     this.info(`Assigned task: ${taskId} to ${agentId}`, {
       taskId,
       agentId,
-      action: 'assignment_add',
+      action: 'assignment_add'
     });
   }
 
@@ -274,7 +294,7 @@ class AutomationLogger {
       error: error.message || error,
       stack: error.stack,
       code: error.code,
-      ...context,
+      ...context
     };
 
     this.error('Automation error occurred', errorData);
@@ -285,7 +305,7 @@ class AutomationLogger {
       error: error.message || error,
       code: error.code || 'UNKNOWN_ERROR',
       timestamp: new Date().toISOString(),
-      context,
+      context
     };
   }
 
@@ -300,7 +320,7 @@ class AutomationLogger {
     this.info(`Performance: ${label} completed in ${duration}ms`, {
       label,
       duration,
-      action: 'performance_measurement',
+      action: 'performance_measurement'
     });
 
     return result;
@@ -316,7 +336,7 @@ class AutomationLogger {
     this.info(`Performance: ${label} completed in ${duration}ms`, {
       label,
       duration,
-      action: 'performance_measurement',
+      action: 'performance_measurement'
     });
 
     return result;
@@ -338,7 +358,7 @@ class AutomationLogger {
       logLevel: this.logLevel,
       startTime: new Date(this.startTime).toISOString(),
       uptime: Date.now() - this.startTime,
-      logFile: this.enableFile ? this.logFile : null,
+      logFile: this.enableFile ? this.logFile : null
     };
   }
 }
@@ -357,5 +377,5 @@ module.exports = {
   AutomationLogger,
   getLogger,
   // Convenience exports for quick access
-  logger: getLogger(),
+  logger: getLogger()
 };

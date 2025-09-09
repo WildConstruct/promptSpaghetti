@@ -103,8 +103,8 @@ interface Permission {
      metadata: z.object({
        requestId: z.string().uuid(),
        timestamp: z.number().int().positive(),
-       clientVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
-     }),
+       clientVersion: z.string().regex(/^\d+\.\d+\.\d+$/)
+     })
    });
    ```
 
@@ -440,7 +440,7 @@ enum IntegrationSecurityEvent {
   SQL_INJECTION_ATTEMPT = 'sql_injection_attempt',
   XSS_ATTEMPT = 'xss_attempt',
   PATH_TRAVERSAL_ATTEMPT = 'path_traversal_attempt',
-  UNAUTHORIZED_API_ACCESS = 'unauthorized_api_access',
+  UNAUTHORIZED_API_ACCESS = 'unauthorized_api_access'
 }
 ```
 

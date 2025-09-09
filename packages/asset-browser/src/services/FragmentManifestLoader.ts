@@ -67,8 +67,8 @@ export class FragmentManifestLoader {
       if (!response.ok) {
         throw new Error(`Failed to load manifest: ${response.statusText}`);
       }
-      
-      const manifest = await response.json() as FragmentManifest;
+
+      const manifest = (await response.json()) as FragmentManifest;
       this.cachedManifest = manifest;
       return manifest;
     } catch (error) {
@@ -84,7 +84,14 @@ export class FragmentManifestLoader {
     id: string;
     name: string;
     tags: string[];
-    type: 'text' | 'image' | 'audio' | 'video' | 'graph' | 'unknown' | undefined;
+    type:
+      | 'text'
+      | 'image'
+      | 'audio'
+      | 'video'
+      | 'graph'
+      | 'unknown'
+      | undefined;
     category: string;
     metadata?: {
       nodes?: number;
@@ -98,7 +105,14 @@ export class FragmentManifestLoader {
       id: string;
       name: string;
       tags: string[];
-      type: 'text' | 'image' | 'audio' | 'video' | 'graph' | 'unknown' | undefined;
+      type:
+        | 'text'
+        | 'image'
+        | 'audio'
+        | 'video'
+        | 'graph'
+        | 'unknown'
+        | undefined;
       category: string;
       metadata?: {
         nodes?: number;
@@ -125,7 +139,7 @@ export class FragmentManifestLoader {
         });
       });
     }
-    
+
     // Handle old format with categories
     if (manifest.categories) {
       Object.entries(manifest.categories).forEach(([categoryKey, category]) => {
@@ -138,7 +152,7 @@ export class FragmentManifestLoader {
               fragment.type.toLowerCase(),
               ...(fragment.tags || [])
             ],
-            type: 'graph' as const,  // Fragment manifests are always graph type
+            type: 'graph' as const, // Fragment manifests are always graph type
             category: category.name,
             metadata: {
               nodes: fragment.nodes,
@@ -160,13 +174,13 @@ export class FragmentManifestLoader {
    */
   static generateExampleOutput(fragment: FragmentEntry): string {
     const examples: Record<string, readonly string[]> = {
-      'SIMPLE': [
+      SIMPLE: [
         'warm smile',
         'gentle grin',
         'subtle smirk',
         'bright beam'
       ] as const,
-      'CONTEXTUAL': [
+      CONTEXTUAL: [
         'nervous smile with downcast eyes',
         'confident grin with raised chin',
         'tired smile with heavy lids',
@@ -178,18 +192,22 @@ export class FragmentManifestLoader {
         'piercing blue eyes with silver rings',
         'hazel eyes shifting green to amber'
       ] as const,
-      'PATTERN': [
+      PATTERN: [
         'dawn → midday → dusk → midnight',
         'spring → summer → autumn → winter',
         'calm → tense → explosive → resolution'
       ] as const
     };
 
-    const typeExamples = examples[fragment.type] || [`Example output for ${fragment.name}`];
+    const typeExamples = examples[fragment.type] || [
+      `Example output for ${fragment.name}`
+    ];
     // Use deterministic selection based on fragment ID for consistent previews
-    const hash = fragment.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hash = fragment.id
+      .split('')
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const index = hash % typeExamples.length;
-    
+
     return typeExamples[index];
   }
 

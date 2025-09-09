@@ -36,12 +36,16 @@ jest.mock('./APIMocks', () => {
       getMockData() {
         return new Map();
       }
-    },
+    }
   };
 });
 
 // Import after mocking
-import { ComprehensiveMockSystem, createMockSystem, MockSystemPresets } from './index';
+import {
+  ComprehensiveMockSystem,
+  createMockSystem,
+  MockSystemPresets
+} from './index';
 
 describe('Mock System Infrastructure', () => {
   let mockSystem: ComprehensiveMockSystem;
@@ -70,7 +74,9 @@ describe('Mock System Infrastructure', () => {
     it('should provide access to all mock components', () => {
       expect(mockSystem.mockFactory).toBeInstanceOf(MockFactory);
       expect(mockSystem.apiMockService).toBeDefined();
-      expect(mockSystem.databaseMockService).toBeInstanceOf(DatabaseMockService);
+      expect(mockSystem.databaseMockService).toBeInstanceOf(
+        DatabaseMockService
+      );
       expect(mockSystem.serviceMockManager).toBeInstanceOf(ServiceMockManager);
     });
 
@@ -184,7 +190,7 @@ describe('Mock System Infrastructure', () => {
     it('should create database connections', () => {
       const connection = dbMock.createConnection('test-conn', {
         type: 'sqlite',
-        database: ':memory:',
+        database: ':memory:'
       });
 
       expect(connection).toHaveProperty('id', 'test-conn');
@@ -194,7 +200,9 @@ describe('Mock System Infrastructure', () => {
     });
 
     it('should execute queries with mock results', async () => {
-      const connection = dbMock.createConnection('test-conn', { type: 'sqlite' });
+      const connection = dbMock.createConnection('test-conn', {
+        type: 'sqlite'
+      });
 
       const result = await connection.query('SELECT * FROM users');
       expect(result).toHaveProperty('rows');
@@ -203,7 +211,9 @@ describe('Mock System Infrastructure', () => {
     });
 
     it('should manage transactions', async () => {
-      const connection = dbMock.createConnection('test-conn', { type: 'postgres' });
+      const connection = dbMock.createConnection('test-conn', {
+        type: 'postgres'
+      });
 
       const transactionId = await connection.beginTransaction('READ_COMMITTED');
       expect(typeof transactionId).toBe('string');
@@ -215,7 +225,9 @@ describe('Mock System Infrastructure', () => {
     });
 
     it('should track query logs', async () => {
-      const connection = dbMock.createConnection('test-conn', { type: 'sqlite' });
+      const connection = dbMock.createConnection('test-conn', {
+        type: 'sqlite'
+      });
 
       await connection.query('SELECT 1');
       await connection.query('SELECT 2');
@@ -249,7 +261,8 @@ describe('Mock System Infrastructure', () => {
     });
 
     it('should create file storage service', () => {
-      const storageService = serviceMock.createFileStorageService('storage-test');
+      const storageService =
+        serviceMock.createFileStorageService('storage-test');
 
       expect(storageService).toHaveProperty('name', 'storage-test');
       expect(storageService).toHaveProperty('type', 'storage');
@@ -269,7 +282,8 @@ describe('Mock System Infrastructure', () => {
     });
 
     it('should create analytics service', () => {
-      const analyticsService = serviceMock.createAnalyticsService('analytics-test');
+      const analyticsService =
+        serviceMock.createAnalyticsService('analytics-test');
 
       expect(analyticsService).toHaveProperty('name', 'analytics-test');
       expect(analyticsService).toHaveProperty('type', 'analytics');
@@ -308,17 +322,26 @@ describe('Mock System Infrastructure', () => {
       await mockSystem.initialize();
 
       // Test factory
-      const apiMock = mockSystem.mockFactory.createMock('api', 'integration-api');
+      const apiMock = mockSystem.mockFactory.createMock(
+        'api',
+        'integration-api'
+      );
       expect(apiMock).toBeDefined();
 
       // Test database
-      const dbConnection = mockSystem.databaseMockService.createConnection('integration-db', {
-        type: 'postgres',
-      });
+      const dbConnection = mockSystem.databaseMockService.createConnection(
+        'integration-db',
+        {
+          type: 'postgres'
+        }
+      );
       expect(dbConnection).toBeDefined();
 
       // Test services
-      const authService = mockSystem.serviceMockManager.createAuthenticationService('integration-auth');
+      const authService =
+        mockSystem.serviceMockManager.createAuthenticationService(
+          'integration-auth'
+        );
       expect(authService).toBeDefined();
 
       // Test statistics

@@ -53,7 +53,7 @@ const button = getByRole('button', { name: /submit/i });
 ```typescript
 // Mock API calls
 jest.mock('../api/client', () => ({
-  fetchData: jest.fn().mockResolvedValue({ data: 'test' }),
+  fetchData: jest.fn().mockResolvedValue({ data: 'test' })
 }));
 
 // Mock timers
@@ -241,7 +241,7 @@ console.log(prettyDOM(container));
 export const mockUser = {
   id: '123',
   name: 'Test User',
-  email: 'test@example.com',
+  email: 'test@example.com'
 };
 
 // Usage
@@ -256,7 +256,7 @@ export const createGraph = (overrides = {}) => ({
   id: generateId(),
   nodes: [],
   edges: [],
-  ...overrides,
+  ...overrides
 });
 ```
 

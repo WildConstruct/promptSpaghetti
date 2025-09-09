@@ -4,7 +4,9 @@
 const Database = require('better-sqlite3');
 const path = require('path');
 
-console.log('🔍 Scrum Master: Creating enhanced task system with QA traceability...\n');
+console.log(
+  '🔍 Scrum Master: Creating enhanced task system with QA traceability...\n'
+);
 
 const db = new Database(path.join(__dirname, 'data', 'events.db'));
 
@@ -19,26 +21,34 @@ const epic23Enhanced = [
       'Touch interactions work for node selection, dragging, connection',
       'Zoom/pan gestures function (pinch-to-zoom, two-finger pan)',
       'Mobile-responsive inspector panel (bottom sheet)',
-      'Performance acceptable on mobile (no lag/stuttering)',
+      'Performance acceptable on mobile (no lag/stuttering)'
     ],
     tasks: [
       {
         title: 'Audit current mobile functionality and document issues',
         type: 'CHORE',
         est: 2,
-        files: ['client/src/core/GraphEditor.tsx', 'packages/core/GraphEditor.tsx'],
-        qaGuidance: 'Check for mobile-specific CSS media queries and touch event handlers',
+        files: [
+          'client/src/core/GraphEditor.tsx',
+          'packages/core/GraphEditor.tsx'
+        ],
+        qaGuidance:
+          'Check for mobile-specific CSS media queries and touch event handlers',
         description:
-          'Review GraphEditor components for mobile compatibility issues. Document specific problems with touch events, viewport scaling, and responsive layout.',
+          'Review GraphEditor components for mobile compatibility issues. Document specific problems with touch events, viewport scaling, and responsive layout.'
       },
       {
         title: 'Fix React Flow touch event handling for mobile',
         type: 'FEAT',
         est: 3,
-        files: ['packages/core/GraphEditor.tsx', 'client/src/core/GraphEditor.tsx'],
-        qaGuidance: 'Test touch interactions: node drag, pan, zoom on actual mobile devices',
+        files: [
+          'packages/core/GraphEditor.tsx',
+          'client/src/core/GraphEditor.tsx'
+        ],
+        qaGuidance:
+          'Test touch interactions: node drag, pan, zoom on actual mobile devices',
         description:
-          'Modify React Flow configuration to properly handle touch events. Update onNodeDrag, onPaneClick, and gesture handling for mobile browsers.',
+          'Modify React Flow configuration to properly handle touch events. Update onNodeDrag, onPaneClick, and gesture handling for mobile browsers.'
       },
       {
         title: 'Implement responsive breakpoints for mobile layout',
@@ -47,28 +57,33 @@ const epic23Enhanced = [
         files: ['client/src/index.css', 'packages/core/components/*/index.ts'],
         qaGuidance: 'Verify layout adapts at 768px, 480px breakpoints',
         description:
-          'Add CSS media queries and responsive design utilities. Update container layouts to work on mobile screen sizes.',
+          'Add CSS media queries and responsive design utilities. Update container layouts to work on mobile screen sizes.'
       },
       {
         title: 'Create mobile-responsive inspector panel (bottom sheet)',
         type: 'FEAT',
         est: 4,
-        files: ['packages/core/InspectorSidebar.tsx', 'packages/core/components/Inspector/'],
-        qaGuidance: 'Test inspector accessibility on mobile - should slide up from bottom',
+        files: [
+          'packages/core/InspectorSidebar.tsx',
+          'packages/core/components/Inspector/'
+        ],
+        qaGuidance:
+          'Test inspector accessibility on mobile - should slide up from bottom',
         description:
-          'Redesign InspectorSidebar as bottom sheet on mobile. Add touch-friendly close gestures and proper z-index layering.',
+          'Redesign InspectorSidebar as bottom sheet on mobile. Add touch-friendly close gestures and proper z-index layering.'
       },
       {
         title: 'Test mobile functionality on real devices',
         type: 'TEST',
         est: 2,
         files: ['**/__tests__/**/*mobile*.test.*', 'tests/**/*'],
-        qaGuidance: 'Test on physical iOS/Android devices, not just browser dev tools',
+        qaGuidance:
+          'Test on physical iOS/Android devices, not just browser dev tools',
         description:
-          'Create mobile-specific test suite. Test on actual iPhone, Android devices to verify touch interactions, performance, and layout.',
-      },
-    ],
-  },
+          'Create mobile-specific test suite. Test on actual iPhone, Android devices to verify touch interactions, performance, and layout.'
+      }
+    ]
+  }
 ];
 
 // Enhanced Epic 19-22 tasks with specific implementation guidance
@@ -81,17 +96,21 @@ const epic1922Enhanced = [
       'Connect to existing marketplace API endpoints (/api/marketplace/*)',
       'Template gallery with search and filtering UI',
       'Template detail pages with preview functionality',
-      'Mobile-responsive marketplace interface',
+      'Mobile-responsive marketplace interface'
     ],
     tasks: [
       {
         title: 'Connect React components to existing marketplace API',
         type: 'FEAT',
         est: 3,
-        files: ['client/src/components/marketplace/', 'server/src/marketplace/routes.ts'],
-        qaGuidance: 'Verify API calls to /api/marketplace/* endpoints work correctly',
+        files: [
+          'client/src/components/marketplace/',
+          'server/src/marketplace/routes.ts'
+        ],
+        qaGuidance:
+          'Verify API calls to /api/marketplace/* endpoints work correctly',
         description:
-          'Create MarketplaceHome component that connects to existing marketplace APIs. Use existing marketplace service endpoints in server/src/marketplace/.',
+          'Create MarketplaceHome component that connects to existing marketplace APIs. Use existing marketplace service endpoints in server/src/marketplace/.'
       },
       {
         title: 'Build template gallery with search and filtering',
@@ -99,11 +118,12 @@ const epic1922Enhanced = [
         est: 4,
         files: [
           'client/src/components/marketplace/TemplateCard.tsx',
-          'client/src/components/marketplace/SearchBar.tsx',
+          'client/src/components/marketplace/SearchBar.tsx'
         ],
-        qaGuidance: 'Test search functionality with various filters and verify results',
+        qaGuidance:
+          'Test search functionality with various filters and verify results',
         description:
-          'Implement template gallery UI using existing TemplateCard and SearchBar components. Connect to Elasticsearch backend for advanced search.',
+          'Implement template gallery UI using existing TemplateCard and SearchBar components. Connect to Elasticsearch backend for advanced search.'
       },
       {
         title: 'Create template detail pages with preview',
@@ -111,23 +131,27 @@ const epic1922Enhanced = [
         est: 3,
         files: [
           'client/src/components/marketplace/TemplateDetail.tsx',
-          'client/src/components/marketplace/PreviewModal.tsx',
+          'client/src/components/marketplace/PreviewModal.tsx'
         ],
         qaGuidance: 'Verify template preview shows actual generated content',
         description:
-          'Build detailed template view with preview functionality. Use existing PreviewModal component for template demonstrations.',
+          'Build detailed template view with preview functionality. Use existing PreviewModal component for template demonstrations.'
       },
       {
         title: 'Implement mobile-responsive marketplace design',
         type: 'FEAT',
         est: 3,
-        files: ['client/src/components/marketplace/*.css', 'client/src/components/marketplace/MarketplaceHome.css'],
-        qaGuidance: 'Test marketplace interface on mobile devices - check card layouts',
+        files: [
+          'client/src/components/marketplace/*.css',
+          'client/src/components/marketplace/MarketplaceHome.css'
+        ],
+        qaGuidance:
+          'Test marketplace interface on mobile devices - check card layouts',
         description:
-          'Add responsive CSS to marketplace components. Ensure template cards stack properly on mobile and search filters are touch-friendly.',
-      },
-    ],
-  },
+          'Add responsive CSS to marketplace components. Ensure template cards stack properly on mobile and search filters are touch-friendly.'
+      }
+    ]
+  }
 ];
 
 // Function to add event with enhanced metadata
@@ -135,8 +159,16 @@ function addEnhancedEvent(type, actor, payload) {
   const timestamp = new Date().toISOString();
   const version = 1;
 
-  const stmt = db.prepare('INSERT INTO events (ts, type, actor, payload, version) VALUES (?, ?, ?, ?, ?)');
-  const result = stmt.run(timestamp, type, actor, JSON.stringify(payload), version);
+  const stmt = db.prepare(
+    'INSERT INTO events (ts, type, actor, payload, version) VALUES (?, ?, ?, ?, ?)'
+  );
+  const result = stmt.run(
+    timestamp,
+    type,
+    actor,
+    JSON.stringify(payload),
+    version
+  );
   return result.lastInsertRowid;
 }
 
@@ -151,7 +183,7 @@ function createEnhancedStory(storyData) {
     acceptance: storyData.acceptance,
     priority: storyData.priority,
     status: 'READY',
-    tasks: [],
+    tasks: []
   };
 
   addEnhancedEvent('STORY_CREATED', 'scrum_master', { story });
@@ -179,9 +211,9 @@ function createEnhancedStory(storyData) {
         testing_requirements: [
           'Verify functionality works as described',
           'Check target files were modified',
-          'Test on specified platforms/browsers',
-        ],
-      },
+          'Test on specified platforms/browsers'
+        ]
+      }
     };
 
     addEnhancedEvent('TASK_CREATED', 'scrum_master', { task: enhancedTask });
@@ -194,7 +226,9 @@ function createEnhancedStory(storyData) {
     console.log('');
   });
 
-  console.log(`  📊 Story ${storyData.id} complete with ${storyData.tasks.length} enhanced tasks\n`);
+  console.log(
+    `  📊 Story ${storyData.id} complete with ${storyData.tasks.length} enhanced tasks\n`
+  );
 }
 
 // Main execution

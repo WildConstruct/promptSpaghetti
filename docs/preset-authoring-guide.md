@@ -5,6 +5,7 @@
 PSGLib (PromptScape Graph Library) presets are reusable graph components that can be shared and imported into any PromptScape project. This guide covers best practices for creating effective, high-quality presets.
 
 ## Table of Contents
+
 1. [Preset Structure](#preset-structure)
 2. [Design Principles](#design-principles)
 3. [Node Selection Guidelines](#node-selection-guidelines)
@@ -42,12 +43,14 @@ Every PSGLib file follows this structure:
 ## Design Principles
 
 ### 1. Single Responsibility
+
 Each preset should do ONE thing well. Don't try to create a "do everything" preset.
 
 ✅ **Good**: "Character Name Generator" - generates first + last names
 ❌ **Bad**: "Complete Character Creator" - tries to generate name, appearance, personality, backstory
 
 ### 2. Meaningful Variety
+
 Ensure your preset generates at least 20-50 unique outputs. Users should get value from multiple runs.
 
 ```javascript
@@ -56,11 +59,13 @@ Ensure your preset generates at least 20-50 unique outputs. Users should get val
 ```
 
 ### 3. Clear Inputs and Outputs
+
 - Use descriptive labels for all nodes
 - Output nodes should have clear template variables
 - Consider what the user will connect to your preset
 
 ### 4. Balanced Weights
+
 Use weights thoughtfully to create natural distributions:
 
 ```json
@@ -84,21 +89,27 @@ Use weights thoughtfully to create natural distributions:
 ### Advanced Patterns
 
 #### Pattern 1: Layered Generation
+
 ```
 [Base] → [Modifier] → [Detail] → [Output]
 ```
+
 Example: Character trait generator with positive trait + flaw + quirk
 
 #### Pattern 2: Template with Variables
+
 ```
 [Variable1] → [Variable2] → [Template] → [Output]
 ```
+
 Example: Story hooks with placeholders for subject, place, event
 
 #### Pattern 3: Hierarchical Selection
+
 ```
 [Category] → [Subcategory] → [Specific] → [Output]
 ```
+
 Example: Item generator with type → material → enchantment
 
 ## Best Practices
@@ -138,12 +149,14 @@ Example: Item generator with type → material → enchantment
 ### Quality Metrics
 
 **Minimum Requirements**:
+
 - At least 10 unique outputs
 - No duplicate combinations
 - All outputs grammatically correct
 - Clear value proposition
 
 **Excellence Standards**:
+
 - 50+ unique outputs
 - Natural language flow
 - Surprising but logical combinations
@@ -154,20 +167,24 @@ Example: Item generator with type → material → enchantment
 ### Metadata Best Practices
 
 **Name**: Clear, descriptive, action-oriented
+
 - ✅ "Character Name Generator"
 - ❌ "Names"
 
 **Description**: Explain what it does and why it's useful
+
 - ✅ "Generates diverse character names with culturally varied first and last name combinations"
 - ❌ "Makes names"
 
 **Tags**: Include relevant categories
+
 - Primary category: `character`, `story`, `worldbuilding`, `dialogue`
 - Type: `generator`, `selector`, `template`
 - Complexity: `basic`, `advanced`
 - Genre: `fantasy`, `scifi`, `modern`
 
 **License**: Choose appropriate license
+
 - `MIT`: Free for any use
 - `CC-BY`: Free with attribution
 - `CC-BY-SA`: Share-alike required
@@ -176,6 +193,7 @@ Example: Item generator with type → material → enchantment
 ### File Organization
 
 Place presets in organized directories:
+
 ```
 presets/
   character/
@@ -192,6 +210,7 @@ presets/
 ### Version Management
 
 Follow semantic versioning:
+
 - `1.0.0`: Initial release
 - `1.0.1`: Bug fixes
 - `1.1.0`: New features/options
@@ -200,14 +219,17 @@ Follow semantic versioning:
 ## Examples of Excellence
 
 ### Character Name Generator
+
 - **Strength**: 225+ combinations with varied cultural backgrounds
 - **Pattern**: First name + Last name with proper weighting
 
 ### Story Hook Generator
+
 - **Strength**: Template system with variable substitution
 - **Pattern**: Multiple hook templates with contextual variables
 
 ### Item Generator
+
 - **Strength**: Layered generation (material + type + property + power)
 - **Pattern**: Hierarchical combination for complex outputs
 
@@ -224,7 +246,9 @@ Follow semantic versioning:
 ## Advanced Techniques
 
 ### Dynamic Templates
+
 Use Output nodes with complex templates:
+
 ```json
 {
   "template": "The {character} was {emotion}, but {modifier}. {action}."
@@ -232,14 +256,17 @@ Use Output nodes with complex templates:
 ```
 
 ### Conditional Paths
+
 Create branches for different scenarios using multiple Output nodes connected to the same sources.
 
 ### Reusable Components
+
 Design node groups that can be copied into other presets as modular components.
 
 ## Community Guidelines
 
 When sharing presets:
+
 1. Test thoroughly before publishing
 2. Include attribution for inspired work
 3. Respond to user feedback
@@ -249,6 +276,7 @@ When sharing presets:
 ## Conclusion
 
 Great presets are:
+
 - **Focused**: Do one thing excellently
 - **Valuable**: Generate meaningful variety
 - **Reliable**: Work every time
@@ -259,5 +287,5 @@ Remember: A simple preset that works perfectly is better than a complex one that
 
 ---
 
-*Last Updated: January 10, 2025*
-*Format Version: PSGLib 1.0.0*
+_Last Updated: January 10, 2025_
+_Format Version: PSGLib 1.0.0_

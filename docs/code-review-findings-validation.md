@@ -33,7 +33,7 @@ SetVariable node allows `z.any()` type for values, completely bypassing type saf
 export const SetVariableNodeSchema = BaseNode.extend({
   type: z.literal('SetVariable'),
   key: z.string(),
-  value: z.any(), // ⚠️ No validation whatsoever
+  value: z.any() // ⚠️ No validation whatsoever
 });
 ```
 
@@ -154,7 +154,10 @@ Graph validation is extremely limited, missing cycle detection and crucial valid
 ### Current Code
 
 ```typescript
-export function validateConnection(edges: Edge[], nodes: Node[]): ValidationError[] {
+export function validateConnection(
+  edges: Edge[],
+  nodes: Node[]
+): ValidationError[] {
   // Only checks self-loops and duplicates
   // Missing: cycle detection, orphaned nodes, type compatibility
 }
@@ -336,7 +339,7 @@ Include node name field has no validation for special characters or path travers
 ```typescript
 export const IncludeNodeSchema = BaseNode.extend({
   type: z.literal('Include'),
-  name: z.string(), // ⚠️ No restrictions on content
+  name: z.string() // ⚠️ No restrictions on content
 });
 ```
 

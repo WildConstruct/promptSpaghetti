@@ -238,8 +238,8 @@ const autoApprovalRules = [
     conditions: { threatIntelligence: 'confirmed_malicious' },
     maxSeverity: SecuritySeverity.HIGH,
     approvedActions: [SecurityActionType.BLOCK_IP],
-    requiredRole: SecurityRole.SECURITY_ANALYST,
-  },
+    requiredRole: SecurityRole.SECURITY_ANALYST
+  }
 ];
 ```
 

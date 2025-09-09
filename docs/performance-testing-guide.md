@@ -237,7 +237,7 @@ const coreEngineConfig = {
   simpleExecutionIterations: 1000,
   complexGraphNodeCount: 100,
   advancedNodeIterations: 500,
-  memoryScalingSteps: [10, 50, 100, 500, 1000],
+  memoryScalingSteps: [10, 50, 100, 500, 1000]
 };
 
 // Graph Execution Benchmarks
@@ -247,8 +247,8 @@ const graphBenchmarkConfig = {
   expectedPerformance: {
     maxExecutionTime: 50,
     maxMemoryUsage: 20,
-    minThroughput: 100,
-  },
+    minThroughput: 100
+  }
 };
 
 // API Load Testing
@@ -259,8 +259,8 @@ const apiLoadConfig = {
   expectedPerformance: {
     maxResponseTime: 2000,
     minSuccessRate: 95,
-    minThroughput: 10,
-  },
+    minThroughput: 10
+  }
 };
 ```
 
@@ -280,7 +280,7 @@ const dashboard = new PerformanceMonitoringDashboard({
   enableRealTimeUpdates: true,
   updateIntervalMs: 5000,
   enableNotifications: true,
-  notificationWebhook: 'https://hooks.slack.com/...',
+  notificationWebhook: 'https://hooks.slack.com/...'
 });
 
 // Record metrics
@@ -335,22 +335,22 @@ const thresholds = [
     operator: 'gt',
     value: 2000,
     severity: 'error',
-    description: 'Engine execution time exceeds 2 seconds',
+    description: 'Engine execution time exceeds 2 seconds'
   },
   {
     metric: 'api.success_rate',
     operator: 'lt',
     value: 95,
     severity: 'warning',
-    description: 'API success rate below 95%',
+    description: 'API success rate below 95%'
   },
   {
     metric: 'memory.leak_detected',
     operator: 'eq',
     value: 1,
     severity: 'critical',
-    description: 'Memory leak detected',
-  },
+    description: 'Memory leak detected'
+  }
 ];
 ```
 
@@ -445,13 +445,13 @@ const thresholds = [
 const developmentThresholds = {
   'engine.execution_time': { warning: 2000, error: 5000 },
   'api.response_time': { warning: 3000, error: 8000 },
-  'memory.usage': { warning: 150, error: 300 },
+  'memory.usage': { warning: 150, error: 300 }
 };
 
 const productionThresholds = {
   'engine.execution_time': { warning: 500, error: 1000 },
   'api.response_time': { warning: 1000, error: 2000 },
-  'memory.usage': { warning: 50, error: 100 },
+  'memory.usage': { warning: 50, error: 100 }
 };
 ```
 
@@ -665,14 +665,14 @@ const performanceRegression = {
     executionTime: 0.15, // 15% increase is a regression
     memoryUsage: 0.2, // 20% increase is a regression
     throughput: -0.1, // 10% decrease is a regression
-    responseTime: 0.15, // 15% increase is a regression
+    responseTime: 0.15 // 15% increase is a regression
   },
 
   async checkRegression(currentResults, baselineResults) {
     // Compare current results against baseline
     // Generate regression report
     // Fail CI if significant regressions detected
-  },
+  }
 };
 ```
 

@@ -56,7 +56,7 @@ export const FlippableNodeExample: React.FC<FlippableNodeExampleProps> = ({
     <>
       {/* Input/Output handles for React Flow */}
       <Handle type="target" position={Position.Top} />
-      
+
       <FlippableNode
         node={node}
         isFlipped={isFlipped}
@@ -69,12 +69,10 @@ export const FlippableNodeExample: React.FC<FlippableNodeExampleProps> = ({
           <div className="node-header">
             <strong>{node.data.label}</strong>
           </div>
-          <div className="node-body">
-            {node.data.content}
-          </div>
+          <div className="node-body">{node.data.content}</div>
           {isEditMode && (
             <div className="node-edit-actions">
-              <button 
+              <button
                 onClick={handleFlip}
                 className="flip-button"
                 title="Flip to view metadata (or Alt+Click)"
@@ -85,7 +83,7 @@ export const FlippableNodeExample: React.FC<FlippableNodeExampleProps> = ({
           )}
         </div>
       </FlippableNode>
-      
+
       <Handle type="source" position={Position.Bottom} />
     </>
   );
@@ -100,7 +98,8 @@ export const FlippableNodeExampleUsage = () => {
       position: { x: 100, y: 100 },
       data: {
         label: 'Story Node',
-        content: 'A brave {hero_name} ventures into the dark forest to face the ancient dragon.',
+        content:
+          'A brave {hero_name} ventures into the dark forest to face the ancient dragon.',
         metadata: {
           themes: [{ name: 'Fantasy Adventure', confidence: 0.95 }],
           entities: [
@@ -118,8 +117,10 @@ export const FlippableNodeExampleUsage = () => {
   ]);
 
   const handleFlip = useCallback((nodeId: string, isFlipped: boolean) => {
-    console.log(`Node ${nodeId} ${isFlipped ? 'flipped to metadata' : 'flipped to content'}`);
-    
+    console.log(
+      `Node ${nodeId} ${isFlipped ? 'flipped to metadata' : 'flipped to content'}`
+    );
+
     // Optional: Track flip events for analytics
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'node_flip', {
@@ -133,25 +134,51 @@ export const FlippableNodeExampleUsage = () => {
   return (
     <div className="flippable-node-example-container">
       <h3>Flippable Node Example</h3>
-      <p>Alt+Click the node or use the flip button in edit mode to reveal metadata.</p>
-      
-      <div className="node-wrapper" style={{ position: 'relative', width: 300, height: 200, border: '1px dashed #ccc', margin: 20 }}>
-        <FlippableNodeExample 
-          node={nodes[0]} 
+      <p>
+        Alt+Click the node or use the flip button in edit mode to reveal
+        metadata.
+      </p>
+
+      <div
+        className="node-wrapper"
+        style={{
+          position: 'relative',
+          width: 300,
+          height: 200,
+          border: '1px dashed #ccc',
+          margin: 20
+        }}
+      >
+        <FlippableNodeExample
+          node={nodes[0]}
           isEditMode={true}
           onFlip={handleFlip}
         />
       </div>
-      
+
       <div className="usage-notes">
         <h4>Integration Notes:</h4>
         <ul>
-          <li><strong>Alt+Click:</strong> Power user flip trigger</li>
-          <li><strong>Flip Button:</strong> Available in edit mode</li>
-          <li><strong>Long Press:</strong> Mobile support (500ms)</li>
-          <li><strong>Metadata:</strong> Shows themes, entities, style, performance metrics</li>
-          <li><strong>Accessibility:</strong> WCAG AA compliant with ARIA attributes</li>
-          <li><strong>Performance:</strong> GPU-accelerated 3D CSS transforms</li>
+          <li>
+            <strong>Alt+Click:</strong> Power user flip trigger
+          </li>
+          <li>
+            <strong>Flip Button:</strong> Available in edit mode
+          </li>
+          <li>
+            <strong>Long Press:</strong> Mobile support (500ms)
+          </li>
+          <li>
+            <strong>Metadata:</strong> Shows themes, entities, style,
+            performance metrics
+          </li>
+          <li>
+            <strong>Accessibility:</strong> WCAG AA compliant with ARIA
+            attributes
+          </li>
+          <li>
+            <strong>Performance:</strong> GPU-accelerated 3D CSS transforms
+          </li>
         </ul>
       </div>
     </div>

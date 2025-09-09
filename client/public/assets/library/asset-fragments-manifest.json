@@ -13,12 +13,7 @@
       "description": "Basic smile descriptors and expressions",
       "path": "./facial-features/smile-variations-simple.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "smile",
-        "expression",
-        "emotion"
-      ],
+      "tags": ["face", "smile", "expression", "emotion"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -34,12 +29,7 @@
       "description": "Context-aware smile variations",
       "path": "./facial-features/smile-variations-contextual.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "smile",
-        "contextual",
-        "emotion"
-      ],
+      "tags": ["face", "smile", "contextual", "emotion"],
       "nodeCount": 3,
       "metadata": {
         "author": "Aspen",
@@ -55,12 +45,7 @@
       "description": "Comprehensive eye descriptors",
       "path": "./facial-features/eye-descriptors-multi-aspect.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "eyes",
-        "multi-aspect",
-        "features"
-      ],
+      "tags": ["face", "eyes", "multi-aspect", "features"],
       "nodeCount": 3,
       "metadata": {
         "author": "Aspen",
@@ -76,12 +61,7 @@
       "description": "Skin color and undertone variations",
       "path": "./facial-features/skin-undertones.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "skin",
-        "color",
-        "undertones"
-      ],
+      "tags": ["face", "skin", "color", "undertones"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -97,12 +77,7 @@
       "description": "Age-related facial characteristics",
       "path": "./facial-features/age-indicators.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "age",
-        "wrinkles",
-        "features"
-      ],
+      "tags": ["face", "age", "wrinkles", "features"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -118,12 +93,7 @@
       "description": "Beard, mustache, and facial hair variations",
       "path": "./facial-features/facial-hair-styles.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "hair",
-        "beard",
-        "mustache"
-      ],
+      "tags": ["face", "hair", "beard", "mustache"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -139,12 +109,7 @@
       "description": "Symmetry and balance descriptors",
       "path": "./facial-features/facial-symmetry.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "symmetry",
-        "balance",
-        "features"
-      ],
+      "tags": ["face", "symmetry", "balance", "features"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -160,12 +125,7 @@
       "description": "Makeup styles and applications",
       "path": "./facial-features/makeup-accents.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "makeup",
-        "cosmetics",
-        "style"
-      ],
+      "tags": ["face", "makeup", "cosmetics", "style"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -181,12 +141,7 @@
       "description": "Facial piercings and modifications",
       "path": "./facial-features/piercings-mods.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "piercings",
-        "mods",
-        "accessories"
-      ],
+      "tags": ["face", "piercings", "mods", "accessories"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -202,12 +157,7 @@
       "description": "Distinctive facial characteristics",
       "path": "./facial-features/iconic-features.psg",
       "category": "facial-features",
-      "tags": [
-        "face",
-        "iconic",
-        "distinctive",
-        "features"
-      ],
+      "tags": ["face", "iconic", "distinctive", "features"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -223,12 +173,7 @@
       "description": "Hair length variations",
       "path": "./hair/hair-lengths.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "length",
-        "style",
-        "appearance"
-      ],
+      "tags": ["hair", "length", "style", "appearance"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -244,12 +189,7 @@
       "description": "Hair texture and curl patterns",
       "path": "./hair/hair-textures.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "texture",
-        "curls",
-        "waves"
-      ],
+      "tags": ["hair", "texture", "curls", "waves"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -265,12 +205,7 @@
       "description": "Natural hair color variations",
       "path": "./hair/hair-colors-natural.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "color",
-        "natural",
-        "shades"
-      ],
+      "tags": ["hair", "color", "natural", "shades"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -286,12 +221,7 @@
       "description": "Unnatural and fantasy hair colors",
       "path": "./hair/hair-colors-fantasy.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "color",
-        "fantasy",
-        "vibrant"
-      ],
+      "tags": ["hair", "color", "fantasy", "vibrant"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -307,12 +237,7 @@
       "description": "Gender-neutral haircut styles",
       "path": "./hair/hair-cuts-neutral.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "cuts",
-        "neutral",
-        "unisex"
-      ],
+      "tags": ["hair", "cuts", "neutral", "unisex"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -328,12 +253,7 @@
       "description": "Masculine-coded hairstyles",
       "path": "./hair/hair-styles-masculine.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "masculine",
-        "styles",
-        "men"
-      ],
+      "tags": ["hair", "masculine", "styles", "men"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -349,12 +269,7 @@
       "description": "Feminine-coded hairstyles",
       "path": "./hair/hair-styles-feminine.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "feminine",
-        "styles",
-        "women"
-      ],
+      "tags": ["hair", "feminine", "styles", "women"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -370,12 +285,7 @@
       "description": "Hair decorations and accessories",
       "path": "./hair/hair-accessories.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "accessories",
-        "decoration",
-        "style"
-      ],
+      "tags": ["hair", "accessories", "decoration", "style"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -391,12 +301,7 @@
       "description": "Weather-affected hair states",
       "path": "./hair/hair-weathered-details.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "weathered",
-        "environmental",
-        "effects"
-      ],
+      "tags": ["hair", "weathered", "environmental", "effects"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -412,12 +317,7 @@
       "description": "Hair movement and dynamics",
       "path": "./hair/hair-motion-cues.psg",
       "category": "hair",
-      "tags": [
-        "hair",
-        "motion",
-        "movement",
-        "dynamics"
-      ],
+      "tags": ["hair", "motion", "movement", "dynamics"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -433,12 +333,7 @@
       "description": "Body build variations",
       "path": "./body-silhouette/body-types.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "types",
-        "build",
-        "physique"
-      ],
+      "tags": ["body", "types", "build", "physique"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -454,12 +349,7 @@
       "description": "Body posture and stance",
       "path": "./body-silhouette/posture-keys.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "posture",
-        "stance",
-        "position"
-      ],
+      "tags": ["body", "posture", "stance", "position"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -475,12 +365,7 @@
       "description": "Movement characteristics",
       "path": "./body-silhouette/movement-quality.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "movement",
-        "quality",
-        "dynamics"
-      ],
+      "tags": ["body", "movement", "quality", "dynamics"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -496,12 +381,7 @@
       "description": "Body markings and modifications",
       "path": "./body-silhouette/scars-tattoos.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "scars",
-        "tattoos",
-        "markings"
-      ],
+      "tags": ["body", "scars", "tattoos", "markings"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -517,12 +397,7 @@
       "description": "Clothing fit and drape",
       "path": "./body-silhouette/clothing-fit.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "clothing",
-        "fit",
-        "fashion"
-      ],
+      "tags": ["body", "clothing", "fit", "fashion"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -538,12 +413,7 @@
       "description": "Accessory shapes and forms",
       "path": "./body-silhouette/accessory-silhouettes.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "accessories",
-        "silhouette",
-        "fashion"
-      ],
+      "tags": ["body", "accessories", "silhouette", "fashion"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -559,12 +429,7 @@
       "description": "Athletic and fitness indicators",
       "path": "./body-silhouette/athletic-markers.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "athletic",
-        "fitness",
-        "sports"
-      ],
+      "tags": ["body", "athletic", "fitness", "sports"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -580,12 +445,7 @@
       "description": "Mobility and assistive devices",
       "path": "./body-silhouette/assistive-gear.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "assistive",
-        "disability",
-        "mobility"
-      ],
+      "tags": ["body", "assistive", "disability", "mobility"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -601,12 +461,7 @@
       "description": "Performance and presence indicators",
       "path": "./body-silhouette/stage-presence.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "presence",
-        "performance",
-        "charisma"
-      ],
+      "tags": ["body", "presence", "performance", "charisma"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -622,12 +477,7 @@
       "description": "Hand and body gestures",
       "path": "./body-silhouette/gesture-starters.psg",
       "category": "body-silhouette",
-      "tags": [
-        "body",
-        "gestures",
-        "hands",
-        "communication"
-      ],
+      "tags": ["body", "gestures", "hands", "communication"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -643,12 +493,7 @@
       "description": "Basic emotional states",
       "path": "./emotion-mood/primary-emotions.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "mood",
-        "feelings",
-        "primary"
-      ],
+      "tags": ["emotion", "mood", "feelings", "primary"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -664,12 +509,7 @@
       "description": "Complex emotional states",
       "path": "./emotion-mood/nuanced-feels.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "mood",
-        "nuanced",
-        "complex"
-      ],
+      "tags": ["emotion", "mood", "nuanced", "complex"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -685,12 +525,7 @@
       "description": "Emotional intensity levels",
       "path": "./emotion-mood/intensity-modifiers.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "intensity",
-        "level",
-        "modifier"
-      ],
+      "tags": ["emotion", "intensity", "level", "modifier"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -706,12 +541,7 @@
       "description": "Emotional facades and masks",
       "path": "./emotion-mood/affect-masks.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "mask",
-        "facade",
-        "pretense"
-      ],
+      "tags": ["emotion", "mask", "facade", "pretense"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -727,12 +557,7 @@
       "description": "Time-based emotional changes",
       "path": "./emotion-mood/temporal-mood-shifts.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "temporal",
-        "shift",
-        "change"
-      ],
+      "tags": ["emotion", "temporal", "shift", "change"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -748,12 +573,7 @@
       "description": "Collective emotional states",
       "path": "./emotion-mood/group-mood-fields.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "group",
-        "collective",
-        "crowd"
-      ],
+      "tags": ["emotion", "group", "collective", "crowd"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -769,12 +589,7 @@
       "description": "Underlying emotional signals",
       "path": "./emotion-mood/subtext-signals.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "subtext",
-        "hidden",
-        "underlying"
-      ],
+      "tags": ["emotion", "subtext", "hidden", "underlying"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -790,12 +605,7 @@
       "description": "Energy and vitality states",
       "path": "./emotion-mood/energy-levels.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "energy",
-        "vitality",
-        "vigor"
-      ],
+      "tags": ["emotion", "energy", "vitality", "vigor"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -811,12 +621,7 @@
       "description": "Empathetic responses and mirroring",
       "path": "./emotion-mood/empathetic-echoes.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "empathy",
-        "mirror",
-        "response"
-      ],
+      "tags": ["emotion", "empathy", "mirror", "response"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -832,12 +637,7 @@
       "description": "Stages of conflict intensity",
       "path": "./emotion-mood/conflict-escalation.psg",
       "category": "emotion-mood",
-      "tags": [
-        "emotion",
-        "conflict",
-        "escalation",
-        "tension"
-      ],
+      "tags": ["emotion", "conflict", "escalation", "tension"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -853,12 +653,7 @@
       "description": "Powerful action movements",
       "path": "./action-dynamics/high-impact-moves.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "impact",
-        "movement",
-        "power"
-      ],
+      "tags": ["action", "impact", "movement", "power"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -874,12 +669,7 @@
       "description": "Small subtle movements",
       "path": "./action-dynamics/subtle-micro-actions.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "subtle",
-        "micro",
-        "small"
-      ],
+      "tags": ["action", "subtle", "micro", "small"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -895,12 +685,7 @@
       "description": "Group movement patterns",
       "path": "./action-dynamics/crowd-behaviors.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "crowd",
-        "group",
-        "collective"
-      ],
+      "tags": ["action", "crowd", "group", "collective"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -916,12 +701,7 @@
       "description": "Small facial movements",
       "path": "./action-dynamics/facial-micro-gestures.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "facial",
-        "micro",
-        "gesture"
-      ],
+      "tags": ["action", "facial", "micro", "gesture"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -937,12 +717,7 @@
       "description": "Interactions with objects",
       "path": "./action-dynamics/object-interactions.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "object",
-        "interaction",
-        "manipulation"
-      ],
+      "tags": ["action", "object", "interaction", "manipulation"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -958,12 +733,7 @@
       "description": "Emergent group behaviors",
       "path": "./action-dynamics/group-dynamics.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "group",
-        "emergent",
-        "dynamics"
-      ],
+      "tags": ["action", "group", "emergent", "dynamics"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -979,12 +749,7 @@
       "description": "Stealthy and sneaky movements",
       "path": "./action-dynamics/stealth-movements.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "stealth",
-        "sneak",
-        "quiet"
-      ],
+      "tags": ["action", "stealth", "sneak", "quiet"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1000,12 +765,7 @@
       "description": "Airborne movements",
       "path": "./action-dynamics/aerial-motions.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "aerial",
-        "flying",
-        "airborne"
-      ],
+      "tags": ["action", "aerial", "flying", "airborne"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1021,12 +781,7 @@
       "description": "Reaction movements and responses",
       "path": "./action-dynamics/reaction-beats.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "reaction",
-        "response",
-        "reflex"
-      ],
+      "tags": ["action", "reaction", "response", "reflex"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1042,12 +797,7 @@
       "description": "Shape-changing and transformative movements",
       "path": "./action-dynamics/transformative-actions.psg",
       "category": "action-dynamics",
-      "tags": [
-        "action",
-        "transform",
-        "change",
-        "morph"
-      ],
+      "tags": ["action", "transform", "change", "morph"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1063,12 +813,7 @@
       "description": "Cinematic and atmospheric lighting",
       "path": "./setting-environment/lighting-moods.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "lighting",
-        "atmosphere",
-        "mood"
-      ],
+      "tags": ["environment", "lighting", "atmosphere", "mood"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1084,12 +829,7 @@
       "description": "Weather conditions and phenomena",
       "path": "./setting-environment/weather-snapshots.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "weather",
-        "climate",
-        "conditions"
-      ],
+      "tags": ["environment", "weather", "climate", "conditions"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1105,12 +845,7 @@
       "description": "Geological formations and features",
       "path": "./setting-environment/geology-touches.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "geology",
-        "terrain",
-        "landscape"
-      ],
+      "tags": ["environment", "geology", "terrain", "landscape"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1126,12 +861,7 @@
       "description": "Building and architectural styles",
       "path": "./setting-environment/architectural-styles.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "architecture",
-        "buildings",
-        "structures"
-      ],
+      "tags": ["environment", "architecture", "buildings", "structures"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1147,12 +877,7 @@
       "description": "Time-of-day indicators",
       "path": "./setting-environment/temporal-markers.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "time",
-        "temporal",
-        "daylight"
-      ],
+      "tags": ["environment", "time", "temporal", "daylight"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1168,12 +893,7 @@
       "description": "Atmospheric particles and effects",
       "path": "./setting-environment/atmospherics.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "atmosphere",
-        "particles",
-        "effects"
-      ],
+      "tags": ["environment", "atmosphere", "particles", "effects"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1189,12 +909,7 @@
       "description": "Environmental sounds and audio",
       "path": "./setting-environment/sound-snippets.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "sound",
-        "audio",
-        "ambience"
-      ],
+      "tags": ["environment", "sound", "audio", "ambience"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1210,12 +925,7 @@
       "description": "Population density descriptions",
       "path": "./setting-environment/crowd-density.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "crowd",
-        "density",
-        "population"
-      ],
+      "tags": ["environment", "crowd", "density", "population"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1231,12 +941,7 @@
       "description": "Scene-setting descriptors",
       "path": "./setting-environment/backdrop-adjectives.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "backdrop",
-        "scene",
-        "descriptive"
-      ],
+      "tags": ["environment", "backdrop", "scene", "descriptive"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1252,12 +957,7 @@
       "description": "Spatial dimensions and relationships",
       "path": "./setting-environment/spatial-relations.psg",
       "category": "setting-environment",
-      "tags": [
-        "environment",
-        "spatial",
-        "dimensions",
-        "space"
-      ],
+      "tags": ["environment", "spatial", "dimensions", "space"],
       "nodeCount": 1,
       "metadata": {},
       "edgeCount": 0
@@ -1268,11 +968,7 @@
       "description": "Axe handling and attack variations",
       "path": "./weapons-armor-combat/axe-techniques.psg",
       "category": "weapons-armor-combat",
-      "tags": [
-        "weapons",
-        "axe",
-        "technique"
-      ],
+      "tags": ["weapons", "axe", "technique"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -1288,11 +984,7 @@
       "description": "Cutting edge alignment and angles",
       "path": "./weapons-armor-combat/edge-alignment-cues.psg",
       "category": "weapons-armor-combat",
-      "tags": [
-        "weapons",
-        "blade",
-        "alignment"
-      ],
+      "tags": ["weapons", "blade", "alignment"],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",

@@ -10,7 +10,7 @@
 
 **Original Plan:** 75-point epic with asset integration, full keyboard navigation, and polish  
 **Revised Plan:** 15-point MVP to validate core hypothesis first  
-**Key Change:** Defer everything except basic parse → toggle → generate flow  
+**Key Change:** Defer everything except basic parse → toggle → generate flow
 
 ---
 
@@ -55,6 +55,7 @@
 ## What We're Building (MVP)
 
 ### Core User Flow
+
 ```
 1. Paste prompt → See segments (basic parsing)
 2. Click to toggle lock/random
@@ -63,6 +64,7 @@
 ```
 
 ### What's In ✅
+
 - Simple comma/conjunction parser
 - Basic UI panel (no animations)
 - Lock/randomize toggle
@@ -70,6 +72,7 @@
 - Error handling
 
 ### What's Out ❌ (See Backlog)
+
 - Asset search/binding
 - Keyboard shortcuts (except Esc)
 - Type classification
@@ -82,13 +85,15 @@
 ## Success Criteria
 
 **Primary (Must Hit):**
+
 - 25% adoption in 2 weeks
 - <2 minute time to success
 - 50% parse acceptance
 
 **Kill if:**
+
 - <10% adoption
-- >5 minute average time
+- > 5 minute average time
 - <2.5/5 satisfaction
 
 ---
@@ -96,16 +101,19 @@
 ## Timeline
 
 ### Week 1-2: Build MVP
+
 - Simple parser (5 pts)
 - Basic panel (5 pts)
 - Node generation (5 pts)
 
 ### Week 3-4: Measure & Learn
+
 - Deploy to 10% users
 - Daily metrics review
 - 5+ user interviews
 
 ### Week 5: Decide
+
 - Review success criteria
 - Go/No-Go decision
 - Plan next phase or pivot
@@ -116,20 +124,23 @@
 
 **Original:** ~$60,000 (3 sprints × full team)  
 **MVP:** ~$20,000 (1 sprint × partial team)  
-**Savings:** $40,000 to invest based on learning  
+**Savings:** $40,000 to invest based on learning
 
 ---
 
 ## What Happens to Original Work?
 
 ### ✅ Preserved in Backlog
+
 All 75 points of original stories preserved in priority order:
+
 - P0: Asset integration, parser improvements
 - P1: Keyboard nav, polish, preview
 - P2: Conflict detection, templates
 - P3: Future vision items
 
 ### ✅ Created Supporting Docs
+
 1. **MVP PRD** - Focused scope
 2. **Product Backlog** - All deferred features
 3. **User Interview Guide** - Validation research
@@ -141,17 +152,20 @@ All 75 points of original stories preserved in priority order:
 ## Next Actions
 
 ### Immediate (Before Sprint Start)
+
 1. ✅ Approve MVP approach
 2. ✅ Schedule 5 user interviews
 3. ✅ Set up analytics instrumentation
 4. ✅ Create feature flag
 
 ### Sprint 1
+
 1. ✅ Build MVP (15 points)
 2. ✅ Daily metrics review
 3. ✅ Gather feedback continuously
 
 ### Post-MVP
+
 1. ✅ Analyze metrics against success criteria
 2. ✅ Synthesize user feedback
 3. ✅ Make Go/No-Go decision
@@ -164,6 +178,7 @@ All 75 points of original stories preserved in priority order:
 **STRONGLY RECOMMEND MVP APPROACH**
 
 Rationale:
+
 - Reduces risk by 70%
 - Validates before investing
 - Preserves optionality
@@ -186,25 +201,29 @@ The core insight is sound, but let's prove users want it before building the ful
 ## Appendix: Document Map
 
 **Planning Documents:**
+
 - `MVP-PRD.md` - Revised product requirements
 - `product-backlog.md` - All deferred features
 - `story-templates.yaml` - Original detailed stories
 
 **Research & Validation:**
+
 - `user-interview-guide.md` - Research protocol
 - `success-metrics.md` - Measurement plan
 - `validation-checklist.md` - Sarah's thorough review
 
 **Execution:**
+
 - `STORY-WIZ-002-breakdown.yaml` - Story splitting
 - `STORY-WIZ-MOCK.yaml` - Mock service story
 - `sprint-board-layout.md` - Execution tracking
 
 **Technical:**
+
 - `technical-design-parsing.md` - Parser architecture
 - `test-scenarios.md` - Comprehensive test cases
 - `acceptance-criteria-clarifications.md` - AC improvements
 
 ---
 
-*"Ship small, learn fast, build what users actually want."* - John, PM
+_"Ship small, learn fast, build what users actually want."_ - John, PM

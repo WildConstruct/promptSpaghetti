@@ -6,9 +6,9 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
-      { tsconfig: 'tsconfig.json', isolatedModules: true },
-    ],
+      { tsconfig: 'tsconfig.json', isolatedModules: true }
+    ]
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
+  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect']
 };

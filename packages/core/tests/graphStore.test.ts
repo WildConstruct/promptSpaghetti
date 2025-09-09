@@ -10,17 +10,35 @@ describe('graphStore basic graph operations', () => {
   test('setNodes/setEdges/add/update/delete/duplicate', () => {
     const s = useGraphStore.getState();
 
-    const n1: Partial<Node> = { id: 'n1', type: 'textBlock', position: { x: 0, y: 0 }, data: { value: 'A' } };
-    const n2: Partial<Node> = { id: 'n2', type: 'textBlock', position: { x: 10, y: 10 }, data: { value: 'B' } };
+    const n1: Partial<Node> = {
+      id: 'n1',
+      type: 'textBlock',
+      position: { x: 0, y: 0 },
+      data: { value: 'A' }
+    };
+    const n2: Partial<Node> = {
+      id: 'n2',
+      type: 'textBlock',
+      position: { x: 10, y: 10 },
+      data: { value: 'B' }
+    };
 
     s.setNodes([n1 as Node]);
     expect(useGraphStore.getState().nodes).toHaveLength(1);
 
     s.addNode(n2 as Node);
-    expect(useGraphStore.getState().nodes.map((n: any) => n.id)).toEqual(['n1', 'n2']);
+    expect(useGraphStore.getState().nodes.map((n: any) => n.id)).toEqual([
+      'n1',
+      'n2'
+    ]);
 
-    s.updateNode('n1', { data: { extra: 1 }, type: 'textBlock' } as Partial<Node>);
-    const updated = useGraphStore.getState().nodes.find((n: any) => n.id === 'n1');
+    s.updateNode('n1', {
+      data: { extra: 1 },
+      type: 'textBlock'
+    } as Partial<Node>);
+    const updated = useGraphStore
+      .getState()
+      .nodes.find((n: any) => n.id === 'n1');
     expect(updated?.data?.value).toBe('A');
     expect(updated?.data?.extra).toBe(1);
 
@@ -38,27 +56,46 @@ describe('graphStore basic graph operations', () => {
     s.deleteNode('n1');
     const afterDelete = useGraphStore.getState();
     expect(afterDelete.nodes.find((n: any) => n.id === 'n1')).toBeUndefined();
-    expect(afterDelete.edges.find((e: any) => e.source === 'n1' || e.target === 'n1')).toBeUndefined();
+    expect(
+      afterDelete.edges.find((e: any) => e.source === 'n1' || e.target === 'n1')
+    ).toBeUndefined();
   });
 });
 
 describe('variations operations', () => {
   test('add/update/remove/reorder variations', () => {
     const s = useGraphStore.getState();
-    const node: Partial<Node> = { id: 'v1', type: 'textBlock', position: { x: 0, y: 0 }, data: { variations: ['a', 'b', 'c'] } };
+    const node: Partial<Node> = {
+      id: 'v1',
+      type: 'textBlock',
+      position: { x: 0, y: 0 },
+      data: { variations: ['a', 'b', 'c'] }
+    };
     s.addNode(node as Node);
 
     s.addVariation('v1', 'd');
-    expect((useGraphStore.getState().nodes.find((n: any) => n.id === 'v1') as any).data.variations).toEqual(['a', 'b', 'c', 'd']);
+    expect(
+      (useGraphStore.getState().nodes.find((n: any) => n.id === 'v1') as any)
+        .data.variations
+    ).toEqual(['a', 'b', 'c', 'd']);
 
     s.updateVariation('v1', 1, 'B');
-    expect((useGraphStore.getState().nodes.find((n: any) => n.id === 'v1') as any).data.variations).toEqual(['a', 'B', 'c', 'd']);
+    expect(
+      (useGraphStore.getState().nodes.find((n: any) => n.id === 'v1') as any)
+        .data.variations
+    ).toEqual(['a', 'B', 'c', 'd']);
 
     s.reorderVariations('v1', 0, 2);
-    expect((useGraphStore.getState().nodes.find((n: any) => n.id === 'v1') as any).data.variations).toEqual(['B', 'c', 'a', 'd']);
+    expect(
+      (useGraphStore.getState().nodes.find((n: any) => n.id === 'v1') as any)
+        .data.variations
+    ).toEqual(['B', 'c', 'a', 'd']);
 
     s.removeVariation('v1', 3);
-    expect((useGraphStore.getState().nodes.find((n: any) => n.id === 'v1') as any).data.variations).toEqual(['B', 'c', 'a']);
+    expect(
+      (useGraphStore.getState().nodes.find((n: any) => n.id === 'v1') as any)
+        .data.variations
+    ).toEqual(['B', 'c', 'a']);
   });
 });
 
@@ -72,7 +109,7 @@ describe('sticky notes', () => {
       color: 'yellow' as const,
       size: { width: 120, height: 80 },
       author: 'me',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     s.setStickyNotes([note]);
@@ -83,10 +120,15 @@ describe('sticky notes', () => {
     expect(useGraphStore.getState().stickyNotes).toHaveLength(2);
 
     s.updateStickyNote('sn2', { content: 'updated' });
-    expect(useGraphStore.getState().stickyNotes.find((n: any) => n.id === 'sn2')?.content).toBe('updated');
+    expect(
+      useGraphStore.getState().stickyNotes.find((n: any) => n.id === 'sn2')
+        ?.content
+    ).toBe('updated');
 
     s.deleteStickyNote('sn1');
-    expect(useGraphStore.getState().stickyNotes.find((n: any) => n.id === 'sn1')).toBeUndefined();
+    expect(
+      useGraphStore.getState().stickyNotes.find((n: any) => n.id === 'sn1')
+    ).toBeUndefined();
   });
 });
 
@@ -101,20 +143,28 @@ describe('node labels', () => {
       position: 'bottom' as const,
       style: 'default' as const,
       author: 'me',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     s.addNodeLabelConfig(cfg);
-    expect(useGraphStore.getState().annotations.nodeLabelConfigs['lbl1']).toBeTruthy();
+    expect(
+      useGraphStore.getState().annotations.nodeLabelConfigs['lbl1']
+    ).toBeTruthy();
 
     s.updateNodeLabelConfig('lbl1', { customLabel: 'L2' });
-    expect(useGraphStore.getState().annotations.nodeLabelConfigs['lbl1'].customLabel).toBe('L2');
+    expect(
+      useGraphStore.getState().annotations.nodeLabelConfigs['lbl1'].customLabel
+    ).toBe('L2');
 
     s.setLabelPreferences({ defaultDisplayMode: 'hover' });
-    expect(useGraphStore.getState().annotations.labelPreferences.defaultDisplayMode).toBe('hover');
+    expect(
+      useGraphStore.getState().annotations.labelPreferences.defaultDisplayMode
+    ).toBe('hover');
 
     s.deleteNodeLabelConfig('lbl1');
-    expect(useGraphStore.getState().annotations.nodeLabelConfigs['lbl1']).toBeUndefined();
+    expect(
+      useGraphStore.getState().annotations.nodeLabelConfigs['lbl1']
+    ).toBeUndefined();
   });
 });
 
@@ -133,7 +183,7 @@ describe('region groups', () => {
       nodeIds: [],
       author: 'me',
       timestamp: new Date().toISOString(),
-      lastModified: new Date().toISOString(),
+      lastModified: new Date().toISOString()
     };
 
     s.setRegionGroups([group]);
@@ -143,13 +193,23 @@ describe('region groups', () => {
     expect(useGraphStore.getState().annotations.regionGroups).toHaveLength(2);
 
     s.updateRegionGroup('g2', { label: 'New' });
-    expect(useGraphStore.getState().annotations.regionGroups.find((g: any) => g.id === 'g2')?.label).toBe('New');
+    expect(
+      useGraphStore
+        .getState()
+        .annotations.regionGroups.find((g: any) => g.id === 'g2')?.label
+    ).toBe('New');
 
     s.setRegionGroupPreferences({ defaultColor: '#fff' });
-    expect(useGraphStore.getState().annotations.regionGroupPreferences.defaultColor).toBe('#fff');
+    expect(
+      useGraphStore.getState().annotations.regionGroupPreferences.defaultColor
+    ).toBe('#fff');
 
     s.deleteRegionGroup('g1');
-    expect(useGraphStore.getState().annotations.regionGroups.find((g: any) => g.id === 'g1')).toBeUndefined();
+    expect(
+      useGraphStore
+        .getState()
+        .annotations.regionGroups.find((g: any) => g.id === 'g1')
+    ).toBeUndefined();
   });
 });
 
@@ -167,17 +227,27 @@ describe('connection labels and annotations', () => {
       visible: true,
       author: 'me',
       timestamp: new Date().toISOString(),
-      lastModified: new Date().toISOString(),
+      lastModified: new Date().toISOString()
     };
 
     s.addConnectionLabel(label);
-    expect(useGraphStore.getState().annotations.connectionLabels?.length || 0).toBeGreaterThan(0);
+    expect(
+      useGraphStore.getState().annotations.connectionLabels?.length || 0
+    ).toBeGreaterThan(0);
 
     s.updateConnectionLabel('cl1', { content: 'bye' });
-    expect(useGraphStore.getState().annotations.connectionLabels?.find((l: any) => l.id === 'cl1')?.content).toBe('bye');
+    expect(
+      useGraphStore
+        .getState()
+        .annotations.connectionLabels?.find((l: any) => l.id === 'cl1')?.content
+    ).toBe('bye');
 
     s.removeConnectionLabel('cl1');
-    expect(useGraphStore.getState().annotations.connectionLabels?.find((l: any) => l.id === 'cl1')).toBeUndefined();
+    expect(
+      useGraphStore
+        .getState()
+        .annotations.connectionLabels?.find((l: any) => l.id === 'cl1')
+    ).toBeUndefined();
   });
 
   test('annotations add/update/remove and preferences', () => {
@@ -189,20 +259,34 @@ describe('connection labels and annotations', () => {
       visualStyle: 'solid' as const,
       author: 'me',
       timestamp: new Date().toISOString(),
-      lastModified: new Date().toISOString(),
+      lastModified: new Date().toISOString()
     };
 
     s.addConnectionAnnotation(ann);
-    expect(useGraphStore.getState().annotations.connectionAnnotations.length).toBe(1);
+    expect(
+      useGraphStore.getState().annotations.connectionAnnotations.length
+    ).toBe(1);
 
     s.updateConnectionAnnotation('a1', { visualStyle: 'dashed' });
-    expect(useGraphStore.getState().annotations.connectionAnnotations.find((a: any) => a.id === 'a1')?.visualStyle).toBe('dashed');
+    expect(
+      useGraphStore
+        .getState()
+        .annotations.connectionAnnotations.find((a: any) => a.id === 'a1')
+        ?.visualStyle
+    ).toBe('dashed');
 
     s.setConnectionAnnotationPreferences({ defaultVisualStyle: 'dotted' });
-    expect(useGraphStore.getState().annotations.connectionAnnotationPreferences.defaultVisualStyle).toBe('dotted');
+    expect(
+      useGraphStore.getState().annotations.connectionAnnotationPreferences
+        .defaultVisualStyle
+    ).toBe('dotted');
 
     s.removeConnectionAnnotation('a1');
-    expect(useGraphStore.getState().annotations.connectionAnnotations.find((a: any) => a.id === 'a1')).toBeUndefined();
+    expect(
+      useGraphStore
+        .getState()
+        .annotations.connectionAnnotations.find((a: any) => a.id === 'a1')
+    ).toBeUndefined();
   });
 });
 
@@ -210,7 +294,9 @@ describe('project ops and graph data IO', () => {
   test('newProject resets; saved/modified flags; get/load graph', () => {
     const s = useGraphStore.getState();
     // seed some state
-    s.setNodes([{ id: 'x', type: 'textBlock', position: { x: 0, y: 0 } } as any]);
+    s.setNodes([
+      { id: 'x', type: 'textBlock', position: { x: 0, y: 0 } } as any
+    ]);
     s.setEdges([{ id: 'ex', source: 'x', target: 'x' } as any]);
 
     s.markProjectModified();
@@ -233,7 +319,10 @@ describe('project ops and graph data IO', () => {
     expect(after.hasUnsavedChanges).toBe(false);
 
     // loadGraphData
-    s.loadGraphData([{ id: 'n', type: 'textBlock', position: { x: 0, y: 0 } } as any], [{ id: 'e', source: 'n', target: 'n' } as any]);
+    s.loadGraphData(
+      [{ id: 'n', type: 'textBlock', position: { x: 0, y: 0 } } as any],
+      [{ id: 'e', source: 'n', target: 'n' } as any]
+    );
     const loaded = useGraphStore.getState();
     expect(loaded.nodes.length).toBe(1);
     expect(loaded.edges.length).toBe(1);

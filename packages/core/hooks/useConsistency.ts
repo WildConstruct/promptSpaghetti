@@ -25,11 +25,18 @@ export function useConsistency(nodes: NodeLike[], edges: any[]) {
     const cats: Record<string, number> = {};
     nodes.forEach(n => {
       const m = n.data?.metadata || {};
-      if (m.style) styles[String(m.style).toLowerCase()] = (styles[String(m.style).toLowerCase()] || 0) + 1;
-      if (m.timePeriod) times[String(m.timePeriod).toLowerCase()] = (times[String(m.timePeriod).toLowerCase()] || 0) + 1;
-      if (m.category) cats[String(m.category).toLowerCase()] = (cats[String(m.category).toLowerCase()] || 0) + 1;
+      if (m.style)
+        styles[String(m.style).toLowerCase()] =
+          (styles[String(m.style).toLowerCase()] || 0) + 1;
+      if (m.timePeriod)
+        times[String(m.timePeriod).toLowerCase()] =
+          (times[String(m.timePeriod).toLowerCase()] || 0) + 1;
+      if (m.category)
+        cats[String(m.category).toLowerCase()] =
+          (cats[String(m.category).toLowerCase()] || 0) + 1;
     });
-    const dominant = (rec: Record<string, number>) => Object.entries(rec).sort((a,b)=>b[1]-a[1])[0]?.[0] || undefined;
+    const dominant = (rec: Record<string, number>) =>
+      Object.entries(rec).sort((a, b) => b[1] - a[1])[0]?.[0] || undefined;
     return {
       styles,
       times,
@@ -59,25 +66,63 @@ export function useConsistency(nodes: NodeLike[], edges: any[]) {
       // Temporal conflicts
       if (hasMedieval && hasFuturistic) {
         if (time === 'medieval' || time === 'futuristic') {
-          list.push({ id: `temp-${n.id}`, nodeId: n.id, type: 'temporal', severity: 'red', message: 'Temporal conflict: medieval and futuristic present' });
+          list.push({
+            id: `temp-${n.id}`,
+            nodeId: n.id,
+            type: 'temporal',
+            severity: 'red',
+            message: 'Temporal conflict: medieval and futuristic present'
+          });
         }
       }
 
       // Style conflicts
       if (hasCartoon && hasRealistic) {
         if (style === 'cartoon' || style === 'realistic') {
-          list.push({ id: `style-${n.id}`, nodeId: n.id, type: 'style', severity: 'red', message: 'Style clash: cartoon vs realistic' });
+          list.push({
+            id: `style-${n.id}`,
+            nodeId: n.id,
+            type: 'style',
+            severity: 'red',
+            message: 'Style clash: cartoon vs realistic'
+          });
         } else if (style) {
-          list.push({ id: `style-minor-${n.id}`, nodeId: n.id, type: 'style', severity: 'yellow', message: 'Minor style inconsistency' });
+          list.push({
+            id: `style-minor-${n.id}`,
+            nodeId: n.id,
+            type: 'style',
+            severity: 'yellow',
+            message: 'Minor style inconsistency'
+          });
         }
       } else if (style && meta.dominantStyle && style !== meta.dominantStyle) {
-        list.push({ id: `style-minor-${n.id}`, nodeId: n.id, type: 'style', severity: 'yellow', message: `Style differs from dominant (${meta.dominantStyle})` });
+        list.push({
+          id: `style-minor-${n.id}`,
+          nodeId: n.id,
+          type: 'style',
+          severity: 'yellow',
+          message: `Style differs from dominant (${meta.dominantStyle})`
+        });
       }
 
       // Semantic conflicts
-      if ((hasUnderwater && hasDesert) || (hasSpace && meta.times['medieval'])) {
-        if (cat === 'underwater' || cat === 'desert' || cat === 'space' || time === 'medieval') {
-          list.push({ id: `sem-${n.id}`, nodeId: n.id, type: 'semantic', severity: 'orange', message: 'Semantic mismatch in categories/environment' });
+      if (
+        (hasUnderwater && hasDesert) ||
+        (hasSpace && meta.times['medieval'])
+      ) {
+        if (
+          cat === 'underwater' ||
+          cat === 'desert' ||
+          cat === 'space' ||
+          time === 'medieval'
+        ) {
+          list.push({
+            id: `sem-${n.id}`,
+            nodeId: n.id,
+            type: 'semantic',
+            severity: 'orange',
+            message: 'Semantic mismatch in categories/environment'
+          });
         }
       }
     });
@@ -92,4 +137,3 @@ export function useConsistency(nodes: NodeLike[], edges: any[]) {
     dominantCategory: meta.dominantCategory
   };
 }
-

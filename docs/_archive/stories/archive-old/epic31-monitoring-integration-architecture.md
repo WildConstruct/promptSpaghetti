@@ -71,7 +71,7 @@ this.reliabilityEngineer.on('circuit_breaker_opened', async data => {
   await this.analyticsCollector.track('security_circuit_breaker_opened', {
     component: data.component,
     failure_count: data.failure_count,
-    timestamp: data.timestamp,
+    timestamp: data.timestamp
   });
 });
 
@@ -83,9 +83,9 @@ await this.healthCheckFramework.registerHealthCheck({
     const systemHealth = this.reliabilityEngineer.getSystemHealth();
     return {
       healthy: systemHealth.overall_health === 'healthy',
-      details: systemHealth,
+      details: systemHealth
     };
-  },
+  }
 });
 ```
 
@@ -100,7 +100,7 @@ this.circuitBreakers.set('epic1_integration', {
   failure_count: 0,
   failure_threshold: 5,
   timeout_ms: 60000,
-  last_failure: 0,
+  last_failure: 0
 });
 ```
 

@@ -35,12 +35,20 @@ describe('ModelSelector', () => {
 
   describe('calculateCost', () => {
     it('should calculate cost for free models', () => {
-      const cost = modelSelector.calculateCost('deepseek/deepseek-r1:free', 1000, 500);
+      const cost = modelSelector.calculateCost(
+        'deepseek/deepseek-r1:free',
+        1000,
+        500
+      );
       expect(cost).toBe(0);
     });
 
     it('should calculate cost for paid models', () => {
-      const cost = modelSelector.calculateCost('openai/gpt-4o-mini', 245000, 89000);
+      const cost = modelSelector.calculateCost(
+        'openai/gpt-4o-mini',
+        245000,
+        89000
+      );
       // (245000 + 89000) / 1000000 * 0.05 = 0.0167
       expect(cost).toBeCloseTo(0.0167, 4);
     });
@@ -75,7 +83,7 @@ describe('ModelSelector', () => {
     it('should mark model as failed temporarily', () => {
       const modelId = 'deepseek/deepseek-r1:free';
       modelSelector.markModelFailed(modelId);
-      
+
       const models = modelSelector.getModelsForTask();
       expect(models).not.toContainEqual(
         expect.objectContaining({ id: modelId })
@@ -86,11 +94,9 @@ describe('ModelSelector', () => {
       const modelId = 'deepseek/deepseek-r1:free';
       modelSelector.markModelFailed(modelId);
       modelSelector.resetFailedModels();
-      
+
       const models = modelSelector.getModelsForTask();
-      expect(models).toContainEqual(
-        expect.objectContaining({ id: modelId })
-      );
+      expect(models).toContainEqual(expect.objectContaining({ id: modelId }));
     });
   });
 });

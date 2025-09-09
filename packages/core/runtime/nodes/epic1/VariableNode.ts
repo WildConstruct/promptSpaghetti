@@ -120,7 +120,7 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
 
     // Story 1.5: Data resolution priority
     let resolvedValue: any;
-    
+
     // Priority 1: Data inlet (if connected and has value)
     if (this.dataInlet !== undefined && this.nodeConfig.hasDataInlet) {
       resolvedValue = this.mergeData(this.dataInlet, this.input);
@@ -178,24 +178,27 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
    */
   private mergeData(dataInlet: any, input: any): any {
     const mergeMode = this.nodeConfig.mergeMode || 'override';
-    
+
     switch (mergeMode) {
       case 'override':
         // Data inlet completely replaces input
         return dataInlet;
-        
+
       case 'template':
         // Input acts as template, data fills placeholders
         if (typeof input === 'string' && typeof dataInlet === 'object') {
           let result = input;
           for (const [key, value] of Object.entries(dataInlet)) {
             const placeholder = `{${key}}`;
-            result = result.replace(new RegExp(placeholder, 'g'), String(value));
+            result = result.replace(
+              new RegExp(placeholder, 'g'),
+              String(value)
+            );
           }
           return result;
         }
         return dataInlet;
-        
+
       case 'append':
         // Combine both values
         if (Array.isArray(dataInlet) && Array.isArray(input)) {
@@ -208,7 +211,7 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
           return { ...input, ...dataInlet };
         }
         return dataInlet;
-        
+
       default:
         return dataInlet;
     }

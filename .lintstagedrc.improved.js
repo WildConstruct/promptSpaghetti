@@ -2,13 +2,13 @@ module.exports = {
   // TypeScript and TSX files - more permissive linting
   '*.{ts,tsx}': [
     'eslint --fix --max-warnings 10', // Allow up to 10 warnings without failing
-    'prettier --write --ignore-unknown',
+    'prettier --write --ignore-unknown'
   ],
 
   // JavaScript and JSX files - more permissive linting
   '*.{js,jsx}': [
     'eslint --fix --max-warnings 5', // Allow up to 5 warnings without failing
-    'prettier --write --ignore-unknown',
+    'prettier --write --ignore-unknown'
   ],
 
   // JSON files
@@ -26,7 +26,7 @@ module.exports = {
   // Special handling for test files - auto-fixed by pre-commit
   '*.{test,spec}.{ts,tsx,js,jsx}': [
     'eslint --fix --max-warnings 20', // Should be clean after auto-fixing
-    'prettier --write --ignore-unknown',
+    'prettier --write --ignore-unknown'
   ],
 
   // Auto-generated files - only format, no linting
@@ -35,9 +35,18 @@ module.exports = {
   'src/monitor-*.js': ['prettier --write --ignore-unknown'],
 
   // Security-critical files need validation but allow warnings
-  '**/runtime/expression-evaluator.ts': ['eslint --fix --max-warnings 5', 'prettier --write --ignore-unknown'],
+  '**/runtime/expression-evaluator.ts': [
+    'eslint --fix --max-warnings 5',
+    'prettier --write --ignore-unknown'
+  ],
 
-  '**/runtime/ast-node-whitelist.ts': ['eslint --fix --max-warnings 5', 'prettier --write --ignore-unknown'],
+  '**/runtime/ast-node-whitelist.ts': [
+    'eslint --fix --max-warnings 5',
+    'prettier --write --ignore-unknown'
+  ],
 
-  '**/validation.ts': ['eslint --fix --max-warnings 5', 'prettier --write --ignore-unknown'],
+  '**/validation.ts': [
+    'eslint --fix --max-warnings 5',
+    'prettier --write --ignore-unknown'
+  ]
 };

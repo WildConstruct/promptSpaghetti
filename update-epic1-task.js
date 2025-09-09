@@ -11,7 +11,9 @@ const status = process.argv[3] || 'COMPLETED';
 const actualHours = parseFloat(process.argv[4]) || null;
 
 if (!taskId) {
-  console.error('Usage: node update-epic1-task.js <task-id> [status] [actual-hours]');
+  console.error(
+    'Usage: node update-epic1-task.js <task-id> [status] [actual-hours]'
+  );
   process.exit(1);
 }
 
@@ -39,7 +41,7 @@ if (oldStatus !== status) {
   else if (oldStatus === 'IN_PROGRESS') db.metadata.inProgressTasks--;
   else if (oldStatus === 'COMPLETED') db.metadata.completedTasks--;
   else if (oldStatus === 'BLOCKED') db.metadata.blockedTasks--;
-  
+
   // Increment new status
   if (status === 'TODO') db.metadata.todoTasks++;
   else if (status === 'IN_PROGRESS') db.metadata.inProgressTasks++;
@@ -64,14 +66,20 @@ console.log(`\n✅ Task updated successfully`);
 console.log(`   Task: ${task.title}`);
 console.log(`   Status: ${oldStatus} → ${status}`);
 if (actualHours !== null) {
-  console.log(`   Actual Hours: ${actualHours} (Estimated: ${task.estimatedHours})`);
+  console.log(
+    `   Actual Hours: ${actualHours} (Estimated: ${task.estimatedHours})`
+  );
 }
 console.log(`   Story Progress: ${progress}%`);
 
 // Show next available task
-const nextTask = db.tasks.find(t => t.status === 'TODO' && t.priority === 'CRITICAL');
+const nextTask = db.tasks.find(
+  t => t.status === 'TODO' && t.priority === 'CRITICAL'
+);
 if (nextTask) {
   console.log(`\n📋 Next available CRITICAL task:`);
   console.log(`   ${nextTask.id}: ${nextTask.title}`);
-  console.log(`   Story: ${nextTask.storyId}, Est: ${nextTask.estimatedHours}h`);
+  console.log(
+    `   Story: ${nextTask.storyId}, Est: ${nextTask.estimatedHours}h`
+  );
 }

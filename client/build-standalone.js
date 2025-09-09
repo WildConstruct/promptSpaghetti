@@ -23,6 +23,9 @@ console.log('Building with full Epic 1 functionality...');
 
 console.log('Running production build (safe mode on)...');
 // Use main config with BUILD_SAFE flag set to enable safe options
-execSync('vite build', { stdio: 'inherit', env: { ...process.env, BUILD_SAFE: '1' } });
+execSync('vite build', {
+  stdio: 'inherit',
+  env: { ...process.env, BUILD_SAFE: '1' }
+});
 
 console.log('Standalone build complete!');

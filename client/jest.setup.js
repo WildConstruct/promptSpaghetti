@@ -19,8 +19,8 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: jest.fn(),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
+    dispatchEvent: jest.fn()
+  }))
 });
 
 // Mock Intersection Observer

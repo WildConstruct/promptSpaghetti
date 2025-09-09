@@ -50,12 +50,14 @@ describe('UserProvider / useUserId', () => {
     const callbacks: Array<(event: string, session: any) => void> = [];
     const supabase = {
       auth: {
-        getSession: jest.fn().mockResolvedValue({ data: { session: { user: { id: 'u1' } } } }),
+        getSession: jest
+          .fn()
+          .mockResolvedValue({ data: { session: { user: { id: 'u1' } } } }),
         onAuthStateChange: (cb: (event: string, session: any) => void) => {
           callbacks.push(cb);
           return { data: { subscription: { unsubscribe: jest.fn() } } };
-        },
-      },
+        }
+      }
     } as any;
 
     function ShowId() {
@@ -69,13 +71,17 @@ describe('UserProvider / useUserId', () => {
       </UserProvider>
     );
 
-    await waitFor(() => expect(screen.getByTestId('uid').textContent).toBe('u1'));
+    await waitFor(() =>
+      expect(screen.getByTestId('uid').textContent).toBe('u1')
+    );
 
     // Simulate auth change to u2
     await act(async () => {
-      callbacks.forEach((cb) => cb('SIGNED_IN', { user: { id: 'u2' } }));
+      callbacks.forEach(cb => cb('SIGNED_IN', { user: { id: 'u2' } }));
     });
 
-    await waitFor(() => expect(screen.getByTestId('uid').textContent).toBe('u2'));
+    await waitFor(() =>
+      expect(screen.getByTestId('uid').textContent).toBe('u2')
+    );
   });
 });

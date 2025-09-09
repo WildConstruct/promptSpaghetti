@@ -11,17 +11,32 @@
 // Core Factory
 import MockFactory from './MockFactory';
 export { MockFactory };
-export type { MockConfig, MockInstance, MockBehavior, MockType } from './MockFactory';
+export type {
+  MockConfig,
+  MockInstance,
+  MockBehavior,
+  MockType
+} from './MockFactory';
 
 // API Layer Mocks
 import APIMockService from './APIMocks';
 export { APIMockService };
-export type { APIResponse, AuthTokenPayload, GraphExecutionRequest, DatabaseOperationRequest } from './APIMocks';
+export type {
+  APIResponse,
+  AuthTokenPayload,
+  GraphExecutionRequest,
+  DatabaseOperationRequest
+} from './APIMocks';
 
 // Database Layer Mocks
 import DatabaseMockService from './DatabaseMocks';
 export { DatabaseMockService };
-export type { DatabaseConnection, QueryResult, TransactionContext, MockTable } from './DatabaseMocks';
+export type {
+  DatabaseConnection,
+  QueryResult,
+  TransactionContext,
+  MockTable
+} from './DatabaseMocks';
 
 // Service Layer Mocks
 import ServiceMockManager from './ServiceMocks';
@@ -128,17 +143,18 @@ export class ComprehensiveMockSystem {
       database: {
         totalQueries: this.databaseMocks.getQueryLog().length,
         activeTables: this.databaseMocks.getTables().size,
-        activeTransactions: this.databaseMocks.getActiveTransactions().length,
+        activeTransactions: this.databaseMocks.getActiveTransactions().length
       },
       services: {
         registeredServices: this.serviceMocks.getServices().length,
-        totalCalls: this.serviceMocks.getCallHistory().length,
+        totalCalls: this.serviceMocks.getCallHistory().length
       },
       system: {
         initialized: this.isInitialized,
-        uptime: Date.now() - (this.factory as { createdAt?: number }).createdAt || 0,
-        memoryUsage: process.memoryUsage(),
-      },
+        uptime:
+          Date.now() - (this.factory as { createdAt?: number }).createdAt || 0,
+        memoryUsage: process.memoryUsage()
+      }
     };
   }
 
@@ -162,7 +178,7 @@ export class ComprehensiveMockSystem {
       cleanup: async () => {
         console.log(`🧹 Cleaning up test environment: ${testName}`);
         await this.reset();
-      },
+      }
     };
   }
 
@@ -181,7 +197,7 @@ export class ComprehensiveMockSystem {
         this.apiMocks.addCustomBehavior('success', {
           name: 'success-flow',
           response: { success: true, data: 'test-data' },
-          delay: 50,
+          delay: 50
         });
       },
 
@@ -191,7 +207,7 @@ export class ComprehensiveMockSystem {
           name: 'error-flow',
           response: { success: false, error: 'Simulated error' },
           statusCode: 500,
-          errorRate: 0.3,
+          errorRate: 0.3
         });
       },
 
@@ -200,7 +216,7 @@ export class ComprehensiveMockSystem {
         this.apiMocks.addCustomBehavior('slow', {
           name: 'slow-response',
           response: { success: true, data: 'delayed-data' },
-          delay: 2000,
+          delay: 2000
         });
       },
 
@@ -208,7 +224,7 @@ export class ComprehensiveMockSystem {
         // Configure authentication mocks
         this.serviceMocks.createAuthenticationService('test-auth');
         // Auth service is automatically configured with mock users and sessions
-      },
+      }
     };
   }
 
@@ -255,13 +271,15 @@ export default ComprehensiveMockSystem;
 /**
  * Utility function to create a configured mock system for testing
  */
-export function createMockSystem(config: MockConfig = {}): ComprehensiveMockSystem {
+export function createMockSystem(
+  config: MockConfig = {}
+): ComprehensiveMockSystem {
   return new ComprehensiveMockSystem({
     seed: 12345,
     deterministic: true,
     enableLogging: false,
     environment: 'test',
-    ...config,
+    ...config
   });
 }
 
@@ -280,8 +298,8 @@ export const MockSystemPresets = {
       environment: 'test',
       performance: {
         defaultDelay: 10,
-        errorRate: 0,
-      },
+        errorRate: 0
+      }
     });
   },
 
@@ -296,8 +314,8 @@ export const MockSystemPresets = {
       environment: 'development',
       performance: {
         defaultDelay: 100,
-        errorRate: 0.1,
-      },
+        errorRate: 0.1
+      }
     });
   },
 
@@ -313,10 +331,10 @@ export const MockSystemPresets = {
       performance: {
         defaultDelay: 0,
         errorRate: 0,
-        maxConcurrency: 1000,
-      },
+        maxConcurrency: 1000
+      }
     });
-  },
+  }
 };
 
 // Main system exports available: ComprehensiveMockSystem, createMockSystem, MockSystemPresets

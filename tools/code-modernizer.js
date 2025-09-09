@@ -23,7 +23,7 @@ class CodeModernizer {
       codeSmelsFixes: 0,
       modernPatternsAdopted: 0,
       asyncAwaitMigrations: 0,
-      classConversions: 0,
+      classConversions: 0
     };
 
     // Legacy patterns to modernize
@@ -32,26 +32,27 @@ class CodeModernizer {
         name: 'Promise callbacks to async/await',
         pattern: /\.then\(\s*\(([^)]*)\)\s*=>\s*\{([^}]*)\}\s*\)\.catch\(/g,
         modernReplacement: 'async/await with try/catch',
-        risk: 'medium',
+        risk: 'medium'
       },
       {
         name: 'var to const/let',
         pattern: /\bvar\s+(\w+)/g,
         replacement: 'const $1',
-        risk: 'low',
+        risk: 'low'
       },
       {
         name: 'function declarations to arrow functions',
         pattern: /function\s+(\w+)\s*\(([^)]*)\)\s*\{/g,
         replacement: 'const $1 = ($2) => {',
-        risk: 'medium',
+        risk: 'medium'
       },
       {
         name: 'Traditional for loops to modern iterations',
-        pattern: /for\s*\(\s*var\s+(\w+)\s*=\s*0\s*;\s*\1\s*<\s*(\w+)\.length\s*;\s*\1\+\+\s*\)/g,
+        pattern:
+          /for\s*\(\s*var\s+(\w+)\s*=\s*0\s*;\s*\1\s*<\s*(\w+)\.length\s*;\s*\1\+\+\s*\)/g,
         replacement: 'for (const item of $2)',
-        risk: 'low',
-      },
+        risk: 'low'
+      }
     ];
 
     // Code smells to detect
@@ -59,23 +60,23 @@ class CodeModernizer {
       {
         name: 'Long functions',
         detect: content => this.detectLongFunctions(content),
-        suggestion: 'Break into smaller functions',
+        suggestion: 'Break into smaller functions'
       },
       {
         name: 'Deep nesting',
         detect: content => this.detectDeepNesting(content),
-        suggestion: 'Use early returns and guard clauses',
+        suggestion: 'Use early returns and guard clauses'
       },
       {
         name: 'Magic numbers',
         detect: content => this.detectMagicNumbers(content),
-        suggestion: 'Replace with named constants',
+        suggestion: 'Replace with named constants'
       },
       {
         name: 'Duplicate string literals',
         detect: content => this.detectDuplicateStrings(content),
-        suggestion: 'Extract to constants',
-      },
+        suggestion: 'Extract to constants'
+      }
     ];
 
     // Performance anti-patterns
@@ -84,20 +85,20 @@ class CodeModernizer {
         name: 'Synchronous file operations',
         pattern: /fs\.readFileSync|fs\.writeFileSync|fs\.existsSync/g,
         suggestion: 'Use async file operations',
-        risk: 'high',
+        risk: 'high'
       },
       {
         name: 'Inefficient array operations',
         pattern: /\.indexOf\([^)]+\)\s*!\==\s*-1/g,
         replacement: '.includes($1)',
-        risk: 'low',
+        risk: 'low'
       },
       {
         name: 'Unnecessary string concatenation',
         pattern: /['"]\s*\+\s*['"]/g,
         suggestion: 'Use template literals',
-        risk: 'low',
-      },
+        risk: 'low'
+      }
     ];
 
     // Modern patterns to adopt
@@ -105,18 +106,18 @@ class CodeModernizer {
       {
         name: 'Destructuring assignment',
         detect: content => this.detectDestructuringOpportunities(content),
-        suggestion: 'Use destructuring for cleaner code',
+        suggestion: 'Use destructuring for cleaner code'
       },
       {
         name: 'Optional chaining',
         detect: content => this.detectOptionalChainingOpportunities(content),
-        suggestion: 'Use ?. for safe property access',
+        suggestion: 'Use ?. for safe property access'
       },
       {
         name: 'Nullish coalescing',
         detect: content => this.detectNullishCoalescingOpportunities(content),
-        suggestion: 'Use ?? for null/undefined checks',
-      },
+        suggestion: 'Use ?? for null/undefined checks'
+      }
     ];
   }
 
@@ -155,7 +156,7 @@ class CodeModernizer {
       codeSmells: [],
       performanceIssues: [],
       modernizationOpportunities: [],
-      fileAnalysis: new Map(),
+      fileAnalysis: new Map()
     };
 
     // Find TypeScript and JavaScript files
@@ -171,7 +172,9 @@ class CodeModernizer {
         results.legacyPatterns.push(...fileAnalysis.legacyPatterns);
         results.codeSmells.push(...fileAnalysis.codeSmells);
         results.performanceIssues.push(...fileAnalysis.performanceIssues);
-        results.modernizationOpportunities.push(...fileAnalysis.modernizationOpportunities);
+        results.modernizationOpportunities.push(
+          ...fileAnalysis.modernizationOpportunities
+        );
         results.fileAnalysis.set(file, fileAnalysis);
       } catch (error) {
         console.warn(`   ⚠️  Could not analyze ${file}: ${error.message}`);
@@ -181,8 +184,12 @@ class CodeModernizer {
     console.log('📊 Analysis Summary:');
     console.log(`   - ${results.legacyPatterns.length} legacy patterns found`);
     console.log(`   - ${results.codeSmells.length} code smells detected`);
-    console.log(`   - ${results.performanceIssues.length} performance issues identified`);
-    console.log(`   - ${results.modernizationOpportunities.length} modernization opportunities`);
+    console.log(
+      `   - ${results.performanceIssues.length} performance issues identified`
+    );
+    console.log(
+      `   - ${results.modernizationOpportunities.length} modernization opportunities`
+    );
 
     return results;
   }
@@ -197,8 +204,8 @@ class CodeModernizer {
       metrics: {
         linesOfCode: content.split('\n').length,
         cyclomaticComplexity: this.calculateCyclomaticComplexity(content),
-        maintainabilityIndex: this.calculateMaintainabilityIndex(content),
-      },
+        maintainabilityIndex: this.calculateMaintainabilityIndex(content)
+      }
     };
 
     // Check for legacy patterns
@@ -208,7 +215,7 @@ class CodeModernizer {
           pattern: pattern.name,
           matches: content.match(pattern.pattern)?.length || 0,
           risk: pattern.risk,
-          suggestion: pattern.modernReplacement || pattern.replacement,
+          suggestion: pattern.modernReplacement || pattern.replacement
         });
       }
     }
@@ -220,7 +227,7 @@ class CodeModernizer {
         analysis.codeSmells.push({
           smell: smell.name,
           issues,
-          suggestion: smell.suggestion,
+          suggestion: smell.suggestion
         });
       }
     }
@@ -232,7 +239,7 @@ class CodeModernizer {
           issue: perf.name,
           matches: content.match(perf.pattern)?.length || 0,
           risk: perf.risk,
-          suggestion: perf.suggestion,
+          suggestion: perf.suggestion
         });
       }
     }
@@ -244,7 +251,7 @@ class CodeModernizer {
         analysis.modernizationOpportunities.push({
           pattern: modern.name,
           opportunities,
-          suggestion: modern.suggestion,
+          suggestion: modern.suggestion
         });
       }
     }
@@ -261,13 +268,20 @@ class CodeModernizer {
         // Apply safe transformations only
         for (const legacyPattern of analysis.legacyPatterns) {
           if (legacyPattern.risk === 'low') {
-            const pattern = this.legacyPatterns.find(p => p.name === legacyPattern.pattern);
+            const pattern = this.legacyPatterns.find(
+              p => p.name === legacyPattern.pattern
+            );
             if (pattern && pattern.replacement) {
-              const newContent = content.replace(pattern.pattern, pattern.replacement);
+              const newContent = content.replace(
+                pattern.pattern,
+                pattern.replacement
+              );
               if (newContent !== content) {
                 content = newContent;
                 modified = true;
-                console.log(`   ✓ Fixed ${legacyPattern.pattern} in ${path.basename(filePath)}`);
+                console.log(
+                  `   ✓ Fixed ${legacyPattern.pattern} in ${path.basename(filePath)}`
+                );
                 this.modernizationStats.legacyPatternsFixed++;
               }
             }
@@ -277,13 +291,20 @@ class CodeModernizer {
         // Apply performance fixes for low-risk items
         for (const perfIssue of analysis.performanceIssues) {
           if (perfIssue.risk === 'low') {
-            const pattern = this.performancePatterns.find(p => p.name === perfIssue.issue);
+            const pattern = this.performancePatterns.find(
+              p => p.name === perfIssue.issue
+            );
             if (pattern && pattern.replacement) {
-              const newContent = content.replace(pattern.pattern, pattern.replacement);
+              const newContent = content.replace(
+                pattern.pattern,
+                pattern.replacement
+              );
               if (newContent !== content) {
                 content = newContent;
                 modified = true;
-                console.log(`   ✓ Fixed ${perfIssue.issue} in ${path.basename(filePath)}`);
+                console.log(
+                  `   ✓ Fixed ${perfIssue.issue} in ${path.basename(filePath)}`
+                );
                 this.modernizationStats.performanceIssuesFixed++;
               }
             }
@@ -294,7 +315,9 @@ class CodeModernizer {
           await fs.writeFile(filePath, content);
         }
       } catch (error) {
-        console.warn(`   ⚠️  Could not transform ${filePath}: ${error.message}`);
+        console.warn(
+          `   ⚠️  Could not transform ${filePath}: ${error.message}`
+        );
       }
     }
   }
@@ -304,7 +327,7 @@ class CodeModernizer {
       immediate: [],
       shortTerm: [],
       longTerm: [],
-      risky: [],
+      risky: []
     };
 
     for (const [filePath, analysis] of analysisResults.fileAnalysis) {
@@ -317,7 +340,7 @@ class CodeModernizer {
           type: 'legacy',
           pattern: legacyPattern.pattern,
           suggestion: legacyPattern.suggestion,
-          matches: legacyPattern.matches,
+          matches: legacyPattern.matches
         };
 
         if (legacyPattern.risk === 'low') {
@@ -335,7 +358,7 @@ class CodeModernizer {
           type: 'code_smell',
           smell: codeSmell.smell,
           suggestion: codeSmell.suggestion,
-          issues: codeSmell.issues.length,
+          issues: codeSmell.issues.length
         });
       }
 
@@ -345,7 +368,7 @@ class CodeModernizer {
           type: 'performance',
           issue: perfIssue.issue,
           suggestion: perfIssue.suggestion,
-          matches: perfIssue.matches,
+          matches: perfIssue.matches
         };
 
         if (perfIssue.risk === 'high') {
@@ -361,7 +384,7 @@ class CodeModernizer {
           type: 'modernization',
           pattern: modernOp.pattern,
           suggestion: modernOp.suggestion,
-          opportunities: modernOp.opportunities.length,
+          opportunities: modernOp.opportunities.length
         });
       }
     }
@@ -376,23 +399,32 @@ class CodeModernizer {
         immediate: suggestions.immediate.length,
         shortTerm: suggestions.shortTerm.length,
         longTerm: suggestions.longTerm.length,
-        risky: suggestions.risky.length,
+        risky: suggestions.risky.length
       },
       suggestions,
       prioritization: {
         'High Priority (Do First)': suggestions.immediate,
         'Medium Priority (Next Sprint)': suggestions.shortTerm,
         'Low Priority (Future)': suggestions.longTerm,
-        'Risky Changes (Review Carefully)': suggestions.risky,
-      },
+        'Risky Changes (Review Carefully)': suggestions.risky
+      }
     };
 
-    await fs.writeFile(path.join(this.baseDir, 'modernization-suggestions.json'), JSON.stringify(report, null, 2));
+    await fs.writeFile(
+      path.join(this.baseDir, 'modernization-suggestions.json'),
+      JSON.stringify(report, null, 2)
+    );
 
     console.log('💡 Suggestions saved to modernization-suggestions.json');
-    console.log(`   📈 ${suggestions.immediate.length} immediate improvements available`);
-    console.log(`   📋 ${suggestions.shortTerm.length} short-term improvements identified`);
-    console.log(`   🔮 ${suggestions.longTerm.length} long-term modernization opportunities`);
+    console.log(
+      `   📈 ${suggestions.immediate.length} immediate improvements available`
+    );
+    console.log(
+      `   📋 ${suggestions.shortTerm.length} short-term improvements identified`
+    );
+    console.log(
+      `   🔮 ${suggestions.longTerm.length} long-term modernization opportunities`
+    );
   }
 
   async createModernizationPlan(analysisResults) {
@@ -402,40 +434,40 @@ class CodeModernizer {
           name: 'Phase 1: Safety and Performance',
           description: 'Low-risk improvements with immediate benefits',
           tasks: [],
-          estimatedDays: 2,
+          estimatedDays: 2
         },
         {
           name: 'Phase 2: Code Quality',
           description: 'Address code smells and maintainability issues',
           tasks: [],
-          estimatedDays: 5,
+          estimatedDays: 5
         },
         {
           name: 'Phase 3: Modernization',
           description: 'Adopt modern JavaScript/TypeScript patterns',
           tasks: [],
-          estimatedDays: 8,
+          estimatedDays: 8
         },
         {
           name: 'Phase 4: Architecture',
           description: 'Structural improvements and refactoring',
           tasks: [],
-          estimatedDays: 12,
-        },
+          estimatedDays: 12
+        }
       ],
       tools: [
         'ESLint with modern rules',
         'Prettier for code formatting',
         'TypeScript strict mode',
         'Automated testing for refactored code',
-        'Code coverage monitoring',
+        'Code coverage monitoring'
       ],
       risks: [
         'Breaking changes in complex refactoring',
         'Performance regression in hot paths',
         'Type errors after strict TypeScript migration',
-        'Test failures after pattern changes',
-      ],
+        'Test failures after pattern changes'
+      ]
     };
 
     // Populate tasks based on analysis
@@ -463,10 +495,16 @@ class CodeModernizer {
       }
     }
 
-    await fs.writeFile(path.join(this.baseDir, 'modernization-plan.json'), JSON.stringify(plan, null, 2));
+    await fs.writeFile(
+      path.join(this.baseDir, 'modernization-plan.json'),
+      JSON.stringify(plan, null, 2)
+    );
 
     console.log('📋 Modernization plan saved to modernization-plan.json');
-    const totalDays = plan.phases.reduce((sum, phase) => sum + phase.estimatedDays, 0);
+    const totalDays = plan.phases.reduce(
+      (sum, phase) => sum + phase.estimatedDays,
+      0
+    );
     console.log(`   ⏱️  Estimated completion: ${totalDays} days`);
   }
 
@@ -478,7 +516,7 @@ class CodeModernizer {
       .map(func => ({
         name: func.name,
         lines: func.lines,
-        startLine: func.startLine,
+        startLine: func.startLine
       }));
   }
 
@@ -501,7 +539,7 @@ class CodeModernizer {
         issues.push({
           line: i + 1,
           depth: currentDepth,
-          content: line.trim(),
+          content: line.trim()
         });
       }
     }
@@ -543,7 +581,7 @@ class CodeModernizer {
         type: 'object_destructuring',
         object: match[1],
         properties: [match[2], match[3]],
-        suggestion: `const { ${match[2]}, ${match[3]} } = ${match[1]};`,
+        suggestion: `const { ${match[2]}, ${match[3]} } = ${match[1]};`
       });
     }
 
@@ -559,7 +597,7 @@ class CodeModernizer {
       opportunities.push({
         type: 'optional_chaining',
         current: match[0],
-        suggestion: `${match[1]}?.${match[2]}`,
+        suggestion: `${match[1]}?.${match[2]}`
       });
     }
 
@@ -575,7 +613,7 @@ class CodeModernizer {
       opportunities.push({
         type: 'nullish_coalescing',
         current: match[0],
-        suggestion: `${match[1]} ?? ${match[2]}`,
+        suggestion: `${match[1]} ?? ${match[2]}`
       });
     }
 
@@ -613,7 +651,7 @@ class CodeModernizer {
         name,
         startLine,
         lines,
-        body: functionBody,
+        body: functionBody
       });
     }
 
@@ -622,7 +660,19 @@ class CodeModernizer {
 
   calculateCyclomaticComplexity(content) {
     // Simplified cyclomatic complexity calculation
-    const complexityKeywords = ['if', 'else', 'while', 'for', 'case', 'catch', 'return', '&&', '||', '?', '::'];
+    const complexityKeywords = [
+      'if',
+      'else',
+      'while',
+      'for',
+      'case',
+      'catch',
+      'return',
+      '&&',
+      '||',
+      '?',
+      '::'
+    ];
 
     let complexity = 1; // Base complexity
 
@@ -646,7 +696,12 @@ class CodeModernizer {
     // Simplified formula
     const maintainabilityIndex = Math.max(
       0,
-      ((171 - 5.2 * Math.log(halsteadVolume) - 0.23 * complexity - 16.2 * Math.log(lines)) * 100) / 171
+      ((171 -
+        5.2 * Math.log(halsteadVolume) -
+        0.23 * complexity -
+        16.2 * Math.log(lines)) *
+        100) /
+        171
     );
 
     return Math.round(maintainabilityIndex);
@@ -662,7 +717,13 @@ class CodeModernizer {
   async findSourceFiles() {
     const files = [];
     const extensions = ['.ts', '.tsx', '.js', '.jsx'];
-    const excludePatterns = ['node_modules', 'dist', 'build', '.turbo', 'coverage'];
+    const excludePatterns = [
+      'node_modules',
+      'dist',
+      'build',
+      '.turbo',
+      'coverage'
+    ];
 
     async function walkDir(dir) {
       try {
@@ -672,13 +733,17 @@ class CodeModernizer {
           const fullPath = path.join(dir, entry.name);
 
           if (entry.isDirectory()) {
-            const shouldSkip = excludePatterns.some(pattern => fullPath.includes(pattern));
+            const shouldSkip = excludePatterns.some(pattern =>
+              fullPath.includes(pattern)
+            );
 
             if (!shouldSkip) {
               await walkDir(fullPath);
             }
           } else {
-            const hasValidExtension = extensions.some(ext => entry.name.endsWith(ext));
+            const hasValidExtension = extensions.some(ext =>
+              entry.name.endsWith(ext)
+            );
 
             if (hasValidExtension) {
               files.push(fullPath);
@@ -697,10 +762,18 @@ class CodeModernizer {
   printModernizationStats() {
     console.log('\n📊 Modernization Statistics:');
     console.log('============================');
-    console.log(`Legacy patterns fixed: ${this.modernizationStats.legacyPatternsFixed}`);
-    console.log(`Performance issues fixed: ${this.modernizationStats.performanceIssuesFixed}`);
-    console.log(`Code smells addressed: ${this.modernizationStats.codeSmelsFixes}`);
-    console.log(`Modern patterns adopted: ${this.modernizationStats.modernPatternsAdopted}`);
+    console.log(
+      `Legacy patterns fixed: ${this.modernizationStats.legacyPatternsFixed}`
+    );
+    console.log(
+      `Performance issues fixed: ${this.modernizationStats.performanceIssuesFixed}`
+    );
+    console.log(
+      `Code smells addressed: ${this.modernizationStats.codeSmelsFixes}`
+    );
+    console.log(
+      `Modern patterns adopted: ${this.modernizationStats.modernPatternsAdopted}`
+    );
   }
 }
 

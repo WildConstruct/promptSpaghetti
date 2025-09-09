@@ -12,7 +12,10 @@ export interface ValidationError {
  * Validate current graph connections.
  * Returns an array of errors – empty means valid.
  */
-export function validateConnection(edges: Edge[], nodes: Node[]): ValidationError[] {
+export function validateConnection(
+  edges: Edge[],
+  nodes: Node[]
+): ValidationError[] {
   const errors: ValidationError[] = [];
   const seenPairs = new Set<string>();
 
@@ -33,7 +36,7 @@ export function validateConnection(edges: Edge[], nodes: Node[]): ValidationErro
   }
 
   // Ensure edges reference existing nodes
-  const nodeIds = new Set(nodes.map((n) => n.id));
+  const nodeIds = new Set(nodes.map(n => n.id));
   for (const e of edges) {
     if (!nodeIds.has(e.source) || !nodeIds.has(e.target)) {
       errors.push({ edgeId: e.id, message: 'Edge references missing node' });

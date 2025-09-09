@@ -96,7 +96,7 @@ enum DashboardWidgetType {
   ASSET_SECURITY_STATUS = 'asset_security_status',
   USER_BEHAVIOR_ANALYTICS = 'user_behavior_analytics',
   NETWORK_SECURITY_OVERVIEW = 'network_security_overview',
-  MALWARE_ANALYSIS = 'malware_analysis',
+  MALWARE_ANALYSIS = 'malware_analysis'
 }
 ```
 
@@ -189,7 +189,11 @@ The dashboard provides real-time updates through WebSocket connections:
 ```typescript
 // Real-time event types
 interface WebSocketMessage {
-  type: 'security_event' | 'threat_intelligence_update' | 'dashboard_metrics' | 'connection_established';
+  type:
+    | 'security_event'
+    | 'threat_intelligence_update'
+    | 'dashboard_metrics'
+    | 'connection_established';
   data: unknown;
   timestamp: number;
 }
@@ -504,7 +508,9 @@ The dashboard provides real-time updates through WebSocket connections:
 
 ```javascript
 // Client-side WebSocket connection
-const ws = new WebSocket('ws://localhost:8000/api/security-intelligence/realtime');
+const ws = new WebSocket(
+  'ws://localhost:8000/api/security-intelligence/realtime'
+);
 
 ws.onmessage = event => {
   const message = JSON.parse(event.data);
@@ -837,7 +843,7 @@ const customFilter: DashboardFilter = {
   field: 'severity',
   operator: FilterOperator.IN,
   value: ['critical', 'high'],
-  enabled: true,
+  enabled: true
 };
 ```
 

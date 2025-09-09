@@ -3,7 +3,10 @@ import '../styles/LogicBrowserStyles.css';
 import type { Preset } from '../types';
 import { LibraryService } from '../services/LibraryService';
 import { FragmentManifestLoader } from '../services/FragmentManifestLoader';
-import { FragmentValidator, ValidationResult } from '../services/FragmentValidator';
+import {
+  FragmentValidator,
+  ValidationResult
+} from '../services/FragmentValidator';
 import { useSectionResize } from '../hooks/useSectionResize';
 
 // Inline SVG icons for a more polished, Logic-like look
@@ -94,14 +97,18 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const [previewSeed, setPreviewSeed] = useState<string>('1234');
-  const [previewSeeds, setPreviewSeeds] = useState<string[]>(['1234', '5678', '9012']);
+  const [previewSeeds, setPreviewSeeds] = useState<string[]>([
+    '1234',
+    '5678',
+    '9012'
+  ]);
   const [sortColumn, setSortColumn] = useState<
     'name' | 'category' | 'complexity' | 'nodes'
   >('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [showDetails, setShowDetails] = useState(false);
   const [presets, setPresets] = useState<Preset[]>([]);
-  
+
   // Section resize handling
   const {
     getSectionHeight,
@@ -110,12 +117,10 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
     toggleCollapse,
     isResizing
   } = useSectionResize({
-    sections: [
-      { id: 'tags', minHeight: 50, defaultHeight: 150 }
-    ],
+    sections: [{ id: 'tags', minHeight: 50, defaultHeight: 150 }],
     storageKey: 'assetBrowser.sectionHeights'
   });
-  
+
   // Load saved preview seeds on mount
   useEffect(() => {
     try {
@@ -159,7 +164,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
     fragmentLoadTime: number;
     renderTime: number;
   }>({ loadStartTime: 0, fragmentLoadTime: 0, renderTime: 0 });
-  
+
   // Load manifest on mount
   useEffect(() => {
     let cancelled = false;
@@ -217,24 +222,25 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
               thumbnail: p.thumbnail ?? undefined
             }))
           : [];
-        
+
         // Also load fragment manifests with validation
         try {
           const fragmentStartTime = performance.now();
           const fragmentManifest = await FragmentManifestLoader.loadManifest();
-          const fragmentPresets = FragmentManifestLoader.convertToPresets(fragmentManifest);
-          
+          const fragmentPresets =
+            FragmentManifestLoader.convertToPresets(fragmentManifest);
+
           // Validate fragments and filter out invalid ones
           const validatedFragments: typeof fragmentPresets = [];
-          const validationErrors: Array<{id: string, errors: string[]}> = [];
-          
+          const validationErrors: Array<{ id: string; errors: string[] }> = [];
+
           // Validate each fragment before adding
           for (const fp of fragmentPresets) {
             // Skip validation for now if we can't load the content
             // In production, we'd load and validate the actual fragment file
             validatedFragments.push(fp);
           }
-          
+
           // Convert validated fragment presets to the format ProAssetBrowser expects
           const fragmentItems: Preset[] = validatedFragments.map(fp => ({
             id: fp.id,
@@ -246,26 +252,35 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
             nodes: fp.metadata?.nodes as number | undefined,
             path: (fp as any).path || fp.metadata?.file
           }));
-          
+
           // Combine regular presets with validated fragment presets
           const allItems = [...items, ...fragmentItems];
-          
+
           // Performance metrics
-          performanceRef.current.fragmentLoadTime = performance.now() - fragmentStartTime;
-          const totalLoadTime = performance.now() - performanceRef.current.loadStartTime;
-          
+          performanceRef.current.fragmentLoadTime =
+            performance.now() - fragmentStartTime;
+          const totalLoadTime =
+            performance.now() - performanceRef.current.loadStartTime;
+
           // Log validation results and performance in development
           if (process.env.NODE_ENV === 'development') {
             if (validationErrors.length > 0) {
-              console.warn(`Fragment validation: ${validationErrors.length} fragments had issues`, validationErrors);
+              console.warn(
+                `Fragment validation: ${validationErrors.length} fragments had issues`,
+                validationErrors
+              );
             }
             if (totalLoadTime > 100) {
-              console.warn(`Asset browser load time: ${totalLoadTime.toFixed(2)}ms (target: <100ms)`);
-              console.log(`  - Fragments: ${performanceRef.current.fragmentLoadTime.toFixed(2)}ms`);
+              console.warn(
+                `Asset browser load time: ${totalLoadTime.toFixed(2)}ms (target: <100ms)`
+              );
+              console.log(
+                `  - Fragments: ${performanceRef.current.fragmentLoadTime.toFixed(2)}ms`
+              );
               console.log(`  - Total items: ${allItems.length}`);
             }
           }
-          
+
           if (!cancelled) {
             setPresets(allItems);
             setUsedFallback(false);
@@ -388,9 +403,14 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
     // Handle fragment paths from manifest - they're in assets/library
     if (path.startsWith('./')) {
       // Check if it's a fragment path (contains category folders)
-      if (path.includes('facial-features') || path.includes('hair') || 
-          path.includes('body-silhouette') || path.includes('emotion-mood') ||
-          path.includes('action-dynamics') || path.includes('setting-environment')) {
+      if (
+        path.includes('facial-features') ||
+        path.includes('hair') ||
+        path.includes('body-silhouette') ||
+        path.includes('emotion-mood') ||
+        path.includes('action-dynamics') ||
+        path.includes('setting-environment')
+      ) {
         return `/assets/library/${path.slice(2)}`;
       }
       return `${assetBase}/${path.slice(2)}`;
@@ -405,49 +425,62 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
       const graphData = preset.data as any;
       if (graphData?.nodes) {
         // Find output nodes
-        const outputNodes = graphData.nodes.filter((n: any) => 
-          n.type === 'Output' || n.type === 'output' || n.data?.type === 'Output'
+        const outputNodes = graphData.nodes.filter(
+          (n: any) =>
+            n.type === 'Output' ||
+            n.type === 'output' ||
+            n.data?.type === 'Output'
         );
-        
+
         // Get first output node's template if available
         if (outputNodes.length > 0) {
-          const template = outputNodes[0].data?.template || outputNodes[0].template;
+          const template =
+            outputNodes[0].data?.template || outputNodes[0].template;
           if (template) {
             // Show the template content (truncate if too long)
-            const output = template.length > 80 ? template.substring(0, 77) + '...' : template;
+            const output =
+              template.length > 80
+                ? template.substring(0, 77) + '...'
+                : template;
             return output;
           }
         }
-        
+
         // Check for WeightedChoice nodes to show sample options
-        const weightedNodes = graphData.nodes.filter((n: any) => 
-          n.type === 'WeightedChoice' || n.type === 'weightedChoice' || n.data?.type === 'WeightedChoice'
+        const weightedNodes = graphData.nodes.filter(
+          (n: any) =>
+            n.type === 'WeightedChoice' ||
+            n.type === 'weightedChoice' ||
+            n.data?.type === 'WeightedChoice'
         );
-        
+
         if (weightedNodes.length > 0) {
           const options = weightedNodes[0].data?.options || [];
           if (options.length > 0) {
             // Show first option as sample
-            const firstOption = typeof options[0] === 'object' ? options[0].text : options[0];
+            const firstOption =
+              typeof options[0] === 'object' ? options[0].text : options[0];
             return firstOption || '[Weighted choice output]';
           }
         }
       }
-      
+
       // Fallback samples based on category
       const categorySamples: Record<string, string> = {
         'emotion-mood': 'softly creased with worry',
         'body-silhouette': 'weathered and lean',
-        'facial-features': "crow's-footed eyes", 
+        'facial-features': "crow's-footed eyes",
         'setting-environment': 'sun-dappled clearing',
-        'character': 'Marcus the Bold',
-        'narrative': 'Once upon a midnight dreary...',
-        'dialogue': '"I never expected to see you here," she said.',
-        'items': 'a worn leather satchel',
+        character: 'Marcus the Bold',
+        narrative: 'Once upon a midnight dreary...',
+        dialogue: '"I never expected to see you here," she said.',
+        items: 'a worn leather satchel',
         'action-dynamics': 'lunged forward with desperate energy'
       };
-      
-      return categorySamples[preset.category || ''] || '[Preview not available]';
+
+      return (
+        categorySamples[preset.category || ''] || '[Preview not available]'
+      );
     } catch (error) {
       console.error('Error generating sample output:', error);
       return '[Error generating preview]';
@@ -458,7 +491,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
     try {
       // Normalize the path for fragments
       const normalizedPath = normalizeAssetPath(preset.path);
-      
+
       const payload = JSON.stringify({
         id: preset.id,
         name: preset.name,
@@ -484,7 +517,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
     const saved = localStorage.getItem('assetBrowser.detailsPanelHeight');
     return saved ? parseInt(saved, 10) : 120;
   });
-  
+
   const [isResizingDetails, setIsResizingDetails] = useState(false);
   const resizeStartY = React.useRef(0);
   const resizeStartHeight = React.useRef(0);
@@ -503,7 +536,10 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
 
     const handleMouseMove = (e: MouseEvent) => {
       const deltaY = resizeStartY.current - e.clientY; // Inverted for upward drag
-      const newHeight = Math.min(200, Math.max(100, resizeStartHeight.current + deltaY));
+      const newHeight = Math.min(
+        200,
+        Math.max(100, resizeStartHeight.current + deltaY)
+      );
       setDetailsPanelHeight(newHeight);
     };
 
@@ -511,7 +547,10 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
       setIsResizingDetails(false);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      localStorage.setItem('assetBrowser.detailsPanelHeight', detailsPanelHeight.toString());
+      localStorage.setItem(
+        'assetBrowser.detailsPanelHeight',
+        detailsPanelHeight.toString()
+      );
     };
 
     document.addEventListener('mousemove', handleMouseMove);
@@ -593,12 +632,16 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
       </div>
 
       {/* Categories Section - Independent Slice */}
-      <div className={`ae-section-full-width ${isSectionCollapsed('categories') ? 'collapsed' : ''}`}>
-        <div 
+      <div
+        className={`ae-section-full-width ${isSectionCollapsed('categories') ? 'collapsed' : ''}`}
+      >
+        <div
           className="ae-section-header-full"
           onClick={() => toggleCollapse('categories')}
         >
-          <span className="ae-section-arrow">{isSectionCollapsed('categories') ? '▶' : '▼'}</span>
+          <span className="ae-section-arrow">
+            {isSectionCollapsed('categories') ? '▶' : '▼'}
+          </span>
           <span>Categories</span>
         </div>
         <div className="ae-section-content-full">
@@ -621,20 +664,26 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
           </div>
         </div>
       </div>
-      
+
       {/* Tags Section - Independent Slice */}
-      <div className={`ae-section-full-width ${isSectionCollapsed('tags') ? 'collapsed' : ''}`}>
-        <div 
+      <div
+        className={`ae-section-full-width ${isSectionCollapsed('tags') ? 'collapsed' : ''}`}
+      >
+        <div
           className="ae-section-header-full"
           onClick={() => toggleCollapse('tags')}
         >
-          <span className="ae-section-arrow">{isSectionCollapsed('tags') ? '▶' : '▼'}</span>
+          <span className="ae-section-arrow">
+            {isSectionCollapsed('tags') ? '▶' : '▼'}
+          </span>
           <span>Tags</span>
         </div>
-        <div 
+        <div
           className="ae-section-content-full"
           style={{
-            height: isSectionCollapsed('tags') ? 0 : `${getSectionHeight('tags')}px`,
+            height: isSectionCollapsed('tags')
+              ? 0
+              : `${getSectionHeight('tags')}px`,
             minHeight: isSectionCollapsed('tags') ? 0 : '50px',
             maxHeight: isSectionCollapsed('tags') ? 0 : '400px',
             overflowY: 'auto'
@@ -654,25 +703,28 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
           </div>
         </div>
         {!isSectionCollapsed('tags') && (
-          <div 
+          <div
             className="ae-resize-handle-section"
-            onMouseDown={(e) => handleResizeStart(e, 'tags')}
+            onMouseDown={e => handleResizeStart(e, 'tags')}
           />
         )}
       </div>
 
       {/* Main Content Area with flex container for list and details */}
       <div className="browser-main-content" style={{ position: 'relative' }}>
-        <div className="content-wrapper" style={{ 
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: showDetails ? `${detailsPanelHeight}px` : 0,
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden'
-        }}>
+        <div
+          className="content-wrapper"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: showDetails ? `${detailsPanelHeight}px` : 0,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
+          }}
+        >
           {loading && (
             <div style={{ padding: 8, color: '#9ca3af' }}>Loading presets…</div>
           )}
@@ -702,7 +754,14 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
           )}
           {/* List/Grid View */}
           {viewMode === 'list' ? (
-            <div className="preset-list-container" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div
+              className="preset-list-container"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%'
+              }}
+            >
               {/* Column Headers */}
               <div className="preset-list-header">
                 <div className="column-header icon-col"></div>
@@ -804,7 +863,10 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
               </div>
             </div>
           ) : (
-            <div className="preset-grid-container" style={{ height: '100%', overflow: 'auto' }}>
+            <div
+              className="preset-grid-container"
+              style={{ height: '100%', overflow: 'auto' }}
+            >
               {!loading && !error && filteredPresets.length === 0 && (
                 <div style={{ padding: 12, color: '#9ca3af' }}>
                   No presets match your filters.
@@ -887,7 +949,9 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
             if (!preset) return null;
 
             return (
-              <div className="details-panel-bottom" style={{ 
+              <div
+                className="details-panel-bottom"
+                style={{
                   position: 'absolute',
                   bottom: 0,
                   left: 0,
@@ -899,120 +963,154 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                   zIndex: 20,
                   display: 'flex',
                   flexDirection: 'column'
-                }}>
-                  {/* Resize Handle */}
-                  <div
-                    className="resize-handle-horizontal"
-                    onMouseDown={handleDetailsResizeStart}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '4px',
-                      cursor: 'ns-resize',
-                      background: 'transparent',
-                      zIndex: 10
-                    }}
-                  />
-                  
-                  {/* Title Section with metadata */}
-                  <div style={{ 
-                    padding: '6px 12px 4px', 
+                }}
+              >
+                {/* Resize Handle */}
+                <div
+                  className="resize-handle-horizontal"
+                  onMouseDown={handleDetailsResizeStart}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '4px',
+                    cursor: 'ns-resize',
+                    background: 'transparent',
+                    zIndex: 10
+                  }}
+                />
+
+                {/* Title Section with metadata */}
+                <div
+                  style={{
+                    padding: '6px 12px 4px',
                     borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                     flexShrink: 0,
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start'
-                  }}>
-                    <div>
-                      <div style={{ fontSize: '12px', fontWeight: 600 }}>{preset.name}</div>
-                      <div style={{ fontSize: '10px', color: '#888' }}>
-                        {preset.category || 'uncategorized'}
-                      </div>
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: '12px', fontWeight: 600 }}>
+                      {preset.name}
                     </div>
-                    <div style={{ textAlign: 'right', fontSize: '10px' }}>
-                      <div style={{ color: '#888' }}>
-                        CATEGORY: <span style={{ color: '#ccc' }}>{preset.category || 'uncategorized'}</span>
-                      </div>
-                      <div style={{ color: '#888' }}>
-                        COMPLEXITY: <span style={{ color: '#ccc' }}>{preset.complexity || 'N/A'}</span> • NODES: <span style={{ color: '#ccc' }}>{preset.nodes || 0}</span>
-                      </div>
+                    <div style={{ fontSize: '10px', color: '#888' }}>
+                      {preset.category || 'uncategorized'}
                     </div>
                   </div>
-                  
-                  {/* Content Area */}
-                  <div style={{ 
+                  <div style={{ textAlign: 'right', fontSize: '10px' }}>
+                    <div style={{ color: '#888' }}>
+                      CATEGORY:{' '}
+                      <span style={{ color: '#ccc' }}>
+                        {preset.category || 'uncategorized'}
+                      </span>
+                    </div>
+                    <div style={{ color: '#888' }}>
+                      COMPLEXITY:{' '}
+                      <span style={{ color: '#ccc' }}>
+                        {preset.complexity || 'N/A'}
+                      </span>{' '}
+                      • NODES:{' '}
+                      <span style={{ color: '#ccc' }}>{preset.nodes || 0}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content Area */}
+                <div
+                  style={{
                     flex: 1,
                     overflowY: 'auto',
                     padding: '8px 12px',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '8px'
-                  }}>
-                    {/* Description - show actual description or generate one */}
-                    <div style={{ 
-                      fontSize: '11px', 
+                  }}
+                >
+                  {/* Description - show actual description or generate one */}
+                  <div
+                    style={{
+                      fontSize: '11px',
                       color: '#ccc',
                       lineHeight: '1.4',
                       marginBottom: '4px'
-                    }}>
-                      {preset.description || 
-                        `A ${preset.category || 'graph'} fragment with ${preset.nodes || 0} nodes. ${
-                          preset.nodeTypes?.includes('WeightedChoice') 
-                            ? 'Uses weighted random selection to generate variations.' 
-                            : 'Generates consistent output based on the graph structure.'
-                        }`
-                      }
-                    </div>
-                    
-                    {/* Sample Output */}
-                    <div style={{ 
+                    }}
+                  >
+                    {preset.description ||
+                      `A ${preset.category || 'graph'} fragment with ${preset.nodes || 0} nodes. ${
+                        preset.nodeTypes?.includes('WeightedChoice')
+                          ? 'Uses weighted random selection to generate variations.'
+                          : 'Generates consistent output based on the graph structure.'
+                      }`}
+                  </div>
+
+                  {/* Sample Output */}
+                  <div
+                    style={{
                       marginBottom: '8px',
                       paddingBottom: '8px',
                       borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}>
-                      <div style={{ fontSize: '10px', color: '#888', marginBottom: '4px' }}>
-                        SAMPLE OUTPUT
-                      </div>
-                      <div style={{ 
-                        fontSize: '11px', 
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        color: '#888',
+                        marginBottom: '4px'
+                      }}
+                    >
+                      SAMPLE OUTPUT
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '11px',
                         color: '#ccc',
                         fontStyle: 'italic',
                         paddingLeft: '8px'
-                      }}>
-                        "{generateSampleOutput(preset)}"
-                      </div>
+                      }}
+                    >
+                      "{generateSampleOutput(preset)}"
                     </div>
-                    
-                    {/* Graph Structure Preview */}
-                    <div style={{
+                  </div>
+
+                  {/* Graph Structure Preview */}
+                  <div
+                    style={{
                       flex: 1,
                       display: 'flex',
                       flexDirection: 'column',
                       gap: '4px',
                       fontSize: '11px',
                       color: '#888'
-                    }}>
-                      <div style={{ fontWeight: 600, color: '#ccc' }}>GRAPH STRUCTURE</div>
-                      <div style={{ paddingLeft: '8px' }}>
-                        • {preset.nodes || 0} nodes
-                      </div>
-                      {(preset.data as { nodes?: any[] })?.nodes && (
-                        <>
-                          {(preset.data as { nodes?: any[] }).nodes?.slice(0, 2).map((node: any, idx: number) => (
-                            <div key={idx} style={{ paddingLeft: '16px', fontSize: '10px' }}>
+                    }}
+                  >
+                    <div style={{ fontWeight: 600, color: '#ccc' }}>
+                      GRAPH STRUCTURE
+                    </div>
+                    <div style={{ paddingLeft: '8px' }}>
+                      • {preset.nodes || 0} nodes
+                    </div>
+                    {(preset.data as { nodes?: any[] })?.nodes && (
+                      <>
+                        {(preset.data as { nodes?: any[] }).nodes
+                          ?.slice(0, 2)
+                          .map((node: any, idx: number) => (
+                            <div
+                              key={idx}
+                              style={{ paddingLeft: '16px', fontSize: '10px' }}
+                            >
                               - {node.type || node.data?.type || 'Node'}
                             </div>
                           ))}
-                        </>
-                      )}
-                    </div>
+                      </>
+                    )}
                   </div>
-
                 </div>
-              );
-            })()}
+              </div>
+            );
+          })()}
       </div>
 
       {/* Removed separate preview panel - now integrated with details panel above */}

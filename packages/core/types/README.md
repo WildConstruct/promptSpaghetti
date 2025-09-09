@@ -109,14 +109,14 @@ const securityPolicy: SecurityPolicy = {
   scope: {
     global: false,
     environments: ['production'],
-    endpoints: ['/api/sensitive/*'],
+    endpoints: ['/api/sensitive/*']
   },
 
   securityLevel: 'enhanced',
   threatCategories: ['authentication', 'authorization'],
   authenticationRequired: true,
   multiFactorRequired: true,
-  encryptionRequired: true,
+  encryptionRequired: true
 
   // ... other required fields
 };
@@ -127,13 +127,14 @@ const securityPolicy: SecurityPolicy = {
 ```typescript
 import { IPolicyEvaluationService, EvaluationContext } from '@/types';
 
-const evaluationService: IPolicyEvaluationService = new PolicyEvaluationService();
+const evaluationService: IPolicyEvaluationService =
+  new PolicyEvaluationService();
 
 const context: EvaluationContext = {
   userId: 'user-123',
   action: 'api_access',
   environment: 'production',
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 const result = await evaluationService.evaluateForContext(context);
@@ -162,14 +163,14 @@ const subscription: PolicyEventSubscription = {
     {
       field: 'data.framework',
       operator: 'in',
-      value: ['GDPR', 'CCPA'],
-    },
+      value: ['GDPR', 'CCPA']
+    }
   ],
 
   deliveryMethod: 'webhook',
   deliveryConfig: {
-    webhookUrl: 'https://compliance.company.com/webhook',
-  },
+    webhookUrl: 'https://compliance.company.com/webhook'
+  }
 
   // ... other configuration
 };

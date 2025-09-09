@@ -20,7 +20,7 @@ class TrackerIntegration {
     this.sources = {
       stateFile: path.join(__dirname, '../data/state.json'),
       commitFile: path.join(__dirname, '../data/commit-tracking.json'),
-      qaFile: path.join(__dirname, '../data/qa-results.json'),
+      qaFile: path.join(__dirname, '../data/qa-results.json')
     };
   }
 
@@ -120,12 +120,16 @@ class TrackerIntegration {
     // Look for newly approved tasks
     for (const [taskId, task] of Object.entries(stateData.tasks)) {
       if (task.status === 'APPROVED' && !task.trackedApproval) {
-        await this.tracker.trackApproval(taskId, task.assignedTo || task.lastUpdatedBy || 'unknown', {
-          story: task.story,
-          estimate: task.estimate,
-          type: task.wipClass,
-          approvedAt: task.lastUpdated,
-        });
+        await this.tracker.trackApproval(
+          taskId,
+          task.assignedTo || task.lastUpdatedBy || 'unknown',
+          {
+            story: task.story,
+            estimate: task.estimate,
+            type: task.wipClass,
+            approvedAt: task.lastUpdated
+          }
+        );
 
         // Mark as tracked (this won't persist to file, just prevents double-tracking)
         task.trackedApproval = true;
@@ -144,16 +148,23 @@ class TrackerIntegration {
     // Look for new commits
     for (const commit of commitData.commits) {
       if (!commit.trackedPush && commit.tasks && commit.tasks.length > 0) {
-        await this.tracker.trackPush(commit.tasks, commit.author || 'unknown', commit.hash || commit.id, {
-          message: commit.message,
-          timestamp: commit.timestamp,
-          branch: commit.branch,
-        });
+        await this.tracker.trackPush(
+          commit.tasks,
+          commit.author || 'unknown',
+          commit.hash || commit.id,
+          {
+            message: commit.message,
+            timestamp: commit.timestamp,
+            branch: commit.branch
+          }
+        );
 
         // Mark as tracked
         commit.trackedPush = true;
 
-        console.log(`🚀 Auto-tracked push: ${commit.tasks.length} task(s) in ${commit.hash}`);
+        console.log(
+          `🚀 Auto-tracked push: ${commit.tasks.length} task(s) in ${commit.hash}`
+        );
       }
     }
   }
@@ -170,7 +181,9 @@ class TrackerIntegration {
 
       // If QA ran in the last minute, it's probably new
       if (now.getTime() - lastRun.getTime() < 60000) {
-        console.log(`🔍 QA activity detected: ${qaData.passed || 0} passed, ${qaData.failed || 0} failed`);
+        console.log(
+          `🔍 QA activity detected: ${qaData.passed || 0} passed, ${qaData.failed || 0} failed`
+        );
       }
     }
   }
@@ -211,7 +224,7 @@ class TrackerIntegration {
     // Track task completion
     await this.trackTaskApproval(taskId, agentId, {
       source: 'finish-task',
-      completedAt: new Date(),
+      completedAt: new Date()
     });
   }
 
@@ -223,7 +236,7 @@ class TrackerIntegration {
       for (const taskId of results.approvedTasks) {
         await this.trackTaskApproval(taskId, 'qa-agent', {
           source: 'qa-approval',
-          qaResults: results,
+          qaResults: results
         });
       }
     }
@@ -304,5 +317,5 @@ module.exports = {
   trackApproval,
   trackPush,
   getStats,
-  generateReport,
+  generateReport
 };

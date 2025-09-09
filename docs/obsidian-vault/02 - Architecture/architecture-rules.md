@@ -158,7 +158,10 @@ class UserService {
 ```typescript
 // ✅ Required: Node factory for type safety
 interface NodeFactory {
-  createNode<T extends NodeType>(type: T, config: NodeConfigFor<T>): RuntimeNodeFor<T>;
+  createNode<T extends NodeType>(
+    type: T,
+    config: NodeConfigFor<T>
+  ): RuntimeNodeFor<T>;
 }
 
 class DefaultNodeFactory implements NodeFactory {
@@ -504,15 +507,17 @@ export async function createNode(req: FastifyRequest, reply: FastifyReply) {
     config: z.record(z.any()),
     metadata: z.object({
       label: SecureValidation.safeString(100),
-      description: SecureValidation.safeString(500),
-    }),
+      description: SecureValidation.safeString(500)
+    })
   });
 
   // 2. Parse and validate
   const validatedInput = createNodeSchema.parse(req.body);
 
   // 3. Additional security validation
-  const securityResult = SecurityValidator.validateNodeConfig(validatedInput.config);
+  const securityResult = SecurityValidator.validateNodeConfig(
+    validatedInput.config
+  );
   if (!securityResult.isValid) {
     throw new SecurityError('Invalid node configuration');
   }
@@ -545,7 +550,10 @@ const query = `SELECT * FROM users WHERE name = '${dangerousInput}'`; // SQL inj
 
 ```typescript
 // ✅ Required: Middleware-based auth
-export const jwtAuthMiddleware = async (request: FastifyRequest, reply: FastifyReply) => {
+export const jwtAuthMiddleware = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
   const token = extractTokenFromHeader(request.headers.authorization);
 
   try {
@@ -592,7 +600,7 @@ async function executeGraph(graph: Graph): Promise<ExecutionResult> {
     logger.error('Graph execution failed', {
       graphId: graph.id,
       error: error.message,
-      stack: error.stack,
+      stack: error.stack
     });
     throw error;
   }
@@ -602,7 +610,9 @@ async function executeGraph(graph: Graph): Promise<ExecutionResult> {
 async function executeNodes(nodes: Node[]): Promise<NodeResult[]> {
   // Execute independent nodes in parallel
   const independentNodes = nodes.filter(node => !node.dependencies);
-  const independentResults = await Promise.all(independentNodes.map(node => executeNode(node)));
+  const independentResults = await Promise.all(
+    independentNodes.map(node => executeNode(node))
+  );
 
   // Execute dependent nodes sequentially
   const dependentNodes = nodes.filter(node => node.dependencies);
@@ -631,7 +641,9 @@ class ResourceManager {
   }
 
   async dispose(): Promise<void> {
-    const disposalPromises = Array.from(this.resources).map(resource => resource.dispose());
+    const disposalPromises = Array.from(this.resources).map(resource =>
+      resource.dispose()
+    );
 
     await Promise.allSettled(disposalPromises);
     this.resources.clear();
@@ -697,7 +709,7 @@ describe('GraphExecutor', () => {
     it('should execute simple weighted choice graph', async () => {
       // Arrange
       const graph = createTestGraph({
-        nodes: [createWeightedChoiceNode(['option1', 'option2'])],
+        nodes: [createWeightedChoiceNode(['option1', 'option2'])]
       });
       const executor = new GraphExecutor(mockNodeFactory, mockValidator);
 
@@ -716,11 +728,13 @@ describe('GraphExecutor', () => {
       const executor = new GraphExecutor(mockNodeFactory, mockValidator);
       mockValidator.validate.mockReturnValue({
         isValid: false,
-        errors: ['Graph must contain at least one node'],
+        errors: ['Graph must contain at least one node']
       });
 
       // Act & Assert
-      await expect(executor.executeGraph(invalidGraph)).rejects.toThrow('Graph must contain at least one node');
+      await expect(executor.executeGraph(invalidGraph)).rejects.toThrow(
+        'Graph must contain at least one node'
+      );
     });
   });
 });
@@ -747,7 +761,7 @@ interface MockUserRepository extends UserRepository {
 
 const createMockUserRepository = (): MockUserRepository => ({
   save: jest.fn(),
-  findById: jest.fn(),
+  findById: jest.fn()
 });
 
 // ✅ Required: Test data builders
@@ -769,7 +783,7 @@ class GraphBuilder {
       id: this.graph.id || 'test-graph',
       nodes: this.graph.nodes || [],
       edges: this.graph.edges || [],
-      seed: this.graph.seed || 42,
+      seed: this.graph.seed || 42
     };
   }
 }
@@ -917,14 +931,14 @@ export async function getGraph(req: FastifyRequest, reply: FastifyReply) {
           code: 'GRAPH_NOT_FOUND',
           message: `Graph with id ${id} not found`,
           timestamp: new Date().toISOString(),
-          requestId: req.id,
-        },
+          requestId: req.id
+        }
       });
     }
 
     reply.send({
       success: true,
-      data: graph,
+      data: graph
     });
   } catch (error) {
     reply.code(500).send({
@@ -933,8 +947,8 @@ export async function getGraph(req: FastifyRequest, reply: FastifyReply) {
         code: 'INTERNAL_ERROR',
         message: 'An unexpected error occurred',
         timestamp: new Date().toISOString(),
-        requestId: req.id,
-      },
+        requestId: req.id
+      }
     });
   }
 }
@@ -994,7 +1008,10 @@ interface GraphExecutionStartedEventV2
 ```javascript
 // .eslintrc.js
 module.exports = {
-  extends: ['@typescript-eslint/recommended', '@typescript-eslint/recommended-requiring-type-checking'],
+  extends: [
+    '@typescript-eslint/recommended',
+    '@typescript-eslint/recommended-requiring-type-checking'
+  ],
   rules: {
     // Architecture rules
     '@typescript-eslint/no-explicit-any': 'error',
@@ -1008,9 +1025,9 @@ module.exports = {
       { selector: 'typeAlias', format: ['PascalCase'] },
       { selector: 'class', format: ['PascalCase'] },
       { selector: 'function', format: ['camelCase'] },
-      { selector: 'variable', format: ['camelCase', 'UPPER_CASE'] },
-    ],
-  },
+      { selector: 'variable', format: ['camelCase', 'UPPER_CASE'] }
+    ]
+  }
 };
 ```
 

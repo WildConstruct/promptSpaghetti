@@ -12,16 +12,16 @@ describe('executeGraph deterministic behaviour', () => {
           type: 'WeightedChoice',
           choices: [
             { value: 'Alpha', weight: 1 },
-            { value: 'Beta', weight: 1 },
+            { value: 'Beta', weight: 1 }
           ],
-          inputs: [],
+          inputs: []
         },
         {
           id: 'out1',
           type: 'Output',
-          inputs: ['wc1'],
-        },
-      ],
+          inputs: ['wc1']
+        }
+      ]
     }) as any;
 
   it('returns identical output for identical seed', async () => {

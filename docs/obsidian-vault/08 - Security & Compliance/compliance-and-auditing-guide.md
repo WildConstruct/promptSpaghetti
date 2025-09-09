@@ -209,7 +209,7 @@ class ComplianceMonitor {
       recommendations,
       overallScore: this.calculateOverallScore(metrics),
       nextAuditDate: this.calculateNextAuditDate(),
-      certificationStatus: await this.checkCertificationStatus(),
+      certificationStatus: await this.checkCertificationStatus()
     };
   }
 
@@ -218,14 +218,22 @@ class ComplianceMonitor {
     const weights = {
       gdpr: 0.3,
       security: 0.4,
-      operational: 0.3,
+      operational: 0.3
     };
 
     const gdprScore = this.scoreGDPRCompliance(metrics.gdprCompliance);
-    const securityScore = this.scoreSecurityCompliance(metrics.securityCompliance);
-    const operationalScore = this.scoreOperationalCompliance(metrics.operationalCompliance);
+    const securityScore = this.scoreSecurityCompliance(
+      metrics.securityCompliance
+    );
+    const operationalScore = this.scoreOperationalCompliance(
+      metrics.operationalCompliance
+    );
 
-    return gdprScore * weights.gdpr + securityScore * weights.security + operationalScore * weights.operational;
+    return (
+      gdprScore * weights.gdpr +
+      securityScore * weights.security +
+      operationalScore * weights.operational
+    );
   }
 }
 ```

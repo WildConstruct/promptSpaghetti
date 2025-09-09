@@ -1,13 +1,22 @@
 import { parseManifest } from '../src/services/ManifestParser';
-import { validateMinimalManifest, validateNpmStyleManifest } from '../src/services/PresetValidator';
+import {
+  validateMinimalManifest,
+  validateNpmStyleManifest
+} from '../src/services/PresetValidator';
 
 describe('Manifest parsing and validation', () => {
   test('validates and parses minimal manifest', () => {
     const minimal = {
       presets: [
-        { id: 'wc-basic', path: './wc-basic.psglib', tags: ['writing'], nodeTypes: ['LLM'], thumbnail: 'thumbs/x.png' },
-        { id: 'wc-2', path: './wc-2.psglib' },
-      ],
+        {
+          id: 'wc-basic',
+          path: './wc-basic.psglib',
+          tags: ['writing'],
+          nodeTypes: ['LLM'],
+          thumbnail: 'thumbs/x.png'
+        },
+        { id: 'wc-2', path: './wc-2.psglib' }
+      ]
     };
 
     const validated = validateMinimalManifest(minimal);
@@ -15,7 +24,11 @@ describe('Manifest parsing and validation', () => {
 
     const res = parseManifest(minimal);
     expect(res.type).toBe('minimal');
-    expect(res.presets[0]).toMatchObject({ id: 'wc-basic', path: './wc-basic.psglib', tags: ['writing'] });
+    expect(res.presets[0]).toMatchObject({
+      id: 'wc-basic',
+      path: './wc-basic.psglib',
+      tags: ['writing']
+    });
   });
 
   test('validates and parses npm-style manifest', () => {
@@ -24,9 +37,15 @@ describe('Manifest parsing and validation', () => {
       version: '0.1.0',
       presetLibrary: {
         presets: [
-          { id: 'wc-basic', path: 'dist/wc-basic.psglib', tags: ['writing'], nodeTypes: ['LLM'], thumbnail: 'dist/thumbs/x.png' },
-        ],
-      },
+          {
+            id: 'wc-basic',
+            path: 'dist/wc-basic.psglib',
+            tags: ['writing'],
+            nodeTypes: ['LLM'],
+            thumbnail: 'dist/thumbs/x.png'
+          }
+        ]
+      }
     };
 
     const validated = validateNpmStyleManifest(npmStyle);
@@ -34,7 +53,11 @@ describe('Manifest parsing and validation', () => {
 
     const res = parseManifest(npmStyle);
     expect(res.type).toBe('npm-style');
-    expect(res.presets[0]).toMatchObject({ id: 'wc-basic', path: 'dist/wc-basic.psglib', tags: ['writing'] });
+    expect(res.presets[0]).toMatchObject({
+      id: 'wc-basic',
+      path: 'dist/wc-basic.psglib',
+      tags: ['writing']
+    });
   });
 
   test('invalid minimal manifest throws', () => {

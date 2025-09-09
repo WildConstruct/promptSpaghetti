@@ -120,10 +120,10 @@ export async function insertPreset(
   try {
     // Parse the preset - detect format and convert if needed
     let psglib: PSGLibFile;
-    
+
     // Try to parse as JSON first to detect format
     const data = JSON.parse(presetContent);
-    
+
     if (data.fileType === 'psglib') {
       // It's already a PSGLib file
       psglib = parsePSGLib(presetContent);
@@ -281,7 +281,7 @@ export function validatePreset(presetContent: string): {
     }
 
     let psglib: PSGLibFile;
-    
+
     // Detect format based on structure
     if (data.fileType === 'psglib') {
       // It's already a PSGLib file
@@ -479,12 +479,16 @@ function positionNodes(
 ): PSGLibNode[] {
   // Check if nodes are stacked (all at same position)
   const firstPos = nodes[0]?.position;
-  const areStacked = nodes.length > 1 && nodes.every(node => 
-    node.position.x === firstPos.x && node.position.y === firstPos.y
-  );
+  const areStacked =
+    nodes.length > 1 &&
+    nodes.every(
+      node => node.position.x === firstPos.x && node.position.y === firstPos.y
+    );
 
   // If nodes are stacked or bounds indicate no layout, don't preserve positions
-  const shouldPreserve = preservePositions && !areStacked && 
+  const shouldPreserve =
+    preservePositions &&
+    !areStacked &&
     (bounds.maxX - bounds.minX > 0 || bounds.maxY - bounds.minY > 0);
 
   if (shouldPreserve) {
@@ -515,15 +519,19 @@ function positionNodes(
   // Nodes are stacked or need repositioning
   // For single node, just place at drop position
   if (nodes.length === 1) {
-    return [{
-      ...nodes[0],
-      type: mapNodeType(nodes[0].type),
-      position: snapToGrid ? {
-        x: Math.round(position.x / gridSize) * gridSize,
-        y: Math.round(position.y / gridSize) * gridSize
-      } : position,
-      data: convertNodeData(nodes[0].type, nodes[0].data)
-    }];
+    return [
+      {
+        ...nodes[0],
+        type: mapNodeType(nodes[0].type),
+        position: snapToGrid
+          ? {
+              x: Math.round(position.x / gridSize) * gridSize,
+              y: Math.round(position.y / gridSize) * gridSize
+            }
+          : position,
+        data: convertNodeData(nodes[0].type, nodes[0].data)
+      }
+    ];
   }
 
   // For multiple stacked nodes, grid-pack within optional container bounds
@@ -532,8 +540,12 @@ function positionNodes(
   const padding = options.containerPadding ?? 24;
   const spacingDefault = 220;
   const hasContainer = !!options.containerSize;
-  const innerWidth = hasContainer ? Math.max(0, options.containerSize!.width - padding * 2) : spacingDefault * (cols - 1);
-  const innerHeight = hasContainer ? Math.max(0, options.containerSize!.height - padding * 2) : spacingDefault * (rows - 1);
+  const innerWidth = hasContainer
+    ? Math.max(0, options.containerSize!.width - padding * 2)
+    : spacingDefault * (cols - 1);
+  const innerHeight = hasContainer
+    ? Math.max(0, options.containerSize!.height - padding * 2)
+    : spacingDefault * (rows - 1);
   const xStep = cols > 1 ? innerWidth / (cols - 1) : 0;
   const yStep = rows > 1 ? innerHeight / (rows - 1) : 0;
 
@@ -542,8 +554,16 @@ function positionNodes(
     const c = index % cols;
 
     // Anchor center at provided position
-    let baseX = position.x - (hasContainer ? (options.containerSize!.width / 2 - padding) : innerWidth / 2);
-    let baseY = position.y - (hasContainer ? (options.containerSize!.height / 2 - padding) : innerHeight / 2);
+    let baseX =
+      position.x -
+      (hasContainer
+        ? options.containerSize!.width / 2 - padding
+        : innerWidth / 2);
+    let baseY =
+      position.y -
+      (hasContainer
+        ? options.containerSize!.height / 2 - padding
+        : innerHeight / 2);
 
     let x = baseX + c * (hasContainer ? xStep : spacingDefault);
     let y = baseY + r * (hasContainer ? yStep : spacingDefault);

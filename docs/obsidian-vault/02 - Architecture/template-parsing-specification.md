@@ -62,7 +62,7 @@ function extractVariables(template: string): ExtractedVariable[] {
     variables.push({
       name: match[1], // Variable name without braces
       placeholder: match[0], // Full {variable} text
-      position: match.index, // Character position in template
+      position: match.index // Character position in template
     });
   }
 
@@ -108,7 +108,10 @@ function validateTemplate(template: string): ValidationResult {
 ### Real-time Preview
 
 ```typescript
-function previewTemplate(template: string, variables: Record<string, string>): string {
+function previewTemplate(
+  template: string,
+  variables: Record<string, string>
+): string {
   let result = template;
 
   // Replace each variable with its value
@@ -125,7 +128,9 @@ function previewTemplate(template: string, variables: Record<string, string>): s
 ### Sample Variable Generation
 
 ```typescript
-function generateSampleVariables(variables: ExtractedVariable[]): Record<string, string> {
+function generateSampleVariables(
+  variables: ExtractedVariable[]
+): Record<string, string> {
   const samples: Record<string, string> = {};
 
   variables.forEach(variable => {
@@ -152,7 +157,7 @@ function getSampleValue(variableName: string): string {
     weather: 'stormy',
     mood: 'mysterious',
     object: 'glowing orb',
-    action: 'flying',
+    action: 'flying'
   };
 
   // Find best match for variable name
@@ -271,7 +276,7 @@ function getTemplateErrors(template: string): TemplateError[] {
       ...validation.errors.map(error => ({
         type: 'syntax' as const,
         message: error,
-        suggestions: getSyntaxSuggestions(error),
+        suggestions: getSyntaxSuggestions(error)
       }))
     );
   }
@@ -284,7 +289,7 @@ function getTemplateErrors(template: string): TemplateError[] {
         type: 'validation',
         message: `Variable name "${variable.name}" is too short`,
         position: variable.position,
-        suggestions: ['Use descriptive variable names (e.g., "color", "style")'],
+        suggestions: ['Use descriptive variable names (e.g., "color", "style")']
       });
     }
   });
@@ -307,7 +312,7 @@ function safeTemplatePreview(
     if (!validation.valid) {
       return {
         result: template,
-        errors: validation.errors,
+        errors: validation.errors
       };
     }
 
@@ -352,7 +357,10 @@ class TemplateCache {
 
 ```typescript
 function useTemplateValidation(template: string, delay = 300) {
-  const [validation, setValidation] = useState<ValidationResult>({ valid: true, errors: [] });
+  const [validation, setValidation] = useState<ValidationResult>({
+    valid: true,
+    errors: []
+  });
 
   const debouncedValidate = useMemo(
     () =>
@@ -382,7 +390,7 @@ function migrateToTemplateSystem(oldNode: InternalNode): UINode {
     return {
       type: 'WeightedChoice',
       choices: extractChoicesFromOldFormat(oldNode),
-      name: oldNode.name || 'Choice Node',
+      name: oldNode.name || 'Choice Node'
     };
   }
 
@@ -401,8 +409,8 @@ function exportTemplate(template: string): ExportedTemplate {
     format: 'prompt-spaghetti-v2',
     compatibility: {
       version: '2.0',
-      backwardCompatible: true,
-    },
+      backwardCompatible: true
+    }
   };
 }
 ```

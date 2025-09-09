@@ -24,9 +24,15 @@ describe('generate-graph-manifest helper', () => {
     const graphsDir = path.join(tmp, 'graphs');
     await fs.promises.mkdir(graphsDir);
     // invalid: no nodes/edges
-    await fs.promises.writeFile(path.join(graphsDir, 'bad.psg'), '{"title":"Bad"}');
+    await fs.promises.writeFile(
+      path.join(graphsDir, 'bad.psg'),
+      '{"title":"Bad"}'
+    );
     // valid minimal shape
-    await fs.promises.writeFile(path.join(graphsDir, 'good.psg'), '{"nodes":[],"edges":[]}');
+    await fs.promises.writeFile(
+      path.join(graphsDir, 'good.psg'),
+      '{"nodes":[],"edges":[]}'
+    );
     const entries = await collectGraphEntries(graphsDir);
     expect(entries.length).toBe(1);
     expect(entries[0].filename).toBe('good.psg');
@@ -37,9 +43,15 @@ describe('generate-graph-manifest helper', () => {
     const graphsDir = path.join(tmp, 'graphs');
     await fs.promises.mkdir(graphsDir);
     // invalid: no nodes/edges
-    await fs.promises.writeFile(path.join(graphsDir, 'bad.psg'), '{"title":"Bad"}');
+    await fs.promises.writeFile(
+      path.join(graphsDir, 'bad.psg'),
+      '{"title":"Bad"}'
+    );
     // valid minimal shape
-    await fs.promises.writeFile(path.join(graphsDir, 'good.psg'), '{"nodes":[],"edges":[]}');
+    await fs.promises.writeFile(
+      path.join(graphsDir, 'good.psg'),
+      '{"nodes":[],"edges":[]}'
+    );
     const entries = await collectGraphEntries(graphsDir);
     expect(entries.length).toBe(1);
     expect(entries[0].filename).toBe('good.psg');
@@ -49,8 +61,14 @@ describe('generate-graph-manifest helper', () => {
     const tmp = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'psg-'));
     const graphsDir = path.join(tmp, 'graphs');
     await fs.promises.mkdir(graphsDir);
-    await fs.promises.writeFile(path.join(graphsDir, 'b-forest-path.psg'), '{"nodes":[],"edges":[]}');
-    await fs.promises.writeFile(path.join(graphsDir, 'a-medieval-market.psg'), '{"nodes":[],"edges":[]}');
+    await fs.promises.writeFile(
+      path.join(graphsDir, 'b-forest-path.psg'),
+      '{"nodes":[],"edges":[]}'
+    );
+    await fs.promises.writeFile(
+      path.join(graphsDir, 'a-medieval-market.psg'),
+      '{"nodes":[],"edges":[]}'
+    );
     await fs.promises.writeFile(path.join(graphsDir, 'ignore.txt'), '');
 
     const entries = await collectGraphEntries(graphsDir);
@@ -58,7 +76,9 @@ describe('generate-graph-manifest helper', () => {
     // Should only include two .psg files
     expect(entries.length).toBe(2);
     // Sorted by title asc: Forest Path, Medieval Market
-    expect(entries.map((e: any) => e.title)).toEqual(['A Medieval Market', 'B Forest Path'].map(toTitleCase));
+    expect(entries.map((e: any) => e.title)).toEqual(
+      ['A Medieval Market', 'B Forest Path'].map(toTitleCase)
+    );
     // Has required fields
     for (const e of entries) {
       expect(typeof e.filename).toBe('string');

@@ -79,9 +79,13 @@ function displayTaskDetails(taskId) {
   console.log('Sub-story 19.2.6 - Data Retention Automation');
   console.log('\nFrom Epic 19 Plan (line 289):');
   console.log('   - Create deletion workflow');
-  console.log('\nContext: This task implements automated data deletion as part of');
+  console.log(
+    '\nContext: This task implements automated data deletion as part of'
+  );
   console.log('the comprehensive data lifecycle management system, ensuring');
-  console.log('compliance with data retention policies and regulations like GDPR.');
+  console.log(
+    'compliance with data retention policies and regulations like GDPR.'
+  );
 
   console.log('\n' + '─'.repeat(80));
   console.log('📚 IMPLEMENTATION GUIDANCE');

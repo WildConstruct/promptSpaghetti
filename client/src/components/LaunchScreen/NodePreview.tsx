@@ -9,10 +9,13 @@ import ReactFlow, {
   useEdgesState,
   NodeTypes,
   Handle,
-  Position,
+  Position
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import type { PromptAnalysis, GeneratedNodeInternal } from '../../lib/simplePromptParser';
+import type {
+  PromptAnalysis,
+  GeneratedNodeInternal
+} from '../../lib/simplePromptParser';
 import './NodePreview.css';
 
 interface NodePreviewProps {
@@ -22,15 +25,18 @@ interface NodePreviewProps {
 }
 
 // Simple preview node component
-const PreviewNode: React.FC<{ data: any; selected: boolean }> = ({ data, selected }) => {
+const PreviewNode: React.FC<{ data: any; selected: boolean }> = ({
+  data,
+  selected
+}) => {
   const nodeColor = data.color || '#666';
-  
+
   return (
-    <div 
+    <div
       className={`preview-node ${selected ? 'selected' : ''}`}
       style={{
         borderColor: nodeColor,
-        backgroundColor: selected ? `${nodeColor}22` : 'transparent',
+        backgroundColor: selected ? `${nodeColor}22` : 'transparent'
       }}
     >
       <Handle type="target" position={Position.Left} />
@@ -42,13 +48,13 @@ const PreviewNode: React.FC<{ data: any; selected: boolean }> = ({ data, selecte
 };
 
 const nodeTypes: NodeTypes = {
-  preview: PreviewNode,
+  preview: PreviewNode
 };
 
 export const NodePreview: React.FC<NodePreviewProps> = ({
   analysis,
   onNodeSelect,
-  selectedNodeId,
+  selectedNodeId
 }) => {
   // Convert analysis to ReactFlow nodes and edges
   const { flowNodes, flowEdges } = useMemo(() => {
@@ -60,35 +66,40 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
     const edges: Edge[] = [];
     const nodeWidth = 180;
     const nodeHeight = 80;
-    const horizontalSpacing = 320;  // Increased from 250 to prevent overlap
-    const verticalSpacing = 150;    // Increased from 120 for better spacing
+    const horizontalSpacing = 320; // Increased from 250 to prevent overlap
+    const verticalSpacing = 150; // Increased from 120 for better spacing
 
     // Create nodes from analysis
     analysis.nodes.forEach((genNode, index) => {
       const row = Math.floor(index / 3); // 3 nodes per row
       const col = index % 3;
-      
+
       // Find the mapping for this node to get its color
       const mapping = analysis.mappings.find(m => m.nodeId === genNode.node.id);
       const color = mapping?.highlightColor || '#666';
       const internal: GeneratedNodeInternal = genNode.node;
-      const label = internal.nodeType === 'Variable'
-        ? (internal.variableName ? `$${internal.variableName}` : 'Variable')
-        : (internal.getPreviewText ? internal.getPreviewText() : 'Text');
+      const label =
+        internal.nodeType === 'Variable'
+          ? internal.variableName
+            ? `$${internal.variableName}`
+            : 'Variable'
+          : internal.getPreviewText
+            ? internal.getPreviewText()
+            : 'Text';
 
       nodes.push({
         id: genNode.node.id,
         type: 'preview',
         position: {
           x: col * horizontalSpacing + 50,
-          y: row * verticalSpacing + 50,
+          y: row * verticalSpacing + 50
         },
         data: {
           label,
           nodeType: internal.nodeType,
-          color: color,
+          color: color
         },
-        selected: genNode.node.id === selectedNodeId,
+        selected: genNode.node.id === selectedNodeId
       });
     });
 
@@ -104,8 +115,8 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
           animated: true,
           style: {
             stroke: '#666',
-            strokeWidth: 2,
-          },
+            strokeWidth: 2
+          }
         });
       }
     }
@@ -123,11 +134,14 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
   }, [flowNodes, flowEdges, setNodes, setEdges]);
 
   // Handle node click
-  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
-    if (onNodeSelect) {
-      onNodeSelect(node.id);
-    }
-  }, [onNodeSelect]);
+  const onNodeClick = useCallback(
+    (event: React.MouseEvent, node: Node) => {
+      if (onNodeSelect) {
+        onNodeSelect(node.id);
+      }
+    },
+    [onNodeSelect]
+  );
 
   // Handle pane click (deselect)
   const onPaneClick = useCallback(() => {
@@ -140,7 +154,12 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
     return (
       <div className="node-preview-empty">
         <div className="empty-state">
-          <svg className="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <svg
+            className="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
             <rect x="3" y="3" width="7" height="7" rx="1" />
             <rect x="14" y="3" width="7" height="7" rx="1" />
             <rect x="3" y="14" width="7" height="7" rx="1" />
@@ -148,7 +167,9 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
             <path d="M10 7h4M7 10v4M17 10v4M10 17h4" strokeLinecap="round" />
           </svg>
           <p>Enter a prompt to see the node graph</p>
-          <p className="empty-hint">Your text will be automatically parsed into interconnected nodes</p>
+          <p className="empty-hint">
+            Your text will be automatically parsed into interconnected nodes
+          </p>
         </div>
       </div>
     );
@@ -169,10 +190,10 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
       >
         <Background color="#333" gap={16} size={1} />
         <Controls />
-        <MiniMap 
-          nodeColor={(node) => node.data?.color || '#666'}
+        <MiniMap
+          nodeColor={node => node.data?.color || '#666'}
           style={{
-            backgroundColor: '#1a1a1a',
+            backgroundColor: '#1a1a1a'
           }}
         />
       </ReactFlow>

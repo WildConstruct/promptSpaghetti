@@ -18,14 +18,14 @@ export interface EnhancedAssetBrowserProps extends AssetBrowserProps {
   enableFragmentManifest?: boolean;
 }
 
-export function EnhancedAssetBrowser({ 
-  onInsert, 
+export function EnhancedAssetBrowser({
+  onInsert,
   onNodeReplace,
-  enableFragmentManifest = true  // Enabled to load fragment assets
+  enableFragmentManifest = true // Enabled to load fragment assets
 }: EnhancedAssetBrowserProps) {
-  const selectedId = useAssetBrowserStore((s) => s.selectedPresetId);
-  const open = useAssetBrowserStore((s) => s.detailsOpen);
-  const scan = useAssetBrowserStore((s) => s.scan);
+  const selectedId = useAssetBrowserStore(s => s.selectedPresetId);
+  const open = useAssetBrowserStore(s => s.detailsOpen);
+  const scan = useAssetBrowserStore(s => s.scan);
   const [manifestLoaded, setManifestLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -38,33 +38,34 @@ export function EnhancedAssetBrowser({
       try {
         console.log('Loading fragment manifest...');
         const manifest = await FragmentManifestLoader.loadManifest();
-        
+
         if (!isMounted) return; // Component unmounted
-        
+
         const presets = FragmentManifestLoader.convertToPresets(manifest);
-        
+
         // Directly set presets in store instead of using scan
         // This avoids the manifest format incompatibility issue
-        const tags = Array.from(new Set(presets.flatMap((p) => p.tags))).sort();
-        
-        useAssetBrowserStore.setState({ 
+        const tags = Array.from(new Set(presets.flatMap(p => p.tags))).sort();
+
+        useAssetBrowserStore.setState({
           presets: presets,
           filteredPresets: presets,
           availableTags: tags,
           scanStatus: 'done',
           error: null
         });
-        
+
         if (isMounted) {
           setManifestLoaded(true);
           console.log(`Fragment manifest loaded: ${presets.length} fragments`);
         }
       } catch (error) {
         if (isMounted) {
-          const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+          const errorMsg =
+            error instanceof Error ? error.message : 'Unknown error';
           console.error('Failed to load fragment manifest:', errorMsg);
           setLoadError(errorMsg);
-          useAssetBrowserStore.setState({ 
+          useAssetBrowserStore.setState({
             scanStatus: 'error',
             error: errorMsg
           });
@@ -73,7 +74,7 @@ export function EnhancedAssetBrowser({
     };
 
     loadFragmentManifest();
-    
+
     return () => {
       isMounted = false;
     };
@@ -86,47 +87,53 @@ export function EnhancedAssetBrowser({
   }, []);
 
   // Handle drop for node replacement
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    
-    try {
-      const presetData = e.dataTransfer.getData('application/x-preset');
-      if (!presetData) return;
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
 
-      const preset = JSON.parse(presetData);
-      
-      // Check if drop is on a node
-      const target = e.target as HTMLElement;
-      const nodeElement = target.closest('.react-flow__node');
-      
-      if (nodeElement && onNodeReplace) {
-        const nodeId = nodeElement.getAttribute('data-id');
-        if (nodeId) {
-          // Add visual feedback
-          nodeElement.classList.add('node-replacement-success');
-          setTimeout(() => {
-            nodeElement.classList.remove('node-replacement-success');
-          }, 500);
-          
-          onNodeReplace(nodeId, preset);
+      try {
+        const presetData = e.dataTransfer.getData('application/x-preset');
+        if (!presetData) return;
+
+        const preset = JSON.parse(presetData);
+
+        // Check if drop is on a node
+        const target = e.target as HTMLElement;
+        const nodeElement = target.closest('.react-flow__node');
+
+        if (nodeElement && onNodeReplace) {
+          const nodeId = nodeElement.getAttribute('data-id');
+          if (nodeId) {
+            // Add visual feedback
+            nodeElement.classList.add('node-replacement-success');
+            setTimeout(() => {
+              nodeElement.classList.remove('node-replacement-success');
+            }, 500);
+
+            onNodeReplace(nodeId, preset);
+          }
         }
+      } catch (error) {
+        console.error('Error handling drop:', error);
       }
-    } catch (error) {
-      console.error('Error handling drop:', error);
-    }
-  }, [onNodeReplace]);
+    },
+    [onNodeReplace]
+  );
 
   return (
     <KeyboardNavigatorProvider>
-      <div 
-        className="asset-browser enhanced-asset-browser" 
+      <div
+        className="asset-browser enhanced-asset-browser"
         style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
         <Sidebar />
         <div>
-          <EnhancedPresetGrid onInsert={onInsert} onNodeReplace={onNodeReplace} />
+          <EnhancedPresetGrid
+            onInsert={onInsert}
+            onNodeReplace={onNodeReplace}
+          />
         </div>
         <DetailsDrawer open={open} selectedId={selectedId} />
       </div>

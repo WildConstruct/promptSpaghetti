@@ -5,6 +5,7 @@
 This document evaluates React Flow's native SubFlow feature against our current custom node grouping implementation. After comprehensive analysis, we recommend **migrating to React Flow SubFlow** for better performance, maintainability, and feature completeness while maintaining backward compatibility.
 
 **Key Findings:**
+
 - SubFlow provides 60% better performance for grouped nodes
 - Reduces custom code maintenance by 40%
 - Offers superior nesting and viewport management
@@ -13,6 +14,7 @@ This document evaluates React Flow's native SubFlow feature against our current 
 ## Current Implementation Analysis
 
 ### Custom Grouping Architecture
+
 ```typescript
 // Current implementation in Epic1GraphEditor.tsx
 interface NodeGroup {
@@ -25,21 +27,22 @@ interface NodeGroup {
 
 // Custom grouping logic (lines 200-217)
 const enhancedNodes = useMemo(() => {
-  return nodes.map((node) => {
+  return nodes.map(node => {
     const nodeData = createNodeData(node.data, node.id);
-    
+
     return {
       ...node,
       type: node.type || 'textBlock',
       position: node.position || { x: 0, y: 0 },
       data: nodeData,
-      selected: node.selected || node.id === selectedNodeId,
+      selected: node.selected || node.id === selectedNodeId
     };
   });
 }, [nodes, selectedNodeId, createNodeData]);
 ```
 
 ### Current Limitations
+
 1. **Manual State Management**: Custom position synchronization
 2. **Performance Overhead**: Full re-render on group changes
 3. **Limited Nesting**: No support for nested groups
@@ -49,6 +52,7 @@ const enhancedNodes = useMemo(() => {
 ## React Flow SubFlow Features
 
 ### Native SubFlow Capabilities
+
 ```typescript
 // React Flow SubFlow implementation example
 import { ReactFlow, Node, Edge, NodeTypes } from 'reactflow';
@@ -83,6 +87,7 @@ const SubFlowEditor: React.FC = () => {
 ```
 
 ### Advanced SubFlow Features
+
 ```typescript
 // SubFlow with custom viewport
 const SubFlowNode: React.FC<NodeProps> = ({ data, id }) => {
@@ -94,7 +99,7 @@ const SubFlowNode: React.FC<NodeProps> = ({ data, id }) => {
         </button>
         <span>{data.label}</span>
       </div>
-      
+
       {!data.collapsed && (
         <ReactFlow
           nodes={data.nodes}
@@ -115,26 +120,28 @@ const SubFlowNode: React.FC<NodeProps> = ({ data, id }) => {
 ## Performance Benchmarks
 
 ### Rendering Performance Comparison
+
 ```typescript
 // Benchmark results for 1000 nodes in 10 groups
 
 const performanceMetrics = {
   customGrouping: {
     initialRender: 245, // ms
-    groupToggle: 89, // ms  
+    groupToggle: 89, // ms
     nodeUpdate: 156, // ms
-    memoryUsage: 89, // MB
+    memoryUsage: 89 // MB
   },
   reactFlowSubFlow: {
     initialRender: 98, // ms (-60%)
-    groupToggle: 23, // ms (-74%) 
+    groupToggle: 23, // ms (-74%)
     nodeUpdate: 67, // ms (-57%)
-    memoryUsage: 52, // MB (-42%)
+    memoryUsage: 52 // MB (-42%)
   }
 };
 ```
 
 ### Memory Usage Analysis
+
 ```typescript
 const memoryComparison = {
   customImplementation: {
@@ -155,16 +162,17 @@ const memoryComparison = {
 ## Implementation Complexity Analysis
 
 ### Current Custom Implementation
+
 ```typescript
 // Lines of code analysis for custom grouping
 const customImplementationComplexity = {
   groupManagement: 340, // lines
-  positionSynchronization: 89, // lines  
+  positionSynchronization: 89, // lines
   eventHandling: 156, // lines
   edgeRouting: 234, // lines
   stateManagement: 123, // lines
   total: 942, // lines of custom code
-  
+
   testCoverage: {
     unitTests: 28,
     integrationTests: 12,
@@ -174,6 +182,7 @@ const customImplementationComplexity = {
 ```
 
 ### React Flow SubFlow Implementation
+
 ```typescript
 // Estimated lines of code for SubFlow migration
 const subFlowImplementationComplexity = {
@@ -182,7 +191,7 @@ const subFlowImplementationComplexity = {
   customizations: 67, // lines
   stateAdapters: 45, // lines
   total: 321, // lines (-66% reduction)
-  
+
   estimatedTestCoverage: {
     unitTests: 15, // (-46% due to built-in features)
     integrationTests: 8,
@@ -194,21 +203,21 @@ const subFlowImplementationComplexity = {
 ## Migration Path Analysis
 
 ### Phase 1: Compatibility Layer (Week 1)
+
 ```typescript
 // packages/core/migration/SubFlowAdapter.ts
 export class SubFlowMigrationAdapter {
   convertCustomGroupsToSubFlows(
-    nodes: Node[], 
+    nodes: Node[],
     groups: NodeGroup[]
-  ): { nodes: Node[], subflows: SubFlowNode[] } {
-    
+  ): { nodes: Node[]; subflows: SubFlowNode[] } {
     const subflows: SubFlowNode[] = [];
     const ungroupedNodes: Node[] = [];
-    
+
     groups.forEach(group => {
       const groupNodes = nodes.filter(n => group.nodes.includes(n.id));
       const subflowEdges = this.extractGroupEdges(groupNodes, edges);
-      
+
       subflows.push({
         id: `subflow-${group.id}`,
         type: 'subflow',
@@ -222,7 +231,7 @@ export class SubFlowMigrationAdapter {
         }
       });
     });
-    
+
     // Add remaining ungrouped nodes
     nodes.forEach(node => {
       const isGrouped = groups.some(g => g.nodes.includes(node.id));
@@ -230,7 +239,7 @@ export class SubFlowMigrationAdapter {
         ungroupedNodes.push(node);
       }
     });
-    
+
     return {
       nodes: ungroupedNodes,
       subflows
@@ -240,12 +249,13 @@ export class SubFlowMigrationAdapter {
 ```
 
 ### Phase 2: SubFlow Integration (Week 2)
+
 ```typescript
 // packages/core/components/epic1/SubFlowGraphEditor.tsx
 export const SubFlowGraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
   const [subflows, setSubflows] = useState<SubFlowNode[]>([]);
   const migrationAdapter = useMemo(() => new SubFlowMigrationAdapter(), []);
-  
+
   // Convert existing groups to subflows
   const convertedData = useMemo(() => {
     if (props.legacyGroups) {
@@ -256,9 +266,9 @@ export const SubFlowGraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
     }
     return { nodes: props.initialNodes || [], subflows: [] };
   }, [props.initialNodes, props.legacyGroups, migrationAdapter]);
-  
+
   const allNodes = [...convertedData.nodes, ...subflows];
-  
+
   return (
     <ReactFlow
       nodes={allNodes}
@@ -274,31 +284,32 @@ export const SubFlowGraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
 ```
 
 ### Phase 3: Feature Enhancement (Week 3)
+
 ```typescript
 // Advanced SubFlow features
-const SubFlowNodeComponent: React.FC<NodeProps<SubFlowData>> = ({ 
-  data, 
+const SubFlowNodeComponent: React.FC<NodeProps<SubFlowData>> = ({
+  data,
   id,
-  selected 
+  selected
 }) => {
   const [isExpanded, setIsExpanded] = useState(!data.collapsed);
   const [subflowViewport, setSubflowViewport] = useState<Viewport>({
     x: 0, y: 0, zoom: 1
   });
-  
+
   return (
     <div className={`subflow-node ${selected ? 'selected' : ''}`}>
       <Handle type="target" position={Position.Left} />
-      
+
       <div className="subflow-header">
-        <button 
+        <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="subflow-toggle"
         >
           {isExpanded ? '−' : '+'}
         </button>
-        <input 
-          value={data.label} 
+        <input
+          value={data.label}
           onChange={(e) => updateSubFlowLabel(id, e.target.value)}
           className="subflow-title"
         />
@@ -306,7 +317,7 @@ const SubFlowNodeComponent: React.FC<NodeProps<SubFlowData>> = ({
           {data.nodes.length} nodes
         </div>
       </div>
-      
+
       {isExpanded && (
         <div className="subflow-content">
           <ReactFlow
@@ -324,7 +335,7 @@ const SubFlowNodeComponent: React.FC<NodeProps<SubFlowData>> = ({
           />
         </div>
       )}
-      
+
       <Handle type="source" position={Position.Right} />
     </div>
   );
@@ -336,6 +347,7 @@ const SubFlowNodeComponent: React.FC<NodeProps<SubFlowData>> = ({
 ### React Flow SubFlow Advantages
 
 #### Performance Benefits
+
 ```typescript
 const subflowAdvantages = {
   performance: [
@@ -344,14 +356,14 @@ const subflowAdvantages = {
     'Automatic memory management',
     'Built-in change detection optimization'
   ],
-  
+
   maintainability: [
     '66% reduction in custom code',
-    'Leverages React Flow\'s battle-tested features',
+    "Leverages React Flow's battle-tested features",
     'Automatic updates with React Flow releases',
     'Comprehensive documentation and community support'
   ],
-  
+
   features: [
     'Nested subflow support',
     'Advanced zoom/pan management',
@@ -359,7 +371,7 @@ const subflowAdvantages = {
     'Automatic edge routing optimization',
     'Touch/mobile gesture support'
   ],
-  
+
   developmentVelocity: [
     'Faster feature development',
     'Reduced testing overhead',
@@ -370,28 +382,29 @@ const subflowAdvantages = {
 ```
 
 #### Feature Completeness
+
 ```typescript
 const featureComparison = {
   nestedGrouping: {
     custom: 'Not supported',
     subflow: 'Full support with infinite nesting'
   },
-  
+
   viewportManagement: {
     custom: 'Manual implementation with bugs',
     subflow: 'Native, optimized, battle-tested'
   },
-  
+
   edgeRouting: {
     custom: 'Custom collision detection',
     subflow: 'Automatic smart routing'
   },
-  
+
   animations: {
     custom: 'Basic CSS transitions',
     subflow: 'Smooth, performant animations'
   },
-  
+
   accessibility: {
     custom: 'Limited keyboard support',
     subflow: 'Full ARIA compliance'
@@ -402,6 +415,7 @@ const featureComparison = {
 ### React Flow SubFlow Disadvantages
 
 #### Migration Complexity
+
 ```typescript
 const migrationChallenges = {
   breakingChanges: [
@@ -409,13 +423,13 @@ const migrationChallenges = {
     'Event handling patterns differ',
     'State structure modifications required'
   ],
-  
+
   customizationLimits: [
     'Less flexibility for highly custom group behaviors',
     'Must work within SubFlow architecture constraints',
     'Some edge cases may require workarounds'
   ],
-  
+
   dependencyRisk: [
     'Tied to React Flow release cycle',
     'Potential breaking changes in future versions',
@@ -425,6 +439,7 @@ const migrationChallenges = {
 ```
 
 ### Custom Implementation Advantages
+
 ```typescript
 const customAdvantages = {
   fullControl: [
@@ -432,7 +447,7 @@ const customAdvantages = {
     'No dependency on external features',
     'Ability to optimize for specific use cases'
   ],
-  
+
   stability: [
     'No risk of upstream breaking changes',
     'Predictable behavior',
@@ -442,6 +457,7 @@ const customAdvantages = {
 ```
 
 ### Custom Implementation Disadvantages
+
 ```typescript
 const customDisadvantages = {
   maintenanceBurden: [
@@ -450,14 +466,14 @@ const customDisadvantages = {
     'Requires specialized team knowledge',
     'Performance optimization is manual'
   ],
-  
+
   featureLimitations: [
     'No nested grouping support',
     'Limited viewport management',
     'Manual edge routing calculations',
     'Poor mobile/touch support'
   ],
-  
+
   performanceIssues: [
     '60% slower rendering',
     '42% higher memory usage',
@@ -470,21 +486,28 @@ const customDisadvantages = {
 ## Recommendation Matrix
 
 ### Decision Criteria Scoring
+
 ```typescript
 const decisionMatrix = {
   criteria: [
     { name: 'Performance', weight: 0.25, custom: 6, subflow: 9 },
-    { name: 'Maintainability', weight: 0.20, custom: 4, subflow: 9 },
-    { name: 'Feature Completeness', weight: 0.20, custom: 5, subflow: 9 },
+    { name: 'Maintainability', weight: 0.2, custom: 4, subflow: 9 },
+    { name: 'Feature Completeness', weight: 0.2, custom: 5, subflow: 9 },
     { name: 'Development Velocity', weight: 0.15, custom: 3, subflow: 8 },
-    { name: 'Migration Risk', weight: 0.10, custom: 9, subflow: 6 },
-    { name: 'Customization Freedom', weight: 0.10, custom: 9, subflow: 6 }
+    { name: 'Migration Risk', weight: 0.1, custom: 9, subflow: 6 },
+    { name: 'Customization Freedom', weight: 0.1, custom: 9, subflow: 6 }
   ],
-  
+
   calculateScore() {
-    const customScore = this.criteria.reduce((sum, c) => sum + (c.custom * c.weight), 0);
-    const subflowScore = this.criteria.reduce((sum, c) => sum + (c.subflow * c.weight), 0);
-    
+    const customScore = this.criteria.reduce(
+      (sum, c) => sum + c.custom * c.weight,
+      0
+    );
+    const subflowScore = this.criteria.reduce(
+      (sum, c) => sum + c.subflow * c.weight,
+      0
+    );
+
     return {
       custom: customScore.toFixed(2),
       subflow: subflowScore.toFixed(2)
@@ -509,6 +532,7 @@ Based on comprehensive analysis, we recommend migrating to React Flow SubFlow fo
 ### Migration Strategy
 
 #### Phased Migration Approach
+
 ```typescript
 const migrationTimeline = {
   phase1: {
@@ -520,9 +544,9 @@ const migrationTimeline = {
       'Legacy API compatibility layer'
     ]
   },
-  
+
   phase2: {
-    duration: '1 week', 
+    duration: '1 week',
     scope: 'Feature parity and testing',
     deliverables: [
       'Complete feature migration',
@@ -530,7 +554,7 @@ const migrationTimeline = {
       'Performance optimization'
     ]
   },
-  
+
   phase3: {
     duration: '1 week',
     scope: 'Advanced features and cleanup',
@@ -544,18 +568,19 @@ const migrationTimeline = {
 ```
 
 #### Risk Mitigation
+
 ```typescript
 const riskMitigation = {
   breakingChanges: {
     risk: 'API changes affect existing integrations',
     mitigation: 'Comprehensive compatibility layer with gradual migration'
   },
-  
+
   performanceRegression: {
     risk: 'Migration introduces new performance issues',
     mitigation: 'Extensive benchmarking and performance testing'
   },
-  
+
   featureLoss: {
     risk: 'Some custom features may be lost',
     mitigation: 'Feature audit and custom SubFlow components where needed'
@@ -566,36 +591,43 @@ const riskMitigation = {
 ## Code Examples
 
 ### Migration Implementation
+
 ```typescript
 // packages/core/migration/SubFlowMigrator.ts
 export class SubFlowMigrator {
   migrateToSubFlow(graphData: LegacyGraphData): ModernGraphData {
     const { nodes, edges, groups } = graphData;
-    
+
     // Convert groups to subflows
-    const subflows = groups.map(group => this.createSubFlow(group, nodes, edges));
-    
-    // Extract ungrouped nodes
-    const ungroupedNodes = nodes.filter(node => 
-      !groups.some(group => group.nodes.includes(node.id))
+    const subflows = groups.map(group =>
+      this.createSubFlow(group, nodes, edges)
     );
-    
+
+    // Extract ungrouped nodes
+    const ungroupedNodes = nodes.filter(
+      node => !groups.some(group => group.nodes.includes(node.id))
+    );
+
     // Update edges to connect to subflows
     const updatedEdges = this.updateEdgesForSubFlows(edges, groups);
-    
+
     return {
       nodes: [...ungroupedNodes, ...subflows],
       edges: updatedEdges,
       version: '2.0.0'
     };
   }
-  
-  private createSubFlow(group: NodeGroup, nodes: Node[], edges: Edge[]): SubFlowNode {
+
+  private createSubFlow(
+    group: NodeGroup,
+    nodes: Node[],
+    edges: Edge[]
+  ): SubFlowNode {
     const groupNodes = nodes.filter(n => group.nodes.includes(n.id));
-    const internalEdges = edges.filter(e => 
-      group.nodes.includes(e.source) && group.nodes.includes(e.target)
+    const internalEdges = edges.filter(
+      e => group.nodes.includes(e.source) && group.nodes.includes(e.target)
     );
-    
+
     return {
       id: `subflow-${group.id}`,
       type: 'subflow',
@@ -615,12 +647,13 @@ export class SubFlowMigrator {
 ```
 
 ### Backward Compatibility
+
 ```typescript
 // Ensure backward compatibility during migration
 export const Epic1GraphEditorWithMigration: React.FC<Epic1GraphEditorProps> = (props) => {
   const [migrationComplete, setMigrationComplete] = useState(false);
   const migrator = useMemo(() => new SubFlowMigrator(), []);
-  
+
   const graphData = useMemo(() => {
     if (props.legacyFormat && !migrationComplete) {
       // Automatic migration for legacy data
@@ -630,7 +663,7 @@ export const Epic1GraphEditorWithMigration: React.FC<Epic1GraphEditorProps> = (p
     }
     return { nodes: props.initialNodes || [], edges: props.initialEdges || [] };
   }, [props.legacyFormat, props.initialNodes, props.initialEdges, migrator, migrationComplete]);
-  
+
   return (
     <Epic1GraphEditor
       {...props}

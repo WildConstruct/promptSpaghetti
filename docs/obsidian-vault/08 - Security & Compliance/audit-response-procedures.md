@@ -158,7 +158,7 @@ CRITICAL_EVENTS = [
   'data_exfiltration_patterns', // Unusual data access patterns
   'system_performance_critical', // Critical system performance
   'compliance_violation', // Regulatory compliance breach
-  'evidence_tampering_attempt', // Audit trail integrity violation
+  'evidence_tampering_attempt' // Audit trail integrity violation
 ];
 ```
 
@@ -187,15 +187,31 @@ CRITICAL_EVENTS = [
 
 ```typescript
 INCIDENT_CATEGORIES = {
-  SECURITY: ['unauthorized_access', 'data_breach', 'malware_detection', 'ddos_attack', 'social_engineering'],
-  COMPLIANCE: ['gdpr_violation', 'ccpa_violation', 'sox_control_failure', 'data_retention_violation'],
-  PERFORMANCE: ['system_outage', 'performance_degradation', 'capacity_exceeded', 'service_unavailable'],
+  SECURITY: [
+    'unauthorized_access',
+    'data_breach',
+    'malware_detection',
+    'ddos_attack',
+    'social_engineering'
+  ],
+  COMPLIANCE: [
+    'gdpr_violation',
+    'ccpa_violation',
+    'sox_control_failure',
+    'data_retention_violation'
+  ],
+  PERFORMANCE: [
+    'system_outage',
+    'performance_degradation',
+    'capacity_exceeded',
+    'service_unavailable'
+  ],
   AUDIT: [
     'audit_trail_tampering',
     'evidence_integrity_violation',
     'unauthorized_audit_access',
-    'retention_policy_violation',
-  ],
+    'retention_policy_violation'
+  ]
 };
 ```
 
@@ -236,18 +252,18 @@ NotificationMatrix = {
   P1_CRITICAL: {
     immediate: ['CISO', 'CTO', 'CEO', 'Legal'],
     within_30min: ['Board', 'PR', 'Customer_Success'],
-    external: ['Regulatory_Bodies', 'Law_Enforcement'], // if required
+    external: ['Regulatory_Bodies', 'Law_Enforcement'] // if required
   },
   P2_HIGH: {
     immediate: ['Security_Team_Lead', 'Engineering_Lead'],
     within_1hour: ['CTO', 'Legal'],
-    external: [], // case-by-case
+    external: [] // case-by-case
   },
   P3_MEDIUM: {
     immediate: ['Team_Lead', 'Security_Team'],
     within_4hours: ['Engineering_Manager'],
-    external: [],
-  },
+    external: []
+  }
 };
 ```
 
@@ -284,10 +300,10 @@ EvidenceCollector.collect({
     'network_capture', // Network traffic analysis
     'database_snapshot', // Data state preservation
     'user_sessions', // Active session information
-    'performance_data', // System performance metrics
+    'performance_data' // System performance metrics
   ],
   chain_of_custody: true, // Cryptographic integrity
-  retention_policy: 'legal_hold', // Extended retention
+  retention_policy: 'legal_hold' // Extended retention
 });
 ```
 
@@ -331,22 +347,22 @@ CONTAINMENT_ACTIONS = {
     'revoke_user_sessions',
     'change_administrative_credentials',
     'block_malicious_ips',
-    'enable_enhanced_monitoring',
+    'enable_enhanced_monitoring'
   ],
   performance_degradation: [
     'scale_system_resources',
     'enable_rate_limiting',
     'activate_caching_layers',
     'redirect_traffic',
-    'disable_non_critical_features',
+    'disable_non_critical_features'
   ],
   compliance_violation: [
     'stop_violating_process',
     'notify_data_protection_officer',
     'implement_corrective_controls',
     'preserve_evidence',
-    'document_violation_details',
-  ],
+    'document_violation_details'
+  ]
 };
 ```
 
@@ -379,7 +395,7 @@ ChainOfCustody = {
   integrity_verification: 'Periodic hash verification',
   access_log: 'Complete access audit trail',
   retention_policy: 'Legal hold or standard retention',
-  disposal_date: 'Scheduled secure disposal date',
+  disposal_date: 'Scheduled secure disposal date'
 };
 ```
 
@@ -403,7 +419,7 @@ PerformanceEvidence = {
   memory_usage: 'Memory consumption patterns',
   network_traffic: 'Network I/O and connection data',
   database_performance: 'Query performance and connection pool stats',
-  application_metrics: 'Custom application performance counters',
+  application_metrics: 'Custom application performance counters'
 };
 ```
 
@@ -416,7 +432,7 @@ SecurityEvidence = {
   authorization_events: 'Permission changes and access attempts',
   network_connections: 'Inbound/outbound connection logs',
   file_system_changes: 'File modification and access logs',
-  application_events: 'Security-relevant application events',
+  application_events: 'Security-relevant application events'
 };
 ```
 
@@ -450,11 +466,16 @@ SecurityEvidence = {
 ```typescript
 // Legal hold implementation
 LegalHold = {
-  trigger_events: ['regulatory_investigation', 'litigation_threat', 'compliance_violation', 'data_breach_notification'],
+  trigger_events: [
+    'regulatory_investigation',
+    'litigation_threat',
+    'compliance_violation',
+    'data_breach_notification'
+  ],
   retention_extension: 'Indefinite until legal release',
   access_restriction: 'Legal team approval required',
   preservation_notice: 'Automated stakeholder notification',
-  disposal_suspension: 'All scheduled deletion suspended',
+  disposal_suspension: 'All scheduled deletion suspended'
 };
 ```
 
@@ -472,15 +493,15 @@ GDPR_Response = {
     authority_deadline: '72 hours to supervisory authority',
     individual_deadline: 'Without undue delay to data subjects',
     breach_register: 'Document in internal breach register',
-    risk_assessment: 'High risk requires individual notification',
+    risk_assessment: 'High risk requires individual notification'
   },
 
   rights_requests: {
     response_time: '30 days (extendable to 60 days)',
     verification: 'Identity verification required',
     documentation: 'Log all requests and responses',
-    escalation: 'Data Protection Officer involvement',
-  },
+    escalation: 'Data Protection Officer involvement'
+  }
 };
 ```
 
@@ -492,14 +513,14 @@ CCPA_Response = {
     verification_period: '10 business days for verification',
     response_period: '45 days (extendable to 90 days)',
     methods: 'Same method as request submission',
-    documentation: 'Maintain 24-month record of requests',
+    documentation: 'Maintain 24-month record of requests'
   },
 
   breach_response: {
     notification: 'Notify Attorney General if required',
     consumer_notice: 'Individual notification for sensitive data',
-    remediation: 'Offer credit monitoring if appropriate',
-  },
+    remediation: 'Offer credit monitoring if appropriate'
+  }
 };
 ```
 
@@ -511,14 +532,14 @@ SOX_Response = {
     assessment: 'Evaluate significance and materiality',
     documentation: 'Document deficiency and remediation plan',
     testing: 'Test effectiveness of corrective actions',
-    reporting: 'Report to Audit Committee if material',
+    reporting: 'Report to Audit Committee if material'
   },
 
   financial_reporting: {
     disclosure: 'Material weaknesses in 10-K/10-Q',
     certification: 'CEO/CFO certification requirements',
-    remediation: '12-month remediation timeline',
-  },
+    remediation: '12-month remediation timeline'
+  }
 };
 ```
 
@@ -530,15 +551,15 @@ ISO27001_Response = {
     classification: 'Classify incident per ISO 27035',
     documentation: 'Complete incident documentation',
     lessons_learned: 'Post-incident review and improvement',
-    management_review: 'Include in management review process',
+    management_review: 'Include in management review process'
   },
 
   corrective_action: {
     root_cause: 'Identify root cause per ISO methodology',
     preventive_measures: 'Implement preventive controls',
     effectiveness: 'Monitor effectiveness of actions',
-    documentation: 'Update ISMS documentation as needed',
-  },
+    documentation: 'Update ISMS documentation as needed'
+  }
 };
 ```
 
@@ -552,19 +573,19 @@ NotificationRequired = {
     GDPR: 'Personal data of EU residents affected',
     CCPA: 'California resident personal information',
     state_laws: 'Varies by state - check requirements',
-    sector_specific: 'HIPAA, FERPA, GLBA as applicable',
+    sector_specific: 'HIPAA, FERPA, GLBA as applicable'
   },
 
   financial_controls: {
     SOX: 'Material weakness in internal controls',
     SEC: 'Material cybersecurity incidents',
-    banking: 'OCC, FDIC notification if applicable',
+    banking: 'OCC, FDIC notification if applicable'
   },
 
   critical_infrastructure: {
     CISA: 'Critical infrastructure cyber incidents',
-    FBI: 'Criminal activity or national security',
-  },
+    FBI: 'Criminal activity or national security'
+  }
 };
 ```
 
@@ -622,26 +643,26 @@ IncidentResponseTeam = {
   incident_commander: {
     role: 'Overall incident coordination',
     authority: 'Decision making and resource allocation',
-    contact: 'CISO or designated security lead',
+    contact: 'CISO or designated security lead'
   },
 
   technical_lead: {
     role: 'Technical investigation and remediation',
     authority: 'System changes and technical decisions',
-    contact: 'Senior engineering manager',
+    contact: 'Senior engineering manager'
   },
 
   legal_counsel: {
     role: 'Legal and regulatory compliance',
     authority: 'External communication approval',
-    contact: 'General counsel or external counsel',
+    contact: 'General counsel or external counsel'
   },
 
   communications_lead: {
     role: 'Stakeholder and public communication',
     authority: 'External communication content',
-    contact: 'PR manager or executive team',
-  },
+    contact: 'PR manager or executive team'
+  }
 };
 ```
 
@@ -652,20 +673,20 @@ CommunicationChannels = {
   immediate: {
     slack: '#security-incidents (P1/P2)',
     phone: 'Emergency contact tree',
-    sms: 'Critical alert notifications',
+    sms: 'Critical alert notifications'
   },
 
   regular_updates: {
     email: 'Incident status updates',
     dashboard: 'Real-time incident tracking',
-    meetings: 'Daily incident response calls',
+    meetings: 'Daily incident response calls'
   },
 
   documentation: {
     wiki: 'Detailed incident documentation',
     tickets: 'Action item and task tracking',
-    reports: 'Post-incident analysis reports',
-  },
+    reports: 'Post-incident analysis reports'
+  }
 };
 ```
 
@@ -679,15 +700,15 @@ CustomerCommunication = {
     timing: 'As soon as containment achieved',
     method: 'Email, in-app notification, status page',
     content: 'Nature of incident, impact, remediation',
-    follow_up: 'Detailed post-incident report',
+    follow_up: 'Detailed post-incident report'
   },
 
   service_disruption: {
     timing: 'Real-time during incident',
     method: 'Status page, Twitter, email alerts',
     content: 'Service impact and expected resolution',
-    updates: 'Regular progress updates',
-  },
+    updates: 'Regular progress updates'
+  }
 };
 ```
 
@@ -698,14 +719,14 @@ RegulatoryCommunication = {
   notification_timing: {
     GDPR: '72 hours to authority, immediate to individuals if high risk',
     CCPA: 'Without unreasonable delay to Attorney General',
-    SOX: 'Quarterly reporting cycle or immediate if material',
+    SOX: 'Quarterly reporting cycle or immediate if material'
   },
 
   communication_method: {
     formal_notification: 'Written notification via designated portal',
     follow_up: 'Detailed investigation report',
-    remediation_plan: 'Corrective action timeline',
-  },
+    remediation_plan: 'Corrective action timeline'
+  }
 };
 ```
 
@@ -717,7 +738,7 @@ MediaProtocol = {
   approval: 'Legal and executive approval required',
   messaging: 'Coordinated with legal and technical teams',
   channels: 'Press release, company blog, social media',
-  timing: 'After stakeholder notification complete',
+  timing: 'After stakeholder notification complete'
 };
 ```
 
@@ -734,20 +755,20 @@ RecoveryPriorities = {
   tier_1_critical: {
     systems: ['Authentication', 'Core_API', 'Database'],
     rto: '1 hour', // Recovery Time Objective
-    rpo: '15 minutes', // Recovery Point Objective
+    rpo: '15 minutes' // Recovery Point Objective
   },
 
   tier_2_important: {
     systems: ['Web_Frontend', 'Analytics', 'Monitoring'],
     rto: '4 hours',
-    rpo: '1 hour',
+    rpo: '1 hour'
   },
 
   tier_3_standard: {
     systems: ['Documentation', 'Development_Tools', 'Logs'],
     rto: '24 hours',
-    rpo: '4 hours',
-  },
+    rpo: '4 hours'
+  }
 };
 ```
 
@@ -800,17 +821,22 @@ SystemValidation = {
     'core_application_features',
     'database_connectivity',
     'api_endpoint_responses',
-    'security_control_operation',
+    'security_control_operation'
   ],
 
   performance_tests: [
     'response_time_verification',
     'throughput_capacity_test',
     'resource_utilization_check',
-    'scalability_validation',
+    'scalability_validation'
   ],
 
-  security_verification: ['vulnerability_scan', 'penetration_test', 'configuration_review', 'access_control_audit'],
+  security_verification: [
+    'vulnerability_scan',
+    'penetration_test',
+    'configuration_review',
+    'access_control_audit'
+  ]
 };
 ```
 
@@ -839,20 +865,20 @@ PostIncidentTimeline = {
   immediate: {
     timeframe: '24-48 hours after resolution',
     participants: 'Incident response team',
-    purpose: 'Hot wash - immediate lessons learned',
+    purpose: 'Hot wash - immediate lessons learned'
   },
 
   formal_review: {
     timeframe: '1-2 weeks after resolution',
     participants: 'Extended stakeholder group',
-    purpose: 'Comprehensive analysis and improvement planning',
+    purpose: 'Comprehensive analysis and improvement planning'
   },
 
   follow_up: {
     timeframe: '30-60 days after resolution',
     participants: 'Management and process owners',
-    purpose: 'Implementation verification and process updates',
-  },
+    purpose: 'Implementation verification and process updates'
+  }
 };
 ```
 
@@ -878,7 +904,12 @@ RootCauseAnalysis = {
   contributing_factors: 'Conditions that enabled the incident',
   root_causes: 'Fundamental organizational or system issues',
 
-  analysis_methods: ['five_whys_technique', 'fishbone_diagram', 'fault_tree_analysis', 'timeline_analysis'],
+  analysis_methods: [
+    'five_whys_technique',
+    'fishbone_diagram',
+    'fault_tree_analysis',
+    'timeline_analysis'
+  ]
 };
 ```
 
@@ -904,22 +935,22 @@ LessonsLearned = {
     'Effective response actions',
     'Good communication practices',
     'Successful technical solutions',
-    'Positive stakeholder feedback',
+    'Positive stakeholder feedback'
   ],
 
   areas_for_improvement: [
     'Detection and alerting gaps',
     'Response time delays',
     'Communication breakdowns',
-    'Technical capability gaps',
+    'Technical capability gaps'
   ],
 
   specific_recommendations: [
     'Process improvements',
     'Technology enhancements',
     'Training needs',
-    'Resource requirements',
-  ],
+    'Resource requirements'
+  ]
 };
 ```
 
@@ -944,20 +975,20 @@ ResponseMetrics = {
   detection_metrics: {
     mean_time_to_detection: 'Average time from incident start to detection',
     false_positive_rate: 'Percentage of false alarms',
-    detection_source: 'Manual vs automated detection rates',
+    detection_source: 'Manual vs automated detection rates'
   },
 
   response_metrics: {
     mean_time_to_response: 'Average time from detection to response',
     mean_time_to_containment: 'Average containment time',
-    mean_time_to_recovery: 'Average recovery time',
+    mean_time_to_recovery: 'Average recovery time'
   },
 
   business_impact: {
     service_downtime: 'Total service interruption time',
     affected_users: 'Number of users impacted',
-    financial_impact: 'Estimated cost of incident',
-  },
+    financial_impact: 'Estimated cost of incident'
+  }
 };
 ```
 
@@ -985,26 +1016,26 @@ TrainingMatrix = {
   all_employees: {
     frequency: 'Annual',
     content: 'Security awareness, incident reporting',
-    delivery: 'Online modules with assessment',
+    delivery: 'Online modules with assessment'
   },
 
   incident_response_team: {
     frequency: 'Quarterly',
     content: 'Technical response procedures, tools training',
-    delivery: 'Hands-on workshops and simulations',
+    delivery: 'Hands-on workshops and simulations'
   },
 
   management: {
     frequency: 'Semi-annual',
     content: 'Crisis communication, decision making',
-    delivery: 'Executive briefings and tabletop exercises',
+    delivery: 'Executive briefings and tabletop exercises'
   },
 
   specialized_roles: {
     frequency: 'As needed',
     content: 'Role-specific procedures and tools',
-    delivery: 'Customized training programs',
-  },
+    delivery: 'Customized training programs'
+  }
 };
 ```
 
@@ -1031,22 +1062,22 @@ PreparednessExercises = {
     frequency: 'Quarterly',
     duration: '2-4 hours',
     participants: 'Leadership and key responders',
-    focus: 'Decision making and communication',
+    focus: 'Decision making and communication'
   },
 
   functional_exercises: {
     frequency: 'Semi-annual',
     duration: '4-8 hours',
     participants: 'Full incident response team',
-    focus: 'Procedural execution and coordination',
+    focus: 'Procedural execution and coordination'
   },
 
   full_scale_exercises: {
     frequency: 'Annual',
     duration: '1-2 days',
     participants: 'All stakeholders',
-    focus: 'Complete response capability testing',
-  },
+    focus: 'Complete response capability testing'
+  }
 };
 ```
 
@@ -1101,20 +1132,20 @@ PreparednessExercises = {
 InternalContacts = {
   incident_commander: {
     primary: 'CISO - security@promptscape.app',
-    backup: 'CTO - technology@promptscape.app',
+    backup: 'CTO - technology@promptscape.app'
   },
 
   technical_leads: {
     security: 'Security Team - security-team@promptscape.app',
     engineering: 'Engineering - engineering@promptscape.app',
-    infrastructure: 'DevOps - devops@promptscape.app',
+    infrastructure: 'DevOps - devops@promptscape.app'
   },
 
   management: {
     ceo: 'CEO - executive@promptscape.app',
     legal: 'Legal Counsel - legal@promptscape.app',
-    communications: 'PR - communications@promptscape.app',
-  },
+    communications: 'PR - communications@promptscape.app'
+  }
 };
 ```
 
@@ -1125,20 +1156,20 @@ ExternalContacts = {
   regulatory: {
     gdpr_supervisory: '[Relevant Data Protection Authority]',
     ccpa_attorney_general: 'California Attorney General',
-    sec: 'Securities and Exchange Commission',
+    sec: 'Securities and Exchange Commission'
   },
 
   law_enforcement: {
     fbi_ic3: 'FBI Internet Crime Complaint Center',
     local_police: '[Local Law Enforcement]',
-    secret_service: 'US Secret Service (financial crimes)',
+    secret_service: 'US Secret Service (financial crimes)'
   },
 
   vendors: {
     legal_counsel: '[External Legal Firm]',
     forensics: '[Digital Forensics Firm]',
-    pr_firm: '[Public Relations Firm]',
-  },
+    pr_firm: '[Public Relations Firm]'
+  }
 };
 ```
 
@@ -1299,22 +1330,22 @@ AuditSystemComponents = {
     schema: '001_evidence_access_audit.sql',
     tables: ['evidence_access_audit', 'audit_alerts', 'retention_policies'],
     indexes: 'Performance-optimized for querying',
-    integrity: 'Chain hash verification',
+    integrity: 'Chain hash verification'
   },
 
   services: {
     audit_service: 'EvidenceAccessAuditService.ts',
     middleware: 'EvidenceAccessAuditMiddleware.ts',
     api: '/api/audit/* endpoints',
-    monitoring: 'Real-time alert system',
+    monitoring: 'Real-time alert system'
   },
 
   frontend: {
     dashboard: 'SecurityDashboard component',
     incident_panel: 'IncidentResponsePanel component',
     alerts: 'SecurityAlerts component',
-    visualization: 'ThreatDetectionVisualizer component',
-  },
+    visualization: 'ThreatDetectionVisualizer component'
+  }
 };
 ```
 
@@ -1328,14 +1359,14 @@ PerformanceIntegration = {
     'error_rate_increase',
     'resource_utilization_spike',
     'throughput_decrease',
-    'availability_reduction',
+    'availability_reduction'
   ],
 
   alerting: {
     thresholds: 'Configurable performance thresholds',
     escalation: 'Automatic incident creation',
-    integration: 'Security dashboard integration',
-  },
+    integration: 'Security dashboard integration'
+  }
 };
 ```
 

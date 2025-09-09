@@ -11,7 +11,7 @@ const PSGNodeSchema = z.object({
   type: z.string(),
   x: z.number(),
   y: z.number(),
-  data: z.record(z.any()).optional(),
+  data: z.record(z.any()).optional()
 });
 
 const PSGEdgeSchema = z.object({
@@ -19,7 +19,7 @@ const PSGEdgeSchema = z.object({
   source: z.string(),
   target: z.string(),
   sourceHandle: z.string().optional(),
-  targetHandle: z.string().optional(),
+  targetHandle: z.string().optional()
 });
 
 const PSGFragmentSchema = z.object({
@@ -29,7 +29,7 @@ const PSGFragmentSchema = z.object({
   edges: z.array(PSGEdgeSchema),
   metadata: z.record(z.any()).optional(),
   regions: z.array(z.any()).optional(),
-  groups: z.array(z.any()).optional(),
+  groups: z.array(z.any()).optional()
 });
 
 // PSGLib schema
@@ -37,7 +37,7 @@ const PSGLibNodeSchema = z.object({
   id: z.string(),
   type: z.string(),
   position: z.object({ x: z.number(), y: z.number() }),
-  data: z.record(z.any()).optional(),
+  data: z.record(z.any()).optional()
 });
 
 const PSGLibFragmentSchema = z.object({
@@ -48,12 +48,12 @@ const PSGLibFragmentSchema = z.object({
     name: z.string(),
     version: z.string().optional(),
     nodeTypes: z.array(z.string()).optional(),
-    isFragment: z.boolean().optional(),
+    isFragment: z.boolean().optional()
   }),
   graph: z.object({
     nodes: z.array(PSGLibNodeSchema),
-    edges: z.array(PSGEdgeSchema),
-  }),
+    edges: z.array(PSGEdgeSchema)
+  })
 });
 
 export interface ValidationResult {
@@ -72,21 +72,21 @@ export class FragmentValidator {
   static async validate(content: string): Promise<ValidationResult> {
     const errors: string[] = [];
     const warnings: string[] = [];
-    
+
     try {
       // Parse JSON
       const data = JSON.parse(content);
-      
+
       // Detect format
       const format = this.detectFormat(data);
       if (!format) {
         return {
           valid: false,
           errors: ['Unknown fragment format - not PSG or PSGLib'],
-          warnings,
+          warnings
         };
       }
-      
+
       // Validate based on format
       if (format === 'psglib') {
         return this.validatePSGLib(data);
@@ -96,22 +96,24 @@ export class FragmentValidator {
     } catch (e) {
       return {
         valid: false,
-        errors: [`Invalid JSON: ${e instanceof Error ? e.message : 'Parse error'}`],
-        warnings,
+        errors: [
+          `Invalid JSON: ${e instanceof Error ? e.message : 'Parse error'}`
+        ],
+        warnings
       };
     }
   }
-  
+
   /**
    * Validate PSG format fragment
    */
   private static validatePSG(data: any): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-    
+
     try {
       const parsed = PSGFragmentSchema.parse(data);
-      
+
       // Check for duplicate node IDs
       const nodeIds = new Set<string>();
       for (const node of parsed.nodes) {
@@ -120,13 +122,13 @@ export class FragmentValidator {
         }
         nodeIds.add(node.id);
       }
-      
+
       // Check for Output nodes in fragments
       const hasOutputNodes = parsed.nodes.some(n => n.type === 'Output');
       if (hasOutputNodes) {
         warnings.push('Fragment contains Output nodes (will be filtered out)');
       }
-      
+
       // Validate edges reference existing nodes
       for (const edge of parsed.edges) {
         if (!nodeIds.has(edge.source)) {
@@ -136,29 +138,29 @@ export class FragmentValidator {
           errors.push(`Edge references non-existent target: ${edge.target}`);
         }
       }
-      
+
       // Check for disconnected nodes
       const connectedNodes = new Set<string>();
       for (const edge of parsed.edges) {
         connectedNodes.add(edge.source);
         connectedNodes.add(edge.target);
       }
-      
+
       const disconnected = parsed.nodes.filter(
         n => !connectedNodes.has(n.id) && n.type !== 'Output'
       );
-      
+
       if (disconnected.length > 0) {
         warnings.push(`${disconnected.length} disconnected node(s)`);
       }
-      
+
       return {
         valid: errors.length === 0,
         errors,
         warnings,
         format: 'psg',
         nodeCount: parsed.nodes.length,
-        hasOutputNodes,
+        hasOutputNodes
       };
     } catch (e) {
       if (e instanceof z.ZodError) {
@@ -166,28 +168,28 @@ export class FragmentValidator {
           valid: false,
           errors: e.errors.map(err => `${err.path.join('.')}: ${err.message}`),
           warnings,
-          format: 'psg',
+          format: 'psg'
         };
       }
       return {
         valid: false,
         errors: [`Validation error: ${e}`],
         warnings,
-        format: 'psg',
+        format: 'psg'
       };
     }
   }
-  
+
   /**
    * Validate PSGLib format fragment
    */
   private static validatePSGLib(data: any): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
-    
+
     try {
       const parsed = PSGLibFragmentSchema.parse(data);
-      
+
       // Check for duplicate node IDs
       const nodeIds = new Set<string>();
       for (const node of parsed.graph.nodes) {
@@ -196,13 +198,13 @@ export class FragmentValidator {
         }
         nodeIds.add(node.id);
       }
-      
+
       // Check for Output nodes in fragments
       const hasOutputNodes = parsed.graph.nodes.some(n => n.type === 'output');
       if (hasOutputNodes && parsed.metadata.isFragment) {
         warnings.push('Fragment contains Output nodes (will be filtered out)');
       }
-      
+
       // Validate edges
       for (const edge of parsed.graph.edges) {
         if (!nodeIds.has(edge.source)) {
@@ -212,14 +214,14 @@ export class FragmentValidator {
           errors.push(`Edge references non-existent target: ${edge.target}`);
         }
       }
-      
+
       return {
         valid: errors.length === 0,
         errors,
         warnings,
         format: 'psglib',
         nodeCount: parsed.graph.nodes.length,
-        hasOutputNodes,
+        hasOutputNodes
       };
     } catch (e) {
       if (e instanceof z.ZodError) {
@@ -227,18 +229,18 @@ export class FragmentValidator {
           valid: false,
           errors: e.errors.map(err => `${err.path.join('.')}: ${err.message}`),
           warnings,
-          format: 'psglib',
+          format: 'psglib'
         };
       }
       return {
         valid: false,
         errors: [`Validation error: ${e}`],
         warnings,
-        format: 'psglib',
+        format: 'psglib'
       };
     }
   }
-  
+
   /**
    * Detect fragment format
    */
@@ -251,7 +253,7 @@ export class FragmentValidator {
     }
     return null;
   }
-  
+
   /**
    * Quick validation for performance - just checks if parseable
    */

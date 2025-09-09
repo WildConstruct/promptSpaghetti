@@ -44,7 +44,7 @@
     }
     const decoded = jwt.verify(token.slice(7), PUBLIC_KEY, {
       algorithms: ['RS256'],
-      issuer: 'promptscape.app',
+      issuer: 'promptscape.app'
     });
     return decoded;
   };
@@ -79,7 +79,7 @@
     auth: { windowMs: 60000, max: 5 }, // 5/min for auth
     api: { windowMs: 60000, max: 60 }, // 60/min for general API
     upload: { windowMs: 60000, max: 10 }, // 10/min for uploads
-    websocket: { windowMs: 60000, max: 10 }, // 10/min for WS connections
+    websocket: { windowMs: 60000, max: 10 } // 10/min for WS connections
   };
   ```
 
@@ -126,7 +126,7 @@
     ip: req.ip,
     userAgent: req.get('User-Agent'),
     requestId: req.id,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   ```
 
@@ -156,6 +156,7 @@
   - [ ] Refresh token rotation
 
 - [ ] **OAuth Flow Validation**
+
   ```typescript
   const validateOAuthCallback = async (code: string, state: string) => {
     // Validate state parameter
@@ -207,12 +208,24 @@
 - [ ] **Webhook Verification**
 
   ```typescript
-  const verifyWebhook = (payload: string, signature: string, secret: string) => {
-    const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+  const verifyWebhook = (
+    payload: string,
+    signature: string,
+    secret: string
+  ) => {
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(payload)
+      .digest('hex');
 
     const providedSignature = signature.replace('sha256=', '');
 
-    if (!crypto.timingSafeEqual(Buffer.from(expectedSignature, 'hex'), Buffer.from(providedSignature, 'hex'))) {
+    if (
+      !crypto.timingSafeEqual(
+        Buffer.from(expectedSignature, 'hex'),
+        Buffer.from(providedSignature, 'hex')
+      )
+    ) {
       throw new Error('Invalid webhook signature');
     }
   };

@@ -71,13 +71,21 @@ class TemplateDatabase {
         graph_data: {
           nodes: [
             { id: 'input-1', type: 'input', data: { label: 'Content Topic' } },
-            { id: 'ai-1', type: 'ai-process', data: { label: 'AI Generator', model: 'gpt-4' } },
-            { id: 'output-1', type: 'output', data: { label: 'Generated Content' } },
+            {
+              id: 'ai-1',
+              type: 'ai-process',
+              data: { label: 'AI Generator', model: 'gpt-4' }
+            },
+            {
+              id: 'output-1',
+              type: 'output',
+              data: { label: 'Generated Content' }
+            }
           ],
           edges: [
             { id: 'e1', source: 'input-1', target: 'ai-1' },
-            { id: 'e2', source: 'ai-1', target: 'output-1' },
-          ],
+            { id: 'e2', source: 'ai-1', target: 'output-1' }
+          ]
         },
         variables: [
           {
@@ -86,9 +94,9 @@ class TemplateDatabase {
             type: 'string',
             defaultValue: '',
             description: 'The topic to generate content about',
-            required: true,
-          },
-        ],
+            required: true
+          }
+        ]
       },
       {
         name: 'Data Processing Pipeline',
@@ -99,15 +107,27 @@ class TemplateDatabase {
         graph_data: {
           nodes: [
             { id: 'input-1', type: 'data-input', data: { label: 'Raw Data' } },
-            { id: 'transform-1', type: 'transform', data: { label: 'Data Cleaner' } },
-            { id: 'transform-2', type: 'transform', data: { label: 'Data Validator' } },
-            { id: 'output-1', type: 'data-output', data: { label: 'Clean Data' } },
+            {
+              id: 'transform-1',
+              type: 'transform',
+              data: { label: 'Data Cleaner' }
+            },
+            {
+              id: 'transform-2',
+              type: 'transform',
+              data: { label: 'Data Validator' }
+            },
+            {
+              id: 'output-1',
+              type: 'data-output',
+              data: { label: 'Clean Data' }
+            }
           ],
           edges: [
             { id: 'e1', source: 'input-1', target: 'transform-1' },
             { id: 'e2', source: 'transform-1', target: 'transform-2' },
-            { id: 'e3', source: 'transform-2', target: 'output-1' },
-          ],
+            { id: 'e3', source: 'transform-2', target: 'output-1' }
+          ]
         },
         variables: [
           {
@@ -116,9 +136,9 @@ class TemplateDatabase {
             type: 'object',
             defaultValue: {},
             description: 'Rules for data cleaning',
-            required: false,
-          },
-        ],
+            required: false
+          }
+        ]
       },
       {
         name: 'Creative Writing Assistant',
@@ -129,15 +149,27 @@ class TemplateDatabase {
         graph_data: {
           nodes: [
             { id: 'input-1', type: 'input', data: { label: 'Story Prompt' } },
-            { id: 'creative-1', type: 'creative-ai', data: { label: 'Story Generator' } },
-            { id: 'enhance-1', type: 'enhance', data: { label: 'Style Enhancer' } },
-            { id: 'output-1', type: 'output', data: { label: 'Creative Story' } },
+            {
+              id: 'creative-1',
+              type: 'creative-ai',
+              data: { label: 'Story Generator' }
+            },
+            {
+              id: 'enhance-1',
+              type: 'enhance',
+              data: { label: 'Style Enhancer' }
+            },
+            {
+              id: 'output-1',
+              type: 'output',
+              data: { label: 'Creative Story' }
+            }
           ],
           edges: [
             { id: 'e1', source: 'input-1', target: 'creative-1' },
             { id: 'e2', source: 'creative-1', target: 'enhance-1' },
-            { id: 'e3', source: 'enhance-1', target: 'output-1' },
-          ],
+            { id: 'e3', source: 'enhance-1', target: 'output-1' }
+          ]
         },
         variables: [
           {
@@ -148,11 +180,17 @@ class TemplateDatabase {
             description: 'Story genre',
             required: true,
             validation: {
-              allowedValues: ['fiction', 'mystery', 'romance', 'sci-fi', 'fantasy'],
-            },
-          },
-        ],
-      },
+              allowedValues: [
+                'fiction',
+                'mystery',
+                'romance',
+                'sci-fi',
+                'fantasy'
+              ]
+            }
+          }
+        ]
+      }
     ];
 
     sampleTemplates.forEach(template => {
@@ -161,7 +199,10 @@ class TemplateDatabase {
 
     // Add some sample reviews and usage data
     this.addReview(1, 3, { rating: 5, comment: 'Excellent template!' });
-    this.addReview(1, 4, { rating: 4, comment: 'Very useful for content creation' });
+    this.addReview(1, 4, {
+      rating: 4,
+      comment: 'Very useful for content creation'
+    });
     this.addReview(2, 3, { rating: 4, comment: 'Great for data processing' });
 
     this.recordUsage(1, 3, 101, { topic: 'Machine Learning' }, true);
@@ -188,7 +229,7 @@ class TemplateDatabase {
       download_count: 0,
       favorite_count: 0,
       created_at: new Date(),
-      updated_at: new Date(),
+      updated_at: new Date()
     };
 
     this.templates.set(template.id, template);
@@ -199,7 +240,11 @@ class TemplateDatabase {
     return this.templates.get(id) || null;
   }
 
-  updateTemplate(id: number, updates: Partial<Template>, userId: number): Template | null {
+  updateTemplate(
+    id: number,
+    updates: Partial<Template>,
+    userId: number
+  ): Template | null {
     const template = this.templates.get(id);
     if (!template) return null;
 
@@ -213,7 +258,7 @@ class TemplateDatabase {
       id: template.id, // Ensure ID doesn't change
       author_id: template.author_id, // Ensure author doesn't change
       created_at: template.created_at, // Ensure created date doesn't change
-      updated_at: new Date(),
+      updated_at: new Date()
     };
 
     this.templates.set(id, updatedTemplate);
@@ -269,7 +314,9 @@ class TemplateDatabase {
     }
 
     if (filters.tags && filters.tags.length > 0) {
-      templates = templates.filter(t => filters.tags!.some(tag => t.tags.includes(tag)));
+      templates = templates.filter(t =>
+        filters.tags!.some(tag => t.tags.includes(tag))
+      );
     }
 
     if (filters.authorId) {
@@ -300,7 +347,7 @@ class TemplateDatabase {
 
     return {
       templates: paginatedTemplates,
-      total,
+      total
     };
   }
 
@@ -318,7 +365,7 @@ class TemplateDatabase {
         if (customizations.variables[variable.name]) {
           return {
             ...variable,
-            defaultValue: customizations.variables[variable.name],
+            defaultValue: customizations.variables[variable.name]
           };
         }
         return variable;
@@ -338,12 +385,18 @@ class TemplateDatabase {
     return customized;
   }
 
-  private applyCustomizationPoints(graphData: unknown, points: unknown[], customizations: unknown): unknown {
+  private applyCustomizationPoints(
+    graphData: unknown,
+    points: unknown[],
+    customizations: unknown
+  ): unknown {
     const customizedGraph = JSON.parse(JSON.stringify(graphData));
 
     points.forEach(point => {
       if (customizations[point.id]) {
-        const node = customizedGraph.nodes.find((n: unknown) => n.id === point.node_id);
+        const node = customizedGraph.nodes.find(
+          (n: unknown) => n.id === point.node_id
+        );
         if (node) {
           node.data[point.property] = customizations[point.id];
         }
@@ -368,7 +421,7 @@ class TemplateDatabase {
       project_id: projectId,
       customizations_applied: customizations,
       used_at: new Date(),
-      success,
+      success
     };
 
     this.usages.set(usage.id, usage);
@@ -390,7 +443,11 @@ class TemplateDatabase {
   }
 
   // Reviews
-  addReview(templateId: number, userId: number, reviewData: { rating: number; comment?: string }): TemplateReview {
+  addReview(
+    templateId: number,
+    userId: number,
+    reviewData: { rating: number; comment?: string }
+  ): TemplateReview {
     // Check for existing review
     const existingReview = Array.from(this.reviews.values()).find(
       r => r.template_id === templateId && r.user_id === userId
@@ -406,7 +463,7 @@ class TemplateDatabase {
       user_id: userId,
       rating: reviewData.rating,
       comment: reviewData.comment,
-      created_at: new Date(),
+      created_at: new Date()
     };
 
     this.reviews.set(review.id, review);
@@ -448,7 +505,8 @@ class TemplateDatabase {
 
     const uniqueUsers = new Set(usages.map(u => u.user_id)).size;
     const successfulUsages = usages.filter(u => u.success).length;
-    const successRate = usages.length > 0 ? successfulUsages / usages.length : 0;
+    const successRate =
+      usages.length > 0 ? successfulUsages / usages.length : 0;
 
     // Analyze popular customizations
     const customizationAnalysis = this.analyzeCustomizations(usages);
@@ -463,8 +521,8 @@ class TemplateDatabase {
       popular_customizations: customizationAnalysis,
       performance_metrics: {
         avg_creation_time: faker.number.int({ min: 500, max: 2000 }),
-        avg_customization_time: faker.number.int({ min: 200, max: 800 }),
-      },
+        avg_customization_time: faker.number.int({ min: 200, max: 800 })
+      }
     };
   }
 
@@ -475,7 +533,8 @@ class TemplateDatabase {
       Object.entries(usage.customizations_applied).forEach(([key, value]) => {
         if (!customizations[key]) customizations[key] = {};
         const valueStr = String(value);
-        customizations[key][valueStr] = (customizations[key][valueStr] || 0) + 1;
+        customizations[key][valueStr] =
+          (customizations[key][valueStr] || 0) + 1;
       });
     });
 
@@ -492,8 +551,8 @@ class TemplateDatabase {
       metadata: {
         exported_at: new Date().toISOString(),
         format,
-        version: '1.0',
-      },
+        version: '1.0'
+      }
     };
 
     const filename = `${template.name.replace(/\s+/g, '_')}_v${template.version}.${format}`;
@@ -509,7 +568,7 @@ class TemplateDatabase {
     return {
       filename,
       content,
-      format,
+      format
     };
   }
 
@@ -534,7 +593,7 @@ class TemplateDatabase {
     return {
       templates: Array.from(this.templates.values()),
       usages: Array.from(this.usages.values()),
-      reviews: Array.from(this.reviews.values()),
+      reviews: Array.from(this.reviews.values())
     };
   }
 }

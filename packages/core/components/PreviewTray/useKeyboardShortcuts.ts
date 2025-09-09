@@ -24,7 +24,11 @@ export function usePreviewTrayKeyboardShortcuts() {
       // Escape: Close tray when focused
       if (e.key === 'Escape') {
         const trayElement = document.querySelector('.preview-tray');
-        if (trayElement && document.activeElement && trayElement.contains(document.activeElement)) {
+        if (
+          trayElement &&
+          document.activeElement &&
+          trayElement.contains(document.activeElement)
+        ) {
           e.preventDefault();
           toggleTray();
         }

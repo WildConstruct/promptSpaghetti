@@ -9,7 +9,7 @@ import {
   TestDataUtils,
   TestAssertionHelpers,
   MockFactory,
-  PerformanceTestUtils,
+  PerformanceTestUtils
 } from '../TestingUtilities';
 
 describe('Testing Utilities', () => {
@@ -23,10 +23,13 @@ describe('Testing Utilities', () => {
         seed: 'test-seed-123',
         mockReactFlow: true,
         mockWebSocket: false,
-        mockLocalStorage: true,
+        mockLocalStorage: true
       };
 
-      const env = await TestEnvironmentManager.createEnvironment('test-env', config);
+      const env = await TestEnvironmentManager.createEnvironment(
+        'test-env',
+        config
+      );
 
       expect(env.name).toBe('test-env');
       expect(env.config).toEqual(config);
@@ -41,9 +44,12 @@ describe('Testing Utilities', () => {
     });
 
     test('should setup ReactFlow mocks when configured', async () => {
-      const env = await TestEnvironmentManager.createEnvironment('react-flow-env', {
-        mockReactFlow: true,
-      });
+      const env = await TestEnvironmentManager.createEnvironment(
+        'react-flow-env',
+        {
+          mockReactFlow: true
+        }
+      );
 
       const reactFlowMock = env.mocks.get('reactFlow');
       expect(reactFlowMock).toBeDefined();
@@ -53,18 +59,24 @@ describe('Testing Utilities', () => {
     });
 
     test('should setup WebSocket mocks when configured', async () => {
-      const env = await TestEnvironmentManager.createEnvironment('websocket-env', {
-        mockWebSocket: true,
-      });
+      const env = await TestEnvironmentManager.createEnvironment(
+        'websocket-env',
+        {
+          mockWebSocket: true
+        }
+      );
 
       expect((global as any).WebSocket).toBeDefined();
       expect(env.mocks.get('WebSocket')).toBeDefined();
     });
 
     test('should setup localStorage mocks when configured', async () => {
-      const env = await TestEnvironmentManager.createEnvironment('storage-env', {
-        mockLocalStorage: true,
-      });
+      const env = await TestEnvironmentManager.createEnvironment(
+        'storage-env',
+        {
+          mockLocalStorage: true
+        }
+      );
 
       const mockStorage = env.mocks.get('localStorage');
       expect(mockStorage).toBeDefined();
@@ -73,15 +85,22 @@ describe('Testing Utilities', () => {
     });
 
     test('should cleanup environments properly', async () => {
-      const env = await TestEnvironmentManager.createEnvironment('cleanup-test', {
-        mockLocalStorage: true,
-      });
+      const env = await TestEnvironmentManager.createEnvironment(
+        'cleanup-test',
+        {
+          mockLocalStorage: true
+        }
+      );
 
-      expect(TestEnvironmentManager.getEnvironment('cleanup-test')).toBeDefined();
+      expect(
+        TestEnvironmentManager.getEnvironment('cleanup-test')
+      ).toBeDefined();
 
       await TestEnvironmentManager.cleanupEnvironment('cleanup-test');
 
-      expect(TestEnvironmentManager.getEnvironment('cleanup-test')).toBeUndefined();
+      expect(
+        TestEnvironmentManager.getEnvironment('cleanup-test')
+      ).toBeUndefined();
     });
   });
 
@@ -119,9 +138,9 @@ describe('Testing Utilities', () => {
     });
 
     test('should timeout when condition is not met', async () => {
-      await expect(TestAssertionHelpers.waitForCondition(() => false, 100, 25)).rejects.toThrow(
-        'Condition not met within 100ms'
-      );
+      await expect(
+        TestAssertionHelpers.waitForCondition(() => false, 100, 25)
+      ).rejects.toThrow('Condition not met within 100ms');
     });
 
     test('should handle delays correctly', async () => {
@@ -137,13 +156,19 @@ describe('Testing Utilities', () => {
       const obj2 = { a: 1, b: { c: 2 } };
       const obj3 = { a: 1, b: { c: 3 } };
 
-      expect(() => TestAssertionHelpers.expectDeepEqual(obj1, obj2)).not.toThrow();
+      expect(() =>
+        TestAssertionHelpers.expectDeepEqual(obj1, obj2)
+      ).not.toThrow();
       expect(() => TestAssertionHelpers.expectDeepEqual(obj1, obj3)).toThrow();
     });
 
     test('should test approximate equality', () => {
-      expect(() => TestAssertionHelpers.expectApproximately(10, 10.1, 0.2)).not.toThrow();
-      expect(() => TestAssertionHelpers.expectApproximately(10, 11, 0.5)).toThrow();
+      expect(() =>
+        TestAssertionHelpers.expectApproximately(10, 10.1, 0.2)
+      ).not.toThrow();
+      expect(() =>
+        TestAssertionHelpers.expectApproximately(10, 11, 0.5)
+      ).toThrow();
     });
 
     test('should handle expectToThrowAsync', async () => {
@@ -151,7 +176,10 @@ describe('Testing Utilities', () => {
         throw new Error('Test error message');
       };
 
-      await TestAssertionHelpers.expectToThrowAsync(throwingFunction, 'Test error message');
+      await TestAssertionHelpers.expectToThrowAsync(
+        throwingFunction,
+        'Test error message'
+      );
     });
   });
 
@@ -171,7 +199,7 @@ describe('Testing Utilities', () => {
       const overrides = {
         name: 'Custom User',
         role: 'admin',
-        isActive: false,
+        isActive: false
       };
 
       const user = MockFactory.createMockUser(overrides);
@@ -226,7 +254,10 @@ describe('Testing Utilities', () => {
         return 'result';
       };
 
-      const measurement = await PerformanceTestUtils.measureExecution(testFunction, 'testFunction');
+      const measurement = await PerformanceTestUtils.measureExecution(
+        testFunction,
+        'testFunction'
+      );
 
       expect(measurement.result).toBe('result');
       expect(measurement.executionTime).toBeGreaterThan(50); // 50ms minimum

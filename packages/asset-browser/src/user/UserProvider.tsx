@@ -1,10 +1,12 @@
 import React from 'react';
 
 export type SupabaseAuthLike = {
-  getSession: () => Promise<{ data: { session: { user: { id: string } } | null } }>
+  getSession: () => Promise<{
+    data: { session: { user: { id: string } } | null };
+  }>;
   onAuthStateChange?: (
     cb: (event: string, session: { user: { id: string } } | null) => void
-  ) => { data: { subscription: { unsubscribe: () => void } } }
+  ) => { data: { subscription: { unsubscribe: () => void } } };
 };
 
 export type SupabaseLike = { auth: SupabaseAuthLike } | null | undefined;
@@ -12,7 +14,11 @@ export type SupabaseLike = { auth: SupabaseAuthLike } | null | undefined;
 const STORAGE_KEY = 'psg.devUserId';
 
 function isDevEnabled(): boolean {
-  const flag = (process.env.NEXT_PUBLIC_FEATURE_DEV_USER || process.env.VITE_FEATURE_DEV_USER || '').toLowerCase();
+  const flag = (
+    process.env.NEXT_PUBLIC_FEATURE_DEV_USER ||
+    process.env.VITE_FEATURE_DEV_USER ||
+    ''
+  ).toLowerCase();
   return flag === '1' || flag === 'true';
 }
 
@@ -57,7 +63,12 @@ export function UserProvider({ children, supabase }: UserProviderProps) {
             const res = supabase.auth.onAuthStateChange((_event, session) => {
               setUserId(session?.user?.id ?? null);
             });
-            if (res && res.data && res.data.subscription && typeof res.data.subscription.unsubscribe === 'function') {
+            if (
+              res &&
+              res.data &&
+              res.data.subscription &&
+              typeof res.data.subscription.unsubscribe === 'function'
+            ) {
               unsub = () => res.data.subscription.unsubscribe();
             }
           }

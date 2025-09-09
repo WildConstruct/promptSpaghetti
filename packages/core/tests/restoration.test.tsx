@@ -20,7 +20,10 @@ import {
   RestorationLoader,
   RestorationToast
 } from '../components/indicators/RestorationLoader';
-import { persistenceStorage, getPersistedStateInfo } from '../utils/persistenceUtils';
+import {
+  persistenceStorage,
+  getPersistedStateInfo
+} from '../utils/persistenceUtils';
 
 // Mock modules
 jest.mock('../utils/persistenceUtils');
@@ -193,8 +196,12 @@ describe('State Recovery', () => {
         timestamp: Date.now()
       });
       // validatePersistedState comes from mocked persistenceUtils
-      const { validatePersistedState } = jest.requireMock('../utils/persistenceUtils');
-      (validatePersistedState as jest.Mock).mockImplementation((x: unknown) => x);
+      const { validatePersistedState } = jest.requireMock(
+        '../utils/persistenceUtils'
+      );
+      (validatePersistedState as jest.Mock).mockImplementation(
+        (x: unknown) => x
+      );
     });
 
     it('should return success for valid persisted state', async () => {
@@ -405,8 +412,9 @@ describe('StorageInfo Component', () => {
       fireEvent.click(resetButton);
     });
 
-    const matches = screen.getAllByText((_, node) =>
-      node?.textContent?.includes('This will permanently delete') ?? false
+    const matches = screen.getAllByText(
+      (_, node) =>
+        node?.textContent?.includes('This will permanently delete') ?? false
     );
     expect(matches.length).toBeGreaterThan(0);
     expect(screen.getByText('Cancel')).toBeInTheDocument();
@@ -414,14 +422,16 @@ describe('StorageInfo Component', () => {
 
   it('should export backup on export button click', async () => {
     const exportBackupMock = jest.fn();
-    jest.spyOn(stateRestorationModule, 'exportBackup').mockImplementation(exportBackupMock);
+    jest
+      .spyOn(stateRestorationModule, 'exportBackup')
+      .mockImplementation(exportBackupMock);
 
     // Ensure Export button is enabled by reporting that persisted state exists
     (getPersistedStateInfo as unknown as jest.Mock).mockReturnValue({
       exists: true,
       size: 123,
       compressed: false,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     });
 
     render(<StorageInfo />);

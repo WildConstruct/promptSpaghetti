@@ -3,7 +3,11 @@
  * Thread-safe registry for custom nodes with validation and lifecycle management
  */
 
-import { CustomNodeRegistry, CustomNodeRegistration, CustomNodeMetadata } from '../types';
+import {
+  CustomNodeRegistry,
+  CustomNodeRegistration,
+  CustomNodeMetadata
+} from '../types';
 
 /**
  * Default implementation of the CustomNodeRegistry interface
@@ -32,7 +36,9 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
     // Register the node
     this.nodes.set(nodeType, registration);
 
-    console.debug(`Registered custom node type: ${nodeType} v${registration.metadata.version}`);
+    console.debug(
+      `Registered custom node type: ${nodeType} v${registration.metadata.version}`
+    );
   }
 
   /**
@@ -141,7 +147,7 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
       categoriesCount: categories.size,
       authorsCount: authors.size,
       categories: Object.fromEntries(categories),
-      authors: Object.fromEntries(authors),
+      authors: Object.fromEntries(authors)
     };
   }
 
@@ -159,7 +165,9 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
         this.register(registration);
         registered.push(registration.metadata.type);
       } catch (error) {
-        errors.push(`${registration.metadata.type}: ${error instanceof Error ? error.message : String(error)}`);
+        errors.push(
+          `${registration.metadata.type}: ${error instanceof Error ? error.message : String(error)}`
+        );
       }
     }
 
@@ -192,7 +200,9 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
     }
 
     if (!/^[a-zA-Z0-9.-]+$/.test(metadata.type)) {
-      throw new Error('Node type must contain only alphanumeric characters, dots, and hyphens');
+      throw new Error(
+        'Node type must contain only alphanumeric characters, dots, and hyphens'
+      );
     }
 
     if (!metadata.displayName || typeof metadata.displayName !== 'string') {

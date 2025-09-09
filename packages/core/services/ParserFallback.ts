@@ -16,13 +16,13 @@ export class ParserFallback {
   ): Promise<ParseResult> {
     // Log error for monitoring
     console.error('LLM parsing failed:', error);
-    
+
     // Notify user of fallback (non-blocking)
     this.notifyUser('Using standard parser due to LLM unavailability');
-    
+
     // Use standard parser with enhanced heuristics
     const result = await this.parseWithEnhancedStandard(prompt, options);
-    
+
     // Add metadata indicating fallback was used
     result.metadata = {
       ...result.metadata,
@@ -30,7 +30,7 @@ export class ParserFallback {
       fallbackReason: error.message,
       originalMode: 'llm-enhanced'
     };
-    
+
     return result;
   }
 
@@ -44,20 +44,20 @@ export class ParserFallback {
     try {
       // Use the existing standard parser
       const analysis = standardParser.parse(prompt);
-      
+
       // Apply enhanced heuristics
       const enhancedNodes = this.enhanceNodes(analysis.nodes);
       const enhancedEdges = this.enhanceEdges(enhancedNodes);
-      
+
       // Convert to React Flow format
       const nodes: Node[] = [];
       const edges: Edge[] = [];
-      
+
       // Convert nodes
       enhancedNodes.forEach((genNode, index) => {
         const serialized = genNode.node.serialize();
         const nodeType = this.mapNodeType(serialized.type);
-        
+
         nodes.push({
           id: serialized.id,
           type: nodeType,
@@ -71,7 +71,7 @@ export class ParserFallback {
           }
         });
       });
-      
+
       // Convert edges
       enhancedEdges.forEach((edge, index) => {
         edges.push({
@@ -82,7 +82,7 @@ export class ParserFallback {
           data: edge.data || {}
         });
       });
-      
+
       return {
         nodes,
         edges,
@@ -94,7 +94,7 @@ export class ParserFallback {
       };
     } catch (standardError) {
       console.error('Standard parser also failed:', standardError);
-      
+
       // Last resort: create a single text block
       return this.createMinimalResult(prompt);
     }
@@ -107,7 +107,7 @@ export class ParserFallback {
     return nodes.map(node => {
       const enhanced = { ...node };
       const content = node.node.serialize().data?.text || '';
-      
+
       // Detect patterns and adjust node types
       if (this.isVariablePattern(content)) {
         enhanced.suggestedType = 'Variable';
@@ -119,7 +119,7 @@ export class ParserFallback {
         enhanced.suggestedType = 'Sequential';
         enhanced.confidence = 0.8;
       }
-      
+
       return enhanced;
     });
   }
@@ -129,12 +129,12 @@ export class ParserFallback {
    */
   private enhanceEdges(nodes: any[]): any[] {
     const edges: any[] = [];
-    
+
     // Create sequential connections by default
     for (let i = 0; i < nodes.length - 1; i++) {
       const source = nodes[i].node.serialize().id;
       const target = nodes[i + 1].node.serialize().id;
-      
+
       edges.push({
         source,
         target,
@@ -144,11 +144,11 @@ export class ParserFallback {
         }
       });
     }
-    
+
     // Look for special connection patterns
     nodes.forEach((node, i) => {
       const content = node.node.serialize().data?.text || '';
-      
+
       // If this node references a variable, connect to variable nodes
       const variables = this.extractVariableReferences(content);
       variables.forEach(varName => {
@@ -156,7 +156,7 @@ export class ParserFallback {
           const data = n.node.serialize().data;
           return data?.name === varName || data?.text?.includes(`{${varName}}`);
         });
-        
+
         if (varNode && varNode !== node) {
           edges.push({
             source: varNode.node.serialize().id,
@@ -169,7 +169,7 @@ export class ParserFallback {
         }
       });
     });
-    
+
     return edges;
   }
 
@@ -181,7 +181,7 @@ export class ParserFallback {
     if (/\{[^}]+\}/.test(content)) {
       return true;
     }
-    
+
     // Check for common variable indicators
     const variableIndicators = [
       /^(name|title|role|character|player):/i,
@@ -189,7 +189,7 @@ export class ParserFallback {
       /^\$\w+/,
       /^@\w+/
     ];
-    
+
     return variableIndicators.some(pattern => pattern.test(content));
   }
 
@@ -200,16 +200,16 @@ export class ParserFallback {
     // Check for list separators
     const separators = /\b(or|and|,)\b/gi;
     const matches = content.match(separators);
-    
+
     if (matches && matches.length >= 2) {
       return true;
     }
-    
+
     // Check for bullet points or numbered lists
     if (/^[\d•\-*]\s+/m.test(content)) {
       return true;
     }
-    
+
     // Check for choice keywords
     const choiceKeywords = /\b(choose|select|pick|either|option)\b/i;
     return choiceKeywords.test(content);
@@ -220,12 +220,13 @@ export class ParserFallback {
    */
   private isSequentialPattern(content: string): boolean {
     // Check for temporal markers
-    const temporalMarkers = /\b(first|then|next|after|finally|lastly|subsequently)\b/i;
-    
+    const temporalMarkers =
+      /\b(first|then|next|after|finally|lastly|subsequently)\b/i;
+
     if (temporalMarkers.test(content)) {
       return true;
     }
-    
+
     // Check for step indicators
     const stepPattern = /\b(step\s+\d+|phase\s+\d+|\d+\.\s+)/i;
     return stepPattern.test(content);
@@ -238,11 +239,11 @@ export class ParserFallback {
     const variables: string[] = [];
     const pattern = /\{([^}]+)\}/g;
     let match;
-    
+
     while ((match = pattern.exec(content)) !== null) {
       variables.push(match[1]);
     }
-    
+
     return variables;
   }
 
@@ -251,14 +252,14 @@ export class ParserFallback {
    */
   private mapNodeType(epicType: string): string {
     const typeMap: Record<string, string> = {
-      'TextBlock': 'textBlock',
-      'WeightedChoice': 'weightedChoice',
-      'Variable': 'variable',
-      'Sequential': 'sequential',
-      'Output': 'output',
-      'Concat': 'concat'
+      TextBlock: 'textBlock',
+      WeightedChoice: 'weightedChoice',
+      Variable: 'variable',
+      Sequential: 'sequential',
+      Output: 'output',
+      Concat: 'concat'
     };
-    
+
     return typeMap[epicType] || 'textBlock';
   }
 
@@ -266,11 +267,13 @@ export class ParserFallback {
    * Extract label from serialized node
    */
   private extractLabel(serialized: any): string {
-    return serialized.data?.text || 
-           serialized.data?.content || 
-           serialized.data?.name ||
-           serialized.data?.label ||
-           'Node';
+    return (
+      serialized.data?.text ||
+      serialized.data?.content ||
+      serialized.data?.name ||
+      serialized.data?.label ||
+      'Node'
+    );
   }
 
   /**
@@ -278,18 +281,20 @@ export class ParserFallback {
    */
   private createMinimalResult(prompt: string): ParseResult {
     const nodeId = 'fallback-node-1';
-    
+
     return {
-      nodes: [{
-        id: nodeId,
-        type: 'textBlock',
-        position: { x: 100, y: 100 },
-        data: {
-          label: prompt,
-          content: prompt,
-          source: 'minimal-fallback'
+      nodes: [
+        {
+          id: nodeId,
+          type: 'textBlock',
+          position: { x: 100, y: 100 },
+          data: {
+            label: prompt,
+            content: prompt,
+            source: 'minimal-fallback'
+          }
         }
-      }],
+      ],
       edges: [],
       metadata: {
         parserMode: 'minimal-fallback',
@@ -306,7 +311,7 @@ export class ParserFallback {
     // In a real implementation, this would show a toast or notification
     // For now, we'll just log it
     console.info(`[Parser Notice] ${message}`);
-    
+
     // If we have access to a notification system, use it
     if (typeof window !== 'undefined' && (window as any).showNotification) {
       (window as any).showNotification({

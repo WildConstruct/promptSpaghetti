@@ -75,7 +75,7 @@ class KnowledgeBaseIndexer {
           'will',
           'would',
           'could',
-          'should',
+          'should'
         ],
 
         // Technical keywords to prioritize
@@ -97,8 +97,8 @@ class KnowledgeBaseIndexer {
           'test',
           'debug',
           'config',
-          'setup',
-        ],
+          'setup'
+        ]
       },
 
       indexing: {
@@ -110,13 +110,13 @@ class KnowledgeBaseIndexer {
           title: 3.0, // Title field boost
           keywords: 2.0, // Keywords field boost
           description: 1.5, // Description field boost
-          content: 1.0, // Content field boost
+          content: 1.0 // Content field boost
         },
 
         // Index optimization
         rebuildThreshold: 1000, // Rebuild index after N additions
         updateBatchSize: 100, // Batch size for index updates
-        compressionEnabled: true, // Enable index compression
+        compressionEnabled: true // Enable index compression
       },
 
       categorization: {
@@ -124,37 +124,67 @@ class KnowledgeBaseIndexer {
         categories: {
           'bug-fixes': {
             keywords: ['bug', 'fix', 'error', 'issue', 'broken'],
-            patterns: [/fix.*bug/i, /resolve.*issue/i, /error.*handling/i],
+            patterns: [/fix.*bug/i, /resolve.*issue/i, /error.*handling/i]
           },
           features: {
             keywords: ['feature', 'add', 'new', 'implement', 'create'],
-            patterns: [/add.*feature/i, /implement.*functionality/i, /new.*component/i],
+            patterns: [
+              /add.*feature/i,
+              /implement.*functionality/i,
+              /new.*component/i
+            ]
           },
           optimizations: {
             keywords: ['optimize', 'performance', 'speed', 'memory', 'cache'],
-            patterns: [/improve.*performance/i, /optimize.*query/i, /reduce.*memory/i],
+            patterns: [
+              /improve.*performance/i,
+              /optimize.*query/i,
+              /reduce.*memory/i
+            ]
           },
           security: {
-            keywords: ['security', 'auth', 'permission', 'validation', 'sanitize'],
-            patterns: [/security.*fix/i, /auth.*implementation/i, /validate.*input/i],
+            keywords: [
+              'security',
+              'auth',
+              'permission',
+              'validation',
+              'sanitize'
+            ],
+            patterns: [
+              /security.*fix/i,
+              /auth.*implementation/i,
+              /validate.*input/i
+            ]
           },
           refactoring: {
             keywords: ['refactor', 'cleanup', 'restructure', 'organize'],
-            patterns: [/refactor.*code/i, /clean.*up/i, /restructure.*component/i],
+            patterns: [
+              /refactor.*code/i,
+              /clean.*up/i,
+              /restructure.*component/i
+            ]
           },
           testing: {
             keywords: ['test', 'testing', 'coverage', 'spec', 'unit'],
-            patterns: [/add.*test/i, /test.*coverage/i, /unit.*test/i],
+            patterns: [/add.*test/i, /test.*coverage/i, /unit.*test/i]
           },
           documentation: {
             keywords: ['document', 'docs', 'readme', 'comment', 'explain'],
-            patterns: [/add.*documentation/i, /update.*readme/i, /document.*api/i],
+            patterns: [
+              /add.*documentation/i,
+              /update.*readme/i,
+              /document.*api/i
+            ]
           },
           configuration: {
             keywords: ['config', 'setup', 'environment', 'deploy', 'build'],
-            patterns: [/config.*setup/i, /environment.*config/i, /build.*process/i],
-          },
-        },
+            patterns: [
+              /config.*setup/i,
+              /environment.*config/i,
+              /build.*process/i
+            ]
+          }
+        }
       },
 
       analytics: {
@@ -167,8 +197,8 @@ class KnowledgeBaseIndexer {
         // Trending analysis
         trendingWindow: 30, // Days for trending analysis
         popularityThreshold: 10, // Min views to be considered popular
-        velocityThreshold: 5, // Min weekly growth for trending
-      },
+        velocityThreshold: 5 // Min weekly growth for trending
+      }
     };
 
     this.knowledgeBase = {
@@ -182,8 +212,8 @@ class KnowledgeBaseIndexer {
         totalSearches: 0,
         popularItems: [],
         knowledgeGaps: [],
-        lastAnalysis: null,
-      },
+        lastAnalysis: null
+      }
     };
 
     this.searchIndex = new Map();
@@ -244,7 +274,9 @@ class KnowledgeBaseIndexer {
           processedCount++;
 
           if (processedCount % 10 === 0) {
-            console.log(`📊 Processed ${processedCount}/${tasks.length} tasks...`);
+            console.log(
+              `📊 Processed ${processedCount}/${tasks.length} tasks...`
+            );
           }
         } catch (error) {
           console.warn(`⚠️  Could not process task ${task.id}:`, error.message);
@@ -270,7 +302,7 @@ class KnowledgeBaseIndexer {
         processedCount,
         extractedPatterns,
         newSolutions,
-        generatedFAQs,
+        generatedFAQs
       };
     } catch (error) {
       console.error('❌ Knowledge indexing failed:', error);
@@ -328,10 +360,12 @@ class KnowledgeBaseIndexer {
       /failing.*to/i,
       /cannot.*do/i,
       /unable.*to/i,
-      /broken/i,
+      /broken/i
     ];
 
-    const hasProblem = problemIndicators.some(pattern => pattern.test(title) || pattern.test(description));
+    const hasProblem = problemIndicators.some(
+      pattern => pattern.test(title) || pattern.test(description)
+    );
 
     if (!hasProblem || !solution) return null;
 
@@ -350,7 +384,7 @@ class KnowledgeBaseIndexer {
       keywords: this.extractKeywords(problem + ' ' + solutionSummary),
       source: task.id,
       confidence: this.calculatePatternConfidence(problem, solutionSummary),
-      created: new Date().toISOString(),
+      created: new Date().toISOString()
     };
   }
 
@@ -412,7 +446,7 @@ class KnowledgeBaseIndexer {
       ...pattern,
       file: filePath,
       fileType: path.extname(filePath),
-      created: new Date().toISOString(),
+      created: new Date().toISOString()
     }));
   }
 
@@ -444,7 +478,10 @@ class KnowledgeBaseIndexer {
    */
   extractMainSolution(task) {
     const solution = task.solution || task.notes || task.description || '';
-    if (!solution || solution.length < this.config.extraction.minContentLength) {
+    if (
+      !solution ||
+      solution.length < this.config.extraction.minContentLength
+    ) {
       return null;
     }
 
@@ -464,7 +501,7 @@ class KnowledgeBaseIndexer {
       source: task.id,
       tags: this.generateSolutionTags(task, solution),
       created: new Date().toISOString(),
-      updated: new Date().toISOString(),
+      updated: new Date().toISOString()
     };
   }
 
@@ -487,7 +524,7 @@ class KnowledgeBaseIndexer {
         popularity: 0,
         helpful: 0,
         notHelpful: 0,
-        created: new Date().toISOString(),
+        created: new Date().toISOString()
       };
 
       faqs.push(faq);
@@ -506,7 +543,7 @@ class KnowledgeBaseIndexer {
         popularity: 0,
         helpful: 0,
         notHelpful: 0,
-        created: new Date().toISOString(),
+        created: new Date().toISOString()
       };
 
       faqs.push(faq);
@@ -523,7 +560,7 @@ class KnowledgeBaseIndexer {
       category = null,
       type = null,
       limit = this.config.indexing.maxSearchResults,
-      includeContent = false,
+      includeContent = false
     } = options;
 
     console.log(`🔍 Searching knowledge base: "${query}"`);
@@ -536,7 +573,11 @@ class KnowledgeBaseIndexer {
 
     // Search patterns
     for (const [id, pattern] of this.knowledgeBase.patterns.entries()) {
-      const score = this.calculateRelevanceScore(pattern, queryTerms, 'pattern');
+      const score = this.calculateRelevanceScore(
+        pattern,
+        queryTerms,
+        'pattern'
+      );
       if (score > 0) {
         results.push({
           id,
@@ -546,14 +587,18 @@ class KnowledgeBaseIndexer {
           category: pattern.category,
           score,
           source: pattern.source,
-          data: includeContent ? pattern : null,
+          data: includeContent ? pattern : null
         });
       }
     }
 
     // Search solutions
     for (const [id, solution] of this.knowledgeBase.solutions.entries()) {
-      const score = this.calculateRelevanceScore(solution, queryTerms, 'solution');
+      const score = this.calculateRelevanceScore(
+        solution,
+        queryTerms,
+        'solution'
+      );
       if (score > 0) {
         results.push({
           id,
@@ -564,7 +609,7 @@ class KnowledgeBaseIndexer {
           score,
           difficulty: solution.difficulty,
           effectiveness: solution.effectiveness,
-          data: includeContent ? solution : null,
+          data: includeContent ? solution : null
         });
       }
     }
@@ -582,7 +627,7 @@ class KnowledgeBaseIndexer {
           score,
           popularity: faq.popularity,
           helpful: faq.helpful,
-          data: includeContent ? faq : null,
+          data: includeContent ? faq : null
         });
       }
     }
@@ -607,7 +652,7 @@ class KnowledgeBaseIndexer {
       totalResults: filteredResults.length,
       results: filteredResults,
       categories: this.getSearchCategories(results),
-      suggestions: this.generateSearchSuggestions(query, filteredResults),
+      suggestions: this.generateSearchSuggestions(query, filteredResults)
     };
   }
 
@@ -621,14 +666,14 @@ class KnowledgeBaseIndexer {
         totalSolutions: this.knowledgeBase.solutions.size,
         totalFAQs: this.knowledgeBase.faqs.length,
         totalCategories: this.knowledgeBase.categories.size,
-        lastIndexRebuild: this.lastIndexRebuild,
+        lastIndexRebuild: this.lastIndexRebuild
       },
 
       analytics: {
         totalSearches: this.knowledgeBase.analytics.totalSearches,
         popularItems: this.knowledgeBase.analytics.popularItems.slice(0, 10),
         knowledgeGaps: this.knowledgeBase.analytics.knowledgeGaps.slice(0, 5),
-        lastAnalysis: this.knowledgeBase.analytics.lastAnalysis,
+        lastAnalysis: this.knowledgeBase.analytics.lastAnalysis
       },
 
       categories: this.getCategoryStatistics(),
@@ -636,8 +681,8 @@ class KnowledgeBaseIndexer {
       indexHealth: {
         searchIndexSize: this.searchIndex.size,
         averageRelevanceScore: this.calculateAverageRelevanceScore(),
-        indexingEfficiency: this.calculateIndexingEfficiency(),
-      },
+        indexingEfficiency: this.calculateIndexingEfficiency()
+      }
     };
   }
 
@@ -663,13 +708,15 @@ class KnowledgeBaseIndexer {
       // Update analytics
       this.knowledgeBase.analytics = {
         totalItems:
-          this.knowledgeBase.patterns.size + this.knowledgeBase.solutions.size + this.knowledgeBase.faqs.length,
+          this.knowledgeBase.patterns.size +
+          this.knowledgeBase.solutions.size +
+          this.knowledgeBase.faqs.length,
         totalSearches: this.knowledgeBase.analytics.totalSearches,
         popularItems,
         knowledgeGaps,
         categoryDistribution,
         trends,
-        lastAnalysis: new Date().toISOString(),
+        lastAnalysis: new Date().toISOString()
       };
 
       // Save analytics
@@ -728,14 +775,23 @@ class KnowledgeBaseIndexer {
   async saveKnowledgeBase() {
     // Save patterns
     const patternsData = Object.fromEntries(this.knowledgeBase.patterns);
-    await fs.writeFile(this.patternsFile, JSON.stringify(patternsData, null, 2));
+    await fs.writeFile(
+      this.patternsFile,
+      JSON.stringify(patternsData, null, 2)
+    );
 
     // Save solutions
     const solutionsData = Object.fromEntries(this.knowledgeBase.solutions);
-    await fs.writeFile(this.solutionsFile, JSON.stringify(solutionsData, null, 2));
+    await fs.writeFile(
+      this.solutionsFile,
+      JSON.stringify(solutionsData, null, 2)
+    );
 
     // Save FAQs
-    await fs.writeFile(this.faqFile, JSON.stringify(this.knowledgeBase.faqs, null, 2));
+    await fs.writeFile(
+      this.faqFile,
+      JSON.stringify(this.knowledgeBase.faqs, null, 2)
+    );
 
     // Save search index
     const indexData = Object.fromEntries(this.searchIndex);
@@ -743,7 +799,10 @@ class KnowledgeBaseIndexer {
   }
 
   async saveAnalytics() {
-    await fs.writeFile(this.analyticsFile, JSON.stringify(this.knowledgeBase.analytics, null, 2));
+    await fs.writeFile(
+      this.analyticsFile,
+      JSON.stringify(this.knowledgeBase.analytics, null, 2)
+    );
   }
 
   async getCompletedTasks() {
@@ -752,7 +811,9 @@ class KnowledgeBaseIndexer {
       const state = JSON.parse(stateData);
 
       const tasks = Object.values(state.tasks || {});
-      return tasks.filter(task => task.state === 'DONE' || task.state === 'COMPLETED');
+      return tasks.filter(
+        task => task.state === 'DONE' || task.state === 'COMPLETED'
+      );
     } catch {
       return [];
     }
@@ -764,7 +825,7 @@ class KnowledgeBaseIndexer {
       task.description || '',
       task.solution || '',
       task.notes || '',
-      ...(task.comments || []).map(c => c.text || ''),
+      ...(task.comments || []).map(c => c.text || '')
     ];
 
     return parts.join(' ').trim();
@@ -773,13 +834,19 @@ class KnowledgeBaseIndexer {
   categorizeContent(content) {
     const text = content.toLowerCase();
 
-    for (const [category, config] of Object.entries(this.config.categorization.categories)) {
+    for (const [category, config] of Object.entries(
+      this.config.categorization.categories
+    )) {
       // Check keywords
-      const keywordMatch = config.keywords.some(keyword => text.includes(keyword));
+      const keywordMatch = config.keywords.some(keyword =>
+        text.includes(keyword)
+      );
       if (keywordMatch) return category;
 
       // Check patterns
-      const patternMatch = config.patterns.some(pattern => pattern.test(content));
+      const patternMatch = config.patterns.some(pattern =>
+        pattern.test(content)
+      );
       if (patternMatch) return category;
     }
 
@@ -791,7 +858,10 @@ class KnowledgeBaseIndexer {
       .toLowerCase()
       .replace(/[^\w\s]/g, ' ')
       .split(/\s+/)
-      .filter(word => word.length > 2 && !this.config.extraction.stopWords.includes(word));
+      .filter(
+        word =>
+          word.length > 2 && !this.config.extraction.stopWords.includes(word)
+      );
 
     // Count word frequency
     const frequency = new Map();
@@ -815,8 +885,12 @@ class KnowledgeBaseIndexer {
 
     // Increase confidence for technical keywords
     const technicalWords = this.config.extraction.technicalKeywords;
-    const problemTech = technicalWords.filter(word => problem.toLowerCase().includes(word));
-    const solutionTech = technicalWords.filter(word => solution.toLowerCase().includes(word));
+    const problemTech = technicalWords.filter(word =>
+      problem.toLowerCase().includes(word)
+    );
+    const solutionTech = technicalWords.filter(word =>
+      solution.toLowerCase().includes(word)
+    );
 
     confidence += (problemTech.length + solutionTech.length) * 0.05;
 
@@ -824,7 +898,13 @@ class KnowledgeBaseIndexer {
   }
 
   isTestFile(filePath) {
-    const testPatterns = [/\.test\./i, /\.spec\./i, /\/test\//i, /\/tests\//i, /__tests__/i];
+    const testPatterns = [
+      /\.test\./i,
+      /\.spec\./i,
+      /\/test\//i,
+      /\/tests\//i,
+      /__tests__/i
+    ];
 
     return testPatterns.some(pattern => pattern.test(filePath));
   }
@@ -841,7 +921,7 @@ class KnowledgeBaseIndexer {
       /problem.*in\s+(.+)/i,
       /error.*when\s+(.+)/i,
       /cannot\s+(.+)/i,
-      /unable.*to\s+(.+)/i,
+      /unable.*to\s+(.+)/i
     ];
 
     for (const pattern of problemPatterns) {
@@ -890,7 +970,7 @@ class KnowledgeBaseIndexer {
       type: 'import',
       pattern: 'common-imports',
       imports: imports.slice(0, 5),
-      frequency: imports.length,
+      frequency: imports.length
     };
   }
 
@@ -926,7 +1006,11 @@ class KnowledgeBaseIndexer {
 
     for (const line of lines) {
       const trimmed = line.trim();
-      if (trimmed.match(/^\d+[\.\)]\s+/) || trimmed.match(/^[-\*]\s+/) || trimmed.toLowerCase().startsWith('step')) {
+      if (
+        trimmed.match(/^\d+[\.\)]\s+/) ||
+        trimmed.match(/^[-\*]\s+/) ||
+        trimmed.toLowerCase().startsWith('step')
+      ) {
         steps.push(trimmed);
       }
     }
@@ -941,14 +1025,19 @@ class KnowledgeBaseIndexer {
     }
 
     const firstLine = solution.split('\n')[0];
-    return firstLine.length > 50 ? firstLine.substring(0, 47) + '...' : firstLine;
+    return firstLine.length > 50
+      ? firstLine.substring(0, 47) + '...'
+      : firstLine;
   }
 
   extractSolutionDescription(solution) {
     // Extract the main description from solution
     const lines = solution.split('\n');
     const mainLines = lines.filter(
-      line => line.trim().length > 20 && !line.trim().match(/^\d+[\.\)]/) && !line.trim().match(/^[-\*]/)
+      line =>
+        line.trim().length > 20 &&
+        !line.trim().match(/^\d+[\.\)]/) &&
+        !line.trim().match(/^[-\*]/)
     );
 
     return mainLines.slice(0, 3).join(' ').trim();
@@ -970,10 +1059,12 @@ class KnowledgeBaseIndexer {
       'architecture',
       'refactor',
       'performance',
-      'security',
+      'security'
     ];
 
-    const hasComplexity = complexityIndicators.some(indicator => solution.toLowerCase().includes(indicator));
+    const hasComplexity = complexityIndicators.some(indicator =>
+      solution.toLowerCase().includes(indicator)
+    );
 
     if (hasComplexity && difficulty === 'easy') difficulty = 'medium';
     if (hasComplexity && difficulty === 'medium') difficulty = 'hard';
@@ -1004,7 +1095,9 @@ class KnowledgeBaseIndexer {
 
     // Add file type tags if applicable
     if (task.files) {
-      const extensions = task.files.map(f => path.extname(f).substring(1)).filter(Boolean);
+      const extensions = task.files
+        .map(f => path.extname(f).substring(1))
+        .filter(Boolean);
       tags.push(...[...new Set(extensions)]);
     }
 
@@ -1098,8 +1191,8 @@ class KnowledgeBaseIndexer {
         id,
         title: this.getItemTitle(item, type),
         category: item.category,
-        keywords: item.keywords || [],
-      },
+        keywords: item.keywords || []
+      }
     });
   }
 
@@ -1134,7 +1227,10 @@ class KnowledgeBaseIndexer {
       .toLowerCase()
       .replace(/[^\w\s]/g, ' ')
       .split(/\s+/)
-      .filter(word => word.length > 2 && !this.config.extraction.stopWords.includes(word));
+      .filter(
+        word =>
+          word.length > 2 && !this.config.extraction.stopWords.includes(word)
+      );
   }
 
   tokenizeQuery(query) {
@@ -1152,18 +1248,33 @@ class KnowledgeBaseIndexer {
       score += termFreq * this.config.indexing.searchBoosts.content;
 
       // Boost for exact matches in important fields
-      if (type === 'pattern' && item.problem && item.problem.toLowerCase().includes(term)) {
+      if (
+        type === 'pattern' &&
+        item.problem &&
+        item.problem.toLowerCase().includes(term)
+      ) {
         score += this.config.indexing.searchBoosts.title;
       }
-      if (type === 'solution' && item.title && item.title.toLowerCase().includes(term)) {
+      if (
+        type === 'solution' &&
+        item.title &&
+        item.title.toLowerCase().includes(term)
+      ) {
         score += this.config.indexing.searchBoosts.title;
       }
-      if (type === 'faq' && item.question && item.question.toLowerCase().includes(term)) {
+      if (
+        type === 'faq' &&
+        item.question &&
+        item.question.toLowerCase().includes(term)
+      ) {
         score += this.config.indexing.searchBoosts.title;
       }
 
       // Boost for keyword matches
-      if (item.keywords && item.keywords.some(keyword => keyword.includes(term))) {
+      if (
+        item.keywords &&
+        item.keywords.some(keyword => keyword.includes(term))
+      ) {
         score += this.config.indexing.searchBoosts.keywords;
       }
     }
@@ -1208,9 +1319,14 @@ class KnowledgeBaseIndexer {
 
   async rebuildSearchIndexIfNeeded() {
     const totalItems =
-      this.knowledgeBase.patterns.size + this.knowledgeBase.solutions.size + this.knowledgeBase.faqs.length;
+      this.knowledgeBase.patterns.size +
+      this.knowledgeBase.solutions.size +
+      this.knowledgeBase.faqs.length;
 
-    if (totalItems > this.config.indexing.rebuildThreshold && this.searchIndex.size < totalItems * 0.9) {
+    if (
+      totalItems > this.config.indexing.rebuildThreshold &&
+      this.searchIndex.size < totalItems * 0.9
+    ) {
       await this.buildSearchIndex();
     }
   }
@@ -1233,7 +1349,7 @@ class KnowledgeBaseIndexer {
           type: 'category_gap',
           category,
           itemCount: count,
-          severity: 'medium',
+          severity: 'medium'
         });
       }
     }
@@ -1242,13 +1358,16 @@ class KnowledgeBaseIndexer {
   }
 
   calculateCategoryDistribution() {
-    const total = this.knowledgeBase.patterns.size + this.knowledgeBase.solutions.size + this.knowledgeBase.faqs.length;
+    const total =
+      this.knowledgeBase.patterns.size +
+      this.knowledgeBase.solutions.size +
+      this.knowledgeBase.faqs.length;
 
     const distribution = {};
     for (const [category, count] of this.knowledgeBase.categories.entries()) {
       distribution[category] = {
         count,
-        percentage: total > 0 ? ((count / total) * 100).toFixed(1) : 0,
+        percentage: total > 0 ? ((count / total) * 100).toFixed(1) : 0
       };
     }
 
@@ -1262,7 +1381,7 @@ class KnowledgeBaseIndexer {
       popularCategories: Array.from(this.knowledgeBase.categories.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5)
-        .map(([category]) => category),
+        .map(([category]) => category)
     };
   }
 
@@ -1274,7 +1393,7 @@ class KnowledgeBaseIndexer {
         totalItems: count,
         patterns: 0,
         solutions: 0,
-        faqs: 0,
+        faqs: 0
       };
     }
 
@@ -1310,7 +1429,7 @@ class KnowledgeBaseIndexer {
     return {
       indexSize: this.searchIndex.size,
       averageTokensPerItem: 15,
-      memoryUsage: 'efficient',
+      memoryUsage: 'efficient'
     };
   }
 }
@@ -1346,12 +1465,16 @@ if (require.main === module) {
           }
 
           console.log(`🔍 Searching for: "${query}"\n`);
-          const searchResult = await indexer.search(query, { includeContent: true });
+          const searchResult = await indexer.search(query, {
+            includeContent: true
+          });
 
           console.log(`📊 Found ${searchResult.totalResults} results:\n`);
 
           for (const [index, result] of searchResult.results.entries()) {
-            console.log(`${index + 1}. [${result.type.toUpperCase()}] ${result.title}`);
+            console.log(
+              `${index + 1}. [${result.type.toUpperCase()}] ${result.title}`
+            );
             console.log(`   Category: ${result.category}`);
             console.log(`   Score: ${result.score.toFixed(2)}`);
             if (result.description) {
@@ -1362,7 +1485,9 @@ if (require.main === module) {
 
           if (searchResult.suggestions.length > 0) {
             console.log('💡 Suggestions:');
-            searchResult.suggestions.forEach(suggestion => console.log(`   • ${suggestion}`));
+            searchResult.suggestions.forEach(suggestion =>
+              console.log(`   • ${suggestion}`)
+            );
           }
           break;
 

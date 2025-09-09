@@ -32,6 +32,7 @@ PSG (Prompt Spaghetti Graph) files are JSON documents that define reusable graph
 ## Node Types
 
 ### 1. WeightedChoice
+
 Most common node type for generating variations:
 
 ```json
@@ -56,6 +57,7 @@ Most common node type for generating variations:
 ```
 
 ### 2. TextBlock
+
 For static text content:
 
 ```json
@@ -72,15 +74,18 @@ For static text content:
 ```
 
 ### 3. Output (Deprecated for Fragments)
+
 Output nodes should NOT be included in asset fragments. They're only for complete graphs.
 
 ## Region Requirements
 
 ### Single-Node Fragments
+
 - Do NOT require regions
 - The node stands alone as a self-contained unit
 
 ### Multi-Node Fragments
+
 - MUST be contained within a region box
 - Regions provide visual grouping and metadata
 
@@ -104,6 +109,7 @@ Output nodes should NOT be included in asset fragments. They're only for complet
 ```
 
 ### Region Colors by Category
+
 - `facial-features`: #4A90E2 (Blue)
 - `hair`: #E94B3C (Red)
 - `body-silhouette`: #6B5B95 (Purple)
@@ -116,13 +122,16 @@ Output nodes should NOT be included in asset fragments. They're only for complet
 ## Node Connection Rules
 
 ### Auto-Concatenation
+
 As of January 2025, nodes automatically concatenate their inputs:
+
 - WeightedChoice nodes accept inputs and prepend them to their output
 - TextBlock nodes concatenate inputs with their text
 - Multiple inputs to a single node are joined with spaces
 - Output nodes auto-concatenate all inputs
 
 ### Edges
+
 Define connections between nodes:
 
 ```json
@@ -140,6 +149,7 @@ Define connections between nodes:
 ## Categories
 
 Standard categories for organization:
+
 - `facial-features` - Eyes, nose, mouth, etc.
 - `hair` - Styles, colors, textures
 - `body-silhouette` - Body types, posture, build
@@ -152,21 +162,25 @@ Standard categories for organization:
 ## Best Practices
 
 ### 1. Naming Conventions
+
 - Use descriptive, lowercase IDs with hyphens: `eye-shape-variations`
 - Label nodes clearly for UI display
 - Include metadata for searchability
 
 ### 2. Weight Distribution
+
 - Use weights 1-100 for clarity
 - Balance weights for even distribution unless intentional bias needed
 - Document weight reasoning in metadata
 
 ### 3. Modularity
+
 - Keep fragments focused on a single aspect
 - Design for reusability across different contexts
 - Avoid overly specific combinations
 
 ### 4. Testing
+
 - Test fragments in the editor before saving
 - Verify all options generate appropriate content
 - Check concatenation behavior with upstream nodes
@@ -196,9 +210,9 @@ Standard categories for organization:
         "label": "Eye Shape",
         "region": "eye-region",
         "options": [
-          {"id": "1", "text": "almond-shaped", "weight": 20},
-          {"id": "2", "text": "round", "weight": 15},
-          {"id": "3", "text": "hooded", "weight": 15}
+          { "id": "1", "text": "almond-shaped", "weight": 20 },
+          { "id": "2", "text": "round", "weight": 15 },
+          { "id": "3", "text": "hooded", "weight": 15 }
         ]
       }
     },
@@ -211,9 +225,9 @@ Standard categories for organization:
         "label": "Eye Color",
         "region": "eye-region",
         "options": [
-          {"id": "1", "text": "deep brown", "weight": 30},
-          {"id": "2", "text": "bright blue", "weight": 20},
-          {"id": "3", "text": "emerald green", "weight": 15}
+          { "id": "1", "text": "deep brown", "weight": 30 },
+          { "id": "2", "text": "bright blue", "weight": 20 },
+          { "id": "3", "text": "emerald green", "weight": 15 }
         ]
       }
     }
@@ -253,6 +267,7 @@ node scripts/generate-assets.js
 ```
 
 This script can:
+
 - Convert existing prompt lists to PSG fragments
 - Apply consistent formatting
 - Add appropriate metadata and regions
@@ -271,11 +286,13 @@ Before adding to the library:
 ## Integration with Asset Browser
 
 Once created, PSG files should be placed in:
+
 - `assets/generated/` - For generated fragments
 - `assets/fragments/` - For hand-crafted fragments
 - `packages/asset-browser/public/graphs/` - For example graphs
 
 The Asset Browser will automatically:
+
 - Index new fragments on startup
 - Display them in categorized sections
 - Enable drag-and-drop into the editor
@@ -300,11 +317,13 @@ The Asset Browser will automatically:
 ### Debug Mode
 
 Enable debug logging in browser console:
+
 ```javascript
 localStorage.setItem('DEBUG_EXECUTION', 'true');
 ```
 
 This will show:
+
 - Node execution order
 - Input concatenation
 - Output generation

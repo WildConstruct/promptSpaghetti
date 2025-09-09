@@ -7,7 +7,7 @@ import { PostItNote } from './PostItNote';
 export const nodeTypes = {
   boundingBox: BoundingBox,
   enhancedBoundingBox: EnhancedBoundingBox,
-  postItNote: PostItNote,
+  postItNote: PostItNote
   // fragmentContainer removed - was causing duplicate containers
   // Add other node types here
 };

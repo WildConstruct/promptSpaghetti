@@ -78,9 +78,12 @@ class ContextMigrationHelper {
       variables: legacy.variables,
       seed: legacy.seed,
       depth: legacy.depth || 0,
-      capabilities: new Set([ContextCapability.PERFORMANCE_TRACKING, ContextCapability.CACHING]),
+      capabilities: new Set([
+        ContextCapability.PERFORMANCE_TRACKING,
+        ContextCapability.CACHING
+      ]),
       hasCapability: cap => this.capabilities.has(cap),
-      getFeature: feature => this.getFeatureImplementation(feature),
+      getFeature: feature => this.getFeatureImplementation(feature)
     };
   }
 }
@@ -106,21 +109,33 @@ class LifecycleIntegratedNode extends OptimizedRuntimeNode<string> {
     this.registerLifecycleHooks();
 
     // Set initial state
-    this.lifecycleManager.transitionTo(NodeLifecycleState.READY, LifecycleTrigger.CONFIGURATION_COMPLETE);
+    this.lifecycleManager.transitionTo(
+      NodeLifecycleState.READY,
+      LifecycleTrigger.CONFIGURATION_COMPLETE
+    );
   }
 
   async executeCore(context: UnifiedExecutionContext): Promise<string> {
     // Lifecycle-aware execution
-    await this.lifecycleManager.transitionTo(NodeLifecycleState.EXECUTING, LifecycleTrigger.EXECUTION_REQUESTED);
+    await this.lifecycleManager.transitionTo(
+      NodeLifecycleState.EXECUTING,
+      LifecycleTrigger.EXECUTION_REQUESTED
+    );
 
     try {
       const result = await this.performExecution(context);
 
-      await this.lifecycleManager.transitionTo(NodeLifecycleState.COMPLETED, LifecycleTrigger.EXECUTION_COMPLETE);
+      await this.lifecycleManager.transitionTo(
+        NodeLifecycleState.COMPLETED,
+        LifecycleTrigger.EXECUTION_COMPLETE
+      );
 
       return result;
     } catch (error) {
-      await this.lifecycleManager.transitionTo(NodeLifecycleState.FAILED, LifecycleTrigger.EXECUTION_ERROR);
+      await this.lifecycleManager.transitionTo(
+        NodeLifecycleState.FAILED,
+        LifecycleTrigger.EXECUTION_ERROR
+      );
       throw error;
     }
   }
@@ -130,7 +145,10 @@ class LifecycleIntegratedNode extends OptimizedRuntimeNode<string> {
     this.lifecycleManager.registerHook({
       id: 'performance-tracking',
       name: 'Performance Tracking',
-      triggers: [LifecycleTrigger.EXECUTION_REQUESTED, LifecycleTrigger.EXECUTION_COMPLETE],
+      triggers: [
+        LifecycleTrigger.EXECUTION_REQUESTED,
+        LifecycleTrigger.EXECUTION_COMPLETE
+      ],
       priority: 1,
       enabled: true,
       execute: async context => {
@@ -140,7 +158,7 @@ class LifecycleIntegratedNode extends OptimizedRuntimeNode<string> {
           this.endPerformanceTracking();
         }
         return HookResult.CONTINUE;
-      },
+      }
     });
 
     // State persistence hook
@@ -153,7 +171,7 @@ class LifecycleIntegratedNode extends OptimizedRuntimeNode<string> {
       execute: async context => {
         await this.stateManager.saveState(this.id, context.currentState);
         return HookResult.CONTINUE;
-      },
+      }
     });
   }
 }
@@ -170,7 +188,7 @@ class HotReloadableNodeExtension implements HotReloadableExtension {
     id: 'custom-text-processor',
     name: 'Custom Text Processor',
     version: '1.0.0',
-    type: 'node',
+    type: 'node'
   };
 
   version = '1.0.0';
@@ -208,7 +226,7 @@ class HotReloadableNodeExtension implements HotReloadableExtension {
       schema: this.createUnifiedSchema(),
       runtimeClass: CustomTextProcessorNode,
       uiComponents: [this.createNodeEditor()],
-      icons: [this.createNodeIcon()],
+      icons: [this.createNodeIcon()]
     };
 
     ExtensionRegistry.registerNodeType('custom-text-processor', nodeDefinition);
@@ -227,9 +245,9 @@ class HotReloadableNodeExtension implements HotReloadableExtension {
         options: z
           .object({
             preserveWhitespace: z.boolean().default(true),
-            customPattern: z.string().optional(),
+            customPattern: z.string().optional()
           })
-          .optional(),
+          .optional()
       }),
 
       // UI generation metadata
@@ -239,7 +257,7 @@ class HotReloadableNodeExtension implements HotReloadableExtension {
             key: 'inputText',
             type: 'textarea',
             label: 'Input Text',
-            required: true,
+            required: true
           },
           {
             key: 'processingMode',
@@ -248,11 +266,11 @@ class HotReloadableNodeExtension implements HotReloadableExtension {
             options: [
               { value: 'uppercase', label: 'Uppercase' },
               { value: 'lowercase', label: 'Lowercase' },
-              { value: 'reverse', label: 'Reverse' },
-            ],
-          },
+              { value: 'reverse', label: 'Reverse' }
+            ]
+          }
         ],
-        layout: { columns: 1, sections: ['basic', 'advanced'] },
+        layout: { columns: 1, sections: ['basic', 'advanced'] }
       },
 
       // Runtime optimization hints
@@ -260,10 +278,10 @@ class HotReloadableNodeExtension implements HotReloadableExtension {
         cacheable: true,
         memoryHeavy: false,
         cpuIntensive: false,
-        deterministic: true,
+        deterministic: true
       },
 
-      compile: target => this.compileSchema(target),
+      compile: target => this.compileSchema(target)
     };
   }
 }
@@ -274,7 +292,9 @@ class ExtensionHotReloadManager {
     const extension = ExtensionRegistry.getExtension(extensionId);
 
     if (!extension.canHotReload) {
-      throw new Error(`Extension ${extensionId} does not support hot reloading`);
+      throw new Error(
+        `Extension ${extensionId} does not support hot reloading`
+      );
     }
 
     // Set up file system watching
@@ -290,14 +310,20 @@ class ExtensionHotReloadManager {
     });
   }
 
-  private async performHotReload(extensionId: string, changedFiles: string[]): Promise<void> {
+  private async performHotReload(
+    extensionId: string,
+    changedFiles: string[]
+  ): Promise<void> {
     const extension = ExtensionRegistry.getExtension(extensionId);
 
     // Pre-reload hooks
     await extension.onBeforeReload?.();
 
     // Analyze dependencies
-    const affectedExtensions = this.analyzeAffectedExtensions(extensionId, changedFiles);
+    const affectedExtensions = this.analyzeAffectedExtensions(
+      extensionId,
+      changedFiles
+    );
 
     // Reload in dependency order
     for (const affectedId of affectedExtensions) {
@@ -336,10 +362,16 @@ class CollaborativeNodeManager {
 
     if (concurrentOps.length > 0) {
       // Apply operational transformation
-      const transformed = this.operationalTransform.transform(operation, concurrentOps);
+      const transformed = this.operationalTransform.transform(
+        operation,
+        concurrentOps
+      );
 
       // Check for conflicts
-      const conflicts = this.operationalTransform.detectConflicts([transformed, ...concurrentOps]);
+      const conflicts = this.operationalTransform.detectConflicts([
+        transformed,
+        ...concurrentOps
+      ]);
 
       if (conflicts.length > 0) {
         // Resolve conflicts
@@ -386,7 +418,10 @@ class CollaborativeNodeManager {
     // Apply change with operational transformation
     const localOps = this.getPendingLocalOperations(change.nodeId);
     if (localOps.length > 0) {
-      const transformed = this.operationalTransform.transform(change.toOperation(), localOps);
+      const transformed = this.operationalTransform.transform(
+        change.toOperation(),
+        localOps
+      );
       await this.applyTransformedChange(transformed);
     } else {
       await this.applyDirectChange(change);
@@ -401,7 +436,11 @@ class CollaborativeNodeManager {
 
 ```typescript
 class SchemaMigrationHelper {
-  static migrateToUnifiedSchema(runtimeSchema: z.ZodSchema, uiSchema: UISchema, nodeType: string): UnifiedNodeSchema {
+  static migrateToUnifiedSchema(
+    runtimeSchema: z.ZodSchema,
+    uiSchema: UISchema,
+    nodeType: string
+  ): UnifiedNodeSchema {
     return {
       id: nodeType,
       name: this.extractNodeName(nodeType),
@@ -417,7 +456,7 @@ class SchemaMigrationHelper {
       runtime: this.inferRuntimeCharacteristics(runtimeSchema),
 
       // Create compilation function
-      compile: target => this.compileForTarget(target, runtimeSchema, uiSchema),
+      compile: target => this.compileForTarget(target, runtimeSchema, uiSchema)
     };
   }
 
@@ -429,36 +468,45 @@ class SchemaMigrationHelper {
         label: field.label || this.humanizeKey(field.name),
         required: field.required || false,
         options: field.options,
-        validation: field.validation,
+        validation: field.validation
       })),
       layout: {
         columns: legacy.layout?.columns || 1,
         sections: legacy.sections || ['basic'],
-        conditional: legacy.conditional,
-      },
+        conditional: legacy.conditional
+      }
     };
   }
 
-  private static inferRuntimeCharacteristics(schema: z.ZodSchema): RuntimeHints {
+  private static inferRuntimeCharacteristics(
+    schema: z.ZodSchema
+  ): RuntimeHints {
     // Analyze schema to infer characteristics
     const schemaAnalysis = this.analyzeSchema(schema);
 
     return {
       cacheable: !schemaAnalysis.hasRandomElements,
-      memoryHeavy: schemaAnalysis.hasLargeArrays || schemaAnalysis.hasFileUploads,
+      memoryHeavy:
+        schemaAnalysis.hasLargeArrays || schemaAnalysis.hasFileUploads,
       cpuIntensive: schemaAnalysis.hasComplexValidation,
-      deterministic: !schemaAnalysis.hasNonDeterministicOperations,
+      deterministic: !schemaAnalysis.hasNonDeterministicOperations
     };
   }
 
   // Batch migration utility
-  static async migrateAllSchemas(nodeTypes: string[]): Promise<Map<string, UnifiedNodeSchema>> {
+  static async migrateAllSchemas(
+    nodeTypes: string[]
+  ): Promise<Map<string, UnifiedNodeSchema>> {
     const migratedSchemas = new Map<string, UnifiedNodeSchema>();
 
     for (const nodeType of nodeTypes) {
       try {
         const legacy = this.getLegacySchemas(nodeType);
-        const unified = this.migrateToUnifiedSchema(legacy.runtime, legacy.ui, nodeType);
+        const unified = this.migrateToUnifiedSchema(
+          legacy.runtime,
+          legacy.ui,
+          nodeType
+        );
 
         migratedSchemas.set(nodeType, unified);
 
@@ -488,10 +536,13 @@ class IncrementalMigrationManager {
     'lifecycle-integration',
     'extension-hot-reload',
     'collaborative-features',
-    'performance-optimization',
+    'performance-optimization'
   ];
 
-  async performStagedMigration(nodeId: string, targetStage: string): Promise<MigrationResult> {
+  async performStagedMigration(
+    nodeId: string,
+    targetStage: string
+  ): Promise<MigrationResult> {
     const currentStage = await this.getCurrentMigrationStage(nodeId);
     const stageIndex = this.migrationStages.indexOf(targetStage);
 
@@ -522,7 +573,11 @@ class FeatureFlagManager {
     return this.flags.get(feature) || false;
   }
 
-  withFeature<T>(feature: ArchitectureFeature, enabled: () => T, disabled: () => T): T {
+  withFeature<T>(
+    feature: ArchitectureFeature,
+    enabled: () => T,
+    disabled: () => T
+  ): T {
     return this.isEnabled(feature) ? enabled() : disabled();
   }
 }
@@ -532,7 +587,7 @@ enum ArchitectureFeature {
   LIFECYCLE_MANAGEMENT = 'lifecycle-management',
   HOT_RELOAD = 'hot-reload',
   COLLABORATIVE_EDITING = 'collaborative-editing',
-  DISTRIBUTED_EXECUTION = 'distributed-execution',
+  DISTRIBUTED_EXECUTION = 'distributed-execution'
 }
 
 // Usage in node implementation
@@ -559,14 +614,17 @@ describe('Architecture Integration', () => {
     it('should maintain compatibility with legacy contexts', async () => {
       const legacyContext: ExecutionContext = {
         variables: { x: 42 },
-        seed: 'test-seed',
+        seed: 'test-seed'
       };
 
-      const unifiedContext = ContextMigrationHelper.upgradeContext(legacyContext);
+      const unifiedContext =
+        ContextMigrationHelper.upgradeContext(legacyContext);
 
       expect(unifiedContext.variables).toEqual(legacyContext.variables);
       expect(unifiedContext.seed).toBe(legacyContext.seed);
-      expect(unifiedContext.hasCapability(ContextCapability.PERFORMANCE_TRACKING)).toBe(true);
+      expect(
+        unifiedContext.hasCapability(ContextCapability.PERFORMANCE_TRACKING)
+      ).toBe(true);
     });
   });
 
@@ -576,14 +634,19 @@ describe('Architecture Integration', () => {
       const executionOrder: string[] = [];
 
       // Mock hook execution tracking
-      jest.spyOn(node.lifecycleManager, 'executeHooks').mockImplementation((nodeId, trigger, context) => {
-        executionOrder.push(`${trigger}`);
-        return Promise.resolve([HookResult.CONTINUE]);
-      });
+      jest
+        .spyOn(node.lifecycleManager, 'executeHooks')
+        .mockImplementation((nodeId, trigger, context) => {
+          executionOrder.push(`${trigger}`);
+          return Promise.resolve([HookResult.CONTINUE]);
+        });
 
       await node.execute(createUnifiedContext());
 
-      expect(executionOrder).toEqual(['execution:requested', 'execution:complete']);
+      expect(executionOrder).toEqual([
+        'execution:requested',
+        'execution:complete'
+      ]);
     });
   });
 
@@ -626,7 +689,7 @@ class PerformanceIntegratedNode extends OptimizedRuntimeNode<string> {
     try {
       // Memory checkpoint
       session.checkpoint('memory-before', {
-        heapUsed: process.memoryUsage().heapUsed,
+        heapUsed: process.memoryUsage().heapUsed
       });
 
       // Execute with performance monitoring
@@ -634,7 +697,7 @@ class PerformanceIntegratedNode extends OptimizedRuntimeNode<string> {
 
       // Memory checkpoint
       session.checkpoint('memory-after', {
-        heapUsed: process.memoryUsage().heapUsed,
+        heapUsed: process.memoryUsage().heapUsed
       });
 
       return result;
@@ -652,14 +715,16 @@ class PerformanceIntegratedNode extends OptimizedRuntimeNode<string> {
     }
   }
 
-  private async storePerformanceMetrics(metrics: PerformanceMetrics): Promise<void> {
+  private async storePerformanceMetrics(
+    metrics: PerformanceMetrics
+  ): Promise<void> {
     // Store in performance database
     await PerformanceDatabase.store({
       nodeId: this.id,
       timestamp: Date.now(),
       executionTime: metrics.executionTime,
       memoryUsage: metrics.memoryDelta,
-      cacheHitRate: metrics.cacheHitRate,
+      cacheHitRate: metrics.cacheHitRate
     });
   }
 }
@@ -683,7 +748,7 @@ class WeightedChoiceNodeMigrated extends OptimizedRuntimeNode<string> {
     // Convert to legacy context for compatibility
     const legacyContext: ExecutionContext = {
       variables: context.variables,
-      seed: context.seed,
+      seed: context.seed
     };
 
     // Use legacy implementation
@@ -702,16 +767,25 @@ class WeightedChoiceNodeWithLifecycle extends WeightedChoiceNodeMigrated {
   }
 
   async executeCore(context: UnifiedExecutionContext): Promise<string> {
-    await this.lifecycleManager.transitionTo(NodeLifecycleState.EXECUTING, LifecycleTrigger.EXECUTION_REQUESTED);
+    await this.lifecycleManager.transitionTo(
+      NodeLifecycleState.EXECUTING,
+      LifecycleTrigger.EXECUTION_REQUESTED
+    );
 
     try {
       const result = await super.executeCore(context);
 
-      await this.lifecycleManager.transitionTo(NodeLifecycleState.COMPLETED, LifecycleTrigger.EXECUTION_COMPLETE);
+      await this.lifecycleManager.transitionTo(
+        NodeLifecycleState.COMPLETED,
+        LifecycleTrigger.EXECUTION_COMPLETE
+      );
 
       return result;
     } catch (error) {
-      await this.lifecycleManager.transitionTo(NodeLifecycleState.FAILED, LifecycleTrigger.EXECUTION_ERROR);
+      await this.lifecycleManager.transitionTo(
+        NodeLifecycleState.FAILED,
+        LifecycleTrigger.EXECUTION_ERROR
+      );
       throw error;
     }
   }
@@ -722,7 +796,9 @@ class WeightedChoiceNodeEnhanced extends WeightedChoiceNodeWithLifecycle {
   async executeCore(context: UnifiedExecutionContext): Promise<string> {
     // Use caching if available
     if (context.hasCapability(ContextCapability.CACHING)) {
-      const cached = context.getFeature('cache')?.get(this.getCacheKey(context));
+      const cached = context
+        .getFeature('cache')
+        ?.get(this.getCacheKey(context));
       if (cached) return cached;
     }
 
@@ -747,7 +823,7 @@ class AdvancedTextExtension implements HotReloadableExtension {
     id: 'advanced-text-processor',
     name: 'Advanced Text Processor',
     version: '2.0.0',
-    type: 'node' as const,
+    type: 'node' as const
   };
 
   canHotReload = true;
@@ -764,7 +840,7 @@ class AdvancedTextExtension implements HotReloadableExtension {
     // Register UI components
     UIComponentRegistry.register(this.manifest.id, {
       editor: AdvancedTextEditor,
-      preview: AdvancedTextPreview,
+      preview: AdvancedTextPreview
     });
 
     // Set up performance monitoring
@@ -783,9 +859,9 @@ class AdvancedTextExtension implements HotReloadableExtension {
         config: z
           .object({
             language: z.string().default('en'),
-            model: z.string().optional(),
+            model: z.string().optional()
           })
-          .optional(),
+          .optional()
       }),
 
       ui: {
@@ -794,7 +870,7 @@ class AdvancedTextExtension implements HotReloadableExtension {
             key: 'text',
             type: 'textarea',
             label: 'Input Text',
-            required: true,
+            required: true
           },
           {
             key: 'operations',
@@ -803,21 +879,21 @@ class AdvancedTextExtension implements HotReloadableExtension {
             options: [
               { value: 'tokenize', label: 'Tokenize' },
               { value: 'sentiment', label: 'Sentiment Analysis' },
-              { value: 'entities', label: 'Named Entity Recognition' },
-            ],
-          },
+              { value: 'entities', label: 'Named Entity Recognition' }
+            ]
+          }
         ],
-        layout: { columns: 1, sections: ['input', 'processing'] },
+        layout: { columns: 1, sections: ['input', 'processing'] }
       },
 
       runtime: {
         cacheable: true,
         memoryHeavy: true,
         cpuIntensive: true,
-        deterministic: false,
+        deterministic: false
       },
 
-      compile: target => this.compileSchema(target),
+      compile: target => this.compileSchema(target)
     };
   }
 

@@ -44,12 +44,20 @@ class Metrics {
     const series: { label: string; count: number }[] = [];
     for (let i = this.windowMinutes - 1; i >= 0; i--) {
       const t = nowMin - i;
-      const b = this.buckets.find((x) => x.t === t);
-      series.push({ label: new Date(t * 60000).toISOString().slice(11, 16), count: b?.c || 0 });
+      const b = this.buckets.find(x => x.t === t);
+      series.push({
+        label: new Date(t * 60000).toISOString().slice(11, 16),
+        count: b?.c || 0
+      });
     }
-    return { uptimeSec, startedAt: new Date(this.start).toISOString(), totals, errors, perMinute: series };
+    return {
+      uptimeSec,
+      startedAt: new Date(this.start).toISOString(),
+      totals,
+      errors,
+      perMinute: series
+    };
   }
 }
 
 export const metrics = new Metrics();
-

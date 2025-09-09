@@ -34,7 +34,7 @@ exports.NodeTypeEnum = zod_1.z.enum([
   'Sequential',
   'Markov',
   // Epic 8 Python Integration
-  'PythonTransform',
+  'PythonTransform'
 ]);
 exports.BaseNode = zod_1.z.object({
   id: zod_1.z.string(),
@@ -50,47 +50,61 @@ exports.BaseNode = zod_1.z.object({
         startIndex: zod_1.z.number(),
         endIndex: zod_1.z.number(),
         isValid: zod_1.z.boolean(),
-        inferredType: zod_1.z.enum(['string', 'number', 'boolean', 'array', 'object', 'auto']).optional(),
-        defaultValue: zod_1.z.string().optional(),
+        inferredType: zod_1.z
+          .enum(['string', 'number', 'boolean', 'array', 'object', 'auto'])
+          .optional(),
+        defaultValue: zod_1.z.string().optional()
       })
     )
-    .optional(),
+    .optional()
 });
 exports.WeightedChoiceNodeSchema = exports.BaseNode.extend({
   type: zod_1.z.literal('WeightedChoice'),
-  choices: zod_1.z.array(zod_1.z.object({ value: zod_1.z.string(), weight: zod_1.z.number().positive() })),
+  choices: zod_1.z.array(
+    zod_1.z.object({
+      value: zod_1.z.string(),
+      weight: zod_1.z.number().positive()
+    })
+  )
 });
 exports.ConcatNodeSchema = exports.BaseNode.extend({
-  type: zod_1.z.literal('Concat'),
+  type: zod_1.z.literal('Concat')
 });
 exports.OutputNodeSchema = exports.BaseNode.extend({
-  type: zod_1.z.literal('Output'),
+  type: zod_1.z.literal('Output')
 });
 exports.IncludeNodeSchema = exports.BaseNode.extend({
   type: zod_1.z.literal('Include'),
-  name: security_1.SecureValidation.safePropertyKey(),
+  name: security_1.SecureValidation.safePropertyKey()
 });
 exports.SetVariableNodeSchema = exports.BaseNode.extend({
   type: zod_1.z.literal('SetVariable'),
   key: security_1.SecureValidation.variableName(),
-  value: security_1.SecureValidation.safeValue(),
+  value: security_1.SecureValidation.safeValue()
 });
 exports.GetVariableNodeSchema = exports.BaseNode.extend({
   type: zod_1.z.literal('GetVariable'),
-  key: security_1.SecureValidation.variableName(),
+  key: security_1.SecureValidation.variableName()
 });
 // Epic 7 Advanced Node Schemas
 exports.WeightedAdvancedNodeSchema = exports.BaseNode.extend({
   type: zod_1.z.literal('WeightedAdvanced'),
-  choices: zod_1.z.array(zod_1.z.object({ value: zod_1.z.string(), weight: zod_1.z.number().min(0) })).optional(),
+  choices: zod_1.z
+    .array(
+      zod_1.z.object({
+        value: zod_1.z.string(),
+        weight: zod_1.z.number().min(0)
+      })
+    )
+    .optional(),
   distributionConfig: zod_1.z
     .object({
       type: zod_1.z.enum(['linear', 'exponential', 'gaussian', 'custom']),
       parameters: zod_1.z.record(zod_1.z.number()).optional(),
       normalize: zod_1.z.boolean().optional(),
-      minWeight: zod_1.z.number().min(0).optional(),
+      minWeight: zod_1.z.number().min(0).optional()
     })
-    .optional(),
+    .optional()
 });
 exports.ConditionalNodeSchema = exports.BaseNode.extend({
   type: zod_1.z.literal('Conditional'),
@@ -99,7 +113,7 @@ exports.ConditionalNodeSchema = exports.BaseNode.extend({
       zod_1.z.object({
         condition: security_1.SecureValidation.safeExpression(),
         output: security_1.SecureValidation.safeString(),
-        label: security_1.SecureValidation.safeString().optional(),
+        label: security_1.SecureValidation.safeString().optional()
       })
     )
     .optional(),
@@ -108,9 +122,11 @@ exports.ConditionalNodeSchema = exports.BaseNode.extend({
     .object({
       allowVariableAccess: zod_1.z.boolean().optional(),
       strictMode: zod_1.z.boolean().optional(),
-      customFunctions: zod_1.z.record(security_1.SecureValidation.safeValue()).optional(),
+      customFunctions: zod_1.z
+        .record(security_1.SecureValidation.safeValue())
+        .optional()
     })
-    .optional(),
+    .optional()
 });
 exports.SequentialNodeSchema = exports.BaseNode.extend({
   type: zod_1.z.literal('Sequential'),
@@ -122,11 +138,11 @@ exports.SequentialNodeSchema = exports.BaseNode.extend({
         .object({
           weights: zod_1.z.array(zod_1.z.number()).optional(),
           allowRepeats: zod_1.z.boolean().optional(),
-          custom: zod_1.z.record(zod_1.z.unknown()).optional(),
+          custom: zod_1.z.record(zod_1.z.unknown()).optional()
         })
-        .optional(),
+        .optional()
     })
-    .optional(),
+    .optional()
 });
 exports.MarkovNodeSchema = exports.BaseNode.extend({
   type: zod_1.z.literal('Markov'),
@@ -139,9 +155,9 @@ exports.MarkovNodeSchema = exports.BaseNode.extend({
       normalizeProbabilities: zod_1.z.boolean().optional(),
       terminationStates: zod_1.z.array(zod_1.z.string()).optional(),
       detectLoops: zod_1.z.boolean().optional(),
-      custom: zod_1.z.record(zod_1.z.unknown()).optional(),
+      custom: zod_1.z.record(zod_1.z.unknown()).optional()
     })
-    .optional(),
+    .optional()
 });
 // Epic 8 Python Integration
 exports.PythonTransformNodeSchema = exports.BaseNode.extend({
@@ -157,9 +173,9 @@ exports.PythonTransformNodeSchema = exports.BaseNode.extend({
       executorUrl: zod_1.z.string().optional(),
       retryAttempts: zod_1.z.number().min(0).optional(),
       fallbackBehavior: zod_1.z.enum(['error', 'skip', 'default']).optional(),
-      defaultOutput: zod_1.z.string().optional(),
+      defaultOutput: zod_1.z.string().optional()
     })
-    .optional(),
+    .optional()
 });
 exports.AnyNodeSchema = zod_1.z.discriminatedUnion('type', [
   exports.WeightedChoiceNodeSchema,
@@ -174,9 +190,9 @@ exports.AnyNodeSchema = zod_1.z.discriminatedUnion('type', [
   exports.SequentialNodeSchema,
   exports.MarkovNodeSchema,
   // Epic 8 Python Integration
-  exports.PythonTransformNodeSchema,
+  exports.PythonTransformNodeSchema
 ]);
 exports.GraphSchema = zod_1.z.object({
   nodes: zod_1.z.array(exports.AnyNodeSchema),
-  seed: zod_1.z.union([zod_1.z.string(), zod_1.z.number()]).optional(),
+  seed: zod_1.z.union([zod_1.z.string(), zod_1.z.number()]).optional()
 });

@@ -44,20 +44,26 @@ const yjsSpecs = {
     singleUserOps: '>10,000/sec',
     multiUserLatency: '<100ms',
     memoryUsage: '~1MB for 10k nodes',
-    networkReduction: '66% vs JSON',
+    networkReduction: '66% vs JSON'
   },
   graphSupport: {
     customTypes: 'Y.Graph implemented',
-    operations: ['addNode', 'updateNode', 'deleteNode', 'addEdge', 'deleteEdge'],
+    operations: [
+      'addNode',
+      'updateNode',
+      'deleteNode',
+      'addEdge',
+      'deleteEdge'
+    ],
     integrity: 'automatic referential integrity',
-    conflicts: 'add-wins, delete-wins, last-writer-wins',
+    conflicts: 'add-wins, delete-wins, last-writer-wins'
   },
   ecosystem: {
     documentation: 'excellent',
     community: 'active',
     production: 'battle-tested',
-    bundleSize: '~100KB minified',
-  },
+    bundleSize: '~100KB minified'
+  }
 };
 ```
 
@@ -91,13 +97,13 @@ const automergeAnalysis = {
   performance: {
     improvement: '5000x faster in 2.0 vs previous versions',
     current: 'similar to Yjs performance',
-    optimizations: 'tree-based data structure improvements',
+    optimizations: 'tree-based data structure improvements'
   },
   suitability: {
     primaryUseCase: 'JSON document collaboration',
     graphSupport: 'would require custom development',
-    migrationCost: 'high - complete Y.Graph reimplementation',
-  },
+    migrationCost: 'high - complete Y.Graph reimplementation'
+  }
 };
 ```
 
@@ -122,7 +128,7 @@ const sharedbLimitations = {
   memory: 'stores all operations in database',
   conflicts: 'manual transformation algorithms required',
   graphs: 'no built-in graph operation support',
-  offline: 'limited offline capability',
+  offline: 'limited offline capability'
 };
 ```
 

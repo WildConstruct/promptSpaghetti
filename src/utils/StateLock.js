@@ -9,7 +9,8 @@ const lockfile = require('proper-lockfile');
 
 class StateLock {
   constructor(stateFilePath = null) {
-    this.stateFilePath = stateFilePath || path.join(__dirname, '..', 'data', 'state.json');
+    this.stateFilePath =
+      stateFilePath || path.join(__dirname, '..', 'data', 'state.json');
     this.lockFilePath = this.stateFilePath + '.lock';
     this.maxRetries = 10;
     this.retryDelay = { min: 100, max: 1000 };
@@ -26,15 +27,17 @@ class StateLock {
         retries: {
           retries: this.maxRetries,
           minTimeout: this.retryDelay.min,
-          maxTimeout: this.retryDelay.max,
+          maxTimeout: this.retryDelay.max
         },
-        stale: this.staleTimeout,
+        stale: this.staleTimeout
       });
 
       return release;
     } catch (error) {
       if (error.code === 'ELOCKED') {
-        throw new Error('State file is locked by another process. Try again in a few seconds.');
+        throw new Error(
+          'State file is locked by another process. Try again in a few seconds.'
+        );
       }
       throw new Error(`Failed to acquire state lock: ${error.message}`);
     }
@@ -263,8 +266,9 @@ module.exports = {
   writeState: state => defaultStateLock.writeState(state),
   transaction: fn => defaultStateLock.transaction(fn),
   updateTask: (taskId, updates) => defaultStateLock.updateTask(taskId, updates),
-  clearTaskAssignment: (taskId, assignee) => defaultStateLock.clearTaskAssignment(taskId, assignee),
+  clearTaskAssignment: (taskId, assignee) =>
+    defaultStateLock.clearTaskAssignment(taskId, assignee),
   assignTask: (taskId, agentId) => defaultStateLock.assignTask(taskId, agentId),
   getLockStatus: () => defaultStateLock.getLockStatus(),
-  forceUnlock: () => defaultStateLock.forceUnlock(),
+  forceUnlock: () => defaultStateLock.forceUnlock()
 };

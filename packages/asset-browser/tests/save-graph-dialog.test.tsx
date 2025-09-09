@@ -14,7 +14,14 @@ function readBlobText(blob: Blob): Promise<string> {
 }
 
 function openWith(onSaveBlob?: (blob: Blob, filename: string) => void) {
-  render(<SaveGraphDialog isOpen onClose={() => {}} graph={graphSample} onSaveBlob={onSaveBlob} />);
+  render(
+    <SaveGraphDialog
+      isOpen
+      onClose={() => {}}
+      graph={graphSample}
+      onSaveBlob={onSaveBlob}
+    />
+  );
 }
 
 describe('SaveGraphDialog', () => {

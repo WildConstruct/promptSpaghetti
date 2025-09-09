@@ -330,16 +330,16 @@ GET /api/referrer-policy/recommendations?start=2023-01-01&end=2023-12-31
 const alertingConfig = {
   criticalViolations: {
     threshold: 10, // per hour
-    severity: 'critical',
+    severity: 'critical'
   },
   blockRate: {
     threshold: 5, // percent
-    severity: 'warning',
+    severity: 'warning'
   },
   policyCompliance: {
     threshold: 95, // percent
-    severity: 'warning',
-  },
+    severity: 'warning'
+  }
 };
 ```
 
@@ -373,7 +373,7 @@ const policyPatterns = {
   api: 'origin',
 
   // Static content
-  assets: 'no-referrer-when-downgrade',
+  assets: 'no-referrer-when-downgrade'
 };
 ```
 

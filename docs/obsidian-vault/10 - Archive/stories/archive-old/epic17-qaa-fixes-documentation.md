@@ -157,7 +157,10 @@ class UploadGateway {
    * @param fileMetadata - File information and constraints
    * @param uploadOptions - Upload behavior configuration
    */
-  async initiateUpload(fileMetadata: FileMetadata, uploadOptions: UploadOptions): Promise<UploadSession> {
+  async initiateUpload(
+    fileMetadata: FileMetadata,
+    uploadOptions: UploadOptions
+  ): Promise<UploadSession> {
     // Create upload session with unique ID
     // Validate file constraints
     // Initialize chunk tracking
@@ -170,7 +173,11 @@ class UploadGateway {
    * @param chunkData - Binary chunk data
    * @param chunkIndex - Position in file
    */
-  async uploadChunk(sessionId: string, chunkData: Buffer, chunkIndex: number): Promise<ChunkUploadResult> {
+  async uploadChunk(
+    sessionId: string,
+    chunkData: Buffer,
+    chunkIndex: number
+  ): Promise<ChunkUploadResult> {
     // Validate session
     // Process chunk (validation, deduplication)
     // Update progress tracking
@@ -194,26 +201,26 @@ const UPLOAD_PROCESSING_PIPELINE: ProcessingStage[] = [
     name: 'virus_scan',
     processor: new ClamAVProcessor(),
     requirements: { cpu: 'medium', memory: 'high' },
-    parallelizable: false,
+    parallelizable: false
   },
   {
     name: 'content_validation',
     processor: new ContentValidator(),
     requirements: { cpu: 'low', memory: 'low' },
-    parallelizable: true,
+    parallelizable: true
   },
   {
     name: 'metadata_extraction',
     processor: new MetadataExtractor(),
     requirements: { cpu: 'high', memory: 'medium' },
-    parallelizable: true,
+    parallelizable: true
   },
   {
     name: 'thumbnail_generation',
     processor: new ThumbnailGenerator(),
     requirements: { cpu: 'very_high', memory: 'high' },
-    parallelizable: true,
-  },
+    parallelizable: true
+  }
 ];
 ```
 
@@ -240,7 +247,7 @@ const UPLOAD_PROCESSING_PIPELINE: ProcessingStage[] = [
        primary: 'nvme',
        replicas: ['ssd', 's3'],
        cdnEnabled: false,
-       archiveAfter: Duration.fromDays(365),
+       archiveAfter: Duration.fromDays(365)
      };
 
      // Hot content - frequently accessed
@@ -266,7 +273,10 @@ interface UploadErrorHandler {
   /**
    * Handle upload failures with automatic retry
    */
-  handleUploadError(error: UploadError, context: UploadContext): Promise<ErrorResolution>;
+  handleUploadError(
+    error: UploadError,
+    context: UploadContext
+  ): Promise<ErrorResolution>;
 
   /**
    * Cleanup failed uploads and temporary files
@@ -276,7 +286,10 @@ interface UploadErrorHandler {
   /**
    * Recover corrupted uploads using chunk checksums
    */
-  recoverCorruptedUpload(sessionId: string, corruptedChunks: number[]): Promise<RecoveryResult>;
+  recoverCorruptedUpload(
+    sessionId: string,
+    corruptedChunks: number[]
+  ): Promise<RecoveryResult>;
 }
 ```
 
@@ -360,7 +373,11 @@ class CategoryHierarchyService {
    * @param newParentId - New parent (null for root)
    * @param newPosition - Position among new siblings
    */
-  async moveCategory(categoryId: string, newParentId?: string, newPosition?: number): Promise<CategoryMoveResult> {
+  async moveCategory(
+    categoryId: string,
+    newParentId?: string,
+    newPosition?: number
+  ): Promise<CategoryMoveResult> {
     // Validate move is not creating cycle
     // Update all descendant paths
     // Recalculate content counts
@@ -374,7 +391,11 @@ class CategoryHierarchyService {
    * @param maxDepth - Limit tree depth
    * @param filters - Additional filtering criteria
    */
-  async getCategoryTree(rootId?: string, maxDepth?: number, filters?: CategoryTreeFilters): Promise<CategoryTree> {
+  async getCategoryTree(
+    rootId?: string,
+    maxDepth?: number,
+    filters?: CategoryTreeFilters
+  ): Promise<CategoryTree> {
     // Use materialized path for efficient querying
     // Apply permission filters
     // Include content counts if requested
@@ -412,6 +433,7 @@ class CategoryHierarchyService {
    ```
 
 3. **Caching Strategy**
+
    ```typescript
    interface CategoryCache {
      // Full tree cache (invalidated on any hierarchy change)

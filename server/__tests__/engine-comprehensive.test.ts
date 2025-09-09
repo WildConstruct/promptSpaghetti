@@ -18,12 +18,12 @@ jest.mock('../src/database/connection', () => ({
     prepare: jest.fn(() => ({
       run: jest.fn<unknown[], unknown>(),
       get: jest.fn<unknown[], unknown>(),
-      all: jest.fn<unknown[], unknown>(),
-    })),
-  })),
+      all: jest.fn<unknown[], unknown>()
+    }))
+  }))
 }));
 jest.mock('uuid', () => ({
-  v4: jest.fn(() => 'mock-uuid-123'),
+  v4: jest.fn(() => 'mock-uuid-123')
 }));
 
 describe('Server Execution Engine', () => {
@@ -36,10 +36,14 @@ describe('Server Execution Engine', () => {
   });
 
   // Helper function to create test nodes
-  const createNode = (id: string, type: NodeTypeEnum, data: unknown = {}): Node => ({
+  const createNode = (
+    id: string,
+    type: NodeTypeEnum,
+    data: unknown = {}
+  ): Node => ({
     id,
     type,
-    ...data,
+    ...data
   });
 
   // Helper function to create test graphs
@@ -47,7 +51,7 @@ describe('Server Execution Engine', () => {
     id: 'test-graph',
     nodes,
     edges: [],
-    seed: seed || 12345,
+    seed: seed || 12345
   });
 
   describe('Analytics Initialization', () => {
@@ -58,7 +62,7 @@ describe('Server Execution Engine', () => {
       expect(AnalyticsCollector).toHaveBeenCalledWith({
         enabled: true,
         sampleRate: 1.0,
-        privacyMode: false,
+        privacyMode: false
       });
     });
 
@@ -72,7 +76,7 @@ describe('Server Execution Engine', () => {
       expect(AnalyticsCollector).toHaveBeenCalledWith({
         enabled: false,
         sampleRate: 0.5,
-        privacyMode: true,
+        privacyMode: true
       });
     });
 
@@ -83,7 +87,10 @@ describe('Server Execution Engine', () => {
       });
 
       expect(() => initializeAnalytics()).not.toThrow();
-      expect(consoleSpy).toHaveBeenCalledWith('Failed to initialize analytics:', expect.any(Error));
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to initialize analytics:',
+        expect.any(Error)
+      );
 
       consoleSpy.mockRestore();
     });
@@ -105,10 +112,10 @@ describe('Server Execution Engine', () => {
         createNode('choice1', 'WeightedChoice', {
           choices: [
             { text: 'Option A', weight: 1 },
-            { text: 'Option B', weight: 1 },
-          ],
+            { text: 'Option B', weight: 1 }
+          ]
         }),
-        createNode('output1', 'Output', { inputs: ['choice1'] }),
+        createNode('output1', 'Output', { inputs: ['choice1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -121,7 +128,7 @@ describe('Server Execution Engine', () => {
     it('should execute concatenation node', async () => {
       const nodes = [
         createNode('concat1', 'Concat', { inputs: [] }),
-        createNode('output1', 'Output', { inputs: ['concat1'] }),
+        createNode('output1', 'Output', { inputs: ['concat1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -134,13 +141,13 @@ describe('Server Execution Engine', () => {
     it('should execute multiple output nodes in order', async () => {
       const nodes = [
         createNode('choice1', 'WeightedChoice', {
-          choices: [{ text: 'Hello', weight: 1 }],
+          choices: [{ text: 'Hello', weight: 1 }]
         }),
         createNode('choice2', 'WeightedChoice', {
-          choices: [{ text: 'World', weight: 1 }],
+          choices: [{ text: 'World', weight: 1 }]
         }),
         createNode('output1', 'Output', { inputs: ['choice1'] }),
-        createNode('output2', 'Output', { inputs: ['choice2'] }),
+        createNode('output2', 'Output', { inputs: ['choice2'] })
       ];
       const graph = createGraph(nodes);
 
@@ -155,9 +162,15 @@ describe('Server Execution Engine', () => {
   describe('Variable Handling', () => {
     it('should set and get variables', async () => {
       const nodes = [
-        createNode('setVar1', 'SetVariable', { key: 'testVar', value: 'testValue' }),
-        createNode('getVar1', 'GetVariable', { key: 'testVar', inputs: ['setVar1'] }),
-        createNode('output1', 'Output', { inputs: ['getVar1'] }),
+        createNode('setVar1', 'SetVariable', {
+          key: 'testVar',
+          value: 'testValue'
+        }),
+        createNode('getVar1', 'GetVariable', {
+          key: 'testVar',
+          inputs: ['setVar1']
+        }),
+        createNode('output1', 'Output', { inputs: ['getVar1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -171,10 +184,16 @@ describe('Server Execution Engine', () => {
       const nodes = [
         createNode('setVar1', 'SetVariable', { key: 'var1', value: 'value1' }),
         createNode('setVar2', 'SetVariable', { key: 'var2', value: 'value2' }),
-        createNode('getVar1', 'GetVariable', { key: 'var1', inputs: ['setVar1'] }),
-        createNode('getVar2', 'GetVariable', { key: 'var2', inputs: ['setVar2'] }),
+        createNode('getVar1', 'GetVariable', {
+          key: 'var1',
+          inputs: ['setVar1']
+        }),
+        createNode('getVar2', 'GetVariable', {
+          key: 'var2',
+          inputs: ['setVar2']
+        }),
         createNode('concat1', 'Concat', { inputs: ['getVar1', 'getVar2'] }),
-        createNode('output1', 'Output', { inputs: ['concat1'] }),
+        createNode('output1', 'Output', { inputs: ['concat1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -191,9 +210,9 @@ describe('Server Execution Engine', () => {
       const nodes = [
         createNode('weightedAdv1', 'WeightedAdvanced', {
           choices: [{ text: 'Advanced Option', weight: 1 }],
-          distributionConfig: { type: 'linear', normalize: true },
+          distributionConfig: { type: 'linear', normalize: true }
         }),
-        createNode('output1', 'Output', { inputs: ['weightedAdv1'] }),
+        createNode('output1', 'Output', { inputs: ['weightedAdv1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -210,10 +229,10 @@ describe('Server Execution Engine', () => {
           defaultOutput: 'Default output',
           conditionalConfig: {
             allowUnknownFunctions: false,
-            maxExpressionLength: 1000,
-          },
+            maxExpressionLength: 1000
+          }
         }),
-        createNode('output1', 'Output', { inputs: ['conditional1'] }),
+        createNode('output1', 'Output', { inputs: ['conditional1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -227,9 +246,9 @@ describe('Server Execution Engine', () => {
       const nodes = [
         createNode('sequential1', 'Sequential', {
           sequence: ['First', 'Second', 'Third'],
-          pattern: { type: 'linear', config: {} },
+          pattern: { type: 'linear', config: {} }
         }),
-        createNode('output1', 'Output', { inputs: ['sequential1'] }),
+        createNode('output1', 'Output', { inputs: ['sequential1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -245,12 +264,12 @@ describe('Server Execution Engine', () => {
           states: ['state1', 'state2'],
           transitions: {
             state1: { state2: 1.0 },
-            state2: { state1: 1.0 },
+            state2: { state1: 1.0 }
           },
           initialState: 'state1',
-          markovConfig: {},
+          markovConfig: {}
         }),
-        createNode('output1', 'Output', { inputs: ['markov1'] }),
+        createNode('output1', 'Output', { inputs: ['markov1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -261,7 +280,10 @@ describe('Server Execution Engine', () => {
     });
 
     it('should handle Markov nodes with empty configuration', async () => {
-      const nodes = [createNode('markov1', 'Markov', {}), createNode('output1', 'Output', { inputs: ['markov1'] })];
+      const nodes = [
+        createNode('markov1', 'Markov', {}),
+        createNode('output1', 'Output', { inputs: ['markov1'] })
+      ];
       const graph = createGraph(nodes);
 
       const result = await executeGraph(graph);
@@ -273,40 +295,51 @@ describe('Server Execution Engine', () => {
 
   describe('Error Handling', () => {
     it('should throw error for missing node', async () => {
-      const nodes = [createNode('output1', 'Output', { inputs: ['nonexistent'] })];
+      const nodes = [
+        createNode('output1', 'Output', { inputs: ['nonexistent'] })
+      ];
       const graph = createGraph(nodes);
 
-      await expect(executeGraph(graph)).rejects.toThrow('Node nonexistent not found');
+      await expect(executeGraph(graph)).rejects.toThrow(
+        'Node nonexistent not found'
+      );
     });
 
     it('should throw error for unsupported node type', async () => {
       const nodes = [
         createNode('unknown1', 'UnknownType' as NodeTypeEnum, {}),
-        createNode('output1', 'Output', { inputs: ['unknown1'] }),
+        createNode('output1', 'Output', { inputs: ['unknown1'] })
       ];
       const graph = createGraph(nodes);
 
-      await expect(executeGraph(graph)).rejects.toThrow('Unsupported node type UnknownType');
+      await expect(executeGraph(graph)).rejects.toThrow(
+        'Unsupported node type UnknownType'
+      );
     });
 
     it('should handle PythonTransform node error', async () => {
       const nodes = [
         createNode('python1', 'PythonTransform', {}),
-        createNode('output1', 'Output', { inputs: ['python1'] }),
+        createNode('output1', 'Output', { inputs: ['python1'] })
       ];
       const graph = createGraph(nodes);
 
-      await expect(executeGraph(graph)).rejects.toThrow('PythonTransform node is not yet implemented');
+      await expect(executeGraph(graph)).rejects.toThrow(
+        'PythonTransform node is not yet implemented'
+      );
     });
 
     it('should record failed executions in analytics', async () => {
       initializeAnalytics();
       const mockAnalyticsCollector = AnalyticsCollector.prototype;
-      const mockRecordError = jest.spyOn(mockAnalyticsCollector, 'recordGraphExecutionError');
+      const mockRecordError = jest.spyOn(
+        mockAnalyticsCollector,
+        'recordGraphExecutionError'
+      );
 
       const nodes = [
         createNode('unknown1', 'UnknownType' as NodeTypeEnum, {}),
-        createNode('output1', 'Output', { inputs: ['unknown1'] }),
+        createNode('output1', 'Output', { inputs: ['unknown1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -328,10 +361,10 @@ describe('Server Execution Engine', () => {
           choices: [
             { text: 'A', weight: 1 },
             { text: 'B', weight: 1 },
-            { text: 'C', weight: 1 },
-          ],
+            { text: 'C', weight: 1 }
+          ]
         }),
-        createNode('output1', 'Output', { inputs: ['choice1'] }),
+        createNode('output1', 'Output', { inputs: ['choice1'] })
       ];
       const graph = createGraph(nodes, 42);
 
@@ -347,10 +380,10 @@ describe('Server Execution Engine', () => {
           choices: [
             { text: 'A', weight: 1 },
             { text: 'B', weight: 1 },
-            { text: 'C', weight: 1 },
-          ],
+            { text: 'C', weight: 1 }
+          ]
         }),
-        createNode('output1', 'Output', { inputs: ['choice1'] }),
+        createNode('output1', 'Output', { inputs: ['choice1'] })
       ];
 
       const graph1 = createGraph(nodes, 42);
@@ -373,8 +406,14 @@ describe('Server Execution Engine', () => {
 
     it('should record graph execution start and complete', async () => {
       const mockAnalyticsCollector = AnalyticsCollector.prototype;
-      const mockRecordStart = jest.spyOn(mockAnalyticsCollector, 'recordGraphExecutionStart');
-      const mockRecordComplete = jest.spyOn(mockAnalyticsCollector, 'recordGraphExecutionComplete');
+      const mockRecordStart = jest.spyOn(
+        mockAnalyticsCollector,
+        'recordGraphExecutionStart'
+      );
+      const mockRecordComplete = jest.spyOn(
+        mockAnalyticsCollector,
+        'recordGraphExecutionComplete'
+      );
 
       const nodes = [createNode('output1', 'Output', { inputs: [] })];
       const graph = createGraph(nodes);
@@ -400,13 +439,16 @@ describe('Server Execution Engine', () => {
     it('should record node execution events', async () => {
       const mockAnalyticsCollector = AnalyticsCollector.prototype;
       const mockRecordEvent = jest.spyOn(mockAnalyticsCollector, 'recordEvent');
-      const mockRecordNodeExecution = jest.spyOn(mockAnalyticsCollector, 'recordNodeExecution');
+      const mockRecordNodeExecution = jest.spyOn(
+        mockAnalyticsCollector,
+        'recordNodeExecution'
+      );
 
       const nodes = [
         createNode('choice1', 'WeightedChoice', {
-          choices: [{ text: 'Test', weight: 1 }],
+          choices: [{ text: 'Test', weight: 1 }]
         }),
-        createNode('output1', 'Output', { inputs: ['choice1'] }),
+        createNode('output1', 'Output', { inputs: ['choice1'] })
       ];
       const graph = createGraph(nodes);
 
@@ -418,8 +460,8 @@ describe('Server Execution Engine', () => {
           type: 'NODE_EXECUTION_START',
           metadata: expect.objectContaining({
             nodeType: 'WeightedChoice',
-            graphId: 'test-graph',
-          }),
+            graphId: 'test-graph'
+          })
         })
       );
 
@@ -437,7 +479,10 @@ describe('Server Execution Engine', () => {
 
     it('should store execution records in database', async () => {
       const mockAnalyticsDAO = AnalyticsDAO.prototype;
-      const mockStoreExecution = jest.spyOn(mockAnalyticsDAO, 'storeGraphExecution');
+      const mockStoreExecution = jest.spyOn(
+        mockAnalyticsDAO,
+        'storeGraphExecution'
+      );
 
       const nodes = [createNode('output1', 'Output', { inputs: [] })];
       const graph = createGraph(nodes);
@@ -453,7 +498,7 @@ describe('Server Execution Engine', () => {
           success: true,
           nodeCount: 1,
           connectionCount: 0,
-          seedValue: 12345,
+          seedValue: 12345
         })
       );
     });
@@ -468,7 +513,7 @@ describe('Server Execution Engine', () => {
       for (let i = 0; i < 50; i++) {
         nodes.push(
           createNode(`choice${i}`, 'WeightedChoice', {
-            choices: [{ text: `Choice ${i}`, weight: 1 }],
+            choices: [{ text: `Choice ${i}`, weight: 1 }]
           })
         );
       }
@@ -477,7 +522,7 @@ describe('Server Execution Engine', () => {
       for (let i = 0; i < 25; i++) {
         nodes.push(
           createNode(`concat${i}`, 'Concat', {
-            inputs: [`choice${i * 2}`, `choice${i * 2 + 1}`],
+            inputs: [`choice${i * 2}`, `choice${i * 2 + 1}`]
           })
         );
       }
@@ -502,19 +547,21 @@ describe('Server Execution Engine', () => {
 
       nodes.push(
         createNode('start', 'WeightedChoice', {
-          choices: [{ text: 'Start', weight: 1 }],
+          choices: [{ text: 'Start', weight: 1 }]
         })
       );
 
       for (let i = 1; i < depth; i++) {
         nodes.push(
           createNode(`node${i}`, 'Concat', {
-            inputs: [i === 1 ? 'start' : `node${i - 1}`],
+            inputs: [i === 1 ? 'start' : `node${i - 1}`]
           })
         );
       }
 
-      nodes.push(createNode('output1', 'Output', { inputs: [`node${depth - 1}`] }));
+      nodes.push(
+        createNode('output1', 'Output', { inputs: [`node${depth - 1}`] })
+      );
 
       const graph = createGraph(nodes);
 
@@ -532,12 +579,12 @@ describe('Server Execution Engine', () => {
       // Create a diamond-shaped graph where one node is referenced by multiple others
       const nodes = [
         createNode('shared', 'WeightedChoice', {
-          choices: [{ text: 'Shared Value', weight: 1 }],
+          choices: [{ text: 'Shared Value', weight: 1 }]
         }),
         createNode('branch1', 'Concat', { inputs: ['shared'] }),
         createNode('branch2', 'Concat', { inputs: ['shared'] }),
         createNode('merge', 'Concat', { inputs: ['branch1', 'branch2'] }),
-        createNode('output1', 'Output', { inputs: ['merge'] }),
+        createNode('output1', 'Output', { inputs: ['merge'] })
       ];
       const graph = createGraph(nodes);
 
@@ -563,7 +610,10 @@ describe('Server Execution Engine', () => {
     it('should track session and user ID when provided', async () => {
       initializeAnalytics();
       const mockAnalyticsDAO = AnalyticsDAO.prototype;
-      const mockStoreExecution = jest.spyOn(mockAnalyticsDAO, 'storeGraphExecution');
+      const mockStoreExecution = jest.spyOn(
+        mockAnalyticsDAO,
+        'storeGraphExecution'
+      );
 
       const nodes = [createNode('output1', 'Output', { inputs: [] })];
       const graph = createGraph(nodes);
@@ -573,7 +623,7 @@ describe('Server Execution Engine', () => {
       expect(mockStoreExecution).toHaveBeenCalledWith(
         expect.objectContaining({
           sessionId: 'test-session-789',
-          userId: 123,
+          userId: 123
         })
       );
     });
@@ -581,7 +631,10 @@ describe('Server Execution Engine', () => {
     it('should generate session ID when not provided', async () => {
       initializeAnalytics();
       const mockAnalyticsDAO = AnalyticsDAO.prototype;
-      const mockStoreExecution = jest.spyOn(mockAnalyticsDAO, 'storeGraphExecution');
+      const mockStoreExecution = jest.spyOn(
+        mockAnalyticsDAO,
+        'storeGraphExecution'
+      );
 
       const nodes = [createNode('output1', 'Output', { inputs: [] })];
       const graph = createGraph(nodes);
@@ -591,7 +644,7 @@ describe('Server Execution Engine', () => {
       expect(mockStoreExecution).toHaveBeenCalledWith(
         expect.objectContaining({
           sessionId: 'mock-uuid-123',
-          userId: 123,
+          userId: 123
         })
       );
     });

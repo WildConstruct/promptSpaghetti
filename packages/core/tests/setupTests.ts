@@ -1,5 +1,8 @@
 import '@testing-library/jest-dom';
-import { TextDecoder as NodeTextDecoder, TextEncoder as NodeTextEncoder } from 'util';
+import {
+  TextDecoder as NodeTextDecoder,
+  TextEncoder as NodeTextEncoder
+} from 'util';
 
 // Add OpenAI Node.js shim for tests
 import 'openai/shims/node';
@@ -10,7 +13,7 @@ global.fetch = jest.fn(() =>
     json: () => Promise.resolve({}),
     text: () => Promise.resolve(''),
     ok: true,
-    status: 200,
+    status: 200
   } as Response)
 );
 
@@ -24,7 +27,7 @@ if (!HTMLElement.prototype.scrollIntoView) {
   Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
     value: function () {},
     writable: true,
-    configurable: true,
+    configurable: true
   });
 }
 

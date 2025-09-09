@@ -29,15 +29,21 @@ class AuthFlowTests {
       email: `test${user.id}_${Date.now()}@example.com`,
       password: 'TestPassword123!',
       name: `Test User ${user.id}`,
-      acceptedTerms: true,
+      acceptedTerms: true
     };
 
     try {
       // 1. Attempt to register a new user
-      const registerResponse = await user.executeRequest('POST', '/auth/register', testUser);
+      const registerResponse = await user.executeRequest(
+        'POST',
+        '/auth/register',
+        testUser
+      );
 
       if (registerResponse.statusCode !== 201) {
-        console.log(`⚠️  Registration failed for user ${user.id}: ${registerResponse.statusCode}`);
+        console.log(
+          `⚠️  Registration failed for user ${user.id}: ${registerResponse.statusCode}`
+        );
         return false;
       }
 
@@ -46,7 +52,10 @@ class AuthFlowTests {
       user.sessionData.token = registerResponse.data.token;
 
       // Set auth header for subsequent requests
-      user.client.setHeader('Authorization', `Bearer ${user.sessionData.token}`);
+      user.client.setHeader(
+        'Authorization',
+        `Bearer ${user.sessionData.token}`
+      );
 
       await user.thinkTime();
 
@@ -54,7 +63,9 @@ class AuthFlowTests {
       const profileResponse = await user.executeRequest('GET', '/auth/profile');
 
       if (profileResponse.statusCode !== 200) {
-        console.log(`⚠️  Profile verification failed for user ${user.id}: ${profileResponse.statusCode}`);
+        console.log(
+          `⚠️  Profile verification failed for user ${user.id}: ${profileResponse.statusCode}`
+        );
         return false;
       }
 
@@ -65,19 +76,28 @@ class AuthFlowTests {
         name: `${testUser.name} Updated`,
         preferences: {
           theme: 'dark',
-          notifications: true,
-        },
+          notifications: true
+        }
       };
 
-      const updateResponse = await user.executeRequest('PUT', '/auth/profile', updateData);
+      const updateResponse = await user.executeRequest(
+        'PUT',
+        '/auth/profile',
+        updateData
+      );
 
       if (updateResponse.statusCode !== 200) {
-        console.log(`⚠️  Profile update failed for user ${user.id}: ${updateResponse.statusCode}`);
+        console.log(
+          `⚠️  Profile update failed for user ${user.id}: ${updateResponse.statusCode}`
+        );
       }
 
       return true;
     } catch (error) {
-      console.error(`❌ Registration flow error for user ${user.id}:`, error.message || error);
+      console.error(
+        `❌ Registration flow error for user ${user.id}:`,
+        error.message || error
+      );
       return false;
     }
   }
@@ -89,15 +109,21 @@ class AuthFlowTests {
     // Use provided credentials or create test credentials
     const credentials = user.userCredentials || {
       email: 'testuser@example.com',
-      password: 'TestPassword123!',
+      password: 'TestPassword123!'
     };
 
     try {
       // 1. Attempt login
-      const loginResponse = await user.executeRequest('POST', '/auth/login', credentials);
+      const loginResponse = await user.executeRequest(
+        'POST',
+        '/auth/login',
+        credentials
+      );
 
       if (loginResponse.statusCode !== 200) {
-        console.log(`⚠️  Login failed for user ${user.id}: ${loginResponse.statusCode}`);
+        console.log(
+          `⚠️  Login failed for user ${user.id}: ${loginResponse.statusCode}`
+        );
 
         // If login fails with test credentials, try registration first
         if (!user.userCredentials) {
@@ -111,7 +137,10 @@ class AuthFlowTests {
       user.sessionData.userId = loginResponse.data.user?.id;
 
       // Set auth header for subsequent requests
-      user.client.setHeader('Authorization', `Bearer ${user.sessionData.token}`);
+      user.client.setHeader(
+        'Authorization',
+        `Bearer ${user.sessionData.token}`
+      );
 
       await user.thinkTime();
 
@@ -119,7 +148,9 @@ class AuthFlowTests {
       const profileResponse = await user.executeRequest('GET', '/auth/profile');
 
       if (profileResponse.statusCode !== 200) {
-        console.log(`⚠️  Token validation failed for user ${user.id}: ${profileResponse.statusCode}`);
+        console.log(
+          `⚠️  Token validation failed for user ${user.id}: ${profileResponse.statusCode}`
+        );
         return false;
       }
 
@@ -127,13 +158,20 @@ class AuthFlowTests {
 
       // 3. Test token refresh (simulate token expiration scenario)
       if (user.sessionData.refreshToken) {
-        const refreshResponse = await user.executeRequest('POST', '/auth/refresh', {
-          refreshToken: user.sessionData.refreshToken,
-        });
+        const refreshResponse = await user.executeRequest(
+          'POST',
+          '/auth/refresh',
+          {
+            refreshToken: user.sessionData.refreshToken
+          }
+        );
 
         if (refreshResponse.statusCode === 200) {
           user.sessionData.token = refreshResponse.data.token;
-          user.client.setHeader('Authorization', `Bearer ${user.sessionData.token}`);
+          user.client.setHeader(
+            'Authorization',
+            `Bearer ${user.sessionData.token}`
+          );
         }
       }
 
@@ -149,7 +187,10 @@ class AuthFlowTests {
 
       return true;
     } catch (error) {
-      console.error(`❌ Login flow error for user ${user.id}:`, error.message || error);
+      console.error(
+        `❌ Login flow error for user ${user.id}:`,
+        error.message || error
+      );
       return false;
     }
   }
@@ -162,12 +203,18 @@ class AuthFlowTests {
 
     try {
       // 1. Request password reset
-      const resetRequestResponse = await user.executeRequest('POST', '/auth/forgot-password', {
-        email: testEmail,
-      });
+      const resetRequestResponse = await user.executeRequest(
+        'POST',
+        '/auth/forgot-password',
+        {
+          email: testEmail
+        }
+      );
 
       if (resetRequestResponse.statusCode !== 200) {
-        console.log(`⚠️  Password reset request failed for user ${user.id}: ${resetRequestResponse.statusCode}`);
+        console.log(
+          `⚠️  Password reset request failed for user ${user.id}: ${resetRequestResponse.statusCode}`
+        );
         return false;
       }
 
@@ -175,9 +222,13 @@ class AuthFlowTests {
 
       // 2. Simulate checking reset token validation (would normally come from email)
       // This would require a mock token or test endpoint in a real scenario
-      const mockResetToken = 'test-reset-token-' + crypto.randomBytes(16).toString('hex');
+      const mockResetToken =
+        'test-reset-token-' + crypto.randomBytes(16).toString('hex');
 
-      const validateTokenResponse = await user.executeRequest('GET', `/auth/reset-password?token=${mockResetToken}`);
+      const validateTokenResponse = await user.executeRequest(
+        'GET',
+        `/auth/reset-password?token=${mockResetToken}`
+      );
 
       // Token validation might fail in load testing, which is expected
       // We're testing the endpoint's ability to handle requests
@@ -186,16 +237,23 @@ class AuthFlowTests {
 
       // 3. Attempt password reset completion (would normally require valid token)
       const newPassword = 'NewTestPassword123!';
-      const resetCompleteResponse = await user.executeRequest('POST', '/auth/reset-password', {
-        token: mockResetToken,
-        password: newPassword,
-        confirmPassword: newPassword,
-      });
+      const resetCompleteResponse = await user.executeRequest(
+        'POST',
+        '/auth/reset-password',
+        {
+          token: mockResetToken,
+          password: newPassword,
+          confirmPassword: newPassword
+        }
+      );
 
       // Reset completion might fail with mock token, which is expected in load testing
       return true;
     } catch (error) {
-      console.error(`❌ Password reset flow error for user ${user.id}:`, error.message || error);
+      console.error(
+        `❌ Password reset flow error for user ${user.id}:`,
+        error.message || error
+      );
       return false;
     }
   }
@@ -207,10 +265,15 @@ class AuthFlowTests {
     try {
       // 1. Get OAuth authorization URL
       const provider = 'google'; // Test with Google OAuth
-      const authUrlResponse = await user.executeRequest('GET', `/auth/oauth/${provider}/authorize`);
+      const authUrlResponse = await user.executeRequest(
+        'GET',
+        `/auth/oauth/${provider}/authorize`
+      );
 
       if (authUrlResponse.statusCode !== 200) {
-        console.log(`⚠️  OAuth authorization URL failed for user ${user.id}: ${authUrlResponse.statusCode}`);
+        console.log(
+          `⚠️  OAuth authorization URL failed for user ${user.id}: ${authUrlResponse.statusCode}`
+        );
         return false;
       }
 
@@ -218,7 +281,8 @@ class AuthFlowTests {
 
       // 2. Simulate OAuth callback (would normally come from OAuth provider)
       // In load testing, we simulate the callback with mock data
-      const mockAuthCode = 'mock-auth-code-' + crypto.randomBytes(16).toString('hex');
+      const mockAuthCode =
+        'mock-auth-code-' + crypto.randomBytes(16).toString('hex');
       const mockState = crypto.randomBytes(16).toString('hex');
 
       const callbackResponse = await user.executeRequest(
@@ -232,12 +296,18 @@ class AuthFlowTests {
       await user.thinkTime();
 
       // 3. Test OAuth user info endpoint
-      const userInfoResponse = await user.executeRequest('GET', `/auth/oauth/${provider}/userinfo`);
+      const userInfoResponse = await user.executeRequest(
+        'GET',
+        `/auth/oauth/${provider}/userinfo`
+      );
 
       // UserInfo might require valid OAuth token, expected to fail in load testing
       return true;
     } catch (error) {
-      console.error(`❌ OAuth flow error for user ${user.id}:`, error.message || error);
+      console.error(
+        `❌ OAuth flow error for user ${user.id}:`,
+        error.message || error
+      );
       return false;
     }
   }
@@ -257,20 +327,29 @@ class AuthFlowTests {
       const sessionResponse = await user.executeRequest('GET', '/auth/session');
 
       if (sessionResponse.statusCode !== 200) {
-        console.log(`⚠️  Session validation failed for user ${user.id}: ${sessionResponse.statusCode}`);
+        console.log(
+          `⚠️  Session validation failed for user ${user.id}: ${sessionResponse.statusCode}`
+        );
       }
 
       await user.thinkTime();
 
       // 3. Test session refresh
       if (user.sessionData.refreshToken) {
-        const refreshResponse = await user.executeRequest('POST', '/auth/session/refresh', {
-          refreshToken: user.sessionData.refreshToken,
-        });
+        const refreshResponse = await user.executeRequest(
+          'POST',
+          '/auth/session/refresh',
+          {
+            refreshToken: user.sessionData.refreshToken
+          }
+        );
 
         if (refreshResponse.statusCode === 200) {
           user.sessionData.token = refreshResponse.data.token;
-          user.client.setHeader('Authorization', `Bearer ${user.sessionData.token}`);
+          user.client.setHeader(
+            'Authorization',
+            `Bearer ${user.sessionData.token}`
+          );
         }
       }
 
@@ -285,7 +364,10 @@ class AuthFlowTests {
 
       return true;
     } catch (error) {
-      console.error(`❌ Session management error for user ${user.id}:`, error.message || error);
+      console.error(
+        `❌ Session management error for user ${user.id}:`,
+        error.message || error
+      );
       return false;
     }
   }
@@ -299,7 +381,7 @@ class AuthFlowTests {
       login: false,
       passwordReset: false,
       oauth: false,
-      sessionManagement: false,
+      sessionManagement: false
     };
 
     try {
@@ -309,7 +391,8 @@ class AuthFlowTests {
       switch (testPattern) {
         case 0:
           // Registration + Login flow
-          flowResults.registration = await AuthFlowTests.registrationFlowTest(user);
+          flowResults.registration =
+            await AuthFlowTests.registrationFlowTest(user);
           await user.thinkTime();
           flowResults.login = await AuthFlowTests.loginFlowTest(user);
           break;
@@ -318,12 +401,14 @@ class AuthFlowTests {
           // Login + Session Management flow
           flowResults.login = await AuthFlowTests.loginFlowTest(user);
           await user.thinkTime();
-          flowResults.sessionManagement = await AuthFlowTests.sessionManagementTest(user);
+          flowResults.sessionManagement =
+            await AuthFlowTests.sessionManagementTest(user);
           break;
 
         case 2:
           // Password Reset flow
-          flowResults.passwordReset = await AuthFlowTests.passwordResetFlowTest(user);
+          flowResults.passwordReset =
+            await AuthFlowTests.passwordResetFlowTest(user);
           await user.thinkTime();
           flowResults.login = await AuthFlowTests.loginFlowTest(user);
           break;
@@ -337,11 +422,13 @@ class AuthFlowTests {
 
         case 4:
           // Full flow test
-          flowResults.registration = await AuthFlowTests.registrationFlowTest(user);
+          flowResults.registration =
+            await AuthFlowTests.registrationFlowTest(user);
           await user.thinkTime();
           flowResults.login = await AuthFlowTests.loginFlowTest(user);
           await user.thinkTime();
-          flowResults.sessionManagement = await AuthFlowTests.sessionManagementTest(user);
+          flowResults.sessionManagement =
+            await AuthFlowTests.sessionManagementTest(user);
           break;
       }
 
@@ -349,7 +436,10 @@ class AuthFlowTests {
       user.sessionData.flowResults = flowResults;
       return true;
     } catch (error) {
-      console.error(`❌ Comprehensive auth test error for user ${user.id}:`, error.message || error);
+      console.error(
+        `❌ Comprehensive auth test error for user ${user.id}:`,
+        error.message || error
+      );
       return false;
     }
   }
@@ -371,9 +461,9 @@ async function runAuthLoadTests() {
         concurrency: 5,
         duration: 30000, // 30 seconds
         rampUpTime: 5000, // 5 seconds
-        thinkTime: { min: 500, max: 2000 },
+        thinkTime: { min: 500, max: 2000 }
       }),
-      scenario: AuthFlowTests.loginFlowTest,
+      scenario: AuthFlowTests.loginFlowTest
     },
     {
       name: 'Registration Flow - Medium Load',
@@ -382,9 +472,9 @@ async function runAuthLoadTests() {
         concurrency: 10,
         duration: 45000, // 45 seconds
         rampUpTime: 10000, // 10 seconds
-        thinkTime: { min: 1000, max: 3000 },
+        thinkTime: { min: 1000, max: 3000 }
       }),
-      scenario: AuthFlowTests.registrationFlowTest,
+      scenario: AuthFlowTests.registrationFlowTest
     },
     {
       name: 'Comprehensive Auth Flow - Heavy Load',
@@ -399,11 +489,11 @@ async function runAuthLoadTests() {
           { email: 'user2@example.com', password: 'TestPass123!' },
           { email: 'user3@example.com', password: 'TestPass123!' },
           { email: 'user4@example.com', password: 'TestPass123!' },
-          { email: 'user5@example.com', password: 'TestPass123!' },
-        ],
+          { email: 'user5@example.com', password: 'TestPass123!' }
+        ]
       }),
-      scenario: AuthFlowTests.comprehensiveAuthTest,
-    },
+      scenario: AuthFlowTests.comprehensiveAuthTest
+    }
   ];
 
   const allResults = [];
@@ -413,7 +503,10 @@ async function runAuthLoadTests() {
     console.log('─'.repeat(50));
 
     const runner = new LoadTestRunner(testConfig.config);
-    const results = await runner.runLoadTest(testConfig.scenario, testConfig.name);
+    const results = await runner.runLoadTest(
+      testConfig.scenario,
+      testConfig.name
+    );
 
     // Export results
     const filename = `auth-load-test-${testConfig.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.json`;
@@ -422,7 +515,7 @@ async function runAuthLoadTests() {
     allResults.push({
       testName: testConfig.name,
       results,
-      filename,
+      filename
     });
 
     // Pause between tests
@@ -440,9 +533,15 @@ async function runAuthLoadTests() {
     const { testName, results } = testResult;
     console.log(`\n${index + 1}. ${testName}:`);
     console.log(`   📈 Total Requests: ${results.global.totalRequests}`);
-    console.log(`   ✅ Success Rate: ${results.global.successRate.toFixed(1)}%`);
-    console.log(`   ⚡ Requests/sec: ${results.global.requestsPerSecond.toFixed(2)}`);
-    console.log(`   ⏱️  Avg Response: ${results.global.averageResponseTime.toFixed(0)}ms`);
+    console.log(
+      `   ✅ Success Rate: ${results.global.successRate.toFixed(1)}%`
+    );
+    console.log(
+      `   ⚡ Requests/sec: ${results.global.requestsPerSecond.toFixed(2)}`
+    );
+    console.log(
+      `   ⏱️  Avg Response: ${results.global.averageResponseTime.toFixed(0)}ms`
+    );
     console.log(`   📁 Report: ${testResult.filename}`);
   });
 
@@ -456,5 +555,5 @@ if (require.main === module) {
 
 module.exports = {
   AuthFlowTests,
-  runAuthLoadTests,
+  runAuthLoadTests
 };

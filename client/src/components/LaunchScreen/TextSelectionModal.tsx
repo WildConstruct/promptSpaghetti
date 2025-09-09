@@ -17,19 +17,19 @@ interface TextSelectionModalProps {
 
 const NODE_TYPES = [
   { value: 'text', label: 'Text Block' },
-  { value: 'choice', label: 'Weighted Choice' },
+  { value: 'choice', label: 'Weighted Choice' }
   // { value: 'variable', label: 'Variable' }, // hidden for initial release
 ];
 
 const SWATCH_COLORS = [
   '#FF6B6B', // Red
-  '#4ECDC4', // Teal  
+  '#4ECDC4', // Teal
   '#45B7D1', // Blue
   '#96CEB4', // Green
   '#FFEAA7', // Yellow
   '#DDA0DD', // Plum
   '#FFB347', // Orange
-  '#B19CD9', // Purple
+  '#B19CD9' // Purple
 ];
 
 export const TextSelectionModal: React.FC<TextSelectionModalProps> = ({
@@ -37,7 +37,7 @@ export const TextSelectionModal: React.FC<TextSelectionModalProps> = ({
   selection,
   onConfirm,
   onCancel,
-  showWarning = false,
+  showWarning = false
 }) => {
   const [nodeType, setNodeType] = useState('text');
   const [selectedColor, setSelectedColor] = useState(SWATCH_COLORS[0]);
@@ -51,11 +51,11 @@ export const TextSelectionModal: React.FC<TextSelectionModalProps> = ({
 
   return (
     <div className="selection-modal-overlay" onClick={onCancel}>
-      <div className="selection-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="selection-modal" onClick={e => e.stopPropagation()}>
         <div className="selection-modal-header">
           <h3>Create Node from Selection</h3>
           {!isAdvanced && (
-            <button 
+            <button
               className="mode-toggle"
               onClick={() => setIsAdvanced(true)}
               title="Advanced options"
@@ -75,9 +75,9 @@ export const TextSelectionModal: React.FC<TextSelectionModalProps> = ({
           {/* Node type selector */}
           <div className="node-type-selector">
             <label>Node Type:</label>
-            <select 
-              value={nodeType} 
-              onChange={(e) => setNodeType(e.target.value)}
+            <select
+              value={nodeType}
+              onChange={e => setNodeType(e.target.value)}
             >
               {NODE_TYPES.map(type => (
                 <option key={type.value} value={type.value}>
@@ -91,7 +91,7 @@ export const TextSelectionModal: React.FC<TextSelectionModalProps> = ({
           <div className="color-selector">
             <label>Highlight Color:</label>
             <div className="color-swatches">
-              {SWATCH_COLORS.map((color) => (
+              {SWATCH_COLORS.map(color => (
                 <button
                   key={color}
                   className={`color-swatch ${selectedColor === color ? 'selected' : ''}`}

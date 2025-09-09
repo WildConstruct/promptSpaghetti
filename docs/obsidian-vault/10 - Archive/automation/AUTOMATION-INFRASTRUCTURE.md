@@ -73,7 +73,7 @@ await stateLock.transaction(state => {
 const { getLogger } = require('./utils/AutomationLogger');
 const logger = getLogger('my-script', {
   logLevel: 'info',
-  enableLogging: true,
+  enableLogging: true
 });
 
 logger.start('Operation started');
@@ -166,7 +166,7 @@ node src/create-epic-batch-manager.js --epic-range="18-21" --priority=high --dry
 ```javascript
 const EPIC_METADATA = {
   18: { title: 'Security Vulnerability Assessment', category: 'security' },
-  20: { title: 'Authentication System', category: 'auth' },
+  20: { title: 'Authentication System', category: 'auth' }
   // ... all epics defined
 };
 ```

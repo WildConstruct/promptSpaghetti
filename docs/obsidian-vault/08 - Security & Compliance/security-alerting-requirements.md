@@ -35,7 +35,7 @@ enum AlertSeverity {
   HIGH = 'high', // Urgent response needed (< 15 minutes)
   MEDIUM = 'medium', // Response required (< 1 hour)
   LOW = 'low', // Monitoring required (< 4 hours)
-  INFO = 'info', // Informational only
+  INFO = 'info' // Informational only
 }
 ```
 
@@ -221,26 +221,32 @@ const ALERT_SOURCES: AlertSource[] = [
       SecurityEventType.SECURITY_ALERT,
       SecurityEventType.ACCOUNT_LOCKED,
       SecurityEventType.EMERGENCY_UNLOCK,
-      SecurityEventType.POLICY_VIOLATION,
+      SecurityEventType.POLICY_VIOLATION
     ],
     processingLatency: 100,
     reliability: 0.98,
-    criticality: AlertSeverity.CRITICAL,
+    criticality: AlertSeverity.CRITICAL
   },
   {
     source: 'BehaviorAnalyzer',
-    eventTypes: [SecurityEventType.SUSPICIOUS_ACTIVITY, SecurityEventType.INSIDER_THREAT],
+    eventTypes: [
+      SecurityEventType.SUSPICIOUS_ACTIVITY,
+      SecurityEventType.INSIDER_THREAT
+    ],
     processingLatency: 500,
     reliability: 0.85,
-    criticality: AlertSeverity.HIGH,
+    criticality: AlertSeverity.HIGH
   },
   {
     source: 'NetworkMonitor',
-    eventTypes: [SecurityEventType.NETWORK_ANOMALY, SecurityEventType.MALICIOUS_TRAFFIC],
+    eventTypes: [
+      SecurityEventType.NETWORK_ANOMALY,
+      SecurityEventType.MALICIOUS_TRAFFIC
+    ],
     processingLatency: 200,
     reliability: 0.92,
-    criticality: AlertSeverity.MEDIUM,
-  },
+    criticality: AlertSeverity.MEDIUM
+  }
 ];
 ```
 
@@ -264,7 +270,7 @@ const ALERT_THRESHOLDS: AlertThreshold[] = [
     value: 50, // per minute
     timeWindow: 60,
     consecutiveViolations: 2,
-    severity: AlertSeverity.HIGH,
+    severity: AlertSeverity.HIGH
   },
   {
     metric: 'account_lockouts_per_hour',
@@ -272,7 +278,7 @@ const ALERT_THRESHOLDS: AlertThreshold[] = [
     value: 10,
     timeWindow: 3600,
     consecutiveViolations: 1,
-    severity: AlertSeverity.MEDIUM,
+    severity: AlertSeverity.MEDIUM
   },
 
   // System Health Thresholds
@@ -282,7 +288,7 @@ const ALERT_THRESHOLDS: AlertThreshold[] = [
     value: 70,
     timeWindow: 300,
     consecutiveViolations: 3,
-    severity: AlertSeverity.HIGH,
+    severity: AlertSeverity.HIGH
   },
   {
     metric: 'threat_pattern_count',
@@ -290,7 +296,7 @@ const ALERT_THRESHOLDS: AlertThreshold[] = [
     value: 5,
     timeWindow: 3600,
     consecutiveViolations: 1,
-    severity: AlertSeverity.CRITICAL,
+    severity: AlertSeverity.CRITICAL
   },
 
   // Data Protection Thresholds
@@ -300,8 +306,8 @@ const ALERT_THRESHOLDS: AlertThreshold[] = [
     value: 200, // % above baseline
     timeWindow: 1800,
     consecutiveViolations: 2,
-    severity: AlertSeverity.HIGH,
-  },
+    severity: AlertSeverity.HIGH
+  }
 ];
 ```
 
@@ -326,25 +332,29 @@ const ALERT_PATTERNS: AlertPattern[] = [
     conditions: [
       { field: 'event_type', operator: 'eq', value: 'failed_login' },
       { field: 'source_ip', operator: 'eq', value: '{grouped_ip}' },
-      { field: 'user_count', operator: 'gt', value: 10 },
+      { field: 'user_count', operator: 'gt', value: 10 }
     ],
     timeWindow: 300,
     minOccurrences: 50,
-    severity: AlertSeverity.CRITICAL,
+    severity: AlertSeverity.CRITICAL
   },
   {
     id: 'privilege-escalation-chain',
     name: 'Privilege Escalation Chain',
     description: 'Sequential privilege escalation across multiple accounts',
     conditions: [
-      { field: 'event_type', operator: 'in', value: ['permission_change', 'role_assignment'] },
+      {
+        field: 'event_type',
+        operator: 'in',
+        value: ['permission_change', 'role_assignment']
+      },
       { field: 'privilege_level', operator: 'eq', value: 'elevated' },
-      { field: 'approval_status', operator: 'ne', value: 'approved' },
+      { field: 'approval_status', operator: 'ne', value: 'approved' }
     ],
     timeWindow: 1800,
     minOccurrences: 3,
-    severity: AlertSeverity.HIGH,
-  },
+    severity: AlertSeverity.HIGH
+  }
 ];
 ```
 
@@ -367,22 +377,30 @@ const ALERT_CHANNELS: AlertChannel[] = [
     endpoint: 'https://events.pagerduty.com/v2/enqueue',
     reliability: 0.999,
     latency: 500,
-    supportedSeverities: [AlertSeverity.CRITICAL, AlertSeverity.HIGH],
+    supportedSeverities: [AlertSeverity.CRITICAL, AlertSeverity.HIGH]
   },
   {
     type: 'slack',
     endpoint: 'https://hooks.slack.com/services/security-alerts',
     reliability: 0.98,
     latency: 200,
-    supportedSeverities: [AlertSeverity.HIGH, AlertSeverity.MEDIUM, AlertSeverity.LOW],
+    supportedSeverities: [
+      AlertSeverity.HIGH,
+      AlertSeverity.MEDIUM,
+      AlertSeverity.LOW
+    ]
   },
   {
     type: 'email',
     endpoint: 'security-team@wildconstruct.com',
     reliability: 0.95,
     latency: 1000,
-    supportedSeverities: [AlertSeverity.MEDIUM, AlertSeverity.LOW, AlertSeverity.INFO],
-  },
+    supportedSeverities: [
+      AlertSeverity.MEDIUM,
+      AlertSeverity.LOW,
+      AlertSeverity.INFO
+    ]
+  }
 ];
 ```
 
@@ -413,23 +431,29 @@ const ESCALATION_RULES: EscalationRule[] = [
     timeline: [
       {
         delay: 0,
-        recipients: ['security-team@wildconstruct.com', 'on-call-engineer@wildconstruct.com'],
+        recipients: [
+          'security-team@wildconstruct.com',
+          'on-call-engineer@wildconstruct.com'
+        ],
         channels: ['pagerduty', 'slack', 'sms'],
-        actions: ['log_incident', 'create_ticket'],
+        actions: ['log_incident', 'create_ticket']
       },
       {
         delay: 300, // 5 minutes
-        recipients: ['security-manager@wildconstruct.com', 'cto@wildconstruct.com'],
+        recipients: [
+          'security-manager@wildconstruct.com',
+          'cto@wildconstruct.com'
+        ],
         channels: ['pagerduty', 'email'],
-        actions: ['escalate_ticket', 'notify_management'],
+        actions: ['escalate_ticket', 'notify_management']
       },
       {
         delay: 900, // 15 minutes
         recipients: ['ciso@wildconstruct.com', 'ceo@wildconstruct.com'],
         channels: ['pagerduty', 'sms'],
-        actions: ['executive_notification', 'media_response_prep'],
-      },
-    ],
+        actions: ['executive_notification', 'media_response_prep']
+      }
+    ]
   },
   {
     severity: AlertSeverity.HIGH,
@@ -441,16 +465,16 @@ const ESCALATION_RULES: EscalationRule[] = [
         delay: 0,
         recipients: ['security-analysts@wildconstruct.com'],
         channels: ['slack', 'email'],
-        actions: ['log_incident', 'create_ticket'],
+        actions: ['log_incident', 'create_ticket']
       },
       {
         delay: 900, // 15 minutes
         recipients: ['security-team@wildconstruct.com'],
         channels: ['pagerduty', 'slack'],
-        actions: ['escalate_ticket'],
-      },
-    ],
-  },
+        actions: ['escalate_ticket']
+      }
+    ]
+  }
 ];
 ```
 
@@ -470,38 +494,44 @@ const AUTOMATED_ACTIONS: AutomatedAction[] = [
     type: 'block_ip_address',
     parameters: {
       duration: 3600, // 1 hour
-      scope: 'global',
+      scope: 'global'
     },
     conditions: [
       { field: 'alert.severity', operator: 'in', value: ['critical', 'high'] },
-      { field: 'alert.source_ip', operator: 'ne', value: 'internal' },
+      { field: 'alert.source_ip', operator: 'ne', value: 'internal' }
     ],
     maxExecutions: 10,
-    cooldownPeriod: 300,
+    cooldownPeriod: 300
   },
   {
     type: 'disable_user_account',
     parameters: {
       duration: 1800, // 30 minutes
-      reason: 'security_alert_triggered',
+      reason: 'security_alert_triggered'
     },
     conditions: [
       { field: 'alert.severity', operator: 'eq', value: 'critical' },
-      { field: 'alert.category', operator: 'in', value: ['compromise', 'insider_threat'] },
+      {
+        field: 'alert.category',
+        operator: 'in',
+        value: ['compromise', 'insider_threat']
+      }
     ],
     maxExecutions: 1,
-    cooldownPeriod: 3600,
+    cooldownPeriod: 3600
   },
   {
     type: 'enable_enhanced_monitoring',
     parameters: {
       duration: 7200, // 2 hours
-      scope: ['user_activity', 'network_traffic', 'system_access'],
+      scope: ['user_activity', 'network_traffic', 'system_access']
     },
-    conditions: [{ field: 'alert.severity', operator: 'in', value: ['high', 'medium'] }],
+    conditions: [
+      { field: 'alert.severity', operator: 'in', value: ['high', 'medium'] }
+    ],
     maxExecutions: 5,
-    cooldownPeriod: 1800,
-  },
+    cooldownPeriod: 1800
+  }
 ];
 ```
 
@@ -516,7 +546,7 @@ enum AlertState {
   INVESTIGATING = 'investigating',
   RESOLVED = 'resolved',
   CLOSED = 'closed',
-  SUPPRESSED = 'suppressed',
+  SUPPRESSED = 'suppressed'
 }
 
 interface AlertLifecycle {
@@ -566,10 +596,10 @@ const CORRELATION_RULES: AlertCorrelationRule[] = [
     correlationWindow: 1800,
     groupingCriteria: [
       { field: 'source_ip', similarity: 'exact', weight: 1.0 },
-      { field: 'attack_type', similarity: 'fuzzy', weight: 0.8 },
+      { field: 'attack_type', similarity: 'fuzzy', weight: 0.8 }
     ],
     suppressDuplicates: true,
-    createParentAlert: true,
+    createParentAlert: true
   },
   {
     name: 'User Behavior Correlation',
@@ -577,11 +607,11 @@ const CORRELATION_RULES: AlertCorrelationRule[] = [
     correlationWindow: 3600,
     groupingCriteria: [
       { field: 'user_id', similarity: 'exact', weight: 1.0 },
-      { field: 'behavior_type', similarity: 'pattern', weight: 0.6 },
+      { field: 'behavior_type', similarity: 'pattern', weight: 0.6 }
     ],
     suppressDuplicates: false,
-    createParentAlert: true,
-  },
+    createParentAlert: true
+  }
 ];
 ```
 
@@ -640,14 +670,19 @@ class AlertTuner {
 
     // Calculate optimal thresholds
     for (const threshold of ALERT_THRESHOLDS) {
-      const analysis = await this.analyzeThresholdPerformance(threshold, alertHistory);
+      const analysis = await this.analyzeThresholdPerformance(
+        threshold,
+        alertHistory
+      );
 
       if (analysis.falsePositiveRate > 0.1) {
         // > 10% false positives
         const newThreshold = await this.calculateOptimalThreshold(analysis);
         await this.updateThreshold(threshold.metric, newThreshold);
 
-        console.log(`Optimized threshold for ${threshold.metric}: ${threshold.value} → ${newThreshold.value}`);
+        console.log(
+          `Optimized threshold for ${threshold.metric}: ${threshold.value} → ${newThreshold.value}`
+        );
       }
     }
   }
@@ -681,16 +716,18 @@ class AlertProcessingPipeline {
     new SeverityAssignmentStage(),
     new EscalationStage(),
     new NotificationStage(),
-    new AutomationStage(),
+    new AutomationStage()
   ];
 
-  async processAlert(rawEvent: SecurityLogEntry): Promise<ProcessedAlert | null> {
+  async processAlert(
+    rawEvent: SecurityLogEntry
+  ): Promise<ProcessedAlert | null> {
     let context: AlertContext = {
       event: rawEvent,
       timestamp: new Date(),
       correlatedEvents: [],
       enrichmentData: {},
-      suppressionRules: [],
+      suppressionRules: []
     };
 
     // Process through each stage
@@ -749,7 +786,9 @@ class ResilientAlertProcessor {
 
   constructor(config: AlertingResilienceConfig) {
     this.circuitBreaker = new CircuitBreaker(config.circuitBreaker);
-    this.processingQueue = new Queue<AlertEvent>(config.backpressure.maxQueueSize);
+    this.processingQueue = new Queue<AlertEvent>(
+      config.backpressure.maxQueueSize
+    );
     this.healthMonitor = new HealthMonitor(config.monitoring);
 
     this.startHealthMonitoring();
@@ -798,18 +837,18 @@ const ALERT_TESTS: AlertTest[] = [
         source_ip: '192.168.1.100',
         target_accounts: ['user1@test.com', 'user2@test.com'],
         attempt_rate: 100, // per minute
-        duration: 300, // seconds
-      },
+        duration: 300 // seconds
+      }
     },
     expectedOutcome: {
       shouldTriggerAlert: true,
       expectedSeverity: AlertSeverity.HIGH,
       expectedRecipients: ['security-analysts@wildconstruct.com'],
       expectedActions: ['block_ip_address', 'enhanced_monitoring'],
-      maxResponseTime: 30000, // 30 seconds
+      maxResponseTime: 30000 // 30 seconds
     },
-    timeout: 60000,
-  },
+    timeout: 60000
+  }
 ];
 
 class AlertTestRunner {
@@ -829,7 +868,7 @@ class AlertTestRunner {
       totalTests: ALERT_TESTS.length,
       passedTests: results.filter(r => r.passed).length,
       failedTests: results.filter(r => !r.passed).length,
-      results,
+      results
     };
   }
 }
@@ -856,13 +895,13 @@ const COMPLIANCE_REQUIREMENTS: ComplianceRequirement[] = [
     implementation: [
       'Alert on financial data access outside business hours',
       'Monitor privileged user activities',
-      'Track configuration changes to financial systems',
+      'Track configuration changes to financial systems'
     ],
     auditEvidence: [
       'Alert logs showing monitoring coverage',
       'Response time metrics',
-      'Incident resolution documentation',
-    ],
+      'Incident resolution documentation'
+    ]
   },
   {
     framework: ComplianceFramework.GDPR,
@@ -871,10 +910,14 @@ const COMPLIANCE_REQUIREMENTS: ComplianceRequirement[] = [
     implementation: [
       'Alert on bulk personal data access',
       'Monitor data export activities',
-      'Track consent withdrawal impacts',
+      'Track consent withdrawal impacts'
     ],
-    auditEvidence: ['Breach detection timelines', 'Data processing activity logs', 'Privacy impact assessments'],
-  },
+    auditEvidence: [
+      'Breach detection timelines',
+      'Data processing activity logs',
+      'Privacy impact assessments'
+    ]
+  }
 ];
 ```
 

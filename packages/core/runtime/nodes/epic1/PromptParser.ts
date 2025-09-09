@@ -107,7 +107,7 @@ export class PromptParser {
 
     // Identify semantic segments - try semantic analysis first
     let segments = this.identifySemanticSegments(prompt, tokens);
-    
+
     // If semantic analysis didn't find multiple segments, fall back to list-based parsing
     if (segments.length <= 1) {
       segments = this.identifySegments(tokens, prompt);
@@ -228,42 +228,91 @@ export class PromptParser {
     tokens: Token[]
   ): PromptSegment[] {
     const segments: PromptSegment[] = [];
-    
+
     // Common action verbs and prepositions that indicate transitions
     const actionVerbs = [
-      'ventures', 'goes', 'walks', 'runs', 'travels', 'journeys', 'explores',
-      'enters', 'approaches', 'finds', 'discovers', 'seeks', 'searches',
-      'fights', 'battles', 'defeats', 'conquers', 'escapes', 'flees',
-      'meets', 'encounters', 'talks', 'speaks', 'asks', 'tells',
-      'takes', 'gives', 'steals', 'hides', 'reveals', 'shows',
-      'builds', 'creates', 'destroys', 'breaks', 'fixes', 'repairs'
+      'ventures',
+      'goes',
+      'walks',
+      'runs',
+      'travels',
+      'journeys',
+      'explores',
+      'enters',
+      'approaches',
+      'finds',
+      'discovers',
+      'seeks',
+      'searches',
+      'fights',
+      'battles',
+      'defeats',
+      'conquers',
+      'escapes',
+      'flees',
+      'meets',
+      'encounters',
+      'talks',
+      'speaks',
+      'asks',
+      'tells',
+      'takes',
+      'gives',
+      'steals',
+      'hides',
+      'reveals',
+      'shows',
+      'builds',
+      'creates',
+      'destroys',
+      'breaks',
+      'fixes',
+      'repairs'
     ];
-    
+
     const prepositions = [
-      'into', 'in', 'at', 'on', 'to', 'from', 'with', 'through', 'across',
-      'over', 'under', 'behind', 'before', 'after', 'during', 'within'
+      'into',
+      'in',
+      'at',
+      'on',
+      'to',
+      'from',
+      'with',
+      'through',
+      'across',
+      'over',
+      'under',
+      'behind',
+      'before',
+      'after',
+      'during',
+      'within'
     ];
-    
+
     // Articles that often start noun phrases
     const articles = ['a', 'an', 'the'];
-    
+
     // Build a text representation from tokens for easier analysis
     let currentPhrase: Token[] = [];
     let phraseType: 'subject' | 'action' | 'object' | 'unknown' = 'subject';
     let inPrepositionalPhrase = false;
-    
+
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
-      
+
       // Skip whitespace and newlines but track position
-      if (token.type === TokenType.WHITESPACE || token.type === TokenType.NEWLINE) {
+      if (
+        token.type === TokenType.WHITESPACE ||
+        token.type === TokenType.NEWLINE
+      ) {
         continue;
       }
-      
+
       // Check if this is an action verb
-      if (token.type === TokenType.WORD && 
-          actionVerbs.includes(token.value.toLowerCase())) {
-        
+      if (
+        token.type === TokenType.WORD &&
+        actionVerbs.includes(token.value.toLowerCase())
+      ) {
         // Save the current phrase as subject if we have one
         if (currentPhrase.length > 0 && phraseType === 'subject') {
           const text = this.tokensToText(currentPhrase, prompt).trim();
@@ -280,15 +329,15 @@ export class PromptParser {
             });
           }
         }
-        
+
         // Start action phrase
         currentPhrase = [token];
         phraseType = 'action';
         inPrepositionalPhrase = false;
-        
-      } else if (token.type === TokenType.WORD && 
-                 prepositions.includes(token.value.toLowerCase())) {
-        
+      } else if (
+        token.type === TokenType.WORD &&
+        prepositions.includes(token.value.toLowerCase())
+      ) {
         // If we're in an action phrase, include the preposition
         if (phraseType === 'action') {
           currentPhrase.push(token);
@@ -304,27 +353,30 @@ export class PromptParser {
               suggestedNodeType: Epic1NodeType.TextBlock,
               confidence: 0.8,
               metadata: {
-                reason: phraseType === 'action' ? 'Action/verb phrase' : 'Descriptive phrase'
+                reason:
+                  phraseType === 'action'
+                    ? 'Action/verb phrase'
+                    : 'Descriptive phrase'
               }
             });
           }
-          
+
           // Include the preposition with the next phrase
           currentPhrase = [token];
           phraseType = 'object';
           inPrepositionalPhrase = true;
         }
-        
-      } else if (inPrepositionalPhrase && 
-                 token.type === TokenType.WORD &&
-                 articles.includes(token.value.toLowerCase())) {
-        
+      } else if (
+        inPrepositionalPhrase &&
+        token.type === TokenType.WORD &&
+        articles.includes(token.value.toLowerCase())
+      ) {
         // If we hit an article after a preposition in an action phrase,
         // this starts the object phrase
         if (phraseType === 'action' && currentPhrase.length > 1) {
           // Remove the last token (preposition) from action phrase
           const prep = currentPhrase.pop();
-          
+
           // Save action phrase
           const text = this.tokensToText(currentPhrase, prompt).trim();
           if (text) {
@@ -339,7 +391,7 @@ export class PromptParser {
               }
             });
           }
-          
+
           // Start object phrase with preposition and article
           currentPhrase = prep ? [prep, token] : [token];
           phraseType = 'object';
@@ -347,10 +399,10 @@ export class PromptParser {
           currentPhrase.push(token);
         }
         inPrepositionalPhrase = false;
-        
-      } else if (token.type === TokenType.PUNCTUATION &&
-                 (token.value === '.' || token.value === '!' || token.value === '?')) {
-        
+      } else if (
+        token.type === TokenType.PUNCTUATION &&
+        (token.value === '.' || token.value === '!' || token.value === '?')
+      ) {
         // End of sentence - save current phrase
         if (currentPhrase.length > 0) {
           const text = this.tokensToText(currentPhrase, prompt).trim();
@@ -362,9 +414,12 @@ export class PromptParser {
               suggestedNodeType: Epic1NodeType.TextBlock,
               confidence: 0.8,
               metadata: {
-                reason: phraseType === 'subject' ? 'Subject phrase' :
-                        phraseType === 'action' ? 'Action/verb phrase' :
-                        'Object/location phrase'
+                reason:
+                  phraseType === 'subject'
+                    ? 'Subject phrase'
+                    : phraseType === 'action'
+                      ? 'Action/verb phrase'
+                      : 'Object/location phrase'
               }
             });
           }
@@ -372,13 +427,12 @@ export class PromptParser {
           phraseType = 'subject';
           inPrepositionalPhrase = false;
         }
-        
       } else {
         // Add token to current phrase
         currentPhrase.push(token);
       }
     }
-    
+
     // Save any remaining phrase
     if (currentPhrase.length > 0) {
       const text = this.tokensToText(currentPhrase, prompt).trim();
@@ -395,7 +449,7 @@ export class PromptParser {
         });
       }
     }
-    
+
     return segments;
   }
 

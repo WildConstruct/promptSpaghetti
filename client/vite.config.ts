@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 // https://vitejs.dev/config/
-const BUILD_SAFE = process.env.BUILD_SAFE === 'true' || process.env.BUILD_SAFE === '1';
+const BUILD_SAFE =
+  process.env.BUILD_SAFE === 'true' || process.env.BUILD_SAFE === '1';
 
 export default defineConfig({
   plugins: [react()],
@@ -56,10 +57,10 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:8000',
-        changeOrigin: true,
+        changeOrigin: true
         // leave path as-is
-      },
-    },
+      }
+    }
   },
   resolve: {
     alias: {
@@ -69,12 +70,27 @@ export default defineConfig({
         '../packages/asset-browser/src'
       ),
       // Stub out server-side OpenAI SDK for browser builds
-      'openai': path.resolve(__dirname, './src/shims/openai.ts'),
-      'openai/shims/node': path.resolve(__dirname, './src/shims/openai-shim-node.ts'),
-      'openai/_shims/node-runtime.mjs': path.resolve(__dirname, './src/shims/openai-shim-node.ts'),
-      '@promptscape/core/services/llm': path.resolve(__dirname, './src/shims/llm-service.ts'),
-      '@promptscape/core/services/llm/LLMService': path.resolve(__dirname, './src/shims/llm-service.ts'),
-      '@promptscape/core/services/SimpleLLMService': path.resolve(__dirname, './src/shims/llm-service.ts')
+      openai: path.resolve(__dirname, './src/shims/openai.ts'),
+      'openai/shims/node': path.resolve(
+        __dirname,
+        './src/shims/openai-shim-node.ts'
+      ),
+      'openai/_shims/node-runtime.mjs': path.resolve(
+        __dirname,
+        './src/shims/openai-shim-node.ts'
+      ),
+      '@promptscape/core/services/llm': path.resolve(
+        __dirname,
+        './src/shims/llm-service.ts'
+      ),
+      '@promptscape/core/services/llm/LLMService': path.resolve(
+        __dirname,
+        './src/shims/llm-service.ts'
+      ),
+      '@promptscape/core/services/SimpleLLMService': path.resolve(
+        __dirname,
+        './src/shims/llm-service.ts'
+      )
     },
     dedupe: [
       'react',

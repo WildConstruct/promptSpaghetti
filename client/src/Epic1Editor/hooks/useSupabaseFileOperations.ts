@@ -3,7 +3,10 @@ import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
 import { createClient } from '@supabase/supabase-js';
 import { readPsg, type PSGFile } from '@promptscape/core';
-import type { GraphNode as PSGGraphNode, GraphEdge as PSGGraphEdge } from '@promptscape/core';
+import type {
+  GraphNode as PSGGraphNode,
+  GraphEdge as PSGGraphEdge
+} from '@promptscape/core';
 
 // Initialize Supabase client
 // Note: supabaseUrl and supabaseAnonKey are intentionally public.
@@ -48,7 +51,10 @@ export const useSupabaseFileOperations = ({
   const [showOpenDialog, setShowOpenDialog] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showNewDocumentModal, setShowNewDocumentModal] = useState(false);
-  const [pendingNewDocument, setPendingNewDocument] = useState<{ nodes: Node[], edges: Edge[] } | null>(null);
+  const [pendingNewDocument, setPendingNewDocument] = useState<{
+    nodes: Node[];
+    edges: Edge[];
+  } | null>(null);
 
   // Check authentication status
   useEffect(() => {
@@ -291,90 +297,119 @@ export const useSupabaseFileOperations = ({
   );
 
   // Convert a PSG file to React Flow nodes/edges with sensible defaults
-  const convertPsgToReactFlow = useCallback((psg: PSGFile): { nodes: Node[]; edges: Edge[] } => {
-    const layout = psg.graph.layout as Record<string, unknown> | undefined;
-    const positionsUnknown = layout && (layout as Record<string, unknown>).positions;
-    const isPositionsMap = (val: unknown): val is Record<string, { x: number; y: number }> => {
-      if (!val || typeof val !== 'object') return false;
-      // shallow check for at least one entry with numeric x/y
-      for (const v of Object.values(val as Record<string, unknown>)) {
-        if (
-          v &&
-          typeof v === 'object' &&
-          typeof (v as Record<string, unknown>).x === 'number' &&
-          typeof (v as Record<string, unknown>).y === 'number'
-        ) {
-          return true;
+  const convertPsgToReactFlow = useCallback(
+    (psg: PSGFile): { nodes: Node[]; edges: Edge[] } => {
+      const layout = psg.graph.layout as Record<string, unknown> | undefined;
+      const positionsUnknown =
+        layout && (layout as Record<string, unknown>).positions;
+      const isPositionsMap = (
+        val: unknown
+      ): val is Record<string, { x: number; y: number }> => {
+        if (!val || typeof val !== 'object') return false;
+        // shallow check for at least one entry with numeric x/y
+        for (const v of Object.values(val as Record<string, unknown>)) {
+          if (
+            v &&
+            typeof v === 'object' &&
+            typeof (v as Record<string, unknown>).x === 'number' &&
+            typeof (v as Record<string, unknown>).y === 'number'
+          ) {
+            return true;
+          }
         }
-      }
-      return true; // treat empty object as valid
-    };
-    const positions: Record<string, { x: number; y: number }> = isPositionsMap(positionsUnknown)
-      ? (positionsUnknown as Record<string, { x: number; y: number }>)
-      : {};
-
-    const xSpacing = 300;
-    const ySpacing = 160;
-    const cols = 3;
-
-    const nodes: Node[] = (psg.graph.nodes as PSGGraphNode[]).map((gn: PSGGraphNode, index: number) => {
-      const pos = positions[gn.id] || {
-        x: (index % cols) * xSpacing + 200,
-        y: Math.floor(index / cols) * ySpacing + 120
+        return true; // treat empty object as valid
       };
-      const type = gn.type || 'textBlock';
-      const dataRaw = (gn.data || {}) as Record<string, unknown>;
-      const labelFromData = typeof dataRaw['label'] === 'string' ? (dataRaw['label'] as string) : undefined;
-      const label = gn.label || labelFromData || gn.id;
+      const positions: Record<string, { x: number; y: number }> =
+        isPositionsMap(positionsUnknown)
+          ? (positionsUnknown as Record<string, { x: number; y: number }>)
+          : {};
 
-      // Normalize data shape expected by Epic1 editor nodes
-      let data: Record<string, unknown> = { label };
-      switch (type) {
-        case 'textBlock': {
-          const contentVal = dataRaw['content'];
-          const textVal = dataRaw['text'];
-          const valueVal = dataRaw['value'];
-          const content = typeof contentVal === 'string' ? contentVal : typeof textVal === 'string' ? textVal : label;
-          const value = typeof valueVal === 'string' ? valueVal : content;
-          data = { nodeType: 'textBlock', content, text: content, value, label };
-          break;
-        }
-        case 'weightedChoice': {
-          const optionsVal = dataRaw['options'];
-          const options = Array.isArray(optionsVal) ? optionsVal : [];
-          data = { nodeType: 'weightedChoice', options, label: label || 'Choice' };
-          break;
-        }
-        case 'output': {
-          const outVal = dataRaw['outputName'];
-          const outputName = typeof outVal === 'string' ? outVal : 'output';
-          data = { nodeType: 'output', outputName, label: 'Output' };
-          break;
-        }
-        default: {
-          data = { label };
-        }
-      }
+      const xSpacing = 300;
+      const ySpacing = 160;
+      const cols = 3;
 
-      return {
-        id: gn.id,
-        type,
-        position: pos,
-        data
-      } as Node;
-    });
+      const nodes: Node[] = (psg.graph.nodes as PSGGraphNode[]).map(
+        (gn: PSGGraphNode, index: number) => {
+          const pos = positions[gn.id] || {
+            x: (index % cols) * xSpacing + 200,
+            y: Math.floor(index / cols) * ySpacing + 120
+          };
+          const type = gn.type || 'textBlock';
+          const dataRaw = (gn.data || {}) as Record<string, unknown>;
+          const labelFromData =
+            typeof dataRaw['label'] === 'string'
+              ? (dataRaw['label'] as string)
+              : undefined;
+          const label = gn.label || labelFromData || gn.id;
 
-    const edges: Edge[] = (psg.graph.edges as PSGGraphEdge[]).map((ge: PSGGraphEdge) => ({
-      id: ge.id,
-      source: ge.source,
-      target: ge.target,
-      type: 'smoothstep',
-      sourceHandle: 'source',
-      targetHandle: 'target'
-    }));
+          // Normalize data shape expected by Epic1 editor nodes
+          let data: Record<string, unknown> = { label };
+          switch (type) {
+            case 'textBlock': {
+              const contentVal = dataRaw['content'];
+              const textVal = dataRaw['text'];
+              const valueVal = dataRaw['value'];
+              const content =
+                typeof contentVal === 'string'
+                  ? contentVal
+                  : typeof textVal === 'string'
+                    ? textVal
+                    : label;
+              const value = typeof valueVal === 'string' ? valueVal : content;
+              data = {
+                nodeType: 'textBlock',
+                content,
+                text: content,
+                value,
+                label
+              };
+              break;
+            }
+            case 'weightedChoice': {
+              const optionsVal = dataRaw['options'];
+              const options = Array.isArray(optionsVal) ? optionsVal : [];
+              data = {
+                nodeType: 'weightedChoice',
+                options,
+                label: label || 'Choice'
+              };
+              break;
+            }
+            case 'output': {
+              const outVal = dataRaw['outputName'];
+              const outputName = typeof outVal === 'string' ? outVal : 'output';
+              data = { nodeType: 'output', outputName, label: 'Output' };
+              break;
+            }
+            default: {
+              data = { label };
+            }
+          }
 
-    return { nodes, edges };
-  }, []);
+          return {
+            id: gn.id,
+            type,
+            position: pos,
+            data
+          } as Node;
+        }
+      );
+
+      const edges: Edge[] = (psg.graph.edges as PSGGraphEdge[]).map(
+        (ge: PSGGraphEdge) => ({
+          id: ge.id,
+          source: ge.source,
+          target: ge.target,
+          type: 'smoothstep',
+          sourceHandle: 'source',
+          targetHandle: 'target'
+        })
+      );
+
+      return { nodes, edges };
+    },
+    []
+  );
 
   // Programmatically load PSG content (as string) into the editor
   const loadFromPsgContent = useCallback(
@@ -392,7 +427,13 @@ export const useSupabaseFileOperations = ({
         showToast('Failed to load PSG content', 'error');
       }
     },
-    [convertPsgToReactFlow, onNodesChange, onEdgesChange, onEditorKeyChange, showToast]
+    [
+      convertPsgToReactFlow,
+      onNodesChange,
+      onEdgesChange,
+      onEditorKeyChange,
+      showToast
+    ]
   );
 
   // Handle opening from local file (fallback)
@@ -414,7 +455,10 @@ export const useSupabaseFileOperations = ({
               onNodesChange(nodes);
               onEdgesChange(edges);
               onEditorKeyChange(prev => prev + 1);
-              localStorage.setItem('epic1-graph', JSON.stringify({ nodes, edges }));
+              localStorage.setItem(
+                'epic1-graph',
+                JSON.stringify({ nodes, edges })
+              );
               showToast('Graph loaded from PSG file', 'success');
               return;
             }
@@ -427,7 +471,10 @@ export const useSupabaseFileOperations = ({
               onNodesChange(nodes);
               onEdgesChange(edges);
               onEditorKeyChange(prev => prev + 1);
-              localStorage.setItem('epic1-graph', JSON.stringify({ nodes, edges }));
+              localStorage.setItem(
+                'epic1-graph',
+                JSON.stringify({ nodes, edges })
+              );
               showToast('Graph loaded from PSG file', 'success');
               return;
             }
@@ -451,7 +498,13 @@ export const useSupabaseFileOperations = ({
       }
     };
     input.click();
-  }, [onNodesChange, onEdgesChange, onEditorKeyChange, showToast, convertPsgToReactFlow]);
+  }, [
+    onNodesChange,
+    onEdgesChange,
+    onEditorKeyChange,
+    showToast,
+    convertPsgToReactFlow
+  ]);
 
   return {
     isAuthenticated,
@@ -541,8 +594,7 @@ export const useSupabaseFileOperations = ({
           `;
         }, 100);
       }
-    }
-    ,
+    },
     // New: programmatically open PSG text
     loadFromPsgContent
   };

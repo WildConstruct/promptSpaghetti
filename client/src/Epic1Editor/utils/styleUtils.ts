@@ -6,7 +6,9 @@
 // Get computed style value for a CSS variable
 export const getCSSVariable = (varName: string): string => {
   if (typeof window === 'undefined') return '';
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(varName)
+    .trim();
 };
 
 // Common color getters
@@ -17,25 +19,25 @@ export const colors = {
   bgTertiary: () => getCSSVariable('--color-bg-tertiary'),
   bgQuaternary: () => getCSSVariable('--color-bg-quaternary'),
   bgOverlay: () => getCSSVariable('--color-bg-overlay'),
-  
+
   // Text colors
   textPrimary: () => getCSSVariable('--color-text-primary'),
   textSecondary: () => getCSSVariable('--color-text-secondary'),
   textTertiary: () => getCSSVariable('--color-text-tertiary'),
-  
+
   // Accent colors
   accentOrange: () => getCSSVariable('--color-accent-orange'),
   accentBlue: () => getCSSVariable('--color-accent-blue'),
-  
+
   // Status colors
   statusError: () => getCSSVariable('--color-status-error'),
   statusSuccess: () => getCSSVariable('--color-status-success'),
   statusWarning: () => getCSSVariable('--color-status-warning'),
   statusInfo: () => getCSSVariable('--color-status-info'),
-  
+
   // UI colors
   uiBorder: () => getCSSVariable('--color-ui-border'),
-  uiBorderLight: () => getCSSVariable('--color-ui-border-light'),
+  uiBorderLight: () => getCSSVariable('--color-ui-border-light')
 };
 
 // Shadow getters
@@ -44,7 +46,7 @@ export const shadows = {
   md: () => getCSSVariable('--shadow-md'),
   lg: () => getCSSVariable('--shadow-lg'),
   xl: () => getCSSVariable('--shadow-xl'),
-  '2xl': () => getCSSVariable('--shadow-2xl'),
+  '2xl': () => getCSSVariable('--shadow-2xl')
 };
 
 // Style presets for common patterns
@@ -63,32 +65,32 @@ export const stylePresets = {
       boxShadow: 'var(--shadow-2xl)',
       maxWidth: '400px',
       color: 'var(--color-text-primary)',
-      fontFamily: 'system-ui, -apple-system, sans-serif',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
     },
-    
+
     heading: {
       margin: '0 0 20px 0',
-      color: 'var(--color-accent-orange)',
+      color: 'var(--color-accent-orange)'
     },
-    
+
     text: {
       margin: '10px 0',
       lineHeight: 1.6,
-      color: 'var(--color-text-secondary)',
+      color: 'var(--color-text-secondary)'
     },
-    
+
     footer: {
       marginTop: '20px',
       paddingTop: '20px',
-      borderTop: '1px solid var(--color-ui-border)',
+      borderTop: '1px solid var(--color-ui-border)'
     },
-    
+
     footerText: {
       margin: '5px 0',
       fontSize: '14px',
-      color: 'var(--color-text-tertiary)',
+      color: 'var(--color-text-tertiary)'
     },
-    
+
     button: {
       marginTop: '20px',
       padding: '10px 20px',
@@ -98,9 +100,9 @@ export const stylePresets = {
       color: 'white',
       fontWeight: 600,
       cursor: 'pointer',
-      fontSize: '14px',
+      fontSize: '14px'
     },
-    
+
     overlay: {
       position: 'fixed' as const,
       top: 0,
@@ -108,19 +110,19 @@ export const stylePresets = {
       right: 0,
       bottom: 0,
       backgroundColor: 'var(--color-bg-overlay)',
-      zIndex: 9999,
-    },
+      zIndex: 9999
+    }
   },
-  
+
   errorMessage: {
     padding: '20px',
-    color: 'var(--color-status-error)',
+    color: 'var(--color-status-error)'
   },
-  
+
   loadingMessage: {
     padding: '20px',
-    color: 'var(--color-text-secondary)',
-  },
+    color: 'var(--color-text-secondary)'
+  }
 };
 
 // Console styling helper
