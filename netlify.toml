@@ -48,8 +48,13 @@
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "accelerometer=(), camera=(), microphone=(), geolocation=(), gyroscope=(), magnetometer=(), payment=(), usb=()"
     Cache-Control = "public, max-age=0, must-revalidate"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';"
+    # Balanced CSP: allow style attributes but disallow inline <style> tags
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';"
+    # Dry-run stricter CSP to surface any remaining violations (optional)
+    Content-Security-Policy-Report-Only = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';"
     # To further tighten CSP (requires hashing/nonces for inline styles/scripts), consider:
     # Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';"
 
@@ -86,3 +91,8 @@
   to = "http://ps.wildconstruct.com:8000/admin/:splat"
   status = 200
   force = true
+# Stricter CSP for admin routes (no inline styles/scripts)
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';"

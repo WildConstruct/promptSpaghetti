@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { getSupabaseAdmin, verifySupabaseToken } from '../services/supabase';
 import { rateLimiter } from '../utils/rateLimit';
+import { metrics } from '../utils/metrics';
 
 export async function filesRoutes(app: FastifyInstance) {
   app.get('/api/files/list', { preHandler: rateLimiter({ key: 'files:list', limitPerMinute: 120 }) }, async (req, reply) => {
@@ -13,6 +14,7 @@ export async function filesRoutes(app: FastifyInstance) {
     if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
     const bucket = process.env.SUPABASE_BUCKET || 'graphs';
     const path = `${userId}/`;
+    metrics.mark('files.list');
     const { data, error } = await admin.storage.from(bucket).list(path, { limit: 100, offset: 0, sortBy: { column: 'name', order: 'asc' } });
     if (error) return reply.status(500).send({ error: error.message });
     return data;
@@ -34,6 +36,7 @@ export async function filesRoutes(app: FastifyInstance) {
     if (!/^[a-zA-Z0-9._-]+$/.test(filename)) return reply.status(400).send({ error: 'Invalid filename' });
     const bucket = process.env.SUPABASE_BUCKET || 'graphs';
     const path = `${userId}/${filename}`;
+    metrics.mark('files.upload');
     const { error } = await admin.storage.from(bucket).upload(path, Buffer.from(content, 'utf-8'), { upsert: true, contentType: 'application/json' });
     if (error) return reply.status(500).send({ error: error.message });
     return { success: true, path };
@@ -52,6 +55,7 @@ export async function filesRoutes(app: FastifyInstance) {
     if (!/^[a-zA-Z0-9._-]+$/.test(filename)) return reply.status(400).send({ error: 'Invalid filename' });
     const bucket = process.env.SUPABASE_BUCKET || 'graphs';
     const path = `${userId}/${filename}`;
+    metrics.mark('files.download');
     const { data, error } = await admin.storage.from(bucket).download(path);
     if (error || !data) return reply.status(404).send({ error: error?.message || 'Not found' });
     reply.header('Content-Type', 'application/json');
@@ -72,6 +76,7 @@ export async function filesRoutes(app: FastifyInstance) {
     if (!/^[a-zA-Z0-9._-]+$/.test(filename)) return reply.status(400).send({ error: 'Invalid filename' });
     const bucket = process.env.SUPABASE_BUCKET || 'graphs';
     const path = `${userId}/${filename}`;
+    metrics.mark('files.delete');
     const { error } = await admin.storage.from(bucket).remove([path]);
     if (error) return reply.status(500).send({ error: error.message });
     return { success: true };

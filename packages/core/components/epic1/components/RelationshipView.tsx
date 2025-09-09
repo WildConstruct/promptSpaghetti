@@ -1,4 +1,5 @@
 import React from 'react';
+import './RelationshipView.css';
 import type { Asset } from '../../../services/assetMatcher';
 
 export const RelationshipView: React.FC<{
@@ -26,16 +27,16 @@ export const RelationshipView: React.FC<{
   }, [internalAssets]);
 
   return (
-    <div style={{ background: '#0b0b0b', color: '#fff', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 8, padding: 10 }}>
-      <div style={{ marginBottom: 8, fontWeight: 600 }}>Asset Relationships</div>
-      <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 6 }}>Clusters by type (prototype)</div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, maxHeight: 280, overflow: 'auto' }}>
+    <div className="relationship-panel">
+      <div className="relationship-title">Asset Relationships</div>
+      <div className="relationship-subtitle">Clusters by type (prototype)</div>
+      <div className="relationship-grid">
         {clusters.map(c => (
-          <div key={c.key} style={{ border: '1px solid rgba(255,255,255,0.1)', borderRadius: 6, padding: 8 }}>
-            <div style={{ fontWeight: 600, marginBottom: 4 }}>{c.key} • {c.count}</div>
-            <ul style={{ margin: 0, paddingLeft: 16 }}>
+          <div key={c.key} className="relationship-card">
+            <div className="relationship-card-title">{c.key} • {c.count}</div>
+            <ul className="relationship-list">
               {c.items.map(a => (<li key={a.id}>{a.name}</li>))}
-              {c.count > c.items.length && (<li>… and {c.count - c.items.length} more</li>)}
+              {c.count > c.items.length && (<li className="relationship-more">… and {c.count - c.items.length} more</li>)}
             </ul>
           </div>
         ))}
@@ -45,4 +46,3 @@ export const RelationshipView: React.FC<{
 };
 
 export default RelationshipView;
-

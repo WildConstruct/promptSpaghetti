@@ -1,4 +1,5 @@
 import React from 'react';
+import './GraphControls.css';
 import { useNeatenSettings } from '../contexts/NeatenSettingsContext';
 import { Panel } from 'reactflow';
 import { NodePalette } from '../NodePalette';
@@ -40,6 +41,7 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
   onShowHistory,
 
 }) => {
+  const { gridSize, rowSnap, setGridSize, setRowSnap } = useNeatenSettings();
   const [showSettings, setShowSettings] = React.useState(false);
   const [requireConsent, setRequireConsent] = React.useState(
     () => ConsentService.getSettings().requireConsent
@@ -121,6 +123,45 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
     try { window.localStorage.setItem('consistency.enabled', String(val)); } catch {}
   }, []);
 
+  // Files test UI state
+  const [supabaseToken, setSupabaseToken] = React.useState<string>('');
+  const [fileName, setFileName] = React.useState<string>('example.json');
+  const [fileContent, setFileContent] = React.useState<string>('{}');
+  const [filesResult, setFilesResult] = React.useState<string>('');
+
+  const filesFetch = React.useCallback(async (method: 'LIST'|'UPLOAD'|'DOWNLOAD'|'DELETE') => {
+    try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (supabaseToken) headers['Authorization'] = `Bearer ${supabaseToken}`;
+      if (method === 'LIST') {
+        const res = await fetch('/api/files/list', { headers });
+        const text = await res.text();
+        setFilesResult(`${res.status}: ${text}`);
+        return;
+      }
+      if (method === 'UPLOAD') {
+        const res = await fetch('/api/files/upload', { method: 'POST', headers, body: JSON.stringify({ filename: fileName, content: fileContent }) });
+        const text = await res.text();
+        setFilesResult(`${res.status}: ${text}`);
+        return;
+      }
+      if (method === 'DOWNLOAD') {
+        const res = await fetch(`/api/files/download?filename=${encodeURIComponent(fileName)}`, { headers });
+        const text = await res.text();
+        setFilesResult(`${res.status}: ${text}`);
+        return;
+      }
+      if (method === 'DELETE') {
+        const res = await fetch('/api/files/delete', { method: 'DELETE', headers, body: JSON.stringify({ filename: fileName }) });
+        const text = await res.text();
+        setFilesResult(`${res.status}: ${text}`);
+        return;
+      }
+    } catch (e: any) {
+      setFilesResult(`error: ${e?.message || String(e)}`);
+    }
+  }, [supabaseToken, fileName, fileContent]);
+
   return (
     <>
       {/* Top-right controls panel */}
@@ -146,7 +187,7 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
               className="epic1-download-button"
               onClick={onDownloadGraph}
               title="Download JSON"
-              style={{ marginLeft: 8 }}
+              className="epic1-download-button epic1-ml-8"
             >
               Download JSON
             </button>
@@ -156,7 +197,7 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
               className="epic1-history-button"
               onClick={onShowHistory}
               title="History"
-              style={{ marginLeft: 8 }}
+              className="epic1-history-button epic1-ml-8"
             >
               History
             </button>
@@ -165,7 +206,7 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
             <button 
               className="epic1-undo-button"
               onClick={onUndoLast}
-              style={{ marginLeft: 8 }}
+              className="epic1-undo-button epic1-ml-8"
             >
               Undo Last
             </button>
@@ -174,36 +215,36 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
             className="epic1-settings-button"
             onClick={toggleSettings}
             title="File → Settings"
-            style={{ marginLeft: 8 }}
+            className="epic1-settings-button epic1-ml-8"
           >
             Settings
           </button>
         </div>
         {showSettings && (
-          <div className="epic1-settings-popover" style={{ marginTop: 8, padding: 8, background: 'rgba(0,0,0,0.7)', color: '#fff', borderRadius: 6 }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="epic1-settings-popover">
+            <label className="epic1-checkbox">
               <input type="checkbox" checked={requireConsent} onChange={onToggleConsent} />
               <span>Require consent for assets</span>
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+            <label className="epic1-checkbox epic1-mt-6">
               <input type="checkbox" checked={smartMode} onChange={onToggleSmartMode} />
               <span>Smart Suggestions (Smart Mode)</span>
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+            <label className="epic1-checkbox epic1-mt-6">
               <input type="checkbox" checked={buildTreeMode} onChange={onToggleBuildTree} />
               <span>Build Tree mode (empty drop expands template)</span>
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+            <label className="epic1-checkbox epic1-mt-6">
               <input type="checkbox" checked={advancedMatching} onChange={onToggleAdvancedMatching} />
               <span>Advanced Matching (ML Scoring)</span>
             </label>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+            <label className="epic1-checkbox epic1-mt-6">
               <input type="checkbox" checked={consistencyEnabled} onChange={onToggleConsistency} />
               <span>Consistency checks</span>
             </label>
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.15)', marginTop: 8, paddingTop: 8 }}>
-              <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 6 }}>Batch Operations</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div className="epic1-section">
+              <div className="epic1-section-title">Batch Operations</div>
+              <div className="epic1-row">
                 {onApplyMetadataToSelection && (
                   <button onClick={onApplyMetadataToSelection}>Apply metadata to selection</button>
                 )}
@@ -212,21 +253,56 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
                 )}
               </div>
             </div>
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.15)', marginTop: 8, paddingTop: 8 }}>
-              <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 6 }}>Neaten Settings</div>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 12, opacity: 0.9 }}>Grid</span>
-                  <input type="number" min={5} max={200} value={gridSize} onChange={(e) => setGridSize(Number(e.target.value) || 20)} style={{ width: 70, padding: 4, borderRadius: 4, border: '1px solid #444', background: '#111', color: '#fff' }} />
+            <div className="epic1-section">
+              <div className="epic1-section-title">Neaten Settings</div>
+              <div className="epic1-row">
+                <label className="epic1-checkbox">
+                  <span className="epic1-small-muted">Grid</span>
+                  <input className="epic1-input-number" type="number" min={5} max={200} value={gridSize} onChange={(e) => setGridSize(Number(e.target.value) || 20)} />
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 12, opacity: 0.9 }}>Row</span>
-                  <input type="number" min={10} max={300} value={rowSnap} onChange={(e) => setRowSnap(Number(e.target.value) || 40)} style={{ width: 70, padding: 4, borderRadius: 4, border: '1px solid #444', background: '#111', color: '#fff' }} />
+                <label className="epic1-checkbox">
+                  <span className="epic1-small-muted">Row</span>
+                  <input className="epic1-input-number" type="number" min={10} max={300} value={rowSnap} onChange={(e) => setRowSnap(Number(e.target.value) || 40)} />
                 </label>
-                <span style={{ fontSize: 11, opacity: 0.7 }}>(snap spacing in px)</span>
+                <span className="epic1-note">(snap spacing in px)</span>
               </div>
             </div>
-            <div style={{ marginTop: 6, fontSize: 12, opacity: 0.8 }}>Adjust later via File → Settings</div>
+            {!import.meta.env.PROD && (
+            <div className="epic1-section">
+              <div className="epic1-section-title">Files (test)</div>
+              <div className="epic1-col">
+                <input className="epic1-textarea"
+                  placeholder="Supabase JWT (Bearer)"
+                  value={supabaseToken}
+                  onChange={(e) => setSupabaseToken(e.target.value)}
+                />
+                <div className="epic1-row">
+                  <input className="epic1-input-text"
+                    placeholder="filename.json"
+                    value={fileName}
+                    onChange={(e) => setFileName(e.target.value)}
+                  />
+                  <button onClick={() => filesFetch('LIST')}>List</button>
+                  <button onClick={() => filesFetch('DOWNLOAD')}>Download</button>
+                  <button onClick={() => filesFetch('DELETE')}>Delete</button>
+                </div>
+                <textarea className="epic1-textarea"
+                  placeholder="{ } content for upload"
+                  value={fileContent}
+                  onChange={(e) => setFileContent(e.target.value)}
+                  rows={4}
+                />
+                <div>
+                  <button onClick={() => filesFetch('UPLOAD')}>Upload</button>
+                </div>
+                <pre className="epic1-pre">{filesResult}</pre>
+                <div className="epic1-note">
+                  Note: Server requires Supabase JWT via Authorization header; set bucket with SUPABASE_BUCKET.
+                </div>
+              </div>
+            </div>
+            )}
+            <div className="epic1-settings-note">Adjust later via File → Settings</div>
           </div>
         )}
       </Panel>
@@ -278,7 +354,6 @@ export const QuickActionBar: React.FC<{
             key={index}
             className="epic1-quick-action"
             onClick={action.onClick}
-  const { gridSize, rowSnap, setGridSize, setRowSnap } = useNeatenSettings();
             disabled={action.disabled}
             title={action.label}
           >

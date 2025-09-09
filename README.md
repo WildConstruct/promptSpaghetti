@@ -301,6 +301,18 @@ pnpm prepare
 - **Fastify**: High-performance API server
 - **Vercel**: Serverless deployment with edge functions
 
+## 🔒 Security & Env
+
+- Server headers: adds `X-Frame-Options=DENY`, `X-Content-Type-Options=nosniff`, `Referrer-Policy=no-referrer`, and a conservative `Permissions-Policy` on all API responses. Netlify adds matching headers for the SPA.
+- CSP (Netlify): tightened `script-src` to `'self'` only; inline styles temporarily allowed for admin. Remove `'unsafe-inline'` for styles after migrating admin styles to external CSS or nonces.
+- CSP (Netlify): global `style-src` still includes `'unsafe-inline'` due to SPA inline styles. For `/admin/*`, we serve external CSS/JS and apply stricter CSP (no inline styles/scripts).
+- CORS: configure allowed origins via `CORS_ORIGINS` (comma-separated). Defaults include `http://localhost:3000`, `http://localhost:5173`, `https://ps.wildconstruct.com`, and `APP_ORIGIN` if set.
+- Rate limiting: per-IP token bucket applied to files API, LLM parse/complete, and admin metrics.
+- Request limits: set `BODY_LIMIT_BYTES` (default `1000000`) to cap request body size.
+- LLM timeout: set `LLM_TIMEOUT_MS` (default `20000`) to abort long external calls.
+- Health: `/health` and `/api/healthz` endpoints return `{ status: 'ok' }`.
+- Files test UI: a small dev-only tester appears in GraphControls Settings to exercise `/api/files/*`. It is hidden in production builds.
+
 ## 🤝 Contributing
 
 ### Development Workflow

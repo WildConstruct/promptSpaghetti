@@ -31,7 +31,7 @@ export class LLMService {
       apiKey: opts.apiKey || process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY || '',
       baseURL: opts.baseURL || process.env.OPENAI_BASE_URL || 'https://openrouter.ai/api/v1',
       defaultModel: opts.defaultModel || process.env.OPENAI_DEFAULT_MODEL || 'openai/gpt-4o-mini',
-      requestTimeoutMs: opts.requestTimeoutMs || 12_000,
+      requestTimeoutMs: opts.requestTimeoutMs || Number(process.env.LLM_TIMEOUT_MS || process.env.OPENAI_REQUEST_TIMEOUT_MS || 12_000),
     };
 
     this.client = this.opts.apiKey
@@ -93,4 +93,3 @@ export class LLMService {
     }
   }
 }
-

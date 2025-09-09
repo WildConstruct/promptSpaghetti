@@ -106,6 +106,13 @@
   cursor: grabbing;
 }
 
+/* Per-type colors (avoid inline styles) */
+.node-button.textBlock { --node-color: #7c7ff2; }
+.node-button.weightedChoice { --node-color: #f6a723; }
+.node-button.concat { --node-color: #22c493; }
+.node-button.variable { --node-color: #9d70f7; }
+.node-button.output { --node-color: #f15656; }
+
 /* Color indicator */
 .node-button::before {
   content: '';

@@ -120,341 +120,8 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Prompt Spaghetti</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f172a;
-            color: #e2e7eb;
-            padding: 2rem;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .banner { margin-bottom: 16px; padding: 12px 14px; border-radius: 8px; }
-        .banner.success { background: #063b2a; color: #a7f3d0; border: 1px solid #10b981; }
-        .banner.error { background: #3b0610; color: #fecaca; border: 1px solid #ef4444; }
-        .banner.info { background: #0a2540; color: #93c5fd; border: 1px solid #3b82f6; }
-        .status-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; }
-        .dot-ok { background:#10b981; }
-        .dot-bad { background:#ef4444; }
-        .kv { display:flex; gap:8px; align-items:center; margin: 4px 0; }
-        .danger { color:#fecaca; }
-        .delete-form { margin-top:8px; padding:8px; background:#1f2937; border-radius:6px; border:1px solid rgba(255,255,255,0.08); }
-      
-        h1 {
-            color: #10b981;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid #334155;
-        }
-        
-        .tab {
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            color: #94a3b8;
-            border: none;
-            border-bottom: 3px solid transparent;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-        
-        .tab:hover {
-            color: #e2e8f0;
-        }
-        
-        .tab.active {
-            color: #10b981;
-            border-bottom-color: #10b981;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .section {
-            background: #1e293b;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        h2 {
-            color: #60a5fa;
-            margin-bottom: 1rem;
-            font-size: 1.25rem;
-        }
-        
-        h3 {
-            color: #94a3b8;
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        label {
-            display: block;
-            color: #94a3b8;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        input[type="text"],
-        input[type="password"],
-        input[type="url"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 0.75rem;
-            background: #334155;
-            border: 1px solid #475569;
-            border-radius: 6px;
-            color: #e2e8f0;
-            font-size: 1rem;
-        }
-        
-        textarea {
-            min-height: 120px;
-            font-family: 'Courier New', monospace;
-            resize: vertical;
-        }
-        
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-        
-        button {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        button:hover {
-            background: #059669;
-        }
-        
-        button.secondary {
-            background: #475569;
-        }
-        
-        button.secondary:hover {
-            background: #64748b;
-        }
-        
-        button.danger {
-            background: #ef4444;
-        }
-        
-        button.danger:hover {
-            background: #dc2626;
-        }
-        
-        .success {
-            background: #065f46;
-            color: #10b981;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 2rem;
-            border: 1px solid #10b981;
-        }
-        
-        .error {
-            background: #7f1d1d;
-            color: #ef4444;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 2rem;
-            border: 1px solid #ef4444;
-        }
-        
-        .info {
-            background: #1e3a8a;
-            color: #60a5fa;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 2rem;
-            border: 1px solid #60a5fa;
-        }
-        
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .metric {
-            background: #334155;
-            padding: 1rem;
-            border-radius: 6px;
-            text-align: center;
-        }
-        
-        .metric-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #10b981;
-        }
-        
-        .metric-label {
-            color: #94a3b8;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-        
-        .code {
-            background: #1a1a1a;
-            padding: 1rem;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
-            white-space: pre-wrap;
-        }
-        
-        .prompt-card {
-            background: #334155;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-        }
-        
-        .prompt-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .prompt-title {
-            font-weight: 600;
-            color: #e2e8f0;
-        }
-        
-        .prompt-category {
-            background: #1e293b;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.875rem;
-            color: #60a5fa;
-        }
-        
-        .prompt-description {
-            color: #94a3b8;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .prompt-variables {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-        }
-        
-        .variable-tag {
-            background: #475569;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            color: #e2e8f0;
-        }
-        
-        .test-result {
-            background: #1a1a1a;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-top: 1rem;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .model-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .model-card {
-            background: #334155;
-            padding: 1rem;
-            border-radius: 6px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .model-card:hover {
-            border-color: #475569;
-        }
-        
-        .model-card.selected {
-            border-color: #10b981;
-            background: #065f46;
-        }
-        
-        .model-name {
-            font-weight: 600;
-            color: #e2e8f0;
-        }
-        
-        .model-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-            color: #94a3b8;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        small {
-            color: #64748b;
-            display: block;
-            margin-top: 0.25rem;
-        }
-</style>
-    <script>
+    <link rel="stylesheet" href="/admin/assets/admin.css" />
+    <script src="/admin/assets/admin.js" defer></script>
         // Auto-dismiss flash banner after save
         document.addEventListener('DOMContentLoaded', function () {
             const banner = document.querySelector('.banner');
@@ -532,22 +199,22 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
   <body>
     <div class="container">
       ${message ? `<div class=\"banner ${message.type}\">${message.text}</div>` : ''}
-      <div style="margin-bottom:16px; padding:12px 14px; border:1px solid rgba(255,255,255,0.1); border-radius:8px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <div style="font-weight:600;">Connection Status</div>
-          <div style="display:flex; gap:8px;">
-            <button id="reload-status" style="padding:4px 8px;">Reload</button>
+      <div class="status-panel">
+        <div class="status-header">
+          <div class="status-title">Connection Status</div>
+          <div class="status-actions">
+            <button id="reload-status" class="btn-small">Reload</button>
           </div>
         </div>
         <div class="kv">
           <span id="supabase-dot" class="status-dot ${status?.supabase?.reachable ? 'dot-ok' : 'dot-bad'}"></span>
           <span id="supabase-text">Supabase: ${status?.supabase?.configured ? 'Configured' : 'Not configured'} — ${status?.supabase?.reachable ? 'Reachable' : 'Unreachable'}${status?.supabase?.status ? ` (HTTP ${status.supabase.status})` : ''}${status?.supabase?.error ? ` — ${status.supabase.error}` : ''}</span>
-          <button id="test-supabase" style="margin-left:auto; padding:4px 8px;">Test</button>
+          <button id="test-supabase" class="btn-small push-right">Test</button>
         </div>
         <div class="kv">
           <span id="openrouter-dot" class="status-dot ${status?.openrouter?.reachable ? 'dot-ok' : 'dot-bad'}"></span>
           <span id="openrouter-text">OpenRouter: ${status?.openrouter?.configured ? 'Configured' : 'Not configured'} — ${status?.openrouter?.reachable ? 'Reachable' : 'Unreachable'}${status?.openrouter?.status ? ` (HTTP ${status.openrouter.status})` : ''}${status?.openrouter?.error ? ` — ${status.openrouter.error}` : ''}</span>
-          <button id="test-openrouter" style="margin-left:auto; padding:4px 8px;">Test</button>
+          <button id="test-openrouter" class="btn-small push-right">Test</button>
         </div>
       </div>
         <h1>⚙️ Enhanced Admin Panel</h1>
@@ -647,7 +314,7 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
                       <div>Type exactly: <code>Yes I want to delete this key</code></div>
                       <input type="text" name="confirmation" placeholder="Yes I want to delete this key" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #334155; background: #111827; color: #e2e8f0;">
                     </label>
-                    <button type="submit" style="padding: 8px 12px; background: #ef4444; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Delete Key</button>
+                    <button type="submit" class="danger btn-small">Delete Key</button>
                   </form>
                 </div>
             </div>
@@ -724,7 +391,7 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
         <div id="prompts" class="tab-content">
             <div class="section">
                 <h2>📝 Prompt Templates</h2>
-                <p style="color: #94a3b8; margin-bottom: 1rem;">
+                <p class="muted mb-1">
                     These are the prompt templates used by the LLM system. Edit them to customize behavior.
                 </p>
                 
@@ -954,7 +621,33 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
       return { supabase, openrouter };
     })();
 
+    // Add stricter CSP for admin (no inline styles/scripts)
+    reply.header('Content-Security-Policy', "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://ps.wildconstruct.com:8000 https://ps.wildconstruct.com; frame-ancestors 'none';");
     reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, undefined, status));
+  });
+
+  // Serve admin assets (CSS/JS)
+  server.get('/admin/assets/admin.css', async (_req, reply) => {
+    const p = path.join(__dirname, './assets/admin.css');
+    try {
+      const css = fs.readFileSync(p, 'utf-8');
+      reply.header('Content-Type', 'text/css; charset=utf-8');
+      reply.header('Cache-Control', 'public, max-age=300');
+      return reply.send(css);
+    } catch {
+      return reply.status(404).send('not found');
+    }
+  });
+  server.get('/admin/assets/admin.js', async (_req, reply) => {
+    const p = path.join(__dirname, './assets/admin.js');
+    try {
+      const js = fs.readFileSync(p, 'utf-8');
+      reply.header('Content-Type', 'application/javascript; charset=utf-8');
+      reply.header('Cache-Control', 'public, max-age=300');
+      return reply.send(js);
+    } catch {
+      return reply.status(404).send('not found');
+    }
   });
 
   // Return current connection status as JSON

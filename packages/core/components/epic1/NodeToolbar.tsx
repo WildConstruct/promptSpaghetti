@@ -76,12 +76,7 @@ const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
       draggable="true"
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      className={`node-button ${isDragging ? 'dragging' : ''}`}
-      style={{ 
-        '--node-color': nodeInfo.color,
-        opacity: isDragging ? 0.5 : 1,
-        cursor: isDragging ? 'grabbing' : 'grab'
-      } as React.CSSProperties}
+      className={`node-button ${nodeInfo.type} ${isDragging ? 'dragging' : ''}`}
       title={`Drag to add ${nodeInfo.label} node`}
     >
       <span className="node-icon">{nodeInfo.icon}</span>

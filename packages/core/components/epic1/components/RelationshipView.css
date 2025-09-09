@@ -1,0 +1,8 @@
+.relationship-panel { background: #0b0b0b; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 10px; }
+.relationship-title { margin-bottom: 8px; font-weight: 600; }
+.relationship-subtitle { font-size: 12px; opacity: 0.85; margin-bottom: 6px; }
+.relationship-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-height: 280px; overflow: auto; }
+.relationship-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px; }
+.relationship-card-title { font-weight: 600; margin-bottom: 4px; }
+.relationship-list { margin: 0; padding-left: 16px; }
+.relationship-more { opacity: 0.85; }
