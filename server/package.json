@@ -48,6 +48,7 @@
     "uuid": "^9.0.1",
     "ws": "^8.18.3",
     "@supabase/supabase-js": "^2.45.4",
+    "@sentry/node": "^7.120.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

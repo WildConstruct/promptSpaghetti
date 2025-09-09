@@ -1,9 +1,10 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { getSupabaseAdmin, verifySupabaseToken } from '../services/supabase';
+import { rateLimiter } from '../utils/rateLimit';
 
 export async function filesRoutes(app: FastifyInstance) {
-  app.get('/api/files/list', async (req, reply) => {
+  app.get('/api/files/list', { preHandler: rateLimiter({ key: 'files:list', limitPerMinute: 120 }) }, async (req, reply) => {
     const admin = getSupabaseAdmin();
     if (!admin) return reply.status(501).send({ error: 'Supabase not configured on server' });
     const auth = String((req.headers['authorization'] as string) || '');
@@ -17,7 +18,7 @@ export async function filesRoutes(app: FastifyInstance) {
     return data;
   });
 
-  app.post('/api/files/upload', async (req, reply) => {
+  app.post('/api/files/upload', { preHandler: rateLimiter({ key: 'files:upload', limitPerMinute: 60 }) }, async (req, reply) => {
     const admin = getSupabaseAdmin();
     if (!admin) return reply.status(501).send({ error: 'Supabase not configured on server' });
     const auth = String((req.headers['authorization'] as string) || '');
@@ -38,7 +39,7 @@ export async function filesRoutes(app: FastifyInstance) {
     return { success: true, path };
   });
 
-  app.get('/api/files/download', async (req, reply) => {
+  app.get('/api/files/download', { preHandler: rateLimiter({ key: 'files:download', limitPerMinute: 120 }) }, async (req, reply) => {
     const admin = getSupabaseAdmin();
     if (!admin) return reply.status(501).send({ error: 'Supabase not configured on server' });
     const auth = String((req.headers['authorization'] as string) || '');
@@ -57,7 +58,7 @@ export async function filesRoutes(app: FastifyInstance) {
     return await data.text();
   });
 
-  app.delete('/api/files/delete', async (req, reply) => {
+  app.delete('/api/files/delete', { preHandler: rateLimiter({ key: 'files:delete', limitPerMinute: 60 }) }, async (req, reply) => {
     const admin = getSupabaseAdmin();
     if (!admin) return reply.status(501).send({ error: 'Supabase not configured on server' });
     const auth = String((req.headers['authorization'] as string) || '');

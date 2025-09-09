@@ -8,6 +8,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import cors from '@fastify/cors';
 import { executeGraph } from './engine-basic';
+import { Sentry } from './sentry';
 import { registerEnhancedAdminRoutes } from './admin-panel-enhanced';
 import { LLMService } from './services/LLMService';
 import { redactPII } from './utils/privacy';
@@ -194,6 +195,9 @@ const start = async () => {
     await server.listen({ port, host: '0.0.0.0' });
     console.log(`Server running on port ${port}`);
   } catch (err) {
+    if (Sentry) {
+      try { (Sentry as any).captureException(err); } catch {}
+    }
     server.log.error(err);
     process.exit(1);
   }
