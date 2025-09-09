@@ -46,7 +46,8 @@
       "Bash(taskkill:*)",
       "Bash(git add:*)",
       "Bash(vercel:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx prettier:*)"
     ],
     "deny": [],
     "ask": [],

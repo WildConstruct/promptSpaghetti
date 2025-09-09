@@ -23,11 +23,11 @@ export default async function handler(req, res) {
   try {
     const { prompt, mode } = req.body;
 
-    if (!prompt) {
-      return res.status(400).json({ error: 'Prompt is required' });
+    if (!prompt || typeof prompt !== 'string') {
+      return res.status(400).json({ error: 'Prompt is required (string)' });
     }
 
-    // Check for API keys
+    // API keys
     const openaiKey = process.env.OPENAI_API_KEY;
     const openrouterKey = process.env.OPENROUTER_API_KEY;
 
@@ -39,36 +39,97 @@ export default async function handler(req, res) {
       });
     }
 
-    // Build the parsing prompt
-    const systemPrompt = `You are a prompt parsing assistant for a randomization system. Break down the prompt into semantic units that could be varied or randomized.
+    // ———————————————————————————————————————————————
+    // Lyra 4.0–optimized system prompt (DETAIL/BASIC)
+    // ———————————————————————————————————————————————
+    const buildSystemPrompt = (parseMode = 'DETAIL') => {
+      // Shared foundation
+      const base = `
+You are a Prompt Parsing Specialist for a semantic randomization system.
+Your task: analyze an input prompt, identify natural variation boundaries ("slots"), and output a structured JSON graph for procedural randomization.
 
-Think of each node as a "slot" that could be filled with different options. Identify natural variation points.
+CRITICAL REQUIREMENT: Each node's "text" field MUST contain the EXACT text from the original prompt - character for character, including spaces and punctuation. Do not modify, clean up, or paraphrase the text.
 
-Guidelines:
-1. Camera/composition terms (e.g., "Extreme close-up", "wide shot")
-2. Subject descriptors that could vary (e.g., "Korean woman's", "young man's")
-3. Body parts or locations (e.g., "cheek", "forehead", "hand")
-4. Qualities/adjectives as units (e.g., "flawless bright skin", "weathered texture")
-5. Actions as complete phrases (e.g., "finger gently pressing", "hand touching")
-6. Style descriptors (e.g., "luxury beauty advertisement style", "documentary style")
+Core Objective:
+- Break the prompt into semantic units that can be swapped or randomized without breaking grammar or meaning.
+- Ensure complete coverage - every character of the original prompt should be represented in the nodes
 
-Return a JSON object with:
-- nodes: Array of {id, type, text, data}
-- edges: Array of {id, source, target}
+Categories to consider (treat each as an atomic unit/phrase, not single words):
+1) Camera/Composition (e.g., "Extreme close-up", "wide shot")
+2) Subject Descriptors (e.g., "Korean woman's", "young man's")
+3) Body Parts / Locations (e.g., "cheek", "forehead", "hand")
+4) Qualities / Adjectives (e.g., "flawless bright skin", "weathered texture")
+5) Actions (full verb phrases, e.g., "finger gently pressing", "hand touching")
+6) Style Descriptors (e.g., "luxury beauty advertisement style", "documentary style")
 
-Node types: 'subject', 'action', 'choice', 'variable', 'output'
+Output JSON shape (strict):
+{
+  "nodes": [
+    {"id": "string", "type": "subject|action|choice|variable|output", "text": "string", "data": {...}}
+  ],
+  "edges": [
+    {"id": "string", "source": "string", "target": "string"}
+  ]
+}
 
-Example: "Extreme close-up of a Korean woman's cheek with flawless bright skin"
-Should become nodes like:
-- "Extreme close-up" (could be replaced with other shot types)
-- "of a Korean woman's" (could be replaced with other subjects)
-- "cheek" (could be replaced with other body parts)
-- "with flawless bright skin" (could be replaced with other skin descriptions)
+Notes:
+- Break at natural randomization boundaries, not word-by-word.
+- Keep each unit independently swappable while preserving grammar.
+- Use node.data.category to optionally annotate finer distinctions (e.g., "composition", "body_part", "quality", "style").
+- Do not include any prose outside JSON in your final message.
+- Memory Note: do not store any information from this session.
+`;
 
-Break at natural randomization boundaries, not word boundaries.`;
+      if ((parseMode || '').toUpperCase() === 'BASIC') {
+        // Faster/cheaper: minimal guidance
+        return `${base}
 
+Mode: BASIC
+- Be concise: only the most obvious variation slots.
+- Prefer fewer, larger units over many tiny ones.
+- STILL use EXACT text from the prompt - do not paraphrase.
+- Return ONLY the JSON object.
+Example Input: "Extreme close-up of a Korean woman's cheek with flawless bright skin"
+Example nodes (fewer, larger chunks but EXACT text):
+- {"text": "Extreme close-up of a ", "type": "subject"}
+- {"text": "Korean woman's cheek", "type": "subject"}  
+- {"text": " with flawless bright skin", "type": "subject"}
+`;
+      }
+
+      // DETAIL (default): richer guidance and example
+      return `${base}
+
+Mode: DETAIL
+- Be thorough: identify all natural variation boundaries that wouldn't break the sentence when swapped.
+- Include node.data.category when helpful (e.g., "composition", "subject_descriptor", "body_part", "quality", "action", "style").
+- Ensure edges represent a left-to-right readable order from the first node to the last (a simple chain is fine unless grouping is essential).
+- If useful, emit a "choice" node when multiple alternatives are implied by the phrase.
+
+Worked Example:
+Input: "Extreme close-up of a Korean woman's cheek with flawless bright skin"
+Expected nodes with EXACT text:
+- {"text": "Extreme close-up", "type": "subject", "data": {"category": "composition"}}
+- {"text": " of a ", "type": "subject", "data": {"category": "connector"}}
+- {"text": "Korean woman's", "type": "subject", "data": {"category": "subject_descriptor"}}
+- {"text": " ", "type": "subject", "data": {"category": "space"}}
+- {"text": "cheek", "type": "subject", "data": {"category": "body_part"}}
+- {"text": " with ", "type": "subject", "data": {"category": "connector"}}
+- {"text": "flawless bright skin", "type": "subject", "data": {"category": "quality"}}
+
+Note: Preserve ALL text including spaces and connectors. The concatenation of all node texts must exactly equal the original prompt
+
+Return ONLY the JSON object.
+`;
+    };
+
+    const systemPrompt = buildSystemPrompt(mode || 'DETAIL');
     const userPrompt = `Parse this prompt into a graph structure:\n"${prompt}"`;
 
+    // Model selection
+    const primaryModel = process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini';
+
+    // Call LLM
     let response;
 
     if (openrouterKey) {
@@ -84,13 +145,13 @@ Break at natural randomization boundaries, not word boundaries.`;
             'X-Title': 'PromptScape Parser'
           },
           body: JSON.stringify({
-            model: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
+            model: primaryModel, // e.g., 'openai/gpt-4o-mini' (default)
             messages: [
               { role: 'system', content: systemPrompt },
               { role: 'user', content: userPrompt }
             ],
-            max_tokens: 1000,
-            temperature: 0.3,
+            max_tokens: 1200,
+            temperature: 0.2,
             response_format: { type: 'json_object' }
           })
         }
@@ -99,16 +160,18 @@ Break at natural randomization boundaries, not word boundaries.`;
       if (!apiResponse.ok) {
         const error = await apiResponse.text();
         console.error('OpenRouter error:', error);
-        return res.status(500).json({
-          error: 'LLM API error',
-          details: error
-        });
+        return res.status(500).json({ error: 'LLM API error', details: error });
       }
 
       const data = await apiResponse.json();
-      response = data.choices[0].message.content;
-    } else if (openaiKey) {
+      response = data?.choices?.[0]?.message?.content;
+    } else {
       // Use OpenAI directly
+      // Map 'openai/gpt-4o-mini' → 'gpt-4o-mini' if user kept default
+      const openAIModel = primaryModel.startsWith('openai/')
+        ? primaryModel.replace('openai/', '')
+        : primaryModel;
+
       const apiResponse = await fetch(
         'https://api.openai.com/v1/chat/completions',
         {
@@ -118,13 +181,13 @@ Break at natural randomization boundaries, not word boundaries.`;
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
+            model: openAIModel || 'gpt-4o-mini',
             messages: [
               { role: 'system', content: systemPrompt },
               { role: 'user', content: userPrompt }
             ],
-            max_tokens: 1000,
-            temperature: 0.3,
+            max_tokens: 1200,
+            temperature: 0.2,
             response_format: { type: 'json_object' }
           })
         }
@@ -133,32 +196,33 @@ Break at natural randomization boundaries, not word boundaries.`;
       if (!apiResponse.ok) {
         const error = await apiResponse.text();
         console.error('OpenAI error:', error);
-        return res.status(500).json({
-          error: 'LLM API error',
-          details: error
-        });
+        return res.status(500).json({ error: 'LLM API error', details: error });
       }
 
       const data = await apiResponse.json();
-      response = data.choices[0].message.content;
+      response = data?.choices?.[0]?.message?.content;
     }
 
     // Parse the LLM response
+    if (!response || typeof response !== 'string') {
+      throw new Error('Empty response from LLM');
+    }
+
     let parsedGraph;
     try {
       parsedGraph = JSON.parse(response);
-    } catch (e) {
-      console.error('Failed to parse LLM response:', response);
-      // Try to extract JSON from the response
+    } catch (_e) {
+      // Try to extract a JSON object from the text
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         parsedGraph = JSON.parse(jsonMatch[0]);
       } else {
+        console.error('Failed to parse LLM response:', response);
         throw new Error('Invalid JSON response from LLM');
       }
     }
 
-    // Ensure the response has the expected structure
+    // Ensure expected structure
     if (!parsedGraph.nodes || !Array.isArray(parsedGraph.nodes)) {
       parsedGraph.nodes = [];
     }
@@ -166,38 +230,49 @@ Break at natural randomization boundaries, not word boundaries.`;
       parsedGraph.edges = [];
     }
 
-    // Add IDs if missing and ensure proper data structure
-    parsedGraph.nodes = parsedGraph.nodes.map((node, index) => ({
-      id: node.id || `node-${index}`,
-      type: node.type || 'subject',
-      text: node.text || '',
-      data: {
-        ...node.data,
-        label: node.text || node.data?.label || '',
-        content: node.text || node.data?.content || ''
-      },
-      position: node.position || { x: 100 + index * 150, y: 100 + index * 50 }
-    }));
+    // Normalize nodes and ensure they contain the actual prompt text
+    parsedGraph.nodes = parsedGraph.nodes.map((node, index) => {
+      const id = node?.id || `node-${index}`;
+      const type = node?.type || 'subject';
+      const text = node?.text || node?.data?.label || node?.data?.content || '';
 
-    parsedGraph.edges = parsedGraph.edges.map((edge, index) => ({
-      id: edge.id || `edge-${index}`,
-      source: edge.source,
-      target: edge.target,
-      type: edge.type || 'default'
-    }));
+      // Important: The text field must contain the exact text from the prompt
+      // that this node represents for proper highlighting
+      const data = {
+        ...(node?.data || {}),
+        label: text,
+        content: text
+      };
+      const position = node?.position || {
+        x: 100 + index * 150,
+        y: 100 + index * 50
+      };
+
+      return { id, type, text, data, position };
+    });
+
+    // Normalize edges
+    parsedGraph.edges = parsedGraph.edges
+      .filter(e => e && e.source && e.target)
+      .map((edge, index) => ({
+        id: edge.id || `edge-${index}`,
+        source: edge.source,
+        target: edge.target,
+        type: edge.type || 'default'
+      }));
 
     // Return the parsed graph directly (client expects { nodes, edges })
     res.status(200).json({
       nodes: parsedGraph.nodes,
       edges: parsedGraph.edges,
       success: true,
-      mode: mode || 'llm-enhanced'
+      mode: (mode || 'DETAIL').toUpperCase()
     });
   } catch (error) {
     console.error('Parse endpoint error:', error);
     res.status(500).json({
       error: 'Failed to parse prompt',
-      details: error.message
+      details: error?.message || String(error)
     });
   }
 }
