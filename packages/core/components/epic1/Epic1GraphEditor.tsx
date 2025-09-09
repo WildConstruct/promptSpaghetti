@@ -415,19 +415,19 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const { toasts, showToast, dismissToast } = useToast();
   
   // Auto-layout functionality
-  const { cleanupNodes, cleanupAll } = useAutoLayout();
+  const { neatenSelection, neatenAll, cleanupNodes, cleanupAll } = useAutoLayout();
   
-  // Handle layout cleanup
+  // Handle layout cleanup: neaten (snap-to-grid and row-align), no full relayout
   const handleLayoutCleanup = useCallback(() => {
-    const selectedNodes = nodes.filter(node => node.selected);
-    if (selectedNodes.length > 0) {
-      cleanupNodes(selectedNodes);
-      showToast('success', `Cleaned up layout for ${selectedNodes.length} selected nodes`);
+    const hasSelection = nodes.some(n => n.selected);
+    if (hasSelection) {
+      neatenSelection();
+      showToast('success', 'Tidied selected nodes');
     } else {
-      cleanupAll();
-      showToast('success', 'Cleaned up layout for all nodes');
+      neatenAll();
+      showToast('success', 'Tidied all nodes');
     }
-  }, [nodes, cleanupNodes, cleanupAll, showToast]);
+  }, [nodes, neatenSelection, neatenAll, showToast]);
   
   // Check for current user on mount
   useEffect(() => {
