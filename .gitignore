@@ -43,3 +43,5 @@ load-tests/*.log
 # Generated assets
 assets/generated/
 asset-gen
+# Ignore stray Windows device filename artifact
+nul

@@ -1,48 +1,397 @@
 /* Enhanced Branching Node - Handle Positioning Fix */
 
-/* Force all handles for enhanced branching nodes to the edges */
-.react-flow__node .epic1-editable-node.enhanced-branching ~ .react-flow__handle {
+/* Metadata view - AGGRESSIVE hide/show to fix visibility issue */
+.enhanced-branching-editor {
+  position: relative;
+}
+
+/* Container needs to maintain space */
+.flip-container {
+  position: relative;
+  width: 100%;
+}
+
+/* The flip card - simple container */
+.flip-card {
+  position: relative;
+  width: 100%;
+}
+
+/* Front face - always visible unless flipped */
+.card-face.node-front {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+}
+
+/* Hide front when flipped - AGGRESSIVE */
+.flip-card.flipped .card-face.node-front {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
   position: absolute !important;
+  pointer-events: none !important;
 }
 
-/* Input handle - LEFT edge */
-.react-flow__node .epic1-editable-node.enhanced-branching ~ .react-flow__handle-left {
-  left: -8px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
+/* Metadata view - AGGRESSIVELY HIDDEN by default */
+.card-face.metadata-view {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  background: #1f2937;
+  border-radius: 8px;
+  padding: 15px;
+  color: #e5e7eb;
+  box-sizing: border-box;
+  pointer-events: none !important;
 }
 
-/* Output handles - RIGHT edge */
-.react-flow__node .epic1-editable-node.enhanced-branching ~ .react-flow__handle-right {
-  right: -8px !important;
-  transform: translateY(-50%) !important;
+/* Show metadata ONLY when flipped - AGGRESSIVE OVERRIDE */
+.flip-card.flipped .card-face.metadata-view {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  pointer-events: auto !important;
 }
 
-/* Main output handle positioning - removed to allow inline styles to control position */
-
-/* Branch output handles - align with option rows */
-.react-flow__node .epic1-editable-node.enhanced-branching ~ .react-flow__handle-right[data-handleid^="branch-"] {
-  /* Positioning will be set inline based on option index */
+/* Enhanced Branching Node Styles - Visual Elements */
+.enhanced-title-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #1f2937;
+  border-radius: 8px;
+  border: 1px solid #374151;
 }
 
-/* Enhanced handle styles */
-.enhanced-handle {
-  width: 16px !important;
-  height: 16px !important;
-  background: #3b82f6 !important;
-  border: 2px solid #1a1a2e !important;
-  border-radius: 50% !important;
-  cursor: crosshair !important;
+.title-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
 }
 
-.enhanced-handle.main-output {
-  background: #10b981 !important;
-  width: 18px !important;
-  height: 18px !important;
+.title-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: #10b981;
+  letter-spacing: 1px;
 }
 
-.enhanced-handle.branch-output {
-  background: #f59e0b !important;
-  width: 14px !important;
-  height: 14px !important;
+.title-edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.title-edit-btn:hover {
+  opacity: 1;
+}
+
+.title-edit-input {
+  flex: 1;
+  background: #111827;
+  border: 1px solid #374151;
+  color: #10b981;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Weight Presets Section */
+.enhanced-presets {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.preset-btn {
+  padding: 6px 12px;
+  background: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.preset-btn:hover {
+  background: #4b5563;
+  transform: translateY(-1px);
+}
+
+.preset-btn.active {
+  background: #10b981;
+  color: #111827;
+  border-color: #10b981;
+}
+
+/* Enhanced Options List */
+.enhanced-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.enhanced-option-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #1f2937;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  transition: all 0.2s;
+}
+
+.enhanced-option-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.enhanced-option-item.drag-over {
+  border-color: #10b981;
+  background: #1f2937;
+}
+
+.drag-handle {
+  cursor: move;
+  color: #6b7280;
+  font-size: 18px;
+  user-select: none;
+}
+
+.option-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.option-text-input {
+  flex: 1;
+  background: #111827;
+  border: 1px solid #374151;
+  color: #e5e7eb;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* Enhanced Weight Slider */
+.weight-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+}
+
+.weight-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: #374151;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+.weight-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #10b981;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.weight-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.weight-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #10b981;
+  cursor: pointer;
+  border: none;
+}
+
+.weight-value {
+  min-width: 40px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #10b981;
+}
+
+/* Branch toggle */
+.branch-toggle {
+  background: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.branch-toggle.active {
+  background: #10b981;
+  color: #111827;
+  border-color: #10b981;
+}
+
+.remove-option-btn {
+  background: #ef4444;
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.remove-option-btn:hover {
+  background: #dc2626;
+}
+
+/* Add Option Button */
+.add-option-btn {
+  padding: 8px 16px;
+  background: #10b981;
+  border: none;
+  border-radius: 6px;
+  color: #111827;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 15px;
+}
+
+.add-option-btn:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+/* Totals Display */
+.totals-display {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #111827;
+  border-radius: 6px;
+  border: 1px solid #374151;
+  margin-bottom: 15px;
+}
+
+.total-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.total-label {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.total-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: #10b981;
+}
+
+.total-value.warning {
+  color: #f59e0b;
+}
+
+.total-value.error {
+  color: #ef4444;
+}
+
+/* Metadata Toggle Button */
+.metadata-toggle-btn {
+  background: #374151;
+  border: 1px solid #4b5563;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+
+.metadata-toggle-btn:hover {
+  background: #4b5563;
+}
+
+/* Simple animations for show/hide */
+.enhanced-branch-output {
+  margin-top: 15px;
+  padding: 10px;
+  background: #1f2937;
+  border-radius: 8px;
+  border: 1px solid #374151;
+}
+
+/* Node Handle Positioning Fix */
+.enhanced-branching-editor .react-flow__handle {
+  background: #10b981;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #111827;
+}
+
+.enhanced-branching-editor .react-flow__handle-left {
+  left: -7px;
+}
+
+.enhanced-branching-editor .react-flow__handle-right {
+  right: -7px;
+}
+
+.enhanced-branching-editor .react-flow__handle-top {
+  top: -7px;
+}
+
+.enhanced-branching-editor .react-flow__handle-bottom {
+  bottom: -7px;
+}
+
+/* Ensure handles are above the node content */
+.enhanced-branching-editor .react-flow__handle {
+  z-index: 10;
+}
+
+/* Loading state for metadata extraction */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.metadata-extracting {
+  animation: pulse 1.5s ease-in-out infinite;
 }

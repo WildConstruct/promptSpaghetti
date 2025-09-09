@@ -96,11 +96,13 @@ class FileService {
    * Get authenticated headers for API requests
    */
   private getHeaders(): HeadersInit {
-    const token = this.deps.authProvider.getToken();
-    return {
-      'Content-Type': 'application/json',
-      'Authorization': token ? `Bearer ${token}` : ''
-    };
+    const state: any = (useAuthStore as any).getState?.() || {};
+    const token = state?.accessToken ?? state?.token ?? this.deps.authProvider.getToken();
+    const userId = state?.user?.id || null;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    if (userId) headers['X-User-Id'] = String(userId);
+    return headers;
   }
   
   /**

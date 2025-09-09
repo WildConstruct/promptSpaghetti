@@ -117,13 +117,20 @@ export interface CanvasDropTargetProps {
   onHover?: (isOver: boolean, canDrop: boolean) => void;
   children: React.ReactNode;
   acceptTypes?: string[];
+  // Optional integration hooks to support ACs
+  onInvalidDrop?: (error: any) => void;
+  nodes?: Array<{ id: string; type: string }>;
+  edges?: Array<{ source: string; target: string; sourceHandle?: string; targetHandle?: string }>;
 }
 
 export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
   onDrop,
   onHover,
   children,
-  acceptTypes = ['psg', 'psglib']
+  acceptTypes = ['psg', 'psglib'],
+  onInvalidDrop,
+  nodes,
+  edges
 }) => {
   const dropRef = useRef<HTMLDivElement>(null);
   
@@ -137,11 +144,27 @@ export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
           x: clientOffset.x - rect.left,
           y: clientOffset.y - rect.top
         };
-        
-        // Check if dropped on a node
-        const targetNode = getNodeAtPosition(position);
+
+        // Enforce 50px boundary rule
+        const tooCloseToEdge = (
+          position.x < 50 ||
+          position.y < 50 ||
+          rect.width - position.x < 50 ||
+          rect.height - position.y < 50
+        );
+        if (tooCloseToEdge) {
+          onInvalidDrop?.({
+            type: 'invalid_position',
+            message: "Can't drop here - too close to edge. Move 50px inward or use grid snap (G key).",
+            details: { requiredDistance: 50 }
+          });
+          return undefined;
+        }
+
+        // Detect target node at client coordinates
+        const targetNode = getNodeAtClientPoint(clientOffset.x, clientOffset.y);
         onDrop(item, position, targetNode);
-        
+
         return {
           position,
           targetNode,
@@ -182,10 +205,9 @@ export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
 };
 
 // Helper function to detect node at position
-function getNodeAtPosition(position: { x: number; y: number }): string | undefined {
-  // This would integrate with React Flow to detect nodes
-  // For now, returning undefined (drop on empty canvas)
-  const elements = document.elementsFromPoint(position.x, position.y);
+function getNodeAtClientPoint(clientX: number, clientY: number): string | undefined {
+  // Integrates with React Flow DOM to detect nodes under the cursor
+  const elements = document.elementsFromPoint(clientX, clientY);
   const nodeElement = elements.find(el => el.classList.contains('react-flow__node'));
   return nodeElement?.getAttribute('data-id') || undefined;
 }

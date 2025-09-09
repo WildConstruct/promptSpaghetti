@@ -1,5 +1,7 @@
 import React from 'react';
 import './NodeContextMenu.css';
+import './CanvasContextMenu.css';
+import { useNeatenSettings } from '../contexts/NeatenSettingsContext';
 
 interface CanvasContextMenuProps {
   position: { x: number; y: number };
@@ -19,6 +21,7 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
   onLayoutCleanup,
   onClose
 }) => {
+  const { setGridSize, setRowSnap } = useNeatenSettings();
   const handleAddNote = () => {
     // Get the graph position from the click position
     const graphPosition = {
@@ -43,13 +46,8 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
 
   return (
     <div
-      className="node-context-menu"
-      style={{
-        position: 'fixed',
-        left: position.x,
-        top: position.y,
-        zIndex: 10000
-      }}
+      className="node-context-menu canvas-context-menu"
+      style={{ position: 'fixed', left: position.x, top: position.y, zIndex: 10000 }}
       onMouseLeave={onClose}
     >
       <div className="context-menu-items">
@@ -71,6 +69,15 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
               Clean Up Layout
               <span className="context-menu-shortcut">⌘⇧L</span>
             </button>
+            <div className="context-menu-subtext presets-subtext">Neaten Presets</div>
+            <div className="presets-grid">
+              <button className="context-menu-item compact" onClick={() => setGridSize(10)}>Grid 10</button>
+              <button className="context-menu-item compact" onClick={() => setGridSize(20)}>Grid 20</button>
+              <button className="context-menu-item compact" onClick={() => setGridSize(40)}>Grid 40</button>
+              <button className="context-menu-item compact" onClick={() => setRowSnap(30)}>Row 30</button>
+              <button className="context-menu-item compact" onClick={() => setRowSnap(40)}>Row 40</button>
+              <button className="context-menu-item compact" onClick={() => setRowSnap(60)}>Row 60</button>
+            </div>
           </>
         )}
         <div className="context-menu-separator" />

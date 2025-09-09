@@ -19,6 +19,9 @@ export interface InsertionOptions {
   snapToGrid?: boolean;
   gridSize?: number;
   selectAfterInsert?: boolean;
+  // Optional: if provided, pack inserted nodes within these bounds (relative to position)
+  containerSize?: { width: number; height: number };
+  containerPadding?: number;
 }
 
 export interface InsertionResult {
@@ -523,17 +526,27 @@ function positionNodes(
     }];
   }
 
-  // For multiple stacked nodes, give them initial positions for the layout algorithm
-  // Place them in a temporary grid so the layout algorithm has something to work with
-  const tempSpacing = 300;  // Increased spacing for better initial layout
+  // For multiple stacked nodes, grid-pack within optional container bounds
   const cols = Math.ceil(Math.sqrt(nodes.length));
-  
+  const rows = Math.ceil(nodes.length / cols);
+  const padding = options.containerPadding ?? 24;
+  const spacingDefault = 220;
+  const hasContainer = !!options.containerSize;
+  const innerWidth = hasContainer ? Math.max(0, options.containerSize!.width - padding * 2) : spacingDefault * (cols - 1);
+  const innerHeight = hasContainer ? Math.max(0, options.containerSize!.height - padding * 2) : spacingDefault * (rows - 1);
+  const xStep = cols > 1 ? innerWidth / (cols - 1) : 0;
+  const yStep = rows > 1 ? innerHeight / (rows - 1) : 0;
+
   return nodes.map((node, index) => {
-    const row = Math.floor(index / cols);
-    const col = index % cols;
-    
-    let x = position.x + (col * tempSpacing) - ((cols - 1) * tempSpacing / 2);
-    let y = position.y + (row * tempSpacing) - ((Math.ceil(nodes.length / cols) - 1) * tempSpacing / 2);
+    const r = Math.floor(index / cols);
+    const c = index % cols;
+
+    // Anchor center at provided position
+    let baseX = position.x - (hasContainer ? (options.containerSize!.width / 2 - padding) : innerWidth / 2);
+    let baseY = position.y - (hasContainer ? (options.containerSize!.height / 2 - padding) : innerHeight / 2);
+
+    let x = baseX + c * (hasContainer ? xStep : spacingDefault);
+    let y = baseY + r * (hasContainer ? yStep : spacingDefault);
 
     if (snapToGrid) {
       x = Math.round(x / gridSize) * gridSize;

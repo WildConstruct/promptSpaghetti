@@ -6,7 +6,8 @@ export type { KeyboardNavigableEditorProps } from './KeyboardNavigableEditor';
 export { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
 export type { KeyboardNavigationOptions } from './hooks/useKeyboardNavigation';
 
-// Main Epic 1 Graph Editor
+// Main Epic 1 Graph Editor (source of truth)
+// Do not import Epic1GraphEditorFinal.tsx — quarantined until repaired.
 export {
   Epic1GraphEditor,
   Epic1GraphEditorWithProvider

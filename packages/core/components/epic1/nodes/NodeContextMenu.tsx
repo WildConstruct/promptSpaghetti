@@ -87,6 +87,20 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
       </div>
       
       <div className="context-menu-items">
+        <button className="context-menu-item" onClick={() => {
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const { getDocUrl } = require('../docsMap');
+            const url = getDocUrl(`${nodeType}Node`);
+            window.open(url, '_blank');
+          } catch {
+            window.open('/docs/index.md', '_blank');
+          }
+          onClose();
+        }}>
+          <span className="icon">?</span>
+          Help
+        </button>
         <button 
           className="context-menu-item"
           onClick={() => handleAction(onSaveAsPreset)}

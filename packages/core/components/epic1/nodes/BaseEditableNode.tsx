@@ -31,6 +31,8 @@ export interface BaseEditableNodeProps extends NodeProps<EditableNodeData> {
   className?: string;
   minWidth?: number;
   minHeight?: number;
+  compactMinWidth?: number;
+  compactMinHeight?: number;
   style?: React.CSSProperties;
 }
 
@@ -45,6 +47,8 @@ export const BaseEditableNode = memo(({
   className = '',
   minWidth = 200,
   minHeight = 80,
+  compactMinWidth,
+  compactMinHeight,
   style = {},
 }: BaseEditableNodeProps) => {
   const [isEditing, setIsEditing] = useState(data.isEditing || false);
@@ -163,8 +167,8 @@ export const BaseEditableNode = memo(({
       onContextMenu={handleContextMenu}
       onKeyDown={handleKeyDown}
       style={{
-        minWidth: `${minWidth}px`,
-        minHeight: `${minHeight}px`,
+        minWidth: `${isEditing ? minWidth : (compactMinWidth ?? minWidth)}px`,
+        minHeight: `${isEditing ? minHeight : (compactMinHeight ?? minHeight)}px`,
         ...style,
       }}
     >

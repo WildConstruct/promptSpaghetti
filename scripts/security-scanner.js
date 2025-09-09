@@ -41,11 +41,11 @@ class SecurityScanner {
     };
 
 
-  log(message: string, color: string = 'reset'): void {
+  log(message, color = 'reset') {
     console.log(`${colors[color]}${message}${colors.reset}`);
+  }
 
-
-  logHeader(title: string): void {
+  logHeader(title) {
     const border = '='.repeat(60);
     this.log(`\n${border}`, 'cyan');
     this.log(`🔒 ${title}`, 'bold');

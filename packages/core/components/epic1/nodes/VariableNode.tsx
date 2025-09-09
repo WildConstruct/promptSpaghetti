@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { NodeProps, Handle, Position } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
+import { useMetadataFlip, MetadataDisplay, MetadataToggleButton } from '../hooks/useMetadataFlip';
 import './VariableNode.css';
 
 export interface VariableNodeData extends EditableNodeData {
@@ -23,63 +24,83 @@ export const VariableNode = memo((props: NodeProps<VariableNodeData>) => {
   const dataInletConnected = props.data.dataInletConnected ?? false;
   const dataSource = props.data.dataSource ?? 'default';
   const mergeMode = props.data.mergeMode ?? 'override';
+  const { showMetadata, setShowMetadata, metadata, flipClassName } = useMetadataFlip(props);
 
   return (
     <BaseEditableNode
       {...props}
-      className={`variable ${dataInletConnected ? 'data-connected' : ''}`}
+      className={`variable ${dataInletConnected ? 'data-connected' : ''} ${flipClassName}`}
       minWidth={180}
       minHeight={hasDataInlet ? 90 : 70}
     >
       {({ isEditing, value, editBuffer, updateBuffer, confirmEdit, cancelEdit }) => {
-        const content = (
-          <>
-            {isEditing ? (
-              <div className="epic1-variable-editor">
-                <div className="epic1-node-type-label">
-                  {isGetter ? 'Get Variable' : 'Set Variable'}
+        if (isEditing) {
+          return (
+            <div className="flip-container">
+              <div className={`flip-card ${showMetadata ? 'flipped' : ''}`}>
+                {/* Front side - editor */}
+                <div className="card-face node-front">
+                  <div className="epic1-variable-editor">
+                    <div className="epic1-node-type-label">
+                      {isGetter ? 'Get Variable' : 'Set Variable'}
+                    </div>
+                    <input
+                      type="text"
+                      className="epic1-inline-input"
+                      value={editBuffer}
+                      onChange={(e) => updateBuffer(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          confirmEdit();
+                        } else if (e.key === 'Escape') {
+                          e.preventDefault();
+                          cancelEdit();
+                        }
+                        e.stopPropagation();
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="Variable name..."
+                      autoFocus
+                    />
+                  </div>
+                  <MetadataToggleButton 
+                    showMetadata={showMetadata} 
+                    onClick={() => setShowMetadata(!showMetadata)} 
+                  />
                 </div>
-                <input
-                  type="text"
-                  className="epic1-inline-input"
-                  value={editBuffer}
-                  onChange={(e) => updateBuffer(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      confirmEdit();
-                    } else if (e.key === 'Escape') {
-                      e.preventDefault();
-                      cancelEdit();
-                    }
-                    e.stopPropagation();
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  placeholder="Variable name..."
-                  autoFocus
+                
+                {/* Back side - metadata */}
+                <MetadataDisplay 
+                  metadata={metadata} 
+                  onClose={() => setShowMetadata(false)} 
                 />
               </div>
-            ) : (
-              <div className="epic1-variable-display">
-                <div className="epic1-node-type-label">
-                  {isGetter ? 'Get Variable' : 'Set Variable'}
-                  {dataInletConnected && (
-                    <span className="data-inlet-badge" title={`Data from: ${dataSource}`}>
-                      📊
-                    </span>
-                  )}
-                </div>
-                <div className="epic1-variable-name">
-                  <span className="epic1-variable-prefix">${isGetter ? '' : '='}</span>
-                  {value || <span className="epic1-placeholder">unnamed</span>}
-                </div>
+            </div>
+          );
+        }
+
+        return (
+          <>
+            <div className="epic1-variable-display">
+              <div className="epic1-node-type-label">
+                {isGetter ? 'Get Variable' : 'Set Variable'}
                 {dataInletConnected && (
-                  <div className="epic1-data-source-indicator">
-                    <span className="data-source-label">Data: {dataSource}</span>
-                  </div>
+                  <span className="data-inlet-badge" title={`Data from: ${dataSource}`}>
+                    📊
+                  </span>
                 )}
               </div>
-            )}
+              <div className="epic1-variable-name">
+                <span className="epic1-variable-prefix">${isGetter ? '' : '='}</span>
+                {value || <span className="epic1-placeholder">unnamed</span>}
+              </div>
+              {dataInletConnected && (
+                <div className="epic1-data-source-indicator">
+                  <span className="data-source-label">Data: {dataSource}</span>
+                </div>
+              )}
+            </div>
             
             {/* Add the third handle - data inlet at bottom */}
             {hasDataInlet && (
@@ -100,8 +121,6 @@ export const VariableNode = memo((props: NodeProps<VariableNodeData>) => {
             )}
           </>
         );
-
-        return content;
       }}
     </BaseEditableNode>
   );

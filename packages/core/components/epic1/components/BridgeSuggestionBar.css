@@ -1,0 +1,15 @@
+.bridge-suggestion-bar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0b0b0b;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  z-index: 9999;
+}
+.ml-12 { margin-left: 12px; }
+.ml-6 { margin-left: 6px; }

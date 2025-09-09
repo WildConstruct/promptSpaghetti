@@ -12,6 +12,7 @@ import {
   selectBestLayout,
   layoutNewNodes,
 } from '../../../utils/layoutAlgorithms';
+import { useNeatenSettings } from '../contexts/NeatenSettingsContext';
 
 export interface UseAutoLayoutOptions {
   defaultAlgorithm?: LayoutAlgorithm;
@@ -23,6 +24,8 @@ export interface AutoLayoutResult {
   cleanupNodes: (nodesToClean?: Node[], algorithm?: LayoutAlgorithm) => void;
   cleanupSelection: () => void;
   cleanupAll: () => void;
+  neatenSelection: () => void;
+  neatenAll: () => void;
   layoutDroppedNodes: (
     newNodes: Node[],
     dropPosition: { x: number; y: number }
@@ -36,6 +39,7 @@ export function useAutoLayout(
   const { defaultAlgorithm = 'dagre', debounceMs = 100 } = options;
   
   const { setNodes, getNodes, getEdges, fitView } = useReactFlow();
+  const { gridSize: gridSetting, rowSnap: rowSetting } = useNeatenSettings();
   const isLayoutingRef = useRef(false);
   const layoutTimeoutRef = useRef<NodeJS.Timeout>();
 
@@ -124,6 +128,50 @@ export function useAutoLayout(
   }, [cleanupNodesInternal]);
 
   /**
+   * Neaten function: snap nodes to grid and align rows without full relayout
+   */
+  const neaten = useCallback((nodesToNeaten?: Node[]) => {
+    const grid = gridSetting || 20; // grid size in px
+    const rowSnap = rowSetting || 40; // row grouping threshold
+    const all = nodesToNeaten || getNodes();
+
+    // Compute row groups by rounding Y to nearest rowSnap multiple
+    const rowMap = new Map<number, number>(); // original rounded -> canonical Y
+    const roundedYs = all.map(n => Math.round(n.position.y / rowSnap) * rowSnap);
+    // Use median per rounded group as canonical
+    const groups = new Map<number, number[]>();
+    roundedYs.forEach((ry, i) => {
+      const arr = groups.get(ry) || [];
+      arr.push(all[i].position.y);
+      groups.set(ry, arr);
+    });
+    groups.forEach((vals, key) => {
+      const sorted = vals.slice().sort((a,b)=>a-b);
+      const median = sorted[Math.floor(sorted.length/2)];
+      // Snap median to grid too
+      rowMap.set(key, Math.round(median / grid) * grid);
+    });
+
+    setNodes(current => current.map(n => {
+      const inScope = (nodesToNeaten ? all.find(a => a.id === n.id) : n) !== undefined;
+      if (!inScope) return n;
+      const snappedX = Math.round(n.position.x / grid) * grid;
+      const ry = Math.round(n.position.y / rowSnap) * rowSnap;
+      const alignedY = rowMap.get(ry) ?? Math.round(n.position.y / grid) * grid;
+      return { ...n, position: { x: snappedX, y: alignedY } };
+    }));
+  }, [getNodes, setNodes, gridSetting, rowSetting]);
+
+  const neatenSelection = useCallback(() => {
+    const selected = getNodes().filter(n => n.selected);
+    if (selected.length > 0) neaten(selected);
+  }, [getNodes, neaten]);
+
+  const neatenAll = useCallback(() => {
+    neaten();
+  }, [neaten]);
+
+  /**
    * Layout nodes that were just dropped from asset browser
    */
   const layoutDroppedNodes = useCallback(
@@ -155,6 +203,8 @@ export function useAutoLayout(
     cleanupNodes: cleanupNodesInternal,
     cleanupSelection,
     cleanupAll,
+    neatenSelection,
+    neatenAll,
     layoutDroppedNodes,
     isLayouting: isLayoutingRef.current,
   };

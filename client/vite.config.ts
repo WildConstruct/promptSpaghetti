@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 // https://vitejs.dev/config/
+const BUILD_SAFE = process.env.BUILD_SAFE === 'true' || process.env.BUILD_SAFE === '1';
+
 export default defineConfig({
   plugins: [react()],
   worker: {
@@ -15,7 +17,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: !BUILD_SAFE,
     commonjsOptions: {
       include: [/zod/, /node_modules/, /@prompt\/asset-browser/]
     },
@@ -28,13 +30,15 @@ export default defineConfig({
         }
       },
       external: id => {
-        // Mark @prompt/asset-browser as external for dynamic imports
-        if (id === '@prompt/asset-browser') {
-          return false; // Actually, we want to bundle it if available
-        }
+        // Prevent bundling Node-only SDKs in browser build
+        if (id.startsWith('openai')) return true;
         return false;
       },
       onwarn(warning, warn) {
+        if (BUILD_SAFE) {
+          if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+          if (warning.code === 'EVAL') return;
+        }
         // Suppress warnings about unresolved dynamic imports for asset-browser
         if (
           warning.code === 'UNRESOLVED_IMPORT' &&
@@ -48,7 +52,14 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    strictPort: false
+    strictPort: false,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:8000',
+        changeOrigin: true,
+        // leave path as-is
+      },
+    },
   },
   resolve: {
     alias: {
@@ -56,7 +67,14 @@ export default defineConfig({
       '@prompt/asset-browser': path.resolve(
         __dirname,
         '../packages/asset-browser/src'
-      )
+      ),
+      // Stub out server-side OpenAI SDK for browser builds
+      'openai': path.resolve(__dirname, './src/shims/openai.ts'),
+      'openai/shims/node': path.resolve(__dirname, './src/shims/openai-shim-node.ts'),
+      'openai/_shims/node-runtime.mjs': path.resolve(__dirname, './src/shims/openai-shim-node.ts'),
+      '@promptscape/core/services/llm': path.resolve(__dirname, './src/shims/llm-service.ts'),
+      '@promptscape/core/services/llm/LLMService': path.resolve(__dirname, './src/shims/llm-service.ts'),
+      '@promptscape/core/services/SimpleLLMService': path.resolve(__dirname, './src/shims/llm-service.ts')
     },
     dedupe: [
       'react',
@@ -78,7 +96,8 @@ export default defineConfig({
       'seedrandom',
       '@prompt/asset-browser > react',
       '@prompt/asset-browser > react-dom'
-    ]
+    ],
+    exclude: ['openai']
   },
   define: {
     // Ensure process.env is available for any Node.js checks

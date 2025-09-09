@@ -10,6 +10,10 @@ export interface WeightedOption {
   hasBranch?: boolean;
 }
 
+/**
+ * @deprecated This component is deprecated. Use WeightedChoiceNode.tsx instead, 
+ * which includes Epic 2 AI integrations (PopulateChoicesButton, OptimizeWeightsButton, InspirationMode).
+ */
 export interface WeightedChoiceNodeData {
   options: WeightedOption[];
   title?: string;

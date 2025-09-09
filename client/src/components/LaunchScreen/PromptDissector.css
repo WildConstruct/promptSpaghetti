@@ -2,8 +2,93 @@
 .prompt-dissector {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0; /* Remove gap to attach tabs to text area */
   height: 100%;
+  position: relative;
+}
+
+/* Toolbar spacing when visible */
+.prompt-dissector .dissector-toolbar {
+  margin-bottom: 1rem; /* Proper spacing between toolbar and tabs */
+}
+
+/* Tab Interface - Integrated with text area */
+.dissector-tabs-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: transparent;
+}
+
+.dissector-tabs {
+  display: flex;
+  gap: 0;
+  background: transparent;
+  margin-bottom: -1px; /* Overlap with input container border */
+  z-index: 2;
+  width: 100%;
+  justify-content: stretch;
+}
+
+.dissector-tab {
+  flex: 1; /* Each tab takes equal space */
+  padding: 8px 20px;
+  background: rgba(20, 20, 20, 0.3); /* Darker background for inactive tabs */
+  border: 1px solid rgba(103, 126, 234, 0.2); /* Lighter border for inactive */
+  border-bottom: 1px solid rgba(103, 126, 234, 0.3); /* Keep bottom border for inactive */
+  color: rgba(255, 255, 255, 0.4); /* Dimmer text for inactive */
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: center;
+}
+
+.dissector-tab:first-child {
+  border-radius: 8px 6px 0 0; /* Round top-left and more rounded inner corner */
+  border-right: none;
+}
+
+.dissector-tab:last-child {
+  border-radius: 6px 8px 0 0; /* Round top-right and more rounded inner corner */
+  border-left: 1px solid rgba(103, 126, 234, 0.3);
+}
+
+.dissector-tab:hover:not(.active) {
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(25, 25, 25, 0.4);
+}
+
+.dissector-tab.active {
+  color: #fff;
+  background: rgba(26, 26, 26, 0.5); /* Match the input container background */
+  border-color: rgba(103, 126, 234, 0.6); /* Brighter border for active state */
+  border-bottom: none !important;
+  z-index: 3;
+  position: relative;
+}
+
+/* Cover the bottom border line completely */
+.dissector-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: -1px;
+  right: -1px;
+  height: 3px;
+  background: rgba(26, 26, 26, 0.5); /* Match container background */
+  z-index: 10;
+}
+
+/* Spin animation for loading indicator */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 
@@ -27,19 +112,19 @@
   position: relative;
   flex: 1;
   min-height: 200px;
-  border-radius: 12px; /* Restored rounded corners */
+  border-radius: 0 0 8px 8px; /* Round only bottom corners */
   overflow: visible; /* allow menus to render outside without clipping */
-  background: transparent; /* Remove dark background for initial state */
-  border: 1px solid rgba(103, 126, 234, 0.3) !important; /* Purple border matching theme */
+  background: rgba(26, 26, 26, 0.5); /* Slight background to match tabs */
+  border: 1px solid rgba(103, 126, 234, 0.6) !important; /* Brighter border to match active tab */
+  border-top: none !important; /* Remove top border completely */
   outline: none !important;
-  box-shadow: none !important;
 }
 
 /* Prevent green focus outline on container */
 .dissector-input-container:focus-within {
-  border: 1px solid rgba(103, 126, 234, 0.5) !important; /* Slightly brighter purple on focus */
+  border: 1px solid rgba(103, 126, 234, 0.8) !important; /* Even brighter purple on focus */
+  border-top: none !important; /* Keep top border removed */
   outline: none !important;
-  box-shadow: none !important;
 }
 
 /* Override any browser default outlines */
@@ -57,7 +142,8 @@
 .dissector-input-container:focus,
 .dissector-input-container:active,
 .dissector-input-container:focus-visible {
-  border: 1px solid rgba(103, 126, 234, 0.5) !important;
+  border: 1px solid rgba(103, 126, 234, 0.8) !important;
+  border-top: none !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -65,20 +151,22 @@
 /* Inline toolbar - compact like original */
 .dissector-toolbar {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 10px; /* 50% taller */
-  margin: 0 0 4px 0; /* Reduced bottom margin to match stats spacing */
+  padding: 8px 10px;
+  margin: 0 0 4px 0;
   background: rgba(20, 22, 28, 0.95);
   backdrop-filter: blur(6px);
-  border: 1px solid rgba(103, 126, 234, 0.3); /* Match text box border color and thickness */
-  border-radius: 8px; /* Match other rounded corners */
+  border: 1px solid rgba(103, 126, 234, 0.3);
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.25);
   z-index: 10;
   pointer-events: auto;
-  width: 100%; /* Make toolbar full width to match text box */
+  width: 100%;
   box-sizing: border-box;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  min-height: 40px;
 }
 
 .dissector-toolbar-sep {
@@ -601,4 +689,55 @@
 .dissector-textarea::-webkit-scrollbar-thumb:hover,
 .dissector-overlay::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .dissector-toolbar {
+    gap: 4px;
+    padding: 6px 8px;
+  }
+  
+  .dissector-btn {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+  
+  .dissector-toolbar-sep {
+    height: 20px;
+    margin: 0 1px;
+  }
+  
+  .dissector-tab {
+    padding: 6px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dissector-toolbar {
+    gap: 3px;
+    padding: 5px 6px;
+  }
+  
+  .dissector-btn {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+  
+  /* Hide toolbar separators on very small screens */
+  .dissector-toolbar-sep {
+    display: none;
+  }
+  
+  .dissector-tab {
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+}
+
+/* Blinking caret animation - slower blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }

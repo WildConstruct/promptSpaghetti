@@ -1,11 +1,24 @@
 # 🍝 Prompt Spaghetti: The Revenge
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](./LICENSE)
 [![Node Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
 [![React](https://img.shields.io/badge/react-18.3-blue)](https://reactjs.org/)
 [![Demo](https://img.shields.io/badge/demo-live-ff69b4)](https://promptscape-graph.vercel.app)
 
-> A powerful node-based visual editor for creating deterministic prompt generation graphs. Build complex branching grammars with an intuitive drag-and-drop interface, then execute them with reproducible results.
+> **Professional Film Industry Content Generation Tool**
+>
+> A powerful node-based visual editor for creating deterministic prompt generation graphs. Designed specifically for film production pipelines, VFX workflows, and creative development teams. Build complex branching narratives, character generators, and scene descriptions with an intuitive drag-and-drop interface, then execute them with reproducible results.
+
+![Prompt Spaghetti Editor](docs/images/editor-screenshot.png)
+*Visual node-based editor for professional content creation*
+
+## 🎬 Why Prompt Spaghetti?
+
+- **Film Industry Focus**: Built by filmmakers for filmmakers
+- **Pipeline Ready**: Integrates with Maya, Houdini, Nuke workflows
+- **Deterministic Output**: Perfect for VFX shot descriptions and continuity
+- **Team Collaboration**: Share presets across departments
+- **Professional Polish**: Cinema 4D-level interface quality
 
 ## 🚀 Features
 
@@ -87,8 +100,8 @@ promptscape-graph/
 
 ```bash
 # Clone the repository
-git clone https://github.com/WildConstruct/prompt-spaghetti.git
-cd prompt-spaghetti
+git clone https://github.com/WildConstruct/prompt_spaghetti_the_revenge.git
+cd prompt_spaghetti_the_revenge
 
 # Install dependencies
 pnpm install
@@ -288,6 +301,18 @@ pnpm prepare
 - **Fastify**: High-performance API server
 - **Vercel**: Serverless deployment with edge functions
 
+## 🔒 Security & Env
+
+- Server headers: adds `X-Frame-Options=DENY`, `X-Content-Type-Options=nosniff`, `Referrer-Policy=no-referrer`, and a conservative `Permissions-Policy` on all API responses. Netlify adds matching headers for the SPA.
+- CSP (Netlify): tightened `script-src` to `'self'` only; inline styles temporarily allowed for admin. Remove `'unsafe-inline'` for styles after migrating admin styles to external CSS or nonces.
+- CSP (Netlify): global `style-src` still includes `'unsafe-inline'` due to SPA inline styles. For `/admin/*`, we serve external CSS/JS and apply stricter CSP (no inline styles/scripts).
+- CORS: configure allowed origins via `CORS_ORIGINS` (comma-separated). Defaults include `http://localhost:3000`, `http://localhost:5173`, `https://ps.wildconstruct.com`, and `APP_ORIGIN` if set.
+- Rate limiting: per-IP token bucket applied to files API, LLM parse/complete, and admin metrics.
+- Request limits: set `BODY_LIMIT_BYTES` (default `1000000`) to cap request body size.
+- LLM timeout: set `LLM_TIMEOUT_MS` (default `20000`) to abort long external calls.
+- Health: `/health` and `/api/healthz` endpoints return `{ status: 'ok' }`.
+- Files test UI: a small dev-only tester appears in GraphControls Settings to exercise `/api/files/*`. It is hidden in production builds.
+
 ## 🤝 Contributing
 
 ### Development Workflow
@@ -350,23 +375,145 @@ Local backlog
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+**This is proprietary software.** All rights reserved by Wild Construct.
 
-## 🙏 Acknowledgments
+For licensing inquiries, please contact:
+- **Brian Behm**, CEO and Head Creative
+- **Wild Construct**
+- **Email**: wildconstruct@wildconstruct.com
 
-- [React-Flow](https://reactflow.dev/) for the excellent node editor foundation
-- [Vercel](https://vercel.com/) for seamless deployment and hosting
-- [Fastify](https://fastify.dev/) for the high-performance API framework
-- The open-source community for inspiration and contributions
+See the [LICENSE](LICENSE) file for full terms.
 
-## 📞 Support
+## 🎯 Use Cases
 
-- **Documentation**: Check the `docs/` directory
-- **Issues**: [GitHub Issues](https://github.com/WildConstruct/prompt-spaghetti/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/WildConstruct/prompt-spaghetti/discussions)
+### Film Production
+- **Script Development**: Generate dialogue variations and scene descriptions
+- **Casting**: Create detailed character profiles and backstories
+- **VFX Planning**: Standardize shot descriptions and technical notes
+- **Marketing**: Generate taglines, synopses, and social media content
+
+### Game Development
+- **NPC Generation**: Create diverse character personalities
+- **Quest Design**: Build branching narrative structures
+- **World Building**: Generate location descriptions and lore
+- **Dialogue Trees**: Design complex conversation systems
+
+## 🏢 About Wild Construct
+
+Wild Construct is pioneering the next generation of creative tools for the film industry. Our suite of professional applications bridges the gap between traditional filmmaking and cutting-edge AI technology.
+
+## 📞 Contact
+
+- **Business Inquiries**: Brian Behm - wildconstruct@wildconstruct.com
+- **Technical Support**: [GitHub Issues](https://github.com/WildConstruct/prompt_spaghetti_the_revenge/issues)
+- **Documentation**: See our [Obsidian Vault](docs/obsidian-vault/)
+- **Examples**: Check the [examples/](examples/) directory
 
 ---
 
-**Made with ❤️ by the PromptScape Team**
+**© 2024-2025 Wild Construct. All Rights Reserved.**
 
-_Building the future of prompt engineering, one node at a time._
+_Professional tools for professional creators._
+## Deploying to Netlify (Option A: Proxy /api)
+
+This app is configured to use relative API paths in production and have Netlify proxy them to your backend.
+
+1) Netlify redirect (already added in `netlify.toml`)
+
+```
+[[redirects]]
+  from = "/api/*"
+  to = "http://ps.wildconstruct.com:8000/api/:splat" # UPDATE to your backend
+  status = 200
+  force = true
+
+# Optional: expose backend admin via app domain (requires backend auth)
+[[redirects]]
+  from = "/admin/*"
+  to = "http://ps.wildconstruct.com:8000/admin/:splat"
+  status = 200
+  force = true
+```
+
+2) Client env (Netlify UI → Site settings → Build & deploy → Environment)
+
+- `VITE_SUPABASE_URL` = `https://YOUR-PROJECT.supabase.co`
+- `VITE_SUPABASE_ANON_KEY` = `<anon key>`
+- Do NOT set `VITE_API_URL` (keep requests relative so the redirect handles routing)
+
+3) Backend CORS
+
+On the backend, include your app origin in `CORS_ORIGINS` (comma-separated list):
+
+```
+CORS_ORIGINS="https://ps.wildconstruct.com"
+```
+
+4) Alternate (Option B)
+
+If you prefer absolute API calls, set `VITE_API_URL` to your backend origin and remove the Netlify redirect. Ensure CORS is configured accordingly.
+
+## Supabase RLS Policies (Storage + Tables)
+
+Enable Row Level Security (RLS) on all tables and define policies to scope data to the authenticated user. For Storage, scope each object path by user id to prevent cross-tenant access.
+
+Example policies for the `graphs` bucket on `storage.objects` (Postgres SQL):
+
+```
+-- Enable RLS (if not already enabled)
+ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+
+-- Helper: first path segment equals auth.uid()
+-- storage.foldername(name) returns text[] of path segments
+
+-- READ own files
+CREATE POLICY "storage_read_own_graphs"
+ON storage.objects FOR SELECT
+USING (
+  bucket_id = 'graphs'
+  AND (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- INSERT own files (must write to a folder named by the user id)
+CREATE POLICY "storage_insert_own_graphs"
+ON storage.objects FOR INSERT
+WITH CHECK (
+  bucket_id = 'graphs'
+  AND (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- UPDATE own files
+CREATE POLICY "storage_update_own_graphs"
+ON storage.objects FOR UPDATE
+USING (
+  bucket_id = 'graphs'
+  AND (storage.foldername(name))[1] = auth.uid()::text
+)
+WITH CHECK (
+  bucket_id = 'graphs'
+  AND (storage.foldername(name))[1] = auth.uid()::text
+);
+
+-- DELETE own files
+CREATE POLICY "storage_delete_own_graphs"
+ON storage.objects FOR DELETE
+USING (
+  bucket_id = 'graphs'
+  AND (storage.foldername(name))[1] = auth.uid()::text
+);
+```
+
+For app tables, add similar policies (e.g., `user_id = auth.uid()`) and prefer UUID primary keys.
+
+## Security Hardening (Quick Guide)
+
+The repo includes initial hardening and a checklist to continue:
+
+- Secrets and keys: Service role keys only on the server; client uses anon key.
+- Rate limits: LLM completion has a token bucket; extend to other sensitive endpoints as needed.
+- Input validation: zod schemas added to files API; expand across routes.
+- PII redaction: LLM requests run through a privacy filter on the server.
+- CSP headers: baseline CSP set in `netlify.toml` (tighten as willing).
+- Admin: form parser added; test buttons for Supabase/OpenRouter; delete-key confirmation.
+
+See `docs/security-hardening.md` for a prioritized checklist and mapping to this codebase.

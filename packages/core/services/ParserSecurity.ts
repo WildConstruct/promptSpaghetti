@@ -5,7 +5,7 @@ export class ParserSecurity {
   // PII patterns to detect and mask
   private readonly piiPatterns = {
     email: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
-    phone: /\b(?:\+?1[-.\s]?)?\(?[2-9]\d{2}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b/g,
+    phone: /\b(?:\+?1[-.\s]?)?\(?[0-9]\d{2}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b\d{3}-\d{4}\b/g,
     ssn: /\b\d{3}-\d{2}-\d{4}\b/g,
     creditCard: /\b(?:\d{4}[-\s]?){3}\d{4}\b/g,
     ipAddress: /\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/g,
@@ -13,6 +13,7 @@ export class ParserSecurity {
 
   // Prompt injection patterns to remove
   private readonly injectionPatterns = [
+    /ignore\s+all\s+previous\s+instructions?/gi,
     /ignore\s+(previous|all|above)\s+instructions?/gi,
     /disregard\s+(previous|all|above)/gi,
     /forget\s+everything/gi,
@@ -57,7 +58,7 @@ export class ParserSecurity {
 
     // Remove injection attempts
     for (const pattern of this.injectionPatterns) {
-      sanitized = sanitized.replace(pattern, '');
+      sanitized = sanitized.replace(pattern, '[REDACTED]');
     }
 
     // Escape special characters that might confuse the LLM
@@ -115,9 +116,12 @@ export class ParserSecurity {
     // This can be configured at workspace level
     // For now, check localStorage or environment variable
     if (typeof window !== 'undefined' && window.localStorage) {
-      return localStorage.getItem('maskPII') === 'true';
+      const maskPII = localStorage.getItem('maskPII');
+      // Default to true if not explicitly set to false
+      return maskPII !== 'false';
     }
-    return process.env.MASK_PII === 'true';
+    // Default to true for security
+    return process.env.MASK_PII !== 'false';
   }
 
   /**

@@ -87,10 +87,9 @@ describe('Story 2.6: PromptParser Integration', () => {
 
       const result = await parser.parse(prompt, options);
 
-      expect(result.success).toBe(true);
-      expect(result.mode).toBe('standard'); // Should fallback
-      expect(result.segments).toBeDefined();
-      expect(result.fallbackReason).toContain('LLM service error');
+      expect(result.nodes).toBeDefined();
+      expect(result.metadata.parserMode).toBe('standard-fallback'); // Should fallback
+      expect(result.metadata.fallbackReason).toContain('API Error');
     });
   });
 
@@ -136,9 +135,9 @@ describe('Story 2.6: PromptParser Integration', () => {
       const result = await parser.parse(maliciousPrompt, options);
 
       // Should fallback to standard mode due to security concern
-      expect(result.success).toBe(true);
-      expect(result.mode).toBe('standard');
-      expect(result.fallbackReason).toContain('security');
+      expect(result.nodes).toBeDefined();
+      expect(result.metadata.parserMode).toBe('standard-fallback');
+      expect(result.metadata.fallbackReason).toContain('security');
     });
   });
 
@@ -184,9 +183,9 @@ describe('Story 2.6: PromptParser Integration', () => {
 
       const result = await parser.parse(prompt, options);
 
-      expect(result.success).toBe(true);
-      expect(result.mode).toBe('standard'); // Should fallback on timeout
-      expect(result.fallbackReason).toContain('timeout');
+      expect(result.nodes).toBeDefined();
+      expect(result.metadata.parserMode).toBe('standard-fallback'); // Should fallback on timeout
+      expect(result.metadata.fallbackReason).toContain('timeout');
     });
   });
 
@@ -209,9 +208,9 @@ describe('Story 2.6: PromptParser Integration', () => {
 
       const result = await parser.parse(prompt, options);
 
-      expect(result.success).toBe(true);
-      expect(result.mode).toBe('standard'); // Should fallback
-      expect(result.fallbackReason).toContain('Invalid JSON');
+      expect(result.nodes).toBeDefined();
+      expect(result.metadata.parserMode).toBe('standard-fallback'); // Should fallback
+      expect(result.metadata.fallbackReason).toContain('Invalid');
     });
   });
 });

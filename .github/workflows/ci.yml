@@ -25,6 +25,30 @@ jobs:
         env:
           PUPPETEER_SKIP_DOWNLOAD: true
 
+      - name: Source of truth guard (editor/nodes)
+        run: |
+          echo "Checking for quarantined imports and final editor references..."
+          if grep -R -n "epic1/_quarantined" packages/core 2>/dev/null; then
+            echo "::error::Quarantined editor referenced. Use Epic1GraphEditor (Monolithic) only."
+            exit 1
+          fi
+          if grep -R -n "Epic1GraphEditorFinal" packages/core 2>/dev/null; then
+            echo "::error::Do not import Epic1GraphEditorFinal.tsx. It is quarantined until repaired."
+            exit 1
+          fi
+          echo "Source of truth guard passed."
+
+      - name: Build server (early)
+        run: pnpm --filter server build
+
+      - name: Smoke server /health
+        run: |
+          node server/dist/index.js &
+          SERVER_PID=$!
+          sleep 2
+          curl -sSf http://127.0.0.1:8000/health | jq . || curl -sSf http://127.0.0.1:8000/health
+          kill $SERVER_PID || true
+
       - name: Dependency Conflict Check
         run: |
           echo "🔍 Checking for critical dependency conflicts..."
@@ -92,10 +116,14 @@ jobs:
       - name: Build client
         run: pnpm --filter client build
 
+      - name: Verify client browser bundle (no Node shims)
+        run: pnpm run verify:bundle
+
       - name: Build server
         run: pnpm --filter server build
 
       - name: Docker build (server)
+        if: ${{ vars.BUILD_DOCKER == 'true' }}
         run: docker build -t promptscape-server ./server
         # (Optional: push to GHCR)
 
@@ -103,6 +131,7 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Performance tests
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         run: |
           pnpm --filter client dev &
           sleep 10

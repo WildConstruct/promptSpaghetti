@@ -1,5 +1,5 @@
 // Core LLM Service with OpenRouter Integration
-
+// Node-only shim import removed for browser bundling
 import OpenAI from 'openai';
 import { 
   LLMRequest, 
@@ -36,7 +36,15 @@ export class LLMService {
     this.privacyFilter = new PrivacyFilter();
 
     // Initialize OpenAI client for OpenRouter
+    console.log('[LLMService] Constructor called with config:', {
+      hasApiKey: !!config.apiKey,
+      apiKeyPrefix: config.apiKey ? config.apiKey.substring(0, 10) + '...' : 'none',
+      mode: config.mode,
+      baseUrl: config.baseUrl
+    });
+    
     if (config.apiKey) {
+      console.log('[LLMService] Creating OpenAI client with API key');
       this.client = new OpenAI({
         apiKey: config.apiKey,
         baseURL: config.baseUrl || 'https://openrouter.ai/api/v1',
@@ -46,6 +54,9 @@ export class LLMService {
         },
         dangerouslyAllowBrowser: config.mode === 'development',
       });
+      console.log('[LLMService] OpenAI client created successfully');
+    } else {
+      console.warn('[LLMService] No API key provided - client not initialized');
     }
   }
 
@@ -131,7 +142,8 @@ export class LLMService {
 
   private async callModel(modelId: string, request: LLMRequest): Promise<LLMResponse> {
     if (!this.client) {
-      throw new Error('LLM client not initialized');
+      console.error('[LLMService] Client not initialized - no API key provided');
+      throw new Error('LLM client not initialized - no API key configured');
     }
 
     const startTime = Date.now();

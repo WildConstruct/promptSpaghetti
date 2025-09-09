@@ -29,11 +29,11 @@ const mockObserver = {
 const MockPerformanceObserver = jest.fn(() => mockObserver);
 
 // Setup global mocks
-Object.defineProperty(global, 'performance', {)
+Object.defineProperty(global, 'performance', {
   value: mockPerformance,
   writable: true,
 });
-Object.defineProperty(global, 'PerformanceObserver', {)
+Object.defineProperty(global, 'PerformanceObserver', {
   value: MockPerformanceObserver,
   writable: true,
 });
@@ -98,7 +98,7 @@ describe('Performance Monitor', () => {
       mockPerformance.now
         .mockReturnValueOnce(1000)
         .mockReturnValueOnce(1030);
-      await expect()
+      await expect(
         performanceMonitor.measureExecution('test_async_error', asyncErrorFn)
       ).rejects.toThrow('Async error');
     });
@@ -118,7 +118,7 @@ describe('Performance Monitor', () => {
     it('should handle metadata in timing completion', () => {
   const endTiming = performanceMonitor.startTiming('timing_with_metadata');
   expect(() => {
-  endTiming({ )
+  endTiming({
   query: 'SELECT * FROM users',
   rows: 150,
   cached: false,
@@ -132,7 +132,7 @@ describe('Performance Monitor', () => {
       mockPerformance.now
         .mockReturnValueOnce(1000)
         .mockReturnValueOnce(1500);
-      const result = await performanceMonitor.trackApiCall(;);
+      const result = await performanceMonitor.trackApiCall(
         '/api/users',
         'GET',
         apiCall
@@ -142,7 +142,7 @@ describe('Performance Monitor', () => {
     });
     it('should track failed API calls', async () => {
       const failedApiCall = jest.fn(() => Promise.reject(new Error('Network error')));
-      await expect()
+      await expect(
         performanceMonitor.trackApiCall('/api/failed', 'POST', failedApiCall)
       ).rejects.toThrow('Network error');
     });
@@ -150,7 +150,7 @@ describe('Performance Monitor', () => {
   describe('trackInteraction', () => {
     it('should track user interaction performance', () => {
       const clickHandler = jest.fn(() => 'clicked');
-      const result = performanceMonitor.trackInteraction(;);
+      const result = performanceMonitor.trackInteraction(
         'button_click',
         clickHandler,
         { buttonId: 'submit-btn' }
@@ -160,7 +160,7 @@ describe('Performance Monitor', () => {
     });
     it('should track async interaction performance', async () => {
       const asyncHandler = jest.fn(() => Promise.resolve('async_click'));
-      const result = await performanceMonitor.trackInteraction(;);
+      const result = await performanceMonitor.trackInteraction(
         'async_action',
         asyncHandler,
         { elementType: 'button' }
@@ -184,11 +184,10 @@ describe('Performance Monitor', () => {
       const spy = jest.spyOn(performanceMonitor, 'flush');
       // Add metrics up to buffer size (assuming default 1000)
       for (let i = 0; i < 1000; i++) {
-        performanceMonitor.addMetric({)
-  name: `metric_${i}`}
-},
+        performanceMonitor.addMetric({
+  name: `metric_${i}`,
   duration: 10,
-          type: 'custom';
+          type: 'custom'
   });
       expect(spy).toHaveBeenCalled();
     });
@@ -196,17 +195,17 @@ describe('Performance Monitor', () => {
   describe('getStats', () => {
   beforeEach(() => {
   // Add some test metrics
-  performanceMonitor.addMetric({)
+  performanceMonitor.addMetric({
   name: 'api_call',
   duration: 100,
   type: 'api',
 });
-      performanceMonitor.addMetric({)
+      performanceMonitor.addMetric({
   name: 'api_call',
   duration: 200,
   type: 'api',
 });
-      performanceMonitor.addMetric({)
+      performanceMonitor.addMetric({
   name: 'user_click',
   duration: 50,
   type: 'user_interaction',
@@ -227,7 +226,7 @@ describe('Performance Monitor', () => {
     });
     it('should sort slowest operations', () => {
       const stats = performanceMonitor.getStats();
-      expect(stats.slowest[0].duration).toBeGreaterThanOrEqual()
+      expect(stats.slowest[0].duration).toBeGreaterThanOrEqual(
         stats.slowest[stats.slowest.length - 1]?.duration || 0
       );
     });
@@ -235,13 +234,13 @@ describe('Performance Monitor', () => {
   describe('flush', () => {
   it('should store metrics in sessionStorage', () => {
   mockSessionStorage.getItem.mockReturnValue(null as unknown as unknown);
-  performanceMonitor.addMetric({)
+  performanceMonitor.addMetric({
   name: 'test_flush',
   duration: 75,
   type: 'custom',
 });
       performanceMonitor.flush();
-      expect(mockSessionStorage.setItem).toHaveBeenCalledWith()
+      expect(mockSessionStorage.setItem).toHaveBeenCalledWith(
         'performance_metrics',
         expect.stringContaining('test_flush')
       );
@@ -251,7 +250,7 @@ describe('Performance Monitor', () => {
         { name: 'existing', duration: 50, type: 'custom', timestamp: 1000 }
       ];
       mockSessionStorage.getItem.mockReturnValue(JSON.stringify(existingMetrics as unknown as unknown));
-      performanceMonitor.addMetric({)
+      performanceMonitor.addMetric({
   name: 'new_metric',
   duration: 100,
   type: 'custom',
@@ -264,12 +263,11 @@ describe('Performance Monitor', () => {
       expect(parsedData.some((m: unknown) => (m as any).name === 'new_metric')).toBe(true);
     });
     it('should limit stored metrics to 5000', () => {
-      const manyMetrics = Array.from({ length: 6000 }, (_, i) => ({)
-  name: `metric_${i}`}
-},
+      const manyMetrics = Array.from({ length: 6000 }, (_, i) => ({
+  name: `metric_${i}`,
   duration: 10,
         type: 'custom',
-        timestamp: 1000 + i;
+        timestamp: 1000 + i
   }));
       mockSessionStorage.getItem.mockReturnValue(JSON.stringify(manyMetrics as unknown as unknown));
       performanceMonitor.flush();
@@ -292,7 +290,7 @@ describe('React Hooks', () => {
       expect(() => unmount()).not.toThrow();
     });
     it('should handle component re-renders', () => {
-      const { rerender } = renderHook()
+      const { rerender } = renderHook(
         ({ deps }) => usePerformanceTracking('TestComponent', deps),
         { initialProps: { deps: ['prop1'] } }
       );

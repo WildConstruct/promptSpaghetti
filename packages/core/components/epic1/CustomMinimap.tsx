@@ -44,8 +44,8 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
     });
   }, [nodes]);
   
-  const width = bounds.maxX - bounds.minX;
-  const height = bounds.maxY - bounds.minY;
+  const width = Math.max(1, bounds.maxX - bounds.minX);
+  const height = Math.max(1, bounds.maxY - bounds.minY);
   const scale = Math.min(200 / width, 120 / height);
   
   // Helper function to get node center position
@@ -138,7 +138,8 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
           const sourcePos = getNodeCenter(edge.source);
           const targetPos = getNodeCenter(edge.target);
           
-          if (!sourcePos || !targetPos) return null;
+          const valid = (p: any) => p && Number.isFinite(p.x) && Number.isFinite(p.y);
+          if (!valid(sourcePos) || !valid(targetPos)) return null;
           
           return (
             <line
@@ -156,8 +157,10 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
         
         {/* Draw nodes */}
         {nodes.map(node => {
-          const x = (node.position.x - bounds.minX) * scale;
-          const y = (node.position.y - bounds.minY) * scale;
+          const x = (node?.position?.x ?? 0) - bounds.minX;
+          const y = (node?.position?.y ?? 0) - bounds.minY;
+          const sx = x * scale;
+          const sy = y * scale;
           const nodeWidth = 280 * scale;
           const nodeHeight = 140 * scale;
           
@@ -177,8 +180,8 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
           return (
             <rect
               key={node.id}
-              x={x}
-              y={y}
+              x={Number.isFinite(sx) ? sx : 0}
+              y={Number.isFinite(sy) ? sy : 0}
               width={nodeWidth}
               height={nodeHeight}
               fill={color}

@@ -1,6 +1,13 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import { NodeProps, Handle, Position } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
+import { 
+  PopulateChoicesButton,
+  OptimizeWeightsButton,
+  InspirationMode 
+} from '../../Inspector/IntelligentFeatures';
+import { useIntelligence } from '../contexts/IntelligenceContext';
+import type { Choice, WeightOptimizationResult } from '../../../services/llm';
 import './WeightedChoiceNode.css';
 import './VisualFeedbackEnhancements.css';
 
@@ -18,7 +25,18 @@ export interface WeightedChoiceNodeData extends EditableNodeData {
  * WeightedChoice node for Epic 1 - inline editing with weight sliders
  */
 export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>) => {
-  const [options, setOptions] = useState<WeightedOption[]>(props.data.options || []);
+  // Ensure options is always an array
+  const initialOptions = Array.isArray(props.data?.options) ? props.data.options : [];
+  const [options, setOptions] = useState<WeightedOption[]>(initialOptions);
+  const intelligence = useIntelligence();
+  
+  // Debug logging
+  console.log('[WeightedChoiceNode] Intelligence context:', {
+    consentGiven: intelligence.consentGiven,
+    isOffline: intelligence.isOffline,
+    hasNodeIntelligence: !!intelligence.nodeIntelligence,
+    optionsLength: options?.length
+  });
 
   // Normalize weights to ensure they sum to 100
   const normalizeWeights = (opts: WeightedOption[]): WeightedOption[] => {
@@ -70,7 +88,25 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
   };
 
   // Check if any options have branching enabled
-  const hasBranching = options.some(opt => opt.hasBranch);
+  const hasBranching = Array.isArray(options) && options.some(opt => opt.hasBranch);
+
+  // AI suggestion handlers
+  const handleChoicesGenerated = useCallback((choices: Choice[]) => {
+    const newOptions = choices.map(choice => ({
+      text: choice.text,
+      weight: choice.weight || Math.round(100 / choices.length),
+      hasBranch: false
+    }));
+    setOptions(normalizeWeights(newOptions));
+  }, []);
+
+  const handleWeightsOptimized = useCallback((result: WeightOptimizationResult) => {
+    const optimizedOptions = result.optimized.map((choice, index) => ({
+      ...options[index],
+      weight: choice.weight
+    }));
+    setOptions(optimizedOptions);
+  }, [options]);
 
   return (
     <>
@@ -79,6 +115,8 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
         className="weighted-choice"
         minWidth={280}
         minHeight={120}
+        compactMinWidth={180}
+        compactMinHeight={80}
         data={{
           ...props.data,
           options,
@@ -166,6 +204,53 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                 ))}
               </div>
               <div className="epic1-option-controls">
+                {/* Debug: Always show for testing, but will check consent inside components */}
+                {true && (
+                  <div className="epic1-debug-consent">
+                    <p>Debug - Consent: {String(intelligence.consentGiven)} | Service: {String(!!intelligence.nodeIntelligence)}</p>
+                    {!intelligence.consentGiven && (
+                      <button 
+                        onClick={() => intelligence.setConsent(true)}
+                        style={{ background: 'blue', color: 'white', padding: '4px 8px', margin: '4px' }}
+                      >
+                        Grant Consent (Debug)
+                      </button>
+                    )}
+                  </div>
+                )}
+                
+                {/* Intelligent Features - only show if consent given */}
+                {intelligence.consentGiven && intelligence.nodeIntelligence && (
+                  <div className="epic1-intelligent-controls">
+                    {options.length === 0 ? (
+                      <InspirationMode
+                        upstreamContext="weighted choice node" // TODO: derive from graph
+                        onInspirationSelected={handleChoicesGenerated}
+                        intelligenceService={intelligence.nodeIntelligence}
+                      />
+                    ) : (
+                      <div className="epic1-suggestion-buttons">
+                        <PopulateChoicesButton
+                          nodeText={JSON.stringify(options.map(opt => opt.text))}
+                          context="weighted choice context" // TODO: derive from graph
+                          currentChoices={options.map(opt => ({ text: opt.text, weight: opt.weight }))}
+                          onChoicesGenerated={handleChoicesGenerated}
+                          intelligenceService={intelligence.nodeIntelligence}
+                        />
+                        {options.length > 1 && (
+                          <OptimizeWeightsButton
+                            choices={options.map(opt => ({ text: opt.text, weight: opt.weight }))}
+                            context="weighted choice context" // TODO: derive from graph
+                            onWeightsOptimized={handleWeightsOptimized}
+                            intelligenceService={intelligence.nodeIntelligence}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Existing controls */}
                 <button
                   className="epic1-add-option nodrag"
                   onClick={(e) => {

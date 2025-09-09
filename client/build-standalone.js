@@ -21,8 +21,8 @@ console.log('Current working directory:', process.cwd());
 // For Epic 1 MVP, we need the full core package
 console.log('Building with full Epic 1 functionality...');
 
-console.log('Running production build...');
-// Use the standard vite config which includes the core package alias
-execSync('vite build', { stdio: 'inherit' });
+console.log('Running production build (safe mode on)...');
+// Use main config with BUILD_SAFE flag set to enable safe options
+execSync('vite build', { stdio: 'inherit', env: { ...process.env, BUILD_SAFE: '1' } });
 
 console.log('Standalone build complete!');

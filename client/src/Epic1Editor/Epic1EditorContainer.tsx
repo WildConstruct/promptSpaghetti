@@ -30,6 +30,8 @@ import './styles/about-modal.css';
 import './styles/theme-variables.css';
 import { fromLegacyGraph, writePsg } from '@promptscape/core';
 import type { GraphNode, GraphEdge, Graph } from '@promptscape/core';
+import { SimpleMenuBar } from './components/SimpleMenuBar';
+import { IntelligenceProvider } from '@promptscape/core/components/epic1/contexts/IntelligenceContext';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -54,7 +56,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [EditorComponent, setEditorComponent] =
     useState<React.ComponentType<Epic1GraphEditorProps> | null>(null);
   const [MenuBarComponent, setMenuBarComponent] =
-    useState<React.ComponentType<Record<string, unknown>> | null>(null);
+    useState<React.ComponentType<any> | null>(null);
   const [loadError, setLoadError] = useState<string>('');
   const [isComponentsLoading, setIsComponentsLoading] = useState(true);
   const [assetLibraryVisible, setAssetLibraryVisible] =
@@ -727,11 +729,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
     const loadComponents = async () => {
       try {
-        const [epic1Module, menuBarModule] = await Promise.all([
-          import('@promptscape/core/components/epic1/Epic1GraphEditor'),
-          showMenuBar
-            ? import('@promptscape/core/components/MenuBar/ProfessionalMenuBar')
-            : Promise.resolve(null)
+        const [epic1Module] = await Promise.all([
+          import('@promptscape/core/components/epic1/Epic1GraphEditor')
         ]);
 
         if (!mounted) return;
@@ -740,11 +739,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           setEditorComponent(() => epic1Module.Epic1GraphEditorWithProvider);
         }
 
-        if (menuBarModule?.ProfessionalMenuBar) {
-          setMenuBarComponent(
-            () => menuBarModule.ProfessionalMenuBar as unknown as React.ComponentType<Record<string, unknown>>
-          );
-        }
+        // Load SimpleMenuBar for menu functionality
+        setMenuBarComponent(() => SimpleMenuBar);
       } catch (err) {
         if (mounted) {
           setLoadError((err as Error).message || 'Failed to load components');
@@ -778,16 +774,17 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   }
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
-      }}
-    >
-      {showMenuBar && MenuBarComponent && (
-        <MenuBarComponent
+    <IntelligenceProvider>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        {showMenuBar && MenuBarComponent && (
+          <MenuBarComponent
           // File operations
           onNew={() => handleNew(demoNodes, demoEdges)}
           onOpen={handleOpen}
@@ -894,5 +891,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         onCancel={cancelNewDocument}
       />
     </div>
+    </IntelligenceProvider>
   );
 };

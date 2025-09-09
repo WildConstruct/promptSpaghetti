@@ -26,12 +26,32 @@
       "Bash(pnpm --filter @prompt-spaghetti/custom-node-sdk build)",
       "Bash(pnpm --filter @promptscape/core build)",
       "Bash(pnpm --filter server build)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Read(C:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(C:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Bash(pnpm --filter core build)",
+      "Read(C:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Bash(pnpm:*)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Bash(PORT=8001 npx ts-node src/index-minimal.ts)",
+      "Bash(curl:*)",
+      "Read(C:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(C:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(C:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Bash(pgrep:*)",
+      "Read(C:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Bash(PORT=8002 npx ts-node src/index-minimal.ts)",
+      "Bash(taskkill:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": [],
     "additionalDirectories": [
-      "C:\\c\\Users\\Owner\\CascadeProjects"
+      "C:\\c\\Users\\Owner\\CascadeProjects",
+      "C:\\Users\\Owner\\CascadeProjects\\prompt-spaghetti-backup",
+      "C:\\Users\\Owner\\CascadeProjects"
     ]
   }
 }

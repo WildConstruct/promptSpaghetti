@@ -28,12 +28,14 @@ export interface NodePaletteProps {
   position?: 'left' | 'right';
   defaultCollapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
+  children?: React.ReactNode;
 }
 
 export const NodePalette: React.FC<NodePaletteProps> = ({
   position = 'left',
   defaultCollapsed = false,
   onCollapsedChange,
+  children,
 }) => {
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
   
@@ -79,6 +81,11 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
               <span className="node-label">{node.label}</span>
             </div>
           ))}
+        </div>
+      )}
+      {!collapsed && children && (
+        <div className="palette-footer">
+          {children}
         </div>
       )}
     </div>
