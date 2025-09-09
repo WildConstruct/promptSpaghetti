@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNeatenSettings } from '../contexts/NeatenSettingsContext';
 import { Panel } from 'reactflow';
 import { NodePalette } from '../NodePalette';
 import { NodeToolbar } from '../NodeToolbar';
@@ -211,6 +212,20 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
                 )}
               </div>
             </div>
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.15)', marginTop: 8, paddingTop: 8 }}>
+              <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 6 }}>Neaten Settings</div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 12, opacity: 0.9 }}>Grid</span>
+                  <input type="number" min={5} max={200} value={gridSize} onChange={(e) => setGridSize(Number(e.target.value) || 20)} style={{ width: 70, padding: 4, borderRadius: 4, border: '1px solid #444', background: '#111', color: '#fff' }} />
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 12, opacity: 0.9 }}>Row</span>
+                  <input type="number" min={10} max={300} value={rowSnap} onChange={(e) => setRowSnap(Number(e.target.value) || 40)} style={{ width: 70, padding: 4, borderRadius: 4, border: '1px solid #444', background: '#111', color: '#fff' }} />
+                </label>
+                <span style={{ fontSize: 11, opacity: 0.7 }}>(snap spacing in px)</span>
+              </div>
+            </div>
             <div style={{ marginTop: 6, fontSize: 12, opacity: 0.8 }}>Adjust later via File → Settings</div>
           </div>
         )}
@@ -263,6 +278,7 @@ export const QuickActionBar: React.FC<{
             key={index}
             className="epic1-quick-action"
             onClick={action.onClick}
+  const { gridSize, rowSnap, setGridSize, setRowSnap } = useNeatenSettings();
             disabled={action.disabled}
             title={action.label}
           >

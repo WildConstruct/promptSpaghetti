@@ -12,6 +12,7 @@ import {
   selectBestLayout,
   layoutNewNodes,
 } from '../../../utils/layoutAlgorithms';
+import { useNeatenSettings } from '../contexts/NeatenSettingsContext';
 
 export interface UseAutoLayoutOptions {
   defaultAlgorithm?: LayoutAlgorithm;
@@ -38,6 +39,7 @@ export function useAutoLayout(
   const { defaultAlgorithm = 'dagre', debounceMs = 100 } = options;
   
   const { setNodes, getNodes, getEdges, fitView } = useReactFlow();
+  const { gridSize: gridSetting, rowSnap: rowSetting } = useNeatenSettings();
   const isLayoutingRef = useRef(false);
   const layoutTimeoutRef = useRef<NodeJS.Timeout>();
 
@@ -129,8 +131,8 @@ export function useAutoLayout(
    * Neaten function: snap nodes to grid and align rows without full relayout
    */
   const neaten = useCallback((nodesToNeaten?: Node[]) => {
-    const grid = 20; // grid size in px
-    const rowSnap = 40; // row grouping threshold
+    const grid = gridSetting || 20; // grid size in px
+    const rowSnap = rowSetting || 40; // row grouping threshold
     const all = nodesToNeaten || getNodes();
 
     // Compute row groups by rounding Y to nearest rowSnap multiple
@@ -158,7 +160,7 @@ export function useAutoLayout(
       const alignedY = rowMap.get(ry) ?? Math.round(n.position.y / grid) * grid;
       return { ...n, position: { x: snappedX, y: alignedY } };
     }));
-  }, [getNodes, setNodes]);
+  }, [getNodes, setNodes, gridSetting, rowSetting]);
 
   const neatenSelection = useCallback(() => {
     const selected = getNodes().filter(n => n.selected);

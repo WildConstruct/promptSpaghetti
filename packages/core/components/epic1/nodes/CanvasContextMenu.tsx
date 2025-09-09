@@ -1,5 +1,6 @@
 import React from 'react';
 import './NodeContextMenu.css';
+import { useNeatenSettings } from '../contexts/NeatenSettingsContext';
 
 interface CanvasContextMenuProps {
   position: { x: number; y: number };
@@ -19,6 +20,7 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
   onLayoutCleanup,
   onClose
 }) => {
+  const { setGridSize, setRowSnap } = useNeatenSettings();
   const handleAddNote = () => {
     // Get the graph position from the click position
     const graphPosition = {
@@ -71,6 +73,15 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
               Clean Up Layout
               <span className="context-menu-shortcut">⌘⇧L</span>
             </button>
+            <div className="context-menu-subtext" style={{ fontSize: 11, opacity: 0.8, padding: '2px 12px' }}>Neaten Presets</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, padding: '0 12px 8px' }}>
+              <button className="context-menu-item" style={{ padding: 6 }} onClick={() => setGridSize(10)}>Grid 10</button>
+              <button className="context-menu-item" style={{ padding: 6 }} onClick={() => setGridSize(20)}>Grid 20</button>
+              <button className="context-menu-item" style={{ padding: 6 }} onClick={() => setGridSize(40)}>Grid 40</button>
+              <button className="context-menu-item" style={{ padding: 6 }} onClick={() => setRowSnap(30)}>Row 30</button>
+              <button className="context-menu-item" style={{ padding: 6 }} onClick={() => setRowSnap(40)}>Row 40</button>
+              <button className="context-menu-item" style={{ padding: 6 }} onClick={() => setRowSnap(60)}>Row 60</button>
+            </div>
           </>
         )}
         <div className="context-menu-separator" />

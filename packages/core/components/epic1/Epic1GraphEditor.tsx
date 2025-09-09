@@ -63,6 +63,7 @@ import {
   clearPersistedState 
 } from '../../utils/persistenceUtils';
 import { IntelligenceProvider } from './contexts/IntelligenceContext';
+import { NeatenSettingsProvider } from './contexts/NeatenSettingsContext';
 
 // Simple debounce utility
 function debounce<T extends (...args: any[]) => void>(
@@ -2430,7 +2431,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   
   // Always wrap with DndProvider since TabbedSidePanel includes asset browser that uses drag-and-drop
   // The asset browser tab can be clicked regardless of showAssetLibrary prop
-  return <DndProvider backend={HTML5Backend}>{content}</DndProvider>;
+  return <DndProvider backend={HTML5Backend}><NeatenSettingsProvider>{content}</NeatenSettingsProvider></DndProvider>;
 };
 
 // Export the main component
