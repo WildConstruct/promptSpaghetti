@@ -22,6 +22,18 @@ async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
     'Content-Type': 'application/json'
   };
 
+  // Add Vercel protection bypass if available
+  // This is set as an environment variable when protection is enabled
+  const protectionBypass =
+    (typeof import.meta !== 'undefined' &&
+      (import.meta as any).env?.VITE_VERCEL_PROTECTION_BYPASS) ||
+    process.env.NEXT_PUBLIC_VERCEL_PROTECTION_BYPASS ||
+    process.env.VERCEL_PROTECTION_BYPASS;
+
+  if (protectionBypass) {
+    headers['x-vercel-protection-bypass'] = protectionBypass;
+  }
+
   // Debug logging
   console.log('[LLM Service] Making request to:', url);
 
