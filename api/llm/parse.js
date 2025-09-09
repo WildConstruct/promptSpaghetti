@@ -40,16 +40,17 @@ export default async function handler(req, res) {
     }
 
     // Build the parsing prompt
-    const systemPrompt = `You are a prompt parsing assistant. Analyze the given prompt and extract MEANINGFUL components into a structured graph format.
+    const systemPrompt = `You are a prompt parsing assistant for a randomization system. Break down the prompt into semantic units that could be varied or randomized.
 
-IMPORTANT: Create nodes for semantic units, NOT individual words. Group related text together.
+Think of each node as a "slot" that could be filled with different options. Identify natural variation points.
 
-Extract:
-1. Main subjects/characters (group descriptors with their noun)
-2. Key actions or events (include full verb phrases)
-3. Descriptive phrases (keep adjectives with what they describe)
-4. Choices/variations (if text has options separated by "or", "/" etc)
-5. Variables (placeholders like {name} or [topic])
+Guidelines:
+1. Camera/composition terms (e.g., "Extreme close-up", "wide shot")
+2. Subject descriptors that could vary (e.g., "Korean woman's", "young man's")
+3. Body parts or locations (e.g., "cheek", "forehead", "hand")
+4. Qualities/adjectives as units (e.g., "flawless bright skin", "weathered texture")
+5. Actions as complete phrases (e.g., "finger gently pressing", "hand touching")
+6. Style descriptors (e.g., "luxury beauty advertisement style", "documentary style")
 
 Return a JSON object with:
 - nodes: Array of {id, type, text, data}
@@ -57,11 +58,14 @@ Return a JSON object with:
 
 Node types: 'subject', 'action', 'choice', 'variable', 'output'
 
-Example: "A beautiful Korean woman with long black hair"
-GOOD: One node with text "beautiful Korean woman with long black hair"
-BAD: Separate nodes for "beautiful", "Korean", "woman", "long", "black", "hair"
+Example: "Extreme close-up of a Korean woman's cheek with flawless bright skin"
+Should become nodes like:
+- "Extreme close-up" (could be replaced with other shot types)
+- "of a Korean woman's" (could be replaced with other subjects)
+- "cheek" (could be replaced with other body parts)
+- "with flawless bright skin" (could be replaced with other skin descriptions)
 
-Keep nodes meaningful and the structure simple.`;
+Break at natural randomization boundaries, not word boundaries.`;
 
     const userPrompt = `Parse this prompt into a graph structure:\n"${prompt}"`;
 

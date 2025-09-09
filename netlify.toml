@@ -22,7 +22,7 @@
   # Disable framework detection
   NETLIFY_USE_YARN = "false"
   # Cache bust to force fresh build
-  NETLIFY_CACHE_BUST = "v8-llm-parse-quality-improvement"
+  NETLIFY_CACHE_BUST = "v9-randomization-aware-parser"
   # Disable secrets scanning for .env.example and other false positives
   SECRETS_SCAN_OMIT_PATHS = ".env.example,docs/**,packages/*/dist/**,client/dist/**"
   # Omit Supabase URL from secrets scanning (it's a public URL, not a secret)
@@ -79,24 +79,24 @@
   framework = "#custom"
 
 # Proxy API calls to the Vercel backend
-# Updated: 2025-09-09 to improve LLM parsing quality
+# Updated: 2025-09-09 for randomization-aware semantic parsing
 [[redirects]]
   from = "/api/*"
-  to = "https://promptspaghettiserver-brqmboppk-wildconstructs-projects.vercel.app/api/:splat"
+  to = "https://promptspaghettiserver-2va6vhe8j-wildconstructs-projects.vercel.app/api/:splat"
   status = 200
   force = true
 
 # Expose enhanced admin panel
 [[redirects]]
   from = "/admin"
-  to = "https://promptspaghettiserver-brqmboppk-wildconstructs-projects.vercel.app/api/admin-enhanced"
+  to = "https://promptspaghettiserver-2va6vhe8j-wildconstructs-projects.vercel.app/api/admin-enhanced"
   status = 200
   force = true
 
 # Handle admin panel routes
 [[redirects]]
   from = "/admin/*"
-  to = "https://promptspaghettiserver-brqmboppk-wildconstructs-projects.vercel.app/api/admin-:splat"
+  to = "https://promptspaghettiserver-2va6vhe8j-wildconstructs-projects.vercel.app/api/admin-:splat"
   status = 200
   force = true
 # Stricter CSP for admin routes (no inline styles/scripts)
