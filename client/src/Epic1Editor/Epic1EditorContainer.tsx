@@ -72,23 +72,67 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
   // Prompt parsing integration state
   const [showPromptDissector, setShowPromptDissector] = useState(false);
-  const [promptAnalysis, setPromptAnalysis] = useState<PromptAnalysis | null>(null);
-  const [nodeCreationMode, setNodeCreationMode] = useState<'new-project' | 'add-to-existing' | null>(null);
+  const [promptAnalysis, setPromptAnalysis] = useState<PromptAnalysis | null>(
+    null
+  );
+  const [nodeCreationMode, setNodeCreationMode] = useState<
+    'new-project' | 'add-to-existing' | null
+  >(null);
 
   // Handle prompt analysis completion from dissector
-  const handlePromptAnalysisComplete = useCallback((analysis: PromptAnalysis) => {
-    setPromptAnalysis(analysis);
-    setShowPromptDissector(false);
+  const handlePromptAnalysisComplete = useCallback(
+    (analysis: PromptAnalysis) => {
+      setPromptAnalysis(analysis);
+      setShowPromptDissector(false);
 
-    // Show dialog to choose new project vs add to existing
-    const choice = window.confirm(
-      'Would you like to create a new project with these nodes?\n\n' +
-      '• Click "OK" to create a new project\n' +
-      '• Click "Cancel" to add nodes to current project'
-    );
+      // Show dialog to choose new project vs add to existing
+      const choice = window.confirm(
+        'Would you like to create a new project with these nodes?\n\n' +
+          '• Click "OK" to create a new project\n' +
+          '• Click "Cancel" to add nodes to current project'
+      );
 
-    setNodeCreationMode(choice ? 'new-project' : 'add-to-existing');
-  }, []);
+      setNodeCreationMode(choice ? 'new-project' : 'add-to-existing');
+    },
+    []
+  );
+
+  // Convert analysis to nodes positioned in empty space
+  const convertAnalysisToNodes = useCallback(
+    (analysis: PromptAnalysis, existingNodes: Node[]) => {
+      const viewport = calculateViewportDimensions();
+      const maxX = Math.max(...existingNodes.map(n => n.position.x + 200), 400);
+      const startY = 100;
+
+      const newNodes: Node[] = [];
+      let yOffset = startY;
+
+      analysis.nodes.forEach((generatedNode, index) => {
+        const nodeId = `analysis-${Date.now()}-${index}`;
+        const nodeType = generatedNode.node.nodeType.toLowerCase();
+
+        newNodes.push({
+          id: nodeId,
+          type:
+            nodeType === 'choice'
+              ? 'weightedChoice'
+              : nodeType === 'variable'
+                ? 'variable'
+                : 'textBlock',
+          position: { x: maxX + 50, y: yOffset },
+          data: {
+            content: generatedNode.node.getPreviewText(),
+            label: generatedNode.node.getPreviewText().substring(0, 30) + '...'
+          }
+        });
+
+        yOffset += 150; // Space nodes vertically
+      });
+
+      return [...existingNodes, ...newNodes];
+    },
+    []
+  );
 
   // Handle node creation based on user choice
   const handleNodeCreation = useCallback(() => {
@@ -100,43 +144,16 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       // The analysis will be passed to the editor component
     } else {
       // Add nodes to existing project in empty space
-      const newNodes = convertAnalysisToNodes(promptAnalysis, currentNodes || []);
+      const newNodes = convertAnalysisToNodes(
+        promptAnalysis,
+        currentNodes || []
+      );
       setCurrentNodes(newNodes);
     }
 
     setNodeCreationMode(null);
     setPromptAnalysis(null);
   }, [promptAnalysis, nodeCreationMode, currentNodes, convertAnalysisToNodes]);
-
-  // Convert analysis to nodes positioned in empty space
-  const convertAnalysisToNodes = useCallback((analysis: PromptAnalysis, existingNodes: Node[]) => {
-    const viewport = calculateViewportDimensions();
-    const maxX = Math.max(...existingNodes.map(n => n.position.x + 200), 400);
-    const startY = 100;
-
-    const newNodes: Node[] = [];
-    let yOffset = startY;
-
-    analysis.nodes.forEach((generatedNode, index) => {
-      const nodeId = `analysis-${Date.now()}-${index}`;
-      const nodeType = generatedNode.node.nodeType.toLowerCase();
-
-      newNodes.push({
-        id: nodeId,
-        type: nodeType === 'choice' ? 'weightedChoice' :
-              nodeType === 'variable' ? 'variable' : 'textBlock',
-        position: { x: maxX + 50, y: yOffset },
-        data: {
-          content: generatedNode.node.getPreviewText(),
-          label: generatedNode.node.getPreviewText().substring(0, 30) + '...'
-        }
-      });
-
-      yOffset += 150; // Space nodes vertically
-    });
-
-    return [...existingNodes, ...newNodes];
-  }, []);
 
   // Handle node creation when mode is selected
   useEffect(() => {
