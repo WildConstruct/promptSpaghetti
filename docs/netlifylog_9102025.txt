@@ -29,21 +29,8 @@ PromptDissector.tsx:593 [PromptDissector] parsing Object
 llm-service.ts:98 [LLM] Using hyphenated path: /api/ai-parse
 llm-service.ts:42 [LLM Service] Making request to: /api/ai-parse
 PromptDissector.tsx:276 [PromptDissector] Using old API format (graph.nodes)
-PromptDissector.tsx:346 [PromptDissector] Could not find "designed" in prompt using any strategy, skipping
-Ee @ PromptDissector.tsx:346
-(anonymous) @ PromptDissector.tsx:492
-PromptDissector.tsx:346 [PromptDissector] Could not find "advertised" in prompt using any strategy, skipping
-Ee @ PromptDissector.tsx:346
-(anonymous) @ PromptDissector.tsx:492
-PromptDissector.tsx:276 [PromptDissector] Using old API format (graph.nodes)
-PromptDissector.tsx:346 [PromptDissector] Could not find "designed" in prompt using any strategy, skipping
-Ee @ PromptDissector.tsx:346
-(anonymous) @ PromptDissector.tsx:492
-PromptDissector.tsx:346 [PromptDissector] Could not find "advertised" in prompt using any strategy, skipping
-Ee @ PromptDissector.tsx:346
-(anonymous) @ PromptDissector.tsx:492
-react-dom.production.min.js:188 ReferenceError: Cannot access 'F' before initialization
-    at nT (Epic1EditorContainer.tsx:156:41)
+react-dom.production.min.js:188 ReferenceError: demoNodes is not defined
+    at nT (Epic1EditorContainer.tsx:830:34)
     at Iu (react-dom.production.min.js:160:137)
     at ca (react-dom.production.min.js:289:337)
     at oa (react-dom.production.min.js:279:389)
@@ -54,8 +41,8 @@ react-dom.production.min.js:188 ReferenceError: Cannot access 'F' before initial
     at Ze (scheduler.production.min.js:13:203)
     at MessagePort.it (scheduler.production.min.js:14:128)
 $u @ react-dom.production.min.js:188
-react-dom.production.min.js:282 Uncaught ReferenceError: Cannot access 'F' before initialization
-    at nT (Epic1EditorContainer.tsx:156:41)
+react-dom.production.min.js:282 Uncaught ReferenceError: demoNodes is not defined
+    at nT (Epic1EditorContainer.tsx:830:34)
     at Iu (react-dom.production.min.js:160:137)
     at ca (react-dom.production.min.js:289:337)
     at oa (react-dom.production.min.js:279:389)
@@ -65,3 +52,8 @@ react-dom.production.min.js:282 Uncaught ReferenceError: Cannot access 'F' befor
     at ra (react-dom.production.min.js:267:429)
     at Ze (scheduler.production.min.js:13:203)
     at MessagePort.it (scheduler.production.min.js:14:128)
+PromptDissector.tsx:276 [PromptDissector] Using old API format (graph.nodes)
+PromptDissector.tsx:346 [PromptDissector] Could not find "designed" in prompt using any strategy, skipping
+Ee @ PromptDissector.tsx:346
+PromptDissector.tsx:346 [PromptDissector] Could not find "photographed" in prompt using any strategy, skipping
+Ee @ PromptDissector.tsx:346

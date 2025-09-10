@@ -817,7 +817,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   // Handle node changes with frame edge enforcement
   const handleNodesChange = useCallback(
     (nodes: Node[]) => {
-      const fixedNodes = enforceFrameEdgePositions(nodes, demoNodes);
+      const fixedNodes = enforceFrameEdgePositions(nodes, []);
 
       // Always update nodes immediately for smooth interaction
       setCurrentNodes(fixedNodes);
@@ -827,7 +827,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         setTimeout(() => addToHistory(fixedNodes, currentEdges), 300);
       }
     },
-    [currentNodes, currentEdges, demoNodes, addToHistory]
+    [currentNodes, currentEdges, addToHistory]
   );
 
   // Handle edge changes
@@ -912,7 +912,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         {showMenuBar && MenuBarComponent && (
           <MenuBarComponent
             // File operations
-            onNew={() => handleNew(demoNodes, demoEdges)}
+            onNew={() => handleNew([], [])}
             onOpen={handleOpen}
             onSave={() => handleSave(currentNodes, currentEdges)}
             onSaveAs={() => handleSaveAs(currentNodes, currentEdges)}
