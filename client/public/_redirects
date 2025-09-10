@@ -1,5 +1,5 @@
 # Proxy API requests to Vercel backend
-/api/*  https://promptspaghettiserver-aobja5cby-wildconstructs-projects.vercel.app/api/:splat  200
+/api/*  https://promptspaghettiserver.vercel.app/api/:splat  200
 
 # SPA fallback - serve index.html for all other routes
 /*      /index.html   200

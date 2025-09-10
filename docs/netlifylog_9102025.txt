@@ -1,5 +1,91 @@
-react-dom.production.min.js:188 ReferenceError: Cannot access 'F' before initialization
-    at nT (Epic1EditorContainer.tsx:109:41)
-
-react-dom.production.min.js:282 Uncaught ReferenceError: Cannot access 'F' before initialization
-    at nT (Epic1EditorContainer.tsx:109:41)
+ OK button clicked!
+ [Parse Skip] Already have results for standard mode with this text
+PromptDissector.tsx:2212 [Tab Click] Re-parsing for AI-Enhanced mode
+llm-service.ts:98 [LLM] Using hyphenated path: /api/ai-parse
+llm-service.ts:42 [LLM Service] Making request to: /api/ai-parse
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute x2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <line> attribute y2: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cx: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+Error: <circle> attribute cy: Expected length, "undefined".
+render.mjs:8 Error: <circle> attribute r: Expected length, "undefined".
+nC @ render.mjs:8
+/api/ai-parse:1  Failed to load resource: the server responded with a status of 404 ()
+llm-service.ts:72 [LLM Service] Request failed: Object
+Ts @ llm-service.ts:72
+llm-service.ts:102 Falling back to /api/llm-parse due to error: Error: LLM endpoint error: 404
+    at Ts (llm-service.ts:83:11)
+    at async dT.parse (llm-service.ts:99:14)
+    at async PromptDissector.tsx:257:20
+    at async onClick (PromptDissector.tsx:2214:41)
+parse @ llm-service.ts:102
+llm-service.ts:42 [LLM Service] Making request to: /api/llm-parse
+/api/llm-parse:1  Failed to load resource: the server responded with a status of 404 ()
+llm-service.ts:72 [LLM Service] Request failed: Object
+Ts @ llm-service.ts:72
+PromptDissector.tsx:261 [PromptDissector] LLM parse failed: LLM endpoint error: 404
+(anonymous) @ PromptDissector.tsx:261
+llm-service.ts:83 Uncaught (in promise) Error: LLM endpoint error: 404
+    at Ts (llm-service.ts:83:11)
+    at async PromptDissector.tsx:257:20
+    at async onClick (PromptDissector.tsx:2214:41)
+PromptDissector.tsx:593 [PromptDissector] parsing Object
+llm-service.ts:98 [LLM] Using hyphenated path: /api/ai-parse
+llm-service.ts:42 [LLM Service] Making request to: /api/ai-parse
+render.mjs:8 Error: <circle> attribute r: Expected length, "undefined".
+nC @ render.mjs:8
+/api/ai-parse:1  Failed to load resource: the server responded with a status of 404 ()
+llm-service.ts:72 [LLM Service] Request failed: Object
+Ts @ llm-service.ts:72
+llm-service.ts:102 Falling back to /api/llm-parse due to error: Error: LLM endpoint error: 404
+    at Ts (llm-service.ts:83:11)
+    at async dT.parse (llm-service.ts:99:14)
+    at async PromptDissector.tsx:257:20
+    at async PromptDissector.tsx:601:29
+parse @ llm-service.ts:102
+llm-service.ts:42 [LLM Service] Making request to: /api/llm-parse
+/api/llm-parse:1  Failed to load resource: the server responded with a status of 404 ()
+llm-service.ts:72 [LLM Service] Request failed: Object
+Ts @ llm-service.ts:72
+PromptDissector.tsx:261 [PromptDissector] LLM parse failed: LLM endpoint error: 404
+(anonymous) @ PromptDissector.tsx:261
+PromptDissector.tsx:665 Error parsing prompt: Error: LLM endpoint error: 404
+    at Ts (llm-service.ts:83:11)
+    at async PromptDissector.tsx:257:20
+    at async PromptDissector.tsx:601:29
+(anonymous) @ PromptDissector.tsx:665
