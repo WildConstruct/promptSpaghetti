@@ -8,6 +8,10 @@ const API_BASE =
 
 function withBase(path: string): string {
   if (!path) return path;
+  // If API_BASE is empty or just a slash, use relative paths
+  if (!API_BASE || API_BASE === '/' || API_BASE === '') {
+    return path;
+  }
   if (API_BASE) {
     if (path.startsWith('http')) return path;
     if (path.startsWith('/')) return API_BASE.replace(/\/$/, '') + path;
