@@ -523,3 +523,4 @@ The repo includes initial hardening and a checklist to continue:
 - Admin: form parser added; test buttons for Supabase/OpenRouter; delete-key confirmation.
 
 See `docs/security-hardening.md` for a prioritized checklist and mapping to this codebase.
+# Trigger rebuild Wed, Sep 10, 2025  2:50:26 PM
