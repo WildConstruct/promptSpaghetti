@@ -4,6 +4,8 @@ import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { usePreviewTrayKeyboardShortcuts } from './useKeyboardShortcuts';
 import { VirtualResultsList } from './VirtualResultsList';
 import { LLMToggle } from '../LLMToggle/LLMToggle';
+import { PreviewRefinement } from './PreviewRefinement';
+import { useIntelligence } from '../epic1/contexts/IntelligenceContext';
 import './PreviewTray.css';
 
 export interface PreviewTrayProps {
@@ -62,6 +64,8 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   onLLMModeChange,
   onLLMConfigClick
 }) => {
+  // Get intelligence services from context
+  const { textRefinement } = useIntelligence();
   console.log('[PreviewTray] Rendering with results:', results);
   console.log('[PreviewTray] Seeds:', seeds);
 
@@ -87,9 +91,21 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   // State for inline seed editing
   const [editingSeedIndex, setEditingSeedIndex] = useState<number | null>(null);
   const [editingSeedValue, setEditingSeedValue] = useState<string>('');
+  
+  // State for refinement
+  const [refinementStyle, setRefinementStyle] = useState<string>('professional');
+  const [refinedResults, setRefinedResults] = useState<Map<string, string>>(new Map());
+  const [currentRefinementSeed, setCurrentRefinementSeed] = useState<number | null>(null);
 
   // Enable keyboard shortcuts
   usePreviewTrayKeyboardShortcuts();
+  
+  // Clear refined results when switching modes
+  useEffect(() => {
+    if (llmMode === 'standard') {
+      setRefinedResults(new Map());
+    }
+  }, [llmMode]);
 
   const maxHeightValue =
     maxHeight || window.innerHeight * TRAY_MAX_HEIGHT_PERCENT;
@@ -102,10 +118,16 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
 
   const handleCopyAll = useCallback(() => {
     const allResults = results
-      .map(r => `Seed ${r.seed}: ${r.result}`)
+      .map(r => {
+        // Use refined text if available in LLM mode
+        const text = llmMode === 'llm-enhanced' && refinedResults.has(`${r.seed}`)
+          ? refinedResults.get(`${r.seed}`)!
+          : r.result;
+        return `Seed ${r.seed}: ${text}`;
+      })
       .join('\n');
     onCopy?.(allResults);
-  }, [results, onCopy]);
+  }, [results, onCopy, llmMode, refinedResults]);
 
   const handleSeedEdit = useCallback(
     (index: number) => {
@@ -652,23 +674,50 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                               overflow: 'auto',
                               cursor: 'pointer'
                             }}
-                            onClick={() =>
-                              result &&
-                              navigator.clipboard.writeText(result.result)
-                            }
+                            onClick={() => {
+                              if (result) {
+                                // Copy refined text if available, otherwise original
+                                const textToCopy = llmMode === 'llm-enhanced' && refinedResults.has(`${seed}`) 
+                                  ? refinedResults.get(`${seed}`)! 
+                                  : result.result;
+                                navigator.clipboard.writeText(textToCopy);
+                              }
+                            }}
                           >
                             {result ? (
-                              <div
-                                style={{
-                                  whiteSpace: 'pre-wrap',
-                                  wordBreak: 'break-word',
-                                  color: '#e8e8e8',
-                                  fontSize: '14px',
-                                  lineHeight: '1.5'
-                                }}
-                              >
-                                {result.result}
-                              </div>
+                              <>
+                                {/* Show refinement UI when in LLM mode */}
+                                {llmMode === 'llm-enhanced' && (
+                                  <PreviewRefinement
+                                    originalText={result.result}
+                                    refinementService={textRefinement}
+                                    onRefined={(refined) => {
+                                      const newRefined = new Map(refinedResults);
+                                      newRefined.set(`${seed}`, refined);
+                                      setRefinedResults(newRefined);
+                                    }}
+                                    isActive={llmMode === 'llm-enhanced'}
+                                    selectedStyle={refinementStyle}
+                                    onStyleChange={setRefinementStyle}
+                                  />
+                                )}
+                                
+                                {/* Show the text - refined if available, otherwise original */}
+                                <div
+                                  style={{
+                                    whiteSpace: 'pre-wrap',
+                                    wordBreak: 'break-word',
+                                    color: '#e8e8e8',
+                                    fontSize: '14px',
+                                    lineHeight: '1.5',
+                                    marginTop: llmMode === 'llm-enhanced' ? '8px' : '0'
+                                  }}
+                                >
+                                  {llmMode === 'llm-enhanced' && refinedResults.has(`${seed}`) 
+                                    ? refinedResults.get(`${seed}`) 
+                                    : result.result}
+                                </div>
+                              </>
                             ) : (
                               <div
                                 style={{
