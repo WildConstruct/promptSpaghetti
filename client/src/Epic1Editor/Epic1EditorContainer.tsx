@@ -995,21 +995,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     };
   }, [showMenuBar]);
 
-  if (loadError) {
-    return <div className="error-message">Error: {loadError}</div>;
-  }
-
-  if (isComponentsLoading || !EditorComponent) {
-    return <div className="loading-message">Loading...</div>;
-  }
-
-  // When launching with an initial analysis/graph, wait until we've cleared core persistence
-  // and prepared the initial nodes/edges before rendering the core editor to avoid auto-restore.
-  if (!editorReady) {
-    return <div className="loading-message">Preparing editor…</div>;
-  }
-
-  // Handle workspace recovery
+  // Handle workspace recovery - MUST be before any early returns for React hooks rules
   const handleRecoverWorkspace = useCallback(() => {
     const recovered = WorkspaceRecovery.recoverWorkspace();
     if (recovered) {
@@ -1028,6 +1014,20 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const handleDismissRecovery = useCallback(() => {
     setShowRecoveryDialog(false);
   }, []);
+
+  if (loadError) {
+    return <div className="error-message">Error: {loadError}</div>;
+  }
+
+  if (isComponentsLoading || !EditorComponent) {
+    return <div className="loading-message">Loading...</div>;
+  }
+
+  // When launching with an initial analysis/graph, wait until we've cleared core persistence
+  // and prepared the initial nodes/edges before rendering the core editor to avoid auto-restore.
+  if (!editorReady) {
+    return <div className="loading-message">Preparing editor…</div>;
+  }
 
   return (
     <IntelligenceProvider>

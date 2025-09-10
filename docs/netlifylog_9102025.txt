@@ -1,59 +1,32 @@
 PromptDissector.tsx:2475 OK button clicked!
 PromptDissector.tsx:583 [Parse Skip] Already have results for standard mode with this text
-PromptDissector.tsx:2212 [Tab Click] Re-parsing for AI-Enhanced mode
-llm-service.ts:98 [LLM] Using hyphenated path: /api/ai-parse
-llm-service.ts:42 [LLM Service] Making request to: /api/ai-parse
-Error: <line> attribute x2: Expected length, "undefined".
-Error: <line> attribute x2: Expected length, "undefined".
-Error: <line> attribute x2: Expected length, "undefined".
-Error: <line> attribute x2: Expected length, "undefined".
-Error: <line> attribute x2: Expected length, "undefined".
-Error: <line> attribute y2: Expected length, "undefined".
-Error: <line> attribute y2: Expected length, "undefined".
-Error: <line> attribute y2: Expected length, "undefined".
-Error: <line> attribute y2: Expected length, "undefined".
-Error: <line> attribute y2: Expected length, "undefined".
-Error: <circle> attribute cx: Expected length, "undefined".
-Error: <circle> attribute cx: Expected length, "undefined".
-Error: <circle> attribute cx: Expected length, "undefined".
-Error: <circle> attribute cx: Expected length, "undefined".
-Error: <circle> attribute cx: Expected length, "undefined".
-Error: <circle> attribute cy: Expected length, "undefined".
-Error: <circle> attribute cy: Expected length, "undefined".
-Error: <circle> attribute cy: Expected length, "undefined".
-Error: <circle> attribute cy: Expected length, "undefined".
-Error: <circle> attribute cy: Expected length, "undefined".
-render.mjs:8 Error: <circle> attribute r: Expected length, "undefined".
-nC @ render.mjs:8
-PromptDissector.tsx:593 [PromptDissector] parsing Object
-llm-service.ts:98 [LLM] Using hyphenated path: /api/ai-parse
-llm-service.ts:42 [LLM Service] Making request to: /api/ai-parse
-PromptDissector.tsx:276 [PromptDissector] Using old API format (graph.nodes)
-react-dom.production.min.js:188 ReferenceError: demoNodes is not defined
-    at nT (Epic1EditorContainer.tsx:830:34)
+testSupabase.ts:8 Supabase Configuration Test:
+testSupabase.ts:9 URL configured: true
+testSupabase.ts:10 Anon Key configured: true
+GoTrueClient.js:71 Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+Hr @ GoTrueClient.js:71
+testSupabase.ts:15 ✅ Supabase client created successfully
+testSupabase.ts:22 ✅ Auth check: Not authenticated
+react-dom.production.min.js:188 Error: Minified React error #310; visit https://reactjs.org/docs/error-decoder.html?invariant=310 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at $e (react-dom.production.min.js:161:314)
+    at Object.ys [as useCallback] (react-dom.production.min.js:171:291)
+    at M.useCallback (react.production.min.js:24:429)
+    at GE (Epic1EditorContainer.tsx:1013:34)
     at Iu (react-dom.production.min.js:160:137)
-    at ca (react-dom.production.min.js:289:337)
+    at Qu (react-dom.production.min.js:196:258)
+    at ca (react-dom.production.min.js:291:88)
     at oa (react-dom.production.min.js:279:389)
     at ic (react-dom.production.min.js:279:320)
     at yl (react-dom.production.min.js:279:180)
-    at oi (react-dom.production.min.js:270:88)
-    at ra (react-dom.production.min.js:267:429)
-    at Ze (scheduler.production.min.js:13:203)
-    at MessagePort.it (scheduler.production.min.js:14:128)
 $u @ react-dom.production.min.js:188
-react-dom.production.min.js:282 Uncaught ReferenceError: demoNodes is not defined
-    at nT (Epic1EditorContainer.tsx:830:34)
+react-dom.production.min.js:282 Uncaught Error: Minified React error #310; visit https://reactjs.org/docs/error-decoder.html?invariant=310 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at $e (react-dom.production.min.js:161:314)
+    at Object.ys [as useCallback] (react-dom.production.min.js:171:291)
+    at M.useCallback (react.production.min.js:24:429)
+    at GE (Epic1EditorContainer.tsx:1013:34)
     at Iu (react-dom.production.min.js:160:137)
-    at ca (react-dom.production.min.js:289:337)
+    at Qu (react-dom.production.min.js:196:258)
+    at ca (react-dom.production.min.js:291:88)
     at oa (react-dom.production.min.js:279:389)
     at ic (react-dom.production.min.js:279:320)
     at yl (react-dom.production.min.js:279:180)
-    at oi (react-dom.production.min.js:270:88)
-    at ra (react-dom.production.min.js:267:429)
-    at Ze (scheduler.production.min.js:13:203)
-    at MessagePort.it (scheduler.production.min.js:14:128)
-PromptDissector.tsx:276 [PromptDissector] Using old API format (graph.nodes)
-PromptDissector.tsx:346 [PromptDissector] Could not find "designed" in prompt using any strategy, skipping
-Ee @ PromptDissector.tsx:346
-PromptDissector.tsx:346 [PromptDissector] Could not find "photographed" in prompt using any strategy, skipping
-Ee @ PromptDissector.tsx:346
