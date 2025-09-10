@@ -101,18 +101,28 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     []
   );
 
-  // Convert analysis to nodes positioned in empty space
-  const convertAnalysisToNodes = useCallback(
-    (analysis: PromptAnalysis, existingNodes: Node[]) => {
+  // Convert analysis to nodes and edges positioned in empty space
+  const convertAnalysisToNodesAndEdges = useCallback(
+    (
+      analysis: PromptAnalysis,
+      existingNodes: Node[],
+      existingEdges: Edge[]
+    ) => {
       const viewport = calculateViewportDimensions();
       const maxX = Math.max(...existingNodes.map(n => n.position.x + 200), 400);
       const startY = 100;
 
       const newNodes: Node[] = [];
+      const newEdges: Edge[] = [];
+      const nodeIdMap: Record<string, string> = {}; // Map original IDs to new IDs
       let yOffset = startY;
 
+      // Create nodes with new IDs
       analysis.nodes.forEach((generatedNode, index) => {
+        const originalId = generatedNode.node.id || String(index);
         const nodeId = `analysis-${Date.now()}-${index}`;
+        nodeIdMap[originalId] = nodeId;
+
         const nodeType = generatedNode.node.nodeType.toLowerCase();
 
         newNodes.push({
@@ -133,7 +143,41 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         yOffset += 150; // Space nodes vertically
       });
 
-      return [...existingNodes, ...newNodes];
+      // Create edges if they exist in the analysis
+      if (analysis.edges && Array.isArray(analysis.edges)) {
+        analysis.edges.forEach((edge, index) => {
+          const sourceId = nodeIdMap[edge.source] || edge.source;
+          const targetId = nodeIdMap[edge.target] || edge.target;
+
+          // Only create edge if both nodes exist
+          if (
+            newNodes.some(n => n.id === sourceId) &&
+            newNodes.some(n => n.id === targetId)
+          ) {
+            newEdges.push({
+              id: `analysis-edge-${Date.now()}-${index}`,
+              source: sourceId,
+              target: targetId,
+              sourceHandle: edge.sourceHandle,
+              targetHandle: edge.targetHandle
+            });
+          }
+        });
+      } else {
+        // If no edges provided, create a linear chain
+        for (let i = 0; i < newNodes.length - 1; i++) {
+          newEdges.push({
+            id: `analysis-edge-${Date.now()}-${i}`,
+            source: newNodes[i].id,
+            target: newNodes[i + 1].id
+          });
+        }
+      }
+
+      return {
+        nodes: [...existingNodes, ...newNodes],
+        edges: [...existingEdges, ...newEdges]
+      };
     },
     []
   );
@@ -148,16 +192,24 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       // The analysis will be passed to the editor component
     } else {
       // Add nodes to existing project in empty space
-      const newNodes = convertAnalysisToNodes(
+      const result = convertAnalysisToNodesAndEdges(
         promptAnalysis,
-        currentNodes || []
+        currentNodes || [],
+        currentEdges || []
       );
-      setCurrentNodes(newNodes);
+      setCurrentNodes(result.nodes);
+      setCurrentEdges(result.edges);
     }
 
     setNodeCreationMode(null);
     setPromptAnalysis(null);
-  }, [promptAnalysis, nodeCreationMode, currentNodes, convertAnalysisToNodes]);
+  }, [
+    promptAnalysis,
+    nodeCreationMode,
+    currentNodes,
+    currentEdges,
+    convertAnalysisToNodesAndEdges
+  ]);
 
   // Handle node creation when mode is selected
   useEffect(() => {
@@ -425,7 +477,26 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         });
       });
 
-      if (nodes.length > 1) {
+      // Use edges from analysis if available, otherwise create linear chain
+      if (initialAnalysis.edges && Array.isArray(initialAnalysis.edges)) {
+        initialAnalysis.edges.forEach((edge, index) => {
+          // Only create edge if both nodes exist
+          if (
+            nodes.some(n => n.id === edge.source) &&
+            nodes.some(n => n.id === edge.target)
+          ) {
+            edges.push({
+              id: `init-e-${index}`,
+              source: edge.source,
+              target: edge.target,
+              type: 'smoothstep',
+              sourceHandle: edge.sourceHandle || 'source',
+              targetHandle: edge.targetHandle || 'target'
+            });
+          }
+        });
+      } else if (nodes.length > 1) {
+        // Fallback to linear chain if no edges provided
         for (let i = 0; i < nodes.length - 1; i++) {
           edges.push({
             id: `init-e-${i}`,
