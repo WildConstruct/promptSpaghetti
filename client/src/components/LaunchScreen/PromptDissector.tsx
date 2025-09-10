@@ -292,65 +292,207 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
             type: node.type
           }));
 
-        // Create mappings with actual text positions
-        // First, concatenate all node texts to understand the full coverage
-        const nodeTexts = result.nodes
-          .filter(n => n.type !== 'output')
-          .map(node => node.text || node.data.content || node.data.label || '');
+        // Improved span generation using fuzzy matching and LLM segmentation
+        const createMappingsFromLLMResponse = (nodes: any[], originalPrompt: string): NodeMapping[] => {
+          const mappings: NodeMapping[] = [];
+          let searchStartPos = 0;
 
-        console.log('[PromptDissector] Node texts from LLM:', nodeTexts);
-        console.log('[PromptDissector] Original prompt:', text);
+          for (let idx = 0; idx < nodes.length; idx++) {
+            const node = nodes[idx];
+            const nodeText = node.text || node.data?.content || node.data?.label || '';
 
-        // Build mappings by finding each node's text in sequence
-        let searchStartPos = 0;
-        const mappings = [];
+            if (!nodeText || nodeText.trim() === '') {
+              console.warn(`[PromptDissector] Skipping empty node ${idx}`);
+              continue;
+            }
 
-        for (let idx = 0; idx < nodeTexts.length; idx++) {
-          const nodeText = nodeTexts[idx];
-          const node = result.nodes.filter(n => n.type !== 'output')[idx];
+            // Try multiple matching strategies
+            let startIdx = -1;
+            let endIdx = -1;
 
-          if (!nodeText || nodeText.trim() === '') {
-            console.warn(`[PromptDissector] Skipping empty node ${idx}`);
-            continue;
+            // Strategy 1: Exact match
+            startIdx = originalPrompt.indexOf(nodeText, searchStartPos);
+            if (startIdx !== -1) {
+              endIdx = startIdx + nodeText.length;
+            } else {
+              // Strategy 2: Trimmed match
+              const trimmedNodeText = nodeText.trim();
+              startIdx = originalPrompt.indexOf(trimmedNodeText, searchStartPos);
+              if (startIdx !== -1) {
+                endIdx = startIdx + trimmedNodeText.length;
+              } else {
+                // Strategy 3: Case-insensitive match
+                const lowerPrompt = originalPrompt.toLowerCase();
+                const lowerNodeText = trimmedNodeText.toLowerCase();
+                startIdx = lowerPrompt.indexOf(lowerNodeText, searchStartPos);
+                if (startIdx !== -1) {
+                  endIdx = startIdx + trimmedNodeText.length;
+                } else {
+                  // Strategy 4: Fuzzy word-based matching
+                  const promptWords = originalPrompt.split(/\s+/);
+                  const nodeWords = trimmedNodeText.split(/\s+/);
+                  const bestMatch = findBestWordSequenceMatch(promptWords, nodeWords, searchStartPos);
+
+                  if (bestMatch) {
+                    startIdx = bestMatch.startIndex;
+                    endIdx = bestMatch.endIndex;
+                  } else {
+                    // Strategy 5: Semantic similarity fallback - find similar phrases
+                    const similarMatch = findSimilarPhraseMatch(originalPrompt, trimmedNodeText, searchStartPos);
+                    if (similarMatch) {
+                      startIdx = similarMatch.startIndex;
+                      endIdx = similarMatch.endIndex;
+                    } else {
+                      console.warn(`[PromptDissector] Could not find "${nodeText}" in prompt using any strategy, skipping`);
+                      continue;
+                    }
+                  }
+                }
+              }
+            }
+
+            mappings.push({
+              nodeId: node.id,
+              startIndex: startIdx,
+              endIndex: endIdx,
+              highlightColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'][idx % 4]
+            });
+
+            searchStartPos = endIdx;
           }
 
-          // Try to find this exact text in the original prompt
-          let startIdx = text.indexOf(nodeText, searchStartPos);
+          return mappings;
+        };
 
-          if (startIdx === -1) {
-            // Try trimmed version
-            const trimmedNodeText = nodeText.trim();
-            startIdx = text.indexOf(trimmedNodeText, searchStartPos);
+        // Helper function for fuzzy word sequence matching
+        const findBestWordSequenceMatch = (promptWords: string[], nodeWords: string[], startPos: number) => {
+          if (nodeWords.length === 0) return null;
 
-            if (startIdx === -1) {
-              // Try case-insensitive search
-              const lowerText = text.toLowerCase();
-              const lowerNodeText = trimmedNodeText.toLowerCase();
-              startIdx = lowerText.indexOf(lowerNodeText, searchStartPos);
+          let bestMatch = null;
+          let bestScore = 0;
 
-              if (startIdx === -1) {
-                console.warn(
-                  `[PromptDissector] Could not find "${nodeText}" in prompt, skipping`
-                );
-                continue;
+          // Slide through prompt words looking for best sequence match
+          for (let i = 0; i <= promptWords.length - nodeWords.length; i++) {
+            let score = 0;
+            let consecutiveMatches = 0;
+
+            for (let j = 0; j < nodeWords.length; j++) {
+              const promptWord = promptWords[i + j].toLowerCase();
+              const nodeWord = nodeWords[j].toLowerCase();
+
+              if (promptWord === nodeWord) {
+                score += 2; // Exact match
+                consecutiveMatches++;
+              } else if (promptWord.includes(nodeWord) || nodeWord.includes(promptWord)) {
+                score += 1; // Partial match
               }
+            }
+
+            // Bonus for consecutive matches
+            score += consecutiveMatches * 0.5;
+
+            if (score > bestScore) {
+              bestScore = score;
+
+              // Calculate character positions
+              const startWordIndex = i;
+              const endWordIndex = i + nodeWords.length - 1;
+              const charStart = promptWords.slice(0, startWordIndex).join(' ').length;
+              const actualStart = startWordIndex > 0 ? charStart + 1 : 0; // +1 for space
+              const charEnd = promptWords.slice(0, endWordIndex + 1).join(' ').length;
+
+              bestMatch = {
+                startIndex: actualStart,
+                endIndex: charEnd,
+                score: bestScore
+              };
             }
           }
 
-          const endIdx = startIdx + nodeText.length;
-          searchStartPos = endIdx; // Move search position forward
+          return bestScore > nodeWords.length * 0.5 ? bestMatch : null; // Require at least 50% match quality
+        };
 
-          mappings.push({
-            nodeId: node.id,
-            startIndex: startIdx,
-            endIndex: endIdx,
-            highlightColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'][
-              idx % 4
-            ]
-          });
-        }
+        // Helper function for semantic similarity matching
+        const findSimilarPhraseMatch = (prompt: string, nodeText: string, startPos: number) => {
+          // Simple semantic similarity - look for phrases with similar meaning
+          const promptLower = prompt.toLowerCase();
+          const nodeLower = nodeText.toLowerCase();
 
-        console.log('[PromptDissector] Created mappings:', mappings);
+          // Try to find similar phrases by looking for shared significant words
+          const promptWords = promptLower.split(/\s+/).filter(word => word.length > 2);
+          const nodeWords = nodeLower.split(/\s+/).filter(word => word.length > 2);
+
+          const sharedWords = nodeWords.filter(word =>
+            promptWords.some(pWord =>
+              pWord.includes(word) || word.includes(pWord) ||
+              levenshteinDistance(pWord, word) <= 2 // Allow small typos
+            )
+          );
+
+          if (sharedWords.length >= Math.max(1, nodeWords.length * 0.6)) {
+            // Find a reasonable span that contains most of the shared words
+            const words = prompt.split(/\s+/);
+            let bestStart = -1;
+            let bestEnd = -1;
+            let maxCoverage = 0;
+
+            for (let i = 0; i < words.length; i++) {
+              for (let j = i + 1; j <= words.length; j++) {
+                const spanWords = words.slice(i, j);
+                const spanText = spanWords.join(' ').toLowerCase();
+                const coverage = sharedWords.filter(word =>
+                  spanText.includes(word.toLowerCase())
+                ).length;
+
+                if (coverage > maxCoverage) {
+                  maxCoverage = coverage;
+                  bestStart = prompt.indexOf(spanWords[0], startPos);
+                  if (bestStart !== -1) {
+                    const spanLength = spanWords.join(' ').length;
+                    bestEnd = bestStart + spanLength;
+                  }
+                }
+              }
+            }
+
+            if (bestStart !== -1 && bestEnd !== -1) {
+              return { startIndex: bestStart, endIndex: bestEnd };
+            }
+          }
+
+          return null;
+        };
+
+        // Simple Levenshtein distance for fuzzy matching
+        const levenshteinDistance = (str1: string, str2: string): number => {
+          const matrix = [];
+          for (let i = 0; i <= str2.length; i++) {
+            matrix[i] = [i];
+          }
+          for (let j = 0; j <= str1.length; j++) {
+            matrix[0][j] = j;
+          }
+          for (let i = 1; i <= str2.length; i++) {
+            for (let j = 1; j <= str1.length; j++) {
+              if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+              } else {
+                matrix[i][j] = Math.min(
+                  matrix[i - 1][j - 1] + 1, // substitution
+                  matrix[i][j - 1] + 1,     // insertion
+                  matrix[i - 1][j] + 1      // deletion
+                );
+              }
+            }
+          }
+          return matrix[str2.length][str1.length];
+        };
+
+        // Use the improved mapping function
+        const mappings = createMappingsFromLLMResponse(
+          result.nodes.filter(n => n.type !== 'output'),
+          text
+        );
 
         // Convert LLM result to expected format
         newAnalysis = {

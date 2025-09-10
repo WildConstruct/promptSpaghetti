@@ -33,6 +33,9 @@ export interface PromptAnalysis {
   segments: PromptSegment[];
   nodes: GeneratedNode[];
   mappings: NodeMapping[];
+  edges?: any[]; // Optional edges from LLM response
+  llmMetadata?: any; // Optional metadata from LLM response
+  rawPrompt?: string; // Optional original prompt text
 }
 
 // Very simple color palette for highlights (alpha will be applied by consumer)
