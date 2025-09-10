@@ -1,0 +1,210 @@
+2:51:21 PM: build-image version: 4a8ac839785702e700079d30b165ce05e5b74e43 (noble)
+2:51:21 PM: buildbot version: ea492e86968abb8ab1c6f00e7c4b5466855f8c43
+2:51:21 PM: Fetching cached dependencies
+2:51:21 PM: Starting to download cache of 428.7MB (Last modified: 2025-09-10 19:49:49 +0000 UTC)
+2:51:23 PM: Finished downloading cache in 1.101s
+2:51:23 PM: Starting to extract cache
+2:51:35 PM: Finished extracting cache in 12.356s
+2:51:35 PM: Finished fetching cache in 13.539s
+2:51:35 PM: Starting to prepare the repo for build
+2:51:35 PM: Preparing Git Reference refs/heads/main
+2:51:37 PM: Custom publish path detected. Proceeding with the specified path: 'client/dist'
+2:51:37 PM: Custom build command detected. Proceeding with the specified command: 'pnpm install && cd packages/asset-browser && npm run prebuild && cd ../.. && pnpm --filter client build'
+2:51:38 PM: Starting to install dependencies
+2:51:38 PM: Started restoring cached python cache
+2:51:38 PM: Finished restoring cached python cache
+2:51:38 PM: Started restoring cached ruby cache
+2:51:39 PM: Finished restoring cached ruby cache
+2:51:39 PM: Started restoring cached go cache
+2:51:39 PM: Finished restoring cached go cache
+2:51:40 PM: Started restoring cached Node.js version
+2:51:41 PM: Finished restoring cached Node.js version
+2:51:41 PM: Attempting Node.js version '20.11.0' from .nvmrc
+2:51:41 PM: v20.11.0 is already installed.
+2:51:42 PM: Now using node v20.11.0 (npm v10.2.4)
+2:51:42 PM: Enabling Node.js Corepack
+2:51:42 PM: Started restoring cached build plugins
+2:51:42 PM: Finished restoring cached build plugins
+2:51:42 PM: Started restoring cached corepack dependencies
+2:51:42 PM: Finished restoring cached corepack dependencies
+2:51:42 PM: Started restoring cached pnpm cache
+2:51:42 PM: Finished restoring cached pnpm cache
+2:51:43 PM: pnpm workspaces detected
+2:51:43 PM: Started restoring workspace client node modules
+2:51:43 PM: Finished restoring workspace client node modules
+2:51:43 PM: Started restoring workspace server node modules
+2:51:43 PM: Finished restoring workspace server node modules
+2:51:43 PM: Started restoring workspace packages/asset-browser node modules
+2:51:43 PM: Finished restoring workspace packages/asset-browser node modules
+2:51:43 PM: Started restoring workspace packages/cli node modules
+2:51:43 PM: Finished restoring workspace packages/cli node modules
+2:51:43 PM: Started restoring workspace packages/core node modules
+2:51:43 PM: Finished restoring workspace packages/core node modules
+2:51:43 PM: Started restoring workspace packages/custom-node-sdk node modules
+2:51:43 PM: Finished restoring workspace packages/custom-node-sdk node modules
+2:51:43 PM: Started restoring workspace docs/content-authoring-handbook node modules
+2:51:43 PM: Finished restoring workspace docs/content-authoring-handbook node modules
+2:51:43 PM: Started restoring workspace root node modules
+2:51:43 PM: Finished restoring workspace root node modules
+2:51:43 PM: Installing npm packages using pnpm version 8.15.4
+2:51:43 PM: Scope: all 8 workspace projects
+2:51:44 PM: Lockfile is up to date, resolution step is skipped
+2:51:44 PM: Already up to date
+2:51:45 PM: . postinstall$ echo 'Monorepo bootstrap complete.'
+2:51:45 PM: . postinstall: Monorepo bootstrap complete.
+2:51:45 PM: . postinstall: Done
+2:51:45 PM: Done in 1.9s
+2:51:45 PM: npm packages installed using pnpm
+2:51:46 PM: Successfully installed dependencies
+2:51:46 PM: Starting build script
+2:51:46 PM: Detected 0 framework(s)
+2:51:46 PM: Section completed: initializing
+2:51:48 PM: ​
+2:51:48 PM: Netlify Build                                                 
+2:51:48 PM: ────────────────────────────────────────────────────────────────
+2:51:48 PM: ​
+2:51:48 PM: ❯ Version
+2:51:48 PM:   @netlify/build 35.1.6
+2:51:48 PM: ​
+2:51:48 PM: ❯ Flags
+2:51:48 PM:   accountId: 686edf594d8a61f74ae8a218
+2:51:48 PM:   baseRelDir: true
+2:51:48 PM:   buildId: 68c1d6b864cad70008c91689
+2:51:48 PM:   deployId: 68c1d6b864cad70008c9168b
+2:51:48 PM:   packagePath: client
+2:51:48 PM: ​
+2:51:48 PM: ❯ Current directory
+2:51:48 PM:   /opt/build/repo
+2:51:48 PM: ​
+2:51:48 PM: ❯ Config file
+2:51:48 PM:   /opt/build/repo/netlify.toml
+2:51:48 PM: ​
+2:51:48 PM: ❯ Context
+2:51:48 PM:   production
+2:51:48 PM: ​
+2:51:48 PM: build.command from netlify.toml                               
+2:51:48 PM: ────────────────────────────────────────────────────────────────
+2:51:48 PM: ​
+2:51:48 PM: $ pnpm install && cd packages/asset-browser && npm run prebuild && cd ../.. && pnpm --filter client build
+2:51:48 PM: Scope: all 8 workspace projects
+2:51:48 PM: Lockfile is up to date, resolution step is skipped
+2:51:48 PM: Already up to date
+2:51:50 PM: . postinstall$ echo 'Monorepo bootstrap complete.'
+2:51:50 PM: . postinstall: Monorepo bootstrap complete.
+2:51:50 PM: . postinstall: Done
+2:51:50 PM: Done in 2.1s
+2:51:50 PM: > @prompt/asset-browser@0.1.0 prebuild
+2:51:50 PM: > node scripts/build/generate-graph-manifest.mjs
+2:51:50 PM: [manifest] Wrote 3 entries to public/graphs/manifest.json
+2:51:51 PM: > client@0.1.0 build /opt/build/repo/client
+2:51:51 PM: > node build-standalone.js
+2:51:51 PM: Creating standalone build for deployment...
+2:51:51 PM: Environment: undefined
+2:51:51 PM: NETLIFY: true
+2:51:51 PM: Current working directory: /opt/build/repo/client
+2:51:51 PM: Building with full Epic 1 functionality...
+2:51:51 PM: Running production build (safe mode on)...
+2:51:51 PM: vite v7.0.5 building for production...
+2:51:51 PM: transforming...
+2:51:56 PM: ✓ 1461 modules transformed.
+2:51:56 PM: rendering chunks...
+2:51:57 PM: computing gzip size...
+2:51:57 PM: dist/index.html                                    1.10 kB │ gzip:   0.47 kB
+2:51:57 PM: dist/assets/AssetBrowserIntegrated-BfZy27PL.css   21.09 kB │ gzip:   4.41 kB
+2:51:57 PM: dist/assets/index-DuOad7KM.css                    79.84 kB │ gzip:  15.03 kB
+2:51:57 PM: dist/assets/Epic1GraphEditor-CbxTbX2g.css         81.19 kB │ gzip:  15.14 kB
+2:51:57 PM: dist/assets/PromptParser-C1slWEYi.js              12.46 kB │ gzip:   4.10 kB │ map:    57.46 kB
+2:51:57 PM: dist/assets/AssetBrowserIntegrated-BHkKMLYd.js    43.57 kB │ gzip:  14.76 kB │ map:   177.55 kB
+2:51:57 PM: dist/assets/utils-DvM8W4yn.js                     54.73 kB │ gzip:  12.77 kB │ map:   227.62 kB
+2:51:57 PM: dist/assets/vendor-kq2j8kjo.js                   142.30 kB │ gzip:  45.66 kB │ map:   345.16 kB
+2:51:57 PM: dist/assets/flow-ClEIExAv.js                     145.89 kB │ gzip:  48.11 kB │ map:   593.22 kB
+2:51:57 PM: dist/assets/Epic1GraphEditor-DZomoVM9.js         419.48 kB │ gzip: 121.45 kB │ map: 1,967.01 kB
+2:51:57 PM: dist/assets/index-BhNu6uh3.js                    582.74 kB │ gzip: 177.57 kB │ map: 2,748.08 kB
+2:51:57 PM: 
+2:51:57 PM: (!) Some chunks are larger than 500 kB after minification. Consider:
+2:51:57 PM: - Using dynamic import() to code-split the application
+2:51:57 PM: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2:51:57 PM: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2:51:57 PM: ✓ built in 6.49s
+2:51:57 PM: Standalone build complete!
+2:51:58 PM: ​
+2:51:58 PM: (build.command completed in 10s)
+2:51:58 PM: ​
+2:51:58 PM: Scanning for secrets in code and build output.                
+2:51:58 PM: ────────────────────────────────────────────────────────────────
+2:51:58 PM: ​
+2:51:58 PM: SECRETS_SCAN_OMIT_KEYS override option set to: VITE_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_URL
+2:51:58 PM: ​
+2:52:00 PM: Post processing done
+2:52:00 PM: Section completed: postprocessing
+2:52:00 PM: Starting post processing
+2:52:00 PM: Skipping form detection
+2:52:00 PM: Post processing - header rules
+2:52:00 PM: Post processing - redirect rules
+2:52:00 PM: SECRETS_SCAN_OMIT_PATHS override option set to: .env.example,docs/**,packages/*/dist/**,client/dist/**
+​
+Secrets scanning complete. 2384 file(s) scanned. No secrets detected in build output or repo code!
+2:52:00 PM: ​
+2:52:00 PM: (Secrets scanning completed in 1.9s)
+2:52:00 PM: ​
+2:52:00 PM: Deploy site                                                   
+2:52:00 PM: ────────────────────────────────────────────────────────────────
+2:52:00 PM: ​
+2:52:00 PM: Starting to deploy site from 'client/dist'
+2:52:00 PM: Calculating files to upload
+2:52:00 PM: 0 new file(s) to upload
+2:52:00 PM: 0 new function(s) to upload
+2:52:00 PM: Section completed: deploying
+2:52:00 PM: Site deploy was successfully initiated
+2:52:00 PM: ​
+2:52:00 PM: (Deploy site completed in 158ms)
+2:52:00 PM: ​
+2:52:00 PM: Netlify Build Complete                                        
+2:52:00 PM: ────────────────────────────────────────────────────────────────
+2:52:00 PM: ​
+2:52:00 PM: (Netlify Build completed in 12.3s)
+2:52:00 PM: Caching artifacts
+2:52:00 PM: Started saving workspace client node modules
+2:52:00 PM: Finished saving workspace client node modules
+2:52:00 PM: Started saving workspace server node modules
+2:52:00 PM: Finished saving workspace server node modules
+2:52:00 PM: Started saving workspace packages/asset-browser node modules
+2:52:00 PM: Finished saving workspace packages/asset-browser node modules
+2:52:00 PM: Started saving workspace packages/cli node modules
+2:52:00 PM: Finished saving workspace packages/cli node modules
+2:52:00 PM: Started saving workspace packages/core node modules
+2:52:00 PM: Finished saving workspace packages/core node modules
+2:52:00 PM: Started saving workspace packages/custom-node-sdk node modules
+2:52:00 PM: Finished saving workspace packages/custom-node-sdk node modules
+2:52:00 PM: Started saving workspace docs/content-authoring-handbook node modules
+2:52:00 PM: Finished saving workspace docs/content-authoring-handbook node modules
+2:52:00 PM: Started saving workspace root node modules
+2:52:00 PM: Finished saving workspace root node modules
+2:52:00 PM: Started saving build plugins
+2:52:00 PM: Finished saving build plugins
+2:52:00 PM: Started saving bun cache
+2:52:00 PM: Finished saving bun cache
+2:52:01 PM: Site is live ✨
+2:52:01 PM: Started saving go cache
+2:52:01 PM: Finished saving go cache
+2:52:01 PM: Started saving python cache
+2:52:01 PM: Finished saving python cache
+2:52:01 PM: Started saving ruby cache
+2:52:01 PM: Finished saving ruby cache
+2:52:01 PM: Started saving corepack cache
+2:52:01 PM: Finished saving corepack cache
+2:52:01 PM: Started saving pnpm cache
+2:52:01 PM: Finished saving pnpm cache
+2:52:01 PM: Started saving emacs cask dependencies
+2:52:01 PM: Finished saving emacs cask dependencies
+2:52:01 PM: Started saving maven dependencies
+2:52:01 PM: Finished saving maven dependencies
+2:52:01 PM: Started saving boot dependencies
+2:52:01 PM: Finished saving boot dependencies
+2:52:01 PM: Started saving rust rustup cache
+2:52:01 PM: Finished saving rust rustup cache
+2:52:01 PM: Build script success
+2:52:01 PM: Section completed: building
+2:52:12 PM: Uploading Cache of size 428.9MB
+2:52:13 PM: Section completed: cleanup
+2:52:13 PM: Finished processing build request in 51.741s
