@@ -34,6 +34,8 @@ import { SimpleMenuBar } from './components/SimpleMenuBar';
 import { IntelligenceProvider } from '@promptscape/core/components/epic1/contexts/IntelligenceContext';
 // Import PromptDissector for wizard integration
 import { PromptDissector } from '../components/LaunchScreen/PromptDissector';
+import { WorkspaceRecovery } from '@promptscape/core/services/WorkspaceRecovery';
+import { WorkspaceRecoveryDialog } from '@promptscape/core/components/WorkspaceRecoveryDialog';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -69,6 +71,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   );
   // Gate rendering the core editor until we've cleared its persistence when launching with initial input
   const [editorReady, setEditorReady] = useState<boolean>(!hasInitialInput);
+  
+  // Workspace recovery state
+  const [showRecoveryDialog, setShowRecoveryDialog] = useState(false);
+  const [hasCheckedRecovery, setHasCheckedRecovery] = useState(false);
 
   // Prompt parsing integration state
   const [showPromptDissector, setShowPromptDissector] = useState(false);
@@ -252,6 +258,31 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     showToast
   });
 
+  // Initialize workspace recovery on mount
+  useEffect(() => {
+    if (!hasCheckedRecovery && !hasInitialInput) {
+      WorkspaceRecovery.initialize();
+      
+      // Check for auto-recovery preference
+      const autoRecover = localStorage.getItem('workspace-recovery:auto') === 'true';
+      
+      if (autoRecover && WorkspaceRecovery.hasRecoverableWorkspace()) {
+        // Auto-recover without showing dialog
+        const recovered = WorkspaceRecovery.recoverWorkspace();
+        if (recovered && recovered.nodes.length > 0) {
+          setCurrentNodes(recovered.nodes);
+          setCurrentEdges(recovered.edges);
+          setEditorKey(prev => prev + 1);
+        }
+      } else if (WorkspaceRecovery.hasRecoverableWorkspace()) {
+        // Show recovery dialog
+        setShowRecoveryDialog(true);
+      }
+      
+      setHasCheckedRecovery(true);
+    }
+  }, [hasCheckedRecovery, hasInitialInput]);
+
   // Initialize from props once
   useEffect(() => {
     if (initializedRef.current) return;
@@ -266,6 +297,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       try {
         // Clear core editor's persistence key used by Epic1GraphEditor
         localStorage.removeItem('promptgraph:state:v1');
+        // Also clear workspace recovery since we have initial data
+        WorkspaceRecovery.clearWorkspace();
       } catch (e) {
         console.warn('[Epic1Editor] Failed to clear core persisted state', e);
       }
@@ -892,6 +925,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
       // Always update nodes immediately for smooth interaction
       setCurrentNodes(fixedNodes);
+      
+      // Auto-save workspace
+      WorkspaceRecovery.autoSave(fixedNodes, currentEdges);
 
       // Only add to history if nodes were added/removed
       if (nodes.length !== currentNodes.length) {
@@ -906,6 +942,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     (edges: Edge[]) => {
       // Always update edges immediately for smooth interaction
       setCurrentEdges(edges);
+      
+      // Auto-save workspace
+      WorkspaceRecovery.autoSave(currentNodes, edges);
 
       // Only add to history if edges were added/removed
       if (edges.length !== currentEdges.length) {
@@ -970,8 +1009,35 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     return <div className="loading-message">Preparing editor…</div>;
   }
 
+  // Handle workspace recovery
+  const handleRecoverWorkspace = useCallback(() => {
+    const recovered = WorkspaceRecovery.recoverWorkspace();
+    if (recovered) {
+      setCurrentNodes(recovered.nodes);
+      setCurrentEdges(recovered.edges);
+      setEditorKey(prev => prev + 1); // Force refresh
+    }
+    setShowRecoveryDialog(false);
+  }, []);
+
+  const handleStartFresh = useCallback(() => {
+    WorkspaceRecovery.clearWorkspace();
+    setShowRecoveryDialog(false);
+  }, []);
+
+  const handleDismissRecovery = useCallback(() => {
+    setShowRecoveryDialog(false);
+  }, []);
+
   return (
     <IntelligenceProvider>
+      {showRecoveryDialog && (
+        <WorkspaceRecoveryDialog
+          onRecover={handleRecoverWorkspace}
+          onStartFresh={handleStartFresh}
+          onDismiss={handleDismissRecovery}
+        />
+      )}
       <div
         style={{
           width: '100%',
@@ -983,7 +1049,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         {showMenuBar && MenuBarComponent && (
           <MenuBarComponent
             // File operations
-            onNew={() => handleNew([], [])}
+            onNew={() => {
+              WorkspaceRecovery.clearWorkspace();
+              handleNew([], []);
+            }}
             onOpen={handleOpen}
             onSave={() => handleSave(currentNodes, currentEdges)}
             onSaveAs={() => handleSaveAs(currentNodes, currentEdges)}
