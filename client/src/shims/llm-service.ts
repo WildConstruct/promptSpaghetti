@@ -40,8 +40,8 @@ async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
   const res = await fetch(withBase(url), {
     method: 'POST',
     headers,
-    body: JSON.stringify(body),
-    credentials: 'include'
+    body: JSON.stringify(body)
+    // Remove credentials: 'include' to avoid CORS issues
   });
 
   if (!res.ok) {

@@ -4,10 +4,27 @@
  */
 
 export default async function handler(req, res) {
-  // Set CORS headers for all requests
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Set comprehensive CORS headers for all requests
+  const allowedOrigins = [
+    'https://ps.wildconstruct.com',
+    'https://promptscape.com',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin) || !origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization, x-vercel-protection-bypass'
+  );
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Max-Age', '86400');
 
   // Handle preflight OPTIONS request
