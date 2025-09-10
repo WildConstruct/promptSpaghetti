@@ -6,6 +6,7 @@ import type { Node, Edge } from 'reactflow';
 import type { PromptAnalysis } from './lib/simplePromptParser';
 import './App.css';
 
+// Version: 2025-01-10-20:10 - Fixed hyphenated API paths for Vercel
 function App() {
   const [showLaunchScreen, setShowLaunchScreen] = useState(true);
   const [initialAnalysis, setInitialAnalysis] = useState<

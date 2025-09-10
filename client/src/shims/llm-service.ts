@@ -92,8 +92,10 @@ export class LLMService {
     this.config = config;
   }
   async parse(prompt: string, request: AnyObj = {}): Promise<AnyObj> {
+    // CACHE BUST: 2025-01-10-20:10 - Using hyphenated paths for Vercel
     // Try the new endpoint first to bypass caching issues
     try {
+      console.log('[LLM] Using hyphenated path: /api/ai-parse');
       return await postJson('/api/ai-parse', { prompt, ...request });
     } catch (e) {
       // Fallback to original endpoint
