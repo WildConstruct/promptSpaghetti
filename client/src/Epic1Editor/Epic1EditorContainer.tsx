@@ -79,6 +79,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     'new-project' | 'add-to-existing' | null
   >(null);
 
+  // Get current nodes and edges from editor state (moved up before callbacks)
+  const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
+  const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
+
   // Handle prompt analysis completion from dissector
   const handlePromptAnalysisComplete = useCallback(
     (analysis: PromptAnalysis) => {
@@ -162,9 +166,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     }
   }, [nodeCreationMode, promptAnalysis, handleNodeCreation]);
 
-  // Get current nodes and edges from editor state
-  const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
-  const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
   const initializedRef = useRef(false);
   const [editorKey, setEditorKey] = useState(0);
   // Toast notifications
