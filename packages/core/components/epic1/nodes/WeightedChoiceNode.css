@@ -116,7 +116,17 @@
   width: 100%;
 }
 
-.epic1-options-preview {
+/* Compact display when collapsed */
+.epic1-editable-node:not(.editing) .epic1-options-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* Reduced gap for compact view */
+  max-height: 40px; /* Limit height when collapsed */
+  overflow: hidden;
+}
+
+/* Normal display when editing */
+.epic1-editable-node.editing .epic1-options-preview {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -125,16 +135,36 @@
 .epic1-option-preview {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px; /* Reduced gap */
 }
 
 .epic1-option-text-preview {
-  font-size: 14px;
+  font-size: 12px; /* Smaller font when collapsed */
   color: inherit; /* Use parent's text color for better contrast */
   font-weight: 500;
+  line-height: 1.2; /* Tighter line height */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.epic1-weight-bar-container {
+/* Larger text when editing */
+.epic1-editable-node.editing .epic1-option-text-preview {
+  font-size: 14px;
+  white-space: normal;
+}
+
+/* Compact weight bar when collapsed */
+.epic1-editable-node:not(.editing) .epic1-weight-bar-container {
+  position: relative;
+  height: 12px; /* Smaller height when collapsed */
+  background: #f0f0f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Normal weight bar when editing */
+.epic1-editable-node.editing .epic1-weight-bar-container {
   position: relative;
   height: 20px;
   background: #f0f0f0;
@@ -152,7 +182,13 @@
   transition: width 0.3s ease;
 }
 
-.epic1-weight-label {
+/* Hide weight label when collapsed */
+.epic1-editable-node:not(.editing) .epic1-weight-label {
+  display: none;
+}
+
+/* Show weight label when editing */
+.epic1-editable-node.editing .epic1-weight-label {
   position: absolute;
   right: 8px;
   top: 50%;

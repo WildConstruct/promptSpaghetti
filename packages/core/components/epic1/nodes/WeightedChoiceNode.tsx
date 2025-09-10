@@ -115,8 +115,8 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
         className="weighted-choice"
         minWidth={280}
         minHeight={120}
-        compactMinWidth={180}
-        compactMinHeight={80}
+        compactMinWidth={200}
+        compactMinHeight={60}
         data={{
           ...props.data,
           options,
