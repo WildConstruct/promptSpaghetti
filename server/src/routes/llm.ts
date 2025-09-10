@@ -25,6 +25,44 @@ export async function llmRoutes(app: FastifyInstance) {
     });
   });
 
+  // Legacy endpoint compatibility - delegates to complete
+  app.post('/api/ai/parse', async (req, reply) => {
+    const parsed = LLMRequestSchema.safeParse((req as any).body);
+    if (!parsed.success) {
+      return reply.status(400).send({ error: 'Invalid request' });
+    }
+    // Delegate to complete endpoint
+    const { request } = parsed.data;
+    return reply.send({
+      content: '[demo] LLM parse response placeholder',
+      model: 'stub',
+      tokensIn: 0,
+      tokensOut: 0,
+      cost: 0,
+      cached: false,
+      echo: request
+    });
+  });
+
+  // Legacy endpoint compatibility - delegates to complete
+  app.post('/api/llm/parse', async (req, reply) => {
+    const parsed = LLMRequestSchema.safeParse((req as any).body);
+    if (!parsed.success) {
+      return reply.status(400).send({ error: 'Invalid request' });
+    }
+    // Delegate to complete endpoint
+    const { request } = parsed.data;
+    return reply.send({
+      content: '[demo] LLM parse response placeholder',
+      model: 'stub',
+      tokensIn: 0,
+      tokensOut: 0,
+      cost: 0,
+      cached: false,
+      echo: request
+    });
+  });
+
   app.post('/api/llm/suggest', async (_req, reply) => {
     return reply.send({
       suggestions: ['Alpha', 'Beta', 'Gamma'],

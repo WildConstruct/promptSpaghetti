@@ -13,6 +13,13 @@
   overflow: hidden;
 }
 
+/* Preview tray as sibling - positioned below canvas */
+.preview-tray-sibling {
+  flex-shrink: 0;
+  position: relative;
+  border-top: 1px solid #444;
+}
+
 /* Ensure ReactFlow canvas adjusts to available space */
 .editor-content-area .react-flow {
   width: 100%;

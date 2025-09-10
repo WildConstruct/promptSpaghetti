@@ -32,6 +32,8 @@ import { fromLegacyGraph, writePsg } from '@promptscape/core';
 import type { GraphNode, GraphEdge, Graph } from '@promptscape/core';
 import { SimpleMenuBar } from './components/SimpleMenuBar';
 import { IntelligenceProvider } from '@promptscape/core/components/epic1/contexts/IntelligenceContext';
+// Import PromptDissector for wizard integration
+import { PromptDissector } from '../components/LaunchScreen/PromptDissector';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -44,9 +46,9 @@ interface Epic1EditorContainerProps {
 }
 
 export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
-  showPreview = true,
+  showPreview = false, // Disable preview panel by default
   showAssetLibrary = true,
-  assetLibraryPosition = 'right',
+  assetLibraryPosition = 'left', // Keep asset library on left
   showMenuBar = true,
   showOnboarding = false,
   initialAnalysis,
@@ -68,42 +70,82 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   // Gate rendering the core editor until we've cleared its persistence when launching with initial input
   const [editorReady, setEditorReady] = useState<boolean>(!hasInitialInput);
 
-  // Calculate viewport and node positions
-  const viewport = calculateViewportDimensions();
-  const nodePositions = calculateNodePositions(viewport);
-  const demoNodes = createDemoNodes(nodePositions);
-  const demoEdges: Edge[] = [
-    {
-      id: 'e1',
-      source: 'prompt-1',
-      sourceHandle: 'source',
-      target: 'setting-1',
-      targetHandle: 'target'
-    },
-    {
-      id: 'e2',
-      source: 'setting-1',
-      sourceHandle: 'source',
-      target: 'prompt-2',
-      targetHandle: 'target'
-    },
-    {
-      id: 'e3',
-      source: 'prompt-2',
-      sourceHandle: 'source',
-      target: 'character-1',
-      targetHandle: 'target'
-    },
-    {
-      id: 'e4',
-      source: 'character-1',
-      sourceHandle: 'source',
-      target: 'output-1',
-      targetHandle: 'target'
-    }
-  ];
+  // Prompt parsing integration state
+  const [showPromptDissector, setShowPromptDissector] = useState(false);
+  const [promptAnalysis, setPromptAnalysis] = useState<PromptAnalysis | null>(null);
+  const [nodeCreationMode, setNodeCreationMode] = useState<'new-project' | 'add-to-existing' | null>(null);
 
-  // Graph state - start with empty graph
+  // Handle prompt analysis completion from dissector
+  const handlePromptAnalysisComplete = useCallback((analysis: PromptAnalysis) => {
+    setPromptAnalysis(analysis);
+    setShowPromptDissector(false);
+
+    // Show dialog to choose new project vs add to existing
+    const choice = window.confirm(
+      'Would you like to create a new project with these nodes?\n\n' +
+      '• Click "OK" to create a new project\n' +
+      '• Click "Cancel" to add nodes to current project'
+    );
+
+    setNodeCreationMode(choice ? 'new-project' : 'add-to-existing');
+  }, []);
+
+  // Handle node creation based on user choice
+  const handleNodeCreation = useCallback(() => {
+    if (!promptAnalysis || !nodeCreationMode) return;
+
+    if (nodeCreationMode === 'new-project') {
+      // Create new project with analysis
+      setEditorReady(false); // Reset editor to load new analysis
+      // The analysis will be passed to the editor component
+    } else {
+      // Add nodes to existing project in empty space
+      const newNodes = convertAnalysisToNodes(promptAnalysis, currentNodes || []);
+      setCurrentNodes(newNodes);
+    }
+
+    setNodeCreationMode(null);
+    setPromptAnalysis(null);
+  }, [promptAnalysis, nodeCreationMode, currentNodes, convertAnalysisToNodes]);
+
+  // Convert analysis to nodes positioned in empty space
+  const convertAnalysisToNodes = useCallback((analysis: PromptAnalysis, existingNodes: Node[]) => {
+    const viewport = calculateViewportDimensions();
+    const maxX = Math.max(...existingNodes.map(n => n.position.x + 200), 400);
+    const startY = 100;
+
+    const newNodes: Node[] = [];
+    let yOffset = startY;
+
+    analysis.nodes.forEach((generatedNode, index) => {
+      const nodeId = `analysis-${Date.now()}-${index}`;
+      const nodeType = generatedNode.node.nodeType.toLowerCase();
+
+      newNodes.push({
+        id: nodeId,
+        type: nodeType === 'choice' ? 'weightedChoice' :
+              nodeType === 'variable' ? 'variable' : 'textBlock',
+        position: { x: maxX + 50, y: yOffset },
+        data: {
+          content: generatedNode.node.getPreviewText(),
+          label: generatedNode.node.getPreviewText().substring(0, 30) + '...'
+        }
+      });
+
+      yOffset += 150; // Space nodes vertically
+    });
+
+    return [...existingNodes, ...newNodes];
+  }, []);
+
+  // Handle node creation when mode is selected
+  useEffect(() => {
+    if (nodeCreationMode && promptAnalysis) {
+      handleNodeCreation();
+    }
+  }, [nodeCreationMode, promptAnalysis, handleNodeCreation]);
+
+  // Get current nodes and edges from editor state
   const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
   const initializedRef = useRef(false);

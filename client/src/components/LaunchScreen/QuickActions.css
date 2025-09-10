@@ -42,9 +42,27 @@
 
 /* Template Icon */
 .template-icon {
-  font-size: 2rem;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
   margin-bottom: 0.25rem;
+  color: #4a9eff;
+  transition: all 0.2s ease;
+}
+
+.template-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.template-card:hover .template-icon {
+  color: #6bb6ff;
+  transform: scale(1.1);
 }
 
 /* Template Title */
@@ -89,7 +107,13 @@
   }
   
   .template-icon {
-    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .template-icon svg {
+    width: 20px;
+    height: 20px;
   }
   
   .template-title,

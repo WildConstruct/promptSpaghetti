@@ -11,59 +11,111 @@ const styles = {
   container: {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '12px',
     position: 'relative' as const
   },
-  toggleButton: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '6px 12px',
-    borderRadius: '6px',
-    border: '1px solid #e0e0e0',
-    background: '#fff',
+  // Sliding switch styles
+  switch: {
+    position: 'relative' as const,
+    width: '52px',
+    height: '28px',
+    background: '#e5e7eb',
+    borderRadius: '14px',
     cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: '500',
-    transition: 'all 0.2s ease',
-    position: 'relative' as const
+    transition: 'all 0.3s ease',
+    border: '2px solid transparent'
   },
-  toggleButtonLLM: {
+  switchActive: {
     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    borderColor: '#667eea',
-    color: '#fff'
+    borderColor: '#667eea'
   },
-  toggleButtonDisabled: {
+  switchDisabled: {
     opacity: 0.5,
     cursor: 'not-allowed'
   },
-  icon: {
+  switchKnob: {
+    position: 'absolute' as const,
+    top: '2px',
+    left: '2px',
+    width: '20px',
+    height: '20px',
+    background: '#fff',
+    borderRadius: '50%',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
   },
-  indicator: {
-    position: 'absolute' as const,
-    top: '-4px',
-    right: '-4px',
-    width: '8px',
-    height: '8px',
-    borderRadius: '50%',
-    background: '#4ade80',
-    animation: 'pulse 2s infinite'
+  switchKnobActive: {
+    left: '26px'
   },
+  switchIcon: {
+    width: '12px',
+    height: '12px',
+    color: '#6b7280'
+  },
+  switchIconActive: {
+    color: '#667eea'
+  },
+  // Labels
+  labelContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    fontSize: '14px',
+    fontWeight: '500'
+  },
+  label: {
+    color: '#6b7280',
+    transition: 'color 0.3s ease'
+  },
+  labelActive: {
+    color: '#667eea'
+  },
+  // Config button
   configButton: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '32px',
     height: '32px',
-    borderRadius: '6px',
-    border: '1px solid #e0e0e0',
+    borderRadius: '8px',
+    border: '1px solid #e5e7eb',
     background: '#fff',
     cursor: 'pointer',
-    transition: 'all 0.2s ease'
+    transition: 'all 0.2s ease',
+    color: '#6b7280'
   },
+  configButtonHover: {
+    borderColor: '#667eea',
+    color: '#667eea',
+    transform: 'scale(1.05)'
+  },
+  // Status bar
+  statusBar: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '8px 12px',
+    background: '#fef3c7',
+    borderRadius: '8px',
+    fontSize: '13px',
+    color: '#92400e',
+    border: '1px solid #f59e0b'
+  },
+  statusIcon: {
+    width: '16px',
+    height: '16px',
+    color: '#f59e0b'
+  },
+  statusLink: {
+    color: '#2563eb',
+    textDecoration: 'none',
+    fontWeight: '500',
+    cursor: 'pointer'
+  },
+  // Tooltip
   tooltip: {
     position: 'absolute' as const,
     bottom: '100%',
@@ -88,21 +140,16 @@ const styles = {
     height: '8px',
     background: 'rgba(0, 0, 0, 0.9)'
   },
-  statusBar: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '8px 12px',
-    background: '#fff3cd',
-    borderRadius: '6px',
-    fontSize: '13px',
-    color: '#856404'
-  },
-  statusLink: {
-    color: '#0066cc',
-    textDecoration: 'none',
-    fontWeight: '500',
-    cursor: 'pointer'
+  // Activity indicator
+  indicator: {
+    position: 'absolute' as const,
+    top: '-2px',
+    right: '-2px',
+    width: '8px',
+    height: '8px',
+    borderRadius: '50%',
+    background: '#10b981',
+    animation: 'pulse 2s infinite'
   }
 };
 
@@ -137,10 +184,10 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
     }
   }, [mode, onModeChange, llmService]);
 
-  const getModeIcon = () => {
+  const getSwitchIcon = () => {
     if (mode === 'llm-enhanced') {
       return (
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={styles.switchIconActive}>
           <path
             d="M8 2L10 6L14 7L11 10L12 14L8 12L4 14L5 10L2 7L6 6L8 2Z"
             fill="currentColor"
@@ -151,7 +198,7 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
       );
     }
     return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={styles.switchIcon}>
         <circle
           cx="8"
           cy="8"
@@ -171,35 +218,61 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
   };
 
   const buttonStyle = {
-    ...styles.toggleButton,
-    ...(mode === 'llm-enhanced' ? styles.toggleButtonLLM : {}),
-    ...(!isEnabled ? styles.toggleButtonDisabled : {})
+    ...styles.switch,
+    ...(mode === 'llm-enhanced' ? styles.switchActive : {}),
+    ...(!isEnabled ? styles.switchDisabled : {})
+  };
+
+  const knobStyle = {
+    ...styles.switchKnob,
+    ...(mode === 'llm-enhanced' ? styles.switchKnobActive : {})
   };
 
   return (
     <div style={styles.container} className={className}>
-      <button
-        style={buttonStyle}
-        onClick={handleToggle}
-        disabled={!isEnabled}
-        aria-label={`Parser mode: ${mode}`}
-        title={
-          isEnabled
-            ? `Switch to ${mode === 'standard' ? 'AI-Enhanced' : 'Standard'} parser`
-            : 'AI parser not configured'
-        }
-      >
-        <span style={styles.icon}>{getModeIcon()}</span>
-        <span>{mode === 'standard' ? 'Standard' : 'AI-Enhanced'}</span>
+      {/* Sliding Switch */}
+      <div style={styles.labelContainer}>
+        <span style={{ ...styles.label, ...(mode === 'standard' ? styles.labelActive : {}) }}>
+          Standard
+        </span>
+        <button
+          style={buttonStyle}
+          onClick={handleToggle}
+          disabled={!isEnabled}
+          aria-label={`Parser mode: ${mode}`}
+          title={
+            isEnabled
+              ? `Switch to ${mode === 'standard' ? 'AI-Enhanced' : 'Standard'} parser`
+              : 'AI parser not configured'
+          }
+        >
+          <div style={knobStyle}>
+            {getSwitchIcon()}
+          </div>
+        </button>
+        <span style={{ ...styles.label, ...(mode === 'llm-enhanced' ? styles.labelActive : {}) }}>
+          AI-Enhanced
+        </span>
         {mode === 'llm-enhanced' && <span style={styles.indicator}></span>}
-      </button>
+      </div>
 
+      {/* Config Button */}
       {onConfigClick && (
         <button
           style={styles.configButton}
           onClick={onConfigClick}
           aria-label="Configure LLM settings"
           title="Configure AI settings"
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = '#667eea';
+            e.currentTarget.style.color = '#667eea';
+            e.currentTarget.style.transform = 'scale(1.05)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = '#e5e7eb';
+            e.currentTarget.style.color = '#6b7280';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path
@@ -216,6 +289,7 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
         </button>
       )}
 
+      {/* Tooltip */}
       {showTooltip && estimatedCost > 0 && (
         <div style={styles.tooltip}>
           <div style={styles.tooltipArrow}></div>
@@ -237,9 +311,18 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
         </div>
       )}
 
+      {/* Status Bar with Proper Icon */}
       {!isEnabled && (
         <div style={styles.statusBar}>
-          <span>ℹ️</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={styles.statusIcon}>
+            <path
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
           <span>AI parser not configured</span>
           {onConfigClick && (
             <a

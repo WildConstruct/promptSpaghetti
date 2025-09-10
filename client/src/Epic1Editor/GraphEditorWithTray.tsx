@@ -2,6 +2,7 @@ import React from 'react';
 import type { Node, Edge } from 'reactflow';
 import { usePreviewTrayStore } from '@promptscape/core/stores/previewTrayStore';
 import type { Epic1GraphEditorProps } from '@promptscape/core/components/epic1/Epic1GraphEditor';
+import { PreviewTray } from '@promptscape/core/components/PreviewTray';
 import './GraphEditorWithTray.css';
 
 interface GraphEditorWithTrayProps {
@@ -39,19 +40,30 @@ export const GraphEditorWithTray: React.FC<GraphEditorWithTrayProps> = ({
         } as React.CSSProperties
       }
     >
+      {/* Main editor area - canvas and left panel */}
       <div className="editor-content-area">
-        {/* Main editor area - PreviewTray is rendered inside EditorComponent */}
         <EditorComponent
           key={editorKey}
           initialNodes={currentNodes}
           initialEdges={currentEdges}
-          showPreview={showPreview}
+          showPreview={false} {/* Disable preview inside editor */}
           showAssetLibrary={assetLibraryVisible}
           assetLibraryPosition={assetLibraryPosition}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
         />
       </div>
+
+      {/* Preview tray as sibling - positioned below canvas */}
+      {showPreview && (
+        <div className="preview-tray-sibling">
+          <PreviewTray
+            seeds={[]}
+            results={[]}
+            isExecuting={false}
+          />
+        </div>
+      )}
     </div>
   );
 };
