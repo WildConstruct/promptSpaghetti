@@ -16,12 +16,13 @@
 
 /* Main layout container that shrinks when tray is open */
 .epic1-main-layout {
-  flex: 1;
+  flex: 1 1 auto; /* Allow shrinking when preview tray opens */
   width: 100%;
   display: flex;
   flex-direction: row;
   position: relative;
   min-height: 0; /* Important for flex shrinking */
+  overflow: hidden; /* Prevent content from overflowing when compressed */
 }
 
 /* ReactFlow should take remaining space when asset panel is open */
