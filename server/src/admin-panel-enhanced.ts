@@ -1097,7 +1097,89 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
       fs.writeFileSync(envPath, envContent);
 
-      reply.redirect('/admin');
+      // Get updated config with new values
+      const config = {
+        SUPABASE_URL: process.env.SUPABASE_URL,
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+          ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8)
+          : '',
+        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY
+          ? '***' + process.env.OPENROUTER_API_KEY.slice(-8)
+          : '',
+        OPENROUTER_BASE_URL:
+          process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+        DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
+        PRIMARY_MODEL: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
+        FALLBACK_MODELS:
+          process.env.FALLBACK_MODELS ||
+          'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
+        MAX_TOKENS: process.env.MAX_TOKENS || '200',
+        TEMPERATURE: process.env.TEMPERATURE || '0.7',
+        NODE_ENV: process.env.NODE_ENV,
+        ENABLE_ADMIN: process.env.ENABLE_ADMIN
+      };
+
+      const prompts = loadPrompts();
+      
+      // Get updated status
+      const status = await (async (): Promise<AdminStatus> => {
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const orBase =
+          process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+        const orKey =
+          process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+        const supabase: ConnectionStatus = {
+          configured: !!supabaseUrl,
+          reachable: false,
+          status: null
+        };
+        if (supabaseUrl) {
+          try {
+            const controller = new AbortController();
+            const to = setTimeout(() => controller.abort(), 4000);
+            let res = await fetch(
+              `${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`
+            );
+            clearTimeout(to);
+            supabase.status = res.status;
+            supabase.reachable = res.ok || res.status === 200;
+          } catch (e: any) {
+            supabase.error = e?.message || 'request failed';
+          }
+        }
+        const openrouter: ConnectionStatus = {
+          configured: !!orKey,
+          reachable: false,
+          status: null
+        };
+        if (orKey) {
+          try {
+            const controller = new AbortController();
+            const to = setTimeout(() => controller.abort(), 5000);
+            const res = await fetch(`${orBase.replace(/\/$/, '')}/models`, {
+              headers: { Authorization: `Bearer ${orKey}` }
+            });
+            clearTimeout(to);
+            openrouter.status = res.status;
+            openrouter.reachable = res.ok;
+          } catch (e: any) {
+            openrouter.error = e?.message || 'request failed';
+          }
+        }
+        return { supabase, openrouter };
+      })();
+
+      reply.type('text/html').send(
+        getEnhancedAdminHTML(
+          config,
+          prompts,
+          {
+            type: 'success',
+            text: 'Model configuration updated successfully!'
+          },
+          status
+        )
+      );
     } catch (error) {
       console.error('Error updating models:', error);
       reply.status(500).send('Failed to update model configuration');
