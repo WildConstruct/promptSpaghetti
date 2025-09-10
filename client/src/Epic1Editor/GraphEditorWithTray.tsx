@@ -2,7 +2,6 @@ import React from 'react';
 import type { Node, Edge } from 'reactflow';
 import { usePreviewTrayStore } from '@promptscape/core/stores/previewTrayStore';
 import type { Epic1GraphEditorProps } from '@promptscape/core/components/epic1/Epic1GraphEditor';
-import { PreviewTray } from '@promptscape/core/components/PreviewTray';
 import './GraphEditorWithTray.css';
 
 interface GraphEditorWithTrayProps {
@@ -15,6 +14,11 @@ interface GraphEditorWithTrayProps {
   assetLibraryPosition: 'left' | 'right';
   onNodesChange: (nodes: Node[]) => void;
   onEdgesChange: (edges: Edge[]) => void;
+  previewSeeds?: number[];
+  previewResults?: any[];
+  isPreviewExecuting?: boolean;
+  onPreviewSeedsChange?: (seeds: number[]) => void;
+  onPreviewExecute?: () => void;
 }
 
 export const GraphEditorWithTray: React.FC<GraphEditorWithTrayProps> = ({
@@ -26,7 +30,12 @@ export const GraphEditorWithTray: React.FC<GraphEditorWithTrayProps> = ({
   assetLibraryVisible,
   assetLibraryPosition,
   onNodesChange,
-  onEdgesChange
+  onEdgesChange,
+  previewSeeds = [],
+  previewResults = [],
+  isPreviewExecuting = false,
+  onPreviewSeedsChange,
+  onPreviewExecute
 }) => {
   const { isOpen, height } = usePreviewTrayStore();
 
@@ -41,29 +50,19 @@ export const GraphEditorWithTray: React.FC<GraphEditorWithTrayProps> = ({
       }
     >
       {/* Main editor area - canvas and left panel */}
+      {/* Pass showPreview to the EditorComponent which has its own PreviewTray */}
       <div className="editor-content-area">
         <EditorComponent
           key={editorKey}
           initialNodes={currentNodes}
           initialEdges={currentEdges}
-          showPreview={false}
+          showPreview={showPreview}
           showAssetLibrary={assetLibraryVisible}
           assetLibraryPosition={assetLibraryPosition}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
         />
       </div>
-
-      {/* Preview tray as sibling - positioned below canvas */}
-      {showPreview && (
-        <div className="preview-tray-sibling">
-          <PreviewTray
-            seeds={[]}
-            results={[]}
-            isExecuting={false}
-          />
-        </div>
-      )}
     </div>
   );
 };
