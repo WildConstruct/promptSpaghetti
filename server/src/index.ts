@@ -13,6 +13,7 @@ import { registerEnhancedAdminRoutes } from './admin-panel-enhanced';
 import { LLMService } from './services/LLMService';
 import { redactPII } from './utils/privacy';
 import { filesRoutes } from './routes/files';
+import { llmRoutes } from './routes/llm';
 
 // Load environment from root and server/.env (server overrides root)
 try {
@@ -146,103 +147,103 @@ server.post(
   }
 );
 
-// LLM endpoints for Epic 2
-import { z } from 'zod';
-import { rateLimiter } from './utils/rateLimit';
+// LLM endpoints removed - now handled by registered routes
+// import { z } from 'zod';
+// import { rateLimiter } from './utils/rateLimit';
 
-const LLMParseSchema = z.object({
-  prompt: z.string().min(1).max(4000),
-  mode: z.string().default('standard').optional()
-});
+// const LLMParseSchema = z.object({
+//   prompt: z.string().min(1).max(4000),
+//   mode: z.string().default('standard').optional()
+// });
 
-server.post(
-  '/api/llm/parse',
-  {
-    preHandler: rateLimiter({
-      key: 'llm:parse',
-      limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60)
-    })
-  },
-  async (request, reply) => {
-    try {
-      const parsed = LLMParseSchema.safeParse((request as any).body);
-      if (!parsed.success)
-        return reply.status(400).send({ error: 'Invalid payload' });
-      metrics.mark('llm.parse');
-      const { prompt, mode = 'standard' } = parsed.data as any;
-      // For now, return a mock response
-      return {
-        success: true,
-        mode,
-        nodes: [{ type: 'TextBlock', content: prompt, id: 'node-1' }],
-        edges: []
-      };
-    } catch (error) {
-      console.error('LLM parse error:', error);
-      metrics.markError('llm.parse');
-      return reply.status(500).send({ error: 'Parse failed' });
-    }
-  }
-);
+// server.post(
+//   '/api/llm/parse',
+//   {
+//     preHandler: rateLimiter({
+//       key: 'llm:parse',
+//       limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60)
+//     })
+//   },
+//   async (request, reply) => {
+//     try {
+//       const parsed = LLMParseSchema.safeParse((request as any).body);
+//       if (!parsed.success)
+//         return reply.status(400).send({ error: 'Invalid payload' });
+//       metrics.mark('llm.parse');
+//       const { prompt, mode = 'standard' } = parsed.data as any;
+//       // For now, return a mock response
+//       return {
+//         success: true,
+//         mode,
+//         nodes: [{ type: 'TextBlock', content: prompt, id: 'node-1' }],
+//         edges: []
+//       };
+//     } catch (error) {
+//       console.error('LLM parse error:', error);
+//       metrics.markError('llm.parse');
+//       return reply.status(500).send({ error: 'Parse failed' });
+//     }
+//   }
+// );
 
-const LLMCompleteSchema = z.object({
-  prompt: z.string().min(1).max(8000),
-  model: z.string().min(1).max(200).optional()
-});
+// const LLMCompleteSchema = z.object({
+//   prompt: z.string().min(1).max(8000),
+//   model: z.string().min(1).max(200).optional()
+// });
 
-server.post(
-  '/api/llm/complete',
-  {
-    preHandler: rateLimiter({
-      key: 'llm:complete',
-      limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60)
-    })
-  },
-  async (request, reply) => {
-    try {
-      const parsed = LLMCompleteSchema.safeParse((request as any).body);
-      if (!parsed.success)
-        return reply.status(400).send({ error: 'Invalid payload' });
-      metrics.mark('llm.complete');
-      const { prompt, model } = parsed.data;
+// server.post(
+//   '/api/llm/complete',
+//   {
+//     preHandler: rateLimiter({
+//       key: 'llm:complete',
+//       limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60)
+//     })
+//   },
+//   async (request, reply) => {
+//     try {
+//       const parsed = LLMCompleteSchema.safeParse((request as any).body);
+//       if (!parsed.success)
+//         return reply.status(400).send({ error: 'Invalid payload' });
+//       metrics.mark('llm.complete');
+//       const { prompt, model } = parsed.data;
 
-      const llm = new LLMService();
-      if (!llm.available()) {
-        // Fallback demo response when no API key present
-        return {
-          success: true,
-          completion: `Enhanced: ${redactPII(prompt)}`,
-          model: model || 'stub',
-          tokens: { input: Math.ceil((prompt?.length || 0) / 4), output: 5 },
-          note: 'LLM unavailable (no API key) - returning stubbed completion'
-        };
-      }
+//       const llm = new LLMService();
+//       if (!llm.available()) {
+//         // Fallback demo response when no API key present
+//         return {
+//           success: true,
+//           completion: `Enhanced: ${redactPII(prompt)}`,
+//           model: model || 'stub',
+//           tokens: { input: Math.ceil((prompt?.length || 0) / 4), output: 5 },
+//           note: 'LLM unavailable (no API key) - returning stubbed completion'
+//         };
+//       }
 
-      // LLMService has its own timeout; optionally override via env
-      if (process.env.LLM_TIMEOUT_MS) {
-        // not changing signature; environment config applies inside service
-        process.env.OPENAI_REQUEST_TIMEOUT_MS = process.env.LLM_TIMEOUT_MS;
-      }
-      const result = await llm.complete({ prompt: redactPII(prompt), model });
-      return {
-        success: true,
-        completion: redactPII(result.content),
-        model: result.model,
-        tokens: { input: result.tokensIn, output: result.tokensOut }
-      };
-    } catch (error: any) {
-      const aborted =
-        error && (error.name === 'AbortError' || error.code === 'ABORT_ERR');
-      if (aborted) {
-        metrics.markError('llm.timeout');
-        return reply.status(504).send({ error: 'LLM timeout' });
-      }
-      console.error('LLM complete error:', error);
-      metrics.markError('llm.complete');
-      return reply.status(500).send({ error: 'Completion failed' });
-    }
-  }
-);
+//       // LLMService has its own timeout; optionally override via env
+//       if (process.env.LLM_TIMEOUT_MS) {
+//         // not changing signature; environment config applies inside service
+//         process.env.OPENAI_REQUEST_TIMEOUT_MS = process.env.LLM_TIMEOUT_MS;
+//       }
+//       const result = await llm.complete({ prompt: redactPII(prompt), model });
+//       return {
+//         success: true,
+//         completion: redactPII(result.content),
+//         model: result.model,
+//         tokens: { input: result.tokensIn, output: result.tokensOut }
+//       };
+//     } catch (error: any) {
+//       const aborted =
+//         error && (error.name === 'AbortError' || error.code === 'ABORT_ERR');
+//       if (aborted) {
+//         metrics.markError('llm.timeout');
+//         return reply.status(504).send({ error: 'LLM timeout' });
+//       }
+//       console.error('LLM complete error:', error);
+//       metrics.markError('llm.complete');
+//       return reply.status(500).send({ error: 'Completion failed' });
+//     }
+//   }
+// );
 
 // Admin metrics endpoint
 // Combined metrics snapshot for admin dashboard
@@ -259,6 +260,9 @@ registerEnhancedAdminRoutes(server);
 
 // Register file routes (Supabase-backed)
 server.register(async app => filesRoutes(app));
+
+// Register LLM routes
+server.register(async app => llmRoutes(app));
 
 // Start server
 const start = async () => {
