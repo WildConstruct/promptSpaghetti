@@ -96,9 +96,12 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
             <div
               key={node.type}
               className="node-item"
-              draggable="true"
+              draggable={true}
               onDragStart={(e) => onDragStart(e, node.type)}
-              onDragEnd={() => debugLogEpic1('[NodePalette] Drag ended for', node.type)}
+              onDragEnd={() => {
+                console.log('[NodePalette] Drag ended for', node.type);
+                debugLogEpic1('[NodePalette] Drag ended for', node.type);
+              }}
               title={node.label}
             >
               <span className="node-icon" dangerouslySetInnerHTML={{ __html: node.icon }} />

@@ -43,6 +43,8 @@ export const usePromptParsing = ({
     if (!promptAnalysis || !nodeCreationMode) return;
 
     const processAnalysis = () => {
+      console.log('[usePromptParsing] Processing analysis:', promptAnalysis);
+      console.log('[usePromptParsing] Node creation mode:', nodeCreationMode);
       const { width: viewportWidth } = calculateViewportDimensions();
 
       // Convert analysis nodes to React Flow nodes
@@ -136,6 +138,8 @@ export const usePromptParsing = ({
         }
 
         // Call the callback with created nodes
+        console.log('[usePromptParsing] Created nodes:', newNodes);
+        console.log('[usePromptParsing] Created edges:', newEdges);
         onNodesCreated?.(newNodes, newEdges);
       }
 
