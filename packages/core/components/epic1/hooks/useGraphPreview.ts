@@ -104,14 +104,27 @@ export function useGraphPreview<NodeData = unknown>(
 
   // Automatically update preview when nodes or edges change
   useEffect(() => {
-    if (!previewEngineRef.current || !isPreviewVisible) return;
-
-    const runtimeGraph = convertToRuntimeGraph(nodes, edges);
-    if (runtimeGraph) {
-      console.log('[Preview] Updating preview with graph changes');
-      previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
+    if (!previewEngineRef.current) {
+      console.log('[Preview] No preview engine available');
+      return;
     }
-  }, [nodes, edges, isPreviewVisible]);
+
+    // Always try to update preview when we have nodes
+    if (nodes.length > 0) {
+      const runtimeGraph = convertToRuntimeGraph(nodes, edges);
+      if (runtimeGraph) {
+        console.log(
+          '[Preview] Updating preview with graph changes - nodes:',
+          nodes.length,
+          'edges:',
+          edges.length
+        );
+        previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
+      } else {
+        console.log('[Preview] Failed to convert graph');
+      }
+    }
+  }, [nodes, edges]);
 
   // Toggle preview visibility
   const togglePreview = useCallback(() => {

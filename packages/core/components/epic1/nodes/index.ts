@@ -24,8 +24,9 @@ export type {
 export { TextBlockNode };
 export type { TextBlockNodeData } from './TextBlockNode';
 
+// Single source of truth for WeightedChoice: EnhancedBranchingNode
 export { EnhancedBranchingNode };
-export { EnhancedBranchingNode as WeightedChoiceNode }; // Alias for compatibility
+export { EnhancedBranchingNode as WeightedChoiceNode }; // Alias for backward compatibility
 export type {
   EnhancedBranchingNodeData as WeightedChoiceNodeData,
   WeightedOption

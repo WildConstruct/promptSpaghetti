@@ -9,7 +9,6 @@ import {
 import { useIntelligence } from '../contexts/IntelligenceContext';
 import type { Choice, WeightOptimizationResult } from '../../../services/llm';
 import type { SegmentMetadata } from '../../../services/llm/MetadataExtractor';
-import './WeightedChoiceNode.css';
 import './EnhancedBranching.css';
 
 export interface WeightedOption {
