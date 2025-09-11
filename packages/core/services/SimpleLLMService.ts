@@ -1012,12 +1012,9 @@ export function getLLMService(): SimpleLLMService {
         : null;
     const parsedConfig = storedConfig ? JSON.parse(storedConfig) : {};
 
-    // Hardcode the API key from .env for now (will be replaced with proper env handling)
-    const defaultApiKey =
-      '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';
-
+    // No default API key - must be configured via localStorage or server-side
     serviceInstance = new SimpleLLMService({
-      apiKey: parsedConfig.apiKey || defaultApiKey,
+      apiKey: parsedConfig.apiKey,
       provider: parsedConfig.provider || 'openrouter',
       model: parsedConfig.model || 'openai/gpt-3.5-turbo',
       temperature: parsedConfig.temperature || 0.7,

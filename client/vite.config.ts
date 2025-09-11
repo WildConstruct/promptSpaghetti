@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import path from 'path';
 
 // https://vitejs.dev/config/
@@ -8,18 +7,7 @@ const BUILD_SAFE =
   process.env.BUILD_SAFE === 'true' || process.env.BUILD_SAFE === '1';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    nodePolyfills({
-      // Include polyfills needed by OpenAI SDK
-      include: ['stream', 'fs', 'path', 'http', 'https', 'zlib', 'url', 'util'],
-      globals: {
-        process: true,
-        Buffer: true,
-        global: true
-      }
-    })
-  ],
+  plugins: [react()],
   worker: {
     format: 'es',
     rollupOptions: {
@@ -77,10 +65,6 @@ export default defineConfig({
         __dirname,
         '../packages/asset-browser/src'
       ),
-      // Redirect OpenAI to use web runtime instead of node runtime
-      'openai/_shims/node-runtime.mjs': 'openai/_shims/web-runtime.mjs',
-      'openai/_shims/node-runtime': 'openai/_shims/web-runtime',
-      'openai/shims/node': 'openai/shims/web',
       '@promptscape/core/services/llm': path.resolve(
         __dirname,
         './src/shims/llm-service.ts'
@@ -115,12 +99,7 @@ export default defineConfig({
       '@prompt/asset-browser > react',
       '@prompt/asset-browser > react-dom'
     ],
-    exclude: ['openai'],
-    esbuildOptions: {
-      define: {
-        global: 'globalThis'
-      }
-    }
+    exclude: ['openai']
   },
   define: {
     // Ensure process.env is available for any Node.js checks

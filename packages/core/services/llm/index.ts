@@ -1,16 +1,22 @@
 // LLM Service Exports
+// Using API-based services that don't require OpenAI in the browser
 
-export { LLMService } from './LLMService';
+// Export API-based services instead of OpenAI-dependent ones
+export {
+  LLMService,
+  NodeIntelligenceService,
+  TextRefinementService,
+  GraphAnalyzer,
+  MetadataExtractor,
+  SimilarityEngine,
+  TokenTracker
+} from '../ApiLLMService';
+
+// These don't depend on OpenAI, can be exported as-is
 export { ModelSelector } from './ModelSelector';
 export { CacheManager } from './CacheManager';
-export { TokenTracker } from './TokenTracker';
 export { PrivacyFilter } from './PrivacyFilter';
-export { NodeIntelligenceService } from './NodeIntelligence';
-export { TextRefinementService } from './TextRefinementService';
-export { GraphAnalyzer } from './GraphAnalyzer';
-export { MetadataExtractor } from './MetadataExtractor';
 export { ContinuityTracker } from './ContinuityTracker';
-export { SimilarityEngine } from './SimilarityEngine';
 export { BulkOperationsManager } from './BulkOperationsManager';
 export { ComplianceAuditSystem } from './ComplianceAuditSystem';
 
