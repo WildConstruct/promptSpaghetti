@@ -16,11 +16,11 @@
     "@heroicons/react": "^2.2.0",
     "@prompt/asset-browser": "workspace:^",
     "@promptscape/core": "workspace:^",
+    "@sentry/react": "^7.120.0",
     "@supabase/supabase-js": "^2.54.0",
     "framer-motion": "^12.23.12",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
-    "@sentry/react": "^7.120.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.3.1",
@@ -56,7 +56,7 @@
     "tmp": "^0.2.5",
     "ts-jest": "^29.4.1",
     "typescript": "^5.8.3",
-    "vite": "^7.0.5",
+    "vite": "^7.1.5",
     "vite-plugin-node-polyfills": "^0.24.0"
   }
 }
