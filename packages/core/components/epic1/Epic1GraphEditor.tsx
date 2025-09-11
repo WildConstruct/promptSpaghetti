@@ -925,7 +925,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   // Konami code detection for Tetris mode
   const [konamiSequence, setKonamiSequence] = useState<string[]>([]);
   const [tetrisMode, setTetrisMode] = useState(false);
-  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyA', 'KeyB', 'Enter'];
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
 
   // Konami code detector
   useEffect(() => {
@@ -937,12 +937,30 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       
       const newSequence = [...konamiSequence, event.code];
       
+      // Debug: Show progress for Konami code (comment out in production)
+      const progress = konamiCode.slice(0, newSequence.length).every((code, i) => code === newSequence[i]);
+      if (progress && newSequence.length > 0 && newSequence.length <= konamiCode.length) {
+        console.log(`Konami progress: ${newSequence.length}/${konamiCode.length}`);
+      }
+      
       // Check if the sequence matches the Konami code
       if (newSequence.length >= konamiCode.length) {
         const lastSequence = newSequence.slice(-konamiCode.length);
         if (JSON.stringify(lastSequence) === JSON.stringify(konamiCode)) {
           setTetrisMode(true);
           showToast('success', '🎮 TETRIS MODE ACTIVATED! 🎮');
+          setKonamiSequence([]);
+          return;
+        }
+      }
+      
+      // Reset if wrong key pressed
+      const expectedKey = konamiCode[newSequence.length - 1];
+      if (newSequence.length > 0 && event.code !== expectedKey) {
+        // Check if they're on the right track
+        const partialMatch = konamiCode.slice(0, newSequence.length - 1).every((code, i) => code === newSequence[i]);
+        if (!partialMatch || event.code !== konamiCode[newSequence.length - 1]) {
+          console.log('Konami sequence reset');
           setKonamiSequence([]);
           return;
         }
@@ -2435,6 +2453,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
                   cursor: 'pointer',
                   fontWeight: 'bold'
                 }}
+              >
+                Replace Graph
+              </button>
             </div>
           </div>
         </div>

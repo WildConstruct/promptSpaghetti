@@ -7,10 +7,10 @@
 .llm-toggle-switch {
   position: relative;
   width: 180px;
-  height: 36px;
+  height: 31px;
   background: linear-gradient(145deg, #1a1a1a, #242424);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 18px;
+  border-radius: 15.5px;
   cursor: pointer;
   overflow: hidden;
   padding: 0;
@@ -50,7 +50,7 @@
   width: calc(50% - 3px);
   height: calc(100% - 6px);
   background: linear-gradient(135deg, #4a7ec7 0%, #3a5f9e 100%);
-  border-radius: 15px;
+  border-radius: 12.5px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
   box-shadow: 
@@ -105,17 +105,12 @@
     0 0 10px rgba(139, 92, 246, 0.3);
 }
 
-/* Add sparkle icon to AI text when active */
-.llm-toggle-switch.llm-enhanced .ai-text::before {
-  content: '✨ ';
-  font-size: 14px;
-  margin-right: 2px;
-}
+/* Removed sparkle emoji - using SVG icons instead */
 
 /* Config button */
 .llm-toggle-config {
-  width: 32px;
-  height: 32px;
+  width: 31px;
+  height: 31px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,7 +166,7 @@
 @media (max-width: 480px) {
   .llm-toggle-switch {
     width: 160px;
-    height: 32px;
+    height: 28px;
   }
   
   .llm-toggle-text {
