@@ -1,0 +1,153 @@
+.llm-toggle-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.llm-toggle-switch {
+  position: relative;
+  width: 140px;
+  height: 32px;
+  background: var(--color-bg-tertiary, #2a2a2a);
+  border: 2px solid var(--color-ui-border, #404040);
+  border-radius: 16px;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.llm-toggle-switch:hover:not(.disabled) {
+  border-color: var(--color-accent-primary, #5b9eff);
+  background: var(--color-bg-hover, #333);
+}
+
+.llm-toggle-switch.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.llm-toggle-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+/* The sliding background indicator */
+.llm-toggle-switch::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(50% - 2px);
+  height: calc(100% - 4px);
+  background: linear-gradient(135deg, #5b9eff 0%, #4a8ee6 100%);
+  border-radius: 13px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.llm-toggle-switch.llm-enhanced::before {
+  transform: translateX(calc(100% + 2px));
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Text labels */
+.llm-toggle-text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  z-index: 2;
+  position: relative;
+  user-select: none;
+}
+
+.llm-toggle-text.standard-text {
+  color: var(--color-text-secondary, #999);
+}
+
+.llm-toggle-text.ai-text {
+  color: var(--color-text-secondary, #999);
+}
+
+/* Active text styling */
+.llm-toggle-switch.standard .standard-text {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.llm-toggle-switch.llm-enhanced .ai-text {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Add sparkle icon to AI text when active */
+.llm-toggle-switch.llm-enhanced .ai-text::before {
+  content: '✨ ';
+  font-size: 14px;
+  margin-right: 2px;
+}
+
+/* Config button */
+.llm-toggle-config {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-tertiary, #2a2a2a);
+  border: 1px solid var(--color-ui-border, #404040);
+  border-radius: 6px;
+  color: var(--color-text-secondary, #999);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.llm-toggle-config:hover {
+  background: var(--color-bg-hover, #333);
+  border-color: var(--color-accent-primary, #5b9eff);
+  color: var(--color-accent-primary, #5b9eff);
+  transform: translateY(-1px);
+}
+
+/* Pulse animation for AI mode */
+@keyframes llm-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.llm-toggle-switch.llm-enhanced::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: llm-pulse 2s infinite;
+  z-index: 3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .llm-toggle-switch {
+    width: 120px;
+    height: 28px;
+  }
+  
+  .llm-toggle-text {
+    font-size: 11px;
+  }
+}

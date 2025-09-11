@@ -501,6 +501,8 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
         nodeTypes: preset.nodeTypes
       });
       e.dataTransfer.setData('application/x-preset', payload);
+      // Also set as 'preset' for compatibility with Epic1GraphEditor
+      e.dataTransfer.setData('preset', payload);
       // Provide a plain-text fallback for other drop targets
       e.dataTransfer.setData('text/plain', preset.name);
       e.dataTransfer.effectAllowed = 'copy';
