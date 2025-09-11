@@ -7,9 +7,82 @@
   position: relative;
 }
 
+/* Toolbar styles */
+.prompt-dissector-toolbar {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.mode-button,
+.toolbar-button {
+  padding: 0.25rem 0.75rem;
+  background: rgba(103, 126, 234, 0.1);
+  border: 1px solid rgba(103, 126, 234, 0.3);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.mode-button:hover,
+.toolbar-button:hover {
+  background: rgba(103, 126, 234, 0.2);
+  color: #fff;
+}
+
+.mode-button.active,
+.toolbar-button.active {
+  background: rgba(103, 126, 234, 0.3);
+  border-color: rgba(103, 126, 234, 0.6);
+  color: #fff;
+}
+
+.mode-button:disabled,
+.toolbar-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.parsing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(103, 126, 234, 0.8);
+  font-size: 12px;
+}
+
+.parsing-indicator .spinner {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
 /* Toolbar spacing when visible */
 .prompt-dissector .dissector-toolbar {
   margin-bottom: 1rem; /* Proper spacing between toolbar and tabs */
+}
+
+/* Content area */
+.prompt-dissector-content {
+  flex: 1;
+  position: relative;
+  background: rgba(26, 26, 26, 0.5);
+  border: 1px solid rgba(103, 126, 234, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow: auto;
 }
 
 /* Tab Interface - Integrated with text area */

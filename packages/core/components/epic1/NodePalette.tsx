@@ -26,6 +26,7 @@ const nodeTypes: NodeTypeInfo[] = [
 
 export interface NodePaletteProps {
   position?: 'left' | 'right';
+  collapsed?: boolean;
   defaultCollapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
   children?: React.ReactNode;
@@ -33,11 +34,18 @@ export interface NodePaletteProps {
 
 export const NodePalette: React.FC<NodePaletteProps> = ({
   position = 'left',
+  collapsed: controlledCollapsed,
   defaultCollapsed = false,
   onCollapsedChange,
   children,
 }) => {
-  const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
+  const [collapsed, setCollapsed] = React.useState(controlledCollapsed ?? defaultCollapsed);
+  
+  React.useEffect(() => {
+    if (controlledCollapsed !== undefined) {
+      setCollapsed(controlledCollapsed);
+    }
+  }, [controlledCollapsed]);
   
   React.useEffect(() => {
     debugLogEpic1('[NodePalette] Mounted, position:', position, 'collapsed:', collapsed);
