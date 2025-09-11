@@ -158,7 +158,10 @@
     "test:framework:health": "node scripts/run-comprehensive-test-framework.js --health-check",
     "test:framework:automation": "node scripts/run-comprehensive-test-framework.js --automation-only",
     "test:framework:coverage": "node scripts/run-comprehensive-test-framework.js --coverage-only",
-    "test:automation": "jest tests/automation/ --verbose"
+    "test:automation": "jest tests/automation/ --verbose",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "changelog:all": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "version": "npm run changelog && git add CHANGELOG.md"
   },
   "dependencies": {
     "@simplewebauthn/browser": "^13.1.2",
@@ -207,6 +210,7 @@
     "antd": "^5.27.0",
     "babel-jest": "^29.7.0",
     "chalk": "^4.1.2",
+    "conventional-changelog-cli": "^5.0.0",
     "esbuild": "^0.25.8",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.5",

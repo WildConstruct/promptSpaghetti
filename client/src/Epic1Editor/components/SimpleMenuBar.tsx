@@ -37,6 +37,7 @@ export interface SimpleMenuBarProps {
   // Help operations
   onDocumentation?: () => void;
   onKeyboardShortcuts?: () => void;
+  onChangelog?: () => void;
   onAbout?: () => void;
 }
 
@@ -120,6 +121,10 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
           <button onClick={props.onKeyboardShortcuts} className="menu-item">
             Keyboard Shortcuts
           </button>
+          <button onClick={props.onChangelog} className="menu-item">
+            What's New
+          </button>
+          <div className="menu-separator" />
           <button onClick={props.onAbout} className="menu-item">
             About
           </button>

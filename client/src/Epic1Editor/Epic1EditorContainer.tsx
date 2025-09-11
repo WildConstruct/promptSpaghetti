@@ -36,6 +36,7 @@ import { IntelligenceProvider } from '@promptscape/core/components/epic1/context
 import { PromptDissector } from '../components/LaunchScreen/PromptDissector';
 import { WorkspaceRecovery } from '@promptscape/core/services/WorkspaceRecovery';
 import { WorkspaceRecoveryDialog } from '@promptscape/core/components/WorkspaceRecoveryDialog';
+import { ChangelogModal } from '@promptscape/core/components/ChangelogModal/ChangelogModal';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -71,7 +72,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   );
   // Gate rendering the core editor until we've cleared its persistence when launching with initial input
   const [editorReady, setEditorReady] = useState<boolean>(!hasInitialInput);
-  
+
   // Workspace recovery state
   const [showRecoveryDialog, setShowRecoveryDialog] = useState(false);
   const [hasCheckedRecovery, setHasCheckedRecovery] = useState(false);
@@ -81,6 +82,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [promptAnalysis, setPromptAnalysis] = useState<PromptAnalysis | null>(
     null
   );
+
+  // Changelog modal state
+  const [showChangelog, setShowChangelog] = useState(false);
   const [nodeCreationMode, setNodeCreationMode] = useState<
     'new-project' | 'add-to-existing' | null
   >(null);
@@ -262,10 +266,11 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   useEffect(() => {
     if (!hasCheckedRecovery && !hasInitialInput) {
       WorkspaceRecovery.initialize();
-      
+
       // Check for auto-recovery preference
-      const autoRecover = localStorage.getItem('workspace-recovery:auto') === 'true';
-      
+      const autoRecover =
+        localStorage.getItem('workspace-recovery:auto') === 'true';
+
       if (autoRecover && WorkspaceRecovery.hasRecoverableWorkspace()) {
         // Auto-recover without showing dialog
         const recovered = WorkspaceRecovery.recoverWorkspace();
@@ -278,7 +283,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         // Show recovery dialog
         setShowRecoveryDialog(true);
       }
-      
+
       setHasCheckedRecovery(true);
     }
   }, [hasCheckedRecovery, hasInitialInput]);
@@ -846,6 +851,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     showToast('Opening documentation...', 'info');
   }, [showToast]);
 
+  const handleChangelog = useCallback(() => {
+    setShowChangelog(true);
+  }, []);
+
   const handleKeyboardShortcuts = useCallback(() => {
     const shortcutsDiv = document.createElement('div');
     shortcutsDiv.innerHTML = `
@@ -925,7 +934,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
       // Always update nodes immediately for smooth interaction
       setCurrentNodes(fixedNodes);
-      
+
       // Auto-save workspace
       WorkspaceRecovery.autoSave(fixedNodes, currentEdges);
 
@@ -942,7 +951,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     (edges: Edge[]) => {
       // Always update edges immediately for smooth interaction
       setCurrentEdges(edges);
-      
+
       // Auto-save workspace
       WorkspaceRecovery.autoSave(currentNodes, edges);
 
@@ -1086,6 +1095,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             // Help operations
             onDocumentation={handleDocumentation}
             onKeyboardShortcuts={handleKeyboardShortcuts}
+            onChangelog={handleChangelog}
             onAbout={handleAbout}
             onSupport={handleSupport}
             onReportBug={handleReportBug}
@@ -1155,6 +1165,11 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           isOpen={showNewDocumentModal}
           onConfirm={confirmNewDocument}
           onCancel={cancelNewDocument}
+        />
+
+        <ChangelogModal
+          isOpen={showChangelog}
+          onClose={() => setShowChangelog(false)}
         />
       </div>
     </IntelligenceProvider>

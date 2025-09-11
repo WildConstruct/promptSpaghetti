@@ -1,38 +1,20 @@
-The Netlify deploy errored, with the following guidance provided:
+I’ve analyzed the layout and DOM structure of your app. Here’s what’s likely happening:
 
-**Diagnosis:**
-[line 50](#L50) indicates that the build failed during the stage of installing dependencies with a non-zero exit code returned by the dependency_installation script.
+- The **preview panel** visually overlays the canvas, but it isn’t *pushing* the canvas upward—suggesting it’s probably using CSS positioning (like `position: absolute` or `position: fixed`) rather than being a true block sibling of the canvas in the DOM flow.
+- When a panel uses absolute or fixed positioning and is layered on top, it *escapes* the normal document flow—so siblings won’t be shifted or pushed by its presence.
+- If you want the preview panel to push the canvas up as a sibling, both elements should be *regular block-level siblings* (not absolutely positioned), or the container should use *flex* or *grid* layout so the preview and canvas are naturally stacked.
 
-**Error Type:** 
-The error is related to an outdated `pnpm-lock.yaml` file causing the installation process to fail.
+**Quick diagnosis steps:**
+- Check the CSS of the preview panel for `position: absolute`/`fixed`.
+- If so, to make it push the canvas up, switch to something like:
+  ```css
+  display: flex;
+  flex-direction: column;
+  ```
 
-**Cause:**
-[line 51](#L51) specifies the error `ERR_PNPM_OUTDATED_LOCKFILE`, stating that the `pnpm-lock.yaml` file is not up to date with the project dependencies.
+...on the parent container, with both `.canvas` and `.preview-panel` as children in DOM order. This allows the preview panel to "push" the canvas accordingly within the layout.
 
-**Solution:**
-To resolve this issue, the user needs to update the `pnpm-lock.yaml` file to match the project dependencies. They can do this by running the following command in the project directory:
-```bash
-pnpm install
-```
+If you paste or describe the relevant HTML/CSS structure, I can give even more specific code fixes.
 
-After updating the lockfile with the correct dependencies, the user should commit the changes including the updated lockfile to the repository to ensure consistency between the lockfile and the project dependencies.
-
-The relevant error logs are:
-
-Line 40: Started restoring workspace packages/core node modules
-Line 41: Finished restoring workspace packages/core node modules
-Line 42: Started restoring workspace packages/custom-node-sdk node modules
-Line 43: Finished restoring workspace packages/custom-node-sdk node modules
-Line 44: Started restoring workspace docs/content-authoring-handbook node modules
-Line 45: Finished restoring workspace docs/content-authoring-handbook node modules
-Line 46: Started restoring workspace root node modules
-Line 47: Finished restoring workspace root node modules
-Line 48: Installing npm packages using pnpm version 8.15.4
-Line 49: Scope: all 8 workspace projects
-Line 50: Failed during stage 'Install dependencies': dependency_installation script returned non-zero exit code: 1
-Line 51:  ERR_PNPM_OUTDATED_LOCKFILE  Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to date with packages/asset-
-Line 52: Note that in CI environments this setting is true by default. If you still need to run install in such cases, use "pnpm install 
-Line 53:     Failure reason:
-Line 54:     specifiers in the lockfile ({"@promptscape/core":"workspace:*","comlink":"^4.4.2","fuse.js":"^7.1.0","react":">=18.0.0","rea
-Line 55: Failing build: Failed to install dependencies
-Line 56: Finished processing build request in 38.792s
+[1](https://ps.wildconstruct.com/)
+[2](https://ps.wildconstruct.com/)
