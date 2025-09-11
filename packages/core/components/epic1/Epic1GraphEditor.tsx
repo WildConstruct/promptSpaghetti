@@ -499,11 +499,11 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       {/* Preview Tray */}
       {showPreview && (
         <PreviewTray
-          previewResults={previewResults}
+          results={previewResults}
           isExecuting={isPreviewExecuting}
           error={previewError}
           seeds={currentSeeds}
-          onSeedChange={updateSeeds}
+          onSeedsChange={updateSeeds}
           onExport={exportPreviewResults}
         />
       )}

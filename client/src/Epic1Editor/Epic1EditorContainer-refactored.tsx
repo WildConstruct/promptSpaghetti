@@ -10,7 +10,6 @@ import { SupabaseOpenDialog } from './components/SupabaseOpenDialog';
 import { SupabaseSaveDialog } from './components/SupabaseSaveDialog';
 import { NewDocumentModal } from './components/NewDocumentModal';
 import { testSupabaseConnection } from './hooks/testSupabase';
-import { GraphEditorWithTray } from './GraphEditorWithTray';
 import {
   validateGraph,
   formatValidationMessage
@@ -194,16 +193,15 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           />
         )}
 
-        <GraphEditorWithTray
-          EditorComponent={Epic1GraphEditor}
-          editorKey={editorKey}
-          currentNodes={currentNodes}
-          currentEdges={currentEdges}
-          showPreview={showPreview}
-          assetLibraryVisible={assetLibraryVisible}
-          assetLibraryPosition={assetLibraryPosition}
+        <Epic1GraphEditor
+          key={editorKey}
+          initialNodes={currentNodes}
+          initialEdges={currentEdges}
           onNodesChange={handleNodesChange}
           onEdgesChange={handleEdgesChange}
+          showPreview={showPreview}
+          showAssetLibrary={assetLibraryVisible}
+          assetLibraryPosition={assetLibraryPosition}
         />
 
         {/* Modals */}
