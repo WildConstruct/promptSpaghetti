@@ -27,6 +27,9 @@ import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
 import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { useKonamiCode } from './hooks/useKonamiCode';
+import { useGraphHistory } from './hooks/useGraphHistory';
+import { useGraphPersistence } from './hooks/useGraphPersistence';
+import { GraphModals } from './components/GraphModals';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { PanZoomControls } from './PanZoomControls';
 import { EdgeRoutingControls } from './EdgeRoutingControls';
@@ -136,76 +139,20 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   // Use preview tray layout hook to push content up
   usePreviewTrayLayout(showPreview);
   
-  // Load persisted state on mount
-  const loadPersistedState = useCallback(() => {
-    if (!isStorageAvailable()) return null;
-    
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const wrapper = JSON.parse(stored);
-        const decompressed = wrapper.compressed 
-          ? JSON.parse(wrapper.state) // Would need lz-string decompress in real impl
-          : JSON.parse(wrapper.state);
-        
-        if (decompressed.nodes && decompressed.edges) {
-          console.log('Restored graph from local storage');
-          return decompressed;
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load persisted state:', error);
-    }
-    return null;
-  }, []);
+  // Graph persistence - using extracted hook
+  const {
+    persistedState,
+    hasRestoredState,
+    lastSaved,
+    save: manualSave,
+    clear: clearPersistedState
+  } = useGraphPersistence([], [], {
+    autoSave: false, // We'll handle auto-save after nodes/edges are initialized
+    onLoadSuccess: (state) => console.log('Restored graph from local storage'),
+    onLoadError: (error) => console.error('Failed to load persisted state:', error)
+  });
 
-  // Initialize with persisted state or initial props
-  const persistedState = useMemo(() => {
-    const state = loadPersistedState();
-    if (state && state.nodes) {
-      // Deduplicate nodes by ID - keep the first occurrence
-      const seenIds = new Set<string>();
-      const uniqueNodes = state.nodes.filter((node: Node) => {
-        if (seenIds.has(node.id)) {
-          console.warn(`[Epic1GraphEditor] Removing duplicate node with ID: ${node.id}`);
-          return false;
-        }
-        seenIds.add(node.id);
-        return true;
-      });
-      
-      // Build a set of all node IDs for parent validation
-      const nodeIds = new Set(uniqueNodes.map((n: Node) => n.id));
-      
-      // Filter out nodes with invalid parent references and GroupNodes without proper data
-      const validNodes = uniqueNodes.filter((node: Node) => {
-        // Check for invalid GroupNode
-        if (node.type === 'group' && (!node.data || !node.data.group)) {
-          console.warn(`[Epic1GraphEditor] Filtering out invalid GroupNode: ${node.id}`);
-          return false;
-        }
-        
-        // Check for orphaned child nodes (nodes with non-existent parents)
-        if (node.parentNode && !nodeIds.has(node.parentNode)) {
-          console.warn(`[Epic1GraphEditor] Removing orphaned node ${node.id} with missing parent ${node.parentNode}`);
-          return false;
-        }
-        
-        // Clean up any nodes that reference the problematic region
-        if (node.parentNode === 'region-1755479434134-jzx1jm81c' || 
-            node.id === 'region-1755479434134-jzx1jm81c') {
-          console.warn(`[Epic1GraphEditor] Removing node related to problematic region: ${node.id}`);
-          return false;
-        }
-        
-        return true;
-      });
-      
-      return { ...state, nodes: validNodes };
-    }
-    return state;
-  }, []);
-  const [hasRestoredState] = useState(() => !!persistedState);
+  // Initialize nodes and edges with persisted state or initial props
   const [nodes, setNodes, onNodesChangeBase] = useNodesState<EditableNodeData>(
     persistedState?.nodes || initialNodes
   );
@@ -219,95 +166,26 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const reactFlowRef = useRef<ReactFlowInstance | null>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
-  // Local history ring (50 entries)
-  const [history, setHistory] = useState<Array<{ nodes: Node<EditableNodeData>[]; edges: Edge[]; timestamp: number }>>([]);
-  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  // Graph history management - using extracted hook
+  const { 
+    undo, 
+    redo, 
+    canUndo, 
+    canRedo,
+    historySize,
+    currentIndex: historyIndex
+  } = useGraphHistory(nodes, edges, setNodes, setEdges, {
+    maxHistorySize: 50,
+    debounceMs: 300
+  });
   const [historyVisible, setHistoryVisible] = useState<boolean>(false);
-  const pushSnapshot = useCallback((nodesSnap: Node<EditableNodeData>[], edgesSnap: Edge[]) => {
-    setHistory(prev => {
-      const base = historyIndex >= 0 ? prev.slice(0, historyIndex + 1) : prev;
-      const next = [...base, { nodes: nodesSnap, edges: edgesSnap, timestamp: Date.now() }];
-      // keep last 50
-      return next.length > 50 ? next.slice(next.length - 50) : next;
-    });
-    setHistoryIndex(idx => {
-      const nextLen = historyIndex >= 0 ? Math.min(history.length, 49) + 1 : history.length + 1;
-      return Math.min(nextLen - 1, 49);
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history.length, historyIndex]);
-
-  // Snapshot on nodes/edges change (debounced by previous autosave)
-  useEffect(() => {
-    // Only snapshot when graph has content
-    if ((nodes?.length || 0) + (edges?.length || 0) === 0) return;
-    pushSnapshot(nodes as any, edges as any);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nodes, edges]);
-
-  const undo = useCallback(() => {
-    if (historyIndex <= 0 || history.length === 0) return;
-    const vp = captureViewport(reactFlowRef.current as any);
-    const target = history[historyIndex - 1];
-    setNodes(target.nodes as any);
-    setEdges(target.edges as any);
-    setHistoryIndex(historyIndex - 1);
-    if (vp) restoreViewport(reactFlowRef.current as any, vp);
-  }, [history, historyIndex, reactFlowInstance, setNodes, setEdges]);
-
-  const redo = useCallback(() => {
-    if (historyIndex >= history.length - 1) return;
-    const vp = captureViewport(reactFlowRef.current as any);
-    const target = history[historyIndex + 1];
-    setNodes(target.nodes as any);
-    setEdges(target.edges as any);
-    setHistoryIndex(historyIndex + 1);
-    if (vp) restoreViewport(reactFlowRef.current as any, vp);
-  }, [history, historyIndex, reactFlowInstance, setNodes, setEdges]);
   
-  // Autosave to local storage (includes post-it notes)
-  const saveToLocalStorage = useCallback((currentNodes: Node[], currentEdges: Edge[]) => {
-    if (!isStorageAvailable()) return;
-    
-    try {
-      const state = {
-        nodes: currentNodes, // This includes post-it notes since they're just another node type
-        edges: currentEdges,
-        lastModified: new Date().toISOString()
-      };
-      
-      const stateString = JSON.stringify(state);
-      const wrapper = {
-        state: stateString,
-        version: 1,
-        timestamp: Date.now(),
-        compressed: false,
-        size: new Blob([stateString]).size
-      };
-      
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(wrapper));
-      console.log('Graph saved to local storage (including post-it notes)');
-    } catch (error) {
-      console.error('Failed to save to local storage:', error);
-    }
-  }, []);
-  
-  // Debounced autosave
-  const debouncedSave = useMemo(
-    () => debounce((nodes: Node[], edges: Edge[]) => {
-      saveToLocalStorage(nodes, edges);
-    }, 2000), // Save after 2 seconds of inactivity
-    [saveToLocalStorage]
-  );
-  
-  // Trigger autosave on changes
-  useEffect(() => {
-    if (nodes.length > 0 || edges.length > 0) {
-      debouncedSave(nodes, edges);
-    }
-  }, [nodes, edges, debouncedSave]);
-  
-  // This useEffect is moved after useToast hook definition
+  // Auto-save persistence (separate instance for auto-saving)
+  useGraphPersistence(nodes, edges, {
+    autoSave: true,
+    autoSaveDelayMs: 2000,
+    onSaveSuccess: () => console.log('Graph auto-saved to local storage')
+  });
   
   // Custom node change handler to optimize performance during dragging
   const onNodesChange = useCallback((changes: any[]) => {
