@@ -31,6 +31,8 @@ import { IntelligenceProvider } from '@promptscape/core/components/epic1/context
 import { PromptDissector } from '../components/LaunchScreen/PromptDissector';
 import { WorkspaceRecoveryDialog } from '@promptscape/core/components/WorkspaceRecoveryDialog';
 import { ChangelogModal } from '@promptscape/core/components/ChangelogModal/ChangelogModal';
+// Import Epic1GraphEditor directly instead of dynamically
+import { Epic1GraphEditor } from '@promptscape/core/components/epic1/Epic1GraphEditor';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -51,13 +53,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   initialAnalysis,
   initialGraph
 }) => {
-  // Component loading state
-  const [EditorComponent, setEditorComponent] =
-    useState<React.ComponentType<Epic1GraphEditorProps> | null>(null);
-  const [MenuBarComponent, setMenuBarComponent] =
-    useState<React.ComponentType<any> | null>(null);
+  // Component loading state (simplified - using static imports now)
   const [loadError, setLoadError] = useState<string>('');
-  const [isComponentsLoading, setIsComponentsLoading] = useState(true);
   const [assetLibraryVisible, setAssetLibraryVisible] =
     useState(showAssetLibrary);
   const hasInitialInput = Boolean(
@@ -112,31 +109,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const fileOps = useSupabaseFileOperations();
   const editOps = useEditOperations();
 
-  // Load components dynamically
-  useEffect(() => {
-    const loadComponents = async () => {
-      try {
-        const [editorModule, menuModule] = await Promise.all([
-          import('@promptscape/core/components/epic1/Epic1GraphEditor'),
-          showMenuBar
-            ? import('./components/SimpleMenuBar')
-            : Promise.resolve(null)
-        ]);
-
-        setEditorComponent(() => editorModule.Epic1GraphEditor);
-        if (menuModule) {
-          setMenuBarComponent(() => menuModule.SimpleMenuBar);
-        }
-        setIsComponentsLoading(false);
-      } catch (error) {
-        console.error('Failed to load components:', error);
-        setLoadError('Failed to load editor components');
-        setIsComponentsLoading(false);
-      }
-    };
-
-    loadComponents();
-  }, [showMenuBar]);
+  // Components are now statically imported at the top of the file
 
   // Process initial graph/analysis
   useEffect(() => {
@@ -167,25 +140,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     [currentNodes, saveForRecovery]
   );
 
-  // Render loading or error state
-  if (isComponentsLoading) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-          backgroundColor: '#0a0a0a',
-          color: '#fff'
-        }}
-      >
-        <div>Loading editor components...</div>
-      </div>
-    );
-  }
-
-  if (loadError || !EditorComponent) {
+  // Render error state if needed
+  if (loadError) {
     return (
       <div
         style={{
@@ -207,8 +163,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       <div
         style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
       >
-        {showMenuBar && MenuBarComponent && (
-          <MenuBarComponent
+        {showMenuBar && (
+          <SimpleMenuBar
             onNewProject={() => openPromptDissector('new-project')}
             onAddNodes={() => openPromptDissector('add-to-existing')}
             onShowChangelog={() => setShowChangelog(true)}
@@ -223,7 +179,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           showAssetLibrary={assetLibraryVisible}
           assetLibraryPosition={assetLibraryPosition}
         >
-          <EditorComponent
+          <Epic1GraphEditor
             initialNodes={currentNodes}
             initialEdges={currentEdges}
             onNodesChange={handleNodesChange}
