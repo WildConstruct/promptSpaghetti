@@ -45,29 +45,31 @@ export const usePromptParsing = ({
     const processAnalysis = () => {
       console.log('[usePromptParsing] Processing analysis:', promptAnalysis);
       console.log('[usePromptParsing] Node creation mode:', nodeCreationMode);
-      const { width: viewportWidth } = calculateViewportDimensions();
+      const viewport = calculateViewportDimensions();
 
       // Convert analysis nodes to React Flow nodes
       const newNodes: Node[] = [];
       const newEdges: Edge[] = [];
 
       if (promptAnalysis.nodes && promptAnalysis.nodes.length > 0) {
-        // Calculate positions for new nodes
-        const positions = calculateNodePositions(
-          promptAnalysis.nodes.length,
-          viewportWidth
-        );
+        // Calculate positions for new nodes in a grid layout
+        const nodesPerRow = 3;
+        const nodeSpacing = { x: 320, y: 200 };
+        const startPosition = { x: 100, y: 100 };
 
         // Create React Flow nodes from analysis
         promptAnalysis.nodes.forEach(
           (genNode: GeneratedNode, index: number) => {
-            const position = positions[index] || {
-              x: 100,
-              y: 100 + index * 150
+            const row = Math.floor(index / nodesPerRow);
+            const col = index % nodesPerRow;
+            const position = {
+              x: startPosition.x + col * nodeSpacing.x,
+              y: startPosition.y + row * nodeSpacing.y
             };
 
             // Extract the actual node from the wrapper
             const nodeInternal = genNode.node;
+            console.log('[usePromptParsing] Processing node:', nodeInternal);
 
             // Map nodeType to appropriate React Flow type
             let nodeType = 'textBlock'; // default
@@ -79,10 +81,24 @@ export const usePromptParsing = ({
               nodeType = 'output';
             }
 
-            // Get the display text
-            const displayText = nodeInternal.getPreviewText
-              ? nodeInternal.getPreviewText()
-              : '';
+            // Get the display text - check all possible sources
+            let displayText = '';
+            if (
+              nodeInternal.getPreviewText &&
+              typeof nodeInternal.getPreviewText === 'function'
+            ) {
+              displayText = nodeInternal.getPreviewText();
+            } else if (nodeInternal.text) {
+              displayText = nodeInternal.text;
+            } else if (nodeInternal.content) {
+              displayText = nodeInternal.content;
+            } else if (nodeInternal.variableName) {
+              displayText = `$${nodeInternal.variableName}`;
+            }
+            console.log(
+              '[usePromptParsing] Display text for node:',
+              displayText
+            );
 
             const newNode: Node = {
               id: nodeInternal.id,

@@ -673,9 +673,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               snapGrid={[15, 15]}
               deleteKeyCode={['Delete', 'Backspace']}
               multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
-              panOnScroll
+              panOnScroll={false}
               panOnDrag={[1, 2]}
-              zoomOnScroll
+              zoomOnScroll={true}
               zoomOnDoubleClick
               isValidConnection={isValidConnection}
             >
