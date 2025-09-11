@@ -47,7 +47,8 @@
       "Bash(git add:*)",
       "Bash(vercel:*)",
       "Bash(git commit:*)",
-      "Bash(npx prettier:*)"
+      "Bash(npx prettier:*)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)"
     ],
     "deny": [],
     "ask": [],

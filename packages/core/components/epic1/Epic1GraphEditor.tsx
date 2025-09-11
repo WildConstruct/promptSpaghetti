@@ -351,9 +351,11 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   }, [onEdgesChangeBase]);
 
   const content = (
-    <div className="epic1-graph-editor" style={{ height: '100vh', display: 'flex' }}>
-      {/* Tabbed Side Panel with Asset Library */}
-      {showAssetLibrary && (
+    <div className="epic1-graph-editor" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Main horizontal container for side panel and canvas */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+        {/* Tabbed Side Panel with Asset Library */}
+        {showAssetLibrary && (
         <TabbedSidePanel
           position={assetLibraryPosition}
           nodes={nodes}
@@ -495,8 +497,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         {/* Connection Toast */}
         <ConnectionToast toasts={toasts} dismissToast={dismissToast} />
       </div>
+    </div>
 
-      {/* Preview Tray */}
+      {/* Preview Tray - Now properly at bottom of flex column */}
       {showPreview && (
         <PreviewTray
           results={previewResults}
