@@ -118,9 +118,16 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   } = usePromptParsing({
     initialAnalysis,
     onNodesCreated: (newNodes, newEdges) => {
+      console.log(
+        '[Epic1EditorContainer] onNodesCreated called with:',
+        newNodes.length,
+        'nodes'
+      );
       if (nodeCreationMode === 'new-project') {
         setCurrentNodes(newNodes);
         setCurrentEdges(newEdges);
+        // Force a re-render of the graph editor with new nodes
+        setEditorKey(prev => prev + 1);
       } else {
         setCurrentNodes(prev => [...prev, ...newNodes]);
         setCurrentEdges(prev => [...prev, ...newEdges]);

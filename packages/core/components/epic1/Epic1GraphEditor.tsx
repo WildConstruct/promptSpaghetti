@@ -194,6 +194,18 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     persistedState?.edges || initialEdges
   );
 
+  // Update nodes when initialNodes change (for when launched from parser)
+  React.useEffect(() => {
+    if (initialNodes && initialNodes.length > 0 && nodes.length === 0) {
+      console.log('[Epic1GraphEditor] Setting initial nodes:', initialNodes.length);
+      setNodes(initialNodes);
+    }
+    if (initialEdges && initialEdges.length > 0 && edges.length === 0) {
+      console.log('[Epic1GraphEditor] Setting initial edges:', initialEdges.length);
+      setEdges(initialEdges);
+    }
+  }, [initialNodes, initialEdges]);
+
   // Toast notifications
   const { toasts, showToast, dismissToast } = useToast();
 
