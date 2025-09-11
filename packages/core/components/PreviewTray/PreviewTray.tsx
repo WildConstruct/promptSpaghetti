@@ -47,7 +47,7 @@ const TRAY_HEADER_HEIGHT = 40; // keep in sync with CSS
 
 export const PreviewTray: React.FC<PreviewTrayProps> = ({
   seeds,
-  results,
+  results = [],
   isExecuting,
   error,
   onSeedsChange,
@@ -251,19 +251,20 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
 
   // Auto-open when execution starts or when first results arrive
   const prevExecRef = useRef(isExecuting);
-  const prevResultsCountRef = useRef(results.length);
+  const prevResultsCountRef = useRef(results?.length || 0);
   useEffect(() => {
     const prevExec = prevExecRef.current;
     const prevCount = prevResultsCountRef.current;
+    const currentResultsLength = results?.length || 0;
     const execStarted = !prevExec && isExecuting;
-    const gotFirstResults = prevCount === 0 && results.length > 0;
+    const gotFirstResults = prevCount === 0 && currentResultsLength > 0;
     if (!isOpen && (execStarted || gotFirstResults)) {
       setOpen(true);
       setMinimized(false);
     }
     prevExecRef.current = isExecuting;
-    prevResultsCountRef.current = results.length;
-  }, [isExecuting, results.length, isOpen, setOpen, setMinimized]);
+    prevResultsCountRef.current = currentResultsLength;
+  }, [isExecuting, results?.length, isOpen, setOpen, setMinimized]);
 
   const getTrayHeight = () => {
     // Since parent controls visibility through conditional rendering,
