@@ -135,7 +135,16 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     onEditorKeyChange: setEditorKey,
     showToast
   });
-  const editOps = useEditOperations();
+
+  // Edit operations with proper configuration
+  const editOps = useEditOperations({
+    currentNodes,
+    currentEdges,
+    onNodesChange: handleNodesChange,
+    onEdgesChange: handleEdgesChange,
+    onEditorKeyChange: setEditorKey,
+    showToast
+  });
 
   // Components are now statically imported at the top of the file
 
