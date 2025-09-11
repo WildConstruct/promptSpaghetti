@@ -1,0 +1,37 @@
+        if (segment.type === 'choice' && segment.options) {
+          // Create WeightedChoice node with proper data structure
+          const options = segment.options.map((option, optionIndex) => ({
+            id: `option-${index}-${optionIndex}`,
+            text: option, // This is the key field for display
+            weight: Math.floor(100 / segment.options!.length),
+            hasBranch: true
+          }));
+
+          node = {
+            id: `tutorial-choice-${Date.now()}-${index}`,
+            type: 'weightedChoice',
+            position,
+            data: {
+              nodeType: 'weightedChoice',
+              options,
+              value: JSON.stringify(options, null, 2),
+              text: segment.content, // Ensure text is passed to preview
+              content: segment.content, // Additional content field
+              label: segment.content // Label for preview display
+            }
+          };
+        } else {
+          // Create TextBlock node with proper data structure
+          node = {
+            id: `tutorial-text-${Date.now()}-${index}`,
+            type: 'textBlock',
+            position,
+            data: {
+              nodeType: 'textBlock',
+              text: segment.content, // This is the key field for display
+              value: segment.content,
+              content: segment.content, // Additional content field
+              label: segment.content // Label for preview display
+            }
+          };
+        }

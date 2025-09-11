@@ -288,34 +288,69 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         const segments = result.nodes
           .filter(n => n.type !== 'output')
           .map(node => ({
-            text: node.data.content || node.data.label || '',
+            text: node.text || node.data.content || node.data.label || '',
             type: node.type
           }));
 
         // Create mappings with actual text positions
-        let currentPos = 0;
-        const mappings = result.nodes
+        // First, concatenate all node texts to understand the full coverage
+        const nodeTexts = result.nodes
           .filter(n => n.type !== 'output')
-          .map((node, idx) => {
-            const nodeText = node.data.content || node.data.label || '';
-            // Try to find this text in the original prompt
-            let startIdx = text.indexOf(nodeText, currentPos);
-            if (startIdx === -1) {
-              // If exact text not found, use approximate positioning
-              startIdx = currentPos;
-            }
-            const endIdx = startIdx + nodeText.length;
-            currentPos = endIdx;
+          .map(node => node.text || node.data.content || node.data.label || '');
 
-            return {
-              nodeId: node.id,
-              startIndex: startIdx,
-              endIndex: endIdx,
-              highlightColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'][
-                idx % 4
-              ]
-            };
+        console.log('[PromptDissector] Node texts from LLM:', nodeTexts);
+        console.log('[PromptDissector] Original prompt:', text);
+
+        // Build mappings by finding each node's text in sequence
+        let searchStartPos = 0;
+        const mappings = [];
+
+        for (let idx = 0; idx < nodeTexts.length; idx++) {
+          const nodeText = nodeTexts[idx];
+          const node = result.nodes.filter(n => n.type !== 'output')[idx];
+
+          if (!nodeText || nodeText.trim() === '') {
+            console.warn(`[PromptDissector] Skipping empty node ${idx}`);
+            continue;
+          }
+
+          // Try to find this exact text in the original prompt
+          let startIdx = text.indexOf(nodeText, searchStartPos);
+
+          if (startIdx === -1) {
+            // Try trimmed version
+            const trimmedNodeText = nodeText.trim();
+            startIdx = text.indexOf(trimmedNodeText, searchStartPos);
+
+            if (startIdx === -1) {
+              // Try case-insensitive search
+              const lowerText = text.toLowerCase();
+              const lowerNodeText = trimmedNodeText.toLowerCase();
+              startIdx = lowerText.indexOf(lowerNodeText, searchStartPos);
+
+              if (startIdx === -1) {
+                console.warn(
+                  `[PromptDissector] Could not find "${nodeText}" in prompt, skipping`
+                );
+                continue;
+              }
+            }
+          }
+
+          const endIdx = startIdx + nodeText.length;
+          searchStartPos = endIdx; // Move search position forward
+
+          mappings.push({
+            nodeId: node.id,
+            startIndex: startIdx,
+            endIndex: endIdx,
+            highlightColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'][
+              idx % 4
+            ]
           });
+        }
+
+        console.log('[PromptDissector] Created mappings:', mappings);
 
         // Convert LLM result to expected format
         newAnalysis = {
@@ -331,9 +366,10 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                     : node.type === 'output'
                       ? 'Output'
                       : 'Text',
-              content: node.data.content || node.data.label || '',
+              content: node.text || node.data.content || node.data.label || '',
               metadata: node.data.metadata,
-              getPreviewText: () => node.data.content || node.data.label || ''
+              getPreviewText: () =>
+                node.text || node.data.content || node.data.label || ''
             }
           })),
           edges: result.edges,
