@@ -1,1 +1,35 @@
-placeholder
+{
+  "version": "1.0.0",
+  "name": "Combat Techniques Placeholder",
+  "description": "Placeholder for future combat technique additions",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "System",
+    "category": "weapons-armor-combat",
+    "type": "PLACEHOLDER",
+    "tags": ["placeholder", "combat", "future"],
+    "fragment_id": "placeholder",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "placeholder-node",
+      "type": "WeightedChoice",
+      "name": "Placeholder",
+      "description": "This is a placeholder for future content",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "placeholder content",
+          "weight": 100,
+          "meta": {
+            "note": "This will be replaced with actual combat techniques"
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "groups": []
+}
