@@ -1,5 +1,15 @@
 /* Enhanced Branching Node Styles */
 
+/* Force width for weighted-choice nodes */
+.weighted-choice.enhanced-branching {
+  width: 280px !important;
+  max-width: 280px !important;
+}
+
+.weighted-choice.enhanced-branching .epic1-editable-node-container {
+  width: 100% !important;
+}
+
 /* 3D Flip Animation - Apply to ANY flippable node */
 .epic1-editable-node.flippable {
   transform-style: preserve-3d !important;

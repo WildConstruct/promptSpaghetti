@@ -764,7 +764,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                 </button>
                 <button 
                   className="palette-footer-button"
-                  onClick={() => console.log('Wizard clicked')}
+                  onClick={() => setIsPromptWizardOpen(true)}
                   style={{
                     padding: '10px 12px',
                     background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',

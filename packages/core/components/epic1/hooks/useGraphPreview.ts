@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PreviewEngine } from '../preview/PreviewEngine';
 import { usePreviewTrayStore } from '../../../stores/previewTrayStore';
+import { nodeDataToRuntimeNode } from '../nodes/nodeFactory';
+import type { Epic1Graph } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 
 interface UseGraphPreviewOptions {
   showToast?: (type: 'success' | 'error' | 'info', message: string) => void;
@@ -316,21 +318,23 @@ export function useGraphPreview<NodeData = unknown>(
 function convertToRuntimeGraph<NodeData>(
   nodes: Node<NodeData>[],
   edges: Edge[]
-): {
-  nodes: Map<string, Node<NodeData>>;
-  edges: Array<{
-    id: string;
-    source: string;
-    target: string;
-    sourceHandle?: string | null;
-    targetHandle?: string | null;
-  }>;
-} | null {
+): Epic1Graph | null {
   try {
-    // This should match the logic in the main component
-    // For now, returning a simple structure
+    // Convert React Flow nodes to runtime nodes
+    const runtimeNodes = new Map();
+
+    for (const node of nodes) {
+      const runtimeNode = nodeDataToRuntimeNode(node as Node);
+      if (runtimeNode) {
+        runtimeNodes.set(node.id, runtimeNode);
+      } else {
+        console.warn('[Preview] Could not convert node:', node.id, node.type);
+      }
+    }
+
+    // Return Epic1Graph format
     return {
-      nodes: new Map(nodes.map(n => [n.id, n])),
+      nodes: runtimeNodes,
       edges: edges.map(e => ({
         id: e.id,
         source: e.source,
