@@ -109,7 +109,11 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   useEffect(() => {
     setOpen(true);
     setMinimized(false);
-  }, [setOpen, setMinimized]);
+    // Also set a default height if none exists
+    if (!height) {
+      setHeight(defaultHeight);
+    }
+  }, [setOpen, setMinimized, setHeight, height, defaultHeight]);
 
   // Clear refined results when switching modes
   useEffect(() => {
@@ -262,7 +266,8 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   }, [isExecuting, results.length, isOpen, setOpen, setMinimized]);
 
   const getTrayHeight = () => {
-    if (!isOpen) return 0;
+    // Since parent controls visibility through conditional rendering,
+    // we should always show with proper height when rendered
     if (minimized) return TRAY_HEADER_HEIGHT;
     if (!resizable) {
       // Use fixed height when not resizable
@@ -275,7 +280,8 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
     return clamped;
   };
 
-  const trayClassName = `preview-tray ${isOpen ? 'open' : 'closed'} ${minimized ? 'minimized' : ''}`;
+  // Always use 'open' class since parent controls visibility through conditional rendering
+  const trayClassName = `preview-tray open ${minimized ? 'minimized' : ''}`;
 
   return (
     <div
