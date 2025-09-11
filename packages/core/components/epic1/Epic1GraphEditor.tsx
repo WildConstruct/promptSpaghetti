@@ -1545,62 +1545,14 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
       if (presetData) {
         try {
-          const preset = JSON.parse(presetData);
+          const meta = JSON.parse(presetData);
           // Calculate graph position
           const pos = reactFlowInstance
             ? reactFlowInstance.screenToFlowPosition({ x: event.clientX, y: event.clientY })
             : { x: 250, y: 250 };
-
-          // Create a node from the preset
-          const nodeId = `preset-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-          const nodeType = preset.nodeType || 'textBlock';
-
-          let nodeData: any = {
-            nodeType: nodeType
-          };
-
-          // Set up node data based on preset type
-          if (nodeType === 'textBlock') {
-            nodeData = {
-              ...nodeData,
-              value: preset.value || '',
-              content: preset.value || '',
-              text: preset.value || ''
-            };
-          } else if (nodeType === 'weightedChoice') {
-            nodeData = {
-              ...nodeData,
-              options: preset.value?.options || [{ id: 'opt-1', text: 'Option 1', weight: 100, hasBranch: false }],
-              value: JSON.stringify(preset.value?.options || [])
-            };
-          } else if (nodeType === 'setVariable') {
-            nodeData = {
-              ...nodeData,
-              variableName: preset.value?.name || 'variable',
-              variableValue: preset.value?.value || ''
-            };
-          } else if (nodeType === 'concat') {
-            nodeData = {
-              ...nodeData,
-              separator: preset.value?.separator || ' ',
-              value: preset.value?.separator || ' '
-            };
-          } else if (nodeType === 'output') {
-            nodeData = {
-              ...nodeData,
-              outputName: preset.value?.outputName || 'output'
-            };
-          }
-
-          const newNode: Node<EditableNodeData> = {
-            id: nodeId,
-            type: nodeType,
-            position: pos,
-            data: nodeData
-          };
-
-          setNodes((nds) => [...nds, newNode]);
-          showToast('success', `Added ${preset.name} node from asset library`);
+          
+          // Use insertPresetByMeta to properly load PSG/PSGLib content
+          void insertPresetByMeta(meta, pos);
           return;
         } catch (e) {
           console.error('[Epic1GraphEditor] Invalid preset drop payload:', e);
