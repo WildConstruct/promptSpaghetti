@@ -64,15 +64,48 @@ export const usePromptParsing = ({
               y: 100 + index * 150
             };
 
+            // Extract the actual node from the wrapper
+            const nodeInternal = genNode.node;
+
+            // Map nodeType to appropriate React Flow type
+            let nodeType = 'textBlock'; // default
+            if (nodeInternal.nodeType === 'Choice') {
+              nodeType = 'weightedChoice';
+            } else if (nodeInternal.nodeType === 'Variable') {
+              nodeType = 'variable';
+            } else if (nodeInternal.nodeType === 'Output') {
+              nodeType = 'output';
+            }
+
+            // Get the display text
+            const displayText = nodeInternal.getPreviewText
+              ? nodeInternal.getPreviewText()
+              : '';
+
             const newNode: Node = {
-              id: genNode.id,
-              type: genNode.type || 'BaseEditableNode',
+              id: nodeInternal.id,
+              type: nodeType,
               position,
               data: {
-                ...genNode.data,
-                label: genNode.name || genNode.id,
-                content: genNode.content || '',
-                nodeType: genNode.nodeType || genNode.type || 'default'
+                label: displayText,
+                text: displayText,
+                content: displayText,
+                nodeType: nodeType,
+                // For Variable nodes, include the variable name
+                ...(nodeInternal.variableName && {
+                  variableName: nodeInternal.variableName
+                }),
+                // For Choice nodes, create options
+                ...(nodeInternal.nodeType === 'Choice' && {
+                  options: [
+                    {
+                      id: `option-0`,
+                      text: displayText,
+                      weight: 100,
+                      hasBranch: false
+                    }
+                  ]
+                })
               }
             };
 
@@ -81,7 +114,7 @@ export const usePromptParsing = ({
         );
 
         // Create edges from analysis
-        if (promptAnalysis.edges) {
+        if (promptAnalysis.edges && promptAnalysis.edges.length > 0) {
           promptAnalysis.edges.forEach((edge: any) => {
             newEdges.push({
               id: edge.id || `${edge.source}-${edge.target}`,
@@ -90,6 +123,16 @@ export const usePromptParsing = ({
               type: edge.type || 'default'
             });
           });
+        } else if (newNodes.length > 1) {
+          // If no edges provided, create a simple chain connecting the nodes
+          for (let i = 0; i < newNodes.length - 1; i++) {
+            newEdges.push({
+              id: `edge-${i}`,
+              source: newNodes[i].id,
+              target: newNodes[i + 1].id,
+              type: 'default'
+            });
+          }
         }
 
         // Call the callback with created nodes

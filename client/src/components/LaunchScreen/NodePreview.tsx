@@ -186,15 +186,18 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
         onPaneClick={onPaneClick}
         nodeTypes={nodeTypes}
         fitView
-        attributionPosition="bottom-left"
+        proOptions={{ hideAttribution: true }}
       >
         <Background color="#333" gap={16} size={1} />
         <Controls />
         <MiniMap
           nodeColor={node => node.data?.color || '#666'}
           style={{
-            backgroundColor: '#1a1a1a'
+            backgroundColor: 'rgba(20, 22, 28, 0.95)',
+            width: 120,
+            height: 80
           }}
+          maskColor="rgba(103, 126, 234, 0.15)"
         />
       </ReactFlow>
     </div>

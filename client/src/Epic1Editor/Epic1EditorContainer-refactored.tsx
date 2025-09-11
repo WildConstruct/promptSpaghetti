@@ -75,6 +75,17 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   );
   const [editorReady, setEditorReady] = useState<boolean>(!hasInitialInput);
 
+  // Set editor ready after mount
+  useEffect(() => {
+    if (!editorReady && hasInitialInput) {
+      // Small delay to ensure components are mounted
+      const timer = setTimeout(() => {
+        setEditorReady(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [editorReady, hasInitialInput]);
+
   // State for current graph
   const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
