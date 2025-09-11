@@ -1,5 +1,4 @@
 import React from 'react';
-import { useStore } from 'reactflow';
 
 interface SafeReactFlowWrapperProps {
   children: React.ReactNode;
@@ -9,22 +8,15 @@ interface SafeReactFlowWrapperProps {
 /**
  * Wrapper component that ensures ReactFlow is initialized before rendering children
  * Prevents "Cannot read properties of undefined" errors
+ * 
+ * Note: This wrapper should NOT use useStore outside of ReactFlowProvider context
+ * Instead, it simply renders children directly as ReactFlow manages its own initialization
  */
 export const SafeReactFlowWrapper: React.FC<SafeReactFlowWrapperProps> = ({ 
   children, 
   fallback = null 
 }) => {
-  try {
-    // Try to access the store to check if ReactFlow is initialized
-    const isInitialized = useStore((state) => state?.viewport !== undefined);
-    
-    if (!isInitialized) {
-      return <>{fallback}</>;
-    }
-    
-    return <>{children}</>;
-  } catch (error) {
-    // If useStore throws, ReactFlow isn't ready yet
-    return <>{fallback}</>;
-  }
+  // Simply render children - ReactFlow will handle its own initialization
+  // The useStore hook can only be used inside ReactFlow components, not outside
+  return <>{children}</>;
 };

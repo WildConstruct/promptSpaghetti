@@ -66,6 +66,7 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
   }, [position, collapsed, onCollapsedChange]);
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
+    console.log('[NodePalette] Drag started for node type:', nodeType);
     debugLogEpic1('[NodePalette] Drag started for node type:', nodeType);
     // Use text/plain as primary for better compatibility
     event.dataTransfer.setData('text/plain', nodeType);
