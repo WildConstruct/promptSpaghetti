@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useMemo,
+  useEffect,
+  useRef
+} from 'react';
 import ReactFlow, {
   Edge,
   Node,
@@ -14,7 +20,7 @@ import ReactFlow, {
   MiniMap,
   ConnectionLineType,
   SelectionMode,
-  BackgroundVariant,
+  BackgroundVariant
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { DndProvider } from 'react-dnd';
@@ -42,7 +48,10 @@ import { useGraphPreview } from './hooks/useGraphPreview';
 // Components
 import { GraphModals } from './components/GraphModals';
 import { GraphContextMenus } from './components/GraphContextMenus';
-import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
+import {
+  ConnectionFeedback,
+  useConnectionValidation
+} from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { PanZoomControls } from './PanZoomControls';
@@ -54,8 +63,14 @@ import { NodeTetris } from './NodeTetris';
 import { NodeToolbar } from './NodeToolbar';
 import { NodePalette } from './NodePalette';
 import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
-import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
-import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
+import {
+  SelectionFeedback,
+  useNodeInteractions
+} from './interactions/NodeInteractionEnhancer';
+import {
+  MicroInteraction,
+  useMicroInteractions
+} from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
 import { edgeTypes } from './EdgeRenderingFix';
 import { AuthModal } from '../auth/AuthModal';
@@ -73,11 +88,11 @@ import './PanZoomControls.css';
 const IntelligenceProvider = ({ children }: any) => children;
 const NeatenSettingsProvider = ({ children }: any) => children;
 const HistoryPalette = () => null;
-const useAutoLayout = () => ({ 
-  neatenSelection: () => {}, 
-  neatenAll: () => {}, 
-  cleanupNodes: () => {}, 
-  cleanupAll: () => {} 
+const useAutoLayout = () => ({
+  neatenSelection: () => {},
+  neatenAll: () => {},
+  cleanupNodes: () => {},
+  cleanupAll: () => {}
 });
 
 export interface Epic1GraphEditorProps {
@@ -110,19 +125,21 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   previewDebounceDelay = 300,
   previewSeeds,
   showAssetLibrary = true,
-  assetLibraryPosition = 'left',
+  assetLibraryPosition = 'left'
 }) => {
   // Node types based on asset library visibility
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
 
   // React Flow instance
-  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<ReactFlowInstance | null>(null);
 
   // Graph persistence
   const { persistedState } = useGraphPersistence([], [], {
     autoSave: false,
-    onLoadSuccess: (state) => console.log('Restored graph from local storage'),
-    onLoadError: (error) => console.error('Failed to load persisted state:', error)
+    onLoadSuccess: state => console.log('Restored graph from local storage'),
+    onLoadError: error =>
+      console.error('Failed to load persisted state:', error)
   });
 
   // Initialize nodes and edges with persisted state or initial props
@@ -138,9 +155,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   // Graph history (undo/redo)
   const { undo, redo, canUndo, canRedo, clearHistory } = useGraphHistory(
-    nodes, 
-    edges, 
-    setNodes, 
+    nodes,
+    edges,
+    setNodes,
     setEdges,
     { maxHistorySize: 50, debounceDelay: 500 }
   );
@@ -168,7 +185,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     onEdgesDelete
   } = useNodeOperations(nodes, edges, setNodes, setEdges, reactFlowInstance, {
     showToast,
-    onNodeSelect: (nodeId) => console.log('Node selected:', nodeId)
+    onNodeSelect: nodeId => console.log('Node selected:', nodeId)
   });
 
   // Selection management
@@ -190,26 +207,15 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   } = useGraphImportExport(nodes, edges, setNodes, setEdges, { showToast });
 
   // View controls
-  const {
-    zoomIn,
-    zoomOut,
-    resetZoom,
-    fitView,
-    panToCenter,
-    panToNode
-  } = useGraphViewControls(reactFlowInstance, { showToast });
+  const { zoomIn, zoomOut, resetZoom, fitView, panToCenter, panToNode } =
+    useGraphViewControls(reactFlowInstance, { showToast });
 
   // Drag and drop
-  const {
-    isDraggingOver,
-    onDragOver,
-    onDragLeave,
-    onDragEnter,
-    onDrop
-  } = useGraphDragDrop(reactFlowInstance, setNodes, {
-    showToast,
-    onNodeCreate: (node) => console.log('Node created via drag:', node)
-  });
+  const { isDraggingOver, onDragOver, onDragLeave, onDragEnter, onDrop } =
+    useGraphDragDrop(reactFlowInstance, setNodes, {
+      showToast,
+      onNodeCreate: node => console.log('Node created via drag:', node)
+    });
 
   // Keyboard shortcuts
   useGraphKeyboardShortcuts(
@@ -228,9 +234,24 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     {
       enabled: true,
       shortcuts: [
-        { key: 's', meta: true, action: () => exportGraph(), description: 'Save graph' },
-        { key: 'o', meta: true, action: () => triggerImport(), description: 'Open graph' },
-        { key: 'e', meta: true, action: () => exportSelected(), description: 'Export selection' }
+        {
+          key: 's',
+          meta: true,
+          action: () => exportGraph(),
+          description: 'Save graph'
+        },
+        {
+          key: 'o',
+          meta: true,
+          action: () => triggerImport(),
+          description: 'Open graph'
+        },
+        {
+          key: 'e',
+          meta: true,
+          action: () => exportSelected(),
+          description: 'Export selection'
+        }
       ]
     }
   );
@@ -248,7 +269,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     exportPreviewResults
   } = useGraphPreview(nodes, edges, {
     showToast,
-    defaultSeeds: previewSeeds ? previewSeeds.map(s => Number(s)) : [1234, 5678, 9012],
+    defaultSeeds: previewSeeds
+      ? previewSeeds.map(s => Number(s))
+      : [1234, 5678, 9012],
     debounceDelay: previewDebounceDelay
   });
 
@@ -275,32 +298,37 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   });
 
   // Layout utilities
-  const { neatenSelection, neatenAll, cleanupNodes, cleanupAll } = useAutoLayout();
+  const { neatenSelection, neatenAll, cleanupNodes, cleanupAll } =
+    useAutoLayout();
 
   // Micro interactions
   const { addNodeWithBounce, highlightConnection } = useNodeInteractions();
   const { interactions, trigger } = useMicroInteractions();
 
   // Connection validation
-  const { isValidConnection } = useConnectionValidation(nodes, edges, (error) => {
+  const { isValidConnection } = useConnectionValidation(nodes, edges, error => {
     showToast('error', error);
   });
 
   // UI State
   const [nodePaletteCollapsed, setNodePaletteCollapsed] = useState(false);
   const [contextMenuPosition, setContextMenuPosition] = useState<any>(null);
-  const [contextMenuNodeId, setContextMenuNodeId] = useState<string | null>(null);
+  const [contextMenuNodeId, setContextMenuNodeId] = useState<string | null>(
+    null
+  );
   const [isPromptWizardOpen, setIsPromptWizardOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [pendingWizardNodes, setPendingWizardNodes] = useState<any>(null);
-  const [saveAsPresetNodeId, setSaveAsPresetNodeId] = useState<string | null>(null);
+  const [saveAsPresetNodeId, setSaveAsPresetNodeId] = useState<string | null>(
+    null
+  );
   const [customPresets, setCustomPresets] = useState<any[]>([]);
   const [historyVisible, setHistoryVisible] = useState(false);
 
   // Enhanced nodes with edit handlers
   const enhancedNodes = useMemo(() => {
-    return nodes.map((node) => ({
+    return nodes.map(node => ({
       ...node,
       type: node.type || 'textBlock',
       position: node.position || { x: 0, y: 0 },
@@ -341,165 +369,187 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   }, []);
 
   // Wrapper for nodes change to support undo/redo
-  const onNodesChange = useCallback((changes: any[]) => {
-    onNodesChangeBase(changes);
-  }, [onNodesChangeBase]);
+  const onNodesChange = useCallback(
+    (changes: any[]) => {
+      onNodesChangeBase(changes);
+    },
+    [onNodesChangeBase]
+  );
 
   // Wrapper for edges change to support undo/redo
-  const onEdgesChange = useCallback((changes: any[]) => {
-    onEdgesChangeBase(changes);
-  }, [onEdgesChangeBase]);
+  const onEdgesChange = useCallback(
+    (changes: any[]) => {
+      onEdgesChangeBase(changes);
+    },
+    [onEdgesChangeBase]
+  );
 
   const content = (
-    <div className="epic1-graph-editor" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div
+      className="epic1-graph-editor"
+      style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
+    >
       {/* Main horizontal container for everything except preview tray */}
-      <div style={{ flex: showPreview ? '1 1 auto' : '1', display: 'flex', overflow: 'hidden', minHeight: 0 }}>
+      <div
+        style={{
+          flex: showPreview ? '1 1 auto' : '1',
+          display: 'flex',
+          overflow: 'hidden',
+          minHeight: 0
+        }}
+      >
         {/* Tabbed Side Panel with Asset Library */}
         {showAssetLibrary && (
-        <TabbedSidePanel
-          position={assetLibraryPosition}
-          nodes={nodes}
-          edges={edges}
-          setNodes={setNodes}
-          setEdges={setEdges}
-          onPresetSelect={(preset: any) => {
-            console.log('Preset selected:', preset);
-          }}
-          selectedNodeId={selectedNodeId}
-          onNodeSelect={(nodeId) => console.log('Node selected from library:', nodeId)}
-        />
-      )}
-
-      {/* Main Graph Canvas */}
-      <div className="graph-canvas-container" style={{ flex: 1, position: 'relative' }}>
-        <SafeReactFlowWrapper>
-          <ReactFlow
-            nodes={enhancedNodes}
+          <TabbedSidePanel
+            position={assetLibraryPosition}
+            nodes={nodes}
             edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onInit={onInit}
-            onNodeClick={handleNodeClick}
-            onPaneClick={handlePaneClick}
-            onNodesDelete={onNodesDelete}
-            onEdgesDelete={onEdgesDelete}
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-            onDragEnter={onDragEnter}
-            onDrop={onDrop}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            connectionMode={ConnectionMode.Loose}
-            connectionLineType={ConnectionLineType.SmoothStep}
-            selectionMode={SelectionMode.Partial}
-            fitView
-            snapToGrid
-            snapGrid={[15, 15]}
-            deleteKeyCode={['Delete', 'Backspace']}
-            multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
-            panOnScroll
-            panOnDrag={[1, 2]}
-            zoomOnScroll
-            zoomOnDoubleClick
-            isValidConnection={isValidConnection}
-          >
-            <Background variant={BackgroundVariant.Dots} gap={15} size={1} />
-            <Controls showInteractive={false} />
-            <MiniMap pannable zoomable />
-            
-            {/* Additional UI Elements */}
-            <Panel position="top-left">
-              <NodePalette 
-                collapsed={false}
-                onCollapsedChange={setNodePaletteCollapsed} />
-            </Panel>
-            
-            <Panel position="top-right">
-              <div className="panel-controls">
-                <button onClick={handleExecute} className="execute-button">
-                  Execute
-                </button>
-                <button onClick={togglePreview} className="preview-button">
-                  {isPreviewVisible ? 'Hide' : 'Show'} Preview
-                </button>
-              </div>
-            </Panel>
+            setNodes={setNodes}
+            setEdges={setEdges}
+            onPresetSelect={(preset: any) => {
+              console.log('Preset selected:', preset);
+            }}
+            selectedNodeId={selectedNodeId}
+            onNodeSelect={nodeId =>
+              console.log('Node selected from library:', nodeId)
+            }
+          />
+        )}
 
-            <Panel position="bottom-left">
-              <PanZoomControls />
-            </Panel>
+        {/* Main Graph Canvas */}
+        <div
+          className="graph-canvas-container"
+          style={{ flex: 1, position: 'relative' }}
+        >
+          <SafeReactFlowWrapper>
+            <ReactFlow
+              nodes={enhancedNodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onInit={onInit}
+              onNodeClick={handleNodeClick}
+              onPaneClick={handlePaneClick}
+              onNodesDelete={onNodesDelete}
+              onEdgesDelete={onEdgesDelete}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              onDragEnter={onDragEnter}
+              onDrop={onDrop}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              connectionMode={ConnectionMode.Loose}
+              connectionLineType={ConnectionLineType.SmoothStep}
+              selectionMode={SelectionMode.Partial}
+              fitView
+              snapToGrid
+              snapGrid={[15, 15]}
+              deleteKeyCode={['Delete', 'Backspace']}
+              multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
+              panOnScroll
+              panOnDrag={[1, 2]}
+              zoomOnScroll
+              zoomOnDoubleClick
+              isValidConnection={isValidConnection}
+            >
+              <Background variant={BackgroundVariant.Dots} gap={15} size={1} />
+              <Controls showInteractive={false} />
+              <MiniMap pannable zoomable />
 
-            <Panel position="bottom-right">
-              <EdgeRoutingControls />
-            </Panel>
+              {/* Additional UI Elements */}
+              <Panel position="top-left">
+                <NodePalette
+                  collapsed={false}
+                  onCollapsedChange={setNodePaletteCollapsed}
+                />
+              </Panel>
 
-            {/* Magnetic Snap Handler */}
-            <MagneticSnapHandler nodes={nodes} edges={edges} />
-            
-            {/* Selection Feedback */}
-            <SelectionFeedback nodes={nodes} edges={edges} />
-            
-            {/* Connection Feedback */}
-            <ConnectionFeedback />
-            
-            {/* Micro Interactions */}
-            {interactions.map((interaction) => (
-              <MicroInteraction key={interaction.id} {...interaction} />
-            ))}
-          </ReactFlow>
-        </SafeReactFlowWrapper>
+              <Panel position="top-right">
+                <div className="panel-controls">
+                  <button onClick={handleExecute} className="execute-button">
+                    Execute
+                  </button>
+                  <button onClick={togglePreview} className="preview-button">
+                    {isPreviewVisible ? 'Hide' : 'Show'} Preview
+                  </button>
+                </div>
+              </Panel>
 
-        {/* Context Menus */}
-        <GraphContextMenus
-          contextMenuPosition={contextMenuPosition}
-          contextMenuNodeId={contextMenuNodeId}
-          setContextMenuPosition={setContextMenuPosition}
-          setContextMenuNodeId={setContextMenuNodeId}
-          nodes={nodes}
-          edges={edges}
-          onDuplicate={duplicateNodes}
-          onDelete={deleteSelectedNodes}
-          onSelectAll={selectAll}
-          onCopy={() => copyToClipboard(true)}
-          onPaste={pasteFromClipboard}
-          onCreatePostIt={(position) => createNode('postItNote', position)}
-          onGroupNodes={(nodes) => console.log('Group nodes:', nodes)}
-          onUngroupNodes={(nodes) => console.log('Ungroup nodes:', nodes)}
-          onSaveAsPreset={() => setSaveAsPresetNodeId(contextMenuNodeId)}
-          reactFlowInstance={reactFlowInstance}
-        />
+              <Panel position="bottom-left">
+                <PanZoomControls />
+              </Panel>
 
-        {/* Modals */}
-        <GraphModals
-          isPromptWizardOpen={isPromptWizardOpen}
-          setIsPromptWizardOpen={setIsPromptWizardOpen}
-          isAuthModalOpen={isAuthModalOpen}
-          setIsAuthModalOpen={setIsAuthModalOpen}
-          saveAsPresetNodeId={saveAsPresetNodeId}
-          setSaveAsPresetNodeId={setSaveAsPresetNodeId}
-          pendingWizardNodes={pendingWizardNodes}
-          setPendingWizardNodes={setPendingWizardNodes}
-          nodes={nodes}
-          edges={edges}
-          setNodes={setNodes}
-          setEdges={setEdges}
-          customPresets={customPresets}
-          setCustomPresets={setCustomPresets}
-          currentUser={currentUser}
-          setCurrentUser={setCurrentUser}
-        />
+              <Panel position="bottom-right">
+                <EdgeRoutingControls />
+              </Panel>
 
-        {/* Keyboard Shortcuts Display */}
-        <KeyboardShortcuts />
+              {/* Magnetic Snap Handler */}
+              <MagneticSnapHandler nodes={nodes} edges={edges} />
 
-        {/* History Palette */}
-        {historyVisible && <HistoryPalette />}
+              {/* Selection Feedback */}
+              <SelectionFeedback nodes={nodes} edges={edges} />
 
-        {/* Connection Toast */}
-        <ConnectionToast toasts={toasts} dismissToast={dismissToast} />
+              {/* Connection Feedback */}
+              <ConnectionFeedback />
+
+              {/* Micro Interactions */}
+              {interactions.map(interaction => (
+                <MicroInteraction key={interaction.id} {...interaction} />
+              ))}
+            </ReactFlow>
+          </SafeReactFlowWrapper>
+
+          {/* Context Menus */}
+          <GraphContextMenus
+            contextMenuPosition={contextMenuPosition}
+            contextMenuNodeId={contextMenuNodeId}
+            setContextMenuPosition={setContextMenuPosition}
+            setContextMenuNodeId={setContextMenuNodeId}
+            nodes={nodes}
+            edges={edges}
+            onDuplicate={duplicateNodes}
+            onDelete={deleteSelectedNodes}
+            onSelectAll={selectAll}
+            onCopy={() => copyToClipboard(true)}
+            onPaste={pasteFromClipboard}
+            onCreatePostIt={position => createNode('postItNote', position)}
+            onGroupNodes={nodes => console.log('Group nodes:', nodes)}
+            onUngroupNodes={nodes => console.log('Ungroup nodes:', nodes)}
+            onSaveAsPreset={() => setSaveAsPresetNodeId(contextMenuNodeId)}
+            reactFlowInstance={reactFlowInstance}
+          />
+
+          {/* Modals */}
+          <GraphModals
+            isPromptWizardOpen={isPromptWizardOpen}
+            setIsPromptWizardOpen={setIsPromptWizardOpen}
+            isAuthModalOpen={isAuthModalOpen}
+            setIsAuthModalOpen={setIsAuthModalOpen}
+            saveAsPresetNodeId={saveAsPresetNodeId}
+            setSaveAsPresetNodeId={setSaveAsPresetNodeId}
+            pendingWizardNodes={pendingWizardNodes}
+            setPendingWizardNodes={setPendingWizardNodes}
+            nodes={nodes}
+            edges={edges}
+            setNodes={setNodes}
+            setEdges={setEdges}
+            customPresets={customPresets}
+            setCustomPresets={setCustomPresets}
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+          />
+
+          {/* Keyboard Shortcuts Display */}
+          <KeyboardShortcuts />
+
+          {/* History Palette */}
+          {historyVisible && <HistoryPalette />}
+
+          {/* Connection Toast */}
+          <ConnectionToast toasts={toasts} dismissToast={dismissToast} />
+        </div>
       </div>
-    </div>
 
       {/* Preview Tray - As proper sibling that pushes content up */}
       {showPreview && (
@@ -522,7 +572,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             setTetrisMode(false);
             showToast('info', 'Exited Tetris mode');
           }}
-          onScoreUpdate={(score) => console.log('Tetris score:', score)}
+          onScoreUpdate={score => console.log('Tetris score:', score)}
         />
       )}
     </div>
@@ -536,7 +586,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 };
 
 // Export with providers
-const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
+const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = props => {
   return (
     <IntelligenceProvider>
       <ReactFlowProvider>

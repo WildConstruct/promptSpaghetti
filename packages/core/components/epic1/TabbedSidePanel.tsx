@@ -29,7 +29,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   onPresetDrag,
   onPresetSelect,
   onInsert,
-  position = 'right',
+  position = 'left',
   defaultTab = null,
   showAssets = true,
   showPreview = true,

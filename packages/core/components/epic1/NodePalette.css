@@ -1,23 +1,21 @@
 .node-palette {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  background: #1a1a1a;
-  border: 1px solid #333;
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid rgba(103, 126, 234, 0.3);
+  border-radius: 8px;
   transition: width 0.3s ease;
-  z-index: 10;
+  z-index: 100;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .node-palette.left {
-  left: 0;
-  border-left: none;
+  /* Remove absolute positioning - let React Flow Panel handle it */
 }
 
 .node-palette.right {
-  right: 0;
-  border-right: none;
+  /* Remove absolute positioning - let React Flow Panel handle it */
 }
 
 .node-palette:not(.collapsed) {
@@ -32,8 +30,9 @@
   display: flex;
   align-items: center;
   padding: 12px;
-  border-bottom: 1px solid #333;
-  background: #222;
+  border-bottom: 1px solid rgba(103, 126, 234, 0.3);
+  background: rgba(30, 32, 38, 0.95);
+  border-radius: 8px 8px 0 0;
 }
 
 .collapse-button {

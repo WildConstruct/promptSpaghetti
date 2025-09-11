@@ -5,7 +5,10 @@
   gap: 0; /* Remove gap to attach tabs to text area */
   height: 100%;
   position: relative;
-  /* Remove excessive styling - let parent control appearance */
+  background: rgba(20, 22, 28, 0.6);
+  border: 1px solid rgba(103, 126, 234, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
 }
 
 /* Toolbar styles */

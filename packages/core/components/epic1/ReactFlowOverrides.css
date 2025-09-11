@@ -49,6 +49,17 @@
   /* Only override if it's a ReactFlow node */
 }
 
+/* Ensure React Flow panels are visible */
+.react-flow__panel {
+  z-index: 5 !important;
+  pointer-events: auto !important;
+}
+
+.react-flow__panel.top-left {
+  top: 10px;
+  left: 10px;
+}
+
 .react-flow__node[style*="box-shadow"] {
   box-shadow: none !important;
 }
