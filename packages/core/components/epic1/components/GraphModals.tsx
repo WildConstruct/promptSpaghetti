@@ -1,37 +1,49 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 import { EditableNodeData } from '../nodes';
-import { PromptWizard } from '../PromptWizard';
-import { AuthModal } from '../AuthModal';
+// PromptWizard component doesn't exist yet - placeholder
+const PromptWizard = ({ isOpen, onClose, onComplete }: any) => {
+  if (!isOpen) return null;
+  return (
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000 }}>
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '20px', borderRadius: '8px' }}>
+        <h2>Prompt Wizard (Coming Soon)</h2>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+};
+import { AuthModal } from '../../auth/AuthModal';
 import { SaveAsPresetDialog } from '../asset-library/SaveAsPresetDialog';
 
 interface GraphModalsProps {
   // Prompt Wizard Modal
   isPromptWizardOpen: boolean;
-  onPromptWizardClose: () => void;
-  onPromptWizardComplete: (nodes: Node<EditableNodeData>[], edges: Edge[]) => void;
+  setIsPromptWizardOpen: (value: boolean) => void;
   
   // Auth Modal
   isAuthModalOpen: boolean;
-  onAuthModalClose: () => void;
-  onAuthSuccess: (user: any) => void;
+  setIsAuthModalOpen: (value: boolean) => void;
   currentUser: any;
+  setCurrentUser: (user: any) => void;
   
   // Save as Preset Dialog
   saveAsPresetNodeId: string | null;
-  onSaveAsPresetClose: () => void;
-  onSaveAsPresetComplete: (name: string, description: string, tags: string[]) => void;
+  setSaveAsPresetNodeId: (id: string | null) => void;
+  
+  // Graph data
   nodes: Node<EditableNodeData>[];
   edges: Edge[];
+  setNodes: React.Dispatch<React.SetStateAction<Node<EditableNodeData>[]>>;
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
   
-  // Pending Wizard Nodes (overlay)
-  pendingWizardNodes: { nodes: Node<EditableNodeData>[], edges: Edge[] } | null;
-  onPendingWizardCancel: () => void;
-  onPendingWizardAdd: () => void;
-  onPendingWizardReplace: () => void;
+  // Pending Wizard Nodes
+  pendingWizardNodes: any;
+  setPendingWizardNodes: (value: any) => void;
   
-  // Toast function for feedback
-  showToast: (type: 'success' | 'error' | 'info', message: string) => void;
+  // Custom presets
+  customPresets: any[];
+  setCustomPresets: (presets: any[]) => void;
 }
 
 /**
@@ -39,22 +51,21 @@ interface GraphModalsProps {
  */
 export const GraphModals: React.FC<GraphModalsProps> = ({
   isPromptWizardOpen,
-  onPromptWizardClose,
-  onPromptWizardComplete,
+  setIsPromptWizardOpen,
   isAuthModalOpen,
-  onAuthModalClose,
-  onAuthSuccess,
+  setIsAuthModalOpen,
   currentUser,
+  setCurrentUser,
   saveAsPresetNodeId,
-  onSaveAsPresetClose,
-  onSaveAsPresetComplete,
+  setSaveAsPresetNodeId,
   nodes,
   edges,
+  setNodes,
+  setEdges,
   pendingWizardNodes,
-  onPendingWizardCancel,
-  onPendingWizardAdd,
-  onPendingWizardReplace,
-  showToast
+  setPendingWizardNodes,
+  customPresets,
+  setCustomPresets
 }) => {
   return (
     <>
@@ -62,18 +73,22 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
       {isPromptWizardOpen && (
         <PromptWizard
           isOpen={isPromptWizardOpen}
-          onClose={onPromptWizardClose}
-          onComplete={onPromptWizardComplete}
+          onClose={() => setIsPromptWizardOpen(false)}
+          onComplete={(nodes: Node[], edges: Edge[]) => {
+            setNodes(prevNodes => [...prevNodes, ...nodes]);
+            setEdges(prevEdges => [...prevEdges, ...edges]);
+            setIsPromptWizardOpen(false);
+          }}
         />
       )}
       
       {/* Auth Modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
-        onClose={onAuthModalClose}
+        onClose={() => setIsAuthModalOpen(false)}
         onSuccess={(user) => {
-          onAuthSuccess(user);
-          showToast('success', `Welcome ${user.email}!`);
+          setCurrentUser(user);
+          setIsAuthModalOpen(false);
         }}
       />
       
@@ -81,8 +96,21 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
       {saveAsPresetNodeId && (
         <SaveAsPresetDialog
           isOpen={!!saveAsPresetNodeId}
-          onClose={onSaveAsPresetClose}
-          onSave={onSaveAsPresetComplete}
+          onClose={() => setSaveAsPresetNodeId(null)}
+          onSave={(name: string, description: string, tags: string[]) => {
+            // Handle save preset logic
+            const newPreset = {
+              id: Date.now().toString(),
+              name,
+              description,
+              tags,
+              nodes,
+              edges,
+              nodeId: saveAsPresetNodeId
+            };
+            setCustomPresets([...customPresets, newPreset]);
+            setSaveAsPresetNodeId(null);
+          }}
           nodes={nodes}
           edges={edges}
           selectedNodeId={saveAsPresetNodeId}
@@ -107,14 +135,14 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
           }}
         >
           <div style={{ marginBottom: '12px', fontSize: '16px', fontWeight: 'bold', color: '#fff' }}>
-            🪄 Prompt Wizard created {pendingWizardNodes.nodes.length} nodes
+            🪄 Prompt Wizard created {pendingWizardNodes.nodes?.length || 0} nodes
           </div>
           <div style={{ marginBottom: '16px', fontSize: '14px', color: '#94a3b8' }}>
             Would you like to add these to your existing graph or replace everything?
           </div>
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
             <button
-              onClick={onPendingWizardCancel}
+              onClick={() => setPendingWizardNodes(null)}
               style={{
                 padding: '8px 16px',
                 background: '#475569',
@@ -127,7 +155,13 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
               Cancel
             </button>
             <button
-              onClick={onPendingWizardAdd}
+              onClick={() => {
+                if (pendingWizardNodes) {
+                  setNodes(prev => [...prev, ...pendingWizardNodes.nodes]);
+                  setEdges(prev => [...prev, ...pendingWizardNodes.edges]);
+                  setPendingWizardNodes(null);
+                }
+              }}
               style={{
                 padding: '8px 16px',
                 background: '#2563eb',
@@ -141,7 +175,13 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
               Add to Graph
             </button>
             <button
-              onClick={onPendingWizardReplace}
+              onClick={() => {
+                if (pendingWizardNodes) {
+                  setNodes(pendingWizardNodes.nodes);
+                  setEdges(pendingWizardNodes.edges);
+                  setPendingWizardNodes(null);
+                }
+              }}
               style={{
                 padding: '8px 16px',
                 background: '#dc2626',

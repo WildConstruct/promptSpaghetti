@@ -1,58 +1,96 @@
- Supabase Configuration Test:
- URL configured: true
- Anon Key configured: true
- Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
-ji @ index-B6RT7Qwr.js:53
-testSupabase.ts:15 ✅ Supabase client created successfully
-IntelligenceContext.tsx:60 [IntelligenceContext] Stored consent: true
-IntelligenceContext.tsx:69 [IntelligenceContext] Services memo - consent given: true
-IntelligenceContext.tsx:84 [IntelligenceContext] Initializing services...
-IntelligenceContext.tsx:85 [IntelligenceContext] Available env vars: Object
-IntelligenceContext.tsx:99 [IntelligenceContext] API key sources: Object
-IntelligenceContext.tsx:107 [IntelligenceContext] No API key found. Using offline mode.
-(anonymous) @ IntelligenceContext.tsx:107
-IntelligenceContext.tsx:108 [IntelligenceContext] To use AI features, set your OpenRouter API key:
-IntelligenceContext.tsx:109   localStorage.setItem("openrouter-api-key", "YOUR_API_KEY")
-LLMService.ts:36 [LLMService] Constructor called with config: Object
-LLMService.ts:58 [LLMService] No API key provided - client not initialized
-OT @ LLMService.ts:58
-IntelligenceContext.tsx:131 [IntelligenceContext] Services initialized successfully: Object
-Epic1GraphEditor.tsx:150 Restored graph from local storage
-IntelligenceContext.tsx:60 [IntelligenceContext] Stored consent: true
-IntelligenceContext.tsx:69 [IntelligenceContext] Services memo - consent given: true
-IntelligenceContext.tsx:84 [IntelligenceContext] Initializing services...
-IntelligenceContext.tsx:85 [IntelligenceContext] Available env vars: Object
-IntelligenceContext.tsx:99 [IntelligenceContext] API key sources: Object
-IntelligenceContext.tsx:107 [IntelligenceContext] No API key found. Using offline mode.
-(anonymous) @ IntelligenceContext.tsx:107
-IntelligenceContext.tsx:108 [IntelligenceContext] To use AI features, set your OpenRouter API key:
-IntelligenceContext.tsx:109   localStorage.setItem("openrouter-api-key", "YOUR_API_KEY")
-LLMService.ts:36 [LLMService] Constructor called with config: Object
-LLMService.ts:58 [LLMService] No API key provided - client not initialized
-OT @ LLMService.ts:58
-IntelligenceContext.tsx:131 [IntelligenceContext] Services initialized successfully: Object
-Epic1GraphEditor.tsx:150 Restored graph from local storage
-react-dom.production.min.js:188 ReferenceError: TabbedSidePanel is not defined
-    at cd (Epic1GraphEditor.tsx:1834:12)
-    at Iu (react-dom.production.min.js:160:137)
-    at ca (react-dom.production.min.js:289:337)
-    at oa (react-dom.production.min.js:279:389)
-    at ic (react-dom.production.min.js:279:320)
-    at yl (react-dom.production.min.js:279:180)
-    at oi (react-dom.production.min.js:270:88)
-    at ra (react-dom.production.min.js:267:429)
-    at Ze (scheduler.production.min.js:13:203)
-    at MessagePort.it (scheduler.production.min.js:14:128)
-$u @ react-dom.production.min.js:188
-react-dom.production.min.js:282 Uncaught ReferenceError: TabbedSidePanel is not defined
-    at cd (Epic1GraphEditor.tsx:1834:12)
-    at Iu (react-dom.production.min.js:160:137)
-    at ca (react-dom.production.min.js:289:337)
-    at oa (react-dom.production.min.js:279:389)
-    at ic (react-dom.production.min.js:279:320)
-    at yl (react-dom.production.min.js:279:180)
-    at oi (react-dom.production.min.js:270:88)
-    at ra (react-dom.production.min.js:267:429)
-    at Ze (scheduler.production.min.js:13:203)
-    at MessagePort.it (scheduler.production.min.js:14:128)
-testSupabase.ts:22 ✅ Auth check: Not authenticated
+The Netlify deploy errored, with the following guidance provided:
+
+### Diagnosis
+The build failure is due to using an incorrect Node.js version. The error specifically states: "You are using Node.js 20.11.0. Vite requires Node.js version 20.19+ or 22.12+."
+
+Additionally, there is an error related to resolving a module "../PromptWizard" in the file "packages/core/components/epic1/components/GraphModals.tsx."
+
+### Solution
+1. **Node.js Version Mismatch**:
+   - Upgrade the Node.js version to meet the requirements of Vite. In this case, upgrade Node.js to version 20.19+ or 22.12+.
+   - You can follow the documentation on [changing Node versions](https://docs.netlify.com/configure-builds/manage-dependencies/#node-js-and-javascript).
+
+2. **Module Resolution Error**:
+   - Check if the module "../PromptWizard" is present in the respective location.
+   - Ensure that the file or package is listed in the `package.json` of the project or was committed to the repository.
+
+By resolving the Node.js version mismatch and verifying the presence of the required module, the build should be able to proceed successfully.
+
+The relevant error logs are:
+
+Line 99: > node build-standalone.js
+Line 100: Creating standalone build for deployment...
+Line 101: Environment: [90mundefined[39m
+Line 102: NETLIFY: true
+Line 103: Current working directory: /opt/build/repo/client
+Line 104: Building with full Epic 1 functionality...
+Line 105: Running production build (safe mode on)...
+Line 106: [33mYou are using Node.js 20.11.0. Vite requires Node.js version 20.19+ or 22.12+. Please upgrade your Node.js version.[39m
+Line 107: [36mvite v7.1.5 [32mbuilding for production...[36m[39m
+Line 108: transforming...
+Line 109: Failed during stage 'building site': Build script returned non-zero exit code: 2
+Line 110: [32m✓[39m 810 modules transformed.
+Line 111: [31m✗[39m Build failed in 1.33s
+Line 112: [31merror during build:
+Line 113: [31mCould not resolve "../PromptWizard" from "../packages/core/components/epic1/components/GraphModals.tsx"[31m
+Line 114: file: [36m/opt/build/repo/packages/core/components/epic1/components/GraphModals.tsx[31m
+Line 115:     at getRollupError (file:///opt/build/repo/node_modules/.pnpm/rollup@4.49.0/node_modules/rollup/dist/es/shared/parseAst.js:40
+Line 116:     at error (file:///opt/build/repo/node_modules/.pnpm/rollup@4.49.0/node_modules/rollup/dist/es/shared/parseAst.js:397:42)
+Line 117:     at ModuleLoader.handleInvalidResolvedId (file:///opt/build/repo/node_modules/.pnpm/rollup@4.49.0/node_modules/rollup/dist/es
+Line 118:     at file:///opt/build/repo/node_modules/.pnpm/rollup@4.49.0/node_modules/rollup/dist/es/shared/node-entry.js:21494:26[39m
+Line 119: node:internal/errors:932
+Line 120:   const err = new Error(message);
+Line 121:               ^
+Line 122: Error: Command failed: vite build
+Line 123: [90m    at checkExecSyncError (node:child_process:890:11)[39m
+Line 124: [90m    at execSync (node:child_process:962:15)[39m
+Line 125:     at [90mfile:///opt/build/repo/client/[39mbuild-standalone.js:26:1
+Line 126: [90m    at ModuleJob.run (node:internal/modules/esm/module_job:218:25)[39m
+Line 127: [90m    at async ModuleLoader.import (node:internal/modules/esm/loader:329:24)[39m
+Line 128: [90m    at async loadESM (node:internal/process/esm_loader:28:7)[39m
+Line 129: [90m    at async handleMainPromise (node:internal/modules/run_main:113:12)[39m {
+Line 130:   status: [33m1[39m,
+Line 131:   signal: [1mnull[22m,
+Line 132:   output: [ [1mnull[22m, [1mnull[22m, [1mnull[22m ],
+Line 133:   pid: [33m2331[39m,
+Line 134:   stdout: [1mnull[22m,
+Line 135:   stderr: [1mnull[22m
+Line 136: }
+Line 137: Node.js v20.11.0
+Line 138: /opt/build/repo/client:
+Line 139: [41m[30m ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL [39m[49m [31mclient@0.1.0 build: `node build-standalone.js`[39m
+Line 140: [31mExit status 1[39m
+Line 141: [91m[1m​[22m[39m
+Line 142: [91m[1m"build.command" failed                                        [22m[39m
+Line 143: [91m[1m────────────────────────────────────────────────────────────────[22m[39m
+Line 144: ​
+Line 145:   [31m[1mError message[22m[39m
+Line 146:   Command failed with exit code 1: pnpm install && cd packages/asset-browser && npm run prebuild && cd ../.. && pnpm --filter cl
+Line 147: ​
+Line 148:   [31m[1mError location[22m[39m
+Line 149:   In build.command from netlify.toml:
+Line 150:   pnpm install && cd packages/asset-browser && npm run prebuild && cd ../.. && pnpm --filter client build
+Line 151: ​
+Line 152:   [31m[1mResolved config[22m[39m
+Line 153:   build:
+Line 154:     command: pnpm install && cd packages/asset-browser && npm run prebuild && cd
+Line 155:       ../.. && pnpm --filter client build
+Line 156:     commandOrigin: config
+Line 157:     environment:
+Line 158:       - VITE_API_URL
+Line 178:       images:
+Line 179:         compress: true
+Line 180:       js:
+Line 181:         bundle: true
+Line 182:         minify: true
+Line 183:       skip_processing: true
+Line 184:     publish: /opt/build/repo/client/dist
+Line 185:     publishOrigin: config
+Line 186:   headers:
+Line 187:     - for: /*
+      values:
+        Cache-Control: public, max-age=0, must-revalidate
+        Content-Security-Policy: default-s
+Line 188: Build failed due to a user error: Build script returned non-zero exit code: 2
+Line 189: Failing build: Failed to build site
+Line 190: Finished processing build request in 35.535s
