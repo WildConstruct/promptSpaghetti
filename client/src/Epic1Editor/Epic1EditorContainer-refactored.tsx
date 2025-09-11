@@ -106,7 +106,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   });
 
   // Toast notifications
-  const { showToast } = useToast();
+  const { toasts, showToast, dismissToast } = useToast();
 
   // Editor key for force refresh
   const [editorKey, setEditorKey] = useState(0);
@@ -234,7 +234,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           />
         )}
 
-        <ToastContainer />
+        <ToastContainer toasts={toasts} onDismiss={dismissToast} />
       </div>
     </IntelligenceProvider>
   );
