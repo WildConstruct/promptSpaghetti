@@ -3,6 +3,7 @@
  */
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { TutorialStepValidator, TutorialValidationContext } from './TutorialStepValidator';
 
 export interface TutorialStep {
   id: string;
@@ -28,7 +29,7 @@ export interface OnboardingState {
   };
 }
 
-interface TutorialContextType {
+export interface TutorialContextType {
   // State
   isActive: boolean;
   currentStep: number;
@@ -38,7 +39,7 @@ interface TutorialContextType {
   // Actions
   startTutorial: () => void;
   skipTutorial: () => void;
-  nextStep: () => void;
+  nextStep: (context?: TutorialValidationContext) => void;
   previousStep: () => void;
   completeTutorial: () => void;
   resetTutorial: () => void;
@@ -148,10 +149,11 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         console.error('Failed to parse onboarding state:', e);
       }
     } else {
-      // First time user - auto start tutorial
-      setIsActive(true);
+      // First time user - tutorial ready but not active
+      setIsActive(false);
     }
   }, []);
+
 
   // Save state to localStorage
   useEffect(() => {
@@ -163,6 +165,19 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setCurrentStep(0);
   }, []);
 
+  // Listen for programmatic tutorial start event
+  useEffect(() => {
+    const handleStartTutorial = () => {
+      console.log('[TutorialContext] Received startTutorial event');
+      startTutorial();
+    };
+
+    window.addEventListener('epic1:startTutorial', handleStartTutorial);
+    return () => {
+      window.removeEventListener('epic1:startTutorial', handleStartTutorial);
+    };
+  }, [startTutorial]);
+
   const skipTutorial = useCallback(() => {
     setIsActive(false);
     setOnboardingState(prev => ({
@@ -172,8 +187,26 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }));
   }, []);
 
-  const nextStep = useCallback(() => {
+  const nextStep = useCallback((context?: TutorialValidationContext) => {
     if (currentStep < tutorialSteps.length - 1) {
+      const nextStepId = tutorialSteps[currentStep + 1].id;
+
+      // Validate prerequisites for next step if context provided
+      if (context) {
+        const validation = TutorialStepValidator.validateStep(nextStepId, context);
+        if (!validation.isValid) {
+          console.warn('[TutorialContext] Step validation failed:', validation.message);
+
+          // For now, log the validation failure but still allow progression
+          // In a future enhancement, we could show a validation error UI
+          console.log('[TutorialContext] Validation error:', TutorialStepValidator.getValidationErrorMessage(validation));
+
+          if (TutorialStepValidator.canRecover(validation)) {
+            console.log('[TutorialContext] Recovery available:', validation.recoveryMessage);
+          }
+        }
+      }
+
       const stepId = tutorialSteps[currentStep].id;
       setCurrentStep(prev => prev + 1);
       setOnboardingState(prev => ({
@@ -184,7 +217,7 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } else {
       completeTutorial();
     }
-  }, [currentStep]);
+  }, [currentStep, tutorialSteps]);
 
   const previousStep = useCallback(() => {
     if (currentStep > 0) {

@@ -15,17 +15,25 @@ function App() {
   const [initialGraph, setInitialGraph] = useState<
     { nodes: Node[]; edges: Edge[] } | undefined
   >();
+  const [startWithTutorial, setStartWithTutorial] = useState(false);
 
   const handleLaunch = (payload: LaunchPayload) => {
     if (payload.kind === 'analysis') {
       setInitialAnalysis(payload.analysis);
       setInitialGraph(undefined);
+      setStartWithTutorial(false);
     } else if (payload.kind === 'template') {
       setInitialGraph(payload.graph);
       setInitialAnalysis(undefined);
+      setStartWithTutorial(false);
+    } else if (payload.kind === 'tutorial') {
+      setInitialGraph(undefined);
+      setInitialAnalysis(undefined);
+      setStartWithTutorial(true);
     } else {
       setInitialGraph(undefined);
       setInitialAnalysis(undefined);
+      setStartWithTutorial(false);
     }
     setShowLaunchScreen(false);
   };
@@ -44,6 +52,7 @@ function App() {
         showOnboarding={false}
         initialAnalysis={initialAnalysis}
         initialGraph={initialGraph}
+        startWithTutorial={startWithTutorial}
       />
     </div>
   );

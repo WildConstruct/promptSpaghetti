@@ -2,27 +2,21 @@
 .prompt-dissector {
   display: flex;
   flex-direction: column;
-  gap: 0; /* Remove gap to attach tabs to text area */
+  gap: 0.5rem;
   height: 100%;
   position: relative;
-  background: rgba(20, 22, 28, 0.6);
-  border: 1px solid rgba(103, 126, 234, 0.2);
-  border-radius: 12px;
-  padding: 1rem;
 }
 
-/* Toolbar styles */
+/* Toolbar styles - compact inline toolbar */
 .prompt-dissector-toolbar {
   display: flex;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  background: rgba(30, 32, 38, 0.8);
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  padding: 8px 10px;
+  background: transparent;
+  border-bottom: 1px solid rgba(103, 126, 234, 0.2);
+  margin-bottom: 0.5rem;
   align-items: center;
-  flex-wrap: wrap;
-  border: 1px solid rgba(103, 126, 234, 0.25);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-wrap: nowrap;
 }
 
 .toolbar-group {
@@ -31,33 +25,69 @@
   align-items: center;
 }
 
-.mode-button,
-.toolbar-button {
-  padding: 0.5rem 1rem;
-  background: rgba(103, 126, 234, 0.15);
-  border: 1px solid rgba(103, 126, 234, 0.4);
+.mode-button {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid rgba(103, 126, 234, 0.3);
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
+}
+
+.toolbar-button {
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid rgba(103, 126, 234, 0.3);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
   font-weight: 500;
   text-transform: none;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.mode-button:hover,
-.toolbar-button:hover {
-  background: rgba(103, 126, 234, 0.2);
-  color: #fff;
+.mode-button:hover {
+  background: rgba(103, 126, 234, 0.15);
+  border-color: rgba(103, 126, 234, 0.5);
+  color: #ffffff;
 }
 
-.mode-button.active,
+.toolbar-button:hover:not(:disabled) {
+  background: rgba(103, 126, 234, 0.15);
+  border-color: rgba(103, 126, 234, 0.5);
+  color: #ffffff;
+}
+
+.mode-button.active {
+  background: rgba(103, 126, 234, 0.2);
+  border-color: rgba(103, 126, 234, 0.6);
+  color: #ffffff;
+}
+
 .toolbar-button.active {
-  background: rgba(103, 126, 234, 0.4);
+  background: rgba(103, 126, 234, 0.2);
+  border-color: rgba(103, 126, 234, 0.6);
+  color: #ffffff;
+}
+
+.parse-button {
+  background: rgba(103, 126, 234, 0.25);
+  border-color: rgba(103, 126, 234, 0.6);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.parse-button:hover:not(:disabled) {
+  background: rgba(103, 126, 234, 0.35);
   border-color: rgba(103, 126, 234, 0.8);
-  color: #fff;
-  box-shadow: 0 0 12px rgba(103, 126, 234, 0.3);
 }
 
 .mode-button:disabled,
@@ -82,20 +112,72 @@
 
 /* Toolbar spacing when visible */
 .prompt-dissector .dissector-toolbar {
-  margin-bottom: 1rem; /* Proper spacing between toolbar and tabs */
+  margin-bottom: 0.5rem; /* Reduced spacing between toolbar and tabs */
 }
 
-/* Content area */
+/* Content area - only style when inside LaunchScreen */
+.launch-screen .prompt-dissector-content {
+  flex: 1;
+  position: relative;
+  background: transparent;
+  border: 1px solid rgba(103, 126, 234, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Default content area without launch-screen parent */
 .prompt-dissector-content {
   flex: 1;
   position: relative;
-  background: rgba(26, 26, 26, 0.8);
-  border: 1px solid rgba(103, 126, 234, 0.4);
-  border-radius: 10px;
-  padding: 1.25rem;
-  overflow: auto;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
-  min-height: 250px;
+  background: transparent;
+  border: 1px solid rgba(103, 126, 234, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Text editor container */
+.prompt-dissector-editor-container {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 300px;
+  background: transparent;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Textarea styling */
+.prompt-dissector-textarea {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e0e0e0;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+}
+
+/* Overlay for highlights */
+.prompt-dissector-overlay {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1rem;
+  pointer-events: none;
+  overflow: hidden;
+  color: #e0e0e0;
 }
 
 /* Tab Interface - Integrated with text area */
@@ -119,7 +201,7 @@
 .dissector-tab {
   flex: 1; /* Each tab takes equal space */
   padding: 10px 24px;
-  background: rgba(30, 32, 38, 0.6); /* Darker background for inactive tabs */
+  background: transparent; /* Transparent background for inactive tabs */
   border: 1px solid rgba(103, 126, 234, 0.25); /* Lighter border for inactive */
   border-bottom: 1px solid rgba(103, 126, 234, 0.3); /* Keep bottom border for inactive */
   color: rgba(255, 255, 255, 0.6); /* Dimmer text for inactive */
@@ -149,12 +231,11 @@
 
 .dissector-tab.active {
   color: #fff;
-  background: rgba(26, 26, 26, 0.8); /* Match the input container background */
-  border-color: rgba(103, 126, 234, 0.7); /* Brighter border for active state */
+  background: rgba(103, 126, 234, 0.2); /* Purple tint for active tab */
+  border-color: rgba(103, 126, 234, 0.5); /* Brighter border for active state */
   border-bottom: none !important;
   z-index: 3;
   position: relative;
-  box-shadow: 0 -2px 8px rgba(103, 126, 234, 0.15);
 }
 
 /* Cover the bottom border line completely */
@@ -195,21 +276,31 @@
   overflow: visible; /* avoid clipping inline menus */
 }
 
-/* Input Container */
-.dissector-input-container {
+/* Input Container - only style when inside LaunchScreen */
+.launch-screen .dissector-input-container {
   position: relative;
   flex: 1;
   min-height: 200px;
   border-radius: 0 0 8px 8px; /* Round only bottom corners */
   overflow: visible; /* allow menus to render outside without clipping */
-  background: rgba(26, 26, 26, 0.5); /* Slight background to match tabs */
-  border: 1px solid rgba(103, 126, 234, 0.6) !important; /* Brighter border to match active tab */
+  background: transparent; /* Transparent background */
+  border: 1px solid rgba(103, 126, 234, 0.4) !important; /* Subtle border */
   border-top: none !important; /* Remove top border completely */
   outline: none !important;
 }
 
-/* Prevent green focus outline on container */
-.dissector-input-container:focus-within {
+/* General dissector-input-container without background for other contexts */
+.dissector-input-container {
+  position: relative;
+  flex: 1;
+  min-height: 200px;
+  border-radius: 0 0 8px 8px;
+  overflow: visible;
+  outline: none !important;
+}
+
+/* Prevent green focus outline on container - only in LaunchScreen */
+.launch-screen .dissector-input-container:focus-within {
   border: 1px solid rgba(103, 126, 234, 0.8) !important; /* Even brighter purple on focus */
   border-top: none !important; /* Keep top border removed */
   outline: none !important;
@@ -226,10 +317,10 @@
   box-shadow: none !important;
 }
 
-/* Ensure container itself maintains purple border on all states */
-.dissector-input-container:focus,
-.dissector-input-container:active,
-.dissector-input-container:focus-visible {
+/* Ensure container itself maintains purple border on all states - only in LaunchScreen */
+.launch-screen .dissector-input-container:focus,
+.launch-screen .dissector-input-container:active,
+.launch-screen .dissector-input-container:focus-visible {
   border: 1px solid rgba(103, 126, 234, 0.8) !important;
   border-top: none !important;
   outline: none !important;
@@ -241,46 +332,44 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 10px;
+  gap: 4px;
+  padding: 6px 8px;
   margin: 0 0 4px 0;
-  background: rgba(20, 22, 28, 0.95);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(103, 126, 234, 0.3);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  background: transparent;
+  border-bottom: 1px solid rgba(103, 126, 234, 0.2);
   z-index: 10;
   pointer-events: auto;
   width: 100%;
   box-sizing: border-box;
-  flex-wrap: wrap; /* Allow wrapping on small screens */
-  min-height: 40px;
+  flex-wrap: wrap;
+  min-height: 36px;
 }
 
 .dissector-toolbar-sep {
   width: 1px;
-  height: 24px; /* Taller separator to match buttons */
+  height: 20px; /* Smaller separator */
   background: rgba(255, 255, 255, 0.08);
-  margin: 0 2px;
+  margin: 0 1px;
 }
 
 .dissector-btn {
   appearance: none;
   -webkit-appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+  border: 1px solid rgba(103, 126, 234, 0.4);
+  background: transparent;
   color: #e1e1e1;
-  font-size: 12px; /* Slightly larger font */
+  font-size: 12px; /* Smaller font to fit */
   line-height: 1;
-  padding: 6px 10px; /* Bigger buttons */
-  border-radius: 4px;
+  padding: 6px 10px; /* Reduced padding */
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
+  font-weight: 500;
 }
 
 .dissector-btn:hover:not([disabled]) {
-  border-color: rgba(255, 255, 255, 0.22);
-  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+  border-color: rgba(103, 126, 234, 0.6);
+  background: rgba(103, 126, 234, 0.15);
   transform: translateY(-0.5px);
 }
 
@@ -453,14 +542,14 @@
 .dissector-textarea-simple {
   width: 100%;
   height: calc(100% - 60px); /* Leave space for buttons */
-  padding: 1rem;
+  padding: 16px 20px; /* Proper inset */
   background: transparent;
   border: none !important;
   outline: none !important;
-  border-radius: 12px;
+  border-radius: 0;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  font-size: 1rem;
-  line-height: 1.8; /* Match content display line height */
+  font-size: 14px;
+  line-height: 1.6; /* Match content display line height */
   color: #e1e1e1;
   resize: none;
   white-space: pre-wrap;
@@ -491,10 +580,10 @@
 
 /* Content display with inline spans */
 .dissector-content-display {
-  padding: 1rem;
+  padding: 16px 20px; /* Proper inset matching textarea */
   font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  font-size: 1rem;
-  line-height: 1.8; /* Increased line spacing */
+  font-size: 14px;
+  line-height: 1.6; /* Consistent line spacing */
   color: #e1e1e1;
   white-space: pre-wrap;
   word-wrap: break-word;

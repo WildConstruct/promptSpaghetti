@@ -56,28 +56,12 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
               onMouseLeave={() => setHoveredTab(null)}
               title="Asset Browser"
             >
-              <span className="tab-icon">📦</span>
+              <span className="tab-icon">
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.94 1.475l-.64 6.038A1.5 1.5 0 0 1 13.81 15H2.19a1.5 1.5 0 0 1-1.49-1.347l-.64-6.038c0-.599.37-1.21.94-1.475V5.5A1.5 1.5 0 0 1 1 3.5zm1.5 0v2.695a.5.5 0 0 1-.336.473 1.4 1.4 0 0 0-.64.644l.64 6.038a.5.5 0 0 0 .496.45h11.18a.5.5 0 0 0 .496-.45l.64-6.038a1.4 1.4 0 0 0-.64-.644.5.5 0 0 1-.336-.473V5.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.76-.56-2.311-1.184C6.279 3.352 5.784 3 5.264 3H2.5a.5.5 0 0 0-.5.5z"/>
+                </svg>
+              </span>
               <span className="tab-label">Assets</span>
-            </button>
-            <button
-              className={`tab-button ${activeTab === 'search' ? 'active' : ''} ${hoveredTab === 'search' ? 'hovered' : ''}`}
-              onClick={() => handleTabClick('search')}
-              onMouseEnter={() => setHoveredTab('search')}
-              onMouseLeave={() => setHoveredTab(null)}
-              title="Search"
-            >
-              <span className="tab-icon">🔎</span>
-              <span className="tab-label">Search</span>
-          </button>
-            <button
-              className={`tab-button ${activeTab === 'relationships' ? 'active' : ''} ${hoveredTab === 'relationships' ? 'hovered' : ''}`}
-              onClick={() => handleTabClick('relationships')}
-              onMouseEnter={() => setHoveredTab('relationships')}
-              onMouseLeave={() => setHoveredTab(null)}
-              title="Relationships"
-            >
-              <span className="tab-icon">🕸️</span>
-              <span className="tab-label">Relations</span>
             </button>
           </>
         )}

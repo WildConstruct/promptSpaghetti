@@ -78,18 +78,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         </button>
       </div>
 
-      {hasBeenAnalyzed && (
-        <div className="toolbar-group">
-          <button
-            onClick={onReparse}
-            disabled={isLLMParsing}
-            className="toolbar-button reparse-button"
-            title="Re-parse the prompt"
-          >
-            {isLLMParsing ? 'Parsing...' : 'Re-parse'}
-          </button>
-        </div>
-      )}
+      <div className="toolbar-group">
+        <button
+          onClick={onReparse}
+          disabled={isLLMParsing}
+          className="toolbar-button parse-button"
+          title="Parse the prompt"
+        >
+          {isLLMParsing ? 'Parsing...' : hasBeenAnalyzed ? 'Re-parse' : 'Parse'}
+        </button>
+      </div>
 
       {isLLMParsing && (
         <div className="parsing-indicator">

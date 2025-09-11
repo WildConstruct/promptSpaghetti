@@ -164,7 +164,7 @@
 }
 
 .nav-item.selected {
-  background: #2196F3;
+  background: rgba(103, 126, 234, 0.3);
   color: #fff;
   font-weight: 500;
 }
@@ -212,13 +212,13 @@
 }
 
 .search-input-v2:focus {
-  border-color: #2196F3;
+  border-color: rgba(103, 126, 234, 0.6);
   background: #333;
 }
 
 .search-btn {
   padding: 8px 12px;
-  background: #2196F3;
+  background: linear-gradient(135deg, rgba(103, 126, 234, 0.3) 0%, rgba(103, 126, 234, 0.4) 100%);
   border: none;
   border-radius: 4px;
   color: #fff;
@@ -274,7 +274,7 @@
 
 .preset-list-item.selected {
   background: #333;
-  border-left: 3px solid #2196F3;
+  border-left: 3px solid rgba(103, 126, 234, 0.6);
 }
 
 .preset-list-item.dragging {
@@ -412,7 +412,7 @@
 .use-preset-btn {
   flex: 1;
   padding: 10px 16px;
-  background: #2196F3;
+  background: linear-gradient(135deg, rgba(103, 126, 234, 0.3) 0%, rgba(103, 126, 234, 0.4) 100%);
   border: none;
   border-radius: 4px;
   color: #fff;

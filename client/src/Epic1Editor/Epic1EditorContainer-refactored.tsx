@@ -41,6 +41,7 @@ interface Epic1EditorContainerProps {
   showOnboarding?: boolean;
   initialAnalysis?: PromptAnalysis;
   initialGraph?: { nodes: Node[]; edges: Edge[] };
+  startWithTutorial?: boolean;
 }
 
 export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
@@ -50,12 +51,24 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   showMenuBar = true,
   showOnboarding = false,
   initialAnalysis,
-  initialGraph
+  initialGraph,
+  startWithTutorial = false
 }) => {
   // Component loading state (simplified - using static imports now)
   const [loadError, setLoadError] = useState<string>('');
   const [assetLibraryVisible, setAssetLibraryVisible] =
     useState(showAssetLibrary);
+
+  // Trigger tutorial when requested
+  useEffect(() => {
+    if (startWithTutorial) {
+      // Dispatch event after a short delay to ensure components are mounted
+      const timer = setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('epic1:startTutorial'));
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [startWithTutorial]);
   const hasInitialInput = Boolean(
     (initialGraph && initialGraph.nodes && initialGraph.edges) ||
       (initialAnalysis && initialAnalysis.nodes)

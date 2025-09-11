@@ -5,6 +5,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTutorial } from './TutorialContext';
 import { PromptPasteDialog } from './PromptPasteDialog';
+import { ElementDetector, ElementDetectionResult } from './ElementDetector';
 
 export const TutorialOverlay: React.FC = () => {
   const {
@@ -20,6 +21,8 @@ export const TutorialOverlay: React.FC = () => {
   const [targetElement, setTargetElement] = useState<HTMLElement | null>(null);
   const [showSkipHint, setShowSkipHint] = useState(false);
   const [showPasteDialog, setShowPasteDialog] = useState(false);
+  const [isDetectingElement, setIsDetectingElement] = useState(false);
+  const [detectionError, setDetectionError] = useState<string | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const skipHintTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -255,12 +258,13 @@ export const TutorialOverlay: React.FC = () => {
         style={{
           position: 'absolute',
           ...getTooltipPosition(),
-          width: '400px',
-          backgroundColor: 'white',
+          background: '#1a1a1a',
           borderRadius: '12px',
-          padding: '24px',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-          pointerEvents: 'auto',
+          padding: '32px',
+          maxWidth: '600px',
+          width: '90%',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+          animation: 'slideUp 0.3s ease'
         }}
       >
         {/* Progress */}
@@ -271,7 +275,7 @@ export const TutorialOverlay: React.FC = () => {
             left: 0,
             right: 0,
             height: '4px',
-            backgroundColor: '#f0f0f0',
+            backgroundColor: '#333',
             borderRadius: '12px 12px 0 0',
             overflow: 'hidden',
           }}
@@ -290,7 +294,7 @@ export const TutorialOverlay: React.FC = () => {
         <div
           style={{
             fontSize: '12px',
-            color: '#666',
+            color: '#999',
             marginBottom: '8px',
           }}
         >
@@ -303,7 +307,7 @@ export const TutorialOverlay: React.FC = () => {
             fontSize: '20px',
             fontWeight: 600,
             marginBottom: '12px',
-            color: '#1a1a1a',
+            color: '#e0e0e0',
           }}
         >
           {step.title}
@@ -314,7 +318,7 @@ export const TutorialOverlay: React.FC = () => {
           style={{
             fontSize: '16px',
             lineHeight: 1.6,
-            color: '#4a4a4a',
+            color: '#ccc',
             marginBottom: step.hint ? '16px' : '24px',
           }}
         >
@@ -325,7 +329,8 @@ export const TutorialOverlay: React.FC = () => {
         {step.hint && (
           <div
             style={{
-              backgroundColor: '#f3f4f6',
+              backgroundColor: '#2a2a2a',
+              border: '1px solid #444',
               borderLeft: '3px solid #6366f1',
               padding: '12px',
               borderRadius: '4px',
@@ -335,7 +340,7 @@ export const TutorialOverlay: React.FC = () => {
             <p
               style={{
                 fontSize: '14px',
-                color: '#4b5563',
+                color: '#ccc',
                 margin: 0,
               }}
             >
@@ -357,7 +362,7 @@ export const TutorialOverlay: React.FC = () => {
             style={{
               background: 'none',
               border: 'none',
-              color: '#666',
+              color: '#999',
               fontSize: '14px',
               cursor: 'pointer',
               padding: '8px',

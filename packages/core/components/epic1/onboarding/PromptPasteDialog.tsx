@@ -33,12 +33,7 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
     e.preventDefault();
     const pastedText = e.clipboardData.getData('text');
     setPrompt(pastedText);
-    // Auto-submit after paste
-    setTimeout(() => {
-      if (pastedText) {
-        onPaste(pastedText);
-      }
-    }, 500);
+    // Do NOT auto-advance - let user click "Create Nodes" button
   };
 
   const handleSubmit = () => {

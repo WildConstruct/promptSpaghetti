@@ -73,9 +73,12 @@ import {
 } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
 import { edgeTypes } from './EdgeRenderingFix';
+import { PromptParser, ParsedPromptResult } from './utils/promptParser';
+import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { AuthModal } from '../auth/AuthModal';
 import { supabase } from '../../utils/supabaseClient';
-import { usePreviewTrayStore } from '../../stores/previewTrayStore';
+import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
+import { TutorialOverlay } from './onboarding/TutorialOverlay';
 
 // Styles
 import './ReactFlowOverrides.css';
@@ -111,6 +114,46 @@ export interface Epic1GraphEditorProps {
 }
 
 /**
+ * Tutorial Button Component that can access the tutorial context
+ */
+const TutorialButton: React.FC = () => {
+  const { startTutorial } = useTutorial();
+  
+  const handleClick = () => {
+    console.log('[TutorialButton] Starting tutorial...');
+    startTutorial();
+  };
+  
+  return (
+    <button 
+      className="palette-footer-button"
+      onClick={handleClick}
+      style={{
+        padding: '10px 12px',
+        background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+        border: '1px solid rgba(103, 126, 234, 0.3)',
+        borderRadius: '6px',
+        color: '#e0e0e0',
+        cursor: 'pointer',
+        fontSize: '13px',
+        fontWeight: '500',
+        transition: 'all 0.3s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        width: '100%',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+      }}
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.81 8.985.936 8 1.783z"/>
+      </svg>
+      Tutorial
+    </button>
+  );
+};
+
+/**
  * Clean Epic1 Graph Editor using all extracted hooks
  */
 const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
@@ -127,6 +170,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   showAssetLibrary = true,
   assetLibraryPosition = 'left'
 }) => {
+  console.log('[Epic1GraphEditor] Component rendering, showAssetLibrary:', showAssetLibrary);
   // Node types based on asset library visibility
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
 
@@ -326,6 +370,178 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   const [customPresets, setCustomPresets] = useState<any[]>([]);
   const [historyVisible, setHistoryVisible] = useState(false);
 
+  // Tutorial integration state
+  const [tutorialPrompt, setTutorialPrompt] = useState<string | null>(null);
+
+  // Tutorial integration - handle 'epic1:promptPasted' event from tutorial system
+  useEffect(() => {
+    const handlePromptPasted = (event: CustomEvent) => {
+      const { prompt } = event.detail;
+      console.log('[Epic1GraphEditor] Tutorial prompt received:', prompt);
+
+      if (prompt && typeof prompt === 'string') {
+        // Store prompt for processing
+        setTutorialPrompt(prompt);
+        // Parse and create nodes immediately
+        parsePromptAndCreateNodes(prompt);
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('epic1:promptPasted', handlePromptPasted as EventListener);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('epic1:promptPasted', handlePromptPasted as EventListener);
+    };
+  }, []);
+
+  // Parse prompt and create nodes
+  const parsePromptAndCreateNodes = useCallback((prompt: string) => {
+    try {
+      console.log('[Epic1GraphEditor] Parsing prompt:', prompt);
+
+      // Validate the prompt first
+      const validation = PromptParser.validate(prompt);
+      if (!validation.isValid) {
+        console.error('[Epic1GraphEditor] Prompt validation failed:', validation.message);
+        showToast('error', validation.message || 'Invalid prompt format');
+        return;
+      }
+
+      // Parse the prompt
+      const result: ParsedPromptResult = PromptParser.parse(prompt);
+      console.log('[Epic1GraphEditor] Parsed result:', result);
+
+      if (result.segments.length === 0) {
+        showToast('warning', 'No content found in prompt to create nodes');
+        return;
+      }
+
+      // Calculate positions for new nodes
+      const startX = 200;
+      const startY = 200;
+      const nodeSpacingX = 300;
+      const nodeSpacingY = 150;
+      const maxNodesPerRow = 3;
+
+      // Create nodes from parsed segments
+      const newNodes: Node<EditableNodeData>[] = [];
+      const newEdges: Edge[] = [];
+
+      result.segments.forEach((segment, index) => {
+        const row = Math.floor(index / maxNodesPerRow);
+        const col = index % maxNodesPerRow;
+        const position = {
+          x: startX + col * nodeSpacingX,
+          y: startY + row * nodeSpacingY
+        };
+
+        let node: Node<EditableNodeData>;
+
+        if (segment.type === 'choice' && segment.options) {
+          // Create WeightedChoice node
+          const options = segment.options.map((option, optionIndex) => ({
+            id: `option-${index}-${optionIndex}`,
+            text: option,
+            weight: Math.floor(100 / segment.options!.length),
+            hasBranch: true
+          }));
+
+          node = {
+            id: `tutorial-choice-${Date.now()}-${index}`,
+            type: 'weightedChoice',
+            position,
+            data: {
+              nodeType: 'weightedChoice',
+              options,
+              value: JSON.stringify(options, null, 2)
+            }
+          };
+        } else {
+          // Create TextBlock node
+          node = {
+            id: `tutorial-text-${Date.now()}-${index}`,
+            type: 'textBlock',
+            position,
+            data: {
+              nodeType: 'textBlock',
+              text: segment.content,
+              value: segment.content,
+              content: segment.content
+            }
+          };
+        }
+
+        newNodes.push(node);
+      });
+
+      // Create edges to connect nodes in sequence
+      for (let i = 0; i < newNodes.length - 1; i++) {
+        const sourceNode = newNodes[i];
+        const targetNode = newNodes[i + 1];
+
+        // Find appropriate handles (WeightedChoice nodes have output handles)
+        let sourceHandle = 'source';
+        let targetHandle = 'target';
+
+        if (sourceNode.type === 'weightedChoice') {
+          // For weighted choice, connect from each option
+          const options = sourceNode.data.options || [];
+          options.forEach((option: any, optionIndex: number) => {
+            newEdges.push({
+              id: `tutorial-edge-${sourceNode.id}-option-${optionIndex}-${targetNode.id}`,
+              source: sourceNode.id,
+              target: targetNode.id,
+              sourceHandle: `option-${optionIndex}`,
+              targetHandle: 'target',
+              type: 'smoothstep',
+              animated: false,
+              style: { stroke: '#9ca3af', strokeWidth: 3 }
+            });
+          });
+        } else {
+          // Simple connection for text nodes
+          newEdges.push({
+            id: `tutorial-edge-${sourceNode.id}-${targetNode.id}`,
+            source: sourceNode.id,
+            target: targetNode.id,
+            sourceHandle,
+            targetHandle,
+            type: 'smoothstep',
+            animated: false,
+            style: { stroke: '#9ca3af', strokeWidth: 3 }
+          });
+        }
+      }
+
+      console.log('[Epic1GraphEditor] Created nodes:', newNodes.length, 'edges:', newEdges.length);
+
+      // Add nodes and edges to the graph
+      setNodes(currentNodes => [...currentNodes, ...newNodes]);
+      setEdges(currentEdges => [...currentEdges, ...newEdges]);
+
+      // Show success message
+      showToast('success', `Created ${newNodes.length} nodes from prompt!`);
+
+      // Fit view to show all new nodes
+      setTimeout(() => {
+        if (reactFlowInstance) {
+          reactFlowInstance.fitView({
+            padding: 0.2,
+            includeHiddenNodes: false,
+            minZoom: 0.5,
+            maxZoom: 1.5
+          });
+        }
+      }, 100);
+
+    } catch (error) {
+      console.error('[Epic1GraphEditor] Error parsing prompt:', error);
+      showToast('error', 'Failed to parse prompt and create nodes');
+    }
+  }, [setNodes, setEdges, showToast, reactFlowInstance]);
+
   // Enhanced nodes with edit handlers
   const enhancedNodes = useMemo(() => {
     return nodes.map(node => ({
@@ -402,17 +618,14 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         {showAssetLibrary && (
           <TabbedSidePanel
             position={assetLibraryPosition}
-            nodes={nodes}
-            edges={edges}
-            setNodes={setNodes}
-            setEdges={setEdges}
+            previewEngine={previewEngine}
+            defaultTab="assets"
+            showAssets={true}
+            showPreview={true}
             onPresetSelect={(preset: any) => {
               console.log('Preset selected:', preset);
             }}
-            selectedNodeId={selectedNodeId}
-            onNodeSelect={nodeId =>
-              console.log('Node selected from library:', nodeId)
-            }
+            selectedNode={nodes.find(n => n.id === selectedNodeId)}
           />
         )}
 
@@ -457,13 +670,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               <Controls showInteractive={false} />
               <MiniMap pannable zoomable />
 
-              {/* Additional UI Elements */}
-              <Panel position="top-left">
-                <NodePalette
-                  collapsed={false}
-                  onCollapsedChange={setNodePaletteCollapsed}
-                />
-              </Panel>
+              {/* Additional UI Elements moved outside due to React Flow rendering issues */}
 
               <Panel position="top-right">
                 <div className="panel-controls">
@@ -499,6 +706,77 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               ))}
             </ReactFlow>
           </SafeReactFlowWrapper>
+
+          {/* NodePalette - positioned outside ReactFlow */}
+          <div style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            bottom: 0,
+            zIndex: 100,
+            display: 'flex',
+            alignItems: 'stretch'
+          }}>
+            <NodePalette
+              collapsed={nodePaletteCollapsed}
+              onCollapsedChange={setNodePaletteCollapsed}
+            >
+              {/* Footer buttons */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+                <button 
+                  className="palette-footer-button"
+                  onClick={() => console.log('Login clicked')}
+                  style={{
+                    padding: '10px 12px',
+                    background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                    border: '1px solid rgba(103, 126, 234, 0.3)',
+                    borderRadius: '6px',
+                    color: '#e0e0e0',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                  </svg>
+                  Login
+                </button>
+                <button 
+                  className="palette-footer-button"
+                  onClick={() => console.log('Wizard clicked')}
+                  style={{
+                    padding: '10px 12px',
+                    background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                    border: '1px solid rgba(103, 126, 234, 0.3)',
+                    borderRadius: '6px',
+                    color: '#e0e0e0',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                    <path d="M9.5 1L8 2.5 6.5 1 5 2.5 3.5 1 2 2.5 0.5 1v14l1.5-1.5L3.5 15 5 13.5 6.5 15 8 13.5 9.5 15l1.5-1.5L12.5 15l1.5-1.5L15.5 15V1l-1.5 1.5L12.5 1 11 2.5 9.5 1zM3 4h10v1H3V4zm0 3h10v1H3V7zm0 3h7v1H3v-1z"/>
+                  </svg>
+                  Wizard
+                </button>
+                <TutorialButton />
+              </div>
+            </NodePalette>
+          </div>
 
           {/* Context Menus */}
           <GraphContextMenus
@@ -588,11 +866,14 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 // Export with providers
 const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = props => {
   return (
-    <IntelligenceProvider>
-      <ReactFlowProvider>
-        <Epic1GraphEditorClean {...props} />
-      </ReactFlowProvider>
-    </IntelligenceProvider>
+    <TutorialProvider>
+      <IntelligenceProvider>
+        <ReactFlowProvider>
+          <Epic1GraphEditorClean {...props} />
+          <TutorialOverlay />
+        </ReactFlowProvider>
+      </IntelligenceProvider>
+    </TutorialProvider>
   );
 };
 

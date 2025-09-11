@@ -120,7 +120,8 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
             lineHeight: '1.5',
             fontFamily: 'monospace',
             whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word'
+            wordBreak: 'break-word',
+            background: 'transparent'
           }}
         >
           {highlightSegments.map((segment, index) => (

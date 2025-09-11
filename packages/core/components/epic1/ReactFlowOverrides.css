@@ -53,11 +53,15 @@
 .react-flow__panel {
   z-index: 5 !important;
   pointer-events: auto !important;
+  position: absolute !important;
+  display: block !important;
+  visibility: visible !important;
 }
 
 .react-flow__panel.top-left {
   top: 10px;
   left: 10px;
+  z-index: 10 !important;
 }
 
 .react-flow__node[style*="box-shadow"] {

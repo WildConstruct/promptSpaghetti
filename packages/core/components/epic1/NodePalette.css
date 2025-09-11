@@ -1,13 +1,17 @@
 .node-palette {
+  height: 100%;
   background: rgba(26, 26, 26, 0.95);
   border: 1px solid rgba(103, 126, 234, 0.3);
-  border-radius: 8px;
+  border-radius: 0 8px 8px 0;
+  border-left: none;
   transition: width 0.3s ease;
   z-index: 100;
-  display: flex;
+  display: flex !important;
   flex-direction: column;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .node-palette.left {
@@ -59,7 +63,9 @@
 .node-list {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 8px;
+  min-height: 0; /* Important for flex children to scroll properly */
   /* Smooth scrolling optimization */
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -67,27 +73,90 @@
 }
 
 .palette-footer {
-  border-top: 1px solid #333;
+  border-top: 1px solid rgba(103, 126, 234, 0.2);
   padding: 12px;
-  background: #1a1a1a;
+  background: rgba(20, 20, 20, 0.8);
+  margin-top: auto; /* Push to bottom */
+}
+
+/* Footer button styles */
+.palette-footer-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.palette-footer-button:hover {
+  background: linear-gradient(135deg, rgba(103, 126, 234, 0.25) 0%, rgba(103, 126, 234, 0.35) 100%) !important;
+  border-color: rgba(103, 126, 234, 0.5) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.palette-footer-button:hover svg {
+  opacity: 0.8 !important;
+}
+
+.palette-footer-button:active {
+  transform: translateY(0);
+  background: linear-gradient(135deg, rgba(103, 126, 234, 0.2) 0%, rgba(103, 126, 234, 0.3) 100%) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Add subtle animation */
+.palette-footer-button {
+  position: relative;
+}
+
+.palette-footer-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  transition: left 0.5s ease;
+}
+
+.palette-footer-button:hover::before {
+  left: 100%;
 }
 
 .node-item {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  margin-bottom: 4px;
-  background: #2a2a2a;
-  border: 1px solid #333;
-  border-radius: 4px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, rgba(40, 40, 40, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%);
+  border: 1px solid rgba(103, 126, 234, 0.2);
+  border-radius: 6px;
   cursor: grab;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.node-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(103, 126, 234, 0.1), transparent);
+  transition: left 0.5s ease;
 }
 
 .node-item:hover {
-  background: #333;
-  border-color: #4a9eff;
+  background: linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%);
+  border-color: rgba(103, 126, 234, 0.4);
   transform: translateX(2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.node-item:hover::before {
+  left: 100%;
 }
 
 .node-item:active {
@@ -97,10 +166,18 @@
 .node-icon {
   font-size: 16px;
   margin-right: 8px;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+}
+
+.node-item:hover .node-icon {
+  opacity: 0.8;
 }
 
 .node-label {
   font-size: 13px;
+  font-weight: 500;
   color: #e0e0e0;
 }
 
