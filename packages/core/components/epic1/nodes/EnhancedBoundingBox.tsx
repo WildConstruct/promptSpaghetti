@@ -3,8 +3,8 @@ import { NodeProps, useReactFlow, Handle, Position, Edge, useStore } from 'react
 // CSS imports removed - using inline styles only
 
 // Feature flag for gradual migration to refactored version
-// Using legacy version as it has the correct collapse/expand functionality
-const USE_REFACTORED_VERSION = false; // Force legacy version which has proper collapse/expand with ports
+// Refactored version is now complete and tested
+const USE_REFACTORED_VERSION = true; // Using refactored modular version
 
 // Import refactored version
 import { EnhancedBoundingBox as EnhancedBoundingBoxRefactored } from './EnhancedBoundingBox/index';

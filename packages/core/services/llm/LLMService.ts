@@ -1,5 +1,6 @@
 // Core LLM Service with OpenRouter Integration
-// Node-only shim import removed for browser bundling
+// Conditional import for Node.js environment
+import 'openai/shims/node';
 import OpenAI from 'openai';
 import {
   LLMRequest,
