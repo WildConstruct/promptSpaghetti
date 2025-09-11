@@ -105,23 +105,11 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     }
   });
 
-  // File operations (already extracted)
-  const fileOps = useSupabaseFileOperations();
-  const editOps = useEditOperations();
+  // Toast notifications
+  const { showToast } = useToast();
 
-  // Components are now statically imported at the top of the file
-
-  // Process initial graph/analysis
-  useEffect(() => {
-    if (editorReady) {
-      if (initialGraph) {
-        setCurrentNodes(initialGraph.nodes);
-        setCurrentEdges(initialGraph.edges);
-      } else if (initialAnalysis) {
-        processExistingAnalysis(initialAnalysis, 'new-project');
-      }
-    }
-  }, [editorReady, initialGraph, initialAnalysis, processExistingAnalysis]);
+  // Editor key for force refresh
+  const [editorKey, setEditorKey] = useState(0);
 
   // Handle editor state changes
   const handleNodesChange = useCallback(
@@ -139,6 +127,29 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     },
     [currentNodes, saveForRecovery]
   );
+
+  // File operations (now with proper handlers)
+  const fileOps = useSupabaseFileOperations({
+    onNodesChange: handleNodesChange,
+    onEdgesChange: handleEdgesChange,
+    onEditorKeyChange: setEditorKey,
+    showToast
+  });
+  const editOps = useEditOperations();
+
+  // Components are now statically imported at the top of the file
+
+  // Process initial graph/analysis
+  useEffect(() => {
+    if (editorReady) {
+      if (initialGraph) {
+        setCurrentNodes(initialGraph.nodes);
+        setCurrentEdges(initialGraph.edges);
+      } else if (initialAnalysis) {
+        processExistingAnalysis(initialAnalysis, 'new-project');
+      }
+    }
+  }, [editorReady, initialGraph, initialAnalysis, processExistingAnalysis]);
 
   // Render error state if needed
   if (loadError) {
