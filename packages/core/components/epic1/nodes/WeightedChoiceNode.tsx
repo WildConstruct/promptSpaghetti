@@ -113,10 +113,10 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
       <BaseEditableNode
         {...props}
         className="weighted-choice"
-        minWidth={280}
-        minHeight={120}
-        compactMinWidth={200}
-        compactMinHeight={60}
+        minWidth={210}
+        minHeight={90}
+        compactMinWidth={150}
+        compactMinHeight={45}
         data={{
           ...props.data,
           options,
@@ -204,8 +204,8 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                 ))}
               </div>
               <div className="epic1-option-controls">
-                {/* Debug: Always show for testing, but will check consent inside components */}
-                {true && (
+                {/* Debug consent section - hidden for production */}
+                {false && (
                   <div className="epic1-debug-consent">
                     <p>Debug - Consent: {String(intelligence.consentGiven)} | Service: {String(!!intelligence.nodeIntelligence)}</p>
                     {!intelligence.consentGiven && (
@@ -219,8 +219,8 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                   </div>
                 )}
                 
-                {/* Intelligent Features - only show if consent given */}
-                {intelligence.consentGiven && intelligence.nodeIntelligence && (
+                {/* Intelligent Features - temporarily disabled until service is properly initialized */}
+                {false && intelligence.consentGiven && intelligence.nodeIntelligence && (
                   <div className="epic1-intelligent-controls">
                     {options.length === 0 ? (
                       <InspirationMode
