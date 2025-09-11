@@ -27,7 +27,11 @@ import './styles/theme-variables.css';
 import { fromLegacyGraph, writePsg } from '@promptscape/core';
 import type { GraphNode, GraphEdge, Graph } from '@promptscape/core';
 import { SimpleMenuBar } from './components/SimpleMenuBar';
-import { IntelligenceProvider } from '@promptscape/core/components/epic1/contexts/IntelligenceContext';
+// Temporarily disabled - IntelligenceContext imports OpenAI which breaks Netlify build
+// import { IntelligenceProvider } from '@promptscape/core/components/epic1/contexts/IntelligenceContext';
+const IntelligenceProvider = ({ children }: { children: React.ReactNode }) => (
+  <>{children}</>
+);
 import { PromptDissector } from '../components/LaunchScreen/PromptDissector';
 import { WorkspaceRecoveryDialog } from '@promptscape/core/components/WorkspaceRecoveryDialog';
 import { ChangelogModal } from '@promptscape/core/components/ChangelogModal/ChangelogModal';
