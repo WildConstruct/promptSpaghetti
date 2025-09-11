@@ -352,8 +352,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   const content = (
     <div className="epic1-graph-editor" style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Main horizontal container for side panel and canvas */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+      {/* Main horizontal container for everything except preview tray */}
+      <div style={{ flex: showPreview ? '1 1 auto' : '1', display: 'flex', overflow: 'hidden', minHeight: 0 }}>
         {/* Tabbed Side Panel with Asset Library */}
         {showAssetLibrary && (
         <TabbedSidePanel
@@ -410,7 +410,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             
             {/* Additional UI Elements */}
             <Panel position="top-left">
-              <NodePalette collapsed={nodePaletteCollapsed} />
+              <NodePalette 
+                collapsed={false}
+                onCollapsedChange={setNodePaletteCollapsed} />
             </Panel>
             
             <Panel position="top-right">
@@ -499,16 +501,18 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       </div>
     </div>
 
-      {/* Preview Tray - Now properly at bottom of flex column */}
+      {/* Preview Tray - As proper sibling that pushes content up */}
       {showPreview && (
-        <PreviewTray
-          results={previewResults}
-          isExecuting={isPreviewExecuting}
-          error={previewError}
-          seeds={currentSeeds}
-          onSeedsChange={updateSeeds}
-          onExport={exportPreviewResults}
-        />
+        <div style={{ flexShrink: 0 }}>
+          <PreviewTray
+            results={previewResults}
+            isExecuting={isPreviewExecuting}
+            error={previewError}
+            seeds={currentSeeds}
+            onSeedsChange={updateSeeds}
+            onExport={exportPreviewResults}
+          />
+        </div>
       )}
 
       {/* Tetris Mode */}
