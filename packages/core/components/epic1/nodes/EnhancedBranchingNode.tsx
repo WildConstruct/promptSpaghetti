@@ -574,9 +574,9 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     <BaseEditableNode
       {...props}
       className={`weighted-choice enhanced-branching flippable ${showMetadata ? 'node-flipped' : ''}`}
-      style={{ width: '520px' }}
-      minWidth={520}
-      minHeight={180}
+      style={{ width: '280px' }}
+      minWidth={280}
+      minHeight={140}
       data={{
         ...props.data,
         nodeType: 'weightedChoice', // Use weightedChoice for compatibility

@@ -44,9 +44,6 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
       const blankCount = currentChoices.filter(
         c => !c.text || c.text.trim() === ''
       ).length;
-      const filledCount = currentChoices.filter(
-        c => c.text && c.text.trim() !== ''
-      ).length;
 
       // If we have blank options, generate that many
       if (blankCount > 0) {
@@ -100,8 +97,8 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
         } else {
           setError('No suggestions available');
         }
-      } catch (err: any) {
-        setError(err.message || 'Failed to generate choices');
+      } catch (err) {
+        setError((err as Error).message || 'Failed to generate choices');
       } finally {
         setLoading(false);
       }
@@ -166,7 +163,15 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
           </>
         ) : (
           <>
-            <span className="icon">✨</span>
+            <svg
+              className="icon"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+            >
+              <path d="M8 0l1.9 5.8H16l-4.9 3.6 1.9 5.8L8 11.6l-4.9 3.6 1.9-5.8L0 5.8h6.1L8 0z" />
+            </svg>
             Populate Choices
           </>
         )}
@@ -240,7 +245,15 @@ export const OptimizeWeightsButton: React.FC<OptimizeWeightsButtonProps> = ({
             </>
           ) : (
             <>
-              <span className="icon">⚖️</span>
+              <svg
+                className="icon"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+              >
+                <path d="M2 3h12v2H2V3zm4 3h4v1h1V6h2l-3 4v4h2v1H4v-1h2v-4L3 6h2v1h1V6z" />
+              </svg>
               Optimize Weights
             </>
           )}
@@ -342,7 +355,16 @@ export const InspirationMode: React.FC<InspirationModeProps> = ({
             </>
           ) : (
             <>
-              <span className="icon">💡</span>
+              <svg
+                className="icon"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+              >
+                <path d="M8 1.5A3.5 3.5 0 1 1 4.5 5c0-.78.32-1.48.84-1.99L6 4.67V7h1V3H5v1h.66A2.5 2.5 0 1 0 10.5 5h1A3.5 3.5 0 0 1 8 1.5zM7 10h2v1H7v-1zm0 2h2v1H7v-1z" />
+                <path d="M5 8.5A.5.5 0 0 1 5.5 8h5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 9.5v-1z" />
+              </svg>
               Need inspiration?
             </>
           )}

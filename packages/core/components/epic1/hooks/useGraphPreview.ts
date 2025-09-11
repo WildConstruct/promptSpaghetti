@@ -102,6 +102,17 @@ export function useGraphPreview<NodeData = unknown>(
     workerPoolSize
   ]);
 
+  // Automatically update preview when nodes or edges change
+  useEffect(() => {
+    if (!previewEngineRef.current || !isPreviewVisible) return;
+
+    const runtimeGraph = convertToRuntimeGraph(nodes, edges);
+    if (runtimeGraph) {
+      console.log('[Preview] Updating preview with graph changes');
+      previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
+    }
+  }, [nodes, edges, isPreviewVisible]);
+
   // Toggle preview visibility
   const togglePreview = useCallback(() => {
     const { toggleTray, isOpen } = usePreviewTrayStore.getState();
