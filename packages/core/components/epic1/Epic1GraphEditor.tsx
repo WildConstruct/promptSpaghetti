@@ -580,9 +580,10 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   // React Flow initialization
   const onInit = useCallback((instance: ReactFlowInstance) => {
+    console.log('[Epic1GraphEditor] React Flow initialized, instance:', instance);
+    console.log('[Epic1GraphEditor] Current nodes:', nodes.length, 'edges:', edges.length);
     setReactFlowInstance(instance);
-    console.log('React Flow initialized');
-  }, []);
+  }, [nodes.length, edges.length]);
 
   // Wrapper for nodes change to support undo/redo
   const onNodesChange = useCallback(

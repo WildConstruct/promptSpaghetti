@@ -33,6 +33,10 @@ export function useGraphDragDrop<NodeData = unknown>(
     (event: DragEvent) => {
       event.preventDefault();
       event.dataTransfer.dropEffect = 'move';
+      console.log(
+        '[useGraphDragDrop] DragOver event, reactFlowInstance:',
+        !!reactFlowInstance
+      );
       setIsDraggingOver(true);
 
       // Calculate drop position
@@ -119,13 +123,16 @@ export function useGraphDragDrop<NodeData = unknown>(
       event.preventDefault();
       event.stopPropagation();
 
+      console.log('[useGraphDragDrop] Drop event received');
       setIsDraggingOver(false);
       setDropPosition(null);
 
       if (!reactFlowInstance) {
+        console.error('[useGraphDragDrop] reactFlowInstance is null');
         showToast?.('error', 'Graph not ready for drop');
         return;
       }
+      console.log('[useGraphDragDrop] reactFlowInstance is available');
 
       const position = reactFlowInstance.screenToFlowPosition({
         x: event.clientX,

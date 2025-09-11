@@ -69,7 +69,7 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
     debugLogEpic1('[NodePalette] Drag started for node type:', nodeType);
     // Use text/plain as primary for better compatibility
     event.dataTransfer.setData('text/plain', nodeType);
-    event.dataTransfer.setData('application/node-type', nodeType);
+    event.dataTransfer.setData('application/nodeType', nodeType); // Fixed: capital T to match hook
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'copy';
   };
