@@ -1,20 +1,58 @@
-I’ve analyzed the layout and DOM structure of your app. Here’s what’s likely happening:
-
-- The **preview panel** visually overlays the canvas, but it isn’t *pushing* the canvas upward—suggesting it’s probably using CSS positioning (like `position: absolute` or `position: fixed`) rather than being a true block sibling of the canvas in the DOM flow.
-- When a panel uses absolute or fixed positioning and is layered on top, it *escapes* the normal document flow—so siblings won’t be shifted or pushed by its presence.
-- If you want the preview panel to push the canvas up as a sibling, both elements should be *regular block-level siblings* (not absolutely positioned), or the container should use *flex* or *grid* layout so the preview and canvas are naturally stacked.
-
-**Quick diagnosis steps:**
-- Check the CSS of the preview panel for `position: absolute`/`fixed`.
-- If so, to make it push the canvas up, switch to something like:
-  ```css
-  display: flex;
-  flex-direction: column;
-  ```
-
-...on the parent container, with both `.canvas` and `.preview-panel` as children in DOM order. This allows the preview panel to "push" the canvas accordingly within the layout.
-
-If you paste or describe the relevant HTML/CSS structure, I can give even more specific code fixes.
-
-[1](https://ps.wildconstruct.com/)
-[2](https://ps.wildconstruct.com/)
+ Supabase Configuration Test:
+ URL configured: true
+ Anon Key configured: true
+ Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+ji @ index-B6RT7Qwr.js:53
+testSupabase.ts:15 ✅ Supabase client created successfully
+IntelligenceContext.tsx:60 [IntelligenceContext] Stored consent: true
+IntelligenceContext.tsx:69 [IntelligenceContext] Services memo - consent given: true
+IntelligenceContext.tsx:84 [IntelligenceContext] Initializing services...
+IntelligenceContext.tsx:85 [IntelligenceContext] Available env vars: Object
+IntelligenceContext.tsx:99 [IntelligenceContext] API key sources: Object
+IntelligenceContext.tsx:107 [IntelligenceContext] No API key found. Using offline mode.
+(anonymous) @ IntelligenceContext.tsx:107
+IntelligenceContext.tsx:108 [IntelligenceContext] To use AI features, set your OpenRouter API key:
+IntelligenceContext.tsx:109   localStorage.setItem("openrouter-api-key", "YOUR_API_KEY")
+LLMService.ts:36 [LLMService] Constructor called with config: Object
+LLMService.ts:58 [LLMService] No API key provided - client not initialized
+OT @ LLMService.ts:58
+IntelligenceContext.tsx:131 [IntelligenceContext] Services initialized successfully: Object
+Epic1GraphEditor.tsx:150 Restored graph from local storage
+IntelligenceContext.tsx:60 [IntelligenceContext] Stored consent: true
+IntelligenceContext.tsx:69 [IntelligenceContext] Services memo - consent given: true
+IntelligenceContext.tsx:84 [IntelligenceContext] Initializing services...
+IntelligenceContext.tsx:85 [IntelligenceContext] Available env vars: Object
+IntelligenceContext.tsx:99 [IntelligenceContext] API key sources: Object
+IntelligenceContext.tsx:107 [IntelligenceContext] No API key found. Using offline mode.
+(anonymous) @ IntelligenceContext.tsx:107
+IntelligenceContext.tsx:108 [IntelligenceContext] To use AI features, set your OpenRouter API key:
+IntelligenceContext.tsx:109   localStorage.setItem("openrouter-api-key", "YOUR_API_KEY")
+LLMService.ts:36 [LLMService] Constructor called with config: Object
+LLMService.ts:58 [LLMService] No API key provided - client not initialized
+OT @ LLMService.ts:58
+IntelligenceContext.tsx:131 [IntelligenceContext] Services initialized successfully: Object
+Epic1GraphEditor.tsx:150 Restored graph from local storage
+react-dom.production.min.js:188 ReferenceError: TabbedSidePanel is not defined
+    at cd (Epic1GraphEditor.tsx:1834:12)
+    at Iu (react-dom.production.min.js:160:137)
+    at ca (react-dom.production.min.js:289:337)
+    at oa (react-dom.production.min.js:279:389)
+    at ic (react-dom.production.min.js:279:320)
+    at yl (react-dom.production.min.js:279:180)
+    at oi (react-dom.production.min.js:270:88)
+    at ra (react-dom.production.min.js:267:429)
+    at Ze (scheduler.production.min.js:13:203)
+    at MessagePort.it (scheduler.production.min.js:14:128)
+$u @ react-dom.production.min.js:188
+react-dom.production.min.js:282 Uncaught ReferenceError: TabbedSidePanel is not defined
+    at cd (Epic1GraphEditor.tsx:1834:12)
+    at Iu (react-dom.production.min.js:160:137)
+    at ca (react-dom.production.min.js:289:337)
+    at oa (react-dom.production.min.js:279:389)
+    at ic (react-dom.production.min.js:279:320)
+    at yl (react-dom.production.min.js:279:180)
+    at oi (react-dom.production.min.js:270:88)
+    at ra (react-dom.production.min.js:267:429)
+    at Ze (scheduler.production.min.js:13:203)
+    at MessagePort.it (scheduler.production.min.js:14:128)
+testSupabase.ts:22 ✅ Auth check: Not authenticated

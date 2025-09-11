@@ -38,6 +38,7 @@ import { Epic1NodeType } from '../../runtime/nodes/epic1/nodeTypes';
 import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import { AssetLibrary, Preset } from './asset-library';
 import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
+import { TabbedSidePanel } from './TabbedSidePanel';
 import { NodeTetris } from './NodeTetris';
 import { NodeToolbar } from './NodeToolbar';
   import { NodePalette } from './NodePalette';
@@ -2419,8 +2420,36 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
                       y: node.position.y
                     }
                   }));
+                  
+                  // Add the new nodes
                   setNodes((nds) => [...nds, ...offsetNodes]);
-                  setEdges((eds) => [...eds, ...pendingWizardNodes.edges]);
+                  
+                  // Add edges but first check for existing connections to avoid duplicates
+                  setEdges((eds) => {
+                    const existingTargets = new Set(eds.map(e => e.target));
+                    const existingSources = new Set(eds.map(e => e.source));
+                    
+                    // Filter out edges that would create multiple connections to the same handle
+                    const validNewEdges = pendingWizardNodes.edges.filter(newEdge => {
+                      // Don't add if target already has an incoming connection
+                      if (existingTargets.has(newEdge.target)) {
+                        console.warn(`Skipping edge to ${newEdge.target} - already has incoming connection`);
+                        return false;
+                      }
+                      // Check if this would be a duplicate source connection
+                      const wouldDuplicate = eds.some(e => 
+                        e.source === newEdge.source && e.sourceHandle === newEdge.sourceHandle
+                      );
+                      if (wouldDuplicate) {
+                        console.warn(`Skipping duplicate edge from ${newEdge.source}`);
+                        return false;
+                      }
+                      return true;
+                    });
+                    
+                    return [...eds, ...validNewEdges];
+                  });
+                  
                   showToast('success', `Added ${pendingWizardNodes.nodes.length} nodes to your graph!`);
                   setPendingWizardNodes(null);
                 }}
