@@ -1,32 +1,38 @@
-PromptDissector.tsx:2475 OK button clicked!
-PromptDissector.tsx:583 [Parse Skip] Already have results for standard mode with this text
-testSupabase.ts:8 Supabase Configuration Test:
-testSupabase.ts:9 URL configured: true
-testSupabase.ts:10 Anon Key configured: true
-GoTrueClient.js:71 Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
-Hr @ GoTrueClient.js:71
-testSupabase.ts:15 ✅ Supabase client created successfully
-testSupabase.ts:22 ✅ Auth check: Not authenticated
-react-dom.production.min.js:188 Error: Minified React error #310; visit https://reactjs.org/docs/error-decoder.html?invariant=310 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
-    at $e (react-dom.production.min.js:161:314)
-    at Object.ys [as useCallback] (react-dom.production.min.js:171:291)
-    at M.useCallback (react.production.min.js:24:429)
-    at GE (Epic1EditorContainer.tsx:1013:34)
-    at Iu (react-dom.production.min.js:160:137)
-    at Qu (react-dom.production.min.js:196:258)
-    at ca (react-dom.production.min.js:291:88)
-    at oa (react-dom.production.min.js:279:389)
-    at ic (react-dom.production.min.js:279:320)
-    at yl (react-dom.production.min.js:279:180)
-$u @ react-dom.production.min.js:188
-react-dom.production.min.js:282 Uncaught Error: Minified React error #310; visit https://reactjs.org/docs/error-decoder.html?invariant=310 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
-    at $e (react-dom.production.min.js:161:314)
-    at Object.ys [as useCallback] (react-dom.production.min.js:171:291)
-    at M.useCallback (react.production.min.js:24:429)
-    at GE (Epic1EditorContainer.tsx:1013:34)
-    at Iu (react-dom.production.min.js:160:137)
-    at Qu (react-dom.production.min.js:196:258)
-    at ca (react-dom.production.min.js:291:88)
-    at oa (react-dom.production.min.js:279:389)
-    at ic (react-dom.production.min.js:279:320)
-    at yl (react-dom.production.min.js:279:180)
+The Netlify deploy errored, with the following guidance provided:
+
+**Diagnosis:**
+[line 50](#L50) indicates that the build failed during the stage of installing dependencies with a non-zero exit code returned by the dependency_installation script.
+
+**Error Type:** 
+The error is related to an outdated `pnpm-lock.yaml` file causing the installation process to fail.
+
+**Cause:**
+[line 51](#L51) specifies the error `ERR_PNPM_OUTDATED_LOCKFILE`, stating that the `pnpm-lock.yaml` file is not up to date with the project dependencies.
+
+**Solution:**
+To resolve this issue, the user needs to update the `pnpm-lock.yaml` file to match the project dependencies. They can do this by running the following command in the project directory:
+```bash
+pnpm install
+```
+
+After updating the lockfile with the correct dependencies, the user should commit the changes including the updated lockfile to the repository to ensure consistency between the lockfile and the project dependencies.
+
+The relevant error logs are:
+
+Line 40: Started restoring workspace packages/core node modules
+Line 41: Finished restoring workspace packages/core node modules
+Line 42: Started restoring workspace packages/custom-node-sdk node modules
+Line 43: Finished restoring workspace packages/custom-node-sdk node modules
+Line 44: Started restoring workspace docs/content-authoring-handbook node modules
+Line 45: Finished restoring workspace docs/content-authoring-handbook node modules
+Line 46: Started restoring workspace root node modules
+Line 47: Finished restoring workspace root node modules
+Line 48: Installing npm packages using pnpm version 8.15.4
+Line 49: Scope: all 8 workspace projects
+Line 50: Failed during stage 'Install dependencies': dependency_installation script returned non-zero exit code: 1
+Line 51:  ERR_PNPM_OUTDATED_LOCKFILE  Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to date with packages/asset-
+Line 52: Note that in CI environments this setting is true by default. If you still need to run install in such cases, use "pnpm install 
+Line 53:     Failure reason:
+Line 54:     specifiers in the lockfile ({"@promptscape/core":"workspace:*","comlink":"^4.4.2","fuse.js":"^7.1.0","react":">=18.0.0","rea
+Line 55: Failing build: Failed to install dependencies
+Line 56: Finished processing build request in 38.792s

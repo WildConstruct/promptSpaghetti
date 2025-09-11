@@ -1535,7 +1535,81 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       event.preventDefault();
       event.stopPropagation();
 
-      // First: check for Asset Browser preset payload
+      // First: check for Asset Browser preset payload (react-dnd 'preset' type)
+      let presetData = '';
+      try {
+        presetData = event.dataTransfer.getData('preset');
+      } catch {
+        // ignore
+      }
+
+      if (presetData) {
+        try {
+          const preset = JSON.parse(presetData);
+          // Calculate graph position
+          const pos = reactFlowInstance
+            ? reactFlowInstance.screenToFlowPosition({ x: event.clientX, y: event.clientY })
+            : { x: 250, y: 250 };
+
+          // Create a node from the preset
+          const nodeId = `preset-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+          const nodeType = preset.nodeType || 'textBlock';
+
+          let nodeData: any = {
+            nodeType: nodeType
+          };
+
+          // Set up node data based on preset type
+          if (nodeType === 'textBlock') {
+            nodeData = {
+              ...nodeData,
+              value: preset.value || '',
+              content: preset.value || '',
+              text: preset.value || ''
+            };
+          } else if (nodeType === 'weightedChoice') {
+            nodeData = {
+              ...nodeData,
+              options: preset.value?.options || [{ id: 'opt-1', text: 'Option 1', weight: 100, hasBranch: false }],
+              value: JSON.stringify(preset.value?.options || [])
+            };
+          } else if (nodeType === 'setVariable') {
+            nodeData = {
+              ...nodeData,
+              variableName: preset.value?.name || 'variable',
+              variableValue: preset.value?.value || ''
+            };
+          } else if (nodeType === 'concat') {
+            nodeData = {
+              ...nodeData,
+              separator: preset.value?.separator || ' ',
+              value: preset.value?.separator || ' '
+            };
+          } else if (nodeType === 'output') {
+            nodeData = {
+              ...nodeData,
+              outputName: preset.value?.outputName || 'output'
+            };
+          }
+
+          const newNode: Node<EditableNodeData> = {
+            id: nodeId,
+            type: nodeType,
+            position: pos,
+            data: nodeData
+          };
+
+          setNodes((nds) => [...nds, newNode]);
+          showToast('success', `Added ${preset.name} node from asset library`);
+          return;
+        } catch (e) {
+          console.error('[Epic1GraphEditor] Invalid preset drop payload:', e);
+          showToast('error', 'Invalid preset drop payload');
+          return;
+        }
+      }
+
+      // Second: check for Asset Browser preset payload (legacy format)
       let presetPayload = '';
       try {
         presetPayload = event.dataTransfer.getData('application/x-preset');
@@ -1559,7 +1633,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         }
       }
 
-      // Try multiple data types for compatibility
+      // Third: Try multiple data types for compatibility
       let nodeType = event.dataTransfer.getData('application/reactflow');
       if (!nodeType) {
         nodeType = event.dataTransfer.getData('application/node-type');
@@ -1570,7 +1644,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       if (!nodeType) {
         nodeType = event.dataTransfer.getData('text');
       }
-      
+
       if (!nodeType) {
         console.error('Drop failed: no nodeType found in any data transfer format');
         return;
@@ -1595,7 +1669,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
       handleNodeDrop(nodeType, position);
     },
-    [reactFlowInstance, handleNodeDrop, insertPresetByMeta, showToast]
+    [reactFlowInstance, handleNodeDrop, insertPresetByMeta, showToast, setNodes]
   );
 
   // Wrap with DndProvider if using droppable nodes
