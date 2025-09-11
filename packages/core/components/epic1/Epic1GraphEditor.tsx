@@ -38,7 +38,7 @@ import { Epic1NodeType } from '../../runtime/nodes/epic1/nodeTypes';
 import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import { AssetLibrary, Preset } from './asset-library';
 import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
-import { TabbedSidePanel } from './TabbedSidePanel';
+import { NodeTetris } from './NodeTetris';
 import { NodeToolbar } from './NodeToolbar';
   import { NodePalette } from './NodePalette';
 import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
@@ -922,13 +922,50 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     }
   }, [enhancedNodes, edges, convertToRuntimeGraph]);
 
+  // Konami code detection for Tetris mode
+  const [konamiSequence, setKonamiSequence] = useState<string[]>([]);
+  const [tetrisMode, setTetrisMode] = useState(false);
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyA', 'KeyB', 'Enter'];
+
+  // Konami code detector
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Skip if we're in an input field or if Tetris mode is already active
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement || tetrisMode) {
+        return;
+      }
+      
+      const newSequence = [...konamiSequence, event.code];
+      
+      // Check if the sequence matches the Konami code
+      if (newSequence.length >= konamiCode.length) {
+        const lastSequence = newSequence.slice(-konamiCode.length);
+        if (JSON.stringify(lastSequence) === JSON.stringify(konamiCode)) {
+          setTetrisMode(true);
+          showToast('success', '🎮 TETRIS MODE ACTIVATED! 🎮');
+          setKonamiSequence([]);
+          return;
+        }
+      }
+      
+      setKonamiSequence(newSequence);
+      
+      // Reset sequence if it gets too long
+      if (newSequence.length > konamiCode.length * 2) {
+        setKonamiSequence([]);
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [konamiSequence, tetrisMode, showToast]);
+
   // Cleanup preview engine on unmount
   useEffect(() => {
     return () => {
       previewEngineRef.current?.dispose();
     };
   }, []);
-  
   
   // Add direct keyboard handler for delete
   useEffect(() => {
@@ -2398,9 +2435,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
                   cursor: 'pointer',
                   fontWeight: 'bold'
                 }}
-              >
-                Replace Graph
-              </button>
             </div>
           </div>
         </div>
@@ -2417,60 +2451,70 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       />
       
       {/* Preview Tray - Bottom output panel as sibling */}
-      {/*
-        IMPORTANT: The internal PreviewTray here must NOT be an overlay.
-        Do not pass overlay={true}. It should remain a normal flex child so it
-        pushes content above it. Overlay mode previously caused UX issues.
-      */}
       {showPreview && (
         <PreviewTray
-        resizable={false}
-        seeds={currentSeeds}
-        results={previewResults}
-        isExecuting={isPreviewExecuting}
-        error={previewError}
-        onSeedsChange={setCurrentSeeds}
-        onExecute={() => {
-          console.log('[Preview] Execute button clicked');
-          console.log('[Preview] Current nodes:', enhancedNodes);
-          console.log('[Preview] Current edges:', edges);
-          const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
-          console.log('[Preview] Converted runtime graph:', runtimeGraph);
-          if (runtimeGraph && previewEngineRef.current) {
-            console.log('[Preview] Updating preview with graph');
-            previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
-          } else {
-            console.warn('[Preview] Missing runtime graph or preview engine', {
-              runtimeGraph,
-              previewEngine: previewEngineRef.current
+          resizable={false}
+          seeds={currentSeeds}
+          results={previewResults}
+          isExecuting={isPreviewExecuting}
+          error={previewError}
+          onSeedsChange={setCurrentSeeds}
+          onExecute={() => {
+            console.log('[Preview] Execute button clicked');
+            console.log('[Preview] Current nodes:', enhancedNodes);
+            console.log('[Preview] Current edges:', edges);
+            const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
+            console.log('[Preview] Converted runtime graph:', runtimeGraph);
+            if (runtimeGraph && previewEngineRef.current) {
+              console.log('[Preview] Updating preview with graph');
+              previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
+            } else {
+              console.warn('[Preview] Missing runtime graph or preview engine', {
+                runtimeGraph,
+                previewEngine: previewEngineRef.current
+              });
+            }
+          }}
+          onCancel={() => {
+            // @ts-ignore - cancelExecution not yet exposed
+            (previewEngineRef.current as any)?.cancelCurrentExecution?.();
+          }}
+          onCopy={(text: string) => {
+            navigator.clipboard.writeText(text).then(() => {
+              showToast('success', 'Results copied to clipboard');
             });
-          }
+          }}
+          onExport={(format: string) => {
+            // Export functionality
+            const data = format === 'json' 
+              ? JSON.stringify(previewResults, null, 2)
+              : previewResults.map(r => `Seed ${r.seed}: ${r.result}`).join('\n');
+            const blob = new Blob([data], { type: format === 'json' ? 'application/json' : 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `preview-results.${format}`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('success', `Results exported as ${format.toUpperCase()}`);
+          }}
+        />
+      )}
+
+    {/* Tetris Mode Overlay */}
+    {tetrisMode && (
+      <NodeTetris
+        onExit={() => {
+          setTetrisMode(false);
+          showToast('info', 'Exited Tetris mode');
         }}
-        onCancel={() => {
-          // @ts-ignore - cancelExecution not yet exposed
-          (previewEngineRef.current as any)?.cancelCurrentExecution?.();
-        }}
-        onCopy={(text: string) => {
-          navigator.clipboard.writeText(text).then(() => {
-            showToast('success', 'Results copied to clipboard');
-          });
-        }}
-        onExport={(format: string) => {
-          // Export functionality
-          const data = format === 'json' 
-            ? JSON.stringify(previewResults, null, 2)
-            : previewResults.map(r => `Seed ${r.seed}: ${r.result}`).join('\n');
-          const blob = new Blob([data], { type: format === 'json' ? 'application/json' : 'text/csv' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `preview-results.${format}`;
-          a.click();
-          URL.revokeObjectURL(url);
-          showToast('success', `Results exported as ${format.toUpperCase()}`);
+        onScoreUpdate={(score) => {
+          // Could add high score tracking here
+          console.log('Tetris score:', score);
         }}
       />
     )}
+
     </div>
   );
   
