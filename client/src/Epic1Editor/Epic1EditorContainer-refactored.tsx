@@ -195,18 +195,16 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         )}
 
         <GraphEditorWithTray
+          EditorComponent={Epic1GraphEditor}
+          editorKey={editorKey}
+          currentNodes={currentNodes}
+          currentEdges={currentEdges}
           showPreview={showPreview}
-          showAssetLibrary={assetLibraryVisible}
+          assetLibraryVisible={assetLibraryVisible}
           assetLibraryPosition={assetLibraryPosition}
-        >
-          <Epic1GraphEditor
-            initialNodes={currentNodes}
-            initialEdges={currentEdges}
-            onNodesChange={handleNodesChange}
-            onEdgesChange={handleEdgesChange}
-            showOnboarding={showOnboarding}
-          />
-        </GraphEditorWithTray>
+          onNodesChange={handleNodesChange}
+          onEdgesChange={handleEdgesChange}
+        />
 
         {/* Modals */}
         {showPromptDissector && (
