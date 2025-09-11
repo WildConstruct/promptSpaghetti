@@ -178,20 +178,21 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
 
-  // Graph persistence
+  // Graph persistence - DISABLED to prevent overriding new nodes
   const { persistedState } = useGraphPersistence([], [], {
     autoSave: false,
+    autoLoad: false, // Disable auto-loading
     onLoadSuccess: state => console.log('Restored graph from local storage'),
     onLoadError: error =>
       console.error('Failed to load persisted state:', error)
   });
 
-  // Initialize nodes and edges with persisted state or initial props
+  // Initialize nodes and edges with initial props ONLY (not persisted state)
   const [nodes, setNodes, onNodesChangeBase] = useNodesState<EditableNodeData>(
-    persistedState?.nodes || initialNodes
+    initialNodes
   );
   const [edges, setEdges, onEdgesChangeBase] = useEdgesState(
-    persistedState?.edges || initialEdges
+    initialEdges
   );
 
   // Update nodes when initialNodes change (for when launched from parser)

@@ -108,6 +108,7 @@ export const usePromptParsing = ({
                 label: displayText,
                 text: displayText,
                 content: displayText,
+                value: displayText, // Add value for BaseEditableNode
                 nodeType: nodeType,
                 // For Variable nodes, include the variable name
                 ...(nodeInternal.variableName && {
@@ -117,7 +118,6 @@ export const usePromptParsing = ({
                 ...(nodeInternal.nodeType === 'Choice' && {
                   options: [
                     {
-                      id: `option-0`,
                       text: displayText,
                       weight: 100,
                       hasBranch: false
