@@ -44,13 +44,17 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
       const edges: Edge[] = [];
       
       // Create nodes from analysis
+      let hasOutputNode = false;
       analysis.nodes.forEach((nodeGen, index) => {
         const node = nodeGen.node;
+        if (node.nodeType === 'Output') {
+          hasOutputNode = true;
+        }
         nodes.push({
           id: node.id,
           type: node.nodeType === 'WeightedChoice' ? 'weightedChoice' : 
                 node.nodeType === 'Output' ? 'output' : 'textBlock',
-          position: { x: 100 + (index % 3) * 200, y: 100 + Math.floor(index / 3) * 150 },
+          position: { x: 100 + (index % 3) * 250, y: 100 + Math.floor(index / 3) * 150 },
           data: {
             ...node.data,
             label: node.data.label || node.nodeType
@@ -58,7 +62,21 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
         });
       });
 
+      // Ensure there's an Output node
+      if (!hasOutputNode) {
+        const outputNode = {
+          id: 'output',
+          type: 'output',
+          position: { x: 100 + (nodes.length % 3) * 250, y: 100 + Math.floor(nodes.length / 3) * 150 },
+          data: {
+            label: 'Output'
+          }
+        };
+        nodes.push(outputNode);
+      }
+
       // Create edges from analysis
+      const connectedNodes = new Set<string>();
       if (analysis.edges) {
         analysis.edges.forEach(edge => {
           edges.push({
@@ -67,8 +85,22 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
             target: edge.target,
             type: 'smoothstep'
           });
+          connectedNodes.add(edge.source);
+          connectedNodes.add(edge.target);
         });
       }
+
+      // Connect any unconnected nodes to the Output node
+      nodes.forEach(node => {
+        if (node.type !== 'output' && !connectedNodes.has(node.id)) {
+          edges.push({
+            id: `${node.id}-output`,
+            source: node.id,
+            target: 'output',
+            type: 'smoothstep'
+          });
+        }
+      });
 
       onComplete(nodes, edges);
       setPromptText('');

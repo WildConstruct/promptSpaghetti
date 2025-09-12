@@ -25,9 +25,9 @@
   user-select: none;
   -webkit-user-select: none;
   /* Fixed width for minimap to properly render nodes */
-  width: 280px;
+  width: 220px;
   /* Ensure minimum width for content */
-  min-width: 280px;
+  min-width: 220px;
 }
 
 /* Remove ALL ReactFlow selection outlines and borders */

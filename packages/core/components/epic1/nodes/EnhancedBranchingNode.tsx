@@ -573,8 +573,8 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     <BaseEditableNode
       {...props}
       className={`weighted-choice enhanced-branching flippable ${showMetadata ? 'node-flipped' : ''}`}
-      style={{ width: '280px' }}
-      minWidth={280}
+      style={{ width: '220px' }}
+      minWidth={220}
       minHeight={140}
       data={{
         ...props.data,
@@ -763,7 +763,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       onMouseDown={(e) => e.stopPropagation()}
                       title="Toggle branch output"
                     >
-                      ⚡
+                      →
                     </button>
 
                     {/* Remove button */}
@@ -797,7 +797,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
               {/* Footer with hints and controls */}
               <div className="enhanced-footer">
                 <div className="hints">
-                  Drag to reorder • ⚡ = branch output • Click and drag dials to adjust weights
+                  Drag to reorder • → = branch output • Click and drag dials to adjust weights
                 </div>
                 
                 {/* Epic 2 AI Integration */}
@@ -1067,7 +1067,6 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 >
                   <span className="option-text">
                     {option.text || 'Empty option'}
-                    {option.hasBranch && ' ⚡'}
                   </span>
                   <span className="option-percentage">{percentages[index]}%</span>
                 </div>

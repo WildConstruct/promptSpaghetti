@@ -249,7 +249,12 @@ export const TutorialOverlay: React.FC = () => {
           pointerEvents: 'auto',
           ...getSpotlightStyle(),
         }}
-        onClick={step.action === 'observe' ? nextStep : undefined}
+        onClick={(e) => {
+          if (step.action === 'observe' || (step.action === 'click' && step.id === 'empty-canvas')) {
+            e.stopPropagation();
+            nextStep();
+          }
+        }}
       />
 
       {/* Tooltip */}

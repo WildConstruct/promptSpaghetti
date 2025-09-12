@@ -244,11 +244,10 @@
 /* Ensure minimap nodes are visible with proper styling */
 .epic1-graph-editor .react-flow__minimap-node {
   opacity: 1 !important;
+  fill: #8b5cf6 !important; /* Purple color for all nodes */
   fill-opacity: 1 !important;
-  stroke: rgba(255, 255, 255, 0.2) !important;
+  stroke: #6d28d9 !important; /* Darker purple stroke */
   stroke-width: 1px !important;
-  /* Force the fill attribute to be respected */
-  fill: attr(fill) !important;
 }
 
 /* Override any red fill that might be applied */
