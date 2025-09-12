@@ -192,11 +192,7 @@ export const TutorialOverlay: React.FC = () => {
     const rect = targetElement.getBoundingClientRect();
     const padding = 10;
 
-    // For wizard button, don't apply clip path
-    if (step.target === '.prompt-wizard-button') {
-      return 'none';
-    }
-
+    // Always create a proper clip-path to cut out the target area
     return `polygon(
       0 0,
       0 100%,
@@ -212,6 +208,8 @@ export const TutorialOverlay: React.FC = () => {
   };
 
   const isWizardStep = step.target === '.prompt-wizard-button';
+  // When action is 'click', we need to allow clicking through the backdrop
+  const shouldAllowClick = step.action === 'click';
 
   const getTooltipPosition = () => {
     const tooltipWidth = 400;
@@ -305,8 +303,10 @@ export const TutorialOverlay: React.FC = () => {
     <div ref={overlayRef} className="tutorial-overlay">
       {/* Dark overlay with spotlight */}
       <div
-        className={`tutorial-backdrop ${isWizardStep ? 'light-overlay' : ''}`}
-        style={{ clipPath: getSpotlightClipPath() }}
+        className={`tutorial-backdrop ${isWizardStep ? 'light-overlay' : ''} ${shouldAllowClick ? 'allow-clicks' : ''}`}
+        style={{ 
+          clipPath: step.spotlight ? getSpotlightClipPath() : 'none'
+        }}
         onClick={(e) => {
           if (step.action === 'observe' || (step.action === 'click' && step.id === 'empty-canvas')) {
             e.stopPropagation();

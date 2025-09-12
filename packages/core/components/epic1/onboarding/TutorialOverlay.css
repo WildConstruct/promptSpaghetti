@@ -20,6 +20,10 @@
   pointer-events: auto;
 }
 
+.tutorial-backdrop.allow-clicks {
+  pointer-events: none;
+}
+
 .tutorial-backdrop.light-overlay {
   background-color: rgba(0, 0, 0, 0.3);
 }
