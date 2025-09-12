@@ -208,8 +208,9 @@ export const TutorialOverlay: React.FC = () => {
   };
 
   const isWizardStep = step.target === '.prompt-wizard-button';
-  // When action is 'click', we need to allow clicking through the backdrop
-  const shouldAllowClick = step.action === 'click';
+  // Only allow clicking through backdrop when we have a specific target with spotlight
+  // For 'empty-canvas' or steps without spotlight, keep backdrop clickable
+  const shouldAllowClick = step.action === 'click' && step.spotlight === true;
 
   const getTooltipPosition = () => {
     const tooltipWidth = 400;
@@ -308,7 +309,8 @@ export const TutorialOverlay: React.FC = () => {
           clipPath: step.spotlight ? getSpotlightClipPath() : 'none'
         }}
         onClick={(e) => {
-          if (step.action === 'observe' || (step.action === 'click' && step.id === 'empty-canvas')) {
+          // Allow clicking to continue for observe steps or specific click steps
+          if (step.action === 'observe' || (step.action === 'click' && !step.spotlight)) {
             e.stopPropagation();
             nextStep();
           }
