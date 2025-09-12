@@ -232,7 +232,7 @@ export const TutorialOverlay: React.FC = () => {
           right: 0,
           bottom: 0,
         zIndex: 9999,
-        pointerEvents: step.spotlight ? 'none' : 'auto',
+        pointerEvents: 'none',
       }}
     >
       {/* Dark overlay with spotlight */}
@@ -264,7 +264,9 @@ export const TutorialOverlay: React.FC = () => {
           maxWidth: '600px',
           width: '90%',
           boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-          animation: 'slideUp 0.3s ease'
+          animation: 'slideUp 0.3s ease',
+          pointerEvents: 'auto',
+          zIndex: 10000
         }}
       >
         {/* Progress */}
