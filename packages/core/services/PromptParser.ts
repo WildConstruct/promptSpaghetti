@@ -313,33 +313,38 @@ CRITICAL: Return ONLY valid JSON matching this exact schema:
 }
 
 Node Type Guidelines:
-- Variable: For character names, parameters, or {variable} syntax
-- WeightedChoice: For lists of alternatives or options
+- Variable: For character names, parameters, or ${variable} syntax (with dollar sign)
+- WeightedChoice: For {option1|option2|option3} bracket syntax OR lists of alternatives
 - TextBlock: For descriptive text, scenes, or narratives
 - Sequential: For temporal sequences (first, then, finally)
 
 Rules:
-1. Preserve ALL {variable} syntax exactly as written
-2. Create edges to show logical flow (no cycles)
-3. If uncertain about node type, use TextBlock with metadata.reason:"uncertain"
-4. Detect multilingual content and add metadata.lang
-5. For code blocks, create TextBlock with metadata.opaque:true
-6. Extract semantic meaning, not just sentence boundaries
+1. {option1|option2} syntax creates WeightedChoice nodes (pipe-separated options in brackets)
+2. ${variable} syntax creates Variable nodes (dollar sign prefix)
+3. Create edges to show logical flow (no cycles)
+4. If uncertain about node type, use TextBlock with metadata.reason:"uncertain"
+5. Detect multilingual content and add metadata.lang
+6. For code blocks, create TextBlock with metadata.opaque:true
+7. Extract semantic meaning, not just sentence boundaries
 
-Example Input: "A brave {hero_name} ventures into the dark forest, then fights the dragon."
+Example Input: "A {brave|cunning|wise} ${hero_name} ventures into the {dark forest|ancient ruins}, then fights the dragon."
 Example Output:
 {
   "version": "psg-parse-v1",
   "nodes": [
-    {"type": "TextBlock", "content": "A brave", "metadata": {"role": "descriptor"}},
-    {"type": "Variable", "content": "{hero_name}", "metadata": {"role": "character"}},
-    {"type": "Sequential", "content": "ventures into the dark forest", "metadata": {"action": "movement"}},
-    {"type": "Sequential", "content": "fights the dragon", "metadata": {"action": "combat"}}
+    {"type": "TextBlock", "content": "A", "metadata": {"role": "article"}},
+    {"type": "WeightedChoice", "content": "brave|cunning|wise", "metadata": {"role": "descriptor"}},
+    {"type": "Variable", "content": "${hero_name}", "metadata": {"role": "character"}},
+    {"type": "TextBlock", "content": "ventures into the", "metadata": {"role": "action"}},
+    {"type": "WeightedChoice", "content": "dark forest|ancient ruins", "metadata": {"role": "location"}},
+    {"type": "Sequential", "content": "then fights the dragon", "metadata": {"action": "combat"}}
   ],
   "edges": [
     {"source": 0, "target": 1},
     {"source": 1, "target": 2},
-    {"source": 2, "target": 3}
+    {"source": 2, "target": 3},
+    {"source": 3, "target": 4},
+    {"source": 4, "target": 5}
   ]
 }`;
   }

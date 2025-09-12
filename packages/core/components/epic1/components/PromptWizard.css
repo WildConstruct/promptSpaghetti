@@ -33,6 +33,13 @@
   flex-direction: column;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.3s ease-out;
+  position: relative;
+}
+
+/* Tutorial focus highlight */
+.prompt-wizard-modal.tutorial-focus {
+  border: 2px solid #8b5cf6 !important;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.3), 0 20px 25px -5px rgba(0, 0, 0, 0.3) !important;
 }
 
 @keyframes slideUp {

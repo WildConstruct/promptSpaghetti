@@ -161,6 +161,15 @@ export const TutorialOverlay: React.FC = () => {
     const rect = targetElement.getBoundingClientRect();
     const padding = 10;
 
+    // For wizard button, expand the spotlight to include the modal area
+    if (step.target === '.prompt-wizard-button') {
+      // Make spotlight cover the entire viewport to not block the wizard modal
+      return {
+        clipPath: 'none',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Lighter overlay when wizard is open
+      };
+    }
+
     return {
       clipPath: `polygon(
         0 0,
@@ -188,6 +197,14 @@ export const TutorialOverlay: React.FC = () => {
     let top = 0;
     let left = 0;
 
+    // Special handling for wizard modal to avoid collision
+    if (step.id === 'enter-prompt' || step.target === '.prompt-wizard-modal') {
+      // Position at top right to avoid blocking the modal
+      top = margin;
+      left = window.innerWidth - tooltipWidth - margin;
+      return { top: `${top}px`, left: `${left}px` };
+    }
+
     switch (step.position) {
       case 'top':
         top = rect.top - tooltipHeight - margin;
@@ -204,6 +221,11 @@ export const TutorialOverlay: React.FC = () => {
       case 'left':
         top = rect.top + rect.height / 2 - tooltipHeight / 2;
         left = rect.left - tooltipWidth - margin;
+        break;
+      case 'center':
+        // For center position, place it offset to not block the element
+        top = margin;
+        left = window.innerWidth - tooltipWidth - margin;
         break;
       default:
         top = window.innerHeight / 2 - tooltipHeight / 2;

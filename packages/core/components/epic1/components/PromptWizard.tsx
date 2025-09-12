@@ -121,9 +121,28 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
 
   if (!isOpen) return null;
 
+  // Check if tutorial is active and targeting this wizard
+  const [isTutorialTarget, setIsTutorialTarget] = React.useState(false);
+  
+  React.useEffect(() => {
+    const checkTutorial = () => {
+      const tutorialStep = document.querySelector('.tutorial-tooltip');
+      const targetElement = document.querySelector('.prompt-wizard-modal');
+      if (tutorialStep && targetElement) {
+        setIsTutorialTarget(true);
+      }
+    };
+    
+    checkTutorial();
+    const observer = new MutationObserver(checkTutorial);
+    observer.observe(document.body, { childList: true, subtree: true });
+    
+    return () => observer.disconnect();
+  }, [isOpen]);
+
   return (
     <div className="prompt-wizard-overlay">
-      <div className="prompt-wizard-modal">
+      <div className={`prompt-wizard-modal ${isTutorialTarget ? 'tutorial-focus' : ''}`}>
         <div className="prompt-wizard-header">
           <h2>Prompt Wizard</h2>
           <button className="prompt-wizard-close" onClick={onClose}>×</button>

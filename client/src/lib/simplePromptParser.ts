@@ -52,40 +52,107 @@ const HIGHLIGHT_COLORS = [
 
 function tokenize(
   input: string
-): Array<{ text: string; start: number; end: number }> {
-  const tokens: Array<{ text: string; start: number; end: number }> = [];
+): Array<{
+  text: string;
+  start: number;
+  end: number;
+  isBracketChoice?: boolean;
+}> {
+  const tokens: Array<{
+    text: string;
+    start: number;
+    end: number;
+    isBracketChoice?: boolean;
+  }> = [];
 
-  // Parse as semantic phrases rather than comma-separated segments
-  // This better matches the wizard's grammar-based approach
+  // First, extract bracketed choices {option1|option2|option3}
+  const bracketRegex = /\{([^}]+)\}/g;
+  let lastEnd = 0;
+  let match;
 
-  // Split on commas but treat them as phrase boundaries
-  const parts = input.split(',').map((p, idx, arr) => ({
-    text: p.trim(),
-    hasCommaAfter: idx < arr.length - 1
-  }));
-
-  let currentPos = 0;
-  parts.forEach(part => {
-    if (part.text.length > 0) {
-      // Find the actual position in the original string
-      const startIndex = input.indexOf(part.text, currentPos);
-      const endIndex = startIndex + part.text.length;
-
-      tokens.push({
-        text: part.text,
-        start: startIndex,
-        end: endIndex
-      });
-
-      currentPos = endIndex;
+  while ((match = bracketRegex.exec(input)) !== null) {
+    // Add any text before the bracket as a regular token
+    if (match.index > lastEnd) {
+      const beforeText = input.substring(lastEnd, match.index).trim();
+      if (beforeText) {
+        // Split the before text on commas
+        const parts = beforeText
+          .split(',')
+          .map(p => p.trim())
+          .filter(Boolean);
+        parts.forEach(part => {
+          const startIndex = input.indexOf(part, lastEnd);
+          tokens.push({
+            text: part,
+            start: startIndex,
+            end: startIndex + part.length
+          });
+        });
+      }
     }
-  });
+
+    // Add the bracketed content as a special token
+    tokens.push({
+      text: match[1], // Content inside brackets without the brackets
+      start: match.index,
+      end: match.index + match[0].length,
+      isBracketChoice: true
+    });
+
+    lastEnd = match.index + match[0].length;
+  }
+
+  // Add any remaining text after the last bracket
+  if (lastEnd < input.length) {
+    const remainingText = input.substring(lastEnd).trim();
+    if (remainingText) {
+      // Split on commas
+      const parts = remainingText
+        .split(',')
+        .map(p => p.trim())
+        .filter(Boolean);
+      parts.forEach(part => {
+        const startIndex = input.indexOf(part, lastEnd);
+        tokens.push({
+          text: part,
+          start: startIndex,
+          end: startIndex + part.length
+        });
+      });
+    }
+  }
+
+  // If no brackets were found, fall back to comma-based splitting
+  if (tokens.length === 0) {
+    const parts = input
+      .split(',')
+      .map(p => p.trim())
+      .filter(Boolean);
+    let currentPos = 0;
+    parts.forEach(part => {
+      const startIndex = input.indexOf(part, currentPos);
+      tokens.push({
+        text: part,
+        start: startIndex,
+        end: startIndex + part.length
+      });
+      currentPos = startIndex + part.length;
+    });
+  }
 
   return tokens;
 }
 
-function splitAlternatives(text: string): string[] {
-  // split on ' or ' and ' and ' (very naive)
+function splitAlternatives(text: string, isBracketChoice?: boolean): string[] {
+  // If it's a bracket choice, split on pipe
+  if (isBracketChoice) {
+    return text
+      .split('|')
+      .map(t => t.trim())
+      .filter(Boolean);
+  }
+
+  // Otherwise split on ' or ' and ' and ' (very naive)
   // keep order; filter empties
   return text
     .split(/\s+(?:or|and)\s+/gi)
@@ -125,33 +192,64 @@ export const simplePromptParser = {
         endIndex: seg.end
       });
 
-      // Enhanced alternative detection
-      const alts = splitAlternatives(seg.text);
+      // Enhanced alternative detection with bracket support
+      const alts = splitAlternatives(seg.text, seg.isBracketChoice);
       const segmentNodes: GeneratedNode[] = [];
 
-      // Smart detection: if we find patterns like "X or Y" or "X/Y" or "X|Y", treat as choice
-      const hasExplicitChoice = /\s+(or|and)\s+|[/|]/i.test(seg.text);
+      // Smart detection: if we find patterns like "X or Y" or "X/Y" or "X|Y", or it's a bracket choice
+      const hasExplicitChoice =
+        seg.isBracketChoice || /\s+(or|and)\s+|[/|]/i.test(seg.text);
 
-      alts.forEach((alt, altIdx) => {
-        const nodeId = `node-${hashString(
-          `${seg.text.toLowerCase()}|${alt.toLowerCase()}|${altIdx}`
-        )}`;
-        const color =
-          HIGHLIGHT_COLORS[(idx + altIdx) % HIGHLIGHT_COLORS.length];
+      // If it's a bracket choice with multiple options, create a single WeightedChoice node
+      if (seg.isBracketChoice && alts.length > 1) {
+        const nodeId = `weighted-${hashString(seg.text.toLowerCase())}`;
+        const color = HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length];
         const node: GeneratedNodeInternal = {
           id: nodeId,
-          // Enhanced logic: detect choice based on alternatives or explicit patterns
-          nodeType: alts.length > 1 || hasExplicitChoice ? 'Choice' : 'Text',
-          getPreviewText: () => alt
+          nodeType: 'Choice',
+          getPreviewText: () => alts.join(' | ')
         };
-        segmentNodes.push({ node });
 
-        // Map this node to the first occurrence of the alt inside the segment text
-        const relStart = seg.text.toLowerCase().indexOf(alt.toLowerCase());
-        const startIndex = relStart >= 0 ? seg.start + relStart : seg.start;
-        const endIndex = startIndex + alt.length;
-        mappings.push({ nodeId, startIndex, endIndex, highlightColor: color });
-      });
+        // Store the options in the node's data for proper WeightedChoice creation
+        (node as any).data = {
+          options: alts.map(alt => ({ text: alt, weight: 1 }))
+        };
+
+        segmentNodes.push({ node });
+        mappings.push({
+          nodeId,
+          startIndex: seg.start,
+          endIndex: seg.end,
+          highlightColor: color
+        });
+      } else {
+        // Original logic for non-bracket choices
+        alts.forEach((alt, altIdx) => {
+          const nodeId = `node-${hashString(
+            `${seg.text.toLowerCase()}|${alt.toLowerCase()}|${altIdx}`
+          )}`;
+          const color =
+            HIGHLIGHT_COLORS[(idx + altIdx) % HIGHLIGHT_COLORS.length];
+          const node: GeneratedNodeInternal = {
+            id: nodeId,
+            // Enhanced logic: detect choice based on alternatives or explicit patterns
+            nodeType: alts.length > 1 || hasExplicitChoice ? 'Choice' : 'Text',
+            getPreviewText: () => alt
+          };
+          segmentNodes.push({ node });
+
+          // Map this node to the first occurrence of the alt inside the segment text
+          const relStart = seg.text.toLowerCase().indexOf(alt.toLowerCase());
+          const startIndex = relStart >= 0 ? seg.start + relStart : seg.start;
+          const endIndex = startIndex + alt.length;
+          mappings.push({
+            nodeId,
+            startIndex,
+            endIndex,
+            highlightColor: color
+          });
+        });
+      }
 
       segmentNodeGroups.push(segmentNodes);
     });
