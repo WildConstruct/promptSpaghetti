@@ -360,7 +360,11 @@ export const TutorialOverlay: React.FC = () => {
           }}
         >
           <button
-            onClick={skipTutorial}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              skipTutorial();
+            }}
             style={{
               background: 'none',
               border: 'none',
@@ -368,6 +372,9 @@ export const TutorialOverlay: React.FC = () => {
               fontSize: '14px',
               cursor: 'pointer',
               padding: '8px',
+              position: 'relative',
+              zIndex: 10001,
+              pointerEvents: 'auto',
             }}
           >
             Skip tutorial
@@ -376,7 +383,11 @@ export const TutorialOverlay: React.FC = () => {
           <div style={{ display: 'flex', gap: '12px' }}>
             {currentStep > 0 && (
               <button
-                onClick={previousStep}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  previousStep();
+                }}
                 style={{
                   backgroundColor: '#f3f4f6',
                   border: 'none',
@@ -385,6 +396,9 @@ export const TutorialOverlay: React.FC = () => {
                   fontSize: '14px',
                   cursor: 'pointer',
                   color: '#4b5563',
+                  position: 'relative',
+                  zIndex: 10001,
+                  pointerEvents: 'auto',
                 }}
               >
                 Back
@@ -393,7 +407,16 @@ export const TutorialOverlay: React.FC = () => {
 
             {/* Always show continue button for all steps */}
             <button
-              onClick={nextStep}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Tutorial button clicked, advancing to next step');
+                nextStep();
+              }}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
               style={{
                 backgroundColor: step.action === 'observe' ? '#6366f1' : 
                                 showSkipHint ? '#f59e0b' : '#4b5563',
@@ -407,6 +430,9 @@ export const TutorialOverlay: React.FC = () => {
                 opacity: step.action === 'observe' ? 1 : 0.8,
                 transition: 'all 0.3s ease',
                 animation: showSkipHint ? 'pulse 1.5s infinite' : 'none',
+                position: 'relative',
+                zIndex: 10001,
+                pointerEvents: 'auto',
               }}
               title={step.action !== 'observe' ? 'Skip this step' : ''}
             >
