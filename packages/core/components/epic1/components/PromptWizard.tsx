@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Node, Edge } from 'reactflow';
-import { simplePromptParser } from '../../../../../client/src/lib/simplePromptParser';
+import { PromptDissector } from '../../../../../client/src/components/LaunchScreen/PromptDissector';
+import { PromptAnalysis } from '../../../../../client/src/lib/simplePromptParser';
 import './PromptWizard.css';
 
 interface PromptWizardProps {
@@ -16,70 +17,75 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
 }) => {
   const [promptText, setPromptText] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysis, setAnalysis] = useState<PromptAnalysis | null>(null);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleAnalyze = useCallback(async () => {
-    if (!promptText.trim()) {
-      setError('Please enter a prompt');
+  // Handle analysis from PromptDissector
+  const handleAnalysisComplete = useCallback((newAnalysis: PromptAnalysis) => {
+    setAnalysis(newAnalysis);
+    setIsAnalyzing(false);
+  }, []);
+
+  const handleAnalysisStart = useCallback(() => {
+    setIsAnalyzing(true);
+  }, []);
+
+  // Convert analysis to nodes and complete
+  const handleCreateNodes = useCallback(() => {
+    if (!analysis) {
+      setError('Please enter and analyze a prompt first');
       return;
     }
 
-    setIsAnalyzing(true);
-    setError(null);
-
     try {
-      const analysis = simplePromptParser.parse(promptText);
+      // Convert analysis to React Flow nodes and edges
+      const nodes: Node[] = [];
+      const edges: Edge[] = [];
       
-      if (analysis && analysis.nodes) {
-        // Convert analysis to React Flow nodes and edges
-        const nodes: Node[] = [];
-        const edges: Edge[] = [];
-        
-        // Create nodes from analysis
-        analysis.nodes.forEach((nodeGen, index) => {
-          const node = nodeGen.node;
-          nodes.push({
-            id: node.id,
-            type: node.nodeType === 'WeightedChoice' ? 'weightedChoice' : 
-                  node.nodeType === 'Output' ? 'output' : 'textBlock',
-            position: { x: 100 + (index % 3) * 200, y: 100 + Math.floor(index / 3) * 150 },
-            data: {
-              ...node.data,
-              label: node.data.label || node.nodeType
-            }
+      // Create nodes from analysis
+      analysis.nodes.forEach((nodeGen, index) => {
+        const node = nodeGen.node;
+        nodes.push({
+          id: node.id,
+          type: node.nodeType === 'WeightedChoice' ? 'weightedChoice' : 
+                node.nodeType === 'Output' ? 'output' : 'textBlock',
+          position: { x: 100 + (index % 3) * 200, y: 100 + Math.floor(index / 3) * 150 },
+          data: {
+            ...node.data,
+            label: node.data.label || node.nodeType
+          }
+        });
+      });
+
+      // Create edges from analysis
+      if (analysis.edges) {
+        analysis.edges.forEach(edge => {
+          edges.push({
+            id: `${edge.source}-${edge.target}`,
+            source: edge.source,
+            target: edge.target,
+            type: 'smoothstep'
           });
         });
-
-        // Create edges from analysis
-        if (analysis.edges) {
-          analysis.edges.forEach(edge => {
-            edges.push({
-              id: `${edge.source}-${edge.target}`,
-              source: edge.source,
-              target: edge.target,
-              type: 'smoothstep'
-            });
-          });
-        }
-
-        onComplete(nodes, edges);
-        setPromptText('');
       }
+
+      onComplete(nodes, edges);
+      setPromptText('');
+      setAnalysis(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to analyze prompt');
-    } finally {
-      setIsAnalyzing(false);
+      setError(err instanceof Error ? err.message : 'Failed to create nodes');
     }
-  }, [promptText, onComplete]);
+  }, [analysis, onComplete]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-      handleAnalyze();
+      handleCreateNodes();
     }
     if (e.key === 'Escape') {
       onClose();
     }
-  }, [handleAnalyze, onClose]);
+  }, [handleCreateNodes, onClose]);
 
   if (!isOpen) return null;
 
@@ -91,21 +97,24 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
           <button className="prompt-wizard-close" onClick={onClose}>×</button>
         </div>
         
-        <div className="prompt-wizard-content">
+        <div className="prompt-wizard-content" onKeyDown={handleKeyDown}>
           <p className="prompt-wizard-description">
-            Enter a prompt and the wizard will automatically create nodes based on the structure.
-            Use "or" for variations, commas for separating concepts.
+            Enter a prompt below. The text will be automatically parsed and highlighted to show how it will be converted into nodes.
+            Click on highlighted segments to modify them.
           </p>
           
-          <textarea
-            className="prompt-wizard-input"
-            placeholder="Example: A brave knight or wise wizard, wearing armor or robes, with a sword or staff"
-            value={promptText}
-            onChange={(e) => setPromptText(e.target.value)}
-            onKeyDown={handleKeyDown}
-            autoFocus
-            rows={6}
-          />
+          <div className="prompt-wizard-dissector-wrapper">
+            <PromptDissector
+              value={promptText}
+              onChange={setPromptText}
+              onAnalysisComplete={handleAnalysisComplete}
+              onAnalysisStart={handleAnalysisStart}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={setSelectedNodeId}
+              placeholder="Example: A brave knight or wise wizard, wearing armor or robes, with a sword or staff"
+              focusOnValueChange
+            />
+          </div>
           
           {error && (
             <div className="prompt-wizard-error">{error}</div>
@@ -128,10 +137,10 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
           </button>
           <button 
             className="prompt-wizard-analyze" 
-            onClick={handleAnalyze}
-            disabled={isAnalyzing || !promptText.trim()}
+            onClick={handleCreateNodes}
+            disabled={!analysis || !promptText.trim()}
           >
-            {isAnalyzing ? 'Analyzing...' : 'Create Nodes'}
+            {isAnalyzing ? 'Analyzing...' : analysis ? 'Create Nodes' : 'Enter a prompt'}
           </button>
         </div>
       </div>

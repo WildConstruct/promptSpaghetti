@@ -27,8 +27,8 @@
   border: 1px solid #334155;
   border-radius: 12px;
   width: 90%;
-  max-width: 600px;
-  max-height: 80vh;
+  max-width: 800px;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
@@ -195,4 +195,41 @@
 .prompt-wizard-analyze:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Wrapper for PromptDissector integration */
+.prompt-wizard-dissector-wrapper {
+  margin: 20px 0;
+  padding: 15px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  min-height: 200px;
+}
+
+/* Override PromptDissector styles for wizard context */
+.prompt-wizard-dissector-wrapper .prompt-dissector {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.prompt-wizard-dissector-wrapper .prompt-dissector-textarea {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+.prompt-wizard-dissector-wrapper .prompt-dissector-textarea:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+}
+
+.prompt-wizard-dissector-wrapper .prompt-dissector-overlay {
+  color: #e2e8f0;
+}
+
+.prompt-wizard-dissector-wrapper .prompt-dissector-toolbar {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: #475569;
 }
