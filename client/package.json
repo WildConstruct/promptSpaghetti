@@ -29,7 +29,10 @@
     "seedrandom": "^3.0.5",
     "uuid": "^9.0.1",
     "zod": "^3.25.76",
-    "zustand": "^4.5.7"
+    "zustand": "^4.5.7",
+    "react-color": "^2.19.3",
+    "react-dropzone": "^14.2.3",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",

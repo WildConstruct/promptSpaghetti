@@ -989,7 +989,9 @@
   <body>
     <div class="dashboard">
       <div class="header">
-        <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+        <button class="theme-toggle" onclick="toggleTheme()">
+          🌙 Dark Mode
+        </button>
         <h1>🎯 Visual Ticket Dashboard</h1>
         <p>Real-time view of all tasks and tickets in the system</p>
       </div>
@@ -1026,7 +1028,13 @@
         <div class="epic-header">
           <h2>🎯 Epic Integration Completion Status</h2>
           <p>Ready-to-deliver features with massive business value</p>
-          <button class="toggle-epic-btn" onclick="toggleEpicDetails()" id="toggleEpicBtn">Show Details ▼</button>
+          <button
+            class="toggle-epic-btn"
+            onclick="toggleEpicDetails()"
+            id="toggleEpicBtn"
+          >
+            Show Details ▼
+          </button>
         </div>
 
         <div class="epic-overview">
@@ -1058,22 +1066,30 @@
             <div class="action-list">
               <div class="action-item">
                 <span class="action-icon">🔐</span>
-                <span class="action-text">Complete auth store: Work on AUTH-985113-F18F</span>
+                <span class="action-text"
+                  >Complete auth store: Work on AUTH-985113-F18F</span
+                >
                 <span class="action-time in-progress">In Progress</span>
               </div>
               <div class="action-item">
                 <span class="action-icon">📁</span>
-                <span class="action-text">Create project API: PROJECT-API-* task available</span>
+                <span class="action-text"
+                  >Create project API: PROJECT-API-* task available</span
+                >
                 <span class="action-time">3-4h</span>
               </div>
               <div class="action-item">
                 <span class="action-icon">🎨</span>
-                <span class="action-text">Update palette categories: Add advanced/transform</span>
+                <span class="action-text"
+                  >Update palette categories: Add advanced/transform</span
+                >
                 <span class="action-time">15min</span>
               </div>
               <div class="action-item">
                 <span class="action-icon">📤</span>
-                <span class="action-text">Enhance export dialog: Format selection</span>
+                <span class="action-text"
+                  >Enhance export dialog: Format selection</span
+                >
                 <span class="action-time">2-3h</span>
               </div>
             </div>
@@ -1108,7 +1124,11 @@
 
         <div class="control-group">
           <label>Search Tasks</label>
-          <input type="text" id="searchInput" placeholder="Search by title, ID, or assignee..." />
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by title, ID, or assignee..."
+          />
         </div>
 
         <div class="control-group">
@@ -1122,13 +1142,17 @@
           </select>
         </div>
 
-        <button class="refresh-btn" onclick="loadTasks()">🔄 Refresh Data</button>
+        <button class="refresh-btn" onclick="loadTasks()">
+          🔄 Refresh Data
+        </button>
       </div>
 
       <div class="tickets-container">
         <div id="loading" class="loading">Loading tickets...</div>
         <div id="ticketsGrid" class="ticket-grid" style="display: none"></div>
-        <div id="noTickets" class="no-tickets" style="display: none">No tickets found matching your criteria.</div>
+        <div id="noTickets" class="no-tickets" style="display: none">
+          No tickets found matching your criteria.
+        </div>
         <div id="error" class="error" style="display: none"></div>
       </div>
     </div>
@@ -1142,7 +1166,8 @@
         epic7_advanced_nodes: {
           name: 'Epic 7: Advanced Nodes',
           icon: '🎲',
-          description: 'WeightedAdvanced, Conditional, Sequential, Markov nodes',
+          description:
+            'WeightedAdvanced, Conditional, Sequential, Markov nodes',
           businessValue: 'Advanced workflow capabilities for power users',
           overallProgress: 85,
           impact: 'HIGH',
@@ -1151,58 +1176,75 @@
               name: 'Runtime Implementation',
               status: 'complete',
               progress: 100,
-              location: 'packages/core/runtime/nodes/',
+              location: 'packages/core/runtime/nodes/'
             },
             {
               name: 'GraphEditor Integration',
               status: 'complete',
               progress: 100,
-              location: 'packages/core/GraphEditor.tsx:129-164',
+              location: 'packages/core/GraphEditor.tsx:129-164'
             },
             {
               name: 'Palette Categories',
               status: 'complete',
               progress: 100,
-              location: 'packages/core/Palette.tsx:100-109',
+              location: 'packages/core/Palette.tsx:100-109'
             },
             {
               name: 'Node Editors',
               status: 'missing',
               progress: 0,
-              task: 'Create specialized editors for advanced nodes',
+              task: 'Create specialized editors for advanced nodes'
             },
-            { name: 'Test Coverage', status: 'complete', progress: 90, location: 'packages/core/runtime/__tests__/' },
-          ],
+            {
+              name: 'Test Coverage',
+              status: 'complete',
+              progress: 90,
+              location: 'packages/core/runtime/__tests__/'
+            }
+          ]
         },
         epic3_export_system: {
           name: 'Epic 3: Export System',
           icon: '📤',
-          description: 'Professional export formats (PNG, PDF, YAML, XML, GeneratorBundle)',
-          businessValue: 'Users can export graphs for presentations and documentation',
+          description:
+            'Professional export formats (PNG, PDF, YAML, XML, GeneratorBundle)',
+          businessValue:
+            'Users can export graphs for presentations and documentation',
           overallProgress: 75,
           impact: 'MEDIUM-HIGH',
           components: [
-            { name: 'GeneratorBundle Exporter', status: 'complete', progress: 100, location: 'server/src/exporter.ts' },
+            {
+              name: 'GeneratorBundle Exporter',
+              status: 'complete',
+              progress: 100,
+              location: 'server/src/exporter.ts'
+            },
             {
               name: 'Export Handler UI',
               status: 'complete',
               progress: 100,
-              location: 'packages/core/GraphEditor.tsx:461-514',
+              location: 'packages/core/GraphEditor.tsx:461-514'
             },
-            { name: 'Server Routes', status: 'complete', progress: 100, location: 'server/src/index.ts:1619-1690' },
+            {
+              name: 'Server Routes',
+              status: 'complete',
+              progress: 100,
+              location: 'server/src/index.ts:1619-1690'
+            },
             {
               name: 'Format Selection Dialog',
               status: 'missing',
               progress: 0,
-              task: 'Create ExportDialog component with format options',
+              task: 'Create ExportDialog component with format options'
             },
             {
               name: 'Import System',
               status: 'missing',
               progress: 0,
-              task: 'Create import functionality for round-trip operations',
-            },
-          ],
+              task: 'Create import functionality for round-trip operations'
+            }
+          ]
         },
         epic8_python_integration: {
           name: 'Epic 8: Python Integration',
@@ -1216,50 +1258,86 @@
               name: 'PythonTransform Node',
               status: 'complete',
               progress: 100,
-              location: 'packages/core/runtime/nodes/PythonTransform.ts',
+              location: 'packages/core/runtime/nodes/PythonTransform.ts'
             },
             {
               name: 'GraphEditor Integration',
               status: 'complete',
               progress: 100,
-              location: 'packages/core/GraphEditor.tsx:158-164',
+              location: 'packages/core/GraphEditor.tsx:158-164'
             },
             {
               name: 'Server Engine Support',
               status: 'partial',
               progress: 50,
-              task: 'Enable Python imports in server/src/engine.ts',
+              task: 'Enable Python imports in server/src/engine.ts'
             },
             {
               name: 'Python Executor Service',
               status: 'exists',
               progress: 80,
-              location: 'Python executor framework implemented',
+              location: 'Python executor framework implemented'
             },
-            { name: 'UI Editor', status: 'unknown', progress: 50, task: 'Verify PythonTransformEditor exists' },
-          ],
+            {
+              name: 'UI Editor',
+              status: 'unknown',
+              progress: 50,
+              task: 'Verify PythonTransformEditor exists'
+            }
+          ]
         },
         authentication_system: {
           name: 'Authentication System',
           icon: '🔐',
           description: 'User login, registration, and session management',
-          businessValue: 'Users can create accounts and access personal features',
+          businessValue:
+            'Users can create accounts and access personal features',
           overallProgress: 85,
           impact: 'CRITICAL',
           components: [
-            { name: 'React Router Setup', status: 'complete', progress: 100, location: 'client/src/App.tsx' },
+            {
+              name: 'React Router Setup',
+              status: 'complete',
+              progress: 100,
+              location: 'client/src/App.tsx'
+            },
             {
               name: 'Auth Pages & Routes',
               status: 'complete',
               progress: 100,
-              location: 'LoginPage, RegistrationPage, etc.',
+              location: 'LoginPage, RegistrationPage, etc.'
             },
-            { name: 'Protected Routes', status: 'complete', progress: 100, location: 'PrivateRoute component' },
-            { name: 'Backend APIs', status: 'complete', progress: 100, location: 'server/src/auth/' },
-            { name: 'Zustand Store Integration', status: 'in_progress', progress: 70, assignee: 'claude_dev' },
-            { name: 'JWT Token Handling', status: 'partial', progress: 60, task: 'Session management validation' },
-            { name: 'Email Verification', status: 'backend_ready', progress: 40, task: 'Connect to SMTP service' },
-          ],
+            {
+              name: 'Protected Routes',
+              status: 'complete',
+              progress: 100,
+              location: 'PrivateRoute component'
+            },
+            {
+              name: 'Backend APIs',
+              status: 'complete',
+              progress: 100,
+              location: 'server/src/auth/'
+            },
+            {
+              name: 'Zustand Store Integration',
+              status: 'in_progress',
+              progress: 70,
+              assignee: 'claude_dev'
+            },
+            {
+              name: 'JWT Token Handling',
+              status: 'partial',
+              progress: 60,
+              task: 'Session management validation'
+            },
+            {
+              name: 'Email Verification',
+              status: 'backend_ready',
+              progress: 40,
+              task: 'Connect to SMTP service'
+            }
+          ]
         },
         file_browser_system: {
           name: 'File Browser & Project Management',
@@ -1273,26 +1351,46 @@
               name: 'Project Dialogs UI',
               status: 'complete',
               progress: 100,
-              location: 'packages/core/GraphEditor.tsx:647-657',
+              location: 'packages/core/GraphEditor.tsx:647-657'
             },
             {
               name: 'Graph Store Management',
               status: 'complete',
               progress: 100,
-              location: 'packages/core/graphStore.ts',
+              location: 'packages/core/graphStore.ts'
             },
-            { name: 'Export Infrastructure', status: 'complete', progress: 100, location: 'server/src/exporter.ts' },
+            {
+              name: 'Export Infrastructure',
+              status: 'complete',
+              progress: 100,
+              location: 'server/src/exporter.ts'
+            },
             {
               name: 'Backend API Endpoints',
               status: 'missing',
               progress: 0,
-              task: 'PROJECT-API-* task available (3-4h)',
+              task: 'PROJECT-API-* task available (3-4h)'
             },
-            { name: '.psg File Format Spec', status: 'missing', progress: 0, task: 'Define project file format' },
-            { name: 'Recent Files System', status: 'missing', progress: 0, task: 'Quick access to recent projects' },
-            { name: 'Auto-recovery', status: 'missing', progress: 0, task: 'Crash recovery system' },
-          ],
-        },
+            {
+              name: '.psg File Format Spec',
+              status: 'missing',
+              progress: 0,
+              task: 'Define project file format'
+            },
+            {
+              name: 'Recent Files System',
+              status: 'missing',
+              progress: 0,
+              task: 'Quick access to recent projects'
+            },
+            {
+              name: 'Auto-recovery',
+              status: 'missing',
+              progress: 0,
+              task: 'Crash recovery system'
+            }
+          ]
+        }
       };
 
       // Epic section functionality
@@ -1386,24 +1484,39 @@
 
       function updateEpicOverview() {
         const epics = Object.values(EPIC_ANALYSIS);
-        const totalProgress = epics.reduce((sum, epic) => sum + epic.overallProgress, 0);
+        const totalProgress = epics.reduce(
+          (sum, epic) => sum + epic.overallProgress,
+          0
+        );
         const averageProgress = Math.round(totalProgress / epics.length);
 
-        const criticalEpics = epics.filter(epic => epic.impact.includes('CRITICAL'));
+        const criticalEpics = epics.filter(epic =>
+          epic.impact.includes('CRITICAL')
+        );
         const criticalProgress =
           criticalEpics.length > 0
-            ? Math.round(criticalEpics.reduce((sum, epic) => sum + epic.overallProgress, 0) / criticalEpics.length)
+            ? Math.round(
+                criticalEpics.reduce(
+                  (sum, epic) => sum + epic.overallProgress,
+                  0
+                ) / criticalEpics.length
+              )
             : 0;
 
         const quickWinsCount = epics.reduce((count, epic) => {
           return (
             count +
-            epic.components.filter(component => component.status === 'missing' || component.status === 'partial').length
+            epic.components.filter(
+              component =>
+                component.status === 'missing' || component.status === 'partial'
+            ).length
           );
         }, 0);
 
-        document.getElementById('overallProgress').textContent = averageProgress + '%';
-        document.getElementById('criticalProgress').textContent = criticalProgress + '%';
+        document.getElementById('overallProgress').textContent =
+          averageProgress + '%';
+        document.getElementById('criticalProgress').textContent =
+          criticalProgress + '%';
         document.getElementById('quickWins').textContent = quickWinsCount;
       }
 
@@ -1427,7 +1540,7 @@
           // Convert tasks object to array
           allTasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
             ...task,
-            id: id,
+            id: id
           }));
 
           updateStats();
@@ -1438,7 +1551,8 @@
           console.error('Error loading tasks:', error);
           document.getElementById('loading').style.display = 'none';
           document.getElementById('error').style.display = 'block';
-          document.getElementById('error').textContent = `Error loading tasks: ${error.message}. 
+          document.getElementById('error').textContent =
+            `Error loading tasks: ${error.message}. 
 
 💡 To use this dashboard:
 1. Make sure you're running this from the project root directory
@@ -1453,12 +1567,15 @@
         const stats = {
           total: allTasks.length,
           unassigned: allTasks.filter(
-            t => t.state === 'UNASSIGNED' || (t.state === 'TODO' && (!t.assignee || t.assignee === 'Unassigned'))
+            t =>
+              t.state === 'UNASSIGNED' ||
+              (t.state === 'TODO' &&
+                (!t.assignee || t.assignee === 'Unassigned'))
           ).length,
           inProgress: allTasks.filter(t => t.state === 'IN_PROGRESS').length,
           auth: 0,
           file: 0,
-          completed: allTasks.filter(t => t.state === 'COMPLETED').length,
+          completed: allTasks.filter(t => t.state === 'COMPLETED').length
         };
 
         // Use same logic as getStoryLabel for consistency
@@ -1497,8 +1614,10 @@
         });
 
         document.getElementById('totalTasks').textContent = stats.total;
-        document.getElementById('unassignedTasks').textContent = stats.unassigned;
-        document.getElementById('inProgressTasks').textContent = stats.inProgress;
+        document.getElementById('unassignedTasks').textContent =
+          stats.unassigned;
+        document.getElementById('inProgressTasks').textContent =
+          stats.inProgress;
         document.getElementById('authTasks').textContent = stats.auth;
         document.getElementById('fileTasks').textContent = stats.file;
         document.getElementById('completedTasks').textContent = stats.completed;
@@ -1508,7 +1627,9 @@
       function applyFilters() {
         const stateFilter = document.getElementById('stateFilter').value;
         const priorityFilter = document.getElementById('priorityFilter').value;
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchTerm = document
+          .getElementById('searchInput')
+          .value.toLowerCase();
         const sortBy = document.getElementById('sortBy').value;
 
         filteredTasks = allTasks.filter(task => {
@@ -1549,7 +1670,8 @@
                 if (!isFileTask) return false;
                 break;
               case 'priority-automation':
-                if (task.metadata?.source !== 'priority-automation') return false;
+                if (task.metadata?.source !== 'priority-automation')
+                  return false;
                 break;
               case 'high':
                 if (task.priority !== 'high') return false;
@@ -1565,7 +1687,7 @@
               task.assignee,
               task.description,
               task.story,
-              ...(task.tags || []),
+              ...(task.tags || [])
             ]
               .join(' ')
               .toLowerCase();
@@ -1669,30 +1791,50 @@
         noTickets.style.display = 'none';
         container.style.display = 'grid';
 
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchTerm = document
+          .getElementById('searchInput')
+          .value.toLowerCase();
 
         container.innerHTML = filteredTasks
           .map(task => {
             try {
               // Safely check task properties with fallbacks
-              const taskTags = task.tags && Array.isArray(task.tags) ? task.tags : [];
+              const taskTags =
+                task.tags && Array.isArray(task.tags) ? task.tags : [];
               const taskState = String(task.state || 'unknown').toLowerCase();
               const taskTitle = String(task.title || 'Untitled Task');
               const taskId = String(task.id || 'Unknown-ID');
 
-              const isAuth = taskTags.includes('auth') || (task.story && task.story.includes('20.1'));
-              const isFile = taskTags.includes('file-browser') || (task.story && task.story.includes('20.2'));
-              const priorityClass = isAuth ? 'priority-auth' : isFile ? 'priority-file' : '';
+              const isAuth =
+                taskTags.includes('auth') ||
+                (task.story && task.story.includes('20.1'));
+              const isFile =
+                taskTags.includes('file-browser') ||
+                (task.story && task.story.includes('20.2'));
+              const priorityClass = isAuth
+                ? 'priority-auth'
+                : isFile
+                  ? 'priority-file'
+                  : '';
               const stateClass = `state-${taskState.replace(/[^a-z0-9]/g, '-')}`;
 
-              const priorityEmoji = isAuth ? '🔐' : isFile ? '📁' : task.priority === 'high' ? '🔥' : '📝';
+              const priorityEmoji = isAuth
+                ? '🔐'
+                : isFile
+                  ? '📁'
+                  : task.priority === 'high'
+                    ? '🔥'
+                    : '📝';
 
               // Highlight search terms safely
               let displayTitle = taskTitle;
               if (searchTerm) {
                 try {
                   const regex = new RegExp(`(${searchTerm})`, 'gi');
-                  displayTitle = taskTitle.replace(regex, '<span class="search-highlight">$1</span>');
+                  displayTitle = taskTitle.replace(
+                    regex,
+                    '<span class="search-highlight">$1</span>'
+                  );
                 } catch (e) {
                   // If regex fails, just use the plain title
                   displayTitle = taskTitle;
@@ -1723,7 +1865,9 @@
                                         const sanitizedTag = String(tag || '')
                                           .replace(/[^a-zA-Z0-9]/g, '-')
                                           .toLowerCase();
-                                        const displayTag = String(tag || '').substring(0, 20); // Limit display length
+                                        const displayTag = String(
+                                          tag || ''
+                                        ).substring(0, 20); // Limit display length
                                         return `<span class="tag tag-${sanitizedTag}">${displayTag}</span>`;
                                       })
                                       .join('')}
@@ -1738,7 +1882,11 @@
                         </div>
                     `;
             } catch (error) {
-              console.warn('Error rendering task:', task?.id || 'unknown', error);
+              console.warn(
+                'Error rendering task:',
+                task?.id || 'unknown',
+                error
+              );
               // Return a safe fallback card for problematic tasks
               return `
                         <div class="ticket state-error">
@@ -1851,10 +1999,18 @@
       }
 
       // Event listeners
-      document.getElementById('stateFilter').addEventListener('change', applyFilters);
-      document.getElementById('priorityFilter').addEventListener('change', applyFilters);
-      document.getElementById('searchInput').addEventListener('input', applyFilters);
-      document.getElementById('sortBy').addEventListener('change', applyFilters);
+      document
+        .getElementById('stateFilter')
+        .addEventListener('change', applyFilters);
+      document
+        .getElementById('priorityFilter')
+        .addEventListener('change', applyFilters);
+      document
+        .getElementById('searchInput')
+        .addEventListener('input', applyFilters);
+      document
+        .getElementById('sortBy')
+        .addEventListener('change', applyFilters);
 
       // Load tasks and theme on page load
       document.addEventListener('DOMContentLoaded', () => {

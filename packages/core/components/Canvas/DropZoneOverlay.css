@@ -19,7 +19,7 @@
     rgba(76, 175, 80, 0.05) 50%,
     transparent 100%
   );
-  border: 2px dashed #4CAF50;
+  border: 2px dashed #4caf50;
 }
 
 .drop-zone-overlay.invalid-drop {
@@ -60,7 +60,7 @@
 }
 
 .valid-drop .drop-zone-icon {
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
 }
 
@@ -90,7 +90,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }

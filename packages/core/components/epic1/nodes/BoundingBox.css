@@ -2,7 +2,9 @@
 .bounding-box {
   position: relative;
   border-radius: 8px;
-  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
   pointer-events: auto;
   cursor: move;
   user-select: none;

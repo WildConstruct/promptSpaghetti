@@ -45,7 +45,7 @@
 }
 
 /* Override any inline styles that might add selection */
-[style*="box-shadow"] {
+[style*='box-shadow'] {
   /* Only override if it's a ReactFlow node */
 }
 
@@ -64,7 +64,7 @@
   z-index: 10 !important;
 }
 
-.react-flow__node[style*="box-shadow"] {
+.react-flow__node[style*='box-shadow'] {
   box-shadow: none !important;
 }
 

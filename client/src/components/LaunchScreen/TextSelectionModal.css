@@ -229,7 +229,7 @@
   cursor: pointer;
 }
 
-.option-group input[type="checkbox"] {
+.option-group input[type='checkbox'] {
   width: 16px;
   height: 16px;
   accent-color: #ff8c00;

@@ -1,15 +1,86 @@
-.epic1-settings-popover { margin-top: 8px; padding: 8px; background: rgba(0,0,0,0.7); color: #fff; border-radius: 6px; }
-.epic1-section { border-top: 1px solid rgba(255,255,255,0.15); margin-top: 8px; padding-top: 8px; }
-.epic1-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.epic1-checkbox { display: flex; align-items: center; gap: 8px; }
-.epic1-input-number { width: 70px; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #111; color: #fff; }
-.epic1-input-text { width: 220px; padding: 6px; border-radius: 4px; border: 1px solid #444; background: #111; color: #fff; }
-.epic1-textarea { width: 320px; padding: 6px; border-radius: 4px; border: 1px solid #444; background: #111; color: #fff; }
-.epic1-note { font-size: 11px; opacity: 0.7; }
-.epic1-settings-note { margin-top: 6px; font-size: 12px; opacity: 0.8; }
-.epic1-ml-8 { margin-left: 8px; }
-.epic1-pre { white-space: pre-wrap; max-width: 480px; max-height: 160px; overflow: auto; background: #0a0a0a; padding: 8px; border-radius: 4px; border: 1px solid #333; }
-.epic1-mt-6 { margin-top: 6px; }
-.epic1-section-title { font-size: 12px; opacity: 0.85; margin-bottom: 6px; }
-.epic1-small-muted { font-size: 12px; opacity: 0.9; }
-.epic1-col { display: flex; flex-direction: column; gap: 6px; }
+.epic1-settings-popover {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 6px;
+}
+.epic1-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 8px;
+  padding-top: 8px;
+}
+.epic1-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.epic1-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.epic1-input-number {
+  width: 70px;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+}
+.epic1-input-text {
+  width: 220px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+}
+.epic1-textarea {
+  width: 320px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+}
+.epic1-note {
+  font-size: 11px;
+  opacity: 0.7;
+}
+.epic1-settings-note {
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+.epic1-ml-8 {
+  margin-left: 8px;
+}
+.epic1-pre {
+  white-space: pre-wrap;
+  max-width: 480px;
+  max-height: 160px;
+  overflow: auto;
+  background: #0a0a0a;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #333;
+}
+.epic1-mt-6 {
+  margin-top: 6px;
+}
+.epic1-section-title {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+.epic1-small-muted {
+  font-size: 12px;
+  opacity: 0.9;
+}
+.epic1-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

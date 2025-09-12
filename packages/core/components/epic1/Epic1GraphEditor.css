@@ -73,7 +73,8 @@
 
 /* Override React Flow defaults for Epic 1 styling */
 .epic1-graph-editor .react-flow__node {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   /* Remove ALL selection outlines */
   outline: none !important;
   box-shadow: none !important;
@@ -115,7 +116,7 @@
 }
 
 /* Only prevent drag preview on specific draggable elements that aren't our drag handles */
-.epic1-graph-editor .enhanced-option-row[draggable="true"] {
+.epic1-graph-editor .enhanced-option-row[draggable='true'] {
   -webkit-user-drag: none;
   user-drag: none;
 }
@@ -128,7 +129,9 @@
 .epic1-graph-editor .react-flow__edge-path {
   stroke: #4a5568;
   stroke-width: 3px;
-  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+  transition:
+    stroke 0.2s ease,
+    stroke-width 0.2s ease;
 }
 
 .epic1-graph-editor .react-flow__edge:hover .react-flow__edge-path {
@@ -253,8 +256,8 @@
   fill: inherit !important;
 }
 
-.epic1-graph-editor .react-flow__minimap-node[fill="#4ECDC4"] {
-  fill: #4ECDC4 !important;
+.epic1-graph-editor .react-flow__minimap-node[fill='#4ECDC4'] {
+  fill: #4ecdc4 !important;
 }
 
 /* Controls styling */

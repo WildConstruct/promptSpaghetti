@@ -102,8 +102,8 @@
 }
 
 .recovery-action.primary {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  border-color: #4CAF50;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  border-color: #4caf50;
   color: white;
   font-weight: 500;
 }
@@ -126,7 +126,7 @@
   bottom: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+  background: linear-gradient(90deg, #4caf50 0%, #8bc34a 100%);
   transition: width 0.1s linear;
 }
 
@@ -147,7 +147,8 @@
 }
 
 @keyframes pulseRed {
-  0%, 100% {
+  0%,
+  100% {
     stroke: #f44336;
     stroke-width: 2;
   }

@@ -1,7 +1,5 @@
 declare module '../scripts/build/lib.cjs' {
-  export function collectGraphEntries(
-    dir: string
-  ): Promise<
+  export function collectGraphEntries(dir: string): Promise<
     Array<{
       filename: string;
       title: string;

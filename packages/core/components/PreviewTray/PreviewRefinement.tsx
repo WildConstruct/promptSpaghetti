@@ -1,5 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { TextRefinementService, RefinementMode } from '../../services/llm/TextRefinementService';
+import {
+  TextRefinementService,
+  RefinementMode
+} from '../../services/llm/TextRefinementService';
 import './PreviewRefinement.css';
 
 export interface RefinementStyle {
@@ -84,13 +87,14 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [showStyleMenu, setShowStyleMenu] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
-  
+
   // Cache refined results
   const refinedCache = useRef<Map<string, RefinedResult>>(new Map());
   const abortController = useRef<AbortController | null>(null);
 
   // Get current style
-  const currentStyle = REFINEMENT_STYLES.find(s => s.id === selectedStyle) || REFINEMENT_STYLES[0];
+  const currentStyle =
+    REFINEMENT_STYLES.find(s => s.id === selectedStyle) || REFINEMENT_STYLES[0];
 
   // Generate cache key
   const getCacheKey = (text: string, styleId: string) => {
@@ -106,7 +110,8 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
     // Check cache first
     const cacheKey = getCacheKey(originalText, selectedStyle);
     const cached = refinedCache.current.get(cacheKey);
-    if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) { // 5 min cache
+    if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
+      // 5 min cache
       setRefinedText(cached.refined);
       onRefined?.(cached.refined);
       return;
@@ -136,7 +141,7 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
       if (result && !abortController.current.signal.aborted) {
         setRefinedText(result.refined);
         onRefined?.(result.refined);
-        
+
         // Cache the result
         refinedCache.current.set(cacheKey, {
           original: originalText,
@@ -145,7 +150,7 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
           timestamp: Date.now()
         });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err.name !== 'AbortError') {
         console.error('Refinement error:', err);
         setError(err.message || 'Failed to refine text');
@@ -169,10 +174,13 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
   }, [isActive, originalText, selectedStyle, refineText]);
 
   // Handle style selection
-  const handleStyleSelect = useCallback((styleId: string) => {
-    onStyleChange?.(styleId);
-    setShowStyleMenu(false);
-  }, [onStyleChange]);
+  const handleStyleSelect = useCallback(
+    (styleId: string) => {
+      onStyleChange?.(styleId);
+      setShowStyleMenu(false);
+    },
+    [onStyleChange]
+  );
 
   // Copy refined text
   const handleCopyRefined = useCallback(() => {
@@ -224,7 +232,7 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
               <span className="style-label">{currentStyle.label}</span>
               <span className="style-chevron">▼</span>
             </button>
-            
+
             {showStyleMenu && (
               <div className="style-menu">
                 {REFINEMENT_STYLES.map(style => (
@@ -235,9 +243,13 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
                   >
                     <div className="style-option-header">
                       <span className="style-option-label">{style.label}</span>
-                      {style.id === selectedStyle && <span className="style-option-check">✓</span>}
+                      {style.id === selectedStyle && (
+                        <span className="style-option-check">✓</span>
+                      )}
                     </div>
-                    <span className="style-option-description">{style.description}</span>
+                    <span className="style-option-description">
+                      {style.description}
+                    </span>
                   </button>
                 ))}
               </div>

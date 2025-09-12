@@ -6,9 +6,11 @@
 **ISSUE:** Vercel does not recognize nested directories for serverless functions in the `api/` folder.
 
 ### Problem
+
 When creating API endpoints like `/api/llm/complete` by placing files in `api/llm/complete.js`, Vercel will NOT recognize these as valid serverless functions and will return 404 errors.
 
 ### Solution
+
 All API endpoints must be at the ROOT level of the `api/` directory. For organization purposes, we use a wrapper pattern:
 
 1. **Actual implementation** stays in subdirectories for organization:
@@ -35,14 +37,14 @@ await postJson('/api/ai/parse', data);
 
 ### Current LLM Endpoints
 
-| Client Path | Wrapper File | Implementation |
-|------------|--------------|----------------|
+| Client Path         | Wrapper File          | Implementation        |
+| ------------------- | --------------------- | --------------------- |
 | `/api/llm-complete` | `api/llm-complete.js` | `api/llm/complete.js` |
-| `/api/llm-suggest` | `api/llm-suggest.js` | `api/llm/suggest.js` |
+| `/api/llm-suggest`  | `api/llm-suggest.js`  | `api/llm/suggest.js`  |
 | `/api/llm-metadata` | `api/llm-metadata.js` | `api/llm/metadata.js` |
-| `/api/llm-refine` | `api/llm-refine.js` | `api/llm/refine.js` |
-| `/api/llm-parse` | `api/llm-parse.js` | `api/llm/parse.js` |
-| `/api/ai-parse` | `api/ai-parse.js` | `api/ai/parse.js` |
+| `/api/llm-refine`   | `api/llm-refine.js`   | `api/llm/refine.js`   |
+| `/api/llm-parse`    | `api/llm-parse.js`    | `api/llm/parse.js`    |
+| `/api/ai-parse`     | `api/ai-parse.js`     | `api/ai/parse.js`     |
 
 ### Adding New API Endpoints
 

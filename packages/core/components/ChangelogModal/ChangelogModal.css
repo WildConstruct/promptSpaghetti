@@ -31,7 +31,7 @@
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 
+  box-shadow:
     0 24px 48px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -55,7 +55,11 @@
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    transparent 100%
+  );
 }
 
 .changelog-modal-header h2 {
@@ -246,14 +250,14 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 
+  box-shadow:
     0 2px 8px rgba(74, 126, 199, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .changelog-github-link:hover {
   transform: translateY(-1px);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(74, 126, 199, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -265,7 +269,7 @@
     max-height: 90vh;
     margin: 20px;
   }
-  
+
   .changelog-modal-content {
     padding: 16px;
   }

@@ -1,11 +1,13 @@
 # TUTORIAL-DARK-MODE-UI - Story
 
 ## User Story
+
 **As a** user in dark mode  
 **I want** the tutorial to match the application's dark theme  
-**So that** the tutorial feels integrated and visually consistent  
+**So that** the tutorial feels integrated and visually consistent
 
 ## Acceptance Criteria
+
 - [ ] Tutorial tooltip background matches app's dark theme (#1a1a1a)
 - [ ] Text is clearly readable with proper contrast ratios
 - [ ] Tutorial buttons match app's purple accent theme
@@ -17,6 +19,7 @@
 ## Technical Details
 
 ### Current Problem
+
 - TutorialOverlay.tsx uses light mode colors (white background, line 259)
 - Text colors optimized for light backgrounds
 - Progress bar uses light theme colors (line 275)
@@ -26,9 +29,11 @@
 ### Required Changes
 
 #### 1. Update TutorialOverlay.tsx Styling
+
 **File**: `packages/core/components/epic1/onboarding/TutorialOverlay.tsx`
 
 **Replace light theme colors with dark theme:**
+
 ```typescript
 // CURRENT (problematic):
 backgroundColor: 'white', // line 259
@@ -43,9 +48,11 @@ color: '#999', // secondary text
 ```
 
 #### 2. Update Progress Bar Colors
+
 **File**: `packages/core/components/epic1/onboarding/TutorialOverlay.tsx`
 
 **Lines 274-275:**
+
 ```typescript
 // CURRENT:
 backgroundColor: '#f0f0f0', // light background
@@ -55,9 +62,11 @@ backgroundColor: '#333', // dark background
 ```
 
 #### 3. Update Button Styling
+
 **File**: `packages/core/components/epic1/onboarding/TutorialOverlay.tsx`
 
 **Lines 374-381:**
+
 ```typescript
 // CURRENT: Light mode button styling
 
@@ -74,7 +83,9 @@ border: '1px solid #444',
 ```
 
 #### 4. Create CSS Variables for Dark Theme
+
 **New File**: `packages/core/components/epic1/onboarding/TutorialDarkTheme.css`
+
 ```css
 :root {
   /* Tutorial Dark Mode Variables */
@@ -114,9 +125,11 @@ border: '1px solid #444',
 ```
 
 #### 5. Update Hint Box Styling
+
 **File**: `packages/core/components/epic1/onboarding/TutorialOverlay.tsx`
 
 **Lines 328-344:**
+
 ```typescript
 // CURRENT: Light mode hint styling
 
@@ -129,6 +142,7 @@ marginBottom: '24px',
 ```
 
 ### Additional Changes Needed
+
 - Update PromptPasteDialog.tsx with dark theme colors
 - Ensure example prompt text is readable
 - Test contrast ratios meet WCAG AA standards (4.5:1 minimum)
@@ -136,6 +150,7 @@ marginBottom: '24px',
 - Update any light-themed borders or shadows
 
 ### Testing Steps
+
 1. Enable dark mode in the application
 2. Start tutorial and verify all elements use dark theme:
    - Tooltip background is dark (#1a1a1a)
@@ -148,11 +163,13 @@ marginBottom: '24px',
 5. Test spotlight effect visibility on dark backgrounds
 
 ### Dependencies
+
 - Independent story, can be implemented in parallel
 - Should be tested in both light and dark modes
 - Requires coordination with app's theme system
 
 ### Definition of Done
+
 - Tutorial visually matches application's dark theme
 - All text meets WCAG AA contrast requirements
 - Consistent with Epic1GraphEditor dark mode styling

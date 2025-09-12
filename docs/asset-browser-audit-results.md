@@ -1,6 +1,7 @@
 # Asset Browser Content Audit Results
 
 ## Summary
+
 - **Total PSG files**: 490
 - **Total nodes**: 497
 - **Files with multiple nodes**: 7 (1.4% of all files)
@@ -9,6 +10,7 @@
 ## Audit Findings
 
 ### ✅ Good News
+
 The vast majority (98.6%) of PSG files correctly contain single nodes as expected. The asset browser content is generally well-organized and accurately described.
 
 ### 📝 Multi-Node Files Requiring Description Updates
@@ -47,16 +49,20 @@ These files contain multiple nodes and should have their descriptions updated to
 ## File Categories
 
 ### Single Node Files (483 files - 98.6%)
+
 These are correctly described as individual components or fragments:
+
 - Age indicators
-- Assistive gear  
+- Assistive gear
 - Hair styles
 - Weather conditions
 - Combat techniques
 - etc.
 
 ### Multi-Node Systems (7 files - 1.4%)
+
 These are complex systems with multiple connected nodes:
+
 - Character generator (5 nodes)
 - Eye descriptor system (3 nodes)
 - Contextual smile system (3 nodes)

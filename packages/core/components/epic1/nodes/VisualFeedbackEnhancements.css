@@ -14,7 +14,11 @@
   left: -10px;
   right: -10px;
   bottom: -10px;
-  background: radial-gradient(circle at center, transparent 30%, rgba(91, 158, 255, 0.15) 100%);
+  background: radial-gradient(
+    circle at center,
+    transparent 30%,
+    rgba(91, 158, 255, 0.15) 100%
+  );
   border-radius: 12px;
   animation: editPulse 2s ease-in-out infinite;
   pointer-events: none;
@@ -23,7 +27,8 @@
 
 /* Edit pulse animation */
 @keyframes editPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
@@ -54,12 +59,17 @@
 }
 
 .epic1-handle:hover::after {
-  background: radial-gradient(circle at center, rgba(74, 158, 255, 0.3) 0%, transparent 70%);
+  background: radial-gradient(
+    circle at center,
+    rgba(74, 158, 255, 0.3) 0%,
+    transparent 70%
+  );
   animation: handlePulse 1s ease-in-out infinite;
 }
 
 @keyframes handlePulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.3;
   }
@@ -105,13 +115,21 @@
 }
 
 @keyframes errorShake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: translateX(-4px);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     transform: translateX(4px);
   }
 }
@@ -139,12 +157,24 @@
 
 /* Slider enhancements */
 .epic1-weight-slider {
-  background: linear-gradient(to right, #f59e0b 0%, #f59e0b var(--value), #e0e0e0 var(--value), #e0e0e0 100%);
+  background: linear-gradient(
+    to right,
+    #f59e0b 0%,
+    #f59e0b var(--value),
+    #e0e0e0 var(--value),
+    #e0e0e0 100%
+  );
 }
 
 /* Slider track glow on hover */
 .epic1-weight-slider:hover {
-  background: linear-gradient(to right, #f97316 0%, #f97316 var(--value), #d0d0d0 var(--value), #d0d0d0 100%);
+  background: linear-gradient(
+    to right,
+    #f97316 0%,
+    #f97316 var(--value),
+    #d0d0d0 var(--value),
+    #d0d0d0 100%
+  );
 }
 
 /* Option row hover state */
@@ -178,7 +208,9 @@
   background: rgba(245, 158, 11, 0.1);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .epic1-add-option:hover::before {

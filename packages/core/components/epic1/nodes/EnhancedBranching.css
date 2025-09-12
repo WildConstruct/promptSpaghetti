@@ -112,7 +112,7 @@
     -webkit-transform-style: preserve-3d !important;
     transform: translateZ(0) !important;
   }
-  
+
   .card-face {
     -webkit-backface-visibility: hidden !important;
     -webkit-transform: translateZ(1px) !important;
@@ -124,11 +124,11 @@
   .flip-card {
     transition: none !important;
   }
-  
+
   .flip-card.flipped .card-face.node-front {
     display: none !important;
   }
-  
+
   .flip-card.flipped .card-face.metadata-view {
     transform: none !important;
     display: block !important;

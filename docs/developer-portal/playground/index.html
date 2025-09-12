@@ -13,7 +13,10 @@
     />
 
     <!-- Existing Interactive Framework Styles -->
-    <link rel="stylesheet" href="../content-authoring-handbook/assets/css/interactive-examples.css" />
+    <link
+      rel="stylesheet"
+      href="../content-authoring-handbook/assets/css/interactive-examples.css"
+    />
 
     <!-- Custom Playground Styles -->
     <style>
@@ -22,7 +25,8 @@
         grid-template-columns: 300px 1fr;
         grid-template-rows: auto 1fr auto;
         height: 100vh;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       }
 
       .playground-header {
@@ -271,11 +275,17 @@
       <div class="playground-header">
         <div>
           <h1>🎮 Custom Node Playground</h1>
-          <span>Build, test, and experiment with custom nodes in real-time</span>
+          <span
+            >Build, test, and experiment with custom nodes in real-time</span
+          >
         </div>
         <div class="action-buttons">
-          <button class="btn btn-secondary" onclick="loadExample()">Load Example</button>
-          <button class="btn btn-primary" onclick="exportNode()">Export Node</button>
+          <button class="btn btn-secondary" onclick="loadExample()">
+            Load Example
+          </button>
+          <button class="btn btn-primary" onclick="exportNode()">
+            Export Node
+          </button>
         </div>
       </div>
 
@@ -301,7 +311,10 @@
             <span class="category">Data Transformation</span>
           </div>
 
-          <div class="node-template" onclick="loadTemplate('conditional-logic')">
+          <div
+            class="node-template"
+            onclick="loadTemplate('conditional-logic')"
+          >
             <h3>Conditional Logic</h3>
             <p>Advanced branching and decision-making</p>
             <span class="category">Logic & Control</span>
@@ -350,10 +363,21 @@
       <div class="playground-main">
         <!-- Tabs -->
         <div class="playground-tabs">
-          <button class="playground-tab active" onclick="switchTab('implementation')">Implementation</button>
-          <button class="playground-tab" onclick="switchTab('test-inputs')">Test Inputs</button>
-          <button class="playground-tab" onclick="switchTab('schema')">Schema</button>
-          <button class="playground-tab" onclick="switchTab('metadata')">Metadata</button>
+          <button
+            class="playground-tab active"
+            onclick="switchTab('implementation')"
+          >
+            Implementation
+          </button>
+          <button class="playground-tab" onclick="switchTab('test-inputs')">
+            Test Inputs
+          </button>
+          <button class="playground-tab" onclick="switchTab('schema')">
+            Schema
+          </button>
+          <button class="playground-tab" onclick="switchTab('metadata')">
+            Metadata
+          </button>
         </div>
 
         <!-- Content -->
@@ -379,11 +403,19 @@
         <div class="playground-status">
           <div>
             <span id="statusText">Ready</span>
-            <span id="loadingIndicator" style="display: none" class="loading"></span>
+            <span
+              id="loadingIndicator"
+              style="display: none"
+              class="loading"
+            ></span>
           </div>
           <div class="action-buttons">
-            <button class="btn btn-secondary" onclick="validateNode()">Validate</button>
-            <button class="btn btn-success" onclick="executeNode()">▶ Execute</button>
+            <button class="btn btn-secondary" onclick="validateNode()">
+              Validate
+            </button>
+            <button class="btn btn-success" onclick="executeNode()">
+              ▶ Execute
+            </button>
           </div>
         </div>
       </div>
@@ -393,12 +425,26 @@
     <div
       id="resultsPanel"
       class="results-panel"
-      style="display: none; position: absolute; top: 60px; right: 20px; width: 400px; max-height: 60vh; z-index: 1000"
+      style="
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        width: 400px;
+        max-height: 60vh;
+        z-index: 1000;
+      "
     >
       <div class="results-header">
         📊 Execution Results
         <button
-          style="float: right; background: none; border: none; color: white; cursor: pointer"
+          style="
+            float: right;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+          "
           onclick="closeResults()"
         >
           ×

@@ -36,11 +36,12 @@
 
 .segment-handle-start {
   left: -4px;
-  background: linear-gradient(to right, 
-    transparent 0%, 
-    rgba(255, 255, 255, 0.2) 30%, 
-    rgba(255, 255, 255, 0.4) 50%, 
-    rgba(255, 255, 255, 0.2) 70%, 
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.2) 70%,
     transparent 100%
   );
   border-left: 2px solid currentColor;
@@ -48,11 +49,12 @@
 
 .segment-handle-end {
   right: -4px;
-  background: linear-gradient(to left, 
-    transparent 0%, 
-    rgba(255, 255, 255, 0.2) 30%, 
-    rgba(255, 255, 255, 0.4) 50%, 
-    rgba(255, 255, 255, 0.2) 70%, 
+  background: linear-gradient(
+    to left,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.2) 70%,
     transparent 100%
   );
   border-right: 2px solid currentColor;
@@ -60,11 +62,12 @@
 
 /* Visual feedback on handle hover */
 .segment-handle:hover {
-  background: linear-gradient(to right, 
-    transparent 0%, 
-    rgba(255, 255, 255, 0.3) 30%, 
-    rgba(255, 255, 255, 0.6) 50%, 
-    rgba(255, 255, 255, 0.3) 70%, 
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 30%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.3) 70%,
     transparent 100%
   );
 }
@@ -90,7 +93,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     outline-color: rgba(74, 158, 255, 0.5);
   }
   50% {
@@ -113,16 +117,20 @@
   gap: 6px;
   padding: 4px 6px;
   background: rgba(20, 22, 28, 0.9);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
   z-index: 99999; /* force above */
 }
 
 .segment-inline-btn {
   appearance: none;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
   color: #eaeaea;
   font-size: 11px;
   line-height: 1;
@@ -132,7 +140,7 @@
 }
 
 .segment-inline-btn:hover {
-  border-color: rgba(255,255,255,0.22);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 /* Visual marker bounds indicator (like After Effects) */

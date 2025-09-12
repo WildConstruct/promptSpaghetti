@@ -36,7 +36,8 @@
   font-size: 12px;
   font-weight: 500;
   text-transform: none;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   position: relative;
 }
 
@@ -51,7 +52,8 @@
   font-size: 12px;
   font-weight: 500;
   text-transform: none;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .mode-button:hover {
@@ -211,7 +213,8 @@
   transition: all 0.2s ease;
   position: relative;
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .dissector-tab:first-child {
@@ -259,7 +262,6 @@
     transform: rotate(360deg);
   }
 }
-
 
 /* Selected node full-text preview under toolbar */
 .selected-node-preview {
@@ -375,7 +377,11 @@
 
 .dissector-btn:active:not([disabled]) {
   transform: translateY(0);
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.02)
+  );
 }
 
 .dissector-btn[disabled] {
@@ -455,12 +461,13 @@
 .highlight-segment.selected {
   /* Remove pulse to avoid perceived flicker */
   animation: none;
-  outline: 1px solid rgba(255,255,255,0.15);
+  outline: 1px solid rgba(255, 255, 255, 0.15);
   z-index: 2;
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -511,7 +518,7 @@
   background: rgba(0, 0, 0, 0.9);
   padding: 3px;
   border-radius: 4px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   z-index: 100;
   pointer-events: auto;
 }
@@ -519,7 +526,7 @@
 .segment-type-btn {
   appearance: none;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   font-size: 11px;
   font-weight: 600;
@@ -534,8 +541,8 @@
 }
 
 .segment-type-btn:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Simple textarea for editing */
@@ -634,7 +641,7 @@
   justify-content: center;
   cursor: pointer;
   z-index: 100;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   padding: 0;
   line-height: 1;
   appearance: none;
@@ -648,7 +655,7 @@
 .segment-delete-btn:hover {
   background: rgba(255, 255, 255, 0.95);
   transform: scale(1.1);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* Inline delete button that flows with text */
@@ -665,7 +672,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   padding: 0;
   margin-left: 12px; /* Moved 10px more to the right */
   margin-right: 2px;
@@ -680,7 +687,7 @@
 .segment-delete-btn-inline:hover {
   background: rgba(255, 255, 255, 0.95);
   transform: scale(1.1);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* Prevent focus styles from changing background */
@@ -760,7 +767,7 @@
   background: rgba(30, 32, 38, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   z-index: 10000; /* Even higher z-index */
   pointer-events: auto !important; /* Force pointer events */
   isolation: isolate; /* Create new stacking context */
@@ -875,17 +882,17 @@
     gap: 4px;
     padding: 6px 8px;
   }
-  
+
   .dissector-btn {
     font-size: 11px;
     padding: 5px 8px;
   }
-  
+
   .dissector-toolbar-sep {
     height: 20px;
     margin: 0 1px;
   }
-  
+
   .dissector-tab {
     padding: 6px 16px;
     font-size: 12px;
@@ -897,17 +904,17 @@
     gap: 3px;
     padding: 5px 6px;
   }
-  
+
   .dissector-btn {
     font-size: 10px;
     padding: 4px 6px;
   }
-  
+
   /* Hide toolbar separators on very small screens */
   .dissector-toolbar-sep {
     display: none;
   }
-  
+
   .dissector-tab {
     padding: 5px 12px;
     font-size: 11px;
@@ -916,6 +923,12 @@
 
 /* Blinking caret animation - slower blink */
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }

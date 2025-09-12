@@ -1,52 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visual Range Indicator Demo</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #fafafa;
-    }
-    
-    /* Additional styles for the demo */
-    .visual-range-segment {
-      transition: all 0.2s ease;
-    }
-    
-    .visual-range-segment.mapped:hover {
-      transform: scale(1.05);
-    }
-    
-    /* Smooth animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    #root > div {
-      animation: fadeIn 0.3s ease;
-    }
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-  
-  <!-- React and ReactDOM from CDN -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  
-  <!-- Note: In a real setup, you would compile the TypeScript to JavaScript -->
-  <!-- For demo purposes, here's how to run it: -->
-  <!-- 1. Compile: npx tsc visual-range-demo.tsx --jsx react --esModuleInterop -->
-  <!-- 2. Bundle: npx esbuild visual-range-demo.js --bundle --outfile=demo-bundle.js -->
-  <!-- 3. Include: <script src="demo-bundle.js"></script> -->
-  
-  <script>
-    // Placeholder message
-    document.getElementById('root').innerHTML = `
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visual Range Indicator Demo</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #fafafa;
+      }
+
+      /* Additional styles for the demo */
+      .visual-range-segment {
+        transition: all 0.2s ease;
+      }
+
+      .visual-range-segment.mapped:hover {
+        transform: scale(1.05);
+      }
+
+      /* Smooth animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      #root > div {
+        animation: fadeIn 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React and ReactDOM from CDN -->
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+
+    <!-- Note: In a real setup, you would compile the TypeScript to JavaScript -->
+    <!-- For demo purposes, here's how to run it: -->
+    <!-- 1. Compile: npx tsc visual-range-demo.tsx --jsx react --esModuleInterop -->
+    <!-- 2. Bundle: npx esbuild visual-range-demo.js --bundle --outfile=demo-bundle.js -->
+    <!-- 3. Include: <script src="demo-bundle.js"></script> -->
+
+    <script>
+      // Placeholder message
+      document.getElementById('root').innerHTML = `
       <div style="padding: 40px; text-align: center; font-family: sans-serif;">
         <h2>Visual Range Indicator Demo</h2>
         <p>To run this demo:</p>
@@ -61,6 +73,6 @@
         </code>
       </div>
     `;
-  </script>
-</body>
+    </script>
+  </body>
 </html>

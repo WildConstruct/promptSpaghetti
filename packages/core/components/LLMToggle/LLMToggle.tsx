@@ -187,7 +187,13 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
   const getSwitchIcon = () => {
     if (mode === 'llm-enhanced') {
       return (
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={styles.switchIconActive}>
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 16 16"
+          fill="none"
+          style={styles.switchIconActive}
+        >
           <path
             d="M8 2L10 6L14 7L11 10L12 14L8 12L4 14L5 10L2 7L6 6L8 2Z"
             fill="currentColor"
@@ -198,7 +204,13 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
       );
     }
     return (
-      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={styles.switchIcon}>
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 16 16"
+        fill="none"
+        style={styles.switchIcon}
+      >
         <circle
           cx="8"
           cy="8"
@@ -232,7 +244,12 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
     <div style={styles.container} className={className}>
       {/* Sliding Switch */}
       <div style={styles.labelContainer}>
-        <span style={{ ...styles.label, ...(mode === 'standard' ? styles.labelActive : {}) }}>
+        <span
+          style={{
+            ...styles.label,
+            ...(mode === 'standard' ? styles.labelActive : {})
+          }}
+        >
           Standard
         </span>
         <button
@@ -246,11 +263,14 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
               : 'AI parser not configured'
           }
         >
-          <div style={knobStyle}>
-            {getSwitchIcon()}
-          </div>
+          <div style={knobStyle}>{getSwitchIcon()}</div>
         </button>
-        <span style={{ ...styles.label, ...(mode === 'llm-enhanced' ? styles.labelActive : {}) }}>
+        <span
+          style={{
+            ...styles.label,
+            ...(mode === 'llm-enhanced' ? styles.labelActive : {})
+          }}
+        >
           AI-Enhanced
         </span>
         {mode === 'llm-enhanced' && <span style={styles.indicator}></span>}
@@ -263,12 +283,12 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
           onClick={onConfigClick}
           aria-label="Configure LLM settings"
           title="Configure AI settings"
-          onMouseEnter={(e) => {
+          onMouseEnter={e => {
             e.currentTarget.style.borderColor = '#667eea';
             e.currentTarget.style.color = '#667eea';
             e.currentTarget.style.transform = 'scale(1.05)';
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={e => {
             e.currentTarget.style.borderColor = '#e5e7eb';
             e.currentTarget.style.color = '#6b7280';
             e.currentTarget.style.transform = 'scale(1)';
@@ -314,7 +334,13 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
       {/* Status Bar with Proper Icon */}
       {!isEnabled && (
         <div style={styles.statusBar}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={styles.statusIcon}>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            style={styles.statusIcon}
+          >
             <path
               d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
               stroke="currentColor"

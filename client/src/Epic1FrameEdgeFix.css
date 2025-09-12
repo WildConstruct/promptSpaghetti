@@ -20,7 +20,12 @@
 /* Visual connection line to frame edge */
 .frame-edge-connector {
   position: absolute;
-  background: linear-gradient(90deg, transparent 0%, #ff6b35 50%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #ff6b35 50%,
+    transparent 100%
+  );
   opacity: 0.5;
   pointer-events: none;
 }
@@ -71,21 +76,21 @@
 }
 
 /* Ensure nodes stay at edges during interactions */
-.react-flow__node[data-frame-edge="top"] {
+.react-flow__node[data-frame-edge='top'] {
   top: 20px !important;
 }
 
-.react-flow__node[data-frame-edge="right"] {
+.react-flow__node[data-frame-edge='right'] {
   right: 20px !important;
   left: auto !important;
 }
 
-.react-flow__node[data-frame-edge="bottom"] {
+.react-flow__node[data-frame-edge='bottom'] {
   bottom: 20px !important;
   top: auto !important;
 }
 
-.react-flow__node[data-frame-edge="left"] {
+.react-flow__node[data-frame-edge='left'] {
   left: 20px !important;
 }
 

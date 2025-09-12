@@ -4,6 +4,7 @@ import { LaunchScreen } from './components/LaunchScreen/LaunchScreen';
 import type { LaunchPayload } from './components/LaunchScreen/LaunchScreen';
 import type { Node, Edge } from 'reactflow';
 import type { PromptAnalysis } from './lib/simplePromptParser';
+import { ThemeProvider } from './ThemeProvider';
 import './App.css';
 
 // Version: 2025-01-10-20:10 - Fixed hyphenated API paths for Vercel
@@ -39,22 +40,28 @@ function App() {
   };
 
   if (showLaunchScreen) {
-    return <LaunchScreen onLaunch={handleLaunch} />;
+    return (
+      <ThemeProvider>
+        <LaunchScreen onLaunch={handleLaunch} />
+      </ThemeProvider>
+    );
   }
 
   return (
-    <div className="App" style={{ width: '100vw', height: '100vh' }}>
-      <Epic1EditorContainer
-        showPreview={true}
-        showAssetLibrary={true}
-        assetLibraryPosition="right"
-        showMenuBar={true}
-        showOnboarding={false}
-        initialAnalysis={initialAnalysis}
-        initialGraph={initialGraph}
-        startWithTutorial={startWithTutorial}
-      />
-    </div>
+    <ThemeProvider>
+      <div className="App" style={{ width: '100vw', height: '100vh' }}>
+        <Epic1EditorContainer
+          showPreview={true}
+          showAssetLibrary={true}
+          assetLibraryPosition="right"
+          showMenuBar={true}
+          showOnboarding={false}
+          initialAnalysis={initialAnalysis}
+          initialGraph={initialGraph}
+          startWithTutorial={startWithTutorial}
+        />
+      </div>
+    </ThemeProvider>
   );
 }
 

@@ -2,7 +2,7 @@ name: Legacy Code Scan (Scheduled)
 
 on:
   schedule:
-    - cron: '0 8 * * 1'  # Mondays at 08:00 UTC
+    - cron: '0 8 * * 1' # Mondays at 08:00 UTC
   workflow_dispatch:
 
 jobs:

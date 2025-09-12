@@ -58,19 +58,15 @@ describe('SaveGraphDialog - Supabase save', () => {
         getSession: jest
           .fn()
           .mockResolvedValue({ data: { session: { user: { id: 'ctx-1' } } } }),
-        onAuthStateChange: jest
-          .fn()
-          .mockReturnValue({
-            data: { subscription: { unsubscribe: jest.fn() } }
-          })
+        onAuthStateChange: jest.fn().mockReturnValue({
+          data: { subscription: { unsubscribe: jest.fn() } }
+        })
       }
     } as any;
-    const supabasePut = jest
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        data: { path: 'users/ctx-1/graphs/X.psg' }
-      });
+    const supabasePut = jest.fn().mockResolvedValue({
+      ok: true,
+      data: { path: 'users/ctx-1/graphs/X.psg' }
+    });
     const onSupabaseSaved = jest.fn();
 
     render(
@@ -104,12 +100,10 @@ describe('SaveGraphDialog - Supabase save', () => {
   });
 
   it('saves successfully to Supabase and calls onSupabaseSaved + onClose', async () => {
-    const supabasePut = jest
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        data: { path: 'users/u1/graphs/My-Graph.psg' }
-      });
+    const supabasePut = jest.fn().mockResolvedValue({
+      ok: true,
+      data: { path: 'users/u1/graphs/My-Graph.psg' }
+    });
     const onSupabaseSaved = jest.fn();
     const onClose = jest.fn();
 

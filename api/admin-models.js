@@ -13,8 +13,11 @@ export default async function handler(req, res) {
 
   try {
     // Initialize Supabase client if available
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    const supabaseUrl =
+      process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const supabaseKey =
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      process.env.VITE_SUPABASE_ANON_KEY;
 
     let saved = false;
 
@@ -22,16 +25,16 @@ export default async function handler(req, res) {
       // Save to Supabase if available
       const supabase = createClient(supabaseUrl, supabaseKey);
 
-      const { data, error } = await supabase
-        .from('admin_config')
-        .upsert({
-          id: 'model_config',
-          primary_model: primary_model || 'openai/gpt-4o-mini',
-          fallback_models: fallback_models || 'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
-          max_tokens: max_tokens ? parseInt(max_tokens) : 200,
-          temperature: temperature ? parseFloat(temperature) : 0.7,
-          updated_at: new Date().toISOString()
-        });
+      const { data, error } = await supabase.from('admin_config').upsert({
+        id: 'model_config',
+        primary_model: primary_model || 'openai/gpt-4o-mini',
+        fallback_models:
+          fallback_models ||
+          'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
+        max_tokens: max_tokens ? parseInt(max_tokens) : 200,
+        temperature: temperature ? parseFloat(temperature) : 0.7,
+        updated_at: new Date().toISOString()
+      });
 
       if (!error) {
         saved = true;
@@ -55,12 +58,13 @@ export default async function handler(req, res) {
       Location: `/api/admin-enhanced?message=${message}#models`
     });
     res.end();
-
   } catch (error) {
     console.error('Error saving model configuration:', error);
 
     // Redirect back with error message
-    const message = encodeURIComponent('Error saving model configuration. Please try again.');
+    const message = encodeURIComponent(
+      'Error saving model configuration. Please try again.'
+    );
     res.writeHead(302, {
       Location: `/api/admin-enhanced?message=${message}#models`
     });

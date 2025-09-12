@@ -4,7 +4,7 @@ module.exports = {
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapping: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   transform: {
     '^.+\\.ts$': [
@@ -12,13 +12,19 @@ module.exports = {
       {
         useESM: true,
         tsconfig: {
-          moduleResolution: 'bundler',
-        },
-      },
-    ],
+          moduleResolution: 'bundler'
+        }
+      }
+    ]
   },
   testMatch: ['**/__tests__/**/*.test.ts', '**/*.test.ts'],
-  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts', '!src/**/*.spec.ts', '!src/cli/**', '!src/testing/**'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.test.ts',
+    '!src/**/*.spec.ts',
+    '!src/cli/**',
+    '!src/testing/**'
+  ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {
@@ -26,7 +32,7 @@ module.exports = {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80,
-    },
-  },
+      statements: 80
+    }
+  }
 };

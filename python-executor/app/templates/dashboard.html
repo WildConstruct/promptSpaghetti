@@ -6,7 +6,8 @@
     <title>{{ dashboard_title }}</title>
     <style>
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         margin: 0;
         padding: 20px;
         background: #f5f5f5;
@@ -146,7 +147,9 @@
     <div class="container">
       <div class="header">
         <h1>{{ dashboard_title }}</h1>
-        <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Data</button>
+        <button class="refresh-btn" onclick="refreshData()">
+          🔄 Refresh Data
+        </button>
         <span id="last-updated" style="float: right; color: #7f8c8d"></span>
       </div>
 
@@ -186,12 +189,16 @@
 
       <div class="chart-container">
         <h3>Performance Trends (Last 24 Hours)</h3>
-        <div id="performance-chart" class="loading">Loading performance data...</div>
+        <div id="performance-chart" class="loading">
+          Loading performance data...
+        </div>
       </div>
 
       <div class="recommendations">
         <h3>Performance Recommendations</h3>
-        <div id="recommendations-list" class="loading">Loading recommendations...</div>
+        <div id="recommendations-list" class="loading">
+          Loading recommendations...
+        </div>
       </div>
 
       <div class="footer">
@@ -224,36 +231,57 @@
       }
 
       function updateMetricsDisplay() {
-        const perfMetrics = metricsData.performance_metrics?.execution_metrics || {};
-        const sysMetrics = metricsData.performance_metrics?.system_metrics || {};
+        const perfMetrics =
+          metricsData.performance_metrics?.execution_metrics || {};
+        const sysMetrics =
+          metricsData.performance_metrics?.system_metrics || {};
         const optSummary = metricsData.optimization_summary || {};
 
         // Update execution performance
-        document.getElementById('avg-duration').textContent = (perfMetrics.average_duration || 0).toFixed(3);
-        document.getElementById('success-rate').textContent = ((1 - (perfMetrics.error_rate || 0)) * 100).toFixed(1);
+        document.getElementById('avg-duration').textContent = (
+          perfMetrics.average_duration || 0
+        ).toFixed(3);
+        document.getElementById('success-rate').textContent = (
+          (1 - (perfMetrics.error_rate || 0)) *
+          100
+        ).toFixed(1);
 
         // Update system resources
-        document.getElementById('cpu-usage').textContent = (sysMetrics.cpu_percent || 0).toFixed(1);
-        document.getElementById('memory-usage').textContent = (sysMetrics.memory_percent || 0).toFixed(1);
+        document.getElementById('cpu-usage').textContent = (
+          sysMetrics.cpu_percent || 0
+        ).toFixed(1);
+        document.getElementById('memory-usage').textContent = (
+          sysMetrics.memory_percent || 0
+        ).toFixed(1);
 
         // Update execution stats
-        document.getElementById('total-executions').textContent = perfMetrics.total_executions || 0;
-        document.getElementById('error-rate').textContent = ((perfMetrics.error_rate || 0) * 100).toFixed(1);
+        document.getElementById('total-executions').textContent =
+          perfMetrics.total_executions || 0;
+        document.getElementById('error-rate').textContent = (
+          (perfMetrics.error_rate || 0) * 100
+        ).toFixed(1);
 
         // Update optimization status
-        document.getElementById('optimization-count').textContent = optSummary.total_optimizations || 0;
-        document.getElementById('optimization-success').textContent = ((optSummary.success_rate || 0) * 100).toFixed(1);
+        document.getElementById('optimization-count').textContent =
+          optSummary.total_optimizations || 0;
+        document.getElementById('optimization-success').textContent = (
+          (optSummary.success_rate || 0) * 100
+        ).toFixed(1);
 
         // Update timestamp
-        document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+        document.getElementById('last-updated').textContent =
+          'Last updated: ' + new Date().toLocaleTimeString();
       }
 
       function updateTrendsDisplay() {
         const recommendations = trendsData.recommendations || [];
-        const recommendationsList = document.getElementById('recommendations-list');
+        const recommendationsList = document.getElementById(
+          'recommendations-list'
+        );
 
         if (recommendations.length === 0) {
-          recommendationsList.innerHTML = '<p>No performance recommendations at this time.</p>';
+          recommendationsList.innerHTML =
+            '<p>No performance recommendations at this time.</p>';
           return;
         }
 

@@ -475,7 +475,7 @@
   font-size: 13px;
 }
 
-.generator-controls input[type="number"] {
+.generator-controls input[type='number'] {
   width: 50px;
   padding: 4px;
   background: rgba(255, 255, 255, 0.1);

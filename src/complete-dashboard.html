@@ -814,7 +814,9 @@
   <body>
     <div class="dashboard">
       <div class="header">
-        <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+        <button class="theme-toggle" onclick="toggleTheme()">
+          🌙 Dark Mode
+        </button>
         <h1>🎯 Complete Ticketing Dashboard</h1>
         <p>Epic completion tracking and comprehensive task management</p>
       </div>
@@ -845,16 +847,26 @@
           <div class="stat-label">Completed</div>
         </div>
         <div class="stat" style="cursor: pointer" onclick="showClaudeAPICost()">
-          <div class="stat-number" id="claudeAPICost" style="color: #f59e0b">$0</div>
+          <div class="stat-number" id="claudeAPICost" style="color: #f59e0b">
+            $0
+          </div>
           <div class="stat-label">Claude API Cost</div>
         </div>
       </div>
 
       <div class="nav-tabs">
-        <button class="nav-tab active" onclick="switchTab('epic-status')">Epic Status</button>
-        <button class="nav-tab" onclick="switchTab('approval-history')">Approval History</button>
-        <button class="nav-tab" onclick="switchTab('tasks')">Task Management</button>
-        <button class="nav-tab" onclick="switchTab('agent-broadcast')">📢 Agent Broadcast</button>
+        <button class="nav-tab active" onclick="switchTab('epic-status')">
+          Epic Status
+        </button>
+        <button class="nav-tab" onclick="switchTab('approval-history')">
+          Approval History
+        </button>
+        <button class="nav-tab" onclick="switchTab('tasks')">
+          Task Management
+        </button>
+        <button class="nav-tab" onclick="switchTab('agent-broadcast')">
+          📢 Agent Broadcast
+        </button>
       </div>
 
       <!-- Epic Status Tab -->
@@ -875,7 +887,9 @@
           </div>
           <div class="epic-stat clickable" onclick="toggleTimeUnit()">
             <div class="epic-stat-number" id="workReady">6+</div>
-            <div class="epic-stat-label" id="workReadyLabel">Months of Work Ready</div>
+            <div class="epic-stat-label" id="workReadyLabel">
+              Months of Work Ready
+            </div>
           </div>
           <div class="epic-stat clickable" onclick="showAgentPerformance()">
             <div class="epic-stat-number" id="agentEfficiency">-</div>
@@ -899,7 +913,9 @@
         <div class="charts-section">
           <div class="charts-container">
             <div class="chart-card">
-              <div class="chart-title">📈 Tasks Approved by Day (Last 30 Days)</div>
+              <div class="chart-title">
+                📈 Tasks Approved by Day (Last 30 Days)
+              </div>
               <div class="chart-container">
                 <canvas id="approvedTasksChart"></canvas>
               </div>
@@ -914,7 +930,9 @@
           </div>
 
           <div class="chart-card">
-            <div class="chart-title">⏱️ Estimate vs Actual Time Performance</div>
+            <div class="chart-title">
+              ⏱️ Estimate vs Actual Time Performance
+            </div>
             <div class="chart-container">
               <canvas id="estimateActualChart"></canvas>
             </div>
@@ -929,7 +947,9 @@
               <span>🎲</span>
               <span>Epic 7: Advanced Nodes</span>
             </div>
-            <div class="epic-description">WeightedAdvanced, Conditional, Sequential, Markov nodes</div>
+            <div class="epic-description">
+              WeightedAdvanced, Conditional, Sequential, Markov nodes
+            </div>
             <div class="epic-progress">
               <div class="epic-progress-label">
                 <span>Progress</span>
@@ -958,7 +978,8 @@
               </div>
             </div>
             <div class="epic-business-value">
-              <strong>Business Value:</strong> Advanced workflow capabilities for power users
+              <strong>Business Value:</strong> Advanced workflow capabilities
+              for power users
             </div>
           </div>
 
@@ -968,14 +989,19 @@
               <span>🔐</span>
               <span>Authentication System</span>
             </div>
-            <div class="epic-description">User login, registration, and session management</div>
+            <div class="epic-description">
+              User login, registration, and session management
+            </div>
             <div class="epic-progress">
               <div class="epic-progress-label">
                 <span>Progress</span>
                 <span>85%</span>
               </div>
               <div class="epic-progress-bar">
-                <div class="epic-progress-fill critical" style="width: 85%"></div>
+                <div
+                  class="epic-progress-fill critical"
+                  style="width: 85%"
+                ></div>
               </div>
             </div>
             <div class="epic-components">
@@ -997,7 +1023,8 @@
               </div>
             </div>
             <div class="epic-business-value">
-              <strong>Business Value:</strong> Users can create accounts and access personal features
+              <strong>Business Value:</strong> Users can create accounts and
+              access personal features
             </div>
           </div>
 
@@ -1007,7 +1034,9 @@
               <span>📤</span>
               <span>Epic 3: Export System</span>
             </div>
-            <div class="epic-description">Professional export formats (PNG, PDF, YAML, XML, GeneratorBundle)</div>
+            <div class="epic-description">
+              Professional export formats (PNG, PDF, YAML, XML, GeneratorBundle)
+            </div>
             <div class="epic-progress">
               <div class="epic-progress-label">
                 <span>Progress</span>
@@ -1032,7 +1061,8 @@
               </div>
             </div>
             <div class="epic-business-value">
-              <strong>Business Value:</strong> Users can export graphs for presentations and documentation
+              <strong>Business Value:</strong> Users can export graphs for
+              presentations and documentation
             </div>
           </div>
 
@@ -1042,14 +1072,19 @@
               <span>📁</span>
               <span>File Browser & Project Management</span>
             </div>
-            <div class="epic-description">Save, load, and manage user projects</div>
+            <div class="epic-description">
+              Save, load, and manage user projects
+            </div>
             <div class="epic-progress">
               <div class="epic-progress-label">
                 <span>Progress</span>
                 <span>60%</span>
               </div>
               <div class="epic-progress-bar">
-                <div class="epic-progress-fill critical" style="width: 60%"></div>
+                <div
+                  class="epic-progress-fill critical"
+                  style="width: 60%"
+                ></div>
               </div>
             </div>
             <div class="epic-components">
@@ -1067,7 +1102,8 @@
               </div>
             </div>
             <div class="epic-business-value">
-              <strong>Business Value:</strong> Users can save their work and not lose projects
+              <strong>Business Value:</strong> Users can save their work and not
+              lose projects
             </div>
           </div>
         </div>
@@ -1085,7 +1121,8 @@
         >
           <h3 style="margin-bottom: 10px">🚀 Business Impact Summary</h3>
           <p>
-            <strong>6+ months of completed development work</strong> ready to deliver massive user value with just
+            <strong>6+ months of completed development work</strong> ready to
+            deliver massive user value with just
             <strong>4-6 hours of integration tasks</strong>
           </p>
         </div>
@@ -1094,11 +1131,15 @@
       <!-- Approval History Tab -->
       <div id="approval-history" class="tab-content">
         <div class="chart-section">
-          <h2 style="color: #e1e5e9; margin-bottom: 20px">📈 Task Approval History</h2>
+          <h2 style="color: #e1e5e9; margin-bottom: 20px">
+            📈 Task Approval History
+          </h2>
 
           <!-- Daily Approvals Chart -->
           <div class="chart-card" style="margin-bottom: 30px">
-            <h3 style="color: #74c0fc; margin-bottom: 15px">Daily Approvals (Last 30 Days)</h3>
+            <h3 style="color: #74c0fc; margin-bottom: 15px">
+              Daily Approvals (Last 30 Days)
+            </h3>
             <div class="chart-container small">
               <canvas id="approvalChart"></canvas>
             </div>
@@ -1106,7 +1147,9 @@
 
           <!-- Weekly Velocity Chart -->
           <div class="chart-card" style="margin-bottom: 30px">
-            <h3 style="color: #10b981; margin-bottom: 15px">Weekly Velocity Trend</h3>
+            <h3 style="color: #10b981; margin-bottom: 15px">
+              Weekly Velocity Trend
+            </h3>
             <div class="chart-container small">
               <canvas id="velocityChart"></canvas>
             </div>
@@ -1134,8 +1177,15 @@
 
           <!-- Recent Approvals List -->
           <div class="chart-card">
-            <h3 style="color: #f59e0b; margin-bottom: 15px">Recent Approvals</h3>
-            <div id="recentApprovalsList" style="max-height: 300px; overflow-y: auto">Loading recent approvals...</div>
+            <h3 style="color: #f59e0b; margin-bottom: 15px">
+              Recent Approvals
+            </h3>
+            <div
+              id="recentApprovalsList"
+              style="max-height: 300px; overflow-y: auto"
+            >
+              Loading recent approvals...
+            </div>
           </div>
         </div>
       </div>
@@ -1171,7 +1221,11 @@
 
           <div class="control-group">
             <label>Keyword Search</label>
-            <input type="text" id="searchInput" placeholder="Search by title, ID, tags, epic, assignee..." />
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search by title, ID, tags, epic, assignee..."
+            />
           </div>
 
           <div class="control-group">
@@ -1185,15 +1239,30 @@
             </select>
           </div>
 
-          <button class="refresh-btn" onclick="loadTasks()">🔄 Refresh Data</button>
+          <button class="refresh-btn" onclick="loadTasks()">
+            🔄 Refresh Data
+          </button>
 
           <!-- QA and Testing Actions -->
           <div class="control-group" style="margin-left: 20px">
             <label>QA Actions</label>
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
-              <button class="qa-action-btn" onclick="triggerQAScript()">🔍 Run QA Review Script</button>
-              <button class="qa-action-btn" onclick="checkActiveTasksStatus()">⚙️ Check Active Task Status</button>
-              <button class="qa-action-btn" onclick="clearStaleTasksScript()">🧹 Clear Stale Tasks</button>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+              "
+            >
+              <button class="qa-action-btn" onclick="triggerQAScript()">
+                🔍 Run QA Review Script
+              </button>
+              <button class="qa-action-btn" onclick="checkActiveTasksStatus()">
+                ⚙️ Check Active Task Status
+              </button>
+              <button class="qa-action-btn" onclick="clearStaleTasksScript()">
+                🧹 Clear Stale Tasks
+              </button>
             </div>
           </div>
         </div>
@@ -1213,40 +1282,73 @@
         >
           <div class="layout-switcher">
             <label style="color: #9ca3af; margin-right: 10px">Layout:</label>
-            <button id="gridViewBtn" class="layout-btn active" onclick="switchLayout('grid')" style="margin-right: 5px">
+            <button
+              id="gridViewBtn"
+              class="layout-btn active"
+              onclick="switchLayout('grid')"
+              style="margin-right: 5px"
+            >
               📱 Grid
             </button>
-            <button id="listViewBtn" class="layout-btn" onclick="switchLayout('list')">📋 List</button>
+            <button
+              id="listViewBtn"
+              class="layout-btn"
+              onclick="switchLayout('list')"
+            >
+              📋 List
+            </button>
           </div>
 
           <div class="pagination-info" style="color: #9ca3af">
-            Showing <span id="taskRange">0-0</span> of <span id="totalTaskCount">0</span> tasks
+            Showing <span id="taskRange">0-0</span> of
+            <span id="totalTaskCount">0</span> tasks
           </div>
 
           <div class="pagination-controls">
-            <button id="prevPageBtn" onclick="changePage(-1)" style="margin-right: 5px" disabled>← Previous</button>
-            <span id="pageInfo" style="color: #74c0fc; margin: 0 10px">Page 1 of 1</span>
-            <button id="nextPageBtn" onclick="changePage(1)" disabled>Next →</button>
+            <button
+              id="prevPageBtn"
+              onclick="changePage(-1)"
+              style="margin-right: 5px"
+              disabled
+            >
+              ← Previous
+            </button>
+            <span id="pageInfo" style="color: #74c0fc; margin: 0 10px"
+              >Page 1 of 1</span
+            >
+            <button id="nextPageBtn" onclick="changePage(1)" disabled>
+              Next →
+            </button>
           </div>
         </div>
 
         <div class="loading" id="loading">Loading tickets...</div>
         <div id="ticketsGrid" class="ticket-grid" style="display: none"></div>
         <div id="ticketsList" class="tickets-list" style="display: none"></div>
-        <div id="noTickets" class="no-tickets" style="display: none">No tickets found matching your criteria.</div>
+        <div id="noTickets" class="no-tickets" style="display: none">
+          No tickets found matching your criteria.
+        </div>
         <div id="error" class="error" style="display: none"></div>
       </div>
 
       <!-- Agent Broadcast Tab -->
       <div id="agent-broadcast" class="tab-content">
-        <h2 style="color: #e1e5e9; margin-bottom: 20px">📢 Agent Broadcasting System</h2>
+        <h2 style="color: #e1e5e9; margin-bottom: 20px">
+          📢 Agent Broadcasting System
+        </h2>
 
         <!-- Send Broadcast Section -->
         <div class="chart-card" style="margin-bottom: 30px">
-          <h3 style="color: #10b981; margin-bottom: 15px">Send Broadcast to All Agents</h3>
+          <h3 style="color: #10b981; margin-bottom: 15px">
+            Send Broadcast to All Agents
+          </h3>
           <div style="display: flex; gap: 15px; align-items: flex-end">
             <div style="flex: 1">
-              <label for="broadcastMessage" style="display: block; color: #9ca3af; margin-bottom: 8px">Message:</label>
+              <label
+                for="broadcastMessage"
+                style="display: block; color: #9ca3af; margin-bottom: 8px"
+                >Message:</label
+              >
               <input
                 type="text"
                 id="broadcastMessage"
@@ -1264,7 +1366,9 @@
               />
             </div>
             <div>
-              <label for="broadcastPriority" style="display: block; color: #9ca3af; margin-bottom: 8px"
+              <label
+                for="broadcastPriority"
+                style="display: block; color: #9ca3af; margin-bottom: 8px"
                 >Priority:</label
               >
               <select
@@ -1301,7 +1405,14 @@
 
         <!-- Recent Broadcasts Section -->
         <div class="chart-card" style="margin-bottom: 30px">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 15px;
+            "
+          >
             <h3 style="color: #74c0fc; margin: 0">Recent Broadcast Messages</h3>
             <div style="display: flex; gap: 10px">
               <button
@@ -1332,8 +1443,13 @@
               </button>
             </div>
           </div>
-          <div id="broadcastMessages" style="max-height: 400px; overflow-y: auto">
-            <div style="text-align: center; color: #6b7280; padding: 40px">Loading broadcast messages...</div>
+          <div
+            id="broadcastMessages"
+            style="max-height: 400px; overflow-y: auto"
+          >
+            <div style="text-align: center; color: #6b7280; padding: 40px">
+              Loading broadcast messages...
+            </div>
           </div>
         </div>
 
@@ -1359,8 +1475,16 @@
 
         <!-- Quick Broadcast Templates -->
         <div class="chart-card">
-          <h3 style="color: #f59e0b; margin-bottom: 15px">Quick Broadcast Templates</h3>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px">
+          <h3 style="color: #f59e0b; margin-bottom: 15px">
+            Quick Broadcast Templates
+          </h3>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+              gap: 10px;
+            "
+          >
             <button
               onclick="sendQuickBroadcast('All agents: Please run QA pipeline when current task is complete')"
               class="template-btn"
@@ -1474,7 +1598,7 @@
           // Convert tasks object to array
           allTasks = Object.entries(state.tasks || {}).map(([id, task]) => ({
             ...task,
-            id: id,
+            id: id
           }));
 
           updateStats();
@@ -1487,7 +1611,8 @@
           console.error('Error loading tasks:', error);
           document.getElementById('loading').style.display = 'none';
           document.getElementById('error').style.display = 'block';
-          document.getElementById('error').textContent = `Error loading tasks: ${error.message}. 
+          document.getElementById('error').textContent =
+            `Error loading tasks: ${error.message}. 
 
 💡 To use this dashboard:
 1. Make sure you're running this from the project root directory
@@ -1499,7 +1624,9 @@
 
       // Create estimate vs actual time chart
       function createEstimateActualChart() {
-        const ctx = document.getElementById('estimateActualChart').getContext('2d');
+        const ctx = document
+          .getElementById('estimateActualChart')
+          .getContext('2d');
 
         // Get tasks with both estimate and actual time data
         const tasksWithTiming = allTasks.filter(task => {
@@ -1518,7 +1645,7 @@
           y: parseFloat(task.actualHours),
           taskId: task.id,
           title: task.title?.substring(0, 50) + '...',
-          agent: task.assignee || 'Unknown',
+          agent: task.assignee || 'Unknown'
         }));
 
         if (estimateActualChart) {
@@ -1536,13 +1663,13 @@
                 borderColor: '#74c0fc',
                 borderWidth: 1,
                 pointRadius: 6,
-                pointHoverRadius: 8,
+                pointHoverRadius: 8
               },
               {
                 label: 'Perfect Estimate Line',
                 data: [
                   { x: 0, y: 0 },
-                  { x: 20, y: 20 },
+                  { x: 20, y: 20 }
                 ],
                 type: 'line',
                 borderColor: '#10b981',
@@ -1550,9 +1677,9 @@
                 borderWidth: 2,
                 pointRadius: 0,
                 borderDash: [5, 5],
-                fill: false,
-              },
-            ],
+                fill: false
+              }
+            ]
           },
           options: {
             responsive: true,
@@ -1560,8 +1687,8 @@
             plugins: {
               legend: {
                 labels: {
-                  color: '#e1e5e9',
-                },
+                  color: '#e1e5e9'
+                }
               },
               tooltip: {
                 callbacks: {
@@ -1572,48 +1699,49 @@
                   label: function (context) {
                     const point = context.raw;
                     if (point.taskId) {
-                      const efficiency = point.x > 0 ? Math.round((point.x / point.y) * 100) : 0;
+                      const efficiency =
+                        point.x > 0 ? Math.round((point.x / point.y) * 100) : 0;
                       return [
                         `${point.title}`,
                         `Estimated: ${point.x}h, Actual: ${point.y}h`,
                         `Efficiency: ${efficiency}% (${point.y > point.x ? 'Over' : 'Under'} estimate)`,
-                        `Agent: ${point.agent}`,
+                        `Agent: ${point.agent}`
                       ];
                     }
                     return context.formattedValue;
-                  },
-                },
-              },
+                  }
+                }
+              }
             },
             scales: {
               x: {
                 title: {
                   display: true,
                   text: 'Estimated Hours',
-                  color: '#e1e5e9',
+                  color: '#e1e5e9'
                 },
                 ticks: {
-                  color: '#9ca3af',
+                  color: '#9ca3af'
                 },
                 grid: {
-                  color: 'rgba(156, 163, 175, 0.1)',
-                },
+                  color: 'rgba(156, 163, 175, 0.1)'
+                }
               },
               y: {
                 title: {
                   display: true,
                   text: 'Actual Hours',
-                  color: '#e1e5e9',
+                  color: '#e1e5e9'
                 },
                 ticks: {
-                  color: '#9ca3af',
+                  color: '#9ca3af'
                 },
                 grid: {
-                  color: 'rgba(156, 163, 175, 0.1)',
-                },
-              },
-            },
-          },
+                  color: 'rgba(156, 163, 175, 0.1)'
+                }
+              }
+            }
+          }
         });
       }
 
@@ -1638,15 +1766,21 @@
         for (let i = 29; i >= 0; i--) {
           const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
           const dateStr = date.toISOString().split('T')[0];
-          last30Days.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+          last30Days.push(
+            date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          );
 
           // Count approvals on this date (simulated from commit tracking data)
           const approvedOnDate = allTasks.filter(task => {
             if (!task.lastUpdated) return false;
-            const taskDate = new Date(task.lastUpdated).toISOString().split('T')[0];
+            const taskDate = new Date(task.lastUpdated)
+              .toISOString()
+              .split('T')[0];
             return (
               taskDate === dateStr &&
-              (task.state === 'REVIEW' || task.state === 'APPROVED' || task.state === 'COMPLETED')
+              (task.state === 'REVIEW' ||
+                task.state === 'APPROVED' ||
+                task.state === 'COMPLETED')
             );
           }).length;
 
@@ -1668,9 +1802,9 @@
                 borderColor: '#74c0fc',
                 backgroundColor: 'rgba(116, 192, 252, 0.1)',
                 fill: true,
-                tension: 0.3,
-              },
-            ],
+                tension: 0.3
+              }
+            ]
           },
           options: {
             responsive: true,
@@ -1678,14 +1812,14 @@
             plugins: {
               legend: {
                 labels: {
-                  color: '#e1e5e9',
-                },
-              },
+                  color: '#e1e5e9'
+                }
+              }
             },
             scales: {
               x: {
                 ticks: { color: '#9ca3af' },
-                grid: { color: 'rgba(156, 163, 175, 0.1)' },
+                grid: { color: 'rgba(156, 163, 175, 0.1)' }
               },
               y: {
                 ticks: { color: '#9ca3af' },
@@ -1693,11 +1827,11 @@
                 title: {
                   display: true,
                   text: 'Approvals',
-                  color: '#e1e5e9',
-                },
-              },
-            },
-          },
+                  color: '#e1e5e9'
+                }
+              }
+            }
+          }
         });
       }
 
@@ -1710,8 +1844,12 @@
         const now = new Date();
 
         for (let i = 11; i >= 0; i--) {
-          const weekStart = new Date(now.getTime() - i * 7 * 24 * 60 * 60 * 1000);
-          const weekEnd = new Date(weekStart.getTime() + 7 * 24 * 60 * 60 * 1000);
+          const weekStart = new Date(
+            now.getTime() - i * 7 * 24 * 60 * 60 * 1000
+          );
+          const weekEnd = new Date(
+            weekStart.getTime() + 7 * 24 * 60 * 60 * 1000
+          );
           weeks.push(`Week ${12 - i}`);
 
           // Count approvals in this week
@@ -1719,7 +1857,9 @@
             if (!task.lastUpdated) return false;
             const taskDate = new Date(task.lastUpdated);
             return (
-              taskDate >= weekStart && taskDate < weekEnd && (task.state === 'APPROVED' || task.state === 'COMPLETED')
+              taskDate >= weekStart &&
+              taskDate < weekEnd &&
+              (task.state === 'APPROVED' || task.state === 'COMPLETED')
             );
           }).length;
 
@@ -1740,9 +1880,9 @@
                 data: velocityData,
                 backgroundColor: 'rgba(16, 185, 129, 0.8)',
                 borderColor: '#10b981',
-                borderWidth: 1,
-              },
-            ],
+                borderWidth: 1
+              }
+            ]
           },
           options: {
             responsive: true,
@@ -1750,14 +1890,14 @@
             plugins: {
               legend: {
                 labels: {
-                  color: '#e1e5e9',
-                },
-              },
+                  color: '#e1e5e9'
+                }
+              }
             },
             scales: {
               x: {
                 ticks: { color: '#9ca3af' },
-                grid: { color: 'rgba(156, 163, 175, 0.1)' },
+                grid: { color: 'rgba(156, 163, 175, 0.1)' }
               },
               y: {
                 ticks: { color: '#9ca3af' },
@@ -1765,11 +1905,11 @@
                 title: {
                   display: true,
                   text: 'Tasks Completed',
-                  color: '#e1e5e9',
-                },
-              },
-            },
-          },
+                  color: '#e1e5e9'
+                }
+              }
+            }
+          }
         });
       }
 
@@ -1781,20 +1921,31 @@
 
         const dailyApprovals = allTasks.filter(task => {
           if (!task.lastUpdated) return false;
-          const taskDate = new Date(task.lastUpdated).toISOString().split('T')[0];
-          return taskDate === today && (task.state === 'APPROVED' || task.state === 'COMPLETED');
+          const taskDate = new Date(task.lastUpdated)
+            .toISOString()
+            .split('T')[0];
+          return (
+            taskDate === today &&
+            (task.state === 'APPROVED' || task.state === 'COMPLETED')
+          );
         }).length;
 
         const weeklyApprovals = allTasks.filter(task => {
           if (!task.lastUpdated) return false;
           const taskDate = new Date(task.lastUpdated);
-          return taskDate >= weekStart && (task.state === 'APPROVED' || task.state === 'COMPLETED');
+          return (
+            taskDate >= weekStart &&
+            (task.state === 'APPROVED' || task.state === 'COMPLETED')
+          );
         }).length;
 
         const monthlyApprovals = allTasks.filter(task => {
           if (!task.lastUpdated) return false;
           const taskDate = new Date(task.lastUpdated);
-          return taskDate >= monthStart && (task.state === 'APPROVED' || task.state === 'COMPLETED');
+          return (
+            taskDate >= monthStart &&
+            (task.state === 'APPROVED' || task.state === 'COMPLETED')
+          );
         }).length;
 
         const avgDailyApprovals = Math.round(monthlyApprovals / now.getDate());
@@ -1815,12 +1966,20 @@
       }
 
       function updateRecentApprovalsList() {
-        const recentApprovalsEl = document.getElementById('recentApprovalsList');
+        const recentApprovalsEl = document.getElementById(
+          'recentApprovalsList'
+        );
         if (!recentApprovalsEl) return;
 
         const recentApprovals = allTasks
-          .filter(task => task.state === 'APPROVED' || task.state === 'COMPLETED')
-          .sort((a, b) => new Date(b.lastUpdated || b.created) - new Date(a.lastUpdated || a.created))
+          .filter(
+            task => task.state === 'APPROVED' || task.state === 'COMPLETED'
+          )
+          .sort(
+            (a, b) =>
+              new Date(b.lastUpdated || b.created) -
+              new Date(a.lastUpdated || a.created)
+          )
           .slice(0, 10);
 
         if (recentApprovals.length === 0) {
@@ -1870,7 +2029,9 @@
 
         allTasks.forEach(task => {
           totalTasks++;
-          const isCompleted = ['COMPLETED', 'APPROVED', 'REVIEW'].includes(task.state);
+          const isCompleted = ['COMPLETED', 'APPROVED', 'REVIEW'].includes(
+            task.state
+          );
           if (isCompleted) totalCompleted++;
 
           // Extract epic number
@@ -1901,7 +2062,9 @@
 
           // Quick wins (high priority, low estimate)
           if (
-            (task.priority === 'high' && task.estimate && parseInt(task.estimate) <= 2) ||
+            (task.priority === 'high' &&
+              task.estimate &&
+              parseInt(task.estimate) <= 2) ||
             task.metadata?.source === 'priority-automation'
           ) {
             quickWins++;
@@ -1936,18 +2099,26 @@
         });
 
         // Calculate averages
-        const avgCompletion = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
+        const avgCompletion =
+          totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
         const criticalCompletion =
-          criticalSystemsTasks > 0 ? Math.round((criticalSystemsCompleted / criticalSystemsTasks) * 100) : 0;
+          criticalSystemsTasks > 0
+            ? Math.round(
+                (criticalSystemsCompleted / criticalSystemsTasks) * 100
+              )
+            : 0;
 
         // Estimate months of work (assuming 150 tasks per month)
         const remainingTasks = totalTasks - totalCompleted;
         const monthsOfWork = Math.ceil(remainingTasks / 150);
 
         // Calculate performance metrics
-        const avgEstimate = tasksWithTiming > 0 ? totalEstimate / tasksWithTiming : 0;
-        const avgActual = tasksWithTiming > 0 ? totalActual / tasksWithTiming : 0;
-        const agentEfficiency = totalActual > 0 ? Math.round((totalEstimate / totalActual) * 100) : 0;
+        const avgEstimate =
+          tasksWithTiming > 0 ? totalEstimate / tasksWithTiming : 0;
+        const avgActual =
+          tasksWithTiming > 0 ? totalActual / tasksWithTiming : 0;
+        const agentEfficiency =
+          totalActual > 0 ? Math.round((totalEstimate / totalActual) * 100) : 0;
 
         // Update the DOM with proper IDs
         const avgCompletionEl = document.getElementById('avgCompletion');
@@ -1960,13 +2131,19 @@
         const weeklyVelocityEl = document.getElementById('weeklyVelocity');
 
         if (avgCompletionEl) avgCompletionEl.textContent = `${avgCompletion}%`;
-        if (criticalSystemsEl) criticalSystemsEl.textContent = `${criticalCompletion}%`;
+        if (criticalSystemsEl)
+          criticalSystemsEl.textContent = `${criticalCompletion}%`;
         if (quickWinsEl) quickWinsEl.textContent = quickWins;
         if (workReadyEl) workReadyEl.textContent = `${monthsOfWork}+`;
-        if (agentEfficiencyEl) agentEfficiencyEl.textContent = tasksWithTiming > 0 ? `${agentEfficiency}%` : '-';
-        if (avgActualTimeEl) avgActualTimeEl.textContent = tasksWithTiming > 0 ? `${avgActual.toFixed(1)}h` : '-';
+        if (agentEfficiencyEl)
+          agentEfficiencyEl.textContent =
+            tasksWithTiming > 0 ? `${agentEfficiency}%` : '-';
+        if (avgActualTimeEl)
+          avgActualTimeEl.textContent =
+            tasksWithTiming > 0 ? `${avgActual.toFixed(1)}h` : '-';
         if (blockedTasksEl) blockedTasksEl.textContent = blockedTasks;
-        if (weeklyVelocityEl) weeklyVelocityEl.textContent = `${weeklyCompleted} tasks`;
+        if (weeklyVelocityEl)
+          weeklyVelocityEl.textContent = `${weeklyCompleted} tasks`;
 
         // Update dynamic epic cards
         updateEpicCards(epicStats);
@@ -1983,44 +2160,45 @@
             name: 'Backstage Admin Controls',
             icon: '🔐',
             description: 'User management, permissions, and admin interfaces',
-            priority: 'critical',
+            priority: 'critical'
           },
           18: {
             name: 'Security Hardening',
             icon: '🛡️',
-            description: 'Authentication, authorization, and security improvements',
-            priority: 'critical',
+            description:
+              'Authentication, authorization, and security improvements',
+            priority: 'critical'
           },
           7: {
             name: 'Advanced Node Capabilities',
             icon: '⚡',
             description: 'Enhanced workflow nodes and advanced features',
-            priority: 'high',
+            priority: 'high'
           },
           8: {
             name: 'Visual Flow Enhancements',
             icon: '🎨',
             description: 'UI/UX improvements and visual enhancements',
-            priority: 'high',
+            priority: 'high'
           },
           3: {
             name: 'Executor & Integration',
             icon: '🔧',
             description: 'Core execution engine and system integration',
-            priority: 'medium',
+            priority: 'medium'
           },
           5: {
             name: 'Inspector Panel System',
             icon: '🔍',
             description: 'Node inspection and configuration interface',
-            priority: 'medium',
+            priority: 'medium'
           },
           1: {
             name: 'Test Coverage & Quality',
             icon: '✅',
             description: 'Comprehensive testing and quality assurance',
-            priority: 'medium',
-          },
+            priority: 'medium'
+          }
         };
 
         // Create overview stats
@@ -2063,12 +2241,19 @@
               name: `Epic ${epicNum}`,
               icon: '📋',
               description: 'Development epic',
-              priority: 'medium',
+              priority: 'medium'
             };
 
-            const completion = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+            const completion =
+              stats.total > 0
+                ? Math.round((stats.completed / stats.total) * 100)
+                : 0;
             const priorityClass =
-              epic.priority === 'critical' ? 'critical' : epic.priority === 'high' ? 'high' : 'medium';
+              epic.priority === 'critical'
+                ? 'critical'
+                : epic.priority === 'high'
+                  ? 'high'
+                  : 'medium';
 
             epicCardsHtml += `
                         <div class="epic-card" onclick="showEpicDetails(${epicNum})">
@@ -2133,7 +2318,9 @@
 
       // Create approved tasks by day chart
       function createApprovedTasksChart() {
-        const ctx = document.getElementById('approvedTasksChart').getContext('2d');
+        const ctx = document
+          .getElementById('approvedTasksChart')
+          .getContext('2d');
 
         // Generate last 30 days data
         const last30Days = [];
@@ -2143,15 +2330,21 @@
         for (let i = 29; i >= 0; i--) {
           const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
           const dateStr = date.toISOString().split('T')[0];
-          last30Days.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+          last30Days.push(
+            date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          );
 
           // Count tasks that were moved to REVIEW or COMPLETED on this date
           const approvedOnDate = allTasks.filter(task => {
             if (!task.lastUpdated) return false;
-            const taskDate = new Date(task.lastUpdated).toISOString().split('T')[0];
+            const taskDate = new Date(task.lastUpdated)
+              .toISOString()
+              .split('T')[0];
             return (
               taskDate === dateStr &&
-              (task.state === 'REVIEW' || task.state === 'COMPLETED' || task.state === 'APPROVED')
+              (task.state === 'REVIEW' ||
+                task.state === 'COMPLETED' ||
+                task.state === 'APPROVED')
             );
           }).length;
 
@@ -2176,9 +2369,9 @@
                 fill: true,
                 tension: 0.4,
                 pointRadius: 4,
-                pointHoverRadius: 6,
-              },
-            ],
+                pointHoverRadius: 6
+              }
+            ]
           },
           options: {
             responsive: true,
@@ -2186,38 +2379,40 @@
             plugins: {
               legend: {
                 labels: {
-                  color: '#e1e5e9',
-                },
-              },
+                  color: '#e1e5e9'
+                }
+              }
             },
             scales: {
               y: {
                 beginAtZero: true,
                 ticks: {
                   color: '#9ca3af',
-                  stepSize: 1,
+                  stepSize: 1
                 },
                 grid: {
-                  color: 'rgba(156, 163, 175, 0.1)',
-                },
+                  color: 'rgba(156, 163, 175, 0.1)'
+                }
               },
               x: {
                 ticks: {
                   color: '#9ca3af',
-                  maxRotation: 45,
+                  maxRotation: 45
                 },
                 grid: {
-                  color: 'rgba(156, 163, 175, 0.1)',
-                },
-              },
-            },
-          },
+                  color: 'rgba(156, 163, 175, 0.1)'
+                }
+              }
+            }
+          }
         });
       }
 
       // Create status distribution chart
       function createStatusDistributionChart() {
-        const ctx = document.getElementById('statusDistributionChart').getContext('2d');
+        const ctx = document
+          .getElementById('statusDistributionChart')
+          .getContext('2d');
 
         // Count tasks by status
         const statusCounts = {};
@@ -2234,7 +2429,7 @@
           COMPLETED: '#10b981',
           APPROVED: '#059669',
           BLOCKED: '#ef4444',
-          Unknown: '#9ca3af',
+          Unknown: '#9ca3af'
         };
 
         if (statusDistributionChart) {
@@ -2248,11 +2443,13 @@
             datasets: [
               {
                 data: Object.values(statusCounts),
-                backgroundColor: Object.keys(statusCounts).map(status => statusColors[status] || '#9ca3af'),
+                backgroundColor: Object.keys(statusCounts).map(
+                  status => statusColors[status] || '#9ca3af'
+                ),
                 borderWidth: 2,
-                borderColor: '#1e1e2e',
-              },
-            ],
+                borderColor: '#1e1e2e'
+              }
+            ]
           },
           options: {
             responsive: true,
@@ -2265,21 +2462,26 @@
                   padding: 15,
                   usePointStyle: true,
                   font: {
-                    size: 11,
-                  },
-                },
+                    size: 11
+                  }
+                }
               },
               tooltip: {
                 callbacks: {
                   label: function (context) {
-                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                    const percentage = Math.round((context.parsed * 100) / total);
+                    const total = context.dataset.data.reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+                    const percentage = Math.round(
+                      (context.parsed * 100) / total
+                    );
                     return `${context.label}: ${context.parsed} tasks (${percentage}%)`;
-                  },
-                },
-              },
-            },
-          },
+                  }
+                }
+              }
+            }
+          }
         });
       }
 
@@ -2288,12 +2490,17 @@
         const stats = {
           total: allTasks.length,
           unassigned: allTasks.filter(
-            t => t.state === 'UNASSIGNED' || (t.state === 'TODO' && (!t.assignee || t.assignee === 'Unassigned'))
+            t =>
+              t.state === 'UNASSIGNED' ||
+              (t.state === 'TODO' &&
+                (!t.assignee || t.assignee === 'Unassigned'))
           ).length,
           inProgress: allTasks.filter(t => t.state === 'IN_PROGRESS').length,
           auth: 0,
           file: 0,
-          completed: allTasks.filter(t => t.state === 'COMPLETED' || t.state === 'APPROVED').length,
+          completed: allTasks.filter(
+            t => t.state === 'COMPLETED' || t.state === 'APPROVED'
+          ).length
         };
 
         // Count auth and file browser tasks
@@ -2332,8 +2539,10 @@
         });
 
         document.getElementById('totalTasks').textContent = stats.total;
-        document.getElementById('unassignedTasks').textContent = stats.unassigned;
-        document.getElementById('inProgressTasks').textContent = stats.inProgress;
+        document.getElementById('unassignedTasks').textContent =
+          stats.unassigned;
+        document.getElementById('inProgressTasks').textContent =
+          stats.inProgress;
         document.getElementById('authTasks').textContent = stats.auth;
         document.getElementById('fileTasks').textContent = stats.file;
         document.getElementById('completedTasks').textContent = stats.completed;
@@ -2346,7 +2555,9 @@
       function applyFilters() {
         const stateFilter = document.getElementById('stateFilter').value;
         const priorityFilter = document.getElementById('priorityFilter').value;
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchTerm = document
+          .getElementById('searchInput')
+          .value.toLowerCase();
         const sortBy = document.getElementById('sortBy').value;
 
         filteredTasks = allTasks.filter(task => {
@@ -2387,13 +2598,15 @@
                 if (!isFileTask) return false;
                 break;
               case 'priority-automation':
-                if (task.metadata?.source !== 'priority-automation') return false;
+                if (task.metadata?.source !== 'priority-automation')
+                  return false;
                 break;
               case 'high':
                 if (task.priority !== 'high') return false;
                 break;
               case 'ready-for-review':
-                if (task.state !== 'REVIEW' && task.state !== 'IN_PROGRESS') return false;
+                if (task.state !== 'REVIEW' && task.state !== 'IN_PROGRESS')
+                  return false;
                 break;
               case 'stale-tasks':
                 // Tasks that have been in progress for more than 7 days or haven't been updated in 14 days
@@ -2403,8 +2616,11 @@
                   : task.created
                     ? new Date(task.created)
                     : now;
-                const daysSinceUpdate = (now - lastUpdated) / (1000 * 60 * 60 * 24);
-                const isStale = (task.state === 'IN_PROGRESS' && daysSinceUpdate > 7) || daysSinceUpdate > 14;
+                const daysSinceUpdate =
+                  (now - lastUpdated) / (1000 * 60 * 60 * 24);
+                const isStale =
+                  (task.state === 'IN_PROGRESS' && daysSinceUpdate > 7) ||
+                  daysSinceUpdate > 14;
                 if (!isStale) return false;
                 break;
             }
@@ -2423,7 +2639,7 @@
               task.wipClass,
               task.priority,
               ...(task.tags || []),
-              ...(task.acceptanceCriteria || []),
+              ...(task.acceptanceCriteria || [])
             ]
               .join(' ')
               .toLowerCase();
@@ -2525,7 +2741,9 @@
 
         updatePaginationInfo(startIndex + 1, endIndex, totalTasks, totalPages);
 
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const searchTerm = document
+          .getElementById('searchInput')
+          .value.toLowerCase();
 
         if (currentLayout === 'grid') {
           displayGridLayout(paginatedTasks, searchTerm);
@@ -2540,24 +2758,42 @@
 
         container.innerHTML = tasks
           .map(task => {
-            const taskTags = task.tags && Array.isArray(task.tags) ? task.tags : [];
+            const taskTags =
+              task.tags && Array.isArray(task.tags) ? task.tags : [];
             const taskState = String(task.state || 'unknown').toLowerCase();
             const taskTitle = String(task.title || 'Untitled Task');
             const taskId = String(task.id || 'Unknown-ID');
 
-            const isAuth = taskTags.includes('auth') || (task.story && task.story.includes('20.1'));
-            const isFile = taskTags.includes('file-browser') || (task.story && task.story.includes('20.2'));
-            const priorityClass = isAuth ? 'priority-auth' : isFile ? 'priority-file' : '';
+            const isAuth =
+              taskTags.includes('auth') ||
+              (task.story && task.story.includes('20.1'));
+            const isFile =
+              taskTags.includes('file-browser') ||
+              (task.story && task.story.includes('20.2'));
+            const priorityClass = isAuth
+              ? 'priority-auth'
+              : isFile
+                ? 'priority-file'
+                : '';
             const stateClass = `state-${taskState.replace(/[^a-z0-9]/g, '-')}`;
 
-            const priorityEmoji = isAuth ? '🔐' : isFile ? '📁' : task.priority === 'high' ? '🔥' : '📝';
+            const priorityEmoji = isAuth
+              ? '🔐'
+              : isFile
+                ? '📁'
+                : task.priority === 'high'
+                  ? '🔥'
+                  : '📝';
 
             // Highlight search terms
             let displayTitle = taskTitle;
             if (searchTerm) {
               try {
                 const regex = new RegExp(`(${searchTerm})`, 'gi');
-                displayTitle = taskTitle.replace(regex, '<span class="search-highlight">$1</span>');
+                displayTitle = taskTitle.replace(
+                  regex,
+                  '<span class="search-highlight">$1</span>'
+                );
               } catch (e) {
                 displayTitle = taskTitle;
               }
@@ -2588,7 +2824,9 @@
                                     const sanitizedTag = String(tag || '')
                                       .replace(/[^a-zA-Z0-9]/g, '-')
                                       .toLowerCase();
-                                    const displayTag = String(tag || '').substring(0, 20);
+                                    const displayTag = String(
+                                      tag || ''
+                                    ).substring(0, 20);
                                     return `<span class="tag tag-${sanitizedTag}">${displayTag}</span>`;
                                   })
                                   .join('')}
@@ -2628,16 +2866,29 @@
                     <tbody>
                         ${tasks
                           .map(task => {
-                            const taskState = String(task.state || 'unknown').toLowerCase();
-                            const taskTitle = String(task.title || 'Untitled Task');
+                            const taskState = String(
+                              task.state || 'unknown'
+                            ).toLowerCase();
+                            const taskTitle = String(
+                              task.title || 'Untitled Task'
+                            );
                             const taskId = String(task.id || 'Unknown-ID');
 
                             // Highlight search terms
-                            let displayTitle = taskTitle.length > 60 ? taskTitle.substring(0, 60) + '...' : taskTitle;
+                            let displayTitle =
+                              taskTitle.length > 60
+                                ? taskTitle.substring(0, 60) + '...'
+                                : taskTitle;
                             if (searchTerm) {
                               try {
-                                const regex = new RegExp(`(${searchTerm})`, 'gi');
-                                displayTitle = displayTitle.replace(regex, '<span class="search-highlight">$1</span>');
+                                const regex = new RegExp(
+                                  `(${searchTerm})`,
+                                  'gi'
+                                );
+                                displayTitle = displayTitle.replace(
+                                  regex,
+                                  '<span class="search-highlight">$1</span>'
+                                );
                               } catch (e) {
                                 displayTitle = taskTitle;
                               }
@@ -2669,15 +2920,20 @@
       function updatePaginationInfo(start, end, total, totalPages) {
         document.getElementById('taskRange').textContent = `${start}-${end}`;
         document.getElementById('totalTaskCount').textContent = total;
-        document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+        document.getElementById('pageInfo').textContent =
+          `Page ${currentPage} of ${totalPages}`;
 
         // Update pagination buttons
         document.getElementById('prevPageBtn').disabled = currentPage <= 1;
-        document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
+        document.getElementById('nextPageBtn').disabled =
+          currentPage >= totalPages;
       }
 
       function changePage(direction) {
-        const totalPages = Math.max(1, Math.ceil(filteredTasks.length / tasksPerPage));
+        const totalPages = Math.max(
+          1,
+          Math.ceil(filteredTasks.length / tasksPerPage)
+        );
         const newPage = currentPage + direction;
 
         if (newPage >= 1 && newPage <= totalPages) {
@@ -2692,8 +2948,12 @@
         currentLayout = layout;
 
         // Update button states
-        document.getElementById('gridViewBtn').classList.toggle('active', layout === 'grid');
-        document.getElementById('listViewBtn').classList.toggle('active', layout === 'list');
+        document
+          .getElementById('gridViewBtn')
+          .classList.toggle('active', layout === 'grid');
+        document
+          .getElementById('listViewBtn')
+          .classList.toggle('active', layout === 'list');
 
         displayTasks();
       }
@@ -2794,7 +3054,7 @@
           'Epic 8 - Visual Flow Enhancements',
           'Epic 17 - Backstage Admin Controls',
           'Epic 18 - Security Hardening',
-          'Other',
+          'Other'
         ];
 
         let options = '<option value="">No Epic</option>';
@@ -2817,7 +3077,9 @@
 
           // Show confirmation
           const epicDisplay = newEpic || 'No Epic';
-          alert(`Task ${taskId} epic updated successfully!\n\nOld Epic: ${oldEpic}\nNew Epic: ${epicDisplay}`);
+          alert(
+            `Task ${taskId} epic updated successfully!\n\nOld Epic: ${oldEpic}\nNew Epic: ${epicDisplay}`
+          );
 
           // Close modal and refresh display
           document.getElementById('taskDetailsModal').remove();
@@ -2912,7 +3174,7 @@
           `docs/stories/${epicNum}.${storyNum}.professional-interface-polish.md`,
           `docs/stories/${epicNum}.${storyNum}.authentication.md`,
           `docs/stories/${epicNum}.${storyNum}.file-browser.md`,
-          `docs/stories/${epicNum}.${storyNum}.md`,
+          `docs/stories/${epicNum}.${storyNum}.md`
         ];
 
         // For now, create a modal that shows the story information
@@ -2980,7 +3242,8 @@
       }
 
       function getStoryType(epicNum, storyNum) {
-        if (epicNum === 20 && storyNum === '1') return '🔐 Authentication System';
+        if (epicNum === 20 && storyNum === '1')
+          return '🔐 Authentication System';
         if (epicNum === 20 && storyNum === '2') return '📁 File Browser';
         if (epicNum === 8) return '🎬 Film Industry Demo';
         return '📝 Feature Story';
@@ -3014,10 +3277,12 @@
             taskStory.includes(`${epicNum}.${storyNum}`) ||
             (epicNum === 20 &&
               storyNum === '1' &&
-              (taskTitle.toLowerCase().includes('auth') || taskTitle.toLowerCase().includes('login'))) ||
+              (taskTitle.toLowerCase().includes('auth') ||
+                taskTitle.toLowerCase().includes('login'))) ||
             (epicNum === 20 &&
               storyNum === '2' &&
-              (taskTitle.toLowerCase().includes('file') || taskTitle.toLowerCase().includes('browser')))
+              (taskTitle.toLowerCase().includes('file') ||
+                taskTitle.toLowerCase().includes('browser')))
           );
         });
 
@@ -3078,12 +3343,15 @@
           `docs/stories/${epicNum}.${storyNum}.professional-interface-polish.md`,
           `docs/stories/${epicNum}.${storyNum}.authentication.md`,
           `docs/stories/${epicNum}.${storyNum}.file-browser.md`,
-          `docs/stories/${epicNum}.${storyNum}.md`,
+          `docs/stories/${epicNum}.${storyNum}.md`
         ];
 
         // Open the first likely file
         if (epicNum === 8 && storyNum === '1') {
-          window.open('docs/stories/8.1.professional-interface-polish.md', '_blank');
+          window.open(
+            'docs/stories/8.1.professional-interface-polish.md',
+            '_blank'
+          );
         } else {
           window.open(`docs/stories/${epicNum}.${storyNum}.md`, '_blank');
         }
@@ -3129,10 +3397,18 @@
       }
 
       // Event listeners
-      document.getElementById('stateFilter').addEventListener('change', applyFilters);
-      document.getElementById('priorityFilter').addEventListener('change', applyFilters);
-      document.getElementById('searchInput').addEventListener('input', applyFilters);
-      document.getElementById('sortBy').addEventListener('change', applyFilters);
+      document
+        .getElementById('stateFilter')
+        .addEventListener('change', applyFilters);
+      document
+        .getElementById('priorityFilter')
+        .addEventListener('change', applyFilters);
+      document
+        .getElementById('searchInput')
+        .addEventListener('input', applyFilters);
+      document
+        .getElementById('sortBy')
+        .addEventListener('change', applyFilters);
 
       // Initialize dashboard on page load
       document.addEventListener('DOMContentLoaded', () => {
@@ -3157,7 +3433,9 @@
         if (!allTasks.length) return;
 
         const totalTasks = allTasks.length;
-        const completedTasks = allTasks.filter(t => t.state === 'COMPLETED' || t.state === 'APPROVED').length;
+        const completedTasks = allTasks.filter(
+          t => t.state === 'COMPLETED' || t.state === 'APPROVED'
+        ).length;
         const remainingTasks = totalTasks - completedTasks;
 
         // Estimate based on different units (assuming 150 tasks/month, 25 tasks/week, 5 tasks/day, 0.6 tasks/hour)
@@ -3199,10 +3477,15 @@
         const quickWinTasks = allTasks.filter(task => {
           const isHighPriority = task.priority === 'high';
           const hasLowEstimate = task.estimate && parseInt(task.estimate) <= 2;
-          const isPriorityAutomation = task.metadata?.source === 'priority-automation';
-          const isUnassigned = task.state === 'UNASSIGNED' || task.state === 'TODO';
+          const isPriorityAutomation =
+            task.metadata?.source === 'priority-automation';
+          const isUnassigned =
+            task.state === 'UNASSIGNED' || task.state === 'TODO';
 
-          return (isHighPriority && hasLowEstimate && isUnassigned) || isPriorityAutomation;
+          return (
+            (isHighPriority && hasLowEstimate && isUnassigned) ||
+            isPriorityAutomation
+          );
         });
 
         const modalHTML = `
@@ -3319,7 +3602,7 @@
               efficiency: 0,
               onTime: 0,
               over: 0,
-              under: 0,
+              under: 0
             };
           }
           const stats = agentStats[agent];
@@ -3342,7 +3625,10 @@
         // Calculate efficiency for each agent
         Object.keys(agentStats).forEach(agent => {
           const stats = agentStats[agent];
-          stats.efficiency = stats.totalActual > 0 ? Math.round((stats.totalEstimate / stats.totalActual) * 100) : 0;
+          stats.efficiency =
+            stats.totalActual > 0
+              ? Math.round((stats.totalEstimate / stats.totalActual) * 100)
+              : 0;
           stats.avgEstimate = stats.totalEstimate / stats.tasks;
           stats.avgActual = stats.totalActual / stats.tasks;
         });
@@ -3445,7 +3731,9 @@
       // QA and Testing Script Functions
       function triggerQAScript() {
         const reviewTasks = allTasks.filter(task => task.state === 'REVIEW');
-        const completedTasks = allTasks.filter(task => task.state === 'COMPLETED');
+        const completedTasks = allTasks.filter(
+          task => task.state === 'COMPLETED'
+        );
         const totalEligible = reviewTasks.length + completedTasks.length;
 
         if (totalEligible === 0) {
@@ -3686,11 +3974,15 @@
       }
 
       function checkActiveTasksStatus() {
-        const activeTasks = allTasks.filter(task => task.state === 'IN_PROGRESS' && task.assignee);
+        const activeTasks = allTasks.filter(
+          task => task.state === 'IN_PROGRESS' && task.assignee
+        );
 
         const now = new Date();
         const statusChecks = activeTasks.map(task => {
-          const lastUpdate = task.lastUpdated ? new Date(task.lastUpdated) : new Date(task.created || now);
+          const lastUpdate = task.lastUpdated
+            ? new Date(task.lastUpdated)
+            : new Date(task.created || now);
           const hoursSinceUpdate = (now - lastUpdate) / (1000 * 60 * 60);
           const daysSinceUpdate = hoursSinceUpdate / 24;
 
@@ -3699,8 +3991,10 @@
             hoursSinceUpdate: Math.round(hoursSinceUpdate * 10) / 10,
             daysSinceUpdate: Math.round(daysSinceUpdate * 10) / 10,
             isLikelyFinished:
-              hoursSinceUpdate > 24 && task.estimate && hoursSinceUpdate > parseFloat(task.estimate) * 2,
-            needsCheck: hoursSinceUpdate > 4,
+              hoursSinceUpdate > 24 &&
+              task.estimate &&
+              hoursSinceUpdate > parseFloat(task.estimate) * 2,
+            needsCheck: hoursSinceUpdate > 4
           };
         });
 
@@ -3716,7 +4010,10 @@
               ? new Date(task.created)
               : now;
           const daysSinceUpdate = (now - lastUpdated) / (1000 * 60 * 60 * 24);
-          return (task.state === 'IN_PROGRESS' && daysSinceUpdate > 7) || daysSinceUpdate > 14;
+          return (
+            (task.state === 'IN_PROGRESS' && daysSinceUpdate > 7) ||
+            daysSinceUpdate > 14
+          );
         });
 
         const message = `🧹 Clear Stale Tasks Script\n\nFound ${staleTasks.length} potentially stale tasks:\n• ${staleTasks.filter(t => t.state === 'IN_PROGRESS').length} IN_PROGRESS tasks older than 7 days\n• ${staleTasks.filter(t => t.state !== 'IN_PROGRESS').length} other tasks not updated in 14+ days\n\nThis would:\n• Check for related work/commits\n• Update task descriptions with findings\n• Release tasks back to UNASSIGNED if abandoned\n• Generate stale task report\n\n(Server-side integration needed)`;
@@ -3862,7 +4159,10 @@
                                 const lastUpdate = task.lastUpdated
                                   ? new Date(task.lastUpdated)
                                   : new Date(task.created);
-                                const daysStale = Math.round((new Date() - lastUpdate) / (1000 * 60 * 60 * 24));
+                                const daysStale = Math.round(
+                                  (new Date() - lastUpdate) /
+                                    (1000 * 60 * 60 * 24)
+                                );
                                 return `
                                     <div style="background: #252538; border: 1px solid #2d2d44; border-radius: 8px; padding: 15px; margin-bottom: 10px;">
                                         <div style="color: #74c0fc; font-weight: bold; margin-bottom: 5px;">${task.id}</div>
@@ -3929,7 +4229,11 @@
                                 ${blockedTasks
                                   .map(task => {
                                     const daysSinceBlocked = task.lastUpdated
-                                      ? Math.round((new Date() - new Date(task.lastUpdated)) / (1000 * 60 * 60 * 24))
+                                      ? Math.round(
+                                          (new Date() -
+                                            new Date(task.lastUpdated)) /
+                                            (1000 * 60 * 60 * 24)
+                                        )
                                       : 0;
                                     return `
                                         <div style="background: #252538; border: 1px solid #2d2d44; border-radius: 8px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #ef4444;">
@@ -4001,10 +4305,14 @@
             const story = (task.story || '').toLowerCase();
 
             if (story.includes('20.1') || title.includes('auth')) epicNum = 20;
-            else if (story.includes('20.2') || title.includes('file')) epicNum = 20;
-            else if (title.includes('python') || title.includes('transform')) epicNum = 8;
-            else if (title.includes('export') || title.includes('generator')) epicNum = 3;
-            else if (title.includes('advanced') || title.includes('markov')) epicNum = 7;
+            else if (story.includes('20.2') || title.includes('file'))
+              epicNum = 20;
+            else if (title.includes('python') || title.includes('transform'))
+              epicNum = 8;
+            else if (title.includes('export') || title.includes('generator'))
+              epicNum = 3;
+            else if (title.includes('advanced') || title.includes('markov'))
+              epicNum = 7;
             else epicNum = 'Other';
           }
 
@@ -4016,7 +4324,7 @@
               review: 0,
               blocked: 0,
               unassigned: 0,
-              approved: 0,
+              approved: 0
             };
           }
 
@@ -4047,7 +4355,9 @@
         Object.keys(epicStats).forEach(epicNum => {
           const stats = epicStats[epicNum];
           const completedTasks = stats.completed + stats.approved;
-          stats.completionPercent = Math.round((completedTasks / stats.total) * 100);
+          stats.completionPercent = Math.round(
+            (completedTasks / stats.total) * 100
+          );
         });
 
         // Sort epics by number (but keep 'Other' at the end)
@@ -4196,9 +4506,12 @@
           7: 'Advanced Node Capabilities - WeightedAdvanced, Conditional, Sequential, Markov nodes',
           8: 'Film Industry Demo - Professional interface polish and Cinema 4D quality workflows',
           20: 'Business Features - Authentication system (20.1) and File Browser (20.2)',
-          Other: 'Miscellaneous Tasks - Infrastructure, documentation, and other development work',
+          Other:
+            'Miscellaneous Tasks - Infrastructure, documentation, and other development work'
         };
-        return names[epicNum] || `Epic ${epicNum} - Development tasks and features`;
+        return (
+          names[epicNum] || `Epic ${epicNum} - Development tasks and features`
+        );
       }
 
       function getEpicIcon(epicNum) {
@@ -4207,7 +4520,7 @@
           7: '🎲',
           8: '🎬',
           20: '🔐',
-          Other: '📝',
+          Other: '📝'
         };
         return icons[epicNum] || '⚙️';
       }
@@ -4225,7 +4538,8 @@
           let searchTerm = '';
           if (epicNum === '20') searchTerm = 'auth OR file OR 20.';
           else if (epicNum === '8') searchTerm = 'python OR film OR cinema';
-          else if (epicNum === '7') searchTerm = 'advanced OR markov OR weighted';
+          else if (epicNum === '7')
+            searchTerm = 'advanced OR markov OR weighted';
           else if (epicNum === '3') searchTerm = 'export OR generator';
           else if (epicNum !== 'Other') searchTerm = `E${epicNum}`;
 
@@ -4247,7 +4561,7 @@
             const realCosts = await response.json();
             return {
               type: 'actual',
-              ...realCosts,
+              ...realCosts
             };
           }
         } catch (error) {
@@ -4273,15 +4587,17 @@
             task.description || '',
             task.story || '',
             (task.acceptanceCriteria || []).join(' '),
-            (task.tags || []).join(' '),
+            (task.tags || []).join(' ')
           ].join(' ');
 
           let inputTokens = Math.ceil(taskText.length / 4) + baseContext;
 
           // Adjust for task complexity
           if (task.title.toLowerCase().includes('epic')) inputTokens += 1000;
-          if (task.title.toLowerCase().includes('integration')) inputTokens += 800;
-          if (task.title.toLowerCase().includes('architecture')) inputTokens += 600;
+          if (task.title.toLowerCase().includes('integration'))
+            inputTokens += 800;
+          if (task.title.toLowerCase().includes('architecture'))
+            inputTokens += 600;
 
           totalInputTokens += inputTokens;
 
@@ -4290,17 +4606,24 @@
 
           if (task.state === 'COMPLETED' || task.state === 'APPROVED') {
             // Implementation work tokens
-            if (task.title.toLowerCase().includes('implement')) outputTokens += 1200;
-            else if (task.title.toLowerCase().includes('create')) outputTokens += 1000;
-            else if (task.title.toLowerCase().includes('add')) outputTokens += 800;
-            else if (task.title.toLowerCase().includes('update')) outputTokens += 600;
-            else if (task.title.toLowerCase().includes('fix')) outputTokens += 500;
+            if (task.title.toLowerCase().includes('implement'))
+              outputTokens += 1200;
+            else if (task.title.toLowerCase().includes('create'))
+              outputTokens += 1000;
+            else if (task.title.toLowerCase().includes('add'))
+              outputTokens += 800;
+            else if (task.title.toLowerCase().includes('update'))
+              outputTokens += 600;
+            else if (task.title.toLowerCase().includes('fix'))
+              outputTokens += 500;
             else outputTokens += 800; // Default implementation
 
             // Additional tokens for specific types
             if (task.title.toLowerCase().includes('test')) outputTokens += 600;
-            if (task.title.toLowerCase().includes('document')) outputTokens += 400;
-            if (task.title.toLowerCase().includes('security')) outputTokens += 300;
+            if (task.title.toLowerCase().includes('document'))
+              outputTokens += 400;
+            if (task.title.toLowerCase().includes('security'))
+              outputTokens += 300;
             if (task.wip_class === 'FEAT') outputTokens += 400;
           }
 
@@ -4321,7 +4644,7 @@
           outputTokens: totalOutputTokens,
           inputCost: inputCost,
           outputCost: outputCost,
-          totalCost: totalCost,
+          totalCost: totalCost
         };
       }
 
@@ -4456,7 +4779,7 @@
           inputPricePerK: '$0.003',
           outputPricePerK: '$0.015',
           calculationDate: new Date().toISOString(),
-          note: 'Estimated cost if using Claude API directly instead of Claude Code',
+          note: 'Estimated cost if using Claude API directly instead of Claude Code'
         };
 
         const dataStr = JSON.stringify(breakdown, null, 2);
@@ -4524,7 +4847,10 @@
             if (stored) {
               broadcastData = JSON.parse(stored);
             } else {
-              broadcastData = { messages: [], lastUpdate: new Date().toISOString() };
+              broadcastData = {
+                messages: [],
+                lastUpdate: new Date().toISOString()
+              };
             }
           }
 
@@ -4532,7 +4858,10 @@
           updateBroadcastStats();
         } catch (error) {
           console.error('Error loading broadcasts:', error);
-          broadcastData = { messages: [], lastUpdate: new Date().toISOString() };
+          broadcastData = {
+            messages: [],
+            lastUpdate: new Date().toISOString()
+          };
           displayBroadcasts();
         }
       }
@@ -4556,7 +4885,12 @@
           .map(msg => {
             const timeAgo = getTimeAgo(new Date(msg.timestamp));
             const priorityClass = msg.priority || 'normal';
-            const priorityIcon = msg.priority === 'urgent' ? '🚨' : msg.priority === 'high' ? '⚠️' : '💬';
+            const priorityIcon =
+              msg.priority === 'urgent'
+                ? '🚨'
+                : msg.priority === 'high'
+                  ? '⚠️'
+                  : '💬';
 
             return `
                     <div class="broadcast-message ${priorityClass}">
@@ -4598,12 +4932,12 @@
           const apiResponse = await fetch('/api/broadcasts', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               message: message,
-              priority: priority,
-            }),
+              priority: priority
+            })
           });
 
           if (!apiResponse.ok) {
@@ -4624,7 +4958,8 @@
         }
 
         // Show confirmation
-        const priorityIcon = priority === 'urgent' ? '🚨' : priority === 'high' ? '⚠️' : '📢';
+        const priorityIcon =
+          priority === 'urgent' ? '🚨' : priority === 'high' ? '⚠️' : '📢';
         alert(
           `${priorityIcon} Broadcast sent successfully!\\n\\nMessage: ${message}\\nPriority: ${priority}\\n\\nAgents can check with: node src/broadcast-to-agents.js check`
         );
@@ -4638,7 +4973,10 @@
         const prioritySelect = document.getElementById('broadcastPriority');
         if (message.includes('Emergency') || message.includes('🚨')) {
           prioritySelect.value = 'urgent';
-        } else if (message.includes('PRIORITY') || message.includes('immediately')) {
+        } else if (
+          message.includes('PRIORITY') ||
+          message.includes('immediately')
+        ) {
           prioritySelect.value = 'high';
         } else {
           prioritySelect.value = 'normal';
@@ -4650,8 +4988,14 @@
       // Clear all broadcasts
       function clearAllBroadcasts() {
         if (confirm('Are you sure you want to clear all broadcast messages?')) {
-          broadcastData = { messages: [], lastUpdate: new Date().toISOString() };
-          localStorage.setItem('agent-broadcasts', JSON.stringify(broadcastData));
+          broadcastData = {
+            messages: [],
+            lastUpdate: new Date().toISOString()
+          };
+          localStorage.setItem(
+            'agent-broadcasts',
+            JSON.stringify(broadcastData)
+          );
           displayBroadcasts();
           updateBroadcastStats();
         }
@@ -4668,10 +5012,14 @@
 
         // Count messages from last 24 hours
         const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        const recent = broadcastData.messages.filter(msg => new Date(msg.timestamp) > dayAgo).length;
+        const recent = broadcastData.messages.filter(
+          msg => new Date(msg.timestamp) > dayAgo
+        ).length;
 
         // Count messages with no acknowledgments (active)
-        const active = broadcastData.messages.filter(msg => !msg.acknowledged || msg.acknowledged.length === 0).length;
+        const active = broadcastData.messages.filter(
+          msg => !msg.acknowledged || msg.acknowledged.length === 0
+        ).length;
 
         // Simple health calculation
         const health = broadcastData.lastUpdate ? '100%' : '0%';

@@ -46,7 +46,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.8;
   }
   50% {
@@ -61,7 +62,7 @@
   background: rgba(76, 175, 80, 0.1);
   border-radius: 4px;
   font-size: 11px;
-  color: #4CAF50;
+  color: #4caf50;
   text-align: center;
 }
 

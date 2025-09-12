@@ -14,6 +14,7 @@ import { LLMService } from './services/LLMService';
 import { redactPII } from './utils/privacy';
 import { filesRoutes } from './routes/files';
 import { llmRoutes } from './routes/llm';
+import { themeRoutes } from './theme';
 
 // Load environment from root and server/.env (server overrides root)
 try {
@@ -263,6 +264,9 @@ server.register(async app => filesRoutes(app));
 
 // Register LLM routes
 server.register(async app => llmRoutes(app));
+
+// Register theme routes
+server.register(themeRoutes);
 
 // Start server
 const start = async () => {

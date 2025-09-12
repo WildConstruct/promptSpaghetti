@@ -27,11 +27,9 @@ import { fromLegacyGraph, writePsg } from '@promptscape/core';
 import type { GraphNode, GraphEdge, Graph } from '@promptscape/core';
 import { SimpleMenuBar } from './components/SimpleMenuBar';
 import { IntelligenceProvider } from '@promptscape/core/components/epic1/contexts/IntelligenceContext';
+import Epic1GraphEditor from '@promptscape/core/components/epic1/Epic1GraphEditor';
 import { PromptDissector } from '../components/LaunchScreen/PromptDissector';
 import { WorkspaceRecoveryDialog } from '@promptscape/core/components/WorkspaceRecoveryDialog';
-import { ChangelogModal } from '@promptscape/core/components/ChangelogModal/ChangelogModal';
-// Import Epic1GraphEditor directly instead of dynamically
-import { Epic1GraphEditor } from '@promptscape/core/components/epic1/Epic1GraphEditor';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -90,7 +88,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
 
-  // Changelog modal state
   const [showChangelog, setShowChangelog] = useState(false);
 
   // Custom hooks

@@ -86,7 +86,7 @@ Based on our assessment, we conclude that our compliance controls are effective 
 - Privacy rights are respected and protected
 - Regulatory requirements are met in all material respects
 
-**Chief Executive Officer Signature**: ****\*\*****\_\_\_\_****\*\*****  
+**Chief Executive Officer Signature**: \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***  
 **Date**: July 22, 2025
 
 ---
@@ -380,7 +380,7 @@ The assessment covered controls over the following financial statement areas:
 
 Based on our assessment, we conclude that Wild Construct maintained effective internal controls over financial reporting as of December 31, 2024, and throughout fiscal year 2024.
 
-**Chief Financial Officer Signature**: ****\*\*****\_\_\_\_****\*\*****  
+**Chief Financial Officer Signature**: \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***  
 **Date**: March 15, 2025
 
 ---
@@ -499,7 +499,7 @@ Based on our assessment, we conclude that Wild Construct maintained effective in
 
 Wild Construct demonstrates a mature and effective information security program. The organization has successfully maintained its ISO 27001 certification and demonstrates strong commitment to security governance. The few findings identified are minor and have been or are being promptly addressed.
 
-**Lead Assessor Signature**: ****\*\*****\_\_\_\_****\*\*****  
+**Lead Assessor Signature**: \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***  
 **Date**: April 15, 2025
 
 ---
@@ -581,7 +581,7 @@ I confirm that throughout the reporting period, I have maintained the independen
 - ✅ Been consulted on all data protection matters
 - ✅ Maintained professional secrecy regarding DPO duties
 
-**Data Protection Officer Signature**: ****\*\*****\_\_\_\_****\*\*****  
+**Data Protection Officer Signature**: \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***  
 **Date**: February 28, 2025
 
 ---

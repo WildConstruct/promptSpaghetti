@@ -10,7 +10,7 @@ stories:
     description: |
       Create the fundamental panel structure and sliding mechanism for the wizard.
       Focus on core functionality without visual polish or animations.
-    
+
     acceptance_criteria:
       - Given Randomizer is open, When clicking "+ Paste prompt", Then panel slides in from right
       - Given panel is open, When clicking X button, Then panel closes
@@ -18,14 +18,14 @@ stories:
       - Given panel has unsaved changes, When closing, Then show confirmation dialog
       - Given text pasted, When processing starts, Then show loading spinner
       - Given panel is open, When window resizes, Then panel maintains correct position
-    
+
     technical_notes:
       - Create packages/core/components/PromptWizard/WizardPanel.tsx
       - Use basic CSS transitions for slide (no spring animations yet)
       - Implement panel state management (open/closed/loading)
       - Wire up to existing Randomizer component
       - Use existing Modal/Dialog patterns from codebase
-    
+
     out_of_scope:
       - Complex animations
       - Resizable width
@@ -41,7 +41,7 @@ stories:
     description: |
       Implement the span highlighting system with all visual states
       (locked/randomized/focused/error) and proper styling.
-    
+
     acceptance_criteria:
       - Given spans detected, When displayed, Then each shows with appropriate background color
       - Given locked span, When rendered, Then show lock icon + neutral gray background
@@ -50,23 +50,23 @@ stories:
       - Given overlapping spans, When detected, Then show red underline error state
       - Given long prompt, When displayed, Then text wraps properly with maintained highlights
       - Given span hovered, When mouse over, Then show subtle hover state
-    
+
     technical_notes:
       - Implement span rendering engine
       - Create SpanHighlight component
       - Use CSS-in-JS for dynamic styling
       - Handle text wrapping edge cases
       - Implement icon system (Lock, Dice1 from lucide-react)
-    
+
     visual_specifications:
       span_styles:
-        locked: "bg-zinc-800/30 border-zinc-700"
-        randomized: "bg-emerald-900/25 border-emerald-700"
-        focused: "ring-2 ring-sky-500"
-        error: "border-b-2 border-red-500 border-dashed"
+        locked: 'bg-zinc-800/30 border-zinc-700'
+        randomized: 'bg-emerald-900/25 border-emerald-700'
+        focused: 'ring-2 ring-sky-500'
+        error: 'border-b-2 border-red-500 border-dashed'
       icons:
-        size: "12px"
-        position: "inline-start with 2px margin"
+        size: '12px'
+        position: 'inline-start with 2px margin'
 
   - id: STORY-WIZ-002C
     title: Panel Polish & Animations
@@ -77,7 +77,7 @@ stories:
     description: |
       Add professional polish including smooth animations, theme support,
       responsive behavior, and accessibility features.
-    
+
     acceptance_criteria:
       - Given panel opens, When animating, Then use spring animation (200ms ease-out)
       - Given panel is resizable, When dragging handle, Then smoothly adjust width 360px-600px
@@ -86,7 +86,7 @@ stories:
       - Given screen reader active, When panel opens, Then announce "Prompt wizard opened"
       - Given reduced motion preference, When set, Then disable animations
       - Given mobile viewport, When opened, Then panel takes full width
-    
+
     technical_notes:
       - Implement react-spring for animations
       - Add resize handle with drag functionality
@@ -94,7 +94,7 @@ stories:
       - Add ARIA live regions
       - Implement responsive breakpoints
       - Add CSS custom properties for theming
-    
+
     accessibility_requirements:
       - role="dialog" with aria-label
       - Focus trap when open
@@ -103,7 +103,6 @@ stories:
       - Respect prefers-reduced-motion
 
 ---
-
 original_story_reference:
   id: STORY-WIZ-002
   original_points: 13
@@ -113,6 +112,6 @@ original_story_reference:
     1. Structure first (can test functionality)
     2. Visual features second (can demo to stakeholders)
     3. Polish last (can defer if needed)
-    
+
     This allows for incremental delivery and reduces risk. Each piece
     can be tested and approved independently.

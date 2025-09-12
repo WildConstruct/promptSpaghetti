@@ -472,7 +472,7 @@ This Compliance Documentation Package represents Wild Construct's comprehensive 
 
 I hereby certify that this Compliance Documentation Package accurately represents Wild Construct's compliance posture as of July 22, 2025. The information contained herein has been reviewed for accuracy and completeness in accordance with our documentation standards and regulatory requirements.
 
-**Chief Compliance Officer**: ****\*\*****\_\_\_\_****\*\*****  
+**Chief Compliance Officer**: \***\*\*\*\*\***\_\_\_\_\***\*\*\*\*\***  
 **Date**: July 22, 2025  
 **Digital Signature**: [Certificate-based signature to be applied]
 

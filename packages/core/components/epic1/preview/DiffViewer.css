@@ -95,7 +95,8 @@
 }
 
 @keyframes epic1-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }

@@ -126,9 +126,7 @@ export class CliValidator {
   /**
    * Parse commands from shell script content
    */
-  private parseCommands(
-    content: string
-  ): Array<{
+  private parseCommands(content: string): Array<{
     command: string;
     args: string[];
     line: number;

@@ -70,7 +70,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -202,24 +203,24 @@
     border-color: #374151;
     color: #f3f4f6;
   }
-  
+
   .llm-toggle-button:hover:not(.disabled) {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .llm-config-button {
     background: #1f2937;
     border-color: #374151;
     color: #9ca3af;
   }
-  
+
   .llm-config-button:hover {
     background: #374151;
     color: #f3f4f6;
     border-color: #4b5563;
   }
-  
+
   .llm-toggle-status {
     background: #451a03;
     border-color: #92400e;

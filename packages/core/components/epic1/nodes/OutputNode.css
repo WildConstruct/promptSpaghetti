@@ -27,14 +27,14 @@
   top: 50% !important;
   transform: translateY(-50%) !important;
   z-index: 10;
-  
+
   /* Green dot style for output */
   background: #10b981 !important; /* Consistent green color */
   border: 2px solid #0a0a0a !important;
   width: 14px !important;
   height: 14px !important;
   border-radius: 50% !important;
-  
+
   /* Add glow effect */
   box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
 }
@@ -97,7 +97,7 @@
 /* Output node editing state */
 .epic1-editable-node.output.editing {
   border-color: #14b8a6 !important;
-  box-shadow: 
+  box-shadow:
     0 0 12px rgba(34, 211, 238, 0.8),
     0 0 24px rgba(34, 211, 238, 0.4) !important;
 }

@@ -9,7 +9,8 @@
   height: 100%;
   background: #1a1a1a;
   color: #e0e0e0;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   font-size: 11px;
   overflow: hidden;
 }
@@ -282,7 +283,12 @@
 }
 
 .preset-list-item.selected {
-  background: rgba(0, 81, 213, 0.4) !important; /* More visible but still transparent, !important to override zebra */
+  background: rgba(
+    0,
+    81,
+    213,
+    0.4
+  ) !important; /* More visible but still transparent, !important to override zebra */
   box-shadow: inset 2px 0 0 rgba(0, 81, 213, 0.8);
 }
 
@@ -749,7 +755,8 @@
   max-height: calc(100vh - 150px);
   background: #1a1a1a;
   color: #e0e0e0;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   font-size: 11px;
   overflow: hidden;
   position: relative;
@@ -933,7 +940,7 @@
   border: 1px solid #333;
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .segmented .toolbar-button {
@@ -957,7 +964,7 @@
   border-radius: 6px;
   overflow: hidden;
   background: #1a1a1a;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .segmented-icon-group .view-toggle-btn {
@@ -1138,19 +1145,19 @@
     width: 160px;
     min-width: 160px;
   }
-  
+
   .details-panel {
     display: none;
   }
-  
+
   .preset-grid-container {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
-  
+
   .keyword-buttons-section {
     max-width: 50%;
   }
-  
+
   .details-panel-horizontal {
     display: none;
   }
@@ -1397,7 +1404,7 @@
 }
 
 /* When collapsed, hide content completely */
-.ae-section-content[style*="height: 0"] {
+.ae-section-content[style*='height: 0'] {
   padding: 0;
   overflow: hidden;
 }

@@ -5,7 +5,8 @@
   align-items: center;
   gap: 8px;
   position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .parser-toggle-label {
@@ -47,7 +48,9 @@
 }
 
 .toggle-switch:focus-visible {
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3b82f6;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px #3b82f6;
   border-radius: 16px;
 }
 
@@ -76,7 +79,9 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  transition: opacity 0.3s ease, color 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    color 0.3s ease;
   pointer-events: none;
 }
 
@@ -124,8 +129,13 @@
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateX(var(--thumb-position, 0)); }
-  50% { transform: translateX(var(--thumb-position, 0)) scale(1.1); }
+  0%,
+  100% {
+    transform: translateX(var(--thumb-position, 0));
+  }
+  50% {
+    transform: translateX(var(--thumb-position, 0)) scale(1.1);
+  }
 }
 
 /* Loading state */
@@ -150,13 +160,21 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes dash {
-  0% { stroke-dashoffset: 40; }
-  50% { stroke-dashoffset: 10; }
-  100% { stroke-dashoffset: 40; }
+  0% {
+    stroke-dashoffset: 40;
+  }
+  50% {
+    stroke-dashoffset: 10;
+  }
+  100% {
+    stroke-dashoffset: 40;
+  }
 }
 
 /* Info button */
@@ -234,16 +252,16 @@
   .toggle-switch {
     width: 140px;
   }
-  
+
   .toggle-switch.llm-enhanced .toggle-thumb {
     transform: translateX(108px);
   }
-  
+
   .standard-option {
     font-size: 11px;
     left: 12px;
   }
-  
+
   .llm-option {
     font-size: 11px;
     right: 12px;
@@ -255,25 +273,25 @@
   .toggle-text {
     color: #e5e7eb;
   }
-  
+
   .toggle-track {
     background: linear-gradient(to right, #374151 50%, #2563eb 50%);
     background-size: 200% 100%;
     background-position: 0% 0;
   }
-  
+
   .standard-option {
     color: #d1d5db;
   }
-  
+
   .toggle-switch.llm-enhanced .standard-option {
     color: #6b7280;
   }
-  
+
   .toggle-info {
     color: #9ca3af;
   }
-  
+
   .toggle-info:hover {
     background: #374151;
     color: #e5e7eb;

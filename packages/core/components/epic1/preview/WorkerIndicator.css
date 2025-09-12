@@ -36,7 +36,8 @@
 }
 
 @keyframes worker-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -92,7 +93,7 @@
 }
 
 /* High utilization warning */
-.worker-utilization-fill[style*="width: 100%"] {
+.worker-utilization-fill[style*='width: 100%'] {
   background: #ef4444;
 }
 

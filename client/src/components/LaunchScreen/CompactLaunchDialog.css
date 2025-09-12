@@ -283,7 +283,7 @@
   cursor: pointer;
 }
 
-.setting-row input[type="checkbox"] {
+.setting-row input[type='checkbox'] {
   width: 18px;
   height: 18px;
   accent-color: #ff8c00;

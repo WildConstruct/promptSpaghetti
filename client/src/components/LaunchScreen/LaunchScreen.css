@@ -41,6 +41,12 @@
   align-items: center;
 }
 
+.launch-logo-image {
+  max-height: 60px;
+  width: auto;
+  margin-bottom: 0.5rem;
+}
+
 .launch-logo h1 {
   margin: 0;
   font-size: 2.5rem;
@@ -68,7 +74,11 @@
   display: flex;
   align-items: center;
   padding: 12px 24px;
-  background: linear-gradient(135deg, rgba(103, 126, 234, 0.2) 0%, rgba(103, 126, 234, 0.3) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(103, 126, 234, 0.2) 0%,
+    rgba(103, 126, 234, 0.3) 100%
+  );
   border: 1px solid rgba(103, 126, 234, 0.4);
   border-radius: 8px;
   color: #e0e0e0;
@@ -80,7 +90,11 @@
 }
 
 .tutorial-button:hover {
-  background: linear-gradient(135deg, rgba(103, 126, 234, 0.3) 0%, rgba(103, 126, 234, 0.4) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(103, 126, 234, 0.3) 0%,
+    rgba(103, 126, 234, 0.4) 100%
+  );
   border-color: rgba(103, 126, 234, 0.6);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(103, 126, 234, 0.3);
@@ -327,13 +341,24 @@
 
 .preview-section.needs-update {
   border-color: rgba(102, 126, 234, 0.35);
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.15), 0 0 24px rgba(102, 126, 234, 0.12);
+  box-shadow:
+    0 0 0 2px rgba(102, 126, 234, 0.15),
+    0 0 24px rgba(102, 126, 234, 0.12);
   animation: glowPulse 2.4s ease-in-out infinite;
 }
 
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 0 2px rgba(102,126,234,0.12), 0 0 16px rgba(102,126,234,0.1); }
-  50% { box-shadow: 0 0 0 2px rgba(118,75,162,0.18), 0 0 28px rgba(118,75,162,0.18); }
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 2px rgba(102, 126, 234, 0.12),
+      0 0 16px rgba(102, 126, 234, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(118, 75, 162, 0.18),
+      0 0 28px rgba(118, 75, 162, 0.18);
+  }
 }
 
 .node-actions {
@@ -408,8 +433,15 @@
 }
 
 @keyframes softGlow {
-  0%, 100% { opacity: 0.8; box-shadow: 0 0 8px rgba(118,75,162,0.7); }
-  50% { opacity: 1; box-shadow: 0 0 14px rgba(102,126,234,0.8); }
+  0%,
+  100% {
+    opacity: 0.8;
+    box-shadow: 0 0 8px rgba(118, 75, 162, 0.7);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 14px rgba(102, 126, 234, 0.8);
+  }
 }
 
 /* Responsive */
@@ -418,14 +450,14 @@
     flex-direction: column;
     overflow-y: auto;
   }
-  
+
   .launch-column {
     flex: none;
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
   }
-  
+
   .launch-column-right {
     display: none;
   }

@@ -82,7 +82,7 @@
 }
 
 .intensity-fill {
-  background: linear-gradient(90deg, #4CAF50, #FF9800, #F44336);
+  background: linear-gradient(90deg, #4caf50, #ff9800, #f44336);
   transition: width 0.3s ease;
 }
 
@@ -102,7 +102,7 @@
 .tag-chip {
   padding: 4px 8px;
   background: rgba(76, 175, 80, 0.2);
-  color: #4CAF50;
+  color: #4caf50;
   border-radius: 12px;
   font-size: 11px;
   font-weight: 500;
@@ -144,19 +144,19 @@
 }
 
 .action-btn.primary {
-  background: #2196F3;
+  background: #2196f3;
   color: white;
-  border-color: #2196F3;
+  border-color: #2196f3;
 }
 
 .action-btn.primary:hover:not(:disabled) {
-  background: #1976D2;
+  background: #1976d2;
 }
 
 .action-btn.danger {
   background: rgba(244, 67, 54, 0.2);
-  color: #F44336;
-  border-color: #F44336;
+  color: #f44336;
+  border-color: #f44336;
 }
 
 .action-btn.danger:hover:not(:disabled) {

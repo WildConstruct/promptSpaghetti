@@ -534,9 +534,7 @@ export class DocTestFramework {
   /**
    * Extract links from markdown content
    */
-  private extractLinks(
-    markdown: string
-  ): Array<{
+  private extractLinks(markdown: string): Array<{
     url: string;
     text: string;
     type: 'internal' | 'external' | 'anchor';

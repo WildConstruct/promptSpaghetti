@@ -113,7 +113,7 @@
 
 .node-type {
   font-size: 14px;
-  color: #4CAF50;
+  color: #4caf50;
   font-weight: 500;
 }
 
@@ -151,7 +151,7 @@
 .impact-item.success {
   background: rgba(76, 175, 80, 0.1);
   border: 1px solid rgba(76, 175, 80, 0.3);
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .impact-item.warning {
@@ -183,7 +183,7 @@
 }
 
 .incompatible-list li::before {
-  content: "•";
+  content: '•';
   margin-right: 6px;
 }
 
@@ -237,7 +237,7 @@
 }
 
 .modal-button.replace.success {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
 }
 
 .modal-button.replace.success:hover {

@@ -6,8 +6,11 @@
 /* Additional randomizer-specific variables */
 :root {
   /* Professional Typography */
-  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Helvetica, Arial, sans-serif;
-  --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  --font-family-primary:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Helvetica,
+    Arial, sans-serif;
+  --font-family-mono:
+    'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
 
   /* Professional Transitions */
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -38,7 +41,11 @@ body {
   align-items: center;
   margin-bottom: 20px;
   padding: 20px;
-  background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-tertiary));
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-secondary),
+    var(--color-bg-tertiary)
+  );
   border-radius: 8px;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--color-ui-border);
@@ -63,7 +70,11 @@ body {
   padding: 8px 16px;
   border: 1px solid var(--color-ui-border);
   border-radius: 6px;
-  background: linear-gradient(145deg, var(--color-bg-tertiary), var(--color-bg-secondary));
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-tertiary),
+    var(--color-bg-secondary)
+  );
   color: var(--color-text-primary);
   cursor: pointer;
   font-size: 14px;
@@ -75,7 +86,11 @@ body {
 .preset-btn:hover,
 .history-btn:hover,
 .advanced-btn:hover {
-  background: linear-gradient(145deg, var(--color-bg-quaternary), var(--color-bg-tertiary));
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-quaternary),
+    var(--color-bg-tertiary)
+  );
   border-color: var(--color-accent-orange);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
@@ -84,7 +99,11 @@ body {
 .preset-btn.active,
 .history-btn.active,
 .advanced-btn.active {
-  background: linear-gradient(145deg, var(--color-accent-orange), var(--color-accent-orange-dark));
+  background: linear-gradient(
+    145deg,
+    var(--color-accent-orange),
+    var(--color-accent-orange-dark)
+  );
   color: white;
   border-color: var(--color-accent-orange);
   box-shadow:
@@ -94,7 +113,11 @@ body {
 
 .presets-panel,
 .history-panel {
-  background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-tertiary));
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-secondary),
+    var(--color-bg-tertiary)
+  );
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
@@ -133,7 +156,11 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: all var(--transition-normal);
-  background: linear-gradient(145deg, var(--color-bg-tertiary), var(--color-bg-secondary));
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-tertiary),
+    var(--color-bg-secondary)
+  );
   box-shadow: var(--shadow-sm);
 }
 
@@ -141,12 +168,20 @@ body {
   border-color: var(--color-accent-orange);
   box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
-  background: linear-gradient(145deg, var(--color-bg-quaternary), var(--color-bg-tertiary));
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-quaternary),
+    var(--color-bg-tertiary)
+  );
 }
 
 .preset-card.selected {
   border-color: var(--color-accent-orange);
-  background: linear-gradient(145deg, var(--color-bg-quaternary), var(--color-bg-tertiary));
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-quaternary),
+    var(--color-bg-tertiary)
+  );
   box-shadow:
     var(--shadow-md),
     0 0 0 2px rgba(255, 120, 0, 0.3);
@@ -247,7 +282,11 @@ body {
 }
 
 .parameters-form {
-  background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-tertiary));
+  background: linear-gradient(
+    145deg,
+    var(--color-bg-secondary),
+    var(--color-bg-tertiary)
+  );
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
@@ -412,7 +451,11 @@ body {
 }
 
 .generate-btn.primary {
-  background: linear-gradient(145deg, var(--color-accent-orange), var(--color-accent-orange-dark));
+  background: linear-gradient(
+    145deg,
+    var(--color-accent-orange),
+    var(--color-accent-orange-dark)
+  );
   color: white;
   border: 1px solid var(--color-accent-orange);
 }

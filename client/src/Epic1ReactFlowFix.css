@@ -178,9 +178,12 @@
 }
 
 /* Selected edge styling - cyan */
-.react-flow .react-flow__edges .react-flow__edge.selected .react-flow__edge-path,
+.react-flow
+  .react-flow__edges
+  .react-flow__edge.selected
+  .react-flow__edge-path,
 .react-flow .react-flow__edge.selected path.react-flow__edge-path,
-.react-flow__edge[class*="selected"] .react-flow__edge-path {
+.react-flow__edge[class*='selected'] .react-flow__edge-path {
   stroke: #22d3ee !important; /* Cyan for selected state */
   stroke-width: 4px !important;
   filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.6)) !important;

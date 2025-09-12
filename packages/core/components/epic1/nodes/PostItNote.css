@@ -3,23 +3,26 @@
   position: relative;
   padding: 12px;
   border-radius: 2px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
-  
+
   /* Paper-like texture */
-  background-image: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 28px,
-      rgba(0, 0, 0, 0.03) 28px,
-      rgba(0, 0, 0, 0.03) 29px
-    );
-  
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 28px,
+    rgba(0, 0, 0, 0.03) 28px,
+    rgba(0, 0, 0, 0.03) 29px
+  );
+
   /* Slight tilt for natural look */
   transform: rotate(-1deg);
 }
@@ -113,9 +116,15 @@
   font-weight: bold;
 }
 
-.post-it-markdown h1 { font-size: 18px; }
-.post-it-markdown h2 { font-size: 16px; }
-.post-it-markdown h3 { font-size: 14px; }
+.post-it-markdown h1 {
+  font-size: 18px;
+}
+.post-it-markdown h2 {
+  font-size: 16px;
+}
+.post-it-markdown h3 {
+  font-size: 14px;
+}
 
 .post-it-markdown p {
   margin: 0 0 8px 0;
@@ -208,7 +217,7 @@
 }
 
 /* Attachment line visual */
-.post-it-note[data-attached="true"]::before {
+.post-it-note[data-attached='true']::before {
   content: '';
   position: absolute;
   left: -20px;
@@ -220,18 +229,18 @@
 }
 
 /* Color-specific adjustments */
-.post-it-note[data-color="blue"] .post-it-markdown,
-.post-it-note[data-color="purple"] .post-it-markdown {
+.post-it-note[data-color='blue'] .post-it-markdown,
+.post-it-note[data-color='purple'] .post-it-markdown {
   color: rgba(255, 255, 255, 0.9);
 }
 
-.post-it-note[data-color="blue"] .post-it-placeholder,
-.post-it-note[data-color="purple"] .post-it-placeholder {
+.post-it-note[data-color='blue'] .post-it-placeholder,
+.post-it-note[data-color='purple'] .post-it-placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.post-it-note[data-color="blue"] .post-it-editor,
-.post-it-note[data-color="purple"] .post-it-editor {
+.post-it-note[data-color='blue'] .post-it-editor,
+.post-it-note[data-color='purple'] .post-it-editor {
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -269,7 +278,7 @@
   cursor: nwse-resize !important;
 }
 
-.post-it-note[data-resizing="true"] {
+.post-it-note[data-resizing='true'] {
   user-select: none !important;
 }
 

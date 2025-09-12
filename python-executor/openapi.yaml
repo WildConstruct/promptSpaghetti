@@ -373,7 +373,7 @@ components:
                   'MemoryError',
                   'SecurityError',
                   'AuthenticationError',
-                  'RateLimitError',
+                  'RateLimitError'
                 ]
               example: 'ExecutionError'
             message:
@@ -391,7 +391,7 @@ components:
                   'MEMORY_LIMIT_EXCEEDED',
                   'SECURITY_VIOLATION',
                   'INVALID_TOKEN',
-                  'RATE_LIMIT_EXCEEDED',
+                  'RATE_LIMIT_EXCEEDED'
                 ]
               example: 'EXECUTION_FAILED'
             line:

@@ -134,10 +134,12 @@
 }
 
 @keyframes fadeInOut {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
   }
-  20%, 80% {
+  20%,
+  80% {
     opacity: 1;
   }
 }
@@ -186,7 +188,8 @@
 }
 
 @keyframes zoomPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {

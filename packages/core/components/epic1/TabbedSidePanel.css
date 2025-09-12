@@ -226,8 +226,15 @@
 }
 
 @keyframes pulse-arrow {
-  0%, 100% { opacity: 0.3; transform: translateX(0); }
-  50% { opacity: 0.8; transform: translateX(-2px); }
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(-2px);
+  }
 }
 
 /* Scrollbar styling */
@@ -253,7 +260,7 @@
   .tabbed-side-panel.expanded {
     width: 320px;
   }
-  
+
   .tabbed-side-panel.expanded .panel-content {
     width: 272px;
   }

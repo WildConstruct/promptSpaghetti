@@ -8,7 +8,7 @@ export default function handler(req, res) {
   res.writeHead(302, { Location: '/api/admin-enhanced' });
   res.end();
   return;
-  
+
   // Basic admin HTML (simplified version) - keeping for reference
   const adminHTML = `
 <!DOCTYPE html>

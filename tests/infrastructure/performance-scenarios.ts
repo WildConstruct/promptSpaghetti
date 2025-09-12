@@ -380,9 +380,7 @@ export class PerformanceScenarios {
   /**
    * Execute a specific scenario
    */
-  async executeScenario(
-    scenarioId: string
-  ): Promise<{
+  async executeScenario(scenarioId: string): Promise<{
     scenario: PerformanceScenario;
     result: PerformanceResult;
     passed: boolean;
@@ -407,9 +405,7 @@ export class PerformanceScenarios {
   /**
    * Execute all scenarios in a category
    */
-  async executeCategoryScenarios(
-    category: PerformanceCategory
-  ): Promise<
+  async executeCategoryScenarios(category: PerformanceCategory): Promise<
     Array<{
       scenario: PerformanceScenario;
       result: PerformanceResult;

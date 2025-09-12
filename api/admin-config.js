@@ -30,21 +30,21 @@ export default function handler(req, res) {
     // In Vercel, environment variables must be set via dashboard or CLI
     // This endpoint is just for demonstration
 
-    return res.status(200).json({
-      message:
-        'Configuration received. Please set these as environment variables in your Vercel dashboard:',
-      instructions: [
-        '1. Go to your Vercel project settings',
-        '2. Navigate to Environment Variables',
-        '3. Add the following variables:',
-        '   - OPENAI_API_KEY',
-        '   - OPENROUTER_API_KEY',
-        '   - SUPABASE_URL',
-        '   - SUPABASE_ANON_KEY',
-        '4. Redeploy your project'
-      ],
-      received: Object.keys(req.body || {})
+    const { session, openai_key, openrouter_key, supabase_url, supabase_key } =
+      req.body;
+
+    console.log('Configuration update requested');
+    if (openai_key) console.log('OpenAI key provided');
+    if (openrouter_key) console.log('OpenRouter key provided');
+    if (supabase_url) console.log('Supabase URL provided');
+    if (supabase_key) console.log('Supabase key provided');
+
+    // Redirect back to admin panel
+    res.writeHead(302, {
+      Location: '/api/admin-enhanced?saved=config'
     });
+    res.end();
+    return;
   }
 
   res.status(405).json({ error: 'Method not allowed' });

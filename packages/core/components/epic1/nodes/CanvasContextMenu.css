@@ -1,4 +1,16 @@
-.canvas-context-menu { }
-.presets-subtext { font-size: 11px; opacity: 0.8; padding: 2px 12px; }
-.presets-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; padding: 0 12px 8px; }
-.context-menu-item.compact { padding: 6px; }
+.canvas-context-menu {
+}
+.presets-subtext {
+  font-size: 11px;
+  opacity: 0.8;
+  padding: 2px 12px;
+}
+.presets-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  padding: 0 12px 8px;
+}
+.context-menu-item.compact {
+  padding: 6px;
+}

@@ -521,9 +521,7 @@ export class CodeBlockAnalyzer {
   /**
    * Extract import/require statements from code blocks
    */
-  static extractImports(
-    codeBlocks: CodeBlock[]
-  ): Array<{
+  static extractImports(codeBlocks: CodeBlock[]): Array<{
     module: string;
     type: 'import' | 'require';
     language: string;

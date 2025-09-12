@@ -6,12 +6,12 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
-      { tsconfig: '<rootDir>/tsconfig.tests.json' },
-    ],
+      { tsconfig: '<rootDir>/tsconfig.tests.json' }
+    ]
   },
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': '<rootDir>/tests/styleMock.js',
+    '\\.(css|less|scss|sass)$': '<rootDir>/tests/styleMock.js'
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
+  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect']
 };

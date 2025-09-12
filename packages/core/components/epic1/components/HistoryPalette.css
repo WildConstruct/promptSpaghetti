@@ -7,11 +7,11 @@
 }
 
 .history-card {
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.75);
   color: #fff;
   border-radius: 8px;
   padding: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .history-header {
@@ -44,14 +44,21 @@
   text-align: left;
   background: transparent;
   color: #fff;
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
   padding: 6px 8px;
   margin-bottom: 6px;
   cursor: pointer;
 }
 
-.history-item.selected { background: rgba(255,255,255,0.1); }
-.history-item-time { font-size: 12px; opacity: 0.85; }
-.history-item-meta { font-size: 11px; opacity: 0.7; }
-
+.history-item.selected {
+  background: rgba(255, 255, 255, 0.1);
+}
+.history-item-time {
+  font-size: 12px;
+  opacity: 0.85;
+}
+.history-item-meta {
+  font-size: 11px;
+  opacity: 0.7;
+}

@@ -21,13 +21,11 @@ export async function filesRoutes(app: FastifyInstance) {
       const bucket = process.env.SUPABASE_BUCKET || 'graphs';
       const path = `${userId}/`;
       metrics.mark('files.list');
-      const { data, error } = await admin.storage
-        .from(bucket)
-        .list(path, {
-          limit: 100,
-          offset: 0,
-          sortBy: { column: 'name', order: 'asc' }
-        });
+      const { data, error } = await admin.storage.from(bucket).list(path, {
+        limit: 100,
+        offset: 0,
+        sortBy: { column: 'name', order: 'asc' }
+      });
       if (error) return reply.status(500).send({ error: error.message });
       return data;
     }

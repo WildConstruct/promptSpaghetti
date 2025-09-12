@@ -148,7 +148,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Accessibility - Focus Indicators */
@@ -166,7 +168,7 @@
   .asset-browser {
     font-size: 1.1em; /* Slightly smaller on mobile but still increased */
   }
-  
+
   .preset-card {
     padding: 0.4em;
     margin: 0.4em;
@@ -192,7 +194,9 @@
 
 /* Smooth Transitions */
 .asset-browser * {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-property:
+    background-color, border-color, color, fill, stroke, opacity, box-shadow,
+    transform;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }

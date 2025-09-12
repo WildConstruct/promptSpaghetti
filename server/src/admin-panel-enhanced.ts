@@ -1120,7 +1120,7 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
       };
 
       const prompts = loadPrompts();
-      
+
       // Get updated status
       const status = await (async (): Promise<AdminStatus> => {
         const supabaseUrl = process.env.SUPABASE_URL;

@@ -77,11 +77,9 @@ describe('OpenGraphDialog - Supabase tab', () => {
         getSession: jest
           .fn()
           .mockResolvedValue({ data: { session: { user: { id: 'ctx-2' } } } }),
-        onAuthStateChange: jest
-          .fn()
-          .mockReturnValue({
-            data: { subscription: { unsubscribe: jest.fn() } }
-          })
+        onAuthStateChange: jest.fn().mockReturnValue({
+          data: { subscription: { unsubscribe: jest.fn() } }
+        })
       }
     } as any;
 
@@ -148,18 +146,14 @@ describe('OpenGraphDialog - Supabase tab', () => {
   });
 
   it('lists items and opens one successfully', async () => {
-    const list = jest
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        data: [{ name: 'a.psg' }, { name: 'b.psg' }]
-      });
-    const get = jest
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        data: JSON.stringify({ openedFrom: 'supabase', id: 1 })
-      });
+    const list = jest.fn().mockResolvedValue({
+      ok: true,
+      data: [{ name: 'a.psg' }, { name: 'b.psg' }]
+    });
+    const get = jest.fn().mockResolvedValue({
+      ok: true,
+      data: JSON.stringify({ openedFrom: 'supabase', id: 1 })
+    });
     const { onOpenGraph } = await renderDlg({
       userId: 'user-123',
       enableSupabase: true,

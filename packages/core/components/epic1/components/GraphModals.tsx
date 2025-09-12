@@ -1,18 +1,7 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 import { EditableNodeData } from '../nodes';
-// PromptWizard component doesn't exist yet - placeholder
-const PromptWizard = ({ isOpen, onClose, onComplete }: any) => {
-  if (!isOpen) return null;
-  return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000 }}>
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', padding: '20px', borderRadius: '8px' }}>
-        <h2>Prompt Wizard (Coming Soon)</h2>
-        <button onClick={onClose}>Close</button>
-      </div>
-    </div>
-  );
-};
+import { PromptWizard } from './PromptWizard';
 import { AuthModal } from '../../auth/AuthModal';
 import { SaveAsPresetDialog } from '../asset-library/SaveAsPresetDialog';
 

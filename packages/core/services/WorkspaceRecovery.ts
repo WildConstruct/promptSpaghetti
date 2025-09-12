@@ -33,7 +33,7 @@ export class WorkspaceRecovery {
   static initialize(): void {
     // Set current session ID
     sessionStorage.setItem(SESSION_KEY, this.sessionId);
-    
+
     // Clear recovery dismissed flag on new session
     sessionStorage.removeItem(RECOVERY_DISMISSED_KEY);
   }
@@ -45,19 +45,22 @@ export class WorkspaceRecovery {
     try {
       const workspace = localStorage.getItem(WORKSPACE_KEY);
       const autosave = localStorage.getItem(AUTOSAVE_KEY);
-      
+
       if (!workspace && !autosave) return false;
-      
+
       // Check if recovery was already dismissed this session
       if (sessionStorage.getItem(RECOVERY_DISMISSED_KEY) === 'true') {
         return false;
       }
-      
+
       // Parse and check if workspace has content
       const data = workspace ? JSON.parse(workspace) : JSON.parse(autosave!);
       return data.nodes && data.nodes.length > 0;
     } catch (error) {
-      console.error('WorkspaceRecovery: Error checking for recoverable workspace', error);
+      console.error(
+        'WorkspaceRecovery: Error checking for recoverable workspace',
+        error
+      );
       return false;
     }
   }
@@ -75,17 +78,17 @@ export class WorkspaceRecovery {
     try {
       const workspace = localStorage.getItem(WORKSPACE_KEY);
       const autosave = localStorage.getItem(AUTOSAVE_KEY);
-      
+
       if (!workspace && !autosave) return null;
-      
+
       const data = workspace ? JSON.parse(workspace) : JSON.parse(autosave!);
-      
+
       if (!data.nodes || data.nodes.length === 0) {
         return { hasWorkspace: false };
       }
 
       const timeSince = this.getTimeSince(data.timestamp);
-      
+
       return {
         hasWorkspace: true,
         timestamp: data.timestamp,
@@ -116,7 +119,7 @@ export class WorkspaceRecovery {
           edgeCount: edges.length
         }
       };
-      
+
       localStorage.setItem(WORKSPACE_KEY, JSON.stringify(snapshot));
       return true;
     } catch (error) {
@@ -136,7 +139,7 @@ export class WorkspaceRecovery {
         timestamp: Date.now(),
         sessionId: this.sessionId
       };
-      
+
       localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(snapshot));
     } catch (error) {
       console.error('WorkspaceRecovery: Autosave failed', error);
@@ -151,15 +154,15 @@ export class WorkspaceRecovery {
       // Try workspace first, then autosave
       const workspace = localStorage.getItem(WORKSPACE_KEY);
       const autosave = localStorage.getItem(AUTOSAVE_KEY);
-      
+
       let data: WorkspaceSnapshot | null = null;
-      
+
       if (workspace) {
         data = JSON.parse(workspace);
       } else if (autosave) {
         data = JSON.parse(autosave);
       }
-      
+
       return data;
     } catch (error) {
       console.error('WorkspaceRecovery: Failed to recover workspace', error);
@@ -193,10 +196,10 @@ export class WorkspaceRecovery {
     try {
       const workspace = localStorage.getItem(WORKSPACE_KEY);
       if (!workspace) return true;
-      
+
       const data = JSON.parse(workspace);
       const age = Date.now() - data.timestamp;
-      
+
       return age > maxAgeMs;
     } catch (error) {
       return true;
@@ -208,7 +211,7 @@ export class WorkspaceRecovery {
    */
   private static getTimeSince(timestamp: number): string {
     const seconds = Math.floor((Date.now() - timestamp) / 1000);
-    
+
     if (seconds < 60) return 'just now';
     if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
@@ -228,9 +231,9 @@ export class WorkspaceRecovery {
         edgeCount: edges.length
       }
     };
-    
-    const blob = new Blob([JSON.stringify(snapshot, null, 2)], { 
-      type: 'application/json' 
+
+    const blob = new Blob([JSON.stringify(snapshot, null, 2)], {
+      type: 'application/json'
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -247,12 +250,12 @@ export class WorkspaceRecovery {
     try {
       const text = await file.text();
       const data = JSON.parse(text);
-      
+
       // Validate basic structure
       if (!data.nodes || !Array.isArray(data.nodes)) {
         throw new Error('Invalid workspace file: missing nodes');
       }
-      
+
       return data as WorkspaceSnapshot;
     } catch (error) {
       console.error('WorkspaceRecovery: Failed to import workspace', error);

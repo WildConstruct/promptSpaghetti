@@ -3,14 +3,17 @@
 .epic1-editable-node {
   background: #1a1a1a;
   border: 2px solid #333333;
-  border-radius: 12px;  /* Increased for smoother corners */
-  padding: 16px 20px;  /* Increased horizontal padding for drag space */
-  margin: 0 8px;  /* Add margin to create more space between nodes */
+  border-radius: 12px; /* Increased for smoother corners */
+  padding: 16px 20px; /* Increased horizontal padding for drag space */
+  margin: 0 8px; /* Add margin to create more space between nodes */
   cursor: grab;
   position: relative;
   overflow: visible;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
   color: #e0e0e0;
   /* Ensure handles are positioned relative to this container */
   display: flex;
@@ -73,9 +76,9 @@
 
 /* Editing state - glow effect */
 .epic1-editable-node.editing {
-  box-shadow: 
-    0 0 12px rgba(91, 158, 255, 0.8),   /* Smaller, tighter glow */
-    0 0 24px rgba(91, 158, 255, 0.4);   /* Subtle outer glow */
+  box-shadow:
+    0 0 12px rgba(91, 158, 255, 0.8),
+    /* Smaller, tighter glow */ 0 0 24px rgba(91, 158, 255, 0.4); /* Subtle outer glow */
   border-color: #5b9eff;
   border-width: 2px; /* Keep same border width to avoid layout shift */
   border-radius: 12px; /* Ensure radius is maintained */
@@ -93,7 +96,6 @@
   background: #1e1e1e; /* Slightly lighter background */
   outline: none !important;
 }
-
 
 /* Override ALL ReactFlow selection styles */
 .react-flow__node.selected::before,
@@ -133,7 +135,7 @@
 .epic1-handle:hover {
   background: #4a8ee6;
   border-color: #0f0f0f;
-  box-shadow: 0 0 12px rgba(91, 158, 255, 1);  /* More saturated glow */
+  box-shadow: 0 0 12px rgba(91, 158, 255, 1); /* More saturated glow */
   /* Keep same size to avoid layout shift */
   width: 12px;
   height: 12px;
@@ -181,20 +183,23 @@
 /* No position adjustment needed on hover since we're using scale transform */
 
 /* Enhanced Branching: allow dynamic vertical and precise horizontal alignment */
-.epic1-editable-node.weighted-choice.enhanced-branching .epic1-handle.branch-output,
-.epic1-editable-node.weighted-choice.enhanced-branching .epic1-handle.main-output {
+.epic1-editable-node.weighted-choice.enhanced-branching
+  .epic1-handle.branch-output,
+.epic1-editable-node.weighted-choice.enhanced-branching
+  .epic1-handle.main-output {
   /* Use CSS var set inline from TSX for vertical positioning */
   top: var(--handle-top, 50%) !important;
   /* Preserve centering transform; TSX can still set translateY(-50%) */
   transform: translateY(-50%) !important;
 }
 
-
-.epic1-editable-node.weighted-choice.enhanced-branching .epic1-handle.branch-output {
+.epic1-editable-node.weighted-choice.enhanced-branching
+  .epic1-handle.branch-output {
   right: -26px !important; /* shift ~20px further right from border */
 }
 
-.epic1-editable-node.weighted-choice.enhanced-branching .epic1-handle.main-output {
+.epic1-editable-node.weighted-choice.enhanced-branching
+  .epic1-handle.main-output {
   right: -27px !important; /* shift ~20px further right from border */
 }
 
@@ -283,7 +288,7 @@
 }
 
 .epic1-editable-node.text-block.editing {
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(124, 127, 242, 0.6),
     0 0 12px rgba(124, 127, 242, 0.8),
     0 0 24px rgba(124, 127, 242, 0.4);
@@ -297,13 +302,12 @@
 
 .epic1-editable-node.weighted-choice.editing {
   border-color: #22d3ee !important; /* Bright cyan when editing */
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(34, 211, 238, 0.6),
     0 0 12px rgba(34, 211, 238, 0.8),
     0 0 24px rgba(34, 211, 238, 0.4);
   border-radius: 12px; /* Maintain rounded corners */
 }
-
 
 .epic1-editable-node.concat {
   border-color: #22c493;
@@ -312,7 +316,7 @@
 /* Concat nodes should have same selection styling as other nodes */
 .epic1-editable-node.concat.selected:not(.editing) {
   border-color: #22c493;
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(34, 196, 147, 0.4),
     0 0 8px rgba(34, 196, 147, 0.3);
 }
@@ -323,7 +327,7 @@
 }
 
 .epic1-editable-node.concat.editing {
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(34, 196, 147, 0.6),
     0 0 12px rgba(34, 196, 147, 0.8),
     0 0 24px rgba(34, 196, 147, 0.4);
@@ -334,7 +338,7 @@
 }
 
 .epic1-editable-node.variable.editing {
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(157, 112, 247, 0.6),
     0 0 12px rgba(157, 112, 247, 0.8),
     0 0 24px rgba(157, 112, 247, 0.4);
@@ -362,7 +366,7 @@
 }
 
 .epic1-editable-node.output.editing {
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(241, 86, 86, 0.6),
     0 0 12px rgba(241, 86, 86, 0.8),
     0 0 24px rgba(241, 86, 86, 0.4);

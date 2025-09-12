@@ -1,11 +1,13 @@
 # TUTORIAL-STEP-VALIDATION - Story
 
 ## User Story
+
 **As a** tutorial system  
 **I want** to validate prerequisites before proceeding to each step  
-**So that** tutorial doesn't break when expected conditions aren't met  
+**So that** tutorial doesn't break when expected conditions aren't met
 
 ## Acceptance Criteria
+
 - [ ] Each tutorial step validates its prerequisites before proceeding
 - [ ] Step 4+ check for existence of nodes created in step 3
 - [ ] Graceful handling when prerequisites aren't met
@@ -16,6 +18,7 @@
 ## Technical Details
 
 ### Current Problem
+
 - TutorialContext.tsx has no validation logic for step prerequisites
 - Steps 4+ assume nodes exist but don't check if they were actually created
 - Tutorial fails silently when expected elements/states don't exist
@@ -24,7 +27,9 @@
 ### Required Changes
 
 #### 1. Create Step Validator
+
 **New File**: `packages/core/components/epic1/onboarding/TutorialStepValidator.tsx`
+
 ```typescript
 export interface StepValidationResult {
   isValid: boolean;
@@ -34,7 +39,10 @@ export interface StepValidationResult {
 }
 
 export class TutorialStepValidator {
-  static validateStep(stepId: string, context: TutorialValidationContext): StepValidationResult {
+  static validateStep(
+    stepId: string,
+    context: TutorialValidationContext
+  ): StepValidationResult {
     switch (stepId) {
       case 'nodes-created':
         return this.validateNodesCreated(context);
@@ -47,7 +55,9 @@ export class TutorialStepValidator {
     }
   }
 
-  private static validateNodesCreated(context: TutorialValidationContext): StepValidationResult {
+  private static validateNodesCreated(
+    context: TutorialValidationContext
+  ): StepValidationResult {
     const { nodes } = context;
     if (nodes.length === 0) {
       return {
@@ -62,7 +72,9 @@ export class TutorialStepValidator {
     return { isValid: true };
   }
 
-  private static validateInlineEdit(context: TutorialValidationContext): StepValidationResult {
+  private static validateInlineEdit(
+    context: TutorialValidationContext
+  ): StepValidationResult {
     const { nodes } = context;
     const hasWeightedChoice = nodes.some(n => n.type === 'weightedChoice');
 
@@ -79,7 +91,9 @@ export class TutorialStepValidator {
     return { isValid: true };
   }
 
-  private static validatePreviewUpdate(context: TutorialValidationContext): StepValidationResult {
+  private static validatePreviewUpdate(
+    context: TutorialValidationContext
+  ): StepValidationResult {
     const { nodes, edges } = context;
     if (nodes.length === 0 || edges.length === 0) {
       return {
@@ -97,9 +111,11 @@ export class TutorialStepValidator {
 ```
 
 #### 2. Update TutorialContext.tsx
+
 **File**: `packages/core/components/epic1/onboarding/TutorialContext.tsx`
 
 **Add validation to nextStep function:**
+
 ```typescript
 const nextStep = useCallback(() => {
   if (currentStep < tutorialSteps.length - 1) {
@@ -129,6 +145,7 @@ const nextStep = useCallback(() => {
 ```
 
 ### Additional Changes Needed
+
 - Add validation error UI/feedback system
 - Implement recovery mechanisms for failed validations
 - Update tutorial state management to track validation status
@@ -136,6 +153,7 @@ const nextStep = useCallback(() => {
 - Consider adding "retry" or "skip" options for failed steps
 
 ### Testing Steps
+
 1. Start tutorial and intentionally break prerequisites:
    - Skip step 3 (prompt parsing) and try to proceed to step 4
    - Manually delete nodes and try to proceed to editing steps
@@ -145,11 +163,13 @@ const nextStep = useCallback(() => {
 4. Verify tutorial can continue normally when prerequisites are met
 
 ### Dependencies
+
 - Depends on TUTORIAL-ELEMENT-DETECTION for reliable element finding
 - Should be implemented after core tutorial flow is working
 - Complements TUTORIAL-EVENT-HANDLER for state synchronization
 
 ### Definition of Done
+
 - All tutorial steps have appropriate prerequisite validation
 - Validation failures provide clear, actionable feedback
 - Recovery mechanisms work when available

@@ -8,13 +8,11 @@ interface WorkspaceRecoveryDialogProps {
   onDismiss?: () => void;
 }
 
-export const WorkspaceRecoveryDialog: React.FC<WorkspaceRecoveryDialogProps> = ({
-  onRecover,
-  onStartFresh,
-  onDismiss
-}) => {
+export const WorkspaceRecoveryDialog: React.FC<
+  WorkspaceRecoveryDialogProps
+> = ({ onRecover, onStartFresh, onDismiss }) => {
   const info = WorkspaceRecovery.getRecoverableInfo();
-  
+
   if (!info || !info.hasWorkspace) {
     return null;
   }
@@ -40,7 +38,7 @@ export const WorkspaceRecoveryDialog: React.FC<WorkspaceRecoveryDialogProps> = (
       <div className="workspace-recovery-dialog">
         <div className="recovery-header">
           <h2>Recover Previous Session?</h2>
-          <button 
+          <button
             className="recovery-close-btn"
             onClick={handleDismiss}
             aria-label="Dismiss"
@@ -48,25 +46,26 @@ export const WorkspaceRecoveryDialog: React.FC<WorkspaceRecoveryDialogProps> = (
             ✕
           </button>
         </div>
-        
+
         <div className="recovery-body">
           <div className="recovery-icon">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-              <path 
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" 
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
                 fill="currentColor"
               />
-              <path 
-                d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" 
+              <path
+                d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"
                 fill="currentColor"
               />
             </svg>
           </div>
-          
+
           <p className="recovery-message">
-            We found an unsaved workspace from <strong>{info.timeSinceLastSave}</strong>
+            We found an unsaved workspace from{' '}
+            <strong>{info.timeSinceLastSave}</strong>
           </p>
-          
+
           <div className="recovery-stats">
             <div className="stat-item">
               <span className="stat-label">Nodes:</span>
@@ -84,13 +83,13 @@ export const WorkspaceRecoveryDialog: React.FC<WorkspaceRecoveryDialogProps> = (
         </div>
 
         <div className="recovery-actions">
-          <button 
+          <button
             className="recovery-btn recovery-btn-primary"
             onClick={handleRecover}
           >
             Restore Workspace
           </button>
-          <button 
+          <button
             className="recovery-btn recovery-btn-secondary"
             onClick={handleStartFresh}
           >
@@ -100,9 +99,9 @@ export const WorkspaceRecoveryDialog: React.FC<WorkspaceRecoveryDialogProps> = (
 
         <div className="recovery-footer">
           <label className="recovery-checkbox">
-            <input 
-              type="checkbox" 
-              onChange={(e) => {
+            <input
+              type="checkbox"
+              onChange={e => {
                 if (e.target.checked) {
                   localStorage.setItem('workspace-recovery:auto', 'true');
                 } else {

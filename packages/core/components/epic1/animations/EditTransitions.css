@@ -99,7 +99,8 @@
 }
 
 @keyframes valueCancelled {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
   20% {
@@ -211,7 +212,8 @@
 }
 
 @keyframes weightChange {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -229,13 +231,21 @@
 }
 
 @keyframes errorShake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: translateX(-4px);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     transform: translateX(4px);
   }
 }
@@ -264,7 +274,8 @@
 }
 
 @keyframes edgePulse {
-  0%, 100% {
+  0%,
+  100% {
     stroke-opacity: 0.6;
   }
   50% {
@@ -277,7 +288,9 @@
 
 /* Hover state transitions */
 .epic1-editable-node {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .epic1-editable-node:hover:not(.editing) {
@@ -337,7 +350,7 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01s !important;
   }
-  
+
   .epic1-edge-highlight {
     animation: none;
     stroke-opacity: 1;
@@ -358,7 +371,7 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
     }
   }
-  
+
   @keyframes focusRing {
     100% {
       box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.3);

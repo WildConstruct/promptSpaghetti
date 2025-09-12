@@ -1,11 +1,13 @@
 # TUTORIAL-ELEMENT-DETECTION - Story
 
 ## User Story
+
 **As a** tutorial system  
 **I want** robust detection of dynamic DOM elements  
-**So that** tutorial steps can reliably find and highlight target elements  
+**So that** tutorial steps can reliably find and highlight target elements
 
 ## Acceptance Criteria
+
 - [ ] Tutorial can find elements that load after initial page load
 - [ ] MutationObserver detects dynamically created elements
 - [ ] Retry logic handles timing issues with React rendering
@@ -16,6 +18,7 @@
 ## Technical Details
 
 ### Current Problem
+
 - TutorialOverlay.tsx uses basic `document.querySelector()` (line 56)
 - Fails to find React-rendered elements that load asynchronously
 - No retry logic for elements that appear after tutorial step starts
@@ -24,7 +27,9 @@
 ### Required Changes
 
 #### 1. Create Robust Element Detector
+
 **New File**: `packages/core/components/epic1/onboarding/ElementDetector.tsx`
+
 ```typescript
 export interface ElementDetectionOptions {
   selector: string;
@@ -35,7 +40,9 @@ export interface ElementDetectionOptions {
 }
 
 export class ElementDetector {
-  static async findElement(options: ElementDetectionOptions): Promise<HTMLElement | null> {
+  static async findElement(
+    options: ElementDetectionOptions
+  ): Promise<HTMLElement | null> {
     const {
       selector,
       maxRetries = 10,
@@ -44,7 +51,7 @@ export class ElementDetector {
       useMutationObserver = true
     } = options;
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       let retries = 0;
       let timeoutId: NodeJS.Timeout;
       let observer: MutationObserver | null = null;
@@ -103,9 +110,11 @@ export class ElementDetector {
 ```
 
 #### 2. Update TutorialOverlay.tsx
+
 **File**: `packages/core/components/epic1/onboarding/TutorialOverlay.tsx`
 
 **Replace basic querySelector with robust detection:**
+
 ```typescript
 // CURRENT (line 56):
 const element = document.querySelector(step.target) as HTMLElement;
@@ -120,6 +129,7 @@ const element = await ElementDetector.findElement({
 ```
 
 ### Additional Changes Needed
+
 - Import ElementDetector in TutorialOverlay.tsx
 - Handle async nature of element detection
 - Add loading states while detecting elements
@@ -127,6 +137,7 @@ const element = await ElementDetector.findElement({
 - Update error handling for detection failures
 
 ### Testing Steps
+
 1. Start tutorial on fresh page load
 2. Verify all target elements are found reliably:
    - `.react-flow__viewport` (empty canvas)
@@ -137,11 +148,13 @@ const element = await ElementDetector.findElement({
 5. Test error handling when elements don't exist
 
 ### Dependencies
+
 - Independent story, can be implemented in parallel
 - Will improve reliability of all tutorial steps
 - Foundation for TUTORIAL-STEP-VALIDATION
 
 ### Definition of Done
+
 - All tutorial target elements detected reliably
 - MutationObserver working for dynamic content
 - Reasonable timeout and retry limits

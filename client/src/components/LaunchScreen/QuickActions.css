@@ -98,24 +98,24 @@
   .template-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .template-card {
     flex-direction: row;
     justify-content: flex-start;
     text-align: left;
     gap: 1rem;
   }
-  
+
   .template-icon {
     width: 40px;
     height: 40px;
   }
-  
+
   .template-icon svg {
     width: 20px;
     height: 20px;
   }
-  
+
   .template-title,
   .template-description {
     text-align: left;
@@ -138,9 +138,21 @@
   animation: slideIn 0.3s ease-out backwards;
 }
 
-.template-card:nth-child(1) { animation-delay: 0.05s; }
-.template-card:nth-child(2) { animation-delay: 0.1s; }
-.template-card:nth-child(3) { animation-delay: 0.15s; }
-.template-card:nth-child(4) { animation-delay: 0.2s; }
-.template-card:nth-child(5) { animation-delay: 0.25s; }
-.template-card:nth-child(6) { animation-delay: 0.3s; }
+.template-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.template-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.template-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.template-card:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.template-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.template-card:nth-child(6) {
+  animation-delay: 0.3s;
+}

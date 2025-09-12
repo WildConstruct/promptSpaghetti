@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   }
 
   const { prompt } = req.body;
-  
+
   if (!prompt) {
     return res.status(400).json({ error: 'Prompt is required' });
   }
@@ -26,31 +26,35 @@ export default async function handler(req, res) {
   // Check if we have API keys configured
   const openaiKey = process.env.OPENAI_API_KEY;
   const openrouterKey = process.env.OPENROUTER_API_KEY;
-  
+
   if (!openaiKey && !openrouterKey) {
     return res.status(200).json({
       success: false,
-      error: 'No API keys configured. Please add OPENAI_API_KEY or OPENROUTER_API_KEY in Vercel environment variables.'
+      error:
+        'No API keys configured. Please add OPENAI_API_KEY or OPENROUTER_API_KEY in Vercel environment variables.'
     });
   }
 
   try {
     if (openrouterKey) {
       // Try OpenRouter
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openrouterKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://promptscape.com',
-          'X-Title': 'PromptScape Admin'
-        },
-        body: JSON.stringify({
-          model: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
-          messages: [{ role: 'user', content: prompt }],
-          max_tokens: 100
-        })
-      });
+      const response = await fetch(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${openrouterKey}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': 'https://promptscape.com',
+            'X-Title': 'PromptScape Admin'
+          },
+          body: JSON.stringify({
+            model: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: 100
+          })
+        }
+      );
 
       if (!response.ok) {
         const error = await response.text();
@@ -68,18 +72,21 @@ export default async function handler(req, res) {
       });
     } else if (openaiKey) {
       // Try OpenAI directly
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openaiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [{ role: 'user', content: prompt }],
-          max_tokens: 100
-        })
-      });
+      const response = await fetch(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${openaiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: 100
+          })
+        }
+      );
 
       if (!response.ok) {
         const error = await response.text();

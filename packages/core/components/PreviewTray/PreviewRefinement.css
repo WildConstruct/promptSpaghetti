@@ -30,7 +30,9 @@
 }
 
 @keyframes refinement-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .refinement-check {
@@ -283,11 +285,11 @@
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  
+
   .comparison-divider {
     display: none;
   }
-  
+
   .style-menu {
     right: 0;
     left: auto;

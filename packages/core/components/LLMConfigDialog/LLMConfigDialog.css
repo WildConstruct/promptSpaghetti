@@ -118,9 +118,9 @@
   color: #374151;
 }
 
-.form-group input[type="text"],
-.form-group input[type="password"],
-.form-group input[type="number"],
+.form-group input[type='text'],
+.form-group input[type='password'],
+.form-group input[type='number'],
 .form-group select {
   width: 100%;
   padding: 8px 12px;
@@ -139,7 +139,7 @@
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.form-group input[type="range"] {
+.form-group input[type='range'] {
   width: 100%;
   margin: 8px 0;
 }
@@ -258,67 +258,67 @@
     background: #1f2937;
     color: #f3f4f6;
   }
-  
+
   .dialog-header {
     border-bottom-color: #374151;
   }
-  
+
   .dialog-header h2 {
     color: #f3f4f6;
   }
-  
+
   .dialog-close {
     color: #9ca3af;
   }
-  
+
   .dialog-close:hover {
     background: #374151;
     color: #f3f4f6;
   }
-  
+
   .config-section h3 {
     color: #9ca3af;
   }
-  
+
   .form-group label {
     color: #d1d5db;
   }
-  
+
   .form-group input,
   .form-group select {
     background: #374151;
     border-color: #4b5563;
     color: #f3f4f6;
   }
-  
+
   .form-group input:focus,
   .form-group select:focus {
     border-color: #667eea;
   }
-  
+
   .form-group small {
     color: #9ca3af;
   }
-  
+
   .cost-info {
     background: #374151;
     border-color: #4b5563;
   }
-  
+
   .cost-item span:first-child {
     color: #9ca3af;
   }
-  
+
   .dialog-footer {
     border-top-color: #374151;
   }
-  
+
   .btn-secondary {
     background: #374151;
     color: #f3f4f6;
     border-color: #4b5563;
   }
-  
+
   .btn-secondary:hover {
     background: #4b5563;
     border-color: #6b7280;

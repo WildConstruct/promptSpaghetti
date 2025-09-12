@@ -158,7 +158,11 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       {/* Header */}
       <header className="launch-header">
         <div className="launch-logo">
-          <h1>Prompt Spaghetti</h1>
+          <img
+            src="/images/PromptSpaghettiLogo.png"
+            alt="Prompt Spaghetti"
+            className="launch-logo-image"
+          />
           <p className="launch-tagline">
             Transform your prompts into powerful node graphs
           </p>

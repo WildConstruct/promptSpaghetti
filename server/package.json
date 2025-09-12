@@ -36,6 +36,7 @@
     "dotenv": "^16.4.5",
     "fastify": "^4.29.1",
     "fastify-multer": "^2.0.3",
+    "@fastify/multipart": "^8.3.0",
     "ioredis": "^5.7.0",
     "jsonwebtoken": "^9.0.2",
     "node-cron": "^3.0.3",
