@@ -99,7 +99,7 @@ const tutorialSteps: TutorialStep[] = [
     spotlight: false, // Don't block the modal
   },
   {
-    id: 'nodes-created',
+    id: 'see-nodes',
     title: 'Look at Your Nodes!',
     description: 'Great! The prompt was automatically parsed into visual nodes with proper connections to the Output.',
     target: '.react-flow__node',

@@ -51,14 +51,20 @@ export const TutorialOverlay: React.FC = () => {
     };
   }, [currentStep, step.action]);
 
-  // Find target element
+  // Find target element and trigger position recalculation
   useEffect(() => {
-    if (!isActive || !step.target) return;
+    if (!isActive) return;
 
     const findTarget = () => {
-      const element = document.querySelector(step.target) as HTMLElement;
-      if (element) {
-        setTargetElement(element);
+      if (step.target) {
+        const element = document.querySelector(step.target) as HTMLElement;
+        if (element) {
+          setTargetElement(element);
+        } else {
+          setTargetElement(null);
+        }
+      } else {
+        setTargetElement(null);
       }
     };
 
@@ -74,6 +80,39 @@ export const TutorialOverlay: React.FC = () => {
 
     return () => observer.disconnect();
   }, [isActive, step, currentStep]);
+
+  // Force position recalculation when wizard modal appears/disappears
+  useEffect(() => {
+    if (!isActive) return;
+
+    const checkWizardState = () => {
+      // This will trigger a re-render and position recalculation
+      setTargetElement(prev => prev);
+    };
+
+    // Check for wizard modal changes
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+          const hasWizardChange = Array.from(mutation.addedNodes).some(
+            node => node instanceof Element && node.classList?.contains('prompt-wizard-overlay')
+          ) || Array.from(mutation.removedNodes).some(
+            node => node instanceof Element && node.classList?.contains('prompt-wizard-overlay')
+          );
+          if (hasWizardChange) {
+            checkWizardState();
+          }
+        }
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, [isActive]);
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -187,49 +226,84 @@ export const TutorialOverlay: React.FC = () => {
   };
 
   const getTooltipPosition = () => {
-    if (!targetElement) return { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
-
-    const rect = targetElement.getBoundingClientRect();
     const tooltipWidth = 400;
-    const tooltipHeight = 200;
+    const tooltipHeight = 250; // Increased to account for content
     const margin = 20;
 
     let top = 0;
     let left = 0;
 
-    // Special handling for wizard modal to avoid collision
-    if (step.id === 'enter-prompt' || step.target === '.prompt-wizard-modal') {
-      // Position at top right to avoid blocking the modal
+    // Check if wizard modal is currently open
+    const wizardModal = document.querySelector('.prompt-wizard-modal');
+    const isWizardOpen = wizardModal !== null;
+
+    // For steps that show the canvas after wizard closes
+    if (step.id === 'see-nodes' || step.id === 'empty-canvas') {
+      // Always position at top-right corner for canvas-related steps
       top = margin;
       left = window.innerWidth - tooltipWidth - margin;
       return { top: `${top}px`, left: `${left}px` };
     }
 
-    switch (step.position) {
-      case 'top':
-        top = rect.top - tooltipHeight - margin;
-        left = rect.left + rect.width / 2 - tooltipWidth / 2;
-        break;
-      case 'right':
-        top = rect.top + rect.height / 2 - tooltipHeight / 2;
-        left = rect.right + margin;
-        break;
-      case 'bottom':
-        top = rect.bottom + margin;
-        left = rect.left + rect.width / 2 - tooltipWidth / 2;
-        break;
-      case 'left':
-        top = rect.top + rect.height / 2 - tooltipHeight / 2;
-        left = rect.left - tooltipWidth - margin;
-        break;
-      case 'center':
-        // For center position, place it offset to not block the element
+    // Special handling for wizard-related steps
+    if (step.id === 'open-wizard' || step.id === 'enter-prompt') {
+      if (isWizardOpen) {
+        // Wizard is open - position at top center to avoid modal
         top = margin;
-        left = window.innerWidth - tooltipWidth - margin;
-        break;
-      default:
-        top = window.innerHeight / 2 - tooltipHeight / 2;
         left = window.innerWidth / 2 - tooltipWidth / 2;
+      } else {
+        // Wizard not open yet - position based on target if available
+        if (targetElement) {
+          const rect = targetElement.getBoundingClientRect();
+          // Position below the wizard button
+          top = rect.bottom + margin;
+          left = rect.left + rect.width / 2 - tooltipWidth / 2;
+          // Keep on screen
+          left = Math.max(margin, Math.min(window.innerWidth - tooltipWidth - margin, left));
+        } else {
+          // Fallback position
+          top = margin;
+          left = window.innerWidth - tooltipWidth - margin;
+        }
+      }
+      return { top: `${top}px`, left: `${left}px` };
+    }
+
+    // For non-wizard steps with target elements
+    if (targetElement) {
+      const rect = targetElement.getBoundingClientRect();
+      
+      switch (step.position) {
+        case 'top':
+          top = rect.top - tooltipHeight - margin;
+          left = rect.left + rect.width / 2 - tooltipWidth / 2;
+          break;
+        case 'right':
+          top = rect.top + rect.height / 2 - tooltipHeight / 2;
+          left = rect.right + margin;
+          break;
+        case 'bottom':
+          top = rect.bottom + margin;
+          left = rect.left + rect.width / 2 - tooltipWidth / 2;
+          break;
+        case 'left':
+          top = rect.top + rect.height / 2 - tooltipHeight / 2;
+          left = rect.left - tooltipWidth - margin;
+          break;
+        case 'center':
+          // For center position, place it at top-right
+          top = margin;
+          left = window.innerWidth - tooltipWidth - margin;
+          break;
+        default:
+          // Default to top-right
+          top = margin;
+          left = window.innerWidth - tooltipWidth - margin;
+      }
+    } else {
+      // No target element - default position
+      top = margin;
+      left = window.innerWidth - tooltipWidth - margin;
     }
 
     // Keep tooltip on screen
@@ -288,8 +362,8 @@ export const TutorialOverlay: React.FC = () => {
           background: '#1a1a1a',
           borderRadius: '12px',
           padding: '32px',
-          maxWidth: '600px',
-          width: '90%',
+          maxWidth: '400px',
+          width: '400px',
           boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
           animation: 'slideUp 0.3s ease',
           pointerEvents: 'auto',
