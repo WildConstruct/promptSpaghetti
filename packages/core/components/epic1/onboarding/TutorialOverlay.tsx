@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTutorial } from './TutorialContext';
 import { PromptPasteDialog } from './PromptPasteDialog';
 import { ElementDetector, ElementDetectionResult } from './ElementDetector';
+import './TutorialOverlay.css';
 
 export const TutorialOverlay: React.FC = () => {
   const {
@@ -185,45 +186,32 @@ export const TutorialOverlay: React.FC = () => {
     );
   }
 
-  // Add pulse animation style
-  const pulseKeyframes = `
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
-      70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
-    }
-  `;
-
-  const getSpotlightStyle = () => {
-    if (!step.spotlight || !targetElement) return {};
+  const getSpotlightClipPath = () => {
+    if (!step.spotlight || !targetElement) return '';
 
     const rect = targetElement.getBoundingClientRect();
     const padding = 10;
 
-    // For wizard button, expand the spotlight to include the modal area
+    // For wizard button, don't apply clip path
     if (step.target === '.prompt-wizard-button') {
-      // Make spotlight cover the entire viewport to not block the wizard modal
-      return {
-        clipPath: 'none',
-        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Lighter overlay when wizard is open
-      };
+      return 'none';
     }
 
-    return {
-      clipPath: `polygon(
-        0 0,
-        0 100%,
-        ${rect.left - padding}px 100%,
-        ${rect.left - padding}px ${rect.top - padding}px,
-        ${rect.right + padding}px ${rect.top - padding}px,
-        ${rect.right + padding}px ${rect.bottom + padding}px,
-        ${rect.left - padding}px ${rect.bottom + padding}px,
-        ${rect.left - padding}px 100%,
-        100% 100%,
-        100% 0
-      )`,
-    };
+    return `polygon(
+      0 0,
+      0 100%,
+      ${rect.left - padding}px 100%,
+      ${rect.left - padding}px ${rect.top - padding}px,
+      ${rect.right + padding}px ${rect.top - padding}px,
+      ${rect.right + padding}px ${rect.bottom + padding}px,
+      ${rect.left - padding}px ${rect.bottom + padding}px,
+      ${rect.left - padding}px 100%,
+      100% 100%,
+      100% 0
+    )`;
   };
+
+  const isWizardStep = step.target === '.prompt-wizard-button';
 
   const getTooltipPosition = () => {
     const tooltipWidth = 400;
@@ -314,37 +302,11 @@ export const TutorialOverlay: React.FC = () => {
   };
 
   return (
-    <>
-      {/* Inject pulse animation */}
-      <style>{pulseKeyframes}</style>
-      
-      <div
-        ref={overlayRef}
-        className="tutorial-overlay"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-        zIndex: 9999,
-        pointerEvents: 'none',
-      }}
-    >
+    <div ref={overlayRef} className="tutorial-overlay">
       {/* Dark overlay with spotlight */}
       <div
-        className="tutorial-backdrop"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-          transition: 'clip-path 0.3s ease',
-          pointerEvents: 'auto',
-          ...getSpotlightStyle(),
-        }}
+        className={`tutorial-backdrop ${isWizardStep ? 'light-overlay' : ''}`}
+        style={{ clipPath: getSpotlightClipPath() }}
         onClick={(e) => {
           if (step.action === 'observe' || (step.action === 'click' && step.id === 'empty-canvas')) {
             e.stopPropagation();
@@ -356,150 +318,61 @@ export const TutorialOverlay: React.FC = () => {
       {/* Tooltip */}
       <div
         className="tutorial-tooltip"
-        style={{
-          position: 'absolute',
-          ...getTooltipPosition(),
-          background: '#1a1a1a',
-          borderRadius: '12px',
-          padding: '32px',
-          maxWidth: '400px',
-          width: '400px',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-          animation: 'slideUp 0.3s ease',
-          pointerEvents: 'auto',
-          zIndex: 10000
-        }}
+        style={getTooltipPosition()}
       >
         {/* Progress */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '4px',
-            backgroundColor: '#333',
-            borderRadius: '12px 12px 0 0',
-            overflow: 'hidden',
-          }}
-        >
+        <div className="tutorial-progress">
           <div
-            style={{
-              height: '100%',
-              backgroundColor: '#6366f1',
-              width: `${((currentStep + 1) / tutorialSteps.length) * 100}%`,
-              transition: 'width 0.3s ease',
-            }}
+            className="tutorial-progress-bar"
+            style={{ width: `${((currentStep + 1) / tutorialSteps.length) * 100}%` }}
           />
         </div>
 
         {/* Step counter */}
-        <div
-          style={{
-            fontSize: '12px',
-            color: '#999',
-            marginBottom: '8px',
-          }}
-        >
+        <div className="tutorial-step-counter">
           Step {currentStep + 1} of {tutorialSteps.length}
         </div>
 
         {/* Title */}
-        <h3
-          style={{
-            fontSize: '20px',
-            fontWeight: 600,
-            marginBottom: '12px',
-            color: '#e0e0e0',
-          }}
-        >
+        <h3 className="tutorial-title">
           {step.title}
         </h3>
 
         {/* Description */}
-        <p
-          style={{
-            fontSize: '16px',
-            lineHeight: 1.6,
-            color: '#ccc',
-            marginBottom: step.hint ? '16px' : '24px',
-          }}
-        >
+        <p className={`tutorial-description ${step.hint ? 'with-hint' : ''}`}>
           {step.description}
         </p>
 
         {/* Hint */}
         {step.hint && (
-          <div
-            style={{
-              backgroundColor: '#2a2a2a',
-              border: '1px solid #444',
-              borderLeft: '3px solid #6366f1',
-              padding: '12px',
-              borderRadius: '4px',
-              marginBottom: '24px',
-            }}
-          >
-            <p
-              style={{
-                fontSize: '14px',
-                color: '#ccc',
-                margin: 0,
-              }}
-            >
+          <div className="tutorial-hint">
+            <p className="tutorial-hint-text">
               💡 {step.hint}
             </p>
           </div>
         )}
 
         {/* Actions */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
+        <div className="tutorial-actions">
           <button
+            className="tutorial-skip-button"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               skipTutorial();
             }}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#999',
-              fontSize: '14px',
-              cursor: 'pointer',
-              padding: '8px',
-              position: 'relative',
-              zIndex: 10001,
-              pointerEvents: 'auto',
-            }}
           >
             Skip tutorial
           </button>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="tutorial-navigation">
             {currentStep > 0 && (
               <button
+                className="tutorial-back-button"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   previousStep();
-                }}
-                style={{
-                  backgroundColor: '#f3f4f6',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '8px 16px',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  color: '#4b5563',
-                  position: 'relative',
-                  zIndex: 10001,
-                  pointerEvents: 'auto',
                 }}
               >
                 Back
@@ -508,6 +381,7 @@ export const TutorialOverlay: React.FC = () => {
 
             {/* Always show continue button for all steps */}
             <button
+              className={`tutorial-continue-button ${step.action === 'observe' ? 'observe' : ''} ${showSkipHint ? 'skip-hint' : ''}`}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -517,23 +391,6 @@ export const TutorialOverlay: React.FC = () => {
               onMouseDown={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-              }}
-              style={{
-                backgroundColor: step.action === 'observe' ? '#6366f1' : 
-                                showSkipHint ? '#f59e0b' : '#4b5563',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                padding: '8px 20px',
-                fontSize: '14px',
-                cursor: 'pointer',
-                fontWeight: 500,
-                opacity: step.action === 'observe' ? 1 : 0.8,
-                transition: 'all 0.3s ease',
-                animation: showSkipHint ? 'pulse 1.5s infinite' : 'none',
-                position: 'relative',
-                zIndex: 10001,
-                pointerEvents: 'auto',
               }}
               title={step.action !== 'observe' ? 'Skip this step' : ''}
             >
@@ -548,39 +405,18 @@ export const TutorialOverlay: React.FC = () => {
       {/* Target element highlight */}
       {targetElement && step.spotlight && (
         <div
-          style={{
-            position: 'absolute',
-            ...(() => {
-              const rect = targetElement.getBoundingClientRect();
-              return {
-                top: rect.top - 5,
-                left: rect.left - 5,
-                width: rect.width + 10,
-                height: rect.height + 10,
-              };
-            })(),
-            border: '2px solid #6366f1',
-            borderRadius: '4px',
-            pointerEvents: 'none',
-            animation: 'pulse 2s infinite',
-          }}
+          className="tutorial-target-highlight"
+          style={(() => {
+            const rect = targetElement.getBoundingClientRect();
+            return {
+              top: `${rect.top - 5}px`,
+              left: `${rect.left - 5}px`,
+              width: `${rect.width + 10}px`,
+              height: `${rect.height + 10}px`
+            };
+          })()}
         />
       )}
-
-      <style>{`
-        @keyframes pulse {
-          0% {
-            box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.5);
-          }
-          70% {
-            box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
-          }
-          100% {
-            box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
-          }
-        }
-      `}</style>
-      </div>
-    </>
+    </div>
   );
 };
