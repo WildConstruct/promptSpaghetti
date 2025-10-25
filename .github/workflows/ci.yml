@@ -22,8 +22,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        env:
-          PUPPETEER_SKIP_DOWNLOAD: true
+
+      - name: Install Chromium for Puppeteer
+        run: pnpm exec puppeteer browsers install chrome
+
+      - name: Build Content Authoring Handbook (PDF)
+        run: pnpm --filter content-authoring-handbook run build:pdf
 
       - name: Source of truth guard (editor/nodes)
         run: |
