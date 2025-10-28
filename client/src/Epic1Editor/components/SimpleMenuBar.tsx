@@ -122,7 +122,7 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
             Keyboard Shortcuts
           </button>
           <button onClick={props.onChangelog} className="menu-item">
-            What's New
+            What&apos;s New
           </button>
           <div className="menu-separator" />
           <button onClick={props.onAbout} className="menu-item">

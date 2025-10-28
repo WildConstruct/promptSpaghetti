@@ -43,7 +43,9 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
     '#B19CD9'
   ];
   const hexToRgba = useCallback((hex?: string, alpha = 0.7) => {
-    if (!hex) return `rgba(0,0,0,0)`;
+    if (!hex) {
+      return 'rgba(0,0,0,0)';
+    }
     const h = hex.replace('#', '');
     const bigint = parseInt(h, 16);
     if (h.length === 6) {
@@ -53,7 +55,7 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
     // fallback
-    return `rgba(0,0,0,0.45)`;
+    return 'rgba(0,0,0,0.45)';
   }, []);
   const [isDraggingStart, setIsDraggingStart] = useState(false);
   const [isDraggingEnd, setIsDraggingEnd] = useState(false);
@@ -83,14 +85,20 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
 
   // Handle mouse move during drag
   useEffect(() => {
-    if (!isDraggingStart && !isDraggingEnd) return;
+    if (!isDraggingStart && !isDraggingEnd) {
+      return;
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
+      if (!containerRef.current) {
+        return;
+      }
 
       const parentRect =
         containerRef.current.parentElement?.getBoundingClientRect();
-      if (!parentRect) return;
+      if (!parentRect) {
+        return;
+      }
 
       // Calculate character position based on mouse position
       const relativeX = e.clientX - parentRect.left;
@@ -139,10 +147,16 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
 
   const displayText = fullText.slice(localStart, localEnd);
   const ensureColor = (id?: string, color?: string) => {
-    if (color) return color;
-    if (!id) return FALLBACK_COLORS[0];
+    if (color) {
+      return color;
+    }
+    if (!id) {
+      return FALLBACK_COLORS[0];
+    }
     let h = 0;
-    for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+    for (let i = 0; i < id.length; i++) {
+      h = (h * 31 + id.charCodeAt(i)) >>> 0;
+    }
     return FALLBACK_COLORS[h % FALLBACK_COLORS.length];
   };
   const resolvedColor = ensureColor(segment.nodeId, segment.color);

@@ -1,7 +1,7 @@
 // Drag and Drop Handler for Asset Browser
 // Story 2.5a: Asset Browser Integration MVP
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DragPerformanceMonitor } from '../../services/performanceMonitor';
@@ -16,7 +16,7 @@ export interface DraggedAsset {
     setting?: string;
     tags?: string[];
   };
-  content: any;
+  content: unknown;
 }
 
 export interface DropResult {
@@ -42,7 +42,7 @@ export const DragDropHandler: React.FC<DragDropHandlerProps> = ({
 }) => {
   const dragId = useRef<string>('');
 
-  const [{ isDragging }, drag, preview] = useDrag({
+  const [{ isDragging }, drag] = useDrag<DraggedAsset, DropResult | undefined, { isDragging: boolean}>({
     type: 'ASSET',
     item: () => {
       dragId.current = `drag-${Date.now()}`;
@@ -53,8 +53,8 @@ export const DragDropHandler: React.FC<DragDropHandlerProps> = ({
       isDragging: monitor.isDragging()
     }),
     canDrag: !disabled,
-    end: (item, monitor) => {
-      const dropResult = monitor.getDropResult() as DropResult | null;
+    end: (_, monitor) => {
+      const dropResult = monitor.getDropResult();
       if (dropResult && onDrop) {
         performanceMonitor.recordDragEvent(dragId.current, 'drop');
         onDrop(dropResult);
@@ -120,16 +120,9 @@ export interface CanvasDropTargetProps {
   ) => void;
   onHover?: (isOver: boolean, canDrop: boolean) => void;
   children: React.ReactNode;
-  acceptTypes?: string[];
+  acceptTypes?: DraggedAsset['type'][];
   // Optional integration hooks to support ACs
-  onInvalidDrop?: (error: any) => void;
-  nodes?: Array<{ id: string; type: string }>;
-  edges?: Array<{
-    source: string;
-    target: string;
-    sourceHandle?: string;
-    targetHandle?: string;
-  }>;
+  onInvalidDrop?: (error: unknown) => void;
 }
 
 export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
@@ -137,15 +130,13 @@ export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
   onHover,
   children,
   acceptTypes = ['psg', 'psglib'],
-  onInvalidDrop,
-  nodes,
-  edges
+  onInvalidDrop
 }) => {
   const dropRef = useRef<HTMLDivElement>(null);
 
-  const [{ isOver, canDrop }, drop] = useDrop({
+  const [{ isOver, canDrop }, drop] = useDrop<DraggedAsset, DropResult | undefined, { isOver: boolean; canDrop: boolean }>({
     accept: 'ASSET',
-    drop: (item: DraggedAsset, monitor) => {
+    drop: (item, monitor) => {
       const clientOffset = monitor.getClientOffset();
       if (clientOffset && dropRef.current) {
         const rect = dropRef.current.getBoundingClientRect();

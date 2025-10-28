@@ -14,11 +14,6 @@ interface GraphEditorWithTrayProps {
   assetLibraryPosition: 'left' | 'right';
   onNodesChange: (nodes: Node[]) => void;
   onEdgesChange: (edges: Edge[]) => void;
-  previewSeeds?: number[];
-  previewResults?: any[];
-  isPreviewExecuting?: boolean;
-  onPreviewSeedsChange?: (seeds: number[]) => void;
-  onPreviewExecute?: () => void;
 }
 
 export const GraphEditorWithTray: React.FC<GraphEditorWithTrayProps> = ({
@@ -30,12 +25,7 @@ export const GraphEditorWithTray: React.FC<GraphEditorWithTrayProps> = ({
   assetLibraryVisible,
   assetLibraryPosition,
   onNodesChange,
-  onEdgesChange,
-  previewSeeds = [],
-  previewResults = [],
-  isPreviewExecuting = false,
-  onPreviewSeedsChange,
-  onPreviewExecute
+  onEdgesChange
 }) => {
   const { isOpen, height } = usePreviewTrayStore();
 

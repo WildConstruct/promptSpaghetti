@@ -1,9 +1,35 @@
 // Bulk Asset Operations for Advanced Asset Browser
 // Story 2.5b: Advanced Asset Browser Features
 
-import { Node, Edge } from 'reactflow';
-import { Asset } from './assetMatcher';
+import { Edge, Node } from 'reactflow';
+import { Asset, AssetMetadata } from './assetMatcher';
 import { TreeBuilder } from './TreeBuilder';
+
+type FlowNode = Node<Record<string, unknown>>;
+type FlowEdge = Edge<Record<string, unknown>>;
+
+interface AssetChoice {
+  id: string;
+  text: string;
+  weight: number;
+  metadata?: AssetMetadata;
+}
+
+type ReplaceRollbackNode = {
+  nodeId: string;
+  originalData: Record<string, unknown>;
+  originalType: string;
+};
+
+type MetadataRollbackNode = {
+  nodeId: string;
+  originalMetadata: Record<string, unknown> | undefined;
+};
+
+type BulkOperationRollback =
+  | { type: 'add_choices'; originalChoices: AssetChoice[] }
+  | { type: 'replace_multiple'; nodes: ReplaceRollbackNode[] }
+  | { type: 'apply_metadata'; nodes: MetadataRollbackNode[] };
 
 export interface BulkOperation {
   id: string;
@@ -17,7 +43,7 @@ export interface BulkOperation {
   targetNodes?: string[];
   status: 'pending' | 'processing' | 'completed' | 'failed';
   progress: number;
-  results?: any;
+  results?: BulkOperationResult;
   error?: string;
 }
 
@@ -27,13 +53,13 @@ export interface BulkOperationResult {
   edgesCreated: Edge[];
   nodesModified: string[];
   errors: string[];
-  rollbackData?: any;
+  rollbackData?: BulkOperationRollback;
 }
 
 export class BulkAssetOperations {
-  private operations: Map<string, BulkOperation> = new Map();
-  private treeBuilder: TreeBuilder;
-  private concurrencyLimit: number = 10;
+  private readonly operations: Map<string, BulkOperation> = new Map();
+  private readonly treeBuilder: TreeBuilder;
+  private readonly concurrencyLimit = 10;
 
   constructor(treeBuilder?: TreeBuilder) {
     this.treeBuilder = treeBuilder || new TreeBuilder();
@@ -43,7 +69,7 @@ export class BulkAssetOperations {
   async addAsChoices(
     assets: Asset[],
     targetNodeId: string,
-    existingNodes: Node[]
+    existingNodes: FlowNode[]
   ): Promise<BulkOperationResult> {
     const operationId = this.createOperation('add_choices', assets, [
       targetNodeId
@@ -55,16 +81,21 @@ export class BulkAssetOperations {
         throw new Error('Target must be a WeightedChoice node');
       }
 
-      const choices = targetNode.data.choices || [];
-      const newChoices = assets.map((asset, index) => ({
+      const nodeData = targetNode.data as Record<string, unknown> & {
+        choices?: AssetChoice[];
+      };
+      const existingChoices: AssetChoice[] = Array.isArray(nodeData.choices)
+        ? [...nodeData.choices]
+        : [];
+      const newChoices: AssetChoice[] = assets.map((asset, index) => ({
         id: `choice-${Date.now()}-${index}`,
         text: asset.name,
-        weight: 5, // Default weight
+        weight: 5,
         metadata: asset.metadata
       }));
 
       // Update node with new choices
-      targetNode.data.choices = [...choices, ...newChoices];
+      nodeData.choices = [...existingChoices, ...newChoices];
 
       this.updateOperationProgress(operationId, 100);
 
@@ -74,16 +105,20 @@ export class BulkAssetOperations {
         edgesCreated: [],
         nodesModified: [targetNodeId],
         errors: [],
-        rollbackData: { originalChoices: choices }
+        rollbackData: {
+          type: 'add_choices',
+          originalChoices: existingChoices
+        }
       };
     } catch (error) {
-      this.updateOperationStatus(operationId, 'failed', error.message);
+      const errorMessage = this.toErrorMessage(error);
+      this.updateOperationStatus(operationId, 'failed', errorMessage);
       return {
         success: false,
         nodesCreated: [],
         edgesCreated: [],
         nodesModified: [],
-        errors: [error.message]
+        errors: [errorMessage]
       };
     }
   }
@@ -94,11 +129,11 @@ export class BulkAssetOperations {
     startPosition: { x: number; y: number }
   ): Promise<BulkOperationResult> {
     const operationId = this.createOperation('create_sequence', assets);
-    const nodes: Node[] = [];
-    const edges: Edge[] = [];
+    const nodes: FlowNode[] = [];
+    const edges: FlowEdge[] = [];
 
     try {
-      let currentX = startPosition.x;
+      const currentX = startPosition.x;
       let currentY = startPosition.y;
       let previousNodeId: string | null = null;
 
@@ -108,7 +143,7 @@ export class BulkAssetOperations {
 
         // Create node based on asset type
         const nodeId = `${asset.type}-${Date.now()}-${i}`;
-        const node: Node = {
+        const node: FlowNode = {
           id: nodeId,
           type: this.getNodeTypeFromAsset(asset),
           position: { x: currentX, y: currentY },
@@ -160,13 +195,14 @@ export class BulkAssetOperations {
         errors: []
       };
     } catch (error) {
-      this.updateOperationStatus(operationId, 'failed', error.message);
+      const errorMessage = this.toErrorMessage(error);
+      this.updateOperationStatus(operationId, 'failed', errorMessage);
       return {
         success: false,
         nodesCreated: [],
         edgesCreated: [],
         nodesModified: [],
-        errors: [error.message]
+        errors: [errorMessage]
       };
     }
   }
@@ -177,8 +213,8 @@ export class BulkAssetOperations {
     startPosition: { x: number; y: number }
   ): Promise<BulkOperationResult> {
     const operationId = this.createOperation('build_parallel', assets);
-    const nodes: Node[] = [];
-    const edges: Edge[] = [];
+    const nodes: FlowNode[] = [];
+    const edges: FlowEdge[] = [];
 
     try {
       // Create a split node (WeightedChoice)
@@ -264,13 +300,14 @@ export class BulkAssetOperations {
         errors: []
       };
     } catch (error) {
-      this.updateOperationStatus(operationId, 'failed', error.message);
+      const errorMessage = this.toErrorMessage(error);
+      this.updateOperationStatus(operationId, 'failed', errorMessage);
       return {
         success: false,
         nodesCreated: [],
         edgesCreated: [],
         nodesModified: [],
-        errors: [error.message]
+        errors: [errorMessage]
       };
     }
   }
@@ -278,8 +315,7 @@ export class BulkAssetOperations {
   // Replace multiple nodes with assets
   async replaceMultipleNodes(
     nodeAssetPairs: Array<{ nodeId: string; asset: Asset }>,
-    existingNodes: Node[],
-    existingEdges: Edge[]
+    existingNodes: FlowNode[]
   ): Promise<BulkOperationResult> {
     const assets = nodeAssetPairs.map(p => p.asset);
     const nodeIds = nodeAssetPairs.map(p => p.nodeId);
@@ -291,7 +327,7 @@ export class BulkAssetOperations {
 
     const modifiedNodes: string[] = [];
     const errors: string[] = [];
-    const rollbackData: any[] = [];
+    const rollbackNodes: ReplaceRollbackNode[] = [];
 
     try {
       // Process replacements in parallel batches
@@ -309,7 +345,7 @@ export class BulkAssetOperations {
               }
 
               // Store original data for rollback
-              rollbackData.push({
+              rollbackNodes.push({
                 nodeId,
                 originalData: { ...node.data },
                 originalType: node.type
@@ -325,7 +361,8 @@ export class BulkAssetOperations {
 
               modifiedNodes.push(nodeId);
             } catch (error) {
-              errors.push(`Failed to replace ${nodeId}: ${error.message}`);
+              const errorMessage = this.toErrorMessage(error);
+              errors.push(`Failed to replace ${nodeId}: ${errorMessage}`);
             }
           })
         );
@@ -342,16 +379,20 @@ export class BulkAssetOperations {
         edgesCreated: [],
         nodesModified: modifiedNodes,
         errors,
-        rollbackData
+        rollbackData:
+          rollbackNodes.length > 0
+            ? { type: 'replace_multiple', nodes: rollbackNodes }
+            : undefined
       };
     } catch (error) {
-      this.updateOperationStatus(operationId, 'failed', error.message);
+      const errorMessage = this.toErrorMessage(error);
+      this.updateOperationStatus(operationId, 'failed', errorMessage);
       return {
         success: false,
         nodesCreated: [],
         edgesCreated: [],
         nodesModified: [],
-        errors: [error.message]
+        errors: [errorMessage]
       };
     }
   }
@@ -359,13 +400,13 @@ export class BulkAssetOperations {
   // Apply metadata to multiple nodes
   async applyMetadataToNodes(
     nodeIds: string[],
-    metadata: any,
-    existingNodes: Node[]
+    metadata: Record<string, unknown>,
+    existingNodes: FlowNode[]
   ): Promise<BulkOperationResult> {
     const operationId = this.createOperation('apply_metadata', [], nodeIds);
     const modifiedNodes: string[] = [];
     const errors: string[] = [];
-    const rollbackData: any[] = [];
+    const rollbackNodes: MetadataRollbackNode[] = [];
 
     try {
       for (let i = 0; i < nodeIds.length; i++) {
@@ -378,14 +419,19 @@ export class BulkAssetOperations {
         }
 
         // Store original metadata
-        rollbackData.push({
+        rollbackNodes.push({
           nodeId,
-          originalMetadata: { ...node.data.metadata }
+          originalMetadata: (node.data as Record<string, unknown> & {
+            metadata?: Record<string, unknown>;
+          }).metadata
         });
 
         // Apply new metadata
-        node.data.metadata = {
-          ...node.data.metadata,
+        const nodeData = node.data as Record<string, unknown> & {
+          metadata?: Record<string, unknown>;
+        };
+        nodeData.metadata = {
+          ...(nodeData.metadata || {}),
           ...metadata
         };
 
@@ -402,16 +448,20 @@ export class BulkAssetOperations {
         edgesCreated: [],
         nodesModified: modifiedNodes,
         errors,
-        rollbackData
+        rollbackData:
+          rollbackNodes.length > 0
+            ? { type: 'apply_metadata', nodes: rollbackNodes }
+            : undefined
       };
     } catch (error) {
-      this.updateOperationStatus(operationId, 'failed', error.message);
+      const errorMessage = this.toErrorMessage(error);
+      this.updateOperationStatus(operationId, 'failed', errorMessage);
       return {
         success: false,
         nodesCreated: [],
         edgesCreated: [],
         nodesModified: [],
-        errors: [error.message]
+        errors: [errorMessage]
       };
     }
   }
@@ -492,48 +542,70 @@ export class BulkAssetOperations {
   // Rollback operation
   async rollbackOperation(
     operationId: string,
-    rollbackData: any,
-    nodes: Node[]
+    rollbackData: BulkOperationRollback | undefined,
+    nodes: FlowNode[]
   ): Promise<boolean> {
-    const operation = this.operations.get(operationId);
-    if (!operation || !rollbackData) return false;
+    if (!rollbackData) return false;
 
     try {
       // Restore original state based on operation type
-      switch (operation.type) {
-        case 'add_choices':
+      switch (rollbackData.type) {
+        case 'add_choices': {
           const targetNode = nodes.find(
-            n => n.id === operation.targetNodes?.[0]
+            n => n.id === this.operations.get(operationId)?.targetNodes?.[0]
           );
-          if (targetNode && rollbackData.originalChoices) {
-            targetNode.data.choices = rollbackData.originalChoices;
+          if (targetNode) {
+            const nodeData = targetNode.data as Record<string, unknown> & {
+              choices?: AssetChoice[];
+            };
+            nodeData.choices = rollbackData.originalChoices;
           }
           break;
+        }
 
-        case 'replace_multiple':
-          rollbackData.forEach((item: any) => {
+        case 'replace_multiple': {
+          rollbackData.nodes.forEach(item => {
             const node = nodes.find(n => n.id === item.nodeId);
             if (node) {
               node.type = item.originalType;
-              node.data = item.originalData;
+              node.data = { ...item.originalData };
             }
           });
           break;
+        }
 
-        case 'apply_metadata':
-          rollbackData.forEach((item: any) => {
+        case 'apply_metadata': {
+          rollbackData.nodes.forEach(item => {
             const node = nodes.find(n => n.id === item.nodeId);
             if (node) {
-              node.data.metadata = item.originalMetadata;
+              const nodeData = node.data as Record<string, unknown> & {
+                metadata?: Record<string, unknown>;
+              };
+              nodeData.metadata = item.originalMetadata;
             }
           });
           break;
+        }
       }
 
       return true;
     } catch (error) {
       console.error('Rollback failed:', error);
       return false;
+    }
+  }
+
+  private toErrorMessage(error: unknown): string {
+    if (error instanceof Error && error.message) {
+      return error.message;
+    }
+    if (typeof error === 'string') {
+      return error;
+    }
+    try {
+      return JSON.stringify(error);
+    } catch {
+      return 'Unknown error';
     }
   }
 }

@@ -32,22 +32,30 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
   llmService,
   onMetadataExtracted
 }) => {
+  const shouldExtract = Boolean(
+    llmService && currentSegmentId && currentSegmentContent?.trim()
+  );
   const [currentMetadata, setCurrentMetadata] = useState<
     SegmentMetadata | undefined
   >();
-  const [isExtracting, setIsExtracting] = useState(false);
+  const [hasPendingExtraction, setHasPendingExtraction] =
+    useState<boolean>(shouldExtract);
 
   // Set up metadata extraction hook
-  const { extractMetadata } = useMetadataExtraction({
+  const {
+    extractMetadata,
+    getNodeMetadata,
+    isExtracting: isNodeExtracting
+  } = useMetadataExtraction({
     enabled: !!llmService,
-    debounceMs: 1000,
+    debounceMs: 250,
     llmService,
     onMetadataExtracted: useCallback(
       (nodeId: string, metadata: SegmentMetadata) => {
         if (nodeId === currentSegmentId) {
           setCurrentMetadata(metadata);
-          setIsExtracting(false);
           onMetadataExtracted?.(nodeId, metadata);
+          setHasPendingExtraction(false);
         }
       },
       [currentSegmentId, onMetadataExtracted]
@@ -56,11 +64,43 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
 
   // Extract metadata when segment content changes
   useEffect(() => {
-    if (currentSegmentId && currentSegmentContent && llmService) {
-      setIsExtracting(true);
+    if (shouldExtract && currentSegmentId && currentSegmentContent) {
+      setHasPendingExtraction(true);
       extractMetadata(currentSegmentId, currentSegmentContent);
+    } else {
+      setHasPendingExtraction(false);
     }
-  }, [currentSegmentId, currentSegmentContent, llmService, extractMetadata]);
+  }, [
+    currentSegmentId,
+    currentSegmentContent,
+    llmService,
+    shouldExtract
+  ]);
+
+  // Keep local metadata in sync with extractor cache
+  useEffect(() => {
+    if (!currentSegmentId) {
+      setCurrentMetadata(undefined);
+      return;
+    }
+    setCurrentMetadata(getNodeMetadata(currentSegmentId));
+  }, [currentSegmentId]);
+
+  useEffect(() => {
+    if (!shouldExtract) {
+      setHasPendingExtraction(false);
+    } else if (!isNodeExtracting(currentSegmentId || '') && currentMetadata) {
+      setHasPendingExtraction(false);
+    }
+  }, [shouldExtract, currentMetadata, currentSegmentId, isNodeExtracting]);
+
+  const isExtracting = currentSegmentId
+    ? isNodeExtracting(currentSegmentId)
+    : false;
+
+  const showExtractionIndicator =
+    shouldExtract &&
+    (isExtracting || (!currentMetadata && hasPendingExtraction));
 
   // Enhanced asset selection with metadata tracking
   const handleAssetSelect = useCallback(
@@ -84,7 +124,7 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
   return (
     <div className="metadata-asset-bridge">
       {/* Metadata extraction indicator */}
-      {isExtracting && (
+      {showExtractionIndicator && (
         <div className="metadata-extracting-indicator">
           <span className="loading-spinner" />
           Analyzing content for smart suggestions...

@@ -21,7 +21,7 @@ export const useWorkspaceRecovery = ({
 
   // Check for recoverable workspace on mount
   useEffect(() => {
-    if (!autoCheckOnMount || hasCheckedRecovery) return;
+    if (!autoCheckOnMount || hasCheckedRecovery) {return;}
 
     const checkRecovery = async () => {
       const hasRecoverable = await WorkspaceRecovery.hasRecoverableWorkspace();
@@ -40,7 +40,7 @@ export const useWorkspaceRecovery = ({
 
   // Handle recovery acceptance
   const handleRecoveryAccept = useCallback(async () => {
-    if (!recoveryData) return;
+    if (!recoveryData) {return;}
 
     // Recover the workspace
     const { nodes, edges } = recoveryData;

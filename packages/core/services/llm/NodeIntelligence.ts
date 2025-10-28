@@ -1,7 +1,7 @@
 // Node Intelligence Service for Story 2.2a
 // Provides intelligent assistance for node operations
 
-import { LLMService, SuggestionResponse } from './LLMService';
+import { LLMService } from './LLMService';
 import { CacheManager } from './CacheManager';
 
 export interface Choice {
@@ -67,14 +67,18 @@ export class NodeIntelligenceService {
     for (const variable of variables) {
       if (!result.includes(variable.placeholder)) {
         // Try to insert at a reasonable position
-        const words = result.split(' ');
-        const insertPos = Math.min(variable.position, result.length);
-        result =
-          result.slice(0, insertPos) +
-          ' ' +
-          variable.placeholder +
-          ' ' +
-          result.slice(insertPos);
+        const tokens =
+          result.trim().length > 0 ? result.trim().split(/\s+/) : [];
+        const referenceLength = Math.max(originalText.length, 1);
+        const relativeIndex = Math.round(
+          (variable.position / referenceLength) * tokens.length
+        );
+        const insertIndex = Math.min(
+          Math.max(relativeIndex, 0),
+          tokens.length
+        );
+        tokens.splice(insertIndex, 0, variable.placeholder);
+        result = tokens.join(' ');
       }
     }
 
@@ -90,20 +94,6 @@ export class NodeIntelligenceService {
     try {
       // Extract variables to preserve
       const variables = this.extractVariables(nodeText);
-      const variableNames = variables.map(v => v.placeholder).join(', ');
-
-      const prompt = `Generate ${count} creative variations for this text segment: "${nodeText}"
-      
-      Context of full prompt: "${context}"
-      ${variables.length > 0 ? `IMPORTANT: Preserve these variables exactly: ${variableNames}` : ''}
-      
-      Return JSON with format: {"choices": [{"text": "...", "weight": 1-10}]}
-      
-      Requirements:
-      - Each variation should be contextually appropriate
-      - Weights should reflect likelihood/appropriateness (1=rare, 10=common)
-      - Maintain similar length and style
-      - Be creative but relevant`;
 
       const response = await this.llmService.populateChoices(
         context,
@@ -121,8 +111,8 @@ export class NodeIntelligenceService {
     } catch (error) {
       console.error('[NodeIntelligence] Failed to populate choices:', error);
       console.log('[NodeIntelligence] Error details:', {
-        message: (error as any)?.message,
-        stack: (error as any)?.stack,
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
         llmServiceExists: !!this.llmService,
         willFallback: true
       });
@@ -139,7 +129,7 @@ export class NodeIntelligenceService {
     context: string
   ): Promise<WeightOptimizationResult> {
     try {
-      const lockedChoices = choices.filter(c => c.locked);
+      const lockedCount = choices.filter(c => c.locked).length;
       const unlocked = choices.filter(c => !c.locked);
 
       if (unlocked.length === 0) {
@@ -193,7 +183,7 @@ export class NodeIntelligenceService {
           return {
             original: choices,
             optimized,
-            confidence: 'high'
+            confidence: lockedCount > 0 ? 'medium' : 'high'
           };
         } catch (parseError) {
           console.error('Failed to parse optimization response:', parseError);
@@ -217,7 +207,7 @@ export class NodeIntelligenceService {
     nodeType: string = 'weighted'
   ): Promise<InspirationSuggestion[]> {
     try {
-      const prompt = `Given this context: "${upstreamContext}"
+      const prompt = `Given this context for a ${nodeType} node: "${upstreamContext}"
       
       Suggest 3 thematic directions for variations:
       
@@ -253,7 +243,7 @@ export class NodeIntelligenceService {
     }
 
     // Fallback to offline inspiration
-    return this.getOfflineInspiration(upstreamContext);
+    return this.getOfflineInspiration(upstreamContext, nodeType);
   }
 
   // Load offline suggestions for fallback
@@ -326,8 +316,12 @@ export class NodeIntelligenceService {
   }
 
   // Get offline inspiration themes
-  private getOfflineInspiration(context: string): InspirationSuggestion[] {
+  private getOfflineInspiration(
+    context: string,
+    nodeType: string
+  ): InspirationSuggestion[] {
     const lowerContext = context.toLowerCase();
+    const lowerNodeType = nodeType.toLowerCase();
 
     const suggestions: InspirationSuggestion[] = [];
 
@@ -361,6 +355,40 @@ export class NodeIntelligenceService {
         { text: 'dead of night', weight: 8 }
       ]
     });
+
+    if (lowerContext.includes('romance')) {
+      suggestions.push({
+        theme: 'Emotional Beats',
+        choices: [
+          { text: 'hands brush gently', weight: 6 },
+          { text: 'shared knowing glance', weight: 7 },
+          { text: 'hesitant confession', weight: 5 },
+          { text: 'nervous laughter', weight: 6 }
+        ]
+      });
+    } else if (lowerContext.includes('battle')) {
+      suggestions.push({
+        theme: 'Combat Escalation',
+        choices: [
+          { text: 'reinforcements arrive', weight: 7 },
+          { text: 'tactical retreat', weight: 6 },
+          { text: 'surge forward', weight: 8 },
+          { text: 'call for artillery', weight: 5 }
+        ]
+      });
+    }
+
+    if (lowerNodeType.includes('dialog')) {
+      suggestions.push({
+        theme: 'Dialogue Beats',
+        choices: [
+          { text: 'ask a pointed question', weight: 7 },
+          { text: 'offer reassurance', weight: 6 },
+          { text: 'share a secret', weight: 5 },
+          { text: 'issue a challenge', weight: 6 }
+        ]
+      });
+    }
 
     return suggestions;
   }

@@ -2,7 +2,7 @@
 // Tests the MetadataAssetBridge component integration
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MetadataAssetBridge } from '../../components/AssetBrowser/MetadataAssetBridge';
 import { LLMService } from '../../services/llm/LLMService';
 import { Asset } from '../../components/AssetBrowser/SmartAssetBrowser';

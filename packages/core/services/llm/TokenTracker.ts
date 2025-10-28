@@ -38,7 +38,7 @@ export class TokenTracker {
 
   private resetDailyQuotas(): void {
     // Reset all user quotas
-    for (const [userId, quota] of this.quotas.entries()) {
+    for (const quota of this.quotas.values()) {
       quota.dailyUsed = 0;
       quota.costUsed = 0;
       quota.resetTime = Date.now() + 24 * 60 * 60 * 1000;

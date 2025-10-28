@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Node, Edge } from 'reactflow';
 import './SupabaseDialogs.css';
 
@@ -44,8 +44,8 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
 
   const filteredGraphs = graphs.filter(graph => {
     // Apply filter
-    if (filter === 'mine' && !graph.user_id) return false;
-    if (filter === 'public' && !graph.is_public) return false;
+    if (filter === 'mine' && !graph.user_id) {return false;}
+    if (filter === 'public' && !graph.is_public) {return false;}
 
     // Apply search
     if (searchQuery) {
@@ -60,7 +60,7 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
     return true;
   });
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <div className="supabase-dialog-overlay" onClick={onClose}>

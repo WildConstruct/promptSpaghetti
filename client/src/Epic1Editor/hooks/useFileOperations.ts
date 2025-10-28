@@ -131,7 +131,7 @@ export const useFileOperations = ({
       confirmBtn?.addEventListener('click', () => handleClose(true));
       cancelBtn?.addEventListener('click', () => handleClose(false));
       modal.addEventListener('click', e => {
-        if (e.target === modal) handleClose(false);
+        if (e.target === modal) {handleClose(false);}
       });
 
       // Keyboard handling
@@ -176,7 +176,7 @@ export const useFileOperations = ({
               localStorage.setItem('epic1-graph', JSON.stringify(data));
               showToast('Graph loaded successfully', 'success');
             }
-          } catch (err) {
+          } catch {
             showToast('Failed to load file', 'error');
           }
         };
@@ -214,6 +214,7 @@ export const useFileOperations = ({
 
   const handleSaveAs = useCallback(
     (currentNodes: Node[], currentEdges: Edge[]) => {
+      // eslint-disable-next-line no-alert
       const name = prompt('Enter a name for this graph:');
       if (name) {
         const graphData = {
@@ -246,6 +247,7 @@ export const useFileOperations = ({
       localStorage.setItem('epic1-graph-autosave', JSON.stringify(graphData));
 
       if (
+        // eslint-disable-next-line no-alert
         window.confirm(
           'Are you sure you want to quit? Any unsaved changes will be auto-saved.'
         )

@@ -60,7 +60,7 @@ export const SupabaseSaveDialog: React.FC<SupabaseSaveDialogProps> = ({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <div className="supabase-dialog-overlay" onClick={onClose}>
@@ -160,7 +160,8 @@ export const SupabaseSaveDialog: React.FC<SupabaseSaveDialogProps> = ({
             </p>
             {!isAuthenticated && (
               <p className="warning-text">
-                ⚠️ You're not signed in. This graph will be saved locally only.
+                ⚠️ You&apos;re not signed in. This graph will be saved locally
+                only.
               </p>
             )}
           </div>

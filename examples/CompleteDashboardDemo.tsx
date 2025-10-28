@@ -108,7 +108,18 @@ const generateChartData = () => ({
   }
 });
 
-const generateTableData = () => [
+interface CustomerRecord {
+  id: number;
+  name: string;
+  email: string;
+  status: string;
+  joinDate: string;
+  orders: number;
+  revenue: number;
+  lastSeen: string;
+}
+
+const generateTableData = (): CustomerRecord[] => [
   {
     id: 1,
     name: 'John Smith',
@@ -240,22 +251,24 @@ const CompleteDashboardDemo: React.FC = () => {
       key: 'view',
       label: 'View',
       icon: Eye,
-      onClick: (record: any) => console.log('View user:', record.name)
+      onClick: (record: CustomerRecord) => console.log('View user:', record.name)
     },
     {
       key: 'edit',
       label: 'Edit',
       icon: Edit,
-      onClick: (record: any) => console.log('Edit user:', record.name),
+      onClick: (record: CustomerRecord) =>
+        console.log('Edit user:', record.name),
       variant: 'primary' as const
     },
     {
       key: 'delete',
       label: 'Delete',
       icon: Trash2,
-      onClick: (record: any) => console.log('Delete user:', record.name),
+      onClick: (record: CustomerRecord) =>
+        console.log('Delete user:', record.name),
       variant: 'danger' as const,
-      disabled: (record: any) => record.status === 'Active'
+      disabled: (record: CustomerRecord) => record.status === 'Active'
     }
   ];
 

@@ -5,7 +5,7 @@ export interface GraphVersion {
   version: number;
   createdAt: Date;
   description?: string;
-  graphData: any;
+  graphData: unknown;
 }
 
 export const useGraphVersions = (graphId: string) => {
@@ -19,6 +19,7 @@ export const useGraphVersions = (graphId: string) => {
   }, [graphId]);
 
   const saveVersion = async (description?: string) => {
+    void description;
     // Stub implementation
     setLoading(true);
     try {
@@ -31,6 +32,7 @@ export const useGraphVersions = (graphId: string) => {
   };
 
   const loadVersion = async (versionId: string) => {
+    void versionId;
     // Stub implementation
     return null;
   };

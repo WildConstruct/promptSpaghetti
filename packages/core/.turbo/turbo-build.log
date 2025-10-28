@@ -1,16 +1,17 @@
 
-> @promptscape/core@0.1.0-alpha build C:\Users\Owner\CascadeProjects\prompt-spaghetti\packages\core
+> @promptscape/core@0.1.0-alpha build /mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/packages/core
 > npm run build:esm && npm run build:cjs && npm run build:types
 
 
 > @promptscape/core@0.1.0-alpha build:esm
 > tsc --project tsconfig.esm.json
 
-
+[1G[0K[1G[0K⠙[1G[0K
 > @promptscape/core@0.1.0-alpha build:cjs
 > tsc --project tsconfig.cjs.json
 
-
+[1G[0K[1G[0K⠙[1G[0K
 > @promptscape/core@0.1.0-alpha build:types
 > tsc --project tsconfig.types.json
 
+[1G[0K[1G[0K⠙[1G[0K

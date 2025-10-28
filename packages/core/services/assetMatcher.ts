@@ -1,14 +1,14 @@
 // Asset Matcher Service for Metadata-Based Suggestions
 // Story 2.5a: Asset Browser Integration MVP
 
-import { MetadataExtractor, SegmentMetadata } from './llm/MetadataExtractor';
+import { MetadataExtractor } from './llm/MetadataExtractor';
 
 export interface Asset {
   id: string;
   name: string;
   type: 'psg' | 'psglib';
   metadata?: AssetMetadata;
-  content?: any;
+  content?: unknown;
   tags?: string[];
 }
 
@@ -252,9 +252,10 @@ export class AssetMatcherService {
     }
 
     if (reasons.length === 0) {
-      return 'General compatibility';
+      return `General compatibility (score: ${Math.round(score)})`;
     }
 
+    reasons.push(`Score: ${Math.round(score)}`);
     return reasons.join(', ');
   }
 

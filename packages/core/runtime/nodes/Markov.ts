@@ -4,13 +4,13 @@ import { AdvancedRuntimeNode,
   AdvancedExecutionContext, 
   AdvancedNodeConfig,
   AdvancedNodeData,
-  ValidationResult }
+  ValidationResult,
   ValidationHelpers 
- from '../advanced';
+} from '../advanced';
 import { AdvancedIOHandler,
-  IOSpecBuilder }
+  IOSpecBuilder,
   TypedInputs 
- from '../io-system';
+} from '../io-system';
 import seedrandom from 'seedrandom';
 /**
  * State tracking for Markov chain processing
@@ -367,26 +367,33 @@ export const MarkovPresets = {
       if (nextIndex < states.length) {
         // Move to next state
         transitions[currentState] = { [states[nextIndex]]: 1.0 };
- else if (cyclic) {
+ } else if (cyclic) {
         // Cycle back to first state
         transitions[currentState] = { [states[0]]: 1.0 };
- else {
+      } else {
         // Stay in final state
         transitions[currentState] = { [currentState]: 1.0 };
+      }
+    }
     return createTransitionMatrix({ states, transitions });
+  }
 
   /** Absorbing states (traps that never transition out) */
-  absorbing: (states: string, absorbingStates: string) => {
+  absorbing: (states: string[], absorbingStates: string[]) => {
     const transitions: Record<string, Record<string, number>> = {};
     const normalStates = states.filter(s => !absorbingStates.includes(s));
     // Absorbing states stay put
     for (const state of absorbingStates) {
       transitions[state] = { [state]: 1.0 };
+    }
     // Normal states transition to other states (including absorbing)
     for (const state of normalStates) {
       const prob = 1.0 / states.length;
       transitions[state] = {};
       for (const targetState of states) {
         transitions[state][targetState] = prob;
+      }
+    }
     return createTransitionMatrix({ states, transitions });
- as const;
+  }
+} as const;

@@ -24,11 +24,17 @@ interface NodePreviewProps {
   selectedNodeId?: string | null;
 }
 
+interface PreviewNodeData {
+  label: string;
+  nodeType: string;
+  color?: string;
+}
+
 // Simple preview node component
-const PreviewNode: React.FC<{ data: any; selected: boolean }> = ({
-  data,
-  selected
-}) => {
+const PreviewNode: React.FC<{
+  data: PreviewNodeData;
+  selected: boolean;
+}> = ({ data, selected }) => {
   const nodeColor = data.color || '#666';
 
   return (
@@ -62,10 +68,8 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
       return { flowNodes: [], flowEdges: [] };
     }
 
-    const nodes: Node[] = [];
+    const nodes: Node<PreviewNodeData>[] = [];
     const edges: Edge[] = [];
-    const nodeWidth = 180;
-    const nodeHeight = 80;
     const horizontalSpacing = 320; // Increased from 250 to prevent overlap
     const verticalSpacing = 150; // Increased from 120 for better spacing
 
@@ -97,7 +101,7 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
         data: {
           label,
           nodeType: internal.nodeType,
-          color: color
+          color
         },
         selected: genNode.node.id === selectedNodeId
       });

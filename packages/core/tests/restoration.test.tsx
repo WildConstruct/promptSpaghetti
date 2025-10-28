@@ -291,7 +291,13 @@ describe('State Recovery', () => {
     it('should throw error when no state exists', () => {
       (persistenceStorage.getItem as jest.Mock).mockReturnValue(null);
 
+      // Suppress expected console error
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      
       expect(() => exportBackup()).toThrow('No state to export');
+      
+      // Restore console
+      consoleSpy.mockRestore();
     });
   });
 

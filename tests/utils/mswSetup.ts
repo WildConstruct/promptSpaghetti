@@ -1,234 +1,204 @@
 /**
- * MSW (Mock Service Worker) Test Setup
- * 
- * Configures MSW for intercepting API calls in tests.
- * Provides clean setup/teardown and request handling utilities.
+ * Mock Service Worker (MSW) utilities shared by unit and integration tests.
  */
 
 import { setupServer } from 'msw/node';
-import { rest } from 'msw';
+import { rest, RestHandler, RestRequest } from 'msw';
 import { handlers } from '../mocks/handlers';
 import { templateDb } from '../mocks/data/template-db';
 
-// Create MSW server instance with our handlers
-export const server = setupServer(...handlers);
+type HttpMethod =
+  | 'get'
+  | 'post'
+  | 'put'
+  | 'patch'
+  | 'delete'
+  | 'head'
+  | 'options';
 
-// Server lifecycle management
-export function setupMSW() {
-  // Enable request interception
-  server.listen({ 
-    onUnhandledRequest: 'error'  // Fail tests on unmocked requests
-  });
-  
-  // Reset handlers and data after each test
+type Resolver = Parameters<typeof rest.get>[1];
+
+type HandlerFactory = (path: string, resolver: Resolver) => RestHandler<RestRequest<unknown>>;
+
+const methodMap: Record<HttpMethod, HandlerFactory> = {
+  get: rest.get,
+  post: rest.post,
+  put: rest.put,
+  patch: rest.patch,
+  delete: rest.delete,
+  head: rest.head,
+  options: rest.options
+};
+
+function resolveMethod(method: string): HandlerFactory {
+  const normalised = method.toLowerCase() as HttpMethod;
+  const handler = methodMap[normalised];
+
+  if (!handler) {
+    throw new Error(`Unsupported HTTP method supplied to MSW helper: ${method}`);
+  }
+
+  return handler;
+}
+
+export const server = setupServer(...handlers);
+let isServerListening = false;
+
+export function setupMSW(): void {
+  if (!isServerListening) {
+    server.listen({ onUnhandledRequest: 'error' });
+    isServerListening = true;
+  }
+
   afterEach(() => {
     server.resetHandlers();
-    templateDb.reset(); // Reset mock database state
+    templateDb.reset();
   });
-  
-  // Cleanup server after all tests
+
   afterAll(() => {
     server.close();
+    isServerListening = false;
   });
+}
 
+export const requestMocking = {
+  mockJsonResponse<T>(method: string, path: string, payload: T, status = 200): void {
+    const handlerFactory = resolveMethod(method);
+    server.use(
+      handlerFactory(path, (_req, res, ctx) => res(ctx.status(status), ctx.json(payload)))
+    );
+  },
 
-// Utility functions for test-specific mocking
-export       })
+  mockNetworkError(method: string, path: string, message = 'Network connection failed'): void {
+    const handlerFactory = resolveMethod(method);
+    server.use(
+      handlerFactory(path, (_req, res) => res.networkError(message))
     );
   },
-  
-  /**
-   * Mock network errors
-   */
-  mockNetworkError: (method: string, path: string) => {
+
+  mockSlowResponse<T>(method: string, path: string, delayMs: number, payload: T): void {
+    const handlerFactory = resolveMethod(method);
     server.use(
-      rest[method.toLowerCase()](path, (req, res) => {
-        return res.networkError('Network connection failed');
-      })
+      handlerFactory(path, (_req, res, ctx) => res(ctx.delay(delayMs), ctx.json(payload)))
     );
   },
-  
-  /**
-   * Mock slow responses for performance testing
-   */
-  mockSlowResponse: (method: string, path: string, delay: number, response: unknown) => {
+
+  mockAuthFailure(path: string): void {
     server.use(
-      rest[method.toLowerCase()](path, (req, res, ctx) => {
-        return res(
-          ctx.delay(delay),
-          ctx.json(response)
-        );
-      })
-    );
-  },
-  
-  /**
-   * Mock authentication failures
-   */
-  mockAuthFailure: (path: string) => {
-    server.use(
-      rest.all(path, (req, res, ctx) => {
-        return res(
+      rest.all(path, (_req, res, ctx) =>
+        res(
           ctx.status(401),
-          ctx.json({ 
+          ctx.json({
             error: 'Unauthorized',
-            message: 'Authentication required' 
+            message: 'Authentication required'
           })
-        );
-      })
+        )
+      )
     );
   },
-  
-  /**
-   * Mock validation errors
-   */
-  mockValidationError: (method: string, path: string, errors: Record<string, string[]>) => {
+
+  mockValidationError(method: string, path: string, errors: Record<string, string[]>): void {
+    const handlerFactory = resolveMethod(method);
     server.use(
-      rest[method.toLowerCase()](path, (req, res, ctx) => {
-        return res(
+      handlerFactory(path, (_req, res, ctx) =>
+        res(
           ctx.status(400),
-          ctx.json({ 
+          ctx.json({
             error: 'Validation Error',
             message: 'Request validation failed',
             details: errors
           })
-        );
-      })
+        )
+      )
     );
   },
-  
-  /**
-   * Mock rate limiting
-   */
-  mockRateLimit: (path: string) => {
+
+  mockRateLimit(path: string, retryAfterSeconds = 60): void {
     server.use(
-      rest.all(path, (req, res, ctx) => {
-        return res(
+      rest.all(path, (_req, res, ctx) =>
+        res(
           ctx.status(429),
-          ctx.json({ 
+          ctx.json({
             error: 'Rate Limited',
             message: 'Too many requests',
-            retryAfter: 60 
+            retryAfter: retryAfterSeconds
           })
-        );
-      })
+        )
+      )
     );
   },
-  
-  /**
-   * Reset to default handlers
-   */
-  resetToDefaults: () => {
-    server.resetHandlers();
-  },
-  
-  /**
-   * Get request history for verification
-   */
-  getRequestHistory: () => {
-    // This would require implementing request logging in handlers
-    // For now, return empty array
-    return [];
-  },
-  
-  /**
-   * Wait for specific request
-   */
-  waitForRequest: async (method: string, path: string, timeout = 5000) => {
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        reject(new Error(`Request ${method} ${path} not received within ${timeout}ms`));
-      }, timeout);
-      
-      // This would need to be implemented with request intercepting
-      // For now, resolve immediately
-      clearTimeout(timer);
-      resolve(true);
-    });
 
+  resetToDefaults(): void {
+    server.resetHandlers(...handlers);
+    templateDb.reset();
+  }
 };
 
-// Request logging middleware for debugging
-export function enableRequestLogging() {
-  
+export function enableRequestLogging(): void {
   server.use(
-    rest.all('*', (req, res, ctx) => {
+    rest.all('*', (req) => {
+      // eslint-disable-next-line no-console
       console.log(`MSW intercepted: ${req.method} ${req.url.href}`);
       return req.passthrough();
     })
   );
+}
 
-
-// Common test scenarios
-export       })
-    );
-  },
-  
-  /**
-   * Simulate server maintenance
-   */
-  maintenance: () => {
+export const scenarioMocks = {
+  maintenance(): void {
     server.use(
-      rest.all('*', (req, res, ctx) => {
-        return res(
+      rest.all('*', (_req, res, ctx) =>
+        res(
           ctx.status(503),
           ctx.json({
             error: 'Service Unavailable',
             message: 'Server is temporarily unavailable for maintenance'
           })
-        );
-      })
+        )
+      )
     );
   },
-  
-  /**
-   * Simulate high latency
-   */
-  highLatency: (delay = 3000) => {
+
+  highLatency(delayMs = 3000): void {
     server.use(
-      rest.all('*', (req, res, ctx) => {
-        return res(
-          ctx.delay(delay),
-          ctx.json({ message: 'Delayed response' })
-        );
-      })
+      rest.all('*', (_req, res, ctx) =>
+        res(ctx.delay(delayMs), ctx.json({ message: 'Delayed response' }))
+      )
     );
   },
-  
-  /**
-   * Simulate partial service degradation
-   */
-  partialOutage: (affectedPaths: string[]) => {
-    affectedPaths.forEach(path => {
+
+  partialOutage(paths: string[]): void {
+    paths.forEach((routePath) => {
       server.use(
-        rest.all(path, (req, res, ctx) => {
-          return res(
+        rest.all(routePath, (_req, res, ctx) =>
+          res(
             ctx.status(503),
             ctx.json({
               error: 'Service Degraded',
               message: 'This service is temporarily experiencing issues'
             })
-          );
-        })
+          )
+        )
       );
     });
-
+  }
 };
 
-// Export configured server and setup function
-export { server };
-
-// Auto-setup for Jest if in test environment
 if (process.env.NODE_ENV === 'test') {
   beforeAll(() => {
-    server.listen({ onUnhandledRequest: 'error' });
+    if (!isServerListening) {
+      server.listen({ onUnhandledRequest: 'error' });
+      isServerListening = true;
+    }
   });
-  
+
   afterEach(() => {
     server.resetHandlers();
     templateDb.reset();
   });
-  
+
   afterAll(() => {
     server.close();
+    isServerListening = false;
   });
+}

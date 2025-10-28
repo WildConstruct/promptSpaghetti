@@ -182,6 +182,15 @@ export default function GrokParsingLoader({
           }}
         />
       </svg>
+      <span
+        style={{
+          color: '#b3e5fc',
+          fontSize: '1rem',
+          letterSpacing: '0.03em'
+        }}
+      >
+        {message}
+      </span>
     </div>
   );
 }

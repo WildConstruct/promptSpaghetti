@@ -105,7 +105,11 @@ export class WorkspaceRecovery {
   /**
    * Save current workspace
    */
-  static saveWorkspace(nodes: Node[], edges: Edge[], metadata?: any): boolean {
+  static saveWorkspace(
+    nodes: Node[],
+    edges: Edge[],
+    metadata?: Record<string, unknown>
+  ): boolean {
     try {
       const snapshot: WorkspaceSnapshot = {
         nodes,
@@ -201,7 +205,7 @@ export class WorkspaceRecovery {
       const age = Date.now() - data.timestamp;
 
       return age > maxAgeMs;
-    } catch (error) {
+    } catch {
       return true;
     }
   }

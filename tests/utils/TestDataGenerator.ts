@@ -275,7 +275,7 @@ export class TestDataGenerator {
       });
 
       // Connect all leaf nodes to output
-      currentLevelNodes.forEach((leafId, index) => {
+      currentLevelNodes.forEach(leafId => {
         edges.push({
           id: `edge_${leafId}_output`,
           source: leafId,

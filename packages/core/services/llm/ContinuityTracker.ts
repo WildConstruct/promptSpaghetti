@@ -421,13 +421,54 @@ export class ContinuityTracker {
     scene1: SceneContext,
     scene2: SceneContext
   ): boolean {
-    // Simple heuristic - scenes are consecutive if less than 5 minutes apart
-    return true; // Simplified for now
+    if (scene1.scene_id === scene2.scene_id) {
+      return false;
+    }
+
+    const extractIndex = (sceneId: string): number | null => {
+      const match = sceneId.match(/(\d+)(?!.*\d)/);
+      return match ? Number.parseInt(match[1], 10) : null;
+    };
+
+    const sceneIndex1 = extractIndex(scene1.scene_id);
+    const sceneIndex2 = extractIndex(scene2.scene_id);
+
+    if (
+      sceneIndex1 !== null &&
+      sceneIndex2 !== null &&
+      Math.abs(sceneIndex1 - sceneIndex2) === 1
+    ) {
+      return true;
+    }
+
+    const timeOrder: SceneContext['time_of_day'][] = [
+      'morning',
+      'afternoon',
+      'evening',
+      'night'
+    ];
+
+    const index1 = timeOrder.indexOf(scene1.time_of_day);
+    const index2 = timeOrder.indexOf(scene2.time_of_day);
+    const timeDiff =
+      index1 >= 0 && index2 >= 0 ? Math.abs(index1 - index2) : Number.POSITIVE_INFINITY;
+    const sameLocation = scene1.location === scene2.location;
+    const similarTimeOfDay = timeDiff <= 1;
+
+    return sameLocation && similarTimeOfDay;
   }
 
   private detectWardrobeChange(wardrobe: WardrobeHistory): boolean {
-    // Check if wardrobe items have changed significantly
-    return false; // Simplified for now
+    if (!wardrobe.notes) {
+      return false;
+    }
+
+    const normalizedNotes = wardrobe.notes.toLowerCase();
+    return (
+      normalizedNotes.includes('change') ||
+      normalizedNotes.includes('swap') ||
+      normalizedNotes.includes('different')
+    );
   }
 
   private hasRainGear(wardrobe: WardrobeHistory): boolean {

@@ -47,7 +47,6 @@ export interface PreviewVariation {
 
 export class GraphAnalyzer {
   private llmService: LLMService | null;
-  private cache: Map<string, any> = new Map();
 
   constructor(llmService?: LLMService) {
     this.llmService = llmService || null;

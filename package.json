@@ -40,6 +40,7 @@
     "pretest": "./scripts/clean-duplicate-tests.sh",
     "test:coverage": "jest --coverage --coverageReporters=json,lcov,text,clover",
     "test:coverage:report": "jest --coverage --coverageReporters=html && open coverage/index.html",
+    "coverage:report": "node scripts/report-low-coverage.js",
     "test:security": "jest --testPathPattern=\"(security|validation|ast-node-whitelist)\" --coverage",
     "build": "turbo run build",
     "build:web": "pnpm --filter client build",

@@ -23,7 +23,9 @@ function lcsLength(a: string, b: string): number {
       const tmp = dp[j];
       if (a[i - 1] === b[j - 1]) {
         dp[j] = prev + 1;
-        if (dp[j] > best) best = dp[j];
+        if (dp[j] > best) {
+          best = dp[j];
+        }
       } else {
         dp[j] = Math.max(dp[j], dp[j - 1]);
       }
@@ -34,7 +36,9 @@ function lcsLength(a: string, b: string): number {
 }
 
 function similarityScore(a: string, b: string): number {
-  if (!a.length || !b.length) return 0;
+  if (!a.length || !b.length) {
+    return 0;
+  }
   const lcs = lcsLength(a, b);
   const denom = Math.max(a.length, b.length);
   return lcs / denom;
@@ -144,7 +148,9 @@ export function reconcileAnalysis(
   ]);
 
   function fillGap(start: number, end: number) {
-    if (end - start <= 0) return;
+    if (end - start <= 0) {
+      return;
+    }
     const id = `node-${Math.random().toString(36).slice(2, 9)}`;
     nodes.push({
       node: {
@@ -158,10 +164,14 @@ export function reconcileAnalysis(
 
   let cursor = 0;
   for (const [s, e] of usedRanges) {
-    if (s > cursor) fillGap(cursor, s);
+    if (s > cursor) {
+      fillGap(cursor, s);
+    }
     cursor = Math.max(cursor, e);
   }
-  if (cursor < newText.length) fillGap(cursor, newText.length);
+  if (cursor < newText.length) {
+    fillGap(cursor, newText.length);
+  }
 
   // Keep Output node last
   nodes.push({
@@ -170,7 +180,9 @@ export function reconcileAnalysis(
 
   // Order nodes by mapping start (Output last)
   const startMap = new Map<string, number>();
-  for (const m of mappings) startMap.set(m.nodeId, m.startIndex);
+  for (const m of mappings) {
+    startMap.set(m.nodeId, m.startIndex);
+  }
   const nonOutput = nodes.filter(n => n.node.nodeType !== 'Output');
   nonOutput.sort(
     (a, b) =>

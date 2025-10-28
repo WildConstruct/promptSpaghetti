@@ -36,6 +36,7 @@ export class TextRefinementService {
   ): Promise<RefinementResult> {
     // Extract and preserve variables
     const variables = this.extractVariables(text);
+    const contextSummary = context?.trim();
 
     try {
       const response = await this.llmService.refineText(text, mode);
@@ -60,7 +61,7 @@ export class TextRefinementService {
     }
 
     // Fallback to offline refinement
-    return this.offlineRefine(text, mode);
+    return this.offlineRefine(text, mode, contextSummary);
   }
 
   // Batch refinement for multiple nodes
@@ -235,7 +236,11 @@ export class TextRefinementService {
   }
 
   // Offline refinement fallback
-  private offlineRefine(text: string, mode: RefinementMode): RefinementResult {
+  private offlineRefine(
+    text: string,
+    mode: RefinementMode,
+    context?: string | null
+  ): RefinementResult {
     let refined = text;
     const changes: string[] = [];
 
@@ -254,6 +259,22 @@ export class TextRefinementService {
         refined = this.offlineCorrect(text);
         changes.push('Fixed grammar issues');
         break;
+    }
+
+    if (mode === 'expand' && context) {
+      const keywords = context
+        .split(/\s+/)
+        .filter(word => word.length > 5)
+        .slice(0, 2);
+
+      if (keywords.length > 0) {
+        for (const keyword of keywords) {
+          if (!refined.toLowerCase().includes(keyword.toLowerCase())) {
+            refined = `${refined} ${keyword}`.trim();
+          }
+        }
+        changes.push(`Added context cues: ${keywords.join(', ')}`);
+      }
     }
 
     return {

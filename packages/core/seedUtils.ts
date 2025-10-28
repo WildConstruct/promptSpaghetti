@@ -1,11 +1,18 @@
 // packages/core/seedUtils.ts
-import seedrandom from 'seedrandom';
+
+import seedrandom, { type PRNG } from 'seedrandom';
 
 /**
  * Returns a deterministic pseudo-random number generator initialised with the provided seed.
+ *
  * Usage:
- *   const rng = createRNG('123');
- *   const value = rng(); // 0 ≤ value < 1
+ * ```ts
+ * const rng = createRNG('123');
+ * const value = rng(); // 0 ≤ value < 1
+ * ```
  */
-export function createRNG(seed: string | number) {
+export type RNG = PRNG;
+
+export function createRNG(seed: string | number): RNG {
   return seedrandom(String(seed));
+}

@@ -37,6 +37,7 @@ import { useGraphHistory } from './hooks/useGraphHistory';
 import { useGraphPersistence } from './hooks/useGraphPersistence';
 import { useNodeOperations } from './hooks/useNodeOperations';
 import { useGraphDragDrop } from './hooks/useGraphDragDrop';
+import { useDragDropHandlers } from './hooks/useDragDropHandlers';
 import { useGraphKeyboardShortcuts } from './hooks/useGraphKeyboardShortcuts';
 import { usePreviewTrayLayout } from './hooks/usePreviewTrayLayout';
 import { usePreviewEngine } from './hooks/usePreviewEngine';
@@ -267,11 +268,24 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   const { zoomIn, zoomOut, resetZoom, fitView, panToCenter, panToNode } =
     useGraphViewControls(reactFlowInstance, { showToast });
 
+  // Node interactions and drag-drop helpers
+  const { addNodeWithBounce } = useNodeInteractions();
+  const { insertPresetByMeta } = useDragDropHandlers({
+    setNodes,
+    setEdges,
+    reactFlowInstance,
+    showToast,
+    addNodeWithBounce
+  });
+
   // Drag and drop
   const { isDraggingOver, onDragOver, onDragLeave, onDragEnter, onDrop } =
     useGraphDragDrop(reactFlowInstance, setNodes, {
       showToast,
-      onNodeCreate: node => console.log('Node created via drag:', node)
+      onNodeCreate: node => console.log('Node created via drag:', node),
+      onPresetDrop: (preset, position) => {
+        void insertPresetByMeta(preset, position);
+      }
     });
 
   // Keyboard shortcuts
@@ -359,7 +373,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     useAutoLayout();
 
   // Micro interactions
-  const { addNodeWithBounce, highlightConnection } = useNodeInteractions();
   const { interactions, trigger } = useMicroInteractions();
 
   // Connection validation
@@ -647,6 +660,10 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         <div
           className="graph-canvas-container"
           style={{ flex: 1, position: 'relative' }}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          onDragEnter={onDragEnter}
+          onDragLeave={onDragLeave}
         >
           <SafeReactFlowWrapper>
             <ReactFlow

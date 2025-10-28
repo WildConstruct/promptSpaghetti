@@ -11,7 +11,7 @@ export const NewDocumentModal: React.FC<NewDocumentModalProps> = ({
   onConfirm,
   onCancel
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <div

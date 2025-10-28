@@ -1,327 +1,342 @@
-/**
- * Performance Monitor - Client-side performance tracking and optimization
- * 
- * Provides utilities for monitoring React component performance, API calls,
- * and user interactions with minimal overhead.
- */
+import React, { ComponentType, useEffect, useMemo, useRef } from 'react';
 
+export type PerformanceMetricType =
+  | 'component'
+  | 'api'
+  | 'user_interaction'
+  | 'custom';
 
-interface PerformanceMetric {
-  name: string;,
-  duration: number;,
-  timestamp: number;,
-  type: 'component' | 'api' | 'user_interaction' | 'custom';
+export interface PerformanceMetric {
+  name: string;
+  duration: number;
+  timestamp: number;
+  type: PerformanceMetricType;
   metadata?: Record<string, unknown>;
+}
 
+export interface PerformanceConfig {
+  enableLogging: boolean;
+  sampleRate: number;
+  bufferSize: number;
+  flushInterval: number;
+}
 
+const defaultConfig: PerformanceConfig = {
+  enableLogging: process.env.NODE_ENV === 'development',
+  sampleRate: 1,
+  bufferSize: 1000,
+  flushInterval: 30_000
+};
 
-interface PerformanceConfig {
-  enableLogging: boolean;,
-  sampleRate: number; // 0-1, percentage of operations to monitor,
-  bufferSize: number;,
-  flushInterval: number; // ms,
-  class PerformanceMonitor {
-  private metrics: PerformanceMetric = [];
-  private config: PerformanceConfig;
-  private flushTimer?: number;
-  private observers: Map<string, PerformanceObserver> = new Map();
+type TimerHandle = ReturnType<typeof setInterval> | null;
 
+class PerformanceMonitor {
+  private readonly config: PerformanceConfig;
+  private metrics: PerformanceMetric[] = [];
+  private flushTimer: TimerHandle = null;
 
   constructor(config: Partial<PerformanceConfig> = {}) {
-  this.config = {
-  enableLogging: process.env.NODE_ENV === 'development',
-  sampleRate: 0.1, // Monitor 10% of operations in production,
-  bufferSize: 1000,
-  flushInterval: 30000, // 30 seconds,
-  ...config
-};
-    this.initializeObservers();
+    this.config = { ...defaultConfig, ...config };
     this.startPeriodicFlush();
-  /**
-   * Initialize native Performance API observers
-   */
-  private initializeObservers(): void {
-  if (typeof PerformanceObserver === 'undefined') {
-  console.warn('PerformanceObserver not supported in this browser');
-  return;
-  // Monitor navigation timing
-  try {
-  const navObserver = new PerformanceObserver((list) => {
-  const entries = list.getEntries();
-  entries.forEach((entry) => {
-  this.addMetric({)
-  name: 'page_load',
-  duration: entry.duration,
-  timestamp: entry.startTime,
-  type: 'custom',
-  metadata: {,
-  entryType: entry.entryType,
-  name: entry.name,
-});
-        });
-      });
-      navObserver.observe({ entryTypes: ['navigation'] });
-      this.observers.set('navigation', navObserver);
- catch (error) {
-  console.warn('Failed to initialize navigation observer:', error);
-  // Monitor resource loading
-  try {
-  const resourceObserver = new PerformanceObserver((list) => {
-  const entries = list.getEntries();
-  entries.forEach((entry) => {
-  if (entry.duration > 100) { // Only track slow resources
-  this.addMetric({)
-  name: 'resource_load',
-  duration: entry.duration,
-  timestamp: entry.startTime,
-  type: 'custom',
-  metadata: {,
-  name: entry.name,
-  transferSize: (entry as PerformanceResourceTiming).transferSize,
-  type: (entry as PerformanceResourceTiming).initiatorType,
-});
-        });
-      });
-      resourceObserver.observe({ entryTypes: ['resource'] });
-      this.observers.set('resource', resourceObserver);
- catch (error) {
-      console.warn('Failed to initialize resource observer:', error);
-  /**
-   * Measure execution time of a function
-   */
-  measureExecution<T>()
+  }
+
+  measureExecution<T>(
     name: string,
     fn: () => T | Promise<T>,
-    type: PerformanceMetric['type'] = 'custom',
+    type: PerformanceMetricType = 'custom',
     metadata?: Record<string, unknown>
   ): T | Promise<T> {
     if (!this.shouldSample()) {
       return fn();
-    const startTime = performance.now();
+    }
+
+    const startTime = this.now();
+    const finish = (result: T): T => {
+      const duration = this.now() - startTime;
+      this.addMetric({ name, duration, timestamp: startTime, type, metadata });
+      return result;
+    };
+
     try {
       const result = fn();
-      // Handle both sync and async functions
       if (result instanceof Promise) {
-        return result.finally(() => {
-          const duration = performance.now() - startTime;
-          this.addMetric({ name, duration, timestamp: startTime, type, metadata });
-        });
- else {
-        const duration = performance.now() - startTime;
-        this.addMetric({ name, duration, timestamp: startTime, type, metadata });
-        return result;
- catch (error) {
-      const duration = performance.now() - startTime;
-      this.addMetric({)
-  name: `${name}_error`}
+        return result
+          .then(value => finish(value))
+          .catch(error => {
+            this.addErrorMetric(name, startTime, type, metadata, error);
+            throw error;
+          });
+      }
 
+      return finish(result);
+    } catch (error) {
+      this.addErrorMetric(name, startTime, type, metadata, error);
+      throw error;
+    }
+  }
+
+  startTiming(name: string, type: PerformanceMetricType = 'custom'): (metadata?: Record<string, unknown>) => void {
+    if (!this.shouldSample()) {
+      return () => undefined;
+    }
+
+    const startTime = this.now();
+    return (metadata?: Record<string, unknown>) => {
+      const duration = this.now() - startTime;
+      this.addMetric({
+        name,
         duration,
         timestamp: startTime,
         type,
-        metadata: { ...metadata, error: error instanceof Error ? error.message : 'Unknown error' }
+        metadata
       });
-      throw error;
-  /**
-   * Start timing an operation
-   */
-  startTiming(name: string): () => void {
-    if (!this.shouldSample()) {
-      return () => {}; // No-op function
-    const startTime = performance.now();
-    return (metadata?: Record<string, unknown>) => {
-  const duration = performance.now() - startTime;
-  this.addMetric({)
-  name,
-  duration,
-  timestamp: startTime,
-  type: 'custom',
-  metadata
-});
     };
-  /**
-   * Track API call performance
-   */
-  trackApiCall<T>()
+  }
+
+  trackApiCall<T>(
     url: string,
     method: string,
-    apiCall: () => Promise<T>): Promise<T> {,
-    return this.measureExecution()
-      'api_call',
+    apiCall: () => Promise<T>
+  ): Promise<T> {
+    return this.measureExecution(
+      `api:${method}:${url}`,
       apiCall,
       'api',
       { url, method }
     ) as Promise<T>;
-  /**
-   * Track user interaction performance
-   */
-  trackInteraction<T>()
+  }
+
+  trackInteraction<T>(
     action: string,
     handler: () => T | Promise<T>,
     metadata?: Record<string, unknown>
   ): T | Promise<T> {
-    return this.measureExecution()
-      `interaction_${action}`}
-
+    return this.measureExecution(
+      `interaction:${action}`,
       handler,
       'user_interaction',
       metadata
     );
-  /**
-   * Add a custom metric
-   */
-  addMetric(metric: Omit<PerformanceMetric, 'timestamp'> & { timestamp?: number }): void {
-  if (!this.shouldSample()) {
-  return;
-  const fullMetric: PerformanceMetric = {,
-  ...metric,
-  timestamp: metric.timestamp ?? performance.now(),
-};
-    this.metrics.push(fullMetric);
-    if (this.config.enableLogging && fullMetric.duration > 100) {
-      console.log(`[Performance] ${fullMetric.name}: ${fullMetric.duration.toFixed(2)}ms`, fullMetric.metadata);}
-    // Auto-flush if buffer is full
+  }
+
+  addMetric(metric: PerformanceMetric): void {
+    this.metrics.push(metric);
+    if (this.config.enableLogging && metric.duration >= 100) {
+      console.log(
+        `[Performance] ${metric.name}: ${metric.duration.toFixed(2)}ms`,
+        metric.metadata ?? {}
+      );
+    }
+
     if (this.metrics.length >= this.config.bufferSize) {
       this.flush();
-  /**
-   * Get performance statistics
-   */
+    }
+  }
+
+  getMetrics(): PerformanceMetric[] {
+    return [...this.metrics];
+  }
+
   getStats(): {
-    total: number;,
-  byType: Record<string, number>;
+    total: number;
+    byType: Record<PerformanceMetricType, number>;
     averages: Record<string, number>;
-    slowest: PerformanceMetric;
-    const byType: Record<string, number> = {};
-    const durations: Record<string, number> = {};
-    this.metrics.forEach(metric => {)
-  byType[metric.type] = (byType[metric.type] || 0) + 1;
-      if (!durations[metric.name]) {
-        durations[metric.name] = [];
+    slowest?: PerformanceMetric;
+  } {
+    if (this.metrics.length === 0) {
+      return { total: 0, byType: { component: 0, api: 0, user_interaction: 0, custom: 0 }, averages: {} };
+    }
+
+    const byType: Record<PerformanceMetricType, number> = {
+      component: 0,
+      api: 0,
+      user_interaction: 0,
+      custom: 0
+    };
+    const durations: Record<string, number[]> = {};
+    let slowest = this.metrics[0];
+
+    this.metrics.forEach(metric => {
+      byType[metric.type] += 1;
+      durations[metric.name] = durations[metric.name] ?? [];
       durations[metric.name].push(metric.duration);
+      if (metric.duration > slowest.duration) {
+        slowest = metric;
+      }
     });
+
     const averages: Record<string, number> = {};
     Object.entries(durations).forEach(([name, values]) => {
-      averages[name] = values.reduce((sum, val) => sum + val, 0) / values.length;
+      const total = values.reduce((sum, value) => sum + value, 0);
+      averages[name] = total / values.length;
     });
-    const slowest = [...this.metrics];
-      .sort((a, b) => b.duration - a.duration)
-      .slice(0, 10);
+
     return {
-  total: this.metrics.length,
-  byType,
-  averages,
-  slowest
-};
-  /**
-   * Flush metrics to storage or analytics service
-   */
-  flush(): void {
-  if (this.metrics.length === 0) {
-  return;
-  const metricsToFlush = [...this.metrics];
-  this.metrics = [];
-  if (this.config.enableLogging) {
-  console.log('[Performance] Flushing metrics:', metricsToFlush.length);
-  // In a real implementation, you would send these to an analytics service
-  // For now, we'll store them in sessionStorage as a fallback
-  try {
-  const existingMetrics = sessionStorage.getItem('performance_metrics');
-  const allMetrics = existingMetrics ? JSON.parse(existingMetrics) : [];
-  allMetrics.push(...metricsToFlush);
-  // Keep only the most recent 5000 metrics
-  const recentMetrics = allMetrics.slice(-5000);
-  sessionStorage.setItem('performance_metrics', JSON.stringify(recentMetrics));
- catch (error) {
-  console.warn('Failed to store performance metrics:', error);
-  /**
-  * Start periodic flushing
-  */
-  private startPeriodicFlush(): void {,
-  this.flushTimer = window.setInterval(() => {
-  this.flush();
-}, this.config.flushInterval);
-  /**
-   * Determine if this operation should be sampled
-   */
-  private shouldSample(): boolean {
-    return Math.random() < this.config.sampleRate;
-  /**
-   * Clean up observers and timers
-   */
+      total: this.metrics.length,
+      byType,
+      averages,
+      slowest
+    };
+  }
+
+  flush(): PerformanceMetric[] {
+    const flushed = this.metrics;
+    this.metrics = [];
+    return flushed;
+  }
+
   destroy(): void {
-    this.observers.forEach(observer => observer.disconnect());
-    this.observers.clear();
-    if (this.flushTimer) {
+    this.flush();
+    this.stopPeriodicFlush();
+  }
+
+  private startPeriodicFlush(): void {
+    if (this.flushTimer !== null) {
+      return;
+    }
+
+    this.flushTimer = setInterval(() => {
+      if (this.metrics.length > 0) {
+        this.flush();
+      }
+    }, this.config.flushInterval);
+  }
+
+  private stopPeriodicFlush(): void {
+    if (this.flushTimer !== null) {
       clearInterval(this.flushTimer);
-    this.flush(); // Final flush
+      this.flushTimer = null;
+    }
+  }
 
-// Create singleton instance
-export const performanceMonitor = new PerformanceMonitor();
+  private shouldSample(): boolean {
+    if (this.config.sampleRate >= 1) {
+      return true;
+    }
 
-// React Hook for component performance monitoring
-export function usePerformanceTracking(componentName: string, dependencies: unknown = []): void {
-  const renderStart = performance.now();
-  React.useEffect(() => {
-    const renderEnd = performance.now();
-    const renderDuration = renderEnd - renderStart;
-    performanceMonitor.addMetric({)
-  name: `${componentName}_render`}
-},
-  duration: renderDuration,
-      timestamp: renderStart,
-      type: 'component',
-      metadata: {
-  componentName,
-  dependencyCount: dependencies.length,
-});
-  });
+    return Math.random() < this.config.sampleRate;
+  }
 
-// Higher-order component for performance tracking
-export function withPerformanceTracking<P extends object>(WrappedComponent: React.ComponentType<P>)
-  componentName?: string
-): React.ComponentType<P> {
-  const displayName = componentName || WrappedComponent.displayName || WrappedComponent.name || 'Component';
-  const MemoizedComponent = React.memo(WrappedComponent);
-  const WithPerformanceTracking: React.FC<P> = (props) => {,
-  usePerformanceTracking(displayName);
-  return React.createElement(MemoizedComponent, props);
-};
-  WithPerformanceTracking.displayName = `withPerformanceTracking(${displayName})`;}
-  return WithPerformanceTracking;
-
-// Utility functions
-    return (...args: Parameters<T>) => {
-      clearTimeout(timeoutId);
-      timeoutId = window.setTimeout(() => {
-        performanceMonitor.measureExecution()
-          name || 'debounced_function',
-          () => func(...args),
-          'custom'
-        );
-      }, delay);
+  private addErrorMetric(
+    name: string,
+    startTime: number,
+    type: PerformanceMetricType,
+    metadata: Record<string, unknown> | undefined,
+    error: unknown
+  ): void {
+    const duration = this.now() - startTime;
+    const errorMetadata = {
+      ...metadata,
+      error: error instanceof Error ? error.message : 'unknown error'
     };
 
-  /**
-   * Throttle function with performance tracking
-   */
-  throttle<T extends (...args: unknown) => unknown>(func: T);
-  delay: number,
-    name?: string
-  ): (...args: Parameters<T>) => void {
-  let lastCall = 0;
-  return (...args: Parameters<T>) => {,
-  const now = Date.now();
-  if (now - lastCall >= delay) {
-  lastCall = now;
-  performanceMonitor.measureExecution()
-  name || 'throttled_function',
-  () => func(...args),
-  'custom'
-  );
-};
+    this.addMetric({
+      name: `${name}:error`,
+      duration,
+      timestamp: startTime,
+      type,
+      metadata: errorMetadata
+    });
+  }
+
+  private now(): number {
+    return typeof performance !== 'undefined' ? performance.now() : Date.now();
+  }
+}
+
+export const performanceMonitor = new PerformanceMonitor();
+
+export function usePerformanceTracking(
+  name: string,
+  dependencies: React.DependencyList = []
+): void {
+  const endRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    endRef.current = performanceMonitor.startTiming(`hook:${name}`, 'component');
+    return () => {
+      endRef.current?.({ phase: 'cleanup' });
+      endRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, dependencies);
+}
+
+export function withPerformanceTracking<P>(
+  Component: ComponentType<P>,
+  name: string
+): ComponentType<P> {
+  const TrackedComponent = (props: P) => {
+    usePerformanceTracking(`component:${name}`);
+    const endTimingRef = useRef<(() => void) | null>(null);
+
+    useEffect(() => {
+      endTimingRef.current = performanceMonitor.startTiming(
+        `render:${name}`,
+        'component'
+      );
+
+      return () => {
+        endTimingRef.current?.({ phase: 'unmount' });
+        endTimingRef.current = null;
+      };
+    }, []);
+
+    return <Component {...props} />;
+  };
+
+  TrackedComponent.displayName = `WithPerformanceTracking(${Component.displayName ?? Component.name ?? 'Component'})`;
+
+  return TrackedComponent;
+}
+
+export const performanceUtils = {
+  formatDuration(duration: number): string {
+    if (duration < 1) {
+      return `${(duration * 1000).toFixed(2)}µs`;
+    }
+
+    if (duration < 1000) {
+      return `${duration.toFixed(2)}ms`;
+    }
+
+    return `${(duration / 1000).toFixed(2)}s`;
+  },
+  percentile(metrics: PerformanceMetric[], percentile: number): number {
+    if (metrics.length === 0) {
+      return 0;
+    }
+
+    const sorted = [...metrics].sort((a, b) => a.duration - b.duration);
+    const index = Math.min(
+      sorted.length - 1,
+      Math.max(0, Math.round((percentile / 100) * sorted.length) - 1)
+    );
+    return sorted[index].duration;
+  },
+  summarize(metrics: PerformanceMetric[]): {
+    average: number;
+    p95: number;
+    p99: number;
+  } {
+    if (metrics.length === 0) {
+      return { average: 0, p95: 0, p99: 0 };
+    }
+
+    const total = metrics.reduce((sum, metric) => sum + metric.duration, 0);
+    return {
+      average: total / metrics.length,
+      p95: performanceUtils.percentile(metrics, 95),
+      p99: performanceUtils.percentile(metrics, 99)
+    };
+  }
 };
 
-// Type exports
-export type { PerformanceMetric, PerformanceConfig };
+export function usePerformanceSummary(metrics: PerformanceMetric[]): {
+  average: number;
+  p95: number;
+  p99: number;
+} {
+  return useMemo(() => performanceUtils.summarize(metrics), [metrics]);
+}
 
-// Import React at the top of the file for the hooks
-import React from 'react';

@@ -17,7 +17,9 @@ const getEnvVar = (key: string, fallback: string = ''): string => {
 // Helper function to get boolean environment variable
 const getBoolEnvVar = (key: string, fallback: boolean = false): boolean => {
   const value = import.meta.env[key];
-  if (value === undefined) return fallback;
+  if (value === undefined) {
+    return fallback;
+  }
   return value === 'true' || value === '1' || value === true;
 };
 

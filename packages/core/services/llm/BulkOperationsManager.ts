@@ -3,11 +3,7 @@
 
 import { MetadataExtractor, SegmentMetadata } from './MetadataExtractor';
 import { SimilarityEngine } from './SimilarityEngine';
-import {
-  ContinuityTracker,
-  ExtraProfile,
-  ValidationResult
-} from './ContinuityTracker';
+import { ContinuityTracker, ValidationResult } from './ContinuityTracker';
 
 export interface BulkOperation {
   id: string;
@@ -20,7 +16,7 @@ export interface BulkOperation {
   startTime?: string;
   endTime?: string;
   errors: string[];
-  results?: any[];
+  results?: OperationResult[];
 }
 
 export interface BulkOperationOptions {
@@ -43,12 +39,35 @@ export interface NaturalLanguageQuery {
     conditions: Array<{
       field: string;
       operator: 'equals' | 'contains' | 'greater' | 'less' | 'exists';
-      value: any;
+      value: string | number | boolean;
     }>;
     keywords: string[];
     errors?: string[];
   };
 }
+
+type ExtractResult = {
+  id: string;
+  metadata?: SegmentMetadata;
+  error?: string;
+};
+
+type TemplateResult = { id: string; success: boolean };
+
+type ValidationSummary = {
+  id: string;
+  valid: boolean;
+  issues: string[];
+};
+
+type SearchResult = { id: string; score: number };
+
+type OperationResult =
+  | ExtractResult
+  | TemplateResult
+  | ValidationResult
+  | ValidationSummary
+  | SearchResult;
 
 export class BulkOperationsManager {
   private operations: Map<string, BulkOperation> = new Map();
@@ -87,11 +106,7 @@ export class BulkOperationsManager {
     operation.startTime = new Date().toISOString();
 
     try {
-      const results: Array<{
-        id: string;
-        metadata?: SegmentMetadata;
-        error?: string;
-      }> = [];
+      const results: ExtractResult[] = [];
 
       // Process in batches
       for (let i = 0; i < items.length; i += concurrency) {
@@ -183,7 +198,7 @@ export class BulkOperationsManager {
     operation.startTime = new Date().toISOString();
 
     try {
-      const results: Array<{ id: string; success: boolean }> = [];
+      const results: TemplateResult[] = [];
 
       for (let i = 0; i < itemIds.length; i += concurrency) {
         if (abortController.signal.aborted) {
@@ -316,8 +331,7 @@ export class BulkOperationsManager {
     operation.startTime = new Date().toISOString();
 
     try {
-      const results: Array<{ id: string; valid: boolean; issues: string[] }> =
-        [];
+      const results: ValidationSummary[] = [];
 
       for (let i = 0; i < nodeIds.length; i += concurrency) {
         const batch = nodeIds.slice(i, i + concurrency);
@@ -478,7 +492,7 @@ export class BulkOperationsManager {
     items: Array<{ id: string; metadata?: SegmentMetadata }>
   ): Promise<Array<{ id: string; score: number }>> {
     const parsed = this.parseNaturalLanguageQuery(query);
-    const results: Array<{ id: string; score: number }> = [];
+    const results: SearchResult[] = [];
 
     for (const item of items) {
       if (!item.metadata) continue;

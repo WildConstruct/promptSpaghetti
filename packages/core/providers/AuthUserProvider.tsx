@@ -11,7 +11,7 @@ import React, {
   useMemo,
   useRef
 } from 'react';
-import type { User, Session, AuthError } from '@supabase/supabase-js';
+import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../utils/supabaseClient';
 import {
   retryWithBackoff,
@@ -90,11 +90,46 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
   const offlineQueue = useRef<OfflineAuthQueue | null>(null);
   const logger = useRef<AuthDebugLogger | null>(null);
 
+  // Refresh session method
+  const refreshSession = useCallback(async () => {
+    if (!supabase) return;
+
+    logger.current?.log('Refreshing session');
+
+    try {
+      const {
+        data: { session },
+        error
+      } = await supabase.auth.refreshSession();
+
+      if (error) throw error;
+
+      if (session) {
+        logger.current?.log('Session refreshed', { userId: session.user.id });
+        setAuthState(prev => ({
+          ...prev,
+          session,
+          user: session.user
+        }));
+        tokenScheduler.current?.schedule(session);
+      }
+    } catch (error) {
+      logger.current?.error('Session refresh failed', error);
+      // Don't update error state for refresh failures as they might be transient
+    }
+  }, []);
+
+  const refreshSessionRef = useRef(refreshSession);
+
+  useEffect(() => {
+    refreshSessionRef.current = refreshSession;
+  }, [refreshSession]);
+
   // Initialize utilities
   useEffect(() => {
     if (!tokenScheduler.current) {
       tokenScheduler.current = new TokenRefreshScheduler(async () => {
-        await refreshSession();
+        await refreshSessionRef.current();
       });
     }
 
@@ -115,7 +150,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       broadcaster.current?.close();
       offlineQueue.current?.clear();
     };
-  }, []);
+  }, [refreshSession]);
 
   // Session restoration on mount
   useEffect(() => {
@@ -176,7 +211,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     };
 
     restoreSession();
-  }, []);
+  }, [refreshSession]);
 
   // Auth state subscription
   useEffect(() => {
@@ -253,7 +288,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       switch (event) {
         case 'signin':
           // Another tab signed in, refresh our session
-          refreshSession();
+          void refreshSessionRef.current();
           break;
 
         case 'signout':
@@ -270,7 +305,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
         case 'session_refresh':
           // Another tab refreshed, we should too
-          refreshSession();
+          void refreshSessionRef.current();
           break;
       }
     });
@@ -483,36 +518,6 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     },
     [authState.user]
   );
-
-  // Refresh session method
-  const refreshSession = useCallback(async () => {
-    if (!supabase) return;
-
-    logger.current?.log('Refreshing session');
-
-    try {
-      const {
-        data: { session },
-        error
-      } = await supabase.auth.refreshSession();
-
-      if (error) throw error;
-
-      if (session) {
-        logger.current?.log('Session refreshed', { userId: session.user.id });
-        setAuthState(prev => ({
-          ...prev,
-          session,
-          user: session.user
-        }));
-        tokenScheduler.current?.schedule(session);
-      }
-    } catch (error) {
-      logger.current?.error('Session refresh failed', error);
-      // Don't update error state for refresh failures
-      // as they might be transient
-    }
-  }, []);
 
   // Clear error method
   const clearError = useCallback(() => {

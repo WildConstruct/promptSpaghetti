@@ -4,6 +4,64 @@
 import { Node, Edge } from 'reactflow';
 import { LLMService } from './llm/LLMService';
 
+type TreeNodeData = {
+  label?: string;
+  [key: string]: unknown;
+};
+
+interface AssetMetadata extends Record<string, unknown> {
+  category?: string;
+  complexity?: 'simple' | 'medium' | 'complex';
+  estimatedNodes?: number;
+}
+
+interface TreeAsset {
+  id?: string;
+  type?: string;
+  name?: string;
+  metadata?: AssetMetadata;
+  [key: string]: unknown;
+}
+
+interface GraphStateSummary extends Record<string, unknown> {
+  summary?: unknown;
+}
+
+interface TreeBuilderContext {
+  graphState?: GraphStateSummary;
+  userPreferences?: Record<string, unknown>;
+  position: { x: number; y: number };
+}
+
+interface SuggestedPosition {
+  x?: number;
+  y?: number;
+}
+
+interface SuggestedNode {
+  type: string;
+  label?: string;
+  position?: SuggestedPosition;
+  data?: Record<string, unknown>;
+}
+
+interface SuggestedEdge {
+  source?: string;
+  target?: string;
+  sourceIndex?: number;
+  targetIndex?: number;
+  sourceHandle?: string;
+  targetHandle?: string;
+}
+
+interface TreeSuggestion {
+  nodes: SuggestedNode[];
+  edges: SuggestedEdge[];
+}
+
+type TreeBuilderNode = Node<TreeNodeData>;
+type TreeBuilderEdge = Edge<Record<string, unknown> | undefined>;
+
 export interface TreeTemplate {
   id: string;
   name: string;
@@ -22,7 +80,7 @@ export interface TreeNode {
   type: string;
   label: string;
   position: { x: number; y: number };
-  data?: any;
+  data?: TreeNodeData;
 }
 
 export interface TreeEdge {
@@ -33,11 +91,14 @@ export interface TreeEdge {
 }
 
 export interface BuildTreeResult {
-  nodes: Node[];
-  edges: Edge[];
+  nodes: TreeBuilderNode[];
+  edges: TreeBuilderEdge[];
   template: TreeTemplate;
   confidence: number;
 }
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
 
 export class TreeBuilder {
   private llmService: LLMService | null = null;
@@ -223,12 +284,8 @@ export class TreeBuilder {
   }
 
   async buildTreeFromAsset(
-    asset: any,
-    context: {
-      graphState?: any;
-      userPreferences?: any;
-      position: { x: number; y: number };
-    }
+    asset: TreeAsset,
+    context: TreeBuilderContext
   ): Promise<BuildTreeResult> {
     // Try intelligent tree building if LLM available
     if (this.llmService) {
@@ -247,8 +304,8 @@ export class TreeBuilder {
   }
 
   private async buildIntelligentTree(
-    asset: any,
-    context: any
+    asset: TreeAsset,
+    context: TreeBuilderContext
   ): Promise<BuildTreeResult> {
     if (!this.llmService) {
       throw new Error('LLM service not available');
@@ -275,15 +332,22 @@ export class TreeBuilder {
     });
 
     try {
-      const suggestion = JSON.parse(response.content);
-      return this.createTreeFromSuggestion(suggestion, context.position);
-    } catch (error) {
+      const suggestion = this.parseSuggestion(JSON.parse(response.content));
+      if (suggestion) {
+        return this.createTreeFromSuggestion(suggestion, context.position);
+      }
+    } catch {
       // If parsing fails, use template fallback
       return this.buildFromTemplate(asset, context);
     }
+
+    return this.buildFromTemplate(asset, context);
   }
 
-  private buildFromTemplate(asset: any, context: any): BuildTreeResult {
+  private buildFromTemplate(
+    asset: TreeAsset,
+    context: TreeBuilderContext
+  ): BuildTreeResult {
     // Match asset to best template
     const template = this.selectBestTemplate(asset);
 
@@ -299,10 +363,10 @@ export class TreeBuilder {
     };
   }
 
-  private selectBestTemplate(asset: any): TreeTemplate {
-    const assetType = asset.type?.toLowerCase() || '';
-    const assetName = asset.name?.toLowerCase() || '';
-    const metadata = asset.metadata || {};
+  private selectBestTemplate(asset: TreeAsset): TreeTemplate {
+    const assetType = asset.type?.toLowerCase() ?? '';
+    const assetName = asset.name?.toLowerCase() ?? '';
+    const metadata = asset.metadata ?? {};
 
     // Score each template based on relevance
     const scores = TreeBuilder.TEMPLATES.map(template => {
@@ -335,9 +399,10 @@ export class TreeBuilder {
   private positionNodes(
     templateNodes: TreeNode[],
     basePosition: { x: number; y: number }
-  ): Node[] {
-    return templateNodes.map((node, index) => ({
-      id: `${node.id}-${Date.now()}`,
+  ): TreeBuilderNode[] {
+    const timestamp = Date.now();
+    return templateNodes.map(node => ({
+      id: `${node.id}-${timestamp}`,
       type: node.type.toLowerCase(),
       position: {
         x: basePosition.x + node.position.x,
@@ -350,7 +415,10 @@ export class TreeBuilder {
     }));
   }
 
-  private createEdges(templateEdges: TreeEdge[], nodes: Node[]): Edge[] {
+  private createEdges(
+    templateEdges: TreeEdge[],
+    nodes: TreeBuilderNode[]
+  ): TreeBuilderEdge[] {
     // Map template IDs to actual node IDs
     const idMap = new Map<string, string>();
     nodes.forEach(node => {
@@ -358,8 +426,9 @@ export class TreeBuilder {
       idMap.set(templateId, node.id);
     });
 
+    const timestamp = Date.now();
     return templateEdges.map((edge, index) => ({
-      id: `edge-${index}-${Date.now()}`,
+      id: `edge-${index}-${timestamp}`,
       source: idMap.get(edge.source.split('-')[0]) || edge.source,
       target: idMap.get(edge.target.split('-')[0]) || edge.target,
       sourceHandle: edge.sourceHandle,
@@ -368,26 +437,33 @@ export class TreeBuilder {
   }
 
   private createTreeFromSuggestion(
-    suggestion: any,
+    suggestion: TreeSuggestion,
     position: { x: number; y: number }
   ): BuildTreeResult {
-    const nodes = suggestion.nodes.map((node: any, index: number) => ({
-      id: `${node.type}-${Date.now()}-${index}`,
+    const timestamp = Date.now();
+    const nodes = suggestion.nodes.map((node, index) => ({
+      id: `${node.type}-${timestamp}-${index}`,
       type: node.type.toLowerCase(),
       position: {
-        x: position.x + (node.position?.x || index * 150),
-        y: position.y + (node.position?.y || index * 100)
+        x: position.x + (node.position?.x ?? index * 150),
+        y: position.y + (node.position?.y ?? index * 100)
       },
       data: {
-        label: node.label || node.type,
+        label: node.label ?? node.type,
         ...node.data
       }
     }));
 
-    const edges = suggestion.edges.map((edge: any, index: number) => ({
-      id: `edge-${Date.now()}-${index}`,
-      source: nodes[edge.sourceIndex]?.id || edge.source,
-      target: nodes[edge.targetIndex]?.id || edge.target,
+    const edges = suggestion.edges.map((edge, index) => ({
+      id: `edge-${timestamp}-${index}`,
+      source:
+        (typeof edge.sourceIndex === 'number'
+          ? nodes[edge.sourceIndex]?.id
+          : undefined) ?? edge.source ?? '',
+      target:
+        (typeof edge.targetIndex === 'number'
+          ? nodes[edge.targetIndex]?.id
+          : undefined) ?? edge.target ?? '',
       sourceHandle: edge.sourceHandle,
       targetHandle: edge.targetHandle
     }));
@@ -408,6 +484,100 @@ export class TreeBuilder {
         edges
       },
       confidence: 0.85
+    };
+  }
+
+  private parseSuggestion(raw: unknown): TreeSuggestion | null {
+    if (!isRecord(raw)) {
+      return null;
+    }
+
+    const nodes = Array.isArray(raw.nodes)
+      ? raw.nodes
+          .map(node => this.normalizeSuggestedNode(node))
+          .filter((node): node is SuggestedNode => Boolean(node))
+      : [];
+    const edges = Array.isArray(raw.edges)
+      ? raw.edges
+          .map(edge => this.normalizeSuggestedEdge(edge))
+          .filter((edge): edge is SuggestedEdge => Boolean(edge))
+      : [];
+
+    if (!nodes.length || !edges.length) {
+      return null;
+    }
+
+    return { nodes, edges };
+  }
+
+  private normalizeSuggestedNode(node: unknown): SuggestedNode | null {
+    if (!isRecord(node)) {
+      return null;
+    }
+
+    const { type } = node;
+    if (typeof type !== 'string' || !type.trim()) {
+      return null;
+    }
+
+    const label =
+      typeof node.label === 'string' && node.label.trim().length > 0
+        ? node.label
+        : undefined;
+    const data = isRecord(node.data) ? node.data : undefined;
+
+    const positionValue = isRecord(node.position) ? node.position : undefined;
+    const position: SuggestedPosition | undefined = positionValue
+      ? {
+          x: typeof positionValue.x === 'number' ? positionValue.x : undefined,
+          y: typeof positionValue.y === 'number' ? positionValue.y : undefined
+        }
+      : undefined;
+
+    return {
+      type,
+      label,
+      data,
+      position
+    };
+  }
+
+  private normalizeSuggestedEdge(edge: unknown): SuggestedEdge | null {
+    if (!isRecord(edge)) {
+      return null;
+    }
+
+    const source =
+      typeof edge.source === 'string' && edge.source.trim().length > 0
+        ? edge.source
+        : undefined;
+    const target =
+      typeof edge.target === 'string' && edge.target.trim().length > 0
+        ? edge.target
+        : undefined;
+
+    const sourceIndex =
+      typeof edge.sourceIndex === 'number' ? edge.sourceIndex : undefined;
+    const targetIndex =
+      typeof edge.targetIndex === 'number' ? edge.targetIndex : undefined;
+
+    if (source === undefined && sourceIndex === undefined) {
+      return null;
+    }
+
+    if (target === undefined && targetIndex === undefined) {
+      return null;
+    }
+
+    return {
+      source,
+      target,
+      sourceIndex,
+      targetIndex,
+      sourceHandle:
+        typeof edge.sourceHandle === 'string' ? edge.sourceHandle : undefined,
+      targetHandle:
+        typeof edge.targetHandle === 'string' ? edge.targetHandle : undefined
     };
   }
 

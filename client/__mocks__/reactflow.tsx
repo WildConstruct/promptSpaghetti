@@ -161,14 +161,14 @@ export const useReactFlow = () => ({
   getNodes: () => [],
   getEdges: () => [],
   getViewport: (): Viewport => ({ x: 0, y: 0, zoom: 1 }),
-  setNodes: () => {},
-  setEdges: () => {},
-  addNodes: () => {},
-  addEdges: () => {},
-  fitView: () => {},
-  zoomTo: () => {},
-  zoomIn: () => {},
-  zoomOut: () => {}
+  setNodes: () => undefined,
+  setEdges: () => undefined,
+  addNodes: () => undefined,
+  addEdges: () => undefined,
+  fitView: () => undefined,
+  zoomTo: () => undefined,
+  zoomIn: () => undefined,
+  zoomOut: () => undefined
 });
 
 export const Position = {

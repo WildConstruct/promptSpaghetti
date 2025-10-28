@@ -1,24 +1,18 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-interface Font {
-  id: string;
-  filename: string;
-  fontFamily: string;
-  fontWeight: string;
-  uploadedAt: string;
-}
+import type { ThemeFont } from './types';
 
 interface FontUploadSectionProps {
-  fonts?: Font[];
-  onChange: (fonts: Font[]) => void;
+  fonts?: ThemeFont[];
+  onChange: (fonts: ThemeFont[]) => void;
 }
 
 const FontUploadSection: React.FC<FontUploadSectionProps> = ({
   fonts = [],
   onChange
 }) => {
-  const [uploadedFonts, setUploadedFonts] = useState<Font[]>(fonts);
+  const [uploadedFonts, setUploadedFonts] = useState<ThemeFont[]>(fonts);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,7 +37,7 @@ const FontUploadSection: React.FC<FontUploadSectionProps> = ({
 
           const result = await response.json();
 
-          const newFont: Font = {
+          const newFont: ThemeFont = {
             id: result.id || Date.now().toString(),
             filename: file.name,
             fontFamily: result.fontFamily || file.name.replace(/\.[^/.]+$/, ''),

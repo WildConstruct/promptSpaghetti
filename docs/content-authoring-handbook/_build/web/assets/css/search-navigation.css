@@ -9,7 +9,8 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .search-header {

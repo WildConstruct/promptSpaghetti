@@ -3,6 +3,42 @@
 
 import { Node, Edge } from 'reactflow';
 
+type SimpleNodeType =
+  | 'textBlock'
+  | 'variable'
+  | 'output'
+  | 'weightedChoice'
+  | 'conditional'
+  | 'merge'
+  | 'concat';
+
+interface WeightedChoiceOption {
+  text: string;
+  weight: number;
+  metadata?: Record<string, unknown>;
+}
+
+interface GraphNodeData {
+  label: string;
+  content: string;
+  type: SimpleNodeType;
+  source?: string;
+  confidence?: number;
+  variableName?: string;
+  suggestions?: string[];
+  metadata?: Record<string, unknown>;
+  options?: WeightedChoiceOption[];
+  mergeStrategy?: string;
+  separator?: string;
+  preserveFormatting?: boolean;
+  preview?: string;
+  condition?: string;
+  intelligenceTags?: string[];
+}
+
+type GraphNode = Node<GraphNodeData>;
+type GraphEdge = Edge<Record<string, unknown> | undefined>;
+
 export interface LLMConfig {
   apiKey?: string;
   provider?: 'openrouter' | 'openai' | 'anthropic';
@@ -17,28 +53,33 @@ export interface ParseOptions {
   autoConnect?: boolean;
 }
 
+interface GraphIntelligence {
+  detectedVariables: string[];
+  hasChoices: boolean;
+  structureType: 'branching' | 'templated' | 'linear';
+  confidence: number;
+}
+
+export interface ParseResultMetadata {
+  parserMode: 'standard' | 'llm-enhanced';
+  parseTime: number;
+  llmUsed: boolean;
+  model?: string;
+  cost?: number;
+  intelligence?: GraphIntelligence;
+}
+
 export interface ParseResult {
-  nodes: Node[];
-  edges: Edge[];
-  metadata: {
-    parserMode: string;
-    parseTime: number;
-    llmUsed?: boolean;
-    model?: string;
-    cost?: number;
-    intelligence?: {
-      detectedVariables: string[];
-      hasChoices: boolean;
-      structureType: 'branching' | 'templated' | 'linear';
-      confidence: number;
-    };
-  };
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  metadata: ParseResultMetadata;
 }
 
 // Simple prompt parser that mimics LLM behavior for testing
 function standardParse(prompt: string): ParseResult {
-  const nodes: Node[] = [];
-  const edges: Edge[] = [];
+  const start = Date.now();
+  const nodes: GraphNode[] = [];
+  const edges: GraphEdge[] = [];
 
   // Split prompt into segments
   const segments = prompt.split(/[.!?]+/).filter(s => s.trim());
@@ -49,15 +90,17 @@ function standardParse(prompt: string): ParseResult {
     // Detect variables like {character} or [setting]
     const hasVariable = /\{[^}]+\}|\[[^\]]+\]/.test(segment);
 
+    const nodeData: GraphNodeData = {
+      label: segment.trim(),
+      content: segment.trim(),
+      type: hasVariable ? 'variable' : 'textBlock'
+    };
+
     nodes.push({
       id: nodeId,
-      type: hasVariable ? 'variable' : 'textBlock',
+      type: nodeData.type,
       position: { x: 100 + index * 200, y: 100 + (index % 2) * 100 },
-      data: {
-        label: segment.trim(),
-        content: segment.trim(),
-        type: hasVariable ? 'variable' : 'textBlock'
-      }
+      data: nodeData
     });
 
     // Connect to previous node
@@ -98,7 +141,7 @@ function standardParse(prompt: string): ParseResult {
     edges,
     metadata: {
       parserMode: 'standard',
-      parseTime: Date.now(),
+      parseTime: Date.now() - start,
       llmUsed: false
     }
   };
@@ -110,6 +153,204 @@ interface MolecularChunk {
   pos: string; // Part of speech
   description: string;
   semanticRole?: string;
+}
+
+interface SemanticGroup {
+  text: string;
+  chunks: MolecularChunk[];
+  semanticRole: string;
+  confidence: number;
+}
+
+interface ApiGraphNode {
+  id: string;
+  type: string;
+  data?: Record<string, unknown>;
+}
+
+interface ApiGraphEdge {
+  id?: string;
+  source: string;
+  target: string;
+  type?: string;
+  data?: Record<string, unknown>;
+}
+
+interface ApiGraphResponse {
+  nodes: ApiGraphNode[];
+  edges: ApiGraphEdge[];
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
+const SIMPLE_NODE_TYPES: ReadonlySet<SimpleNodeType> = new Set([
+  'textBlock',
+  'variable',
+  'output',
+  'weightedChoice',
+  'conditional',
+  'merge',
+  'concat'
+]);
+
+const toSimpleNodeType = (value: unknown): SimpleNodeType => {
+  if (typeof value !== 'string') {
+    return 'textBlock';
+  }
+  const lower = value.toLowerCase();
+  return SIMPLE_NODE_TYPES.has(lower as SimpleNodeType)
+    ? (lower as SimpleNodeType)
+    : 'textBlock';
+};
+
+const ensureString = (value: unknown, fallback = ''): string =>
+  typeof value === 'string' ? value : fallback;
+
+const ensureRecord = (value: unknown): Record<string, unknown> | undefined =>
+  isRecord(value) ? value : undefined;
+
+function normaliseApiGraph(raw: unknown): ApiGraphResponse | null {
+  if (!isRecord(raw)) {
+    return null;
+  }
+
+  const rawNodes = raw.nodes;
+  const rawEdges = raw.edges;
+
+  if (!Array.isArray(rawNodes) || !Array.isArray(rawEdges)) {
+    return null;
+  }
+
+  const nodes: ApiGraphNode[] = [];
+  for (const node of rawNodes) {
+    if (!isRecord(node)) {
+      return null;
+    }
+    const id = ensureString(node.id);
+    if (!id) {
+      return null;
+    }
+    nodes.push({
+      id,
+      type: ensureString(node.type, 'textBlock'),
+      data: ensureRecord(node.data)
+    });
+  }
+
+  const edges: ApiGraphEdge[] = [];
+  for (const edge of rawEdges) {
+    if (!isRecord(edge)) {
+      return null;
+    }
+    const source = ensureString(edge.source);
+    const target = ensureString(edge.target);
+    if (!source || !target) {
+      return null;
+    }
+    edges.push({
+      id: typeof edge.id === 'string' ? edge.id : undefined,
+      source,
+      target,
+      type: typeof edge.type === 'string' ? edge.type : undefined,
+      data: ensureRecord(edge.data)
+    });
+  }
+
+  return { nodes, edges };
+}
+
+function mapApiNodeToGraphNode(
+  apiNode: ApiGraphNode,
+  index: number
+): GraphNode {
+  const data = apiNode.data ?? {};
+  const label =
+    'label' in data && typeof data.label === 'string' ? data.label : '';
+  const content =
+    'content' in data && typeof data.content === 'string'
+      ? data.content
+      : label;
+
+  let metadata: Record<string, unknown> | undefined;
+  if ('metadata' in data) {
+    const rawMetadata = (data as { metadata?: unknown }).metadata;
+    metadata = ensureRecord(rawMetadata);
+  }
+
+  const nodeData: GraphNodeData = {
+    label,
+    content,
+    type: toSimpleNodeType(apiNode.type),
+    metadata
+  };
+
+  if ('variableName' in data && typeof data.variableName === 'string') {
+    nodeData.variableName = data.variableName;
+  }
+
+  if ('options' in data && Array.isArray(data.options)) {
+    const options: WeightedChoiceOption[] = data.options
+      .map(option => {
+        if (!isRecord(option)) return null;
+        const text = ensureString(option.text);
+        if (!text) return null;
+        const weightRaw = option.weight;
+        const weight =
+          typeof weightRaw === 'number' && Number.isFinite(weightRaw)
+            ? weightRaw
+            : 1;
+        return {
+          text,
+          weight,
+          metadata: ensureRecord(option.metadata)
+        };
+      })
+      .filter((opt): opt is WeightedChoiceOption => Boolean(opt));
+    if (options.length > 0) {
+      nodeData.options = options;
+    }
+  }
+
+  return {
+    id: apiNode.id,
+    type: nodeData.type,
+    position: { x: 120 + index * 180, y: 150 },
+    data: nodeData
+  };
+}
+
+function mapApiEdgeToGraphEdge(
+  apiEdge: ApiGraphEdge,
+  index: number
+): GraphEdge {
+  return {
+    id: apiEdge.id ?? `edge-${index}`,
+    source: apiEdge.source,
+    target: apiEdge.target,
+    type: apiEdge.type ?? 'default',
+    data: apiEdge.data
+  };
+}
+
+function extractMessageContent(payload: unknown): string | null {
+  if (!isRecord(payload)) {
+    return null;
+  }
+  const choices = payload.choices;
+  if (!Array.isArray(choices) || choices.length === 0) {
+    return null;
+  }
+  const firstChoice = choices[0];
+  if (!isRecord(firstChoice)) {
+    return null;
+  }
+  const message = firstChoice.message;
+  if (!isRecord(message)) {
+    return null;
+  }
+  const content = message.content;
+  return typeof content === 'string' ? content : null;
 }
 
 // Call OpenRouter API for actual LLM parsing
@@ -177,26 +418,46 @@ Identify variables (enclosed in {}, [], or <>), choices (or patterns), and maint
       throw new Error(`API error: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json();
-    const result = JSON.parse(data.choices[0].message.content);
+    const payload = (await response.json()) as unknown;
+    const content = extractMessageContent(payload);
+    if (!content) {
+      throw new Error('OpenRouter response missing content');
+    }
 
-    // Add output node if not present
-    const hasOutput = result.nodes.some((n: any) => n.type === 'output');
-    if (!hasOutput) {
-      const outputId = `output-${result.nodes.length}`;
-      result.nodes.push({
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(content);
+    } catch {
+      throw new Error('OpenRouter response content is not valid JSON');
+    }
+
+    const normalised = normaliseApiGraph(parsed);
+    if (!normalised) {
+      throw new Error('OpenRouter response does not match expected schema');
+    }
+
+    const nodes = normalised.nodes.map(mapApiNodeToGraphNode);
+    const edges = normalised.edges.map(mapApiEdgeToGraphEdge);
+
+    if (!nodes.some(node => node.type === 'output')) {
+      const outputId = `output-${nodes.length}`;
+      const outputNode: GraphNode = {
         id: outputId,
         type: 'output',
+        position: { x: 120 + nodes.length * 180, y: 220 },
         data: {
           label: 'Generated Output',
-          content: ''
+          content: '',
+          type: 'output'
         }
-      });
+      };
+      nodes.push(outputNode);
 
-      if (result.nodes.length > 1) {
-        result.edges.push({
-          id: `edge-output`,
-          source: result.nodes[result.nodes.length - 2].id,
+      if (nodes.length > 1) {
+        const previous = nodes[nodes.length - 2];
+        edges.push({
+          id: `edge-${edges.length}`,
+          source: previous.id,
           target: outputId,
           type: 'default'
         });
@@ -204,11 +465,11 @@ Identify variables (enclosed in {}, [], or <>), choices (or patterns), and maint
     }
 
     return {
-      nodes: result.nodes,
-      edges: result.edges,
+      nodes,
+      edges,
       metadata: {
         parserMode: 'llm-enhanced',
-        parseTime: Date.now(),
+        parseTime: 0,
         llmUsed: true,
         model: config.model || 'openai/gpt-3.5-turbo',
         cost: 0.0002
@@ -225,7 +486,6 @@ async function llmEnhancedParse(
   prompt: string,
   config: LLMConfig
 ): Promise<ParseResult> {
-  // Try actual API call first if configured
   if (config.apiKey && config.apiKey !== 'demo') {
     const apiResult = await callOpenRouterAPI(prompt, config);
     if (apiResult) {
@@ -233,83 +493,68 @@ async function llmEnhancedParse(
     }
   }
 
-  // Fallback to local parsing with simulated delay
   await new Promise(resolve => setTimeout(resolve, 800));
 
-  const nodes: Node[] = [];
-  const edges: Edge[] = [];
-
-  // Perform molecular chunking with POS tagging and semantic analysis
   const chunks = performMolecularChunking(prompt);
-
-  // Group chunks into semantic units for node creation
   const semanticGroups = groupChunksIntoSemanticUnits(chunks);
 
-  // Create nodes from semantic groups
-  let nodeIndex = 0;
+  const nodes: GraphNode[] = [];
+  const edges: GraphEdge[] = [];
   let previousNodeId: string | null = null;
+  let nodeCounter = 0;
   const detectedVariables = new Set<string>();
   let hasChoices = false;
   let hasBranching = false;
 
+  const variablePattern = /\{([^}]+)\}|\[([^\]]+)\]|<([^>]+)>/g;
+
   semanticGroups.forEach((group, groupIndex) => {
-    const nodeId = `node-${nodeIndex++}`;
-    let nodeType = 'textBlock';
-    let nodeData: any = {
+    const nodeId = `node-${nodeCounter++}`;
+    let nodeType: SimpleNodeType = 'textBlock';
+
+    const nodeData: GraphNodeData = {
       label: group.text,
       content: group.text,
-      type: 'textBlock',
+      type: nodeType,
       metadata: {
-        chunks: group.chunks,
         semanticRole: group.semanticRole,
-        confidence: group.confidence
+        confidence: group.confidence,
+        chunkCount: group.chunks.length
       }
     };
 
-    // Detect variables in molecular chunks
-    const variablePattern = /\{([^}]+)\}|\[([^\]]+)\]|<([^>]+)>/g;
-    const varMatches = group.text.matchAll(variablePattern);
-    const foundVars = Array.from(varMatches) as RegExpMatchArray[];
-
-    if (foundVars.length > 0) {
-      nodeType = 'variable';
-      nodeData.type = 'variable';
-      nodeData.variableName =
-        foundVars[0][1] || foundVars[0][2] || foundVars[0][3];
-      detectedVariables.add(nodeData.variableName);
-
-      // Intelligent suggestions based on semantic analysis
-      nodeData.suggestions = generateSmartSuggestions(
-        nodeData.variableName,
-        group.chunks
-      );
+    const variableMatches = Array.from(group.text.matchAll(variablePattern));
+    if (variableMatches.length > 0) {
+      const firstMatch = variableMatches[0];
+      const rawName =
+        firstMatch[1] || firstMatch[2] || firstMatch[3] || firstMatch[0];
+      const variableName = rawName
+        .replace(/[{}<>]/g, '')
+        .replace(/\[|\]/g, '')
+        .trim();
+      if (variableName) {
+        nodeType = 'variable';
+        nodeData.type = 'variable';
+        nodeData.variableName = variableName;
+        nodeData.suggestions = generateSmartSuggestions(
+          variableName,
+          group.chunks
+        );
+        detectedVariables.add(variableName);
+      }
     }
 
-    // Detect choice patterns from POS analysis
-    const hasChoiceWords = group.chunks.some(
-      (chunk: any) =>
-        chunk.pos === 'conjunction' && /\b(or|either)\b/i.test(chunk.text)
-    );
-
-    if (hasChoiceWords || group.semanticRole === 'choice') {
-      hasChoices = true;
-      hasBranching = true;
+    const choiceOptions = extractOptionsFromChunks(group.chunks);
+    if (choiceOptions.length > 1 || group.semanticRole === 'choice') {
       nodeType = 'weightedChoice';
       nodeData.type = 'weightedChoice';
-
-      // Extract options using molecular chunks
-      const options = extractOptionsFromChunks(group.chunks);
-      nodeData.options = options.map((opt, i) => ({
-        text: opt.text,
-        weight: opt.weight || 1.0 / options.length,
-        metadata: opt.metadata
-      }));
+      nodeData.options = choiceOptions;
+      hasChoices = true;
+      hasBranching = true;
     }
 
-    // Detect conditional patterns
-    const hasConditional = group.chunks.some(
-      (chunk: any) =>
-        chunk.pos === 'conditional' || /\b(if|when|unless)\b/i.test(chunk.text)
+    const hasConditional = group.chunks.some(chunk =>
+      chunk.pos === 'conditional' || /\b(if|when|unless)\b/i.test(chunk.text)
     );
 
     if (hasConditional) {
@@ -319,8 +564,7 @@ async function llmEnhancedParse(
       hasBranching = true;
     }
 
-    // Smart positioning based on semantic structure
-    const position = calculateSmartPosition(groupIndex, nodeType, hasBranching);
+    const position = calculateSmartPosition(nodes.length, nodeType, hasBranching);
 
     nodes.push({
       id: nodeId,
@@ -329,20 +573,16 @@ async function llmEnhancedParse(
       data: nodeData
     });
 
-    // Create intelligent edge connections
     if (previousNodeId) {
+      const previousGroup = semanticGroups[groupIndex - 1];
       edges.push({
         id: `edge-${edges.length}`,
         source: previousNodeId,
         target: nodeId,
-        type: 'smoothstep',
-        animated: nodeType === 'variable' || nodeType === 'conditional',
+        type: nodeType === 'textBlock' ? 'default' : 'smoothstep',
         data: {
-          label: getEdgeLabel(semanticGroups[groupIndex - 1], group),
-          confidence: Math.min(
-            semanticGroups[groupIndex - 1].confidence,
-            group.confidence
-          )
+          label: getEdgeLabel(previousGroup, group),
+          confidence: Math.min(previousGroup.confidence, group.confidence)
         }
       });
     }
@@ -350,25 +590,25 @@ async function llmEnhancedParse(
     previousNodeId = nodeId;
   });
 
-  // Add intelligent combination nodes if needed
   if (nodes.length > 2 && hasBranching) {
-    const mergeId = `merge-${nodeIndex++}`;
+    const mergeId = `merge-${nodeCounter++}`;
+    const mergeNode: GraphNodeData = {
+      label: 'Merge Paths',
+      content: '',
+      type: 'merge',
+      mergeStrategy: 'intelligent'
+    };
+
     nodes.push({
       id: mergeId,
       type: 'merge',
       position: calculateSmartPosition(nodes.length, 'merge', hasBranching),
-      data: {
-        label: 'Merge Paths',
-        content: '',
-        type: 'merge',
-        mergeStrategy: 'intelligent'
-      }
+      data: mergeNode
     });
 
-    // Connect branch endpoints to merge
     if (previousNodeId) {
       edges.push({
-        id: `edge-merge`,
+        id: `edge-${edges.length}`,
         source: previousNodeId,
         target: mergeId,
         type: 'smoothstep'
@@ -377,25 +617,26 @@ async function llmEnhancedParse(
     previousNodeId = mergeId;
   }
 
-  // Add concatenation node for multi-part outputs
   if (nodes.length > 1 && detectedVariables.size > 0) {
-    const concatId = `concat-${nodeIndex++}`;
+    const concatId = `concat-${nodeCounter++}`;
+    const concatNode: GraphNodeData = {
+      label: 'Assemble Output',
+      content: '',
+      type: 'concat',
+      separator: ' ',
+      preserveFormatting: true
+    };
+
     nodes.push({
       id: concatId,
       type: 'concat',
       position: calculateSmartPosition(nodes.length, 'concat', hasBranching),
-      data: {
-        label: 'Assemble Output',
-        content: '',
-        type: 'concat',
-        separator: ' ',
-        preserveFormatting: true
-      }
+      data: concatNode
     });
 
     if (previousNodeId) {
       edges.push({
-        id: `edge-concat`,
+        id: `edge-${edges.length}`,
         source: previousNodeId,
         target: concatId,
         type: 'smoothstep'
@@ -404,32 +645,32 @@ async function llmEnhancedParse(
     previousNodeId = concatId;
   }
 
-  // Add output node with rich metadata
-  const outputId = `output-${nodeIndex}`;
+  const outputId = `output-${nodeCounter}`;
+  const outputNode: GraphNodeData = {
+    label: 'Generated Output',
+    content: '',
+    type: 'output',
+    preview: generatePreview(prompt, chunks),
+    metadata: {
+      totalChunks: chunks.length,
+      semanticGroups: semanticGroups.length,
+      complexity: calculateComplexity(chunks, semanticGroups)
+    }
+  };
+
   nodes.push({
     id: outputId,
     type: 'output',
     position: calculateSmartPosition(nodes.length, 'output', hasBranching),
-    data: {
-      label: 'Generated Output',
-      content: '',
-      type: 'output',
-      preview: generatePreview(prompt, chunks),
-      metadata: {
-        totalChunks: chunks.length,
-        semanticGroups: semanticGroups.length,
-        complexity: calculateComplexity(chunks, semanticGroups)
-      }
-    }
+    data: outputNode
   });
 
   if (previousNodeId) {
     edges.push({
-      id: `edge-output`,
+      id: `edge-${edges.length}`,
       source: previousNodeId,
       target: outputId,
       type: 'smoothstep',
-      animated: true,
       data: {
         label: 'Final Output',
         confidence: 0.95
@@ -437,16 +678,15 @@ async function llmEnhancedParse(
     });
   }
 
-  // Return with comprehensive metadata
   return {
     nodes,
     edges,
     metadata: {
       parserMode: 'llm-enhanced',
-      parseTime: Date.now(),
+      parseTime: 0,
       llmUsed: true,
       model: config.model || 'gpt-3.5-turbo',
-      cost: 0.0002, // Higher cost for more intelligent parsing
+      cost: 0.0002,
       intelligence: {
         detectedVariables: Array.from(detectedVariables),
         hasChoices,
@@ -455,7 +695,7 @@ async function llmEnhancedParse(
           : detectedVariables.size > 0
             ? 'templated'
             : 'linear',
-        confidence: 0.92
+        confidence: Math.min(0.92, 0.6 + semanticGroups.length * 0.05)
       }
     }
   };
@@ -630,131 +870,101 @@ function performMolecularChunking(prompt: string): MolecularChunk[] {
 }
 
 // Helper function: Group molecular chunks into semantic units
-function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
-  const groups: any[] = [];
-  let currentGroup: any = {
+function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): SemanticGroup[] {
+  const groups: SemanticGroup[] = [];
+
+  let currentGroup: SemanticGroup = {
     text: '',
     chunks: [],
     semanticRole: 'descriptor',
-    confidence: 1.0
+    confidence: 1
   };
 
-  // More intelligent grouping based on semantic boundaries
+  const pushGroup = (): void => {
+    const text = currentGroup.chunks.map(chunk => chunk.text).join('').trim();
+    if (!text || /^[.,;:!?]+$/.test(text)) {
+      currentGroup = {
+        text: '',
+        chunks: [],
+        semanticRole: 'statement',
+        confidence: 1
+      };
+      return;
+    }
+
+    currentGroup = {
+      text,
+      chunks: [...currentGroup.chunks],
+      semanticRole: determineSemanticRole(currentGroup.chunks),
+      confidence: currentGroup.confidence
+    };
+    groups.push(currentGroup);
+
+    currentGroup = {
+      text: '',
+      chunks: [],
+      semanticRole: 'statement',
+      confidence: 1
+    };
+  };
+
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
-    const nextChunk = chunks[i + 1];
-    const prevChunk = chunks[i - 1];
-
-    // Add current chunk to group
     currentGroup.chunks.push(chunk);
 
-    // Determine if we should create a new group
+    const nextChunk = chunks[i + 1];
     let shouldBreak = false;
 
-    // Major punctuation creates natural breaks
     if (chunk.pos === 'punctuation' && /[.!?]/.test(chunk.text)) {
       shouldBreak = true;
-    }
-    // Don't break on commas - keep phrases together
-    // Only break on commas if we have accumulated a significant amount of text
-    else if (chunk.pos === 'punctuation' && chunk.text === ',' && nextChunk) {
-      // Only break if we have at least 5 chunks accumulated
+    } else if (chunk.pos === 'punctuation' && chunk.text === ',' && nextChunk) {
       if (currentGroup.chunks.length > 5) {
         shouldBreak = true;
       }
-    }
-    // Keep person descriptors together (avoid breaking "tall dark-skinned model")
-    else if (
-      chunk.text.toLowerCase() === 'model' ||
-      chunk.text.toLowerCase() === 'person'
+    } else if (
+      (chunk.text.toLowerCase() === 'model' || chunk.text.toLowerCase() === 'person') &&
+      nextChunk &&
+      nextChunk.pos !== 'adjective' &&
+      nextChunk.pos !== 'preposition'
     ) {
-      // Only break if the next chunk is not an adjective or related descriptor
-      if (
-        nextChunk &&
-        nextChunk.pos !== 'adjective' &&
-        nextChunk.pos !== 'preposition'
-      ) {
-        shouldBreak = true; // Break after the noun
-      }
-    }
-    // Break after major noun phrases only if they are substantial
-    else if (
+      shouldBreak = true;
+    } else if (
       (chunk.pos === 'domain-noun' || chunk.pos === 'noun') &&
-      nextChunk
+      nextChunk &&
+      (nextChunk.pos === 'action-verb' || nextChunk.text === '.') &&
+      currentGroup.chunks.length > 3
     ) {
-      // Only break if we're transitioning to a new clause or action
-      if (
-        (nextChunk.pos === 'action-verb' || nextChunk.text === '.') &&
-        currentGroup.chunks.length > 3
-      ) {
-        shouldBreak = true;
-      }
-    }
-    // Choice patterns
-    else if (chunk.pos === 'conjunction' && /^(or)$/i.test(chunk.text)) {
-      // Break before 'or' to separate choices
-      currentGroup.chunks.pop(); // Remove 'or' from current group
+      shouldBreak = true;
+    } else if (chunk.pos === 'conjunction' && /^or$/i.test(chunk.text)) {
+      currentGroup.chunks.pop();
       if (currentGroup.chunks.length > 0) {
-        currentGroup.text = currentGroup.chunks
-          .map((c: any) => c.text)
-          .join(' ')
-          .trim();
-        groups.push(currentGroup);
+        pushGroup();
       }
-      // Create 'or' as its own group
       groups.push({
         text: chunk.text,
         chunks: [chunk],
         semanticRole: 'choice',
-        confidence: 1.0
+        confidence: 1
       });
       currentGroup = {
         text: '',
         chunks: [],
         semanticRole: 'alternative',
-        confidence: 1.0
+        confidence: 1
       };
-      shouldBreak = false;
+      continue;
     }
 
-    // Execute break if needed
     if (shouldBreak) {
-      // Join chunks without adding spaces - preserve original spacing
-      currentGroup.text = currentGroup.chunks
-        .map((c: any) => c.text)
-        .join('')
-        .trim();
-      if (
-        currentGroup.text &&
-        currentGroup.text !== '.' &&
-        !/^[.,;:!?]+$/.test(currentGroup.text)
-      ) {
-        groups.push(currentGroup);
-      }
-      currentGroup = {
-        text: '',
-        chunks: [],
-        semanticRole: 'statement',
-        confidence: 1.0
-      };
+      pushGroup();
     }
   }
 
-  // Add final group - IMPORTANT: capture any remaining text
   if (currentGroup.chunks.length > 0) {
-    // Join chunks without adding spaces - preserve original spacing
-    currentGroup.text = currentGroup.chunks
-      .map((c: any) => c.text)
-      .join('')
-      .trim();
-    if (currentGroup.text && currentGroup.text !== '.') {
-      // Don't create groups for standalone punctuation
-      groups.push(currentGroup);
-    }
+    pushGroup();
   }
 
-  // Filter out any groups that are just punctuation
-  return groups.filter(g => g.text && !/^[.,;:!?]+$/.test(g.text));
+  return groups;
 }
 
 // Helper to determine semantic role based on chunk types
@@ -806,8 +1016,10 @@ function generateSmartSuggestions(
 }
 
 // Helper function: Extract options from molecular chunks
-function extractOptionsFromChunks(chunks: MolecularChunk[]): any[] {
-  const options: any[] = [];
+function extractOptionsFromChunks(
+  chunks: MolecularChunk[]
+): WeightedChoiceOption[] {
+  const options: WeightedChoiceOption[] = [];
   let currentOption = '';
 
   chunks.forEach(chunk => {
@@ -815,7 +1027,7 @@ function extractOptionsFromChunks(chunks: MolecularChunk[]): any[] {
       if (currentOption.trim()) {
         options.push({
           text: currentOption.trim(),
-          weight: 1.0,
+          weight: 1,
           metadata: { source: 'molecular_parsing' }
         });
         currentOption = '';
@@ -828,14 +1040,28 @@ function extractOptionsFromChunks(chunks: MolecularChunk[]): any[] {
   if (currentOption.trim()) {
     options.push({
       text: currentOption.trim(),
-      weight: 1.0,
+      weight: 1,
       metadata: { source: 'molecular_parsing' }
     });
   }
 
-  return options.length > 0
-    ? options
-    : [{ text: chunks.map(c => c.text).join(' '), weight: 1.0 }];
+  if (options.length === 0) {
+    const fallbackText = chunks.map(chunk => chunk.text).join(' ').trim();
+    if (fallbackText) {
+      options.push({ text: fallbackText, weight: 1 });
+    }
+  }
+
+  if (options.length === 0) {
+    options.push({ text: 'Option', weight: 1 });
+  }
+
+  const normalisedWeight = 1 / options.length;
+  return options.map(option => ({
+    text: option.text,
+    weight: option.weight ?? normalisedWeight,
+    metadata: option.metadata
+  }));
 }
 
 // Helper function: Extract condition from chunks
@@ -853,7 +1079,7 @@ function extractConditionFromChunks(chunks: MolecularChunk[]): string {
 // Helper function: Calculate smart positioning for nodes
 function calculateSmartPosition(
   index: number,
-  nodeType: string,
+  nodeType: SimpleNodeType,
   hasBranching: boolean
 ): { x: number; y: number } {
   const baseX = 100;
@@ -890,7 +1116,7 @@ function calculateSmartPosition(
 }
 
 // Helper function: Get edge label based on semantic relationship
-function getEdgeLabel(fromGroup: any, toGroup: any): string {
+function getEdgeLabel(fromGroup: SemanticGroup, toGroup: SemanticGroup): string {
   if (
     fromGroup.semanticRole === 'condition' &&
     toGroup.semanticRole === 'statement'
@@ -916,7 +1142,10 @@ function generatePreview(prompt: string, chunks: MolecularChunk[]): string {
 }
 
 // Helper function: Calculate complexity score
-function calculateComplexity(chunks: MolecularChunk[], groups: any[]): number {
+function calculateComplexity(
+  chunks: MolecularChunk[],
+  groups: SemanticGroup[]
+): number {
   const varCount = chunks.filter(c => c.pos === 'variable').length;
   const choiceCount = chunks.filter(
     c => c.pos === 'conjunction' && /or/i.test(c.text)
@@ -997,15 +1226,6 @@ let serviceInstance: SimpleLLMService | null = null;
 
 export function getLLMService(): SimpleLLMService {
   if (!serviceInstance) {
-    // Check for API key in environment or localStorage
-    let envApiKey: string | undefined;
-
-    // Check if we're in a browser with Vite
-    if (typeof window !== 'undefined' && (window as any).__VITE__) {
-      // In Vite environment, env vars are injected differently
-      // We'll rely on localStorage config for now
-    }
-
     const storedConfig =
       typeof localStorage !== 'undefined'
         ? localStorage.getItem('llm-config')

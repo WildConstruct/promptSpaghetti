@@ -146,7 +146,9 @@ export class TestDataPersistence {
     storedData.metadata.updatedAt = new Date().toISOString();
 
     // Save updated metadata (fire and forget)
-    this.updateMetadata(key, storedData.metadata).catch(() => {});
+    this.updateMetadata(key, storedData.metadata).catch((error) => {
+      console.warn(`Failed to update metadata for key ${key}:`, error);
+    });
 
     return this.deserialize(storedData.data);
   }
@@ -216,13 +218,13 @@ export class TestDataPersistence {
 
     switch (this.config.storage) {
       case 'file':
-        results = await this.queryFiles(options);
+        results = await this.queryFiles();
         break;
       case 'memory':
-        results = this.queryMemory(options);
+        results = this.queryMemory();
         break;
       case 'sqlite':
-        results = await this.querySQLite(options);
+        results = await this.querySQLite();
         break;
     }
 
@@ -429,7 +431,7 @@ export class TestDataPersistence {
     }
   }
 
-  private async queryFiles(options: QueryOptions): Promise<StoredTestData[]> {
+  private async queryFiles(): Promise<StoredTestData[]> {
     const results: StoredTestData[] = [];
     const filesDir = path.join(this.config.directory, 'files');
 
@@ -466,7 +468,7 @@ export class TestDataPersistence {
 
   // Memory storage methods
 
-  private queryMemory(options: QueryOptions): StoredTestData[] {
+  private queryMemory(): StoredTestData[] {
     return Array.from(this.memoryStore.values());
   }
 
@@ -503,7 +505,9 @@ export class TestDataPersistence {
   }
 
   private async storeToSQLite(storedData: StoredTestData): Promise<void> {
-    if (!this.sqliteDb) return;
+    if (!this.sqliteDb) {
+      return;
+    }
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
     await run(
@@ -530,14 +534,18 @@ export class TestDataPersistence {
   private async retrieveFromSQLite(
     key: string
   ): Promise<StoredTestData | null> {
-    if (!this.sqliteDb) return null;
+    if (!this.sqliteDb) {
+      return null;
+    }
 
     const get = promisify(this.sqliteDb.get.bind(this.sqliteDb));
     const row = (await get('SELECT * FROM test_data WHERE key = ?', [
       key
     ])) as unknown;
 
-    if (!row) return null;
+    if (!row) {
+      return null;
+    }
 
     return {
       id: row.id,
@@ -560,7 +568,9 @@ export class TestDataPersistence {
   }
 
   private async deleteFromSQLite(key: string): Promise<boolean> {
-    if (!this.sqliteDb) return false;
+    if (!this.sqliteDb) {
+      return false;
+    }
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
     const result = (await run('DELETE FROM test_data WHERE key = ?', [
@@ -569,8 +579,10 @@ export class TestDataPersistence {
     return result.changes > 0;
   }
 
-  private async querySQLite(options: QueryOptions): Promise<StoredTestData[]> {
-    if (!this.sqliteDb) return [];
+  private async querySQLite(): Promise<StoredTestData[]> {
+    if (!this.sqliteDb) {
+      return [];
+    }
 
     const all = promisify(this.sqliteDb.all.bind(this.sqliteDb));
     const rows = (await all('SELECT * FROM test_data')) as unknown[];
@@ -592,7 +604,9 @@ export class TestDataPersistence {
   }
 
   private async clearSQLite(): Promise<void> {
-    if (!this.sqliteDb) return;
+    if (!this.sqliteDb) {
+      return;
+    }
 
     const run = promisify(this.sqliteDb.run.bind(this.sqliteDb));
     await run('DELETE FROM test_data');
@@ -644,7 +658,9 @@ export class TestDataPersistence {
         const hasMatchingTag = options.tags.some(tag =>
           item.metadata.tags.includes(tag)
         );
-        if (!hasMatchingTag) return false;
+        if (!hasMatchingTag) {
+          return false;
+        }
       }
 
       // Filter by date range

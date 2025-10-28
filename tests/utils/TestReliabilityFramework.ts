@@ -1,8 +1,8 @@
 /**
- * Test Reliability Framework - Advanced utilities for test stability and reliability
- * 
- * Provides retry strategies, flaky test detection, timing utilities, and test isolation
- * helpers to ensure consistent and reliable test execution across all environments.
+ * Test Reliability Framework - utilities for improving test stability.
+ *
+ * Provides retry helpers, timing utilities, flaky test detection, and
+ * environment validation that we can lean on across suites.
  */
 
 export interface RetryConfig {
@@ -11,14 +11,14 @@ export interface RetryConfig {
   exponentialBackoff: boolean;
   baseDelayMs: number;
   maxDelayMs: number;
-
+}
 
 export interface TimeoutConfig {
   unit: number;
   integration: number;
   e2e: number;
   performance: number;
-
+}
 
 export interface TestMetrics {
   startTime: number;
@@ -28,7 +28,7 @@ export interface TestMetrics {
   success: boolean;
   error?: string;
   memoryUsage?: number;
-
+}
 
 export interface FlakyTestDetection {
   testName: string;
@@ -38,228 +38,235 @@ export interface FlakyTestDetection {
   successRate: number;
   isFlaky: boolean;
   commonFailures: string[];
+}
 
+interface PerformanceMetrics {
+  duration: number;
+  memoryDelta: number;
+  startMemory: number;
+  endMemory: number;
+  operationName: string;
+  timestamp: number;
+}
+
+interface EnvironmentValidation {
+  memoryAvailable: number;
+  diskSpaceAvailable: number;
+  networkConnectivity: boolean;
+  databaseConnection: boolean;
+  requiredServices: string[];
+  isValid: boolean;
+  warnings: string[];
+  errors: string[];
+}
+
+interface TestReliabilityReport {
+  timestamp: number;
+  totalTests: number;
+  totalRuns: number;
+  overallSuccessRate: number;
+  averageRetries: number;
+  flakyTests: FlakyTestDetection[];
+  recommendations: string[];
+}
+
+const DEFAULT_RETRY_CONFIG: RetryConfig = {
+  maxRetries: 3,
+  retryConditions: [
+    'network timeout',
+    'element not found',
+    'connection refused',
+    'temporary failure',
+    'flaky assertion'
+  ],
+  exponentialBackoff: true,
+  baseDelayMs: 1000,
+  maxDelayMs: 10000
+};
+
+const DEFAULT_TIMEOUT_CONFIG: TimeoutConfig = {
+  unit: 5000,
+  integration: 30000,
+  e2e: 60000,
+  performance: 120000
+};
+
+const now = (): number => {
+  if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+    return performance.now();
+  }
+
+  return Date.now();
+};
 
 export class TestReliabilityFramework {
-  private static instance: TestReliabilityFramework;
-  private testMetrics: Map<string, TestMetrics[]> = new Map();
-  private retryConfig: RetryConfig;
-  private timeoutConfig: TimeoutConfig;
+  private static instance: TestReliabilityFramework | null = null;
 
-  constructor() {
-    this.retryConfig = {
-      maxRetries: 3,
-      retryConditions: [
-        'network timeout',
-        'element not found',
-        'connection refused',
-        'temporary failure',
-        'flaky assertion'
-      ],
-      exponentialBackoff: true,
-      baseDelayMs: 1000,
-      maxDelayMs: 10000
-    };
+  private readonly testMetrics: Map<string, TestMetrics[]> = new Map();
+  private readonly retryConfig: RetryConfig;
+  private readonly timeoutConfig: TimeoutConfig;
 
-    this.timeoutConfig = {
-      unit: 5000,        // 5 seconds
-      integration: 30000, // 30 seconds
-      e2e: 60000,        // 60 seconds
-      performance: 120000 // 2 minutes
-    };
-
+  private constructor(
+    retryConfig: Partial<RetryConfig> = {},
+    timeoutConfig: Partial<TimeoutConfig> = {}
+  ) {
+    this.retryConfig = { ...DEFAULT_RETRY_CONFIG, ...retryConfig };
+    this.timeoutConfig = { ...DEFAULT_TIMEOUT_CONFIG, ...timeoutConfig };
+  }
 
   static getInstance(): TestReliabilityFramework {
     if (!TestReliabilityFramework.instance) {
       TestReliabilityFramework.instance = new TestReliabilityFramework();
+    }
 
     return TestReliabilityFramework.instance;
+  }
 
-
-  /**
-   * Execute test with retry logic and reliability tracking
-   */
   async executeWithRetry<T>(
     testFn: () => Promise<T>,
     testName: string,
-    customConfig?: Partial<RetryConfig>
+    customConfig: Partial<RetryConfig> = {}
   ): Promise<T> {
-    const config = { ...this.retryConfig, ...customConfig };
+    const config: RetryConfig = { ...this.retryConfig, ...customConfig };
     const metrics: TestMetrics = {
       startTime: Date.now(),
       endTime: 0,
       duration: 0,
       retryCount: 0,
-      success: false
+      success: false,
+      memoryUsage: undefined
     };
 
-    let lastError: Error | null = null;
+    let lastError: Error | undefined;
 
-    for (let attempt = 0; attempt <= config.maxRetries; attempt++) {
+    for (let attempt = 0; attempt <= config.maxRetries; attempt += 1) {
       try {
         if (attempt > 0) {
-          // Apply exponential backoff delay
-          const delay = config.exponentialBackoff
+          metrics.retryCount = attempt;
+          const delayMs = config.exponentialBackoff
             ? Math.min(config.baseDelayMs * Math.pow(2, attempt - 1), config.maxDelayMs)
             : config.baseDelayMs;
-          
-          console.log(`🔄 Retrying test "${testName}" (attempt ${attempt + 1}/${config.maxRetries + 1}) after ${delay}ms delay`);
-          await this.delay(delay);
-
+          await this.delay(delayMs);
+        }
 
         const result = await testFn();
-        
         metrics.success = true;
-        metrics.retryCount = attempt;
         this.recordMetrics(testName, metrics);
-        
-        if (attempt > 0) {
-          console.log(`✅ Test "${testName}" succeeded on retry attempt ${attempt + 1}`);
-
-        
         return result;
- catch (error) {
+      } catch (error) {
         lastError = error as Error;
-        metrics.retryCount = attempt + 1;
-        
-        // Check if this error is retryable
-        const isRetryable = this.isRetryableError(error as Error, config);
-        
+        const isRetryable = this.isRetryableError(lastError, config);
+
         if (!isRetryable || attempt === config.maxRetries) {
           metrics.success = false;
           metrics.error = lastError.message;
           this.recordMetrics(testName, metrics);
-          
-          if (isRetryable && attempt === config.maxRetries) {
-            console.error(`❌ Test "${testName}" failed after ${config.maxRetries + 1} attempts`);
-
-          
           throw lastError;
+        }
+      }
+    }
 
-        
-        console.warn(`⚠️ Test "${testName}" failed on attempt ${attempt + 1}: ${lastError.message}`);
+    throw lastError ?? new Error(`Test "${testName}" failed without throwing an error instance.`);
+  }
 
-
-
-    throw lastError!;
-
-
-  /**
-   * Wait for condition with timeout and retry logic
-   */
   async waitForCondition(
     condition: () => boolean | Promise<boolean>,
-    timeoutMs: number = 5000,
-    intervalMs: number = 100,
-    description: string = 'condition'
+    timeoutMs = this.timeoutConfig.unit,
+    intervalMs = 100
   ): Promise<void> {
-    const startTime = Date.now();
-    
-    while (Date.now() - startTime < timeoutMs) {
+    const start = Date.now();
+
+    while (Date.now() - start < timeoutMs) {
       try {
         const result = await condition();
         if (result) {
           return;
+        }
+      } catch {
+        // Continue polling until timeout.
+      }
 
- catch (error) {
-        // Continue waiting unless timeout exceeded
-
-      
       await this.delay(intervalMs);
+    }
 
-    
-    throw new Error(`Timeout waiting for ${description} after ${timeoutMs}ms`);
+    throw new Error(`Timeout waiting for condition after ${timeoutMs}ms`);
+  }
 
-
-  /**
-   * Wait for element to be stable (no changes for specified duration)
-   */
   async waitForStable<T>(
     getValue: () => T | Promise<T>,
-    stableDurationMs: number = 1000,
-    maxWaitMs: number = 10000,
-    description: string = 'value'
+    stableDurationMs = 1000,
+    maxWaitMs = 10000
   ): Promise<T> {
-    const startTime = Date.now();
-    let lastValue: T;
-    let lastChangeTime = Date.now();
-    
-    while (Date.now() - startTime < maxWaitMs) {
+    const start = Date.now();
+    let lastValue: T | undefined;
+    let lastChange = Date.now();
+
+    while (Date.now() - start < maxWaitMs) {
       const currentValue = await getValue();
-      
-      if (currentValue !== lastValue) {
+      if (lastValue !== currentValue) {
         lastValue = currentValue;
-        lastChangeTime = Date.now();
+        lastChange = Date.now();
+      }
 
-      
-      // Check if value has been stable for required duration
-      if (Date.now() - lastChangeTime >= stableDurationMs) {
+      if (Date.now() - lastChange >= stableDurationMs) {
         return currentValue;
+      }
 
-      
-      await this.delay(50); // Check every 50ms
+      await this.delay(50);
+    }
 
-    
-    throw new Error(`Timeout waiting for ${description} to be stable after ${maxWaitMs}ms`);
+    throw new Error(`Timeout waiting for value to stabilize after ${maxWaitMs}ms`);
+  }
 
-
-  /**
-   * Test isolation utilities
-   */
   async isolateTest<T>(
     testFn: () => Promise<T>,
     testName: string,
     cleanup?: () => Promise<void>
   ): Promise<T> {
     const startMemory = this.getMemoryUsage();
-    
-    try {
-      // Pre-test cleanup
-      if (typeof global !== 'undefined' && global.gc) {
-        global.gc();
 
-      
+    try {
+      const globalRef = globalThis as typeof globalThis & { gc?: () => void };
+      if (typeof globalRef.gc === 'function') {
+        globalRef.gc();
+      }
+
       const result = await testFn();
-      
-      // Post-test cleanup
+
       if (cleanup) {
         await cleanup();
+      }
 
-      
       const endMemory = this.getMemoryUsage();
       this.recordMemoryUsage(testName, startMemory, endMemory);
-      
       return result;
- catch (error) {
-      // Ensure cleanup runs even on failure
+    } catch (error) {
       if (cleanup) {
         try {
           await cleanup();
- catch (cleanupError) {
+        } catch (cleanupError) {
           console.error(`Cleanup failed for test "${testName}":`, cleanupError);
-
+        }
+      }
 
       throw error;
+    }
+  }
 
-
-
-  /**
-   * Performance testing utilities
-   */
   async measureExecution<T>(
     operation: () => Promise<T>,
     operationName: string,
     performanceBudget?: number
   ): Promise<{ result: T; metrics: PerformanceMetrics }> {
-    const startTime = performance.now();
+    const startTime = now();
     const startMemory = this.getMemoryUsage();
-    
+
     const result = await operation();
-    
-    const endTime = performance.now();
+
+    const endTime = now();
     const endMemory = this.getMemoryUsage();
     const duration = endTime - startTime;
-    
+
     const metrics: PerformanceMetrics = {
       duration,
       memoryDelta: endMemory - startMemory,
@@ -268,51 +275,48 @@ export class TestReliabilityFramework {
       operationName,
       timestamp: Date.now()
     };
-    
+
     if (performanceBudget && duration > performanceBudget) {
       console.warn(
-        `⚠️ Performance budget exceeded for "${operationName}": ${duration.toFixed(2)}ms > ${performanceBudget}ms`
+        `Performance budget exceeded for "${operationName}": ${duration.toFixed(2)}ms > ${performanceBudget}ms`
       );
+    }
 
-    
     return { result, metrics };
+  }
 
+  analyzeTestFlakiness(testName: string, threshold = 0.95): FlakyTestDetection {
+    const metrics = this.testMetrics.get(testName) ?? [];
 
-  /**
-   * Flaky test detection and reporting
-   */
-  analyzeTestFlakiness(testName: string, threshold: number = 0.95): FlakyTestDetection {
-    const metrics = this.testMetrics.get(testName) || [];
-    
     if (metrics.length < 5) {
       return {
         testName,
         runCount: metrics.length,
-        successCount: 0,
-        failureCount: 0,
-        successRate: 0,
+        successCount: metrics.filter((entry) => entry.success).length,
+        failureCount: metrics.filter((entry) => !entry.success).length,
+        successRate: metrics.length === 0 ? 0 : metrics.filter((entry) => entry.success).length / metrics.length,
         isFlaky: false,
         commonFailures: []
       };
+    }
 
-    
-    const successCount = metrics.filter(m => m.success).length;
+    const successCount = metrics.filter((entry) => entry.success).length;
     const failureCount = metrics.length - successCount;
-    const successRate = successCount / metrics.length;
-    
+    const successRate = metrics.length > 0 ? successCount / metrics.length : 0;
+
     const failureMessages = metrics
-      .filter(m => !m.success && m.error)
-      .map(m => m.error!)
-      .reduce((acc, error) => {
-        acc[error] = (acc[error] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-    
+      .filter((entry) => !entry.success && entry.error)
+      .map((entry) => entry.error as string)
+      .reduce<Record<string, number>>((accumulator, message) => {
+        accumulator[message] = (accumulator[message] ?? 0) + 1;
+        return accumulator;
+      }, {});
+
     const commonFailures = Object.entries(failureMessages)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
-      .map(([error]) => error);
-    
+      .map(([message]) => message);
+
     return {
       testName,
       runCount: metrics.length,
@@ -322,11 +326,8 @@ export class TestReliabilityFramework {
       isFlaky: successRate < threshold && successRate > 0,
       commonFailures
     };
+  }
 
-
-  /**
-   * Test environment validation
-   */
   async validateTestEnvironment(): Promise<EnvironmentValidation> {
     const validation: EnvironmentValidation = {
       memoryAvailable: this.getMemoryUsage(),
@@ -338,53 +339,47 @@ export class TestReliabilityFramework {
       warnings: [],
       errors: []
     };
-    
-    // Validate memory
-    if (validation.memoryAvailable < 100 * 1024 * 1024) { // 100MB
+
+    if (validation.memoryAvailable < 100 * 1024 * 1024) {
       validation.errors.push('Insufficient memory available for testing');
       validation.isValid = false;
+    }
 
-    
-    // Validate disk space
-    if (validation.diskSpaceAvailable < 500 * 1024 * 1024) { // 500MB
-      validation.warnings.push('Low disk space available');
+    if (validation.diskSpaceAvailable < 500 * 1024 * 1024) {
+      validation.warnings.push('Low disk space available for tests');
+    }
 
-    
-    // Validate network
     if (!validation.networkConnectivity) {
       validation.errors.push('Network connectivity issues detected');
       validation.isValid = false;
+    }
 
-    
     return validation;
+  }
 
-
-  /**
-   * Generate test reliability report
-   */
   generateReliabilityReport(): TestReliabilityReport {
     const allMetrics = Array.from(this.testMetrics.entries());
     const totalTests = allMetrics.length;
-    const flakyTests: FlakyTestDetection[] = [];
-    
+
     let totalRuns = 0;
     let totalSuccesses = 0;
     let totalRetries = 0;
-    
+    const flakyTests: FlakyTestDetection[] = [];
+
     for (const [testName, metrics] of allMetrics) {
       totalRuns += metrics.length;
-      totalSuccesses += metrics.filter(m => m.success).length;
-      totalRetries += metrics.reduce((sum, m) => sum + m.retryCount, 0);
-      
-      const flakinessAnalysis = this.analyzeTestFlakiness(testName);
-      if (flakinessAnalysis.isFlaky) {
-        flakyTests.push(flakinessAnalysis);
+      totalSuccesses += metrics.filter((entry) => entry.success).length;
+      totalRetries += metrics.reduce((sum, entry) => sum + entry.retryCount, 0);
 
+      const flakiness = this.analyzeTestFlakiness(testName);
+      if (flakiness.isFlaky) {
+        flakyTests.push(flakiness);
+      }
+    }
 
-    
     const overallSuccessRate = totalRuns > 0 ? totalSuccesses / totalRuns : 0;
     const averageRetries = totalRuns > 0 ? totalRetries / totalRuns : 0;
-    
+
     return {
       timestamp: Date.now(),
       totalTests,
@@ -394,152 +389,114 @@ export class TestReliabilityFramework {
       flakyTests,
       recommendations: this.generateRecommendations(flakyTests, overallSuccessRate)
     };
-
-
-  // Private helper methods
+  }
 
   private async delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-
+    await new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
 
   private isRetryableError(error: Error, config: RetryConfig): boolean {
-    const errorMessage = error.message.toLowerCase();
-    return config.retryConditions.some(condition => 
-      errorMessage.includes(condition.toLowerCase())
-    );
-
+    const lowerMessage = error.message.toLowerCase();
+    return config.retryConditions.some((condition) => lowerMessage.includes(condition.toLowerCase()));
+  }
 
   private recordMetrics(testName: string, metrics: TestMetrics): void {
-    metrics.endTime = Date.now();
-    metrics.duration = metrics.endTime - metrics.startTime;
-    
-    if (!this.testMetrics.has(testName)) {
-      this.testMetrics.set(testName, []);
+    const endTime = Date.now();
+    const updatedMetrics: TestMetrics = {
+      ...metrics,
+      endTime,
+      duration: endTime - metrics.startTime
+    };
 
-    
-    this.testMetrics.get(testName)!.push({ ...metrics });
-    
-    // Keep only last 100 runs per test
-    const testRuns = this.testMetrics.get(testName)!;
-    if (testRuns.length > 100) {
-      testRuns.splice(0, testRuns.length - 100);
+    const existing = this.testMetrics.get(testName) ?? [];
+    existing.push(updatedMetrics);
 
+    if (existing.length > 100) {
+      existing.splice(0, existing.length - 100);
+    }
 
+    this.testMetrics.set(testName, existing);
+  }
 
   private getMemoryUsage(): number {
-    if (typeof process !== 'undefined' && process.memoryUsage) {
-      return process.memoryUsage().heapUsed;
+    const processReference = globalThis.process as
+      | { memoryUsage?: () => { heapUsed: number } }
+      | undefined;
+
+    if (processReference?.memoryUsage) {
+      try {
+        return processReference.memoryUsage().heapUsed;
+      } catch {
+        return 0;
+      }
+    }
 
     return 0;
-
+  }
 
   private recordMemoryUsage(testName: string, startMemory: number, endMemory: number): void {
     const memoryDelta = endMemory - startMemory;
-    if (memoryDelta > 10 * 1024 * 1024) { // 10MB threshold
-      console.warn(`⚠️ High memory usage detected in test "${testName}": ${(memoryDelta / 1024 / 1024).toFixed(2)}MB`);
-
-
+    if (memoryDelta > 10 * 1024 * 1024) {
+      console.warn(
+        `High memory usage detected in test "${testName}": ${(memoryDelta / 1024 / 1024).toFixed(2)}MB`
+      );
+    }
+  }
 
   private async checkDiskSpace(): Promise<number> {
-    // Simplified disk space check
-    try {
-      // Would use fs.promises.statfs('.') in real implementation
-      return 1000 * 1024 * 1024; // Default 1GB
- catch {
-      return 1000 * 1024 * 1024; // Default 1GB
-
-
+    // The real implementation would inspect the filesystem. We return a safe
+    // default that callers can still validate against.
+    return 1_000 * 1024 * 1024;
+  }
 
   private async checkNetworkConnectivity(): Promise<boolean> {
-    // Simple network connectivity check
-    try {
-      // Would use http.request for real connectivity check in implementation
-      return true; // Assume connectivity
- catch {
-      return false;
-
-
+    // In CI we do not perform outbound requests; assume connectivity is fine.
+    return true;
+  }
 
   private async checkDatabaseConnection(): Promise<boolean> {
-    // Database connectivity check would be implemented based on the actual database
-    // For now, return true as a placeholder
+    // Placeholder until we have a real health-check hook.
     return true;
-
+  }
 
   private async checkRequiredServices(): Promise<string[]> {
-    // Check for required services (Redis, PostgreSQL, etc.)
-    const availableServices: string[] = [];
-    
-    // Add service checks here based on project requirements
-    // For now, return empty array
-    return availableServices;
-
+    // Extend when new required services are introduced.
+    return [];
+  }
 
   private generateRecommendations(flakyTests: FlakyTestDetection[], successRate: number): string[] {
     const recommendations: string[] = [];
-    
+
     if (successRate < 0.95) {
-      recommendations.push('Overall test success rate is below 95%. Review test reliability strategies.');
+      recommendations.push('Overall test success rate is below 95%. Review reliability strategies.');
+    }
 
-    
     if (flakyTests.length > 0) {
-      recommendations.push(`${flakyTests.length} flaky tests detected. Prioritize stabilization efforts.`);
-      
-      flakyTests.forEach(test => {
-        recommendations.push(`Test "${test.testName}": ${(test.successRate * 100).toFixed(1)}% success rate. Common failures: ${test.commonFailures.join(', ')}`);
+      recommendations.push(`${flakyTests.length} flaky tests detected. Prioritise their stabilisation.`);
+      flakyTests.forEach((test) => {
+        recommendations.push(
+          `Test "${test.testName}": ${(test.successRate * 100).toFixed(
+            1
+          )}% success rate. Failures: ${test.commonFailures.join(', ')}`
+        );
       });
+    }
 
-    
-    recommendations.push('Run tests in isolation to identify dependencies and race conditions.');
-    recommendations.push('Consider implementing wait strategies for timing-dependent tests.');
-    
+    if (recommendations.length === 0) {
+      recommendations.push('Test suites look healthy. Keep monitoring reliability metrics.');
+    }
+
     return recommendations;
+  }
+}
 
-
-
-// Interfaces and types
-
-interface PerformanceMetrics {
-  duration: number;
-  memoryDelta: number;
-  startMemory: number;
-  endMemory: number;
-  operationName: string;
-  timestamp: number;
-
-
-interface EnvironmentValidation {
-  memoryAvailable: number;
-  diskSpaceAvailable: number;
-  networkConnectivity: boolean;
-  databaseConnection: boolean;
-  requiredServices: string[];
-  isValid: boolean;
-  warnings: string[];
-  errors: string[];
-
-
-interface TestReliabilityReport {
-  timestamp: number;
-  totalTests: number;
-  totalRuns: number;
-  overallSuccessRate: number;
-  averageRetries: number;
-  flakyTests: FlakyTestDetection[];
-  recommendations: string[];
-
-
-// Export singleton instance
 export const testReliability = TestReliabilityFramework.getInstance();
 
-// Utility functions for common test patterns
-export 
 export const retry = {
   test: <T>(testFn: () => Promise<T>, testName: string) =>
     testReliability.executeWithRetry(testFn, testName),
-    
   withConfig: <T>(testFn: () => Promise<T>, testName: string, config: Partial<RetryConfig>) =>
     testReliability.executeWithRetry(testFn, testName, config)
 };
-
-export };

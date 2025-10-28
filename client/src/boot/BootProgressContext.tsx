@@ -52,7 +52,7 @@ async function fetchFirstJson(urls: string[]): Promise<unknown> {
   for (const url of urls) {
     try {
       const res = await fetch(url);
-      if (res.ok) return await res.json();
+      if (res.ok) {return await res.json();}
     } catch {
       // try next
     }
@@ -181,6 +181,6 @@ export const BootProgressProvider: React.FC<{ children: React.ReactNode }> = ({
 export function useBootProgress(): BootProgressState {
   const ctx = useContext(BootProgressContext);
   if (!ctx)
-    throw new Error('useBootProgress must be used within BootProgressProvider');
+    {throw new Error('useBootProgress must be used within BootProgressProvider');}
   return ctx;
 }

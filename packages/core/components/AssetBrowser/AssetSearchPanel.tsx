@@ -1,13 +1,23 @@
 import React, { useCallback, useState } from 'react';
+import type { Node } from 'reactflow';
 import { NaturalLanguageSearch } from '../../services/NaturalLanguageSearch';
 import type { Asset } from '../../services/assetMatcher';
 
-export const AssetSearchPanel: React.FC<{
+type GraphContext = Record<string, unknown>;
+
+interface AssetSearchPanelProps {
   assets: Asset[];
   onInsert: (asset: Asset) => void;
-  graphContext?: any;
-  selectedNode?: any;
-}> = ({ assets, onInsert, graphContext, selectedNode }) => {
+  graphContext?: GraphContext;
+  selectedNode?: Node<{ label?: string }> | null;
+}
+
+export const AssetSearchPanel: React.FC<AssetSearchPanelProps> = ({
+  assets,
+  onInsert,
+  graphContext,
+  selectedNode
+}) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Asset[]>([]);
   const [total, setTotal] = useState(0);
@@ -43,10 +53,12 @@ export const AssetSearchPanel: React.FC<{
           type: 'psglib' as const,
           metadata: { keywords: [p.path || ''] }
         }));
-        setInternalAssets(list as any);
+        setInternalAssets(list as Asset[]);
         return;
       }
-    } catch {}
+    } catch {
+      // ignore manifest loading errors; component falls back to provided assets
+    }
   }, [assets]);
   React.useEffect(() => {
     void loadAssets();
@@ -54,19 +66,26 @@ export const AssetSearchPanel: React.FC<{
 
   // Hook to global asset registry events
   React.useEffect(() => {
-    const handler = (e: any) => {
-      if (e?.detail?.assets) setInternalAssets(e.detail.assets);
+    const handler: EventListener = event => {
+      const customEvent = event as CustomEvent<{ assets: Asset[] }>;
+      if (customEvent?.detail?.assets) {
+        setInternalAssets(customEvent.detail.assets);
+      }
     };
-    window.addEventListener('assetRegistry:update', handler as any);
+    window.addEventListener('assetRegistry:update', handler);
     // Expose a simple registry helper for external callers
-    (window as any).assetRegistry = (window as any).assetRegistry || {};
-    (window as any).assetRegistry.update = (assets: Asset[]) => {
+    const windowWithRegistry = window as typeof window & {
+      assetRegistry?: { update?: (assets: Asset[]) => void };
+    };
+    if (!windowWithRegistry.assetRegistry) {
+      windowWithRegistry.assetRegistry = {};
+    }
+    windowWithRegistry.assetRegistry.update = (nextAssets: Asset[]) => {
       window.dispatchEvent(
-        new CustomEvent('assetRegistry:update', { detail: { assets } })
+        new CustomEvent('assetRegistry:update', { detail: { assets: nextAssets } })
       );
     };
-    return () =>
-      window.removeEventListener('assetRegistry:update', handler as any);
+    return () => window.removeEventListener('assetRegistry:update', handler);
   }, []);
 
   const runSearch = useCallback(async () => {
@@ -91,7 +110,7 @@ export const AssetSearchPanel: React.FC<{
     setTotal(res.totalMatches);
     setTimeMs(Math.round(res.executionTime));
     setBusy(false);
-  }, [query, assets, graphContext, nls]);
+  }, [exclude, graphContext, internalAssets, nls, query, streaming]);
 
   return (
     <div
@@ -161,9 +180,9 @@ export const AssetSearchPanel: React.FC<{
           : `Results: ${results.length}/${total} • ${timeMs}ms`}
       </div>
       <div style={{ maxHeight: 260, overflow: 'auto' }}>
-        {results.map(a => (
+        {results.map(asset => (
           <div
-            key={a.id}
+            key={asset.id}
             style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -173,10 +192,10 @@ export const AssetSearchPanel: React.FC<{
             }}
           >
             <div>
-              <div style={{ fontWeight: 600 }}>{a.name}</div>
-              <div style={{ fontSize: 12, opacity: 0.8 }}>{a.type}</div>
+              <div style={{ fontWeight: 600 }}>{asset.name}</div>
+              <div style={{ fontSize: 12, opacity: 0.8 }}>{asset.type}</div>
             </div>
-            <button onClick={() => onInsert(a)}>Insert</button>
+            <button onClick={() => onInsert(asset)}>Insert</button>
           </div>
         ))}
         {results.length === 0 && !busy && (

@@ -684,4 +684,64 @@ describe('LLMService', () => {
       });
     });
   });
+
+  describe('validateJsonResponse', () => {
+    it('throws when JSON cannot be parsed', () => {
+      const internal = service as unknown as {
+        validateJsonResponse: (content: string, taskType?: string) => void;
+      };
+
+      expect(() =>
+        internal.validateJsonResponse('not-json', 'suggestion')
+      ).toThrow('Invalid JSON response');
+    });
+
+    it('enforces suggestion choice structure', () => {
+      const internal = service as unknown as {
+        validateJsonResponse: (content: string, taskType?: string) => void;
+      };
+
+      expect(() =>
+        internal.validateJsonResponse(
+          JSON.stringify({ choices: [{ text: 'only-text' }] }),
+          'suggestion'
+        )
+      ).toThrow('Each suggestion choice must include text and weight');
+
+      expect(() =>
+        internal.validateJsonResponse(
+          JSON.stringify({ choices: [{ text: 'ok', weight: 6 }] }),
+          'suggestion'
+        )
+      ).not.toThrow();
+    });
+
+    it('validates metadata payload types', () => {
+      const internal = service as unknown as {
+        validateJsonResponse: (content: string, taskType?: string) => void;
+      };
+
+      expect(() =>
+        internal.validateJsonResponse(
+          JSON.stringify({
+            tags: ['scene'],
+            subject: 'test',
+            intensity: 'high'
+          }),
+          'metadata'
+        )
+      ).toThrow('Metadata intensity must be a number');
+
+      expect(() =>
+        internal.validateJsonResponse(
+          JSON.stringify({
+            tags: ['scene'],
+            subject: 'test',
+            intensity: 5
+          }),
+          'metadata'
+        )
+      ).not.toThrow();
+    });
+  });
 });

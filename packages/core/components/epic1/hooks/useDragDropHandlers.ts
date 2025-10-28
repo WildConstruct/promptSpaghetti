@@ -126,15 +126,24 @@ export function useDragDropHandlers({
         // Prefer inline PSG content if provided
         if (meta?.psglib || meta?.content) {
           content = String(meta.psglib ?? meta.content);
+          console.log('[DragDrop] Using inline preset content');
         } else {
           // Resolve path from payload or manifest by ID
-          let presetPath: string | null = meta?.path || null;
+          let presetPath: string | null =
+            (typeof meta?.path === 'string' && meta.path) ||
+            (typeof meta?.file === 'string' && meta.file) ||
+            (typeof (meta as any)?.metadata?.file === 'string'
+              ? (meta as any).metadata.file
+              : null);
+
           if (!presetPath && meta?.id) {
             presetPath = await resolvePresetPathById(meta.id);
           }
+
           if (!presetPath) {
             throw new Error('Unable to resolve preset path.');
           }
+
           const normalized = normalizePresetPath(presetPath);
           const resp = await fetch(normalized, { cache: 'no-cache' });
           if (!resp.ok) {
@@ -143,6 +152,7 @@ export function useDragDropHandlers({
             );
           }
           content = await resp.text();
+          console.log('[DragDrop] Loaded preset from path:', normalized);
         }
 
         if (!content) throw new Error('Preset content is empty.');

@@ -59,25 +59,32 @@ module.exports = {
     'react/jsx-no-undef': 'off',
     'react/no-unescaped-entities': 'off',
 
-    // TypeScript rules - very relaxed for development
-    '@typescript-eslint/no-unused-vars': 'off', // Turn off completely
-    '@typescript-eslint/no-explicit-any': 'off', // Allow any type
+    // TypeScript rules - balanced for development
+    '@typescript-eslint/no-unused-vars': 'warn', // Changed to warn to catch unused imports
+    '@typescript-eslint/no-explicit-any': 'off', // Allow any type for flexibility
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-empty-function': 'warn', // Changed to warn
+    '@typescript-eslint/no-non-null-assertion': 'warn', // Added to catch potential null issues
 
-    // JavaScript rules - relaxed
-    'no-unused-vars': 'off', // Turn off completely
+    // JavaScript rules - relaxed but helpful
+    'no-unused-vars': 'warn', // Changed to warn to catch unused variables
     'no-constant-condition': 'off',
     'no-useless-escape': 'off',
     'no-case-declarations': 'off', // This was causing switch statement issues
     'no-undef': 'off', // TypeScript handles this better
-    'no-redeclare': 'off',
+    'no-redeclare': 'warn', // Changed to warn to catch variable redeclaration
 
     // Only keep critical rules that prevent actual bugs
     'no-debugger': 'warn',
     'no-console': 'off', // Allow console statements
-    'no-alert': 'warn'
+    'no-alert': 'warn',
+    
+    // Additional helpful rules for development
+    'prefer-const': 'warn', // Helps with better variable declarations
+    'no-var': 'warn', // Encourage modern JavaScript
+    'eqeqeq': 'warn', // Encourage strict equality checks
+    'curly': 'warn' // Encourage consistent brace usage
   },
   settings: {
     react: {

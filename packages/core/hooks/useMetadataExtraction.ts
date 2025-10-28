@@ -20,6 +20,8 @@ interface MetadataState {
     metadata?: SegmentMetadata;
     extracting: boolean;
     lastExtracted?: number;
+    lastContent?: string;
+    pendingContent?: string;
   };
 }
 
@@ -34,6 +36,7 @@ export function useMetadataExtraction(
   } = options;
 
   const [metadataState, setMetadataState] = useState<MetadataState>({});
+  const metadataStateRef = useRef<MetadataState>({});
   const extractorRef = useRef<MetadataExtractor>();
   const debounceTimersRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
 
@@ -43,6 +46,10 @@ export function useMetadataExtraction(
       extractorRef.current = new MetadataExtractor(llmService);
     }
   }, [llmService]);
+
+  useEffect(() => {
+    metadataStateRef.current = metadataState;
+  }, [metadataState]);
 
   // Cleanup debounce timers on unmount
   useEffect(() => {
@@ -62,11 +69,41 @@ export function useMetadataExtraction(
         clearTimeout(existingTimer);
       }
 
+      const recentState = metadataStateRef.current[nodeId];
+      if (
+        recentState?.lastExtracted &&
+        recentState.lastContent === text &&
+        Date.now() - recentState.lastExtracted < 60000
+      ) {
+        return;
+      }
+
+      setMetadataState(prev => ({
+        ...prev,
+        [nodeId]: {
+          ...prev[nodeId],
+          extracting: true,
+          pendingContent: text
+        }
+      }));
+
       // Set new debounced extraction
       const timer = setTimeout(async () => {
         // Check if we've already extracted for this exact text recently
-        const state = metadataState[nodeId];
-        if (state?.lastExtracted && Date.now() - state.lastExtracted < 60000) {
+        const state = metadataStateRef.current[nodeId];
+        if (
+          state?.lastExtracted &&
+          state.lastContent === text &&
+          Date.now() - state.lastExtracted < 60000
+        ) {
+          setMetadataState(prev => ({
+            ...prev,
+            [nodeId]: {
+              ...prev[nodeId],
+              extracting: false,
+              pendingContent: undefined
+            }
+          }));
           // Skip if extracted within last minute
           return;
         }
@@ -74,7 +111,11 @@ export function useMetadataExtraction(
         // Mark as extracting
         setMetadataState(prev => ({
           ...prev,
-          [nodeId]: { ...prev[nodeId], extracting: true }
+          [nodeId]: {
+            ...prev[nodeId],
+            extracting: true,
+            pendingContent: text
+          }
         }));
 
         try {
@@ -87,7 +128,9 @@ export function useMetadataExtraction(
             [nodeId]: {
               metadata: result.metadata,
               extracting: false,
-              lastExtracted: Date.now()
+              lastExtracted: Date.now(),
+              lastContent: text,
+              pendingContent: undefined
             }
           }));
 
@@ -111,7 +154,12 @@ export function useMetadataExtraction(
           // Mark extraction as complete even on failure
           setMetadataState(prev => ({
             ...prev,
-            [nodeId]: { ...prev[nodeId], extracting: false }
+            [nodeId]: {
+              ...prev[nodeId],
+              extracting: false,
+              pendingContent: undefined,
+              lastContent: text
+            }
           }));
         }
 
@@ -154,7 +202,11 @@ export function useMetadataExtraction(
 
       setMetadataState(prev => ({
         ...prev,
-        [nodeId]: { ...prev[nodeId], extracting: true }
+        [nodeId]: {
+          ...prev[nodeId],
+          extracting: true,
+          pendingContent: text
+        }
       }));
 
       try {
@@ -165,7 +217,9 @@ export function useMetadataExtraction(
           [nodeId]: {
             metadata: result.metadata,
             extracting: false,
-            lastExtracted: Date.now()
+            lastExtracted: Date.now(),
+            lastContent: text,
+            pendingContent: undefined
           }
         }));
 
@@ -179,7 +233,12 @@ export function useMetadataExtraction(
 
         setMetadataState(prev => ({
           ...prev,
-          [nodeId]: { ...prev[nodeId], extracting: false }
+          [nodeId]: {
+            ...prev[nodeId],
+            extracting: false,
+            pendingContent: undefined,
+            lastContent: text
+          }
         }));
 
         return null;
@@ -198,13 +257,16 @@ export function useMetadataExtraction(
 
       results.forEach((result, index) => {
         const { nodeId } = segments[index];
+        const text = segments[index].text;
 
         setMetadataState(prev => ({
           ...prev,
           [nodeId]: {
             metadata: result.metadata,
             extracting: false,
-            lastExtracted: Date.now()
+            lastExtracted: Date.now(),
+            lastContent: text,
+            pendingContent: undefined
           }
         }));
 

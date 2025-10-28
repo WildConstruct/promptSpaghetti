@@ -20,8 +20,8 @@ export const LibraryService = {
     const errors: string[] = [];
     for (const m of manifests) {
       try {
-        const res = parseManifest(m);
-        entries.push(...res.presets);
+        const result = await Promise.resolve(parseManifest(m));
+        entries.push(...result.presets);
       } catch (e: unknown) {
         errors.push(e instanceof Error ? e.message : 'Unknown manifest error');
       }

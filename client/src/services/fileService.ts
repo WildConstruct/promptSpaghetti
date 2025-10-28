@@ -5,6 +5,16 @@
  */
 import { useAuthStore } from '../stores/authStore';
 
+type AuthStoreSnapshot = {
+  accessToken?: string | null;
+  token?: string | null;
+  user?: { id?: string | number | null } | null;
+};
+
+type AuthStoreWithGetState = {
+  getState?: () => AuthStoreSnapshot;
+};
+
 // Dependency Injection Interfaces
 
 export interface HttpClient {
@@ -93,15 +103,20 @@ class FileService {
    * Get authenticated headers for API requests
    */
   private getHeaders(): HeadersInit {
-    const state: any = (useAuthStore as any).getState?.() || {};
+    const authStore = useAuthStore as AuthStoreWithGetState;
+    const state = authStore.getState?.() ?? {};
     const token =
       state?.accessToken ?? state?.token ?? this.deps.authProvider.getToken();
     const userId = state?.user?.id || null;
     const headers: Record<string, string> = {
       'Content-Type': 'application/json'
     };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-    if (userId) headers['X-User-Id'] = String(userId);
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    if (userId) {
+      headers['X-User-Id'] = String(userId);
+    }
     return headers;
   }
 

@@ -1,14 +1,30 @@
 // Advanced Matcher Service with ML Capabilities
 // Story 2.5b: Advanced Asset Browser Features
 
+import { Edge, Node } from 'reactflow';
 import { Asset, AssetMetadata } from './assetMatcher';
+import { SegmentMetadata } from './llm/MetadataExtractor';
 import { SimilarityEngine } from './llm/SimilarityEngine';
 import { LLMService } from './llm/LLMService';
 
+interface GraphNodeMetadata extends AssetMetadata {
+  timePeriod?: string;
+  category?: string;
+  keywords?: string[];
+}
+
+interface GraphNodeData extends Record<string, unknown> {
+  label?: string;
+  metadata?: GraphNodeMetadata;
+}
+
+type GraphNode = Node<GraphNodeData>;
+type GraphEdge = Edge<Record<string, unknown> | undefined>;
+
 export interface GraphContext {
-  selectedNode?: any;
-  allNodes: any[];
-  edges: any[];
+  selectedNode?: GraphNode;
+  allNodes: GraphNode[];
+  edges: GraphEdge[];
   recentActions?: string[];
   userPreferences?: UserPreferences;
 }
@@ -185,18 +201,70 @@ export class AdvancedMatcherService {
     }
 
     try {
+      const query = this.buildSimilarityQuery(context.selectedNode);
+      if (!query) {
+        return 0.5;
+      }
+
       // Use similarity engine for semantic matching
       const similar = await this.similarityEngine.findSimilar(
-        { metadata: context.selectedNode.data },
+        query.text,
+        query.metadata,
         { limit: 100 }
       );
 
-      const match = similar.find(s => s.asset.id === asset.id);
+      const match = similar.find(s => s.id === asset.id);
       return match ? match.score / 100 : 0.2;
-    } catch (error) {
+    } catch {
       // Fallback to keyword matching
-      return this.keywordSimilarity(asset.metadata, context.selectedNode.data);
+      return this.keywordSimilarity(
+        asset.metadata,
+        context.selectedNode.data?.metadata
+      );
     }
+  }
+
+  private buildSimilarityQuery(
+    node: GraphNode
+  ): { text: string; metadata: SegmentMetadata } | null {
+    const data = node.data;
+    if (!data) {
+      return null;
+    }
+
+    const metadata = data.metadata ?? {};
+    const label =
+      typeof data.label === 'string' && data.label.trim().length > 0
+        ? data.label.trim()
+        : undefined;
+    const theme =
+      typeof metadata.theme === 'string' && metadata.theme.trim().length > 0
+        ? metadata.theme.trim()
+        : undefined;
+
+    const text = label ?? theme ?? node.id;
+
+    const keywordTags = Array.isArray(metadata.keywords)
+      ? metadata.keywords.filter(
+          (keyword): keyword is string => typeof keyword === 'string'
+        )
+      : [];
+    const entityTags = Array.isArray(metadata.entities)
+      ? metadata.entities.filter(
+          (entity): entity is string => typeof entity === 'string'
+        )
+      : [];
+    const tags = Array.from(new Set([...keywordTags, ...entityTags]));
+
+    const segmentMetadata: SegmentMetadata = {
+      subject: metadata.theme,
+      action: metadata.style,
+      location: metadata.setting,
+      mood: metadata.mood,
+      tags
+    };
+
+    return { text, metadata: segmentMetadata };
   }
 
   private calculateContextualFit(asset: Asset, context: GraphContext): number {
@@ -258,9 +326,12 @@ export class AdvancedMatcherService {
     return score;
   }
 
-  private keywordSimilarity(metadata1: any, metadata2: any): number {
-    const text1 = JSON.stringify(metadata1).toLowerCase();
-    const text2 = JSON.stringify(metadata2).toLowerCase();
+  private keywordSimilarity(
+    assetMetadata: AssetMetadata | undefined,
+    nodeMetadata: GraphNodeMetadata | undefined
+  ): number {
+    const text1 = JSON.stringify(assetMetadata ?? {}).toLowerCase();
+    const text2 = JSON.stringify(nodeMetadata ?? {}).toLowerCase();
 
     const words1 = text1.match(/\b\w+\b/g) || [];
     const words2 = text2.match(/\b\w+\b/g) || [];

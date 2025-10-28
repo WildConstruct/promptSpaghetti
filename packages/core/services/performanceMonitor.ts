@@ -17,6 +17,14 @@ export interface PerformanceReport {
   fps: number;
 }
 
+interface AnalyticsReporter {
+  track: (event: string, payload: Record<string, unknown>) => void;
+}
+
+type WindowWithAnalytics = Window & {
+  analyticsReporter?: AnalyticsReporter;
+};
+
 export class DragPerformanceMonitor {
   private metrics: Map<string, PerformanceMetric[]> = new Map();
   private frameTimestamps: number[] = [];
@@ -105,8 +113,9 @@ export class DragPerformanceMonitor {
     // Report to analytics
     this.reportToAnalytics(dragId, event, duration, true);
     // Also emit perf_violation for dashboards expecting this event name
-    if (typeof window !== 'undefined' && (window as any).analyticsReporter) {
-      (window as any).analyticsReporter.track('perf_violation', {
+    if (typeof window !== 'undefined') {
+      const reporter = (window as WindowWithAnalytics).analyticsReporter;
+      reporter?.track('perf_violation', {
         dragId,
         event,
         duration,
@@ -131,11 +140,16 @@ export class DragPerformanceMonitor {
     const totalDuration =
       metrics[metrics.length - 1].timestamp - metrics[0].timestamp;
 
-    // Calculate average FPS during operation
-    const avgFPS = this.calculateAverageFPS();
-
-    // Generate report
-    const report = this.generateReport(dragId);
+    // Generate report for analytics/monitoring
+    const summary = this.generateReport(dragId);
+    if (summary) {
+      if (summary.fps < 55) {
+        console.warn(
+          `Drag operation ${dragId} average FPS dropped to ${summary.fps}`
+        );
+      }
+      this.emitSummary(summary);
+    }
 
     // Log summary
     if (totalDuration > 200) {
@@ -182,8 +196,9 @@ export class DragPerformanceMonitor {
     if (!this.analyticsEnabled) return;
 
     // Integration point for analytics service
-    if (typeof window !== 'undefined' && (window as any).analyticsReporter) {
-      (window as any).analyticsReporter.track('drag_performance', {
+    if (typeof window !== 'undefined') {
+      const reporter = (window as WindowWithAnalytics).analyticsReporter;
+      reporter?.track('drag_performance', {
         dragId,
         event,
         duration,
@@ -256,6 +271,20 @@ export class DragPerformanceMonitor {
   // Export metrics for debugging
   exportMetrics(): Record<string, PerformanceMetric[]> {
     return Object.fromEntries(this.metrics);
+  }
+
+  private emitSummary(report: PerformanceReport): void {
+    if (typeof window !== 'undefined') {
+      const reporter = (window as WindowWithAnalytics).analyticsReporter;
+      reporter?.track('drag_performance_summary', {
+        dragId: report.dragId,
+        totalDuration: report.totalDuration,
+        eventCount: report.events.length,
+        violations: report.violations,
+        fps: report.fps,
+        timestamp: Date.now()
+      });
+    }
   }
 }
 

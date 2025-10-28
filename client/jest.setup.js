@@ -3,9 +3,17 @@ import { jest } from '@jest/globals';
 
 // Mock ResizeObserver which isn't available in JSDOM
 global.ResizeObserver = class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe() {
+    return undefined;
+  }
+
+  unobserve() {
+    return undefined;
+  }
+
+  disconnect() {
+    return undefined;
+  }
 };
 
 // Mock window.matchMedia which isn't available in JSDOM
@@ -29,12 +37,12 @@ global.IntersectionObserver = class {
     this.callback = callback;
   }
   observe() {
-    /* do nothing */
+    return undefined;
   }
   unobserve() {
-    /* do nothing */
+    return undefined;
   }
   disconnect() {
-    /* do nothing */
+    return undefined;
   }
 };

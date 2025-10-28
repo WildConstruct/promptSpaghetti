@@ -14,6 +14,19 @@ interface UseGraphDragDropOptions {
   showToast?: (type: 'success' | 'error' | 'info', message: string) => void;
 }
 
+declare global {
+  interface Window {
+    __graphDragDropHookBuild?: string;
+  }
+}
+
+if (typeof window !== 'undefined' && window.__graphDragDropHookBuild !== '20250206') {
+  window.__graphDragDropHookBuild = '20250206';
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('[useGraphDragDrop] Hook build 20250206 active');
+  }
+}
+
 /**
  * Custom hook for managing drag and drop operations in the graph
  */
@@ -32,11 +45,13 @@ export function useGraphDragDrop<NodeData = unknown>(
   const onDragOver = useCallback(
     (event: DragEvent) => {
       event.preventDefault();
-      event.dataTransfer.dropEffect = 'move';
-      console.log(
-        '[useGraphDragDrop] DragOver event, reactFlowInstance:',
-        !!reactFlowInstance
-      );
+      const effectAllowed = event.dataTransfer.effectAllowed || 'copy';
+      event.dataTransfer.dropEffect =
+        effectAllowed === 'copy' || effectAllowed === 'copyMove'
+          ? 'copy'
+          : effectAllowed === 'move'
+            ? 'move'
+            : 'copy';
       setIsDraggingOver(true);
 
       // Calculate drop position
@@ -72,7 +87,10 @@ export function useGraphDragDrop<NodeData = unknown>(
     (dataTransfer: DataTransfer): DraggedItem | null => {
       try {
         // Check for preset data
-        const presetData = dataTransfer.getData('application/preset');
+        const presetData =
+          dataTransfer.getData('application/preset') ||
+          dataTransfer.getData('application/x-preset') ||
+          dataTransfer.getData('preset');
         if (presetData) {
           return { type: 'preset', presetData };
         }
@@ -179,12 +197,12 @@ export function useGraphDragDrop<NodeData = unknown>(
       // This would typically load the asset and create nodes
       // Implementation depends on your asset system
       const assetMeta = meta as Record<string, unknown>;
-      if (assetMeta.filePath || assetMeta.assetPath) {
-        onPresetDrop?.(meta, position);
-        showToast?.('success', `Loading asset: ${assetMeta.name || 'Unknown'}`);
-      } else {
-        showToast?.('error', 'Invalid asset data');
-      }
+      const assetName =
+        typeof assetMeta.name === 'string' && assetMeta.name.trim().length > 0
+          ? assetMeta.name
+          : 'Asset';
+      onPresetDrop?.(meta, position);
+      showToast?.('success', `Loading ${assetName}`);
     },
     [onPresetDrop, showToast]
   );

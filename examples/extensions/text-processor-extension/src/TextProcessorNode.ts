@@ -24,6 +24,13 @@ export interface TextProcessorState extends NodeState {
   operationHistory: string[];
 }
 
+type TextProcessorInputMap = Record<string, unknown>;
+
+interface TextProcessorExecutionResult {
+  result: string;
+  metadata: Record<string, unknown>;
+}
+
 export class TextProcessorNode extends AdvancedRuntimeNode {
   protected getIOSpec() {
     return new IOSpecBuilder()
@@ -60,7 +67,7 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     };
   }
 
-  protected validateInputs(inputs: any): ValidationResult {
+  protected validateInputs(inputs: TextProcessorInputMap): ValidationResult {
     const errors: string[] = [];
 
     // Validate text input
@@ -80,7 +87,7 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
       'reverse',
       'clean'
     ];
-    if (!validOperations.includes(inputs.operation)) {
+    if (!validOperations.includes(inputs.operation as string)) {
       errors.push(
         `Invalid operation. Must be one of: ${validOperations.join(', ')}`
       );
@@ -97,37 +104,39 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
     };
   }
 
-  protected async executeImplementation(inputs: any): Promise<any> {
+  protected async executeImplementation(
+    inputs: TextProcessorInputMap
+  ): Promise<TextProcessorExecutionResult> {
     const startTime = performance.now();
 
-    const text = inputs.text as string;
-    const operation = inputs.operation as string;
+    const text = typeof inputs.text === 'string' ? inputs.text : '';
+    const operation =
+      (inputs.operation as TextProcessorOptions['operation']) ?? 'uppercase';
     const options = (inputs.options as Partial<TextProcessorOptions>) || {};
 
-    // Process text based on operation
     let result: string;
 
     try {
       result = await this.processText(text, operation, options);
     } catch (error) {
-      throw new Error(`Text processing failed: ${error.message}`);
+      const message =
+        error instanceof Error ? error.message : 'Unknown processing error';
+      throw new Error(`Text processing failed: ${message}`);
     }
 
-    // Update state
     const currentState = this.getState() as TextProcessorState;
     this.updateState({
       processedCount: currentState.processedCount + 1,
       totalCharacters: currentState.totalCharacters + text.length,
-      operationHistory: [...currentState.operationHistory.slice(-9), operation] // Keep last 10
+      operationHistory: [...currentState.operationHistory.slice(-9), operation]
     });
 
-    // Generate metadata
     const processingTime = performance.now() - startTime;
-    const metadata = {
+    const metadata: Record<string, unknown> = {
       operation,
       originalLength: text.length,
       resultLength: result.length,
-      processingTime: Math.round(processingTime * 100) / 100,
+      processingTime: Number(processingTime.toFixed(2)),
       charactersDiff: result.length - text.length,
       totalProcessed: (this.getState() as TextProcessorState).processedCount,
       operationHistory: (this.getState() as TextProcessorState).operationHistory
@@ -223,12 +232,16 @@ export class TextProcessorNode extends AdvancedRuntimeNode {
         const regex = new RegExp(options.customPattern, 'g');
         result = result.replace(regex, options.replaceWith);
       } catch (error) {
-        throw new Error(`Invalid regex pattern: ${options.customPattern}`);
+        const message =
+          error instanceof Error ? error.message : 'Unknown regex error';
+        throw new Error(
+          `Invalid regex pattern: ${options.customPattern}. ${message}`
+        );
       }
     }
 
     // Remove common unwanted characters
-    result = result.replace(/[^\w\s\.\,\!\?\-]/g, '');
+    result = result.replace(/[^\w\s.,!?-]/g, '');
 
     return result;
   }

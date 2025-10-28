@@ -1,10 +1,10 @@
 
-> @prompt-spaghetti/custom-node-sdk@0.1.0 build C:\Users\Owner\CascadeProjects\prompt-spaghetti\packages\custom-node-sdk
+> @prompt-spaghetti/custom-node-sdk@0.1.0 build /mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/packages/custom-node-sdk
 > tsc && npm run copy-templates
 
 
 > @prompt-spaghetti/custom-node-sdk@0.1.0 copy-templates
-> xcopy templates dist\templates /E /I /Y
+> node ./scripts/copy-templates.mjs
 
-templates\.gitkeep
-1 File(s) copied
+[1G[0K[copy-templates] Copied templates to /mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/packages/custom-node-sdk/dist/templates
+[1G[0K⠙[1G[0K

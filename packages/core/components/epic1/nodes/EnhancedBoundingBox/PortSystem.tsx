@@ -70,6 +70,7 @@ const PortHandle: React.FC<{
       className={`bounding-box-port port-${port.direction}`}
       data-port-type={port.type}
       data-port-label={port.label}
+      data-testid={`handle-${port.direction === 'input' ? 'target' : 'source'}-${port.id}`}
     />
   );
 });

@@ -48,7 +48,7 @@ export interface AdvancedExecutionContext extends ExecutionContext {
   /** Pseudorandom number generator function for deterministic execution */
   prng?: () => number;
   /** Current graph for dependency resolution */
-  graph?: any; // TODO: Type this properly with Graph type
+  graph?: Record<string, unknown>;
   /** Current platform (web, mobile, desktop) */
   platform?: string;
   /** Current locale for internationalization */

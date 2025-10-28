@@ -8,14 +8,13 @@ export interface ChatCompletionCreateParams {
 }
 
 class ChatCompletionsAPI {
-  async create(_params: ChatCompletionCreateParams): Promise<any> {
+  async create(): Promise<never> {
     throw new Error('OpenAI API is not available in the browser build');
   }
 }
 
 export default class OpenAI {
   chat = { completions: new ChatCompletionsAPI() } as const;
-  constructor(_opts?: any) {}
 }
 
 export { OpenAI };

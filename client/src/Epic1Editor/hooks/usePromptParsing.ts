@@ -4,11 +4,12 @@ import type {
   PromptAnalysis,
   GeneratedNode
 } from '../../lib/simplePromptParser';
-import {
-  calculateViewportDimensions,
-  calculateNodePositions,
-  createDemoNodes
-} from '../utils/nodePositioning';
+type AnalysisEdge = {
+  id?: string;
+  source: string;
+  target: string;
+  type?: string;
+};
 
 interface UsePromptParsingProps {
   onNodesCreated?: (nodes: Node[], edges: Edge[]) => void;
@@ -40,13 +41,11 @@ export const usePromptParsing = ({
 
   // Process analysis into nodes when available
   useEffect(() => {
-    if (!promptAnalysis || !nodeCreationMode) return;
+    if (!promptAnalysis || !nodeCreationMode) {return;}
 
     const processAnalysis = () => {
       console.log('[usePromptParsing] Processing analysis:', promptAnalysis);
       console.log('[usePromptParsing] Node creation mode:', nodeCreationMode);
-      const viewport = calculateViewportDimensions();
-
       // Convert analysis nodes to React Flow nodes
       const newNodes: Node[] = [];
       const newEdges: Edge[] = [];
@@ -132,8 +131,12 @@ export const usePromptParsing = ({
         );
 
         // Create edges from analysis
-        if (promptAnalysis.edges && promptAnalysis.edges.length > 0) {
-          promptAnalysis.edges.forEach((edge: any) => {
+        const analysisEdges = promptAnalysis.edges as
+          | AnalysisEdge[]
+          | undefined;
+
+        if (analysisEdges && analysisEdges.length > 0) {
+          analysisEdges.forEach(edge => {
             newEdges.push({
               id: edge.id || `${edge.source}-${edge.target}`,
               source: edge.source,

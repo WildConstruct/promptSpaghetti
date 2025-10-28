@@ -267,7 +267,7 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
                 <span className="epic1-note">(snap spacing in px)</span>
               </div>
             </div>
-            {!import.meta.env.PROD && (
+            {!process.env.NODE_ENV?.includes('prod') && (
             <div className="epic1-section">
               <div className="epic1-section-title">Files (test)</div>
               <div className="epic1-col">

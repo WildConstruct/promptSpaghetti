@@ -182,58 +182,6 @@
     "id": "2e93f6a8"
   },
   {
-    "title": "Chapter 3: Generator JSON Schema Reference",
-    "url": "part1-foundation/03-schema-reference.html",
-    "content": "Chapter 3: Generator JSON Schema Reference This chapter provides a complete reference for the Generator JSON format, which serves as both the storage format and the interchange format for Prompt Spaghetti generators. Schema Overview A generator file consists of several key sections: ``json { \"meta\": { \"name\": \"Generator Name\", \"author\": \"Author Name\", \"version\": \"1.0.0\", \"description\": \"What this generator creates\" }, \"variables\": { \"variableName\": \"defaultValue\" }, \"grammar\": { \"start\": [\"Entry point rule\"], \"ruleName\": [\"array\", \"of\", \"options\"] }, \"includes\": { \"external\": \"./path/to/file.json\" }, \"config\": { \"maxDepth\": 10, \"enableDebug\": false } } ` Metadata Structure The meta section contains information about the generator: Required Fields `json { \"meta\": { \"name\": \"Character Generator\", \"version\": \"1.0.0\" } } ` name (string, required): Display name for the generator version (string, required): Semantic version number Optional Fields `json { \"meta\": { \"author\": \"Jane Doe\", \"desc",
-    "type": "reference",
-    "difficulty": "intermediate",
-    "part": "part1",
-    "keywords": [
-      "chapter",
-      "generator",
-      "json",
-      "schema",
-      "reference",
-      "name",
-      "grammar",
-      "type",
-      "string",
-      "rules",
-      "character",
-      "variables",
-      "meta",
-      "node",
-      "rule"
-    ],
-    "id": "3fea8c5f"
-  },
-  {
-    "title": "Chapter 4: Basic Generator Creation",
-    "url": "part2-content-development/04-basic-generator.html",
-    "content": "Chapter 4: Basic Generator Creation Welcome to hands-on generator creation! This chapter walks you through building your first generators, from simple random selections to more sophisticated content generation patterns. Your First Generator Let's start with the simplest possible generator - a greeting generator. Step 1: Basic Structure Create a new file called greeting-generator.json: ``json { \"meta\": { \"name\": \"My First Generator\", \"version\": \"1.0.0\" }, \"grammar\": { \"start\": \"Hello, world!\" } } ` This generator always outputs \"Hello, world!\" - not very exciting, but it's valid! Step 2: Adding Randomness Let's make it more interesting by adding random selection: `json { \"meta\": { \"name\": \"Random Greeting Generator\", \"version\": \"1.0.0\" }, \"grammar\": { \"start\": [\"Hello, world!\", \"Hi there!\", \"Greetings!\", \"Welcome!\"] } } ` Now the generator randomly picks one of the four greetings. Step 3: Combining Elements Real generators combine multiple random elements: `json { \"meta\": { \"name\": \"Dyn",
-    "type": "chapter",
-    "difficulty": "beginner",
-    "part": "part2",
-    "keywords": [
-      "chapter",
-      "basic",
-      "generator",
-      "creation",
-      "json",
-      "grammar",
-      "start",
-      "name",
-      "rules",
-      "gold",
-      "price",
-      "your",
-      "step",
-      "rule",
-      "variable"
-    ],
-    "id": "b5184b0a"
-  },
-  {
     "title": "Content Authoring Handbook",
     "url": "README.html",
     "content": "Content Authoring Handbook Epic 8.3 Implementation - A comprehensive guide to creating and managing content with the Prompt Spaghetti system 📚 Handbook Structure This handbook is organized into six main parts, designed to take you from basic concepts to advanced techniques: Part 1: Foundation Introduction & Overview Architecture & Core Concepts Generator JSON Schema Reference Part 2: Content Development Basic Generator Creation Advanced Rule Syntax Modularization & Organization UI Integration & Lockable Rules Slot Taxonomy & Prompt Assembly Part 3: Engine Reference Engine API Documentation Modifier System Variable System Conditional Logic Performance Optimization Part 4: Practical Guides Step-by-Step Generator Creation Expansion Recipes for LLMs Testing & Quality Assurance Debug Tools & Troubleshooting Part 5: Advanced Topics Custom Extensions Security Best Practices Integration Patterns Generator Design Patterns Part 6: Reference Materials Quick Reference Tables Templates & Boilerpla",
@@ -284,6 +232,58 @@
       "json"
     ],
     "id": "723b9447"
+  },
+  {
+    "title": "Chapter 3: Generator JSON Schema Reference",
+    "url": "part1-foundation/03-schema-reference.html",
+    "content": "Chapter 3: Generator JSON Schema Reference This chapter provides a complete reference for the Generator JSON format, which serves as both the storage format and the interchange format for Prompt Spaghetti generators. Schema Overview A generator file consists of several key sections: ``json { \"meta\": { \"name\": \"Generator Name\", \"author\": \"Author Name\", \"version\": \"1.0.0\", \"description\": \"What this generator creates\" }, \"variables\": { \"variableName\": \"defaultValue\" }, \"grammar\": { \"start\": [\"Entry point rule\"], \"ruleName\": [\"array\", \"of\", \"options\"] }, \"includes\": { \"external\": \"./path/to/file.json\" }, \"config\": { \"maxDepth\": 10, \"enableDebug\": false } } ` Metadata Structure The meta section contains information about the generator: Required Fields `json { \"meta\": { \"name\": \"Character Generator\", \"version\": \"1.0.0\" } } ` name (string, required): Display name for the generator version (string, required): Semantic version number Optional Fields `json { \"meta\": { \"author\": \"Jane Doe\", \"desc",
+    "type": "reference",
+    "difficulty": "intermediate",
+    "part": "part1",
+    "keywords": [
+      "chapter",
+      "generator",
+      "json",
+      "schema",
+      "reference",
+      "name",
+      "grammar",
+      "type",
+      "string",
+      "rules",
+      "character",
+      "variables",
+      "meta",
+      "node",
+      "rule"
+    ],
+    "id": "3fea8c5f"
+  },
+  {
+    "title": "Chapter 4: Basic Generator Creation",
+    "url": "part2-content-development/04-basic-generator.html",
+    "content": "Chapter 4: Basic Generator Creation Welcome to hands-on generator creation! This chapter walks you through building your first generators, from simple random selections to more sophisticated content generation patterns. Your First Generator Let's start with the simplest possible generator - a greeting generator. Step 1: Basic Structure Create a new file called greeting-generator.json: ``json { \"meta\": { \"name\": \"My First Generator\", \"version\": \"1.0.0\" }, \"grammar\": { \"start\": \"Hello, world!\" } } ` This generator always outputs \"Hello, world!\" - not very exciting, but it's valid! Step 2: Adding Randomness Let's make it more interesting by adding random selection: `json { \"meta\": { \"name\": \"Random Greeting Generator\", \"version\": \"1.0.0\" }, \"grammar\": { \"start\": [\"Hello, world!\", \"Hi there!\", \"Greetings!\", \"Welcome!\"] } } ` Now the generator randomly picks one of the four greetings. Step 3: Combining Elements Real generators combine multiple random elements: `json { \"meta\": { \"name\": \"Dyn",
+    "type": "chapter",
+    "difficulty": "beginner",
+    "part": "part2",
+    "keywords": [
+      "chapter",
+      "basic",
+      "generator",
+      "creation",
+      "json",
+      "grammar",
+      "start",
+      "name",
+      "rules",
+      "gold",
+      "price",
+      "your",
+      "step",
+      "rule",
+      "variable"
+    ],
+    "id": "b5184b0a"
   },
   {
     "title": "Chapter 14: Interactive Tutorial - Your First Generator",

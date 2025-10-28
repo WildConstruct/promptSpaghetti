@@ -65,6 +65,10 @@ class SimpleVectorDB {
     return scores.sort((a, b) => b.score - a.score).slice(0, limit);
   }
 
+  getEmbedding(assetId: string): AssetEmbedding | undefined {
+    return this.embeddings.get(assetId);
+  }
+
   private cosineSimilarity(vec1: number[], vec2: number[]): number {
     if (vec1.length !== vec2.length) return 0;
 
@@ -422,24 +426,86 @@ export class SimilarityEngine {
     query: SegmentMetadata,
     assetId: string
   ): number {
-    // Calculate style similarity based on mood, intensity, etc.
-    // Simplified for MVP
-    return Math.random() * 0.8 + 0.2;
+    const asset = this.vectorDB.getEmbedding(assetId);
+    if (!asset) {
+      return 0.5;
+    }
+
+    const target = asset.metadata;
+    let score = 0;
+    let comparisons = 0;
+
+    if (query.mood && target.mood) {
+      comparisons++;
+      score += query.mood === target.mood ? 1 : 0.4;
+    }
+
+    if (
+      typeof query.intensity === 'number' &&
+      typeof target.intensity === 'number'
+    ) {
+      comparisons++;
+      const intensityDiff = Math.abs(query.intensity - target.intensity);
+      score += Math.max(0, 1 - intensityDiff / 10);
+    }
+
+    if (query.location && target.location) {
+      comparisons++;
+      score += query.location === target.location ? 1 : 0.3;
+    }
+
+    if (comparisons === 0) {
+      return 0.5;
+    }
+
+    return score / comparisons;
   }
 
   private calculateTagSimilarity(
     query: SegmentMetadata,
     assetId: string
   ): number {
-    // Calculate tag overlap
-    // Simplified for MVP
-    return Math.random() * 0.7 + 0.3;
+    const asset = this.vectorDB.getEmbedding(assetId);
+    if (!asset) {
+      return 0.3;
+    }
+
+    const queryTags = new Set(query.tags || []);
+    const assetTags = new Set(asset.metadata.tags || []);
+
+    if (queryTags.size === 0 || assetTags.size === 0) {
+      return 0.3;
+    }
+
+    let intersection = 0;
+    for (const tag of queryTags) {
+      if (assetTags.has(tag)) {
+        intersection++;
+      }
+    }
+
+    const union = new Set([...queryTags, ...assetTags]).size;
+    return union === 0 ? 0 : intersection / union;
   }
 
   private calculateRecencyScore(assetId: string): number {
-    // Prefer recently used assets slightly
-    // Simplified for MVP
-    return Math.random() * 0.5 + 0.5;
+    const asset = this.vectorDB.getEmbedding(assetId);
+    if (!asset) {
+      return 0.5;
+    }
+
+    const assetTime = new Date(asset.timestamp).getTime();
+    if (Number.isNaN(assetTime)) {
+      return 0.5;
+    }
+
+    const ageMs = Date.now() - assetTime;
+    const ageDays = ageMs / (1000 * 60 * 60 * 24);
+
+    if (ageDays <= 1) return 1;
+    if (ageDays <= 7) return 0.85;
+    if (ageDays <= 30) return 0.7;
+    return 0.5;
   }
 
   private explainMatch(

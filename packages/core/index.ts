@@ -288,8 +288,17 @@ export {
   type ValidationResult as AdvancedValidationResult
 } from './runtime';
 
-// Epic1 exports - DISABLED (Epic1GraphEditor uses import.meta which breaks Jest)
-// export { Epic1GraphEditor, Epic1GraphEditorWithProvider } from './components/epic1/Epic1GraphEditor';
-// export { AssetBrowserLoader } from './components/epic1/AssetBrowserLoader';
-// export { TabbedSidePanel } from './components/epic1/TabbedSidePanel';
-// export { EdgeRenderingFix, edgeTypes as epic1EdgeTypes } from './components/epic1/EdgeRenderingFix';
+// Epic1 exports - Re-enabled (import.meta issues fixed)
+export { Epic1GraphEditor, Epic1GraphEditorWithProvider } from './components/epic1/Epic1GraphEditor';
+export { AssetBrowserLoader } from './components/epic1/AssetBrowserLoader';
+export { TabbedSidePanel } from './components/epic1/TabbedSidePanel';
+export { EdgeRenderingFix, edgeTypes as epic1EdgeTypes } from './components/epic1/EdgeRenderingFix';
+
+// Root-level component exports
+export { GraphEditor, GraphEditorWithProvider } from './GraphEditor';
+export { Palette } from './Palette';
+export { PreviewModal } from './PreviewModal';
+
+export type { GraphEditorProps } from './GraphEditor';
+export type { PaletteProps } from './Palette';
+export type { PreviewModalProps } from './PreviewModal';

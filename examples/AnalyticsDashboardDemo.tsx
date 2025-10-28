@@ -5,13 +5,11 @@
  * Demonstrates how to build dashboards with the new shared components
  */
 
-import React, { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, Users, DollarSign } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { BarChart3 } from 'lucide-react';
 import {
   DashboardShell,
   useDashboard,
-  LoadingState,
-  ErrorState,
   EmptyState
 } from '../packages/ui-kit/src/Dashboard';
 
@@ -105,7 +103,8 @@ export const AnalyticsDashboardDemo: React.FC = () => {
             }
           ]
         });
-      } catch (err) {
+      } catch (caughtError) {
+        console.error('Failed to load analytics data', caughtError);
         setError('Failed to load analytics data');
       } finally {
         setLoading(false);

@@ -10,7 +10,9 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({
   isOpen,
   onConsent
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="consent-modal-overlay">

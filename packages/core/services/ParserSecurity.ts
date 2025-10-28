@@ -1,6 +1,33 @@
 // Parser Security Service - Story 2.6
 // Handles prompt sanitization and output validation
 
+type GraphResponseNode = {
+  content?: unknown;
+  [key: string]: unknown;
+};
+
+type GraphResponseEdge = {
+  source: number;
+  target: number;
+  [key: string]: unknown;
+};
+
+interface GraphResponse {
+  nodes: GraphResponseNode[];
+  edges: GraphResponseEdge[];
+  [key: string]: unknown;
+}
+
+interface SecurityLogEntry {
+  timestamp: string;
+  event: string;
+  details: unknown;
+  source: 'ParserSecurity';
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
 export class ParserSecurity {
   // PII patterns to detect and mask
   private readonly piiPatterns = {
@@ -77,8 +104,14 @@ export class ParserSecurity {
   /**
    * Validate LLM output for safety
    */
-  validateOutputSafety(response: any): boolean {
-    const responseStr = JSON.stringify(response);
+  validateOutputSafety(response: unknown): boolean {
+    if (!this.isGraphResponse(response)) {
+      console.warn('ParserSecurity: Invalid response format');
+      return false;
+    }
+
+    const graphResponse = response;
+    const responseStr = JSON.stringify(graphResponse);
 
     // Check for dangerous patterns
     for (const pattern of this.dangerousPatterns) {
@@ -89,20 +122,18 @@ export class ParserSecurity {
     }
 
     // Check for suspicious node content
-    if (response.nodes && Array.isArray(response.nodes)) {
-      for (const node of response.nodes) {
-        if (node.content && typeof node.content === 'string') {
-          // Check for script tags or executable code
-          if (this.containsExecutableCode(node.content)) {
-            console.warn('Executable code detected in node content');
-            return false;
-          }
+    for (const node of graphResponse.nodes) {
+      if (typeof node.content === 'string') {
+        // Check for script tags or executable code
+        if (this.containsExecutableCode(node.content)) {
+          console.warn('Executable code detected in node content');
+          return false;
         }
       }
     }
 
     // Validate structure integrity
-    if (!this.validateStructure(response)) {
+    if (!this.validateStructure(graphResponse)) {
       console.warn('Invalid structure in LLM response');
       return false;
     }
@@ -187,20 +218,25 @@ export class ParserSecurity {
   /**
    * Validate response structure
    */
-  private validateStructure(response: any): boolean {
+  private validateStructure(response: GraphResponse): boolean {
     // Must have nodes array
-    if (!response.nodes || !Array.isArray(response.nodes)) {
+    if (!Array.isArray(response.nodes)) {
       return false;
     }
 
     // Must have edges array
-    if (!response.edges || !Array.isArray(response.edges)) {
+    if (!Array.isArray(response.edges)) {
       return false;
     }
 
     // Validate edge references
     for (const edge of response.edges) {
-      if (typeof edge.source !== 'number' || typeof edge.target !== 'number') {
+      if (
+        typeof edge.source !== 'number' ||
+        Number.isNaN(edge.source) ||
+        typeof edge.target !== 'number' ||
+        Number.isNaN(edge.target)
+      ) {
         return false;
       }
 
@@ -233,7 +269,7 @@ export class ParserSecurity {
   /**
    * Check if edges form a cycle
    */
-  private hasCycles(edges: any[], nodeCount: number): boolean {
+  private hasCycles(edges: GraphResponseEdge[], nodeCount: number): boolean {
     const adjacency: number[][] = Array(nodeCount)
       .fill(null)
       .map(() => []);
@@ -277,9 +313,9 @@ export class ParserSecurity {
   /**
    * Audit log for security events
    */
-  logSecurityEvent(event: string, details: any): void {
+  logSecurityEvent(event: string, details: unknown): void {
     const timestamp = new Date().toISOString();
-    const logEntry = {
+    const logEntry: SecurityLogEntry = {
       timestamp,
       event,
       details,
@@ -294,7 +330,7 @@ export class ParserSecurity {
     // In production, this could send to a security monitoring service
     // For now, just store in memory or localStorage
     if (typeof window !== 'undefined' && window.localStorage) {
-      const logs = JSON.parse(localStorage.getItem('securityLogs') || '[]');
+      const logs = this.getStoredLogs(localStorage.getItem('securityLogs'));
       logs.push(logEntry);
       // Keep only last 100 entries
       if (logs.length > 100) {
@@ -302,5 +338,53 @@ export class ParserSecurity {
       }
       localStorage.setItem('securityLogs', JSON.stringify(logs));
     }
+  }
+
+  private isGraphResponse(value: unknown): value is GraphResponse {
+    if (!isRecord(value)) return false;
+    const nodes = value.nodes;
+    const edges = value.edges;
+    if (!Array.isArray(nodes) || !Array.isArray(edges)) {
+      return false;
+    }
+    const nodesValid = nodes.every(node => isRecord(node));
+    const edgesValid = edges.every(
+      edge =>
+        isRecord(edge) &&
+        typeof edge.source === 'number' &&
+        typeof edge.target === 'number'
+    );
+    return nodesValid && edgesValid;
+  }
+
+  private getStoredLogs(raw: string | null): SecurityLogEntry[] {
+    if (!raw) {
+      return [];
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
+      return parsed.filter(this.isSecurityLogEntry);
+    } catch {
+      return [];
+    }
+  }
+
+  private isSecurityLogEntry(value: unknown): value is SecurityLogEntry {
+    if (!isRecord(value)) return false;
+    return (
+      typeof value.timestamp === 'string' &&
+      typeof value.event === 'string' &&
+      'details' in value &&
+      value.source === 'ParserSecurity'
+    );
+  }
+
+  private shouldMaskPII(): boolean {
+    // In test environment, always mask PII
+    // In production, this could be controlled by workspace settings
+    return process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development';
   }
 }

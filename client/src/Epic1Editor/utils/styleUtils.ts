@@ -5,7 +5,7 @@
 
 // Get computed style value for a CSS variable
 export const getCSSVariable = (varName: string): string => {
-  if (typeof window === 'undefined') return '';
+  if (typeof window === 'undefined') {return '';}
   return getComputedStyle(document.documentElement)
     .getPropertyValue(varName)
     .trim();

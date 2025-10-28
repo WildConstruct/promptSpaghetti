@@ -81,7 +81,9 @@ export const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(
       const textarea = textareaRef.current;
       const overlay = overlayRef.current;
 
-      if (!textarea || !overlay) return;
+      if (!textarea || !overlay) {
+        return;
+      }
 
       const syncScroll = () => {
         overlay.scrollTop = textarea.scrollTop;

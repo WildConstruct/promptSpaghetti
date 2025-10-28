@@ -8,7 +8,6 @@ import React, {
 import {
   simplePromptParser,
   PromptAnalysis,
-  GeneratedNodeInternal,
   GeneratedNode,
   NodeMapping
 } from '../../lib/simplePromptParser';
@@ -42,6 +41,26 @@ interface HighlightSegment {
   nodeId?: string;
   color?: string;
   isSelected?: boolean;
+}
+
+type LLMNodeData = {
+  content?: string;
+  label?: string;
+  [key: string]: unknown;
+};
+
+interface LLMNode {
+  id: string;
+  type?: string;
+  text?: string;
+  data?: LLMNodeData;
+}
+
+interface LLMParseResult {
+  nodes?: LLMNode[];
+  graph?: {
+    nodes?: LLMNode[];
+  };
 }
 
 const HIGHLIGHT_COLORS = [
@@ -93,9 +112,9 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
   // Utility to convert hex color to rgba with alpha - memoized
   const hexToRgba = useCallback((hex: string, alpha = 0.6) => {
-    if (!hex) return 'rgba(0,0,0,0)';
+    if (!hex) {return 'rgba(0,0,0,0)';}
     const h = hex.replace('#', '');
-    if (h.length !== 6) return 'rgba(0,0,0,0.4)';
+    if (h.length !== 6) {return 'rgba(0,0,0,0.4)';}
     const r = parseInt(h.slice(0, 2), 16);
     const g = parseInt(h.slice(2, 4), 16);
     const b = parseInt(h.slice(4, 6), 16);
@@ -105,7 +124,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   // Memoize segment styles to avoid recalculation on every render
   const segmentStyles = useMemo(() => {
     return highlightSegments.map((segment, index) => {
-      if (!segment.nodeId) return null;
+      if (!segment.nodeId) {return null;}
       const color =
         segment.color || HIGHLIGHT_COLORS[index % HIGHLIGHT_COLORS.length];
       const isSelected = !!segment.isSelected;
@@ -126,7 +145,6 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedSegIndex, setSelectedSegIndex] = useState<number | null>(null);
-  const [isTextFocused, setIsTextFocused] = useState(false);
   const [hasBeenAnalyzed, setHasBeenAnalyzed] = useState(false);
   // Removed unused caretRect state
   const preEditTextRef = useRef<string | null>(null);
@@ -141,30 +159,9 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   const historyRef = useRef<HighlightSegment[][]>([]);
   const futureRef = useRef<HighlightSegment[][]>([]);
 
-  // Debug: mount
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    // console.log('[PromptDissector] mounted');
-    // Extra: log toolbar rect if present
-    const el = toolbarRef.current;
-    if (el) {
-      const rect = el.getBoundingClientRect();
-      const styles = window.getComputedStyle(el);
-      // eslint-disable-next-line no-console
-      // console.log('[PromptDissector] toolbar rect', rect, {
-      //   position: styles.position,
-      //   zIndex: styles.zIndex,
-      //   pointerEvents: styles.pointerEvents,
-      //   display: styles.display,
-      //   visibility: styles.visibility,
-      //   opacity: styles.opacity,
-      // });
-    }
-  }, []);
-
   // Scroll the overlay to bring a given nodeId into view
   const scrollToNodeId = useCallback((node: string | null) => {
-    if (!node || !overlayRef.current) return;
+    if (!node || !overlayRef.current) {return;}
     const el = overlayRef.current.querySelector(
       `[data-node-id="${node}"]`
     ) as HTMLElement | null;
@@ -251,15 +248,17 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       let newAnalysis: PromptAnalysis;
 
       if (mode === 'llm-enhanced') {
-        if (showLoading) setIsLLMParsing(true);
-        let result: any;
+        if (showLoading) {setIsLLMParsing(true);}
+        let result: LLMParseResult;
         try {
-          result = await llmServiceRef.current.parse(text, {
+          const rawResult = await llmServiceRef.current.parse(text, {
             mode: 'llm-enhanced'
           });
-        } catch (e: any) {
-          console.error('[PromptDissector] LLM parse failed:', e?.message || e);
-          if (showLoading) setIsLLMParsing(false);
+          result = rawResult as LLMParseResult;
+        } catch (e: unknown) {
+          const message = e instanceof Error ? e.message : String(e);
+          console.error('[PromptDissector] LLM parse failed:', message);
+          if (showLoading) {setIsLLMParsing(false);}
           throw e;
         }
 
@@ -267,7 +266,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         // Handle both old format (graph.nodes) and new format (nodes)
         if (!result) {
           console.error('[PromptDissector] No response from LLM service');
-          if (showLoading) setIsLLMParsing(false);
+          if (showLoading) {setIsLLMParsing(false);}
           throw new Error('No response from LLM service');
         }
 
@@ -280,23 +279,35 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
             '[PromptDissector] Invalid LLM response - no nodes found:',
             result
           );
-          if (showLoading) setIsLLMParsing(false);
+          if (showLoading) {setIsLLMParsing(false);}
           throw new Error('Invalid response from LLM service - no nodes found');
         }
 
         // Create segments from the nodes
-        const segments = result.nodes
+        const nodes = result.nodes ?? [];
+
+        const segments = nodes
           .filter(n => n.type !== 'output')
           .map(node => ({
-            text: node.text || node.data.content || node.data.label || '',
+            text:
+              node.text ||
+              (node.data?.content as string | undefined) ||
+              (node.data?.label as string | undefined) ||
+              '',
             type: node.type
           }));
 
         // Create mappings with actual text positions
         // First, concatenate all node texts to understand the full coverage
-        const nodeTexts = result.nodes
+        const nodeTexts = nodes
           .filter(n => n.type !== 'output')
-          .map(node => node.text || node.data.content || node.data.label || '');
+          .map(
+            node =>
+              node.text ||
+              (node.data?.content as string | undefined) ||
+              (node.data?.label as string | undefined) ||
+              ''
+          );
 
         console.log('[PromptDissector] Node texts from LLM:', nodeTexts);
         console.log('[PromptDissector] Original prompt:', text);
@@ -307,7 +318,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
         for (let idx = 0; idx < nodeTexts.length; idx++) {
           const nodeText = nodeTexts[idx];
-          const node = result.nodes.filter(n => n.type !== 'output')[idx];
+          const node = nodes.filter(n => n.type !== 'output')[idx];
 
           if (!nodeText || nodeText.trim() === '') {
             console.warn(`[PromptDissector] Skipping empty node ${idx}`);
@@ -377,7 +388,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           llmMetadata: result.metadata,
           rawPrompt: text
         };
-        if (showLoading) setIsLLMParsing(false);
+        if (showLoading) {setIsLLMParsing(false);}
       } else {
         // Use standard parser
         newAnalysis = parserRef.current.parse(text);
@@ -531,11 +542,12 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     };
   }, [
     value,
-    onAnalysisComplete,
     isEditMode,
     hasBeenAnalyzed,
     llmMode,
-    performParse
+    performParse,
+    safeOnAnalysisComplete,
+    onAnalysisStart
   ]);
 
   // Handle text change - already optimized with useCallback
@@ -549,7 +561,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   // Track selection in textarea - optimized with useCallback
   const handleSelect = useCallback(() => {
     const el = textareaRef.current;
-    if (!el) return;
+    if (!el) {return;}
     const start = el.selectionStart ?? 0;
     const end = el.selectionEnd ?? 0;
     if (start === end) {
@@ -568,14 +580,14 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   // Locally select a segment - optimized with useCallback
   const handleSegmentClickLocal = useCallback(
     (nodeId: string | null, segIndex: number, event?: React.MouseEvent) => {
-      if (!nodeId) return;
+      if (!nodeId) {return;}
 
       // Check if Ctrl/Cmd key is held for multi-selection
       const isMultiSelect = event && (event.ctrlKey || event.metaKey);
 
       setHighlightSegments(prev =>
         prev.map((s, i) => {
-          if (!s.nodeId) return s;
+          if (!s.nodeId) {return s;}
           if (isMultiSelect) {
             // Toggle selection for clicked segment, keep others
             return i === segIndex ? { ...s, isSelected: !s.isSelected } : s;
@@ -595,19 +607,11 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
   // Removed unused updateCaret function
 
-  // Removed problematic useEffect that was causing infinite re-renders
-
-  // Sync scroll between textarea and overlay - optimized with useCallback
-  const handleScroll = useCallback(() => {
-    if (textareaRef.current && overlayRef.current) {
-      overlayRef.current.scrollTop = textareaRef.current.scrollTop;
-      overlayRef.current.scrollLeft = textareaRef.current.scrollLeft;
-    }
-  }, []);
-
   // Keep selection styling in sync with selectedNodeId from parent
   useEffect(() => {
-    if (selectedNodeId == null) return;
+    if (selectedNodeId === null || selectedNodeId === undefined) {
+      return;
+    }
     const idx = highlightSegments.findIndex(s => s.nodeId === selectedNodeId);
     if (idx >= 0) {
       setSelectedSegIndex(idx);
@@ -618,7 +622,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       );
       scrollToNodeId(selectedNodeId);
     }
-  }, [selectedNodeId]); // Removed scrollToNodeId from deps to prevent loops
+  }, [highlightSegments, scrollToNodeId, selectedNodeId]);
 
   // Note: segment range drag has been temporarily disabled in favor of simpler selection-based combine/merge.
 
@@ -628,7 +632,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       setHighlightSegments(prev => {
         const current = [...prev];
         const target = current[segIndex];
-        if (!target || !target.nodeId) return prev;
+        if (!target || !target.nodeId) {return prev;}
 
         // push history for undo
         historyRef.current.push(prev);
@@ -671,7 +675,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         if (analysis) {
           const removedNodeId = target.nodeId;
           setAnalysis(prevAnalysis => {
-            if (!prevAnalysis) return prevAnalysis;
+            if (!prevAnalysis) {return prevAnalysis;}
 
             const filteredMappings = prevAnalysis.mappings.filter(
               m => m.nodeId !== removedNodeId
@@ -683,7 +687,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
             // Reorder nodes by mapping start index (keep Output last)
             const mappingStarts = new Map<string, number>();
             for (const m of filteredMappings)
-              mappingStarts.set(m.nodeId, m.startIndex);
+              {mappingStarts.set(m.nodeId, m.startIndex);}
             const nonOutput = filteredNodes.filter(
               n => n.node.nodeType !== 'Output'
             );
@@ -713,56 +717,24 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         return current;
       });
     },
-    [analysis, onAnalysisComplete, value]
-  );
-
-  // Toolbar actions for changing node type of the currently selected mapped segment
-  const handleChangeSelectedNodeType = useCallback(
-    (newType: 'Text' | 'Choice' | 'Variable') => {
-      const effectiveIndex =
-        selectedSegIndex ?? highlightSegments.findIndex(s => !!s.nodeId);
-      if (effectiveIndex == null || effectiveIndex < 0) return;
-      const seg = highlightSegments[effectiveIndex];
-      if (!seg || !seg.nodeId || !analysis) return;
-      const updated: PromptAnalysis = {
-        ...analysis,
-        nodes: analysis.nodes.map(n =>
-          n.node.id === seg.nodeId
-            ? {
-                node: {
-                  ...n.node,
-                  nodeType: newType as GeneratedNodeInternal['nodeType']
-                }
-              }
-            : n
-        )
-      } as PromptAnalysis;
-      setAnalysis(updated);
-      safeOnAnalysisComplete(updated);
-      // reflect selection visually
-      setHighlightSegments(prev =>
-        prev.map((s, i) =>
-          s.nodeId ? { ...s, isSelected: i === effectiveIndex } : s
-        )
-      );
-      setSelectedSegIndex(effectiveIndex);
-    },
-    [analysis, highlightSegments, onAnalysisComplete, selectedSegIndex]
+    [analysis, safeOnAnalysisComplete, value]
   );
 
   // Merge the currently selected mapped segment with the next mapped segment
   const handleMergeWithNext = useCallback(() => {
-    if (selectedSegIndex == null) return;
+    if (selectedSegIndex === null || selectedSegIndex === undefined) {
+      return;
+    }
     const current = highlightSegments[selectedSegIndex];
-    if (!current || !current.nodeId) return;
+    if (!current || !current.nodeId) {return;}
 
     // Find the next mapped segment index after the current one
     const nextMappedIndex = highlightSegments.findIndex(
       (s, i) => i > selectedSegIndex && !!s.nodeId
     );
-    if (nextMappedIndex < 0) return;
+    if (nextMappedIndex < 0) {return;}
     const nextMapped = highlightSegments[nextMappedIndex];
-    if (!nextMapped || !nextMapped.nodeId) return;
+    if (!nextMapped || !nextMapped.nodeId) {return;}
 
     // Prefer selection boundaries if user highlighted across nodes; otherwise merge full next node
     const el = textareaRef.current;
@@ -818,7 +790,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
     // Update analysis: extend keep node mapping; remove drop node mapping and node entry
     setAnalysis(prev => {
-      if (!prev) return prev;
+      if (!prev) {return prev;}
       let updatedMappings = prev.mappings.map(m => {
         if (m.nodeId === keepNodeId) {
           return { ...m, startIndex: newStart, endIndex: newEnd };
@@ -867,7 +839,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       // Reorder nodes by mapping start (keep Output last)
       const mappingStarts = new Map<string, number>();
       for (const m of updatedMappings)
-        mappingStarts.set(m.nodeId, m.startIndex);
+        {mappingStarts.set(m.nodeId, m.startIndex);}
       const nonOutput = updatedNodes.filter(n => n.node.nodeType !== 'Output');
       nonOutput.sort((a, b) => {
         const aPos = mappingStarts.get(a.node.id) ?? Number.MAX_SAFE_INTEGER;
@@ -884,31 +856,11 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       safeOnAnalysisComplete(updated);
       return updated;
     });
-  }, [highlightSegments, onAnalysisComplete, selectedSegIndex, value]);
-
-  // Selected node full text preview - memoized for performance
-  const effectiveIndexForPreview = useMemo(
-    () => selectedSegIndex ?? highlightSegments.findIndex(s => !!s.nodeId),
-    [selectedSegIndex, highlightSegments]
-  );
-
-  const nodeIdForPreview = useMemo(
-    () =>
-      effectiveIndexForPreview != null && effectiveIndexForPreview >= 0
-        ? (highlightSegments[effectiveIndexForPreview]?.nodeId ?? null)
-        : (selectedNodeId ?? null),
-    [effectiveIndexForPreview, highlightSegments, selectedNodeId]
-  );
-
-  const selectedNodeFullText = useMemo(() => {
-    if (!analysis || !nodeIdForPreview) return '';
-    const map = analysis.mappings.find(m => m.nodeId === nodeIdForPreview);
-    return map ? value.slice(map.startIndex, map.endIndex) : '';
-  }, [analysis, nodeIdForPreview, value]);
+  }, [highlightSegments, safeOnAnalysisComplete, selectedSegIndex, value]);
 
   const handleUndo = useCallback(() => {
     const last = historyRef.current.pop();
-    if (!last) return;
+    if (!last) {return;}
     futureRef.current.push(highlightSegments);
     setHighlightSegments(last);
     setCanRedo(true);
@@ -917,7 +869,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
   const handleRedo = useCallback(() => {
     const next = futureRef.current.pop();
-    if (!next) return;
+    if (!next) {return;}
     historyRef.current.push(highlightSegments);
     setHighlightSegments(next);
     setCanUndo(true);
@@ -980,7 +932,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         seg => cursor > seg.startIndex && cursor < seg.endIndex
       );
       console.log('[Split Debug] Found segment at index:', idx);
-      if (idx < 0) return prev;
+      if (idx < 0) {return prev;}
       const target = prev[idx];
 
       historyRef.current.push(prev);
@@ -1008,13 +960,13 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
         // Update analysis mappings and nodes accordingly
         setAnalysis(prevAnalysis => {
-          if (!prevAnalysis) return prevAnalysis;
+          if (!prevAnalysis) {return prevAnalysis;}
           const existing = prevAnalysis.nodes.find(
             n => n.node.id === target.nodeId
           );
           const nodeType = existing?.node.nodeType ?? 'Text';
           const updatedMappings = prevAnalysis.mappings.flatMap(m => {
-            if (m.nodeId !== target.nodeId) return [m];
+            if (m.nodeId !== target.nodeId) {return [m];}
             // left piece (trim end to cursor)
             const leftMap = { ...m, endIndex: cursor };
             // right piece (new node id)
@@ -1046,7 +998,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           // Reorder nodes by mapping start index (keep Output last)
           const mappingStarts = new Map<string, number>();
           for (const m of updatedMappings)
-            mappingStarts.set(m.nodeId, m.startIndex);
+            {mappingStarts.set(m.nodeId, m.startIndex);}
           const nonOutputNodes = updatedNodes.filter(
             n => n.node.nodeType !== 'Output'
           );
@@ -1095,7 +1047,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       const next = [...prev.slice(0, idx), left, right, ...prev.slice(idx + 1)];
       return next;
     });
-  }, [value, onAnalysisComplete, caretPosition, llmMode]);
+  }, [value, safeOnAnalysisComplete, caretPosition, llmMode]);
 
   // Split selection and create a node mapping via modal
   const handleSplitSelection = useCallback(() => {
@@ -1118,17 +1070,17 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
     // Otherwise use textarea selection
     const el = textareaRef.current;
-    if (!el) return;
+    if (!el) {return;}
     const start = el.selectionStart ?? 0;
     const end = el.selectionEnd ?? 0;
-    if (start === end) return;
+    if (start === end) {return;}
     setSelection({ start, end, text: value.slice(start, end) });
     setIsModalOpen(true);
   }, [value, llmMode, selectedSegIndex, highlightSegments]);
 
   const handleCreateNodeFromSelection = useCallback(
     (nodeTypeValue: string, color: string) => {
-      if (!selection) return;
+      if (!selection) {return;}
 
       // Create a new node and mapping
       const nodeId = `node-${Math.random().toString(36).slice(2, 9)}`;
@@ -1190,7 +1142,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
           // Build new mappings: left (keep original id), middle (new), right (new id)
           const updatedMappings: NodeMapping[] = prev.mappings.flatMap(m => {
-            if (m.nodeId !== originalNodeId) return [m];
+            if (m.nodeId !== originalNodeId) {return [m];}
             const out: NodeMapping[] = [];
             if (leftText.length > 0) {
               out.push({
@@ -1252,7 +1204,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           // Reorder by mapping start index, keep Output last
           const mappingStarts2 = new Map<string, number>();
           for (const m of updatedMappings)
-            mappingStarts2.set(m.nodeId, m.startIndex);
+            {mappingStarts2.set(m.nodeId, m.startIndex);}
           const nonOutput2: GeneratedNode[] = updatedNodes.filter(
             n => n.node.nodeType !== 'Output'
           );
@@ -1302,7 +1254,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
         const mappingStarts = new Map<string, number>();
         for (const m of baseUpdated.mappings)
-          mappingStarts.set(m.nodeId, m.startIndex);
+          {mappingStarts.set(m.nodeId, m.startIndex);}
         const nonOutputNodes = baseUpdated.nodes.filter(
           n => n.node.nodeType !== 'Output'
         );
@@ -1384,7 +1336,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
       setIsModalOpen(false);
     },
-    [analysis, onAnalysisComplete, selection, value]
+    [analysis, safeOnAnalysisComplete, selection, value]
   );
 
   // Combine selection into a single mapped segment, merging across boundaries
@@ -1407,7 +1359,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       } else if (selectedSegIndex !== null) {
         // Single segment selected
         const segment = highlightSegments[selectedSegIndex];
-        if (!segment) return;
+        if (!segment) {return;}
         start = segment.startIndex;
         end = segment.endIndex;
       } else {
@@ -1416,10 +1368,10 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     } else {
       // Standard mode - use textarea selection
       const el = textareaRef.current;
-      if (!el) return;
+      if (!el) {return;}
       start = el.selectionStart ?? 0;
       end = el.selectionEnd ?? 0;
-      if (start === end) return;
+      if (start === end) {return;}
     }
 
     // Determine keepNodeId: prefer mapped segment that contains the start; else first mapped within selection; else new id
@@ -1496,7 +1448,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       // Reorder nodes by mapping start (keep Output last)
       const mappingStarts = new Map<string, number>();
       for (const m of updatedMappings)
-        mappingStarts.set(m.nodeId, m.startIndex);
+        {mappingStarts.set(m.nodeId, m.startIndex);}
       const nonOutput = updatedNodes.filter(n => n.node.nodeType !== 'Output');
       nonOutput.sort((a, b) => {
         const aPos = mappingStarts.get(a.node.id) ?? Number.MAX_SAFE_INTEGER;
@@ -1569,7 +1521,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     });
   }, [
     analysis,
-    onAnalysisComplete,
+    safeOnAnalysisComplete,
     value,
     llmMode,
     highlightSegments,
@@ -1627,7 +1579,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       // Auto-select first mapped
       const firstIdx = segments.findIndex(s => !!s.nodeId);
       if (firstIdx >= 0)
-        segments[firstIdx] = { ...segments[firstIdx], isSelected: true };
+        {segments[firstIdx] = { ...segments[firstIdx], isSelected: true };}
       setHighlightSegments(segments);
       setSelectedSegIndex(firstIdx >= 0 ? firstIdx : null);
     }
@@ -1685,7 +1637,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       // Auto-select first mapped
       const firstIdx2 = segments.findIndex(s => !!s.nodeId);
       if (firstIdx2 >= 0)
-        segments[firstIdx2] = { ...segments[firstIdx2], isSelected: true };
+        {segments[firstIdx2] = { ...segments[firstIdx2], isSelected: true };}
       setHighlightSegments(segments);
       setSelectedSegIndex(firstIdx2 >= 0 ? firstIdx2 : null);
     } catch (e) {
@@ -1694,7 +1646,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     } finally {
       setIsEditMode(false);
     }
-  }, [onAnalysisComplete, value]);
+  }, [safeOnAnalysisComplete, value]);
 
   // Keyboard shortcuts for Edit Mode and Caret navigation
   useEffect(() => {
@@ -1822,6 +1774,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                   className="dissector-btn"
                   onClick={handleCombineSelection}
                   title="Combine Selection"
+                  disabled={!hasSelectedMapping}
                 >
                   Combine
                 </button>
@@ -1829,6 +1782,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                   className="dissector-btn"
                   onClick={handleMergeWithNext}
                   title="Merge with Next"
+                  disabled={!hasSelectedMapping}
                 >
                   Merge →
                 </button>
@@ -1859,7 +1813,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                     } else {
                       // Create a new node from current selection or entire text
                       const el = textareaRef.current;
-                      if (!el && !value.trim()) return;
+                      if (!el && !value.trim()) {return;}
 
                       if (value.trim() && !hasBeenAnalyzed) {
                         // Parse the entire text first
@@ -1934,6 +1888,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                       <button
                         className="dissector-btn"
                         onClick={() => {
+                          // eslint-disable-next-line no-alert
                           if (window.confirm('Delete this segment mapping?')) {
                             handleDeleteSegment(selectedSegIndex);
                           }
@@ -2026,7 +1981,10 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                   } else {
                     // Use existing Standard results
                     console.log('[Tab Skip] Using existing Standard results');
-                    const existingResult = existingStandard!;
+                    const existingResult = existingStandard;
+                    if (!existingResult) {
+                      return;
+                    }
                     setAnalysis(existingResult.analysis);
                     safeOnAnalysisComplete(existingResult.analysis);
 
@@ -2131,7 +2089,10 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                     console.log(
                       '[Tab Skip] Using existing AI-Enhanced results'
                     );
-                    const existingResult = existingEnhanced!;
+                    const existingResult = existingEnhanced;
+                    if (!existingResult) {
+                      return;
+                    }
                     setAnalysis(existingResult.analysis);
                     safeOnAnalysisComplete(existingResult.analysis);
 
@@ -2203,14 +2164,15 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                   <div>No segments to display</div>
                 )}
                 {highlightSegments.map((segment, index) => {
-                  if (segment.nodeId) {
-                    const isHovered = hoveredNodeId === segment.nodeId;
-                    const isSelected = !!segment.isSelected;
+                  const nodeId = segment.nodeId;
+                  if (nodeId) {
+                    const isHovered = hoveredNodeId === nodeId;
+                    const isSelected = Boolean(segment.isSelected);
                     return (
                       <span
                         key={index}
                         className={`segment-inline mapped ${isSelected ? 'selected' : ''} ${isHovered ? 'hovered' : ''}`}
-                        onMouseEnter={() => handleSegmentHover(segment.nodeId!)}
+                        onMouseEnter={() => handleSegmentHover(nodeId)}
                         onMouseLeave={() => handleSegmentHover(null)}
                         onClick={e => {
                           // Handle both selection and caret positioning
@@ -2237,7 +2199,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                           }
 
                           // Also handle segment selection if Ctrl/Cmd is held
-                          handleSegmentClickLocal(segment.nodeId!, index, e);
+                          handleSegmentClickLocal(nodeId, index, e);
                         }}
                         style={{ ...segmentStyles[index], cursor: 'text' }}
                       >
@@ -2385,6 +2347,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                         console.error('[PromptDissector] Parse failed:', error);
                         setIsLLMParsing(false);
                         // Optionally show an error message to the user
+                        // eslint-disable-next-line no-alert
                         alert(
                           'Failed to parse prompt. Please try again or use Standard mode.'
                         );

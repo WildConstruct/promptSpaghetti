@@ -41,19 +41,16 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   const preEditAnalysisRef = useRef<PromptAnalysis | null>(null);
 
   // Custom hooks
-  const { performParse, clearCache, isLLMParsing, llmMode, setLlmMode } =
+  const { performParse, clearCache, isLLMParsing, llmMode } =
     useParsingEngine();
 
   const {
     highlightSegments,
     setHighlightSegments,
-    hoveredNodeId,
     handleSegmentHover,
-    selectedSegIndex,
     selectSegment,
     convertAnalysisToSegments,
     segmentStyles,
-    pushToHistory,
     undo,
     redo,
     canUndo,
@@ -88,16 +85,17 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
   // Handle parse button click
   const handleParse = useCallback(() => {
-    if (value.trim()) {
-      onAnalysisStart?.();
-      performParse(value, llmMode, newAnalysis => {
-        setAnalysis(newAnalysis);
-        const newSegments = convertAnalysisToSegments(value, newAnalysis);
-        setHighlightSegments(newSegments);
-        onAnalysisComplete(newAnalysis);
-        setHasBeenAnalyzed(true);
-      });
+    if (!value.trim()) {
+      return;
     }
+    onAnalysisStart?.();
+    performParse(value, llmMode, newAnalysis => {
+      setAnalysis(newAnalysis);
+      const newSegments = convertAnalysisToSegments(value, newAnalysis);
+      setHighlightSegments(newSegments);
+      onAnalysisComplete(newAnalysis);
+      setHasBeenAnalyzed(true);
+    });
   }, [
     value,
     llmMode,
@@ -127,7 +125,9 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
   // Track selection in textarea
   const handleSelect = useCallback(() => {
-    if (!textareaRef.current) return;
+    if (!textareaRef.current) {
+      return;
+    }
 
     const start = textareaRef.current.selectionStart || 0;
     const end = textareaRef.current.selectionEnd || 0;
@@ -149,6 +149,17 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     },
     [selectSegment, onSelectNode]
   );
+
+  useEffect(() => {
+    if (!selectedNodeId) {
+      selectSegment(null);
+      return;
+    }
+    const index = highlightSegments.findIndex(
+      segment => segment.nodeId === selectedNodeId
+    );
+    selectSegment(index >= 0 ? index : null);
+  }, [highlightSegments, selectSegment, selectedNodeId]);
 
   // Edit mode handlers
   const handleEnterEditMode = useCallback(() => {
@@ -176,7 +187,9 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     const textarea = textareaRef.current;
     const overlay = overlayRef.current;
 
-    if (!textarea || !overlay) return;
+    if (!textarea || !overlay) {
+      return;
+    }
 
     const syncScroll = () => {
       overlay.scrollTop = textarea.scrollTop;

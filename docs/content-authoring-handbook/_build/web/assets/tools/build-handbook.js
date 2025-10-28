@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const os = require('os');
 const crypto = require('crypto');
 
 class HandbookBuilder {
@@ -442,43 +443,119 @@ class HandbookBuilder {
   }
 
   async generatePDFFromHTML(htmlFile, pdfFile) {
-    try {
-      // Try using Puppeteer first
-      const puppeteer = require('puppeteer-core');
-      const possiblePaths = [
+    const launchWithPuppeteer = async (puppeteerLib, executablePath) => {
+      const launchOptions = {
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--single-process',
+          '--no-zygote',
+          '--disable-crash-reporter',
+          '--disable-software-rasterizer',
+          '--disable-extensions'
+        ]
+      };
+
+      if (executablePath) {
+        launchOptions.executablePath = executablePath;
+      }
+
+      const browser = await puppeteerLib.launch(launchOptions);
+
+      try {
+        const page = await browser.newPage();
+        await page.goto(`file://${htmlFile}`, { waitUntil: 'networkidle0' });
+        await page.pdf({
+          path: pdfFile,
+          format: 'A4',
+          printBackground: true,
+          margin: {
+            top: '20mm',
+            right: '20mm',
+            bottom: '20mm',
+            left: '20mm'
+          }
+        });
+      } finally {
+        await browser.close();
+      }
+    };
+
+    const findChromiumExecutable = () => {
+      const candidates = [
+        process.env.PUPPETEER_EXECUTABLE_PATH,
         process.env.CHROME_PATH,
+        process.env.BROWSER_PATH,
         '/usr/bin/google-chrome',
         '/usr/bin/chromium-browser',
+        '/usr/bin/chromium',
         '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
       ];
-      const executablePath = possiblePaths.find(p => p && fs.existsSync(p));
-      const browser = await puppeteer.launch({
-        executablePath,
-        headless: 'new'
-      });
-      const page = await browser.newPage();
 
-      await page.goto(`file://${htmlFile}`, { waitUntil: 'networkidle0' });
+      const cacheDir = path.join(os.homedir(), '.cache', 'puppeteer');
+      if (fs.existsSync(cacheDir)) {
+        const cacheVariants = ['chrome', 'chrome-headless-shell'];
 
-      await page.pdf({
-        path: pdfFile,
-        format: 'A4',
-        printBackground: true,
-        margin: {
-          top: '20mm',
-          right: '20mm',
-          bottom: '20mm',
-          left: '20mm'
+        for (const variant of cacheVariants) {
+          const variantDir = path.join(cacheDir, variant);
+          if (!fs.existsSync(variantDir)) continue;
+
+          const revisions = fs.readdirSync(variantDir);
+          for (const revision of revisions) {
+            const candidate = path.join(
+              variantDir,
+              revision,
+              'chrome-linux64',
+              'chrome'
+            );
+
+            if (fs.existsSync(candidate)) {
+              candidates.push(candidate);
+            }
+          }
         }
-      });
+      }
 
-      await browser.close();
-    } catch (error) {
+      return candidates.find(
+        candidate => candidate && fs.existsSync(candidate)
+      );
+    };
+
+    try {
+      // Prefer full puppeteer which bundles Chromium
+      const puppeteer = require('puppeteer');
+      await launchWithPuppeteer(puppeteer);
+      return;
+    } catch (puppeteerError) {
+      console.warn(
+        'Puppeteer not available or failed, trying puppeteer-core...',
+        puppeteerError?.stack || puppeteerError
+      );
+    }
+
+    try {
+      const puppeteerCore = require('puppeteer-core');
+      const executablePath = findChromiumExecutable();
+
+      if (!executablePath) {
+        throw new Error('Chromium executable not found for puppeteer-core');
+      }
+
+      await launchWithPuppeteer(puppeteerCore, executablePath);
+      return;
+    } catch (coreError) {
       // Fallback to Prince or other PDF generator
-      console.warn('Puppeteer not available, trying Prince...');
+      console.warn(
+        'Puppeteer-core not available or failed, trying Prince...',
+        coreError?.stack || coreError
+      );
 
       try {
         execSync(`prince "${htmlFile}" -o "${pdfFile}"`, { stdio: 'inherit' });
+        return;
       } catch (princeError) {
         console.warn('Prince not available, creating placeholder PDF...');
 

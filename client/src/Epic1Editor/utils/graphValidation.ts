@@ -1,5 +1,4 @@
 import { Node, Edge } from 'reactflow';
-import { filterMap } from './arrayOptimizations';
 
 export interface ValidationIssue {
   type: 'warning' | 'error';
@@ -52,7 +51,7 @@ export const detectCycle = (nodes: Node[], edges: Edge[]): boolean => {
 
     for (const neighbor of neighbors) {
       if (!visited.has(neighbor)) {
-        if (hasCycleDFS(neighbor)) return true;
+        if (hasCycleDFS(neighbor)) {return true;}
       } else if (recursionStack.has(neighbor)) {
         return true;
       }
@@ -64,7 +63,7 @@ export const detectCycle = (nodes: Node[], edges: Edge[]): boolean => {
 
   for (const node of nodes) {
     if (!visited.has(node.id)) {
-      if (hasCycleDFS(node.id)) return true;
+      if (hasCycleDFS(node.id)) {return true;}
     }
   }
 
