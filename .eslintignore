@@ -42,12 +42,9 @@ packages/core/storage/
 
 # Legacy test scaffolding pending rewrite
 client/src/stores/__tests__/
-client/src/utils/__tests__/
 
 # Placeholder utilities awaiting proper implementation
-client/src/utils/memoryOptimization.ts
 client/src/utils/nodeUtils.ts
-client/src/utils/performanceMonitor.ts
 client/src/utils/clientPerformanceProfiler.ts
 
 # Asset browser package (migrating to separate lint pipeline)

@@ -30,7 +30,9 @@ export class WeakCache<K extends object, V> {
 }
 
 type CleanupCallback = () => void;
-type TimerHandle = ReturnType<typeof setTimeout> | ReturnType<typeof setInterval>;
+type TimerHandle =
+  | ReturnType<typeof setTimeout>
+  | ReturnType<typeof setInterval>;
 type Observable = { disconnect: () => void };
 
 export class ResourceManager {
@@ -120,7 +122,11 @@ export function useStableCallback<T extends (...args: unknown[]) => unknown>(
     callbackRef.current = callback;
   }, [callback]);
 
-  return useCallback(((...args: Parameters<T>) => callbackRef.current(...args)) as T, dependencies);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies are caller-provided to control memoization semantics.
+  return useCallback(
+    ((...args: Parameters<T>) => callbackRef.current(...args)) as T,
+    dependencies
+  );
 }
 
 type LimitedMemoCache<T> = Map<string, { value: T; accessTime: number }>;
@@ -137,14 +143,18 @@ export function useLimitedMemo<T>(
     const cache = cacheRef.current;
     const now = Date.now();
 
-    if (cache.has(key)) {
-      const entry = cache.get(key)!;
+    const existingEntry = cache.get(key);
+
+    if (existingEntry !== undefined) {
+      const entry = existingEntry;
       entry.accessTime = now;
       return entry.value;
     }
 
     if (cache.size >= maxSize) {
-      const entries = [...cache.entries()].sort((a, b) => a[1].accessTime - b[1].accessTime);
+      const entries = [...cache.entries()].sort(
+        (a, b) => a[1].accessTime - b[1].accessTime
+      );
       const itemsToRemove = Math.max(1, Math.floor(maxSize * 0.25));
       entries.slice(0, itemsToRemove).forEach(([entryKey]) => {
         cache.delete(entryKey);
@@ -154,7 +164,8 @@ export function useLimitedMemo<T>(
     const value = factory();
     cache.set(key, { value, accessTime: now });
     return value;
-  }, dependencies);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- caller-supplied dependencies are spread to maintain cache parity alongside factory/maxSize.
+  }, [factory, maxSize, ...dependencies]);
 }
 
 export function useVirtualScrolling<T>(
@@ -201,7 +212,7 @@ export function useVirtualScrolling<T>(
 
 export function useLazyLoading<T extends HTMLElement>(
   threshold = 0.1
-: { ref: RefObject<T>; isVisible: boolean } {
+): { ref: RefObject<T>; isVisible: boolean } {
   const ref = useRef<T>(null);
   const [isVisible, setIsVisible] = useState(false);
   const resourceManager = useResourceManager();
@@ -212,13 +223,16 @@ export function useLazyLoading<T extends HTMLElement>(
       return;
     }
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      });
-    }, { threshold });
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold }
+    );
 
     observer.observe(element);
     const removeObserver = resourceManager.addObserver(observer);
@@ -231,9 +245,7 @@ export function useLazyLoading<T extends HTMLElement>(
   return { ref, isVisible };
 }
 
-export function useMemoryMonitoring(
-  interval = 10_000
-): {
+export function useMemoryMonitoring(interval = 10_000): {
   usedJSHeapSize?: number;
   totalJSHeapSize?: number;
   jsHeapSizeLimit?: number;
@@ -249,7 +261,9 @@ export function useMemoryMonitoring(
 
   useEffect(() => {
     const tick = () => {
-      const memory = (performance as Performance & { memory?: PerformanceMemory }).memory;
+      const memory = (
+        performance as Performance & { memory?: PerformanceMemory }
+      ).memory;
       if (!memory) {
         return;
       }
