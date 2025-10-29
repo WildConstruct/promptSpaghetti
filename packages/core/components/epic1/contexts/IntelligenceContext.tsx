@@ -21,6 +21,10 @@ interface IntelligenceContextType {
   setConsent: (consent: boolean) => void;
 }
 
+const warnMissingProvider = () => {
+  console.warn('setConsent called without IntelligenceProvider; ignoring request.');
+};
+
 const IntelligenceContext = createContext<IntelligenceContextType>({
   nodeIntelligence: null,
   textRefinement: null,
@@ -30,7 +34,7 @@ const IntelligenceContext = createContext<IntelligenceContextType>({
   costTracker: null,
   consentGiven: false,
   isOffline: true,
-  setConsent: () => {}
+  setConsent: warnMissingProvider
 });
 
 export const useIntelligence = () => {
@@ -47,7 +51,7 @@ export const useIntelligence = () => {
       costTracker: null,
       consentGiven: false,
       isOffline: true,
-      setConsent: () => {}
+      setConsent: warnMissingProvider
     };
   }
   return context;

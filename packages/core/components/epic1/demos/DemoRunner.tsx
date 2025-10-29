@@ -4,8 +4,6 @@
  */
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Node, Edge } from 'reactflow';
-import { EditableNodeData } from '../nodes';
 
 export interface DemoStep {
   id: string;
@@ -66,7 +64,7 @@ export const DemoRunner: React.FC<DemoRunnerProps> = ({
 
     // Execute first step
     executeStep(0);
-  }, [script]);
+  }, [executeStep]);
 
   // Execute a specific step
   const executeStep = useCallback((stepIndex: number) => {
@@ -106,7 +104,7 @@ export const DemoRunner: React.FC<DemoRunnerProps> = ({
       stopDemo();
       onError?.(error);
     }
-  }, [script, onStepChange, onComplete, onError]);
+  }, [script, onStepChange, onComplete, onError, stopDemo]);
 
   // Stop demo
   const stopDemo = useCallback(() => {

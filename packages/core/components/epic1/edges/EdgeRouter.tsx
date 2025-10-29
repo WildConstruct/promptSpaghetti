@@ -9,9 +9,7 @@ import {
   getBezierPath,
   getSmoothStepPath,
   getStraightPath,
-  getSimpleBezierPath,
   EdgeLabelRenderer,
-  BaseEdge,
   useReactFlow
 } from 'reactflow';
 
@@ -53,7 +51,6 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
   selected
 }) => {
   const { setEdges } = useReactFlow();
-  const [isDraggingControl, setIsDraggingControl] = useState(false);
   const [hoveredControl, setHoveredControl] = useState<string | null>(null);
 
   const algorithm = data?.routing?.algorithm || 'bezier';
@@ -61,7 +58,10 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
   const animated = data?.routing?.animated || false;
   const label = data?.routing?.label;
   const strokeWidth = data?.routing?.strokeWidth || (selected ? 3 : 2);
-  const controlPoints = data?.routing?.controlPoints || [];
+  const controlPoints = useMemo(
+    () => data?.routing?.controlPoints ?? [],
+    [data?.routing?.controlPoints]
+  );
 
   // Calculate path based on algorithm
   const edgePath = useMemo(() => {
@@ -127,12 +127,10 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
   // Handle control point drag
   const handleControlPointDrag = useCallback((pointId: string, event: React.MouseEvent) => {
     event.stopPropagation();
-    setIsDraggingControl(true);
-
     const startX = event.clientX;
     const startY = event.clientY;
     const point = controlPoints.find(cp => cp.id === pointId);
-    if (!point) return;
+    if (!point) {return;}
 
     const handleMouseMove = (e: MouseEvent) => {
       const deltaX = e.clientX - startX;
@@ -163,7 +161,6 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
     };
 
     const handleMouseUp = () => {
-      setIsDraggingControl(false);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
@@ -174,7 +171,7 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
 
   // Add control point on double-click
   const handleDoubleClick = useCallback((event: React.MouseEvent) => {
-    if (algorithm !== 'bezier') return;
+    if (algorithm !== 'bezier') {return;}
     
     const rect = (event.target as SVGElement).getBoundingClientRect();
     const x = event.clientX - rect.left;

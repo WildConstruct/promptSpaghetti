@@ -39,6 +39,7 @@ export const AttachmentEdge: React.FC<EdgeProps> = ({
         }}
         className="react-flow__edge-path"
         d={edgePath}
+        markerEnd={markerEnd}
       />
     </>
   );

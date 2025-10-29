@@ -6,7 +6,7 @@
  * in under 30 seconds while highlighting all key features.
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Epic1GraphEditorWithProvider } from '../Epic1GraphEditor';
 import { Node, Edge } from 'reactflow';
 import { EditableNodeData } from '../nodes';
@@ -279,7 +279,7 @@ export const MedievalDemoShowcase: React.FC = () => {
   const [completedStages, setCompletedStages] = useState<Set<string>>(new Set());
 
   // Demo stages
-  const demoStages: DemoStage[] = [
+  const demoStages: DemoStage[] = useMemo(() => ([
     {
       id: 'empty',
       title: 'Empty Canvas',
@@ -353,7 +353,7 @@ export const MedievalDemoShowcase: React.FC = () => {
       duration: 6000,
       highlight: ['output-1'],
     },
-  ];
+  ]), [setEdges, setHighlightedNodes, setNodes]);
 
   // Auto-play demo
   const playDemo = useCallback(() => {
@@ -379,7 +379,7 @@ export const MedievalDemoShowcase: React.FC = () => {
     };
     
     playNextStage();
-  }, []);
+  }, [demoStages]);
 
   // Jump to specific stage
   const jumpToStage = useCallback((index: number) => {
@@ -388,7 +388,7 @@ export const MedievalDemoShowcase: React.FC = () => {
       demoStages[index].action();
       setCompletedStages(prev => new Set([...prev, demoStages[index].id]));
     }
-  }, []);
+  }, [demoStages]);
 
   // Reset demo
   const resetDemo = useCallback(() => {
