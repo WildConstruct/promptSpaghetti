@@ -67,7 +67,7 @@ export class Epic1ExecutionEngine {
   private readonly graph: Epic1Graph;
   private readonly context: Epic1ExecutionContext;
   private readonly results: Map<string, NodeExecutionResult>;
-  private readonly executionOrder: string[];
+  private executionOrder: string[];
   private outputNodeId: string | null = null;
 
   constructor(graph: Epic1Graph, seed?: string | number) {
@@ -469,7 +469,7 @@ export class Epic1ExecutionEngine {
     inputs: any[]
   ): Promise<any> {
     const config = node.getData().value;
-    const nodeConfig = node.getData().configuration || {};
+    const nodeConfig = node.getNodeConfig();
     const mode = nodeConfig.mode || 'both';
 
     // Get input value (if any)
@@ -528,7 +528,7 @@ export class Epic1ExecutionEngine {
     }
 
     // Return the concatenated result
-    const result = await node.run(this.context);
+    const result = await node.run(this.context.getExecutionContext());
     debugLogExecution('[ExecutionEngine] Output node result:', result);
     return result;
   }

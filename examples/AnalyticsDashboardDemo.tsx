@@ -232,7 +232,9 @@ export const AnalyticsDashboardDemo: React.FC = () => {
 // Helper component for metric cards
 const MetricCard: React.FC<{ metric: MetricData }> = ({ metric }) => {
   const formatValue = (value: number | string, format?: string) => {
-    if (typeof value === 'string') return value;
+    if (typeof value === 'string') {
+      return value;
+    }
 
     switch (format) {
       case 'currency':
@@ -249,12 +251,16 @@ const MetricCard: React.FC<{ metric: MetricData }> = ({ metric }) => {
   };
 
   const getTrendIcon = (change?: number) => {
-    if (!change) return null;
+    if (!change) {
+      return null;
+    }
     return change > 0 ? '↗' : '↘';
   };
 
   const getTrendColor = (change?: number) => {
-    if (!change) return '#6b7280';
+    if (!change) {
+      return '#6b7280';
+    }
     return change > 0 ? '#10b981' : '#ef4444';
   };
 

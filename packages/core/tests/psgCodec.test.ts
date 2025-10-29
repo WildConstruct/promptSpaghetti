@@ -70,7 +70,8 @@ describe('psgCodec', () => {
           expect(e.error.message).toContain('required');
           expect(e.error.details).toBeDefined();
           expect(e.error.suggestions).toBeDefined();
-          expect(e.error.suggestions!.length).toBeGreaterThan(0);
+          const suggestions = e.error.suggestions ?? [];
+          expect(suggestions.length).toBeGreaterThan(0);
         }
       }
     });
@@ -381,8 +382,11 @@ describe('psgCodec', () => {
       const lines = output.split('\n');
       const indentedLine = lines.find(l => l.startsWith('  '));
       expect(indentedLine).toBeDefined();
-      expect(indentedLine!.startsWith('  ')).toBe(true);
-      expect(indentedLine!.startsWith('    ')).toBe(false);
+      if (!indentedLine) {
+        throw new Error('Expected indented line to exist in PSG output');
+      }
+      expect(indentedLine.startsWith('  ')).toBe(true);
+      expect(indentedLine.startsWith('    ')).toBe(false);
     });
 
     test('[AC-B2] Round-trip preserves data', () => {

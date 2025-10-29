@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { NodeProps, useReactFlow } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 import './BoundingBox.css';
+import type { Epic1NodeProps } from './nodePropTypes';
 
 export interface BoundingBoxData {
   title: string;
@@ -30,7 +31,7 @@ const defaultColors = [
  * Bounding Box component for visual organization of nodes
  * Story 1.26: Bounding Boxes/Regions
  */
-export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
+export const BoundingBox: React.FC<Epic1NodeProps<BoundingBoxData>> = ({
   data,
   selected,
   id,

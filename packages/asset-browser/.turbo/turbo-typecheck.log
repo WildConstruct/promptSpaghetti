@@ -1,4 +1,4 @@
 
-> @prompt/asset-browser@0.1.0 typecheck C:\Users\Owner\CascadeProjects\prompt-spaghetti\packages\asset-browser
+> @prompt/asset-browser@0.1.0 typecheck /mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/packages/asset-browser
 > tsc -p tsconfig.json --noEmit
 

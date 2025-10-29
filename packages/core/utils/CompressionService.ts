@@ -11,8 +11,10 @@ import {
   deflate,
   inflate,
   brotliCompress,
-  brotliDecompress
+  brotliDecompress,
+  constants as zlibConstants
 } from 'zlib';
+import { createHash } from 'crypto';
 import { promisify } from 'util';
 import { z } from 'zod';
 
@@ -579,8 +581,7 @@ export class CompressionService {
     return Buffer.from(String(data), 'utf8');
   }
   private calculateChecksum(data: Buffer): string {
-    const crypto = require('crypto');
-    return crypto.createHash('sha256').update(data).digest('hex');
+    return createHash('sha256').update(data).digest('hex');
   }
   private initializeStats(): CompressionStats {
     return {
@@ -604,8 +605,7 @@ export class CompressionService {
     this.stats.totalBytesCompressed += originalSize;
     this.stats.totalCompressionTime += timeMs;
     // Update average compression ratio
-    const totalCompressed = this.stats.totalBytesCompressed;
-    const ratio = compressedSize / originalSize;
+    const ratio = originalSize === 0 ? 1 : compressedSize / originalSize;
     this.stats.averageCompressionRatio =
       (this.stats.averageCompressionRatio * (this.stats.totalCompressions - 1) +
         ratio) /
@@ -631,18 +631,31 @@ export class CompressionService {
         ratio) /
       algorithmStat.usageCount;
     algorithmStat.averageSpeed =
-      algorithmStat.totalBytesProcessed / algorithmStat.totalProcessingTime;
+      algorithmStat.totalProcessingTime === 0
+        ? 0
+        : algorithmStat.totalBytesProcessed / algorithmStat.totalProcessingTime;
   }
 
   private updateDecompressionStats(
     algorithm: CompressionAlgorithm,
-    compressedSize: number,
+    _compressedSize: number,
     decompressedSize: number,
     timeMs: number
   ): void {
     this.stats.totalDecompressions++;
     this.stats.totalBytesDecompressed += decompressedSize;
     this.stats.totalDecompressionTime += timeMs;
+
+    const algorithmStat = this.stats.algorithmStats.get(algorithm);
+    if (algorithmStat) {
+      algorithmStat.totalProcessingTime += timeMs;
+      algorithmStat.totalBytesProcessed += decompressedSize;
+      algorithmStat.averageSpeed =
+        algorithmStat.totalProcessingTime === 0
+          ? 0
+          : algorithmStat.totalBytesProcessed /
+            algorithmStat.totalProcessingTime;
+    }
   }
 }
 
@@ -677,7 +690,7 @@ class BrotliProcessor extends AlgorithmProcessor {
   async compress(data: Buffer, options: CompressionOptions): Promise<Buffer> {
     return brotliCompressAsync(data, {
       params: {
-        [require('zlib').constants.BROTLI_PARAM_QUALITY]: options.level
+        [zlibConstants.BROTLI_PARAM_QUALITY]: options.level
       }
     });
   }
@@ -687,7 +700,8 @@ class BrotliProcessor extends AlgorithmProcessor {
 }
 
 class NoCompressionProcessor extends AlgorithmProcessor {
-  async compress(data: Buffer): Promise<Buffer> {
+  async compress(data: Buffer, _options: CompressionOptions): Promise<Buffer> {
+    void _options;
     return data;
   }
   async decompress(data: Buffer): Promise<Buffer> {

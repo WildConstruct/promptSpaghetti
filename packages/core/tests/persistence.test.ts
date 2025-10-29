@@ -24,7 +24,7 @@ describe('Persistence Utils', () => {
           setItem: () => {
             throw new Error('Storage not available');
           },
-          removeItem: () => {}
+          removeItem: () => undefined
         },
         writable: true
       });

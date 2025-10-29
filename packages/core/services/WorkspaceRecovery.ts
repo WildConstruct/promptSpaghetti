@@ -46,7 +46,9 @@ export class WorkspaceRecovery {
       const workspace = localStorage.getItem(WORKSPACE_KEY);
       const autosave = localStorage.getItem(AUTOSAVE_KEY);
 
-      if (!workspace && !autosave) return false;
+      if (!workspace && !autosave) {
+        return false;
+      }
 
       // Check if recovery was already dismissed this session
       if (sessionStorage.getItem(RECOVERY_DISMISSED_KEY) === 'true') {
@@ -54,7 +56,12 @@ export class WorkspaceRecovery {
       }
 
       // Parse and check if workspace has content
-      const data = workspace ? JSON.parse(workspace) : JSON.parse(autosave!);
+      const serializedWorkspace = workspace ?? autosave;
+      if (!serializedWorkspace) {
+        return false;
+      }
+
+      const data = JSON.parse(serializedWorkspace);
       return data.nodes && data.nodes.length > 0;
     } catch (error) {
       console.error(
@@ -79,9 +86,16 @@ export class WorkspaceRecovery {
       const workspace = localStorage.getItem(WORKSPACE_KEY);
       const autosave = localStorage.getItem(AUTOSAVE_KEY);
 
-      if (!workspace && !autosave) return null;
+      if (!workspace && !autosave) {
+        return null;
+      }
 
-      const data = workspace ? JSON.parse(workspace) : JSON.parse(autosave!);
+      const serializedWorkspace = workspace ?? autosave;
+      if (!serializedWorkspace) {
+        return null;
+      }
+
+      const data = JSON.parse(serializedWorkspace);
 
       if (!data.nodes || data.nodes.length === 0) {
         return { hasWorkspace: false };
@@ -199,7 +213,9 @@ export class WorkspaceRecovery {
   static isWorkspaceStale(maxAgeMs: number = 24 * 60 * 60 * 1000): boolean {
     try {
       const workspace = localStorage.getItem(WORKSPACE_KEY);
-      if (!workspace) return true;
+      if (!workspace) {
+        return true;
+      }
 
       const data = JSON.parse(workspace);
       const age = Date.now() - data.timestamp;
@@ -216,9 +232,15 @@ export class WorkspaceRecovery {
   private static getTimeSince(timestamp: number): string {
     const seconds = Math.floor((Date.now() - timestamp) / 1000);
 
-    if (seconds < 60) return 'just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)} minutes ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+    if (seconds < 60) {
+      return 'just now';
+    }
+    if (seconds < 3600) {
+      return `${Math.floor(seconds / 60)} minutes ago`;
+    }
+    if (seconds < 86400) {
+      return `${Math.floor(seconds / 3600)} hours ago`;
+    }
     return `${Math.floor(seconds / 86400)} days ago`;
   }
 

@@ -51,7 +51,8 @@ client/src/utils/clientPerformanceProfiler.ts
 packages/asset-browser/
 
 # Core component experimental surfaces pending redesign
-packages/core/components/
+packages/core/components/legacy/
+packages/core/components/prototype/
 packages/core/examples/
 packages/core/config/python-executor.ts
 packages/core/fileFormats/psg.ts
@@ -66,3 +67,4 @@ packages/core/services/ParserFallback.ts
 packages/core/services/ParserSecurity.ts
 packages/core/services/PromptParser.ts
 packages/core/services/SimpleLLMService.ts
+packages/core/types/

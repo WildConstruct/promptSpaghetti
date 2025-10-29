@@ -1,9 +1,9 @@
 // Natural Language Search for Advanced Asset Browser
 // Story 2.5b: Advanced Asset Browser Features
 
-import { Asset } from './assetMatcher';
+import { Asset, AssetMetadata } from './assetMatcher';
 import { LLMService } from './llm/LLMService';
-import type { LLMCompletionResponse } from './ApiLLMService';
+import type { LLMResponse } from './llm/types';
 
 export interface SearchIntent {
   action: 'find' | 'exclude' | 'similar' | 'filter';
@@ -82,12 +82,14 @@ export class NaturalLanguageSearch {
 
     // Check cache
     const cacheKey = `${query}-${limit}`;
-    if (useCache && this.searchCache.has(cacheKey)) {
-      const cached = this.searchCache.get(cacheKey)!;
-      return {
-        ...cached,
-        executionTime: performance.now() - startTime
-      };
+    if (useCache) {
+      const cached = this.searchCache.get(cacheKey);
+      if (cached) {
+        return {
+          ...cached,
+          executionTime: performance.now() - startTime
+        };
+      }
     }
 
     // Parse the query
@@ -119,8 +121,10 @@ export class NaturalLanguageSearch {
 
       // Clear old cache entries
       if (this.searchCache.size > 100) {
-        const firstKey = this.searchCache.keys().next().value;
-        this.searchCache.delete(firstKey);
+        const iterator = this.searchCache.keys().next();
+        if (!iterator.done && iterator.value) {
+          this.searchCache.delete(iterator.value);
+        }
       }
     }
 
@@ -253,11 +257,17 @@ export class NaturalLanguageSearch {
     const prompt = `Parse this natural language search query into structured search criteria.\n${contextBlock}Query: "${query}"\n\nReturn JSON with: { action, criteria, modifiers }.\n`;
 
     try {
-      const response = await this.llmService.complete(prompt, {
-        model: 'gpt-4o-mini',
+      const response = await this.llmService.complete({
+        prompt,
         temperature: 0.1,
-        maxTokens: 500
+        maxTokens: 500,
+        taskType: 'general',
+        responseFormat: 'json'
       });
+
+      if (!response) {
+        throw new Error('LLM returned null response');
+      }
 
       const content = this.extractContent(response);
       const parsed = JSON.parse(content) as unknown;
@@ -425,12 +435,16 @@ export class NaturalLanguageSearch {
     const s1 = str1.toLowerCase();
     const s2 = str2.toLowerCase();
 
-    if (s1 === s2) return 1;
+    if (s1 === s2) {
+      return 1;
+    }
 
     const longer = s1.length > s2.length ? s1 : s2;
     const shorter = s1.length > s2.length ? s2 : s1;
 
-    if (longer.length === 0) return 1;
+    if (longer.length === 0) {
+      return 1;
+    }
 
     const editDistance = this.levenshteinDistance(longer, shorter);
     return (longer.length - editDistance) / longer.length;
@@ -500,23 +514,12 @@ export class NaturalLanguageSearch {
     }
   }
 
-  private extractContent(response: LLMCompletionResponse): string {
-    if (typeof response.output === 'string' && response.output.trim().length > 0) {
-      return response.output;
+  private extractContent(response: LLMResponse): string {
+    const content = (response.content ?? '').trim();
+    if (!content) {
+      throw new Error('Empty LLM response');
     }
-
-    if (Array.isArray(response.outputs)) {
-      const combined = response.outputs
-        .map(item =>
-          typeof item === 'string' ? item : this.safeStringify(item)
-        )
-        .join('\n');
-      if (combined.trim().length > 0) {
-        return combined;
-      }
-    }
-
-    throw new Error('Empty LLM response');
+    return content;
   }
 
   private normalizeIntent(data: unknown, fallbackQuery: string): SearchIntent {
@@ -532,7 +535,10 @@ export class NaturalLanguageSearch {
 
     const record = data as Record<string, unknown>;
 
-    if (typeof record.action === 'string' && this.isValidAction(record.action)) {
+    if (
+      typeof record.action === 'string' &&
+      this.isValidAction(record.action)
+    ) {
       intent.action = record.action;
     }
 
@@ -575,11 +581,16 @@ export class NaturalLanguageSearch {
 
     const record = raw as Record<string, unknown>;
     const field = typeof record.field === 'string' ? record.field : 'any';
-    const operator = typeof record.operator === 'string' ? record.operator : 'contains';
+    const operator =
+      typeof record.operator === 'string' ? record.operator : 'contains';
     const value = typeof record.value === 'string' ? record.value : '';
     const weight = typeof record.weight === 'number' ? record.weight : 1;
 
-    if (!this.isValidField(field) || !this.isValidOperator(operator) || value.length === 0) {
+    if (
+      !this.isValidField(field) ||
+      !this.isValidOperator(operator) ||
+      value.length === 0
+    ) {
       return null;
     }
 
@@ -615,10 +626,14 @@ export class NaturalLanguageSearch {
   }
 
   private isValidField(field: string): field is SearchCriteria['field'] {
-    return ['theme', 'mood', 'setting', 'category', 'style', 'any'].includes(field);
+    return ['theme', 'mood', 'setting', 'category', 'style', 'any'].includes(
+      field
+    );
   }
 
-  private isValidOperator(operator: string): operator is SearchCriteria['operator'] {
+  private isValidOperator(
+    operator: string
+  ): operator is SearchCriteria['operator'] {
     return ['contains', 'equals', 'not', 'similar'].includes(operator);
   }
 

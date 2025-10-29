@@ -210,11 +210,14 @@ export function useGraphDragDrop<NodeData = unknown>(
   // Handle node type drop
   const handleNodeTypeDrop = useCallback(
     (nodeType: string, position: XYPosition, data?: unknown) => {
+      const nodeData: NodeData =
+        (data as NodeData | undefined) ?? (getDefaultNodeData(nodeType) as NodeData);
+
       const newNode: Node<NodeData> = {
         id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         type: nodeType,
         position,
-        data: data || (getDefaultNodeData(nodeType) as NodeData)
+        data: nodeData
       };
 
       setNodes(nds => [...nds, newNode]);

@@ -2,11 +2,7 @@
 // Processes and validates LLM parsing responses
 
 import { Edge, Node } from 'reactflow';
-import {
-  LLMParseResponse,
-  ParserOptions,
-  ParseResult
-} from './PromptParser';
+import { LLMParseResponse, ParserOptions, ParseResult } from './PromptParser';
 
 type ParsedNode = LLMParseResponse['nodes'][number];
 type ParsedEdge = LLMParseResponse['edges'][number];
@@ -184,8 +180,9 @@ export class LLMResponseProcessor {
     if (nodeData.metadata) {
       // Copy all metadata to preserve LLM-generated fields like 'importance'
       node.data.metadata = { ...nodeData.metadata };
-      (node as Node<NodeData> & { metadata?: Record<string, unknown> }).metadata =
-        { ...nodeData.metadata };
+      (
+        node as Node<NodeData> & { metadata?: Record<string, unknown> }
+      ).metadata = { ...nodeData.metadata };
 
       // Opaque nodes (like code blocks)
       if (nodeData.metadata.opaque) {
@@ -315,7 +312,10 @@ export class LLMResponseProcessor {
       );
       referencedVars.forEach(varName => {
         if (!varNodes.has(varName)) {
-          const metadata = (node.data.metadata ?? {}) as Record<string, unknown>;
+          const metadata = (node.data.metadata ?? {}) as Record<
+            string,
+            unknown
+          >;
           node.data.metadata = {
             ...metadata,
             missingVariableRef: true,
@@ -417,7 +417,10 @@ export class LLMResponseProcessor {
     });
 
     while (queue.length > 0) {
-      const nodeId = queue.shift()!;
+      const nodeId = queue.shift();
+      if (!nodeId) {
+        continue;
+      }
       sorted.push(nodeId);
 
       adjacency.get(nodeId)?.forEach(neighbor => {
@@ -507,12 +510,12 @@ export class LLMResponseProcessor {
   /**
    * Check if a variable node already exists
    */
-  private hasVariableNode(
-    nodes: Node<NodeData>[],
-    varName: string
-  ): boolean {
+  private hasVariableNode(nodes: Node<NodeData>[], varName: string): boolean {
     return nodes.some(
-      node => node.data.isVariable && 'name' in node.data && node.data.name === varName
+      node =>
+        node.data.isVariable &&
+        'name' in node.data &&
+        node.data.name === varName
     );
   }
 
@@ -533,9 +536,7 @@ export class LLMResponseProcessor {
   /**
    * Get type-specific data for node
    */
-  private getTypeSpecificData(
-    nodeData: ParsedNode
-  ): Partial<NodeData> {
+  private getTypeSpecificData(nodeData: ParsedNode): Partial<NodeData> {
     switch (nodeData.type) {
       case 'WeightedChoice': {
         const metadataAlternatives = Array.isArray(
@@ -547,9 +548,11 @@ export class LLMResponseProcessor {
             )
           : undefined;
 
-        const choices = metadataAlternatives ?? nodeData.content.split(/\s*\|\s*/);
+        const choices =
+          metadataAlternatives ?? nodeData.content.split(/\s*\|\s*/);
 
-        const weight = choices.length > 0 ? Math.floor(100 / choices.length) : 100;
+        const weight =
+          choices.length > 0 ? Math.floor(100 / choices.length) : 100;
 
         const options: WeightedChoiceOption[] = choices.map((choice, i) => ({
           id: `option-${i + 1}`,

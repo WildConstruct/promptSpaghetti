@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { NodeProps, useReactFlow, Handle, Position, Edge, useStore } from 'reactflow';
+import { useReactFlow, Handle, Position, Edge, useStore } from 'reactflow';
 // CSS imports removed - using inline styles only
 
 // Feature flag for gradual migration to refactored version
@@ -8,6 +8,7 @@ const USE_REFACTORED_VERSION = true; // Using refactored modular version
 
 // Import refactored version
 import { EnhancedBoundingBox as EnhancedBoundingBoxRefactored } from './EnhancedBoundingBox/index';
+import type { Epic1NodeProps } from './nodePropTypes';
 
 export interface Port {
   id: string;
@@ -33,6 +34,8 @@ export interface EnhancedBoundingBoxData {
   isCollapsed?: boolean;
   ports?: Port[];
   autoLayout?: boolean;
+  collapsedNodeIds?: string[];
+  collapsedNodeTypes?: string[];
 }
 
 const defaultColors = [
@@ -58,7 +61,7 @@ const PADDING = 20;
 /**
  * Enhanced Bounding Box with collapse/expand and port system
  */
-const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
+const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxData>> = ({
   data,
   selected,
   id,

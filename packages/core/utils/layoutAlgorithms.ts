@@ -5,7 +5,8 @@
 
 import * as dagre from 'dagre';
 import * as d3 from 'd3-force';
-import { Node, Edge } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
+import { hasMeasuredDimensions } from '../components/epic1/nodes/nodePropTypes';
 
 export type LayoutAlgorithm = 'dagre' | 'force' | 'grid';
 
@@ -15,6 +16,18 @@ export interface LayoutOptions {
   rankSpacing?: number;
   animate?: boolean;
 }
+
+const getNodeDimensions = (
+  node: Node,
+  defaults: { width: number; height: number }
+) => {
+  const measured = hasMeasuredDimensions(node) ? node.measured : undefined;
+
+  return {
+    width: node.width ?? measured?.width ?? defaults.width,
+    height: node.height ?? measured?.height ?? defaults.height
+  };
+};
 
 /**
  * Apply Dagre (hierarchical) layout algorithm
@@ -69,9 +82,13 @@ export function applyDagreLayout(
         // Ensure node has required properties - WeightedChoice nodes are taller
         const defaultWidth = 250; // Wider default for WeightedChoice nodes
         const defaultHeight = node.type === 'weightedChoice' ? 200 : 100; // Taller for WeightedChoice
+        const { width, height } = getNodeDimensions(node, {
+          width: defaultWidth,
+          height: defaultHeight
+        });
         const nodeConfig = {
-          width: node.width || node.measured?.width || defaultWidth,
-          height: node.height || node.measured?.height || defaultHeight,
+          width,
+          height,
           label: node.id
         };
         g.setNode(node.id, nodeConfig);
@@ -136,8 +153,10 @@ export function applyDagreLayout(
 
         const defaultWidth = 250;
         const defaultHeight = node.type === 'weightedChoice' ? 200 : 100;
-        const width = node.width || node.measured?.width || defaultWidth;
-        const height = node.height || node.measured?.height || defaultHeight;
+        const { width, height } = getNodeDimensions(node, {
+          width: defaultWidth,
+          height: defaultHeight
+        });
 
         return {
           ...node,
@@ -475,8 +494,10 @@ export function layoutNewNodes(
         const pos = node.position || { x: 0, y: 0 };
         const defaultWidth = 250;
         const defaultHeight = node.type === 'weightedChoice' ? 200 : 100;
-        const width = node.width || node.measured?.width || defaultWidth;
-        const height = node.height || node.measured?.height || defaultHeight;
+        const { width, height } = getNodeDimensions(node, {
+          width: defaultWidth,
+          height: defaultHeight
+        });
 
         return {
           minX: Math.min(acc.minX, pos.x),

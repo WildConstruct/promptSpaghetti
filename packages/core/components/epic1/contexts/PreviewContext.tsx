@@ -1,7 +1,14 @@
-import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect
+} from 'react';
 import { Node, Edge } from 'reactflow';
-import { PreviewEngine } from '../preview/PreviewEngine';
 import type { EditableNodeData } from '../nodes';
+import { GraphConverter } from '../services/GraphConverter';
+import { Epic1ExecutionEngine } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 
 export interface PreviewResult {
   seed: string | number;
@@ -10,7 +17,7 @@ export interface PreviewResult {
 }
 
 export interface PreviewContextValue {
-  previewEngine: PreviewEngine | null;
+  previewEngine: Epic1ExecutionEngine | null;
   isPreviewVisible: boolean;
   setPreviewVisible: (visible: boolean) => void;
   executePreview: (nodes: Node<EditableNodeData>[], edges: Edge[]) => Promise<void>;
@@ -40,14 +47,59 @@ export const PreviewProvider: React.FC<PreviewProviderProps> = ({
   previewDebounceDelay = 300,
   previewSeeds: initialSeeds = ['seed1', 'seed2', 'seed3'],
 }) => {
-  const [previewEngine] = useState(() => new PreviewEngine());
   const [isPreviewVisible, setPreviewVisible] = useState(false);
   const [previewResults, setPreviewResults] = useState<PreviewResult[]>([]);
   const [isExecuting, setIsExecuting] = useState(false);
   const [previewSeeds, setPreviewSeeds] = useState<(string | number)[]>(initialSeeds);
-  
-  const executionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const executePreview = useCallback(async (
+    previewNodes: Node<EditableNodeData>[],
+    previewEdges: Edge[]
+  ) => {
+    const runtimeGraph = GraphConverter.convertToRuntimeGraph(
+      previewNodes,
+      previewEdges
+    );
+
+    if (!runtimeGraph) {
+      setPreviewResults([]);
+      return;
+    }
+
+    setIsExecuting(true);
+    setPreviewResults([]);
+
+    try {
+      const results: PreviewResult[] = [];
+      for (const seed of previewSeeds) {
+        try {
+          const engine = new Epic1ExecutionEngine(runtimeGraph, seed);
+          const execution = await engine.execute();
+          const output =
+            typeof execution.output === 'string'
+              ? execution.output
+              : JSON.stringify(execution.output ?? '');
+
+          results.push({
+            seed,
+            result: output
+          });
+        } catch (error) {
+          results.push({
+            seed,
+            result: '',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          });
+        }
+      }
+
+      setPreviewResults(results);
+    } catch (error) {
+      console.error('Preview execution error:', error);
+    } finally {
+      setIsExecuting(false);
+    }
+  }, [previewSeeds]);
 
   // Auto-execute preview when nodes/edges change and preview is visible
   useEffect(() => {
@@ -55,105 +107,21 @@ export const PreviewProvider: React.FC<PreviewProviderProps> = ({
       return;
     }
 
-    // Clear existing timeout
-    if (executionTimeoutRef.current) {
-      clearTimeout(executionTimeoutRef.current);
-    }
-
-    // Debounce execution
-    executionTimeoutRef.current = setTimeout(() => {
-      executePreview(nodes, edges);
+    const timeoutId = setTimeout(() => {
+      void executePreview(nodes, edges);
     }, previewDebounceDelay);
 
     return () => {
-      if (executionTimeoutRef.current) {
-        clearTimeout(executionTimeoutRef.current);
-      }
+      clearTimeout(timeoutId);
     };
-  }, [nodes, edges, isPreviewVisible, isDragging, previewDebounceDelay]);
-
-  const executePreview = useCallback(async (
-    previewNodes: Node<EditableNodeData>[],
-    previewEdges: Edge[]
-  ) => {
-    // Cancel any existing execution
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    // Create new abort controller
-    const abortController = new AbortController();
-    abortControllerRef.current = abortController;
-
-    setIsExecuting(true);
-    setPreviewResults([]);
-
-    try {
-      const results: PreviewResult[] = [];
-
-      for (const seed of previewSeeds) {
-        // Check if aborted
-        if (abortController.signal.aborted) {
-          break;
-        }
-
-        try {
-          const result = await previewEngine.execute(
-            previewNodes,
-            previewEdges,
-            seed
-          );
-
-          // Check if aborted after execution
-          if (!abortController.signal.aborted) {
-            results.push({
-              seed,
-              result: result || 'No output',
-            });
-          }
-        } catch (error) {
-          if (!abortController.signal.aborted) {
-            results.push({
-              seed,
-              result: '',
-              error: error instanceof Error ? error.message : 'Unknown error',
-            });
-          }
-        }
-      }
-
-      // Only update results if not aborted
-      if (!abortController.signal.aborted) {
-        setPreviewResults(results);
-      }
-    } catch (error) {
-      console.error('Preview execution error:', error);
-    } finally {
-      if (abortControllerRef.current === abortController) {
-        setIsExecuting(false);
-        abortControllerRef.current = null;
-      }
-    }
-  }, [previewEngine, previewSeeds]);
+  }, [nodes, edges, isPreviewVisible, isDragging, previewDebounceDelay, executePreview]);
 
   const clearResults = useCallback(() => {
     setPreviewResults([]);
   }, []);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (executionTimeoutRef.current) {
-        clearTimeout(executionTimeoutRef.current);
-      }
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-  }, []);
-
   const value: PreviewContextValue = {
-    previewEngine,
+    previewEngine: null,
     isPreviewVisible,
     setPreviewVisible,
     executePreview,

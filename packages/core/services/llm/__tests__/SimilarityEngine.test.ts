@@ -71,7 +71,10 @@ describe('SimilarityEngine scoring heuristics', () => {
     const agedMatch = agedResults[0];
     expect(agedMatch.matches?.style).toBeCloseTo(1, 5);
     expect(agedMatch.matches?.tags).toBeCloseTo(2 / 3, 3);
-    expect(agedMatch.matches?.recency).toBeLessThan(freshMatch.matches!.recency!);
-    expect(agedMatch.matches?.recency).toBeCloseTo(0.5, 1);
+    expect(freshMatch.matches?.recency).toBeDefined();
+    const freshRecency = freshMatch.matches?.recency ?? 0;
+    const agedRecency = agedMatch.matches?.recency ?? 0;
+    expect(agedRecency).toBeLessThan(freshRecency);
+    expect(agedRecency).toBeCloseTo(0.5, 1);
   });
 });

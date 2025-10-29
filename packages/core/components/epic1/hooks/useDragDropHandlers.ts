@@ -292,6 +292,7 @@ export function useDragDropHandlers({
         type: nodeType || 'textBlock',
         position: validPosition,
         data: {
+          value: '',
           nodeType: nodeType,
           ...(nodeType === 'textBlock' && {
             value: 'New text block',

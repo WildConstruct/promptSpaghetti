@@ -1,5 +1,5 @@
 import { Node, Edge } from 'reactflow';
-import { Epic1Graph } from '../../../../runtime/nodes/epic1/Epic1ExecutionEngine';
+import { Epic1Graph } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { nodeDataToRuntimeNode } from '../nodes/nodeFactory';
 import type { EditableNodeData } from '../nodes';
 
@@ -39,8 +39,8 @@ export class GraphConverter {
           id: edge.id,
           source: edge.source,
           target: edge.target,
-          sourceHandle: edge.sourceHandle,
-          targetHandle: edge.targetHandle
+          sourceHandle: edge.sourceHandle ?? undefined,
+          targetHandle: edge.targetHandle ?? undefined
         }))
       };
     } catch (error) {

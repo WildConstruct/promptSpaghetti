@@ -2,9 +2,10 @@
  * DroppableNode - Higher-order component that makes React Flow nodes accept preset drops
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { NodeProps } from 'reactflow';
+import type { EditableNodeData } from '../nodes';
 import { DraggedPreset, Preset } from './types';
 import { applyPresetToNode } from './presetUtils';
 import './DroppableNode.css';
@@ -14,14 +15,20 @@ export interface DroppableNodeProps {
   autoEditOnDrop?: boolean;
 }
 
+type DroppableNodeData = EditableNodeData & {
+  isDropTarget?: boolean;
+  dropHighlight?: boolean;
+  justDropped?: boolean;
+};
+
 /**
  * Makes a React Flow node component accept preset drops
  */
-export function withDroppableNode<T extends NodeProps>(
+export function withDroppableNode<T extends NodeProps<DroppableNodeData>>(
   NodeComponent: React.ComponentType<T>,
   options: DroppableNodeProps = {}
-): React.ComponentType<T> {
-  return React.memo((props: T) => {
+) {
+  const DroppableComponent: React.FC<T> = props => {
     const { id, data, type } = props;
     const [dropHighlight, setDropHighlight] = useState(false);
     const [justDropped, setJustDropped] = useState(false);
@@ -85,14 +92,19 @@ export function withDroppableNode<T extends NodeProps>(
     }, [isOver, canDrop]);
 
     // Create enhanced props
-    const enhancedProps = {
-      ...props,
-      data: {
+    const enhancedData = useMemo(
+      () => ({
         ...data,
         isDropTarget: true,
         dropHighlight,
         justDropped
-      }
+      }),
+      [data, dropHighlight, justDropped]
+    );
+
+    const enhancedProps: T = {
+      ...props,
+      data: enhancedData
     };
 
     return (
@@ -100,7 +112,7 @@ export function withDroppableNode<T extends NodeProps>(
         ref={drop} 
         className={`droppable-node-wrapper ${dropHighlight ? 'drop-highlight' : ''} ${justDropped ? 'just-dropped' : ''}`}
       >
-        <NodeComponent {...enhancedProps as T} />
+        <NodeComponent {...enhancedProps} />
         {dropHighlight && (
           <div className="drop-indicator">
             <span>Drop to apply preset</span>
@@ -108,7 +120,9 @@ export function withDroppableNode<T extends NodeProps>(
         )}
       </div>
     );
-  });
+  };
+
+  return React.memo(DroppableComponent);
 }
 
 /**

@@ -277,11 +277,6 @@ export const TutorialOverlay: React.FC = () => {
           top = rect.top + rect.height / 2 - tooltipHeight / 2;
           left = rect.left - tooltipWidth - margin;
           break;
-        case 'center':
-          // For center position, place it at top-right
-          top = margin;
-          left = window.innerWidth - tooltipWidth - margin;
-          break;
         default:
           // Default to top-right
           top = margin;

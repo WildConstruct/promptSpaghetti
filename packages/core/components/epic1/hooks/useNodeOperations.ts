@@ -69,10 +69,10 @@ export function useNodeOperations<NodeData = unknown>(
                         try {
                           return JSON.parse(newValue);
                         } catch {
-                          return node.data.options;
+                          return (node.data as { options?: unknown })?.options;
                         }
                       })()
-                    : (node.data as Record<string, unknown>).options
+                    : (node.data as { options?: unknown })?.options
               }
             };
           }

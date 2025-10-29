@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 
-export interface GraphSnapshot<TNode = any, TEdge = any> {
+export interface GraphSnapshot<TNode = unknown, TEdge = unknown> {
   nodes: TNode[];
   edges: TEdge[];
   timestamp?: number;
 }
 
-interface HistoryState<TNode = any, TEdge = any> {
+interface HistoryState<TNode = unknown, TEdge = unknown> {
   entries: GraphSnapshot<TNode, TEdge>[];
   index: number; // -1 means empty
   capacity: number;
@@ -36,7 +36,9 @@ export const useHistoryStore = create<HistoryState>()((set, get) => ({
 
   undo: () => {
     const { entries, index } = get();
-    if (index <= 0 || entries.length === 0) return null;
+    if (index <= 0 || entries.length === 0) {
+      return null;
+    }
     const nextIndex = index - 1;
     set({ index: nextIndex });
     return get().entries[nextIndex];
@@ -44,7 +46,9 @@ export const useHistoryStore = create<HistoryState>()((set, get) => ({
 
   redo: () => {
     const { entries, index } = get();
-    if (index < 0 || index >= entries.length - 1) return null;
+    if (index < 0 || index >= entries.length - 1) {
+      return null;
+    }
     const nextIndex = index + 1;
     set({ index: nextIndex });
     return get().entries[nextIndex];
@@ -52,7 +56,9 @@ export const useHistoryStore = create<HistoryState>()((set, get) => ({
 
   select: i => {
     const { entries } = get();
-    if (i < 0 || i >= entries.length) return null;
+    if (i < 0 || i >= entries.length) {
+      return null;
+    }
     set({ index: i });
     return entries[i];
   },

@@ -19,7 +19,9 @@ describe('useHistoryStore ring buffer', () => {
 
   it('pushes snapshots and caps at 50', () => {
     act(() => {
-      for (let i = 0; i < 55; i++) useHistoryStore.getState().push(snap(1, i));
+      for (let i = 0; i < 55; i++) {
+        useHistoryStore.getState().push(snap(1, i));
+      }
     });
     const { entries, index, capacity } = useHistoryStore.getState();
     expect(entries.length).toBe(capacity);

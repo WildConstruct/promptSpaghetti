@@ -421,9 +421,11 @@ export class BulkAssetOperations {
         // Store original metadata
         rollbackNodes.push({
           nodeId,
-          originalMetadata: (node.data as Record<string, unknown> & {
-            metadata?: Record<string, unknown>;
-          }).metadata
+          originalMetadata: (
+            node.data as Record<string, unknown> & {
+              metadata?: Record<string, unknown>;
+            }
+          ).metadata
         });
 
         // Apply new metadata
@@ -545,7 +547,9 @@ export class BulkAssetOperations {
     rollbackData: BulkOperationRollback | undefined,
     nodes: FlowNode[]
   ): Promise<boolean> {
-    if (!rollbackData) return false;
+    if (!rollbackData) {
+      return false;
+    }
 
     try {
       // Restore original state based on operation type

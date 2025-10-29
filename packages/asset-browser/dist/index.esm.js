@@ -2690,7 +2690,7 @@ const Yt = {
     const e = [], t = [];
     for (const r of a)
       try {
-        const n = qt(r);
+        const n = await Promise.resolve(qt(r));
         e.push(...n.presets);
       } catch (n) {
         t.push(n instanceof Error ? n.message : "Unknown manifest error");

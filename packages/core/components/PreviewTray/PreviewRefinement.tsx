@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   TextRefinementService,
   RefinementMode
-} from '../../services/llm/TextRefinementService';
+} from '../../services/llm';
 import './PreviewRefinement.css';
 
 export interface RefinementStyle {
@@ -138,7 +138,7 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
         style.prompt
       );
 
-      if (result && !abortController.current.signal.aborted) {
+      if (!abortController.current?.signal.aborted) {
         setRefinedText(result.refined);
         onRefined?.(result.refined);
 
@@ -151,9 +151,10 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
         });
       }
     } catch (err: unknown) {
-      if (err.name !== 'AbortError') {
-        console.error('Refinement error:', err);
-        setError(err.message || 'Failed to refine text');
+      const error = err as Error;
+      if (error.name !== 'AbortError') {
+        console.error('Refinement error:', error);
+        setError(error.message || 'Failed to refine text');
         // Fall back to original
         setRefinedText(originalText);
       }

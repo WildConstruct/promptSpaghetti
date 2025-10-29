@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
-import { PreviewEngine } from '../preview/PreviewEngine';
+import { PreviewEngine, PreviewState } from '../preview/PreviewEngine';
 import { usePreviewTrayStore } from '../../../stores/previewTrayStore';
 import { nodeDataToRuntimeNode } from '../nodes/nodeFactory';
 import type { Epic1Graph } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
@@ -65,26 +65,36 @@ export function useGraphPreview<NodeData = unknown>(
 
       // Subscribe to preview updates
       const unsubscribe = previewEngineRef.current.subscribe(update => {
-        console.log('[Preview] Got update:', update);
+        const isExecuting =
+          update.state === PreviewState.EXECUTING ||
+          update.state === PreviewState.PENDING;
+        setIsPreviewExecuting(isExecuting);
 
-        if (update.loading !== undefined) {
-          setIsPreviewExecuting(update.loading);
-        }
-
-        if (update.results) {
-          const mappedResults = update.results.map(
-            (r: { seed: number; output?: string }) => ({
-              seed: r.seed,
-              result: r.output || ''
-            })
-          );
+        if (Array.isArray(update.results)) {
+          const mappedResults = update.results.map(result => {
+            const withSeed = result as typeof result & { seed?: number };
+            const seedValue =
+              typeof withSeed.seed === 'number'
+                ? withSeed.seed
+                : Array.isArray(currentSeeds)
+                  ? currentSeeds[0]
+                  : 0;
+            const outputValue =
+              typeof result.output === 'string'
+                ? result.output
+                : JSON.stringify(result.output ?? '');
+            return {
+              seed: seedValue,
+              result: outputValue
+            };
+          });
           setPreviewResults(mappedResults);
         }
 
         if (update.error) {
           console.error('[Preview] Error:', update.error);
           setPreviewError(update.error);
-        } else {
+        } else if (update.state !== PreviewState.ERROR) {
           setPreviewError(undefined);
         }
       });
@@ -130,24 +140,25 @@ export function useGraphPreview<NodeData = unknown>(
 
   // Toggle preview visibility
   const togglePreview = useCallback(() => {
-    const { toggleTray, isOpen } = usePreviewTrayStore.getState();
-    toggleTray();
-    setIsPreviewVisible(!isOpen);
-    showToast?.('info', `Preview ${!isOpen ? 'shown' : 'hidden'}`);
+    const store = usePreviewTrayStore.getState();
+    const nextOpen = !store.isOpen;
+    store.setOpen(nextOpen);
+    setIsPreviewVisible(nextOpen);
+    showToast?.('info', `Preview ${nextOpen ? 'shown' : 'hidden'}`);
   }, [showToast]);
 
   // Show preview
   const showPreview = useCallback(() => {
-    const { openTray } = usePreviewTrayStore.getState();
-    openTray();
+    const store = usePreviewTrayStore.getState();
+    store.setOpen(true);
     setIsPreviewVisible(true);
     showToast?.('info', 'Preview shown');
   }, [showToast]);
 
   // Hide preview
   const hidePreview = useCallback(() => {
-    const { closeTray } = usePreviewTrayStore.getState();
-    closeTray();
+    const store = usePreviewTrayStore.getState();
+    store.setOpen(false);
     setIsPreviewVisible(false);
     showToast?.('info', 'Preview hidden');
   }, [showToast]);
@@ -158,12 +169,15 @@ export function useGraphPreview<NodeData = unknown>(
       setCurrentSeeds(seeds);
       if (previewEngineRef.current) {
         previewEngineRef.current.setSeeds(seeds);
-        // Trigger re-execution with new seeds
-        previewEngineRef.current.updatePreview(
-          convertToRuntimeGraph(nodes, edges),
-          nodes,
-          edges
-        );
+        const runtimeGraph = convertToRuntimeGraph(nodes, edges);
+        if (runtimeGraph) {
+          // Trigger re-execution with new seeds
+          previewEngineRef.current.updatePreview(
+            runtimeGraph,
+            nodes,
+            edges
+          );
+        }
       }
       showToast?.('info', `Updated ${seeds.length} preview seeds`);
     },
@@ -339,8 +353,8 @@ function convertToRuntimeGraph<NodeData>(
         id: e.id,
         source: e.source,
         target: e.target,
-        sourceHandle: e.sourceHandle,
-        targetHandle: e.targetHandle
+        sourceHandle: e.sourceHandle ?? undefined,
+        targetHandle: e.targetHandle ?? undefined
       }))
     };
   } catch (error) {

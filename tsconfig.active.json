@@ -12,7 +12,11 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@prompt/asset-browser": ["packages/asset-browser/src/index.tsx"],
+      "@prompt/asset-browser/*": ["packages/asset-browser/src/*"]
+    }
   },
   "include": [
     "packages/asset-browser/src/**/*",
@@ -23,6 +27,8 @@
     "packages/core/utils/supabaseClient.ts",
     "packages/core/utils/supabaseFeature.ts",
     "packages/core/types/graph.ts",
+    "packages/core/types/vite-client.d.ts",
+    "packages/core/types/openai.d.ts",
     "packages/core/index.ts"
   ],
   "exclude": [

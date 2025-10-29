@@ -9,7 +9,8 @@ import {
   simplePromptParser,
   PromptAnalysis,
   GeneratedNode,
-  NodeMapping
+  NodeMapping,
+  PromptSegment
 } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
 import LLMService from '../../shims/llm-service';
@@ -46,6 +47,7 @@ interface HighlightSegment {
 type LLMNodeData = {
   content?: string;
   label?: string;
+  metadata?: Record<string, unknown>;
   [key: string]: unknown;
 };
 
@@ -61,6 +63,15 @@ interface LLMParseResult {
   graph?: {
     nodes?: LLMNode[];
   };
+  edges?: Array<{
+    id?: string;
+    source: string;
+    target: string;
+    sourceHandle?: string | null;
+    targetHandle?: string | null;
+    [key: string]: unknown;
+  }>;
+  metadata?: Record<string, unknown>;
 }
 
 const HIGHLIGHT_COLORS = [
@@ -284,41 +295,30 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         }
 
         // Create segments from the nodes
-        const nodes = result.nodes ?? [];
+        const nodes = Array.isArray(result.nodes) ? result.nodes : [];
+        const nonOutputNodes = nodes.filter(n => n.type !== 'output');
 
-        const segments = nodes
-          .filter(n => n.type !== 'output')
-          .map(node => ({
-            text:
-              node.text ||
-              (node.data?.content as string | undefined) ||
-              (node.data?.label as string | undefined) ||
-              '',
-            type: node.type
-          }));
-
-        // Create mappings with actual text positions
-        // First, concatenate all node texts to understand the full coverage
-        const nodeTexts = nodes
-          .filter(n => n.type !== 'output')
-          .map(
-            node =>
-              node.text ||
-              (node.data?.content as string | undefined) ||
-              (node.data?.label as string | undefined) ||
-              ''
+        const nodeTexts = nonOutputNodes.map(node => {
+          const nodeData = node.data ?? {};
+          return (
+            node.text ||
+            (nodeData.content as string | undefined) ||
+            (nodeData.label as string | undefined) ||
+            ''
           );
+        });
 
         console.log('[PromptDissector] Node texts from LLM:', nodeTexts);
         console.log('[PromptDissector] Original prompt:', text);
 
         // Build mappings by finding each node's text in sequence
         let searchStartPos = 0;
-        const mappings = [];
+        const mappings: NodeMapping[] = [];
+        const llmSegments: PromptSegment[] = [];
 
-        for (let idx = 0; idx < nodeTexts.length; idx++) {
-          const nodeText = nodeTexts[idx];
-          const node = nodes.filter(n => n.type !== 'output')[idx];
+        for (let idx = 0; idx < nonOutputNodes.length; idx++) {
+          const nodeText = nodeTexts[idx] ?? '';
+          const node = nonOutputNodes[idx];
 
           if (!nodeText || nodeText.trim() === '') {
             console.warn(`[PromptDissector] Skipping empty node ${idx}`);
@@ -351,6 +351,12 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           const endIdx = startIdx + nodeText.length;
           searchStartPos = endIdx; // Move search position forward
 
+          llmSegments.push({
+            text: nodeText,
+            startIndex: startIdx,
+            endIndex: endIdx
+          });
+
           mappings.push({
             nodeId: node.id,
             startIndex: startIdx,
@@ -365,27 +371,44 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
         // Convert LLM result to expected format
         newAnalysis = {
-          segments: segments,
-          nodes: result.nodes.map(node => ({
-            node: {
-              id: node.id,
-              nodeType:
-                node.type === 'weightedChoice'
-                  ? 'Choice'
-                  : node.type === 'variable'
-                    ? 'Variable'
-                    : node.type === 'output'
-                      ? 'Output'
-                      : 'Text',
-              content: node.text || node.data.content || node.data.label || '',
-              metadata: node.data.metadata,
-              getPreviewText: () =>
-                node.text || node.data.content || node.data.label || ''
-            }
-          })),
-          edges: result.edges,
+          segments:
+            llmSegments.length > 0
+              ? llmSegments
+              : nonOutputNodes.map((node, idx) => ({
+                  text: nodeTexts[idx] ?? '',
+                  startIndex: 0,
+                  endIndex: (nodeTexts[idx] ?? '').length
+                })),
+          nodes: nodes.map(node => {
+            const nodeData = node.data ?? {};
+            const resolvedContent =
+              node.text ||
+              (nodeData.content as string | undefined) ||
+              (nodeData.label as string | undefined) ||
+              '';
+            const dataPayload: Record<string, unknown> = {
+              ...nodeData,
+              content: resolvedContent
+            };
+            return {
+              node: {
+                id: node.id,
+                nodeType:
+                  node.type === 'weightedChoice'
+                    ? 'Choice'
+                    : node.type === 'variable'
+                      ? 'Variable'
+                      : node.type === 'output'
+                        ? 'Output'
+                        : 'Text',
+                data: dataPayload,
+                getPreviewText: () => resolvedContent
+              }
+            };
+          }),
+          edges: Array.isArray(result.edges) ? result.edges : [],
           mappings: mappings,
-          llmMetadata: result.metadata,
+          llmMetadata: result.metadata ?? {},
           rawPrompt: text
         };
         if (showLoading) {setIsLLMParsing(false);}

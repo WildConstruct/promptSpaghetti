@@ -300,13 +300,17 @@ function mapApiNodeToGraphNode(
           typeof weightRaw === 'number' && Number.isFinite(weightRaw)
             ? weightRaw
             : 1;
-        return {
+        const metadata = ensureRecord(option.metadata);
+        const weightedOption: WeightedChoiceOption = {
           text,
-          weight,
-          metadata: ensureRecord(option.metadata)
+          weight
         };
+        if (metadata && Object.keys(metadata).length > 0) {
+          weightedOption.metadata = metadata;
+        }
+        return weightedOption;
       })
-      .filter((opt): opt is WeightedChoiceOption => Boolean(opt));
+      .filter((opt): opt is WeightedChoiceOption => opt !== null);
     if (options.length > 0) {
       nodeData.options = options;
     }

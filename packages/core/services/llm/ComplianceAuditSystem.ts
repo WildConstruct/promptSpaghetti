@@ -125,6 +125,19 @@ export class ComplianceAuditSystem {
     this.initializeDefaultPolicies();
   }
 
+  private mapToAuditTargetType(value: string): AuditTargetType {
+    const allowed: AuditTargetType[] = [
+      'extra',
+      'user',
+      'asset',
+      'segment',
+      'metadata'
+    ];
+    return allowed.includes(value as AuditTargetType)
+      ? (value as AuditTargetType)
+      : 'metadata';
+  }
+
   // Initialize default retention policies
   private initializeDefaultPolicies(): void {
     this.retentionPolicies.set('metadata', {
@@ -213,7 +226,9 @@ export class ComplianceAuditSystem {
           new Date(a.consent_date).getTime()
       );
 
-    if (records.length === 0) return null;
+    if (records.length === 0) {
+      return null;
+    }
 
     const record = records[0];
 
@@ -232,10 +247,12 @@ export class ComplianceAuditSystem {
     requester: string,
     reason?: string
   ): Promise<DeletionRequest> {
+    const targetType = this.mapToAuditTargetType(entity_type);
+
     const request: DeletionRequest = {
       id: this.generateDeletionId(),
       entity_id,
-      entity_type,
+      entity_type: targetType,
       requested_date: new Date().toISOString(),
       requester,
       reason,
@@ -249,7 +266,7 @@ export class ComplianceAuditSystem {
       action: 'deletion_requested',
       user: requester,
       target: entity_id,
-      target_type: entity_type,
+      target_type: targetType,
       success: true,
       details: { reason }
     });
@@ -574,7 +591,9 @@ export class ComplianceAuditSystem {
     };
 
     for (const entry of entries) {
-      if (entry.target_type !== 'extra') continue;
+      if (entry.target_type !== 'extra') {
+        continue;
+      }
 
       const details = entry.details as Record<string, unknown> | undefined;
       const detailsCategory = this.getDetailString(details, 'category');
@@ -601,7 +620,9 @@ export class ComplianceAuditSystem {
     details: Record<string, unknown> | undefined,
     key: string
   ): string | null {
-    if (!details) return null;
+    if (!details) {
+      return null;
+    }
     const value = details[key];
     return typeof value === 'string' ? value : null;
   }

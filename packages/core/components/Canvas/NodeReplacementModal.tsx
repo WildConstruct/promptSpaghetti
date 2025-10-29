@@ -51,7 +51,9 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
     }
   }, [isVisible]);
 
-  if (!isVisible && !isAnimating) return null;
+  if (!isVisible && !isAnimating) {
+    return null;
+  }
 
   const handleClose = () => {
     setIsAnimating(false);
@@ -125,13 +127,13 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
                 <span>
                   {info.connectionImpact.lost} connections will be lost
                 </span>
-                {info.connectionImpact.incompatible.length > 0 && (
-                  <ul className="incompatible-list">
-                    {info.connectionImpact.incompatible.map((conn, idx) => (
-                      <li key={idx}>{conn}</li>
-                    ))}
-                  </ul>
-                )}
+            {info.connectionImpact.incompatible.length > 0 && (
+              <ul className="incompatible-list">
+                {info.connectionImpact.incompatible.map(conn => (
+                  <li key={conn}>{conn}</li>
+                ))}
+              </ul>
+            )}
               </div>
             )}
 
@@ -218,14 +220,26 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
 };
 
 // Connection validator service
+export interface GraphEdgeInfo {
+  source: string;
+  target: string;
+  sourceHandle?: string | null;
+  targetHandle?: string | null;
+}
+
+export interface ReplacementNodeSummary {
+  id: string;
+  type: string;
+}
+
 export class ConnectionValidator {
   static analyzeReplacementImpact(
-    currentNode: any,
+    currentNode: ReplacementNodeSummary,
     newNodeType: string,
-    edges: any[]
+    edges: GraphEdgeInfo[]
   ): ReplacementInfo['connectionImpact'] {
-    const incomingEdges = edges.filter(e => e.target === currentNode.id);
-    const outgoingEdges = edges.filter(e => e.source === currentNode.id);
+    const incomingEdges = edges.filter(edge => edge.target === currentNode.id);
+    const outgoingEdges = edges.filter(edge => edge.source === currentNode.id);
 
     let preserved = 0;
     let lost = 0;
@@ -259,8 +273,8 @@ export class ConnectionValidator {
   }
 
   private static isCompatibleConnection(
-    sourceType: string,
-    targetType: string,
+    sourceType: string | null | undefined,
+    targetType: string | null | undefined,
     direction: 'input' | 'output'
   ): boolean {
     // Simple compatibility matrix for MVP
@@ -272,12 +286,16 @@ export class ConnectionValidator {
       Variable: ['TextBlock', 'Output', 'Concat']
     };
 
+    if (!sourceType || !targetType) {
+      return false;
+    }
+
     if (direction === 'output') {
       return compatibilityMatrix[sourceType]?.includes(targetType) || false;
-    } else {
-      return Object.entries(compatibilityMatrix).some(
-        ([key, values]) => key === targetType && values.includes(sourceType)
-      );
     }
+
+    return Object.entries(compatibilityMatrix).some(
+      ([key, values]) => key === targetType && values.includes(sourceType)
+    );
   }
 }

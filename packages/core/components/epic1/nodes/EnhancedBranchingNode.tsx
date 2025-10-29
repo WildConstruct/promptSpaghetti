@@ -282,12 +282,15 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       const allText = options.map(opt => opt.text).filter(t => t).join(' ');
       if (allText.length > 10) {
         setIsExtractingMetadata(true);
-        intelligence.metadataExtractor.extract(allText).then(result => {
-          if (result) {
-            setMetadata(result.metadata);
-          }
-          setIsExtractingMetadata(false);
-        }).catch(() => {
+        intelligence.metadataExtractor
+          .extract(allText)
+          .then(result => {
+            const metadataResult = result as { metadata?: SegmentMetadata };
+            if (metadataResult?.metadata) {
+              setMetadata(metadataResult.metadata);
+            }
+            setIsExtractingMetadata(false);
+          }).catch(() => {
           setIsExtractingMetadata(false);
         });
       }
@@ -1015,12 +1018,15 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                           const allText = options.map(opt => opt.text).filter(t => t).join(' ');
                           if (intelligence.metadataExtractor && allText.length > 10) {
                             setIsExtractingMetadata(true);
-                            intelligence.metadataExtractor.extract(allText).then(result => {
-                              if (result) {
-                                setMetadata(result.metadata);
-                              }
-                              setIsExtractingMetadata(false);
-                            }).catch(() => {
+                            intelligence.metadataExtractor
+                              .extract(allText)
+                              .then(result => {
+                                const metadataResult = result as { metadata?: SegmentMetadata };
+                                if (metadataResult?.metadata) {
+                                  setMetadata(metadataResult.metadata);
+                                }
+                                setIsExtractingMetadata(false);
+                              }).catch(() => {
                               setIsExtractingMetadata(false);
                             });
                           }

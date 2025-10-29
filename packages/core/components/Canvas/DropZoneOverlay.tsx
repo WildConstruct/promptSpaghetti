@@ -26,7 +26,9 @@ export const DropZoneOverlay: React.FC<DropZoneOverlayProps> = ({
     setVisible(state.isOver);
   }, [state.isOver]);
 
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   const overlayClass = state.canDrop ? 'valid-drop' : 'invalid-drop';
   const icon = state.canDrop ? '✓' : '✗';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useStore, Node, Edge } from 'reactflow';
+import { useStore, type Node, type Edge, type Connection } from 'reactflow';
 import { connectionValidator } from './validation/ConnectionValidator';
 import type { EditableNodeData } from './nodes';
 import './ConnectionFeedback.css';
@@ -38,8 +38,14 @@ export const ConnectionFeedback: React.FC<ConnectionFeedbackProps> = ({ nodes, e
         nodes.forEach(node => {
           if (node.id !== connectionNodeId && node.type && validTargetTypes.includes(node.type)) {
             // Additional validation
+            const draftConnection: Connection = {
+              source: connectionNodeId,
+              target: node.id,
+              sourceHandle: null,
+              targetHandle: null
+            };
             const result = connectionValidator.validateConnection(
-              { source: connectionNodeId, target: node.id },
+              draftConnection,
               nodes,
               edges
             );
@@ -109,7 +115,7 @@ export const useConnectionValidation = (
   edges: Edge[],
   onError?: (error: string) => void
 ) => {
-  const isValidConnection = React.useCallback((connection: any) => {
+  const isValidConnection = React.useCallback((connection: Connection) => {
     const result = connectionValidator.validateConnection(connection, nodes, edges);
     
     // Show error toast if invalid

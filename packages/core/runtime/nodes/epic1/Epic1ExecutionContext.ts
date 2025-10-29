@@ -4,6 +4,7 @@
  */
 
 import seedrandom from 'seedrandom';
+import type { ExecutionContext } from '../../types';
 
 /**
  * Variable value types supported by the execution context
@@ -32,8 +33,10 @@ export interface ExecutionStats {
  */
 export class Epic1ExecutionContext {
   private readonly seed: string;
-  private readonly prng: seedrandom.PRNG;
+  private readonly prng: ReturnType<typeof seedrandom>;
   private readonly variables: Map<string, VariableValue>;
+  private readonly variableProxy: Record<string, VariableValue>;
+  private readonly contextView: ExecutionContext;
   private readonly nodeSeeds: Map<string, string>;
   private readonly stats: ExecutionStats;
   private depth: number = 0;
@@ -43,6 +46,39 @@ export class Epic1ExecutionContext {
     this.seed = String(seed);
     this.prng = seedrandom(this.seed);
     this.variables = new Map();
+    this.variableProxy = new Proxy<Record<string, VariableValue>>(
+      {},
+      {
+        get: (_target, prop) =>
+          typeof prop === 'string' ? this.getVariable(prop) : undefined,
+        set: (_target, prop, value) => {
+          if (typeof prop === 'string') {
+            this.setVariable(prop, value as VariableValue);
+            return true;
+          }
+          return false;
+        },
+        has: (_target, prop) =>
+          typeof prop === 'string' ? this.hasVariable(prop) : false,
+        deleteProperty: (_target, prop) =>
+          typeof prop === 'string' ? this.variables.delete(prop) : false,
+        ownKeys: () => Array.from(this.variables.keys()),
+        getOwnPropertyDescriptor: (_target, prop) => {
+          if (typeof prop === 'string' && this.variables.has(prop)) {
+            return {
+              enumerable: true,
+              configurable: true,
+              value: this.getVariable(prop)
+            };
+          }
+          return undefined;
+        }
+      }
+    );
+    this.contextView = {
+      seed: this.seed,
+      variables: this.variableProxy
+    };
     this.nodeSeeds = new Map();
     this.stats = {
       startTime: Date.now(),
@@ -75,7 +111,7 @@ export class Epic1ExecutionContext {
   /**
    * Get a seeded PRNG for a specific node
    */
-  getNodePRNG(nodeId: string): seedrandom.PRNG {
+  getNodePRNG(nodeId: string): ReturnType<typeof seedrandom> {
     const nodeSeed = this.getNodeSeed(nodeId);
     return seedrandom(nodeSeed);
   }
@@ -131,6 +167,10 @@ export class Epic1ExecutionContext {
    */
   clearVariables(): void {
     this.variables.clear();
+  }
+
+  getExecutionContext(): ExecutionContext {
+    return this.contextView;
   }
 
   /**

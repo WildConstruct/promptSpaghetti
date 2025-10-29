@@ -417,7 +417,7 @@ export const NodeTetris: React.FC<NodeTetrisProps> = ({ onExit, onScoreUpdate })
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .node-tetris-overlay {
           position: fixed;
           top: 0;

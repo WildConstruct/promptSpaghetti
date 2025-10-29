@@ -309,8 +309,9 @@ export class AdvancedMatcherService {
 
   private async getPopularityScore(asset: Asset): Promise<number> {
     // Check cache first
-    if (this.popularityCache.has(asset.id)) {
-      return this.popularityCache.get(asset.id)!;
+    const cachedScore = this.popularityCache.get(asset.id);
+    if (cachedScore !== undefined) {
+      return cachedScore;
     }
 
     // In production, this would query usage analytics
@@ -318,8 +319,12 @@ export class AdvancedMatcherService {
     let score = 0.5;
 
     // Boost popular categories
-    if (asset.metadata?.category === 'character') score += 0.2;
-    if (asset.metadata?.category === 'action') score += 0.1;
+    if (asset.metadata?.category === 'character') {
+      score += 0.2;
+    }
+    if (asset.metadata?.category === 'action') {
+      score += 0.1;
+    }
 
     // Cache the result
     this.popularityCache.set(asset.id, score);
@@ -480,18 +485,26 @@ class UserPreferenceModel {
     asset: Asset,
     preferences?: UserPreferences
   ): Promise<number> {
-    if (!preferences) return 0.5;
+    if (!preferences) {
+      return 0.5;
+    }
 
     // Check direct preferences
-    if (preferences.favoriteAssets.includes(asset.id)) return 1.0;
-    if (preferences.rejectedAssets.includes(asset.id)) return 0.0;
+    if (preferences.favoriteAssets.includes(asset.id)) {
+      return 1.0;
+    }
+    if (preferences.rejectedAssets.includes(asset.id)) {
+      return 0.0;
+    }
 
     // Analyze acceptance history
     const relevantHistory = preferences.acceptanceHistory.filter(record =>
       this.isRelevantContext(record.context, asset)
     );
 
-    if (relevantHistory.length === 0) return 0.5;
+    if (relevantHistory.length === 0) {
+      return 0.5;
+    }
 
     const acceptanceRate =
       relevantHistory.filter(r => r.accepted).length / relevantHistory.length;
@@ -515,15 +528,21 @@ class ConsistencyEngine {
 
     // Check temporal consistency
     const temporalIssue = this.checkTemporalConsistency(asset, context);
-    if (temporalIssue) score *= 0.7;
+    if (temporalIssue) {
+      score *= 0.7;
+    }
 
     // Check style consistency
     const styleIssue = this.checkStyleConsistency(asset, context);
-    if (styleIssue) score *= 0.8;
+    if (styleIssue) {
+      score *= 0.8;
+    }
 
     // Check semantic consistency
     const semanticIssue = this.checkSemanticConsistency(asset, context);
-    if (semanticIssue) score *= 0.6;
+    if (semanticIssue) {
+      score *= 0.6;
+    }
 
     return score;
   }
@@ -538,13 +557,17 @@ class ConsistencyEngine {
       .map(n => n.data?.metadata?.timePeriod)
       .filter(Boolean);
 
-    if (!assetTime || graphTimes.length === 0) return false;
+    if (!assetTime || graphTimes.length === 0) {
+      return false;
+    }
 
     // Simple check: medieval shouldn't mix with futuristic
-    if (assetTime === 'medieval' && graphTimes.includes('futuristic'))
+    if (assetTime === 'medieval' && graphTimes.includes('futuristic')) {
       return true;
-    if (assetTime === 'futuristic' && graphTimes.includes('medieval'))
+    }
+    if (assetTime === 'futuristic' && graphTimes.includes('medieval')) {
       return true;
+    }
 
     return false;
   }
@@ -555,13 +578,17 @@ class ConsistencyEngine {
       .map(n => n.data?.metadata?.style)
       .filter(Boolean);
 
-    if (!assetStyle || graphStyles.length === 0) return false;
+    if (!assetStyle || graphStyles.length === 0) {
+      return false;
+    }
 
     // Check for style clashes
-    if (assetStyle === 'cartoon' && graphStyles.includes('realistic'))
+    if (assetStyle === 'cartoon' && graphStyles.includes('realistic')) {
       return true;
-    if (assetStyle === 'realistic' && graphStyles.includes('cartoon'))
+    }
+    if (assetStyle === 'realistic' && graphStyles.includes('cartoon')) {
       return true;
+    }
 
     return false;
   }
@@ -576,13 +603,17 @@ class ConsistencyEngine {
       .map(n => n.data?.metadata?.category)
       .filter(Boolean);
 
-    if (!assetCategory || graphCategories.length === 0) return false;
+    if (!assetCategory || graphCategories.length === 0) {
+      return false;
+    }
 
     // Simple semantic rules
-    if (assetCategory === 'underwater' && graphCategories.includes('desert'))
+    if (assetCategory === 'underwater' && graphCategories.includes('desert')) {
       return true;
-    if (assetCategory === 'space' && graphCategories.includes('medieval'))
+    }
+    if (assetCategory === 'space' && graphCategories.includes('medieval')) {
       return true;
+    }
 
     return false;
   }

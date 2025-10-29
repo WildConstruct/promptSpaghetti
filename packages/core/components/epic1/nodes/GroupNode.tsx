@@ -97,8 +97,8 @@ const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
     );
 
     // Determine visual style based on state
-    const getGroupStyle = () => {
-      const baseStyle = {
+    const getGroupStyle = (): React.CSSProperties => {
+      const baseStyle: React.CSSProperties = {
         padding: '8px',
         borderRadius: '8px',
         backgroundColor: group.metadata?.color || '#f0f0f0',
@@ -399,7 +399,7 @@ const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
           </div>
         )}
 
-        <style jsx>{`
+        <style>{`
           @keyframes spin {
             from {
               transform: rotate(0deg);

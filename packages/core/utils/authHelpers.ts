@@ -7,27 +7,32 @@ import type { AuthError, Session } from '@supabase/supabase-js';
 /**
  * Retry logic with exponential backoff
  */
+const isSupabaseAuthError = (value: unknown): value is AuthError => {
+  return Boolean(
+    value && typeof value === 'object' && 'status' in value && 'message' in value
+  );
+};
+
 export async function retryWithBackoff<T>(
   fn: () => Promise<T>,
   maxRetries = 3,
   baseDelay = 1000
 ): Promise<T> {
-  let lastError: Error;
+  let lastError: Error | null = null;
 
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
     } catch (error) {
-      lastError = error as Error;
+      if (error instanceof Error) {
+        lastError = error;
+      } else {
+        lastError = new Error(String(error));
+      }
 
       // Don't retry on auth errors (wrong password, etc)
-      if (error && typeof error === 'object' && 'status' in error) {
-        const authError = error as AuthError;
-        if (
-          authError.status &&
-          authError.status >= 400 &&
-          authError.status < 500
-        ) {
+      if (isSupabaseAuthError(error)) {
+        if (error.status && error.status >= 400 && error.status < 500) {
           throw error;
         }
       }
@@ -39,7 +44,7 @@ export async function retryWithBackoff<T>(
     }
   }
 
-  throw lastError!;
+  throw lastError ?? new Error('Maximum retries exceeded');
 }
 
 /**
@@ -56,7 +61,9 @@ export class TokenRefreshScheduler {
   schedule(session: Session) {
     this.cancel();
 
-    if (!session.expires_at) return;
+    if (!session.expires_at) {
+      return;
+    }
 
     const expiresAt = session.expires_at * 1000; // Convert to milliseconds
     const expiresIn = expiresAt - Date.now();
@@ -84,6 +91,14 @@ export class TokenRefreshScheduler {
 /**
  * Cross-tab synchronization for auth state
  */
+type AuthBroadcastEvent = 'signin' | 'signout' | 'session_refresh';
+
+interface AuthBroadcastMessage {
+  event: AuthBroadcastEvent;
+  data?: unknown;
+  timestamp: number;
+}
+
 export class AuthStateBroadcaster {
   private channel: BroadcastChannel | null = null;
   private storageKey = 'psg_auth_sync';
@@ -99,8 +114,8 @@ export class AuthStateBroadcaster {
     }
   }
 
-  broadcast(event: 'signin' | 'signout' | 'session_refresh', data?: any) {
-    const message = { event, data, timestamp: Date.now() };
+  broadcast(event: AuthBroadcastEvent, data?: unknown) {
+    const message: AuthBroadcastMessage = { event, data, timestamp: Date.now() };
 
     if (this.channel) {
       this.channel.postMessage(message);
@@ -109,24 +124,32 @@ export class AuthStateBroadcaster {
       try {
         localStorage.setItem(this.storageKey, JSON.stringify(message));
         // Immediately remove to trigger storage event
-        setTimeout(() => localStorage.removeItem(this.storageKey), 100);
+        setTimeout(() => {
+          localStorage.removeItem(this.storageKey);
+        }, 100);
       } catch (error) {
         console.warn('Failed to broadcast auth event:', error);
       }
     }
   }
 
-  subscribe(callback: (event: string, data?: any) => void) {
+  subscribe(callback: (event: AuthBroadcastEvent, data?: unknown) => void) {
     if (this.channel) {
-      this.channel.onmessage = e => {
-        callback(e.data.event, e.data.data);
+      this.channel.onmessage = event => {
+        const message = event.data as AuthBroadcastMessage;
+        callback(message.event, message.data);
+      };
+      return () => {
+        if (this.channel) {
+          this.channel.onmessage = null;
+        }
       };
     } else {
       // Fallback to storage events
       const handleStorage = (e: StorageEvent) => {
         if (e.key === this.storageKey && e.newValue) {
           try {
-            const message = JSON.parse(e.newValue);
+            const message = JSON.parse(e.newValue) as AuthBroadcastMessage;
             callback(message.event, message.data);
           } catch (error) {
             console.warn('Failed to parse auth sync message:', error);
@@ -174,7 +197,10 @@ export class OfflineAuthQueue {
 
   private async processQueue() {
     while (this.queue.length > 0) {
-      const item = this.queue.shift()!;
+      const item = this.queue.shift();
+      if (!item) {
+        continue;
+      }
       try {
         await item.operation();
         item.resolve();
@@ -203,9 +229,13 @@ export class OfflineAuthQueue {
  * Transform Supabase auth errors to user-friendly messages
  */
 export function transformAuthError(error: unknown): string {
-  if (!error) return 'An unknown error occurred';
+  if (!error) {
+    return 'An unknown error occurred';
+  }
 
-  if (typeof error === 'string') return error;
+  if (typeof error === 'string') {
+    return error;
+  }
 
   if (error && typeof error === 'object' && 'message' in error) {
     const message = (error as { message: string }).message;
@@ -247,8 +277,10 @@ export class AuthDebugLogger {
       !process.env.VITE_PRODUCTION;
   }
 
-  log(event: string, data?: any) {
-    if (!this.enabled) return;
+  log(event: string, data?: unknown) {
+    if (!this.enabled) {
+      return;
+    }
 
     const timestamp = new Date().toISOString();
     console.group(`[Auth] ${event} - ${timestamp}`);
@@ -259,7 +291,9 @@ export class AuthDebugLogger {
   }
 
   error(event: string, error: unknown) {
-    if (!this.enabled) return;
+    if (!this.enabled) {
+      return;
+    }
 
     const timestamp = new Date().toISOString();
     console.group(`[Auth Error] ${event} - ${timestamp}`);

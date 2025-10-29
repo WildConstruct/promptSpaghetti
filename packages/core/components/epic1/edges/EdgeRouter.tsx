@@ -296,7 +296,7 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
         </EdgeLabelRenderer>
       )}
 
-      <style jsx>{`
+      <style>{`
         @keyframes dash {
           to {
             stroke-dashoffset: -10;

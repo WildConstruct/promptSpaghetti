@@ -2,16 +2,139 @@
 // Story 2.5a: Asset Browser Integration MVP
 
 import React, { useCallback, useMemo, useState } from 'react';
-import { CanvasDropTarget, DraggedAsset } from '../AssetBrowser/DragDropHandler';
-import { DropZoneOverlay, DropZoneState } from './DropZoneOverlay';
-import { NodeReplacementModal, ConnectionValidator, ReplacementInfo } from './NodeReplacementModal';
-import { ErrorRecoveryToast, DropError } from '../Toast/ErrorRecoveryToast';
+import {
+  CanvasDropTarget,
+  type DraggedAsset
+} from '../AssetBrowser/DragDropHandler';
+import {
+  DropZoneOverlay,
+  type DropZoneState
+} from './DropZoneOverlay';
+import {
+  NodeReplacementModal,
+  type ReplacementInfo
+} from './NodeReplacementModal';
+import {
+  ErrorRecoveryToast,
+  type DropError
+} from '../Toast/ErrorRecoveryToast';
 import { ConsentService } from '../../services/consent';
-import { TreeBuilder } from '../../services/TreeBuilder';
+import {
+  TreeBuilder,
+  type BuildTreeResult
+} from '../../services/TreeBuilder';
 import TreePreviewModal from './TreePreviewModal';
-import { mapAssetToNodeType, mapReactFlowTypeToCompat, canConnect } from '../../services/assetTypeMapping';
+import {
+  mapAssetToNodeType,
+  mapReactFlowTypeToCompat,
+  canConnect
+} from '../../services/assetTypeMapping';
 
-export interface CanvasDropAreaProps {\n  children: React.ReactNode;\n  nodes: Array<{ id: string; type: string; label?: string; selected?: boolean }>;\n  edges: Array<{ source: string; target: string; sourceHandle?: string; targetHandle?: string }>;\n  onCreateFromAsset: (asset: DraggedAsset, position: { x: number; y: number }) => void;\n  onReplaceNode: (targetNodeId: string, asset: DraggedAsset) => void;\n  onQuickAddChoice?: (weightedChoiceNodeId: string, asset: DraggedAsset, weight?: number) => void;\n  onInsertTree?: (nodes: any[], edges: any[]) => void;\n  onMergeChoices?: (targetNodeId: string, asset: DraggedAsset) => void;\n  onCreateVariant?: (targetNodeId: string) => void;\n  onSmartSwap?: (targetNodeId: string, asset: DraggedAsset) => void;\n  onReplaceAllSimilar?: (targetNodeId: string, asset: DraggedAsset) => void;\n  onReplaceAllSelected?: (targetIds: string[], asset: DraggedAsset, onProgress: (done: number, total: number) => boolean) => void;\n}\n
+interface CanvasNodeSummary {
+  id: string;
+  type: string;
+  label?: string;
+  data?: Record<string, unknown>;
+  selected?: boolean;
+}
+
+interface CanvasEdgeSummary {
+  source: string;
+  target: string;
+  sourceHandle?: string | null;
+  targetHandle?: string | null;
+}
+
+type ProgressCallback = (done: number, total: number) => boolean;
+
+interface CanvasDropAreaProps {
+  children: React.ReactNode;
+  nodes: CanvasNodeSummary[];
+  edges: CanvasEdgeSummary[];
+  onCreateFromAsset: (
+    asset: DraggedAsset,
+    position: { x: number; y: number }
+  ) => void;
+  onReplaceNode: (targetNodeId: string, asset: DraggedAsset) => void;
+  onQuickAddChoice?: (
+    weightedChoiceNodeId: string,
+    asset: DraggedAsset,
+    weight?: number
+  ) => void;
+  onInsertTree?: (
+    nodes: BuildTreeResult['nodes'],
+    edges: BuildTreeResult['edges']
+  ) => void;
+  onMergeChoices?: (targetNodeId: string, asset: DraggedAsset) => void;
+  onCreateVariant?: (targetNodeId: string) => void;
+  onSmartSwap?: (targetNodeId: string, asset: DraggedAsset) => void;
+  onReplaceAllSimilar?: (targetNodeId: string, asset: DraggedAsset) => void;
+  onReplaceAllSelected?: (
+    targetIds: string[],
+    asset: DraggedAsset,
+    onProgress: ProgressCallback
+  ) => void;
+}
+
+type ModalState = {
+  visible: boolean;
+  info: ReplacementInfo | null;
+  asset: DraggedAsset | null;
+};
+
+type TreePreviewState = {
+  visible: boolean;
+  result: BuildTreeResult | null;
+};
+
+const CONNECTION_WARNING =
+  "This would break {count} connections. Disconnect downstream nodes or use 'Replace All' (coming in 2.5b).";
+
+const buildReplacementImpact = (
+  targetNodeId: string,
+  mappedType: ReturnType<typeof mapAssetToNodeType>,
+  nodes: CanvasNodeSummary[],
+  edges: CanvasEdgeSummary[]
+): ReplacementInfo['connectionImpact'] => {
+  let preserved = 0;
+  const incompatible: string[] = [];
+
+  edges.forEach(edge => {
+    if (edge.source !== targetNodeId && edge.target !== targetNodeId) {
+      return;
+    }
+
+    const isOutgoing = edge.source === targetNodeId;
+    const neighborId = isOutgoing ? edge.target : edge.source;
+    const neighbor =
+      nodes.find(node => node.id === neighborId) ?? undefined;
+    const neighborType =
+      typeof neighbor?.data?.type === 'string'
+        ? String(neighbor.data.type)
+        : neighbor?.type ?? 'Unknown';
+    const neighborCompat = mapReactFlowTypeToCompat(neighborType);
+    const keepConnection = isOutgoing
+      ? canConnect(mappedType.compatType, neighborCompat)
+      : canConnect(neighborCompat, mappedType.compatType);
+
+    if (keepConnection) {
+      preserved += 1;
+      return;
+    }
+
+    const label = neighbor?.label ?? neighborId;
+    incompatible.push(
+      isOutgoing ? `Output to ${label}` : `Input from ${label}`
+    );
+  });
+
+  return {
+    preserved,
+    lost: incompatible.length,
+    incompatible
+  };
+};
+
 export const CanvasDropArea: React.FC<CanvasDropAreaProps> = ({
   children,
   nodes,
@@ -26,15 +149,25 @@ export const CanvasDropArea: React.FC<CanvasDropAreaProps> = ({
   onReplaceAllSimilar,
   onReplaceAllSelected
 }) => {
-  const [overlay, setOverlay] = useState<DropZoneState>({ isOver: false, canDrop: false });
+  const [overlay, setOverlay] = useState<DropZoneState>({
+    isOver: false,
+    canDrop: false
+  });
   const [toast, setToast] = useState<DropError | null>(null);
-  const [modal, setModal] = useState<{ visible: boolean; info?: ReplacementInfo }>({ visible: false });
-  const [treePreview, setTreePreview] = useState<{ visible: boolean; result?: any }>({ visible: false });
+  const [modal, setModal] = useState<ModalState>({
+    visible: false,
+    info: null,
+    asset: null
+  });
+  const [treePreview, setTreePreview] = useState<TreePreviewState>({
+    visible: false,
+    result: null
+  });
   const [treeBuilder] = useState(() => new TreeBuilder());
 
   const nodeTypeById = useMemo(() => {
     const map = new Map<string, string>();
-    nodes.forEach(n => map.set(n.id, n.type));
+    nodes.forEach(node => map.set(node.id, node.type));
     return map;
   }, [nodes]);
 
@@ -44,109 +177,160 @@ export const CanvasDropArea: React.FC<CanvasDropAreaProps> = ({
 
   const handleInvalidDrop = useCallback((error: DropError) => {
     setToast(error);
-    // Also show overlay as invalid briefly
     setOverlay(prev => ({ ...prev, isOver: true, canDrop: false }));
-    setTimeout(() => setOverlay(prev => ({ ...prev, isOver: false })), 2000);
+    setTimeout(
+      () =>
+        setOverlay(prev => ({
+          ...prev,
+          isOver: false,
+          canDrop: false
+        })),
+      2000
+    );
   }, []);
 
-  const handleDrop = useCallback((asset: DraggedAsset, position: { x: number; y: number }, targetNodeId?: string) => {
-    // Consent validation (optional P2)
-    const consent = ConsentService.check({ id: asset.id, name: asset.name, metadata: (asset as any).metadata });
-    if (!consent.allowed) {
-      setToast({
-        type: 'general',
-        message: consent.status === 'denied'
-          ? 'Consent denied for this asset. Enable consent or choose a different asset. You can adjust this in File ? Settings.'
-          : 'Consent unclear for this asset. Enable consent or choose a different asset. You can adjust this in File ? Settings.'
+  const closeModal = useCallback(() => {
+    setModal({ visible: false, info: null, asset: null });
+  }, []);
+
+  const handleDrop = useCallback(
+    (
+      asset: DraggedAsset,
+      position: { x: number; y: number },
+      targetNodeId?: string
+    ) => {
+      const consent = ConsentService.check({
+        id: asset.id,
+        name: asset.name,
+        metadata: asset.metadata
       });
-      ConsentService.audit('asset_drop', { id: asset.id, name: asset.name }, false);
-      return;
-    }
-    if (!targetNodeId) {
-      // Build Tree mode?
-      let buildTree = false;
-      try { buildTree = window?.localStorage?.getItem('buildTree.enabled') === 'true'; } catch {}
-      if (buildTree && onInsertTree) {
-        treeBuilder.buildTreeFromAsset(asset, { position, graphState: { nodes, edges } }).then(res => {
-          setTreePreview({ visible: true, result: res });
-        }).catch(() => {
-          // fallback to simple create
-          onCreateFromAsset(asset, position);
-          ConsentService.audit('asset_drop', { id: asset.id, name: asset.name }, true);
+      if (!consent.allowed) {
+        setToast({
+          type: 'general',
+          message:
+            consent.status === 'denied'
+              ? 'Consent denied for this asset. Enable consent or choose a different asset. You can adjust this in File -> Settings.'
+              : 'Consent unclear for this asset. Enable consent or choose a different asset. You can adjust this in File -> Settings.'
         });
-      } else {
-        onCreateFromAsset(asset, position);
-        ConsentService.audit('asset_drop', { id: asset.id, name: asset.name }, true);
+        ConsentService.audit(
+          'asset_drop',
+          { id: asset.id, name: asset.name },
+          false
+        );
+        return;
       }
-      return;
-    }
-    const targetType = nodeTypeById.get(targetNodeId);
-    if (targetType === 'WeightedChoice' && onQuickAddChoice) {
-      onQuickAddChoice(targetNodeId, asset, 5);
-      // Success toast is optional; rely on host app to show success message
-      ConsentService.audit('asset_drop', { id: asset.id, name: asset.name }, true);
-      return;
-    }
-    // Open replacement modal (MVP: assume connection preservation when replacing visuals)
-    const currentNode = { id: targetNodeId, type: targetType || 'Unknown' } as any;
-    // Preview impact using compat matrix
-    const mapped = mapAssetToNodeType({ id: asset.id, name: asset.name, metadata: (asset as any).metadata } as any);
-    const newCompat = mapped.compatType;
-    const incompatible: string[] = [];
-    const preservedCount = (edges || []).reduce((acc, e) => {
-      if (e.source !== targetNodeId && e.target !== targetNodeId) return acc;
-      const isOutgoing = e.source === targetNodeId;
-      const neighborId = isOutgoing ? e.target : e.source;
-      const neighbor = nodes.find(n => n.id === neighborId);
-      const neighborType = String((neighbor as any)?.data?.type || neighbor?.type || 'Unknown');
-      const neighborCompat = mapReactFlowTypeToCompat(neighborType);
-      const keep = isOutgoing
-        ? canConnect(newCompat, neighborCompat)
-        : canConnect(neighborCompat, newCompat);
-      if (!keep) {
-        const label = nodes.find(n => n.id === neighborId)?.label || neighborId;
-        incompatible.push(isOutgoing ? `Output to ${label}` : `Input from ${label}`);
-        return acc;
+
+      if (!targetNodeId) {
+        let buildTree = false;
+        try {
+          buildTree =
+            window?.localStorage?.getItem('buildTree.enabled') === 'true';
+        } catch {
+          buildTree = false;
+        }
+
+        if (buildTree && onInsertTree) {
+          treeBuilder
+            .buildTreeFromAsset(asset, { position, graphState: { nodes, edges } })
+            .then(result => {
+              setTreePreview({ visible: true, result });
+            })
+            .catch(() => {
+              onCreateFromAsset(asset, position);
+              ConsentService.audit(
+                'asset_drop',
+                { id: asset.id, name: asset.name },
+                true
+              );
+            });
+        } else {
+          onCreateFromAsset(asset, position);
+          ConsentService.audit(
+            'asset_drop',
+            { id: asset.id, name: asset.name },
+            true
+          );
+        }
+        return;
       }
-      return acc + 1;
-    }, 0);
-    const impact = { preserved: preservedCount, lost: incompatible.length, incompatible };
-    const info: ReplacementInfo = {
-      targetNode: { id: targetNodeId, type: targetType || 'Unknown', label: nodes.find(n => n.id === targetNodeId)?.label || targetNodeId },
-      newAsset: { id: asset.id, name: asset.name, type: 'auto' },
-      connectionImpact: impact
-    };
-    setModal({ visible: true, info });
-  }, [edges, nodeTypeById, nodes, onCreateFromAsset, onQuickAddChoice]);
+
+      const targetType = nodeTypeById.get(targetNodeId);
+      if (targetType === 'WeightedChoice' && onQuickAddChoice) {
+        onQuickAddChoice(targetNodeId, asset, 5);
+        ConsentService.audit(
+          'asset_drop',
+          { id: asset.id, name: asset.name },
+          true
+        );
+        return;
+      }
+
+      const mappedType = mapAssetToNodeType({
+        id: asset.id,
+        name: asset.name,
+        metadata: asset.metadata
+      });
+      const impact = buildReplacementImpact(
+        targetNodeId,
+        mappedType,
+        nodes,
+        edges
+      );
+      const replacementInfo: ReplacementInfo = {
+        targetNode: {
+          id: targetNodeId,
+          type: targetType ?? 'Unknown',
+          label:
+            nodes.find(node => node.id === targetNodeId)?.label ??
+            targetNodeId
+        },
+        newAsset: {
+          id: asset.id,
+          name: asset.name,
+          type: asset.type
+        },
+        connectionImpact: impact
+      };
+
+      setModal({
+        visible: true,
+        info: replacementInfo,
+        asset
+      });
+    },
+    [edges, nodeTypeById, nodes, onCreateFromAsset, onInsertTree, onQuickAddChoice, treeBuilder]
+  );
 
   const confirmReplace = useCallback(() => {
-    if (!modal.info) return;
-    // Remove incompatible edges if any
-    const targetId = modal.info.targetNode.id;
-    const incompatibleSet = new Set<string>();
-    (modal.info.connectionImpact.incompatible || []).forEach((desc) => {
-      // desc format: "Input from <nodeId>" or "Output to <nodeId>"
-      const m = /\bfrom\s+(\S+)$/.exec(desc) || /\bto\s+(\S+)$/.exec(desc);
-      if (m && m[1]) incompatibleSet.add(m[1]);
-    });
-
-    // Update edges: drop any edge connected between target and incompatible counterpart
-    if (incompatibleSet.size > 0) {
-      // This component doesn't own edges; host must remove via callback. For MVP, emit a toast.
-      setToast({ type: 'connection_conflict', message: `This would break ${incompatibleSet.size} connections. Disconnect downstream nodes or use 'Replace All' (coming in 2.5b).` });
+    if (!modal.info || !modal.asset) {
+      return;
     }
 
-    onReplaceNode(targetId, {
-      id: modal.info.newAsset.id,
-      name: modal.info.newAsset.name,
-      type: modal.info.newAsset.type as any,
-      content: undefined
-    });
-    setModal({ visible: false });
-  }, [modal, onReplaceNode]);
+    const connectionLossCount = modal.info.connectionImpact.incompatible.length;
+    if (connectionLossCount > 0) {
+      setToast({
+        type: 'connection_conflict',
+        message: CONNECTION_WARNING.replace(
+          '{count}',
+          String(connectionLossCount)
+        )
+      });
+    }
+
+    onReplaceNode(modal.info.targetNode.id, modal.asset);
+    ConsentService.audit(
+      'asset_drop',
+      { id: modal.asset.id, name: modal.asset.name },
+      true
+    );
+    closeModal();
+  }, [closeModal, modal, onReplaceNode]);
 
   return (
-    <div className="canvas-drop-area" style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div
+      className="canvas-drop-area"
+      style={{ position: 'relative', width: '100%', height: '100%' }}
+    >
       <CanvasDropTarget
         onDrop={handleDrop}
         onHover={handleHover}
@@ -162,17 +346,49 @@ export const CanvasDropArea: React.FC<CanvasDropAreaProps> = ({
           autoHideDelay={2000}
         />
       )}
-      {modal.visible && modal.info && (
+      {modal.visible && modal.info && modal.asset && (
         <NodeReplacementModal
           info={modal.info}
           isVisible={modal.visible}
-          onCancel={() => setModal({ visible: false })}
+          onCancel={closeModal}
           onReplace={confirmReplace}
           advancedActions={{
-            onMergeChoices: onMergeChoices ? () => { onMergeChoices(modal.info!.targetNode.id, { id: modal.info!.newAsset.id, name: modal.info!.newAsset.name, type: 'psglib', content: undefined } as any); setModal({ visible: false }); } : undefined,
-            onCreateVariant: onCreateVariant ? () => { onCreateVariant(modal.info!.targetNode.id); setModal({ visible: false }); } : undefined,
-            onSmartSwap: onSmartSwap ? () => { onSmartSwap(modal.info!.targetNode.id, { id: modal.info!.newAsset.id, name: modal.info!.newAsset.name, type: 'psglib', content: undefined } as any); setModal({ visible: false }); } : undefined,
-            onReplaceAllSimilar: onReplaceAllSimilar ? () => { onReplaceAllSimilar(modal.info!.targetNode.id, { id: modal.info!.newAsset.id, name: modal.info!.newAsset.name, type: 'psglib', content: undefined } as any); setModal({ visible: false }); } : undefined
+            onMergeChoices: onMergeChoices
+              ? () => {
+                  onMergeChoices(modal.info.targetNode.id, modal.asset);
+                  closeModal();
+                }
+              : undefined,
+            onCreateVariant: onCreateVariant
+              ? () => {
+                  onCreateVariant(modal.info.targetNode.id);
+                  closeModal();
+                }
+              : undefined,
+            onSmartSwap: onSmartSwap
+              ? () => {
+                  onSmartSwap(modal.info.targetNode.id, modal.asset);
+                  closeModal();
+                }
+              : undefined,
+            onReplaceAllSimilar: onReplaceAllSimilar
+              ? () => {
+                  onReplaceAllSimilar(modal.info.targetNode.id, modal.asset);
+                  closeModal();
+                }
+              : undefined,
+            onReplaceAllSelected: onReplaceAllSelected
+              ? () => {
+                  onReplaceAllSelected(
+                    nodes
+                      .filter(node => node.selected)
+                      .map(node => node.id),
+                    modal.asset,
+                    () => true
+                  );
+                  closeModal();
+                }
+              : undefined
           }}
         />
       )}
@@ -180,23 +396,28 @@ export const CanvasDropArea: React.FC<CanvasDropAreaProps> = ({
         <TreePreviewModal
           visible={treePreview.visible}
           result={treePreview.result}
-          onCancel={() => setTreePreview({ visible: false })}
+          onCancel={() =>
+            setTreePreview({ visible: false, result: null })
+          }
           onAccept={() => {
             if (onInsertTree && treePreview.result) {
-              onInsertTree(treePreview.result.nodes, treePreview.result.edges);
-              ConsentService.audit('asset_drop', { id: treePreview.result.template?.id || 'tree', name: treePreview.result.template?.name }, true);
+              onInsertTree(
+                treePreview.result.nodes,
+                treePreview.result.edges
+              );
+              ConsentService.audit(
+                'asset_drop',
+                {
+                  id: treePreview.result.template?.id ?? 'tree',
+                  name: treePreview.result.template?.name
+                },
+                true
+              );
             }
-            setTreePreview({ visible: false });
+            setTreePreview({ visible: false, result: null });
           }}
         />
       )}
     </div>
   );
 };
-
-
-
-
-
-
-

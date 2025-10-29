@@ -139,7 +139,9 @@ export class BulkOperationsManager {
                   operation.failed--; // Decrement failed count
                   return { id: item.id, metadata: result.metadata };
                 } catch (retryError) {
-                  if (!continueOnError) throw retryError;
+                  if (!continueOnError) {
+                    throw retryError;
+                  }
                   return { id: item.id, error: String(retryError) };
                 }
               } else if (!continueOnError) {
@@ -417,18 +419,23 @@ export class BulkOperationsManager {
         errors: []
       }
     };
+    const details = parsed.parsed;
+
+    if (!details) {
+      return parsed;
+    }
 
     const lowerQuery = query.toLowerCase();
 
     // Parse location conditions
     if (lowerQuery.includes('urban') || lowerQuery.includes('city')) {
-      parsed.parsed!.conditions.push({
+      details.conditions.push({
         field: 'location',
         operator: 'equals',
         value: 'urban'
       });
     } else if (lowerQuery.includes('desert')) {
-      parsed.parsed!.conditions.push({
+      details.conditions.push({
         field: 'location',
         operator: 'equals',
         value: 'desert'
@@ -437,7 +444,7 @@ export class BulkOperationsManager {
 
     // Parse mood conditions
     if (lowerQuery.includes('panicked') || lowerQuery.includes('frantic')) {
-      parsed.parsed!.conditions.push({
+      details.conditions.push({
         field: 'mood',
         operator: 'equals',
         value: 'frantic'
@@ -449,7 +456,7 @@ export class BulkOperationsManager {
       lowerQuery.includes('high intensity') ||
       lowerQuery.includes('intense')
     ) {
-      parsed.parsed!.conditions.push({
+      details.conditions.push({
         field: 'intensity',
         operator: 'greater',
         value: 7
@@ -459,7 +466,7 @@ export class BulkOperationsManager {
     // Parse prop/item conditions
     const withoutMatch = lowerQuery.match(/without\s+(\w+)/);
     if (withoutMatch) {
-      parsed.parsed!.conditions.push({
+      details.conditions.push({
         field: 'items',
         operator: 'contains',
         value: `!${withoutMatch[1]}` // Negation
@@ -481,7 +488,7 @@ export class BulkOperationsManager {
     const words = query
       .split(/\s+/)
       .filter(word => !stopWords.has(word.toLowerCase()) && word.length > 2);
-    parsed.parsed!.keywords = words;
+    details.keywords = words;
 
     return parsed;
   }
@@ -493,28 +500,40 @@ export class BulkOperationsManager {
   ): Promise<Array<{ id: string; score: number }>> {
     const parsed = this.parseNaturalLanguageQuery(query);
     const results: SearchResult[] = [];
+    const parsedDetails = parsed.parsed;
+
+    if (!parsedDetails) {
+      return results;
+    }
 
     for (const item of items) {
-      if (!item.metadata) continue;
+      if (!item.metadata) {
+        continue;
+      }
 
       let score = 0;
       let maxScore = 0;
 
       // Check conditions
-      for (const condition of parsed.parsed!.conditions) {
+      for (const condition of parsedDetails.conditions) {
         maxScore++;
 
         switch (condition.field) {
           case 'location':
-            if (item.metadata.location === condition.value) score++;
+            if (item.metadata.location === condition.value) {
+              score++;
+            }
             break;
           case 'mood':
-            if (item.metadata.mood === condition.value) score++;
+            if (item.metadata.mood === condition.value) {
+              score++;
+            }
             break;
           case 'intensity':
             if (
               condition.operator === 'greater' &&
-              item.metadata.intensity &&
+              typeof item.metadata.intensity === 'number' &&
+              typeof condition.value === 'number' &&
               item.metadata.intensity > condition.value
             ) {
               score++;
@@ -522,7 +541,10 @@ export class BulkOperationsManager {
             break;
           case 'items':
             // Handle negation for "without"
-            if (condition.value.startsWith('!')) {
+            if (
+              typeof condition.value === 'string' &&
+              condition.value.startsWith('!')
+            ) {
               const itemToExclude = condition.value.substring(1);
               if (!item.metadata.tags?.includes(itemToExclude)) {
                 score++;
@@ -533,7 +555,7 @@ export class BulkOperationsManager {
       }
 
       // Check keywords
-      for (const keyword of parsed.parsed!.keywords) {
+      for (const keyword of parsedDetails.keywords) {
         const lowerKeyword = keyword.toLowerCase();
         if (
           item.metadata.subject?.toLowerCase().includes(lowerKeyword) ||

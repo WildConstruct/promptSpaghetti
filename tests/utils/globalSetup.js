@@ -16,11 +16,11 @@ module.exports = async () => {
     const originalConsole = console;
     global.testConsole = originalConsole;
 
-    console.log = () => {};
-    console.info = () => {};
-    console.debug = () => {};
-    console.warn = () => {};
-    console.error = () => {};
+    console.log = () => undefined;
+    console.info = () => undefined;
+    console.debug = () => undefined;
+    console.warn = () => undefined;
+    console.error = () => undefined;
   }
 
   console.log('✅ Epic 18 testing environment ready');

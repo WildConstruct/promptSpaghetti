@@ -73,6 +73,7 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
   }, [
     currentSegmentId,
     currentSegmentContent,
+    extractMetadata,
     llmService,
     shouldExtract
   ]);
@@ -84,7 +85,7 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
       return;
     }
     setCurrentMetadata(getNodeMetadata(currentSegmentId));
-  }, [currentSegmentId]);
+  }, [currentSegmentId, getNodeMetadata]);
 
   useEffect(() => {
     if (!shouldExtract) {

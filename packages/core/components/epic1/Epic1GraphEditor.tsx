@@ -47,8 +47,7 @@ import { useGraphSelection } from './hooks/useGraphSelection';
 import { useGraphPreview } from './hooks/useGraphPreview';
 
 // Components
-import { GraphModals } from './components/GraphModals';
-import { GraphContextMenus } from './components/GraphContextMenus';
+import { GraphModals, WizardPreviewResult } from './components/GraphModals';
 import {
   ConnectionFeedback,
   useConnectionValidation
@@ -182,7 +181,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   // Graph persistence - DISABLED to prevent overriding new nodes
   const { persistedState } = useGraphPersistence([], [], {
     autoSave: false,
-    autoLoad: false, // Disable auto-loading
     onLoadSuccess: state => console.log('Restored graph from local storage'),
     onLoadError: error =>
       console.error('Failed to load persisted state:', error)
@@ -217,13 +215,13 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     edges,
     setNodes,
     setEdges,
-    { maxHistorySize: 50, debounceDelay: 500 }
+    { maxHistorySize: 50, debounceMs: 500 }
   );
 
   // Auto-save
   useGraphPersistence(nodes, edges, {
     autoSave: true,
-    autoSaveDelay: 2000,
+    autoSaveDelayMs: 2000,
     storageKey: 'prompt-graph-autosave'
   });
 
@@ -260,7 +258,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     exportGraph,
     exportSelected,
     triggerImport,
-    copyToClipboard,
     pasteFromClipboard
   } = useGraphImportExport(nodes, edges, setNodes, setEdges, { showToast });
 
@@ -382,19 +379,17 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   // UI State
   const [nodePaletteCollapsed, setNodePaletteCollapsed] = useState(false);
-  const [contextMenuPosition, setContextMenuPosition] = useState<any>(null);
-  const [contextMenuNodeId, setContextMenuNodeId] = useState<string | null>(
-    null
-  );
   const [isPromptWizardOpen, setIsPromptWizardOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [pendingWizardNodes, setPendingWizardNodes] = useState<any>(null);
+  const [pendingWizardNodes, setPendingWizardNodes] =
+    useState<WizardPreviewResult | null>(null);
   const [saveAsPresetNodeId, setSaveAsPresetNodeId] = useState<string | null>(
     null
   );
   const [customPresets, setCustomPresets] = useState<any[]>([]);
   const [historyVisible, setHistoryVisible] = useState(false);
+  const activeToast = toasts.length > 0 ? toasts[0] : null;
 
   // Tutorial integration state
   const [tutorialPrompt, setTutorialPrompt] = useState<string | null>(null);
@@ -578,11 +573,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         ...node.data,
         onEdit: (newValue: string) => handleNodeEdit(node.id, newValue),
         onEditStart: () => {},
-        onEditEnd: () => {},
-        onContextMenu: (event: React.MouseEvent) => {
-          setContextMenuPosition({ x: event.clientX, y: event.clientY });
-          setContextMenuNodeId(node.id);
-        }
+        onEditEnd: () => {}
       },
       selected: node.selected || node.id === selectedNodeId,
       width: node.width || undefined,
@@ -723,13 +714,13 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               </Panel>
 
               {/* Magnetic Snap Handler */}
-              <MagneticSnapHandler nodes={nodes} edges={edges} />
+              <MagneticSnapHandler />
 
               {/* Selection Feedback */}
-              <SelectionFeedback nodes={nodes} edges={edges} />
+              <SelectionFeedback />
 
               {/* Connection Feedback */}
-              <ConnectionFeedback />
+              <ConnectionFeedback nodes={nodes} edges={edges} />
 
               {/* Micro Interactions */}
               {interactions.map(interaction => (
@@ -809,26 +800,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             </NodePalette>
           </div>
 
-          {/* Context Menus */}
-          <GraphContextMenus
-            contextMenuPosition={contextMenuPosition}
-            contextMenuNodeId={contextMenuNodeId}
-            setContextMenuPosition={setContextMenuPosition}
-            setContextMenuNodeId={setContextMenuNodeId}
-            nodes={nodes}
-            edges={edges}
-            onDuplicate={duplicateNodes}
-            onDelete={deleteSelectedNodes}
-            onSelectAll={selectAll}
-            onCopy={() => copyToClipboard(true)}
-            onPaste={pasteFromClipboard}
-            onCreatePostIt={position => createNode('postItNote', position)}
-            onGroupNodes={nodes => console.log('Group nodes:', nodes)}
-            onUngroupNodes={nodes => console.log('Ungroup nodes:', nodes)}
-            onSaveAsPreset={() => setSaveAsPresetNodeId(contextMenuNodeId)}
-            reactFlowInstance={reactFlowInstance}
-          />
-
           {/* Modals */}
           <GraphModals
             isPromptWizardOpen={isPromptWizardOpen}
@@ -840,12 +811,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             pendingWizardNodes={pendingWizardNodes}
             setPendingWizardNodes={setPendingWizardNodes}
             nodes={nodes}
-            edges={edges}
             setNodes={setNodes}
             setEdges={setEdges}
-            customPresets={customPresets}
             setCustomPresets={setCustomPresets}
-            currentUser={currentUser}
             setCurrentUser={setCurrentUser}
           />
 
@@ -856,7 +824,14 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           {historyVisible && <HistoryPalette />}
 
           {/* Connection Toast */}
-          <ConnectionToast toasts={toasts} dismissToast={dismissToast} />
+          <ConnectionToast
+            message={activeToast}
+            onDismiss={() => {
+              if (activeToast) {
+                dismissToast(activeToast.id);
+              }
+            }}
+          />
         </div>
       </div>
 
@@ -910,3 +885,4 @@ const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = props => {
 
 export default Epic1GraphEditor;
 export { Epic1GraphEditor };
+export const Epic1GraphEditorWithProvider = Epic1GraphEditor;

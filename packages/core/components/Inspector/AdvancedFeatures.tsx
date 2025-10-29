@@ -7,16 +7,12 @@ import {
   TextRefinementService,
   RefinementMode,
   RefinementResult,
-  DiffSegment
-} from '../../services/llm/TextRefinementService';
-import {
   GraphAnalyzer,
   Conflict,
   ComplexityReport,
-  MergeSuggestion,
   SplitSuggestion,
   PreviewVariation
-} from '../../services/llm/GraphAnalyzer';
+} from '../../services/llm';
 import './AdvancedFeatures.css';
 
 // Text Refinement Component
@@ -266,8 +262,12 @@ export const ComplexityAnalysis: React.FC<ComplexityAnalysisProps> = ({
   }, [nodes, edges, analyzer]);
 
   const getScoreColor = (score: number) => {
-    if (score < 30) return 'good';
-    if (score < 60) return 'moderate';
+    if (score < 30) {
+      return 'good';
+    }
+    if (score < 60) {
+      return 'moderate';
+    }
     return 'complex';
   };
 
@@ -439,7 +439,9 @@ export const SmartSplit: React.FC<SmartSplitProps> = ({
   const [loading, setLoading] = useState(false);
 
   const getSplitSuggestions = useCallback(async () => {
-    if (!selectedText) return;
+    if (!selectedText) {
+      return;
+    }
 
     setLoading(true);
     try {
@@ -460,7 +462,9 @@ export const SmartSplit: React.FC<SmartSplitProps> = ({
     [onSplit]
   );
 
-  if (!selectedText) return null;
+  if (!selectedText) {
+    return null;
+  }
 
   return (
     <div className="smart-split">

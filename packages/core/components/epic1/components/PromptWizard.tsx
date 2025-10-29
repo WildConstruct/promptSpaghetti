@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PromptDissector } from '../../../../../client/src/components/LaunchScreen/PromptDissector';
 import { PromptAnalysis } from '../../../../../client/src/lib/simplePromptParser';
@@ -20,6 +20,7 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
   const [analysis, setAnalysis] = useState<PromptAnalysis | null>(null);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isTutorialTarget, setIsTutorialTarget] = useState(false);
 
   // Handle analysis from PromptDissector
   const handleAnalysisComplete = useCallback((newAnalysis: PromptAnalysis) => {
@@ -30,6 +31,32 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
   const handleAnalysisStart = useCallback(() => {
     setIsAnalyzing(true);
   }, []);
+
+  useEffect(() => {
+    if (!isOpen || typeof document === 'undefined') {
+      setIsTutorialTarget(false);
+      return;
+    }
+
+    const checkTutorial = () => {
+      const tutorialStep = document.querySelector('.tutorial-tooltip');
+      const targetElement = document.querySelector('.prompt-wizard-modal');
+      setIsTutorialTarget(Boolean(tutorialStep && targetElement));
+    };
+
+    checkTutorial();
+
+    if (typeof MutationObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new MutationObserver(checkTutorial);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isOpen]);
 
   // Convert analysis to nodes and complete
   const handleCreateNodes = useCallback(() => {
@@ -42,32 +69,60 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
       // Convert analysis to React Flow nodes and edges
       const nodes: Node[] = [];
       const edges: Edge[] = [];
-      
+
       // Create nodes from analysis
       let hasOutputNode = false;
       analysis.nodes.forEach((nodeGen, index) => {
         const node = nodeGen.node;
-        if (node.nodeType === 'Output') {
+        if (!node?.id) {
+          return;
+        }
+
+        const rfType = (() => {
+          switch (node.nodeType) {
+            case 'Choice':
+              return 'weightedChoice';
+            case 'Variable':
+              return 'variable';
+            case 'Output':
+              return 'output';
+            default:
+              return 'textBlock';
+          }
+        })();
+
+        if (rfType === 'output') {
           hasOutputNode = true;
         }
+
+        const nodeData = (node.data ?? {}) as Record<string, unknown>;
+        const label = typeof nodeData.label === 'string' && nodeData.label.length
+          ? nodeData.label
+          : node.nodeType;
+
         nodes.push({
           id: node.id,
-          type: node.nodeType === 'WeightedChoice' ? 'weightedChoice' : 
-                node.nodeType === 'Output' ? 'output' : 'textBlock',
-          position: { x: 100 + (index % 3) * 250, y: 100 + Math.floor(index / 3) * 150 },
+          type: rfType,
+          position: {
+            x: 100 + (index % 3) * 250,
+            y: 100 + Math.floor(index / 3) * 150
+          },
           data: {
-            ...node.data,
-            label: node.data.label || node.nodeType
+            ...nodeData,
+            label
           }
         });
       });
 
       // Ensure there's an Output node
       if (!hasOutputNode) {
-        const outputNode = {
+        const outputNode: Node = {
           id: 'output',
           type: 'output',
-          position: { x: 100 + (nodes.length % 3) * 250, y: 100 + Math.floor(nodes.length / 3) * 150 },
+          position: {
+            x: 100 + (nodes.length % 3) * 250,
+            y: 100 + Math.floor(nodes.length / 3) * 150
+          },
           data: {
             label: 'Output'
           }
@@ -77,18 +132,23 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
 
       // Create edges from analysis
       const connectedNodes = new Set<string>();
-      if (analysis.edges) {
-        analysis.edges.forEach(edge => {
-          edges.push({
-            id: `${edge.source}-${edge.target}`,
-            source: edge.source,
-            target: edge.target,
-            type: 'smoothstep'
-          });
-          connectedNodes.add(edge.source);
-          connectedNodes.add(edge.target);
+      const analysisEdges = Array.isArray(analysis.edges)
+        ? (analysis.edges as Array<{ source?: string; target?: string }>)
+        : [];
+
+      analysisEdges.forEach(edge => {
+        if (!edge || typeof edge.source !== 'string' || typeof edge.target !== 'string') {
+          return;
+        }
+        edges.push({
+          id: `${edge.source}-${edge.target}`,
+          source: edge.source,
+          target: edge.target,
+          type: 'smoothstep'
         });
-      }
+        connectedNodes.add(edge.source);
+        connectedNodes.add(edge.target);
+      });
 
       // Connect any unconnected nodes to the Output node
       nodes.forEach(node => {
@@ -119,27 +179,11 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
     }
   }, [handleCreateNodes, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   // Check if tutorial is active and targeting this wizard
-  const [isTutorialTarget, setIsTutorialTarget] = React.useState(false);
-  
-  React.useEffect(() => {
-    const checkTutorial = () => {
-      const tutorialStep = document.querySelector('.tutorial-tooltip');
-      const targetElement = document.querySelector('.prompt-wizard-modal');
-      if (tutorialStep && targetElement) {
-        setIsTutorialTarget(true);
-      }
-    };
-    
-    checkTutorial();
-    const observer = new MutationObserver(checkTutorial);
-    observer.observe(document.body, { childList: true, subtree: true });
-    
-    return () => observer.disconnect();
-  }, [isOpen]);
-
   return (
     <div className="prompt-wizard-overlay">
       <div className={`prompt-wizard-modal ${isTutorialTarget ? 'tutorial-focus' : ''}`}>
@@ -174,9 +218,9 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
           <div className="prompt-wizard-tips">
             <h4>Tips:</h4>
             <ul>
-              <li>Use "or" to create weighted choices</li>
+              <li>Use &quot;or&quot; to create weighted choices</li>
               <li>Separate concepts with commas</li>
-              <li>Add descriptors with "with" or "wearing"</li>
+              <li>Add descriptors with &quot;with&quot; or &quot;wearing&quot;</li>
               <li>Press Ctrl+Enter to analyze</li>
             </ul>
           </div>

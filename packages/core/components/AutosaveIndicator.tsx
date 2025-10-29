@@ -16,25 +16,41 @@ interface AutosaveIndicatorProps {
  * Format relative time (e.g., "2 minutes ago")
  */
 function formatRelativeTime(date: Date | null): string {
-  if (!date) return 'Never';
+  if (!date) {
+    return 'Never';
+  }
 
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffSec = Math.floor(diffMs / 1000);
 
-  if (diffSec < 5) return 'Just now';
-  if (diffSec < 60) return `${diffSec} seconds ago`;
+  if (diffSec < 5) {
+    return 'Just now';
+  }
+  if (diffSec < 60) {
+    return `${diffSec} seconds ago`;
+  }
 
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin === 1) return '1 minute ago';
-  if (diffMin < 60) return `${diffMin} minutes ago`;
+  if (diffMin === 1) {
+    return '1 minute ago';
+  }
+  if (diffMin < 60) {
+    return `${diffMin} minutes ago`;
+  }
 
   const diffHour = Math.floor(diffMin / 60);
-  if (diffHour === 1) return '1 hour ago';
-  if (diffHour < 24) return `${diffHour} hours ago`;
+  if (diffHour === 1) {
+    return '1 hour ago';
+  }
+  if (diffHour < 24) {
+    return `${diffHour} hours ago`;
+  }
 
   const diffDay = Math.floor(diffHour / 24);
-  if (diffDay === 1) return '1 day ago';
+  if (diffDay === 1) {
+    return '1 day ago';
+  }
   return `${diffDay} days ago`;
 }
 

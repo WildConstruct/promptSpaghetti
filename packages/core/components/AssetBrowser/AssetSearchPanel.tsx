@@ -41,9 +41,13 @@ export const AssetSearchPanel: React.FC<AssetSearchPanelProps> = ({
       ];
       for (const url of baseCandidates) {
         const res = await fetch(url, { cache: 'no-cache' });
-        if (!res.ok) continue;
+        if (!res.ok) {
+          continue;
+        }
         const text = await res.text();
-        if (text.trim().startsWith('<')) continue;
+        if (text.trim().startsWith('<')) {
+          continue;
+        }
         const json = JSON.parse(text) as {
           presets?: Array<{ id?: string; name?: string; path?: string }>;
         };
@@ -131,7 +135,9 @@ export const AssetSearchPanel: React.FC<AssetSearchPanelProps> = ({
           placeholder="Search assets (e.g., find tense urban chase)"
           style={{ flex: 1 }}
           onKeyDown={e => {
-            if (e.key === 'Enter') runSearch().catch(() => {});
+            if (e.key === 'Enter') {
+              void runSearch();
+            }
           }}
         />
         <input
@@ -140,7 +146,9 @@ export const AssetSearchPanel: React.FC<AssetSearchPanelProps> = ({
           placeholder="Exclude (e.g., fantasy)"
           style={{ minWidth: 160 }}
           onKeyDown={e => {
-            if (e.key === 'Enter') runSearch().catch(() => {});
+            if (e.key === 'Enter') {
+              void runSearch();
+            }
           }}
         />
         <button onClick={() => runSearch()} disabled={busy}>

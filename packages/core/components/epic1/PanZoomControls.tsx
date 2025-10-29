@@ -21,11 +21,15 @@ export const PanZoomControls: React.FC<PanZoomControlsProps> = ({
   const [showZoomIndicator, setShowZoomIndicator] = useState(false);
   
   // Get viewport from store with safety check
-  const viewport = useStore((state) => state?.viewport);
+  const viewport = useStore(state => ({
+    x: state.transform[0],
+    y: state.transform[1],
+    zoom: state.transform[2]
+  }));
 
   // Update zoom level when viewport changes
   useEffect(() => {
-    if (!viewport?.zoom) return;
+    if (typeof viewport.zoom !== 'number') return;
     setZoomLevel(Math.round(viewport.zoom * 100));
     setShowZoomIndicator(true);
     const timer = setTimeout(() => setShowZoomIndicator(false), 2000);

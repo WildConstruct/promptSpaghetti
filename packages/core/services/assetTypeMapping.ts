@@ -61,7 +61,9 @@ export function mapAssetToNodeType(asset: AssetSummary): MappedType {
 export function mapReactFlowTypeToCompat(
   reactFlowType: string | undefined
 ): CompatType {
-  if (!reactFlowType) return 'Unknown';
+  if (!reactFlowType) {
+    return 'Unknown';
+  }
   const t = reactFlowType.toLowerCase();
   switch (t) {
     case 'weightedchoice':

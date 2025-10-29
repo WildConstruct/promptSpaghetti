@@ -55,7 +55,7 @@ describe('LLMService', () => {
   beforeAll(() => {
     resetSpy = jest
       .spyOn(TokenTracker.prototype as any, 'scheduleDailyReset')
-      .mockImplementation(() => {});
+      .mockImplementation(() => undefined);
   });
 
   afterAll(() => {
@@ -65,9 +65,9 @@ describe('LLMService', () => {
   beforeEach(() => {
     createCompletionMock.mockReset();
     openAIConstructorMock.mockClear();
-    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    logSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
+    errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
   });
 
   afterEach(() => {

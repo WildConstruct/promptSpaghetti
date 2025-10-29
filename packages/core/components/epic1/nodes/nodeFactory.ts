@@ -13,7 +13,9 @@ import {
 import { ConcatNode } from '../../../runtime/nodes/epic1/ConcatNode';
 import {
   VariableNode,
-  VariableMode
+  VariableMode,
+  VariableConfig,
+  VariableNodeConfig
 } from '../../../runtime/nodes/epic1/VariableNode';
 import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
 import { debugLogEpic1 } from '../../../utils/debug';
@@ -153,12 +155,15 @@ export function nodeDataToRuntimeNode(
         }
 
         // VariableNode constructor takes (id, name, defaultValue, config)
-        return new VariableNode(
-          id,
-          data.variableName || data.name || 'myVar',
-          data.defaultValue || '',
-          { mode }
-        );
+        const variableConfig: VariableConfig = {
+          name: data.variableName || data.name || 'myVar',
+          defaultValue: data.defaultValue ?? '',
+          currentValue: data.value ?? data.defaultValue ?? ''
+        };
+
+        const nodeConfig: VariableNodeConfig = { mode };
+
+        return new VariableNode(id, variableConfig, nodeConfig);
       }
 
       case 'output': {

@@ -3,7 +3,7 @@ import './ConnectionToast.css';
 
 export interface ToastMessage {
   id: string;
-  type: 'error' | 'warning' | 'success';
+  type: 'error' | 'warning' | 'success' | 'info';
   message: string;
   duration?: number;
 }
@@ -40,6 +40,7 @@ export const ConnectionToast: React.FC<ConnectionToastProps> = ({ message, onDis
         {message.type === 'error' && '❌'}
         {message.type === 'warning' && '⚠️'}
         {message.type === 'success' && '✅'}
+        {message.type === 'info' && 'ℹ️'}
       </div>
       <div className="epic1-toast-message">{message.message}</div>
       <button 

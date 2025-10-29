@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { NodeProps, useReactFlow, useStore, Edge } from 'reactflow';
+import { useReactFlow, useStore, Edge } from 'reactflow';
 
 // Import types and constants
 import { 
@@ -31,6 +31,7 @@ import { useAutoLayout } from './hooks/useAutoLayout';
 
 // Import performance monitoring
 import { PerformanceMonitor } from '../../../../utils/performance/PerformanceMonitor';
+import type { Epic1NodeProps } from '../nodePropTypes';
 
 const {
   COLLAPSED_HEIGHT,
@@ -48,7 +49,7 @@ const { BORDER_RADIUS } = BOUNDING_BOX_CONSTANTS.ui;
  * Enhanced Bounding Box with modular architecture
  * Refactored for better performance and maintainability
  */
-export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
+export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxData>> = ({
   data,
   selected,
   id,

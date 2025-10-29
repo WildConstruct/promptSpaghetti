@@ -56,19 +56,32 @@ interface UserContextValue extends AuthState {
   clearError: () => void;
 }
 
+const missingAuthProviderError = () =>
+  new Error(
+    'AuthUserProvider is not initialized. Wrap your component tree with <AuthUserProvider>.'
+  );
+
+const throwAuthProviderMissingAsync = async (): Promise<void> => {
+  throw missingAuthProviderError();
+};
+
+const throwAuthProviderMissingSync = (): void => {
+  throw missingAuthProviderError();
+};
+
 const UserContext = createContext<UserContextValue>({
   user: null,
   session: null,
   loading: true,
   error: null,
   isAuthenticated: false,
-  signIn: async () => {},
-  signUp: async () => {},
-  signOut: async () => {},
-  resetPassword: async () => {},
-  updateProfile: async () => {},
-  refreshSession: async () => {},
-  clearError: () => {}
+  signIn: throwAuthProviderMissingAsync,
+  signUp: throwAuthProviderMissingAsync,
+  signOut: throwAuthProviderMissingAsync,
+  resetPassword: throwAuthProviderMissingAsync,
+  updateProfile: throwAuthProviderMissingAsync,
+  refreshSession: throwAuthProviderMissingAsync,
+  clearError: throwAuthProviderMissingSync
 });
 
 interface AuthUserProviderProps {
@@ -92,7 +105,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
   // Refresh session method
   const refreshSession = useCallback(async () => {
-    if (!supabase) return;
+    if (!supabase) {
+      return;
+    }
 
     logger.current?.log('Refreshing session');
 
@@ -102,7 +117,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
         error
       } = await supabase.auth.refreshSession();
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       if (session) {
         logger.current?.log('Session refreshed', { userId: session.user.id });
@@ -215,7 +232,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
   // Auth state subscription
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase) {
+      return;
+    }
 
     const {
       data: { subscription }
@@ -226,19 +245,33 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       });
 
       switch (event) {
-        case 'SIGNED_IN':
+        case 'SIGNED_IN': {
+          if (!session || !session.user) {
+            logger.current?.error('Signed in event missing session data');
+            setAuthState({
+              user: null,
+              session: null,
+              loading: false,
+              error: null,
+              isAuthenticated: false
+            });
+            break;
+          }
+
+          const { user } = session;
           setAuthState({
-            user: session!.user,
+            user,
             session,
             loading: false,
             error: null,
             isAuthenticated: true
           });
-          tokenScheduler.current?.schedule(session!);
+          tokenScheduler.current?.schedule(session);
           broadcaster.current?.broadcast('signin', {
-            userId: session!.user.id
+            userId: user.id
           });
           break;
+        }
 
         case 'SIGNED_OUT':
           setAuthState({
@@ -280,7 +313,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
   // Cross-tab synchronization
   useEffect(() => {
-    if (!broadcaster.current) return;
+    if (!broadcaster.current) {
+      return;
+    }
 
     const unsubscribe = broadcaster.current.subscribe((event, data) => {
       logger.current?.log('Cross-tab auth event', { event, data });
@@ -345,7 +380,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           password
         });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
         return data;
       };
 
@@ -395,7 +432,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           }
         });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
         return data;
       };
 
@@ -425,14 +464,18 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
   // Sign out method
   const signOut = useCallback(async () => {
-    if (!supabase) return;
+    if (!supabase) {
+      return;
+    }
 
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
     logger.current?.log('Sign out attempt');
 
     try {
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       logger.current?.log('Sign out successful');
       // State update handled by onAuthStateChange
@@ -463,7 +506,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           redirectTo: `${window.location.origin}/auth/reset-password`
         });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
       };
 
       await retryWithBackoff(operation);
@@ -497,7 +542,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           data: updates
         });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
 
         logger.current?.log('Profile updated', { userId: data.user.id });
         setAuthState(prev => ({

@@ -20,7 +20,9 @@ export const MicroInteraction: React.FC<MicroInteractionProps> = ({
   trigger,
   x = 0,
   y = 0,
-  message
+  message,
+  targetX,
+  targetY
 }) => {
   const [visible, setVisible] = useState(true);
 
@@ -146,20 +148,13 @@ export const triggerHaptic = (type: 'light' | 'medium' | 'heavy' | 'error') => {
 };
 
 // Hook for managing micro-interactions
+type QueuedInteraction = MicroInteractionProps & { id: string };
+
 export function useMicroInteractions() {
-  const [interactions, setInteractions] = useState<Array<{
-    id: string;
-    type: MicroInteractionProps['trigger'];
-    x: number;
-    y: number;
-    message?: string;
-    targetX?: number;
-    targetY?: number;
-    nodeId?: string;
-  }>>([]);
+  const [interactions, setInteractions] = useState<QueuedInteraction[]>([]);
 
   const trigger = (
-    type: MicroInteractionProps['trigger'],
+    interactionTrigger: MicroInteractionProps['trigger'],
     x: number,
     y: number,
     options?: {
@@ -171,28 +166,35 @@ export function useMicroInteractions() {
     }
   ) => {
     const id = `${Date.now()}-${Math.random()}`;
-    setInteractions(prev => [...prev, { 
-      id, 
-      type, 
-      x, 
-      y, 
-      message: options?.message,
-      targetX: options?.targetX,
-      targetY: options?.targetY,
-      nodeId: options?.nodeId
-    }]);
+    setInteractions(prev => [
+      ...prev,
+      {
+        id,
+        trigger: interactionTrigger,
+        x,
+        y,
+        message: options?.message,
+        targetX: options?.targetX,
+        targetY: options?.targetY,
+        nodeId: options?.nodeId
+      }
+    ]);
 
-    // Trigger haptic feedback if requested
     if (options?.haptic) {
       triggerHaptic(options.haptic);
     }
 
-    // Auto-remove after animation
-    const duration = type === 'error' ? 2500 : 
-                    type === 'snap' ? 600 :
-                    type === 'bounce' ? 800 :
-                    type === 'connect' ? 1000 : 1500;
-    
+    const duration =
+      interactionTrigger === 'error'
+        ? 2500
+        : interactionTrigger === 'snap'
+          ? 600
+          : interactionTrigger === 'bounce'
+            ? 800
+            : interactionTrigger === 'connect'
+              ? 1000
+              : 1500;
+
     setTimeout(() => {
       setInteractions(prev => prev.filter(i => i.id !== id));
     }, duration);

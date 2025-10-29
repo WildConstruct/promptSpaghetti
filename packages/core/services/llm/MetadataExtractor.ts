@@ -38,6 +38,40 @@ export interface ExtractionResult {
   fromCache: boolean;
 }
 
+type MetadataCompletionOptions = {
+  responseFormat?: string;
+  taskType?: string;
+  maxTokens?: number;
+};
+
+type MetadataCompletionRequest = {
+  prompt: string;
+  maxTokens?: number;
+  responseFormat?: string;
+  taskType?: string;
+};
+
+type MetadataCompleteFn =
+  | ((prompt: string, options?: MetadataCompletionOptions) => Promise<unknown>)
+  | ((request: MetadataCompletionRequest) => Promise<unknown>);
+
+type MetadataExtractionClient = {
+  extractMetadata?: (payload: {
+    content: string;
+    includeEntities: boolean;
+    includeThemes: boolean;
+    includeStyle: boolean;
+    maxTags: number;
+  }) => Promise<unknown>;
+  metadata?: (payload: string | Record<string, unknown>) => Promise<unknown>;
+  complete?: MetadataCompleteFn;
+};
+
+type MetadataCompletionResponse = {
+  content?: unknown;
+  model?: string;
+};
+
 interface CacheEntry {
   metadata: SegmentMetadata;
   timestamp: number;
@@ -72,7 +106,6 @@ export class MetadataExtractor {
 
     this.offlineCache.set('desert scene', {
       subject: 'landscape',
-      action: null,
       location: 'desert',
       mood: 'desolate',
       intensity: 3,
@@ -82,7 +115,6 @@ export class MetadataExtractor {
     this.offlineCache.set('crowd panic', {
       subject: 'crowd',
       action: 'panic',
-      location: null,
       mood: 'frantic',
       intensity: 10,
       tags: ['crowd', 'panic', 'emergency']
@@ -91,7 +123,6 @@ export class MetadataExtractor {
     this.offlineCache.set('car drifting', {
       subject: 'sports car',
       action: 'drifting',
-      location: null,
       mood: 'intense',
       intensity: 8,
       tags: ['vehicle', 'action', 'speed']
@@ -160,7 +191,7 @@ export class MetadataExtractor {
       throw new Error('LLM service not available');
     }
 
-    const service: any = this.llmService;
+    const service = this.llmService as LLMService & MetadataExtractionClient;
 
     // Prefer dedicated metadata endpoints when available
     if (typeof service.extractMetadata === 'function') {
@@ -217,17 +248,31 @@ Output schema:
 
     if (typeof service.complete === 'function') {
       try {
-        let response: any;
-        if (service.complete.length >= 2) {
+        let response: unknown;
+        const completeFn = service.complete as MetadataCompleteFn | undefined;
+        if (!completeFn) {
+          throw new Error('LLM completion function missing');
+        }
+
+        if (completeFn.length >= 2) {
           // API-based service signature: complete(prompt, options?)
-          response = await service.complete(prompt, {
+          response = await (
+            completeFn as (
+              prompt: string,
+              options?: MetadataCompletionOptions
+            ) => Promise<unknown>
+          )(prompt, {
             responseFormat: 'json',
             taskType: 'metadata',
             maxTokens: 220
           });
         } else {
           // Core service signature: complete(request)
-          response = await service.complete({
+          response = await (
+            completeFn as (
+              request: MetadataCompletionRequest
+            ) => Promise<unknown>
+          )({
             prompt,
             maxTokens: 220,
             responseFormat: 'json',
@@ -235,11 +280,16 @@ Output schema:
           });
         }
 
+        const completionResponse = response as MetadataCompletionResponse;
         const payload =
-          response?.content !== undefined ? response.content : response;
-        const normalised = this.normalizeMetadataPayload(payload, text, {
-          model: response?.model
-        });
+          completionResponse.content !== undefined
+            ? completionResponse.content
+            : response;
+        const normalised = this.normalizeMetadataPayload(
+          payload,
+          text,
+          completionResponse.model ? { model: completionResponse.model } : {}
+        );
         if (normalised) {
           return normalised;
         }
@@ -324,9 +374,7 @@ Output schema:
         this.coerceString(candidate.extraction_date) ||
         new Date().toISOString(),
       consent_flag:
-        'consent_flag' in candidate
-          ? Boolean(candidate.consent_flag)
-          : true
+        'consent_flag' in candidate ? Boolean(candidate.consent_flag) : true
     };
 
     if (metadata.tags.length === 0) {
@@ -412,9 +460,7 @@ Output schema:
             return null;
           }
           const confidence = this.normaliseConfidence(record.confidence);
-          return confidence !== undefined
-            ? { name, confidence }
-            : { name };
+          return confidence !== undefined ? { name, confidence } : { name };
         }
         return null;
       })
@@ -550,7 +596,9 @@ Output schema:
 
   private checkCache(text: string): SegmentMetadata | null {
     const entry = this.cache.get(text);
-    if (!entry) return null;
+    if (!entry) {
+      return null;
+    }
 
     const now = Date.now();
     if (now - entry.timestamp > entry.ttl) {
@@ -569,7 +617,9 @@ Output schema:
     // Limit cache size
     if (this.cache.size > 100) {
       const firstKey = this.cache.keys().next().value;
-      if (firstKey) this.cache.delete(firstKey);
+      if (firstKey) {
+        this.cache.delete(firstKey);
+      }
     }
 
     this.cache.set(text, {

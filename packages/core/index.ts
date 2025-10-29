@@ -289,10 +289,15 @@ export {
 } from './runtime';
 
 // Epic1 exports - Re-enabled (import.meta issues fixed)
-export { Epic1GraphEditor, Epic1GraphEditorWithProvider } from './components/epic1/Epic1GraphEditor';
+export { Epic1GraphEditor } from './components/epic1/Epic1GraphEditor';
+export type { Epic1GraphEditorProps } from './components/epic1/Epic1GraphEditor';
 export { AssetBrowserLoader } from './components/epic1/AssetBrowserLoader';
 export { TabbedSidePanel } from './components/epic1/TabbedSidePanel';
-export { EdgeRenderingFix, edgeTypes as epic1EdgeTypes } from './components/epic1/EdgeRenderingFix';
+export {
+  DefaultEdge as Epic1DefaultEdge,
+  edgeTypes as epic1EdgeTypes,
+  checkEdgeRendering as verifyEpic1EdgeRendering
+} from './components/epic1/EdgeRenderingFix';
 
 // Root-level component exports
 export { GraphEditor, GraphEditorWithProvider } from './GraphEditor';

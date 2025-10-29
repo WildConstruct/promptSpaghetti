@@ -8,6 +8,11 @@ import type {
   WeightOptimizationResult,
   InspirationSuggestion
 } from './llm/NodeIntelligence';
+import type {
+  RefinementMode,
+  RefinementResult
+} from './llm/TextRefinementService';
+import type { RefinementResponse } from './llm/types';
 
 export interface LLMConfig {
   apiKey?: string;
@@ -22,10 +27,6 @@ type JsonObject = Record<string, unknown>;
 export interface LLMCompletionResponse extends JsonObject {
   output?: string;
   outputs?: string[];
-}
-
-export interface RefinementResponse extends JsonObject {
-  refined?: string;
 }
 
 export class LLMService {
@@ -61,37 +62,37 @@ export class LLMService {
     });
   }
 
-  async suggest<TResponse extends JsonObject>(
+  async suggest<TResponse>(
     request: JsonObject
   ): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-suggest', request);
   }
 
-  async metadata<TResponse extends JsonObject>(
+  async metadata<TResponse>(
     request: JsonObject
   ): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-metadata', request);
   }
 
-  async refine<TResponse extends JsonObject>(
+  async refine<TResponse>(
     request: JsonObject
   ): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-refine', request);
   }
 
-  async analyze<TResponse extends JsonObject>(
+  async analyze<TResponse>(
     request: JsonObject
   ): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-analyze', request);
   }
 
-  async populateChoices<TResponse extends JsonObject>(
+  async populateChoices<TResponse>(
     request: JsonObject
   ): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-populate', request);
   }
 
-  async optimizeChoices<TResponse extends JsonObject>(
+  async optimizeChoices<TResponse>(
     request: JsonObject
   ): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-optimize', request);
@@ -313,9 +314,46 @@ export class NodeIntelligenceService {
 export class TextRefinementService {
   constructor(private llm: LLMService) {}
 
-  async refine(text: string, options: JsonObject): Promise<string> {
-    const result = await this.llm.refine<RefinementResponse>({ text, options });
-    return typeof result.refined === 'string' ? result.refined : text;
+  async refine(
+    text: string,
+    mode: RefinementMode,
+    prompt?: string
+  ): Promise<RefinementResult> {
+    try {
+      const result = await this.llm.refine<RefinementResponse>({
+        text,
+        mode,
+        prompt
+      });
+
+      const refined =
+        typeof result?.refined === 'string' ? result.refined : text;
+
+      return {
+        original: result?.original || text,
+        refined,
+        changes: Array.isArray(result?.changes) ? result.changes : [],
+        mode,
+        confidence: 'medium'
+      };
+    } catch (error) {
+      console.error('[ApiLLMService] Text refinement failed:', error);
+      return {
+        original: text,
+        refined: text,
+        changes: [],
+        mode,
+        confidence: 'low'
+      };
+    }
+  }
+
+  async refineBatch(
+    texts: string[],
+    mode: RefinementMode,
+    prompt?: string
+  ): Promise<RefinementResult[]> {
+    return Promise.all(texts.map(text => this.refine(text, mode, prompt)));
   }
 }
 

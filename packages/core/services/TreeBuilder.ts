@@ -374,19 +374,27 @@ export class TreeBuilder {
 
       // Check name/type match
       if (assetName.includes('character') || assetType.includes('character')) {
-        if (template.id.includes('character')) score += 50;
+        if (template.id.includes('character')) {
+          score += 50;
+        }
       }
       if (assetName.includes('scene') || assetName.includes('environment')) {
-        if (template.id.includes('scene')) score += 50;
+        if (template.id.includes('scene')) {
+          score += 50;
+        }
       }
 
       // Check metadata match
-      if (metadata.category === template.metadata?.category) score += 30;
+      if (metadata.category === template.metadata?.category) {
+        score += 30;
+      }
 
       // Prefer complexity based on asset richness
       const assetComplexity =
         Object.keys(metadata).length > 5 ? 'complex' : 'simple';
-      if (template.metadata?.complexity === assetComplexity) score += 20;
+      if (template.metadata?.complexity === assetComplexity) {
+        score += 20;
+      }
 
       return { template, score };
     });
@@ -459,11 +467,15 @@ export class TreeBuilder {
       source:
         (typeof edge.sourceIndex === 'number'
           ? nodes[edge.sourceIndex]?.id
-          : undefined) ?? edge.source ?? '',
+          : undefined) ??
+        edge.source ??
+        '',
       target:
         (typeof edge.targetIndex === 'number'
           ? nodes[edge.targetIndex]?.id
-          : undefined) ?? edge.target ?? '',
+          : undefined) ??
+        edge.target ??
+        '',
       sourceHandle: edge.sourceHandle,
       targetHandle: edge.targetHandle
     }));

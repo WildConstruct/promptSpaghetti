@@ -283,7 +283,11 @@ export function getFrameLayout(
     | 'diamond'
     | 'spiral'
     | 'star' = 'elliptical'
-) {
+): (
+  index: number,
+  total: number,
+  options: LayoutOptions
+) => Position {
   switch (layoutType) {
     case 'rectangular':
       return rectangularFrameLayout;
@@ -302,8 +306,8 @@ export function getFrameLayout(
 /**
  * Auto-layout nodes in a frame pattern based on node count
  */
-export function autoFrameLayout(
-  nodes: any[],
+export function autoFrameLayout<TNode extends Record<string, unknown>>(
+  nodes: TNode[],
   viewportWidth: number,
   viewportHeight: number,
   layoutType:
@@ -312,7 +316,7 @@ export function autoFrameLayout(
     | 'diamond'
     | 'spiral'
     | 'star' = 'elliptical'
-): any[] {
+): Array<TNode & { position: Position }> {
   const layoutFn = getFrameLayout(layoutType);
   const layoutOptions: LayoutOptions = {
     viewportWidth,

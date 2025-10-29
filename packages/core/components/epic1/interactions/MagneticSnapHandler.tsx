@@ -4,8 +4,23 @@
  */
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { Node, Edge, Connection, useReactFlow, useStoreApi } from 'reactflow';
+import { useReactFlow, useStoreApi } from 'reactflow';
+import type { Edge, Connection } from 'reactflow';
 import { useMicroInteractions, triggerHaptic } from '../animations/MicroInteractions';
+
+interface ClosestHandle {
+  nodeId: string;
+  x: number;
+  y: number;
+  distance: number;
+}
+
+interface SnapNode {
+  id: string;
+  position: { x: number; y: number };
+  width?: number | null;
+  height?: number | null;
+}
 
 interface MagneticSnapHandlerProps {
   magnetDistance?: number;
@@ -30,45 +45,45 @@ export const MagneticSnapHandler: React.FC<MagneticSnapHandlerProps> = ({
   };
 
   // Find the closest valid target handle
-  const findClosestHandle = useCallback((sourceNode: Node, mouseX: number, mouseY: number) => {
-    const nodes = getNodes();
-    let closestHandle = null;
-    let closestDistance = Infinity;
+  const findClosestHandle = useCallback(
+    (sourceNode: SnapNode, mouseX: number, mouseY: number): ClosestHandle | null => {
+      const nodes = getNodes() as SnapNode[];
+      let closestHandle: ClosestHandle | null = null;
+      let closestDistance = Infinity;
 
-    nodes.forEach(node => {
-      if (node.id === sourceNode.id) return;
+      nodes.forEach(node => {
+        if (node.id === sourceNode.id) return;
 
-      // Calculate handle positions (simplified - assumes center handles)
-      const targetX = node.position.x + (node.width || 100) / 2;
-      const targetY = node.position.y + (node.height || 50) / 2;
-      
-      const distance = getDistance(mouseX, mouseY, targetX, targetY);
-      
-      if (distance < magnetDistance && distance < closestDistance) {
-        closestDistance = distance;
-        closestHandle = {
-          nodeId: node.id,
-          x: targetX,
-          y: targetY,
-          distance
-        };
-      }
-    });
+        const targetX = node.position.x + (node.width || 100) / 2;
+        const targetY = node.position.y + (node.height || 50) / 2;
 
-    return closestHandle;
-  }, [getNodes, magnetDistance]);
+        const distance = getDistance(mouseX, mouseY, targetX, targetY);
+
+        if (distance < magnetDistance && distance < closestDistance) {
+          closestDistance = distance;
+          closestHandle = {
+            nodeId: node.id,
+            x: targetX,
+            y: targetY,
+            distance
+          };
+        }
+      });
+
+      return closestHandle;
+    },
+    [getNodes, magnetDistance]
+  );
 
   // Handle connection start
   useEffect(() => {
-    const unsubscribe = store.subscribe(
-      state => state.connectionNodeId,
-      connectionNodeId => {
-        setIsConnecting(!!connectionNodeId);
-        if (!connectionNodeId) {
-          setLastSnapTarget(null);
-        }
+    const unsubscribe = store.subscribe(state => {
+      const connectionNodeId = state.connectionNodeId;
+      setIsConnecting(Boolean(connectionNodeId));
+      if (!connectionNodeId) {
+        setLastSnapTarget(null);
       }
-    );
+    });
 
     return unsubscribe;
   }, [store]);
@@ -132,8 +147,8 @@ export function useMagneticSnap(options?: {
   const [snappedNodeId, setSnappedNodeId] = useState<string | null>(null);
   const { magnetDistance = 30, onSnap, onRelease } = options || {};
 
-  const checkSnap = useCallback((sourceX: number, sourceY: number, nodes: Node[]) => {
-    let closestNode = null;
+  const checkSnap = useCallback((sourceX: number, sourceY: number, nodes: SnapNode[]) => {
+    let closestNode: SnapNode | null = null;
     let closestDistance = Infinity;
 
     nodes.forEach(node => {
@@ -147,16 +162,24 @@ export function useMagneticSnap(options?: {
       }
     });
 
-    if (closestNode && closestNode.id !== snappedNodeId) {
-      setSnappedNodeId(closestNode.id);
-      onSnap?.(closestNode.id);
-      triggerHaptic('light');
-    } else if (!closestNode && snappedNodeId) {
-      setSnappedNodeId(null);
-      onRelease?.();
+    if (!closestNode) {
+      if (snappedNodeId) {
+        setSnappedNodeId(null);
+        onRelease?.();
+      }
+      return null;
     }
 
-    return closestNode;
+    const resolvedNode = closestNode as SnapNode;
+
+    if (resolvedNode.id !== snappedNodeId) {
+      const targetId = resolvedNode.id;
+      setSnappedNodeId(targetId);
+      onSnap?.(targetId);
+      triggerHaptic('light');
+    }
+
+    return resolvedNode;
   }, [magnetDistance, snappedNodeId, onSnap, onRelease]);
 
   return { snappedNodeId, checkSnap };

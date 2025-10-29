@@ -4,6 +4,12 @@ import { EditableNodeData } from '../nodes';
 import { PromptWizard } from './PromptWizard';
 import { AuthModal } from '../../auth/AuthModal';
 import { SaveAsPresetDialog } from '../asset-library/SaveAsPresetDialog';
+import type { Preset } from '../asset-library/types';
+
+export interface WizardPreviewResult {
+  nodes: Node<EditableNodeData>[];
+  edges: Edge[];
+}
 
 interface GraphModalsProps {
   // Prompt Wizard Modal
@@ -13,8 +19,7 @@ interface GraphModalsProps {
   // Auth Modal
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (value: boolean) => void;
-  currentUser: any;
-  setCurrentUser: (user: any) => void;
+  setCurrentUser: (user: unknown) => void;
   
   // Save as Preset Dialog
   saveAsPresetNodeId: string | null;
@@ -22,17 +27,17 @@ interface GraphModalsProps {
   
   // Graph data
   nodes: Node<EditableNodeData>[];
-  edges: Edge[];
   setNodes: React.Dispatch<React.SetStateAction<Node<EditableNodeData>[]>>;
   setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
   
   // Pending Wizard Nodes
-  pendingWizardNodes: any;
-  setPendingWizardNodes: (value: any) => void;
-  
+  pendingWizardNodes: WizardPreviewResult | null;
+  setPendingWizardNodes: React.Dispatch<
+    React.SetStateAction<WizardPreviewResult | null>
+  >;
+
   // Custom presets
-  customPresets: any[];
-  setCustomPresets: (presets: any[]) => void;
+  setCustomPresets: React.Dispatch<React.SetStateAction<Preset[]>>;
 }
 
 /**
@@ -43,19 +48,22 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
   setIsPromptWizardOpen,
   isAuthModalOpen,
   setIsAuthModalOpen,
-  currentUser,
   setCurrentUser,
   saveAsPresetNodeId,
   setSaveAsPresetNodeId,
   nodes,
-  edges,
   setNodes,
   setEdges,
   pendingWizardNodes,
   setPendingWizardNodes,
-  customPresets,
   setCustomPresets
 }) => {
+  const presetNode = saveAsPresetNodeId
+    ? nodes.find(node => node.id === saveAsPresetNodeId) ?? null
+    : null;
+  const presetNodeData = presetNode?.data ?? null;
+  const presetNodeType = presetNode?.type ?? 'textBlock';
+
   return (
     <>
       {/* Prompt Wizard Modal */}
@@ -82,27 +90,16 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
       />
       
       {/* Save as Preset Dialog */}
-      {saveAsPresetNodeId && (
+      {presetNode && (
         <SaveAsPresetDialog
-          isOpen={!!saveAsPresetNodeId}
+          isOpen={Boolean(presetNode)}
+          nodeData={(presetNodeData as EditableNodeData) ?? null}
+          nodeType={presetNodeType || 'textBlock'}
           onClose={() => setSaveAsPresetNodeId(null)}
-          onSave={(name: string, description: string, tags: string[]) => {
-            // Handle save preset logic
-            const newPreset = {
-              id: Date.now().toString(),
-              name,
-              description,
-              tags,
-              nodes,
-              edges,
-              nodeId: saveAsPresetNodeId
-            };
-            setCustomPresets([...customPresets, newPreset]);
+          onSave={preset => {
+            setCustomPresets(prev => [...prev, preset]);
             setSaveAsPresetNodeId(null);
           }}
-          nodes={nodes}
-          edges={edges}
-          selectedNodeId={saveAsPresetNodeId}
         />
       )}
       

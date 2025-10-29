@@ -1,45 +1,46 @@
 import React from 'react';
-import { Node, Edge } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
 import { NodeContextMenu, ContextMenuPosition } from '../nodes/NodeContextMenu';
 import { CanvasContextMenu } from '../nodes/CanvasContextMenu';
 
 interface GraphContextMenusProps {
   // Node context menu
-  nodeContextMenuPosition: ContextMenuPosition | null;
-  contextMenuNodeId: string | null;
-  nodes: Node[];
-  edges: Edge[];
-  onNodeContextMenuClose: () => void;
-  onNodeDuplicate: (nodeId: string) => void;
-  onNodeDelete: (nodeId: string) => void;
-  onNodeCopy: (nodeId: string) => void;
-  onNodeCut: (nodeId: string) => void;
-  onNodePaste: () => void;
-  onNodeEdit: (nodeId: string) => void;
-  onNodeGroup: (nodeIds: string[]) => void;
-  onNodeUngroup: (nodeId: string) => void;
-  onNodeLock: (nodeId: string) => void;
-  onNodeUnlock: (nodeId: string) => void;
-  onNodeSaveAsPreset: (nodeId: string) => void;
+  nodeContextMenuPosition?: ContextMenuPosition | null;
+  contextMenuNodeId?: string | null;
+  nodes?: Node[];
+  edges?: Edge[];
+  onNodeContextMenuClose?: () => void;
+  onNodeDuplicate?: (nodeId: string) => void;
+  onNodeDelete?: (nodeId: string) => void;
+  onNodeCopy?: (nodeId: string) => void;
+  onNodeCut?: (nodeId: string) => void;
+  onNodePaste?: () => void;
+  onNodeEdit?: (nodeId: string) => void;
+  onNodeGroup?: (nodeIds: string[]) => void;
+  onNodeUngroup?: (nodeId: string) => void;
+  onNodeLock?: (nodeId: string) => void;
+  onNodeUnlock?: (nodeId: string) => void;
+  onNodeSaveAsPreset?: (nodeId: string | null) => void;
   
   // Canvas context menu
-  canvasContextMenuPosition: ContextMenuPosition | null;
-  onCanvasContextMenuClose: () => void;
-  onCanvasAddNode: (type: string, position: { x: number; y: number }) => void;
-  onCanvasPaste: (position: { x: number; y: number }) => void;
-  onCanvasSelectAll: () => void;
-  onCanvasDeselectAll: () => void;
-  onCanvasUndo: () => void;
-  onCanvasRedo: () => void;
-  onCanvasZoomIn: () => void;
-  onCanvasZoomOut: () => void;
-  onCanvasZoomToFit: () => void;
-  onCanvasArrange: () => void;
+  canvasContextMenuPosition?: ContextMenuPosition | null;
+  onCanvasContextMenuClose?: () => void;
+  onCanvasAddNode?: (type: string, position: { x: number; y: number }) => void;
+  onCanvasPaste?: (position: { x: number; y: number }) => void;
+  onCanvasSelectAll?: () => void;
+  onCanvasDeselectAll?: () => void;
+  onCanvasUndo?: () => void;
+  onCanvasRedo?: () => void;
+  onCanvasZoomIn?: () => void;
+  onCanvasZoomOut?: () => void;
+  onCanvasZoomToFit?: () => void;
+  onCanvasArrange?: () => void;
   
   // Shared
-  canUndo: boolean;
-  canRedo: boolean;
-  hasClipboard: boolean;
+  canUndo?: boolean;
+  canRedo?: boolean;
+  hasClipboard?: boolean;
+  fallbackPositionSetter?: (pos: ContextMenuPosition | null) => void;
 }
 
 /**
@@ -47,10 +48,10 @@ interface GraphContextMenusProps {
  */
 export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
   // Node context menu props
-  nodeContextMenuPosition,
-  contextMenuNodeId,
-  nodes,
-  edges,
+  nodeContextMenuPosition = null,
+  contextMenuNodeId = null,
+  nodes = [],
+  edges = [],
   onNodeContextMenuClose,
   onNodeDuplicate,
   onNodeDelete,
@@ -65,7 +66,7 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
   onNodeSaveAsPreset,
   
   // Canvas context menu props
-  canvasContextMenuPosition,
+  canvasContextMenuPosition = null,
   onCanvasContextMenuClose,
   onCanvasAddNode,
   onCanvasPaste,
@@ -79,9 +80,10 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
   onCanvasArrange,
   
   // Shared props
-  canUndo,
-  canRedo,
-  hasClipboard
+  canUndo = false,
+  canRedo = false,
+  hasClipboard = false,
+  fallbackPositionSetter
 }) => {
   // Find the node for context menu
   const contextMenuNode = contextMenuNodeId 
@@ -93,6 +95,11 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
   const hasSelection = selectedNodes.length > 0;
   const canGroup = selectedNodes.length > 1;
 
+  const closeNodeMenu = () => {
+    onNodeContextMenuClose?.();
+    fallbackPositionSetter?.(null);
+  };
+
   return (
     <>
       {/* Node Context Menu */}
@@ -100,14 +107,14 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
         <NodeContextMenu
           position={nodeContextMenuPosition}
           node={contextMenuNode}
-          onClose={onNodeContextMenuClose}
+          onClose={closeNodeMenu}
           actions={[
             {
               label: 'Edit',
               icon: '✏️',
               onClick: () => {
-                onNodeEdit(contextMenuNode.id);
-                onNodeContextMenuClose();
+                onNodeEdit?.(contextMenuNode.id);
+                closeNodeMenu();
               },
               shortcut: 'Enter'
             },
@@ -115,8 +122,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Duplicate',
               icon: '📋',
               onClick: () => {
-                onNodeDuplicate(contextMenuNode.id);
-                onNodeContextMenuClose();
+                onNodeDuplicate?.(contextMenuNode.id);
+                closeNodeMenu();
               },
               shortcut: '⌘D'
             },
@@ -124,8 +131,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Copy',
               icon: '📄',
               onClick: () => {
-                onNodeCopy(contextMenuNode.id);
-                onNodeContextMenuClose();
+                onNodeCopy?.(contextMenuNode.id);
+                closeNodeMenu();
               },
               shortcut: '⌘C'
             },
@@ -133,8 +140,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Cut',
               icon: '✂️',
               onClick: () => {
-                onNodeCut(contextMenuNode.id);
-                onNodeContextMenuClose();
+                onNodeCut?.(contextMenuNode.id);
+                closeNodeMenu();
               },
               shortcut: '⌘X'
             },
@@ -142,8 +149,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Paste',
               icon: '📋',
               onClick: () => {
-                onNodePaste();
-                onNodeContextMenuClose();
+                onNodePaste?.();
+                closeNodeMenu();
               },
               shortcut: '⌘V',
               disabled: !hasClipboard
@@ -154,9 +161,9 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               icon: '📁',
               onClick: () => {
                 if (canGroup) {
-                  onNodeGroup(selectedNodes.map(n => n.id));
+                  onNodeGroup?.(selectedNodes.map(n => n.id));
                 }
-                onNodeContextMenuClose();
+                closeNodeMenu();
               },
               shortcut: '⌘G',
               disabled: !canGroup
@@ -165,8 +172,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Ungroup',
               icon: '📂',
               onClick: () => {
-                onNodeUngroup(contextMenuNode.id);
-                onNodeContextMenuClose();
+                onNodeUngroup?.(contextMenuNode.id);
+                closeNodeMenu();
               },
               disabled: contextMenuNode.type !== 'group'
             },
@@ -176,11 +183,11 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               icon: contextMenuNode.data?.locked ? '🔓' : '🔒',
               onClick: () => {
                 if (contextMenuNode.data?.locked) {
-                  onNodeUnlock(contextMenuNode.id);
+                  onNodeUnlock?.(contextMenuNode.id);
                 } else {
-                  onNodeLock(contextMenuNode.id);
+                  onNodeLock?.(contextMenuNode.id);
                 }
-                onNodeContextMenuClose();
+                closeNodeMenu();
               },
               shortcut: '⌘L'
             },
@@ -188,8 +195,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Save as Preset',
               icon: '💾',
               onClick: () => {
-                onNodeSaveAsPreset(contextMenuNode.id);
-                onNodeContextMenuClose();
+                onNodeSaveAsPreset?.(contextMenuNode.id);
+                closeNodeMenu();
               }
             },
             { type: 'separator' },
@@ -197,8 +204,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Delete',
               icon: '🗑️',
               onClick: () => {
-                onNodeDelete(contextMenuNode.id);
-                onNodeContextMenuClose();
+                onNodeDelete?.(contextMenuNode.id);
+                closeNodeMenu();
               },
               shortcut: 'Delete',
               className: 'danger'
@@ -211,7 +218,7 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
       {canvasContextMenuPosition && (
         <CanvasContextMenu
           position={canvasContextMenuPosition}
-          onClose={onCanvasContextMenuClose}
+          onClose={closeCanvasMenu}
           actions={[
             {
               label: 'Add Node',
@@ -220,36 +227,36 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
                 {
                   label: 'Text Block',
                   onClick: () => {
-                    onCanvasAddNode('textBlock', canvasContextMenuPosition);
-                    onCanvasContextMenuClose();
+                    onCanvasAddNode?.('textBlock', canvasContextMenuPosition);
+                    closeCanvasMenu();
                   }
                 },
                 {
                   label: 'Weighted Choice',
                   onClick: () => {
-                    onCanvasAddNode('weightedChoice', canvasContextMenuPosition);
-                    onCanvasContextMenuClose();
+                    onCanvasAddNode?.('weightedChoice', canvasContextMenuPosition);
+                    closeCanvasMenu();
                   }
                 },
                 {
                   label: 'Concatenate',
                   onClick: () => {
-                    onCanvasAddNode('concat', canvasContextMenuPosition);
-                    onCanvasContextMenuClose();
+                    onCanvasAddNode?.('concat', canvasContextMenuPosition);
+                    closeCanvasMenu();
                   }
                 },
                 {
                   label: 'Output',
                   onClick: () => {
-                    onCanvasAddNode('output', canvasContextMenuPosition);
-                    onCanvasContextMenuClose();
+                    onCanvasAddNode?.('output', canvasContextMenuPosition);
+                    closeCanvasMenu();
                   }
                 },
                 {
                   label: 'Variable',
                   onClick: () => {
-                    onCanvasAddNode('variable', canvasContextMenuPosition);
-                    onCanvasContextMenuClose();
+                    onCanvasAddNode?.('variable', canvasContextMenuPosition);
+                    closeCanvasMenu();
                   }
                 }
               ]
@@ -258,8 +265,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Paste',
               icon: '📋',
               onClick: () => {
-                onCanvasPaste(canvasContextMenuPosition);
-                onCanvasContextMenuClose();
+                onCanvasPaste?.(canvasContextMenuPosition);
+                closeCanvasMenu();
               },
               shortcut: '⌘V',
               disabled: !hasClipboard
@@ -269,8 +276,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Select All',
               icon: '⬚',
               onClick: () => {
-                onCanvasSelectAll();
-                onCanvasContextMenuClose();
+                onCanvasSelectAll?.();
+                closeCanvasMenu();
               },
               shortcut: '⌘A'
             },
@@ -278,8 +285,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Deselect All',
               icon: '⬜',
               onClick: () => {
-                onCanvasDeselectAll();
-                onCanvasContextMenuClose();
+                onCanvasDeselectAll?.();
+                closeCanvasMenu();
               },
               shortcut: 'Esc',
               disabled: !hasSelection
@@ -289,8 +296,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Undo',
               icon: '↶',
               onClick: () => {
-                onCanvasUndo();
-                onCanvasContextMenuClose();
+                onCanvasUndo?.();
+                closeCanvasMenu();
               },
               shortcut: '⌘Z',
               disabled: !canUndo
@@ -299,8 +306,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Redo',
               icon: '↷',
               onClick: () => {
-                onCanvasRedo();
-                onCanvasContextMenuClose();
+                onCanvasRedo?.();
+                closeCanvasMenu();
               },
               shortcut: '⌘⇧Z',
               disabled: !canRedo
@@ -310,8 +317,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Zoom In',
               icon: '🔍',
               onClick: () => {
-                onCanvasZoomIn();
-                onCanvasContextMenuClose();
+                onCanvasZoomIn?.();
+                closeCanvasMenu();
               },
               shortcut: '⌘+'
             },
@@ -319,8 +326,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Zoom Out',
               icon: '🔍',
               onClick: () => {
-                onCanvasZoomOut();
-                onCanvasContextMenuClose();
+                onCanvasZoomOut?.();
+                closeCanvasMenu();
               },
               shortcut: '⌘-'
             },
@@ -328,8 +335,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Fit to View',
               icon: '⊡',
               onClick: () => {
-                onCanvasZoomToFit();
-                onCanvasContextMenuClose();
+                onCanvasZoomToFit?.();
+                closeCanvasMenu();
               },
               shortcut: '⌘0'
             },
@@ -338,8 +345,8 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
               label: 'Auto Arrange',
               icon: '📐',
               onClick: () => {
-                onCanvasArrange();
-                onCanvasContextMenuClose();
+                onCanvasArrange?.();
+                closeCanvasMenu();
               },
               shortcut: '⌘⇧A'
             }

@@ -96,7 +96,9 @@ export class GraphAnalyzer {
       for (const neighbor of neighbors) {
         if (!visited.has(neighbor)) {
           const cyclePath = hasCycle(neighbor, [...path]);
-          if (cyclePath) return cyclePath;
+          if (cyclePath) {
+            return cyclePath;
+          }
         } else if (recursionStack.has(neighbor)) {
           // Found a cycle
           const cycleStart = path.indexOf(neighbor);
@@ -136,10 +138,12 @@ export class GraphAnalyzer {
     for (const node of nodes) {
       if (node.type === 'variable' && node.data?.variableName) {
         const varName = node.data.variableName;
-        if (!variableMap.has(varName)) {
-          variableMap.set(varName, []);
+        const nodesForVariable = variableMap.get(varName);
+        if (nodesForVariable) {
+          nodesForVariable.push(node.id);
+        } else {
+          variableMap.set(varName, [node.id]);
         }
-        variableMap.get(varName)!.push(node.id);
       }
     }
 
@@ -167,7 +171,9 @@ export class GraphAnalyzer {
   ): Promise<Conflict[]> {
     const conflicts: Conflict[] = [];
 
-    if (!this.llmService) return conflicts;
+    if (!this.llmService) {
+      return conflicts;
+    }
 
     // Get connected node pairs
     const connectedPairs = this.getConnectedPairs(nodes, edges);
@@ -176,7 +182,9 @@ export class GraphAnalyzer {
       const text1 = this.getNodeText(node1);
       const text2 = this.getNodeText(node2);
 
-      if (!text1 || !text2) continue;
+      if (!text1 || !text2) {
+        continue;
+      }
 
       try {
         const prompt = `Analyze these two connected text segments for conflicts:
@@ -226,7 +234,9 @@ export class GraphAnalyzer {
 
     for (const node of nodes) {
       const text = this.getNodeText(node);
-      if (!text) continue;
+      if (!text) {
+        continue;
+      }
 
       // Detect style (simplified)
       let style = 'neutral';
@@ -238,10 +248,12 @@ export class GraphAnalyzer {
         style = 'casual';
       }
 
-      if (!styles.has(style)) {
-        styles.set(style, []);
+      const nodesForStyle = styles.get(style);
+      if (nodesForStyle) {
+        nodesForStyle.push(node.id);
+      } else {
+        styles.set(style, [node.id]);
       }
-      styles.get(style)!.push(node.id);
     }
 
     // If multiple styles are used, flag as potential inconsistency
@@ -348,7 +360,9 @@ export class GraphAnalyzer {
         const text1 = this.getNodeText(nodes[i]);
         const text2 = this.getNodeText(nodes[j]);
 
-        if (!text1 || !text2) continue;
+        if (!text1 || !text2) {
+          continue;
+        }
 
         const similarity = this.calculateSimilarity(text1, text2);
 
@@ -463,10 +477,12 @@ export class GraphAnalyzer {
     const adjacency = new Map<string, string[]>();
 
     for (const edge of edges) {
-      if (!adjacency.has(edge.source)) {
-        adjacency.set(edge.source, []);
+      const targets = adjacency.get(edge.source);
+      if (targets) {
+        targets.push(edge.target);
+      } else {
+        adjacency.set(edge.source, [edge.target]);
       }
-      adjacency.get(edge.source)!.push(edge.target);
     }
 
     return adjacency;
@@ -489,9 +505,15 @@ export class GraphAnalyzer {
   }
 
   private getNodeText(node: Node): string | null {
-    if (node.data?.value) return node.data.value;
-    if (node.data?.text) return node.data.text;
-    if (node.data?.content) return node.data.content;
+    if (node.data?.value) {
+      return node.data.value;
+    }
+    if (node.data?.text) {
+      return node.data.text;
+    }
+    if (node.data?.content) {
+      return node.data.content;
+    }
     return null;
   }
 
@@ -503,7 +525,9 @@ export class GraphAnalyzer {
       visited.add(nodeId);
       const neighbors = adjacency.get(nodeId) || [];
 
-      if (neighbors.length === 0) return depth;
+      if (neighbors.length === 0) {
+        return depth;
+      }
 
       let maxChildDepth = depth;
       for (const neighbor of neighbors) {
@@ -530,13 +554,17 @@ export class GraphAnalyzer {
 
     for (const node of nodes) {
       const text = this.getNodeText(node);
-      if (!text) continue;
+      if (!text) {
+        continue;
+      }
 
       const normalized = text.toLowerCase().trim();
-      if (!textMap.has(normalized)) {
-        textMap.set(normalized, []);
+      const existing = textMap.get(normalized);
+      if (existing) {
+        existing.push(node.id);
+      } else {
+        textMap.set(normalized, [node.id]);
       }
-      textMap.get(normalized)!.push(node.id);
     }
 
     return Array.from(textMap.values()).filter(ids => ids.length > 1);

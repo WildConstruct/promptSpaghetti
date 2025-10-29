@@ -95,7 +95,7 @@ const tutorialSteps: TutorialStep[] = [
     target: '.prompt-wizard-modal',
     action: 'observe',
     hint: 'The brackets {} create weighted choice nodes automatically',
-    position: 'center',
+    position: 'top',
     spotlight: false, // Don't block the modal
   },
   {

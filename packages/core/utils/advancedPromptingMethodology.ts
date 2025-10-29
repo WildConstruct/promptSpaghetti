@@ -22,6 +22,15 @@ export interface ZadaTemplateComponent {
   dependencies?: string[]; // Other components this depends on
 }
 
+interface HybridTemplateStructure {
+  naturalLanguage: string;
+  extractedVariables: string[];
+  marsFramework: ReturnType<
+    AdvancedPromptingMethodology['parseMarsFramework']
+  > | null;
+  enhancedTemplate?: string;
+}
+
 export const ZADA_SCREENPLAY_TEMPLATES: ZadaTemplateComponent[] = [
   // Time/Setting Foundation
   {
@@ -502,8 +511,9 @@ export class AdvancedPromptingMethodology {
     const tagRegex = /(\[(?:CAM|SUBJ|FX|SET|MOOD):[A-Z]+\]|!FOCAL:[A-Z]+)/g;
     const matches = template.match(tagRegex) || [];
     for (const match of matches) {
+      const normalized = match.replace(/\[|\]/g, '');
       const tag = MARS_FRAMEWORK_TAGS.find(
-        t => t.syntax === match || t.tag === match.replace(/[\[\]]/g, '')
+        t => t.syntax === match || t.tag === normalized
       );
       if (tag) {
         foundTags.push(tag);
@@ -546,14 +556,14 @@ export class AdvancedPromptingMethodology {
     marsFramework: boolean = false
   ): {
     hybrid: string;
-    structure: any;
+    structure: HybridTemplateStructure;
     variables: string[];
   } {
     // Parse existing template for variables
     const parseResult = templateParser.parseTemplate(naturalTemplate);
     const variables = parseResult.variables.map(v => v.name);
     let hybrid = naturalTemplate;
-    const structure: any = {
+    const structure: HybridTemplateStructure = {
       naturalLanguage: naturalTemplate,
       extractedVariables: variables,
       marsFramework: marsFramework

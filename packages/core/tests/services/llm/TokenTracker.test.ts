@@ -6,7 +6,7 @@ describe('TokenTracker', () => {
   beforeAll(() => {
     scheduleSpy = jest
       .spyOn(TokenTracker.prototype as any, 'scheduleDailyReset')
-      .mockImplementation(() => {});
+      .mockImplementation(() => undefined);
   });
 
   afterAll(() => {
