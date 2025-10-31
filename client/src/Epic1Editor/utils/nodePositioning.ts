@@ -170,10 +170,7 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
 /**
  * Allow all nodes to be draggable - no longer enforcing frame edge positions
  */
-export const enforceFrameEdgePositions = (
-  nodes: Node[],
-  originalNodes: Node[]
-): Node[] => {
+export const enforceFrameEdgePositions = (nodes: Node[]): Node[] => {
   // Simply return nodes as-is, allowing them to be dragged freely
   return nodes;
 };

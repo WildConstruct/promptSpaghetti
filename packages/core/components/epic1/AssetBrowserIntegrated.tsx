@@ -5,23 +5,19 @@
 
 import React from 'react';
 import { ProAssetBrowser, UserProvider } from '@prompt/asset-browser';
+import type { Preset } from '@prompt/asset-browser';
 
 interface AssetBrowserIntegratedProps {
-  onInsert?: (preset: any) => void;
-  onNodeReplace?: (nodeId: string, preset: any) => void;
-  enableFragmentManifest?: boolean;
+  onInsert?: (preset: Preset) => void;
 }
 
 export const AssetBrowserIntegrated: React.FC<AssetBrowserIntegratedProps> = ({ 
   onInsert,
-  onNodeReplace,
-  enableFragmentManifest = true
+  
 }) => {
   return (
     <UserProvider>
-      <ProAssetBrowser 
-        onInsert={onInsert}
-      />
+      <ProAssetBrowser onInsert={onInsert} />
     </UserProvider>
   );
 };

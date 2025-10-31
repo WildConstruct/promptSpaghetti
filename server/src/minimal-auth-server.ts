@@ -23,7 +23,7 @@ server.addHook('onRequest', async (request, reply) => {
   reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (request.method === 'OPTIONS') {
-    reply.send();
+    return reply.send();
   }
 });
 
@@ -31,17 +31,16 @@ server.addHook('onRequest', async (request, reply) => {
 server.register(authRoutes, { prefix: '/api/auth' });
 
 // Health check endpoint
-server.get('/api/health', async (request, reply) => {
-  return { status: 'ok', timestamp: new Date().toISOString() };
-});
+server.get('/api/health', async () => ({
+  status: 'ok',
+  timestamp: new Date().toISOString()
+}));
 
 // Root endpoint
-server.get('/', async (request, reply) => {
-  return {
-    message: 'Minimal Auth Server Running',
-    endpoints: ['/api/auth/*', '/api/health']
-  };
-});
+server.get('/', async () => ({
+  message: 'Minimal Auth Server Running',
+  endpoints: ['/api/auth/*', '/api/health']
+}));
 
 const start = async () => {
   try {
@@ -54,7 +53,8 @@ const start = async () => {
       `🔐 Authentication endpoints available at http://localhost:${port}/api/auth/*`
     );
   } catch (err) {
-    server.log.error(err);
+    const error = err instanceof Error ? err : new Error(String(err));
+    server.log.error(error);
     process.exit(1);
   }
 };

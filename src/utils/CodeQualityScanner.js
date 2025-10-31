@@ -18,7 +18,6 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const { execSync, spawn } = require('child_process');
 
 class CodeQualityScanner {
   constructor() {
@@ -273,7 +272,6 @@ class CodeQualityScanner {
     for (const file of files) {
       try {
         const content = await fs.readFile(file, 'utf8');
-        const lines = content.split('\n');
 
         // Check for duplicate code
         const fileHashes = this.generateLineHashes(lines);
@@ -401,7 +399,7 @@ class CodeQualityScanner {
     let duplicateLines = 0;
     let totalLines = 0;
 
-    for (const [hash, locations] of duplicateBlocks.entries()) {
+    for (const [, locations] of duplicateBlocks.entries()) {
       if (locations.length > 1) {
         duplicateLines += locations.reduce(
           (sum, loc) => sum + loc.lines.length,
@@ -644,7 +642,6 @@ class CodeQualityScanner {
     for (const file of files) {
       try {
         const content = await fs.readFile(file, 'utf8');
-        const lines = content.split('\n');
 
         // Check each security pattern category
         for (const [category, patterns] of Object.entries(securityPatterns)) {
@@ -727,7 +724,7 @@ class CodeQualityScanner {
 
         for (const func of functions) {
           const hasDoc = this.hasDocumentation(content, func.startLine);
-          if (hasDoc) documentedFunctions++;
+          if (hasDoc) {documentedFunctions++;}
 
           // Calculate cyclomatic complexity
           const complexity = this.calculateCyclomaticComplexity(func.content);
@@ -900,6 +897,8 @@ class CodeQualityScanner {
     // This analysis was partially covered in maintainability
     // Here we focus on project-level documentation
 
+    void files;
+
     try {
       // Check for README
       const readmeFiles = ['README.md', 'readme.md', 'Readme.md'];
@@ -985,7 +984,7 @@ class CodeQualityScanner {
    * Apply automatic fixes to code
    */
   async applyAutoFixes() {
-    if (!this.config.autoFix.enabled) return 0;
+    if (!this.config.autoFix.enabled) {return 0;}
 
     console.log('🔧 Applying automatic fixes...');
 
@@ -1076,7 +1075,8 @@ class CodeQualityScanner {
 
   // Helper methods for analysis
 
-  getFilesToScan(paths) {
+  getFilesToScan(_paths) {
+    void _paths;
     // Implementation to get list of files to scan
     // This would recursively find all relevant files
     return Promise.resolve([
@@ -1490,11 +1490,11 @@ class CodeQualityScanner {
       body += line + '\n';
 
       for (const char of line) {
-        if (char === '{') braceCount++;
-        if (char === '}') braceCount--;
+        if (char === '{') {braceCount++;}
+        if (char === '}') {braceCount--;}
       }
 
-      if (braceCount === 0 && i > startIndex) break;
+      if (braceCount === 0 && i > startIndex) {break;}
     }
 
     return body;
@@ -1646,7 +1646,8 @@ class CodeQualityScanner {
     return issues;
   }
 
-  findTightCoupling(content, file) {
+  findTightCoupling(content, _file) {
+    void _file;
     // Find tight coupling issues
     const issues = [];
     const lines = content.split('\n');
@@ -1747,9 +1748,9 @@ class CodeQualityScanner {
 
     // Bonus points for good metrics
     const metrics = this.qualityResults.metrics;
-    if (metrics.testCoverage > 90) score += 0.5;
-    if (metrics.documentationCoverage > 80) score += 0.5;
-    if (metrics.duplicateCodePercent < 2) score += 0.5;
+    if (metrics.testCoverage > 90) {score += 0.5;}
+    if (metrics.documentationCoverage > 80) {score += 0.5;}
+    if (metrics.duplicateCodePercent < 2) {score += 0.5;}
 
     return Math.max(0, Math.min(10, score));
   }
@@ -2199,12 +2200,12 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
+  const run = async () => {
     try {
       await scanner.initialize();
 
       switch (command) {
-        case 'scan':
+        case 'scan': {
           console.log('🔍 Running full quality scan...\n');
           const report = args.includes('--report');
           const fix = args.includes('--fix');
@@ -2216,8 +2217,9 @@ if (require.main === module) {
             process.exit(1);
           }
           break;
+        }
 
-        case 'quick-scan':
+        case 'quick-scan': {
           console.log('⚡ Running quick quality scan...\n');
           // Quick scan implementation
           const quickResult = await scanner.runFullScan({
@@ -2229,26 +2231,49 @@ if (require.main === module) {
             process.exit(1);
           }
           break;
+        }
 
-        case 'fix':
+        case 'fix': {
           console.log('🔧 Applying automatic fixes...\n');
           await scanner.runFullScan({ fix: true });
           break;
+        }
 
-        case 'stats':
+        case 'stats': {
           const stats = await scanner.getStatistics();
           console.log('📊 Code Quality Statistics:');
           console.log(JSON.stringify(stats, null, 2));
           break;
+        }
 
-        case 'setup-hooks':
+        case 'setup-hooks': {
           await scanner.setupGitHooks();
           console.log('✅ Git hooks installed');
           break;
+        }
 
         case 'help':
+        case undefined:
+          printScannerHelp();
+          break;
+
         default:
-          console.log(`
+          console.log(`Unknown command "${command}".`);
+          printScannerHelp();
+          process.exitCode = 1;
+          break;
+      }
+    } catch (error) {
+      console.error('❌ Error:', error.message);
+      process.exit(1);
+    }
+  };
+
+  run();
+}
+
+function printScannerHelp() {
+  console.log(`
 🔍 Code Quality Scanner
 
 USAGE:
@@ -2277,15 +2302,6 @@ EXIT CODES:
   0 = Quality checks passed
   1 = Quality issues found (severity depends on thresholds)
 `);
-          break;
-      }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
-    }
-  }
-
-  main();
 }
 
 module.exports = CodeQualityScanner;

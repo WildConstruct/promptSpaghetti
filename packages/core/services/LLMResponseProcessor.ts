@@ -1,9 +1,55 @@
 // LLM Response Processor - Story 2.6
 // Processes and validates LLM parsing responses
 
-import { z } from 'zod';
-import { Node, Edge } from 'reactflow';
+import { Edge, Node } from 'reactflow';
 import { LLMParseResponse, ParserOptions, ParseResult } from './PromptParser';
+
+type ParsedNode = LLMParseResponse['nodes'][number];
+type ParsedEdge = LLMParseResponse['edges'][number];
+
+type NodeType = 'variable' | 'weightedChoice' | 'textBlock' | 'sequential';
+
+interface WeightedChoiceOption {
+  id: string;
+  text: string;
+  weight: number;
+  hasBranch: boolean;
+}
+
+type NodeData = {
+  nodeType: NodeType;
+  value: string;
+  label: string;
+  content?: string;
+  text?: string;
+  metadata?: Record<string, unknown>;
+  language?: string;
+  editable?: boolean;
+  style?: Record<string, unknown>;
+  confidence?: number;
+  needsReview?: boolean;
+  cycleResolved?: boolean;
+  rank?: number;
+  variableName?: string;
+  name?: string;
+  isVariable?: boolean;
+  options?: WeightedChoiceOption[];
+  sequence?: string;
+  step?: number;
+};
+
+type VariableNodeData = NodeData & {
+  nodeType: 'variable';
+  variableName: string;
+  name: string;
+  isVariable: true;
+};
+
+interface EdgeData {
+  label?: string;
+  variable?: string;
+  isVariableReference?: boolean;
+}
 
 export class LLMResponseProcessor {
   private nodeIdCounter = 0;
@@ -22,8 +68,8 @@ export class LLMResponseProcessor {
       throw new Error(`Unsupported response version: ${response.version}`);
     }
 
-    const nodes: Node[] = [];
-    const edges: Edge[] = [];
+    const nodes: Node<NodeData>[] = [];
+    const edges: Edge<EdgeData>[] = [];
     const variableIntegrity = new Set<string>();
 
     // Process nodes
@@ -68,10 +114,7 @@ export class LLMResponseProcessor {
 
       // Add variable reference edges
       if (options.preserveVariables) {
-        const varEdges = this.createVariableReferenceEdges(
-          nodes,
-          variableIntegrity
-        );
+        const varEdges = this.createVariableReferenceEdges(nodes);
         edges.push(...varEdges);
       }
     }
@@ -102,33 +145,45 @@ export class LLMResponseProcessor {
   /**
    * Create a React Flow node from LLM node data
    */
-  private createNode(nodeData: any, nodeId: string, index: number): Node {
+  private createNode(
+    nodeData: ParsedNode,
+    nodeId: string,
+    index: number
+  ): Node<NodeData> {
     const nodeType = this.mapNodeType(nodeData.type);
     const position = this.calculateNodePosition(index);
     const typeSpecificData = this.getTypeSpecificData(nodeData);
 
-    const node: Node = {
+    const baseData: NodeData = {
+      nodeType,
+      value: nodeData.content || '',
+      label: nodeData.content || '',
+      content: nodeData.content,
+      metadata: (nodeData.metadata as Record<string, unknown>) ?? {}
+    };
+
+    if (nodeType === 'textBlock') {
+      baseData.text = nodeData.content || '';
+    }
+
+    const node: Node<NodeData> = {
       id: nodeId,
       type: nodeType,
       position,
       data: {
-        // Required fields for Epic1 nodes
-        nodeType: nodeType,
-        value: nodeData.content || '',
-        // Legacy fields for compatibility
-        label: nodeData.content || '',
-        content: nodeData.content,
-        // Add text field for TextBlock nodes
-        ...(nodeType === 'textBlock' && { text: nodeData.content || '' }),
-        // Add metadata
-        metadata: nodeData.metadata || {},
-        // Add any type-specific data
+        ...baseData,
         ...typeSpecificData
       }
     };
 
     // Handle special metadata
     if (nodeData.metadata) {
+      // Copy all metadata to preserve LLM-generated fields like 'importance'
+      node.data.metadata = { ...nodeData.metadata };
+      (
+        node as Node<NodeData> & { metadata?: Record<string, unknown> }
+      ).metadata = { ...nodeData.metadata };
+
       // Opaque nodes (like code blocks)
       if (nodeData.metadata.opaque) {
         node.data.editable = false;
@@ -137,7 +192,7 @@ export class LLMResponseProcessor {
 
       // Language metadata
       if (nodeData.metadata.lang) {
-        node.data.language = nodeData.metadata.lang;
+        node.data.language = String(nodeData.metadata.lang);
       }
 
       // Uncertainty marker
@@ -153,7 +208,7 @@ export class LLMResponseProcessor {
 
       // Rank for topological sort
       if (nodeData.metadata.rank !== undefined) {
-        node.data.rank = nodeData.metadata.rank;
+        node.data.rank = Number(nodeData.metadata.rank);
       }
     }
 
@@ -163,7 +218,10 @@ export class LLMResponseProcessor {
   /**
    * Create a variable node
    */
-  private createVariableNode(varName: string, index: number): Node {
+  private createVariableNode(
+    varName: string,
+    index: number
+  ): Node<VariableNodeData> {
     const nodeId = this.generateNodeId();
     const variableContent = `{${varName}}`;
 
@@ -172,14 +230,12 @@ export class LLMResponseProcessor {
       type: 'variable',
       position: this.calculateNodePosition(index),
       data: {
-        // Required fields for Epic1 nodes
         nodeType: 'variable',
         value: variableContent,
-        variableName: varName,
-        // Legacy fields
         label: variableContent,
-        name: varName,
         content: variableContent,
+        variableName: varName,
+        name: varName,
         isVariable: true
       }
     };
@@ -188,7 +244,10 @@ export class LLMResponseProcessor {
   /**
    * Create an edge from LLM edge data
    */
-  private createEdge(edgeData: any, nodes: Node[]): Edge {
+  private createEdge(
+    edgeData: ParsedEdge,
+    nodes: Node<NodeData>[]
+  ): Edge<EdgeData> {
     const sourceNode = nodes[edgeData.source];
     const targetNode = nodes[edgeData.target];
 
@@ -207,24 +266,23 @@ export class LLMResponseProcessor {
    * Create edges for variable references
    */
   private createVariableReferenceEdges(
-    nodes: Node[],
-    variables: Set<string>
-  ): Edge[] {
-    const edges: Edge[] = [];
-    const varNodes = new Map<string, Node>();
+    nodes: Node<NodeData>[]
+  ): Edge<EdgeData>[] {
+    const edges: Edge<EdgeData>[] = [];
+    const varNodes = new Map<string, Node<VariableNodeData>>();
 
     // Find all variable nodes
     nodes.forEach(node => {
-      if (node.data.isVariable && node.data.name) {
-        varNodes.set(node.data.name, node);
+      if (node.data.isVariable && 'name' in node.data && node.data.name) {
+        varNodes.set(node.data.name, node as Node<VariableNodeData>);
       }
     });
 
     // Connect nodes that reference variables
     nodes.forEach(node => {
-      if (!node.data.isVariable && node.data.content) {
+      if (!node.data.isVariable && 'content' in node.data) {
         const referencedVars = this.extractVariablesFromContent(
-          node.data.content
+          String(node.data.content ?? '')
         );
 
         referencedVars.forEach(varName => {
@@ -250,12 +308,16 @@ export class LLMResponseProcessor {
     // Mark broken references
     nodes.forEach(node => {
       const referencedVars = this.extractVariablesFromContent(
-        node.data.content || ''
+        String(node.data.content || '')
       );
       referencedVars.forEach(varName => {
         if (!varNodes.has(varName)) {
+          const metadata = (node.data.metadata ?? {}) as Record<
+            string,
+            unknown
+          >;
           node.data.metadata = {
-            ...node.data.metadata,
+            ...metadata,
             missingVariableRef: true,
             missingVariable: varName
           };
@@ -296,7 +358,7 @@ export class LLMResponseProcessor {
   /**
    * Validate edge references
    */
-  private validateEdge(edgeData: any, nodeCount: number): boolean {
+  private validateEdge(edgeData: ParsedEdge, nodeCount: number): boolean {
     // Check valid indices
     if (
       edgeData.source < 0 ||
@@ -322,7 +384,10 @@ export class LLMResponseProcessor {
   /**
    * Apply topological sort for logical node layout
    */
-  private layoutNodesWithTopologicalSort(nodes: Node[], edges: Edge[]): Node[] {
+  private layoutNodesWithTopologicalSort(
+    nodes: Node<NodeData>[],
+    edges: Edge<EdgeData>[]
+  ): Node<NodeData>[] {
     // Build adjacency list
     const adjacency = new Map<string, string[]>();
     const inDegree = new Map<string, number>();
@@ -352,7 +417,10 @@ export class LLMResponseProcessor {
     });
 
     while (queue.length > 0) {
-      const nodeId = queue.shift()!;
+      const nodeId = queue.shift();
+      if (!nodeId) {
+        continue;
+      }
       sorted.push(nodeId);
 
       adjacency.get(nodeId)?.forEach(neighbor => {
@@ -374,7 +442,7 @@ export class LLMResponseProcessor {
 
     // Apply layout based on sort order
     const nodeMap = new Map(nodes.map(n => [n.id, n]));
-    const layouted: Node[] = [];
+    const layouted: Node<NodeData>[] = [];
     const horizontalSpacing = 200;
     const verticalSpacing = 120;
     const nodesPerRow = 4;
@@ -442,59 +510,86 @@ export class LLMResponseProcessor {
   /**
    * Check if a variable node already exists
    */
-  private hasVariableNode(nodes: Node[], varName: string): boolean {
+  private hasVariableNode(nodes: Node<NodeData>[], varName: string): boolean {
     return nodes.some(
-      node => node.data.isVariable && node.data.name === varName
+      node =>
+        node.data.isVariable &&
+        'name' in node.data &&
+        node.data.name === varName
     );
   }
 
   /**
    * Map LLM node type to React Flow type
    */
-  private mapNodeType(llmType: string): string {
-    const typeMap: Record<string, string> = {
+  private mapNodeType(llmType: ParsedNode['type']): NodeType {
+    const typeMap: Record<ParsedNode['type'], NodeType> = {
       Variable: 'variable',
       WeightedChoice: 'weightedChoice',
       TextBlock: 'textBlock',
       Sequential: 'sequential'
     };
 
-    return typeMap[llmType] || 'textBlock';
+    return typeMap[llmType];
   }
 
   /**
    * Get type-specific data for node
    */
-  private getTypeSpecificData(nodeData: any): any {
+  private getTypeSpecificData(nodeData: ParsedNode): Partial<NodeData> {
     switch (nodeData.type) {
-      case 'WeightedChoice':
-        // Parse choices from content or metadata
+      case 'WeightedChoice': {
+        const metadataAlternatives = Array.isArray(
+          nodeData.metadata?.alternatives
+        )
+          ? (nodeData.metadata?.alternatives as unknown[]).filter(
+              (alternative): alternative is string =>
+                typeof alternative === 'string'
+            )
+          : undefined;
+
         const choices =
-          nodeData.metadata?.alternatives || nodeData.content.split(/\s*\|\s*/);
-        const options = choices.map((choice: string, i: number) => ({
+          metadataAlternatives ?? nodeData.content.split(/\s*\|\s*/);
+
+        const weight =
+          choices.length > 0 ? Math.floor(100 / choices.length) : 100;
+
+        const options: WeightedChoiceOption[] = choices.map((choice, i) => ({
           id: `option-${i + 1}`,
           text: choice.trim(),
-          weight: Math.floor(100 / choices.length),
+          weight,
           hasBranch: false
         }));
+
         return {
-          options: options,
-          // For Epic1 compatibility, also serialize as value
+          options,
           value: JSON.stringify(options, null, 2)
         };
+      }
 
-      case 'Variable':
+      case 'Variable': {
         const varName = nodeData.content.replace(/[{}]/g, '');
         return {
           name: varName,
+          variableName: varName,
           isVariable: true
         };
+      }
 
-      case 'Sequential':
+      case 'Sequential': {
+        const metadata = nodeData.metadata ?? {};
+        const sequence =
+          typeof metadata.sequence === 'string' ? metadata.sequence : 'linear';
+        const stepValue =
+          typeof metadata.step === 'number'
+            ? metadata.step
+            : Number(metadata.step ?? 0);
+
         return {
-          sequence: nodeData.metadata?.sequence || 'linear',
-          step: nodeData.metadata?.step || 0
+          sequence,
+          step: stepValue
         };
+      }
 
       default:
         return {};

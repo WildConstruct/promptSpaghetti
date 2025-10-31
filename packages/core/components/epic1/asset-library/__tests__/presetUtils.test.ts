@@ -187,10 +187,13 @@ describe('presetUtils', () => {
       const afterTime = new Date();
 
       expect(result.lastModified).toBeDefined();
-      expect(result.lastModified!.getTime()).toBeGreaterThanOrEqual(
+      if (!result.lastModified) {
+        throw new Error('Expected lastModified to be defined');
+      }
+      expect(result.lastModified.getTime()).toBeGreaterThanOrEqual(
         beforeTime.getTime()
       );
-      expect(result.lastModified!.getTime()).toBeLessThanOrEqual(
+      expect(result.lastModified.getTime()).toBeLessThanOrEqual(
         afterTime.getTime()
       );
     });

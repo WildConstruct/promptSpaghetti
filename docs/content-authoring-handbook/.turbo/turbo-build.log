@@ -1,5 +1,5 @@
 
-> content-authoring-handbook@1.0.0 build C:\Users\Owner\CascadeProjects\prompt-spaghetti\docs\content-authoring-handbook
+> content-authoring-handbook@1.0.0 build /mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/content-authoring-handbook
 > node assets/tools/build-handbook.js
 
 📚 Building Content Authoring Handbook (all)...
@@ -15,6 +15,8 @@
 ✓ Indexed: Contributors
 ✓ Indexed: Maintenance and Update Cycle
 ✓ Indexed: Content Authoring Handbook - Detailed Outline
+✓ Indexed: Content Authoring Handbook
+✓ Indexed: Version Control and Updates
 ✓ Indexed: Chapter 1: Introduction & Overview
 ✓ Indexed: Chapter 2: Architecture & Core Concepts
 ✓ Indexed: Chapter 3: Generator JSON Schema Reference
@@ -22,19 +24,13 @@
 ✓ Indexed: Chapter 15: Expansion Recipes for LLMs
 ✓ Indexed: Chapter 14: Interactive Tutorial - Your First Generator
 ✓ Indexed: Chapter 22: Quick Reference Tables
-✓ Indexed: Content Authoring Handbook
-✓ Indexed: Version Control and Updates
 ✅ Search index built successfully!
 📊 Indexed 14 pages
-📝 Output: C:\Users\Owner\CascadeProjects\prompt-spaghetti\docs\content-authoring-handbook\_build\web\assets\data\search-index.json
+📝 Output: /mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/content-authoring-handbook/_build/web/assets/data/search-index.json
 ✅ Web version complete
 
 🔄 Building PDF format...
 📄 Building PDF version...
-Puppeteer not available, trying Prince...
-'prince' is not recognized as an internal or external command,
-operable program or batch file.
-Prince not available, creating placeholder PDF...
 ✅ PDF version complete
 
 🔄 Building EPUB format...
@@ -46,5 +42,5 @@ Prince not available, creating placeholder PDF...
 ✅ Print version complete
 
 ✅ Handbook build completed successfully!
-📁 Output directory: C:\Users\Owner\CascadeProjects\prompt-spaghetti\docs\content-authoring-handbook\_build
-EPUB created: 32005 bytes
+📁 Output directory: /mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/content-authoring-handbook/_build
+EPUB created: 31886 bytes

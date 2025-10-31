@@ -10,7 +10,7 @@ function createPreset(
   name: string,
   category: string,
   nodeType: string,
-  value: any,
+  value: Preset['value'],
   tags: string[] = [],
   description?: string
 ): Preset {

@@ -5,6 +5,7 @@
 
 import { jest } from '@jest/globals';
 import WebSocket from 'ws';
+import jwt from 'jsonwebtoken';
 import { ConnectionManager } from '../../server/src/websocket/ConnectionManager';
 import { GraphEngine } from '../../packages/graph-core/src/engine';
 import { Graph } from '../packages/core/graphSchema';
@@ -85,13 +86,13 @@ describe('Error Scenarios - Integration Tests', () => {
         };
 
         const manager = new ConnectionManager(config);
-        let closeHandler: Function;
-        let errorHandler: Function;
+        let closeHandler: () => void;
+        let errorHandler: (error: Error) => void;
 
         const mockWs = {
           on: jest.fn((event, handler) => {
-            if (event === 'close') closeHandler = handler;
-            if (event === 'error') errorHandler = handler;
+            if (event === 'close') {closeHandler = handler;}
+            if (event === 'error') {errorHandler = handler;}
           }),
           close: jest.fn(),
           ping: jest.fn(),
@@ -108,8 +109,8 @@ describe('Error Scenarios - Integration Tests', () => {
         const connectionId = manager.addConnection(mockWs, request);
 
         // Simulate connection drop
-        errorHandler!(new Error('Connection lost'));
-        closeHandler!(1006, 'Connection lost'); // 1006 = abnormal closure
+        errorHandler?.(new Error('Connection lost'));
+        closeHandler?.(1006, 'Connection lost'); // 1006 = abnormal closure
 
         // Connection should be cleaned up
         await AsyncTestingUtils.delay(100);
@@ -346,7 +347,6 @@ describe('Error Scenarios - Integration Tests', () => {
         const manager = new ConnectionManager(config);
 
         // Mock JWT verification to throw expired token error
-        const jwt = require('jsonwebtoken');
         jwt.verify = jest.fn(() => {
           const error = new Error('jwt expired');
           error.name = 'TokenExpiredError';
@@ -399,7 +399,6 @@ describe('Error Scenarios - Integration Tests', () => {
         const manager = new ConnectionManager(config);
 
         // Mock JWT verification to throw invalid signature error
-        const jwt = require('jsonwebtoken');
         jwt.verify = jest.fn(() => {
           const error = new Error('invalid signature');
           error.name = 'JsonWebTokenError';
@@ -459,7 +458,6 @@ describe('Error Scenarios - Integration Tests', () => {
 
         const manager = new ConnectionManager(config);
 
-        const jwt = require('jsonwebtoken');
         jwt.verify = jest.fn().mockReturnValue(limitedUser);
 
         const mockWs = {

@@ -115,7 +115,7 @@ class TrackerIntegration {
    * Process state.json changes for task approvals
    */
   async processStateChanges(stateData) {
-    if (!stateData.tasks) return;
+    if (!stateData.tasks) {return;}
 
     // Look for newly approved tasks
     for (const [taskId, task] of Object.entries(stateData.tasks)) {
@@ -143,7 +143,7 @@ class TrackerIntegration {
    * Process commit-tracking.json changes for pushes
    */
   async processCommitChanges(commitData) {
-    if (!commitData.commits) return;
+    if (!commitData.commits) {return;}
 
     // Look for new commits
     for (const commit of commitData.commits) {
@@ -246,7 +246,7 @@ class TrackerIntegration {
    * Get current statistics
    */
   getCurrentStats() {
-    if (!this.initialized) return null;
+    if (!this.initialized) {return null;}
     return this.tracker.getCurrentStats();
   }
 
@@ -254,7 +254,7 @@ class TrackerIntegration {
    * Generate report
    */
   async generateReport(includeTimeline = false) {
-    if (!this.initialized) return null;
+    if (!this.initialized) {return null;}
     return await this.tracker.generateEnhancedReport(includeTimeline);
   }
 

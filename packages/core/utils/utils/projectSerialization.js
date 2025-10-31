@@ -2,310 +2,414 @@
 /**
  * Project Serialization Utilities - Story 6.1
  *
- * Handles serialization and deserialization of .psg files with error handling,
- * compression, and version migration support.
+ * Handles serialization/deserialization of .psg files with validation,
+ * checksum generation, and (placeholder) migration support.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.serializeProject = serializeProject;
 exports.deserializeProject = deserializeProject;
 exports.validateFileIntegrity = validateFileIntegrity;
 exports.createEmptyProject = createEmptyProject;
-const psgSchema_1 = require("../schemas/psgSchema");
-/**
- * Serializes graph state to .psg format
- */
-function serializeProject(graphState: unknown, metadata: unknown, settings: unknown, options: unknown = {}) {
-    try {
-        const { includeMetadata = true, includeSettings = true, includeCollaboration = true, compress = false, validateOutput = true } = options;
-        // Convert ReactFlow nodes/edges to graph schema format
-        const graph = {
-            nodes: graphState.nodes.map(convertReactFlowNodeToGraphNode),
-            seed: undefined // Will be set during execution if needed
-        };
-        // Build the .psg file structure
-        const psgFile = {
-            fileType: 'psg',
-            formatVersion: psgSchema_1.PSG_FORMAT_VERSION,
-            metadata: includeMetadata ? metadata : (0, psgSchema_1.createDefaultMetadata)('Untitled Project'),
-            settings: includeSettings ? settings : (0, psgSchema_1.createDefaultSettings)(),
-            graph,
-            exportedAt: new Date().toISOString()
-        };
-        // Add collaboration data if available and requested
-        if (includeCollaboration && graphState.annotations) {
-            psgFile.collaboration = {
-                stickyNotes: graphState.annotations.stickyNotes || [],
-                annotations: {
-                    nodeLabels: graphState.annotations.nodeLabels || {},
-                    regionGroups: graphState.annotations.regionGroups || [],
-                    connectionLabels: graphState.annotations.connectionLabels || {}
 
-            };
-
-        // Generate checksum for integrity
-        const content = JSON.stringify(psgFile, null, compress ? 0 : 2);
-        psgFile.checksum = generateChecksum(content);
-        // Validate output if requested
-        if (validateOutput) {
-            const validation = (0, psgSchema_1.validatePsgFile)(psgFile);
-            if (!validation.success) {
-                return {
-                    success: false,
-                    error: `Serialization validation failed: ${validation.error}`,
-                    warnings: validation.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`)
-                };
-
-
-        const finalContent = JSON.stringify(psgFile, null, compress ? 0 : 2);
-        return {
-            success: true,
-            data: finalContent,
-            warnings: []
-        };
-
-    catch (error) {
-        return {
-            success: false,
-            error: error instanceof Error ? error.message : 'Unknown serialization error'
-        };
-
+const {
+  PSG_FORMAT_VERSION,
+  validatePsgFile,
+  createDefaultMetadata,
+  createDefaultSettings,
+  isVersionCompatible,
+} = require("../schemas/psgSchema");
 
 /**
- * Deserializes .psg file content to graph state
+ * Serializes graph state to the .psg format.
+ *
+ * @param {object} graphState
+ * @param {object} metadata
+ * @param {object} settings
+ * @param {object} options
+ * @returns {{ success: boolean, data?: string, error?: string, warnings?: string[] }}
  */
-function deserializeProject(content: string, options: unknown = {}) {
-    try {
-        const { skipValidation = false, autoMigrate = true, preserveIds = true } = options;
-        // Parse JSON
-        let psgData;
-        try {
-            psgData = JSON.parse(content);
+function serializeProject(
+  graphState,
+  metadata,
+  settings,
+  options = {}
+) {
+  const {
+    includeMetadata = true,
+    includeSettings = true,
+    includeCollaboration = true,
+    compress = false,
+    validateOutput = true,
+  } = options;
 
-        catch (parseError) {
-            return {
-                success: false,
-                error: 'Invalid JSON format in .psg file'
-            };
+  try {
+    const nodes = Array.isArray(graphState?.nodes)
+      ? graphState.nodes
+      : [];
 
-        // Validate file format
-        if (!skipValidation) {
-            const validation = (0, psgSchema_1.validatePsgFile)(psgData);
-            if (!validation.success) {
-                return {
-                    success: false,
-                    error: `Invalid .psg file format: ${validation.error}`,
-                    warnings: validation.issues.map(issue => `${issue.path.join('.')}: ${issue.message}`)
-                };
-
-            psgData = validation.data;
-
-        const psgFile = psgData;
-        const warnings = [];
-        let migrated = false;
-        // Check version compatibility
-        const compatibility = (0, psgSchema_1.isVersionCompatible)(psgFile.formatVersion);
-        if (!compatibility.compatible) {
-            return {
-                success: false,
-                error: compatibility.message || 'Incompatible file version'
-            };
-
-        if (compatibility.requiresMigration) {
-            if (autoMigrate) {
-                // Perform migration (placeholder for future versions)
-                migrated = true;
-                warnings.push(compatibility.message || 'File format was automatically updated');
-
-            else {
-                warnings.push(compatibility.message || 'File format migration available');
-
-
-        // Convert graph nodes back to ReactFlow format
-        const reactFlowNodes = psgFile.graph.nodes.map(node => convertGraphNodeToReactFlowNode(node, { preserveIds }));
-        // Create edges array (empty for now, will be populated based on node inputs)
-        const reactFlowEdges = generateEdgesFromNodes(reactFlowNodes);
-        // Build graph state
-        const graphState = {
-            nodes: reactFlowNodes,
-            edges: reactFlowEdges
-        };
-        // Add collaboration data if present
-        if (psgFile.collaboration) {
-            graphState.annotations = {
-                stickyNotes: psgFile.collaboration.stickyNotes,
-                nodeLabels: psgFile.collaboration.annotations.nodeLabels,
-                regionGroups: psgFile.collaboration.annotations.regionGroups,
-                connectionLabels: psgFile.collaboration.annotations.connectionLabels
-            };
-
-        return {
-            success: true,
-            data: {
-                graph: graphState,
-                metadata: psgFile.metadata,
-                settings: psgFile.settings,
-                collaboration: psgFile.collaboration
-            },
-            warnings,
-            migrated
-        };
-
-    catch (error) {
-        return {
-            success: false,
-            error: error instanceof Error ? error.message : 'Unknown deserialization error'
-        };
-
-
-/**
- * Converts ReactFlow node to graph schema node format
- */
-function convertReactFlowNodeToGraphNode(reactFlowNode: unknown) {
-    // Map nodeType to proper schema type
-    const getSchemaNodeType = (nodeType: string) => {
-        const typeMap = {
-            'weighted-choice': 'WeightedChoice',
-            'concat': 'Concat',
-            'output': 'Output',
-            'include': 'Include',
-            'set-variable': 'SetVariable',
-            'get-variable': 'GetVariable',
-            'weighted-advanced': 'WeightedAdvanced',
-            'conditional': 'Conditional',
-            'sequential': 'Sequential',
-            'markov': 'Markov',
-            'python-transform': 'PythonTransform'
-        };
-        return typeMap[nodeType] || 'Output';
+    const graph = {
+      nodes: nodes.map(convertReactFlowNodeToGraphNode),
+      seed: graphState?.seed,
     };
-    const nodeType = reactFlowNode.data?.nodeType || 'output';
-    const schemaType = getSchemaNodeType(nodeType);
-    const baseNode = {
-        id: reactFlowNode.id,
-        type: schemaType,
-        inputs: [] // Will be calculated from edge connections
+
+    const psgFile = {
+      fileType: "psg",
+      formatVersion: PSG_FORMAT_VERSION,
+      metadata: includeMetadata
+        ? metadata
+        : createDefaultMetadata("Untitled Project"),
+      settings: includeSettings
+        ? settings
+        : createDefaultSettings(),
+      graph,
+      exportedAt: new Date().toISOString(),
     };
-    // Copy node-specific data, excluding ReactFlow-specific fields
-    if (reactFlowNode.data) {
-        const { nodeType: _, ...nodeData } = reactFlowNode.data;
-        // Handle specific node type conversions
-        if (schemaType === 'WeightedChoice' && nodeData.variations) {
-            // Convert variations array to choices format for WeightedChoice nodes
-            baseNode.choices = nodeData.variations.map((value) => ({
-                value,
-                weight: 1.0 // Default equal weight
-            }));
-            // Don't include the original variations field
-            const { variations: _variations, ...restData } = nodeData;
-            Object.assign(baseNode, restData);
 
-        else {
-            Object.assign(baseNode, nodeData);
+    if (includeCollaboration && graphState?.annotations) {
+      const annotations = graphState.annotations;
+      psgFile.collaboration = {
+        stickyNotes: annotations.stickyNotes || [],
+        annotations: {
+          nodeLabels: annotations.nodeLabels || {},
+          regionGroups: annotations.regionGroups || [],
+          connectionLabels: annotations.connectionLabels || {},
+        },
+      };
+    }
 
+    const draftContent = JSON.stringify(psgFile, null, compress ? 0 : 2);
+    psgFile.checksum = generateChecksum(draftContent);
 
-    return baseNode;
+    let warnings = [];
 
-/**
- * Converts graph schema node to ReactFlow node format
- */
-function convertGraphNodeToReactFlowNode(graphNode: unknown, options: unknown = {}) {
-    const { preserveIds = true } = options;
-    // Map schema type back to UI nodeType
-    const getUINodeType = (schemaType: string) => {
-        const typeMap = {
-            'WeightedChoice': 'weighted-choice',
-            'Concat': 'concat',
-            'Output': 'output',
-            'Include': 'include',
-            'SetVariable': 'set-variable',
-            'GetVariable': 'get-variable',
-            'WeightedAdvanced': 'weighted-advanced',
-            'Conditional': 'conditional',
-            'Sequential': 'sequential',
-            'Markov': 'markov',
-            'PythonTransform': 'python-transform'
+    if (validateOutput) {
+      const validation = validatePsgFile(psgFile);
+      if (!validation.success) {
+        return {
+          success: false,
+          error: `Serialization validation failed: ${validation.error}`,
+          warnings: validation.issues?.map((issue) =>
+            `${issue.path.join(".")}: ${issue.message}`
+          ) || [],
         };
-        return typeMap[schemaType] || 'output';
-    };
-    const uiNodeType = getUINodeType(graphNode.type);
-    const reactFlowNode = {
-        id: preserveIds ? graphNode.id : `node_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        type: 'default', // ReactFlow visual type
-        position: { x: 0, y: 0 }, // Will be set by auto-layout or user
-        data: {
-            nodeType: uiNodeType,
-            label: graphNode.label || graphNode.id,
-            ...graphNode
+      }
 
-    };
-    // Handle specific node type conversions back to UI format
-    if (graphNode.type === 'WeightedChoice' && graphNode.choices) {
-        // Convert choices back to variations for UI
-        reactFlowNode.data.variations = graphNode.choices.map((choice) => choice.value);
-        // Remove the schema-specific choices field from data
-        const { choices: _choices, type: _type, ...restData } = reactFlowNode.data;
-        reactFlowNode.data = { nodeType: uiNodeType, label: graphNode.label || graphNode.id, ...restData };
+      // If validation returns a normalized version of the file,
+      // adopt it so we know we're outputting a conformant object.
+      if (validation.data) {
+        Object.assign(psgFile, validation.data, { checksum: psgFile.checksum });
+      }
 
-    else {
-        // Remove schema-specific type field
-        const { type: _type, ...restData } = reactFlowNode.data;
-        reactFlowNode.data = { nodeType: uiNodeType, label: graphNode.label || graphNode.id, ...restData };
+      warnings = validation.issues?.map((issue) =>
+        `${issue.path.join(".")}: ${issue.message}`
+      ) || [];
+    }
 
-    return reactFlowNode;
+    const finalContent = JSON.stringify(psgFile, null, compress ? 0 : 2);
 
-/**
- * Generates ReactFlow edges from node input connections
- */
-function generateEdgesFromNodes(nodes: unknown[]) {
-    const edges = [];
-    nodes.forEach(node => {
-        if (node.data?.inputs && Array.isArray(node.data.inputs)) {
-            node.data.inputs.forEach((inputId, index) => {
-                edges.push({
-                    id: `edge_${inputId}_to_${node.id}_${index}`,
-                    source: inputId,
-                    target: node.id,
-                    sourceHandle: null,
-                    targetHandle: `input_${index}`,
-                    type: 'default'
-                });
-            });
-
-    });
-    return edges;
-
-/**
- * Generates a simple checksum for file integrity
- */
-function generateChecksum(content: string) {
-    let checksum = 0;
-    for (let i = 0; i < content.length; i++) {
-        checksum = ((checksum << 5) - checksum + content.charCodeAt(i)) & 0xffffffff;
-
-    return Math.abs(checksum).toString(16);
-
-/**
- * Validates file integrity using checksum
- */
-function validateFileIntegrity(psgFile: unknown) {
-    if (!psgFile.checksum) {
-        return true; // No checksum to validate
-
-    const { checksum, ...fileWithoutChecksum } = psgFile;
-    const content = JSON.stringify(fileWithoutChecksum, null, 2);
-    const calculatedChecksum = generateChecksum(content);
-    return checksum === calculatedChecksum;
-
-/**
- * Creates a minimal .psg file for testing
- */
-function createEmptyProject(name = 'New Project', author?: string) {
     return {
-        fileType: 'psg',
-        formatVersion: psgSchema_1.PSG_FORMAT_VERSION,
-        metadata: (0, psgSchema_1.createDefaultMetadata)(name, author),
-        settings: (0, psgSchema_1.createDefaultSettings)(),
-        graph: { nodes: [] },
-        exportedAt: new Date().toISOString()
+      success: true,
+      data: finalContent,
+      warnings,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error
+        ? error.message
+        : "Unknown serialization error",
+    };
+  }
+}
+
+/**
+ * Deserializes .psg file content to graph state.
+ *
+ * @param {string} content
+ * @param {object} options
+ * @returns {{ success: boolean, data?: any, error?: string, warnings?: string[], migrated?: boolean }}
+ */
+function deserializeProject(content, options = {}) {
+  const {
+    skipValidation = false,
+    autoMigrate = true,
+    preserveIds = true,
+  } = options;
+
+  try {
+    let parsed;
+
+    try {
+      parsed = JSON.parse(content);
+    } catch {
+      return {
+        success: false,
+        error: "Invalid JSON format in .psg file",
+      };
+    }
+
+    const warnings = [];
+
+    if (!skipValidation) {
+      const validation = validatePsgFile(parsed);
+      if (!validation.success) {
+        return {
+          success: false,
+          error: `Invalid .psg file format: ${validation.error}`,
+          warnings: validation.issues?.map((issue) =>
+            `${issue.path.join(".")}: ${issue.message}`
+          ) || [],
+        };
+      }
+
+      parsed = validation.data;
+      warnings.push(
+        ...(validation.issues?.map((issue) =>
+          `${issue.path.join(".")}: ${issue.message}`
+        ) || [])
+      );
+    }
+
+    const compatibility = isVersionCompatible(parsed.formatVersion);
+    if (!compatibility.compatible) {
+      return {
+        success: false,
+        error: compatibility.message || "Incompatible file version",
+      };
+    }
+
+    let migrated = false;
+
+    if (compatibility.requiresMigration) {
+      if (autoMigrate) {
+        // Placeholder for future migration logic.
+        migrated = true;
+        if (compatibility.message) {
+          warnings.push(compatibility.message);
+        }
+      } else if (compatibility.message) {
+        warnings.push(compatibility.message);
+      }
+    }
+
+    const reactFlowNodes = Array.isArray(parsed.graph?.nodes)
+      ? parsed.graph.nodes.map((node) =>
+          convertGraphNodeToReactFlowNode(node, { preserveIds })
+        )
+      : [];
+
+    const reactFlowEdges = generateEdgesFromNodes(reactFlowNodes);
+
+    const graphState = {
+      nodes: reactFlowNodes,
+      edges: reactFlowEdges,
     };
 
+    if (parsed.collaboration) {
+      graphState.annotations = {
+        stickyNotes: parsed.collaboration.stickyNotes || [],
+        nodeLabels: parsed.collaboration.annotations?.nodeLabels || {},
+        regionGroups: parsed.collaboration.annotations?.regionGroups || [],
+        connectionLabels:
+          parsed.collaboration.annotations?.connectionLabels || {},
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        graph: graphState,
+        metadata: parsed.metadata,
+        settings: parsed.settings,
+        collaboration: parsed.collaboration,
+      },
+      warnings,
+      migrated,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error
+        ? error.message
+        : "Unknown deserialization error",
+    };
+  }
+}
+
+/**
+ * Converts a ReactFlow node to the schema format used in .psg files.
+ */
+function convertReactFlowNodeToGraphNode(reactFlowNode = {}) {
+  const typeMap = {
+    "weighted-choice": "WeightedChoice",
+    concat: "Concat",
+    output: "Output",
+    include: "Include",
+    "set-variable": "SetVariable",
+    "get-variable": "GetVariable",
+    "weighted-advanced": "WeightedAdvanced",
+    conditional: "Conditional",
+    sequential: "Sequential",
+    markov: "Markov",
+    "python-transform": "PythonTransform",
+  };
+
+  const uiNodeType = reactFlowNode?.data?.nodeType || "output";
+  const schemaType = typeMap[uiNodeType] || "Output";
+
+  const nodeData = { ...(reactFlowNode?.data || {}) };
+  const rawVariations = Array.isArray(nodeData.variations)
+    ? [...nodeData.variations]
+    : undefined;
+  const rawInputs = Array.isArray(nodeData.inputs)
+    ? [...nodeData.inputs]
+    : [];
+
+  delete nodeData.nodeType;
+  delete nodeData.variations;
+  delete nodeData.inputs;
+
+  const graphNode = {
+    id: reactFlowNode?.id,
+    type: schemaType,
+    inputs: rawInputs,
+    ...nodeData,
+  };
+
+  if (schemaType === "WeightedChoice" && rawVariations) {
+    graphNode.choices = rawVariations.map((value) => ({
+      value,
+      weight: 1,
+    }));
+  }
+
+  return graphNode;
+}
+
+/**
+ * Converts a graph schema node back into a ReactFlow node.
+ */
+function convertGraphNodeToReactFlowNode(graphNode = {}, options = {}) {
+  const { preserveIds = true } = options;
+
+  const typeMap = {
+    WeightedChoice: "weighted-choice",
+    Concat: "concat",
+    Output: "output",
+    Include: "include",
+    SetVariable: "set-variable",
+    GetVariable: "get-variable",
+    WeightedAdvanced: "weighted-advanced",
+    Conditional: "conditional",
+    Sequential: "sequential",
+    Markov: "markov",
+    PythonTransform: "python-transform",
+  };
+
+  const uiNodeType = typeMap[graphNode.type] || "output";
+  const id = preserveIds
+    ? graphNode.id
+    : `node_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+
+  const graphNodeCopy = { ...graphNode };
+  const inputs = Array.isArray(graphNodeCopy.inputs)
+    ? [...graphNodeCopy.inputs]
+    : [];
+  delete graphNodeCopy.inputs;
+  delete graphNodeCopy.type;
+  const choices = Array.isArray(graphNodeCopy.choices)
+    ? [...graphNodeCopy.choices]
+    : undefined;
+  delete graphNodeCopy.choices;
+  const label = graphNodeCopy.label || graphNodeCopy.id;
+  delete graphNodeCopy.label;
+  delete graphNodeCopy.id;
+
+  const data = {
+    nodeType: uiNodeType,
+    label,
+    inputs,
+    ...graphNodeCopy,
+  };
+
+  if (graphNode.type === "WeightedChoice" && Array.isArray(choices)) {
+    data.variations = choices.map((choice) => choice.value);
+    delete data.choices;
+  }
+
+  return {
+    id,
+    type: "default",
+    position: { x: 0, y: 0 },
+    data,
+  };
+}
+
+/**
+ * Generates ReactFlow edges using node input metadata.
+ */
+function generateEdgesFromNodes(nodes) {
+  const edges = [];
+
+  nodes.forEach((node) => {
+    const inputs = node?.data?.inputs;
+    if (!Array.isArray(inputs)) {
+      return;
+    }
+
+    inputs.forEach((inputId, index) => {
+      edges.push({
+        id: `edge_${inputId}_to_${node.id}_${index}`,
+        source: inputId,
+        target: node.id,
+        sourceHandle: null,
+        targetHandle: `input_${index}`,
+        type: "default",
+      });
+    });
+  });
+
+  return edges;
+}
+
+/**
+ * Generates a checksum for file integrity validation.
+ */
+function generateChecksum(content) {
+  let checksum = 0;
+
+  for (let i = 0; i < content.length; i += 1) {
+    checksum = ((checksum << 5) - checksum + content.charCodeAt(i)) & 0xffffffff;
+  }
+
+  return Math.abs(checksum).toString(16);
+}
+
+/**
+ * Validates file integrity using a generated checksum.
+ */
+function validateFileIntegrity(psgFile) {
+  if (!psgFile?.checksum) {
+    return true;
+  }
+
+  const { checksum, ...rest } = psgFile;
+  const content = JSON.stringify(rest, null, 2);
+  const calculated = generateChecksum(content);
+
+  return checksum === calculated;
+}
+
+/**
+ * Creates a minimal .psg project (primarily for tests/bootstrapping).
+ */
+function createEmptyProject(name = "New Project", author) {
+  return {
+    fileType: "psg",
+    formatVersion: PSG_FORMAT_VERSION,
+    metadata: createDefaultMetadata(name, author),
+    settings: createDefaultSettings(),
+    graph: { nodes: [] },
+    exportedAt: new Date().toISOString(),
+  };
+}

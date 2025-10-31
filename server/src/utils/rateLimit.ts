@@ -14,7 +14,7 @@ export function rateLimiter({
   ) {
     try {
       const now = Date.now();
-      const ip = (req as any).ip || 'unknown';
+      const ip = (req as { ip?: string }).ip || 'unknown';
       const id = `${key}:${ip}`;
       const bucket = buckets.get(id) || { tokens: limitPerMinute, last: now };
       const elapsed = now - bucket.last;
@@ -29,7 +29,7 @@ export function rateLimiter({
       bucket.tokens -= 1;
       buckets.set(id, bucket);
       done();
-    } catch (e) {
+    } catch {
       done();
     }
   };

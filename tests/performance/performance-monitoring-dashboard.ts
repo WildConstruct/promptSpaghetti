@@ -18,7 +18,7 @@ interface PerformanceMetric {
   value: number;
   unit: string;
   tags?: Record<string, string>;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface PerformanceThreshold {
@@ -232,7 +232,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     value: number,
     unit: string,
     tags?: Record<string, string>,
-    metadata?: any
+    metadata?: unknown
   ): void {
     const performanceMetric: PerformanceMetric = {
       timestamp: Date.now(),
@@ -358,7 +358,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    * Send notification for alert
    */
   private async sendNotification(alert: PerformanceAlert): Promise<void> {
-    if (!this.config.notificationWebhook) return;
+    if (!this.config.notificationWebhook) {return;}
 
     try {
       const payload = {
@@ -391,10 +391,10 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     endTime?: number
   ): PerformanceMetric[] {
     return this.metrics.filter(m => {
-      if (testSuite && m.testSuite !== testSuite) return false;
-      if (metric && m.metric !== metric) return false;
-      if (startTime && m.timestamp < startTime) return false;
-      if (endTime && m.timestamp > endTime) return false;
+      if (testSuite && m.testSuite !== testSuite) {return false;}
+      if (metric && m.metric !== metric) {return false;}
+      if (startTime && m.timestamp < startTime) {return false;}
+      if (endTime && m.timestamp > endTime) {return false;}
       return true;
     });
   }
@@ -406,8 +406,8 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     severity?: 'warning' | 'error' | 'critical'
   ): PerformanceAlert[] {
     return this.alerts.filter(a => {
-      if (a.resolved) return false;
-      if (severity && a.severity !== severity) return false;
+      if (a.resolved) {return false;}
+      if (severity && a.severity !== severity) {return false;}
       return true;
     });
   }
@@ -436,7 +436,10 @@ class PerformanceMonitoringDashboard extends EventEmitter {
       if (!hourlyData.has(hour)) {
         hourlyData.set(hour, []);
       }
-      hourlyData.get(hour)!.push(m.value);
+      const bucket = hourlyData.get(hour);
+      if (bucket) {
+        bucket.push(m.value);
+      }
     });
 
     // Calculate hourly averages
@@ -612,7 +615,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
    * Calculate overall system health score
    */
   private calculateOverallHealth(
-    summaryStats: any[],
+    summaryStats: unknown[],
     alerts: PerformanceAlert[]
   ): {
     score: number;
@@ -631,9 +634,9 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     score -= errorAlerts * 15;
     score -= warningAlerts * 5;
 
-    if (criticalAlerts > 0) factors.push(`${criticalAlerts} critical alerts`);
-    if (errorAlerts > 0) factors.push(`${errorAlerts} error alerts`);
-    if (warningAlerts > 0) factors.push(`${warningAlerts} warning alerts`);
+    if (criticalAlerts > 0) {factors.push(`${criticalAlerts} critical alerts`);}
+    if (errorAlerts > 0) {factors.push(`${errorAlerts} error alerts`);}
+    if (warningAlerts > 0) {factors.push(`${warningAlerts} warning alerts`);}
 
     // Evaluate test suite performance
     summaryStats.forEach(stat => {
@@ -654,11 +657,11 @@ class PerformanceMonitoringDashboard extends EventEmitter {
     score = Math.max(0, Math.min(100, score));
 
     let status: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
-    if (score >= 95) status = 'excellent';
-    else if (score >= 85) status = 'good';
-    else if (score >= 70) status = 'fair';
-    else if (score >= 50) status = 'poor';
-    else status = 'critical';
+    if (score >= 95) {status = 'excellent';}
+    else if (score >= 85) {status = 'good';}
+    else if (score >= 70) {status = 'fair';}
+    else if (score >= 50) {status = 'poor';}
+    else {status = 'critical';}
 
     return { score, status, factors };
   }
@@ -722,7 +725,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Generate HTML report
    */
-  private generateHTMLReport(report: any): string {
+  private generateHTMLReport(report: unknown): string {
     return `<!DOCTYPE html>
 <html>
 <head>
@@ -837,7 +840,7 @@ class PerformanceMonitoringDashboard extends EventEmitter {
   /**
    * Generate Markdown report
    */
-  private generateMarkdownReport(report: any): string {
+  private generateMarkdownReport(report: unknown): string {
     return `# Performance Monitoring Report
 
 **Generated:** ${report.timestamp}

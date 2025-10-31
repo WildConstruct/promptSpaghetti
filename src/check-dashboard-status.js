@@ -80,7 +80,7 @@ async function checkDashboardStatus() {
         if (networkIP && networkIP !== 'localhost') {
           console.log(`   Network: http://${networkIP}:${port}/login`);
         }
-      } catch (e) {
+      } catch {
         // Ignore hostname errors
       }
 
@@ -142,7 +142,7 @@ async function checkProcesses() {
         console.log(`   ${i + 1}. PID ${pid} (CPU: ${cpu}%, Memory: ${mem}%)`);
       });
     }
-  } catch (e) {
+  } catch {
     // Ignore process check errors
   }
 }

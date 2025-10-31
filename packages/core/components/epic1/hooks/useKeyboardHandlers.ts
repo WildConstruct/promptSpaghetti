@@ -98,7 +98,7 @@ export function useKeyboardHandlers({
   }, [setNodes]);
 
   // Initialize auto-layout hook
-  const { cleanupNodes, cleanupSelection, cleanupAll } = useAutoLayout();
+  const { cleanupSelection, cleanupAll } = useAutoLayout();
 
   // Handle layout cleanup
   const handleLayoutCleanup = useCallback(() => {

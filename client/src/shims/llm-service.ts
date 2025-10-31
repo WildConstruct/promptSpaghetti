@@ -1,26 +1,38 @@
 // Browser build stub for LLMService to avoid pulling in OpenAI SDK.
-type AnyObj = Record<string, any>;
+type JsonRecord = Record<string, unknown>;
 
-const API_BASE =
-  (typeof import.meta !== 'undefined' &&
-    (import.meta as any).env?.VITE_API_URL) ||
-  '';
+const ENV_VARS: Record<string, string | undefined> =
+  typeof import.meta !== 'undefined' && import.meta.env
+    ? import.meta.env
+    : {
+        VITE_API_URL: undefined,
+        VITE_VERCEL_PROTECTION_BYPASS: undefined
+      };
+
+const API_BASE = ENV_VARS.VITE_API_URL ?? '';
 
 function withBase(path: string): string {
-  if (!path) return path;
+  if (!path) {
+    return path;
+  }
   // If API_BASE is empty or just a slash, use relative paths
   if (!API_BASE || API_BASE === '/' || API_BASE === '') {
     return path;
   }
-  if (API_BASE) {
-    if (path.startsWith('http')) return path;
-    if (path.startsWith('/')) return API_BASE.replace(/\/$/, '') + path;
-    return API_BASE.replace(/\/$/, '') + '/' + path;
+  if (path.startsWith('http')) {
+    return path;
   }
-  return path;
+  const base = API_BASE.replace(/\/$/, '');
+  if (path.startsWith('/')) {
+    return `${base}${path}`;
+  }
+  return `${base}/${path}`;
 }
 
-async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
+async function postJson<T = JsonRecord>(
+  url: string,
+  body: JsonRecord
+): Promise<T> {
   // Client should NOT handle API keys - server should have them configured
   const headers: Record<string, string> = {
     'Content-Type': 'application/json'
@@ -29,8 +41,7 @@ async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
   // Add Vercel protection bypass if available
   // This is set as an environment variable when protection is enabled
   const protectionBypass =
-    (typeof import.meta !== 'undefined' &&
-      (import.meta as any).env?.VITE_VERCEL_PROTECTION_BYPASS) ||
+    ENV_VARS.VITE_VERCEL_PROTECTION_BYPASS ||
     process.env.NEXT_PUBLIC_VERCEL_PROTECTION_BYPASS ||
     process.env.VERCEL_PROTECTION_BYPASS;
 
@@ -87,32 +98,35 @@ async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
 }
 
 export class LLMService {
-  private config: AnyObj;
-  constructor(config: AnyObj = {}) {
+  private config: JsonRecord;
+  constructor(config: JsonRecord = {}) {
     this.config = config;
   }
-  async parse(prompt: string, request: AnyObj = {}): Promise<AnyObj> {
+  async parse(
+    prompt: string,
+    request: JsonRecord = {}
+  ): Promise<JsonRecord> {
     // CACHE BUST: 2025-01-10-20:10 - Using hyphenated paths for Vercel
     // Try the new endpoint first to bypass caching issues
     try {
       console.log('[LLM] Using hyphenated path: /api/ai-parse');
       return await postJson('/api/ai-parse', { prompt, ...request });
-    } catch (e) {
+    } catch (error) {
       // Fallback to original endpoint
-      console.warn('Falling back to /api/llm-parse due to error:', e);
+      console.warn('Falling back to /api/llm-parse due to error:', error);
       return postJson('/api/llm-parse', { prompt, ...request });
     }
   }
-  async complete(request: AnyObj): Promise<AnyObj> {
+  async complete(request: JsonRecord): Promise<JsonRecord> {
     return postJson('/api/llm-complete', { config: this.config, request });
   }
-  async suggest(request: AnyObj): Promise<AnyObj> {
+  async suggest(request: JsonRecord): Promise<JsonRecord> {
     return postJson('/api/llm-suggest', { config: this.config, request });
   }
-  async metadata(request: AnyObj): Promise<AnyObj> {
+  async metadata(request: JsonRecord): Promise<JsonRecord> {
     return postJson('/api/llm-metadata', { config: this.config, request });
   }
-  async refine(request: AnyObj): Promise<AnyObj> {
+  async refine(request: JsonRecord): Promise<JsonRecord> {
     return postJson('/api/llm-refine', { config: this.config, request });
   }
 }

@@ -37,16 +37,26 @@ if (actualHours !== null) {
 // Update metadata counts
 if (oldStatus !== status) {
   // Decrement old status
-  if (oldStatus === 'TODO') db.metadata.todoTasks--;
-  else if (oldStatus === 'IN_PROGRESS') db.metadata.inProgressTasks--;
-  else if (oldStatus === 'COMPLETED') db.metadata.completedTasks--;
-  else if (oldStatus === 'BLOCKED') db.metadata.blockedTasks--;
+if (oldStatus === 'TODO') {
+  db.metadata.todoTasks--;
+} else if (oldStatus === 'IN_PROGRESS') {
+  db.metadata.inProgressTasks--;
+} else if (oldStatus === 'COMPLETED') {
+  db.metadata.completedTasks--;
+} else if (oldStatus === 'BLOCKED') {
+  db.metadata.blockedTasks--;
+}
 
-  // Increment new status
-  if (status === 'TODO') db.metadata.todoTasks++;
-  else if (status === 'IN_PROGRESS') db.metadata.inProgressTasks++;
-  else if (status === 'COMPLETED') db.metadata.completedTasks++;
-  else if (status === 'BLOCKED') db.metadata.blockedTasks++;
+// Increment new status
+if (status === 'TODO') {
+  db.metadata.todoTasks++;
+} else if (status === 'IN_PROGRESS') {
+  db.metadata.inProgressTasks++;
+} else if (status === 'COMPLETED') {
+  db.metadata.completedTasks++;
+} else if (status === 'BLOCKED') {
+  db.metadata.blockedTasks++;
+}
 }
 
 // Update story progress

@@ -141,13 +141,15 @@ function roundTripTest(psg) {
 }
 function cryptoRandomId() {
     const c = globalThis.crypto;
-    if (c?.randomUUID)
+    if (c?.randomUUID) {
         return c.randomUUID();
+    }
     return 'psg_' + Math.random().toString(36).slice(2, 10);
 }
 function checkSecurityViolations(obj, path = '') {
-    if (!obj || typeof obj !== 'object')
+    if (!obj || typeof obj !== 'object') {
         return null;
+    }
     const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
     const xssPatterns = [/javascript:/i, /<script/i, /eval\(/i];
     for (const key of Object.keys(obj)) {
@@ -175,8 +177,9 @@ function checkSecurityViolations(obj, path = '') {
         }
         if (typeof value === 'object' && value !== null) {
             const nested = checkSecurityViolations(value, currentPath);
-            if (nested)
+            if (nested) {
                 return nested;
+            }
         }
     }
     return null;

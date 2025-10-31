@@ -52,7 +52,7 @@ export class AssetLibraryErrorBoundary extends Component<Props, State> {
               📚 Asset Browser Error
             </h3>
             <p style={{ color: '#6c757d', marginBottom: '15px' }}>
-              The asset browser encountered an error and couldn't load properly.
+              The asset browser encountered an error and couldn&apos;t load properly.
             </p>
             <button
               onClick={() => this.setState({ hasError: false, error: null })}

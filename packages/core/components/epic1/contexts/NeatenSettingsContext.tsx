@@ -1,50 +1,113 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 
-type NeatenSettings = {
+interface NeatenSettings {
   gridSize: number;
   rowSnap: number;
-  setGridSize: (n: number) => void;
-  setRowSnap: (n: number) => void;
+  setGridSize: (value: number) => void;
+  setRowSnap: (value: number) => void;
+}
+
+const DEFAULTS: NeatenSettings = {
+  gridSize: 20,
+  rowSnap: 40,
+  setGridSize: () => undefined,
+  setRowSnap: () => undefined
 };
 
-const DEFAULTS = { gridSize: 20, rowSnap: 40 };
-const KEY = 'epic1.neaten.settings';
+const STORAGE_KEY = 'epic1.neaten.settings';
 
-const Ctx = createContext<NeatenSettings | null>(null);
+const NeatenSettingsContext = createContext<NeatenSettings | null>(null);
 
-export const NeatenSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [gridSize, setGrid] = useState(DEFAULTS.gridSize);
-  const [rowSnap, setRow] = useState(DEFAULTS.rowSnap);
+const clamp = (value: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, value));
 
-  // Load from localStorage
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) {
-        const v = JSON.parse(raw);
-        if (typeof v.gridSize === 'number') setGrid(v.gridSize);
-        if (typeof v.rowSnap === 'number') setRow(v.rowSnap);
+const readSettings = (): Pick<NeatenSettings, 'gridSize' | 'rowSnap'> => {
+  try {
+    if (typeof window === 'undefined') {
+      return { gridSize: DEFAULTS.gridSize, rowSnap: DEFAULTS.rowSnap };
+    }
+
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      return { gridSize: DEFAULTS.gridSize, rowSnap: DEFAULTS.rowSnap };
+    }
+
+    const parsed = JSON.parse(raw) as Partial<NeatenSettings>;
+    const gridSize = typeof parsed.gridSize === 'number' ? parsed.gridSize : DEFAULTS.gridSize;
+    const rowSnap = typeof parsed.rowSnap === 'number' ? parsed.rowSnap : DEFAULTS.rowSnap;
+    return { gridSize, rowSnap };
+  } catch (error) {
+    console.warn('[NeatenSettings] Failed to read settings', error);
+    return { gridSize: DEFAULTS.gridSize, rowSnap: DEFAULTS.rowSnap };
+  }
+};
+
+const writeSettings = (settings: { gridSize: number; rowSnap: number }) => {
+  try {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  } catch (error) {
+    console.warn('[NeatenSettings] Failed to persist settings', error);
+  }
+};
+
+export const NeatenSettingsProvider: React.FC<{ children: React.ReactNode }> = ({
+  children
+}) => {
+  const [{ gridSize, rowSnap }, setSettings] = useState(() => readSettings());
+
+  const setGridSize = useCallback((value: number) => {
+    setSettings(prev => {
+      const nextGrid = clamp(Math.round(value), 5, 200);
+      if (nextGrid === prev.gridSize) {
+        return prev;
       }
-    } catch {}
+      const next = { ...prev, gridSize: nextGrid };
+      writeSettings(next);
+      return next;
+    });
   }, []);
 
-  // Persist
+  const setRowSnap = useCallback((value: number) => {
+    setSettings(prev => {
+      const nextSnap = clamp(Math.round(value), 10, 300);
+      if (nextSnap === prev.rowSnap) {
+        return prev;
+      }
+      const next = { ...prev, rowSnap: nextSnap };
+      writeSettings(next);
+      return next;
+    });
+  }, []);
+
   useEffect(() => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify({ gridSize, rowSnap }));
-    } catch {}
-  }, [gridSize, rowSnap]);
+    const settings = readSettings();
+    setSettings(settings);
+  }, []);
 
-  const setGridSize = useCallback((n: number) => setGrid(Math.max(5, Math.min(200, Math.round(n)))), []);
-  const setRowSnap = useCallback((n: number) => setRow(Math.max(10, Math.min(300, Math.round(n)))), []);
+  const value = useMemo<NeatenSettings>(
+    () => ({ gridSize, rowSnap, setGridSize, setRowSnap }),
+    [gridSize, rowSnap, setGridSize, setRowSnap]
+  );
 
-  const value = useMemo(() => ({ gridSize, rowSnap, setGridSize, setRowSnap }), [gridSize, rowSnap, setGridSize, setRowSnap]);
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+  return (
+    <NeatenSettingsContext.Provider value={value}>
+      {children}
+    </NeatenSettingsContext.Provider>
+  );
 };
 
 export function useNeatenSettings(): NeatenSettings {
-  const ctx = useContext(Ctx);
-  if (!ctx) return { ...DEFAULTS, setGridSize: () => {}, setRowSnap: () => {} };
-  return ctx;
+  const context = useContext(NeatenSettingsContext);
+  return context ?? DEFAULTS;
 }
 

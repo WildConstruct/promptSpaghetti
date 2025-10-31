@@ -6,14 +6,24 @@
  * into the existing graph editor components.
  */
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   useCachedData,
   useWorkerTask,
-  useRenderPerformance,
-  usePerformance
+  useRenderPerformance
 } from '../../hooks/usePerformance';
 import { Node, Edge } from 'reactflow';
+import { PerformanceMonitor } from './PerformanceMonitor';
+
+/**
+ * Bounds interface for group calculations
+ */
+interface Bounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 
 /**
  * Example: Optimized Edge Routing Component
@@ -27,7 +37,7 @@ export const OptimizedEdgeRouting: React.FC<{
   const { measure } = useRenderPerformance('EdgeRouting');
 
   // Use worker for complex edge calculations
-  const { result, execute } = useWorkerTask<Edge[]>(
+  const { execute } = useWorkerTask<Edge[]>(
     edges.length > 50
       ? {
           type: 'OPTIMIZE_EDGE_ROUTING',
@@ -51,7 +61,7 @@ export const OptimizedEdgeRouting: React.FC<{
         onEdgesCalculated(edges);
       });
     }
-  }, [edges, nodes]);
+  }, [edges, nodes, execute, onEdgesCalculated, measure]);
 
   return null; // This is a logic component
 };
@@ -63,7 +73,7 @@ export const CachedGroupBounds: React.FC<{
   groupId: string;
   nodeIds: string[];
   nodes: Node[];
-  onBoundsCalculated: (bounds: any) => void;
+  onBoundsCalculated: (bounds: Bounds) => void;
 }> = ({ groupId, nodeIds, nodes, onBoundsCalculated }) => {
   const cacheKey = `group:bounds:${groupId}:${nodeIds.join(',')}`;
 
@@ -109,50 +119,6 @@ export const CachedGroupBounds: React.FC<{
  * Example: Performance-Optimized Graph Editor Integration
  */
 export const PerformanceOptimizedGraphEditor: React.FC = () => {
-  const { cache, workerPool, perfMonitor } = usePerformance();
-  const { startMeasure, endMeasure } = useRenderPerformance('GraphEditor');
-
-  // Example: Optimized node update with caching
-  const updateNodePosition = useCallback(
-    async (nodeId: string, position: { x: number; y: number }) => {
-      startMeasure('node-update');
-
-      // Cache the position for quick retrieval
-      await cache?.set(`node:position:${nodeId}`, position, { ttl: 30000 });
-
-      // Record performance metric
-      const duration = endMeasure('node-update');
-
-      if (duration > 50) {
-        console.warn(`Slow node update: ${duration}ms`);
-      }
-    },
-    [cache, startMeasure, endMeasure]
-  );
-
-  // Example: Batch operations with worker pool
-  const batchUpdateNodes = useCallback(
-    async (
-      updates: Array<{ id: string; position: { x: number; y: number } }>
-    ) => {
-      if (updates.length > 20 && workerPool) {
-        // Use worker for large batches
-        const result = await workerPool.execute({
-          type: 'BATCH_UPDATE_NODES',
-          data: updates,
-          priority: 1 // High priority
-        });
-
-        perfMonitor?.record('batch:update', updates.length);
-        return result;
-      } else {
-        // Direct update for small batches
-        return updates;
-      }
-    },
-    [workerPool, perfMonitor]
-  );
-
   return (
     <div>
       {/* Your graph editor components here */}
@@ -202,7 +168,7 @@ export const PerformanceOptimizedGraphEditor: React.FC = () => {
 /**
  * Example: Performance thresholds configuration
  */
-export const setupPerformanceThresholds = (perfMonitor: any) => {
+export const setupPerformanceThresholds = (perfMonitor: PerformanceMonitor) => {
   // Set warning thresholds
   perfMonitor?.setThreshold({
     metric: 'render',

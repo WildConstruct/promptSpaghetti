@@ -7,6 +7,38 @@
  * Task: E18-1753114562159-0BC5A0
  */
 
+interface TestDataUser {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface TestDataSession {
+  userId: string;
+  id: string;
+}
+
+interface GraphScenario {
+  id: string;
+  name: string;
+}
+
+type GraphComplexityLevel =
+  | 'simple'
+  | 'validation'
+  | 'performance'
+  | 'security'
+  | 'edge-case';
+
+interface TestData {
+  metadata?: {
+    generatedAt?: string;
+  };
+  users: TestDataUser[];
+  sessions: TestDataSession[];
+  graphScenarios: GraphScenario[];
+}
+
 // Core generators
 export {
   default as AdvancedGraphGenerator,
@@ -132,18 +164,19 @@ export class TestDataGeneratorFactory {
     const sessions = suite.authGenerator.generateSessions(users);
     const authScenarios = suite.authGenerator.generateAuthenticationScenarios();
 
-    const graphScenarios = [];
+    const graphScenarios: GraphScenario[] = [];
+    const complexityLevels: GraphComplexityLevel[] = [
+      'simple',
+      'validation',
+      'performance',
+      'security',
+      'edge-case'
+    ];
     for (let i = 0; i < graphCount; i++) {
       graphScenarios.push(
         suite.graphGenerator.generateComplexScenario({
           nodeCount: 5 + i * 2,
-          complexity: [
-            'simple',
-            'validation',
-            'performance',
-            'security',
-            'edge-case'
-          ][i % 5] as any,
+          complexity: complexityLevels[i % complexityLevels.length],
           seed: seed + i,
           includeAdvancedNodes: i > 10
         })
@@ -220,10 +253,10 @@ export class TestDataUtils {
     endDate: Date,
     seed: number = 12345
   ): Date[] {
-    const rng = require('seedrandom')(seed.toString());
+    const rng = seedrandom(seed.toString());
     const timeRange = endDate.getTime() - startDate.getTime();
 
-    return Array.from({ length: count }, (_, i) => {
+    return Array.from({ length: count }, () => {
       const randomOffset = rng() * timeRange;
       return new Date(startDate.getTime() + randomOffset);
     }).sort((a, b) => a.getTime() - b.getTime());
@@ -246,7 +279,7 @@ export class TestDataUtils {
   /**
    * Validate generated test data integrity
    */
-  static validateTestData(data: any): { isValid: boolean; errors: string[] } {
+  static validateTestData(data: TestData): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
     // Check for required fields
@@ -255,25 +288,23 @@ export class TestDataUtils {
     }
 
     // Check data consistency
-    if (data.users && data.sessions) {
-      const userIds = new Set(data.users.map((u: any) => u.id));
-      const sessionUserIds = data.sessions.map((s: any) => s.userId);
-      const orphanedSessions = sessionUserIds.filter(
-        (id: string) => !userIds.has(id)
-      );
+    const userIds = new Set(data.users.map((u: TestDataUser) => u.id));
+    const sessionUserIds = data.sessions.map((s: TestDataSession) => s.userId);
+    const orphanedSessions = sessionUserIds.filter(
+      (id: string) => !userIds.has(id)
+    );
 
-      if (orphanedSessions.length > 0) {
-        errors.push(
-          `Found ${orphanedSessions.length} sessions with invalid user IDs`
-        );
-      }
+    if (orphanedSessions.length > 0) {
+      errors.push(
+        `Found ${orphanedSessions.length} sessions with invalid user IDs`
+      );
     }
 
     // Check graph data integrity
     if (data.graphScenarios) {
-      data.graphScenarios.forEach((scenario: any, index: number) => {
-        if (!scenario.graph?.nodes || !scenario.graph?.edges) {
-          errors.push(`Graph scenario ${index} missing nodes or edges`);
+      data.graphScenarios.forEach((scenario: GraphScenario, index: number) => {
+        if (!scenario.id || !scenario.name) {
+          errors.push(`Graph scenario ${index} missing required fields`);
         }
       });
     }

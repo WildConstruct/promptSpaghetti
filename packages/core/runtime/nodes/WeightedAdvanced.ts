@@ -4,13 +4,13 @@ import { AdvancedRuntimeNode,
   AdvancedExecutionContext, 
   AdvancedNodeConfig,
   AdvancedNodeData,
-  ValidationResult }
+  ValidationResult,
   ValidationHelpers 
- from '../advanced';
+} from '../advanced';
 import { AdvancedIOHandler,
-  IOSpecBuilder }
+  IOSpecBuilder,
   TypedInputs 
- from '../io-system';
+} from '../io-system';
 /**
  * Weight distribution types for advanced weighted selection
  */

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Analytics event types for comprehensive tracking
  */
-export var AnalyticsEventType;
+export const AnalyticsEventType;
 (function (AnalyticsEventType) {
   // Execution events
   AnalyticsEventType['GRAPH_EXECUTION_START'] = 'graph_execution_start';
@@ -59,7 +59,7 @@ export class AnalyticsCollector extends EventEmitter {
    * Start analytics collection
    */
   startCollection() {
-    if (!this.config.enabled) return;
+    if (!this.config.enabled) {return;}
     console.log('Starting analytics collection');
     // Record session start
     this.recordEvent({
@@ -86,7 +86,7 @@ export class AnalyticsCollector extends EventEmitter {
    * Stop analytics collection
    */
   stopCollection() {
-    if (!this.config.enabled) return;
+    if (!this.config.enabled) {return;}
     console.log('Stopping analytics collection');
     // Record session end
     this.recordEvent({
@@ -263,7 +263,7 @@ export class AnalyticsCollector extends EventEmitter {
       // Count events by type
       eventsByType.set(event.type, (eventsByType.get(event.type) || 0) + 1);
       // Track unique users and sessions
-      if (event.userId) uniqueUsers.add(event.userId);
+      if (event.userId) {uniqueUsers.add(event.userId);}
       uniqueSessions.add(event.sessionId);
       // Calculate metrics
       if (event.type === AnalyticsEventType.GRAPH_EXECUTION_COMPLETE) {
@@ -318,7 +318,7 @@ export class AnalyticsCollector extends EventEmitter {
    * Record an analytics event
    */
   recordEvent(event) {
-    if (!this.config.enabled) return;
+    if (!this.config.enabled) {return;}
     // Apply sampling for non-critical events
     if (!this.isCriticalEvent(event.type) && Math.random() > this.config.sampleRate) {
       return;
@@ -362,7 +362,8 @@ export class AnalyticsCollector extends EventEmitter {
     }
     // Remove sensitive metadata
     if (anonymized.metadata) {
-      const { userAgent, ...cleanMetadata } = anonymized.metadata;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { userAgent: _userAgent, ...cleanMetadata } = anonymized.metadata;
       anonymized.metadata = cleanMetadata;
     }
     return anonymized;
@@ -383,7 +384,7 @@ export class AnalyticsCollector extends EventEmitter {
    * Flush events to persistent storage
    */
   flushEvents() {
-    if (this.events.length === 0) return;
+    if (this.events.length === 0) {return;}
     const eventsToFlush = [...this.events];
     this.events = [];
     // Emit flush event for storage handlers

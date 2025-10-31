@@ -8,7 +8,7 @@ export interface Preset {
   category: string;
   tags: string[];
   nodeType: string;
-  value: any;
+  value: unknown;
   metadata: {
     author?: string;
     created: Date;
@@ -16,6 +16,9 @@ export interface Preset {
     usage: number;
     description?: string;
     rating?: number; // 1-5 star rating
+    options?: number;
+    combinations?: unknown;
+    file?: string;
   };
 }
 

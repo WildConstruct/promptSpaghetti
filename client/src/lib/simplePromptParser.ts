@@ -16,6 +16,7 @@ export interface GeneratedNodeInternal {
   // optional variable metadata used when nodeType === 'Variable'
   variableName?: string;
   getPreviewText?: () => string;
+  data?: Record<string, unknown>;
 }
 
 export interface GeneratedNode {
@@ -33,8 +34,8 @@ export interface PromptAnalysis {
   segments: PromptSegment[];
   nodes: GeneratedNode[];
   mappings: NodeMapping[];
-  edges?: any[]; // Optional edges from LLM response
-  llmMetadata?: any; // Optional metadata from LLM response
+  edges?: unknown[]; // Optional edges from LLM response
+  llmMetadata?: Record<string, unknown>; // Optional metadata from LLM response
   rawPrompt?: string; // Optional original prompt text
 }
 
@@ -211,7 +212,7 @@ export const simplePromptParser = {
         };
 
         // Store the options in the node's data for proper WeightedChoice creation
-        (node as any).data = {
+        node.data = {
           options: alts.map(alt => ({ text: alt, weight: 1 }))
         };
 

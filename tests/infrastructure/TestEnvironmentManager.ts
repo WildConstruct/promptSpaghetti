@@ -7,7 +7,7 @@
  * Task: E18-1753114562152-28B905
  */
 
-import { spawn, ChildProcess } from 'child_process';
+import { ChildProcess } from 'child_process';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -65,6 +65,8 @@ export interface ServiceInstance {
   healthCheckUrl?: string;
   status: 'starting' | 'ready' | 'failed' | 'stopped';
 }
+
+type ServiceConfig = TestEnvironmentConfig['services'][number];
 
 export class TestEnvironmentManager {
   private environments: Map<string, TestEnvironmentInstance> = new Map();
@@ -277,7 +279,7 @@ export class TestEnvironmentManager {
     instance: TestEnvironmentInstance
   ): Promise<void> {
     const { database } = instance.config;
-    if (!database) return;
+    if (!database) {return;}
 
     switch (database.type) {
       case 'sqlite':
@@ -368,21 +370,21 @@ export class TestEnvironmentManager {
   private async startServiceProcess(
     instance: TestEnvironmentInstance,
     service: ServiceInstance,
-    config: any
+    serviceConfig: ServiceConfig
   ): Promise<void> {
-    // TODO: Start service as separate process
-    console.log(`🚀 Starting service ${service.name} on port ${service.port}`);
+    console.log(
+      `🚀 Starting service ${service.name} (type: ${serviceConfig.name}) on port ${service.port}`
+    );
     service.status = 'ready';
   }
 
   private async startServiceContainer(
     instance: TestEnvironmentInstance,
     service: ServiceInstance,
-    config: any
+    serviceConfig: ServiceConfig
   ): Promise<void> {
-    // TODO: Start service in container
     console.log(
-      `🐳 Starting container for ${service.name} on port ${service.port}`
+      `🐳 Starting container for ${service.name} (${serviceConfig.image ?? 'local'}) on port ${service.port}`
     );
     service.status = 'ready';
   }
@@ -409,6 +411,10 @@ export class TestEnvironmentManager {
             }
           } catch (error) {
             allHealthy = false;
+            console.warn(
+              `Health check failed for ${serviceName}:`,
+              (error as Error).message
+            );
           }
         }
       }

@@ -36,7 +36,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   useEffect(() => {
     const timers: NodeJS.Timeout[] = [];
 
-    notifications.forEach((notification) => {
+    notifications.forEach(notification => {
       if (notification.duration && notification.duration > 0) {
         const timer = setTimeout(() => {
           dismissNotification(notification.id);
@@ -48,7 +48,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     return () => {
       timers.forEach(clearTimeout);
     };
-  }, [notifications]);
+  }, [notifications, dismissNotification]);
 
   const showNotification = useCallback(
     (type: NotificationType, message: string, duration?: number) => {

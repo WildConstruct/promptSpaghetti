@@ -33,8 +33,12 @@ export default defineConfig({
       external: [],
       onwarn(warning, warn) {
         if (BUILD_SAFE) {
-          if (warning.code === 'CIRCULAR_DEPENDENCY') return;
-          if (warning.code === 'EVAL') return;
+          if (warning.code === 'CIRCULAR_DEPENDENCY') {
+            return;
+          }
+          if (warning.code === 'EVAL') {
+            return;
+          }
         }
         // Suppress warnings about unresolved dynamic imports for asset-browser
         if (

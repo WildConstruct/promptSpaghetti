@@ -3,6 +3,7 @@
  */
 
 import React, { useState, FormEvent } from 'react';
+import type { User } from '@supabase/supabase-js';
 import {
   useEmailValidation,
   usePasswordValidation,
@@ -14,7 +15,7 @@ import { PasswordStrengthIndicator } from '../shared/PasswordStrengthIndicator';
 import { supabase } from '../../utils/supabaseClient';
 
 interface SignupFormProps {
-  onSuccess: (user: any) => void;
+  onSuccess: (user: User) => void;
 }
 
 export function SignupForm({ onSuccess }: SignupFormProps) {
@@ -62,7 +63,9 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         throw error;
       }
 
-      if (!data.user) {
+      const user = data.user;
+
+      if (!user) {
         throw new Error('Signup failed - no user returned');
       }
 
@@ -71,7 +74,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
       // Note: Supabase may require email confirmation
       // The user object will be returned but session might not be active until confirmed
       setTimeout(() => {
-        onSuccess(data.user);
+        onSuccess(user);
       }, 1500);
     } catch (err) {
       setError(getAuthErrorMessage(err));
@@ -284,7 +287,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           lineHeight: '1.5'
         }}
       >
-        By signing up, you'll get access to save your graphs, collaborate with
+        By signing up, you&apos;ll get access to save your graphs, collaborate with
         others, and use advanced features.
       </p>
     </form>

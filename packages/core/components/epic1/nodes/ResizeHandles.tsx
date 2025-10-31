@@ -37,17 +37,17 @@ export const ResizeHandles: React.FC<FragmentResizeHandlesProps> = ({
  onResizeStart?.();
 
  const onMove = (ev: MouseEvent) => {
- if (!startRef.current) return;
+ if (!startRef.current) {return;}
  const dx = ev.clientX - startRef.current.x;
  const dy = ev.clientY - startRef.current.y;
 
  let newW = startRef.current.w;
  let newH = startRef.current.h;
 
- if (direction.includes('e')) newW = Math.max(minWidth, startRef.current.w + dx);
- if (direction.includes('w')) newW = Math.max(minWidth, startRef.current.w - dx);
- if (direction.includes('s')) newH = Math.max(minHeight, startRef.current.h + dy);
- if (direction.includes('n')) newH = Math.max(minHeight, startRef.current.h - dy);
+ if (direction.includes('e')) {newW = Math.max(minWidth, startRef.current.w + dx);}
+ if (direction.includes('w')) {newW = Math.max(minWidth, startRef.current.w - dx);}
+ if (direction.includes('s')) {newH = Math.max(minHeight, startRef.current.h + dy);}
+ if (direction.includes('n')) {newH = Math.max(minHeight, startRef.current.h - dy);}
 
  onResize({ width: newW, height: newH });
  };

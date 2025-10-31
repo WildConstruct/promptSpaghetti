@@ -2,6 +2,11 @@
 // Conditional import for Node.js environment
 import 'openai/shims/node';
 import OpenAI from 'openai';
+import type {
+  ChatCompletion,
+  ChatCompletionCreateParamsNonStreaming,
+  ChatCompletionMessageParam
+} from 'openai/resources/chat/completions';
 import {
   LLMRequest,
   LLMResponse,
@@ -213,8 +218,9 @@ export class LLMService {
         cost,
         cached: false
       };
-    } catch (error: any) {
+    } catch (error) {
       const latencyMs = Date.now() - startTime;
+      const normalizedError = this.normalizeError(error);
 
       // Log error metrics
       this.logMetrics({
@@ -227,10 +233,10 @@ export class LLMService {
         success: false,
         userId: this.userId,
         consentVerified: true,
-        error: error.message
+        error: normalizedError.message
       });
 
-      throw error;
+      throw normalizedError;
     }
   }
 
@@ -239,40 +245,49 @@ export class LLMService {
     maxRetries: number = 3,
     timeout: number = 3000
   ): Promise<T> {
-    let lastError: Error | null = null;
+    let lastError: unknown = null;
 
     for (let attempt = 0; attempt < maxRetries; attempt++) {
+      let timeoutId: NodeJS.Timeout | undefined;
       try {
-        // Create promise with timeout
         const timeoutPromise = new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new Error('Request timeout')), timeout);
+          timeoutId = setTimeout(
+            () => reject(new Error('Request timeout')),
+            timeout
+          );
         });
 
-        // Race between actual call and timeout
         const result = await Promise.race([fn(), timeoutPromise]);
-        return result;
-      } catch (error: any) {
-        lastError = error;
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        return result as T;
+      } catch (error) {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
 
-        // Check if it's a rate limit error
-        if (error.status === 429 || error.message?.includes('rate')) {
-          // Exponential backoff: 1s, 2s, 4s
+        lastError = error;
+        const status = this.extractStatusCode(error);
+        const message = this.getErrorMessage(error);
+
+        if (status === 429 || message.toLowerCase().includes('rate')) {
           const backoffMs = Math.pow(2, attempt) * 1000;
           console.log(`Rate limited, retrying in ${backoffMs}ms...`);
           await new Promise(resolve => setTimeout(resolve, backoffMs));
-        } else if (error.message === 'Request timeout') {
+        } else if (message === 'Request timeout') {
           console.log(
             `Request timed out after ${timeout}ms, attempt ${attempt + 1}/${maxRetries}`
           );
-          // Don't wait for timeout errors, try immediately
         } else {
-          // For other errors, don't retry
-          throw error;
+          throw this.normalizeError(error);
         }
       }
     }
 
-    throw lastError || new Error('Max retries exceeded');
+    throw this.normalizeError(
+      lastError ?? new Error('Max retries exceeded')
+    );
   }
 
   private async createCompletion(
@@ -281,8 +296,12 @@ export class LLMService {
     maxTokens: number,
     temperature?: number,
     jsonMode?: boolean
-  ): Promise<any> {
-    const messages = [
+  ): Promise<ChatCompletion> {
+    if (!this.client) {
+      throw new Error('LLM client not initialized - no API key configured');
+    }
+
+    const messages: ChatCompletionMessageParam[] = [
       {
         role: 'system' as const,
         content: jsonMode
@@ -295,11 +314,11 @@ export class LLMService {
       }
     ];
 
-    const completionParams: any = {
+    const completionParams: ChatCompletionCreateParamsNonStreaming = {
       model,
       messages,
       max_tokens: maxTokens,
-      temperature: temperature || 0.7
+      temperature: temperature ?? 0.7
     };
 
     // Add response format for JSON mode if supported
@@ -307,7 +326,7 @@ export class LLMService {
       completionParams.response_format = { type: 'json_object' };
     }
 
-    return await this.client!.chat.completions.create(completionParams);
+    return this.client.chat.completions.create(completionParams);
   }
 
   private compressPrompt(prompt: string, context?: string): string {
@@ -336,9 +355,8 @@ export class LLMService {
 
   private validateJsonResponse(content: string, taskType?: string): void {
     try {
-      const parsed = JSON.parse(content);
+      const parsed: unknown = JSON.parse(content);
 
-      // Validate based on task type
       switch (taskType) {
         case 'suggestion':
           this.validateSuggestionResponse(parsed);
@@ -351,47 +369,139 @@ export class LLMService {
           break;
       }
     } catch (error) {
-      throw new Error(`Invalid JSON response: ${error}`);
+      throw new Error(
+        `Invalid JSON response: ${this.getErrorMessage(error)}`
+      );
     }
   }
 
-  private validateSuggestionResponse(data: any): void {
-    if (!Array.isArray(data.choices)) {
-      throw new Error('Suggestion response must have choices array');
+  private validateSuggestionResponse(data: unknown): void {
+    if (!this.isRecord(data)) {
+      throw new Error('Suggestion response must be an object');
     }
 
-    for (const choice of data.choices) {
-      if (
-        typeof choice.text !== 'string' ||
-        typeof choice.weight !== 'number'
-      ) {
-        throw new Error('Each choice must have text and weight');
+    const choices = data.choices;
+    if (!Array.isArray(choices) || choices.length === 0) {
+      throw new Error('Suggestion response must include choices array');
+    }
+
+    for (const choice of choices) {
+      if (!this.isSuggestionChoice(choice)) {
+        throw new Error('Each suggestion choice must include text and weight');
       }
     }
   }
 
-  private validateMetadataResponse(data: any): void {
-    if (
-      !Array.isArray(data.tags) ||
-      typeof data.subject !== 'string' ||
-      typeof data.intensity !== 'number'
-    ) {
-      throw new Error(
-        'Metadata response must have tags, subject, and intensity'
-      );
+  private validateMetadataResponse(data: unknown): void {
+    if (!this.isRecord(data)) {
+      throw new Error('Metadata response must be an object');
+    }
+
+    if (!this.isStringArray(data.tags)) {
+      throw new Error('Metadata tags must be an array of strings');
+    }
+
+    if (typeof data.subject !== 'string') {
+      throw new Error('Metadata subject must be a string');
+    }
+
+    if (typeof data.intensity !== 'number') {
+      throw new Error('Metadata intensity must be a number');
     }
   }
 
-  private validateRefinementResponse(data: any): void {
+  private validateRefinementResponse(data: unknown): void {
+    if (!this.isRecord(data)) {
+      throw new Error('Refinement response must be an object');
+    }
+
     if (
       typeof data.original !== 'string' ||
-      typeof data.refined !== 'string' ||
-      !Array.isArray(data.changes)
+      typeof data.refined !== 'string'
     ) {
       throw new Error(
-        'Refinement response must have original, refined, and changes'
+        'Refinement response must include original and refined text'
       );
     }
+
+    if (!this.isStringArray(data.changes)) {
+      throw new Error('Refinement changes must be an array of strings');
+    }
+  }
+
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+    if (typeof error === 'string') {
+      return error;
+    }
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'message' in error &&
+      typeof (error as { message?: unknown }).message === 'string'
+    ) {
+      return (error as { message: string }).message;
+    }
+    return '';
+  }
+
+  private extractStatusCode(error: unknown): number | null {
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'status' in error &&
+      typeof (error as { status?: unknown }).status === 'number'
+    ) {
+      return (error as { status: number }).status;
+    }
+
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'response' in error
+    ) {
+      const response = (error as { response?: unknown }).response;
+      if (
+        typeof response === 'object' &&
+        response !== null &&
+        'status' in response &&
+        typeof (response as { status?: unknown }).status === 'number'
+      ) {
+        return (response as { status: number }).status;
+      }
+    }
+
+    return null;
+  }
+
+  private normalizeError(error: unknown): Error {
+    if (error instanceof Error) {
+      return error;
+    }
+
+    const message = this.getErrorMessage(error) || 'Unknown error';
+    return new Error(message);
+  }
+
+  private isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
+  }
+
+  private isStringArray(value: unknown): value is string[] {
+    return Array.isArray(value) && value.every(item => typeof item === 'string');
+  }
+
+  private isSuggestionChoice(
+    value: unknown
+  ): value is SuggestionResponse['choices'][number] {
+    if (!this.isRecord(value)) {
+      return false;
+    }
+
+    const { text, weight } = value;
+    return typeof text === 'string' && typeof weight === 'number';
   }
 
   private logMetrics(metrics: LLMMetrics): void {

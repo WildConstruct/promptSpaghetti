@@ -5,7 +5,7 @@ export interface Metric {
   duration: number;
   timestamp: number;
   operation?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface PerformanceReport {
@@ -51,12 +51,18 @@ export class PerformanceMonitor {
   }
 
   // Track a metric
-  track(operation: string, duration: number, metadata?: any): void {
-    if (!this.metrics.has(operation)) {
-      this.metrics.set(operation, []);
+  track(
+    operation: string,
+    duration: number,
+    metadata?: Record<string, unknown>
+  ): void {
+    let operationMetrics = this.metrics.get(operation);
+    if (!operationMetrics) {
+      operationMetrics = [];
+      this.metrics.set(operation, operationMetrics);
     }
 
-    this.metrics.get(operation)!.push({
+    operationMetrics.push({
       duration,
       timestamp: Date.now(),
       operation,
@@ -84,7 +90,9 @@ export class PerformanceMonitor {
 
   // Calculate percentile
   private calculatePercentile(values: number[], percentile: number): number {
-    if (values.length === 0) return 0;
+    if (values.length === 0) {
+      return 0;
+    }
 
     const sorted = [...values].sort((a, b) => a - b);
     const index = Math.ceil((percentile / 100) * sorted.length) - 1;
@@ -113,7 +121,9 @@ export class PerformanceMonitor {
   // Calculate cache hit rate
   calculateCacheRate(): number {
     const total = this.cacheHits + this.cacheMisses;
-    if (total === 0) return 0;
+    if (total === 0) {
+      return 0;
+    }
     return this.cacheHits / total;
   }
 
@@ -124,7 +134,9 @@ export class PerformanceMonitor {
       0
     );
 
-    if (totalOps === 0) return 0;
+    if (totalOps === 0) {
+      return 0;
+    }
     return this.totalCost / totalOps;
   }
 

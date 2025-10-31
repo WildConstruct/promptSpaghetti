@@ -16,7 +16,9 @@ describe('psgStorage helpers', () => {
 
     const list = await listUserGraphs('user1');
     expect(list.ok).toBe(false);
-    if (!list.ok) expect(list.error.message).toMatch(/not configured/i);
+    if (!list.ok) {
+      expect(list.error.message).toMatch(/not configured/i);
+    }
 
     const get = await getUserGraph('user1', 'a.psg');
     expect(get.ok).toBe(false);
@@ -73,7 +75,9 @@ describe('psgStorage helpers', () => {
     expect(fromMock).toHaveBeenCalledWith('graphs');
     expect(downloadMock).toHaveBeenCalledWith('users/me/graphs/graph.psg');
     expect(res.ok).toBe(true);
-    if (res.ok) expect(JSON.parse(res.data)).toEqual({ x: 1 });
+    if (res.ok) {
+      expect(JSON.parse(res.data)).toEqual({ x: 1 });
+    }
   });
 
   test('putUserGraph uploads with application/json and upsert true', async () => {
@@ -105,6 +109,8 @@ describe('psgStorage helpers', () => {
     expect(sentBlob.size).toBe(expectedSize);
 
     expect(res.ok).toBe(true);
-    if (res.ok) expect(res.data.path).toBe('users/u7/graphs/n.psg');
+    if (res.ok) {
+      expect(res.data.path).toBe('users/u7/graphs/n.psg');
+    }
   });
 });

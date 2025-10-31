@@ -17,7 +17,6 @@ import {
   APIDataGenerator,
   PerformanceDataGenerator
 } from './TestDataGenerators';
-import { TestFixture } from './TestFixtures';
 
 export interface PerformanceScenario {
   id: string;
@@ -28,6 +27,24 @@ export interface PerformanceScenario {
   execute: () => Promise<PerformanceResult>;
   cleanup?: () => Promise<void>;
   expectedThresholds: PerformanceThresholds;
+}
+
+export interface PerformanceResultSummary {
+  totalScenarios: number;
+  successfulScenarios: number;
+  averageExecutionTime: number;
+  averageMemoryUsage: number;
+  averageThroughput: number;
+  averageLatency: number;
+  results: PerformanceResult[];
+}
+
+export interface LatencyMetrics {
+  min: number;
+  max: number;
+  average: number;
+  p95: number;
+  p99: number;
 }
 
 export enum PerformanceCategory {
@@ -62,7 +79,7 @@ export interface PerformanceResult {
     network: number;
     disk: number;
   };
-  customMetrics?: Record<string, any>;
+  customMetrics?: Record<string, unknown>;
 }
 
 export interface PerformanceThresholds {
@@ -108,7 +125,9 @@ export class PerformanceScenarios {
       name: 'Small Graph Execution Performance',
       description: 'Test execution performance with small graphs (10-50 nodes)',
       category: PerformanceCategory.GRAPH_EXECUTION,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeSmallGraphScenario(),
       expectedThresholds: {
         maxExecutionTime: 1000,
@@ -125,7 +144,9 @@ export class PerformanceScenarios {
       description:
         'Test execution performance with medium graphs (50-200 nodes)',
       category: PerformanceCategory.GRAPH_EXECUTION,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeMediumGraphScenario(),
       expectedThresholds: {
         maxExecutionTime: 5000,
@@ -142,7 +163,9 @@ export class PerformanceScenarios {
       description:
         'Test execution performance with large graphs (200-1000 nodes)',
       category: PerformanceCategory.GRAPH_EXECUTION,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeLargeGraphScenario(),
       expectedThresholds: {
         maxExecutionTime: 15000,
@@ -160,7 +183,9 @@ export class PerformanceScenarios {
       description:
         'Test initial rendering performance for graphs of varying sizes',
       category: PerformanceCategory.FRONTEND_RENDERING,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeInitialRenderScenario(),
       expectedThresholds: {
         maxExecutionTime: 2000,
@@ -177,7 +202,9 @@ export class PerformanceScenarios {
       description:
         'Test performance during continuous graph updates and re-renders',
       category: PerformanceCategory.FRONTEND_RENDERING,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeRealTimeUpdatesScenario(),
       expectedThresholds: {
         maxExecutionTime: 100, // Per update
@@ -194,7 +221,9 @@ export class PerformanceScenarios {
       name: 'Concurrent API Request Performance',
       description: 'Test API performance under concurrent load',
       category: PerformanceCategory.API_PERFORMANCE,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeConcurrentAPIScenario(),
       expectedThresholds: {
         maxExecutionTime: 5000,
@@ -210,7 +239,9 @@ export class PerformanceScenarios {
       name: 'Graph API Operations Performance',
       description: 'Test CRUD operations performance for graphs',
       category: PerformanceCategory.API_PERFORMANCE,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeGraphAPIOperationsScenario(),
       expectedThresholds: {
         maxExecutionTime: 3000,
@@ -227,7 +258,9 @@ export class PerformanceScenarios {
       name: 'Graph Lifecycle Memory Usage',
       description: 'Test memory usage throughout complete graph lifecycle',
       category: PerformanceCategory.MEMORY_USAGE,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeGraphLifecycleMemoryScenario(),
       expectedThresholds: {
         maxExecutionTime: 10000,
@@ -243,7 +276,9 @@ export class PerformanceScenarios {
       name: 'Garbage Collection Performance',
       description: 'Test garbage collection efficiency under various loads',
       category: PerformanceCategory.MEMORY_USAGE,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeGarbageCollectionScenario(),
       expectedThresholds: {
         maxExecutionTime: 8000,
@@ -260,7 +295,9 @@ export class PerformanceScenarios {
       name: 'User Graph Creation Workflow',
       description: 'Simulate complete user workflow from creation to execution',
       category: PerformanceCategory.USER_WORKFLOW,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeUserCreationWorkflowScenario(),
       expectedThresholds: {
         maxExecutionTime: 20000,
@@ -276,7 +313,9 @@ export class PerformanceScenarios {
       name: 'Collaborative Editing Performance',
       description: 'Test performance during multi-user collaborative editing',
       category: PerformanceCategory.USER_WORKFLOW,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeCollaborativeWorkflowScenario(),
       expectedThresholds: {
         maxExecutionTime: 15000,
@@ -293,7 +332,9 @@ export class PerformanceScenarios {
       name: 'Extreme Load Stress Test',
       description: 'Test system behavior under extreme load conditions',
       category: PerformanceCategory.STRESS_TESTING,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeExtremeLoadScenario(),
       expectedThresholds: {
         maxExecutionTime: 60000,
@@ -309,7 +350,9 @@ export class PerformanceScenarios {
       name: 'Memory Pressure Stress Test',
       description: 'Test system behavior under memory pressure',
       category: PerformanceCategory.STRESS_TESTING,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeMemoryPressureScenario(),
       expectedThresholds: {
         maxExecutionTime: 30000,
@@ -326,7 +369,9 @@ export class PerformanceScenarios {
       name: 'User Growth Scalability Test',
       description: 'Test scalability as user count increases',
       category: PerformanceCategory.SCALABILITY,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeUserGrowthScalabilityScenario(),
       expectedThresholds: {
         maxExecutionTime: 45000,
@@ -342,7 +387,9 @@ export class PerformanceScenarios {
       name: 'Data Growth Scalability Test',
       description: 'Test scalability as data volume increases',
       category: PerformanceCategory.SCALABILITY,
-      setup: async () => {},
+      setup: async () => {
+        // No setup required for this scenario
+      },
       execute: async () => this.executeDataGrowthScalabilityScenario(),
       expectedThresholds: {
         maxExecutionTime: 40000,
@@ -444,8 +491,8 @@ export class PerformanceScenarios {
   /**
    * Get performance results summary
    */
-  getResultsSummary(): any {
-    if (this.results.length === 0) return null;
+  getResultsSummary(): PerformanceResultSummary {
+    if (this.results.length === 0) {return null;}
 
     const avgExecutionTime =
       this.results.reduce((sum, r) => sum + r.executionTime, 0) /
@@ -577,10 +624,8 @@ export class PerformanceScenarios {
     const startTime = Date.now();
     const startMemory = this.getMemoryUsage();
 
-    let totalNodes = 0;
     for (const scenario of scenarios) {
       await this.simulateRendering(scenario.nodeCount, scenario.complexity);
-      totalNodes += scenario.nodeCount;
     }
 
     const endTime = Date.now();
@@ -825,7 +870,7 @@ export class PerformanceScenarios {
     const startMemory = this.getMemoryUsage();
 
     // Simulate multiple users collaborating
-    const promises = Array.from({ length: userCount }, async (_, i) => {
+    const promises = Array.from({ length: userCount }, async () => {
       await this.simulateUserLogin();
       await this.simulateCollaborativeEditing();
       await this.simulateRealTimeSync();
@@ -856,7 +901,6 @@ export class PerformanceScenarios {
   }
 
   private async executeExtremeLoadScenario(): Promise<PerformanceResult> {
-    const loadFactor = 10; // Extreme load multiplier
     const startTime = Date.now();
     const startMemory = this.getMemoryUsage();
 
@@ -1053,7 +1097,7 @@ export class PerformanceScenarios {
       delete: 100
     };
 
-    const baseDelay = (operationDelays as any)[operation] || 100;
+    const baseDelay = (operationDelays as Record<string, number>)[operation] || 100;
     await new Promise(resolve =>
       setTimeout(resolve, baseDelay + Math.random() * 100)
     );
@@ -1106,7 +1150,7 @@ export class PerformanceScenarios {
     return Math.random() * 50 + 30;
   }
 
-  private generateLatencyMetrics(minLatency: number, maxLatency: number): any {
+  private generateLatencyMetrics(minLatency: number, maxLatency: number): LatencyMetrics {
     const latencies = Array.from(
       { length: 20 },
       () => minLatency + Math.random() * (maxLatency - minLatency)

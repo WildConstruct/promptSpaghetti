@@ -51,7 +51,7 @@ export const NodeInteractionEnhancer: React.FC<NodeInteractionEnhancerProps> = (
 
   // Enhanced hover tracking
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!enableHoverEffects || !nodeRef.current) return;
+    if (!enableHoverEffects || !nodeRef.current) {return;}
 
     const rect = nodeRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -60,7 +60,7 @@ export const NodeInteractionEnhancer: React.FC<NodeInteractionEnhancerProps> = (
     setMousePosition({ x, y });
   }, [enableHoverEffects]);
 
-  const handleMouseEnter = useCallback((e: React.MouseEvent) => {
+  const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
     
     if (enableHoverEffects) {
@@ -131,7 +131,7 @@ export const NodeInteractionEnhancer: React.FC<NodeInteractionEnhancerProps> = (
 
 // Hook for managing node interactions globally
 export function useNodeInteractions() {
-  const { getNodes, addNodes, setNodes } = useReactFlow();
+  const { getNodes, addNodes } = useReactFlow();
   const { trigger } = useMicroInteractions();
 
   const addNodeWithBounce = useCallback((node: Node | string) => {
@@ -196,7 +196,7 @@ export const SelectionFeedback: React.FC = () => {
   const { trigger } = useMicroInteractions();
   
   useOnSelectionChange({
-    onChange: ({ nodes, edges }) => {
+    onChange: ({ nodes }) => {
       if (nodes.length > 0) {
         // Trigger subtle haptic on selection
         triggerHaptic('light');

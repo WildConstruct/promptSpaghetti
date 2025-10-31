@@ -28,7 +28,7 @@ export class GraphPersistence {
   static load(): { nodes: Node<EditableNodeData>[]; edges: Edge[] } | null {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) return null;
+      if (!saved) {return null;}
 
       const data = JSON.parse(saved);
       return { nodes: data.nodes, edges: data.edges };
@@ -59,7 +59,7 @@ export class GraphPersistence {
   } | null {
     try {
       const saved = localStorage.getItem(AUTOSAVE_KEY);
-      if (!saved) return null;
+      if (!saved) {return null;}
 
       const data = JSON.parse(saved);
       return { nodes: data.nodes, edges: data.edges };
@@ -152,7 +152,7 @@ export class GraphPersistence {
     try {
       const historyStr = localStorage.getItem(HISTORY_KEY);
       const history = historyStr ? JSON.parse(historyStr) : [];
-      if (!history.length) return null;
+      if (!history.length) {return null;}
       const last = history.pop();
       localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
       return { nodes: last.nodes, edges: last.edges };

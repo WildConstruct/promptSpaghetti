@@ -26,8 +26,6 @@ export const DelightfulIntegration: React.FC<DelightfulIntegrationProps> = ({
   const [weirdMode, setWeirdMode] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
   const [expertMode, setExpertMode] = useState(false);
-  const [precisionMode, setPrecisionMode] = useState(false);
-  const [achievementUnlocked, setAchievementUnlocked] = useState<string | null>(null);
 
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
@@ -41,15 +39,13 @@ export const DelightfulIntegration: React.FC<DelightfulIntegrationProps> = ({
   const unlockAchievement = useCallback((achievementId: string, title: string, description: string) => {
     // Check if already unlocked
     const unlocked = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
-    if (unlocked.includes(achievementId)) return;
+    if (unlocked.includes(achievementId)) {return;}
 
     // Save achievement
     unlocked.push(achievementId);
     localStorage.setItem('unlockedAchievements', JSON.stringify(unlocked));
 
     // Show notification
-    setAchievementUnlocked(title);
-    
     // Create achievement toast
     const toast = document.createElement('div');
     toast.className = 'achievement-toast';
@@ -155,7 +151,7 @@ export const DelightfulIntegration: React.FC<DelightfulIntegrationProps> = ({
 
   // Expert mode features
   const ExpertModeIndicator = () => {
-    if (!expertMode) return null;
+    if (!expertMode) {return null;}
 
     return (
       <div className="expert-mode-panel" style={{

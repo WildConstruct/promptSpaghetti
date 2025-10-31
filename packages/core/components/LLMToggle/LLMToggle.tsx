@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { getLLMService } from '../../services/SimpleLLMService';
 
 export interface LLMToggleProps {
@@ -163,12 +163,12 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
   const [showTooltip, setShowTooltip] = useState(false);
   const [estimatedCost, setEstimatedCost] = useState<number>(0);
 
-  const llmService = getLLMService();
+  const llmService = useMemo(() => getLLMService(), []);
 
   useEffect(() => {
     // Check if LLM service is available
     setIsEnabled(llmService.isEnabled());
-  }, []);
+  }, [llmService]);
 
   const handleToggle = useCallback(() => {
     const newMode = mode === 'standard' ? 'llm-enhanced' : 'standard';

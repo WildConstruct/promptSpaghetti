@@ -106,12 +106,12 @@ for (let i = 0; i < lines.length; i++) {
     
     // Count only if not in string
     if (!inString) {
-      if (char === '{') braceCount++;
-      if (char === '}') braceCount--;
-      if (char === '(') parenCount++;
-      if (char === ')') parenCount--;
-      if (char === '[') bracketCount++;
-      if (char === ']') bracketCount--;
+      if (char === '{') {braceCount++;}
+      if (char === '}') {braceCount--;}
+      if (char === '(') {parenCount++;}
+      if (char === ')') {parenCount--;}
+      if (char === '[') {bracketCount++;}
+      if (char === ']') {bracketCount--;}
     }
   }
 }

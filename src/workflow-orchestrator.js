@@ -22,7 +22,6 @@
  */
 
 const fs = require('fs');
-const path = require('path');
 const { execSync, spawn } = require('child_process');
 const { getLogger } = require('./utils/AutomationLogger');
 const { StateLock } = require('./utils/StateLock');
@@ -433,13 +432,13 @@ class WorkflowOrchestrator {
         performance: this.workflowState.performance,
         errors: this.workflowState.errors
       };
-    } catch (error) {
-      logger.handleError(error, { workflow: workflowName });
+    } catch {
+      logger.handleError(new Error('Workflow execution failed'), { workflow: workflowName });
 
-      console.log(`\n❌ Workflow '${workflow.name}' failed: ${error.message}`);
-      this.handleWorkflowFailure(workflow, error);
+      console.log(`\n❌ Workflow '${workflow.name}' failed`);
+      this.handleWorkflowFailure(workflow, new Error('Workflow execution failed'));
 
-      throw error;
+      throw new Error('Workflow execution failed');
     }
   }
 
@@ -520,26 +519,26 @@ class WorkflowOrchestrator {
 
         // Update system state after successful step
         systemState = await this.getSystemState();
-      } catch (error) {
+      } catch {
         this.workflowState.errors.push({
           step: step.id,
-          error: error.message,
+          error: 'Step execution failed',
           timestamp: new Date()
         });
 
         if (!this.options.continueOnError && !step.continueOnError) {
           console.log(`❌ Workflow stopped due to error in step: ${step.name}`);
-          throw error;
+          throw new Error('Step execution failed');
         }
 
         console.log(
-          `⚠️  Step failed but continuing: ${step.name} - ${error.message}`
+          `⚠️  Step failed but continuing: ${step.name}`
         );
         results.push({
           stepId: step.id,
           name: step.name,
           success: false,
-          error: error.message,
+          error: 'Step execution failed',
           duration: 0
         });
       }
@@ -597,9 +596,9 @@ class WorkflowOrchestrator {
 
       this.workflowState.steps.push(stepResult);
       return stepResult;
-    } catch (error) {
+    } catch {
       const duration = Date.now() - startTime;
-      console.log(`   ❌ Failed after ${duration}ms: ${error.message}`);
+      console.log(`   ❌ Failed after ${duration}ms`);
 
       // Retry logic
       if (step.retries && step.retries > 0) {
@@ -609,7 +608,7 @@ class WorkflowOrchestrator {
         return this.executeStep(step);
       }
 
-      throw new Error(`Step '${step.name}' failed: ${error.message}`);
+      throw new Error(`Step '${step.name}' failed`);
     }
   }
 
@@ -697,7 +696,7 @@ class WorkflowOrchestrator {
       }
 
       return Object.keys(metrics).length > 0 ? metrics : null;
-    } catch (error) {
+    } catch {
       return null;
     }
   }
@@ -719,7 +718,7 @@ class WorkflowOrchestrator {
           actualValue = stepResult?.output?.[metric];
         }
 
-        if (actualValue === undefined) return false;
+        if (actualValue === undefined) {return false;}
 
         const expectedValue = isNaN(value) ? value : Number(value);
 
@@ -732,15 +731,16 @@ class WorkflowOrchestrator {
             return actualValue >= expectedValue;
           case '<=':
             return actualValue <= expectedValue;
-          case '==':
-            return actualValue == expectedValue;
-          case '!=':
-            return actualValue != expectedValue;
+          case '===':
+            return actualValue === expectedValue;
+          case '!==':
+            return actualValue !== expectedValue;
           default:
+            console.warn(`Unsupported operator in condition: ${operator}`);
             return false;
         }
       } catch (error) {
-        console.log(`⚠️  Condition evaluation failed: ${condition}`);
+        console.warn('Failed to evaluate condition:', condition, error);
         return false;
       }
     });
@@ -761,7 +761,7 @@ class WorkflowOrchestrator {
         completed_tasks: tasks.filter(t => t.state === 'COMPLETED').length,
         agents_count: Object.keys(state.assignments || {}).length
       };
-    } catch (error) {
+    } catch {
       return {};
     }
   }
@@ -820,7 +820,7 @@ class WorkflowOrchestrator {
   }
 
   // Handle workflow failure
-  handleWorkflowFailure(workflow, error) {
+  handleWorkflowFailure() {
     console.log('\n🔄 Failure Recovery Options:');
     console.log(
       '1. Fix the issue and run: node workflow-orchestrator.js --resume'
@@ -967,9 +967,9 @@ async function main() {
       '❌ No workflow specified. Use --list to see available workflows or --help for usage.'
     );
     process.exit(1);
-  } catch (error) {
-    logger.handleError(error, { args });
-    console.error(`❌ Workflow orchestration failed: ${error.message}`);
+  } catch {
+    logger.handleError(new Error('Workflow orchestration failed'), { args });
+    console.error(`❌ Workflow orchestration failed`);
     process.exit(1);
   }
 }

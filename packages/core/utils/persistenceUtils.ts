@@ -4,7 +4,6 @@
 
 import { compress, decompress } from 'lz-string';
 import { z } from 'zod';
-import type { Node, Edge } from 'reactflow';
 
 // Storage configuration
 export const STORAGE_KEY = 'promptgraph:state:v1';
@@ -56,7 +55,7 @@ export function isStorageAvailable(): boolean {
  */
 export function getStorageSize(key: string): number {
   const item = localStorage.getItem(key);
-  if (!item) return 0;
+  if (!item) {return 0;}
   return new Blob([item]).size;
 }
 
@@ -72,7 +71,7 @@ export function checkStorageQuota(): {
 
   try {
     for (const key in localStorage) {
-      if (localStorage.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
         totalSize += localStorage[key].length + key.length;
       }
     }
@@ -144,11 +143,11 @@ export function validatePersistedState(data: unknown): PersistedState | null {
  */
 export const persistenceStorage = {
   getItem: (name: string): string | null => {
-    if (!isStorageAvailable()) return null;
+    if (!isStorageAvailable()) {return null;}
 
     try {
       const item = localStorage.getItem(name);
-      if (!item) return null;
+      if (!item) {return null;}
 
       const wrapper: StorageWrapper = JSON.parse(item);
 
@@ -181,7 +180,7 @@ export const persistenceStorage = {
   },
 
   setItem: (name: string, value: string): void => {
-    if (!isStorageAvailable()) return;
+    if (!isStorageAvailable()) {return;}
 
     try {
       // Check storage quota
@@ -232,7 +231,7 @@ export const persistenceStorage = {
   },
 
   removeItem: (name: string): void => {
-    if (!isStorageAvailable()) return;
+    if (!isStorageAvailable()) {return;}
     localStorage.removeItem(name);
   }
 };
@@ -255,12 +254,12 @@ export function getPersistedStateInfo(): {
   compressed: boolean;
   timestamp: number | null;
 } | null {
-  if (!isStorageAvailable()) return null;
+  if (!isStorageAvailable()) {return null;}
 
   try {
     const item = localStorage.getItem(STORAGE_KEY);
     if (!item)
-      return { exists: false, size: 0, compressed: false, timestamp: null };
+      {return { exists: false, size: 0, compressed: false, timestamp: null };}
 
     const wrapper: StorageWrapper = JSON.parse(item);
     return {

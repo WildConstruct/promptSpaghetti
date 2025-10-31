@@ -10,7 +10,6 @@ import {
   Epic1Graph,
   ExecutionResult
 } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
-import { BaseInlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineEditableNode';
 import { PreviewCache } from './PreviewCache';
 import { WorkerPool } from './WorkerPool';
 import { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'reactflow';

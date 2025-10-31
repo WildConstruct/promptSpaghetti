@@ -146,8 +146,8 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
   /**
    * Extract inputs from the execution context based on the node's schema
    */
-  private extractInputs(ctx: AdvancedExecutionContext): Record<string, any> {
-    const inputs: Record<string, any> = {};
+  private extractInputs(ctx: AdvancedExecutionContext): Record<string, unknown> {
+    const inputs: Record<string, unknown> = {};
     const schema = this.customConfig.schema;
 
     for (const [inputName, inputSpec] of Object.entries(schema.inputs)) {
@@ -171,7 +171,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
    */
   private createCustomRuntime(
     ctx: AdvancedExecutionContext,
-    inputs: Record<string, any>
+    inputs: Record<string, unknown>
   ): CustomNodeRuntime {
     const nodeId = this.id;
 
@@ -195,7 +195,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
   /**
    * Format the output according to PromptScape conventions
    */
-  private formatOutput(outputs: Record<string, any>): unknown {
+  private formatOutput(outputs: Record<string, unknown>): unknown {
     const outputSchema = this.customConfig.schema.outputs;
     const outputKeys = Object.keys(outputSchema);
 
@@ -259,7 +259,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
         ctx.outputs['_errors'] = [];
       }
 
-      (ctx.outputs['_errors'] as any[]).push({
+      (ctx.outputs['_errors'] as unknown[]).push({
         nodeId: this.id,
         error: error.message,
         timestamp: new Date().toISOString(),

@@ -298,8 +298,8 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       throw new Error(`Cannot find source or target node for edge ${edge.id}`);
     }
 
-    const sourcePos = this.getEdgePosition(sourceNode, edge.sourceHandle);
-    const targetPos = this.getEdgePosition(targetNode, edge.targetHandle);
+    const sourcePos = this.getEdgePosition(sourceNode);
+    const targetPos = this.getEdgePosition(targetNode);
 
     // Calculate path
     const path = await algorithm.calculatePath(
@@ -385,7 +385,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
   /**
    * Get edge connection position on node
    */
-  private getEdgePosition(node: Node, handle?: string | null): XYPosition {
+  private getEdgePosition(node: Node): XYPosition {
     // Simple center position for now
     // In production, calculate based on handle position
     return {
@@ -451,7 +451,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
    * Start auto-routing process
    */
   private startAutoRouting(): void {
-    if (!this.autoRoutingConfig?.enabled) return;
+    if (!this.autoRoutingConfig?.enabled) {return;}
 
     const interval = this.autoRoutingConfig.updateInterval || 1000;
 
@@ -472,7 +472,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
    * Process routing queue
    */
   private async processRoutingQueue(): Promise<void> {
-    if (this.routingQueue.size === 0) return;
+    if (this.routingQueue.size === 0) {return;}
 
     const edgeIds = Array.from(this.routingQueue);
     this.routingQueue.clear();
@@ -480,7 +480,6 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
     // Process in batches
     const batchSize = 5;
     for (let i = 0; i < edgeIds.length; i += batchSize) {
-      const batch = edgeIds.slice(i, i + batchSize);
       // Note: This would need access to edges and nodes from the graph
       // In practice, this would be called with proper context
     }
@@ -491,7 +490,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
    */
   private async loadCachedPaths(): Promise<void> {
     const { cache } = getPerformanceInfrastructure();
-    if (!cache) return;
+    if (!cache) {return;}
 
     // Load previously cached paths
     // This would iterate through known edge IDs and load their cached paths

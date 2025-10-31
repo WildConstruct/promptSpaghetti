@@ -4,8 +4,6 @@
  */
 
 import { RuntimeNode, ExecutionContext } from '../../types';
-import { z } from 'zod';
-import { EditStateSchema, EditState } from '../../../schemas/psgSchemaV2';
 
 /**
  * Configuration for inline editable nodes
@@ -26,9 +24,19 @@ export interface InlineEditableConfig {
 /**
  * Base data structure for all inline editable nodes
  */
+export interface EditState {
+  isEditing: boolean;
+  editBuffer?: unknown;
+  lastEditTimestamp?: string;
+  validationErrors: string[];
+  isDirty: boolean;
+}
+
 export interface InlineEditableData<T = any> {
   /** The actual value of the node */
   value: T;
+  /** Legacy configuration access */
+  configuration?: T;
   /** Edit state for inline editing */
   editState: EditState;
   /** Whether the node is locked */
@@ -63,6 +71,7 @@ export abstract class BaseInlineEditableNode<
     super(id);
     this.data = {
       value: initialValue,
+      configuration: initialValue,
       editState: this.createDefaultEditState(),
       isLocked: config.isLocked || false,
       lockReason: config.lockReason,
@@ -254,6 +263,10 @@ export abstract class BaseInlineEditableNode<
     return {
       ...data,
       value: this.cloneValue(data.value),
+      configuration:
+        data.configuration !== undefined
+          ? this.cloneValue(data.configuration)
+          : this.cloneValue(data.value),
       editState: { ...data.editState }
     };
   }

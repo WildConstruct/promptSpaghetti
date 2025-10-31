@@ -58,7 +58,7 @@ const initialEdges: Edge[] = [
 
 export const AutoLayoutDemo: React.FC = () => {
   const handleExecute = useCallback((nodes: Node[], edges: Edge[]) => {
-    console.log('Executing graph with', nodes.length, 'nodes');
+    console.log('Executing graph with', nodes.length, 'nodes and', edges.length, 'edges');
   }, []);
 
   return (
@@ -78,7 +78,7 @@ export const AutoLayoutDemo: React.FC = () => {
         <ul>
           <li>Press <strong>Cmd+Shift+L</strong> to clean up all nodes</li>
           <li>Select nodes and press <strong>Cmd+Shift+L</strong> to clean up selection</li>
-          <li>Right-click canvas for "Clean Up Layout" option</li>
+          <li>Right-click canvas for &ldquo;Clean Up Layout&rdquo; option</li>
           <li>Drag assets from browser - multiple nodes auto-arrange</li>
         </ul>
         <p>Notice how stacked nodes (initial state) get properly arranged!</p>

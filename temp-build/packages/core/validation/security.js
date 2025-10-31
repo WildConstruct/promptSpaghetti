@@ -55,46 +55,8 @@ const DANGEROUS_PATTERNS = [
   /vm/gi,
   /worker_threads/gi,
 ];
-// Safe expression patterns for conditionals
-const SAFE_EXPRESSION_PATTERNS = [
-  // Basic operators
-  /^[a-zA-Z_$][a-zA-Z0-9_$]*$/, // Simple variable names
-  /^[a-zA-Z0-9_$\s\.\[\]]+$/, // Property access
-  /^[a-zA-Z0-9_$\s\.\[\]===!==<>=+\-*\/&&\|\|!()]+$/, // Basic expressions
-];
-// Allowed operators and keywords in expressions
-const ALLOWED_OPERATORS = [
-  '===',
-  '!==',
-  '==',
-  '!=',
-  '<',
-  '>',
-  '<=',
-  '>=',
-  '+',
-  '-',
-  '*',
-  '/',
-  '%',
-  '&&',
-  '||',
-  '!',
-  '(',
-  ')',
-  '[',
-  ']',
-  '.',
-  'true',
-  'false',
-  'null',
-  'undefined',
-];
-// Allowed functions in expressions
-const ALLOWED_FUNCTIONS = [
-  'startsWith',
-  'endsWith',
-  'includes',
+
+const SAFE_STRING_METHODS = [
   'indexOf',
   'lastIndexOf',
   'toLowerCase',
@@ -134,7 +96,7 @@ export class SecurityValidation {
    * Validates that a string doesn't contain dangerous patterns
    */
   static validateSafeString(value) {
-    if (typeof value !== 'string') return false;
+    if (typeof value !== 'string') {return false;}
     // Check against dangerous patterns
     for (const pattern of DANGEROUS_PATTERNS) {
       if (pattern.test(value)) {
@@ -147,9 +109,9 @@ export class SecurityValidation {
    * Validates that an expression is safe to evaluate
    */
   static validateSafeExpression(expression) {
-    if (typeof expression !== 'string') return false;
-    if (expression.length === 0) return true;
-    if (expression.length > 500) return false; // Prevent DoS via long expressions
+    if (typeof expression !== 'string') {return false;}
+    if (expression.length === 0) {return true;}
+    if (expression.length > 500) {return false;} // Prevent DoS via long expressions
     // Check against dangerous patterns first
     if (!SecurityValidation.validateSafeString(expression)) {
       return false;
@@ -194,9 +156,9 @@ export class SecurityValidation {
    * - Must not use reserved keywords or dangerous patterns
    */
   static validateVariableName(name) {
-    if (typeof name !== 'string') return false;
-    if (name.length === 0) return false;
-    if (name.length > VARIABLE_NAME_MAX_LENGTH) return false;
+    if (typeof name !== 'string') {return false;}
+    if (name.length === 0) {return false;}
+    if (name.length > VARIABLE_NAME_MAX_LENGTH) {return false;}
     // Check alphanumeric pattern first
     if (!VARIABLE_NAME_PATTERN.test(name)) {
       return false;
@@ -208,9 +170,9 @@ export class SecurityValidation {
    * Validates that a property key is safe for object access
    */
   static validateSafePropertyKey(key) {
-    if (typeof key !== 'string') return false;
-    if (key.length === 0) return false;
-    if (key.length > VARIABLE_NAME_MAX_LENGTH) return false; // Limit to 64 chars as per security requirements
+    if (typeof key !== 'string') {return false;}
+    if (key.length === 0) {return false;}
+    if (key.length > VARIABLE_NAME_MAX_LENGTH) {return false;} // Limit to 64 chars as per security requirements
     // Dangerous property names
     const dangerousProperties = [
       '__proto__',
@@ -246,7 +208,7 @@ export class SecurityValidation {
    * Validates that a value is safe for storage/processing
    */
   static validateSafeValue(value) {
-    if (value === null || value === undefined) return true;
+    if (value === null || value === undefined) {return true;}
     // Check primitive types
     if (typeof value === 'string') {
       return SecurityValidation.validateSafeString(value) && value.length <= 10000;
@@ -259,17 +221,17 @@ export class SecurityValidation {
     }
     // Check arrays
     if (Array.isArray(value)) {
-      if (value.length > 1000) return false; // Prevent DoS via large arrays
+      if (value.length > 1000) {return false;} // Prevent DoS via large arrays
       return value.every(item => SecurityValidation.validateSafeValue(item));
     }
     // Check objects
     if (typeof value === 'object') {
       const keys = Object.keys(value);
-      if (keys.length > 100) return false; // Prevent DoS via large objects
+      if (keys.length > 100) {return false;} // Prevent DoS via large objects
       // Validate all keys and values
       for (const key of keys) {
-        if (!SecurityValidation.validateSafePropertyKey(key)) return false;
-        if (!SecurityValidation.validateSafeValue(value[key])) return false;
+        if (!SecurityValidation.validateSafePropertyKey(key)) {return false;}
+        if (!SecurityValidation.validateSafeValue(value[key])) {return false;}
       }
       return true;
     }
@@ -280,7 +242,7 @@ export class SecurityValidation {
    * Sanitizes a string by removing dangerous content
    */
   static sanitizeString(value) {
-    if (typeof value !== 'string') return '';
+    if (typeof value !== 'string') {return '';}
     // Remove dangerous patterns
     let sanitized = value;
     for (const pattern of DANGEROUS_PATTERNS) {
@@ -379,7 +341,7 @@ export const SecureValidation = {
       z.record(z.string().max(1000)).refine(
         val => {
           const keys = Object.keys(val);
-          if (keys.length > 100) return false;
+          if (keys.length > 100) {return false;}
           return (
             keys.every(key => SecurityValidation.validateSafePropertyKey(key)) &&
             Object.values(val).every(value => SecurityValidation.validateSafeString(value))

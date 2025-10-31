@@ -7,6 +7,7 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { useAutosave } from '../hooks/useAutosave';
+import * as useAutosaveModule from '../hooks/useAutosave';
 import { AutosaveIndicator } from '../components/AutosaveIndicator';
 import { persistenceStorage } from '../utils/persistenceUtils';
 
@@ -355,7 +356,7 @@ describe('AutosaveIndicator Component', () => {
     const mockDate = new Date();
     mockDate.setMinutes(mockDate.getMinutes() - 5);
 
-    jest.spyOn(require('../hooks/useAutosave'), 'useAutosave').mockReturnValue({
+    jest.spyOn(useAutosaveModule, 'useAutosave').mockReturnValue({
       status: 'saved',
       lastSaved: mockDate,
       error: null,
@@ -373,7 +374,7 @@ describe('AutosaveIndicator Component', () => {
   });
 
   it('should show conflict dialog when conflict detected', () => {
-    jest.spyOn(require('../hooks/useAutosave'), 'useAutosave').mockReturnValue({
+    jest.spyOn(useAutosaveModule, 'useAutosave').mockReturnValue({
       status: 'saved',
       lastSaved: null,
       error: null,
@@ -396,7 +397,7 @@ describe('AutosaveIndicator Component', () => {
   });
 
   it('should not render when autosave is disabled', () => {
-    jest.spyOn(require('../hooks/useAutosave'), 'useAutosave').mockReturnValue({
+    jest.spyOn(useAutosaveModule, 'useAutosave').mockReturnValue({
       status: 'saved',
       lastSaved: null,
       error: null,
@@ -415,7 +416,7 @@ describe('AutosaveIndicator Component', () => {
 
   it('should apply correct position styles', () => {
     // Ensure the indicator renders by mocking the autosave hook to be enabled
-    jest.spyOn(require('../hooks/useAutosave'), 'useAutosave').mockReturnValue({
+    jest.spyOn(useAutosaveModule, 'useAutosave').mockReturnValue({
       status: 'saved',
       lastSaved: null,
       error: null,

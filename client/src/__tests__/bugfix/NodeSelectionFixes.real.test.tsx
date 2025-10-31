@@ -55,8 +55,8 @@ const waitForReactFlowReady = async () => {
 describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
   beforeEach(() => {
     // Clear any console warnings
-    jest.spyOn(console, 'warn').mockImplementation(() => {});
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    jest.spyOn(console, 'error').mockImplementation(() => undefined);
   });
   afterEach(() => {
     jest.restoreAllMocks();
@@ -78,13 +78,16 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       expect(p).toBeInTheDocument();
       return p;
     });
+    if (!pane) {
+      throw new Error('ReactFlow pane not found');
+    }
     // Simulate drag and drop
     fireEvent.dragStart(subjectNodeInPalette, {
       dataTransfer: { setData: jest.fn() }
     });
     // Create and dispatch the drop event
     const dropEvent = createDragEvent('drop', 200, 150, 'Subject');
-    fireEvent(pane!, dropEvent);
+    fireEvent(pane, dropEvent);
     // Wait for the node to be created in the real ReactFlow
     const createdNode = await waitFor(
       () => {
@@ -128,12 +131,15 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       expect(p).toBeInTheDocument();
       return p;
     });
+    if (!pane) {
+      throw new Error('ReactFlow pane not found');
+    }
     // Simulate drag and drop at specific coordinates
     fireEvent.dragStart(actionNodeInPalette, {
       dataTransfer: { setData: jest.fn() }
     });
     const dropEvent = createDragEvent('drop', 300, 200, 'Action');
-    fireEvent(pane!, dropEvent);
+    fireEvent(pane, dropEvent);
     // Wait for node creation and verify positioning
     await waitFor(
       () => {
@@ -165,12 +171,15 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       expect(p).toBeInTheDocument();
       return p;
     });
+    if (!pane) {
+      throw new Error('ReactFlow pane not found');
+    }
     // Create the node
     fireEvent.dragStart(actionNodeInPalette, {
       dataTransfer: { setData: jest.fn() }
     });
     const dropEvent = createDragEvent('drop', 300, 200, 'Action');
-    fireEvent(pane!, dropEvent);
+    fireEvent(pane, dropEvent);
     // Wait for node creation
     const createdNode = await waitFor(
       () => {
@@ -197,6 +206,9 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       expect(p).toBeInTheDocument();
       return p;
     });
+    if (!pane) {
+      throw new Error('ReactFlow pane not found');
+    }
     // Create first Subject node
     const subjectNodeInPalette = await waitFor(() => {
       return screen.getByTestId('palette-node-Subject');
@@ -205,7 +217,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       dataTransfer: { setData: jest.fn() }
     });
     const firstDropEvent = createDragEvent('drop', 100, 100, 'Subject');
-    fireEvent(pane!, firstDropEvent);
+    fireEvent(pane, firstDropEvent);
     // Wait for first node
     await waitFor(() => {
       const nodes = reactFlowWrapper.querySelectorAll('.react-flow__node');
@@ -219,7 +231,7 @@ describe('Node Selection Bug Fixes (Real ReactFlow)', () => {
       dataTransfer: { setData: jest.fn() }
     });
     const secondDropEvent = createDragEvent('drop', 100, 100, 'Action');
-    fireEvent(pane!, secondDropEvent);
+    fireEvent(pane, secondDropEvent);
     // Wait for both nodes
     await waitFor(
       () => {

@@ -4,6 +4,7 @@
  */
 
 import React, { useCallback, useEffect, useRef } from 'react';
+import { getDocUrl } from '../docsMap';
 import './NodeContextMenu.css';
 
 export interface ContextMenuPosition {
@@ -12,7 +13,6 @@ export interface ContextMenuPosition {
 }
 
 interface NodeContextMenuProps {
-  nodeId: string;
   nodeType: string;
   position: ContextMenuPosition | null;
   onClose: () => void;
@@ -24,7 +24,6 @@ interface NodeContextMenuProps {
 }
 
 export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
-  nodeId,
   nodeType,
   position,
   onClose,
@@ -66,7 +65,7 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
     onClose();
   }, [onClose]);
 
-  if (!position) return null;
+  if (!position) {return null;}
 
   // Adjust position to ensure menu stays within viewport
   const menuStyle: React.CSSProperties = {
@@ -87,17 +86,18 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
       </div>
       
       <div className="context-menu-items">
-        <button className="context-menu-item" onClick={() => {
-          try {
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
-            const { getDocUrl } = require('../docsMap');
-            const url = getDocUrl(`${nodeType}Node`);
-            window.open(url, '_blank');
-          } catch {
-            window.open('/docs/index.md', '_blank');
-          }
-          onClose();
-        }}>
+        <button
+          className="context-menu-item"
+          onClick={() => {
+            try {
+              const url = getDocUrl(`${nodeType}Node`);
+              window.open(url, '_blank');
+            } catch {
+              window.open('/docs/index.md', '_blank');
+            }
+            onClose();
+          }}
+        >
           <span className="icon">?</span>
           Help
         </button>

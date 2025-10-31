@@ -38,9 +38,13 @@ export const useHighlightManager = () => {
 
   // Utility to convert hex color to rgba with alpha
   const hexToRgba = useCallback((hex: string, alpha = 0.6) => {
-    if (!hex) return 'rgba(0,0,0,0)';
+    if (!hex) {
+      return 'rgba(0,0,0,0)';
+    }
     const h = hex.replace('#', '');
-    if (h.length !== 6) return 'rgba(0,0,0,0.4)';
+    if (h.length !== 6) {
+      return 'rgba(0,0,0,0.4)';
+    }
     const r = parseInt(h.slice(0, 2), 16);
     const g = parseInt(h.slice(2, 4), 16);
     const b = parseInt(h.slice(4, 6), 16);
@@ -88,13 +92,17 @@ export const useHighlightManager = () => {
       let lastEndIndex = 0;
 
       sortedNodes.forEach((node: GeneratedNode) => {
-        if (!node.sourcePosition) return;
+        if (!node.sourcePosition) {
+          return;
+        }
 
         const { start, end } = node.sourcePosition;
         const rangeKey = `${start}-${end}`;
 
         // Skip if already processed
-        if (processedRanges.has(rangeKey)) return;
+        if (processedRanges.has(rangeKey)) {
+          return;
+        }
         processedRanges.add(rangeKey);
 
         // Add unhighlighted text before this node
@@ -142,7 +150,9 @@ export const useHighlightManager = () => {
   }, []);
 
   const undo = useCallback(() => {
-    if (historyRef.current.length === 0) return;
+    if (historyRef.current.length === 0) {
+      return;
+    }
 
     const previousSegments = historyRef.current.pop();
     if (previousSegments) {
@@ -154,7 +164,9 @@ export const useHighlightManager = () => {
   }, [highlightSegments]);
 
   const redo = useCallback(() => {
-    if (futureRef.current.length === 0) return;
+    if (futureRef.current.length === 0) {
+      return;
+    }
 
     const nextSegments = futureRef.current.pop();
     if (nextSegments) {

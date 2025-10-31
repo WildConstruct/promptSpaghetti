@@ -1,7 +1,7 @@
 // src/agents/productOwnerAgent-updated.ts
 // Product Owner agent - focuses on story creation and prioritization
 
-import { AgentRunner } from './agentBase';
+import { AgentRunner, Event, State, Story, ProductGoal } from './agentBase';
 
 export class ProductOwnerAgent extends AgentRunner {
   constructor() {
@@ -11,7 +11,7 @@ export class ProductOwnerAgent extends AgentRunner {
   /**
    * Filter for PO-relevant events
    */
-  filterRelevant(events: any[]): any[] {
+  filterRelevant(events: Event[]): Event[] {
     const relevantTypes = [
       'GOAL_CREATED',
       'STORY_REQUESTED',
@@ -27,17 +27,18 @@ export class ProductOwnerAgent extends AgentRunner {
   /**
    * Product Owner decision logic
    */
-  async decide(ev: any, state: any): Promise<any> {
+  async decide(ev: Event, state: State): Promise<Event | 'NOOP'> {
     switch (ev.type) {
-      case 'GOAL_CREATED':
+      case 'GOAL_CREATED': {
         // Create stories for new goals
         const goal = ev.payload.goal;
         if (goal && this.getStoriesForGoal(state, goal.id).length === 0) {
           return this.createStoryForGoal(goal);
         }
         break;
+      }
 
-      case 'METRICS_ANALYZED':
+      case 'METRICS_ANALYZED': {
         // Review metrics and adjust priorities
         const metrics = ev.payload;
         if (metrics.velocity < 5) {
@@ -47,14 +48,16 @@ export class ProductOwnerAgent extends AgentRunner {
           });
         }
         break;
+      }
 
-      case 'PR_MERGED':
+      case 'PR_MERGED': {
         // Track feature completion
         return this.createEvent('FEATURE_COMPLETED', {
           task_id: ev.payload.task_id,
           pr_number: ev.payload.pr_number,
           completed_at: new Date().toISOString()
         });
+      }
     }
 
     // Check if we need more stories
@@ -75,7 +78,7 @@ export class ProductOwnerAgent extends AgentRunner {
   /**
    * Create a story for a goal
    */
-  private createStoryForGoal(goal: any): any {
+  private createStoryForGoal(goal: ProductGoal): Event {
     const storyTemplates = [
       {
         title: 'User authentication system',
@@ -129,17 +132,16 @@ export class ProductOwnerAgent extends AgentRunner {
   /**
    * Check if we need more stories in the backlog
    */
-  private checkStoryBacklog(state: any): any {
-    const readyStories = state.stories.filter((s: any) => s.status === 'READY');
-    const totalTasks = Object.keys(state.tasks).length;
+  private checkStoryBacklog(state: State): Event | null {
+    const readyStories = state.stories.filter((s: Story) => s.status === 'READY');
     const unassignedTasks = Object.values(state.tasks).filter(
-      (t: any) => t.state === 'UNASSIGNED'
+      (t) => t.status === 'UNASSIGNED'
     ).length;
 
     // If we have few ready stories and most tasks are assigned, create more
     if (readyStories.length < 3 && unassignedTasks < 5) {
       const activeGoals = state.product_goals.filter(
-        (g: any) => g.status === 'ACTIVE'
+        (g: ProductGoal) => g.status === 'ACTIVE'
       );
       if (activeGoals.length > 0) {
         // Pick a goal that needs more stories
@@ -158,20 +160,20 @@ export class ProductOwnerAgent extends AgentRunner {
   /**
    * Check progress toward goals
    */
-  private checkGoalProgress(state: any): any {
+  private checkGoalProgress(state: State): Event | null {
     for (const goal of state.product_goals) {
-      if (goal.status !== 'ACTIVE') continue;
+      if (goal.status !== 'ACTIVE') {continue;}
 
       const stories = this.getStoriesForGoal(state, goal.id);
-      const completedStories = stories.filter((s: any) => {
+      const completedStories = stories.filter((s: Story) => {
         // Story is complete if all its tasks are completed or approved
         const storyTasks = Object.values(state.tasks).filter(
-          (t: any) => t.story_id === s.id
+          (t) => t.storyId === s.id
         );
         return (
           storyTasks.length > 0 &&
-          storyTasks.every((t: any) =>
-            ['COMPLETED', 'APPROVED'].includes(t.state)
+          storyTasks.every((t) =>
+            ['COMPLETED', 'APPROVED'].includes(t.status)
           )
         );
       });
@@ -197,8 +199,8 @@ export class ProductOwnerAgent extends AgentRunner {
   /**
    * Get all stories for a specific goal
    */
-  private getStoriesForGoal(state: any, goalId: string): any[] {
-    return state.stories.filter((s: any) => s.goal_id === goalId);
+  private getStoriesForGoal(state: State, goalId: string): Story[] {
+    return state.stories.filter((s: Story) => s.id === goalId);
   }
 }
 

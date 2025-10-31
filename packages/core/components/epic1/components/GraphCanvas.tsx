@@ -1,32 +1,41 @@
 import React from 'react';
 import ReactFlow, {
-  Node,
-  Edge,
+  type Node,
+  type Edge,
+  type NodeTypes,
+  type EdgeTypes,
+  type NodeChange,
+  type EdgeChange,
+  type NodeMouseHandler,
+  type EdgeMouseHandler,
+  type PaneMouseHandler,
+  type OnConnect,
+  type Connection,
   Background,
   Controls,
   ConnectionMode,
-  ReactFlowInstance,
+  type ReactFlowInstance
 } from 'reactflow';
 import { CustomMinimap } from '../CustomMinimap';
 import { ConnectionFeedback } from '../ConnectionFeedback';
 import { PanZoomControls } from '../PanZoomControls';
 import { SafeReactFlowWrapper } from '../SafeReactFlowWrapper';
 
-interface GraphCanvasProps {
-  nodes: Node[];
-  edges: Edge[];
-  nodeTypes: any;
-  edgeTypes: any;
-  onNodesChange: (changes: any[]) => void;
-  onEdgesChange: (changes: any[]) => void;
-  onConnect: (params: any) => void;
-  onPaneClick: (event: React.MouseEvent) => void;
-  onNodeClick: (event: React.MouseEvent, node: Node) => void;
-  onEdgeClick: (event: React.MouseEvent, edge: Edge) => void;
+interface GraphCanvasProps<TNodeData = unknown, TEdgeData = unknown> {
+  nodes: Array<Node<TNodeData>>;
+  edges: Array<Edge<TEdgeData>>;
+  nodeTypes: NodeTypes<TNodeData>;
+  edgeTypes: EdgeTypes<TEdgeData>;
+  onNodesChange: (changes: NodeChange<TNodeData>[]) => void;
+  onEdgesChange: (changes: EdgeChange<TEdgeData>[]) => void;
+  onConnect: OnConnect;
+  onPaneClick: PaneMouseHandler | undefined;
+  onNodeClick: NodeMouseHandler<TNodeData>;
+  onEdgeClick: EdgeMouseHandler<TEdgeData>;
   onSelectionStart: () => void;
   onSelectionEnd: () => void;
   onInit: (instance: ReactFlowInstance) => void;
-  isValidConnection: (connection: any) => boolean;
+  isValidConnection: (connection: Connection) => boolean;
   activatedEdges: Set<string>;
   showMinimap?: boolean;
   minimapStyle?: React.CSSProperties;
@@ -37,7 +46,7 @@ interface GraphCanvasProps {
  * GraphCanvas - Pure presentation component for the ReactFlow canvas
  * Handles only the visual rendering and basic interactions
  */
-export const GraphCanvas: React.FC<GraphCanvasProps> = ({
+export const GraphCanvas = <TNodeData = unknown, TEdgeData = unknown>({
   nodes,
   edges,
   nodeTypes,
@@ -55,8 +64,8 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   activatedEdges,
   showMinimap = true,
   minimapStyle,
-  children,
-}) => {
+  children
+}: GraphCanvasProps<TNodeData, TEdgeData>) => {
   // Process edges to add activation and selection classes
   const processedEdges = edges.map(edge => ({
     ...edge,
@@ -65,7 +74,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   }));
 
   return (
-    <ReactFlow
+    <ReactFlow<Node<TNodeData>, Edge<TEdgeData>>
       nodes={nodes}
       edges={processedEdges}
       onNodesChange={onNodesChange}

@@ -14,4 +14,635 @@ import { PlacementManagementService, CreateSlotRequest, CreatePlacementRequest }
 import { PlacementAnalyticsService } from '../../server/src/services/analytics/PlacementAnalyticsService';
 import { PlacementAdminController } from '../../server/src/admin/PlacementAdminController';
 import { AuditService } from '../../server/src/auth/services/AuditService';
-import {\n  PlacementArea,\n  PlacementPosition,\n  ContentType,\n  PlacementStatus,\n  PlacementSlot,\n  ContentPlacement\n} from '../packages/core/types/PlacementTypes';\n\n// Mock dependencies\nconst mockDatabase = {\n  query: jest.fn()\n} as unknown as Database;\n\nconst mockAuditService = {\n  logEvent: jest.fn()\n} as unknown as AuditService;\n\ndescribe('Placement Management System', () => {\n  let placementService: PlacementManagementService;\n  let analyticsService: PlacementAnalyticsService;\n  let adminController: PlacementAdminController;\n\n  beforeEach(() => {\n    jest.clearAllMocks();\n    \n    placementService = new PlacementManagementService(\n      mockDatabase,\n      mockAuditService\n    );\n    \n    analyticsService = new PlacementAnalyticsService(mockDatabase, {\n      metricsCalculationInterval: 1,\n      insightGenerationInterval: 1\n    });\n    \n    adminController = new PlacementAdminController(\n      mockDatabase,\n      placementService,\n      mockAuditService\n    );\n  });\n\n  describe('PlacementManagementService', () => {\n    describe('Placement Slot Management', () => {\n      test('should create placement slot successfully', async () => {\n        // Mock successful database insertion\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({ rows: [] }) // INSERT query\n          .mockResolvedValueOnce({ // SELECT query for retrieval\n            rows: [{\n              slot_id: 'slot-123',\n              name: 'test_slot',\n              display_name: 'Test Slot',\n              description: 'Test description',\n              placement_area: 'homepage',\n              position: 'hero_banner',\n              max_items: 1,\n              min_items: 1,\n              dimensions: '{}',\n              styling: '{}',\n              layout: '{}',\n              targeting_rules: '{}',\n              display_rules: '{}',\n              is_active: true,\n              priority: 50,\n              tags: '[]',\n              created_at: new Date(),\n              updated_at: new Date(),\n              created_by: 'admin'\n            }]\n          });\n\n        const slotRequest: CreateSlotRequest = {\n          name: 'test_slot',\n          displayName: 'Test Slot',\n          description: 'Test description',\n          placementArea: PlacementArea.HOMEPAGE,\n          position: PlacementPosition.HERO_BANNER,\n          maxItems: 1,\n          minItems: 1,\n          dimensions: { width: 1200, height: 400 },\n          layout: { type: 'stack' }\n        };\n\n        const result = await placementService.createPlacementSlot(slotRequest, 'admin');\n\n        expect(result).toBeDefined();\n        expect(result.slotId).toBeTruthy();\n        expect(result.name).toBe('test_slot');\n        expect(result.placementArea).toBe(PlacementArea.HOMEPAGE);\n        expect(mockAuditService.logEvent).toHaveBeenCalledWith(\n          expect.objectContaining({\n            action: 'placement_slot_created',\n            userId: 'admin'\n          })\n        );\n      });\n\n      test('should retrieve placement slots with filtering', async () => {\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({ rows: [{ count: '5' }] }) // COUNT query\n          .mockResolvedValueOnce({ // SELECT query\n            rows: [\n              {\n                slot_id: 'slot-1',\n                name: 'homepage_hero',\n                display_name: 'Homepage Hero',\n                placement_area: 'homepage',\n                position: 'hero_banner',\n                max_items: 1,\n                min_items: 1,\n                dimensions: '{}',\n                styling: '{}',\n                layout: '{}',\n                targeting_rules: '{}',\n                display_rules: '{}',\n                is_active: true,\n                priority: 80,\n                tags: '[]',\n                created_at: new Date(),\n                updated_at: new Date(),\n                created_by: 'admin'\n              }\n            ]\n          });\n\n        const result = await placementService.getPlacementSlots({\n          placementArea: PlacementArea.HOMEPAGE,\n          isActive: true,\n          limit: 10\n        });\n\n        expect(result.slots).toHaveLength(1);\n        expect(result.total).toBe(5);\n        expect(result.slots[0].placementArea).toBe(PlacementArea.HOMEPAGE);\n      });\n\n      test('should update placement slot', async () => {\n        // Mock current slot retrieval\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({\n            rows: [{\n              slot_id: 'slot-123',\n              name: 'test_slot',\n              display_name: 'Test Slot',\n              description: 'Original description',\n              placement_area: 'homepage',\n              position: 'hero_banner',\n              max_items: 1,\n              min_items: 1,\n              dimensions: '{}',\n              styling: '{}',\n              layout: '{}',\n              targeting_rules: '{}',\n              display_rules: '{}',\n              is_active: true,\n              priority: 50,\n              tags: '[]',\n              created_at: new Date(),\n              updated_at: new Date(),\n              created_by: 'admin'\n            }]\n          })\n          .mockResolvedValueOnce({ rows: [] }) // UPDATE query\n          .mockResolvedValueOnce({ // Final SELECT query\n            rows: [{\n              slot_id: 'slot-123',\n              name: 'test_slot',\n              display_name: 'Updated Test Slot',\n              description: 'Updated description',\n              placement_area: 'homepage',\n              position: 'hero_banner',\n              max_items: 2,\n              min_items: 1,\n              dimensions: '{}',\n              styling: '{}',\n              layout: '{}',\n              targeting_rules: '{}',\n              display_rules: '{}',\n              is_active: true,\n              priority: 60,\n              tags: '[]',\n              created_at: new Date(),\n              updated_at: new Date(),\n              created_by: 'admin'\n            }]\n          });\n\n        const updates = {\n          displayName: 'Updated Test Slot',\n          description: 'Updated description',\n          maxItems: 2,\n          priority: 60\n        };\n\n        const result = await placementService.updatePlacementSlot('slot-123', updates, 'admin');\n\n        expect(result.displayName).toBe('Updated Test Slot');\n        expect(result.maxItems).toBe(2);\n        expect(result.priority).toBe(60);\n        expect(mockAuditService.logEvent).toHaveBeenCalledWith(\n          expect.objectContaining({\n            action: 'placement_slot_updated'\n          })\n        );\n      });\n\n      test('should delete placement slot when no active placements', async () => {\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({ rows: [{ count: '0' }] }) // Check active placements\n          .mockResolvedValueOnce({ rows: [] }); // DELETE query\n\n        await expect(\n          placementService.deletePlacementSlot('slot-123', 'admin')\n        ).resolves.not.toThrow();\n\n        expect(mockAuditService.logEvent).toHaveBeenCalledWith(\n          expect.objectContaining({\n            action: 'placement_slot_deleted'\n          })\n        );\n      });\n\n      test('should prevent deletion when active placements exist', async () => {\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({ rows: [{ count: '3' }] }); // Active placements exist\n\n        await expect(\n          placementService.deletePlacementSlot('slot-123', 'admin')\n        ).rejects.toThrow('Cannot delete slot with 3 active placements');\n      });\n    });\n\n    describe('Content Placement Management', () => {\n      test('should create content placement successfully', async () => {\n        // Mock slot existence and capacity check\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({ // Get slot\n            rows: [{\n              slot_id: 'slot-123',\n              name: 'test_slot',\n              max_items: 5,\n              min_items: 1,\n              placement_area: 'homepage',\n              position: 'hero_banner'\n            }]\n          })\n          .mockResolvedValueOnce({ rows: [{ count: '2' }] }) // Active placements count\n          .mockResolvedValueOnce({ rows: [{ id: 'template-456' }] }) // Content validation\n          .mockResolvedValueOnce({ rows: [] }); // INSERT query\n\n        const placementRequest: CreatePlacementRequest = {\n          slotId: 'slot-123',\n          contentId: 'template-456',\n          contentType: ContentType.TEMPLATE,\n          priority: 75,\n          startTime: new Date('2024-01-01'),\n          endTime: new Date('2024-12-31')\n        };\n\n        const result = await placementService.createContentPlacement(placementRequest, 'admin');\n\n        expect(result).toBeDefined();\n        expect(result.placementId).toBeTruthy();\n        expect(result.slotId).toBe('slot-123');\n        expect(result.contentId).toBe('template-456');\n        expect(result.priority).toBe(75);\n        expect(mockAuditService.logEvent).toHaveBeenCalledWith(\n          expect.objectContaining({\n            action: 'content_placement_created'\n          })\n        );\n      });\n\n      test('should prevent placement when slot is at capacity', async () => {\n        // Mock slot at capacity\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({ \n            rows: [{\n              slot_id: 'slot-123',\n              max_items: 3\n            }]\n          })\n          .mockResolvedValueOnce({ rows: [{ count: '3' }] }); // At capacity\n\n        const placementRequest: CreatePlacementRequest = {\n          slotId: 'slot-123',\n          contentId: 'template-456',\n          contentType: ContentType.TEMPLATE\n        };\n\n        await expect(\n          placementService.createContentPlacement(placementRequest, 'admin')\n        ).rejects.toThrow('Slot slot-123 is at capacity (3 items)');\n      });\n\n      test('should search content placements with filters', async () => {\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({ rows: [{ count: '10' }] }) // COUNT query\n          .mockResolvedValueOnce({ // SELECT query\n            rows: [\n              {\n                placement_id: 'place-1',\n                slot_id: 'slot-123',\n                content_id: 'template-456',\n                content_type: 'template',\n                priority: 75,\n                status: 'active',\n                created_at: new Date(),\n                updated_at: new Date(),\n                slot_name: 'test_slot',\n                slot_display_name: 'Test Slot'\n              }\n            ]\n          });\n\n        const result = await placementService.searchContentPlacements({\n          slotIds: ['slot-123'],\n          contentTypes: [ContentType.TEMPLATE],\n          status: [PlacementStatus.ACTIVE],\n          limit: 20\n        });\n\n        expect(result.placements).toHaveLength(1);\n        expect(result.total).toBe(10);\n        expect(result.placements[0].contentType).toBe(ContentType.TEMPLATE);\n      });\n    });\n\n    describe('Preview Generation', () => {\n      test('should generate placement preview', async () => {\n        // Mock slot retrieval\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({\n            rows: [{\n              slot_id: 'slot-123',\n              name: 'test_slot',\n              max_items: 3,\n              placement_area: 'homepage',\n              position: 'hero_banner',\n              targeting_rules: '{}'\n            }]\n          });\n\n        const viewerContext = {\n          deviceType: 'desktop',\n          userSegment: 'premium',\n          location: 'US'\n        };\n\n        const preview = await placementService.generatePlacementPreview(\n          'slot-123',\n          viewerContext,\n          'test'\n        );\n\n        expect(preview).toBeDefined();\n        expect(preview.slotId).toBe('slot-123');\n        expect(preview.previewMode).toBe('test');\n        expect(preview.viewerContext).toEqual(\n          expect.objectContaining(viewerContext)\n        );\n        expect(preview.expiresAt).toBeInstanceOf(Date);\n      });\n    });\n  });\n\n  describe('PlacementAnalyticsService', () => {\n    test('should calculate slot metrics', async () => {\n      const period = {\n        startDate: new Date('2024-01-01'),\n        endDate: new Date('2024-01-31'),\n        granularity: 'day' as const\n      };\n\n      const metrics = await analyticsService.calculateSlotMetrics('slot-123', period);\n\n      expect(metrics).toBeDefined();\n      expect(metrics.slotId).toBe('slot-123');\n      expect(metrics.period).toEqual(period);\n      expect(metrics.impressions).toBeGreaterThan(0);\n      expect(metrics.clickThroughRate).toBeGreaterThan(0);\n      expect(metrics.performanceIndex).toBeGreaterThan(0);\n    });\n\n    test('should generate comprehensive analytics', async () => {\n      const period = {\n        startDate: new Date('2024-01-01'),\n        endDate: new Date('2024-01-31'),\n        granularity: 'day' as const\n      };\n\n      const analytics = await analyticsService.generateAnalytics(period);\n\n      expect(analytics).toBeDefined();\n      expect(analytics.period).toEqual(period);\n      expect(analytics.generatedAt).toBeInstanceOf(Date);\n      expect(analytics.totalSlots).toBeGreaterThan(0);\n      expect(analytics.overallPerformance).toBeDefined();\n      expect(analytics.insights).toBeInstanceOf(Array);\n      expect(analytics.recommendations).toBeInstanceOf(Array);\n    });\n\n    test('should detect performance anomalies', async () => {\n      const currentMetrics = {\n        slotId: 'slot-123',\n        period: {\n          startDate: new Date('2024-01-01'),\n          endDate: new Date('2024-01-02'),\n          granularity: 'day' as const\n        },\n        impressions: 1000,\n        uniqueViews: 800,\n        viewDuration: 45,\n        viewabilityRate: 75,\n        clicks: 15, // Low CTR - should trigger anomaly\n        clickThroughRate: 1.5,\n        interactionRate: 2.0,\n        bounceRate: 45,\n        conversions: 2,\n        conversionRate: 0.2,\n        revenue: 50,\n        revenuePerView: 0.05,\n        loadTime: 350,\n        errorRate: 2.5,\n        performanceIndex: 60\n      };\n\n      const anomalies = await analyticsService.detectAnomalies('slot-123', currentMetrics);\n\n      expect(anomalies).toBeInstanceOf(Array);\n      // Note: Actual anomaly detection depends on baseline data availability\n    });\n  });\n\n  describe('Integration Workflows', () => {\n    test('should handle complete placement creation workflow', async () => {\n      // Mock all required database calls for the full workflow\n      (mockDatabase.query as jest.Mock)\n        .mockResolvedValueOnce({ rows: [] }) // Slot creation INSERT\n        .mockResolvedValueOnce({ // Slot retrieval\n          rows: [{\n            slot_id: 'slot-123',\n            name: 'integration_test_slot',\n            display_name: 'Integration Test Slot',\n            placement_area: 'homepage',\n            position: 'hero_banner',\n            max_items: 5,\n            min_items: 1,\n            dimensions: '{}',\n            styling: '{}',\n            layout: '{}',\n            targeting_rules: '{}',\n            display_rules: '{}',\n            is_active: true,\n            priority: 50,\n            tags: '[]',\n            created_at: new Date(),\n            updated_at: new Date(),\n            created_by: 'admin'\n          }]\n        })\n        .mockResolvedValueOnce({ // Get slot for placement\n          rows: [{\n            slot_id: 'slot-123',\n            max_items: 5,\n            placement_area: 'homepage',\n            position: 'hero_banner'\n          }]\n        })\n        .mockResolvedValueOnce({ rows: [{ count: '0' }] }) // Active placements count\n        .mockResolvedValueOnce({ rows: [{ id: 'template-789' }] }) // Content validation\n        .mockResolvedValueOnce({ rows: [] }); // Placement creation INSERT\n\n      // Step 1: Create placement slot\n      const slotRequest: CreateSlotRequest = {\n        name: 'integration_test_slot',\n        displayName: 'Integration Test Slot',\n        description: 'Slot for integration testing',\n        placementArea: PlacementArea.HOMEPAGE,\n        position: PlacementPosition.HERO_BANNER,\n        maxItems: 5,\n        dimensions: { width: 1200, height: 400 },\n        layout: { type: 'stack' }\n      };\n\n      const slot = await placementService.createPlacementSlot(slotRequest, 'admin');\n      expect(slot.slotId).toBeTruthy();\n\n      // Step 2: Create content placement\n      const placementRequest: CreatePlacementRequest = {\n        slotId: slot.slotId,\n        contentId: 'template-789',\n        contentType: ContentType.TEMPLATE,\n        priority: 80,\n        startTime: new Date('2024-01-01'),\n        endTime: new Date('2024-12-31')\n      };\n\n      const placement = await placementService.createContentPlacement(placementRequest, 'admin');\n      expect(placement.placementId).toBeTruthy();\n      expect(placement.slotId).toBe(slot.slotId);\n\n      // Verify audit events were logged\n      expect(mockAuditService.logEvent).toHaveBeenCalledTimes(2);\n      expect(mockAuditService.logEvent).toHaveBeenNthCalledWith(1,\n        expect.objectContaining({ action: 'placement_slot_created' })\n      );\n      expect(mockAuditService.logEvent).toHaveBeenNthCalledWith(2,\n        expect.objectContaining({ action: 'content_placement_created' })\n      );\n    });\n\n    test('should handle placement lifecycle management', async () => {\n      const placementId = 'place-lifecycle-test';\n      \n      // Mock placement retrieval for updates\n      (mockDatabase.query as jest.Mock)\n        .mockResolvedValue({\n          rows: [{\n            placement_id: placementId,\n            slot_id: 'slot-123',\n            content_id: 'template-456',\n            content_type: 'template',\n            status: 'draft',\n            priority: 50,\n            created_at: new Date(),\n            updated_at: new Date(),\n            created_by: 'admin'\n          }]\n        });\n\n      // Test status progression: draft -> scheduled -> active -> paused -> archived\n      const statusProgression = [\n        PlacementStatus.SCHEDULED,\n        PlacementStatus.ACTIVE,\n        PlacementStatus.PAUSED,\n        PlacementStatus.ARCHIVED\n      ];\n\n      for (const status of statusProgression) {\n        // Mock the update and retrieval calls\n        (mockDatabase.query as jest.Mock)\n          .mockResolvedValueOnce({ // Current placement retrieval\n            rows: [{\n              placement_id: placementId,\n              status: 'draft', // Previous status\n              slot_id: 'slot-123'\n            }]\n          })\n          .mockResolvedValueOnce({ rows: [] }) // UPDATE query\n          .mockResolvedValueOnce({ // Final retrieval\n            rows: [{\n              placement_id: placementId,\n              status: status.toLowerCase(),\n              slot_id: 'slot-123',\n              updated_at: new Date()\n            }]\n          });\n\n        const result = await placementService.updateContentPlacement(\n          placementId,\n          { status },\n          'admin'\n        );\n\n        expect(result.status).toBe(status.toLowerCase());\n      }\n\n      // Verify audit logging for each status change\n      expect(mockAuditService.logEvent).toHaveBeenCalledTimes(statusProgression.length);\n    });\n  });\n\n  describe('Error Handling and Validation', () => {\n    test('should validate slot creation requirements', async () => {\n      const invalidRequests = [\n        { name: 'ab' }, // Too short\n        { name: 'valid_name', displayName: 'xy' }, // Display name too short\n        { name: 'valid_name', displayName: 'Valid Name' }, // Missing area/position\n        {\n          name: 'valid_name',\n          displayName: 'Valid Name',\n          placementArea: PlacementArea.HOMEPAGE,\n          position: PlacementPosition.HERO_BANNER,\n          maxItems: 0 // Invalid max items\n        }\n      ];\n\n      for (const request of invalidRequests) {\n        await expect(\n          placementService.createPlacementSlot(request as any, 'admin')\n        ).rejects.toThrow();\n      }\n    });\n\n    test('should handle database connection errors gracefully', async () => {\n      (mockDatabase.query as jest.Mock)\n        .mockRejectedValue(new Error('Database connection failed'));\n\n      await expect(\n        placementService.getPlacementSlots({})\n      ).rejects.toThrow('Database connection failed');\n    });\n\n    test('should validate placement scheduling constraints', async () => {\n      const request: CreatePlacementRequest = {\n        slotId: 'slot-123',\n        contentId: 'template-456',\n        contentType: ContentType.TEMPLATE,\n        startTime: new Date('2024-12-31'),\n        endTime: new Date('2024-01-01') // End before start\n      };\n\n      // Mock slot retrieval\n      (mockDatabase.query as jest.Mock)\n        .mockResolvedValueOnce({\n          rows: [{ slot_id: 'slot-123', max_items: 5 }]\n        });\n\n      await expect(\n        placementService.createContentPlacement(request, 'admin')\n      ).rejects.toThrow();\n    });\n  });\n\n  afterEach(() => {\n    // Clean up any timers or resources\n    jest.clearAllTimers();\n  });\n});
+import {
+  PlacementArea,
+  PlacementPosition,
+  ContentType,
+  PlacementStatus,
+  PlacementSlot,
+  ContentPlacement
+} from '../packages/core/types/PlacementTypes';
+
+// Mock dependencies
+const mockDatabase = {
+  query: jest.fn()
+} as unknown as Database;
+
+const mockAuditService = {
+  logEvent: jest.fn()
+} as unknown as AuditService;
+
+describe('Placement Management System', () => {
+  let placementService: PlacementManagementService;
+  let analyticsService: PlacementAnalyticsService;
+  let adminController: PlacementAdminController;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    
+    placementService = new PlacementManagementService(
+      mockDatabase,
+      mockAuditService
+    );
+    
+    analyticsService = new PlacementAnalyticsService(mockDatabase, {
+      metricsCalculationInterval: 1,
+      insightGenerationInterval: 1
+    });
+    
+    adminController = new PlacementAdminController(
+      mockDatabase,
+      placementService,
+      mockAuditService
+    );
+  });
+
+  describe('PlacementManagementService', () => {
+    describe('Placement Slot Management', () => {
+      test('should create placement slot successfully', async () => {
+        // Mock successful database insertion
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({ rows: [] }) // INSERT query
+          .mockResolvedValueOnce({ // SELECT query for retrieval
+            rows: [{
+              slot_id: 'slot-123',
+              name: 'test_slot',
+              display_name: 'Test Slot',
+              description: 'Test description',
+              placement_area: 'homepage',
+              position: 'hero_banner',
+              max_items: 1,
+              min_items: 1,
+              dimensions: '{}',
+              styling: '{}',
+              layout: '{}',
+              targeting_rules: '{}',
+              display_rules: '{}',
+              is_active: true,
+              priority: 50,
+              tags: '[]',
+              created_at: new Date(),
+              updated_at: new Date(),
+              created_by: 'admin'
+            }]
+          });
+
+        const slotRequest: CreateSlotRequest = {
+          name: 'test_slot',
+          displayName: 'Test Slot',
+          description: 'Test description',
+          placementArea: PlacementArea.HOMEPAGE,
+          position: PlacementPosition.HERO_BANNER,
+          maxItems: 1,
+          minItems: 1,
+          dimensions: { width: 1200, height: 400 },
+          layout: { type: 'stack' }
+        };
+
+        const result = await placementService.createPlacementSlot(slotRequest, 'admin');
+
+        expect(result).toBeDefined();
+        expect(result.slotId).toBeTruthy();
+        expect(result.name).toBe('test_slot');
+        expect(result.placementArea).toBe(PlacementArea.HOMEPAGE);
+        expect(mockAuditService.logEvent).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: 'placement_slot_created',
+            userId: 'admin'
+          })
+        );
+      });
+
+      test('should retrieve placement slots with filtering', async () => {
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({ rows: [{ count: '5' }] }) // COUNT query
+          .mockResolvedValueOnce({ // SELECT query
+            rows: [
+              {
+                slot_id: 'slot-1',
+                name: 'homepage_hero',
+                display_name: 'Homepage Hero',
+                placement_area: 'homepage',
+                position: 'hero_banner',
+                max_items: 1,
+                min_items: 1,
+                dimensions: '{}',
+                styling: '{}',
+                layout: '{}',
+                targeting_rules: '{}',
+                display_rules: '{}',
+                is_active: true,
+                priority: 80,
+                tags: '[]',
+                created_at: new Date(),
+                updated_at: new Date(),
+                created_by: 'admin'
+              }
+            ]
+          });
+
+        const result = await placementService.getPlacementSlots({
+          placementArea: PlacementArea.HOMEPAGE,
+          isActive: true,
+          limit: 10
+        });
+
+        expect(result.slots).toHaveLength(1);
+        expect(result.total).toBe(5);
+        expect(result.slots[0].placementArea).toBe(PlacementArea.HOMEPAGE);
+      });
+
+      test('should update placement slot', async () => {
+        // Mock current slot retrieval
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({
+            rows: [{
+              slot_id: 'slot-123',
+              name: 'test_slot',
+              display_name: 'Test Slot',
+              description: 'Original description',
+              placement_area: 'homepage',
+              position: 'hero_banner',
+              max_items: 1,
+              min_items: 1,
+              dimensions: '{}',
+              styling: '{}',
+              layout: '{}',
+              targeting_rules: '{}',
+              display_rules: '{}',
+              is_active: true,
+              priority: 50,
+              tags: '[]',
+              created_at: new Date(),
+              updated_at: new Date(),
+              created_by: 'admin'
+            }]
+          })
+          .mockResolvedValueOnce({ rows: [] }) // UPDATE query
+          .mockResolvedValueOnce({ // Final SELECT query
+            rows: [{
+              slot_id: 'slot-123',
+              name: 'test_slot',
+              display_name: 'Updated Test Slot',
+              description: 'Updated description',
+              placement_area: 'homepage',
+              position: 'hero_banner',
+              max_items: 2,
+              min_items: 1,
+              dimensions: '{}',
+              styling: '{}',
+              layout: '{}',
+              targeting_rules: '{}',
+              display_rules: '{}',
+              is_active: true,
+              priority: 60,
+              tags: '[]',
+              created_at: new Date(),
+              updated_at: new Date(),
+              created_by: 'admin'
+            }]
+          });
+
+        const updates = {
+          displayName: 'Updated Test Slot',
+          description: 'Updated description',
+          maxItems: 2,
+          priority: 60
+        };
+
+        const result = await placementService.updatePlacementSlot('slot-123', updates, 'admin');
+
+        expect(result.displayName).toBe('Updated Test Slot');
+        expect(result.maxItems).toBe(2);
+        expect(result.priority).toBe(60);
+        expect(mockAuditService.logEvent).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: 'placement_slot_updated'
+          })
+        );
+      });
+
+      test('should delete placement slot when no active placements', async () => {
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({ rows: [{ count: '0' }] }) // Check active placements
+          .mockResolvedValueOnce({ rows: [] }); // DELETE query
+
+        await expect(
+          placementService.deletePlacementSlot('slot-123', 'admin')
+        ).resolves.not.toThrow();
+
+        expect(mockAuditService.logEvent).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: 'placement_slot_deleted'
+          })
+        );
+      });
+
+      test('should prevent deletion when active placements exist', async () => {
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({ rows: [{ count: '3' }] }); // Active placements exist
+
+        await expect(
+          placementService.deletePlacementSlot('slot-123', 'admin')
+        ).rejects.toThrow('Cannot delete slot with 3 active placements');
+      });
+    });
+
+    describe('Content Placement Management', () => {
+      test('should create content placement successfully', async () => {
+        // Mock slot existence and capacity check
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({ // Get slot
+            rows: [{
+              slot_id: 'slot-123',
+              name: 'test_slot',
+              max_items: 5,
+              min_items: 1,
+              placement_area: 'homepage',
+              position: 'hero_banner'
+            }]
+          })
+          .mockResolvedValueOnce({ rows: [{ count: '2' }] }) // Active placements count
+          .mockResolvedValueOnce({ rows: [{ id: 'template-456' }] }) // Content validation
+          .mockResolvedValueOnce({ rows: [] }); // INSERT query
+
+        const placementRequest: CreatePlacementRequest = {
+          slotId: 'slot-123',
+          contentId: 'template-456',
+          contentType: ContentType.TEMPLATE,
+          priority: 75,
+          startTime: new Date('2024-01-01'),
+          endTime: new Date('2024-12-31')
+        };
+
+        const result = await placementService.createContentPlacement(placementRequest, 'admin');
+
+        expect(result).toBeDefined();
+        expect(result.placementId).toBeTruthy();
+        expect(result.slotId).toBe('slot-123');
+        expect(result.contentId).toBe('template-456');
+        expect(result.priority).toBe(75);
+        expect(mockAuditService.logEvent).toHaveBeenCalledWith(
+          expect.objectContaining({
+            action: 'content_placement_created'
+          })
+        );
+      });
+
+      test('should prevent placement when slot is at capacity', async () => {
+        // Mock slot at capacity
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({ 
+            rows: [{
+              slot_id: 'slot-123',
+              max_items: 3
+            }]
+          })
+          .mockResolvedValueOnce({ rows: [{ count: '3' }] }); // At capacity
+
+        const placementRequest: CreatePlacementRequest = {
+          slotId: 'slot-123',
+          contentId: 'template-456',
+          contentType: ContentType.TEMPLATE
+        };
+
+        await expect(
+          placementService.createContentPlacement(placementRequest, 'admin')
+        ).rejects.toThrow('Slot slot-123 is at capacity (3 items)');
+      });
+
+      test('should search content placements with filters', async () => {
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({ rows: [{ count: '10' }] }) // COUNT query
+          .mockResolvedValueOnce({ // SELECT query
+            rows: [
+              {
+                placement_id: 'place-1',
+                slot_id: 'slot-123',
+                content_id: 'template-456',
+                content_type: 'template',
+                priority: 75,
+                status: 'active',
+                created_at: new Date(),
+                updated_at: new Date(),
+                slot_name: 'test_slot',
+                slot_display_name: 'Test Slot'
+              }
+            ]
+          });
+
+        const result = await placementService.searchContentPlacements({
+          slotIds: ['slot-123'],
+          contentTypes: [ContentType.TEMPLATE],
+          status: [PlacementStatus.ACTIVE],
+          limit: 20
+        });
+
+        expect(result.placements).toHaveLength(1);
+        expect(result.total).toBe(10);
+        expect(result.placements[0].contentType).toBe(ContentType.TEMPLATE);
+      });
+    });
+
+    describe('Preview Generation', () => {
+      test('should generate placement preview', async () => {
+        // Mock slot retrieval
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({
+            rows: [{
+              slot_id: 'slot-123',
+              name: 'test_slot',
+              max_items: 3,
+              placement_area: 'homepage',
+              position: 'hero_banner',
+              targeting_rules: '{}'
+            }]
+          });
+
+        const viewerContext = {
+          deviceType: 'desktop',
+          userSegment: 'premium',
+          location: 'US'
+        };
+
+        const preview = await placementService.generatePlacementPreview(
+          'slot-123',
+          viewerContext,
+          'test'
+        );
+
+        expect(preview).toBeDefined();
+        expect(preview.slotId).toBe('slot-123');
+        expect(preview.previewMode).toBe('test');
+        expect(preview.viewerContext).toEqual(
+          expect.objectContaining(viewerContext)
+        );
+        expect(preview.expiresAt).toBeInstanceOf(Date);
+      });
+    });
+  });
+
+  describe('PlacementAnalyticsService', () => {
+    test('should calculate slot metrics', async () => {
+      const period = {
+        startDate: new Date('2024-01-01'),
+        endDate: new Date('2024-01-31'),
+        granularity: 'day' as const
+      };
+
+      const metrics = await analyticsService.calculateSlotMetrics('slot-123', period);
+
+      expect(metrics).toBeDefined();
+      expect(metrics.slotId).toBe('slot-123');
+      expect(metrics.period).toEqual(period);
+      expect(metrics.impressions).toBeGreaterThan(0);
+      expect(metrics.clickThroughRate).toBeGreaterThan(0);
+      expect(metrics.performanceIndex).toBeGreaterThan(0);
+    });
+
+    test('should generate comprehensive analytics', async () => {
+      const period = {
+        startDate: new Date('2024-01-01'),
+        endDate: new Date('2024-01-31'),
+        granularity: 'day' as const
+      };
+
+      const analytics = await analyticsService.generateAnalytics(period);
+
+      expect(analytics).toBeDefined();
+      expect(analytics.period).toEqual(period);
+      expect(analytics.generatedAt).toBeInstanceOf(Date);
+      expect(analytics.totalSlots).toBeGreaterThan(0);
+      expect(analytics.overallPerformance).toBeDefined();
+      expect(analytics.insights).toBeInstanceOf(Array);
+      expect(analytics.recommendations).toBeInstanceOf(Array);
+    });
+
+    test('should detect performance anomalies', async () => {
+      const currentMetrics = {
+        slotId: 'slot-123',
+        period: {
+          startDate: new Date('2024-01-01'),
+          endDate: new Date('2024-01-02'),
+          granularity: 'day' as const
+        },
+        impressions: 1000,
+        uniqueViews: 800,
+        viewDuration: 45,
+        viewabilityRate: 75,
+        clicks: 15, // Low CTR - should trigger anomaly
+        clickThroughRate: 1.5,
+        interactionRate: 2.0,
+        bounceRate: 45,
+        conversions: 2,
+        conversionRate: 0.2,
+        revenue: 50,
+        revenuePerView: 0.05,
+        loadTime: 350,
+        errorRate: 2.5,
+        performanceIndex: 60
+      };
+
+      const anomalies = await analyticsService.detectAnomalies('slot-123', currentMetrics);
+
+      expect(anomalies).toBeInstanceOf(Array);
+      // Note: Actual anomaly detection depends on baseline data availability
+    });
+  });
+
+  describe('Integration Workflows', () => {
+    test('should handle complete placement creation workflow', async () => {
+      // Mock all required database calls for the full workflow
+      (mockDatabase.query as jest.Mock)
+        .mockResolvedValueOnce({ rows: [] }) // Slot creation INSERT
+        .mockResolvedValueOnce({ // Slot retrieval
+          rows: [{
+            slot_id: 'slot-123',
+            name: 'integration_test_slot',
+            display_name: 'Integration Test Slot',
+            placement_area: 'homepage',
+            position: 'hero_banner',
+            max_items: 5,
+            min_items: 1,
+            dimensions: '{}',
+            styling: '{}',
+            layout: '{}',
+            targeting_rules: '{}',
+            display_rules: '{}',
+            is_active: true,
+            priority: 50,
+            tags: '[]',
+            created_at: new Date(),
+            updated_at: new Date(),
+            created_by: 'admin'
+          }]
+        })
+        .mockResolvedValueOnce({ // Get slot for placement
+          rows: [{
+            slot_id: 'slot-123',
+            max_items: 5,
+            placement_area: 'homepage',
+            position: 'hero_banner'
+          }]
+        })
+        .mockResolvedValueOnce({ rows: [{ count: '0' }] }) // Active placements count
+        .mockResolvedValueOnce({ rows: [{ id: 'template-789' }] }) // Content validation
+        .mockResolvedValueOnce({ rows: [] }); // Placement creation INSERT
+
+      // Step 1: Create placement slot
+      const slotRequest: CreateSlotRequest = {
+        name: 'integration_test_slot',
+        displayName: 'Integration Test Slot',
+        description: 'Slot for integration testing',
+        placementArea: PlacementArea.HOMEPAGE,
+        position: PlacementPosition.HERO_BANNER,
+        maxItems: 5,
+        dimensions: { width: 1200, height: 400 },
+        layout: { type: 'stack' }
+      };
+
+      const slot = await placementService.createPlacementSlot(slotRequest, 'admin');
+      expect(slot.slotId).toBeTruthy();
+
+      // Step 2: Create content placement
+      const placementRequest: CreatePlacementRequest = {
+        slotId: slot.slotId,
+        contentId: 'template-789',
+        contentType: ContentType.TEMPLATE,
+        priority: 80,
+        startTime: new Date('2024-01-01'),
+        endTime: new Date('2024-12-31')
+      };
+
+      const placement = await placementService.createContentPlacement(placementRequest, 'admin');
+      expect(placement.placementId).toBeTruthy();
+      expect(placement.slotId).toBe(slot.slotId);
+
+      // Verify audit events were logged
+      expect(mockAuditService.logEvent).toHaveBeenCalledTimes(2);
+      expect(mockAuditService.logEvent).toHaveBeenNthCalledWith(1,
+        expect.objectContaining({ action: 'placement_slot_created' })
+      );
+      expect(mockAuditService.logEvent).toHaveBeenNthCalledWith(2,
+        expect.objectContaining({ action: 'content_placement_created' })
+      );
+    });
+
+    test('should handle placement lifecycle management', async () => {
+      const placementId = 'place-lifecycle-test';
+      
+      // Mock placement retrieval for updates
+      (mockDatabase.query as jest.Mock)
+        .mockResolvedValue({
+          rows: [{
+            placement_id: placementId,
+            slot_id: 'slot-123',
+            content_id: 'template-456',
+            content_type: 'template',
+            status: 'draft',
+            priority: 50,
+            created_at: new Date(),
+            updated_at: new Date(),
+            created_by: 'admin'
+          }]
+        });
+
+      // Test status progression: draft -> scheduled -> active -> paused -> archived
+      const statusProgression = [
+        PlacementStatus.SCHEDULED,
+        PlacementStatus.ACTIVE,
+        PlacementStatus.PAUSED,
+        PlacementStatus.ARCHIVED
+      ];
+
+      for (const status of statusProgression) {
+        // Mock the update and retrieval calls
+        (mockDatabase.query as jest.Mock)
+          .mockResolvedValueOnce({ // Current placement retrieval
+            rows: [{
+              placement_id: placementId,
+              status: 'draft', // Previous status
+              slot_id: 'slot-123'
+            }]
+          })
+          .mockResolvedValueOnce({ rows: [] }) // UPDATE query
+          .mockResolvedValueOnce({ // Final retrieval
+            rows: [{
+              placement_id: placementId,
+              status: status.toLowerCase(),
+              slot_id: 'slot-123',
+              updated_at: new Date()
+            }]
+          });
+
+        const result = await placementService.updateContentPlacement(
+          placementId,
+          { status },
+          'admin'
+        );
+
+        expect(result.status).toBe(status.toLowerCase());
+      }
+
+      // Verify audit logging for each status change
+      expect(mockAuditService.logEvent).toHaveBeenCalledTimes(statusProgression.length);
+    });
+  });
+
+  describe('Error Handling and Validation', () => {
+    test('should validate slot creation requirements', async () => {
+      const invalidRequests = [
+        { name: 'ab' }, // Too short
+        { name: 'valid_name', displayName: 'xy' }, // Display name too short
+        { name: 'valid_name', displayName: 'Valid Name' }, // Missing area/position
+        {
+          name: 'valid_name',
+          displayName: 'Valid Name',
+          placementArea: PlacementArea.HOMEPAGE,
+          position: PlacementPosition.HERO_BANNER,
+          maxItems: 0 // Invalid max items
+        }
+      ];
+
+      for (const request of invalidRequests) {
+        await expect(
+          placementService.createPlacementSlot(request as any, 'admin')
+        ).rejects.toThrow();
+      }
+    });
+
+    test('should handle database connection errors gracefully', async () => {
+      (mockDatabase.query as jest.Mock)
+        .mockRejectedValue(new Error('Database connection failed'));
+
+      await expect(
+        placementService.getPlacementSlots({})
+      ).rejects.toThrow('Database connection failed');
+    });
+
+    test('should validate placement scheduling constraints', async () => {
+      const request: CreatePlacementRequest = {
+        slotId: 'slot-123',
+        contentId: 'template-456',
+        contentType: ContentType.TEMPLATE,
+        startTime: new Date('2024-12-31'),
+        endTime: new Date('2024-01-01') // End before start
+      };
+
+      // Mock slot retrieval
+      (mockDatabase.query as jest.Mock)
+        .mockResolvedValueOnce({
+          rows: [{ slot_id: 'slot-123', max_items: 5 }]
+        });
+
+      await expect(
+        placementService.createContentPlacement(request, 'admin')
+      ).rejects.toThrow();
+    });
+  });
+
+  afterEach(() => {
+    // Clean up any timers or resources
+    jest.clearAllTimers();
+  });
+});

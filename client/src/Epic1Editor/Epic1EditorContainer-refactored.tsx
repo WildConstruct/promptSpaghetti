@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Node, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { ToastContainer, useToast } from '../Toast';
@@ -6,30 +6,22 @@ import { useSupabaseFileOperations } from './hooks/useSupabaseFileOperations';
 import { useEditOperations } from './hooks/useEditOperations';
 import { useWorkspaceRecovery } from './hooks/useWorkspaceRecovery';
 import { usePromptParsing } from './hooks/usePromptParsing';
-import { SupabaseOpenDialog } from './components/SupabaseOpenDialog';
-import { SupabaseSaveDialog } from './components/SupabaseSaveDialog';
-import { NewDocumentModal } from './components/NewDocumentModal';
-import { testSupabaseConnection } from './hooks/testSupabase';
-import {
-  validateGraph,
-  formatValidationMessage
-} from './utils/graphValidation';
-import { Epic1GraphEditorProps, NodeData } from './types';
 import type { PromptAnalysis } from '../lib/simplePromptParser';
-import { stylePresets, getConsoleStyle } from './utils/styleUtils';
 import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
 import '@promptscape/core/components/epic1/nodes/BaseEditableNode.css';
 import '@promptscape/core/components/epic1/nodes/NodeStyles.css';
 import '../Epic1ReactFlowFix.css';
 import './styles/about-modal.css';
 import './styles/theme-variables.css';
-import { fromLegacyGraph, writePsg } from '@promptscape/core';
-import type { GraphNode, GraphEdge, Graph } from '@promptscape/core';
 import { SimpleMenuBar } from './components/SimpleMenuBar';
 import { IntelligenceProvider } from '@promptscape/core/components/epic1/contexts/IntelligenceContext';
 import Epic1GraphEditor from '@promptscape/core/components/epic1/Epic1GraphEditor';
 import { PromptDissector } from '../components/LaunchScreen/PromptDissector';
 import { WorkspaceRecoveryDialog } from '@promptscape/core/components/WorkspaceRecoveryDialog';
+import { SupabaseOpenDialog } from './components/SupabaseOpenDialog';
+import { SupabaseSaveDialog } from './components/SupabaseSaveDialog';
+import { NewDocumentModal } from './components/NewDocumentModal';
+import ChangelogModal from '@promptscape/core/components/ChangelogModal/ChangelogModal';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -53,7 +45,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   startWithTutorial = false
 }) => {
   // Component loading state (simplified - using static imports now)
-  const [loadError, setLoadError] = useState<string>('');
   const [assetLibraryVisible, setAssetLibraryVisible] =
     useState(showAssetLibrary);
 
@@ -67,6 +58,13 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       return () => clearTimeout(timer);
     }
   }, [startWithTutorial]);
+
+  useEffect(() => {
+    if (showOnboarding) {
+      window.dispatchEvent(new CustomEvent('epic1:showOnboarding'));
+    }
+  }, [showOnboarding]);
+
   const hasInitialInput = Boolean(
     (initialGraph && initialGraph.nodes && initialGraph.edges) ||
       (initialAnalysis && initialAnalysis.nodes)
@@ -89,6 +87,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
 
   const [showChangelog, setShowChangelog] = useState(false);
+  const noop = useCallback(() => undefined, []);
 
   // Custom hooks
   const {
@@ -106,11 +105,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
   const {
     showPromptDissector,
-    promptAnalysis,
     nodeCreationMode,
     handlePromptAnalysisComplete,
     openPromptDissector,
-    closePromptDissector,
     processExistingAnalysis
   } = usePromptParsing({
     initialAnalysis,
@@ -162,6 +159,27 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     onEditorKeyChange: setEditorKey,
     showToast
   });
+  const {
+    isAuthenticated,
+    savedGraphs,
+    isLoading: isFileLoading,
+    showOpenDialog,
+    showSaveDialog,
+    showNewDocumentModal,
+    setShowOpenDialog,
+    setShowSaveDialog,
+    handleOpen,
+    handleSave,
+    handleSaveAs,
+    handleLocalOpen,
+    handleNew,
+    confirmNewDocument,
+    cancelNewDocument,
+    handleSupabaseSave,
+    loadGraph,
+    deleteGraph,
+    handleQuit
+  } = fileOps;
 
   // Edit operations with proper configuration
   const editOps = useEditOperations({
@@ -172,8 +190,12 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     onEditorKeyChange: setEditorKey,
     showToast
   });
+  const { handleUndo, handleRedo, handleCopy, handlePaste } = editOps;
 
   // Components are now statically imported at the top of the file
+  const handleCreateNew = useCallback(() => {
+    handleNew([], []);
+  }, [handleNew]);
 
   // Process initial graph/analysis
   useEffect(() => {
@@ -187,24 +209,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     }
   }, [editorReady, initialGraph, initialAnalysis, processExistingAnalysis]);
 
-  // Render error state if needed
-  if (loadError) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-          backgroundColor: '#0a0a0a',
-          color: '#ff6b6b'
-        }}
-      >
-        <div>{loadError || 'Failed to load editor'}</div>
-      </div>
-    );
-  }
-
   return (
     <IntelligenceProvider>
       <div
@@ -212,12 +216,21 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       >
         {showMenuBar && (
           <SimpleMenuBar
-            onNewProject={() => openPromptDissector('new-project')}
-            onAddNodes={() => openPromptDissector('add-to-existing')}
-            onShowChangelog={() => setShowChangelog(true)}
-            onToggleAssetLibrary={() =>
-              setAssetLibraryVisible(!assetLibraryVisible)
-            }
+            onNew={handleCreateNew}
+            onOpen={handleOpen}
+            onSave={() => handleSave(currentNodes, currentEdges)}
+            onSaveAs={() => handleSaveAs(currentNodes, currentEdges)}
+            onImport={handleLocalOpen}
+            onExport={() => handleSaveAs(currentNodes, currentEdges)}
+            onQuit={() => handleQuit(currentNodes, currentEdges)}
+            onUndo={handleUndo}
+            onRedo={handleRedo}
+            onCopy={handleCopy}
+            onPaste={handlePaste}
+            onToggleAssetLibrary={() => setAssetLibraryVisible(prev => !prev)}
+            onDocumentation={() => openPromptDissector('new-project')}
+            onPreferences={() => openPromptDissector('add-to-existing')}
+            onChangelog={() => setShowChangelog(true)}
           />
         )}
 
@@ -236,7 +249,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         {showPromptDissector && (
           <PromptDissector
             value=""
-            onChange={() => {}}
+            onChange={noop}
             onAnalysisComplete={handlePromptAnalysisComplete}
             placeholder="Enter your prompt to generate nodes..."
           />
@@ -257,6 +270,48 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             onClose={() => setShowChangelog(false)}
           />
         )}
+
+        <SupabaseOpenDialog
+          isOpen={showOpenDialog}
+          onClose={() => setShowOpenDialog(false)}
+          graphs={savedGraphs}
+          onLoad={graph => {
+            loadGraph(graph);
+            setShowOpenDialog(false);
+          }}
+          onDelete={isAuthenticated ? deleteGraph : undefined}
+          isLoading={isFileLoading}
+          isAuthenticated={isAuthenticated}
+          onLocalOpen={() => {
+            setShowOpenDialog(false);
+            handleLocalOpen();
+          }}
+        />
+
+        <SupabaseSaveDialog
+          isOpen={showSaveDialog}
+          onClose={() => setShowSaveDialog(false)}
+          onSave={(name, description, isPublic, tags) =>
+            handleSupabaseSave(
+              currentNodes,
+              currentEdges,
+              name,
+              description,
+              isPublic,
+              tags
+            )
+          }
+          isLoading={isFileLoading}
+          isAuthenticated={isAuthenticated}
+          currentNodes={currentNodes}
+          currentEdges={currentEdges}
+        />
+
+        <NewDocumentModal
+          isOpen={showNewDocumentModal}
+          onConfirm={confirmNewDocument}
+          onCancel={cancelNewDocument}
+        />
 
         <ToastContainer toasts={toasts} onDismiss={dismissToast} />
       </div>

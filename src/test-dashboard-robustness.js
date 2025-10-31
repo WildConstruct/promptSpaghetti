@@ -117,7 +117,8 @@ function testTaskRendering(task, index) {
       taskTags: taskTags.length,
       priorityClass,
       stateClass,
-      tagClasses
+      tagClasses,
+      priorityEmoji
     };
   } catch (error) {
     return {

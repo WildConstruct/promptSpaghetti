@@ -1,0 +1,254 @@
+/* Storage Information Component Styles */
+
+.storage-info {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  font-size: '14px';
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+.storage-info.fixed {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 12px 16px;
+  z-index: 1000;
+  max-width: 300px;
+}
+
+.storage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.storage-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.storage-subtitle {
+  font-size: 13px;
+  color: #6c757d;
+  margin-top: 8px;
+}
+
+.storage-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.storage-metric-label {
+  color: #6c757d;
+  font-size: 13px;
+}
+
+.storage-metric-value {
+  color: #495057;
+  font-weight: 500;
+}
+
+.storage-usage-section {
+  margin-top: 12px;
+}
+
+.storage-usage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.storage-usage-percentage {
+  font-weight: 500;
+}
+
+.storage-usage-bar {
+  height: 6px;
+  background-color: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.storage-usage-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745 0%, #ffc107 70%, #dc3545 100%);
+  transition: width 0.3s ease;
+}
+
+.storage-actions {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #dee2e6;
+}
+
+.storage-data-info {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #dee2e6;
+}
+
+.storage-button {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.storage-button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.storage-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.storage-button-primary {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.storage-button-primary:hover:not(:disabled) {
+  background-color: #007bff;
+  color: white;
+}
+
+.storage-button-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.storage-button-danger:hover:not(:disabled) {
+  background-color: #dc3545;
+  color: white;
+}
+
+.storage-button-danger:active {
+  background-color: #c82333;
+}
+
+.storage-error {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 4px;
+  color: #c33;
+  font-size: 12px;
+}
+
+.storage-confirm-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.storage-confirm-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 90%;
+}
+
+.storage-confirm-title {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #dc3545;
+}
+
+.storage-confirm-message {
+  margin: 0 0 20px 0;
+  color: #495057;
+  line-height: 1.5;
+}
+
+.storage-confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.storage-confirm-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.storage-confirm-button-cancel {
+  border: 1px solid #6c757d;
+  background-color: white;
+  color: #6c757d;
+}
+
+.storage-confirm-button-cancel:hover {
+  background-color: #6c757d;
+  color: white;
+}
+
+.storage-confirm-button-confirm {
+  border: 1px solid #dc3545;
+  background-color: #dc3545;
+  color: white;
+}
+
+.storage-confirm-button-confirm:hover {
+  background-color: #c82333;
+}
+
+.storage-confirm-note {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #856404;
+}
+
+.empty-message {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.storage-compression-status {
+  margin-top: 8px;
+  padding: 4px 8px;
+  background-color: #e7f3ff;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #0066cc;
+  display: inline-block;
+}

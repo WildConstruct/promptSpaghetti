@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Interactive Examples Framework for Content Authoring Handbook
  * Epic 8.3.2 - Interactive Examples Development

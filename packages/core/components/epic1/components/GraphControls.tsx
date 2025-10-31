@@ -6,6 +6,32 @@ import { NodePalette } from '../NodePalette';
 import { NodeToolbar } from '../NodeToolbar';
 import { ConsentService } from '../../../services/consent';
 
+const isBrowser = typeof window !== 'undefined';
+
+const readBooleanSetting = (key: string, fallback: boolean): boolean => {
+  if (!isBrowser || !window.localStorage) {
+    return fallback;
+  }
+  try {
+    const stored = window.localStorage.getItem(key);
+    return stored === null ? fallback : stored === 'true';
+  } catch (error) {
+    console.warn(`[GraphControls] Failed to read ${key}`, error);
+    return fallback;
+  }
+};
+
+const writeBooleanSetting = (key: string, value: boolean): void => {
+  if (!isBrowser || !window.localStorage) {
+    return;
+  }
+  try {
+    window.localStorage.setItem(key, String(value));
+  } catch (error) {
+    console.warn(`[GraphControls] Failed to write ${key}`, error);
+  }
+};
+
 interface GraphControlsProps {
   onTogglePreview: () => void;
   onExecute?: () => void;
@@ -37,6 +63,7 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
   showInstructions = true,
   onUndoLast,
   onApplyMetadataToSelection,
+  onDisconnectSelection,
   onDownloadGraph,
   onShowHistory,
 
@@ -46,40 +73,18 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
   const [requireConsent, setRequireConsent] = React.useState(
     () => ConsentService.getSettings().requireConsent
   );
-  const [smartMode, setSmartMode] = React.useState<boolean>(() => {
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const s = window.localStorage.getItem('smartMode.enabled');
-        return s === null ? true : s === 'true';
-      }
-    } catch {}
-    return true;
-  });
-  const [buildTreeMode, setBuildTreeMode] = React.useState<boolean>(() => {
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const s = window.localStorage.getItem('buildTree.enabled');
-        return s === null ? false : s === 'true';
-      }
-    } catch {}
-    return false;
-  });
-  const [advancedMatching, setAdvancedMatching] = React.useState<boolean>(() => {
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const s = window.localStorage.getItem('advancedMatching.enabled');
-        return s === null ? false : s === 'true';
-      }
-    } catch {}
-    return false;
-  });
-  const [consistencyEnabled, setConsistencyEnabled] = React.useState<boolean>(() => {
-    try {
-      const s = window.localStorage.getItem('consistency.enabled');
-      return s === null ? true : s === 'true';
-    } catch {}
-    return true;
-  });
+  const [smartMode, setSmartMode] = React.useState<boolean>(() =>
+    readBooleanSetting('smartMode.enabled', true)
+  );
+  const [buildTreeMode, setBuildTreeMode] = React.useState<boolean>(() =>
+    readBooleanSetting('buildTree.enabled', false)
+  );
+  const [advancedMatching, setAdvancedMatching] = React.useState<boolean>(() =>
+    readBooleanSetting('advancedMatching.enabled', false)
+  );
+  const [consistencyEnabled, setConsistencyEnabled] = React.useState<boolean>(() =>
+    readBooleanSetting('consistency.enabled', true)
+  );
 
   const toggleSettings = React.useCallback(() => {
     setShowSettings(s => !s);
@@ -94,33 +99,25 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
   const onToggleSmartMode = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.checked;
     setSmartMode(val);
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.setItem('smartMode.enabled', String(val));
-      }
-    } catch {}
+    writeBooleanSetting('smartMode.enabled', val);
   }, []);
 
   const onToggleBuildTree = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.checked;
     setBuildTreeMode(val);
-    try {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.setItem('buildTree.enabled', String(val));
-      }
-    } catch {}
+    writeBooleanSetting('buildTree.enabled', val);
   }, []);
 
   const onToggleAdvancedMatching = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.checked;
     setAdvancedMatching(val);
-    try { window?.localStorage?.setItem('advancedMatching.enabled', String(val)); } catch {}
+    writeBooleanSetting('advancedMatching.enabled', val);
   }, []);
 
   const onToggleConsistency = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.checked;
     setConsistencyEnabled(val);
-    try { window.localStorage.setItem('consistency.enabled', String(val)); } catch {}
+    writeBooleanSetting('consistency.enabled', val);
   }, []);
 
   // Files test UI state
@@ -129,10 +126,10 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
   const [fileContent, setFileContent] = React.useState<string>('{}');
   const [filesResult, setFilesResult] = React.useState<string>('');
 
-  const filesFetch = React.useCallback(async (method: 'LIST'|'UPLOAD'|'DOWNLOAD'|'DELETE') => {
+  const filesFetch = React.useCallback(async (method: 'LIST' | 'UPLOAD' | 'DOWNLOAD' | 'DELETE') => {
     try {
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (supabaseToken) headers['Authorization'] = `Bearer ${supabaseToken}`;
+      if (supabaseToken) {headers['Authorization'] = `Bearer ${supabaseToken}`;}
       if (method === 'LIST') {
         const res = await fetch('/api/files/list', { headers });
         const text = await res.text();
@@ -157,8 +154,9 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
         setFilesResult(`${res.status}: ${text}`);
         return;
       }
-    } catch (e: any) {
-      setFilesResult(`error: ${e?.message || String(e)}`);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setFilesResult(`error: ${message}`);
     }
   }, [supabaseToken, fileName, fileContent]);
 
@@ -184,38 +182,34 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
           )}
           {onDownloadGraph && (
             <button
-              className="epic1-download-button"
+              className="epic1-download-button epic1-ml-8"
               onClick={onDownloadGraph}
               title="Download JSON"
-              className="epic1-download-button epic1-ml-8"
             >
               Download JSON
             </button>
           )}
           {onShowHistory && (
             <button
-              className="epic1-history-button"
+              className="epic1-history-button epic1-ml-8"
               onClick={onShowHistory}
               title="History"
-              className="epic1-history-button epic1-ml-8"
             >
               History
             </button>
           )}
           {onUndoLast && (
             <button 
-              className="epic1-undo-button"
-              onClick={onUndoLast}
               className="epic1-undo-button epic1-ml-8"
+              onClick={onUndoLast}
             >
               Undo Last
             </button>
           )}
           <button
-            className="epic1-settings-button"
+            className="epic1-settings-button epic1-ml-8"
             onClick={toggleSettings}
             title="File → Settings"
-            className="epic1-settings-button epic1-ml-8"
           >
             Settings
           </button>
@@ -267,7 +261,7 @@ export const GraphControls: React.FC<GraphControlsProps> = ({
                 <span className="epic1-note">(snap spacing in px)</span>
               </div>
             </div>
-            {!import.meta.env.PROD && (
+            {!process.env.NODE_ENV?.includes('prod') && (
             <div className="epic1-section">
               <div className="epic1-section-title">Files (test)</div>
               <div className="epic1-col">

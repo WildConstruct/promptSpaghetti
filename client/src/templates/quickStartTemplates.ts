@@ -1,19 +1,27 @@
 import type { Node, Edge } from 'reactflow';
 
 export type QuickStartTemplate = {
-  nodes: Node[];
+  nodes: Node<TemplateNodeData>[];
   edges: Edge[];
 };
+
+interface TemplateNodeData extends Record<string, unknown> {
+  nodeType: string;
+  label?: string;
+}
 
 // Simple prebuilt graphs for quick start
 const baseY = 100;
 const gapX = 350; // Increased to accommodate wider weighted choice nodes
 
-function lineGraph(labels: string[]): { nodes: Node[]; edges: Edge[] } {
-  const nodes: Node[] = labels.map((label, i) => {
+function lineGraph(labels: string[]): {
+  nodes: Node<TemplateNodeData>[];
+  edges: Edge[];
+} {
+  const nodes: Node<TemplateNodeData>[] = labels.map((label, i) => {
     // Determine node type based on label
     let nodeType = 'textBlock';
-    let data: any = {};
+    let data: TemplateNodeData = { nodeType: 'textBlock', label };
 
     if (label.toLowerCase() === 'output') {
       nodeType = 'output';
@@ -39,7 +47,7 @@ function lineGraph(labels: string[]): { nodes: Node[]; edges: Edge[] } {
         content: `${label} content goes here...`,
         text: `${label} content goes here...`,
         value: `${label} content goes here...`, // BaseEditableNode expects 'value'
-        label: label
+        label
       };
     }
 

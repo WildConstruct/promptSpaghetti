@@ -247,7 +247,7 @@ async function createUtilityTasks() {
     try {
       const stateData = await fs.readFile(stateFile, 'utf8');
       state = JSON.parse(stateData);
-    } catch (error) {
+    } catch {
       // Create new state if file doesn't exist
       state = {
         tasks: {},
@@ -339,7 +339,7 @@ async function createUtilityTasks() {
 
     console.log('\n📋 Created Utility Tasks by Priority:');
     const byPriority = createdTasks.reduce((acc, task) => {
-      if (!acc[task.priority]) acc[task.priority] = [];
+      if (!acc[task.priority]) {acc[task.priority] = [];}
       acc[task.priority].push(task);
       return acc;
     }, {});

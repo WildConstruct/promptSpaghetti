@@ -30,7 +30,6 @@ export const GraphEditorWorkspace: React.FC<GraphEditorWorkspaceProps> = ({
   onNodesChange,
   onEdgesChange,
   onExecute,
-  showPreview,
   previewPosition,
   previewWidth,
   previewDebounceDelay,

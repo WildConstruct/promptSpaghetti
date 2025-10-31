@@ -27,8 +27,15 @@ export interface WorkerResponse {
   progress?: number;
 }
 
-// Worker context type assertion
-declare const self: DedicatedWorkerGlobalScope;
+type ExecutionWorkerContext = {
+  postMessage: (message: WorkerResponse) => void;
+  addEventListener: (
+    type: 'message',
+    handler: (event: { data: WorkerRequest }) => void
+  ) => void;
+};
+
+const workerContext = self as unknown as ExecutionWorkerContext;
 
 /**
  * Execute a graph with progress reporting
@@ -37,38 +44,19 @@ async function executeGraph(
   graph: Epic1Graph,
   seed: string | number
 ): Promise<ExecutionResult> {
-  try {
-    // Create execution engine
-    const engine = new Epic1ExecutionEngine(graph, seed);
-
-    // Execute with progress tracking
-    let lastProgress = 0;
-    const result = await engine.execute(progress => {
-      // Report progress in 10% increments to avoid message flooding
-      const roundedProgress = Math.floor(progress * 10) * 10;
-      if (roundedProgress > lastProgress) {
-        lastProgress = roundedProgress;
-        self.postMessage({
-          type: 'progress',
-          progress: roundedProgress
-        });
-      }
-    });
-
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  // Create execution engine
+  const engine = new Epic1ExecutionEngine(graph, seed);
+  return engine.execute();
 }
 
 /**
  * Handle incoming messages
  */
-self.addEventListener('message', async (event: MessageEvent<WorkerRequest>) => {
+workerContext.addEventListener('message', async (event) => {
   const { type, id, graph, seed } = event.data;
 
   if (type !== 'execute') {
-    self.postMessage({
+    workerContext.postMessage({
       type: 'error',
       id,
       error: `Unknown message type: ${type}`
@@ -78,7 +66,7 @@ self.addEventListener('message', async (event: MessageEvent<WorkerRequest>) => {
 
   try {
     // Report start
-    self.postMessage({
+    workerContext.postMessage({
       type: 'progress',
       id,
       progress: 0
@@ -88,14 +76,14 @@ self.addEventListener('message', async (event: MessageEvent<WorkerRequest>) => {
     const result = await executeGraph(graph, seed);
 
     // Send result
-    self.postMessage({
+    workerContext.postMessage({
       type: 'result',
       id,
       result
     } as WorkerResponse);
   } catch (error) {
     // Send error
-    self.postMessage({
+    workerContext.postMessage({
       type: 'error',
       id,
       error: error instanceof Error ? error.message : 'Unknown execution error'

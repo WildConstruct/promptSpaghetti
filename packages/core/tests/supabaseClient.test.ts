@@ -41,8 +41,11 @@ describe('supabaseClient gating', () => {
     delete process.env.NEXT_PUBLIC_SUPABASE_URL;
     delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
     await import('../utils/supabaseClient');
     expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 });

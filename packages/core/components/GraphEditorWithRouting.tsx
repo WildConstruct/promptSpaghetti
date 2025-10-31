@@ -16,9 +16,7 @@ import ReactFlow, {
   Panel,
   Connection,
   addEdge,
-  EdgeTypes,
-  NodeTypes,
-  useReactFlow
+  EdgeTypes
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -48,6 +46,24 @@ interface GraphEditorWithRoutingProps {
   defaultAlgorithm?: EdgeRoutingAlgorithm;
 }
 
+interface RoutingStats {
+  size: number;
+  hitRate: number;
+  avgCalculationTime: number;
+  crossings?: number;
+  bends?: number;
+  optimizationTime?: number;
+}
+
+type EdgeRoutingData = {
+  routing?: {
+    algorithm?: EdgeRoutingAlgorithm;
+    showControlPoints?: boolean;
+    animated?: boolean;
+    label?: string;
+  };
+};
+
 /**
  * Graph editor with advanced edge routing capabilities
  */
@@ -57,19 +73,51 @@ const GraphEditorWithRouting: React.FC<GraphEditorWithRoutingProps> = ({
   enableAutoRouting = false,
   defaultAlgorithm = 'bezier'
 }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedAlgorithm, setSelectedAlgorithm] =
     useState<EdgeRoutingAlgorithm>(defaultAlgorithm);
   const [showControlPoints, setShowControlPoints] = useState(true);
   const [autoRoutingEnabled, setAutoRoutingEnabled] =
     useState(enableAutoRouting);
-  const [routingStats, setRoutingStats] = useState<any>(null);
+  const [routingStats, setRoutingStats] = useState<RoutingStats | null>(null);
 
   const { perfMonitor } = usePerformance();
-  const reactFlowInstance = useReactFlow();
   const routingManager = useMemo(() => getEdgeRoutingManager(), []);
   const autoRouter = useMemo(() => createAutoRouter(), []);
+  const handleControlPointMove = useCallback(
+    (edgeId: string, pointId: string, position: { x: number; y: number }) => {
+      routingManager.updateControlPoint(edgeId, pointId, position);
+
+      setEdges(previousEdges =>
+        previousEdges.map(edge =>
+          edge.id === edgeId
+            ? { ...edge, data: { ...edge.data, lastUpdate: Date.now() } }
+            : edge
+        )
+      );
+    },
+    [routingManager, setEdges]
+  );
+  const mapRoutedEdges = useCallback(
+    (routedEdges: RoutedEdge[]): Edge[] =>
+      routedEdges.map(edge => ({
+        ...edge,
+        type: 'routing',
+        data: {
+          ...edge.data,
+          routing: {
+            algorithm: selectedAlgorithm,
+            showControlPoints,
+            animated: autoRoutingEnabled,
+            label: edge.data?.label
+          },
+          onControlPointMove: handleControlPointMove,
+          performanceMetrics: edge.calculatedPath?.performance
+        }
+      })),
+    [selectedAlgorithm, showControlPoints, autoRoutingEnabled, handleControlPointMove]
+  );
 
   // Apply routing to edges when they change
   useEffect(() => {
@@ -103,46 +151,54 @@ const GraphEditorWithRouting: React.FC<GraphEditorWithRoutingProps> = ({
         }
       });
 
-      // Apply routing
       const routedEdges = await applyRoutingToEdges(
         edges,
         nodes,
         routingConfigs
       );
 
-      // Update edges with routing data
-      setEdges(
-        routedEdges.map(edge => ({
-          ...edge,
-          type: 'routing',
-          data: {
-            ...edge.data,
-            routing: {
-              algorithm: selectedAlgorithm,
-              showControlPoints,
-              animated: autoRoutingEnabled,
-              label: edge.data?.label
-            },
-            onControlPointMove: handleControlPointMove,
-            performanceMetrics: edge.calculatedPath?.performance
-          }
-        }))
-      );
+      const nextEdges = mapRoutedEdges(routedEdges);
+
+      const shouldUpdate = nextEdges.some(nextEdge => {
+        const current = edges.find(e => e.id === nextEdge.id);
+        if (!current) {
+          return true;
+        }
+        const currentRouting = (current.data as EdgeRoutingData | undefined)?.routing;
+        const nextRouting = (nextEdge.data as EdgeRoutingData | undefined)?.routing;
+        return (
+          current.type !== nextEdge.type ||
+          currentRouting?.algorithm !== nextRouting?.algorithm ||
+          currentRouting?.showControlPoints !== nextRouting?.showControlPoints ||
+          currentRouting?.animated !== nextRouting?.animated ||
+          currentRouting?.label !== nextRouting?.label
+        );
+      });
+
+      if (shouldUpdate) {
+        setEdges(nextEdges);
+      }
 
       // Update stats
       const stats = routingManager.getCacheStats();
       setRoutingStats(stats);
-
+      perfMonitor?.mark('routing:apply:end');
       perfMonitor?.measureMarks('routing:apply:start', 'routing:apply:end');
     };
 
-    applyRouting();
+    void applyRouting();
   }, [
     nodes,
-    edges.length,
+    edges,
     selectedAlgorithm,
     showControlPoints,
-    autoRoutingEnabled
+    autoRoutingEnabled,
+    routingManager,
+    handleControlPointMove,
+    setEdges,
+    perfMonitor,
+    mapRoutedEdges,
+    setRoutingStats
   ]);
 
   // Handle auto-routing toggle
@@ -171,7 +227,7 @@ const GraphEditorWithRouting: React.FC<GraphEditorWithRoutingProps> = ({
     } else {
       autoRouter.stop();
     }
-  }, [autoRoutingEnabled, edges, nodes, autoRouter]);
+  }, [autoRoutingEnabled, autoRouter, edges, nodes, setRoutingStats]);
 
   // Handle edge connection
   const onConnect = useCallback(
@@ -192,31 +248,14 @@ const GraphEditorWithRouting: React.FC<GraphEditorWithRoutingProps> = ({
         setEdges(eds => addEdge(newEdge, eds));
       });
     },
-    [selectedAlgorithm, showControlPoints, autoRoutingEnabled, perfMonitor]
-  );
-
-  // Handle control point movement
-  const handleControlPointMove = useCallback(
-    (edgeId: string, pointId: string, position: { x: number; y: number }) => {
-      routingManager.updateControlPoint(edgeId, pointId, position);
-
-      // Trigger re-render
-      setEdges(edges =>
-        edges.map(edge =>
-          edge.id === edgeId
-            ? { ...edge, data: { ...edge.data, lastUpdate: Date.now() } }
-            : edge
-        )
-      );
-    },
-    [routingManager]
+    [selectedAlgorithm, showControlPoints, autoRoutingEnabled, perfMonitor, setEdges]
   );
 
   // Clear routing cache
   const handleClearCache = useCallback(() => {
     routingManager.clearCache();
     setRoutingStats(routingManager.getCacheStats());
-  }, [routingManager]);
+  }, [routingManager, setRoutingStats]);
 
   // Recalculate all routes
   const handleRecalculateRoutes = useCallback(async () => {
@@ -226,13 +265,15 @@ const GraphEditorWithRouting: React.FC<GraphEditorWithRoutingProps> = ({
 
     // Re-apply routing
     const routedEdges = await applyRoutingToEdges(edges, nodes);
-    setEdges(routedEdges);
+    const nextEdges = mapRoutedEdges(routedEdges);
+    setEdges(nextEdges);
 
+    perfMonitor?.mark('routing:recalculate:end');
     perfMonitor?.measureMarks(
       'routing:recalculate:start',
       'routing:recalculate:end'
     );
-  }, [edges, nodes, routingManager, perfMonitor]);
+  }, [edges, mapRoutedEdges, nodes, perfMonitor, routingManager, setEdges]);
 
   return (
     <div style={{ width: '100%', height: '100%' }}>

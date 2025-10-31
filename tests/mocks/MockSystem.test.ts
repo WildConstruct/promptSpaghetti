@@ -16,7 +16,9 @@ jest.mock('./APIMocks', () => {
   return {
     __esModule: true,
     default: class MockAPIMockService {
-      constructor() {}
+      constructor() {
+        // Mock constructor - no initialization needed
+      }
       start() {
         console.log('Mock API server started');
       }
@@ -26,7 +28,9 @@ jest.mock('./APIMocks', () => {
       resetHandlers() {
         console.log('API handlers reset');
       }
-      addCustomBehavior() {}
+      addCustomBehavior() {
+        // No custom behavior needed for mock
+      }
       getServer() {
         return {};
       }

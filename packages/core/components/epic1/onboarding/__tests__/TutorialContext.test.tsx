@@ -37,7 +37,7 @@ describe('TutorialContext', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
-    localStorageMock.setItem.mockImplementation(() => {});
+    localStorageMock.setItem.mockImplementation(() => undefined);
   });
 
   describe('useTutorial hook', () => {
@@ -313,7 +313,7 @@ describe('TutorialContext', () => {
         throw new Error('localStorage quota exceeded');
       });
 
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
 
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <TutorialProvider>{children}</TutorialProvider>

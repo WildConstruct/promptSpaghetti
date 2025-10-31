@@ -168,13 +168,17 @@ export class ContinuityTracker {
   ): ContinuityIssue[] {
     const issues: ContinuityIssue[] = [];
 
-    if (profile.wardrobe_history.length === 0) return issues;
+    if (profile.wardrobe_history.length === 0) {
+      return issues;
+    }
 
     const lastWardrobe =
       profile.wardrobe_history[profile.wardrobe_history.length - 1];
     const lastScene = this.sceneContexts.get(lastWardrobe.scene);
 
-    if (!lastScene) return issues;
+    if (!lastScene) {
+      return issues;
+    }
 
     // Check for impossible wardrobe changes
     if (this.isConsecutiveScene(lastScene, newScene)) {
@@ -215,7 +219,9 @@ export class ContinuityTracker {
   ): ContinuityIssue[] {
     const issues: ContinuityIssue[] = [];
 
-    if (profile.action_history.length === 0) return issues;
+    if (profile.action_history.length === 0) {
+      return issues;
+    }
 
     const lastAction =
       profile.action_history[profile.action_history.length - 1];
@@ -269,7 +275,9 @@ export class ContinuityTracker {
     const issues: ContinuityIssue[] = [];
 
     const recentScenes = this.getRecentScenes(profile, 3);
-    if (recentScenes.length === 0) return issues;
+    if (recentScenes.length === 0) {
+      return issues;
+    }
 
     const lastScene = recentScenes[recentScenes.length - 1];
 
@@ -296,7 +304,9 @@ export class ContinuityTracker {
     const issues: ContinuityIssue[] = [];
 
     const recentScenes = this.getRecentScenes(profile, 2);
-    if (recentScenes.length === 0 || !newScene.weather) return issues;
+    if (recentScenes.length === 0 || !newScene.weather) {
+      return issues;
+    }
 
     const lastScene = recentScenes[recentScenes.length - 1];
 
@@ -382,7 +392,9 @@ export class ContinuityTracker {
 
     for (const scene_id of scene_ids) {
       const scene = this.sceneContexts.get(scene_id);
-      if (!scene) continue;
+      if (!scene) {
+        continue;
+      }
 
       report.push(`## Scene ${scene_id}\n`);
       report.push(`- Location: ${scene.location}\n`);
@@ -421,13 +433,56 @@ export class ContinuityTracker {
     scene1: SceneContext,
     scene2: SceneContext
   ): boolean {
-    // Simple heuristic - scenes are consecutive if less than 5 minutes apart
-    return true; // Simplified for now
+    if (scene1.scene_id === scene2.scene_id) {
+      return false;
+    }
+
+    const extractIndex = (sceneId: string): number | null => {
+      const match = sceneId.match(/(\d+)(?!.*\d)/);
+      return match ? Number.parseInt(match[1], 10) : null;
+    };
+
+    const sceneIndex1 = extractIndex(scene1.scene_id);
+    const sceneIndex2 = extractIndex(scene2.scene_id);
+
+    if (
+      sceneIndex1 !== null &&
+      sceneIndex2 !== null &&
+      Math.abs(sceneIndex1 - sceneIndex2) === 1
+    ) {
+      return true;
+    }
+
+    const timeOrder: SceneContext['time_of_day'][] = [
+      'morning',
+      'afternoon',
+      'evening',
+      'night'
+    ];
+
+    const index1 = timeOrder.indexOf(scene1.time_of_day);
+    const index2 = timeOrder.indexOf(scene2.time_of_day);
+    const timeDiff =
+      index1 >= 0 && index2 >= 0
+        ? Math.abs(index1 - index2)
+        : Number.POSITIVE_INFINITY;
+    const sameLocation = scene1.location === scene2.location;
+    const similarTimeOfDay = timeDiff <= 1;
+
+    return sameLocation && similarTimeOfDay;
   }
 
   private detectWardrobeChange(wardrobe: WardrobeHistory): boolean {
-    // Check if wardrobe items have changed significantly
-    return false; // Simplified for now
+    if (!wardrobe.notes) {
+      return false;
+    }
+
+    const normalizedNotes = wardrobe.notes.toLowerCase();
+    return (
+      normalizedNotes.includes('change') ||
+      normalizedNotes.includes('swap') ||
+      normalizedNotes.includes('different')
+    );
   }
 
   private hasRainGear(wardrobe: WardrobeHistory): boolean {
@@ -446,9 +501,15 @@ export class ContinuityTracker {
 
   private estimateDistance(pos1: string, pos2: string): number {
     // Simplified distance estimation
-    if (pos1 === pos2) return 0;
-    if (pos1.includes('left') && pos2.includes('right')) return 20;
-    if (pos1.includes('background') && pos2.includes('foreground')) return 15;
+    if (pos1 === pos2) {
+      return 0;
+    }
+    if (pos1.includes('left') && pos2.includes('right')) {
+      return 20;
+    }
+    if (pos1.includes('background') && pos2.includes('foreground')) {
+      return 15;
+    }
     return 10; // Default medium distance
   }
 

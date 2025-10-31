@@ -536,11 +536,6 @@ describe('MarketplaceMetrics', () => {
 describe('MarketplaceMetrics React Integration', () => {
   test('can be imported and used in React components', () => {
     // This test ensures the module structure is compatible with React
-    const {
-      MarketplaceMetrics,
-      marketplaceMetrics
-    } = require('../packages/core/analytics/MarketplaceMetrics');
-
     expect(MarketplaceMetrics).toBeDefined();
     expect(marketplaceMetrics).toBeDefined();
     expect(typeof marketplaceMetrics.trackEvent).toBe('function');

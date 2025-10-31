@@ -23,7 +23,9 @@ export function SessionTimeoutWarning({
 
   // Track user activity
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) {
+      return;
+    }
 
     const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
 
@@ -45,7 +47,9 @@ export function SessionTimeoutWarning({
 
   // Check for timeout
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) {
+      return;
+    }
 
     const interval = setInterval(() => {
       const now = Date.now();

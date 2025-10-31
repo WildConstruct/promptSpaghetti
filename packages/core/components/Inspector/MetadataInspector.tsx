@@ -32,7 +32,9 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
 
   // Update cache stats periodically
   useEffect(() => {
-    if (!metadataExtractor || !developerMode) return;
+    if (!metadataExtractor || !developerMode) {
+      return;
+    }
 
     const updateStats = () => {
       const stats = metadataExtractor.getCacheStats();
@@ -46,7 +48,9 @@ export const MetadataInspector: React.FC<MetadataInspectorProps> = ({
   }, [metadataExtractor, developerMode]);
 
   const handleManualExtraction = useCallback(async () => {
-    if (!metadataExtractor || !text) return;
+    if (!metadataExtractor || !text) {
+      return;
+    }
 
     setIsExtracting(true);
     const startTime = performance.now();

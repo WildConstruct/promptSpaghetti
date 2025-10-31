@@ -2,11 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const {
-  transaction,
-  updateTask,
-  clearTaskAssignment
-} = require('./utils/StateLock');
+const { transaction } = require('./utils/StateLock');
 const { getLogger } = require('./utils/AutomationLogger');
 const { getConfigManager } = require('./utils/ConfigManager');
 

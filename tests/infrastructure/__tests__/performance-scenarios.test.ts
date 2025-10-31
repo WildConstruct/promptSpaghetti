@@ -309,7 +309,9 @@ describe('Performance Scenarios System', () => {
         name: 'Custom Test Scenario',
         description: 'A custom scenario for testing',
         category: PerformanceCategory.GRAPH_EXECUTION,
-        setup: async () => {},
+        setup: async () => {
+          await Promise.resolve();
+        },
         execute: async () => ({
           executionTime: 1000,
           memoryUsage: {

@@ -89,7 +89,7 @@ console.log(chalk.gray('\n  (Run with different prompts to see various layouts)\
 // Helper functions
 
 function createAsciiCanvas(nodes) {
-  if (nodes.length === 0) return '     (empty)';
+  if (nodes.length === 0) {return '     (empty)';}
   
   // Find bounds
   let minX = Infinity, maxX = -Infinity;
@@ -170,14 +170,14 @@ function identifyGroups(nodes) {
   const visited = new Set();
   
   nodes.forEach((genNode, idx) => {
-    if (visited.has(idx)) return;
+    if (visited.has(idx)) {return;}
     
     const group = [idx];
     visited.add(idx);
     
     // Find nodes close to this one
     nodes.forEach((otherNode, otherIdx) => {
-      if (otherIdx === idx || visited.has(otherIdx)) return;
+      if (otherIdx === idx || visited.has(otherIdx)) {return;}
       
       const dist = calculateDistance(genNode.position, otherNode.position);
       if (dist < 150) { // Threshold for grouping

@@ -6,14 +6,12 @@
 
 import { StateCreator } from 'zustand';
 import { Node } from 'reactflow';
-import { NodeGroup, GroupValidationResult } from '../types/groups';
+import { NodeGroup, GroupValidationResult, GroupBounds } from '../types/groups';
 import {
   createGroup as createGroupUtil,
   validateGroupHierarchy,
   getGroupBounds,
-  collapseGroup,
-  invalidateGroupCaches,
-  normalizeGroupState
+  invalidateGroupCaches
 } from '../utils/grouping';
 import { getPerformanceInfrastructure } from '../utils/performance';
 
@@ -58,7 +56,7 @@ export interface GroupingSlice {
 
   // Performance
   invalidateCaches: () => Promise<void>;
-  getGroupBounds: (groupId: string, nodes: Node[]) => Promise<any>;
+  getGroupBounds: (groupId: string, nodes: Node[]) => Promise<GroupBounds | null>;
 }
 
 export const createGroupingSlice: StateCreator<
@@ -137,12 +135,18 @@ export const createGroupingSlice: StateCreator<
   },
 
   // Delete a group
-  deleteGroup: async (groupId: string, deleteContents: boolean) => {
+  deleteGroup: async (groupId: string, _deleteContents: boolean) => {
     const startTime = performance.now();
     const { perfMonitor } = getPerformanceInfrastructure();
 
+    if (_deleteContents) {
+      // Deleting contents is handled upstream by the graph store; the flag is preserved for future integration.
+    }
+
     const group = get().groups.get(groupId);
-    if (!group) return;
+    if (!group) {
+      return;
+    }
 
     set(state => {
       const newGroups = new Map(state.groups);
@@ -157,9 +161,9 @@ export const createGroupingSlice: StateCreator<
       }
 
       // Update child groups if any
-      for (const [id, g] of newGroups) {
-        if (g.parentId === groupId) {
-          g.parentId = undefined; // Orphan child groups
+      for (const [, childGroup] of newGroups) {
+        if (childGroup.parentId === groupId) {
+          childGroup.parentId = undefined; // Orphan child groups
         }
       }
 
@@ -182,10 +186,12 @@ export const createGroupingSlice: StateCreator<
   // Toggle group collapse state
   toggleGroup: async (groupId: string) => {
     const startTime = performance.now();
-    const { perfMonitor, workerPool, cache } = getPerformanceInfrastructure();
+    const { perfMonitor, workerPool } = getPerformanceInfrastructure();
 
     const group = get().groups.get(groupId);
-    if (!group) return;
+    if (!group) {
+      return;
+    }
 
     // For large groups, calculate collapse data in worker
     if (group.nodeIds.size > 50 && workerPool) {
@@ -260,7 +266,9 @@ export const createGroupingSlice: StateCreator<
   // Add node to group
   addNodeToGroup: async (nodeId: string, groupId: string) => {
     const group = get().groups.get(groupId);
-    if (!group) return;
+    if (!group) {
+      return;
+    }
 
     set(state => {
       const newGroups = new Map(state.groups);
@@ -287,10 +295,14 @@ export const createGroupingSlice: StateCreator<
   // Remove node from group
   removeNodeFromGroup: async (nodeId: string) => {
     const groupId = get().nodeToGroup.get(nodeId);
-    if (!groupId) return;
+    if (!groupId) {
+      return;
+    }
 
     const group = get().groups.get(groupId);
-    if (!group) return;
+    if (!group) {
+      return;
+    }
 
     set(state => {
       const newGroups = new Map(state.groups);
@@ -388,7 +400,9 @@ export const createGroupingSlice: StateCreator<
 
   getGroupBounds: async (groupId: string, nodes: Node[]) => {
     const group = get().groups.get(groupId);
-    if (!group) return null;
+    if (!group) {
+      return null;
+    }
 
     return getGroupBounds(group, nodes);
   }

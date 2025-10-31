@@ -4,7 +4,7 @@
 let coreModules = null;
 let advancedModules = null;
 let executionTracker = null;
-let advancedNodes = {};
+const advancedNodes = {};
 let extensions = null;
 let templates = null;
 

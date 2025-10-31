@@ -33,14 +33,19 @@ export class ElementDetector {
 
     const startTime = Date.now();
     let attempts = 0;
-    let timeoutId: NodeJS.Timeout | null = null;
+    let retryTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    let overallTimeoutId: ReturnType<typeof setTimeout> | null = null;
     let observer: MutationObserver | null = null;
 
     return new Promise((resolve) => {
       const cleanup = () => {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
+        if (retryTimeoutId) {
+          clearTimeout(retryTimeoutId);
         }
+        if (overallTimeoutId) {
+          clearTimeout(overallTimeoutId);
+        }
+
         if (observer) {
           observer.disconnect();
         }
@@ -59,7 +64,7 @@ export class ElementDetector {
 
       const attemptFind = () => {
         attempts++;
-        const element = document.querySelector(selector) as HTMLElement;
+        const element = document.querySelector<HTMLElement>(selector);
 
         if (element) {
           console.log(`[ElementDetector] Found element "${selector}" after ${attempts} attempts (${Date.now() - startTime}ms)`);
@@ -74,17 +79,17 @@ export class ElementDetector {
         }
 
         // Schedule next attempt
-        timeoutId = setTimeout(attemptFind, retryDelay);
+        retryTimeoutId = setTimeout(attemptFind, retryDelay);
       };
 
       // Set overall timeout
-      setTimeout(() => {
+      overallTimeoutId = setTimeout(() => {
         console.warn(`[ElementDetector] Timeout: Element "${selector}" not found within ${timeout}ms`);
         complete(null, false);
       }, timeout);
 
       // Try to find element immediately
-      const immediateElement = document.querySelector(selector) as HTMLElement;
+      const immediateElement = document.querySelector<HTMLElement>(selector);
       if (immediateElement) {
         console.log(`[ElementDetector] Found element "${selector}" immediately`);
         complete(immediateElement, true);
@@ -93,9 +98,9 @@ export class ElementDetector {
 
       // Set up MutationObserver for dynamic content
       if (useMutationObserver) {
-        observer = new MutationObserver((mutations) => {
+        observer = new MutationObserver(() => {
           // Check if our target element was added
-          const element = document.querySelector(selector) as HTMLElement;
+          const element = document.querySelector<HTMLElement>(selector);
           if (element) {
             console.log(`[ElementDetector] Found element "${selector}" via MutationObserver after ${attempts} attempts`);
             complete(element, true);
@@ -127,9 +132,9 @@ export class ElementDetector {
     }
 
     // Find all matching elements
-    const allElements = Array.from(document.querySelectorAll(options.selector)) as HTMLElement[];
+    const allElements = Array.from(document.querySelectorAll<HTMLElement>(options.selector));
 
-    return allElements.map((element, index) => ({
+    return allElements.map(element => ({
       element,
       found: true,
       attempts: result.attempts,
@@ -189,7 +194,7 @@ export class ElementDetector {
 
     return new Promise((resolve) => {
       const checkVisibility = () => {
-        if (this.isVisible(result.element!)) {
+        if (result.element && this.isVisible(result.element)) {
           resolve({
             ...result,
             duration: Date.now() - startTime

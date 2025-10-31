@@ -7,6 +7,7 @@ import { KeyboardShortcuts } from '../KeyboardShortcuts';
 import { SafeReactFlowWrapper } from '../SafeReactFlowWrapper';
 import type { EditableNodeData } from '../nodes';
 import type { Preset } from '../asset-library';
+import type { ComponentProps } from 'react';
 
 interface Toast {
   id: string;
@@ -33,7 +34,7 @@ interface GraphOverlaysProps {
   onSavePreset: (preset: Preset) => void;
   
   // Keyboard shortcuts props
-  keyboardHandlers?: any;
+  keyboardHandlers?: ComponentProps<typeof KeyboardShortcuts>;
   
   // Loading/processing overlays
   isProcessing?: boolean;

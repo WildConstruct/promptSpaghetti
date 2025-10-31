@@ -68,9 +68,9 @@ export class UnifiedPromptParser {
     const parts = input.split(',');
     let currentIndex = 0;
 
-    parts.forEach((part, idx) => {
+    parts.forEach((part) => {
       const trimmed = part.trim();
-      if (!trimmed) return;
+      if (!trimmed) {return;}
 
       const startIndex = input.indexOf(part, currentIndex);
       const endIndex = startIndex + part.length;
@@ -157,7 +157,7 @@ export class UnifiedPromptParser {
           });
           break;
 
-        case 'variable':
+        case 'variable': {
           const varMatch = VARIABLE_PATTERN.exec(segment.text);
           nodes.push({
             id: nodeId,
@@ -166,6 +166,7 @@ export class UnifiedPromptParser {
             variableName: varMatch ? varMatch[1] : 'variable'
           });
           break;
+        }
 
         default:
           nodes.push({

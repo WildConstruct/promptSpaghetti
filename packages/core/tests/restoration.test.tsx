@@ -291,7 +291,15 @@ describe('State Recovery', () => {
     it('should throw error when no state exists', () => {
       (persistenceStorage.getItem as jest.Mock).mockReturnValue(null);
 
+      // Suppress expected console error
+      const consoleSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+      
       expect(() => exportBackup()).toThrow('No state to export');
+      
+      // Restore console
+      consoleSpy.mockRestore();
     });
   });
 
@@ -389,6 +397,8 @@ describe('StateRecoveryDialog Component', () => {
 
 describe('StorageInfo Component', () => {
   beforeEach(() => {
+    // Reset localStorage mock
+    localStorageMock.clear();
     (persistenceStorage.getItem as jest.Mock).mockReturnValue(
       JSON.stringify({ nodes: [], edges: [] })
     );
@@ -398,7 +408,7 @@ describe('StorageInfo Component', () => {
     render(<StorageInfo />);
 
     await waitFor(() => {
-      expect(screen.getByText('Storage Information')).toBeInTheDocument();
+      expect(screen.getByText('💾 Storage Info')).toBeInTheDocument();
       expect(screen.getByText(/Storage used:/)).toBeInTheDocument();
       expect(screen.getByText(/Available:/)).toBeInTheDocument();
     });

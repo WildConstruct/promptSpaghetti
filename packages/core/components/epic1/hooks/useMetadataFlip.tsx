@@ -1,12 +1,26 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
+import type { NodeProps } from 'reactflow';
+import type { EditableNodeData } from '../nodes';
+
+type MetadataFlipProps = Pick<
+  NodeProps<EditableNodeData>,
+  'selected' | 'data'
+>;
+
+interface MetadataSummary {
+  wordCount: number;
+  charCount: number;
+  nodeType?: string;
+  lastModified: string;
+}
 
 /**
  * Hook for adding metadata flip functionality to any node
  */
-export const useMetadataFlip = (props: any) => {
+export const useMetadataFlip = (props: MetadataFlipProps) => {
   const [showMetadata, setShowMetadata] = useState(false);
-  const [metadata, setMetadata] = useState<any>(null);
+  const [metadata, setMetadata] = useState<MetadataSummary | null>(null);
 
   // Keyboard handler for metadata toggle
   useEffect(() => {
@@ -51,7 +65,7 @@ export const useMetadataFlip = (props: any) => {
  * Reusable metadata display component
  */
 export const MetadataDisplay: React.FC<{
-  metadata: any;
+  metadata: MetadataSummary | null;
   onClose: () => void;
 }> = ({ metadata, onClose }) => {
   return (

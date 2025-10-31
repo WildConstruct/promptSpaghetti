@@ -1,5 +1,6 @@
-import React, { memo, useState, useCallback, useRef, useEffect } from 'react';
-import { NodeProps, Handle, Position } from 'reactflow';
+import React, { memo, useState, useCallback, useEffect } from 'react';
+import type { NodeProps } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 import './WeightedChoiceNode.css';
 import './EnhancedBranching.css';
 
@@ -44,8 +45,8 @@ const RadioDial = ({ value, onChange, disabled = false }: {
   const fillLength = (value / 100) * arcLength;
   
   const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
-    if (disabled) return;
-    if (e.button !== 0) return;
+    if (disabled) {return;}
+    if (e.button !== 0) {return;}
     e.preventDefault();
     e.stopPropagation();
     
@@ -64,7 +65,7 @@ const RadioDial = ({ value, onChange, disabled = false }: {
       const dy = clientY - centerY;
       let angle = Math.atan2(dy, dx) * (180 / Math.PI);
       
-      if (angle < 0) angle += 360;
+      if (angle < 0) {angle += 360;}
       
       let normalizedValue = 0;
       
@@ -100,7 +101,7 @@ const RadioDial = ({ value, onChange, disabled = false }: {
   };
   
   const handleWheel = (e: React.WheelEvent<SVGElement>) => {
-    if (disabled) return;
+    if (disabled) {return;}
     e.preventDefault();
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
@@ -190,12 +191,12 @@ const WeightedChoiceNodeFixedComponent = (props: NodeProps<WeightedChoiceNodeDat
         const parsed = JSON.parse(props.data.value);
         if (Array.isArray(parsed.options)) {
           console.log('Parsed options from value:', parsed.options);
-          return parsed.options.map((opt: any, idx: number) => ({
+          return parsed.options.map((opt: Record<string, unknown>, idx: number) => ({
             id: opt.id || `option-${idx + 1}`,
             ...opt
           }));
         }
-      } catch (e) {
+      } catch {
         // Ignore parse errors
       }
     }
@@ -246,34 +247,48 @@ const WeightedChoiceNodeFixedComponent = (props: NodeProps<WeightedChoiceNodeDat
   
   const calculatePercentages = useCallback((opts: WeightedOption[]) => {
     const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
-    if (totalWeight === 0) return opts.map(() => 0);
+    if (totalWeight === 0) {return opts.map(() => 0);}
     return opts.map(opt => Math.round((opt.weight / totalWeight) * 100));
   }, []);
 
   const applyPreset = useCallback((preset: string) => {
     const count = options.length;
-    if (count === 0) return;
+    if (count === 0) {return;}
 
     let newWeights: number[] = [];
     
     switch (preset) {
-      case 'equal':
-        newWeights = Array(count).fill(50);
+      case 'equal': {
+        const equalWeight = Math.floor(100 / count);
+        newWeights = Array.from({ length: count }, (_, index) =>
+          index === count - 1 ? 100 - equalWeight * (count - 1) : equalWeight
+        );
         break;
-      case 'favorFirst':
+      }
+      case 'favorFirst': {
         newWeights = [75, ...Array(count - 1).fill(25)];
         break;
-      case 'favorLast':
+      }
+      case 'favorLast': {
         newWeights = [...Array(count - 1).fill(25), 75];
         break;
-      case 'rampUp':
-        const stepUp = 60 / (count - 1);
-        newWeights = Array(count).fill(0).map((_, i) => Math.round(20 + stepUp * i));
+      }
+      case 'rampUp': {
+        const stepUp = count > 1 ? 60 / (count - 1) : 0;
+        newWeights = Array.from({ length: count }, (_, index) =>
+          Math.round(20 + stepUp * index)
+        );
         break;
-      case 'rampDown':
-        const stepDown = 60 / (count - 1);
-        newWeights = Array(count).fill(0).map((_, i) => Math.round(80 - stepDown * i));
+      }
+      case 'rampDown': {
+        const stepDown = count > 1 ? 60 / (count - 1) : 0;
+        newWeights = Array.from({ length: count }, (_, index) =>
+          Math.round(80 - stepDown * index)
+        );
         break;
+      }
+      default:
+        return;
     }
 
     setOptions(options.map((opt, i) => ({
@@ -315,27 +330,29 @@ const WeightedChoiceNodeFixedComponent = (props: NodeProps<WeightedChoiceNodeDat
     }
   };
 
-  const handleDragStart = (e: React.DragEvent, index: number) => {
-    e.stopPropagation();
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', index.toString());
-    
-    const dragImage = document.createElement('div');
-    dragImage.style.width = '1px';
-    dragImage.style.height = '1px';
-    dragImage.style.opacity = '0';
-    document.body.appendChild(dragImage);
-    e.dataTransfer.setDragImage(dragImage, 0, 0);
-    setTimeout(() => document.body.removeChild(dragImage), 0);
-    
-    setDraggedIndex(index);
-    (e.currentTarget as HTMLElement).style.opacity = '0.5';
-  };
+  const handleDragStart = (index: number, currentTarget: EventTarget | null, dataTransfer: DataTransfer) => {
+  dataTransfer.effectAllowed = 'move';
+  dataTransfer.setData('text/plain', index.toString());
+
+  const dragImage = document.createElement('div');
+  dragImage.style.width = '1px';
+  dragImage.style.height = '1px';
+  dragImage.style.opacity = '0';
+  document.body.appendChild(dragImage);
+  dataTransfer.setDragImage(dragImage, 0, 0);
+  setTimeout(() => document.body.removeChild(dragImage), 0);
+
+  setDraggedIndex(index);
+  if (currentTarget instanceof HTMLElement) {
+    currentTarget.style.opacity = '0.5';
+  }
+};
+
 
   const handleDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     e.stopPropagation();
-    if (draggedIndex === null || draggedIndex === index) return;
+    if (draggedIndex === null || draggedIndex === index) {return;}
 
     const newOptions = [...options];
     const draggedOption = newOptions[draggedIndex];
@@ -424,7 +441,7 @@ const WeightedChoiceNodeFixedComponent = (props: NodeProps<WeightedChoiceNodeDat
                   onChange={(e) => setTitle(e.target.value)}
                   onBlur={() => setIsEditingTitle(false)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') setIsEditingTitle(false);
+                    if (e.key === 'Enter') {setIsEditingTitle(false);}
                   }}
                   autoFocus
                 />
@@ -473,7 +490,7 @@ const WeightedChoiceNodeFixedComponent = (props: NodeProps<WeightedChoiceNodeDat
                   <div 
                     className="enhanced-drag-handle nodrag"
                     draggable="true"
-                    onDragStart={(e) => handleDragStart(e, index)}
+                    onDragStart={(event) => handleDragStart(index, event.currentTarget, event.dataTransfer)}
                     onDragEnd={handleDragEnd}
                     onMouseDown={(e) => e.stopPropagation()}
                     style={{ cursor: 'grab' }}

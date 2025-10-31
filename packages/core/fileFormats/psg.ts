@@ -144,10 +144,11 @@ export function convertPSGToPSGLib(psg: PSGFile): any {
   });
 
   // Check if this is a fragment
+  const regionCount = Array.isArray(psg.regions) ? psg.regions.length : 0;
   const isFragment =
     psg.metadata?.type === 'MULTI-ASPECT' ||
     psg.metadata?.type === 'ASSET_FRAGMENT' ||
-    psg.regions?.length > 0;
+    regionCount > 0;
 
   // Include all nodes - Output nodes are needed for preview functionality
   const nodesToImport = psg.nodes;

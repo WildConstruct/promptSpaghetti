@@ -383,7 +383,7 @@ describe('Health Check Definition System', () => {
 
       // Test invalid cron
       const invalidCronDefinition = { ...validCronDefinition };
-      invalidCronDefinition.execution!.schedule!.cronExpression =
+      invalidCronDefinition.execution?.schedule?.cronExpression =
         'invalid cron';
 
       const invalidResult = HealthCheckDefinitionValidator.validate(

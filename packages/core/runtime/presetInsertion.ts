@@ -159,7 +159,8 @@ export async function insertPreset(
       position,
       preservePositions,
       snapToGrid,
-      gridSize
+      gridSize,
+      options
     );
 
     // Create node type map for edge handle mapping
@@ -475,7 +476,11 @@ function positionNodes(
   position: { x: number; y: number },
   preservePositions: boolean,
   snapToGrid: boolean,
-  gridSize: number
+  gridSize: number,
+  options: {
+    containerPadding?: number;
+    containerSize?: { width: number; height: number };
+  } = {}
 ): PSGLibNode[] {
   // Check if nodes are stacked (all at same position)
   const firstPos = nodes[0]?.position;

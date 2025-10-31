@@ -12,7 +12,6 @@ import ReactFlow, {
   addEdge,
   Connection,
   ConnectionMode,
-  Position,
 } from 'reactflow';
 import { epic1NodeTypes } from '../nodes';
 import 'reactflow/dist/style.css';
@@ -183,7 +182,7 @@ export const VariableDataInletDemo: React.FC = () => {
         }}
       >
         <h3>Story 1.5: Variable Data Inlet Demo</h3>
-        <p>Connect the Data Source to the Variable's bottom handle (green data inlet)</p>
+        <p>Connect the Data Source to the Variable&apos;s bottom handle (green data inlet)</p>
         <button onClick={toggleMergeMode} style={{ marginRight: '10px' }}>
           Toggle Merge Mode
         </button>

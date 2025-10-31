@@ -13,16 +13,25 @@ export interface MappedType {
   compatType: CompatType;
 }
 
-export function mapAssetToNodeType(asset: {
+interface AssetMetadataLike {
+  keywords?: unknown;
+  [key: string]: unknown;
+}
+
+interface AssetSummary {
   id: string;
   name?: string;
   type?: string;
-  metadata?: any;
-}): MappedType {
+  metadata?: AssetMetadataLike;
+}
+
+export function mapAssetToNodeType(asset: AssetSummary): MappedType {
   const name = (asset.name || '').toLowerCase();
-  const keywords: string[] = ((asset as any).metadata?.keywords || []).map(
-    (k: string) => String(k).toLowerCase()
-  );
+  const rawKeywords = asset.metadata?.keywords;
+  const keywords: string[] =
+    Array.isArray(rawKeywords) && rawKeywords.length > 0
+      ? rawKeywords.map(keyword => String(keyword).toLowerCase())
+      : [];
   const text = `${name} ${keywords.join(' ')}`;
 
   if (text.includes('choice') || text.includes('weightedchoice')) {
@@ -52,7 +61,9 @@ export function mapAssetToNodeType(asset: {
 export function mapReactFlowTypeToCompat(
   reactFlowType: string | undefined
 ): CompatType {
-  if (!reactFlowType) return 'Unknown';
+  if (!reactFlowType) {
+    return 'Unknown';
+  }
   const t = reactFlowType.toLowerCase();
   switch (t) {
     case 'weightedchoice':

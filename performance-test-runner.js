@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* eslint-disable */
+// @ts-nocheck
 
 /**
  * Comprehensive Performance Test Runner
@@ -24,8 +26,8 @@ const PERFORMANCE_TEST_CONFIG = {
       cpuUsage: 80,
       memoryUsage: 85,
       responseTime: 2000,
-      errorRate: 5
-
+      errorRate: 5,
+    },
   },
   loadTests: [
     {
@@ -33,22 +35,22 @@ const PERFORMANCE_TEST_CONFIG = {
       script: './load-tests/auth-flow-load-test.js',
       concurrency: 15,
       duration: 180000, // 3 minutes
-      delay: 30000      // 30 second delay before starting
+      delay: 30000,      // 30 second delay before starting
     },
     {
       name: 'File Browser - Performance Profile',
       script: './load-tests/file-browser-load-test.js',
       concurrency: 12,
       duration: 180000,
-      delay: 60000      // 1 minute delay
+      delay: 60000,      // 1 minute delay
     },
     {
       name: 'Graph Execution - Performance Profile',
       script: './load-tests/graph-execution-load-test.js',
       concurrency: 8,
       duration: 180000,
-      delay: 90000      // 1.5 minute delay
-
+      delay: 90000,      // 1.5 minute delay
+    }
   ],
   client: {
     monitoringDuration: 300000, // 5 minutes
@@ -63,15 +65,15 @@ const PERFORMANCE_TEST_CONFIG = {
     outputDir: './performance-analysis-results',
     generateHTML: true,
     generateCharts: true,
-    includeRecommendations: true
-
+    includeRecommendations: true,
+  }
 };
 
 /**
  * Performance Test Orchestrator
  */
 class PerformanceTestOrchestrator {
-  constructor(config: any = PERFORMANCE_TEST_CONFIG) {
+  constructor(config = PERFORMANCE_TEST_CONFIG) {
     this.config = config;
     this.results = {
       serverMetrics: null,
@@ -81,12 +83,12 @@ class PerformanceTestOrchestrator {
       startTime: null,
       endTime: null
     };
-
+  }
 
   /**
    * Run comprehensive performance testing
    */
-  async runPerformanceTests(): Promise<any> {
+  async runPerformanceTests() {
     console.log('🚀 Starting Comprehensive Performance Testing');
     console.log('=============================================\n');
 
@@ -125,6 +127,7 @@ class PerformanceTestOrchestrator {
 
       console.log('\n✅ Performance testing completed successfully!');
       return this.results;
+    }
  catch (error) {
       console.error('\n❌ Performance testing failed:', error.message);
       this.results.endTime = new Date();
@@ -132,18 +135,18 @@ class PerformanceTestOrchestrator {
       // Generate partial report if possible
       try {
         await this.generateComprehensiveReport();
- catch (reportError) {
+      } catch (reportError) {
         console.error('Failed to generate error report:', reportError.message);
-
+      }
 
       throw error;
-
-
+    }
+  }
 
   /**
    * Start server performance profiling
    */
-  async startServerProfiling(): Promise<any> {
+  async startServerProfiling() {
     console.log('📊 Starting server performance profiling...');
 
     try {
@@ -174,21 +177,23 @@ process.on('SIGTERM', async () => {
 `;
 
       const scriptPath = path.join(this.config.reporting.outputDir, 'server-profiler.js');
-      await fs.writeFile(scriptPath, profilerScript);
+      
+      try {
+        await fs.writeFile(scriptPath, profilerScript);
 
-      // Start the profiler process
-      const profilerProcess = spawn('node', [scriptPath], {
-        detached: true,
-        stdio: 'pipe'
-      });
+        // Start the profiler process
+        const profilerProcess = spawn('node', [scriptPath], {
+          detached: true,
+          stdio: 'pipe'
+        });
 
-      console.log(`✅ Server profiling started (PID: ${profilerProcess.pid})`);
-      return profilerProcess;
- catch (error) {
+        console.log(`✅ Server profiling started (PID: ${profilerProcess.pid})`);
+        return profilerProcess;
+      } catch (error) {
       console.error('Failed to start server profiling:', error);
       throw error;
-
-
+      }
+  }
 
   /**
    * Stop server performance profiling
@@ -216,7 +221,7 @@ process.on('SIGTERM', async () => {
   /**
    * Run staggered load tests
    */
-  async runStaggeredLoadTests(): Promise<void> {
+  async runStaggeredLoadTests() {
     console.log('🎯 Starting staggered load tests...');
 
     const loadTestPromises = this.config.loadTests.map(async (testConfig, index) => {
@@ -290,7 +295,7 @@ process.on('SIGTERM', async () => {
   /**
    * Start client performance profiling
    */
-  async startClientProfiling(): Promise<any> {
+  async startClientProfiling() {
     console.log('🌐 Starting client performance profiling...');
 
     try {
@@ -679,7 +684,7 @@ process.on('SIGTERM', async () => {
   /**
    * Generate comprehensive performance analysis report
    */
-  async generateComprehensiveReport(): Promise<any> {
+  async generateComprehensiveReport() {
     console.log('📊 Generating comprehensive performance analysis report...');
 
     const report = {
@@ -756,7 +761,7 @@ process.on('SIGTERM', async () => {
   /**
    * Aggregate performance metrics
    */
-  async aggregatePerformanceMetrics(): Promise<any> {
+  async aggregatePerformanceMetrics() {
     const metrics = {
       server: await this.loadServerMetrics(),
       client: await this.loadClientMetrics(),
@@ -769,7 +774,7 @@ process.on('SIGTERM', async () => {
   /**
    * Load server metrics from profiles
    */
-  async loadServerMetrics(): Promise<any> {
+  async loadServerMetrics() {
     try {
       const profileDir = path.join(this.config.reporting.outputDir, 'server-profiles');
       const files = await fs.readdir(profileDir);
@@ -796,7 +801,7 @@ process.on('SIGTERM', async () => {
   /**
    * Load client metrics from localStorage
    */
-  async loadClientMetrics(): Promise<any> {
+  async loadClientMetrics() {
     // Client metrics would be retrieved from the browser's localStorage
     // This is a placeholder for the structure
     return {
@@ -972,7 +977,7 @@ process.on('SIGTERM', async () => {
   /**
    * Utility methods
    */
-  async ensureOutputDir(): Promise<void> {
+  async ensureOutputDir() {
     try {
       await fs.access(this.config.reporting.outputDir);
  catch (error) {
@@ -980,7 +985,7 @@ process.on('SIGTERM', async () => {
 
 
 
-  delay(ms: number): Promise<void> {
+  delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 
 
@@ -988,7 +993,7 @@ process.on('SIGTERM', async () => {
 /**
  * Main execution
  */
-async function runPerformanceAnalysis(): Promise<any> {
+async function runPerformanceAnalysis() {
   const orchestrator = new PerformanceTestOrchestrator();
   
   try {

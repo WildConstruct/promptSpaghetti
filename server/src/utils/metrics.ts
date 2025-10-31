@@ -29,7 +29,7 @@ class Metrics {
       last.c += by;
     }
     // trim
-    while (this.buckets.length > this.windowMinutes) this.buckets.shift();
+    while (this.buckets.length > this.windowMinutes) {this.buckets.shift();}
   }
 
   markError(kind: string, by = 1) {

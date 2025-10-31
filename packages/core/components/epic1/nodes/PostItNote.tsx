@@ -1,7 +1,15 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { NodeProps, Handle, Position, useStore, useReactFlow } from 'reactflow';
+import { Handle, Position, useReactFlow } from 'reactflow';
 import ReactMarkdown from 'react-markdown';
 import './PostItNote.css';
+import type { Epic1NodeProps } from './nodePropTypes';
+interface SnapNode {
+  id: string;
+  position: { x: number; y: number };
+  width?: number | null;
+  height?: number | null;
+  type?: string;
+}
 
 export interface PostItNoteData {
   text: string;
@@ -26,14 +34,10 @@ const colorMap = {
  * Post-it Note component for annotations
  * Story 1.25: Post-it Notes/Comments
  */
-export const PostItNote: React.FC<NodeProps<PostItNoteData>> = ({
+export const PostItNote: React.FC<Epic1NodeProps<PostItNoteData>> = ({
   data,
   selected,
-  id,
-  xPos,
-  yPos,
-  draggable = true,
-  measured
+  id
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(data.text || '');
@@ -46,12 +50,12 @@ export const PostItNote: React.FC<NodeProps<PostItNoteData>> = ({
   const sizeRef = useRef(size);
   const nodeRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { setNodes, getNode, getNodes } = useReactFlow();
+  const { setNodes, getNodes } = useReactFlow();
   
   // Ensure the node has its dimensions set in ReactFlow on mount
   useEffect(() => {
-    setNodes((nodes) =>
-      nodes.map((node) =>
+    setNodes(nodes =>
+      nodes.map(node =>
         node.id === id
           ? {
               ...node,
@@ -65,7 +69,7 @@ export const PostItNote: React.FC<NodeProps<PostItNoteData>> = ({
           : node
       )
     );
-  }, []);
+  }, [data.height, data.width, id, setNodes]);
   
   useEffect(() => {
     sizeRef.current = size;
@@ -79,23 +83,21 @@ export const PostItNote: React.FC<NodeProps<PostItNoteData>> = ({
         height: data.height
       });
     }
-  }, [data.width, data.height]);
+  }, [data.height, data.width]);
   
   // Get attached node position for visual connection
-  const attachedNode = data.attachedTo ? getNode(data.attachedTo) : null;
-  
   // Handle drag end to check for nearby nodes to attach to
   const handleDragEnd = useCallback(() => {
-    const allNodes = getNodes();
+    const allNodes = getNodes() as SnapNode[];
     const thisNode = allNodes.find(n => n.id === id);
-    if (!thisNode) return;
+    if (!thisNode) {return;}
     
     // Find nearest node within attachment distance (100px)
-    let nearestNode = null;
+    let nearestNode: SnapNode | null = null;
     let nearestDistance = Infinity;
     
     allNodes.forEach((node) => {
-      if (node.id === id || node.type === 'postItNote') return; // Don't attach to self or other notes
+      if (node.id === id || node.type === 'postItNote') {return;} // Don't attach to self or other notes
       
       const distance = Math.sqrt(
         Math.pow(node.position.x - thisNode.position.x, 2) +
@@ -109,43 +111,50 @@ export const PostItNote: React.FC<NodeProps<PostItNoteData>> = ({
     });
     
     // Update attachment if near a node
-    if (nearestNode) {
-      setNodes((nodes) =>
-        nodes.map((node) => {
-          if (node.id === id) {
-            return {
-              ...node,
-              data: {
-                ...node.data,
-                attachedTo: nearestNode.id,
-                attachmentOffset: {
-                  x: thisNode.position.x - nearestNode.position.x,
-                  y: thisNode.position.y - nearestNode.position.y
+    if (!nearestNode) {
+      if (data.attachedTo) {
+        // Clear attachment if moved away
+        setNodes((nodes) =>
+          nodes.map((node) => {
+            if (node.id === id) {
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  attachedTo: undefined,
+                  attachmentOffset: undefined
                 }
-              }
-            };
-          }
-          return node;
-        })
-      );
-    } else if (data.attachedTo) {
-      // Clear attachment if moved away
-      setNodes((nodes) =>
-        nodes.map((node) => {
-          if (node.id === id) {
-            return {
-              ...node,
-              data: {
-                ...node.data,
-                attachedTo: undefined,
-                attachmentOffset: undefined
-              }
-            };
-          }
-          return node;
-        })
-      );
+              };
+            }
+            return node;
+          })
+        );
+      }
+      return;
     }
+
+    const resolvedNode = nearestNode as SnapNode;
+    const targetId = resolvedNode.id;
+    const attachmentOffset = {
+      x: thisNode.position.x - resolvedNode.position.x,
+      y: thisNode.position.y - resolvedNode.position.y
+    };
+
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === id) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              attachedTo: targetId,
+              attachmentOffset
+            }
+          };
+        }
+        return node;
+      })
+    );
   }, [id, data.attachedTo, getNodes, setNodes]);
 
   // Handle double-click to edit

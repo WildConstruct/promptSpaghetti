@@ -135,7 +135,8 @@ app.get('/api/auth/me', (req, res) => {
       isEmailVerified: user.isEmailVerified,
       roles: user.roles
     });
-  } catch (error) {
+  } catch {
+    console.error('Token validation failed');
     res.status(401).json({ message: 'Invalid token' });
   }
 });

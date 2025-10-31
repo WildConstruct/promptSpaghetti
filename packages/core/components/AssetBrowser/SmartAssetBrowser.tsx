@@ -36,7 +36,6 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
   const [smartMatchEnabled, setSmartMatchEnabled] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [searchInput, setSearchInput] = useState(searchQuery);
-  const [isLoading, setIsLoading] = useState(false);
   const [matchCounts, setMatchCounts] = useState<Map<string, number>>(
     new Map()
   );
@@ -114,7 +113,9 @@ export const SmartAssetBrowser: React.FC<SmartAssetBrowserProps> = ({
 
   // Extract metadata for assets without it (background process)
   useEffect(() => {
-    if (!metadataExtractor || !smartMatchEnabled) return;
+    if (!metadataExtractor || !smartMatchEnabled) {
+      return;
+    }
 
     const extractMissingMetadata = async () => {
       for (const asset of assets) {

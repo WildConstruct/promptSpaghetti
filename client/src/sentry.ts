@@ -1,12 +1,15 @@
 import * as Sentry from '@sentry/react';
 
-const DSN = (import.meta as any)?.env?.VITE_SENTRY_DSN as string | undefined;
-if (DSN) {
+const {
+  VITE_SENTRY_DSN,
+  VITE_SENTRY_TRACES_SAMPLE_RATE,
+  MODE
+} = import.meta.env;
+
+if (VITE_SENTRY_DSN) {
   Sentry.init({
-    dsn: DSN,
-    environment: (import.meta as any)?.env?.MODE || 'production',
-    tracesSampleRate: Number(
-      (import.meta as any)?.env?.VITE_SENTRY_TRACES_SAMPLE_RATE || 0
-    )
+    dsn: VITE_SENTRY_DSN,
+    environment: MODE ?? 'production',
+    tracesSampleRate: Number(VITE_SENTRY_TRACES_SAMPLE_RATE ?? 0)
   });
 }

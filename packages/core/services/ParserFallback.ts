@@ -1,9 +1,36 @@
 // Parser Fallback Handler - Story 2.6
 // Handles graceful degradation when LLM parsing fails
+// NOTE: This module is retained as a legacy fallback and stays excluded from
+// lint enforcement. Modernising it requires re-typing the generated parser
+// structures from PromptParser before re-enabling ESLint.
 
 import { promptParser as standardParser } from '../runtime/nodes/epic1/PromptParser';
 import { ParserOptions, ParseResult } from './PromptParser';
 import { Node, Edge } from 'reactflow';
+
+interface SerializedPromptNode {
+  id: string;
+  type: string;
+  data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+interface ParserNodeWrapper {
+  node: {
+    serialize: () => SerializedPromptNode;
+  };
+  position?: { x: number; y: number };
+  confidence?: number;
+  suggestedType?: string;
+  [key: string]: unknown;
+}
+
+interface EnhancedEdge {
+  source: string;
+  target: string;
+  type?: string;
+  data?: Record<string, unknown>;
+}
 
 export class ParserFallback {
   /**
@@ -21,26 +48,62 @@ export class ParserFallback {
     this.notifyUser('Using standard parser due to LLM unavailability');
 
     // Use standard parser with enhanced heuristics
-    const result = await this.parseWithEnhancedStandard(prompt, options);
+    const result = await this.parseWithEnhancedStandard(prompt);
 
     // Add metadata indicating fallback was used
     result.metadata = {
       ...result.metadata,
       parserMode: 'standard-fallback',
-      fallbackReason: error.message,
-      originalMode: 'llm-enhanced'
+      fallbackReason: this.getSpecificFallbackReason(error),
+      originalMode: 'llm-enhanced',
+      fallbackOptions: { ...options }
     };
 
     return result;
   }
 
   /**
+   * Get specific fallback reason based on error type
+   */
+  private getSpecificFallbackReason(error: Error): string {
+    const message = error.message.toLowerCase();
+    
+    // Check for timeout
+    if (message.includes('timeout') || message.includes('timed out')) {
+      return 'LLM request timeout';
+    }
+    
+    // Check for security issues
+    if (message.includes('security') || message.includes('injection') || 
+        message.includes('blocked') || message.includes('sanitized')) {
+      return 'security validation failed';
+    }
+    
+    // Check for network issues
+    if (message.includes('network') || message.includes('connection') || 
+        message.includes('fetch')) {
+      return 'network error';
+    }
+    
+    // Check for JSON parsing issues
+    if (message.includes('json') || message.includes('parse') || 
+        message.includes('invalid')) {
+      return 'Invalid JSON response from LLM';
+    }
+    
+    // Check for empty response
+    if (message.includes('empty') || message.includes('no content')) {
+      return 'Empty LLM response';
+    }
+    
+    // Default: return original error message
+    return error.message;
+  }
+
+  /**
    * Parse with enhanced standard parser
    */
-  private async parseWithEnhancedStandard(
-    prompt: string,
-    options: ParserOptions
-  ): Promise<ParseResult> {
+  private async parseWithEnhancedStandard(prompt: string): Promise<ParseResult> {
     try {
       // Use the existing standard parser
       const analysis = standardParser.parse(prompt);
@@ -103,7 +166,7 @@ export class ParserFallback {
   /**
    * Enhance nodes with additional heuristics
    */
-  private enhanceNodes(nodes: any[]): any[] {
+  private enhanceNodes(nodes: ParserNodeWrapper[]): ParserNodeWrapper[] {
     return nodes.map(node => {
       const enhanced = { ...node };
       const content = node.node.serialize().data?.text || '';
@@ -127,8 +190,8 @@ export class ParserFallback {
   /**
    * Enhance edges with better connections
    */
-  private enhanceEdges(nodes: any[]): any[] {
-    const edges: any[] = [];
+  private enhanceEdges(nodes: ParserNodeWrapper[]): EnhancedEdge[] {
+    const edges: EnhancedEdge[] = [];
 
     // Create sequential connections by default
     for (let i = 0; i < nodes.length - 1; i++) {
@@ -146,7 +209,7 @@ export class ParserFallback {
     }
 
     // Look for special connection patterns
-    nodes.forEach((node, i) => {
+    nodes.forEach(node => {
       const content = node.node.serialize().data?.text || '';
 
       // If this node references a variable, connect to variable nodes
@@ -266,7 +329,7 @@ export class ParserFallback {
   /**
    * Extract label from serialized node
    */
-  private extractLabel(serialized: any): string {
+  private extractLabel(serialized: SerializedPromptNode): string {
     return (
       serialized.data?.text ||
       serialized.data?.content ||
@@ -313,8 +376,15 @@ export class ParserFallback {
     console.info(`[Parser Notice] ${message}`);
 
     // If we have access to a notification system, use it
-    if (typeof window !== 'undefined' && (window as any).showNotification) {
-      (window as any).showNotification({
+    if (typeof window !== 'undefined') {
+      const win = window as typeof window & {
+        showNotification?: (payload: {
+          type: string;
+          message: string;
+          duration?: number;
+        }) => void;
+      };
+      win.showNotification?.({
         type: 'info',
         message,
         duration: 3000

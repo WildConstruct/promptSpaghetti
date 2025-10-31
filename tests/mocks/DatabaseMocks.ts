@@ -144,12 +144,12 @@ export class DatabaseMockService {
 
       // Redis-specific operations (if type is redis)
       ...(config.type === 'redis'
-        ? this.createRedisOperations(_connectionId)
+        ? this.createRedisOperations()
         : {}),
 
       // PostgreSQL-specific operations
       ...(config.type === 'postgres'
-        ? this.createPostgresOperations(_connectionId)
+        ? this.createPostgresOperations()
         : {})
     };
 
@@ -165,7 +165,7 @@ export class DatabaseMockService {
   private async executeQuery(
     _connectionId: string,
     _sql: string,
-    _params: unknown[] = []
+    params?: unknown[]
   ): Promise<QueryResult> {
     const startTime = Date.now();
 
@@ -178,14 +178,14 @@ export class DatabaseMockService {
 
     // Log the query
     this.queryLog.push({
-      _sql: _sql,
-      params: _params,
+      _sql,
+      params,
       timestamp: new Date(),
       duration: executionTime
     });
 
     // Parse and execute the SQL (simplified mock implementation)
-    const result = this.parseSQLAndExecute(_sql, _params);
+    const result = this.parseSQLAndExecute(_sql);
 
     return {
       ...result,
@@ -606,7 +606,7 @@ export class DatabaseMockService {
   /**
    * Create Redis-specific operations
    */
-  private createRedisOperations(_connectionId: string) {
+  private createRedisOperations() {
     const redisData = new Map();
 
     return {
@@ -620,7 +620,7 @@ export class DatabaseMockService {
       },
       get: async (key: string) => {
         const data = redisData.get(key);
-        if (!data) return null;
+        if (!data) {return null;}
         if (data.expires && Date.now() > data.expires) {
           redisData.delete(key);
           return null;
@@ -630,7 +630,7 @@ export class DatabaseMockService {
       del: async (...keys: string[]) => {
         let deleted = 0;
         keys.forEach(key => {
-          if (redisData.delete(key)) deleted++;
+          if (redisData.delete(key)) {deleted++;}
         });
         return deleted;
       },
@@ -645,9 +645,9 @@ export class DatabaseMockService {
         }
         const hash = redisData.get(key);
         if (hash.type !== 'hash')
-          throw new Error(
+          {throw new Error(
             'WRONGTYPE Operation against a key holding the wrong kind of value'
-          );
+          );}
         return hash.data.set(field, value) ? 1 : 0;
       },
       hget: async (key: string, field: string) => {
@@ -656,7 +656,7 @@ export class DatabaseMockService {
       },
       hgetall: async (key: string) => {
         const hash = redisData.get(key);
-        if (!hash || hash.type !== 'hash') return {};
+        if (!hash || hash.type !== 'hash') {return {};}
         return Object.fromEntries(hash.data.entries());
       },
 
@@ -666,7 +666,7 @@ export class DatabaseMockService {
           redisData.set(key, { type: 'list', data: [] });
         }
         const list = redisData.get(key);
-        if (list.type !== 'list') throw new Error('WRONGTYPE');
+        if (list.type !== 'list') {throw new Error('WRONGTYPE');}
         list.data.unshift(...values.reverse());
         return list.data.length;
       },
@@ -675,7 +675,7 @@ export class DatabaseMockService {
           redisData.set(key, { type: 'list', data: [] });
         }
         const list = redisData.get(key);
-        if (list.type !== 'list') throw new Error('WRONGTYPE');
+        if (list.type !== 'list') {throw new Error('WRONGTYPE');}
         list.data.push(...values);
         return list.data.length;
       },
@@ -686,7 +686,7 @@ export class DatabaseMockService {
           redisData.set(key, { type: 'set', data: new Set() });
         }
         const set = redisData.get(key);
-        if (set.type !== 'set') throw new Error('WRONGTYPE');
+        if (set.type !== 'set') {throw new Error('WRONGTYPE');}
         let added = 0;
         members.forEach(member => {
           if (!set.data.has(member)) {
@@ -706,7 +706,7 @@ export class DatabaseMockService {
         redisData.clear();
         return 'OK';
       },
-      info: async (_section?: string) => {
+      info: async () => {
         return `# Redis Mock\nredis_version:6.0.0\nuptime_in_seconds:${Math.floor(this.rng() * 86400)}`;
       }
     };
@@ -715,7 +715,7 @@ export class DatabaseMockService {
   /**
    * Create PostgreSQL-specific operations
    */
-  private createPostgresOperations(_connectionId: string) {
+  private createPostgresOperations() {
     return {
       // Array operations
       arrayAppend: async (
@@ -811,21 +811,18 @@ export class DatabaseMockService {
     console.log('📊 Initialized default database tables');
   }
 
-  private parseSQLAndExecute(
-    _sql: string,
-    _params: unknown[] = []
-  ): QueryResult {
+  private parseSQLAndExecute(_sql: string): QueryResult {
     // Simplified SQL parser for common operations
     const sql = _sql.trim().toLowerCase();
 
     if (sql.startsWith('select')) {
-      return this.mockSelectQuery(sql, _params);
+      return this.mockSelectQuery(sql);
     } else if (sql.startsWith('insert')) {
-      return this.mockInsertQuery(sql, _params);
+      return this.mockInsertQuery(sql);
     } else if (sql.startsWith('update')) {
-      return this.mockUpdateQuery(sql, _params);
+      return this.mockUpdateQuery();
     } else if (sql.startsWith('delete')) {
-      return this.mockDeleteQuery(sql, _params);
+      return this.mockDeleteQuery();
     } else {
       // Return a generic successful result for other queries
       return {
@@ -836,7 +833,7 @@ export class DatabaseMockService {
     }
   }
 
-  private mockSelectQuery(_sql: string, _params: unknown[]): QueryResult {
+  private mockSelectQuery(_sql: string): QueryResult {
     // Extract table name (very simplified)
     const tableMatch = _sql.match(/from\s+(\w+)/);
     const tableName = tableMatch ? tableMatch[1] : 'users';
@@ -854,7 +851,7 @@ export class DatabaseMockService {
     };
   }
 
-  private mockInsertQuery(_sql: string, _params: unknown[]): QueryResult {
+  private mockInsertQuery(_sql: string): QueryResult {
     const tableMatch = _sql.match(/into\s+(\w+)/);
     const tableName = tableMatch ? tableMatch[1] : 'users';
 
@@ -869,7 +866,7 @@ export class DatabaseMockService {
     };
   }
 
-  private mockUpdateQuery(_sql: string, _params: unknown[]): QueryResult {
+  private mockUpdateQuery(): QueryResult {
     const affectedRows = Math.floor(this.rng() * 5) + 1;
     return {
       rows: [],
@@ -879,7 +876,7 @@ export class DatabaseMockService {
     };
   }
 
-  private mockDeleteQuery(_sql: string, _params: unknown[]): QueryResult {
+  private mockDeleteQuery(): QueryResult {
     const affectedRows = Math.floor(this.rng() * 3) + 1;
     return {
       rows: [],
@@ -919,7 +916,7 @@ export class DatabaseMockService {
     operation: 'insert' | 'update' | 'delete'
   ): void {
     const table = this.tables.get(tableName);
-    if (!table) return;
+    if (!table) {return;}
 
     // Update indexes for unique and indexed fields
     Object.entries(table.schema).forEach(([field, spec]) => {
@@ -928,7 +925,7 @@ export class DatabaseMockService {
           table.indexes.set(field, new Set());
         }
 
-        const index = table.indexes.get(field)!;
+        const index = table.indexes.get(field);
         const id = record.id || record[field];
 
         switch (operation) {
@@ -989,7 +986,7 @@ export class DatabaseMockService {
 
   private getConnectionStats(_connectionId: string): unknown {
     const connection = this.connections.get(_connectionId);
-    if (!connection) return null;
+    if (!connection) {return null;}
 
     return {
       connectionId: _connectionId,

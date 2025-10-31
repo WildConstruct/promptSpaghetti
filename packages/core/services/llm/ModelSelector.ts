@@ -52,19 +52,21 @@ export class ModelSelector {
 
   getModelsForTask(taskType?: string): ModelConfig[] {
     // Get task-specific model if specified
-    if (taskType && this.taskModelMap.has(taskType)) {
-      const preferredModelId = this.taskModelMap.get(taskType)!;
-      const preferredModel = this.models.find(m => m.id === preferredModelId);
+    if (taskType) {
+      const preferredModelId = this.taskModelMap.get(taskType);
+      if (preferredModelId) {
+        const preferredModel = this.models.find(m => m.id === preferredModelId);
 
-      if (preferredModel && !this.failedModels.has(preferredModel.id)) {
-        // Return preferred model first, then fallbacks
-        const otherModels = this.models
-          .filter(
-            m => m.id !== preferredModelId && !this.failedModels.has(m.id)
-          )
-          .sort((a, b) => a.priority - b.priority);
+        if (preferredModel && !this.failedModels.has(preferredModel.id)) {
+          // Return preferred model first, then fallbacks
+          const otherModels = this.models
+            .filter(
+              m => m.id !== preferredModelId && !this.failedModels.has(m.id)
+            )
+            .sort((a, b) => a.priority - b.priority);
 
-        return [preferredModel, ...otherModels];
+          return [preferredModel, ...otherModels];
+        }
       }
     }
 
@@ -96,7 +98,9 @@ export class ModelSelector {
 
   calculateCost(modelId: string, tokensIn: number, tokensOut: number): number {
     const model = this.getModelById(modelId);
-    if (!model) return 0;
+    if (!model) {
+      return 0;
+    }
 
     const totalTokens = tokensIn + tokensOut;
     return (totalTokens / 1_000_000) * model.costPerMillion;

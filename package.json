@@ -31,8 +31,8 @@
   },
   "scripts": {
     "postinstall": "echo 'Monorepo bootstrap complete.'",
-    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --ignore-path .gitignore",
-    "lint:sonar": "eslint . --config .eslintrc.sonar.json --ext .ts,.tsx,.js,.jsx --ignore-path .gitignore",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:sonar": "eslint . --config .eslintrc.sonar.json --ext .ts,.tsx,.js,.jsx",
     "analyze": "node scripts/analyze-code-quality.js",
     "quality:check": "npm run lint && npm run typecheck && npm run analyze",
     "test": "jest --coverage",
@@ -40,6 +40,7 @@
     "pretest": "./scripts/clean-duplicate-tests.sh",
     "test:coverage": "jest --coverage --coverageReporters=json,lcov,text,clover",
     "test:coverage:report": "jest --coverage --coverageReporters=html && open coverage/index.html",
+    "coverage:report": "node scripts/report-low-coverage.js",
     "test:security": "jest --testPathPattern=\"(security|validation|ast-node-whitelist)\" --coverage",
     "build": "turbo run build",
     "build:web": "pnpm --filter client build",

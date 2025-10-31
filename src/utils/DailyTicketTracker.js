@@ -1,230 +1,224 @@
 /**
  * Daily Ticket Tracker Utility
- * 
- * Tracks and logs daily ticket completion statistics with automatic 
+ *
+ * Tracks and logs daily ticket completion statistics with automatic
  * midnight Central Time reset functionality.
- * 
- * Features:
- * - Real-time tracking of approved and pushed tickets
- * - Daily statistics with agent breakdown
- * - Automatic midnight CT reset
- * - Historical data retention
- * - Performance metrics and trends
  */
 
 const fs = require('fs').promises;
 const path = require('path');
 
+const DATA_DIRECTORY = path.join(__dirname, '../data');
+const DAILY_LOG_FILE = path.join(DATA_DIRECTORY, 'daily-ticket-log.json');
+const HISTORY_FILE = path.join(DATA_DIRECTORY, 'ticket-history.json');
+const CONFIG_FILE = path.join(DATA_DIRECTORY, 'tracker-config.json');
+
+const DEFAULT_CONFIG = {
+  resetTime: '00:00',
+  retentionDays: 90,
+  enableNotifications: true,
+  trackingEnabled: true,
+  detailedLogging: true
+};
+
 class DailyTicketTracker {
   constructor() {
-    this.dataDir = path.join(__dirname, '../data');
-    this.dailyLogFile = path.join(this.dataDir, 'daily-ticket-log.json');
-    this.historyFile = path.join(this.dataDir, 'ticket-history.json');
-    this.configFile = path.join(this.dataDir, 'tracker-config.json');
-    
-    // Central Time zone offset (UTC-6 standard, UTC-5 daylight)
+    this.config = { ...DEFAULT_CONFIG };
     this.centralTimeZone = 'America/Chicago';
-    
-    // Current day's data
-    this.currentDay = {
-      date: this.getCurrentDateCT(),
-      approved: 0,
-      pushed: 0,
-      agents: new Map(),
-      timeline: [],
-      startTime: new Date(),
-      lastUpdate: new Date()
-    };
-    
-    // Configuration
-    this.config = {
-      resetTime: '00:00', // Midnight CT
-      retentionDays: 90,
-      enableNotifications: true,
-      trackingEnabled: true,
-      detailedLogging: true
-    };
-    
+    this.currentDay = this.createEmptyDay();
     this.initialized = false;
     this.resetTimer = null;
-
+  }
 
   /**
-   * Initialize the tracker
+   * Initialise tracker by loading configuration and current day state.
    */
   async initialize() {
     try {
-      // Ensure data directory exists
       await this.ensureDataDirectory();
-      
-      // Load configuration
       await this.loadConfig();
-      
-      // Load current day data
       await this.loadCurrentDay();
-      
-      // Set up midnight reset timer
       this.setupMidnightReset();
-      
       this.initialized = true;
-      console.log('✅ Daily Ticket Tracker initialized successfully');
-      
-      // Log initialization
       await this.logEvent('system', 'Tracker initialized');
- catch (error) {
+      if (this.config.detailedLogging) {
+        console.log('✅ Daily Ticket Tracker initialized successfully');
+      }
+    } catch (error) {
       console.error('❌ Failed to initialize Daily Ticket Tracker:', error);
       throw error;
-
-
+    }
+  }
 
   /**
-   * Track a ticket approval
+   * Record an approved ticket.
    */
   async trackApproval(ticketId, agentId = 'unknown', metadata = {}) {
-    if (!this.config.trackingEnabled) return;
-    
+    if (!this.config.trackingEnabled) {
+      return;
+    }
+
     try {
-      this.currentDay.approved++;
+      this.currentDay.approved += 1;
       this.updateAgentStats(agentId, 'approved');
-      
+
       const event = {
         type: 'approval',
-        ticketId,
+        ticketIds: [ticketId],
         agentId,
-        timestamp: new Date(),
-        metadata
+        metadata,
+        timestamp: new Date().toISOString()
       };
-      
+
       this.currentDay.timeline.push(event);
       this.currentDay.lastUpdate = new Date();
-      
       await this.saveCurrentDay();
-      
+
       if (this.config.detailedLogging) {
         console.log(`📋 Ticket approved: ${ticketId} by ${agentId}`);
+      }
 
-      
-      // Check for milestones
       await this.checkMilestones();
- catch (error) {
+    } catch (error) {
       console.error('Error tracking approval:', error);
-
-
+    }
+  }
 
   /**
-   * Track a ticket push/commit
+   * Record a push/commit event.
    */
   async trackPush(ticketIds = [], agentId = 'unknown', commitHash = '', metadata = {}) {
-    if (!this.config.trackingEnabled) return;
-    
+    if (!this.config.trackingEnabled) {
+      return;
+    }
+
     try {
-      const count = Array.isArray(ticketIds) ? ticketIds.length : 1;
+      const ids = Array.isArray(ticketIds) ? ticketIds : [ticketIds];
+      const count = ids.length;
       this.currentDay.pushed += count;
       this.updateAgentStats(agentId, 'pushed', count);
-      
+
       const event = {
         type: 'push',
-        ticketIds: Array.isArray(ticketIds) ? ticketIds : [ticketIds],
+        ticketIds: ids,
         agentId,
         commitHash,
-        timestamp: new Date(),
+        metadata,
         count,
-        metadata
+        timestamp: new Date().toISOString()
       };
-      
+
       this.currentDay.timeline.push(event);
       this.currentDay.lastUpdate = new Date();
-      
       await this.saveCurrentDay();
-      
+
       if (this.config.detailedLogging) {
         console.log(`🚀 ${count} ticket(s) pushed by ${agentId}: ${commitHash}`);
+      }
 
-      
-      // Check for milestones
       await this.checkMilestones();
- catch (error) {
+    } catch (error) {
       console.error('Error tracking push:', error);
-
-
+    }
+  }
 
   /**
-   * Get current day statistics
+   * Current day's statistics.
    */
   getCurrentStats() {
-    const agentStats = {};
-    for (const [agentId, stats] of this.currentDay.agents) {
-      agentStats[agentId] = {
-        approved: stats.approved || 0,
-        pushed: stats.pushed || 0,
-        total: (stats.approved || 0) + (stats.pushed || 0),
+    const agents = {};
+    for (const [agentId, stats] of this.currentDay.agents.entries()) {
+      agents[agentId] = {
+        approved: stats.approved,
+        pushed: stats.pushed,
+        total: stats.approved + stats.pushed,
         lastActivity: stats.lastActivity
       };
+    }
 
-    
-    const sessionDuration = Date.now() - this.currentDay.startTime.getTime();
-    const hoursActive = sessionDuration / (1000 * 60 * 60);
-    
+    const sessionDurationMs = Date.now() - this.currentDay.startTime.getTime();
+    const hoursActive = sessionDurationMs / (1000 * 60 * 60);
+    const totalTickets = this.currentDay.approved + this.currentDay.pushed;
+
     return {
       date: this.currentDay.date,
       approved: this.currentDay.approved,
       pushed: this.currentDay.pushed,
-      total: this.currentDay.approved + this.currentDay.pushed,
+      total: totalTickets,
       agents: {
         count: this.currentDay.agents.size,
-        breakdown: agentStats
+        breakdown: agents
       },
-      timeline: this.currentDay.timeline,
+      timeline: [...this.currentDay.timeline],
       session: {
         startTime: this.currentDay.startTime,
-        duration: sessionDuration,
-        hoursActive: Math.round(hoursActive * 100) / 100,
-        avgTicketsPerHour: hoursActive > 0 ? Math.round((this.currentDay.approved + this.currentDay.pushed) / hoursActive * 100) / 100 : 0
+        durationMs: sessionDurationMs,
+        hoursActive: Number(hoursActive.toFixed(2)),
+        avgTicketsPerHour:
+          hoursActive > 0 ? Number((totalTickets / hoursActive).toFixed(2)) : 0
       },
       lastUpdate: this.currentDay.lastUpdate
     };
-
+  }
 
   /**
-   * Get historical statistics
+   * Historical statistics for the requested number of days.
    */
   async getHistoricalStats(days = 7) {
     try {
       const history = await this.loadHistory();
-      const recentDays = history.slice(-days);
-      
+      const recentDays = history.slice(-Math.max(days, 0));
+
       if (recentDays.length === 0) {
         return {
           days: 0,
           totalApproved: 0,
           totalPushed: 0,
+          total: 0,
           avgPerDay: 0,
           trend: 'stable',
           dailyBreakdown: []
         };
+      }
 
-      
-      const totalApproved = recentDays.reduce((sum, day) => sum + (day.approved || 0), 0);
-      const totalPushed = recentDays.reduce((sum, day) => sum + (day.pushed || 0), 0);
+      const totalApproved = recentDays.reduce(
+        (sum, day) => sum + (day.approved || 0),
+        0
+      );
+      const totalPushed = recentDays.reduce(
+        (sum, day) => sum + (day.pushed || 0),
+        0
+      );
       const total = totalApproved + totalPushed;
-      
-      // Calculate trend
-      const firstHalf = recentDays.slice(0, Math.floor(recentDays.length / 2));
-      const secondHalf = recentDays.slice(Math.floor(recentDays.length / 2));
-      
-      const firstAvg = firstHalf.reduce((sum, day) => sum + (day.approved || 0) + (day.pushed || 0), 0) / firstHalf.length;
-      const secondAvg = secondHalf.reduce((sum, day) => sum + (day.approved || 0) + (day.pushed || 0), 0) / secondHalf.length;
-      
+
+      const midpoint = Math.floor(recentDays.length / 2) || 1;
+      const firstHalf = recentDays.slice(0, midpoint);
+      const secondHalf = recentDays.slice(midpoint);
+
+      const firstAvg =
+        firstHalf.reduce(
+          (sum, day) => sum + (day.approved || 0) + (day.pushed || 0),
+          0
+        ) / firstHalf.length;
+      const secondAvg =
+        secondHalf.reduce(
+          (sum, day) => sum + (day.approved || 0) + (day.pushed || 0),
+          0
+        ) / secondHalf.length;
+
       let trend = 'stable';
-      if (secondAvg > firstAvg * 1.1) trend = 'improving';
-      else if (secondAvg < firstAvg * 0.9) trend = 'declining';
-      
+      if (secondAvg > firstAvg * 1.1) {
+        trend = 'improving';
+      } else if (secondAvg < firstAvg * 0.9) {
+        trend = 'declining';
+      }
+
       return {
         days: recentDays.length,
         totalApproved,
         totalPushed,
         total,
-        avgPerDay: Math.round(total / recentDays.length * 100) / 100,
+        avgPerDay: Number((total / recentDays.length).toFixed(2)),
         trend,
         dailyBreakdown: recentDays.map(day => ({
           date: day.date,
@@ -234,325 +228,263 @@ class DailyTicketTracker {
           agents: day.agentCount || 0
         }))
       };
- catch (error) {
+    } catch (error) {
       console.error('Error getting historical stats:', error);
       return null;
-
-
+    }
+  }
 
   /**
-   * Generate daily report
+   * Generate a report of the current day, optionally including the timeline.
    */
   async generateDailyReport(includeTimeline = false) {
-    const currentStats = this.getCurrentStats();
-    const historicalStats = await this.getHistoricalStats(7);
-    
+    const current = this.getCurrentStats();
+    const historical = await this.getHistoricalStats(7);
+
     const report = {
       summary: {
-        date: currentStats.date,
-        approved: currentStats.approved,
-        pushed: currentStats.pushed,
-        total: currentStats.total,
-        activeAgents: currentStats.agents.count,
-        productivity: currentStats.session.avgTicketsPerHour
+        date: current.date,
+        approved: current.approved,
+        pushed: current.pushed,
+        total: current.total,
+        activeAgents: current.agents.count,
+        productivity: current.session.avgTicketsPerHour
       },
-      agents: currentStats.agents.breakdown,
-      session: currentStats.session,
-      historical: historicalStats,
-      milestones: this.checkDailyMilestones(currentStats),
-      timestamp: new Date()
+      agents: current.agents.breakdown,
+      session: current.session,
+      historical,
+      milestones: this.checkDailyMilestones(current),
+      timestamp: new Date().toISOString()
     };
-    
+
     if (includeTimeline) {
-      report.timeline = currentStats.timeline;
+      report.timeline = current.timeline;
+    }
 
-    
     return report;
-
+  }
 
   /**
-   * Reset daily counters (called at midnight CT)
+   * Reset counters at the end of the day.
    */
   async resetDaily() {
     try {
-      console.log('🕛 Daily reset triggered - archiving current day...');
-      
-      // Archive current day to history
+      if (this.config.detailedLogging) {
+        console.log('🕛 Daily reset triggered - archiving current day...');
+      }
+
       await this.archiveCurrentDay();
-      
-      // Reset current day
-      this.currentDay = {
-        date: this.getCurrentDateCT(),
-        approved: 0,
-        pushed: 0,
-        agents: new Map(),
-        timeline: [],
-        startTime: new Date(),
-        lastUpdate: new Date()
-      };
-      
-      // Save reset day
+      this.currentDay = this.createEmptyDay();
       await this.saveCurrentDay();
-      
-      // Clean up old history
       await this.cleanupHistory();
-      
-      console.log(`✅ Daily reset complete - tracking for ${this.currentDay.date}`);
-      
-      // Log reset event
       await this.logEvent('system', 'Daily reset completed');
- catch (error) {
+
+      if (this.config.detailedLogging) {
+        console.log(`✅ Daily reset complete - tracking for ${this.currentDay.date}`);
+      }
+    } catch (error) {
       console.error('❌ Error during daily reset:', error);
-
-
+    }
+  }
 
   /**
-   * Manual reset (for testing or admin use)
+   * Manual reset helper, primarily for tests/admins.
    */
   async manualReset() {
-    console.log('⚡ Manual reset triggered...');
     await this.resetDaily();
+  }
 
-
-  // Private helper methods
-
-  private async ensureDataDirectory() {
+  /**
+   * Ensure the data directory is present.
+   */
+  async ensureDataDirectory() {
     try {
-      await fs.access(this.dataDir);
- catch {
-      await fs.mkdir(this.dataDir, { recursive: true });
+      await fs.access(DATA_DIRECTORY);
+    } catch {
+      await fs.mkdir(DATA_DIRECTORY, { recursive: true });
+    }
+  }
 
-
-
-  private async loadConfig() {
+  async loadConfig() {
     try {
-      const configData = await fs.readFile(this.configFile, 'utf8');
-      this.config = { ...this.config, ...JSON.parse(configData) };
- catch {
-      // Use defaults, save initial config
+      const raw = await fs.readFile(CONFIG_FILE, 'utf8');
+      this.config = { ...DEFAULT_CONFIG, ...JSON.parse(raw) };
+    } catch {
       await this.saveConfig();
+    }
+  }
 
+  async saveConfig() {
+    await fs.writeFile(CONFIG_FILE, JSON.stringify(this.config, null, 2));
+  }
 
-
-  private async saveConfig() {
-    await fs.writeFile(this.configFile, JSON.stringify(this.config, null, 2));
-
-
-  private async loadCurrentDay() {
+  async loadCurrentDay() {
     try {
-      const data = await fs.readFile(this.dailyLogFile, 'utf8');
-      const parsed = JSON.parse(data);
-      
-      // Check if it's the same day
+      const raw = await fs.readFile(DAILY_LOG_FILE, 'utf8');
+      const parsed = JSON.parse(raw);
       if (parsed.date === this.getCurrentDateCT()) {
         this.currentDay = {
           ...parsed,
           agents: new Map(Object.entries(parsed.agents || {})),
-          startTime: new Date(parsed.startTime),
-          lastUpdate: new Date(parsed.lastUpdate)
+          startTime: parsed.startTime ? new Date(parsed.startTime) : new Date(),
+          lastUpdate: parsed.lastUpdate ? new Date(parsed.lastUpdate) : new Date(),
+          timeline: parsed.timeline || []
         };
- else {
-        // Different day, archive old data and start fresh
-        if (parsed.date) {
-          await this.archiveDay(parsed);
+        return;
+      }
 
+      if (parsed.date) {
+        await this.archiveDay(parsed);
+      }
+    } catch {
+      // fall through to create empty day
+    }
 
- catch {
-      // File doesn't exist or is corrupted, start fresh
+    this.currentDay = this.createEmptyDay();
+    await this.saveCurrentDay();
+  }
 
-
-
-  private async saveCurrentDay() {
-    const data = {
+  async saveCurrentDay() {
+    const serialisable = {
       ...this.currentDay,
-      agents: Object.fromEntries(this.currentDay.agents)
+      agents: Object.fromEntries(this.currentDay.agents),
+      startTime: this.currentDay.startTime.toISOString(),
+      lastUpdate: this.currentDay.lastUpdate.toISOString()
     };
-    await fs.writeFile(this.dailyLogFile, JSON.stringify(data, null, 2));
+    await fs.writeFile(DAILY_LOG_FILE, JSON.stringify(serialisable, null, 2));
+  }
 
-
-  private async loadHistory() {
+  async loadHistory() {
     try {
-      const data = await fs.readFile(this.historyFile, 'utf8');
-      return JSON.parse(data);
- catch {
+      const raw = await fs.readFile(HISTORY_FILE, 'utf8');
+      return JSON.parse(raw);
+    } catch {
       return [];
+    }
+  }
 
+  async saveHistory(history) {
+    await fs.writeFile(HISTORY_FILE, JSON.stringify(history, null, 2));
+  }
 
-
-  private async saveHistory(history) {
-    await fs.writeFile(this.historyFile, JSON.stringify(history, null, 2));
-
-
-  private async archiveCurrentDay() {
+  async archiveCurrentDay() {
     if (this.currentDay.approved === 0 && this.currentDay.pushed === 0) {
-      return; // Don't archive empty days
+      return;
+    }
 
-    
     await this.archiveDay(this.currentDay);
+  }
 
-
-  private async archiveDay(dayData) {
+  async archiveDay(dayData) {
     const history = await this.loadHistory();
-    
-    const archiveEntry = {
+    history.push({
       date: dayData.date,
       approved: dayData.approved || 0,
       pushed: dayData.pushed || 0,
-      agentCount: dayData.agents ? dayData.agents.size : 0,
-      agents: dayData.agents ? Object.fromEntries(dayData.agents) : {},
-      timeline: dayData.timeline || [],
-      sessionDuration: dayData.lastUpdate && dayData.startTime 
-        ? new Date(dayData.lastUpdate).getTime() - new Date(dayData.startTime).getTime()
-        : 0,
-      archivedAt: new Date()
-    };
-    
-    // Remove existing entry for same date
-    const filteredHistory = history.filter(h => h.date !== dayData.date);
-    filteredHistory.push(archiveEntry);
-    
-    // Sort by date
-    filteredHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
-    
-    await this.saveHistory(filteredHistory);
+      agentCount:
+        dayData.agents instanceof Map
+          ? dayData.agents.size
+          : Object.keys(dayData.agents || {}).length
+    });
+    await this.saveHistory(history);
+  }
 
-
-  private async cleanupHistory() {
-    if (this.config.retentionDays <= 0) return;
-    
+  async cleanupHistory() {
     const history = await this.loadHistory();
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - this.config.retentionDays);
-    
-    const filteredHistory = history.filter(entry => 
-      new Date(entry.date) >= cutoffDate
-    );
-    
-    if (filteredHistory.length !== history.length) {
-      await this.saveHistory(filteredHistory);
-      console.log(`🧹 Cleaned up ${history.length - filteredHistory.length} old history entries`);
+    const cutoff = Date.now() - this.config.retentionDays * 24 * 60 * 60 * 1000;
+    const filtered = history.filter(day => {
+      const time = new Date(day.date).getTime();
+      return Number.isNaN(time) || time >= cutoff;
+    });
+    if (filtered.length !== history.length) {
+      await this.saveHistory(filtered);
+    }
+  }
 
+  setupMidnightReset() {
+    if (this.resetTimer) {
+      clearTimeout(this.resetTimer);
+    }
 
+    const schedule = () => {
+      const now = new Date();
+      const resetTimeParts = this.config.resetTime.split(':').map(Number);
+      const target = new Date(
+        now.toLocaleString('en-US', { timeZone: this.centralTimeZone })
+      );
+      target.setHours(resetTimeParts[0] ?? 0, resetTimeParts[1] ?? 0, 0, 0);
 
-  private updateAgentStats(agentId, type, count = 1) {
+      if (target <= now) {
+        target.setDate(target.getDate() + 1);
+      }
+
+      const delay = target.getTime() - now.getTime();
+      this.resetTimer = setTimeout(async () => {
+        await this.resetDaily();
+        schedule();
+      }, delay);
+    };
+
+    schedule();
+  }
+
+  updateAgentStats(agentId, field, increment = 1) {
     if (!this.currentDay.agents.has(agentId)) {
       this.currentDay.agents.set(agentId, {
         approved: 0,
         pushed: 0,
-        lastActivity: new Date()
+        lastActivity: new Date().toISOString()
       });
-
-    
+    }
     const stats = this.currentDay.agents.get(agentId);
-    stats[type] += count;
-    stats.lastActivity = new Date();
+    stats[field] += increment;
+    stats.lastActivity = new Date().toISOString();
+  }
 
-
-  private getCurrentDateCT() {
-    return new Date().toLocaleDateString('en-US', {
-      timeZone: this.centralTimeZone,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-
-
-  private getNextMidnightCT() {
-    const now = new Date();
-    const centralTime = new Date(now.toLocaleString('en-US', { timeZone: this.centralTimeZone }));
-    
-    // Get next midnight Central Time
-    const nextMidnight = new Date(centralTime);
-    nextMidnight.setDate(nextMidnight.getDate() + 1);
-    nextMidnight.setHours(0, 0, 0, 0);
-    
-    // Convert back to local time
-    const utcOffset = now.getTimezoneOffset() * 60000;
-    const centralOffset = this.getCentralTimeOffset();
-    const localMidnight = new Date(nextMidnight.getTime() + centralOffset - utcOffset);
-    
-    return localMidnight;
-
-
-  private getCentralTimeOffset() {
-    // Central Standard Time is UTC-6, Central Daylight Time is UTC-5
-    const now = new Date();
-    const january = new Date(now.getFullYear(), 0, 1);
-    const july = new Date(now.getFullYear(), 6, 1);
-    
-    const stdTimezoneOffset = Math.max(
-      january.getTimezoneOffset(),
-      july.getTimezoneOffset()
-    );
-    
-    const isDST = now.getTimezoneOffset() < stdTimezoneOffset;
-    return isDST ? -5 * 3600000 : -6 * 3600000; // Convert hours to milliseconds
-
-
-  private setupMidnightReset() {
-    // Clear existing timer
-    if (this.resetTimer) {
-      clearTimeout(this.resetTimer);
-
-    
-    const nextMidnight = this.getNextMidnightCT();
-    const msUntilMidnight = nextMidnight.getTime() - Date.now();
-    
-    console.log(`⏰ Next reset scheduled for: ${nextMidnight.toLocaleString()} (${Math.round(msUntilMidnight / 1000 / 60)} minutes)`);
-    
-    this.resetTimer = setTimeout(async () => {
-      await this.resetDaily();
-      // Schedule next reset
-      this.setupMidnightReset();
-    }, msUntilMidnight);
-
-
-  private async checkMilestones() {
+  async checkMilestones() {
     const total = this.currentDay.approved + this.currentDay.pushed;
-    const milestones = [10, 25, 50, 75, 100];
-    
-    for (const milestone of milestones) {
-      if (total === milestone && this.config.enableNotifications) {
-        console.log(`🎉 Milestone reached: ${milestone} tickets completed today!`);
-        await this.logEvent('milestone', `${milestone} tickets completed`);
+    const milestones = [10, 25, 50, 100];
+    if (milestones.includes(total)) {
+      await this.logEvent('system', `Milestone reached: ${total} tickets`);
+    }
+  }
 
+  checkDailyMilestones(currentStats) {
+    const milestones = [10, 25, 50, 100];
+    return milestones.filter(value => currentStats.total >= value);
+  }
 
-
-
-  private checkDailyMilestones(stats) {
-    const milestones = [];
-    const total = stats.total;
-    
-    if (total >= 100) milestones.push('Century Club (100+)');
-    else if (total >= 75) milestones.push('Productivity Champion (75+)');
-    else if (total >= 50) milestones.push('High Achiever (50+)');
-    else if (total >= 25) milestones.push('Strong Performance (25+)');
-    else if (total >= 10) milestones.push('Good Progress (10+)');
-    
-    if (stats.agents.count >= 5) milestones.push('Team Collaboration (5+ agents)');
-    if (stats.session.avgTicketsPerHour >= 10) milestones.push('Speed Demon (10+ per hour)');
-    
-    return milestones;
-
-
-  private async logEvent(type, message) {
-    if (!this.config.detailedLogging) return;
-    
-    const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}] [${type.toUpperCase()}] ${message}`);
-
-
-  /**
-   * Cleanup and shutdown
-   */
-  async shutdown() {
-    if (this.resetTimer) {
-      clearTimeout(this.resetTimer);
-
-    
+  async logEvent(actor, message, extra = {}) {
+    const event = {
+      type: 'log',
+      actor,
+      message,
+      extra,
+      timestamp: new Date().toISOString()
+    };
+    this.currentDay.timeline.push(event);
+    this.currentDay.lastUpdate = new Date();
     await this.saveCurrentDay();
-    console.log('📊 Daily Ticket Tracker shutdown complete');
+  }
 
+  createEmptyDay() {
+    const now = new Date();
+    return {
+      date: this.getCurrentDateCT(),
+      approved: 0,
+      pushed: 0,
+      agents: new Map(),
+      timeline: [],
+      startTime: now,
+      lastUpdate: now
+    };
+  }
 
+  getCurrentDateCT() {
+    return new Date().toLocaleDateString('en-CA', {
+      timeZone: this.centralTimeZone
+    });
+  }
+}
 
 module.exports = DailyTicketTracker;

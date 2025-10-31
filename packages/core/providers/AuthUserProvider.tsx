@@ -11,7 +11,7 @@ import React, {
   useMemo,
   useRef
 } from 'react';
-import type { User, Session, AuthError } from '@supabase/supabase-js';
+import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../utils/supabaseClient';
 import {
   retryWithBackoff,
@@ -56,19 +56,32 @@ interface UserContextValue extends AuthState {
   clearError: () => void;
 }
 
+const missingAuthProviderError = () =>
+  new Error(
+    'AuthUserProvider is not initialized. Wrap your component tree with <AuthUserProvider>.'
+  );
+
+const throwAuthProviderMissingAsync = async (): Promise<void> => {
+  throw missingAuthProviderError();
+};
+
+const throwAuthProviderMissingSync = (): void => {
+  throw missingAuthProviderError();
+};
+
 const UserContext = createContext<UserContextValue>({
   user: null,
   session: null,
   loading: true,
   error: null,
   isAuthenticated: false,
-  signIn: async () => {},
-  signUp: async () => {},
-  signOut: async () => {},
-  resetPassword: async () => {},
-  updateProfile: async () => {},
-  refreshSession: async () => {},
-  clearError: () => {}
+  signIn: throwAuthProviderMissingAsync,
+  signUp: throwAuthProviderMissingAsync,
+  signOut: throwAuthProviderMissingAsync,
+  resetPassword: throwAuthProviderMissingAsync,
+  updateProfile: throwAuthProviderMissingAsync,
+  refreshSession: throwAuthProviderMissingAsync,
+  clearError: throwAuthProviderMissingSync
 });
 
 interface AuthUserProviderProps {
@@ -90,11 +103,50 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
   const offlineQueue = useRef<OfflineAuthQueue | null>(null);
   const logger = useRef<AuthDebugLogger | null>(null);
 
+  // Refresh session method
+  const refreshSession = useCallback(async () => {
+    if (!supabase) {
+      return;
+    }
+
+    logger.current?.log('Refreshing session');
+
+    try {
+      const {
+        data: { session },
+        error
+      } = await supabase.auth.refreshSession();
+
+      if (error) {
+        throw error;
+      }
+
+      if (session) {
+        logger.current?.log('Session refreshed', { userId: session.user.id });
+        setAuthState(prev => ({
+          ...prev,
+          session,
+          user: session.user
+        }));
+        tokenScheduler.current?.schedule(session);
+      }
+    } catch (error) {
+      logger.current?.error('Session refresh failed', error);
+      // Don't update error state for refresh failures as they might be transient
+    }
+  }, []);
+
+  const refreshSessionRef = useRef(refreshSession);
+
+  useEffect(() => {
+    refreshSessionRef.current = refreshSession;
+  }, [refreshSession]);
+
   // Initialize utilities
   useEffect(() => {
     if (!tokenScheduler.current) {
       tokenScheduler.current = new TokenRefreshScheduler(async () => {
-        await refreshSession();
+        await refreshSessionRef.current();
       });
     }
 
@@ -115,7 +167,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       broadcaster.current?.close();
       offlineQueue.current?.clear();
     };
-  }, []);
+  }, [refreshSession]);
 
   // Session restoration on mount
   useEffect(() => {
@@ -176,11 +228,13 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     };
 
     restoreSession();
-  }, []);
+  }, [refreshSession]);
 
   // Auth state subscription
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase) {
+      return;
+    }
 
     const {
       data: { subscription }
@@ -191,19 +245,33 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       });
 
       switch (event) {
-        case 'SIGNED_IN':
+        case 'SIGNED_IN': {
+          if (!session || !session.user) {
+            logger.current?.error('Signed in event missing session data');
+            setAuthState({
+              user: null,
+              session: null,
+              loading: false,
+              error: null,
+              isAuthenticated: false
+            });
+            break;
+          }
+
+          const { user } = session;
           setAuthState({
-            user: session!.user,
+            user,
             session,
             loading: false,
             error: null,
             isAuthenticated: true
           });
-          tokenScheduler.current?.schedule(session!);
+          tokenScheduler.current?.schedule(session);
           broadcaster.current?.broadcast('signin', {
-            userId: session!.user.id
+            userId: user.id
           });
           break;
+        }
 
         case 'SIGNED_OUT':
           setAuthState({
@@ -245,7 +313,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
   // Cross-tab synchronization
   useEffect(() => {
-    if (!broadcaster.current) return;
+    if (!broadcaster.current) {
+      return;
+    }
 
     const unsubscribe = broadcaster.current.subscribe((event, data) => {
       logger.current?.log('Cross-tab auth event', { event, data });
@@ -253,7 +323,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       switch (event) {
         case 'signin':
           // Another tab signed in, refresh our session
-          refreshSession();
+          void refreshSessionRef.current();
           break;
 
         case 'signout':
@@ -270,7 +340,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
         case 'session_refresh':
           // Another tab refreshed, we should too
-          refreshSession();
+          void refreshSessionRef.current();
           break;
       }
     });
@@ -310,7 +380,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           password
         });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
         return data;
       };
 
@@ -360,7 +432,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           }
         });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
         return data;
       };
 
@@ -390,14 +464,18 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
 
   // Sign out method
   const signOut = useCallback(async () => {
-    if (!supabase) return;
+    if (!supabase) {
+      return;
+    }
 
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
     logger.current?.log('Sign out attempt');
 
     try {
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       logger.current?.log('Sign out successful');
       // State update handled by onAuthStateChange
@@ -428,7 +506,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           redirectTo: `${window.location.origin}/auth/reset-password`
         });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
       };
 
       await retryWithBackoff(operation);
@@ -462,7 +542,9 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           data: updates
         });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
 
         logger.current?.log('Profile updated', { userId: data.user.id });
         setAuthState(prev => ({
@@ -483,36 +565,6 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     },
     [authState.user]
   );
-
-  // Refresh session method
-  const refreshSession = useCallback(async () => {
-    if (!supabase) return;
-
-    logger.current?.log('Refreshing session');
-
-    try {
-      const {
-        data: { session },
-        error
-      } = await supabase.auth.refreshSession();
-
-      if (error) throw error;
-
-      if (session) {
-        logger.current?.log('Session refreshed', { userId: session.user.id });
-        setAuthState(prev => ({
-          ...prev,
-          session,
-          user: session.user
-        }));
-        tokenScheduler.current?.schedule(session);
-      }
-    } catch (error) {
-      logger.current?.error('Session refresh failed', error);
-      // Don't update error state for refresh failures
-      // as they might be transient
-    }
-  }, []);
 
   // Clear error method
   const clearError = useCallback(() => {

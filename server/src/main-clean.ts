@@ -9,7 +9,7 @@ const server = Fastify({ logger: false });
 
 // Initialize database
 try {
-  const db = initDatabase();
+  initDatabase();
   console.log('✅ Database initialized');
 } catch (error) {
   console.error('❌ Database initialization failed:', error);
@@ -24,7 +24,7 @@ try {
 }
 
 // Root endpoint
-server.get('/', async (request, reply) => {
+server.get('/', async () => {
   return {
     status: 'PromptScape API running',
     mode: 'production',
@@ -34,7 +34,7 @@ server.get('/', async (request, reply) => {
 });
 
 // Health check endpoint
-server.get('/health', async (request, reply) => {
+server.get('/health', async (_request, reply) => {
   try {
     const dbHealthy = healthCheck();
     return {
@@ -44,19 +44,25 @@ server.get('/health', async (request, reply) => {
       timestamp: new Date().toISOString()
     };
   } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Health check failed';
     return reply.code(500).send({
       status: 'unhealthy',
       database: 'error',
-      error: error.message,
+      error: message,
       timestamp: new Date().toISOString()
     });
   }
 });
 
 // Preview endpoint (graph execution)
-server.post('/preview', async (request, reply) => {
+type PreviewBody = {
+  graph: Graph;
+};
+
+server.post<{ Body: PreviewBody }>('/preview', async (request, reply) => {
   try {
-    const graph = request.body as Graph;
+    const { graph } = request.body;
 
     // Basic validation
     const validation = validateGraph(graph);
@@ -89,9 +95,11 @@ server.post('/preview', async (request, reply) => {
     };
   } catch (error) {
     console.error('Graph execution error:', error);
+    const message =
+      error instanceof Error ? error.message : 'Graph execution failed';
     return reply.code(500).send({
       error: 'Graph execution failed',
-      message: error.message
+      message
     });
   }
 });
@@ -108,7 +116,8 @@ const start = async () => {
     );
     console.log('🎯 Ready for production use!');
   } catch (err) {
-    console.error('❌ Server start failed:', err);
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error('❌ Server start failed:', error);
     process.exit(1);
   }
 };

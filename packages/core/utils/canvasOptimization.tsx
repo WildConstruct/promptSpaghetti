@@ -4,8 +4,17 @@
  *
  * Professional canvas optimization for large graph performance
  */
-import React from 'react';
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Edge, Node, Viewport } from 'reactflow';
+
+type PerformanceWithMemory = Performance & {
+  memory?: {
+    usedJSHeapSize: number;
+    totalJSHeapSize: number;
+    jsHeapSizeLimit: number;
+  };
+};
 
 export interface PerformanceConfig {
   maxVisibleNodes: number;
@@ -61,7 +70,9 @@ export class CanvasOptimizer {
       if (this.lastFrameTime) {
         const delta = now - this.lastFrameTime;
         this.frameDurations.push(delta);
-        if (this.frameDurations.length > 60) this.frameDurations.shift();
+        if (this.frameDurations.length > 60) {
+          this.frameDurations.shift();
+        }
         const avg =
           this.frameDurations.reduce((a, b) => a + b, 0) /
           this.frameDurations.length;
@@ -74,7 +85,9 @@ export class CanvasOptimizer {
   }
 
   private startMemoryCleanup(): void {
-    if (this.memoryCleanupTimer) clearInterval(this.memoryCleanupTimer);
+    if (this.memoryCleanupTimer) {
+      clearInterval(this.memoryCleanupTimer);
+    }
     this.memoryCleanupTimer = setInterval(() => {
       this.cleanupMemory();
       this.updateMemoryMetrics();
@@ -83,16 +96,22 @@ export class CanvasOptimizer {
 
   private cleanupMemory(): void {
     // Best-effort memory cleanup hooks (devtools only)
-    if (typeof (window as any).gc === 'function') {
+    const globalWindow = window as typeof window & { gc?: () => void };
+    if (typeof globalWindow.gc === 'function') {
       try {
-        (window as any).gc();
-      } catch {}
+        globalWindow.gc();
+      } catch {
+        // Ignore failures from manual GC triggers
+      }
     }
   }
 
   private updateMemoryMetrics(): void {
-    const perf: any = typeof performance !== 'undefined' ? performance : null;
-    if (perf && perf.memory) {
+    const perf =
+      typeof performance !== 'undefined'
+        ? (performance as PerformanceWithMemory)
+        : null;
+    if (perf?.memory) {
       const used = perf.memory.usedJSHeapSize;
       const total =
         perf.memory.totalJSHeapSize || perf.memory.jsHeapSizeLimit || used;
@@ -107,11 +126,11 @@ export class CanvasOptimizer {
     this.metrics.lastUpdateTime = Date.now();
   }
 
-  optimizeNodeVisibility(
-    nodes: Node[],
+  optimizeNodeVisibility<TNodeData>(
+    nodes: Array<Node<TNodeData>>,
     viewport: Viewport,
     canvasSize: { width: number; height: number }
-  ): Node[] {
+  ): Array<Node<TNodeData>> {
     this.metrics.nodeCount = nodes.length;
     const visibleNodes = this.cullInvisibleNodes(nodes, viewport, canvasSize);
     this.metrics.visibleNodes = visibleNodes.length;
@@ -124,11 +143,11 @@ export class CanvasOptimizer {
     return visibleNodes;
   }
 
-  private cullInvisibleNodes(
-    nodes: Node[],
+  private cullInvisibleNodes<TNodeData>(
+    nodes: Array<Node<TNodeData>>,
     viewport: Viewport,
     canvasSize: { width: number; height: number }
-  ): Node[] {
+  ): Array<Node<TNodeData>> {
     const { x, y, zoom } = viewport;
     const t = this.config.cullingThreshold;
     const bounds = {
@@ -138,10 +157,10 @@ export class CanvasOptimizer {
       bottom: (-y + canvasSize.height) / zoom + t * canvasSize.height
     };
     return nodes.filter(node => {
-      const nx = (node as any).position?.x ?? 0;
-      const ny = (node as any).position?.y ?? 0;
-      const w = (node as any).width ?? 200;
-      const h = (node as any).height ?? 100;
+      const nx = node.position?.x ?? 0;
+      const ny = node.position?.y ?? 0;
+      const w = node.width ?? 200;
+      const h = node.height ?? 100;
       return (
         nx + w >= bounds.left &&
         nx <= bounds.right &&
@@ -151,28 +170,36 @@ export class CanvasOptimizer {
     });
   }
 
-  private prioritizeNodes(nodes: Node[]): Node[] {
+  private prioritizeNodes<TNodeData>(
+    nodes: Array<Node<TNodeData>>
+  ): Array<Node<TNodeData>> {
     return [...nodes].sort(
       (a, b) => this.getNodeImportance(b) - this.getNodeImportance(a)
     );
   }
 
-  private getNodeImportance(node: Node): number {
+  private getNodeImportance<TNodeData>(node: Node<TNodeData>): number {
     let score = 0;
-    if ((node as any).selected) score += 50;
-    const type = (node as any).type || '';
-    if (String(type).toLowerCase().includes('output')) score += 100;
-    const connectionCount = (node as any).data?.connections || 0;
-    score += Number(connectionCount) * 5;
+    if (node.selected) {
+      score += 50;
+    }
+    const type = String(node.type ?? '').toLowerCase();
+    if (type.includes('output')) {
+      score += 100;
+    }
+    const data = node.data as Record<string, unknown> | undefined;
+    const connectionCount =
+      typeof data?.connections === 'number' ? data.connections : 0;
+    score += connectionCount * 5;
     return score;
   }
 
-  optimizeEdges(
-    edges: Edge[],
-    visibleNodes: Node[],
+  optimizeEdges<TEdgeData>(
+    edges: Array<Edge<TEdgeData>>,
+    visibleNodes: Array<Node<unknown>>,
     viewport: Viewport
-  ): Edge[] {
-    const visibleIds = new Set(visibleNodes.map(n => n.id));
+  ): Array<Edge<TEdgeData>> {
+    const visibleIds = new Set(visibleNodes.map(node => node.id));
     const filtered = edges.filter(
       e => visibleIds.has(e.source) && visibleIds.has(e.target)
     );
@@ -181,10 +208,17 @@ export class CanvasOptimizer {
       : filtered;
   }
 
-  private simplifyEdgesForZoom(edges: Edge[], zoom: number): Edge[] {
+  private simplifyEdgesForZoom<TEdgeData>(
+    edges: Array<Edge<TEdgeData>>,
+    zoom: number
+  ): Array<Edge<TEdgeData>> {
     if (zoom < 0.3) {
       return edges.filter(
-        e => (e as any).selected || (e as any).data?.important
+        edge =>
+          edge.selected === true ||
+          Boolean(
+            (edge.data as Record<string, unknown> | undefined)?.important
+          )
       );
     }
     return edges;
@@ -205,7 +239,7 @@ export class CanvasOptimizer {
     } as const;
   }
 
-  createThrottledRenderer<T extends (...args: any[]) => void>(
+  createThrottledRenderer<T extends (...args: unknown[]) => void>(
     fn: T,
     delay: number = this.config.renderDebounce
   ): T {
@@ -213,9 +247,13 @@ export class CanvasOptimizer {
     let lastArgs: Parameters<T> | null = null;
     const wrapper = ((...args: Parameters<T>) => {
       lastArgs = args;
-      if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
       timeoutId = setTimeout(() => {
-        if (lastArgs) fn(...lastArgs);
+        if (lastArgs) {
+          fn(...lastArgs);
+        }
         timeoutId = null;
       }, delay);
     }) as T;
@@ -282,12 +320,10 @@ export class CanvasOptimizer {
 
 // Hook to expose optimizer and live metrics
 export function useCanvasOptimization(config?: Partial<PerformanceConfig>) {
-  const [optimizer] = React.useState(() => new CanvasOptimizer(config));
-  const [metrics, setMetrics] = React.useState<CanvasMetrics>(
-    optimizer.getMetrics()
-  );
+  const [optimizer] = useState(() => new CanvasOptimizer(config));
+  const [metrics, setMetrics] = useState<CanvasMetrics>(optimizer.getMetrics());
 
-  React.useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(
       () => setMetrics(optimizer.getMetrics()),
       1000
@@ -312,21 +348,27 @@ export interface PerformanceMonitorProps {
   visible?: boolean;
 }
 
-export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
+export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   optimizer,
   visible = true
 }) => {
-  const [metrics, setMetrics] = React.useState<CanvasMetrics>(
+  const [metrics, setMetrics] = useState<CanvasMetrics>(
     optimizer.getMetrics()
   );
 
-  React.useEffect(() => {
-    if (!visible) return;
+  useEffect(() => {
+    if (!visible) {
+      return undefined;
+    }
     const interval = setInterval(() => setMetrics(optimizer.getMetrics()), 250);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, [optimizer, visible]);
 
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   const boxStyle: React.CSSProperties = {
     position: 'fixed',

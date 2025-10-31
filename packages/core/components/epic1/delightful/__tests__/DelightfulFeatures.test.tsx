@@ -7,6 +7,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { EasterEggManager } from '../EasterEggManager';
 import { PlayfulLoadingStates, PlayfulProgressBar } from '../PlayfulLoadingStates';
 import { DelightfulIntegration } from '../DelightfulIntegration';
+import { useStore } from '@/stores/graphStore';
 
 // Mock React Flow
 jest.mock('reactflow', () => ({
@@ -22,11 +23,13 @@ jest.mock('reactflow', () => ({
 
 // Mock store
 jest.mock('@/stores/graphStore', () => ({
-  useStore: () => ({
+  useStore: jest.fn(() => ({
     nodes: [],
-    edges: [],
-  }),
+    edges: []
+  }))
 }));
+
+const mockedUseStore = useStore as jest.MockedFunction<typeof useStore>;
 
 // Mock vibrate API
 const mockVibrate = jest.fn();
@@ -39,6 +42,7 @@ describe('EasterEggManager', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
+    mockedUseStore.mockReturnValue({ nodes: [], edges: [] });
   });
 
   test('konami code triggers weird mode', async () => {
@@ -76,7 +80,7 @@ describe('EasterEggManager', () => {
       </div>
     );
 
-    const viewport = screen.getByClassName('react-flow__viewport');
+    const viewport = getByClassName('react-flow__viewport');
     
     // Simulate long press
     fireEvent.mouseDown(viewport);
@@ -100,7 +104,7 @@ describe('EasterEggManager', () => {
       </div>
     );
 
-    const viewport = screen.getByClassName('react-flow__viewport');
+    const viewport = getByClassName('react-flow__viewport');
     
     // Triple click
     fireEvent.click(viewport);
@@ -162,7 +166,7 @@ describe('PlayfulLoadingStates', () => {
     );
 
     // Should show one of the graph loading messages
-    const container = screen.getByClassName('playful-loading-container');
+    const container = getByClassName('playful-loading-container');
     expect(container).toBeInTheDocument();
     
     // Should have emoji and message
@@ -177,11 +181,11 @@ describe('PlayfulLoadingStates', () => {
       />
     );
 
-    const firstMessage = screen.getByClassName('playful-loading-container').textContent;
+    const firstMessage = getByClassName('playful-loading-container').textContent;
 
     // Wait for message to change
     await waitFor(() => {
-      const currentMessage = screen.getByClassName('playful-loading-container').textContent;
+      const currentMessage = getByClassName('playful-loading-container').textContent;
       expect(currentMessage).not.toBe(firstMessage);
     }, { timeout: 4000 });
   });
@@ -218,12 +222,12 @@ describe('PlayfulProgressBar', () => {
       />
     );
 
-    const progressBar = screen.getByStyle({ width: '0%' });
+    const progressBar = getByStyle({ width: '0%' });
     expect(progressBar).toBeInTheDocument();
 
     rerender(<PlayfulProgressBar progress={75} />);
     
-    const updatedBar = screen.getByStyle({ width: '75%' });
+    const updatedBar = getByStyle({ width: '75%' });
     expect(updatedBar).toBeInTheDocument();
   });
 
@@ -273,7 +277,7 @@ describe('DelightfulIntegration', () => {
     );
 
     // Mock nodes and edges to trigger achievement
-    jest.mocked(require('@/stores/graphStore').useStore).mockReturnValue({
+    mockedUseStore.mockReturnValue({
       nodes: [{ id: '1' }, { id: '2' }, { id: '3' }],
       edges: [{ id: 'e1' }, { id: 'e2' }, { id: 'e3' }],
     });
@@ -299,7 +303,7 @@ describe('DelightfulIntegration', () => {
     );
 
     // Trigger an achievement
-    jest.mocked(require('@/stores/graphStore').useStore).mockReturnValue({
+    mockedUseStore.mockReturnValue({
       nodes: Array(11).fill({}).map((_, i) => ({ id: `node-${i}` })),
       edges: [],
     });
@@ -313,7 +317,7 @@ describe('DelightfulIntegration', () => {
 });
 
 // Helper to get element by partial style
-function screen.getByStyle(styles: Record<string, string>) {
+function getByStyle(styles: Record<string, string>) {
   const elements = document.querySelectorAll('*');
   for (const element of elements) {
     const elementStyles = (element as HTMLElement).style;
@@ -326,15 +330,19 @@ function screen.getByStyle(styles: Record<string, string>) {
       }
     }
     
-    if (matches) return element;
+    if (matches) {
+      return element;
+    }
   }
   
   throw new Error(`No element found with styles: ${JSON.stringify(styles)}`);
 }
 
 // Helper to get by class name
-function screen.getByClassName(className: string) {
+function getByClassName(className: string) {
   const element = document.querySelector(`.${className}`);
-  if (!element) throw new Error(`No element found with class: ${className}`);
+  if (!element) {
+    throw new Error(`No element found with class: ${className}`);
+  }
   return element;
 }

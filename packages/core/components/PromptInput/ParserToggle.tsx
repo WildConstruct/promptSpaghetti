@@ -1,7 +1,7 @@
 // Parser Toggle Component - Story 2.6
 // UI toggle for switching between standard and LLM-enhanced parsing modes
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './ParserToggle.css';
 
 interface ParserToggleProps {
@@ -19,13 +19,25 @@ export const ParserToggle: React.FC<ParserToggleProps> = ({
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const getStorageKey = useCallback(() => {
+    const globalWindow = window as typeof window & {
+      currentProjectId?: string;
+      currentUserId?: string;
+    };
+    const projectId = globalWindow.currentProjectId ?? 'default';
+    const userId = globalWindow.currentUserId;
+
+    if (userId) {
+      return `parser-mode-${userId}-${projectId}`;
+    }
+    return 'parser-mode-anonymous';
+  }, []);
 
   // Persist toggle state
   useEffect(() => {
-    // Per-project storage when signed in, localStorage for anonymous
     const storageKey = getStorageKey();
     localStorage.setItem(storageKey, mode);
-  }, [mode]);
+  }, [getStorageKey, mode]);
 
   // Load persisted state on mount
   useEffect(() => {
@@ -34,10 +46,12 @@ export const ParserToggle: React.FC<ParserToggleProps> = ({
     if (saved && (saved === 'standard' || saved === 'llm-enhanced')) {
       onChange(saved);
     }
-  }, []);
+  }, [getStorageKey, onChange]);
 
   const handleToggle = () => {
-    if (disabled || loading) return;
+    if (disabled || loading) {
+      return;
+    }
 
     setIsAnimating(true);
     const newMode = mode === 'standard' ? 'llm-enhanced' : 'standard';
@@ -52,17 +66,6 @@ export const ParserToggle: React.FC<ParserToggleProps> = ({
       e.preventDefault();
       handleToggle();
     }
-  };
-
-  const getStorageKey = () => {
-    // Check if user is signed in (would need auth context in real impl)
-    const projectId = (window as any).currentProjectId || 'default';
-    const userId = (window as any).currentUserId;
-
-    if (userId) {
-      return `parser-mode-${userId}-${projectId}`;
-    }
-    return 'parser-mode-anonymous';
   };
 
   const getTooltipContent = () => {

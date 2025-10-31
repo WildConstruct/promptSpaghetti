@@ -1,11 +1,9 @@
 import React from 'react';
 
+import type { ThemeConfig } from './types';
+
 interface LivePreviewComponentProps {
-  theme: {
-    colors: Record<string, string>;
-    typography: Record<string, any>;
-    branding: Record<string, any>;
-  };
+  theme: ThemeConfig;
 }
 
 const LivePreviewComponent: React.FC<LivePreviewComponentProps> = ({

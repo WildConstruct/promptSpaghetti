@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 import { useDrop } from 'react-dnd';
+import type { ReactFlowInstance } from 'reactflow';
 
 interface DroppableCanvasProps {
   children: React.ReactNode;
   onDrop: (type: string, position: { x: number; y: number }) => void;
-  reactFlowInstance?: any;
+  reactFlowInstance?: ReactFlowInstance;
 }
 
 export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({ 

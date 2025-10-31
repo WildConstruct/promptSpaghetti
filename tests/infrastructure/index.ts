@@ -69,10 +69,10 @@ export const EPIC_TASK_ID = 'E18-1753114562510-5E3421';
 /**
  * Quick setup helper for common testing scenarios
  */
-export const createTestHarness = (
+export const createTestHarness = async (
   config?: Partial<Record<string, unknown>>
 ) => {
-  const TestHarness = require('./TestHarness').default;
+  const { default: TestHarness } = await import('./TestHarness');
   return new TestHarness(config);
 };
 
@@ -80,13 +80,6 @@ export const createTestHarness = (
  * Quick setup helper for test data generation
  */
 export const createTestGenerators = (seed?: string) => {
-  const {
-    GraphDataGenerator,
-    UserDataGenerator,
-    APIDataGenerator,
-    PerformanceDataGenerator
-  } = require('./TestDataGenerators');
-
   return {
     graph: new GraphDataGenerator(seed),
     user: new UserDataGenerator(seed),
@@ -99,7 +92,6 @@ export const createTestGenerators = (seed?: string) => {
  * Quick setup helper for test fixtures
  */
 export const createTestFixtures = (seed?: string) => {
-  const TestFixtureManager = require('./TestFixtures').default;
   return new TestFixtureManager(seed);
 };
 

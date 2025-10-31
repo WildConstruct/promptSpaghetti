@@ -26,10 +26,10 @@ function addTimingFields() {
     tasksUpdated++;
 
     // Add new fields if they don't exist
-    if (!task.startTime) task.startTime = null;
-    if (!task.endTime) task.endTime = null;
-    if (!task.actualHours) task.actualHours = null;
-    if (!task.agentId) task.agentId = null;
+    if (!task.startTime) {task.startTime = null;}
+    if (!task.endTime) {task.endTime = null;}
+    if (!task.actualHours) {task.actualHours = null;}
+    if (!task.agentId) {task.agentId = null;}
 
     // For demonstration, add timing data to tasks with estimates (20% chance)
     // In production, this would be populated by actual agent tracking

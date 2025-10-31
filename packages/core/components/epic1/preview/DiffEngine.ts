@@ -263,7 +263,7 @@ export class DiffEngine {
    * Merge adjacent segments of the same type
    */
   private mergeSegments(segments: DiffSegment[]): DiffSegment[] {
-    if (segments.length === 0) return segments;
+    if (segments.length === 0) {return segments;}
 
     const merged: DiffSegment[] = [];
     let current = segments[0];
@@ -293,7 +293,7 @@ export class DiffEngine {
    */
   summarizeChanges(changeSet: ChangeSet): string {
     const totalChanged = changeSet.changedIndices.length;
-    if (totalChanged === 0) return 'No changes';
+    if (totalChanged === 0) {return 'No changes';}
 
     const additions = changeSet.diffs.reduce(
       (sum, { diff }) => sum + diff.addedCount,

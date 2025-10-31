@@ -7,10 +7,11 @@ import React from 'react';
 import { ReactFlowProvider } from 'reactflow';
 import { EnhancedAssetBrowser, UserProvider } from '@prompt/asset-browser';
 import { NodeReplacementHandler } from './asset-library/NodeReplacementHandler';
+import type { Preset } from '@prompt/asset-browser';
 
 interface AssetBrowserEnhancedProps {
-  onInsert?: (preset: any) => void;
-  onNodeReplace?: (nodeId: string, preset: any) => void;
+  onInsert?: (preset: Preset) => void;
+  onNodeReplace?: (nodeId: string, preset: Preset) => void;
   enableFragmentManifest?: boolean;
   children?: React.ReactNode;
 }
@@ -23,7 +24,7 @@ export const AssetBrowserEnhanced: React.FC<AssetBrowserEnhancedProps> = ({
 }) => {
   return (
     <UserProvider>
-      <EnhancedAssetBrowser 
+      <EnhancedAssetBrowser
         onInsert={onInsert}
         onNodeReplace={onNodeReplace}
         enableFragmentManifest={enableFragmentManifest}

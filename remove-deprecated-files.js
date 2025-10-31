@@ -90,6 +90,8 @@ directoriesToRemove.forEach(dir => {
         console.log(`✅ Removed ${dir} (${fileCount} files)`);
         removedCount += fileCount;
       } catch (gitError) {
+        const reason = gitError instanceof Error ? gitError.message : String(gitError);
+        console.warn(`⚠️  git rm failed for ${dir}: ${reason}`);
         // Fallback to regular removal if not in git
         fs.rmSync(fullPath, { recursive: true, force: true });
         console.log(
@@ -118,6 +120,8 @@ filesToRemove.forEach(file => {
         console.log(`✅ Removed ${file}`);
         removedCount++;
       } catch (gitError) {
+        const reason = gitError instanceof Error ? gitError.message : String(gitError);
+        console.warn(`⚠️  git rm failed for ${file}: ${reason}`);
         // Fallback to regular removal if not in git
         fs.unlinkSync(fullPath);
         console.log(`✅ Removed ${file} - not tracked in git`);
@@ -168,7 +172,7 @@ function countFiles(dir) {
       }
     });
   } catch (error) {
-    // Directory might not exist
+    console.warn(`⚠️  Unable to inspect ${dir}:`, error instanceof Error ? error.message : error);
   }
   return count;
 }
@@ -195,6 +199,6 @@ function cleanEmptyDirs(dir) {
       }
     }
   } catch (error) {
-    // Ignore errors for non-existent directories
+    console.warn(`⚠️  Failed to clean directory ${dir}:`, error instanceof Error ? error.message : error);
   }
 }

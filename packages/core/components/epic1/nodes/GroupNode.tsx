@@ -3,8 +3,9 @@
  * Story 1.27: Node Grouping Hierarchy
  */
 
-import React, { useState, useCallback, memo } from 'react';
-import { Handle, Position, NodeProps } from 'reactflow';
+import React, { useState, memo } from 'react';
+import type { NodeProps } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 import './GroupNode.css';
 
 interface NodeGroup {
@@ -32,97 +33,98 @@ interface GroupNodeData {
   };
 }
 
+const InvalidGroupNode: React.FC<{ id: string }> = ({ id }) => (
+  <div
+    className="group-node-error"
+    style={{
+      padding: '8px',
+      borderRadius: '8px',
+      backgroundColor: '#ffebee',
+      border: '2px dashed #f44336',
+      minWidth: '200px',
+      minHeight: '60px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#f44336'
+    }}
+  >
+    ⚠️ Invalid Group Node ({id})
+  </div>
+);
+
 /**
  * GroupNode component with performance optimization
  */
-const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
-  ({ data, selected, id }) => {
-    // Handle undefined data gracefully
-    if (!data || !data.group) {
-      console.warn(`[GroupNode] Missing data for node ${id}`, { data });
-      return (
-        <div className="group-node-error" style={{
-          padding: '8px',
-          borderRadius: '8px',
-          backgroundColor: '#ffebee',
-          border: '2px dashed #f44336',
-          minWidth: '200px',
-          minHeight: '60px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#f44336'
-        }}>
-          ⚠️ Invalid Group Node
-        </div>
-      );
+const GroupNodeComponent = ({
+  data,
+  selected,
+  id
+}: NodeProps<GroupNodeData>) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+
+  if (!data?.group) {
+    console.warn(`[GroupNode] Missing data for node ${id}`, { data });
+    return <InvalidGroupNode id={id} />;
+  }
+
+  const { group, nodeCount, onToggle, onEdit, performanceMetrics, onDelete } =
+    data;
+
+  const handleToggle = () => {
+    if (!onToggle) {
+      return;
     }
-    
-    const { group, nodeCount, onToggle, onEdit, performanceMetrics } = data;
-    const [isEditing, setIsEditing] = useState(false);
-    const [isCalculating, setIsCalculating] = useState(false);
-    const [showMenu, setShowMenu] = useState(false);
 
-    const handleToggle = useCallback(async () => {
-      if (!onToggle) return;
+    setIsCalculating(true);
+    Promise.resolve(onToggle(group.id)).finally(() => setIsCalculating(false));
+  };
 
-      setIsCalculating(true);
-      onToggle(group.id);
-      setIsCalculating(false);
-    }, [group.id, onToggle]);
+  const handleNameEdit = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (!onEdit) {
+      return;
+    }
 
-    const handleNameEdit = useCallback(
-      (e: React.FocusEvent<HTMLInputElement>) => {
-        if (!onEdit) return;
+    const newName = event.target.value.trim();
+    if (newName && newName !== group.name) {
+      onEdit(group.id, { name: newName });
+    }
+    setIsEditing(false);
+  };
 
-        const newName = e.target.value.trim();
-        if (newName && newName !== group.name) {
-          onEdit(group.id, { name: newName });
-        }
-        setIsEditing(false);
-      },
-      [group.id, group.name, onEdit]
-    );
-
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-          e.currentTarget.blur();
-        } else if (e.key === 'Escape') {
-          e.currentTarget.value = group.name;
-          setIsEditing(false);
-        }
-      },
-      [group.name]
-    );
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.currentTarget.blur();
+    } else if (event.key === 'Escape') {
+      event.currentTarget.value = group.name;
+      setIsEditing(false);
+    }
+  };
 
     // Determine visual style based on state
-    const getGroupStyle = () => {
-      const baseStyle = {
-        padding: '8px',
-        borderRadius: '8px',
-        backgroundColor: group.metadata?.color || '#f0f0f0',
-        border: `2px ${selected ? 'solid' : 'dashed'} ${selected ? '#1a73e8' : '#ccc'}`,
-        minWidth: '200px',
+    const groupStyle: React.CSSProperties = {
+      padding: '8px',
+      borderRadius: '8px',
+      backgroundColor: group.metadata?.color || '#f0f0f0',
+      border: `2px ${selected ? 'solid' : 'dashed'} ${
+        selected ? '#1a73e8' : '#ccc'
+      }`,
+      minWidth: '200px',
         minHeight: '60px',
-        cursor: 'pointer',
-        transition: 'all 0.2s ease'
-      };
-
-      if (selected) {
-        baseStyle.boxShadow = '0 4px 12px rgba(26, 115, 232, 0.3)';
-      }
-
-      return baseStyle;
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      boxShadow: selected ? '0 4px 12px rgba(26, 115, 232, 0.3)' : undefined
     };
 
     return (
       <div
         className="group-node"
-        style={getGroupStyle()}
+        style={groupStyle}
         onContextMenu={e => {
           e.preventDefault();
-          setShowMenu(!showMenu);
+          setShowMenu(prev => !prev);
         }}
       >
         {/* Handles for connections */}
@@ -351,9 +353,7 @@ const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
 
             <button
               onClick={() => {
-                if (window.confirm('Delete group and ungroup nodes?')) {
-                  data.onDelete?.(group.id, false);
-                }
+                onDelete?.(group.id, false);
                 setShowMenu(false);
               }}
               style={{
@@ -375,9 +375,7 @@ const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
 
             <button
               onClick={() => {
-                if (window.confirm('Delete group and all its nodes?')) {
-                  data.onDelete?.(group.id, true);
-                }
+                onDelete?.(group.id, true);
                 setShowMenu(false);
               }}
               style={{
@@ -399,7 +397,7 @@ const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
           </div>
         )}
 
-        <style jsx>{`
+        <style>{`
           @keyframes spin {
             from {
               transform: rotate(0deg);
@@ -412,8 +410,10 @@ const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
       </div>
     );
   }
-);
 
+GroupNodeComponent.displayName = 'GroupNodeComponent';
+
+export const GroupNode = memo(GroupNodeComponent);
 GroupNode.displayName = 'GroupNode';
 
 export default GroupNode;

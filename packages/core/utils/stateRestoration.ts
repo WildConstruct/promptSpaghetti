@@ -2,14 +2,19 @@
  * State restoration and recovery utilities
  */
 
-import { z } from 'zod';
 import {
   getPersistedStateInfo,
   validatePersistedState,
   persistenceStorage,
   STORAGE_KEY
 } from './persistenceUtils';
-import { GraphSchema } from '../graphSchema';
+
+interface RestoredState {
+  nodes?: unknown[];
+  edges?: unknown[];
+  viewport?: unknown;
+  selection?: unknown;
+}
 
 export interface RecoveryReport {
   recoverable: {
@@ -31,7 +36,7 @@ export interface RestorationResult {
   success: boolean;
   recovered: boolean;
   report?: RecoveryReport;
-  state?: any;
+  state?: RestoredState;
   error?: string;
 }
 
@@ -62,7 +67,7 @@ export function attemptRecovery(corrupted: unknown): RecoveryReport {
       return report;
     }
 
-    const state = corrupted as any;
+    const state = corrupted as Record<string, unknown>;
 
     // Try to recover nodes
     if (Array.isArray(state.nodes)) {
@@ -74,7 +79,7 @@ export function attemptRecovery(corrupted: unknown): RecoveryReport {
           } else {
             report.corrupted.nodes.push(node?.id || 'unknown');
           }
-        } catch (error) {
+        } catch {
           report.corrupted.nodes.push(node?.id || 'unknown');
         }
       }
@@ -96,7 +101,7 @@ export function attemptRecovery(corrupted: unknown): RecoveryReport {
           } else {
             report.corrupted.edges.push(edge?.id || 'unknown');
           }
-        } catch (error) {
+        } catch {
           report.corrupted.edges.push(edge?.id || 'unknown');
         }
       }
@@ -161,10 +166,10 @@ export function attemptRecovery(corrupted: unknown): RecoveryReport {
  * Build recovered state from corrupted data
  */
 export function buildRecoveredState(
-  corrupted: any,
+  corrupted: unknown,
   report: RecoveryReport
-): any {
-  const recovered: any = {
+): RestoredState {
+  const recovered: RestoredState = {
     nodes: [],
     edges: [],
     viewport: { x: 0, y: 0, zoom: 1 }
@@ -186,7 +191,7 @@ export function buildRecoveredState(
   }
 
   // Recover edges (only if both source and target nodes exist)
-  const nodeIds = new Set(recovered.nodes.map((n: any) => n.id));
+  const nodeIds = new Set(recovered.nodes.map((n: unknown) => (n as { id: string }).id));
   if (Array.isArray(corrupted.edges)) {
     for (const edge of corrupted.edges) {
       if (
@@ -217,7 +222,7 @@ export function buildRecoveredState(
       );
     }
     if (Array.isArray(corrupted.selectedEdges)) {
-      const edgeIds = new Set(recovered.edges.map((e: any) => e.id));
+      const edgeIds = new Set(recovered.edges.map((e: unknown) => (e as { id: string }).id));
       recovered.selectedEdges = corrupted.selectedEdges.filter((id: string) =>
         edgeIds.has(id)
       );
@@ -255,10 +260,10 @@ export async function restoreState(): Promise<RestorationResult> {
     }
 
     // Parse state
-    let parsedState: any;
+    let parsedState: unknown;
     try {
       parsedState = JSON.parse(persistedString);
-    } catch (error) {
+    } catch {
       // State is corrupted, attempt recovery
       const report = attemptRecovery(persistedString);
       return {
@@ -372,7 +377,7 @@ export async function getStorageInfo(): Promise<{
  * Format bytes to human-readable string
  */
 function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) {return '0 Bytes';}
 
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];

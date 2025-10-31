@@ -1,6 +1,6 @@
 // Admin Panel for LLM Monitoring
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './LLMMonitor.css';
 
 interface UsageStats {
@@ -46,63 +46,97 @@ export const LLMMonitor: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [refreshInterval, setRefreshInterval] = useState(30);
+  const [feedback, setFeedback] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
+  const statsRef = useRef<LLMStats | null>(null);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
+      setLoading(true);
       const response = await fetch('/api/llm/stats?hours=24');
       if (!response.ok) {
         throw new Error('Failed to fetch LLM stats');
       }
-      const data = await response.json();
+      const data = (await response.json()) as LLMStats;
+      statsRef.current = data;
       setStats(data);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
-      // Show cached data in offline mode
-      if (stats) {
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Failed to fetch LLM stats';
+      setError(message);
+      if (statsRef.current) {
         console.log('Using cached stats data');
       }
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchStats();
+    void fetchStats();
 
     if (autoRefresh) {
-      const interval = setInterval(fetchStats, refreshInterval * 1000);
+      const interval = setInterval(() => {
+        void fetchStats();
+      }, refreshInterval * 1000);
       return () => clearInterval(interval);
     }
-  }, [autoRefresh, refreshInterval]);
 
-  const clearCache = async () => {
+    return undefined;
+  }, [autoRefresh, fetchStats, refreshInterval]);
+
+  const clearCache = useCallback(async () => {
     try {
       const response = await fetch('/api/llm/cache/clear', {
         method: 'POST'
       });
-      if (response.ok) {
-        alert('Cache cleared successfully');
-        fetchStats();
+      if (!response.ok) {
+        throw new Error('Cache clear failed');
       }
-    } catch (err) {
-      alert('Failed to clear cache');
+      setFeedback({
+        type: 'success',
+        text: 'Cache cleared successfully.'
+      });
+      void fetchStats();
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Failed to clear cache';
+      setFeedback({
+        type: 'error',
+        text: message
+      });
     }
-  };
+  }, [fetchStats]);
 
-  const exportMetrics = async () => {
+  const exportMetrics = useCallback(async () => {
     try {
       const response = await fetch('/api/llm/metrics/export');
+      if (!response.ok) {
+        throw new Error('Export request failed');
+      }
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'llm-metrics.json';
-      a.click();
-    } catch (err) {
-      alert('Failed to export metrics');
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'llm-metrics.json';
+      anchor.click();
+      window.URL.revokeObjectURL(url);
+      setFeedback({
+        type: 'success',
+        text: 'Metrics exported.'
+      });
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Failed to export metrics';
+      setFeedback({
+        type: 'error',
+        text: message
+      });
     }
-  };
+  }, []);
 
   if (loading && !stats) {
     return <div className="llm-monitor loading">Loading LLM stats...</div>;
@@ -121,9 +155,9 @@ export const LLMMonitor: React.FC = () => {
     : 0;
 
   const getQuotaClass = (percentage: number) => {
-    if (percentage >= 100) return 'danger';
-    if (percentage >= 80) return 'warning';
-    if (percentage >= 50) return 'caution';
+    if (percentage >= 100) {return 'danger';}
+    if (percentage >= 80) {return 'warning';}
+    if (percentage >= 50) {return 'caution';}
     return 'safe';
   };
 
@@ -155,6 +189,23 @@ export const LLMMonitor: React.FC = () => {
           <button onClick={clearCache}>Clear Cache</button>
           <button onClick={exportMetrics}>Export Metrics</button>
         </div>
+        {feedback && (
+          <div
+            role="status"
+            style={{
+              marginTop: 8,
+              padding: '6px 10px',
+              borderRadius: 4,
+              backgroundColor:
+                feedback.type === 'success'
+                  ? 'rgba(46, 125, 50, 0.15)'
+                  : 'rgba(198, 40, 40, 0.15)',
+              color: feedback.type === 'success' ? '#2e7d32' : '#c62828'
+            }}
+          >
+            {feedback.text}
+          </div>
+        )}
         {error && (
           <div className="offline-banner">
             Offline - Showing cached data from{' '}

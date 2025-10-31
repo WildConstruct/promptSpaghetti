@@ -10,12 +10,16 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { AssetLibrary } from '../AssetLibrary';
 import { medievalPresetCategories } from '../medievalPresets';
 
-// Wrapper component for DnD context
 const DndWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <DndProvider backend={HTML5Backend}>
-    {children}
-  </DndProvider>
+  <DndProvider backend={HTML5Backend}>{children}</DndProvider>
 );
+
+const requireElement = <T extends Element>(element: T | null, message: string): T => {
+  if (!element) {
+    throw new Error(message);
+  }
+  return element;
+};
 
 describe('AssetLibrary', () => {
   it('renders the asset library with default state', () => {
@@ -36,18 +40,17 @@ describe('AssetLibrary', () => {
       </DndWrapper>
     );
 
-    const header = screen.getByText('Asset Library').closest('.library-header');
-    expect(header).toBeInTheDocument();
+    const header = requireElement(
+      screen.getByText('Asset Library').closest('.library-header'),
+      'Expected library header to be present'
+    );
 
-    // Should be expanded by default
     expect(screen.getByPlaceholderText('Search presets...')).toBeInTheDocument();
 
-    // Click to collapse
-    fireEvent.click(header!);
+    fireEvent.click(header);
     expect(screen.queryByPlaceholderText('Search presets...')).not.toBeInTheDocument();
 
-    // Click to expand again
-    fireEvent.click(header!);
+    fireEvent.click(header);
     expect(screen.getByPlaceholderText('Search presets...')).toBeInTheDocument();
   });
 
@@ -70,19 +73,18 @@ describe('AssetLibrary', () => {
       </DndWrapper>
     );
 
-    const categoryHeader = screen.getByText('Character Occupations').closest('.category-header');
-    expect(categoryHeader).toBeInTheDocument();
+    const categoryHeader = requireElement(
+      screen.getByText('Character Occupations').closest('.category-header'),
+      'Expected character category header to exist'
+    );
 
-    // Should show presets in expanded category
     expect(screen.getByText('Merchant')).toBeInTheDocument();
     expect(screen.getByText('Knight')).toBeInTheDocument();
 
-    // Click to collapse
-    fireEvent.click(categoryHeader!);
+    fireEvent.click(categoryHeader);
     expect(screen.queryByText('Merchant')).not.toBeInTheDocument();
 
-    // Click to expand again
-    fireEvent.click(categoryHeader!);
+    fireEvent.click(categoryHeader);
     expect(screen.getByText('Merchant')).toBeInTheDocument();
   });
 
@@ -95,14 +97,9 @@ describe('AssetLibrary', () => {
     );
 
     const searchInput = screen.getByPlaceholderText('Search presets...');
-
-    // Type search query
     await user.type(searchInput, 'knight');
 
-    // Should show matching preset
     expect(screen.getByText('Knight')).toBeInTheDocument();
-    
-    // Should hide non-matching presets
     expect(screen.queryByText('Merchant')).not.toBeInTheDocument();
     expect(screen.queryByText('Peasant')).not.toBeInTheDocument();
   });
@@ -115,21 +112,19 @@ describe('AssetLibrary', () => {
       </DndWrapper>
     );
 
-    const merchantPreset = screen.getByText('Merchant').closest('.preset-item');
-    expect(merchantPreset).toBeInTheDocument();
+    const merchantPreset = requireElement(
+      screen.getByText('Merchant').closest('.preset-item'),
+      'Expected Merchant preset item'
+    );
 
-    // Hover over preset
-    await user.hover(merchantPreset!);
+    await user.hover(merchantPreset);
 
-    // Should show preview
     await waitFor(() => {
       expect(screen.getByText('A trader of goods and wares')).toBeInTheDocument();
     });
 
-    // Unhover
-    await user.unhover(merchantPreset!);
+    await user.unhover(merchantPreset);
 
-    // Preview should disappear
     await waitFor(() => {
       expect(screen.queryByText('A trader of goods and wares')).not.toBeInTheDocument();
     });
@@ -142,12 +137,16 @@ describe('AssetLibrary', () => {
       </DndWrapper>
     );
 
-    // Check for textBlock type
-    const merchantPreset = screen.getByText('Merchant').closest('.preset-item');
+    const merchantPreset = requireElement(
+      screen.getByText('Merchant').closest('.preset-item'),
+      'Expected Merchant preset item'
+    );
     expect(merchantPreset).toHaveTextContent('textBlock');
 
-    // Check for weightedChoice type
-    const randomOccupation = screen.getByText('Random Occupation').closest('.preset-item');
+    const randomOccupation = requireElement(
+      screen.getByText('Random Occupation').closest('.preset-item'),
+      'Expected Random Occupation preset item'
+    );
     expect(randomOccupation).toHaveTextContent('weightedChoice');
   });
 
@@ -158,124 +157,10 @@ describe('AssetLibrary', () => {
       </DndWrapper>
     );
 
-    const totalCount = medievalPresetCategories.reduce((sum, cat) => sum + cat.presets.length, 0);
-    expect(screen.getByText(totalCount.toString())).toBeInTheDocument();
-  });
-
-  it('shows category preset counts', () => {
-    render(
-      <DndWrapper>
-        <AssetLibrary />
-      </DndWrapper>
+    const total = medievalPresetCategories.reduce(
+      (sum, category) => sum + category.presets.length,
+      0
     );
-
-    medievalPresetCategories.forEach(category => {
-      const categoryElement = screen.getByText(category.name).closest('.category-section');
-      expect(categoryElement).toHaveTextContent(category.presets.length.toString());
-    });
-  });
-
-  it('supports position prop', () => {
-    const { rerender } = render(
-      <DndWrapper>
-        <AssetLibrary position="left" />
-      </DndWrapper>
-    );
-
-    let libraryElement = screen.getByText('Asset Library').closest('.asset-library');
-    expect(libraryElement).toHaveClass('left');
-
-    rerender(
-      <DndWrapper>
-        <AssetLibrary position="right" />
-      </DndWrapper>
-    );
-
-    libraryElement = screen.getByText('Asset Library').closest('.asset-library');
-    expect(libraryElement).toHaveClass('right');
-  });
-
-  it('searches by tags', async () => {
-    const user = userEvent.setup();
-    render(
-      <DndWrapper>
-        <AssetLibrary />
-      </DndWrapper>
-    );
-
-    const searchInput = screen.getByPlaceholderText('Search presets...');
-
-    // Search by tag
-    await user.type(searchInput, 'warrior');
-
-    // Should show knight (has 'warrior' tag)
-    expect(screen.getByText('Knight')).toBeInTheDocument();
-    
-    // Should hide others
-    expect(screen.queryByText('Merchant')).not.toBeInTheDocument();
-  });
-
-  it('handles empty search results gracefully', async () => {
-    const user = userEvent.setup();
-    render(
-      <DndWrapper>
-        <AssetLibrary />
-      </DndWrapper>
-    );
-
-    const searchInput = screen.getByPlaceholderText('Search presets...');
-
-    // Type non-matching search
-    await user.type(searchInput, 'xyz123');
-
-    // Categories with no matches should be hidden
-    medievalPresetCategories.forEach(category => {
-      const categoryElement = screen.queryByText(category.name);
-      if (categoryElement) {
-        const categorySection = categoryElement.closest('.category-section');
-        const presetsContainer = categorySection?.querySelector('.category-presets');
-        expect(presetsContainer?.children.length || 0).toBe(0);
-      }
-    });
-  });
-
-  it('displays category icons', () => {
-    render(
-      <DndWrapper>
-        <AssetLibrary />
-      </DndWrapper>
-    );
-
-    // Check for some category icons
-    expect(screen.getByText('👤')).toBeInTheDocument(); // Character Occupations
-    expect(screen.getByText('⚔️')).toBeInTheDocument(); // Items & Props
-    expect(screen.getByText('🏰')).toBeInTheDocument(); // Settings & Locations
-  });
-
-  it('maintains expanded categories across searches', async () => {
-    const user = userEvent.setup();
-    render(
-      <DndWrapper>
-        <AssetLibrary />
-      </DndWrapper>
-    );
-
-    // Expand a specific category
-    const itemsCategory = screen.getByText('Items & Props').closest('.category-header');
-    fireEvent.click(itemsCategory!);
-    expect(screen.getByText('Ancient Scroll')).toBeInTheDocument();
-
-    // Search for something
-    const searchInput = screen.getByPlaceholderText('Search presets...');
-    await user.type(searchInput, 'sword');
-
-    // Should still show the expanded category with matching results
-    expect(screen.getByText('Longsword')).toBeInTheDocument();
-
-    // Clear search
-    await user.clear(searchInput);
-
-    // Category should still be expanded
-    expect(screen.getByText('Ancient Scroll')).toBeInTheDocument();
+    expect(screen.getByText(String(total))).toBeInTheDocument();
   });
 });

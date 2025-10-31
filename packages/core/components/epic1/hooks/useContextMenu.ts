@@ -38,7 +38,7 @@ export function useContextMenu({ nodes, showToast }: UseContextMenuProps) {
 
   // Get node data for save-as-preset dialog
   const saveAsPresetNode = useMemo(() => {
-    if (!saveAsPresetNodeId) return null;
+    if (!saveAsPresetNodeId) {return null;}
     const node = nodes.find(n => n.id === saveAsPresetNodeId);
     return node ? { data: node.data, type: node.type || 'textBlock' } : null;
   }, [saveAsPresetNodeId, nodes]);

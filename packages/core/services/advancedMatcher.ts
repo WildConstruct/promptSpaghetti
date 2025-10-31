@@ -1,14 +1,30 @@
 // Advanced Matcher Service with ML Capabilities
 // Story 2.5b: Advanced Asset Browser Features
 
+import { Edge, Node } from 'reactflow';
 import { Asset, AssetMetadata } from './assetMatcher';
+import { SegmentMetadata } from './llm/MetadataExtractor';
 import { SimilarityEngine } from './llm/SimilarityEngine';
 import { LLMService } from './llm/LLMService';
 
+interface GraphNodeMetadata extends AssetMetadata {
+  timePeriod?: string;
+  category?: string;
+  keywords?: string[];
+}
+
+interface GraphNodeData extends Record<string, unknown> {
+  label?: string;
+  metadata?: GraphNodeMetadata;
+}
+
+type GraphNode = Node<GraphNodeData>;
+type GraphEdge = Edge<Record<string, unknown> | undefined>;
+
 export interface GraphContext {
-  selectedNode?: any;
-  allNodes: any[];
-  edges: any[];
+  selectedNode?: GraphNode;
+  allNodes: GraphNode[];
+  edges: GraphEdge[];
   recentActions?: string[];
   userPreferences?: UserPreferences;
 }
@@ -185,18 +201,70 @@ export class AdvancedMatcherService {
     }
 
     try {
+      const query = this.buildSimilarityQuery(context.selectedNode);
+      if (!query) {
+        return 0.5;
+      }
+
       // Use similarity engine for semantic matching
       const similar = await this.similarityEngine.findSimilar(
-        { metadata: context.selectedNode.data },
+        query.text,
+        query.metadata,
         { limit: 100 }
       );
 
-      const match = similar.find(s => s.asset.id === asset.id);
+      const match = similar.find(s => s.id === asset.id);
       return match ? match.score / 100 : 0.2;
-    } catch (error) {
+    } catch {
       // Fallback to keyword matching
-      return this.keywordSimilarity(asset.metadata, context.selectedNode.data);
+      return this.keywordSimilarity(
+        asset.metadata,
+        context.selectedNode.data?.metadata
+      );
     }
+  }
+
+  private buildSimilarityQuery(
+    node: GraphNode
+  ): { text: string; metadata: SegmentMetadata } | null {
+    const data = node.data;
+    if (!data) {
+      return null;
+    }
+
+    const metadata = data.metadata ?? {};
+    const label =
+      typeof data.label === 'string' && data.label.trim().length > 0
+        ? data.label.trim()
+        : undefined;
+    const theme =
+      typeof metadata.theme === 'string' && metadata.theme.trim().length > 0
+        ? metadata.theme.trim()
+        : undefined;
+
+    const text = label ?? theme ?? node.id;
+
+    const keywordTags = Array.isArray(metadata.keywords)
+      ? metadata.keywords.filter(
+          (keyword): keyword is string => typeof keyword === 'string'
+        )
+      : [];
+    const entityTags = Array.isArray(metadata.entities)
+      ? metadata.entities.filter(
+          (entity): entity is string => typeof entity === 'string'
+        )
+      : [];
+    const tags = Array.from(new Set([...keywordTags, ...entityTags]));
+
+    const segmentMetadata: SegmentMetadata = {
+      subject: metadata.theme,
+      action: metadata.style,
+      location: metadata.setting,
+      mood: metadata.mood,
+      tags
+    };
+
+    return { text, metadata: segmentMetadata };
   }
 
   private calculateContextualFit(asset: Asset, context: GraphContext): number {
@@ -241,8 +309,9 @@ export class AdvancedMatcherService {
 
   private async getPopularityScore(asset: Asset): Promise<number> {
     // Check cache first
-    if (this.popularityCache.has(asset.id)) {
-      return this.popularityCache.get(asset.id)!;
+    const cachedScore = this.popularityCache.get(asset.id);
+    if (cachedScore !== undefined) {
+      return cachedScore;
     }
 
     // In production, this would query usage analytics
@@ -250,17 +319,24 @@ export class AdvancedMatcherService {
     let score = 0.5;
 
     // Boost popular categories
-    if (asset.metadata?.category === 'character') score += 0.2;
-    if (asset.metadata?.category === 'action') score += 0.1;
+    if (asset.metadata?.category === 'character') {
+      score += 0.2;
+    }
+    if (asset.metadata?.category === 'action') {
+      score += 0.1;
+    }
 
     // Cache the result
     this.popularityCache.set(asset.id, score);
     return score;
   }
 
-  private keywordSimilarity(metadata1: any, metadata2: any): number {
-    const text1 = JSON.stringify(metadata1).toLowerCase();
-    const text2 = JSON.stringify(metadata2).toLowerCase();
+  private keywordSimilarity(
+    assetMetadata: AssetMetadata | undefined,
+    nodeMetadata: GraphNodeMetadata | undefined
+  ): number {
+    const text1 = JSON.stringify(assetMetadata ?? {}).toLowerCase();
+    const text2 = JSON.stringify(nodeMetadata ?? {}).toLowerCase();
 
     const words1 = text1.match(/\b\w+\b/g) || [];
     const words2 = text2.match(/\b\w+\b/g) || [];
@@ -409,18 +485,26 @@ class UserPreferenceModel {
     asset: Asset,
     preferences?: UserPreferences
   ): Promise<number> {
-    if (!preferences) return 0.5;
+    if (!preferences) {
+      return 0.5;
+    }
 
     // Check direct preferences
-    if (preferences.favoriteAssets.includes(asset.id)) return 1.0;
-    if (preferences.rejectedAssets.includes(asset.id)) return 0.0;
+    if (preferences.favoriteAssets.includes(asset.id)) {
+      return 1.0;
+    }
+    if (preferences.rejectedAssets.includes(asset.id)) {
+      return 0.0;
+    }
 
     // Analyze acceptance history
     const relevantHistory = preferences.acceptanceHistory.filter(record =>
       this.isRelevantContext(record.context, asset)
     );
 
-    if (relevantHistory.length === 0) return 0.5;
+    if (relevantHistory.length === 0) {
+      return 0.5;
+    }
 
     const acceptanceRate =
       relevantHistory.filter(r => r.accepted).length / relevantHistory.length;
@@ -444,15 +528,21 @@ class ConsistencyEngine {
 
     // Check temporal consistency
     const temporalIssue = this.checkTemporalConsistency(asset, context);
-    if (temporalIssue) score *= 0.7;
+    if (temporalIssue) {
+      score *= 0.7;
+    }
 
     // Check style consistency
     const styleIssue = this.checkStyleConsistency(asset, context);
-    if (styleIssue) score *= 0.8;
+    if (styleIssue) {
+      score *= 0.8;
+    }
 
     // Check semantic consistency
     const semanticIssue = this.checkSemanticConsistency(asset, context);
-    if (semanticIssue) score *= 0.6;
+    if (semanticIssue) {
+      score *= 0.6;
+    }
 
     return score;
   }
@@ -467,13 +557,17 @@ class ConsistencyEngine {
       .map(n => n.data?.metadata?.timePeriod)
       .filter(Boolean);
 
-    if (!assetTime || graphTimes.length === 0) return false;
+    if (!assetTime || graphTimes.length === 0) {
+      return false;
+    }
 
     // Simple check: medieval shouldn't mix with futuristic
-    if (assetTime === 'medieval' && graphTimes.includes('futuristic'))
+    if (assetTime === 'medieval' && graphTimes.includes('futuristic')) {
       return true;
-    if (assetTime === 'futuristic' && graphTimes.includes('medieval'))
+    }
+    if (assetTime === 'futuristic' && graphTimes.includes('medieval')) {
       return true;
+    }
 
     return false;
   }
@@ -484,13 +578,17 @@ class ConsistencyEngine {
       .map(n => n.data?.metadata?.style)
       .filter(Boolean);
 
-    if (!assetStyle || graphStyles.length === 0) return false;
+    if (!assetStyle || graphStyles.length === 0) {
+      return false;
+    }
 
     // Check for style clashes
-    if (assetStyle === 'cartoon' && graphStyles.includes('realistic'))
+    if (assetStyle === 'cartoon' && graphStyles.includes('realistic')) {
       return true;
-    if (assetStyle === 'realistic' && graphStyles.includes('cartoon'))
+    }
+    if (assetStyle === 'realistic' && graphStyles.includes('cartoon')) {
       return true;
+    }
 
     return false;
   }
@@ -505,13 +603,17 @@ class ConsistencyEngine {
       .map(n => n.data?.metadata?.category)
       .filter(Boolean);
 
-    if (!assetCategory || graphCategories.length === 0) return false;
+    if (!assetCategory || graphCategories.length === 0) {
+      return false;
+    }
 
     // Simple semantic rules
-    if (assetCategory === 'underwater' && graphCategories.includes('desert'))
+    if (assetCategory === 'underwater' && graphCategories.includes('desert')) {
       return true;
-    if (assetCategory === 'space' && graphCategories.includes('medieval'))
+    }
+    if (assetCategory === 'space' && graphCategories.includes('medieval')) {
       return true;
+    }
 
     return false;
   }

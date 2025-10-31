@@ -1,10 +1,15 @@
-import React, { useState, useRef, useEffect, memo } from 'react';
+import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { SaveIndicator } from './SaveIndicator';
 import { useEditTransitions } from '../hooks/useEditTransitions';
 import './BaseEditableNode.css';
 import './VisualFeedbackEnhancements.css';
 import '../animations/EditTransitions.css';
+
+interface BranchOption {
+  hasBranch?: boolean;
+  [key: string]: unknown;
+}
 
 export interface EditableNodeData {
   isEditing?: boolean;
@@ -15,7 +20,8 @@ export interface EditableNodeData {
   onEditStart?: () => void;
   onEditEnd?: () => void;
   onContextMenu?: (event: React.MouseEvent) => void;
-  [key: string]: any;
+  options?: BranchOption[];
+  [key: string]: unknown;
 }
 
 export interface BaseEditableNodeProps extends NodeProps<EditableNodeData> {
@@ -58,7 +64,6 @@ export const BaseEditableNode = memo(({
   
   // Animation state management
   const {
-    transitionState,
     triggerValueConfirmed,
     triggerValueCancelled,
     animationClasses
@@ -90,16 +95,18 @@ export const BaseEditableNode = memo(({
   };
 
   // Confirm edits and exit edit mode
-  const confirmEdit = () => {
-    if (isEditing) {
-      data.onEdit?.(editBuffer);
-      setIsEditing(false);
-      data.onEditEnd?.();
-      // Trigger save animation
-      setSaveTrigger(prev => prev + 1);
-      triggerValueConfirmed();
+  const confirmEdit = useCallback(() => {
+    if (!isEditing) {
+      return;
     }
-  };
+
+    data.onEdit?.(editBuffer);
+    setIsEditing(false);
+    data.onEditEnd?.();
+    // Trigger save animation
+    setSaveTrigger(prev => prev + 1);
+    triggerValueConfirmed();
+  }, [data, editBuffer, isEditing, triggerValueConfirmed]);
 
   // Cancel edits and restore original value
   const cancelEdit = () => {
@@ -125,7 +132,7 @@ export const BaseEditableNode = memo(({
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [isEditing, editBuffer]);
+  }, [isEditing, confirmEdit]);
 
   // Handle keyboard shortcuts
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -205,7 +212,9 @@ export const BaseEditableNode = memo(({
         if (data.nodeType === 'weightedChoice') {
           // Only show handle if NO branches are active
           // When branches are active, EnhancedBranchingNode handles all outputs
-          const hasBranching = data.options && data.options.some((opt: any) => opt.hasBranch === true);
+          const hasBranching =
+            Array.isArray(data.options) &&
+            data.options.some(option => option?.hasBranch === true);
           if (!hasBranching) {
             return (
               <Handle

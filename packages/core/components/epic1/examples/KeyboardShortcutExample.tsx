@@ -5,7 +5,7 @@
  * with Epic 1's help functionality.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   KeyboardShortcutProvider,
   KeyboardShortcutIntegration,
@@ -176,140 +176,156 @@ export const VisualKeyboardExample: React.FC = () => {
 };
 
 // Example: Context-aware shortcuts
+type ContentEditorProps = {
+  mode: 'edit' | 'view';
+  setMode: React.Dispatch<React.SetStateAction<'edit' | 'view'>>;
+  content: string;
+  setContent: React.Dispatch<React.SetStateAction<string>>;
+  selected: boolean;
+  setSelected: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const ContentEditor: React.FC<ContentEditorProps> = ({
+  mode,
+  setMode,
+  content,
+  setContent,
+  selected,
+  setSelected,
+}) => {
+  const manager = useKeyboardShortcutManager();
+
+  React.useEffect(() => {
+    // Mode-specific shortcuts
+    if (mode === 'edit') {
+      manager.registerShortcut({
+        id: 'save-edit',
+        keys: ['Enter'],
+        handler: () => {
+          setMode('view');
+          setSelected(false);
+        },
+        description: 'Save and exit edit mode',
+        category: 'edit',
+      });
+
+      manager.registerShortcut({
+        id: 'cancel-edit',
+        keys: ['Escape'],
+        handler: () => {
+          setMode('view');
+          setContent('Click to edit this text');
+          setSelected(false);
+        },
+        description: 'Cancel edit',
+        category: 'edit',
+      });
+    } else {
+      manager.unregisterShortcut('save-edit');
+      manager.unregisterShortcut('cancel-edit');
+
+      manager.registerShortcut({
+        id: 'enter-edit',
+        keys: ['E'],
+        handler: () => {
+          if (selected) {
+            setMode('edit');
+          }
+        },
+        description: 'Enter edit mode',
+        category: 'edit',
+        enabled: selected,
+      });
+    }
+
+    // Always-available shortcuts
+    manager.registerShortcut({
+      id: 'toggle-select',
+      keys: ['Space'],
+      handler: () => {
+        if (mode === 'view') {
+          setSelected((prev) => !prev);
+        }
+      },
+      description: 'Toggle selection',
+      category: 'selection',
+      preventDefault: true,
+    });
+
+    return () => {
+      manager.unregisterShortcut('save-edit');
+      manager.unregisterShortcut('cancel-edit');
+      manager.unregisterShortcut('enter-edit');
+      manager.unregisterShortcut('toggle-select');
+    };
+  }, [mode, selected, manager, setMode, setContent, setSelected]);
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <div style={{
+        marginBottom: '16px',
+        padding: '8px 12px',
+        backgroundColor: mode === 'edit' ? '#fef3c7' : '#e0e7ff',
+        borderRadius: '6px',
+        fontSize: '14px',
+      }}>
+        Mode: <strong>{mode === 'edit' ? '✏️ Edit' : '👁️ View'}</strong>
+      </div>
+
+      {mode === 'edit' ? (
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          style={{
+            width: '100%',
+            minHeight: '100px',
+            padding: '12px',
+            border: '2px solid #3b82f6',
+            borderRadius: '6px',
+            fontSize: '14px',
+          }}
+          autoFocus
+        />
+      ) : (
+        <div
+          onClick={() => setSelected(true)}
+          style={{
+            padding: '12px',
+            border: `2px ${selected ? 'solid' : 'dashed'} ${selected ? '#3b82f6' : '#e5e7eb'}`,
+            borderRadius: '6px',
+            backgroundColor: selected ? '#eff6ff' : 'white',
+            cursor: 'pointer',
+            minHeight: '100px',
+          }}
+        >
+          {content}
+        </div>
+      )}
+
+      <div style={{ marginTop: '16px' }}>
+        <h4>Available shortcuts in {mode} mode:</h4>
+        {mode === 'edit' ? (
+          <div>
+            <ShortcutHint shortcut={['Enter']} description="Save changes" />
+            <br />
+            <ShortcutHint shortcut={['Escape']} description="Cancel edit" />
+          </div>
+        ) : (
+          <div>
+            <ShortcutHint shortcut={['Space']} description="Select/deselect" />
+            <br />
+            {selected && <ShortcutHint shortcut={['E']} description="Edit selected" />}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const ContextAwareExample: React.FC = () => {
   const [mode, setMode] = useState<'edit' | 'view'>('view');
   const [content, setContent] = useState('Click to edit this text');
   const [selected, setSelected] = useState(false);
-
-  const ContentEditor = () => {
-    const manager = useKeyboardShortcutManager();
-
-    React.useEffect(() => {
-      // Mode-specific shortcuts
-      if (mode === 'edit') {
-        manager.registerShortcut({
-          id: 'save-edit',
-          keys: ['Enter'],
-          handler: () => {
-            setMode('view');
-            setSelected(false);
-          },
-          description: 'Save and exit edit mode',
-          category: 'edit',
-        });
-
-        manager.registerShortcut({
-          id: 'cancel-edit',
-          keys: ['Escape'],
-          handler: () => {
-            setMode('view');
-            setContent('Click to edit this text');
-            setSelected(false);
-          },
-          description: 'Cancel edit',
-          category: 'edit',
-        });
-      } else {
-        manager.unregisterShortcut('save-edit');
-        manager.unregisterShortcut('cancel-edit');
-
-        manager.registerShortcut({
-          id: 'enter-edit',
-          keys: ['E'],
-          handler: () => {
-            if (selected) {
-              setMode('edit');
-            }
-          },
-          description: 'Enter edit mode',
-          category: 'edit',
-          enabled: selected,
-        });
-      }
-
-      // Always-available shortcuts
-      manager.registerShortcut({
-        id: 'toggle-select',
-        keys: ['Space'],
-        handler: () => {
-          if (mode === 'view') {
-            setSelected(!selected);
-          }
-        },
-        description: 'Toggle selection',
-        category: 'selection',
-        preventDefault: true,
-      });
-
-      return () => {
-        manager.unregisterShortcut('save-edit');
-        manager.unregisterShortcut('cancel-edit');
-        manager.unregisterShortcut('enter-edit');
-        manager.unregisterShortcut('toggle-select');
-      };
-    }, [mode, selected, manager]);
-
-    return (
-      <div style={{ padding: '20px' }}>
-        <div style={{
-          marginBottom: '16px',
-          padding: '8px 12px',
-          backgroundColor: mode === 'edit' ? '#fef3c7' : '#e0e7ff',
-          borderRadius: '6px',
-          fontSize: '14px',
-        }}>
-          Mode: <strong>{mode === 'edit' ? '✏️ Edit' : '👁️ View'}</strong>
-        </div>
-
-        {mode === 'edit' ? (
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            style={{
-              width: '100%',
-              minHeight: '100px',
-              padding: '12px',
-              border: '2px solid #3b82f6',
-              borderRadius: '6px',
-              fontSize: '14px',
-            }}
-            autoFocus
-          />
-        ) : (
-          <div
-            onClick={() => setSelected(true)}
-            style={{
-              padding: '12px',
-              border: `2px ${selected ? 'solid' : 'dashed'} ${selected ? '#3b82f6' : '#e5e7eb'}`,
-              borderRadius: '6px',
-              backgroundColor: selected ? '#eff6ff' : 'white',
-              cursor: 'pointer',
-              minHeight: '100px',
-            }}
-          >
-            {content}
-          </div>
-        )}
-
-        <div style={{ marginTop: '16px' }}>
-          <h4>Available shortcuts in {mode} mode:</h4>
-          {mode === 'edit' ? (
-            <div>
-              <ShortcutHint shortcut={['Enter']} description="Save changes" />
-              <br />
-              <ShortcutHint shortcut={['Escape']} description="Cancel edit" />
-            </div>
-          ) : (
-            <div>
-              <ShortcutHint shortcut={['Space']} description="Select/deselect" />
-              <br />
-              {selected && <ShortcutHint shortcut={['E']} description="Edit selected" />}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <TutorialProvider>
@@ -319,7 +335,14 @@ export const ContextAwareExample: React.FC = () => {
           <p style={{ marginBottom: '20px', color: '#6b7280' }}>
             Shortcuts change based on the current mode and selection
           </p>
-          <ContentEditor />
+          <ContentEditor
+            mode={mode}
+            setMode={setMode}
+            content={content}
+            setContent={setContent}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </div>
       </KeyboardShortcutProvider>
     </TutorialProvider>

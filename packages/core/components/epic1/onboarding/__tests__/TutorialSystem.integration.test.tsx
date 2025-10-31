@@ -49,7 +49,7 @@ describe('Tutorial System Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
-    localStorageMock.setItem.mockImplementation(() => {});
+  localStorageMock.setItem.mockImplementation(() => undefined);
   });
 
   describe('Complete Tutorial Flow', () => {

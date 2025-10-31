@@ -49,7 +49,9 @@ export function getDatabase(): Database.Database {
 export function healthCheck(): boolean {
   try {
     const db = getDatabase();
-    const result = db.prepare('SELECT 1 as health').get() as any;
+    const result = db
+      .prepare('SELECT 1 as health')
+      .get() as { health?: number } | undefined;
     return result?.health === 1;
   } catch (error) {
     console.error('Database health check failed:', error);

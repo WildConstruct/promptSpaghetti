@@ -30,7 +30,7 @@ export const SaveAsPresetDialog: React.FC<SaveAsPresetDialogProps> = ({
   const [description, setDescription] = useState('');
 
   const handleSave = useCallback(() => {
-    if (!nodeData || !presetName.trim()) return;
+    if (!nodeData || !presetName.trim()) {return;}
 
     // Parse tags from comma-separated string
     const tagArray = tags
@@ -71,7 +71,7 @@ export const SaveAsPresetDialog: React.FC<SaveAsPresetDialogProps> = ({
     onClose();
   }, [onClose]);
 
-  if (!isOpen || !nodeData) return null;
+  if (!isOpen || !nodeData) {return null;}
 
   return (
     <div className="save-preset-overlay">

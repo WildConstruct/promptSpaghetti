@@ -1,6 +1,6 @@
 // Clean graph exporter with advanced functionality
 import { z } from 'zod';
-import { Graph, Node } from '../../packages/core/graphSchema';
+import { Graph } from '../../packages/core/graphSchema';
 
 /**
  * GeneratorBundle format for external compatibility
@@ -57,18 +57,18 @@ export function graphToBundle(
     graph.nodes?.some(n => n.type === 'WeightedChoice') || false;
 
   let complexity: 'simple' | 'moderate' | 'complex' = 'simple';
-  if (nodeCount > 10 || hasVariables) complexity = 'moderate';
+  if (nodeCount > 10 || hasVariables) {complexity = 'moderate';}
   if (nodeCount > 20 || (hasVariables && hasWeightedChoice))
-    complexity = 'complex';
+    {complexity = 'complex';}
 
   // Extract node types
   const nodeTypes = [...new Set(graph.nodes?.map(n => n.type) || [])];
 
   // Determine required features
   const requiredFeatures: string[] = [];
-  if (hasVariables) requiredFeatures.push('variable-context');
-  if (hasWeightedChoice) requiredFeatures.push('weighted-selection');
-  if (graph.seed !== undefined) requiredFeatures.push('deterministic-seeding');
+  if (hasVariables) {requiredFeatures.push('variable-context');}
+  if (hasWeightedChoice) {requiredFeatures.push('weighted-selection');}
+  if (graph.seed !== undefined) {requiredFeatures.push('deterministic-seeding');}
 
   // Build edges from node inputs
   const edges = [];
@@ -134,7 +134,10 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
       if (!nodeInputs.has(targetId)) {
         nodeInputs.set(targetId, []);
       }
-      nodeInputs.get(targetId)!.push(edge.source);
+      const inputs = nodeInputs.get(targetId);
+      if (inputs) {
+        inputs.push(edge.source);
+      }
     }
   }
 
@@ -347,9 +350,9 @@ export function getExportStats(graph: Graph): {
   const outputCount = nodeTypes['Output'] || 0;
 
   let complexity: 'simple' | 'moderate' | 'complex' = 'simple';
-  if (nodeCount > 10 || hasVariables) complexity = 'moderate';
+  if (nodeCount > 10 || hasVariables) {complexity = 'moderate';}
   if (nodeCount > 20 || (hasVariables && hasWeightedChoice))
-    complexity = 'complex';
+    {complexity = 'complex';}
 
   return {
     nodeCount,

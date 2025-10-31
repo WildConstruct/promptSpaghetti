@@ -34,10 +34,10 @@ jest.mock('../engine-wrapper', () => ({
   })
 }));
 
-// Import the CLI main function
-const { main } = require('../cli');
+// Import the CLI main function (after mocks are set up)
+import { main } from '../cli';
 // Import the mocked engine-wrapper for direct tests
-const { executeGraphFromFile } = require('../engine-wrapper');
+import { executeGraphFromFile } from '../engine-wrapper';
 
 describe('promptgraph CLI', () => {
   const graphPath = path.resolve(__dirname, 'fixtures', 'simpleGraph.json');

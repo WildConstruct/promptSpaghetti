@@ -18,6 +18,9 @@ import {
 import { PerformanceMonitoringDashboard } from '../packages/core/performance/PerformanceMonitoringDashboard';
 import { Logger } from '../../server/src/logging/Logger';
 import { RefactoredDataLifecycleService } from '../../server/src/services/RefactoredDataLifecycleService';
+import { execSync } from 'child_process';
+import fs from 'fs/promises';
+import path from 'path';
 
 export interface IntegratedPerformanceReport {
   timestamp: Date;
@@ -26,7 +29,7 @@ export interface IntegratedPerformanceReport {
     results: Array<{
       config: BenchmarkConfiguration;
       metrics: GraphExecutionMetrics[];
-      summary: any;
+      summary: unknown;
     }>;
   };
   loadTestResults: {
@@ -192,7 +195,7 @@ export class PerformanceTestIntegration {
     results: Array<{
       config: BenchmarkConfiguration;
       metrics: GraphExecutionMetrics[];
-      summary: any;
+      summary: unknown;
     }>;
   }> {
     const benchmarkConfigs: BenchmarkConfiguration[] = [
@@ -268,7 +271,6 @@ export class PerformanceTestIntegration {
   }> {
     try {
       // Import and run existing load test runner
-      const { execSync } = require('child_process');
 
       // Run baseline load test scenario
       const output = execSync('npm run load:baseline', {
@@ -542,8 +544,6 @@ export class PerformanceTestIntegration {
     outputPath: string
   ): Promise<void> {
     try {
-      const fs = require('fs').promises;
-      const path = require('path');
 
       // Ensure directory exists
       await fs.mkdir(path.dirname(outputPath), { recursive: true });

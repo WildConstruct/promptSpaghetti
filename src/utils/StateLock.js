@@ -70,7 +70,7 @@ class StateLock {
     const release = await this.acquireLock();
     try {
       // Update metadata
-      if (!state.meta) state.meta = {};
+      if (!state.meta) {state.meta = {};}
       state.meta.updated = new Date().toISOString();
 
       // Atomic write using temporary file
@@ -103,7 +103,7 @@ class StateLock {
       const result = transaction(state);
 
       // Update metadata
-      if (!state.meta) state.meta = {};
+      if (!state.meta) {state.meta = {};}
       state.meta.updated = new Date().toISOString();
 
       // Atomic write
@@ -198,7 +198,7 @@ class StateLock {
       task.updated = new Date().toISOString();
 
       // Update assignments tracking
-      if (!state.assignments) state.assignments = {};
+      if (!state.assignments) {state.assignments = {};}
       if (!state.assignments[agentId]) {
         state.assignments[agentId] = [];
       }
@@ -224,7 +224,7 @@ class StateLock {
   getLockStatus() {
     try {
       const lockExists = fs.existsSync(this.lockFilePath);
-      let lockInfo = { exists: lockExists };
+      const lockInfo = { exists: lockExists };
 
       if (lockExists) {
         const stats = fs.statSync(this.lockFilePath);

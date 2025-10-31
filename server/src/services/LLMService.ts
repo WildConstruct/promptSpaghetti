@@ -94,7 +94,7 @@ export class LLMService {
             { role: 'user', content: prompt }
           ]
         },
-        { signal: controller.signal as any }
+        { signal: controller.signal as AbortSignal }
       );
 
       const content = completion.choices?.[0]?.message?.content || '';

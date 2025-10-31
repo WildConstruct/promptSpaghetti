@@ -218,10 +218,10 @@ export class SerializationHelpers {
   }
   static validateSerializedData(data) {
     const errors = [];
-    if (!data.id) errors.push('Node ID is required');
-    if (!data.type) errors.push('Node type is required');
-    if (!data.config) errors.push('Node config is required');
-    if (!data.data) errors.push('Node data is required');
+    if (!data.id) {errors.push('Node ID is required');}
+    if (!data.type) {errors.push('Node type is required');}
+    if (!data.config) {errors.push('Node config is required');}
+    if (!data.data) {errors.push('Node data is required');}
     if (data.config) {
       if (typeof data.config.deterministic !== 'boolean') {
         errors.push('Config.deterministic must be a boolean');

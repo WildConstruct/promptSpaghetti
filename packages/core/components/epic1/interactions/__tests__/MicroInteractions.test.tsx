@@ -6,9 +6,19 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { renderHook, act } from '@testing-library/react-hooks';
 import { MicroInteraction, useMicroInteractions, triggerHaptic } from '../../animations/MicroInteractions';
-import { MagneticSnapHandler, useMagneticSnap } from '../MagneticSnapHandler';
+import { useMagneticSnap } from '../MagneticSnapHandler';
 import { NodeInteractionEnhancer, useNodeInteractions } from '../NodeInteractionEnhancer';
 import { ReactFlowProvider } from 'reactflow';
+import type { Node as ReactFlowNode } from 'reactflow';
+import * as MicroInteractionsModule from '../../animations/MicroInteractions';
+import * as ReactFlowModule from 'reactflow';
+
+type TestSnapNode = {
+  id: string;
+  position: { x: number; y: number };
+  width: number;
+  height: number;
+};
 
 // Mock navigator.vibrate
 const mockVibrate = jest.fn();
@@ -36,7 +46,7 @@ jest.mock('reactflow', () => ({
   }),
   useStoreApi: () => ({
     getState: () => ({ connectionNodeId: null }),
-    subscribe: jest.fn(() => () => {})
+    subscribe: jest.fn(() => () => undefined)
   })
 }));
 
@@ -116,8 +126,8 @@ describe('useMicroInteractions Hook', () => {
     });
 
     expect(result.current.interactions).toHaveLength(2);
-    expect(result.current.interactions[0].type).toBe('hover');
-    expect(result.current.interactions[1].type).toBe('click');
+    expect(result.current.interactions[0].trigger).toBe('hover');
+    expect(result.current.interactions[1].trigger).toBe('click');
   });
 
   it('triggers haptic feedback when requested', () => {
@@ -189,13 +199,15 @@ describe('triggerHaptic Function', () => {
   });
 
   it('handles missing vibration API gracefully', () => {
-    const originalVibrate = navigator.vibrate;
-    // @ts-ignore
-    delete navigator.vibrate;
+    const navigatorWithVibrate = navigator as Navigator & {
+      vibrate?: typeof navigator.vibrate;
+    };
+    const originalVibrate = navigatorWithVibrate.vibrate;
+    delete navigatorWithVibrate.vibrate;
 
     expect(() => triggerHaptic('light')).not.toThrow();
 
-    navigator.vibrate = originalVibrate;
+    navigatorWithVibrate.vibrate = originalVibrate;
   });
 });
 
@@ -207,10 +219,10 @@ describe('useMagneticSnap Hook', () => {
       onSnap 
     }));
 
-    const nodes = [
+    const nodes: TestSnapNode[] = [
       { id: '1', position: { x: 100, y: 100 }, width: 100, height: 50 },
       { id: '2', position: { x: 200, y: 100 }, width: 100, height: 50 }
-    ] as any;
+    ];
 
     act(() => {
       result.current.checkSnap(245, 125, nodes); // Close to node 2
@@ -228,9 +240,9 @@ describe('useMagneticSnap Hook', () => {
       onRelease 
     }));
 
-    const nodes = [
+    const nodes: TestSnapNode[] = [
       { id: '1', position: { x: 100, y: 100 }, width: 100, height: 50 }
-    ] as any;
+    ];
 
     // First snap
     act(() => {
@@ -251,7 +263,8 @@ describe('useMagneticSnap Hook', () => {
 describe('NodeInteractionEnhancer', () => {
   it('triggers bounce animation on mount', async () => {
     const mockTrigger = jest.fn();
-    jest.spyOn(require('../../animations/MicroInteractions'), 'useMicroInteractions')
+    const microInteractionsSpy = jest
+      .spyOn(MicroInteractionsModule, 'useMicroInteractions')
       .mockReturnValue({ trigger: mockTrigger, interactions: [] });
 
     render(
@@ -270,11 +283,14 @@ describe('NodeInteractionEnhancer', () => {
         { nodeId: 'test-node', haptic: 'medium' }
       );
     });
+
+    microInteractionsSpy.mockRestore();
   });
 
   it('shows hover hint on mouse enter', () => {
     const mockTrigger = jest.fn();
-    jest.spyOn(require('../../animations/MicroInteractions'), 'useMicroInteractions')
+    const microInteractionsSpy = jest
+      .spyOn(MicroInteractionsModule, 'useMicroInteractions')
       .mockReturnValue({ trigger: mockTrigger, interactions: [] });
 
     const { container } = render(
@@ -295,11 +311,13 @@ describe('NodeInteractionEnhancer', () => {
     );
 
     expect(screen.getByText('Double-click to edit')).toBeInTheDocument();
+    microInteractionsSpy.mockRestore();
   });
 
   it('triggers click feedback', () => {
     const mockTrigger = jest.fn();
-    jest.spyOn(require('../../animations/MicroInteractions'), 'useMicroInteractions')
+    const microInteractionsSpy = jest
+      .spyOn(MicroInteractionsModule, 'useMicroInteractions')
       .mockReturnValue({ trigger: mockTrigger, interactions: [] });
 
     const { container } = render(
@@ -318,11 +336,13 @@ describe('NodeInteractionEnhancer', () => {
       expect.any(Number),
       { nodeId: 'test-node', haptic: 'light' }
     );
+    microInteractionsSpy.mockRestore();
   });
 
   it('disables haptic when enableHaptic is false', () => {
     const mockTrigger = jest.fn();
-    jest.spyOn(require('../../animations/MicroInteractions'), 'useMicroInteractions')
+    const microInteractionsSpy = jest
+      .spyOn(MicroInteractionsModule, 'useMicroInteractions')
       .mockReturnValue({ trigger: mockTrigger, interactions: [] });
 
     const { container } = render(
@@ -341,6 +361,7 @@ describe('NodeInteractionEnhancer', () => {
       expect.any(Number),
       { nodeId: 'test-node', haptic: undefined }
     );
+    microInteractionsSpy.mockRestore();
   });
 });
 
@@ -349,22 +370,23 @@ describe('useNodeInteractions Hook', () => {
     const mockAddNodes = jest.fn();
     const mockTrigger = jest.fn();
     
-    jest.spyOn(require('reactflow'), 'useReactFlow').mockReturnValue({
+    const reactFlowSpy = jest.spyOn(ReactFlowModule, 'useReactFlow').mockReturnValue({
       getNodes: jest.fn(),
       addNodes: mockAddNodes,
       setNodes: jest.fn()
     });
     
-    jest.spyOn(require('../../animations/MicroInteractions'), 'useMicroInteractions')
+    const microInteractionsSpy = jest
+      .spyOn(MicroInteractionsModule, 'useMicroInteractions')
       .mockReturnValue({ trigger: mockTrigger, interactions: [] });
 
     const { result } = renderHook(() => useNodeInteractions());
 
-    const newNode = {
+    const newNode: ReactFlowNode<{ label: string }> = {
       id: 'new-node',
       position: { x: 100, y: 100 },
       data: { label: 'New Node' }
-    } as any;
+    };
 
     act(() => {
       result.current.addNodeWithBounce(newNode);
@@ -380,5 +402,8 @@ describe('useNodeInteractions Hook', () => {
         { nodeId: 'new-node', haptic: 'medium' }
       );
     });
+
+    reactFlowSpy.mockRestore();
+    microInteractionsSpy.mockRestore();
   });
 });

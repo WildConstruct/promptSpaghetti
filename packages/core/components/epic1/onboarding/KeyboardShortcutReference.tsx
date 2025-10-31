@@ -5,7 +5,7 @@
  * available shortcuts organized by category with search functionality.
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTutorial } from './TutorialContext';
 
 interface Shortcut {
@@ -304,7 +304,7 @@ export const KeyboardShortcutReference: React.FC<KeyboardShortcutReferenceProps>
     }
   }, [isOpen, state, updatePreferences]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   const isMac = navigator.platform.toLowerCase().includes('mac');
 
@@ -415,7 +415,9 @@ export const KeyboardShortcutReference: React.FC<KeyboardShortcutReferenceProps>
               padding: '40px',
               color: '#6b7280',
             }}>
-              <p>No shortcuts found matching "{searchQuery}"</p>
+              <p>
+                No shortcuts found matching &ldquo;{searchQuery}&rdquo;
+              </p>
             </div>
           ) : (
             filteredCategories.map(category => (

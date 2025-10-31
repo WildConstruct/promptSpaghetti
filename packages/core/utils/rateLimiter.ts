@@ -130,7 +130,7 @@ export class RateLimiter {
    */
   getRemainingAttempts(key: string): number {
     const record = this.attempts.get(key);
-    if (!record) return this.config.maxAttempts;
+    if (!record) {return this.config.maxAttempts;}
 
     const now = Date.now();
     if (now - record.firstAttempt > this.config.windowMs) {

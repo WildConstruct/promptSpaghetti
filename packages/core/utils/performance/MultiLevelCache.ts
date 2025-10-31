@@ -15,9 +15,9 @@ export interface MultiLevelCacheOptions {
   storeName?: string;
 }
 
-export class MultiLevelCache {
-  private static instance: MultiLevelCache;
-  private l1Cache: LRUCache;
+export class MultiLevelCache<T = unknown> {
+  private static instance: MultiLevelCache<unknown>;
+  private l1Cache: LRUCache<T>;
   private dbName: string;
   private storeName: string;
   private db: IDBDatabase | null = null;
@@ -90,11 +90,11 @@ export class MultiLevelCache {
   /**
    * Get value from cache (tries all levels)
    */
-  async get<T = any>(key: string): Promise<T | undefined> {
+  async get(key: string): Promise<T | undefined> {
     // Try L1 (Memory)
     const l1Value = this.l1Cache.get(key);
     if (l1Value !== undefined) {
-      return l1Value as T;
+      return l1Value;
     }
 
     // Try L2 (Session Storage)
@@ -120,7 +120,7 @@ export class MultiLevelCache {
   /**
    * Set value in cache
    */
-  async set<T = any>(
+  async set(
     key: string,
     value: T,
     options?: { ttl?: number }
@@ -185,14 +185,14 @@ export class MultiLevelCache {
   }
 
   // L2 (Session Storage) operations
-  private getL2(key: string): any {
+  private getL2(key: string): T | undefined {
     if (typeof window === 'undefined' || !window.sessionStorage) {
       return undefined;
     }
 
     try {
       const item = sessionStorage.getItem(`cache:${key}`);
-      if (!item) return undefined;
+      if (!item) {return undefined;}
 
       const parsed = JSON.parse(item);
 
@@ -209,7 +209,7 @@ export class MultiLevelCache {
     }
   }
 
-  private setL2(key: string, value: any): void {
+  private setL2(key: string, value: T): void {
     if (typeof window === 'undefined' || !window.sessionStorage) {
       return;
     }
@@ -298,7 +298,7 @@ export class MultiLevelCache {
         try {
           const item = JSON.parse(sessionStorage.getItem(key) || '{}');
           entries.push({ key, timestamp: item.timestamp || 0 });
-        } catch (e) {
+        } catch {
           // Invalid entry, remove it
           sessionStorage.removeItem(key);
         }
@@ -315,14 +315,19 @@ export class MultiLevelCache {
   }
 
   // L3 (IndexedDB) operations
-  private async getL3(key: string): Promise<any> {
+  private async getL3(key: string): Promise<T | undefined> {
     if (!this.db) {
       await this.initPromise;
-      if (!this.db) return undefined;
+      if (!this.db) {
+        return undefined;
+      }
     }
 
+    // At this point, this.db is guaranteed to exist
+    const db = this.db;
+    
     return new Promise(resolve => {
-      const transaction = this.db!.transaction([this.storeName], 'readonly');
+      const transaction = db.transaction([this.storeName], 'readonly');
       const store = transaction.objectStore(this.storeName);
       const request = store.get(key);
 
@@ -351,14 +356,19 @@ export class MultiLevelCache {
     });
   }
 
-  private async setL3(key: string, value: any): Promise<void> {
+  private async setL3(key: string, value: T): Promise<void> {
     if (!this.db) {
       await this.initPromise;
-      if (!this.db) return;
+      if (!this.db) {
+        return;
+      }
     }
 
+    // At this point, this.db is guaranteed to exist
+    const db = this.db;
+    
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([this.storeName], 'readwrite');
+      const transaction = db.transaction([this.storeName], 'readwrite');
       const store = transaction.objectStore(this.storeName);
 
       const data = {
@@ -381,11 +391,16 @@ export class MultiLevelCache {
   private async deleteL3(key: string): Promise<void> {
     if (!this.db) {
       await this.initPromise;
-      if (!this.db) return;
+      if (!this.db) {
+        return;
+      }
     }
 
+    // At this point, this.db is guaranteed to exist
+    const db = this.db;
+    
     return new Promise(resolve => {
-      const transaction = this.db!.transaction([this.storeName], 'readwrite');
+      const transaction = db.transaction([this.storeName], 'readwrite');
       const store = transaction.objectStore(this.storeName);
       const request = store.delete(key);
 
@@ -400,11 +415,16 @@ export class MultiLevelCache {
   private async clearL3(): Promise<void> {
     if (!this.db) {
       await this.initPromise;
-      if (!this.db) return;
+      if (!this.db) {
+        return;
+      }
     }
 
+    // At this point, this.db is guaranteed to exist
+    const db = this.db;
+    
     return new Promise(resolve => {
-      const transaction = this.db!.transaction([this.storeName], 'readwrite');
+      const transaction = db.transaction([this.storeName], 'readwrite');
       const store = transaction.objectStore(this.storeName);
       const request = store.clear();
 
@@ -419,11 +439,16 @@ export class MultiLevelCache {
   private async getL3Size(): Promise<number> {
     if (!this.db) {
       await this.initPromise;
-      if (!this.db) return 0;
+      if (!this.db) {
+        return 0;
+      }
     }
 
+    // At this point, this.db is guaranteed to exist
+    const db = this.db;
+    
     return new Promise(resolve => {
-      const transaction = this.db!.transaction([this.storeName], 'readonly');
+      const transaction = db.transaction([this.storeName], 'readonly');
       const store = transaction.objectStore(this.storeName);
       const request = store.count();
 
@@ -438,14 +463,19 @@ export class MultiLevelCache {
   private async invalidateL3Pattern(pattern: string): Promise<number> {
     if (!this.db) {
       await this.initPromise;
-      if (!this.db) return 0;
+      if (!this.db) {
+        return 0;
+      }
     }
 
+    // At this point, this.db is guaranteed to exist
+    const db = this.db;
+    
     return new Promise(resolve => {
       const regex = new RegExp(pattern.replace(/\*/g, '.*'));
       let invalidated = 0;
 
-      const transaction = this.db!.transaction([this.storeName], 'readwrite');
+      const transaction = db.transaction([this.storeName], 'readwrite');
       const store = transaction.objectStore(this.storeName);
       const request = store.openCursor();
 

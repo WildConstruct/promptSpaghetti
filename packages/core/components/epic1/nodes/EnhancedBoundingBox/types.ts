@@ -3,7 +3,7 @@
  * Extracted for better type safety and reusability
  */
 
-import { Position } from 'reactflow';
+import type { Position, Node } from 'reactflow';
 
 export interface Port {
   id: string;
@@ -104,13 +104,13 @@ export interface PortSystemProps {
 }
 
 export interface NodeContainmentProps {
-  containedNodes: any[];
+  containedNodes: Node[];
   isCollapsed: boolean;
 }
 
 // Hook return types
 export interface UseNodeContainmentReturn {
-  containedNodes: any[];
+  containedNodes: Node[];
   recalculate: () => void;
   cacheHitRate: number;
 }

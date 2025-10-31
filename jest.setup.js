@@ -33,8 +33,14 @@ global.ResizeObserver = class ResizeObserver {
     // Simulate initial observation
     this.callback([{ target, contentRect: { width: 800, height: 600 } }], this);
   }
-  unobserve() {}
-  disconnect() {}
+  unobserve() {
+    // No-op: ResizeObserver mock does not track observed elements.
+    return undefined;
+  }
+  disconnect() {
+    // No-op: included for API parity with the DOM implementation.
+    return undefined;
+  }
 };
 
 // DOMMatrix mock for ReactFlow transforms
@@ -139,7 +145,7 @@ jest.mock(
 // Mock URL.createObjectURL / revokeObjectURL to silence JSDOM navigation warnings
 if (!global.URL.createObjectURL) {
   global.URL.createObjectURL = () => 'blob:mock-url';
-  global.URL.revokeObjectURL = () => {};
+  global.URL.revokeObjectURL = () => undefined;
 }
 
 // Mock window.matchMedia for React components that use theme detection

@@ -1,5 +1,5 @@
 // Scene-specific export functions extracted from exporter.ts
-import { Graph, Node } from '../../../packages/core/graphSchema';
+import { Graph } from '../../../packages/core/graphSchema';
 import { SceneData, GeneratorBundle } from './schemas';
 
 /**

@@ -65,8 +65,14 @@ class SimpleVectorDB {
     return scores.sort((a, b) => b.score - a.score).slice(0, limit);
   }
 
+  getEmbedding(assetId: string): AssetEmbedding | undefined {
+    return this.embeddings.get(assetId);
+  }
+
   private cosineSimilarity(vec1: number[], vec2: number[]): number {
-    if (vec1.length !== vec2.length) return 0;
+    if (vec1.length !== vec2.length) {
+      return 0;
+    }
 
     let dotProduct = 0;
     let norm1 = 0;
@@ -78,7 +84,9 @@ class SimpleVectorDB {
       norm2 += vec2[i] * vec2[i];
     }
 
-    if (norm1 === 0 || norm2 === 0) return 0;
+    if (norm1 === 0 || norm2 === 0) {
+      return 0;
+    }
 
     return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
   }
@@ -86,7 +94,9 @@ class SimpleVectorDB {
   async findClusters(k: number = 5): Promise<ClusterInfo[]> {
     // Simple k-means clustering
     const vectors = Array.from(this.embeddings.values());
-    if (vectors.length < k) return [];
+    if (vectors.length < k) {
+      return [];
+    }
 
     // Initialize centroids randomly
     const centroids: number[][] = [];
@@ -121,17 +131,25 @@ class SimpleVectorDB {
           }
         }
 
-        clusters.get(bestCluster)!.push(embedding.asset_id);
+        const cluster = clusters.get(bestCluster);
+        if (cluster) {
+          cluster.push(embedding.asset_id);
+        }
       }
 
       // Update centroids
       for (let i = 0; i < k; i++) {
-        const clusterMembers = clusters.get(i)!;
-        if (clusterMembers.length === 0) continue;
+        const clusterMembers = clusters.get(i);
+        if (!clusterMembers || clusterMembers.length === 0) {
+          continue;
+        }
 
         const newCentroid = new Array(this.dimensions).fill(0);
         for (const memberId of clusterMembers) {
-          const memberEmbedding = this.embeddings.get(memberId)!;
+          const memberEmbedding = this.embeddings.get(memberId);
+          if (!memberEmbedding) {
+            continue;
+          }
           for (let d = 0; d < this.dimensions; d++) {
             newCentroid[d] += memberEmbedding.embedding[d];
           }
@@ -148,8 +166,8 @@ class SimpleVectorDB {
     // Create cluster info
     const clusterInfos: ClusterInfo[] = [];
     for (let i = 0; i < k; i++) {
-      const members = clusters.get(i)!;
-      if (members.length > 0) {
+      const members = clusters.get(i);
+      if (members && members.length > 0) {
         clusterInfos.push({
           id: `cluster_${i}`,
           name: this.generateClusterName(members),
@@ -203,7 +221,10 @@ export class SimilarityEngine {
     // Check cache first
     const cacheKey = `${text}_${JSON.stringify(metadata || {})}`;
     if (this.embeddingCache.has(cacheKey)) {
-      return this.embeddingCache.get(cacheKey)!;
+      const cached = this.embeddingCache.get(cacheKey);
+      if (cached) {
+        return cached;
+      }
     }
 
     // Generate embedding (simplified for MVP - uses random vectors)
@@ -243,6 +264,7 @@ export class SimilarityEngine {
         recency: 0.1
       }
     } = options;
+    const { semantic = 0.4, style = 0.3, tags = 0.2, recency = 0.1 } = weights;
 
     // Generate query embedding
     const queryEmbedding = await this.generateEmbedding(
@@ -263,10 +285,10 @@ export class SimilarityEngine {
       const recencyScore = this.calculateRecencyScore(match.id);
 
       const compositeScore =
-        weights.semantic! * semanticScore +
-        weights.style! * styleScore +
-        weights.tags! * tagScore +
-        weights.recency! * recencyScore;
+        semantic * semanticScore +
+        style * styleScore +
+        tags * tagScore +
+        recency * recencyScore;
 
       if (compositeScore >= threshold) {
         results.push({
@@ -338,7 +360,9 @@ export class SimilarityEngine {
   ): Promise<SimilarAsset[]> {
     // Retrieve the asset's data
     const assetData = await this.getAssetData(assetId);
-    if (!assetData) return [];
+    if (!assetData) {
+      return [];
+    }
 
     return this.findSimilar(
       assetData.text || '',
@@ -372,11 +396,21 @@ export class SimilarityEngine {
 
     // Incorporate metadata features
     if (metadata) {
-      if (metadata.mood === 'intense') embedding[0] += 0.5;
-      if (metadata.mood === 'calm') embedding[0] -= 0.5;
-      if (metadata.location === 'urban') embedding[1] += 0.3;
-      if (metadata.location === 'desert') embedding[1] -= 0.3;
-      if (metadata.tags?.includes('action')) embedding[2] += 0.4;
+      if (metadata.mood === 'intense') {
+        embedding[0] += 0.5;
+      }
+      if (metadata.mood === 'calm') {
+        embedding[0] -= 0.5;
+      }
+      if (metadata.location === 'urban') {
+        embedding[1] += 0.3;
+      }
+      if (metadata.location === 'desert') {
+        embedding[1] -= 0.3;
+      }
+      if (metadata.tags?.includes('action')) {
+        embedding[2] += 0.4;
+      }
     }
 
     // Normalize
@@ -422,24 +456,92 @@ export class SimilarityEngine {
     query: SegmentMetadata,
     assetId: string
   ): number {
-    // Calculate style similarity based on mood, intensity, etc.
-    // Simplified for MVP
-    return Math.random() * 0.8 + 0.2;
+    const asset = this.vectorDB.getEmbedding(assetId);
+    if (!asset) {
+      return 0.5;
+    }
+
+    const target = asset.metadata;
+    let score = 0;
+    let comparisons = 0;
+
+    if (query.mood && target.mood) {
+      comparisons++;
+      score += query.mood === target.mood ? 1 : 0.4;
+    }
+
+    if (
+      typeof query.intensity === 'number' &&
+      typeof target.intensity === 'number'
+    ) {
+      comparisons++;
+      const intensityDiff = Math.abs(query.intensity - target.intensity);
+      score += Math.max(0, 1 - intensityDiff / 10);
+    }
+
+    if (query.location && target.location) {
+      comparisons++;
+      score += query.location === target.location ? 1 : 0.3;
+    }
+
+    if (comparisons === 0) {
+      return 0.5;
+    }
+
+    return score / comparisons;
   }
 
   private calculateTagSimilarity(
     query: SegmentMetadata,
     assetId: string
   ): number {
-    // Calculate tag overlap
-    // Simplified for MVP
-    return Math.random() * 0.7 + 0.3;
+    const asset = this.vectorDB.getEmbedding(assetId);
+    if (!asset) {
+      return 0.3;
+    }
+
+    const queryTags = new Set(query.tags || []);
+    const assetTags = new Set(asset.metadata.tags || []);
+
+    if (queryTags.size === 0 || assetTags.size === 0) {
+      return 0.3;
+    }
+
+    let intersection = 0;
+    for (const tag of queryTags) {
+      if (assetTags.has(tag)) {
+        intersection++;
+      }
+    }
+
+    const union = new Set([...queryTags, ...assetTags]).size;
+    return union === 0 ? 0 : intersection / union;
   }
 
   private calculateRecencyScore(assetId: string): number {
-    // Prefer recently used assets slightly
-    // Simplified for MVP
-    return Math.random() * 0.5 + 0.5;
+    const asset = this.vectorDB.getEmbedding(assetId);
+    if (!asset) {
+      return 0.5;
+    }
+
+    const assetTime = new Date(asset.timestamp).getTime();
+    if (Number.isNaN(assetTime)) {
+      return 0.5;
+    }
+
+    const ageMs = Date.now() - assetTime;
+    const ageDays = ageMs / (1000 * 60 * 60 * 24);
+
+    if (ageDays <= 1) {
+      return 1;
+    }
+    if (ageDays <= 7) {
+      return 0.85;
+    }
+    if (ageDays <= 30) {
+      return 0.7;
+    }
+    return 0.5;
   }
 
   private explainMatch(
@@ -450,12 +552,21 @@ export class SimilarityEngine {
   ): string {
     const factors: string[] = [];
 
-    if (semantic > 0.7) factors.push('Strong semantic match');
-    else if (semantic > 0.5) factors.push('Good semantic similarity');
+    if (semantic > 0.7) {
+      factors.push('Strong semantic match');
+    } else if (semantic > 0.5) {
+      factors.push('Good semantic similarity');
+    }
 
-    if (style > 0.7) factors.push('Similar style/mood');
-    if (tags > 0.7) factors.push('Matching tags');
-    if (recency > 0.8) factors.push('Recently used');
+    if (style > 0.7) {
+      factors.push('Similar style/mood');
+    }
+    if (tags > 0.7) {
+      factors.push('Matching tags');
+    }
+    if (recency > 0.8) {
+      factors.push('Recently used');
+    }
 
     return factors.length > 0 ? factors.join(', ') : 'General similarity';
   }

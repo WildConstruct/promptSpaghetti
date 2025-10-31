@@ -15,7 +15,9 @@ import WebSocket from 'ws';
 
 // Mock ConnectionManager since websocket functionality is disabled
 class ConnectionManager {
-  constructor(config: unknown) {}
+  constructor(config: unknown) {
+    // Mock constructor - no initialization needed
+  }
   connect() {
     return Promise.resolve();
   }
@@ -68,12 +70,12 @@ describe('System Recovery and Resilience Scenarios', () => {
         };
 
         const manager = new ConnectionManager(config);
-        let closeHandler: Function;
+        let closeHandler: () => void;
         let reconnectAttempts = 0;
 
         const mockWs = {
           on: jest.fn((event, handler) => {
-            if (event === 'close') closeHandler = handler;
+            if (event === 'close') {closeHandler = handler;}
           }),
           close: jest.fn<unknown[], unknown>(),
           ping: jest.fn<unknown[], unknown>(),
@@ -95,7 +97,7 @@ describe('System Recovery and Resilience Scenarios', () => {
         expect(manager.getConnectionInfo(connectionId)).toBeDefined();
 
         // Simulate connection drop and auto-reconnection behavior
-        closeHandler!(1006, 'Connection lost'); // Abnormal closure
+        closeHandler?.(1006, 'Connection lost'); // Abnormal closure
 
         // Simulate the client-side reconnection logic that would happen in a real scenario
         const simulateReconnection = async () => {
@@ -109,7 +111,7 @@ describe('System Recovery and Resilience Scenarios', () => {
             reconnectAttempts++;
 
             // In a real scenario, this would be a new WebSocket connection
-            if (attempt === 2) break; // Simulate successful reconnection on second attempt
+            if (attempt === 2) {break;} // Simulate successful reconnection on second attempt
           }
         };
 
@@ -265,8 +267,8 @@ describe('System Recovery and Resilience Scenarios', () => {
         };
 
         const getHealthyService = () => {
-          if (mockServiceHealth.primary) return primaryManager;
-          if (mockServiceHealth.fallback) return fallbackManager;
+          if (mockServiceHealth.primary) {return primaryManager;}
+          if (mockServiceHealth.fallback) {return fallbackManager;}
           throw new Error('No healthy service available');
         };
 

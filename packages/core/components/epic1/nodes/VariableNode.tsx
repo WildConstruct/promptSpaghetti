@@ -10,7 +10,7 @@ export interface VariableNodeData extends EditableNodeData {
   mergeMode?: 'override' | 'template' | 'append';
   hasDataInlet?: boolean;
   dataInletConnected?: boolean;
-  resolvedValue?: any;
+  resolvedValue?: string | number | boolean | null;
   dataSource?: 'inlet' | 'input' | 'default';
 }
 
@@ -23,7 +23,6 @@ export const VariableNode = memo((props: NodeProps<VariableNodeData>) => {
   const hasDataInlet = props.data.hasDataInlet !== false; // Default to true for Story 1.5
   const dataInletConnected = props.data.dataInletConnected ?? false;
   const dataSource = props.data.dataSource ?? 'default';
-  const mergeMode = props.data.mergeMode ?? 'override';
   const { showMetadata, setShowMetadata, metadata, flipClassName } = useMetadataFlip(props);
 
   return (

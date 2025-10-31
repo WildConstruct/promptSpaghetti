@@ -6,6 +6,8 @@ import { ProfessionalIntegration } from '../../packages/core';
 import type { Node, Edge } from 'reactflow';
 
 // Professional GraphEditor that uses modular architecture
+const noop = () => undefined;
+
 const ProfessionalGraphEditor: React.FC<{
   initialNodes?: Node[];
   initialEdges?: Edge[];
@@ -16,15 +18,15 @@ const ProfessionalGraphEditor: React.FC<{
       edges={initialEdges}
       selectedNodes={[]}
       selectedEdges={[]}
-      onNodesChange={() => {}}
-      onEdgesChange={() => {}}
-      onNodesSelect={() => {}}
-      onEdgesSelect={() => {}}
-      onNodeCreate={() => {}}
-      onNodeDelete={() => {}}
-      onExport={() => {}}
-      onSave={() => {}}
-      onLoad={() => {}}
+      onNodesChange={noop}
+      onEdgesChange={noop}
+      onNodesSelect={noop}
+      onEdgesSelect={noop}
+      onNodeCreate={noop}
+      onNodeDelete={noop}
+      onExport={noop}
+      onSave={noop}
+      onLoad={noop}
       theme="cinema"
     />
   );

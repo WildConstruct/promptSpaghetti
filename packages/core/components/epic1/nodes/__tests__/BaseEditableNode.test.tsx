@@ -7,7 +7,9 @@ import { NodeProps } from 'reactflow';
 // Mock React Flow hooks
 jest.mock('reactflow', () => ({
   ...jest.requireActual('reactflow'),
-  Handle: ({ type, position }: any) => <div data-testid={`handle-${type}`} />,
+  Handle: ({ type, position }: { type?: string; position?: string }) => (
+    <div data-testid={`handle-${type}`} />
+  ),
   Position: {
     Left: 'left',
     Right: 'right',
@@ -45,8 +47,8 @@ describe('BaseEditableNode', () => {
                 value={editBuffer}
                 onChange={(e) => updateBuffer(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') confirmEdit();
-                  if (e.key === 'Escape') cancelEdit();
+                  if (e.key === 'Enter') {confirmEdit();}
+                  if (e.key === 'Escape') {cancelEdit();}
                 }}
               />
             ) : (
@@ -72,7 +74,9 @@ describe('BaseEditableNode', () => {
     renderNode();
     const node = screen.getByTestId('display-value').parentElement?.parentElement;
     
-    fireEvent.click(node!);
+    if (node) {
+      fireEvent.click(node);
+    }
     
     await waitFor(() => {
       expect(screen.getByTestId('edit-input')).toBeInTheDocument();
@@ -84,7 +88,9 @@ describe('BaseEditableNode', () => {
     renderNode();
     const node = screen.getByTestId('display-value').parentElement?.parentElement;
     
-    fireEvent.click(node!);
+    if (node) {
+      fireEvent.click(node);
+    }
     
     const input = await screen.findByTestId('edit-input');
     await userEvent.clear(input);
@@ -97,7 +103,9 @@ describe('BaseEditableNode', () => {
     renderNode();
     const node = screen.getByTestId('display-value').parentElement?.parentElement;
     
-    fireEvent.click(node!);
+    if (node) {
+      fireEvent.click(node);
+    }
     
     const input = await screen.findByTestId('edit-input');
     await userEvent.clear(input);
@@ -113,7 +121,9 @@ describe('BaseEditableNode', () => {
     renderNode();
     const node = screen.getByTestId('display-value').parentElement?.parentElement;
     
-    fireEvent.click(node!);
+    if (node) {
+      fireEvent.click(node);
+    }
     
     const input = await screen.findByTestId('edit-input');
     await userEvent.clear(input);
@@ -133,7 +143,9 @@ describe('BaseEditableNode', () => {
     renderNode();
     const node = screen.getByTestId('display-value').parentElement?.parentElement;
     
-    fireEvent.click(node!);
+    if (node) {
+      fireEvent.click(node);
+    }
     
     const input = await screen.findByTestId('edit-input');
     await userEvent.clear(input);
@@ -152,7 +164,9 @@ describe('BaseEditableNode', () => {
     
     expect(node).not.toHaveClass('editing');
     
-    fireEvent.click(node!);
+    if (node) {
+      fireEvent.click(node);
+    }
     
     await waitFor(() => {
       expect(node).toHaveClass('editing');
@@ -177,7 +191,9 @@ describe('BaseEditableNode', () => {
     renderNode();
     const node = screen.getByTestId('display-value').parentElement?.parentElement;
     
-    fireEvent.click(node!);
+    if (node) {
+      fireEvent.click(node);
+    }
     
     await waitFor(() => {
       const editIndicator = node?.querySelector('.epic1-edit-indicator');

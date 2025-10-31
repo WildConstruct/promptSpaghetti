@@ -8,12 +8,17 @@ import { Edge, Node, XYPosition } from 'reactflow';
 import {
   AutoRoutingConfig,
   EdgeRoutingAlgorithm,
-  CollisionResult,
-  PathCalculationResult,
   EdgeRoutingConfig
 } from '../../types/edgeRouting';
 import { getEdgeRoutingManager } from './edgeRouting';
 import { getPerformanceInfrastructure } from '../performance';
+
+interface EdgeData {
+  calculatedPath?: {
+    bends?: number;
+    length?: number;
+  };
+}
 
 interface RouteOptimizationResult {
   edges: Edge[];
@@ -40,7 +45,7 @@ export class AutoRouter {
    * Start auto-routing
    */
   start(edges: Edge[], nodes: Node[]): void {
-    if (this.isRunning) return;
+    if (this.isRunning) {return;}
 
     this.isRunning = true;
     const interval = this.config.updateInterval || 1000;
@@ -152,8 +157,8 @@ export class AutoRouter {
       );
 
       // Check if edge is in congested area
-      const inCongestedArea = analysis.congestion.some(area =>
-        this.isEdgeInArea(edge, area)
+      const inCongestedArea = analysis.congestion.some(() =>
+        this.isEdgeInArea()
       );
 
       if (hasCrossings || inCongestedArea) {
@@ -407,7 +412,7 @@ export class AutoRouter {
   /**
    * Check if edge is in area
    */
-  private isEdgeInArea(edge: Edge, area: CongestionArea): boolean {
+  private isEdgeInArea(): boolean {
     // Simplified check - would need actual edge path in production
     return false;
   }
@@ -465,7 +470,7 @@ export class AutoRouter {
     let totalLength = 0;
 
     edges.forEach(edge => {
-      const edgeData = edge.data as any;
+      const edgeData = edge.data as EdgeData;
       if (edgeData?.calculatedPath) {
         totalBends += edgeData.calculatedPath.bends || 0;
         totalLength += edgeData.calculatedPath.length || 0;

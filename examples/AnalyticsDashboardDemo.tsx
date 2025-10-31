@@ -5,13 +5,11 @@
  * Demonstrates how to build dashboards with the new shared components
  */
 
-import React, { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, Users, DollarSign } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { BarChart3 } from 'lucide-react';
 import {
   DashboardShell,
   useDashboard,
-  LoadingState,
-  ErrorState,
   EmptyState
 } from '../packages/ui-kit/src/Dashboard';
 
@@ -105,7 +103,8 @@ export const AnalyticsDashboardDemo: React.FC = () => {
             }
           ]
         });
-      } catch (err) {
+      } catch (caughtError) {
+        console.error('Failed to load analytics data', caughtError);
         setError('Failed to load analytics data');
       } finally {
         setLoading(false);
@@ -233,7 +232,9 @@ export const AnalyticsDashboardDemo: React.FC = () => {
 // Helper component for metric cards
 const MetricCard: React.FC<{ metric: MetricData }> = ({ metric }) => {
   const formatValue = (value: number | string, format?: string) => {
-    if (typeof value === 'string') return value;
+    if (typeof value === 'string') {
+      return value;
+    }
 
     switch (format) {
       case 'currency':
@@ -250,12 +251,16 @@ const MetricCard: React.FC<{ metric: MetricData }> = ({ metric }) => {
   };
 
   const getTrendIcon = (change?: number) => {
-    if (!change) return null;
+    if (!change) {
+      return null;
+    }
     return change > 0 ? '↗' : '↘';
   };
 
   const getTrendColor = (change?: number) => {
-    if (!change) return '#6b7280';
+    if (!change) {
+      return '#6b7280';
+    }
     return change > 0 ? '#10b981' : '#ef4444';
   };
 

@@ -6,11 +6,35 @@
 import { StateLock } from '../../src/utils/StateLock.js';
 import { TestDataManager } from './TestDataManager';
 
+type TaskRecord = {
+  id: string;
+  status: string;
+  title?: string;
+  epic?: string;
+  assignee?: string | null;
+  dueDate?: string;
+  output?: string;
+  completedAt?: string;
+  rejectionReason?: string;
+  startedAt?: string;
+  updated?: string;
+  [key: string]: unknown;
+};
+
+interface LockedState {
+  tasks: Record<string, TaskRecord>;
+  [key: string]: unknown;
+}
+
+type ConditionFn = (state: TaskRecord) => boolean;
+type ActionFn = (state: TaskRecord) => Partial<TaskRecord> | void;
+type TransitionData = Partial<TaskRecord>;
+
 export interface StateDefinition {
   name: string;
   validTransitions: string[];
-  conditions?: Record<string, (state: any) => boolean>;
-  actions?: Record<string, (state: any) => any>;
+  conditions?: Record<string, ConditionFn>;
+  actions?: Record<string, ActionFn>;
 }
 
 export interface TransitionEvent {
@@ -18,7 +42,7 @@ export interface TransitionEvent {
   to: string;
   event: string;
   timestamp: string;
-  data?: any;
+  data?: TransitionData;
   success: boolean;
   error?: string;
 }
@@ -151,7 +175,7 @@ export class StateTransitionTestFramework {
     taskId: string,
     fromState: string,
     toState: string,
-    data?: any
+    data?: TransitionData
   ): Promise<TransitionEvent> {
     const timestamp = new Date().toISOString();
 
@@ -167,7 +191,7 @@ export class StateTransitionTestFramework {
       }
 
       // Perform the actual state transition
-      await this.stateLock.transaction(state => {
+      await this.stateLock.transaction((state: LockedState) => {
         const task = state.tasks[taskId];
         if (!task) {
           throw new Error(`Task ${taskId} not found`);
@@ -205,11 +229,13 @@ export class StateTransitionTestFramework {
         // Execute state actions
         const toStateDefinition = this.states.get(toState);
         if (toStateDefinition?.actions) {
-          for (const [actionName, actionFn] of Object.entries(
+          for (const [, actionFn] of Object.entries(
             toStateDefinition.actions
           )) {
             const result = actionFn(task);
-            Object.assign(task, result);
+            if (result) {
+              Object.assign(task, result);
+            }
           }
         }
 
@@ -235,7 +261,7 @@ export class StateTransitionTestFramework {
         timestamp,
         data,
         success: false,
-        error: error.message
+        error: error instanceof Error ? error.message : String(error)
       };
 
       this.transitionHistory.push(event);
@@ -255,7 +281,8 @@ export class StateTransitionTestFramework {
       await this.testValidTransition(taskId, fromState, toState);
       return { blocked: false, reason: 'Transition unexpectedly succeeded' };
     } catch (error) {
-      return { blocked: true, reason: error.message };
+      const reason = error instanceof Error ? error.message : String(error);
+      return { blocked: true, reason };
     }
   }
 
@@ -286,7 +313,9 @@ export class StateTransitionTestFramework {
 
     // Check for unreachable states using graph traversal
     const visitState = (stateName: string, visited: Set<string>) => {
-      if (visited.has(stateName)) return;
+      if (visited.has(stateName)) {
+        return;
+      }
       visited.add(stateName);
       reachableStates.add(stateName);
 
@@ -414,7 +443,7 @@ export class StateTransitionTestFramework {
       results.details.push({
         test: 'State machine integrity',
         result: 'failed',
-        message: error.message,
+        message: (error instanceof Error ? error.message : String(error)),
         duration: Date.now() - startTime
       });
     }
@@ -422,7 +451,9 @@ export class StateTransitionTestFramework {
     // Test 2: Valid transitions for each state
     for (const fromState of allStates) {
       const stateDefinition = this.states.get(fromState);
-      if (!stateDefinition) continue;
+      if (!stateDefinition) {
+        continue;
+      }
 
       for (const toState of stateDefinition.validTransitions) {
         const testStart = Date.now();
@@ -443,7 +474,7 @@ export class StateTransitionTestFramework {
           results.details.push({
             test: `Valid transition ${fromState} -> ${toState}`,
             result: 'failed',
-            message: error.message,
+            message: (error instanceof Error ? error.message : String(error)),
             duration: Date.now() - testStart
           });
         }
@@ -486,7 +517,7 @@ export class StateTransitionTestFramework {
             results.details.push({
               test: `Invalid transition ${fromState} -> ${toState}`,
               result: 'failed',
-              message: error.message,
+              message: (error instanceof Error ? error.message : String(error)),
               duration: Date.now() - testStart
             });
           }

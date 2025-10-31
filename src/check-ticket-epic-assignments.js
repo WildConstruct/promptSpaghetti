@@ -27,17 +27,17 @@ const examples = {
 tasks.forEach(task => {
   if (task.story) {
     withStoryField++;
-    if (examples.story.length < 5) examples.story.push(task);
+    if (examples.story.length < 5) {examples.story.push(task);}
   }
 
   if (task.tags && task.tags.length > 0) {
     withTagsField++;
-    if (examples.tags.length < 5) examples.tags.push(task);
+    if (examples.tags.length < 5) {examples.tags.push(task);}
   }
 
   if (task.metadata && task.metadata.source) {
     withSourceField++;
-    if (examples.source.length < 5) examples.source.push(task);
+    if (examples.source.length < 5) {examples.source.push(task);}
   }
 
   if (
@@ -46,7 +46,7 @@ tasks.forEach(task => {
     (!task.metadata || !task.metadata.source)
   ) {
     completelyUntagged++;
-    if (examples.untagged.length < 10) examples.untagged.push(task);
+    if (examples.untagged.length < 10) {examples.untagged.push(task);}
   }
 });
 

@@ -1,9 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Node, Edge } from 'reactflow';
+import type { Preset } from '@prompt/asset-browser';
+
+type TabbedAssetBrowserComponent =
+  (typeof import('@prompt/asset-browser'))['TabbedAssetBrowser'];
+type UserProviderComponent =
+  (typeof import('@prompt/asset-browser'))['UserProvider'];
 
 // Dynamic import to handle potential build issues
-let TabbedAssetBrowser: any = null;
-let UserProvider: any = null;
+let TabbedAssetBrowser: TabbedAssetBrowserComponent | null = null;
+let UserProvider: UserProviderComponent | null = null;
 
 interface AssetLibraryPanelProps {
   onClose?: () => void;
@@ -38,7 +44,7 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
           UserProvider = module.UserProvider;
           setComponentsLoaded(true);
         } catch (error) {
-          console.warn('Asset browser not available, using placeholder');
+          console.warn('Asset browser not available, using placeholder', error);
           setLoadError('Asset browser module not available');
         }
       };
@@ -47,16 +53,20 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
   }, []);
 
   const handleInsertPreset = useCallback(
-    (preset: any) => {
-      if (!onNodesChange || !onEdgesChange) return;
+    (preset: Preset) => {
+      if (!onNodesChange || !onEdgesChange) {return;}
 
       // Convert preset to nodes and insert into graph
-      if (preset?.data && preset.data.nodes) {
+      const graphData = preset?.data as
+        | { nodes?: Node[]; edges?: Edge[] }
+        | undefined;
+
+      if (graphData?.nodes) {
         // Generate unique IDs for the new nodes
         const timestamp = Date.now();
         const idMap = new Map<string, string>();
 
-        const newNodes = preset.data.nodes.map((node: any, index: number) => {
+        const newNodes = graphData.nodes.map((node, index) => {
           const newId = `${node.id}_${timestamp}_${index}`;
           idMap.set(node.id, newId);
 
@@ -71,7 +81,7 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
         });
 
         const newEdges =
-          preset.data.edges?.map((edge: any, idx: number) => ({
+          graphData.edges?.map((edge, idx) => ({
             ...edge,
             id: `${edge.id}_${timestamp}_${idx}`,
             source: idMap.get(edge.source) || edge.source,

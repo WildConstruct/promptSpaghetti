@@ -10,11 +10,13 @@ import cors from '@fastify/cors';
 import { executeGraph } from './engine-basic';
 import { Sentry } from './sentry';
 import { registerEnhancedAdminRoutes } from './admin-panel-enhanced';
-import { LLMService } from './services/LLMService';
-import { redactPII } from './utils/privacy';
 import { filesRoutes } from './routes/files';
 import { llmRoutes } from './routes/llm';
 import { themeRoutes } from './theme';
+import { rateLimiter } from './utils/rateLimit';
+import { metrics } from './utils/metrics';
+import type { Graph as CoreGraph } from '../../packages/core/graphSchema';
+import type { Graph } from './exporter-standalone';
 
 // Load environment from root and server/.env (server overrides root)
 try {
@@ -22,7 +24,9 @@ try {
   const serverEnv = path.resolve(__dirname, '../.env');
   dotenv.config({ path: rootEnv });
   dotenv.config({ path: serverEnv, override: true });
-} catch {}
+} catch (error) {
+  console.warn('Failed to load environment variables:', error);
+}
 
 const bodyLimit = process.env.BODY_LIMIT_BYTES
   ? parseInt(process.env.BODY_LIMIT_BYTES)
@@ -32,6 +36,20 @@ const server = Fastify({
   bodyLimit // cap request body to mitigate abuse
 });
 
+type PreviewBody = {
+  graph: Graph;
+  runs?: number;
+  seedStart?: number;
+};
+
+// Convert from API Graph type to Core Graph type
+function convertToCoreGraph(apiGraph: Graph): CoreGraph {
+  return {
+    nodes: (apiGraph.nodes || []) as CoreGraph['nodes'],
+    seed: apiGraph.seed
+  };
+}
+
 // Accept classic HTML form posts from the admin panel
 // Fastify rejects application/x-www-form-urlencoded by default without a parser
 server.addContentTypeParser(
@@ -40,8 +58,8 @@ server.addContentTypeParser(
   (_req, body, done) => {
     try {
       const params = new URLSearchParams(body as string);
-      const obj: Record<string, any> = {};
-      for (const [k, v] of params) obj[k] = v;
+      const obj: Record<string, string> = {};
+      for (const [k, v] of params) {obj[k] = v;}
       done(null, obj);
     } catch (err) {
       done(err as Error);
@@ -51,7 +69,7 @@ server.addContentTypeParser(
 
 // Register CORS (configurable via CORS_ORIGINS). If APP_ORIGIN is set, include it.
 const defaultOrigins = ['http://localhost:3000', 'http://localhost:5173'];
-if (process.env.APP_ORIGIN) defaultOrigins.push(process.env.APP_ORIGIN);
+if (process.env.APP_ORIGIN) {defaultOrigins.push(process.env.APP_ORIGIN);}
 // include production host by default
 defaultOrigins.push('https://ps.wildconstruct.com');
 const corsOrigins = (process.env.CORS_ORIGINS || defaultOrigins.join(','))
@@ -62,7 +80,7 @@ const corsOrigins = (process.env.CORS_ORIGINS || defaultOrigins.join(','))
 server.register(cors, {
   origin: (origin, cb) => {
     // Allow non-browser or same-origin requests (no Origin header)
-    if (!origin) return cb(null, true);
+    if (!origin) {return cb(null, true);}
     const allowed = corsOrigins.includes(origin);
     cb(null, allowed);
   },
@@ -95,10 +113,7 @@ server.get('/api/healthz', async () => {
 });
 
 // Preview endpoint - core functionality
-import { rateLimiter } from './utils/rateLimit';
-import { metrics } from './utils/metrics';
-
-server.post(
+server.post<{ Body: PreviewBody }>(
   '/preview',
   {
     preHandler: rateLimiter({
@@ -108,7 +123,7 @@ server.post(
   },
   async (request, reply) => {
     try {
-      const { graph, runs = 3, seedStart = 1 } = request.body as any;
+      const { graph, runs = 3, seedStart = 1 } = request.body;
 
       if (!graph || !graph.nodes) {
         return reply.status(400).send({ error: 'Invalid graph structure' });
@@ -123,7 +138,10 @@ server.post(
       for (let i = 0; i < runs; i++) {
         const seed = seedStart + i;
         try {
-          const result = await executeGraph(graph, `session-${seed}`);
+          // Convert API graph to core graph format and set seed
+          const coreGraph = convertToCoreGraph(graph);
+          coreGraph.seed = seed;
+          const result = await executeGraph(coreGraph);
           results.push({
             seed,
             output: result.outputs.join('\n')
@@ -143,7 +161,9 @@ server.post(
     } catch (error) {
       console.error('Preview error:', error);
       metrics.markError('preview.fatal');
-      return reply.status(500).send({ error: 'Internal server error' });
+      const message =
+        error instanceof Error ? error.message : 'Internal server error';
+      return reply.status(500).send({ error: message });
     }
   }
 );
@@ -275,12 +295,11 @@ const start = async () => {
     await server.listen({ port, host: '0.0.0.0' });
     console.log(`Server running on port ${port}`);
   } catch (err) {
-    if (Sentry) {
-      try {
-        (Sentry as any).captureException(err);
-      } catch {}
+    const error = err instanceof Error ? err : new Error(String(err));
+    if (Sentry && typeof Sentry.captureException === 'function') {
+      Sentry.captureException(error);
     }
-    server.log.error(err);
+    server.log.error(error);
     process.exit(1);
   }
 };

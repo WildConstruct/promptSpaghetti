@@ -373,11 +373,11 @@ export class ExtensionLifecycleManager {
     const errors = [];
     const warnings = [];
     // Basic validation
-    if (!extension.id) errors.push('Extension ID is required');
-    if (!extension.name) errors.push('Extension name is required');
-    if (!extension.version) errors.push('Extension version is required');
-    if (!extension.description) errors.push('Extension description is required');
-    if (!extension.author) errors.push('Extension author is required');
+    if (!extension.id) {errors.push('Extension ID is required');}
+    if (!extension.name) {errors.push('Extension name is required');}
+    if (!extension.version) {errors.push('Extension version is required');}
+    if (!extension.description) {errors.push('Extension description is required');}
+    if (!extension.author) {errors.push('Extension author is required');}
     // Lifecycle methods validation
     if (typeof extension.initialize !== 'function') {
       errors.push('Extension must implement initialize method');

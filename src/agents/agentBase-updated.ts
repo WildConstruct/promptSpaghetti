@@ -5,8 +5,40 @@ export interface Event {
   id: string;
   type: string;
   timestamp: string;
-  payload: any;
+  payload: Record<string, unknown>;
   agent_id: string;
+}
+
+interface ProductGoal {
+  id: string;
+  title: string;
+  description: string;
+  priority: string;
+  status: string;
+}
+
+interface Story {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  assignee?: string;
+}
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  assignee?: string;
+  storyId?: string;
+}
+
+interface Metrics {
+  cycle_time?: number;
+  throughput?: number;
+  wip?: number;
+  [key: string]: unknown;
 }
 
 export interface State {
@@ -14,11 +46,11 @@ export interface State {
     cycle: number;
     updated: string;
   };
-  product_goals: any[];
-  stories: any[];
-  tasks: Record<string, any>;
+  product_goals: ProductGoal[];
+  stories: Story[];
+  tasks: Record<string, Task>;
   assignments: Record<string, string[]>;
-  metrics: any;
+  metrics: Metrics;
   config: {
     wip_limit_per_dev: number;
     timeout_sec: number;
@@ -65,7 +97,7 @@ export abstract class AgentRunner {
   /**
    * Helper to create an event
    */
-  protected createEvent(type: string, payload: any): Event {
+  protected createEvent(type: string, payload: Record<string, unknown>): Event {
     return {
       id: `E-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type,
@@ -94,36 +126,36 @@ export abstract class AgentRunner {
   /**
    * Check if a task exists and get it
    */
-  protected getTask(state: State, taskId: string): any | null {
+  protected getTask(state: State, taskId: string): Task | null {
     return state.tasks[taskId] || null;
   }
 
   /**
    * Get all tasks for a specific story
    */
-  protected getTasksForStory(state: State, storyId: string): any[] {
-    return Object.values(state.tasks).filter(t => t.story_id === storyId);
+  protected getTasksForStory(state: State, storyId: string): Task[] {
+    return Object.values(state.tasks).filter(task => task.storyId === storyId);
   }
 
   /**
    * Get all unassigned tasks
    */
-  protected getUnassignedTasks(state: State): any[] {
-    return Object.values(state.tasks).filter(t => t.state === 'UNASSIGNED');
+  protected getUnassignedTasks(state: State): Task[] {
+    return Object.values(state.tasks).filter(task => !task.assignee);
   }
 
   /**
    * Get tasks by state
    */
-  protected getTasksByState(state: State, taskState: string): any[] {
-    return Object.values(state.tasks).filter(t => t.state === taskState);
+  protected getTasksByState(state: State, taskState: string): Task[] {
+    return Object.values(state.tasks).filter(task => task.status === taskState);
   }
 
   /**
    * Get tasks assigned to a specific developer
    */
-  protected getTasksForDeveloper(state: State, devId: string): any[] {
-    return Object.values(state.tasks).filter(t => t.assignee === devId);
+  protected getTasksForDeveloper(state: State, devId: string): Task[] {
+    return Object.values(state.tasks).filter(task => task.assignee === devId);
   }
 
   /**

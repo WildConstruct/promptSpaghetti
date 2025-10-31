@@ -52,10 +52,14 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
   // merge overrides into analysis so UI and launch use the swapped types
   const mergedAnalysis = useMemo(() => {
-    if (!analysis) return null;
+    if (!analysis) {
+      return null;
+    }
     const newNodes = analysis.nodes.map(gen => {
       const ov = nodeOverrides[gen.node.id];
-      if (!ov) return gen;
+      if (!ov) {
+        return gen;
+      }
       return {
         node: {
           ...gen.node,
@@ -93,7 +97,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
     (templateId: string) => {
       // Launch directly with a prebuilt graph
       const tmpl = quickStartTemplates[templateId];
-      if (!tmpl) return;
+      if (!tmpl) {
+        return;
+      }
       setIsTransitioning(true);
       setIsAnalyzing(false);
       setSelectedNodeId(null);
@@ -129,8 +135,12 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   // node actions: swap type helpers
   const applyNodeType = useCallback(
     (type: 'Text' | 'Choice') => {
-      if (!selectedNodeId) return;
-      if (selectedNodeId === 'output') return; // don't edit Output node
+      if (!selectedNodeId) {
+        return;
+      }
+      if (selectedNodeId === 'output') {
+        return; // don't edit Output node
+      }
       setNodeOverrides(prev => ({
         ...prev,
         [selectedNodeId]: {
@@ -144,11 +154,18 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   // Variable name change handler removed - no longer supporting Variables
 
   const resetNodeOverride = useCallback(() => {
-    if (!selectedNodeId) return;
-    if (selectedNodeId === 'output') return; // don't edit Output node
+    if (!selectedNodeId) {
+      return;
+    }
+    if (selectedNodeId === 'output') {
+      return; // don't edit Output node
+    }
     setNodeOverrides(prev => {
       const next = { ...prev };
-      delete next[selectedNodeId!];
+      const nodeId = selectedNodeId;
+      if (nodeId) {
+        delete next[nodeId];
+      }
       return next;
     });
   }, [selectedNodeId]);

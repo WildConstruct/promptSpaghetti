@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { useReactFlow, Edge } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 import './EdgeRoutingControls.css';
 
 export type EdgeRoutingAlgorithm = 'bezier' | 'smoothstep' | 'straight' | 'step';
@@ -16,7 +16,7 @@ interface EdgeRoutingControlsProps {
 export const EdgeRoutingControls: React.FC<EdgeRoutingControlsProps> = ({
   position = 'top-right'
 }) => {
-  const { getEdges, setEdges } = useReactFlow();
+  const { setEdges } = useReactFlow();
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<EdgeRoutingAlgorithm>('bezier');
   const [showControlPoints, setShowControlPoints] = useState(false);
   const [animatedEdges, setAnimatedEdges] = useState(false);

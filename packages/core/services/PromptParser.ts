@@ -5,11 +5,9 @@ import { z } from 'zod';
 import { LLMService } from './llm/LLMService';
 import { LLMRequest } from './llm/types';
 import { promptParser as standardParser } from '../runtime/nodes/epic1/PromptParser';
-import { PromptAnalysis } from '../runtime/nodes/epic1/PromptParser';
 import { ParserSecurity } from './ParserSecurity';
 import { ParserFallback } from './ParserFallback';
 import { LLMResponseProcessor } from './LLMResponseProcessor';
-import { CacheManager } from './llm/CacheManager';
 import { Node, Edge } from 'reactflow';
 
 // Parser options interface
@@ -21,19 +19,21 @@ export interface ParserOptions {
 }
 
 // Parse result interface
+type ParseMetadata = {
+  parserMode?: string;
+  fallbackReason?: string;
+  parseTime?: number;
+  cacheHit?: boolean;
+  segmentCount?: number;
+} & Record<string, unknown>;
+
 export interface ParseResult {
   nodes: Node[];
   edges: Edge[];
-  metadata: {
-    parserMode?: string;
-    fallbackReason?: string;
-    parseTime?: number;
-    cacheHit?: boolean;
-    [key: string]: any;
-  };
+  metadata: ParseMetadata;
 }
 
-// LLM response schema with strict validation
+// LLM response schema with permissive validation
 export const LLMResponseSchema = z
   .object({
     version: z.literal('psg-parse-v1'),
@@ -41,7 +41,7 @@ export const LLMResponseSchema = z
       z.object({
         type: z.enum(['Variable', 'WeightedChoice', 'TextBlock', 'Sequential']),
         content: z.string(),
-        metadata: z.record(z.any()).optional(),
+        metadata: z.record(z.unknown()).optional(),
         variables: z.array(z.string()).optional()
       })
     ),
@@ -53,7 +53,29 @@ export const LLMResponseSchema = z
       })
     )
   })
-  .strict();
+  .passthrough(); // Allow additional fields like 'segments'
+
+// Strict version for testing - rejects extra fields
+export const LLMResponseSchemaStrict = z
+  .object({
+    version: z.literal('psg-parse-v1'),
+    nodes: z.array(
+      z.object({
+        type: z.enum(['Variable', 'WeightedChoice', 'TextBlock', 'Sequential']),
+        content: z.string(),
+        metadata: z.record(z.unknown()).optional(),
+        variables: z.array(z.string()).optional()
+      })
+    ),
+    edges: z.array(
+      z.object({
+        source: z.number(),
+        target: z.number(),
+        label: z.string().optional()
+      })
+    )
+  })
+  .strict(); // Reject additional fields
 
 export type LLMParseResponse = z.infer<typeof LLMResponseSchema>;
 
@@ -62,7 +84,7 @@ export class PromptParser {
   private security: ParserSecurity;
   private fallback: ParserFallback;
   private responseProcessor: LLMResponseProcessor;
-  private cacheManager: CacheManager;
+  private parseCache: Map<string, ParseResult> = new Map();
   private retryCount = 2;
   private retryDelays = [300, 800]; // Exponential backoff in ms
 
@@ -71,7 +93,6 @@ export class PromptParser {
     this.security = new ParserSecurity();
     this.fallback = new ParserFallback();
     this.responseProcessor = new LLMResponseProcessor();
-    this.cacheManager = new CacheManager();
   }
 
   async parse(
@@ -91,10 +112,7 @@ export class PromptParser {
       try {
         // Check cache first
         const cacheKey = this.getCacheKey(sanitizedPrompt, options);
-        const cached = this.cacheManager.get(
-          { prompt: cacheKey } as any,
-          'parser'
-        );
+        const cached = this.parseCache.get(cacheKey);
 
         if (cached) {
           return {
@@ -115,7 +133,7 @@ export class PromptParser {
         );
 
         // Cache successful result
-        this.cacheManager.set({ prompt: cacheKey } as any, 'parser', result);
+        this.storeInCache(cacheKey, result);
 
         return {
           ...result,
@@ -176,10 +194,10 @@ export class PromptParser {
         }
 
         // Parse and validate response
-        let parsedResponse: any;
+        let parsedResponse: unknown;
         try {
           parsedResponse = JSON.parse(response.content);
-        } catch (e) {
+        } catch {
           throw new Error('Invalid JSON response from LLM');
         }
 
@@ -187,17 +205,17 @@ export class PromptParser {
         const validated = LLMResponseSchema.parse(parsedResponse);
 
         // Process response into nodes and edges
+        // Security check on raw LLM output
+        if (!this.security.validateOutputSafety(validated)) {
+          throw new Error('Security validation failed on LLM output');
+        }
+
         const result = await this.responseProcessor.processResponse(
           validated,
           originalPrompt,
           options,
           originalVariables
         );
-
-        // Security check on output
-        if (!this.security.validateOutputSafety(result)) {
-          throw new Error('Security validation failed on LLM output');
-        }
 
         return result;
       } catch (error) {
@@ -227,14 +245,18 @@ export class PromptParser {
       setTimeout(() => reject(new Error('LLM request timeout')), timeoutMs);
     });
 
-    const llmPromise = this.llmService.complete({
-      prompt: systemPrompt,
+    const combinedPrompt = `${systemPrompt}\n\n[USER_PROMPT]\n${userContent}`;
+
+    const request: LLMRequest = {
+      prompt: combinedPrompt,
       context: userContent,
       maxTokens: 800,
       temperature: 0.3,
       responseFormat: 'json',
       taskType: 'general'
-    } as LLMRequest);
+    };
+
+    const llmPromise = this.llmService.complete(request);
 
     try {
       const result = await Promise.race([llmPromise, timeoutPromise]);
@@ -269,14 +291,16 @@ export class PromptParser {
       });
     });
 
-    // Create edges based on sequential layout
-    for (let i = 0; i < nodes.length - 1; i++) {
-      edges.push({
-        id: `edge-${i}`,
-        source: nodes[i].id,
-        target: nodes[i + 1].id,
-        type: 'default'
-      });
+    // Create edges based on sequential layout when auto-connect is enabled
+    if (options.autoConnect) {
+      for (let i = 0; i < nodes.length - 1; i++) {
+        edges.push({
+          id: `edge-${i}`,
+          source: nodes[i].id,
+          target: nodes[i + 1].id,
+          type: 'default'
+        });
+      }
     }
 
     return {
@@ -287,6 +311,16 @@ export class PromptParser {
         segmentCount: analysis.segments.length
       }
     };
+  }
+
+  private storeInCache(key: string, result: ParseResult): void {
+    if (this.parseCache.size >= 50) {
+      const firstKey = this.parseCache.keys().next().value;
+      if (firstKey) {
+        this.parseCache.delete(firstKey);
+      }
+    }
+    this.parseCache.set(key, result);
   }
 
   private buildSystemPrompt(): string {
@@ -313,28 +347,28 @@ CRITICAL: Return ONLY valid JSON matching this exact schema:
 }
 
 Node Type Guidelines:
-- Variable: For character names, parameters, or ${variable} syntax (with dollar sign)
+- Variable: For character names, parameters, or \${variable} syntax (with dollar sign)
 - WeightedChoice: For {option1|option2|option3} bracket syntax OR lists of alternatives
 - TextBlock: For descriptive text, scenes, or narratives
 - Sequential: For temporal sequences (first, then, finally)
 
 Rules:
 1. {option1|option2} syntax creates WeightedChoice nodes (pipe-separated options in brackets)
-2. ${variable} syntax creates Variable nodes (dollar sign prefix)
+2. \${variable} syntax creates Variable nodes (dollar sign prefix)
 3. Create edges to show logical flow (no cycles)
 4. If uncertain about node type, use TextBlock with metadata.reason:"uncertain"
 5. Detect multilingual content and add metadata.lang
 6. For code blocks, create TextBlock with metadata.opaque:true
 7. Extract semantic meaning, not just sentence boundaries
 
-Example Input: "A {brave|cunning|wise} ${hero_name} ventures into the {dark forest|ancient ruins}, then fights the dragon."
+Example Input: "A {brave|cunning|wise} \${hero_name} ventures into the {dark forest|ancient ruins}, then fights the dragon."
 Example Output:
 {
   "version": "psg-parse-v1",
   "nodes": [
     {"type": "TextBlock", "content": "A", "metadata": {"role": "article"}},
     {"type": "WeightedChoice", "content": "brave|cunning|wise", "metadata": {"role": "descriptor"}},
-    {"type": "Variable", "content": "${hero_name}", "metadata": {"role": "character"}},
+    {"type": "Variable", "content": "\${hero_name}", "metadata": {"role": "character"}},
     {"type": "TextBlock", "content": "ventures into the", "metadata": {"role": "action"}},
     {"type": "WeightedChoice", "content": "dark forest|ancient ruins", "metadata": {"role": "location"}},
     {"type": "Sequential", "content": "then fights the dragon", "metadata": {"action": "combat"}}

@@ -99,7 +99,7 @@ export class SecurityManager {
       setTimeout(() => {
         if (this.executionStartTime) {
           throw new SecurityError(
-            `Execution timeout exceeded: ${this.securityConfig!.maxExecutionTime}ms`
+            `Execution timeout exceeded: ${this.securityConfig?.maxExecutionTime ?? 'unknown'}ms`
           );
         }
       }, this.securityConfig.maxExecutionTime);
@@ -161,12 +161,14 @@ export class SecurityManager {
       'Promise'
     ];
 
+    const globalScope = globalThis as Record<string, unknown>;
+
     const sandbox: SandboxEnvironment = {
       // Provide safe globals
       ...Object.fromEntries(
         allowedGlobals
-          .filter(name => typeof (globalThis as any)[name] !== 'undefined')
-          .map(name => [name, (globalThis as any)[name]])
+          .filter(name => typeof globalScope[name] !== 'undefined')
+          .map(name => [name, globalScope[name]])
       ),
 
       // Provide controlled access to restricted APIs
@@ -316,7 +318,7 @@ export class SecurityError extends Error {
  * Sandbox environment interface
  */
 export interface SandboxEnvironment {
-  [key: string]: any;
+  [key: string]: unknown;
   __securityManager: SecurityManager;
 }
 

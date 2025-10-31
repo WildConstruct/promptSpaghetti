@@ -92,7 +92,22 @@ export interface ValidationStep {
   description: string;
   automatable: boolean;
   command?: string;
-  expectedResult?: any;
+  expectedResult?: unknown;
+}
+
+export interface DeploymentMetrics {
+  testCoverage?: number;
+  securityScan?: {
+    status?: string;
+    criticalIssues?: number;
+    highIssues?: number;
+  };
+  performanceRegression?: {
+    percent?: number;
+  };
+  breakingChanges?: boolean;
+  changedFiles?: number;
+  linesChanged?: number;
 }
 
 // Default deployment approval rules
@@ -439,19 +454,19 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
  */
 export function getDeploymentApprovalRules(environment: string): DeploymentApprovalRule | null {
   return DEPLOYMENT_APPROVAL_RULES[environment] || null;
-
+}
 
 /**
  * Validate if a deployment meets auto-approval criteria
  */
 export function validateAutoApprovalCriteria(
   environment: string,
-  deploymentMetrics: any
+  deploymentMetrics: DeploymentMetrics
 ): { eligible: boolean; failedCriteria: string[]; passedCriteria: string[] } {
   const rules = getDeploymentApprovalRules(environment);
   if (!rules?.autoApprovalConditions) {
     return { eligible: false, failedCriteria: ['No auto-approval rules defined'], passedCriteria: [] };
-
+  }
 
   const failedCriteria: string[] = [];
   const passedCriteria: string[] = [];
@@ -462,7 +477,7 @@ export function validateAutoApprovalCriteria(
     const coverage = deploymentMetrics.testCoverage || 0;
     if (coverage >= conditions.testCoverage.minimum) {
       passedCriteria.push(`Test coverage: ${coverage}% >= ${conditions.testCoverage.minimum}%`);
-    }  } else {
+    } else {
       failedCriteria.push(`Test coverage: ${coverage}% < ${conditions.testCoverage.minimum}%`);
     }
   }
@@ -518,7 +533,7 @@ export function validateAutoApprovalCriteria(
     
     if (inAllowedHours && inAllowedDays) {
       passedCriteria.push('Business hours: deployment during allowed time');
-  } else {
+    } else {
       failedCriteria.push('Business hours: deployment outside allowed time window');
     }
   }
@@ -540,7 +555,7 @@ export function getReviewerAssignments(
   const rules = getDeploymentApprovalRules(environment);
   if (!rules) {
     return { reviewers: [], pools: [], strategy: 'none' };
-
+  }
 
   const assignment = rules.reviewerAssignment;
   let reviewers: string[] = [];

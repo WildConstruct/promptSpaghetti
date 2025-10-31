@@ -21,9 +21,7 @@ import {
   APIDataGenerator,
   PerformanceDataGenerator
 } from './TestDataGenerators';
-import PerformanceScenarios, {
-  PerformanceCategory
-} from './performance-scenarios';
+import PerformanceScenarios from './performance-scenarios';
 
 export interface TestHarnessConfig {
   environment: TestEnvironment;
@@ -62,6 +60,90 @@ export interface TestDefinition {
   skip?: boolean;
   only?: boolean;
   tags?: string[];
+}
+
+interface GraphExecutionBenchmark {
+  nodeCount: number;
+  executionTime: number;
+  memoryUsage: number;
+}
+
+interface ApiLatencyBenchmark {
+  endpoint: string;
+  avgLatency: number;
+  minLatency: number;
+  maxLatency: number;
+}
+
+type RenderingComplexity = 'simple' | 'medium' | 'complex';
+
+interface RenderingBenchmark {
+  nodeCount: number;
+  complexity: RenderingComplexity;
+  renderTime: number;
+  fps: number;
+}
+
+interface MemoryUsageMetrics {
+  baseline: number;
+  peak: number;
+  average: number;
+  gcCount: number;
+  gcTime: number;
+}
+
+interface ProtectionSummary {
+  totalPayloads: number;
+  blockedPayloads: number;
+  protectionRate: number;
+}
+
+interface AuthenticationSecurityResult {
+  tokenValidation: boolean;
+  sessionSecurity: boolean;
+  passwordHashing: boolean;
+  bruteForceProtection: boolean;
+  mfaSupport: boolean;
+}
+
+interface InputValidationResult {
+  lengthValidation: boolean;
+  typeValidation: boolean;
+  formatValidation: boolean;
+  sanitization: boolean;
+  encodingSupport: boolean;
+}
+
+interface PerformanceBenchmarkResults {
+  graphExecution: GraphExecutionBenchmark[];
+  apiLatency: ApiLatencyBenchmark[];
+  renderingPerformance: RenderingBenchmark[];
+  memoryUsage: MemoryUsageMetrics;
+}
+
+interface SecurityTestResults {
+  xssProtection: ProtectionSummary;
+  sqlInjectionProtection: ProtectionSummary;
+  authenticationSecurity: AuthenticationSecurityResult;
+  inputValidation: InputValidationResult;
+}
+
+interface TestHarnessStatus {
+  isRunning: boolean;
+  totalResults: number;
+  passedTests: number;
+  failedTests: number;
+  environments: ReturnType<TestEnvironmentManager['listEnvironments']>;
+  fixtures: string[];
+  lastRun: Date | null;
+}
+
+interface CoverageSummary {
+  lines: number;
+  statements: number;
+  functions: number;
+  branches: number;
+  percentage: number;
 }
 
 /**
@@ -213,7 +295,7 @@ export class TestHarness extends EventEmitter {
   /**
    * Run performance benchmarks
    */
-  async runPerformanceBenchmarks(): Promise<any> {
+  async runPerformanceBenchmarks(): Promise<PerformanceBenchmarkResults> {
     this.emit('performanceBenchmarksStarted');
 
     const benchmarks = {
@@ -230,7 +312,7 @@ export class TestHarness extends EventEmitter {
   /**
    * Run security tests
    */
-  async runSecurityTests(): Promise<any> {
+  async runSecurityTests(): Promise<SecurityTestResults> {
     this.emit('securityTestsStarted');
 
     const securityResults = {
@@ -247,7 +329,7 @@ export class TestHarness extends EventEmitter {
   /**
    * Get comprehensive test status
    */
-  getTestStatus(): any {
+  getTestStatus(): TestHarnessStatus {
     return {
       isRunning: this.isRunning,
       totalResults: this.results.length,
@@ -304,7 +386,7 @@ export class TestHarness extends EventEmitter {
       this.emit('testResult', result);
     });
 
-    this.framework.on('suiteComplete', (data: any) => {
+    this.framework.on('suiteComplete', (data: unknown) => {
       this.emit('suiteComplete', data);
     });
 
@@ -346,11 +428,19 @@ export class TestHarness extends EventEmitter {
     engineSuite.test('Graph Validation', async context => {
       const graph = context.fixtures.get('graph-simple-linear');
       context.utilities.assert.truthy(graph, 'Graph fixture should exist');
+      context.utilities.assert.truthy(
+        graph?.nodes?.length,
+        'Graph should include nodes'
+      );
     });
 
     engineSuite.test('Node Execution', async context => {
       const graph = context.fixtures.get('graph-complex-branching');
       // Test node execution logic
+      context.utilities.assert.truthy(
+        graph?.nodes?.length,
+        'Complex graph should include nodes'
+      );
       await context.utilities.wait(100); // Simulate execution time
     });
 
@@ -404,6 +494,10 @@ export class TestHarness extends EventEmitter {
         await context.utilities.wait(1000);
 
         const duration = Date.now() - startTime;
+        context.utilities.assert.truthy(
+          largeGraph.nodes.length > 0,
+          'Generated graph should contain nodes'
+        );
         context.utilities.assert.truthy(
           duration < 5000,
           'Processing should complete within 5 seconds'
@@ -499,6 +593,11 @@ export class TestHarness extends EventEmitter {
     plan: TestExecutionPlan
   ): Promise<TestResult[]> {
     this.results = [];
+    this.emit('testPlanStarted', {
+      suites: plan.suites.map(suite => suite.name),
+      environment: plan.environment,
+      estimatedDuration: plan.estimatedDuration
+    });
 
     // Execute test suites
     const results = await this.framework.runAll();
@@ -552,10 +651,13 @@ export class TestHarness extends EventEmitter {
     this.emit('postExecutionCleanup');
   }
 
-  private calculateOverallCoverage(results: TestResult[]): any {
+  private calculateOverallCoverage(results: TestResult[]): CoverageSummary {
     const coverageResults = results
       .map(r => r.coverage)
-      .filter(c => c !== undefined);
+      .filter(
+        (coverage): coverage is NonNullable<TestResult['coverage']> =>
+          coverage !== undefined
+      );
 
     if (coverageResults.length === 0) {
       return {
@@ -569,23 +671,23 @@ export class TestHarness extends EventEmitter {
 
     return {
       lines: Math.round(
-        coverageResults.reduce((sum, c) => sum + c!.lines, 0) /
+        coverageResults.reduce((sum, c) => sum + c.lines, 0) /
           coverageResults.length
       ),
       statements: Math.round(
-        coverageResults.reduce((sum, c) => sum + c!.statements, 0) /
+        coverageResults.reduce((sum, c) => sum + c.statements, 0) /
           coverageResults.length
       ),
       functions: Math.round(
-        coverageResults.reduce((sum, c) => sum + c!.functions, 0) /
+        coverageResults.reduce((sum, c) => sum + c.functions, 0) /
           coverageResults.length
       ),
       branches: Math.round(
-        coverageResults.reduce((sum, c) => sum + c!.branches, 0) /
+        coverageResults.reduce((sum, c) => sum + c.branches, 0) /
           coverageResults.length
       ),
       percentage: Math.round(
-        coverageResults.reduce((sum, c) => sum + c!.percentage, 0) /
+        coverageResults.reduce((sum, c) => sum + c.percentage, 0) /
           coverageResults.length
       )
     };
@@ -600,14 +702,14 @@ export class TestHarness extends EventEmitter {
   }
 
   // Benchmark methods
-  private async benchmarkGraphExecution(): Promise<any> {
+  private async benchmarkGraphExecution(): Promise<GraphExecutionBenchmark[]> {
     const graphs = [
       this.generators.graph.generateGraph({ nodeCount: 10 }),
       this.generators.graph.generateGraph({ nodeCount: 50 }),
       this.generators.graph.generateGraph({ nodeCount: 100 })
     ];
 
-    const results = [];
+    const results: GraphExecutionBenchmark[] = [];
     for (const graph of graphs) {
       const startTime = Date.now();
       // Simulate graph execution
@@ -622,12 +724,12 @@ export class TestHarness extends EventEmitter {
     return results;
   }
 
-  private async benchmarkAPILatency(): Promise<any> {
+  private async benchmarkAPILatency(): Promise<ApiLatencyBenchmark[]> {
     const endpoints = ['/api/auth/login', '/api/graphs', '/api/execute'];
-    const results = [];
+    const results: ApiLatencyBenchmark[] = [];
 
     for (const endpoint of endpoints) {
-      const latencies = [];
+      const latencies: number[] = [];
       for (let i = 0; i < 10; i++) {
         const startTime = Date.now();
         // Simulate API call
@@ -648,14 +750,14 @@ export class TestHarness extends EventEmitter {
     return results;
   }
 
-  private async benchmarkRendering(): Promise<any> {
+  private async benchmarkRendering(): Promise<RenderingBenchmark[]> {
     const scenarios = [
       { nodeCount: 10, complexity: 'simple' },
       { nodeCount: 50, complexity: 'medium' },
       { nodeCount: 100, complexity: 'complex' }
     ];
 
-    const results = [];
+    const results: RenderingBenchmark[] = [];
     for (const scenario of scenarios) {
       const startTime = Date.now();
       // Simulate rendering
@@ -672,22 +774,22 @@ export class TestHarness extends EventEmitter {
     return results;
   }
 
-  private async benchmarkMemoryUsage(): Promise<any> {
+  private async benchmarkMemoryUsage(): Promise<MemoryUsageMetrics> {
     // Simulate memory usage monitoring
     return {
       baseline: 45,
       peak: 120,
       average: 78,
-      gc_count: 5,
-      gc_time: 25
+      gcCount: 5,
+      gcTime: 25
     };
   }
 
   // Security test methods
-  private async testXSSProtection(): Promise<any> {
+  private async testXSSProtection(): Promise<ProtectionSummary> {
     const xssPayloads =
       this.fixtureManager.get('security-xss-payloads')?.data || [];
-    const results = [];
+    const results: Array<{ payload: string; blocked: boolean }> = [];
 
     for (const payload of xssPayloads) {
       // Simulate XSS protection testing
@@ -703,10 +805,10 @@ export class TestHarness extends EventEmitter {
     };
   }
 
-  private async testSQLInjectionProtection(): Promise<any> {
+  private async testSQLInjectionProtection(): Promise<ProtectionSummary> {
     const sqlPayloads =
       this.fixtureManager.get('security-sql-injection')?.data || [];
-    const results = [];
+    const results: Array<{ payload: string; blocked: boolean }> = [];
 
     for (const payload of sqlPayloads) {
       // Simulate SQL injection protection testing
@@ -722,7 +824,7 @@ export class TestHarness extends EventEmitter {
     };
   }
 
-  private async testAuthenticationSecurity(): Promise<any> {
+  private async testAuthenticationSecurity(): Promise<AuthenticationSecurityResult> {
     // Simulate authentication security testing
     return {
       tokenValidation: true,
@@ -733,7 +835,7 @@ export class TestHarness extends EventEmitter {
     };
   }
 
-  private async testInputValidation(): Promise<any> {
+  private async testInputValidation(): Promise<InputValidationResult> {
     // Simulate input validation testing
     return {
       lengthValidation: true,

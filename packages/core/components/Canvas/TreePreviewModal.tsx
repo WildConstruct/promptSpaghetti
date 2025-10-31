@@ -19,9 +19,17 @@ export const TreePreviewModal: React.FC<TreePreviewModalProps> = ({
 }) => {
   const [anim, setAnim] = useState(false);
   useEffect(() => {
-    if (visible) setTimeout(() => setAnim(true), 0);
+    if (!visible) {
+      return undefined;
+    }
+    const timer = setTimeout(() => setAnim(true), 0);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [visible]);
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   const { template, nodes, edges, confidence } = result;
 
@@ -86,7 +94,18 @@ export const TreePreviewModal: React.FC<TreePreviewModalProps> = ({
           <div
             style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}
           >
-            <MiniCanvas nodes={nodes as any} edges={edges as any} />
+            <MiniCanvas
+              nodes={nodes.map(node => ({
+                id: node.id,
+                position: node.position,
+                type: node.type,
+                data: node.data ?? {}
+              }))}
+              edges={edges.map(edge => ({
+                source: edge.source,
+                target: edge.target
+              }))}
+            />
             <div>
               <div style={{ fontWeight: 600, marginBottom: 6 }}>Summary</div>
               <ul style={{ margin: 0, paddingLeft: 16 }}>
@@ -141,19 +160,24 @@ export const TreePreviewModal: React.FC<TreePreviewModalProps> = ({
 export default TreePreviewModal;
 
 // MiniCanvas: very lightweight static preview using SVG
-const MiniCanvas: React.FC<{
-  nodes: Array<{
-    id: string;
-    position: { x: number; y: number };
-    data?: any;
-    type?: string;
-  }>;
+interface MiniCanvasNode {
+  id: string;
+  position: { x: number; y: number };
+  data?: Record<string, unknown>;
+  type?: string;
+}
+
+interface MiniCanvasProps {
+  nodes: MiniCanvasNode[];
   edges: Array<{ source: string; target: string }>;
-}> = ({ nodes, edges }) => {
-  if (!nodes || nodes.length === 0)
+}
+
+const MiniCanvas: React.FC<MiniCanvasProps> = ({ nodes, edges }) => {
+  if (nodes.length === 0) {
     return (
       <div style={{ fontSize: 12, opacity: 0.7 }}>No nodes to preview</div>
     );
+  }
   const minX = Math.min(...nodes.map(n => n.position?.x ?? 0));
   const minY = Math.min(...nodes.map(n => n.position?.y ?? 0));
   const maxX = Math.max(...nodes.map(n => n.position?.x ?? 0));
@@ -166,41 +190,53 @@ const MiniCanvas: React.FC<{
   const scaleX = (viewW - pad * 2) / (width || 1);
   const scaleY = (viewH - pad * 2) / (height || 1);
   const scale = Math.min(scaleX, scaleY);
-  const pos = (n: any) => ({
-    x: pad + (n.position.x - minX) * scale,
-    y: pad + (n.position.y - minY) * scale
+  const positionNode = (node: MiniCanvasNode) => ({
+    x: pad + ((node.position?.x ?? 0) - minX) * scale,
+    y: pad + ((node.position?.y ?? 0) - minY) * scale
   });
   const posMap = new Map<string, { x: number; y: number }>();
-  nodes.forEach(n => posMap.set(n.id, pos(n)));
+  nodes.forEach(node => posMap.set(node.id, positionNode(node)));
   return (
     <svg
       width={viewW}
       height={viewH}
       style={{ background: '#0b0b0b', borderRadius: 6 }}
     >
-      {edges.map((e, i) => {
-        const s = posMap.get(e.source);
-        const t = posMap.get(e.target);
-        if (!s || !t) return null;
+      {edges.map(edge => {
+        const start = posMap.get(edge.source);
+        const end = posMap.get(edge.target);
+        if (!start || !end) {
+          return null;
+        }
         return (
           <line
-            key={i}
-            x1={s.x}
-            y1={s.y}
-            x2={t.x}
-            y2={t.y}
+            key={`${edge.source}-${edge.target}`}
+            x1={start.x}
+            y1={start.y}
+            x2={end.x}
+            y2={end.y}
             stroke="#555"
             strokeWidth={2}
           />
         );
       })}
-      {nodes.map(n => {
-        const p = posMap.get(n.id)!;
+      {nodes.map(node => {
+        const coords = posMap.get(node.id);
+        if (!coords) {
+          return null;
+        }
+        const displayLabel = (() => {
+          const rawLabel =
+            (typeof node.data?.label === 'string' && node.data.label) ||
+            node.type ||
+            node.id;
+          return rawLabel.toString().slice(0, 12);
+        })();
         return (
-          <g key={n.id}>
+          <g key={node.id}>
             <rect
-              x={p.x - 18}
-              y={p.y - 10}
+              x={coords.x - 18}
+              y={coords.y - 10}
               width={36}
               height={20}
               rx={4}
@@ -209,13 +245,13 @@ const MiniCanvas: React.FC<{
               stroke="#6b7280"
             />
             <text
-              x={p.x}
-              y={p.y + 4}
+              x={coords.x}
+              y={coords.y + 4}
               fontSize={8}
               fill="#d1d5db"
               textAnchor="middle"
             >
-              {(n.data?.label || n.type || n.id).toString().slice(0, 12)}
+              {displayLabel}
             </text>
           </g>
         );

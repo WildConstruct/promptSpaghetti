@@ -64,7 +64,7 @@ export class SecurityManager {
         if (this.securityConfig?.maxExecutionTime) {
             setTimeout(() => {
                 if (this.executionStartTime) {
-                    throw new SecurityError(`Execution timeout exceeded: ${this.securityConfig.maxExecutionTime}ms`);
+                    throw new SecurityError(`Execution timeout exceeded: ${this.securityConfig?.maxExecutionTime ?? 'unknown'}ms`);
                 }
             }, this.securityConfig.maxExecutionTime);
         }

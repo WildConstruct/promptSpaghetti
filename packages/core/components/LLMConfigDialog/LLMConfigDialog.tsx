@@ -133,10 +133,20 @@ const styles = {
   }
 };
 
+type LLMProvider = 'openrouter' | 'openai' | 'anthropic';
+
+export interface LLMConfig {
+  provider: LLMProvider;
+  apiKey: string;
+  model: string;
+  temperature: number;
+  maxTokens: number;
+}
+
 export interface LLMConfigDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave?: (config: any) => void;
+  onSave?: (config: LLMConfig) => void;
 }
 
 export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
@@ -144,17 +154,23 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
   onClose,
   onSave
 }) => {
-  const [provider, setProvider] = useState<
-    'openrouter' | 'openai' | 'anthropic'
-  >('openrouter');
+  const [provider, setProvider] = useState<LLMProvider>('openrouter');
   const [apiKey, setApiKey] = useState('');
   const [model, setModel] = useState('openai/gpt-3.5-turbo');
   const [temperature, setTemperature] = useState(0.7);
   const [maxTokens, setMaxTokens] = useState(500);
   const [showApiKey, setShowApiKey] = useState(false);
 
+  const handleProviderChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const nextProvider = event.target.value as LLMProvider;
+      setProvider(nextProvider);
+    },
+    []
+  );
+
   const handleSave = useCallback(() => {
-    const config = {
+    const config: LLMConfig = {
       provider,
       apiKey,
       model,
@@ -173,7 +189,9 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
     onClose();
   }, [provider, apiKey, model, temperature, maxTokens, onSave, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div style={styles.overlay} onClick={onClose}>
@@ -194,7 +212,7 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
               <select
                 style={styles.select}
                 value={provider}
-                onChange={e => setProvider(e.target.value as any)}
+                onChange={handleProviderChange}
               >
                 <option value="openrouter">OpenRouter</option>
                 <option value="openai">OpenAI</option>

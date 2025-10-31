@@ -7,7 +7,31 @@ import fs from 'fs/promises';
 import path from 'path';
 import { randomBytes } from 'crypto';
 import { fixtures } from './testFixtures';
-import { testUtils } from './mockHelpers';
+
+type GeneratorOptions = Record<string, unknown>;
+type TestDataGenerator<T = unknown> = (count?: number, options?: GeneratorOptions) => T[];
+
+interface GraphLike {
+  nodes: unknown[];
+  edges: unknown[];
+}
+
+interface DatabaseFile {
+  id: string;
+  name: string;
+  schema: Record<string, unknown>;
+  tables: Record<string, unknown[]>;
+  createdAt: string;
+  updatedAt?: string;
+  testGenerated: boolean;
+}
+
+interface ExportPayload {
+  config: TestDataConfig;
+  snapshots: TestDataSnapshot[];
+  statistics: ReturnType<TestDataManager['getStatistics']>;
+  exportedAt: string;
+}
 
 export interface TestDataConfig {
   seed?: number;
@@ -29,7 +53,7 @@ export interface TestDataSnapshot {
   id: string;
   timestamp: string;
   testSuite: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   metadata: {
     seed: number;
     environment: string;
@@ -42,21 +66,22 @@ export interface TestDataRequest {
   type: string;
   count?: number;
   seed?: number;
-  options?: Record<string, any>;
-  constraints?: Record<string, any>;
+  options?: GeneratorOptions;
+  constraints?: GeneratorOptions;
 }
 
 export class TestDataManager {
   private config: TestDataConfig;
-  private cache: Map<string, any>;
+  private cache: Map<string, unknown>;
   private snapshots: Map<string, TestDataSnapshot>;
-  private generators: Map<string, Function>;
+  private generators: Map<string, TestDataGenerator>;
   private dataDirectory: string;
   private currentSeed: number;
 
   constructor(config: Partial<TestDataConfig> = {}) {
+    const initialSeed = config.seed ?? Math.floor(Math.random() * 1000000);
     this.config = {
-      seed: config.seed || Math.floor(Math.random() * 1000000),
+      seed: initialSeed,
       environment: config.environment || 'test',
       persistence: {
         enabled: true,
@@ -80,7 +105,7 @@ export class TestDataManager {
       process.cwd(),
       this.config.persistence.directory
     );
-    this.currentSeed = this.config.seed!;
+    this.currentSeed = initialSeed;
 
     this.initializeGenerators();
   }
@@ -90,18 +115,23 @@ export class TestDataManager {
    */
   private initializeGenerators() {
     // User data generator
-    this.registerGenerator('user', (count = 1, options = {}) => {
+    this.registerGenerator('user', (count = 1, options: GeneratorOptions = {}) => {
+      const userOptions = options as {
+        role?: string;
+        active?: boolean;
+        permissions?: string[];
+      };
       return Array.from({ length: count }, (_, i) => ({
         id: this.generateId('user'),
         username: `testuser${i + 1}`,
         email: `test${i + 1}@example.com`,
         name: `Test User ${i + 1}`,
-        role: options.role || 'user',
-        active: options.active !== false,
+        role: userOptions.role ?? 'user',
+        active: userOptions.active !== false,
         createdAt: new Date(
           Date.now() - Math.random() * 86400000
         ).toISOString(),
-        permissions: options.permissions || ['read'],
+        permissions: userOptions.permissions ?? ['read'],
         profile: {
           avatar: `https://api.dicebear.com/6.x/personas/svg?seed=user${i + 1}`,
           bio: `Test user ${i + 1} biography`,
@@ -115,10 +145,14 @@ export class TestDataManager {
     });
 
     // Graph data generator
-    this.registerGenerator('graph', (count = 1, options = {}) => {
+    this.registerGenerator('graph', (count = 1, options: GeneratorOptions = {}) => {
       const graphTypes = ['simple', 'branching', 'complex'];
+      const graphOptions = options as {
+        type?: string;
+        tags?: string[];
+      };
       return Array.from({ length: count }, (_, i) => {
-        const type = options.type || graphTypes[i % graphTypes.length];
+        const type = graphOptions.type ?? graphTypes[i % graphTypes.length];
         const baseGraph = this.getFixtureGraph(type);
 
         return {
@@ -126,7 +160,7 @@ export class TestDataManager {
           name: `Test Graph ${i + 1}`,
           description: `Generated test graph of type ${type}`,
           version: '1.0.0',
-          tags: options.tags || ['test', type],
+          tags: graphOptions.tags ?? ['test', type],
           createdAt: new Date().toISOString(),
           ...baseGraph,
           metadata: {
@@ -140,17 +174,23 @@ export class TestDataManager {
     });
 
     // API response generator
-    this.registerGenerator('apiResponse', (count = 1, options = {}) => {
+    this.registerGenerator('apiResponse', (count = 1, options: GeneratorOptions = {}) => {
+      const responseOptions = options as {
+        status?: number;
+        statusText?: string;
+        data?: unknown;
+        headers?: Record<string, string>;
+      };
       return Array.from({ length: count }, (_, i) => ({
         id: this.generateId('response'),
-        status: options.status || 200,
-        statusText: options.statusText || 'OK',
-        data: options.data || { message: `Test response ${i + 1}` },
+        status: responseOptions.status ?? 200,
+        statusText: responseOptions.statusText ?? 'OK',
+        data: responseOptions.data ?? { message: `Test response ${i + 1}` },
         timestamp: new Date().toISOString(),
         headers: {
           'content-type': 'application/json',
           'x-request-id': this.generateId('req'),
-          ...options.headers
+          ...(responseOptions.headers ?? {})
         },
         metadata: {
           responseTime: Math.floor(Math.random() * 100) + 50,
@@ -161,10 +201,13 @@ export class TestDataManager {
     });
 
     // File data generator
-    this.registerGenerator('file', (count = 1, options = {}) => {
+    this.registerGenerator('file', (count = 1, options: GeneratorOptions = {}) => {
       const fileTypes = ['json', 'csv', 'txt', 'xml'];
+      const fileOptions = options as {
+        type?: string;
+      };
       return Array.from({ length: count }, (_, i) => {
-        const ext = options.type || fileTypes[i % fileTypes.length];
+        const ext = fileOptions.type ?? fileTypes[i % fileTypes.length];
         return {
           id: this.generateId('file'),
           name: `test-file-${i + 1}.${ext}`,
@@ -184,10 +227,20 @@ export class TestDataManager {
     });
 
     // Performance data generator
-    this.registerGenerator('performance', (count = 1, options = {}) => {
+    this.registerGenerator('performance', (count = 1, options: GeneratorOptions = {}) => {
+      const performanceOptions = options as {
+        testName?: string;
+        baseline?: {
+          executionTime: number;
+          memoryUsage: number;
+          cpuUsage: number;
+          networkLatency: number;
+        };
+        passed?: boolean;
+      };
       return Array.from({ length: count }, (_, i) => ({
         id: this.generateId('perf'),
-        testName: options.testName || `performance-test-${i + 1}`,
+        testName: performanceOptions.testName ?? `performance-test-${i + 1}`,
         metrics: {
           executionTime: Math.floor(Math.random() * 1000) + 100,
           memoryUsage: Math.floor(Math.random() * 100) + 10,
@@ -196,36 +249,44 @@ export class TestDataManager {
         },
         timestamp: new Date().toISOString(),
         environment: this.config.environment,
-        baseline: options.baseline || {
+        baseline: performanceOptions.baseline ?? {
           executionTime: 500,
           memoryUsage: 50,
           cpuUsage: 30,
           networkLatency: 20
         },
-        passed: options.passed !== false,
+        passed: performanceOptions.passed !== false,
         testGenerated: true
       }));
     });
 
     // Error data generator
-    this.registerGenerator('error', (count = 1, options = {}) => {
+    this.registerGenerator('error', (count = 1, options: GeneratorOptions = {}) => {
       const errorTypes = [
         'ValidationError',
         'NetworkError',
         'AuthenticationError',
         'NotFoundError'
       ];
+      const errorOptions = options as {
+        name?: string;
+        message?: string;
+        code?: string;
+        statusCode?: number;
+        stack?: string;
+        context?: Record<string, unknown>;
+      };
       return Array.from({ length: count }, (_, i) => ({
         id: this.generateId('error'),
-        name: options.name || errorTypes[i % errorTypes.length],
-        message: options.message || `Test error message ${i + 1}`,
-        code: options.code || `E${1000 + i}`,
-        statusCode: options.statusCode || 400,
+        name: errorOptions.name ?? errorTypes[i % errorTypes.length],
+        message: errorOptions.message ?? `Test error message ${i + 1}`,
+        code: errorOptions.code ?? `E${1000 + i}`,
+        statusCode: errorOptions.statusCode ?? 400,
         stack: this.generateStackTrace(
-          options.name || errorTypes[i % errorTypes.length]
+          errorOptions.name ?? errorTypes[i % errorTypes.length]
         ),
         timestamp: new Date().toISOString(),
-        context: options.context || {
+        context: errorOptions.context ?? {
           operation: `test-operation-${i + 1}`,
           userId: this.generateId('user'),
           requestId: this.generateId('req')
@@ -238,14 +299,14 @@ export class TestDataManager {
   /**
    * Register a custom data generator
    */
-  registerGenerator(type: string, generator: Function) {
+  registerGenerator<T>(type: string, generator: TestDataGenerator<T>) {
     this.generators.set(type, generator);
   }
 
   /**
    * Generate test data of specified type
    */
-  async generate<T = any>(request: TestDataRequest): Promise<T[]> {
+  async generate<T = unknown>(request: TestDataRequest): Promise<T[]> {
     const { type, count = 1, seed, options = {}, constraints = {} } = request;
 
     // Use provided seed or current seed
@@ -256,11 +317,11 @@ export class TestDataManager {
 
     // Check cache first
     if (this.cache.has(cacheKey) && this.config.generation.deterministic) {
-      return this.cache.get(cacheKey);
+      return this.cache.get(cacheKey) as T[];
     }
 
     // Get generator
-    const generator = this.generators.get(type);
+    const generator = this.generators.get(type) as TestDataGenerator<T> | undefined;
     if (!generator) {
       throw new Error(`No generator found for type: ${type}`);
     }
@@ -281,8 +342,8 @@ export class TestDataManager {
    */
   async generateBatch(
     requests: TestDataRequest[]
-  ): Promise<Record<string, any[]>> {
-    const results: Record<string, any[]> = {};
+  ): Promise<Record<string, unknown[]>> {
+    const results: Record<string, unknown[]> = {};
 
     for (const request of requests) {
       results[request.type] = await this.generate(request);
@@ -296,7 +357,7 @@ export class TestDataManager {
    */
   async createSnapshot(
     testSuite: string,
-    data: Record<string, any>
+    data: Record<string, unknown>
   ): Promise<string> {
     const snapshot: TestDataSnapshot = {
       id: this.generateId('snapshot'),
@@ -325,8 +386,9 @@ export class TestDataManager {
    */
   async loadSnapshot(snapshotId: string): Promise<TestDataSnapshot | null> {
     // Check memory first
-    if (this.snapshots.has(snapshotId)) {
-      return this.snapshots.get(snapshotId)!;
+    const cachedSnapshot = this.snapshots.get(snapshotId);
+    if (cachedSnapshot) {
+      return cachedSnapshot;
     }
 
     // Try to load from disk
@@ -340,8 +402,8 @@ export class TestDataManager {
   /**
    * Get fixture data
    */
-  getFixture<T = any>(category: string, name: string): T {
-    const categoryFixtures = (fixtures as any)[category];
+  getFixture<T = unknown>(category: string, name: string): T {
+    const categoryFixtures = (fixtures as Record<string, Record<string, unknown>>)[category];
     if (!categoryFixtures) {
       throw new Error(`Fixture category not found: ${category}`);
     }
@@ -351,13 +413,17 @@ export class TestDataManager {
       throw new Error(`Fixture not found: ${category}.${name}`);
     }
 
-    return typeof fixture === 'function' ? fixture() : fixture;
+    if (typeof fixture === 'function') {
+      return (fixture as () => T)();
+    }
+
+    return fixture as T;
   }
 
   /**
    * Create test database
    */
-  async createTestDatabase(name: string, schema?: any): Promise<string> {
+  async createTestDatabase(name: string, schema?: Record<string, unknown>): Promise<string> {
     const dbId = this.generateId('db');
     const dbPath = path.join(
       this.dataDirectory,
@@ -368,7 +434,7 @@ export class TestDataManager {
     const database = {
       id: dbId,
       name,
-      schema: schema || {},
+      schema: schema ?? {},
       tables: {},
       createdAt: new Date().toISOString(),
       testGenerated: true
@@ -385,7 +451,7 @@ export class TestDataManager {
    */
   async seedDatabase(
     dbId: string,
-    tableData: Record<string, any[]>
+    tableData: Record<string, unknown[]>
   ): Promise<void> {
     const dbPath = path.join(this.dataDirectory, 'databases', `*_${dbId}.json`);
     const files = await this.globFiles(dbPath);
@@ -394,7 +460,7 @@ export class TestDataManager {
       throw new Error(`Database not found: ${dbId}`);
     }
 
-    const database = JSON.parse(await fs.readFile(files[0], 'utf8'));
+    const database = JSON.parse(await fs.readFile(files[0], 'utf8')) as DatabaseFile;
     database.tables = { ...database.tables, ...tableData };
     database.updatedAt = new Date().toISOString();
 
@@ -448,7 +514,15 @@ export class TestDataManager {
   /**
    * Get usage statistics
    */
-  getStatistics() {
+  getStatistics(): {
+    cacheSize: number;
+    snapshotCount: number;
+    generatorCount: number;
+    currentSeed: number;
+    environment: string;
+    persistenceEnabled: boolean;
+    dataDirectory: string;
+  } {
     return {
       cacheSize: this.cache.size,
       snapshotCount: this.snapshots.size,
@@ -464,7 +538,7 @@ export class TestDataManager {
    * Export test data for sharing
    */
   async export(format: 'json' | 'csv' = 'json'): Promise<string> {
-    const exportData = {
+    const exportData: ExportPayload = {
       config: this.config,
       snapshots: Array.from(this.snapshots.values()),
       statistics: this.getStatistics(),
@@ -528,31 +602,34 @@ export class TestDataManager {
     return `${request.type}_${request.count}_${JSON.stringify(request.options)}_${JSON.stringify(request.constraints)}`;
   }
 
-  private getFixtureGraph(type: string) {
+  private getFixtureGraph(type: string): GraphLike {
     switch (type) {
       case 'simple':
-        return fixtures.graphs.simple;
+        return fixtures.graphs.simple as GraphLike;
       case 'branching':
-        return fixtures.graphs.branching;
+        return fixtures.graphs.branching as GraphLike;
       case 'complex':
-        return fixtures.graphs.complex;
+        return fixtures.graphs.complex as GraphLike;
       default:
-        return fixtures.graphs.simple;
+        return fixtures.graphs.simple as GraphLike;
     }
   }
 
-  private calculateGraphComplexity(graph: any): number {
+  private calculateGraphComplexity(graph: GraphLike): number {
     const nodeCount = graph.nodes.length;
     const edgeCount = graph.edges.length;
     const branchingFactor = edgeCount / Math.max(nodeCount - 1, 1);
     return Math.round(nodeCount * 0.5 + edgeCount * 0.3 + branchingFactor * 2);
   }
 
-  private generateFileContent(type: string, options: any): string {
+  private generateFileContent(type: string, options: GeneratorOptions): string {
     switch (type) {
       case 'json':
         return JSON.stringify(
-          { test: true, data: options.data || 'sample' },
+          {
+            test: true,
+            data: 'data' in options ? options.data : 'sample'
+          },
           null,
           2
         );
@@ -659,7 +736,7 @@ export class TestDataManager {
     }
   }
 
-  private convertToCSV(data: any): string {
+  private convertToCSV(data: ExportPayload): string {
     // Simple CSV conversion for export
     const rows = [];
     rows.push('Type,ID,Timestamp,TestSuite,DataCount');
@@ -743,7 +820,7 @@ export const testData = {
   /**
    * Create snapshot of test data
    */
-  snapshot: (testSuite: string, data: Record<string, any>) =>
+  snapshot: (testSuite: string, data: Record<string, unknown>) =>
     getTestDataManager().createSnapshot(testSuite, data),
 
   /**

@@ -377,7 +377,7 @@ export class PerformanceTestUtils {
   static async measureExecution<T>(
     fn: () => Promise<T> | T,
     name: string = 'function'
-  ): Promise<{ result: T; executionTime: number; memoryUsage: unknown }> {
+  ): Promise<{ result: T; executionTime: number; memoryUsage: unknown; operationName: string }> {
     const startTime = process.hrtime.bigint();
     const startMemory = process.memoryUsage();
 
@@ -396,7 +396,7 @@ export class PerformanceTestUtils {
       gcTime: 0
     };
 
-    return { result, executionTime, memoryUsage };
+    return { result, executionTime, memoryUsage, operationName: name };
   }
 
   static generateLoadTest(

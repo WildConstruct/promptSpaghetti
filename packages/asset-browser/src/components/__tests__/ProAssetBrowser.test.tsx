@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
@@ -46,7 +46,9 @@ const MockProAssetBrowser = () => {
         if (response.ok) {
           const data = await response.json();
           if (data.presets) {
-            setPresets(data.presets);
+            act(() => {
+              setPresets(data.presets);
+            });
           }
         }
       } catch (e) {
@@ -59,7 +61,9 @@ const MockProAssetBrowser = () => {
         if (response.ok) {
           const data = await response.json();
           if (data.fragments) {
-            setFragments(data.fragments);
+            act(() => {
+              setFragments(data.fragments);
+            });
           }
         }
       } catch (e) {
@@ -105,10 +109,10 @@ const MockProAssetBrowser = () => {
           type="text"
           placeholder="search"
           value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
+          onChange={e => act(() => setSearchQuery(e.target.value))}
         />
-        <button onClick={() => setSelectedCategory('face')}>face</button>
-        <button onClick={() => setSelectedCategory('hair')}>hair</button>
+        <button onClick={() => act(() => setSelectedCategory('face'))}>face</button>
+        <button onClick={() => act(() => setSelectedCategory('hair'))}>hair</button>
       </div>
       <div
         className="preset-list-container"
@@ -312,16 +316,9 @@ describe('ProAssetBrowser', () => {
       await userEvent.type(searchInput, 'smile');
 
       await waitFor(() => {
-        const buttons = screen.getAllByRole('button');
-        const smileButton = buttons.find(
-          b => b.textContent === 'Smile Variation'
-        );
-        const eyeButton = buttons.find(b => b.textContent === 'Eye Color');
-        const hairButton = buttons.find(b => b.textContent === 'Hair Style');
-
-        expect(smileButton).toBeInTheDocument();
-        expect(eyeButton).not.toBeInTheDocument();
-        expect(hairButton).not.toBeInTheDocument();
+        expect(screen.getByText('Smile Variation')).toBeInTheDocument();
+        expect(screen.queryByText('Eye Color')).not.toBeInTheDocument();
+        expect(screen.queryByText('Hair Style')).not.toBeInTheDocument();
       });
     });
 
@@ -353,16 +350,12 @@ describe('ProAssetBrowser', () => {
       // Wait a bit for state update
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const faceButton = screen.getByRole('button', { name: /face/i });
+      const faceButton = screen.getByRole('button', { name: /^face$/ });
       fireEvent.click(faceButton);
 
       await waitFor(() => {
-        const buttons = screen.getAllByRole('button');
-        const faceItem = buttons.find(b => b.textContent === 'Face Item');
-        const hairItem = buttons.find(b => b.textContent === 'Hair Item');
-
-        expect(faceItem).toBeInTheDocument();
-        expect(hairItem).not.toBeInTheDocument();
+        expect(screen.getByText('Face Item')).toBeInTheDocument();
+        expect(screen.queryByText('Hair Item')).not.toBeInTheDocument();
       });
     });
   });

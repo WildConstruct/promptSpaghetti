@@ -99,7 +99,7 @@ export class GraphExecutionTracker {
    */
   getExecutionPath(executionId) {
     const execution = this.activeExecutions.get(executionId);
-    if (!execution) return null;
+    if (!execution) {return null;}
     return {
       id: executionId,
       seed: execution.seed,
@@ -142,7 +142,7 @@ export class ExecutionPathAnalyzer {
    * Calculate execution path variance across multiple results
    */
   static calculatePathVariance(paths) {
-    if (paths.length <= 1) return 0;
+    if (paths.length <= 1) {return 0;}
     const nodeUsageCounts = new Map();
     const totalPaths = paths.length;
     // Count how often each node is used

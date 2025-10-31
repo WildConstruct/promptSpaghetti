@@ -129,7 +129,7 @@ class EnhancedTicketTracker {
    * Track ticket approval with enhanced data
    */
   async trackApproval(ticketId, agentId = 'unknown', metadata = {}) {
-    if (!this.config.trackingEnabled) return;
+    if (!this.config.trackingEnabled) {return;}
 
     try {
       // Core metrics
@@ -200,7 +200,7 @@ class EnhancedTicketTracker {
     commitHash = '',
     metadata = {}
   ) {
-    if (!this.config.trackingEnabled) return;
+    if (!this.config.trackingEnabled) {return;}
 
     try {
       const count = Array.isArray(ticketIds) ? ticketIds.length : 1;
@@ -258,7 +258,7 @@ class EnhancedTicketTracker {
    * Track QA activity
    */
   async trackQA(results, agentId = 'qa-agent') {
-    if (!this.config.trackingEnabled) return;
+    if (!this.config.trackingEnabled) {return;}
 
     try {
       if (results.passed) {
@@ -303,7 +303,7 @@ class EnhancedTicketTracker {
    * Track review requests
    */
   async trackReview(ticketId, reviewer, requester, metadata = {}) {
-    if (!this.config.trackingEnabled) return;
+    if (!this.config.trackingEnabled) {return;}
 
     try {
       this.currentDay.metrics.reviewRequests++;
@@ -613,7 +613,7 @@ class EnhancedTicketTracker {
     const normalizedType = this.normalizeTicketType(type);
     if (
       normalizedType &&
-      this.currentDay.metrics.hasOwnProperty(normalizedType)
+      Object.prototype.hasOwnProperty.call(this.currentDay.metrics, normalizedType)
     ) {
       this.currentDay.metrics[normalizedType]++;
     }
@@ -635,7 +635,7 @@ class EnhancedTicketTracker {
   }
 
   normalizeTicketType(type) {
-    if (!type) return 'features'; // default
+    if (!type) {return 'features';} // default
 
     const typeMap = {
       feat: 'features',
@@ -654,13 +654,13 @@ class EnhancedTicketTracker {
 
   getComplexityFromEstimate(estimate) {
     const hours = this.parseEstimate(estimate);
-    if (hours < 1) return 'simple';
-    if (hours <= 4) return 'medium';
+    if (hours < 1) {return 'simple';}
+    if (hours <= 4) {return 'medium';}
     return 'complex';
   }
 
   parseEstimate(estimate) {
-    if (typeof estimate === 'number') return estimate;
+    if (typeof estimate === 'number') {return estimate;}
     if (typeof estimate === 'string') {
       const match = estimate.match(/(\d+(?:\.\d+)?)/);
       return match ? parseFloat(match[1]) : 1;
@@ -671,7 +671,7 @@ class EnhancedTicketTracker {
   calculateQualityScore() {
     const total =
       this.currentDay.metrics.qaApproved + this.currentDay.metrics.qaFailed;
-    if (total === 0) return 100; // No QA data yet
+    if (total === 0) {return 100;} // No QA data yet
 
     return Math.round((this.currentDay.metrics.qaApproved / total) * 100);
   }
@@ -849,16 +849,16 @@ class EnhancedTicketTracker {
     const milestones = [];
     const total = stats.summary.totalTickets;
 
-    if (total >= 100) milestones.push('Century Club (100+)');
-    else if (total >= 75) milestones.push('Productivity Champion (75+)');
-    else if (total >= 50) milestones.push('High Achiever (50+)');
-    else if (total >= 25) milestones.push('Strong Performance (25+)');
-    else if (total >= 10) milestones.push('Good Progress (10+)');
+    if (total >= 100) {milestones.push('Century Club (100+)');}
+    else if (total >= 75) {milestones.push('Productivity Champion (75+)');}
+    else if (total >= 50) {milestones.push('High Achiever (50+)');}
+    else if (total >= 25) {milestones.push('Strong Performance (25+)');}
+    else if (total >= 10) {milestones.push('Good Progress (10+)');}
 
     if (stats.agents.count >= 5)
-      milestones.push('Team Collaboration (5+ agents)');
+      {milestones.push('Team Collaboration (5+ agents)');}
     if (stats.summary.productivity >= 10)
-      milestones.push('Speed Demon (10+ per hour)');
+      {milestones.push('Speed Demon (10+ per hour)');}
 
     return milestones;
   }
@@ -879,7 +879,7 @@ class EnhancedTicketTracker {
   }
 
   async logEvent(type, message) {
-    if (!this.config.detailedLogging) return;
+    if (!this.config.detailedLogging) {return;}
 
     const timestamp = new Date().toISOString();
     console.log(`[${timestamp}] [${type.toUpperCase()}] ${message}`);

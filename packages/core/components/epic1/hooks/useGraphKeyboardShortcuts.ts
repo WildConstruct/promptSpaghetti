@@ -281,7 +281,7 @@ export function useGraphKeyboardShortcuts(
 
   // Handle keyboard events
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     const handleKeyDown = (event: KeyboardEvent) => {
       // Skip if typing in input field

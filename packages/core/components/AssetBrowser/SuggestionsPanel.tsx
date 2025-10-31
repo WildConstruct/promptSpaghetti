@@ -2,21 +2,36 @@
 // Story 2.5a: Asset Browser Integration MVP
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { AssetMatcherService, Asset, AssetMatch, NodeMetadata } from '../../services/assetMatcher';
-import { AdvancedMatcherService } from '../../services/advancedMatcher';
-import { DragDropHandler } from './DragDropHandler';
+import type { Node } from 'reactflow';
+import {
+  AssetMatcherService,
+  type Asset,
+  type AssetMatch,
+  type NodeMetadata
+} from '../../services/assetMatcher';
+import {
+  AdvancedMatcherService,
+  type CategorizedMatches,
+  type GraphContext,
+  type ScoredAsset
+} from '../../services/advancedMatcher';
+import { DragDropHandler, type DropResult } from './DragDropHandler';
 import './SuggestionsPanel.css';
 import { AssetMatchIndicator } from './AssetMatchIndicator';
-import { AdvancedMatcherService } from '../../services/advancedMatcher';
-import { PreferencesService } from '../../services/preferences';
+import {
+  PreferencesService,
+  type UserPreferences
+} from '../../services/preferences';
+
+interface SelectedNode {
+  id: string;
+  type: string;
+  data?: Record<string, unknown>;
+  metadata?: NodeMetadata;
+}
 
 interface SuggestionsPanelProps {
-  selectedNode?: {
-    id: string;
-    type: string;
-    data?: any;
-    metadata?: NodeMetadata;
-  };
+  selectedNode?: SelectedNode;
   assets: Asset[];
   onAssetDrop?: (asset: Asset, targetNode?: string) => void;
   isCollapsed?: boolean;
@@ -24,6 +39,98 @@ interface SuggestionsPanelProps {
   smartModeEnabled?: boolean;
   showMatchesOnly?: boolean;
 }
+
+type CategorizedPreview = Pick<
+  CategorizedMatches,
+  'complementary' | 'alternatives' | 'extensions' | 'refinements'
+>;
+
+const ADVANCED_KEY = 'advancedMatching.enabled';
+const SMART_MODE_KEY = 'smartMode.enabled';
+const MATCHES_ONLY_KEY = 'matches.only';
+
+const scoreToRelevance = (score: number): AssetMatch['relevance'] => {
+  if (score >= 70) {
+    return 'high';
+  }
+  if (score >= 40) {
+    return 'medium';
+  }
+  return 'low';
+};
+
+const mapScoreToMatch = (score: ScoredAsset): AssetMatch => {
+  const percentage = Math.round((score.totalScore ?? 0) * 100);
+  return {
+    asset: score.asset,
+    score: percentage,
+    relevance: scoreToRelevance(percentage),
+    explanation: score.explanation
+  };
+};
+
+const extractMetadataFromNodeData = (
+  data?: Record<string, unknown>
+): Partial<NodeMetadata> => {
+  if (!data) {
+    return {};
+  }
+
+  const metadata: Partial<NodeMetadata> = {};
+  const text = typeof data.text === 'string' ? data.text.toLowerCase() : '';
+
+  if (text.includes('urban') || text.includes('city')) {
+    metadata.setting = 'urban';
+  }
+  if (text.includes('happy') || text.includes('joy')) {
+    metadata.mood = 'positive';
+  }
+  if (text.includes('action') || text.includes('movement')) {
+    metadata.theme = 'dynamic';
+  }
+
+  const choices = Array.isArray(data.choices)
+    ? (data.choices as Array<Record<string, unknown>>)
+    : [];
+  if (choices.length > 0) {
+    const keywords: string[] = [];
+    choices.forEach(choice => {
+      const choiceText = typeof choice.text === 'string' ? choice.text : '';
+      if (choiceText) {
+        keywords.push(
+          ...choiceText
+            .split(/\s+/)
+            .map(part => part.toLowerCase())
+            .slice(0, 3)
+        );
+      }
+    });
+    if (keywords.length > 0) {
+      metadata.keywords = keywords;
+    }
+  }
+
+  return metadata;
+};
+
+const createGraphContext = (
+  node: SelectedNode,
+  preferences: UserPreferences
+): GraphContext => {
+  const reactFlowNode: Node<Record<string, unknown>> = {
+    id: node.id,
+    type: node.type,
+    position: { x: 0, y: 0 },
+    data: (node.data ?? {}) as Record<string, unknown>
+  };
+
+  return {
+    selectedNode: reactFlowNode,
+    allNodes: [reactFlowNode],
+    edges: [],
+    userPreferences: preferences
+  };
+};
 
 export const SuggestionsPanel: React.FC<SuggestionsPanelProps> = ({
   selectedNode,
@@ -35,241 +142,386 @@ export const SuggestionsPanel: React.FC<SuggestionsPanelProps> = ({
   showMatchesOnly
 }) => {
   const [suggestions, setSuggestions] = useState<AssetMatch[]>([]);
+  const [categorizedMatches, setCategorizedMatches] =
+    useState<CategorizedPreview | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [matcherService] = useState(() => new AssetMatcherService());
-  const [advMatcher] = useState(() => new AdvancedMatcherService());
-  const [advancedMatching, setAdvancedMatching] = useState<boolean>(() => {
-    try { const v = window?.localStorage?.getItem('advancedMatching.enabled'); return v === 'true'; } catch { return false; }
-  });
-  const [userPrefs, setUserPrefs] = useState(() => PreferencesService.load());
-  const [categorized, setCategorized] = useState<any>(null);
-  const [advMatcher] = useState(() => new AdvancedMatcherService());
-  const [advancedMatching, setAdvancedMatching] = useState<boolean>(() => {
-    try { const v = window?.localStorage?.getItem('advancedMatching.enabled'); return v === 'true'; } catch { return false; }
-  });
+  const [advancedMatcher] = useState(() => new AdvancedMatcherService());
+  const [userPrefs, setUserPrefs] = useState<UserPreferences>(() =>
+    PreferencesService.load()
+  );
   const [smartModeSetting, setSmartModeSetting] = useState<boolean>(() => {
-    try { const v = window?.localStorage?.getItem('smartMode.enabled'); return v === null ? true : v === 'true'; } catch { return true; }
+    try {
+      const stored = window?.localStorage?.getItem(SMART_MODE_KEY);
+      return stored === null ? true : stored === 'true';
+    } catch {
+      return true;
+    }
   });
-  const [internalShowMatchesOnly, setInternalShowMatchesOnly] = useState<boolean>(() => {
-    if (typeof showMatchesOnly === 'boolean') return showMatchesOnly;
-    try { const v = window?.localStorage?.getItem('matches.only'); return v === 'true'; } catch { return false; }
+  const [internalShowMatchesOnly, setInternalShowMatchesOnly] =
+    useState<boolean>(() => {
+      if (typeof showMatchesOnly === 'boolean') {
+        return showMatchesOnly;
+      }
+      try {
+        return window?.localStorage?.getItem(MATCHES_ONLY_KEY) === 'true';
+      } catch {
+        return false;
+      }
+    });
+  const [advancedMatching, setAdvancedMatching] = useState<boolean>(() => {
+    try {
+      return window?.localStorage?.getItem(ADVANCED_KEY) === 'true';
+    } catch {
+      return false;
+    }
   });
 
-  const effectiveSmartMode = typeof smartModeEnabled === 'boolean' ? smartModeEnabled : smartModeSetting;
-  const effectiveShowMatchesOnly = typeof showMatchesOnly === 'boolean' ? showMatchesOnly : internalShowMatchesOnly;
+  const effectiveSmartMode =
+    typeof smartModeEnabled === 'boolean'
+      ? smartModeEnabled
+      : smartModeSetting;
+  const effectiveShowMatchesOnly =
+    typeof showMatchesOnly === 'boolean'
+      ? showMatchesOnly
+      : internalShowMatchesOnly;
 
-  // Load suggestions when node selection changes
-  useEffect(() => {
+  const loadSuggestions = useCallback(async () => {
     if (!selectedNode || !effectiveSmartMode) {
       setSuggestions([]);
+      setCategorizedMatches(null);
       return;
     }
 
-    loadSuggestions();
-  }, [selectedNode, assets, effectiveSmartMode, effectiveShowMatchesOnly, advancedMatching]);
+    const nodeMetadata: NodeMetadata = {
+      nodeType: selectedNode.type,
+      nodeId: selectedNode.id,
+      ...selectedNode.metadata,
+      ...extractMetadataFromNodeData(selectedNode.data)
+    };
 
-  const loadSuggestions = useCallback(async () => {
-    if (!selectedNode) return;
-    
     setIsLoading(true);
     const startTime = performance.now();
-    
+
     try {
-      // Prepare node metadata
-      const nodeMetadata: NodeMetadata = {
-        nodeType: selectedNode.type,
-        nodeId: selectedNode.id,
-        ...selectedNode.metadata,
-        ...extractMetadataFromNodeData(selectedNode.data)
-      };
-      
-      // Get matches - advanced or basic\n      if (advancedMatching) {\n        const ctx: any = { selectedNode: selectedNode, allNodes: [], edges: [], userPreferences: userPrefs };\n        const categorized: any = await advMatcher.findMatches(ctx, assets as any, { limit: 6, includeCategories: true, learningEnabled: true });\n        const all = (categorized?.all || []).slice(0, 3).map((s: any) => ({ asset: s.asset, score: Math.round(((s.totalScore ?? 0) * 100)), relevance: (s.totalScore ?? 0) >= 0.7 ? 'high' : (s.totalScore ?? 0) >= 0.4 ? 'medium' : 'low', explanation: s.explanation }));\n        setSuggestions(all);\n        setCategorized(categorized);\n      } else {\n        const matches = await matcherService.findMatches(\n          nodeMetadata,\n          assets,\n          { limit: 3, minScore: effectiveShowMatchesOnly ? 40 : 0 }\n        );\n        setSuggestions(matches);\n        setCategorized(null);\n      }
+      if (advancedMatching) {
+        const context = createGraphContext(selectedNode, userPrefs);
+        const categorized = await advancedMatcher.findMatches(
+          context,
+          assets,
+          {
+            limit: 6,
+            includeCategories: true,
+            learningEnabled: true
+          }
+        );
+        setCategorizedMatches({
+          complementary: categorized.complementary,
+          alternatives: categorized.alternatives,
+          extensions: categorized.extensions,
+          refinements: categorized.refinements
+        });
+        setSuggestions(
+          categorized.all.slice(0, 3).map(entry => mapScoreToMatch(entry))
+        );
+      } else {
+        const matches = await matcherService.findMatches(nodeMetadata, assets, {
+          limit: 3,
+          minScore: effectiveShowMatchesOnly ? 40 : 0
+        });
+        setSuggestions(matches);
+        setCategorizedMatches(null);
+      }
+
       setIsOffline(!matcherService.isSmartModeAvailable());
-      
-      // Check performance
+
       const duration = performance.now() - startTime;
       if (duration > 200) {
-        console.warn(`Suggestion generation took ${duration.toFixed(0)}ms (target: <200ms)`);
+        console.warn(
+          `Suggestion generation took ${duration.toFixed(
+            0
+          )}ms (target: <200ms)`
+        );
       }
     } catch (error) {
       console.error('Failed to load suggestions:', error);
-      // Fallback to offline mode
       matcherService.setOfflineMode(true);
       setIsOffline(true);
-      
-      // Retry with offline mode
-      const nodeMetadata: NodeMetadata = {
-        nodeType: selectedNode.type,
-        nodeId: selectedNode.id,
-        ...selectedNode.metadata
-      };
-      
-      const offlineMatches = await matcherService.findMatches(
-        nodeMetadata,
-        assets,
-        { limit: 3, offlineOnly: true }
-      );
-      
-      setSuggestions(offlineMatches);
+      try {
+        const fallbackMatches = await matcherService.findMatches(
+          nodeMetadata,
+          assets,
+          { limit: 3, offlineOnly: true }
+        );
+        setSuggestions(fallbackMatches);
+      } catch (fallbackError) {
+        console.error('Fallback suggestion generation failed:', fallbackError);
+        setSuggestions([]);
+      }
+      setCategorizedMatches(null);
     } finally {
       setIsLoading(false);
     }
-  }, [selectedNode, assets, showMatchesOnly, matcherService, advMatcher, advancedMatching, effectiveShowMatchesOnly]);
-
-  const extractMetadataFromNodeData = (data: any): Partial<NodeMetadata> => {
-    const metadata: Partial<NodeMetadata> = {};
-    
-    // Extract from text content
-    if (data?.text) {
-      const text = data.text.toLowerCase();
-      
-      // Simple keyword extraction
-      if (text.includes('urban') || text.includes('city')) {
-        metadata.setting = 'urban';
-      }
-      if (text.includes('happy') || text.includes('joy')) {
-        metadata.mood = 'positive';
-      }
-      if (text.includes('action') || text.includes('movement')) {
-        metadata.theme = 'dynamic';
-      }
-    }
-    
-    // Extract from choices (for WeightedChoice nodes)
-    if (data?.choices && Array.isArray(data.choices)) {
-      const keywords: string[] = [];
-      data.choices.forEach((choice: any) => {
-        if (choice.text) {
-          keywords.push(...choice.text.split(/\s+/).slice(0, 3));
-        }
-      });
-      metadata.keywords = keywords;
-    }
-    
-    return metadata;
-  };
-
-    const handleAccept = (asset: Asset) => {
-    if (selectedNode && onAssetDrop) {
-      onAssetDrop(asset, selectedNode.id);
-    }
-    const prefs = PreferencesService.recordAcceptance(asset.id, true, selectedNode?.type || 'unknown');
-    setUserPrefs(prefs);
-  };
-
-  const handleReject = (asset: Asset) => {
-    const prefs = PreferencesService.recordAcceptance(asset.id, false, selectedNode?.type || 'unknown');
-    setUserPrefs(prefs);
-    setSuggestions(prev => prev.filter(m => m.asset.id !== asset.id));
-  };const handleSuggestionClick = (asset: Asset) => {
-    if (onAssetDrop) {
-      onAssetDrop(asset, selectedNode?.id);
-    }
-  };
+  }, [
+    advancedMatcher,
+    advancedMatching,
+    assets,
+    effectiveShowMatchesOnly,
+    effectiveSmartMode,
+    matcherService,
+    selectedNode,
+    userPrefs
+  ]);
 
   useEffect(() => {
-    const handler = (e: StorageEvent) => {
-      if (e.key === 'smartMode.enabled' && e.newValue != null) setSmartModeSetting(e.newValue === 'true');
-      if (e.key === 'matches.only' && typeof showMatchesOnly !== 'boolean' && e.newValue != null) setInternalShowMatchesOnly(e.newValue === 'true');
-      if (e.key === 'advancedMatching.enabled' && e.newValue != null) setAdvancedMatching(e.newValue === 'true');
+    void loadSuggestions();
+  }, [loadSuggestions]);
+
+  useEffect(() => {
+    const handler = (event: StorageEvent) => {
+      if (event.key === SMART_MODE_KEY && event.newValue !== null) {
+        setSmartModeSetting(event.newValue === 'true');
+      }
+      if (
+        event.key === MATCHES_ONLY_KEY &&
+        typeof showMatchesOnly !== 'boolean' &&
+        event.newValue !== null
+      ) {
+        setInternalShowMatchesOnly(event.newValue === 'true');
+      }
+      if (event.key === ADVANCED_KEY && event.newValue !== null) {
+        setAdvancedMatching(event.newValue === 'true');
+      }
     };
     window.addEventListener('storage', handler);
     return () => window.removeEventListener('storage', handler);
   }, [showMatchesOnly]);
 
+  const handleSuggestionClick = useCallback(
+    (asset: Asset) => {
+      if (onAssetDrop) {
+        onAssetDrop(asset, selectedNode?.id);
+      }
+    },
+    [onAssetDrop, selectedNode]
+  );
+
+  const handleDropResult = useCallback(
+    (asset: Asset, result: DropResult | undefined) => {
+      if (onAssetDrop) {
+        onAssetDrop(asset, result?.targetNode ?? selectedNode?.id);
+      }
+    },
+    [onAssetDrop, selectedNode]
+  );
+
+  const handleAccept = useCallback(
+    (asset: Asset) => {
+      if (selectedNode && onAssetDrop) {
+        onAssetDrop(asset, selectedNode.id);
+      }
+      const nextPrefs = PreferencesService.recordAcceptance(
+        asset.id,
+        true,
+        selectedNode?.type ?? 'unknown'
+      );
+      setUserPrefs(nextPrefs);
+      setSuggestions(prev =>
+        prev.filter(match => match.asset.id !== asset.id)
+      );
+      setCategorizedMatches(prev => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          complementary: prev.complementary.filter(
+            entry => entry.asset.id !== asset.id
+          ),
+          alternatives: prev.alternatives.filter(
+            entry => entry.asset.id !== asset.id
+          ),
+          extensions: prev.extensions.filter(
+            entry => entry.asset.id !== asset.id
+          ),
+          refinements: prev.refinements.filter(
+            entry => entry.asset.id !== asset.id
+          )
+        };
+      });
+    },
+    [onAssetDrop, selectedNode]
+  );
+
+  const handleReject = useCallback(
+    (asset: Asset) => {
+      const nextPrefs = PreferencesService.recordAcceptance(
+        asset.id,
+        false,
+        selectedNode?.type ?? 'unknown'
+      );
+      setUserPrefs(nextPrefs);
+      setSuggestions(prev =>
+        prev.filter(match => match.asset.id !== asset.id)
+      );
+      setCategorizedMatches(prev => {
+        if (!prev) {
+          return prev;
+        }
+        return {
+          complementary: prev.complementary.filter(
+            entry => entry.asset.id !== asset.id
+          ),
+          alternatives: prev.alternatives.filter(
+            entry => entry.asset.id !== asset.id
+          ),
+          extensions: prev.extensions.filter(
+            entry => entry.asset.id !== asset.id
+          ),
+          refinements: prev.refinements.filter(
+            entry => entry.asset.id !== asset.id
+          )
+        };
+      });
+    },
+    [selectedNode]
+  );
+
   if (!effectiveSmartMode) {
     return null;
   }
 
+  const renderCategorizedSection = (
+    title: string,
+    entries: ScoredAsset[] | undefined
+  ) => {
+    if (!entries || entries.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="suggestions-category">
+        <div className="suggestions-category-title">{title}</div>
+        {entries.slice(0, 3).map(entry => {
+          const match = mapScoreToMatch(entry);
+          return (
+            <div key={entry.asset.id} className="suggestion-item">
+              <div className="suggestion-header">
+                <span className="suggestion-name">{entry.asset.name}</span>
+                <AssetMatchIndicator
+                  score={match.score}
+                  relevance={match.relevance}
+                  offline={false}
+                />
+              </div>
+              {match.explanation && (
+                <div className="suggestion-explanation">
+                  {match.explanation}
+                </div>
+              )}
+              <div className="suggestion-meta">
+                <span className="asset-type">{entry.asset.type}</span>
+                <button
+                  className="suggestion-accept"
+                  type="button"
+                  onClick={() => handleAccept(entry.asset)}
+                >
+                  Accept
+                </button>
+                <button
+                  className="suggestion-reject"
+                  type="button"
+                  onClick={() => handleReject(entry.asset)}
+                >
+                  Reject
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className={`suggestions-panel ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="suggestions-header" onClick={onToggleCollapse}>
-        <span className="suggestions-title">Suggested Assets
-          {isOffline && <span className="offline-badge">Basic matching (offline)</span>}
+        <span className="suggestions-title">
+          Suggested Assets
+          {isOffline && (
+            <span className="offline-badge">Basic matching (offline)</span>
+          )}
         </span>
-        <button className="collapse-toggle">
+        <button className="collapse-toggle" type="button">
           {isCollapsed ? '▶' : '▼'}
         </button>
       </div>
-      
+
       {!isCollapsed && (
-        <div className="suggestions-content">\n          <div className="suggestions-controls" style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>\n            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12 }}>\n              <input type="checkbox" checked={effectiveShowMatchesOnly} onChange={(e) => { const val = e.target.checked; if (typeof showMatchesOnly !== "boolean") { setInternalShowMatchesOnly(val); try { window?.localStorage?.setItem("matches.only", String(val)); } catch {} } }} />\n              <span>Show Matches Only</span>\n            </label>\n          </div>
+        <div className="suggestions-content">
+          <div className="suggestions-controls">
+            <label className="suggestions-toggle">
+              <input
+                type="checkbox"
+                checked={effectiveShowMatchesOnly}
+                onChange={event => {
+                  const value = event.target.checked;
+                  if (typeof showMatchesOnly !== 'boolean') {
+                    setInternalShowMatchesOnly(value);
+                    try {
+                      window?.localStorage?.setItem(
+                        MATCHES_ONLY_KEY,
+                        String(value)
+                      );
+                    } catch {
+                      // ignore storage errors
+                    }
+                  }
+                }}
+              />
+              <span>Show Matches Only</span>
+            </label>
+          </div>
+
           {!selectedNode ? (
             <div className="suggestions-empty">
               <span className="empty-icon">💡</span>
-              <span className="empty-text">Select a node to see suggestions</span>
+              <span className="empty-text">
+                Select a node to see suggestions
+              </span>
             </div>
-          {advancedMatching && categorized ? (
-            <div className=\"suggestions-categories\">
-              {(categorized.complementary || []).slice(0,3).map((s: any, idx: number) => (
-                <div key={(s.asset?.id || 'comp') + '-' + idx} className=\"suggestion-item\">
-                  <div className=\"suggestion-header\">
-                    <span className=\"suggestion-name\">{s.asset?.name}</span>
-                    <AssetMatchIndicator score={Math.round(((s.totalScore ?? 0) * 100))} relevance={(s.totalScore ?? 0) >= 0.7 ? 'high' : (s.totalScore ?? 0) >= 0.4 ? 'medium' : 'low'} offline={false} />
-                  </div>
-                  {s.explanation && (<div className=\"suggestion-explanation\">{s.explanation}</div>)}
-                  <div className=\"suggestion-meta\" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span className=\"asset-type\">{s.asset?.type}</span>
-                    <button className=\"suggestion-accept\" onClick={() => handleAccept(s.asset)}>Accept</button>
-                    <button className=\"suggestion-reject\" onClick={() => handleReject(s.asset)}>Reject</button>
-                  </div>
-                </div>
-              ))}
-              {(categorized.alternatives || []).slice(0,3).map((s: any, idx: number) => (
-                <div key={(s.asset?.id || 'alt') + '-' + idx} className=\"suggestion-item\">
-                  <div className=\"suggestion-header\">
-                    <span className=\"suggestion-name\">{s.asset?.name}</span>
-                    <AssetMatchIndicator score={Math.round(((s.totalScore ?? 0) * 100))} relevance={(s.totalScore ?? 0) >= 0.7 ? 'high' : (s.totalScore ?? 0) >= 0.4 ? 'medium' : 'low'} offline={false} />
-                  </div>
-                  {s.explanation && (<div className=\"suggestion-explanation\">{s.explanation}</div>)}
-                  <div className=\"suggestion-meta\" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span className=\"asset-type\">{s.asset?.type}</span>
-                    <button className=\"suggestion-accept\" onClick={() => handleAccept(s.asset)}>Accept</button>
-                    <button className=\"suggestion-reject\" onClick={() => handleReject(s.asset)}>Reject</button>
-                  </div>
-                </div>
-              ))}
-              {(categorized.extensions || []).slice(0,3).map((s: any, idx: number) => (
-                <div key={(s.asset?.id || 'ext') + '-' + idx} className=\"suggestion-item\">
-                  <div className=\"suggestion-header\">
-                    <span className=\"suggestion-name\">{s.asset?.name}</span>
-                    <AssetMatchIndicator score={Math.round(((s.totalScore ?? 0) * 100))} relevance={(s.totalScore ?? 0) >= 0.7 ? 'high' : (s.totalScore ?? 0) >= 0.4 ? 'medium' : 'low'} offline={false} />
-                  </div>
-                  {s.explanation && (<div className=\"suggestion-explanation\">{s.explanation}</div>)}
-                  <div className=\"suggestion-meta\" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span className=\"asset-type\">{s.asset?.type}</span>
-                    <button className=\"suggestion-accept\" onClick={() => handleAccept(s.asset)}>Accept</button>
-                    <button className=\"suggestion-reject\" onClick={() => handleReject(s.asset)}>Reject</button>
-                  </div>
-                </div>
-              ))}
-              {(categorized.refinements || []).slice(0,3).map((s: any, idx: number) => (
-                <div key={(s.asset?.id || 'ref') + '-' + idx} className=\"suggestion-item\">
-                  <div className=\"suggestion-header\">
-                    <span className=\"suggestion-name\">{s.asset?.name}</span>
-                    <AssetMatchIndicator score={Math.round(((s.totalScore ?? 0) * 100))} relevance={(s.totalScore ?? 0) >= 0.7 ? 'high' : (s.totalScore ?? 0) >= 0.4 ? 'medium' : 'low'} offline={false} />
-                  </div>
-                  {s.explanation && (<div className=\"suggestion-explanation\">{s.explanation}</div>)}
-                  <div className=\"suggestion-meta\" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span className=\"asset-type\">{s.asset?.type}</span>
-                    <button className=\"suggestion-accept\" onClick={() => handleAccept(s.asset)}>Accept</button>
-                    <button className=\"suggestion-reject\" onClick={() => handleReject(s.asset)}>Reject</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : null}          ) : isLoading ? (
+          ) : isLoading ? (
             <div className="suggestions-loading">
               <div className="loading-spinner" />
               <span>Finding matches...</span>
+            </div>
+          ) : advancedMatching && categorizedMatches ? (
+            <div className="suggestions-categories">
+              {renderCategorizedSection(
+                'Complementary',
+                categorizedMatches.complementary
+              )}
+              {renderCategorizedSection(
+                'Alternatives',
+                categorizedMatches.alternatives
+              )}
+              {renderCategorizedSection(
+                'Extensions',
+                categorizedMatches.extensions
+              )}
+              {renderCategorizedSection(
+                'Refinements',
+                categorizedMatches.refinements
+              )}
             </div>
           ) : suggestions.length === 0 ? (
             <div className="suggestions-empty">
               <span className="empty-icon">🔍</span>
               <span className="empty-text">No matching assets found</span>
-              {showMatchesOnly && (
-                <span className="empty-hint">Try disabling "Show Matches Only"</span>
+              {effectiveShowMatchesOnly && (
+                <span className="empty-hint">
+                  Try disabling &quot;Show Matches Only&quot;
+                </span>
               )}
             </div>
           ) : (
@@ -280,12 +532,14 @@ export const SuggestionsPanel: React.FC<SuggestionsPanelProps> = ({
                   match={match}
                   index={index}
                   onClick={() => handleSuggestionClick(match.asset)}
+                  onDrop={result => handleDropResult(match.asset, result)}
+                  isOffline={isOffline}
                   selectedNodeType={selectedNode.type}
                 />
               ))}
             </div>
           )}
-          
+
           {selectedNode?.type === 'WeightedChoice' && suggestions.length > 0 && (
             <div className="suggestions-hint">
               <span className="hint-icon">💡</span>
@@ -302,6 +556,8 @@ interface SuggestionItemProps {
   match: AssetMatch;
   index: number;
   onClick: () => void;
+  onDrop: (result: DropResult | undefined) => void;
+  isOffline: boolean;
   selectedNodeType?: string;
 }
 
@@ -309,30 +565,10 @@ const SuggestionItem: React.FC<SuggestionItemProps> = ({
   match,
   index,
   onClick,
+  onDrop,
+  isOffline,
   selectedNodeType
 }) => {
-  const getMatchIcon = (relevance: string) => {
-    switch (relevance) {
-      case 'high':
-        return '✓';
-      case 'medium':
-        return '~';
-      default:
-        return '';
-    }
-  };
-
-  const getMatchColor = (relevance: string) => {
-    switch (relevance) {
-      case 'high':
-        return '#4CAF50';
-      case 'medium':
-        return '#FFC107';
-      default:
-        return '#9E9E9E';
-    }
-  };
-
   return (
     <DragDropHandler
       asset={{
@@ -340,24 +576,35 @@ const SuggestionItem: React.FC<SuggestionItemProps> = ({
         name: match.asset.name,
         type: match.asset.type,
         metadata: match.asset.metadata,
-        content: match.asset.content
+        content: match.asset.content ?? null
       }}
-      onDrop={(result) => onClick()}
+      onDrop={onDrop}
     >
-      <div 
+      <div
         className={`suggestion-item relevance-${match.relevance}`}
         onClick={onClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            onClick();
+          }
+        }}
         style={{ animationDelay: `${index * 50}ms` }}
       >
         <div className="suggestion-header">
           <span className="suggestion-name">{match.asset.name}</span>
-          <AssetMatchIndicator score={match.score} relevance={match.relevance} offline={isOffline} />
+          <AssetMatchIndicator
+            score={match.score}
+            relevance={match.relevance}
+            offline={isOffline}
+          />
         </div>
-        
+
         {match.explanation && (
           <div className="suggestion-explanation">{match.explanation}</div>
         )}
-        
+
         <div className="suggestion-meta">
           <span className="asset-type">{match.asset.type}</span>
           {selectedNodeType === 'WeightedChoice' && (
@@ -369,7 +616,6 @@ const SuggestionItem: React.FC<SuggestionItemProps> = ({
   );
 };
 
-// Smart Mode Toggle Component
 export const SmartModeToggle: React.FC<{
   enabled: boolean;
   onChange: (enabled: boolean) => void;
@@ -380,21 +626,13 @@ export const SmartModeToggle: React.FC<{
         <input
           type="checkbox"
           checked={enabled}
-          onChange={(e) => onChange(e.target.checked)}
+          onChange={event => onChange(event.target.checked)}
         />
         <span>Smart Suggestions</span>
       </label>
       {enabled && (
-        <span className="smart-mode-status">
-          AI-powered matching active
-        </span>
+        <span className="smart-mode-status">AI-powered matching active</span>
       )}
     </div>
   );
 };
-
-
-
-
-
-

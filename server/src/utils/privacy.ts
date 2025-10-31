@@ -14,7 +14,7 @@ const SECRET_RE =
 const CARD_RE = /\b(?:\d[ -]*?){13,19}\b/g;
 
 export function redactPII(input: string | undefined | null): string {
-  if (!input) return '';
+  if (!input) {return '';}
   return input
     .replace(EMAIL_RE, '[REDACTED_EMAIL]')
     .replace(SECRET_RE, '[REDACTED_SECRET]')

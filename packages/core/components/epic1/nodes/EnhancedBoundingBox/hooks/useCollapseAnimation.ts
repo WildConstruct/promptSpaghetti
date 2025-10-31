@@ -60,7 +60,7 @@ export function useCollapseAnimation(
    */
   const animate = useCallback(
     (timestamp: number) => {
-      if (!animationStateRef.current) return;
+      if (!animationStateRef.current) {return;}
 
       const { startSize, targetSize, startTime, duration } =
         animationStateRef.current;

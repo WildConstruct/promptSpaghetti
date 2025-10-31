@@ -2,7 +2,7 @@
  * Tests for PreviewCache
  */
 
-const { PreviewCache } = require('../PreviewCache');
+import { PreviewCache } from '../PreviewCache';
 
 describe('PreviewCache', () => {
   let cache;

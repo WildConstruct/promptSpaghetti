@@ -23,9 +23,9 @@ export class TestHarness {
    */
   async runNode(
     node: CustomNodeBase,
-    inputs: Record<string, any>,
+    inputs: Record<string, unknown>,
     config?: {
-      variables?: Record<string, any>;
+      variables?: Record<string, unknown>;
       state?: unknown;
       cache?: Map<string, unknown>;
     }
@@ -110,10 +110,10 @@ export class TestHarness {
    */
   async runMultiple(
     node: CustomNodeBase,
-    inputs: Record<string, any>,
+    inputs: Record<string, unknown>,
     seeds: Array<string | number>,
     config?: {
-      variables?: Record<string, any>;
+      variables?: Record<string, unknown>;
     }
   ): Promise<
     Array<{
@@ -137,7 +137,7 @@ export class TestHarness {
    */
   async testDeterminism(
     node: CustomNodeBase,
-    inputs: Record<string, any>,
+    inputs: Record<string, unknown>,
     seed: string | number = 'test-seed',
     runs: number = 5
   ): Promise<{
@@ -166,7 +166,7 @@ export class TestHarness {
    */
   async testStatePersistence(
     node: CustomNodeBase,
-    inputs: Record<string, any>,
+    inputs: Record<string, unknown>,
     iterations: number = 3
   ): Promise<{
     states: unknown[];
@@ -174,7 +174,6 @@ export class TestHarness {
   }> {
     const states: unknown[] = [];
     const outputs: unknown[] = [];
-    const ctx = this.mockContext.getContext();
 
     for (let i = 0; i < iterations; i++) {
       const { output, context } = await this.runNode(node, inputs, {
@@ -194,7 +193,7 @@ export class TestHarness {
    */
   async benchmark(
     node: CustomNodeBase,
-    inputs: Record<string, any>,
+    inputs: Record<string, unknown>,
     iterations: number = 100
   ): Promise<{
     averageTime: number;

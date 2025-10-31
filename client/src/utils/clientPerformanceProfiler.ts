@@ -1,161 +1,205 @@
 /**
- * Client Performance Profiler
- * 
- * Comprehensive client-side performance monitoring for React application.
- * Tracks rendering performance, memory usage, network timing, and user interactions.
- * 
- * Task: T-1752989144295-168 - Profile server and client performance under load
+ * Client-side performance profiler used during development to capture
+ * lightweight render, memory, network, and interaction snapshots. The
+ * implementation intentionally avoids external dependencies so that it can
+ * run inside Jest/JSDOM as well as the browser.
  */
 
+type NumericRecord = Record<string, number>;
 
-interface RenderMetrics {
-  componentCount: number;,
-  renderTime: number;,
-  reRenderCount: number;,
-  mountTime: number;,
+export interface RenderMetrics {
+  componentCount: number;
+  renderTime: number;
+  reRenderCount: number;
+  mountTime: number;
   updateTime: number;
-  interface MemoryMetrics {
-  usedJSHeapSize: number;,
-  totalJSHeapSize: number;,
-  jsHeapSizeLimit: number;,
+}
+
+export interface MemoryMetrics {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
   heapUtilization: number;
-  interface NetworkMetrics {
-  requestCount: number;,
-  totalTransferSize: number;,
-  averageResponseTime: number;,
-  errorCount: number;,
+}
+
+export interface NetworkMetrics {
+  requestCount: number;
+  totalTransferSize: number;
+  averageResponseTime: number;
+  errorCount: number;
   cacheHitRate: number;
-  interface UserInteractionMetrics {
-  clickCount: number;,
-  scrollEvents: number;,
-  inputEvents: number;,
-  navigationCount: number;,
+}
+
+export interface UserInteractionMetrics {
+  clickCount: number;
+  scrollEvents: number;
+  inputEvents: number;
+  navigationCount: number;
   averageInteractionTime: number;
-  interface VitalMetrics {
-  FCP: number; // First Contentful Paint,
-  LCP: number; // Largest Contentful Paint,
-  FID: number; // First Input Delay,
-  CLS: number; // Cumulative Layout Shift,
-  TTFB: number; // Time to First Byte,
-  interface PerformanceSnapshot {
-  timestamp: number;,
-  render: RenderMetrics;,
-  memory: MemoryMetrics;,
-  network: NetworkMetrics;,
-  interactions: UserInteractionMetrics;,
-  vitals: VitalMetrics;,
-  customMetrics: Record<string, any>;
-  interface ClientProfilingConfig {
-  sampleInterval: number;,
-  trackRenderMetrics: boolean;,
-  trackMemoryMetrics: boolean;,
-  trackNetworkMetrics: boolean;,
-  trackUserInteractions: boolean;,
-  trackWebVitals: boolean;,
-  maxSnapshots: number;,
-  alertThresholds: {,
-  renderTime: number;,
-  memoryUsage: number;,
-  responseTime: number;,
+}
+
+export interface VitalMetrics {
+  FCP: number;
+  LCP: number;
+  FID: number;
+  CLS: number;
+  TTFB: number;
+}
+
+export interface PerformanceSnapshot {
+  timestamp: number;
+  render: RenderMetrics;
+  memory: MemoryMetrics;
+  network: NetworkMetrics;
+  interactions: UserInteractionMetrics;
+  vitals: VitalMetrics;
+  customMetrics: NumericRecord;
+}
+
+export interface AlertThresholds {
+  renderTime: number;
+  memoryUsage: number;
+  responseTime: number;
   layoutShift: number;
+}
 
+export interface ClientProfilingConfig {
+  sampleInterval: number;
+  trackRenderMetrics: boolean;
+  trackMemoryMetrics: boolean;
+  trackNetworkMetrics: boolean;
+  trackUserInteractions: boolean;
+  trackWebVitals: boolean;
+  maxSnapshots: number;
+  alertThresholds: AlertThresholds;
+}
 
-};
-/**
- * Client Performance Profiler
- */
-export class ClientPerformanceProfiler {
-  private config: ClientProfilingConfig;
-  private snapshots: PerformanceSnapshot = [];
-  private isRunning = false;
-  private intervalId: number | null = null;
-  private startTime: number = 0;
-  private observers: PerformanceObserver = [];
-  private renderMetrics: RenderMetrics = {,
-  componentCount: 0,
-  renderTime: 0,
-  reRenderCount: 0,
-  mountTime: 0,
-  updateTime: 0,
-};
-  private networkRequests: PerformanceNavigationTiming = [];
-  private userInteractions = {
-  clickCount: 0,
-  scrollEvents: 0,
-  inputEvents: 0,
-  navigationCount: 0,
-  interactionTimes: [] as number,
-};
-  constructor(config: Partial<ClientProfilingConfig> = {}) {
-  this.config = {
-  sampleInterval: 1000, // 1 second,
+const defaultConfig: ClientProfilingConfig = {
+  sampleInterval: 1000,
   trackRenderMetrics: true,
   trackMemoryMetrics: true,
   trackNetworkMetrics: true,
   trackUserInteractions: true,
   trackWebVitals: true,
-  maxSnapshots: 3600, // 1 hour,
-  alertThresholds: {,
-  renderTime: 16.67, // 60fps threshold,
-  memoryUsage: 80, // %,
-  responseTime: 2000, // ms,
-  layoutShift: 0.1 // CLS threshold,
+  maxSnapshots: 3600,
+  alertThresholds: {
+    renderTime: 16.67,
+    memoryUsage: 80,
+    responseTime: 2000,
+    layoutShift: 0.1
+  }
+};
 
-      ...config
-    };
-    this.initializeObservers();
-    this.setupEventListeners();
-  /**
-   * Start client performance profiling
-   */
+type InteractionCounters = {
+  clickCount: number;
+  scrollEvents: number;
+  inputEvents: number;
+  navigationCount: number;
+  interactionDurations: number[];
+  lastInteractionTimestamp: number | null;
+};
+
+type WebVitalState = {
+  fcp: number;
+  lcp: number;
+  fid: number;
+  cls: number;
+  ttfb: number;
+};
+
+export class ClientPerformanceProfiler {
+  private readonly config: ClientProfilingConfig;
+  private snapshots: PerformanceSnapshot[] = [];
+  private isRunning = false;
+  private intervalId: number | null = null;
+  private observers: PerformanceObserver[] = [];
+  private startTime = 0;
+  private interactionCounters: InteractionCounters = {
+    clickCount: 0,
+    scrollEvents: 0,
+    inputEvents: 0,
+    navigationCount: 0,
+    interactionDurations: [],
+    lastInteractionTimestamp: null
+  };
+  private webVitals: WebVitalState = {
+    fcp: 0,
+    lcp: 0,
+    fid: 0,
+    cls: 0,
+    ttfb: 0
+  };
+  private detachListeners: Array<() => void> = [];
+  private listenersRegistered = false;
+
+  constructor(config: Partial<ClientProfilingConfig> = {}) {
+    this.config = { ...defaultConfig, ...config };
+
+    if (typeof window !== 'undefined') {
+      this.setupEventListeners();
+    }
+
+    if (typeof PerformanceObserver !== 'undefined') {
+      this.initializeObservers();
+    }
+  }
+
   startProfiling(): void {
     if (this.isRunning) {
-      console.warn('Client performance profiling is already running');
+      console.warn('ClientPerformanceProfiler.startProfiling: already running');
       return;
-    console.log('🔍 Starting client performance profiling...');
+    }
+
+    if (typeof performance === 'undefined') {
+      console.warn('ClientPerformanceProfiler requires the Performance API');
+      return;
+    }
+
     this.isRunning = true;
     this.startTime = performance.now();
     this.snapshots = [];
-    // Reset counters
     this.resetCounters();
-    // Start periodic sampling
-    this.intervalId = window.setInterval(() => {
-      this.collectSnapshot();
-    }, this.config.sampleInterval);
-    // Take initial snapshot
     this.collectSnapshot();
-    console.log(`✅ Client performance profiling started (sampling every ${this.config.sampleInterval}ms)`);}
-  /**
-   * Stop client performance profiling
-   */
-  stopProfiling(): PerformanceSnapshot {
+
+    if (typeof window !== 'undefined') {
+      this.intervalId = window.setInterval(
+        () => this.collectSnapshot(),
+        this.config.sampleInterval
+      );
+    }
+  }
+
+  stopProfiling(): PerformanceSnapshot[] {
     if (!this.isRunning) {
-      console.warn('Client performance profiling is not running');
-      return this.snapshots;
-    console.log('⏹️  Stopping client performance profiling...');
-    this.isRunning = false;
-    if (this.intervalId) {
+      return [...this.snapshots];
+    }
+
+    if (this.intervalId !== null && typeof window !== 'undefined') {
       window.clearInterval(this.intervalId);
-      this.intervalId = null;
-    // Take final snapshot
+    }
+
+    this.intervalId = null;
+    this.isRunning = false;
     this.collectSnapshot();
-    // Cleanup observers
-    this.observers.forEach(observer => observer.disconnect());
-    this.observers = [];
-    const endTime = performance.now();
-    const duration = endTime - this.startTime;
-    console.log(`✅ Client performance profiling stopped (${this.snapshots.length} snapshots collected over ${Math.round(duration / 1000)}s)`);}
-    // Generate and save report
+    this.teardownObservers();
+    this.teardownListeners();
     this.generateReport();
-    return this.snapshots;
-  /**
-   * Collect performance snapshot
-   */
+
+    return [...this.snapshots];
+  }
+
+  getSnapshots(): PerformanceSnapshot[] {
+    return [...this.snapshots];
+  }
+
   private collectSnapshot(): void {
+    if (typeof performance === 'undefined') {
+      return;
+    }
+
     try {
-      const timestamp = performance.now();
       const snapshot: PerformanceSnapshot = {
-        timestamp,
+        timestamp: performance.now(),
         render: this.collectRenderMetrics(),
         memory: this.collectMemoryMetrics(),
         network: this.collectNetworkMetrics(),
@@ -163,368 +207,310 @@ export class ClientPerformanceProfiler {
         vitals: this.collectWebVitals(),
         customMetrics: {}
       };
+
       this.snapshots.push(snapshot);
-      // Trim snapshots if exceeding max
       if (this.snapshots.length > this.config.maxSnapshots) {
         this.snapshots = this.snapshots.slice(-this.config.maxSnapshots);
-      // Check for performance alerts
-      this.checkPerformanceAlerts(snapshot);
- catch (error) {
-  console.error('Failed to collect client performance snapshot:', error);
-  /**
-  * Collect render metrics
-  */
-  private collectRenderMetrics(): RenderMetrics {,
-  if (!this.config.trackRenderMetrics) {
-  return {
-  componentCount: 0,
-  renderTime: 0,
-  reRenderCount: 0,
-  mountTime: 0,
-  updateTime: 0,
-};
-    // Get React DevTools data if available
-    let componentCount = 0;
-    try {
-      // This would integrate with React DevTools profiler
-      componentCount = document.querySelectorAll('[data-reactroot] *').length;
- catch (error) {
-      // Fallback to DOM element count
-      componentCount = document.getElementsByTagName('*').length;
-    return {
-      ...this.renderMetrics,
-      componentCount
-    };
-  /**
-   * Collect memory metrics
-   */
-  private collectMemoryMetrics(): MemoryMetrics {
-  if (!this.config.trackMemoryMetrics || !(performance as any).memory) {
-  return {
-  usedJSHeapSize: 0,
-  totalJSHeapSize: 0,
-  jsHeapSizeLimit: 0,
-  heapUtilization: 0,
-};
-    const memory = (performance as any).memory;
-    const heapUtilization = (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100;
-    return {
-  usedJSHeapSize: memory.usedJSHeapSize,
-  totalJSHeapSize: memory.totalJSHeapSize,
-  jsHeapSizeLimit: memory.jsHeapSizeLimit,
-  heapUtilization
-};
-  /**
-   * Collect network metrics
-   */
-  private collectNetworkMetrics(): NetworkMetrics {
-  if (!this.config.trackNetworkMetrics) {
-  return {
-  requestCount: 0,
-  totalTransferSize: 0,
-  averageResponseTime: 0,
-  errorCount: 0,
-  cacheHitRate: 0,
-};
-    const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming;
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    let totalSize = 0;
-    let totalResponseTime = 0;
-    let cacheHits = 0;
-    const errorCount = 0;
-    resources.forEach(resource => {)
-  totalSize += resource.transferSize || 0;
-      totalResponseTime += resource.responseEnd - resource.responseStart;
-      if (resource.transferSize === 0 && resource.decodedBodySize > 0) {
-        cacheHits++;
-    });
-    const averageResponseTime = resources.length > 0 ? totalResponseTime / resources.length : 0;
-    const cacheHitRate = resources.length > 0 ? (cacheHits / resources.length) * 100 : 0;
-    return {
-  requestCount: resources.length,
-  totalTransferSize: totalSize,
-  averageResponseTime,
-  errorCount,
-  cacheHitRate
-};
-  /**
-   * Collect user interaction metrics
-   */
-  private collectUserInteractionMetrics(): UserInteractionMetrics {
-  if (!this.config.trackUserInteractions) {
-  return {
-  clickCount: 0,
-  scrollEvents: 0,
-  inputEvents: 0,
-  navigationCount: 0,
-  averageInteractionTime: 0,
-};
-    const averageInteractionTime = this.userInteractions.interactionTimes.length > 0;
-      ? this.userInteractions.interactionTimes.reduce()
-        (a)
-          b
-        ) => a + b, 0) / this.userInteractions.interactionTimes.length
-      : 0;
-    return {
-  clickCount: this.userInteractions.clickCount,
-  scrollEvents: this.userInteractions.scrollEvents,
-  inputEvents: this.userInteractions.inputEvents,
-  navigationCount: this.userInteractions.navigationCount,
-  averageInteractionTime
-};
-  /**
-   * Collect Web Vitals metrics
-   */
-  private collectWebVitals(): VitalMetrics {
-  if (!this.config.trackWebVitals) {
-  return {
-  FCP: 0,
-  LCP: 0,
-  FID: 0,
-  CLS: 0,
-  TTFB: 0,
-};
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    const paint = performance.getEntriesByName('first-contentful-paint')[0];
-    return {
-  FCP: paint ? paint.startTime : 0,
-  LCP: this.getLargestContentfulPaint(),
-  FID: this.getFirstInputDelay(),
-  CLS: this.getCumulativeLayoutShift(),
-  TTFB: navigation ? navigation.responseStart - navigation.requestStart : 0,
-};
-  /**
-   * Initialize performance observers
-   */
-  private initializeObservers(): void {
-    if (!window.PerformanceObserver) return;
-    // Layout shift observer
-    if (this.config.trackWebVitals) {
-      try {
-        const clsObserver = new PerformanceObserver((list) => {
-          for (const entry of list.getEntries()) {
-            if (entry.entryType === 'layout-shift' && !(entry as any).hadRecentInput) {
-              this.cumulativeLayoutShift += (entry as any).value;
-        });
-        clsObserver.observe({ entryTypes: ['layout-shift'] });
-        this.observers.push(clsObserver);
- catch (error) {
-  console.warn('Failed to initialize layout-shift observer:', error);
-  // Paint observer
-  try {
-  const paintObserver = new PerformanceObserver((list) => {
-  for (const entry of list.getEntries()) {
-  if (entry.name === 'largest-contentful-paint') {
-  this.largestContentfulPaint = entry.startTime;
-});
-      paintObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-      this.observers.push(paintObserver);
- catch (error) {
-  console.warn('Failed to initialize paint observer:', error);
-  /**
-  * Setup event listeners for user interactions
-  */
-  private setupEventListeners(): void {,
-  if (!this.config.trackUserInteractions) return;
-  // Click events
-  document.addEventListener('click', (event) => {
-  this.userInteractions.clickCount++;
-  this.trackInteractionTime(event);
-});
-    // Scroll events  
-    let scrollTimeout: number;
-    document.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = window.setTimeout(() => {
-        this.userInteractions.scrollEvents++;
-      }, 100);
-    });
-    // Input events
-    document.addEventListener('input', (event) => {
-      this.userInteractions.inputEvents++;
-      this.trackInteractionTime(event);
-    });
-    // Navigation events
-    window.addEventListener('popstate', () => {
-      this.userInteractions.navigationCount++;
-    });
-  /**
-   * Track interaction timing
-   */
-  private trackInteractionTime(event: Event): void {
-    const start = performance.now();
-    requestAnimationFrame(() => {
-      const duration = performance.now() - start;
-      this.userInteractions.interactionTimes.push(duration);
-    });
-  /**
-   * React component lifecycle tracking
-   */
-  trackComponentRender(componentName: string, renderTime: number, isMount: boolean = false): void {
-    if (!this.config.trackRenderMetrics) return;
-    this.renderMetrics.renderTime += renderTime;
-    if (isMount) {
-      this.renderMetrics.mountTime += renderTime;
- else {
-      this.renderMetrics.updateTime += renderTime;
-      this.renderMetrics.reRenderCount++;
-  /**
-   * Custom metric tracking
-   */
-  addCustomMetric(key: string, value: unknown): void {
-    if (this.snapshots.length > 0) {
-      const lastSnapshot = this.snapshots[this.snapshots.length - 1];
-      lastSnapshot.customMetrics[key] = value;
-  /**
-   * Check for performance alerts
-   */
-  private checkPerformanceAlerts(snapshot: PerformanceSnapshot): void {
-    const alerts: string = [];
-    // Render time alert
-    if (snapshot.render.renderTime > this.config.alertThresholds.renderTime) {
-      alerts.push(`Slow rendering detected: ${snapshot.render.renderTime.toFixed(2)}ms`);}
-    // Memory usage alert
-    if (snapshot.memory.heapUtilization > this.config.alertThresholds.memoryUsage) {
-      alerts.push(`High memory usage: ${snapshot.memory.heapUtilization.toFixed(1)}%`);}
-    // Response time alert
-    if (snapshot.network.averageResponseTime > this.config.alertThresholds.responseTime) {
-      alerts.push(`Slow network responses: ${snapshot.network.averageResponseTime.toFixed(0)}ms`);}
-    // Layout shift alert
-    if (snapshot.vitals.CLS > this.config.alertThresholds.layoutShift) {
-      alerts.push(`High layout shift: ${snapshot.vitals.CLS.toFixed(3)}`);}
-    if (alerts.length > 0) {
-  console.warn('🚨 Client Performance Alerts:', alerts);
-  /**
-  * Generate performance report
-  */
-  private generateReport(): void {,
-  if (this.snapshots.length === 0) {
-  console.warn('No client snapshots to generate report');
-  return;
-  const report = {
-  metadata: {,
-  userAgent: navigator.userAgent,
-  startTime: this.startTime,
-  endTime: performance.now(),
-  duration: performance.now() - this.startTime,
-  snapshotCount: this.snapshots.length,
-  sampleInterval: this.config.sampleInterval,
-},
-  summary: this.generateSummaryMetrics(),
-      snapshots: this.snapshots,
-      recommendations: this.generateRecommendations();
-  };
-    // Store in localStorage for retrieval
-    const reportKey = `client-performance-${Date.now()}`;}
-    localStorage.setItem(reportKey, JSON.stringify(report));
-    console.log(`📊 Client performance report saved to localStorage: ${reportKey}`);}
-    // Also send to server if available
-    this.sendReportToServer(report);
-  /**
-   * Send report to server
-   */
-  private async sendReportToServer(report: PerformanceSnapshot): Promise<void> {
-  try {
-  await fetch('/api/performance/client-report', {)
-  method: 'POST',
-  headers: {,
-  'Content-Type': 'application/json',
-},
-  body: JSON.stringify(report);
-  });
-      console.log('📤 Client performance report sent to server');
- catch (error) {
-  console.warn('Failed to send client performance report to server:', error);
-  /**
-  * Generate summary metrics
-  */
-  private generateSummaryMetrics(): Record<string, unknown> {,
-  if (this.snapshots.length === 0) return null;
-  const renderTimes = this.snapshots.map(s => s.render.renderTime);
-  const memoryUsage = this.snapshots.map(s => s.memory.heapUtilization);
-  const responseTimes = this.snapshots.map(s => s.network.averageResponseTime);
-  return {
-  render: {,
-  average: this.average(renderTimes),
-  max: Math.max(...renderTimes),
-  min: Math.min(...renderTimes),
-  totalReRenders: this.renderMetrics.reRenderCount,
-},
-  memory: {,
-  average: this.average(memoryUsage),
-  max: Math.max(...memoryUsage),
-  peak: Math.max(...this.snapshots.map(s => s.memory.usedJSHeapSize)),
-},
-  network: {,
-  average: this.average(responseTimes),
-  totalRequests: this.snapshots.reduce((sum, s) => sum + s.network.requestCount, 0),
-  totalTransfer: this.snapshots.reduce((sum, s) => sum + s.network.totalTransferSize, 0),
-},
-  interactions: {,
-  totalClicks: this.userInteractions.clickCount,
-  totalScrolls: this.userInteractions.scrollEvents,
-  totalInputs: this.userInteractions.inputEvents,
-};
-  /**
-   * Generate recommendations
-   */
-  private generateRecommendations(): string {
-  const recommendations: string = [];
-  const summary = this.generateSummaryMetrics();
-  if (!summary) return recommendations;
-  if (summary.render.average > 16.67) {
-  recommendations.push('Consider React.memo() or useMemo() for expensive components');
-  if (summary.memory.average > 70) {
-  recommendations.push('Optimize memory usage: implement component cleanup and avoid memory leaks');
-  if (summary.network.average > 1000) {
-  recommendations.push('Optimize network requests: implement caching and request deduplication');
-  if (summary.render.totalReRenders > 100) {
-  recommendations.push('Reduce unnecessary re-renders: optimize state management and prop passing');
-  return recommendations;
-  // Helper properties for Web Vitals
-  private largestContentfulPaint = 0;
-  private firstInputDelay = 0;
-  private cumulativeLayoutShift = 0;
-  private getLargestContentfulPaint(): number {,
-  return this.largestContentfulPaint;
-  private getFirstInputDelay(): number {,
-  return this.firstInputDelay;
-  private getCumulativeLayoutShift(): number {,
-  return this.cumulativeLayoutShift;
-  private average(values: number): number {,
-  return values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-  private resetCounters(): void {,
-  this.renderMetrics = {
-  componentCount: 0,
-  renderTime: 0,
-  reRenderCount: 0,
-  mountTime: 0,
-  updateTime: 0,
-};
-    this.userInteractions = {
-  clickCount: 0,
-  scrollEvents: 0,
-  inputEvents: 0,
-  navigationCount: 0,
-  interactionTimes: [],
-};
-    this.largestContentfulPaint = 0;
-    this.firstInputDelay = 0;
-    this.cumulativeLayoutShift = 0;
-  /**
-   * Get current performance stats
-   */
-  getCurrentStats(): PerformanceSnapshot {
-  if (this.snapshots.length === 0) return null;
-  const latest = this.snapshots[this.snapshots.length - 1];
-  return {
-  timestamp: latest.timestamp,
-  renderTime: latest.render.renderTime,
-  memoryUsage: latest.memory.heapUtilization,
-  networkResponseTime: latest.network.averageResponseTime,
-  layoutShift: latest.vitals.CLS,
-  interactionCount: latest.interactions.clickCount + latest.interactions.inputEvents,
-};
+      }
 
-// Global instance for easy access
-export const clientProfiler = new ClientPerformanceProfiler();
+      this.checkPerformanceAlerts(snapshot);
+    } catch (error) {
+      console.error('ClientPerformanceProfiler: failed to collect snapshot', error);
+    }
+  }
+
+  private collectRenderMetrics(): RenderMetrics {
+    if (!this.config.trackRenderMetrics || typeof performance === 'undefined') {
+      return { componentCount: 0, renderTime: 0, reRenderCount: 0, mountTime: 0, updateTime: 0 };
+    }
+
+    const measures = performance.getEntriesByType('measure');
+    const totalRenderTime = measures.reduce((sum, entry) => sum + entry.duration, 0);
+    const componentCount =
+      typeof document !== 'undefined'
+        ? document.querySelectorAll('[data-reactroot], [data-component-id]').length
+        : 0;
+
+    return {
+      componentCount,
+      renderTime: totalRenderTime,
+      reRenderCount: measures.length,
+      mountTime: measures.length > 0 ? measures[0]?.duration ?? 0 : 0,
+      updateTime: totalRenderTime
+    };
+  }
+
+  private collectMemoryMetrics(): MemoryMetrics {
+    if (!this.config.trackMemoryMetrics || typeof performance === 'undefined') {
+      return { usedJSHeapSize: 0, totalJSHeapSize: 0, jsHeapSizeLimit: 0, heapUtilization: 0 };
+    }
+
+    const memory = (performance as Performance & { memory?: PerformanceMemory }).memory;
+    if (!memory) {
+      return { usedJSHeapSize: 0, totalJSHeapSize: 0, jsHeapSizeLimit: 0, heapUtilization: 0 };
+    }
+
+    const heapUtilization =
+      memory.jsHeapSizeLimit > 0
+        ? (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100
+        : 0;
+
+    return {
+      usedJSHeapSize: memory.usedJSHeapSize,
+      totalJSHeapSize: memory.totalJSHeapSize,
+      jsHeapSizeLimit: memory.jsHeapSizeLimit,
+      heapUtilization
+    };
+  }
+
+  private collectNetworkMetrics(): NetworkMetrics {
+    if (!this.config.trackNetworkMetrics || typeof performance === 'undefined') {
+      return { requestCount: 0, totalTransferSize: 0, averageResponseTime: 0, errorCount: 0, cacheHitRate: 0 };
+    }
+
+    const resourceEntries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
+    if (resourceEntries.length === 0) {
+      return { requestCount: 0, totalTransferSize: 0, averageResponseTime: 0, errorCount: 0, cacheHitRate: 0 };
+    }
+
+    let transferSize = 0;
+    let responseTotal = 0;
+    let cacheHits = 0;
+
+    resourceEntries.forEach(entry => {
+      transferSize += entry.transferSize;
+      responseTotal += entry.responseEnd - entry.responseStart;
+      if (entry.transferSize === 0 && entry.decodedBodySize > 0) {
+        cacheHits += 1;
+      }
+    });
+
+    return {
+      requestCount: resourceEntries.length,
+      totalTransferSize: transferSize,
+      averageResponseTime: responseTotal / resourceEntries.length,
+      errorCount: 0,
+      cacheHitRate: (cacheHits / resourceEntries.length) * 100
+    };
+  }
+
+  private collectUserInteractionMetrics(): UserInteractionMetrics {
+    if (!this.config.trackUserInteractions) {
+      return {
+        clickCount: 0,
+        scrollEvents: 0,
+        inputEvents: 0,
+        navigationCount: 0,
+        averageInteractionTime: 0
+      };
+    }
+
+    const durations = this.interactionCounters.interactionDurations;
+    const averageInteractionTime =
+      durations.length > 0
+        ? durations.reduce((sum, value) => sum + value, 0) / durations.length
+        : 0;
+
+    return {
+      clickCount: this.interactionCounters.clickCount,
+      scrollEvents: this.interactionCounters.scrollEvents,
+      inputEvents: this.interactionCounters.inputEvents,
+      navigationCount: this.interactionCounters.navigationCount,
+      averageInteractionTime
+    };
+  }
+
+  private collectWebVitals(): VitalMetrics {
+    if (!this.config.trackWebVitals || typeof performance === 'undefined') {
+      return { FCP: 0, LCP: 0, FID: 0, CLS: 0, TTFB: 0 };
+    }
+
+    const navigationEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+    const navigation = navigationEntries[0];
+
+    if (navigation) {
+      this.webVitals.ttfb = navigation.responseStart - navigation.requestStart;
+    }
+
+    const paintEntries = performance.getEntriesByName('first-contentful-paint');
+    if (paintEntries[0]) {
+      this.webVitals.fcp = paintEntries[0].startTime;
+    }
+
+    return {
+      FCP: this.webVitals.fcp,
+      LCP: this.webVitals.lcp,
+      FID: this.webVitals.fid,
+      CLS: this.webVitals.cls,
+      TTFB: this.webVitals.ttfb
+    };
+  }
+
+  private initializeObservers(): void {
+    if (!this.config.trackWebVitals || typeof PerformanceObserver === 'undefined') {
+      return;
+    }
+
+    try {
+      const clsObserver = new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) {
+          const layoutShift = entry as PerformanceEntry & { value?: number; hadRecentInput?: boolean };
+          if (layoutShift.hadRecentInput) {
+            continue;
+          }
+          this.webVitals.cls += layoutShift.value ?? 0;
+        }
+      });
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+      this.observers.push(clsObserver);
+    } catch (error) {
+      console.warn('ClientPerformanceProfiler: failed to observe layout shifts', error);
+    }
+
+    try {
+      const lcpObserver = new PerformanceObserver(list => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        if (lastEntry) {
+          this.webVitals.lcp = lastEntry.startTime;
+        }
+      });
+      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      this.observers.push(lcpObserver);
+    } catch (error) {
+      console.warn('ClientPerformanceProfiler: failed to observe LCP', error);
+    }
+
+    try {
+      const fidObserver = new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) {
+          const firstInput = entry as PerformanceEventTiming;
+          this.webVitals.fid = firstInput.processingStart - firstInput.startTime;
+        }
+      });
+      fidObserver.observe({ entryTypes: ['first-input'] });
+      this.observers.push(fidObserver);
+    } catch (error) {
+      console.warn('ClientPerformanceProfiler: failed to observe FID', error);
+    }
+  }
+
+  private setupEventListeners(): void {
+    if (typeof window === 'undefined' || this.listenersRegistered) {
+      return;
+    }
+
+    const register = <K extends keyof WindowEventMap>(
+      event: K,
+      handler: (event: WindowEventMap[K]) => void
+    ): void => {
+      window.addEventListener(event, handler as EventListener, { passive: true });
+      this.detachListeners.push(() =>
+        window.removeEventListener(event, handler as EventListener)
+      );
+    };
+
+    register('click', () => {
+      this.interactionCounters.clickCount += 1;
+      this.recordInteractionDuration();
+    });
+
+    register('scroll', () => {
+      this.interactionCounters.scrollEvents += 1;
+      this.recordInteractionDuration();
+    });
+
+    register('input', () => {
+      this.interactionCounters.inputEvents += 1;
+      this.recordInteractionDuration();
+    });
+
+    register('popstate', () => {
+      this.interactionCounters.navigationCount += 1;
+    });
+
+    this.listenersRegistered = true;
+  }
+
+  private teardownObservers(): void {
+    this.observers.forEach(observer => observer.disconnect());
+    this.observers = [];
+  }
+
+  private teardownListeners(): void {
+    this.detachListeners.forEach(detach => detach());
+    this.detachListeners = [];
+    this.listenersRegistered = false;
+  }
+
+  private resetCounters(): void {
+    this.interactionCounters = {
+      clickCount: 0,
+      scrollEvents: 0,
+      inputEvents: 0,
+      navigationCount: 0,
+      interactionDurations: [],
+      lastInteractionTimestamp: null
+    };
+  }
+
+  private recordInteractionDuration(): void {
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+    const lastTimestamp = this.interactionCounters.lastInteractionTimestamp;
+    if (lastTimestamp !== null) {
+      this.interactionCounters.interactionDurations.push(now - lastTimestamp);
+    }
+    this.interactionCounters.lastInteractionTimestamp = now;
+  }
+
+  private checkPerformanceAlerts(snapshot: PerformanceSnapshot): void {
+    const { renderTime } = snapshot.render;
+    const heapUsage = snapshot.memory.heapUtilization;
+    const { averageResponseTime } = snapshot.network;
+    const { CLS } = snapshot.vitals;
+
+    if (renderTime > this.config.alertThresholds.renderTime) {
+      console.warn('[Profiler] High render time detected:', renderTime.toFixed(2), 'ms');
+    }
+    if (heapUsage > this.config.alertThresholds.memoryUsage) {
+      console.warn('[Profiler] Memory usage above threshold:', heapUsage.toFixed(1), '%');
+    }
+    if (averageResponseTime > this.config.alertThresholds.responseTime) {
+      console.warn('[Profiler] Slow network responses detected:', averageResponseTime.toFixed(2), 'ms');
+    }
+    if (CLS > this.config.alertThresholds.layoutShift) {
+      console.warn('[Profiler] Layout shift above threshold:', CLS.toFixed(3));
+    }
+  }
+
+  private generateReport(): void {
+    if (this.snapshots.length === 0 || typeof console === 'undefined') {
+      return;
+    }
+
+    const durationMs =
+      this.snapshots[this.snapshots.length - 1].timestamp - this.startTime;
+
+    const average = (values: number[]): number => {
+      if (values.length === 0) {
+        return 0;
+      }
+      return values.reduce((sum, value) => sum + value, 0) / values.length;
+    };
+
+    const renderTimes = this.snapshots.map(snapshot => snapshot.render.renderTime);
+    const heapUsage = this.snapshots.map(snapshot => snapshot.memory.heapUtilization);
+    const networkTimes = this.snapshots.map(snapshot => snapshot.network.averageResponseTime);
+
+    console.info('[Profiler] Session summary', {
+      snapshots: this.snapshots.length,
+      durationMs,
+      averageRenderTime: average(renderTimes).toFixed(2),
+      averageHeapUsage: average(heapUsage).toFixed(2),
+      averageNetworkTime: average(networkTimes).toFixed(2)
+    });
+  }
+}
+
+export const clientPerformanceProfiler = new ClientPerformanceProfiler();
+

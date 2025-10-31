@@ -43,7 +43,9 @@ export const TextSelectionModal: React.FC<TextSelectionModalProps> = ({
   const [selectedColor, setSelectedColor] = useState(SWATCH_COLORS[0]);
   const [isAdvanced, setIsAdvanced] = useState(false);
 
-  if (!isOpen || !selection) return null;
+  if (!isOpen || !selection) {
+    return null;
+  }
 
   const handleConfirm = () => {
     onConfirm(nodeType, selectedColor);

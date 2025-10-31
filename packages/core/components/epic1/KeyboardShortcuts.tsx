@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useReactFlow, useKeyPress, useStore } from 'reactflow';
-import { Node, Edge } from 'reactflow';
-import type { EditableNodeData } from './nodes';
+import { useReactFlow, useStore } from 'reactflow';
+import type { Node } from 'reactflow';
 
 interface KeyboardShortcutsProps {
   onSave?: () => void;
@@ -34,11 +33,11 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   const [showHelp, setShowHelp] = useState(false);
   
   // Get selected nodes and edges from store with safety check
-  const selectedNodes = useStore((state) => 
-    state?.nodes?.filter(node => node.selected) || []
+  const selectedNodes = useStore(state =>
+    Array.from(state.nodeInternals.values()).filter(node => node.selected)
   );
-  const selectedEdges = useStore((state) => 
-    state?.edges?.filter(edge => edge.selected) || []
+  const selectedEdges = useStore(state =>
+    state.edges.filter(edge => edge.selected)
   );
 
   // Pan shortcuts (Arrow keys)
@@ -322,6 +321,9 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
     handleDuplicate,
     handleSelectAll,
     additionalHandlers,
+    selectedNodes,
+    onGroup,
+    onUngroup
   ]);
 
   // Help overlay

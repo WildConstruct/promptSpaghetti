@@ -372,7 +372,7 @@ export class PerformanceRegressionDetector {
   private calculateTrend(
     values: PerformanceMetric[]
   ): 'improving' | 'stable' | 'degrading' {
-    if (values.length < 3) return 'stable';
+    if (values.length < 3) {return 'stable';}
 
     const numericValues = values.map(v => v.value);
     const firstHalf = numericValues.slice(
@@ -388,8 +388,8 @@ export class PerformanceRegressionDetector {
 
     const changePercent = ((secondAvg - firstAvg) / firstAvg) * 100;
 
-    if (changePercent < -5) return 'improving'; // Assuming lower is better for most metrics
-    if (changePercent > 5) return 'degrading';
+    if (changePercent < -5) {return 'improving';} // Assuming lower is better for most metrics
+    if (changePercent > 5) {return 'degrading';}
     return 'stable';
   }
 
@@ -405,7 +405,10 @@ export class PerformanceRegressionDetector {
       if (!groups.has(metric.name)) {
         groups.set(metric.name, []);
       }
-      groups.get(metric.name)!.push(metric);
+      const bucket = groups.get(metric.name);
+      if (bucket) {
+        bucket.push(metric);
+      }
     }
 
     return groups;
@@ -435,6 +438,7 @@ export class PerformanceRegressionDetector {
       const data = await fs.readFile(this.metricsFile, 'utf-8');
       return JSON.parse(data);
     } catch (error) {
+      console.warn('Warning: Failed to load performance metrics:', error);
       return [];
     }
   }
@@ -447,6 +451,7 @@ export class PerformanceRegressionDetector {
       const data = await fs.readFile(this.baselinesFile, 'utf-8');
       return JSON.parse(data);
     } catch (error) {
+      console.warn('Warning: Failed to load performance baselines:', error);
       return [];
     }
   }

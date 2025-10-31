@@ -6,6 +6,19 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useStore } from '@/stores/graphStore';
 
+const KONAMI_CODE = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'b',
+  'a'
+];
+
 export interface EasterEgg {
   id: string;
   name: string;
@@ -39,15 +52,14 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
   
   // Konami code tracking
   const konamiSequence = useRef<string[]>([]);
-  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
   
   // Long press tracking
-  const longPressTimer = useRef<NodeJS.Timeout>();
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const longPressActive = useRef(false);
-  
+
   // Triple click tracking
   const clickCount = useRef(0);
-  const clickTimer = useRef<NodeJS.Timeout>();
+  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Shake detection
   const lastShakeTime = useRef(0);
@@ -58,21 +70,39 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
 
   // Discover an Easter egg
   const discoverEgg = useCallback((eggId: string) => {
-    if (!discoveredEggs.has(eggId)) {
-      setDiscoveredEggs(prev => new Set([...prev, eggId]));
-      
-      // Trigger celebration animation
-      triggerCelebration(eggId);
-      
-      // Save to localStorage
-      const allDiscovered = JSON.parse(localStorage.getItem('discoveredEasterEggs') || '[]');
-      allDiscovered.push(eggId);
-      localStorage.setItem('discoveredEasterEggs', JSON.stringify(allDiscovered));
+    let isNewDiscovery = false;
+
+    setDiscoveredEggs(prev => {
+      if (prev.has(eggId)) {
+        return prev;
+      }
+      const next = new Set(prev);
+      next.add(eggId);
+      isNewDiscovery = true;
+      return next;
+    });
+
+    if (!isNewDiscovery) {
+      return;
     }
-  }, [discoveredEggs]);
+
+    triggerCelebration(eggId);
+
+    try {
+      const stored: string[] = JSON.parse(
+        localStorage.getItem('discoveredEasterEggs') || '[]'
+      );
+      if (!stored.includes(eggId)) {
+        stored.push(eggId);
+        localStorage.setItem('discoveredEasterEggs', JSON.stringify(stored));
+      }
+    } catch (error) {
+      console.warn('[EasterEggManager] Failed to persist discovered eggs', error);
+    }
+  }, [triggerCelebration]);
 
   // Celebration animation
-  const triggerCelebration = (eggId: string) => {
+  const triggerCelebration = useCallback((eggId: string) => {
     // Create confetti or sparkle effect
     const celebration = document.createElement('div');
     celebration.className = 'easter-egg-celebration';
@@ -95,7 +125,7 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
     if (navigator.vibrate) {
       navigator.vibrate([100, 50, 100]);
     }
-  };
+  }, []);
 
   // Get emoji for egg type
   const getEggEmoji = (eggId: string): string => {
@@ -124,7 +154,7 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
       
       // Check if matches Konami code
       const currentSequence = konamiSequence.current.join(',');
-      const targetSequence = konamiCode.join(',');
+      const targetSequence = KONAMI_CODE.join(',');
       
       if (currentSequence === targetSequence) {
         discoverEgg('konami');
@@ -142,7 +172,7 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
 
     window.addEventListener('keydown', handleKonami);
     return () => window.removeEventListener('keydown', handleKonami);
-  }, [onWeirdModeToggle, discoverEgg]);
+  }, [discoverEgg, onWeirdModeToggle]);
 
   // 2. Long Press Handler
   useEffect(() => {
@@ -167,6 +197,7 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
       longPressActive.current = false;
       if (longPressTimer.current) {
         clearTimeout(longPressTimer.current);
+        longPressTimer.current = null;
       }
     };
 
@@ -199,9 +230,12 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
         }
         
         // Reset counter after delay
-        clearTimeout(clickTimer.current);
+        if (clickTimer.current) {
+          clearTimeout(clickTimer.current);
+        }
         clickTimer.current = setTimeout(() => {
           clickCount.current = 0;
+          clickTimer.current = null;
         }, 500);
       }
     };
@@ -218,7 +252,7 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
 
     const handleMotion = (e: DeviceMotionEvent) => {
       const current = e.accelerationIncludingGravity;
-      if (!current || current.x === null || current.y === null || current.z === null) return;
+      if (!current || current.x === null || current.y === null || current.z === null) {return;}
 
       if (lastX !== null && lastY !== null && lastZ !== null) {
         const deltaX = Math.abs(current.x - lastX);
@@ -253,6 +287,8 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
   }, [onPresetsShuffled, discoverEgg]);
 
   // 5. Shift for Precision Mode
+  const hasDiscoveredShift = discoveredEggs.has('shift');
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Shift' && !precisionMode) {
@@ -261,7 +297,7 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
         document.body.classList.add('precision-mode');
         
         // First time discovery
-        if (!discoveredEggs.has('shift')) {
+        if (!hasDiscoveredShift) {
           discoverEgg('shift');
         }
       }
@@ -282,7 +318,7 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [precisionMode, onPrecisionModeToggle, discoveredEggs, discoverEgg]);
+  }, [precisionMode, onPrecisionModeToggle, hasDiscoveredShift, discoverEgg]);
 
   // Load discovered eggs from localStorage
   useEffect(() => {

@@ -673,22 +673,24 @@ export class DocTestFramework {
     results.forEach(result => {
       result.errors.forEach(error => {
         const key = error.message;
-        if (!errorMap.has(key)) {
-          errorMap.set(key, { count: 0, files: [] });
+        const existing = errorMap.get(key);
+        if (existing) {
+          existing.count += 1;
+          existing.files.push(result.fileName);
+        } else {
+          errorMap.set(key, { count: 1, files: [result.fileName] });
         }
-        const entry = errorMap.get(key)!;
-        entry.count++;
-        entry.files.push(result.fileName);
       });
 
       result.warnings.forEach(warning => {
         const key = warning.message;
-        if (!warningMap.has(key)) {
-          warningMap.set(key, { count: 0, files: [] });
+        const existing = warningMap.get(key);
+        if (existing) {
+          existing.count += 1;
+          existing.files.push(result.fileName);
+        } else {
+          warningMap.set(key, { count: 1, files: [result.fileName] });
         }
-        const entry = warningMap.get(key)!;
-        entry.count++;
-        entry.files.push(result.fileName);
       });
     });
 

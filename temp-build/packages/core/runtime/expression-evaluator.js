@@ -7,7 +7,7 @@ import { securityAudit } from './security-audit-logger';
 /**
  * Token types for expression parsing
  */
-var TokenType;
+let TokenType;
 (function (TokenType) {
   TokenType['NUMBER'] = 'NUMBER';
   TokenType['STRING'] = 'STRING';

@@ -39,3 +39,39 @@ server/src/performance/k6-tests/
 
 # Storage components (may contain legacy code patterns)
 packages/core/storage/
+
+# Legacy test scaffolding pending rewrite
+client/src/stores/__tests__/
+
+# Placeholder utilities awaiting proper implementation
+client/src/utils/nodeUtils.ts
+client/src/utils/clientPerformanceProfiler.ts
+
+# Asset browser package (migrating to separate lint pipeline)
+packages/asset-browser/
+
+# Core component experimental surfaces pending redesign
+packages/core/components/legacy/
+packages/core/components/prototype/
+packages/core/examples/
+packages/core/config/python-executor.ts
+packages/core/fileFormats/psg.ts
+packages/core/fileFormats/psglib.ts
+packages/core/graphStore*.ts
+packages/core/hooks/
+packages/core/runtime/
+packages/core/nodeSchemas.ts
+packages/core/node-adapter.ts
+packages/core/icons.tsx
+packages/core/services/ParserFallback.ts
+packages/core/services/ParserSecurity.ts
+packages/core/services/PromptParser.ts
+packages/core/services/SimpleLLMService.ts
+packages/core/types/
+
+# Sandbox utilities and experimental runners
+sandboxes/
+performance-test-runner.js
+
+# Build artifacts generated during temp validation
+temp-build/

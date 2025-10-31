@@ -22,7 +22,7 @@ export interface MockConfig {
 export interface MockInstance {
   id: string;
   type: string;
-  _config: MockConfig;
+  config: MockConfig;
   active: boolean;
   createdAt: Date;
   lastUsed?: Date;
@@ -99,7 +99,7 @@ export class MockFactory extends EventEmitter {
     };
 
     // Create specific mock based on type
-    const mock = this.createSpecificMock<T>(type, id, mockConfig);
+    const mock = this.createSpecificMock<T>(type, id);
 
     // Store mock instance
     this.mocks.set(id, mockInstance);
@@ -123,8 +123,7 @@ export class MockFactory extends EventEmitter {
       instance.callCount++;
       return this.createSpecificMock<T>(
         instance.type as MockType,
-        id,
-        instance.config
+        id
       );
     }
     return undefined;
@@ -159,7 +158,7 @@ export class MockFactory extends EventEmitter {
       this.behaviors.set(mockId, []);
     }
 
-    this.behaviors.get(mockId)!.push(behavior);
+    this.behaviors.get(mockId)?.push(behavior);
 
     if (this.globalConfig.enableLogging) {
       console.log(`🎯 Added behavior "${behavior.name}" to mock: ${mockId}`);
@@ -302,32 +301,31 @@ export class MockFactory extends EventEmitter {
    */
   private createSpecificMock<T>(
     type: MockType,
-    id: string,
-    _config: MockConfig
+    id: string
   ): T {
     switch (type) {
       case 'api':
-        return this.createAPIMock(id, _config) as T;
+        return this.createAPIMock(id) as T;
       case 'database':
-        return this.createDatabaseMock(id, _config) as T;
+        return this.createDatabaseMock(id) as T;
       case 'service':
-        return this.createServiceMock(id, _config) as T;
+        return this.createServiceMock(id) as T;
       case 'component':
-        return this.createComponentMock(id, _config) as T;
+        return this.createComponentMock(id) as T;
       case 'filesystem':
-        return this.createFilesystemMock(id, _config) as T;
+        return this.createFilesystemMock(id) as T;
       case 'network':
-        return this.createNetworkMock(id, _config) as T;
+        return this.createNetworkMock(id) as T;
       case 'auth':
-        return this.createAuthMock(id, _config) as T;
+        return this.createAuthMock(id) as T;
       case 'analytics':
-        return this.createAnalyticsMock(id, _config) as T;
+        return this.createAnalyticsMock(id) as T;
       default:
         throw new Error(`Unknown mock type: ${type}`);
     }
   }
 
-  private createAPIMock(id: string, __config: MockConfig): unknown {
+  private createAPIMock(id: string): unknown {
     return {
       id,
       type: 'api',
@@ -344,7 +342,7 @@ export class MockFactory extends EventEmitter {
     };
   }
 
-  private createDatabaseMock(id: string, _config: MockConfig): unknown {
+  private createDatabaseMock(id: string): unknown {
     const mockData = new Map();
 
     return {
@@ -370,7 +368,7 @@ export class MockFactory extends EventEmitter {
     };
   }
 
-  private createServiceMock(id: string, _config: MockConfig): unknown {
+  private createServiceMock(id: string): unknown {
     return {
       id,
       type: 'service',
@@ -379,12 +377,12 @@ export class MockFactory extends EventEmitter {
       isAvailable: () => true,
       getStatus: () => ({
         status: 'active',
-        uptime: Date.now() - this.mocks.get(id)!.createdAt.getTime()
+        uptime: Date.now() - (this.mocks.get(id)?.createdAt.getTime() || 0)
       })
     };
   }
 
-  private createComponentMock(id: string, _config: MockConfig): unknown {
+  private createComponentMock(id: string): unknown {
     const mockProps: unknown = {};
     const mockMethods: unknown = {};
 
@@ -402,7 +400,7 @@ export class MockFactory extends EventEmitter {
     };
   }
 
-  private createFilesystemMock(id: string, _config: MockConfig): unknown {
+  private createFilesystemMock(id: string): unknown {
     const mockFiles = new Map();
 
     return {
@@ -442,7 +440,7 @@ export class MockFactory extends EventEmitter {
     };
   }
 
-  private createNetworkMock(id: string, _config: MockConfig): unknown {
+  private createNetworkMock(id: string): unknown {
     return {
       id,
       type: 'network',
@@ -458,7 +456,7 @@ export class MockFactory extends EventEmitter {
     };
   }
 
-  private createAuthMock(id: string, _config: MockConfig): unknown {
+  private createAuthMock(id: string): unknown {
     const sessions = new Map();
 
     return {
@@ -502,7 +500,7 @@ export class MockFactory extends EventEmitter {
     };
   }
 
-  private createAnalyticsMock(id: string, _config: MockConfig): unknown {
+  private createAnalyticsMock(id: string): unknown {
     const events: unknown[] = [];
 
     return {

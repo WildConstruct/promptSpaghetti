@@ -1,6 +1,5 @@
 // NodeTetris - Tetris game using React Flow nodes
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Node, Edge } from 'reactflow';
 
 // Tetris piece shapes using different node types
 const TETRIS_PIECES = {
@@ -196,11 +195,11 @@ export const NodeTetris: React.FC<NodeTetrisProps> = ({ onExit, onScoreUpdate })
 
   // Game loop
   useEffect(() => {
-    if (!currentPiece || gameOver || paused) return;
+    if (!currentPiece || gameOver || paused) {return;}
 
     gameLoopRef.current = setInterval(() => {
       setCurrentPiece(prevPiece => {
-        if (!prevPiece) return null;
+        if (!prevPiece) {return null;}
 
         const newPiece = { ...prevPiece, position: { ...prevPiece.position, y: prevPiece.position.y + 1 } };
 
@@ -245,7 +244,7 @@ export const NodeTetris: React.FC<NodeTetrisProps> = ({ onExit, onScoreUpdate })
   // Keyboard controls
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (gameOver || paused) return;
+      if (gameOver || paused) {return;}
 
       switch (event.code) {
         case 'ArrowLeft':
@@ -263,7 +262,7 @@ export const NodeTetris: React.FC<NodeTetrisProps> = ({ onExit, onScoreUpdate })
         case 'ArrowDown':
           event.preventDefault();
           setCurrentPiece(prev => {
-            if (!prev) return null;
+            if (!prev) {return null;}
             const newPiece = { ...prev, position: { ...prev.position, y: prev.position.y + 1 } };
             return checkCollision(newPiece, board) ? prev : newPiece;
           });
@@ -276,8 +275,8 @@ export const NodeTetris: React.FC<NodeTetrisProps> = ({ onExit, onScoreUpdate })
           event.preventDefault();
           // Hard drop
           setCurrentPiece(prev => {
-            if (!prev) return null;
-            let newPiece = { ...prev };
+            if (!prev) {return null;}
+            const newPiece = { ...prev };
             while (!checkCollision({ ...newPiece, position: { ...newPiece.position, y: newPiece.position.y + 1 } }, board)) {
               newPiece.position.y += 1;
             }
@@ -417,7 +416,7 @@ export const NodeTetris: React.FC<NodeTetrisProps> = ({ onExit, onScoreUpdate })
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .node-tetris-overlay {
           position: fixed;
           top: 0;

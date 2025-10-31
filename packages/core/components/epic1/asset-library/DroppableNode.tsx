@@ -2,9 +2,10 @@
  * DroppableNode - Higher-order component that makes React Flow nodes accept preset drops
  */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { NodeProps } from 'reactflow';
+import type { EditableNodeData } from '../nodes';
 import { DraggedPreset, Preset } from './types';
 import { applyPresetToNode } from './presetUtils';
 import './DroppableNode.css';
@@ -14,17 +15,25 @@ export interface DroppableNodeProps {
   autoEditOnDrop?: boolean;
 }
 
+type DroppableNodeData = EditableNodeData & {
+  isDropTarget?: boolean;
+  dropHighlight?: boolean;
+  justDropped?: boolean;
+};
+
 /**
  * Makes a React Flow node component accept preset drops
  */
-export function withDroppableNode<T extends NodeProps>(
+export function withDroppableNode<T extends NodeProps<DroppableNodeData>>(
   NodeComponent: React.ComponentType<T>,
   options: DroppableNodeProps = {}
-): React.ComponentType<T> {
-  return React.memo((props: T) => {
+) {
+  const DroppableComponent: React.FC<T> = props => {
     const { id, data, type } = props;
     const [dropHighlight, setDropHighlight] = useState(false);
     const [justDropped, setJustDropped] = useState(false);
+    const autoEdit = options.autoEditOnDrop !== false;
+    const presetDropHandler = options.onPresetDrop;
 
     const handleDrop = useCallback((item: DraggedPreset) => {
       const { preset } = item;
@@ -39,13 +48,13 @@ export function withDroppableNode<T extends NodeProps>(
       const newData = applyPresetToNode(data, preset, type || '');
       
       // Auto-enter edit mode if enabled
-      if (options.autoEditOnDrop !== false) {
+      if (autoEdit) {
         newData.isEditing = true;
       }
 
       // Notify parent about the drop
-      if (options.onPresetDrop) {
-        options.onPresetDrop(id, preset);
+      if (presetDropHandler) {
+        presetDropHandler(id, preset);
       }
 
       // Trigger drop animation
@@ -67,7 +76,7 @@ export function withDroppableNode<T extends NodeProps>(
           data.onEdit(preset.value.label);
         }
       }
-    }, [id, data, type, options]);
+    }, [autoEdit, data, id, presetDropHandler, type]);
 
     const [{ isOver, canDrop }, drop] = useDrop(() => ({
       accept: 'preset',
@@ -85,14 +94,19 @@ export function withDroppableNode<T extends NodeProps>(
     }, [isOver, canDrop]);
 
     // Create enhanced props
-    const enhancedProps = {
-      ...props,
-      data: {
+    const enhancedData = useMemo(
+      () => ({
         ...data,
         isDropTarget: true,
         dropHighlight,
         justDropped
-      }
+      }),
+      [data, dropHighlight, justDropped]
+    );
+
+    const enhancedProps: T = {
+      ...props,
+      data: enhancedData
     };
 
     return (
@@ -100,7 +114,7 @@ export function withDroppableNode<T extends NodeProps>(
         ref={drop} 
         className={`droppable-node-wrapper ${dropHighlight ? 'drop-highlight' : ''} ${justDropped ? 'just-dropped' : ''}`}
       >
-        <NodeComponent {...enhancedProps as T} />
+        <NodeComponent {...enhancedProps} />
         {dropHighlight && (
           <div className="drop-indicator">
             <span>Drop to apply preset</span>
@@ -108,7 +122,9 @@ export function withDroppableNode<T extends NodeProps>(
         )}
       </div>
     );
-  });
+  };
+
+  return React.memo(DroppableComponent);
 }
 
 /**

@@ -1,13 +1,23 @@
 import React from 'react';
-import { Edge, EdgeProps, getBezierPath, getSmoothStepPath } from 'reactflow';
+import { EdgeProps, getSmoothStepPath } from 'reactflow';
 import { AttachmentEdge } from './edges/AttachmentEdge';
 import EdgeRouter from './edges/EdgeRouter';
 
 // Default edge component that forces rendering
-export const DefaultEdge: React.FC<EdgeProps> = (props) => {
+export const DefaultEdge: React.FC<EdgeProps> = props => {
+  const extraClassName =
+    'className' in props && typeof (props as { className?: string }).className === 'string'
+      ? (props as { className?: string }).className ?? ''
+      : '';
+
   // Log edge state for debugging
   if (props.selected) {
-    console.log('[DefaultEdge] Selected edge:', props.id, 'className:', props.className);
+    console.log(
+      '[DefaultEdge] Selected edge:',
+      props.id,
+      'className:',
+      extraClassName
+    );
   }
   
   // Use smoothstep path since that's what the edges are configured to use
@@ -22,7 +32,9 @@ export const DefaultEdge: React.FC<EdgeProps> = (props) => {
   });
 
   return (
-    <g className={`react-flow__edge ${props.selected ? 'selected' : ''} ${props.className || ''}`}>
+    <g
+      className={`react-flow__edge ${props.selected ? 'selected' : ''} ${extraClassName}`}
+    >
       {/* Invisible wider path for better click detection - MUST BE FIRST */}
       <path
         className="react-flow__edge-interaction"

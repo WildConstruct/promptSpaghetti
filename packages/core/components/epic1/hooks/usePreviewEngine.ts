@@ -70,8 +70,8 @@ export function usePreviewEngine({
             id: edge.id,
             source: edge.source,
             target: edge.target,
-            sourceHandle: edge.sourceHandle,
-            targetHandle: edge.targetHandle
+            sourceHandle: edge.sourceHandle ?? undefined,
+            targetHandle: edge.targetHandle ?? undefined
           }))
         };
       } catch (error) {
@@ -84,7 +84,7 @@ export function usePreviewEngine({
 
   // Update preview when graph changes (but not during dragging)
   useEffect(() => {
-    if (!isPreviewVisible || !previewEngineRef.current || isDragging) return;
+    if (!isPreviewVisible || !previewEngineRef.current || isDragging) {return;}
 
     const runtimeGraph = convertToRuntimeGraph(nodes, edges);
     if (runtimeGraph) {

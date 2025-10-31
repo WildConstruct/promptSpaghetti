@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { NodeProps, useReactFlow } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 import './BoundingBox.css';
+import type { Epic1NodeProps } from './nodePropTypes';
 
 export interface BoundingBoxData {
   title: string;
@@ -30,14 +31,10 @@ const defaultColors = [
  * Bounding Box component for visual organization of nodes
  * Story 1.26: Bounding Boxes/Regions
  */
-export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
+export const BoundingBox: React.FC<Epic1NodeProps<BoundingBoxData>> = ({
   data,
   selected,
   id,
-  xPos,
-  yPos,
-  draggable = true,
-  measured,
   width,
   height
 }) => {
@@ -60,8 +57,12 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
   
   // Sync with React Flow's width/height props if they change
   useEffect(() => {
-    if (width && height && (width !== size.width || height !== size.height)) {
-      setSize({ width, height });
+    if (width && height) {
+      setSize(prev =>
+        prev.width === width && prev.height === height
+          ? prev
+          : { width, height }
+      );
     }
   }, [width, height]);
   
@@ -102,10 +103,10 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
   const getContainedNodes = useCallback(() => {
     const allNodes = getNodes();
     const thisBox = allNodes.find(n => n.id === id);
-    if (!thisBox) return [];
+    if (!thisBox) {return [];}
     
     return allNodes.filter(node => {
-      if (node.id === id || node.type === 'boundingBox') return false;
+      if (node.id === id || node.type === 'boundingBox') {return false;}
       
       const nodeX = node.position.x;
       const nodeY = node.position.y;
@@ -125,7 +126,7 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
         nodeY + nodeHeight <= boxY + boxHeight
       );
     });
-  }, [id, size, getNodes]);
+  }, [id, size.width, size.height, getNodes]);
   
   const containedNodes = getContainedNodes();
   
@@ -412,7 +413,9 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
     
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
-    let h = 0, s = 0, l = (max + min) / 2;
+    const l = (max + min) / 2;
+    let h = 0;
+    let s = 0;
     
     if (max !== min) {
       const d = max - min;
@@ -437,11 +440,11 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
       r2 = g2 = b2 = l;
     } else {
       const hue2rgb = (p: number, q: number, t: number) => {
-        if (t < 0) t += 1;
-        if (t > 1) t -= 1;
-        if (t < 1/6) return p + (q - p) * 6 * t;
-        if (t < 1/2) return q;
-        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        if (t < 0) {t += 1;}
+        if (t > 1) {t -= 1;}
+        if (t < 1/6) {return p + (q - p) * 6 * t;}
+        if (t < 1/2) {return q;}
+        if (t < 2/3) {return p + (q - p) * (2/3 - t) * 6;}
         return p;
       };
       

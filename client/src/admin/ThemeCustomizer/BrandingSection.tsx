@@ -1,8 +1,10 @@
 import React from 'react';
 
+import type { ThemeBranding } from './types';
+
 interface BrandingSectionProps {
-  branding: Record<string, any>;
-  onChange: (branding: Record<string, any>) => void;
+  branding: ThemeBranding;
+  onChange: (branding: ThemeBranding) => void;
 }
 
 const BrandingSection: React.FC<BrandingSectionProps> = ({

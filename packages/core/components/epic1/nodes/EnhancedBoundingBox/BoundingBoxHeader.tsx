@@ -10,7 +10,7 @@ import { BOUNDING_BOX_CONSTANTS } from './utils/constants';
 const { BUTTON_SIZE, BUTTON_SPACING } = BOUNDING_BOX_CONSTANTS.ui;
 const { CONTROLS } = BOUNDING_BOX_CONSTANTS.zIndex;
 
-export const BoundingBoxHeader: React.FC<BoundingBoxHeaderProps> = React.memo(({
+const BoundingBoxHeaderComponent: React.FC<BoundingBoxHeaderProps> = ({
   title,
   description,
   isCollapsed,
@@ -230,6 +230,7 @@ export const BoundingBoxHeader: React.FC<BoundingBoxHeaderProps> = React.memo(({
       )}
     </div>
   );
-});
+};
 
+export const BoundingBoxHeader = React.memo(BoundingBoxHeaderComponent);
 BoundingBoxHeader.displayName = 'BoundingBoxHeader';

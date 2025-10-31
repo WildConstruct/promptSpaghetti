@@ -1,30 +1,52 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import './RelationshipView.css';
 import type { Asset } from '../../../services/assetMatcher';
 
-export const RelationshipView: React.FC<{
-  assets?: Asset[];
-}> = ({ assets = [] }) => {
-  const [internalAssets, setInternalAssets] = React.useState<Asset[]>(assets);
+type AssetRegistryEvent = CustomEvent<{ assets: Asset[] }>;
 
-  React.useEffect(() => setInternalAssets(assets), [assets]);
-  React.useEffect(() => {
-    const handler = (e: any) => { if (e?.detail?.assets) setInternalAssets(e.detail.assets); };
-    window.addEventListener('assetRegistry:update', handler as any);
-    return () => window.removeEventListener('assetRegistry:update', handler as any);
+interface RelationshipViewProps {
+  assets?: Asset[];
+}
+
+const mapAssetsByType = (assets: Asset[]) => {
+  const groups = new Map<string, Asset[]>();
+  assets.forEach(asset => {
+    const key = (asset.type ?? 'unknown').toLowerCase();
+    const existing = groups.get(key);
+    if (existing) {
+      existing.push(asset);
+    } else {
+      groups.set(key, [asset]);
+    }
+  });
+  return Array.from(groups.entries()).map(([key, items]) => ({
+    key,
+    count: items.length,
+    items: items.slice(0, 8)
+  }));
+};
+
+export const RelationshipView: React.FC<RelationshipViewProps> = ({ assets = [] }) => {
+  const [internalAssets, setInternalAssets] = useState<Asset[]>(assets);
+
+  useEffect(() => {
+    setInternalAssets(assets);
+  }, [assets]);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const customEvent = event as AssetRegistryEvent;
+      if (Array.isArray(customEvent.detail?.assets)) {
+        setInternalAssets(customEvent.detail.assets);
+      }
+    };
+
+    window.addEventListener('assetRegistry:update', handler);
+    return () => window.removeEventListener('assetRegistry:update', handler);
   }, []);
 
   // Cluster by type and first keyword
-  const clusters = React.useMemo(() => {
-    const map = new Map<string, Asset[]>();
-    internalAssets.forEach(a => {
-      const key = String(a.type || 'unknown').toLowerCase();
-      const groupKey = key;
-      if (!map.has(groupKey)) map.set(groupKey, []);
-      map.get(groupKey)!.push(a);
-    });
-    return Array.from(map.entries()).map(([k, v]) => ({ key: k, count: v.length, items: v.slice(0, 8) }));
-  }, [internalAssets]);
+  const clusters = useMemo(() => mapAssetsByType(internalAssets), [internalAssets]);
 
   return (
     <div className="relationship-panel">

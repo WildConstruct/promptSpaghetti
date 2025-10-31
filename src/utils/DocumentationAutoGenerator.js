@@ -273,7 +273,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       const configData = await fs.readFile(this.configFile, 'utf8');
       this.config = { ...this.config, ...JSON.parse(configData) };
     } catch (error) {
-      // Create default configuration
+      console.warn(
+        'Falling back to default documentation generator configuration:',
+        error
+      );
       await this.saveConfiguration();
     }
   }
@@ -287,6 +290,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       const cacheData = await fs.readFile(this.cacheFile, 'utf8');
       this.cache = JSON.parse(cacheData);
     } catch (error) {
+      console.warn('Creating fresh documentation cache:', error);
       this.cache = {
         lastGeneration: null,
         fileHashes: {},
@@ -312,31 +316,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       errors: []
     };
 
+    const generationTypes = {
+      ...this.config.generation.types,
+      ...(options.types || {})
+    };
+
     try {
       // Analyze project structure
       const projectInfo = await this.analyzeProject();
       this.cache.projectInfo = projectInfo;
 
       // Generate different types of documentation
-      if (this.config.generation.types.api) {
+      if (generationTypes.api) {
         const apiResult = await this.generateAPIDocumentation();
         results.generated.push(...apiResult.generated);
         results.errors.push(...apiResult.errors);
       }
 
-      if (this.config.generation.types.readme) {
+      if (generationTypes.readme) {
         const readmeResult = await this.generateREADMEs();
         results.generated.push(...readmeResult.generated);
         results.errors.push(...readmeResult.errors);
       }
 
-      if (this.config.generation.types.changelog) {
+      if (generationTypes.changelog) {
         const changelogResult = await this.generateChangelog();
         results.generated.push(...changelogResult.generated);
         results.errors.push(...changelogResult.errors);
       }
 
-      if (this.config.generation.types.guides) {
+      if (generationTypes.guides) {
         const guidesResult = await this.generateGuides();
         results.generated.push(...guidesResult.generated);
         results.errors.push(...guidesResult.errors);
@@ -399,7 +408,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         analysis.dependencies = packageData.dependencies || {};
         analysis.scripts = packageData.scripts || {};
       } catch (error) {
-        console.warn('Could not read package.json');
+        console.warn('Could not read package.json:', error);
       }
 
       // Analyze file structure
@@ -723,11 +732,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
             };
 
             examples.push(example);
-          } catch (error) {
-            console.warn(`Could not read example ${filePath}:`, error.message);
-          }
-        }
       } catch (error) {
+        console.warn(`Could not read example ${filePath}:`, error.message);
+      }
+    }
+      } catch {
         // Directory doesn't exist, skip
       }
     }
@@ -870,7 +879,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       try {
         const existingReadme = await fs.readFile(readmePath, 'utf8');
         readme = this.mergeReadmeContent(existingReadme, readme);
-      } catch (error) {
+      } catch {
         // File doesn't exist, use generated content
       }
 
@@ -900,7 +909,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       const pnpmWorkspace = path.join(process.cwd(), 'pnpm-workspace.yaml');
       fs.accessSync(pnpmWorkspace);
       return 'pnpm install';
-    } catch (error) {
+    } catch {
       // Not a pnpm workspace
     }
 
@@ -1239,9 +1248,9 @@ This document contains code examples for common use cases.
 
     // Parse value
     let parsedValue = value;
-    if (value === 'true') parsedValue = true;
-    else if (value === 'false') parsedValue = false;
-    else if (!isNaN(value)) parsedValue = Number(value);
+    if (value === 'true') {parsedValue = true;}
+    else if (value === 'false') {parsedValue = false;}
+    else if (!isNaN(value)) {parsedValue = Number(value);}
 
     current[keys[keys.length - 1]] = parsedValue;
   }

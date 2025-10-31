@@ -19,10 +19,13 @@ test('preview loads without console errors and becomes ready', async ({
   const loadingSelector = '.loading-message';
   const hasLoading = await page.locator(loadingSelector).count();
   if (hasLoading > 0) {
-    await page
-      .locator(loadingSelector)
-      .waitFor({ state: 'detached', timeout: 20_000 })
-      .catch(() => {});
+    try {
+      await page
+        .locator(loadingSelector)
+        .waitFor({ state: 'detached', timeout: 20_000 });
+    } catch (error) {
+      console.warn('Loading indicator persisted longer than expected:', error);
+    }
   }
 
   // Expect that an error screen is not shown.

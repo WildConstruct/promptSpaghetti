@@ -3,7 +3,7 @@
  * Handles port detection and rendering for collapsed bounding boxes
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Handle, Position } from 'reactflow';
 import { PortSystemProps, Port } from './types';
 import { BOUNDING_BOX_CONSTANTS } from './utils/constants';
@@ -52,11 +52,17 @@ function getPortStyle(port: Port, index: number) {
 /**
  * Individual port component
  */
-const PortHandle: React.FC<{
+interface PortHandleProps {
   port: Port;
   index: number;
   boundingBoxId: string;
-}> = React.memo(({ port, index, boundingBoxId }) => {
+}
+
+const PortHandleComponent: React.FC<PortHandleProps> = ({
+  port,
+  index,
+  boundingBoxId
+}) => {
   const style = getPortStyle(port, index);
   const id = `${boundingBoxId}-${port.id}`;
   
@@ -70,19 +76,24 @@ const PortHandle: React.FC<{
       className={`bounding-box-port port-${port.direction}`}
       data-port-type={port.type}
       data-port-label={port.label}
+      data-testid={`handle-${port.direction === 'input' ? 'target' : 'source'}-${port.id}`}
     />
   );
-});
+};
+
+const PortHandle = React.memo(PortHandleComponent);
 
 PortHandle.displayName = 'PortHandle';
 
 /**
  * Port label component for better UX
  */
-const PortLabel: React.FC<{
+interface PortLabelProps {
   port: Port;
   index: number;
-}> = React.memo(({ port, index }) => {
+}
+
+const PortLabelComponent: React.FC<PortLabelProps> = ({ port, index }) => {
   const isInput = port.direction === 'input';
   
   const style: React.CSSProperties = {
@@ -116,18 +127,20 @@ const PortLabel: React.FC<{
       {port.label}
     </div>
   );
-});
+};
+
+const PortLabel = React.memo(PortLabelComponent);
 
 PortLabel.displayName = 'PortLabel';
 
 /**
  * Main PortSystem component
  */
-export const PortSystem: React.FC<PortSystemProps> = React.memo(({
+const PortSystemComponent: React.FC<PortSystemProps> = ({
   isCollapsed,
   ports = [],
   boundingBoxId,
-  detectPorts,
+  detectPorts
 }) => {
   // Only render when collapsed
   if (!isCollapsed) {
@@ -135,35 +148,28 @@ export const PortSystem: React.FC<PortSystemProps> = React.memo(({
   }
   
   // Determine which ports to show
-  const portsToRender = useMemo(() => {
-    // First try to detect ports from connections
-    const detectedPorts = detectPorts();
-    
-    // Combine configured ports with detected ports
-    const allPorts = [...ports];
-    
-    // Add detected ports that aren't already configured
-    detectedPorts.forEach(detectedPort => {
-      const exists = allPorts.some(p => 
-        p.nodeId === detectedPort.nodeId && 
-        p.direction === detectedPort.direction
-      );
-      if (!exists) {
-        allPorts.push(detectedPort);
-      }
-    });
-    
-    // If no ports at all, use defaults
-    if (allPorts.length === 0) {
-      return DEFAULT_PORTS.map(p => ({
-        ...p,
-        nodeId: boundingBoxId,
-        id: `${boundingBoxId}-${p.id}`,
-      }));
+  const detectedPorts = detectPorts();
+  const allPorts = [...ports];
+
+  detectedPorts.forEach(detectedPort => {
+    const exists = allPorts.some(
+      existing =>
+        existing.nodeId === detectedPort.nodeId &&
+        existing.direction === detectedPort.direction
+    );
+    if (!exists) {
+      allPorts.push(detectedPort);
     }
-    
-    return allPorts;
-  }, [ports, detectPorts, boundingBoxId]);
+  });
+
+  const portsToRender =
+    allPorts.length > 0
+      ? allPorts
+      : DEFAULT_PORTS.map(port => ({
+          ...port,
+          nodeId: boundingBoxId,
+          id: `${boundingBoxId}-${port.id}`
+        }));
   
   // Separate input and output ports
   const inputPorts = portsToRender.filter(p => p.direction === 'input');
@@ -196,6 +202,7 @@ export const PortSystem: React.FC<PortSystemProps> = React.memo(({
       ))}
     </div>
   );
-});
+};
 
+export const PortSystem = React.memo(PortSystemComponent);
 PortSystem.displayName = 'PortSystem';

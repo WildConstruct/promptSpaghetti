@@ -21,7 +21,9 @@ export const AssetMatchIndicator: React.FC<{
       : relevance === 'medium'
         ? '#FFC107'
         : '#9E9E9E';
-  if (!label) return null;
+  if (!label) {
+    return null;
+  }
   return (
     <span
       className="asset-match-indicator"

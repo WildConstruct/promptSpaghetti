@@ -125,27 +125,31 @@ export function partition<T>(
  * Compute multiple aggregations in a single pass
  * Instead of: multiple reduce operations
  */
-export function aggregate<T>(
+type Aggregator<T, Acc> = {
+  initial: Acc;
+  reducer: (acc: Acc, item: T, index: number) => Acc;
+};
+
+type AggregatorMap<T, R extends Record<string, unknown>> = {
+  [K in keyof R]: Aggregator<T, R[K]>;
+};
+
+export function aggregate<T, R extends Record<string, unknown>>(
   array: T[],
-  aggregators: {
-    [key: string]: {
-      initial: any;
-      reducer: (acc: any, item: T, index: number) => any;
-    };
-  }
-): Record<string, any> {
-  const result: Record<string, any> = {};
+  aggregators: AggregatorMap<T, R>
+): R {
+  const result = {} as R;
+  const keys = Object.keys(aggregators) as Array<keyof R>;
 
-  // Initialize
-  for (const key in aggregators) {
+  keys.forEach(key => {
     result[key] = aggregators[key].initial;
-  }
+  });
 
-  // Single pass
   for (let i = 0; i < array.length; i++) {
-    for (const key in aggregators) {
-      result[key] = aggregators[key].reducer(result[key], array[i], i);
-    }
+    keys.forEach(key => {
+      const aggregator = aggregators[key];
+      result[key] = aggregator.reducer(result[key], array[i], i);
+    });
   }
 
   return result;
@@ -173,7 +177,7 @@ export function intersection<T>(a: T[], b: T[]): T[] {
  * Memoized array operation wrapper
  * Caches results for expensive operations
  */
-export function memoizeArrayOp<T, Args extends any[], R>(
+export function memoizeArrayOp<T, Args extends unknown[], R>(
   operation: (array: T[], ...args: Args) => R,
   keyGenerator?: (array: T[], ...args: Args) => string
 ): (array: T[], ...args: Args) => R {
@@ -185,7 +189,7 @@ export function memoizeArrayOp<T, Args extends any[], R>(
       : JSON.stringify({ length: array.length, args });
 
     if (cache.has(key)) {
-      return cache.get(key)!;
+      return cache.get(key) as R;
     }
 
     const result = operation(array, ...args);
@@ -194,7 +198,9 @@ export function memoizeArrayOp<T, Args extends any[], R>(
     // Limit cache size
     if (cache.size > 100) {
       const firstKey = cache.keys().next().value;
-      cache.delete(firstKey);
+      if (typeof firstKey === 'string') {
+        cache.delete(firstKey);
+      }
     }
 
     return result;

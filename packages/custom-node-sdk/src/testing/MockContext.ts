@@ -13,11 +13,9 @@ export interface MockContextConfig {
   /** Seed for deterministic random generation */
   seed?: string;
   /** Initial variables */
-  variables?: Record<string, any>;
+  variables?: Record<string, unknown>;
   /** Node states for stateful testing */
-  nodeStates?: Record<string, any>;
-  /** Maximum evaluation depth */
-  maxDepth?: number;
+  nodeStates?: Record<string, unknown>;
   /** Enable performance tracking */
   trackPerformance?: boolean;
 }
@@ -51,7 +49,6 @@ export class MockContextFactory {
       seed = 'test-seed',
       variables = {},
       nodeStates = {},
-      maxDepth = 10,
       trackPerformance = true
     } = config;
 
@@ -76,7 +73,7 @@ export class MockContextFactory {
    * Create a minimal context with just the essentials
    */
   static createMinimal(
-    variables: Record<string, any> = {}
+    variables: Record<string, unknown> = {}
   ): AdvancedExecutionContext {
     return this.create({
       variables,
@@ -88,8 +85,8 @@ export class MockContextFactory {
    * Create a context for testing stateful nodes
    */
   static createStateful(
-    variables: Record<string, any> = {},
-    initialStates: Record<string, any> = {}
+    variables: Record<string, unknown> = {},
+    initialStates: Record<string, unknown> = {}
   ): AdvancedExecutionContext {
     return this.create({
       variables,
@@ -102,8 +99,8 @@ export class MockContextFactory {
    * Create a context with pre-loaded cache for testing performance scenarios
    */
   static createWithCache(
-    variables: Record<string, any> = {},
-    cacheEntries: Record<string, any> = {}
+    variables: Record<string, unknown> = {},
+    cacheEntries: Record<string, unknown> = {}
   ): AdvancedExecutionContext {
     const context = this.create({ variables, trackPerformance: true });
 
@@ -154,8 +151,8 @@ export class TestScenarios {
    */
   static conditionalLogic(
     condition: boolean,
-    trueValue: any,
-    falseValue: any
+    trueValue: unknown,
+    falseValue: unknown
   ): AdvancedExecutionContext {
     return MockContextFactory.create({
       variables: {
@@ -171,7 +168,7 @@ export class TestScenarios {
   /**
    * Create a scenario for testing array processing nodes
    */
-  static arrayProcessing(items: any[]): AdvancedExecutionContext {
+  static arrayProcessing(items: unknown[]): AdvancedExecutionContext {
     return MockContextFactory.create({
       variables: {
         items,
@@ -187,7 +184,7 @@ export class TestScenarios {
    * Create a scenario for testing object manipulation nodes
    */
   static objectManipulation(
-    object: Record<string, any>
+    object: Record<string, unknown>
   ): AdvancedExecutionContext {
     return MockContextFactory.create({
       variables: {

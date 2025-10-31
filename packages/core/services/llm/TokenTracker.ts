@@ -38,7 +38,7 @@ export class TokenTracker {
 
   private resetDailyQuotas(): void {
     // Reset all user quotas
-    for (const [userId, quota] of this.quotas.entries()) {
+    for (const quota of this.quotas.values()) {
       quota.dailyUsed = 0;
       quota.costUsed = 0;
       quota.resetTime = Date.now() + 24 * 60 * 60 * 1000;
@@ -73,17 +73,21 @@ export class TokenTracker {
   }
 
   getUserQuota(userId: string): UserQuota {
-    if (!this.quotas.has(userId)) {
-      this.quotas.set(userId, {
-        dailyLimit: this.defaultDailyLimit,
-        dailyUsed: 0,
-        costLimit: this.defaultCostLimit,
-        costUsed: 0,
-        resetTime: Date.now() + 24 * 60 * 60 * 1000
-      });
+    const existingQuota = this.quotas.get(userId);
+    if (existingQuota) {
+      return existingQuota;
     }
 
-    return this.quotas.get(userId)!;
+    const newQuota: UserQuota = {
+      dailyLimit: this.defaultDailyLimit,
+      dailyUsed: 0,
+      costLimit: this.defaultCostLimit,
+      costUsed: 0,
+      resetTime: Date.now() + 24 * 60 * 60 * 1000
+    };
+
+    this.quotas.set(userId, newQuota);
+    return newQuota;
   }
 
   setUserQuota(userId: string, dailyLimit?: number, costLimit?: number): void {
@@ -158,7 +162,10 @@ export class TokenTracker {
         });
       }
 
-      const modelStats = modelBreakdown.get(usage.model)!;
+      const modelStats = modelBreakdown.get(usage.model);
+      if (!modelStats) {
+        continue;
+      }
       modelStats.calls++;
       modelStats.tokensIn += usage.tokensIn;
       modelStats.tokensOut += usage.tokensOut;

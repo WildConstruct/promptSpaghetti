@@ -1,5 +1,5 @@
-import React, { memo, useState, useEffect, useCallback } from 'react';
-import { NodeProps } from 'reactflow';
+import React, { memo, useState, useCallback } from 'react';
+import type { NodeProps } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
 import './WeightedChoiceNode.css';
 import './VisualFeedbackEnhancements.css';
@@ -30,40 +30,53 @@ const WEIGHT_PRESETS = {
  */
 export const ImprovedWeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>) => {
   const [options, setOptions] = useState<WeightedOption[]>(props.data.options || []);
-  const [useRawWeights, setUseRawWeights] = useState(true); // Use raw weights by default
 
   // Calculate percentages for display
   const calculatePercentages = useCallback((opts: WeightedOption[]) => {
     const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
-    if (totalWeight === 0) return opts.map(() => 0);
+    if (totalWeight === 0) {return opts.map(() => 0);}
     return opts.map(opt => Math.round((opt.weight / totalWeight) * 100));
   }, []);
 
   // Apply preset pattern
   const applyPreset = useCallback((preset: string) => {
     const count = options.length;
-    if (count === 0) return;
+    if (count === 0) {return;}
 
     let newWeights: number[] = [];
     
     switch (preset) {
-      case 'equal':
-        newWeights = Array(count).fill(50);
+      case 'equal': {
+        const equalWeight = Math.floor(100 / count);
+        newWeights = Array.from({ length: count }, (_, index) =>
+          index === count - 1
+            ? 100 - equalWeight * (count - 1)
+            : equalWeight
+        );
         break;
-      case 'favorFirst':
+      }
+      case 'favorFirst': {
         newWeights = [80, ...Array(count - 1).fill(20)];
         break;
-      case 'favorLast':
+      }
+      case 'favorLast': {
         newWeights = [...Array(count - 1).fill(20), 80];
         break;
-      case 'rampUp':
-        const stepUp = 60 / (count - 1);
-        newWeights = Array(count).fill(0).map((_, i) => Math.round(20 + stepUp * i));
+      }
+      case 'rampUp': {
+        const stepUp = count > 1 ? 60 / (count - 1) : 0;
+        newWeights = Array.from({ length: count }, (_, index) =>
+          Math.round(20 + stepUp * index)
+        );
         break;
-      case 'rampDown':
-        const stepDown = 60 / (count - 1);
-        newWeights = Array(count).fill(0).map((_, i) => Math.round(80 - stepDown * i));
+      }
+      case 'rampDown': {
+        const stepDown = count > 1 ? 60 / (count - 1) : 0;
+        newWeights = Array.from({ length: count }, (_, index) =>
+          Math.round(80 - stepDown * index)
+        );
         break;
+      }
       default:
         return;
     }
@@ -115,7 +128,7 @@ export const ImprovedWeightedChoiceNode = memo((props: NodeProps<WeightedChoiceN
       data={{
         ...props.data,
         options,
-        onEdit: (value: string) => {
+        onEdit: () => {
           props.data.onEdit?.(JSON.stringify(options));
         }
       }}

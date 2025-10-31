@@ -1,4 +1,5 @@
-import { Connection, Node, Edge } from 'reactflow';
+import type { Connection, Edge, Node } from 'reactflow';
+
 import type { EditableNodeData } from '../nodes';
 
 export interface ConnectionRule {
@@ -166,15 +167,14 @@ export class ConnectionValidator {
     }
 
     // No specific rule found - check general compatibility
-    return this.checkGeneralCompatibility(sourceType, targetType);
+    return this.checkGeneralCompatibility(sourceType);
   }
 
   /**
    * General compatibility check when no specific rules apply
    */
   private checkGeneralCompatibility(
-    sourceType: string,
-    targetType: string
+    sourceType: string
   ): ValidationResult {
     // Output nodes cannot be sources
     if (sourceType === 'output') {
@@ -201,8 +201,8 @@ export class ConnectionValidator {
       ...edges,
       {
         id: 'temp',
-        source: connection.source!,
-        target: connection.target!
+        source: connection.source || '',
+        target: connection.target || ''
       }
     ];
 

@@ -9,13 +9,13 @@ export type { GraphNode, GraphEdge, Graph, PSGFile } from './types/graph';
 //   RuntimeNode
 // } from './runtime';
 
-// Export both types and classes for Advanced runtime - commented out to fix Netlify build
-// export {
-//   AdvancedRuntimeNode,
-//   type AdvancedExecutionContext,
-//   type AdvancedNodeConfig,
-//   type ValidationResult
-// } from './runtime';
+// Export both types and classes for Advanced runtime
+export {
+  AdvancedRuntimeNode,
+  type AdvancedExecutionContext,
+  type AdvancedNodeConfig,
+  type ValidationResult
+} from './runtime';
 
 // Public Utils surface - temporarily disabled due to import issues
 // export * from './utils/index';

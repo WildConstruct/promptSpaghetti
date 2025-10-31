@@ -1,19 +1,22 @@
 // Compliance and Audit System for Story 2.3b
 // Provides complete audit trails, consent management, and compliance reporting
 
+type ConsentEntityType = 'extra' | 'user' | 'asset';
+type AuditTargetType = ConsentEntityType | 'segment' | 'metadata';
+
 export interface AuditEntry {
   id: string;
   action: string;
   timestamp: string;
   user: string;
   target: string;
-  target_type: 'extra' | 'segment' | 'asset' | 'metadata';
+  target_type: AuditTargetType;
   llm_model?: string;
   consent_status?: 'verified' | 'pending' | 'refused';
   data_source?: 'original' | 'derived' | 'imported';
   ip_address?: string;
   session_id: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   success: boolean;
   error_message?: string;
 }
@@ -21,7 +24,7 @@ export interface AuditEntry {
 export interface ConsentRecord {
   id: string;
   entity_id: string;
-  entity_type: 'extra' | 'user' | 'asset';
+  entity_type: ConsentEntityType;
   consent_given: boolean;
   consent_date: string;
   consent_version: string;
@@ -39,6 +42,46 @@ export interface DataRetentionPolicy {
   exceptions?: string[];
 }
 
+interface GDPRReportDetails {
+  lawful_basis: string;
+  data_categories: string[];
+  processing_activities: Record<string, number>;
+  consent_mechanisms: string;
+  data_transfers: string[];
+  retention_policies: DataRetentionPolicy[];
+  subject_rights_exercised: {
+    access: number;
+    rectification: number;
+    erasure: number;
+    portability: number;
+    objection: number;
+  };
+}
+
+interface SAGReportDetails {
+  union_compliance: boolean;
+  extra_classifications: Record<string, number>;
+  payment_tracking: string;
+  working_conditions: {
+    max_continuous_hours: number;
+    break_requirements: string;
+    overtime_eligible: boolean;
+  };
+  safety_protocols: string[];
+  consent_forms: number;
+}
+
+interface CustomReportDetails {
+  audit_entries: number;
+  consent_records: number;
+  retention_policies: number;
+}
+
+type ComplianceReportDetails =
+  | GDPRReportDetails
+  | SAGReportDetails
+  | CustomReportDetails;
+
 export interface ComplianceReport {
   id: string;
   report_type: 'gdpr' | 'ccpa' | 'sag' | 'custom';
@@ -53,14 +96,14 @@ export interface ComplianceReport {
     deletion_requests: number;
     audit_entries: number;
   };
-  details: any;
+  details: ComplianceReportDetails;
   format: 'json' | 'pdf' | 'csv';
 }
 
 export interface DeletionRequest {
   id: string;
   entity_id: string;
-  entity_type: string;
+  entity_type: AuditTargetType;
   requested_date: string;
   requester: string;
   reason?: string;
@@ -80,6 +123,19 @@ export class ComplianceAuditSystem {
   constructor() {
     this.sessionId = this.generateSessionId();
     this.initializeDefaultPolicies();
+  }
+
+  private mapToAuditTargetType(value: string): AuditTargetType {
+    const allowed: AuditTargetType[] = [
+      'extra',
+      'user',
+      'asset',
+      'segment',
+      'metadata'
+    ];
+    return allowed.includes(value as AuditTargetType)
+      ? (value as AuditTargetType)
+      : 'metadata';
   }
 
   // Initialize default retention policies
@@ -150,7 +206,7 @@ export class ComplianceAuditSystem {
       action: consent_given ? 'consent_granted' : 'consent_refused',
       user: 'system',
       target: entity_id,
-      target_type: entity_type as any,
+      target_type: entity_type,
       consent_status: consent_given ? 'verified' : 'refused',
       success: true,
       details: { purposes }
@@ -170,7 +226,9 @@ export class ComplianceAuditSystem {
           new Date(a.consent_date).getTime()
       );
 
-    if (records.length === 0) return null;
+    if (records.length === 0) {
+      return null;
+    }
 
     const record = records[0];
 
@@ -189,10 +247,12 @@ export class ComplianceAuditSystem {
     requester: string,
     reason?: string
   ): Promise<DeletionRequest> {
+    const targetType = this.mapToAuditTargetType(entity_type);
+
     const request: DeletionRequest = {
       id: this.generateDeletionId(),
       entity_id,
-      entity_type,
+      entity_type: targetType,
       requested_date: new Date().toISOString(),
       requester,
       reason,
@@ -206,7 +266,7 @@ export class ComplianceAuditSystem {
       action: 'deletion_requested',
       user: requester,
       target: entity_id,
-      target_type: entity_type as any,
+      target_type: targetType,
       success: true,
       details: { reason }
     });
@@ -241,7 +301,7 @@ export class ComplianceAuditSystem {
         action: 'deletion_completed',
         user: 'system',
         target: request.entity_id,
-        target_type: request.entity_type as any,
+        target_type: request.entity_type,
         success: true,
         details: { deleted_items: deletedItems }
       });
@@ -254,7 +314,7 @@ export class ComplianceAuditSystem {
         action: 'deletion_failed',
         user: 'system',
         target: request.entity_id,
-        target_type: request.entity_type as any,
+        target_type: request.entity_type,
         success: false,
         error_message: String(error)
       });
@@ -340,7 +400,7 @@ export class ComplianceAuditSystem {
     type: ComplianceReport['report_type'],
     auditEntries: AuditEntry[],
     consentRecords: ConsentRecord[]
-  ): any {
+  ): ComplianceReportDetails {
     switch (type) {
       case 'gdpr':
         return {
@@ -524,12 +584,47 @@ export class ComplianceAuditSystem {
   }
 
   private classifyExtras(entries: AuditEntry[]): Record<string, number> {
-    // Classify extras based on their roles/usage
-    return {
-      background: 100,
-      featured: 20,
-      special_ability: 5
+    const classifications: Record<string, number> = {
+      background: 0,
+      featured: 0,
+      special_ability: 0
     };
+
+    for (const entry of entries) {
+      if (entry.target_type !== 'extra') {
+        continue;
+      }
+
+      const details = entry.details as Record<string, unknown> | undefined;
+      const detailsCategory = this.getDetailString(details, 'category');
+
+      if (detailsCategory && classifications[detailsCategory] !== undefined) {
+        classifications[detailsCategory] += 1;
+        continue;
+      }
+
+      const action = entry.action.toLowerCase();
+      if (action.includes('ability') || action.includes('stunt')) {
+        classifications.special_ability += 1;
+      } else if (action.includes('feature') || action.includes('closeup')) {
+        classifications.featured += 1;
+      } else {
+        classifications.background += 1;
+      }
+    }
+
+    return classifications;
+  }
+
+  private getDetailString(
+    details: Record<string, unknown> | undefined,
+    key: string
+  ): string | null {
+    if (!details) {
+      return null;
+    }
+    const value = details[key];
+    return typeof value === 'string' ? value : null;
   }
 
   private async simulateDelay(ms: number): Promise<void> {

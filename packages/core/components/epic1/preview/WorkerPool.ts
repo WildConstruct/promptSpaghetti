@@ -91,7 +91,7 @@ export class WorkerPool {
     response: WorkerResponse
   ): void {
     const task = pooledWorker.currentTask;
-    if (!task) return;
+    if (!task) {return;}
 
     switch (response.type) {
       case 'result':

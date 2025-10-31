@@ -3,15 +3,60 @@
  */
 
 import React from 'react';
+
 import {
-  useFeatureGate,
-  useFeatureAvailability
-} from '../../hooks/useFeatureGate';
-import {
-  InlineUpgradePrompt,
   FeatureTooltip,
+  InlineUpgradePrompt,
   PremiumBadge
 } from '../upgrade/UpgradePrompt';
+import {
+  useFeatureAvailability,
+  useFeatureGate
+} from '../../hooks/useFeatureGate';
+
+// Extract styles to constants for better maintainability
+const DISABLED_BUTTON_STYLE = {
+  padding: '10px 20px',
+  backgroundColor: '#e5e7eb',
+  color: '#9ca3af',
+  border: '1px solid #d1d5db',
+  borderRadius: '6px',
+  fontSize: '14px',
+  fontWeight: '500',
+  cursor: 'not-allowed',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px'
+};
+
+const PRIMARY_BUTTON_STYLE = {
+  padding: '10px 20px',
+  backgroundColor: '#0284c7',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  fontSize: '14px',
+  fontWeight: '500',
+  cursor: 'pointer',
+  transition: 'background-color 0.2s',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px'
+};
+
+const SECONDARY_BUTTON_STYLE = {
+  padding: '10px 20px',
+  backgroundColor: 'white',
+  color: '#0284c7',
+  border: '1px solid #0284c7',
+  borderRadius: '6px',
+  fontSize: '14px',
+  fontWeight: '500',
+  cursor: 'pointer',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px'
+};
 
 /**
  * Props for gated save/load buttons
@@ -31,7 +76,7 @@ export function CloudSaveButton({
   disabled,
   children
 }: GatedButtonProps) {
-  const { isEnabled, Gate, isAuthenticated } = useFeatureGate({
+  const { Gate } = useFeatureGate({
     requireAuth: true,
     requireSupabase: true
   });
@@ -40,22 +85,7 @@ export function CloudSaveButton({
     <Gate
       fallback={
         <FeatureTooltip content="Sign in to save to cloud">
-          <button
-            disabled
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#e5e7eb',
-              color: '#9ca3af',
-              border: '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'not-allowed',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
+          <button disabled style={DISABLED_BUTTON_STYLE}>
             ☁️ {children}
             <PremiumBadge />
           </button>
@@ -66,18 +96,10 @@ export function CloudSaveButton({
         onClick={onClick}
         disabled={disabled}
         style={{
-          padding: '10px 20px',
-          backgroundColor: disabled ? '#e5e7eb' : '#0284c7',
-          color: disabled ? '#9ca3af' : 'white',
-          border: 'none',
-          borderRadius: '6px',
-          fontSize: '14px',
-          fontWeight: '500',
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          transition: 'background-color 0.2s',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px'
+          ...PRIMARY_BUTTON_STYLE,
+          backgroundColor: disabled ? '#e5e7eb' : PRIMARY_BUTTON_STYLE.backgroundColor,
+          color: disabled ? '#9ca3af' : PRIMARY_BUTTON_STYLE.color,
+          cursor: disabled ? 'not-allowed' : PRIMARY_BUTTON_STYLE.cursor
         }}
         onMouseEnter={e => {
           if (!disabled) {
@@ -86,7 +108,7 @@ export function CloudSaveButton({
         }}
         onMouseLeave={e => {
           if (!disabled) {
-            e.currentTarget.style.backgroundColor = '#0284c7';
+            e.currentTarget.style.backgroundColor = PRIMARY_BUTTON_STYLE.backgroundColor;
           }
         }}
       >
@@ -104,7 +126,7 @@ export function CloudLoadButton({
   disabled,
   children
 }: GatedButtonProps) {
-  const { isEnabled, Gate } = useFeatureGate({
+  const { Gate } = useFeatureGate({
     requireAuth: true,
     requireSupabase: true
   });
@@ -113,22 +135,7 @@ export function CloudLoadButton({
     <Gate
       fallback={
         <FeatureTooltip content="Sign in to load from cloud">
-          <button
-            disabled
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#e5e7eb',
-              color: '#9ca3af',
-              border: '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'not-allowed',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
+          <button disabled style={DISABLED_BUTTON_STYLE}>
             ☁️ {children}
             <PremiumBadge />
           </button>
@@ -139,18 +146,10 @@ export function CloudLoadButton({
         onClick={onClick}
         disabled={disabled}
         style={{
-          padding: '10px 20px',
-          backgroundColor: 'white',
-          color: disabled ? '#9ca3af' : '#0284c7',
+          ...SECONDARY_BUTTON_STYLE,
+          color: disabled ? '#9ca3af' : SECONDARY_BUTTON_STYLE.color,
           border: `1px solid ${disabled ? '#d1d5db' : '#0284c7'}`,
-          borderRadius: '6px',
-          fontSize: '14px',
-          fontWeight: '500',
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          transition: 'all 0.2s',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px'
+          cursor: disabled ? 'not-allowed' : SECONDARY_BUTTON_STYLE.cursor
         }}
         onMouseEnter={e => {
           if (!disabled) {
@@ -310,7 +309,7 @@ export function GatedSection({
   onUpgrade,
   children
 }: GatedSectionProps) {
-  const { isEnabled, Gate } = useFeatureGate({
+  const { Gate } = useFeatureGate({
     requireAuth: true,
     requireSupabase: true
   });

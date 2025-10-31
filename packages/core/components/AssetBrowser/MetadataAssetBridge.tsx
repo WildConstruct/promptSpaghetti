@@ -32,22 +32,30 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
   llmService,
   onMetadataExtracted
 }) => {
+  const shouldExtract = Boolean(
+    llmService && currentSegmentId && currentSegmentContent?.trim()
+  );
   const [currentMetadata, setCurrentMetadata] = useState<
     SegmentMetadata | undefined
   >();
-  const [isExtracting, setIsExtracting] = useState(false);
+  const [hasPendingExtraction, setHasPendingExtraction] =
+    useState<boolean>(shouldExtract);
 
   // Set up metadata extraction hook
-  const { extractMetadata } = useMetadataExtraction({
+  const {
+    extractMetadata,
+    getNodeMetadata,
+    isExtracting: isNodeExtracting
+  } = useMetadataExtraction({
     enabled: !!llmService,
-    debounceMs: 1000,
+    debounceMs: 250,
     llmService,
     onMetadataExtracted: useCallback(
       (nodeId: string, metadata: SegmentMetadata) => {
         if (nodeId === currentSegmentId) {
           setCurrentMetadata(metadata);
-          setIsExtracting(false);
           onMetadataExtracted?.(nodeId, metadata);
+          setHasPendingExtraction(false);
         }
       },
       [currentSegmentId, onMetadataExtracted]
@@ -56,11 +64,44 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
 
   // Extract metadata when segment content changes
   useEffect(() => {
-    if (currentSegmentId && currentSegmentContent && llmService) {
-      setIsExtracting(true);
+    if (shouldExtract && currentSegmentId && currentSegmentContent) {
+      setHasPendingExtraction(true);
       extractMetadata(currentSegmentId, currentSegmentContent);
+    } else {
+      setHasPendingExtraction(false);
     }
-  }, [currentSegmentId, currentSegmentContent, llmService, extractMetadata]);
+  }, [
+    currentSegmentId,
+    currentSegmentContent,
+    extractMetadata,
+    llmService,
+    shouldExtract
+  ]);
+
+  // Keep local metadata in sync with extractor cache
+  useEffect(() => {
+    if (!currentSegmentId) {
+      setCurrentMetadata(undefined);
+      return;
+    }
+    setCurrentMetadata(getNodeMetadata(currentSegmentId));
+  }, [currentSegmentId, getNodeMetadata]);
+
+  useEffect(() => {
+    if (!shouldExtract) {
+      setHasPendingExtraction(false);
+    } else if (!isNodeExtracting(currentSegmentId || '') && currentMetadata) {
+      setHasPendingExtraction(false);
+    }
+  }, [shouldExtract, currentMetadata, currentSegmentId, isNodeExtracting]);
+
+  const isExtracting = currentSegmentId
+    ? isNodeExtracting(currentSegmentId)
+    : false;
+
+  const showExtractionIndicator =
+    shouldExtract &&
+    (isExtracting || (!currentMetadata && hasPendingExtraction));
 
   // Enhanced asset selection with metadata tracking
   const handleAssetSelect = useCallback(
@@ -84,8 +125,8 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
   return (
     <div className="metadata-asset-bridge">
       {/* Metadata extraction indicator */}
-      {isExtracting && (
-        <div className="metadata-extracting-indicator">
+      {showExtractionIndicator && (
+        <div data-testid="metadata-extraction-indicator" className="metadata-extracting-indicator">
           <span className="loading-spinner" />
           Analyzing content for smart suggestions...
         </div>
@@ -93,7 +134,7 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
 
       {/* Debug info in development */}
       {process.env.NODE_ENV === 'development' && currentMetadata && (
-        <div className="metadata-debug-info">
+        <div data-testid="metadata-debug-info" className="metadata-debug-info">
           <details>
             <summary>Extracted Metadata (Debug)</summary>
             <pre>{JSON.stringify(currentMetadata, null, 2)}</pre>
@@ -103,6 +144,7 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
 
       {/* Smart Asset Browser with metadata context */}
       <SmartAssetBrowser
+        data-testid="smart-asset-browser"
         assets={assets}
         currentSegmentMetadata={currentMetadata}
         onAssetSelect={handleAssetSelect}

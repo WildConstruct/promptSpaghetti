@@ -277,7 +277,7 @@ class QAAgent {
       'commit-tracking.json'
     );
 
-    if (!fs.existsSync(commitTrackingFile)) return;
+    if (!fs.existsSync(commitTrackingFile)) {return;}
 
     const commitData = JSON.parse(fs.readFileSync(commitTrackingFile, 'utf8'));
     const unpushedCount = commitData.unpushedApprovals.length;
@@ -309,7 +309,7 @@ class QAAgent {
       task.qa_issues = issues;
 
       // Add note about required changes
-      if (!task.notes) task.notes = [];
+      if (!task.notes) {task.notes = [];}
       task.notes.push({
         timestamp: new Date().toISOString(),
         author: this.agentId,

@@ -3,14 +3,11 @@
  * Validates PSG and PSGLib files before they are added to the library
  */
 
-import { z } from 'zod';
-import { PSGFileSchema, PSGFile, parsePSG } from '../fileFormats/psg';
+import { PSGFileSchema } from '../fileFormats/psg';
 import {
-  PSGLibFileSchema,
-  PSGLibFile,
-  parsePSGLib
+  PSGLibFileSchema
 } from '../fileFormats/psglib';
-import { nodeRegistry, INodeType } from '../runtime/nodeRegistry';
+import { nodeRegistry } from '../runtime/nodeRegistry';
 
 /**
  * Validation result interface
@@ -36,7 +33,7 @@ export interface ValidationError {
   code: string;
   message: string;
   path?: string;
-  details?: any;
+  details?: unknown;
 }
 
 /**
@@ -46,7 +43,7 @@ export interface ValidationWarning {
   code: string;
   message: string;
   path?: string;
-  details?: any;
+  details?: unknown;
 }
 
 /**
@@ -125,7 +122,7 @@ export class AssetValidator {
     const suggestions: ValidationSuggestion[] = [];
 
     // Step 1: Parse JSON
-    let data: any;
+    let data: unknown;
     try {
       data = JSON.parse(content);
     } catch (e) {
@@ -158,7 +155,7 @@ export class AssetValidator {
   /**
    * Validate PSG format file
    */
-  private validatePSG(data: any): ValidationResult {
+  private validatePSG(data: unknown): ValidationResult {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const suggestions: ValidationSuggestion[] = [];
@@ -237,7 +234,7 @@ export class AssetValidator {
   /**
    * Validate PSGLib format file
    */
-  private validatePSGLib(data: any): ValidationResult {
+  private validatePSGLib(data: unknown): ValidationResult {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
     const suggestions: ValidationSuggestion[] = [];
@@ -323,7 +320,7 @@ export class AssetValidator {
    * Validate nodes (PSG format)
    */
   private validateNodes(
-    nodes: any[],
+    nodes: unknown[],
     isFragment: boolean
   ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -385,7 +382,7 @@ export class AssetValidator {
    * Validate nodes (PSGLib format)
    */
   private validatePSGLibNodes(
-    nodes: any[],
+    nodes: unknown[],
     isFragment?: boolean
   ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
@@ -451,8 +448,8 @@ export class AssetValidator {
    * Validate edges (PSG format)
    */
   private validateEdges(
-    edges: any[],
-    nodes: any[]
+    edges: unknown[],
+    nodes: unknown[]
   ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
@@ -522,8 +519,8 @@ export class AssetValidator {
    * Validate edges (PSGLib format)
    */
   private validatePSGLibEdges(
-    edges: any[],
-    nodes: any[]
+    edges: unknown[],
+    nodes: unknown[]
   ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     // Similar to validateEdges but with PSGLib path structure
     const errors: ValidationError[] = [];
@@ -555,8 +552,8 @@ export class AssetValidator {
    * Validate regions
    */
   private validateRegions(
-    regions: any[],
-    nodes: any[]
+    regions: unknown[],
+    nodes: unknown[]
   ): { errors: ValidationError[]; warnings: ValidationWarning[] } {
     const errors: ValidationError[] = [];
     const warnings: ValidationWarning[] = [];
@@ -586,7 +583,7 @@ export class AssetValidator {
       // Validate ports if present
       if (region.ports) {
         const portIds = new Set<string>();
-        region.ports.forEach((port: any, portIndex: number) => {
+        region.ports.forEach((port: unknown, portIndex: number) => {
           if (portIds.has(port.id)) {
             errors.push({
               code: ValidationErrorCode.DUPLICATE_PORT_ID,
@@ -631,7 +628,7 @@ export class AssetValidator {
       return errors;
     }
 
-    const [major, minor, patch] = versionParts;
+    const [major] = versionParts;
     const [currentMajor] = currentParts;
 
     // Check major version compatibility
@@ -653,7 +650,7 @@ export class AssetValidator {
   /**
    * Detect format from data
    */
-  private detectFormat(data: any): 'psg' | 'psglib' | null {
+  private detectFormat(data: unknown): 'psg' | 'psglib' | null {
     if (data.fileType === 'psglib') {
       return 'psglib';
     }
@@ -666,7 +663,7 @@ export class AssetValidator {
   /**
    * Detect circular dependencies in edges
    */
-  private detectCycles(edges: any[]): string[][] {
+  private detectCycles(edges: unknown[]): string[][] {
     const adjacency = new Map<string, Set<string>>();
 
     // Build adjacency list
@@ -674,7 +671,7 @@ export class AssetValidator {
       if (!adjacency.has(edge.source)) {
         adjacency.set(edge.source, new Set());
       }
-      adjacency.get(edge.source)!.add(edge.target);
+      adjacency.get(edge.source)?.add(edge.target);
     });
 
     const cycles: string[][] = [];

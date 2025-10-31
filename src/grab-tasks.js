@@ -39,8 +39,6 @@ if (!devId) {
 
 // File paths
 const statePath = path.join(__dirname, 'data', 'state.json');
-const lockPath = statePath + '.lock';
-
 async function grabTasksSafely() {
   let release;
 
@@ -124,23 +122,23 @@ async function grabTasksSafely() {
           task.tags?.includes('epic-8') ||
           task.tags?.includes('wild-construct')
         )
-          return 1;
+          {return 1;}
         // Second priority: Authentication tasks (Story 20.1 OR auth tag)
         if (task.story?.includes('20.1') || task.tags?.includes('auth'))
-          return 2;
+          {return 2;}
         // Third priority: File browser tasks (Story 20.2 OR file-browser tag)
         if (task.story?.includes('20.2') || task.tags?.includes('file-browser'))
-          return 3;
+          {return 3;}
         // Fourth priority: Other priority automation tasks
-        if (task.metadata?.source === 'priority-automation') return 4;
+        if (task.metadata?.source === 'priority-automation') {return 4;}
         // Fourth priority: High priority tasks
-        if (task.priority === 'high') return 4;
+        if (task.priority === 'high') {return 4;}
         // Lower priority: Everything else
         return 5;
       };
 
       const priorityDiff = getPriority(a) - getPriority(b);
-      if (priorityDiff !== 0) return priorityDiff;
+      if (priorityDiff !== 0) {return priorityDiff;}
 
       // If same priority, sort by creation date (newest first)
       return new Date(b.created || 0) - new Date(a.created || 0);

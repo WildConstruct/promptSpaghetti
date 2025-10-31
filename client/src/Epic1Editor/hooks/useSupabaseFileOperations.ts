@@ -58,7 +58,7 @@ export const useSupabaseFileOperations = ({
 
   // Check authentication status
   useEffect(() => {
-    if (!supabase) return;
+    if (!supabase) {return;}
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setIsAuthenticated(!!session);
@@ -103,7 +103,7 @@ export const useSupabaseFileOperations = ({
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {throw error;}
       setSavedGraphs(data || []);
     } catch (error) {
       console.error('Error fetching graphs:', error);
@@ -146,7 +146,8 @@ export const useSupabaseFileOperations = ({
       currentEdges: Edge[],
       name?: string,
       description?: string,
-      isPublic: boolean = false
+      isPublic: boolean = false,
+      tags: string[] = []
     ) => {
       if (!supabase) {
         showToast('Supabase not configured - saving locally', 'warning');
@@ -183,6 +184,7 @@ export const useSupabaseFileOperations = ({
           edges: currentEdges,
           user_id: user?.id,
           is_public: isPublic,
+          tags,
           updated_at: new Date().toISOString()
         };
 
@@ -193,7 +195,9 @@ export const useSupabaseFileOperations = ({
           try {
             const parsed = JSON.parse(savedData);
             existingId = parsed.supabase_id || null;
-          } catch {}
+          } catch {
+            // Ignore malformed legacy cache entries
+          }
         }
 
         let result;
@@ -215,7 +219,7 @@ export const useSupabaseFileOperations = ({
             .single();
         }
 
-        if (result.error) throw result.error;
+        if (result.error) {throw result.error;}
 
         // Update local storage with the Supabase ID
         localStorage.setItem(
@@ -260,10 +264,11 @@ export const useSupabaseFileOperations = ({
   // Delete a graph
   const deleteGraph = useCallback(
     async (graphId: string) => {
-      if (!supabase) return;
+      if (!supabase) {return;}
 
+      // eslint-disable-next-line no-alert
       if (!window.confirm('Are you sure you want to delete this graph?'))
-        return;
+        {return;}
 
       setIsLoading(true);
       try {
@@ -282,7 +287,7 @@ export const useSupabaseFileOperations = ({
           .eq('id', graphId)
           .eq('user_id', user.id);
 
-        if (error) throw error;
+        if (error) {throw error;}
 
         showToast('Graph deleted', 'success');
         await fetchSavedGraphs();
@@ -305,7 +310,7 @@ export const useSupabaseFileOperations = ({
       const isPositionsMap = (
         val: unknown
       ): val is Record<string, { x: number; y: number }> => {
-        if (!val || typeof val !== 'object') return false;
+        if (!val || typeof val !== 'object') {return false;}
         // shallow check for at least one entry with numeric x/y
         for (const v of Object.values(val as Record<string, unknown>)) {
           if (
@@ -539,7 +544,7 @@ export const useSupabaseFileOperations = ({
         showToast('Graph saved locally', 'success');
       }
     },
-    handleSaveAs: (nodes: Node[], edges: Edge[]) => {
+    handleSaveAs: () => {
       setShowSaveDialog(true);
     },
     handleNew: (demoNodes: Node[], demoEdges: Edge[]) => {
@@ -568,6 +573,7 @@ export const useSupabaseFileOperations = ({
       localStorage.setItem('epic1-graph-autosave', JSON.stringify(graphData));
 
       if (
+        // eslint-disable-next-line no-alert
         window.confirm(
           'Are you sure you want to quit? Any unsaved changes will be auto-saved.'
         )

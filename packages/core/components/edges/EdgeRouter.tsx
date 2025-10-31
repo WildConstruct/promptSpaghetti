@@ -56,7 +56,7 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
   selected
 }) => {
   const { perfMonitor } = usePerformance();
-  const { getEdge, setEdges } = useReactFlow();
+  const { getEdge } = useReactFlow();
 
   const [isDraggingControl, setIsDraggingControl] = useState(false);
   const [activeControlPoint, setActiveControlPoint] = useState<string | null>(
@@ -119,14 +119,20 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
   // Handle control point drag
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
-      if (!isDraggingControl || !activeControlPoint) return;
+      if (!isDraggingControl || !activeControlPoint) {
+        return;
+      }
 
       const point = localControlPoints.find(cp => cp.id === activeControlPoint);
-      if (!point || point.locked) return;
+      if (!point || point.locked) {
+        return;
+      }
 
       // Get SVG coordinates
       const svg = (event.target as Element).closest('svg');
-      if (!svg) return;
+      if (!svg) {
+        return;
+      }
 
       const pt = svg.createSVGPoint();
       pt.x = event.clientX;
@@ -260,7 +266,9 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
 
   // Performance indicator
   const performanceIndicator = useMemo(() => {
-    if (!data?.performanceMetrics || !selected) return null;
+    if (!data?.performanceMetrics || !selected) {
+      return null;
+    }
 
     const { calculationTime, cacheHit } = data.performanceMetrics;
 

@@ -3,8 +3,6 @@
  * Specialized utilities for testing code refactoring and migration
  */
 
-import { TestFixtureManager } from '../infrastructure/TestFixtures';
-
 /**
  * Migration Test Helper
  * Utilities for testing migration paths and backward compatibility
@@ -17,12 +15,12 @@ export class MigrationTestHelper {
    */
   static async testMigrationStep(
     step: MigrationStep,
-    beforeState: any,
-    expectedAfterState?: any
+    beforeState: unknown,
+    expectedAfterState?: unknown
   ): Promise<MigrationStepResult> {
     const startTime = performance.now(); // Use high-resolution timing
     let error: Error | null = null;
-    let actualAfterState: any = null;
+    let actualAfterState: unknown = null;
     let rollbackSuccessful = false;
 
     try {
@@ -69,7 +67,7 @@ export class MigrationTestHelper {
   static async testMigrationPath(
     migrationId: string,
     steps: MigrationStep[],
-    initialState: any
+    initialState: unknown
   ): Promise<MigrationResult> {
     const startTime = Date.now();
     const stepResults: MigrationStepResult[] = [];
@@ -114,8 +112,8 @@ export class MigrationTestHelper {
    * Test backward compatibility
    */
   static testBackwardCompatibility(
-    oldInterface: any,
-    newInterface: any,
+    oldInterface: unknown,
+    newInterface: unknown,
     testCases: CompatibilityTestCase[]
   ): CompatibilityResult {
     const results: CompatibilityTestResult[] = [];
@@ -197,7 +195,11 @@ export class MigrationTestHelper {
     migrationId?: string
   ): MigrationResult | MigrationResult[] {
     if (migrationId) {
-      return this.migrationResults.get(migrationId)!;
+      const result = this.migrationResults.get(migrationId);
+      if (!result) {
+        throw new Error(`Migration ${migrationId} not found`);
+      }
+      return result;
     }
     return Array.from(this.migrationResults.values());
   }
@@ -212,18 +214,19 @@ export class MigrationTestHelper {
   /**
    * Deep comparison utility
    */
-  private static deepCompare(obj1: any, obj2: any): boolean {
-    if (obj1 === obj2) return true;
+  private static deepCompare(obj1: unknown, obj2: unknown): boolean {
+    if (obj1 === obj2) {return true;}
 
-    if (obj1 == null || obj2 == null) return false;
-    if (typeof obj1 !== typeof obj2) return false;
+    if (obj1 === null || obj1 === undefined) {return false;}
+    if (obj2 === null || obj2 === undefined) {return false;}
+    if (typeof obj1 !== typeof obj2) {return false;}
 
-    if (Array.isArray(obj1) !== Array.isArray(obj2)) return false;
+    if (Array.isArray(obj1) !== Array.isArray(obj2)) {return false;}
 
     if (Array.isArray(obj1)) {
-      if (obj1.length !== obj2.length) return false;
+      if (obj1.length !== obj2.length) {return false;}
       for (let i = 0; i < obj1.length; i++) {
-        if (!this.deepCompare(obj1[i], obj2[i])) return false;
+        if (!this.deepCompare(obj1[i], obj2[i])) {return false;}
       }
       return true;
     }
@@ -232,11 +235,11 @@ export class MigrationTestHelper {
       const keys1 = Object.keys(obj1);
       const keys2 = Object.keys(obj2);
 
-      if (keys1.length !== keys2.length) return false;
+      if (keys1.length !== keys2.length) {return false;}
 
       for (const key of keys1) {
-        if (!keys2.includes(key)) return false;
-        if (!this.deepCompare(obj1[key], obj2[key])) return false;
+        if (!keys2.includes(key)) {return false;}
+        if (!this.deepCompare(obj1[key], obj2[key])) {return false;}
       }
       return true;
     }
@@ -252,7 +255,7 @@ export class MigrationTestHelper {
 export class LegacySystemMock {
   private version: string;
   private behavior: LegacyBehavior;
-  private state: any = {};
+  private state: unknown = {};
 
   constructor(version: string, behavior: LegacyBehavior = {}) {
     this.version = version;
@@ -290,7 +293,7 @@ export class LegacySystemMock {
   /**
    * Execute graph in legacy mode
    */
-  executeGraph(graph: any, options: any = {}): any {
+  executeGraph(graph: unknown, options: unknown = {}): unknown {
     if (this.behavior.executionEngine === 'v1') {
       return this.executeV1(graph, options);
     } else if (this.behavior.executionEngine === 'v2') {
@@ -323,7 +326,7 @@ export class LegacySystemMock {
     }
   }
 
-  private executeV1(graph: any, options: any): any {
+  private executeV1(graph: unknown): unknown {
     // Simulate v1 execution behavior
     if (!graph.nodes || graph.nodes.length === 0) {
       return { result: '', variables: {} };
@@ -331,8 +334,8 @@ export class LegacySystemMock {
 
     // V1 simple execution - just concatenate node values
     const result = graph.nodes
-      .filter((node: any) => node.type !== 'output')
-      .map((node: any) => node.data?.text || node.data?.value || '')
+      .filter((node: unknown) => (node as { type: string }).type !== 'output')
+      .map((node: unknown) => (node as { data?: { text?: string; value?: string } }).data?.text || (node as { data?: { text?: string; value?: string } }).data?.value || '')
       .join(' ');
 
     return {
@@ -342,9 +345,9 @@ export class LegacySystemMock {
     };
   }
 
-  private executeV2(graph: any, options: any): any {
+  private executeV2(graph: unknown): unknown {
     // Simulate v2 execution behavior with variable support
-    const variables: Record<string, any> = {};
+    const variables: Record<string, unknown> = {};
     let result = '';
 
     if (graph.nodes) {
@@ -385,14 +388,14 @@ export class LegacySystemMock {
   /**
    * Set internal state for testing
    */
-  setState(state: any): void {
+  setState(state: unknown): void {
     this.state = { ...this.state, ...state };
   }
 
   /**
    * Get internal state
    */
-  getState(): any {
+  getState(): unknown {
     return { ...this.state };
   }
 }
@@ -405,7 +408,7 @@ export class RefactoringValidator {
   /**
    * Compare two function implementations
    */
-  static async compareFunctionBehavior<TArgs extends any[], TReturn>(
+  static async compareFunctionBehavior<TArgs extends unknown[], TReturn>(
     oldFunction: (...args: TArgs) => TReturn | Promise<TReturn>,
     newFunction: (...args: TArgs) => TReturn | Promise<TReturn>,
     testCases: FunctionTestCase<TArgs, TReturn>[]
@@ -500,8 +503,8 @@ export class RefactoringValidator {
    * Validate object interface compatibility
    */
   static validateInterfaceCompatibility(
-    oldObject: any,
-    newObject: any,
+    oldObject: unknown,
+    newObject: unknown,
     requiredMethods: string[] = [],
     requiredProperties: string[] = []
   ): InterfaceCompatibilityResult {
@@ -556,18 +559,18 @@ export class RefactoringValidator {
     };
   }
 
-  private static deepEqual(a: any, b: any): boolean {
-    if (a === b) return true;
+  private static deepEqual(a: unknown, b: unknown): boolean {
+    if (a === b) {return true;}
     if (a instanceof Date && b instanceof Date)
-      return a.getTime() === b.getTime();
+      {return a.getTime() === b.getTime();}
     if (!a || !b || (typeof a !== 'object' && typeof b !== 'object'))
-      return a === b;
+      {return a === b;}
     if (a === null || a === undefined || b === null || b === undefined)
-      return false;
-    if (a.prototype !== b.prototype) return false;
+      {return false;}
+    if (a.prototype !== b.prototype) {return false;}
 
     const keys = Object.keys(a);
-    if (keys.length !== Object.keys(b).length) return false;
+    if (keys.length !== Object.keys(b).length) {return false;}
 
     return keys.every(k => this.deepEqual(a[k], b[k]));
   }
@@ -581,9 +584,9 @@ export interface MigrationStep {
   id: string;
   name: string;
   description?: string;
-  execute: (beforeState: any) => any | Promise<any>;
-  rollback?: (afterState: any) => any | Promise<any>;
-  validate?: (state: any) => boolean;
+  execute: (beforeState: unknown) => unknown | Promise<unknown>;
+  rollback?: (afterState: unknown) => unknown | Promise<unknown>;
+  validate?: (state: unknown) => boolean;
 }
 
 export interface MigrationStepResult {
@@ -591,8 +594,8 @@ export interface MigrationStepResult {
   stepName: string;
   success: boolean;
   error: Error | null;
-  beforeState: any;
-  afterState: any;
+  beforeState: unknown;
+  afterState: unknown;
   rollbackSuccessful: boolean;
   executionTime: number;
   timestamp: string;
@@ -602,8 +605,8 @@ export interface MigrationResult {
   migrationId: string;
   success: boolean;
   failedAtStep: number | null;
-  initialState: any;
-  finalState: any;
+  initialState: unknown;
+  finalState: unknown;
   stepResults: MigrationStepResult[];
   totalSteps: number;
   completedSteps: number;
@@ -615,8 +618,8 @@ export interface CompatibilityTestCase {
   name: string;
   methodName?: string;
   propertyName?: string;
-  args?: any[];
-  expectedResult?: any;
+  args?: unknown[];
+  expectedResult?: unknown;
 }
 
 export interface CompatibilityTestResult {
@@ -640,7 +643,7 @@ export interface LegacyBehavior {
   supportsAsync?: boolean;
 }
 
-export interface FunctionTestCase<TArgs extends any[], TReturn> {
+export interface FunctionTestCase<TArgs extends unknown[], TReturn> {
   name: string;
   args: TArgs;
   expectedResult?: TReturn;
@@ -653,7 +656,7 @@ export interface FunctionTestCase<TArgs extends any[], TReturn> {
   };
 }
 
-export interface FunctionTestResult<TArgs extends any[], TReturn> {
+export interface FunctionTestResult<TArgs extends unknown[], TReturn> {
   testCase: FunctionTestCase<TArgs, TReturn>;
   success: boolean;
   error: string | null;
@@ -663,7 +666,7 @@ export interface FunctionTestResult<TArgs extends any[], TReturn> {
   newError: Error | null;
 }
 
-export interface FunctionComparisonResult<TArgs extends any[], TReturn> {
+export interface FunctionComparisonResult<TArgs extends unknown[], TReturn> {
   success: boolean;
   results: FunctionTestResult<TArgs, TReturn>[];
   totalTests: number;

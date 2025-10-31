@@ -122,9 +122,9 @@ class TaskDependencyResolver {
       console.log(
         `📊 Loaded ${this.dependencies.size} existing dependency relationships`
       );
-    } catch (error) {
-      console.error('❌ Failed to initialize Task Dependency Resolver:', error);
-      throw error;
+    } catch {
+      console.error('❌ Failed to initialize Task Dependency Resolver');
+      throw new Error('Initialization failed');
     }
   }
 
@@ -193,9 +193,9 @@ class TaskDependencyResolver {
         cycles: this.analysis.cycles.length,
         criticalPathLength: this.analysis.criticalPath.length
       };
-    } catch (error) {
-      console.error('❌ Dependency analysis failed:', error);
-      throw error;
+    } catch {
+      console.error('❌ Dependency analysis failed');
+      throw new Error('Dependency analysis failed');
     }
   }
 
@@ -205,7 +205,7 @@ class TaskDependencyResolver {
   async analyzeTaskDependencies(taskId, task, allTasks) {
     const dependencies = [];
 
-    if (!task || !task.description) return dependencies;
+    if (!task || !task.description) {return dependencies;}
 
     const text =
       `${task.title || ''} ${task.description || ''} ${(task.acceptanceCriteria || []).join(' ')}`.toLowerCase();
@@ -358,11 +358,11 @@ class TaskDependencyResolver {
       }
     }
 
-    if (currentFiles.size === 0) return dependencies;
+    if (currentFiles.size === 0) {return dependencies;}
 
     // Find other tasks that work on the same files
     for (const [id, task] of Object.entries(allTasks)) {
-      if (id === taskId || !task.description) continue;
+      if (id === taskId || !task.description) {continue;}
 
       const otherText =
         `${task.title || ''} ${task.description || ''}`.toLowerCase();
@@ -400,7 +400,7 @@ class TaskDependencyResolver {
     const contextWords = context.split(/\s+/).filter(word => word.length > 3);
 
     for (const [id, task] of Object.entries(allTasks)) {
-      if (id === taskId || !task.description) continue;
+      if (id === taskId || !task.description) {continue;}
 
       const taskText =
         `${task.title || ''} ${task.description || ''}`.toLowerCase();
@@ -521,7 +521,7 @@ class TaskDependencyResolver {
    * DFS to find longest path from a node
    */
   dfsLongestPath(nodeId, visited) {
-    if (visited.has(nodeId)) return []; // Avoid cycles
+    if (visited.has(nodeId)) {return [];} // Avoid cycles
 
     visited.add(nodeId);
     const node = this.dependencyGraph.get(nodeId);
@@ -607,7 +607,7 @@ class TaskDependencyResolver {
             recursionStack,
             [...path]
           );
-          if (cycle.length > 0) return cycle;
+          if (cycle.length > 0) {return cycle;}
         } else if (recursionStack.has(edge.target)) {
           // Found a cycle
           const cycleStart = path.indexOf(edge.target);
@@ -950,8 +950,8 @@ class TaskDependencyResolver {
       const stateData = await fs.readFile(this.stateFile, 'utf8');
       const state = JSON.parse(stateData);
       return state.tasks || {};
-    } catch (error) {
-      console.warn('Could not load tasks:', error.message);
+    } catch {
+      console.warn('Could not load tasks');
       return {};
     }
   }
@@ -989,8 +989,8 @@ class TaskDependencyResolver {
   }
 
   calculateBlockerSeverity(blockingCount) {
-    if (blockingCount >= 5) return 'high';
-    if (blockingCount >= 3) return 'medium';
+    if (blockingCount >= 5) {return 'high';}
+    if (blockingCount >= 3) {return 'medium';}
     return 'low';
   }
 
@@ -1110,11 +1110,10 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
-    try {
-      await resolver.initialize();
+  const run = async () => {
+    await resolver.initialize();
 
-      switch (command) {
+    switch (command) {
         case 'analyze':
           console.log('🔍 Analyzing all task dependencies...\n');
           const result = await resolver.analyzeAllTasks();
@@ -1178,14 +1177,13 @@ OUTPUT FILES:
   - dependencies-export-*.csv  CSV export
 `);
           break;
-      }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
     }
-  }
+  };
 
-  main();
+  run().catch(error => {
+    console.error('❌ Task Dependency Resolver failed:', error);
+    process.exitCode = 1;
+  });
 }
 
 module.exports = TaskDependencyResolver;

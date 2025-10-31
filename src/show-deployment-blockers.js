@@ -35,8 +35,8 @@ function showDeploymentBlockers() {
           b.metadata?.taskCode
         );
 
-        if (aFoundational && !bFoundational) return -1;
-        if (!aFoundational && bFoundational) return 1;
+        if (aFoundational && !bFoundational) {return -1;}
+        if (!aFoundational && bFoundational) {return 1;}
 
         return (a.metadata?.taskCode || '').localeCompare(
           b.metadata?.taskCode || ''

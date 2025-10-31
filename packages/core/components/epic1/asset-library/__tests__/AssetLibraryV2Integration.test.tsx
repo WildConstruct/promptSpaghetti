@@ -42,15 +42,10 @@ describe('AssetLibraryV2 Integration Tests', () => {
   });
 
   it('should work correctly in TabbedSidePanel with DndProvider', async () => {
-    const mockOnPresetDrag = jest.fn();
-    const mockOnPresetSelect = jest.fn();
-
     const { container } = render(
       <DndProvider backend={HTML5Backend}>
         <TabbedSidePanel
           previewEngine={null}
-          onPresetDrag={mockOnPresetDrag}
-          onPresetSelect={mockOnPresetSelect}
         />
       </DndProvider>
     );

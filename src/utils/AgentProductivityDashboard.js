@@ -631,7 +631,7 @@ class AgentProductivityDashboard {
       task => task.completedAt && task.startedAt
     );
 
-    if (completedTasks.length === 0) return 0;
+    if (completedTasks.length === 0) {return 0;}
 
     const totalTime = completedTasks.reduce((sum, task) => {
       const start = new Date(task.startedAt);
@@ -653,9 +653,9 @@ class AgentProductivityDashboard {
       const hours =
         (new Date(task.completedAt) - new Date(task.startedAt)) /
         (1000 * 60 * 60);
-      if (hours <= 2) distribution.fast++;
-      else if (hours <= 8) distribution.medium++;
-      else distribution.slow++;
+      if (hours <= 2) {distribution.fast++;}
+      else if (hours <= 8) {distribution.medium++;}
+      else {distribution.slow++;}
     });
 
     return distribution;
@@ -663,7 +663,7 @@ class AgentProductivityDashboard {
 
   calculateQualityScore(tasks) {
     const reviewedTasks = tasks.filter(task => task.qualityScore !== undefined);
-    if (reviewedTasks.length === 0) return 0.9; // Default good score
+    if (reviewedTasks.length === 0) {return 0.9;} // Default good score
 
     return (
       reviewedTasks.reduce((sum, task) => sum + task.qualityScore, 0) /
@@ -673,7 +673,7 @@ class AgentProductivityDashboard {
 
   calculateRevisionRate(tasks) {
     const completedTasks = tasks.filter(task => task.completedAt);
-    if (completedTasks.length === 0) return 0;
+    if (completedTasks.length === 0) {return 0;}
 
     const revisedTasks = completedTasks.filter(task => task.revisions > 0);
     return revisedTasks.length / completedTasks.length;
@@ -733,13 +733,13 @@ class AgentProductivityDashboard {
       task => task.completedAt && new Date(task.completedAt) >= week2Start
     );
 
-    if (week1Tasks.length === 0) return 'stable';
+    if (week1Tasks.length === 0) {return 'stable';}
 
     const week1Velocity = week1Tasks.length / 7;
     const week2Velocity = week2Tasks.length / 7;
 
-    if (week2Velocity > week1Velocity * 1.1) return 'improving';
-    if (week2Velocity < week1Velocity * 0.9) return 'declining';
+    if (week2Velocity > week1Velocity * 1.1) {return 'improving';}
+    if (week2Velocity < week1Velocity * 0.9) {return 'declining';}
     return 'stable';
   }
 
@@ -761,7 +761,7 @@ class AgentProductivityDashboard {
           (1000 * 60 * 60)
       );
 
-    if (completionTimes.length < 2) return 1;
+    if (completionTimes.length < 2) {return 1;}
 
     const mean =
       completionTimes.reduce((sum, time) => sum + time, 0) /
@@ -797,8 +797,8 @@ class AgentProductivityDashboard {
 
     const totalScore = velocityScore + timeScore + qualityScoreValue;
 
-    if (totalScore >= 5) return 'excellent';
-    if (totalScore >= 3) return 'good';
+    if (totalScore >= 5) {return 'excellent';}
+    if (totalScore >= 3) {return 'good';}
     return 'needs-attention';
   }
 
@@ -836,9 +836,29 @@ class AgentProductivityDashboard {
   }
 
   calculateCollaborationIndex(agents) {
-    // Simplified collaboration index based on task sharing patterns
-    // In a real implementation, this would analyze cross-agent interactions
-    return Math.random() * 0.5 + 0.5; // Placeholder
+    if (agents.length === 0) {
+      return 0.5;
+    }
+
+    const sharedInteractions = agents.reduce(
+      (total, agent) =>
+        total +
+        (agent.collaboration?.sharedTasks || 0) +
+        (agent.collaboration?.pairSessions || 0),
+      0
+    );
+
+    const totalWork = agents.reduce(
+      (total, agent) => total + (agent.currentWorkload.total || 0),
+      0
+    );
+
+    if (totalWork === 0) {
+      return 0.5;
+    }
+
+    const collaborationIndex = sharedInteractions / totalWork;
+    return Math.max(0, Math.min(1, collaborationIndex));
   }
 
   identifyTeamBottlenecks(agents) {
@@ -883,7 +903,7 @@ class AgentProductivityDashboard {
     const agents = new Map();
 
     Object.values(taskData.tasks || {}).forEach(task => {
-      if (!task.assignee || task.assignee === 'Unassigned') return;
+      if (!task.assignee || task.assignee === 'Unassigned') {return;}
 
       if (!agents.has(task.assignee)) {
         agents.set(task.assignee, {
@@ -1007,7 +1027,7 @@ class AgentProductivityDashboard {
 
   convertToCSV(data) {
     const agents = Object.values(data.agents);
-    if (agents.length === 0) return 'No data available';
+    if (agents.length === 0) {return 'No data available';}
 
     const headers = [
       'Agent ID',
@@ -1081,85 +1101,86 @@ class AgentProductivityDashboard {
   }
 }
 
-// CLI interface
-if (require.main === module) {
+async function runCLI() {
   const dashboard = new AgentProductivityDashboard();
-
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
-    try {
-      await dashboard.initialize();
+  try {
+    await dashboard.initialize();
 
-      switch (command) {
-        case 'collect':
-        case 'run':
-          await dashboard.collectMetrics();
-          dashboard.generateSummaryReport();
-          break;
+    switch (command) {
+      case 'collect':
+      case 'run':
+        await dashboard.collectMetrics();
+        dashboard.generateSummaryReport();
+        break;
+      case 'report':
+        dashboard.generateSummaryReport();
+        break;
+      case 'watch':
+        dashboard.startWatching();
+        break;
+      case 'dashboard':
+      case 'html':
+        await dashboard.generateDashboard();
+        break;
+      case 'export':
+        await dashboard.exportMetrics(args[1] || 'json');
+        break;
+      case 'summary':
+        dashboard.generateSummaryReport();
+        break;
+      case 'help':
+      default:
+        dashboard.showHelp(command && !['help', undefined].includes(command));
+        break;
+    }
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+    process.exit(1);
+  }
+}
 
-        case 'dashboard':
-        case 'html':
-          await dashboard.collectMetrics();
-          const dashboardFile = await dashboard.generateDashboard();
-          console.log(`🎨 Dashboard available at: file://${dashboardFile}`);
-          break;
+AgentProductivityDashboard.prototype.showHelp = function showHelp(
+  showUnknownMessage = false
+) {
+  if (showUnknownMessage) {
+    console.log('Unknown command. Use one of the options below:');
+  }
+  this.printHelp();
+};
 
-        case 'export':
-          const format = args[1] || 'json';
-          await dashboard.collectMetrics();
-          const exportFile = await dashboard.exportMetrics(format);
-          console.log(`📁 Metrics exported to: ${exportFile}`);
-          break;
-
-        case 'summary':
-          await dashboard.collectMetrics();
-          dashboard.generateSummaryReport();
-          break;
-
-        case 'help':
-        default:
-          console.log(`
+AgentProductivityDashboard.prototype.printHelp = AgentProductivityDashboard.prototype.printHelp ||
+  function printHelp() {
+    console.log(`
 📊 Agent Productivity Dashboard
 
 USAGE:
   node AgentProductivityDashboard.js <command> [options]
 
 COMMANDS:
-  collect/run           Collect metrics and show summary
-  dashboard/html        Generate interactive HTML dashboard
-  export [format]       Export metrics (json, csv)
-  summary              Show summary report only
-  help                 Show this help
+  collect, run          Collect metrics and show summary
+  dashboard, html       Generate interactive HTML dashboard
+  export <format>       Export metrics (json, csv)
+  summary               Show summary report only
+  watch                 Monitor state changes and auto-refresh metrics
+  help                  Show this help
 
 EXAMPLES:
   node AgentProductivityDashboard.js collect
   node AgentProductivityDashboard.js dashboard
   node AgentProductivityDashboard.js export csv
 
-FEATURES:
-  ✅ Real-time productivity metrics
-  ✅ Interactive HTML dashboard
-  ✅ Performance trend analysis
-  ✅ Bottleneck identification
-  ✅ Team collaboration insights
-  ✅ Automated recommendations
-
 OUTPUT:
   📊 Metrics saved to: src/data/productivity/
   🎨 Dashboard: src/data/productivity/dashboard.html
   📁 Exports: src/data/productivity/
 `);
-          break;
-      }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
-    }
-  }
+  };
 
-  main();
+if (require.main === module) {
+  runCLI();
 }
 
 module.exports = AgentProductivityDashboard;

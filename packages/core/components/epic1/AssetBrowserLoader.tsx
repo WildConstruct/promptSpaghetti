@@ -5,7 +5,7 @@
 
 import React, { lazy, Suspense } from 'react';
 import { AssetLibraryErrorBoundary } from './asset-library/AssetLibraryErrorBoundary';
-import { Preset } from './asset-library/types';
+import type { Preset } from '@prompt/asset-browser';
 
 // Try to lazy load the integrated asset browser
 const AssetBrowserIntegrated = lazy(() => 
@@ -26,14 +26,11 @@ const AssetBrowserIntegrated = lazy(() =>
 interface AssetBrowserLoaderProps {
   onPresetDrag?: (preset: Preset) => void;
   onPresetSelect?: (preset: Preset) => void;
-  onInsert?: (preset: any) => void;
+  onInsert?: (preset: Preset) => void;
 }
 
-export const AssetBrowserLoader: React.FC<AssetBrowserLoaderProps> = ({
-  onPresetDrag,
-  onPresetSelect,
-  onInsert
-}) => {
+export const AssetBrowserLoader: React.FC<AssetBrowserLoaderProps> = props => {
+  const { onInsert } = props;
   const [loadFailed, setLoadFailed] = React.useState(false);
 
   const LoadingPlaceholder = () => (
@@ -73,9 +70,7 @@ export const AssetBrowserLoader: React.FC<AssetBrowserLoaderProps> = ({
     <AssetLibraryErrorBoundary>
       <Suspense fallback={<LoadingPlaceholder />}>
         <AssetBrowserIntegrated
-          onInsert={(preset: any) => {
-            // Forward insert event directly to upstream without guards (AC7)
-            // Just call onInsert(preset) directly as per story requirements
+          onInsert={preset => {
             console.log('[AssetBrowserLoader] Forwarding preset insert:', preset);
             onInsert?.(preset);
           }}

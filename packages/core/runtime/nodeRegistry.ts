@@ -289,7 +289,7 @@ class NodeTypeRegistry {
           id: 'options',
           label: 'Options',
           type: 'json',
-          defaultValue: [],
+          defaultValue: '[]',
           required: true
         }
       ],

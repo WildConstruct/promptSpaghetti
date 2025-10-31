@@ -28,11 +28,6 @@ test.describe('Large Graph Performance', () => {
     await page.waitForSelector('[data-testid="restore-draft-modal"]');
     await page.click('button:has-text("Restore")');
 
-    // Start performance monitoring
-    const startTime = performance.now();
-    const frameCount = 0;
-    const lastFrameTime = startTime;
-
     // Monitor FPS for 5 seconds
     const fpsPromise = page.evaluate(() => {
       return new Promise<number>(resolve => {
@@ -57,7 +52,7 @@ test.describe('Large Graph Performance', () => {
     const memoryPromise = page.evaluate(() => {
       return new Promise<number>(resolve => {
         if ('memory' in performance) {
-          const memory = (performance as any).memory;
+          const memory = (performance as { memory?: { usedJSHeapSize: number } }).memory;
           resolve(memory.usedJSHeapSize / 1024 / 1024); // Convert to MB
         } else {
           resolve(0); // Memory API not available

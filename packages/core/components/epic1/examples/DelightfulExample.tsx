@@ -127,15 +127,15 @@ export const DelightfulLoadingExample: React.FC = () => {
       <h2>Delightful Loading States</h2>
       
       <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
-        <button onClick={handleGraphOperation}>
+        <button onClick={handleGraphOperation} disabled={isLoading}>
           Load Graph (with fun messages)
         </button>
         
-        <button onClick={handlePreviewGeneration}>
+        <button onClick={handlePreviewGeneration} disabled={isLoading}>
           Generate Preview (mystical loading)
         </button>
         
-        <button onClick={handleSave}>
+        <button onClick={handleSave} disabled={isLoading}>
           Save Graph (emotional messages)
         </button>
       </div>
@@ -149,29 +149,29 @@ export const DelightfulLoadingExample: React.FC = () => {
         <div style={{ fontSize: 14, lineHeight: 1.8 }}>
           <p><strong>Graph Loading:</strong></p>
           <ul>
-            <li>"Summoning nodes from the void..."</li>
-            <li>"Teaching edges how to connect..."</li>
-            <li>"Polishing node surfaces..."</li>
-            <li>"Arranging pixels artfully..."</li>
-            <li>"Convincing nodes to stay put..."</li>
+            <li>&ldquo;Summoning nodes from the void...&rdquo;</li>
+            <li>&ldquo;Teaching edges how to connect...&rdquo;</li>
+            <li>&ldquo;Polishing node surfaces...&rdquo;</li>
+            <li>&ldquo;Arranging pixels artfully...&rdquo;</li>
+            <li>&ldquo;Convincing nodes to stay put...&rdquo;</li>
           </ul>
 
           <p><strong>Preview Generation:</strong></p>
           <ul>
-            <li>"Rolling cosmic dice..."</li>
-            <li>"Consulting the oracle..."</li>
-            <li>"Mixing word potions..."</li>
-            <li>"Weaving narrative threads..."</li>
-            <li>"Birthing possibilities..."</li>
+            <li>&ldquo;Rolling cosmic dice...&rdquo;</li>
+            <li>&ldquo;Consulting the oracle...&rdquo;</li>
+            <li>&ldquo;Mixing word potions...&rdquo;</li>
+            <li>&ldquo;Weaving narrative threads...&rdquo;</li>
+            <li>&ldquo;Birthing possibilities...&rdquo;</li>
           </ul>
 
           <p><strong>Save Operations:</strong></p>
           <ul>
-            <li>"Preserving your masterpiece..."</li>
-            <li>"Etching in digital stone..."</li>
-            <li>"Tucking nodes into bed..."</li>
-            <li>"Sealing with a kiss..."</li>
-            <li>"Making it permanent..."</li>
+            <li>&ldquo;Preserving your masterpiece...&rdquo;</li>
+            <li>&ldquo;Etching in digital stone...&rdquo;</li>
+            <li>&ldquo;Tucking nodes into bed...&rdquo;</li>
+            <li>&ldquo;Sealing with a kiss...&rdquo;</li>
+            <li>&ldquo;Making it permanent...&rdquo;</li>
           </ul>
         </div>
       </div>

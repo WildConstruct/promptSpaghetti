@@ -7,7 +7,7 @@ import {
   Choice,
   WeightOptimizationResult,
   InspirationSuggestion
-} from '../../services/llm/NodeIntelligence';
+} from '../../services/llm';
 import './IntelligentFeatures.css';
 
 interface PopulateChoicesButtonProps {

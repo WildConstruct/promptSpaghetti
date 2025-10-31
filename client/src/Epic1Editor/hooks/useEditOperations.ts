@@ -33,7 +33,6 @@ export const useEditOperations = ({
   ]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [clipboard, setClipboard] = useState<HistoryState | null>(null);
-  const [lastChangeTime, setLastChangeTime] = useState(Date.now());
 
   // Track changes to nodes and edges for undo/redo history
   const prevNodesRef = useRef<Node[]>(currentNodes);

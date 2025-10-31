@@ -17,7 +17,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { execSync } = require('child_process');
 
 class ConflictResolutionAssistant {
   constructor() {
@@ -173,14 +173,14 @@ class ConflictResolutionAssistant {
       const stateData = await fs.readFile(this.stateFile, 'utf8');
       const state = JSON.parse(stateData);
 
-      if (!state.tasks) return [];
+      if (!state.tasks) {return [];}
 
       const cutoffTime = new Date(
         Date.now() - this.config.detection.activeTaskWindow
       );
 
       return Object.entries(state.tasks)
-        .filter(([id, task]) => {
+        .filter(([, task]) => {
           // Task is in progress or recently updated
           const isActive =
             task.state === 'IN_PROGRESS' || task.assignee !== 'Unassigned';
@@ -319,7 +319,7 @@ class ConflictResolutionAssistant {
                 .trim()
                 .split('\n')
                 .forEach(file => {
-                  if (file.trim()) files.add(file.trim());
+                  if (file.trim()) {files.add(file.trim());}
                 });
             }
 
@@ -331,7 +331,7 @@ class ConflictResolutionAssistant {
       }
 
       return [];
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -451,9 +451,9 @@ class ConflictResolutionAssistant {
       if (['.js', '.ts', '.jsx', '.tsx'].includes(analysis.type)) {
         await this.analyzeJavaScriptFile(content, analysis, taskA, taskB);
       } else if (analysis.type === '.json') {
-        await this.analyzeJSONFile(content, analysis, taskA, taskB);
+        await this.analyzeJSONFile(content, analysis);
       } else if (['.css', '.scss'].includes(analysis.type)) {
-        await this.analyzeStyleFile(content, analysis, taskA, taskB);
+        await this.analyzeStyleFile(content, analysis);
       }
 
       // Determine severity
@@ -513,18 +513,18 @@ class ConflictResolutionAssistant {
       functions.length > 0 ? functionConflicts / functions.length : 0;
 
     // Detect specific conflict types
-    if (imports.length > 5) analysis.conflictTypes.push('import_heavy');
-    if (functions.length > 10) analysis.conflictTypes.push('function_heavy');
+    if (imports.length > 5) {analysis.conflictTypes.push('import_heavy');}
+    if (functions.length > 10) {analysis.conflictTypes.push('function_heavy');}
     if (content.includes('export default'))
-      analysis.conflictTypes.push('default_export');
+      {analysis.conflictTypes.push('default_export');}
     if (content.includes('module.exports'))
-      analysis.conflictTypes.push('commonjs_export');
+      {analysis.conflictTypes.push('commonjs_export');}
   }
 
   /**
    * Analyze JSON files
    */
-  async analyzeJSONFile(content, analysis, taskA, taskB) {
+  async analyzeJSONFile(content, analysis) {
     try {
       const json = JSON.parse(content);
 
@@ -555,7 +555,7 @@ class ConflictResolutionAssistant {
   /**
    * Analyze CSS/SCSS files
    */
-  async analyzeStyleFile(content, analysis, taskA, taskB) {
+  async analyzeStyleFile(content, analysis) {
     const selectors =
       content.match(/\.[a-zA-Z][a-zA-Z0-9_-]*|\#[a-zA-Z][a-zA-Z0-9_-]*/g) || [];
     const variables = content.match(/\$[a-zA-Z][a-zA-Z0-9_-]*/g) || [];
@@ -671,8 +671,8 @@ class ConflictResolutionAssistant {
 
     return strategies.sort((a, b) => {
       // Sort by recommendation and effort
-      if (a.recommendation && !b.recommendation) return -1;
-      if (!a.recommendation && b.recommendation) return 1;
+      if (a.recommendation && !b.recommendation) {return -1;}
+      if (!a.recommendation && b.recommendation) {return 1;}
 
       const effortOrder = { low: 1, medium: 2, high: 3 };
       return effortOrder[a.effort] - effortOrder[b.effort];
@@ -731,7 +731,7 @@ class ConflictResolutionAssistant {
     score += conflict.files.length * 2;
 
     // Auto-resolvable penalty (less urgent if can be auto-resolved)
-    if (conflict.autoResolvable) score -= 3;
+    if (conflict.autoResolvable) {score -= 3;}
 
     return Math.max(0, score);
   }
@@ -839,7 +839,7 @@ class ConflictResolutionAssistant {
 
       // Resolve each file
       for (const file of conflict.files) {
-        const fileResolution = await this.resolveFile(file, conflict);
+        const fileResolution = await this.resolveFile(file);
         resolution.actions.push(...fileResolution.actions);
 
         if (fileResolution.modified) {
@@ -871,7 +871,7 @@ class ConflictResolutionAssistant {
         try {
           await this.restoreBackup(conflict.files);
           resolution.actions.push('backup_restored');
-        } catch (restoreError) {
+        } catch {
           resolution.actions.push('backup_restore_failed');
         }
       }
@@ -883,7 +883,7 @@ class ConflictResolutionAssistant {
   /**
    * Resolve a specific file
    */
-  async resolveFile(filePath, conflict) {
+  async resolveFile(filePath) {
     const resolution = { actions: [], modified: false };
 
     try {
@@ -893,13 +893,13 @@ class ConflictResolutionAssistant {
 
       // Apply resolution strategies based on file type
       if (fileExt === '.json' && filePath.includes('package.json')) {
-        modifiedContent = await this.resolvePackageJson(content, conflict);
+        modifiedContent = await this.resolvePackageJson(content);
         resolution.actions.push('merged_dependencies');
       } else if (['.js', '.ts', '.jsx', '.tsx'].includes(fileExt)) {
-        modifiedContent = await this.resolveJavaScriptFile(content, conflict);
+        modifiedContent = await this.resolveJavaScriptFile(content);
         resolution.actions.push('resolved_imports');
       } else if (['.css', '.scss'].includes(fileExt)) {
-        modifiedContent = await this.resolveStyleFile(content, conflict);
+        modifiedContent = await this.resolveStyleFile(content);
         resolution.actions.push('merged_styles');
       }
 
@@ -919,7 +919,7 @@ class ConflictResolutionAssistant {
   /**
    * Resolve package.json conflicts
    */
-  async resolvePackageJson(content, conflict) {
+  async resolvePackageJson(content) {
     try {
       const packageJson = JSON.parse(content);
 
@@ -946,7 +946,7 @@ class ConflictResolutionAssistant {
       }
 
       return JSON.stringify(packageJson, null, 2);
-    } catch (error) {
+    } catch {
       return content; // Return original if parsing fails
     }
   }
@@ -954,7 +954,7 @@ class ConflictResolutionAssistant {
   /**
    * Resolve JavaScript/TypeScript file conflicts
    */
-  async resolveJavaScriptFile(content, conflict) {
+  async resolveJavaScriptFile(content) {
     let modified = content;
 
     // Sort imports
@@ -1001,7 +1001,7 @@ class ConflictResolutionAssistant {
   /**
    * Resolve style file conflicts
    */
-  async resolveStyleFile(content, conflict) {
+  async resolveStyleFile(content) {
     // Simple approach: ensure consistent formatting
     return content
       .replace(/\s*{\s*/g, ' {\n  ')
@@ -1073,7 +1073,7 @@ class ConflictResolutionAssistant {
 
   async restoreBackup(files) {
     // Implementation would restore from most recent backup
-    console.log('Backup restoration (placeholder)');
+    console.log('Backup restoration (placeholder for files):', files);
   }
 
   async runTests() {
@@ -1194,7 +1194,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
+  const main = async () => {
     try {
       await assistant.initialize();
 
@@ -1256,9 +1256,12 @@ OUTPUT FILES:
       console.error('❌ Error:', error.message);
       process.exit(1);
     }
-  }
+  };
 
-  main();
+  main().catch(error => {
+    console.error('Conflict Resolution Assistant failed:', error.message);
+    process.exit(1);
+  });
 }
 
 module.exports = ConflictResolutionAssistant;

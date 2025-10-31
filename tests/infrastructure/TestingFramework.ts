@@ -5,6 +5,20 @@
  */
 
 import { EventEmitter } from 'events';
+import { fn } from 'jest-mock';
+import type { MockedFunction } from 'jest-mock';
+
+type AnyFn = (...args: unknown[]) => unknown;
+type DataGenerationType = 'string' | 'number' | 'boolean' | 'array' | 'object';
+
+interface GenerateDataOptions {
+  length?: number;
+  min?: number;
+  max?: number;
+  itemType?: DataGenerationType;
+  itemOptions?: GenerateDataOptions;
+  keys?: string[];
+}
 
 export enum TestEnvironment {
   UNIT = 'unit',
@@ -32,7 +46,7 @@ export interface TestResult {
   status: 'passed' | 'failed' | 'skipped' | 'pending';
   duration: number;
   error?: Error;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   assertions?: AssertionResult[];
   coverage?: CoverageData;
 }
@@ -40,8 +54,8 @@ export interface TestResult {
 export interface AssertionResult {
   description: string;
   passed: boolean;
-  expected?: any;
-  actual?: any;
+  expected?: unknown;
+  actual?: unknown;
   error?: string;
 }
 
@@ -67,8 +81,8 @@ export interface TestSuiteConfig {
 }
 
 export interface TestContext {
-  fixtures: Map<string, any>;
-  mocks: Map<string, jest.MockedFunction<any>>;
+  fixtures: Map<string, unknown>;
+  mocks: Map<string, MockedFunction<AnyFn>>;
   utilities: TestUtilities;
   environment: TestEnvironment;
   category: TestCategory;
@@ -137,7 +151,7 @@ export class TestingFramework extends EventEmitter {
     this.results = [];
     const promises: Promise<TestResult[]>[] = [];
 
-    for (const [name, suite] of this.suites) {
+    for (const [, suite] of this.suites) {
       if (this.globalConfig.parallel) {
         promises.push(suite.run());
       } else {
@@ -274,7 +288,7 @@ export class TestSuite extends EventEmitter {
     }
 
     // Run tests
-    for (const [name, testCase] of this.tests) {
+    for (const testCase of this.tests.values()) {
       const result = await testCase.run();
       results.push(result);
     }
@@ -328,7 +342,11 @@ export class TestCase extends EventEmitter {
 
     try {
       // Create isolated context for this test
-      const testContext = { ...this.context };
+      const testContext: TestContext = {
+        ...this.context,
+        fixtures: new Map(this.context.fixtures),
+        mocks: new Map(this.context.mocks)
+      };
 
       // Run the test with timeout
       await this.runWithTimeout(this.testFn(testContext), this.config.timeout);
@@ -346,11 +364,12 @@ export class TestCase extends EventEmitter {
   }
 
   private async runWithTimeout<T>(
-    promise: Promise<T>,
+    operation: Promise<T> | T,
     timeout: number
   ): Promise<T> {
+    const execution = Promise.resolve(operation);
     return Promise.race([
-      promise,
+      execution,
       new Promise<never>((_, reject) => {
         setTimeout(
           () => reject(new Error(`Test timeout after ${timeout}ms`)),
@@ -368,11 +387,8 @@ export class TestUtilities {
   /**
    * Create a mock function with Jest-like interface
    */
-  createMock<T extends (...args: any[]) => any>(
-    implementation?: T
-  ): jest.MockedFunction<T> {
-    const mockFn = jest.fn(implementation) as jest.MockedFunction<T>;
-    return mockFn;
+  createMock<T extends AnyFn>(implementation?: T): MockedFunction<T> {
+    return fn(implementation) as MockedFunction<T>;
   }
 
   /**
@@ -406,30 +422,20 @@ export class TestUtilities {
    * Generate random test data
    */
   generateData(
-    type: 'string' | 'number' | 'boolean' | 'array' | 'object',
-    options?: any
-  ): any {
+    type: DataGenerationType,
+    options: GenerateDataOptions = {}
+  ): unknown {
     switch (type) {
       case 'string':
-        return this.generateRandomString(options?.length || 10);
+        return this.generateRandomString(options.length ?? 10);
       case 'number':
-        return (
-          Math.floor(Math.random() * (options?.max || 1000)) +
-          (options?.min || 0)
-        );
+        return this.generateRandomNumber(options);
       case 'boolean':
         return Math.random() > 0.5;
       case 'array':
-        return Array.from({ length: options?.length || 5 }, () =>
-          this.generateData(options?.itemType || 'string', options?.itemOptions)
-        );
+        return this.generateArray(options);
       case 'object':
-        const obj: Record<string, any> = {};
-        const keys = options?.keys || ['id', 'name', 'value'];
-        keys.forEach((key: string) => {
-          obj[key] = this.generateData('string');
-        });
-        return obj;
+        return this.generateObject(options);
       default:
         return null;
     }
@@ -445,11 +451,40 @@ export class TestUtilities {
     return result;
   }
 
+  private generateRandomNumber(options: GenerateDataOptions): number {
+    const min = options.min ?? 0;
+    const max = options.max ?? 1000;
+    if (max <= min) {
+      return min;
+    }
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  private generateArray(options: GenerateDataOptions): unknown[] {
+    const length = options.length ?? 5;
+    const itemType = options.itemType ?? 'string';
+    const itemOptions: GenerateDataOptions = options.itemOptions ?? {};
+    return Array.from({ length }, () =>
+      this.generateData(itemType, itemOptions)
+    );
+  }
+
+  private generateObject(
+    options: GenerateDataOptions
+  ): Record<string, unknown> {
+    const keys = options.keys ?? ['id', 'name', 'value'];
+    const obj: Record<string, unknown> = {};
+    keys.forEach(key => {
+      obj[key] = this.generateData('string');
+    });
+    return obj;
+  }
+
   /**
    * Assert helper functions
    */
   assert = {
-    equal: (actual: any, expected: any, message?: string): AssertionResult => {
+    equal: <T>(actual: T, expected: T, message?: string): AssertionResult => {
       const passed = actual === expected;
       return {
         description: message || `Expected ${actual} to equal ${expected}`,
@@ -461,8 +496,8 @@ export class TestUtilities {
     },
 
     deepEqual: (
-      actual: any,
-      expected: any,
+      actual: unknown,
+      expected: unknown,
       message?: string
     ): AssertionResult => {
       const passed = JSON.stringify(actual) === JSON.stringify(expected);
@@ -475,21 +510,23 @@ export class TestUtilities {
       };
     },
 
-    truthy: (value: any, message?: string): AssertionResult => {
+    truthy: (value: unknown, message?: string): AssertionResult => {
       const passed = !!value;
       return {
         description: message || 'Expected value to be truthy',
         passed,
+        expected: true,
         actual: value,
         error: passed ? undefined : `Expected truthy value, got: ${value}`
       };
     },
 
-    falsy: (value: any, message?: string): AssertionResult => {
+    falsy: (value: unknown, message?: string): AssertionResult => {
       const passed = !value;
       return {
         description: message || 'Expected value to be falsy',
         passed,
+        expected: false,
         actual: value,
         error: passed ? undefined : `Expected falsy value, got: ${value}`
       };

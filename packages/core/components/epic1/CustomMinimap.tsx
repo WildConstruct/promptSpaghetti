@@ -8,17 +8,33 @@ interface CustomMinimapProps {
   style?: React.CSSProperties;
 }
 
+interface Bounds {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+interface DragState {
+  x: number;
+  y: number;
+  viewportX: number;
+  viewportY: number;
+}
+
 export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, style }) => {
   const viewport = useViewport();
   const { getViewport, setViewport } = useReactFlow();
   const minimapRef = useRef<HTMLDivElement>(null);
-  const [bounds, setBounds] = useState({ minX: 0, minY: 0, maxX: 1000, maxY: 1000 });
+  const [bounds, setBounds] = useState<Bounds>({ minX: 0, minY: 0, maxX: 1000, maxY: 1000 });
   const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0, viewportX: 0, viewportY: 0 });
+  const [dragStart, setDragStart] = useState<DragState>({ x: 0, y: 0, viewportX: 0, viewportY: 0 });
   
   // Calculate the bounds of all nodes
   useEffect(() => {
-    if (nodes.length === 0) return;
+    if (nodes.length === 0) {
+      return;
+    }
     
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     
@@ -51,7 +67,9 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
   // Helper function to get node center position
   const getNodeCenter = (nodeId: string) => {
     const node = nodes.find(n => n.id === nodeId);
-    if (!node) return null;
+    if (!node) {
+      return null;
+    }
     const x = (node.position.x - bounds.minX + 140) * scale; // 140 is half of node width
     const y = (node.position.y - bounds.minY + 70) * scale; // 70 is half of node height
     return { x, y };
@@ -74,8 +92,10 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
   // Handle mouse move for dragging
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging) return;
-      
+      if (!isDragging) {
+        return;
+      }
+
       const deltaX = (e.clientX - dragStart.x) / scale;
       const deltaY = (e.clientY - dragStart.y) / scale;
       
@@ -90,24 +110,30 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
       setIsDragging(false);
     };
     
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      
-      return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-      };
+    if (!isDragging) {
+      return undefined;
     }
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
   }, [isDragging, dragStart, scale, viewport.zoom, setViewport]);
-  
+
   // Handle click on minimap background to navigate
   const handleMinimapClick = (e: React.MouseEvent) => {
-    if (!minimapRef.current || isDragging) return;
-    
+    if (!minimapRef.current || isDragging) {
+      return;
+    }
+
     // Don't navigate if clicking on the viewport rectangle
     const target = e.target as HTMLElement;
-    if (target.style.cursor === 'grab' || target.style.cursor === 'grabbing') return;
+    if (target.style.cursor === 'grab' || target.style.cursor === 'grabbing') {
+      return;
+    }
     
     const rect = minimapRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / scale + bounds.minX;
@@ -137,10 +163,16 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
         {edges.map(edge => {
           const sourcePos = getNodeCenter(edge.source);
           const targetPos = getNodeCenter(edge.target);
-          
-          const valid = (p: any) => p && Number.isFinite(p.x) && Number.isFinite(p.y);
-          if (!valid(sourcePos) || !valid(targetPos)) return null;
-          
+
+          const isPointValid = (
+            point: { x: number; y: number } | null
+          ): point is { x: number; y: number } =>
+            Boolean(point && Number.isFinite(point.x) && Number.isFinite(point.y));
+
+          if (!isPointValid(sourcePos) || !isPointValid(targetPos)) {
+            return null;
+          }
+
           return (
             <line
               key={edge.id}

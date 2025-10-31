@@ -1,15 +1,15 @@
 // Natural Language Search for Advanced Asset Browser
 // Story 2.5b: Advanced Asset Browser Features
 
-import { Asset } from './assetMatcher';
+import { Asset, AssetMetadata } from './assetMatcher';
 import { LLMService } from './llm/LLMService';
-import { BulkOperationsManager } from './llm/BulkOperationsManager';
+import type { LLMResponse } from './llm/types';
 
 export interface SearchIntent {
   action: 'find' | 'exclude' | 'similar' | 'filter';
   criteria: SearchCriteria[];
   modifiers: SearchModifier[];
-  context?: any;
+  context?: Record<string, unknown>;
 }
 
 export interface SearchCriteria {
@@ -42,7 +42,6 @@ export interface ParsedQuery {
 
 export class NaturalLanguageSearch {
   private llmService: LLMService | null;
-  private bulkOpsManager: BulkOperationsManager;
   private searchCache: Map<string, SearchResult> = new Map();
 
   // Common search patterns
@@ -67,7 +66,6 @@ export class NaturalLanguageSearch {
 
   constructor(llmService?: LLMService) {
     this.llmService = llmService || null;
-    this.bulkOpsManager = new BulkOperationsManager();
   }
 
   async search(
@@ -76,7 +74,7 @@ export class NaturalLanguageSearch {
     options: {
       limit?: number;
       useCache?: boolean;
-      graphContext?: any;
+      graphContext?: Record<string, unknown>;
     } = {}
   ): Promise<SearchResult> {
     const startTime = performance.now();
@@ -84,12 +82,14 @@ export class NaturalLanguageSearch {
 
     // Check cache
     const cacheKey = `${query}-${limit}`;
-    if (useCache && this.searchCache.has(cacheKey)) {
-      const cached = this.searchCache.get(cacheKey)!;
-      return {
-        ...cached,
-        executionTime: performance.now() - startTime
-      };
+    if (useCache) {
+      const cached = this.searchCache.get(cacheKey);
+      if (cached) {
+        return {
+          ...cached,
+          executionTime: performance.now() - startTime
+        };
+      }
     }
 
     // Parse the query
@@ -121,15 +121,20 @@ export class NaturalLanguageSearch {
 
       // Clear old cache entries
       if (this.searchCache.size > 100) {
-        const firstKey = this.searchCache.keys().next().value;
-        this.searchCache.delete(firstKey);
+        const iterator = this.searchCache.keys().next();
+        if (!iterator.done && iterator.value) {
+          this.searchCache.delete(iterator.value);
+        }
       }
     }
 
     return result;
   }
 
-  private async parseQuery(query: string, context?: any): Promise<ParsedQuery> {
+  private async parseQuery(
+    query: string,
+    context?: Record<string, unknown>
+  ): Promise<ParsedQuery> {
     const normalized = this.normalizeQuery(query);
     const tokens = this.tokenizeQuery(normalized);
     const corrections = this.applyCorrections(tokens);
@@ -139,11 +144,15 @@ export class NaturalLanguageSearch {
     if (this.llmService) {
       try {
         intent = await this.parseWithLLM(query, context);
-      } catch (error) {
+      } catch {
         intent = this.parseWithPatterns(normalized);
       }
     } else {
       intent = this.parseWithPatterns(normalized);
+    }
+
+    if (context) {
+      intent.context = context;
     }
 
     return {
@@ -235,45 +244,35 @@ export class NaturalLanguageSearch {
 
   private async parseWithLLM(
     query: string,
-    context?: any
+    context?: Record<string, unknown>
   ): Promise<SearchIntent> {
     if (!this.llmService) {
       return this.parseWithPatterns(query);
     }
 
-    const prompt = `
-      Parse this natural language search query into structured search criteria:
-      Query: "${query}"
-      ${context ? `Context: ${JSON.stringify(context)}` : ''}
-      
-      Return JSON with:
-      - action: 'find' | 'exclude' | 'similar' | 'filter'
-      - criteria: array of {field, operator, value, weight}
-      - modifiers: array of {type, value}
-      
-      Example: "Find urban chase scenes but not at night"
-      Returns: {
-        action: 'find',
-        criteria: [
-          {field: 'setting', operator: 'equals', value: 'urban', weight: 1.0},
-          {field: 'theme', operator: 'contains', value: 'chase', weight: 0.8}
-        ],
-        modifiers: [
-          {type: 'but_not', value: 'night'}
-        ]
-      }
-    `;
+    const contextBlock = context
+      ? `Context: ${this.safeStringify(context)}\n`
+      : '';
+
+    const prompt = `Parse this natural language search query into structured search criteria.\n${contextBlock}Query: "${query}"\n\nReturn JSON with: { action, criteria, modifiers }.\n`;
 
     try {
       const response = await this.llmService.complete({
         prompt,
-        model: 'gpt-4o-mini',
         temperature: 0.1,
-        maxTokens: 500
+        maxTokens: 500,
+        taskType: 'general',
+        responseFormat: 'json'
       });
 
-      return JSON.parse(response.content);
-    } catch (error) {
+      if (!response) {
+        throw new Error('LLM returned null response');
+      }
+
+      const content = this.extractContent(response);
+      const parsed = JSON.parse(content) as unknown;
+      return this.normalizeIntent(parsed, query);
+    } catch {
       // Fallback to pattern matching
       return this.parseWithPatterns(query);
     }
@@ -335,18 +334,16 @@ export class NaturalLanguageSearch {
   private applyCriterion(assets: Asset[], criterion: SearchCriteria): Asset[] {
     return assets.filter(asset => {
       const fieldValue = this.getFieldValue(asset, criterion.field);
+      const normalisedField = fieldValue.toLowerCase();
+      const normalizedValue = criterion.value.toLowerCase();
 
       switch (criterion.operator) {
         case 'contains':
-          return fieldValue
-            .toLowerCase()
-            .includes(criterion.value.toLowerCase());
+          return normalisedField.includes(normalizedValue);
         case 'equals':
-          return fieldValue.toLowerCase() === criterion.value.toLowerCase();
+          return normalisedField === normalizedValue;
         case 'not':
-          return !fieldValue
-            .toLowerCase()
-            .includes(criterion.value.toLowerCase());
+          return !normalisedField.includes(normalizedValue);
         case 'similar':
           return this.calculateSimilarity(fieldValue, criterion.value) > 0.6;
         default:
@@ -361,7 +358,24 @@ export class NaturalLanguageSearch {
       return JSON.stringify(asset).toLowerCase();
     }
 
-    return asset.metadata?.[field as keyof typeof asset.metadata] || '';
+    const metadata = asset.metadata;
+    if (!metadata) {
+      return '';
+    }
+
+    const metadataValue = metadata[field as keyof AssetMetadata];
+
+    if (typeof metadataValue === 'string') {
+      return metadataValue;
+    }
+
+    if (Array.isArray(metadataValue)) {
+      return metadataValue
+        .filter((value): value is string => typeof value === 'string')
+        .join(' ');
+    }
+
+    return '';
   }
 
   private applyModifier(assets: Asset[], modifier: SearchModifier): Asset[] {
@@ -373,15 +387,7 @@ export class NaturalLanguageSearch {
         });
 
       case 'especially':
-        // Boost assets that match the modifier
-        return assets.map(asset => {
-          const assetText = JSON.stringify(asset).toLowerCase();
-          if (assetText.includes(modifier.value.toLowerCase())) {
-            // Add boost metadata for sorting
-            (asset as any)._boost = ((asset as any)._boost || 1) * 2;
-          }
-          return asset;
-        });
+        return assets;
 
       default:
         return assets;
@@ -411,9 +417,15 @@ export class NaturalLanguageSearch {
     });
 
     // Apply boost if present
-    if ((asset as any)._boost) {
-      score *= (asset as any)._boost;
-    }
+    const boostMultiplier = parsedQuery.intent.modifiers.some(
+      modifier =>
+        modifier.type === 'especially' &&
+        assetText.includes(modifier.value.toLowerCase())
+    )
+      ? 2
+      : 1;
+
+    score *= boostMultiplier;
 
     return score;
   }
@@ -423,12 +435,16 @@ export class NaturalLanguageSearch {
     const s1 = str1.toLowerCase();
     const s2 = str2.toLowerCase();
 
-    if (s1 === s2) return 1;
+    if (s1 === s2) {
+      return 1;
+    }
 
     const longer = s1.length > s2.length ? s1 : s2;
     const shorter = s1.length > s2.length ? s2 : s1;
 
-    if (longer.length === 0) return 1;
+    if (longer.length === 0) {
+      return 1;
+    }
 
     const editDistance = this.levenshteinDistance(longer, shorter);
     return (longer.length - editDistance) / longer.length;
@@ -488,6 +504,141 @@ export class NaturalLanguageSearch {
     }
 
     return suggestions.slice(0, 3);
+  }
+
+  private safeStringify(value: unknown): string {
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return '[unserializable context]';
+    }
+  }
+
+  private extractContent(response: LLMResponse): string {
+    const content = (response.content ?? '').trim();
+    if (!content) {
+      throw new Error('Empty LLM response');
+    }
+    return content;
+  }
+
+  private normalizeIntent(data: unknown, fallbackQuery: string): SearchIntent {
+    const intent: SearchIntent = {
+      action: 'find',
+      criteria: [],
+      modifiers: []
+    };
+
+    if (!data || typeof data !== 'object') {
+      return intent;
+    }
+
+    const record = data as Record<string, unknown>;
+
+    if (
+      typeof record.action === 'string' &&
+      this.isValidAction(record.action)
+    ) {
+      intent.action = record.action;
+    }
+
+    if (Array.isArray(record.criteria)) {
+      record.criteria.forEach(raw => {
+        const criterion = this.normalizeCriterion(raw);
+        if (criterion) {
+          intent.criteria.push(criterion);
+        }
+      });
+    }
+
+    if (Array.isArray(record.modifiers)) {
+      record.modifiers.forEach(raw => {
+        const modifier = this.normalizeModifier(raw);
+        if (modifier) {
+          intent.modifiers.push(modifier);
+        }
+      });
+    }
+
+    if (intent.criteria.length === 0) {
+      this.extractKeywords(fallbackQuery).forEach(keyword => {
+        intent.criteria.push({
+          field: 'any',
+          operator: 'contains',
+          value: keyword,
+          weight: 0.5
+        });
+      });
+    }
+
+    return intent;
+  }
+
+  private normalizeCriterion(raw: unknown): SearchCriteria | null {
+    if (!raw || typeof raw !== 'object') {
+      return null;
+    }
+
+    const record = raw as Record<string, unknown>;
+    const field = typeof record.field === 'string' ? record.field : 'any';
+    const operator =
+      typeof record.operator === 'string' ? record.operator : 'contains';
+    const value = typeof record.value === 'string' ? record.value : '';
+    const weight = typeof record.weight === 'number' ? record.weight : 1;
+
+    if (
+      !this.isValidField(field) ||
+      !this.isValidOperator(operator) ||
+      value.length === 0
+    ) {
+      return null;
+    }
+
+    return {
+      field,
+      operator,
+      value,
+      weight
+    };
+  }
+
+  private normalizeModifier(raw: unknown): SearchModifier | null {
+    if (!raw || typeof raw !== 'object') {
+      return null;
+    }
+
+    const record = raw as Record<string, unknown>;
+    const type = typeof record.type === 'string' ? record.type : '';
+    const value = typeof record.value === 'string' ? record.value : '';
+
+    if (!this.isValidModifierType(type) || value.length === 0) {
+      return null;
+    }
+
+    return {
+      type,
+      value
+    };
+  }
+
+  private isValidAction(action: string): action is SearchIntent['action'] {
+    return ['find', 'exclude', 'similar', 'filter'].includes(action);
+  }
+
+  private isValidField(field: string): field is SearchCriteria['field'] {
+    return ['theme', 'mood', 'setting', 'category', 'style', 'any'].includes(
+      field
+    );
+  }
+
+  private isValidOperator(
+    operator: string
+  ): operator is SearchCriteria['operator'] {
+    return ['contains', 'equals', 'not', 'similar'].includes(operator);
+  }
+
+  private isValidModifierType(type: string): type is SearchModifier['type'] {
+    return ['but_not', 'especially', 'similar_to', 'between'].includes(type);
   }
 
   // Clear search cache

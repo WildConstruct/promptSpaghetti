@@ -1,14 +1,14 @@
 // Asset Matcher Service for Metadata-Based Suggestions
 // Story 2.5a: Asset Browser Integration MVP
 
-import { MetadataExtractor, SegmentMetadata } from './llm/MetadataExtractor';
+import { MetadataExtractor } from './llm/MetadataExtractor';
 
 export interface Asset {
   id: string;
   name: string;
   type: 'psg' | 'psglib';
   metadata?: AssetMetadata;
-  content?: any;
+  content?: unknown;
   tags?: string[];
 }
 
@@ -119,8 +119,9 @@ export class AssetMatcherService {
 
     // Entity overlap
     if (node.entities && asset.entities) {
+      const assetEntities = asset.entities ?? [];
       const commonEntities = node.entities.filter(e =>
-        asset.entities!.includes(e)
+        assetEntities.includes(e)
       );
       score += commonEntities.length * 10;
     }
@@ -187,9 +188,15 @@ export class AssetMatcherService {
     }
 
     // Extract from other fields
-    if (metadata.theme) keywords.push(...metadata.theme.split(/\s+/));
-    if (metadata.mood) keywords.push(...metadata.mood.split(/\s+/));
-    if (metadata.setting) keywords.push(...metadata.setting.split(/\s+/));
+    if (metadata.theme) {
+      keywords.push(...metadata.theme.split(/\s+/));
+    }
+    if (metadata.mood) {
+      keywords.push(...metadata.mood.split(/\s+/));
+    }
+    if (metadata.setting) {
+      keywords.push(...metadata.setting.split(/\s+/));
+    }
 
     return keywords.map(k => k.toLowerCase()).filter(k => k.length > 2);
   }
@@ -198,7 +205,9 @@ export class AssetMatcherService {
     const s1 = style1.toLowerCase();
     const s2 = style2.toLowerCase();
 
-    if (s1 === s2) return 1;
+    if (s1 === s2) {
+      return 1;
+    }
 
     // Check for partial matches
     const styles = [
@@ -219,18 +228,34 @@ export class AssetMatcherService {
 
   private metadataToText(metadata: AssetMetadata): string {
     const parts = [];
-    if (metadata.theme) parts.push(metadata.theme);
-    if (metadata.mood) parts.push(metadata.mood);
-    if (metadata.setting) parts.push(metadata.setting);
-    if (metadata.style) parts.push(metadata.style);
-    if (metadata.keywords) parts.push(...metadata.keywords);
-    if (metadata.entities) parts.push(...metadata.entities);
+    if (metadata.theme) {
+      parts.push(metadata.theme);
+    }
+    if (metadata.mood) {
+      parts.push(metadata.mood);
+    }
+    if (metadata.setting) {
+      parts.push(metadata.setting);
+    }
+    if (metadata.style) {
+      parts.push(metadata.style);
+    }
+    if (metadata.keywords) {
+      parts.push(...metadata.keywords);
+    }
+    if (metadata.entities) {
+      parts.push(...metadata.entities);
+    }
     return parts.join(' ');
   }
 
   private getRelevanceLevel(score: number): 'high' | 'medium' | 'low' {
-    if (score >= 70) return 'high';
-    if (score >= 40) return 'medium';
+    if (score >= 70) {
+      return 'high';
+    }
+    if (score >= 40) {
+      return 'medium';
+    }
     return 'low';
   }
 
@@ -252,9 +277,10 @@ export class AssetMatcherService {
     }
 
     if (reasons.length === 0) {
-      return 'General compatibility';
+      return `General compatibility (score: ${Math.round(score)})`;
     }
 
+    reasons.push(`Score: ${Math.round(score)}`);
     return reasons.join(', ');
   }
 

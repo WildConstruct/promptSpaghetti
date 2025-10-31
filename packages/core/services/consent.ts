@@ -15,6 +15,21 @@ export interface ConsentAssetMeta {
   metadata?: { consent?: boolean | 'unclear' };
 }
 
+interface AnalyticsReporter {
+  track: (event: string, payload: AuditPayload) => void;
+}
+
+type AuditPayload = {
+  action: 'asset_drop';
+  asset: string;
+  consent: boolean;
+  timestamp: number;
+};
+
+type WindowWithAnalytics = Window & {
+  analyticsReporter?: AnalyticsReporter;
+};
+
 const settings: ConsentSettings = {
   requireConsent: true
 };
@@ -50,26 +65,32 @@ export const ConsentService = {
   },
   check(asset: ConsentAssetMeta): ConsentResult {
     const flag = asset?.metadata?.consent;
-    if (flag === true) return { allowed: true, status: 'granted' };
-    if (flag === false)
+    if (flag === true) {
+      return { allowed: true, status: 'granted' };
+    }
+    if (flag === false) {
       return { allowed: !settings.requireConsent, status: 'denied' };
+    }
     // unclear / missing
     return { allowed: !settings.requireConsent, status: 'unclear' };
   },
   audit(action: 'asset_drop', asset: ConsentAssetMeta, consent: boolean) {
-    const payload = {
+    const payload: AuditPayload = {
       action,
       asset: asset?.id || asset?.name || 'unknown',
       consent,
       timestamp: Date.now()
     };
     try {
-      if (typeof window !== 'undefined' && (window as any).analyticsReporter) {
-        (window as any).analyticsReporter.track('asset_drop', payload);
-      } else {
-        // eslint-disable-next-line no-console
-        console.debug('[audit]', payload);
+      if (typeof window !== 'undefined') {
+        const reporter = (window as WindowWithAnalytics).analyticsReporter;
+        if (reporter) {
+          reporter.track('asset_drop', payload);
+          return;
+        }
       }
+      // eslint-disable-next-line no-console
+      console.debug('[audit]', payload);
     } catch {
       // swallow
     }

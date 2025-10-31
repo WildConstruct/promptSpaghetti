@@ -3,7 +3,7 @@
  * Quick actions to speed up investor demos
  */
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { DemoGraph, getDemoGraphById } from './medievalDemoGraphs';
 
 export interface DemoShortcut {
@@ -31,13 +31,13 @@ export const DemoShortcuts: React.FC<DemoShortcutsProps> = ({
   additionalShortcuts = [],
 }) => {
   // Default demo shortcuts
-  const defaultShortcuts: DemoShortcut[] = [
+  const defaultShortcuts: DemoShortcut[] = useMemo(() => ([
     {
       key: '1',
       description: 'Load Simple Character',
       action: () => {
         const graph = getDemoGraphById('simple-character');
-        if (graph) onLoadGraph(graph);
+        if (graph) {onLoadGraph(graph);}
       },
     },
     {
@@ -45,7 +45,7 @@ export const DemoShortcuts: React.FC<DemoShortcutsProps> = ({
       description: 'Load Quest Hook',
       action: () => {
         const graph = getDemoGraphById('quest-hook');
-        if (graph) onLoadGraph(graph);
+        if (graph) {onLoadGraph(graph);}
       },
     },
     {
@@ -53,7 +53,7 @@ export const DemoShortcuts: React.FC<DemoShortcutsProps> = ({
       description: 'Load Tavern Scene',
       action: () => {
         const graph = getDemoGraphById('tavern-scene');
-        if (graph) onLoadGraph(graph);
+        if (graph) {onLoadGraph(graph);}
       },
     },
     {
@@ -61,7 +61,7 @@ export const DemoShortcuts: React.FC<DemoShortcutsProps> = ({
       description: 'Load Combat Encounter',
       action: () => {
         const graph = getDemoGraphById('combat-encounter');
-        if (graph) onLoadGraph(graph);
+        if (graph) {onLoadGraph(graph);}
       },
     },
     {
@@ -85,9 +85,12 @@ export const DemoShortcuts: React.FC<DemoShortcutsProps> = ({
       action: onStartDemo,
       modifier: 'cmd',
     },
-  ];
+  ]), [onClearGraph, onGeneratePreview, onLoadGraph, onStartDemo, onToggleAssetLibrary]);
 
-  const allShortcuts = [...defaultShortcuts, ...additionalShortcuts];
+  const allShortcuts = useMemo(
+    () => [...defaultShortcuts, ...additionalShortcuts],
+    [additionalShortcuts, defaultShortcuts]
+  );
 
   // Handle keyboard events
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
@@ -144,16 +147,16 @@ export const DemoShortcuts: React.FC<DemoShortcutsProps> = ({
   // Format shortcut display
   const formatShortcut = (shortcut: DemoShortcut) => {
     let keys = '';
-    if (shortcut.modifier === 'cmd') keys += '⌘';
-    else if (shortcut.modifier === 'ctrl') keys += 'Ctrl+';
-    else if (shortcut.modifier === 'shift') keys += '⇧';
-    else if (shortcut.modifier === 'alt') keys += '⌥';
+    if (shortcut.modifier === 'cmd') {keys += '⌘';}
+    else if (shortcut.modifier === 'ctrl') {keys += 'Ctrl+';}
+    else if (shortcut.modifier === 'shift') {keys += '⇧';}
+    else if (shortcut.modifier === 'alt') {keys += '⌥';}
     
     keys += shortcut.key.toUpperCase();
     return keys;
   };
 
-  if (!showHelp) return null;
+  if (!showHelp) {return null;}
 
   return (
     <div style={{

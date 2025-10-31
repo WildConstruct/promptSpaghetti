@@ -2,7 +2,7 @@
  * Onboarding Integration - Main wrapper component
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { TutorialProvider, useTutorial } from './TutorialContext';
 import { TutorialOverlay } from './TutorialOverlay';
 import { SuccessCelebration, useSuccessCelebration } from './SuccessCelebration';
@@ -12,15 +12,21 @@ interface OnboardingIntegrationProps {
   children: React.ReactNode;
   showProgress?: boolean;
   onFirstEdit?: () => void;
+  onComplete?: () => void;
+  onSkip?: () => void;
 }
 
 const OnboardingContent: React.FC<OnboardingIntegrationProps> = ({
   children,
   showProgress = true,
   onFirstEdit,
+  onComplete,
+  onSkip,
 }) => {
   const { onboardingState } = useTutorial();
   const { celebration, celebrateFirstEdit, celebrateTutorialComplete } = useSuccessCelebration();
+  const hasReportedCompletion = useRef(false);
+  const hasReportedSkip = useRef(false);
 
   // Detect first edit
   useEffect(() => {
@@ -47,6 +53,23 @@ const OnboardingContent: React.FC<OnboardingIntegrationProps> = ({
       celebrateTutorialComplete();
     }
   }, [onboardingState.tutorialProgress, onboardingState.achievementsUnlocked, celebrateTutorialComplete]);
+
+  useEffect(() => {
+    if (!onComplete && !onSkip) {return;}
+
+    const isFinished = onboardingState.tutorialProgress === 100;
+    const hasCompletionBadge = onboardingState.achievementsUnlocked.includes('tutorial_complete');
+
+    if (onComplete && isFinished && hasCompletionBadge && !hasReportedCompletion.current) {
+      onComplete();
+      hasReportedCompletion.current = true;
+    }
+
+    if (onSkip && isFinished && !hasCompletionBadge && !hasReportedSkip.current) {
+      onSkip();
+      hasReportedSkip.current = true;
+    }
+  }, [onComplete, onSkip, onboardingState.tutorialProgress, onboardingState.achievementsUnlocked]);
 
   return (
     <>
@@ -85,7 +108,8 @@ export const OnboardingIntegration: React.FC<{
     <TutorialProvider>
       <OnboardingContent 
         showProgress={true}
-        onFirstEdit={() => {}}
+        onComplete={onComplete}
+        onSkip={onSkip}
       >
         {/* Empty children since this is an overlay */}
         <div />

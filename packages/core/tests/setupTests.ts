@@ -7,6 +7,52 @@ import {
 // Add OpenAI Node.js shim for tests
 import 'openai/shims/node';
 
+// Mock performance API for tests
+Object.defineProperty(global, 'performance', {
+  value: {
+    now: jest.fn(() => Date.now()),
+  },
+  writable: true,
+});
+
+// Mock navigation API to prevent jsdom errors
+Object.defineProperty(window, 'navigation', {
+  value: {
+    navigate: jest.fn(),
+  },
+  writable: true,
+});
+
+// Mock URL navigation to prevent jsdom errors
+const originalLocation = window.location;
+delete window.location;
+window.location = { 
+  ...originalLocation, 
+  assign: jest.fn(), 
+  replace: jest.fn(),
+  href: 'http://localhost:3000',
+  origin: 'http://localhost:3000',
+  protocol: 'http:',
+  host: 'localhost:3000',
+  hostname: 'localhost',
+  port: '3000',
+  pathname: '/',
+  search: '',
+  hash: ''
+};
+
+// Mock HTMLAnchorElement.prototype to prevent navigation errors
+Object.defineProperty(HTMLAnchorElement.prototype, 'href', {
+  get() { return this.getAttribute('href') || ''; },
+  set(value) { this.setAttribute('href', value); }
+});
+
+// Stop all navigation attempts
+Object.defineProperty(window, 'onbeforeunload', {
+  value: null,
+  writable: true,
+});
+
 // Add fetch polyfill for OpenAI
 global.fetch = jest.fn(() =>
   Promise.resolve({
@@ -20,12 +66,14 @@ global.fetch = jest.fn(() =>
 // Optional safe polyfills for jsdom gaps used in some tests/components
 if (!('scrollTo' in window)) {
   // @ts-expect-error jsdom doesn't implement scrollTo in older versions
-  window.scrollTo = () => {};
+  window.scrollTo = () => undefined;
 }
 
 if (!HTMLElement.prototype.scrollIntoView) {
   Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
-    value: function () {},
+    value: function scrollIntoViewMock() {
+      return undefined;
+    },
     writable: true,
     configurable: true
   });
@@ -38,7 +86,7 @@ if (typeof URL.createObjectURL !== 'function') {
 }
 if (typeof URL.revokeObjectURL !== 'function') {
   // @ts-expect-error allow assignment in test env
-  URL.revokeObjectURL = () => {};
+  URL.revokeObjectURL = () => undefined;
 }
 
 // Ensure TextEncoder/TextDecoder exist
@@ -53,23 +101,42 @@ if (typeof globalThis.TextDecoder === 'undefined') {
 
 // Polyfill Blob.prototype.text/arrayBuffer if missing
 (() => {
-  const BlobCtor: any = (globalThis as any).Blob;
-  if (!BlobCtor || !BlobCtor.prototype) return;
-  const proto = BlobCtor.prototype as any;
-  const Resp: any = (globalThis as any).Response;
+  type BlobPrototypeOverrides = Blob & {
+    text?: () => Promise<string>;
+    arrayBuffer?: () => Promise<ArrayBuffer>;
+  };
+
+  const globalBlobSupport = globalThis as {
+    Blob?: typeof Blob;
+    Response?: typeof Response;
+  };
+
+  const BlobCtor = globalBlobSupport.Blob;
+  if (!BlobCtor || !BlobCtor.prototype) {
+    return;
+  }
+
+  const proto = BlobCtor.prototype as BlobPrototypeOverrides;
+  const ResponseCtor = globalBlobSupport.Response;
+
   if (typeof proto.text !== 'function') {
-    proto.text = function (): Promise<string> {
-      if (Resp) return new Resp(this).text();
+    proto.text = function textShim(this: Blob): Promise<string> {
+      if (ResponseCtor) {
+        return new ResponseCtor(this).text();
+      }
       // Best-effort fallback
       return Promise.resolve(String(this));
     };
   }
+
   if (typeof proto.arrayBuffer !== 'function') {
-    proto.arrayBuffer = function (): Promise<ArrayBuffer> {
-      if (Resp) return new Resp(this).arrayBuffer();
+    proto.arrayBuffer = function arrayBufferShim(this: Blob): Promise<ArrayBuffer> {
+      if (ResponseCtor) {
+        return new ResponseCtor(this).arrayBuffer();
+      }
       // Best-effort fallback
-      const enc = new TextEncoder();
-      return Promise.resolve(enc.encode(String(this)).buffer);
+      const encoder = new TextEncoder();
+      return Promise.resolve(encoder.encode(String(this)).buffer);
     };
   }
 })();

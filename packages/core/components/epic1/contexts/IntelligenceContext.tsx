@@ -21,6 +21,10 @@ interface IntelligenceContextType {
   setConsent: (consent: boolean) => void;
 }
 
+const warnMissingProvider = () => {
+  console.warn('setConsent called without IntelligenceProvider; ignoring request.');
+};
+
 const IntelligenceContext = createContext<IntelligenceContextType>({
   nodeIntelligence: null,
   textRefinement: null,
@@ -30,7 +34,7 @@ const IntelligenceContext = createContext<IntelligenceContextType>({
   costTracker: null,
   consentGiven: false,
   isOffline: true,
-  setConsent: () => {}
+  setConsent: warnMissingProvider
 });
 
 export const useIntelligence = () => {
@@ -47,7 +51,7 @@ export const useIntelligence = () => {
       costTracker: null,
       consentGiven: false,
       isOffline: true,
-      setConsent: () => {}
+      setConsent: warnMissingProvider
     };
   }
   return context;
@@ -82,16 +86,13 @@ export const IntelligenceProvider: React.FC<{children: React.ReactNode}> = ({ ch
 
     try {
       console.log('[IntelligenceContext] Initializing services...');
-      console.log('[IntelligenceContext] Available env vars:', import.meta.env);
+      console.log('[IntelligenceContext] Available env vars:', process.env);
       
       // Create LLM service with proper configuration
       // Check localStorage for API key first (for demo purposes)
       const storedApiKey = localStorage.getItem('openrouter-api-key');
-      // In browser, use import.meta.env for Vite environment variables  
-      // @ts-ignore - import.meta.env might not be typed
-      const envApiKey = (typeof window !== 'undefined' && (window as any).import?.meta?.env?.VITE_OPENROUTER_API_KEY) ||
-                        import.meta.env?.VITE_OPENROUTER_API_KEY || 
-                        process.env.OPENROUTER_API_KEY || 
+      // In Node/test/CI, use process.env for environment variables  
+      const envApiKey = process.env.OPENROUTER_API_KEY || 
                         process.env.VITE_OPENROUTER_API_KEY;
       
       const apiKey = storedApiKey || envApiKey;
@@ -99,7 +100,7 @@ export const IntelligenceProvider: React.FC<{children: React.ReactNode}> = ({ ch
       console.log('[IntelligenceContext] API key sources:', {
         hasStoredKey: !!storedApiKey,
         hasEnvKey: !!envApiKey,
-        envValue: import.meta.env?.VITE_OPENROUTER_API_KEY ? 'Found in import.meta.env' : 'Not in import.meta.env',
+        envValue: process.env.VITE_OPENROUTER_API_KEY ? 'Found in process.env' : 'Not in process.env',
         finalKey: apiKey ? `${apiKey.substring(0, 10)}...` : 'None'
       });
       

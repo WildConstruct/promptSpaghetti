@@ -28,9 +28,13 @@ export default defineConfig({
       // Add onwarn to suppress circular dependency warnings
       onwarn(warning, warn) {
         // Ignore circular dependency warnings
-        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+        if (warning.code === 'CIRCULAR_DEPENDENCY') {
+          return;
+        }
         // Ignore eval warnings
-        if (warning.code === 'EVAL') return;
+        if (warning.code === 'EVAL') {
+          return;
+        }
         // Use default for everything else
         warn(warning);
       }

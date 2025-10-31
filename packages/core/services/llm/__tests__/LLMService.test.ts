@@ -684,4 +684,154 @@ describe('LLMService', () => {
       });
     });
   });
+
+  describe('callWithRetry', () => {
+    it('retries on rate limits with exponential backoff', async () => {
+      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+      jest.useFakeTimers();
+
+      try {
+        let attempt = 0;
+        const fn = jest.fn(async () => {
+          attempt += 1;
+          if (attempt === 1) {
+            const error = new Error('Too many requests') as Error & { status?: number };
+            error.status = 429;
+            throw error;
+          }
+          return 'ok';
+        });
+
+        const callWithRetry = (service as any).callWithRetry.bind(service);
+        const promise = callWithRetry(fn, 3, 1000);
+
+        await jest.advanceTimersByTimeAsync(1000);
+        const result = await promise;
+
+        expect(result).toBe('ok');
+        expect(fn).toHaveBeenCalledTimes(2);
+        expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Rate limited'));
+      } finally {
+        consoleSpy.mockRestore();
+        jest.useRealTimers();
+      }
+    });
+
+    it('logs timeout and succeeds on subsequent attempt', async () => {
+      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+      jest.useFakeTimers();
+
+      try {
+        let attempt = 0;
+        const fn = jest.fn(async () => {
+          attempt += 1;
+          if (attempt === 1) {
+            return new Promise(resolve => setTimeout(() => resolve('slow'), 2000));
+          }
+          return 'fast';
+        });
+
+        const callWithRetry = (service as any).callWithRetry.bind(service);
+        const promise = callWithRetry(fn, 2, 1000);
+
+        await jest.advanceTimersByTimeAsync(1000);
+        const result = await promise;
+
+        expect(result).toBe('fast');
+        expect(consoleSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Request timed out after 1000ms')
+        );
+        expect(fn).toHaveBeenCalledTimes(2);
+
+        await jest.advanceTimersByTimeAsync(2000);
+      } finally {
+        consoleSpy.mockRestore();
+        jest.useRealTimers();
+      }
+    });
+
+    it('rethrows normalized errors for non retryable failures', async () => {
+      const callWithRetry = (service as any).callWithRetry.bind(service);
+      const fn = jest.fn(async () => {
+        const error = { response: { status: 503 }, message: 'Service unavailable right now' };
+        throw error;
+      });
+
+      await expect(callWithRetry(fn, 2, 500)).rejects.toThrow(
+        'Service unavailable right now'
+      );
+      expect(fn).toHaveBeenCalledTimes(1);
+    });
+
+    it('propagates plain string errors via normalizeError', async () => {
+      const callWithRetry = (service as any).callWithRetry.bind(service);
+      const fn = jest.fn(async () => {
+        throw 'catastrophic failure';
+      });
+
+      await expect(callWithRetry(fn, 1, 500)).rejects.toThrow(
+        'catastrophic failure'
+      );
+    });
+  });
+
+  describe('validateJsonResponse', () => {
+    it('throws when JSON cannot be parsed', () => {
+      const internal = service as unknown as {
+        validateJsonResponse: (content: string, taskType?: string) => void;
+      };
+
+      expect(() =>
+        internal.validateJsonResponse('not-json', 'suggestion')
+      ).toThrow('Invalid JSON response');
+    });
+
+    it('enforces suggestion choice structure', () => {
+      const internal = service as unknown as {
+        validateJsonResponse: (content: string, taskType?: string) => void;
+      };
+
+      expect(() =>
+        internal.validateJsonResponse(
+          JSON.stringify({ choices: [{ text: 'only-text' }] }),
+          'suggestion'
+        )
+      ).toThrow('Each suggestion choice must include text and weight');
+
+      expect(() =>
+        internal.validateJsonResponse(
+          JSON.stringify({ choices: [{ text: 'ok', weight: 6 }] }),
+          'suggestion'
+        )
+      ).not.toThrow();
+    });
+
+    it('validates metadata payload types', () => {
+      const internal = service as unknown as {
+        validateJsonResponse: (content: string, taskType?: string) => void;
+      };
+
+      expect(() =>
+        internal.validateJsonResponse(
+          JSON.stringify({
+            tags: ['scene'],
+            subject: 'test',
+            intensity: 'high'
+          }),
+          'metadata'
+        )
+      ).toThrow('Metadata intensity must be a number');
+
+      expect(() =>
+        internal.validateJsonResponse(
+          JSON.stringify({
+            tags: ['scene'],
+            subject: 'test',
+            intensity: 5
+          }),
+          'metadata'
+        )
+      ).not.toThrow();
+    });
+  });
 });

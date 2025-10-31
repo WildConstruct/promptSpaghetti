@@ -21,7 +21,7 @@ export interface Permission {
   name: string;
   resource: string;
   action: string;
-  conditions?: Record<string, any>;
+  conditions?: Record<string, PermissionCondition>;
 }
 
 export interface TestUser {
@@ -34,7 +34,7 @@ export interface TestUser {
   isVerified: boolean;
   mfaEnabled: boolean;
   organizationId?: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, MetadataValue>;
   createdAt: Date;
   lastLoginAt?: Date;
 }
@@ -66,6 +66,9 @@ export interface AuthenticationScenario {
     reason?: string;
   }>;
 }
+
+type PermissionCondition = string | string[] | number | boolean;
+type MetadataValue = string | number | boolean | Date | string[] | null;
 
 export class AuthenticationDataGenerator {
   private rng: seedrandom.PRNG;
@@ -175,9 +178,9 @@ export class AuthenticationDataGenerator {
   private generatePermissionConditions(
     resource: string,
     action: string
-  ): Record<string, any> | undefined {
+  ): Record<string, PermissionCondition> | undefined {
     // Generate context-specific conditions
-    const conditions: Record<string, any> = {};
+    const conditions: Record<string, PermissionCondition> = {};
 
     if (resource === 'project' && action === 'update') {
       conditions.ownership = 'owner_or_collaborator';

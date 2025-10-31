@@ -15,25 +15,29 @@ interface CustomMatchers<R = unknown> {
   toHaveAccessibilityCompliance(): R;
   toHaveValidationErrors(expectedCount?: number): R;
   toBeWithinRange(min: number, max: number): R;
-  toHaveProperty(property: string, value?: any): R;
+  toHaveProperty(property: string, value?: unknown): R;
   toBeExecutableGraph(): R;
   toHaveValidDeterministicOutput(): R;
 }
 
+/* eslint-disable @typescript-eslint/no-namespace */
 declare global {
   namespace jest {
+    /* eslint-disable @typescript-eslint/no-empty-object-type */
     interface Expect extends CustomMatchers {}
     interface Matchers<R> extends CustomMatchers<R> {}
     interface InverseAsymmetricMatchers extends CustomMatchers {}
+    /* eslint-enable @typescript-eslint/no-empty-object-type */
   }
 }
+/* eslint-enable @typescript-eslint/no-namespace */
 
 /**
  * Register all custom matchers with Jest
  */
 export function registerCustomMatchers(): void {
   expect.extend({
-    toHavePerformanceWithin(received: any, maxTime: number) {
+    toHavePerformanceWithin(received: unknown, maxTime: number) {
       const pass =
         typeof received.executionTime === 'number' &&
         received.executionTime <= maxTime;
@@ -52,7 +56,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toHaveMemoryUsageBelow(received: any, maxMemory: number) {
+    toHaveMemoryUsageBelow(received: unknown, maxMemory: number) {
       const memoryUsage =
         received.memoryUsage?.peak || received.peak || received;
       const pass = typeof memoryUsage === 'number' && memoryUsage <= maxMemory;
@@ -71,7 +75,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toHaveThroughputAbove(received: any, minThroughput: number) {
+    toHaveThroughputAbove(received: unknown, minThroughput: number) {
       const throughput = received.throughput || received;
       const pass =
         typeof throughput === 'number' && throughput >= minThroughput;
@@ -90,7 +94,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toBeValidGraph(received: any) {
+    toBeValidGraph(received: unknown) {
       const hasNodes = Array.isArray(received.nodes);
       const hasEdges = Array.isArray(received.edges);
       const pass = hasNodes && hasEdges;
@@ -108,7 +112,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toBeValidNode(received: any) {
+    toBeValidNode(received: unknown) {
       const hasId = typeof received.id === 'string';
       const hasType = typeof received.type === 'string';
       const hasData = received.data !== undefined;
@@ -128,7 +132,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toBeValidEdge(received: any) {
+    toBeValidEdge(received: unknown) {
       const hasId = typeof received.id === 'string';
       const hasSource = typeof received.source === 'string';
       const hasTarget = typeof received.target === 'string';
@@ -148,7 +152,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toHaveValidSchema(received: any) {
+    toHaveValidSchema(received: unknown) {
       try {
         // Basic schema validation - can be enhanced with specific schema library
         const hasRequiredFields = received && typeof received === 'object';
@@ -173,7 +177,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toHaveSecurityCompliance(received: any) {
+    toHaveSecurityCompliance(received: unknown) {
       // Basic security compliance checks
       const noEval = !received.toString().includes('eval(');
       const noInnerHTML = !received.toString().includes('innerHTML');
@@ -193,7 +197,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toHaveAccessibilityCompliance(received: any) {
+    toHaveAccessibilityCompliance(received: unknown) {
       // Basic accessibility checks for UI components
       const hasAriaLabel =
         received.props?.['aria-label'] || received['aria-label'];
@@ -213,7 +217,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toHaveValidationErrors(received: any, expectedCount?: number) {
+    toHaveValidationErrors(received: unknown, expectedCount?: number) {
       const errors = received.errors || received.validationErrors || [];
       const hasErrors = Array.isArray(errors) && errors.length > 0;
       const correctCount =
@@ -254,11 +258,11 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toBeExecutableGraph(received: any) {
+    toBeExecutableGraph(received: unknown) {
       const isValidGraph =
         Array.isArray(received.nodes) && Array.isArray(received.edges);
       const hasOutputNode = received.nodes?.some(
-        (node: any) => node.type === 'output'
+        (node: unknown) => (node as { type: string }).type === 'output'
       );
       const pass = isValidGraph && hasOutputNode;
 
@@ -276,7 +280,7 @@ export function registerCustomMatchers(): void {
       }
     },
 
-    toHaveValidDeterministicOutput(received: any) {
+    toHaveValidDeterministicOutput(received: unknown) {
       // Check if output is deterministic by ensuring it's not random
       const hasOutput = received.output !== undefined;
       const isNotRandom =

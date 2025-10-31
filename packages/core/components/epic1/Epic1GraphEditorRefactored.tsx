@@ -4,10 +4,11 @@ import ReactFlow, {
   Edge,
   Background,
   Controls,
+  Connection,
   ConnectionMode,
   Panel,
   ReactFlowProvider,
-  ReactFlowInstance,
+  ReactFlowInstance
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { DndProvider } from 'react-dnd';
@@ -23,7 +24,7 @@ import {
 } from './hooks';
 
 // Import services
-import { GraphPersistence, NodeFactory } from './services';
+import { NodeFactory } from './services';
 
 // Import components
 import { epic1NodeTypes } from './nodes';
@@ -41,7 +42,6 @@ import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
 import { edgeTypes } from './EdgeRenderingFix';
 import { useNodeInteractions } from './interactions/NodeInteractionEnhancer';
-import { useMicroInteractions } from './animations/MicroInteractions';
 import type { EditableNodeData } from './nodes';
 import { PromptParser } from '../../runtime/nodes/epic1/PromptParser';
 
@@ -94,8 +94,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   
   // Micro-interactions
   const { addNodeWithBounce, highlightConnection } = useNodeInteractions();
-  const { interactions, trigger } = useMicroInteractions();
-
   // Use extracted hooks
   const {
     nodes,
@@ -103,7 +101,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     activatedEdges,
     selectedNodeId,
     isDragging,
-    isSelecting,
     setNodes,
     setEdges,
     setSelectedNodeId,
@@ -122,20 +119,19 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   });
 
   // Enhanced onConnect with toast
-  const onConnect = useCallback((params) => {
-    baseOnConnect(params);
-    if (params.source && params.target) {
-      highlightConnection(params.source, params.target);
-      showToast('success', 'Connection created!');
-    }
-  }, [baseOnConnect, highlightConnection, showToast]);
+  const onConnect = useCallback(
+    (params: Connection) => {
+      baseOnConnect(params);
+      if (params.source && params.target) {
+        highlightConnection(params.source, params.target);
+        showToast('success', 'Connection created!');
+      }
+    },
+    [baseOnConnect, highlightConnection, showToast]
+  );
 
   // Preview engine hook
-  const {
-    previewEngine,
-    convertToRuntimeGraph,
-    handlePreviewSeedChange,
-  } = usePreviewEngine({
+  const { previewEngine } = usePreviewEngine({
     previewDebounceDelay,
     previewSeeds,
     nodes,
@@ -205,17 +201,26 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   }, [setNodes]);
 
   // Create node data with edit handlers
-  const createNodeData = useCallback((baseData: any, nodeId: string) => {
-    return {
-      ...baseData,
-      onEdit: (newValue: string) => handleNodeEdit(nodeId, newValue),
-      onEditStart: () => setSelectedNodeId(nodeId),
-      onEditEnd: () => setSelectedNodeId(null),
-      onContextMenu: (event: React.MouseEvent) => {
-        setContextMenuPosition({ x: event.clientX, y: event.clientY });
-      },
-    };
-  }, [handleNodeEdit, setSelectedNodeId, setContextMenuPosition]);
+  const createNodeData = useCallback(
+    (baseData: EditableNodeData | undefined, nodeId: string): EditableNodeData => {
+      const safeData: EditableNodeData = {
+        value: baseData?.value ?? '',
+        nodeType: baseData?.nodeType ?? 'textBlock',
+        ...baseData
+      };
+
+      return {
+        ...safeData,
+        onEdit: (newValue: string) => handleNodeEdit(nodeId, newValue),
+        onEditStart: () => setSelectedNodeId(nodeId),
+        onEditEnd: () => setSelectedNodeId(null),
+        onContextMenu: (event: React.MouseEvent) => {
+          setContextMenuPosition({ x: event.clientX, y: event.clientY });
+        }
+      };
+    },
+    [handleNodeEdit, setSelectedNodeId, setContextMenuPosition]
+  );
 
   // Enhanced nodes with edit handlers
   const enhancedNodes = useMemo(() => {
@@ -253,9 +258,11 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Listen for prompt paste events from tutorial
   useEffect(() => {
-    const handlePromptPasted = async (event: CustomEvent) => {
+    const handlePromptPasted = async (event: CustomEvent<{ prompt?: string }>) => {
       const { prompt } = event.detail;
-      if (!prompt) return;
+      if (!prompt) {
+        return;
+      }
       
       try {
         const parser = new PromptParser();
@@ -340,22 +347,42 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     };
   }, [setNodes, setEdges, reactFlowInstance, showToast]);
 
-  // Notify parent of changes
-  useEffect(() => {
-    onNodesChangeProp?.(enhancedNodes);
-  }, [enhancedNodes, onNodesChangeProp]);
+  const editorStyle = useMemo(
+    () => ({
+      height: '100%',
+      position: 'relative' as const
+    }),
+    []
+  );
 
-  useEffect(() => {
-    onEdgesChangeProp?.(edges);
-  }, [edges, onEdgesChangeProp]);
+  const editorClassName = useMemo(
+    () =>
+      [
+        'epic1-graph-editor',
+        `preview-${previewPosition}`,
+        `asset-${assetLibraryPosition}`
+      ].join(' '),
+    [assetLibraryPosition, previewPosition]
+  );
 
-  const editorStyle = useMemo(() => ({
-    height: '100%',
-    position: 'relative' as const
-  }), []);
+  const normalisedPreviewSize =
+    typeof previewWidth === 'number' ? `${previewWidth}px` : previewWidth;
+
+  const previewPanelStyle = useMemo<React.CSSProperties>(() => {
+    if (previewPosition === 'right') {
+      return { width: normalisedPreviewSize };
+    }
+
+    return {
+      width: '100%',
+      maxHeight: normalisedPreviewSize
+    };
+  }, [normalisedPreviewSize, previewPosition]);
 
   return (
-    <div className="epic1-graph-editor" style={editorStyle}
+    <div
+      className={editorClassName}
+      style={editorStyle}
          onDrop={onDrop}
          onDragOver={onDragOver}>
       <ReactFlow
@@ -471,8 +498,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         />
       ))}
       
-      <NodePalette 
-        position="left" 
+      <NodePalette
+        position={assetLibraryPosition}
         defaultCollapsed={false} 
         onCollapsedChange={setNodePaletteCollapsed}
       />
@@ -480,25 +507,24 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       <NodeToolbar position="top" />
       
       {(showPreview || showAssetLibrary) && (
-        <TabbedSidePanel
-          previewEngine={previewEngine}
-          onPresetDrag={(preset) => {
-            // TODO: Implement preset application to nodes
-          }}
-          onPresetSelect={(preset) => {
-            // TODO: Implement preset selection
-          }}
-          onInsert={(preset) => {
-            const pos = reactFlowInstance
-              ? reactFlowInstance.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
-              : { x: 250, y: 250 };
-            void insertPresetByMeta(preset, pos);
-          }}
-          position="right"
-          defaultTab={showAssetLibrary ? 'assets' : isPreviewVisible ? 'preview' : null}
-          showAssets={showAssetLibrary}
-          showPreview={showPreview}
-        />
+        <div
+          className={`tabbed-side-panel-wrapper preview-${previewPosition}`}
+          style={previewPanelStyle}
+        >
+          <TabbedSidePanel
+            previewEngine={previewEngine}
+            onInsert={(preset) => {
+              const pos = reactFlowInstance
+                ? reactFlowInstance.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
+                : { x: 250, y: 250 };
+              void insertPresetByMeta(preset, pos);
+            }}
+            position="right"
+            defaultTab={showAssetLibrary ? 'assets' : isPreviewVisible ? 'preview' : null}
+            showAssets={showAssetLibrary}
+            showPreview={showPreview}
+          />
+        </div>
       )}
       
       <NodeContextMenu

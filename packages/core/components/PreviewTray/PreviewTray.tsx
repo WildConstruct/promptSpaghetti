@@ -134,11 +134,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   const handleCopyAll = useCallback(() => {
     const allResults = results
       .map(r => {
-        // Use refined text if available in LLM mode
+        const refined = refinedResults.get(`${r.seed}`);
         const text =
-          llmMode === 'llm-enhanced' && refinedResults.has(`${r.seed}`)
-            ? refinedResults.get(`${r.seed}`)!
-            : r.result;
+          llmMode === 'llm-enhanced' && refined ? refined : r.result;
         return `Seed ${r.seed}: ${text}`;
       })
       .join('\n');
@@ -198,7 +196,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
 
   const handleDragMove = useCallback(
     (e: MouseEvent) => {
-      if (!isDragging.current) return;
+      if (!isDragging.current) {
+        return;
+      }
 
       requestAnimationFrame(() => {
         const deltaY = dragStartY.current - e.clientY;
@@ -223,7 +223,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   const handleDragStart = useCallback(
     (e: React.MouseEvent) => {
       // Don't start drag if closed
-      if (!isOpen || !resizable) return;
+      if (!isOpen || !resizable) {
+        return;
+      }
 
       e.preventDefault();
       e.stopPropagation();
@@ -269,7 +271,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   const getTrayHeight = () => {
     // Since parent controls visibility through conditional rendering,
     // we should always show with proper height when rendered
-    if (minimized) return TRAY_HEADER_HEIGHT;
+    if (minimized) {
+      return TRAY_HEADER_HEIGHT;
+    }
     if (!resizable) {
       // Use fixed height when not resizable
       return Math.min(Math.max(defaultHeight, minHeight), maxHeightValue);
@@ -299,11 +303,15 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
         }
       }}
       onMouseUp={e => {
-        if (!isDragging.current) e.stopPropagation();
+        if (!isDragging.current) {
+          e.stopPropagation();
+        }
       }}
       onPointerDown={e => e.stopPropagation()}
       onPointerUp={e => {
-        if (!isDragging.current) e.stopPropagation();
+        if (!isDragging.current) {
+          e.stopPropagation();
+        }
       }}
     >
       <div
@@ -315,8 +323,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
           if (
             t.closest('.preview-tray-drag-handle') ||
             t.closest('.preview-tray-controls')
-          )
+          ) {
             return;
+          }
           toggleMinimized();
         }}
       >
@@ -600,9 +609,12 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                                 }
                                 onBlur={handleSeedSave}
                                 onKeyDown={e => {
-                                  if (e.key === 'Enter') handleSeedSave();
-                                  if (e.key === 'Escape')
+                                  if (e.key === 'Enter') {
+                                    handleSeedSave();
+                                  }
+                                  if (e.key === 'Escape') {
                                     setEditingSeedIndex(null);
+                                  }
                                 }}
                                 autoFocus
                                 style={{
@@ -697,10 +709,10 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                             onClick={() => {
                               if (result) {
                                 // Copy refined text if available, otherwise original
+                                const refined = refinedResults.get(`${seed}`);
                                 const textToCopy =
-                                  llmMode === 'llm-enhanced' &&
-                                  refinedResults.has(`${seed}`)
-                                    ? refinedResults.get(`${seed}`)!
+                                  llmMode === 'llm-enhanced' && refined
+                                    ? refined
                                     : result.result;
                                 navigator.clipboard.writeText(textToCopy);
                               }
@@ -738,10 +750,13 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                                       llmMode === 'llm-enhanced' ? '8px' : '0'
                                   }}
                                 >
-                                  {llmMode === 'llm-enhanced' &&
-                                  refinedResults.has(`${seed}`)
-                                    ? refinedResults.get(`${seed}`)
-                                    : result.result}
+                                  {(() => {
+                                    const refined = refinedResults.get(`${seed}`);
+                                    if (llmMode === 'llm-enhanced' && refined) {
+                                      return refined;
+                                    }
+                                    return result.result;
+                                  })()}
                                 </div>
                               </>
                             ) : (

@@ -10,17 +10,37 @@ export type StorageResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: StorageError };
 
+/**
+ * GlobalThis extensions for browser APIs
+ */
+interface ExtendedGlobalThis {
+  Response?: new (input: unknown) => { text(): Promise<string> };
+  FileReader?: new () => {
+    result: string | null | ArrayBuffer;
+    onload: ((event: ProgressEvent<FileReader>) => void) | null;
+    onerror: ((event: ProgressEvent<FileReader>) => void) | null;
+    readAsText(blob: Blob): void;
+  };
+}
+
+/**
+ * FileReader error event type
+ */
+interface FileReaderErrorEvent extends ProgressEvent<FileReader> {
+  target: FileReader & { error: Error | null };
+}
+
 export async function listUserGraphs(
   userId: string
 ): Promise<StorageResult<{ name: string }[]>> {
   if (!supabase)
-    return { ok: false, error: { message: 'Supabase not configured' } };
+    {return { ok: false, error: { message: 'Supabase not configured' } };}
   const prefix = pathPrefix(userId);
   const { data, error } = await supabase.storage.from(BUCKET).list(prefix, {
     limit: 100,
     sortBy: { column: 'name', order: 'asc' }
   });
-  if (error) return { ok: false, error: { message: error.message } };
+  if (error) {return { ok: false, error: { message: error.message } };}
   const files = (data || [])
     .filter((x: { name: string }) => x.name.endsWith('.psg'))
     .map((x: { name: string }) => ({ name: x.name }));
@@ -32,10 +52,10 @@ export async function getUserGraph(
   name: string
 ): Promise<StorageResult<string>> {
   if (!supabase)
-    return { ok: false, error: { message: 'Supabase not configured' } };
+    {return { ok: false, error: { message: 'Supabase not configured' } };}
   const path = objectPath(userId, name);
   const { data, error } = await supabase.storage.from(BUCKET).download(path);
-  if (error) return { ok: false, error: { message: error.message } };
+  if (error) {return { ok: false, error: { message: error.message } };}
   const value: unknown = data;
   // Decode blob-like, buffers, or strings without relying on global Response
   let text: string;
@@ -52,16 +72,16 @@ export async function getUserGraph(
   } else if (hasMethod(value, 'arrayBuffer')) {
     const buf = (await value.arrayBuffer()) as unknown as ArrayBuffer;
     text = new TextDecoder().decode(buf);
-  } else if (typeof (globalThis as any).Response !== 'undefined') {
-    text = await new (globalThis as any).Response(value).text();
-  } else if (typeof (globalThis as any).FileReader !== 'undefined') {
+  } else if (typeof (globalThis as ExtendedGlobalThis).Response !== 'undefined') {
+    text = await new (globalThis as ExtendedGlobalThis).Response(value).text();
+  } else if (typeof (globalThis as ExtendedGlobalThis).FileReader !== 'undefined') {
     text = await new Promise<string>((resolve, reject) => {
       try {
-        const fr = new (globalThis as any).FileReader();
+        const fr = new (globalThis as ExtendedGlobalThis).FileReader();
         fr.onload = () => resolve(String(fr.result ?? ''));
-        fr.onerror = (e: any) => reject(e);
+        fr.onerror = (e: FileReaderErrorEvent) => reject(e.target?.error || new Error('FileReader error'));
         fr.readAsText(value as Blob);
-      } catch (e) {
+      } catch {
         resolve(String(value));
       }
     });
@@ -83,7 +103,7 @@ export async function putUserGraph(
   content: string
 ): Promise<StorageResult<{ path: string }>> {
   if (!supabase)
-    return { ok: false, error: { message: 'Supabase not configured' } };
+    {return { ok: false, error: { message: 'Supabase not configured' } };}
   const path = objectPath(userId, name);
   const { error } = await supabase.storage
     .from(BUCKET)
@@ -91,6 +111,6 @@ export async function putUserGraph(
       upsert: true,
       contentType: 'application/json'
     });
-  if (error) return { ok: false, error: { message: error.message } };
+  if (error) {return { ok: false, error: { message: error.message } };}
   return { ok: true, data: { path } };
 }

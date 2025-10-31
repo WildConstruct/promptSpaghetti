@@ -3,7 +3,7 @@
  * Story 0.1: Performance Infrastructure
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { usePerformanceMonitor } from '@/packages/core/hooks/usePerformance';
 
 const PerformanceDashboard: React.FC = () => {
@@ -13,12 +13,22 @@ const PerformanceDashboard: React.FC = () => {
 
   // Determine performance status
   const getPerformanceStatus = () => {
-    if (!report) return 'unknown';
+    if (!report) {
+      return 'unknown';
+    }
 
-    if (fps < 30) return 'critical';
-    if (fps < 50) return 'warning';
-    if (memory.percentage > 80) return 'warning';
-    if (memory.percentage > 90) return 'critical';
+    if (fps < 30) {
+      return 'critical';
+    }
+    if (fps < 50) {
+      return 'warning';
+    }
+    if (memory.percentage > 80) {
+      return 'warning';
+    }
+    if (memory.percentage > 90) {
+      return 'critical';
+    }
 
     return 'good';
   };

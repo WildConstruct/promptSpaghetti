@@ -51,9 +51,9 @@ describe('Test Data Generators', () => {
       expect(scenario.expectedBehavior).toBe('success');
       expect(scenario.graph.nodes).toHaveLength(5);
       expect(scenario.performanceThresholds).toBeDefined();
-      expect(scenario.performanceThresholds!.maxExecutionTimeMs).toBeLessThan(
-        200
-      );
+      expect(
+        scenario.performanceThresholds?.maxExecutionTimeMs ?? Number.MAX_SAFE_INTEGER
+      ).toBeLessThan(200);
     });
 
     it('should generate validation scenarios with errors', () => {
@@ -84,7 +84,7 @@ describe('Test Data Generators', () => {
       expect(scenario.expectedBehavior).toBe('performance');
       expect(scenario.graph.nodes.length).toBeGreaterThanOrEqual(100);
       expect(
-        scenario.performanceThresholds!.maxExecutionTimeMs
+        scenario.performanceThresholds?.maxExecutionTimeMs ?? 0
       ).toBeGreaterThan(500);
     });
 
@@ -296,7 +296,9 @@ describe('Test Data Generators', () => {
       expect(events.every(e => e.id && e.type && e.category && e.action)).toBe(
         true
       );
-      expect(events.every(e => users.includes(e.userId!))).toBe(true);
+      expect(
+        events.every(e => typeof e.userId === 'string' && users.includes(e.userId))
+      ).toBe(true);
     });
 
     it('should generate performance metrics', () => {
