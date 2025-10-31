@@ -20,8 +20,8 @@ export interface GraphFile {
   createdAt: string;
   updatedAt: string;
   size: number;
-  nodes: any[];
-  edges: any[];
+  nodes: StoredGraphNode[];
+  edges: StoredGraphEdge[];
 }
 
 export interface FileListItem {
@@ -32,11 +32,34 @@ export interface FileListItem {
   size: number;
 }
 
+export interface StoredGraphNode {
+  id: string;
+  type: string;
+  position?: { x: number; y: number };
+  data?: Record<string, unknown>;
+  inputs?: string[];
+  [key: string]: unknown;
+}
+
+export interface StoredGraphEdge {
+  id: string;
+  source: string;
+  target: string;
+  type?: string;
+  [key: string]: unknown;
+}
+
+interface GraphRequestPayload {
+  name?: string;
+  nodes?: StoredGraphNode[];
+  edges?: StoredGraphEdge[];
+}
+
 export async function registerFileStorageRoutes(fastify: FastifyInstance) {
   await ensureStorageDir();
 
   // List all saved graphs
-  fastify.get('/api/graphs', async (request, reply) => {
+  fastify.get('/api/graphs', async () => {
     try {
       const files = await fs.readdir(STORAGE_DIR);
       const graphFiles: FileListItem[] = [];
@@ -76,14 +99,14 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
       const filePath = path.join(STORAGE_DIR, `${id}.json`);
       const content = await fs.readFile(filePath, 'utf-8');
       return JSON.parse(content);
-    } catch (error) {
+    } catch {
       reply.code(404).send({ error: 'Graph not found' });
     }
   });
 
   // Save a new graph
   fastify.post('/api/graphs', async (request, reply) => {
-    const { name, nodes, edges } = request.body as any;
+    const { name, nodes, edges } = request.body as GraphRequestPayload;
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -115,7 +138,7 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
   // Update an existing graph
   fastify.put('/api/graphs/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
-    const { name, nodes, edges } = request.body as any;
+    const { name, nodes, edges } = request.body as GraphRequestPayload;
 
     try {
       const filePath = path.join(STORAGE_DIR, `${id}.json`);
@@ -149,13 +172,13 @@ export async function registerFileStorageRoutes(fastify: FastifyInstance) {
       const filePath = path.join(STORAGE_DIR, `${id}.json`);
       await fs.unlink(filePath);
       return { success: true };
-    } catch (error) {
+    } catch {
       reply.code(404).send({ error: 'Graph not found' });
     }
   });
 
   // Get demo graphs
-  fastify.get('/api/demo-graphs', async (request, reply) => {
+  fastify.get('/api/demo-graphs', async () => {
     // Return pre-made demo graphs
     return [
       {

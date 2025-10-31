@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { useReactFlow, useKeyPress, useStore } from 'reactflow';
-import type { Node, Edge } from 'reactflow';
-import type { EditableNodeData } from './nodes';
+import { useReactFlow, useStore } from 'reactflow';
+import type { Node } from 'reactflow';
 
 interface KeyboardShortcutsProps {
   onSave?: () => void;
@@ -322,6 +321,9 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
     handleDuplicate,
     handleSelectAll,
     additionalHandlers,
+    selectedNodes,
+    onGroup,
+    onUngroup
   ]);
 
   // Help overlay

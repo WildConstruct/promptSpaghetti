@@ -3,27 +3,31 @@ const BUCKET = 'graphs';
 const pathPrefix = (userId) => `users/${userId}/graphs/`;
 const objectPath = (userId, name) => `${pathPrefix(userId)}${name}`;
 export async function listUserGraphs(userId) {
-    if (!supabase)
+    if (!supabase) {
         return { ok: false, error: { message: 'Supabase not configured' } };
+    }
     const prefix = pathPrefix(userId);
     const { data, error } = await supabase.storage.from(BUCKET).list(prefix, {
         limit: 100,
         sortBy: { column: 'name', order: 'asc' }
     });
-    if (error)
+    if (error) {
         return { ok: false, error: { message: error.message } };
+    }
     const files = (data || [])
         .filter((x) => x.name.endsWith('.psg'))
         .map((x) => ({ name: x.name }));
     return { ok: true, data: files };
 }
 export async function getUserGraph(userId, name) {
-    if (!supabase)
+    if (!supabase) {
         return { ok: false, error: { message: 'Supabase not configured' } };
+    }
     const path = objectPath(userId, name);
     const { data, error } = await supabase.storage.from(BUCKET).download(path);
-    if (error)
+    if (error) {
         return { ok: false, error: { message: error.message } };
+    }
     const value = data;
     // Decode blob-like, buffers, or strings without relying on global Response
     let text;
@@ -46,10 +50,10 @@ export async function getUserGraph(userId, name) {
             try {
                 const fr = new globalThis.FileReader();
                 fr.onload = () => resolve(String(fr.result ?? ''));
-                fr.onerror = (e) => reject(e);
+                fr.onerror = (e) => reject(e.target?.error || new Error('FileReader error'));
                 fr.readAsText(value);
             }
-            catch (e) {
+            catch {
                 resolve(String(value));
             }
         });
@@ -69,8 +73,9 @@ export async function getUserGraph(userId, name) {
     return { ok: true, data: text };
 }
 export async function putUserGraph(userId, name, content) {
-    if (!supabase)
+    if (!supabase) {
         return { ok: false, error: { message: 'Supabase not configured' } };
+    }
     const path = objectPath(userId, name);
     const { error } = await supabase.storage
         .from(BUCKET)
@@ -78,7 +83,8 @@ export async function putUserGraph(userId, name, content) {
         upsert: true,
         contentType: 'application/json'
     });
-    if (error)
+    if (error) {
         return { ok: false, error: { message: error.message } };
+    }
     return { ok: true, data: { path } };
 }

@@ -111,7 +111,7 @@ export const GraphEditorProvider: React.FC<GraphEditorProviderProps> = ({
 
   // Handle new connections
   const onConnect = useCallback((connection: Connection) => {
-    if (!connection.source || !connection.target) return;
+    if (!connection.source || !connection.target) {return;}
     
     const newEdge: Edge = {
       id: `${connection.source}-${connection.target}`,
@@ -185,7 +185,7 @@ export const GraphEditorProvider: React.FC<GraphEditorProviderProps> = ({
 
   // Duplicate selected nodes
   const duplicateSelectedNodes = useCallback(() => {
-    if (selectedNodes.length === 0) return;
+    if (selectedNodes.length === 0) {return;}
     
     const nodesToDuplicate = nodes.filter((node) => selectedNodes.includes(node.id));
     const duplicatedNodes: Node<EditableNodeData>[] = nodesToDuplicate.map((node) => ({

@@ -19,7 +19,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { execSync } = require('child_process');
 const os = require('os');
 
 class EnvironmentSetupAutomator {
@@ -275,8 +275,8 @@ class EnvironmentSetupAutomator {
 
       console.log('Environment Setup Automator initialized successfully');
       return true;
-    } catch (error) {
-      console.error('Failed to initialize Environment Setup Automator:', error);
+    } catch {
+      console.error('Failed to initialize Environment Setup Automator');
       return false;
     }
   }
@@ -304,7 +304,7 @@ class EnvironmentSetupAutomator {
       const configData = await fs.readFile(this.configFile, 'utf8');
       const fileConfig = JSON.parse(configData);
       this.config = { ...this.config, ...fileConfig };
-    } catch (error) {
+    } catch {
       // Config file doesn't exist or is invalid, use defaults
       await this.saveConfiguration();
     }
@@ -324,7 +324,7 @@ class EnvironmentSetupAutomator {
     try {
       const historyData = await fs.readFile(this.historyFile, 'utf8');
       this.setupHistory = JSON.parse(historyData);
-    } catch (error) {
+    } catch {
       this.setupHistory = [];
     }
   }
@@ -363,7 +363,7 @@ class EnvironmentSetupAutomator {
 
       // Step 3: Install dependencies
       await this.runStep('install_dependencies', () =>
-        this.installDependencies(mode, options)
+        this.installDependencies(mode)
       );
 
       // Step 4: Configure environment
@@ -376,7 +376,7 @@ class EnvironmentSetupAutomator {
 
       // Step 6: Configure development tools
       await this.runStep('configure_tools', () =>
-        this.configureTools(mode, options)
+        this.configureTools(mode)
       );
 
       // Step 7: Validate setup
@@ -422,12 +422,11 @@ class EnvironmentSetupAutomator {
       }
 
       return setupRecord;
-    } catch (error) {
+    } catch {
       const duration = Date.now() - this.startTime;
 
       console.error(
-        `❌ Environment setup failed after ${Math.round(duration / 1000)}s:`,
-        error.message
+        `❌ Environment setup failed after ${Math.round(duration / 1000)}s`
       );
 
       // Record failed setup
@@ -464,7 +463,7 @@ class EnvironmentSetupAutomator {
     try {
       await stepFunction();
       console.log(`✅ ${stepName} completed`);
-    } catch (error) {
+    } catch {
       console.error(`❌ ${stepName} failed:`, error.message);
       this.errors.push({ step: stepName, error: error.message });
 
@@ -513,20 +512,20 @@ class EnvironmentSetupAutomator {
     // Try to get npm/pnpm version
     try {
       env.npmVersion = execSync('npm --version', { encoding: 'utf8' }).trim();
-    } catch (error) {
+    } catch {
       // npm not installed
     }
 
     try {
       env.pnpmVersion = execSync('pnpm --version', { encoding: 'utf8' }).trim();
-    } catch (error) {
+    } catch {
       // pnpm not installed
     }
 
     // Try to get git version
     try {
       env.gitVersion = execSync('git --version', { encoding: 'utf8' }).trim();
-    } catch (error) {
+    } catch {
       // git not installed
     }
 
@@ -571,7 +570,7 @@ class EnvironmentSetupAutomator {
             }
           }
         }
-      } catch (error) {
+      } catch {
         if (!config.optional) {
           issues.push(`Required tool ${tool} is not installed`);
         } else {
@@ -606,8 +605,8 @@ class EnvironmentSetupAutomator {
       const vPart = versionParts[i] || 0;
       const rPart = requirementParts[i] || 0;
 
-      if (vPart > rPart) return true;
-      if (vPart < rPart) return false;
+      if (vPart > rPart) {return true;}
+      if (vPart < rPart) {return false;}
     }
 
     return true; // Equal versions satisfy
@@ -616,14 +615,14 @@ class EnvironmentSetupAutomator {
   /**
    * Install system dependencies and development tools
    */
-  async installDependencies(mode, options) {
+  async installDependencies(mode) {
     const platform = this.config.setup.platform;
     const dependencies = this.config.dependencies.system;
     const tools = this.config.dependencies.tools;
 
     // Install system dependencies
     for (const [tool, config] of Object.entries(dependencies)) {
-      if (config.optional && mode === 'minimal') continue;
+      if (config.optional && mode === 'minimal') {continue;}
 
       if (!(await this.isToolInstalled(tool))) {
         console.log(`Installing ${tool}...`);
@@ -636,7 +635,7 @@ class EnvironmentSetupAutomator {
     // Install development tools (for standard and full modes)
     if (mode !== 'minimal') {
       for (const [tool, config] of Object.entries(tools)) {
-        if (config.optional && mode === 'standard') continue;
+        if (config.optional && mode === 'standard') {continue;}
 
         if (!(await this.isToolInstalled(tool))) {
           console.log(`Installing ${config.name}...`);
@@ -659,7 +658,7 @@ class EnvironmentSetupAutomator {
     try {
       execSync(`${tool} --version`, { stdio: 'ignore', timeout: 5000 });
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -689,14 +688,14 @@ class EnvironmentSetupAutomator {
             execSync(`code --install-extension ${extension}`, {
               stdio: 'inherit'
             });
-          } catch (error) {
+          } catch {
             this.warnings.push(
               `Failed to install VS Code extension ${extension}: ${error.message}`
             );
           }
         }
       }
-    } catch (error) {
+    } catch {
       throw new Error(`Failed to install ${tool}: ${error.message}`);
     }
   }
@@ -716,7 +715,7 @@ class EnvironmentSetupAutomator {
         cwd: process.cwd(),
         timeout: this.config.setup.commandTimeout
       });
-    } catch (error) {
+    } catch {
       throw new Error(
         `Failed to install project dependencies: ${error.message}`
       );
@@ -738,7 +737,7 @@ class EnvironmentSetupAutomator {
     for (const [filePath, config] of Object.entries(
       this.config.environment.configFiles
     )) {
-      if (config.optional && !options.includeOptional) continue;
+      if (config.optional && !options.includeOptional) {continue;}
 
       await this.setupConfigFile(filePath, config);
     }
@@ -759,7 +758,7 @@ class EnvironmentSetupAutomator {
       let existingContent = '';
       try {
         existingContent = await fs.readFile(envFile, 'utf8');
-      } catch (error) {
+      } catch {
         // File doesn't exist, that's okay
       }
 
@@ -779,7 +778,7 @@ class EnvironmentSetupAutomator {
         await fs.writeFile(envFile, content);
         console.log(`✓ Environment variables added to ${envFile}`);
       }
-    } catch (error) {
+    } catch {
       this.warnings.push(
         `Failed to set up environment variables: ${error.message}`
       );
@@ -804,7 +803,7 @@ class EnvironmentSetupAutomator {
         const templatePath = path.join(process.cwd(), config.template);
         try {
           content = await fs.readFile(templatePath, 'utf8');
-        } catch (error) {
+        } catch {
           throw new Error(`Template file ${config.template} not found`);
         }
       } else if (config.content) {
@@ -821,7 +820,7 @@ class EnvironmentSetupAutomator {
             execSync(`git config ${scope} ${key} "${value}"`, {
               stdio: 'ignore'
             });
-          } catch (error) {
+          } catch {
             this.warnings.push(
               `Failed to set git config ${key}: ${error.message}`
             );
@@ -838,7 +837,7 @@ class EnvironmentSetupAutomator {
           console.log(`⚠ ${filePath} already exists, skipping`);
           shouldWrite = false;
         }
-      } catch (error) {
+      } catch {
         // File doesn't exist, proceed with creation
       }
 
@@ -846,7 +845,7 @@ class EnvironmentSetupAutomator {
         await fs.writeFile(fullPath, content);
         console.log(`✓ Created ${filePath}`);
       }
-    } catch (error) {
+    } catch {
       this.warnings.push(
         `Failed to set up config file ${filePath}: ${error.message}`
       );
@@ -863,7 +862,7 @@ class EnvironmentSetupAutomator {
     for (const [key, value] of Object.entries(gitSettings)) {
       try {
         execSync(`git config --global ${key} "${value}"`, { stdio: 'ignore' });
-      } catch (error) {
+      } catch {
         this.warnings.push(`Failed to set git config ${key}: ${error.message}`);
       }
     }
@@ -878,7 +877,7 @@ class EnvironmentSetupAutomator {
     const databases = this.config.environment.databases;
 
     for (const [dbName, config] of Object.entries(databases)) {
-      if (!config.enabled && !options.databases?.[dbName]) continue;
+      if (!config.enabled && !options.databases?.[dbName]) {continue;}
 
       console.log(`Setting up ${dbName}...`);
 
@@ -888,12 +887,12 @@ class EnvironmentSetupAutomator {
             await this.setupPostgreSQL(config);
             break;
           case 'redis':
-            await this.setupRedis(config);
+            await this.setupRedis();
             break;
           default:
             this.warnings.push(`Unknown database type: ${dbName}`);
         }
-      } catch (error) {
+      } catch {
         this.warnings.push(`Failed to set up ${dbName}: ${error.message}`);
       }
     }
@@ -914,7 +913,7 @@ class EnvironmentSetupAutomator {
         try {
           execSync(`createdb ${dbName}`, { stdio: 'ignore' });
           console.log(`✓ Created database ${dbName}`);
-        } catch (error) {
+        } catch {
           // Database might already exist
           this.warnings.push(`Database ${dbName} might already exist`);
         }
@@ -925,13 +924,13 @@ class EnvironmentSetupAutomator {
         try {
           execSync('pnpm db:migrate', { stdio: 'inherit', cwd: process.cwd() });
           console.log('✓ Database migrations completed');
-        } catch (error) {
+        } catch {
           this.warnings.push(
             'Failed to run database migrations - they might not be set up yet'
           );
         }
       }
-    } catch (error) {
+    } catch {
       throw new Error('PostgreSQL is not running or not installed');
     }
   }
@@ -939,12 +938,12 @@ class EnvironmentSetupAutomator {
   /**
    * Set up Redis
    */
-  async setupRedis(config) {
+  async setupRedis() {
     try {
       // Check if Redis is running
       execSync('redis-cli ping', { stdio: 'ignore' });
       console.log('✓ Redis is running');
-    } catch (error) {
+    } catch {
       throw new Error('Redis is not running or not installed');
     }
   }
@@ -952,7 +951,7 @@ class EnvironmentSetupAutomator {
   /**
    * Configure development tools
    */
-  async configureTools(mode, options) {
+  async configureTools(mode) {
     // Set up Git hooks
     await this.setupGitHooks();
 
@@ -1002,7 +1001,7 @@ exit 0
       await fs.chmod(preCommitPath, '755');
 
       console.log('✓ Git hooks configured');
-    } catch (error) {
+    } catch {
       this.warnings.push(
         'Failed to set up git hooks - not in a git repository?'
       );
@@ -1066,7 +1065,7 @@ esac
       await fs.writeFile(scriptPath, devScript);
       await fs.chmod(scriptPath, '755');
       console.log('✓ Development aliases configured');
-    } catch (error) {
+    } catch {
       this.warnings.push('Failed to create development script');
     }
   }
@@ -1096,7 +1095,7 @@ esac
 
         results.push({ name: check.name, success: true, output });
         console.log(`✅ ${check.name} - OK`);
-      } catch (error) {
+      } catch {
         results.push({
           name: check.name,
           success: false,
@@ -1152,7 +1151,7 @@ esac
           `✅ Build time: ${buildTime}s (target: <${benchmarks.buildTime}s)`
         );
       }
-    } catch (error) {
+    } catch {
       this.warnings.push('Failed to run build benchmark');
     }
 
@@ -1175,7 +1174,7 @@ esac
           `✅ Test time: ${testTime}s (target: <${benchmarks.testTime}s)`
         );
       }
-    } catch (error) {
+    } catch {
       this.warnings.push('Failed to run test benchmark');
     }
   }
@@ -1452,7 +1451,7 @@ ${Object.entries(report.environment)
           timeout: 5000
         }).trim();
         diagnostics.tools[tool] = { installed: true, version };
-      } catch (error) {
+      } catch {
         diagnostics.tools[tool] = { installed: false, error: error.message };
       }
     }
@@ -1463,7 +1462,7 @@ ${Object.entries(report.environment)
       diagnostics.projects.name = packageJson.name;
       diagnostics.projects.version = packageJson.version;
       diagnostics.projects.scripts = Object.keys(packageJson.scripts || {});
-    } catch (error) {
+    } catch {
       diagnostics.projects.error = 'No package.json found or invalid';
     }
 
@@ -1474,7 +1473,7 @@ ${Object.entries(report.environment)
         timeout: 5000
       });
       diagnostics.network.npm = true;
-    } catch (error) {
+    } catch {
       diagnostics.network.npm = false;
     }
 
@@ -1483,7 +1482,7 @@ ${Object.entries(report.environment)
       const start = Date.now();
       execSync('pnpm install --dry-run', { stdio: 'ignore', timeout: 30000 });
       diagnostics.performance.dependencyCheck = Date.now() - start;
-    } catch (error) {
+    } catch {
       diagnostics.performance.dependencyCheck = -1;
     }
 
@@ -1549,11 +1548,10 @@ ${Object.entries(report.environment)
 // CLI interface
 if (require.main === module) {
   const automator = new EnvironmentSetupAutomator();
-
   const command = process.argv[2];
   const args = process.argv.slice(3);
 
-  async function main() {
+  const run = async () => {
     await automator.initialize();
 
     switch (command) {
@@ -1623,11 +1621,11 @@ Environment Setup Modes:
   custom     - Interactive setup with user choices
 `);
     }
-  }
+  };
 
-  main().catch(error => {
-    console.error('Environment Setup Automator failed:', error);
-    process.exit(1);
+  run().catch(error => {
+    console.error('Environment setup automation failed:', error);
+    process.exitCode = 1;
   });
 }
 

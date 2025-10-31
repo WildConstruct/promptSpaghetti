@@ -5,7 +5,7 @@
  * loading states, error handling, and seed controls.
  */
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PreviewEngine, PreviewState, PreviewUpdate } from './PreviewEngine';
 import { ExecutionResult } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { DiffEngine, ChangeSet } from './DiffEngine';
@@ -46,20 +46,16 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   const [changeSet, setChangeSet] = useState<ChangeSet | null>(null);
   const previousResults = useRef<string[]>([]);
 
-  // Early return if no preview engine
-  if (!previewEngine) {
-    return (
-      <div className={`preview-panel ${className}`}>
-        <div className="preview-error">
-          <p>Preview engine not initialized</p>
-        </div>
-      </div>
-    );
-  }
-
   // Subscribe to preview engine updates
   useEffect(() => {
-    const unsubscribe = previewEngine.subscribe((update) => {
+    if (!previewEngine) {
+      setPreviewUpdate(null);
+      setSeeds([]);
+      previousResults.current = [];
+      return;
+    }
+
+    const unsubscribe = previewEngine.subscribe(update => {
       debugLogEpic1('[PreviewPanel] Received update:', {
         state: update.state,
         hasResults: !!update.results,
@@ -107,11 +103,15 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
     const engineSeeds = previewEngine.getSeeds();
     setSeeds(engineSeeds.map(s => ({ value: s, isCustom: false })));
 
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+    };
   }, [previewEngine]);
 
   // Handle seed changes
   const handleSeedChange = useCallback((index: number, value: string) => {
+    if (!previewEngine) {return;}
+
     const newSeeds = [...seeds];
     newSeeds[index] = { value: value || 1234, isCustom: true };
     setSeeds(newSeeds);
@@ -123,6 +123,8 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
 
   // Add new seed
   const handleAddSeed = useCallback(() => {
+    if (!previewEngine) {return;}
+
     const newSeed = { value: Math.floor(Math.random() * 10000), isCustom: true };
     const newSeeds = [...seeds, newSeed];
     setSeeds(newSeeds);
@@ -134,7 +136,9 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
 
   // Remove seed
   const handleRemoveSeed = useCallback((index: number) => {
-    if (seeds.length <= 1) return; // Keep at least one seed
+    if (!previewEngine) {return;}
+
+    if (seeds.length <= 1) {return;} // Keep at least one seed
 
     const newSeeds = seeds.filter((_, i) => i !== index);
     setSeeds(newSeeds);
@@ -316,9 +320,19 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   );
 
   // Main render
-  const isLoading = previewUpdate?.state === PreviewState.PENDING || 
+  const isLoading = previewUpdate?.state === PreviewState.PENDING ||
                    previewUpdate?.state === PreviewState.EXECUTING;
   const hasError = previewUpdate?.state === PreviewState.ERROR;
+
+  if (!previewEngine) {
+    return (
+      <div className={`preview-panel ${className}`}>
+        <div className="preview-error">
+          <p>Preview engine not initialized</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`preview-panel ${className}`}>

@@ -215,7 +215,7 @@ export function useGraphPreview<NodeData = unknown>(
 
   // Execute preview manually
   const executePreview = useCallback(() => {
-    if (!previewEngineRef.current) return;
+    if (!previewEngineRef.current) {return;}
 
     const runtimeGraph = convertToRuntimeGraph(nodes, edges);
     if (runtimeGraph) {

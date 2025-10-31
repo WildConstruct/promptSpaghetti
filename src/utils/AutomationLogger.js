@@ -87,7 +87,7 @@ class AutomationLogger {
   }
 
   writeToFile(logEntry) {
-    if (!this.enableFile) return;
+    if (!this.enableFile) {return;}
 
     try {
       // Check file size and rotate if necessary
@@ -117,7 +117,7 @@ class AutomationLogger {
   }
 
   log(level, message, data = null) {
-    if (!this.shouldLog(level)) return;
+    if (!this.shouldLog(level)) {return;}
 
     const { logEntry, consoleMsg } = this.formatMessage(level, message, data);
 

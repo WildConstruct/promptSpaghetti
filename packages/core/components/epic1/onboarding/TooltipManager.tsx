@@ -46,7 +46,7 @@ export const TooltipManagerProvider: React.FC<{ children: React.ReactNode }> = (
 
   // Show single tooltip
   const showTooltip = useCallback((tooltip: TooltipConfig) => {
-    if (!onboardingState.preferences.showTooltips) return;
+    if (!onboardingState.preferences.showTooltips) {return;}
     
     setActiveTooltips(prev => {
       // Remove existing tooltip with same ID
@@ -68,7 +68,7 @@ export const TooltipManagerProvider: React.FC<{ children: React.ReactNode }> = (
 
   // Queue multiple tooltips
   const queueTooltips = useCallback((tooltips: TooltipConfig[]) => {
-    if (!onboardingState.preferences.showTooltips) return;
+    if (!onboardingState.preferences.showTooltips) {return;}
     
     setQueue({ tooltips, currentIndex: 0 });
     setIsShowingQueue(true);
@@ -205,8 +205,7 @@ export const useTooltipSequence = () => {
 // Auto-tooltip component
 export const AutoTooltips: React.FC<{
   showForNewUsers?: boolean;
-  contextual?: boolean;
-}> = ({ showForNewUsers = true, contextual = true }) => {
+}> = ({ showForNewUsers = true }) => {
   const { onboardingState } = useTutorial();
   const { startSequence } = useTooltipSequence();
 

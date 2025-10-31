@@ -712,7 +712,7 @@ class TemplateParser {
   extractSurroundingContext(variableName, template) {
     const placeholder = `{${variableName}}`;
     const index = template.indexOf(placeholder);
-    if (index === -1) return '';
+    if (index === -1) {return '';}
     const start = Math.max(0, index - 30);
     const end = Math.min(template.length, index + placeholder.length + 30);
     return template.slice(start, end);
@@ -814,7 +814,7 @@ class TemplateParser {
     );
     // Filter by partial name match
     const filtered = uniqueSuggestions.filter(suggestion => {
-      if (!partialName) return true;
+      if (!partialName) {return true;}
       const searchTerm = partialName.toLowerCase();
       return (
         suggestion.name.toLowerCase().includes(searchTerm) ||
@@ -828,17 +828,17 @@ class TemplateParser {
       const bName = b.name.toLowerCase();
       const searchTerm = partialName.toLowerCase();
       // Exact matches first
-      if (aName === searchTerm && bName !== searchTerm) return -1;
-      if (bName === searchTerm && aName !== searchTerm) return 1;
+      if (aName === searchTerm && bName !== searchTerm) {return -1;}
+      if (bName === searchTerm && aName !== searchTerm) {return 1;}
       // Starts with matches next
       const aStartsWith = aName.startsWith(searchTerm);
       const bStartsWith = bName.startsWith(searchTerm);
-      if (aStartsWith && !bStartsWith) return -1;
-      if (bStartsWith && !aStartsWith) return 1;
+      if (aStartsWith && !bStartsWith) {return -1;}
+      if (bStartsWith && !aStartsWith) {return 1;}
       // Priority-based sorting
       const aPriority = a.priority || 0;
       const bPriority = b.priority || 0;
-      if (aPriority !== bPriority) return bPriority - aPriority;
+      if (aPriority !== bPriority) {return bPriority - aPriority;}
       // Alphabetical as final tiebreaker
       return aName.localeCompare(bName);
     });
@@ -930,26 +930,26 @@ export const generateSmartDefaults = parseResult => {
 export const getContextualDefault = (name, nodeType, template) => {
   // Node-type specific defaults
   if (nodeType === 'output') {
-    if (name.includes('title') || name.includes('headline')) return 'Epic Adventure Begins';
-    if (name.includes('description') || name.includes('summary')) return 'A thrilling tale of discovery and courage';
+    if (name.includes('title') || name.includes('headline')) {return 'Epic Adventure Begins';}
+    if (name.includes('description') || name.includes('summary')) {return 'A thrilling tale of discovery and courage';}
   }
   if (nodeType === 'subject' || nodeType === 'character') {
-    if (name.includes('hero') || name.includes('protagonist')) return 'brave warrior';
-    if (name.includes('villain') || name.includes('antagonist')) return 'dark sorcerer';
-    if (name.includes('companion') || name.includes('sidekick')) return 'loyal friend';
+    if (name.includes('hero') || name.includes('protagonist')) {return 'brave warrior';}
+    if (name.includes('villain') || name.includes('antagonist')) {return 'dark sorcerer';}
+    if (name.includes('companion') || name.includes('sidekick')) {return 'loyal friend';}
   }
   if (nodeType === 'action') {
-    if (name.includes('movement') || name.includes('motion')) return 'running swiftly';
-    if (name.includes('combat') || name.includes('fight')) return 'fierce battle';
-    if (name.includes('travel') || name.includes('journey')) return 'long voyage';
+    if (name.includes('movement') || name.includes('motion')) {return 'running swiftly';}
+    if (name.includes('combat') || name.includes('fight')) {return 'fierce battle';}
+    if (name.includes('travel') || name.includes('journey')) {return 'long voyage';}
   }
   // Template context analysis
   if (template) {
     const templateLower = template.toLowerCase();
     if (templateLower.includes('cinematic') || templateLower.includes('camera')) {
-      if (name.includes('shot') || name.includes('angle')) return 'wide shot';
-      if (name.includes('lighting')) return 'golden hour';
-      if (name.includes('mood')) return 'dramatic';
+      if (name.includes('shot') || name.includes('angle')) {return 'wide shot';}
+      if (name.includes('lighting')) {return 'golden hour';}
+      if (name.includes('mood')) {return 'dramatic';}
     }
   }
   // General creative defaults

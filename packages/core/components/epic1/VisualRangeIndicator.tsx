@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Epic1NodeType } from '../../runtime/nodes/epic1';
-import type { NodeMapping, PromptAnalysis } from '../../runtime/nodes/epic1/PromptParser';
+import type { PromptAnalysis } from '../../runtime/nodes/epic1/PromptParser';
 
 export interface VisualRangeIndicatorProps {
   promptAnalysis: PromptAnalysis;
@@ -192,7 +191,7 @@ export const VisualRangeIndicator: React.FC<VisualRangeIndicatorProps> = ({
 
   // Render connection lines as SVG
   const renderConnectionLines = () => {
-    if (!showConnectionLines || connectionLines.length === 0) return null;
+    if (!showConnectionLines || connectionLines.length === 0) {return null;}
 
     return (
       <svg
@@ -274,9 +273,9 @@ export const VisualRangeIndicator: React.FC<VisualRangeIndicatorProps> = ({
         >
           <strong>Visual Mapping:</strong>
           <div style={{ marginTop: '8px' }}>
-            {promptAnalysis.nodes.map((genNode, index) => {
+            {promptAnalysis.nodes.map(genNode => {
               const mapping = promptAnalysis.mappings.find(m => m.nodeId === genNode.node.serialize().id);
-              if (!mapping) return null;
+              if (!mapping) {return null;}
               
               return (
                 <div

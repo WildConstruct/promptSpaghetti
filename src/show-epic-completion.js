@@ -9,7 +9,6 @@
  * Integrated with Visual Ticket Dashboard for comprehensive view.
  */
 
-const fs = require('fs').promises;
 const path = require('path');
 const Database = require('better-sqlite3');
 
@@ -18,7 +17,7 @@ const dbPath = path.join(__dirname, 'data/tasks.db');
 let db;
 try {
   db = new Database(dbPath);
-} catch (error) {
+} catch {
   console.error('Database connection failed, showing static analysis only');
 }
 
@@ -278,8 +277,8 @@ function getProgressBar(percentage, width = 20) {
   const bar = '█'.repeat(filled) + '░'.repeat(empty);
 
   let color = colors.red;
-  if (percentage >= 80) color = colors.green;
-  else if (percentage >= 60) color = colors.yellow;
+  if (percentage >= 80) {color = colors.green;}
+  else if (percentage >= 60) {color = colors.yellow;}
 
   return `${color}${bar}${colors.reset} ${percentage}%`;
 }
@@ -306,15 +305,15 @@ function getStatusIcon(status) {
 }
 
 function getImpactColor(impact) {
-  if (impact.startsWith('CRITICAL')) return colors.red;
-  if (impact.startsWith('HIGH')) return colors.magenta;
-  if (impact.startsWith('MEDIUM-HIGH')) return colors.yellow;
-  if (impact.startsWith('MEDIUM')) return colors.cyan;
+  if (impact.startsWith('CRITICAL')) {return colors.red;}
+  if (impact.startsWith('HIGH')) {return colors.magenta;}
+  if (impact.startsWith('MEDIUM-HIGH')) {return colors.yellow;}
+  if (impact.startsWith('MEDIUM')) {return colors.cyan;}
   return colors.white;
 }
 
 async function getTaskStatus() {
-  if (!db) return { totalTasks: 0, byStatus: {} };
+  if (!db) {return { totalTasks: 0, byStatus: {} };}
 
   try {
     const statusQuery = db.prepare(`
@@ -341,7 +340,7 @@ async function getTaskStatus() {
       totalTasks: totalResult.total,
       byStatus: byStatus
     };
-  } catch (error) {
+  } catch {
     return { totalTasks: 0, byStatus: {} };
   }
 }
@@ -363,7 +362,7 @@ async function showEpicCompletion() {
   let totalQuickWins = 0;
 
   // Display epic completion status
-  for (const [epicKey, epic] of Object.entries(EPIC_ANALYSIS)) {
+  for (const epic of Object.values(EPIC_ANALYSIS)) {
     console.log(
       `${colors.bright}${epic.name}: ${getProgressBar(epic.overallProgress)}${colors.reset}`
     );
@@ -510,7 +509,7 @@ async function showIntegratedDashboard() {
           `${colors.bright}├─ ${icon} ${status}: ${count}${colors.reset}`
         );
       });
-    } catch (error) {
+    } catch {
       console.log(
         `${colors.yellow}├─ Task database analysis failed${colors.reset}`
       );

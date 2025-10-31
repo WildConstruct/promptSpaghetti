@@ -136,7 +136,7 @@ export function validateNodeData<T>(
   schema: {
     type: string;
     required?: string[];
-    properties?: Record<string, any>;
+    properties?: Record<string, unknown>;
   }
 ): boolean {
   if (!data || typeof data !== 'object') {

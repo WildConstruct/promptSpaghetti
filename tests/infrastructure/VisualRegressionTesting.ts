@@ -60,6 +60,24 @@ export interface VisualTestSuite {
   };
 }
 
+interface VisualReportSummary {
+  total: number;
+  passed: number;
+  failed: number;
+  avgCaptureTime: number;
+  avgComparisonTime: number;
+}
+
+type VisualReportResult = Omit<VisualTestResult, 'timestamp'> & {
+  timestamp: string;
+};
+
+interface VisualReportData {
+  timestamp: string;
+  summary: VisualReportSummary;
+  results: VisualReportResult[];
+}
+
 export class VisualRegressionTester {
   private baselineDir: string;
   private currentDir: string;
@@ -155,18 +173,28 @@ export class VisualRegressionTester {
    * Generate visual test report
    */
   async generateReport(results: VisualTestResult[]): Promise<string> {
-    const reportData = {
+    const totalResults = results.length;
+    const passedCount = results.filter(r => r.passed).length;
+    const failedCount = totalResults - passedCount;
+    const totalCaptureTime = results.reduce(
+      (sum, r) => sum + r.metrics.captureTime,
+      0
+    );
+    const totalComparisonTime = results.reduce(
+      (sum, r) => sum + r.metrics.comparisonTime,
+      0
+    );
+
+    const reportData: VisualReportData = {
       timestamp: new Date().toISOString(),
       summary: {
-        total: results.length,
-        passed: results.filter(r => r.passed).length,
-        failed: results.filter(r => !r.passed).length,
-        avgCaptureTime:
-          results.reduce((sum, r) => sum + r.metrics.captureTime, 0) /
-          results.length,
-        avgComparisonTime:
-          results.reduce((sum, r) => sum + r.metrics.comparisonTime, 0) /
-          results.length
+        total: totalResults,
+        passed: passedCount,
+        failed: failedCount,
+        avgCaptureTime: totalResults ? totalCaptureTime / totalResults : 0,
+        avgComparisonTime: totalResults
+          ? totalComparisonTime / totalResults
+          : 0
       },
       results: results.map(result => ({
         ...result,
@@ -314,24 +342,19 @@ export class VisualRegressionTester {
     page: Page,
     config: VisualTestConfig
   ): Promise<Buffer> {
-    const options: any = {
-      type: 'png',
-      fullPage: !config.selector
-    };
-
     if (config.selector) {
       const element = await page.locator(config.selector);
-      return await element.screenshot(options);
-    } else {
-      return await page.screenshot(options);
+      return element.screenshot({ type: 'png' });
     }
+
+    return page.screenshot({ type: 'png', fullPage: true });
   }
 
   private async executeActions(
     page: Page,
     actions: VisualTestConfig['actions']
   ): Promise<void> {
-    if (!actions) return;
+    if (!actions) {return;}
 
     for (const action of actions) {
       switch (action.type) {
@@ -485,7 +508,16 @@ export class VisualRegressionTester {
     );
   }
 
-  private async generateHTMLReport(reportData: any): Promise<string> {
+  private async generateHTMLReport(
+    reportData: VisualReportData
+  ): Promise<string> {
+    const successRate =
+      reportData.summary.total === 0
+        ? 0
+        : Math.round(
+            (reportData.summary.passed / reportData.summary.total) * 100
+          );
+
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -532,14 +564,14 @@ export class VisualRegressionTester {
             </div>
             <div class="summary-card">
                 <h3>Success Rate</h3>
-                <div style="font-size: 2em; font-weight: bold;">${Math.round((reportData.summary.passed / reportData.summary.total) * 100)}%</div>
+                <div style="font-size: 2em; font-weight: bold;">${successRate}%</div>
             </div>
         </div>
         
         <div class="test-results">
             ${reportData.results
               .map(
-                (result: any) => `
+                result => `
                 <div class="test-result">
                     <div class="test-header ${result.passed ? 'passed' : 'failed'}">
                         ${result.testName} (${result.browser}) - ${result.passed ? 'PASSED' : 'FAILED'}
@@ -558,18 +590,27 @@ export class VisualRegressionTester {
                             <div class="test-images">
                                 <div class="image-container">
                                     <h4>Baseline</h4>
-                                    <img src="${path.relative(this.screenshotDir, result.baselineImagePath)}" alt="Baseline">
+                                    <img src="${path.relative(
+                                      this.screenshotDir,
+                                      result.baselineImagePath
+                                    )}" alt="Baseline">
                                 </div>
                                 <div class="image-container">
                                     <h4>Current</h4>
-                                    <img src="${path.relative(this.screenshotDir, result.currentImagePath)}" alt="Current">
+                                    <img src="${path.relative(
+                                      this.screenshotDir,
+                                      result.currentImagePath
+                                    )}" alt="Current">
                                 </div>
                                 ${
                                   result.diffImagePath
                                     ? `
                                     <div class="image-container">
                                         <h4>Diff</h4>
-                                        <img src="${path.relative(this.screenshotDir, result.diffImagePath)}" alt="Diff">
+                                        <img src="${path.relative(
+                                          this.screenshotDir,
+                                          result.diffImagePath
+                                        )}" alt="Diff">
                                     </div>
                                 `
                                     : ''

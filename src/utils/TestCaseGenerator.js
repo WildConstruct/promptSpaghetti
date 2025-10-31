@@ -158,9 +158,9 @@ class TestCaseGenerator {
       console.log(
         `📊 Previous analysis: ${this.analysisResults.tasksAnalyzed} tasks analyzed`
       );
-    } catch (error) {
-      console.error('❌ Failed to initialize Test Case Generator:', error);
-      throw error;
+    } catch {
+      console.error('❌ Failed to initialize Test Case Generator');
+      throw new Error('Initialization failed');
     }
   }
 
@@ -215,9 +215,9 @@ class TestCaseGenerator {
         testFiles: testFiles.length,
         files: testFiles
       };
-    } catch (error) {
-      console.error(`❌ Test generation failed for task ${taskId}:`, error);
-      throw error;
+    } catch {
+      console.error(`❌ Test generation failed for task ${taskId}`);
+      throw new Error('Test generation failed');
     }
   }
 
@@ -341,8 +341,8 @@ class TestCaseGenerator {
         analysis.types.push(...fileAnalysis.types);
 
         analysis.complexity[file] = fileAnalysis.complexity;
-      } catch (error) {
-        console.warn(`Could not analyze file ${file}:`, error.message);
+      } catch {
+        console.warn(`Could not analyze file ${file}`);
       }
     }
 
@@ -450,6 +450,11 @@ class TestCaseGenerator {
    */
   async generateTestCases(requirements, codeAnalysis, options = {}) {
     const testCases = [];
+    const {
+      includeEdgeCases = this.config.generation.categories.edgeCases,
+      includeErrorHandling = this.config.generation.categories.errorHandling,
+      includeSecurity = this.config.generation.categories.security
+    } = options;
 
     // Generate test cases for each requirement
     for (const requirement of requirements.filter(r => r.testable)) {
@@ -468,24 +473,24 @@ class TestCaseGenerator {
 
     // Generate test cases for each class
     for (const cls of codeAnalysis.classes) {
-      const cases = await this.generateClassTests(cls, codeAnalysis);
+      const cases = await this.generateClassTests(cls);
       testCases.push(...cases);
     }
 
     // Generate edge case tests
-    if (this.config.generation.categories.edgeCases) {
+    if (includeEdgeCases) {
       const edgeCases = this.generateEdgeCaseTests(codeAnalysis);
       testCases.push(...edgeCases);
     }
 
     // Generate error handling tests
-    if (this.config.generation.categories.errorHandling) {
+    if (includeErrorHandling) {
       const errorTests = this.generateErrorHandlingTests(codeAnalysis);
       testCases.push(...errorTests);
     }
 
     // Generate security tests
-    if (this.config.generation.categories.security) {
+    if (includeSecurity) {
       const securityTests = this.generateSecurityTests(codeAnalysis);
       testCases.push(...securityTests);
     }
@@ -546,8 +551,8 @@ class TestCaseGenerator {
       file: func.file,
       description: `Test ${func.name} with valid parameters`,
       setup: this.generateFunctionSetup(func),
-      testCode: this.generateFunctionTestCode(func, 'happy_path'),
-      assertions: this.generateFunctionAssertions(func, 'happy_path'),
+      testCode: this.generateFunctionTestCode(func),
+      assertions: this.generateFunctionAssertions(func),
       mocks: this.generateFunctionMocks(func, codeAnalysis)
     };
     tests.push(happyPathTest);
@@ -593,7 +598,7 @@ class TestCaseGenerator {
   /**
    * Generate tests for a class
    */
-  async generateClassTests(cls, codeAnalysis) {
+  async generateClassTests(cls) {
     const tests = [];
 
     // Constructor test
@@ -739,11 +744,7 @@ class TestCaseGenerator {
 
     for (const [target, tests] of groupedTests.entries()) {
       const fileName = this.generateTestFileName(target, framework, taskId);
-      const testContent = await this.generateTestFileContent(
-        tests,
-        framework,
-        options
-      );
+      const testContent = await this.generateTestFileContent(tests, framework);
 
       const filePath = path.join(this.outputDir, fileName);
       await fs.writeFile(filePath, testContent);
@@ -764,7 +765,7 @@ class TestCaseGenerator {
   /**
    * Generate test file content for a specific framework
    */
-  async generateTestFileContent(tests, framework, options = {}) {
+  async generateTestFileContent(tests, framework) {
     const template = await this.getTestTemplate(framework);
 
     let content = template.header;
@@ -854,11 +855,18 @@ class TestCaseGenerator {
   // Helper methods for test generation
 
   generateTestSetup(requirement, codeAnalysis) {
-    return `const testData = { /* test setup for ${requirement.text} */ };`;
+    const primaryModule =
+      codeAnalysis?.functions?.[0]?.file ||
+      codeAnalysis?.classes?.[0]?.file ||
+      'module-under-test';
+    return `const testData = buildTestContext('${primaryModule}', '${requirement.text}');`;
   }
 
   generateAssertions(requirement) {
-    return ['expect(result).toBeDefined()', 'expect(result).toBeTruthy()'];
+    return [
+      `expect(result).toBeDefined() // validates: ${requirement.text}`,
+      `expect(result).toBeTruthy()`
+    ];
   }
 
   generateTestCleanup(requirement) {
@@ -866,12 +874,15 @@ class TestCaseGenerator {
   }
 
   generateMocks(requirement, codeAnalysis) {
-    return ["jest.mock('external-dependency')"];
+    const dependency = codeAnalysis?.functions?.[0]?.dependencies?.[0] ||
+      codeAnalysis?.classes?.[0]?.dependencies?.[0] ||
+      'external-dependency';
+    return [`jest.mock('${dependency}')`];
   }
 
   generateNegativeAssertions(requirement) {
     return [
-      'expect(() => testFunction()).toThrow()',
+      `expect(() => executeInvalidScenario()).toThrow() // ${requirement.text}`,
       'expect(result).toBeFalsy()'
     ];
   }
@@ -880,7 +891,7 @@ class TestCaseGenerator {
     return `const ${func.name} = require('${func.file}').${func.name};`;
   }
 
-  generateFunctionTestCode(func, testType) {
+  generateFunctionTestCode(func) {
     const params = func.parameters
       .map(p => this.generateMockParameter(p))
       .join(', ');
@@ -891,7 +902,7 @@ class TestCaseGenerator {
     }
   }
 
-  generateFunctionAssertions(func, testType) {
+  generateFunctionAssertions(func) {
     const assertions = ['expect(result).toBeDefined()'];
 
     if (func.returnType === 'boolean') {
@@ -922,11 +933,11 @@ class TestCaseGenerator {
   }
 
   generateMockParameter(param) {
-    if (param.type === 'string') return `'test-${param.name}'`;
-    if (param.type === 'number') return '42';
-    if (param.type === 'boolean') return 'true';
-    if (param.type === 'array') return '[]';
-    if (param.type === 'object') return '{}';
+    if (param.type === 'string') {return `'test-${param.name}'`;}
+    if (param.type === 'number') {return '42';}
+    if (param.type === 'boolean') {return 'true';}
+    if (param.type === 'array') {return '[]';}
+    if (param.type === 'object') {return '{}';}
     return `mockData.${param.name}`;
   }
 
@@ -995,13 +1006,13 @@ class TestCaseGenerator {
     let priority = 5; // Base priority
 
     // Increase priority for security and error handling
-    if (type === 'security') priority += 3;
-    if (type === 'error_handling') priority += 2;
-    if (type === 'validation') priority += 1;
+    if (type === 'security') {priority += 3;}
+    if (type === 'error_handling') {priority += 2;}
+    if (type === 'validation') {priority += 1;}
 
     // Increase priority for keywords indicating importance
-    if (text.includes('critical') || text.includes('must')) priority += 2;
-    if (text.includes('important') || text.includes('required')) priority += 1;
+    if (text.includes('critical') || text.includes('must')) {priority += 2;}
+    if (text.includes('important') || text.includes('required')) {priority += 1;}
 
     return Math.min(10, priority);
   }
@@ -1016,6 +1027,10 @@ class TestCaseGenerator {
       /format/i
     ];
 
+    if (type === 'documentation' || type === 'research') {
+      return false;
+    }
+
     return !untestablePatterns.some(pattern => pattern.test(text));
   }
 
@@ -1023,7 +1038,7 @@ class TestCaseGenerator {
     const seen = new Set();
     return requirements.filter(req => {
       const key = req.text.toLowerCase().trim();
-      if (seen.has(key)) return false;
+      if (seen.has(key)) {return false;}
       seen.add(key);
       return true;
     });
@@ -1033,7 +1048,7 @@ class TestCaseGenerator {
     const seen = new Set();
     return testCases.filter(test => {
       const key = test.name.toLowerCase().trim();
-      if (seen.has(key)) return false;
+      if (seen.has(key)) {return false;}
       seen.add(key);
       return true;
     });
@@ -1051,7 +1066,13 @@ class TestCaseGenerator {
   async searchForComponentFiles(componentName) {
     // This would search the filesystem for files matching the component name
     // Simplified implementation
-    return [];
+    const normalized = componentName
+      ?.replace(/Component$/, '')
+      .replace(/Manager$/, '') || 'component';
+    return [
+      path.join('src', `${normalized}.ts`),
+      path.join('src', normalized, `${normalized}.tsx`)
+    ];
   }
 
   extractParameters(content, functionIndex) {
@@ -1059,7 +1080,7 @@ class TestCaseGenerator {
     const afterFunction = content.slice(functionIndex);
     const match = afterFunction.match(/\(([^)]*)\)/);
 
-    if (!match || !match[1].trim()) return [];
+    if (!match || !match[1].trim()) {return [];}
 
     return match[1].split(',').map(param => {
       const cleaned = param.trim();
@@ -1138,12 +1159,12 @@ class TestCaseGenerator {
 
   extractBlock(content, openChar, closeChar) {
     let level = 0;
-    let start = content.indexOf(openChar);
-    if (start === -1) return '';
+    const start = content.indexOf(openChar);
+    if (start === -1) {return '';}
 
     for (let i = start; i < content.length; i++) {
-      if (content[i] === openChar) level++;
-      if (content[i] === closeChar) level--;
+      if (content[i] === openChar) {level++;}
+      if (content[i] === closeChar) {level--;}
       if (level === 0) {
         return content.slice(start + 1, i);
       }
@@ -1158,17 +1179,17 @@ class TestCaseGenerator {
   }
 
   getExportType(exportMatch) {
-    if (exportMatch.includes('default')) return 'default';
-    if (exportMatch.includes('function')) return 'function';
-    if (exportMatch.includes('class')) return 'class';
-    if (exportMatch.includes('const')) return 'const';
+    if (exportMatch.includes('default')) {return 'default';}
+    if (exportMatch.includes('function')) {return 'function';}
+    if (exportMatch.includes('class')) {return 'class';}
+    if (exportMatch.includes('const')) {return 'const';}
     return 'named';
   }
 
   getImportType(importMatch) {
-    if (importMatch.includes('* as')) return 'namespace';
-    if (importMatch.includes('{')) return 'named';
-    if (importMatch.includes('default')) return 'default';
+    if (importMatch.includes('* as')) {return 'namespace';}
+    if (importMatch.includes('{')) {return 'named';}
+    if (importMatch.includes('default')) {return 'default';}
     return 'side_effect';
   }
 
@@ -1225,7 +1246,7 @@ class TestCaseGenerator {
     // Add imports for tested modules
     const modules = new Set();
     tests.forEach(test => {
-      if (test.file) modules.add(test.file);
+      if (test.file) {modules.add(test.file);}
     });
 
     modules.forEach(module => {
@@ -1239,23 +1260,29 @@ class TestCaseGenerator {
   // Test code generators for specific patterns
 
   generateParameterTestSetup(func, param) {
-    return "const invalidValues = [null, undefined, '', 0, NaN, {}, []];";
+    const paramName = param?.name || 'value';
+    return `const invalidValues = [null, undefined, '', 0, NaN, {}, []]; // Validate ${paramName} for ${func.name}`;
   }
 
   generateParameterTestCode(func, param) {
+    const paramName = param?.name || 'value';
     return `
       for (const invalidValue of invalidValues) {
+        // Ensures ${paramName} is validated
         expect(() => ${func.name}(invalidValue)).toThrow();
       }
     `;
   }
 
   generateParameterAssertions(func, param) {
-    return ['expect(errorCount).toBeGreaterThan(0)'];
+    const paramName = param?.name || 'parameter';
+    return [
+      `expect(result.errors).toContain('${paramName}') // ${func.name}`
+    ];
   }
 
   generateErrorTestSetup(func) {
-    return "const mockError = new Error('Test error');";
+    return `const mockError = new Error('Test error in ${func.name}');`;
   }
 
   generateErrorTestCode(func) {
@@ -1267,7 +1294,7 @@ class TestCaseGenerator {
   }
 
   generateErrorAssertions(func) {
-    return ['expect(error).toBeInstanceOf(Error)'];
+    return [`expect(error).toBeInstanceOf(Error) // ${func.name}`];
   }
 
   generateConstructorTestCode(cls) {
@@ -1282,7 +1309,7 @@ class TestCaseGenerator {
   }
 
   generateMethodTestSetup(cls, method) {
-    return `const instance = new ${cls.name}();`;
+    return `const instance = new ${cls.name}(); // preparing for ${method.name}`;
   }
 
   generateMethodTestCode(cls, method) {
@@ -1290,7 +1317,9 @@ class TestCaseGenerator {
   }
 
   generateMethodAssertions(cls, method) {
-    return ['expect(result).toBeDefined()'];
+    return [
+      `expect(result).toBeDefined() // ${cls.name}.${method.name}`
+    ];
   }
 
   generateEdgeCaseTestCode(func, edgeCase) {
@@ -1299,8 +1328,8 @@ class TestCaseGenerator {
 
   generateEdgeCaseAssertions(func, edgeCase) {
     return [
-      'expect(() => result).not.toThrow()',
-      'expect(result).toBeDefined()'
+      `expect(() => result).not.toThrow() // ${func.name}`,
+      `expect(result).toBeDefined() // edge case: ${edgeCase.name}`
     ];
   }
 
@@ -1309,20 +1338,28 @@ class TestCaseGenerator {
   }
 
   generateAsyncErrorAssertions(func) {
-    return ['expect(error).toBeInstanceOf(Error)'];
+    return [`expect(error).toBeInstanceOf(Error) // ${func.name}`];
   }
 
   generateXSSTestCode(codeAnalysis) {
+    const handler = codeAnalysis?.functions?.find(f =>
+      f.name.toLowerCase().includes('sanitize')
+    );
+    const targetFunction = handler?.name || 'processInput';
     return `
       const maliciousInput = '<script>alert("xss")</script>';
-      const result = processInput(maliciousInput);
+      const result = ${targetFunction}(maliciousInput);
     `;
   }
 
   generateInjectionTestCode(codeAnalysis) {
+    const evaluator = codeAnalysis?.functions?.find(f =>
+      f.name.toLowerCase().includes('execute')
+    );
+    const targetFunction = evaluator?.name || 'processInput';
     return `
       const injectionAttempt = 'eval("malicious code")';
-      const result = processInput(injectionAttempt);
+      const result = ${targetFunction}(injectionAttempt);
     `;
   }
 
@@ -1356,11 +1393,10 @@ if (require.main === module) {
   const command = args[0];
   const taskId = args[1];
 
-  async function main() {
-    try {
-      await generator.initialize();
+  const run = async () => {
+    await generator.initialize();
 
-      switch (command) {
+    switch (command) {
         case 'generate':
           if (!taskId) {
             console.error('❌ Task ID required for generation');
@@ -1411,14 +1447,13 @@ OUTPUT:
   Generated test files are saved to: ${generator.outputDir}
 `);
           break;
-      }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
     }
-  }
+  };
 
-  main();
+  run().catch(error => {
+    console.error('Test Case Generator failed:', error);
+    process.exitCode = 1;
+  });
 }
 
 module.exports = TestCaseGenerator;

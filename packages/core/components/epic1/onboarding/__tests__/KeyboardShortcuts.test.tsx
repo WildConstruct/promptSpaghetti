@@ -59,7 +59,7 @@ describe('Keyboard Shortcut Reference', () => {
     test('shows all shortcut categories', () => {
       render(
         <TutorialProvider>
-          <KeyboardShortcutReference isOpen={true} onClose={() => {}} />
+          <KeyboardShortcutReference isOpen={true} onClose={() => undefined} />
         </TutorialProvider>
       );
 
@@ -74,7 +74,7 @@ describe('Keyboard Shortcut Reference', () => {
     test('search functionality filters shortcuts', () => {
       render(
         <TutorialProvider>
-          <KeyboardShortcutReference isOpen={true} onClose={() => {}} />
+          <KeyboardShortcutReference isOpen={true} onClose={() => undefined} />
         </TutorialProvider>
       );
 
@@ -91,7 +91,7 @@ describe('Keyboard Shortcut Reference', () => {
     test('category filter works', () => {
       render(
         <TutorialProvider>
-          <KeyboardShortcutReference isOpen={true} onClose={() => {}} />
+          <KeyboardShortcutReference isOpen={true} onClose={() => undefined} />
         </TutorialProvider>
       );
 
@@ -113,7 +113,7 @@ describe('Keyboard Shortcut Reference', () => {
 
       render(
         <TutorialProvider>
-          <KeyboardShortcutReference isOpen={true} onClose={() => {}} />
+          <KeyboardShortcutReference isOpen={true} onClose={() => undefined} />
         </TutorialProvider>
       );
 
@@ -124,7 +124,7 @@ describe('Keyboard Shortcut Reference', () => {
     test('displays shortcut count', () => {
       render(
         <TutorialProvider>
-          <KeyboardShortcutReference isOpen={true} onClose={() => {}} />
+          <KeyboardShortcutReference isOpen={true} onClose={() => undefined} />
         </TutorialProvider>
       );
 

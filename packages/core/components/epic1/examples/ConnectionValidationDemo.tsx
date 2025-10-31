@@ -104,11 +104,11 @@ export const ConnectionValidationDemo: React.FC = () => {
           </p>
           <ul style={{ margin: '4px 0 0 20px', lineHeight: 1.6 }}>
             <li>✅ <strong>Valid:</strong> Text Block → Concat, Variable Getter → Output</li>
-            <li>❌ <strong>Invalid:</strong> Output → Any Node (outputs can't be sources)</li>
+            <li>❌ <strong>Invalid:</strong> Output → Any Node (outputs cannot be sources)</li>
             <li>❌ <strong>Invalid:</strong> Any Node → Itself (no self-connections)</li>
             <li>❌ <strong>Invalid:</strong> Creating cycles (e.g., A → B → C → A)</li>
             <li>✅ <strong>Valid targets highlight in green</strong> while dragging</li>
-            <li>❌ <strong>Invalid targets fade out</strong> to show they can't be connected</li>
+            <li>❌ <strong>Invalid targets fade out</strong> to show they cannot be connected</li>
           </ul>
         </div>
       </div>

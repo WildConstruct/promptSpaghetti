@@ -32,7 +32,7 @@ export const MicroInteraction: React.FC<MicroInteractionProps> = ({
     return () => clearTimeout(timer);
   }, [trigger]);
 
-  if (!visible) return null;
+  if (!visible) {return null;}
 
   const renderInteraction = () => {
     switch (trigger) {

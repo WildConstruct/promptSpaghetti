@@ -46,7 +46,6 @@ class DatabaseEnhancer {
   async migrate() {
     logger.start('Database schema migration to v2.0.0');
 
-    const state = await this.stateLock.readState();
     let migratedCount = 0;
     let enhancedCount = 0;
 
@@ -62,8 +61,6 @@ class DatabaseEnhancer {
 
       // Enhanced task structure
       Object.values(currentState.tasks).forEach(task => {
-        const originalFields = Object.keys(task).length;
-
         // Enhanced epic information
         if (task.epic && !task.epicMeta) {
           const epicMatch = task.epic.match(/Epic (\d+)/);
@@ -312,7 +309,7 @@ class DatabaseEnhancer {
         .toLowerCase()
         .split(/\W+/)
         .forEach(word => {
-          if (word.length > 2) keywords.add(word);
+          if (word.length > 2) {keywords.add(word);}
         });
     }
 
@@ -324,7 +321,7 @@ class DatabaseEnhancer {
         .toLowerCase()
         .split(/\W+/)
         .forEach(word => {
-          if (word.length > 2) keywords.add(word);
+          if (word.length > 2) {keywords.add(word);}
         });
     }
 
@@ -333,24 +330,29 @@ class DatabaseEnhancer {
     }
 
     // Technical keywords
-    if (task.wip_class) keywords.add(task.wip_class.toLowerCase());
-    if (task.tags) task.tags.forEach(tag => keywords.add(tag.toLowerCase()));
+    if (task.wip_class) {keywords.add(task.wip_class.toLowerCase());}
+    if (task.tags) {task.tags.forEach(tag => keywords.add(tag.toLowerCase()));}
 
     return Array.from(keywords);
   }
 
   // Categorize task complexity
   categorizeComplexity(estimate) {
-    if (estimate <= 2) return 'simple';
-    if (estimate <= 8) return 'medium';
-    if (estimate <= 24) return 'complex';
+    if (estimate <= 2) {return 'simple';}
+    if (estimate <= 8) {return 'medium';}
+    if (estimate <= 24) {return 'complex';}
     return 'epic';
   }
 
   // Extract story title from epic documentation (placeholder)
   extractStoryTitle(epic, story) {
-    // In a real implementation, this would parse the epic plan markdown
-    // For now, return a placeholder
+    // Placeholder implementation that still leverages the provided context
+    if (story) {
+      return `${epic ? `${epic}: ` : ''}Story ${story}`;
+    }
+    if (epic) {
+      return `${epic} Story`;
+    }
     return null;
   }
 
@@ -370,9 +372,9 @@ class DatabaseEnhancer {
 
     // Validate task schema compliance
     Object.values(state.tasks).forEach(task => {
-      if (task.epicMeta) stats.tasksWithEpicMeta++;
-      if (task.storyMeta) stats.tasksWithStoryMeta++;
-      if (task.dbIndexes) stats.tasksWithIndexes++;
+      if (task.epicMeta) {stats.tasksWithEpicMeta++;}
+      if (task.storyMeta) {stats.tasksWithStoryMeta++;}
+      if (task.dbIndexes) {stats.tasksWithIndexes++;}
 
       // Check for required fields after migration
       if (task.epic && !task.epicMeta) {

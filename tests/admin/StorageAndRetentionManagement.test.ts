@@ -355,9 +355,9 @@ describe('Storage Management and Retention Policy Admin Systems', () => {
 
         expect(result.status).toBe('completed');
         expect(result.results).toBeDefined();
-        expect(result.results!.filesProcessed).toBeGreaterThan(0);
-        expect(result.results!.storageFreed).toBeGreaterThan(0);
-        expect(result.actualSavings).toBe(result.results!.storageFreed);
+        expect(result.results?.filesProcessed).toBeGreaterThan(0);
+        expect(result.results?.storageFreed).toBeGreaterThan(0);
+        expect(result.actualSavings).toBe(result.results?.storageFreed);
         expect(result.costSavings).toBeGreaterThan(0);
       });
 

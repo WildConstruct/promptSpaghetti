@@ -156,6 +156,8 @@ export async function executeGraph(graph, sessionId, userId) {
     const nodeMap = new Map();
     graph.nodes.forEach(n => nodeMap.set(n.id, n));
     const memo = new Map();
+    
+    // Depth-first search function moved to function body root
     async function dfs(nodeId, depth = 0) {
       // SECURITY FIX: Prevent stack overflow with depth protection
       if (depth > 1000) {
@@ -163,9 +165,9 @@ export async function executeGraph(graph, sessionId, userId) {
           `Maximum execution depth exceeded (${depth}). Possible infinite recursion in graph at node ${nodeId}`
         );
       }
-      if (memo.has(nodeId)) return memo.get(nodeId);
+      if (memo.has(nodeId)) {return memo.get(nodeId);}
       const node = nodeMap.get(nodeId);
-      if (!node) throw new Error(`Node ${nodeId} not found`);
+      if (!node) {throw new Error(`Node ${nodeId} not found`);}
       // Record node execution start
       const nodeStartTime = Date.now();
       if (analyticsCollector) {
@@ -219,7 +221,7 @@ export async function executeGraph(graph, sessionId, userId) {
         };
         // Check if this is a randomization node and capture choice info
         if (isRandomizationNode(node.type)) {
-          const randomChoice = extractRandomChoiceInfo(node, result, resolvedInputs);
+          const randomChoice = extractRandomChoiceInfo(node, result);
           if (randomChoice) {
             executionStep.randomChoice = randomChoice;
             tracker.recordRandomChoice(trackingId, randomChoice);
@@ -375,7 +377,7 @@ function isAdvancedNodeType(nodeType) {
         }
       }
     }
-  } catch (error) {
+  } catch {
     // Ignore errors in extension checking
   }
   return false;
@@ -456,7 +458,7 @@ function createRuntimeNode(node, resolvedInputs, executionContext) {
       throw new Error('PythonTransform node is not yet implemented');
     default:
       // Epic 8.4 Extension System - Try to find extension nodes
-      const extensionNode = tryCreateExtensionNode(node, resolvedInputs, executionContext);
+      const extensionNode = tryCreateExtensionNode(node);
       if (extensionNode) {
         return extensionNode;
       }
@@ -474,7 +476,7 @@ function isRandomizationNode(nodeType) {
 /**
  * Extract random choice information for execution path tracking
  */
-function extractRandomChoiceInfo(node, result, resolvedInputs) {
+function extractRandomChoiceInfo(node, result) {
   try {
     switch (node.type) {
       case 'WeightedChoice': {
@@ -544,7 +546,7 @@ function extractRandomChoiceInfo(node, result, resolvedInputs) {
 /**
  * Try to create a runtime node from an extension
  */
-function tryCreateExtensionNode(node, resolvedInputs, executionContext) {
+function tryCreateExtensionNode(node) {
   try {
     // Get all active node extensions
     const extensions = ExtensionLifecycleManager.getActiveExtensions();
@@ -557,7 +559,8 @@ function tryCreateExtensionNode(node, resolvedInputs, executionContext) {
         if (nodeTypeInfo) {
           // Create the extension node instance
           // Convert node properties to config object (excluding id, type, and inputs)
-          const { id, type, inputs, ...nodeConfig } = node;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { id: _id, type: _type, inputs: _inputs, ...nodeConfig } = node;
           const extensionNode = nodeExtension.createNode(node.type, node.id, nodeConfig);
           // Wrap in a RuntimeNode adapter if needed
           if (extensionNode && typeof extensionNode.run === 'function') {

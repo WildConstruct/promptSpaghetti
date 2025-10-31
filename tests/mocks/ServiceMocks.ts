@@ -558,7 +558,7 @@ export class ServiceMockManager extends EventEmitter {
         });
       },
 
-      identify: async (userId: string, _traits: unknown) => {
+      identify: async (userId: string) => {
         users.set(userId, {
           id: userId,
           traits,
@@ -575,7 +575,7 @@ export class ServiceMockManager extends EventEmitter {
         });
       },
 
-      group: async (userId: string, groupId: string, _traits?: unknown) => {
+      group: async (userId: string, groupId: string) => {
         return this.createServiceResponse(name, 'group', {
           userId,
           groupId,
@@ -990,24 +990,22 @@ export class ServiceMockManager extends EventEmitter {
   }
 
   private createMessageQueueMethods(serviceName: string) {
-    const queues = new Map();
+    const messages: Array<{ id: string; payload: unknown }> = [];
 
     return {
-      publish: async (_topic: string, message: unknown) => {
-        if (!queues.has(topic)) {
-          queues.set(topic, []);
-        }
-        queues.get(topic).push({ message, timestamp: new Date() });
+      publish: async (message: unknown) => {
+        const messageId = this.generateId();
+        messages.push({ id: messageId, payload: message });
         return this.createServiceResponse(serviceName, 'publish', {
-          messageId: this.generateId()
+          messageId,
+          size: messages.length
         });
       },
-      subscribe: async (_topic: string, _handler: () => void) => {
-        // Mock subscription
-        return this.createServiceResponse(serviceName, 'subscribe', {
-          subscribed: true
-        });
-      }
+      subscribe: async () =>
+        this.createServiceResponse(serviceName, 'subscribe', {
+          subscribed: true,
+          pending: messages.length
+        })
     };
   }
 
@@ -1200,7 +1198,7 @@ export class ServiceMockManager extends EventEmitter {
     return `sess_${Date.now()}_${Math.floor(this.rng() * 10000)}`;
   }
 
-  private generateChecksum(_content: unknown): string {
+  private generateChecksum(): string {
     return `md5_${Math.floor(this.rng() * 1000000)}`;
   }
 

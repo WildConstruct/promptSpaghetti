@@ -173,7 +173,7 @@ function createStatisticalEngine() {
       let bestImprovement = 0;
 
       for (const variant of variants) {
-        if (variant.variantId === controlVariantId) continue;
+        if (variant.variantId === controlVariantId) {continue;}
 
         const improvement = Math.random() * 0.4 - 0.2; // -20% to +20%
         if (improvement > bestImprovement && improvement > 0.05) {

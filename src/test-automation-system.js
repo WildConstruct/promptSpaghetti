@@ -47,8 +47,8 @@ async function testCompleteAutomationSystem() {
     const testTaskId = 'TEST-WORKFLOW-' + Date.now();
 
     // Create a test task
-    const createResult = await stateLock.transaction(state => {
-      if (!state.tasks) state.tasks = {};
+    await stateLock.transaction(state => {
+      if (!state.tasks) {state.tasks = {};}
 
       state.tasks[testTaskId] = {
         id: testTaskId,
@@ -62,7 +62,6 @@ async function testCompleteAutomationSystem() {
       };
 
       logger.taskStart(testTaskId, 'Created test task');
-      return state.tasks[testTaskId];
     });
 
     logger.success('Test task created', { taskId: testTaskId });
@@ -151,7 +150,7 @@ async function testCompleteAutomationSystem() {
     try {
       await stateLock.updateTask('NONEXISTENT-TASK', { state: 'COMPLETED' });
     } catch (error) {
-      const errorReport = logger.handleError(error, {
+      logger.handleError(error, {
         operation: 'update-nonexistent-task',
         expectedBehavior: 'error-for-missing-task'
       });
@@ -235,7 +234,7 @@ async function testCompleteAutomationSystem() {
 
     return systemSummary;
   } catch (error) {
-    const errorReport = logger.handleError(error, {
+    logger.handleError(error, {
       testPhase: 'complete-automation-system-test'
     });
 

@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useReactFlow, useStore, Edge } from 'reactflow';
+import { useReactFlow, Position } from 'reactflow';
 
 // Import types and constants
 import { 
@@ -55,7 +55,6 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   id,
   xPos,
   yPos,
-  draggable = true,
   dragging,
 }) => {
   const perfMonitor = PerformanceMonitor.getInstance();
@@ -82,7 +81,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   });
   
   // Use performance-optimized hooks
-  const { containedNodes, recalculate, cacheHitRate } = useNodeContainment(
+  const { containedNodes, cacheHitRate } = useNodeContainment(
     id,
     getNodes(),
     { x: xPos, y: yPos },
@@ -149,7 +148,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
               type: 'any',
               direction: 'output',
               nodeId: edge.source,
-              position: 'right' as any,
+              position: Position.Right,
               color: '#52c41a'
             });
           }
@@ -162,7 +161,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
               type: 'any',
               direction: 'input',
               nodeId: edge.target,
-              position: 'left' as any,
+              position: Position.Left,
               color: '#1890ff'
             });
           }
@@ -264,7 +263,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
    * Handle resize start
    */
   const handleResizeStart = useCallback((e: React.MouseEvent, direction: ResizeDirection) => {
-    if (isLocked) return;
+    if (isLocked) {return;}
     
     e.stopPropagation();
     e.preventDefault();
@@ -293,10 +292,10 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       let newWidth = startWidth;
       let newHeight = startHeight;
       
-      if (direction.includes('e')) newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth + deltaX);
-      if (direction.includes('w')) newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth - deltaX);
-      if (direction.includes('s')) newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight + deltaY);
-      if (direction.includes('n')) newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight - deltaY);
+      if (direction.includes('e')) {newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth + deltaX);}
+      if (direction.includes('w')) {newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth - deltaX);}
+      if (direction.includes('s')) {newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight + deltaY);}
+      if (direction.includes('n')) {newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight - deltaY);}
       
       sizeRef.current = { width: newWidth, height: newHeight };
       

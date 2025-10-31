@@ -1,14 +1,31 @@
 // Basic graph execution engine - no external dependencies
-import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
+import { Graph, Node, WeightedChoiceNodeSchema, SetVariableNodeSchema, GetVariableNodeSchema, IncludeNodeSchema } from '../../packages/core/graphSchema';
+import { z } from 'zod';
 import seedrandom from 'seedrandom';
-import { v4 as uuidv4 } from 'uuid';
+
+// Type guards for specific node types
+function isWeightedChoiceNode(node: Node): node is z.infer<typeof WeightedChoiceNodeSchema> {
+  return node.type === 'WeightedChoice';
+}
+
+function isSetVariableNode(node: Node): node is z.infer<typeof SetVariableNodeSchema> {
+  return node.type === 'SetVariable';
+}
+
+function isGetVariableNode(node: Node): node is z.infer<typeof GetVariableNodeSchema> {
+  return node.type === 'GetVariable';
+}
+
+function isIncludeNode(node: Node): node is z.infer<typeof IncludeNodeSchema> {
+  return node.type === 'Include';
+}
 
 /**
  * Basic execution context for graph execution
  */
 
 interface ExecutionContext {
-  variables: Record<string, any>;
+  variables: Record<string, unknown>;
   seed: number;
   rng: seedrandom.PRNG;
 }
@@ -24,12 +41,10 @@ export function initializeAnalytics(): void {
  * Basic graph executor with support for core node types
  */
 export async function executeGraph(
-  graph: Graph,
-  sessionId?: string,
-  userId?: number
+  graph: Graph
 ): Promise<{
   outputs: string[];
-  executionPath?: any;
+  executionPath?: unknown[];
 }> {
   console.log(`[BASIC] Executing graph with ${graph.nodes?.length || 0} nodes`);
 
@@ -54,12 +69,12 @@ export async function executeGraph(
   }
 
   // Memoization for node results
-  const memo = new Map<string, any>();
+  const memo = new Map<string, unknown>();
 
   /**
    * Execute a single node recursively
    */
-  async function executeNode(nodeId: string, depth: number = 0): Promise<any> {
+  async function executeNode(nodeId: string, depth: number = 0): Promise<unknown> {
     // Prevent infinite recursion
     if (depth > 100) {
       throw new Error(`Maximum execution depth exceeded at node ${nodeId}`);
@@ -73,7 +88,7 @@ export async function executeGraph(
       throw new Error(`Node ${nodeId} not found`);
     }
     // Execute input nodes first
-    const inputValues: any[] = [];
+    const inputValues: unknown[] = [];
     if (node.inputs && node.inputs.length > 0) {
       for (const inputId of node.inputs) {
         const inputValue = await executeNode(inputId, depth + 1);
@@ -82,7 +97,7 @@ export async function executeGraph(
     }
 
     // Execute the node based on its type
-    let result: any;
+    let result: unknown;
 
     switch (node.type) {
       case 'Output':
@@ -95,24 +110,27 @@ export async function executeGraph(
         result = inputValues.map(v => String(v || '')).join('');
         break;
 
-      case 'WeightedChoice':
+      case 'WeightedChoice': {
         // Simple weighted choice implementation
-        const choices = (node as any).choices || [];
+        if (!isWeightedChoiceNode(node)) {
+          result = '';
+          break;
+        }
+        const choices = node.choices || [];
         if (choices.length === 0) {
           result = '';
         } else if (choices.length === 1) {
-          result =
-            typeof choices[0] === 'string' ? choices[0] : choices[0].value;
+          result = choices[0].value;
         } else {
           // Extract weights and values
-          const items = choices.map((choice: any) => ({
-            value: typeof choice === 'string' ? choice : choice.value,
-            weight: typeof choice === 'string' ? 1 : choice.weight || 1
+          const items = choices.map((choice) => ({
+            value: choice.value,
+            weight: choice.weight || 1
           }));
 
           // Calculate total weight
           const totalWeight = items.reduce(
-            (sum: number, item: any) => sum + item.weight,
+            (sum: number, item: { value: string; weight: number }) => sum + item.weight,
             0
           );
 
@@ -133,28 +151,44 @@ export async function executeGraph(
           }
         }
         break;
+      }
 
-      case 'SetVariable':
+      case 'SetVariable': {
         // Set a variable in the context
-        const key = (node as any).key;
-        const value = (node as any).value || inputValues[0] || '';
+        if (!isSetVariableNode(node)) {
+          result = '';
+          break;
+        }
+        const key = node.key;
+        const value = node.value || inputValues[0] || '';
         if (key) {
           context.variables[key] = value;
         }
 
         result = value;
         break;
+      }
 
-      case 'GetVariable':
+      case 'GetVariable': {
         // Get a variable from the context
-        const varKey = (node as any).key;
+        if (!isGetVariableNode(node)) {
+          result = '';
+          break;
+        }
+        const varKey = node.key;
         result = context.variables[varKey] || '';
         break;
+      }
 
-      case 'Include':
+      case 'Include': {
         // Simple include - just return the name or empty string
-        result = (node as any).name || '';
+        if (!isIncludeNode(node)) {
+          result = '';
+          break;
+        }
+        result = node.name || '';
         break;
+      }
 
       default:
         console.warn(
@@ -188,12 +222,14 @@ export async function executeGraph(
 
   return {
     outputs,
-    executionPath: {
-      nodeCount: graph.nodes?.length || 0,
-      outputCount: outputs.length,
-      seed,
-      variables: context.variables
-    }
+    executionPath: [
+      {
+        nodeCount: graph.nodes?.length || 0,
+        outputCount: outputs.length,
+        seed,
+        variables: context.variables
+      }
+    ]
   };
 }
 
@@ -202,9 +238,11 @@ export async function executeGraph(
  */
 export async function executeGraphLegacy(
   graph: Graph,
-  sessionId?: string,
-  userId?: number
+  _sessionId?: string,
+  _userId?: number
 ): Promise<string[]> {
-  const result = await executeGraph(graph, sessionId, userId);
+  void _sessionId;
+  void _userId;
+  const result = await executeGraph(graph);
   return result.outputs;
 }

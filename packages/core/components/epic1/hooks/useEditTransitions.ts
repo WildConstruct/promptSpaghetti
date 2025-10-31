@@ -222,7 +222,7 @@ export function useWeightedOptionTransitions() {
 
   const getOptionClass = useCallback(
     (index: number, isRemoving: boolean) => {
-      if (!animatingOptions.has(index)) return '';
+      if (!animatingOptions.has(index)) {return '';}
       return isRemoving
         ? 'epic1-weighted-option-exiting'
         : 'epic1-weighted-option-entering';

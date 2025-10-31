@@ -1,6 +1,6 @@
 // VFX-specific export functions extracted from exporter.ts
-import { Graph, Node } from '../../../packages/core/graphSchema';
-import { ControlNetParameters, SceneData, GeneratorBundle } from './schemas';
+import { Graph } from '../../../packages/core/graphSchema';
+import { ControlNetParameters, GeneratorBundle } from './schemas';
 
 /**
  * Extract ControlNet parameters from graph metadata

@@ -28,7 +28,7 @@ function KeyboardNavigationDemo() {
   };
 
   const handleCanvasClick = () => {
-    setStatus('All edits confirmed! Click "Analyze Prompt" to start over.');
+    setStatus('All edits confirmed! Click “Analyze Prompt” to start over.');
   };
 
   const handleEscapePress = () => {
@@ -135,7 +135,7 @@ function KeyboardNavigationDemo() {
             <li className="flex items-start">
               <span className="font-semibold mr-2">2.</span>
               <div>
-                <strong>Click "Analyze Prompt"</strong> to generate nodes
+                <strong>Click &ldquo;Analyze Prompt&rdquo;</strong> to generate nodes
               </div>
             </li>
             <li className="flex items-start">
@@ -176,5 +176,10 @@ function KeyboardNavigationDemo() {
 }
 
 // Mount the demo
-const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(<KeyboardNavigationDemo />);
+const mountNode = document.getElementById('root');
+
+if (mountNode) {
+  ReactDOM.createRoot(mountNode).render(<KeyboardNavigationDemo />);
+} else {
+  console.warn('KeyboardNavigationDemo: root element not found.');
+}

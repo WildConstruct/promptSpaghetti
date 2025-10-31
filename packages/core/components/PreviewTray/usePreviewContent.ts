@@ -27,20 +27,24 @@ function estimateMemoryUsage(results: PreviewResult[]): number {
 
 export function usePreviewContent({
   seeds,
-  nodes,
-  edges,
+  nodes: _nodes,
+  edges: _edges,
   enabled = true,
   onComplete,
   onError,
   maxMemoryMB = MAX_MEMORY_MB_DEFAULT
 }: UsePreviewContentOptions) {
+  void _nodes;
+  void _edges;
   const [results, setResults] = useState<PreviewResult[]>([]);
   const [isExecuting, setIsExecuting] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const execute = useCallback(async () => {
-    if (!enabled || isExecuting) return;
+    if (!enabled || isExecuting) {
+      return;
+    }
 
     try {
       setIsExecuting(true);
@@ -84,8 +88,6 @@ export function usePreviewContent({
     }
   }, [
     seeds,
-    nodes,
-    edges,
     enabled,
     onComplete,
     onError,

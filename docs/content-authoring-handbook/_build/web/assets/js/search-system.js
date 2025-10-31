@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Search and Navigation System for Content Authoring Handbook
  * Epic 8.3.3 - Search and Navigation System

@@ -213,7 +213,7 @@ export class PreviewCache {
     const key = this.generateKey(nodes, edges, seeds);
     const entry = this.cache.get(key);
 
-    if (!entry) return false;
+    if (!entry) {return false;}
 
     // Check if expired
     const age = Date.now() - entry.timestamp;
@@ -231,7 +231,7 @@ export class PreviewCache {
     const key = this.generateKey(nodes, edges, seeds);
     const entry = this.cache.get(key);
 
-    if (!entry) return null;
+    if (!entry) {return null;}
 
     return Date.now() - entry.timestamp;
   }
@@ -269,13 +269,13 @@ export class PreviewCache {
       this.cache.clear();
 
       // Reconstruct cache with proper key generation
-      parsed.entries.forEach((entry: CacheEntry) => {
+      if (parsed.entries?.length) {
         // We can't reconstruct the original key without nodes/edges
         // This is primarily for debugging/inspection
         console.warn(
           'Cache import requires nodes/edges for proper key generation'
         );
-      });
+      }
 
       this.stats = parsed.stats;
       this.maxSize = parsed.maxSize;

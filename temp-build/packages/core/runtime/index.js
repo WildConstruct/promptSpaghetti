@@ -17,7 +17,7 @@ export class WeightedChoiceNode extends RuntimeNode {
     const total = this.choices.reduce((sum, c) => sum + c.weight, 0);
     let r = seededRandom(ctx.seed) * total;
     for (const c of this.choices) {
-      if (r < c.weight) return c.value;
+      if (r < c.weight) {return c.value;}
       r -= c.weight;
     }
     return this.choices[this.choices.length - 1].value;

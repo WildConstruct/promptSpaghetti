@@ -2,13 +2,13 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 
 const LLMRequestSchema = z.object({
-  config: z.record(z.any()).optional(),
-  request: z.record(z.any())
+  config: z.record(z.unknown()).optional(),
+  request: z.record(z.unknown())
 });
 
 export async function llmRoutes(app: FastifyInstance) {
   app.post('/api/llm/complete', async (req, reply) => {
-    const parsed = LLMRequestSchema.safeParse((req as any).body);
+    const parsed = LLMRequestSchema.safeParse(req.body);
     if (!parsed.success) {
       return reply.status(400).send({ error: 'Invalid request' });
     }
@@ -27,7 +27,7 @@ export async function llmRoutes(app: FastifyInstance) {
 
   // Legacy endpoint compatibility - delegates to complete
   app.post('/api/ai/parse', async (req, reply) => {
-    const parsed = LLMRequestSchema.safeParse((req as any).body);
+    const parsed = LLMRequestSchema.safeParse(req.body);
     if (!parsed.success) {
       return reply.status(400).send({ error: 'Invalid request' });
     }
@@ -46,7 +46,7 @@ export async function llmRoutes(app: FastifyInstance) {
 
   // Legacy endpoint compatibility - delegates to complete
   app.post('/api/llm/parse', async (req, reply) => {
-    const parsed = LLMRequestSchema.safeParse((req as any).body);
+    const parsed = LLMRequestSchema.safeParse(req.body);
     if (!parsed.success) {
       return reply.status(400).send({ error: 'Invalid request' });
     }

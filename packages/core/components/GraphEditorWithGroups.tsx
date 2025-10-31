@@ -4,31 +4,61 @@
  * Shows how to integrate grouping with React Flow
  */
 
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import type { Connection, Edge, Node, NodeTypes } from 'reactflow';
 import ReactFlow, {
-  Node,
-  Edge,
-  useNodesState,
-  useEdgesState,
-  Controls,
+  addEdge,
   Background,
+  Controls,
   MiniMap,
   Panel,
-  useReactFlow,
-  NodeTypes,
-  addEdge,
-  Connection
+  useEdgesState,
+  useNodesState
 } from 'reactflow';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import 'reactflow/dist/style.css';
 
 import GroupNode from './nodes/GroupNode';
-import {
-  useGroupedNodes,
-  useGroupKeyboardShortcuts
-} from '../hooks/useGroupedNodes';
+import { useGroupedNodes, useGroupKeyboardShortcuts } from '../hooks/useGroupedNodes';
 import { usePerformance } from '../hooks/usePerformance';
 import { GroupingSlice } from '../stores/groupingSlice';
 import { NodeGroup } from '../types/groups';
+
+// Extract styles to constants for better maintainability
+const CONTAINER_STYLE = { width: '100%', height: '100%' };
+
+const STATS_PANEL_STYLE = {
+  padding: '10px',
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  borderRadius: '4px',
+  fontSize: '12px',
+  fontFamily: 'monospace'
+};
+
+const ACTIONS_PANEL_STYLE = {
+  padding: '10px',
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  borderRadius: '4px'
+};
+
+const BUTTON_STYLE = {
+  padding: '6px 12px',
+  color: 'white',
+  border: 'none',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+  marginBottom: '4px',
+  width: '100%'
+};
+
+const PERFORMANCE_PANEL_STYLE = {
+  padding: '8px',
+  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  color: '#00ff00',
+  borderRadius: '4px',
+  fontSize: '10px',
+  fontFamily: 'monospace'
+};
 
 // Define node types including our custom GroupNode
 const nodeTypes: NodeTypes = {
@@ -53,8 +83,8 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
+  const [validationMessage, setValidationMessage] = useState<string | null>(null);
   const { perfMonitor } = usePerformance();
-  const reactFlowInstance = useReactFlow();
 
   // Get grouped nodes with performance optimization
   const { groupedNodes, isCalculating, stats } = useGroupedNodes(
@@ -72,8 +102,8 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
   }, [groupedNodes, setNodes]);
 
   // Handle node selection
-  const onSelectionChange = useCallback(({ nodes: selectedNodes }) => {
-    setSelectedNodes(selectedNodes.map(n => n.id));
+  const onSelectionChange = useCallback((selection: { nodes: Node[] }) => {
+    setSelectedNodes(selection.nodes.map(node => node.id));
   }, []);
 
   // Handle edge connection
@@ -96,11 +126,13 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
 
         // Clear selection after grouping
         setSelectedNodes([]);
-
-        perfMonitor?.measureMarks('group:create:start', 'group:create:end');
       } catch (error) {
+        // TODO: Show error to user via toast or notification
+        // eslint-disable-next-line no-console
         console.error('Failed to create group:', error);
-        // Show error to user
+      } finally {
+        perfMonitor?.mark('group:create:end');
+        perfMonitor?.measureMarks('group:create:start', 'group:create:end');
       }
     },
     [groupingStore, perfMonitor]
@@ -165,19 +197,26 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
     (event: React.MouseEvent, node: Node) => {
       event.preventDefault();
 
-      // Show context menu with group options
-      // This is a simplified example - implement proper context menu
       if (selectedNodes.length > 1 && selectedNodes.includes(node.id)) {
-        if (window.confirm('Create group from selected nodes?')) {
-          handleCreateGroup(selectedNodes);
-        }
+        handleCreateGroup(selectedNodes);
       }
     },
     [selectedNodes, handleCreateGroup]
   );
 
+  const handleValidateHierarchy = useCallback(async () => {
+    const validation = await groupingStore.validateHierarchy();
+    if (!validation.valid) {
+      setValidationMessage(
+        `Hierarchy validation failed:\n${validation.errors.join('\n')}`
+      );
+      return;
+    }
+    setValidationMessage('Hierarchy is valid!');
+  }, [groupingStore]);
+
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div style={CONTAINER_STYLE}>
       <ReactFlow
         nodes={nodesWithCallbacks}
         edges={edges}
@@ -195,15 +234,7 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
 
         {/* Group Statistics Panel */}
         <Panel position="top-left">
-          <div
-            style={{
-              padding: '10px',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              borderRadius: '4px',
-              fontSize: '12px',
-              fontFamily: 'monospace'
-            }}
-          >
+          <div style={STATS_PANEL_STYLE}>
             <div>Total Nodes: {stats.totalNodes}</div>
             <div>Visible Nodes: {stats.visibleNodes}</div>
             <div>Groups: {stats.totalGroups}</div>
@@ -217,13 +248,7 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
 
         {/* Group Actions Panel */}
         <Panel position="top-right">
-          <div
-            style={{
-              padding: '10px',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              borderRadius: '4px'
-            }}
-          >
+          <div style={ACTIONS_PANEL_STYLE}>
             <button
               onClick={() => {
                 if (selectedNodes.length > 1) {
@@ -232,42 +257,19 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
               }}
               disabled={selectedNodes.length < 2}
               style={{
-                padding: '6px 12px',
+                ...BUTTON_STYLE,
                 backgroundColor: selectedNodes.length > 1 ? '#1a73e8' : '#ccc',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: selectedNodes.length > 1 ? 'pointer' : 'not-allowed',
-                fontSize: '12px',
-                marginBottom: '4px',
-                width: '100%'
+                cursor: selectedNodes.length > 1 ? 'pointer' : 'not-allowed'
               }}
             >
               Group Selected ({selectedNodes.length})
             </button>
 
             <button
-              onClick={async () => {
-                // Validate hierarchy
-                const validation = await groupingStore.validateHierarchy();
-                if (!validation.valid) {
-                  alert(
-                    `Hierarchy validation failed:\n${validation.errors.join('\n')}`
-                  );
-                } else {
-                  alert('Hierarchy is valid!');
-                }
-              }}
+              onClick={handleValidateHierarchy}
               style={{
-                padding: '6px 12px',
-                backgroundColor: '#4CAF50',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '12px',
-                marginBottom: '4px',
-                width: '100%'
+                ...BUTTON_STYLE,
+                backgroundColor: '#4CAF50'
               }}
             >
               Validate Hierarchy
@@ -276,34 +278,35 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
             <button
               onClick={() => groupingStore.invalidateCaches()}
               style={{
-                padding: '6px 12px',
+                ...BUTTON_STYLE,
                 backgroundColor: '#ff9800',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '12px',
-                width: '100%'
+                marginBottom: 0
               }}
             >
               Clear Cache
             </button>
+
+            {validationMessage && (
+              <div
+                style={{
+                  marginTop: '8px',
+                  fontSize: '11px',
+                  whiteSpace: 'pre-wrap',
+                  color: validationMessage.startsWith('Hierarchy is valid')
+                    ? '#0f9d58'
+                    : '#d93025'
+                }}
+              >
+                {validationMessage}
+              </div>
+            )}
           </div>
         </Panel>
 
         {/* Performance Metrics (if available) */}
         {groupingStore.performanceMetrics.lastOperationTime > 0 && (
           <Panel position="bottom-right">
-            <div
-              style={{
-                padding: '8px',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                color: '#00ff00',
-                borderRadius: '4px',
-                fontSize: '10px',
-                fontFamily: 'monospace'
-              }}
-            >
+            <div style={PERFORMANCE_PANEL_STYLE}>
               Last Op:{' '}
               {groupingStore.performanceMetrics.lastOperationTime.toFixed(0)}ms
             </div>

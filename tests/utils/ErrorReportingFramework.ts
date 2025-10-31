@@ -279,7 +279,7 @@ export class EnhancedErrorReporter {
   }
 
   reportTestResult(feedback: TestFeedback): void {
-    if (!this.reportingEnabled) return;
+    if (!this.reportingEnabled) {return;}
 
     const reportPath = join(
       this.outputDirectory,
@@ -414,7 +414,7 @@ export class EnhancedErrorReporter {
     const previousCount =
       this.getErrorCountInTimeframe(previousTimeframe) - currentCount;
 
-    if (previousCount === 0) return currentCount > 0 ? 100 : 0;
+    if (previousCount === 0) {return currentCount > 0 ? 100 : 0;}
     return ((currentCount - previousCount) / previousCount) * 100;
   }
 
@@ -424,20 +424,20 @@ export class EnhancedErrorReporter {
   }
 
   getReports(filter?: Partial<ErrorDetails>): ErrorReport[] {
-    if (!filter) return [...this.reports];
+    if (!filter) {return [...this.reports];}
 
     return this.reports.filter(report => {
-      if (filter.type && report.error.type !== filter.type) return false;
+      if (filter.type && report.error.type !== filter.type) {return false;}
       if (filter.severity && report.error.severity !== filter.severity)
-        return false;
-      if (filter.code && report.error.code !== filter.code) return false;
+        {return false;}
+      if (filter.code && report.error.code !== filter.code) {return false;}
       return true;
     });
   }
 
   markResolved(reportId: string, resolution: string): boolean {
     const report = this.reports.find(r => r.id === reportId);
-    if (!report) return false;
+    if (!report) {return false;}
 
     report.resolution = resolution;
     this.saveReport(report);
@@ -568,7 +568,7 @@ export class EnhancedErrorReporter {
   static expectNoErrors(testSuite: string): void {
     const reporter = (global as Record<string, unknown>)
       .__errorReporter as EnhancedErrorReporter;
-    if (!reporter) return;
+    if (!reporter) {return;}
 
     const errors = reporter
       .getReports()

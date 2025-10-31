@@ -25,7 +25,7 @@ export class MockContextFactory {
      * Create a mock AdvancedExecutionContext for testing
      */
     static create(config = {}) {
-        const { seed = 'test-seed', variables = {}, nodeStates = {}, maxDepth = 10, trackPerformance = true } = config;
+        const { seed = 'test-seed', variables = {}, nodeStates = {}, trackPerformance = true } = config;
         const prng = seedrandom(seed);
         const stateMap = new Map(Object.entries(nodeStates));
         return {

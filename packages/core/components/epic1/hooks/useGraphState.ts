@@ -1,10 +1,12 @@
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Node,
   Edge,
   useNodesState,
   useEdgesState,
   Connection,
+  NodeChange,
+  EdgeChange,
   addEdge
 } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
@@ -32,7 +34,7 @@ export function useGraphState({
 
   // Custom node change handler to optimize performance during dragging
   const onNodesChange = useCallback(
-    (changes: any[]) => {
+    (changes: NodeChange<EditableNodeData>[]) => {
       const hasDraggingChange = changes.some(
         change => change.type === 'position' && change.dragging === true
       );
@@ -54,7 +56,7 @@ export function useGraphState({
 
   // Custom edges change handler
   const onEdgesChange = useCallback(
-    (changes: any[]) => {
+    (changes: EdgeChange[]) => {
       onEdgesChangeBase(changes);
     },
     [onEdgesChangeBase]
@@ -156,7 +158,7 @@ export function useGraphState({
 
   // Handle canvas click to deselect all
   const handlePaneClick = useCallback(
-    (event: React.MouseEvent) => {
+    () => {
       if (!isSelecting) {
         setNodes(nds => nds.map(n => ({ ...n, selected: false })));
         setEdges(eds => eds.map(e => ({ ...e, selected: false })));
@@ -166,6 +168,14 @@ export function useGraphState({
     },
     [setNodes, setEdges, isSelecting]
   );
+
+  useEffect(() => {
+    onNodesChangeProp?.(nodes);
+  }, [nodes, onNodesChangeProp]);
+
+  useEffect(() => {
+    onEdgesChangeProp?.(edges);
+  }, [edges, onEdgesChangeProp]);
 
   return {
     nodes,

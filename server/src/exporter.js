@@ -433,10 +433,10 @@ function extractSceneData(graph) {
         for (const keyword of timeKeywords) {
           if (stringValue.includes(keyword)) {
             if (keyword === 'golden')
-              sceneData.lighting.timeOfDay = 'golden-hour';
+              {sceneData.lighting.timeOfDay = 'golden-hour';}
             else if (keyword === 'blue')
-              sceneData.lighting.timeOfDay = 'blue-hour';
-            else sceneData.lighting.timeOfDay = keyword;
+              {sceneData.lighting.timeOfDay = 'blue-hour';}
+            else {sceneData.lighting.timeOfDay = keyword;}
             break;
           }
         }
@@ -508,7 +508,7 @@ function extractSceneData(graph) {
       }
       // Props
       if (key.includes('prop') && typeof value === 'string') {
-        if (!sceneData.environment.props) sceneData.environment.props = [];
+        if (!sceneData.environment.props) {sceneData.environment.props = [];}
         sceneData.environment.props.push(value);
       }
     }
@@ -518,20 +518,20 @@ function extractSceneData(graph) {
     // Camera movement hints
     if (nodeId.includes('pan') || nodeContent.includes('pan')) {
       if (!sceneData.camera.movement)
-        sceneData.camera.movement = {
+        {sceneData.camera.movement = {
           type: 'static',
           speed: 'medium',
           smoothness: 0.8
-        };
+        };}
       sceneData.camera.movement.type = 'pan';
     }
     if (nodeId.includes('dolly') || nodeContent.includes('dolly')) {
       if (!sceneData.camera.movement)
-        sceneData.camera.movement = {
+        {sceneData.camera.movement = {
           type: 'static',
           speed: 'medium',
           smoothness: 0.8
-        };
+        };}
       sceneData.camera.movement.type = 'dolly';
     }
     // Lighting hints from node content
@@ -651,10 +651,8 @@ export function graphToBundle(graph, options) {
   // Find all variable declarations in the graph
   const variables = {};
   const outputNodes = [];
-  const nodeMap = new Map();
   // First pass - catalog all nodes and extract variables
   graph.nodes.forEach(node => {
-    nodeMap.set(node.id, node);
     if (node.type === 'SetVariable') {
       variables[node.key] = node.value;
     }
@@ -667,7 +665,7 @@ export function graphToBundle(graph, options) {
   // Create grammar rules for each node
   graph.nodes.forEach(node => {
     const ruleId = node.id;
-    bundle.grammar[ruleId] = convertNodeToRule(node, nodeMap);
+    bundle.grammar[ruleId] = convertNodeToRule(node);
   });
   // Set the default entry point to the first output node
   if (outputNodes.length > 0) {
@@ -711,30 +709,30 @@ export function validateVFXCompatibility(graph) {
     node =>
       node.type === 'SetVariable' && node.key?.toLowerCase().includes('camera')
   );
-  if (hasCameraVars) features.push('Camera controls detected');
+  if (hasCameraVars) {features.push('Camera controls detected');}
   else
-    recommendations.push('Add camera position/angle variables for 3D scenes');
+    {recommendations.push('Add camera position/angle variables for 3D scenes');}
   // Check for animation sequences
   const hasAnimation = graph.nodes.some(
     node =>
       node.type === 'Sequential' && node.sequence && node.sequence.length > 1
   );
-  if (hasAnimation) features.push('Animation sequence support');
-  else recommendations.push('Use Sequential nodes for multi-frame animations');
+  if (hasAnimation) {features.push('Animation sequence support');}
+  else {recommendations.push('Use Sequential nodes for multi-frame animations');}
   // Check for depth/3D hints
   const hasDepthHints = graph.nodes.some(
     node =>
       node.id.toLowerCase().includes('depth') ||
       node.id.toLowerCase().includes('3d')
   );
-  if (hasDepthHints) features.push('Depth processing hints');
+  if (hasDepthHints) {features.push('Depth processing hints');}
   // Check for edge detection hints
   const hasEdgeHints = graph.nodes.some(
     node =>
       node.id.toLowerCase().includes('edge') ||
       node.id.toLowerCase().includes('canny')
   );
-  if (hasEdgeHints) features.push('Edge detection support');
+  if (hasEdgeHints) {features.push('Edge detection support');}
   // Epic 8.6 Task 3: Check for scene data variables
   const hasSceneVars = graph.nodes.some(
     node =>
@@ -747,11 +745,11 @@ export function validateVFXCompatibility(graph) {
         node.key.toLowerCase().includes('mood'))
   );
   if (hasSceneVars)
-    features.push('Scene data variables (camera, lighting, environment)');
+    {features.push('Scene data variables (camera, lighting, environment)');}
   else
-    recommendations.push(
+    {recommendations.push(
       'Add scene variables (camera_x, lighting_mood, weather_clear) for cinematic control'
-    );
+    );}
   // Check for camera position controls
   const hasCameraControls = graph.nodes.some(
     node =>
@@ -761,7 +759,7 @@ export function validateVFXCompatibility(graph) {
         node.key.toLowerCase().includes('angle') ||
         node.key.toLowerCase().includes('distance'))
   );
-  if (hasCameraControls) features.push('Camera position and angle controls');
+  if (hasCameraControls) {features.push('Camera position and angle controls');}
   const compatible = features.length >= 1; // Need at least one VFX feature
   if (!compatible) {
     recommendations.push(
@@ -787,25 +785,25 @@ export function generateScenePromptFlow(sceneData) {
   };
   // Camera prompt generation
   if (sceneData.camera) {
-    const { position, angle, distance, lens, movement } = sceneData.camera;
+    const { angle, distance, lens, movement } = sceneData.camera;
     // Distance and framing
-    if (distance < 2) prompts.cameraPrompt += 'extreme close-up, ';
-    else if (distance < 5) prompts.cameraPrompt += 'close-up shot, ';
-    else if (distance < 10) prompts.cameraPrompt += 'medium shot, ';
-    else if (distance < 20) prompts.cameraPrompt += 'wide shot, ';
-    else prompts.cameraPrompt += 'very wide shot, ';
+    if (distance < 2) {prompts.cameraPrompt += 'extreme close-up, ';}
+    else if (distance < 5) {prompts.cameraPrompt += 'close-up shot, ';}
+    else if (distance < 10) {prompts.cameraPrompt += 'medium shot, ';}
+    else if (distance < 20) {prompts.cameraPrompt += 'wide shot, ';}
+    else {prompts.cameraPrompt += 'very wide shot, ';}
     // Camera angles
-    if (angle.pitch > 30) prompts.cameraPrompt += 'high angle, ';
-    else if (angle.pitch < -30) prompts.cameraPrompt += 'low angle, ';
-    else prompts.cameraPrompt += 'eye level, ';
+    if (angle.pitch > 30) {prompts.cameraPrompt += 'high angle, ';}
+    else if (angle.pitch < -30) {prompts.cameraPrompt += 'low angle, ';}
+    else {prompts.cameraPrompt += 'eye level, ';}
     // Lens characteristics
     if (lens?.focalLength) {
-      if (lens.focalLength < 35) prompts.cameraPrompt += 'wide angle lens, ';
+      if (lens.focalLength < 35) {prompts.cameraPrompt += 'wide angle lens, ';}
       else if (lens.focalLength > 85)
-        prompts.cameraPrompt += 'telephoto lens, ';
+        {prompts.cameraPrompt += 'telephoto lens, ';}
       if (lens.aperture < 2.8)
-        prompts.cameraPrompt += 'shallow depth of field, ';
-      else if (lens.aperture > 8) prompts.cameraPrompt += 'deep focus, ';
+        {prompts.cameraPrompt += 'shallow depth of field, ';}
+      else if (lens.aperture > 8) {prompts.cameraPrompt += 'deep focus, ';}
     }
     // Camera movement
     if (movement?.type && movement.type !== 'static') {
@@ -817,15 +815,15 @@ export function generateScenePromptFlow(sceneData) {
     const { timeOfDay, weather, mood, keyLight } = sceneData.lighting;
     // Time and weather
     prompts.lightingPrompt += `${timeOfDay.replace('-', ' ')} lighting, `;
-    if (weather !== 'clear') prompts.lightingPrompt += `${weather} weather, `;
+    if (weather !== 'clear') {prompts.lightingPrompt += `${weather} weather, `;}
     // Mood
     prompts.lightingPrompt += `${mood} lighting mood, `;
     // Technical lighting
     if (keyLight?.intensity) {
       if (keyLight.intensity > 80)
-        prompts.lightingPrompt += 'strong key light, ';
+        {prompts.lightingPrompt += 'strong key light, ';}
       else if (keyLight.intensity < 40)
-        prompts.lightingPrompt += 'soft key light, ';
+        {prompts.lightingPrompt += 'soft key light, ';}
     }
   }
   // Environment prompt generation
@@ -842,9 +840,9 @@ export function generateScenePromptFlow(sceneData) {
     prompts.environmentPrompt += `${atmosphere} atmosphere, `;
     // Depth layers
     if (depth?.foreground)
-      prompts.environmentPrompt += `${depth.foreground} in foreground, `;
+      {prompts.environmentPrompt += `${depth.foreground} in foreground, `;}
     if (depth?.background)
-      prompts.environmentPrompt += `${depth.background} in background, `;
+      {prompts.environmentPrompt += `${depth.background} in background, `;}
     // Props
     if (props.length > 0) {
       prompts.environmentPrompt += `featuring ${props.join(', ')}, `;
@@ -886,7 +884,7 @@ export function graphToSceneAwareBundle(graph, options) {
 /**
  * Convert a node to its corresponding grammar rule in the GeneratorBundle format
  */
-function convertNodeToRule(node, nodeMap) {
+function convertNodeToRule(node) {
   switch (node.type) {
     case 'WeightedChoice':
       // Convert to weighted array rule
@@ -933,6 +931,7 @@ export function validateGeneratorBundle(bundle) {
     GeneratorBundleSchema.parse(bundle);
     return true;
   } catch (error) {
+    console.warn('GeneratorBundle validation failed:', error);
     return false;
   }
 }
@@ -967,7 +966,7 @@ export function bundleToGraph(bundle) {
   // Process grammar rules
   Object.entries(bundle.grammar).forEach(([ruleId, rule]) => {
     // Skip if we already created this node (from variables)
-    if (createdNodeIds.has(ruleId)) return;
+    if (createdNodeIds.has(ruleId)) {return;}
     const node = convertRuleToNode(ruleId, rule);
     if (node) {
       graph.nodes.push(node);
@@ -1093,7 +1092,7 @@ function findNodeReferences(rule) {
     typeof rule === 'object' &&
     rule.type === 'modifier_chain'
   ) {
-    if (rule.base) refs.push(rule.base);
+    if (rule.base) {refs.push(rule.base);}
   }
   return refs;
 }
@@ -1133,30 +1132,30 @@ function ensureOutputNode(graph, entryPointId) {
   }
 }
 export async function exportResults(request) {
-  const { format, data, options, filename } = request;
+  const { format, data, options } = request;
   switch (format) {
     case 'fountain':
       return exportFountainScript(data, options);
     case 'final-draft':
       return exportFinalDraftScript(data, options);
     case 'controlnet-json':
-      return exportControlNetJSON(data, options);
+      return exportControlNetJSON(data);
     case 'stable-diffusion':
       return exportStableDiffusionBundle(data, options);
     case 'scene-data':
-      return exportSceneData(data, options);
+      return exportSceneData(data);
     case 'csv-analysis':
-      return exportCSVAnalysis(data, options);
+      return exportCSVAnalysis(data);
     case 'json-complete':
       return exportCompleteJSON(data, options);
     case 'professional-report':
-      return exportProfessionalReport(data, options);
+      return exportProfessionalReport(data);
     case 'creative-brief':
-      return exportCreativeBrief(data, options);
+      return exportCreativeBrief(data);
     case 'hybrid-prompting':
       return exportHybridPrompting(data, options);
     case 'mars-framework':
-      return exportMARSFramework(data, options);
+      return exportMARSFramework(data);
     case 'zada-natural':
       return exportZadaNaturalLanguage(data, options);
     case 'shared-graph':
@@ -1229,7 +1228,7 @@ function exportFinalDraftScript(data, options) {
   };
 }
 // ControlNet JSON Export
-function exportControlNetJSON(data, options) {
+function exportControlNetJSON(data) {
   const { results, vfxData } = data;
   const controlNetData = {
     version: '1.0.0',
@@ -1294,7 +1293,7 @@ function exportStableDiffusionBundle(data, options) {
   };
 }
 // Scene Data Export
-function exportSceneData(data, options) {
+function exportSceneData(data) {
   const sceneData = {
     version: '1.0.0',
     format: 'scene-data',
@@ -1323,7 +1322,7 @@ function exportSceneData(data, options) {
   };
 }
 // CSV Analysis Export
-function exportCSVAnalysis(data, options) {
+function exportCSVAnalysis(data) {
   let csvContent =
     'Seed,Output,Word Count,Character Count,Execution Time (ms)\n';
   data.results.forEach(result => {
@@ -1356,7 +1355,7 @@ function exportCompleteJSON(data, options) {
   };
 }
 // Professional Report Export (would generate PDF in real implementation)
-function exportProfessionalReport(data, options) {
+function exportProfessionalReport(data) {
   // For now, return structured data that client can format
   const reportData = {
     type: 'professional-report',
@@ -1393,7 +1392,7 @@ function exportProfessionalReport(data, options) {
   };
 }
 // Creative Brief Export (would generate DOCX in real implementation)
-function exportCreativeBrief(data, options) {
+function exportCreativeBrief(data) {
   const briefData = {
     type: 'creative-brief',
     title: 'Creative Brief - Generated Content',
@@ -1457,6 +1456,7 @@ async function exportHybridPrompting(data, options) {
       shouldDownload: true
     };
   } catch (error) {
+    console.error('Hybrid prompt export failed, using fallback:', error);
     // Fallback to basic hybrid structure
     const fallbackData = {
       metadata: {
@@ -1511,7 +1511,7 @@ async function exportHybridPrompting(data, options) {
 /**
  * Epic 8.6 Task 7: MARS Framework Export - VFX Professional Format
  */
-async function exportMARSFramework(data, options) {
+async function exportMARSFramework(data) {
   const hybridService = new HybridPromptExportService();
   try {
     const graph = {
@@ -1603,6 +1603,7 @@ async function exportMARSFramework(data, options) {
       shouldDownload: true
     };
   } catch (error) {
+    console.error('MARS framework export failed, using fallback:', error);
     // Fallback MARS format
     const fallbackMARS = {
       format: 'MARS-VFX-Framework-v1.0-fallback',
@@ -1733,6 +1734,7 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
       };
     }
   } catch (error) {
+    console.error('Zada export failed, using fallback:', error);
     // Fallback Zada format
     const originalPrompt = data.results?.[0]?.output || '';
     const fallbackZada = {
@@ -1817,6 +1819,7 @@ async function exportSharedGraph(data, options) {
       filename: `shared-graph-${sharedGraph.metadata.exportId}.json`
     };
   } catch (error) {
+    console.error('Shared graph export failed, using fallback:', error);
     // Fallback shared format
     const fallbackSharedGraph = {
       metadata: {
@@ -1941,6 +1944,7 @@ async function exportCollaborationFormat(data, options) {
       filename: `collaboration-${sharedGraph.metadata.exportId}.json`
     };
   } catch (error) {
+    console.error('Collaboration export failed, using fallback:', error);
     // Fallback collaboration format
     const fallbackFormat = {
       metadata: {

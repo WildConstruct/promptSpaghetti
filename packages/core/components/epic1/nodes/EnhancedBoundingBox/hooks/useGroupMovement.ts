@@ -26,6 +26,7 @@ export function useGroupMovement(
   useEffect(() => {
     if (!isLocked || !isDragging) {
       isMovingRef.current = false;
+      previousPositionRef.current = currentPosition;
       return;
     }
 
@@ -68,13 +69,11 @@ export function useGroupMovement(
     // Update previous position for next frame
     previousPositionRef.current = currentPosition;
   }, [
-    currentPosition.x,
-    currentPosition.y,
+    currentPosition,
     isLocked,
     isDragging,
     containedNodes,
     setNodes,
-    boxId,
     perfMonitor
   ]);
 
@@ -83,7 +82,7 @@ export function useGroupMovement(
    */
   const handleGroupMove = useCallback(
     (deltaX: number, deltaY: number) => {
-      if (!isLocked || containedNodes.length === 0) return;
+      if (!isLocked || containedNodes.length === 0) {return;}
 
       const start = performance.now();
       const nodeIdsToMove = new Set(containedNodes.map(n => n.id));

@@ -126,7 +126,7 @@ const server = http.createServer((req, res) => {
   }
 
   // Serve static files
-  let filePath = path.join(
+  const filePath = path.join(
     __dirname,
     pathname === '/' ? 'complete-dashboard.html' : pathname
   );

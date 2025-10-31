@@ -41,11 +41,14 @@ export const SmartTooltip: React.FC<SmartTooltipProps> = ({
   });
 
   useEffect(() => {
-    if (!visible || !target || !tooltipRef.current) return;
+    if (!visible || !target || !tooltipRef.current) {return;}
 
     const calculatePosition = () => {
+      const tooltipNode = tooltipRef.current;
+      if (!tooltipNode) {return;}
+
       const targetRect = target.getBoundingClientRect();
-      const tooltipRect = tooltipRef.current!.getBoundingClientRect();
+      const tooltipRect = tooltipNode.getBoundingClientRect();
       
       // Calculate available space in each direction
       const space = {
@@ -101,13 +104,11 @@ export const SmartTooltip: React.FC<SmartTooltipProps> = ({
       const margin = 8;
       
       if (left < margin) {
-        const shift = margin - left;
         left = margin;
         if (arrowPosition === 'top' || arrowPosition === 'bottom') {
           arrowOffset = Math.max(20, Math.min(80, ((targetRect.left + targetRect.width / 2 - margin) / tooltipRect.width) * 100));
         }
       } else if (left + tooltipRect.width > window.innerWidth - margin) {
-        const shift = left + tooltipRect.width - (window.innerWidth - margin);
         left = window.innerWidth - tooltipRect.width - margin;
         if (arrowPosition === 'top' || arrowPosition === 'bottom') {
           arrowOffset = Math.max(20, Math.min(80, ((targetRect.left + targetRect.width / 2 - left) / tooltipRect.width) * 100));
@@ -115,13 +116,11 @@ export const SmartTooltip: React.FC<SmartTooltipProps> = ({
       }
 
       if (top < margin) {
-        const shift = margin - top;
         top = margin;
         if (arrowPosition === 'left' || arrowPosition === 'right') {
           arrowOffset = Math.max(20, Math.min(80, ((targetRect.top + targetRect.height / 2 - margin) / tooltipRect.height) * 100));
         }
       } else if (top + tooltipRect.height > window.innerHeight - margin) {
-        const shift = top + tooltipRect.height - (window.innerHeight - margin);
         top = window.innerHeight - tooltipRect.height - margin;
         if (arrowPosition === 'left' || arrowPosition === 'right') {
           arrowOffset = Math.max(20, Math.min(80, ((targetRect.top + targetRect.height / 2 - top) / tooltipRect.height) * 100));
@@ -135,17 +134,16 @@ export const SmartTooltip: React.FC<SmartTooltipProps> = ({
     calculatePosition();
 
     // Recalculate on window resize or scroll
-    const handleReposition = () => calculatePosition();
-    window.addEventListener('resize', handleReposition);
-    window.addEventListener('scroll', handleReposition, true);
+    window.addEventListener('resize', calculatePosition);
+    window.addEventListener('scroll', calculatePosition, true);
 
     return () => {
-      window.removeEventListener('resize', handleReposition);
-      window.removeEventListener('scroll', handleReposition, true);
+      window.removeEventListener('resize', calculatePosition);
+      window.removeEventListener('scroll', calculatePosition, true);
     };
   }, [visible, target, position, offset]);
 
-  if (!visible || !target) return null;
+  if (!visible || !target) {return null;}
 
   const getArrowStyles = (): React.CSSProperties => {
     const size = 8;
@@ -201,6 +199,8 @@ export const SmartTooltip: React.FC<SmartTooltipProps> = ({
           filter: `drop-shadow(-2px 0 2px ${shadowColor})`,
         };
     }
+
+    return baseStyles;
   };
 
   return (
@@ -251,10 +251,10 @@ export const TooltipWrapper: React.FC<{
 }) => {
   const [visible, setVisible] = useState(false);
   const [target, setTarget] = useState<HTMLElement | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
-    if (disabled) return;
+    if (disabled) {return;}
     
     setTarget(e.currentTarget);
     clearTimeout(timeoutRef.current);

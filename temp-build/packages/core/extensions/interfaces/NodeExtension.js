@@ -46,9 +46,9 @@ export var NodeExtensionHelpers;
     const errors = [];
     const warnings = [];
     // Basic validation
-    if (!definition.id) errors.push('Node ID is required');
-    if (!definition.name) errors.push('Node name is required');
-    if (!definition.nodeClass) errors.push('Node class is required');
+    if (!definition.id) {errors.push('Node ID is required');}
+    if (!definition.name) {errors.push('Node name is required');}
+    if (!definition.nodeClass) {errors.push('Node class is required');}
     // Schema validation
     try {
       definition.configSchema.parse({});

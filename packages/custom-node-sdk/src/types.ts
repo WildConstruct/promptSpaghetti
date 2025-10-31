@@ -61,14 +61,14 @@ export interface NodeIOSchema {
       type: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
       required: boolean;
       description?: string;
-      default?: any;
+      default?: unknown;
       validation?: {
         minLength?: number;
         maxLength?: number;
         pattern?: string;
         min?: number;
         max?: number;
-        enum?: any[];
+        enum?: unknown[];
       };
     }
   >;
@@ -91,7 +91,7 @@ export interface CustomNodeConfig extends AdvancedNodeConfig {
   /** Input/Output schema */
   schema: NodeIOSchema;
   /** Custom configuration options */
-  customOptions?: Record<string, any>;
+  customOptions?: Record<string, unknown>;
   /** Security settings */
   security?: {
     /** Whether this node can access the file system */
@@ -134,7 +134,7 @@ export interface CustomNodeRuntime {
   /** Node execution context */
   context: AdvancedExecutionContext;
   /** Input values (validated against schema) */
-  inputs: Record<string, any>;
+  inputs: Record<string, unknown>;
   /** Utility functions */
   utils: {
     /** Generate a deterministic random number */
@@ -143,21 +143,21 @@ export interface CustomNodeRuntime {
     log: (
       level: 'debug' | 'info' | 'warn' | 'error',
       message: string,
-      data?: any
+      data?: unknown
     ) => void;
     /** Validate data against a schema */
-    validate: (data: any, schema: any) => ValidationResult;
+    validate: (data: unknown, schema: unknown) => ValidationResult;
     /** Access node state (for stateful nodes) */
-    getState: <T = any>() => T | undefined;
+    getState: <T = unknown>() => T | undefined;
     /** Update node state (for stateful nodes) */
-    setState: <T = any>(state: T) => void;
+    setState: <T = unknown>(state: T) => void;
   };
 }
 
 /**
  * Result returned by custom node execution
  */
-export interface CustomNodeResult<T = any> {
+export interface CustomNodeResult<T = unknown> {
   /** Output values */
   outputs: Record<string, T>;
   /** Optional metadata about the execution */
@@ -170,7 +170,7 @@ export interface CustomNodeResult<T = any> {
     metrics?: Record<string, number>;
   };
   /** Optional debug information */
-  debug?: any;
+  debug?: unknown;
 }
 
 /**
@@ -239,7 +239,7 @@ export interface AdvancedCustomNode extends CustomNodeBase {
   /** Handle dynamic input changes */
   onInputChanged?(
     inputName: string,
-    newValue: any,
+    newValue: unknown,
     runtime: CustomNodeRuntime
   ): Promise<void> | void;
 
@@ -247,10 +247,10 @@ export interface AdvancedCustomNode extends CustomNodeBase {
   onConfigChanged?(newConfig: Partial<CustomNodeConfig>): Promise<void> | void;
 
   /** Provide dynamic validation based on current inputs */
-  validateDynamic?(inputs: Record<string, any>): ValidationResult;
+  validateDynamic?(inputs: Record<string, unknown>): ValidationResult;
 
   /** Provide suggestions for input values */
-  getSuggestions?(inputName: string, partialValue: any): Promise<any[]> | any[];
+  getSuggestions?(inputName: string, partialValue: unknown): Promise<unknown[]> | unknown[];
 }
 
 /**

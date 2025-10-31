@@ -144,7 +144,7 @@ async function testUnifiedInfrastructure() {
       '\n🎉 All automation infrastructure components are functioning correctly!'
     );
   } catch (error) {
-    const errorReport = logger.handleError(error, {
+    logger.handleError(error, {
       testPhase: 'unified-infrastructure-test'
     });
 

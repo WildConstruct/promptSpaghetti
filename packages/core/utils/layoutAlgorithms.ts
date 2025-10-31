@@ -5,7 +5,8 @@
 
 import * as dagre from 'dagre';
 import * as d3 from 'd3-force';
-import type { Node, Edge } from 'reactflow';
+import type { Edge, Node } from 'reactflow';
+
 import { hasMeasuredDimensions } from '../components/epic1/nodes/nodePropTypes';
 
 export type LayoutAlgorithm = 'dagre' | 'force' | 'grid';
@@ -43,7 +44,7 @@ export function applyDagreLayout(
     return [];
   }
 
-  let {
+  const {
     direction = 'LR',
     nodeSpacing = 150, // Increased default spacing
     rankSpacing = 200 // Increased default spacing
@@ -111,12 +112,14 @@ export function applyDagreLayout(
             // Add edge with empty label object
             g.setEdge(edge.source, edge.target, {});
           } catch (e) {
+            // eslint-disable-next-line no-console
             console.warn(
               `Failed to add edge ${edge.source} -> ${edge.target}:`,
               e
             );
           }
         } else if (edge) {
+          // eslint-disable-next-line no-console
           console.warn(
             `Skipping edge ${edge.source} -> ${edge.target}: nodes not in graph`
           );
@@ -125,6 +128,7 @@ export function applyDagreLayout(
     }
 
     // Log graph structure for debugging
+    // eslint-disable-next-line no-console
     console.log(
       `[Dagre] Layout graph with ${g.nodeCount()} nodes and ${g.edgeCount()} edges`
     );
@@ -134,7 +138,9 @@ export function applyDagreLayout(
 
     // Apply the calculated positions to nodes
     return nodes.map(node => {
-      if (!node || !node.id) return node;
+      if (!node || !node.id) {
+        return node;
+      }
 
       try {
         const nodeWithPosition = g.node(node.id);
@@ -167,6 +173,7 @@ export function applyDagreLayout(
           }
         };
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.warn(`Failed to get layout for node ${node.id}:`, e);
         return {
           ...node,
@@ -175,6 +182,7 @@ export function applyDagreLayout(
       }
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Dagre layout failed:', error);
     // Fallback to grid layout
     return applyGridLayout(nodes, { x: 100, y: 100 }, options);
@@ -217,12 +225,12 @@ export function applyForceLayout(
 
     // Create force simulation
     const simulation = d3
-      .forceSimulation(simulationNodes as any)
+      .forceSimulation(simulationNodes as d3.SimulationNodeDatum)
       .force(
         'link',
         d3
           .forceLink(simulationLinks)
-          .id((d: any) => d.id)
+          .id((d: d3.SimulationNodeDatum) => d.id as string)
           .distance(150)
       )
       .force('charge', d3.forceManyBody().strength(-500))
@@ -234,10 +242,10 @@ export function applyForceLayout(
     simulation.tick(300);
 
     // Apply calculated positions
-    return simulationNodes.map((simNode: any) => {
+    return simulationNodes.map((simNode: d3.SimulationNodeDatum) => {
       const originalNode = nodes.find(n => n.id === simNode.id);
       if (!originalNode) {
-        return simNode;
+        return simNode as Node;
       }
       return {
         ...originalNode,
@@ -248,6 +256,7 @@ export function applyForceLayout(
       };
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Force layout failed:', error);
     // Fallback to grid layout
     return applyGridLayout(nodes, { x: 100, y: 100 }, options);
@@ -344,15 +353,16 @@ function checkIfHierarchical(nodes: Node[], edges: Edge[]): boolean {
   // Count nodes that are clearly sources, sinks, or intermediate
   let sources = 0;
   let sinks = 0;
-  let intermediate = 0;
 
   nodes.forEach(node => {
     const inCount = inDegree.get(node.id) || 0;
     const outCount = outDegree.get(node.id) || 0;
 
-    if (inCount === 0 && outCount > 0) sources++;
-    else if (inCount > 0 && outCount === 0) sinks++;
-    else if (inCount > 0 && outCount > 0) intermediate++;
+    if (inCount === 0 && outCount > 0) {
+      sources++;
+    } else if (inCount > 0 && outCount === 0) {
+      sinks++;
+    }
   });
 
   // If we have clear sources and sinks, it's likely hierarchical

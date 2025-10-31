@@ -32,7 +32,7 @@ function parseEpicPlan(filePath) {
 
   let currentStory = null;
   let tasks = [];
-  let stories = [];
+  const stories = [];
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();

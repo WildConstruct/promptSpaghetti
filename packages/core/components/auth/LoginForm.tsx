@@ -3,6 +3,7 @@
  */
 
 import React, { useState, FormEvent } from 'react';
+import type { User } from '@supabase/supabase-js';
 import {
   useEmailValidation,
   usePasswordValidation,
@@ -12,7 +13,7 @@ import { FormField } from '../shared/FormField';
 import { supabase } from '../../utils/supabaseClient';
 
 interface LoginFormProps {
-  onSuccess: (user: any) => void;
+  onSuccess: (user: User) => void;
   onForgotPassword: () => void;
 }
 

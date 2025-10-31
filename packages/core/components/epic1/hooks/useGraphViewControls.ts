@@ -25,7 +25,7 @@ export function useGraphViewControls(
 
   // Zoom controls
   const zoomIn = useCallback(() => {
-    if (!reactFlowInstance) return;
+    if (!reactFlowInstance) {return;}
     const currentZoom = reactFlowInstance.getZoom();
     const newZoom = Math.min(currentZoom * 1.2, maxZoom);
     reactFlowInstance.zoomTo(newZoom);
@@ -33,7 +33,7 @@ export function useGraphViewControls(
   }, [reactFlowInstance, maxZoom, showToast]);
 
   const zoomOut = useCallback(() => {
-    if (!reactFlowInstance) return;
+    if (!reactFlowInstance) {return;}
     const currentZoom = reactFlowInstance.getZoom();
     const newZoom = Math.max(currentZoom / 1.2, minZoom);
     reactFlowInstance.zoomTo(newZoom);
@@ -41,14 +41,14 @@ export function useGraphViewControls(
   }, [reactFlowInstance, minZoom, showToast]);
 
   const resetZoom = useCallback(() => {
-    if (!reactFlowInstance) return;
+    if (!reactFlowInstance) {return;}
     reactFlowInstance.zoomTo(defaultZoom);
     showToast?.('info', 'Zoom reset to 100%');
   }, [reactFlowInstance, defaultZoom, showToast]);
 
   const fitView = useCallback(
     (options?: { padding?: number; duration?: number }) => {
-      if (!reactFlowInstance) return;
+      if (!reactFlowInstance) {return;}
       reactFlowInstance.fitView({
         padding: options?.padding || 0.1,
         duration: options?.duration || 200
@@ -60,14 +60,14 @@ export function useGraphViewControls(
 
   // Pan controls
   const panToCenter = useCallback(() => {
-    if (!reactFlowInstance) return;
+    if (!reactFlowInstance) {return;}
     reactFlowInstance.setCenter(0, 0, { zoom: defaultZoom, duration: 200 });
     showToast?.('info', 'View centered');
   }, [reactFlowInstance, defaultZoom, showToast]);
 
   const panToNode = useCallback(
     (nodeId: string) => {
-      if (!reactFlowInstance) return;
+      if (!reactFlowInstance) {return;}
       const node = reactFlowInstance.getNode(nodeId);
       if (!node) {
         showToast?.('error', 'Node not found');
@@ -85,7 +85,7 @@ export function useGraphViewControls(
 
   // Viewport capture and restore
   const captureViewport = useCallback((): Viewport | null => {
-    if (!reactFlowInstance) return null;
+    if (!reactFlowInstance) {return null;}
     const currentViewport = reactFlowInstance.getViewport();
     setViewport(currentViewport);
     return currentViewport;
@@ -93,7 +93,7 @@ export function useGraphViewControls(
 
   const restoreViewport = useCallback(
     (savedViewport?: Viewport) => {
-      if (!reactFlowInstance) return;
+      if (!reactFlowInstance) {return;}
       const targetViewport = savedViewport || viewport;
       reactFlowInstance.setViewport(targetViewport, { duration: 200 });
       showToast?.('info', 'Viewport restored');
@@ -103,7 +103,7 @@ export function useGraphViewControls(
 
   // Get current viewport info
   const getViewportInfo = useCallback(() => {
-    if (!reactFlowInstance) return null;
+    if (!reactFlowInstance) {return null;}
     const vp = reactFlowInstance.getViewport();
     return {
       zoom: Math.round(vp.zoom * 100),

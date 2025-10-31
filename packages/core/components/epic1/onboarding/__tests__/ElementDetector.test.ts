@@ -293,7 +293,7 @@ describe('ElementDetector', () => {
       let isVisible = false;
 
       mockQuerySelector.mockImplementation(() => {
-        if (isVisible) return mockElement;
+        if (isVisible) {return mockElement;}
         return { ...mockElement, offsetWidth: 0, offsetHeight: 0 };
       });
 

@@ -9,7 +9,7 @@ const server = Fastify({ logger: false });
 
 // Initialize database
 try {
-  const db = initDatabase();
+  initDatabase();
   console.log('✅ Database initialized');
 } catch (error) {
   console.error('❌ Database initialization failed:', error);
@@ -24,12 +24,12 @@ try {
 }
 
 // Root endpoint
-server.get('/', async (request, reply) => {
-  return { status: 'PromptScape API running - minimal mode' };
-});
+server.get('/', async () => ({
+  status: 'PromptScape API running - minimal mode'
+}));
 
 // Health check endpoint
-server.get('/health', async (request, reply) => {
+server.get('/health', async () => {
   try {
     const dbHealthy = healthCheck();
     return {
@@ -39,24 +39,30 @@ server.get('/health', async (request, reply) => {
       timestamp: new Date().toISOString()
     };
   } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Health check failed';
     return {
       status: 'unhealthy',
       database: 'error',
-      error: error.message,
+      error: message,
       timestamp: new Date().toISOString()
     };
   }
 });
 
 // Preview endpoint (graph execution)
-server.post('/preview', async (request, reply) => {
+type PreviewBody = {
+  graph: Graph;
+};
+
+server.post<{ Body: PreviewBody }>('/preview', async (_request, _reply) => {
   try {
-    const graph = request.body as Graph;
+    const { graph } = _request.body;
 
     // Basic validation
     const validation = validateGraph(graph);
     if (!validation.valid) {
-      return reply.code(400).send({
+      return _reply.code(400).send({
         error: 'Invalid graph',
         details: validation.errors
       });
@@ -75,9 +81,11 @@ server.post('/preview', async (request, reply) => {
       }
     };
   } catch (error) {
-    return reply.code(500).send({
+    const message =
+      error instanceof Error ? error.message : 'Graph execution failed';
+    return _reply.code(500).send({
       error: 'Graph execution failed',
-      message: error.message
+      message
     });
   }
 });
@@ -91,7 +99,8 @@ const start = async () => {
     console.log('✅ Core endpoints: /, /health, /preview');
     console.log('🎯 Ready for testing!');
   } catch (err) {
-    console.error('❌ Server start failed:', err);
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error('❌ Server start failed:', error);
     process.exit(1);
   }
 };

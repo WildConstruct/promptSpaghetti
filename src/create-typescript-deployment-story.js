@@ -211,7 +211,7 @@ async function loadCurrentState() {
   try {
     const stateData = await fs.readFile(stateFile, 'utf8');
     return JSON.parse(stateData);
-  } catch (error) {
+  } catch {
     // Create new state if file doesn't exist
     return {
       tasks: {},
@@ -266,7 +266,7 @@ function createStoryObject(storyDef, storyId) {
 }
 
 function createImplementationTasks(storyId, implementationTasks, state) {
-  let createdTasks = [];
+  const createdTasks = [];
 
   implementationTasks.forEach((taskDef, index) => {
     const taskId = generateTaskId('TS-TASK');
@@ -320,7 +320,7 @@ async function createTypeScriptDeploymentStory() {
 
   try {
     // Load current state
-    let state = await loadCurrentState();
+    const state = await loadCurrentState();
 
     if (!state.stories) {
       state.stories = {};
@@ -435,17 +435,17 @@ async function createTypeScriptDeploymentStory() {
       console.log(`${index + 1}. ${task.title} (${task.estimate})`);
       console.log(`   🎯 Key Goal: ${task.acceptanceCriteria[0]}`);
       if (index === 0)
-        console.log(
+        {console.log(
           '   📋 Foundation: Creates resolution strategy and identifies cascade opportunities'
-        );
+        );}
       if (index === 1)
-        console.log(
+        {console.log(
           '   🏗️  Infrastructure: Builds core type foundation preventing cascading errors'
-        );
+        );}
       if (index === 7)
-        console.log(
+        {console.log(
           '   ✅ Validation: Ensures complete resolution and deployment success'
-        );
+        );}
     });
     console.log('');
 

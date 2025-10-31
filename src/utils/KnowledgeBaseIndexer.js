@@ -233,16 +233,16 @@ class KnowledgeBaseIndexer {
       console.log(`📚 Loaded ${this.knowledgeBase.patterns.size} patterns`);
       console.log(`💡 Loaded ${this.knowledgeBase.solutions.size} solutions`);
       console.log(`❓ Loaded ${this.knowledgeBase.faqs.length} FAQ entries`);
-    } catch (error) {
-      console.error('❌ Failed to initialize Knowledge Base Indexer:', error);
-      throw error;
+    } catch {
+      console.error('❌ Failed to initialize Knowledge Base Indexer');
+      throw new Error('Initialization failed');
     }
   }
 
   /**
    * Process completed tasks and extract knowledge
    */
-  async indexCompletedTasks(options = {}) {
+  async indexCompletedTasks() {
     console.log('📚 Indexing completed tasks for knowledge extraction...\n');
 
     try {
@@ -278,8 +278,8 @@ class KnowledgeBaseIndexer {
               `📊 Processed ${processedCount}/${tasks.length} tasks...`
             );
           }
-        } catch (error) {
-          console.warn(`⚠️  Could not process task ${task.id}:`, error.message);
+        } catch {
+          console.warn(`⚠️  Could not process task ${task.id}`);
         }
       }
 
@@ -304,9 +304,9 @@ class KnowledgeBaseIndexer {
         newSolutions,
         generatedFAQs
       };
-    } catch (error) {
-      console.error('❌ Knowledge indexing failed:', error);
-      throw error;
+    } catch {
+      console.error('❌ Knowledge indexing failed');
+      throw new Error('Knowledge indexing failed');
     }
   }
 
@@ -367,13 +367,13 @@ class KnowledgeBaseIndexer {
       pattern => pattern.test(title) || pattern.test(description)
     );
 
-    if (!hasProblem || !solution) return null;
+    if (!hasProblem || !solution) {return null;}
 
     // Extract the core problem and solution
     const problem = this.extractProblemDescription(title, description);
     const solutionSummary = this.extractSolutionSummary(solution);
 
-    if (!problem || !solutionSummary) return null;
+    if (!problem || !solutionSummary) {return null;}
 
     return {
       id: `pattern-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -394,7 +394,7 @@ class KnowledgeBaseIndexer {
   async extractCodePatterns(task) {
     const patterns = [];
 
-    if (!task.files || task.files.length === 0) return patterns;
+    if (!task.files || task.files.length === 0) {return patterns;}
 
     for (const filePath of task.files) {
       try {
@@ -411,7 +411,7 @@ class KnowledgeBaseIndexer {
         // Extract common code patterns
         const codePatterns = this.analyzeCodeStructure(content, filePath);
         patterns.push(...codePatterns);
-      } catch (error) {
+      } catch {
         // File might not exist or be accessible
         continue;
       }
@@ -428,7 +428,7 @@ class KnowledgeBaseIndexer {
 
     // Extract import patterns
     const importPattern = this.extractImportPatterns(content);
-    if (importPattern) patterns.push(importPattern);
+    if (importPattern) {patterns.push(importPattern);}
 
     // Extract function patterns
     const functionPatterns = this.extractFunctionPatterns(content);
@@ -725,8 +725,8 @@ class KnowledgeBaseIndexer {
       console.log(
         `✅ Analytics generated: ${popularItems.length} popular items, ${knowledgeGaps.length} knowledge gaps identified`
       );
-    } catch (error) {
-      console.error('❌ Analytics generation failed:', error);
+    } catch {
+      console.error('❌ Analytics generation failed');
     }
   }
 
@@ -841,13 +841,13 @@ class KnowledgeBaseIndexer {
       const keywordMatch = config.keywords.some(keyword =>
         text.includes(keyword)
       );
-      if (keywordMatch) return category;
+      if (keywordMatch) {return category;}
 
       // Check patterns
       const patternMatch = config.patterns.some(pattern =>
         pattern.test(content)
       );
-      if (patternMatch) return category;
+      if (patternMatch) {return category;}
     }
 
     return 'general';
@@ -880,8 +880,8 @@ class KnowledgeBaseIndexer {
     let confidence = 0.5; // Base confidence
 
     // Increase confidence for detailed descriptions
-    if (problem.length > 100) confidence += 0.1;
-    if (solution.length > 200) confidence += 0.2;
+    if (problem.length > 100) {confidence += 0.1;}
+    if (solution.length > 200) {confidence += 0.2;}
 
     // Increase confidence for technical keywords
     const technicalWords = this.config.extraction.technicalKeywords;
@@ -951,19 +951,21 @@ class KnowledgeBaseIndexer {
     return importantSentences.slice(0, 2).join('. ').trim();
   }
 
-  extractConfigurationPatterns(task) {
+  extractConfigurationPatterns() {
     // Extract configuration-related patterns
     return [];
   }
 
-  extractWorkflowPatterns(task) {
+  extractWorkflowPatterns() {
     // Extract workflow and process patterns
     return [];
   }
 
   extractImportPatterns(content) {
     const imports = content.match(/import\s+.*?from\s+['"][^'"]+['"]/g);
-    if (!imports || imports.length === 0) return null;
+    if (!imports || imports.length === 0) {
+      return null;
+    }
 
     return {
       id: `import-pattern-${Date.now()}`,
@@ -974,27 +976,27 @@ class KnowledgeBaseIndexer {
     };
   }
 
-  extractFunctionPatterns(content) {
+  extractFunctionPatterns() {
     // Extract common function patterns
     return [];
   }
 
-  extractErrorHandlingPatterns(content) {
+  extractErrorHandlingPatterns() {
     // Extract error handling patterns
     return [];
   }
 
-  extractCodeConfigPatterns(content) {
+  extractCodeConfigPatterns() {
     // Extract configuration patterns from code
     return [];
   }
 
-  extractTechnicalSolutions(task) {
+  extractTechnicalSolutions() {
     // Extract technical solutions from code changes
     return [];
   }
 
-  extractConfigurationSolutions(task) {
+  extractConfigurationSolutions() {
     // Extract configuration-related solutions
     return [];
   }
@@ -1047,8 +1049,12 @@ class KnowledgeBaseIndexer {
     // Assess the difficulty level of the solution
     let difficulty = 'easy';
 
-    if (steps.length > 5) difficulty = 'medium';
-    if (steps.length > 10) difficulty = 'hard';
+    if (steps.length > 5) {
+      difficulty = 'medium';
+    }
+    if (steps.length > 10) {
+      difficulty = 'hard';
+    }
 
     // Check for complexity indicators
     const complexityIndicators = [
@@ -1066,16 +1072,31 @@ class KnowledgeBaseIndexer {
       solution.toLowerCase().includes(indicator)
     );
 
-    if (hasComplexity && difficulty === 'easy') difficulty = 'medium';
-    if (hasComplexity && difficulty === 'medium') difficulty = 'hard';
+    if (hasComplexity && difficulty === 'easy') {
+      difficulty = 'medium';
+    }
+    if (hasComplexity && difficulty === 'medium') {
+      difficulty = 'hard';
+    }
 
     return difficulty;
   }
 
   assessSolutionEffectiveness(task) {
-    // Assess how effective the solution was
-    // This could be based on task completion time, feedback, etc.
-    return 'effective'; // Placeholder
+    if (!task) {
+      return 'unknown';
+    }
+
+    const resolutionTime = task.metrics?.resolutionTimeHours;
+    if (typeof resolutionTime === 'number' && resolutionTime > 12) {
+      return 'moderate';
+    }
+
+    if (task.feedback?.rating === 'negative') {
+      return 'needs-improvement';
+    }
+
+    return 'effective';
   }
 
   generateSolutionTags(task, solution) {
@@ -1123,8 +1144,21 @@ class KnowledgeBaseIndexer {
   }
 
   identifyCommonIssues(task) {
-    // Identify common issues that could become FAQs
-    return [];
+    if (!task?.description) {
+      return [];
+    }
+
+    const lower = task.description.toLowerCase();
+    const categories = [
+      { keyword: 'authentication', tag: 'auth' },
+      { keyword: 'deployment', tag: 'deployment' },
+      { keyword: 'performance', tag: 'performance' },
+      { keyword: 'database', tag: 'database' }
+    ];
+
+    return categories
+      .filter(item => lower.includes(item.keyword))
+      .map(item => item.tag);
   }
 
   async updateKnowledgeBase(task, patterns, solutions, faqs) {
@@ -1282,9 +1316,22 @@ class KnowledgeBaseIndexer {
     return score;
   }
 
-  async recordSearch(query, options) {
+  async recordSearch(query, options = {}) {
     this.knowledgeBase.analytics.totalSearches++;
-    // In a full implementation, this would record search analytics
+    const analytics = this.knowledgeBase.analytics;
+    if (!analytics.recentSearches) {
+      analytics.recentSearches = [];
+    }
+
+    analytics.recentSearches.push({
+      query,
+      options,
+      timestamp: new Date().toISOString()
+    });
+
+    if (analytics.recentSearches.length > 50) {
+      analytics.recentSearches = analytics.recentSearches.slice(-50);
+    }
   }
 
   getSearchCategories(results) {
@@ -1437,15 +1484,13 @@ class KnowledgeBaseIndexer {
 // CLI mode
 if (require.main === module) {
   const indexer = new KnowledgeBaseIndexer();
-
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
-    try {
-      await indexer.initialize();
+  const run = async () => {
+    await indexer.initialize();
 
-      switch (command) {
+    switch (command) {
         case 'index':
           console.log('📚 Starting knowledge base indexing...\n');
           const result = await indexer.indexCompletedTasks();
@@ -1539,13 +1584,12 @@ KNOWLEDGE EXTRACTION:
 `);
           break;
       }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
-    }
-  }
+  };
 
-  main();
+  run().catch(error => {
+    console.error('Knowledge Base Indexer failed:', error);
+    process.exitCode = 1;
+  });
 }
 
 module.exports = KnowledgeBaseIndexer;

@@ -74,9 +74,9 @@ class StaleTaskCleanup {
       console.log('✅ Stale Task Cleanup utility initialized');
 
       await this.log('SYSTEM', 'Stale task cleanup utility initialized');
-    } catch (error) {
-      console.error('❌ Failed to initialize Stale Task Cleanup:', error);
-      throw error;
+    } catch {
+      console.error('❌ Failed to initialize Stale Task Cleanup');
+      throw new Error('Initialization failed');
     }
   }
 
@@ -116,7 +116,10 @@ class StaleTaskCleanup {
       let cleanedCount = 0;
       let errorCount = 0;
 
-      if (this.config.actions.dryRun) {
+      const { dryRun = this.config.actions.dryRun } = options;
+      const isDryRun = dryRun;
+
+      if (isDryRun) {
         console.log('\n🔍 DRY RUN MODE - No changes will be made');
         await this.log(
           'INFO',
@@ -127,18 +130,17 @@ class StaleTaskCleanup {
 
         for (const { taskId, task, staleDuration } of staleTask) {
           try {
-            await this.cleanupStaleTask(taskId, task, staleDuration, state);
+            await this.cleanupStaleTask(taskId, task, staleDuration);
             cleanedCount++;
             console.log(`✅ Cleaned up task ${taskId}`);
-          } catch (error) {
+          } catch {
             errorCount++;
             console.error(
-              `❌ Failed to cleanup task ${taskId}:`,
-              error.message
+              `❌ Failed to cleanup task ${taskId}`
             );
             await this.log(
               'ERROR',
-              `Failed to cleanup task ${taskId}: ${error.message}`
+              `Failed to cleanup task ${taskId}`
             );
           }
         }
@@ -159,10 +161,10 @@ class StaleTaskCleanup {
       console.log('\n📊 Cleanup Summary:', summary);
 
       return summary;
-    } catch (error) {
-      console.error('❌ Cleanup process failed:', error);
-      await this.log('ERROR', `Cleanup process failed: ${error.message}`);
-      throw error;
+    } catch {
+      console.error('❌ Cleanup process failed');
+      await this.log('ERROR', 'Cleanup process failed');
+      throw new Error('Cleanup process failed');
     }
   }
 
@@ -278,7 +280,7 @@ class StaleTaskCleanup {
    * Display stale tasks in a formatted table
    */
   displayStaleTasks(staleTask) {
-    if (staleTask.length === 0) return;
+    if (staleTask.length === 0) {return;}
 
     console.log('\n📋 STALE TASKS FOUND:');
     console.log('═'.repeat(100));
@@ -286,7 +288,7 @@ class StaleTaskCleanup {
       'ID'.padEnd(20) +
         'Assignee'.padEnd(15) +
         'State'.padEnd(12) +
-        'Stale For'.padEnd(12) +
+        'Stale/Limit'.padEnd(12) +
         'Title'.padEnd(35)
     );
     console.log('-'.repeat(100));
@@ -296,12 +298,16 @@ class StaleTaskCleanup {
       const staleDays = Math.floor(staleHours / 24);
       const staleDisplay =
         staleDays > 0 ? `${staleDays}d ${staleHours % 24}h` : `${staleHours}h`;
+      const thresholdLabel =
+        typeof thresholdHours === 'number'
+          ? `${staleDisplay}/${Math.round(thresholdHours)}h`
+          : staleDisplay;
 
       console.log(
         taskId.padEnd(20) +
           (task.assignee || 'Unknown').padEnd(15) +
           (task.state || 'Unknown').padEnd(12) +
-          staleDisplay.padEnd(12) +
+          thresholdLabel.padEnd(12) +
           (task.title || 'No title').substring(0, 34).padEnd(35)
       );
     }
@@ -311,7 +317,7 @@ class StaleTaskCleanup {
   /**
    * Clean up a specific stale task
    */
-  async cleanupStaleTask(taskId, task, staleDuration, state) {
+  async cleanupStaleTask(taskId, task, staleDuration) {
     const originalAssignee = task.assignee;
     const staleHours = Math.floor(staleDuration / (1000 * 60 * 60));
 
@@ -331,7 +337,7 @@ class StaleTaskCleanup {
     task.lastUpdated = new Date().toISOString();
 
     // Add cleanup note to task
-    if (!task.notes) task.notes = [];
+    if (!task.notes) {task.notes = [];}
     task.notes.push(
       `[AUTOMATED] Task reassigned due to inactivity (${staleHours}h stale) - was assigned to ${originalAssignee}`
     );
@@ -374,8 +380,8 @@ class StaleTaskCleanup {
       console.log(
         `📧 Notification queued for ${assignee} about task ${taskId}`
       );
-    } catch (error) {
-      console.warn(`⚠️  Failed to notify ${assignee}:`, error.message);
+    } catch {
+      console.warn(`⚠️  Failed to notify ${assignee}`);
     }
   }
 
@@ -407,8 +413,8 @@ class StaleTaskCleanup {
       };
 
       return stats;
-    } catch (error) {
-      console.error('Error getting cleanup stats:', error);
+    } catch {
+      console.error('Error getting cleanup stats');
       return null;
     }
   }
@@ -441,8 +447,8 @@ class StaleTaskCleanup {
     try {
       const stateData = await fs.readFile(this.stateFile, 'utf8');
       return JSON.parse(stateData);
-    } catch (error) {
-      console.warn('⚠️  Could not load state file:', error.message);
+    } catch {
+      console.warn('⚠️  Could not load state file');
       return null;
     }
   }
@@ -461,8 +467,8 @@ class StaleTaskCleanup {
     try {
       const logLine = `${logEntry.timestamp} [${logEntry.type}] ${logEntry.message}\n`;
       await fs.appendFile(this.logFile, logLine);
-    } catch (error) {
-      console.warn('Failed to write to log file:', error.message);
+    } catch {
+      console.warn('Failed to write to log file');
     }
 
     if (this.config.actions.logDetailed) {
@@ -479,7 +485,7 @@ class StaleTaskCleanup {
       return lines
         .map(line => {
           const match = line.match(/^(.+?) \[(.+?)\] (.+)$/);
-          if (!match) return null;
+          if (!match) {return null;}
 
           return {
             timestamp: new Date(match[1]),
@@ -551,9 +557,8 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
-    try {
-      switch (command) {
+  const run = async () => {
+    switch (command) {
         case 'cleanup':
         case 'clean':
           await cleanup.cleanup();
@@ -601,14 +606,13 @@ CONFIGURATION:
   - Notification settings
 `);
           break;
-      }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
     }
-  }
+  };
 
-  main();
+  run().catch(error => {
+    console.error('Stale Task Cleanup failed:', error);
+    process.exitCode = 1;
+  });
 }
 
 module.exports = StaleTaskCleanup;

@@ -427,7 +427,6 @@ class AgentWorkloadBalancer {
    * Calculate capacity score (higher score = more available capacity)
    */
   calculateCapacityScore(agent) {
-    const availableCapacity = agent.effectiveCapacity - agent.currentLoad;
     const utilizationRate = agent.currentLoad / agent.effectiveCapacity;
 
     // Score decreases as utilization increases
@@ -486,7 +485,7 @@ class AgentWorkloadBalancer {
    * Calculate availability score
    */
   calculateAvailabilityScore(agent) {
-    if (agent.availability !== 'available') return 0;
+    if (agent.availability !== 'available') {return 0;}
 
     // Consider time zone if relevant
     const now = new Date();
@@ -563,11 +562,36 @@ class AgentWorkloadBalancer {
    * Skill-based selection
    */
   selectSkillBased(agentScores, taskAnalysis) {
-    // Prioritize skill match over other factors
-    const skillFocused = agentScores.map(item => ({
-      ...item,
-      skillFocusedScore: item.breakdown.skill * 0.7 + item.score * 0.3
-    }));
+    const requiredSkills = Object.keys(taskAnalysis.skillsRequired || {});
+    const priorityFactor =
+      taskAnalysis.priority === 'critical'
+        ? 1.3
+        : taskAnalysis.priority === 'high'
+          ? 1.15
+          : 1;
+
+    const skillFocused = agentScores.map(item => {
+      const specializationMatches =
+        requiredSkills.length === 0
+          ? 0
+          : (item.agent.specializations || []).filter(spec =>
+              requiredSkills.includes(spec)
+            ).length / requiredSkills.length;
+
+      const collaborationFactor =
+        typeof item.agent.collaborationRate === 'number'
+          ? 0.9 + item.agent.collaborationRate * 0.1
+          : 1;
+
+      return {
+        ...item,
+        skillFocusedScore:
+          (item.breakdown.skill * 0.7 + item.score * 0.3) *
+          priorityFactor *
+          (0.85 + specializationMatches * 0.15) *
+          collaborationFactor
+      };
+    });
 
     skillFocused.sort((a, b) => b.skillFocusedScore - a.skillFocusedScore);
     return skillFocused[0];
@@ -578,7 +602,7 @@ class AgentWorkloadBalancer {
    */
   async updateAgentWorkload(agentId, assignment, action = 'add') {
     const agent = this.agents.get(agentId);
-    if (!agent) return;
+    if (!agent) {return;}
 
     if (action === 'add') {
       agent.assignedTasks.push(assignment.id);
@@ -821,7 +845,7 @@ class AgentWorkloadBalancer {
    * Calculate skill match percentage
    */
   calculateSkillMatch(agent, requiredSkills) {
-    if (Object.keys(requiredSkills).length === 0) return 100;
+    if (Object.keys(requiredSkills).length === 0) {return 100;}
 
     let totalMatch = 0;
     let totalRequired = 0;
@@ -880,7 +904,7 @@ class AgentWorkloadBalancer {
       agent => agent.availability === 'available'
     );
 
-    if (agents.length < 2) return;
+    if (agents.length < 2) {return;}
 
     // Calculate load distribution
     const loads = agents.map(agent => agent.utilizationRate);
@@ -915,7 +939,7 @@ class AgentWorkloadBalancer {
 
       for (const taskId of reassignableTasks) {
         const assignment = this.assignments.get(taskId);
-        if (!assignment) continue;
+        if (!assignment) {continue;}
 
         // Find suitable underutilized agent
         const targetAgent = this.findBestReassignmentTarget(
@@ -960,7 +984,7 @@ class AgentWorkloadBalancer {
    * Find best target agent for task reassignment
    */
   findBestReassignmentTarget(assignment, candidateAgents) {
-    if (candidateAgents.length === 0) return null;
+    if (candidateAgents.length === 0) {return null;}
 
     // Score candidates based on capacity and skill match
     const scored = candidateAgents.map(agent => ({
@@ -1040,7 +1064,7 @@ class AgentWorkloadBalancer {
    * Calculate average skill match rate across assignments
    */
   calculateAverageSkillMatch(assignments) {
-    if (assignments.length === 0) return 0;
+    if (assignments.length === 0) {return 0;}
 
     const matches = assignments.map(
       assignment => assignment.skillsMatched || 0
@@ -1184,91 +1208,116 @@ class AgentWorkloadBalancer {
   }
 }
 
-// CLI mode
-if (require.main === module) {
+async function runCLI() {
   const balancer = new AgentWorkloadBalancer();
-
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
-    try {
-      await balancer.initialize();
+  try {
+    await balancer.initialize();
 
-      switch (command) {
-        case 'register':
-          const agentData = {
-            id: args[1] || `agent-${Date.now()}`,
-            name: args[2] || args[1],
-            skills: JSON.parse(args[3] || '{}'),
-            capacity: parseInt(args[4]) || 40
-          };
+    switch (command) {
+      case 'register': {
+        const agentData = {
+          id: args[1] || `agent-${Date.now()}`,
+          name: args[2] || args[1] || 'Unnamed Agent',
+          skills: JSON.parse(args[3] || '{}'),
+          capacity: Number.parseInt(args[4], 10) || 40
+        };
 
-          const agent = await balancer.registerAgent(agentData);
-          console.log(`✅ Agent registered: ${JSON.stringify(agent, null, 2)}`);
-          break;
+        const agent = await balancer.registerAgent(agentData);
+        console.log(`✅ Agent registered: ${JSON.stringify(agent, null, 2)}`);
+        break;
+      }
 
-        case 'assign':
-          const taskData = {
-            id: args[1],
-            title: args[2] || 'Test Task',
-            priority: args[3] || 'medium',
-            estimate: parseInt(args[4]) || 4
-          };
+      case 'assign': {
+        const taskData = {
+          id: args[1] || `TASK-${Date.now()}`,
+          title: args[2] || 'Unspecified Task',
+          priority: args[3] || 'medium',
+          estimate: Number.parseInt(args[4], 10) || 4
+        };
 
-          const assignment = await balancer.assignTask(taskData);
+        const assignment = await balancer.assignTask(taskData);
+        console.log(
+          `✅ Task assigned: ${JSON.stringify(assignment, null, 2)}`
+        );
+        break;
+      }
+
+      case 'complete': {
+        const assignmentId = args[1];
+        if (!assignmentId) {
+          console.error('❌ Missing assignment id');
+          process.exit(1);
+        }
+
+        const completionData = {
+          actualEffort:
+            args[2] === undefined ? null : Number.parseInt(args[2], 10),
+          qualityScore:
+            args[3] === undefined ? 1.0 : Number.parseFloat(args[3])
+        };
+
+        const completed = await balancer.completeTask(
+          assignmentId,
+          completionData
+        );
+        console.log(`✅ Task completed: ${JSON.stringify(completed, null, 2)}`);
+        break;
+      }
+
+      case 'rebalance': {
+        await balancer.rebalanceWorkloads();
+        console.log('✅ Workload rebalancing completed');
+        break;
+      }
+
+      case 'stats': {
+        const stats = await balancer.getStatistics();
+        console.log('📊 Workload Balancer Statistics:');
+        console.log(JSON.stringify(stats, null, 2));
+        break;
+      }
+
+      case 'agents': {
+        const agents = Array.from(balancer.agents.values());
+        console.log('👥 Registered Agents:');
+        agents.forEach(agent => {
+          const utilization = (agent.utilizationRate || 0) * 100;
           console.log(
-            `✅ Task assigned: ${JSON.stringify(assignment, null, 2)}`
+            `  ${agent.name}: ${utilization.toFixed(1)}% utilized (capacity ${agent.capacity}h)`
           );
-          break;
+        });
+        break;
+      }
 
-        case 'complete':
-          const assignmentId = args[1];
-          const completionData = {
-            actualEffort: parseInt(args[2]) || null,
-            qualityScore: parseFloat(args[3]) || 1.0
-          };
+      case 'help':
+      case undefined:
+        showHelp();
+        break;
 
-          const completed = await balancer.completeTask(
-            assignmentId,
-            completionData
-          );
-          console.log(
-            `✅ Task completed: ${JSON.stringify(completed, null, 2)}`
-          );
-          break;
+      default:
+        console.log(`Unknown command "${command}".`);
+        showHelp();
+        process.exitCode = 1;
+        break;
+    }
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+    process.exit(1);
+  }
+}
 
-        case 'rebalance':
-          await balancer.rebalanceWorkloads();
-          console.log('✅ Workload rebalancing completed');
-          break;
-
-        case 'stats':
-          const stats = await balancer.getStatistics();
-          console.log('📊 Workload Balancer Statistics:');
-          console.log(JSON.stringify(stats, null, 2));
-          break;
-
-        case 'agents':
-          const agents = Array.from(balancer.agents.values());
-          console.log('👥 Registered Agents:');
-          agents.forEach(agent => {
-            console.log(
-              `  ${agent.name}: ${(agent.utilizationRate * 100).toFixed(1)}% utilized`
-            );
-          });
-          break;
-
-        case 'help':
-        default:
-          console.log(`
+function showHelp() {
+  console.log(`
 ⚖️  Agent Workload Balancer
 
 USAGE:
   node AgentWorkloadBalancer.js <command> [options]
 
 COMMANDS:
-  register <id> [name] [skills] [capacity]    Register a new agent
+  register <id> [name] [skills] [capacity]     Register a new agent
   assign <taskId> [title] [priority] [effort]  Assign a task
   complete <assignmentId> [effort] [quality]   Complete a task
   rebalance                                    Manual workload rebalancing
@@ -1286,15 +1335,10 @@ SKILLS:
   Skills are JSON objects with skill names and levels (1-4):
   {"frontend": 3, "backend": 2, "testing": 4}
 `);
-          break;
-      }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
-    }
-  }
+}
 
-  main();
+if (require.main === module) {
+  runCLI();
 }
 
 module.exports = AgentWorkloadBalancer;

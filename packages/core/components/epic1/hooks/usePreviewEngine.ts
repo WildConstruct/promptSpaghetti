@@ -84,7 +84,7 @@ export function usePreviewEngine({
 
   // Update preview when graph changes (but not during dragging)
   useEffect(() => {
-    if (!isPreviewVisible || !previewEngineRef.current || isDragging) return;
+    if (!isPreviewVisible || !previewEngineRef.current || isDragging) {return;}
 
     const runtimeGraph = convertToRuntimeGraph(nodes, edges);
     if (runtimeGraph) {

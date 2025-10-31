@@ -32,6 +32,8 @@ export function withDroppableNode<T extends NodeProps<DroppableNodeData>>(
     const { id, data, type } = props;
     const [dropHighlight, setDropHighlight] = useState(false);
     const [justDropped, setJustDropped] = useState(false);
+    const autoEdit = options.autoEditOnDrop !== false;
+    const presetDropHandler = options.onPresetDrop;
 
     const handleDrop = useCallback((item: DraggedPreset) => {
       const { preset } = item;
@@ -46,13 +48,13 @@ export function withDroppableNode<T extends NodeProps<DroppableNodeData>>(
       const newData = applyPresetToNode(data, preset, type || '');
       
       // Auto-enter edit mode if enabled
-      if (options.autoEditOnDrop !== false) {
+      if (autoEdit) {
         newData.isEditing = true;
       }
 
       // Notify parent about the drop
-      if (options.onPresetDrop) {
-        options.onPresetDrop(id, preset);
+      if (presetDropHandler) {
+        presetDropHandler(id, preset);
       }
 
       // Trigger drop animation
@@ -74,7 +76,7 @@ export function withDroppableNode<T extends NodeProps<DroppableNodeData>>(
           data.onEdit(preset.value.label);
         }
       }
-    }, [id, data, type, options]);
+    }, [autoEdit, data, id, presetDropHandler, type]);
 
     const [{ isOver, canDrop }, drop] = useDrop(() => ({
       accept: 'preset',

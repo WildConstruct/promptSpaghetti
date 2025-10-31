@@ -5,8 +5,7 @@
 
 import {
   CustomNodeRegistry,
-  CustomNodeRegistration,
-  CustomNodeMetadata
+  CustomNodeRegistration
 } from '../types';
 
 /**
@@ -107,12 +106,12 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
    */
   searchByTags(tags: string[], matchAll = false): CustomNodeRegistration[] {
     return this.getAll().filter(reg => {
-      if (!reg.metadata.tags) return false;
+      if (!reg.metadata.tags) {return false;}
 
       if (matchAll) {
-        return tags.every(tag => reg.metadata.tags!.includes(tag));
+        return tags.every(tag => reg.metadata.tags?.includes(tag) || false);
       } else {
-        return tags.some(tag => reg.metadata.tags!.includes(tag));
+        return tags.some(tag => reg.metadata.tags?.includes(tag) || false);
       }
     });
   }

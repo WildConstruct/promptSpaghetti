@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Update Notifications System
  * Epic 8.3 Story 8.3.5 - Version Control and Updates

@@ -50,9 +50,10 @@ import request from 'supertest';
 import { Graph } from '../packages/core/graphSchema';
 import { TestEnvironmentManager } from '../utils/TestingUtilities';
 
+import express from 'express';
+
 // Mock Express app for testing
 const createMockApp = () => {
-  const express = require('express');
   const app = express();
 
   app.use(express.json({ limit: '10mb' }));
@@ -595,7 +596,7 @@ describe('API Error Scenarios', () => {
               data: {
                 choices: [
                   { value: 'Unicode: 🚀 🎉 🔥', weight: 1 },
-                  { value: 'Escaped: \"quotes\" \\backslash\\', weight: 1 },
+                  { value: 'Escaped: "quotes" \\backslash\\', weight: 1 },
                   { value: 'Control chars: \\n\\t\\r', weight: 1 }
                 ]
               }

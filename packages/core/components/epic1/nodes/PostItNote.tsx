@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Handle, Position, useStore, useReactFlow } from 'reactflow';
+import { Handle, Position, useReactFlow } from 'reactflow';
 import ReactMarkdown from 'react-markdown';
 import './PostItNote.css';
 import type { Epic1NodeProps } from './nodePropTypes';
@@ -37,11 +37,7 @@ const colorMap = {
 export const PostItNote: React.FC<Epic1NodeProps<PostItNoteData>> = ({
   data,
   selected,
-  id,
-  xPos,
-  yPos,
-  draggable = true,
-  measured
+  id
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(data.text || '');
@@ -54,12 +50,12 @@ export const PostItNote: React.FC<Epic1NodeProps<PostItNoteData>> = ({
   const sizeRef = useRef(size);
   const nodeRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { setNodes, getNode, getNodes } = useReactFlow();
+  const { setNodes, getNodes } = useReactFlow();
   
   // Ensure the node has its dimensions set in ReactFlow on mount
   useEffect(() => {
-    setNodes((nodes) =>
-      nodes.map((node) =>
+    setNodes(nodes =>
+      nodes.map(node =>
         node.id === id
           ? {
               ...node,
@@ -73,7 +69,7 @@ export const PostItNote: React.FC<Epic1NodeProps<PostItNoteData>> = ({
           : node
       )
     );
-  }, []);
+  }, [data.height, data.width, id, setNodes]);
   
   useEffect(() => {
     sizeRef.current = size;
@@ -87,23 +83,21 @@ export const PostItNote: React.FC<Epic1NodeProps<PostItNoteData>> = ({
         height: data.height
       });
     }
-  }, [data.width, data.height]);
+  }, [data.height, data.width]);
   
   // Get attached node position for visual connection
-  const attachedNode = data.attachedTo ? getNode(data.attachedTo) : null;
-  
   // Handle drag end to check for nearby nodes to attach to
   const handleDragEnd = useCallback(() => {
     const allNodes = getNodes() as SnapNode[];
     const thisNode = allNodes.find(n => n.id === id);
-    if (!thisNode) return;
+    if (!thisNode) {return;}
     
     // Find nearest node within attachment distance (100px)
     let nearestNode: SnapNode | null = null;
     let nearestDistance = Infinity;
     
     allNodes.forEach((node) => {
-      if (node.id === id || node.type === 'postItNote') return; // Don't attach to self or other notes
+      if (node.id === id || node.type === 'postItNote') {return;} // Don't attach to self or other notes
       
       const distance = Math.sqrt(
         Math.pow(node.position.x - thisNode.position.x, 2) +

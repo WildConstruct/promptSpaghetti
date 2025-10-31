@@ -168,9 +168,9 @@ export var UIExtensionHelpers;
     const errors = [];
     const warnings = [];
     // Basic validation
-    if (!definition.id) errors.push('Component ID is required');
-    if (!definition.name) errors.push('Component name is required');
-    if (!definition.component) errors.push('Component class is required');
+    if (!definition.id) {errors.push('Component ID is required');}
+    if (!definition.name) {errors.push('Component name is required');}
+    if (!definition.component) {errors.push('Component class is required');}
     // React component validation
     if (definition.component && typeof definition.component !== 'function') {
       errors.push('Component must be a valid React component');

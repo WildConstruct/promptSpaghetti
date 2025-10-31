@@ -80,7 +80,7 @@ export class PerformanceTestSuite {
       ...config
     };
 
-    this.outputDir = this.config.outputDir!;
+    this.outputDir = this.config.outputDir ?? './test-output';
     this.testStartTime = new Date();
   }
 
@@ -92,7 +92,7 @@ export class PerformanceTestSuite {
     console.log('='.repeat(80));
     console.log(`Base URL: ${this.config.baseUrl}`);
     console.log(`Concurrency: ${this.config.concurrency}`);
-    console.log(`Duration: ${this.config.duration! / 1000}s`);
+    console.log(`Duration: ${(this.config.duration ?? 30000) / 1000}s`);
     console.log(`Output: ${this.outputDir}`);
     console.log('');
 
@@ -158,7 +158,7 @@ export class PerformanceTestSuite {
   /**
    * Execute load testing scenarios
    */
-  private async executeLoadTests(): Promise<any> {
+  private async executeLoadTests(): Promise<unknown> {
     try {
       // Execute baseline load test
       const baselineResult = await this.runLoadTestScenario('baseline_light');
@@ -183,7 +183,7 @@ export class PerformanceTestSuite {
   /**
    * Execute infrastructure performance scenarios
    */
-  private async executeInfrastructureScenarios(): Promise<any> {
+  private async executeInfrastructureScenarios(): Promise<unknown> {
     try {
       const infraScenarios = new InfraPerformanceScenarios();
 
@@ -225,7 +225,7 @@ export class PerformanceTestSuite {
   /**
    * Execute user workflow performance testing
    */
-  private async executeUserWorkflows(): Promise<any> {
+  private async executeUserWorkflows(): Promise<unknown> {
     try {
       const framework = new TestScenarioFramework();
 
@@ -270,15 +270,15 @@ export class PerformanceTestSuite {
   /**
    * Execute main performance test runner
    */
-  private async executeMainPerformanceRunner(): Promise<any> {
+  private async executeMainPerformanceRunner(): Promise<unknown> {
     return new Promise((resolve, reject) => {
       const runnerPath = path.join(process.cwd(), 'performance-test-runner.js');
 
       const args = [
         '--concurrency',
-        this.config.concurrency!.toString(),
+        (this.config.concurrency ?? 4).toString(),
         '--duration',
-        (this.config.duration! / 1000).toString(),
+        ((this.config.duration ?? 30000) / 1000).toString(),
         '--output',
         this.outputDir,
         '--format',
@@ -358,8 +358,8 @@ export class PerformanceTestSuite {
   /**
    * Run individual load test scenario
    */
-  private async runLoadTestScenario(scenarioName: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+  private async runLoadTestScenario(scenarioName: string): Promise<unknown> {
+    return new Promise(resolve => {
       const scenarioRunnerPath = path.join(
         process.cwd(),
         'load-tests',
@@ -371,7 +371,7 @@ export class PerformanceTestSuite {
         '--scenario',
         scenarioName,
         '--base-url',
-        this.config.baseUrl!,
+        this.config.baseUrl ?? 'http://localhost:3000',
         '--output',
         path.join(this.outputDir, 'load-tests')
       ];
@@ -424,25 +424,31 @@ export class PerformanceTestSuite {
    * Analyze results against thresholds
    */
   private async analyzeResults(result: PerformanceTestResult): Promise<void> {
-    const thresholds = this.config.thresholds!;
+    const thresholds = this.config.thresholds ?? {
+      maxResponseTime: 2000,
+      minThroughput: 10,
+      maxErrorRate: 0.05,
+      maxMemoryUsage: 512,
+      maxCpuUsage: 80
+    };
 
     // Analyze orchestration results
     if (result.results.orchestration?.results) {
       const metrics = result.results.orchestration.results;
 
-      if (metrics.averageResponseTime > thresholds.maxResponseTime!) {
+      if (metrics.averageResponseTime > (thresholds.maxResponseTime ?? 2000)) {
         result.thresholdViolations.push(
           `Response time exceeded threshold: ${metrics.averageResponseTime}ms > ${thresholds.maxResponseTime}ms`
         );
       }
 
-      if (metrics.requestsPerSecond < thresholds.minThroughput!) {
+      if (metrics.requestsPerSecond < (thresholds.minThroughput ?? 10)) {
         result.thresholdViolations.push(
           `Throughput below threshold: ${metrics.requestsPerSecond} < ${thresholds.minThroughput}`
         );
       }
 
-      if (metrics.errorRate > thresholds.maxErrorRate!) {
+      if (metrics.errorRate > (thresholds.maxErrorRate ?? 0.05)) {
         result.thresholdViolations.push(
           `Error rate exceeded threshold: ${metrics.errorRate} > ${thresholds.maxErrorRate}`
         );
@@ -620,13 +626,13 @@ export class PerformanceTestSuite {
     });
 
     console.log('\n📊 Test Components:');
-    if (result.results.loadTests) console.log('  ✓ Load Testing Scenarios');
+    if (result.results.loadTests) {console.log('  ✓ Load Testing Scenarios');}
     if (result.results.infrastructureScenarios)
-      console.log('  ✓ Infrastructure Performance Scenarios');
+      {console.log('  ✓ Infrastructure Performance Scenarios');}
     if (result.results.userWorkflows)
-      console.log('  ✓ User Workflow Performance Testing');
+      {console.log('  ✓ User Workflow Performance Testing');}
     if (result.results.orchestration)
-      console.log('  ✓ Main Performance Test Runner');
+      {console.log('  ✓ Main Performance Test Runner');}
 
     console.log('\n' + '='.repeat(80));
   }

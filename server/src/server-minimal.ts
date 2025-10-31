@@ -17,16 +17,21 @@ server.register(cors, {
 initializeAnalytics();
 
 // Health check endpoint
-server.get('/health', async (request, reply) => {
-  return { status: 'ok', message: 'Server is running (minimal mode)' };
-});
+server.get('/health', async () => ({
+  status: 'ok',
+  message: 'Server is running (minimal mode)'
+}));
+
+type PreviewBody = {
+  graph: Graph;
+  numSeeds?: number;
+};
 
 // Preview endpoint - execute graph with multiple seeds
-server.post('/preview', async (request, reply) => {
-  const { graph, numSeeds = 5 } = request.body as {
-    graph: Graph;
-    numSeeds?: number;
-  };
+server.post<{ Body: PreviewBody }>(
+  '/preview',
+  async (request, reply) => {
+  const { graph, numSeeds = 5 } = request.body;
 
   if (!graph) {
     return reply.status(400).send({ error: 'Graph is required' });
@@ -43,9 +48,10 @@ server.post('/preview', async (request, reply) => {
       const graphWithSeed = { ...graph, seed };
       const result = await executeGraph(graphWithSeed);
       outputs.push(result.outputs);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(`Error executing graph with seed ${seed}:`, error);
-      outputs.push([`Error: ${error.message}`]);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      outputs.push([`Error: ${message}`]);
     }
   }
 
@@ -71,7 +77,8 @@ const start = async () => {
     console.log('  POST /preview - Execute graph with multiple seeds');
     console.log('  POST /export  - Export graph (currently disabled)');
   } catch (err) {
-    server.log.error(err);
+    const error = err instanceof Error ? err : new Error(String(err));
+    server.log.error(error);
     process.exit(1);
   }
 };

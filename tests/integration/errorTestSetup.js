@@ -5,7 +5,6 @@
 
 const { EnhancedErrorReporter } = require('../utils/ErrorReportingFramework');
 const path = require('path');
-const fs = require('fs');
 
 // Initialize global error reporter
 const errorReporter = new EnhancedErrorReporter(
@@ -111,6 +110,10 @@ afterEach(function () {
         memoryUsage: process.memoryUsage().heapUsed,
         cpuUsage: process.cpuUsage().user,
         networkRequests: 0
+      },
+      metadata: {
+        name: testName,
+        path: testPath
       },
       errors: [],
       warnings: [],
@@ -249,7 +252,9 @@ global.cleanupResources = function () {
   }
 
   // Clear any timers
-  const timerId = setTimeout(() => {}, 0);
+  const timerId = setTimeout(() => {
+    // Immediate timeout for async operation
+  }, 0);
   for (let i = 0; i < timerId; i++) {
     clearTimeout(i);
     clearInterval(i);
@@ -319,7 +324,7 @@ global.retry = async function (fn, attempts = 3, delay = 1000) {
     try {
       return await fn();
     } catch (error) {
-      if (i === attempts - 1) throw error;
+      if (i === attempts - 1) {throw error;}
 
       console.log(`Attempt ${i + 1} failed, retrying in ${delay}ms...`);
       await new Promise(resolve => setTimeout(resolve, delay));

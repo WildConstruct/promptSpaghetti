@@ -1,7 +1,7 @@
 // src/agents/scrumMasterAgent-updated.ts
 // Scrum Master agent - updated to focus on task creation and monitoring without phases
 
-import { AgentRunner } from './agentBase';
+import { AgentRunner, Event, State, Story, Task } from './agentBase';
 
 export class ScrumMasterAgent extends AgentRunner {
   constructor() {
@@ -11,7 +11,7 @@ export class ScrumMasterAgent extends AgentRunner {
   /**
    * Filter for SM-relevant events
    */
-  filterRelevant(events: any[]): any[] {
+  filterRelevant(events: Event[]): Event[] {
     const relevantTypes = [
       'STORY_CREATED',
       'TASK_CREATED',
@@ -27,54 +27,70 @@ export class ScrumMasterAgent extends AgentRunner {
   /**
    * Scrum Master decision logic - focused on task management without phases
    */
-  async decide(ev: any, state: any): Promise<any> {
+  async decide(ev: Event, state: State): Promise<Event | 'NOOP'> {
     switch (ev.type) {
-      case 'STORY_CREATED':
-        // Immediately create tasks for new stories
+      case 'STORY_CREATED': {
+        // Create tasks for the new story
         const story = ev.payload.story;
-        if (story.tasks.length === 0) {
+        if (story && story.tasks.length === 0) {
           return this.createTaskForStory(story.id, story.title);
         }
         break;
+      }
 
-      case 'TASK_BLOCKED':
-      case 'TASK_STUCK':
-        // Help resolve blocked tasks
+      case 'TASK_BLOCKED': {
+        // Help unblock tasks
         const blockedTask = state.tasks[ev.payload.task_id];
         if (blockedTask) {
-          // Check if task has been blocked too long
-          const blockedDuration =
-            Date.now() - new Date(blockedTask.updated).getTime();
-          if (blockedDuration > 3600000) {
-            // 1 hour
-            return this.createEvent('TASK_NOTE_ADDED', {
-              task_id: blockedTask.id,
-              note: 'Task has been blocked for over an hour. Consider breaking it down or getting help.'
-            });
-          }
+          return this.createEvent('TASK_NOTE_ADDED', {
+            task_id: ev.payload.task_id,
+            note: 'Scrum Master assisting with blocker resolution',
+            blocker_type: ev.payload.blocker_type || 'dependency'
+          });
         }
         break;
+      }
 
-      case 'TASK_APPROVED':
-        // Monitor approved tasks (GitHub PR will be created automatically)
-        return this.createEvent('METRICS_UPDATED', {
-          metric: 'task_approved',
+      case 'TASK_STUCK': {
+        // Task has been in same state too long
+        const stuckTask = state.tasks[ev.payload.task_id];
+        if (stuckTask) {
+          return this.createEvent('TASK_NOTE_ADDED', {
+            task_id: ev.payload.task_id,
+            note: 'Scrum Master reviewing stuck task',
+            stuck_duration: ev.payload.duration
+          });
+        }
+        break;
+      }
+
+      case 'METRICS_PUBLISHED': {
+        // Review metrics and adjust workflow
+        const metrics = ev.payload;
+        if (metrics.cycle_time > 7) {
+          return this.createEvent('WORKFLOW_ADJUSTMENT', {
+            reason: 'High cycle time detected',
+            suggestion: 'Consider reducing WIP limits'
+          });
+        }
+        break;
+      }
+
+      case 'TASK_APPROVED': {
+        // Track approved tasks for GitHub automation
+        return this.createEvent('GITHUB_SYNC', {
           task_id: ev.payload.task_id,
-          timestamp: new Date().toISOString()
+          action: 'track_for_pr',
+          approved_by: ev.payload.approved_by
         });
-
-      case 'METRICS_PUBLISHED':
-        // Analyze metrics and provide insights
-        return this.analyzeProjectMetrics(state);
+      }
     }
 
-    // Check for stories that need tasks
     const taskCreationNeeded = this.checkStoriesNeedingTasks(state);
     if (taskCreationNeeded) {
       return taskCreationNeeded;
     }
 
-    // Monitor overall project health
     const healthCheck = this.checkProjectHealth(state);
     if (healthCheck) {
       return healthCheck;
@@ -86,7 +102,7 @@ export class ScrumMasterAgent extends AgentRunner {
   /**
    * Create tasks from a story
    */
-  private createTaskForStory(storyId: string, storyTitle: string): any {
+  private createTaskForStory(storyId: string, storyTitle: string): Event {
     const taskTemplates = [
       { title: 'Implement backend API', est: 3, wip_class: 'FEAT' },
       { title: 'Create frontend components', est: 2, wip_class: 'FEAT' },
@@ -118,9 +134,9 @@ export class ScrumMasterAgent extends AgentRunner {
   /**
    * Check for stories that need tasks created
    */
-  private checkStoriesNeedingTasks(state: any): any {
+  private checkStoriesNeedingTasks(state: State): Event | null {
     const storiesWithoutTasks = state.stories.filter(
-      (s: any) => s.status === 'READY' && s.tasks.length === 0
+      (s: Story) => s.status === 'READY' && (!s.tasks || s.tasks.length === 0)
     );
 
     if (storiesWithoutTasks.length > 0) {
@@ -134,11 +150,11 @@ export class ScrumMasterAgent extends AgentRunner {
   /**
    * Monitor overall project health
    */
-  private checkProjectHealth(state: any): any {
+  private checkProjectHealth(state: State): Event | null {
     const tasks = Object.values(state.tasks);
 
     // Check for too many blocked tasks
-    const blockedTasks = tasks.filter((t: any) => t.state === 'BLOCKED');
+    const blockedTasks = tasks.filter((t: Task) => t.status === 'BLOCKED');
     if (blockedTasks.length > 3) {
       return this.createEvent('ALERT_RAISED', {
         type: 'high_blocked_count',
@@ -148,9 +164,9 @@ export class ScrumMasterAgent extends AgentRunner {
     }
 
     // Check for tasks stuck in review too long
-    const reviewTasks = tasks.filter((t: any) => t.state === 'REVIEW');
-    const stuckInReview = reviewTasks.filter((t: any) => {
-      const reviewDuration = Date.now() - new Date(t.updated).getTime();
+    const reviewTasks = tasks.filter((t: Task) => t.status === 'REVIEW');
+    const stuckInReview = reviewTasks.filter((t: Task) => {
+      const reviewDuration = Date.now() - new Date(t.updated || '').getTime();
       return reviewDuration > 86400000; // 24 hours
     });
 
@@ -168,10 +184,10 @@ export class ScrumMasterAgent extends AgentRunner {
   /**
    * Analyze project metrics
    */
-  private analyzeProjectMetrics(state: any): any {
+  private analyzeProjectMetrics(state: State): Event {
     const tasks = Object.values(state.tasks);
-    const completedTasks = tasks.filter((t: any) => t.state === 'COMPLETED');
-    const approvedTasks = tasks.filter((t: any) => t.state === 'APPROVED');
+    const completedTasks = tasks.filter((t: Task) => t.status === 'COMPLETED');
+    const approvedTasks = tasks.filter((t: Task) => t.status === 'APPROVED');
 
     // Calculate velocity
     const velocity = completedTasks.length + approvedTasks.length;

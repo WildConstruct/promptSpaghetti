@@ -2,7 +2,7 @@
  * Tests for DiffEngine
  */
 
-const { DiffEngine } = require('../DiffEngine');
+import { DiffEngine } from '../DiffEngine';
 
 describe('DiffEngine', () => {
   let diffEngine;

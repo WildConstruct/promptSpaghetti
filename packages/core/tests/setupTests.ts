@@ -7,6 +7,52 @@ import {
 // Add OpenAI Node.js shim for tests
 import 'openai/shims/node';
 
+// Mock performance API for tests
+Object.defineProperty(global, 'performance', {
+  value: {
+    now: jest.fn(() => Date.now()),
+  },
+  writable: true,
+});
+
+// Mock navigation API to prevent jsdom errors
+Object.defineProperty(window, 'navigation', {
+  value: {
+    navigate: jest.fn(),
+  },
+  writable: true,
+});
+
+// Mock URL navigation to prevent jsdom errors
+const originalLocation = window.location;
+delete window.location;
+window.location = { 
+  ...originalLocation, 
+  assign: jest.fn(), 
+  replace: jest.fn(),
+  href: 'http://localhost:3000',
+  origin: 'http://localhost:3000',
+  protocol: 'http:',
+  host: 'localhost:3000',
+  hostname: 'localhost',
+  port: '3000',
+  pathname: '/',
+  search: '',
+  hash: ''
+};
+
+// Mock HTMLAnchorElement.prototype to prevent navigation errors
+Object.defineProperty(HTMLAnchorElement.prototype, 'href', {
+  get() { return this.getAttribute('href') || ''; },
+  set(value) { this.setAttribute('href', value); }
+});
+
+// Stop all navigation attempts
+Object.defineProperty(window, 'onbeforeunload', {
+  value: null,
+  writable: true,
+});
+
 // Add fetch polyfill for OpenAI
 global.fetch = jest.fn(() =>
   Promise.resolve({

@@ -9,6 +9,7 @@ import {
   clearPersistedState
 } from '../../utils/stateRestoration';
 import { getPersistedStateInfo } from '../../utils/persistenceUtils';
+import './StorageInfo.css';
 
 interface StorageInfoProps {
   position?: 'inline' | 'fixed';
@@ -23,13 +24,15 @@ export function StorageInfo({
   onReset,
   className = ''
 }: StorageInfoProps) {
-  const [storageInfo, setStorageInfo] = useState<Awaited<
-    ReturnType<typeof getStorageInfo>
-  > | null>(null);
-  const [stateInfo, setStateInfo] =
-    useState<ReturnType<typeof getPersistedStateInfo>>(null);
+  const [storageInfo, setStorageInfo] = useState<
+    Awaited<ReturnType<typeof getStorageInfo>> | null
+  >(null);
+  const [stateInfo, setStateInfo] = useState<
+    ReturnType<typeof getPersistedStateInfo>
+  >(null);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   // Update storage information
   useEffect(() => {
@@ -56,13 +59,15 @@ export function StorageInfo({
     };
   }, []);
 
-  const handleExportBackup = async () => {
+  const handleExport = async () => {
     setIsExporting(true);
+    setExportError(null);
     try {
       exportBackup();
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Export failed:', error);
-      alert('Failed to export backup. Please try again.');
+      setExportError('Failed to export backup. Please try again.');
     } finally {
       setIsExporting(false);
     }
@@ -77,6 +82,7 @@ export function StorageInfo({
     try {
       exportBackup();
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Backup export failed:', error);
     }
 
@@ -99,106 +105,63 @@ export function StorageInfo({
 
   // Format last modified time
   const formatLastModified = () => {
-    if (!stateInfo?.timestamp) return 'Never';
+    if (!stateInfo?.timestamp) {
+      return 'Never';
+    }
 
     const date = new Date(stateInfo.timestamp);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60)
-      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    if (diffMins < 1) {
+    return 'Just now';
+  }
+  if (diffMins < 60) {
+    return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+  }
 
-    const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24)
-      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) {
+    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+  }
 
-    return date.toLocaleDateString();
-  };
+  return date.toLocaleDateString();
+};
 
   if (!storageInfo) {
     return null;
   }
 
-  const containerStyles: React.CSSProperties =
-    position === 'fixed'
-      ? {
-          position: 'fixed',
-          bottom: '20px',
-          left: '20px',
-          backgroundColor: 'white',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-          padding: '12px 16px',
-          zIndex: 1000,
-          maxWidth: '300px'
-        }
-      : {
-          backgroundColor: '#f8f9fa',
-          borderRadius: '8px',
-          border: '1px solid #dee2e6',
-          padding: '16px'
-        };
-
   return (
     <>
-      <div className={className} style={containerStyles}>
-        <h4
-          style={{
-            margin: '0 0 12px 0',
-            fontSize: '14px',
-            fontWeight: '600',
-            color: '#495057',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}
-        >
-          <span>💾</span>
-          Storage Information
+      <div className={`storage-info ${position === 'fixed' ? 'fixed' : ''} ${className}`}>
+        <h4 className="storage-title">
+          💾 Storage Info
         </h4>
 
-        <div style={{ fontSize: '13px', color: '#6c757d' }}>
+        <div className="storage-subtitle">
           {/* Last Modified */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '8px'
-            }}
-          >
-            <span>Last saved:</span>
-            <span style={{ color: '#495057', fontWeight: '500' }}>
+          <div className="storage-metric">
+            <span className="storage-metric-label">Last saved:</span>
+            <span className="storage-metric-value">
               {formatLastModified()}
             </span>
           </div>
 
-          {/* Storage Usage */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '8px'
-            }}
-          >
-            <span>Storage used:</span>
-            <span style={{ color: '#495057', fontWeight: '500' }}>
+          {/* Storage Size */}
+          <div className="storage-metric">
+            <span className="storage-metric-label">Storage used:</span>
+            <span className="storage-metric-value">
               {storageInfo.formattedUsed}
             </span>
           </div>
 
           {/* Available Space */}
-          {storageInfo.quota && (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '8px'
-              }}
-            >
-              <span>Available:</span>
-              <span style={{ color: '#495057', fontWeight: '500' }}>
+          {storageInfo.formattedAvailable && (
+            <div className="storage-metric">
+              <span className="storage-metric-label">Available:</span>
+              <span className="storage-metric-value">
                 {storageInfo.formattedAvailable}
               </span>
             </div>
@@ -206,40 +169,24 @@ export function StorageInfo({
 
           {/* Storage Bar */}
           {storageInfo.quota && (
-            <div style={{ marginTop: '12px' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '4px',
-                  fontSize: '11px'
-                }}
-              >
+            <div className="storage-usage-section">
+              <div className="storage-usage-header">
                 <span>Usage</span>
-                <span style={{ fontWeight: '500' }}>
+                <span className="storage-usage-percentage">
                   {Math.round(storageInfo.percentage)}%
                 </span>
               </div>
-              <div
-                style={{
-                  height: '6px',
-                  backgroundColor: '#e9ecef',
-                  borderRadius: '3px',
-                  overflow: 'hidden'
-                }}
-              >
+              <div className="storage-usage-bar">
                 <div
+                  className="storage-usage-fill"
                   style={{
-                    height: '100%',
                     width: `${Math.min(100, storageInfo.percentage)}%`,
                     backgroundColor:
                       storageInfo.percentage > 90
                         ? '#dc3545'
                         : storageInfo.percentage > 75
                           ? '#ffc107'
-                          : '#28a745',
-                    transition: 'width 0.3s ease'
+                          : '#28a745'
                   }}
                 />
               </div>
@@ -248,17 +195,7 @@ export function StorageInfo({
 
           {/* Compression Status */}
           {stateInfo?.compressed && (
-            <div
-              style={{
-                marginTop: '8px',
-                padding: '4px 8px',
-                backgroundColor: '#e7f3ff',
-                borderRadius: '4px',
-                fontSize: '11px',
-                color: '#0066cc',
-                display: 'inline-block'
-              }}
-            >
+            <div className="storage-compression-status">
               🗜️ Data compressed (
               {stateInfo.size
                 ? `${Math.round(stateInfo.size / 1024)} KB`
@@ -270,71 +207,38 @@ export function StorageInfo({
 
         {/* Action Buttons */}
         {showActions && (
-          <div
-            style={{
-              marginTop: '16px',
-              paddingTop: '16px',
-              borderTop: '1px solid #dee2e6',
-              display: 'flex',
-              gap: '8px'
-            }}
-          >
+          <div className="storage-actions">
             <button
-              onClick={handleExportBackup}
+              className="storage-button storage-button-primary"
+              onClick={handleExport}
               disabled={isExporting || !stateInfo?.exists}
-              style={{
-                flex: 1,
-                padding: '6px 12px',
-                borderRadius: '4px',
-                border: '1px solid #007bff',
-                backgroundColor: 'white',
-                color: '#007bff',
-                fontSize: '12px',
-                fontWeight: '500',
-                cursor:
-                  isExporting || !stateInfo?.exists ? 'not-allowed' : 'pointer',
-                opacity: isExporting || !stateInfo?.exists ? 0.5 : 1,
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={e => {
-                if (!isExporting && stateInfo?.exists) {
-                  e.currentTarget.style.backgroundColor = '#007bff';
-                  e.currentTarget.style.color = 'white';
-                }
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = 'white';
-                e.currentTarget.style.color = '#007bff';
-              }}
             >
               {isExporting ? 'Exporting...' : 'Export Backup'}
             </button>
-
             <button
+              className="storage-button storage-button-danger"
               onClick={handleReset}
-              style={{
-                flex: 1,
-                padding: '6px 12px',
-                borderRadius: '4px',
-                border: '1px solid #dc3545',
-                backgroundColor: 'white',
-                color: '#dc3545',
-                fontSize: '12px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = '#dc3545';
-                e.currentTarget.style.color = 'white';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = 'white';
-                e.currentTarget.style.color = '#dc3545';
-              }}
             >
               Reset Storage
             </button>
+          </div>
+        )}
+
+        {/* Data Info */}
+        {stateInfo?.compressed && (
+          <div className="storage-data-info">
+            🗜️ Data compressed (
+            {stateInfo.size
+              ? `${Math.round(stateInfo.size / 1024)} KB`
+              : 'size unknown'}
+            )
+          </div>
+        )}
+
+        {/* Error Display */}
+        {exportError && (
+          <div className="storage-error">
+            {exportError}
           </div>
         )}
       </div>
@@ -359,122 +263,38 @@ function ResetConfirmDialog({
 }) {
   return (
     <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 10001
-      }}
+      className="storage-confirm-dialog"
       role="dialog"
       aria-labelledby="reset-title"
       aria-describedby="reset-description"
     >
-      <div
-        style={{
-          backgroundColor: 'white',
-          borderRadius: '8px',
-          padding: '24px',
-          maxWidth: '400px',
-          width: '90%',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
-        }}
-      >
-        <h3
-          id="reset-title"
-          style={{
-            margin: '0 0 12px 0',
-            fontSize: '18px',
-            fontWeight: '600',
-            color: '#dc3545',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
+      <div className="storage-confirm-content">
+        <h3 id="reset-title" className="storage-confirm-title">
           <span>⚠️</span>
           Reset Storage?
         </h3>
 
-        <p
-          id="reset-description"
-          style={{
-            margin: '0 0 20px 0',
-            fontSize: '14px',
-            color: '#666',
-            lineHeight: '1.5'
-          }}
-        >
+        <p id="reset-description" className="storage-confirm-message">
           This will <strong>permanently delete</strong> all your saved work and
           cannot be undone. A backup will be automatically exported before
           resetting.
         </p>
 
-        <div
-          style={{
-            backgroundColor: '#fff3cd',
-            border: '1px solid #ffeeba',
-            borderRadius: '4px',
-            padding: '12px',
-            marginBottom: '20px',
-            fontSize: '13px',
-            color: '#856404'
-          }}
-        >
+        <div className="storage-confirm-note">
           <strong>Note:</strong> Your current work will be exported as a backup
           file before resetting. You can re-import it later if needed.
         </div>
 
-        <div
-          style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}
-        >
+        <div className="storage-confirm-actions">
           <button
+            className="storage-confirm-button storage-confirm-button-cancel"
             onClick={onCancel}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: '1px solid #ddd',
-              backgroundColor: '#f8f9fa',
-              color: '#333',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s'
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.backgroundColor = '#e9ecef';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.backgroundColor = '#f8f9fa';
-            }}
           >
             Cancel
           </button>
-
           <button
+            className="storage-confirm-button storage-confirm-button-confirm"
             onClick={onConfirm}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '4px',
-              border: 'none',
-              backgroundColor: '#dc3545',
-              color: 'white',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s'
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.backgroundColor = '#c82333';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.backgroundColor = '#dc3545';
-            }}
           >
             Reset Storage
           </button>

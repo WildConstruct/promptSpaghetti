@@ -41,7 +41,7 @@ class FormatValidator {
     let propsDepth = 0;
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (!line || line.startsWith('#')) continue;
+      if (!line || line.startsWith('#')) {continue;}
       if (line === '---NODES---') {
         currentSection = 'nodes';
         continue;
@@ -115,7 +115,7 @@ class FormatValidator {
     return parsed;
   }
   static parseValue(value) {
-    if (!value) return null;
+    if (!value) {return null;}
     if (value.startsWith('[') && value.endsWith(']')) {
       return this.parseArrayValue(value);
     }
@@ -135,8 +135,8 @@ class FormatValidator {
     if (/^\d+\.?\d*$/.test(value)) {
       return parseFloat(value);
     }
-    if (value === 'true') return true;
-    if (value === 'false') return false;
+    if (value === 'true') {return true;}
+    if (value === 'false') {return false;}
     return value;
   }
   static parseArrayValue(value) {
@@ -144,7 +144,7 @@ class FormatValidator {
       return [];
     }
     const content = value.slice(1, -1).trim();
-    if (!content) return [];
+    if (!content) {return [];}
     return content.split(',').map(item => this.parseValue(item.trim()));
   }
   static validateStructure(parsed, result) {
@@ -370,13 +370,12 @@ class FormatValidator {
     this.checkReachability(parsed, result);
   }
   static checkReachability(parsed, result) {
-    const nodeMap = new Map(parsed.nodes.map(n => [n.id, n]));
     const reachable = new Set();
     const rootNodes = parsed.nodes.filter(
       node => !node.inputs || node.inputs.length === 0
     );
     const dfs = nodeId => {
-      if (reachable.has(nodeId)) return;
+      if (reachable.has(nodeId)) {return;}
       reachable.add(nodeId);
       parsed.nodes.forEach(node => {
         if (node.inputs?.includes(nodeId)) {

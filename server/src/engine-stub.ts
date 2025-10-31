@@ -1,6 +1,5 @@
 // Minimal engine stub for server startup
-import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
-import { v4 as uuidv4 } from 'uuid';
+import { Graph } from '../../packages/core/graphSchema';
 
 /**
  * Simplified stub for server startup
@@ -13,12 +12,10 @@ export function initializeAnalytics(): void {
  * Simplified stub for server startup
  */
 export async function executeGraph(
-  graph: Graph,
-  sessionId?: string,
-  userId?: number
+  graph: Graph
 ): Promise<{
   outputs: string[];
-  executionPath?: any;
+  executionPath?: unknown[];
 }> {
   console.log(
     `[STUB] executeGraph called with ${graph.nodes?.length || 0} nodes`
@@ -38,9 +35,11 @@ export async function executeGraph(
  */
 export async function executeGraphLegacy(
   graph: Graph,
-  sessionId?: string,
-  userId?: number
+  _sessionId?: string,
+  _userId?: number
 ): Promise<string[]> {
-  const result = await executeGraph(graph, sessionId, userId);
+  void _sessionId;
+  void _userId;
+  const result = await executeGraph(graph);
   return result.outputs;
 }

@@ -246,7 +246,7 @@ class TemplateDatabase {
     userId: number
   ): Template | null {
     const template = this.templates.get(id);
-    if (!template) return null;
+    if (!template) {return null;}
 
     if (template.author_id !== userId) {
       throw new Error('Permission denied: User is not the template author');
@@ -267,7 +267,7 @@ class TemplateDatabase {
 
   deleteTemplate(id: number, userId: number): boolean {
     const template = this.templates.get(id);
-    if (!template) return false;
+    if (!template) {return false;}
 
     if (template.author_id !== userId) {
       throw new Error('Permission denied: User is not the template author');
@@ -315,7 +315,7 @@ class TemplateDatabase {
 
     if (filters.tags && filters.tags.length > 0) {
       templates = templates.filter(t =>
-        filters.tags!.some(tag => t.tags.includes(tag))
+        filters.tags?.some(tag => t.tags.includes(tag))
       );
     }
 
@@ -330,8 +330,8 @@ class TemplateDatabase {
       let aVal = a[sortBy as keyof Template];
       let bVal = b[sortBy as keyof Template];
 
-      if (aVal instanceof Date) aVal = aVal.getTime();
-      if (bVal instanceof Date) bVal = bVal.getTime();
+      if (aVal instanceof Date) {aVal = aVal.getTime();}
+      if (bVal instanceof Date) {bVal = bVal.getTime();}
 
       if (sortOrder === 'desc') {
         return bVal > aVal ? 1 : -1;
@@ -354,7 +354,7 @@ class TemplateDatabase {
   // Template customization
   customizeTemplate(id: number, customizations: unknown): Template | null {
     const template = this.getTemplate(id);
-    if (!template) return null;
+    if (!template) {return null;}
 
     // Create a customized copy without modifying the original
     const customized = JSON.parse(JSON.stringify(template));
@@ -482,7 +482,7 @@ class TemplateDatabase {
 
   private updateTemplateRating(templateId: number): void {
     const template = this.templates.get(templateId);
-    if (!template) return;
+    if (!template) {return;}
 
     const reviews = this.getReviews(templateId);
     if (reviews.length === 0) {
@@ -498,7 +498,7 @@ class TemplateDatabase {
   // Analytics
   getAnalytics(templateId: number) {
     const template = this.getTemplate(templateId);
-    if (!template) return null;
+    if (!template) {return null;}
 
     const usages = this.getUsage(templateId);
     const reviews = this.getReviews(templateId);
@@ -531,7 +531,7 @@ class TemplateDatabase {
 
     usages.forEach(usage => {
       Object.entries(usage.customizations_applied).forEach(([key, value]) => {
-        if (!customizations[key]) customizations[key] = {};
+        if (!customizations[key]) {customizations[key] = {};}
         const valueStr = String(value);
         customizations[key][valueStr] =
           (customizations[key][valueStr] || 0) + 1;
@@ -544,7 +544,7 @@ class TemplateDatabase {
   // Export functionality
   exportTemplate(templateId: number, format: string) {
     const template = this.getTemplate(templateId);
-    if (!template) return null;
+    if (!template) {return null;}
 
     const exportData = {
       template,

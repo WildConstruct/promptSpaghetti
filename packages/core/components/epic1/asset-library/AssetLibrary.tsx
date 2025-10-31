@@ -20,14 +20,18 @@ const PresetItem: React.FC<{
   preset: Preset; 
   category: string;
   onHover?: (preset: Preset | null) => void;
-}> = ({ preset, category, onHover }) => {
-  const [{ isDragging }, drag, preview] = useDrag(() => ({
+  onDragStart?: (preset: Preset) => void;
+}> = ({ preset, category, onHover, onDragStart }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: 'preset',
     item: { preset, sourceCategory: category } as DraggedPreset,
+    begin: () => {
+      onDragStart?.(preset);
+    },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-  }), [preset, category]);
+  }), [preset, category, onDragStart]);
 
   const handleMouseEnter = useCallback(() => {
     onHover?.(preset);
@@ -65,10 +69,11 @@ const CategorySection: React.FC<{
   onToggle: () => void;
   searchQuery: string;
   onPresetHover?: (preset: Preset | null) => void;
-}> = ({ category, isExpanded, onToggle, searchQuery, onPresetHover }) => {
+  onPresetDrag?: (preset: Preset) => void;
+}> = ({ category, isExpanded, onToggle, searchQuery, onPresetHover, onPresetDrag }) => {
   // Filter presets based on search
   const filteredPresets = useMemo(() => {
-    if (!searchQuery) return category.presets;
+    if (!searchQuery) {return category.presets;}
     
     const query = searchQuery.toLowerCase();
     return category.presets.filter(preset => 
@@ -98,6 +103,7 @@ const CategorySection: React.FC<{
               preset={preset} 
               category={category.id}
               onHover={onPresetHover}
+              onDragStart={onPresetDrag}
             />
           ))}
         </div>
@@ -182,6 +188,7 @@ export const AssetLibrary: React.FC<AssetLibraryProps> = ({
                 onToggle={() => toggleCategory(category.id)}
                 searchQuery={searchQuery}
                 onPresetHover={handlePresetHover}
+                onPresetDrag={onPresetDrag}
               />
             ))}
           </div>

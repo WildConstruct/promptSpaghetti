@@ -279,7 +279,7 @@ export class ApiValidator {
     lines: string[],
     startIndex: number,
     method: string,
-    _endpointPart: string
+    endpointPart?: string
   ): ApiExample | null {
     const fullCommand = this.extractFullCurlCommand(lines, startIndex);
     if (!fullCommand) {
@@ -288,7 +288,8 @@ export class ApiValidator {
 
     const example: ApiExample = {
       method,
-      endpoint: this.extractEndpointFromCurl(fullCommand),
+      endpoint:
+        endpointPart || this.extractEndpointFromCurl(fullCommand),
       lineNumber: startIndex + 1,
       headers: this.extractHeadersFromCurl(fullCommand),
       requestBody: this.extractRequestBodyFromCurl(fullCommand)
@@ -541,9 +542,10 @@ export class ApiValidator {
   /**
    * Validate against OpenAPI schema (placeholder implementation)
    */
-  private async validateAgainstSchema(_example: ApiExample): Promise<string[]> {
+  private async validateAgainstSchema(example: ApiExample): Promise<string[]> {
     // In a real implementation, this would validate against OpenAPI specs
-    // For now, return empty array (no schema validation)
+    // For now, acknowledge the example to avoid unused variable warnings
+    console.debug('Schema validation skipped for example:', example.endpoint);
     return [];
   }
 
@@ -735,10 +737,10 @@ export class ApiValidator {
         }
 
         if (!inString) {
-          if (char === '{') braceCount++;
-          if (char === '}') braceCount--;
-          if (char === '[') bracketCount++;
-          if (char === ']') bracketCount--;
+          if (char === '{') {braceCount++;}
+          if (char === '}') {braceCount--;}
+          if (char === '[') {bracketCount++;}
+          if (char === ']') {bracketCount--;}
         }
       }
 

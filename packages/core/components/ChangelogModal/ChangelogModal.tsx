@@ -49,7 +49,7 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <div className="changelog-modal-overlay" onClick={onClose}>

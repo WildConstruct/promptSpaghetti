@@ -263,7 +263,7 @@ async function loadCurrentState() {
   try {
     const stateData = await fs.readFile(stateFile, 'utf8');
     return JSON.parse(stateData);
-  } catch (error) {
+  } catch {
     // Create new state if file doesn't exist
     return {
       tasks: {},
@@ -329,7 +329,7 @@ async function createDeploymentBlockerTasks() {
 
   try {
     // Load current state
-    let state = await loadCurrentState();
+    const state = await loadCurrentState();
 
     if (!state.tasks) {
       state.tasks = {};

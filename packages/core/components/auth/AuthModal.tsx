@@ -3,6 +3,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import type { User } from '@supabase/supabase-js';
 import { LoginForm } from './LoginForm';
 import { SignupForm } from './SignupForm';
 import { PasswordReset } from './PasswordReset';
@@ -13,7 +14,7 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: AuthTab;
-  onSuccess?: (user: any) => void;
+  onSuccess?: (user: User) => void;
 }
 
 export function AuthModal({
@@ -44,7 +45,9 @@ export function AuthModal({
 
   // Trap focus within modal
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      return;
+    }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -75,7 +78,9 @@ export function AuthModal({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -87,7 +92,7 @@ export function AuthModal({
     setActiveTab(tab);
   };
 
-  const handleAuthSuccess = (user: any) => {
+  const handleAuthSuccess = (user: User) => {
     onSuccess?.(user);
     onClose();
   };
@@ -281,7 +286,7 @@ export function AuthModal({
         >
           {activeTab === 'login' ? (
             <span>
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <button
                 onClick={() => handleTabChange('signup')}
                 style={{

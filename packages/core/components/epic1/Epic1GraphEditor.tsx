@@ -640,9 +640,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             defaultTab="assets"
             showAssets={true}
             showPreview={true}
-            onPresetSelect={(preset: any) => {
-              console.log('Preset selected:', preset);
-            }}
             selectedNode={nodes.find(n => n.id === selectedNodeId)}
           />
         )}

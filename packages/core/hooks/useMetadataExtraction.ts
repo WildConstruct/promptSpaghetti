@@ -169,7 +169,9 @@ export function useMetadataExtraction(
 
       debounceTimersRef.current.set(nodeId, timer);
     },
-    [enabled, debounceMs, onMetadataExtracted, metadataState]
+    // Intentionally omit metadataState so the callback remains stable.
+    // We rely on metadataStateRef for the latest state to avoid infinite render loops.
+    [enabled, debounceMs, onMetadataExtracted]
   );
 
   // Get metadata for a specific node

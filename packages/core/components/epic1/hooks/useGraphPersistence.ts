@@ -170,7 +170,7 @@ export function useGraphPersistence<N = unknown, E = unknown>(
 
   // Clear persisted state
   const clearStorage = useCallback(() => {
-    if (!isStorageAvailable()) return false;
+    if (!isStorageAvailable()) {return false;}
 
     try {
       localStorage.removeItem(storageKey);
@@ -198,15 +198,15 @@ export function useGraphPersistence<N = unknown, E = unknown>(
 
   // Auto-save on changes
   useEffect(() => {
-    if (!autoSave) return;
-    if (nodes.length === 0 && edges.length === 0) return;
+    if (!autoSave) {return;}
+    if (nodes.length === 0 && edges.length === 0) {return;}
 
     debouncedSave(nodes, edges);
   }, [nodes, edges, autoSave, debouncedSave]);
 
   // Load persisted state on mount
   const loadPersistedState = useMemo(() => {
-    if (hasRestoredState) return null;
+    if (hasRestoredState) {return null;}
     return loadFromStorage();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

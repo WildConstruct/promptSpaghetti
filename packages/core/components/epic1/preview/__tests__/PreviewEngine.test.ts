@@ -30,6 +30,7 @@ jest.mock('../../../../runtime/nodes/epic1/Epic1ExecutionEngine', () => {
   };
 });
 
+const mockedExecutionEngine = jest.mocked(Epic1ExecutionEngine);
 describe('PreviewEngine', () => {
   let engine: PreviewEngine;
   let mockGraph: Epic1Graph;
@@ -309,10 +310,7 @@ describe('PreviewEngine', () => {
   describe('Error handling', () => {
     it('should handle execution errors', async () => {
       // Mock execution to fail
-      const {
-        Epic1ExecutionEngine
-      } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
-      Epic1ExecutionEngine.mockImplementationOnce(() => ({
+      mockedExecutionEngine.mockImplementationOnce(() => ({
         execute: jest.fn().mockRejectedValue(new Error('Execution failed'))
       }));
 
@@ -340,10 +338,7 @@ describe('PreviewEngine', () => {
       });
 
       // Mock slow execution
-      const {
-        Epic1ExecutionEngine
-      } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
-      Epic1ExecutionEngine.mockImplementationOnce(() => ({
+      mockedExecutionEngine.mockImplementationOnce(() => ({
         execute: jest.fn(
           () =>
             new Promise(resolve => {
@@ -389,11 +384,8 @@ describe('PreviewEngine', () => {
 
     it('should not update state after cancellation', async () => {
       // Mock slow execution
-      const {
-        Epic1ExecutionEngine
-      } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
       let resolveExecution: any;
-      Epic1ExecutionEngine.mockImplementationOnce(() => ({
+      mockedExecutionEngine.mockImplementationOnce(() => ({
         execute: jest.fn(
           () =>
             new Promise(resolve => {

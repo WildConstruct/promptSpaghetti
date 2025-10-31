@@ -46,7 +46,7 @@ class ClaudeCostIntegration {
           if (files.some(file => file.endsWith('.jsonl'))) {
             return dir;
           }
-        } catch (error) {
+        } catch {
           continue;
         }
       }

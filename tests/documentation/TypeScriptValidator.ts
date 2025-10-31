@@ -146,7 +146,7 @@ export class TypeScriptValidator {
       diagnostics.forEach(diagnostic => {
         if (diagnostic.file) {
           const { line, character } =
-            diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+            diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start || 0);
           const message = ts.flattenDiagnosticMessageText(
             diagnostic.messageText,
             '\n'
@@ -219,14 +219,16 @@ export class TypeScriptValidator {
           if (files.has(fileName)) {
             return ts.createSourceFile(
               fileName,
-              files.get(fileName)!,
+              files.get(fileName) || '',
               ts.ScriptTarget.Latest,
               true
             );
           }
           return undefined;
         },
-        writeFile: () => {},
+        writeFile: () => {
+          // Mock file system - no write needed for validation
+        },
         getCurrentDirectory: () => process.cwd(),
         getDirectories: () => [],
         fileExists: fileName => files.has(fileName),
@@ -422,7 +424,7 @@ export class TypeScriptValidator {
 
     // Check cache first
     if (this.nodeModulesCache.has(cleanPackageName)) {
-      return this.nodeModulesCache.get(cleanPackageName)!;
+      return this.nodeModulesCache.get(cleanPackageName) || false;
     }
 
     try {
@@ -485,7 +487,7 @@ export class TypeScriptValidator {
         }
       }
 
-      const rootPackageJson = this.packageJsonCache.get('root')!;
+      const rootPackageJson = this.packageJsonCache.get('root') || {};
 
       // Check all dependency types
       const depTypes = [

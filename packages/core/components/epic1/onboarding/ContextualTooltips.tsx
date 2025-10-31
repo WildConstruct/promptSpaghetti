@@ -2,7 +2,7 @@
  * Contextual Tooltips - Smart help tooltips for UI elements
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useTutorial } from './TutorialContext';
 
 export interface TooltipConfig {
@@ -108,11 +108,16 @@ export const ContextualTooltips: React.FC<{
     dismissed: new Set(),
   });
   
-  const timeoutRef = useRef<NodeJS.Timeout>();
-  const hoverTargets = useRef<Map<string, HTMLElement>>(new Map());
+  type TooltipElement = HTMLElement & { __tooltipCleanup?: () => void };
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const hoverTargets = useRef<Map<string, TooltipElement>>(new Map());
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  const tooltips = [...defaultTooltips, ...additionalTooltips];
+  const tooltips = useMemo(
+    () => [...defaultTooltips, ...additionalTooltips],
+    [additionalTooltips],
+  );
 
   // Calculate tooltip position
   const calculatePosition = useCallback((
@@ -134,10 +139,10 @@ export const ContextualTooltips: React.FC<{
       const spaceBottom = window.innerHeight - rect.bottom;
       const spaceLeft = rect.left;
 
-      if (spaceBottom >= tooltipHeight + margin) return 'bottom';
-      if (spaceRight >= tooltipWidth + margin) return 'right';
-      if (spaceTop >= tooltipHeight + margin) return 'top';
-      if (spaceLeft >= tooltipWidth + margin) return 'left';
+      if (spaceBottom >= tooltipHeight + margin) {return 'bottom';}
+      if (spaceRight >= tooltipWidth + margin) {return 'right';}
+      if (spaceTop >= tooltipHeight + margin) {return 'top';}
+      if (spaceLeft >= tooltipWidth + margin) {return 'left';}
       return 'bottom'; // fallback
     };
 
@@ -171,9 +176,9 @@ export const ContextualTooltips: React.FC<{
 
   // Show tooltip
   const showTooltip = useCallback((tooltip: TooltipConfig, element: HTMLElement) => {
-    if (!enabled || !onboardingState.preferences.showTooltips) return;
-    if (state.dismissed.has(tooltip.id)) return;
-    if (tooltip.showOnce && onboardingState.helpViewed[tooltip.id]) return;
+    if (!enabled || !onboardingState.preferences.showTooltips) {return;}
+    if (state.dismissed.has(tooltip.id)) {return;}
+    if (tooltip.showOnce && onboardingState.helpViewed[tooltip.id]) {return;}
 
     clearTimeout(timeoutRef.current);
 
@@ -214,19 +219,20 @@ export const ContextualTooltips: React.FC<{
 
   // Set up hover listeners
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     const observers: MutationObserver[] = [];
+    const targets = hoverTargets.current;
 
     tooltips.forEach(tooltip => {
       const setupTarget = () => {
         const elements = document.querySelectorAll(tooltip.target);
         
-        elements.forEach((element) => {
-          const htmlElement = element as HTMLElement;
+        elements.forEach(element => {
+          const htmlElement = element as TooltipElement;
           
           // Skip if already tracked
-          if (hoverTargets.current.has(`${tooltip.id}-${htmlElement.id}`)) return;
+          if (targets.has(`${tooltip.id}-${htmlElement.id}`)) {return;}
           
           const handleMouseEnter = () => showTooltip(tooltip, htmlElement);
           const handleMouseLeave = () => hideTooltip();
@@ -234,17 +240,17 @@ export const ContextualTooltips: React.FC<{
           htmlElement.addEventListener('mouseenter', handleMouseEnter);
           htmlElement.addEventListener('mouseleave', handleMouseLeave);
           
-          hoverTargets.current.set(`${tooltip.id}-${htmlElement.id}`, htmlElement);
+          targets.set(`${tooltip.id}-${htmlElement.id}`, htmlElement);
 
           // Cleanup function
           const cleanup = () => {
             htmlElement.removeEventListener('mouseenter', handleMouseEnter);
             htmlElement.removeEventListener('mouseleave', handleMouseLeave);
-            hoverTargets.current.delete(`${tooltip.id}-${htmlElement.id}`);
+            targets.delete(`${tooltip.id}-${htmlElement.id}`);
           };
 
           // Store cleanup in element dataset
-          (htmlElement as any).__tooltipCleanup = cleanup;
+          htmlElement.__tooltipCleanup = cleanup;
         });
       };
 
@@ -265,12 +271,12 @@ export const ContextualTooltips: React.FC<{
       observers.forEach(obs => obs.disconnect());
       
       // Clean up all event listeners
-      hoverTargets.current.forEach((element) => {
-        if ((element as any).__tooltipCleanup) {
-          (element as any).__tooltipCleanup();
+      targets.forEach(element => {
+        if (element.__tooltipCleanup) {
+          element.__tooltipCleanup();
         }
       });
-      hoverTargets.current.clear();
+      targets.clear();
       
       clearTimeout(timeoutRef.current);
     };
@@ -405,7 +411,7 @@ export const ContextualTooltips: React.FC<{
             textDecoration: 'underline',
           }}
         >
-          Don't show tips again
+          Don&apos;t show tips again
         </button>
       )}
 

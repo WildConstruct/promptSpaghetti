@@ -3,24 +3,24 @@
  * Part of Story 0.1: Performance Infrastructure
  */
 
-export interface WorkerTask {
+export interface WorkerTask<T = unknown> {
   id?: string;
   type: string;
-  data: any;
+  data: T;
   priority?: number;
 }
 
-export interface WorkerResult {
+export interface WorkerResult<T = unknown> {
   id: string;
   type: string;
-  data: any;
+  data: T;
   error?: string;
 }
 
-interface QueueItem {
-  task: WorkerTask;
-  resolve: (value: any) => void;
-  reject: (error: any) => void;
+interface QueueItem<T = unknown> {
+  task: WorkerTask<T>;
+  resolve: (value: WorkerResult<T>) => void;
+  reject: (error: Error) => void;
   priority: number;
   timestamp: number;
 }
@@ -31,10 +31,53 @@ interface WorkerInfo {
   currentTask?: string;
 }
 
-export class WorkerPool {
-  private static instance: WorkerPool;
+/**
+ * Edge data interface for path calculation
+ */
+interface EdgeData {
+  edge: {
+    sourceX: number;
+    sourceY: number;
+    targetX: number;
+    targetY: number;
+  };
+}
+
+/**
+ * Path calculation result interface
+ */
+interface PathResult {
+  path: string;
+  length: number;
+}
+
+/**
+ * Group data interface for bounds calculation
+ */
+interface GroupData {
+  group: {
+    nodeIds: string[];
+  };
+  nodes: Array<{
+    id: string;
+    position: { x: number; y: number };
+  }>;
+}
+
+/**
+ * Group bounds result interface
+ */
+interface GroupBounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export class WorkerPool<T = unknown> {
+  private static instance: WorkerPool<unknown>;
   private workers: WorkerInfo[] = [];
-  private queue: QueueItem[] = [];
+  private queue: QueueItem<T>[] = [];
   private maxWorkers: number;
   private workerScript: string | null = null;
   private fallbackMode = false;
@@ -74,7 +117,7 @@ export class WorkerPool {
    * Initialize the worker pool with a worker script
    */
   async initialize(workerScriptUrl?: string): Promise<void> {
-    if (this.fallbackMode) return;
+    if (this.fallbackMode) {return;}
 
     // Use provided URL or create inline worker
     this.workerScript = workerScriptUrl || this.createInlineWorkerScript();
@@ -89,7 +132,7 @@ export class WorkerPool {
   /**
    * Execute a task in the worker pool
    */
-  async execute<T = any>(task: WorkerTask): Promise<T> {
+  async execute(task: WorkerTask<T>): Promise<T> {
     // Generate task ID if not provided
     if (!task.id) {
       task.id = `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -141,7 +184,7 @@ export class WorkerPool {
    * Process queued tasks
    */
   private processQueue(): void {
-    if (this.queue.length === 0) return;
+    if (this.queue.length === 0) {return;}
 
     // Find available worker
     let availableWorker = this.workers.find(w => !w.busy);
@@ -151,11 +194,11 @@ export class WorkerPool {
       availableWorker = this.createWorker();
     }
 
-    if (!availableWorker) return;
+    if (!availableWorker) {return;}
 
     // Get next task from queue
     const queueItem = this.queue.shift();
-    if (!queueItem) return;
+    if (!queueItem) {return;}
 
     // Mark worker as busy
     availableWorker.busy = true;
@@ -165,7 +208,7 @@ export class WorkerPool {
 
     // Set up message handler
     const messageHandler = (event: MessageEvent) => {
-      if (event.data.id !== queueItem.task.id) return;
+      if (event.data.id !== queueItem.task.id) {return;}
 
       // Clean up
       availableWorker.worker.removeEventListener('message', messageHandler);
@@ -491,7 +534,7 @@ export class WorkerPool {
     }
   }
 
-  private calculatePathFallback(data: any): any {
+  private calculatePathFallback(data: EdgeData): PathResult {
     const { edge } = data;
     return {
       path: `M ${edge.sourceX},${edge.sourceY} L ${edge.targetX},${edge.targetY}`,
@@ -502,16 +545,16 @@ export class WorkerPool {
     };
   }
 
-  private calculateGroupBoundsFallback(data: any): any {
+  private calculateGroupBoundsFallback(data: GroupData): GroupBounds {
     const { group, nodes } = data;
-    const groupNodes = nodes.filter((n: any) => group.nodeIds.includes(n.id));
+    const groupNodes = nodes.filter((n) => group.nodeIds.includes(n.id));
 
     if (groupNodes.length === 0) {
       return { x: 0, y: 0, width: 0, height: 0 };
     }
 
-    const xs = groupNodes.map((n: any) => n.position.x);
-    const ys = groupNodes.map((n: any) => n.position.y);
+    const xs = groupNodes.map((n) => n.position.x);
+    const ys = groupNodes.map((n) => n.position.y);
 
     return {
       x: Math.min(...xs) - 20,

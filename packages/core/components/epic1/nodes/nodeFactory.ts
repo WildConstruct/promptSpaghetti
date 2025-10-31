@@ -3,7 +3,7 @@
  */
 
 import { Node } from 'reactflow';
-import { EditableNodeData } from './index';
+import { EditableNodeData } from './nodePropTypes';
 import { BaseInlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineEditableNode';
 import { TextBlockNode } from '../../../runtime/nodes/epic1/TextBlockNode';
 import {
@@ -19,7 +19,6 @@ import {
 } from '../../../runtime/nodes/epic1/VariableNode';
 import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
 import { debugLogEpic1 } from '../../../utils/debug';
-import { nodeRegistry } from '../../../runtime/nodeRegistry';
 
 /**
  * Convert a React Flow node to an Epic 1 runtime node
@@ -46,7 +45,7 @@ export function nodeDataToRuntimeNode(
           // Check if options is already an array
           if (Array.isArray(data.options)) {
             // Already parsed - ensure all options have ids
-            options = data.options.map((opt: any, idx: number) => ({
+            options = data.options.map((opt: Record<string, unknown>, idx: number) => ({
               id: opt.id || `option-${idx + 1}`,
               text: opt.text || '',
               weight: opt.weight || 1
@@ -56,7 +55,7 @@ export function nodeDataToRuntimeNode(
             try {
               const parsed = JSON.parse(data.options);
               if (Array.isArray(parsed)) {
-                options = parsed.map((opt: any, idx: number) => ({
+                options = parsed.map((opt: Record<string, unknown>, idx: number) => ({
                   id: opt.id || `option-${idx + 1}`,
                   text: opt.text || '',
                   weight: opt.weight || 1
@@ -73,7 +72,7 @@ export function nodeDataToRuntimeNode(
             // Handle case where data.options is an object with an options property
             const innerOptions = data.options.options;
             if (Array.isArray(innerOptions)) {
-              options = innerOptions.map((opt: any, idx: number) => ({
+              options = innerOptions.map((opt: Record<string, unknown>, idx: number) => ({
                 id: opt.id || `option-${idx + 1}`,
                 text: opt.text || '',
                 weight: opt.weight || 1,
@@ -99,7 +98,7 @@ export function nodeDataToRuntimeNode(
                 ? JSON.parse(data.value)
                 : data.value;
             if (Array.isArray(parsed)) {
-              options = parsed.map((opt: any, idx: number) => ({
+              options = parsed.map((opt: Record<string, unknown>, idx: number) => ({
                 id: opt.id || `option-${idx + 1}`,
                 text: opt.text || '',
                 weight: opt.weight || 1
@@ -109,7 +108,7 @@ export function nodeDataToRuntimeNode(
               parsed.options &&
               Array.isArray(parsed.options)
             ) {
-              options = parsed.options.map((opt: any, idx: number) => ({
+              options = parsed.options.map((opt: Record<string, unknown>, idx: number) => ({
                 id: opt.id || `option-${idx + 1}`,
                 text: opt.text || '',
                 weight: opt.weight || 1

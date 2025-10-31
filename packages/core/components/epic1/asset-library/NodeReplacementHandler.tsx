@@ -5,23 +5,27 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Node, useReactFlow } from 'reactflow';
+import type { Preset } from './types';
 
 export interface NodeReplacementHandlerProps {
   children: React.ReactNode;
-  onNodeReplace?: (nodeId: string, preset: any) => void;
+  onNodeReplace?: (nodeId: string, preset: Preset) => void;
 }
 
 export const NodeReplacementHandler: React.FC<NodeReplacementHandlerProps> = ({ 
   children, 
   onNodeReplace 
 }) => {
-  const { getNodes, setNodes, getEdges } = useReactFlow();
+  const { getNodes, setNodes } = useReactFlow();
   const [draggedOverNode, setDraggedOverNode] = useState<string | null>(null);
 
   // Handle drag over event
   const handleDragOver = useCallback((e: DragEvent) => {
     e.preventDefault();
-    e.dataTransfer!.dropEffect = 'copy';
+    if (!e.dataTransfer) {
+      return;
+    }
+    e.dataTransfer.dropEffect = 'copy';
     
     // Find if we're over a node
     const target = e.target as HTMLElement;
@@ -62,10 +66,13 @@ export const NodeReplacementHandler: React.FC<NodeReplacementHandlerProps> = ({
     });
     
     try {
-      const presetData = e.dataTransfer!.getData('application/x-preset');
-      if (!presetData) return;
+      if (!e.dataTransfer) {
+        return;
+      }
+      const presetData = e.dataTransfer.getData('application/x-preset');
+      if (!presetData) {return;}
 
-      const preset = JSON.parse(presetData);
+          const preset = JSON.parse(presetData) as Preset;
       const target = e.target as HTMLElement;
       const nodeElement = target.closest('.react-flow__node');
       
@@ -118,7 +125,7 @@ export const NodeReplacementHandler: React.FC<NodeReplacementHandlerProps> = ({
   // Set up event listeners
   useEffect(() => {
     const container = document.querySelector('.react-flow');
-    if (!container) return;
+    if (!container) {return;}
 
     // Use proper event listener typing
     const dragOverHandler = handleDragOver as EventListener;
@@ -166,29 +173,31 @@ function mapPresetTypeToNodeType(presetType: string): string {
 /**
  * Extract relevant data from preset for node
  */
-function extractPresetData(preset: any): Record<string, any> {
-  const data: Record<string, any> = {};
+function extractPresetData(preset: Preset): Record<string, unknown> {
+  const data: Record<string, unknown> = {};
   
-  if (preset.metadata) {
-    if (preset.metadata.options) {
-      data.options = Array(preset.metadata.options).fill('').map((_, i) => ({
+  const { metadata, tags } = preset;
+
+  if (metadata) {
+    if (typeof metadata.options === 'number' && metadata.options > 0) {
+      data.options = Array.from({ length: metadata.options }, (_, i) => ({
         id: `option-${i}`,
         text: `Option ${i + 1}`,
         weight: 1
       }));
     }
     
-    if (preset.metadata.combinations) {
-      data.combinations = preset.metadata.combinations;
+    if (metadata.combinations !== undefined) {
+      data.combinations = metadata.combinations;
     }
     
-    if (preset.metadata.file) {
-      data.sourceFile = preset.metadata.file;
+    if (typeof metadata.file === 'string') {
+      data.sourceFile = metadata.file;
     }
   }
   
-  if (preset.tags) {
-    data.tags = preset.tags;
+  if (tags?.length) {
+    data.tags = tags;
   }
   
   return data;

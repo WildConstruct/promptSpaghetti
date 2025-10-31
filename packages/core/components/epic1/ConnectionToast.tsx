@@ -20,19 +20,23 @@ export const ConnectionToast: React.FC<ConnectionToastProps> = ({ message, onDis
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (message) {
-      setIsVisible(true);
-      
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-        setTimeout(onDismiss, 300); // Wait for animation to complete
-      }, message.duration || 3000);
-
-      return () => clearTimeout(timer);
+    if (!message) {
+      return undefined;
     }
+
+    setIsVisible(true);
+
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+      setTimeout(onDismiss, 300); // Wait for animation to complete
+    }, message.duration || 3000);
+
+    return () => clearTimeout(timer);
   }, [message, onDismiss]);
 
-  if (!message) return null;
+  if (!message) {
+    return null;
+  }
 
   return (
     <div className={`epic1-toast epic1-toast-${message.type} ${isVisible ? 'visible' : ''}`}>
@@ -43,7 +47,7 @@ export const ConnectionToast: React.FC<ConnectionToastProps> = ({ message, onDis
         {message.type === 'info' && 'ℹ️'}
       </div>
       <div className="epic1-toast-message">{message.message}</div>
-      <button 
+      <button
         className="epic1-toast-close"
         onClick={() => {
           setIsVisible(false);

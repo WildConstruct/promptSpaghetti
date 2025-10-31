@@ -17,7 +17,10 @@ jest.mock('./services/supabase', () => ({
 }));
 
 jest.mock('./utils/rateLimit', () => ({
-  rateLimiter: jest.fn(() => async () => {})
+  rateLimiter: jest.fn(() => async () => {
+    // Mock implementation
+    return;
+  })
 }));
 
 describe('Theme API Integration Tests', () => {

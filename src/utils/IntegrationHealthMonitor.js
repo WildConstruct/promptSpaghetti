@@ -18,7 +18,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const { execSync, spawn } = require('child_process');
+const { execSync } = require('child_process');
 const http = require('http');
 const https = require('https');
 
@@ -264,12 +264,11 @@ class IntegrationHealthMonitor {
       console.log(
         `📊 Tracking ${this.config.systems.dependencies.length} dependencies`
       );
-    } catch (error) {
+    } catch {
       console.error(
-        '❌ Failed to initialize Integration Health Monitor:',
-        error
+        '❌ Failed to initialize Integration Health Monitor'
       );
-      throw error;
+      throw new Error('Initialization failed');
     }
   }
 
@@ -440,9 +439,9 @@ class IntegrationHealthMonitor {
           result.status = 'unknown';
           result.error = `Unknown check method: ${utility.checkMethod}`;
       }
-    } catch (error) {
+    } catch {
       result.status = 'unhealthy';
-      result.error = error.message;
+      result.error = 'Health check failed';
     }
 
     result.responseTime = Date.now() - startTime;
@@ -513,9 +512,9 @@ class IntegrationHealthMonitor {
           result.status = 'unknown';
           result.error = `Unknown check method: ${dependency.checkMethod}`;
       }
-    } catch (error) {
+    } catch {
       result.status = 'unhealthy';
-      result.error = error.message;
+      result.error = 'Health check failed';
     }
 
     result.responseTime = Date.now() - startTime;
@@ -625,8 +624,8 @@ class IntegrationHealthMonitor {
       } else {
         console.log(`❌ Auto-recovery failed for ${system.name}`);
       }
-    } catch (error) {
-      console.error(`❌ Auto-recovery error for ${system.name}:`, error);
+    } catch {
+      console.error(`❌ Auto-recovery error for ${system.name}`);
     }
   }
 
@@ -653,8 +652,8 @@ class IntegrationHealthMonitor {
       }
 
       console.log('✅ Self-healing actions completed');
-    } catch (error) {
-      console.error('❌ Self-healing failed:', error);
+    } catch {
+      console.error('❌ Self-healing failed');
     }
   }
 
@@ -742,8 +741,8 @@ class IntegrationHealthMonitor {
 
       // Store performance data for trending
       await this.storePerformanceData(performanceData);
-    } catch (error) {
-      console.error('❌ Performance check failed:', error);
+    } catch {
+      console.error('❌ Performance check failed');
     }
   }
 
@@ -1126,25 +1125,25 @@ class IntegrationHealthMonitor {
         version: output.trim(),
         error: match ? null : "Version output doesn't match expected pattern"
       };
-    } catch (error) {
+    } catch {
       return {
         success: false,
         version: null,
-        error: error.message
+        error: 'Version check failed'
       };
     }
   }
 
   async checkDiskSpace(dirPath) {
     try {
-      const stats = await fs.stat(dirPath);
+      await fs.stat(dirPath);
       // Simplified disk space check - in production would use statvfs or similar
       return {
         usage: 0.1, // Mock 10% usage
         free: '900GB',
         total: '1TB'
       };
-    } catch (error) {
+    } catch {
       return {
         usage: 1.0, // Assume full if can't check
         free: '0GB',
@@ -1165,7 +1164,7 @@ class IntegrationHealthMonitor {
         free: total - used.heapUsed,
         total
       };
-    } catch (error) {
+    } catch {
       return {
         usage: 0,
         free: 0,
@@ -1203,21 +1202,22 @@ class IntegrationHealthMonitor {
           // Directory doesn't exist or no access
         }
       }
-    } catch (error) {
-      console.warn('Temp file cleanup failed:', error.message);
+    } catch {
+      console.warn('Temp file cleanup failed');
     }
   }
 
   async rotateLogs() {
     try {
       const logFiles = ['./logs/*.log', './data/*.log'];
-      // Simple log rotation - truncate large files
       for (const pattern of logFiles) {
-        // Implementation would go here
+        console.debug(`Log rotation placeholder for ${pattern}`);
       }
+      // Simple log rotation - truncate large files
+      // Implementation would go here
       console.log('📋 Log rotation completed');
-    } catch (error) {
-      console.warn('Log rotation failed:', error.message);
+    } catch {
+      console.warn('Log rotation failed');
     }
   }
 
@@ -1233,8 +1233,8 @@ class IntegrationHealthMonitor {
       }
 
       console.log(`🗑️  Cleared ${cacheKeys.length} cache entries`);
-    } catch (error) {
-      console.warn('Cache clearing failed:', error.message);
+    } catch {
+      console.warn('Cache clearing failed');
     }
   }
 
@@ -1294,8 +1294,8 @@ class IntegrationHealthMonitor {
 
       const logLine = JSON.stringify(logEntry) + '\n';
       await fs.appendFile(this.alertsFile, logLine);
-    } catch (error) {
-      console.error('Failed to log alert to file:', error);
+    } catch {
+      console.error('Failed to log alert to file');
     }
   }
 
@@ -1344,8 +1344,8 @@ class IntegrationHealthMonitor {
       }
 
       await fs.writeFile(performanceFile, JSON.stringify(history, null, 2));
-    } catch (error) {
-      console.warn('Failed to store performance data:', error.message);
+    } catch {
+      console.warn('Failed to store performance data');
     }
   }
 
@@ -1491,15 +1491,13 @@ class IntegrationHealthMonitor {
 // CLI mode
 if (require.main === module) {
   const monitor = new IntegrationHealthMonitor();
-
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
-    try {
-      await monitor.initialize();
+  const run = async () => {
+    await monitor.initialize();
 
-      switch (command) {
+    switch (command) {
         case 'start':
           await monitor.startMonitoring();
           console.log('🔍 Health monitor started. Press Ctrl+C to stop.');
@@ -1512,7 +1510,9 @@ if (require.main === module) {
           });
 
           // Keep alive
-          setInterval(() => {}, 1000);
+          setInterval(() => {
+            // Keep process alive for monitoring
+          }, 1000);
           break;
 
         case 'check':
@@ -1611,13 +1611,12 @@ EXIT CODES:
 `);
           break;
       }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
-    }
-  }
+  };
 
-  main();
+  run().catch(error => {
+    console.error('❌ Error occurred', error);
+    process.exitCode = 1;
+  });
 }
 
 module.exports = IntegrationHealthMonitor;

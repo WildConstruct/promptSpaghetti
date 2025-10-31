@@ -56,7 +56,7 @@ class QAReviewWorkflow {
       task.updated = new Date().toISOString();
 
       // Add note about moving to review
-      if (!task.notes) task.notes = [];
+      if (!task.notes) {task.notes = [];}
       task.notes.push({
         timestamp: new Date().toISOString(),
         author: this.agentId,
@@ -205,9 +205,16 @@ class QAReviewWorkflow {
   }
 
   evaluateIntegration(task) {
+    const customNotes =
+      typeof task?.integrationNotes === 'string'
+        ? task.integrationNotes.trim()
+        : '';
     return {
       status: 'compatible',
-      notes: 'Integrates well with existing codebase'
+      notes:
+        customNotes.length > 0
+          ? customNotes
+          : 'Integrates well with existing codebase'
     };
   }
 
@@ -265,7 +272,7 @@ class QAReviewWorkflow {
     };
 
     // Select relevant issue categories
-    let applicableIssues = [...possibleIssues.general];
+    const applicableIssues = [...possibleIssues.general];
 
     if (task.title.toLowerCase().includes('security')) {
       applicableIssues.push(...possibleIssues.security);
@@ -349,7 +356,7 @@ class QAReviewWorkflow {
       logger.qaReject(taskId, 2.5, issues);
 
       // Add detailed feedback
-      if (!task.notes) task.notes = [];
+      if (!task.notes) {task.notes = [];}
       task.notes.push({
         timestamp: new Date().toISOString(),
         author: this.agentId,

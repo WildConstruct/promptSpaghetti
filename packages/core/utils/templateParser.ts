@@ -514,7 +514,7 @@ class TemplateParser {
   parseTemplate(template: string): TemplateParseResult {
     // Check cache first
     if (this.parseCache.has(template)) {
-      return this.parseCache.get(template)!;
+      return this.parseCache.get(template) ?? { variables: [], errors: [] };
     }
     const result = this.performParse(template);
     // Cache result (limit cache size)
@@ -562,8 +562,8 @@ class TemplateParser {
           isValid: false
         });
         errors.push({
-          type: validation.errorType!,
-          message: validation.errorMessage!,
+          type: validation.errorType ?? 'syntax',
+          message: validation.errorMessage ?? 'Invalid template syntax',
           position: startIndex,
           severity: 'error'
         });
@@ -647,8 +647,7 @@ class TemplateParser {
   }
 
   private highlightVariables(
-    template: string,
-    variables: ExtractedVariable[]
+    template: string
   ): string {
     // This would be used by the UI to highlight variables
     // For now, return template as-is since highlighting is done in React
@@ -862,7 +861,7 @@ class TemplateParser {
   ): string {
     const placeholder = `{${variableName}}`;
     const index = template.indexOf(placeholder);
-    if (index === -1) return '';
+    if (index === -1) {return '';}
     const start = Math.max(0, index - 30);
     const end = Math.min(template.length, index + placeholder.length + 30);
     return template.slice(start, end);
@@ -912,7 +911,7 @@ class TemplateParser {
             description: `Custom variable (used ${history.count} times)`,
             examples: [`{${variableName}}`],
             priority: Math.min(10, history.count), // Priority based on usage
-            relatedVariables: this.findRelatedVariables(variableName)
+            relatedVariables: this.findRelatedVariables()
           });
         }
       }
@@ -924,7 +923,7 @@ class TemplateParser {
   /**
    * Find related variables based on co-occurrence patterns
    */
-  private findRelatedVariables(variableName: string): string[] {
+  private findRelatedVariables(): string[] {
     // This could be enhanced to track actual co-occurrence patterns
     // For now, return empty array but structure is in place
     return [];
@@ -985,7 +984,7 @@ class TemplateParser {
     );
     // Filter by partial name match
     const filtered = uniqueSuggestions.filter(suggestion => {
-      if (!partialName) return true;
+      if (!partialName) {return true;}
       const searchTerm = partialName.toLowerCase();
       return (
         suggestion.name.toLowerCase().includes(searchTerm) ||
@@ -1001,17 +1000,17 @@ class TemplateParser {
       const bName = b.name.toLowerCase();
       const searchTerm = partialName.toLowerCase();
       // Exact matches first
-      if (aName === searchTerm && bName !== searchTerm) return -1;
-      if (bName === searchTerm && aName !== searchTerm) return 1;
+      if (aName === searchTerm && bName !== searchTerm) {return -1;}
+      if (bName === searchTerm && aName !== searchTerm) {return 1;}
       // Starts with matches next
       const aStartsWith = aName.startsWith(searchTerm);
       const bStartsWith = bName.startsWith(searchTerm);
-      if (aStartsWith && !bStartsWith) return -1;
-      if (bStartsWith && !aStartsWith) return 1;
+      if (aStartsWith && !bStartsWith) {return -1;}
+      if (bStartsWith && !aStartsWith) {return 1;}
       // Priority-based sorting
       const aPriority = a.priority || 0;
       const bPriority = b.priority || 0;
-      if (aPriority !== bPriority) return bPriority - aPriority;
+      if (aPriority !== bPriority) {return bPriority - aPriority;}
       // Alphabetical as final tiebreaker
       return aName.localeCompare(bName);
     });
@@ -1142,19 +1141,19 @@ export const getContextualDefault = (
 ): string => {
   if (nodeType === 'subject' || nodeType === 'character') {
     if (name.includes('hero') || name.includes('protagonist'))
-      return 'brave warrior';
+      {return 'brave warrior';}
     if (name.includes('villain') || name.includes('antagonist'))
-      return 'dark sorcerer';
+      {return 'dark sorcerer';}
     if (name.includes('companion') || name.includes('sidekick'))
-      return 'loyal friend';
+      {return 'loyal friend';}
   }
   if (nodeType === 'action') {
     if (name.includes('movement') || name.includes('motion'))
-      return 'running swiftly';
+      {return 'running swiftly';}
     if (name.includes('combat') || name.includes('fight'))
-      return 'fierce battle';
+      {return 'fierce battle';}
     if (name.includes('travel') || name.includes('journey'))
-      return 'long voyage';
+      {return 'long voyage';}
   }
   // Template context analysis
   if (template) {
@@ -1163,9 +1162,9 @@ export const getContextualDefault = (
       templateLower.includes('cinematic') ||
       templateLower.includes('camera')
     ) {
-      if (name.includes('shot') || name.includes('angle')) return 'wide shot';
-      if (name.includes('lighting')) return 'golden hour';
-      if (name.includes('mood')) return 'dramatic';
+      if (name.includes('shot') || name.includes('angle')) {return 'wide shot';}
+      if (name.includes('lighting')) {return 'golden hour';}
+      if (name.includes('mood')) {return 'dramatic';}
     }
   }
   // General creative defaults

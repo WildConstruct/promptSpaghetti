@@ -142,7 +142,7 @@ export const KeyboardPanZoomDemo: React.FC = () => {
           initialEdges={initialEdges}
           onExecute={(nodes, edges) => {
             console.log('Executing graph with keyboard/pan-zoom features:', { nodes, edges });
-            alert('Graph executed! Check console for output.');
+            console.info('Graph executed! Check console for output.');
           }}
         />
       </div>

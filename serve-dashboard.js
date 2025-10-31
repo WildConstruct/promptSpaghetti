@@ -8,7 +8,6 @@
  */
 
 const { spawn } = require('child_process');
-const path = require('path');
 
 console.log('🎯 Starting Ticketing Dashboard Server...\n');
 
@@ -19,7 +18,7 @@ const server = spawn('python3', ['-m', 'http.server', '8000'], {
 });
 
 server.on('error', error => {
-  console.error('❌ Python3 not found, trying python...');
+  console.error('❌ Python3 not found, trying python...', error?.message || error);
 
   // Fallback to python (Python 2 or systems where python3 is called python)
   const server2 = spawn('python', ['-m', 'SimpleHTTPServer', '8000'], {
@@ -28,7 +27,7 @@ server.on('error', error => {
   });
 
   server2.on('error', error2 => {
-    console.error('❌ Failed to start server. Please install Python or use:');
+    console.error('❌ Failed to start server. Please install Python or use:', error2?.message || error2);
     console.error('   node src/ticket-dashboard-server.js');
     process.exit(1);
   });

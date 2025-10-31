@@ -305,7 +305,7 @@ describe('VisualRangeIndicator', () => {
 // Helper function to convert hex to rgb
 function hexToRgb(hex: string): string {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) return hex;
+  if (!result) {return hex;}
   
   const r = parseInt(result[1], 16);
   const g = parseInt(result[2], 16);

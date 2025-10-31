@@ -52,6 +52,41 @@ export interface PerformanceReport {
   };
 }
 
+/**
+ * Performance memory interface
+ */
+interface PerformanceMemory {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+/**
+ * Extended performance interface
+ */
+interface ExtendedPerformance extends Performance {
+  memory?: PerformanceMemory;
+}
+
+/**
+ * Cache statistics interface
+ */
+interface CacheStats {
+  hits: number;
+  misses: number;
+  hitRate: number;
+  size: number;
+}
+
+/**
+ * Worker statistics interface
+ */
+interface WorkerStats {
+  queueLength: number;
+  busyWorkers: number;
+  averageTime: number;
+}
+
 export class PerformanceMonitor {
   private static instance: PerformanceMonitor;
   private metrics: Map<string, PerformanceMetric[]> = new Map();
@@ -97,12 +132,14 @@ export class PerformanceMonitor {
       this.metrics.set(name, []);
     }
 
-    const metricArray = this.metrics.get(name)!;
-    metricArray.push(metric);
+    const metricArray = this.metrics.get(name);
+    if (metricArray) {
+      metricArray.push(metric);
 
-    // Keep only last 1000 measurements per metric
-    if (metricArray.length > 1000) {
-      metricArray.shift();
+      // Keep only last 1000 measurements per metric
+      if (metricArray.length > 1000) {
+        metricArray.shift();
+      }
     }
 
     // Check thresholds
@@ -237,13 +274,13 @@ export class PerformanceMonitor {
    * Start FPS monitoring
    */
   private startFPSMonitoring(): void {
-    if (this.isMonitoring) return;
+    if (this.isMonitoring) {return;}
 
     this.isMonitoring = true;
     this.lastFrameTime = performance.now();
 
     const measureFPS = (currentTime: number) => {
-      if (!this.isMonitoring) return;
+      if (!this.isMonitoring) {return;}
 
       const delta = currentTime - this.lastFrameTime;
       const fps = 1000 / delta;
@@ -285,7 +322,7 @@ export class PerformanceMonitor {
    * Get current FPS
    */
   getCurrentFPS(): number {
-    if (this.fpsHistory.length === 0) return 60;
+    if (this.fpsHistory.length === 0) {return 60;}
     return this.fpsHistory[this.fpsHistory.length - 1];
   }
 
@@ -293,7 +330,7 @@ export class PerformanceMonitor {
    * Get average FPS
    */
   getAverageFPS(): number {
-    if (this.fpsHistory.length === 0) return 60;
+    if (this.fpsHistory.length === 0) {return 60;}
 
     const sum = this.fpsHistory.reduce((a, b) => a + b, 0);
     return sum / this.fpsHistory.length;
@@ -303,11 +340,12 @@ export class PerformanceMonitor {
    * Get memory usage
    */
   getMemoryUsage(): { used: number; limit: number; percentage: number } {
-    if (typeof performance === 'undefined' || !(performance as any).memory) {
+    const extendedPerformance = performance as ExtendedPerformance;
+    if (typeof performance === 'undefined' || !extendedPerformance.memory) {
       return { used: 0, limit: 0, percentage: 0 };
     }
 
-    const memory = (performance as any).memory;
+    const memory = extendedPerformance.memory;
     const used = memory.usedJSHeapSize / (1024 * 1024); // Convert to MB
     const limit = memory.jsHeapSizeLimit / (1024 * 1024); // Convert to MB
     const percentage = (used / limit) * 100;
@@ -318,7 +356,7 @@ export class PerformanceMonitor {
   /**
    * Generate performance report
    */
-  generateReport(cacheStats?: any, workerStats?: any): PerformanceReport {
+  generateReport(cacheStats?: CacheStats, workerStats?: WorkerStats): PerformanceReport {
     const report: PerformanceReport = {
       metrics: {},
       memory: this.getMemoryUsage(),
@@ -337,7 +375,7 @@ export class PerformanceMonitor {
 
     // Calculate statistics for each metric
     for (const [name, values] of this.metrics.entries()) {
-      if (values.length === 0) continue;
+      if (values.length === 0) {continue;}
 
       const sorted = values.map(v => v.value).sort((a, b) => a - b);
       const sum = sorted.reduce((a, b) => a + b, 0);
@@ -361,7 +399,7 @@ export class PerformanceMonitor {
    * Calculate percentile
    */
   private percentile(sorted: number[], p: number): number {
-    if (sorted.length === 0) return 0;
+    if (sorted.length === 0) {return 0;}
 
     const index = Math.ceil(sorted.length * p) - 1;
     return sorted[Math.max(0, Math.min(index, sorted.length - 1))];

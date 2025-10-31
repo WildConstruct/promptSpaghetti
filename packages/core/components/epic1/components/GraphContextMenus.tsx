@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Node, Edge } from 'reactflow';
+import type { Node } from 'reactflow';
 import { NodeContextMenu, ContextMenuPosition } from '../nodes/NodeContextMenu';
 import { CanvasContextMenu } from '../nodes/CanvasContextMenu';
 
@@ -8,7 +8,6 @@ interface GraphContextMenusProps {
   nodeContextMenuPosition?: ContextMenuPosition | null;
   contextMenuNodeId?: string | null;
   nodes?: Node[];
-  edges?: Edge[];
   onNodeContextMenuClose?: () => void;
   onNodeDuplicate?: (nodeId: string) => void;
   onNodeDelete?: (nodeId: string) => void;
@@ -51,7 +50,6 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
   nodeContextMenuPosition = null,
   contextMenuNodeId = null,
   nodes = [],
-  edges = [],
   onNodeContextMenuClose,
   onNodeDuplicate,
   onNodeDelete,
@@ -97,6 +95,11 @@ export const GraphContextMenus: React.FC<GraphContextMenusProps> = ({
 
   const closeNodeMenu = () => {
     onNodeContextMenuClose?.();
+    fallbackPositionSetter?.(null);
+  };
+
+  const closeCanvasMenu = () => {
+    onCanvasContextMenuClose?.();
     fallbackPositionSetter?.(null);
   };
 

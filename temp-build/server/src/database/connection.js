@@ -135,7 +135,7 @@ export function runMigrations() {
       migrationFiles = readdirSync(migrationsDir)
         .filter(file => file.endsWith('.sql'))
         .sort(); // Sort to ensure migrations run in order
-    } catch (error) {
+    } catch {
       console.log('No migrations directory found, skipping migrations');
       return true;
     }

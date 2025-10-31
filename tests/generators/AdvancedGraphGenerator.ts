@@ -58,11 +58,11 @@ export class AdvancedGraphGenerator {
       case 'simple':
         return this.generateSimpleScenario(options);
       case 'validation':
-        return this.generateValidationScenario(options);
+        return this.generateValidationScenario();
       case 'performance':
         return this.generatePerformanceScenario(options);
       case 'security':
-        return this.generateSecurityScenario(options);
+        return this.generateSecurityScenario();
       case 'edge-case':
         return this.generateEdgeCaseScenario(options);
       default:
@@ -133,9 +133,7 @@ export class AdvancedGraphGenerator {
   /**
    * Generate graphs for validation testing (malformed, edge cases)
    */
-  private generateValidationScenario(
-    _options: GraphGenerationOptions
-  ): GraphScenario {
+  private generateValidationScenario(): GraphScenario {
     const scenarios = [
       () => this.generateSelfLoopGraph(),
       () => this.generateDisconnectedGraph(),
@@ -165,7 +163,6 @@ export class AdvancedGraphGenerator {
 
     // Create a complex branching structure
     const layerSizes = this.calculateLayerSizes(nodeCount);
-    let nodeIndex = 0;
 
     for (let layer = 0; layer < layerSizes.length; layer++) {
       const layerSize = layerSizes[layer];
@@ -238,9 +235,7 @@ export class AdvancedGraphGenerator {
   /**
    * Generate graphs with security vulnerabilities for testing
    */
-  private generateSecurityScenario(
-    options: GraphGenerationOptions
-  ): GraphScenario {
+  private generateSecurityScenario(): GraphScenario {
     const securityTests = [
       () => this.generateMaliciousExpressionGraph(),
       () => this.generatePrototypePollutionGraph(),
@@ -352,7 +347,7 @@ export class AdvancedGraphGenerator {
           }
         };
 
-      case 'Markov':
+      case 'Markov': {
         const states = ['alpha', 'beta', 'gamma', 'delta'];
         const transitions: Record<string, Record<string, number>> = {};
 
@@ -379,6 +374,7 @@ export class AdvancedGraphGenerator {
             terminationConditions: [states[states.length - 1]]
           }
         };
+      }
 
       default:
         return {

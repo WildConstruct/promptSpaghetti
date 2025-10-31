@@ -3,23 +3,29 @@
  * Combines Preview and Asset Browser in a collapsible tabbed interface
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import type { Node } from 'reactflow';
 import { AssetBrowserLoader } from './AssetBrowserLoader';
 import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
 import { PreviewEngine } from './preview/PreviewEngine';
-import { Preset } from './asset-library/types';
+import { PreviewPanel } from './preview/PreviewPanel';
+import type { Preset } from '@prompt/asset-browser';
+import type { Asset } from '../../services/assetMatcher';
+import type { EditableNodeData } from './nodes';
+import RelationshipView from './components/RelationshipView';
 import './TabbedSidePanel.css';
 
 export interface TabbedSidePanelProps {
   previewEngine: PreviewEngine | null;
   onPresetDrag?: (preset: Preset) => void;
   onPresetSelect?: (preset: Preset) => void;
-  onInsert?: (preset: any) => void;
+  onInsert?: (item: Preset | Asset) => void;
   position?: 'left' | 'right';
   defaultTab?: 'preview' | 'assets' | null;
   showAssets?: boolean;
   showPreview?: boolean;
-  selectedNode?: any;
+  selectedNode?: Node<EditableNodeData> | null;
+  onSeedChange?: (seeds: Array<string | number>) => void;
 }
 
 type TabType = 'preview' | 'assets' | 'search' | 'relationships' | null;
@@ -33,14 +39,48 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   defaultTab = null,
   showAssets = true,
   showPreview = true,
-  selectedNode
+  selectedNode,
+  onSeedChange
 }) => {
-  const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
+  const hasPreviewTab = showPreview && !!previewEngine;
+
+  const initialTab = useMemo<TabType>(() => {
+    if (defaultTab) {
+      return defaultTab;
+    }
+    if (showAssets) {
+      return 'assets';
+    }
+    if (hasPreviewTab) {
+      return 'preview';
+    }
+    return null;
+  }, [defaultTab, showAssets, hasPreviewTab]);
+
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
 
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
+
   const handleTabClick = useCallback((tab: TabType) => {
-    setActiveTab(activeTab === tab ? null : tab);
-  }, [activeTab]);
+    setActiveTab(prev => (prev === tab ? null : tab));
+  }, []);
+
+  const handlePresetInsert = useCallback(
+    (preset: Preset) => {
+      onInsert?.(preset);
+    },
+    [onInsert]
+  );
+
+  const handleAssetInsert = useCallback(
+    (asset: Asset) => {
+      onInsert?.(asset);
+    },
+    [onInsert]
+  );
 
   const isExpanded = activeTab !== null;
 
@@ -48,23 +88,56 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
     <div className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'}`}>
       <div className="tab-buttons">
         {showAssets && (
-          <>
-            <button
-              className={`tab-button ${activeTab === 'assets' ? 'active' : ''} ${hoveredTab === 'assets' ? 'hovered' : ''}`}
-              onClick={() => handleTabClick('assets')}
-              onMouseEnter={() => setHoveredTab('assets')}
-              onMouseLeave={() => setHoveredTab(null)}
-              title="Asset Browser"
-            >
-              <span className="tab-icon">
-                <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.94 1.475l-.64 6.038A1.5 1.5 0 0 1 13.81 15H2.19a1.5 1.5 0 0 1-1.49-1.347l-.64-6.038c0-.599.37-1.21.94-1.475V5.5A1.5 1.5 0 0 1 1 3.5zm1.5 0v2.695a.5.5 0 0 1-.336.473 1.4 1.4 0 0 0-.64.644l.64 6.038a.5.5 0 0 0 .496.45h11.18a.5.5 0 0 0 .496-.45l.64-6.038a1.4 1.4 0 0 0-.64-.644.5.5 0 0 1-.336-.473V5.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.76-.56-2.311-1.184C6.279 3.352 5.784 3 5.264 3H2.5a.5.5 0 0 0-.5.5z"/>
-                </svg>
-              </span>
-              <span className="tab-label">Assets</span>
-            </button>
-          </>
+          <button
+            className={`tab-button ${activeTab === 'assets' ? 'active' : ''} ${hoveredTab === 'assets' ? 'hovered' : ''}`}
+            onClick={() => handleTabClick('assets')}
+            onMouseEnter={() => setHoveredTab('assets')}
+            onMouseLeave={() => setHoveredTab(null)}
+            title="Asset Browser"
+          >
+            <span className="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.94 1.475l-.64 6.038A1.5 1.5 0 0 1 13.81 15H2.19a1.5 1.5 0 0 1-1.49-1.347l-.64-6.038c0-.599.37-1.21.94-1.475V5.5A1.5 1.5 0 0 1 1 3.5zm1.5 0v2.695a.5.5 0 0 1-.336.473 1.4 1.4 0 0 0-.64.644l.64 6.038a.5.5 0 0 0 .496.45h11.18a.5.5 0 0 0 .496-.45l.64-6.038a1.4 1.4 0 0 0-.64-.644.5.5 0 0 1-.336-.473V5.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.76-.56-2.311-1.184C6.279 3.352 5.784 3 5.264 3H2.5a.5.5 0 0 0-.5.5z"/>
+              </svg>
+            </span>
+            <span className="tab-label">Assets</span>
+          </button>
         )}
+
+        {hasPreviewTab && (
+          <button
+            className={`tab-button ${activeTab === 'preview' ? 'active' : ''} ${hoveredTab === 'preview' ? 'hovered' : ''}`}
+            onClick={() => handleTabClick('preview')}
+            onMouseEnter={() => setHoveredTab('preview')}
+            onMouseLeave={() => setHoveredTab(null)}
+            title="Preview"
+          >
+            <span className="tab-icon">👁️</span>
+            <span className="tab-label">Preview</span>
+          </button>
+        )}
+
+        <button
+          className={`tab-button ${activeTab === 'search' ? 'active' : ''} ${hoveredTab === 'search' ? 'hovered' : ''}`}
+          onClick={() => handleTabClick('search')}
+          onMouseEnter={() => setHoveredTab('search')}
+          onMouseLeave={() => setHoveredTab(null)}
+          title="Search"
+        >
+          <span className="tab-icon">🔍</span>
+          <span className="tab-label">Search</span>
+        </button>
+
+        <button
+          className={`tab-button ${activeTab === 'relationships' ? 'active' : ''} ${hoveredTab === 'relationships' ? 'hovered' : ''}`}
+          onClick={() => handleTabClick('relationships')}
+          onMouseEnter={() => setHoveredTab('relationships')}
+          onMouseLeave={() => setHoveredTab(null)}
+          title="Relationships"
+        >
+          <span className="tab-icon">🕸️</span>
+          <span className="tab-label">Relationships</span>
+        </button>
       </div>
 
       <div className="panel-content">
@@ -73,19 +146,28 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
             <AssetBrowserLoader
               onPresetDrag={onPresetDrag}
               onPresetSelect={onPresetSelect}
-              onInsert={onInsert}
+              onInsert={handlePresetInsert}
             />
           </div>
         )}
         {activeTab === 'search' && (
           <div className="assets-container">
-            <AssetSearchPanel assets={[]} onInsert={(a) => onInsert?.(a)} graphContext={selectedNode} selectedNode={selectedNode} />
+            <AssetSearchPanel
+              assets={[]}
+              onInsert={handleAssetInsert}
+              graphContext={selectedNode?.data || undefined}
+              selectedNode={selectedNode as Node<{ label?: string }> | null}
+            />
           </div>
         )}
         {activeTab === 'relationships' && (
           <div className="assets-container">
-            {/** RelationshipView listens to assetRegistry events for assets */}
-            {require('./components/RelationshipView').default({ assets: [] })}
+            <RelationshipView />
+          </div>
+        )}
+        {activeTab === 'preview' && hasPreviewTab && previewEngine && (
+          <div className="preview-container">
+            <PreviewPanel previewEngine={previewEngine} onSeedChange={onSeedChange} />
           </div>
         )}
         {!activeTab && (

@@ -1,14 +1,31 @@
-import React, { useMemo, useState } from 'react';
-import { ReactFlowProvider } from 'reactflow';
+import React, { useCallback, useMemo, useState } from 'react';
+import {
+  ReactFlowProvider,
+  type Node,
+  type Edge,
+  type NodeChange,
+  type EdgeChange,
+  type Connection,
+  applyNodeChanges,
+  applyEdgeChanges,
+  addEdge
+} from 'reactflow';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { GraphCanvas } from '../epic1/components/GraphCanvas';
 import { CanvasDropArea } from '../Canvas/CanvasDropArea';
 import type { DraggedAsset } from '../AssetBrowser/DragDropHandler';
 
+type DemoNodeData = {
+  label: string;
+  options?: Array<{ text: string; weight: number }>;
+};
+
+const noop = () => undefined;
+
 export const AssetBrowserMvpDemo: React.FC = () => {
-  const [nodes, setNodes] = useState<any[]>([]);
-  const [edges, setEdges] = useState<any[]>([]);
+  const [nodes, setNodes] = useState<Node<DemoNodeData>[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
 
   const assets: DraggedAsset[] = useMemo(
     () =>
@@ -27,9 +44,21 @@ export const AssetBrowserMvpDemo: React.FC = () => {
           content: '{"graph":{}}',
           metadata: { theme: 'character' }
         }
-      ] as any,
+      ],
     []
   );
+
+  const handleNodesChange = useCallback((changes: NodeChange[]) => {
+    setNodes(nds => applyNodeChanges(changes, nds));
+  }, []);
+
+  const handleEdgesChange = useCallback((changes: EdgeChange[]) => {
+    setEdges(eds => applyEdgeChanges(changes, eds));
+  }, []);
+
+  const handleConnect = useCallback((connection: Connection) => {
+    setEdges(eds => addEdge(connection, eds));
+  }, []);
 
   return (
     <ReactFlowProvider>
@@ -76,11 +105,11 @@ export const AssetBrowserMvpDemo: React.FC = () => {
                         data: {
                           ...n.data,
                           options: [
-                            ...(n.data?.options || []),
-                            { text: asset.name, weight }
-                          ]
-                        }
+                          ...(n.data?.options || []),
+                          { text: asset.name, weight }
+                        ]
                       }
+                    }
                     : n
                 )
               );
@@ -91,15 +120,15 @@ export const AssetBrowserMvpDemo: React.FC = () => {
               edges={edges}
               nodeTypes={{}}
               edgeTypes={{}}
-              onNodesChange={() => {}}
-              onEdgesChange={() => {}}
-              onConnect={() => {}}
-              onPaneClick={() => {}}
-              onNodeClick={() => {}}
-              onEdgeClick={() => {}}
-              onSelectionStart={() => {}}
-              onSelectionEnd={() => {}}
-              onInit={() => {}}
+              onNodesChange={handleNodesChange}
+              onEdgesChange={handleEdgesChange}
+              onConnect={handleConnect}
+              onPaneClick={noop}
+              onNodeClick={noop}
+              onEdgeClick={noop}
+              onSelectionStart={noop}
+              onSelectionEnd={noop}
+              onInit={noop}
               isValidConnection={() => true}
               activatedEdges={new Set()}
               showMinimap={false}

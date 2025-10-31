@@ -3,19 +3,48 @@
  * Provides Tab/Shift+Tab navigation and auto-focus for inline editable nodes
  */
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { Node, Edge, ReactFlow, ReactFlowProvider, Controls, Background, useReactFlow } from 'reactflow';
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import {
+  ReactFlow,
+  ReactFlowProvider,
+  Controls,
+  Background,
+  applyNodeChanges,
+  applyEdgeChanges,
+  type Node,
+  type Edge,
+  type NodeChange,
+  type EdgeChange,
+  type NodeProps
+} from 'reactflow';
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
 import { VisualRangeIndicator } from './VisualRangeIndicator';
 import { PromptAnalysis } from '../../runtime/nodes/epic1/PromptParser';
 import 'reactflow/dist/style.css';
 
+interface WeightedChoiceOption {
+  text: string;
+  weight: number;
+}
+
+interface EditorNodeData extends Record<string, unknown> {
+  isEditing?: boolean;
+  value?: string | WeightedChoiceOption[];
+  originalValue?: string;
+  type?: string;
+  label?: string;
+  sourceRange?: { start: number; end: number };
+}
+
+type EditorNode = Node<EditorNodeData>;
+type EditorEdge = Edge;
+
 export interface KeyboardNavigableEditorProps {
   promptAnalysis?: PromptAnalysis;
-  initialNodes?: Node[];
-  initialEdges?: Edge[];
-  onNodesChange?: (nodes: Node[]) => void;
-  onEdgesChange?: (edges: Edge[]) => void;
+  initialNodes?: EditorNode[];
+  initialEdges?: EditorEdge[];
+  onNodesChange?: (nodes: EditorNode[]) => void;
+  onEdgesChange?: (edges: EditorEdge[]) => void;
   onCanvasClick?: () => void;
   onEscapePress?: () => void;
   className?: string;
@@ -33,13 +62,11 @@ function KeyboardNavigableEditorInternal({
   className = '',
   showVisualIndicators = true
 }: KeyboardNavigableEditorProps) {
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const [nodes, setNodes] = useState<EditorNode[]>(initialNodes);
+  const [edges, setEdges] = useState<EditorEdge[]>(initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
-  const [hoveredTextRange, setHoveredTextRange] = useState<{ start: number; end: number } | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const { getNodes, setNodes: setFlowNodes } = useReactFlow();
 
   // Handle node selection
   const handleNodeSelect = useCallback((nodeId: string) => {
@@ -98,7 +125,7 @@ function KeyboardNavigableEditorInternal({
   }, [onEscapePress]);
 
   // Set up keyboard navigation
-  const { autoFocusFirstNode } = useKeyboardNavigation({
+  useKeyboardNavigation({
     nodes,
     selectedNodeId,
     onNodeSelect: handleNodeSelect,
@@ -135,34 +162,13 @@ function KeyboardNavigableEditorInternal({
   }, [onCanvasClick]);
 
   // Handle node changes from React Flow
-  const handleNodesChange = useCallback((changes: any[]) => {
-    setNodes(currentNodes => {
-      let updatedNodes = [...currentNodes];
-      
-      changes.forEach(change => {
-        if (change.type === 'position') {
-          const nodeIndex = updatedNodes.findIndex(n => n.id === change.id);
-          if (nodeIndex !== -1) {
-            updatedNodes[nodeIndex] = {
-              ...updatedNodes[nodeIndex],
-              position: change.position
-            };
-          }
-        }
-        // Handle other change types as needed
-      });
-      
-      return updatedNodes;
-    });
+  const handleNodesChange = useCallback((changes: NodeChange<EditorNodeData>[]) => {
+    setNodes(currentNodes => applyNodeChanges(changes, currentNodes));
   }, []);
 
   // Handle edge changes from React Flow
-  const handleEdgesChange = useCallback((changes: any[]) => {
-    setEdges(currentEdges => {
-      let updatedEdges = [...currentEdges];
-      // Handle edge changes
-      return updatedEdges;
-    });
+  const handleEdgesChange = useCallback((changes: EdgeChange[]) => {
+    setEdges(currentEdges => applyEdgeChanges(changes, currentEdges));
   }, []);
 
   // Update parent when nodes change
@@ -182,7 +188,7 @@ function KeyboardNavigableEditorInternal({
   // Generate nodes from prompt analysis if provided
   useEffect(() => {
     if (promptAnalysis && promptAnalysis.nodes.length > 0) {
-      const generatedNodes = promptAnalysis.nodes.map((genNode, index) => {
+      const generatedNodes: EditorNode[] = promptAnalysis.nodes.map((genNode, index) => {
         const node = genNode.node;
         const mapping = promptAnalysis.mappings.find(m => m.nodeId === node.serialize().id);
         
@@ -206,7 +212,7 @@ function KeyboardNavigableEditorInternal({
       setNodes(generatedNodes);
       
       // Auto-connect nodes in sequence
-      const generatedEdges = generatedNodes.slice(0, -1).map((node, index) => ({
+      const generatedEdges: EditorEdge[] = generatedNodes.slice(0, -1).map((node, index) => ({
         id: `e${node.id}-${generatedNodes[index + 1].id}`,
         source: node.id,
         target: generatedNodes[index + 1].id,
@@ -218,10 +224,15 @@ function KeyboardNavigableEditorInternal({
   }, [promptAnalysis]);
 
   // Custom node component with edit support
-  const nodeTypes = React.useMemo(() => ({
-    default: (props: any) => {
+  const nodeTypes = useMemo(() => ({
+    default: (props: NodeProps<EditorNodeData>) => {
       const { data, selected } = props;
       const isHovered = hoveredNodeId === props.id;
+      const rawValue = data.value;
+      const weightedChoices: WeightedChoiceOption[] = Array.isArray(rawValue)
+        ? (rawValue as WeightedChoiceOption[])
+        : [];
+      const textValue = typeof rawValue === 'string' ? rawValue : data.originalValue ?? '';
       
       return (
         <div 
@@ -244,7 +255,7 @@ function KeyboardNavigableEditorInternal({
               {data.type === 'TextBlock' && (
                 <textarea
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  value={data.value || ''}
+                  value={textValue}
                   onChange={(e) => {
                     setNodes(nodes => 
                       nodes.map(node => 
@@ -262,14 +273,14 @@ function KeyboardNavigableEditorInternal({
               
               {data.type === 'WeightedChoice' && (
                 <div className="space-y-1">
-                  {(data.value || []).map((choice: any, index: number) => (
+                  {weightedChoices.map((choice, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <input
                         type="text"
                         className="flex-1 p-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                         value={choice.text || ''}
                         onChange={(e) => {
-                          const newChoices = [...(data.value || [])];
+                          const newChoices = [...weightedChoices];
                           newChoices[index] = { ...newChoices[index], text: e.target.value };
                           setNodes(nodes => 
                             nodes.map(node => 
@@ -286,8 +297,11 @@ function KeyboardNavigableEditorInternal({
                         className="w-16 p-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                         value={choice.weight || 0}
                         onChange={(e) => {
-                          const newChoices = [...(data.value || [])];
-                          newChoices[index] = { ...newChoices[index], weight: parseInt(e.target.value) || 0 };
+                          const newChoices = [...weightedChoices];
+                          newChoices[index] = {
+                            ...newChoices[index],
+                            weight: Number.parseInt(e.target.value, 10) || 0
+                          };
                           setNodes(nodes => 
                             nodes.map(node => 
                               node.id === props.id 
@@ -307,10 +321,10 @@ function KeyboardNavigableEditorInternal({
             </div>
           ) : (
             <div className="text-sm">
-              {data.type === 'TextBlock' && <div className="text-gray-700">{data.value}</div>}
+              {data.type === 'TextBlock' && <div className="text-gray-700">{textValue}</div>}
               {data.type === 'WeightedChoice' && (
                 <div className="space-y-1">
-                  {(data.value || []).map((choice: any, index: number) => (
+                  {weightedChoices.map((choice, index) => (
                     <div key={index} className="text-xs text-gray-600">
                       • {choice.text} ({choice.weight}%)
                     </div>
@@ -328,7 +342,7 @@ function KeyboardNavigableEditorInternal({
         </div>
       );
     }
-  }), [nodes, hoveredNodeId]);
+  }), [hoveredNodeId]);
 
   return (
     <div className={`relative h-full ${className}`}>
@@ -337,7 +351,6 @@ function KeyboardNavigableEditorInternal({
           <VisualRangeIndicator
             promptAnalysis={promptAnalysis}
             onNodeHover={setHoveredNodeId}
-            onTextHover={setHoveredTextRange}
             hoveredNodeId={hoveredNodeId}
             showConnectionLines={true}
           />

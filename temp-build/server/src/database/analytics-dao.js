@@ -573,10 +573,10 @@ export class AnalyticsDAO {
    */
   buildWhereParams(filters) {
     const params = [];
-    if (filters.startTime !== undefined) params.push(filters.startTime);
-    if (filters.endTime !== undefined) params.push(filters.endTime);
-    if (filters.userId !== undefined) params.push(filters.userId);
-    if (filters.sessionId !== undefined) params.push(filters.sessionId);
+    if (filters.startTime !== undefined) {params.push(filters.startTime);}
+    if (filters.endTime !== undefined) {params.push(filters.endTime);}
+    if (filters.userId !== undefined) {params.push(filters.userId);}
+    if (filters.sessionId !== undefined) {params.push(filters.sessionId);}
     if (filters.eventTypes && filters.eventTypes.length > 0) {
       params.push(...filters.eventTypes);
     }
@@ -586,18 +586,18 @@ export class AnalyticsDAO {
    * Get event category from event type
    */
   getEventCategory(eventType) {
-    if (eventType.includes('execution')) return 'execution';
-    if (eventType.includes('user') || eventType.includes('interaction')) return 'user';
-    if (eventType.includes('performance') || eventType.includes('token')) return 'performance';
-    if (eventType.includes('error')) return 'error';
+    if (eventType.includes('execution')) {return 'execution';}
+    if (eventType.includes('user') || eventType.includes('interaction')) {return 'user';}
+    if (eventType.includes('performance') || eventType.includes('token')) {return 'performance';}
+    if (eventType.includes('error')) {return 'error';}
     return 'general';
   }
   /**
    * Get event severity from event type
    */
   getEventSeverity(eventType) {
-    if (eventType.includes('error')) return 'error';
-    if (eventType.includes('warning')) return 'warning';
+    if (eventType.includes('error')) {return 'error';}
+    if (eventType.includes('warning')) {return 'warning';}
     return 'info';
   }
   /**

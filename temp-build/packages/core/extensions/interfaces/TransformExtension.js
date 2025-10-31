@@ -77,12 +77,12 @@ export var TransformExtensionHelpers;
     const errors = [];
     const warnings = [];
     // Basic validation
-    if (!definition.id) errors.push('Transform ID is required');
-    if (!definition.name) errors.push('Transform name is required');
-    if (!definition.transformClass) errors.push('Transform class is required');
+    if (!definition.id) {errors.push('Transform ID is required');}
+    if (!definition.name) {errors.push('Transform name is required');}
+    if (!definition.transformClass) {errors.push('Transform class is required');}
     // Schema validation
-    if (!definition.inputSchema) errors.push('Input schema is required');
-    if (!definition.outputSchema) errors.push('Output schema is required');
+    if (!definition.inputSchema) {errors.push('Input schema is required');}
+    if (!definition.outputSchema) {errors.push('Output schema is required');}
     return {
       valid: errors.length === 0,
       errors,

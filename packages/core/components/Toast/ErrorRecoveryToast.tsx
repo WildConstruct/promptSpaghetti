@@ -209,11 +209,11 @@ function getRecoveryActions(error: DropError): ErrorRecoveryAction[] {
   // Normalize labels to match AC exact copy
   actions.forEach(a => {
     if (a.label === 'Auto-scroll to valid area')
-      a.label = 'Click here to auto-scroll to empty area';
+      {a.label = 'Click here to auto-scroll to empty area';}
     if (a.label === 'Create WeightedChoice (W)')
-      a.label = 'Press W to create one';
+      {a.label = 'Press W to create one';}
     if (a.label === 'View compatibility')
-      a.label = 'View compatibility matrix (? key)';
+      {a.label = 'View compatibility matrix (? key)';}
   });
 
   return actions;

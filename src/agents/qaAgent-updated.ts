@@ -1,7 +1,7 @@
 // src/agents/qaAgent-updated.ts
 // QA agent - updated to work with ticket system and GitHub automation
 
-import { AgentRunner } from './agentBase';
+import { AgentRunner, Event, State, Task } from './agentBase';
 
 export class QAAgent extends AgentRunner {
   constructor() {
@@ -11,7 +11,7 @@ export class QAAgent extends AgentRunner {
   /**
    * Filter for QA-relevant events
    */
-  filterRelevant(events: any[]): any[] {
+  filterRelevant(events: Event[]): Event[] {
     const relevantTypes = [
       'TASK_MOVED_TO_REVIEW',
       'TASK_REVIEW_REQUESTED',
@@ -21,48 +21,43 @@ export class QAAgent extends AgentRunner {
       'AUTO_PUSH_TRIGGERED' // New: Track auto-push events
     ];
 
-    return events.filter(ev => {
-      // QA is interested in all review tasks
-      if (ev.type === 'TASK_MOVED_TO_REVIEW') return true;
-
-      // Also interested in tasks already in review
-      if (ev.payload?.task_id) {
-        const task = this.getTaskFromState(ev.payload.task_id);
-        if (task?.state === 'REVIEW') return true;
-      }
-
-      return relevantTypes.includes(ev.type);
-    });
+    return events.filter(ev => relevantTypes.includes(ev.type));
   }
 
   /**
    * QA decision logic - includes GitHub automation awareness
    */
-  async decide(ev: any, state: any): Promise<any> {
+  async decide(ev: Event, state: State): Promise<Event | 'NOOP'> {
     switch (ev.type) {
-      case 'TASK_MOVED_TO_REVIEW':
-        // Start reviewing newly submitted tasks
+      case 'TASK_REVIEW_REQUESTED': {
+        // Perform QA review on the task
         const task = state.tasks[ev.payload.task_id];
-        if (task) {
-          await this.sleep(3000); // Simulate review time
+        if (task && task.state === 'REVIEW') {
           return this.performQAReview(task);
         }
         break;
+      }
 
-      case 'PR_CREATED':
-        // Log that PR was automatically created
-        return this.createEvent('TASK_NOTE_ADDED', {
+      case 'PR_CREATED': {
+        // Review the created PR
+        return this.createEvent('PR_REVIEW_STARTED', {
           task_id: ev.payload.task_id,
-          note: `GitHub PR #${ev.payload.pr_number} automatically created: ${ev.payload.pr_url}`
+          pr_number: ev.payload.pr_number,
+          review_type: 'automated'
         });
+      }
 
-      case 'AUTO_PUSH_TRIGGERED':
-        // Log auto-push event
-        return this.createEvent('METRICS_UPDATED', {
-          metric: 'auto_push',
-          commit_count: ev.payload.commit_count,
-          timestamp: new Date().toISOString()
-        });
+      case 'AUTO_PUSH_TRIGGERED': {
+        // Monitor auto-push events for quality
+        if (ev.payload.failed) {
+          return this.createEvent('QUALITY_ALERT', {
+            task_id: ev.payload.task_id,
+            issue: 'Auto-push failed',
+            details: ev.payload.error
+          });
+        }
+        break;
+      }
     }
 
     // Check for tasks that have been in review too long
@@ -77,7 +72,7 @@ export class QAAgent extends AgentRunner {
   /**
    * Perform QA review on a task
    */
-  private performQAReview(task: any): any {
+  private performQAReview(task: Task): Event {
     // Simulate QA decision process
     const passRate = 0.8; // 80% pass rate
     const passed = Math.random() < passRate;
@@ -107,22 +102,22 @@ export class QAAgent extends AgentRunner {
   /**
    * Check review queue for tasks needing attention
    */
-  private checkReviewQueue(state: any): any {
+  private checkReviewQueue(state: State): Event | null {
     const reviewTasks = Object.values(state.tasks).filter(
-      (t: any) => t.state === 'REVIEW'
+      (t: Task) => t.status === 'REVIEW'
     );
 
     // Find oldest unreviewed task
-    const unreviewed = reviewTasks.filter((t: any) => {
-      const waitTime = Date.now() - new Date(t.updated).getTime();
+    const unreviewed = reviewTasks.filter((t: Task) => {
+      const waitTime = Date.now() - new Date(t.updated || '').getTime();
       return waitTime > 60000; // Tasks waiting more than 1 minute
     });
 
     if (unreviewed.length > 0) {
       // Sort by age and review the oldest
       unreviewed.sort(
-        (a: any, b: any) =>
-          new Date(a.updated).getTime() - new Date(b.updated).getTime()
+        (a: Task, b: Task) =>
+          new Date(a.updated || '').getTime() - new Date(b.updated || '').getTime()
       );
 
       return this.performQAReview(unreviewed[0]);
@@ -156,12 +151,6 @@ export class QAAgent extends AgentRunner {
     }
 
     return selected;
-  }
-
-  private getTaskFromState(taskId: string): any {
-    // This would be implemented to fetch task from state
-    // For now, returning null as placeholder
-    return null;
   }
 }
 

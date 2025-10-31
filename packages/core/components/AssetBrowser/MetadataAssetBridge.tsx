@@ -126,7 +126,7 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
     <div className="metadata-asset-bridge">
       {/* Metadata extraction indicator */}
       {showExtractionIndicator && (
-        <div className="metadata-extracting-indicator">
+        <div data-testid="metadata-extraction-indicator" className="metadata-extracting-indicator">
           <span className="loading-spinner" />
           Analyzing content for smart suggestions...
         </div>
@@ -134,7 +134,7 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
 
       {/* Debug info in development */}
       {process.env.NODE_ENV === 'development' && currentMetadata && (
-        <div className="metadata-debug-info">
+        <div data-testid="metadata-debug-info" className="metadata-debug-info">
           <details>
             <summary>Extracted Metadata (Debug)</summary>
             <pre>{JSON.stringify(currentMetadata, null, 2)}</pre>
@@ -144,6 +144,7 @@ export const MetadataAssetBridge: React.FC<MetadataAssetBridgeProps> = ({
 
       {/* Smart Asset Browser with metadata context */}
       <SmartAssetBrowser
+        data-testid="smart-asset-browser"
         assets={assets}
         currentSegmentMetadata={currentMetadata}
         onAssetSelect={handleAssetSelect}

@@ -24,22 +24,24 @@ export const EnhancedWeightedChoice: React.FC<EnhancedWeightedChoiceProps> = ({
   // Apply preset weight distributions
   const applyPreset = (preset: 'equal' | 'random' | 'golden') => {
     let newOptions = [...options];
-    
+
     switch (preset) {
-      case 'equal':
+      case 'equal': {
         const equalWeight = Math.floor(100 / options.length);
-        newOptions = options.map((opt, i) => ({
+        newOptions = options.map((opt, index) => ({
           ...opt,
-          weight: i === options.length - 1 
-            ? 100 - (equalWeight * (options.length - 1)) 
-            : equalWeight
+          weight:
+            index === options.length - 1
+              ? 100 - equalWeight * (options.length - 1)
+              : equalWeight
         }));
         break;
-        
-      case 'random':
+      }
+
+      case 'random': {
         let remaining = 100;
-        newOptions = options.map((opt, i) => {
-          if (i === options.length - 1) {
+        newOptions = options.map((opt, index) => {
+          if (index === options.length - 1) {
             return { ...opt, weight: remaining };
           }
           const weight = Math.floor(Math.random() * remaining * 0.7);
@@ -47,37 +49,27 @@ export const EnhancedWeightedChoice: React.FC<EnhancedWeightedChoiceProps> = ({
           return { ...opt, weight };
         });
         break;
-        
-      case 'golden':
-        // Golden ratio distribution
+      }
+
+      case 'golden': {
         const phi = 1.618;
-        let weights = [1];
-        for (let i = 1; i < options.length; i++) {
+        const weights = [1];
+        for (let i = 1; i < options.length; i += 1) {
           weights.push(weights[i - 1] * phi);
         }
-        const sum = weights.reduce((a, b) => a + b, 0);
-        newOptions = options.map((opt, i) => ({
+        const sum = weights.reduce((acc, weight) => acc + weight, 0);
+        newOptions = options.map((opt, index) => ({
           ...opt,
-          weight: Math.round((weights[i] / sum) * 100)
+          weight: Math.round((weights[index] / sum) * 100)
         }));
         break;
-    }
-    
-    onChange(newOptions);
-  };
+      }
 
-  // Handle keyboard shortcuts for weight adjustment
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      const delta = e.shiftKey ? 10 : 1;
-      const change = e.key === 'ArrowUp' ? delta : -delta;
-      const newWeight = Math.max(0, Math.min(100, options[index].weight + change));
-      
-      const newOptions = [...options];
-      newOptions[index] = { ...newOptions[index], weight: newWeight };
-      onChange(newOptions);
+      default:
+        break;
     }
+
+    onChange(newOptions);
   };
 
   return (

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { Node, Edge } from 'reactflow';
 import {
   createPSGLib,
   serializePSGLib,
@@ -9,8 +10,8 @@ import {
 interface SaveAsPresetDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedNodes: any[]; // Replace with proper Node type
-  selectedEdges: any[]; // Replace with proper Edge type
+  selectedNodes: Node[];
+  selectedEdges: Edge[];
   currentUser?: string;
   onSave?: (psglib: string, filename: string) => void;
   saveToLibrary?: boolean;
@@ -35,7 +36,9 @@ export function SaveAsPresetDialog({
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   const handleAddTag = () => {
     const trimmed = tagInput.trim();

@@ -4664,7 +4664,7 @@ function we(a) {
   const e = (r = globalThis.import) == null ? void 0 : r.meta, t = (e == null ? void 0 : e.env) ?? globalThis.__env__;
   if (t && Object.prototype.hasOwnProperty.call(t, a)) {
     const n = t[a];
-    return typeof n == "string" ? n : n != null ? String(n) : void 0;
+    return typeof n == "string" ? n : n !== null ? String(n) : void 0;
   }
 }
 function fr(a, e = !0) {

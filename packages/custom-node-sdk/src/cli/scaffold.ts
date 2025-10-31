@@ -80,9 +80,9 @@ async function promptForConfig(): Promise<NodeScaffoldConfig> {
       name: 'name',
       message: 'Node type identifier (e.g., my-company.text-processor):',
       validate: (input: string) => {
-        if (!input.trim()) return 'Name is required';
+        if (!input.trim()) {return 'Name is required';}
         if (!/^[a-zA-Z0-9.-]+$/.test(input))
-          return 'Name must contain only alphanumeric characters, dots, and hyphens';
+          {return 'Name must contain only alphanumeric characters, dots, and hyphens';}
         return true;
       }
     },

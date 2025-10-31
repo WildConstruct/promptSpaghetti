@@ -126,10 +126,15 @@ function getResizeHandleStyle(direction: ResizeDirection): HandleStyleConfig {
 /**
  * Individual resize handle component
  */
-const ResizeHandle: React.FC<{
+interface ResizeHandleProps {
   direction: ResizeDirection;
   onMouseDown: (e: React.MouseEvent) => void;
-}> = React.memo(({ direction, onMouseDown }) => {
+}
+
+const ResizeHandleComponent: React.FC<ResizeHandleProps> = ({
+  direction,
+  onMouseDown
+}) => {
   const style = getResizeHandleStyle(direction);
   
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -166,17 +171,19 @@ const ResizeHandle: React.FC<{
       data-direction={direction}
     />
   );
-});
+};
+
+const ResizeHandle = React.memo(ResizeHandleComponent);
 
 ResizeHandle.displayName = 'ResizeHandle';
 
 /**
  * Main ResizeHandles component that renders all 8 handles
  */
-export const ResizeHandles: React.FC<ResizeHandlesProps> = React.memo(({
+const ResizeHandlesComponent: React.FC<ResizeHandlesProps> = ({
   visible,
   isLocked,
-  onResizeStart,
+  onResizeStart
 }) => {
   // Don't render if not visible or if locked
   if (!visible || isLocked) {
@@ -194,6 +201,7 @@ export const ResizeHandles: React.FC<ResizeHandlesProps> = React.memo(({
       ))}
     </>
   );
-});
+};
 
+export const ResizeHandles = React.memo(ResizeHandlesComponent);
 ResizeHandles.displayName = 'ResizeHandles';

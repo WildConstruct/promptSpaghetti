@@ -5,7 +5,6 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useReactFlow, useStoreApi } from 'reactflow';
-import type { Edge, Connection } from 'reactflow';
 import { useMicroInteractions, triggerHaptic } from '../animations/MicroInteractions';
 
 interface ClosestHandle {
@@ -33,7 +32,7 @@ export const MagneticSnapHandler: React.FC<MagneticSnapHandlerProps> = ({
   snapStrength = 0.8,
   enableHaptic = true
 }) => {
-  const { getNodes, getEdges } = useReactFlow();
+  const { getNodes } = useReactFlow();
   const store = useStoreApi();
   const { trigger } = useMicroInteractions();
   const [isConnecting, setIsConnecting] = useState(false);
@@ -52,7 +51,7 @@ export const MagneticSnapHandler: React.FC<MagneticSnapHandlerProps> = ({
       let closestDistance = Infinity;
 
       nodes.forEach(node => {
-        if (node.id === sourceNode.id) return;
+        if (node.id === sourceNode.id) {return;}
 
         const targetX = node.position.x + (node.width || 100) / 2;
         const targetY = node.position.y + (node.height || 50) / 2;
@@ -90,20 +89,20 @@ export const MagneticSnapHandler: React.FC<MagneticSnapHandlerProps> = ({
 
   // Monitor mouse position during connection
   useEffect(() => {
-    if (!isConnecting) return;
+    if (!isConnecting) {return;}
 
     const handleMouseMove = (event: MouseEvent) => {
       const state = store.getState();
       const connectionNodeId = state.connectionNodeId;
       
-      if (!connectionNodeId) return;
+      if (!connectionNodeId) {return;}
 
       const sourceNode = getNodes().find(n => n.id === connectionNodeId);
-      if (!sourceNode) return;
+      if (!sourceNode) {return;}
 
       // Get viewport-adjusted mouse position
       const reactFlowBounds = document.querySelector('.react-flow')?.getBoundingClientRect();
-      if (!reactFlowBounds) return;
+      if (!reactFlowBounds) {return;}
 
       const viewportX = event.clientX - reactFlowBounds.left;
       const viewportY = event.clientY - reactFlowBounds.top;
@@ -112,14 +111,17 @@ export const MagneticSnapHandler: React.FC<MagneticSnapHandlerProps> = ({
       const closestHandle = findClosestHandle(sourceNode, viewportX, viewportY);
 
       if (closestHandle && closestHandle.distance < magnetDistance) {
-        // Apply magnetic effect
-        const snapFactor = 1 - (closestHandle.distance / magnetDistance) * (1 - snapStrength);
-        
         // Trigger snap feedback if this is a new target
         if (closestHandle.nodeId !== lastSnapTarget) {
+          const hapticType =
+            snapStrength >= 0.9
+              ? 'heavy'
+              : snapStrength >= 0.6
+                ? 'medium'
+                : 'light';
           trigger('snap', closestHandle.x, closestHandle.y, {
             nodeId: closestHandle.nodeId,
-            haptic: enableHaptic ? 'light' : undefined
+            haptic: enableHaptic ? hapticType : undefined
           });
           setLastSnapTarget(closestHandle.nodeId);
         }

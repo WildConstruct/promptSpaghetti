@@ -3,8 +3,8 @@
  * Delightful surprises throughout the interface
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
-import { Node, Edge, useReactFlow } from 'reactflow';
+import React, { useEffect, useState } from 'react';
+import { useReactFlow } from 'reactflow';
 
 interface UnexpectedAnimationsProps {
   enabled?: boolean;
@@ -15,7 +15,7 @@ export const UnexpectedAnimations: React.FC<UnexpectedAnimationsProps> = ({
   enabled = true,
   weirdMode = false,
 }) => {
-  const { getNodes, setNodes, getEdges, setEdges, project } = useReactFlow();
+  const { getNodes, setNodes, setEdges } = useReactFlow();
   const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
   const [idleTime, setIdleTime] = useState(0);
 
@@ -48,56 +48,12 @@ export const UnexpectedAnimations: React.FC<UnexpectedAnimationsProps> = ({
     return () => clearInterval(interval);
   }, [lastInteractionTime]);
 
-  // Node wiggle on creation
-  const animateNodeCreation = useCallback((nodeId: string) => {
-    if (!enabled) return;
-
-    const nodes = getNodes();
-    const node = nodes.find(n => n.id === nodeId);
-    if (!node) return;
-
-    // Add wiggle class
-    setNodes(nodes => nodes.map(n => 
-      n.id === nodeId 
-        ? { ...n, className: `${n.className || ''} node-wiggle` }
-        : n
-    ));
-
-    // Remove after animation
-    setTimeout(() => {
-      setNodes(nodes => nodes.map(n => 
-        n.id === nodeId 
-          ? { ...n, className: (n.className || '').replace('node-wiggle', '') }
-          : n
-      ));
-    }, 500);
-  }, [enabled, getNodes, setNodes]);
-
-  // Edge dance on connection
-  const animateEdgeConnection = useCallback((edgeId: string) => {
-    if (!enabled) return;
-
-    setEdges(edges => edges.map(e => 
-      e.id === edgeId 
-        ? { ...e, animated: true, className: 'edge-dance' }
-        : e
-    ));
-
-    setTimeout(() => {
-      setEdges(edges => edges.map(e => 
-        e.id === edgeId 
-          ? { ...e, animated: false, className: '' }
-          : e
-      ));
-    }, 2000);
-  }, [enabled, setEdges]);
-
   // Idle animations
   useEffect(() => {
-    if (!enabled || idleTime < 10) return; // Start after 10 seconds idle
+    if (!enabled || idleTime < 10) {return;} // Start after 10 seconds idle
 
     const nodes = getNodes();
-    if (nodes.length === 0) return;
+    if (nodes.length === 0) {return;}
 
     // Random node breathes
     if (idleTime > 10 && idleTime < 20) {
@@ -140,7 +96,7 @@ export const UnexpectedAnimations: React.FC<UnexpectedAnimationsProps> = ({
 
   // Weird mode effects
   useEffect(() => {
-    if (!weirdMode || !enabled) return;
+    if (!weirdMode || !enabled) {return;}
 
     // Rainbow edges
     const interval = setInterval(() => {
@@ -174,7 +130,7 @@ export const UnexpectedAnimations: React.FC<UnexpectedAnimationsProps> = ({
 
   // Random surprises
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     const surpriseTriggers = [
       {
@@ -288,7 +244,7 @@ function createScreenFlash() {
 // Node click celebration
 export function celebrateNodeClick(nodeId: string) {
   const node = document.querySelector(`[data-id="${nodeId}"]`);
-  if (!node) return;
+  if (!node) {return;}
 
   const rect = node.getBoundingClientRect();
   const x = rect.left + rect.width / 2;

@@ -40,9 +40,17 @@ describe('Edge Case State Transition Tests', () => {
     await framework.cleanup();
     try {
       await fs.unlink(testStateFile);
-      await fs.unlink(testStateFile + '.lock').catch(() => {});
+      await fs.unlink(`${testStateFile}.lock`).catch(err => {
+        const lockError = err as NodeJS.ErrnoException;
+        if (lockError && lockError.code !== 'ENOENT') {
+          console.warn('Failed to remove lock file:', lockError);
+        }
+      });
     } catch (error) {
-      // File might not exist
+      const stateError = error as NodeJS.ErrnoException;
+      if (stateError && stateError.code !== 'ENOENT') {
+        console.warn('Failed to remove state file:', stateError);
+      }
     }
   });
 
@@ -84,7 +92,7 @@ describe('Edge Case State Transition Tests', () => {
       });
 
       try {
-        await framework.testValidTransition(taskId, null as any, 'IN_PROGRESS');
+        await framework.testValidTransition(taskId, null as unknown, 'IN_PROGRESS');
         fail('Should have failed with null status');
       } catch (error) {
         expect(error.message).toContain('Unknown state: null');
@@ -128,7 +136,7 @@ describe('Edge Case State Transition Tests', () => {
         };
 
         // Create circular reference (this tests JSON serialization)
-        (task as any).self = task;
+        (task as unknown as { self: unknown }).self = task;
         state.tasks[taskId] = task;
       });
 
@@ -254,7 +262,7 @@ describe('Edge Case State Transition Tests', () => {
 
     it('should handle transitions with microsecond timing differences', async () => {
       const taskCount = 50;
-      const promises: Promise<any>[] = [];
+      const promises: Promise<unknown>[] = [];
 
       // Create many tasks and transition them simultaneously
       for (let i = 0; i < taskCount; i++) {
@@ -291,7 +299,7 @@ describe('Edge Case State Transition Tests', () => {
       // Verify final state consistency
       const finalState = await stateLock.readState();
       const inProgressTasks = Object.values(finalState.tasks).filter(
-        (task: any) => task.status === 'IN_PROGRESS'
+        (task: { status: string }) => task.status === 'IN_PROGRESS'
       );
       expect(inProgressTasks).toHaveLength(taskCount);
     }, 30000);
@@ -337,7 +345,7 @@ describe('Edge Case State Transition Tests', () => {
       const taskId = 'nested-task';
 
       // Create deeply nested structure
-      const deeplyNested: any = { level: 0 };
+      const deeplyNested: unknown = { level: 0 };
       let current = deeplyNested;
 
       for (let i = 1; i <= 100; i++) {

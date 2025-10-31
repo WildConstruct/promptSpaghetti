@@ -11,10 +11,7 @@ import {
   ControlPoint,
   EdgeConstraints,
   CollisionResult,
-  EdgeRoutingConfig,
-  BezierParams,
-  OrthogonalParams,
-  StepParams
+  EdgeRoutingConfig
 } from '../../types/edgeRouting';
 
 /**
@@ -44,7 +41,7 @@ abstract class BaseRoutingAlgorithm implements IRoutingAlgorithm {
     // In production, use more sophisticated algorithms
     const hasCollision = false;
     const collisionPoints: XYPosition[] = [];
-    const collidingElements: any[] = [];
+    const collidingElements: unknown[] = [];
 
     if (obstacles && obstacles.length > 0) {
       // Parse SVG path and check intersections
@@ -488,8 +485,7 @@ export class SmartRoutingAlgorithm extends BaseRoutingAlgorithm {
 
   calculateControlPoints(
     source: XYPosition,
-    target: XYPosition,
-    config?: EdgeRoutingConfig
+    target: XYPosition
   ): ControlPoint[] {
     // Use AI/heuristics to determine optimal control points
     const distance = this.distance(source, target);

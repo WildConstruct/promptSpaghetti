@@ -462,7 +462,7 @@ export class CliValidator {
   private async isCommandAvailable(command: string): Promise<boolean> {
     // Check cache first
     if (this.commandCache.has(command)) {
-      return this.commandCache.get(command)!;
+      return this.commandCache.get(command) || false;
     }
 
     try {
@@ -624,8 +624,8 @@ export class CliValidator {
         continue;
       }
 
-      if (char === "'") singleQuotes++;
-      if (char === '"') doubleQuotes++;
+      if (char === "'") {singleQuotes++;}
+      if (char === '"') {doubleQuotes++;}
     }
 
     return singleQuotes % 2 !== 0 || doubleQuotes % 2 !== 0;
@@ -652,8 +652,8 @@ export class CliValidator {
       }
 
       if (!inQuotes) {
-        if (char === '(') count++;
-        if (char === ')') count--;
+        if (char === '(') {count++;}
+        if (char === ')') {count--;}
       }
     }
 

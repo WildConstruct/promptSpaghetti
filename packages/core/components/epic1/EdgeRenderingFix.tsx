@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edge, EdgeProps, getBezierPath, getSmoothStepPath } from 'reactflow';
+import { EdgeProps, getSmoothStepPath } from 'reactflow';
 import { AttachmentEdge } from './edges/AttachmentEdge';
 import EdgeRouter from './edges/EdgeRouter';
 

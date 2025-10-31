@@ -5,7 +5,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTutorial } from './TutorialContext';
 import { PromptPasteDialog } from './PromptPasteDialog';
-import { ElementDetector, ElementDetectionResult } from './ElementDetector';
 import './TutorialOverlay.css';
 
 export const TutorialOverlay: React.FC = () => {
@@ -16,14 +15,11 @@ export const TutorialOverlay: React.FC = () => {
     nextStep,
     previousStep,
     skipTutorial,
-    onboardingState,
   } = useTutorial();
 
   const [targetElement, setTargetElement] = useState<HTMLElement | null>(null);
   const [showSkipHint, setShowSkipHint] = useState(false);
   const [showPasteDialog, setShowPasteDialog] = useState(false);
-  const [isDetectingElement, setIsDetectingElement] = useState(false);
-  const [detectionError, setDetectionError] = useState<string | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const skipHintTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -54,7 +50,7 @@ export const TutorialOverlay: React.FC = () => {
 
   // Find target element and trigger position recalculation
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {return;}
 
     const findTarget = () => {
       if (step.target) {
@@ -84,7 +80,7 @@ export const TutorialOverlay: React.FC = () => {
 
   // Force position recalculation when wizard modal appears/disappears
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {return;}
 
     const checkWizardState = () => {
       // This will trigger a re-render and position recalculation
@@ -117,7 +113,7 @@ export const TutorialOverlay: React.FC = () => {
 
   // Handle keyboard shortcuts
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {return;}
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -135,7 +131,7 @@ export const TutorialOverlay: React.FC = () => {
 
   // Handle paste action - show dialog for paste step
   useEffect(() => {
-    if (!isActive || step.action !== 'paste') return;
+    if (!isActive || step.action !== 'paste') {return;}
     
     // Show the paste dialog for the paste step
     setShowPasteDialog(true);
@@ -157,7 +153,7 @@ export const TutorialOverlay: React.FC = () => {
 
   // Handle click action
   useEffect(() => {
-    if (!isActive || !targetElement || step.action !== 'click') return;
+    if (!isActive || !targetElement || step.action !== 'click') {return;}
 
     const handleClick = (e: MouseEvent) => {
       if (targetElement.contains(e.target as Node)) {
@@ -169,7 +165,7 @@ export const TutorialOverlay: React.FC = () => {
     return () => targetElement.removeEventListener('click', handleClick);
   }, [isActive, targetElement, step.action, nextStep]);
 
-  if (!isActive) return null;
+  if (!isActive) {return null;}
   
   // Show paste dialog if needed
   if (showPasteDialog) {
@@ -187,7 +183,7 @@ export const TutorialOverlay: React.FC = () => {
   }
 
   const getSpotlightClipPath = () => {
-    if (!step.spotlight || !targetElement) return '';
+    if (!step.spotlight || !targetElement) {return '';}
 
     const rect = targetElement.getBoundingClientRect();
     const padding = 10;

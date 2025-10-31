@@ -7,7 +7,6 @@
 
 import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
 import { KeyboardShortcutReference, useKeyboardShortcuts } from './KeyboardShortcutReference';
-import { CompactKeyboardView } from './VisualKeyboardMap';
 
 interface ShortcutHandler {
   id: string;
@@ -106,7 +105,7 @@ export const KeyboardShortcutProvider: React.FC<KeyboardShortcutProviderProps> =
 
   // Global keyboard event handler
   useEffect(() => {
-    if (disabled) return;
+    if (disabled) {return;}
 
     const handleKeyDown = (e: KeyboardEvent) => {
       // Skip if user is typing in an input
@@ -119,7 +118,7 @@ export const KeyboardShortcutProvider: React.FC<KeyboardShortcutProviderProps> =
 
       // Check each registered shortcut
       shortcuts.forEach(shortcut => {
-        if (!shortcut.enabled) return;
+        if (!shortcut.enabled) {return;}
 
         const matches = checkShortcutMatch(e, shortcut.keys);
         if (matches) {

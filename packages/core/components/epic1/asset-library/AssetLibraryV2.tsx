@@ -6,7 +6,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useDrag } from 'react-dnd';
 import { medievalPresetCategories } from './medievalPresets';
-import { Preset, PresetCategory, DraggedPreset } from './types';
+import { Preset, DraggedPreset } from './types';
 import './AssetLibraryV2.css';
 
 export interface AssetLibraryV2Props {
@@ -29,15 +29,19 @@ const PresetListItem: React.FC<{
   preset: Preset;
   onSelect: () => void;
   isSelected: boolean;
-}> = ({ preset, onSelect, isSelected }) => {
+  onDragStart?: (preset: Preset) => void;
+}> = ({ preset, onSelect, isSelected, onDragStart }) => {
   // Safely initialize drag hook with error handling
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'preset',
     item: { preset } as DraggedPreset,
+    begin: () => {
+      onDragStart?.(preset);
+    },
     collect: (monitor) => ({
       isDragging: monitor?.isDragging() || false,
     }),
-  }), [preset]);
+  }), [preset, onDragStart]);
 
   return (
     <div
@@ -102,7 +106,7 @@ export const AssetLibraryV2: React.FC<AssetLibraryV2Props> = ({
     timbre: null
   });
   const [selectedPreset, setSelectedPreset] = useState<Preset | null>(null);
-  const [userTags, setUserTags] = useState<string[]>([]);
+  const [userTags] = useState<string[]>([]);
 
   // Mock enhanced category structure for demonstration
   const categories = useMemo(() => [
@@ -128,24 +132,6 @@ export const AssetLibraryV2: React.FC<AssetLibraryV2Props> = ({
     }
     return [{ id: 'All', name: 'All' }];
   }, [navigation.category]);
-
-  // Mock genres
-  const genres = useMemo(() => [
-    { id: 'All', name: 'All' },
-    { id: 'hero', name: 'Hero' },
-    { id: 'villain', name: 'Villain' },
-    { id: 'neutral', name: 'Neutral' },
-    { id: 'comic', name: 'Comic' }
-  ], []);
-
-  // Mock timbres
-  const timbres = useMemo(() => [
-    { id: 'All', name: 'All' },
-    { id: 'simple', name: 'Simple' },
-    { id: 'complex', name: 'Complex' },
-    { id: 'detailed', name: 'Detailed' },
-    { id: 'minimal', name: 'Minimal' }
-  ], []);
 
   // Filter presets based on navigation and search
   const filteredPresets = useMemo(() => {
@@ -246,6 +232,7 @@ export const AssetLibraryV2: React.FC<AssetLibraryV2Props> = ({
                     preset={preset}
                     onSelect={() => handlePresetSelect(preset)}
                     isSelected={selectedPreset?.id === preset.id}
+                    onDragStart={onPresetDrag}
                   />
                 ))}
               </div>

@@ -8,10 +8,27 @@ import cors from '@fastify/cors';
 import { executeGraph } from './engine-basic';
 // import { registerAdminRoutes } from './admin-panel';
 import { registerEnhancedAdminRoutes } from './admin-panel-enhanced';
+import type { Graph } from './exporter-standalone';
 
 const server = Fastify({
   logger: true
 });
+
+type PreviewBody = {
+  graph: Graph;
+  runs?: number;
+  seedStart?: number;
+};
+
+type ParseBody = {
+  prompt: string;
+  mode?: string;
+};
+
+type CompleteBody = {
+  prompt: string;
+  model?: string;
+};
 
 // Register CORS
 server.register(cors, {
@@ -25,9 +42,11 @@ server.get('/health', async () => {
 });
 
 // Preview endpoint - core functionality
-server.post('/preview', async (request, reply) => {
+server.post<{ Body: PreviewBody }>(
+  '/preview',
+  async (request, reply) => {
   try {
-    const { graph, runs = 3, seedStart = 1 } = request.body as any;
+    const { graph, runs = 3, seedStart = 1 } = request.body;
 
     if (!graph || !graph.nodes) {
       return reply.status(400).send({ error: 'Invalid graph structure' });
@@ -55,14 +74,19 @@ server.post('/preview', async (request, reply) => {
     return { results };
   } catch (error) {
     console.error('Preview error:', error);
-    return reply.status(500).send({ error: 'Internal server error' });
+    const message =
+      error instanceof Error ? error.message : 'Internal server error';
+    return reply.status(500).send({ error: message });
   }
-});
+}
+);
 
 // LLM endpoints for Epic 2
-server.post('/api/llm/parse', async (request, reply) => {
+server.post<{ Body: ParseBody }>(
+  '/api/llm/parse',
+  async (request, reply) => {
   try {
-    const { prompt, mode = 'standard' } = request.body as any;
+    const { prompt, mode = 'standard' } = request.body;
 
     // For now, return a mock response
     // TODO: Wire to actual PromptParser service
@@ -74,27 +98,34 @@ server.post('/api/llm/parse', async (request, reply) => {
     };
   } catch (error) {
     console.error('LLM parse error:', error);
-    return reply.status(500).send({ error: 'Parse failed' });
+    const message = error instanceof Error ? error.message : 'Parse failed';
+    return reply.status(500).send({ error: message });
   }
-});
+}
+);
 
 // LLM completion endpoint
-server.post('/api/llm/complete', async (request, reply) => {
-  try {
-    const { prompt, model = 'default' } = request.body as any;
+server.post<{ Body: CompleteBody }>(
+  '/api/llm/complete',
+  async (request, reply) => {
+    try {
+      const { prompt, model = 'default' } = request.body;
 
-    // Mock response for demo
-    return {
-      success: true,
-      completion: `Enhanced: ${prompt}`,
-      model,
-      tokens: { input: 10, output: 5 }
-    };
-  } catch (error) {
-    console.error('LLM complete error:', error);
-    return reply.status(500).send({ error: 'Completion failed' });
+      // Mock response for demo
+      return {
+        success: true,
+        completion: `Enhanced: ${prompt}`,
+        model,
+        tokens: { input: 10, output: 5 }
+      };
+    } catch (error) {
+      console.error('LLM complete error:', error);
+      const message =
+        error instanceof Error ? error.message : 'Completion failed';
+      return reply.status(500).send({ error: message });
+    }
   }
-});
+);
 
 // Admin metrics endpoint
 server.get('/api/admin/llm/metrics', async () => {

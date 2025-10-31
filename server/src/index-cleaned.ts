@@ -1,10 +1,8 @@
 // Cleaned server - removed all disabled services for production readiness
 import Fastify, { FastifyRequest } from 'fastify';
-import { z } from 'zod';
 import { executeGraph, initializeAnalytics } from './engine-basic';
-import { Graph, Node } from './exporter-standalone';
 import {
-  graphToBundle,
+  Graph,
   bundleToGraph,
   exportGraph,
   validateBundleCompatibility,
@@ -19,11 +17,37 @@ const server = Fastify({ logger: false });
 // Global analytics placeholder
 let analyticsEnabled = false;
 
+type PreviewRoute = {
+  Body: Graph;
+};
+
+type PreviewRequest = FastifyRequest<PreviewRoute> & {
+  session?: { id?: string };
+  user?: { id?: string };
+};
+
+interface ExportRequestBody {
+  graph: Graph;
+  format?: ExportFormat;
+  metadata?: Record<string, unknown>;
+}
+
+type ExportRoute = {
+  Body: ExportRequestBody;
+};
+
+type ImportBundle = {
+  format?: string;
+  compatibility?: {
+    engineVersion?: string;
+  };
+};
+
 // Initialize core services
 async function initializeServices() {
   try {
     // Initialize database
-    const db = initDatabase();
+    initDatabase();
     console.log('✅ Database initialized');
 
     // Initialize analytics (basic)
@@ -39,7 +63,7 @@ async function initializeServices() {
 }
 
 // Root endpoint
-server.get('/', async (request, reply) => {
+server.get('/', async () => {
   return {
     status: 'PromptScape API - Production Ready',
     version: '1.0.0',
@@ -63,7 +87,7 @@ server.get('/', async (request, reply) => {
 });
 
 // Health check endpoint
-server.get('/health', async (request, reply) => {
+server.get('/health', async (_request, reply) => {
   try {
     const dbHealthy = healthCheck();
     const analyticsHealthy = analyticsEnabled;
@@ -90,9 +114,10 @@ server.get('/health', async (request, reply) => {
 });
 
 // Graph execution endpoint
-server.post('/preview', async (request, reply) => {
+server.post<PreviewRoute>('/preview', async (request, reply) => {
   try {
-    const graph = request.body as Graph;
+    const graph = request.body;
+    const previewRequest = request as PreviewRequest;
 
     // Validate graph structure
     const validation = validateGraph(graph);
@@ -105,8 +130,8 @@ server.post('/preview', async (request, reply) => {
     }
 
     // Execute graph with analytics tracking
-    const sessionId = (request as any).session?.id || 'anonymous';
-    const userId = (request as any).user?.id;
+    const sessionId = previewRequest.session?.id ?? 'anonymous';
+    const userId = previewRequest.user?.id;
 
     const result = await executeGraph(graph, sessionId, userId);
 
@@ -125,31 +150,27 @@ server.post('/preview', async (request, reply) => {
     };
   } catch (error) {
     console.error('Graph execution error:', error);
+    const message =
+      error instanceof Error ? error.message : 'Graph execution failed';
 
     // Track error in analytics (basic logging)
     if (analyticsEnabled) {
-      console.log(`Analytics: Graph execution error - ${error.message}`);
+      console.log(`Analytics: Graph execution error - ${message}`);
     }
 
     return reply.code(500).send({
       success: false,
       error: 'Graph execution failed',
-      message: error.message,
+      message,
       timestamp: new Date().toISOString()
     });
   }
 });
 
 // Advanced export endpoint with multiple formats
-server.post('/export', async (request, reply) => {
+server.post<ExportRoute>('/export', async (request, reply) => {
   try {
-    const body = request.body as {
-      graph: Graph;
-      format?: ExportFormat;
-      metadata?: any;
-    };
-
-    const { graph, format = 'bundle', metadata } = body;
+    const { graph, format = 'bundle', metadata } = request.body;
 
     // Basic validation
     const validation = validateGraph(graph);
@@ -184,10 +205,12 @@ server.post('/export', async (request, reply) => {
       }
     };
   } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Export failed';
     return reply.code(500).send({
       success: false,
       error: 'Export failed',
-      message: error.message,
+      message,
       timestamp: new Date().toISOString()
     });
   }
@@ -196,7 +219,8 @@ server.post('/export', async (request, reply) => {
 // Import endpoint for bundles
 server.post('/import', async (request, reply) => {
   try {
-    const bundle = request.body;
+    const bundle = request.body as Record<string, unknown>;
+    const bundleInfo = bundle as ImportBundle;
 
     // Validate bundle compatibility
     const compatibility = validateBundleCompatibility(bundle);
@@ -228,8 +252,8 @@ server.post('/import', async (request, reply) => {
       graph,
       compatibility: {
         warnings: compatibility.warnings,
-        bundleFormat: (bundle as any).format,
-        engineVersion: (bundle as any).compatibility?.engineVersion
+        bundleFormat: bundleInfo.format,
+        engineVersion: bundleInfo.compatibility?.engineVersion
       },
       metadata: {
         timestamp: new Date().toISOString(),
@@ -237,17 +261,19 @@ server.post('/import', async (request, reply) => {
       }
     };
   } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Import failed';
     return reply.code(500).send({
       success: false,
       error: 'Import failed',
-      message: error.message,
+      message,
       timestamp: new Date().toISOString()
     });
   }
 });
 
 // Analytics summary endpoint
-server.get('/analytics/summary', async (request, reply) => {
+server.get('/analytics/summary', async (_request, reply) => {
   try {
     if (!analyticsEnabled) {
       return reply.code(503).send({
@@ -263,9 +289,11 @@ server.get('/analytics/summary', async (request, reply) => {
       timestamp: new Date().toISOString()
     };
   } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Analytics summary failed';
     return reply.code(500).send({
       error: 'Analytics summary failed',
-      message: error.message
+      message
     });
   }
 });

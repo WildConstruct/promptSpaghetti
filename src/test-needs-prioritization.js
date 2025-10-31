@@ -177,9 +177,9 @@ class TestNeedsPrioritizer {
   }
 
   assessRiskLevel(priorityScore) {
-    if (priorityScore > 8000) return 'CRITICAL';
-    if (priorityScore > 5000) return 'HIGH';
-    if (priorityScore > 2000) return 'MEDIUM';
+    if (priorityScore > 8000) {return 'CRITICAL';}
+    if (priorityScore > 5000) {return 'HIGH';}
+    if (priorityScore > 2000) {return 'MEDIUM';}
     return 'LOW';
   }
 
@@ -280,7 +280,7 @@ class TestNeedsPrioritizer {
     };
 
     Object.entries(phases).forEach(([phaseName, tasks]) => {
-      if (tasks.length === 0) return;
+      if (tasks.length === 0) {return;}
 
       console.log(`\n${phaseName}`);
       console.log('─'.repeat(60));
@@ -468,7 +468,7 @@ if (require.main === module) {
   const prioritizer = new TestNeedsPrioritizer();
   prioritizer
     .run()
-    .then(results => {
+    .then(() => {
       console.log('\n🎯 Prioritization completed successfully!');
       process.exit(0);
     })

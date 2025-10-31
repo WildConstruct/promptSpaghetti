@@ -231,15 +231,15 @@ export class AdvancedIOHandler {
    * Get the IODataType for a value
    */
   getValueType(value) {
-    if (typeof value === 'string') return 'string';
-    if (typeof value === 'number') return 'number';
-    if (typeof value === 'boolean') return 'boolean';
+    if (typeof value === 'string') {return 'string';}
+    if (typeof value === 'number') {return 'number';}
+    if (typeof value === 'boolean') {return 'boolean';}
     if (Array.isArray(value)) {
-      if (value.every(v => typeof v === 'string')) return 'stringArray';
-      if (value.every(v => typeof v === 'number')) return 'numberArray';
+      if (value.every(v => typeof v === 'string')) {return 'stringArray';}
+      if (value.every(v => typeof v === 'number')) {return 'numberArray';}
       return 'array';
     }
-    if (typeof value === 'object' && value !== null) return 'object';
+    if (typeof value === 'object' && value !== null) {return 'object';}
     return 'any';
   }
   /**
@@ -252,9 +252,9 @@ export class AdvancedIOHandler {
       case 'number':
         const num = Number(value);
         if (isNaN(num))
-          throw ErrorFactory.createValidationError('value', value, 'convertible to number', {
+          {throw ErrorFactory.createValidationError('value', value, 'convertible to number', {
             operation: 'type_coercion',
-          });
+          });}
         return num;
       case 'boolean':
         if (typeof value === 'string') {
@@ -271,9 +271,9 @@ export class AdvancedIOHandler {
         return numArr.map(v => {
           const n = Number(v);
           if (isNaN(n))
-            throw ErrorFactory.createValidationError('array_element', v, 'convertible to number', {
+            {throw ErrorFactory.createValidationError('array_element', v, 'convertible to number', {
               operation: 'array_coercion',
-            });
+            });}
           return n;
         });
       default:

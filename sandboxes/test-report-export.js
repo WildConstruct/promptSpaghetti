@@ -97,7 +97,7 @@ class ReportExportTester {
   /**
    * Run all export system tests
    */
-  async runAllTests(): Promise<any> {
+  async runAllTests() {
     console.log('🚀 Starting Report Export System Tests');
     console.log('=====================================\n');
 
@@ -153,7 +153,7 @@ class ReportExportTester {
   /**
    * Setup test environment
    */
-  async setupTestEnvironment(): Promise<void> {
+  async setupTestEnvironment() {
     console.log('🔧 Setting up test environment...');
 
     // Create output directory
@@ -181,7 +181,7 @@ class ReportExportTester {
   /**
    * Test API endpoints
    */
-  async testAPIEndpoints(): Promise<void> {
+  async testAPIEndpoints() {
     console.log('📡 Testing API Endpoints...');
 
     const endpoints = [
@@ -221,7 +221,7 @@ class ReportExportTester {
   /**
    * Test export formats
    */
-  async testExportFormats(): Promise<void> {
+  async testExportFormats() {
     console.log('📄 Testing Export Formats...');
 
     for (const format of TEST_CONFIG.export.formats) {
@@ -277,7 +277,7 @@ class ReportExportTester {
   /**
    * Test delivery methods
    */
-  async testDeliveryMethods(): Promise<void> {
+  async testDeliveryMethods() {
     console.log('🚚 Testing Delivery Methods...');
 
     for (const delivery of TEST_CONFIG.export.deliveryMethods) {
@@ -344,7 +344,7 @@ class ReportExportTester {
   /**
    * Test export options and configuration
    */
-  async testExportOptions(): Promise<void> {
+  async testExportOptions() {
     console.log('⚙️  Testing Export Options...');
 
     const optionsTests = [
@@ -403,7 +403,7 @@ class ReportExportTester {
   /**
    * Test bulk export
    */
-  async testBulkExport(): Promise<void> {
+  async testBulkExport() {
     console.log('📦 Testing Bulk Export...');
 
     const testResult = await this.runTest(
@@ -466,7 +466,7 @@ class ReportExportTester {
   /**
    * Test scheduled exports
    */
-  async testScheduledExports(): Promise<void> {
+  async testScheduledExports() {
     console.log('⏰ Testing Scheduled Exports...');
 
     const testResult = await this.runTest(
@@ -528,7 +528,7 @@ class ReportExportTester {
   /**
    * Test history and statistics
    */
-  async testHistoryAndStatistics(): Promise<void> {
+  async testHistoryAndStatistics() {
     console.log('📊 Testing History and Statistics...');
 
     const tests = [
@@ -581,7 +581,7 @@ class ReportExportTester {
   /**
    * Test preview functionality
    */
-  async testPreviewFunctionality(): Promise<void> {
+  async testPreviewFunctionality() {
     console.log('👁️  Testing Preview Functionality...');
 
     const previewFormats = ['html', 'csv', 'json', 'xml'];
@@ -628,7 +628,7 @@ class ReportExportTester {
   /**
    * Run individual test with error handling
    */
-  async runTest(testName: string, testFunction: () => Promise<any>): Promise<any> {
+  async runTest(testName, testFunction) {
     const startTime = Date.now();
     
     try {
@@ -674,7 +674,7 @@ class ReportExportTester {
   /**
    * Generate comprehensive test report
    */
-  async generateTestReport(): Promise<void> {
+  async generateTestReport() {
     const report = {
       testSuite: 'Report Export System',
       executionTime: this.results.endTime - this.results.startTime,
@@ -706,7 +706,7 @@ class ReportExportTester {
   /**
    * Generate HTML test report
    */
-  generateHTMLReport(report: any): string {
+  generateHTMLReport(report) {
     return `
 <!DOCTYPE html>
 <html>
@@ -814,7 +814,7 @@ class ReportExportTester {
 /**
  * Main execution
  */
-async function runExportSystemTests(): Promise<void> {
+async function runExportSystemTests() {
   const tester = new ReportExportTester();
   
   try {

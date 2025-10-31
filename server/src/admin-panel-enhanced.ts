@@ -139,11 +139,48 @@ const AVAILABLE_MODELS = [
   }
 ];
 
+interface TestProviderRequest {
+  provider: string;
+}
+
+interface UpdateEnvRequest {
+  [key: string]: string;
+}
+
+interface DeleteEnvRequest {
+  key_name: string;
+  confirmation: string;
+}
+
+interface PromptTestRequest {
+  prompt: string;
+  model: string;
+}
+
+interface ModelConfigRequest {
+  primary_model?: string;
+  fallback_models?: string;
+  max_tokens?: string;
+  temperature?: string;
+}
+
+interface AdminConfig {
+  SUPABASE_URL?: string;
+  SUPABASE_ANON_KEY?: string;
+  OPENROUTER_API_KEY?: string;
+  OPENROUTER_BASE_URL?: string;
+  DAILY_COST_LIMIT?: string;
+  PRIMARY_MODEL?: string;
+  FALLBACK_MODELS?: string;
+  MAX_TOKENS?: string;
+  TEMPERATURE?: string;
+}
+
 /**
  * Enhanced HTML admin panel
  */
 const getEnhancedAdminHTML = (
-  config: any,
+  config: AdminConfig,
   prompts: PromptTemplate[],
   message?: Message,
   status?: AdminStatus
@@ -180,7 +217,7 @@ const getEnhancedAdminHTML = (
             
             // Show selected tab
             document.getElementById(tabName).classList.add('active');
-            document.querySelector(\`[data-tab="\${tabName}"]\`).classList.add('active');
+            document.querySelector('[data-tab="' + tabName + '"]').classList.add('active');
         }
         
         function selectModel(modelId) {
@@ -191,7 +228,7 @@ const getEnhancedAdminHTML = (
             document.querySelectorAll('.model-card').forEach(card => {
                 card.classList.remove('selected');
             });
-            document.querySelector(\`[data-model="\${modelId}"]\`).classList.add('selected');
+            document.querySelector('[data-model="' + modelId + '"]').classList.add('selected');
         }
         
         async function testLLM() {
@@ -233,7 +270,7 @@ const getEnhancedAdminHTML = (
 </head>
   <body>
     <div class="container">
-      ${message ? `<div class=\"banner ${message.type}\">${message.text}</div>` : ''}
+      ${message ? `<div class="banner ${message.type}">${message.text}</div>` : ''}
       <div class="status-panel">
         <div class="status-header">
           <div class="status-title">Connection Status</div>
@@ -598,7 +635,7 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Enhanced admin panel HTML page
   server.get('/admin', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
     const config = {
       SUPABASE_URL: process.env.SUPABASE_URL,
@@ -642,7 +679,7 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
           const to = setTimeout(() => controller.abort(), 4000);
           let res = await fetch(
             `${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`,
-            { signal: controller.signal as any }
+            { signal: controller.signal }
           );
           clearTimeout(to);
           if (res.status === 401 && process.env.SUPABASE_ANON_KEY) {
@@ -655,15 +692,15 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
                   apikey: process.env.SUPABASE_ANON_KEY,
                   Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY}`
                 },
-                signal: controller2.signal as any
+                signal: controller2.signal
               }
             );
             clearTimeout(to2);
           }
           supabase.status = res.status;
           supabase.reachable = res.ok || res.status === 200;
-        } catch (e: any) {
-          supabase.error = e?.message || 'request failed';
+        } catch (e: unknown) {
+          supabase.error = (e as Error)?.message || 'request failed';
         }
 
         // (client-side script for status buttons is injected in HTML template <script>)
@@ -680,13 +717,13 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
           const to = setTimeout(() => controller.abort(), 5000);
           const res = await fetch(`${orBase.replace(/\/$/, '')}/models`, {
             headers: { Authorization: `Bearer ${orKey}` },
-            signal: controller.signal as any
+            signal: controller.signal
           });
           clearTimeout(to);
           openrouter.status = res.status;
           openrouter.reachable = res.ok;
-        } catch (e: any) {
-          openrouter.error = e?.message || 'request failed';
+        } catch (e: unknown) {
+          openrouter.error = (e as Error)?.message || 'request failed';
         }
       }
       return { supabase, openrouter };
@@ -728,7 +765,7 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Return current connection status as JSON
   server.get('/admin/connection-status', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
     const supabaseUrl = process.env.SUPABASE_URL;
     const orBase =
       process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
@@ -745,8 +782,8 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
         );
         supabase.status = r.status;
         supabase.reachable = r.ok;
-      } catch (e: any) {
-        supabase.error = e?.message;
+      } catch (e: unknown) {
+        supabase.error = (e as Error)?.message;
       }
     }
     const openrouter: ConnectionStatus = {
@@ -761,8 +798,8 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
         });
         openrouter.status = r.status;
         openrouter.reachable = r.ok;
-      } catch (e: any) {
-        openrouter.error = e?.message;
+      } catch (e: unknown) {
+        openrouter.error = (e as Error)?.message;
       }
     }
     return { supabase, openrouter } as AdminStatus;
@@ -770,8 +807,8 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Test connection for a single provider
   server.post('/admin/test-connection', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
-    const { provider } = (request.body as any) || {};
+    if (!checkAdminAuth(request, reply)) {return;}
+    const { provider } = (request.body as TestProviderRequest) || {};
     if (provider !== 'supabase' && provider !== 'openrouter') {
       return reply.status(400).send({ error: 'Invalid provider' });
     }
@@ -789,8 +826,8 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
           );
           status.status = r.status;
           status.reachable = r.ok;
-        } catch (e: any) {
-          status.error = e?.message;
+        } catch (e: unknown) {
+          status.error = (e as Error)?.message;
         }
       }
       return status;
@@ -811,8 +848,8 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
           });
           status.status = r.status;
           status.reachable = r.ok;
-        } catch (e: any) {
-          status.error = e?.message;
+        } catch (e: unknown) {
+          status.error = (e as Error)?.message;
         }
       }
       return status;
@@ -821,9 +858,9 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Handle config updates
   server.post('/admin/config', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
-    const body = request.body as any;
+    const body = request.body as UpdateEnvRequest;
     const envPath = path.join(__dirname, '../.env');
 
     try {
@@ -908,7 +945,7 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
             );
             supabase.status = r.status;
             supabase.reachable = r.ok;
-          } catch (e: any) {
+          } catch (e) {
             supabase.error = e?.message;
           }
         }
@@ -924,8 +961,8 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
             });
             openrouter.status = r.status;
             openrouter.reachable = r.ok;
-          } catch (e: any) {
-            openrouter.error = e?.message;
+          } catch (e: unknown) {
+            openrouter.error = (e as Error)?.message;
           }
         }
         return { supabase, openrouter };
@@ -950,9 +987,9 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Delete a key with confirmation phrase
   server.post('/admin/delete-key', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
-    const { key_name, confirmation } = (request.body as any) || {};
+    const { key_name, confirmation } = (request.body as DeleteEnvRequest) || {};
     const allowed = new Set([
       'SUPABASE_ANON_KEY',
       'OPENROUTER_API_KEY',
@@ -1009,11 +1046,11 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
     try {
       let envContent = '';
       if (fs.existsSync(envPath))
-        envContent = fs.readFileSync(envPath, 'utf-8');
+        {envContent = fs.readFileSync(envPath, 'utf-8');}
       const lineRegex = new RegExp(`^${key_name}=.*$\\r?\\n?`, 'gm');
       envContent = envContent.replace(lineRegex, '');
       fs.writeFileSync(envPath, envContent);
-      delete (process.env as any)[key_name];
+      delete (process.env as Record<string, string | undefined>)[key_name];
 
       const config = {
         SUPABASE_URL: process.env.SUPABASE_URL,
@@ -1067,9 +1104,9 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Handle model configuration
   server.post('/admin/models', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
-    const body = request.body as any;
+    const body = request.body as ModelConfigRequest;
     const envPath = path.join(__dirname, '../.env');
 
     try {
@@ -1080,10 +1117,10 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
       const updates: Record<string, string> = {};
 
-      if (body.primary_model) updates.PRIMARY_MODEL = body.primary_model;
-      if (body.fallback_models) updates.FALLBACK_MODELS = body.fallback_models;
-      if (body.max_tokens) updates.MAX_TOKENS = body.max_tokens;
-      if (body.temperature) updates.TEMPERATURE = body.temperature;
+      if (body.primary_model) {updates.PRIMARY_MODEL = body.primary_model;}
+      if (body.fallback_models) {updates.FALLBACK_MODELS = body.fallback_models;}
+      if (body.max_tokens) {updates.MAX_TOKENS = body.max_tokens;}
+      if (body.temperature) {updates.TEMPERATURE = body.temperature;}
 
       for (const [key, value] of Object.entries(updates)) {
         const regex = new RegExp(`^${key}=.*$`, 'gm');
@@ -1137,14 +1174,15 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
           try {
             const controller = new AbortController();
             const to = setTimeout(() => controller.abort(), 4000);
-            let res = await fetch(
+            const res = await fetch(
               `${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`
             );
             clearTimeout(to);
             supabase.status = res.status;
             supabase.reachable = res.ok || res.status === 200;
-          } catch (e: any) {
-            supabase.error = e?.message || 'request failed';
+          } catch (error: unknown) {
+            supabase.error =
+              error instanceof Error ? error.message : 'request failed';
           }
         }
         const openrouter: ConnectionStatus = {
@@ -1162,8 +1200,9 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
             clearTimeout(to);
             openrouter.status = res.status;
             openrouter.reachable = res.ok;
-          } catch (e: any) {
-            openrouter.error = e?.message || 'request failed';
+          } catch (error: unknown) {
+            openrouter.error =
+              error instanceof Error ? error.message : 'request failed';
           }
         }
         return { supabase, openrouter };
@@ -1188,17 +1227,24 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Handle prompt updates
   server.post('/admin/prompt/:id', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
     const { id } = request.params as { id: string };
-    const body = request.body as any;
+    const payload = request.body as { template?: unknown } | undefined;
+    const template =
+      typeof payload?.template === 'string' ? payload.template : undefined;
+
+    if (!template) {
+      reply.status(400).send('Invalid prompt template');
+      return;
+    }
 
     try {
       const prompts = loadPrompts();
       const promptIndex = prompts.findIndex(p => p.id === id);
 
       if (promptIndex >= 0) {
-        prompts[promptIndex].template = body.template;
+        prompts[promptIndex].template = template;
         savePrompts(prompts);
       }
 
@@ -1211,9 +1257,9 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Test LLM endpoint
   server.post('/admin/test-llm', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
-    const { prompt, model } = request.body as any;
+    const { prompt, model } = request.body as PromptTestRequest;
 
     // Mock test for now - would connect to actual LLM service
     return {
@@ -1232,7 +1278,7 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
 
   // Admin metrics endpoint (JSON)
   server.get('/admin/metrics', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
     return {
       timestamp: new Date().toISOString(),

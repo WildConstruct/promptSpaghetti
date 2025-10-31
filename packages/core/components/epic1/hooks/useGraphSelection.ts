@@ -147,7 +147,7 @@ export function useGraphSelection<NodeData = unknown>(
       connectedIds.add(nodeId);
 
       const traverse = (currentId: string, visited = new Set<string>()) => {
-        if (visited.has(currentId)) return;
+        if (visited.has(currentId)) {return;}
         visited.add(currentId);
 
         edges.forEach(edge => {
@@ -206,14 +206,14 @@ export function useGraphSelection<NodeData = unknown>(
 
   const updateBoxSelection = useCallback(
     (x: number, y: number) => {
-      if (!isSelecting || !selectionBox) return;
+      if (!isSelecting || !selectionBox) {return;}
       setSelectionBox({ ...selectionBox, endX: x, endY: y });
     },
     [isSelecting, selectionBox]
   );
 
   const endBoxSelection = useCallback(() => {
-    if (!isSelecting || !selectionBox) return;
+    if (!isSelecting || !selectionBox) {return;}
 
     // Calculate selection bounds
     const minX = Math.min(selectionBox.startX, selectionBox.endX);

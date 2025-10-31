@@ -13,7 +13,7 @@ interface StorageErrorState {
   hasError: boolean;
   errorType: 'quota' | 'corruption' | null;
   errorMessage: string;
-  storageInfo: ReturnType<typeof getPersistedStateInfo>;
+  storageInfo: ReturnType<typeof getPersistedStateInfo> | null;
   quotaInfo: ReturnType<typeof checkStorageQuota>;
 }
 
@@ -28,7 +28,7 @@ export function StorageErrorBoundary({ children }: StorageErrorBoundaryProps) {
 
   useEffect(() => {
     // Listen for storage quota exceeded events
-    const handleQuotaExceeded = (event: CustomEvent) => {
+    const handleQuotaExceeded = () => {
       setErrorState({
         hasError: true,
         errorType: 'quota',
@@ -39,7 +39,7 @@ export function StorageErrorBoundary({ children }: StorageErrorBoundaryProps) {
     };
 
     // Listen for corruption events
-    const handleCorruption = (event: CustomEvent) => {
+    const handleCorruption = () => {
       setErrorState({
         hasError: true,
         errorType: 'corruption',

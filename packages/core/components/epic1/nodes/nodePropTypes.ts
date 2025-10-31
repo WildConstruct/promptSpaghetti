@@ -5,11 +5,11 @@ export interface NodeMeasurements {
   height?: number | null;
 }
 
-export type Epic1Node<T = any> = Node<T> & {
+export type Epic1Node<T = EditableNodeData> = Node<T> & {
   measured?: NodeMeasurements | null;
 };
 
-export type Epic1NodeProps<T = any> = NodeProps<T> &
+export type Epic1NodeProps<T = EditableNodeData> = NodeProps<T> &
   Partial<Pick<Node<T>, 'width' | 'height' | 'draggable'>> & {
     measured?: NodeMeasurements | null;
   };

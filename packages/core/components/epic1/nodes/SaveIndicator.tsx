@@ -17,7 +17,7 @@ export const SaveIndicator: React.FC<SaveIndicatorProps> = ({ trigger }) => {
     }
   }, [trigger]);
 
-  if (!showCheck) return null;
+  if (!showCheck) {return null;}
 
   return <div className="epic1-complete-animation">✓</div>;
 };

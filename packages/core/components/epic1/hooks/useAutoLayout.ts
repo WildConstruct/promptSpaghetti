@@ -4,7 +4,7 @@
  */
 
 import { useCallback, useRef } from 'react';
-import { Node, Edge, useReactFlow } from 'reactflow';
+import { Node, useReactFlow } from 'reactflow';
 import {
   LayoutAlgorithm,
   LayoutOptions,
@@ -71,7 +71,9 @@ export function useAutoLayout(
 
         // Select best algorithm if not specified
         const layoutAlgorithm =
-          algorithm || selectBestLayout(targetNodes, relevantEdges);
+          algorithm ??
+          defaultAlgorithm ??
+          selectBestLayout(targetNodes, relevantEdges);
 
         // Apply layout with animation
         const layoutedNodes = applyLayoutWithAnimation(
@@ -105,7 +107,7 @@ export function useAutoLayout(
         }, 600);
       }, debounceMs);
     },
-    [setNodes, getNodes, getEdges, fitView, debounceMs]
+    [setNodes, getNodes, getEdges, fitView, debounceMs, defaultAlgorithm]
   );
 
   /**
@@ -157,7 +159,7 @@ export function useAutoLayout(
         current.map(n => {
           const inScope =
             (nodesToNeaten ? all.find(a => a.id === n.id) : n) !== undefined;
-          if (!inScope) return n;
+          if (!inScope) {return n;}
           const snappedX = Math.round(n.position.x / grid) * grid;
           const ry = Math.round(n.position.y / rowSnap) * rowSnap;
           const alignedY =
@@ -171,7 +173,7 @@ export function useAutoLayout(
 
   const neatenSelection = useCallback(() => {
     const selected = getNodes().filter(n => n.selected);
-    if (selected.length > 0) neaten(selected);
+    if (selected.length > 0) {neaten(selected);}
   }, [getNodes, neaten]);
 
   const neatenAll = useCallback(() => {

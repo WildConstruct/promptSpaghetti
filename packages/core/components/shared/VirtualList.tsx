@@ -13,6 +13,10 @@ interface VirtualListProps<T> {
   className?: string;
 }
 
+interface EnhancedHTMLDivElement extends HTMLDivElement {
+  scrollToItem?: (index: number) => void;
+}
+
 export function VirtualList<T>({
   items,
   height,
@@ -22,7 +26,7 @@ export function VirtualList<T>({
   className = ''
 }: VirtualListProps<T>) {
   const [scrollTop, setScrollTop] = useState(0);
-  const scrollElementRef = useRef<HTMLDivElement>(null);
+  const scrollElementRef = useRef<EnhancedHTMLDivElement>(null);
 
   const totalHeight = items.length * itemHeight;
   const containerHeight = Math.min(height, totalHeight);
@@ -43,7 +47,7 @@ export function VirtualList<T>({
   // Handle keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (!scrollElementRef.current) return;
+      if (!scrollElementRef.current) {return;}
 
       const scrollElement = scrollElementRef.current;
       let newScrollTop = scrollTop;
@@ -91,7 +95,7 @@ export function VirtualList<T>({
   // Scroll to specific item
   const scrollToItem = useCallback(
     (index: number) => {
-      if (!scrollElementRef.current) return;
+      if (!scrollElementRef.current) {return;}
 
       const targetScrollTop = index * itemHeight;
       scrollElementRef.current.scrollTop = targetScrollTop;
@@ -103,7 +107,7 @@ export function VirtualList<T>({
   useEffect(() => {
     const element = scrollElementRef.current;
     if (element) {
-      (element as any).scrollToItem = scrollToItem;
+      element.scrollToItem = scrollToItem;
     }
   }, [scrollToItem]);
 

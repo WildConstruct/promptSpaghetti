@@ -10,7 +10,7 @@ if (task && task.qa_issues) {
   task.updated = new Date().toISOString();
 
   // Add comprehensive fix note
-  if (!task.notes) task.notes = [];
+  if (!task.notes) {task.notes = [];}
   task.notes.push({
     timestamp: new Date().toISOString(),
     author: 'advanced_fixing_agent',

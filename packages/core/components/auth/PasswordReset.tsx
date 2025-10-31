@@ -83,7 +83,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
             lineHeight: '1.5'
           }}
         >
-          We've sent a password reset link to
+          We&apos;ve sent a password reset link to
           <br />
           <strong>{email.value}</strong>
         </p>
@@ -100,7 +100,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
             marginBottom: '24px'
           }}
         >
-          <strong>Didn't receive the email?</strong>
+          <strong>Didn&apos;t receive the email?</strong>
           <ul
             style={{
               margin: '8px 0 0 0',
@@ -151,7 +151,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
           lineHeight: '1.5'
         }}
       >
-        Enter your email address and we'll send you a link to reset your
+        Enter your email address and we&apos;ll send you a link to reset your
         password.
       </p>
 

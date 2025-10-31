@@ -9,6 +9,8 @@ import { VisualRangeIndicator } from '../VisualRangeIndicator';
 import { promptParser } from '../../../runtime/nodes/epic1/PromptParser';
 import type { PromptAnalysis } from '../../../runtime/nodes/epic1/PromptParser';
 
+type WeightedChoiceOption = { text: string; weight: number };
+
 // Example prompts for demonstration
 const DEMO_PROMPTS = {
   medieval: {
@@ -63,10 +65,19 @@ function VisualRangeDemo() {
       }}>
         <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Generated Nodes</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-          {promptAnalysis.nodes.map((genNode, index) => {
+          {promptAnalysis.nodes.map((genNode) => {
             const nodeId = genNode.node.serialize().id;
             const isHovered = hoveredNodeId === nodeId;
             const nodeType = genNode.node.getNodeType();
+            const rawValue = genNode.node.getCurrentValue();
+            const weightedOptions: WeightedChoiceOption[] = Array.isArray(rawValue)
+              ? rawValue.filter((opt): opt is WeightedChoiceOption => (
+                  typeof opt === 'object' &&
+                  opt !== null &&
+                  'text' in opt &&
+                  'weight' in opt
+                ))
+              : [];
             
             return (
               <div
@@ -96,10 +107,10 @@ function VisualRangeDemo() {
                 </div>
                 <div style={{ fontSize: '14px' }}>
                   {nodeType === 'TextBlock' && genNode.node.getCurrentValue()}
-                  {nodeType === 'WeightedChoice' && (
+                  {nodeType === 'WeightedChoice' && weightedOptions.length > 0 && (
                     <div>
-                      {genNode.node.getCurrentValue().map((opt: any, i: number) => (
-                        <div key={i} style={{ fontSize: '12px', marginTop: '2px' }}>
+                      {weightedOptions.map((opt, index) => (
+                        <div key={`${nodeId}-${index}`} style={{ fontSize: '12px', marginTop: '2px' }}>
                           • {opt.text} ({opt.weight}%)
                         </div>
                       ))}
@@ -190,10 +201,10 @@ function VisualRangeDemo() {
             {hoveredTextRange && (
               <p><strong>Text Range:</strong> [{hoveredTextRange.start}-{hoveredTextRange.end}]</p>
             )}
-            <p><strong>Text:</strong> "{promptAnalysis.originalText.slice(
+            <p><strong>Text:</strong> &ldquo;{promptAnalysis.originalText.slice(
               hoveredTextRange?.start || 0,
               hoveredTextRange?.end || 0
-            )}"</p>
+            )}&rdquo;</p>
           </div>
         ) : (
           <p style={{ color: '#666' }}>Hover over highlighted text or nodes to see details</p>
@@ -210,7 +221,7 @@ function VisualRangeDemo() {
       }}>
         <h3 style={{ marginTop: 0, color: '#856404' }}>Instructions:</h3>
         <ul style={{ margin: 0, paddingLeft: '20px', color: '#856404' }}>
-          <li>Select different prompts to see how they're parsed</li>
+          <li>Select different prompts to see how they&rsquo;re parsed</li>
           <li>Hover over highlighted text to see which node it maps to</li>
           <li>Hover over nodes to highlight the source text</li>
           <li>Enable connection lines to see visual links between text and nodes</li>
@@ -223,15 +234,9 @@ function VisualRangeDemo() {
 
 // Initialize the demo
 function initializeDemo() {
-  const rootElement = document.getElementById('root');
-  if (!rootElement) {
-    const root = document.createElement('div');
-    root.id = 'root';
-    document.body.appendChild(root);
-  }
-  
-  const root = ReactDOM.createRoot(document.getElementById('root')!);
-  root.render(<VisualRangeDemo />);
+  const existingRoot = document.getElementById('root');
+  const container = existingRoot ?? document.body.appendChild(Object.assign(document.createElement('div'), { id: 'root' }));
+  ReactDOM.createRoot(container).render(<VisualRangeDemo />);
 }
 
 // Check if running in browser

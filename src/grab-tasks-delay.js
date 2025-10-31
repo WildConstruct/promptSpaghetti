@@ -35,7 +35,7 @@ setTimeout(() => {
         break;
       } catch (error) {
         retries--;
-        if (retries === 0) throw error;
+        if (retries === 0) {throw error;}
         console.log(`🔄 Retrying file read (${retries} attempts left)...`);
         // Short delay before retry
         Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200);

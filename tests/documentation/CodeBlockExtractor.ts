@@ -125,12 +125,12 @@ export class CodeBlockExtractor {
 
         if (this.isValidCodeBlockContent(content)) {
           const completeBlock: CodeBlock = {
-            language: currentBlock.language!,
+            language: currentBlock.language || 'unknown',
             content: this.options.preserveIndentation
               ? content
               : content.trim(),
-            lineNumber: currentBlock.lineNumber!,
-            startColumn: currentBlock.startColumn!,
+            lineNumber: currentBlock.lineNumber || 0,
+            startColumn: currentBlock.startColumn || 0,
             endColumn: line.indexOf('```'),
             originalBlock:
               currentBlock.originalBlock +
@@ -167,10 +167,10 @@ export class CodeBlockExtractor {
       const content = blockContent.join('\n');
       if (this.isValidCodeBlockContent(content)) {
         const completeBlock: CodeBlock = {
-          language: currentBlock.language!,
+          language: currentBlock.language || 'unknown',
           content: this.options.preserveIndentation ? content : content.trim(),
-          lineNumber: currentBlock.lineNumber!,
-          startColumn: currentBlock.startColumn!,
+          lineNumber: currentBlock.lineNumber || 0,
+          startColumn: currentBlock.startColumn || 0,
           endColumn: 0,
           originalBlock:
             currentBlock.originalBlock + '\n' + blockContent.join('\n'),
@@ -478,14 +478,14 @@ export class CodeBlockAnalyzer {
       // Check metadata for example indicators
       if (block.metadata?.title) {
         return exampleIndicators.some(pattern =>
-          pattern.test(block.metadata!.title!)
+          pattern.test(block.metadata?.title || '')
         );
       }
 
       // Check if filename suggests it's an example
       if (block.metadata?.filename) {
         return exampleIndicators.some(pattern =>
-          pattern.test(block.metadata!.filename!)
+          pattern.test(block.metadata?.filename || '')
         );
       }
 

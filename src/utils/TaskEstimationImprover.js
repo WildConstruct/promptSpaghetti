@@ -175,9 +175,9 @@ class TaskEstimationImprover {
       console.log(
         `🎯 Overall accuracy: ${(this.metrics.overallAccuracy * 100).toFixed(1)}%`
       );
-    } catch (error) {
-      console.error('❌ Failed to initialize Task Estimation Improver:', error);
-      throw error;
+    } catch {
+      console.error('❌ Failed to initialize Task Estimation Improver');
+      throw new Error('Initialization failed');
     }
   }
 
@@ -245,12 +245,11 @@ class TaskEstimationImprover {
       );
 
       return suggestion;
-    } catch (error) {
+    } catch {
       console.error(
-        `❌ Failed to generate estimation for task ${taskData.id}:`,
-        error
+        `❌ Failed to generate estimation for task ${taskData.id}`
       );
-      throw error;
+      throw new Error('Estimation generation failed');
     }
   }
 
@@ -311,12 +310,11 @@ class TaskEstimationImprover {
       await this.checkRetrainingNeeds();
 
       return completion;
-    } catch (error) {
+    } catch {
       console.error(
-        `❌ Failed to record completion for task ${taskId}:`,
-        error
+        `❌ Failed to record completion for task ${taskId}`
       );
-      throw error;
+      throw new Error('Completion recording failed');
     }
   }
 
@@ -394,9 +392,9 @@ class TaskEstimationImprover {
       );
 
       return true;
-    } catch (error) {
-      console.error('❌ Model training failed:', error);
-      throw error;
+    } catch {
+      console.error('❌ Model training failed');
+      throw new Error('Model training failed');
     }
   }
 
@@ -574,7 +572,7 @@ class TaskEstimationImprover {
   calculateConfidence(predictions, features) {
     // Calculate prediction variance
     const values = Object.values(predictions).filter(v => !isNaN(v) && v > 0);
-    if (values.length === 0) return 0.5;
+    if (values.length === 0) {return 0.5;}
 
     const mean = values.reduce((a, b) => a + b, 0) / values.length;
     const variance =
@@ -664,7 +662,7 @@ class TaskEstimationImprover {
 
       // Check convergence
       const meanSquaredError = totalError / trainSet.length;
-      if (meanSquaredError < 0.001) break;
+      if (meanSquaredError < 0.001) {break;}
     }
 
     // Test model
@@ -755,7 +753,7 @@ class TaskEstimationImprover {
 
   predictLinear(features) {
     const model = this.models.get('linear');
-    if (!model) return 4; // Default
+    if (!model) {return 4;} // Default
 
     return this.predictLinearSample(features, model);
   }
@@ -772,7 +770,7 @@ class TaskEstimationImprover {
 
   predictPolynomial(features) {
     const model = this.models.get('polynomial');
-    if (!model) return 4; // Default
+    if (!model) {return 4;} // Default
 
     const polynomialFeatures = this.createPolynomialFeatures(features);
     return this.predictLinearSample(polynomialFeatures, model.baseModel);
@@ -780,7 +778,7 @@ class TaskEstimationImprover {
 
   predictExponential(features) {
     const model = this.models.get('exponential');
-    if (!model) return 4; // Default
+    if (!model) {return 4;} // Default
 
     const complexity = this.determineComplexityLevel(features);
     const experience = features.experienceLevel || 3;
@@ -796,7 +794,7 @@ class TaskEstimationImprover {
     // Find similar patterns in historical data
     const similarTasks = this.findSimilarTasks(features);
 
-    if (similarTasks.length === 0) return 4; // Default
+    if (similarTasks.length === 0) {return 4;} // Default
 
     // Average the completion times of similar tasks
     const totalHours = similarTasks.reduce(
@@ -811,7 +809,7 @@ class TaskEstimationImprover {
     const k = 5;
     const neighbors = this.findKNearestNeighbors(features, k);
 
-    if (neighbors.length === 0) return 4; // Default
+    if (neighbors.length === 0) {return 4;} // Default
 
     // Weighted average based on similarity
     let weightedSum = 0;
@@ -850,7 +848,7 @@ class TaskEstimationImprover {
 
   calculateEpicComplexity(epic) {
     // Simple epic complexity scoring
-    if (!epic) return 1;
+    if (!epic) {return 1;}
 
     const complexEpics = [
       'security',
@@ -871,10 +869,10 @@ class TaskEstimationImprover {
     ).toLowerCase();
 
     // Simple heuristics for file count estimation
-    if (description.includes('new feature')) return 5;
-    if (description.includes('refactor')) return 3;
-    if (description.includes('bug fix')) return 1;
-    if (description.includes('test')) return 2;
+    if (description.includes('new feature')) {return 5;}
+    if (description.includes('refactor')) {return 3;}
+    if (description.includes('bug fix')) {return 1;}
+    if (description.includes('test')) {return 2;}
 
     return 2; // Default
   }
@@ -942,19 +940,19 @@ class TaskEstimationImprover {
     let complexity = 0;
 
     // Word count contribution
-    if (features.wordCount > 100) complexity++;
-    if (features.wordCount > 200) complexity++;
+    if (features.wordCount > 100) {complexity++;}
+    if (features.wordCount > 200) {complexity++;}
 
     // Acceptance criteria contribution
-    if (features.acceptanceCriteriaCount > 3) complexity++;
-    if (features.acceptanceCriteriaCount > 6) complexity++;
+    if (features.acceptanceCriteriaCount > 3) {complexity++;}
+    if (features.acceptanceCriteriaCount > 6) {complexity++;}
 
     // Feature flags contribution
-    if (features.newFeatureFlag) complexity++;
-    if (features.refactorFlag) complexity++;
+    if (features.newFeatureFlag) {complexity++;}
+    if (features.refactorFlag) {complexity++;}
 
     // Dependency contribution
-    if (features.dependencyCount > 2) complexity++;
+    if (features.dependencyCount > 2) {complexity++;}
 
     return Math.min(complexity, 4); // Cap at level 4
   }
@@ -967,9 +965,9 @@ class TaskEstimationImprover {
   getConfidenceLevel(confidence) {
     const levels = this.config.suggestions.confidenceLevels;
 
-    if (confidence >= levels.high) return 'high';
-    if (confidence >= levels.medium) return 'medium';
-    if (confidence >= levels.low) return 'low';
+    if (confidence >= levels.high) {return 'high';}
+    if (confidence >= levels.medium) {return 'medium';}
+    if (confidence >= levels.low) {return 'low';}
     return 'very_low';
   }
 
@@ -1147,7 +1145,7 @@ class TaskEstimationImprover {
   // Accuracy and error calculation methods
 
   calculateAccuracy(estimated, actual) {
-    if (actual === 0) return estimated === 0 ? 1 : 0;
+    if (actual === 0) {return estimated === 0 ? 1 : 0;}
 
     const error = Math.abs(estimated - actual) / actual;
     return Math.max(0, 1 - error);
@@ -1155,7 +1153,7 @@ class TaskEstimationImprover {
 
   calculateAccuracyFromPredictions(predictions, actuals) {
     if (predictions.length !== actuals.length || predictions.length === 0)
-      return 0;
+      {return 0;}
 
     let totalAccuracy = 0;
     for (let i = 0; i < predictions.length; i++) {
@@ -1190,7 +1188,7 @@ class TaskEstimationImprover {
   }
 
   calculateMSEFromPredictions(predictions, actuals) {
-    if (predictions.length !== actuals.length) return Infinity;
+    if (predictions.length !== actuals.length) {return Infinity;}
 
     let sumSquaredError = 0;
     for (let i = 0; i < predictions.length; i++) {
@@ -1202,7 +1200,7 @@ class TaskEstimationImprover {
   }
 
   calculateMAEFromPredictions(predictions, actuals) {
-    if (predictions.length !== actuals.length) return Infinity;
+    if (predictions.length !== actuals.length) {return Infinity;}
 
     let sumAbsoluteError = 0;
     for (let i = 0; i < predictions.length; i++) {
@@ -1318,30 +1316,43 @@ class TaskEstimationImprover {
 
   reconstructFeatures(completion) {
     // Reconstruct features from completion record (simplified)
+    const features = completion?.features ?? {};
     return {
-      wordCount: 50,
-      acceptanceCriteriaCount: 2,
-      tagCount: 1,
-      priorityLevel: 2,
-      epicComplexity: 2,
-      dependencyCount: 1,
-      fileCount: 2,
-      newFeatureFlag: 0,
-      bugFixFlag: 1,
-      refactorFlag: 0,
-      testingFlag: 0,
-      experienceLevel: 3,
-      domainExpertise: 0.5,
-      velocityScore: 1.0,
-      accuracyScore: 1.0,
-      currentWorkload: 0.5,
-      recentPerformance: 1.0,
-      timeOfDay: 10,
-      dayOfWeek: 2,
-      quarterOfYear: 2,
-      teamVelocity: 1.0,
-      projectPhase: 'development',
-      pressureLevel: 2
+      wordCount: features.wordCount ?? completion?.wordCount ?? 50,
+      acceptanceCriteriaCount:
+        features.acceptanceCriteriaCount ??
+        completion?.acceptanceCriteriaCount ??
+        2,
+      tagCount: features.tagCount ?? completion?.tagCount ?? 1,
+      priorityLevel: features.priorityLevel ?? completion?.priorityLevel ?? 2,
+      epicComplexity: features.epicComplexity ?? completion?.epicComplexity ?? 2,
+      dependencyCount:
+        features.dependencyCount ?? completion?.dependencyCount ?? 1,
+      fileCount: features.fileCount ?? completion?.fileCount ?? 2,
+      newFeatureFlag:
+        features.newFeatureFlag ?? (completion?.type === 'feature' ? 1 : 0),
+      bugFixFlag:
+        features.bugFixFlag ?? (completion?.type === 'bugfix' ? 1 : 0),
+      refactorFlag:
+        features.refactorFlag ?? (completion?.type === 'refactor' ? 1 : 0),
+      testingFlag:
+        features.testingFlag ?? (completion?.includesTests ? 1 : 0),
+      experienceLevel:
+        features.experienceLevel ?? completion?.experienceLevel ?? 3,
+      domainExpertise:
+        features.domainExpertise ?? completion?.domainExpertise ?? 0.5,
+      velocityScore: features.velocityScore ?? completion?.velocityScore ?? 1.0,
+      accuracyScore: features.accuracyScore ?? completion?.accuracyScore ?? 1.0,
+      currentWorkload:
+        features.currentWorkload ?? completion?.currentWorkload ?? 0.5,
+      recentPerformance:
+        features.recentPerformance ?? completion?.recentPerformance ?? 1.0,
+      timeOfDay: features.timeOfDay ?? completion?.timeOfDay ?? 10,
+      dayOfWeek: features.dayOfWeek ?? completion?.dayOfWeek ?? 2,
+      quarterOfYear: features.quarterOfYear ?? completion?.quarterOfYear ?? 2,
+      teamVelocity: features.teamVelocity ?? completion?.teamVelocity ?? 1.0,
+      projectPhase: features.projectPhase ?? completion?.projectPhase ?? 'development',
+      pressureLevel: features.pressureLevel ?? completion?.pressureLevel ?? 2
     };
   }
 
@@ -1409,10 +1420,10 @@ class TaskEstimationImprover {
     let score = 1.0;
 
     // Check for unreasonable values
-    if (features.wordCount > 1000) score -= 0.1; // Very long description
+    if (features.wordCount > 1000) {score -= 0.1;} // Very long description
     if (features.experienceLevel > 5 || features.experienceLevel < 1)
-      score -= 0.2;
-    if (features.currentWorkload > 1.5) score -= 0.1; // Overloaded
+      {score -= 0.2;}
+    if (features.currentWorkload > 1.5) {score -= 0.1;} // Overloaded
 
     return Math.max(0, score);
   }
@@ -1469,8 +1480,8 @@ class TaskEstimationImprover {
     setInterval(async () => {
       try {
         await this.trainModels();
-      } catch (error) {
-        console.error('Scheduled retraining failed:', error);
+      } catch {
+        console.error('Scheduled retraining failed');
       }
     }, this.config.learning.retrainInterval);
   }
@@ -1626,7 +1637,7 @@ class TaskEstimationImprover {
       r => r.type === 'completion' && r.accuracy !== undefined
     );
 
-    if (recentCompletions.length === 0) return '0%';
+    if (recentCompletions.length === 0) {return '0%';}
 
     const averageAccuracy =
       recentCompletions.reduce((sum, r) => sum + r.accuracy, 0) /
@@ -1642,11 +1653,10 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const command = args[0];
 
-  async function main() {
-    try {
-      await improver.initialize();
+  const run = async () => {
+    await improver.initialize();
 
-      switch (command) {
+    switch (command) {
         case 'estimate':
           const taskData = {
             id: args[1] || 'test-task',
@@ -1768,14 +1778,13 @@ FEATURES ANALYZED:
   - Current workload and context
 `);
           break;
-      }
-    } catch (error) {
-      console.error('❌ Error:', error.message);
-      process.exit(1);
     }
-  }
+  };
 
-  main();
+  run().catch(error => {
+    console.error('❌ Estimation improver failed:', error);
+    process.exitCode = 1;
+  });
 }
 
 module.exports = TaskEstimationImprover;

@@ -271,12 +271,12 @@ function analyzeTasksByEpic(state) {
 
     if (task.metadata?.source?.includes('epic')) {
       const match = task.metadata.source.match(/epic(\d+)/);
-      if (match) epicNum = parseInt(match[1]);
+      if (match) {epicNum = parseInt(match[1]);}
     }
 
     if (task.id?.includes('E')) {
       const match = task.id.match(/E(\d+)-/);
-      if (match) epicNum = parseInt(match[1]);
+      if (match) {epicNum = parseInt(match[1]);}
     }
 
     if (epicNum && epicAnalysis[epicNum]) {
@@ -285,9 +285,9 @@ function analyzeTasksByEpic(state) {
       epic.tasks.push(task);
 
       // Analyze priority
-      if (task.priority === 'high') epic.highPriorityTasks++;
-      else if (task.priority === 'medium') epic.mediumPriorityTasks++;
-      else epic.lowPriorityTasks++;
+      if (task.priority === 'high') {epic.highPriorityTasks++;}
+      else if (task.priority === 'medium') {epic.mediumPriorityTasks++;}
+      else {epic.lowPriorityTasks++;}
 
       // Calculate estimated hours and story points
       const hours = parseFloat(task.estimate?.replace(' hours', '')) || 4;
@@ -314,8 +314,6 @@ function generateSprintPlan(epicAnalysis) {
     };
   });
 
-  let sprintNumber = 1;
-
   // Process each phase
   SPRINT_THEMES.forEach(phase => {
     console.log(`\n🎯 PHASE ${phase.phase}: ${phase.theme.toUpperCase()}`);
@@ -338,7 +336,7 @@ function generateSprintPlan(epicAnalysis) {
       const availableEpics = allEpics.filter(epic => {
         const epicData = dependencyGraph[epic.epic];
         if (epicData.assigned || epicData.analysis.totalTasks === 0)
-          return false;
+          {return false;}
 
         // Check if all dependencies are completed
         const depsCompleted = epic.dependencies.every(
@@ -352,7 +350,7 @@ function generateSprintPlan(epicAnalysis) {
 
       // Sort by priority and task count
       availableEpics.sort((a, b) => {
-        if (a.priority !== b.priority) return a.priority - b.priority;
+        if (a.priority !== b.priority) {return a.priority - b.priority;}
         return b.tasks - a.tasks; // Larger epics first within same priority
       });
 
@@ -432,44 +430,44 @@ function generateKeyDeliverables(sprint) {
 
   sprint.epics.forEach(epic => {
     if (epic.epic === 6)
-      deliverables.push(
+      {deliverables.push(
         'Performance optimization framework',
         'Scalability architecture'
-      );
+      );}
     else if (epic.epic === 7)
-      deliverables.push('Advanced node system', 'Node execution engine');
+      {deliverables.push('Advanced node system', 'Node execution engine');}
     else if (epic.epic === 9)
-      deliverables.push(
+      {deliverables.push(
         'Error handling system',
         'User experience improvements'
-      );
+      );}
     else if (epic.epic === 10)
-      deliverables.push('Analytics dashboard', 'Intelligence features');
+      {deliverables.push('Analytics dashboard', 'Intelligence features');}
     else if (epic.epic === 11)
-      deliverables.push('User management system', 'RBAC implementation');
+      {deliverables.push('User management system', 'RBAC implementation');}
     else if (epic.epic === 12)
-      deliverables.push('Data integration pipelines', 'ETL framework');
+      {deliverables.push('Data integration pipelines', 'ETL framework');}
     else if (epic.epic === 13)
-      deliverables.push('Performance monitoring', 'Optimization tools');
+      {deliverables.push('Performance monitoring', 'Optimization tools');}
     else if (epic.epic === 14)
-      deliverables.push('Security framework', 'Authentication system');
+      {deliverables.push('Security framework', 'Authentication system');}
     else if (epic.epic === 15)
-      deliverables.push('I18n/L10n system', 'Multi-language support');
+      {deliverables.push('I18n/L10n system', 'Multi-language support');}
     else if (epic.epic === 16)
-      deliverables.push('Testing framework', 'QA automation');
+      {deliverables.push('Testing framework', 'QA automation');}
     else if (epic.epic === 17)
-      deliverables.push('Workflow engine', 'Automation features');
+      {deliverables.push('Workflow engine', 'Automation features');}
     else if (epic.epic === 18)
-      deliverables.push('Policy management', 'Compliance tools');
+      {deliverables.push('Policy management', 'Compliance tools');}
     else if (epic.epic === 19)
-      deliverables.push('Policy configuration', 'Assignment tools');
+      {deliverables.push('Policy configuration', 'Assignment tools');}
     else if (epic.epic === 20)
-      deliverables.push('Advanced monitoring', 'Observability tools');
+      {deliverables.push('Advanced monitoring', 'Observability tools');}
     else if (epic.epic === 22)
-      deliverables.push('Graph visualization', 'Navigation tools');
+      {deliverables.push('Graph visualization', 'Navigation tools');}
     else if (epic.epic === 23)
-      deliverables.push('Real-time collaboration', 'Workspace features');
-    else deliverables.push(`${epic.name} core features`);
+      {deliverables.push('Real-time collaboration', 'Workspace features');}
+    else {deliverables.push(`${epic.name} core features`);}
   });
 
   return deliverables.slice(0, 5); // Limit to top 5 deliverables per sprint

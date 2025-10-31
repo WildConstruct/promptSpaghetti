@@ -40,7 +40,7 @@ class GraphExecutionBenchmarker {
    * Record memory baseline
    */
   recordMemoryBaseline(): void {
-    if (global.gc) global.gc();
+    if (global.gc) {global.gc();}
     this.memoryBaseline = process.memoryUsage().heapUsed;
   }
 
@@ -48,7 +48,7 @@ class GraphExecutionBenchmarker {
    * Get memory delta in MB
    */
   getMemoryDelta(): number {
-    if (global.gc) global.gc();
+    if (global.gc) {global.gc();}
     return (process.memoryUsage().heapUsed - this.memoryBaseline) / 1024 / 1024;
   }
 
@@ -110,7 +110,7 @@ class GraphExecutionBenchmarker {
 
     // Create branches recursively
     const createBranch = (parentId: string, currentDepth: number) => {
-      if (currentDepth >= depth) return;
+      if (currentDepth >= depth) {return;}
 
       for (let i = 0; i < branchFactor; i++) {
         const nodeId = `node-${nodeCounter++}`;
@@ -264,7 +264,7 @@ class GraphExecutionBenchmarker {
         // Mock execution based on node type
         let result = '';
         switch (node.type) {
-          case 'WeightedChoice':
+          case 'WeightedChoice': {
             const choices = node.data.choices || ['default'];
             const weights = node.data.weights || [1];
             let sum = 0;
@@ -277,6 +277,7 @@ class GraphExecutionBenchmarker {
               }
             }
             break;
+          }
           case 'Concat':
             result = `concat-${seed}`;
             break;
@@ -293,10 +294,11 @@ class GraphExecutionBenchmarker {
                 node.data.variableName || 'var'
               ) as string) || 'undefined';
             break;
-          case 'Output':
+          case 'Output': {
             const template = node.data.template || '{{value}}';
             result = template.replace('{{value}}', `output-${seed}`);
             break;
+          }
           default:
             result = `unknown-${node.type}`;
         }
@@ -382,7 +384,7 @@ class GraphExecutionBenchmarker {
       if (!seedGroups.has(m.seed)) {
         seedGroups.set(m.seed, []);
       }
-      seedGroups.get(m.seed)!.push(m);
+      seedGroups.get(m.seed)?.push(m);
     });
 
     let deterministicSeeds = 0;
@@ -391,7 +393,7 @@ class GraphExecutionBenchmarker {
       totalSeeds++;
       const outputs = metrics.map(m => m.uniqueOutputs.join(''));
       const allSame = outputs.every(output => output === outputs[0]);
-      if (allSame) deterministicSeeds++;
+      if (allSame) {deterministicSeeds++;}
     });
 
     const determinismScore = deterministicSeeds / totalSeeds;
@@ -438,7 +440,7 @@ class GraphExecutionBenchmarker {
     results: Array<{
       config: BenchmarkConfiguration;
       metrics: GraphExecutionMetrics[];
-      summary: any;
+      summary: unknown;
     }>
   ): string {
     let report = '\\n📊 GRAPH EXECUTION BENCHMARK REPORT\\n';

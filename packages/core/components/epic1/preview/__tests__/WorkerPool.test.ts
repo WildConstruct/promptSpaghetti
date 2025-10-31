@@ -36,7 +36,7 @@ class MockWorker {
 // Mock global Worker
 global.Worker = MockWorker;
 
-const { WorkerPool } = require('../WorkerPool');
+import { WorkerPool } from '../WorkerPool';
 
 describe('WorkerPool', () => {
   let pool;
@@ -206,7 +206,7 @@ describe('WorkerPool', () => {
       expect(MockWorker).toHaveBeenCalledTimes(2);
 
       // Check stats
-      let stats = pool.getStats();
+      const stats = pool.getStats();
       expect(stats.busyWorkers).toBe(2);
       expect(stats.queuedTasks).toBe(1);
 

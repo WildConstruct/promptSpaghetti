@@ -26,7 +26,7 @@ export class CyclicalPattern {
     this.type = 'cyclical';
   }
   getNext(sequence, state, ctx) {
-    if (sequence.length === 0) return '';
+    if (sequence.length === 0) {return '';}
     const index = state.index % sequence.length;
     return sequence[index];
   }
@@ -40,7 +40,7 @@ export class RandomPattern {
     this.type = 'random';
   }
   getNext(sequence, state, ctx) {
-    if (sequence.length === 0) return '';
+    if (sequence.length === 0) {return '';}
     // Create seeded RNG for deterministic randomness
     const rng = seedrandom(`${ctx.seed}-${state.index}`);
     if (this.config.allowRepeats === false) {
@@ -70,7 +70,7 @@ export class WeightedPattern {
     }
   }
   getNext(sequence, state, ctx) {
-    if (sequence.length === 0) return '';
+    if (sequence.length === 0) {return '';}
     const weights = this.config.weights;
     if (weights.length !== sequence.length) {
       throw new Error(`Weights length (${weights.length}) must match sequence length (${sequence.length})`);

@@ -18,6 +18,8 @@ import {
   AutoTooltips,
 } from '../onboarding';
 
+type TooltipPosition = 'top' | 'right' | 'bottom' | 'left' | 'auto';
+
 // Example: Basic tooltip usage
 export const BasicTooltipExample: React.FC = () => {
   return (
@@ -48,7 +50,7 @@ export const BasicTooltipExample: React.FC = () => {
               icon="💡"
               shortcut="Cmd+K"
               example="Type to search..."
-              learnMore={() => alert('Learn more clicked!')}
+              learnMore={() => console.info('Learn more clicked!')}
             />
           }
           position="right"
@@ -209,7 +211,7 @@ export const ProgrammaticTooltipExample: React.FC = () => {
 export const SmartPositioningExample: React.FC = () => {
   const [targetEl, setTargetEl] = useState<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
-  const [position, setPosition] = useState<'top' | 'right' | 'bottom' | 'left' | 'auto'>('auto');
+  const [position, setPosition] = useState<TooltipPosition>('auto');
 
   return (
     <div style={{ padding: '40px', minHeight: '500px' }}>
@@ -219,7 +221,7 @@ export const SmartPositioningExample: React.FC = () => {
         <label>Position: </label>
         <select 
           value={position} 
-          onChange={(e) => setPosition(e.target.value as any)}
+          onChange={(e) => setPosition(e.target.value as TooltipPosition)}
           style={{ marginLeft: '8px' }}
         >
           <option value="auto">Auto</option>
@@ -241,7 +243,7 @@ export const SmartPositioningExample: React.FC = () => {
         {/* Test different positions */}
         {['Top Left', 'Top Center', 'Top Right',
           'Middle Left', 'Middle Center', 'Middle Right',
-          'Bottom Left', 'Bottom Center', 'Bottom Right'].map((label, index) => (
+          'Bottom Left', 'Bottom Center', 'Bottom Right'].map((label) => (
           <button
             key={label}
             ref={(el) => {
@@ -298,7 +300,7 @@ export const CustomTooltipExample: React.FC = () => {
       delay: 500,
       priority: 'high' as const,
       actions: [
-        { label: 'Show me', action: () => alert('Showing node library tutorial') },
+        { label: 'Show me', action: () => console.info('Showing node library tutorial') },
       ],
     },
     {

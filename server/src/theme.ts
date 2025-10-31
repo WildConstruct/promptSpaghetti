@@ -23,7 +23,9 @@ export async function themeRoutes(app: FastifyInstance) {
         return result.rows[0] || { colors: {}, typography: {}, branding: {} };
       } catch (error) {
         app.log.error(error);
-        return reply.status(500).send({ error: 'Failed to get theme' });
+        const message =
+          error instanceof Error ? error.message : 'Failed to get theme';
+        return reply.status(500).send({ error: message });
       }
     }
   );
@@ -35,13 +37,13 @@ export async function themeRoutes(app: FastifyInstance) {
     },
     async (req, reply) => {
       const schema = z.object({
-        colors: z.record(z.any()).optional(),
-        typography: z.record(z.any()).optional(),
-        branding: z.record(z.any()).optional()
+        colors: z.record(z.unknown()).optional(),
+        typography: z.record(z.unknown()).optional(),
+        branding: z.record(z.unknown()).optional()
       });
-      const parsed = schema.safeParse((req as any).body);
+      const parsed = schema.safeParse(req.body);
       if (!parsed.success)
-        return reply.status(400).send({ error: 'Invalid payload' });
+        {return reply.status(400).send({ error: 'Invalid payload' });}
       const { colors, typography, branding } = parsed.data;
       try {
         await pool.query(
@@ -51,7 +53,9 @@ export async function themeRoutes(app: FastifyInstance) {
         return { success: true };
       } catch (error) {
         app.log.error(error);
-        return reply.status(500).send({ error: 'Failed to update theme' });
+        const message =
+          error instanceof Error ? error.message : 'Failed to update theme';
+        return reply.status(500).send({ error: message });
       }
     }
   );
@@ -70,7 +74,7 @@ export async function themeRoutes(app: FastifyInstance) {
         try {
           const data = await req.file();
           if (!data)
-            return reply.status(400).send({ error: 'No file uploaded' });
+            {return reply.status(400).send({ error: 'No file uploaded' });}
           const admin = getSupabaseAdmin();
           if (admin) {
             const bucket = 'fonts';
@@ -102,7 +106,9 @@ export async function themeRoutes(app: FastifyInstance) {
           }
         } catch (error) {
           app.log.error(error);
-          return reply.status(500).send({ error: 'Failed to upload font' });
+          const message =
+            error instanceof Error ? error.message : 'Failed to upload font';
+          return reply.status(500).send({ error: message });
         }
       }
     );
@@ -116,7 +122,7 @@ export async function themeRoutes(app: FastifyInstance) {
         })
       },
       async (req, reply) => {
-        const { id } = req.params as any;
+        const { id } = req.params as { id: string };
         try {
           // Get font details from database
           const fontResult = await pool.query(
@@ -146,7 +152,9 @@ export async function themeRoutes(app: FastifyInstance) {
           return { success: true };
         } catch (error) {
           app.log.error(error);
-          return reply.status(500).send({ error: 'Failed to delete font' });
+          const message =
+            error instanceof Error ? error.message : 'Failed to delete font';
+          return reply.status(500).send({ error: message });
         }
       }
     );
@@ -163,7 +171,7 @@ export async function themeRoutes(app: FastifyInstance) {
         try {
           const data = await req.file();
           if (!data)
-            return reply.status(400).send({ error: 'No file uploaded' });
+            {return reply.status(400).send({ error: 'No file uploaded' });}
 
           const admin = getSupabaseAdmin();
           if (admin) {
@@ -211,7 +219,9 @@ export async function themeRoutes(app: FastifyInstance) {
           }
         } catch (error) {
           app.log.error(error);
-          return reply.status(500).send({ error: 'Failed to upload logo' });
+          const message =
+            error instanceof Error ? error.message : 'Failed to upload logo';
+          return reply.status(500).send({ error: message });
         }
       }
     );
@@ -253,7 +263,9 @@ export async function themeRoutes(app: FastifyInstance) {
           return { success: true };
         } catch (error) {
           app.log.error(error);
-          return reply.status(500).send({ error: 'Failed to delete logo' });
+          const message =
+            error instanceof Error ? error.message : 'Failed to delete logo';
+          return reply.status(500).send({ error: message });
         }
       }
     );

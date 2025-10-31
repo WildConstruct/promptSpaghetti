@@ -1,21 +1,8 @@
 // Refactored exporter - main export functions
 import { Graph, Node } from '../../../packages/core/graphSchema';
-import {
-  GeneratorBundle,
-  GeneratorBundleSchema,
-  ControlNetParameters,
-  SceneData
-} from './schemas';
-import {
-  extractControlNetParameters,
-  graphToVFXBundle,
-  validateVFXCompatibility
-} from './vfx-exporter';
-import {
-  extractSceneData,
-  generateScenePromptFlow,
-  graphToSceneAwareBundle
-} from './scene-exporter';
+import { GeneratorBundle, GeneratorBundleSchema } from './schemas';
+import { graphToVFXBundle } from './vfx-exporter';
+import { graphToSceneAwareBundle } from './scene-exporter';
 
 // Re-export all types and functions for backward compatibility
 export * from './schemas';
@@ -25,10 +12,7 @@ export * from './scene-exporter';
 /**
  * Convert a Node to a rule in the GeneratorBundle format
  */
-function convertNodeToRule(
-  node: Node,
-  nodeMap: Map<string, Node>
-): Record<string, unknown> {
+function convertNodeToRule(node: Node): Record<string, unknown> {
   const rule: Record<string, unknown> = {
     type: node.type,
     data: node.data
@@ -87,11 +71,6 @@ export function graphToBundle(
   }
 ): GeneratorBundle {
   // Create node map for quick lookups
-  const nodeMap = new Map<string, Node>();
-  graph.nodes.forEach(node => {
-    nodeMap.set(node.id, node);
-  });
-
   // Find entry point (Output node or first node)
   let entryPoint = graph.nodes.find(n => n.type === 'Output')?.id;
   if (!entryPoint && graph.nodes.length > 0) {
@@ -104,7 +83,7 @@ export function graphToBundle(
   // Convert nodes to rules
   const rules: Record<string, Record<string, unknown>> = {};
   graph.nodes.forEach(node => {
-    rules[node.id] = convertNodeToRule(node, nodeMap);
+    rules[node.id] = convertNodeToRule(node);
   });
 
   // Add edge information to rules
@@ -165,9 +144,16 @@ export function validateGeneratorBundle(
 /**
  * Convert a GeneratorBundle back to a Graph
  */
+type ExportedEdge = {
+  id: string;
+  source: string;
+  target: string;
+  type: string;
+};
+
 export function bundleToGraph(bundle: GeneratorBundle): Graph {
   const nodes: Node[] = [];
-  const edges: any[] = [];
+  const edges: ExportedEdge[] = [];
 
   // Convert rules back to nodes
   Object.entries(bundle.rules).forEach(([id, rule]) => {

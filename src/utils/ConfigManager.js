@@ -140,7 +140,7 @@ class ConfigManager {
           ) {
             value = JSON.parse(value);
           }
-        } catch (e) {
+        } catch {
           // Keep as string if not valid JSON
         }
 

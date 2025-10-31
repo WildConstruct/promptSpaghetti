@@ -83,7 +83,7 @@ export const InteractiveTutorial: React.FC = () => {
 
   // Handle element highlighting
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {return;}
 
     const step = tutorialSteps[currentStep];
     if (step.target) {
@@ -97,31 +97,31 @@ export const InteractiveTutorial: React.FC = () => {
     }
   }, [isActive, currentStep]);
 
-  const handleNext = useCallback(() => {
-    if (currentStep < tutorialSteps.length - 1) {
-      setCurrentStep(prev => prev + 1);
-    } else {
-      handleClose();
-    }
-  }, [currentStep]);
-
-  const handlePrevious = useCallback(() => {
-    if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
-    }
-  }, [currentStep]);
-
   const handleClose = useCallback(() => {
     setIsActive(false);
     setCurrentStep(0);
     setHighlightElement(null);
   }, []);
 
+  const handleNext = useCallback(() => {
+    setCurrentStep(prev => {
+      if (prev < tutorialSteps.length - 1) {
+        return prev + 1;
+      }
+      handleClose();
+      return prev;
+    });
+  }, [handleClose]);
+
+  const handlePrevious = useCallback(() => {
+    setCurrentStep(prev => (prev > 0 ? prev - 1 : prev));
+  }, []);
+
   const handleSkip = useCallback(() => {
     handleClose();
   }, [handleClose]);
 
-  if (!isActive) return null;
+  if (!isActive) {return null;}
 
   const step = tutorialSteps[currentStep];
   const progress = ((currentStep + 1) / tutorialSteps.length) * 100;

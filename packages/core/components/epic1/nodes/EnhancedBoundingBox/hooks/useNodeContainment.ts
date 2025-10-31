@@ -64,7 +64,7 @@ export function useNodeContainment(
 
     // Find the bounding box node itself
     const thisBox = allNodes.find(n => n.id === boxId);
-    if (!thisBox) return [];
+    if (!thisBox) {return [];}
 
     // Filter nodes that are contained within the bounding box
     const contained = allNodes.filter(node => {
@@ -120,13 +120,13 @@ export function useNodeContainment(
 
     return contained;
   }, [
-    boxId,
     allNodes,
+    boxId,
     boxPosition.x,
     boxPosition.y,
-    checkSize.width,
     checkSize.height,
-    isCollapsed
+    checkSize.width,
+    perfMonitor
   ]);
 
   // Force recalculation
@@ -136,10 +136,9 @@ export function useNodeContainment(
   }, [boxId]);
 
   // Calculate cache hit rate
-  const cacheHitRate = useMemo(() => {
-    const total = hitCountRef.current + missCountRef.current;
-    return total > 0 ? (hitCountRef.current / total) * 100 : 0;
-  }, [containedNodes]); // Recalculate when nodes change
+  const totalLookups = hitCountRef.current + missCountRef.current;
+  const cacheHitRate =
+    totalLookups > 0 ? (hitCountRef.current / totalLookups) * 100 : 0;
 
   return {
     containedNodes,

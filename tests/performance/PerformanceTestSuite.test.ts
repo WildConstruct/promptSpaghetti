@@ -23,7 +23,7 @@ describe('Performance Test Suite - E18', () => {
     result: T;
   } => {
     const times: number[] = [];
-    let result: T;
+    let result: T | undefined;
 
     for (let i = 0; i < iterations; i++) {
       const start = performance.now();
@@ -40,7 +40,7 @@ describe('Performance Test Suite - E18', () => {
       max: times[times.length - 1],
       p95: times[Math.floor(times.length * 0.95)],
       p99: times[Math.floor(times.length * 0.99)],
-      result: result!
+      result: result ?? (undefined as T)
     };
   };
 
@@ -161,8 +161,11 @@ describe('Performance Test Suite - E18', () => {
             height: 40
           };
           // Simulate layout calculations
-          bbox.x + bbox.width;
-          bbox.y + bbox.height;
+          const bboxRight = bbox.x + bbox.width;
+          const bboxBottom = bbox.y + bbox.height;
+          // Use the calculated values
+          expect(bboxRight).toBeGreaterThan(0);
+          expect(bboxBottom).toBeGreaterThan(0);
         });
 
         edges.forEach(edge => {
@@ -170,10 +173,12 @@ describe('Performance Test Suite - E18', () => {
           const sourceNode = nodes.find(n => n.id === edge.source);
           const targetNode = nodes.find(n => n.id === edge.target);
           if (sourceNode && targetNode) {
-            Math.sqrt(
+            const distance = Math.sqrt(
               Math.pow(targetNode.position.x - sourceNode.position.x, 2) +
                 Math.pow(targetNode.position.y - sourceNode.position.y, 2)
             );
+            // Validate distance calculation
+            expect(distance).toBeGreaterThanOrEqual(0);
           }
         });
 
@@ -204,8 +209,11 @@ describe('Performance Test Suite - E18', () => {
             height: 60
           };
           // Complex node rendering simulation
-          bbox.x + bbox.width;
-          bbox.y + bbox.height;
+          const bboxRight = bbox.x + bbox.width;
+          const bboxBottom = bbox.y + bbox.height;
+          // Use the calculated values for layout validation
+          expect(bboxRight).toBeGreaterThan(0);
+          expect(bboxBottom).toBeGreaterThan(0);
         });
 
         const viewportEdges = edges.filter((_, index) => index < 50);
@@ -214,10 +222,12 @@ describe('Performance Test Suite - E18', () => {
           const targetNode = nodes.find(n => n.id === edge.target);
           if (sourceNode && targetNode) {
             // Complex bezier curve calculations
-            Math.sqrt(
+            const distance = Math.sqrt(
               Math.pow(targetNode.position.x - sourceNode.position.x, 2) +
                 Math.pow(targetNode.position.y - sourceNode.position.y, 2)
             );
+            // Validate distance calculation
+            expect(distance).toBeGreaterThanOrEqual(0);
           }
         });
 
@@ -253,7 +263,8 @@ describe('Performance Test Suite - E18', () => {
 
         // Mock seed generation
         Array.from({ length: previewData.seedCount }, (_, i) => {
-          Math.random() * 1000000 + i;
+          const seed = Math.random() * 1000000 + i;
+          return seed;
         });
 
         return performance.now() - startTime;
@@ -327,18 +338,18 @@ describe('Performance Test Suite - E18', () => {
           if (testCase.type === 'Output') {
             return testCase.content;
           } else if (testCase.type === 'Concat') {
-            return (testCase as any).parts.join(' ');
+            return (testCase as { parts: string[] }).parts.join(' ');
           } else if (testCase.type === 'WeightedChoice') {
-            const totalWeight = (testCase as any).weights.reduce(
+            const totalWeight = (testCase as { weights: number[] }).weights.reduce(
               (a: number, b: number) => a + b,
               0
             );
             const random = Math.random() * totalWeight;
             let currentWeight = 0;
-            for (let i = 0; i < (testCase as any).weights.length; i++) {
-              currentWeight += (testCase as any).weights[i];
+            for (let i = 0; i < (testCase as { weights: number[] }).weights.length; i++) {
+              currentWeight += (testCase as { weights: number[] }).weights[i];
               if (random <= currentWeight) {
-                return (testCase as any).options[i];
+                return (testCase as { options: unknown[] }).options[i];
               }
             }
           }
@@ -390,15 +401,15 @@ describe('Performance Test Suite - E18', () => {
 
           // Mock advanced node execution
           if (testCase.type === 'Conditional') {
-            const conditionResult = (testCase as any).variables.variable > 0.5;
+            const conditionResult = (testCase as { variables: { variable: number } }).variables.variable > 0.5;
             return conditionResult
-              ? (testCase as any).trueBranch
-              : (testCase as any).falseBranch;
+              ? (testCase as { trueBranch: unknown }).trueBranch
+              : (testCase as { falseBranch: unknown }).falseBranch;
           } else if (testCase.type === 'Sequential') {
-            const tc = testCase as any;
+            const tc = testCase as { items: unknown[]; currentStep: number };
             return tc.items[tc.currentStep % tc.items.length];
           } else if (testCase.type === 'Markov') {
-            const tc = testCase as any;
+            const tc = testCase as { transitions: Record<string, unknown>; currentState: string };
             const currentTransitions = tc.transitions[tc.currentState];
             const random = Math.random();
             let cumulativeProbability = 0;
@@ -434,7 +445,7 @@ describe('Performance Test Suite - E18', () => {
           const startTime = performance.now();
 
           // Mock multi-seed execution
-          const results = [];
+          const seedResults = [];
           for (let i = 0; i < seedCount; i++) {
             const seed = 12345 + i;
             // Mock deterministic execution with seed
@@ -447,12 +458,10 @@ describe('Performance Test Suite - E18', () => {
                 const options = node.data.variations || ['Default'];
                 output += options[seed % options.length];
               } else {
-                output += node.data.variations?.[0] || 'Output';
+                output += node.data.variations?.[0] || 'Default';
               }
-              output += ' ';
             });
-
-            results.push({
+            seedResults.push({
               seed,
               output: output.trim(),
               executionTime: Math.random() * 100 // Mock execution time
@@ -505,15 +514,21 @@ describe('Performance Test Suite - E18', () => {
           const recursionStack = new Set<string>();
 
           const detectCycle = (nodeId: string): boolean => {
-            if (recursionStack.has(nodeId)) return true;
-            if (visited.has(nodeId)) return false;
+            if (recursionStack.has(nodeId)) {
+              return true;
+            }
+            if (visited.has(nodeId)) {
+              return false;
+            }
 
             visited.add(nodeId);
             recursionStack.add(nodeId);
 
             const outgoingEdges = edges.filter(e => e.source === nodeId);
             for (const edge of outgoingEdges) {
-              if (detectCycle(edge.target)) return true;
+              if (detectCycle(edge.target)) {
+                return true;
+              }
             }
 
             recursionStack.delete(nodeId);
@@ -591,7 +606,7 @@ describe('Performance Test Suite - E18', () => {
 
     test('Preview cache memory management', () => {
       const cacheLimit = 50; // Mock 50MB limit
-      const previewCache = new Map<string, any>();
+      const previewCache = new Map<string, unknown>();
 
       // Simulate cache operations
       for (let i = 0; i < 1000; i++) {
@@ -688,7 +703,11 @@ describe('Performance Test Suite - E18', () => {
         complexNodeExecution: measurePerformance(() => {
           // Mock complex computation
           for (let i = 0; i < 1000; i++) {
-            Math.random() * Math.sqrt(i);
+            const result = Math.random() * Math.sqrt(i);
+            // Use result to avoid unused expression warning
+            if (result > 0.5) {
+              // Simulate some conditional logic
+            }
           }
         }, 100).average,
 

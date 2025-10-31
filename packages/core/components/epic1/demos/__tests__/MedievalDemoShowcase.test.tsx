@@ -83,7 +83,11 @@ describe('MedievalDemoShowcase', () => {
     render(<MedievalDemoShowcase />);
     
     const inlineEditStage = screen.getByText('Inline Edit');
-    fireEvent.click(inlineEditStage.closest('div')!);
+    const inlineEditContainer = inlineEditStage.closest('div');
+    if (!inlineEditContainer) {
+      throw new Error('Inline Edit stage container not found');
+    }
+    fireEvent.click(inlineEditContainer);
     
     // Should trigger haptic for that stage
     expect(mockVibrate).toHaveBeenCalledWith(10);
@@ -112,7 +116,10 @@ describe('MedievalDemoShowcase', () => {
     
     // Find and click close button
     const closeButton = instructions.parentElement?.querySelector('button');
-    fireEvent.click(closeButton!);
+    if (!closeButton) {
+      throw new Error('Instructions close button not found');
+    }
+    fireEvent.click(closeButton);
     
     // Instructions should be gone
     expect(screen.queryByText(/Click nodes to edit inline/)).not.toBeInTheDocument();
@@ -123,7 +130,11 @@ describe('MedievalDemoShowcase', () => {
     
     // Click on a stage to complete it
     const quickStartStage = screen.getByText('Quick Start');
-    fireEvent.click(quickStartStage.closest('div')!);
+    const quickStartContainer = quickStartStage.closest('div');
+    if (!quickStartContainer) {
+      throw new Error('Quick Start stage container not found');
+    }
+    fireEvent.click(quickStartContainer);
     
     // Should show checkmark for completed stage
     await waitFor(() => {
@@ -138,7 +149,11 @@ describe('MedievalDemoShowcase', () => {
     
     // Jump to a stage that highlights nodes
     const quickStartStage = screen.getByText('Quick Start');
-    fireEvent.click(quickStartStage.closest('div')!);
+    const quickStartContainer = quickStartStage.closest('div');
+    if (!quickStartContainer) {
+      throw new Error('Quick Start stage container not found');
+    }
+    fireEvent.click(quickStartContainer);
     
     // Graph editor should receive nodes with highlight class
     const graphEditor = screen.getByTestId('graph-editor');
@@ -161,12 +176,15 @@ describe('MedievalDemoShowcase', () => {
     
     // Click on inline edit stage
     const inlineEditStage = screen.getByText('Inline Edit');
-    const stageContainer = inlineEditStage.closest('div')?.parentElement;
+    const inlineStageContainer = inlineEditStage.closest('div')?.parentElement;
+    if (!inlineStageContainer) {
+      throw new Error('Inline Edit stage container not found');
+    }
     
-    fireEvent.click(stageContainer!);
+    fireEvent.click(inlineStageContainer);
     
     // Should have highlight background
-    expect(stageContainer).toHaveStyle('background: #e7f3ff');
+    expect(inlineStageContainer).toHaveStyle('background: #e7f3ff');
   });
 
   test('status badge shows playing state', async () => {
@@ -196,7 +214,11 @@ describe('MedievalDemoShowcase', () => {
     
     stages.forEach(({ name }) => {
       const stage = screen.getByText(name);
-      fireEvent.click(stage.closest('div')!);
+      const stageContainer = stage.closest('div');
+      if (!stageContainer) {
+        throw new Error(`Stage container for ${name} not found`);
+      }
+      fireEvent.click(stageContainer);
       expect(mockVibrate).toHaveBeenCalled();
     });
   });

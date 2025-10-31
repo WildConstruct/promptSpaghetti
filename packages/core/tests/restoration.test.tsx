@@ -397,6 +397,8 @@ describe('StateRecoveryDialog Component', () => {
 
 describe('StorageInfo Component', () => {
   beforeEach(() => {
+    // Reset localStorage mock
+    localStorageMock.clear();
     (persistenceStorage.getItem as jest.Mock).mockReturnValue(
       JSON.stringify({ nodes: [], edges: [] })
     );
@@ -406,7 +408,7 @@ describe('StorageInfo Component', () => {
     render(<StorageInfo />);
 
     await waitFor(() => {
-      expect(screen.getByText('Storage Information')).toBeInTheDocument();
+      expect(screen.getByText('💾 Storage Info')).toBeInTheDocument();
       expect(screen.getByText(/Storage used:/)).toBeInTheDocument();
       expect(screen.getByText(/Available:/)).toBeInTheDocument();
     });

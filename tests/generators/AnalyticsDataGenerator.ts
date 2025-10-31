@@ -75,9 +75,11 @@ export interface TimeSeriesData {
     value: number;
     tags?: Record<string, string>;
   }>;
-  aggregation: 'sum' | 'avg' | 'min' | 'max' | 'count';
+  aggregation: AggregationMethod;
   interval: 'minute' | 'hour' | 'day' | 'week' | 'month';
 }
+
+type AggregationMethod = 'sum' | 'avg' | 'min' | 'max' | 'count';
 
 export interface RuleUsageAnalytics {
   ruleId: string;
@@ -543,12 +545,21 @@ export class AnalyticsDataGenerator {
       });
     }
 
+    const aggregationOptions: AggregationMethod[] = [
+      'sum',
+      'avg',
+      'min',
+      'max',
+      'count'
+    ];
+
     return {
       metric,
       dataPoints,
-      aggregation: ['sum', 'avg', 'min', 'max', 'count'][
-        Math.floor(this.rng() * 5)
-      ] as any,
+      aggregation:
+        aggregationOptions[
+          Math.floor(this.rng() * aggregationOptions.length)
+        ],
       interval
     };
   }

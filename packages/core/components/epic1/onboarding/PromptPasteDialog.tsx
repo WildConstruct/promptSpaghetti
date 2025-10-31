@@ -54,7 +54,7 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   return (
     <div style={{

@@ -68,3 +68,10 @@ packages/core/services/ParserSecurity.ts
 packages/core/services/PromptParser.ts
 packages/core/services/SimpleLLMService.ts
 packages/core/types/
+
+# Sandbox utilities and experimental runners
+sandboxes/
+performance-test-runner.js
+
+# Build artifacts generated during temp validation
+temp-build/

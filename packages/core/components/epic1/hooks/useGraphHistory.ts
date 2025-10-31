@@ -83,7 +83,7 @@ export function useGraphHistory<N = unknown, E = unknown>(
 
   // Undo to previous state
   const undo = useCallback(() => {
-    if (historyIndex <= 0 || history.length === 0) return;
+    if (historyIndex <= 0 || history.length === 0) {return;}
 
     isInternalUpdateRef.current = true;
     const targetIndex = historyIndex - 1;
@@ -101,7 +101,7 @@ export function useGraphHistory<N = unknown, E = unknown>(
 
   // Redo to next state
   const redo = useCallback(() => {
-    if (historyIndex >= history.length - 1) return;
+    if (historyIndex >= history.length - 1) {return;}
 
     isInternalUpdateRef.current = true;
     const targetIndex = historyIndex + 1;
@@ -126,10 +126,10 @@ export function useGraphHistory<N = unknown, E = unknown>(
   // Auto-snapshot when nodes/edges change
   useEffect(() => {
     // Skip empty graphs
-    if ((nodes?.length || 0) + (edges?.length || 0) === 0) return;
+    if ((nodes?.length || 0) + (edges?.length || 0) === 0) {return;}
 
     // Skip if this is an internal update
-    if (isInternalUpdateRef.current) return;
+    if (isInternalUpdateRef.current) {return;}
 
     pushSnapshot(nodes, edges);
   }, [nodes, edges, pushSnapshot]);

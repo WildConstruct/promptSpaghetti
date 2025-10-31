@@ -51,7 +51,7 @@ export function useKeyboardNavigation({
   // Find next/previous node in tab order
   const getNextNode = useCallback(
     (currentNodeId: string, reverse: boolean = false) => {
-      if (getEditableNodes.length === 0) return null;
+      if (getEditableNodes.length === 0) {return null;}
 
       const currentIndex = getEditableNodes.findIndex(
         node => node.id === currentNodeId
@@ -138,7 +138,7 @@ export function useKeyboardNavigation({
   // Handle keyboard events with improved performance
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (!enabled) return;
+      if (!enabled) {return;}
 
       // Ignore if user is typing in a non-node input
       const target = event.target as HTMLElement;
@@ -208,7 +208,7 @@ export function useKeyboardNavigation({
 
   // Set up event listeners with proper cleanup
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     // Use capture phase for better control
     document.addEventListener('keydown', handleKeyDown, true);

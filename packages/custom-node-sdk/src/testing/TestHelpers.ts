@@ -51,7 +51,7 @@ export function createMockNode(
 /**
  * Create a stateful mock node
  */
-export function createStatefulMockNode<TState = any>(
+export function createStatefulMockNode<TState = unknown>(
   initialState: TState,
   executeImpl: (
     runtime: CustomNodeRuntime,
@@ -162,7 +162,7 @@ export function createLifecycleMockNode(callbacks: {
 /**
  * Create mock inputs with various types
  */
-export function createMockInputs(): Record<string, any> {
+export function createMockInputs(): Record<string, unknown> {
   return {
     text: 'test string',
     number: 42,
@@ -189,11 +189,11 @@ export function createValidationResult(
  * Create a mock custom node result
  */
 export function createMockResult(
-  outputs: Record<string, any>,
+  outputs: Record<string, unknown>,
   metadata?: {
     executionTime?: number;
     memoryUsed?: number;
-    metrics?: Record<string, any>;
+    metrics?: Record<string, number>;
   }
 ): CustomNodeResult {
   return {
@@ -206,11 +206,20 @@ export function createMockResult(
  * Assert that two objects are deeply equal
  */
 export function assertDeepEqual(
-  actual: any,
-  expected: any,
+  actual: unknown,
+  expected: unknown,
   path: string = ''
 ): void {
-  if (actual === expected) return;
+  if (actual === expected) {return;}
+
+  if (expected === undefined) {
+    if (actual !== undefined) {
+      throw new Error(
+        `Expected undefined at ${path || 'root'}, but got ${typeof actual}`
+      );
+    }
+    return;
+  }
 
   if (typeof actual !== typeof expected) {
     throw new Error(
@@ -227,9 +236,12 @@ export function assertDeepEqual(
     return;
   }
 
-  if (typeof actual === 'object') {
-    const actualKeys = Object.keys(actual).sort();
-    const expectedKeys = Object.keys(expected).sort();
+  if (typeof actual === 'object' && actual !== null && expected !== null) {
+    const actualRecord = actual as Record<string, unknown>;
+    const expectedRecord = expected as Record<string, unknown>;
+
+    const actualKeys = Object.keys(actualRecord).sort();
+    const expectedKeys = Object.keys(expectedRecord).sort();
 
     if (actualKeys.length !== expectedKeys.length) {
       throw new Error(
@@ -242,8 +254,8 @@ export function assertDeepEqual(
         throw new Error(`Unexpected key at ${path || 'root'}: ${key}`);
       }
       assertDeepEqual(
-        actual[key],
-        expected[key],
+        actualRecord[key],
+        expectedRecord[key],
         path ? `${path}.${key}` : key
       );
     }
@@ -268,11 +280,11 @@ export class MockLogger {
   private logs: Array<{
     level: string;
     message: string;
-    data?: any;
+    data?: unknown;
     timestamp: Date;
   }> = [];
 
-  log(level: string, message: string, data?: any): void {
+  log(level: string, message: string, data?: unknown): void {
     this.logs.push({
       level,
       message,
@@ -322,7 +334,7 @@ export function createTestSchema() {
 /**
  * Generate random test data
  */
-export function generateTestData(seed: number = 0): Record<string, any> {
+export function generateTestData(seed: number = 0): Record<string, unknown> {
   const random = (max: number) => Math.floor((seed * 9973) % max);
 
   return {
@@ -342,7 +354,7 @@ export function generateTestData(seed: number = 0): Record<string, any> {
 /**
  * Spy on a function to track calls
  */
-export class FunctionSpy<T extends (...args: any[]) => any> {
+export class FunctionSpy<T extends (...args: unknown[]) => unknown> {
   private calls: Array<{
     args: Parameters<T>;
     result?: ReturnType<T>;
@@ -361,7 +373,8 @@ export class FunctionSpy<T extends (...args: any[]) => any> {
       try {
         const impl = this.mockImplementation || this.originalFn;
         if (impl) {
-          call.result = impl(...args);
+          const result = impl(...args);
+          call.result = result as ReturnType<T>;
           this.calls.push(call);
           return call.result;
         }

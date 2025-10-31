@@ -2,8 +2,7 @@
  * Upgrade prompt components for encouraging authentication
  */
 
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../providers/AuthUserProvider';
+import React, { useState } from 'react';
 
 /**
  * Inline upgrade prompt for gated features

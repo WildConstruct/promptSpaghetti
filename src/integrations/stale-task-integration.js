@@ -52,9 +52,9 @@ class StaleTaskIntegration {
       if (this.config.autoRunEnabled) {
         this.scheduleAutomaticRuns();
       }
-    } catch (error) {
-      console.error('❌ Failed to initialize Stale Task Integration:', error);
-      throw error;
+    } catch {
+      console.error('❌ Failed to initialize Stale Task Integration');
+      throw new Error('Initialization failed');
     }
   }
 
@@ -99,9 +99,9 @@ class StaleTaskIntegration {
       await this.updateLastRun(result);
 
       return { ...result, source };
-    } catch (error) {
-      console.error('❌ Stale task cleanup failed:', error);
-      throw error;
+    } catch {
+      console.error('❌ Stale task cleanup failed');
+      throw new Error('Cleanup failed');
     }
   }
 
@@ -115,7 +115,7 @@ class StaleTaskIntegration {
       const stateData = await fs.readFile(stateFile, 'utf8');
       const state = JSON.parse(stateData);
 
-      if (!state.tasks) return false;
+      if (!state.tasks) {return false;}
 
       const tasks = Object.values(state.tasks);
       const assignedTasks = tasks.filter(
@@ -134,7 +134,7 @@ class StaleTaskIntegration {
       const now = new Date();
       const veryOldTasks = assignedTasks.filter(task => {
         const lastUpdate = task.lastUpdated ? new Date(task.lastUpdated) : null;
-        if (!lastUpdate) return false;
+        if (!lastUpdate) {return false;}
 
         const ageHours =
           (now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60);
@@ -142,10 +142,9 @@ class StaleTaskIntegration {
       });
 
       return veryOldTasks.length > 0;
-    } catch (error) {
+    } catch {
       console.warn(
-        'Warning: Could not check cleanup conditions:',
-        error.message
+        'Warning: Could not check cleanup conditions'
       );
       return true; // Default to running cleanup if we can't check
     }
@@ -162,8 +161,8 @@ class StaleTaskIntegration {
     this.scheduledTimer = setInterval(async () => {
       try {
         await this.runCleanup({ source: 'scheduled' });
-      } catch (error) {
-        console.error('Scheduled cleanup failed:', error);
+      } catch {
+        console.error('Scheduled cleanup failed');
       }
     }, this.config.runInterval);
 
@@ -178,7 +177,7 @@ class StaleTaskIntegration {
   /**
    * Trigger cleanup when specific events occur
    */
-  async onTaskAssigned(taskId, agentId) {
+  async onTaskAssigned() {
     // Could trigger cleanup if too many tasks are assigned
     if (this.config.triggers.onTaskOverflow) {
       const stateFile = path.join(__dirname, '../data/state.json');
@@ -192,8 +191,8 @@ class StaleTaskIntegration {
         if (assignedCount > this.config.triggers.maxAssignedTasks) {
           await this.runCleanup({ source: 'task_overflow' });
         }
-      } catch (error) {
-        console.warn('Could not check task overflow condition:', error.message);
+      } catch {
+        console.warn('Could not check task overflow condition');
       }
     }
   }
@@ -245,7 +244,7 @@ class StaleTaskIntegration {
    * Send notifications about cleanup completion
    */
   async notifyCleanupComplete(result, source) {
-    if (result.cleaned === 0) return;
+    if (result.cleaned === 0) {return;}
 
     const notification = {
       type: 'stale_task_cleanup_complete',
@@ -285,8 +284,8 @@ class StaleTaskIntegration {
 
     try {
       await fs.writeFile(lastRunFile, JSON.stringify(lastRun, null, 2));
-    } catch (error) {
-      console.warn('Could not save last run info:', error.message);
+    } catch {
+      console.warn('Could not save last run info');
     }
   }
 

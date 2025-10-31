@@ -74,7 +74,7 @@ class KeyboardNavigator {
   }
 
   navigateNext() {
-    if (this.editableNodes.length === 0) return null;
+    if (this.editableNodes.length === 0) {return null;}
     
     this.currentIndex = (this.currentIndex + 1) % this.editableNodes.length;
     const node = this.editableNodes[this.currentIndex];
@@ -83,7 +83,7 @@ class KeyboardNavigator {
   }
 
   navigatePrevious() {
-    if (this.editableNodes.length === 0) return null;
+    if (this.editableNodes.length === 0) {return null;}
     
     this.currentIndex = this.currentIndex - 1;
     if (this.currentIndex < 0) {

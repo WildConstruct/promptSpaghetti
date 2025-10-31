@@ -13,7 +13,7 @@ export declare enum PSGErrorType {
 export interface PSGError {
     type: PSGErrorType;
     message: string;
-    details?: any;
+    details?: unknown;
     suggestions?: string[];
 }
 export declare class PSGValidationError extends Error {

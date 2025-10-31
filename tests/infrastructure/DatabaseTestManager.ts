@@ -19,7 +19,7 @@ export interface DatabaseConfig {
   port?: number;
   username?: string;
   password?: string;
-  options?: Record<string, any>;
+  options?: Record<string, unknown>;
 }
 
 export interface MigrationFile {
@@ -34,7 +34,7 @@ export interface MigrationFile {
 export interface SeedDataSet {
   name: string;
   description: string;
-  tables: Record<string, any[]>;
+  tables: Record<string, TableRow[]>;
   dependencies?: string[];
   cleanup?: boolean;
 }
@@ -48,21 +48,32 @@ export interface TestTransaction {
     | 'repeatable_read'
     | 'serializable';
   tables: Set<string>;
-  snapshots: Map<string, any[]>;
+  snapshots: Map<string, TableSnapshot>;
 }
 
 export interface DatabaseSnapshot {
   id: string;
   timestamp: Date;
-  tables: Record<string, any[]>;
+  tables: TableSnapshot;
   metadata: {
     rowCounts: Record<string, number>;
     checksum: string;
   };
 }
 
+type TableRow = Record<string, unknown>;
+type TableSnapshot = Record<string, TableRow[]>;
+type QueryResult = {
+  success: boolean;
+  rows: TableRow[];
+};
+type ExecutionPlan = Record<string, unknown>;
+type DatabaseConnection =
+  | { type: 'sqlite'; database?: string }
+  | { type: 'postgres' | 'mysql' | 'redis'; host?: string; port?: number };
+
 export class DatabaseTestManager {
-  private connection: any;
+  private connection: DatabaseConnection | null = null;
   private activeTransactions: Map<string, TestTransaction> = new Map();
   private snapshots: Map<string, DatabaseSnapshot> = new Map();
   private appliedMigrations: Set<string> = new Set();
@@ -235,8 +246,8 @@ export class DatabaseTestManager {
     differences: Array<{
       table: string;
       type: 'row_count' | 'data';
-      before: any;
-      after: any;
+      before: unknown;
+      after: unknown;
     }>;
   }> {
     const snapshot1 = this.snapshots.get(snapshot1Id);
@@ -335,13 +346,13 @@ export class DatabaseTestManager {
   async generateTestData(
     tableName: string,
     count: number,
-    template?: Record<string, any>
-  ): Promise<any[]> {
+    template?: Partial<TableRow>
+  ): Promise<TableRow[]> {
     const tableSchema = await this.getTableSchema(tableName);
-    const testData = [];
+    const testData: TableRow[] = [];
 
     for (let i = 0; i < count; i++) {
-      const record: Record<string, any> = {};
+      const record: TableRow = {};
 
       for (const column of tableSchema.columns) {
         if (template && template[column.name] !== undefined) {
@@ -367,7 +378,7 @@ export class DatabaseTestManager {
     avgExecutionTime: number;
     minExecutionTime: number;
     maxExecutionTime: number;
-    executionPlan?: any;
+    executionPlan?: ExecutionPlan;
   }> {
     const executionTimes: number[] = [];
 
@@ -480,10 +491,13 @@ export class DatabaseTestManager {
         const checksum = createHash('md5').update(content).digest('hex');
 
         // TODO: Check if migration was already applied
-        console.log(`📄 Loaded migration: ${file}`);
+        console.log(`📄 Loaded migration: ${file} (checksum: ${checksum})`);
       }
     } catch (error) {
-      console.warn('No migrations directory found or error loading migrations');
+      console.warn(
+        'No migrations directory found or error loading migrations',
+        error
+      );
     }
   }
 
@@ -501,11 +515,11 @@ export class DatabaseTestManager {
         console.log(`🌱 Loaded seed data set: ${seedDataSet.name}`);
       }
     } catch (error) {
-      console.warn('No seeds directory found or error loading seed data');
+      console.warn('No seeds directory found or error loading seed data', error);
     }
   }
 
-  private async executeQuery(query: string): Promise<any> {
+  private async executeQuery(query: string): Promise<QueryResult> {
     // Mock query execution
     console.log(`🔍 Executing query: ${query.substring(0, 50)}...`);
     return { success: true, rows: [] };
@@ -531,7 +545,7 @@ export class DatabaseTestManager {
     // TODO: Implement table truncation logic
   }
 
-  private async getAllTableData(): Promise<Record<string, any[]>> {
+  private async getAllTableData(): Promise<TableSnapshot> {
     // TODO: Implement actual data retrieval
     return {
       users: [],
@@ -540,12 +554,15 @@ export class DatabaseTestManager {
     };
   }
 
-  private async insertTableData(tableName: string, data: any[]): Promise<void> {
+  private async insertTableData(
+    tableName: string,
+    data: TableRow[]
+  ): Promise<void> {
     console.log(`📥 Inserting ${data.length} records into ${tableName}`);
     // TODO: Implement actual data insertion
   }
 
-  private calculateDataChecksum(data: Record<string, any[]>): string {
+  private calculateDataChecksum(data: TableSnapshot): string {
     const serialized = JSON.stringify(data, Object.keys(data).sort());
     return createHash('md5').update(serialized).digest('hex');
   }
@@ -581,10 +598,11 @@ export class DatabaseTestManager {
       name: string;
       type: string;
       nullable: boolean;
-      default?: any;
+      default?: unknown;
     }>;
   }> {
     // TODO: Implement actual schema retrieval
+    console.log(`ℹ️ Returning mock schema for table ${tableName}`);
     return {
       columns: [
         { name: 'id', type: 'integer', nullable: false },
@@ -594,7 +612,15 @@ export class DatabaseTestManager {
     };
   }
 
-  private generateColumnValue(column: any, index: number): any {
+  private generateColumnValue(
+    column: {
+      name: string;
+      type: string;
+      nullable: boolean;
+      default?: unknown;
+    },
+    index: number
+  ): unknown {
     switch (column.type.toLowerCase()) {
       case 'integer':
         return index + 1;
@@ -611,9 +637,9 @@ export class DatabaseTestManager {
     }
   }
 
-  private async getExecutionPlan(query: string): Promise<any> {
+  private async getExecutionPlan(query: string): Promise<ExecutionPlan> {
     // TODO: Implement execution plan retrieval
-    return { plan: 'mock_execution_plan' };
+    return { plan: 'mock_execution_plan', querySnippet: query.slice(0, 50) };
   }
 
   /**

@@ -11,7 +11,7 @@ const Database = require('better-sqlite3');
 console.log('🚀 Epic 13 Minimal Analytics API Server');
 console.log('=====================================\n');
 
-async function createMinimalAnalyticsAPI(): Promise<any> {
+async function createMinimalAnalyticsAPI() {
   const fastify = Fastify({ logger: true });
   
   // Initialize in-memory database for testing
@@ -50,7 +50,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   console.log('✅ Database initialized with test data');
   
   // Health check endpoint
-  fastify.get('/health', async (request: any, reply: any) => {
+  fastify.get('/health', async (request, reply) => {
     return { 
       status: 'healthy', 
       service: 'epic13-analytics-api',
@@ -60,7 +60,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
   
   // Analytics summary endpoint
-  fastify.get('/api/analytics/summary', async (request: any, reply: any) => {
+  fastify.get('/api/analytics/summary', async (request, reply) => {
     try {
       const summary = db.prepare('SELECT * FROM analytics_summary ORDER BY id DESC LIMIT 1').get();
       
@@ -109,7 +109,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
   
   // Dashboard data endpoint
-  fastify.get('/api/analytics/dashboard', async (request: any, reply: any) => {
+  fastify.get('/api/analytics/dashboard', async (request, reply) => {
     return {
       success: true,
       data: {
@@ -145,7 +145,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
   
   // Time series endpoint
-  fastify.get('/api/analytics/timeseries/:metric', async (request: any, reply: any) => {
+  fastify.get('/api/analytics/timeseries/:metric', async (request, reply) => {
     const { metric } = request.params;
     const validMetrics = ['executions', 'tokens', 'cost', 'errors'];
     
@@ -195,7 +195,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
   
   // Cost summary endpoint
-  fastify.get('/api/analytics/costs/summary', async (request: any, reply: any) => {
+  fastify.get('/api/analytics/costs/summary', async (request, reply) => {
     return {
       success: true,
       data: {
@@ -216,7 +216,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
   
   // Budgets endpoint
-  fastify.get('/api/analytics/budgets', async (request: any, reply: any) => {
+  fastify.get('/api/analytics/budgets', async (request, reply) => {
     return {
       success: true,
       data: [
@@ -247,7 +247,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
   
   // Alerts endpoint
-  fastify.get('/api/analytics/alerts', async (request: any, reply: any) => {
+  fastify.get('/api/analytics/alerts', async (request, reply) => {
     return {
       success: true,
       data: [
@@ -274,7 +274,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
   
   // Usage patterns endpoint
-  fastify.get('/api/analytics/patterns/:type', async (request: any, reply: any) => {
+  fastify.get('/api/analytics/patterns/:type', async (request, reply) => {
     const { type } = request.params;
     const validTypes = ['hourly', 'daily', 'weekly'];
     
@@ -290,12 +290,12 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
         usage: Math.floor(Math.random() * 100) + 20,
         peak: i >= 9 && i <= 17 // Business hours
       })),
-      daily: Array.from({ length: 7 }, (_, i: number) => ({
+      daily: Array.from({ length: 7 }, (_, i) => ({
         day: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i],
         usage: Math.floor(Math.random() * 200) + 50,
         isWeekend: i >= 5
       })),
-      weekly: Array.from({ length: 12 }, (_, i: number) => ({
+      weekly: Array.from({ length: 12 }, (_, i) => ({
         week: i + 1,
         usage: Math.floor(Math.random() * 500) + 200,
         trend: Math.random() > 0.5 ? 'up' : 'down'
@@ -309,7 +309,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
         patterns: patterns[type],
         insights: {
           peakUsage: type === 'hourly' ? '2-4 PM' : type === 'daily' ? 'Wednesday' : 'Week 8',
-          averageUsage: patterns[type].reduce((sum: number, p: any) => sum + p.usage, 0) / patterns[type].length,
+          averageUsage: patterns[type].reduce((sum, p) => sum + p.usage, 0) / patterns[type].length,
           recommendation: 'Consider scaling resources during peak hours'
 
 
@@ -317,7 +317,7 @@ async function createMinimalAnalyticsAPI(): Promise<any> {
   });
 
   // Export endpoint
-  fastify.get('/api/analytics/export', async (request: any, reply: any) => {
+  fastify.get('/api/analytics/export', async (request, reply) => {
     const { format = 'json' } = request.query;
     
     const exportData = {

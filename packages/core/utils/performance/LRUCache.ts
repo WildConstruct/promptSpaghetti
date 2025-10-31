@@ -3,10 +3,10 @@
  * Part of Story 0.1: Performance Infrastructure
  */
 
-export interface CacheOptions {
+export interface CacheOptions<T = unknown> {
   maxSize?: number;
   ttl?: number; // Time to live in milliseconds
-  onEvict?: (key: string, value: any) => void;
+  onEvict?: (key: string, value: T) => void;
 }
 
 interface CacheEntry<T> {
@@ -15,7 +15,7 @@ interface CacheEntry<T> {
   ttl?: number;
 }
 
-export class LRUCache<T = any> {
+export class LRUCache<T = unknown> {
   private cache: Map<string, CacheEntry<T>>;
   private maxSize: number;
   private defaultTTL?: number;
@@ -27,7 +27,7 @@ export class LRUCache<T = any> {
     sets: 0
   };
 
-  constructor(options: CacheOptions = {}) {
+  constructor(options: CacheOptions<T> = {}) {
     this.maxSize = options.maxSize || 500;
     this.defaultTTL = options.ttl;
     this.onEvict = options.onEvict;
@@ -99,7 +99,7 @@ export class LRUCache<T = any> {
   has(key: string): boolean {
     const entry = this.cache.get(key);
 
-    if (!entry) return false;
+    if (!entry) {return false;}
 
     // Check expiration
     if (entry.ttl && Date.now() - entry.timestamp > entry.ttl) {

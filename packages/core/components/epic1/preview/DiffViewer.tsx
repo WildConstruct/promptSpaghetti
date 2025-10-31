@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { DiffResult, DiffSegment } from './DiffEngine';
+import { DiffResult } from './DiffEngine';
 import './DiffViewer.css';
 
 interface DiffViewerProps {
@@ -48,7 +48,7 @@ export const DiffViewer: React.FC<DiffViewerProps> = ({
 
   // Show summary for significant changes
   const changeSummary = useMemo(() => {
-    if (!diff.hasChanges) return null;
+    if (!diff.hasChanges) {return null;}
 
     const parts: string[] = [];
     if (diff.addedCount > 0) {

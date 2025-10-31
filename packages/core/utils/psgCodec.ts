@@ -16,7 +16,7 @@ export enum PSGErrorType {
 export interface PSGError {
   type: PSGErrorType;
   message: string;
-  details?: any;
+  details?: unknown;
   suggestions?: string[];
 }
 
@@ -91,7 +91,7 @@ export function readPsg(text: string, options: ReadPsgOptions = {}): PSGFile {
     });
   }
 
-  let json: any;
+  let json: unknown;
   try {
     json = JSON.parse(text);
   } catch (e) {
@@ -155,7 +155,7 @@ export function roundTripTest(psg: PSGFile): boolean {
     const serialized = writePsg(psg);
     const deserialized = readPsg(serialized);
 
-    const normalize = (obj: any): any => JSON.parse(JSON.stringify(obj));
+    const normalize = (obj: unknown): unknown => JSON.parse(JSON.stringify(obj));
     return (
       JSON.stringify(normalize(psg)) === JSON.stringify(normalize(deserialized))
     );
@@ -168,12 +168,12 @@ function cryptoRandomId(): string {
   const c = (
     globalThis as unknown as { crypto?: { randomUUID?: () => string } }
   ).crypto;
-  if (c?.randomUUID) return c.randomUUID();
+  if (c?.randomUUID) {return c.randomUUID();}
   return 'psg_' + Math.random().toString(36).slice(2, 10);
 }
 
-function checkSecurityViolations(obj: any, path: string = ''): PSGError | null {
-  if (!obj || typeof obj !== 'object') return null;
+function checkSecurityViolations(obj: unknown, path: string = ''): PSGError | null {
+  if (!obj || typeof obj !== 'object') {return null;}
 
   const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
   const xssPatterns = [/javascript:/i, /<script/i, /eval\(/i];
@@ -206,7 +206,7 @@ function checkSecurityViolations(obj: any, path: string = ''): PSGError | null {
 
     if (typeof value === 'object' && value !== null) {
       const nested = checkSecurityViolations(value, currentPath);
-      if (nested) return nested;
+      if (nested) {return nested;}
     }
   }
 

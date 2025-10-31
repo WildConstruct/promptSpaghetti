@@ -32,6 +32,97 @@ export interface APIGeneratorOptions extends GeneratorOptions {
   statusCodes?: number[];
 }
 
+type VariableValue = string | number | boolean;
+type NodeData = Record<string, unknown>;
+type EdgeStyle = {
+  strokeWidth: number;
+  stroke?: string;
+  strokeDasharray?: string;
+};
+type MarkovState = {
+  text: string;
+  transitions: Record<string, number>;
+};
+
+export interface GeneratedUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  role: string;
+  isActive: boolean;
+  createdAt: Date;
+  lastLogin: Date;
+  auth?: {
+    hashedPassword: string;
+    salt: string;
+    twoFactorEnabled: boolean;
+    loginAttempts: number;
+    lockedUntil: Date | null;
+  };
+  profile?: {
+    avatar: string;
+    bio: string;
+    preferences: {
+      theme: string;
+      language: string;
+      notifications: boolean;
+      newsletter: boolean;
+    };
+    metadata: {
+      lastIpAddress: string;
+      userAgent: string;
+      timezone: string;
+    };
+  };
+}
+
+export interface GeneratedRequest {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  endpoint: string;
+  headers: Record<string, string>;
+  params: Record<string, string | number | boolean>;
+  body?: unknown;
+  timestamp: string;
+  requestId: string;
+}
+
+export interface GeneratedResponse {
+  statusCode: number;
+  success: boolean;
+  data?: unknown;
+  error?: ErrorData;
+  headers: Record<string, string>;
+  timestamp: string;
+  duration: number;
+}
+
+interface ErrorData {
+  code: number;
+  message: string;
+  details: string;
+  timestamp: string;
+}
+
+export interface PerformanceMetrics {
+  executionTime: number;
+  memoryUsage: number;
+  cpuUsage: number;
+  networkRequests: number;
+  renderTime: number;
+  bundleSize: number;
+  timestamp: string;
+}
+
+export interface LoadTestScenario {
+  userId: string;
+  scenario: 'light' | 'medium' | 'heavy';
+  requestsPerSecond: number;
+  duration: number;
+  expectedLatency: number;
+}
+
 /**
  * Base Test Data Generator
  */
@@ -210,7 +301,7 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
   private generateNodeData(
     nodeType: string,
     complexity: 'simple' | 'medium' | 'complex'
-  ): any {
+  ): NodeData {
     const baseData = {
       label: `${nodeType} ${this.randomString(5)}`,
       description: `Generated ${nodeType} node for testing`
@@ -290,8 +381,8 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
     }
   }
 
-  private generateVariables(count: number): Record<string, any> {
-    const variables: Record<string, any> = {};
+  private generateVariables(count: number): Record<string, VariableValue> {
+    const variables: Record<string, VariableValue> = {};
     for (let i = 0; i < count; i++) {
       variables[`var_${i + 1}`] = this.randomChoice([
         this.randomString(10),
@@ -302,9 +393,9 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
     return variables;
   }
 
-  private generateMarkovStates(): Record<string, any> {
+  private generateMarkovStates(): Record<string, MarkovState> {
     const states = ['start', 'middle1', 'middle2', 'end'];
-    const stateData: Record<string, any> = {};
+    const stateData: Record<string, MarkovState> = {};
 
     states.forEach(state => {
       const transitions: Record<string, number> = {};
@@ -347,7 +438,9 @@ export class GraphDataGenerator extends BaseTestDataGenerator {
     return this.randomChoice(types);
   }
 
-  private getEdgeStyle(complexity: 'simple' | 'medium' | 'complex'): any {
+  private getEdgeStyle(
+    complexity: 'simple' | 'medium' | 'complex'
+  ): EdgeStyle {
     if (complexity === 'simple') {
       return { strokeWidth: 2 };
     }
@@ -403,7 +496,7 @@ export class UserDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate a single user
    */
-  generateUser(options: UserGeneratorOptions = {}): any {
+  generateUser(options: UserGeneratorOptions = {}): GeneratedUser {
     const {
       includeAuth = true,
       includeProfile = true,
@@ -414,7 +507,7 @@ export class UserDataGenerator extends BaseTestDataGenerator {
     const lastName = this.randomChoice(this.lastNames);
     const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${this.randomChoice(this.domains)}`;
 
-    const user: any = {
+    const user: GeneratedUser = {
       id: `user-${this.randomString(8)}`,
       email,
       firstName,
@@ -462,7 +555,10 @@ export class UserDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate multiple users
    */
-  generateUsers(count: number, options: UserGeneratorOptions = {}): any[] {
+  generateUsers(
+    count: number,
+    options: UserGeneratorOptions = {}
+  ): GeneratedUser[] {
     return Array.from({ length: count }, () => this.generateUser(options));
   }
 
@@ -507,11 +603,11 @@ export class APIDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate API request data
    */
-  generateRequest(options: APIGeneratorOptions = {}): any {
+  generateRequest(options: APIGeneratorOptions = {}): GeneratedRequest {
     const { endpoints = this.endpoints, methods = this.methods } = options;
 
     const endpoint = this.randomChoice(endpoints);
-    const method = this.randomChoice(methods);
+    const method = this.randomChoice(methods) as GeneratedRequest['method'];
 
     return {
       method,
@@ -529,7 +625,10 @@ export class APIDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate API response data
    */
-  generateResponse(request: any, options: APIGeneratorOptions = {}): any {
+  generateResponse(
+    request: GeneratedRequest,
+    options: APIGeneratorOptions = {}
+  ): GeneratedResponse {
     const { statusCodes = this.statusCodes } = options;
 
     const statusCode = this.randomChoice(statusCodes);
@@ -559,8 +658,10 @@ export class APIDataGenerator extends BaseTestDataGenerator {
     };
   }
 
-  private generateParams(endpoint: string): Record<string, any> {
-    const params: Record<string, any> = {};
+  private generateParams(
+    endpoint: string
+  ): Record<string, string | number | boolean> {
+    const params: Record<string, string | number | boolean> = {};
 
     if (endpoint.includes('users')) {
       params.limit = this.randomNumber(10, 50);
@@ -575,7 +676,7 @@ export class APIDataGenerator extends BaseTestDataGenerator {
     return params;
   }
 
-  private generateBody(endpoint: string): any {
+  private generateBody(endpoint: string): unknown {
     if (endpoint.includes('login')) {
       return {
         email: 'test@example.com',
@@ -606,7 +707,7 @@ export class APIDataGenerator extends BaseTestDataGenerator {
     };
   }
 
-  private generateResponseData(endpoint: string): any {
+  private generateResponseData(endpoint: string): unknown {
     if (endpoint.includes('users')) {
       const userGen = new UserDataGenerator(this.seed);
       return {
@@ -640,7 +741,7 @@ export class APIDataGenerator extends BaseTestDataGenerator {
     };
   }
 
-  private generateErrorData(statusCode: number): any {
+  private generateErrorData(statusCode: number): ErrorData {
     const errorMessages = {
       400: 'Bad Request - Invalid input parameters',
       401: 'Unauthorized - Invalid authentication token',
@@ -684,7 +785,7 @@ export class PerformanceDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate performance metrics
    */
-  generatePerformanceMetrics(): any {
+  generatePerformanceMetrics(): PerformanceMetrics {
     return {
       executionTime: this.randomNumber(100, 5000),
       memoryUsage: this.randomNumber(50, 500),
@@ -699,14 +800,17 @@ export class PerformanceDataGenerator extends BaseTestDataGenerator {
   /**
    * Generate load testing scenarios
    */
-  generateLoadTestScenarios(concurrentUsers: number): any[] {
-    return Array.from({ length: concurrentUsers }, (_, i) => ({
-      userId: `load-user-${i + 1}`,
-      scenario: this.randomChoice(['light', 'medium', 'heavy']),
-      requestsPerSecond: this.randomNumber(1, 10),
-      duration: this.randomNumber(60, 300),
-      expectedLatency: this.randomNumber(100, 1000)
-    }));
+  generateLoadTestScenarios(concurrentUsers: number): LoadTestScenario[] {
+    return Array.from({ length: concurrentUsers }, (_, i) => {
+      const scenario = this.randomChoice(['light', 'medium', 'heavy'] as const);
+      return {
+        userId: `load-user-${i + 1}`,
+        scenario,
+        requestsPerSecond: this.randomNumber(1, 10),
+        duration: this.randomNumber(60, 300),
+        expectedLatency: this.randomNumber(100, 1000)
+      };
+    });
   }
 }
 

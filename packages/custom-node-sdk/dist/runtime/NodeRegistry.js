@@ -86,13 +86,14 @@ export class DefaultNodeRegistry {
      */
     searchByTags(tags, matchAll = false) {
         return this.getAll().filter(reg => {
-            if (!reg.metadata.tags)
+            if (!reg.metadata.tags) {
                 return false;
+            }
             if (matchAll) {
-                return tags.every(tag => reg.metadata.tags.includes(tag));
+                return tags.every(tag => reg.metadata.tags?.includes(tag) || false);
             }
             else {
-                return tags.some(tag => reg.metadata.tags.includes(tag));
+                return tags.some(tag => reg.metadata.tags?.includes(tag) || false);
             }
         });
     }

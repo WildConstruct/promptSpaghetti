@@ -44,16 +44,9 @@ async function executeGraph(
   graph: Epic1Graph,
   seed: string | number
 ): Promise<ExecutionResult> {
-  try {
-    // Create execution engine
-    const engine = new Epic1ExecutionEngine(graph, seed);
-
-    const result = await engine.execute();
-
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  // Create execution engine
+  const engine = new Epic1ExecutionEngine(graph, seed);
+  return engine.execute();
 }
 
 /**

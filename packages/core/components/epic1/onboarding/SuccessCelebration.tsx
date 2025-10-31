@@ -23,7 +23,7 @@ export const SuccessCelebration: React.FC<CelebrationProps> = ({
   const { onboardingState } = useTutorial();
 
   useEffect(() => {
-    if (!onboardingState.preferences.enableCelebrations) return;
+    if (!onboardingState.preferences.enableCelebrations) {return;}
 
     setIsVisible(true);
 
@@ -48,7 +48,7 @@ export const SuccessCelebration: React.FC<CelebrationProps> = ({
     return () => clearTimeout(timer);
   }, [duration, onboardingState.preferences.enableCelebrations]);
 
-  if (!isVisible || !onboardingState.preferences.enableCelebrations) return null;
+  if (!isVisible || !onboardingState.preferences.enableCelebrations) {return null;}
 
   return (
     <>

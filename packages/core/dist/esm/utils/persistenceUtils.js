@@ -40,8 +40,9 @@ export function isStorageAvailable() {
  */
 export function getStorageSize(key) {
     const item = localStorage.getItem(key);
-    if (!item)
+    if (!item) {
         return 0;
+    }
     return new Blob([item]).size;
 }
 /**
@@ -51,7 +52,7 @@ export function checkStorageQuota() {
     let totalSize = 0;
     try {
         for (const key in localStorage) {
-            if (localStorage.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
                 totalSize += localStorage[key].length + key.length;
             }
         }
@@ -115,12 +116,14 @@ export function validatePersistedState(data) {
  */
 export const persistenceStorage = {
     getItem: (name) => {
-        if (!isStorageAvailable())
+        if (!isStorageAvailable()) {
             return null;
+        }
         try {
             const item = localStorage.getItem(name);
-            if (!item)
+            if (!item) {
                 return null;
+            }
             const wrapper = JSON.parse(item);
             // Check version compatibility
             if (wrapper.version !== STORAGE_VERSION) {
@@ -145,8 +148,9 @@ export const persistenceStorage = {
         }
     },
     setItem: (name, value) => {
-        if (!isStorageAvailable())
+        if (!isStorageAvailable()) {
             return;
+        }
         try {
             // Check storage quota
             const quota = checkStorageQuota();
@@ -186,8 +190,9 @@ export const persistenceStorage = {
         }
     },
     removeItem: (name) => {
-        if (!isStorageAvailable())
+        if (!isStorageAvailable()) {
             return;
+        }
         localStorage.removeItem(name);
     }
 };
@@ -203,12 +208,14 @@ export function clearPersistedState() {
  * Get persisted state info (for debugging)
  */
 export function getPersistedStateInfo() {
-    if (!isStorageAvailable())
+    if (!isStorageAvailable()) {
         return null;
+    }
     try {
         const item = localStorage.getItem(STORAGE_KEY);
-        if (!item)
+        if (!item) {
             return { exists: false, size: 0, compressed: false, timestamp: null };
+        }
         const wrapper = JSON.parse(item);
         return {
             exists: true,

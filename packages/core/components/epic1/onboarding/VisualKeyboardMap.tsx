@@ -91,6 +91,7 @@ export const VisualKeyboardMap: React.FC<VisualKeyboardMapProps> = ({
   highlightedCategory,
 }) => {
   const isMac = navigator.platform.toLowerCase().includes('mac');
+  const normalizedCategory = highlightedCategory?.toLowerCase().trim();
 
   // Define keyboard layout
   const keyboardRows = [
@@ -211,16 +212,24 @@ export const VisualKeyboardMap: React.FC<VisualKeyboardMapProps> = ({
               justifyContent: rowIndex === 5 ? 'center' : 'flex-start',
             }}
           >
-            {row.map((key, keyIndex) => (
-              <Key
-                key={`${rowIndex}-${keyIndex}`}
-                label={key.label}
-                width={key.width}
-                shortcuts={key.shortcuts}
-                active={activeKeys.has(key.label)}
-                modifier={key.modifier}
-              />
-            ))}
+            {row.map((key, keyIndex) => {
+              const shortcuts = key.shortcuts ?? [];
+              const matchesCategory = normalizedCategory
+                ? shortcuts.some(shortcut => shortcut.toLowerCase().includes(normalizedCategory))
+                : false;
+              const isActive = activeKeys.has(key.label) || matchesCategory;
+
+              return (
+                <Key
+                  key={`${rowIndex}-${keyIndex}`}
+                  label={key.label}
+                  width={key.width}
+                  shortcuts={shortcuts}
+                  active={isActive}
+                  modifier={key.modifier}
+                />
+              );
+            })}
           </div>
         ))}
       </div>
@@ -234,6 +243,11 @@ export const VisualKeyboardMap: React.FC<VisualKeyboardMapProps> = ({
         color: '#6b7280',
         textAlign: 'center',
       }}>
+        {highlightedCategory && (
+          <p style={{ margin: '0 0 8px 0' }}>
+            Showing shortcuts matching &ldquo;{highlightedCategory}&rdquo;
+          </p>
+        )}
         <p style={{ margin: '0 0 8px 0' }}>
           💡 <strong>Tip:</strong> Hover over highlighted keys to see their functions
         </p>

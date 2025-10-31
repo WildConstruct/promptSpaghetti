@@ -31,7 +31,6 @@ export const OutputNode = memo((props: NodeProps<OutputNodeData>) => {
   
   // Animation state management
   const {
-    transitionState,
     triggerValueConfirmed,
     triggerValueCancelled,
     animationClasses
@@ -63,15 +62,17 @@ export const OutputNode = memo((props: NodeProps<OutputNodeData>) => {
   };
 
   // Confirm edits and exit edit mode
-  const confirmEdit = () => {
-    if (isEditing) {
-      data.onEdit?.(editBuffer);
-      setIsEditing(false);
-      data.onEditEnd?.();
-      setSaveTrigger(prev => prev + 1);
-      triggerValueConfirmed();
+  const confirmEdit = React.useCallback(() => {
+    if (!isEditing) {
+      return;
     }
-  };
+
+    data.onEdit?.(editBuffer);
+    setIsEditing(false);
+    data.onEditEnd?.();
+    setSaveTrigger(prev => prev + 1);
+    triggerValueConfirmed();
+  }, [data, editBuffer, isEditing, triggerValueConfirmed]);
 
   // Cancel edits and restore original value
   const cancelEdit = () => {
@@ -97,7 +98,7 @@ export const OutputNode = memo((props: NodeProps<OutputNodeData>) => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [isEditing, editBuffer]);
+  }, [isEditing, confirmEdit]);
 
   // Handle keyboard shortcuts
   const handleKeyDown = (e: React.KeyboardEvent) => {

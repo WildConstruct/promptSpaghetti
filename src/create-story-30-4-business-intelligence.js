@@ -264,7 +264,7 @@ async function loadCurrentState() {
   try {
     const stateData = await fs.readFile(stateFile, 'utf8');
     return JSON.parse(stateData);
-  } catch (error) {
+  } catch {
     // Create new state if file doesn't exist
     return {
       tasks: {},
@@ -348,7 +348,7 @@ function createStoryObject(storyDef, storyId) {
 }
 
 function createImplementationTasks(storyId, implementationTasks, state) {
-  let createdTasks = [];
+  const createdTasks = [];
 
   implementationTasks.forEach((taskDef, index) => {
     const taskId = generateTaskId('T-30-4');
@@ -420,7 +420,7 @@ async function createStory304() {
 
   try {
     // Load current state
-    let state = await loadCurrentState();
+    const state = await loadCurrentState();
 
     if (!state.stories) {
       state.stories = {};

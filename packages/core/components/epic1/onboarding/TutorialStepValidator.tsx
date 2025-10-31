@@ -3,6 +3,8 @@
  * Validates prerequisites for tutorial steps to prevent failures
  */
 
+import type { Edge, Node } from '@reactflow/core';
+
 export interface StepValidationResult {
   isValid: boolean;
   message?: string;
@@ -11,12 +13,15 @@ export interface StepValidationResult {
   recoveryMessage?: string;
 }
 
+type TutorialNode = Node<{ nodeType?: string }>;
+type TutorialEdge = Edge;
+
 export interface TutorialValidationContext {
-  nodes: any[];
-  edges: any[];
-  tutorialState?: any;
-  currentUser?: any;
-  graphState?: any;
+  nodes?: TutorialNode[];
+  edges?: TutorialEdge[];
+  tutorialState?: unknown;
+  currentUser?: unknown;
+  graphState?: unknown;
 }
 
 /**
@@ -41,7 +46,7 @@ export class TutorialStepValidator {
       case 'empty-canvas':
         return this.validateEmptyCanvas(context);
       case 'paste-prompt':
-        return this.validatePastePrompt(context);
+        return this.validatePastePrompt();
       default:
         return { isValid: true };
     }
@@ -51,9 +56,9 @@ export class TutorialStepValidator {
    * Validate that nodes were actually created
    */
   private static validateNodesCreated(context: TutorialValidationContext): StepValidationResult {
-    const { nodes } = context;
+    const nodes = context.nodes ?? [];
 
-    if (!nodes || nodes.length === 0) {
+    if (nodes.length === 0) {
       return {
         isValid: false,
         message: 'No nodes found. The prompt parsing may have failed.',
@@ -90,9 +95,9 @@ export class TutorialStepValidator {
    * Validate that there are editable nodes available
    */
   private static validateInlineEdit(context: TutorialValidationContext): StepValidationResult {
-    const { nodes } = context;
+    const nodes = context.nodes ?? [];
 
-    if (!nodes || nodes.length === 0) {
+    if (nodes.length === 0) {
       return {
         isValid: false,
         message: 'No nodes available to edit.',
@@ -125,9 +130,10 @@ export class TutorialStepValidator {
    * Validate that the graph is ready for preview
    */
   private static validatePreviewUpdate(context: TutorialValidationContext): StepValidationResult {
-    const { nodes, edges } = context;
+    const nodes = context.nodes ?? [];
+    const edges = context.edges ?? [];
 
-    if (!nodes || nodes.length === 0) {
+    if (nodes.length === 0) {
       return {
         isValid: false,
         message: 'No nodes in the graph to preview.',
@@ -136,7 +142,7 @@ export class TutorialStepValidator {
       };
     }
 
-    if (!edges || edges.length === 0) {
+    if (edges.length === 0) {
       return {
         isValid: false,
         message: 'No connections between nodes found.',
@@ -155,9 +161,7 @@ export class TutorialStepValidator {
       connectedNodeIds.add(edge.target);
     });
 
-    const isolatedNodes = nodes.filter(node =>
-      !connectedNodeIds.has(node.id)
-    );
+    const isolatedNodes = nodes.filter(node => !connectedNodeIds.has(node.id));
 
     if (isolatedNodes.length > 0) {
       return {
@@ -178,7 +182,7 @@ export class TutorialStepValidator {
    * Validate that the canvas is empty for initial tutorial step
    */
   private static validateEmptyCanvas(context: TutorialValidationContext): StepValidationResult {
-    const { nodes } = context;
+    const nodes = context.nodes ?? [];
 
     // For the empty canvas step, we actually want it to be empty
     // But we should allow some tolerance for tutorial-generated content
@@ -197,7 +201,7 @@ export class TutorialStepValidator {
   /**
    * Validate that the paste functionality is ready
    */
-  private static validatePastePrompt(context: TutorialValidationContext): StepValidationResult {
+  private static validatePastePrompt(): StepValidationResult {
     // This step is about preparing to paste, so it's always valid
     // The actual validation happens when the paste occurs
     return { isValid: true };
@@ -207,7 +211,7 @@ export class TutorialStepValidator {
    * Get a user-friendly error message for validation failures
    */
   static getValidationErrorMessage(result: StepValidationResult): string {
-    if (result.isValid) return '';
+    if (result.isValid) {return '';}
 
     const baseMessage = result.message || 'Step validation failed';
     const recoveryMessage = result.recoveryMessage ? `\n\n${result.recoveryMessage}` : '';

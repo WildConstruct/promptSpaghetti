@@ -3,7 +3,7 @@
  * Fun, unexpected loading animations
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 export interface LoadingState {
   id: string;
@@ -11,6 +11,37 @@ export interface LoadingState {
   emoji: string;
   animation: 'spin' | 'bounce' | 'pulse' | 'dance' | 'typewriter';
 }
+
+const DEFAULT_LOADING_MESSAGES: Record<'graph' | 'preview' | 'save' | 'general', LoadingState[]> = {
+  graph: [
+    { id: 'g1', message: 'Summoning nodes from the void...', emoji: '🌀', animation: 'spin' },
+    { id: 'g2', message: 'Teaching edges how to connect...', emoji: '🔗', animation: 'pulse' },
+    { id: 'g3', message: 'Polishing node surfaces...', emoji: '✨', animation: 'bounce' },
+    { id: 'g4', message: 'Arranging pixels artfully...', emoji: '🎨', animation: 'dance' },
+    { id: 'g5', message: 'Convincing nodes to stay put...', emoji: '📌', animation: 'typewriter' }
+  ],
+  preview: [
+    { id: 'p1', message: 'Rolling cosmic dice...', emoji: '🎲', animation: 'spin' },
+    { id: 'p2', message: 'Consulting the oracle...', emoji: '🔮', animation: 'pulse' },
+    { id: 'p3', message: 'Mixing word potions...', emoji: '⚗️', animation: 'bounce' },
+    { id: 'p4', message: 'Weaving narrative threads...', emoji: '🧵', animation: 'dance' },
+    { id: 'p5', message: 'Birthing possibilities...', emoji: '🌟', animation: 'typewriter' }
+  ],
+  save: [
+    { id: 's1', message: 'Preserving your masterpiece...', emoji: '🖼️', animation: 'pulse' },
+    { id: 's2', message: 'Etching in digital stone...', emoji: '🗿', animation: 'bounce' },
+    { id: 's3', message: 'Tucking nodes into bed...', emoji: '🛏️', animation: 'spin' },
+    { id: 's4', message: 'Sealing with a kiss...', emoji: '💋', animation: 'dance' },
+    { id: 's5', message: 'Making it permanent...', emoji: '🔒', animation: 'typewriter' }
+  ],
+  general: [
+    { id: 'x1', message: 'Doing something magical...', emoji: '🪄', animation: 'spin' },
+    { id: 'x2', message: 'Almost there...', emoji: '⏳', animation: 'pulse' },
+    { id: 'x3', message: 'Good things take time...', emoji: '🌱', animation: 'bounce' },
+    { id: 'x4', message: 'Brewing excellence...', emoji: '☕', animation: 'dance' },
+    { id: 'x5', message: 'Loading awesomeness...', emoji: '🚀', animation: 'typewriter' }
+  ]
+};
 
 interface PlayfulLoadingStatesProps {
   isLoading: boolean;
@@ -27,48 +58,19 @@ export const PlayfulLoadingStates: React.FC<PlayfulLoadingStatesProps> = ({
   const [messageIndex, setMessageIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
 
-  // Playful loading messages by type
-  const loadingMessages: Record<string, LoadingState[]> = {
-    graph: [
-      { id: 'g1', message: 'Summoning nodes from the void...', emoji: '🌀', animation: 'spin' },
-      { id: 'g2', message: 'Teaching edges how to connect...', emoji: '🔗', animation: 'pulse' },
-      { id: 'g3', message: 'Polishing node surfaces...', emoji: '✨', animation: 'bounce' },
-      { id: 'g4', message: 'Arranging pixels artfully...', emoji: '🎨', animation: 'dance' },
-      { id: 'g5', message: 'Convincing nodes to stay put...', emoji: '📌', animation: 'typewriter' },
-    ],
-    preview: [
-      { id: 'p1', message: 'Rolling cosmic dice...', emoji: '🎲', animation: 'spin' },
-      { id: 'p2', message: 'Consulting the oracle...', emoji: '🔮', animation: 'pulse' },
-      { id: 'p3', message: 'Mixing word potions...', emoji: '⚗️', animation: 'bounce' },
-      { id: 'p4', message: 'Weaving narrative threads...', emoji: '🧵', animation: 'dance' },
-      { id: 'p5', message: 'Birthing possibilities...', emoji: '🌟', animation: 'typewriter' },
-    ],
-    save: [
-      { id: 's1', message: 'Preserving your masterpiece...', emoji: '🖼️', animation: 'pulse' },
-      { id: 's2', message: 'Etching in digital stone...', emoji: '🗿', animation: 'bounce' },
-      { id: 's3', message: 'Tucking nodes into bed...', emoji: '🛏️', animation: 'spin' },
-      { id: 's4', message: 'Sealing with a kiss...', emoji: '💋', animation: 'dance' },
-      { id: 's5', message: 'Making it permanent...', emoji: '🔒', animation: 'typewriter' },
-    ],
-    general: [
-      { id: 'x1', message: 'Doing something magical...', emoji: '🪄', animation: 'spin' },
-      { id: 'x2', message: 'Almost there...', emoji: '⏳', animation: 'pulse' },
-      { id: 'x3', message: 'Good things take time...', emoji: '🌱', animation: 'bounce' },
-      { id: 'x4', message: 'Brewing excellence...', emoji: '☕', animation: 'dance' },
-      { id: 'x5', message: 'Loading awesomeness...', emoji: '🚀', animation: 'typewriter' },
-    ],
-  };
-
   // Add custom messages if provided
-  const allMessages = [
-    ...loadingMessages[loadingType],
-    ...customMessages.map((msg, i) => ({
-      id: `custom-${i}`,
-      message: msg,
-      emoji: '✨',
-      animation: 'pulse' as const,
-    })),
-  ];
+  const allMessages = useMemo(
+    () => [
+      ...DEFAULT_LOADING_MESSAGES[loadingType],
+      ...customMessages.map((msg, i) => ({
+        id: `custom-${i}`,
+        message: msg,
+        emoji: '✨',
+        animation: 'pulse' as const
+      }))
+    ],
+    [customMessages, loadingType]
+  );
 
   // Rotate through messages
   useEffect(() => {
@@ -90,18 +92,18 @@ export const PlayfulLoadingStates: React.FC<PlayfulLoadingStatesProps> = ({
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [isLoading, loadingType]);
+  }, [allMessages, isLoading]);
 
   // Update current message when index changes
   useEffect(() => {
     if (isLoading && allMessages[messageIndex]) {
       setCurrentMessage(allMessages[messageIndex]);
     }
-  }, [messageIndex, isLoading]);
+  }, [allMessages, isLoading, messageIndex]);
 
   // Typewriter effect
   useEffect(() => {
-    if (!currentMessage || currentMessage.animation !== 'typewriter') return;
+    if (!currentMessage || currentMessage.animation !== 'typewriter') {return;}
 
     const timer = setTimeout(() => {
       if (charIndex < currentMessage.message.length) {
@@ -112,7 +114,7 @@ export const PlayfulLoadingStates: React.FC<PlayfulLoadingStatesProps> = ({
     return () => clearTimeout(timer);
   }, [charIndex, currentMessage]);
 
-  if (!isLoading || !currentMessage) return null;
+  if (!isLoading || !currentMessage) {return null;}
 
   // Get animation class
   const getAnimationClass = (animation: string) => {
@@ -177,13 +179,14 @@ export const PlayfulLoadingStates: React.FC<PlayfulLoadingStatesProps> = ({
 };
 
 // Inline loading spinner for smaller contexts
+const SPINNER_FRAMES = ['◐', '◓', '◑', '◒'] as const;
+
 export const InlineLoadingSpinner: React.FC<{ size?: number }> = ({ size = 16 }) => {
-  const spinners = ['◐', '◓', '◑', '◒'];
   const [frame, setFrame] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setFrame(prev => (prev + 1) % spinners.length);
+      setFrame(prev => (prev + 1) % SPINNER_FRAMES.length);
     }, 150);
     return () => clearInterval(interval);
   }, []);
@@ -194,7 +197,7 @@ export const InlineLoadingSpinner: React.FC<{ size?: number }> = ({ size = 16 })
       display: 'inline-block',
       animation: 'spin 1s linear infinite',
     }}>
-      {spinners[frame]}
+      {SPINNER_FRAMES[frame]}
     </span>
   );
 };
@@ -213,19 +216,22 @@ export const PlayfulProgressBar: React.FC<{
 
   // Add sparkles as progress increases
   useEffect(() => {
-    if (progress > 0 && progress < 100) {
-      const sparkle = {
-        id: Date.now(),
-        left: progress,
-      };
-      setSparkles(prev => [...prev, sparkle]);
-
-      // Remove sparkle after animation
-      setTimeout(() => {
-        setSparkles(prev => prev.filter(s => s.id !== sparkle.id));
-      }, 1000);
+    if (progress <= 0 || progress >= 100) {
+      return;
     }
-  }, [Math.floor(progress / 10)]); // Sparkle every 10%
+
+    const sparkle = {
+      id: Date.now(),
+      left: progress
+    };
+    setSparkles(prev => [...prev, sparkle]);
+
+    const timer = setTimeout(() => {
+      setSparkles(prev => prev.filter(s => s.id !== sparkle.id));
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [progress]);
 
   return (
     <div style={{ width: '100%', padding: 16 }}>

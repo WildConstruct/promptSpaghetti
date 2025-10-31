@@ -12,11 +12,27 @@ interface Message {
   text: string;
 }
 
+interface AdminConfig {
+  SUPABASE_URL?: string;
+  SUPABASE_ANON_KEY?: string;
+  OPENROUTER_API_KEY?: string;
+  OPENROUTER_BASE_URL?: string;
+  DAILY_COST_LIMIT?: string;
+  PRIMARY_MODEL?: string;
+  FALLBACK_MODELS?: string;
+  MAX_TOKENS?: string;
+  TEMPERATURE?: string;
+}
+
+interface UpdateEnvRequest {
+  [key: string]: string;
+}
+
 /**
  * Simple HTML admin panel
  * Serves a basic form for configuration management
  */
-const getAdminHTML = (config: any, message?: Message) => {
+const getAdminHTML = (config: AdminConfig, message?: Message) => {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -336,7 +352,7 @@ export async function registerAdminRoutes(server: FastifyInstance) {
 
   // Admin panel HTML page
   server.get('/admin', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
     const config = {
       SUPABASE_URL: process.env.SUPABASE_URL,
@@ -356,9 +372,9 @@ export async function registerAdminRoutes(server: FastifyInstance) {
 
   // Handle config updates
   server.post('/admin/config', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
-    const body = request.body as any;
+    const body = request.body as UpdateEnvRequest;
     const envPath = path.join(__dirname, '../.env');
 
     try {
@@ -428,7 +444,7 @@ export async function registerAdminRoutes(server: FastifyInstance) {
 
   // Admin metrics endpoint (JSON)
   server.get('/admin/metrics', async (request, reply) => {
-    if (!checkAdminAuth(request, reply)) return;
+    if (!checkAdminAuth(request, reply)) {return;}
 
     // Return actual or mock metrics
     return {

@@ -516,7 +516,7 @@ class MemoryOptimizationTester {
    * Calculate memory trend (positive = growing, negative = decreasing)
    */
   private calculateMemoryTrend(memoryHistory: number[]): number {
-    if (memoryHistory.length < 2) return 0;
+    if (memoryHistory.length < 2) {return 0;}
 
     // Simple linear regression to find trend
     const n = memoryHistory.length;

@@ -41,9 +41,17 @@ describe('State Transition Tests', () => {
     await framework.cleanup();
     try {
       await fs.unlink(testStateFile);
-      await fs.unlink(testStateFile + '.lock').catch(() => {});
+      await fs.unlink(`${testStateFile}.lock`).catch(err => {
+        const lockError = err as NodeJS.ErrnoException;
+        if (lockError && lockError.code !== 'ENOENT') {
+          console.warn('Failed to remove lock file:', lockError);
+        }
+      });
     } catch (error) {
-      // File might not exist
+      const stateError = error as NodeJS.ErrnoException;
+      if (stateError && stateError.code !== 'ENOENT') {
+        console.warn('Failed to remove state file:', stateError);
+      }
     }
   });
 

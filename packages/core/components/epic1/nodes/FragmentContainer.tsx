@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { NodeProps, useReactFlow, Handle, Position } from 'reactflow';
+import { type NodeProps, useReactFlow, Handle, Position } from 'reactflow';
 import type { EditableNodeData } from './BaseEditableNode';
 import { ResizeHandles } from './ResizeHandles';
 
@@ -30,12 +30,9 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
   data,
   selected,
   id,
-  xPos,
-  yPos,
   dragging
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(data.isCollapsed || false);
-  const [isResizing, setIsResizing] = useState(false);
   const [size, setSize] = useState({
     width: isCollapsed ? COLLAPSED_WIDTH : (data.width || 400),
     height: isCollapsed ? COLLAPSED_HEIGHT : (data.height || 300)
@@ -45,7 +42,6 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
     width: data.width || 400,
     height: data.height || 300
   });
-  const boxRef = useRef<HTMLDivElement>(null);
 
   const { setNodes, getNodes } = useReactFlow();
 
@@ -65,7 +61,7 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
 
   // Handle resize
   const handleResize = useCallback((newSize: { width: number; height: number }) => {
-    if (isCollapsed) return; // Don't resize when collapsed
+    if (isCollapsed) {return;} // Don't resize when collapsed
 
     const clampedWidth = Math.max(MIN_EXPANDED_WIDTH, newSize.width);
     const clampedHeight = Math.max(MIN_EXPANDED_HEIGHT, newSize.height);
@@ -194,7 +190,7 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
   }, [isCollapsed, id, size, getContainedNodes, setNodes]);
 
   return (
-    <div ref={boxRef} style={containerStyle}>
+    <div style={containerStyle}>
       {/* Resize handles when not collapsed */}
       {!isCollapsed && !dragging && (
         <ResizeHandles
@@ -203,8 +199,6 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
           minWidth={MIN_EXPANDED_WIDTH}
           minHeight={MIN_EXPANDED_HEIGHT}
           onResize={handleResize}
-          onResizeStart={() => setIsResizing(true)}
-          onResizeEnd={() => setIsResizing(false)}
         />
       )}
 

@@ -218,6 +218,16 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }));
   }, []);
 
+  const completeTutorial = useCallback(() => {
+    setIsActive(false);
+    setOnboardingState(prev => ({
+      ...prev,
+      completedSteps: tutorialSteps.map(s => s.id),
+      tutorialProgress: 100,
+      achievementsUnlocked: [...prev.achievementsUnlocked, 'tutorial_complete'],
+    }));
+  }, []);
+
   const nextStep = useCallback((context?: TutorialValidationContext) => {
     if (currentStep < tutorialSteps.length - 1) {
       const nextStepId = tutorialSteps[currentStep + 1].id;
@@ -248,23 +258,13 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } else {
       completeTutorial();
     }
-  }, [currentStep, tutorialSteps]);
+  }, [completeTutorial, currentStep]);
 
   const previousStep = useCallback(() => {
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
     }
   }, [currentStep]);
-
-  const completeTutorial = useCallback(() => {
-    setIsActive(false);
-    setOnboardingState(prev => ({
-      ...prev,
-      completedSteps: tutorialSteps.map(s => s.id),
-      tutorialProgress: 100,
-      achievementsUnlocked: [...prev.achievementsUnlocked, 'tutorial_complete'],
-    }));
-  }, []);
 
   const resetTutorial = useCallback(() => {
     setCurrentStep(0);

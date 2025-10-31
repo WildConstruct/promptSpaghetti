@@ -194,7 +194,7 @@ export function useNodeOperations<NodeData = unknown>(
   // Delete selected nodes
   const deleteSelectedNodes = useCallback(() => {
     const nodesToDelete = nodes.filter(n => n.selected).map(n => n.id);
-    if (nodesToDelete.length === 0) return;
+    if (nodesToDelete.length === 0) {return;}
 
     setNodes(nds => nds.filter(n => !nodesToDelete.includes(n.id)));
     setEdges(eds =>

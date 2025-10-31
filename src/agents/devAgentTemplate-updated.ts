@@ -1,7 +1,7 @@
 // src/agents/devAgentTemplate-updated.ts
 // Developer agent template - updated for direct task assignment without phases
 
-import { AgentRunner } from './agentBase';
+import { AgentRunner, Event, State, Task } from './agentBase';
 
 export class DevAgent extends AgentRunner {
   constructor(private devId: string) {
@@ -11,7 +11,7 @@ export class DevAgent extends AgentRunner {
   /**
    * Filter for developer-relevant events
    */
-  filterRelevant(events: any[]): any[] {
+  filterRelevant(events: Event[]): Event[] {
     const relevantTypes = [
       'TASK_NOTE_ADDED',
       'TASK_BLOCKED',
@@ -19,24 +19,15 @@ export class DevAgent extends AgentRunner {
       'TASK_REVIEW_REQUESTED'
     ];
 
-    return events.filter(ev => {
-      // Only interested in tasks assigned to this developer
-      if (ev.payload?.task_id) {
-        const task = this.getTaskFromState(ev.payload.task_id);
-        if (task?.assignee === this.devId) {
-          return true;
-        }
-      }
-      return relevantTypes.includes(ev.type);
-    });
+    return events.filter(ev => relevantTypes.includes(ev.type));
   }
 
   /**
    * Developer decision logic - simplified without phases
    */
-  async decide(ev: any, state: any): Promise<any> {
+  async decide(ev: Event, state: State): Promise<Event | 'NOOP'> {
     switch (ev.type) {
-      case 'TASK_BLOCKED':
+      case 'TASK_BLOCKED': {
         // Help unblock tasks if we can
         const blockedTask = state.tasks[ev.payload.task_id];
         if (blockedTask?.assignee === this.devId) {
@@ -48,8 +39,9 @@ export class DevAgent extends AgentRunner {
           });
         }
         break;
+      }
 
-      case 'TASK_REVIEW_REQUESTED':
+      case 'TASK_REVIEW_REQUESTED': {
         // Respond to review feedback
         const reviewTask = state.tasks[ev.payload.task_id];
         if (
@@ -63,6 +55,7 @@ export class DevAgent extends AgentRunner {
           });
         }
         break;
+      }
     }
 
     // Check if we should update any of our tasks
@@ -77,10 +70,10 @@ export class DevAgent extends AgentRunner {
   /**
    * Check if any assigned tasks need status updates
    */
-  private checkTasksNeedingUpdate(state: any): any {
+  private checkTasksNeedingUpdate(state: State): Task | null {
     // Get all tasks assigned to this developer
     const myTasks = Object.values(state.tasks).filter(
-      (t: any) => t.assignee === this.devId
+      (t: Task) => t.assignee === this.devId
     );
 
     // Check for tasks that might need attention
@@ -100,11 +93,6 @@ export class DevAgent extends AgentRunner {
     return null;
   }
 
-  private getTaskFromState(taskId: string): any {
-    // This would be implemented to fetch task from state
-    // For now, returning null as placeholder
-    return null;
-  }
 }
 
 /**

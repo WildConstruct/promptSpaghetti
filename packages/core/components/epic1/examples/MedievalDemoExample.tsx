@@ -127,13 +127,13 @@ import { DemoShortcuts } from '../demos/DemoShortcuts';
       <div style={{ padding: 20, background: '#e3f2fd', borderRadius: 8, margin: 20 }}>
         <h3>🎯 Demo Script Template</h3>
         <ol>
-          <li><strong>Hook (5s)</strong>: "What if creating content was as easy as editing text?"</li>
+          <li><strong>Hook (5s)</strong>: &ldquo;What if creating content was as easy as editing text?&rdquo;</li>
           <li><strong>Empty Canvas (3s)</strong>: Show the blank starting point</li>
           <li><strong>Quick Creation (5s)</strong>: Paste text, instant node appears</li>
           <li><strong>Inline Edit (5s)</strong>: Click to edit, show immediate changes</li>
           <li><strong>Expand (7s)</strong>: Add variety with weighted choices</li>
           <li><strong>Preview (8s)</strong>: Generate 20 unique variations instantly</li>
-          <li><strong>Close (2s)</strong>: "From idea to content in 30 seconds"</li>
+          <li><strong>Close (2s)</strong>: &ldquo;From idea to content in 30 seconds&rdquo;</li>
         </ol>
       </div>
     </div>

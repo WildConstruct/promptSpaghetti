@@ -13,7 +13,9 @@ describe('Palette component', () => {
   ];
   it('renders node icons and tooltips', () => {
     render(
-      <Palette nodes={nodes as unknown} collapsed={false} onToggle={() => {}} />
+      <Palette nodes={nodes as unknown} collapsed={false} onToggle={() => {
+        // No toggle action needed for test
+      }} />
     );
     expect(screen.getByLabelText(/WeightedChoice/)).toBeTruthy();
   });
@@ -24,7 +26,9 @@ describe('Palette component', () => {
       <Palette
         nodes={nodes as unknown}
         collapsed={false}
-        onToggle={() => {}}
+        onToggle={() => {
+          // No toggle action needed for test
+        }}
         onDragStart={mockDragStart}
       />
     );

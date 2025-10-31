@@ -115,7 +115,8 @@ export function useAutoLayout(
         setNodes(nodes =>
           nodes.map(node => {
             if (positionMap.has(node.id)) {
-              const { transition, ...restStyle } = node.style || {};
+              const restStyle = { ...(node.style || {}) };
+              delete restStyle.transition;
               return {
                 ...node,
                 style: restStyle

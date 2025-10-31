@@ -9,6 +9,11 @@ import {
   useOnboarding,
   TutorialProvider,
   useTutorial,
+  TutorialOverlay,
+  SuccessCelebration,
+  useSuccessCelebration,
+  ProgressWidget,
+  ProgressTracker,
 } from '../index';
 
 // Mock localStorage

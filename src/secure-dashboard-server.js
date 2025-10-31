@@ -30,8 +30,8 @@ const CONFIG = {
 };
 
 // In-memory storage for demo (use database in production)
-let users = {};
-let loginAttempts = {};
+const users = {};
+const loginAttempts = {};
 
 // Initialize default user
 async function initializeUsers() {
@@ -102,7 +102,7 @@ function requireAuth(req, res, next) {
 // Check if user is locked out
 function isLockedOut(ip) {
   const attempts = loginAttempts[ip];
-  if (!attempts) return false;
+  if (!attempts) {return false;}
 
   const now = Date.now();
   return (
@@ -439,6 +439,9 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
+  if (res.headersSent) {
+    return next(err);
+  }
   res.status(500).json({ error: 'Internal server error' });
 });
 

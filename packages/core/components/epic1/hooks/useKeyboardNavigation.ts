@@ -5,10 +5,10 @@
 
 import { useEffect, useCallback, useRef } from 'react';
 import { Node } from 'reactflow';
-import { InlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineEditableNode';
+import type { EditableNodeData } from '../nodes';
 
 export interface KeyboardNavigationOptions {
-  nodes: Node[];
+  nodes: Node<EditableNodeData>[];
   selectedNodeId?: string | null;
   onNodeSelect: (nodeId: string) => void;
   onEscapePress?: () => void;
@@ -30,7 +30,7 @@ export function useKeyboardNavigation({
   const getEditableNodes = useCallback(() => {
     return nodes
       .filter(node => {
-        const nodeData = node.data as any;
+        const nodeData = node.data as EditableNodeData | undefined;
         return nodeData?.isEditing === true;
       })
       .sort((a, b) => {
@@ -46,7 +46,7 @@ export function useKeyboardNavigation({
   const getNextNode = useCallback(
     (currentNodeId: string, reverse: boolean = false) => {
       const editableNodes = getEditableNodes();
-      if (editableNodes.length === 0) return null;
+      if (editableNodes.length === 0) {return null;}
 
       const currentIndex = editableNodes.findIndex(
         node => node.id === currentNodeId
@@ -97,7 +97,7 @@ export function useKeyboardNavigation({
   // Handle keyboard events
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (!enabled) return;
+      if (!enabled) {return;}
 
       // Tab navigation
       if (event.key === 'Tab') {
@@ -171,7 +171,7 @@ export function useKeyboardNavigation({
 
   // Set up event listeners
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {return;}
 
     document.addEventListener('keydown', handleKeyDown);
     return () => {

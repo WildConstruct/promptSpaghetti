@@ -117,7 +117,7 @@ This documentation captures the complete overhaul of the QA and cost tracking sy
   });
 
   console.log('\n💰 Business Value:');
-  newTask.businessValue.forEach((value, index) => {
+  newTask.businessValue.forEach((value) => {
     console.log(`   • ${value}`);
   });
 

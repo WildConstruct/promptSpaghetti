@@ -6,9 +6,6 @@
  * to use proper epic assignments going forward.
  */
 
-const fs = require('fs');
-const path = require('path');
-
 /**
  * Determine epic assignment based on task content
  * @param {Object} task - Task object with title, description, tags, etc.

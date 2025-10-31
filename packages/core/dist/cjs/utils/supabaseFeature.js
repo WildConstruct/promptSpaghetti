@@ -21,22 +21,26 @@ function getEnvVar(key) {
         const val = metaEnv[key];
         return typeof val === 'string'
             ? val
-            : val != null
+            : val !== null
                 ? String(val)
                 : undefined;
     }
     return undefined;
 }
 function parseBoolean(value, fallback = true) {
-    if (value === undefined || value === null || value === '')
+    if (value === undefined || value === null || value === '') {
         return fallback;
-    if (typeof value === 'boolean')
+    }
+    if (typeof value === 'boolean') {
         return value;
+    }
     const s = String(value).toLowerCase().trim();
-    if (['1', 'true', 'yes', 'on', 'enabled'].includes(s))
+    if (['1', 'true', 'yes', 'on', 'enabled'].includes(s)) {
         return true;
-    if (['0', 'false', 'no', 'off', 'disabled'].includes(s))
+    }
+    if (['0', 'false', 'no', 'off', 'disabled'].includes(s)) {
         return false;
+    }
     return fallback;
 }
 function getSupabaseConfig() {
