@@ -12,10 +12,8 @@ import ReactFlow, {
   Position
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import type {
-  PromptAnalysis,
-  GeneratedNodeInternal
-} from '../../lib/simplePromptParser';
+import type { PromptAnalysis } from '../../lib/simplePromptParser';
+import { convertAnalysisToGraph } from '../../lib/analysisToGraph';
 import './NodePreview.css';
 
 interface NodePreviewProps {
@@ -68,64 +66,52 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
       return { flowNodes: [], flowEdges: [] };
     }
 
-    const nodes: Node<PreviewNodeData>[] = [];
-    const edges: Edge[] = [];
-    const horizontalSpacing = 320; // Increased from 250 to prevent overlap
-    const verticalSpacing = 150; // Increased from 120 for better spacing
-
-    // Create nodes from analysis
-    analysis.nodes.forEach((genNode, index) => {
-      const row = Math.floor(index / 3); // 3 nodes per row
-      const col = index % 3;
-
-      // Find the mapping for this node to get its color
-      const mapping = analysis.mappings.find(m => m.nodeId === genNode.node.id);
-      const color = mapping?.highlightColor || '#666';
-      const internal: GeneratedNodeInternal = genNode.node;
-      const label =
-        internal.nodeType === 'Variable'
-          ? internal.variableName
-            ? `$${internal.variableName}`
-            : 'Variable'
-          : internal.getPreviewText
-            ? internal.getPreviewText()
-            : 'Text';
-
-      nodes.push({
-        id: genNode.node.id,
-        type: 'preview',
-        position: {
-          x: col * horizontalSpacing + 50,
-          y: row * verticalSpacing + 50
-        },
-        data: {
-          label,
-          nodeType: internal.nodeType,
-          color
-        },
-        selected: genNode.node.id === selectedNodeId
-      });
+    const graph = convertAnalysisToGraph(analysis, {
+      nodesPerRow: 3,
+      spacing: { x: 320, y: 150 },
+      start: { x: 50, y: 50 }
     });
 
-    // Create edges based on node relationships
-    // For now, create a simple chain if multiple nodes
-    if (nodes.length > 1) {
-      for (let i = 0; i < nodes.length - 1; i++) {
-        edges.push({
-          id: `edge-${i}`,
-          source: nodes[i].id,
-          target: nodes[i + 1].id,
-          type: 'smoothstep',
-          animated: true,
-          style: {
-            stroke: '#666',
-            strokeWidth: 2
-          }
-        });
-      }
-    }
+    const flowNodes: Node<PreviewNodeData>[] = graph.nodes.map(node => {
+      const mapping = analysis.mappings.find(m => m.nodeId === node.id);
+      const color = mapping?.highlightColor || '#666';
+      const labelCandidate =
+        typeof node.data?.label === 'string' && node.data.label.length > 0
+          ? node.data.label
+          : typeof node.data?.value === 'string'
+            ? node.data.value
+            : node.id;
+      const nodeType =
+        typeof node.data?.nodeType === 'string'
+          ? node.data.nodeType
+          : 'Text';
 
-    return { flowNodes: nodes, flowEdges: edges };
+      return {
+        id: node.id,
+        type: 'preview',
+        position: node.position ?? { x: 50, y: 50 },
+        data: {
+          label: labelCandidate,
+          nodeType,
+          color
+        },
+        selected: node.id === selectedNodeId
+      };
+    });
+
+    const flowEdges: Edge[] = graph.edges.map(edge => ({
+      id: edge.id,
+      source: edge.source,
+      target: edge.target,
+      type: edge.type ?? 'smoothstep',
+      animated: true,
+      style: {
+        stroke: '#666',
+        strokeWidth: 2
+      }
+    }));
+
+    return { flowNodes, flowEdges };
   }, [analysis, selectedNodeId]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);

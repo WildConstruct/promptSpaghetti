@@ -3,6 +3,7 @@
 import { PromptParser, LLMResponseSchema, LLMResponseSchemaStrict } from '../../services/PromptParser';
 import { ParserSecurity } from '../../services/ParserSecurity';
 import { LLMService } from '../../services/llm/LLMService';
+import { promptParser as runtimePromptParser } from '../../runtime/nodes/epic1/PromptParser';
 
 // Mock the LLM service
 jest.mock('../../services/llm/LLMService');
@@ -31,6 +32,13 @@ describe('PromptParser', () => {
   });
 
   describe('Standard Mode', () => {
+    it('uses default parser options when none supplied', async () => {
+      const result = await parser.parse('Default options prompt');
+
+      expect(result.nodes).toEqual(expect.any(Array));
+      expect(result.metadata.parserMode).toBe('standard');
+    });
+
     it('should parse simple text in standard mode', async () => {
       const result = await parser.parse('The hero ventures into the forest.', {
         mode: 'standard',
@@ -215,6 +223,93 @@ describe('PromptParser', () => {
       expect(result.metadata.parserMode).toBe('standard-fallback');
       expect(result.metadata.fallbackReason).toContain('timeout');
     }, 10000); // Increase test timeout
+
+    it('falls back when LLM returns empty content', async () => {
+      const fallbackResult = {
+        nodes: [],
+        edges: [],
+        metadata: { parserMode: 'standard-fallback', fallbackReason: 'Empty LLM response' }
+      };
+
+      const localParser = new PromptParser(mockLLMService);
+      const fallbackMock = jest.fn().mockResolvedValue(fallbackResult);
+      (localParser as any).fallback = { handleLLMFailure: fallbackMock };
+
+      jest
+        .spyOn(localParser as any, 'callLLMWithTimeout')
+        .mockResolvedValue({ content: '' });
+
+      const result = await localParser.parse('Empty response prompt', {
+        mode: 'llm-enhanced',
+        preserveVariables: true,
+        autoConnect: true
+      });
+
+      expect(result).toBe(fallbackResult);
+      expect(fallbackMock).toHaveBeenCalledWith(
+        'Empty response prompt',
+        expect.objectContaining({ message: 'Empty LLM response' }),
+        expect.objectContaining({ mode: 'llm-enhanced' })
+      );
+    });
+
+    it('falls back when security validation fails after LLM parse', async () => {
+      const fallbackResult = {
+        nodes: [],
+        edges: [],
+        metadata: { parserMode: 'standard-fallback' }
+      };
+
+      const localParser = new PromptParser(mockLLMService);
+      const fallbackMock = jest.fn().mockResolvedValue(fallbackResult);
+      (localParser as any).fallback = { handleLLMFailure: fallbackMock };
+
+      const securitySpy = jest
+        .spyOn((localParser as any).security, 'validateOutputSafety')
+        .mockReturnValue(false);
+
+      jest.spyOn(localParser as any, 'callLLMWithTimeout').mockResolvedValue({
+        content: JSON.stringify({
+          version: 'psg-parse-v1',
+          nodes: [{ type: 'TextBlock', content: 'data' }],
+          edges: []
+        })
+      });
+
+      const result = await localParser.parse('Security failure prompt', {
+        mode: 'llm-enhanced',
+        preserveVariables: true,
+        autoConnect: true
+      });
+
+      expect(result).toBe(fallbackResult);
+      expect(fallbackMock).toHaveBeenCalledWith(
+        'Security failure prompt',
+        expect.objectContaining({
+          message: 'Security validation failed on LLM output'
+        }),
+        expect.objectContaining({ mode: 'llm-enhanced' })
+      );
+
+      securitySpy.mockRestore();
+    });
+
+    it('throws from llmEnhancedParse when no attempts run', async () => {
+      const localParser = new PromptParser(mockLLMService);
+      Object.assign(localParser as any, { retryCount: -1 });
+
+      await expect(
+        (localParser as any).llmEnhancedParse(
+          'sanitized',
+          'No attempts prompt',
+          {
+            mode: 'llm-enhanced',
+            preserveVariables: true,
+            autoConnect: true
+          }
+        )
+      ).rejects.toThrow('LLM parsing failed after all retries');
+    });
   });
 
   describe('Security', () => {
@@ -351,6 +446,36 @@ describe('PromptParser', () => {
     });
   });
 
+  describe('LLM helper internals', () => {
+    it('returns null when LLM service is not configured', async () => {
+      const noLLMParser = new PromptParser();
+      const result = await (noLLMParser as any).callLLMWithTimeout(
+        'system',
+        'user',
+        100
+      );
+      expect(result).toBeNull();
+    });
+
+    it('warns when LLM call exceeds timeout window', async () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+      mockLLMService.complete.mockImplementation(
+        () =>
+          new Promise(() => {
+            // Never resolve to trigger timeout
+          })
+      );
+
+      await expect(
+        (parser as any).callLLMWithTimeout('system', 'user', 10)
+      ).rejects.toThrow('LLM request timeout');
+      expect(warnSpy).toHaveBeenCalledWith('LLM request timed out');
+
+      warnSpy.mockRestore();
+    });
+  });
+
   describe('Edge Cases', () => {
     it('should handle very long prompts', async () => {
       const longPrompt = 'Lorem ipsum '.repeat(1000);
@@ -400,6 +525,89 @@ describe('PromptParser', () => {
       });
 
       expect(result.nodes).toBeDefined();
+    });
+  });
+
+  describe('Standard parser integration', () => {
+    it('derives labels from serialized text when label field missing', async () => {
+      const parseSpy = jest.spyOn(runtimePromptParser, 'parse').mockReturnValue({
+        nodes: [
+          {
+            node: {
+              serialize: () => ({
+                id: 'mock-node-1',
+                type: 'TextBlock',
+                data: { text: 'Sample text' }
+              }),
+              getNodeType: () => 'TextBlock'
+            },
+            position: undefined,
+            sourceSegments: [0]
+          }
+        ],
+        edges: [],
+        segments: []
+      } as any);
+
+      try {
+        const result = await parser.parse('stub prompt', {
+          mode: 'standard',
+          preserveVariables: true,
+          autoConnect: false
+        });
+
+        expect(result.nodes).toHaveLength(1);
+        expect(result.nodes[0].data.label).toBe('Sample text');
+      } finally {
+        parseSpy.mockRestore();
+      }
+    });
+
+    it('uses provided edges and skips invalid ones from runtime parser', async () => {
+      const parseSpy = jest.spyOn(runtimePromptParser, 'parse').mockReturnValue({
+        nodes: [
+          {
+            node: {
+              serialize: () => ({
+                id: 'node-A',
+                type: 'TextBlock',
+                data: { label: 'A' }
+              }),
+              getNodeType: () => 'TextBlock'
+            }
+          },
+          {
+            node: {
+              serialize: () => ({
+                id: 'node-B',
+                type: 'Variable',
+                data: { content: 'B' }
+              }),
+              getNodeType: () => 'Variable'
+            }
+          }
+        ],
+        edges: [
+          { source: 'node-A', target: 'node-B' },
+          { source: undefined, target: 'node-A' },
+          { source: 'node-B', target: undefined }
+        ],
+        segments: []
+      } as any);
+
+      try {
+        const result = await parser.parse('stub prompt', {
+          mode: 'standard',
+          preserveVariables: true,
+          autoConnect: false
+        });
+
+        expect(result.edges).toEqual([
+          { id: 'edge-0', source: 'node-A', target: 'node-B', type: 'smoothstep' }
+        ]);
+      } finally {
+        parseSpy.mockRestore();
+      }
     });
   });
 });

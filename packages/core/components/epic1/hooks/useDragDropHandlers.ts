@@ -3,6 +3,10 @@ import { Node, ReactFlowInstance, Edge } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
 import { validatePreset, insertPreset } from '../../../runtime/presetInsertion';
 import { layoutNewNodes } from '../../../utils/layoutAlgorithms';
+import {
+  attachNodesToContainerNodes,
+  findContainerAtPosition
+} from './dragDropContainerUtils';
 
 type FlowNode = Node<EditableNodeData>;
 type FlowEdge = Edge<EditableNodeData>;
@@ -43,6 +47,7 @@ const toFlowNodes = (nodes: unknown): FlowNode[] =>
 
 const toFlowEdges = (edges: unknown): FlowEdge[] =>
   Array.isArray(edges) ? edges.filter(isFlowEdge) : [];
+
 
 interface UseDragDropHandlersProps {
   setNodes: (
@@ -159,6 +164,30 @@ export function useDragDropHandlers({
     return `${base}/${path}`;
   }, []);
 
+  const getContainerAtPosition = useCallback(
+    (position: { x: number; y: number }) => {
+      if (!reactFlowInstance) {
+        return null;
+      }
+      const nodes = reactFlowInstance
+        .getNodes()
+        .filter(isFlowNode) as FlowNode[];
+      return findContainerAtPosition(nodes, position);
+    },
+    [reactFlowInstance]
+  );
+
+  const attachNodesToContainer = useCallback(
+    (
+      nodes: FlowNode[],
+      container: Node<Record<string, unknown>>
+    ): FlowNode[] => {
+      const containerNode = container as FlowNode;
+      return attachNodesToContainerNodes(nodes, containerNode);
+    },
+    []
+  );
+
   // Shared insertion routine for both drop and explicit insert actions
   const insertPresetByMeta = useCallback(
     async (meta: PresetDropPayload, position: { x: number; y: number }) => {
@@ -269,6 +298,11 @@ export function useDragDropHandlers({
           );
         }
 
+        const containerNode = getContainerAtPosition(position);
+        if (containerNode) {
+          nodesToAdd = attachNodesToContainer(nodesToAdd, containerNode);
+        }
+
         // Debug logging for edges
         console.log('[DragDrop] Adding nodes:', nodesToAdd.length, 'nodes');
         console.log(
@@ -321,7 +355,9 @@ export function useDragDropHandlers({
       setEdges,
       showToast,
       normalizePresetPath,
-      resolvePresetPathById
+      resolvePresetPathById,
+      attachNodesToContainer,
+      getContainerAtPosition
     ]
   );
 
@@ -333,7 +369,7 @@ export function useDragDropHandlers({
         y: typeof position?.y === 'number' ? position.y : 250
       };
 
-      const newNode: FlowNode = {
+      let newNode: FlowNode = {
         id: createNodeId(),
         type: nodeType || 'textBlock',
         position: validPosition,
@@ -396,6 +432,17 @@ export function useDragDropHandlers({
         }
       };
 
+      const containerNode = getContainerAtPosition(validPosition);
+      if (containerNode) {
+        const [attachedNode] = attachNodesToContainerNodes(
+          [newNode],
+          containerNode as FlowNode
+        );
+        if (attachedNode) {
+          newNode = attachedNode;
+        }
+      }
+
       setNodes(nds => nds.concat(newNode));
 
       try {
@@ -408,7 +455,13 @@ export function useDragDropHandlers({
 
       showToast('success', `Added ${nodeType} node`);
     },
-    [createNodeId, setNodes, addNodeWithBounce, showToast]
+    [
+      createNodeId,
+      setNodes,
+      addNodeWithBounce,
+      showToast,
+      getContainerAtPosition
+    ]
   );
 
   // Handle drag over for new nodes

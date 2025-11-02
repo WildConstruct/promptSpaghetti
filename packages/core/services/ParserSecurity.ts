@@ -142,21 +142,6 @@ export class ParserSecurity {
   }
 
   /**
-   * Check if PII masking should be enabled
-   */
-  private shouldMaskPII(): boolean {
-    // This can be configured at workspace level
-    // For now, check localStorage or environment variable
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const maskPII = localStorage.getItem('maskPII');
-      // Default to true if not explicitly set to false
-      return maskPII !== 'false';
-    }
-    // Default to true for security
-    return process.env.MASK_PII !== 'false';
-  }
-
-  /**
    * Escape special characters that might confuse LLM
    */
   private escapeSpecialCharacters(text: string): string {
@@ -383,8 +368,25 @@ export class ParserSecurity {
   }
 
   private shouldMaskPII(): boolean {
-    // In test environment, always mask PII
-    // In production, this could be controlled by workspace settings
-    return process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development';
+    // Always mask PII in lower environments for safety
+    if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
+      return true;
+    }
+
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const storedPreference = localStorage.getItem('maskPII');
+      if (storedPreference === 'false') {
+        return false;
+      }
+      if (storedPreference === 'true') {
+        return true;
+      }
+    }
+
+    if (process.env.MASK_PII === 'false') {
+      return false;
+    }
+
+    return true;
   }
 }

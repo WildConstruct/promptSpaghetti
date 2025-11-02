@@ -283,22 +283,40 @@ export class PromptParser {
       nodes.push({
         id: serialized.id,
         type: this.mapNodeType(serialized.type),
-        position: genNode.position || { x: index * 200, y: 100 },
+        position: genNode.position || { x: 120 + index * 200, y: 80 },
         data: {
           ...serialized.data,
-          label: serialized.data?.text || serialized.data?.content || ''
+          label:
+            serialized.data?.label ||
+            serialized.data?.text ||
+            serialized.data?.content ||
+            serialized.type
         }
       });
     });
 
-    // Create edges based on sequential layout when auto-connect is enabled
-    if (options.autoConnect) {
+    const analysisEdges = Array.isArray(analysis.edges) ? analysis.edges : [];
+    if (analysisEdges.length > 0) {
+      analysisEdges.forEach((edge, idx) => {
+        if (!edge?.source || !edge?.target) {
+          return;
+        }
+        edges.push({
+          id: `edge-${idx}`,
+          source: edge.source,
+          target: edge.target,
+          type: 'smoothstep'
+        });
+      });
+    } else if (options.autoConnect) {
       for (let i = 0; i < nodes.length - 1; i++) {
+        const source = nodes[i].id;
+        const target = nodes[i + 1].id;
         edges.push({
           id: `edge-${i}`,
-          source: nodes[i].id,
-          target: nodes[i + 1].id,
-          type: 'default'
+          source,
+          target,
+          type: 'smoothstep'
         });
       }
     }

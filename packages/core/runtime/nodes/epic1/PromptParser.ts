@@ -1,18 +1,14 @@
-/**
- * Prompt Parser for Epic 1 - Semantic Unit Analysis
- *
- * Analyzes natural language prompts and intelligently generates
- * inline-editable nodes based on semantic understanding.
- */
-
 import { TextBlockNode } from './TextBlockNode';
 import { WeightedChoiceNode, WeightedOption } from './WeightedChoiceNode';
-import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
 import { BaseInlineEditableNode } from './BaseInlineEditableNode';
 import { Epic1NodeType } from './nodeTypes';
-import { smartNodePositioner, NodePosition } from './SmartNodePositioning';
+import { smartNodePositioner } from './SmartNodePositioning';
+import {
+  segmentPrompt,
+  SegmentKind
+} from '../../prompting/PromptSegmentation';
 
 /**
  * Represents a parsed segment of the prompt
@@ -28,6 +24,8 @@ export interface PromptSegment {
     alternatives?: string[];
     isListItem?: boolean;
     parentList?: string;
+    segmentKind?: SegmentKind;
+    variableName?: string;
   };
 }
 
@@ -39,6 +37,7 @@ export interface PromptAnalysis {
   segments: PromptSegment[];
   nodes: GeneratedNode[];
   mappings: NodeMapping[];
+  edges?: Array<{ source: string; target: string }>;
 }
 
 /**
@@ -60,69 +59,74 @@ export interface NodeMapping {
   highlightColor?: string;
 }
 
-/**
- * Token type for lexical analysis
- */
-enum TokenType {
-  WORD = 'WORD',
-  PUNCTUATION = 'PUNCTUATION',
-  WHITESPACE = 'WHITESPACE',
-  SEPARATOR = 'SEPARATOR', // commas, 'or', 'and'
-  NEWLINE = 'NEWLINE'
-}
-
-/**
- * Token for lexical analysis
- */
-interface Token {
-  type: TokenType;
-  value: string;
-  startIndex: number;
-  endIndex: number;
-}
+const HIGHLIGHT_COLORS = [
+  '#FF6B6B',
+  '#4ECDC4',
+  '#45B7D1',
+  '#96CEB4',
+  '#FFEAA7',
+  '#DDA0DD',
+  '#FFB347',
+  '#B19CD9'
+];
 
 /**
  * Main prompt parser class
  */
 export class PromptParser {
   private nodeCounter = 0;
-  private readonly listSeparators = ['or', 'and', ','];
-  private readonly descriptiveWords = [
-    'with',
-    'in',
-    'wearing',
-    'holding',
-    'carrying'
-  ];
 
   /**
    * Parse a prompt into semantic segments and generate nodes
    */
   parse(prompt: string): PromptAnalysis {
-    // Reset counter for consistent IDs
     this.nodeCounter = 0;
 
-    // Tokenize the input
-    const tokens = this.tokenize(prompt);
+    const segmented = segmentPrompt(prompt);
+    const highlightColor = (index: number) =>
+      HIGHLIGHT_COLORS[index % HIGHLIGHT_COLORS.length];
 
-    // Identify semantic segments - try semantic analysis first
-    let segments = this.identifySemanticSegments(prompt, tokens);
+    const nodes: GeneratedNode[] = [];
+    const mappings: NodeMapping[] = [];
+    const analysisSegments: PromptSegment[] = [];
+    const edges: Array<{ source: string; target: string }> = [];
 
-    // If semantic analysis didn't find multiple segments, fall back to list-based parsing
-    if (segments.length <= 1) {
-      segments = this.identifySegments(tokens, prompt);
-    }
+    segmented.segments.forEach((segment, index) => {
+      const nodeId = this.generateNodeId(segment.kind);
+      const node = createNodeForSegment(nodeId, segment);
 
-    // Generate nodes from segments
-    const { nodes, mappings } = this.generateNodes(segments);
+      nodes.push({
+        node,
+        sourceSegments: [index]
+      });
 
-    // Add an output node at the end
-    const outputNode = new OutputNode(this.generateNodeId());
+      mappings.push({
+        nodeId,
+        startIndex: segment.startIndex,
+        endIndex: segment.endIndex,
+        highlightColor: highlightColor(index)
+      });
+
+      analysisSegments.push({
+        text: segment.text,
+        startIndex: segment.startIndex,
+        endIndex: segment.endIndex,
+        suggestedNodeType: segmentKindToNodeType(segment.kind),
+        confidence: segment.kind === 'text' ? 0.7 : 0.9,
+        metadata: {
+          alternatives: segment.options,
+          segmentKind: segment.kind,
+          variableName: segment.variableName
+        }
+      });
+    });
+
+    // Ensure there is always an output node at the end
+    const outputNode = new OutputNode(this.generateNodeId('output'));
     outputNode.lock();
     nodes.push({
       node: outputNode,
-      sourceSegments: [],
-      position: { x: 0, y: 0 } // Will be calculated with smart positioning
+      sourceSegments: []
     });
 
     // Apply smart positioning to all nodes
@@ -131,787 +135,128 @@ export class PromptParser {
       positions,
       nodes
     );
+    nodes.forEach((wrapper, index) => {
+      wrapper.position = optimizedPositions[index];
+    });
 
-    // Update node positions
-    for (let i = 0; i < nodes.length; i++) {
-      nodes[i].position = optimizedPositions[i];
+    // Sequential edges connecting the flow of nodes
+    for (let i = 0; i < nodes.length - 1; i++) {
+      edges.push({
+        source: nodes[i].node.id,
+        target: nodes[i + 1].node.id
+      });
     }
 
     return {
       originalText: prompt,
-      segments,
+      segments: analysisSegments,
       nodes,
-      mappings
+      mappings,
+      edges
     };
   }
 
-  /**
-   * Tokenize the input prompt
-   */
-  private tokenize(prompt: string): Token[] {
-    const tokens: Token[] = [];
-    let currentIndex = 0;
-
-    // Regular expression patterns
-    const patterns = {
-      word: /^[a-zA-Z0-9''-]+/,
-      punctuation: /^[.!?;:()[\]{}'"]/,
-      separator: /^[,]/,
-      whitespace: /^[ \t]+/,
-      newline: /^[\n\r]+/
-    };
-
-    while (currentIndex < prompt.length) {
-      let matched = false;
-
-      // Try each pattern
-      for (const [type, pattern] of Object.entries(patterns)) {
-        const match = prompt.slice(currentIndex).match(pattern);
-        if (match) {
-          const value = match[0];
-          const token: Token = {
-            type: this.getTokenType(type, value),
-            value,
-            startIndex: currentIndex,
-            endIndex: currentIndex + value.length
-          };
-
-          tokens.push(token);
-          currentIndex += value.length;
-          matched = true;
-          break;
-        }
-      }
-
-      // If no pattern matched, skip character
-      if (!matched) {
-        currentIndex++;
-      }
-    }
-
-    return tokens;
-  }
-
-  /**
-   * Get token type from pattern name
-   */
-  private getTokenType(patternName: string, value: string): TokenType {
-    if (
-      patternName === 'word' &&
-      this.listSeparators.includes(value.toLowerCase())
-    ) {
-      return TokenType.SEPARATOR;
-    }
-
-    switch (patternName) {
-      case 'word':
-        return TokenType.WORD;
-      case 'punctuation':
-        return TokenType.PUNCTUATION;
-      case 'separator':
-        return TokenType.SEPARATOR;
-      case 'whitespace':
-        return TokenType.WHITESPACE;
-      case 'newline':
-        return TokenType.NEWLINE;
-      default:
-        return TokenType.WORD;
-    }
-  }
-
-  /**
-   * Identify semantic segments using natural language patterns
-   * Breaks down sentences into subject/verb/object components
-   */
-  private identifySemanticSegments(
-    prompt: string,
-    tokens: Token[]
-  ): PromptSegment[] {
-    const segments: PromptSegment[] = [];
-
-    // Common action verbs and prepositions that indicate transitions
-    const actionVerbs = [
-      'ventures',
-      'goes',
-      'walks',
-      'runs',
-      'travels',
-      'journeys',
-      'explores',
-      'enters',
-      'approaches',
-      'finds',
-      'discovers',
-      'seeks',
-      'searches',
-      'fights',
-      'battles',
-      'defeats',
-      'conquers',
-      'escapes',
-      'flees',
-      'meets',
-      'encounters',
-      'talks',
-      'speaks',
-      'asks',
-      'tells',
-      'takes',
-      'gives',
-      'steals',
-      'hides',
-      'reveals',
-      'shows',
-      'builds',
-      'creates',
-      'destroys',
-      'breaks',
-      'fixes',
-      'repairs'
-    ];
-
-    const prepositions = [
-      'into',
-      'in',
-      'at',
-      'on',
-      'to',
-      'from',
-      'with',
-      'through',
-      'across',
-      'over',
-      'under',
-      'behind',
-      'before',
-      'after',
-      'during',
-      'within'
-    ];
-
-    // Articles that often start noun phrases
-    const articles = ['a', 'an', 'the'];
-
-    // Build a text representation from tokens for easier analysis
-    let currentPhrase: Token[] = [];
-    let phraseType: 'subject' | 'action' | 'object' | 'unknown' = 'subject';
-    let inPrepositionalPhrase = false;
-
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
-
-      // Skip whitespace and newlines but track position
-      if (
-        token.type === TokenType.WHITESPACE ||
-        token.type === TokenType.NEWLINE
-      ) {
-        continue;
-      }
-
-      // Check if this is an action verb
-      if (
-        token.type === TokenType.WORD &&
-        actionVerbs.includes(token.value.toLowerCase())
-      ) {
-        // Save the current phrase as subject if we have one
-        if (currentPhrase.length > 0 && phraseType === 'subject') {
-          const text = this.tokensToText(currentPhrase, prompt).trim();
-          if (text) {
-            segments.push({
-              text,
-              startIndex: currentPhrase[0].startIndex,
-              endIndex: currentPhrase[currentPhrase.length - 1].endIndex,
-              suggestedNodeType: Epic1NodeType.TextBlock,
-              confidence: 0.8,
-              metadata: {
-                reason: 'Subject of the sentence'
-              }
-            });
-          }
-        }
-
-        // Start action phrase
-        currentPhrase = [token];
-        phraseType = 'action';
-        inPrepositionalPhrase = false;
-      } else if (
-        token.type === TokenType.WORD &&
-        prepositions.includes(token.value.toLowerCase())
-      ) {
-        // If we're in an action phrase, include the preposition
-        if (phraseType === 'action') {
-          currentPhrase.push(token);
-          inPrepositionalPhrase = true;
-        } else if (currentPhrase.length > 0) {
-          // Otherwise, save current phrase and start object phrase
-          const text = this.tokensToText(currentPhrase, prompt).trim();
-          if (text) {
-            segments.push({
-              text,
-              startIndex: currentPhrase[0].startIndex,
-              endIndex: currentPhrase[currentPhrase.length - 1].endIndex,
-              suggestedNodeType: Epic1NodeType.TextBlock,
-              confidence: 0.8,
-              metadata: {
-                reason:
-                  phraseType === 'action'
-                    ? 'Action/verb phrase'
-                    : 'Descriptive phrase'
-              }
-            });
-          }
-
-          // Include the preposition with the next phrase
-          currentPhrase = [token];
-          phraseType = 'object';
-          inPrepositionalPhrase = true;
-        }
-      } else if (
-        inPrepositionalPhrase &&
-        token.type === TokenType.WORD &&
-        articles.includes(token.value.toLowerCase())
-      ) {
-        // If we hit an article after a preposition in an action phrase,
-        // this starts the object phrase
-        if (phraseType === 'action' && currentPhrase.length > 1) {
-          // Remove the last token (preposition) from action phrase
-          const prep = currentPhrase.pop();
-
-          // Save action phrase
-          const text = this.tokensToText(currentPhrase, prompt).trim();
-          if (text) {
-            segments.push({
-              text,
-              startIndex: currentPhrase[0].startIndex,
-              endIndex: currentPhrase[currentPhrase.length - 1].endIndex,
-              suggestedNodeType: Epic1NodeType.TextBlock,
-              confidence: 0.8,
-              metadata: {
-                reason: 'Action/verb phrase'
-              }
-            });
-          }
-
-          // Start object phrase with preposition and article
-          currentPhrase = prep ? [prep, token] : [token];
-          phraseType = 'object';
-        } else {
-          currentPhrase.push(token);
-        }
-        inPrepositionalPhrase = false;
-      } else if (
-        token.type === TokenType.PUNCTUATION &&
-        (token.value === '.' || token.value === '!' || token.value === '?')
-      ) {
-        // End of sentence - save current phrase
-        if (currentPhrase.length > 0) {
-          const text = this.tokensToText(currentPhrase, prompt).trim();
-          if (text) {
-            segments.push({
-              text,
-              startIndex: currentPhrase[0].startIndex,
-              endIndex: currentPhrase[currentPhrase.length - 1].endIndex,
-              suggestedNodeType: Epic1NodeType.TextBlock,
-              confidence: 0.8,
-              metadata: {
-                reason:
-                  phraseType === 'subject'
-                    ? 'Subject phrase'
-                    : phraseType === 'action'
-                      ? 'Action/verb phrase'
-                      : 'Object/location phrase'
-              }
-            });
-          }
-          currentPhrase = [];
-          phraseType = 'subject';
-          inPrepositionalPhrase = false;
-        }
-      } else {
-        // Add token to current phrase
-        currentPhrase.push(token);
-      }
-    }
-
-    // Save any remaining phrase
-    if (currentPhrase.length > 0) {
-      const text = this.tokensToText(currentPhrase, prompt).trim();
-      if (text) {
-        segments.push({
-          text,
-          startIndex: currentPhrase[0].startIndex,
-          endIndex: currentPhrase[currentPhrase.length - 1].endIndex,
-          suggestedNodeType: Epic1NodeType.TextBlock,
-          confidence: 0.8,
-          metadata: {
-            reason: 'Final phrase'
-          }
-        });
-      }
-    }
-
-    return segments;
-  }
-
-  /**
-   * Identify semantic segments from tokens
-   */
-  private identifySegments(
-    tokens: Token[],
-    originalText: string
-  ): PromptSegment[] {
-    const segments: PromptSegment[] = [];
-    let currentSegment: Token[] = [];
-    let isInList = false;
-    let listItems: string[] = [];
-    let listStartIndex = -1;
-
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
-      const prevToken = i > 0 ? tokens[i - 1] : null;
-      const nextToken = i < tokens.length - 1 ? tokens[i + 1] : null;
-
-      // Skip whitespace in analysis
-      if (token.type === TokenType.WHITESPACE) {
-        continue;
-      }
-
-      // Check for list detection
-      if (token.type === TokenType.SEPARATOR) {
-        // We found a list separator
-        if (!isInList) {
-          // Start of a list - convert current segment to list
-          isInList = true;
-          listStartIndex =
-            currentSegment.length > 0
-              ? currentSegment[0].startIndex
-              : token.startIndex;
-
-          // Add current accumulated text as first list item
-          if (currentSegment.length > 0) {
-            const text = this.tokensToText(currentSegment, originalText);
-            listItems.push(text.trim());
-          }
-
-          currentSegment = [];
-        } else {
-          // Continuing a list - add previous item
-          if (currentSegment.length > 0) {
-            const text = this.tokensToText(currentSegment, originalText);
-            listItems.push(text.trim());
-            currentSegment = [];
-          }
-        }
-      } else if (
-        token.type === TokenType.PUNCTUATION &&
-        (token.value === '.' || token.value === '!' || token.value === '?')
-      ) {
-        // End of sentence - finalize current segment
-        if (isInList && listItems.length > 0) {
-          // Add last item to list
-          if (currentSegment.length > 0) {
-            const text = this.tokensToText(currentSegment, originalText);
-            listItems.push(text.trim());
-          }
-
-          // Create weighted choice segment
-          const endIndex = token.endIndex;
-          segments.push({
-            text: listItems.join(' | '),
-            startIndex: listStartIndex,
-            endIndex: endIndex,
-            suggestedNodeType: Epic1NodeType.WeightedChoice,
-            confidence: 0.9,
-            metadata: {
-              reason: 'List of alternatives detected',
-              alternatives: listItems
-            }
-          });
-
-          // Reset
-          isInList = false;
-          listItems = [];
-          currentSegment = [];
-        } else if (currentSegment.length > 0) {
-          // Regular text segment
-          const startIndex = currentSegment[0].startIndex;
-          const endIndex = token.endIndex;
-          const text = this.tokensToText(
-            [...currentSegment, token],
-            originalText
-          );
-
-          segments.push({
-            text: text.trim(),
-            startIndex,
-            endIndex,
-            suggestedNodeType: Epic1NodeType.TextBlock,
-            confidence: 0.8,
-            metadata: {
-              reason: 'Complete sentence or phrase'
-            }
-          });
-
-          currentSegment = [];
-        }
-      } else if (token.type === TokenType.NEWLINE) {
-        // Newline - might indicate segment boundary
-        if (currentSegment.length > 0) {
-          const startIndex = currentSegment[0].startIndex;
-          const endIndex = currentSegment[currentSegment.length - 1].endIndex;
-          const text = this.tokensToText(currentSegment, originalText);
-
-          segments.push({
-            text: text.trim(),
-            startIndex,
-            endIndex,
-            suggestedNodeType: Epic1NodeType.TextBlock,
-            confidence: 0.7,
-            metadata: {
-              reason: 'Line break separation'
-            }
-          });
-
-          currentSegment = [];
-        }
-      } else {
-        // Regular token - add to current segment
-        currentSegment.push(token);
-      }
-    }
-
-    // Handle remaining tokens
-    if (isInList && listItems.length > 0) {
-      // Finalize list
-      if (currentSegment.length > 0) {
-        const text = this.tokensToText(currentSegment, originalText);
-        listItems.push(text.trim());
-      }
-
-      const endIndex =
-        currentSegment.length > 0
-          ? currentSegment[currentSegment.length - 1].endIndex
-          : tokens[tokens.length - 1].endIndex;
-
-      segments.push({
-        text: listItems.join(' | '),
-        startIndex: listStartIndex,
-        endIndex: endIndex,
-        suggestedNodeType: Epic1NodeType.WeightedChoice,
-        confidence: 0.85,
-        metadata: {
-          reason: 'List of alternatives at end of prompt',
-          alternatives: listItems
-        }
-      });
-    } else if (currentSegment.length > 0) {
-      // Regular text at end
-      const startIndex = currentSegment[0].startIndex;
-      const endIndex = currentSegment[currentSegment.length - 1].endIndex;
-      const text = this.tokensToText(currentSegment, originalText);
-
-      segments.push({
-        text: text.trim(),
-        startIndex,
-        endIndex,
-        suggestedNodeType: Epic1NodeType.TextBlock,
-        confidence: 0.75,
-        metadata: {
-          reason: 'Remaining text at end of prompt'
-        }
-      });
-    }
-
-    return this.refineSegments(segments);
-  }
-
-  /**
-   * Convert tokens back to text
-   */
-  private tokensToText(tokens: Token[], originalText: string): string {
-    if (tokens.length === 0) return '';
-
-    const startIndex = tokens[0].startIndex;
-    const endIndex = tokens[tokens.length - 1].endIndex;
-    return originalText.slice(startIndex, endIndex);
-  }
-
-  /**
-   * Refine segments by detecting patterns and improving suggestions
-   */
-  private refineSegments(segments: PromptSegment[]): PromptSegment[] {
-    const refined: PromptSegment[] = [];
-
-    for (let i = 0; i < segments.length; i++) {
-      const segment = segments[i];
-      const prevSegment = i > 0 ? segments[i - 1] : null;
-      const nextSegment = i < segments.length - 1 ? segments[i + 1] : null;
-
-      // Check for concatenation patterns
-      if (
-        segment.text.toLowerCase().includes(' with ') ||
-        segment.text.toLowerCase().includes(' and ') ||
-        segment.text.toLowerCase().includes(' wearing ') ||
-        segment.text.toLowerCase().includes(' carrying ')
-      ) {
-        // This might be better as separate nodes with concatenation
-        const parts = this.splitOnDescriptiveWords(segment.text);
-        if (parts.length > 1) {
-          // Create multiple segments
-          let currentIndex = segment.startIndex;
-
-          for (const part of parts) {
-            refined.push({
-              text: part.trim(),
-              startIndex: currentIndex,
-              endIndex: currentIndex + part.length,
-              suggestedNodeType: Epic1NodeType.TextBlock,
-              confidence: 0.85,
-              metadata: {
-                reason: 'Part of descriptive phrase',
-                parentList: segment.text
-              }
-            });
-            currentIndex += part.length;
-          }
-
-          continue;
-        }
-      }
-
-      // Check for variables pattern (e.g., {{variableName}})
-      if (segment.text.includes('{{') && segment.text.includes('}}')) {
-        segment.suggestedNodeType = Epic1NodeType.TextBlock;
-        segment.confidence = 0.95;
-        segment.metadata = {
-          ...segment.metadata,
-          reason: 'Contains variable references'
-        };
-      }
-
-      refined.push(segment);
-    }
-
-    return refined;
-  }
-
-  /**
-   * Split text on descriptive words
-   */
-  private splitOnDescriptiveWords(text: string): string[] {
-    const pattern = new RegExp(
-      `\\s+(${this.descriptiveWords.join('|')})\\s+`,
-      'gi'
-    );
-    const parts = text.split(pattern);
-
-    // Filter out the separator words themselves and empty strings
-    return parts.filter(
-      part => part && !this.descriptiveWords.includes(part.toLowerCase().trim())
-    );
-  }
-
-  /**
-   * Generate nodes from segments
-   */
-  private generateNodes(segments: PromptSegment[]): {
-    nodes: GeneratedNode[];
-    mappings: NodeMapping[];
-  } {
-    const nodes: GeneratedNode[] = [];
-    const mappings: NodeMapping[] = [];
-    const colors = ['#FFE5B4', '#E6E6FA', '#98FB98', '#FFB6C1', '#87CEEB'];
-    let colorIndex = 0;
-
-    for (let i = 0; i < segments.length; i++) {
-      const segment = segments[i];
-      const nodeId = this.generateNodeId();
-      let node: BaseInlineEditableNode;
-
-      switch (segment.suggestedNodeType) {
-        case Epic1NodeType.WeightedChoice:
-          // Create weighted choice from alternatives
-          const options: WeightedOption[] = (
-            segment.metadata?.alternatives || [segment.text]
-          ).map((alt, idx) => ({
-            id: `opt-${idx}`,
-            text: alt.trim(),
-            weight: 100 / (segment.metadata?.alternatives?.length || 1)
-          }));
-
-          node = new WeightedChoiceNode(nodeId, options);
-          break;
-
-        case Epic1NodeType.TextBlock:
-        default:
-          node = new TextBlockNode(nodeId, segment.text);
-          break;
-      }
-
-      // Set node to editing mode
-      node.startEdit();
-
-      // Add to nodes array
-      nodes.push({
-        node,
-        sourceSegments: [i],
-        position: { x: 0, y: 0 } // Will be calculated with smart positioning
-      });
-
-      // Add mapping
-      mappings.push({
-        nodeId,
-        startIndex: segment.startIndex,
-        endIndex: segment.endIndex,
-        highlightColor: colors[colorIndex % colors.length]
-      });
-
-      colorIndex++;
-    }
-
-    // Check if we should add concatenation nodes
-    if (segments.length > 1) {
-      // Look for opportunities to add Concat nodes
-      const concatOpportunities = this.identifyConcatOpportunities(segments);
-
-      for (const opportunity of concatOpportunities) {
-        const concatNode = new ConcatNode(this.generateNodeId(), {
-          separator: opportunity.separator
-        });
-        concatNode.startEdit();
-
-        // Insert at appropriate position
-        const insertIndex = opportunity.afterIndex + 1;
-        nodes.splice(insertIndex, 0, {
-          node: concatNode,
-          sourceSegments: opportunity.sourceSegments,
-          position: { x: 0, y: 0 } // Will be calculated with smart positioning
-        });
-      }
-    }
-
-    return { nodes, mappings };
-  }
-
-  /**
-   * Identify where to add concatenation nodes
-   */
-  private identifyConcatOpportunities(segments: PromptSegment[]): Array<{
-    afterIndex: number;
-    separator: string;
-    sourceSegments: number[];
-  }> {
-    const opportunities: Array<{
-      afterIndex: number;
-      separator: string;
-      sourceSegments: number[];
-    }> = [];
-
-    // For now, we'll keep this simple
-    // In the future, this could be more sophisticated
-
-    return opportunities;
-  }
-
-  /**
-   * Generate unique node ID
-   */
-  private generateNodeId(): string {
-    return `parsed-node-${++this.nodeCounter}`;
-  }
-
-  /**
-   * Adjust segment boundaries manually
-   */
-  adjustBoundary(
-    analysis: PromptAnalysis,
-    segmentIndex: number,
-    newStartIndex: number,
-    newEndIndex: number
-  ): PromptAnalysis {
-    if (segmentIndex < 0 || segmentIndex >= analysis.segments.length) {
-      throw new Error('Invalid segment index');
-    }
-
-    // Clone the analysis
-    const updatedAnalysis = {
-      ...analysis,
-      segments: [...analysis.segments],
-      mappings: [...analysis.mappings]
-    };
-
-    // Update segment
-    updatedAnalysis.segments[segmentIndex] = {
-      ...analysis.segments[segmentIndex],
-      startIndex: newStartIndex,
-      endIndex: newEndIndex,
-      text: analysis.originalText.slice(newStartIndex, newEndIndex)
-    };
-
-    // Update corresponding mapping
-    const nodeId = analysis.nodes[segmentIndex]?.node.serialize().id;
-    const mappingIndex = updatedAnalysis.mappings.findIndex(
-      m => m.nodeId === nodeId
-    );
-    if (mappingIndex >= 0) {
-      updatedAnalysis.mappings[mappingIndex] = {
-        ...updatedAnalysis.mappings[mappingIndex],
-        startIndex: newStartIndex,
-        endIndex: newEndIndex
-      };
-    }
-
-    return updatedAnalysis;
-  }
-
-  /**
-   * Merge adjacent segments
-   */
-  mergeSegments(
-    analysis: PromptAnalysis,
-    firstIndex: number,
-    secondIndex: number
-  ): PromptAnalysis {
-    if (
-      firstIndex >= secondIndex ||
-      firstIndex < 0 ||
-      secondIndex >= analysis.segments.length
-    ) {
-      throw new Error('Invalid segment indices for merge');
-    }
-
-    const first = analysis.segments[firstIndex];
-    const second = analysis.segments[secondIndex];
-
-    // Create merged segment
-    const mergedSegment: PromptSegment = {
-      text: analysis.originalText.slice(first.startIndex, second.endIndex),
-      startIndex: first.startIndex,
-      endIndex: second.endIndex,
-      suggestedNodeType: Epic1NodeType.TextBlock,
-      confidence: (first.confidence + second.confidence) / 2,
-      metadata: {
-        reason: 'Manually merged segments'
-      }
-    };
-
-    // Regenerate nodes with merged segments
-    const updatedSegments = [
-      ...analysis.segments.slice(0, firstIndex),
-      mergedSegment,
-      ...analysis.segments.slice(secondIndex + 1)
-    ];
-
-    const { nodes, mappings } = this.generateNodes(updatedSegments);
-
-    return {
-      originalText: analysis.originalText,
-      segments: updatedSegments,
-      nodes,
-      mappings
-    };
+  private generateNodeId(kind?: SegmentKind): string {
+    const suffix = ++this.nodeCounter;
+    const prefix = kind ?? 'node';
+    return `${prefix}-${suffix}`;
   }
 }
 
-// Export a singleton instance
+function segmentKindToNodeType(kind: SegmentKind): Epic1NodeType {
+  switch (kind) {
+    case 'choice':
+      return Epic1NodeType.WeightedChoice;
+    case 'variable':
+      return Epic1NodeType.Variable;
+    case 'text':
+    default:
+      return Epic1NodeType.TextBlock;
+  }
+}
+
+function createNodeForSegment(
+  nodeId: string,
+  segment: {
+    text: string;
+    kind: SegmentKind;
+    options?: string[];
+    variableName?: string;
+  }
+): BaseInlineEditableNode {
+  const trimmed = segment.text.trim();
+
+  switch (segment.kind) {
+    case 'choice': {
+      const options = buildWeightedOptions(segment.options ?? [trimmed]);
+      return new WeightedChoiceNode(nodeId, options);
+    }
+    case 'variable': {
+      const name =
+        segment.variableName ?? guessVariableName(trimmed) ?? `var_${nodeId}`;
+      return new VariableNode(
+        nodeId,
+        {
+          name,
+          currentValue: trimmed
+        },
+        {
+          variableType: 'any',
+          mode: 'both',
+          hasDataInlet: true
+        }
+      );
+    }
+    default: {
+      const multiline = /\n/.test(trimmed);
+      return new TextBlockNode(
+        nodeId,
+        trimmed,
+        {
+          multiline,
+          placeholder: 'Text'
+        }
+      );
+    }
+  }
+}
+
+function buildWeightedOptions(texts: string[]): WeightedOption[] {
+  if (texts.length === 0) {
+    return [
+      {
+        id: 'option-1',
+        text: 'Option 1',
+        weight: 50
+      }
+    ];
+  }
+
+  const weight = Math.max(1, Math.round(100 / texts.length));
+  return texts.map((text, idx) => ({
+    id: `option-${idx + 1}`,
+    text: text.trim(),
+    weight
+  }));
+}
+
+function guessVariableName(text: string): string | undefined {
+  const braceMatch = text.match(/\{\{([\w.-]+)\}\}/);
+  if (braceMatch) {
+    return braceMatch[1];
+  }
+
+  const assignment = text.match(/^\s*([\w.-]{1,32})\s*[:=\-]/);
+  if (assignment) {
+    return assignment[1];
+  }
+
+  const words = text.trim().split(/\s+/);
+  if (words.length === 1 && /^[\w.-]+$/.test(words[0])) {
+    return words[0];
+  }
+
+  return undefined;
+}
+
 export const promptParser = new PromptParser();
