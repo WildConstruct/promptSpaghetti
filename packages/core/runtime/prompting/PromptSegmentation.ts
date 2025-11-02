@@ -178,16 +178,19 @@ function analyseSegment(text: string): Array<{
   }
 
   // Inline choices (word1 or word2) -> treat as a single choice
-  if (CHOICE_SEPARATOR_PATTERN.test(trimmed)) {
-    const start = text.indexOf(trimmed);
-    result.push({
-      text: trimmed,
-      relativeStart: start,
-      relativeEnd: start + trimmed.length,
-      kind: 'choice',
-      options: splitChoiceAlternatives(trimmed, false)
-    });
-    return result;
+  if (!trimmed.includes(',') && CHOICE_SEPARATOR_PATTERN.test(trimmed)) {
+    const options = splitChoiceAlternatives(trimmed, false);
+    if (options.length > 1 && options.length <= 6) {
+      const start = text.indexOf(trimmed);
+      result.push({
+        text: trimmed,
+        relativeStart: start,
+        relativeEnd: start + trimmed.length,
+        kind: 'choice',
+        options
+      });
+      return result;
+    }
   }
 
   // Mixed text with inline variables -> split into text parts but keep as text kind.
@@ -245,6 +248,31 @@ function analyseSegment(text: string): Array<{
       }
     });
     return result;
+  }
+
+  // Comma-delimited descriptors (e.g., "calm lighting, soft focus")
+  const commaParts = trimmed
+    .split(',')
+    .map(part => part.trim())
+    .filter(Boolean);
+  if (commaParts.length > 1) {
+    let searchFrom = 0;
+    commaParts.forEach(part => {
+      const partStart = findSubStringIndex(text, part, searchFrom);
+      const partEnd = partStart + part.length;
+      if (partEnd > partStart) {
+        result.push({
+          text: part,
+          relativeStart: partStart,
+          relativeEnd: partEnd,
+          kind: 'text'
+        });
+        searchFrom = partEnd;
+      }
+    });
+    if (result.length > 0) {
+      return result;
+    }
   }
 
   // Default fallback: treat as text segment
@@ -416,4 +444,3 @@ function mergeText(a: string, b: string): string {
   if (b.includes(a)) {return b;}
   return `${a.trimEnd()} ${b.trimStart()}`.trim();
 }
-
