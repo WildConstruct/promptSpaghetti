@@ -9,8 +9,7 @@ import {
   simplePromptParser,
   PromptAnalysis,
   GeneratedNode,
-  NodeMapping,
-  AnalysisEdge
+  NodeMapping
 } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
 import { normalizeLLMResult, mergeLLMResult } from '../../lib/llmAnalysisMerge';
@@ -34,6 +33,7 @@ interface CaretPosition {
   index: number;
   x: number;
   y: number;
+  height: number;
 }
 
 interface HighlightSegment {
@@ -55,6 +55,107 @@ const HIGHLIGHT_COLORS = [
   '#FFB347', // Orange
   '#B19CD9' // Purple
 ];
+
+const splitChoiceOptions = (raw: string): string[] => {
+  const text = raw.trim();
+  if (!text) {
+    return ['Option 1'];
+  }
+
+  const pipeParts = text.split('|').map(part => part.trim()).filter(Boolean);
+  if (pipeParts.length > 1) {
+    return pipeParts;
+  }
+
+  const slashParts = text
+    .split('/')
+    .map(part => part.trim())
+    .filter(Boolean);
+  if (slashParts.length > 1) {
+    return slashParts;
+  }
+
+  const orParts = text
+    .split(/\s+(?:or|vs)\s+/i)
+    .map(part => part.trim())
+    .filter(Boolean);
+  if (orParts.length > 1) {
+    return orParts;
+  }
+
+  const commaParts = text
+    .split(',')
+    .map(part => part.trim())
+    .filter(Boolean);
+  if (commaParts.length > 1) {
+    return commaParts;
+  }
+
+  return [text];
+};
+
+const buildGeneratedNode = (
+  nodeId: string,
+  nodeTypeValue: string,
+  text: string
+): GeneratedNode => {
+  if (nodeTypeValue === 'choice') {
+    const options = splitChoiceOptions(text);
+    return {
+      node: {
+        id: nodeId,
+        nodeType: 'Choice',
+        getPreviewText: () => options.join(' / '),
+        data: {
+          options,
+          label: options.join(' / '),
+          value: JSON.stringify(
+            options.map((option, index) => ({
+              id: `option-${index + 1}`,
+              text: option,
+              weight: Math.max(1, Math.round(100 / options.length)),
+              hasBranch: false
+            })),
+            null,
+            2
+          )
+        }
+      }
+    };
+  }
+
+  if (nodeTypeValue === 'variable') {
+    return {
+      node: {
+        id: nodeId,
+        nodeType: 'Variable',
+        getPreviewText: () => text,
+        variableName:
+          text
+            .trim()
+            .split(/\s+/)
+            .join('_')
+            .toLowerCase() || `variable_${nodeId.slice(-4)}`,
+        data: {
+          label: text,
+          value: text
+        }
+      }
+    };
+  }
+
+  return {
+    node: {
+      id: nodeId,
+      nodeType: 'Text',
+      getPreviewText: () => text,
+      data: {
+        label: text,
+        text
+      }
+    }
+  };
+};
 
 export const PromptDissector: React.FC<PromptDissectorProps> = ({
   value,
@@ -775,23 +876,65 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     setCanRedo(futureRef.current.length > 0);
   }, [highlightSegments]);
 
+  const resolveSelectionRange = useCallback(() => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+      return null;
+    }
+
+    const resolveIndex = (node: Node | null, offset: number): number | null => {
+      if (!node) {return null;}
+      let element =
+        node.nodeType === Node.ELEMENT_NODE
+          ? (node as HTMLElement)
+          : node.parentElement;
+
+      while (element && !element.dataset?.segmentStart) {
+        element = element.parentElement;
+      }
+
+      if (!element?.dataset?.segmentStart) {
+        return null;
+      }
+
+      const startIndex = Number(element.dataset.segmentStart);
+      const content = element.textContent ?? '';
+      const clamped = Math.min(Math.max(offset, 0), content.length);
+      return startIndex + clamped;
+    };
+
+    const anchor = resolveIndex(selection.anchorNode, selection.anchorOffset);
+    const focus = resolveIndex(selection.focusNode, selection.focusOffset);
+    if (anchor === null || anchor === undefined) {return null;}
+    if (focus === null || focus === undefined) {return null;}
+    const start = Math.min(anchor, focus);
+    const end = Math.max(anchor, focus);
+    if (start === end) {return null;}
+    return { start, end };
+  }, []);
+
   // Split at cursor for plain segments only (safe minimal impl)
   const handleSplitAtCursor = useCallback(() => {
     // eslint-disable-next-line no-console
     console.log('[PromptDissector] handleSplitAtCursor called');
 
-    // Use caret position if available (AI-Enhanced mode), otherwise use textarea cursor
-    let cursor = 0;
-    if (llmMode === 'llm-enhanced' && caretPosition) {
-      cursor = caretPosition.index;
-      console.log('[Split Debug] Using caretPosition:', cursor);
-    } else if (
-      textareaRef.current &&
-      textareaRef.current.selectionStart !== null
-    ) {
-      cursor = textareaRef.current.selectionStart;
-      console.log('[Split Debug] Using textarea cursor:', cursor);
-    } else {
+    // Prefer explicit caret position, fall back to textarea or selection range
+    let cursor: number | null = caretPosition?.index ?? null;
+    if ((cursor === null || cursor === undefined) && textareaRef.current) {
+      const start = textareaRef.current.selectionStart;
+      if (start !== null && start !== undefined) {
+        cursor = start;
+        console.log('[Split Debug] Using textarea cursor:', cursor);
+      }
+    }
+    if (cursor === null || cursor === undefined) {
+      const range = resolveSelectionRange();
+      if (range) {
+        cursor = range.start;
+        console.log('[Split Debug] Using selection start:', cursor);
+      }
+    }
+    if (cursor === null || cursor === undefined) {
       console.log(
         '[Split Debug] No cursor position available. CaretPos:',
         caretPosition,
@@ -946,7 +1089,12 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       const next = [...prev.slice(0, idx), left, right, ...prev.slice(idx + 1)];
       return next;
     });
-  }, [value, safeOnAnalysisComplete, caretPosition, llmMode]);
+  }, [
+    value,
+    safeOnAnalysisComplete,
+    caretPosition,
+    resolveSelectionRange
+  ]);
 
   // Split selection and create a node mapping via modal
   const handleSplitSelection = useCallback(() => {
@@ -967,7 +1115,19 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       }
     }
 
-    // Otherwise use textarea selection
+    // Prefer DOM selection range from overlay
+    const overlayRange = resolveSelectionRange();
+    if (overlayRange) {
+      setSelection({
+        start: overlayRange.start,
+        end: overlayRange.end,
+        text: value.slice(overlayRange.start, overlayRange.end)
+      });
+      setIsModalOpen(true);
+      return;
+    }
+
+    // Fallback to textarea selection (edit mode)
     const el = textareaRef.current;
     if (!el) {return;}
     const start = el.selectionStart ?? 0;
@@ -975,7 +1135,13 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     if (start === end) {return;}
     setSelection({ start, end, text: value.slice(start, end) });
     setIsModalOpen(true);
-  }, [value, llmMode, selectedSegIndex, highlightSegments]);
+  }, [
+    value,
+    llmMode,
+    selectedSegIndex,
+    highlightSegments,
+    resolveSelectionRange
+  ]);
 
   const handleCreateNodeFromSelection = useCallback(
     (nodeTypeValue: string, color: string) => {
@@ -1006,20 +1172,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         if (!prev) {
           const fresh: PromptAnalysis = {
             segments: [],
-            nodes: [
-              {
-                node: {
-                  id: nodeId,
-                  nodeType:
-                    nodeTypeValue === 'choice'
-                      ? 'Choice'
-                      : nodeTypeValue === 'variable'
-                        ? 'Variable'
-                        : 'Text',
-                  getPreviewText: () => selection.text
-                }
-              }
-            ],
+            nodes: [buildGeneratedNode(nodeId, nodeTypeValue, selection.text)],
             mappings: [
               {
                 nodeId,
@@ -1074,18 +1227,11 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
               ? { node: { ...n.node, getPreviewText: () => leftText } }
               : n
           );
-          const middleNode: GeneratedNode = {
-            node: {
-              id: nodeId,
-              nodeType:
-                nodeTypeValue === 'choice'
-                  ? 'Choice'
-                  : nodeTypeValue === 'variable'
-                    ? 'Variable'
-                    : 'Text',
-              getPreviewText: () => midText
-            }
-          };
+          const middleNode = buildGeneratedNode(
+            nodeId,
+            nodeTypeValue,
+            midText
+          );
           const rightNode: GeneratedNode | null =
             rightText.length > 0 && rightNodeId
               ? {
@@ -1130,21 +1276,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         // Fallback: append selection as a new mapping/node and then order inline
         const baseUpdated: PromptAnalysis = {
           ...prev,
-          nodes: [
-            ...prev.nodes,
-            {
-              node: {
-                id: nodeId,
-                nodeType:
-                  nodeTypeValue === 'choice'
-                    ? 'Choice'
-                    : nodeTypeValue === 'variable'
-                      ? 'Variable'
-                      : 'Text',
-                getPreviewText: () => selection.text
-              }
-            }
-          ],
+          nodes: [...prev.nodes, buildGeneratedNode(nodeId, nodeTypeValue, selection.text)],
           mappings: [
             ...prev.mappings,
             { nodeId, startIndex: start, endIndex: end, highlightColor: color }
@@ -1574,7 +1706,8 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
             setCaretPosition({
               index: newIndex,
               x: caretPosition.x - 10, // Approximate
-              y: caretPosition.y
+              y: caretPosition.y,
+              height: caretPosition.height
             });
             if (textareaRef.current) {
               textareaRef.current.setSelectionRange(newIndex, newIndex);
@@ -1594,7 +1727,8 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
             setCaretPosition({
               index: newIndex,
               x: caretPosition.x + 10, // Approximate
-              y: caretPosition.y
+              y: caretPosition.y,
+              height: caretPosition.height
             });
             if (textareaRef.current) {
               textareaRef.current.setSelectionRange(newIndex, newIndex);
@@ -2058,7 +2192,19 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                   data-testid="hidden-textarea-for-cursor"
                 />
               )}
-              <div className="dissector-content-display">
+              <div
+                className="dissector-content-display"
+                ref={overlayRef}
+              >
+                {caretPosition && (
+                  <span
+                    className="dissector-caret"
+                    style={{
+                      transform: `translate(${caretPosition.x}px, ${caretPosition.y}px)`,
+                      height: `${caretPosition.height}px`
+                    }}
+                  />
+                )}
                 {highlightSegments.length === 0 && (
                   <div>No segments to display</div>
                 )}
@@ -2071,6 +2217,8 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                       <span
                         key={index}
                         className={`segment-inline mapped ${isSelected ? 'selected' : ''} ${isHovered ? 'hovered' : ''}`}
+                        data-segment-start={segment.startIndex}
+                        data-segment-end={segment.endIndex}
                         onMouseEnter={() => handleSegmentHover(nodeId)}
                         onMouseLeave={() => handleSegmentHover(null)}
                         onClick={e => {
@@ -2080,15 +2228,19 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                           const charWidth = rect.width / segment.text.length;
                           const charIndex = Math.floor(x / charWidth);
                           const globalIndex = segment.startIndex + charIndex;
-
-                          // Set caret position
-                          setCaretPosition({
-                            index: globalIndex,
-                            x: rect.left + charIndex * charWidth,
-                            y: rect.top // Back to original baseline
-                          });
-
-                          // Set cursor position in hidden textarea
+                          const containerRect =
+                            overlayRef.current?.getBoundingClientRect();
+                          if (containerRect) {
+                            setCaretPosition({
+                              index: globalIndex,
+                              x:
+                                rect.left -
+                                containerRect.left +
+                                charIndex * charWidth,
+                              y: rect.top - containerRect.top,
+                              height: rect.height
+                            });
+                          }
                           if (textareaRef.current) {
                             textareaRef.current.focus();
                             textareaRef.current.setSelectionRange(
@@ -2110,6 +2262,8 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                     <span
                       key={index}
                       className="segment-inline plain"
+                      data-segment-start={segment.startIndex}
+                      data-segment-end={segment.endIndex}
                       onClick={e => {
                         // Calculate click position within the segment
                         const rect = e.currentTarget.getBoundingClientRect();
@@ -2117,15 +2271,19 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                         const charWidth = rect.width / segment.text.length;
                         const charIndex = Math.floor(x / charWidth);
                         const globalIndex = segment.startIndex + charIndex;
-
-                        // Set caret position for visual indicator
-                        setCaretPosition({
-                          index: globalIndex,
-                          x: rect.left + charIndex * charWidth,
-                          y: rect.top // Back to original baseline
-                        });
-
-                        // Set cursor position in hidden textarea for split functionality
+                        const containerRect =
+                          overlayRef.current?.getBoundingClientRect();
+                        if (containerRect) {
+                          setCaretPosition({
+                            index: globalIndex,
+                            x:
+                              rect.left -
+                              containerRect.left +
+                              charIndex * charWidth,
+                            y: rect.top - containerRect.top,
+                            height: rect.height
+                          });
+                        }
                         if (textareaRef.current) {
                           textareaRef.current.focus();
                           textareaRef.current.setSelectionRange(
