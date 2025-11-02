@@ -35,4 +35,4 @@ export {
   type SegmentedPrompt,
   type PromptSegment as SegmentedPromptSegment,
   type SegmentKind
-} from './runtime/prompting/PromptSegmentation.js';
+} from './runtime/prompting/PromptSegmentation';
