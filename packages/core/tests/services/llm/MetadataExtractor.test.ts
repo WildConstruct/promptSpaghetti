@@ -227,4 +227,189 @@ describe('MetadataExtractor', () => {
     const relevance = extractor.calculateRelevance(metadata, filters);
     expect(relevance).toBeGreaterThan(0);
   });
+
+  describe('normalization edge cases', () => {
+    it('gracefully handles empty and invalid JSON payload strings', () => {
+      const extractor = new MetadataExtractor();
+      const debugSpy = jest
+        .spyOn(console, 'debug')
+        .mockImplementation(() => undefined);
+
+      const normalize = (extractor as any).normalizeMetadataPayload.bind(extractor);
+
+      expect(normalize(null, 'absent payload')).toBeNull();
+      expect(normalize(42, 'numeric payload')).toBeNull();
+      expect(normalize('   ', 'empty payload')).toBeNull();
+      expect(normalize('not valid json', 'invalid payload')).toBeNull();
+
+      expect(debugSpy).toHaveBeenCalledWith(
+        'Failed to parse metadata payload string:',
+        expect.any(SyntaxError)
+      );
+      debugSpy.mockRestore();
+    });
+
+    it('derives tags from themes and respects consent flags', () => {
+      const extractor = new MetadataExtractor();
+      const normalize = (extractor as any).normalizeMetadataPayload.bind(extractor);
+
+      const payload = {
+        metadata: {
+          subject: 'Heroic escape',
+          themes: [{ name: 'Valor', confidence: 95 }],
+          entities: [],
+          tags: [],
+          consent_flag: false
+        }
+      };
+
+      const result = normalize(payload, 'A hero races through danger.', {
+        model: 'gpt-metadata-plus'
+      });
+
+      expect(result?.tags).toEqual(['Valor']);
+      expect(result?.themes).toEqual([{ name: 'Valor', confidence: 0.95 }]);
+      expect(result?.extracted_by).toBe('gpt-metadata-plus');
+      expect(result?.consent_flag).toBe(false);
+    });
+
+    it('falls back to entity names when no tags or themes exist', () => {
+      const extractor = new MetadataExtractor();
+      const normalize = (extractor as any).normalizeMetadataPayload.bind(extractor);
+
+      const payload = {
+        subject: 'The council gathers',
+        entities: [
+          { name: 'Archivist', entityType: 'advisor', score: '82' },
+          { label: '   ' },
+          'Silent Watcher'
+        ]
+      };
+
+      const result = normalize(payload, 'The council gathers in silence.');
+
+      expect(result?.tags).toEqual(['Archivist', 'Silent Watcher']);
+      expect(result?.entities).toEqual([
+        { name: 'Archivist', type: 'advisor', confidence: 0.82 },
+        { name: 'Silent Watcher' }
+      ]);
+    });
+
+    it('clamps numeric coercions and normalises confidence scores', () => {
+      const extractor = new MetadataExtractor();
+      const coerceNumber = (extractor as any).coerceNumber.bind(extractor);
+      const normaliseConfidence = (extractor as any).normaliseConfidence.bind(
+        extractor
+      );
+      const coerceStringArray = (extractor as any).coerceStringArray.bind(
+        extractor
+      );
+
+      expect(coerceNumber('7.5')).toBe(7.5);
+      expect(coerceNumber(15)).toBe(10);
+      expect(coerceNumber('not-a-number')).toBeUndefined();
+
+      expect(normaliseConfidence(250)).toBe(1);
+      expect(normaliseConfidence(7)).toBe(0.7);
+      expect(normaliseConfidence('0.42')).toBe(0.42);
+      expect(normaliseConfidence('NaN')).toBeUndefined();
+      expect(normaliseConfidence(null)).toBeUndefined();
+
+      expect(coerceStringArray('noir| thriller ; mystery')).toEqual([
+        'noir',
+        'thriller',
+        'mystery'
+      ]);
+    });
+
+    it('deduplicates tags case-insensitively when normalizing payloads', () => {
+      const extractor = new MetadataExtractor();
+      const normalize = (extractor as any).normalizeMetadataPayload.bind(extractor);
+
+      const payload = {
+        tags: ['Neon', 'neon', 'CHASE', 'chase']
+      };
+
+      const result = normalize(payload, 'Neon chase through the city.');
+      expect(result?.tags).toEqual(['Neon', 'CHASE']);
+    });
+
+    it('supports desert search queries and exact action matching', () => {
+      const extractor = new MetadataExtractor();
+      const { filters, keywords } = extractor.parseSearchQuery(
+        'Peaceful desert scene with traveling caravan'
+      );
+
+      expect(filters).toEqual({
+        location: 'desert',
+        mood: 'peaceful'
+      });
+      expect(keywords).toEqual(['traveling', 'caravan']);
+
+      const relevance = extractor.calculateRelevance(
+        {
+          location: 'desert',
+          mood: 'peaceful',
+          action: 'rest',
+          tags: ['caravan']
+        },
+        { location: 'desert', mood: 'peaceful', action: 'rest', tags: ['caravan'] }
+      );
+
+      expect(relevance).toBe(1);
+    });
+
+    it('captures extractInBackground failures for diagnostics', async () => {
+      const extractor = new MetadataExtractor();
+      const debugSpy = jest
+        .spyOn(console, 'debug')
+        .mockImplementation(() => undefined);
+
+      jest
+        .spyOn(extractor as any, 'extract')
+        .mockRejectedValueOnce(new Error('network dropped'));
+
+      await extractor.extractInBackground('Background failure sample');
+
+      expect(debugSpy).toHaveBeenCalledWith(
+        'Background metadata extraction failed:',
+        expect.any(Error)
+      );
+      debugSpy.mockRestore();
+    });
+
+    it('throws when extractWithLLM is invoked without a backing service', async () => {
+      const extractor = new MetadataExtractor();
+      await expect(
+        (extractor as any).extractWithLLM('Requires LLM service')
+      ).rejects.toThrow('LLM service not available');
+    });
+
+    it('supports completion responses that return raw payload strings', async () => {
+      const completeFn = jest.fn(
+        async (prompt: string, options?: Record<string, unknown>) => {
+          expect(options).toMatchObject({
+            responseFormat: 'json',
+            taskType: 'metadata',
+            maxTokens: 220
+          });
+          return JSON.stringify({
+            subject: 'Raw City',
+            tags: ['raw'],
+            summary: 'Raw payload string'
+          });
+        }
+      );
+
+      const extractor = new MetadataExtractor(
+        createLLMStub({ complete: completeFn }) as any
+      );
+      const result = await extractor.extract('Raw payload string sample');
+
+      expect(completeFn).toHaveBeenCalledTimes(1);
+      expect(result.metadata.subject).toBe('Raw City');
+      expect(result.metadata.tags).toEqual(['raw']);
+      expect(result.metadata.summary).toBe('Raw payload string');
+    });
+  });
 });
