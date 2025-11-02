@@ -42,6 +42,16 @@ describe('ParserSecurity', () => {
     expect(sanitized).not.toContain('qa@example.com');
   });
 
+  it('truncates overly long prompts after escape handling', () => {
+    process.env.NODE_ENV = 'production';
+    const longPrompt = 'Begin ' + 'x'.repeat(10020) + ' End';
+
+    const sanitized = security.sanitizePrompt(longPrompt);
+
+    expect(sanitized.endsWith('... [truncated]')).toBe(true);
+    expect(sanitized.length).toBe(10015);
+  });
+
   it('falls back to environment mask setting when no localStorage preference exists', () => {
     process.env.NODE_ENV = 'production';
     process.env.MASK_PII = 'false';
@@ -57,6 +67,16 @@ describe('ParserSecurity', () => {
     const result = security.validateOutputSafety(null as unknown as Record<string, unknown>);
 
     expect(result).toBe(false);
+    expect(warnSpy).toHaveBeenCalledWith('ParserSecurity: Invalid response format');
+
+    warnSpy.mockClear();
+
+    const malformedRecord = { nodes: {}, edges: [] };
+    const secondResult = security.validateOutputSafety(
+      malformedRecord as unknown as Record<string, unknown>
+    );
+
+    expect(secondResult).toBe(false);
     expect(warnSpy).toHaveBeenCalledWith('ParserSecurity: Invalid response format');
   });
 
@@ -113,6 +133,36 @@ describe('ParserSecurity', () => {
     expect(warnSpy).toHaveBeenCalledWith('Invalid structure in LLM response');
   });
 
+  it('rejects structures with invalid shapes before cycle detection', () => {
+    const validateStructure = (security as any).validateStructure.bind(security);
+    const baseNodes = [{}, {}];
+
+    expect(
+      validateStructure({ nodes: 'not-array', edges: [] })
+    ).toBe(false);
+    expect(
+      validateStructure({ nodes: baseNodes, edges: 'not-array' })
+    ).toBe(false);
+    expect(
+      validateStructure({
+        nodes: baseNodes,
+        edges: [{ source: '0', target: 1 }]
+      })
+    ).toBe(false);
+    expect(
+      validateStructure({
+        nodes: baseNodes,
+        edges: [{ source: 2, target: 0 }]
+      })
+    ).toBe(false);
+    expect(
+      validateStructure({
+        nodes: baseNodes,
+        edges: [{ source: 0, target: 0 }]
+      })
+    ).toBe(false);
+  });
+
   it('stores security events, filters invalid entries, and trims history to 100 records', () => {
     process.env.NODE_ENV = 'development';
     const logSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
@@ -165,5 +215,12 @@ describe('ParserSecurity', () => {
         source: 'ParserSecurity'
       })
     );
+  });
+
+  it('falls back to empty log collections when stored data is not an array', () => {
+    const storedLogs = (security as any).getStoredLogs.bind(security);
+
+    expect(storedLogs(null)).toEqual([]);
+    expect(storedLogs('{}')).toEqual([]);
   });
 });
