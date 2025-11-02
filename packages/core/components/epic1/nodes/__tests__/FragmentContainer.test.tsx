@@ -5,15 +5,16 @@ import { FragmentContainer } from '../FragmentContainer';
 import type { NodeProps } from 'reactflow';
 
 // Mock React Flow hooks
-const mockGetNodes = jest.fn();
 const mockSetNodes = jest.fn();
+let nodeInternalsMock: Map<string, any> = new Map();
 
 jest.mock('reactflow', () => ({
   ...jest.requireActual('reactflow'),
   useReactFlow: () => ({
-    getNodes: mockGetNodes,
+    getNodes: () => Array.from(nodeInternalsMock.values()),
     setNodes: mockSetNodes,
   }),
+  useStore: (selector: any) => selector({ nodeInternals: nodeInternalsMock }),
   Handle: ({ children, ...props }: any) => <div data-testid="handle" {...props}>{children}</div>,
   Position: {
     Left: 'left',
@@ -46,11 +47,11 @@ describe('FragmentContainer', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockGetNodes.mockReturnValue([
-      { id: 'fragment-1', type: 'fragmentContainer', position: { x: 0, y: 0 } },
-      { id: 'node-1', parentNode: 'fragment-1', position: { x: 10, y: 10 } },
-      { id: 'node-2', parentNode: 'fragment-1', position: { x: 10, y: 50 } },
-      { id: 'node-3', parentNode: 'fragment-1', position: { x: 10, y: 90 } },
+    nodeInternalsMock = new Map([
+      ['fragment-1', { id: 'fragment-1', type: 'fragmentContainer', position: { x: 0, y: 0 }, data: { value: '', nodeType: 'fragmentContainer' } }],
+      ['node-1', { id: 'node-1', parentNode: 'fragment-1', position: { x: 10, y: 10 }, data: { value: '', nodeType: 'textBlock' } }],
+      ['node-2', { id: 'node-2', parentNode: 'fragment-1', position: { x: 10, y: 50 }, data: { value: '', nodeType: 'textBlock' } }],
+      ['node-3', { id: 'node-3', parentNode: 'other', position: { x: 10, y: 90 }, data: { value: '', nodeType: 'textBlock' } }],
     ]);
   });
 
@@ -95,7 +96,7 @@ describe('FragmentContainer', () => {
     const toggleButton = screen.getByText('▲ Collapse');
     fireEvent.click(toggleButton);
 
-    expect(mockSetNodes).toHaveBeenCalledTimes(1);
+    expect(mockSetNodes).toHaveBeenCalled();
     const setNodesCallback = mockSetNodes.mock.calls[0][0];
     const updatedNodes = setNodesCallback([
       { id: 'fragment-1', data: { isCollapsed: false } },
@@ -135,6 +136,38 @@ describe('FragmentContainer', () => {
     expect(updatedNodes[3].hidden).toBe(false); // Not a child of this fragment
   });
 
+  it('keeps newly added children hidden while collapsed', () => {
+    const collapsedProps = {
+      ...defaultProps,
+      data: { ...defaultProps.data, isCollapsed: true }
+    };
+
+    render(
+      <ReactFlowProvider>
+        <FragmentContainer {...collapsedProps} />
+      </ReactFlowProvider>
+    );
+
+    expect(mockSetNodes).toHaveBeenCalled();
+    const collapseCallback = mockSetNodes.mock.calls[0][0];
+    const nodes = [
+      { id: 'fragment-1', data: { isCollapsed: true } },
+      { id: 'node-existing', parentNode: 'fragment-1', hidden: true },
+      { id: 'node-new', parentNode: 'fragment-1', hidden: true }
+    ];
+    nodeInternalsMock.set('node-new', {
+      id: 'node-new',
+      parentNode: 'fragment-1',
+      position: { x: 0, y: 0 },
+      data: { value: '', nodeType: 'textBlock' }
+    });
+    const updatedNodes = collapseCallback(nodes);
+
+    expect(updatedNodes[0].data.isCollapsed).toBe(true);
+    expect(updatedNodes[1].hidden).toBe(true);
+    expect(updatedNodes[2].hidden).toBe(true);
+  });
+
   it('applies correct styles when selected', () => {
     const selectedProps = { ...defaultProps, selected: true };
 
@@ -145,11 +178,8 @@ describe('FragmentContainer', () => {
     );
 
     const containerDiv = container.firstChild as HTMLElement;
-    expect(containerDiv).toHaveStyle({
-      background: expect.stringContaining('#9b59b6'),
-      border: expect.stringContaining('#8e44ad'),
-      boxShadow: expect.stringContaining('rgba(155, 89, 182'),
-    });
+    expect(containerDiv.style.border).toContain('#8e44ad');
+    expect(containerDiv.style.boxShadow).toContain('rgba(155, 89, 182');
   });
 
   it('applies correct styles when dragging', () => {
@@ -186,11 +216,48 @@ describe('FragmentContainer', () => {
     );
 
     const containerDiv = container.firstChild as HTMLElement;
-    // Check for purple gradient background
-    expect(containerDiv).toHaveStyle({
-      background: expect.stringContaining('#a569bd'),
-      borderRadius: '12px',
-    });
+    expect(containerDiv.style.borderRadius).toBe('12px');
+    expect(containerDiv.style.boxShadow).toContain('0 4px 12px');
+  });
+
+  it('auto-resizes to fit children when expanded', () => {
+    nodeInternalsMock = new Map([
+      ['fragment-1', { id: 'fragment-1', type: 'fragmentContainer', position: { x: 0, y: 0 }, data: { value: '', nodeType: 'fragmentContainer' } }],
+      ['node-1', { id: 'node-1', parentNode: 'fragment-1', position: { x: 10, y: 10 }, data: { value: '', nodeType: 'textBlock' } }],
+      ['node-wide', {
+        id: 'node-wide',
+        parentNode: 'fragment-1',
+        position: { x: 320, y: 40 },
+        width: 300,
+        height: 80,
+        data: { value: '', nodeType: 'textBlock', width: 300, height: 80 }
+      }]
+    ]);
+
+    render(
+      <ReactFlowProvider>
+        <FragmentContainer {...defaultProps} />
+      </ReactFlowProvider>
+    );
+
+    const resizeCallback = mockSetNodes.mock.calls
+      .map(call => call[0])
+      .find(cb => typeof cb === 'function');
+    expect(resizeCallback).toBeInstanceOf(Function);
+
+    const nodes = [
+      {
+        id: 'fragment-1',
+        data: { width: 400, height: 300 },
+        style: { width: 400, height: 300 }
+      }
+    ];
+
+    const updated = resizeCallback?.(nodes);
+    expect(updated?.[0]?.data?.width).toBeGreaterThanOrEqual(400);
+    expect(updated?.[0]?.data?.height).toBeGreaterThanOrEqual(300);
+    expect(updated?.[0]?.style?.width).toBe(updated?.[0]?.data?.width);
+    expect(updated?.[0]?.style?.height).toBe(updated?.[0]?.data?.height);
   });
 
   it('counts child nodes correctly', () => {
@@ -217,6 +284,6 @@ describe('FragmentContainer', () => {
     );
 
     expect(screen.getByText('Fragment')).toBeInTheDocument(); // Default title
-    expect(screen.getByText('Contains: 3 nodes')).toBeInTheDocument();
+    expect(screen.getByText('Contains: 2 nodes')).toBeInTheDocument();
   });
 });

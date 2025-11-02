@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PromptDissector } from '../../../../../client/src/components/LaunchScreen/PromptDissector';
 import { PromptAnalysis } from '../../../../../client/src/lib/simplePromptParser';
+import { convertAnalysisToGraph } from '../../../../../client/src/lib/analysisToGraph';
 import './PromptWizard.css';
 
 interface PromptWizardProps {
@@ -66,103 +67,9 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
     }
 
     try {
-      // Convert analysis to React Flow nodes and edges
-      const nodes: Node[] = [];
-      const edges: Edge[] = [];
+      const { nodes: flowNodes, edges } = convertAnalysisToGraph(analysis);
 
-      // Create nodes from analysis
-      let hasOutputNode = false;
-      analysis.nodes.forEach((nodeGen, index) => {
-        const node = nodeGen.node;
-        if (!node?.id) {
-          return;
-        }
-
-        const rfType = (() => {
-          switch (node.nodeType) {
-            case 'Choice':
-              return 'weightedChoice';
-            case 'Variable':
-              return 'variable';
-            case 'Output':
-              return 'output';
-            default:
-              return 'textBlock';
-          }
-        })();
-
-        if (rfType === 'output') {
-          hasOutputNode = true;
-        }
-
-        const nodeData = (node.data ?? {}) as Record<string, unknown>;
-        const label = typeof nodeData.label === 'string' && nodeData.label.length
-          ? nodeData.label
-          : node.nodeType;
-
-        nodes.push({
-          id: node.id,
-          type: rfType,
-          position: {
-            x: 100 + (index % 3) * 250,
-            y: 100 + Math.floor(index / 3) * 150
-          },
-          data: {
-            ...nodeData,
-            label
-          }
-        });
-      });
-
-      // Ensure there's an Output node
-      if (!hasOutputNode) {
-        const outputNode: Node = {
-          id: 'output',
-          type: 'output',
-          position: {
-            x: 100 + (nodes.length % 3) * 250,
-            y: 100 + Math.floor(nodes.length / 3) * 150
-          },
-          data: {
-            label: 'Output'
-          }
-        };
-        nodes.push(outputNode);
-      }
-
-      // Create edges from analysis
-      const connectedNodes = new Set<string>();
-      const analysisEdges = Array.isArray(analysis.edges)
-        ? (analysis.edges as Array<{ source?: string; target?: string }>)
-        : [];
-
-      analysisEdges.forEach(edge => {
-        if (!edge || typeof edge.source !== 'string' || typeof edge.target !== 'string') {
-          return;
-        }
-        edges.push({
-          id: `${edge.source}-${edge.target}`,
-          source: edge.source,
-          target: edge.target,
-          type: 'smoothstep'
-        });
-        connectedNodes.add(edge.source);
-        connectedNodes.add(edge.target);
-      });
-
-      // Connect any unconnected nodes to the Output node
-      nodes.forEach(node => {
-        if (node.type !== 'output' && !connectedNodes.has(node.id)) {
-          edges.push({
-            id: `${node.id}-output`,
-            source: node.id,
-            target: 'output',
-            type: 'smoothstep'
-          });
-        }
-      });
-
-      onComplete(nodes, edges);
+      onComplete(flowNodes, edges);
       setPromptText('');
       setAnalysis(null);
     } catch (err) {

@@ -10,9 +10,10 @@ import {
   PromptAnalysis,
   GeneratedNode,
   NodeMapping,
-  PromptSegment
+  AnalysisEdge
 } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
+import { normalizeLLMResult, mergeLLMResult } from '../../lib/llmAnalysisMerge';
 import LLMService from '../../shims/llm-service';
 import './PromptDissector.css';
 import { TextSelectionModal, TextSelection } from './TextSelectionModal';
@@ -42,36 +43,6 @@ interface HighlightSegment {
   nodeId?: string;
   color?: string;
   isSelected?: boolean;
-}
-
-type LLMNodeData = {
-  content?: string;
-  label?: string;
-  metadata?: Record<string, unknown>;
-  [key: string]: unknown;
-};
-
-interface LLMNode {
-  id: string;
-  type?: string;
-  text?: string;
-  data?: LLMNodeData;
-}
-
-interface LLMParseResult {
-  nodes?: LLMNode[];
-  graph?: {
-    nodes?: LLMNode[];
-  };
-  edges?: Array<{
-    id?: string;
-    source: string;
-    target: string;
-    sourceHandle?: string | null;
-    targetHandle?: string | null;
-    [key: string]: unknown;
-  }>;
-  metadata?: Record<string, unknown>;
 }
 
 const HIGHLIGHT_COLORS = [
@@ -256,191 +227,96 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       const startTime = performance.now();
       const charCount = text.length;
 
-      let newAnalysis: PromptAnalysis;
-
-      if (mode === 'llm-enhanced') {
-        if (showLoading) {setIsLLMParsing(true);}
-        let result: LLMParseResult;
-        try {
-          const rawResult = await llmServiceRef.current.parse(text, {
-            mode: 'llm-enhanced'
-          });
-          result = rawResult as LLMParseResult;
-        } catch (e: unknown) {
-          const message = e instanceof Error ? e.message : String(e);
-          console.error('[PromptDissector] LLM parse failed:', message);
-          if (showLoading) {setIsLLMParsing(false);}
-          throw e;
-        }
-
-        // Check if result is valid
-        // Handle both old format (graph.nodes) and new format (nodes)
-        if (!result) {
-          console.error('[PromptDissector] No response from LLM service');
-          if (showLoading) {setIsLLMParsing(false);}
-          throw new Error('No response from LLM service');
-        }
-
-        // Support both old and new API response formats
-        if (result.graph && result.graph.nodes) {
-          console.log('[PromptDissector] Using old API format (graph.nodes)');
-          result = result.graph; // Unwrap the nested structure
-        } else if (!result.nodes) {
-          console.error(
-            '[PromptDissector] Invalid LLM response - no nodes found:',
-            result
-          );
-          if (showLoading) {setIsLLMParsing(false);}
-          throw new Error('Invalid response from LLM service - no nodes found');
-        }
-
-        // Create segments from the nodes
-        const nodes = Array.isArray(result.nodes) ? result.nodes : [];
-        const nonOutputNodes = nodes.filter(n => n.type !== 'output');
-
-        const nodeTexts = nonOutputNodes.map(node => {
-          const nodeData = node.data ?? {};
-          return (
-            node.text ||
-            (nodeData.content as string | undefined) ||
-            (nodeData.label as string | undefined) ||
-            ''
-          );
-        });
-
-        console.log('[PromptDissector] Node texts from LLM:', nodeTexts);
-        console.log('[PromptDissector] Original prompt:', text);
-
-        // Build mappings by finding each node's text in sequence
-        let searchStartPos = 0;
-        const mappings: NodeMapping[] = [];
-        const llmSegments: PromptSegment[] = [];
-
-        for (let idx = 0; idx < nonOutputNodes.length; idx++) {
-          const nodeText = nodeTexts[idx] ?? '';
-          const node = nonOutputNodes[idx];
-
-          if (!nodeText || nodeText.trim() === '') {
-            console.warn(`[PromptDissector] Skipping empty node ${idx}`);
-            continue;
-          }
-
-          // Try to find this exact text in the original prompt
-          let startIdx = text.indexOf(nodeText, searchStartPos);
-
-          if (startIdx === -1) {
-            // Try trimmed version
-            const trimmedNodeText = nodeText.trim();
-            startIdx = text.indexOf(trimmedNodeText, searchStartPos);
-
-            if (startIdx === -1) {
-              // Try case-insensitive search
-              const lowerText = text.toLowerCase();
-              const lowerNodeText = trimmedNodeText.toLowerCase();
-              startIdx = lowerText.indexOf(lowerNodeText, searchStartPos);
-
-              if (startIdx === -1) {
-                console.warn(
-                  `[PromptDissector] Could not find "${nodeText}" in prompt, skipping`
-                );
-                continue;
-              }
-            }
-          }
-
-          const endIdx = startIdx + nodeText.length;
-          searchStartPos = endIdx; // Move search position forward
-
-          llmSegments.push({
-            text: nodeText,
-            startIndex: startIdx,
-            endIndex: endIdx
-          });
-
-          mappings.push({
-            nodeId: node.id,
-            startIndex: startIdx,
-            endIndex: endIdx,
-            highlightColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'][
-              idx % 4
-            ]
-          });
-        }
-
-        console.log('[PromptDissector] Created mappings:', mappings);
-
-        // Convert LLM result to expected format
-        newAnalysis = {
-          segments:
-            llmSegments.length > 0
-              ? llmSegments
-              : nonOutputNodes.map((node, idx) => ({
-                  text: nodeTexts[idx] ?? '',
-                  startIndex: 0,
-                  endIndex: (nodeTexts[idx] ?? '').length
-                })),
-          nodes: nodes.map(node => {
-            const nodeData = node.data ?? {};
-            const resolvedContent =
-              node.text ||
-              (nodeData.content as string | undefined) ||
-              (nodeData.label as string | undefined) ||
-              '';
-            const dataPayload: Record<string, unknown> = {
-              ...nodeData,
-              content: resolvedContent
-            };
-            return {
-              node: {
-                id: node.id,
-                nodeType:
-                  node.type === 'weightedChoice'
-                    ? 'Choice'
-                    : node.type === 'variable'
-                      ? 'Variable'
-                      : node.type === 'output'
-                        ? 'Output'
-                        : 'Text',
-                data: dataPayload,
-                getPreviewText: () => resolvedContent
-              }
-            };
-          }),
-          edges: Array.isArray(result.edges) ? result.edges : [],
-          mappings: mappings,
-          llmMetadata: result.metadata ?? {},
-          rawPrompt: text
+      const runStandardParse = (): PromptAnalysis => {
+        const parsed = parserRef.current.parse(text);
+        const normalizedEdges = Array.isArray(parsed.edges)
+          ? parsed.edges
+          : [];
+        const metadata: Record<string, unknown> = {
+          ...(parsed.llmMetadata ?? {}),
+          parserMode: mode === 'llm-enhanced' ? 'llm-baseline' : 'standard'
         };
-        if (showLoading) {setIsLLMParsing(false);}
-      } else {
-        // Use standard parser
-        newAnalysis = parserRef.current.parse(text);
+        const enriched: PromptAnalysis = {
+          ...parsed,
+          edges: normalizedEdges,
+          llmMetadata: metadata,
+          rawPrompt: parsed.rawPrompt ?? text
+        };
+        parsedResultsRef.current.standard = { text, analysis: enriched };
+        return enriched;
+      };
+
+      if (mode === 'standard') {
+        const standardAnalysis = runStandardParse();
+        parsedResultsRef.current.standard = { text, analysis: standardAnalysis };
+        const duration = performance.now() - startTime;
+        if (charCount > 2000 && duration > 500) {
+          console.warn(
+            `[PromptDissector] Performance warning: ${charCount} chars took ${duration.toFixed(2)}ms (target: <500ms for 2-3k chars)`
+          );
+        }
+        return standardAnalysis;
       }
 
-      const endTime = performance.now();
-      const duration = endTime - startTime;
+      const baselineAnalysis = runStandardParse();
+      let finalAnalysis = baselineAnalysis;
 
-      // console.log('[PromptDissector] parsed', {
-      //   mode,
-      //   textLength: text.length,
-      //   segments: newAnalysis.segments.length,
-      //   nodes: newAnalysis.nodes.length,
-      //   mappings: newAnalysis.mappings.length,
-      //   performanceMs: duration.toFixed(2),
-      //   charsPerMs: (charCount / duration).toFixed(2),
-      // });
+      if (showLoading) {
+        setIsLLMParsing(true);
+      }
 
-      // Store the parsed results for this mode
-      parsedResultsRef.current[mode] = { text, analysis: newAnalysis };
+      try {
+        const rawResult = await llmServiceRef.current.parse(text, {
+          mode: 'llm-enhanced'
+        });
+        const normalized = normalizeLLMResult(rawResult);
+        if (normalized) {
+          finalAnalysis = mergeLLMResult(baselineAnalysis, normalized);
+        } else {
+          finalAnalysis = {
+            ...baselineAnalysis,
+            llmMetadata: {
+              ...(baselineAnalysis.llmMetadata ?? {}),
+              parserMode: 'llm-enhanced',
+              fallbackReason: 'empty-llm-result'
+            }
+          };
+        }
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : String(err ?? 'Unknown error');
+        console.warn(
+          '[PromptDissector] LLM parse failed, falling back to baseline:',
+          message
+        );
+        finalAnalysis = {
+          ...baselineAnalysis,
+          llmMetadata: {
+            ...(baselineAnalysis.llmMetadata ?? {}),
+            parserMode: 'llm-enhanced',
+            fallbackReason: message
+          }
+        };
+      } finally {
+        if (showLoading) {
+          setIsLLMParsing(false);
+        }
+      }
 
-      // Performance warning for large prompts
+      parsedResultsRef.current['llm-enhanced'] = {
+        text,
+        analysis: finalAnalysis
+      };
+
+      const duration = performance.now() - startTime;
+
       if (charCount > 2000 && duration > 500) {
         console.warn(
           `[PromptDissector] Performance warning: ${charCount} chars took ${duration.toFixed(2)}ms (target: <500ms for 2-3k chars)`
         );
       }
 
-      return newAnalysis;
+      return finalAnalysis;
     },
     []
   );

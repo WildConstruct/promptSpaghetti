@@ -1,7 +1,7 @@
 "use strict";
 // Minimal stable public API for @promptscape/core
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fromLegacyGraph = exports.writePsg = exports.readPsg = exports.AdvancedRuntimeNode = void 0;
+exports.segmentPrompt = exports.fromLegacyGraph = exports.writePsg = exports.readPsg = exports.AdvancedRuntimeNode = void 0;
 // Runtime system exports - commented out to fix Netlify build
 // export type {
 //   ExecutionContext,
@@ -22,3 +22,6 @@ Object.defineProperty(exports, "fromLegacyGraph", { enumerable: true, get: funct
 // export { LLMConfigDialog } from './components/LLMConfigDialog/LLMConfigDialog';
 // export { SimpleLLMService, getLLMService } from './services/SimpleLLMService';
 // export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMService';
+// Shared prompt segmentation helpers (used by splash-screen preview + runtime parser)
+var PromptSegmentation_1 = require("./runtime/prompting/PromptSegmentation");
+Object.defineProperty(exports, "segmentPrompt", { enumerable: true, get: function () { return PromptSegmentation_1.segmentPrompt; } });

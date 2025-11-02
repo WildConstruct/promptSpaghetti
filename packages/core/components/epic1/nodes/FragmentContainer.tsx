@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useRef } from 'react';
-import { type NodeProps, useReactFlow, Handle, Position } from 'reactflow';
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { type NodeProps, useReactFlow, useStore, Handle, Position } from 'reactflow';
 import type { EditableNodeData } from './BaseEditableNode';
 import { ResizeHandles } from './ResizeHandles';
 
@@ -43,21 +43,48 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
     height: data.height || 300
   });
 
-  const { setNodes, getNodes } = useReactFlow();
+  const { setNodes } = useReactFlow();
+  const nodeInternals = useStore(state => state.nodeInternals);
+  const allNodes = useMemo(
+    () => Array.from(nodeInternals.values()),
+    [nodeInternals]
+  );
 
-  // Get contained nodes (children with parentNode = this id)
-  const getContainedNodes = useCallback(() => {
-    const allNodes = getNodes();
-    return allNodes.filter(node =>
-      node.parentNode === id ||
-      node.data?.parentNode === id
-    );
-  }, [id, getNodes]);
+  const containedNodes = useMemo(
+    () =>
+      allNodes.filter(node =>
+        node.parentNode === id ||
+        (node.data as EditableNodeData | undefined)?.parentNode === id
+      ),
+    [allNodes, id]
+  );
 
-  // Calculate node count from actual contained nodes
-  const containedNodes = getContainedNodes();
   const actualNodeCount = containedNodes.length;
   const displayNodeCount = data.nodeCount || actualNodeCount;
+
+  const readDimension = useCallback((
+    primary: unknown,
+    styleValue: unknown,
+    dataValue: unknown,
+    fallback: number
+  ): number => {
+    if (typeof primary === 'number' && Number.isFinite(primary)) {
+      return primary;
+    }
+    if (typeof styleValue === 'number' && Number.isFinite(styleValue)) {
+      return styleValue;
+    }
+    if (typeof styleValue === 'string') {
+      const parsed = parseFloat(styleValue);
+      if (!Number.isNaN(parsed)) {
+        return parsed;
+      }
+    }
+    if (typeof dataValue === 'number' && Number.isFinite(dataValue)) {
+      return dataValue;
+    }
+    return fallback;
+  }, []);
 
   // Handle resize
   const handleResize = useCallback((newSize: { width: number; height: number }) => {
@@ -70,9 +97,11 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
     expandedSizeRef.current = { width: clampedWidth, height: clampedHeight };
 
     // Update the node's data with new dimensions
-    setNodes((nodes) =>
-      nodes.map((node) => {
+    setNodes((nodes) => {
+      let changed = false;
+      const updated = nodes.map((node) => {
         if (node.id === id) {
+          changed = true;
           return {
             ...node,
             data: { ...node.data, width: clampedWidth, height: clampedHeight },
@@ -80,8 +109,9 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
           };
         }
         return node;
-      })
-    );
+      });
+      return changed ? updated : nodes;
+    });
   }, [id, isCollapsed, setNodes]);
 
   // Determine container style based on state
@@ -137,8 +167,7 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
     const newCollapsed = !isCollapsed;
     setIsCollapsed(newCollapsed);
 
-    // Get nodes that are children of this container
-    const containedNodes = getContainedNodes();
+    const currentContainedNodes = containedNodes;
 
     if (newCollapsed) {
       // Save expanded size before collapsing
@@ -157,7 +186,7 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
             };
           }
           // Hide contained nodes
-          if (containedNodes.some(cn => cn.id === node.id)) {
+          if (currentContainedNodes.some(cn => cn.id === node.id)) {
             return { ...node, hidden: true };
           }
           return node;
@@ -180,14 +209,129 @@ export const FragmentContainer: React.FC<NodeProps<FragmentContainerData>> = ({
             };
           }
           // Show contained nodes
-          if (containedNodes.some(cn => cn.id === node.id)) {
+          if (currentContainedNodes.some(cn => cn.id === node.id)) {
             return { ...node, hidden: false };
           }
           return node;
         })
       );
     }
-  }, [isCollapsed, id, size, getContainedNodes, setNodes]);
+  }, [containedNodes, isCollapsed, id, size, setNodes]);
+
+  useEffect(() => {
+    if (!isCollapsed || actualNodeCount === 0) {
+      return;
+    }
+
+    const containedIds = new Set(containedNodes.map(node => node.id));
+    if (containedIds.size === 0) {
+      return;
+    }
+
+    setNodes(nodes => {
+      let changed = false;
+      const updated = nodes.map(node => {
+        if (containedIds.has(node.id) && node.hidden !== true) {
+          changed = true;
+          return { ...node, hidden: true };
+        }
+        return node;
+      });
+      return changed ? updated : nodes;
+    });
+  }, [containedNodes, isCollapsed, actualNodeCount, setNodes]);
+
+  useEffect(() => {
+    if (isCollapsed || actualNodeCount === 0) {
+      return;
+    }
+
+    const children = containedNodes.filter(
+      node => node.parentNode === id
+    );
+    if (children.length === 0) {
+      return;
+    }
+
+    const padding = 48;
+    let minX = 0;
+    let minY = 0;
+    let maxX = MIN_EXPANDED_WIDTH;
+    let maxY = MIN_EXPANDED_HEIGHT;
+
+    children.forEach(node => {
+      const pos = node.position ?? { x: 0, y: 0 };
+      const childData = node.data as EditableNodeData | undefined;
+      const width = readDimension(
+        node.width,
+        node.style?.width,
+        childData?.width,
+        150
+      );
+      const height = readDimension(
+        node.height,
+        node.style?.height,
+        childData?.height,
+        80
+      );
+
+      minX = Math.min(minX, pos.x);
+      minY = Math.min(minY, pos.y);
+      maxX = Math.max(maxX, pos.x + width);
+      maxY = Math.max(maxY, pos.y + height);
+    });
+
+    const requiredWidth = Math.max(
+      MIN_EXPANDED_WIDTH,
+      maxX - Math.min(minX, 0) + padding
+    );
+    const requiredHeight = Math.max(
+      MIN_EXPANDED_HEIGHT,
+      maxY - Math.min(minY, 0) + padding
+    );
+
+    if (
+      requiredWidth <= size.width &&
+      requiredHeight <= size.height
+    ) {
+      return;
+    }
+
+    setSize(current => ({
+      width: Math.max(current.width, requiredWidth),
+      height: Math.max(current.height, requiredHeight)
+    }));
+    expandedSizeRef.current = {
+      width: Math.max(expandedSizeRef.current.width, requiredWidth),
+      height: Math.max(expandedSizeRef.current.height, requiredHeight)
+    };
+
+    setNodes(nodes => {
+      let changed = false;
+      const updated = nodes.map(node => {
+        if (node.id === id) {
+          changed = true;
+          const width =
+            Math.max(
+              (node.data as EditableNodeData | undefined)?.width ?? MIN_EXPANDED_WIDTH,
+              requiredWidth
+            );
+          const height =
+            Math.max(
+              (node.data as EditableNodeData | undefined)?.height ?? MIN_EXPANDED_HEIGHT,
+              requiredHeight
+            );
+          return {
+            ...node,
+            data: { ...node.data, width, height },
+            style: { ...node.style, width, height }
+          };
+        }
+        return node;
+      });
+      return changed ? updated : nodes;
+    });
+  }, [actualNodeCount, containedNodes, id, isCollapsed, readDimension, setNodes, size.height, size.width]);
 
   return (
     <div style={containerStyle}>

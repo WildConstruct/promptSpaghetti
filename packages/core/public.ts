@@ -28,3 +28,11 @@ export { readPsg, writePsg, fromLegacyGraph } from './utils/psgCodec';
 // export { LLMConfigDialog } from './components/LLMConfigDialog/LLMConfigDialog';
 // export { SimpleLLMService, getLLMService } from './services/SimpleLLMService';
 // export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMService';
+
+// Shared prompt segmentation helpers (used by splash-screen preview + runtime parser)
+export {
+  segmentPrompt,
+  type SegmentedPrompt,
+  type PromptSegment as SegmentedPromptSegment,
+  type SegmentKind
+} from './runtime/prompting/PromptSegmentation';
