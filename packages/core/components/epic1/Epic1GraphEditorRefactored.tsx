@@ -172,6 +172,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     saveAsPresetNode,
     setSaveAsPresetNodeId,
     setContextMenuPosition,
+    openContextMenu,
+    closeContextMenu,
     handleSaveAsPreset,
     handleSavePreset,
   } = useContextMenu({ nodes, showToast });
@@ -215,11 +217,12 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         onEditStart: () => setSelectedNodeId(nodeId),
         onEditEnd: () => setSelectedNodeId(null),
         onContextMenu: (event: React.MouseEvent) => {
-          setContextMenuPosition({ x: event.clientX, y: event.clientY });
+          event.preventDefault();
+          openContextMenu(nodeId, { x: event.clientX, y: event.clientY });
         }
       };
     },
-    [handleNodeEdit, setSelectedNodeId, setContextMenuPosition]
+    [handleNodeEdit, setSelectedNodeId, openContextMenu]
   );
 
   // Enhanced nodes with edit handlers
@@ -395,7 +398,10 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onPaneClick={handlePaneClick}
+        onPaneClick={() => {
+          closeContextMenu();
+          handlePaneClick();
+        }}
         onSelectionStart={() => setIsSelecting(true)}
         onSelectionEnd={() => setIsSelecting(false)}
         onNodeClick={handleNodeClick}
@@ -423,7 +429,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         panOnScroll={false}
         zoomOnScroll={true}
         zoomOnPinch={true}
-        panOnDrag={[1, 2]}
+        panOnDrag={[1]}
         selectionOnDrag={true}
         panActivationKeyCode="Space"
         selectionMode="partial"

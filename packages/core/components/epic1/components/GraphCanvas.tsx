@@ -108,7 +108,7 @@ export const GraphCanvas = <TNodeData = unknown, TEdgeData = unknown>({
       panOnScroll={false}
       zoomOnScroll={true}
       zoomOnPinch={true}
-      panOnDrag={[1, 2]}
+      panOnDrag={[1]}
       selectionOnDrag={true}
       panActivationKeyCode="Space"
       selectionMode="partial"
