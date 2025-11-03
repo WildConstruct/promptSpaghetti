@@ -9,7 +9,9 @@ import ReactFlow, {
   useEdgesState,
   NodeTypes,
   Handle,
-  Position
+  Position,
+  addEdge,
+  Connection
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import type { PromptAnalysis } from '../../lib/simplePromptParser';
@@ -43,10 +45,10 @@ const PreviewNode: React.FC<{
         backgroundColor: selected ? `${nodeColor}22` : 'transparent'
       }}
     >
-      <Handle type="target" position={Position.Left} />
+      <Handle id="target" type="target" position={Position.Left} />
       <div className="preview-node-type">{data.nodeType}</div>
       <div className="preview-node-content">{data.label}</div>
-      <Handle type="source" position={Position.Right} />
+      <Handle id="source" type="source" position={Position.Right} />
     </div>
   );
 };
@@ -115,6 +117,24 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(flowEdges);
 
+  // Allow users to connect nodes in the preview
+  const onConnect = useCallback(
+    (params: Connection) => {
+      setEdges(eds =>
+        addEdge(
+          {
+            ...params,
+            type: 'smoothstep',
+            animated: true,
+            style: { stroke: '#666', strokeWidth: 2 }
+          },
+          eds
+        )
+      );
+    },
+    [setEdges]
+  );
+
   // Update nodes when analysis changes
   React.useEffect(() => {
     setNodes(flowNodes);
@@ -173,6 +193,9 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        isValidConnection={() => true}
+        connectionMode="loose"
         onNodeClick={onNodeClick}
         onPaneClick={onPaneClick}
         nodeTypes={nodeTypes}

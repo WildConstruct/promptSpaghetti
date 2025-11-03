@@ -1,4 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { supabase } from '../../lib/supabaseClient';
+
 import { PromptDissector } from './PromptDissector';
 import { PromptDissectorErrorBoundary } from './PromptDissectorErrorBoundary';
 import { NodePreview } from './NodePreview';
@@ -24,6 +26,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [authEmail, setAuthEmail] = useState<string | null>(null);
+
   // node overrides
   const [nodeOverrides, setNodeOverrides] = useState<
     Record<string, { nodeType: 'Text' | 'Choice' }>
@@ -69,6 +73,33 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
     });
     return { ...analysis, nodes: newNodes } as PromptAnalysis;
   }, [analysis, nodeOverrides]);
+
+  // Supabase auth session
+  useEffect(() => {
+    let unsub: { subscription: { unsubscribe: () => void } } | null = null;
+    (async () => {
+      if (!supabase) { return; }
+      const { data } = await supabase.auth.getSession();
+      setAuthEmail(data.session?.user?.email ?? null);
+      const listener = supabase.auth.onAuthStateChange((_event, session) => {
+        setAuthEmail(session?.user?.email ?? null);
+      });
+      unsub = listener.data as any;
+    })();
+    return () => {
+      try { unsub?.subscription?.unsubscribe(); } catch {}
+    };
+  }, []);
+
+  const signInWithProvider = useCallback(async (provider: 'github' | 'google') => {
+    if (!supabase) { return; }
+    await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin } });
+  }, []);
+
+  const signOut = useCallback(async () => {
+    if (!supabase) { return; }
+    await supabase.auth.signOut();
+  }, []);
 
   // Handle launching the editor
   const handleLaunchEditor = useCallback(() => {
@@ -201,6 +232,35 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             </svg>
             Start Tutorial
           </button>
+          {/* Auth Controls */}
+          {supabase ? (
+            authEmail ? (
+              <button
+                className="tutorial-button"
+                onClick={signOut}
+                title={`Signed in as ${authEmail}`}
+              >
+                Sign out
+              </button>
+            ) : (
+              <>
+                <button
+                  className="tutorial-button"
+                  onClick={() => signInWithProvider('github')}
+                  title="Sign in with GitHub"
+                >
+                  Sign in (GitHub)
+                </button>
+                <button
+                  className="tutorial-button"
+                  onClick={() => signInWithProvider('google')}
+                  title="Sign in with Google"
+                >
+                  Sign in (Google)
+                </button>
+              </>
+            )
+          ) : null}
         </div>
       </header>
 
