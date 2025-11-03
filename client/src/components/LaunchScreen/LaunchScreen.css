@@ -135,6 +135,8 @@
 .launch-column-center {
   flex: 1;
   min-width: 400px;
+  /* allow children to use full height */
+  min-height: 0;
 }
 
 .launch-column-right {
@@ -151,6 +153,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  /* critical for flex child (.node-preview) to stretch/shrink */
+  min-height: 0;
 }
 
 .launch-section h2 {
@@ -344,6 +348,8 @@
 /* Node Actions toolbar (compact, non-intrusive) */
 .preview-section {
   position: relative;
+  /* ensure ReactFlow wrapper can occupy all remaining space */
+  min-height: 0;
 }
 
 .preview-section.needs-update {
