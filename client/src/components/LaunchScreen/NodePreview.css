@@ -2,7 +2,9 @@
 .node-preview {
   position: relative;
   width: 100%;
-  height: clamp(420px, 60vh, 680px);
+  aspect-ratio: 16 / 9;
+  min-height: 360px;
+  max-height: 540px;
   border-radius: 8px;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.4);
@@ -17,7 +19,9 @@
 /* Empty State */
 .node-preview-empty {
   width: 100%;
-  height: clamp(420px, 60vh, 680px);
+  aspect-ratio: 16 / 9;
+  min-height: 360px;
+  max-height: 540px;
   display: flex;
   align-items: center;
   justify-content: center;
