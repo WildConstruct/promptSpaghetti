@@ -119,12 +119,18 @@
   gap: 2rem;
   padding: 2rem;
   overflow: hidden;
+  /* allow children columns to compute heights */
+  min-height: 0;
+  height: 100%;
 }
 
 .launch-column {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  /* prevent implicit min-height:auto from constraining children */
+  min-height: 0;
+  height: 100%;
 }
 
 .launch-column-left {
@@ -137,6 +143,7 @@
   min-width: 400px;
   /* allow children to use full height */
   min-height: 0;
+  height: 100%;
 }
 
 .launch-column-right {
@@ -155,6 +162,7 @@
   flex-direction: column;
   /* critical for flex child (.node-preview) to stretch/shrink */
   min-height: 0;
+  height: 100%;
 }
 
 .launch-section h2 {
@@ -348,8 +356,12 @@
 /* Node Actions toolbar (compact, non-intrusive) */
 .preview-section {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
   /* ensure ReactFlow wrapper can occupy all remaining space */
   min-height: 0;
+  height: 100%;
 }
 
 .preview-section.needs-update {
