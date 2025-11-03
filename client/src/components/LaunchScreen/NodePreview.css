@@ -2,7 +2,8 @@
 .node-preview {
   position: relative;
   width: 100%;
-  flex: 1;
+  display: flex;
+  flex: 1 1 auto;
   height: 100%;
   min-height: 0;
   border-radius: 8px;
@@ -12,6 +13,8 @@
 }
 
 .node-preview .react-flow {
+  position: absolute !important;
+  inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
 }

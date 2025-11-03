@@ -164,7 +164,10 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
   }
 
   return (
-    <div className="node-preview">
+    <div
+      className="node-preview"
+      style={{ display: 'flex', flex: 1, minHeight: 0, height: '100%' }}
+    >
       <ReactFlow
         nodes={nodes}
         edges={edges}
