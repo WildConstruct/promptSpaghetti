@@ -163,6 +163,7 @@
   /* critical for flex child (.node-preview) to stretch/shrink */
   min-height: 0;
   height: 100%;
+  width: 100% !important;
 }
 
 .launch-section h2 {
@@ -359,6 +360,8 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  align-items: stretch;
+  width: 100%;
   /* ensure ReactFlow wrapper can occupy all remaining space */
   min-height: 0;
   height: 100%;
