@@ -5,10 +5,7 @@ import { OutputNode } from './OutputNode';
 import { BaseInlineEditableNode } from './BaseInlineEditableNode';
 import { Epic1NodeType } from './nodeTypes';
 import { smartNodePositioner } from './SmartNodePositioning';
-import {
-  segmentPrompt,
-  SegmentKind
-} from '../../prompting/PromptSegmentation';
+import { segmentPrompt, SegmentKind } from '../../prompting/PromptSegmentation';
 
 /**
  * Represents a parsed segment of the prompt
@@ -60,14 +57,14 @@ export interface NodeMapping {
 }
 
 const HIGHLIGHT_COLORS = [
-  '#FF6B6B',
-  '#4ECDC4',
-  '#45B7D1',
-  '#96CEB4',
-  '#FFEAA7',
-  '#DDA0DD',
-  '#FFB347',
-  '#B19CD9'
+  '#FFE6E6',
+  '#FFE6E6',
+  '#FFE6E6',
+  '#FFE6E6',
+  '#FFE6E6',
+  '#FFE6E6',
+  '#FFE6E6',
+  '#FFE6E6'
 ];
 
 /**
@@ -209,14 +206,10 @@ function createNodeForSegment(
     }
     default: {
       const multiline = /\n/.test(trimmed);
-      return new TextBlockNode(
-        nodeId,
-        trimmed,
-        {
-          multiline,
-          placeholder: 'Text'
-        }
-      );
+      return new TextBlockNode(nodeId, trimmed, {
+        multiline,
+        placeholder: 'Text'
+      });
     }
   }
 }

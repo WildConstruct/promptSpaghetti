@@ -5,10 +5,10 @@
 
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useCollapseAnimation } from '../../hooks/useCollapseAnimation';
-import { PerformanceMonitor } from '../../../../../utils/performance/PerformanceMonitor';
+import { PerformanceMonitor } from '@/utils/performance/PerformanceMonitor';
 
 // Mock PerformanceMonitor
-jest.mock('../../../../../utils/performance/PerformanceMonitor', () => ({
+jest.mock('@/utils/performance/PerformanceMonitor', () => ({
   PerformanceMonitor: {
     getInstance: jest.fn(() => ({
       record: jest.fn()
@@ -19,6 +19,7 @@ jest.mock('../../../../../utils/performance/PerformanceMonitor', () => ({
 // Mock requestAnimationFrame for testing
 let rafCallbacks: FrameRequestCallback[] = [];
 let rafId = 0;
+let mockNow = 0;
 
 global.requestAnimationFrame = jest.fn((callback: FrameRequestCallback) => {
   rafCallbacks.push(callback);
@@ -26,10 +27,10 @@ global.requestAnimationFrame = jest.fn((callback: FrameRequestCallback) => {
 });
 
 global.cancelAnimationFrame = jest.fn((id: number) => {
-  // Remove callback
+  rafCallbacks = rafCallbacks.filter((_, index) => index !== id - 1);
 });
 
-global.performance.now = jest.fn(() => Date.now());
+global.performance.now = jest.fn(() => mockNow);
 
 describe('useCollapseAnimation', () => {
   const mockPerfMonitor = {
@@ -40,6 +41,7 @@ describe('useCollapseAnimation', () => {
     jest.clearAllMocks();
     rafCallbacks = [];
     rafId = 0;
+    mockNow = 0;
     (PerformanceMonitor.getInstance as jest.Mock).mockReturnValue(
       mockPerfMonitor
     );
@@ -120,10 +122,10 @@ describe('useCollapseAnimation', () => {
 
       // Simulate animation frames
       act(() => {
-        const now = performance.now();
+        mockNow = 16; // simulate first frame (~1 tick)
 
         // Start of animation
-        rafCallbacks[0]?.(now);
+        rafCallbacks[0]?.(mockNow);
       });
 
       // Size should be changing
@@ -132,8 +134,8 @@ describe('useCollapseAnimation', () => {
 
       // Simulate end of animation (200ms later)
       act(() => {
-        const endTime = performance.now() + 200;
-        rafCallbacks[rafCallbacks.length - 1]?.(endTime);
+        mockNow = 200;
+        rafCallbacks[rafCallbacks.length - 1]?.(mockNow);
       });
 
       await waitFor(() => {
@@ -159,8 +161,8 @@ describe('useCollapseAnimation', () => {
 
       // Simulate animation frames
       act(() => {
-        const now = performance.now();
-        rafCallbacks[0]?.(now);
+        mockNow = 16;
+        rafCallbacks[0]?.(mockNow);
       });
 
       // Size should be changing
@@ -169,8 +171,8 @@ describe('useCollapseAnimation', () => {
 
       // Simulate end of animation
       act(() => {
-        const endTime = performance.now() + 200;
-        rafCallbacks[rafCallbacks.length - 1]?.(endTime);
+        mockNow = 200;
+        rafCallbacks[rafCallbacks.length - 1]?.(mockNow);
       });
 
       await waitFor(() => {
@@ -196,8 +198,8 @@ describe('useCollapseAnimation', () => {
 
       // Simulate complete animation
       act(() => {
-        const now = performance.now();
-        rafCallbacks.forEach(cb => cb(now + 250)); // Past animation duration
+        mockNow = 250;
+        rafCallbacks.forEach(cb => cb(mockNow));
       });
 
       await waitFor(() => {
@@ -223,10 +225,17 @@ describe('useCollapseAnimation', () => {
       expect(global.cancelAnimationFrame).toHaveBeenCalledWith(firstRafId);
     });
 
-    it('should cleanup animation on unmount', () => {
-      const { unmount } = renderHook(() =>
-        useCollapseAnimation(false, expandedSize)
+    it('should cleanup animation on unmount', async () => {
+      const { rerender, unmount } = renderHook(
+        ({ isCollapsed }) => useCollapseAnimation(isCollapsed, expandedSize),
+        { initialProps: { isCollapsed: false } }
       );
+
+      rerender({ isCollapsed: true });
+
+      await waitFor(() => {
+        expect(global.requestAnimationFrame).toHaveBeenCalled();
+      });
 
       unmount();
 
@@ -267,17 +276,19 @@ describe('useCollapseAnimation', () => {
 
       // Simulate mid-animation (50% time progress)
       act(() => {
-        const now = performance.now();
-        rafCallbacks[0]?.(now);
-        rafCallbacks[1]?.(now + 100); // 50% of 200ms duration
+        mockNow = 0;
+        rafCallbacks[0]?.(mockNow);
+        mockNow = 50; // 25% of 200ms duration
+        rafCallbacks[1]?.(mockNow);
       });
 
-      // With cubic easing, 50% time doesn't mean 50% size change
+      // With cubic easing, 25% time progresses slower than linear interpolation
       const midWidth = result.current.size.width;
-      const expectedMidpoint = (400 + 280) / 2; // Linear midpoint
+      const linearWidth =
+        expandedSize.width - (expandedSize.width - collapsedSize.width) * 0.25;
 
-      // Cubic easing should make it different from linear
-      expect(Math.abs(midWidth - expectedMidpoint)).toBeGreaterThan(5);
+      // Cubic easing eases in slower, so width should remain larger than linear interpolation
+      expect(midWidth).toBeGreaterThan(linearWidth);
     });
   });
 
@@ -295,19 +306,17 @@ describe('useCollapseAnimation', () => {
 
       // Simulate multiple frames
       act(() => {
-        const now = performance.now();
         for (let i = 0; i < 10; i++) {
-          rafCallbacks[i]?.(now + i * 16); // ~60fps
+          mockNow = i * 16; // ~60fps
+          rafCallbacks[i]?.(mockNow);
         }
       });
 
-      // Should continue requesting frames
-      expect(global.requestAnimationFrame).toHaveBeenCalledTimes(10);
+      // Initial schedule + 10 frame requests
+      expect(global.requestAnimationFrame).toHaveBeenCalledTimes(11);
     });
 
     it('should complete animation in expected duration', async () => {
-      const startTime = performance.now();
-
       const { result, rerender } = renderHook(
         ({ isCollapsed }) => useCollapseAnimation(isCollapsed, expandedSize),
         { initialProps: { isCollapsed: false } }
@@ -317,7 +326,8 @@ describe('useCollapseAnimation', () => {
 
       // Simulate animation at exact duration
       act(() => {
-        rafCallbacks.forEach(cb => cb(startTime + 200));
+        mockNow = 200;
+        rafCallbacks.forEach(cb => cb(mockNow));
       });
 
       await waitFor(() => {

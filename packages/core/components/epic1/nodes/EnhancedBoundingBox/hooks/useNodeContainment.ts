@@ -64,7 +64,9 @@ export function useNodeContainment(
 
     // Find the bounding box node itself
     const thisBox = allNodes.find(n => n.id === boxId);
-    if (!thisBox) {return [];}
+    if (!thisBox) {
+      return [];
+    }
 
     // Filter nodes that are contained within the bounding box
     const contained = allNodes.filter(node => {
@@ -74,6 +76,11 @@ export function useNodeContainment(
         node.type === 'boundingBox' ||
         node.type === 'enhancedBoundingBox'
       ) {
+        return false;
+      }
+
+      // Respect fragment/parent hierarchy; region boxes only operate on top-level nodes
+      if (typeof node.parentNode === 'string' && node.parentNode.length > 0) {
         return false;
       }
 

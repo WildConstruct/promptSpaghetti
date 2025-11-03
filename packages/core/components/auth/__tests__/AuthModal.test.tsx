@@ -1,339 +1,217 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { AuthModal } from '../AuthModal';
+import type { User } from '@supabase/supabase-js';
+import { act } from 'react';
+import { AuthModal, type AuthTab } from '../AuthModal';
 
-// Mock the auth service
-const mockAuthService = {
-  login: jest.fn(),
-  signup: jest.fn(),
-  logout: jest.fn(),
-  resetPassword: jest.fn(),
-  verifySession: jest.fn(),
-  refreshToken: jest.fn()
-};
-
-// Mock child components
+// Surface the same callback interface the modal relies on while keeping the
+// tests lightweight. These stubs avoid replacing genuine logic with no-op
+// implementations elsewhere in the codebase.
 jest.mock('../LoginForm', () => ({
-  LoginForm: ({ onSuccess, onError }: any) => (
-    <div data-testid="login-form">
-      <button onClick={() => onSuccess({ user: 'test' })}>Login</button>
-      <button onClick={() => onError(new Error('Login failed'))}>Fail</button>
+  LoginForm: ({
+    onSuccess,
+    onForgotPassword
+  }: {
+    onSuccess: (user: User) => void;
+    onForgotPassword: () => void;
+  }) => (
+    <div>
+      <button type="button" onClick={() => onSuccess({} as User)}>
+        Complete Login
+      </button>
+      <button type="button" onClick={onForgotPassword}>
+        Forgot password?
+      </button>
     </div>
   )
 }));
 
 jest.mock('../SignupForm', () => ({
-  SignupForm: ({ onSuccess, onError }: any) => (
-    <div data-testid="signup-form">
-      <button onClick={() => onSuccess({ user: 'newuser' })}>Signup</button>
-      <button onClick={() => onError(new Error('Signup failed'))}>Fail</button>
+  SignupForm: ({ onSuccess }: { onSuccess: (user: User) => void }) => (
+    <div>
+      <button type="button" onClick={() => onSuccess({} as User)}>
+        Complete Signup
+      </button>
     </div>
   )
 }));
 
 jest.mock('../PasswordReset', () => ({
-  PasswordReset: ({ onSuccess, onCancel }: any) => (
-    <div data-testid="password-reset">
-      <button onClick={() => onSuccess()}>Reset</button>
-      <button onClick={() => onCancel()}>Cancel</button>
+  PasswordReset: ({ onBack }: { onBack: () => void }) => (
+    <div>
+      <button type="button" onClick={onBack}>
+        Back to login
+      </button>
     </div>
   )
 }));
 
 describe('AuthModal', () => {
-  const defaultProps = {
-    isOpen: true,
-    onClose: jest.fn(),
-    authService: mockAuthService,
-    onAuthSuccess: jest.fn()
+  const clickWithAct = async (
+    user: ReturnType<typeof userEvent.setup>,
+    element: Element
+  ) => {
+    await act(async () => {
+      await user.click(element);
+    });
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  const renderModal = (
+    props?: Partial<React.ComponentProps<typeof AuthModal>>
+  ) => {
+    const defaultProps = {
+      isOpen: true,
+      onClose: jest.fn(),
+      onSuccess: jest.fn(),
+      initialTab: 'login' as AuthTab
+    };
 
-  describe('Rendering', () => {
-    it('should render when open', () => {
-      render(<AuthModal {...defaultProps} />);
-      expect(screen.getByTestId('auth-modal')).toBeInTheDocument();
+    const result = render(<AuthModal {...defaultProps} {...props} />);
+    return {
+      ...result,
+      onClose: (props?.onClose ?? defaultProps.onClose) as jest.Mock,
+      onSuccess: (props?.onSuccess ?? defaultProps.onSuccess) as jest.Mock
+    };
+  };
+
+  describe('visibility', () => {
+    it('renders nothing when closed', () => {
+      const { container } = render(
+        <AuthModal isOpen={false} onClose={jest.fn()} onSuccess={jest.fn()} />
+      );
+      expect(container.firstChild).toBeNull();
     });
 
-    it('should not render when closed', () => {
-      render(<AuthModal {...defaultProps} isOpen={false} />);
-      expect(screen.queryByTestId('auth-modal')).not.toBeInTheDocument();
-    });
-
-    it('should show login form by default', () => {
-      render(<AuthModal {...defaultProps} />);
-      expect(screen.getByTestId('login-form')).toBeInTheDocument();
-    });
-
-    it('should show title based on mode', () => {
-      render(<AuthModal {...defaultProps} initialMode="signup" />);
-      expect(screen.getByText(/sign up/i)).toBeInTheDocument();
-    });
-  });
-
-  describe('Mode Switching', () => {
-    it('should switch to signup mode', () => {
-      render(<AuthModal {...defaultProps} />);
-
-      const signupLink = screen.getByText(/don't have an account/i);
-      fireEvent.click(signupLink);
-
-      expect(screen.getByTestId('signup-form')).toBeInTheDocument();
-    });
-
-    it('should switch to password reset mode', () => {
-      render(<AuthModal {...defaultProps} />);
-
-      const resetLink = screen.getByText(/forgot password/i);
-      fireEvent.click(resetLink);
-
-      expect(screen.getByTestId('password-reset')).toBeInTheDocument();
-    });
-
-    it('should switch back to login from signup', () => {
-      render(<AuthModal {...defaultProps} initialMode="signup" />);
-
-      const loginLink = screen.getByText(/already have an account/i);
-      fireEvent.click(loginLink);
-
-      expect(screen.getByTestId('login-form')).toBeInTheDocument();
+    it('renders dialog with welcome heading when open', () => {
+      renderModal();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /welcome/i })).toBeVisible();
     });
   });
 
-  describe('Authentication Flow', () => {
-    it('should handle successful login', async () => {
-      render(<AuthModal {...defaultProps} />);
-
-      const loginButton = screen.getByText('Login');
-      fireEvent.click(loginButton);
-
-      await waitFor(() => {
-        expect(defaultProps.onAuthSuccess).toHaveBeenCalledWith({
-          user: 'test'
-        });
-        expect(defaultProps.onClose).toHaveBeenCalled();
-      });
+  describe('tab navigation', () => {
+    it('shows login form by default', () => {
+      renderModal();
+      expect(
+        screen.getByRole('button', { name: /complete login/i })
+      ).toBeVisible();
     });
 
-    it('should handle login failure', async () => {
-      render(<AuthModal {...defaultProps} />);
+    it('switches to signup when tab clicked', async () => {
+      const user = userEvent.setup();
+      renderModal();
 
-      const failButton = screen.getByText('Fail');
-      fireEvent.click(failButton);
+      await clickWithAct(user, screen.getByRole('tab', { name: /sign up/i }));
 
-      await waitFor(() => {
-        expect(screen.getByText(/login failed/i)).toBeInTheDocument();
-      });
-
-      expect(defaultProps.onAuthSuccess).not.toHaveBeenCalled();
+      expect(
+        screen.getByRole('button', { name: /complete signup/i })
+      ).toBeVisible();
     });
 
-    it('should handle successful signup', async () => {
-      render(<AuthModal {...defaultProps} initialMode="signup" />);
+    it('switches to password reset when login form triggers forgot password', async () => {
+      const user = userEvent.setup();
+      renderModal();
 
-      const signupButton = screen.getByText('Signup');
-      fireEvent.click(signupButton);
-
-      await waitFor(() => {
-        expect(defaultProps.onAuthSuccess).toHaveBeenCalledWith({
-          user: 'newuser'
-        });
-        expect(defaultProps.onClose).toHaveBeenCalled();
-      });
-    });
-
-    it('should handle password reset success', async () => {
-      render(<AuthModal {...defaultProps} initialMode="reset" />);
-
-      const resetButton = screen.getByText('Reset');
-      fireEvent.click(resetButton);
-
-      await waitFor(() => {
-        expect(
-          screen.getByText(/password reset email sent/i)
-        ).toBeInTheDocument();
-      });
-    });
-  });
-
-  describe('Modal Behavior', () => {
-    it('should close on escape key', () => {
-      render(<AuthModal {...defaultProps} />);
-
-      fireEvent.keyDown(document, { key: 'Escape' });
-
-      expect(defaultProps.onClose).toHaveBeenCalled();
-    });
-
-    it('should close on overlay click', () => {
-      render(<AuthModal {...defaultProps} />);
-
-      const overlay = screen.getByTestId('modal-overlay');
-      fireEvent.click(overlay);
-
-      expect(defaultProps.onClose).toHaveBeenCalled();
-    });
-
-    it('should not close on modal content click', () => {
-      render(<AuthModal {...defaultProps} />);
-
-      const modalContent = screen.getByTestId('modal-content');
-      fireEvent.click(modalContent);
-
-      expect(defaultProps.onClose).not.toHaveBeenCalled();
-    });
-
-    it('should show close button', () => {
-      render(<AuthModal {...defaultProps} />);
-
-      const closeButton = screen.getByLabelText(/close/i);
-      fireEvent.click(closeButton);
-
-      expect(defaultProps.onClose).toHaveBeenCalled();
-    });
-  });
-
-  describe('Loading States', () => {
-    it('should show loading spinner during authentication', async () => {
-      mockAuthService.login.mockImplementation(
-        () => new Promise(resolve => setTimeout(resolve, 100))
+      await clickWithAct(
+        user,
+        screen.getByRole('button', { name: /forgot password/i })
       );
 
-      render(<AuthModal {...defaultProps} />);
-
-      const loginButton = screen.getByText('Login');
-      fireEvent.click(loginButton);
-
-      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
-
-      await waitFor(() => {
-        expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+      const backToLoginButtons = screen.getAllByRole('button', {
+        name: /back to login/i
       });
+      expect(backToLoginButtons.length).toBeGreaterThan(0);
+      backToLoginButtons.forEach(button => expect(button).toBeVisible());
+      expect(
+        screen.getByRole('heading', { name: /reset password/i })
+      ).toBeVisible();
     });
 
-    it('should disable form during loading', async () => {
-      mockAuthService.login.mockImplementation(
-        () => new Promise(resolve => setTimeout(resolve, 100))
-      );
+    it('restores login tab from password reset', async () => {
+      const user = userEvent.setup();
+      renderModal({ initialTab: 'reset' });
 
-      render(<AuthModal {...defaultProps} />);
-
-      const loginButton = screen.getByText('Login');
-      fireEvent.click(loginButton);
-
-      expect(loginButton).toBeDisabled();
-
-      await waitFor(() => {
-        expect(loginButton).not.toBeDisabled();
+      const [firstBackButton] = screen.getAllByRole('button', {
+        name: /back to login/i
       });
+      await clickWithAct(user, firstBackButton);
+
+      expect(
+        screen.getByRole('button', { name: /complete login/i })
+      ).toBeVisible();
+      expect(screen.getByRole('heading', { name: /welcome/i })).toBeVisible();
     });
   });
 
-  describe('Error Handling', () => {
-    it('should display error messages', () => {
-      render(<AuthModal {...defaultProps} error="Invalid credentials" />);
-      expect(screen.getByText('Invalid credentials')).toBeInTheDocument();
-    });
+  describe('callbacks', () => {
+    it('passes through success callback and closes modal on login success', async () => {
+      const user = userEvent.setup();
+      const { onSuccess, onClose } = renderModal();
 
-    it('should clear errors on mode switch', () => {
-      const { rerender } = render(
-        <AuthModal {...defaultProps} error="Login error" />
+      await clickWithAct(
+        user,
+        screen.getByRole('button', { name: /complete login/i })
       );
 
-      expect(screen.getByText('Login error')).toBeInTheDocument();
-
-      const signupLink = screen.getByText(/don't have an account/i);
-      fireEvent.click(signupLink);
-
-      expect(screen.queryByText('Login error')).not.toBeInTheDocument();
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+      expect(onClose).toHaveBeenCalledTimes(1);
     });
 
-    it('should show network error message', async () => {
-      mockAuthService.login.mockRejectedValue(new Error('Network error'));
+    it('passes through success callback from signup form', async () => {
+      const user = userEvent.setup();
+      const { onSuccess, onClose } = renderModal({ initialTab: 'signup' });
 
-      render(<AuthModal {...defaultProps} />);
+      await clickWithAct(
+        user,
+        screen.getByRole('button', { name: /complete signup/i })
+      );
 
-      const loginButton = screen.getByText('Login');
-      fireEvent.click(loginButton);
-
-      await waitFor(() => {
-        expect(screen.getByText(/network error/i)).toBeInTheDocument();
-      });
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+      expect(onClose).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('Accessibility', () => {
-    it('should have proper ARIA attributes', () => {
-      render(<AuthModal {...defaultProps} />);
+  describe('modal behaviour', () => {
+    it('closes when escape is pressed', async () => {
+      const user = userEvent.setup();
+      const { onClose } = renderModal();
 
-      const modal = screen.getByRole('dialog');
-      expect(modal).toHaveAttribute('aria-modal', 'true');
-      expect(modal).toHaveAttribute('aria-labelledby');
+      await user.keyboard('{Escape}');
+
+      expect(onClose).toHaveBeenCalledTimes(1);
     });
 
-    it('should trap focus within modal', () => {
-      render(<AuthModal {...defaultProps} />);
+    it('closes when backdrop is clicked', async () => {
+      const user = userEvent.setup();
+      const { onClose } = renderModal();
 
-      const modal = screen.getByTestId('auth-modal');
-      const focusableElements = modal.querySelectorAll(
-        'button, input, [tabindex]:not([tabindex="-1"])'
+      await clickWithAct(user, screen.getByRole('dialog'));
+
+      expect(onClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not close when content is clicked', async () => {
+      const user = userEvent.setup();
+      const { onClose } = renderModal();
+
+      const heading = screen.getByRole('heading', { name: /welcome/i });
+      await clickWithAct(user, heading);
+
+      expect(onClose).not.toHaveBeenCalled();
+    });
+
+    it('closes when close button is pressed', async () => {
+      const user = userEvent.setup();
+      const { onClose } = renderModal();
+
+      await clickWithAct(
+        user,
+        screen.getByRole('button', { name: /close modal/i })
       );
 
-      expect(focusableElements.length).toBeGreaterThan(0);
-    });
-
-    it('should restore focus on close', () => {
-      const buttonRef = { current: document.createElement('button') };
-      document.body.appendChild(buttonRef.current);
-      buttonRef.current.focus();
-
-      const { rerender } = render(<AuthModal {...defaultProps} />);
-
-      rerender(<AuthModal {...defaultProps} isOpen={false} />);
-
-      expect(document.activeElement).toBe(buttonRef.current);
-
-      document.body.removeChild(buttonRef.current);
-    });
-  });
-
-  describe('Session Management', () => {
-    it('should verify session on mount', async () => {
-      mockAuthService.verifySession.mockResolvedValue({ valid: true });
-
-      render(<AuthModal {...defaultProps} />);
-
-      await waitFor(() => {
-        expect(mockAuthService.verifySession).toHaveBeenCalled();
-      });
-    });
-
-    it('should handle session expiry', async () => {
-      mockAuthService.verifySession.mockResolvedValue({ valid: false });
-
-      render(<AuthModal {...defaultProps} />);
-
-      await waitFor(() => {
-        expect(screen.getByText(/session expired/i)).toBeInTheDocument();
-      });
-    });
-
-    it('should refresh token on expiry', async () => {
-      mockAuthService.refreshToken.mockResolvedValue({ token: 'new-token' });
-
-      render(<AuthModal {...defaultProps} />);
-
-      const refreshButton = screen.getByText(/refresh session/i);
-      fireEvent.click(refreshButton);
-
-      await waitFor(() => {
-        expect(mockAuthService.refreshToken).toHaveBeenCalled();
-      });
+      expect(onClose).toHaveBeenCalledTimes(1);
     });
   });
 });

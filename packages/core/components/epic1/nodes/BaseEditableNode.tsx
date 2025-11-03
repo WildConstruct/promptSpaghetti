@@ -165,6 +165,14 @@ export const BaseEditableNode = memo(({
     data.onContextMenu?.(e);
   };
 
+  const contentClassNames = [
+    'epic1-node-content',
+    isEditing ? 'editing' : '',
+    selected ? 'selected' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <div
       ref={nodeRef}
@@ -189,7 +197,7 @@ export const BaseEditableNode = memo(({
         />
       )}
       
-      <div className="epic1-node-content">
+      <div className={contentClassNames}>
         {children({
           isEditing,
           value: data.value,
@@ -199,6 +207,10 @@ export const BaseEditableNode = memo(({
           confirmEdit,
           cancelEdit,
         })}
+
+        {/* Visual feedback indicators live inside content for easier authoring/tests */}
+        {isEditing && <div className="epic1-edit-indicator" />}
+        {selected && !isEditing && <div className="epic1-selected-indicator" />}
       </div>
 
       {/* Handle rendering logic based on node type */}
@@ -245,9 +257,6 @@ export const BaseEditableNode = memo(({
         );
       })()}
 
-      {/* Visual feedback indicators */}
-      {isEditing && <div className="epic1-edit-indicator" />}
-      {selected && !isEditing && <div className="epic1-selected-indicator" />}
       <SaveIndicator trigger={saveTrigger} />
     </div>
   );

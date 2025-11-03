@@ -2,64 +2,86 @@
  * Tests for WorkerPool
  */
 
-// Mock Worker implementation for testing
-class MockWorker {
-  postMessage = jest.fn();
-  terminate = jest.fn();
-  addEventListener = jest.fn();
-  removeEventListener = jest.fn();
-  dispatchEvent = jest.fn();
+type MockWorkerInstance = Worker & {
+  triggerMessage: (data: unknown) => void;
+  triggerError: (error: ErrorEvent) => void;
+};
 
-  // Simulate message handling
-  triggerMessage(data) {
-    const listeners = this.addEventListener.mock.calls
-      .filter(call => call[0] === 'message')
-      .map(call => call[1]);
+const MockWorker = jest.fn<MockWorkerInstance, []>(function () {
+  const listeners: Record<string, Array<(payload: any) => void>> = {
+    message: [],
+    error: []
+  };
 
-    listeners.forEach(listener => {
-      listener({ data });
-    });
-  }
+  const worker: Partial<MockWorkerInstance> = {
+    postMessage: jest.fn(),
+    terminate: jest.fn(),
+    addEventListener: jest.fn(
+      (type: string, handler: (payload: any) => void) => {
+        if (!listeners[type]) {
+          listeners[type] = [];
+        }
+        listeners[type]?.push(handler);
+      }
+    ),
+    removeEventListener: jest.fn(
+      (type: string, handler: (payload: any) => void) => {
+        const handlers = listeners[type];
+        if (!handlers) {
+          return;
+        }
+        const index = handlers.indexOf(handler);
+        if (index >= 0) {
+          handlers.splice(index, 1);
+        }
+      }
+    ),
+    dispatchEvent: jest.fn(),
+    triggerMessage: (data: unknown) => {
+      [...(listeners.message || [])].forEach(listener => listener({ data }));
+    },
+    triggerError: (error: ErrorEvent) => {
+      [...(listeners.error || [])].forEach(listener => listener(error));
+    }
+  };
 
-  // Simulate error
-  triggerError(error) {
-    const listeners = this.addEventListener.mock.calls
-      .filter(call => call[0] === 'error')
-      .map(call => call[1]);
+  Object.assign(this, worker);
+  return this as MockWorkerInstance;
+});
 
-    listeners.forEach(listener => {
-      listener(error);
-    });
-  }
-}
-
-// Mock global Worker
-global.Worker = MockWorker;
+// Ensure any global Worker usage falls back to the mock
+global.Worker = MockWorker as unknown as typeof Worker;
 
 import { WorkerPool } from '../WorkerPool';
 
 describe('WorkerPool', () => {
   let pool;
-  const mockWorkerScript = 'mock-worker.js';
+  const workerCtor = MockWorker as unknown as new () => Worker;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    MockWorker.mockClear();
   });
 
   afterEach(() => {
     if (pool && !pool.isTerminated()) {
-      pool.terminate();
+      try {
+        pool.terminate();
+      } catch (error) {
+        // Tests intentionally terminate pools mid-task; ignore expected rejections.
+      }
     }
+    pool = undefined;
   });
 
   describe('initialization', () => {
     it('should create minimum number of workers', () => {
-      pool = new WorkerPool(mockWorkerScript, 2, 4);
+      pool = new WorkerPool(workerCtor, 2, 4);
       expect(MockWorker).toHaveBeenCalledTimes(2);
     });
 
     it('should respect max workers configuration', () => {
-      pool = new WorkerPool(mockWorkerScript, 1, 3);
+      pool = new WorkerPool(workerCtor, 1, 3);
       const stats = pool.getStats();
       expect(stats.totalWorkers).toBe(1);
     });
@@ -67,7 +89,7 @@ describe('WorkerPool', () => {
 
   describe('task execution', () => {
     it('should execute task and return result', async () => {
-      pool = new WorkerPool(mockWorkerScript, 1, 2);
+      pool = new WorkerPool(workerCtor, 1, 2);
 
       const mockGraph = { nodes: new Map(), edges: [] };
       const mockSeed = 1234;
@@ -78,7 +100,7 @@ describe('WorkerPool', () => {
 
       // Simulate worker response
       setTimeout(() => {
-        const worker = MockWorker.mock.instances[0];
+        const worker = MockWorker.mock.instances[0] as MockWorkerInstance;
         worker.triggerMessage({
           type: 'result',
           id: expect.any(String),
@@ -91,14 +113,14 @@ describe('WorkerPool', () => {
     });
 
     it('should handle task errors', async () => {
-      pool = new WorkerPool(mockWorkerScript, 1, 2);
+      pool = new WorkerPool(workerCtor, 1, 2);
 
       const mockGraph = { nodes: new Map(), edges: [] };
       const promise = pool.execute(mockGraph, 1234);
 
       // Simulate error response
       setTimeout(() => {
-        const worker = MockWorker.mock.instances[0];
+        const worker = MockWorker.mock.instances[0] as MockWorkerInstance;
         worker.triggerMessage({
           type: 'error',
           id: expect.any(String),
@@ -110,7 +132,7 @@ describe('WorkerPool', () => {
     });
 
     it('should track progress updates', async () => {
-      pool = new WorkerPool(mockWorkerScript, 1, 2);
+      pool = new WorkerPool(workerCtor, 1, 2);
 
       const progressUpdates = [];
       const promise = pool.execute(
@@ -121,7 +143,7 @@ describe('WorkerPool', () => {
 
       // Simulate progress updates
       setTimeout(() => {
-        const worker = MockWorker.mock.instances[0];
+        const worker = MockWorker.mock.instances[0] as MockWorkerInstance;
         worker.triggerMessage({ type: 'progress', progress: 25 });
         worker.triggerMessage({ type: 'progress', progress: 50 });
         worker.triggerMessage({ type: 'progress', progress: 75 });
@@ -135,14 +157,14 @@ describe('WorkerPool', () => {
 
   describe('worker pool management', () => {
     it('should reuse idle workers', async () => {
-      pool = new WorkerPool(mockWorkerScript, 1, 2);
+      pool = new WorkerPool(workerCtor, 1, 2);
 
       // First execution
       const promise1 = pool.execute({ nodes: new Map() }, 1);
 
       // Complete first task
       setTimeout(() => {
-        MockWorker.mock.instances[0].triggerMessage({
+        (MockWorker.mock.instances[0] as MockWorkerInstance).triggerMessage({
           type: 'result',
           result: { output: 'result1' }
         });
@@ -154,7 +176,7 @@ describe('WorkerPool', () => {
       const promise2 = pool.execute({ nodes: new Map() }, 2);
 
       setTimeout(() => {
-        MockWorker.mock.instances[0].triggerMessage({
+        (MockWorker.mock.instances[0] as MockWorkerInstance).triggerMessage({
           type: 'result',
           result: { output: 'result2' }
         });
@@ -167,7 +189,7 @@ describe('WorkerPool', () => {
     });
 
     it('should create new workers up to max when busy', async () => {
-      pool = new WorkerPool(mockWorkerScript, 1, 3);
+      pool = new WorkerPool(workerCtor, 1, 3);
 
       // Start 3 tasks simultaneously
       const promises = [
@@ -180,20 +202,22 @@ describe('WorkerPool', () => {
       expect(MockWorker).toHaveBeenCalledTimes(3);
 
       // Complete all tasks
-      MockWorker.mock.instances.forEach((worker, i) => {
-        setTimeout(() => {
-          worker.triggerMessage({
-            type: 'result',
-            result: { output: `result${i}` }
-          });
-        }, 10);
-      });
+      MockWorker.mock.instances.forEach(
+        (worker: MockWorkerInstance, i: number) => {
+          setTimeout(() => {
+            worker.triggerMessage({
+              type: 'result',
+              result: { output: `result${i}` }
+            });
+          }, 10);
+        }
+      );
 
       await Promise.all(promises);
     });
 
     it('should queue tasks when all workers are busy', async () => {
-      pool = new WorkerPool(mockWorkerScript, 1, 2);
+      pool = new WorkerPool(workerCtor, 1, 2);
 
       // Start 3 tasks (more than max workers)
       const promises = [
@@ -212,7 +236,7 @@ describe('WorkerPool', () => {
 
       // Complete first task
       setTimeout(() => {
-        MockWorker.mock.instances[0].triggerMessage({
+        (MockWorker.mock.instances[0] as MockWorkerInstance).triggerMessage({
           type: 'result',
           result: { output: 'result1' }
         });
@@ -220,7 +244,7 @@ describe('WorkerPool', () => {
 
       // Complete remaining tasks
       setTimeout(() => {
-        MockWorker.mock.instances.forEach(worker => {
+        MockWorker.mock.instances.forEach((worker: MockWorkerInstance) => {
           worker.triggerMessage({
             type: 'result',
             result: { output: 'result' }
@@ -234,13 +258,13 @@ describe('WorkerPool', () => {
 
   describe('error handling', () => {
     it('should handle worker errors gracefully', async () => {
-      pool = new WorkerPool(mockWorkerScript, 2, 4);
+      pool = new WorkerPool(workerCtor, 2, 4);
 
       const promise = pool.execute({ nodes: new Map() }, 1234);
 
       // Simulate worker error
       setTimeout(() => {
-        const worker = MockWorker.mock.instances[0];
+        const worker = MockWorker.mock.instances[0] as MockWorkerInstance;
         worker.triggerError(
           new ErrorEvent('error', {
             message: 'Worker crashed'
@@ -256,11 +280,11 @@ describe('WorkerPool', () => {
     });
 
     it('should replace failed workers', async () => {
-      pool = new WorkerPool(mockWorkerScript, 2, 4);
+      pool = new WorkerPool(workerCtor, 2, 4);
       const initialWorkerCount = MockWorker.mock.instances.length;
 
       // Simulate worker failure
-      MockWorker.mock.instances[0].triggerError(
+      (MockWorker.mock.instances[0] as MockWorkerInstance).triggerError(
         new ErrorEvent('error', { message: 'crashed' })
       );
 
@@ -271,7 +295,7 @@ describe('WorkerPool', () => {
 
   describe('parallel execution', () => {
     it('should execute multiple graphs in parallel', async () => {
-      pool = new WorkerPool(mockWorkerScript, 2, 4);
+      pool = new WorkerPool(workerCtor, 2, 4);
 
       const graph = { nodes: new Map(), edges: [] };
       const seeds = [1, 2, 3, 4];
@@ -283,14 +307,16 @@ describe('WorkerPool', () => {
 
       // Simulate results for all seeds
       setTimeout(() => {
-        MockWorker.mock.instances.forEach((worker, i) => {
-          if (i < seeds.length) {
-            worker.triggerMessage({
-              type: 'result',
-              result: { output: `result${i}`, stats: {} }
-            });
+        MockWorker.mock.instances.forEach(
+          (worker: MockWorkerInstance, i: number) => {
+            if (i < seeds.length) {
+              worker.triggerMessage({
+                type: 'result',
+                result: { output: `result${i}`, stats: {} }
+              });
+            }
           }
-        });
+        );
       }, 10);
 
       const results = await promise;
@@ -300,13 +326,13 @@ describe('WorkerPool', () => {
 
   describe('termination', () => {
     it('should terminate all workers', () => {
-      pool = new WorkerPool(mockWorkerScript, 2, 4);
-      const workers = MockWorker.mock.instances;
+      pool = new WorkerPool(workerCtor, 2, 4);
+      const workers = MockWorker.mock.instances as MockWorkerInstance[];
 
       pool.terminate();
 
       // All workers should be terminated
-      workers.forEach(worker => {
+      workers.forEach((worker: MockWorkerInstance) => {
         expect(worker.terminate).toHaveBeenCalled();
       });
 
@@ -314,7 +340,7 @@ describe('WorkerPool', () => {
     });
 
     it('should reject pending tasks on termination', async () => {
-      pool = new WorkerPool(mockWorkerScript, 1, 2);
+      pool = new WorkerPool(workerCtor, 1, 2);
 
       // Start tasks
       const promises = [
@@ -339,7 +365,7 @@ describe('WorkerPool', () => {
 
   describe('statistics', () => {
     it('should provide accurate statistics', async () => {
-      pool = new WorkerPool(mockWorkerScript, 2, 4);
+      pool = new WorkerPool(workerCtor, 2, 4);
 
       // Initial stats
       let stats = pool.getStats();
@@ -351,13 +377,33 @@ describe('WorkerPool', () => {
       });
 
       // Start some tasks
-      pool.execute({ nodes: new Map() }, 1);
-      pool.execute({ nodes: new Map() }, 2);
-      pool.execute({ nodes: new Map() }, 3);
+      const task1 = pool.execute({ nodes: new Map() }, 1);
+      const task2 = pool.execute({ nodes: new Map() }, 2);
+      const task3 = pool.execute({ nodes: new Map() }, 3);
 
       stats = pool.getStats();
       expect(stats.busyWorkers).toBeGreaterThan(0);
       expect(stats.idleWorkers).toBeLessThan(2);
+
+      // Complete tasks to avoid leaking pending work between tests
+      const workerA = MockWorker.mock.instances[0] as MockWorkerInstance;
+      const workerB = MockWorker.mock.instances[1] as MockWorkerInstance;
+      const workerC = MockWorker.mock.instances[2] as MockWorkerInstance;
+
+      workerA.triggerMessage({
+        type: 'result',
+        result: { output: 'done-1' }
+      });
+      workerB.triggerMessage({
+        type: 'result',
+        result: { output: 'done-2' }
+      });
+      workerC.triggerMessage({
+        type: 'result',
+        result: { output: 'done-3' }
+      });
+
+      await Promise.all([task1, task2, task3]);
     });
   });
 });

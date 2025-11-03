@@ -51,8 +51,11 @@ const createStorageMock = (): {
     clear: jest.fn(() => {
       store.clear();
       Object.keys(storage).forEach(key => {
-        if (!['getItem', 'setItem', 'removeItem', 'clear', 'key'].includes(key))
-          {delete storage[key];}
+        if (
+          !['getItem', 'setItem', 'removeItem', 'clear', 'key'].includes(key)
+        ) {
+          delete storage[key];
+        }
       });
     }),
     key: jest.fn((index: number) => Array.from(store.keys())[index] ?? null)
@@ -143,6 +146,16 @@ describe('persistenceUtils', () => {
     expect(quota.percentage).toBeGreaterThan(0);
   });
 
+  it('reports key sizes through getStorageSize helper', () => {
+    const missing = persistenceUtils.getStorageSize('absent-key');
+    expect(missing).toBe(0);
+
+    storageMock.setItem('measured', 'payload:12345');
+    const measured = persistenceUtils.getStorageSize('measured');
+    expect(measured).toBeGreaterThan(0);
+    expect(measured).toBeGreaterThanOrEqual('payload:12345'.length);
+  });
+
   it('returns fallback quota metrics when iteration fails', () => {
     const failingStorage: Storage & Record<string, unknown> = {
       getItem: jest.fn(),
@@ -203,7 +216,9 @@ describe('persistenceUtils', () => {
   it('validates persisted state schema and logs in development', () => {
     const originalEnv = process.env.NODE_ENV;
     process.env.NODE_ENV = 'development';
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const errorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
 
     const valid = persistenceUtils.validatePersistedState({
       nodes: [],
@@ -249,7 +264,9 @@ describe('persistenceUtils', () => {
       })
     );
 
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
     const result = persistenceUtils.persistenceStorage.getItem(STORAGE_KEY);
 
     expect(result).toBeNull();
@@ -261,7 +278,11 @@ describe('persistenceUtils', () => {
     storageMock.setItem(
       STORAGE_KEY,
       JSON.stringify({
-        state: JSON.stringify({ nodes: [], edges: [], viewport: { x: 0, y: 0, zoom: 1 } }),
+        state: JSON.stringify({
+          nodes: [],
+          edges: [],
+          viewport: { x: 0, y: 0, zoom: 1 }
+        }),
         version: STORAGE_VERSION,
         timestamp: 42,
         compressed: false,
@@ -269,7 +290,9 @@ describe('persistenceUtils', () => {
       })
     );
 
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const errorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
     // Break validation by replacing nodes with string
     storageMock.setItem(
       STORAGE_KEY,
@@ -310,12 +333,11 @@ describe('persistenceUtils', () => {
   });
 
   it('handles getItem failures gracefully', () => {
-    storageMock.setItem(
-      STORAGE_KEY,
-      '{invalid json'
-    );
+    storageMock.setItem(STORAGE_KEY, '{invalid json');
 
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const errorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
     const result = persistenceUtils.persistenceStorage.getItem(STORAGE_KEY);
     expect(result).toBeNull();
     expect(errorSpy).toHaveBeenCalled();
@@ -340,14 +362,18 @@ describe('persistenceUtils', () => {
   });
 
   it('dispatches quota events when storage is saturated', () => {
-    const ballast = 'x'.repeat(Math.ceil(persistenceUtils.MAX_STORAGE_SIZE * 0.92));
+    const ballast = 'x'.repeat(
+      Math.ceil(persistenceUtils.MAX_STORAGE_SIZE * 0.92)
+    );
     storageMock.setItem('ballast', ballast);
 
     persistenceUtils.persistenceStorage.setItem(STORAGE_KEY, '{}');
 
-    expect(dispatchEventSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ type: 'storage-quota-exceeded' })
-    );
+    expect(dispatchEventSpy).toHaveBeenCalled();
+    const dispatchedEvent = dispatchEventSpy.mock.calls[0][0];
+    expect(dispatchedEvent.type).toBe('storage-quota-exceeded');
+    expect(dispatchedEvent.detail.used).toBeGreaterThan(0);
+    expect(dispatchedEvent.detail.percentage).toBeGreaterThanOrEqual(90);
     expect(storageMock.getItem(STORAGE_KEY)).toBeNull();
   });
 

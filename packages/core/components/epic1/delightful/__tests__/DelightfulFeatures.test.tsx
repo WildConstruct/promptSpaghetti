@@ -1,348 +1,229 @@
-/**
- * Tests for Delightful Features
- */
-
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import { EasterEggManager } from '../EasterEggManager';
 import { PlayfulLoadingStates, PlayfulProgressBar } from '../PlayfulLoadingStates';
 import { DelightfulIntegration } from '../DelightfulIntegration';
 import { useStore } from '@/stores/graphStore';
 
-// Mock React Flow
 jest.mock('reactflow', () => ({
-  ReactFlowProvider: ({ children }: any) => <div>{children}</div>,
-  useReactFlow: () => ({
-    getNodes: () => [],
-    setNodes: jest.fn(),
-    getEdges: () => [],
-    setEdges: jest.fn(),
-    project: jest.fn(),
-  }),
+  ReactFlowProvider: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="reactflow-provider">{children}</div>
+  )
 }));
 
-// Mock store
+jest.mock('../UnexpectedAnimations', () => ({
+  UnexpectedAnimations: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="unexpected-animations">{children}</div>
+  ),
+  celebrateNodeClick: jest.fn()
+}));
+
 jest.mock('@/stores/graphStore', () => ({
-  useStore: jest.fn(() => ({
-    nodes: [],
-    edges: []
-  }))
+  useStore: jest.fn()
 }));
 
 const mockedUseStore = useStore as jest.MockedFunction<typeof useStore>;
+const KONAMI_SEQUENCE = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'b',
+  'a'
+];
 
-// Mock vibrate API
-const mockVibrate = jest.fn();
-Object.defineProperty(navigator, 'vibrate', {
-  value: mockVibrate,
-  writable: true,
+let originalVibrate: typeof navigator.vibrate | undefined;
+
+beforeAll(() => {
+  originalVibrate = navigator.vibrate;
+  Object.defineProperty(navigator, 'vibrate', {
+    configurable: true,
+    value: jest.fn()
+  });
+});
+
+afterAll(() => {
+  Object.defineProperty(navigator, 'vibrate', {
+    configurable: true,
+    value: originalVibrate
+  });
+});
+
+beforeEach(() => {
+  mockedUseStore.mockReset();
+  mockedUseStore.mockReturnValue({ nodes: [], edges: [] });
+  localStorage.clear();
+  document.body.className = '';
+});
+
+afterEach(() => {
+  jest.clearAllTimers();
+  jest.useRealTimers();
 });
 
 describe('EasterEggManager', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    localStorage.clear();
-    mockedUseStore.mockReturnValue({ nodes: [], edges: [] });
-  });
-
-  test('konami code triggers weird mode', async () => {
+  it('activates weird mode on Konami sequence', async () => {
     const onWeirdModeToggle = jest.fn();
-    render(
-      <EasterEggManager
-        onWeirdModeToggle={onWeirdModeToggle}
-      />
-    );
+    render(<EasterEggManager onWeirdModeToggle={onWeirdModeToggle} />);
 
-    // Enter Konami code
-    const konamiSequence = [
-      'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-      'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-      'b', 'a'
-    ];
-
-    for (const key of konamiSequence) {
+    KONAMI_SEQUENCE.forEach(key => {
       fireEvent.keyDown(window, { key });
-    }
+    });
 
     await waitFor(() => {
-      expect(onWeirdModeToggle).toHaveBeenCalledWith(true);
-      expect(document.body.classList.contains('weird-mode')).toBe(true);
+      expect(onWeirdModeToggle).toHaveBeenLastCalledWith(true);
     });
+    expect(document.body.classList.contains('weird-mode')).toBe(true);
   });
 
-  test('long press shows debug mode', async () => {
+  it('enables debug mode after long press inside viewport', async () => {
+    jest.useFakeTimers();
     const onDebugModeToggle = jest.fn();
-    render(
-      <div className="react-flow__viewport">
-        <EasterEggManager
-          onDebugModeToggle={onDebugModeToggle}
-        />
-      </div>
-    );
+    const viewport = document.createElement('div');
+    viewport.className = 'react-flow__viewport';
+    document.body.appendChild(viewport);
 
-    const viewport = getByClassName('react-flow__viewport');
-    
-    // Simulate long press
+    render(<EasterEggManager onDebugModeToggle={onDebugModeToggle} />);
+
     fireEvent.mouseDown(viewport);
-
-    // Wait for long press duration
-    await waitFor(() => {
-      expect(onDebugModeToggle).toHaveBeenCalledWith(true);
-    }, { timeout: 1500 });
-
-    // Should show debug info
-    expect(screen.getByText('🐛 Debug Info')).toBeInTheDocument();
-  });
-
-  test('triple click activates expert mode', async () => {
-    const onExpertModeToggle = jest.fn();
-    render(
-      <div className="react-flow__viewport">
-        <EasterEggManager
-          onExpertModeToggle={onExpertModeToggle}
-        />
-      </div>
-    );
-
-    const viewport = getByClassName('react-flow__viewport');
-    
-    // Triple click
-    fireEvent.click(viewport);
-    fireEvent.click(viewport);
-    fireEvent.click(viewport);
-
-    await waitFor(() => {
-      expect(onExpertModeToggle).toHaveBeenCalledWith(true);
+    await act(async () => {
+      jest.advanceTimersByTime(1000);
     });
+
+    expect(onDebugModeToggle).toHaveBeenLastCalledWith(true);
+    expect(screen.getByText('🐛 Debug Info')).toBeInTheDocument();
+
+    document.body.removeChild(viewport);
   });
 
-  test('shift key toggles precision mode', () => {
+  it('toggles precision mode with Shift key and persists discovery', async () => {
+    jest.useFakeTimers();
     const onPrecisionModeToggle = jest.fn();
-    render(
-      <EasterEggManager
-        onPrecisionModeToggle={onPrecisionModeToggle}
-      />
-    );
+    const vibrateMock = navigator.vibrate as jest.Mock;
+    vibrateMock.mockClear();
+    render(<EasterEggManager onPrecisionModeToggle={onPrecisionModeToggle} />);
 
-    // Press shift
     fireEvent.keyDown(window, { key: 'Shift' });
     expect(onPrecisionModeToggle).toHaveBeenCalledWith(true);
     expect(document.body.classList.contains('precision-mode')).toBe(true);
+    await waitFor(() => {
+      expect(vibrateMock).toHaveBeenCalled();
+    });
 
-    // Release shift
     fireEvent.keyUp(window, { key: 'Shift' });
     expect(onPrecisionModeToggle).toHaveBeenCalledWith(false);
     expect(document.body.classList.contains('precision-mode')).toBe(false);
-  });
 
-  test('discovered eggs are saved to localStorage', async () => {
-    render(<EasterEggManager />);
-
-    // Trigger Konami code
-    const konamiSequence = [
-      'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-      'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-      'b', 'a'
-    ];
-
-    for (const key of konamiSequence) {
-      fireEvent.keyDown(window, { key });
-    }
+    await act(async () => {
+      jest.runOnlyPendingTimers();
+    });
 
     await waitFor(() => {
       const saved = JSON.parse(localStorage.getItem('discoveredEasterEggs') || '[]');
-      expect(saved).toContain('konami');
+      expect(saved).toContain('shift');
     });
   });
 });
 
 describe('PlayfulLoadingStates', () => {
-  test('shows loading message with emoji', () => {
-    render(
-      <PlayfulLoadingStates
-        isLoading={true}
-        loadingType="graph"
-      />
-    );
+  it('renders animated loading message while active and hides when stopped', () => {
+    const randomSpy = jest.spyOn(Math, 'random').mockReturnValue(0);
+    jest.useFakeTimers();
 
-    // Should show one of the graph loading messages
-    const container = getByClassName('playful-loading-container');
-    expect(container).toBeInTheDocument();
-    
-    // Should have emoji and message
-    expect(container.querySelector('span')).toBeInTheDocument();
-  });
-
-  test('cycles through messages', async () => {
     const { rerender } = render(
-      <PlayfulLoadingStates
-        isLoading={true}
-        loadingType="preview"
-      />
+      <PlayfulLoadingStates isLoading loadingType="general" />
     );
 
-    const firstMessage = getByClassName('playful-loading-container').textContent;
+    act(() => {
+      jest.advanceTimersByTime(1500);
+    });
 
-    // Wait for message to change
-    await waitFor(() => {
-      const currentMessage = getByClassName('playful-loading-container').textContent;
-      expect(currentMessage).not.toBe(firstMessage);
-    }, { timeout: 4000 });
-  });
+    expect(
+      screen.getByText(/Doing something magical/i)
+    ).toBeInTheDocument();
 
-  test('hides when not loading', () => {
-    const { rerender } = render(
-      <PlayfulLoadingStates
-        isLoading={false}
-        loadingType="save"
-      />
-    );
+    rerender(<PlayfulLoadingStates isLoading={false} loadingType="general" />);
+    expect(document.querySelector('.playful-loading-container')).toBeNull();
 
-    expect(screen.queryByClassName('playful-loading-container')).not.toBeInTheDocument();
+    randomSpy.mockRestore();
   });
 });
 
 describe('PlayfulProgressBar', () => {
-  test('shows progress percentage', () => {
-    render(
-      <PlayfulProgressBar
-        progress={45}
-        message="Loading magic..."
-      />
+  it('shows message, percentage and updates width', () => {
+    const { rerender } = render(
+      <PlayfulProgressBar progress={0} message="Loading magic..." />
     );
 
     expect(screen.getByText('Loading magic...')).toBeInTheDocument();
-    expect(screen.getByText('45%')).toBeInTheDocument();
-  });
+    expect(screen.getByText('0%')).toBeInTheDocument();
 
-  test('progress bar fills correctly', () => {
-    const { rerender } = render(
-      <PlayfulProgressBar
-        progress={0}
-      />
-    );
+    const initialFill = screen
+      .getByText('Loading magic...')
+      .parentElement?.nextElementSibling?.firstElementChild as HTMLElement;
+    expect(initialFill.style.width).toBe('0%');
 
-    const progressBar = getByStyle({ width: '0%' });
-    expect(progressBar).toBeInTheDocument();
+    rerender(<PlayfulProgressBar progress={75} message="Loading magic..." />);
+    expect(screen.getByText('75%')).toBeInTheDocument();
 
-    rerender(<PlayfulProgressBar progress={75} />);
-    
-    const updatedBar = getByStyle({ width: '75%' });
-    expect(updatedBar).toBeInTheDocument();
-  });
-
-  test('can hide percentage', () => {
-    render(
-      <PlayfulProgressBar
-        progress={50}
-        showPercentage={false}
-      />
-    );
-
-    expect(screen.queryByText('50%')).not.toBeInTheDocument();
+    const updatedFill = screen
+      .getByText('Loading magic...')
+      .parentElement?.nextElementSibling?.firstElementChild as HTMLElement;
+    expect(updatedFill.style.width).toBe('75%');
   });
 });
 
 describe('DelightfulIntegration', () => {
-  test('integrates all delightful features', () => {
-    render(
-      <DelightfulIntegration>
-        <div>Test App</div>
-      </DelightfulIntegration>
-    );
-
-    expect(screen.getByText('Test App')).toBeInTheDocument();
-  });
-
-  test('can disable features individually', () => {
+  it('renders children inside ReactFlow provider', () => {
     render(
       <DelightfulIntegration
         enableEasterEggs={false}
         enableAnimations={false}
         enablePlayfulLoading={false}
       >
-        <div>Test App</div>
+        <div>Delightful App</div>
       </DelightfulIntegration>
     );
 
-    // Should still render children
-    expect(screen.getByText('Test App')).toBeInTheDocument();
+    expect(screen.getByText('Delightful App')).toBeInTheDocument();
+    expect(screen.getByTestId('reactflow-provider')).toBeInTheDocument();
   });
 
-  test('unlocks achievements', async () => {
+  it('unlocks complex graph achievement when node threshold exceeded', async () => {
+    mockedUseStore.mockReset();
+    mockedUseStore
+      .mockReturnValueOnce({ nodes: [], edges: [] })
+      .mockReturnValueOnce({
+        nodes: Array.from({ length: 11 }, (_, index) => ({ id: `node-${index}` })),
+        edges: []
+      })
+      .mockReturnValue({
+        nodes: Array.from({ length: 11 }, (_, index) => ({ id: `node-${index}` })),
+        edges: []
+      });
+
     const { rerender } = render(
-      <DelightfulIntegration>
-        <div>Test App</div>
+      <DelightfulIntegration enableEasterEggs={false}>
+        <div>App</div>
       </DelightfulIntegration>
     );
-
-    // Mock nodes and edges to trigger achievement
-    mockedUseStore.mockReturnValue({
-      nodes: [{ id: '1' }, { id: '2' }, { id: '3' }],
-      edges: [{ id: 'e1' }, { id: 'e2' }, { id: 'e3' }],
-    });
 
     rerender(
-      <DelightfulIntegration>
-        <div>Test App</div>
+      <DelightfulIntegration enableEasterEggs={false}>
+        <div>App</div>
       </DelightfulIntegration>
     );
 
-    // Should unlock triangle achievement
     await waitFor(() => {
-      const unlocked = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
-      expect(unlocked).toContain('triangle');
-    });
-  });
-
-  test('shows achievement toast', async () => {
-    render(
-      <DelightfulIntegration>
-        <div>Test App</div>
-      </DelightfulIntegration>
-    );
-
-    // Trigger an achievement
-    mockedUseStore.mockReturnValue({
-      nodes: Array(11).fill({}).map((_, i) => ({ id: `node-${i}` })),
-      edges: [],
+      expect(document.querySelector('.achievement-toast')).toBeTruthy();
     });
 
-    await waitFor(() => {
-      const toast = document.querySelector('.achievement-toast');
-      expect(toast).toBeInTheDocument();
-      expect(toast?.textContent).toContain('Achievement Unlocked!');
-    });
+    const unlocked = JSON.parse(localStorage.getItem('unlockedAchievements') || '[]');
+    expect(unlocked).toContain('complex-graph');
   });
 });
-
-// Helper to get element by partial style
-function getByStyle(styles: Record<string, string>) {
-  const elements = document.querySelectorAll('*');
-  for (const element of elements) {
-    const elementStyles = (element as HTMLElement).style;
-    let matches = true;
-    
-    for (const [prop, value] of Object.entries(styles)) {
-      if (elementStyles.getPropertyValue(prop) !== value) {
-        matches = false;
-        break;
-      }
-    }
-    
-    if (matches) {
-      return element;
-    }
-  }
-  
-  throw new Error(`No element found with styles: ${JSON.stringify(styles)}`);
-}
-
-// Helper to get by class name
-function getByClassName(className: string) {
-  const element = document.querySelector(`.${className}`);
-  if (!element) {
-    throw new Error(`No element found with class: ${className}`);
-  }
-  return element;
-}

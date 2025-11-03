@@ -3,7 +3,7 @@
  */
 
 import { Node } from 'reactflow';
-import { EditableNodeData } from './nodePropTypes';
+import type { EditableNodeData } from './BaseEditableNode';
 import { BaseInlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineEditableNode';
 import { TextBlockNode } from '../../../runtime/nodes/epic1/TextBlockNode';
 import {
@@ -23,6 +23,58 @@ import { debugLogEpic1 } from '../../../utils/debug';
 /**
  * Convert a React Flow node to an Epic 1 runtime node
  */
+const toWeightedOption = (
+  input: Record<string, unknown>,
+  index: number
+): WeightedOption => {
+  const id =
+    typeof input.id === 'string' && input.id.trim().length > 0
+      ? input.id
+      : `option-${index + 1}`;
+  const text =
+    typeof input.text === 'string'
+      ? input.text
+      : String(input.text ?? `Option ${index + 1}`);
+  const weightCandidate =
+    typeof input.weight === 'number'
+      ? input.weight
+      : Number.parseFloat(String(input.weight ?? '0'));
+  const weight = Number.isFinite(weightCandidate) ? weightCandidate : 1;
+  const color =
+    typeof input.color === 'string' && input.color.trim().length > 0
+      ? input.color
+      : undefined;
+  return { id, text, weight, color };
+};
+
+const collectWeightedOptions = (source: unknown): WeightedOption[] => {
+  if (!source) {
+    return [];
+  }
+  if (Array.isArray(source)) {
+    return source.map((opt, idx) =>
+      toWeightedOption((opt ?? {}) as Record<string, unknown>, idx)
+    );
+  }
+  if (typeof source === 'string') {
+    try {
+      const parsed = JSON.parse(source);
+      return collectWeightedOptions(parsed);
+    } catch {
+      return [];
+    }
+  }
+  if (typeof source === 'object') {
+    const record = source as Record<string, unknown>;
+    if (Array.isArray(record.options)) {
+      return record.options.map((opt, idx) =>
+        toWeightedOption((opt ?? {}) as Record<string, unknown>, idx)
+      );
+    }
+  }
+  return [];
+};
+
 export function nodeDataToRuntimeNode(
   flowNode: Node<EditableNodeData>
 ): BaseInlineEditableNode | null {
@@ -33,95 +85,40 @@ export function nodeDataToRuntimeNode(
   try {
     switch (type) {
       case 'textBlock': {
-        // TextBlockNode constructor takes (id, text)
-        return new TextBlockNode(id, data.text || '');
+        const text =
+          typeof data.text === 'string' && data.text.length > 0
+            ? data.text
+            : typeof data.value === 'string'
+              ? data.value
+              : '';
+        return new TextBlockNode(id, text);
       }
 
       case 'weightedChoice': {
-        // Parse options from data
-        let options: WeightedOption[] = [];
+        const optionSources: unknown[] = [];
+        if (data.options !== undefined) {
+          optionSources.push(data.options);
+        }
+        if (data.value !== undefined) {
+          optionSources.push(data.value);
+        }
 
-        if (data.options) {
-          // Check if options is already an array
-          if (Array.isArray(data.options)) {
-            // Already parsed - ensure all options have ids
-            options = data.options.map((opt: Record<string, unknown>, idx: number) => ({
-              id: opt.id || `option-${idx + 1}`,
-              text: opt.text || '',
-              weight: opt.weight || 1
-            }));
-          } else if (typeof data.options === 'string') {
-            // Try to parse string
-            try {
-              const parsed = JSON.parse(data.options);
-              if (Array.isArray(parsed)) {
-                options = parsed.map((opt: Record<string, unknown>, idx: number) => ({
-                  id: opt.id || `option-${idx + 1}`,
-                  text: opt.text || '',
-                  weight: opt.weight || 1
-                }));
-              }
-            } catch (e) {
-              console.warn('Failed to parse options string:', e);
-              options = [
-                { id: 'option-1', text: 'Option 1', weight: 1 },
-                { id: 'option-2', text: 'Option 2', weight: 1 }
-              ];
-            }
-          } else if (typeof data.options === 'object' && data.options.options) {
-            // Handle case where data.options is an object with an options property
-            const innerOptions = data.options.options;
-            if (Array.isArray(innerOptions)) {
-              options = innerOptions.map((opt: Record<string, unknown>, idx: number) => ({
-                id: opt.id || `option-${idx + 1}`,
-                text: opt.text || '',
-                weight: opt.weight || 1,
-                hasBranch: opt.hasBranch !== undefined ? opt.hasBranch : false
-              }));
-            }
-          } else {
-            console.warn(
-              'Unknown options format:',
-              typeof data.options,
-              data.options
-            );
-            options = [
-              { id: 'option-1', text: 'Option 1', weight: 50 },
-              { id: 'option-2', text: 'Option 2', weight: 50 }
-            ];
+        let options: WeightedOption[] = [];
+        for (const source of optionSources) {
+          options = collectWeightedOptions(source);
+          if (options.length > 0) {
+            break;
           }
-        } else if (data.value) {
-          // Try to parse from value field
-          try {
-            const parsed =
-              typeof data.value === 'string'
-                ? JSON.parse(data.value)
-                : data.value;
-            if (Array.isArray(parsed)) {
-              options = parsed.map((opt: Record<string, unknown>, idx: number) => ({
-                id: opt.id || `option-${idx + 1}`,
-                text: opt.text || '',
-                weight: opt.weight || 1
-              }));
-            } else if (
-              parsed &&
-              parsed.options &&
-              Array.isArray(parsed.options)
-            ) {
-              options = parsed.options.map((opt: Record<string, unknown>, idx: number) => ({
-                id: opt.id || `option-${idx + 1}`,
-                text: opt.text || '',
-                weight: opt.weight || 1
-              }));
-            }
-          } catch (e) {
-            console.warn('Failed to parse weighted choice value:', e);
-            options = [
-              { id: 'option-1', text: data.value || 'Option 1', weight: 1 }
-            ];
-          }
-        } else {
-          // Default options
+        }
+
+        if (options.length === 0 && optionSources.length > 0) {
+          console.warn(
+            '[nodeFactory] Unable to parse weighted choice options from sources',
+            optionSources
+          );
+        }
+
+        if (options.length === 0) {
           options = [
             { id: 'option-1', text: 'Option 1', weight: 1 },
             { id: 'option-2', text: 'Option 2', weight: 1 }
@@ -139,7 +136,13 @@ export function nodeDataToRuntimeNode(
       case 'concat': {
         // ConcatNode constructor takes (id, config)
         // Get separator from value field if it exists (for templates)
-        const separator = data.value || data.separator || ' ';
+        const separatorCandidate = (data as { separator?: unknown }).separator;
+        const separator =
+          typeof data.value === 'string'
+            ? data.value
+            : typeof separatorCandidate === 'string'
+              ? separatorCandidate
+              : ' ';
         return new ConcatNode(id, {
           separator: separator,
           trimInputs: data.trimInputs !== false
@@ -155,9 +158,27 @@ export function nodeDataToRuntimeNode(
 
         // VariableNode constructor takes (id, name, defaultValue, config)
         const variableConfig: VariableConfig = {
-          name: data.variableName || data.name || 'myVar',
-          defaultValue: data.defaultValue ?? '',
-          currentValue: data.value ?? data.defaultValue ?? ''
+          name:
+            typeof data.variableName === 'string' &&
+            data.variableName.trim().length > 0
+              ? data.variableName
+              : typeof data.name === 'string' && data.name.trim().length > 0
+                ? data.name
+                : 'myVar',
+          defaultValue:
+            typeof data.defaultValue === 'string'
+              ? data.defaultValue
+              : data.defaultValue !== null && data.defaultValue !== undefined
+                ? String(data.defaultValue)
+                : '',
+          currentValue:
+            typeof data.value === 'string'
+              ? data.value
+              : data.value !== null && data.value !== undefined
+                ? String(data.value)
+                : typeof data.defaultValue === 'string'
+                  ? data.defaultValue
+                  : ''
         };
 
         const nodeConfig: VariableNodeConfig = { mode };
@@ -167,12 +188,18 @@ export function nodeDataToRuntimeNode(
 
       case 'output': {
         // OutputNode constructor takes (id, initialValue, config)
-        const node = new OutputNode(id, data.label || data.value || 'Output');
+        const label =
+          typeof data.label === 'string' && data.label.trim().length > 0
+            ? data.label
+            : typeof data.value === 'string' && data.value.trim().length > 0
+              ? data.value
+              : 'Output';
+        const node = new OutputNode(id, label);
         debugLogEpic1(
           '[nodeFactory] Created output node:',
           id,
           'with label:',
-          data.label || data.value || 'Output'
+          label
         );
         return node;
       }

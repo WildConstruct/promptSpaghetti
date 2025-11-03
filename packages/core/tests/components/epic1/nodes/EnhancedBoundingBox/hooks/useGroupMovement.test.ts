@@ -12,11 +12,11 @@ jest.mock('../../../../../../utils/performance/PerformanceMonitor', () => ({
   }
 }));
 
-const setNodesMock = jest.fn<(updater: (nodes: Node[]) => Node[]) => void>();
+const mockSetNodes = jest.fn<(updater: (nodes: Node[]) => Node[]) => void>();
 
 jest.mock('reactflow', () => ({
   useReactFlow: () => ({
-    setNodes: setNodesMock
+    setNodes: mockSetNodes
   })
 }));
 
@@ -52,7 +52,7 @@ describe('useGroupMovement', () => {
     ] as Node[];
     containedNodes = nodesState.slice(0, 2);
 
-    setNodesMock.mockImplementation(updater => {
+    mockSetNodes.mockImplementation(updater => {
       nodesState = updater(nodesState);
     });
     (PerformanceMonitor.getInstance as jest.Mock).mockReturnValue(
@@ -70,13 +70,7 @@ describe('useGroupMovement', () => {
   it('moves contained nodes together while locked and dragging', async () => {
     const { result, rerender } = renderHook(
       ({ position, dragging, locked }) =>
-        useGroupMovement(
-          'box-1',
-          locked,
-          dragging,
-          position,
-          containedNodes
-        ),
+        useGroupMovement('box-1', locked, dragging, position, containedNodes),
       {
         initialProps: {
           locked: true,
@@ -96,7 +90,7 @@ describe('useGroupMovement', () => {
       });
     });
 
-    expect(setNodesMock).toHaveBeenCalledTimes(1);
+    expect(mockSetNodes).toHaveBeenCalledTimes(1);
     expect(nodesState[0].position).toEqual({ x: 115, y: 110 });
     expect(nodesState[1].position).toEqual({ x: 165, y: 190 });
     expect(nodesState[2].position).toEqual({ x: 400, y: 400 });
@@ -120,7 +114,7 @@ describe('useGroupMovement', () => {
       expect.any(Number)
     );
 
-    setNodesMock.mockClear();
+    mockSetNodes.mockClear();
     await act(async () => {
       rerender({
         locked: false,
@@ -132,6 +126,6 @@ describe('useGroupMovement', () => {
     act(() => {
       result.current.handleGroupMove(10, 10);
     });
-    expect(setNodesMock).not.toHaveBeenCalled();
+    expect(mockSetNodes).not.toHaveBeenCalled();
   });
 });

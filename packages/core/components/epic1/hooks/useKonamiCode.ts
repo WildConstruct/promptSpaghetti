@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface UseKonamiCodeOptions {
   code?: string[];
@@ -28,94 +28,125 @@ export function useKonamiCode({
   onDeactivate,
   debug = false
 }: UseKonamiCodeOptions = {}) {
-  const [sequence, setSequence] = useState<string[]>([]);
   const [isActive, setIsActive] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const codeRef = useRef(code);
+  const progressRef = useRef(0);
+  const historyRef = useRef<string[]>([]);
+  const activeRef = useRef(false);
+  const onActivateRef = useRef(onActivate);
+  const onDeactivateRef = useRef(onDeactivate);
+  const debugRef = useRef(debug);
+
+  useEffect(() => {
+    codeRef.current = code;
+  }, [code]);
+
+  useEffect(() => {
+    onActivateRef.current = onActivate;
+  }, [onActivate]);
+
+  useEffect(() => {
+    onDeactivateRef.current = onDeactivate;
+  }, [onDeactivate]);
+
+  useEffect(() => {
+    debugRef.current = debug;
+  }, [debug]);
+
+  const resetProgress = useCallback(() => {
+    progressRef.current = 0;
+    historyRef.current = [];
+    setProgress(0);
+  }, []);
 
   const activate = useCallback(() => {
     setIsActive(true);
-    onActivate?.();
-    if (debug) {
+    activeRef.current = true;
+    onActivateRef.current?.();
+    if (debugRef.current) {
       console.log('🎮 Konami Code Activated!');
     }
-  }, [onActivate, debug]);
+  }, []);
 
   const deactivate = useCallback(() => {
     setIsActive(false);
-    onDeactivate?.();
-    if (debug) {
+    activeRef.current = false;
+    resetProgress();
+    onDeactivateRef.current?.();
+    if (debugRef.current) {
       console.log('🎮 Konami Code Deactivated');
     }
-  }, [onDeactivate, debug]);
+  }, [resetProgress]);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Skip if in input field or already active
-      if (
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLTextAreaElement ||
-        isActive
-      ) {
+    resetProgress();
+    activeRef.current = isActive;
+  }, [isActive, resetProgress]);
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (activeRef.current) {
         return;
       }
 
-      const newSequence = [...sequence, event.code];
-
-      // Debug: Show progress
-      if (debug) {
-        const progress = code
-          .slice(0, newSequence.length)
-          .every((c, i) => c === newSequence[i]);
-        if (
-          progress &&
-          newSequence.length > 0 &&
-          newSequence.length <= code.length
-        ) {
-          console.log(`Konami progress: ${newSequence.length}/${code.length}`);
-        }
+      const target = event.target as HTMLElement | null;
+      if (target?.tagName === 'INPUT' || target?.tagName === 'TEXTAREA') {
+        return;
       }
 
-      // Check if sequence matches
-      if (newSequence.length >= code.length) {
-        const lastSequence = newSequence.slice(-code.length);
-        if (JSON.stringify(lastSequence) === JSON.stringify(code)) {
-          activate();
-          setSequence([]);
-          return;
-        }
+      const sequence = codeRef.current;
+      if (sequence.length === 0) {
+        return;
       }
 
-      // Reset if wrong key pressed
-      const expectedKey = code[newSequence.length - 1];
-      if (newSequence.length > 0 && event.code !== expectedKey) {
-        const partialMatch = code
-          .slice(0, newSequence.length - 1)
-          .every((c, i) => c === newSequence[i]);
-        if (!partialMatch || event.code !== code[newSequence.length - 1]) {
-          if (debug) {
-            console.log('Konami sequence reset');
+      const history = historyRef.current;
+      history.push(event.code);
+      if (history.length > sequence.length) {
+        history.shift();
+      }
+
+      const maxLen = Math.min(sequence.length, history.length);
+      let nextIndex = 0;
+
+      for (let len = maxLen; len > 0; len--) {
+        let matches = true;
+        for (let i = 0; i < len; i++) {
+          if (history[history.length - len + i] !== sequence[i]) {
+            matches = false;
+            break;
           }
-          setSequence([]);
-          return;
+        }
+        if (matches) {
+          nextIndex = len;
+          break;
         }
       }
 
-      setSequence(newSequence);
+      progressRef.current = nextIndex;
+      setProgress(nextIndex);
 
-      // Reset if too long
-      if (newSequence.length > code.length * 2) {
-        setSequence([]);
+      if (debugRef.current) {
+        console.debug(`Konami progress: ${nextIndex}/${sequence.length}`);
+      }
+
+      if (nextIndex >= sequence.length) {
+        resetProgress();
+        activate();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [sequence, isActive, code, activate, debug]);
+    const listener = (event: KeyboardEvent) => handler(event);
+    document.addEventListener('keydown', listener);
+    return () => document.removeEventListener('keydown', listener);
+  }, [activate, resetProgress]);
 
   return {
     isActive,
     activate,
     deactivate,
-    progress: sequence.length,
-    total: code.length
+    progress,
+    total: codeRef.current.length
   };
 }

@@ -62,9 +62,18 @@ export class ElementDetector {
         });
       };
 
+      const queryTarget = () => {
+        try {
+          return document.querySelector<HTMLElement>(selector);
+        } catch (error) {
+          console.error(`[ElementDetector] querySelector failed for "${selector}"`, error);
+          return null;
+        }
+      };
+
       const attemptFind = () => {
         attempts++;
-        const element = document.querySelector<HTMLElement>(selector);
+        const element = queryTarget();
 
         if (element) {
           console.log(`[ElementDetector] Found element "${selector}" after ${attempts} attempts (${Date.now() - startTime}ms)`);
@@ -89,7 +98,7 @@ export class ElementDetector {
       }, timeout);
 
       // Try to find element immediately
-      const immediateElement = document.querySelector<HTMLElement>(selector);
+      const immediateElement = queryTarget();
       if (immediateElement) {
         console.log(`[ElementDetector] Found element "${selector}" immediately`);
         complete(immediateElement, true);
@@ -100,7 +109,7 @@ export class ElementDetector {
       if (useMutationObserver) {
         observer = new MutationObserver(() => {
           // Check if our target element was added
-          const element = document.querySelector<HTMLElement>(selector);
+          const element = queryTarget();
           if (element) {
             console.log(`[ElementDetector] Found element "${selector}" via MutationObserver after ${attempts} attempts`);
             complete(element, true);

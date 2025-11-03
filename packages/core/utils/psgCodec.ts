@@ -155,7 +155,8 @@ export function roundTripTest(psg: PSGFile): boolean {
     const serialized = writePsg(psg);
     const deserialized = readPsg(serialized);
 
-    const normalize = (obj: unknown): unknown => JSON.parse(JSON.stringify(obj));
+    const normalize = (obj: unknown): unknown =>
+      JSON.parse(JSON.stringify(obj));
     return (
       JSON.stringify(normalize(psg)) === JSON.stringify(normalize(deserialized))
     );
@@ -168,17 +169,25 @@ function cryptoRandomId(): string {
   const c = (
     globalThis as unknown as { crypto?: { randomUUID?: () => string } }
   ).crypto;
-  if (c?.randomUUID) {return c.randomUUID();}
+  if (c?.randomUUID) {
+    return c.randomUUID();
+  }
   return 'psg_' + Math.random().toString(36).slice(2, 10);
 }
 
-function checkSecurityViolations(obj: unknown, path: string = ''): PSGError | null {
-  if (!obj || typeof obj !== 'object') {return null;}
+function checkSecurityViolations(
+  obj: unknown,
+  path: string = ''
+): PSGError | null {
+  if (!obj || typeof obj !== 'object') {
+    return null;
+  }
 
   const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
   const xssPatterns = [/javascript:/i, /<script/i, /eval\(/i];
 
-  for (const key of Object.keys(obj)) {
+  const record = obj as Record<string, unknown>;
+  for (const key of Object.keys(record)) {
     const currentPath = path ? `${path}.${key}` : key;
 
     if (dangerousKeys.includes(key)) {
@@ -190,7 +199,7 @@ function checkSecurityViolations(obj: unknown, path: string = ''): PSGError | nu
       };
     }
 
-    const value = obj[key];
+    const value = record[key];
     if (typeof value === 'string') {
       for (const pattern of xssPatterns) {
         if (pattern.test(value)) {
@@ -206,7 +215,9 @@ function checkSecurityViolations(obj: unknown, path: string = ''): PSGError | nu
 
     if (typeof value === 'object' && value !== null) {
       const nested = checkSecurityViolations(value, currentPath);
-      if (nested) {return nested;}
+      if (nested) {
+        return nested;
+      }
     }
   }
 

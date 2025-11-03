@@ -62,12 +62,18 @@ describe('ParserSecurity', () => {
   });
 
   it('rejects non-graph responses and logs a warning', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
 
-    const result = security.validateOutputSafety(null as unknown as Record<string, unknown>);
+    const result = security.validateOutputSafety(
+      null as unknown as Record<string, unknown>
+    );
 
     expect(result).toBe(false);
-    expect(warnSpy).toHaveBeenCalledWith('ParserSecurity: Invalid response format');
+    expect(warnSpy).toHaveBeenCalledWith(
+      'ParserSecurity: Invalid response format'
+    );
 
     warnSpy.mockClear();
 
@@ -77,11 +83,15 @@ describe('ParserSecurity', () => {
     );
 
     expect(secondResult).toBe(false);
-    expect(warnSpy).toHaveBeenCalledWith('ParserSecurity: Invalid response format');
+    expect(warnSpy).toHaveBeenCalledWith(
+      'ParserSecurity: Invalid response format'
+    );
   });
 
   it('flags responses with dangerous patterns', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
 
     const result = security.validateOutputSafety({
       nodes: [{ content: '<script>alert(1)</script>' }],
@@ -95,7 +105,9 @@ describe('ParserSecurity', () => {
   });
 
   it('rejects responses that contain executable code in nodes', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
 
     const result = security.validateOutputSafety({
       nodes: [{ content: '<div onload="alert(1)"></div>' }],
@@ -103,11 +115,15 @@ describe('ParserSecurity', () => {
     });
 
     expect(result).toBe(false);
-    expect(warnSpy).toHaveBeenCalledWith('Executable code detected in node content');
+    expect(warnSpy).toHaveBeenCalledWith(
+      'Executable code detected in node content'
+    );
   });
 
   it('warns when cycles are detected but still accepts the structure', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
 
     const result = security.validateOutputSafety({
       nodes: [{ content: 'node-1' }, { content: 'node-2' }],
@@ -122,7 +138,9 @@ describe('ParserSecurity', () => {
   });
 
   it('rejects structures with invalid edge references', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
 
     const result = security.validateOutputSafety({
       nodes: [{}],
@@ -134,15 +152,15 @@ describe('ParserSecurity', () => {
   });
 
   it('rejects structures with invalid shapes before cycle detection', () => {
-    const validateStructure = (security as any).validateStructure.bind(security);
+    const validateStructure = (security as any).validateStructure.bind(
+      security
+    );
     const baseNodes = [{}, {}];
 
-    expect(
-      validateStructure({ nodes: 'not-array', edges: [] })
-    ).toBe(false);
-    expect(
-      validateStructure({ nodes: baseNodes, edges: 'not-array' })
-    ).toBe(false);
+    expect(validateStructure({ nodes: 'not-array', edges: [] })).toBe(false);
+    expect(validateStructure({ nodes: baseNodes, edges: 'not-array' })).toBe(
+      false
+    );
     expect(
       validateStructure({
         nodes: baseNodes,
@@ -163,9 +181,46 @@ describe('ParserSecurity', () => {
     ).toBe(false);
   });
 
+  it('issues cycle warning but preserves structure validity', () => {
+    const validateStructure = (security as any).validateStructure.bind(
+      security
+    );
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+
+    const cyclicResult = validateStructure({
+      nodes: [{}, {}],
+      edges: [
+        { source: 0, target: 1 },
+        { source: 1, target: 0 }
+      ]
+    });
+
+    expect(cyclicResult).toBe(true);
+    expect(warnSpy).toHaveBeenCalledWith('Cycle detected in graph structure');
+
+    warnSpy.mockClear();
+
+    const acyclicResult = validateStructure({
+      nodes: [{}, {}, {}],
+      edges: [
+        { source: 0, target: 1 },
+        { source: 1, target: 2 }
+      ]
+    });
+
+    expect(acyclicResult).toBe(true);
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    warnSpy.mockRestore();
+  });
+
   it('stores security events, filters invalid entries, and trims history to 100 records', () => {
     process.env.NODE_ENV = 'development';
-    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
+    const logSpy = jest
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
 
     const baseDate = Date.now();
     const existingLogs = Array.from({ length: 100 }, (_, index) => ({
@@ -196,7 +251,9 @@ describe('ParserSecurity', () => {
     expect(storedLogs[storedLogs.length - 1]).toEqual(
       expect.objectContaining({ event: 'new-security-event' })
     );
-    expect(storedLogs[0]).toEqual(expect.objectContaining({ event: 'existing-1' }));
+    expect(storedLogs[0]).toEqual(
+      expect.objectContaining({ event: 'existing-1' })
+    );
   });
 
   it('recovers from corrupt stored logs when recording a security event', () => {

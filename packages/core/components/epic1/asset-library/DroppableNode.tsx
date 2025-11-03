@@ -6,7 +6,15 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { NodeProps } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
-import { DraggedPreset, Preset } from './types';
+import {
+  DraggedPreset,
+  Preset,
+  isTextBlockPreset,
+  isWeightedChoicePreset,
+  isConcatPreset,
+  isVariablePreset,
+  isOutputPreset
+} from './types';
 import { applyPresetToNode } from './presetUtils';
 import './DroppableNode.css';
 
@@ -63,16 +71,15 @@ export function withDroppableNode<T extends NodeProps<DroppableNodeData>>(
 
       // Update node data through React Flow's onChange
       if (data.onEdit) {
-        // For text-based presets, pass the text value
-        if (preset.nodeType === 'textBlock' && preset.value.text) {
+        if (isTextBlockPreset(preset) && preset.value.text) {
           data.onEdit(preset.value.text);
-        } else if (preset.nodeType === 'weightedChoice' && preset.value.options) {
+        } else if (isWeightedChoicePreset(preset) && preset.value.options) {
           data.onEdit(JSON.stringify(preset.value.options));
-        } else if (preset.nodeType === 'concat' && preset.value.separator !== undefined) {
+        } else if (isConcatPreset(preset) && preset.value.separator !== undefined) {
           data.onEdit(preset.value.separator);
-        } else if (preset.nodeType === 'variable' && preset.value.variableName) {
+        } else if (isVariablePreset(preset) && preset.value.variableName) {
           data.onEdit(preset.value.variableName);
-        } else if (preset.nodeType === 'output' && preset.value.label) {
+        } else if (isOutputPreset(preset) && preset.value.label) {
           data.onEdit(preset.value.label);
         }
       }

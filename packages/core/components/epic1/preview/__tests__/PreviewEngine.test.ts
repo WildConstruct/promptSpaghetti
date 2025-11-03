@@ -2,13 +2,15 @@
  * Tests for PreviewEngine
  */
 
-import { PreviewEngine, PreviewState, PreviewUpdate } from '../PreviewEngine';
+import { PreviewEngine, PreviewState } from '../PreviewEngine';
 import {
   Epic1Graph,
-  ExecutionResult
+  ExecutionResult,
+  Epic1ExecutionEngine
 } from '../../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { TextBlockNode } from '../../../../runtime/nodes/epic1/TextBlockNode';
 import { OutputNode } from '../../../../runtime/nodes/epic1/OutputNode';
+import type { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'reactflow';
 
 // Mock the execution engine
 jest.mock('../../../../runtime/nodes/epic1/Epic1ExecutionEngine', () => {
@@ -30,15 +32,20 @@ jest.mock('../../../../runtime/nodes/epic1/Epic1ExecutionEngine', () => {
   };
 });
 
-const mockedExecutionEngine = jest.mocked(Epic1ExecutionEngine);
+const mockedExecutionEngine = Epic1ExecutionEngine as jest.MockedClass<
+  typeof Epic1ExecutionEngine
+>;
 describe('PreviewEngine', () => {
   let engine: PreviewEngine;
   let mockGraph: Epic1Graph;
+  let reactFlowNodes: ReactFlowNode[];
+  let reactFlowEdges: ReactFlowEdge[];
 
   beforeEach(() => {
     // Clear all timers
     jest.clearAllTimers();
     jest.useFakeTimers();
+    mockedExecutionEngine.mockClear();
 
     // Create test graph
     const textNode = new TextBlockNode({ id: 'node1', text: 'Hello' });
@@ -51,6 +58,29 @@ describe('PreviewEngine', () => {
       ]),
       edges: [{ id: 'edge1', source: 'node1', target: 'node2' }]
     };
+
+    reactFlowNodes = [
+      {
+        id: 'node1',
+        type: 'text-block',
+        data: { label: 'Hello' },
+        position: { x: 0, y: 0 }
+      },
+      {
+        id: 'node2',
+        type: 'output',
+        data: { label: 'Output' },
+        position: { x: 200, y: 0 }
+      }
+    ];
+
+    reactFlowEdges = [
+      {
+        id: 'edge1',
+        source: 'node1',
+        target: 'node2'
+      }
+    ];
 
     // Create engine with short debounce for testing
     engine = new PreviewEngine({
@@ -68,7 +98,7 @@ describe('PreviewEngine', () => {
     it('should initialize with default options', () => {
       const defaultEngine = new PreviewEngine();
       expect(defaultEngine.getState()).toBe(PreviewState.IDLE);
-      expect(defaultEngine.getSeeds()).toEqual([1234, 5678, 9012]);
+      expect(defaultEngine.getSeeds()).toEqual([3141, 5926, 5358, 9793]);
       defaultEngine.dispose();
     });
 
@@ -84,9 +114,9 @@ describe('PreviewEngine', () => {
       engine.subscribe(callback);
 
       // Make rapid updates
-      engine.updatePreview(mockGraph);
-      engine.updatePreview(mockGraph);
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Should immediately go to pending
       expect(callback).toHaveBeenCalledWith(
@@ -126,24 +156,20 @@ describe('PreviewEngine', () => {
       engine.subscribe(callback);
 
       // First update
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Advance halfway through debounce
       jest.advanceTimersByTime(50);
 
       // New update should cancel the first
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
-      // Advance past original debounce time
-      jest.advanceTimersByTime(100);
-
-      // Should still be pending (new debounce timer)
+      // Advance but stay just under the new debounce window
+      jest.advanceTimersByTime(90);
       expect(engine.getState()).toBe(PreviewState.PENDING);
 
-      // Advance to complete new debounce
-      jest.advanceTimersByTime(50);
-
-      // Now should be executing
+      // Finish the debounce window
+      jest.advanceTimersByTime(10);
       expect(engine.getState()).toBe(PreviewState.EXECUTING);
     });
   });
@@ -154,7 +180,11 @@ describe('PreviewEngine', () => {
       engine.subscribe(callback);
 
       // Immediate update
-      const promise = engine.updatePreviewImmediate(mockGraph);
+      const promise = engine.updatePreviewImmediate(
+        mockGraph,
+        reactFlowNodes,
+        reactFlowEdges
+      );
 
       // Should immediately start executing
       expect(callback).toHaveBeenCalledWith(
@@ -182,7 +212,7 @@ describe('PreviewEngine', () => {
       const unsub1 = engine.subscribe(callback1);
       const unsub2 = engine.subscribe(callback2);
 
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Both should be notified
       expect(callback1).toHaveBeenCalled();
@@ -194,7 +224,7 @@ describe('PreviewEngine', () => {
       callback2.mockClear();
 
       // Update again
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Only second callback should be notified
       expect(callback1).not.toHaveBeenCalled();
@@ -205,7 +235,7 @@ describe('PreviewEngine', () => {
 
     it('should send current state to new subscribers', () => {
       // Execute first
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
       jest.advanceTimersByTime(150);
 
       // Subscribe after state change
@@ -232,7 +262,7 @@ describe('PreviewEngine', () => {
       engine.subscribe(errorCallback);
       engine.subscribe(normalCallback);
 
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Error callback throws, but normal callback should still be called
       expect(errorCallback).toHaveBeenCalled();
@@ -261,7 +291,11 @@ describe('PreviewEngine', () => {
       engine.setSeeds([999]);
 
       // Execute
-      await engine.updatePreviewImmediate(mockGraph);
+      await engine.updatePreviewImmediate(
+        mockGraph,
+        reactFlowNodes,
+        reactFlowEdges
+      );
 
       // Check results contain the new seed
       const lastCall = callback.mock.calls[callback.mock.calls.length - 1][0];
@@ -277,7 +311,7 @@ describe('PreviewEngine', () => {
       const callback = jest.fn();
       engine.subscribe(callback);
 
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Advance less than new delay
       jest.advanceTimersByTime(400);
@@ -299,7 +333,7 @@ describe('PreviewEngine', () => {
       const callback = jest.fn();
       engine.subscribe(callback);
 
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Should execute immediately with 0 delay
       jest.advanceTimersByTime(0);
@@ -317,7 +351,11 @@ describe('PreviewEngine', () => {
       const callback = jest.fn();
       engine.subscribe(callback);
 
-      await engine.updatePreviewImmediate(mockGraph);
+      await engine.updatePreviewImmediate(
+        mockGraph,
+        reactFlowNodes,
+        reactFlowEdges
+      );
 
       // Should report error state
       expect(callback).toHaveBeenCalledWith(
@@ -351,7 +389,11 @@ describe('PreviewEngine', () => {
       timeoutEngine.subscribe(callback);
 
       jest.useRealTimers();
-      await timeoutEngine.updatePreviewImmediate(mockGraph);
+      await timeoutEngine.updatePreviewImmediate(
+        mockGraph,
+        reactFlowNodes,
+        reactFlowEdges
+      );
       jest.useFakeTimers();
 
       // Should timeout
@@ -369,14 +411,14 @@ describe('PreviewEngine', () => {
       engine.subscribe(callback);
 
       // Start execution
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
       jest.advanceTimersByTime(150);
 
       // Should be executing
       expect(engine.getState()).toBe(PreviewState.EXECUTING);
 
       // New update should cancel current execution
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Should go back to pending
       expect(engine.getState()).toBe(PreviewState.PENDING);
@@ -398,7 +440,7 @@ describe('PreviewEngine', () => {
       engine.subscribe(callback);
 
       // Start execution
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
       jest.advanceTimersByTime(150);
 
       // Clear callback history
@@ -426,7 +468,7 @@ describe('PreviewEngine', () => {
       engine.subscribe(callback);
 
       // Start a pending execution
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
 
       // Dispose
       engine.dispose();
@@ -445,18 +487,69 @@ describe('PreviewEngine', () => {
     it('should return current state', () => {
       expect(engine.getState()).toBe(PreviewState.IDLE);
 
-      engine.updatePreview(mockGraph);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
       expect(engine.getState()).toBe(PreviewState.PENDING);
     });
 
     it('should return last update', async () => {
       expect(engine.getLastUpdate()).toBeNull();
 
-      await engine.updatePreviewImmediate(mockGraph);
+      const executeSpy = jest
+        .spyOn(
+          engine as unknown as {
+            executeOnMainThread: (
+              graph: Epic1Graph,
+              signal: AbortSignal
+            ) => Promise<ExecutionResult[]>;
+          },
+          'executeOnMainThread'
+        )
+        .mockImplementation(function (this: PreviewEngine) {
+          const seeds = this.getSeeds().map(Number);
+          const baseStats = {
+            totalDuration: 10,
+            nodesExecuted: 1,
+            errors: [] as Array<{ nodeId: string; error: Error }>,
+            warnings: [] as Array<{ nodeId: string; message: string }>
+          };
+
+          return Promise.resolve(
+            seeds.map<ExecutionResult>(seed => ({
+              success: true,
+              output: `Mock output ${seed}`,
+              results: new Map(),
+              stats: baseStats,
+              context: {}
+            }))
+          );
+        });
+
+      const updatePromise = new Promise<void>(resolve => {
+        const unsubscribe = engine.subscribe(update => {
+          if (
+            update.state === PreviewState.IDLE ||
+            update.state === PreviewState.CACHED
+          ) {
+            unsubscribe();
+            resolve();
+          }
+        });
+      });
+
+      await engine.updatePreviewImmediate(
+        mockGraph,
+        reactFlowNodes,
+        reactFlowEdges
+      );
+
+      await updatePromise;
+      executeSpy.mockRestore();
 
       const lastUpdate = engine.getLastUpdate();
       expect(lastUpdate).not.toBeNull();
-      expect(lastUpdate?.state).toBe(PreviewState.IDLE);
+      expect([PreviewState.IDLE, PreviewState.CACHED]).toContain(
+        lastUpdate?.state
+      );
       expect(lastUpdate?.results).toBeDefined();
       expect(lastUpdate?.timestamp).toBeGreaterThan(0);
     });

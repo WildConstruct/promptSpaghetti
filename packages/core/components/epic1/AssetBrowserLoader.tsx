@@ -3,25 +3,10 @@
  * Conditionally loads the new asset browser or falls back to AssetLibraryV2
  */
 
-import React, { lazy, Suspense } from 'react';
+import React from 'react';
 import { AssetLibraryErrorBoundary } from './asset-library/AssetLibraryErrorBoundary';
+import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
 import type { Preset } from '@prompt/asset-browser';
-
-// Try to lazy load the integrated asset browser
-const AssetBrowserIntegrated = lazy(() => 
-  import('./AssetBrowserIntegrated')
-    .then(module => {
-      console.log('[AssetBrowserLoader] Successfully loaded asset browser module:', module);
-      return { default: module.AssetBrowserIntegrated };
-    })
-    .catch((error) => {
-      console.error('[AssetBrowserLoader] Failed to load integrated asset browser:', error);
-      // Return a component that renders the fallback
-      return {
-        default: () => null
-      };
-    })
-);
 
 interface AssetBrowserLoaderProps {
   onPresetDrag?: (preset: Preset) => void;
@@ -29,53 +14,80 @@ interface AssetBrowserLoaderProps {
   onInsert?: (preset: Preset) => void;
 }
 
-export const AssetBrowserLoader: React.FC<AssetBrowserLoaderProps> = props => {
-  const { onInsert } = props;
-  const [loadFailed, setLoadFailed] = React.useState(false);
+type LoaderStatus = 'pending' | 'ready' | 'fallback';
 
-  const LoadingPlaceholder = () => (
-    <div style={{ padding: 12, color: '#9ca3af' }}>
-      Loading Asset Browser…
-    </div>
-  );
+export const AssetBrowserLoader: React.FC<AssetBrowserLoaderProps> = props => {
+  const { onInsert, onPresetDrag, onPresetSelect } = props;
+  const [status, setStatus] = React.useState<LoaderStatus>('pending');
+  const [IntegratedComponent, setIntegratedComponent] =
+    React.useState<React.ComponentType<{ onInsert?: (preset: Preset) => void }> | null>(null);
 
   React.useEffect(() => {
-    // Check if the component actually loaded
-    import('./AssetBrowserIntegrated')
-      .then(() => {
+    let active = true;
+
+    const load = async () => {
+      try {
+        const module = await import('./AssetBrowserIntegrated');
+        if (!active) {
+          return;
+        }
         console.log('[AssetBrowserLoader] Asset browser module is available');
-      })
-      .catch(() => {
+        setIntegratedComponent(() => module.AssetBrowserIntegrated);
+        setStatus('ready');
+      } catch (error) {
+        console.error('[AssetBrowserLoader] Failed to load integrated asset browser:', error);
         console.log('[AssetBrowserLoader] Asset browser module not available, using fallback');
-        setLoadFailed(true);
-      });
+        if (active) {
+          setStatus('fallback');
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
-  // If load failed, use fallback directly
-  if (loadFailed) {
-    return (
-      <div style={{ padding: 12 }}>
-        <div style={{ marginBottom: 6, fontWeight: 600 }}>Asset Browser failed to load</div>
-        <div style={{ color: '#6b7280', marginBottom: 8 }}>Please reload the page or try again.</div>
-        <button onClick={() => {
-          setLoadFailed(false);
-          // Re-trigger dynamic import check
-          import('./AssetBrowserIntegrated').catch(() => setLoadFailed(true));
-        }}>Retry</button>
-      </div>
-    );
+  const forwardSelect = React.useCallback(
+    (preset: Preset) => {
+      onPresetSelect?.(preset);
+      onInsert?.(preset);
+    },
+    [onInsert, onPresetSelect]
+  );
+
+  const renderFallback = () => (
+    <AssetLibraryV2
+      defaultExpanded={true}
+      onPresetDrag={preset => onPresetDrag?.(preset as unknown as Preset)}
+      onPresetSelect={preset => forwardSelect(preset as unknown as Preset)}
+    />
+  );
+
+  if (status === 'fallback') {
+    return <AssetLibraryErrorBoundary>{renderFallback()}</AssetLibraryErrorBoundary>;
   }
 
-  return (
-    <AssetLibraryErrorBoundary>
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <AssetBrowserIntegrated
+  if (status === 'ready' && IntegratedComponent) {
+    return (
+      <AssetLibraryErrorBoundary>
+        <IntegratedComponent
           onInsert={preset => {
             console.log('[AssetBrowserLoader] Forwarding preset insert:', preset);
             onInsert?.(preset);
           }}
         />
-      </Suspense>
+      </AssetLibraryErrorBoundary>
+    );
+  }
+
+  return (
+    <AssetLibraryErrorBoundary>
+      <div style={{ padding: 12, color: '#9ca3af' }}>
+        Loading Asset Browser…
+      </div>
     </AssetLibraryErrorBoundary>
   );
 };

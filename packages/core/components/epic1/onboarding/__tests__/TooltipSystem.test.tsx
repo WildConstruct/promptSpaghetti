@@ -33,7 +33,7 @@ describe('Contextual Tooltip System', () => {
       render(
         <TutorialProvider>
           <div>
-            <button className="test-button">Hover me</button>
+            <button id="test-button" className="test-button">Hover me</button>
             <ContextualTooltips 
               additionalTooltips={[{
                 id: 'test-tooltip',
@@ -64,7 +64,7 @@ describe('Contextual Tooltip System', () => {
       render(
         <TutorialProvider>
           <div>
-            <button className="test-button">Hover me</button>
+            <button id="test-button" className="test-button">Hover me</button>
             <ContextualTooltips 
               additionalTooltips={[{
                 id: 'test-tooltip',
@@ -96,7 +96,7 @@ describe('Contextual Tooltip System', () => {
       render(
         <TutorialProvider>
           <div>
-            <button className="test-button">Hover me</button>
+            <button id="test-button" className="test-button">Hover me</button>
             <ContextualTooltips 
               additionalTooltips={[{
                 id: 'once-tooltip',
@@ -134,7 +134,7 @@ describe('Contextual Tooltip System', () => {
       render(
         <TutorialProvider>
           <div>
-            <button className="test-button">Hover me</button>
+            <button id="test-button" className="test-button">Hover me</button>
             <ContextualTooltips 
               additionalTooltips={[{
                 id: 'dismiss-test',
@@ -166,7 +166,7 @@ describe('Contextual Tooltip System', () => {
       render(
         <TutorialProvider>
           <div>
-            <button className="test-button">Hover me</button>
+            <button id="test-button" className="test-button">Hover me</button>
             <ContextualTooltips 
               additionalTooltips={[{
                 id: 'priority-test',

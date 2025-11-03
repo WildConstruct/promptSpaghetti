@@ -11,12 +11,12 @@ import {
 type FlowNode = Node<EditableNodeData>;
 type FlowEdge = Edge<EditableNodeData>;
 
-interface PresetDropMetadata {
+export interface PresetDropMetadata {
   file?: string;
   [key: string]: unknown;
 }
 
-interface PresetDropPayload {
+export interface PresetDropPayload {
   id?: string;
   path?: string;
   file?: string;
@@ -40,24 +40,19 @@ const isFlowEdge = (edge: unknown): edge is FlowEdge =>
   typeof edge.target === 'string';
 
 const toFlowNodes = (nodes: unknown): FlowNode[] =>
-  Array.isArray(nodes) ? nodes.filter(isFlowNode).map(node => ({
-    ...node,
-    data: node.data as EditableNodeData
-  })) : [];
+  Array.isArray(nodes)
+    ? nodes.filter(isFlowNode).map(node => ({
+        ...node,
+        data: node.data as EditableNodeData
+      }))
+    : [];
 
 const toFlowEdges = (edges: unknown): FlowEdge[] =>
   Array.isArray(edges) ? edges.filter(isFlowEdge) : [];
 
-
 interface UseDragDropHandlersProps {
-  setNodes: (
-    nodes:
-      | FlowNode[]
-      | ((nodes: FlowNode[]) => FlowNode[])
-  ) => void;
-  setEdges: (
-    edges: FlowEdge[] | ((edges: FlowEdge[]) => FlowEdge[])
-  ) => void;
+  setNodes: (nodes: FlowNode[] | ((nodes: FlowNode[]) => FlowNode[])) => void;
+  setEdges: (edges: FlowEdge[] | ((edges: FlowEdge[]) => FlowEdge[])) => void;
   reactFlowInstance: ReactFlowInstance | null;
   showToast: (type: 'success' | 'error' | 'info', message: string) => void;
   addNodeWithBounce?: (node: FlowNode) => void;
@@ -89,9 +84,12 @@ export function useDragDropHandlers({
     async (presetId: string): Promise<string | null> => {
       type Manifest = { presets?: Array<{ id?: string; path?: string }> };
       const getManifest = async (): Promise<unknown | null> => {
-        if (manifestCacheRef.current) {return manifestCacheRef.current;}
-        if (manifestLoadPromiseRef.current)
-          {return manifestLoadPromiseRef.current;}
+        if (manifestCacheRef.current) {
+          return manifestCacheRef.current;
+        }
+        if (manifestLoadPromiseRef.current) {
+          return manifestLoadPromiseRef.current;
+        }
         const loader = (async () => {
           try {
             const baseUrl =
@@ -106,7 +104,9 @@ export function useDragDropHandlers({
             for (const url of candidates) {
               try {
                 const res = await fetch(url, { cache: 'no-cache' });
-                if (!res.ok) {continue;}
+                if (!res.ok) {
+                  continue;
+                }
                 const text = await res.text();
                 const trimmed = text.trim().toLowerCase();
                 if (
@@ -136,7 +136,9 @@ export function useDragDropHandlers({
 
       try {
         const manifest = (await getManifest()) as Manifest | null;
-        if (!manifest) {return null;}
+        if (!manifest) {
+          return null;
+        }
         const entry = Array.isArray(manifest.presets)
           ? manifest.presets.find(p => p.id === presetId)
           : null;
@@ -150,11 +152,19 @@ export function useDragDropHandlers({
   );
 
   const normalizePresetPath = useCallback((path: string): string => {
-    if (!path) {return path;}
-    if (/^https?:\/\//i.test(path) || path.startsWith('/')) {return path;}
+    if (!path) {
+      return path;
+    }
+    if (/^https?:\/\//i.test(path) || path.startsWith('/')) {
+      return path;
+    }
     const base = manifestBaseRef.current || '/presets';
-    if (path.startsWith('./')) {return `${base}/${path.slice(2)}`;}
-    if (path.startsWith('presets/')) {return `/${path}`;}
+    if (path.startsWith('./')) {
+      return `${base}/${path.slice(2)}`;
+    }
+    if (path.startsWith('presets/')) {
+      return `/${path}`;
+    }
     if (
       path.startsWith('asset-browser/presets/') ||
       path.startsWith('/asset-browser/presets/')
@@ -226,7 +236,9 @@ export function useDragDropHandlers({
           console.log('[DragDrop] Loaded preset from path:', normalized);
         }
 
-        if (!content) {throw new Error('Preset content is empty.');}
+        if (!content) {
+          throw new Error('Preset content is empty.');
+        }
 
         // Validate before inserting
         const validation = validatePreset(content);
@@ -241,7 +253,8 @@ export function useDragDropHandlers({
           const graphNodes = Array.isArray(data?.graph?.nodes)
             ? data.graph.nodes
             : [];
-          const hasRegions = Array.isArray(data?.regions) && data.regions.length > 0;
+          const hasRegions =
+            Array.isArray(data?.regions) && data.regions.length > 0;
           const hasEnhancedBoundingBox = graphNodes.some(
             (node: unknown) =>
               isRecord(node) && node.type === 'enhancedBoundingBox'

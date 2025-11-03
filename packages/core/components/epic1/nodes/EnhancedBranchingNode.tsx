@@ -12,13 +12,15 @@ import type { SegmentMetadata } from '../../../services/llm/MetadataExtractor';
 import './EnhancedBranching.css';
 
 export interface WeightedOption {
+  id?: string;
   text: string;
   weight: number;
   hasBranch?: boolean;
+  [key: string]: unknown;
 }
 
 export interface EnhancedBranchingNodeData extends EditableNodeData {
-  options: WeightedOption[];
+  options?: WeightedOption[];
   title?: string;
   metadata?: SegmentMetadata;
 }
@@ -891,14 +893,14 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     type="source"
                     position={Position.Right}
                     id={`branch-${index}`}
-                    className="epic1-handle enhanced-handle branch-output"
-                    style={{
-                      position: 'absolute',
-                      '--handle-top': `${branchHandleTops[index] ?? 0}px`,
-                      transform: 'translateY(-50%)',
-                      zIndex: 1000,
-                      background: '#f59e0b',
-                      border: '2px solid #fff',
+                      className="epic1-handle enhanced-handle branch-output"
+                      style={{
+                        position: 'absolute',
+                        top: branchHandleTops[index] ?? 0,
+                        transform: 'translateY(-50%)',
+                        zIndex: 1000,
+                        background: '#f59e0b',
+                        border: '2px solid #fff',
                       width: '12px',
                       height: '12px',
                       borderRadius: '50%'
@@ -916,7 +918,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   className="epic1-handle enhanced-handle main-output"
                 style={{
                   position: 'absolute',
-                  '--handle-top': `${mainHandleTop}px`,
+                  top: mainHandleTop,
                   transform: 'translateY(-50%)',
                   zIndex: 1000,
                   background: '#10b981',
@@ -1104,17 +1106,17 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   position={Position.Right}
                   id={`branch-${index}`}
                   className="epic1-handle enhanced-handle branch-output"
-                  style={{
-                    position: 'absolute',
-                    '--handle-top': `${branchHandleTops[index] ?? 0}px`,
-                    transform: 'translateY(-50%)',
-                    zIndex: 1000,
-                    background: '#f59e0b',
-                    border: '2px solid #fff',
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%'
-                  }}
+                    style={{
+                      position: 'absolute',
+                      top: branchHandleTops[index] ?? 0,
+                      transform: 'translateY(-50%)',
+                      zIndex: 1000,
+                      background: '#f59e0b',
+                      border: '2px solid #fff',
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%'
+                    }}
                 />
               )
             )}
@@ -1128,7 +1130,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 className="epic1-handle enhanced-handle main-output"
                 style={{
                   position: 'absolute',
-                  '--handle-top': `${mainHandleTop}px`,
+                  top: mainHandleTop,
                   transform: 'translateY(-50%)',
                   zIndex: 1000,
                   background: '#10b981',

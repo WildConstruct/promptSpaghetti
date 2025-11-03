@@ -9,6 +9,9 @@ import type { Edge, Node } from 'reactflow';
 
 import { hasMeasuredDimensions } from '../components/epic1/nodes/nodePropTypes';
 
+type SimulationNode = d3.SimulationNodeDatum & { id: string };
+type SimulationLink = d3.SimulationLinkDatum<SimulationNode>;
+
 export type LayoutAlgorithm = 'dagre' | 'force' | 'grid';
 
 export interface LayoutOptions {
@@ -44,20 +47,15 @@ export function applyDagreLayout(
     return [];
   }
 
-  const {
-    direction = 'LR',
-    nodeSpacing = 150, // Increased default spacing
-    rankSpacing = 200 // Increased default spacing
-  } = options;
+  const nodeSpacing = options.nodeSpacing ?? 150;
+  const rankSpacing = options.rankSpacing ?? 200;
+  let directionValue = options.direction;
 
-  // Auto-detect best direction if not specified
-  if (!options.direction) {
-    // Check if we have an output node (should be at the end)
+  if (!directionValue) {
     const hasOutput = nodes.some(
       n => n.type === 'output' || n.data?.nodeType === 'output'
     );
-    // For prompt graphs, LR (left-right) usually works best
-    direction = hasOutput ? 'LR' : 'TB';
+    directionValue = hasOutput ? 'LR' : 'TB';
   }
 
   try {
@@ -66,7 +64,7 @@ export function applyDagreLayout(
 
     // Set graph options
     g.setGraph({
-      rankdir: direction,
+      rankdir: directionValue,
       nodesep: nodeSpacing,
       ranksep: rankSpacing,
       marginx: 20,
@@ -205,7 +203,7 @@ export function applyForceLayout(
 
   try {
     // Prepare nodes with current positions
-    const simulationNodes = nodes.map(node => ({
+    const simulationNodes: SimulationNode[] = nodes.map(node => ({
       ...node,
       id: node.id,
       x: node.position?.x || 100,
@@ -214,7 +212,7 @@ export function applyForceLayout(
 
     // Prepare links for simulation with validation
     const nodeIds = new Set(nodes.map(n => n.id));
-    const simulationLinks = (edges || [])
+    const simulationLinks: SimulationLink[] = (edges || [])
       .filter(
         edge => edge && nodeIds.has(edge.source) && nodeIds.has(edge.target)
       )
@@ -225,12 +223,12 @@ export function applyForceLayout(
 
     // Create force simulation
     const simulation = d3
-      .forceSimulation(simulationNodes as d3.SimulationNodeDatum)
+      .forceSimulation<SimulationNode>(simulationNodes)
       .force(
         'link',
         d3
-          .forceLink(simulationLinks)
-          .id((d: d3.SimulationNodeDatum) => d.id as string)
+          .forceLink<SimulationNode, SimulationLink>(simulationLinks)
+          .id(d => d.id)
           .distance(150)
       )
       .force('charge', d3.forceManyBody().strength(-500))
@@ -242,16 +240,30 @@ export function applyForceLayout(
     simulation.tick(300);
 
     // Apply calculated positions
-    return simulationNodes.map((simNode: d3.SimulationNodeDatum) => {
+    return simulationNodes.map(simNode => {
       const originalNode = nodes.find(n => n.id === simNode.id);
       if (!originalNode) {
-        return simNode as Node;
+        return {
+          id: simNode.id,
+          position: {
+            x: typeof simNode.x === 'number' ? simNode.x : 100,
+            y: typeof simNode.y === 'number' ? simNode.y : 100
+          }
+        } as Node;
       }
+      const x =
+        typeof simNode.x === 'number' && Number.isFinite(simNode.x)
+          ? simNode.x
+          : (originalNode.position?.x ?? 100);
+      const y =
+        typeof simNode.y === 'number' && Number.isFinite(simNode.y)
+          ? simNode.y
+          : (originalNode.position?.y ?? 100);
       return {
         ...originalNode,
         position: {
-          x: isFinite(simNode.x) ? simNode.x : originalNode.position?.x || 100,
-          y: isFinite(simNode.y) ? simNode.y : originalNode.position?.y || 100
+          x,
+          y
         }
       };
     });

@@ -312,10 +312,9 @@ describe('LLMService', () => {
     await service.complete(baseRequest);
 
     expect(sanitizeMock).toHaveBeenCalledTimes(2);
-    expect(warnSpy).toHaveBeenCalledWith(
-      'Privacy filter warnings:',
-      ['Sensitive token']
-    );
+    expect(warnSpy).toHaveBeenCalledWith('Privacy filter warnings:', [
+      'Sensitive token'
+    ]);
 
     sanitizeMock.mockRestore();
   });
@@ -323,31 +322,35 @@ describe('LLMService', () => {
   it('throws descriptive errors for invalid suggestion responses', () => {
     const service = createService() as any;
 
-    expect(() =>
-      service.validateJsonResponse('"text"', 'suggestion')
-    ).toThrow('Invalid JSON response: Suggestion response must be an object');
+    expect(() => service.validateJsonResponse('"text"', 'suggestion')).toThrow(
+      'Invalid JSON response: Suggestion response must be an object'
+    );
 
     expect(() =>
       service.validateJsonResponse(
         JSON.stringify({ choices: [] }),
         'suggestion'
       )
-    ).toThrow('Invalid JSON response: Suggestion response must include choices array');
+    ).toThrow(
+      'Invalid JSON response: Suggestion response must include choices array'
+    );
 
     expect(() =>
       service.validateJsonResponse(
         JSON.stringify({ choices: [{ text: 'only text' }] }),
         'suggestion'
       )
-    ).toThrow('Invalid JSON response: Each suggestion choice must include text and weight');
+    ).toThrow(
+      'Invalid JSON response: Each suggestion choice must include text and weight'
+    );
   });
 
   it('enforces metadata response shape and types', () => {
     const service = createService() as any;
 
-    expect(() =>
-      service.validateJsonResponse('"text"', 'metadata')
-    ).toThrow('Invalid JSON response: Metadata response must be an object');
+    expect(() => service.validateJsonResponse('"text"', 'metadata')).toThrow(
+      'Invalid JSON response: Metadata response must be an object'
+    );
 
     expect(() =>
       service.validateJsonResponse(
@@ -358,7 +361,9 @@ describe('LLMService', () => {
         }),
         'metadata'
       )
-    ).toThrow('Invalid JSON response: Metadata tags must be an array of strings');
+    ).toThrow(
+      'Invalid JSON response: Metadata tags must be an array of strings'
+    );
 
     expect(() =>
       service.validateJsonResponse(
@@ -386,9 +391,9 @@ describe('LLMService', () => {
   it('validates refinement responses strictly', () => {
     const service = createService() as any;
 
-    expect(() =>
-      service.validateJsonResponse('"text"', 'refinement')
-    ).toThrow('Invalid JSON response: Refinement response must be an object');
+    expect(() => service.validateJsonResponse('"text"', 'refinement')).toThrow(
+      'Invalid JSON response: Refinement response must be an object'
+    );
 
     expect(() =>
       service.validateJsonResponse(
@@ -399,7 +404,9 @@ describe('LLMService', () => {
         }),
         'refinement'
       )
-    ).toThrow('Invalid JSON response: Refinement response must include original and refined text');
+    ).toThrow(
+      'Invalid JSON response: Refinement response must include original and refined text'
+    );
 
     expect(() =>
       service.validateJsonResponse(
@@ -410,7 +417,9 @@ describe('LLMService', () => {
         }),
         'refinement'
       )
-    ).toThrow('Invalid JSON response: Refinement changes must be an array of strings');
+    ).toThrow(
+      'Invalid JSON response: Refinement changes must be an array of strings'
+    );
   });
 
   it('executes completeBatch requests', async () => {
@@ -679,7 +688,37 @@ describe('LLMService', () => {
 
       expect(result).toBe('ok');
       expect(fn).toHaveBeenCalledTimes(2);
-      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Rate limited'));
+      expect(logSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Rate limited')
+      );
+      jest.useRealTimers();
+    });
+
+    it('retries when rate limit status is reported via response object', async () => {
+      jest.useFakeTimers();
+      const service = createService();
+      const callWithRetry = (service as any).callWithRetry.bind(service);
+
+      const fn = jest.fn(async () => {
+        if (fn.mock.calls.length === 1) {
+          const error = {
+            response: { status: 429 },
+            message: 'Please slow down'
+          };
+          throw error;
+        }
+        return 'recovered';
+      });
+
+      const promise = callWithRetry(fn, 2, 500);
+      await jest.advanceTimersByTimeAsync(1000);
+      const result = await promise;
+
+      expect(result).toBe('recovered');
+      expect(fn).toHaveBeenCalledTimes(2);
+      expect(logSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Rate limited')
+      );
       jest.useRealTimers();
     });
 
@@ -690,7 +729,9 @@ describe('LLMService', () => {
 
       const fn = jest.fn(async () => {
         if (fn.mock.calls.length === 1) {
-          return new Promise(resolve => setTimeout(() => resolve('slow'), 2000));
+          return new Promise(resolve =>
+            setTimeout(() => resolve('slow'), 2000)
+          );
         }
         return 'fast';
       });
@@ -713,7 +754,10 @@ describe('LLMService', () => {
       const service = createService();
       const callWithRetry = (service as any).callWithRetry.bind(service);
       const fn = jest.fn(async () => {
-        const error = { response: { status: 503 }, message: 'Service unavailable right now' };
+        const error = {
+          response: { status: 503 },
+          message: 'Service unavailable right now'
+        };
         throw error;
       });
 

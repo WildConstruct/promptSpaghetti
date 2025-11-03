@@ -104,7 +104,13 @@ export class DiffEngine {
     // Simple word-based diff for MVP
     const oldWords = this.tokenize(oldText);
     const newWords = this.tokenize(newText);
-    const lcs = this.findLCS(oldWords, newWords);
+    const rawMatches = this.findLCS(oldWords, newWords);
+    const hasMeaningfulMatch = rawMatches.some(
+      entry => entry.word.trim().length > 0
+    );
+    const lcs = hasMeaningfulMatch
+      ? rawMatches
+      : rawMatches.filter(entry => entry.word.trim().length > 0);
 
     let oldIndex = 0;
     let newIndex = 0;
@@ -263,7 +269,9 @@ export class DiffEngine {
    * Merge adjacent segments of the same type
    */
   private mergeSegments(segments: DiffSegment[]): DiffSegment[] {
-    if (segments.length === 0) {return segments;}
+    if (segments.length === 0) {
+      return segments;
+    }
 
     const merged: DiffSegment[] = [];
     let current = segments[0];
@@ -293,7 +301,9 @@ export class DiffEngine {
    */
   summarizeChanges(changeSet: ChangeSet): string {
     const totalChanged = changeSet.changedIndices.length;
-    if (totalChanged === 0) {return 'No changes';}
+    if (totalChanged === 0) {
+      return 'No changes';
+    }
 
     const additions = changeSet.diffs.reduce(
       (sum, { diff }) => sum + diff.addedCount,

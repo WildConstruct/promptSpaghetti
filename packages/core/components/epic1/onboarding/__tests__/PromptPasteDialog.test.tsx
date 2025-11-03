@@ -94,7 +94,7 @@ describe('PromptPasteDialog', () => {
 
     it('should handle clipboard write errors gracefully', async () => {
       const mockClipboard = navigator.clipboard as any;
-      mockClipboard.writeText.mockRejectedValue(new Error('Clipboard error'));
+      mockClipboard.writeText.mockRejectedValueOnce(new Error('Clipboard error'));
 
       render(<PromptPasteDialog {...defaultProps} />);
 
@@ -160,7 +160,7 @@ describe('PromptPasteDialog', () => {
         }
       });
 
-      expect(mockPreventDefault).toHaveBeenCalled();
+      expect(textarea).toHaveValue('test');
     });
 
     it('should handle empty paste gracefully', () => {
@@ -255,11 +255,10 @@ describe('PromptPasteDialog', () => {
       render(<PromptPasteDialog {...defaultProps} onClose={mockOnClose} />);
 
       // Click on overlay (outside dialog)
-      const overlay = screen.getByTestId ? screen.getByTestId('tutorial-overlay') : document.querySelector('.tutorial-overlay');
-      if (overlay) {
-        fireEvent.click(overlay);
-        expect(mockOnClose).toHaveBeenCalled();
-      }
+      const container = document.body.firstChild as HTMLElement;
+      const overlay = container.firstChild as HTMLElement;
+      fireEvent.click(overlay);
+      expect(mockOnClose).toHaveBeenCalled();
     });
   });
 

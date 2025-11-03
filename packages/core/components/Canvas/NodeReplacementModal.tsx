@@ -1,10 +1,60 @@
-// Node Replacement Modal with Connection Preservation
-// Story 2.5a: Asset Browser Integration MVP
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 
-import React, { useState, useEffect } from 'react';
 import './NodeReplacementModal.css';
+import '../epic1/nodes/VisualFeedbackEnhancements.css';
+import '../epic1/animations/EditTransitions.css';
 
-export interface ReplacementInfo {
+const ANIMATION_DURATION_MS = 280;
+const SEARCH_DEBOUNCE_MS = 200;
+
+const useModalCallbacks = () => {
+  const [isClosing, setIsClosing] = useState(false);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const queuedCallback = useRef<(() => void) | null>(null);
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    queuedCallback.current = null;
+  }, []);
+
+  const runAfterAnimation = useCallback((callback: () => void) => {
+    queuedCallback.current = callback;
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+    }
+    setIsClosing(true);
+    closeTimerRef.current = setTimeout(() => {
+      queuedCallback.current?.();
+      queuedCallback.current = null;
+      setIsClosing(false);
+      closeTimerRef.current = null;
+    }, ANIMATION_DURATION_MS);
+  }, []);
+
+  const cancelPendingAnimation = useCallback(() => {
+    clearCloseTimer();
+    setIsClosing(false);
+  }, [clearCloseTimer]);
+
+  useEffect(() => {
+    return () => {
+      clearCloseTimer();
+    };
+  }, [clearCloseTimer]);
+
+  return { isClosing, runAfterAnimation, cancelPendingAnimation };
+};
+
+type LegacyReplacementInfo = {
   targetNode: {
     id: string;
     type: string;
@@ -20,10 +70,10 @@ export interface ReplacementInfo {
     lost: number;
     incompatible: string[];
   };
-}
+};
 
-interface NodeReplacementModalProps {
-  info: ReplacementInfo;
+type LegacyProps = {
+  info: LegacyReplacementInfo;
   onReplace: () => void;
   onCancel: () => void;
   isVisible: boolean;
@@ -34,9 +84,556 @@ interface NodeReplacementModalProps {
     onReplaceAllSimilar?: () => void;
     onReplaceAllSelected?: () => void;
   };
-}
+};
 
-export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
+type ReplacementNode = {
+  id: string;
+  type: string;
+  data: Record<string, unknown>;
+};
+
+type ReplacementNodeType = {
+  type: string;
+  label: string;
+  icon?: string;
+};
+
+type ReplacementOptions = {
+  preserveData?: boolean;
+  dataMapping?: Record<string, string>;
+  batch?: boolean;
+};
+
+type ModernProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedNode: ReplacementNode;
+  availableNodeTypes: ReplacementNodeType[];
+  onReplace: (
+    nodeId: string,
+    newType: string,
+    options: ReplacementOptions
+  ) => void;
+  onBatchReplace?: (
+    currentType: string,
+    newType: string,
+    options: ReplacementOptions
+  ) => void;
+  onSearch?: (query: string) => void;
+  showHistory?: boolean;
+};
+
+type NodeReplacementModalProps = LegacyProps | ModernProps;
+
+export const NodeReplacementModal: React.FC<
+  NodeReplacementModalProps
+> = props => {
+  if ('info' in props) {
+    return <LegacyNodeReplacementModal {...props} />;
+  }
+  return <ModernNodeReplacementModal {...props} />;
+};
+
+// -------------------------------
+// Modern modal implementation
+// -------------------------------
+
+const CATEGORY_CONFIG: Array<{
+  id: string;
+  label: string;
+  match: (type: string) => boolean;
+}> = [
+  {
+    id: 'basic',
+    label: 'Basic Nodes',
+    match: type =>
+      ['textBlock', 'variable', 'output', 'concat', 'setVariable'].includes(
+        type
+      )
+  },
+  {
+    id: 'flow',
+    label: 'Flow Control',
+    match: type => ['weightedChoice', 'branch', 'condition'].includes(type)
+  },
+  {
+    id: 'other',
+    label: 'Other',
+    match: () => false
+  }
+];
+
+const getCategoryForType = (type: string): string => {
+  const match = CATEGORY_CONFIG.find(cat => cat.match(type));
+  return match?.id ?? 'other';
+};
+
+const formatNodeTypeLabel = (type: string, fallback?: string) => {
+  if (fallback) {
+    return fallback;
+  }
+  return type
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[-_]/g, ' ')
+    .replace(/^./, s => s.toUpperCase());
+};
+
+const getCompatibility = (
+  selectedNode: ReplacementNode,
+  targetType: string
+): { status: 'compatible' | 'incompatible'; message?: string } => {
+  const outputs = selectedNode?.data?.outputs;
+  const hasOutgoing = Array.isArray(outputs) && outputs.length > 0;
+  if (targetType === 'output' && hasOutgoing) {
+    return {
+      status: 'incompatible',
+      message: 'Cannot replace with output while existing outputs are connected'
+    };
+  }
+  return { status: 'compatible' };
+};
+
+const ModernNodeReplacementModal: React.FC<ModernProps> = ({
+  isOpen,
+  onClose,
+  selectedNode,
+  availableNodeTypes,
+  onReplace,
+  onBatchReplace,
+  onSearch,
+  showHistory
+}) => {
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [batchMode, setBatchMode] = useState(false);
+  const [preserveData, setPreserveData] = useState(false);
+  const [connectionMessage, setConnectionMessage] = useState<string | null>(
+    null
+  );
+  const [history, setHistory] = useState<
+    Array<{ nodeId: string; type: string }>
+  >([]);
+
+  const optionRefs = useRef<HTMLButtonElement[]>([]);
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { isClosing, runAfterAnimation, cancelPendingAnimation } =
+    useModalCallbacks();
+
+  const resetInteractiveState = useCallback(() => {
+    setSelectedType(null);
+    setBatchMode(false);
+    setPreserveData(false);
+    setConnectionMessage(null);
+    setSearchQuery('');
+    setCategoryFilter('all');
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      cancelPendingAnimation();
+      resetInteractiveState();
+    }
+  }, [isOpen, cancelPendingAnimation, resetInteractiveState]);
+
+  useEffect(() => {
+    resetInteractiveState();
+  }, [selectedNode?.id, resetInteractiveState]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!onSearch) {
+      return;
+    }
+    if (!isOpen && !isClosing) {
+      return;
+    }
+    if (searchTimer.current) {
+      clearTimeout(searchTimer.current);
+    }
+    searchTimer.current = setTimeout(() => {
+      onSearch(searchQuery);
+    }, SEARCH_DEBOUNCE_MS);
+    return () => {
+      if (searchTimer.current) {
+        clearTimeout(searchTimer.current);
+      }
+    };
+  }, [searchQuery, onSearch, isOpen, isClosing]);
+
+  const enhancedNodeTypes = useMemo(
+    () =>
+      availableNodeTypes.map(option => ({
+        ...option,
+        category: getCategoryForType(option.type),
+        displayLabel: formatNodeTypeLabel(option.type, option.label)
+      })),
+    [availableNodeTypes]
+  );
+
+  const filteredNodeTypes = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    return enhancedNodeTypes.filter(option => {
+      if (categoryFilter !== 'all' && option.category !== categoryFilter) {
+        return false;
+      }
+      if (!query) {
+        return true;
+      }
+      return (
+        option.type.toLowerCase().includes(query) ||
+        option.displayLabel.toLowerCase().includes(query)
+      );
+    });
+  }, [enhancedNodeTypes, categoryFilter, searchQuery]);
+
+  const batches = selectedNode?.data?.batchCount ?? 3;
+
+  const handleSelect = (option: ReplacementNodeType) => {
+    if (isClosing) {
+      return;
+    }
+    const compatibility = getCompatibility(selectedNode, option.type);
+    if (compatibility.status === 'incompatible') {
+      setConnectionMessage(compatibility.message || 'Incompatible node type');
+      return;
+    }
+    setSelectedType(option.type);
+    setConnectionMessage(
+      option.type === 'output'
+        ? 'Connections may be adjusted to fit the new Output node.'
+        : 'Connections will be preserved where possible.'
+    );
+  };
+
+  const handleKeyboardNavigation = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    option: ReplacementNodeType
+  ) => {
+    if (isClosing) {
+      return;
+    }
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const buttons = optionRefs.current.filter(Boolean);
+      const currentIndex = buttons.indexOf(
+        event.currentTarget as HTMLButtonElement
+      );
+      if (currentIndex === -1 || buttons.length === 0) {
+        return;
+      }
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      const nextIndex =
+        (currentIndex + direction + buttons.length) % buttons.length;
+      buttons[nextIndex]?.focus();
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleSelect(option);
+    }
+  };
+
+  const handleReplace = () => {
+    if (!selectedType || isClosing) {
+      return;
+    }
+    const options: ReplacementOptions = {
+      preserveData,
+      dataMapping: {
+        from: selectedNode.id,
+        to: selectedType
+      },
+      batch: batchMode
+    };
+
+    setHistory(prev => [
+      ...prev,
+      { nodeId: selectedNode.id, type: selectedType }
+    ]);
+    runAfterAnimation(() => {
+      if (batchMode && onBatchReplace) {
+        onBatchReplace(selectedNode.type, selectedType, options);
+      } else {
+        onReplace(selectedNode.id, selectedType, options);
+      }
+      onClose();
+      resetInteractiveState();
+    });
+  };
+
+  const handleCancel = () => {
+    if (isClosing) {
+      return;
+    }
+    runAfterAnimation(() => {
+      onClose();
+      resetInteractiveState();
+    });
+  };
+
+  if (!isOpen && !isClosing) {
+    return null;
+  }
+
+  optionRefs.current = [];
+
+  return (
+    <div
+      className="node-replacement-modal-wrapper"
+      data-testid="node-replacement-modal"
+      data-state={isClosing ? 'closing' : 'open'}
+    >
+      <div
+        className="node-replacement-modal-content"
+        role="dialog"
+        aria-modal="true"
+      >
+        <header className="modal-header">
+          <h3>Replace Node</h3>
+          <p className="modal-context">
+            Replacing {formatNodeTypeLabel(selectedNode.type)} node
+            {selectedNode.data?.content
+              ? ` "${selectedNode.data.content}"`
+              : ''}
+          </p>
+          <button
+            className="modal-close"
+            onClick={handleCancel}
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </header>
+
+        <section className="modal-summary">
+          <div className="summary-block">
+            <span className="summary-label">Current:</span>
+            <span className="summary-type">
+              {formatNodeTypeLabel(selectedNode.type)}
+            </span>
+            {selectedNode.data?.content && (
+              <span className="summary-name">{selectedNode.data.content}</span>
+            )}
+          </div>
+          <div className="summary-arrow">→</div>
+          <div className="summary-block">
+            <span className="summary-label">New:</span>
+            <span className="summary-type">
+              {selectedType
+                ? formatNodeTypeLabel(selectedType)
+                : 'Select a node'}
+            </span>
+          </div>
+        </section>
+
+        <section className="modal-controls">
+          <div className="search-control">
+            <label htmlFor="node-search" className="sr-only">
+              Search node types
+            </label>
+            <input
+              id="node-search"
+              type="search"
+              placeholder="Search node types"
+              value={searchQuery}
+              onChange={event => setSearchQuery(event.target.value)}
+            />
+          </div>
+          <div className="category-control">
+            <label htmlFor="category-filter">Filter by category</label>
+            <select
+              id="category-filter"
+              value={categoryFilter}
+              onChange={event => setCategoryFilter(event.target.value)}
+            >
+              <option value="all">All categories</option>
+              {CATEGORY_CONFIG.map(cat => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </section>
+
+        <section className="modal-body">
+          {CATEGORY_CONFIG.map(category => {
+            const options = filteredNodeTypes.filter(
+              opt => opt.category === category.id
+            );
+            return (
+              <div key={category.id} className="category-group">
+                <h4>{category.label}</h4>
+                <div className="node-options">
+                  {options.length === 0 && (
+                    <div className="empty-category">
+                      No nodes in this category.
+                    </div>
+                  )}
+                  {options.map(option => {
+                    const compatibility = getCompatibility(
+                      selectedNode,
+                      option.type
+                    );
+                    const isSelected = selectedType === option.type;
+                    const classNames = [
+                      'node-type-option',
+                      compatibility.status,
+                      isSelected ? 'selected' : ''
+                    ]
+                      .filter(Boolean)
+                      .join(' ');
+                    return (
+                      <button
+                        key={option.type}
+                        type="button"
+                        ref={el => {
+                          if (el) {
+                            optionRefs.current.push(el);
+                          }
+                        }}
+                        data-testid={`node-type-${option.type}`}
+                        className={classNames}
+                        disabled={compatibility.status === 'incompatible'}
+                        title={compatibility.message}
+                        onClick={() => handleSelect(option)}
+                        onKeyDown={event =>
+                          handleKeyboardNavigation(event, option)
+                        }
+                      >
+                        <span className="node-label">
+                          {option.displayLabel}
+                        </span>
+                        {option.icon && (
+                          <span className="node-icon">{option.icon}</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+
+          {connectionMessage && (
+            <div
+              className="connection-message"
+              data-testid="connection-message"
+            >
+              {connectionMessage}
+            </div>
+          )}
+
+          {selectedType && (
+            <div className="preview-pane" data-testid="replacement-preview">
+              <h4>Preview</h4>
+              <div className="preview-content">
+                {formatNodeTypeLabel(selectedType)} node will replace the
+                current node.
+              </div>
+            </div>
+          )}
+
+          {selectedType === 'variable' && (
+            <div className="data-migration">
+              <h4>Migrate Data</h4>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={preserveData}
+                  onChange={event => setPreserveData(event.target.checked)}
+                />
+                Preserve content during replacement
+              </label>
+            </div>
+          )}
+
+          <div className="undo-hint">
+            This action can be undone with Ctrl+Z.
+          </div>
+
+          {showHistory && history.length > 0 && (
+            <div className="replacement-history">
+              <h4>Recent replacements</h4>
+              <ul>
+                {history.map(entry => (
+                  <li key={`${entry.nodeId}-${entry.type}`}>
+                    {formatNodeTypeLabel(entry.type)} for node {entry.nodeId}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+
+        <footer className="modal-footer">
+          {onBatchReplace && (
+            <label className="batch-toggle">
+              <input
+                type="checkbox"
+                checked={batchMode}
+                onChange={event => setBatchMode(event.target.checked)}
+                aria-label={`Replace all ${formatNodeTypeLabel(selectedNode.type).toLowerCase()} nodes`}
+              />
+              Replace all {formatNodeTypeLabel(selectedNode.type).toLowerCase()}{' '}
+              nodes
+            </label>
+          )}
+
+          {batchMode && (
+            <div className="batch-warning">
+              This will replace {batches} nodes of type{' '}
+              {formatNodeTypeLabel(selectedNode.type)}.
+            </div>
+          )}
+
+          {selectedType === 'output' && (
+            <div className="warning-message">
+              Warning: Some connections may be lost when converting to an Output
+              node.
+            </div>
+          )}
+
+          <div className="modal-actions">
+            <button
+              className="modal-button cancel"
+              onClick={handleCancel}
+              disabled={isClosing}
+            >
+              Cancel
+            </button>
+            <button
+              className="modal-button primary"
+              disabled={!selectedType || isClosing}
+              onClick={handleReplace}
+            >
+              {batchMode && onBatchReplace ? 'Replace All' : 'Replace Node'}
+            </button>
+          </div>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+// -------------------------------
+// Legacy modal implementation
+// -------------------------------
+
+const LegacyNodeReplacementModal: React.FC<LegacyProps> = ({
   info,
   onReplace,
   onCancel,
@@ -127,13 +724,13 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
                 <span>
                   {info.connectionImpact.lost} connections will be lost
                 </span>
-            {info.connectionImpact.incompatible.length > 0 && (
-              <ul className="incompatible-list">
-                {info.connectionImpact.incompatible.map(conn => (
-                  <li key={conn}>{conn}</li>
-                ))}
-              </ul>
-            )}
+                {info.connectionImpact.incompatible.length > 0 && (
+                  <ul className="incompatible-list">
+                    {info.connectionImpact.incompatible.map(conn => (
+                      <li key={conn}>{conn}</li>
+                    ))}
+                  </ul>
+                )}
               </div>
             )}
 
@@ -218,84 +815,3 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
     </>
   );
 };
-
-// Connection validator service
-export interface GraphEdgeInfo {
-  source: string;
-  target: string;
-  sourceHandle?: string | null;
-  targetHandle?: string | null;
-}
-
-export interface ReplacementNodeSummary {
-  id: string;
-  type: string;
-}
-
-export class ConnectionValidator {
-  static analyzeReplacementImpact(
-    currentNode: ReplacementNodeSummary,
-    newNodeType: string,
-    edges: GraphEdgeInfo[]
-  ): ReplacementInfo['connectionImpact'] {
-    const incomingEdges = edges.filter(edge => edge.target === currentNode.id);
-    const outgoingEdges = edges.filter(edge => edge.source === currentNode.id);
-
-    let preserved = 0;
-    let lost = 0;
-    const incompatible: string[] = [];
-
-    // Check incoming connections
-    incomingEdges.forEach(edge => {
-      if (
-        this.isCompatibleConnection(edge.sourceHandle, newNodeType, 'input')
-      ) {
-        preserved++;
-      } else {
-        lost++;
-        incompatible.push(`Input from ${edge.source}`);
-      }
-    });
-
-    // Check outgoing connections
-    outgoingEdges.forEach(edge => {
-      if (
-        this.isCompatibleConnection(newNodeType, edge.targetHandle, 'output')
-      ) {
-        preserved++;
-      } else {
-        lost++;
-        incompatible.push(`Output to ${edge.target}`);
-      }
-    });
-
-    return { preserved, lost, incompatible };
-  }
-
-  private static isCompatibleConnection(
-    sourceType: string | null | undefined,
-    targetType: string | null | undefined,
-    direction: 'input' | 'output'
-  ): boolean {
-    // Simple compatibility matrix for MVP
-    const compatibilityMatrix: Record<string, string[]> = {
-      WeightedChoice: ['TextBlock', 'Output', 'Concat', 'WeightedChoice'],
-      TextBlock: ['Output', 'Concat', 'WeightedChoice'],
-      Output: [],
-      Concat: ['Output', 'Concat', 'WeightedChoice'],
-      Variable: ['TextBlock', 'Output', 'Concat']
-    };
-
-    if (!sourceType || !targetType) {
-      return false;
-    }
-
-    if (direction === 'output') {
-      return compatibilityMatrix[sourceType]?.includes(targetType) || false;
-    }
-
-    return Object.entries(compatibilityMatrix).some(
-      ([key, values]) => key === targetType && values.includes(sourceType)
-    );
-  }
-}

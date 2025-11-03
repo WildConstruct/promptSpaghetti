@@ -37,13 +37,19 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
   };
 
   const handleSubmit = () => {
-    if (prompt.trim()) {
-      onPaste(prompt);
+    const trimmed = prompt.trim();
+    if (trimmed) {
+      onPaste(trimmed);
     }
   };
 
-  const handleCopyExample = () => {
-    navigator.clipboard.writeText(examplePrompt);
+  const handleCopyExample = async () => {
+    try {
+      await navigator.clipboard.writeText(examplePrompt);
+    } catch (error) {
+      console.warn('[PromptPasteDialog] Failed to copy example prompt', error);
+    }
+
     // Show a temporary message
     const button = document.getElementById('copy-button');
     if (button) {
@@ -51,6 +57,19 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
       setTimeout(() => {
         button.textContent = 'Copy Example';
       }, 2000);
+    }
+  };
+
+  const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      onClose();
     }
   };
 
@@ -69,7 +88,7 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
       justifyContent: 'center',
       zIndex: 10000,
       animation: 'fadeIn 0.3s ease'
-    }}>
+    }} onClick={handleOverlayClick}>
       <div style={{
         background: 'white',
         borderRadius: '12px',
@@ -146,6 +165,7 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             onPaste={handlePaste}
+            onKeyDown={handleKeyDown}
             placeholder="Paste your prompt here (Ctrl+V or Cmd+V)..."
             style={{
               width: '100%',

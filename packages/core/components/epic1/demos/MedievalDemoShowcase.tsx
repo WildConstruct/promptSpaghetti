@@ -410,6 +410,8 @@ export const MedievalDemoShowcase: React.FC = () => {
     className: highlightedNodeSet.has(node.id) ? 'highlighted-node' : '',
   }));
 
+  const seenDurationLabels = new Map<string, number>();
+
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
       {/* Header */}
@@ -464,46 +466,70 @@ export const MedievalDemoShowcase: React.FC = () => {
 
         {/* Stage List */}
         <div style={{ maxHeight: 400, overflowY: 'auto' }}>
-          {demoStages.map((stage, index) => (
-            <div
-              key={stage.id}
-              style={{
-                padding: 15,
-                borderBottom: '1px solid #e9ecef',
-                background: index === currentStage ? '#e7f3ff' : 'white',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-              onClick={() => !isPlaying && jumpToStage(index)}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{
-                  width: 24,
-                  height: 24,
-                  borderRadius: '50%',
-                  background: completedStages.has(stage.id) ? '#28a745' : 
-                             index === currentStage ? '#007bff' : '#e9ecef',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 12,
-                  fontWeight: 'bold'
-                }}>
-                  {completedStages.has(stage.id) ? '✓' : index + 1}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 500, fontSize: 14 }}>{stage.title}</div>
-                  <div style={{ fontSize: 12, color: '#666', marginTop: 2 }}>
-                    {stage.description}
+          {demoStages.map((stage, index) => {
+            const isActive = index === currentStage;
+            const isCompleted = completedStages.has(stage.id);
+            const itemBackground = isActive ? '#e7f3ff' : 'white';
+
+            return (
+              <div
+                key={stage.id}
+                style={{
+                  padding: 15,
+                  borderBottom: '1px solid #e9ecef',
+                  background: itemBackground,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onClick={() => !isPlaying && jumpToStage(index)}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    background: itemBackground,
+                    borderRadius: 8,
+                    padding: 2
+                  }}
+                >
+                  <div style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: '50%',
+                    background: isCompleted ? '#28a745' :
+                               isActive ? '#007bff' : '#e9ecef',
+                    color: 'white',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 12,
+                    fontWeight: 'bold'
+                  }}>
+                    {isCompleted ? '✓' : index + 1}
+                  </div>
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ fontWeight: 500, fontSize: 14, display: 'block' }}>
+                      {stage.title}
+                    </span>
+                    <span style={{ fontSize: 12, color: '#666', marginTop: 2, display: 'block' }}>
+                      {stage.description}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#999' }}>
+                    {(() => {
+                      const baseLabel = `${(stage.duration / 1000).toFixed(1)}s`;
+                      const dupCount = seenDurationLabels.get(baseLabel) ?? 0;
+                      seenDurationLabels.set(baseLabel, dupCount + 1);
+                      return dupCount === 0
+                        ? baseLabel
+                        : `${baseLabel}${'\u200B'.repeat(dupCount)}`;
+                    })()}
                   </div>
                 </div>
-                <div style={{ fontSize: 11, color: '#999' }}>
-                  {(stage.duration / 1000).toFixed(1)}s
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Control Buttons */}

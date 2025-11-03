@@ -5,6 +5,37 @@
 
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+jest.mock('react-dnd', () => {
+  const React = jest.requireActual<typeof import('react')>('react');
+  const DndContext = React.createContext(false);
+
+  const useEnsureProvider = () => {
+    if (!React.useContext(DndContext)) {
+      throw new Error('useDrag must be used within a DndProvider');
+    }
+  };
+
+  return {
+    DndProvider: ({ children }: { children: React.ReactNode }) => (
+      <DndContext.Provider value={true}>
+        <div data-testid="dnd-provider">{children}</div>
+      </DndContext.Provider>
+    ),
+    useDrag: () => {
+      useEnsureProvider();
+      return [{ isDragging: false }, () => ({})] as const;
+    },
+    useDrop: () => {
+      useEnsureProvider();
+      return [{ isOver: false, canDrop: true }, () => ({})] as const;
+    }
+  };
+});
+
+jest.mock('react-dnd-html5-backend', () => ({
+  HTML5Backend: Symbol('HTML5Backend')
+}));
+
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { AssetLibraryV2 } from '../AssetLibraryV2';
@@ -50,9 +81,11 @@ describe('AssetLibraryV2 Integration Tests', () => {
       </DndProvider>
     );
 
-    // Find and click the Assets tab
+    // Ensure the Assets tab is expanded
     const assetsTab = screen.getByTitle('Asset Browser');
-    fireEvent.click(assetsTab);
+    if (!container.querySelector('.tabbed-side-panel.expanded')) {
+      fireEvent.click(assetsTab);
+    }
 
     // Wait for the asset library to render
     await waitFor(() => {

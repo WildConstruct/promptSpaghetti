@@ -3,8 +3,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { renderHook, act } from '@testing-library/react-hooks';
+import { render, screen, fireEvent, waitFor, renderHook, act } from '@testing-library/react';
 import { MicroInteraction, useMicroInteractions, triggerHaptic } from '../../animations/MicroInteractions';
 import { useMagneticSnap } from '../MagneticSnapHandler';
 import { NodeInteractionEnhancer, useNodeInteractions } from '../NodeInteractionEnhancer';
@@ -23,38 +22,55 @@ type TestSnapNode = {
 // Mock navigator.vibrate
 const mockVibrate = jest.fn();
 Object.defineProperty(navigator, 'vibrate', {
+  configurable: true,
   value: mockVibrate,
   writable: true
 });
 
 // Mock ReactFlow hooks
-jest.mock('reactflow', () => ({
-  ...jest.requireActual('reactflow'),
-  useReactFlow: () => ({
-    getNodes: () => [
-      { id: '1', position: { x: 100, y: 100 }, width: 100, height: 50 },
-      { id: '2', position: { x: 300, y: 100 }, width: 100, height: 50 }
-    ],
-    getNode: (id: string) => ({ 
-      id, 
-      position: { x: 100, y: 100 }, 
-      width: 100, 
-      height: 50 
-    }),
-    addNodes: jest.fn(),
-    setNodes: jest.fn(),
-  }),
-  useStoreApi: () => ({
-    getState: () => ({ connectionNodeId: null }),
-    subscribe: jest.fn(() => () => undefined)
-  })
-}));
+jest.mock('reactflow', () => {
+  const actual = jest.requireActual('reactflow');
+  return {
+    ...actual,
+    useReactFlow: jest.fn(),
+    useStoreApi: jest.fn()
+  };
+});
+
+const useReactFlowMock = ReactFlowModule.useReactFlow as jest.Mock;
+const useStoreApiMock = ReactFlowModule.useStoreApi as jest.Mock;
+
+const createReactFlowApi = (overrides = {}) => ({
+  getNodes: jest.fn(() => [
+    { id: '1', position: { x: 100, y: 100 }, width: 100, height: 50 },
+    { id: '2', position: { x: 300, y: 100 }, width: 100, height: 50 }
+  ]),
+  getNode: jest.fn((id: string) => ({
+    id,
+    position: { x: 100, y: 100 },
+    width: 100,
+    height: 50
+  })),
+  addNodes: jest.fn(),
+  setNodes: jest.fn(),
+  project: jest.fn(),
+  ...overrides
+});
+
+const createStoreApi = (overrides = {}) => ({
+  getState: () => ({ connectionNodeId: null }),
+  subscribe: jest.fn(() => () => undefined),
+  ...overrides
+});
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockVibrate.mockReset();
+  useReactFlowMock.mockImplementation(() => createReactFlowApi());
+  useStoreApiMock.mockImplementation(() => createStoreApi());
+});
 
 describe('MicroInteraction Component', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('renders hover interaction', () => {
     const { container } = render(
       <MicroInteraction trigger="hover" x={100} y={100} />
@@ -199,15 +215,16 @@ describe('triggerHaptic Function', () => {
   });
 
   it('handles missing vibration API gracefully', () => {
-    const navigatorWithVibrate = navigator as Navigator & {
-      vibrate?: typeof navigator.vibrate;
-    };
-    const originalVibrate = navigatorWithVibrate.vibrate;
-    delete navigatorWithVibrate.vibrate;
+    const originalDescriptor = Object.getOwnPropertyDescriptor(navigator, 'vibrate');
+    Reflect.deleteProperty(navigator, 'vibrate');
 
     expect(() => triggerHaptic('light')).not.toThrow();
 
-    navigatorWithVibrate.vibrate = originalVibrate;
+    if (originalDescriptor) {
+      Object.defineProperty(navigator, 'vibrate', originalDescriptor);
+    } else {
+      delete (navigator as Navigator & { vibrate?: typeof navigator.vibrate }).vibrate;
+    }
   });
 });
 
@@ -369,13 +386,19 @@ describe('useNodeInteractions Hook', () => {
   it('adds node with bounce effect', async () => {
     const mockAddNodes = jest.fn();
     const mockTrigger = jest.fn();
-    
-    const reactFlowSpy = jest.spyOn(ReactFlowModule, 'useReactFlow').mockReturnValue({
-      getNodes: jest.fn(),
-      addNodes: mockAddNodes,
-      setNodes: jest.fn()
-    });
-    
+
+    useReactFlowMock.mockImplementation(() =>
+      createReactFlowApi({
+        addNodes: mockAddNodes,
+        getNode: jest.fn(() => ({
+          id: 'new-node',
+          position: { x: 100, y: 100 },
+          width: 100,
+          height: 50
+        }))
+      })
+    );
+
     const microInteractionsSpy = jest
       .spyOn(MicroInteractionsModule, 'useMicroInteractions')
       .mockReturnValue({ trigger: mockTrigger, interactions: [] });
@@ -403,7 +426,6 @@ describe('useNodeInteractions Hook', () => {
       );
     });
 
-    reactFlowSpy.mockRestore();
     microInteractionsSpy.mockRestore();
   });
 });

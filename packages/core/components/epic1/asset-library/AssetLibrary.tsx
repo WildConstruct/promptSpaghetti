@@ -24,13 +24,13 @@ const PresetItem: React.FC<{
 }> = ({ preset, category, onHover, onDragStart }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'preset',
-    item: { preset, sourceCategory: category } as DraggedPreset,
-    begin: () => {
+    item: () => {
       onDragStart?.(preset);
+      return { preset, sourceCategory: category } as DraggedPreset;
     },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+      isDragging: monitor.isDragging()
+    })
   }), [preset, category, onDragStart]);
 
   const handleMouseEnter = useCallback(() => {

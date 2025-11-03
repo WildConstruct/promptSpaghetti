@@ -3,7 +3,7 @@
  * Validates prerequisites for tutorial steps to prevent failures
  */
 
-import type { Edge, Node } from '@reactflow/core';
+import type { Edge, Node } from 'reactflow';
 
 export interface StepValidationResult {
   isValid: boolean;
@@ -56,7 +56,7 @@ export class TutorialStepValidator {
    * Validate that nodes were actually created
    */
   private static validateNodesCreated(context: TutorialValidationContext): StepValidationResult {
-    const nodes = context.nodes ?? [];
+    const nodes = (context.nodes ?? []).filter((node): node is TutorialNode => Boolean(node));
 
     if (nodes.length === 0) {
       return {
@@ -73,7 +73,7 @@ export class TutorialStepValidator {
 
     // Check for tutorial-created nodes
     const tutorialNodes = nodes.filter(node =>
-      node.id && node.id.includes('tutorial-')
+      typeof node.id === 'string' && node.id.includes('tutorial-')
     );
 
     if (tutorialNodes.length === 0) {
@@ -95,7 +95,7 @@ export class TutorialStepValidator {
    * Validate that there are editable nodes available
    */
   private static validateInlineEdit(context: TutorialValidationContext): StepValidationResult {
-    const nodes = context.nodes ?? [];
+    const nodes = (context.nodes ?? []).filter((node): node is TutorialNode => Boolean(node));
 
     if (nodes.length === 0) {
       return {
@@ -130,8 +130,11 @@ export class TutorialStepValidator {
    * Validate that the graph is ready for preview
    */
   private static validatePreviewUpdate(context: TutorialValidationContext): StepValidationResult {
-    const nodes = context.nodes ?? [];
-    const edges = context.edges ?? [];
+    const nodes = (context.nodes ?? []).filter((node): node is TutorialNode => Boolean(node));
+    const edges = (context.edges ?? []).filter(
+      (edge): edge is TutorialEdge =>
+        Boolean(edge && typeof edge.source === 'string' && typeof edge.target === 'string')
+    );
 
     if (nodes.length === 0) {
       return {
@@ -155,7 +158,7 @@ export class TutorialStepValidator {
     }
 
     // Check if nodes are properly connected
-    const connectedNodeIds = new Set();
+    const connectedNodeIds = new Set<string>();
     edges.forEach(edge => {
       connectedNodeIds.add(edge.source);
       connectedNodeIds.add(edge.target);
@@ -182,7 +185,7 @@ export class TutorialStepValidator {
    * Validate that the canvas is empty for initial tutorial step
    */
   private static validateEmptyCanvas(context: TutorialValidationContext): StepValidationResult {
-    const nodes = context.nodes ?? [];
+    const nodes = (context.nodes ?? []).filter((node): node is TutorialNode => Boolean(node));
 
     // For the empty canvas step, we actually want it to be empty
     // But we should allow some tolerance for tutorial-generated content

@@ -1,5 +1,6 @@
 import { useCallback, useState, DragEvent } from 'react';
 import { Node, ReactFlowInstance, XYPosition } from 'reactflow';
+import type { PresetDropPayload } from './useDragDropHandlers';
 
 interface DraggedItem {
   type: string;
@@ -10,7 +11,7 @@ interface DraggedItem {
 
 interface UseGraphDragDropOptions {
   onNodeCreate?: (node: Node) => void;
-  onPresetDrop?: (preset: unknown, position: XYPosition) => void;
+  onPresetDrop?: (preset: PresetDropPayload, position: XYPosition) => void;
   showToast?: (type: 'success' | 'error' | 'info', message: string) => void;
 }
 
@@ -20,7 +21,10 @@ declare global {
   }
 }
 
-if (typeof window !== 'undefined' && window.__graphDragDropHookBuild !== '20250206') {
+if (
+  typeof window !== 'undefined' &&
+  window.__graphDragDropHookBuild !== '20250206'
+) {
   window.__graphDragDropHookBuild = '20250206';
   if (process.env.NODE_ENV !== 'production') {
     console.log('[useGraphDragDrop] Hook build 20250206 active');
@@ -180,9 +184,13 @@ export function useGraphDragDrop<NodeData = unknown>(
   const handlePresetDrop = useCallback(
     (presetData: string, position: XYPosition) => {
       try {
-        const preset = JSON.parse(presetData);
-        onPresetDrop?.(preset, position);
-        showToast?.('success', 'Preset loaded');
+        const parsed = JSON.parse(presetData) as unknown;
+        if (isPresetDropPayload(parsed)) {
+          onPresetDrop?.(parsed, position);
+          showToast?.('success', 'Preset loaded');
+        } else {
+          throw new Error('Preset payload missing required structure');
+        }
       } catch (error) {
         console.error('Failed to parse preset data:', error);
         showToast?.('error', 'Invalid preset data');
@@ -201,7 +209,9 @@ export function useGraphDragDrop<NodeData = unknown>(
         typeof assetMeta.name === 'string' && assetMeta.name.trim().length > 0
           ? assetMeta.name
           : 'Asset';
-      onPresetDrop?.(meta, position);
+      if (isPresetDropPayload(meta)) {
+        onPresetDrop?.(meta, position);
+      }
       showToast?.('success', `Loading ${assetName}`);
     },
     [onPresetDrop, showToast]
@@ -211,7 +221,8 @@ export function useGraphDragDrop<NodeData = unknown>(
   const handleNodeTypeDrop = useCallback(
     (nodeType: string, position: XYPosition, data?: unknown) => {
       const nodeData: NodeData =
-        (data as NodeData | undefined) ?? (getDefaultNodeData(nodeType) as NodeData);
+        (data as NodeData | undefined) ??
+        (getDefaultNodeData(nodeType) as NodeData);
 
       const newNode: Node<NodeData> = {
         id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -277,3 +288,5 @@ function getDefaultNodeData(type: string): Record<string, unknown> {
       return {};
   }
 }
+const isPresetDropPayload = (value: unknown): value is PresetDropPayload =>
+  typeof value === 'object' && value !== null;

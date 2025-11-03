@@ -1,4 +1,5 @@
 import type { Node, NodeProps } from 'reactflow';
+import type { EditableNodeData } from './BaseEditableNode';
 
 export interface NodeMeasurements {
   width?: number | null;

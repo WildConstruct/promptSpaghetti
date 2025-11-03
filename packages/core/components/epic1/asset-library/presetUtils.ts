@@ -157,7 +157,9 @@ export function createPresetFromNode(
   let presetValue: unknown;
   switch (nodeType) {
     case 'textBlock':
-      presetValue = { text: String(value ?? '') } satisfies TextBlockPresetValue;
+      presetValue = {
+        text: String(value ?? '')
+      } satisfies TextBlockPresetValue;
       break;
 
     case 'weightedChoice':
@@ -169,7 +171,9 @@ export function createPresetFromNode(
       break;
 
     case 'concat':
-      presetValue = { separator: String(value ?? '') } satisfies ConcatPresetValue;
+      presetValue = {
+        separator: String(value ?? '')
+      } satisfies ConcatPresetValue;
       break;
 
     case 'variable':
@@ -180,7 +184,7 @@ export function createPresetFromNode(
         operation:
           nodeData.operation || (nodeType === 'setVariable' ? 'set' : 'get')
       } as VariablePresetValue;
-      if (nodeData.variableValue !== undefined) {
+      if (typeof nodeData.variableValue === 'string') {
         (presetValue as VariablePresetValue).value = nodeData.variableValue;
       }
       break;

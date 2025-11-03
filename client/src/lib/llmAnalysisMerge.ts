@@ -152,7 +152,7 @@ export const mergeLLMResult = (
         ? llmNode.text
         : typeof llmNode.data?.content === 'string'
           ? String(llmNode.data.content)
-          : wrapper.node.getPreviewText?.() ?? '';
+          : (wrapper.node.getPreviewText?.() ?? '');
 
     const mergedData: Record<string, unknown> = {
       ...(wrapper.node.data ?? {})
@@ -194,7 +194,7 @@ export const mergeLLMResult = (
 
   const allowedIds = new Set(mergedNodes.map(n => n.node.id));
   const llmEdges = normalized.edges
-    .map((edge, index) => {
+    .map<AnalysisEdge | null>((edge, index) => {
       const source = typeof edge.source === 'string' ? edge.source : undefined;
       const target = typeof edge.target === 'string' ? edge.target : undefined;
       if (!source || !target) {
@@ -203,23 +203,28 @@ export const mergeLLMResult = (
       if (!allowedIds.has(source) || !allowedIds.has(target)) {
         return null;
       }
-      return {
-        id:
-          typeof edge.id === 'string' && edge.id.length > 0
-            ? edge.id
-            : `${source}__${target}__llm${index}`,
+      const id =
+        typeof edge.id === 'string' && edge.id.length > 0
+          ? edge.id
+          : `${source}__${target}__llm${index}`;
+      const sourceHandle =
+        typeof edge.sourceHandle === 'string' ? edge.sourceHandle : undefined;
+      const targetHandle =
+        typeof edge.targetHandle === 'string' ? edge.targetHandle : undefined;
+      const normalizedEdge: AnalysisEdge = {
+        id,
         source,
-        target,
-        sourceHandle:
-          typeof edge.sourceHandle === 'string' ? edge.sourceHandle : undefined,
-        targetHandle:
-          typeof edge.targetHandle === 'string' ? edge.targetHandle : undefined
+        target
       };
+      if (sourceHandle) {
+        normalizedEdge.sourceHandle = sourceHandle;
+      }
+      if (targetHandle) {
+        normalizedEdge.targetHandle = targetHandle;
+      }
+      return normalizedEdge;
     })
-    .filter(
-      (edge): edge is AnalysisEdge =>
-        edge !== null
-    );
+    .filter((edge): edge is AnalysisEdge => edge !== null);
 
   const edges =
     llmEdges.length > 0

@@ -26,6 +26,7 @@ export const DelightfulIntegration: React.FC<DelightfulIntegrationProps> = ({
   const [weirdMode, setWeirdMode] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
   const [expertMode, setExpertMode] = useState(false);
+  const [precisionMode, setPrecisionMode] = useState(false);
 
   // Loading states
   const [isLoading, setIsLoading] = useState(false);
@@ -194,8 +195,14 @@ export const DelightfulIntegration: React.FC<DelightfulIntegrationProps> = ({
     }
   }, [weirdMode]);
 
+  const wrapperClassName = [
+    'delightful-wrapper',
+    weirdMode ? 'weird-mode-active' : '',
+    precisionMode ? 'precision-mode-active' : ''
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className={`delightful-wrapper ${weirdMode ? 'weird-mode-active' : ''}`}>
+    <div className={wrapperClassName}>
       {/* Easter Egg Manager */}
       {enableEasterEggs && (
         <EasterEggManager

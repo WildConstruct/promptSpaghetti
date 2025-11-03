@@ -184,17 +184,17 @@ export const ContextualTooltips: React.FC<{
 
     timeoutRef.current = setTimeout(() => {
       const position = calculatePosition(element, tooltip);
-      setState({
+      setState(prev => ({
+        ...prev,
         visible: true,
         currentTooltip: tooltip,
         position,
-        dismissed: state.dismissed,
-      });
+      }));
       
       if (tooltip.showOnce) {
         markHelpViewed(tooltip.id);
       }
-    }, tooltip.delay || 1000);
+    }, tooltip.delay ?? 1000);
   }, [enabled, onboardingState, calculatePosition, markHelpViewed, state.dismissed]);
 
   // Hide tooltip

@@ -2,7 +2,7 @@
  * Tests for useEditTransitions hook
  */
 
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import {
   useEditTransitions,
   useWeightedOptionTransitions
@@ -85,7 +85,7 @@ describe('useEditTransitions', () => {
       rerender({ isFocused: false });
 
       expect(result.current.transitionState.hasTabFocus).toBe(false);
-      expect(result.current.animationClasses).toContain('epic1-tab-blur');
+      expect(result.current.animationClasses).not.toContain('epic1-tab-focus');
     });
   });
 

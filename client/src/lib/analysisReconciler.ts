@@ -5,7 +5,8 @@ import {
   PromptAnalysis,
   NodeMapping,
   GeneratedNode,
-  GeneratedNodeInternal
+  GeneratedNodeInternal,
+  buildSequentialEdges
 } from './simplePromptParser';
 
 function normalize(s: string): string {
@@ -192,5 +193,6 @@ export function reconcileAnalysis(
   const output = nodes.find(n => n.node.nodeType === 'Output');
   const ordered = output ? [...nonOutput, output] : nonOutput;
 
-  return { segments: [], nodes: ordered, mappings };
+  const edges = buildSequentialEdges(ordered);
+  return { segments: [], nodes: ordered, mappings, edges };
 }

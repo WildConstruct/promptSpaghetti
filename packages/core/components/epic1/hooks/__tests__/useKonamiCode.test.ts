@@ -1,10 +1,31 @@
 import { renderHook, act } from '@testing-library/react';
 import { useKonamiCode } from '../useKonamiCode';
 
+const triggerKey = (code: string, target?: HTMLElement) => {
+  const event = new KeyboardEvent('keydown', { code, bubbles: true });
+  if (target) {
+    target.dispatchEvent(event);
+  } else {
+    document.dispatchEvent(event);
+  }
+};
+
 describe('useKonamiCode', () => {
+  const konamiSequence = [
+    'ArrowUp',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowLeft',
+    'ArrowRight',
+    'KeyB',
+    'KeyA'
+  ];
+
   beforeEach(() => {
-    // Clear any existing event listeners
-    document.removeEventListener('keydown', jest.fn());
+    jest.clearAllMocks();
   });
 
   it('should initialize with inactive state', () => {
@@ -12,31 +33,15 @@ describe('useKonamiCode', () => {
 
     expect(result.current.isActive).toBe(false);
     expect(result.current.progress).toBe(0);
-    expect(result.current.total).toBe(10); // Default Konami code length
+    expect(result.current.total).toBe(konamiSequence.length);
   });
 
   it('should activate when correct sequence is entered', () => {
     const onActivate = jest.fn();
     const { result } = renderHook(() => useKonamiCode({ onActivate }));
 
-    const konamiSequence = [
-      'ArrowUp',
-      'ArrowUp',
-      'ArrowDown',
-      'ArrowDown',
-      'ArrowLeft',
-      'ArrowRight',
-      'ArrowLeft',
-      'ArrowRight',
-      'KeyB',
-      'KeyA'
-    ];
-
     act(() => {
-      konamiSequence.forEach(code => {
-        const event = new KeyboardEvent('keydown', { code });
-        document.dispatchEvent(event);
-      });
+      konamiSequence.forEach(code => triggerKey(code));
     });
 
     expect(onActivate).toHaveBeenCalledTimes(1);
@@ -44,16 +49,12 @@ describe('useKonamiCode', () => {
   });
 
   it('should reset sequence on wrong key', () => {
-    const { result } = renderHook(() => useKonamiCode({ debug: false }));
+    const { result } = renderHook(() => useKonamiCode());
 
     act(() => {
-      // Start with correct sequence
-      document.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
-      document.dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
-      // Wrong key
-      document.dispatchEvent(
-        new KeyboardEvent('keydown', { code: 'ArrowLeft' })
-      );
+      triggerKey('ArrowUp');
+      triggerKey('ArrowUp');
+      triggerKey('ArrowLeft'); // wrong
     });
 
     expect(result.current.progress).toBe(0);
@@ -69,15 +70,11 @@ describe('useKonamiCode', () => {
     input.focus();
 
     act(() => {
-      const event = new KeyboardEvent('keydown', {
-        code: 'ArrowUp',
-        target: input as any
-      });
-      document.dispatchEvent(event);
+      triggerKey('ArrowUp', input);
+      triggerKey('ArrowUp', input);
     });
 
     expect(onActivate).not.toHaveBeenCalled();
-
     document.body.removeChild(input);
   });
 
@@ -92,12 +89,10 @@ describe('useKonamiCode', () => {
       })
     );
 
-    expect(result.current.total).toBe(3);
+    expect(result.current.total).toBe(customCode.length);
 
     act(() => {
-      customCode.forEach(code => {
-        document.dispatchEvent(new KeyboardEvent('keydown', { code }));
-      });
+      customCode.forEach(code => triggerKey(code));
     });
 
     expect(onActivate).toHaveBeenCalledTimes(1);
@@ -119,5 +114,54 @@ describe('useKonamiCode', () => {
 
     expect(result.current.isActive).toBe(false);
     expect(onDeactivate).toHaveBeenCalledTimes(1);
+  });
+
+  it('should ignore additional sequences while active until deactivated', () => {
+    const onActivate = jest.fn();
+    const { result } = renderHook(() => useKonamiCode({ onActivate }));
+
+    act(() => {
+      konamiSequence.forEach(code => triggerKey(code));
+      konamiSequence.forEach(code => triggerKey(code));
+    });
+
+    expect(onActivate).toHaveBeenCalledTimes(1);
+    expect(result.current.isActive).toBe(true);
+
+    act(() => {
+      result.current.deactivate();
+    });
+
+    act(() => {
+      konamiSequence.forEach(code => triggerKey(code));
+    });
+
+    expect(onActivate).toHaveBeenCalledTimes(2);
+  });
+
+  it('should handle overlapping prefix sequences without losing progress', () => {
+    const { result } = renderHook(() => useKonamiCode());
+
+    act(() => {
+      triggerKey('ArrowUp');
+      triggerKey('ArrowUp');
+      triggerKey('ArrowUp'); // restart from first key
+      triggerKey('ArrowDown');
+    });
+
+    expect(result.current.progress).toBe(3);
+  });
+
+  it('should clean up event listeners on unmount', () => {
+    const onActivate = jest.fn();
+    const { unmount } = renderHook(() => useKonamiCode({ onActivate }));
+
+    unmount();
+
+    act(() => {
+      konamiSequence.forEach(code => triggerKey(code));
+    });
+
+    expect(onActivate).not.toHaveBeenCalled();
   });
 });

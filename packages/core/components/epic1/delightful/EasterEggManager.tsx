@@ -37,6 +37,19 @@ interface EasterEggManagerProps {
   onPrecisionModeToggle?: (enabled: boolean) => void;
 }
 
+const EGG_EMOJI: Record<string, string> = {
+  konami: '🎮',
+  longpress: '🔍',
+  tripleclick: '⚡',
+  shake: '🎲',
+  shift: '🎯',
+  weird: '🌈',
+  debug: '🐛',
+  expert: '🏆'
+};
+
+const getEggEmoji = (eggId: string): string => EGG_EMOJI[eggId] || '✨';
+
 export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
   onWeirdModeToggle,
   onDebugModeToggle,
@@ -68,39 +81,6 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
   // Store reference for expert mode features
   const { nodes, edges } = useStore();
 
-  // Discover an Easter egg
-  const discoverEgg = useCallback((eggId: string) => {
-    let isNewDiscovery = false;
-
-    setDiscoveredEggs(prev => {
-      if (prev.has(eggId)) {
-        return prev;
-      }
-      const next = new Set(prev);
-      next.add(eggId);
-      isNewDiscovery = true;
-      return next;
-    });
-
-    if (!isNewDiscovery) {
-      return;
-    }
-
-    triggerCelebration(eggId);
-
-    try {
-      const stored: string[] = JSON.parse(
-        localStorage.getItem('discoveredEasterEggs') || '[]'
-      );
-      if (!stored.includes(eggId)) {
-        stored.push(eggId);
-        localStorage.setItem('discoveredEasterEggs', JSON.stringify(stored));
-      }
-    } catch (error) {
-      console.warn('[EasterEggManager] Failed to persist discovered eggs', error);
-    }
-  }, [triggerCelebration]);
-
   // Celebration animation
   const triggerCelebration = useCallback((eggId: string) => {
     // Create confetti or sparkle effect
@@ -127,20 +107,30 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
     }
   }, []);
 
-  // Get emoji for egg type
-  const getEggEmoji = (eggId: string): string => {
-    const emojis: Record<string, string> = {
-      'konami': '🎮',
-      'longpress': '🔍',
-      'tripleclick': '⚡',
-      'shake': '🎲',
-      'shift': '🎯',
-      'weird': '🌈',
-      'debug': '🐛',
-      'expert': '🏆',
-    };
-    return emojis[eggId] || '✨';
-  };
+  // Discover an Easter egg
+  const discoverEgg = useCallback((eggId: string) => {
+    if (discoveredEggs.has(eggId)) {
+      return;
+    }
+
+    const updatedDiscoveries = new Set(discoveredEggs);
+    updatedDiscoveries.add(eggId);
+    setDiscoveredEggs(updatedDiscoveries);
+
+    triggerCelebration(eggId);
+
+    try {
+      const stored: string[] = JSON.parse(
+        localStorage.getItem('discoveredEasterEggs') || '[]'
+      );
+      if (!stored.includes(eggId)) {
+        stored.push(eggId);
+        localStorage.setItem('discoveredEasterEggs', JSON.stringify(stored));
+      }
+    } catch (error) {
+      console.warn('[EasterEggManager] Failed to persist discovered eggs', error);
+    }
+  }, [discoveredEggs, triggerCelebration]);
 
   // 1. Konami Code Handler
   useEffect(() => {
@@ -295,7 +285,7 @@ export const EasterEggManager: React.FC<EasterEggManagerProps> = ({
         setPrecisionMode(true);
         onPrecisionModeToggle?.(true);
         document.body.classList.add('precision-mode');
-        
+
         // First time discovery
         if (!hasDiscoveredShift) {
           discoverEgg('shift');

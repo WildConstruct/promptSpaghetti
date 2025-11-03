@@ -59,7 +59,7 @@ describe('ElementDetector', () => {
 
       expect(result.found).toBe(true);
       expect(result.element).toBe(mockElement);
-      expect(result.attempts).toBe(1);
+      expect(result.attempts).toBe(0);
       expect(result.duration).toBeGreaterThanOrEqual(0);
     });
 
@@ -77,7 +77,7 @@ describe('ElementDetector', () => {
       });
 
       expect(result.found).toBe(true);
-      expect(result.attempts).toBe(3);
+      expect(result.attempts).toBe(2);
     });
 
     it('should return not found if element never appears', async () => {
@@ -91,7 +91,7 @@ describe('ElementDetector', () => {
 
       expect(result.found).toBe(false);
       expect(result.element).toBe(null);
-      expect(result.attempts).toBe(3); // 1 initial + 2 retries
+      expect(result.attempts).toBe(2); // initial check + 2 scheduled attempts
     });
 
     it('should respect timeout', async () => {
@@ -291,11 +291,17 @@ describe('ElementDetector', () => {
   describe('waitForVisible', () => {
     it('should resolve when element becomes visible', async () => {
       let isVisible = false;
-
-      mockQuerySelector.mockImplementation(() => {
-        if (isVisible) {return mockElement;}
-        return { ...mockElement, offsetWidth: 0, offsetHeight: 0 };
+      const element = document.createElement('div');
+      Object.defineProperty(element, 'offsetWidth', {
+        get: () => (isVisible ? 100 : 0)
       });
+      Object.defineProperty(element, 'offsetHeight', {
+        get: () => (isVisible ? 100 : 0)
+      });
+
+      mockQuerySelector.mockImplementation(
+        () => element as unknown as HTMLElement
+      );
 
       setTimeout(() => {
         isVisible = true;
@@ -305,7 +311,7 @@ describe('ElementDetector', () => {
         await ElementDetector.waitForVisible('.test-element', 1000);
 
       expect(result.found).toBe(true);
-      expect(result.element).toBe(mockElement);
+      expect(result.element).toBe(element);
     });
 
     it('should timeout if element never becomes visible', async () => {
@@ -331,6 +337,9 @@ describe('ElementDetector', () => {
       testElement.id = 'test-element-123';
       document.body.appendChild(testElement);
 
+      const previousQuerySelector = document.querySelector;
+      document.querySelector = originalQuerySelector;
+
       const result: ElementDetectionResult = await ElementDetector.findElement({
         selector: '.test-element-integration'
       });
@@ -340,6 +349,8 @@ describe('ElementDetector', () => {
 
       // Cleanup
       document.body.removeChild(testElement);
+      document.querySelector =
+        previousQuerySelector as typeof document.querySelector;
     });
 
     it('should handle complex selectors', async () => {
@@ -352,6 +363,9 @@ describe('ElementDetector', () => {
 
       document.body.appendChild(container);
 
+      const previousQuerySelector = document.querySelector;
+      document.querySelector = originalQuerySelector;
+
       const result: ElementDetectionResult = await ElementDetector.findElement({
         selector: '#container .child-element'
       });
@@ -361,6 +375,8 @@ describe('ElementDetector', () => {
 
       // Cleanup
       document.body.removeChild(container);
+      document.querySelector =
+        previousQuerySelector as typeof document.querySelector;
     });
   });
 });

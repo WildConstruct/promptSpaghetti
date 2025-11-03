@@ -122,18 +122,21 @@ export class ConnectionValidator {
     const sourceType = sourceNode.type || 'default';
     const targetType = targetNode.type || 'default';
 
-    // Find applicable rules
-    for (const rule of this.rules) {
+    const rulesForSource = this.rules.filter(rule => {
       const sourceTypes = Array.isArray(rule.sourceType)
         ? rule.sourceType
         : [rule.sourceType];
-      const targetTypes = Array.isArray(rule.targetType)
-        ? rule.targetType
-        : [rule.targetType];
+      return sourceTypes.includes(sourceType);
+    });
 
-      // Check if rule applies to source
-      if (sourceTypes.includes(sourceType)) {
-        // If target types is empty array, no connections allowed
+    if (rulesForSource.length > 0) {
+      let fallbackError: string | undefined;
+
+      for (const rule of rulesForSource) {
+        const targetTypes = Array.isArray(rule.targetType)
+          ? rule.targetType
+          : [rule.targetType];
+
         if (targetTypes.length === 0) {
           return {
             isValid: false,
@@ -143,12 +146,14 @@ export class ConnectionValidator {
           };
         }
 
-        // Check if target type is allowed
         if (!targetTypes.includes(targetType)) {
-          continue; // This rule doesn't apply to this target
+          fallbackError =
+            fallbackError ||
+            rule.errorMessage ||
+            `Invalid connection from ${sourceType} to ${targetType}`;
+          continue;
         }
 
-        // Custom validation function
         if (rule.validate) {
           const isValid = rule.validate(sourceNode, targetNode, edges);
           if (!isValid) {
@@ -161,9 +166,15 @@ export class ConnectionValidator {
           }
         }
 
-        // Rule matches and is valid
         return { isValid: true };
       }
+
+      return {
+        isValid: false,
+        error:
+          fallbackError ||
+          `Invalid connection from ${sourceType} to ${targetType}`
+      };
     }
 
     // No specific rule found - check general compatibility
@@ -173,9 +184,7 @@ export class ConnectionValidator {
   /**
    * General compatibility check when no specific rules apply
    */
-  private checkGeneralCompatibility(
-    sourceType: string
-  ): ValidationResult {
+  private checkGeneralCompatibility(sourceType: string): ValidationResult {
     // Output nodes cannot be sources
     if (sourceType === 'output') {
       return {

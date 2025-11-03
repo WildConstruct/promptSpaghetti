@@ -42,6 +42,25 @@ export interface PromptAnalysis {
   rawPrompt?: string;
 }
 
+export const buildSequentialEdges = (
+  nodes: GeneratedNode[]
+): AnalysisEdge[] => {
+  const edges: AnalysisEdge[] = [];
+  for (let i = 0; i < nodes.length - 1; i += 1) {
+    const currentId = nodes[i]?.node.id;
+    const nextId = nodes[i + 1]?.node.id;
+    if (!currentId || !nextId) {
+      continue;
+    }
+    edges.push({
+      id: `${currentId}__${nextId}`,
+      source: currentId,
+      target: nextId
+    });
+  }
+  return edges;
+};
+
 const HIGHLIGHT_COLORS = [
   '#FF6B6B',
   '#4ECDC4',
@@ -58,10 +77,9 @@ export const simplePromptParser = {
     const segments: PromptSegment[] = [];
     const nodes: GeneratedNode[] = [];
     const mappings: NodeMapping[] = [];
-    const edges: AnalysisEdge[] = [];
 
     if (!input || !input.trim()) {
-      return { segments, nodes, mappings, edges, rawPrompt: input };
+      return { segments, nodes, mappings, edges: [], rawPrompt: input };
     }
 
     const segmented = segmentPrompt(input);
@@ -87,7 +105,10 @@ export const simplePromptParser = {
             segment.kind === 'choice'
               ? { options: segment.options }
               : segment.kind === 'variable'
-                ? { label: segment.variableName ?? 'Variable', value: segment.text }
+                ? {
+                    label: segment.variableName ?? 'Variable',
+                    value: segment.text
+                  }
                 : { label: segment.text }
         }
       };
@@ -112,20 +133,7 @@ export const simplePromptParser = {
       }
     });
 
-    // Connect the nodes sequentially (including output at the end)
-    for (let i = 0; i < nodes.length - 1; i++) {
-      const currentId = nodes[i].node.id;
-      const nextId = nodes[i + 1].node.id;
-      if (!currentId || !nextId) {
-        continue;
-      }
-      edges.push({
-        id: `${currentId}__${nextId}`,
-        source: currentId,
-        target: nextId
-      });
-    }
-
+    const edges = buildSequentialEdges(nodes);
     return {
       segments,
       nodes,
@@ -136,7 +144,9 @@ export const simplePromptParser = {
   }
 };
 
-function displayTypeForKind(kind: SegmentKind): GeneratedNodeInternal['nodeType'] {
+function displayTypeForKind(
+  kind: SegmentKind
+): GeneratedNodeInternal['nodeType'] {
   switch (kind) {
     case 'choice':
       return 'Choice';

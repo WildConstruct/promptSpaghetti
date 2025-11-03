@@ -12,13 +12,13 @@ jest.mock('../../../../../../utils/performance/PerformanceMonitor', () => ({
   }
 }));
 
-const setNodesMock = jest.fn<(updater: (nodes: Node[]) => Node[]) => void>();
-const getNodesMock = jest.fn<() => Node[]>();
+const mockSetNodes = jest.fn<(updater: (nodes: Node[]) => Node[]) => void>();
+const mockGetNodes = jest.fn<() => Node[]>();
 
 jest.mock('reactflow', () => ({
   useReactFlow: () => ({
-    getNodes: getNodesMock,
-    setNodes: setNodesMock
+    getNodes: mockGetNodes,
+    setNodes: mockSetNodes
   })
 }));
 
@@ -67,10 +67,10 @@ describe('useAutoLayout', () => {
     jest.clearAllMocks();
     jest.useRealTimers();
     nodesState = [boundingBoxNode, ...childNodes.map(node => ({ ...node }))];
-    setNodesMock.mockImplementation(updater => {
+    mockSetNodes.mockImplementation(updater => {
       nodesState = updater(nodesState);
     });
-    getNodesMock.mockImplementation(() => nodesState);
+    mockGetNodes.mockImplementation(() => nodesState);
     (PerformanceMonitor.getInstance as jest.Mock).mockReturnValue(
       perfMonitorMock
     );
@@ -92,7 +92,7 @@ describe('useAutoLayout', () => {
     });
 
     expect(result.current.isLayouting).toBe(true);
-    expect(setNodesMock).toHaveBeenCalled();
+    expect(mockSetNodes).toHaveBeenCalled();
 
     const getChild = (id: string) =>
       nodesState.find(node => node.id === id) as Node;
@@ -101,9 +101,7 @@ describe('useAutoLayout', () => {
     expect(getChild('child-2').position).toEqual({ x: 270, y: 260 });
     expect(getChild('child-3').position).toEqual({ x: 120, y: 370 });
     [1, 2, 3].forEach(i =>
-      expect(getChild(`child-${i}`).style?.transition).toBe(
-        'all 0.3s ease-out'
-      )
+      expect(getChild(`child-${i}`).style?.transition).toBe('all 0.3s ease-out')
     );
 
     expect(perfMonitorMock.record).toHaveBeenCalledWith(
@@ -132,15 +130,15 @@ describe('useAutoLayout', () => {
     act(() => {
       disabledResult.current.applyLayout();
     });
-    expect(setNodesMock).not.toHaveBeenCalled();
+    expect(mockSetNodes).not.toHaveBeenCalled();
 
-    setNodesMock.mockClear();
+    mockSetNodes.mockClear();
     const { result: emptyResult } = renderHook(() =>
       useAutoLayout('box-1', [], true)
     );
     act(() => {
       emptyResult.current.applyLayout();
     });
-    expect(setNodesMock).not.toHaveBeenCalled();
+    expect(mockSetNodes).not.toHaveBeenCalled();
   });
 });

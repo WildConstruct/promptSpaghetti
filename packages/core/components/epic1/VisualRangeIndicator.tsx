@@ -84,6 +84,85 @@ export const VisualRangeIndicator: React.FC<VisualRangeIndicatorProps> = ({
     return segments;
   }, [promptAnalysis]);
 
+  const legendEntries = useMemo(() => {
+    const entries = new Map<
+      string,
+      { color: string; ranges: Array<{ start: number; end: number }> }
+    >();
+
+    const segments =
+      promptAnalysis.segments?.map(segment => ({
+        start: segment.startIndex,
+        end: segment.endIndex,
+        text: segment.text,
+        kind:
+          segment.metadata?.segmentKind ??
+          segment.suggestedNodeType ??
+          'text'
+      })) ?? [];
+
+    const inferType = (segment: {
+      text: string;
+      kind: string;
+    }): string => {
+      if (segment.kind === 'choice') {return 'WeightedChoice';}
+      const lower = segment.text.toLowerCase();
+      if (
+        /\b(or|and)\b/.test(lower) &&
+        !lower.includes(',') &&
+        lower.split(/\b(or|and)\b/).length >= 3
+      ) {
+        return 'WeightedChoice';
+      }
+      return 'TextBlock';
+    };
+
+    segments.forEach(segment => {
+      const nodeType = formatNodeType(inferType(segment));
+      const mapping = promptAnalysis.mappings.find(
+        m => m.startIndex === segment.start && m.endIndex === segment.end
+      );
+      const color = mapping?.highlightColor || HIGHLIGHT_COLORS[0];
+      if (!entries.has(nodeType)) {
+        entries.set(nodeType, {
+          color,
+          ranges: [{ start: segment.start, end: segment.end }]
+        });
+      } else {
+        entries.get(nodeType)?.ranges.push({
+          start: segment.start,
+          end: segment.end
+        });
+      }
+    });
+
+    if (entries.size === 0) {
+      promptAnalysis.mappings.forEach(mapping => {
+        const node = promptAnalysis.nodes.find(
+          candidate => candidate.node.serialize().id === mapping.nodeId
+        );
+        const nodeType = formatNodeType(node?.node.getNodeType() || 'TextBlock');
+        if (!entries.has(nodeType)) {
+          entries.set(nodeType, {
+            color: mapping.highlightColor || HIGHLIGHT_COLORS[0],
+            ranges: [{ start: mapping.startIndex, end: mapping.endIndex }]
+          });
+        } else {
+          entries.get(nodeType)?.ranges.push({
+            start: mapping.startIndex,
+            end: mapping.endIndex
+          });
+        }
+      });
+    }
+
+    return Array.from(entries.entries()).map(([nodeType, payload]) => ({
+      nodeType,
+      color: payload.color,
+      ranges: payload.ranges
+    }));
+  }, [promptAnalysis]);
+
   // Handle text segment hover
   const handleSegmentHover = (segment: TextSegment | null) => {
     if (segment?.nodeId) {
@@ -190,22 +269,21 @@ export const VisualRangeIndicator: React.FC<VisualRangeIndicatorProps> = ({
   };
 
   // Render connection lines as SVG
-  const renderConnectionLines = () => {
-    if (!showConnectionLines || connectionLines.length === 0) {return null;}
-
-    return (
-      <svg
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-          zIndex: 1000,
-        }}
-      >
-        {connectionLines.map((line, index) => {
+  const renderConnectionLines = () => (
+    <svg
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: 1000,
+        visibility: showConnectionLines ? 'visible' : 'hidden'
+      }}
+    >
+      {showConnectionLines &&
+        connectionLines.map((line, index) => {
           const fromX = line.from.left + line.from.width / 2;
           const fromY = line.from.top + line.from.height / 2;
           const toX = line.to.left + line.to.width / 2;
@@ -237,9 +315,8 @@ export const VisualRangeIndicator: React.FC<VisualRangeIndicatorProps> = ({
             </g>
           );
         })}
-      </svg>
-    );
-  };
+    </svg>
+  );
 
   return (
     <>
@@ -273,35 +350,32 @@ export const VisualRangeIndicator: React.FC<VisualRangeIndicatorProps> = ({
         >
           <strong>Visual Mapping:</strong>
           <div style={{ marginTop: '8px' }}>
-            {promptAnalysis.nodes.map(genNode => {
-              const mapping = promptAnalysis.mappings.find(m => m.nodeId === genNode.node.serialize().id);
-              if (!mapping) {return null;}
-              
-              return (
-                <div
-                  key={genNode.node.serialize().id}
+            {legendEntries.map(entry => (
+              <div
+                key={entry.nodeType}
+                style={{
+                  display: 'inline-block',
+                  marginRight: '12px',
+                  marginBottom: '4px',
+                }}
+              >
+                <span
                   style={{
-                    display: 'inline-block',
-                    marginRight: '12px',
-                    marginBottom: '4px',
+                    backgroundColor: entry.color,
+                    padding: '2px 6px',
+                    borderRadius: '3px',
+                    marginRight: '4px',
                   }}
                 >
-                  <span
-                    style={{
-                      backgroundColor: mapping.highlightColor,
-                      padding: '2px 6px',
-                      borderRadius: '3px',
-                      marginRight: '4px',
-                    }}
-                  >
-                    {genNode.node.getNodeType()}
-                  </span>
-                  <span style={{ fontSize: '11px' }}>
-                    [{mapping.startIndex}-{mapping.endIndex}]
-                  </span>
-                </div>
-              );
-            })}
+                  {entry.nodeType}
+                </span>
+                <span style={{ fontSize: '11px' }}>
+                  {entry.ranges
+                    .map(range => `[${range.start}-${range.end}]`)
+                    .join(', ')}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -318,6 +392,19 @@ function adjustColorBrightness(color: string, amount: number): string {
   const g = Math.max(0, Math.min(255, ((num >> 8) & 0xff) + amount));
   const b = Math.max(0, Math.min(255, (num & 0xff) + amount));
   return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
+
+function formatNodeType(type: string): string {
+  if (!type) {return type;}
+  const withoutNode = type.replace(/Node$/i, '');
+  const parts = withoutNode
+    .replace(/[_-]+/g, ' ')
+    .replace(/([a-z\d])([A-Z])/g, '$1 $2')
+    .split(' ')
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase());
+
+  return parts.join('');
 }
 
 export default VisualRangeIndicator;

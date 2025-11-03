@@ -1,7 +1,12 @@
 import type { Node } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
 
-export type FlowNode = Node<EditableNodeData>;
+export interface FlowNode extends Node<EditableNodeData> {
+  measured?: {
+    width?: number;
+    height?: number;
+  };
+}
 
 export const CONTAINER_TYPES = new Set([
   'fragmentContainer',
@@ -65,11 +70,7 @@ const readNodeHeight = (node: FlowNode): number => {
 
 export const getContainerPadding = (node: FlowNode): number => {
   const data = node.data as Record<string, unknown> | undefined;
-  const candidates = [
-    data?.padding,
-    data?.innerPadding,
-    node.style?.padding
-  ];
+  const candidates = [data?.padding, data?.innerPadding, node.style?.padding];
   for (const candidate of candidates) {
     const value = parseDimension(candidate, Number.NaN);
     if (!Number.isNaN(value)) {
@@ -121,8 +122,7 @@ export const findContainerAtPosition = (
       return;
     }
 
-    const origin =
-      node.positionAbsolute ?? node.position ?? { x: 0, y: 0 };
+    const origin = node.positionAbsolute ?? node.position ?? { x: 0, y: 0 };
     const width = readNodeWidth(node);
     const height = readNodeHeight(node);
     const padding = getContainerPadding(node);
@@ -140,8 +140,7 @@ export const findContainerAtPosition = (
 
     const depth = computeDepth(node, nodeMap);
     const area = width * height;
-    const zIndex =
-      typeof node.zIndex === 'number' ? node.zIndex : depth;
+    const zIndex = typeof node.zIndex === 'number' ? node.zIndex : depth;
 
     candidates.push({ node, depth, area, zIndex });
   });
@@ -171,11 +170,12 @@ export const attachNodesToContainerNodes = (
     return nodes;
   }
 
-  const base =
-    container.positionAbsolute ?? container.position ?? { x: 0, y: 0 };
+  const base = container.positionAbsolute ??
+    container.position ?? { x: 0, y: 0 };
   const padding = getContainerPadding(container);
   const isCollapsed =
-    (container.data as { isCollapsed?: boolean } | undefined)?.isCollapsed === true;
+    (container.data as { isCollapsed?: boolean } | undefined)?.isCollapsed ===
+    true;
 
   return nodes.map(node => {
     if (

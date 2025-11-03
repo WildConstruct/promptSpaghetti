@@ -1,391 +1,187 @@
 /**
- * Comprehensive tests for TutorialContext
- * Tests state management, hooks, and tutorial flow
+ * TutorialContext – state management and persistence contract
  */
 
-import React from 'react';
-import { render, act, waitFor } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
-import { jest } from '@jest/globals';
-
-// Mock localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  clear: jest.fn(),
-};
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-  writable: true,
-});
-
-// Mock custom event
-const mockCustomEvent = jest.fn();
-Object.defineProperty(window, 'CustomEvent', {
-  value: mockCustomEvent,
-  writable: true,
-});
-
+import { act, renderHook } from '@testing-library/react';
 import {
-  TutorialProvider,
-  useTutorial,
-  TutorialStep,
-  OnboardingState
-} from '../TutorialContext';
+  renderTutorialHook,
+  resetOnboardingStorage,
+  seedOnboardingState,
+} from './testUtils';
+import { useTutorial } from '../TutorialContext';
 
 describe('TutorialContext', () => {
   beforeEach(() => {
+    resetOnboardingStorage();
     jest.clearAllMocks();
-    localStorageMock.getItem.mockReturnValue(null);
-    localStorageMock.setItem.mockImplementation(() => undefined);
   });
 
-  describe('useTutorial hook', () => {
-    it('should throw error when used outside provider', () => {
-      expect(() => {
-        renderHook(() => useTutorial());
-      }).toThrow('useTutorial must be used within TutorialProvider');
-    });
-
-    it('should return tutorial context when used within provider', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      expect(result.current).toHaveProperty('isActive');
-      expect(result.current).toHaveProperty('currentStep');
-      expect(result.current).toHaveProperty('tutorialSteps');
-      expect(result.current).toHaveProperty('startTutorial');
-      expect(result.current).toHaveProperty('nextStep');
-      expect(result.current).toHaveProperty('skipTutorial');
-    });
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
-  describe('TutorialProvider state management', () => {
-    it('should initialize with default state', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
+  it('throws when useTutorial is consumed outside the provider', () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
 
-      const { result } = renderHook(() => useTutorial(), { wrapper });
+    expect(() => renderHook(() => useTutorial())).toThrow(
+      'useTutorial must be used within TutorialProvider'
+    );
 
-      expect(result.current.isActive).toBe(false);
-      expect(result.current.currentStep).toBe(0);
-      expect(result.current.tutorialSteps).toHaveLength(6);
-    });
-
-    it('should load saved state from localStorage', () => {
-      const savedState: Partial<OnboardingState> = {
-        tutorialProgress: 50,
-        completedSteps: ['welcome', 'empty-canvas'],
-        currentStep: 2
-      };
-      localStorageMock.getItem.mockReturnValue(JSON.stringify(savedState));
-
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      waitFor(() => {
-        expect(result.current.onboardingState.tutorialProgress).toBe(50);
-        expect(result.current.onboardingState.completedSteps).toContain('welcome');
-      });
-    });
-
-    it('should auto-start tutorial for first-time users', () => {
-      localStorageMock.getItem.mockReturnValue(null);
-
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      // Note: The auto-start logic was modified to NOT auto-start
-      // This test verifies the new behavior
-      expect(result.current.isActive).toBe(false);
-    });
+    consoleSpy.mockRestore();
   });
 
-  describe('Tutorial actions', () => {
-    it('should start tutorial correctly', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
+  it('exposes the default onboarding state when mounted', () => {
+    const { result } = renderTutorialHook(() => useTutorial());
 
-      const { result } = renderHook(() => useTutorial(), { wrapper });
+    expect(result.current.isActive).toBe(false);
+    expect(result.current.currentStep).toBe(0);
+    expect(result.current.tutorialSteps.length).toBeGreaterThan(0);
+    expect(result.current.onboardingState.tutorialProgress).toBe(0);
+    expect(result.current.onboardingState.completedSteps).toHaveLength(0);
+  });
 
+  it('startTutorial activates the flow and resets progress', () => {
+    const { result } = renderTutorialHook(() => useTutorial());
+
+    act(() => {
+      result.current.startTutorial();
+    });
+
+    expect(result.current.isActive).toBe(true);
+    expect(result.current.currentStep).toBe(0);
+    expect(result.current.onboardingState.tutorialProgress).toBe(0);
+  });
+
+  it('nextStep advances the tutorial and records completion progress', () => {
+    const { result } = renderTutorialHook(() => useTutorial());
+
+    act(() => {
+      result.current.startTutorial();
+    });
+
+    act(() => {
+      result.current.nextStep();
+    });
+
+    expect(result.current.currentStep).toBe(1);
+    expect(result.current.onboardingState.completedSteps).toContain(
+      result.current.tutorialSteps[0].id
+    );
+    expect(result.current.onboardingState.tutorialProgress).toBeGreaterThan(0);
+  });
+
+  it('previousStep navigates backward when possible', () => {
+    const { result } = renderTutorialHook(() => useTutorial());
+
+    act(() => {
+      result.current.startTutorial();
+    });
+
+    act(() => {
+      result.current.nextStep();
+    });
+
+    act(() => {
+      result.current.previousStep();
+    });
+
+    expect(result.current.currentStep).toBe(0);
+  });
+
+  it('skipTutorial marks every step as completed and stops the flow', () => {
+    const { result } = renderTutorialHook(() => useTutorial());
+
+    act(() => {
+      result.current.startTutorial();
+      result.current.skipTutorial();
+    });
+
+    expect(result.current.isActive).toBe(false);
+    expect(result.current.onboardingState.tutorialProgress).toBe(100);
+    expect(result.current.onboardingState.completedSteps).toEqual(
+      result.current.tutorialSteps.map(step => step.id)
+    );
+  });
+
+  it('completeTutorial marks the run finished with an achievement', () => {
+    const { result } = renderTutorialHook(() => useTutorial());
+
+    act(() => {
+      result.current.startTutorial();
+    });
+
+    const stepCount = result.current.tutorialSteps.length;
+    for (let i = 0; i < stepCount; i += 1) {
       act(() => {
-        result.current.startTutorial();
-      });
-
-      expect(result.current.isActive).toBe(true);
-      expect(result.current.currentStep).toBe(0);
-    });
-
-    it('should progress through tutorial steps', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.startTutorial();
         result.current.nextStep();
       });
+    }
 
-      expect(result.current.currentStep).toBe(1);
-    });
-
-    it('should complete tutorial on last step', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.startTutorial();
-        // Advance to last step
-        for (let i = 0; i < result.current.tutorialSteps.length - 1; i++) {
-          result.current.nextStep();
-        }
-        // This should complete the tutorial
-        result.current.nextStep();
-      });
-
-      expect(result.current.isActive).toBe(false);
-      expect(result.current.onboardingState.tutorialProgress).toBe(100);
-    });
-
-    it('should skip tutorial correctly', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.startTutorial();
-        result.current.skipTutorial();
-      });
-
-      expect(result.current.isActive).toBe(false);
-      expect(result.current.onboardingState.completedSteps).toHaveLength(6);
-      expect(result.current.onboardingState.tutorialProgress).toBe(100);
-    });
-
-    it('should navigate backward through steps', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.startTutorial();
-        result.current.nextStep(); // Step 1
-        result.current.nextStep(); // Step 2
-        result.current.previousStep(); // Back to Step 1
-      });
-
-      expect(result.current.currentStep).toBe(1);
-    });
-
-    it('should reset tutorial correctly', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.startTutorial();
-        result.current.nextStep();
-        result.current.resetTutorial();
-      });
-
-      expect(result.current.currentStep).toBe(0);
-      expect(result.current.isActive).toBe(true);
-      expect(result.current.onboardingState.completedSteps).toHaveLength(0);
-    });
+    expect(result.current.isActive).toBe(false);
+    expect(result.current.onboardingState.tutorialProgress).toBe(100);
+    expect(result.current.onboardingState.achievementsUnlocked).toContain('tutorial_complete');
   });
 
-  describe('Preferences management', () => {
-    it('should update preferences correctly', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
+  it('updatePreferences merges preferences without dropping defaults', () => {
+    const { result } = renderTutorialHook(() => useTutorial());
 
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.updatePreferences({
-          showTooltips: false,
-          enableCelebrations: false
-        });
-      });
-
-      expect(result.current.onboardingState.preferences.showTooltips).toBe(false);
-      expect(result.current.onboardingState.preferences.enableCelebrations).toBe(false);
-      expect(result.current.onboardingState.preferences.keyboardShortcutsOverlay).toBe(true);
+    act(() => {
+      result.current.updatePreferences({ showTooltips: false });
     });
+
+    expect(result.current.onboardingState.preferences.showTooltips).toBe(false);
+    expect(result.current.onboardingState.preferences.keyboardShortcutsOverlay).toBe(true);
   });
 
-  describe('Help tracking', () => {
-    it('should track help views correctly', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
+  it('markHelpViewed records contextual help and unlockAchievement deduplicates entries', () => {
+    const { result } = renderTutorialHook(() => useTutorial());
 
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.markHelpViewed('keyboard-shortcuts');
-        result.current.markHelpViewed('node-types');
-      });
-
-      expect(result.current.onboardingState.helpViewed['keyboard-shortcuts']).toBe(true);
-      expect(result.current.onboardingState.helpViewed['node-types']).toBe(true);
+    act(() => {
+      result.current.markHelpViewed('keyboard-shortcuts');
+      result.current.unlockAchievement('first_prompt');
+      result.current.unlockAchievement('first_prompt');
     });
+
+    expect(result.current.onboardingState.helpViewed['keyboard-shortcuts']).toBe(true);
+    expect(
+      result.current.onboardingState.achievementsUnlocked.filter(id => id === 'first_prompt')
+    ).toHaveLength(1);
   });
 
-  describe('Achievement system', () => {
-    it('should unlock achievements correctly', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
+  it('persists state changes to localStorage', () => {
+    const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
+    const { result } = renderTutorialHook(() => useTutorial());
 
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.unlockAchievement('tutorial_complete');
-        result.current.unlockAchievement('first_prompt');
-      });
-
-      expect(result.current.onboardingState.achievementsUnlocked).toContain('tutorial_complete');
-      expect(result.current.onboardingState.achievementsUnlocked).toContain('first_prompt');
+    act(() => {
+      result.current.startTutorial();
+      result.current.nextStep();
     });
 
-    it('should prevent duplicate achievements', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.unlockAchievement('tutorial_complete');
-        result.current.unlockAchievement('tutorial_complete');
-      });
-
-      expect(result.current.onboardingState.achievementsUnlocked.filter(
-        achievement => achievement === 'tutorial_complete'
-      )).toHaveLength(1);
-    });
+    expect(setItemSpy).toHaveBeenCalledWith(
+      'onboardingState',
+      expect.stringContaining('"tutorialProgress"')
+    );
   });
 
-  describe('localStorage persistence', () => {
-    it('should save state to localStorage', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      act(() => {
-        result.current.startTutorial();
-      });
-
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        'onboardingState',
-        expect.any(String)
-      );
+  it('hydrates from previously stored onboarding state', async () => {
+    seedOnboardingState({
+      tutorialProgress: 40,
+      completedSteps: ['welcome'],
+      achievementsUnlocked: ['first_edit'],
+      helpViewed: { basics: true },
+      preferences: {
+        showTooltips: false,
+        enableCelebrations: true,
+        keyboardShortcutsOverlay: false,
+      },
     });
 
-    it('should handle localStorage errors gracefully', () => {
-      localStorageMock.setItem.mockImplementation(() => {
-        throw new Error('localStorage quota exceeded');
-      });
+    const { result } = renderTutorialHook(() => useTutorial());
 
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
-
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      expect(() => {
-        renderHook(() => useTutorial(), { wrapper });
-      }).not.toThrow();
-
-      consoleSpy.mockRestore();
-    });
-  });
-
-  describe('Tutorial steps structure', () => {
-    it('should have all required tutorial steps', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      expect(result.current.tutorialSteps).toHaveLength(6);
-
-      const stepIds = result.current.tutorialSteps.map(step => step.id);
-      expect(stepIds).toEqual([
-        'welcome',
-        'empty-canvas',
-        'paste-prompt',
-        'nodes-created',
-        'inline-edit',
-        'preview-update',
-        'completion'
-      ].slice(0, 6)); // Note: completion step might be missing
-    });
-
-    it('should have valid step structure', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      result.current.tutorialSteps.forEach(step => {
-        expect(step).toHaveProperty('id');
-        expect(step).toHaveProperty('title');
-        expect(step).toHaveProperty('description');
-        expect(step).toHaveProperty('target');
-        expect(step).toHaveProperty('action');
-        expect(['click', 'drag', 'type', 'observe', 'paste']).toContain(step.action);
-      });
-    });
-  });
-
-  describe('Step validation integration', () => {
-    it('should handle validation context in nextStep', () => {
-      const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <TutorialProvider>{children}</TutorialProvider>
-      );
-
-      const { result } = renderHook(() => useTutorial(), { wrapper });
-
-      const mockContext = {
-        nodes: [],
-        edges: []
-      };
-
-      act(() => {
-        result.current.startTutorial();
-        result.current.nextStep(mockContext);
-      });
-
-      expect(result.current.currentStep).toBe(1);
-    });
+    expect(result.current.onboardingState.tutorialProgress).toBe(40);
+    expect(result.current.onboardingState.completedSteps).toContain('welcome');
+    expect(result.current.onboardingState.helpViewed.basics).toBe(true);
+    expect(result.current.onboardingState.preferences.showTooltips).toBe(false);
+    expect(result.current.onboardingState.preferences.keyboardShortcutsOverlay).toBe(false);
   });
 });

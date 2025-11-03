@@ -6,15 +6,15 @@ import type { NodeProps } from 'reactflow';
 
 // Mock React Flow hooks
 const mockSetNodes = jest.fn();
-let nodeInternalsMock: Map<string, any> = new Map();
+let mockNodeInternals: Map<string, any> = new Map();
 
 jest.mock('reactflow', () => ({
   ...jest.requireActual('reactflow'),
   useReactFlow: () => ({
-    getNodes: () => Array.from(nodeInternalsMock.values()),
+    getNodes: () => Array.from(mockNodeInternals.values()),
     setNodes: mockSetNodes,
   }),
-  useStore: (selector: any) => selector({ nodeInternals: nodeInternalsMock }),
+  useStore: (selector: any) => selector({ nodeInternals: mockNodeInternals }),
   Handle: ({ children, ...props }: any) => <div data-testid="handle" {...props}>{children}</div>,
   Position: {
     Left: 'left',
@@ -47,7 +47,7 @@ describe('FragmentContainer', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    nodeInternalsMock = new Map([
+    mockNodeInternals = new Map([
       ['fragment-1', { id: 'fragment-1', type: 'fragmentContainer', position: { x: 0, y: 0 }, data: { value: '', nodeType: 'fragmentContainer' } }],
       ['node-1', { id: 'node-1', parentNode: 'fragment-1', position: { x: 10, y: 10 }, data: { value: '', nodeType: 'textBlock' } }],
       ['node-2', { id: 'node-2', parentNode: 'fragment-1', position: { x: 10, y: 50 }, data: { value: '', nodeType: 'textBlock' } }],
@@ -155,7 +155,7 @@ describe('FragmentContainer', () => {
       { id: 'node-existing', parentNode: 'fragment-1', hidden: true },
       { id: 'node-new', parentNode: 'fragment-1', hidden: true }
     ];
-    nodeInternalsMock.set('node-new', {
+    mockNodeInternals.set('node-new', {
       id: 'node-new',
       parentNode: 'fragment-1',
       position: { x: 0, y: 0 },
@@ -221,7 +221,7 @@ describe('FragmentContainer', () => {
   });
 
   it('auto-resizes to fit children when expanded', () => {
-    nodeInternalsMock = new Map([
+    mockNodeInternals = new Map([
       ['fragment-1', { id: 'fragment-1', type: 'fragmentContainer', position: { x: 0, y: 0 }, data: { value: '', nodeType: 'fragmentContainer' } }],
       ['node-1', { id: 'node-1', parentNode: 'fragment-1', position: { x: 10, y: 10 }, data: { value: '', nodeType: 'textBlock' } }],
       ['node-wide', {
