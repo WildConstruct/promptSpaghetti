@@ -134,20 +134,20 @@
 }
 
 .launch-column-left {
-  flex: 0 0 30%;
+  flex: 0 0 28%;
   min-width: 350px;
 }
 
 .launch-column-center {
-  flex: 1;
-  min-width: 400px;
+  flex: 1 1 42%;
+  min-width: 480px;
   /* allow children to use full height */
   min-height: 0;
   height: 100%;
 }
 
 .launch-column-right {
-  flex: 0 0 25%;
+  flex: 0 0 24%;
   min-width: 280px;
 }
 
@@ -362,6 +362,12 @@
   /* ensure ReactFlow wrapper can occupy all remaining space */
   min-height: 0;
   height: 100%;
+}
+
+/* Prevent header from shrinking; keep canvas area flexible below */
+.preview-section > h2 {
+  flex: 0 0 auto;
+  margin-bottom: 1rem;
 }
 
 .preview-section.needs-update {
