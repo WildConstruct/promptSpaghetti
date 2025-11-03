@@ -9,7 +9,8 @@ import {
   simplePromptParser,
   PromptAnalysis,
   GeneratedNode,
-  NodeMapping
+  NodeMapping,
+  buildSequentialEdges
 } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
 import { normalizeLLMResult, mergeLLMResult } from '../../lib/llmAnalysisMerge';
@@ -704,10 +705,12 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
             const orderedNodes = outputNode
               ? [...nonOutput, outputNode]
               : nonOutput;
+            const edges = buildSequentialEdges(orderedNodes);
             const updated: PromptAnalysis = {
               ...prevAnalysis,
               nodes: orderedNodes,
-              mappings: filteredMappings
+              mappings: filteredMappings,
+              edges
             };
             safeOnAnalysisComplete(updated);
             return updated;
@@ -848,10 +851,12 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       });
       const outputNode = updatedNodes.find(n => n.node.nodeType === 'Output');
       const orderedNodes = outputNode ? [...nonOutput, outputNode] : nonOutput;
+      const edges = buildSequentialEdges(orderedNodes);
       const updated: PromptAnalysis = {
         ...prev,
         nodes: orderedNodes,
-        mappings: updatedMappings
+        mappings: updatedMappings,
+        edges
       };
       safeOnAnalysisComplete(updated);
       return updated;
@@ -912,6 +917,80 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     if (start === end) {return null;}
     return { start, end };
   }, []);
+
+  const positionCaretFromElement = useCallback(
+    (
+      element: HTMLElement,
+      clientX: number,
+      segmentStart: number
+    ): number | null => {
+      const containerRect = overlayRef.current?.getBoundingClientRect();
+      if (!containerRect) {return null;}
+
+      const textNode = element.firstChild;
+      const textContent =
+        textNode && textNode.nodeType === Node.TEXT_NODE
+          ? (textNode.textContent ?? '')
+          : element.textContent ?? '';
+
+      if (!textNode || textNode.nodeType !== Node.TEXT_NODE) {
+        setCaretPosition({
+          index: segmentStart,
+          x: element.getBoundingClientRect().left - containerRect.left,
+          y: element.getBoundingClientRect().top - containerRect.top,
+          height: element.getBoundingClientRect().height
+        });
+        return segmentStart;
+      }
+
+      const range = document.createRange();
+      const elementRect = element.getBoundingClientRect();
+      const clampedX = Math.min(
+        Math.max(clientX, elementRect.left),
+        elementRect.right
+      );
+
+      let bestOffset = 0;
+      let bestDistance = Number.POSITIVE_INFINITY;
+      for (let i = 0; i <= textContent.length; i += 1) {
+        range.setStart(textNode, i);
+        range.setEnd(textNode, i);
+        const rect = range.getBoundingClientRect();
+        const distance = Math.abs(rect.left - clampedX);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestOffset = i;
+        }
+        if (rect.left >= clampedX) {
+          break;
+        }
+      }
+
+      range.setStart(textNode, bestOffset);
+      range.setEnd(textNode, bestOffset);
+      const caretRect = range.getBoundingClientRect();
+      const absoluteIndex = segmentStart + bestOffset;
+
+      setCaretPosition({
+        index: absoluteIndex,
+        x: caretRect.left - containerRect.left,
+        y: caretRect.top - containerRect.top,
+        height: caretRect.height || elementRect.height
+      });
+
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(absoluteIndex, absoluteIndex);
+      }
+
+      return absoluteIndex;
+    },
+    []
+  );
 
   // Split at cursor for plain segments only (safe minimal impl)
   const handleSplitAtCursor = useCallback(() => {
@@ -1057,10 +1136,12 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           const orderedNodes = outputNode
             ? [...nonOutputNodes, outputNode]
             : nonOutputNodes;
+          const edges = buildSequentialEdges(orderedNodes);
           const updated: PromptAnalysis = {
             ...prevAnalysis,
             nodes: orderedNodes,
-            mappings: updatedMappings
+            mappings: updatedMappings,
+            edges
           };
           safeOnAnalysisComplete(updated);
           return updated;
@@ -1170,17 +1251,20 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       // Update analysis
       setAnalysis(prev => {
         if (!prev) {
+          const nodes = [buildGeneratedNode(nodeId, nodeTypeValue, selection.text)];
+          const mappings: NodeMapping[] = [
+            {
+              nodeId,
+              startIndex: start,
+              endIndex: end,
+              highlightColor: color
+            }
+          ];
           const fresh: PromptAnalysis = {
             segments: [],
-            nodes: [buildGeneratedNode(nodeId, nodeTypeValue, selection.text)],
-            mappings: [
-              {
-                nodeId,
-                startIndex: start,
-                endIndex: end,
-                highlightColor: color
-              }
-            ]
+            nodes,
+            mappings,
+            edges: buildSequentialEdges(nodes)
           };
           safeOnAnalysisComplete(fresh);
           return fresh;
@@ -1264,29 +1348,30 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           const ordered2: GeneratedNode[] = output2
             ? [...nonOutput2, output2]
             : nonOutput2;
+          const edges = buildSequentialEdges(ordered2);
           const updatedTri: PromptAnalysis = {
             ...prev,
             nodes: ordered2,
-            mappings: updatedMappings
+            mappings: updatedMappings,
+            edges
           };
           safeOnAnalysisComplete(updatedTri);
           return updatedTri;
         }
 
         // Fallback: append selection as a new mapping/node and then order inline
-        const baseUpdated: PromptAnalysis = {
-          ...prev,
-          nodes: [...prev.nodes, buildGeneratedNode(nodeId, nodeTypeValue, selection.text)],
-          mappings: [
-            ...prev.mappings,
-            { nodeId, startIndex: start, endIndex: end, highlightColor: color }
-          ]
-        };
-
+        const appendedNodes = [
+          ...prev.nodes,
+          buildGeneratedNode(nodeId, nodeTypeValue, selection.text)
+        ];
+        const appendedMappings = [
+          ...prev.mappings,
+          { nodeId, startIndex: start, endIndex: end, highlightColor: color }
+        ];
         const mappingStarts = new Map<string, number>();
-        for (const m of baseUpdated.mappings)
+        for (const m of appendedMappings)
           {mappingStarts.set(m.nodeId, m.startIndex);}
-        const nonOutputNodes = baseUpdated.nodes.filter(
+        const nonOutputNodes = appendedNodes.filter(
           n => n.node.nodeType !== 'Output'
         );
         nonOutputNodes.sort((a, b) => {
@@ -1294,13 +1379,19 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           const bPos = mappingStarts.get(b.node.id) ?? Number.MAX_SAFE_INTEGER;
           return aPos - bPos;
         });
-        const outputNode = baseUpdated.nodes.find(
+        const outputNode = appendedNodes.find(
           n => n.node.nodeType === 'Output'
         );
         const orderedNodes = outputNode
           ? [...nonOutputNodes, outputNode]
           : nonOutputNodes;
-        const updated: PromptAnalysis = { ...baseUpdated, nodes: orderedNodes };
+        const edges = buildSequentialEdges(orderedNodes);
+        const updated: PromptAnalysis = {
+          ...prev,
+          nodes: orderedNodes,
+          mappings: appendedMappings,
+          edges
+        };
         safeOnAnalysisComplete(updated);
         return updated;
       });
@@ -1424,11 +1515,12 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     setAnalysis(prev => {
       const prevAnalysis =
         prev ??
-        ({
+        {
           segments: [],
           nodes: [],
-          mappings: []
-        } as PromptAnalysis);
+          mappings: [],
+          edges: []
+        };
       const updatedMappings = [] as NodeMapping[];
       let keepNodeExists = !!prevAnalysis.nodes.find(
         n => n.node.id === keepNodeId
@@ -1488,10 +1580,12 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       });
       const output = updatedNodes.find(n => n.node.nodeType === 'Output');
       const ordered = output ? [...nonOutput, output] : nonOutput;
+      const edges = buildSequentialEdges(ordered);
       const updated: PromptAnalysis = {
         ...prevAnalysis,
         nodes: ordered,
-        mappings: updatedMappings
+        mappings: updatedMappings,
+        edges
       };
       safeOnAnalysisComplete(updated);
       return updated;
@@ -1848,12 +1942,10 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                       const el = textareaRef.current;
                       if (!el && !value.trim()) {return;}
 
-                      if (value.trim() && !hasBeenAnalyzed) {
-                        // Parse the entire text first
-                        const nodeId = `node-${Math.random().toString(36).slice(2, 9)}`;
-                        const newAnalysis: PromptAnalysis = {
-                          segments: [],
-                          nodes: [
+                        if (value.trim() && !hasBeenAnalyzed) {
+                          // Parse the entire text first
+                          const nodeId = `node-${Math.random().toString(36).slice(2, 9)}`;
+                          const nodes: GeneratedNode[] = [
                             {
                               node: {
                                 id: nodeId,
@@ -1861,16 +1953,21 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                                 getPreviewText: () => value
                               }
                             }
-                          ],
-                          mappings: [
+                          ];
+                          const mappings: NodeMapping[] = [
                             {
                               nodeId,
                               startIndex: 0,
                               endIndex: value.length,
                               highlightColor: HIGHLIGHT_COLORS[0]
                             }
-                          ]
-                        };
+                          ];
+                          const newAnalysis: PromptAnalysis = {
+                            segments: [],
+                            nodes,
+                            mappings,
+                            edges: buildSequentialEdges(nodes)
+                          };
                         setAnalysis(newAnalysis);
                         safeOnAnalysisComplete(newAnalysis);
                         setHasBeenAnalyzed(true);
@@ -2222,34 +2319,11 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                         onMouseEnter={() => handleSegmentHover(nodeId)}
                         onMouseLeave={() => handleSegmentHover(null)}
                         onClick={e => {
-                          // Handle both selection and caret positioning
-                          const rect = e.currentTarget.getBoundingClientRect();
-                          const x = e.clientX - rect.left;
-                          const charWidth = rect.width / segment.text.length;
-                          const charIndex = Math.floor(x / charWidth);
-                          const globalIndex = segment.startIndex + charIndex;
-                          const containerRect =
-                            overlayRef.current?.getBoundingClientRect();
-                          if (containerRect) {
-                            setCaretPosition({
-                              index: globalIndex,
-                              x:
-                                rect.left -
-                                containerRect.left +
-                                charIndex * charWidth,
-                              y: rect.top - containerRect.top,
-                              height: rect.height
-                            });
-                          }
-                          if (textareaRef.current) {
-                            textareaRef.current.focus();
-                            textareaRef.current.setSelectionRange(
-                              globalIndex,
-                              globalIndex
-                            );
-                          }
-
-                          // Also handle segment selection if Ctrl/Cmd is held
+                          positionCaretFromElement(
+                            e.currentTarget,
+                            e.clientX,
+                            segment.startIndex
+                          );
                           handleSegmentClickLocal(nodeId, index, e);
                         }}
                         style={{ ...segmentStyles[index], cursor: 'text' }}
@@ -2265,32 +2339,11 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                       data-segment-start={segment.startIndex}
                       data-segment-end={segment.endIndex}
                       onClick={e => {
-                        // Calculate click position within the segment
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const charWidth = rect.width / segment.text.length;
-                        const charIndex = Math.floor(x / charWidth);
-                        const globalIndex = segment.startIndex + charIndex;
-                        const containerRect =
-                          overlayRef.current?.getBoundingClientRect();
-                        if (containerRect) {
-                          setCaretPosition({
-                            index: globalIndex,
-                            x:
-                              rect.left -
-                              containerRect.left +
-                              charIndex * charWidth,
-                            y: rect.top - containerRect.top,
-                            height: rect.height
-                          });
-                        }
-                        if (textareaRef.current) {
-                          textareaRef.current.focus();
-                          textareaRef.current.setSelectionRange(
-                            globalIndex,
-                            globalIndex
-                          );
-                        }
+                        positionCaretFromElement(
+                          e.currentTarget,
+                          e.clientX,
+                          segment.startIndex
+                        );
                       }}
                       style={{ cursor: 'text' }}
                     >
