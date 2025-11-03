@@ -82,9 +82,7 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
             ? node.data.value
             : node.id;
       const nodeType =
-        typeof node.data?.nodeType === 'string'
-          ? node.data.nodeType
-          : 'Text';
+        typeof node.data?.nodeType === 'string' ? node.data.nodeType : 'Text';
 
       return {
         id: node.id,
@@ -176,6 +174,7 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
         onPaneClick={onPaneClick}
         nodeTypes={nodeTypes}
         fitView
+        style={{ width: '100%', height: '100%' }}
         proOptions={{ hideAttribution: true }}
       >
         <Background color="#333" gap={16} size={1} />
