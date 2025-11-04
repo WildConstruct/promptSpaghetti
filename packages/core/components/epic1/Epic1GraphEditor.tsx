@@ -783,6 +783,80 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                 </button>
                 <button 
                   className="palette-footer-button"
+                  onClick={() => {
+                    try {
+                      console.log('[Epic1GraphEditor] Discord login clicked');
+                      if (supabase) {
+                        void supabase.auth.signInWithOAuth({
+                          provider: 'discord',
+                          options: { redirectTo: window.location.origin }
+                        });
+                      } else {
+                        console.warn('[Epic1GraphEditor] Supabase not configured.');
+                      }
+                    } catch (e) {
+                      console.error('[Epic1GraphEditor] Discord login error', e);
+                    }
+                  }}
+                  style={{
+                    padding: '10px 12px',
+                    background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                    border: '1px solid rgba(103, 126, 234, 0.3)',
+                    borderRadius: '6px',
+                    color: '#e0e0e0',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                    <path d="M8 1.333a6.667 6.667 0 1 0 0 13.334A6.667 6.667 0 0 0 8 1.333z"/>
+                  </svg>
+                  Login (Discord)
+                </button>
+                <button 
+                  className="palette-footer-button"
+                  onClick={() => {
+                    try {
+                      console.log('[Epic1GraphEditor] Email login clicked');
+                      if (!supabase) { console.warn('[Epic1GraphEditor] Supabase not configured.'); return; }
+                      const email = window.prompt('Enter your email to receive a magic login link:');
+                      if (!email) { return; }
+                      void supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
+                    } catch (e) {
+                      console.error('[Epic1GraphEditor] Email login error', e);
+                    }
+                  }}
+                  style={{
+                    padding: '10px 12px',
+                    background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                    border: '1px solid rgba(103, 126, 234, 0.3)',
+                    borderRadius: '6px',
+                    color: '#e0e0e0',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v.217l-8 4.8-8-4.8V4zm0 1.383v6.617a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5.383l-7.555 4.533a1 1 0 0 1-1.026 0L0 5.383z"/>
+                  </svg>
+                  Login (Email)
+                </button>
+                <button 
+                  className="palette-footer-button"
                   onClick={() => setIsPromptWizardOpen(true)}
                   style={{
                     padding: '10px 12px',

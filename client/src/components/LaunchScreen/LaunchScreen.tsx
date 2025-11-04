@@ -91,7 +91,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
     };
   }, []);
 
-  const signInWithProvider = useCallback(async (provider: 'github' | 'google') => {
+  const signInWithProvider = useCallback(async (provider: 'google' | 'discord') => {
     if (!supabase) { return; }
     await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin } });
   }, []);
@@ -99,6 +99,24 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const signOut = useCallback(async () => {
     if (!supabase) { return; }
     await supabase.auth.signOut();
+  }, []);
+
+  const signInWithEmail = useCallback(async () => {
+    if (!supabase) { return; }
+    const email = window.prompt('Enter your email to receive a magic login link:');
+    if (!email) { return; }
+    try {
+      const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
+      if (error) { throw error; }
+      // optionally: show a minimal confirmation UI; keeping it silent to avoid adding UI deps
+      // eslint-disable-next-line no-alert
+      window.alert('Check your email for a magic login link.');
+    } catch (e) {
+      // eslint-disable-next-line no-alert
+      window.alert('Failed to send magic link.');
+      // eslint-disable-next-line no-console
+      console.error('Magic link error', e);
+    }
   }, []);
 
   // Handle launching the editor
@@ -243,13 +261,29 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                 Sign out
               </button>
             ) : (
-              <button
-                className="tutorial-button"
-                onClick={() => signInWithProvider('google')}
-                title="Sign in with Google"
-              >
-                Sign in (Google)
-              </button>
+              <>
+                <button
+                  className="tutorial-button"
+                  onClick={() => signInWithProvider('google')}
+                  title="Sign in with Google"
+                >
+                  Sign in (Google)
+                </button>
+                <button
+                  className="tutorial-button"
+                  onClick={() => signInWithProvider('discord')}
+                  title="Sign in with Discord"
+                >
+                  Sign in (Discord)
+                </button>
+                <button
+                  className="tutorial-button"
+                  onClick={signInWithEmail}
+                  title="Sign in with Email (Magic Link)"
+                >
+                  Sign in (Email)
+                </button>
+              </>
             )
           ) : null}
         </div>
