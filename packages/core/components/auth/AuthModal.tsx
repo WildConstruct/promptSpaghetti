@@ -7,6 +7,7 @@ import type { User } from '@supabase/supabase-js';
 import { LoginForm } from './LoginForm';
 import { SignupForm } from './SignupForm';
 import { PasswordReset } from './PasswordReset';
+import { supabase } from '../../utils/supabaseClient';
 
 export type AuthTab = 'login' | 'signup' | 'reset';
 
@@ -252,6 +253,67 @@ export function AuthModal({
 
         {/* Content */}
         <div style={{ padding: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+            <button
+              onClick={() => {
+                if (!supabase) { return; }
+                void supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+              }}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                borderRadius: '6px',
+                border: '1px solid rgba(103, 126, 234, 0.3)',
+                background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                color: '#e0e0e0',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500
+              }}
+            >
+              Continue with Google
+            </button>
+            <button
+              onClick={() => {
+                if (!supabase) { return; }
+                void supabase.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: window.location.origin } });
+              }}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                borderRadius: '6px',
+                border: '1px solid rgba(103, 126, 234, 0.3)',
+                background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                color: '#e0e0e0',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500
+              }}
+            >
+              Continue with Discord
+            </button>
+            <button
+              onClick={() => {
+                if (!supabase) { return; }
+                const email = window.prompt('Enter your email to receive a magic login link:');
+                if (!email) { return; }
+                void supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
+              }}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                borderRadius: '6px',
+                border: '1px solid rgba(103, 126, 234, 0.3)',
+                background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                color: '#e0e0e0',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500
+              }}
+            >
+              Continue with Email (Magic Link)
+            </button>
+          </div>
           {activeTab === 'login' && (
             <div id="login-panel" role="tabpanel">
               <LoginForm

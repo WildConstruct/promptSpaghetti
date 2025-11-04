@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { supabase } from '@promptscape/core/utils/supabaseClient';
+import { AuthModal } from '@promptscape/core/components/auth/AuthModal';
 
 import { PromptDissector } from './PromptDissector';
 import { PromptDissectorErrorBoundary } from './PromptDissectorErrorBoundary';
@@ -27,6 +28,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [authEmail, setAuthEmail] = useState<string | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   // node overrides
   const [nodeOverrides, setNodeOverrides] = useState<
@@ -261,29 +263,13 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                 Sign out
               </button>
             ) : (
-              <>
-                <button
-                  className="tutorial-button"
-                  onClick={() => signInWithProvider('google')}
-                  title="Sign in with Google"
-                >
-                  Sign in (Google)
-                </button>
-                <button
-                  className="tutorial-button"
-                  onClick={() => signInWithProvider('discord')}
-                  title="Sign in with Discord"
-                >
-                  Sign in (Discord)
-                </button>
-                <button
-                  className="tutorial-button"
-                  onClick={signInWithEmail}
-                  title="Sign in with Email (Magic Link)"
-                >
-                  Sign in (Email)
-                </button>
-              </>
+              <button
+                className="tutorial-button"
+                onClick={() => setIsAuthModalOpen(true)}
+                title="Sign in"
+              >
+                Sign in
+              </button>
             )
           ) : null}
         </div>
@@ -412,6 +398,13 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           Skip to Editor →
         </button>
       </footer>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={() => setIsAuthModalOpen(false)}
+      />
     </div>
   );
 };
