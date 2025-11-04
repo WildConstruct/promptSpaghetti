@@ -105,6 +105,9 @@ export default defineConfig({
     ],
     exclude: ['openai']
   },
+  // Expose additional prefixes so dynamic lookups like import.meta.env[KEY]
+  // work for NEXT_PUBLIC_*, PUBLIC_*, SUPABASE_* in addition to VITE_*
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_', 'PUBLIC_', 'SUPABASE_', 'FEATURE_'],
   define: {
     // Ensure process.env is available for any Node.js checks
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),

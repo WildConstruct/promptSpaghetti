@@ -10,9 +10,9 @@ try {
     enabledByFlag,
     hasEnv,
     enabled,
-    urlSource: meta?.urlSource,
-    anonKeySource: meta?.anonKeySource,
-    flagSource: meta?.flagSource,
+    urlKey: meta?.urlKey,
+    anonKeyKey: meta?.anonKeyKey,
+    flagKey: meta?.flagKey,
     urlLen: url ? url.length : 0,
     anonKeyLen: anonKey ? anonKey.length : 0
   });
