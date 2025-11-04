@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '@promptscape/core/utils/supabaseClient';
 
 import { PromptDissector } from './PromptDissector';
 import { PromptDissectorErrorBoundary } from './PromptDissectorErrorBoundary';
@@ -243,22 +243,13 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                 Sign out
               </button>
             ) : (
-              <>
-                <button
-                  className="tutorial-button"
-                  onClick={() => signInWithProvider('github')}
-                  title="Sign in with GitHub"
-                >
-                  Sign in (GitHub)
-                </button>
-                <button
-                  className="tutorial-button"
-                  onClick={() => signInWithProvider('google')}
-                  title="Sign in with Google"
-                >
-                  Sign in (Google)
-                </button>
-              </>
+              <button
+                className="tutorial-button"
+                onClick={() => signInWithProvider('google')}
+                title="Sign in with Google"
+              >
+                Sign in (Google)
+              </button>
             )
           ) : null}
         </div>

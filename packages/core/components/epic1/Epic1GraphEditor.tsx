@@ -744,7 +744,21 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
                 <button 
                   className="palette-footer-button"
-                  onClick={() => console.log('Login clicked')}
+                  onClick={() => {
+                    try {
+                      console.log('[Epic1GraphEditor] Login clicked');
+                      if (supabase) {
+                        void supabase.auth.signInWithOAuth({
+                          provider: 'google',
+                          options: { redirectTo: window.location.origin }
+                        });
+                      } else {
+                        console.warn('[Epic1GraphEditor] Supabase not configured.');
+                      }
+                    } catch (e) {
+                      console.error('[Epic1GraphEditor] Login error', e);
+                    }
+                  }}
                   style={{
                     padding: '10px 12px',
                     background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
