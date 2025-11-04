@@ -47,30 +47,50 @@ function parseBoolean(value: unknown, fallback = true): boolean {
 }
 
 export function getSupabaseConfig() {
-  // Resolve URL from supported prefixes
-  const urlNext = getEnvVar('NEXT_PUBLIC_SUPABASE_URL');
-  const urlVite = getEnvVar('VITE_SUPABASE_URL');
-  const url = urlNext || urlVite || '';
+  const URL_KEYS = [
+    'NEXT_PUBLIC_SUPABASE_URL',
+    'VITE_SUPABASE_URL',
+    'SUPABASE_URL',
+    'PUBLIC_SUPABASE_URL'
+  ];
+  const ANON_KEYS = [
+    'NEXT_PUBLIC_SUPABASE_ANON_KEY',
+    'VITE_SUPABASE_ANON_KEY',
+    'SUPABASE_ANON_KEY',
+    'PUBLIC_SUPABASE_ANON_KEY'
+  ];
+  const FLAG_KEYS = [
+    'NEXT_PUBLIC_FEATURE_SUPABASE',
+    'VITE_FEATURE_SUPABASE',
+    'FEATURE_SUPABASE'
+  ];
 
-  // Resolve anon key from supported prefixes
-  const anonKeyNext = getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-  const anonKeyVite = getEnvVar('VITE_SUPABASE_ANON_KEY');
-  const anonKey = anonKeyNext || anonKeyVite || '';
+  function pickFirst(keys: string[]) {
+    for (const k of keys) {
+      const v = getEnvVar(k);
+      if (v && String(v).trim() !== '') {
+        return { key: k, value: String(v) } as const;
+      }
+    }
+    return { key: 'none', value: '' } as const;
+  }
 
-  // Resolve feature flag from supported prefixes
-  const flagNext = getEnvVar('NEXT_PUBLIC_FEATURE_SUPABASE');
-  const flagVite = getEnvVar('VITE_FEATURE_SUPABASE');
-  const flagRaw = flagNext ?? flagVite;
+  const urlPick = pickFirst(URL_KEYS);
+  const anonPick = pickFirst(ANON_KEYS);
+  const flagPick = pickFirst(FLAG_KEYS);
+
+  const url = urlPick.value;
+  const anonKey = anonPick.value;
+  const flagRaw = flagPick.value;
 
   const enabledByFlag = parseBoolean(flagRaw, true);
   const hasEnv = Boolean(url && anonKey);
   const enabled = enabledByFlag && hasEnv;
 
-  // Provide non-sensitive meta for diagnostics
   const meta = {
-    urlSource: urlNext ? 'NEXT_PUBLIC' : urlVite ? 'VITE' : 'none',
-    anonKeySource: anonKeyNext ? 'NEXT_PUBLIC' : anonKeyVite ? 'VITE' : 'none',
-    flagSource: flagNext != null ? 'NEXT_PUBLIC' : flagVite != null ? 'VITE' : 'none',
+    urlKey: urlPick.key,
+    anonKeyKey: anonPick.key,
+    flagKey: flagPick.key,
     urlLen: url ? url.length : 0,
     anonKeyLen: anonKey ? anonKey.length : 0
   } as const;
