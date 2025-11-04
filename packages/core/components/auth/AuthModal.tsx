@@ -255,9 +255,28 @@ export function AuthModal({
         <div style={{ padding: '24px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
             <button
-              onClick={() => {
-                if (!supabase) { return; }
-                void supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+              onClick={async () => {
+                try {
+                  // eslint-disable-next-line no-console
+                  console.log('[AuthModal] Google clicked');
+                  if (!supabase) {
+                    // eslint-disable-next-line no-alert
+                    window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
+                    return;
+                  }
+                  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+                  if (error) {
+                    // eslint-disable-next-line no-console
+                    console.error('[AuthModal] Google OAuth error', error);
+                    // eslint-disable-next-line no-alert
+                    window.alert('Failed to start Google sign-in.');
+                  } else if (data?.url) {
+                    window.location.assign(data.url);
+                  }
+                } catch (e) {
+                  // eslint-disable-next-line no-console
+                  console.error('[AuthModal] Google OAuth exception', e);
+                }
               }}
               style={{
                 width: '100%',
@@ -274,9 +293,28 @@ export function AuthModal({
               Continue with Google
             </button>
             <button
-              onClick={() => {
-                if (!supabase) { return; }
-                void supabase.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: window.location.origin } });
+              onClick={async () => {
+                try {
+                  // eslint-disable-next-line no-console
+                  console.log('[AuthModal] Discord clicked');
+                  if (!supabase) {
+                    // eslint-disable-next-line no-alert
+                    window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
+                    return;
+                  }
+                  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: window.location.origin } });
+                  if (error) {
+                    // eslint-disable-next-line no-console
+                    console.error('[AuthModal] Discord OAuth error', error);
+                    // eslint-disable-next-line no-alert
+                    window.alert('Failed to start Discord sign-in.');
+                  } else if (data?.url) {
+                    window.location.assign(data.url);
+                  }
+                } catch (e) {
+                  // eslint-disable-next-line no-console
+                  console.error('[AuthModal] Discord OAuth exception', e);
+                }
               }}
               style={{
                 width: '100%',
@@ -293,11 +331,31 @@ export function AuthModal({
               Continue with Discord
             </button>
             <button
-              onClick={() => {
-                if (!supabase) { return; }
-                const email = window.prompt('Enter your email to receive a magic login link:');
-                if (!email) { return; }
-                void supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
+              onClick={async () => {
+                try {
+                  // eslint-disable-next-line no-console
+                  console.log('[AuthModal] Magic link clicked');
+                  if (!supabase) {
+                    // eslint-disable-next-line no-alert
+                    window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
+                    return;
+                  }
+                  const email = window.prompt('Enter your email to receive a magic login link:');
+                  if (!email) { return; }
+                  const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
+                  if (error) {
+                    // eslint-disable-next-line no-console
+                    console.error('[AuthModal] Magic link error', error);
+                    // eslint-disable-next-line no-alert
+                    window.alert('Failed to send magic link.');
+                  } else {
+                    // eslint-disable-next-line no-alert
+                    window.alert('Check your email for a magic login link.');
+                  }
+                } catch (e) {
+                  // eslint-disable-next-line no-console
+                  console.error('[AuthModal] Magic link exception', e);
+                }
               }}
               style={{
                 width: '100%',
