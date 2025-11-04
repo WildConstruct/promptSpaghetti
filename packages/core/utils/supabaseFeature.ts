@@ -9,6 +9,13 @@ function getEnvVar(key: string): string | undefined {
   ) {
     return (process.env as Record<string, string | undefined>)[key];
   }
+  try {
+    const im: any = (import.meta as unknown) as { env?: Record<string, unknown> };
+    if (im && im.env && Object.prototype.hasOwnProperty.call(im.env, key)) {
+      const val = im.env[key];
+      return typeof val === 'string' ? val : val != null ? String(val) : undefined;
+    }
+  } catch {}
   // Try to read from global import.meta.env (when bundled for browser environments)
   const meta = (
     globalThis as unknown as {
