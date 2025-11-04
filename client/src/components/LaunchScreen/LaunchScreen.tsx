@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { supabase } from '@promptscape/core/utils/supabaseClient';
-import { AuthModal } from '@promptscape/core/components/auth/AuthModal';
+import { AuthModal } from '../AuthModal';
 
 import { PromptDissector } from './PromptDissector';
 import { PromptDissectorErrorBoundary } from './PromptDissectorErrorBoundary';

@@ -35,11 +35,11 @@ interface SystemMetric {
 }
 
 const createDailyStats = (days: number): DailyStat[] => {
-  return Array.from({ length: days }, (_, index) => {
+  const result: DailyStat[] = [];
+  for (let index = 0; index < days; index++) {
     const date = new Date();
     date.setDate(date.getDate() - index);
-
-    return {
+    result.push({
       date: date.toISOString().split('T')[0],
       activeUsers: faker.number.int({ min: 100, max: 800 }),
       newUsers: faker.number.int({ min: 10, max: 120 }),
@@ -50,8 +50,9 @@ const createDailyStats = (days: number): DailyStat[] => {
       avgSessionDuration: faker.number.int({ min: 180, max: 1200 }),
       bounceRate: Number(faker.number.float({ min: 0.15, max: 0.5, fractionDigits: 2 })),
       conversionRate: Number(faker.number.float({ min: 0.04, max: 0.2, fractionDigits: 3 }))
-    };
-  });
+    });
+  }
+  return result;
 };
 
 const createTemplateMetric = (id: number): TemplateMetric => ({
@@ -65,14 +66,15 @@ const createTemplateMetric = (id: number): TemplateMetric => ({
 });
 
 const createSystemMetric = (type: string): SystemMetric => {
-  const history = Array.from({ length: 24 }, (_, index) => {
+  const history: Array<{ timestamp: string; value: number }> = [];
+  for (let index = 0; index < 24; index++) {
     const timestamp = new Date();
     timestamp.setHours(timestamp.getHours() - index);
-    return {
+    history.push({
       timestamp: timestamp.toISOString(),
       value: Number(faker.number.float({ min: 5, max: 95, fractionDigits: 2 }))
-    };
-  });
+    });
+  }
 
   const latest = history[0]?.value ?? 0;
   return {
@@ -85,9 +87,10 @@ const createSystemMetric = (type: string): SystemMetric => {
 };
 
 const dailyStats = createDailyStats(30);
-const templateMetrics = Array.from({ length: 25 }, (_, index) =>
-  createTemplateMetric(index + 1)
-);
+const templateMetrics: TemplateMetric[] = [];
+for (let index = 0; index < 25; index++) {
+  templateMetrics.push(createTemplateMetric(index + 1));
+}
 const systemMetrics = ['cpu', 'memory', 'disk', 'network', 'api'].map(type =>
   createSystemMetric(type)
 );
@@ -105,7 +108,7 @@ const getRangeDays = (range: string | null): number => {
 };
 
 const analyticsHandlers = [
-  rest.get('/api/analytics/overview', (req, res, ctx) => {
+  rest.get('/api/analytics/overview', (req: any, res: any, ctx: any) => {
     const rangeParam = req.url.searchParams.get('range');
     const days = getRangeDays(rangeParam);
     const recentStats = dailyStats.slice(0, days);
@@ -156,7 +159,7 @@ const analyticsHandlers = [
     );
   }),
 
-  rest.get('/api/analytics/users', (req, res, ctx) => {
+  rest.get('/api/analytics/users', (req: any, res: any, ctx: any) => {
     const rangeParam = req.url.searchParams.get('range');
     const days = getRangeDays(rangeParam);
     const recentStats = dailyStats.slice(0, days);
@@ -196,7 +199,7 @@ const analyticsHandlers = [
     );
   }),
 
-  rest.get('/api/analytics/templates', (_req, res, ctx) => {
+  rest.get('/api/analytics/templates', (_req: any, res: any, ctx: any) => {
     const ranked = [...templateMetrics].sort((a, b) => b.views - a.views);
 
     return res(
@@ -213,7 +216,7 @@ const analyticsHandlers = [
     );
   }),
 
-  rest.get('/api/analytics/system', (_req, res, ctx) => {
+  rest.get('/api/analytics/system', (_req: any, res: any, ctx: any) => {
     return res(
       ctx.status(200),
       ctx.json({

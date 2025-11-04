@@ -6,10 +6,10 @@
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "node",
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
     "skipLibCheck": true,
     "strict": true,
     "isolatedModules": true,
-    "types": ["jest", "seedrandom"],
     "forceConsistentCasingInFileNames": true,
     "composite": true,
     "declaration": true,
@@ -20,7 +20,9 @@
       "@prompt-spaghetti/graph-core": ["packages/graph-core/src"],
       "@prompt-spaghetti/ui-kit": ["packages/ui-kit/src"],
       "@prompt-spaghetti/analytics-sdk": ["packages/analytics-sdk/src"],
-      "@prompt-spaghetti/claude-sdk": ["packages/claude-sdk/src"]
+      "@prompt-spaghetti/claude-sdk": ["packages/claude-sdk/src"],
+      "@promptscape/core": ["packages/core"],
+      "@promptscape/core/*": ["packages/core/*"]
     }
   },
   "include": ["packages/**/*", "client/**/*"],
