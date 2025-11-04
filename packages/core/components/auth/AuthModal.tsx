@@ -264,7 +264,7 @@ export function AuthModal({
                     window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
                     return;
                   }
-                  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+                  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin, skipBrowserRedirect: true } });
                   if (error) {
                     // eslint-disable-next-line no-console
                     console.error('[AuthModal] Google OAuth error', error);
@@ -302,7 +302,7 @@ export function AuthModal({
                     window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
                     return;
                   }
-                  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: window.location.origin } });
+                  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: window.location.origin, skipBrowserRedirect: true } });
                   if (error) {
                     // eslint-disable-next-line no-console
                     console.error('[AuthModal] Discord OAuth error', error);

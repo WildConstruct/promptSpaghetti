@@ -1,7 +1,22 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { getSupabaseConfig } from './supabaseFeature';
 
-const { url, anonKey, enabledByFlag, hasEnv, enabled } = getSupabaseConfig();
+const { url, anonKey, enabledByFlag, hasEnv, enabled, meta } = getSupabaseConfig();
+
+// Minimal, safe diagnostic log (no secrets)
+try {
+  // eslint-disable-next-line no-console
+  console.log('[supabase] env', {
+    enabledByFlag,
+    hasEnv,
+    enabled,
+    urlSource: meta?.urlSource,
+    anonKeySource: meta?.anonKeySource,
+    flagSource: meta?.flagSource,
+    urlLen: url ? url.length : 0,
+    anonKeyLen: anonKey ? anonKey.length : 0
+  });
+} catch {}
 
 let warned = false;
 const isTest = process.env.NODE_ENV === 'test';

@@ -47,23 +47,35 @@ function parseBoolean(value: unknown, fallback = true): boolean {
 }
 
 export function getSupabaseConfig() {
-  const url =
-    getEnvVar('NEXT_PUBLIC_SUPABASE_URL') ||
-    getEnvVar('VITE_SUPABASE_URL') ||
-    '';
-  const anonKey =
-    getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY') ||
-    getEnvVar('VITE_SUPABASE_ANON_KEY') ||
-    '';
-  const flagRaw =
-    getEnvVar('NEXT_PUBLIC_FEATURE_SUPABASE') ??
-    getEnvVar('VITE_FEATURE_SUPABASE');
+  // Resolve URL from supported prefixes
+  const urlNext = getEnvVar('NEXT_PUBLIC_SUPABASE_URL');
+  const urlVite = getEnvVar('VITE_SUPABASE_URL');
+  const url = urlNext || urlVite || '';
+
+  // Resolve anon key from supported prefixes
+  const anonKeyNext = getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+  const anonKeyVite = getEnvVar('VITE_SUPABASE_ANON_KEY');
+  const anonKey = anonKeyNext || anonKeyVite || '';
+
+  // Resolve feature flag from supported prefixes
+  const flagNext = getEnvVar('NEXT_PUBLIC_FEATURE_SUPABASE');
+  const flagVite = getEnvVar('VITE_FEATURE_SUPABASE');
+  const flagRaw = flagNext ?? flagVite;
 
   const enabledByFlag = parseBoolean(flagRaw, true);
   const hasEnv = Boolean(url && anonKey);
   const enabled = enabledByFlag && hasEnv;
 
-  return { url, anonKey, flagRaw, enabledByFlag, hasEnv, enabled } as const;
+  // Provide non-sensitive meta for diagnostics
+  const meta = {
+    urlSource: urlNext ? 'NEXT_PUBLIC' : urlVite ? 'VITE' : 'none',
+    anonKeySource: anonKeyNext ? 'NEXT_PUBLIC' : anonKeyVite ? 'VITE' : 'none',
+    flagSource: flagNext != null ? 'NEXT_PUBLIC' : flagVite != null ? 'VITE' : 'none',
+    urlLen: url ? url.length : 0,
+    anonKeyLen: anonKey ? anonKey.length : 0
+  } as const;
+
+  return { url, anonKey, flagRaw, enabledByFlag, hasEnv, enabled, meta } as const;
 }
 
 export function hasSupabaseEnv(): boolean {
