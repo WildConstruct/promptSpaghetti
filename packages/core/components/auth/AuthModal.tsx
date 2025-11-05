@@ -7,7 +7,7 @@ import type { User } from '@supabase/supabase-js';
 import { LoginForm } from './LoginForm';
 import { SignupForm } from './SignupForm';
 import { PasswordReset } from './PasswordReset';
-import { supabase } from '../../utils/supabaseClient';
+import { getSupabase } from '../../utils/supabaseClient';
 
 export type AuthTab = 'login' | 'signup' | 'reset';
 
@@ -259,6 +259,7 @@ export function AuthModal({
                 try {
                   // eslint-disable-next-line no-console
                   console.log('[AuthModal] Google clicked');
+                  const supabase = getSupabase();
                   if (!supabase) {
                     // eslint-disable-next-line no-alert
                     window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
@@ -297,6 +298,7 @@ export function AuthModal({
                 try {
                   // eslint-disable-next-line no-console
                   console.log('[AuthModal] Discord clicked');
+                  const supabase = getSupabase();
                   if (!supabase) {
                     // eslint-disable-next-line no-alert
                     window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
@@ -335,6 +337,7 @@ export function AuthModal({
                 try {
                   // eslint-disable-next-line no-console
                   console.log('[AuthModal] Magic link clicked');
+                  const supabase = getSupabase();
                   if (!supabase) {
                     // eslint-disable-next-line no-alert
                     window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');

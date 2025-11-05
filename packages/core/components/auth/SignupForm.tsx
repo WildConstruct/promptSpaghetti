@@ -12,7 +12,7 @@ import {
 } from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
 import { PasswordStrengthIndicator } from '../shared/PasswordStrengthIndicator';
-import { supabase } from '../../utils/supabaseClient';
+import { getSupabase } from '../../utils/supabaseClient';
 
 interface SignupFormProps {
   onSuccess: (user: User) => void;
@@ -47,6 +47,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     setError(null);
 
     try {
+      const supabase = getSupabase();
       if (!supabase) {
         throw new Error('Authentication service is not available');
       }

@@ -10,7 +10,7 @@ import {
   getAuthErrorMessage
 } from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
-import { supabase } from '../../utils/supabaseClient';
+import { getSupabase } from '../../utils/supabaseClient';
 
 interface LoginFormProps {
   onSuccess: (user: User) => void;
@@ -40,6 +40,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
     setError(null);
 
     try {
+      const supabase = getSupabase();
       if (!supabase) {
         throw new Error('Authentication service is not available');
       }

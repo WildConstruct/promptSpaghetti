@@ -76,7 +76,6 @@ import { edgeTypes } from './EdgeRenderingFix';
 import { PromptParser, ParsedPromptResult } from './utils/promptParser';
 import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { AuthModal } from '../auth/AuthModal';
-import { supabase } from '../../utils/supabaseClient';
 import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
 import { TutorialOverlay } from './onboarding/TutorialOverlay';
 

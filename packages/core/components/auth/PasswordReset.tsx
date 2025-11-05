@@ -8,7 +8,7 @@ import {
   getAuthErrorMessage
 } from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
-import { supabase } from '../../utils/supabaseClient';
+import { getSupabase } from '../../utils/supabaseClient';
 
 interface PasswordResetProps {
   onBack: () => void;
@@ -32,6 +32,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
     setError(null);
 
     try {
+      const supabase = getSupabase();
       if (!supabase) {
         throw new Error('Authentication service is not available');
       }
