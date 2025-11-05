@@ -16,18 +16,25 @@ function getEnvVar(key: string): string | undefined {
       return typeof val === 'string' ? val : val != null ? String(val) : undefined;
     }
   } catch {}
-  // Try to read from global import.meta.env (when bundled for browser environments)
+  // Try to read from global import.meta.env and also from a global env bag
   const meta = (
     globalThis as unknown as {
       import?: { meta?: { env?: Record<string, unknown> } };
       __env__?: Record<string, unknown>;
     }
   ).import?.meta;
-  const metaEnv =
-    meta?.env ??
-    (globalThis as unknown as { __env__?: Record<string, unknown> }).__env__;
+  const metaEnv = meta?.env;
   if (metaEnv && Object.prototype.hasOwnProperty.call(metaEnv, key)) {
     const val = metaEnv[key];
+    return typeof val === 'string'
+      ? val
+      : val !== null
+        ? String(val)
+        : undefined;
+  }
+  const globalEnv = (globalThis as unknown as { __env__?: Record<string, unknown> }).__env__;
+  if (globalEnv && Object.prototype.hasOwnProperty.call(globalEnv, key)) {
+    const val = globalEnv[key];
     return typeof val === 'string'
       ? val
       : val !== null

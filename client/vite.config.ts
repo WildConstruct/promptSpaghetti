@@ -131,6 +131,32 @@ export default defineConfig({
         process.env.NEXT_PUBLIC_FEATURE_SUPABASE ??
         process.env.FEATURE_SUPABASE ??
         '1'
-    )
+    ),
+    // Provide a global bag to support dynamic lookups at runtime
+    // Our supabaseFeature.ts reads globalThis.__env__ as a final fallback
+    'globalThis.__env__': JSON.stringify({
+      VITE_SUPABASE_URL:
+        process.env.VITE_SUPABASE_URL ||
+        process.env.NEXT_PUBLIC_SUPABASE_URL ||
+        process.env.SUPABASE_URL ||
+        process.env.PUBLIC_SUPABASE_URL ||
+        '',
+      VITE_SUPABASE_ANON_KEY:
+        process.env.VITE_SUPABASE_ANON_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+        process.env.SUPABASE_ANON_KEY ||
+        process.env.PUBLIC_SUPABASE_ANON_KEY ||
+        '',
+      VITE_FEATURE_SUPABASE:
+        process.env.VITE_FEATURE_SUPABASE ??
+        process.env.NEXT_PUBLIC_FEATURE_SUPABASE ??
+        process.env.FEATURE_SUPABASE ??
+        '1',
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY:
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+      NEXT_PUBLIC_FEATURE_SUPABASE:
+        process.env.NEXT_PUBLIC_FEATURE_SUPABASE ?? ''
+    })
   }
 });
