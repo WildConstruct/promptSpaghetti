@@ -94,6 +94,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
     };
   }, []);
 
+  const hasSupabase = useMemo(() => Boolean(getSupabase()), []);
+
   const signInWithProvider = useCallback(async (provider: 'google' | 'discord') => {
     const supabase = getSupabase();
     if (!supabase) { return; }
@@ -257,7 +259,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             Start Tutorial
           </button>
           {/* Auth Controls */}
-          {supabase ? (
+          {hasSupabase ? (
             authEmail ? (
               <button
                 className="tutorial-button"

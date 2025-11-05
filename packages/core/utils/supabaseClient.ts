@@ -4,9 +4,12 @@ import { getSupabaseConfig } from './supabaseFeature';
 let _client: SupabaseClient | null | undefined;
 let _diagnosed = false;
 let warned = false;
-const isTest = process.env.NODE_ENV === 'test';
-const isProd = process.env.NODE_ENV === 'production';
-const isCI = process.env.CI === 'true';
+const env = (typeof process !== 'undefined' && typeof process.env !== 'undefined')
+  ? (process.env as Record<string, string | undefined>)
+  : ({} as Record<string, string | undefined>);
+const isTest = env.NODE_ENV === 'test';
+const isProd = env.NODE_ENV === 'production';
+const isCI = env.CI === 'true';
 
 export function getSupabase(): SupabaseClient | null {
   if (_client !== undefined) { return _client; }
