@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import './Epic1ReactFlowFix.css';
+import './env-shim';
 
 const rootElement = document.getElementById('root');
 
