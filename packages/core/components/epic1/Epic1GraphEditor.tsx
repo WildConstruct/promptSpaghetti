@@ -78,6 +78,7 @@ import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { AuthModal } from '../auth/AuthModal';
 import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
 import { TutorialOverlay } from './onboarding/TutorialOverlay';
+import { getSupabase } from '../../utils/supabaseClient';
 
 // Styles
 import './ReactFlowOverrides.css';
@@ -416,6 +417,23 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    const sb = getSupabase();
+    if (!sb) { return; }
+    let unsub: any = null;
+    (async () => {
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        setCurrentUser(session?.user ?? null);
+      } catch {}
+      const { data } = sb.auth.onAuthStateChange((_event, session) => {
+        setCurrentUser(session?.user ?? null);
+      });
+      unsub = data?.subscription ?? null;
+    })();
+    return () => { try { unsub?.unsubscribe?.(); } catch {} };
+  }, []);
+
   // Parse prompt and create nodes
   const parsePromptAndCreateNodes = useCallback((prompt: string) => {
     try {
@@ -741,34 +759,66 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             >
               {/* Footer buttons */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
-                <button 
-                  className="palette-footer-button"
-                  onClick={() => {
-                    console.log('[Epic1GraphEditor] Login clicked');
-                    setIsAuthModalOpen(true);
-                  }}
-                  style={{
-                    padding: '10px 12px',
-                    background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-                    border: '1px solid rgba(103, 126, 234, 0.3)',
-                    borderRadius: '6px',
-                    color: '#e0e0e0',
-                    cursor: 'pointer',
-                    fontSize: '13px',
-                    fontWeight: '500',
-                    transition: 'all 0.3s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    width: '100%',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                  </svg>
-                  Login
-                </button>
+                {currentUser ? (
+                  <button
+                    className="palette-footer-button"
+                    onClick={async () => {
+                      const sb = getSupabase();
+                      if (!sb) { return; }
+                      await sb.auth.signOut();
+                    }}
+                    style={{
+                      padding: '10px 12px',
+                      background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                      border: '1px solid rgba(103, 126, 234, 0.3)',
+                      borderRadius: '6px',
+                      color: '#e0e0e0',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      transition: 'all 0.3s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      width: '100%',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                    }}
+                    title={currentUser?.email || ''}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                      <path d="M3 8a.5.5 0 0 1 .5-.5H10V5.707a.5.5 0 0 1 .854-.353l3 3a.5.5 0 0 1 0 .707l-3 3A.5.5 0 0 1 10 11.707V9.5H3.5A.5.5 0 0 1 3 9V8z"/>
+                    </svg>
+                    Sign out
+                  </button>
+                ) : (
+                  <button
+                    className="palette-footer-button"
+                    onClick={() => {
+                      setIsAuthModalOpen(true);
+                    }}
+                    style={{
+                      padding: '10px 12px',
+                      background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
+                      border: '1px solid rgba(103, 126, 234, 0.3)',
+                      borderRadius: '6px',
+                      color: '#e0e0e0',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      transition: 'all 0.3s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      width: '100%',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                      <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                    </svg>
+                    Login
+                  </button>
+                )}
                 <button 
                   className="palette-footer-button"
                   onClick={() => setIsPromptWizardOpen(true)}
