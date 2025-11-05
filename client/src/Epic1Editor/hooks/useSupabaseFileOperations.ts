@@ -8,8 +8,7 @@ import type {
   GraphEdge as PSGGraphEdge
 } from '@promptscape/core';
 
-// Use shared Supabase client
-const supabase = getSupabase();
+// Resolve Supabase client lazily at call sites to avoid capturing null
 
 interface FileOperationsConfig {
   onNodesChange: (nodes: Node[]) => void;
@@ -50,17 +49,16 @@ export const useSupabaseFileOperations = ({
 
   // Check authentication status
   useEffect(() => {
-    if (!supabase) {return;}
+    const sb = getSupabase();
+    if (!sb) { return; }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    sb.auth.getSession().then(({ data: { session } }) => {
       setIsAuthenticated(!!session);
     });
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setIsAuthenticated(!!session);
-      }
-    );
+    const { data: authListener } = sb.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
 
     return () => {
       authListener?.subscription.unsubscribe();
@@ -69,7 +67,8 @@ export const useSupabaseFileOperations = ({
 
   // Fetch saved graphs from Supabase
   const fetchSavedGraphs = useCallback(async () => {
-    if (!supabase) {
+    const sb = getSupabase();
+    if (!sb) {
       showToast('Supabase not configured', 'warning');
       return;
     }
@@ -78,9 +77,9 @@ export const useSupabaseFileOperations = ({
     try {
       const {
         data: { user }
-      } = await supabase.auth.getUser();
+      } = await sb.auth.getUser();
 
-      let query = supabase
+      let query = sb
         .from('graphs')
         .select('*')
         .order('updated_at', { ascending: false });
@@ -95,7 +94,7 @@ export const useSupabaseFileOperations = ({
 
       const { data, error } = await query;
 
-      if (error) {throw error;}
+      if (error) { throw error; }
       setSavedGraphs(data || []);
     } catch (error) {
       console.error('Error fetching graphs:', error);
@@ -141,7 +140,8 @@ export const useSupabaseFileOperations = ({
       isPublic: boolean = false,
       tags: string[] = []
     ) => {
-      if (!supabase) {
+      const sb = getSupabase();
+      if (!sb) {
         showToast('Supabase not configured - saving locally', 'warning');
         // Fall back to local save
         const blob = new Blob(
@@ -167,7 +167,7 @@ export const useSupabaseFileOperations = ({
       try {
         const {
           data: { user }
-        } = await supabase.auth.getUser();
+        } = await sb.auth.getUser();
 
         const graphData = {
           name: name || `Graph ${new Date().toLocaleDateString()}`,
@@ -195,7 +195,7 @@ export const useSupabaseFileOperations = ({
         let result;
         if (existingId && user) {
           // Update existing graph
-          result = await supabase
+          result = await sb
             .from('graphs')
             .update(graphData)
             .eq('id', existingId)
@@ -204,7 +204,7 @@ export const useSupabaseFileOperations = ({
             .single();
         } else {
           // Create new graph
-          result = await supabase
+          result = await sb
             .from('graphs')
             .insert(graphData)
             .select()
@@ -256,7 +256,8 @@ export const useSupabaseFileOperations = ({
   // Delete a graph
   const deleteGraph = useCallback(
     async (graphId: string) => {
-      if (!supabase) {return;}
+      const sb = getSupabase();
+      if (!sb) { return; }
 
       // eslint-disable-next-line no-alert
       if (!window.confirm('Are you sure you want to delete this graph?'))
@@ -266,14 +267,14 @@ export const useSupabaseFileOperations = ({
       try {
         const {
           data: { user }
-        } = await supabase.auth.getUser();
+        } = await sb.auth.getUser();
 
         if (!user) {
           showToast('Must be logged in to delete graphs', 'error');
           return;
         }
 
-        const { error } = await supabase
+        const { error } = await sb
           .from('graphs')
           .delete()
           .eq('id', graphId)
@@ -518,9 +519,9 @@ export const useSupabaseFileOperations = ({
     deleteGraph,
     fetchSavedGraphs,
     // Keep the original interface for compatibility
-    handleOpen: supabase ? handleSupabaseOpen : handleLocalOpen,
+    handleOpen: getSupabase() ? handleSupabaseOpen : handleLocalOpen,
     handleSave: (nodes: Node[], edges: Edge[]) => {
-      if (supabase) {
+      if (getSupabase()) {
         setShowSaveDialog(true);
       } else {
         // Fall back to local save
