@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import type { User } from '@supabase/supabase-js';
-import { supabase } from '@promptscape/core/utils/supabaseClient';
+import { getSupabase } from '@promptscape/core/utils/supabaseClient';
 
 export type AuthTab = 'login' | 'signup' | 'reset';
 
@@ -83,6 +83,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               try {
                 // eslint-disable-next-line no-console
                 console.log('[Client.AuthModal] Google clicked');
+                const supabase = getSupabase();
                 if (!supabase) {
                   // eslint-disable-next-line no-alert
                   window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
@@ -115,6 +116,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               try {
                 // eslint-disable-next-line no-console
                 console.log('[Client.AuthModal] Discord clicked');
+                const supabase = getSupabase();
                 if (!supabase) {
                   // eslint-disable-next-line no-alert
                   window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
@@ -147,6 +149,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               try {
                 // eslint-disable-next-line no-console
                 console.log('[Client.AuthModal] Magic link clicked');
+                const supabase = getSupabase();
                 if (!supabase) {
                   // eslint-disable-next-line no-alert
                   window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');

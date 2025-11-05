@@ -5,14 +5,15 @@ declare global {
 
 (function initEnv() {
   try {
-    const env = (import.meta as unknown as { env?: Record<string, unknown> }).env || {};
+    // Use static references so Vite inlines the values at build time
+    const SB_URL = import.meta.env.VITE_SUPABASE_URL;
+    const SB_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    const SB_FLAG = import.meta.env.VITE_FEATURE_SUPABASE;
+
     const bag: Record<string, unknown> = {
-      VITE_SUPABASE_URL: (env as any).VITE_SUPABASE_URL || '',
-      VITE_SUPABASE_ANON_KEY: (env as any).VITE_SUPABASE_ANON_KEY || '',
-      VITE_FEATURE_SUPABASE: (env as any).VITE_FEATURE_SUPABASE ?? '1',
-      NEXT_PUBLIC_SUPABASE_URL: (env as any).NEXT_PUBLIC_SUPABASE_URL || '',
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: (env as any).NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
-      NEXT_PUBLIC_FEATURE_SUPABASE: (env as any).NEXT_PUBLIC_FEATURE_SUPABASE ?? ''
+      VITE_SUPABASE_URL: SB_URL || '',
+      VITE_SUPABASE_ANON_KEY: SB_ANON || '',
+      VITE_FEATURE_SUPABASE: SB_FLAG ?? '1'
     };
     (globalThis as any).__env__ = bag;
     // Minimal presence log; no secrets

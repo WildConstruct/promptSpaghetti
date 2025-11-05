@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { supabase } from '@promptscape/core/utils/supabaseClient';
+import { getSupabase } from '@promptscape/core/utils/supabaseClient';
 import { AuthModal } from '../AuthModal';
 
 import { PromptDissector } from './PromptDissector';
@@ -80,6 +80,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   useEffect(() => {
     let unsub: { subscription: { unsubscribe: () => void } } | null = null;
     (async () => {
+      const supabase = getSupabase();
       if (!supabase) { return; }
       const { data } = await supabase.auth.getSession();
       setAuthEmail(data.session?.user?.email ?? null);
@@ -94,16 +95,19 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   }, []);
 
   const signInWithProvider = useCallback(async (provider: 'google' | 'discord') => {
+    const supabase = getSupabase();
     if (!supabase) { return; }
     await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin } });
   }, []);
 
   const signOut = useCallback(async () => {
+    const supabase = getSupabase();
     if (!supabase) { return; }
     await supabase.auth.signOut();
   }, []);
 
   const signInWithEmail = useCallback(async () => {
+    const supabase = getSupabase();
     if (!supabase) { return; }
     const email = window.prompt('Enter your email to receive a magic login link:');
     if (!email) { return; }

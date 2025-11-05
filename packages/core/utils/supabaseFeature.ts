@@ -1,6 +1,22 @@
 /* Supabase feature gating utilities */
+const STATIC_VITE_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as
+  | string
+  | undefined;
+const STATIC_VITE_SUPABASE_ANON_KEY = import.meta.env
+  .VITE_SUPABASE_ANON_KEY as string | undefined;
+const STATIC_VITE_FEATURE_SUPABASE = import.meta.env
+  .VITE_FEATURE_SUPABASE as string | undefined;
 
 function getEnvVar(key: string): string | undefined {
+  if (key === 'VITE_SUPABASE_URL' && STATIC_VITE_SUPABASE_URL) {
+    return STATIC_VITE_SUPABASE_URL;
+  }
+  if (key === 'VITE_SUPABASE_ANON_KEY' && STATIC_VITE_SUPABASE_ANON_KEY) {
+    return STATIC_VITE_SUPABASE_ANON_KEY;
+  }
+  if (key === 'VITE_FEATURE_SUPABASE' && STATIC_VITE_FEATURE_SUPABASE) {
+    return STATIC_VITE_FEATURE_SUPABASE;
+  }
   // Prefer process.env in Node/test/CI. Fallback to import.meta.env in browser builds.
   if (
     typeof process !== 'undefined' &&
