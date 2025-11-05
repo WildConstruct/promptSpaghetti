@@ -9,7 +9,13 @@ import './App.css';
 
 // Version: 2025-01-10-20:10 - Fixed hyphenated API paths for Vercel
 function App() {
-  const [showLaunchScreen, setShowLaunchScreen] = useState(true);
+  const [showLaunchScreen, setShowLaunchScreen] = useState<boolean>(() => {
+    try {
+      return (typeof window !== 'undefined' && window.localStorage.getItem('psg:last-view') === 'editor') ? false : true;
+    } catch {
+      return true;
+    }
+  });
   const [initialAnalysis, setInitialAnalysis] = useState<
     PromptAnalysis | undefined
   >();
@@ -36,6 +42,7 @@ function App() {
       setInitialAnalysis(undefined);
       setStartWithTutorial(false);
     }
+    try { window.localStorage.setItem('psg:last-view', 'editor'); } catch {}
     setShowLaunchScreen(false);
   };
 
