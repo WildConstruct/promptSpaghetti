@@ -351,12 +351,24 @@ export function regenerateNodeIds(
   let delayCounter = 0;
 
   // Generate new IDs for nodes with guaranteed uniqueness
-  const newNodes = nodes.map((node, index) => {
+  const newNodesWithOldIds = nodes.map((node, index) => {
     // Create a unique ID with multiple entropy sources
     delayCounter++;
     const newId = `node-${timestamp}-${processId}-${random}-${delayCounter}-${index}`;
     idMap.set(node.id, newId);
     return { ...node, id: newId };
+  });
+
+  // Remap parentNode relationships to new IDs (preserve container parenting)
+  const newNodes = newNodesWithOldIds.map((node) => {
+    const parent = (node as any).parentNode as string | undefined;
+    if (parent) {
+      const mapped = idMap.get(parent) || parent;
+      if (mapped !== (node as any).parentNode) {
+        return { ...(node as any), parentNode: mapped } as PSGLibNode;
+      }
+    }
+    return node;
   });
 
   // Reset counter for edges

@@ -43,6 +43,7 @@ function mapEdgeHandles(
   nodeTypeMap: Map<string, string>,
   nodes: PSGLibNode[]
 ): PSGLibEdge[] {
+
   // Track which weighted choice nodes have branch connections
   const branchConnections = new Map<string, Set<number>>();
 
@@ -61,7 +62,21 @@ function mapEdgeHandles(
     }
   });
 
-  // Enable hasBranch for connected options
+  // Track concat input usage so we can assign inputs deterministically
+  const concatInputUsage = new Map<string, Set<string>>();
+  edges.forEach(e => {
+    const tType = nodeTypeMap.get(e.target);
+    if (tType === 'concat') {
+      const used = concatInputUsage.get(e.target) || new Set<string>();
+      if (e.targetHandle === 'input1' || e.targetHandle === 'input2') {
+        used.add(e.targetHandle);
+      }
+      concatInputUsage.set(e.target, used);
+    }
+  });
+
+  // Enable hasBranch for connected options and compute weightedChoice main output policy
+  const weightedChoiceHasBranch = new Map<string, boolean>();
   nodes.forEach(node => {
     if (node.type === 'WeightedChoice' || node.type === 'weightedChoice') {
       const connections = branchConnections.get(node.id);
@@ -70,6 +85,9 @@ function mapEdgeHandles(
           option.hasBranch = connections.has(index);
         });
       }
+      const opts = (node as any)?.data?.options;
+      const has = Array.isArray(opts) && opts.some((o: any) => o?.hasBranch === true);
+      weightedChoiceHasBranch.set(node.id, !!has);
     }
   });
 
@@ -79,19 +97,37 @@ function mapEdgeHandles(
 
     // Map source handle based on source node type
     let sourceHandle = edge.sourceHandle;
-    if (sourceType === 'weightedChoice' && sourceHandle === 'output') {
-      sourceHandle = 'main'; // WeightedChoice uses 'main' not 'output'
+    if (sourceType === 'weightedChoice') {
+      // Preserve explicit branch-N handles
+      const isBranch = typeof sourceHandle === 'string' && /^branch-\d+$/.test(sourceHandle);
+      if (!isBranch) {
+        const has = weightedChoiceHasBranch.get(edge.source) === true;
+        if (!sourceHandle || sourceHandle === 'output' || sourceHandle === 'main') {
+          sourceHandle = has ? 'main-output' : 'source';
+        }
+        // If sourceHandle is 'main-output' or 'source', leave as-is
+      }
     }
 
     // Map target handle if needed
     let targetHandle = edge.targetHandle;
-    // Concat nodes use 'target' not 'input0', 'input1', etc.
-    if (
-      targetType === 'concat' &&
-      targetHandle &&
-      targetHandle.startsWith('input')
-    ) {
-      targetHandle = 'target'; // Concat nodes only have a single 'target' handle
+    // Concat nodes have two named inputs: input1 and input2. Preserve if provided;
+    // otherwise assign the next available input.
+    if (targetType === 'concat') {
+      const used = concatInputUsage.get(edge.target) || new Set<string>();
+      if (targetHandle !== 'input1' && targetHandle !== 'input2') {
+        if (!used.has('input1')) {
+          targetHandle = 'input1';
+          used.add('input1');
+        } else if (!used.has('input2')) {
+          targetHandle = 'input2';
+          used.add('input2');
+        } else {
+          // More than two incoming edges: default to input2 (will visually stack)
+          targetHandle = 'input2';
+        }
+        concatInputUsage.set(edge.target, used);
+      }
     }
 
     return {
@@ -163,14 +199,59 @@ export async function insertPreset(
       options
     );
 
+    // Parent inserted content nodes to EnhancedBoundingBox if present
+    const boxes = positionedNodes.filter(n => n.type === 'enhancedBoundingBox');
+    const getBoxSize = (b: any) => ({
+      width: (b.size && b.size.width) || (b.data && b.data.width) || (b.style && b.style.width) || 400,
+      height: (b.size && b.size.height) || (b.data && b.data.height) || (b.style && b.style.height) || 300
+    });
+    const PADDING_X = 40;
+    const HEADER_Y = 80;
+    const positionedWithParent = boxes.length
+      ? positionedNodes.map(n => {
+          if (n.type === 'enhancedBoundingBox' || (n as any).parentNode) {
+            return n;
+          }
+          // Single box: parent all; multiple: parent if inside bounds
+          const targetBox = boxes.length === 1
+            ? boxes[0]
+            : boxes.find(b => {
+                const { width, height } = getBoxSize(b);
+                const x0 = (b as any).position?.x ?? 0;
+                const y0 = (b as any).position?.y ?? 0;
+                const x1 = x0 + width;
+                const y1 = y0 + height;
+                const nx = (n as any).position?.x ?? 0;
+                const ny = (n as any).position?.y ?? 0;
+                return nx >= x0 && nx <= x1 && ny >= y0 && ny <= y1;
+              });
+          if (!targetBox) {
+            return n;
+          }
+          const bx = (targetBox as any).position?.x ?? 0;
+          const by = (targetBox as any).position?.y ?? 0;
+          const nx = (n as any).position?.x ?? 0;
+          const ny = (n as any).position?.y ?? 0;
+          return {
+            ...n,
+            parentNode: (targetBox as any).id,
+            extent: 'parent',
+            position: {
+              x: nx - bx - PADDING_X,
+              y: ny - by - HEADER_Y
+            }
+          } as any;
+        })
+      : positionedNodes;
+
     // Create node type map for edge handle mapping
     const nodeTypeMap = new Map<string, string>();
-    positionedNodes.forEach(node => {
+    positionedWithParent.forEach(node => {
       nodeTypeMap.set(node.id, node.type);
     });
 
     // Map edge handles based on node types and enable branch outputs
-    const mappedEdges = mapEdgeHandles(edges, nodeTypeMap, positionedNodes);
+    const mappedEdges = mapEdgeHandles(edges, nodeTypeMap, positionedWithParent);
 
     // Mark nodes as selected if requested
     if (selectAfterInsert) {
@@ -184,7 +265,7 @@ export async function insertPreset(
     }
 
     // Combine positioned nodes with region group nodes
-    const allNodes = [...regions, ...positionedNodes];
+    const allNodes = [...regions, ...positionedWithParent];
 
     return {
       nodes: allNodes,
@@ -199,141 +280,6 @@ export async function insertPreset(
   } catch (error) {
     console.error('Failed to insert preset:', error);
     throw error;
-  }
-}
-
-/**
- * Insert preset via drag and drop
- */
-export async function insertPresetFromDrop(
-  presetContent: string,
-  dropPosition: { x: number; y: number },
-  viewportTransform?: { x: number; y: number; zoom: number }
-): Promise<InsertionResult> {
-  // Convert screen coordinates to graph coordinates
-  const graphPosition = viewportTransform
-    ? {
-        x: (dropPosition.x - viewportTransform.x) / viewportTransform.zoom,
-        y: (dropPosition.y - viewportTransform.y) / viewportTransform.zoom
-      }
-    : dropPosition;
-
-  // Check if this preset contains a region box (fragment)
-  // If so, preserve positions to maintain the spatial relationship
-  let preservePositions = false;
-  try {
-    const data = JSON.parse(presetContent);
-    // Check if it has an enhancedBoundingBox (Region Box)
-    if (data.graph?.nodes?.some((n: any) => n.type === 'enhancedBoundingBox')) {
-      preservePositions = true;
-    }
-  } catch (e) {
-    // If we can't parse, use default behavior
-  }
-
-  return insertPreset(presetContent, {
-    position: graphPosition,
-    preservePositions,
-    snapToGrid: true,
-    selectAfterInsert: true
-  });
-}
-
-/**
- * Load preset from file path (for Asset Browser integration)
- */
-export async function loadPresetFromPath(
-  path: string,
-  options: InsertionOptions = {}
-): Promise<InsertionResult> {
-  try {
-    const response = await fetch(path);
-    if (!response.ok) {
-      throw new Error(`Failed to load preset: ${response.statusText}`);
-    }
-
-    const content = await response.text();
-    return insertPreset(content, options);
-  } catch (error) {
-    console.error('Failed to load preset from path:', error);
-    throw error;
-  }
-}
-
-/**
- * Validate preset before insertion
- */
-export function validatePreset(presetContent: string): {
-  valid: boolean;
-  error?: string;
-  nodeCount?: number;
-  edgeCount?: number;
-} {
-  try {
-    // Try to parse as JSON first to detect format
-    let data: any;
-    try {
-      data = JSON.parse(presetContent);
-    } catch (e) {
-      return {
-        valid: false,
-        error: 'Invalid JSON format'
-      };
-    }
-
-    let psglib: PSGLibFile;
-
-    // Detect format based on structure
-    if (data.fileType === 'psglib') {
-      // It's already a PSGLib file
-      psglib = parsePSGLib(presetContent);
-    } else if (data.version && data.nodes && !data.fileType) {
-      // It's a PSG fragment file - convert it
-      try {
-        const psg = parsePSG(presetContent);
-        psglib = convertPSGToPSGLib(psg);
-      } catch (psgError) {
-        return {
-          valid: false,
-          error: `Invalid PSG fragment: ${psgError instanceof Error ? psgError.message : 'Unknown error'}`
-        };
-      }
-    } else {
-      return {
-        valid: false,
-        error: 'Unrecognized preset format'
-      };
-    }
-
-    // Check for empty preset
-    if (psglib.graph.nodes.length === 0) {
-      return {
-        valid: false,
-        error: 'Preset contains no nodes'
-      };
-    }
-
-    // Check for orphaned edges
-    const nodeIds = new Set(psglib.graph.nodes.map(n => n.id));
-    for (const edge of psglib.graph.edges) {
-      if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) {
-        return {
-          valid: false,
-          error: 'Preset contains invalid edge references'
-        };
-      }
-    }
-
-    return {
-      valid: true,
-      nodeCount: psglib.graph.nodes.length,
-      edgeCount: psglib.graph.edges.length
-    };
-  } catch (error) {
-    return {
-      valid: false,
-      error: error instanceof Error ? error.message : 'Invalid preset file'
-    };
   }
 }
 
@@ -356,10 +302,10 @@ function calculateBounds(nodes: PSGLibNode[]): {
   let maxY = -Infinity;
 
   for (const node of nodes) {
-    const x = node.position.x;
-    const y = node.position.y;
-    const width = node.size?.width || 150;
-    const height = node.size?.height || 50;
+    const x = (node as any).position?.x ?? 0;
+    const y = (node as any).position?.y ?? 0;
+    const width = (node as any).size?.width || 150;
+    const height = (node as any).size?.height || 50;
 
     minX = Math.min(minX, x);
     minY = Math.min(minY, y);
@@ -376,22 +322,21 @@ function calculateBounds(nodes: PSGLibNode[]): {
 function mapNodeType(type: string): string {
   const typeMap: Record<string, string> = {
     WeightedChoice: 'weightedChoice',
-    weightedChoice: 'weightedChoice', // Already mapped
+    weightedChoice: 'weightedChoice',
     Concat: 'concat',
-    concat: 'concat', // Already mapped
+    concat: 'concat',
     Output: 'output',
-    output: 'output', // Already mapped
+    output: 'output',
     TextBlock: 'textBlock',
-    textBlock: 'textBlock', // Already mapped
+    textBlock: 'textBlock',
     Variable: 'variable',
-    variable: 'variable', // Already mapped
+    variable: 'variable',
     SetVariable: 'setVariable',
     GetVariable: 'getVariable',
     Include: 'include',
-    boundingBox: 'boundingBox' // Don't lowercase this
+    boundingBox: 'boundingBox'
   };
 
-  // Return mapped type or keep as-is if already in correct format
   return typeMap[type] || type;
 }
 
@@ -401,70 +346,52 @@ function mapNodeType(type: string): string {
 function convertNodeData(type: string, data: any): any {
   const nodeType = mapNodeType(type);
 
-  // Convert data based on node type
   switch (nodeType) {
-    case 'weightedChoice':
-      // Convert choices array to options format expected by WeightedChoiceNode
-      if (data.choices && Array.isArray(data.choices)) {
+    case 'weightedChoice': {
+      if ((data as any).choices && Array.isArray((data as any).choices)) {
         return {
           ...data,
           nodeType: 'weightedChoice',
-          options: data.choices.map((choice: any, idx: number) => ({
+          options: (data as any).choices.map((choice: any, idx: number) => ({
             id: `option-${idx + 1}`,
             text: choice.text || '',
             weight: choice.weight || 1,
-            hasBranch: false // Default to false - only enable when actually connected
+            hasBranch: false
           })),
-          value: JSON.stringify(data.choices, null, 2)
+          value: JSON.stringify((data as any).choices, null, 2)
         };
       }
       break;
-
+    }
     case 'concat':
-      return {
-        ...data,
-        nodeType: 'concat',
-        value: data.separator || ' '
-      };
-
+      return { ...data, nodeType: 'concat', value: (data as any).separator || ' ' };
     case 'output':
       return {
         ...data,
         nodeType: 'output',
-        value: data.template || data.label || 'output',
-        label: data.label || 'output'
+        value: (data as any).template || (data as any).label || 'output',
+        label: (data as any).label || 'output'
       };
-
     case 'textBlock':
       return {
         ...data,
         nodeType: 'textBlock',
-        value: data.text || data.value || 'New text block',
-        text: data.text || data.value || 'New text block'
+        value: (data as any).text || (data as any).value || 'New text block',
+        text: (data as any).text || (data as any).value || 'New text block'
       };
-
     case 'variable':
     case 'setVariable':
     case 'getVariable':
       return {
         ...data,
-        nodeType: nodeType,
-        value: data.variableName || 'myVariable',
-        variableName: data.variableName || 'myVariable',
-        mode:
-          nodeType === 'setVariable'
-            ? 'set'
-            : nodeType === 'getVariable'
-              ? 'get'
-              : 'both'
+        nodeType,
+        value: (data as any).variableName || 'myVariable',
+        variableName: (data as any).variableName || 'myVariable',
+        mode: nodeType === 'setVariable' ? 'set' : nodeType === 'getVariable' ? 'get' : 'both'
       };
   }
 
-  // Default: just add nodeType field
-  return {
-    ...data,
-    nodeType
-  };
+  return { ...data, nodeType };
 }
 
 /**
@@ -504,8 +431,11 @@ function positionNodes(
     const offsetY = position.y - centerY;
 
     return nodes.map(node => {
-      let x = node.position.x + offsetX;
-      let y = node.position.y + offsetY;
+      const hasParent = !!(node as any).parentNode;
+      // IMPORTANT: child nodes already use relative positions to their parent.
+      // Do NOT apply global offset to them, only to top-level nodes.
+      let x = hasParent ? node.position.x : node.position.x + offsetX;
+      let y = hasParent ? node.position.y : node.position.y + offsetY;
 
       if (snapToGrid) {
         x = Math.round(x / gridSize) * gridSize;
@@ -611,6 +541,107 @@ export function createGhostNodes(
       pointerEvents: 'none'
     }
   }));
+}
+
+/**
+ * Insert preset via drag and drop
+ */
+export async function insertPresetFromDrop(
+  presetContent: string,
+  dropPosition: { x: number; y: number },
+  viewportTransform?: { x: number; y: number; zoom: number }
+): Promise<InsertionResult> {
+  const graphPosition = viewportTransform
+    ? {
+        x: (dropPosition.x - (viewportTransform as any).x) / (viewportTransform as any).zoom,
+        y: (dropPosition.y - (viewportTransform as any).y) / (viewportTransform as any).zoom
+      }
+    : dropPosition;
+
+  let preservePositions = false;
+  try {
+    const data = JSON.parse(presetContent);
+    if ((data as any).graph?.nodes?.some((n: any) => n.type === 'enhancedBoundingBox')) {
+      preservePositions = true;
+    }
+  } catch {}
+
+  return insertPreset(presetContent, {
+    position: graphPosition,
+    preservePositions,
+    snapToGrid: true,
+    selectAfterInsert: true
+  });
+}
+
+/**
+ * Load preset from file path (for Asset Browser integration)
+ */
+export async function loadPresetFromPath(
+  path: string,
+  options: InsertionOptions = {}
+): Promise<InsertionResult> {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`Failed to load preset: ${response.statusText}`);
+  }
+  const content = await response.text();
+  return insertPreset(content, options);
+}
+
+/**
+ * Validate preset before insertion
+ */
+export function validatePreset(presetContent: string): {
+  valid: boolean;
+  error?: string;
+  nodeCount?: number;
+  edgeCount?: number;
+} {
+  try {
+    let data: any;
+    try {
+      data = JSON.parse(presetContent);
+    } catch (e) {
+      return { valid: false, error: 'Invalid JSON format' };
+    }
+
+    let psglib: PSGLibFile;
+    if (data.fileType === 'psglib') {
+      psglib = parsePSGLib(presetContent);
+    } else if (data.version && data.nodes && !data.fileType) {
+      try {
+        const psg = parsePSG(presetContent);
+        psglib = convertPSGToPSGLib(psg);
+      } catch (psgError) {
+        return {
+          valid: false,
+          error: `Invalid PSG fragment: ${psgError instanceof Error ? psgError.message : 'Unknown error'}`
+        };
+      }
+    } else {
+      return { valid: false, error: 'Unrecognized preset format' };
+    }
+
+    if (psglib.graph.nodes.length === 0) {
+      return { valid: false, error: 'Preset contains no nodes' };
+    }
+
+    const nodeIds = new Set(psglib.graph.nodes.map(n => n.id));
+    for (const edge of psglib.graph.edges) {
+      if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) {
+        return { valid: false, error: 'Preset contains invalid edge references' };
+      }
+    }
+
+    return {
+      valid: true,
+      nodeCount: psglib.graph.nodes.length,
+      edgeCount: psglib.graph.edges.length
+    };
+  } catch (error) {
+    return { valid: false, error: error instanceof Error ? error.message : 'Invalid preset file' };
+  }
 }
 
 /**

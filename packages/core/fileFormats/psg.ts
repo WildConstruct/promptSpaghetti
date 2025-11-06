@@ -386,6 +386,10 @@ export function convertPSGToPSGLib(psg: PSGFile): any {
           y: pos.y - minY + 80 // Add extra padding for the header
         };
       }
+      // Critical: make content nodes children of the region box
+      // so they move/select with the container and can be hit-tested properly
+      (result as any).parentNode = boundingBoxId;
+      (result as any).extent = 'parent';
     } else {
       // Standalone node, use absolute position
       result.position = {

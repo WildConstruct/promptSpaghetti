@@ -281,7 +281,7 @@ export function useDragDropHandlers({
 
         // Apply auto-layout if multiple nodes (but not for fragments with preserved positions)
         const resultNodes = toFlowNodes(result.nodes);
-        const resultEdges = toFlowEdges(result.edges);
+        let resultEdges = toFlowEdges(result.edges);
         let nodesToAdd: FlowNode[] = resultNodes;
         if (nodesToAdd && nodesToAdd.length > 1 && !shouldPreservePositions) {
           console.log(
@@ -309,6 +309,32 @@ export function useDragDropHandlers({
           console.log(
             '[DragDrop] Skipping auto-layout for fragment with preserved positions'
           );
+        }
+
+        // If an Output node already exists in the current graph, do not insert new outputs
+        // and retarget edges that pointed to the inserted outputs to the existing output.
+        try {
+          const existing = reactFlowInstance?.getNodes?.() as FlowNode[] | undefined;
+          const existingOutput = existing?.find?.(n => n.type === 'output');
+          if (existingOutput) {
+            const removedOutputIds = new Set<string>(
+              nodesToAdd.filter(n => n.type === 'output').map(n => n.id)
+            );
+            if (removedOutputIds.size > 0) {
+              nodesToAdd = nodesToAdd.filter(n => n.type !== 'output');
+              resultEdges = resultEdges.map(e =>
+                removedOutputIds.has(e.target)
+                  ? {
+                      ...e,
+                      target: existingOutput.id,
+                      targetHandle: 'target'
+                    }
+                  : e
+              );
+            }
+          }
+        } catch {
+          // non-fatal
         }
 
         const containerNode = getContainerAtPosition(position);
