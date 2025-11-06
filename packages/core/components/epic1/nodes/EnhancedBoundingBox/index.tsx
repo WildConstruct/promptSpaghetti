@@ -378,199 +378,28 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     const hex = hexColor.replace('#', '');
     const r = parseInt(hex.substr(0, 2), 16);
     const g = parseInt(hex.substr(2, 2), 16);
-  
-  setIsResizing(true);
-  
-  // Disable node dragging during resize
-  setNodes((nodes) =>
-    nodes.map((node) => {
-      if (node.id === id) {
-        return { ...node, draggable: false };
-      }
-      return node;
-    })
-  );
-  
-  const startX = e.clientX;
-  const startY = e.clientY;
-  const startWidth = sizeRef.current.width;
-  const startHeight = sizeRef.current.height;
-  
-  const handleMouseMove = (e: MouseEvent) => {
-    const deltaX = e.clientX - startX;
-    const deltaY = e.clientY - startY;
-    
-    let newWidth = startWidth;
-    let newHeight = startHeight;
-    
-    if (direction.includes('e')) {newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth + deltaX);}
-    if (direction.includes('w')) {newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth - deltaX);}
-    if (direction.includes('s')) {newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight + deltaY);}
-    if (direction.includes('n')) {newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight - deltaY);}
-    
-    sizeRef.current = { width: newWidth, height: newHeight };
-    
-    // Update node dimensions
-    setNodes((nodes) =>
-      nodes.map((node) => {
-        if (node.id === id) {
-          return {
-            ...node,
-            width: newWidth,
-            height: newHeight,
-            data: { ...node.data, width: newWidth, height: newHeight }
-          };
-        }
-        return node;
-      })
-    );
+    const b = parseInt(hex.substr(4, 2), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   };
   
-  const handleMouseUp = () => {
-    setIsResizing(false);
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-    
-    // Re-enable node dragging
-    setNodes((nodes) =>
-      nodes.map((node) => {
-        if (node.id === id) {
-          return { ...node, draggable: !isLocked };
-        }
-        return node;
-      })
-    );
-    
-    // Save expanded size
-    if (!isCollapsed) {
-      expandedSizeRef.current = sizeRef.current;
-    }
-    
-    perfMonitor.record('boundingBox.resize', 1);
+  // Box style with animations
+  const boxStyle: React.CSSProperties = {
+    width: `${size.width}px`,
+    height: `${size.height}px`,
+    border: `${data.borderWidth || 2}px solid ${data.borderColor || DEFAULT_REGION_COLORS[0]}`,
+    borderRadius: `${BORDER_RADIUS}px`,
+    position: 'relative',
+    overflow: 'visible',
+    transition: isAnimating ? 'all 0.2s ease-in-out' : 'none',
+    zIndex: selected ? 2000 : BOUNDING_BOX,
+    boxSizing: 'border-box',
   };
   
-  document.addEventListener('mousemove', handleMouseMove);
-  document.addEventListener('mouseup', handleMouseUp);
-}, [isLocked, isCollapsed, id, setNodes, perfMonitor]);
-
-/**
- * Handle title and description edits
- */
-const handleEditStart = useCallback((type: 'title' | 'description') => {
-  if (type === 'title') {
-    setIsEditingTitle(true);
-  } else {
-    setIsEditingDescription(true);
-  }
-}, []);
-
-const handleEditEnd = useCallback(() => {
-  setIsEditingTitle(false);
-  setIsEditingDescription(false);
-  
-  // Save changes to node data
-  setNodes((nodes) =>
-    nodes.map((node) => {
-      if (node.id === id) {
-        return {
-          ...node,
-          data: { ...node.data, title, description }
-        };
-      }
-      return node;
-    })
-  );
-}, [id, title, description, setNodes]);
-
-/**
- * Create RGBA color from hex color and opacity
- */
-const getBackgroundWithOpacity = (hexColor: string, opacity: number) => {
-  const hex = hexColor.replace('#', '');
-  const r = parseInt(hex.substr(0, 2), 16);
-  const g = parseInt(hex.substr(2, 2), 16);
-  const b = parseInt(hex.substr(4, 2), 16);
-  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-};
-
-// Box style with animations
-const boxStyle: React.CSSProperties = {
-  width: `${size.width}px`,
-  height: `${size.height}px`,
-  border: `${data.borderWidth || 2}px solid ${data.borderColor || DEFAULT_REGION_COLORS[0]}`,
-  borderRadius: `${BORDER_RADIUS}px`,
-  position: 'relative',
-  overflow: 'visible',
-  transition: isAnimating ? 'all 0.2s ease-in-out' : 'none',
-  // Elevate above overlapping nodes only when selected so handles can be used
-  zIndex: selected ? 2000 : BOUNDING_BOX,
-  boxSizing: 'border-box',
-};
-
-return (
-  <div
-    className={`enhanced-bounding-box-refactored ${selected ? 'selected' : ''} ${isResizing ? 'resizing' : ''} ${isCollapsed ? 'collapsed' : ''}`}
-    style={boxStyle}
-  >
-    {/* Background layer */}
-    <div 
-      className="bounding-box-background" 
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: getBackgroundWithOpacity(
-          data.backgroundColor || DEFAULT_REGION_COLORS[0], 
-          data.opacity || 0.3
-        ),
-        borderRadius: `${BORDER_RADIUS}px`,
-        zIndex: BACKGROUND,
-        pointerEvents: 'none'
-      }}
-    />
-    
-    {/* Header with controls */}
-    <BoundingBoxHeader
-      title={title}
-      description={description}
-      isCollapsed={isCollapsed}
-      isLocked={isLocked}
-      isEditingTitle={isEditingTitle}
-      isEditingDescription={isEditingDescription}
-      onTitleChange={setTitle}
-      onDescriptionChange={setDescription}
-      onLockToggle={handleLockToggle}
-      onCollapseToggle={handleCollapseToggle}
-      onEditStart={handleEditStart}
-      onEditEnd={handleEditEnd}
-    />
-    
-    {/* Node count indicator */}
-    {!isCollapsed && (
-      <div className="bounding-box-status" style={{
-        position: 'absolute',
-        bottom: '8px',
-        left: '12px',
-        fontSize: '11px',
-        color: 'rgba(255, 255, 255, 0.6)',
-      }}>
-        {containedNodes.length} node{containedNodes.length !== 1 ? 's' : ''}
-        {isLayouting && ' (arranging...)'}
-      </div>
-    )}
-    
-    {/* Collapsed indicator */}
-    {isCollapsed && (
-      <div style={{
-        position: 'absolute',
-        bottom: '20px',
-        left: '15px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-      }}>
+  return (
+    <div
+      className={`enhanced-bounding-box-refactored ${selected ? 'selected' : ''} ${isResizing ? 'resizing' : ''} ${isCollapsed ? 'collapsed' : ''}`}
+      style={boxStyle}
+    >
       {/* Background layer */}
       <div 
         className="bounding-box-background" 
