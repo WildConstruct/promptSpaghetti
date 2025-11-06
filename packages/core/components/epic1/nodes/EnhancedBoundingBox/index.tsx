@@ -488,7 +488,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       
       {/* Resize handles */}
       <ResizeHandles
-        visible={selected && !isCollapsed}
+        visible={(selected || isResizing) && !isCollapsed}
         isLocked={isLocked}
         onResizeStart={handleResizeStart}
       />

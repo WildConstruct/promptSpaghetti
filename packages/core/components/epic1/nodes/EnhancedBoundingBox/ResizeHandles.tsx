@@ -165,7 +165,7 @@ const ResizeHandleComponent: React.FC<ResizeHandleProps> = ({
       className={`nodrag resize-handle resize-handle-${direction}`}
       style={style}
       onMouseDown={handleMouseDown}
-      onPointerDown={(e) => e.stopPropagation()}
+      onPointerDown={(e) => { e.stopPropagation(); onMouseDown(e as any); }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-direction={direction}
