@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useReactFlow, Position } from 'reactflow';
+import { useReactFlow, Position, useUpdateNodeInternals } from 'reactflow';
 
 // Import types and constants
 import { 
@@ -59,6 +59,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
 }) => {
   const perfMonitor = PerformanceMonitor.getInstance();
   const { setNodes, getNodes, getEdges } = useReactFlow();
+  const updateNodeInternals = useUpdateNodeInternals();
   
   // State management
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -313,6 +314,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           return node;
         })
       );
+      updateNodeInternals(id);
     };
     
     const handleMouseUp = () => {
@@ -336,6 +338,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       }
       
       perfMonitor.record('boundingBox.resize', 1);
+      updateNodeInternals(id);
     };
     
     document.addEventListener('mousemove', handleMouseMove);
@@ -384,8 +387,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   
   // Box style with animations
   const boxStyle: React.CSSProperties = {
-    width: `${size.width}px`,
-    height: `${size.height}px`,
+    width: `${sizeRef.current.width}px`,
+    height: `${sizeRef.current.height}px`,
     border: `${data.borderWidth || 2}px solid ${data.borderColor || DEFAULT_REGION_COLORS[0]}`,
     borderRadius: `${BORDER_RADIUS}px`,
     position: 'relative',
