@@ -226,6 +226,7 @@ export function useDragDropHandlers({
           }
 
           const normalized = normalizePresetPath(presetPath);
+          console.log('[DragDrop] Fetching preset path:', normalized);
           const resp = await fetch(normalized, { cache: 'no-cache' });
           if (!resp.ok) {
             throw new Error(

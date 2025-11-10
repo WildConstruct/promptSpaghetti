@@ -52,6 +52,7 @@ export const AssetBrowserLoader: React.FC<AssetBrowserLoaderProps> = props => {
 
   const forwardSelect = React.useCallback(
     (preset: Preset) => {
+      console.log('[AssetBrowserLoader] forwardSelect insert:', preset?.id, preset?.path);
       onPresetSelect?.(preset);
       onInsert?.(preset);
     },

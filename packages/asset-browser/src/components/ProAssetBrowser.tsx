@@ -394,6 +394,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
   };
 
   const handleInsert = (preset: Preset) => {
+    console.log('[AssetBrowser] Insert requested:', preset.id, preset.path);
     onInsert?.(preset);
   };
 

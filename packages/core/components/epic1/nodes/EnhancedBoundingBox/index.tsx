@@ -82,7 +82,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   });
   
   // Use performance-optimized hooks
-  const { containedNodes, cacheHitRate } = useNodeContainment(
+  const { containedNodes, cacheHitRate, recalculate } = useNodeContainment(
     id,
     getNodes(),
     { x: xPos, y: yPos },
@@ -206,6 +206,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           return node;
         })
       );
+      recalculate();
     } else {
       // Restore hidden nodes
       const boxNode = getNodes().find(n => n.id === id);
@@ -229,8 +230,9 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           return node;
         })
       );
+      recalculate();
     }
-  }, [isCollapsed, containedNodes, id, setNodes, getNodes, perfMonitor]);
+  }, [isCollapsed, containedNodes, id, setNodes, getNodes, perfMonitor, recalculate]);
   
   /**
    * Handle lock toggle
@@ -285,6 +287,10 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     const startY = e.clientY;
     const startWidth = sizeRef.current.width;
     const startHeight = sizeRef.current.height;
+    const startLeft = xPos;
+    const startTop = yPos;
+    const startRight = startLeft + startWidth;
+    const startBottom = startTop + startHeight;
     
     const handleMouseMove = (e: MouseEvent) => {
       const deltaX = e.clientX - startX;
@@ -292,11 +298,19 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       
       let newWidth = startWidth;
       let newHeight = startHeight;
+      let newX = startLeft;
+      let newY = startTop;
       
       if (direction.includes('e')) {newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth + deltaX);}
-      if (direction.includes('w')) {newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth - deltaX);}
+      if (direction.includes('w')) {
+        newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth - deltaX);
+        newX = startRight - newWidth;
+      }
       if (direction.includes('s')) {newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight + deltaY);}
-      if (direction.includes('n')) {newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight - deltaY);}
+      if (direction.includes('n')) {
+        newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight - deltaY);
+        newY = startBottom - newHeight;
+      }
       
       sizeRef.current = { width: newWidth, height: newHeight };
       
@@ -308,6 +322,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
               ...node,
               width: newWidth,
               height: newHeight,
+              position: { ...node.position, x: newX, y: newY },
               data: { ...node.data, width: newWidth, height: newHeight }
             };
           }
@@ -343,7 +358,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
-  }, [isLocked, isCollapsed, id, setNodes, perfMonitor]);
+  }, [isLocked, isCollapsed, id, setNodes, perfMonitor, recalculate, xPos, yPos]);
   
   /**
    * Handle title and description edits
@@ -396,6 +411,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     transition: isAnimating ? 'all 0.2s ease-in-out' : 'none',
     zIndex: selected ? 2000 : BOUNDING_BOX,
     boxSizing: 'border-box',
+    pointerEvents: 'none'
   };
   
   return (

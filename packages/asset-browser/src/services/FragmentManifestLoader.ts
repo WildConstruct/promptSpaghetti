@@ -93,6 +93,7 @@ export class FragmentManifestLoader {
       | 'unknown'
       | undefined;
     category: string;
+    path?: string;
     metadata?: {
       nodes?: number;
       options?: number;
@@ -114,6 +115,7 @@ export class FragmentManifestLoader {
         | 'unknown'
         | undefined;
       category: string;
+      path?: string;
       metadata?: {
         nodes?: number;
         options?: number;
@@ -126,6 +128,9 @@ export class FragmentManifestLoader {
     // Handle new format with direct fragments array
     if (manifest.fragments && Array.isArray(manifest.fragments)) {
       manifest.fragments.forEach(fragment => {
+        const normalizedPath = fragment.path.startsWith('/assets/')
+          ? fragment.path
+          : `/assets/library/${fragment.path.replace(/^\.\//, '')}`;
         presets.push({
           id: fragment.id,
           name: fragment.name,
@@ -134,8 +139,9 @@ export class FragmentManifestLoader {
           category: fragment.category,
           metadata: {
             nodes: fragment.nodeCount,
-            file: fragment.path
-          }
+            file: normalizedPath
+          },
+          path: normalizedPath
         });
       });
     }
@@ -144,6 +150,11 @@ export class FragmentManifestLoader {
     if (manifest.categories) {
       Object.entries(manifest.categories).forEach(([categoryKey, category]) => {
         category.fragments.forEach(fragment => {
+          const relativePath = `${category.path}${fragment.file}`;
+          const normalizedPath = relativePath.startsWith('/assets/')
+            ? relativePath
+            : `/assets/library/${relativePath.replace(/^\.\//, '')}`;
+
           presets.push({
             id: fragment.id,
             name: fragment.name,
@@ -159,8 +170,9 @@ export class FragmentManifestLoader {
               options: fragment.options,
               combinations: fragment.combinations,
               region: fragment.region,
-              file: `${category.path}${fragment.file}`
-            }
+              file: normalizedPath
+            },
+            path: normalizedPath
           });
         });
       });

@@ -30,16 +30,13 @@ export function useNodeContainment(
   const hitCountRef = useRef(0);
   const missCountRef = useRef(0);
 
-  // Use expanded size for containment check even when collapsed
-  const checkSize = isCollapsed ? expandedSize : boxSize;
-
   const containedNodes = useMemo(() => {
-    // Generate cache key based on relevant parameters
-    const nodeIds = allNodes
-      .map(n => n.id)
+    const nodeGeoSignature = allNodes
+      .map(n => `${n.id}:${n.position?.x ?? 0}:${n.position?.y ?? 0}:${n.width ?? 0}:${n.height ?? 0}`)
       .sort()
-      .join(',');
-    const cacheKey = `${boxId}:${nodeIds}:${boxPosition.x},${boxPosition.y}:${checkSize.width}x${checkSize.height}`;
+      .join('|');
+    const boxSignature = `${boxPosition.x}:${boxPosition.y}:${boxSize.width}:${boxSize.height}:${expandedSize.width}:${expandedSize.height}:${isCollapsed}`;
+    const cacheKey = `${boxId}:${nodeGeoSignature}:${boxSignature}`;
 
     // Check cache first
     const cached = cacheRef.current.get(cacheKey);
@@ -50,56 +47,34 @@ export function useNodeContainment(
     ) {
       hitCountRef.current++;
       perfMonitor.record('boundingBox.cacheHit', 1);
-      console.debug(
-        `[Cache Hit] Containment for ${boxId}: ${cached.nodes.length} nodes`
-      );
       return cached.nodes;
     }
 
-    // Cache miss - calculate containment
+    // Cache miss - calculate containment by parent relationship
     missCountRef.current++;
     perfMonitor.record('boundingBox.cacheMiss', 1);
 
     const start = performance.now();
 
-    // Find the bounding box node itself
-    const thisBox = allNodes.find(n => n.id === boxId);
-    if (!thisBox) {
-      return [];
-    }
-
-    // Filter nodes that are contained within the bounding box
+    const checkSize = isCollapsed ? expandedSize : boxSize;
     const contained = allNodes.filter(node => {
-      // Skip self and other bounding boxes
-      if (
-        node.id === boxId ||
-        node.type === 'boundingBox' ||
-        node.type === 'enhancedBoundingBox'
-      ) {
-        return false;
+      if (node.parentNode === boxId) {
+        return true;
       }
 
-      // Respect fragment/parent hierarchy; region boxes only operate on top-level nodes
-      if (typeof node.parentNode === 'string' && node.parentNode.length > 0) {
-        return false;
-      }
+      const nodeX = node.position?.x ?? 0;
+      const nodeY = node.position?.y ?? 0;
+      const nodeWidth = node.width ?? 0;
+      const nodeHeight = node.height ?? 0;
 
-      const nodeX = node.position.x;
-      const nodeY = node.position.y;
-      const nodeWidth = node.width || 150;
-      const nodeHeight = node.height || 50;
+      const withinHorizontal =
+        nodeX >= boxPosition.x - 1 &&
+        nodeX + nodeWidth <= boxPosition.x + checkSize.width + 1;
+      const withinVertical =
+        nodeY >= boxPosition.y - 1 &&
+        nodeY + nodeHeight <= boxPosition.y + checkSize.height + 1;
 
-      const boxX = thisBox.position.x;
-      const boxY = thisBox.position.y;
-
-      // Check if node is fully contained within the box
-      const isContained =
-        nodeX >= boxX &&
-        nodeY >= boxY &&
-        nodeX + nodeWidth <= boxX + checkSize.width &&
-        nodeY + nodeHeight <= boxY + checkSize.height;
-
-      return isContained;
+      return withinHorizontal && withinVertical;
     });
 
     const duration = performance.now() - start;
@@ -118,23 +93,10 @@ export function useNodeContainment(
     if (cacheRef.current.size > CACHE_SIZE) {
       const oldestKey = Array.from(cacheRef.current.keys())[0];
       cacheRef.current.delete(oldestKey);
-      console.debug(`[Cache Eviction] Removed oldest entry: ${oldestKey}`);
     }
 
-    console.debug(
-      `[Cache Miss] Calculated containment for ${boxId}: ${contained.length} nodes in ${duration.toFixed(2)}ms`
-    );
-
     return contained;
-  }, [
-    allNodes,
-    boxId,
-    boxPosition.x,
-    boxPosition.y,
-    checkSize.height,
-    checkSize.width,
-    perfMonitor
-  ]);
+  }, [allNodes, boxId, perfMonitor]);
 
   // Force recalculation
   const recalculate = useCallback(() => {

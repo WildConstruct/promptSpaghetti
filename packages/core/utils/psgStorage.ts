@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+import { getSupabase } from './supabaseClient';
 
 const BUCKET = 'graphs';
 const pathPrefix = (userId: string) => `users/${userId}/graphs/` as const;
@@ -26,6 +26,7 @@ interface ExtendedGlobalThis {
 export async function listUserGraphs(
   userId: string
 ): Promise<StorageResult<{ name: string }[]>> {
+  const supabase = getSupabase();
   if (!supabase) {
     return { ok: false, error: { message: 'Supabase not configured' } };
   }
@@ -47,6 +48,7 @@ export async function getUserGraph(
   userId: string,
   name: string
 ): Promise<StorageResult<string>> {
+  const supabase = getSupabase();
   if (!supabase) {
     return { ok: false, error: { message: 'Supabase not configured' } };
   }
@@ -110,6 +112,7 @@ export async function putUserGraph(
   name: string,
   content: string
 ): Promise<StorageResult<{ path: string }>> {
+  const supabase = getSupabase();
   if (!supabase) {
     return { ok: false, error: { message: 'Supabase not configured' } };
   }

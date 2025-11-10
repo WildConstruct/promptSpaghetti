@@ -70,6 +70,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   const handlePresetInsert = useCallback(
     (preset: Preset) => {
+      console.log('[TabbedSidePanel] Forwarding preset insert', preset?.id);
       onInsert?.(preset);
     },
     [onInsert]

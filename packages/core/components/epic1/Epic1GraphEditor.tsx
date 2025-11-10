@@ -78,6 +78,8 @@ import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { AuthModal } from '../auth/AuthModal';
 import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
 import { TutorialOverlay } from './onboarding/TutorialOverlay';
+import type { Preset } from '@prompt/asset-browser';
+import type { Asset } from '../../services/assetMatcher';
 import { getSupabase } from '../../utils/supabaseClient';
 
 // Styles
@@ -275,6 +277,24 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     addNodeWithBounce
   });
 
+  const handleAssetInsert = useCallback(
+    (item: Preset | Asset) => {
+      const preset = item as Preset;
+      if (!preset) {
+        return;
+      }
+      console.log('[Epic1GraphEditor] Inserting preset via TabbedSidePanel:', preset.id);
+      const pos = reactFlowInstance
+        ? reactFlowInstance.screenToFlowPosition({
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2
+          })
+        : { x: 250, y: 250 };
+      void insertPresetByMeta(preset, pos);
+    },
+    [insertPresetByMeta, reactFlowInstance]
+  );
+
   // Drag and drop
   const { isDraggingOver, onDragOver, onDragLeave, onDragEnter, onDrop } =
     useGraphDragDrop(reactFlowInstance, setNodes, {
@@ -284,6 +304,12 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         void insertPresetByMeta(preset, position);
       }
     });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).__EPIC1_REACT_FLOW__ = reactFlowInstance;
+    }
+  }, [reactFlowInstance]);
 
   // Keyboard shortcuts
   useGraphKeyboardShortcuts(
@@ -658,6 +684,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             showAssets={true}
             showPreview={true}
             selectedNode={nodes.find(n => n.id === selectedNodeId)}
+            onInsert={handleAssetInsert}
           />
         )}
 
