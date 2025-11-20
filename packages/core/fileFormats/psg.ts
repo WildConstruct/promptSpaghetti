@@ -80,8 +80,18 @@ export function parsePSG(content: string): PSGFile {
       hasNodes: !!data.nodes,
       hasEdges: !!data.edges,
       hasRegions: !!data.regions,
+      hasRegion: !!data.region,
       rawEdges: data.edges
     });
+
+    // Handle legacy asset fragment format
+    if (data.region && !data.regions && !data.version) {
+      console.log('[PSG] Detected legacy asset fragment format, converting...');
+      data.version = data.metadata?.version || '1.0.0';
+      data.regions = [data.region];
+      delete data.region;
+    }
+
     console.log('[PSG] Parsed JSON data:', {
       nodes: data.nodes?.length || 0,
       edges: data.edges?.length || 0,
