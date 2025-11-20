@@ -140,6 +140,7 @@ const ResizeHandleComponent: React.FC<ResizeHandleProps> = ({
   const style = getResizeHandleStyle(direction);
   
   const handleMouseDown = (e: React.MouseEvent) => {
+    console.log('[ResizeHandle] Mouse down on handle:', direction, 'at', e.clientX, e.clientY);
     // Stop all propagation to prevent node dragging
     e.stopPropagation();
     e.preventDefault();
@@ -147,6 +148,7 @@ const ResizeHandleComponent: React.FC<ResizeHandleProps> = ({
   };
   
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    console.log('[ResizeHandle] Mouse enter handle:', direction);
     const target = e.currentTarget;
     if (direction === 'n' || direction === 's') {
       target.style.transform = `${style.transform || ''} scale(1, 1.05)`.trim();
@@ -167,7 +169,11 @@ const ResizeHandleComponent: React.FC<ResizeHandleProps> = ({
       className={`nodrag resize-handle resize-handle-${direction}`}
       style={style}
       onMouseDown={handleMouseDown}
-      onPointerDown={(e) => { e.stopPropagation(); onMouseDown(e as any); }}
+      onPointerDown={(e) => {
+        console.log('[ResizeHandle] Pointer down on handle:', direction);
+        e.stopPropagation(); 
+        onMouseDown(e as any);
+      }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-direction={direction}

@@ -23,7 +23,7 @@ export const PSGNodeSchema = z.object({
   template: z.string().optional(),
   value: z.any().optional(),
   data: z.record(z.any()).optional()
-});
+}).catchall(z.any()); // Allow additional fields
 
 export const PSGEdgeSchema = z.object({
   id: z.string(),
@@ -90,6 +90,25 @@ export function parsePSG(content: string): PSGFile {
       data.version = data.metadata?.version || '1.0.0';
       data.regions = [data.region];
       delete data.region;
+    }
+
+    // Handle groups as alias for regions
+    if (data.groups && !data.regions) {
+      console.log('[PSG] Converting groups to regions format');
+      data.regions = data.groups.map((group: any) => ({
+        id: group.id,
+        name: group.label || group.name,
+        color: group.color,
+        nodes: group.nodeIds || group.nodes || [],
+        description: group.description,
+        metadata: group.metadata
+      }));
+      delete data.groups;
+    }
+
+    // Remove top-level type field if present (should be in metadata)
+    if (data.type && data.type !== 'psglib') {
+      delete data.type;
     }
 
     console.log('[PSG] Parsed JSON data:', {

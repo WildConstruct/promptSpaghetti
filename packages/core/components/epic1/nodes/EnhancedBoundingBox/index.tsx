@@ -81,12 +81,15 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     height: isCollapsed ? COLLAPSED_HEIGHT : (data.height || DEFAULT_HEIGHT)
   });
   
+  // State for current size to trigger re-renders during resize
+  const [currentSize, setCurrentSize] = useState<Size>(sizeRef.current);
+  
   // Use performance-optimized hooks
   const { containedNodes, cacheHitRate, recalculate } = useNodeContainment(
     id,
     getNodes(),
     { x: xPos, y: yPos },
-    sizeRef.current,
+    currentSize,
     expandedSizeRef.current,
     isCollapsed
   );
@@ -116,9 +119,10 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     data.autoLayout
   );
   
-  // Update size ref when size changes
+  // Update size ref and state when size changes
   useEffect(() => {
     sizeRef.current = size;
+    setCurrentSize(size);
   }, [size]);
   
   // Track render performance
@@ -312,12 +316,29 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         newY = startBottom - newHeight;
       }
       
+      console.log('[Resize] Mouse move:', {
+        deltaX,
+        deltaY,
+        newWidth,
+        newHeight,
+        newX,
+        newY,
+        direction
+      });
+      
       sizeRef.current = { width: newWidth, height: newHeight };
+      setCurrentSize({ width: newWidth, height: newHeight });
       
       // Update node dimensions
       setNodes((nodes) =>
         nodes.map((node) => {
           if (node.id === id) {
+            console.log('[Resize] Updating node dimensions:', {
+              id,
+              newWidth,
+              newHeight,
+              position: { x: newX, y: newY }
+            });
             return {
               ...node,
               width: newWidth,
@@ -349,7 +370,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       
       // Save expanded size
       if (!isCollapsed) {
-        expandedSizeRef.current = sizeRef.current;
+        expandedSizeRef.current = currentSize;
       }
       
       perfMonitor.record('boundingBox.resize', 1);
@@ -402,8 +423,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   
   // Box style with animations
   const boxStyle: React.CSSProperties = {
-    width: `${sizeRef.current.width}px`,
-    height: `${sizeRef.current.height}px`,
+    width: `${currentSize.width}px`,
+    height: `${currentSize.height}px`,
     border: `${data.borderWidth || 2}px solid ${data.borderColor || DEFAULT_REGION_COLORS[0]}`,
     borderRadius: `${BORDER_RADIUS}px`,
     position: 'relative',

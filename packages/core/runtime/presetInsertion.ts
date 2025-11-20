@@ -348,17 +348,19 @@ function convertNodeData(type: string, data: any): any {
 
   switch (nodeType) {
     case 'weightedChoice': {
-      if ((data as any).choices && Array.isArray((data as any).choices)) {
+      // Handle both PSG format (data.options) and legacy format (data.choices)
+      const options = (data as any).options || (data as any).choices;
+      if (options && Array.isArray(options)) {
         return {
           ...data,
           nodeType: 'weightedChoice',
-          options: (data as any).choices.map((choice: any, idx: number) => ({
+          options: options.map((option: any, idx: number) => ({
             id: `option-${idx + 1}`,
-            text: choice.text || '',
-            weight: choice.weight || 1,
+            text: option.text || '',
+            weight: option.weight || 1,
             hasBranch: false
           })),
-          value: JSON.stringify((data as any).choices, null, 2)
+          value: JSON.stringify(options, null, 2)
         };
       }
       break;
