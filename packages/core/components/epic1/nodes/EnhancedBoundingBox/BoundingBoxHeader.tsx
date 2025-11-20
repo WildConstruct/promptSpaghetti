@@ -65,7 +65,10 @@ const BoundingBoxHeaderComponent: React.FC<BoundingBoxHeaderProps> = ({
   }, [isCollapsed, onEditStart]);
   
   return (
-    <div className="bounding-box-header">
+    <div 
+      className="bounding-box-header"
+      style={{ pointerEvents: 'auto' }}
+    >
       {/* Control Buttons */}
       <div className="control-buttons">
         {/* Lock Button */}

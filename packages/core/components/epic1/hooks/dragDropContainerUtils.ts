@@ -69,6 +69,11 @@ const readNodeHeight = (node: FlowNode): number => {
 };
 
 export const getContainerPadding = (node: FlowNode): number => {
+  // Bounding boxes don't have internal padding - nodes can be positioned at edges
+  if (node.type === 'enhancedBoundingBox') {
+    return 0;
+  }
+  
   const data = node.data as Record<string, unknown> | undefined;
   const candidates = [data?.padding, data?.innerPadding, node.style?.padding];
   for (const candidate of candidates) {

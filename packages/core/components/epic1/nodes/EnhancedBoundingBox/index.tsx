@@ -416,7 +416,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   
   return (
     <div
-      className={`enhanced-bounding-box-refactored ${selected ? 'selected' : ''} ${isResizing ? 'resizing' : ''} ${isCollapsed ? 'collapsed' : ''}`}
+      className={`enhanced-bounding-box enhanced-bounding-box-refactored ${selected ? 'selected' : ''} ${isResizing ? 'resizing' : ''} ${isCollapsed ? 'collapsed' : ''}`}
       style={boxStyle}
     >
       {/* Background layer */}

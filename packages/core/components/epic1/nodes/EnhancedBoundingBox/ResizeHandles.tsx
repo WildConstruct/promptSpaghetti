@@ -26,6 +26,7 @@ interface HandleStyleConfig {
   width: string;
   height: string;
   transform?: string;
+  pointerEvents?: string;
 }
 
 /**
@@ -39,6 +40,7 @@ function getResizeHandleStyle(direction: ResizeDirection): HandleStyleConfig {
     borderRadius: '2px',
     cursor: RESIZE_CURSORS[direction],
     zIndex: RESIZE_HANDLES,
+    pointerEvents: 'auto',
   };
   
   switch (direction) {
