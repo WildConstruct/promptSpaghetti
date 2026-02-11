@@ -3,15 +3,25 @@
  * Main container component that orchestrates all sub-components and hooks
  */
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useReactFlow, Position, useUpdateNodeInternals } from 'reactflow';
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useLayoutEffect
+} from 'react';
+import {
+  useReactFlow,
+  Position,
+  useUpdateNodeInternals,
+  NodeResizer
+} from 'reactflow';
 
 // Import types and constants
 import { 
   EnhancedBoundingBoxData, 
-  Port, 
-  Size, 
-  ResizeDirection 
+  Port,
+  Size 
 } from './types';
 import { 
   BOUNDING_BOX_CONSTANTS, 
@@ -20,7 +30,6 @@ import {
 
 // Import sub-components
 import { BoundingBoxHeader } from './BoundingBoxHeader';
-import { ResizeHandles } from './ResizeHandles';
 import { PortSystem } from './PortSystem';
 
 // Import hooks
@@ -124,6 +133,44 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     sizeRef.current = size;
     setCurrentSize(size);
   }, [size]);
+
+  // Keep React Flow internals in sync with the rendered size (both initial load and during resize)
+  useEffect(() => {
+    setNodes(nodes =>
+      nodes.map(node => {
+        if (node.id !== id) {
+          return node;
+        }
+
+        const widthChanged = node.width !== currentSize.width;
+        const heightChanged = node.height !== currentSize.height;
+        const styleWidth = (node.style as { width?: number } | undefined)?.width;
+        const styleHeight = (node.style as { height?: number } | undefined)?.height;
+        const styleWidthChanged =
+          styleWidth !== currentSize.width || styleHeight !== currentSize.height;
+        if (!widthChanged && !heightChanged && !styleWidthChanged) {
+          return node;
+        }
+
+        return {
+          ...node,
+          width: currentSize.width,
+          height: currentSize.height,
+          style: {
+            ...(node.style ?? {}),
+            width: currentSize.width,
+            height: currentSize.height
+          },
+          data: {
+            ...node.data,
+            width: currentSize.width,
+            height: currentSize.height
+          }
+        };
+      })
+    );
+    updateNodeInternals(id);
+  }, [currentSize, id, setNodes, updateNodeInternals]);
   
   // Track render performance
   useEffect(() => {
@@ -136,7 +183,20 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
    */
   const detectPorts = useCallback((): Port[] => {
     const edges = getEdges();
-    const containedNodeIds = new Set(containedNodes.map(n => n.id));
+    const explicitChildIds = new Set(
+      getNodes()
+        .filter(node => {
+          const directParent = (node as { parentNode?: string }).parentNode;
+          const dataParent = (node.data as { parentNode?: string } | undefined)
+            ?.parentNode;
+          return directParent === id || dataParent === id;
+        })
+        .map(node => node.id)
+    );
+    const containedNodeIds = new Set([
+      ...containedNodes.map(n => n.id),
+      ...explicitChildIds
+    ]);
     const detectedPorts: Port[] = [];
     
     edges.forEach(edge => {
@@ -175,7 +235,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     });
     
     return detectedPorts;
-  }, [containedNodes, getEdges]);
+  }, [containedNodes, getEdges, getNodes, id]);
   
   /**
    * Handle collapse/expand toggle
@@ -190,7 +250,20 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     // Update nodes with new collapsed state
     if (newCollapsed) {
       // Store which nodes we're hiding
-      const hiddenNodeIds = containedNodes.map(n => n.id);
+      const hiddenNodeIds = Array.from(
+        new Set([
+          ...containedNodes.map(n => n.id),
+          ...getNodes()
+            .filter(node => {
+              const directParent = (node as { parentNode?: string }).parentNode;
+              const dataParent = (
+                node.data as { parentNode?: string } | undefined
+              )?.parentNode;
+              return directParent === id || dataParent === id;
+            })
+            .map(node => node.id)
+        ])
+      );
       
       setNodes((nodes) => 
         nodes.map((node) => {
@@ -265,121 +338,61 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       })
     );
   }, [id, isLocked, containedNodes, setNodes]);
-  
-  /**
-   * Handle resize start
-   */
-  const handleResizeStart = useCallback((e: React.MouseEvent, direction: ResizeDirection) => {
-    if (isLocked) {return;}
-    
-    e.stopPropagation();
-    e.preventDefault();
-    
+
+  // Built-in React Flow resizer callbacks
+  const canResize = !isCollapsed && !isLocked;
+
+  const handleResizeStart = useCallback(() => {
+    if (!canResize) {
+      return;
+    }
     setIsResizing(true);
-    
-    // Disable node dragging during resize
-    setNodes((nodes) =>
-      nodes.map((node) => {
+    setNodes(nodes =>
+      nodes.map(node => {
         if (node.id === id) {
           return { ...node, draggable: false };
         }
         return node;
       })
     );
-    
-    const startX = e.clientX;
-    const startY = e.clientY;
-    const startWidth = sizeRef.current.width;
-    const startHeight = sizeRef.current.height;
-    const startLeft = xPos;
-    const startTop = yPos;
-    const startRight = startLeft + startWidth;
-    const startBottom = startTop + startHeight;
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      const deltaX = e.clientX - startX;
-      const deltaY = e.clientY - startY;
-      
-      let newWidth = startWidth;
-      let newHeight = startHeight;
-      let newX = startLeft;
-      let newY = startTop;
-      
-      if (direction.includes('e')) {newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth + deltaX);}
-      if (direction.includes('w')) {
-        newWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth - deltaX);
-        newX = startRight - newWidth;
-      }
-      if (direction.includes('s')) {newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight + deltaY);}
-      if (direction.includes('n')) {
-        newHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight - deltaY);
-        newY = startBottom - newHeight;
-      }
-      
-      console.log('[Resize] Mouse move:', {
-        deltaX,
-        deltaY,
-        newWidth,
-        newHeight,
-        newX,
-        newY,
-        direction
-      });
-      
-      sizeRef.current = { width: newWidth, height: newHeight };
-      setCurrentSize({ width: newWidth, height: newHeight });
-      
-      // Update node dimensions
-      setNodes((nodes) =>
-        nodes.map((node) => {
-          if (node.id === id) {
-            console.log('[Resize] Updating node dimensions:', {
-              id,
-              newWidth,
-              newHeight,
-              position: { x: newX, y: newY }
-            });
-            return {
-              ...node,
-              width: newWidth,
-              height: newHeight,
-              position: { ...node.position, x: newX, y: newY },
-              data: { ...node.data, width: newWidth, height: newHeight }
-            };
-          }
-          return node;
-        })
-      );
-      updateNodeInternals(id);
-    };
-    
-    const handleMouseUp = () => {
-      setIsResizing(false);
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      
-      // Re-enable node dragging
-      setNodes((nodes) =>
-        nodes.map((node) => {
+  }, [canResize, id, setNodes]);
+
+  const handleResize = useCallback(
+    (_event: unknown, params: { width?: number; height?: number }) => {
+      const nextSize = {
+        width: Math.max(MIN_EXPANDED_WIDTH, params.width ?? sizeRef.current.width),
+        height: Math.max(MIN_EXPANDED_HEIGHT, params.height ?? sizeRef.current.height)
+      };
+      sizeRef.current = nextSize;
+      setCurrentSize(nextSize);
+    },
+    []
+  );
+
+  const handleResizeEnd = useCallback(
+    (_event: unknown, params: { width?: number; height?: number }) => {
+      const finalSize = {
+        width: Math.max(MIN_EXPANDED_WIDTH, params.width ?? sizeRef.current.width),
+        height: Math.max(MIN_EXPANDED_HEIGHT, params.height ?? sizeRef.current.height)
+      };
+      expandedSizeRef.current = finalSize;
+      sizeRef.current = finalSize;
+      setCurrentSize(finalSize);
+
+      setNodes(nodes =>
+        nodes.map(node => {
           if (node.id === id) {
             return { ...node, draggable: !isLocked };
           }
           return node;
         })
       );
-      
-      // Save expanded size
-      if (!isCollapsed) {
-        expandedSizeRef.current = currentSize;
-      }
-      
+
+      setIsResizing(false);
       perfMonitor.record('boundingBox.resize', 1);
-      updateNodeInternals(id);
-    };
-    
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  }, [isLocked, isCollapsed, id, setNodes, perfMonitor, recalculate, xPos, yPos]);
+    },
+    [id, isLocked, perfMonitor, setNodes]
+  );
   
   /**
    * Handle title and description edits
@@ -423,23 +436,56 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   
   // Box style with animations
   const boxStyle: React.CSSProperties = {
-    width: `${currentSize.width}px`,
-    height: `${currentSize.height}px`,
+    width: currentSize.width,
+    height: currentSize.height,
     border: `${data.borderWidth || 2}px solid ${data.borderColor || DEFAULT_REGION_COLORS[0]}`,
     borderRadius: `${BORDER_RADIUS}px`,
     position: 'relative',
     overflow: 'visible',
     transition: isAnimating ? 'all 0.2s ease-in-out' : 'none',
-    zIndex: selected ? 2000 : BOUNDING_BOX,
+    // Keep above its children enough to receive clicks for selection/resize but below other UI layers
+    zIndex: selected ? 2000 : BOUNDING_BOX + 1,
     boxSizing: 'border-box',
-    pointerEvents: 'none'
+    // Allow interactions for resize handles and header controls while keeping children draggable
+    pointerEvents: 'auto'
   };
   
+  // Ensure the outer React Flow node wrapper gets updated width/height.
+  // React Flow uses the wrapper dimensions for hit-testing and selection,
+  // so force-sync it when currentSize changes to avoid stale measurements.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  useLayoutEffect(() => {
+    const wrapper = rootRef.current?.closest<HTMLElement>('.react-flow__node');
+    if (!wrapper) {return;}
+
+    wrapper.style.width = `${currentSize.width}px`;
+    wrapper.style.height = `${currentSize.height}px`;
+    wrapper.style.minWidth = `${currentSize.width}px`;
+    wrapper.style.minHeight = `${currentSize.height}px`;
+  }, [currentSize]);
+
   return (
     <div
+      ref={rootRef}
       className={`enhanced-bounding-box enhanced-bounding-box-refactored ${selected ? 'selected' : ''} ${isResizing ? 'resizing' : ''} ${isCollapsed ? 'collapsed' : ''}`}
       style={boxStyle}
     >
+      <NodeResizer
+        minWidth={MIN_EXPANDED_WIDTH}
+        minHeight={MIN_EXPANDED_HEIGHT}
+        isVisible={selected && canResize}
+        onResizeStart={handleResizeStart}
+        onResize={handleResize}
+        onResizeEnd={handleResizeEnd}
+        lineStyle={{ borderColor: data.borderColor || DEFAULT_REGION_COLORS[0] }}
+        handleStyle={{
+          width: 10,
+          height: 10,
+          borderRadius: 2,
+          border: '2px solid #fff',
+          background: data.borderColor || DEFAULT_REGION_COLORS[0]
+        }}
+      />
       {/* Background layer */}
       <div 
         className="bounding-box-background" 
@@ -523,12 +569,6 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         detectPorts={detectPorts}
       />
       
-      {/* Resize handles */}
-      <ResizeHandles
-        visible={(selected || isResizing) && !isCollapsed}
-        isLocked={isLocked}
-        onResizeStart={handleResizeStart}
-      />
     </div>
   );
 };
