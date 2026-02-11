@@ -31,8 +31,16 @@ export function useNodeContainment(
   const missCountRef = useRef(0);
 
   const containedNodes = useMemo(() => {
+    const boxNode = allNodes.find(n => n.id === boxId);
+    if (!boxNode) {
+      return [];
+    }
+
     const nodeGeoSignature = allNodes
-      .map(n => `${n.id}:${n.position?.x ?? 0}:${n.position?.y ?? 0}:${n.width ?? 0}:${n.height ?? 0}`)
+      .map(
+        n =>
+          `${n.id}:${n.position?.x ?? 0}:${n.position?.y ?? 0}:${n.width ?? 0}:${n.height ?? 0}`
+      )
       .sort()
       .join('|');
     const boxSignature = `${boxPosition.x}:${boxPosition.y}:${boxSize.width}:${boxSize.height}:${expandedSize.width}:${expandedSize.height}:${isCollapsed}`;
@@ -58,8 +66,21 @@ export function useNodeContainment(
 
     const checkSize = isCollapsed ? expandedSize : boxSize;
     const contained = allNodes.filter(node => {
-      if (node.parentNode === boxId) {
-        return true;
+      if (node.id === boxId) {
+        return false;
+      }
+
+      // Region boxes only contain free nodes, never nested groups/containers.
+      if (node.parentNode) {
+        return false;
+      }
+
+      if (
+        node.type === 'enhancedBoundingBox' ||
+        node.type === 'boundingBox' ||
+        node.type === 'fragmentContainer'
+      ) {
+        return false;
       }
 
       const nodeX = node.position?.x ?? 0;
@@ -96,12 +117,23 @@ export function useNodeContainment(
     }
 
     return contained;
-  }, [allNodes, boxId, perfMonitor]);
+  }, [
+    allNodes,
+    boxId,
+    perfMonitor,
+    boxPosition.x,
+    boxPosition.y,
+    boxSize.height,
+    boxSize.width,
+    expandedSize.height,
+    expandedSize.width,
+    isCollapsed
+  ]);
 
   // Force recalculation
   const recalculate = useCallback(() => {
     cacheRef.current.clear();
-    console.debug(`[Cache Clear] Forced recalculation for ${boxId}`);
+    // Silent clear to avoid noisy logs during drag/resize
   }, [boxId]);
 
   // Calculate cache hit rate

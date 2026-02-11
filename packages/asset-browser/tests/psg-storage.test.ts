@@ -7,8 +7,10 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
   });
 
   test('gracefully handles null supabase client', async () => {
+    const holder = { supabase: null as any };
     jest.doMock('@promptscape/core/utils/supabaseClient', () => ({
-      supabase: null
+      getSupabase: () => holder.supabase,
+      supabase: holder.supabase
     }));
     const { listUserGraphs, getUserGraph, putUserGraph } = await import(
       '@promptscape/core/utils/psgStorage'
@@ -31,8 +33,12 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
       error: null
     });
     const fromMock = jest.fn(() => ({ list: listMock }));
+    const holder = {
+      supabase: { storage: { from: fromMock } } as any
+    };
     jest.doMock('@promptscape/core/utils/supabaseClient', () => ({
-      supabase: { storage: { from: fromMock } }
+      getSupabase: () => holder.supabase,
+      supabase: holder.supabase
     }));
     const { listUserGraphs } = await import(
       '@promptscape/core/utils/psgStorage'
@@ -55,8 +61,12 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
       .fn()
       .mockResolvedValue({ data: { text: async () => payload }, error: null });
     const fromMock = jest.fn(() => ({ download: downloadMock }));
+    const holder = {
+      supabase: { storage: { from: fromMock } } as any
+    };
     jest.doMock('@promptscape/core/utils/supabaseClient', () => ({
-      supabase: { storage: { from: fromMock } }
+      getSupabase: () => holder.supabase,
+      supabase: holder.supabase
     }));
     const { getUserGraph } = await import('@promptscape/core/utils/psgStorage');
 
@@ -70,8 +80,12 @@ describe('core/utils/psgStorage via asset-browser test runner', () => {
   test('putUserGraph uploads with application/json and upsert true', async () => {
     const uploadMock = jest.fn().mockResolvedValue({ data: null, error: null });
     const fromMock = jest.fn(() => ({ upload: uploadMock }));
+    const holder = {
+      supabase: { storage: { from: fromMock } } as any
+    };
     jest.doMock('@promptscape/core/utils/supabaseClient', () => ({
-      supabase: { storage: { from: fromMock } }
+      getSupabase: () => holder.supabase,
+      supabase: holder.supabase
     }));
     const { putUserGraph } = await import('@promptscape/core/utils/psgStorage');
 

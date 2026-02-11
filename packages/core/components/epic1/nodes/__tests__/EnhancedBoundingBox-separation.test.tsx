@@ -137,7 +137,10 @@ describe('EnhancedBoundingBox - System Separation', () => {
       // Check that setNodes was called
       expect(mockSetNodes).toHaveBeenCalled();
       
-      const setNodesCallback = mockSetNodes.mock.calls[0][0];
+      const setNodeCallbacks = mockSetNodes.mock.calls
+        .map(call => call[0])
+        .filter((fn): fn is (nodes: any[]) => any[] => typeof fn === 'function');
+      const setNodesCallback = setNodeCallbacks[setNodeCallbacks.length - 1];
       const updatedNodes = setNodesCallback(nodes);
 
       // node-1 should NOT move (has parentNode)
@@ -199,7 +202,10 @@ describe('EnhancedBoundingBox - System Separation', () => {
         </ReactFlowProvider>
       );
 
-      const setNodesCallback = mockSetNodes.mock.calls[0][0];
+      const setNodeCallbacks = mockSetNodes.mock.calls
+        .map(call => call[0])
+        .filter((fn): fn is (nodes: any[]) => any[] => typeof fn === 'function');
+      const setNodesCallback = setNodeCallbacks[setNodeCallbacks.length - 1];
       const updatedNodes = setNodesCallback(nodes);
 
       // node-1 should not move even though it has box-1 as parent
