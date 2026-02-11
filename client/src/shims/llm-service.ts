@@ -6,10 +6,11 @@ const ENV_VARS: Record<string, string | undefined> =
     ? import.meta.env
     : {
         VITE_API_URL: undefined,
+        VITE_API_BASE_URL: undefined,
         VITE_VERCEL_PROTECTION_BYPASS: undefined
       };
 
-const API_BASE = ENV_VARS.VITE_API_URL ?? '';
+const API_BASE = ENV_VARS.VITE_API_URL ?? ENV_VARS.VITE_API_BASE_URL ?? '';
 
 function withBase(path: string): string {
   if (!path) {
@@ -102,10 +103,7 @@ export class LLMService {
   constructor(config: JsonRecord = {}) {
     this.config = config;
   }
-  async parse(
-    prompt: string,
-    request: JsonRecord = {}
-  ): Promise<JsonRecord> {
+  async parse(prompt: string, request: JsonRecord = {}): Promise<JsonRecord> {
     // CACHE BUST: 2025-01-10-20:10 - Using hyphenated paths for Vercel
     // Try the new endpoint first to bypass caching issues
     try {
@@ -118,16 +116,45 @@ export class LLMService {
     }
   }
   async complete(request: JsonRecord): Promise<JsonRecord> {
-    return postJson('/api/llm-complete', { config: this.config, request });
+    try {
+      return await postJson('/api/llm/complete', {
+        config: this.config,
+        request
+      });
+    } catch (error) {
+      console.warn('Falling back to /api/llm-complete due to error:', error);
+      return postJson('/api/llm-complete', { config: this.config, request });
+    }
   }
   async suggest(request: JsonRecord): Promise<JsonRecord> {
-    return postJson('/api/llm-suggest', { config: this.config, request });
+    try {
+      return await postJson('/api/llm/suggest', {
+        config: this.config,
+        request
+      });
+    } catch {
+      return postJson('/api/llm-suggest', { config: this.config, request });
+    }
   }
   async metadata(request: JsonRecord): Promise<JsonRecord> {
-    return postJson('/api/llm-metadata', { config: this.config, request });
+    try {
+      return await postJson('/api/llm/metadata', {
+        config: this.config,
+        request
+      });
+    } catch {
+      return postJson('/api/llm-metadata', { config: this.config, request });
+    }
   }
   async refine(request: JsonRecord): Promise<JsonRecord> {
-    return postJson('/api/llm-refine', { config: this.config, request });
+    try {
+      return await postJson('/api/llm/refine', {
+        config: this.config,
+        request
+      });
+    } catch {
+      return postJson('/api/llm-refine', { config: this.config, request });
+    }
   }
 }
 export default LLMService;

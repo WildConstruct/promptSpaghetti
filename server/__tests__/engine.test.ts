@@ -1,8 +1,18 @@
 // server/__tests__/engine.test.ts
-import { executeGraph } from '../src/engine';
+import { executeGraph } from '../src/engine-basic';
 import { Graph } from '../../packages/core/graphSchema';
 
 describe('executeGraph deterministic behaviour', () => {
+  let logSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    logSpy.mockRestore();
+  });
+
   const buildGraph = (seed: number): Graph =>
     ({
       seed,

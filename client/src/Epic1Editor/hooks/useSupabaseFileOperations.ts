@@ -2,11 +2,14 @@ import { useCallback, useState, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
 import { getSupabase } from '@promptscape/core/utils/supabaseClient';
-import { readPsg, type PSGFile } from '@promptscape/core';
+import { readPsg } from '@promptscape/core';
 import type {
+  Graph,
   GraphNode as PSGGraphNode,
   GraphEdge as PSGGraphEdge
 } from '@promptscape/core';
+import { parsePSG, convertPSGToPSGLib } from '@promptscape/core/fileFormats/psg';
+import type { PSGLibFile } from '@promptscape/core/fileFormats/psglib';
 
 // Resolve Supabase client lazily at call sites to avoid capturing null
 
@@ -294,10 +297,12 @@ export const useSupabaseFileOperations = ({
     [showToast, fetchSavedGraphs]
   );
 
-  // Convert a PSG file to React Flow nodes/edges with sensible defaults
-  const convertPsgToReactFlow = useCallback(
-    (psg: PSGFile): { nodes: Node[]; edges: Edge[] } => {
-      const layout = psg.graph.layout as Record<string, unknown> | undefined;
+  const CONTAINER_NODE_TYPES = new Set(['enhancedBoundingBox', 'fragmentContainer']);
+
+  // Convert a PSG/PSGLib graph to React Flow nodes/edges with sensible defaults
+  const convertGraphToReactFlow = useCallback(
+    (graph: Graph): { nodes: Node[]; edges: Edge[] } => {
+      const layout = graph.layout as Record<string, unknown> | undefined;
       const positionsUnknown =
         layout && (layout as Record<string, unknown>).positions;
       const isPositionsMap = (
@@ -326,8 +331,10 @@ export const useSupabaseFileOperations = ({
       const ySpacing = 160;
       const cols = 3;
 
-      const nodes: Node[] = (psg.graph.nodes as PSGGraphNode[]).map(
-        (gn: PSGGraphNode, index: number) => {
+      const runtimeNodes = (graph.nodes as PSGGraphNode[]).filter(
+        gn => !CONTAINER_NODE_TYPES.has(gn.type)
+      );
+      const nodes: Node[] = runtimeNodes.map((gn: PSGGraphNode, index: number) => {
           const pos = positions[gn.id] || {
             x: (index % cols) * xSpacing + 200,
             y: Math.floor(index / cols) * ySpacing + 120
@@ -390,43 +397,27 @@ export const useSupabaseFileOperations = ({
             position: pos,
             data
           } as Node;
-        }
-      );
+        });
 
-      const edges: Edge[] = (psg.graph.edges as PSGGraphEdge[]).map(
-        (ge: PSGGraphEdge) => ({
+      const validNodeIds = new Set(runtimeNodes.map(node => node.id));
+      const edges: Edge[] = (graph.edges as PSGGraphEdge[])
+        .filter(
+          (ge: PSGGraphEdge) =>
+            validNodeIds.has(ge.source) && validNodeIds.has(ge.target)
+        )
+        .map((ge: PSGGraphEdge) => ({
           id: ge.id,
           source: ge.source,
           target: ge.target,
           type: 'smoothstep',
           sourceHandle: 'source',
           targetHandle: 'target'
-        })
-      );
+        }));
 
       return { nodes, edges };
     },
-    []
-  );
-
-  // Programmatically load PSG content (as string) into the editor
-  const loadFromPsgContent = useCallback(
-    (psgText: string) => {
-      try {
-        const psg = readPsg(psgText, { strictValidation: true });
-        const { nodes, edges } = convertPsgToReactFlow(psg);
-        onNodesChange(nodes);
-        onEdgesChange(edges);
-        onEditorKeyChange(prev => prev + 1);
-        localStorage.setItem('epic1-graph', JSON.stringify({ nodes, edges }));
-        showToast('Graph loaded from PSG', 'success');
-      } catch (err) {
-        console.error('Failed to parse PSG content:', err);
-        showToast('Failed to load PSG content', 'error');
-      }
-    },
     [
-      convertPsgToReactFlow,
+      convertGraphToReactFlow,
       onNodesChange,
       onEdgesChange,
       onEditorKeyChange,
@@ -448,8 +439,9 @@ export const useSupabaseFileOperations = ({
             const text = String(evt.target?.result || '');
             const name = file.name.toLowerCase();
             if (name.endsWith('.psg')) {
-              const psg = readPsg(text, { strictValidation: true });
-              const { nodes, edges } = convertPsgToReactFlow(psg);
+              const fragment = parsePSG(text);
+              const psglib: PSGLibFile = convertPSGToPSGLib(fragment);
+              const { nodes, edges } = convertGraphToReactFlow(psglib.graph);
               onNodesChange(nodes);
               onEdgesChange(edges);
               onEditorKeyChange(prev => prev + 1);
@@ -465,7 +457,7 @@ export const useSupabaseFileOperations = ({
             const data = JSON.parse(text);
             if (data && data.kind === 'graph' && data.version && data.graph) {
               const psg = readPsg(text, { strictValidation: false });
-              const { nodes, edges } = convertPsgToReactFlow(psg);
+              const { nodes, edges } = convertGraphToReactFlow(psg.graph);
               onNodesChange(nodes);
               onEdgesChange(edges);
               onEditorKeyChange(prev => prev + 1);
@@ -501,7 +493,7 @@ export const useSupabaseFileOperations = ({
     onEdgesChange,
     onEditorKeyChange,
     showToast,
-    convertPsgToReactFlow
+    convertGraphToReactFlow
   ]);
 
   return {

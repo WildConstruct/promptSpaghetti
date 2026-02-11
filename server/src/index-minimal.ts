@@ -42,9 +42,7 @@ server.get('/health', async () => {
 });
 
 // Preview endpoint - core functionality
-server.post<{ Body: PreviewBody }>(
-  '/preview',
-  async (request, reply) => {
+server.post<{ Body: PreviewBody }>('/preview', async (request, reply) => {
   try {
     const { graph, runs = 3, seedStart = 1 } = request.body;
 
@@ -56,7 +54,7 @@ server.post<{ Body: PreviewBody }>(
     for (let i = 0; i < runs; i++) {
       const seed = seedStart + i;
       try {
-        const result = await executeGraph(graph, `session-${seed}`);
+        const result = await executeGraph(graph);
         results.push({
           seed,
           output: result.outputs.join('\n')
@@ -78,13 +76,10 @@ server.post<{ Body: PreviewBody }>(
       error instanceof Error ? error.message : 'Internal server error';
     return reply.status(500).send({ error: message });
   }
-}
-);
+});
 
 // LLM endpoints for Epic 2
-server.post<{ Body: ParseBody }>(
-  '/api/llm/parse',
-  async (request, reply) => {
+server.post<{ Body: ParseBody }>('/api/llm/parse', async (request, reply) => {
   try {
     const { prompt, mode = 'standard' } = request.body;
 
@@ -101,8 +96,7 @@ server.post<{ Body: ParseBody }>(
     const message = error instanceof Error ? error.message : 'Parse failed';
     return reply.status(500).send({ error: message });
   }
-}
-);
+});
 
 // LLM completion endpoint
 server.post<{ Body: CompleteBody }>(

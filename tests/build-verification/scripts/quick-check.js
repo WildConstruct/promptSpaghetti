@@ -29,6 +29,7 @@ console.log(chalk.yellow('🏗️  Checking Monorepo Structure:'));
 const rootPkgPath = path.resolve('./package.json');
 const clientPkgPath = path.resolve('./client/package.json');
 const corePkgPath = path.resolve('./packages/core/package.json');
+const pnpmWorkspacePath = path.resolve('./pnpm-workspace.yaml');
 
 if (fs.existsSync(rootPkgPath)) {
   const rootPkg = JSON.parse(fs.readFileSync(rootPkgPath, 'utf8'));
@@ -37,6 +38,18 @@ if (fs.existsSync(rootPkgPath)) {
   if (rootPkg.workspaces) {
     console.log(
       chalk.green(`  ✓ Workspaces configured: ${rootPkg.workspaces.join(', ')}`)
+    );
+  } else if (fs.existsSync(pnpmWorkspacePath)) {
+    const workspaceText = fs.readFileSync(pnpmWorkspacePath, 'utf8');
+    const packageLines = workspaceText
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.startsWith('-'))
+      .map(line => line.replace(/^-+\s*/, '').replace(/['"]/g, ''));
+    console.log(
+      chalk.green(
+        `  ✓ pnpm workspace configured: ${packageLines.join(', ') || '(detected)'}`
+      )
     );
   } else {
     console.log(chalk.red('  ✗ No workspaces configuration found!'));
@@ -169,7 +182,8 @@ if (!fs.existsSync(path.resolve('./client/node_modules/zod'))) {
 }
 if (
   !fs.existsSync(rootPkgPath) ||
-  !JSON.parse(fs.readFileSync(rootPkgPath, 'utf8')).workspaces
+  (!JSON.parse(fs.readFileSync(rootPkgPath, 'utf8')).workspaces &&
+    !fs.existsSync(pnpmWorkspacePath))
 ) {
   issues.push('Workspaces configuration missing');
 }

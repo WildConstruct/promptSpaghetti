@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
  */
+import { jest } from '@jest/globals';
 import { LLMService } from '../llm-service';
 
 describe('LLMService browser adapter', () => {
@@ -30,6 +31,10 @@ describe('LLMService browser adapter', () => {
   });
 
   it('throws on non-OK response', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 500
+    });
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: false,
       status: 500
