@@ -10,25 +10,25 @@ import 'openai/shims/node';
 // Mock performance API for tests
 Object.defineProperty(global, 'performance', {
   value: {
-    now: jest.fn(() => Date.now()),
+    now: jest.fn(() => Date.now())
   },
-  writable: true,
+  writable: true
 });
 
 // Mock navigation API to prevent jsdom errors
 Object.defineProperty(window, 'navigation', {
   value: {
-    navigate: jest.fn(),
+    navigate: jest.fn()
   },
-  writable: true,
+  writable: true
 });
 
 // Mock URL navigation to prevent jsdom errors
 const originalLocation = window.location;
 delete window.location;
-window.location = { 
-  ...originalLocation, 
-  assign: jest.fn(), 
+window.location = {
+  ...originalLocation,
+  assign: jest.fn(),
   replace: jest.fn(),
   href: 'http://localhost:3000',
   origin: 'http://localhost:3000',
@@ -43,14 +43,18 @@ window.location = {
 
 // Mock HTMLAnchorElement.prototype to prevent navigation errors
 Object.defineProperty(HTMLAnchorElement.prototype, 'href', {
-  get() { return this.getAttribute('href') || ''; },
-  set(value) { this.setAttribute('href', value); }
+  get() {
+    return this.getAttribute('href') || '';
+  },
+  set(value) {
+    this.setAttribute('href', value);
+  }
 });
 
 // Stop all navigation attempts
 Object.defineProperty(window, 'onbeforeunload', {
   value: null,
-  writable: true,
+  writable: true
 });
 
 // Add fetch polyfill for OpenAI
@@ -130,7 +134,9 @@ if (typeof globalThis.TextDecoder === 'undefined') {
   }
 
   if (typeof proto.arrayBuffer !== 'function') {
-    proto.arrayBuffer = function arrayBufferShim(this: Blob): Promise<ArrayBuffer> {
+    proto.arrayBuffer = function arrayBufferShim(
+      this: Blob
+    ): Promise<ArrayBuffer> {
       if (ResponseCtor) {
         return new ResponseCtor(this).arrayBuffer();
       }
@@ -140,3 +146,61 @@ if (typeof globalThis.TextDecoder === 'undefined') {
     };
   }
 })();
+
+type ConsoleMethod = 'debug' | 'info' | 'log' | 'warn' | 'error';
+
+const SUPPRESSED_LOG_PATTERNS: RegExp[] = [
+  /Warning: An update to .* inside a test was not wrapped in act/i,
+  /Not implemented: navigation \(except hash changes\)/i,
+  /\[TutorialStepValidator\] Validating step:/i,
+  /\[ElementDetector\] querySelector failed/i,
+  /\[ElementDetector\] Element ".*" not found after/i,
+  /\[ElementDetector\] Timeout: Element ".*" not found within/i,
+  /\[ElementDetector\] Found element ".*"( immediately| after \d+ attempts| via MutationObserver)/i,
+  /LLM parse attempt \d+ failed:/i,
+  /LLM parse failed, falling back to standard/i,
+  /LLM parsing failed:/i,
+  /\[Parser Notice\] Using standard parser due to LLM unavailability/i,
+  /Dedicated extractMetadata call failed:/i,
+  /LLM completion metadata extraction failed:/i,
+  /LLM extraction failed, using fallback:/i,
+  /Metadata extraction failed:/i,
+  /Failed to decompress data/i,
+  /Storage quota exceeded/i,
+  /Error saving state:/i
+];
+
+const shouldSuppressConsoleOutput = (args: unknown[]): boolean => {
+  const message = args
+    .map(value => {
+      if (typeof value === 'string') {
+        return value;
+      }
+      if (value instanceof Error) {
+        return `${value.name}: ${value.message}`;
+      }
+      try {
+        return JSON.stringify(value);
+      } catch {
+        return String(value);
+      }
+    })
+    .join(' ');
+
+  return SUPPRESSED_LOG_PATTERNS.some(pattern => pattern.test(message));
+};
+
+(['debug', 'info', 'log', 'warn', 'error'] as const).forEach(method => {
+  const original = console[method].bind(console);
+  const filtered = (...args: unknown[]) => {
+    if (shouldSuppressConsoleOutput(args)) {
+      return;
+    }
+    original(...args);
+  };
+  Object.defineProperty(console, method, {
+    value: filtered,
+    writable: true,
+    configurable: true
+  });
+});
