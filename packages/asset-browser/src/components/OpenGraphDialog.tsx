@@ -1,8 +1,10 @@
 import React from 'react';
 import { deriveEnableSupabaseProp } from '@promptscape/core/utils/supabaseFeature';
-import { readPsg } from '@promptscape/core';
-import { looksLikeLegacyGraphWrapper } from '@promptscape/core/utils/psgCodec';
-import { parsePsgWithCompatibility } from '@promptscape/core/fileFormats/psg';
+import {
+  looksLikeLegacyGraphWrapper,
+  parsePsgWithCompatibility,
+  readPsg
+} from '@promptscape/core';
 import { useUserId } from '../user/UserProvider';
 import {
   loadServerGraphs,
@@ -10,6 +12,7 @@ import {
 } from '../services/GraphManifestLoader';
 import { EmptyState } from './ui/EmptyState';
 import { ErrorState } from './ui/ErrorState';
+import { validateOpenedGraphPayload } from '../utils/graphOpenValidation';
 
 export type OpenGraphDialogProps = {
   isOpen: boolean;
@@ -50,10 +53,22 @@ function parseGraphPayload(text: string, nameHint = ''): unknown {
 
   if (normalizedName.endsWith('.psg')) {
     try {
-      return parsePsgWithCompatibility(text);
+      const validated = validateOpenedGraphPayload(
+        parsePsgWithCompatibility(text)
+      );
+      if (!validated.ok) {
+        throw new Error(validated.error);
+      }
+      return validated.data;
     } catch {
       try {
-        return readPsg(text, { strictValidation: false });
+        const validated = validateOpenedGraphPayload(
+          readPsg(text, { strictValidation: false })
+        );
+        if (!validated.ok) {
+          throw new Error(validated.error);
+        }
+        return validated.data;
       } catch {
         throw new Error('Invalid or unsupported .psg file');
       }
@@ -62,7 +77,11 @@ function parseGraphPayload(text: string, nameHint = ''): unknown {
 
   const json = parseJson();
   if (looksLikeLegacyGraphWrapper(json)) {
-    return json;
+    const validated = validateOpenedGraphPayload(json);
+    if (!validated.ok) {
+      throw new Error(validated.error);
+    }
+    return validated.data;
   }
   throw new Error('Unsupported file type. Open a .psg file.');
 }

@@ -22,11 +22,17 @@ export {
 
 // Legacy graph-wrapper PSG codec.
 // Keep exported for compatibility while active surfaces migrate away from it.
-export { readPsg, writePsg, fromLegacyGraph } from './utils/psgCodec';
+export {
+  readPsg,
+  writePsg,
+  fromLegacyGraph,
+  looksLikeLegacyGraphWrapper
+} from './utils/psgCodec';
 
 // Canonical flat PSG fragment/source helpers for the MVP surface.
 export {
   parsePSG,
+  parsePsgWithCompatibility,
   convertPSGToPSGLib,
   exportGraphToPSG,
   type PSGFile as FlatPSGFile,

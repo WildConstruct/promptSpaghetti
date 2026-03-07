@@ -1,6 +1,6 @@
 import React from 'react';
+import { exportGraphToPSG } from '@promptscape/core';
 import { deriveEnableSupabaseProp } from '@promptscape/core/utils/supabaseFeature';
-import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 import { useUserId } from '../user/UserProvider';
 
 export type SaveGraphDialogProps = {

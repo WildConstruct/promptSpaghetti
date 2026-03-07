@@ -177,8 +177,14 @@ function loadLegacyGraphWrapper(
   strictValidation: boolean
 ): LoadedPsgDocument {
   const psgFile = readPsg(psgText, { strictValidation });
+  const validated = validateEditorGraphPayload(
+    convertGraphToReactFlow(psgFile.graph)
+  );
+  if (!validated.ok) {
+    throw new Error(validated.error);
+  }
   return {
-    ...convertGraphToReactFlow(psgFile.graph),
+    ...validated.data,
     source: 'legacy'
   };
 }
