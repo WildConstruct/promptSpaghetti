@@ -631,21 +631,6 @@ export async function insertPresetFromDrop(
 }
 
 /**
- * Load preset from file path (for Asset Browser integration)
- */
-export async function loadPresetFromPath(
-  path: string,
-  options: InsertionOptions = {}
-): Promise<InsertionResult> {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Failed to load preset: ${response.statusText}`);
-  }
-  const content = await response.text();
-  return insertPreset(content, options);
-}
-
-/**
  * Validate preset before insertion
  */
 export function validatePreset(
