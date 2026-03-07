@@ -13,19 +13,18 @@ import React, {
 import {
   useReactFlow,
   Position,
-  useUpdateNodeInternals,
-  NodeResizer
+  useUpdateNodeInternals
 } from 'reactflow';
 
 // Import types and constants
-import { 
-  EnhancedBoundingBoxData, 
+import {
+  EnhancedBoundingBoxData,
   Port,
-  Size 
+  Size
 } from './types';
-import { 
-  BOUNDING_BOX_CONSTANTS, 
-  DEFAULT_REGION_COLORS 
+import {
+  BOUNDING_BOX_CONSTANTS,
+  DEFAULT_REGION_COLORS
 } from './utils/constants';
 
 // Import sub-components
@@ -69,7 +68,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const perfMonitor = PerformanceMonitor.getInstance();
   const { setNodes, getNodes, getEdges } = useReactFlow();
   const updateNodeInternals = useUpdateNodeInternals();
-  
+
   // State management
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState(data.title || 'Region');
@@ -79,20 +78,21 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const [isCollapsed, setIsCollapsed] = useState(data.isCollapsed || false);
   const [isLocked, setIsLocked] = useState(data.locked || false);
   const [ports] = useState<Port[]>(data.ports || []);
-  
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
   // Size refs for maintaining state between collapsed/expanded
-  const expandedSizeRef = useRef<Size>({ 
-    width: data.width || DEFAULT_WIDTH, 
-    height: data.height || DEFAULT_HEIGHT 
+  const expandedSizeRef = useRef<Size>({
+    width: data.width || DEFAULT_WIDTH,
+    height: data.height || DEFAULT_HEIGHT
   });
   const sizeRef = useRef<Size>({
     width: isCollapsed ? COLLAPSED_WIDTH : (data.width || DEFAULT_WIDTH),
     height: isCollapsed ? COLLAPSED_HEIGHT : (data.height || DEFAULT_HEIGHT)
   });
-  
+
   // State for current size to trigger re-renders during resize
   const [currentSize, setCurrentSize] = useState<Size>(sizeRef.current);
-  
+
   // Use performance-optimized hooks
   const { containedNodes, cacheHitRate, recalculate } = useNodeContainment(
     id,
@@ -102,7 +102,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     expandedSizeRef.current,
     isCollapsed
   );
-  
+
   const { size, isAnimating } = useCollapseAnimation(
     isCollapsed,
     expandedSizeRef.current,
@@ -113,7 +113,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       }
     }
   );
-  
+
   useGroupMovement(
     id,
     isLocked,
@@ -121,18 +121,49 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     { x: xPos, y: yPos },
     containedNodes
   );
-  
+
   const { applyLayout, isLayouting } = useAutoLayout(
     id,
     containedNodes,
     data.autoLayout
   );
-  
-  // Update size ref and state when size changes
+
+  // Follow collapse animation frames, but do not overwrite manual resize updates.
   useEffect(() => {
+    if (!isAnimating) {
+      return;
+    }
     sizeRef.current = size;
     setCurrentSize(size);
-  }, [size]);
+  }, [isAnimating, size]);
+
+  // Sync externally-provided dimensions into local resize state when the node
+  // is updated by import/drop logic rather than manual pointer resizing.
+  useEffect(() => {
+    if (isAnimating || isResizing || isCollapsed) {
+      return;
+    }
+
+    const nextWidth = data.width || DEFAULT_WIDTH;
+    const nextHeight = data.height || DEFAULT_HEIGHT;
+    if (
+      nextWidth === sizeRef.current.width &&
+      nextHeight === sizeRef.current.height
+    ) {
+      return;
+    }
+
+    const nextSize = { width: nextWidth, height: nextHeight };
+    expandedSizeRef.current = nextSize;
+    sizeRef.current = nextSize;
+    setCurrentSize(nextSize);
+  }, [
+    data.height,
+    data.width,
+    isAnimating,
+    isCollapsed,
+    isResizing
+  ]);
 
   // Keep React Flow internals in sync with the rendered size (both initial load and during resize)
   useEffect(() => {
@@ -156,6 +187,10 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           ...node,
           width: currentSize.width,
           height: currentSize.height,
+          measured: {
+            width: currentSize.width,
+            height: currentSize.height
+          },
           style: {
             ...(node.style ?? {}),
             width: currentSize.width,
@@ -171,13 +206,28 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     );
     updateNodeInternals(id);
   }, [currentSize, id, setNodes, updateNodeInternals]);
-  
+
   // Track render performance
   useEffect(() => {
     perfMonitor.record('boundingBox.render', 1);
     perfMonitor.record('boundingBox.cacheHitRate', cacheHitRate);
   }, [perfMonitor, cacheHitRate]);
-  
+
+  // Recovery guard: some environments can leave the node wrapper non-draggable
+  // if a resize end callback is missed. Keep unlocked boxes draggable.
+  useEffect(() => {
+    if (isLocked) {
+      return;
+    }
+    setNodes(nodes =>
+      nodes.map(node =>
+        node.id === id && node.draggable === false
+          ? { ...node, draggable: true }
+          : node
+      )
+    );
+  }, [id, isLocked, setNodes]);
+
   /**
    * Port detection for collapsed state
    */
@@ -198,11 +248,11 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       ...explicitChildIds
     ]);
     const detectedPorts: Port[] = [];
-    
+
     edges.forEach(edge => {
       const sourceInside = containedNodeIds.has(edge.source);
       const targetInside = containedNodeIds.has(edge.target);
-      
+
       if (sourceInside !== targetInside) {
         if (sourceInside) {
           const sourceNode = containedNodes.find(n => n.id === edge.source);
@@ -233,20 +283,20 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         }
       }
     });
-    
+
     return detectedPorts;
   }, [containedNodes, getEdges, getNodes, id]);
-  
+
   /**
    * Handle collapse/expand toggle
    */
   const handleCollapseToggle = useCallback(() => {
     const newCollapsed = !isCollapsed;
     setIsCollapsed(newCollapsed);
-    
+
     // Track performance
     perfMonitor.record('boundingBox.toggleCollapse', 1);
-    
+
     // Update nodes with new collapsed state
     if (newCollapsed) {
       // Store which nodes we're hiding
@@ -264,8 +314,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
             .map(node => node.id)
         ])
       );
-      
-      setNodes((nodes) => 
+
+      setNodes((nodes) =>
         nodes.map((node) => {
           if (hiddenNodeIds.includes(node.id)) {
             return { ...node, hidden: true };
@@ -273,8 +323,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           if (node.id === id) {
             return {
               ...node,
-              data: { 
-                ...node.data, 
+              data: {
+                ...node.data,
                 isCollapsed: true,
                 collapsedNodeIds: hiddenNodeIds
               }
@@ -288,7 +338,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       // Restore hidden nodes
       const boxNode = getNodes().find(n => n.id === id);
       const collapsedNodeIds = boxNode?.data?.collapsedNodeIds || [];
-      
+
       setNodes((nodes) =>
         nodes.map((node) => {
           if (collapsedNodeIds.includes(node.id)) {
@@ -297,8 +347,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           if (node.id === id) {
             return {
               ...node,
-              data: { 
-                ...node.data, 
+              data: {
+                ...node.data,
                 isCollapsed: false,
                 collapsedNodeIds: undefined
               }
@@ -310,14 +360,14 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       recalculate();
     }
   }, [isCollapsed, containedNodes, id, setNodes, getNodes, perfMonitor, recalculate]);
-  
+
   /**
    * Handle lock toggle
    */
   const handleLockToggle = useCallback(() => {
     const newLocked = !isLocked;
     setIsLocked(newLocked);
-    
+
     setNodes((nodes) =>
       nodes.map((node) => {
         if (node.id === id) {
@@ -328,8 +378,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         }
         // Lock/unlock dragging for contained nodes
         if (containedNodes.some(cn => cn.id === node.id)) {
-          return { 
-            ...node, 
+          return {
+            ...node,
             draggable: !newLocked,
             selectable: true
           };
@@ -339,61 +389,90 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     );
   }, [id, isLocked, containedNodes, setNodes]);
 
-  // Built-in React Flow resizer callbacks
   const canResize = !isCollapsed && !isLocked;
 
-  const handleResizeStart = useCallback(() => {
-    if (!canResize) {
-      return;
-    }
-    setIsResizing(true);
-    setNodes(nodes =>
-      nodes.map(node => {
-        if (node.id === id) {
-          return { ...node, draggable: false };
+  const startResize = useCallback(
+    (
+      direction: 'n' | 'e' | 's' | 'w' | 'ne' | 'nw' | 'se' | 'sw',
+      event: React.MouseEvent<HTMLDivElement>
+    ) => {
+      if (!canResize) {
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+
+      const startX = event.clientX;
+      const startY = event.clientY;
+      const startWidth = sizeRef.current.width;
+      const startHeight = sizeRef.current.height;
+      const startPosX = xPos;
+      const startPosY = yPos;
+
+      setIsResizing(true);
+
+      const onMouseMove = (moveEvent: MouseEvent) => {
+        moveEvent.preventDefault();
+        const dx = moveEvent.clientX - startX;
+        const dy = moveEvent.clientY - startY;
+
+        let nextWidth = startWidth;
+        let nextHeight = startHeight;
+        let nextPosX = startPosX;
+        let nextPosY = startPosY;
+
+        if (direction.includes('e')) {
+          nextWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth + dx);
         }
-        return node;
-      })
-    );
-  }, [canResize, id, setNodes]);
+        if (direction.includes('w')) {
+          nextWidth = Math.max(MIN_EXPANDED_WIDTH, startWidth - dx);
+          nextPosX = startPosX + (startWidth - nextWidth);
+        }
+        if (direction.includes('s')) {
+          nextHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight + dy);
+        }
+        if (direction.includes('n')) {
+          nextHeight = Math.max(MIN_EXPANDED_HEIGHT, startHeight - dy);
+          nextPosY = startPosY + (startHeight - nextHeight);
+        }
 
-  const handleResize = useCallback(
-    (_event: unknown, params: { width?: number; height?: number }) => {
-      const nextSize = {
-        width: Math.max(MIN_EXPANDED_WIDTH, params.width ?? sizeRef.current.width),
-        height: Math.max(MIN_EXPANDED_HEIGHT, params.height ?? sizeRef.current.height)
+        const nextSize = { width: nextWidth, height: nextHeight };
+        sizeRef.current = nextSize;
+        setCurrentSize(nextSize);
+
+        setNodes(nodes =>
+          nodes.map(node =>
+            node.id === id
+              ? {
+                  ...node,
+                  position: { x: nextPosX, y: nextPosY }
+                }
+              : node
+          )
+        );
       };
-      sizeRef.current = nextSize;
-      setCurrentSize(nextSize);
+
+      const onMouseUp = () => {
+        const finalSize = {
+          width: Math.max(MIN_EXPANDED_WIDTH, sizeRef.current.width),
+          height: Math.max(MIN_EXPANDED_HEIGHT, sizeRef.current.height)
+        };
+        expandedSizeRef.current = finalSize;
+        sizeRef.current = finalSize;
+        setCurrentSize(finalSize);
+
+        setIsResizing(false);
+        perfMonitor.record('boundingBox.resize', 1);
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+
+      document.addEventListener('mousemove', onMouseMove, { passive: false });
+      document.addEventListener('mouseup', onMouseUp);
     },
-    []
+    [canResize, id, perfMonitor, setNodes, xPos, yPos]
   );
 
-  const handleResizeEnd = useCallback(
-    (_event: unknown, params: { width?: number; height?: number }) => {
-      const finalSize = {
-        width: Math.max(MIN_EXPANDED_WIDTH, params.width ?? sizeRef.current.width),
-        height: Math.max(MIN_EXPANDED_HEIGHT, params.height ?? sizeRef.current.height)
-      };
-      expandedSizeRef.current = finalSize;
-      sizeRef.current = finalSize;
-      setCurrentSize(finalSize);
-
-      setNodes(nodes =>
-        nodes.map(node => {
-          if (node.id === id) {
-            return { ...node, draggable: !isLocked };
-          }
-          return node;
-        })
-      );
-
-      setIsResizing(false);
-      perfMonitor.record('boundingBox.resize', 1);
-    },
-    [id, isLocked, perfMonitor, setNodes]
-  );
-  
   /**
    * Handle title and description edits
    */
@@ -404,11 +483,11 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       setIsEditingDescription(true);
     }
   }, []);
-  
+
   const handleEditEnd = useCallback(() => {
     setIsEditingTitle(false);
     setIsEditingDescription(false);
-    
+
     // Save changes to node data
     setNodes((nodes) =>
       nodes.map((node) => {
@@ -422,7 +501,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       })
     );
   }, [id, title, description, setNodes]);
-  
+
   /**
    * Create RGBA color from hex color and opacity
    */
@@ -433,11 +512,15 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     const b = parseInt(hex.substr(4, 2), 16);
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   };
-  
+
   // Box style with animations
+  const effectiveSize = isCollapsed
+    ? { width: COLLAPSED_WIDTH, height: COLLAPSED_HEIGHT }
+    : currentSize;
+
   const boxStyle: React.CSSProperties = {
-    width: currentSize.width,
-    height: currentSize.height,
+    width: effectiveSize.width,
+    height: effectiveSize.height,
     border: `${data.borderWidth || 2}px solid ${data.borderColor || DEFAULT_REGION_COLORS[0]}`,
     borderRadius: `${BORDER_RADIUS}px`,
     position: 'relative',
@@ -449,20 +532,54 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     // Allow interactions for resize handles and header controls while keeping children draggable
     pointerEvents: 'auto'
   };
-  
+
+  const handleBaseStyle: React.CSSProperties = {
+    position: 'absolute',
+    background: 'rgba(24, 144, 255, 0.9)',
+    border: '1px solid #fff',
+    borderRadius: 2,
+    zIndex: 2300,
+    pointerEvents: 'auto',
+    touchAction: 'none',
+    userSelect: 'none'
+  };
+
   // Ensure the outer React Flow node wrapper gets updated width/height.
   // React Flow uses the wrapper dimensions for hit-testing and selection,
   // so force-sync it when currentSize changes to avoid stale measurements.
-  const rootRef = useRef<HTMLDivElement | null>(null);
   useLayoutEffect(() => {
     const wrapper = rootRef.current?.closest<HTMLElement>('.react-flow__node');
     if (!wrapper) {return;}
 
-    wrapper.style.width = `${currentSize.width}px`;
-    wrapper.style.height = `${currentSize.height}px`;
-    wrapper.style.minWidth = `${currentSize.width}px`;
-    wrapper.style.minHeight = `${currentSize.height}px`;
-  }, [currentSize]);
+    // React Flow may rewrite these dimensions from cached measurements.
+    // Use priority here so manual resize/collapse state remains visible.
+    wrapper.style.setProperty('width', `${effectiveSize.width}px`, 'important');
+    wrapper.style.setProperty(
+      'height',
+      `${effectiveSize.height}px`,
+      'important'
+    );
+    wrapper.style.setProperty(
+      'min-width',
+      `${effectiveSize.width}px`,
+      'important'
+    );
+    wrapper.style.setProperty(
+      'min-height',
+      `${effectiveSize.height}px`,
+      'important'
+    );
+    wrapper.style.setProperty(
+      'max-width',
+      `${effectiveSize.width}px`,
+      'important'
+    );
+    wrapper.style.setProperty(
+      'max-height',
+      `${effectiveSize.height}px`,
+      'important'
+    );
+  }, [effectiveSize]);
 
   return (
     <div
@@ -470,25 +587,26 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       className={`enhanced-bounding-box enhanced-bounding-box-refactored ${selected ? 'selected' : ''} ${isResizing ? 'resizing' : ''} ${isCollapsed ? 'collapsed' : ''}`}
       style={boxStyle}
     >
-      <NodeResizer
-        minWidth={MIN_EXPANDED_WIDTH}
-        minHeight={MIN_EXPANDED_HEIGHT}
-        isVisible={selected && canResize}
-        onResizeStart={handleResizeStart}
-        onResize={handleResize}
-        onResizeEnd={handleResizeEnd}
-        lineStyle={{ borderColor: data.borderColor || DEFAULT_REGION_COLORS[0] }}
-        handleStyle={{
-          width: 10,
-          height: 10,
-          borderRadius: 2,
-          border: '2px solid #fff',
-          background: data.borderColor || DEFAULT_REGION_COLORS[0]
-        }}
-      />
+      {selected && canResize && (
+        <>
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -6, left: -6, width: 12, height: 12, cursor: 'nwse-resize' }} onMouseDown={event => startResize('nw', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -6, right: -6, width: 12, height: 12, cursor: 'nesw-resize' }} onMouseDown={event => startResize('ne', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -6, left: -6, width: 12, height: 12, cursor: 'nesw-resize' }} onMouseDown={event => startResize('sw', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -6, right: -6, width: 12, height: 12, cursor: 'nwse-resize' }} onMouseDown={event => startResize('se', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -5, left: '50%', transform: 'translateX(-50%)', width: 44, height: 10, cursor: 'ns-resize' }} onMouseDown={event => startResize('n', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -5, left: '50%', transform: 'translateX(-50%)', width: 44, height: 10, cursor: 'ns-resize' }} onMouseDown={event => startResize('s', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, right: -5, top: '50%', transform: 'translateY(-50%)', width: 10, height: 44, cursor: 'ew-resize' }} onMouseDown={event => startResize('e', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, left: -5, top: '50%', transform: 'translateY(-50%)', width: 10, height: 44, cursor: 'ew-resize' }} onMouseDown={event => startResize('w', event)} />
+        </>
+      )}
+      {isResizing && (
+        <div className="enhanced-bounding-box-size-badge nodrag">
+          {Math.round(currentSize.width)} x {Math.round(currentSize.height)}
+        </div>
+      )}
       {/* Background layer */}
-      <div 
-        className="bounding-box-background" 
+      <div
+        className="bounding-box-background"
         style={{
           position: 'absolute',
           top: 0,
@@ -496,7 +614,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           right: 0,
           bottom: 0,
           backgroundColor: getBackgroundWithOpacity(
-            data.backgroundColor || DEFAULT_REGION_COLORS[0], 
+            data.backgroundColor || DEFAULT_REGION_COLORS[0],
             data.opacity || 0.3
           ),
           borderRadius: `${BORDER_RADIUS}px`,
@@ -504,7 +622,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           pointerEvents: 'none'
         }}
       />
-      
+
       {/* Header with controls */}
       <BoundingBoxHeader
         title={title}
@@ -520,7 +638,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         onEditStart={handleEditStart}
         onEditEnd={handleEditEnd}
       />
-      
+
       {/* Node count indicator */}
       {!isCollapsed && (
         <div className="bounding-box-status" style={{
@@ -534,7 +652,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           {isLayouting && ' (arranging...)'}
         </div>
       )}
-      
+
       {/* Collapsed indicator */}
       {isCollapsed && (
         <div style={{
@@ -560,7 +678,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           </span>
         </div>
       )}
-      
+
       {/* Port system for collapsed state */}
       <PortSystem
         isCollapsed={isCollapsed}
@@ -568,7 +686,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         boundingBoxId={id}
         detectPorts={detectPorts}
       />
-      
+
     </div>
   );
 };

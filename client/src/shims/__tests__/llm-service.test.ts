@@ -44,4 +44,42 @@ describe('LLMService browser adapter', () => {
       'LLM endpoint error'
     );
   });
+
+  it('posts draftGraphFromPrompt requests to the agent draft endpoint', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        ok: true,
+        summary: 'Created a deterministic draft.',
+        operations: [],
+        notes: [],
+        fallback: true
+      })
+    });
+
+    const svc = new LLMService({});
+    const res = await svc.draftGraphFromPrompt('hero portrait, cinematic', {
+      mode: 'draft',
+      options: { maxNewNodes: 6 }
+    });
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      '/api/agent/draft-graph',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({
+          prompt: 'hero portrait, cinematic',
+          mode: 'draft',
+          options: { maxNewNodes: 6 }
+        })
+      })
+    );
+    expect(res).toEqual({
+      ok: true,
+      summary: 'Created a deterministic draft.',
+      operations: [],
+      notes: [],
+      fallback: true
+    });
+  });
 });

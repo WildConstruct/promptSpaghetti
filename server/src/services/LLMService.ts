@@ -10,8 +10,10 @@ export interface LLMServiceOptions {
 export interface CompleteParams {
   prompt: string;
   model?: string;
+  systemPrompt?: string;
   temperature?: number;
   maxTokens?: number;
+  responseFormat?: 'text' | 'json_object';
 }
 
 export interface CompleteResult {
@@ -74,6 +76,7 @@ export class LLMService {
     const model = params.model || this.opts.defaultModel;
     const temperature = params.temperature ?? 0.4;
     const maxTokens = Math.min(params.maxTokens ?? 256, 1024);
+    const systemPrompt = params.systemPrompt || 'You are a helpful assistant.';
 
     const prompt = params.prompt?.toString() ?? '';
     const tokensIn = Math.ceil(prompt.length / 4); // rough estimate
@@ -90,10 +93,17 @@ export class LLMService {
           temperature,
           max_tokens: maxTokens,
           messages: [
-            { role: 'system', content: 'You are a helpful assistant.' },
+            { role: 'system', content: systemPrompt },
             { role: 'user', content: prompt }
-          ]
-        },
+          ],
+          ...(params.responseFormat === 'json_object'
+            ? {
+                response_format: {
+                  type: 'json_object' as const
+                }
+              }
+            : {})
+        } as any,
         { signal: controller.signal as AbortSignal }
       );
 

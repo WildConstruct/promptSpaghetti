@@ -156,5 +156,14 @@ export class LLMService {
       return postJson('/api/llm-refine', { config: this.config, request });
     }
   }
+  async draftGraphFromPrompt(
+    prompt: string,
+    request: JsonRecord = {}
+  ): Promise<JsonRecord> {
+    return postJson('/api/agent/draft-graph', {
+      prompt,
+      ...request
+    });
+  }
 }
 export default LLMService;

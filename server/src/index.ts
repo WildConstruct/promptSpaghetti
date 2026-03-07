@@ -11,6 +11,7 @@ import { executeGraph } from './engine-basic';
 import { Sentry } from './sentry';
 import { registerEnhancedAdminRoutes } from './admin-panel-enhanced';
 import { filesRoutes } from './routes/files';
+import { agentRoutes } from './routes/agent';
 import { llmRoutes } from './routes/llm';
 import { themeRoutes } from './theme';
 import { rateLimiter } from './utils/rateLimit';
@@ -59,7 +60,9 @@ server.addContentTypeParser(
     try {
       const params = new URLSearchParams(body as string);
       const obj: Record<string, string> = {};
-      for (const [k, v] of params) {obj[k] = v;}
+      for (const [k, v] of params) {
+        obj[k] = v;
+      }
       done(null, obj);
     } catch (err) {
       done(err as Error);
@@ -69,7 +72,9 @@ server.addContentTypeParser(
 
 // Register CORS (configurable via CORS_ORIGINS). If APP_ORIGIN is set, include it.
 const defaultOrigins = ['http://localhost:3000', 'http://localhost:5173'];
-if (process.env.APP_ORIGIN) {defaultOrigins.push(process.env.APP_ORIGIN);}
+if (process.env.APP_ORIGIN) {
+  defaultOrigins.push(process.env.APP_ORIGIN);
+}
 // include production host by default
 defaultOrigins.push('https://ps.wildconstruct.com');
 const corsOrigins = (process.env.CORS_ORIGINS || defaultOrigins.join(','))
@@ -80,11 +85,20 @@ const corsOrigins = (process.env.CORS_ORIGINS || defaultOrigins.join(','))
 server.register(cors, {
   origin: (origin, cb) => {
     // Allow non-browser or same-origin requests (no Origin header)
-    if (!origin) {return cb(null, true);}
-    const allowed = corsOrigins.includes(origin);
+    if (!origin) {
+      return cb(null, true);
+    }
+    const isLocalDevOrigin =
+      origin === 'http://localhost:3000' ||
+      origin === 'http://127.0.0.1:3000' ||
+      origin === 'http://localhost:5173' ||
+      origin === 'http://127.0.0.1:5173';
+    const allowed = isLocalDevOrigin || corsOrigins.includes(origin);
     cb(null, allowed);
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 });
 
 // Add conservative security headers to all responses (complements Netlify)
@@ -284,6 +298,9 @@ server.register(async app => filesRoutes(app));
 
 // Register LLM routes
 server.register(async app => llmRoutes(app));
+
+// Register bounded agent routes
+server.register(async app => agentRoutes(app));
 
 // Register theme routes
 server.register(themeRoutes);

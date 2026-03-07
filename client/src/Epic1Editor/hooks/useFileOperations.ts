@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
+import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
+import { loadReactFlowFromAnyPsgContent } from '../utils/psgDocument';
 
 interface FileOperationsConfig {
   onNodesChange: (nodes: Node[]) => void;
@@ -15,6 +17,23 @@ export const useFileOperations = ({
   onEditorKeyChange,
   showToast
 }: FileOperationsConfig) => {
+  const exportPsg = useCallback(
+    (nodes: Node[], edges: Edge[], name = 'Prompt Spaghetti Graph') => {
+      const psg = exportGraphToPSG(nodes, edges, { name });
+      const blob = new Blob([JSON.stringify(psg, null, 2)], {
+        type: 'application/x-promptspaghetti-graph'
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${name.replace(/[^a-z0-9._-]+/gi, '_')}.psg`;
+      a.click();
+      URL.revokeObjectURL(url);
+      return psg;
+    },
+    []
+  );
+
   const handleNew = useCallback(
     (demoNodes: Node[], demoEdges: Edge[]) => {
       // Create custom modal dialog
@@ -47,7 +66,7 @@ export const useFileOperations = ({
     `;
 
       dialog.innerHTML = `
-      <h3 style="color: #e8e8e8; margin: 0 0 16px 0; font-size: 18px;">Create New Graph</h3>
+      <h3 style="color: #e8e8e8; margin: 0 0 16px 0; font-size: 18px;">Create New Document</h3>
       <p style="color: #b8b8b8; margin: 0 0 24px 0; font-size: 14px;">Any unsaved changes will be lost. Do you want to continue?</p>
       <div style="display: flex; gap: 12px; justify-content: flex-end;">
         <button id="cancel-btn" style="
@@ -70,7 +89,7 @@ export const useFileOperations = ({
           font-size: 14px;
           font-weight: 500;
           transition: all 0.2s;
-        ">Create New Graph</button>
+        ">Create New Document</button>
       </div>
     `;
 
@@ -131,7 +150,9 @@ export const useFileOperations = ({
       confirmBtn?.addEventListener('click', () => handleClose(true));
       cancelBtn?.addEventListener('click', () => handleClose(false));
       modal.addEventListener('click', e => {
-        if (e.target === modal) {handleClose(false);}
+        if (e.target === modal) {
+          handleClose(false);
+        }
       });
 
       // Keyboard handling
@@ -161,20 +182,49 @@ export const useFileOperations = ({
   const handleOpen = useCallback(() => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.json';
+    input.accept = '.psg';
     input.onchange = e => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = evt => {
           try {
-            const data = JSON.parse(evt.target?.result as string);
+            const raw = String(evt.target?.result || '');
+            const isPsg = file.name.toLowerCase().endsWith('.psg');
+            const data = isPsg ? null : JSON.parse(raw);
+
+            if (isPsg) {
+              try {
+                const loaded = loadReactFlowFromAnyPsgContent(raw);
+                const { nodes, edges } = loaded;
+                onNodesChange(nodes);
+                onEdgesChange(edges);
+                onEditorKeyChange(prev => prev + 1);
+                localStorage.setItem(
+                  'epic1-graph',
+                  JSON.stringify({ nodes, edges })
+                );
+                showToast(
+                  loaded.source === 'legacy'
+                    ? 'Legacy PSG loaded via compatibility path'
+                    : 'PSG document loaded successfully',
+                  'success'
+                );
+                return;
+              } catch {
+                // Fall through to generic JSON handling below.
+              }
+            }
+
             if (data.nodes && data.edges) {
               onNodesChange(data.nodes);
               onEdgesChange(data.edges);
               onEditorKeyChange(prev => prev + 1);
               localStorage.setItem('epic1-graph', JSON.stringify(data));
-              showToast('Graph loaded successfully', 'success');
+              showToast(
+                'Legacy JSON graph loaded via compatibility path',
+                'success'
+              );
             }
           } catch {
             showToast('Failed to load file', 'error');
@@ -188,57 +238,26 @@ export const useFileOperations = ({
 
   const handleSave = useCallback(
     (currentNodes: Node[], currentEdges: Edge[]) => {
-      const graphData = {
-        nodes: currentNodes,
-        edges: currentEdges,
-        version: '1.0',
-        timestamp: new Date().toISOString()
-      };
-
-      localStorage.setItem('epic1-graph', JSON.stringify(graphData));
-
-      const blob = new Blob([JSON.stringify(graphData, null, 2)], {
-        type: 'application/json'
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `graph-${Date.now()}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-
-      showToast('Graph saved', 'success');
+      localStorage.setItem(
+        'epic1-graph',
+        JSON.stringify({ nodes: currentNodes, edges: currentEdges })
+      );
+      const psg = exportPsg(currentNodes, currentEdges);
+      showToast(`Exported "${psg.name}" as PSG`, 'success');
     },
-    [showToast]
+    [exportPsg, showToast]
   );
 
   const handleSaveAs = useCallback(
     (currentNodes: Node[], currentEdges: Edge[]) => {
       // eslint-disable-next-line no-alert
-      const name = prompt('Enter a name for this graph:');
+      const name = prompt('Enter a name for this PSG document:');
       if (name) {
-        const graphData = {
-          name,
-          nodes: currentNodes,
-          edges: currentEdges,
-          version: '1.0',
-          timestamp: new Date().toISOString()
-        };
-
-        const blob = new Blob([JSON.stringify(graphData, null, 2)], {
-          type: 'application/json'
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${name.replace(/[^a-z0-9]/gi, '_')}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-
-        showToast(`Graph saved as "${name}"`, 'success');
+        exportPsg(currentNodes, currentEdges, name);
+        showToast(`Exported "${name}" as PSG`, 'success');
       }
     },
-    [showToast]
+    [exportPsg, showToast]
   );
 
   const handleQuit = useCallback(

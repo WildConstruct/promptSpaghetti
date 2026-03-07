@@ -62,39 +62,27 @@ export class LLMService {
     });
   }
 
-  async suggest<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
+  async suggest<TResponse>(request: JsonObject): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-suggest', request);
   }
 
-  async metadata<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
+  async metadata<TResponse>(request: JsonObject): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-metadata', request);
   }
 
-  async refine<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
+  async refine<TResponse>(request: JsonObject): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-refine', request);
   }
 
-  async analyze<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
+  async analyze<TResponse>(request: JsonObject): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-analyze', request);
   }
 
-  async populateChoices<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
+  async populateChoices<TResponse>(request: JsonObject): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-populate', request);
   }
 
-  async optimizeChoices<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
+  async optimizeChoices<TResponse>(request: JsonObject): Promise<TResponse> {
     return this.callAPI<TResponse>('llm-optimize', request);
   }
 }
@@ -102,6 +90,59 @@ export class LLMService {
 // Mock services that use the API-based LLM service
 export class NodeIntelligenceService {
   constructor(private llm: LLMService) {}
+
+  private variablePattern = /\{([^}]+)\}/g;
+
+  private extractVariables(text: string): string[] {
+    const matches = text.match(this.variablePattern);
+    return matches ? Array.from(new Set(matches)) : [];
+  }
+
+  private preserveVariables(
+    originalText: string,
+    generatedText: string
+  ): string {
+    const variables = this.extractVariables(originalText);
+    if (variables.length === 0) {
+      return generatedText.trim();
+    }
+
+    let result = generatedText.trim();
+    for (const variable of variables) {
+      if (!result.includes(variable)) {
+        result = `${variable} ${result}`.trim();
+      }
+    }
+
+    return result;
+  }
+
+  private normalizeChoices(
+    nodeText: string,
+    choices: Array<{ text?: string; weight?: number }>
+  ): Choice[] {
+    const seen = new Set<string>();
+
+    return choices
+      .map(choice => ({
+        text: this.preserveVariables(
+          nodeText,
+          String(choice.text ?? '').trim()
+        ),
+        weight: Number.isFinite(choice.weight)
+          ? Math.max(1, Math.min(10, Math.round(Number(choice.weight))))
+          : 5
+      }))
+      .filter(choice => choice.text.length > 0)
+      .filter(choice => {
+        const key = choice.text.trim().toLowerCase();
+        if (!key || seen.has(key)) {
+          return false;
+        }
+        seen.add(key);
+        return true;
+      });
+  }
 
   async getSuggestions<TResponse extends JsonObject>(
     nodeType: string,
@@ -125,17 +166,10 @@ export class NodeIntelligenceService {
       });
 
       if (Array.isArray(response?.choices)) {
-        const normalised = response.choices
-          .map(choice => ({
-            text: String(choice.text ?? '').trim(),
-            weight: Number.isFinite(choice.weight)
-              ? Math.max(1, Math.min(10, Math.round(Number(choice.weight))))
-              : 5
-          }))
-          .filter(choice => choice.text.length > 0);
+        const normalised = this.normalizeChoices(nodeText, response.choices);
 
         if (normalised.length > 0) {
-          return normalised;
+          return normalised.slice(0, count);
         }
       }
     } catch (error) {
@@ -166,7 +200,7 @@ export class NodeIntelligenceService {
           ...choice,
           weight: Number.isFinite(choice.weight)
             ? Math.max(1, Math.min(10, Math.round(Number(choice.weight))))
-            : choices[index]?.weight ?? 5
+            : (choices[index]?.weight ?? 5)
         }));
 
         return {
@@ -275,7 +309,7 @@ export class NodeIntelligenceService {
       category = 'weather';
     }
 
-    return fallback[category].slice(0, count);
+    return this.normalizeChoices(text, fallback[category]).slice(0, count);
   }
 
   private getOfflineInspiration(): InspirationSuggestion[] {

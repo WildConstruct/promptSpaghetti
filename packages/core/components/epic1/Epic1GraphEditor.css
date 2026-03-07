@@ -62,6 +62,13 @@
   cursor: grabbing !important;
 }
 
+/* Keep overlays from stealing drop interactions while a drag is in progress. */
+.epic1-graph-editor.drag-over .react-flow__minimap,
+.epic1-graph-editor.drag-over .react-flow__controls,
+.epic1-graph-editor.drag-over .react-flow__panel {
+  pointer-events: none !important;
+}
+
 /* Ensure nodes don't block canvas interactions when not being interacted with */
 .epic1-graph-editor .react-flow__nodes {
   pointer-events: none !important;
@@ -69,6 +76,23 @@
 
 .epic1-graph-editor .react-flow__node {
   pointer-events: all !important;
+}
+
+.drop-indicator {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 211, 238, 0.5);
+  background: rgba(15, 23, 42, 0.92);
+  color: #d1fae5;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
 }
 
 /* Override React Flow defaults for Epic 1 styling */

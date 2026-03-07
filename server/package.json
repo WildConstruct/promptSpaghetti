@@ -5,10 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
-    "dev:minimal": "ts-node-dev src/index-minimal.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "start:minimal": "ts-node src/index-minimal.ts",
+    "start": "node dist/server/src/index.js",
     "test": "jest",
     "perf:test": "ts-node src/performance/performance-cli.ts test",
     "perf:monitor": "ts-node src/performance/performance-cli.ts monitor",

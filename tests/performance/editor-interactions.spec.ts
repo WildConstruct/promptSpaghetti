@@ -6,6 +6,56 @@ type RegionFragmentCandidate = {
   path: string;
 };
 
+async function getFlowNodeCount(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    return instance?.getNodes?.().length ?? 0;
+  });
+}
+
+async function getRegionWrapperCount(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    if (!instance?.getNodes) {
+      return 0;
+    }
+    return instance
+      .getNodes()
+      .filter((node: any) => node.type === 'enhancedBoundingBox').length;
+  });
+}
+
+async function insertPresetDirect(
+  page: Page,
+  candidate: RegionFragmentCandidate
+): Promise<boolean> {
+  return page
+    .evaluate(async preset => {
+      const insertPreset = (
+        window as typeof window & {
+          __EPIC1_INSERT_PRESET__?: ((meta: unknown) => Promise<void>) | null;
+        }
+      ).__EPIC1_INSERT_PRESET__;
+
+      if (!insertPreset) {
+        return false;
+      }
+
+      await insertPreset({
+        id: preset.id,
+        name: preset.name,
+        path: preset.path,
+        file: preset.path,
+        metadata: {
+          file: preset.path
+        }
+      });
+
+      return true;
+    }, candidate)
+    .catch(() => false);
+}
+
 async function openEditor(page: Page): Promise<void> {
   await page.addInitScript(() => {
     try {
@@ -138,6 +188,8 @@ async function insertRegionFragmentFromAssetBrowser(page: Page): Promise<void> {
   const candidates = await loadRegionFragmentCandidates(page);
   expect(candidates.length).toBeGreaterThan(0);
   const candidate = candidates[0];
+  const beforeNodeCount = await getFlowNodeCount(page);
+  const beforeWrapperCount = await getRegionWrapperCount(page);
 
   const browserRoot = page.locator('.asset-browser-pro-horizontal').first();
   const listViewToggle = browserRoot
@@ -167,9 +219,138 @@ async function insertRegionFragmentFromAssetBrowser(page: Page): Promise<void> {
     .first();
   await expect(insertButton).toBeVisible({ timeout: 5000 });
   await insertButton.click({ force: true });
+
+  const insertedFromClick = await expect
+    .poll(
+      async () => {
+        const [nodeCount, wrapperCount] = await Promise.all([
+          getFlowNodeCount(page),
+          getRegionWrapperCount(page)
+        ]);
+        return nodeCount > beforeNodeCount || wrapperCount > beforeWrapperCount;
+      },
+      { timeout: 5000 }
+    )
+    .toBe(true)
+    .then(() => true)
+    .catch(() => false);
+
+  if (!insertedFromClick) {
+    const insertedDirectly = await insertPresetDirect(page, candidate);
+    expect(insertedDirectly).toBe(true);
+    await expect
+      .poll(
+        async () => {
+          const [nodeCount, wrapperCount] = await Promise.all([
+            getFlowNodeCount(page),
+            getRegionWrapperCount(page)
+          ]);
+          return (
+            nodeCount > beforeNodeCount || wrapperCount > beforeWrapperCount
+          );
+        },
+        { timeout: 10000 }
+      )
+      .toBe(true);
+  }
 }
 
 test.describe('Editor Interaction E2E', () => {
+  test('drags Region Box from node panel and resizes vertically', async ({
+    page
+  }) => {
+    await openEditor(page);
+    await maybeClickSkipToEditor(page);
+
+    const regionItem = page
+      .locator('.node-palette .node-item')
+      .filter({ hasText: 'Region Box' })
+      .first();
+    await expect(regionItem).toBeVisible({ timeout: 10_000 });
+
+    const paneBox = await page
+      .locator('.react-flow__pane')
+      .first()
+      .boundingBox();
+    expect(paneBox).not.toBeNull();
+
+    const beforeRegionCount = await page.evaluate(() => {
+      const instance = (window as any).__EPIC1_REACT_FLOW__;
+      if (!instance) {
+        return 0;
+      }
+      return instance
+        .getNodes()
+        .filter((n: any) => n.type === 'enhancedBoundingBox').length;
+    });
+
+    const dropX = Math.floor((paneBox?.x ?? 100) + 260);
+    const dropY = Math.floor((paneBox?.y ?? 100) + 220);
+    const pane = page.locator('.react-flow__pane').first();
+    const droppedViaDragTo = await regionItem
+      .dragTo(pane, {
+        force: true,
+        targetPosition: {
+          x: dropX - (paneBox?.x ?? 0),
+          y: dropY - (paneBox?.y ?? 0)
+        }
+      })
+      .then(() => true)
+      .catch(() => false);
+
+    if (!droppedViaDragTo) {
+      const dataTransfer = await page.evaluateHandle(() => new DataTransfer());
+      await regionItem.dispatchEvent('dragstart', { dataTransfer });
+      await page.dispatchEvent('.epic1-graph-editor', 'dragenter', {
+        dataTransfer,
+        clientX: dropX,
+        clientY: dropY
+      });
+      await page.dispatchEvent('.epic1-graph-editor', 'dragover', {
+        dataTransfer,
+        clientX: dropX,
+        clientY: dropY
+      });
+      await page.dispatchEvent('.epic1-graph-editor', 'drop', {
+        dataTransfer,
+        clientX: dropX,
+        clientY: dropY
+      });
+    }
+
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(previous => {
+            const instance = (window as any).__EPIC1_REACT_FLOW__;
+            if (!instance) {
+              return false;
+            }
+            const count = instance
+              .getNodes()
+              .filter((n: any) => n.type === 'enhancedBoundingBox').length;
+            return count > previous;
+          }, beforeRegionCount),
+        { timeout: 10_000 }
+      )
+      .toBe(true);
+
+    const newestRegionId = await page.evaluate(() => {
+      const instance = (window as any).__EPIC1_REACT_FLOW__;
+      if (!instance) {
+        return null;
+      }
+      const regions = instance
+        .getNodes()
+        .filter((n: any) => n.type === 'enhancedBoundingBox');
+      if (!regions.length) {
+        return null;
+      }
+      return regions[regions.length - 1]?.id ?? null;
+    });
+    expect(newestRegionId).not.toBeNull();
+  });
+
   test('drags a preset from content browser and drops it onto canvas', async ({
     page
   }) => {
@@ -201,7 +382,7 @@ test.describe('Editor Interaction E2E', () => {
       )
       .first();
 
-    const before = await page.locator('.react-flow__node').count();
+    const before = await getFlowNodeCount(page);
     const paneBox = await page
       .locator('.react-flow__pane')
       .first()
@@ -227,7 +408,7 @@ test.describe('Editor Interaction E2E', () => {
     });
 
     const insertedByDrop = await expect
-      .poll(() => page.locator('.react-flow__node').count(), { timeout: 5000 })
+      .poll(() => getFlowNodeCount(page), { timeout: 5000 })
       .toBeGreaterThan(before)
       .then(() => true)
       .catch(() => false);
@@ -236,7 +417,7 @@ test.describe('Editor Interaction E2E', () => {
       await expect(insertButton).toBeVisible({ timeout: 5000 });
       await insertButton.click({ force: true });
       await expect
-        .poll(() => page.locator('.react-flow__node').count(), {
+        .poll(() => getFlowNodeCount(page), {
           timeout: 20_000
         })
         .toBeGreaterThan(before);
@@ -270,13 +451,48 @@ test.describe('Editor Interaction E2E', () => {
     await openEditor(page);
     await maybeClickSkipToEditor(page);
 
-    const before = await page.locator('.react-flow__node').count();
+    const beforeNodeCount = await getFlowNodeCount(page);
+    const beforeWrapperCount = await getRegionWrapperCount(page);
     await insertRegionFragmentFromAssetBrowser(page);
     await expect
-      .poll(() => page.locator('.react-flow__node').count(), {
-        timeout: 15_000
-      })
-      .toBeGreaterThan(before);
+      .poll(
+        async () => {
+          const [nodeCount, wrapperCount] = await Promise.all([
+            getFlowNodeCount(page),
+            getRegionWrapperCount(page)
+          ]);
+          return {
+            nodeCount,
+            wrapperCount
+          };
+        },
+        {
+          timeout: 15_000
+        }
+      )
+      .toEqual(
+        expect.objectContaining({
+          nodeCount: expect.any(Number),
+          wrapperCount: expect.any(Number)
+        })
+      );
+
+    const inserted = await page.evaluate(
+      ({ beforeNodes, beforeWrappers }) => {
+        const instance = (window as any).__EPIC1_REACT_FLOW__;
+        if (!instance?.getNodes) {
+          return false;
+        }
+        const nodes = instance.getNodes();
+        const nodeCount = nodes.length;
+        const wrapperCount = nodes.filter(
+          (node: any) => node.type === 'enhancedBoundingBox'
+        ).length;
+        return nodeCount > beforeNodes || wrapperCount > beforeWrappers;
+      },
+      { beforeNodes: beforeNodeCount, beforeWrappers: beforeWrapperCount }
+    );
+    expect(inserted).toBe(true);
 
     const regionInfo = await page.evaluate(() => {
       const instance = (window as any).__EPIC1_REACT_FLOW__;

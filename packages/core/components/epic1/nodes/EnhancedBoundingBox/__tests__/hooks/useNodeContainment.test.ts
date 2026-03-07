@@ -114,6 +114,40 @@ describe('useNodeContainment', () => {
       expect(result.current.containedNodes).toHaveLength(0);
     });
 
+    it('should recognize direct parented child as contained by its wrapper', () => {
+      const nodes = [
+        {
+          id: 'box-1',
+          type: 'enhancedBoundingBox',
+          position: { x: 0, y: 0 },
+          data: {}
+        },
+        {
+          id: 'node-1',
+          type: 'default',
+          parentNode: 'box-1',
+          position: { x: 50, y: 50 },
+          width: 100,
+          height: 40,
+          data: {}
+        }
+      ] as Node[];
+
+      const { result } = renderHook(() =>
+        useNodeContainment(
+          'box-1',
+          nodes,
+          { x: 0, y: 0 },
+          { width: 400, height: 300 },
+          { width: 400, height: 300 },
+          false
+        )
+      );
+
+      expect(result.current.containedNodes).toHaveLength(1);
+      expect(result.current.containedNodes[0].id).toBe('node-1');
+    });
+
     it('should use expanded size when collapsed', () => {
       const nodes = [
         {
@@ -145,6 +179,49 @@ describe('useNodeContainment', () => {
 
       // Should still detect the node using expanded size
       expect(result.current.containedNodes).toHaveLength(1);
+    });
+
+    it('should include direct parented children for imported fragment wrappers', () => {
+      const nodes = [
+        {
+          id: 'box-1',
+          type: 'enhancedBoundingBox',
+          position: { x: 200, y: 200 },
+          data: {}
+        },
+        {
+          id: 'text-1',
+          type: 'textBlock',
+          parentNode: 'box-1',
+          position: { x: 24, y: 96 },
+          width: 180,
+          height: 80,
+          data: {}
+        },
+        {
+          id: 'text-2',
+          type: 'textBlock',
+          parentNode: 'some-other-box',
+          position: { x: 24, y: 96 },
+          width: 180,
+          height: 80,
+          data: {}
+        }
+      ] as Node[];
+
+      const { result } = renderHook(() =>
+        useNodeContainment(
+          'box-1',
+          nodes,
+          { x: 200, y: 200 },
+          { width: 320, height: 240 },
+          { width: 320, height: 240 },
+          false
+        )
+      );
+
+      expect(result.current.containedNodes).toHaveLength(1);
+      expect(result.current.containedNodes[0].id).toBe('text-1');
     });
   });
 

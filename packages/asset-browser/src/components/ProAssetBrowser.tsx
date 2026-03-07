@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import '../styles/LogicBrowserStyles.css';
 import type { Preset } from '../types';
-import { LibraryService } from '../services/LibraryService';
 import { FragmentManifestLoader } from '../services/FragmentManifestLoader';
 import {
   FragmentValidator,
@@ -138,7 +137,6 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState<number>(0);
-  const [usedFallback, setUsedFallback] = useState<boolean>(false);
   const [assetBase, setAssetBase] = useState<string>('/presets');
   const clearAllFilters = () => {
     setSelectedCategory('All');
@@ -283,7 +281,6 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
 
           if (!cancelled) {
             setPresets(allItems);
-            setUsedFallback(false);
             setAssetBase(chosenBase);
           }
         } catch (fragmentError) {
@@ -293,7 +290,6 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
           // Still set the regular presets even if fragments fail
           if (!cancelled) {
             setPresets(items);
-            setUsedFallback(false);
             setAssetBase(chosenBase);
           }
         }
@@ -301,15 +297,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
         if (!cancelled) {
           const msg = e instanceof Error ? e.message : 'Failed to load presets';
           setError(msg);
-          // Fallback to stubbed presets so the UI remains usable
-          try {
-            const fallback = await LibraryService.listPresets();
-            setPresets(fallback);
-            setUsedFallback(true);
-            setAssetBase('/presets');
-          } catch {
-            // leave presets empty
-          }
+          setPresets([]);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -401,31 +389,20 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
   const normalizeAssetPath = (path?: string): string | undefined => {
     if (!path) return undefined;
     if (/^https?:\/\//i.test(path) || path.startsWith('/')) return path;
-    // Handle fragment paths from manifest - they're in assets/library
+    // Fragment files are PSG assets under /assets/library.
+    if (path.toLowerCase().endsWith('.psg')) {
+      return `/assets/library/${path.replace(/^\.\//, '')}`;
+    }
     if (path.startsWith('./')) {
-      // Check if it's a fragment path (contains category folders)
-      if (
-        path.includes('facial-features') ||
-        path.includes('hair') ||
-        path.includes('body-silhouette') ||
-        path.includes('emotion-mood') ||
-        path.includes('action-dynamics') ||
-        path.includes('setting-environment')
-      ) {
-        return `/assets/library/${path.slice(2)}`;
-      }
       return `${assetBase}/${path.slice(2)}`;
     }
     return `${assetBase}/${path}`;
   };
 
-  // Generate sample output from fragment data using a standard seed
-  const generateSampleOutput = (preset: Preset): string => {
+  const getSampleOutput = (preset: Preset): string | null => {
     try {
-      // If preset has actual graph data, try to extract sample output
       const graphData = preset.data as any;
       if (graphData?.nodes) {
-        // Find output nodes
         const outputNodes = graphData.nodes.filter(
           (n: any) =>
             n.type === 'Output' ||
@@ -433,12 +410,10 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
             n.data?.type === 'Output'
         );
 
-        // Get first output node's template if available
         if (outputNodes.length > 0) {
           const template =
             outputNodes[0].data?.template || outputNodes[0].template;
           if (template) {
-            // Show the template content (truncate if too long)
             const output =
               template.length > 80
                 ? template.substring(0, 77) + '...'
@@ -447,7 +422,6 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
           }
         }
 
-        // Check for WeightedChoice nodes to show sample options
         const weightedNodes = graphData.nodes.filter(
           (n: any) =>
             n.type === 'WeightedChoice' ||
@@ -458,58 +432,90 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
         if (weightedNodes.length > 0) {
           const options = weightedNodes[0].data?.options || [];
           if (options.length > 0) {
-            // Show first option as sample
             const firstOption =
               typeof options[0] === 'object' ? options[0].text : options[0];
-            return firstOption || '[Weighted choice output]';
+            return firstOption || null;
           }
         }
       }
-
-      // Fallback samples based on category
-      const categorySamples: Record<string, string> = {
-        'emotion-mood': 'softly creased with worry',
-        'body-silhouette': 'weathered and lean',
-        'facial-features': "crow's-footed eyes",
-        'setting-environment': 'sun-dappled clearing',
-        character: 'Marcus the Bold',
-        narrative: 'Once upon a midnight dreary...',
-        dialogue: '"I never expected to see you here," she said.',
-        items: 'a worn leather satchel',
-        'action-dynamics': 'lunged forward with desperate energy'
-      };
-
-      return (
-        categorySamples[preset.category || ''] || '[Preview not available]'
-      );
+      return null;
     } catch (error) {
       console.error('Error generating sample output:', error);
-      return '[Error generating preview]';
+      return null;
     }
   };
 
   const handleDragStart = (e: React.DragEvent, preset: Preset) => {
+    const target = e.target as HTMLElement | null;
+    if (target?.closest('button')) {
+      e.preventDefault();
+      return;
+    }
     try {
       // Normalize the path for fragments
       const normalizedPath = normalizeAssetPath(preset.path);
 
-      const payload = JSON.stringify({
+      const payloadObject = {
         id: preset.id,
         name: preset.name,
         tags: preset.tags,
         type: preset.type ?? 'graph',
         path: normalizedPath || preset.path,
-        nodeTypes: preset.nodeTypes
-      });
+        nodeTypes: preset.nodeTypes,
+        metadata: {
+          file: normalizedPath || preset.path
+        }
+      };
+      if (typeof window !== 'undefined') {
+        (
+          window as Window & { __EPIC1_LAST_PRESET_DRAG__?: unknown }
+        ).__EPIC1_LAST_PRESET_DRAG__ = payloadObject;
+      }
+      const payload = JSON.stringify(payloadObject);
       e.dataTransfer.setData('application/x-preset', payload);
       // Also set as 'preset' for compatibility with Epic1GraphEditor
       e.dataTransfer.setData('preset', payload);
-      // Provide a plain-text fallback for other drop targets
-      e.dataTransfer.setData('text/plain', preset.name);
+      // Keep JSON payload accessible to handlers that read application/json.
+      e.dataTransfer.setData('application/json', payload);
+      // Use a JSON fallback instead of raw name to avoid mis-parsing as node type.
+      e.dataTransfer.setData('text/plain', payload);
       e.dataTransfer.effectAllowed = 'copy';
+
+      // Show a clear drag ghost so drag feels tangible while moving into canvas.
+      const dragImage = document.createElement('div');
+      dragImage.textContent = preset.name;
+      dragImage.style.position = 'absolute';
+      dragImage.style.top = '-1000px';
+      dragImage.style.left = '-1000px';
+      dragImage.style.padding = '6px 10px';
+      dragImage.style.border = '1px solid rgba(34, 211, 238, 0.55)';
+      dragImage.style.borderRadius = '6px';
+      dragImage.style.background = 'rgba(20, 23, 32, 0.96)';
+      dragImage.style.color = '#e5e7eb';
+      dragImage.style.fontSize = '12px';
+      dragImage.style.fontWeight = '600';
+      dragImage.style.boxShadow = '0 6px 14px rgba(0, 0, 0, 0.35)';
+      document.body.appendChild(dragImage);
+      e.dataTransfer.setDragImage(dragImage, 14, 14);
+      setTimeout(() => {
+        if (dragImage.parentNode) {
+          dragImage.parentNode.removeChild(dragImage);
+        }
+      }, 0);
     } catch {
       // no-op
     }
+  };
+
+  const handleDragEnd = () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    setTimeout(() => {
+      (
+        window as Window & { __EPIC1_LAST_PRESET_DRAG__?: unknown }
+      ).__EPIC1_LAST_PRESET_DRAG__ = undefined;
+    }, 250);
   };
 
   // Auto-open details when an item is selected
@@ -750,11 +756,6 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
               </button>
             </div>
           )}
-          {usedFallback && !loading && (
-            <div style={{ padding: 8, color: '#b45309' }}>
-              Using fallback presets (manifest not available).
-            </div>
-          )}
           {/* List/Grid View */}
           {viewMode === 'list' ? (
             <div
@@ -806,6 +807,8 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                   <div
                     key={preset.id}
                     className={`preset-list-item ${selectedPreset === preset.id ? 'selected' : ''}`}
+                    data-path={preset.path || undefined}
+                    data-preset-id={preset.id}
                     onClick={() => {
                       setSelectedPreset(preset.id);
                       // Auto-show details panel if not visible
@@ -814,6 +817,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                     onDoubleClick={() => handleInsert(preset)}
                     draggable
                     onDragStart={e => handleDragStart(e, preset)}
+                    onDragEnd={handleDragEnd}
                     role="button"
                     tabIndex={0}
                     onKeyDown={e => {
@@ -851,7 +855,17 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                     <div className="preset-meta">{preset.nodes || 0}</div>
                     <div className="preset-action">
                       <button
+                        type="button"
                         className="insert-btn"
+                        draggable={false}
+                        onMouseDown={e => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
+                        onPointerDown={e => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
                         onClick={e => {
                           e.stopPropagation();
                           handleInsert(preset);
@@ -879,6 +893,8 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                 <div
                   key={preset.id}
                   className={`preset-card-compact ${selectedPreset === preset.id ? 'selected' : ''}`}
+                  data-path={preset.path || undefined}
+                  data-preset-id={preset.id}
                   onClick={() => {
                     setSelectedPreset(preset.id);
                     // Auto-show details panel if not visible
@@ -887,6 +903,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                   onDoubleClick={() => handleInsert(preset)}
                   draggable
                   onDragStart={e => handleDragStart(e, preset)}
+                  onDragEnd={handleDragEnd}
                   role="button"
                   tabIndex={0}
                   onKeyDown={e => {
@@ -902,7 +919,17 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                   }}
                 >
                   <button
+                    type="button"
                     className="preset-insert-btn"
+                    draggable={false}
+                    onMouseDown={e => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    onPointerDown={e => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                     onClick={e => {
                       e.stopPropagation();
                       handleInsert(preset);
@@ -1032,7 +1059,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                     gap: '8px'
                   }}
                 >
-                  {/* Description - show actual description or generate one */}
+                  {/* Description */}
                   <div
                     style={{
                       fontSize: '11px',
@@ -1041,12 +1068,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                       marginBottom: '4px'
                     }}
                   >
-                    {preset.description ||
-                      `A ${preset.category || 'graph'} fragment with ${preset.nodes || 0} nodes. ${
-                        preset.nodeTypes?.includes('WeightedChoice')
-                          ? 'Uses weighted random selection to generate variations.'
-                          : 'Generates consistent output based on the graph structure.'
-                      }`}
+                    {preset.description || 'No description available.'}
                   </div>
 
                   {/* Sample Output */}
@@ -1074,7 +1096,12 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                         paddingLeft: '8px'
                       }}
                     >
-                      "{generateSampleOutput(preset)}"
+                      {(() => {
+                        const sampleOutput = getSampleOutput(preset);
+                        return sampleOutput
+                          ? `"${sampleOutput}"`
+                          : 'Preview text not available.';
+                      })()}
                     </div>
                   </div>
 

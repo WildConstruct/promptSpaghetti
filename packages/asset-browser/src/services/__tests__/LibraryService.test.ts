@@ -19,25 +19,10 @@ describe('LibraryService', () => {
   });
 
   describe('listPresets', () => {
-    it('should return stubbed preset data', async () => {
+    it('should return an empty preset list when no real manifest-backed presets are available', async () => {
       const presets = await LibraryService.listPresets();
 
-      expect(presets).toHaveLength(3);
-      expect(presets).toEqual([
-        {
-          id: 'p1',
-          name: 'Medieval Castle',
-          tags: ['demo', 'medieval'],
-          type: 'image'
-        },
-        { id: 'p2', name: 'Forest Path', tags: ['nature'], type: 'image' },
-        {
-          id: 'p3',
-          name: 'Ocean Waves',
-          tags: ['nature', 'demo'],
-          type: 'video'
-        }
-      ]);
+      expect(presets).toEqual([]);
     });
 
     it('should return an array of Preset objects', async () => {
@@ -59,20 +44,18 @@ describe('LibraryService', () => {
       expect(firstCall).toEqual(secondCall);
     });
 
-    it('should have correct preset types', async () => {
+    it('should currently expose no preset types', async () => {
       const presets = await LibraryService.listPresets();
       const types = presets.map(p => p.type);
 
-      expect(types).toContain('image');
-      expect(types).toContain('video');
+      expect(types).toEqual([]);
     });
 
-    it('should have presets with multiple tags', async () => {
+    it('should currently expose no tagged stub presets', async () => {
       const presets = await LibraryService.listPresets();
       const multiTagPresets = presets.filter(p => p.tags.length > 1);
 
-      expect(multiTagPresets.length).toBeGreaterThan(0);
-      expect(multiTagPresets[0].tags).toContain('demo');
+      expect(multiTagPresets).toEqual([]);
     });
   });
 

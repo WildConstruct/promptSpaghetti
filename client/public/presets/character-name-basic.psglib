@@ -93,22 +93,21 @@
         "id": "edge-1736536800000-1",
         "source": "first-name-1736536800000",
         "target": "concat-1736536800000",
-        "sourceHandle": "output",
-        "targetHandle": "input0"
+        "sourceHandle": "source",
+        "targetHandle": "input1"
       },
       {
         "id": "edge-1736536800000-2",
         "source": "last-name-1736536800000",
         "target": "concat-1736536800000",
-        "sourceHandle": "output",
-        "targetHandle": "input1"
+        "sourceHandle": "source",
+        "targetHandle": "input2"
       },
       {
         "id": "edge-1736536800000-3",
         "source": "concat-1736536800000",
         "target": "output-1736536800000",
-        "sourceHandle": "output",
-        "targetHandle": "fullName"
+        "sourceHandle": "source"
       }
     ],
     "settings": {}

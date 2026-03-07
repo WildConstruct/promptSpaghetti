@@ -203,6 +203,10 @@ export const attachNodesToContainerNodes = (
       position: relative
     };
 
+    if (container.type === 'enhancedBoundingBox') {
+      (next as FlowNode & { expandParent?: boolean }).expandParent = true;
+    }
+
     if (isCollapsed) {
       next.hidden = true;
     }

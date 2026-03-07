@@ -1,5 +1,8 @@
 import React from 'react';
 import { deriveEnableSupabaseProp } from '@promptscape/core/utils/supabaseFeature';
+import { readPsg } from '@promptscape/core';
+import { looksLikeLegacyGraphWrapper } from '@promptscape/core/utils/psgCodec';
+import { parsePsgWithCompatibility } from '@promptscape/core/fileFormats/psg';
 import { useUserId } from '../user/UserProvider';
 import {
   loadServerGraphs,
@@ -28,10 +31,40 @@ export type OpenGraphDialogProps = {
   >;
 };
 
-async function fetchJson(url: string): Promise<unknown> {
+async function fetchText(url: string): Promise<string> {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to download graph (${res.status})`);
-  return res.json();
+  if (typeof res.text === 'function') {
+    return res.text();
+  }
+  if (typeof res.json === 'function') {
+    const data = await res.json();
+    return typeof data === 'string' ? data : JSON.stringify(data);
+  }
+  throw new Error('Unsupported response shape');
+}
+
+function parseGraphPayload(text: string, nameHint = ''): unknown {
+  const normalizedName = nameHint.toLowerCase();
+  const parseJson = () => JSON.parse(text);
+
+  if (normalizedName.endsWith('.psg')) {
+    try {
+      return parsePsgWithCompatibility(text);
+    } catch {
+      try {
+        return readPsg(text, { strictValidation: false });
+      } catch {
+        throw new Error('Invalid or unsupported .psg file');
+      }
+    }
+  }
+
+  const json = parseJson();
+  if (looksLikeLegacyGraphWrapper(json)) {
+    return json;
+  }
+  throw new Error('Unsupported file type. Open a .psg file.');
 }
 
 function Spinner() {
@@ -66,21 +99,21 @@ export function OpenGraphDialog({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Open Graph"
+      aria-label="Open PSG File"
       style={styles.backdrop}
     >
       <div style={styles.dialog}>
         <header style={styles.header}>
-          <h2 style={{ margin: 0 }}>Open</h2>
+          <h2 style={{ margin: 0 }}>Open .psg File</h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close Open Dialog"
+            aria-label="Close Open .psg Dialog"
           >
             ✕
           </button>
         </header>
-        <nav aria-label="Open Tabs" style={styles.tabs}>
+        <nav aria-label="Open PSG Tabs" style={styles.tabs}>
           <button
             type="button"
             aria-selected={tab === 'server'}
@@ -159,7 +192,7 @@ function SupabasePane({
     setError(null);
     const res = await listFn(userId);
     if (!res.ok) {
-      setError(res.error.message || 'Failed to list graphs');
+      setError(res.error.message || 'Failed to list .psg files');
       setStatus('error');
       return;
     }
@@ -176,15 +209,16 @@ function SupabasePane({
     setOpening(name);
     const res = await getFn(userId, name);
     if (!res.ok) {
-      setError(res.error.message || 'Failed to open graph');
+      setError(res.error.message || 'Failed to open .psg file');
       setOpening(null);
       return;
     }
     try {
-      const json = JSON.parse(res.data);
-      onOpenGraph(json);
-    } catch {
-      setError('Invalid graph JSON');
+      onOpenGraph(parseGraphPayload(res.data, name));
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : 'Invalid or unsupported .psg file';
+      setError(msg);
     } finally {
       setOpening(null);
     }
@@ -215,11 +249,11 @@ function SupabasePane({
       </div>
       {error && <ErrorState message={error} onRetry={load} />}
       {status === 'done' && items.length === 0 && (
-        <EmptyState message="No Supabase graphs available." />
+        <EmptyState message="No saved .psg files available in Supabase." />
       )}
       {status === 'done' && items.length > 0 && (
         <ul
-          aria-label="Supabase Graphs"
+          aria-label="Supabase PSG Files"
           role="listbox"
           tabIndex={0}
           onKeyDown={onKeyDown}
@@ -294,9 +328,8 @@ function ServerPane({ onOpenGraph }: { onOpenGraph: (g: unknown) => void }) {
   async function handleOpen(filename: string) {
     setOpening(filename);
     try {
-      const data = await fetchJson(`/graphs/${filename}`);
-      // Placeholder for codec: pass raw JSON through for now
-      onOpenGraph(data);
+      const text = await fetchText(`/graphs/${filename}`);
+      onOpenGraph(parseGraphPayload(text, filename));
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to open graph';
       setError(msg);
@@ -330,7 +363,7 @@ function ServerPane({ onOpenGraph }: { onOpenGraph: (g: unknown) => void }) {
       </div>
       {error && <ErrorState message={error} onRetry={load} />}
       {status === 'done' && graphs.length === 0 && (
-        <EmptyState message="No server graphs available." />
+        <EmptyState message="No server .psg files available." />
       )}
       {status === 'done' && graphs.length > 0 && (
         <ul
@@ -388,20 +421,15 @@ function LocalPane({ onOpenGraph }: { onOpenGraph: (g: unknown) => void }) {
     reader.onload = () => {
       try {
         const text = String(reader.result || '');
-        const json = JSON.parse(text);
-        if (name.endsWith('.graph.json')) {
-          // Placeholder migration until fromLegacyGraph is available
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const migrated = json; // fromLegacyGraph(json)
-          onOpenGraph(migrated);
-        } else if (name.endsWith('.psg')) {
-          // Placeholder codec read until available
-          onOpenGraph(json);
+        if (name.endsWith('.psg')) {
+          onOpenGraph(parseGraphPayload(text, name));
         } else {
-          setError('Unsupported file type');
+          setError('Unsupported file type. Choose a .psg file.');
         }
-      } catch {
-        setError('Invalid file');
+      } catch (err: unknown) {
+        const msg =
+          err instanceof Error ? err.message : 'Invalid or unsupported file';
+        setError(msg);
       }
     };
     reader.readAsText(file);
@@ -411,15 +439,20 @@ function LocalPane({ onOpenGraph }: { onOpenGraph: (g: unknown) => void }) {
     <div>
       <label>
         <span style={{ display: 'block', marginBottom: 4 }}>
-          Choose a .psg or .graph.json file
+          Choose a .psg file
         </span>
         <input
-          aria-label="Local Graph File"
+          aria-label="Local PSG File"
           type="file"
-          accept=".psg,.graph.json,application/json"
+          accept=".psg"
           onChange={onChange}
         />
       </label>
+      <div style={{ marginTop: 8, fontSize: 12, color: '#555' }}>
+        The MVP open path is a flat <code>.psg</code> fragment file. Older
+        compatibility shapes may still open when detected, but raw JSON is not a
+        supported primary format.
+      </div>
       {error && <ErrorState message={error} />}
     </div>
   );

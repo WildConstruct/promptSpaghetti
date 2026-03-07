@@ -76,7 +76,7 @@ export function ServerTab(): JSX.Element {
   }, [load]);
 
   return (
-    <section aria-label="Server Graphs" style={{ padding: 12 }}>
+    <section aria-label="Server PSG Assets" style={{ padding: 12 }}>
       <header
         style={{
           display: 'flex',
@@ -97,21 +97,19 @@ export function ServerTab(): JSX.Element {
       )}
       {status === 'done' && graphs.length === 0 ? (
         <EmptyState
-          title={missing ? 'No server manifest found' : 'No server graphs'}
+          title={missing ? 'No server manifest found' : 'No server .psg assets'}
           message={
-            'No server graphs available. See docs for adding demo assets.'
-          }
-          helpUrl={
             missing
-              ? 'docs/stories/1.15.error-empty-states-and-fallbacks.md'
-              : undefined
+              ? 'No server asset manifest is available in this build.'
+              : 'No server .psg assets are currently available.'
           }
+          helpUrl={undefined}
           actionLabel={missing ? 'Retry' : undefined}
           onAction={missing ? onRetry : undefined}
         />
       ) : null}
       {status === 'done' && graphs.length > 0 && (
-        <ul aria-label="Server Graph List" style={{ marginTop: 8 }}>
+        <ul aria-label="Server PSG Asset List" style={{ marginTop: 8 }}>
           {graphs.map(g => (
             <li key={g.filename}>
               <strong>{g.title}</strong>

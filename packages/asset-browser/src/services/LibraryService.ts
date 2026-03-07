@@ -3,17 +3,7 @@ import { parseManifest, type NormalizedPresetEntry } from './ManifestParser';
 
 export const LibraryService = {
   async listPresets(): Promise<Preset[]> {
-    // stubbed data until wired to real manifest
-    return [
-      {
-        id: 'p1',
-        name: 'Medieval Castle',
-        tags: ['demo', 'medieval'],
-        type: 'image'
-      },
-      { id: 'p2', name: 'Forest Path', tags: ['nature'], type: 'image' },
-      { id: 'p3', name: 'Ocean Waves', tags: ['nature', 'demo'], type: 'video' }
-    ];
+    return [];
   },
   async scanLibraries(manifests: unknown[]): Promise<NormalizedPresetEntry[]> {
     const entries: NormalizedPresetEntry[] = [];

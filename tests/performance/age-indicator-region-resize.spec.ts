@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 
 type RegionFragmentCandidate = {
   name: string;
+  path: string;
   searchTerms: string[];
 };
 
@@ -68,6 +69,7 @@ async function loadRegionFragmentCandidatesFromBrowser(
 
       candidates.push({
         name: fragment.name,
+        path: `${basePath}${normalizedPath}`,
         searchTerms: [fragment.name, ...regionNames]
       });
     }
@@ -114,8 +116,109 @@ async function getRegionSize(page: Page, regionId: string) {
   }, regionId);
 }
 
+async function getWrapperSnapshots(page: Page) {
+  return page.evaluate(() => {
+    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    if (!instance) {
+      return [];
+    }
+
+    return instance
+      .getNodes()
+      .filter((node: any) => node.type === 'enhancedBoundingBox')
+      .map((node: any) => ({
+        id: node.id,
+        title: node.data?.title,
+        position: node.position,
+        width:
+          node.data?.width || node.style?.width || node.measured?.width || 0,
+        height:
+          node.data?.height || node.style?.height || node.measured?.height || 0
+      }));
+  });
+}
+
+async function waitForWrapperCountIncrease(
+  page: Page,
+  before: number,
+  reason: string
+) {
+  try {
+    await expect
+      .poll(async () => (await getWrapperSnapshots(page)).length, {
+        timeout: 8000,
+        message: `Waiting for wrapper count increase after ${reason}`
+      })
+      .toBeGreaterThan(before);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function insertPresetDirect(
+  page: Page,
+  candidate: RegionFragmentCandidate
+) {
+  await page.evaluate(async preset => {
+    const insertPreset = (
+      window as typeof window & {
+        __EPIC1_INSERT_PRESET__?: ((meta: unknown) => Promise<void>) | null;
+      }
+    ).__EPIC1_INSERT_PRESET__;
+
+    if (!insertPreset) {
+      throw new Error('Editor preset insert helper is not available.');
+    }
+
+    await insertPreset({
+      name: preset.name,
+      path: preset.path,
+      file: preset.path,
+      metadata: {
+        file: preset.path
+      }
+    });
+  }, candidate);
+}
+
+async function selectWrapperForResize(wrapper: Locator) {
+  await expect(wrapper).toBeVisible({ timeout: 15000 });
+  await wrapper.locator('div.bounding-box-header').first().click();
+  await expect(wrapper).toHaveClass(/selected/);
+  await expect(wrapper.locator('.ebb-resize-handle')).toHaveCount(8);
+}
+
+async function getSouthEastResizeHandle(wrapper: Locator): Promise<Locator> {
+  const handles = wrapper.locator('.ebb-resize-handle');
+  await expect(handles).toHaveCount(8);
+
+  let bestIndex = -1;
+  let bestScore = Number.NEGATIVE_INFINITY;
+
+  for (let i = 0; i < 8; i += 1) {
+    const box = await handles.nth(i).boundingBox();
+    if (!box) {
+      continue;
+    }
+    const score = box.x + box.y;
+    if (score > bestScore) {
+      bestScore = score;
+      bestIndex = i;
+    }
+  }
+
+  if (bestIndex < 0) {
+    throw new Error('Unable to resolve south-east resize handle.');
+  }
+
+  return handles.nth(bestIndex);
+}
+
 async function ensureAssetBrowserOpen(page: Page) {
-  const assetBrowserToggle = page.locator('button[title="Asset Browser"]').first();
+  const assetBrowserToggle = page
+    .locator('button[title="Asset Browser"]')
+    .first();
   if (await assetBrowserToggle.count()) {
     const classes = (await assetBrowserToggle.getAttribute('class')) || '';
     if (!classes.includes('active')) {
@@ -132,7 +235,11 @@ async function ensureAssetBrowserOpen(page: Page) {
 async function findRegionFragmentTile(
   page: Page,
   candidates: RegionFragmentCandidate[]
-): Promise<{ fragmentCard: Locator; insertButton: Locator; fragmentName: string }> {
+): Promise<{
+  fragmentCard: Locator;
+  insertButton: Locator;
+  fragmentName: string;
+}> {
   if (candidates.length === 0) {
     throw new Error(
       'No asset fragments with regions were detected in the manifest.'
@@ -203,7 +310,9 @@ async function findRegionFragmentTile(
     }
   }
 
-  throw new Error('Unable to locate a region-enabled asset fragment in the browser UI.');
+  throw new Error(
+    'Unable to locate a region-enabled asset fragment in the browser UI.'
+  );
 }
 
 async function resolveInsertButton(
@@ -247,7 +356,9 @@ async function waitForNodeCountIncrease(
 }
 
 test.describe('Region fragment box sizing and resize', () => {
-  test('drag fragment, ensure region fits contents, then resize larger', async ({ page }) => {
+  test('drag fragment, ensure region fits contents, then resize larger', async ({
+    page
+  }) => {
     test.setTimeout(60000);
     page.on('console', msg => {
       console.log(`[browser:${msg.type()}] ${msg.text()}`);
@@ -260,17 +371,23 @@ test.describe('Region fragment box sizing and resize', () => {
     await page.goto('/');
 
     // 2) If Launch Screen appears, skip to editor
-    await maybeClick(page, page.getByRole('button', { name: /Skip to Editor/i }));
+    await maybeClick(
+      page,
+      page.getByRole('button', { name: /Skip to Editor/i })
+    );
 
     // 3) Ensure editor canvas is visible
     const canvas = page.locator('div.graph-canvas-container');
     await expect(canvas).toBeVisible();
     const nodeLocator = page.locator('.react-flow__node');
     const nodesBeforeInsert = await nodeLocator.count();
+    const wrappersBeforeInsert = (await getWrapperSnapshots(page)).length;
 
     // 4) Locate any fragment that has a region defined
-    const regionCandidates = await loadRegionFragmentCandidatesFromBrowser(page);
-    const { fragmentCard, insertButton } = await findRegionFragmentTile(page, regionCandidates);
+    const regionCandidates =
+      await loadRegionFragmentCandidatesFromBrowser(page);
+    const { fragmentCard, insertButton, fragmentName } =
+      await findRegionFragmentTile(page, regionCandidates);
 
     // 5) Try dragging the item into the canvas; if drag fails, attempt a click fallback
     let inserted = false;
@@ -286,6 +403,24 @@ test.describe('Region fragment box sizing and resize', () => {
         return true;
       } catch {
         console.log('[spec] Insert button click failed');
+        return false;
+      }
+    };
+
+    const tryDomClick = async () => {
+      try {
+        await page.evaluate(name => {
+          const button = Array.from(document.querySelectorAll('button')).find(
+            candidate =>
+              candidate.getAttribute('aria-label') === `Insert ${name}`
+          ) as HTMLButtonElement | undefined;
+          if (!button) {
+            throw new Error(`Insert button not found for ${name}`);
+          }
+          button.click();
+        }, fragmentName);
+        return true;
+      } catch {
         return false;
       }
     };
@@ -311,6 +446,7 @@ test.describe('Region fragment box sizing and resize', () => {
 
     const insertionStrategies: Array<[string, () => Promise<boolean>]> = [
       ['button', tryInsertButton],
+      ['dom-click', tryDomClick],
       ['double-click', tryDoubleClick],
       ['keyboard', tryKeyboardInsert]
     ];
@@ -327,6 +463,17 @@ test.describe('Region fragment box sizing and resize', () => {
           if (success) {
             return true;
           }
+
+          // eslint-disable-next-line no-await-in-loop
+          if (
+            await waitForWrapperCountIncrease(
+              page,
+              wrappersBeforeInsert,
+              'insert action'
+            )
+          ) {
+            return true;
+          }
         }
       }
       return false;
@@ -341,7 +488,9 @@ test.describe('Region fragment box sizing and resize', () => {
         return null;
       }
       const nodes = instance.getNodes();
-      const regionNode = nodes.find((node: any) => node.type === 'enhancedBoundingBox');
+      const regionNode = nodes.find(
+        (node: any) => node.type === 'enhancedBoundingBox'
+      );
       if (!regionNode) {
         return null;
       }
@@ -364,10 +513,7 @@ test.describe('Region fragment box sizing and resize', () => {
       .first();
     await expect(region).toBeVisible({ timeout: 15000 });
 
-    // 7) Select the region by clicking its header (so resize handles render)
-    const header = region.locator('div.bounding-box-header');
-    await expect(header).toBeVisible();
-    await header.click();
+    await selectWrapperForResize(region);
 
     // 8) Check node count indicator (should include contained nodes)
     const status = region.locator('div.bounding-box-status');
@@ -387,7 +533,7 @@ test.describe('Region fragment box sizing and resize', () => {
     await expect(primaryNode).toBeVisible();
 
     // 11) Attempt a resize via the south-east handle
-    const handleSE = region.locator('div.resize-handle-se');
+    const handleSE = await getSouthEastResizeHandle(region);
     await expect(handleSE).toBeVisible();
 
     const beforeSize = await getRegionSize(page, regionInfo.id);
@@ -412,5 +558,123 @@ test.describe('Region fragment box sizing and resize', () => {
     for (const locator of childLocators) {
       await expect(locator).toBeVisible();
     }
+  });
+
+  test('resizing one imported wrapper does not shift unrelated wrappers during pointer drag', async ({
+    page
+  }) => {
+    test.setTimeout(60000);
+
+    await page.goto('/');
+    await maybeClick(
+      page,
+      page.getByRole('button', { name: /Skip to Editor/i })
+    );
+
+    const canvas = page.locator('div.graph-canvas-container');
+    await expect(canvas).toBeVisible();
+    const nodeLocator = page.locator('.react-flow__node');
+
+    const candidates = await loadRegionFragmentCandidatesFromBrowser(page);
+    expect(candidates.length).toBeGreaterThan(1);
+    const preferredNames = [
+      'Multi-Aspect Eye Description System',
+      'Architectural Styles'
+    ];
+    const selectedCandidates: RegionFragmentCandidate[] = [];
+
+    for (const name of preferredNames) {
+      const match = candidates.find(candidate => candidate.name === name);
+      if (match) {
+        selectedCandidates.push(match);
+      }
+    }
+
+    for (const candidate of candidates) {
+      if (
+        selectedCandidates.some(existing => existing.name === candidate.name)
+      ) {
+        continue;
+      }
+      selectedCandidates.push(candidate);
+      if (selectedCandidates.length >= 2) {
+        break;
+      }
+    }
+
+    expect(selectedCandidates.length).toBeGreaterThan(1);
+
+    const insertRegionFragment = async (
+      candidate: RegionFragmentCandidate,
+      expectedBefore: number
+    ) => {
+      await insertPresetDirect(page, candidate);
+      await waitForWrapperCountIncrease(
+        page,
+        expectedBefore,
+        'region fragment insert'
+      );
+    };
+
+    let beforeInsert = (await getWrapperSnapshots(page)).length;
+    await insertRegionFragment(selectedCandidates[0], beforeInsert);
+    beforeInsert = (await getWrapperSnapshots(page)).length;
+    await insertRegionFragment(selectedCandidates[1], beforeInsert);
+
+    await expect
+      .poll(async () => (await getWrapperSnapshots(page)).length, {
+        timeout: 10000
+      })
+      .toBeGreaterThan(1);
+
+    const wrappers = await getWrapperSnapshots(page);
+    expect(wrappers.length).toBeGreaterThan(1);
+
+    const targetWrapper = wrappers[0];
+    const stableWrapper = wrappers[1];
+
+    const targetRegionNode = page
+      .locator(`.react-flow__node[data-id="${targetWrapper.id}"]`)
+      .first();
+    const stableRegionNode = page
+      .locator(`.react-flow__node[data-id="${stableWrapper.id}"]`)
+      .first();
+
+    await expect(targetRegionNode).toBeVisible({ timeout: 15000 });
+    await expect(stableRegionNode).toBeVisible({ timeout: 15000 });
+
+    const targetRegion = targetRegionNode
+      .locator('.enhanced-bounding-box-refactored')
+      .first();
+    const stableBefore = await sizeOf(stableRegionNode);
+
+    await selectWrapperForResize(targetRegion);
+
+    const handleSE = await getSouthEastResizeHandle(targetRegion);
+    await expect(handleSE).toBeVisible();
+
+    const handleBox = await handleSE.boundingBox();
+    if (!handleBox) {
+      throw new Error('Resize handle not interactable for imported wrapper.');
+    }
+
+    const startX = handleBox.x + handleBox.width / 2;
+    const startY = handleBox.y + handleBox.height / 2;
+
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(startX + 180, startY + 120, { steps: 12 });
+
+    const stableDuring = await sizeOf(stableRegionNode);
+
+    await page.mouse.up();
+    await page.waitForTimeout(100);
+
+    const stableAfter = await sizeOf(stableRegionNode);
+
+    expect(Math.abs(stableDuring.x - stableBefore.x)).toBeLessThanOrEqual(2);
+    expect(Math.abs(stableDuring.y - stableBefore.y)).toBeLessThanOrEqual(2);
+    expect(Math.abs(stableAfter.x - stableBefore.x)).toBeLessThanOrEqual(2);
+    expect(Math.abs(stableAfter.y - stableBefore.y)).toBeLessThanOrEqual(2);
   });
 });

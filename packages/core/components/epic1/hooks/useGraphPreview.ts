@@ -4,6 +4,7 @@ import { PreviewEngine, PreviewState } from '../preview/PreviewEngine';
 import { usePreviewTrayStore } from '../../../stores/previewTrayStore';
 import { nodeDataToRuntimeNode } from '../nodes/nodeFactory';
 import type { Epic1Graph } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
+import { debugLogEpic1 } from '../../../utils/debug';
 
 interface UseGraphPreviewOptions {
   showToast?: (type: 'success' | 'error' | 'info', message: string) => void;
@@ -117,7 +118,6 @@ export function useGraphPreview<NodeData = unknown>(
   // Automatically update preview when nodes or edges change
   useEffect(() => {
     if (!previewEngineRef.current) {
-      console.log('[Preview] No preview engine available');
       return;
     }
 
@@ -125,15 +125,9 @@ export function useGraphPreview<NodeData = unknown>(
     if (nodes.length > 0) {
       const runtimeGraph = convertToRuntimeGraph(nodes, edges);
       if (runtimeGraph) {
-        console.log(
-          '[Preview] Updating preview with graph changes - nodes:',
-          nodes.length,
-          'edges:',
-          edges.length
-        );
         previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
       } else {
-        console.log('[Preview] Failed to convert graph');
+        // Conversion failed; avoid spamming logs in production
       }
     }
   }, [nodes, edges]);
@@ -172,11 +166,7 @@ export function useGraphPreview<NodeData = unknown>(
         const runtimeGraph = convertToRuntimeGraph(nodes, edges);
         if (runtimeGraph) {
           // Trigger re-execution with new seeds
-          previewEngineRef.current.updatePreview(
-            runtimeGraph,
-            nodes,
-            edges
-          );
+          previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
         }
       }
       showToast?.('info', `Updated ${seeds.length} preview seeds`);
@@ -215,7 +205,9 @@ export function useGraphPreview<NodeData = unknown>(
 
   // Execute preview manually
   const executePreview = useCallback(() => {
-    if (!previewEngineRef.current) {return;}
+    if (!previewEngineRef.current) {
+      return;
+    }
 
     const runtimeGraph = convertToRuntimeGraph(nodes, edges);
     if (runtimeGraph) {
@@ -342,7 +334,7 @@ function convertToRuntimeGraph<NodeData>(
       if (runtimeNode) {
         runtimeNodes.set(node.id, runtimeNode);
       } else {
-        console.warn('[Preview] Could not convert node:', node.id, node.type);
+        debugLogEpic1('[Preview] Could not convert node:', node.id, node.type);
       }
     }
 

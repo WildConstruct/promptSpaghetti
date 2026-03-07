@@ -2,8 +2,15 @@
 
 /* Force width for weighted-choice nodes */
 .weighted-choice.enhanced-branching {
-  width: 280px !important;
-  max-width: 280px !important;
+  width: 320px !important;
+  max-width: 320px !important;
+}
+
+.weighted-choice.enhanced-branching.editing,
+.epic1-editable-node.weighted-choice.enhanced-branching.editing {
+  width: 380px !important;
+  max-width: 380px !important;
+  min-width: 380px !important;
 }
 
 .weighted-choice.enhanced-branching .epic1-editable-node-container {
@@ -391,9 +398,9 @@
 
 /* Text input - maximized width */
 .enhanced-option-text {
-  flex: 1 1 auto;
-  min-width: 200px; /* Minimum reasonable width */
-  max-width: calc(100% - 140px); /* Account for other controls */
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
   height: 32px;
   padding: 6px 10px;
   background: rgba(0, 0, 0, 0.2);
@@ -688,9 +695,9 @@
 
 /* Base editable node override with overflow for handles */
 .epic1-editable-node.weighted-choice.enhanced-branching {
-  width: 560px !important; /* Wider to accommodate all controls */
-  max-width: 560px !important;
-  min-width: 560px !important;
+  width: 320px !important;
+  max-width: 320px !important;
+  min-width: 320px !important;
   overflow: visible !important;
 }
 

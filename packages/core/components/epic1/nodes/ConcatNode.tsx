@@ -93,6 +93,19 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
                   zIndex: 1000
                 }}
               />
+              <Handle
+                type="source"
+                position={Position.Right}
+                id="source"
+                className="epic1-handle source concat-output"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '-5px',
+                  transform: 'translateY(-50%)',
+                  zIndex: 1000
+                }}
+              />
             </>
           );
         }
@@ -129,6 +142,19 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
                 position: 'absolute',
                 top: '70%',
                 left: '-5px',
+                transform: 'translateY(-50%)',
+                zIndex: 1000
+              }}
+            />
+            <Handle
+              type="source"
+              position={Position.Right}
+              id="source"
+              className="epic1-handle source concat-output"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '-5px',
                 transform: 'translateY(-50%)',
                 zIndex: 1000
               }}

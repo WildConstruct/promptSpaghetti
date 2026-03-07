@@ -10,10 +10,10 @@ import {
   PromptAnalysis,
   GeneratedNode,
   NodeMapping,
+  AnalysisEdge,
   buildSequentialEdges
 } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
-import { normalizeLLMResult, mergeLLMResult } from '../../lib/llmAnalysisMerge';
 import LLMService from '../../shims/llm-service';
 import './PromptDissector.css';
 import { TextSelectionModal, TextSelection } from './TextSelectionModal';
@@ -61,6 +61,128 @@ const HIGHLIGHT_COLORS = [
   '#FFB347', // Orange
   '#B19CD9' // Purple
 ];
+
+type DraftGraphResponse = {
+  ok?: boolean;
+  summary?: string;
+  operations?: Array<{
+    kind?: string;
+    nodes?: Array<Record<string, unknown>>;
+    edges?: Array<Record<string, unknown>>;
+  }>;
+  notes?: string[];
+  model?: string;
+  fallback?: boolean;
+};
+
+const mapDraftNodeType = (type: unknown): GeneratedNode['node']['nodeType'] => {
+  const normalized = typeof type === 'string' ? type.toLowerCase() : '';
+  if (normalized.includes('choice')) {
+    return 'Choice';
+  }
+  if (normalized.includes('variable')) {
+    return 'Variable';
+  }
+  if (normalized.includes('output')) {
+    return 'Output';
+  }
+  return 'Text';
+};
+
+const analysisFromDraftGraphResponse = (
+  prompt: string,
+  response: DraftGraphResponse
+): PromptAnalysis | null => {
+  const draftInsert = Array.isArray(response.operations)
+    ? response.operations.find(operation => operation.kind === 'insertNodes')
+    : null;
+
+  if (!draftInsert || !Array.isArray(draftInsert.nodes)) {
+    return null;
+  }
+
+  const baseline = simplePromptParser.parse(prompt);
+  const nodes: GeneratedNode[] = draftInsert.nodes.map((node, index) => {
+    const nodeId =
+      typeof node.id === 'string' ? node.id : `draft-node-${index}`;
+    const data =
+      typeof node.data === 'object' && node.data !== null
+        ? (node.data as Record<string, unknown>)
+        : {};
+    const previewText =
+      typeof data.text === 'string'
+        ? data.text
+        : typeof data.content === 'string'
+          ? data.content
+          : typeof data.label === 'string'
+            ? data.label
+            : 'Node';
+
+    return {
+      node: {
+        id: nodeId,
+        nodeType: mapDraftNodeType(node.type),
+        variableName:
+          typeof data.variableName === 'string' ? data.variableName : undefined,
+        getPreviewText: () => previewText,
+        data
+      }
+    };
+  });
+
+  const mappings = baseline.mappings
+    .slice(0, Math.max(0, nodes.length - 1))
+    .map((mapping, index) => ({
+      ...mapping,
+      nodeId: nodes[index]?.node.id || mapping.nodeId,
+      highlightColor: HIGHLIGHT_COLORS[index % HIGHLIGHT_COLORS.length]
+    }));
+
+  const edges: AnalysisEdge[] = Array.isArray(draftInsert.edges)
+    ? draftInsert.edges.reduce<AnalysisEdge[]>((acc, edge, index) => {
+        const source =
+          typeof edge.source === 'string' ? edge.source : undefined;
+        const target =
+          typeof edge.target === 'string' ? edge.target : undefined;
+        if (!source || !target) {
+          return acc;
+        }
+
+        acc.push({
+          id:
+            typeof edge.id === 'string'
+              ? edge.id
+              : `${source}__${target}__${index}`,
+          source,
+          target,
+          sourceHandle:
+            typeof edge.sourceHandle === 'string'
+              ? edge.sourceHandle
+              : undefined,
+          targetHandle:
+            typeof edge.targetHandle === 'string'
+              ? edge.targetHandle
+              : undefined
+        });
+        return acc;
+      }, [])
+    : baseline.edges;
+
+  return {
+    segments: baseline.segments,
+    nodes,
+    mappings,
+    edges,
+    rawPrompt: prompt,
+    llmMetadata: {
+      parserMode: 'llm-enhanced',
+      summary: response.summary,
+      notes: response.notes || [],
+      model: response.model || 'heuristic-segmentation-v1',
+      fallback: response.fallback !== false
+    }
+  };
+};
 
 const splitChoiceOptions = (raw: string): string[] => {
   const text = raw.trim();
@@ -386,12 +508,15 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       }
 
       try {
-        const rawResult = await llmServiceRef.current.parse(text, {
-          mode: 'llm-enhanced'
-        });
-        const normalized = normalizeLLMResult(rawResult);
-        if (normalized) {
-          finalAnalysis = mergeLLMResult(baselineAnalysis, normalized);
+        const rawResult = (await llmServiceRef.current.draftGraphFromPrompt(
+          text,
+          {
+            mode: 'draft'
+          }
+        )) as DraftGraphResponse;
+        const draftAnalysis = analysisFromDraftGraphResponse(text, rawResult);
+        if (draftAnalysis) {
+          finalAnalysis = draftAnalysis;
         } else {
           finalAnalysis = {
             ...baselineAnalysis,
@@ -2380,7 +2505,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
               }
             }}
           >
-            AI-Enhanced
+            Agent Draft
           </button>
         </div>
         {/* Input container inside tabs container */}
@@ -2663,7 +2788,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
               animation: 'spin 1s linear infinite'
             }}
           />
-          <span>AI is analyzing your prompt...</span>
+          <span>Agent is drafting your graph...</span>
         </div>
       )}
       {/* Removed Node Types legend as requested */}

@@ -138,7 +138,7 @@ export default function ParsingLoader({
             ease: 'easeInOut'
           }}
         >
-          AI-Enhanced parsing in progress
+          Agent draft in progress
         </motion.span>
         <motion.span
           animate={{ opacity: [0, 1, 0] }}

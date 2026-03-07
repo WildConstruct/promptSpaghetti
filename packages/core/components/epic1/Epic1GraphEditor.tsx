@@ -122,7 +122,6 @@ const TutorialButton: React.FC = () => {
   const { startTutorial } = useTutorial();
   
   const handleClick = () => {
-    console.log('[TutorialButton] Starting tutorial...');
     startTutorial();
   };
   
@@ -172,7 +171,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   showAssetLibrary = true,
   assetLibraryPosition = 'left'
 }) => {
-  console.log('[Epic1GraphEditor] Component rendering, showAssetLibrary:', showAssetLibrary);
   // Node types based on asset library visibility
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
 
@@ -183,7 +181,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   // Graph persistence - DISABLED to prevent overriding new nodes
   const { persistedState } = useGraphPersistence([], [], {
     autoSave: false,
-    onLoadSuccess: state => console.log('Restored graph from local storage'),
+    onLoadSuccess: state => state && state.nodes?.length,
     onLoadError: error =>
       console.error('Failed to load persisted state:', error)
   });
@@ -199,11 +197,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   // Update nodes when initialNodes change (for when launched from parser)
   React.useEffect(() => {
     if (initialNodes && initialNodes.length > 0 && nodes.length === 0) {
-      console.log('[Epic1GraphEditor] Setting initial nodes:', initialNodes.length);
       setNodes(initialNodes);
     }
     if (initialEdges && initialEdges.length > 0 && edges.length === 0) {
-      console.log('[Epic1GraphEditor] Setting initial edges:', initialEdges.length);
       setEdges(initialEdges);
     }
   }, [initialNodes, initialEdges]);
@@ -243,7 +239,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     onEdgesDelete
   } = useNodeOperations(nodes, edges, setNodes, setEdges, reactFlowInstance, {
     showToast,
-    onNodeSelect: nodeId => console.log('Node selected:', nodeId)
+    onNodeSelect: () => void 0
   });
 
   // Selection management
@@ -283,7 +279,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       if (!preset) {
         return;
       }
-      console.log('[Epic1GraphEditor] Inserting preset via TabbedSidePanel:', preset.id);
       const pos = reactFlowInstance
         ? reactFlowInstance.screenToFlowPosition({
             x: window.innerWidth / 2,
@@ -299,17 +294,50 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   const { isDraggingOver, onDragOver, onDragLeave, onDragEnter, onDrop } =
     useGraphDragDrop(reactFlowInstance, setNodes, {
       showToast,
-      onNodeCreate: node => console.log('Node created via drag:', node),
+      onNodeCreate: () => void 0,
       onPresetDrop: (preset, position) => {
         void insertPresetByMeta(preset, position);
       }
     });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      (window as any).__EPIC1_REACT_FLOW__ = reactFlowInstance;
+    if (typeof window === 'undefined') {
+      return;
     }
-  }, [reactFlowInstance]);
+
+    (
+      window as typeof window & {
+        __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+        __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+      }
+    ).__EPIC1_REACT_FLOW__ = reactFlowInstance;
+    (
+      window as typeof window & {
+        __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+        __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+      }
+    ).__EPIC1_INSERT_PRESET__ = async (preset: unknown) => {
+      const pos = reactFlowInstance
+        ? reactFlowInstance.screenToFlowPosition({
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2
+          })
+        : { x: 250, y: 250 };
+      await insertPresetByMeta(preset as Parameters<typeof insertPresetByMeta>[0], pos);
+    };
+
+    return () => {
+      const win = window as typeof window & {
+        __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+        __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+      };
+
+      if (win.__EPIC1_REACT_FLOW__ === reactFlowInstance) {
+        win.__EPIC1_REACT_FLOW__ = null;
+        win.__EPIC1_INSERT_PRESET__ = null;
+      }
+    };
+  }, [insertPresetByMeta, reactFlowInstance]);
 
   // Keyboard shortcuts
   useGraphKeyboardShortcuts(
@@ -424,7 +452,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   useEffect(() => {
     const handlePromptPasted = (event: CustomEvent) => {
       const { prompt } = event.detail;
-      console.log('[Epic1GraphEditor] Tutorial prompt received:', prompt);
 
       if (prompt && typeof prompt === 'string') {
         // Store prompt for processing
@@ -463,8 +490,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   // Parse prompt and create nodes
   const parsePromptAndCreateNodes = useCallback((prompt: string) => {
     try {
-      console.log('[Epic1GraphEditor] Parsing prompt:', prompt);
-
       // Validate the prompt first
       const validation = PromptParser.validate(prompt);
       if (!validation.isValid) {
@@ -475,7 +500,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
       // Parse the prompt
       const result: ParsedPromptResult = PromptParser.parse(prompt);
-      console.log('[Epic1GraphEditor] Parsed result:', result);
 
       if (result.segments.length === 0) {
         showToast('warning', 'No content found in prompt to create nodes');
@@ -579,8 +603,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         }
       }
 
-      console.log('[Epic1GraphEditor] Created nodes:', newNodes.length, 'edges:', newEdges.length);
-
       // Add nodes and edges to the graph
       setNodes(currentNodes => [...currentNodes, ...newNodes]);
       setEdges(currentEdges => [...currentEdges, ...newEdges]);
@@ -640,10 +662,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   // React Flow initialization
   const onInit = useCallback((instance: ReactFlowInstance) => {
-    console.log('[Epic1GraphEditor] React Flow initialized, instance:', instance);
-    console.log('[Epic1GraphEditor] Current nodes:', nodes.length, 'edges:', edges.length);
     setReactFlowInstance(instance);
-  }, [nodes.length, edges.length]);
+  }, []);
 
   // Wrapper for nodes change to support undo/redo
   const onNodesChange = useCallback(
@@ -663,7 +683,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   const content = (
     <div
-      className="epic1-graph-editor"
+      className={`epic1-graph-editor ${isDraggingOver ? 'drag-over' : ''}`}
       style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
     >
       {/* Main horizontal container for everything except preview tray */}
@@ -697,6 +717,11 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           onDragEnter={onDragEnter}
           onDragLeave={onDragLeave}
         >
+          {isDraggingOver && (
+            <div className="drop-indicator" aria-live="polite">
+              Drop to insert
+            </div>
+          )}
           <SafeReactFlowWrapper>
             <ReactFlow
               nodes={enhancedNodes}
@@ -932,7 +957,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             setTetrisMode(false);
             showToast('info', 'Exited Tetris mode');
           }}
-          onScoreUpdate={score => console.log('Tetris score:', score)}
+          onScoreUpdate={() => void 0}
         />
       )}
     </div>

@@ -1,5 +1,6 @@
-import { useCallback, useState, DragEvent } from 'react';
+import { useCallback, useEffect, useState, DragEvent } from 'react';
 import { Node, ReactFlowInstance, XYPosition } from 'reactflow';
+import { debugLogEpic1 } from '../../../utils/debug';
 import type { PresetDropPayload } from './useDragDropHandlers';
 
 interface DraggedItem {
@@ -18,6 +19,7 @@ interface UseGraphDragDropOptions {
 declare global {
   interface Window {
     __graphDragDropHookBuild?: string;
+    __EPIC1_LAST_PRESET_DRAG__?: unknown;
   }
 }
 
@@ -27,7 +29,7 @@ if (
 ) {
   window.__graphDragDropHookBuild = '20250206';
   if (process.env.NODE_ENV !== 'production') {
-    console.log('[useGraphDragDrop] Hook build 20250206 active');
+    debugLogEpic1('[useGraphDragDrop] Hook build 20250206 active');
   }
 }
 
@@ -100,7 +102,9 @@ export function useGraphDragDrop<NodeData = unknown>(
         }
 
         // Check for node type data
-        const nodeType = dataTransfer.getData('application/nodeType');
+        const nodeType =
+          dataTransfer.getData('application/nodeType') ||
+          dataTransfer.getData('application/node-type');
         if (nodeType) {
           return { type: nodeType };
         }
@@ -108,8 +112,13 @@ export function useGraphDragDrop<NodeData = unknown>(
         // Check for custom data format
         const customData = dataTransfer.getData('application/reactflow');
         if (customData) {
-          const parsed = JSON.parse(customData);
-          return parsed;
+          try {
+            const parsed = JSON.parse(customData);
+            return parsed;
+          } catch {
+            // Some drag sources write plain node type text to this key.
+            return { type: customData };
+          }
         }
 
         // Check for asset browser data
@@ -117,6 +126,16 @@ export function useGraphDragDrop<NodeData = unknown>(
         if (assetData) {
           try {
             const parsed = JSON.parse(assetData);
+            if (
+              parsed &&
+              typeof parsed === 'object' &&
+              ('path' in parsed ||
+                'file' in parsed ||
+                'psglib' in parsed ||
+                'content' in parsed)
+            ) {
+              return { type: 'preset', presetData: assetData };
+            }
             if (parsed.type === 'asset' || parsed.assetType) {
               return {
                 type: 'asset',
@@ -130,6 +149,17 @@ export function useGraphDragDrop<NodeData = unknown>(
           }
         }
 
+        const fallbackPreset =
+          typeof window !== 'undefined'
+            ? window.__EPIC1_LAST_PRESET_DRAG__
+            : undefined;
+        if (isPresetDropPayload(fallbackPreset)) {
+          return {
+            type: 'preset',
+            presetData: JSON.stringify(fallbackPreset)
+          };
+        }
+
         return null;
       } catch (error) {
         console.error('Failed to parse drag data:', error);
@@ -137,47 +167,6 @@ export function useGraphDragDrop<NodeData = unknown>(
       }
     },
     []
-  );
-
-  // Handle drop event
-  const onDrop = useCallback(
-    (event: DragEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      console.log('[useGraphDragDrop] Drop event received');
-      setIsDraggingOver(false);
-      setDropPosition(null);
-
-      if (!reactFlowInstance) {
-        console.error('[useGraphDragDrop] reactFlowInstance is null');
-        showToast?.('error', 'Graph not ready for drop');
-        return;
-      }
-      console.log('[useGraphDragDrop] reactFlowInstance is available');
-
-      const position = reactFlowInstance.screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY
-      });
-
-      const dragData = parseDragData(event.dataTransfer);
-      if (!dragData) {
-        console.warn('No valid drag data found');
-        return;
-      }
-
-      // Handle different drop types
-      if (dragData.type === 'preset' && dragData.presetData) {
-        handlePresetDrop(dragData.presetData, position);
-      } else if (dragData.type === 'asset' && dragData.meta) {
-        handleAssetDrop(dragData.meta, position);
-      } else if (dragData.type) {
-        handleNodeTypeDrop(dragData.type, position, dragData.data);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reactFlowInstance, parseDragData, showToast]
   );
 
   // Handle preset drop
@@ -231,12 +220,159 @@ export function useGraphDragDrop<NodeData = unknown>(
         data: nodeData
       };
 
+      if (nodeType === 'enhancedBoundingBox') {
+        newNode.width = 400;
+        newNode.height = 300;
+        newNode.style = {
+          ...(newNode.style || {}),
+          width: 400,
+          height: 300
+        };
+      }
+
       setNodes(nds => [...nds, newNode]);
       onNodeCreate?.(newNode);
       showToast?.('success', `Added ${nodeType} node`);
     },
     [setNodes, onNodeCreate, showToast]
   );
+
+  const handleParsedDrop = useCallback(
+    (dataTransfer: DataTransfer, clientX: number, clientY: number) => {
+      setIsDraggingOver(false);
+      setDropPosition(null);
+
+      if (!reactFlowInstance) {
+        console.error('[useGraphDragDrop] reactFlowInstance is null');
+        showToast?.('error', 'Graph not ready for drop');
+        return;
+      }
+
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: clientX,
+        y: clientY
+      });
+
+      const dragData = parseDragData(dataTransfer);
+      if (!dragData) {
+        console.warn('No valid drag data found');
+        return;
+      }
+
+      if (dragData.type === 'preset' && dragData.presetData) {
+        handlePresetDrop(dragData.presetData, position);
+      } else if (dragData.type === 'asset' && dragData.meta) {
+        handleAssetDrop(dragData.meta, position);
+      } else if (dragData.type) {
+        handleNodeTypeDrop(dragData.type, position, dragData.data);
+      }
+    },
+    [
+      handleAssetDrop,
+      handleNodeTypeDrop,
+      handlePresetDrop,
+      parseDragData,
+      reactFlowInstance,
+      showToast
+    ]
+  );
+
+  // Handle drop event
+  const onDrop = useCallback(
+    (event: DragEvent) => {
+      if (
+        (event.nativeEvent as { __epic1DropHandled?: boolean })
+          .__epic1DropHandled
+      ) {
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      (
+        event.nativeEvent as { __epic1DropHandled?: boolean }
+      ).__epic1DropHandled = true;
+      debugLogEpic1('[useGraphDragDrop] Drop event received');
+      handleParsedDrop(event.dataTransfer, event.clientX, event.clientY);
+    },
+    [handleParsedDrop]
+  );
+
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    const isInsideEditor = (event: globalThis.DragEvent) => {
+      const editor = document.querySelector('.epic1-graph-editor');
+      if (!editor) {
+        return false;
+      }
+      const target = event.target as globalThis.Node | null;
+      if (target && editor.contains(target)) {
+        return true;
+      }
+      const rect = editor.getBoundingClientRect();
+      return (
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom
+      );
+    };
+
+    const hasAppDragTypes = (dataTransfer: DataTransfer | null) => {
+      if (!dataTransfer) {
+        return false;
+      }
+      const types = Array.from(dataTransfer.types || []);
+      return (
+        types.includes('application/x-preset') ||
+        types.includes('preset') ||
+        types.includes('application/json') ||
+        types.includes('application/reactflow') ||
+        types.includes('application/nodeType') ||
+        types.includes('application/node-type') ||
+        types.includes('text/plain')
+      );
+    };
+
+    const onDocumentDragOver = (event: globalThis.DragEvent) => {
+      if (!isInsideEditor(event) || !hasAppDragTypes(event.dataTransfer)) {
+        return;
+      }
+      event.preventDefault();
+      if (event.dataTransfer) {
+        event.dataTransfer.dropEffect = 'copy';
+      }
+      setIsDraggingOver(true);
+      if (reactFlowInstance) {
+        const position = reactFlowInstance.screenToFlowPosition({
+          x: event.clientX,
+          y: event.clientY
+        });
+        setDropPosition(position);
+      }
+    };
+
+    const onDocumentDrop = (event: globalThis.DragEvent) => {
+      if (!isInsideEditor(event) || !hasAppDragTypes(event.dataTransfer)) {
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      (event as { __epic1DropHandled?: boolean }).__epic1DropHandled = true;
+      if (event.dataTransfer) {
+        handleParsedDrop(event.dataTransfer, event.clientX, event.clientY);
+      }
+    };
+
+    document.addEventListener('dragover', onDocumentDragOver, true);
+    document.addEventListener('drop', onDocumentDrop, true);
+    return () => {
+      document.removeEventListener('dragover', onDocumentDragOver, true);
+      document.removeEventListener('drop', onDocumentDrop, true);
+    };
+  }, [handleParsedDrop, reactFlowInstance]);
 
   // Handle drag start (for internal nodes)
   const onDragStart = useCallback((event: DragEvent, node: Node) => {
@@ -283,7 +419,23 @@ function getDefaultNodeData(type: string): Record<string, unknown> {
     case 'output':
       return { label: 'Output' };
     case 'variable':
+    case 'setVariable':
+    case 'getVariable':
       return { variableName: 'myVariable', value: '' };
+    case 'enhancedBoundingBox':
+      return {
+        title: 'Region',
+        description: '',
+        backgroundColor: '#1a202c',
+        opacity: 0.1,
+        borderColor: '#22d3ee',
+        borderStyle: 'solid',
+        borderWidth: 2,
+        locked: false,
+        isCollapsed: false,
+        width: 400,
+        height: 300
+      };
     default:
       return {};
   }

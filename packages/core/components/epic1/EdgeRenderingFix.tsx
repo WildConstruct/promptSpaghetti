@@ -2,6 +2,7 @@ import React from 'react';
 import { EdgeProps, getSmoothStepPath } from 'reactflow';
 import { AttachmentEdge } from './edges/AttachmentEdge';
 import EdgeRouter from './edges/EdgeRouter';
+import { debugLogEpic1 } from '../../utils/debug';
 
 // Default edge component that forces rendering
 export const DefaultEdge: React.FC<EdgeProps> = props => {
@@ -12,7 +13,7 @@ export const DefaultEdge: React.FC<EdgeProps> = props => {
 
   // Log edge state for debugging
   if (props.selected) {
-    console.log(
+    debugLogEpic1(
       '[DefaultEdge] Selected edge:',
       props.id,
       'className:',
@@ -83,7 +84,7 @@ export const checkEdgeRendering = () => {
   const svg = document.querySelector('.react-flow__edges svg');
   const paths = document.querySelectorAll('.react-flow__edges path');
   
-  console.log('Edge Rendering Check:', {
+  debugLogEpic1('Edge Rendering Check:', {
     edgesContainer: !!edges,
     svgElement: !!svg,
     pathElements: paths.length,

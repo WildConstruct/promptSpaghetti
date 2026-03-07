@@ -97,12 +97,29 @@ export function AssetFragmentsTab(): JSX.Element {
       type: 'asset-fragment',
       id: fragment.id,
       name: fragment.name,
-      path: `${category.path}${fragment.file}`,
+      path: `${category.path}${fragment.file}`.replace(
+        /^\.?\/*/,
+        '/assets/library/'
+      ),
       fragmentType: fragment.type,
       nodes: fragment.nodes
     };
 
-    e.dataTransfer.setData('application/json', JSON.stringify(payload));
+    const serialized = JSON.stringify(payload);
+    // Primary payload for consumers that listen for JSON
+    e.dataTransfer.setData('application/json', serialized);
+    // Explicit preset payload so the graph drop handler routes through insertPreset
+    e.dataTransfer.setData(
+      'application/x-preset',
+      JSON.stringify({
+        id: fragment.id,
+        name: fragment.name,
+        path: payload.path,
+        metadata: { file: payload.path }
+      })
+    );
+    // Fallback plain text for any generic handlers
+    e.dataTransfer.setData('text/plain', serialized);
     e.dataTransfer.effectAllowed = 'copy';
   };
 
@@ -118,8 +135,8 @@ export function AssetFragmentsTab(): JSX.Element {
     return (
       <EmptyState
         title="No Asset Fragments"
-        message="No asset fragments found. Generate some using the /asset command."
-        helpUrl="/docs/asset-fragment-manifest-system.md"
+        message="No asset fragments are available in this build."
+        helpUrl={undefined}
       />
     );
   }

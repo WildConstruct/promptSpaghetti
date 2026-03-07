@@ -221,15 +221,11 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             onSave={() => handleSave(currentNodes, currentEdges)}
             onSaveAs={() => handleSaveAs(currentNodes, currentEdges)}
             onImport={handleLocalOpen}
-            onExport={() => handleSaveAs(currentNodes, currentEdges)}
-            onQuit={() => handleQuit(currentNodes, currentEdges)}
             onUndo={handleUndo}
             onRedo={handleRedo}
             onCopy={handleCopy}
             onPaste={handlePaste}
             onToggleAssetLibrary={() => setAssetLibraryVisible(prev => !prev)}
-            onDocumentation={() => openPromptDissector('new-project')}
-            onPreferences={() => openPromptDissector('add-to-existing')}
             onChangelog={() => setShowChangelog(true)}
           />
         )}
@@ -275,6 +271,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           isOpen={showOpenDialog}
           onClose={() => setShowOpenDialog(false)}
           graphs={savedGraphs}
+          currentUserId={fileOps.currentUserId}
           onLoad={graph => {
             loadGraph(graph);
             setShowOpenDialog(false);

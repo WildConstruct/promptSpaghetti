@@ -1,15 +1,16 @@
 import React, { memo, useState, useCallback, useRef, useLayoutEffect, useEffect } from 'react';
 import { NodeProps, Handle, Position } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
-import { 
+import {
   PopulateChoicesButton,
   OptimizeWeightsButton,
-  InspirationMode 
+  InspirationMode
 } from '../../Inspector/IntelligentFeatures';
 import { useIntelligence } from '../contexts/IntelligenceContext';
 import type { Choice, WeightOptimizationResult } from '../../../services/llm';
 import type { SegmentMetadata } from '../../../services/llm/MetadataExtractor';
 import './EnhancedBranching.css';
+import { debugLogEpic1 } from '../../../utils/debug';
 
 export interface WeightedOption {
   id?: string;
@@ -25,6 +26,102 @@ export interface EnhancedBranchingNodeData extends EditableNodeData {
   metadata?: SegmentMetadata;
 }
 
+function normalizedChoiceKey(text: string): string {
+  return text.trim().toLowerCase();
+}
+
+export function normalizeWeightedOptions(
+  opts: WeightedOption[]
+): WeightedOption[] {
+  const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
+  if (totalWeight <= 0) {
+    return opts;
+  }
+
+  const scaled = opts.map(opt => {
+    const exact = (opt.weight / totalWeight) * 100;
+    const floor = Math.floor(exact);
+    return {
+      opt,
+      floor,
+      remainder: exact - floor
+    };
+  });
+
+  let remainder = 100 - scaled.reduce((sum, item) => sum + item.floor, 0);
+  const byRemainder = [...scaled]
+    .sort((a, b) => b.remainder - a.remainder)
+    .map(item => item.opt);
+  const bonuses = new Map<WeightedOption, number>();
+
+  for (let index = 0; index < byRemainder.length && remainder > 0; index += 1) {
+    const opt = byRemainder[index];
+    bonuses.set(opt, (bonuses.get(opt) ?? 0) + 1);
+    remainder -= 1;
+    if (index === byRemainder.length - 1 && remainder > 0) {
+      index = -1;
+    }
+  }
+
+  return scaled.map(item => ({
+    ...item.opt,
+    weight: item.floor + (bonuses.get(item.opt) ?? 0)
+  }));
+}
+
+export function mergeGeneratedChoicesIntoOptions(
+  options: WeightedOption[],
+  choices: Choice[]
+): WeightedOption[] {
+  const existingKeys = new Set(
+    options.map(opt => normalizedChoiceKey(opt.text || '')).filter(Boolean)
+  );
+  const uniqueChoices = choices.filter(choice => {
+    const key = normalizedChoiceKey(choice.text || '');
+    if (!key || existingKeys.has(key)) {
+      return false;
+    }
+    existingKeys.add(key);
+    return true;
+  });
+
+  const blankOptionCount = options.filter(
+    opt => !opt.text || opt.text.trim() === ''
+  ).length;
+
+  if (blankOptionCount > 0 && uniqueChoices.length > 0) {
+    let choiceIndex = 0;
+    const updatedOptions = options.map(opt => {
+      if (opt.text && opt.text.trim() !== '') {
+        return opt;
+      }
+
+      if (choiceIndex < uniqueChoices.length) {
+        const choice = uniqueChoices[choiceIndex++];
+        return {
+          text: choice.text,
+          weight: choice.weight || 50,
+          hasBranch: opt.hasBranch || false
+        };
+      }
+
+      return opt;
+    });
+    return normalizeWeightedOptions(updatedOptions);
+  }
+
+  if (uniqueChoices.length > 0) {
+    const newOptions = uniqueChoices.map(choice => ({
+      text: choice.text,
+      weight: choice.weight || 50,
+      hasBranch: false
+    }));
+    return normalizeWeightedOptions([...options, ...newOptions]);
+  }
+
+  return options;
+}
+
 // Brighter drag handle icon
 const DragHandleIcon = () => (
   <svg width="6" height="12" viewBox="0 0 6 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,8 +135,8 @@ const DragHandleIcon = () => (
 );
 
 // Simplified radio dial component - independent weight control
-const RadioDial = ({ value, onChange, disabled = false }: { 
-  value: number; 
+const RadioDial = ({ value, onChange, disabled = false }: {
+  value: number;
   onChange: (val: number) => void;
   disabled?: boolean;
 }) => {
@@ -48,38 +145,38 @@ const RadioDial = ({ value, onChange, disabled = false }: {
   const circumference = 2 * Math.PI * 19; // Full circle circumference
   const arcLength = circumference * 0.75; // 3/4 of circle for visual range
   const fillLength = (value / 100) * arcLength;
-  
+
   const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
     if (disabled) {return;}
     // Only respond to left click
     if (e.button !== 0) {return;}
     e.preventDefault();
     e.stopPropagation();
-    
+
     // CRITICAL: Stop the event from bubbling to the node drag handler
     const event = e.nativeEvent;
     event.stopImmediatePropagation();
-    
+
     const svg = e.currentTarget;
     const rect = svg.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    
+
     // Add visual feedback for interaction
     svg.style.cursor = 'grabbing';
-    
+
     const updateValue = (clientX: number, clientY: number) => {
       const dx = clientX - centerX;
       const dy = clientY - centerY;
       let angle = Math.atan2(dy, dx) * (180 / Math.PI);
-      
+
       // Normalize angle: -180 to 180 -> 0 to 360
       if (angle < 0) {angle += 360;}
-      
+
       // Map the 3/4 circle (225° to 135°) to 0-100
       // The dial starts at 225° and goes clockwise to 135°
       let normalizedValue = 0;
-      
+
       if (angle >= 225) {
         // From 225° to 360° (start to bottom)
         normalizedValue = ((angle - 225) / 270) * 100;
@@ -93,29 +190,29 @@ const RadioDial = ({ value, onChange, disabled = false }: {
         const distToStart = Math.abs(angle - 225);
         normalizedValue = distToEnd < distToStart ? 100 : 0;
       }
-      
+
       // Clamp to 0-100 range (changed from 0-200)
       const newValue = Math.round(Math.max(0, Math.min(100, normalizedValue)));
       onChange(newValue);
     };
-    
+
     const handleMouseMove = (e: MouseEvent) => {
       e.preventDefault();
       updateValue(e.clientX, e.clientY);
     };
-    
+
     const handleMouseUp = (e: MouseEvent) => {
       e.preventDefault();
       svg.style.cursor = 'pointer'; // Reset cursor
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-    
+
     updateValue(e.clientX, e.clientY);
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
-  
+
   // Add mouse wheel support
   const handleWheel = (e: React.WheelEvent<SVGElement>) => {
     if (disabled) {return;}
@@ -123,36 +220,36 @@ const RadioDial = ({ value, onChange, disabled = false }: {
     e.stopPropagation();
     // Stop ReactFlow from zooming
     e.nativeEvent.stopImmediatePropagation();
-    
+
     // More responsive: 5 units per wheel tick (increased from typical 1-2)
     const delta = e.deltaY > 0 ? -5 : 5;
     const newValue = Math.round(Math.max(0, Math.min(100, value + delta)));
     onChange(newValue);
   };
-  
+
   return (
-    <svg 
-      width="44" 
-      height="44" 
-      viewBox="0 0 44 44" 
+    <svg
+      width="44"
+      height="44"
+      viewBox="0 0 44 44"
       className="radio-dial-simple nodrag"
       onMouseDown={handleMouseDown}
       onWheel={handleWheel}
-      style={{ 
+      style={{
         cursor: disabled ? 'default' : 'pointer',
         pointerEvents: 'all',
         zIndex: 10
       }}
     >
       {/* Background circle */}
-      <circle 
-        cx="22" 
-        cy="22" 
-        r="19" 
-        fill="#0a0a0a" 
+      <circle
+        cx="22"
+        cy="22"
+        r="19"
+        fill="#0a0a0a"
         stroke="none"
       />
-      
+
       {/* Background ring track on outer edge - 3/4 circle */}
       <circle
         cx="22"
@@ -165,7 +262,7 @@ const RadioDial = ({ value, onChange, disabled = false }: {
         strokeDasharray={`${arcLength} 100`}
         transform="rotate(135 22 22)"
       />
-      
+
       {/* Filled progress ring based on percentage */}
       <circle
         cx="22"
@@ -179,9 +276,9 @@ const RadioDial = ({ value, onChange, disabled = false }: {
         transform="rotate(135 22 22)"
         opacity="0.9"
       />
-      
+
       {/* Removed the indicator dot that animates around the dial */}
-      
+
       {/* Number display in center */}
       <text
         x="22"
@@ -214,14 +311,14 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   const [metadata, setMetadata] = useState<SegmentMetadata | null>(props.data?.metadata || null);
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isExtractingMetadata, setIsExtractingMetadata] = useState(false);
-  
+
   // Debug logging for Epic 2 integration
-  console.log('[EnhancedBranchingNode] Intelligence context:', {
+  debugLogEpic1('[EnhancedBranchingNode] Intelligence context:', {
     consentGiven: intelligence.consentGiven,
     hasNodeIntelligence: !!intelligence.nodeIntelligence,
     isOffline: intelligence.isOffline
   });
-  
+
   // Ensure all options have hasBranch set to false by default
   const initializeOptions = () => {
     // Check if options are in props.data.options
@@ -232,7 +329,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
         hasBranch: opt.hasBranch === true // Only true if explicitly true
       }));
     }
-    
+
     // Try to parse from value if it's a JSON string
     if (typeof props.data?.value === 'string') {
       try {
@@ -245,17 +342,17 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
           }));
         }
       } catch (error) {
-        console.debug('Failed to parse weighted options from node value', error);
+        debugLogEpic1('Failed to parse weighted options from node value', error);
       }
     }
-    
+
     // Default options with branching OFF
     return [
       { text: '', weight: 50, hasBranch: false },
       { text: '', weight: 50, hasBranch: false }
     ];
   };
-  
+
   const [options, setOptions] = useState<WeightedOption[]>(initializeOptions());
   const [title, setTitle] = useState(props.data?.title || 'Weighted Choice');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -263,20 +360,27 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   const [mainHandleTop, setMainHandleTop] = useState(35);
   const [branchHandleTops, setBranchHandleTops] = useState<number[]>([]);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
-  
+
   const hasBranching = options.some(opt => opt.hasBranch);
-  
-  // Normalize weights to ensure they sum to 100
-  const normalizeWeights = (opts: WeightedOption[]): WeightedOption[] => {
-    const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
-    if (totalWeight === 0) {return opts;}
-    
-    return opts.map(opt => ({
-      ...opt,
-      weight: Math.round((opt.weight / totalWeight) * 100)
-    }));
-  };
-  
+  const suggestionIntelligence = intelligence.nodeIntelligence;
+  const hasFilledOptions = options.some(
+    opt => typeof opt.text === 'string' && opt.text.trim() !== ''
+  );
+  const suggestionSeedText =
+    options
+      .map(opt => opt.text?.trim())
+      .filter((text): text is string => Boolean(text))
+      .join(', ') || title || 'weighted choice node';
+  const optimizationContext = `Node title: ${title || 'Weighted Choice'}. Options: ${
+    options
+      .map(opt => opt.text?.trim())
+      .filter((text): text is string => Boolean(text))
+      .join(', ') || 'none'
+  }`;
+  const canUseOfflineSuggestions = !!suggestionIntelligence;
+  const canUseRemoteIntelligence =
+    intelligence.consentGiven && !!suggestionIntelligence;
+
   // Calculate the position of the main handle and each branch handle relative to the node box
   // Extract metadata when text changes
   useEffect(() => {
@@ -315,7 +419,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
 
   // Debug effect to monitor flip state changes
   useEffect(() => {
-    console.log('🎭 Flip State Changed:', {
+    debugLogEpic1('🎭 Flip State Changed:', {
       showMetadata,
       flipCard: document.querySelector('.flip-card'),
       hasFlippedClass: !!document.querySelector('.flip-card.flipped'),
@@ -406,12 +510,12 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       try {
         ro.disconnect();
       } catch (error) {
-        console.debug('ResizeObserver cleanup failed', error);
+        debugLogEpic1('ResizeObserver cleanup failed', error);
       }
       try {
         mo?.disconnect();
       } catch (error) {
-        console.debug('MutationObserver cleanup failed', error);
+        debugLogEpic1('MutationObserver cleanup failed', error);
       }
       window.removeEventListener('resize', calcPositions);
     };
@@ -429,7 +533,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     if (count === 0) {return;}
 
     let newWeights: number[] = [];
-    
+
     switch (preset) {
       case 'equal':
         newWeights = Array(count).fill(50);
@@ -466,9 +570,9 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
 
   const toggleBranch = (index: number) => {
     const newOptions = [...options];
-    newOptions[index] = { 
-      ...newOptions[index], 
-      hasBranch: !newOptions[index].hasBranch 
+    newOptions[index] = {
+      ...newOptions[index],
+      hasBranch: !newOptions[index].hasBranch
     };
     setOptions(newOptions);
   };
@@ -502,7 +606,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     // Set drag data
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', index.toString());
-    
+
     // Create a custom drag image to prevent ghost text
     const dragImage = document.createElement('div');
     dragImage.style.width = '1px';
@@ -516,7 +620,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     setTimeout(() => {
       document.body.removeChild(dragImage);
     }, 0);
-    
+
     setDraggedIndex(index);
     // Add visual feedback
     (e.currentTarget as HTMLElement).style.opacity = '0.5';
@@ -531,7 +635,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     const draggedOption = newOptions[draggedIndex];
     newOptions.splice(draggedIndex, 1);
     newOptions.splice(index, 0, draggedOption);
-    
+
     setOptions(newOptions);
     setDraggedIndex(index);
   };
@@ -548,38 +652,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
 
   // AI suggestion handlers
   const handleChoicesGenerated = useCallback((choices: Choice[]) => {
-    // Smart choice generation that respects existing options
-    const blankOptionCount = options.filter(opt => !opt.text || opt.text.trim() === '').length;
-    
-    // If we have blank options, fill them intelligently
-    if (blankOptionCount > 0 && choices.length > 0) {
-      let choiceIndex = 0;
-      const updatedOptions = options.map(opt => {
-        // Keep filled options as-is
-        if (opt.text && opt.text.trim() !== '') {
-          return opt;
-        }
-        // Fill blank options with generated choices
-        if (choiceIndex < choices.length) {
-          const choice = choices[choiceIndex++];
-          return {
-            text: choice.text,
-            weight: opt.weight || choice.weight || 50,
-            hasBranch: opt.hasBranch || false
-          };
-        }
-        return opt;
-      });
-      setOptions(normalizeWeights(updatedOptions));
-    } else if (choices.length > 0) {
-      // No blank options, so append the new choices to existing ones
-      const newOptions = choices.map(choice => ({
-        text: choice.text,
-        weight: choice.weight || 50,
-        hasBranch: false
-      }));
-      setOptions(normalizeWeights([...options, ...newOptions]));
-    }
+    setOptions(mergeGeneratedChoicesIntoOptions(options, choices));
   }, [options]);
 
   const handleWeightsOptimized = useCallback((result: WeightOptimizationResult) => {
@@ -594,8 +667,8 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     <BaseEditableNode
       {...props}
       className={`weighted-choice enhanced-branching flippable ${showMetadata ? 'node-flipped' : ''}`}
-      style={{ width: '220px' }}
-      minWidth={220}
+      style={{ width: '320px' }}
+      minWidth={320}
       minHeight={140}
       data={{
         ...props.data,
@@ -649,7 +722,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   </div>
                 )}
               </div>
-              
+
               {/* Weight Presets */}
               <div className="enhanced-presets">
                 {Object.entries(WEIGHT_PRESETS).map(([key, preset]) => (
@@ -671,7 +744,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   onClick={(e) => {
                     e.stopPropagation();
                     const newState = !showMetadata;
-                    console.log('🔄 Flip Toggle:', {
+                    debugLogEpic1('🔄 Flip Toggle:', {
                       previousState: showMetadata,
                       newState,
                       flipCardElement: document.querySelector('.flip-card'),
@@ -702,7 +775,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
               </div>
 
               {/* Options list with scroll support */}
-              <div 
+              <div
                 className="enhanced-options-list"
                 onWheel={(e) => {
                   e.stopPropagation();
@@ -710,8 +783,8 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 }}
               >
                 {options.map((option, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className={`enhanced-option-row ${draggedIndex === index ? 'dragging' : ''}`}
                     ref={(el) => { optionRefs.current[index] = el; }}
                     onDragOver={(e) => handleDragOver(e, index)}
@@ -725,7 +798,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     }}
                   >
                     {/* Drag handle - initiate option dragging */}
-                    <div 
+                    <div
                       className="enhanced-drag-handle nodrag"
                       draggable="true"
                       onDragStart={(e) => handleDragStart(e, index)}
@@ -767,13 +840,13 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       }}
                       style={{ pointerEvents: 'all' }}
                     />
-                    
+
                     {/* Simplified radio dial with proper event handling */}
                     <RadioDial
                       value={option.weight}
                       onChange={val => updateOptionWeight(index, val)}
                     />
-                    
+
                     {/* Branch toggle */}
                     <button
                       className={`branch-toggle nodrag ${option.hasBranch ? 'active' : ''}`}
@@ -804,7 +877,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
 
                     {/* Branch handle indicator - actual handle rendered at node level */}
                     {option.hasBranch && (
-                      <span style={{ 
+                      <span style={{
                         position: 'absolute',
                         right: '10px',
                         color: '#f59e0b',
@@ -820,60 +893,63 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 <div className="hints">
                   Drag to reorder • → = branch output • Click and drag dials to adjust weights
                 </div>
-                
+
                 {/* Epic 2 AI Integration */}
-                {intelligence.consentGiven && intelligence.nodeIntelligence && (
+                {suggestionIntelligence && (
                   <div className="epic2-ai-controls" style={{ marginBottom: '10px', padding: '10px', borderTop: '1px solid #333' }}>
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                      {/* Show InspirationMode only when there are NO options at all */}
-                      {options.length === 0 && (
+                      {/* Treat all-blank rows as empty so suggestion tools are reachable on fresh nodes */}
+                      {!hasFilledOptions && (
                         <InspirationMode
-                          upstreamContext="weighted choice node"
+                          upstreamContext={suggestionSeedText}
                           onInspirationSelected={handleChoicesGenerated}
-                          intelligenceService={intelligence.nodeIntelligence}
+                          intelligenceService={suggestionIntelligence}
                         />
                       )}
-                      
+
                       {/* Show PopulateChoices when we need more options (less than 3) or have blank ones */}
                       {(options.length < 3 || options.some(opt => !opt.text || opt.text.trim() === '')) && (
                         <PopulateChoicesButton
-                          nodeText={title || 'weighted choice node'}
+                          nodeText={suggestionSeedText}
                           context={`Node title: ${title || 'Weighted Choice'}. ${options.filter(opt => opt.text).map(opt => opt.text).join(', ')}`}
                           currentChoices={options.map(opt => ({ text: opt.text, weight: opt.weight }))}
                           onChoicesGenerated={handleChoicesGenerated}
-                          intelligenceService={intelligence.nodeIntelligence}
+                          intelligenceService={suggestionIntelligence}
                           requestedCount={options.filter(opt => !opt.text || opt.text.trim() === '').length || (3 - options.length)}
                         />
                       )}
-                      
+
                       {/* Show OptimizeWeights only when we have 2+ filled options */}
-                      {options.filter(opt => opt.text && opt.text.trim() !== '').length > 1 && (
+                      {canUseRemoteIntelligence &&
+                        options.filter(opt => opt.text && opt.text.trim() !== '').length > 1 && (
                         <OptimizeWeightsButton
                           choices={options.map(opt => ({ text: opt.text, weight: opt.weight }))}
-                          context="weighted choice context"
+                          context={optimizationContext}
                           onWeightsOptimized={handleWeightsOptimized}
-                          intelligenceService={intelligence.nodeIntelligence}
+                          intelligenceService={suggestionIntelligence}
                         />
                       )}
                     </div>
-                  </div>
-                )}
-                
-                {/* Debug info if consent not given */}
-                {!intelligence.consentGiven && (
-                  <div style={{ padding: '8px', fontSize: '11px', color: '#666', textAlign: 'center' }}>
-                    <div>AI Features: {intelligence.consentGiven ? 'Enabled' : 'Disabled'}</div>
                     {!intelligence.consentGiven && (
-                      <button 
-                        onClick={() => intelligence.setConsent(true)}
-                        style={{ marginTop: '4px', fontSize: '10px', padding: '2px 6px' }}
-                      >
-                        Enable AI Features
-                      </button>
+                      <div style={{ paddingTop: '8px', fontSize: '11px', color: '#888', textAlign: 'center' }}>
+                        Offline suggestions available. Enable AI features to use remote weighting and richer assists.
+                      </div>
                     )}
                   </div>
                 )}
-                
+
+                {!canUseOfflineSuggestions && (
+                  <div style={{ padding: '8px', fontSize: '11px', color: '#666', textAlign: 'center' }}>
+                    <div>Suggestion tools unavailable.</div>
+                    <button
+                      onClick={() => intelligence.setConsent(true)}
+                      style={{ marginTop: '4px', fontSize: '10px', padding: '2px 6px' }}
+                    >
+                      Enable AI Features
+                    </button>
+                  </div>
+                )}
+
                 <div className="footer-controls">
                   <button className="add-option-btn" onClick={addOption}>
                     + Add Option
@@ -886,7 +962,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
               </div>
 
               {/* Render all branch handles at node level */}
-              {options.map((option, index) => 
+              {options.map((option, index) =>
                 option.hasBranch && (
                   <Handle
                     key={`branch-${index}`}
@@ -931,7 +1007,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
               )}
               {/* Note: Main output when no branching is handled by BaseEditableNode */}
                   </div>
-                  
+
                   {/* Back side - metadata view */}
                   <div className="card-face metadata-view">
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
@@ -988,7 +1064,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       )}
                       {metadata.intensity !== undefined && (
                         <div style={{ marginBottom: '8px' }}>
-                          <strong>Intensity:</strong> 
+                          <strong>Intensity:</strong>
                           <div style={{
                             display: 'inline-block',
                             marginLeft: '10px',
@@ -1080,7 +1156,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
             {/* Main output is handled by BaseEditableNode in display mode */}
 
             <div className="display-title">{title}</div>
-            
+
             <div className="display-options">
               {options.map((option, index) => (
                 <div
@@ -1098,7 +1174,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
             </div>
 
             {/* Render all handles at node level, not inside option divs */}
-            {options.map((option, index) => 
+            {options.map((option, index) =>
               option.hasBranch && (
                 <Handle
                   key={`branch-${index}`}

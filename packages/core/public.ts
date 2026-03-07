@@ -20,8 +20,20 @@ export {
 // Public Utils surface - temporarily disabled due to import issues
 // export * from './utils/index';
 
-// Export specific utils that are needed by client
+// Legacy graph-wrapper PSG codec.
+// Keep exported for compatibility while active surfaces migrate away from it.
 export { readPsg, writePsg, fromLegacyGraph } from './utils/psgCodec';
+
+// Canonical flat PSG fragment/source helpers for the MVP surface.
+export {
+  parsePSG,
+  convertPSGToPSGLib,
+  exportGraphToPSG,
+  type PSGFile as FlatPSGFile,
+  type PSGNode,
+  type PSGEdge,
+  type PSGRegion
+} from './fileFormats/psg';
 
 // Epic 2 LLM components and services - commented out to fix Netlify build
 // export { LLMToggle } from './components/LLMToggle/LLMToggle';

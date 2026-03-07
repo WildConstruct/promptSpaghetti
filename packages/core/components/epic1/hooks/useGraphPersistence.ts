@@ -4,6 +4,7 @@ import {
   isStorageAvailable,
   STORAGE_KEY
 } from '../../../utils/persistenceUtils';
+import { debugLogEpic1 } from '../../../utils/debug';
 
 interface PersistenceState {
   nodes: Node[];
@@ -82,7 +83,7 @@ export function useGraphPersistence<N = unknown, E = unknown>(
         setLastSaved(new Date());
         onSaveSuccess?.();
 
-        console.log(
+        debugLogEpic1(
           `[GraphPersistence] Saved to ${storageKey} (${wrapper.size} bytes)`
         );
         return true;
@@ -152,7 +153,7 @@ export function useGraphPersistence<N = unknown, E = unknown>(
         edges: validEdges
       };
 
-      console.log(
+      debugLogEpic1(
         `[GraphPersistence] Loaded from ${storageKey} (${uniqueNodes.length} nodes, ${validEdges.length} edges)`
       );
       onLoadSuccess?.(cleanState);
@@ -170,13 +171,15 @@ export function useGraphPersistence<N = unknown, E = unknown>(
 
   // Clear persisted state
   const clearStorage = useCallback(() => {
-    if (!isStorageAvailable()) {return false;}
+    if (!isStorageAvailable()) {
+      return false;
+    }
 
     try {
       localStorage.removeItem(storageKey);
       setLastSaved(null);
       setHasRestoredState(false);
-      console.log(`[GraphPersistence] Cleared ${storageKey}`);
+      debugLogEpic1(`[GraphPersistence] Cleared ${storageKey}`);
       return true;
     } catch (error) {
       console.error('[GraphPersistence] Failed to clear:', error);
@@ -198,15 +201,21 @@ export function useGraphPersistence<N = unknown, E = unknown>(
 
   // Auto-save on changes
   useEffect(() => {
-    if (!autoSave) {return;}
-    if (nodes.length === 0 && edges.length === 0) {return;}
+    if (!autoSave) {
+      return;
+    }
+    if (nodes.length === 0 && edges.length === 0) {
+      return;
+    }
 
     debouncedSave(nodes, edges);
   }, [nodes, edges, autoSave, debouncedSave]);
 
   // Load persisted state on mount
   const loadPersistedState = useMemo(() => {
-    if (hasRestoredState) {return null;}
+    if (hasRestoredState) {
+      return null;
+    }
     return loadFromStorage();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

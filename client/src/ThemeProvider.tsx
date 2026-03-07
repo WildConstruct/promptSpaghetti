@@ -19,9 +19,24 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     fetch('/api/admin/theme')
-      .then(res => res.json())
-      .then(setTheme)
-      .catch(err => console.error('Failed to load theme', err));
+      .then(async res => {
+        if (!res.ok) {
+          return null;
+        }
+        const contentType = res.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          return null;
+        }
+        return (await res.json()) as Theme;
+      })
+      .then(data => {
+        if (data) {
+          setTheme(data);
+        }
+      })
+      .catch(() => {
+        // Theme endpoint is optional in local/dev mode.
+      });
   }, []);
 
   useEffect(() => {

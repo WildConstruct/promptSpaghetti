@@ -259,6 +259,58 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     }, 100);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    (
+      window as typeof window & {
+        __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+        __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+      }
+    ).__EPIC1_REACT_FLOW__ = reactFlowInstance;
+    (
+      window as typeof window & {
+        __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+        __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+      }
+    ).__EPIC1_INSERT_PRESET__ = async (preset: unknown) => {
+      const pos = reactFlowInstance
+        ? reactFlowInstance.screenToFlowPosition({
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2
+          })
+        : { x: 250, y: 250 };
+      await insertPresetByMeta(preset as Parameters<typeof insertPresetByMeta>[0], pos);
+    };
+
+    return () => {
+      if (
+        (
+          window as typeof window & {
+            __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+            __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+          }
+        ).__EPIC1_REACT_FLOW__ ===
+        reactFlowInstance
+      ) {
+        (
+          window as typeof window & {
+            __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+            __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+          }
+        ).__EPIC1_REACT_FLOW__ = null;
+        (
+          window as typeof window & {
+            __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+            __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+          }
+        ).__EPIC1_INSERT_PRESET__ = null;
+      }
+    };
+  }, [insertPresetByMeta, reactFlowInstance]);
+
   // Listen for prompt paste events from tutorial
   useEffect(() => {
     const handlePromptPasted = async (event: CustomEvent<{ prompt?: string }>) => {
