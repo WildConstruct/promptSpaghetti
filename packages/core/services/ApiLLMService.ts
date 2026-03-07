@@ -12,7 +12,6 @@ import type {
   RefinementMode,
   RefinementResult
 } from './llm/TextRefinementService';
-import type { RefinementResponse } from './llm/types';
 
 export interface LLMConfig {
   apiKey?: string;
@@ -25,6 +24,7 @@ export interface LLMConfig {
 type JsonObject = Record<string, unknown>;
 
 export interface LLMCompletionResponse extends JsonObject {
+  content?: string;
   output?: string;
   outputs?: string[];
 }
@@ -42,7 +42,7 @@ export class LLMService {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ ...data, config: this.config })
+      body: JSON.stringify(this.filterRequestPayload(data))
     });
 
     if (!response.ok) {
@@ -50,6 +50,28 @@ export class LLMService {
     }
 
     return response.json();
+  }
+
+  private filterRequestPayload(data: JsonObject): JsonObject {
+    const payload: JsonObject = { ...data };
+
+    if (typeof this.config.model === 'string' && payload.model == null) {
+      payload.model = this.config.model;
+    }
+    if (
+      typeof this.config.temperature === 'number' &&
+      payload.temperature == null
+    ) {
+      payload.temperature = this.config.temperature;
+    }
+    if (
+      typeof this.config.maxTokens === 'number' &&
+      payload.maxTokens == null
+    ) {
+      payload.maxTokens = this.config.maxTokens;
+    }
+
+    return payload;
   }
 
   async complete(
@@ -144,6 +166,63 @@ export class NodeIntelligenceService {
       });
   }
 
+  private isChoiceLike(
+    value: unknown
+  ): value is { text?: string; weight?: number } {
+    return typeof value === 'object' && value !== null;
+  }
+
+  private parseChoiceResponse(
+    value: unknown
+  ): Array<{ text?: string; weight?: number }> | null {
+    if (
+      typeof value !== 'object' ||
+      value === null ||
+      !Array.isArray((value as { choices?: unknown }).choices)
+    ) {
+      return null;
+    }
+
+    const choices = (value as { choices: unknown[] }).choices.filter(choice =>
+      this.isChoiceLike(choice)
+    );
+
+    return choices.length > 0 ? choices : null;
+  }
+
+  private isInspirationSuggestionLike(
+    value: unknown
+  ): value is InspirationSuggestion {
+    if (typeof value !== 'object' || value === null) {
+      return false;
+    }
+
+    const candidate = value as InspirationSuggestion;
+    return (
+      typeof candidate.theme === 'string' && Array.isArray(candidate.choices)
+    );
+  }
+
+  private parseInspirationResponse(
+    value: unknown
+  ): InspirationSuggestion[] | null {
+    if (
+      typeof value !== 'object' ||
+      value === null ||
+      !Array.isArray((value as { suggestions?: unknown }).suggestions)
+    ) {
+      return null;
+    }
+
+    const suggestions = (
+      value as { suggestions: unknown[] }
+    ).suggestions.filter(suggestion =>
+      this.isInspirationSuggestionLike(suggestion)
+    );
+
+    return suggestions.length > 0 ? suggestions : null;
+  }
+
   async getSuggestions<TResponse extends JsonObject>(
     nodeType: string,
     context: JsonObject
@@ -157,16 +236,15 @@ export class NodeIntelligenceService {
     count: number = 5
   ): Promise<Choice[]> {
     try {
-      const response = await this.llm.populateChoices<{
-        choices?: Array<{ text?: string; weight?: number }>;
-      }>({
+      const response = await this.llm.populateChoices<unknown>({
         nodeText,
         context,
         count
       });
 
-      if (Array.isArray(response?.choices)) {
-        const normalised = this.normalizeChoices(nodeText, response.choices);
+      const parsedChoices = this.parseChoiceResponse(response);
+      if (parsedChoices) {
+        const normalised = this.normalizeChoices(nodeText, parsedChoices);
 
         if (normalised.length > 0) {
           return normalised.slice(0, count);
@@ -188,14 +266,15 @@ export class NodeIntelligenceService {
     preference: string = 'balanced variety'
   ): Promise<WeightOptimizationResult> {
     try {
-      const response = await this.llm.optimizeChoices<{ choices?: Choice[] }>({
+      const response = await this.llm.optimizeChoices<unknown>({
         choices,
         context,
         preference
       });
 
-      if (Array.isArray(response?.choices) && response.choices.length > 0) {
-        const optimised = response.choices.map((choice, index) => ({
+      const parsedChoices = this.parseChoiceResponse(response);
+      if (parsedChoices) {
+        const optimised = parsedChoices.map((choice, index) => ({
           ...choices[index],
           ...choice,
           weight: Number.isFinite(choice.weight)
@@ -227,15 +306,14 @@ export class NodeIntelligenceService {
     upstreamContext: string
   ): Promise<InspirationSuggestion[]> {
     try {
-      const response = await this.llm.suggest<{
-        suggestions?: InspirationSuggestion[];
-      }>({
+      const response = await this.llm.suggest<unknown>({
         operation: 'inspiration',
         context: upstreamContext
       });
 
-      if (Array.isArray(response?.suggestions)) {
-        return response.suggestions.map(suggestion => ({
+      const parsedSuggestions = this.parseInspirationResponse(response);
+      if (parsedSuggestions) {
+        return parsedSuggestions.map(suggestion => ({
           theme: suggestion.theme || 'Inspiration',
           choices: Array.isArray(suggestion.choices)
             ? suggestion.choices.map(choice => ({
@@ -354,14 +432,19 @@ export class TextRefinementService {
     prompt?: string
   ): Promise<RefinementResult> {
     try {
-      const result = await this.llm.refine<RefinementResponse>({
+      const result = await this.llm.refine<{
+        refinedText?: string;
+        model?: string;
+        changes?: unknown;
+        original?: string;
+      }>({
         text,
         mode,
-        prompt
+        instruction: prompt
       });
 
       const refined =
-        typeof result?.refined === 'string' ? result.refined : text;
+        typeof result?.refinedText === 'string' ? result.refinedText : text;
 
       return {
         original: result?.original || text,

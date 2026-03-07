@@ -5,6 +5,7 @@ import { getSupabase } from '@promptscape/core/utils/supabaseClient';
 import { looksLikeLegacyGraphWrapper } from '@promptscape/core/utils/psgCodec';
 import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 import { loadReactFlowFromPsgContent } from '../utils/psgDocument';
+import { validateEditorGraphPayload } from '../utils/graphValidation';
 
 // Resolve Supabase client lazily at call sites to avoid capturing null
 
@@ -88,6 +89,22 @@ function exportGraphAsPsg(
     'application/x-promptspaghetti-graph'
   );
   return psg;
+}
+
+function exportGraphLocallyWithToast(
+  showToast: ReturnType<typeof useToast>['showToast'],
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  },
+  message: string,
+  level: Parameters<ReturnType<typeof useToast>['showToast']>[1]
+) {
+  exportGraphAsPsg(nodes, edges, options);
+  showToast(message, level);
 }
 
 export const useSupabaseFileOperations = ({
@@ -182,14 +199,19 @@ export const useSupabaseFileOperations = ({
   // Load a specific graph
   const loadGraph = useCallback(
     (graph: SupabaseGraph) => {
-      onNodesChange(graph.nodes);
-      onEdgesChange(graph.edges);
+      const validated = validateEditorGraphPayload(graph);
+      if (!validated.ok) {
+        showToast(`Failed to load graph: ${validated.error}`, 'error');
+        return;
+      }
+      onNodesChange(validated.data.nodes);
+      onEdgesChange(validated.data.edges);
       onEditorKeyChange(prev => prev + 1);
       localStorage.setItem(
         'epic1-graph',
         JSON.stringify({
-          nodes: graph.nodes,
-          edges: graph.edges,
+          nodes: validated.data.nodes,
+          edges: validated.data.edges,
           supabase_id: graph.id
         })
       );
@@ -211,12 +233,18 @@ export const useSupabaseFileOperations = ({
     ) => {
       const sb = getSupabase();
       if (!sb) {
-        exportGraphAsPsg(currentNodes, currentEdges, {
-          name,
-          description,
-          tags
-        });
-        showToast('Supabase not configured - exported PSG locally', 'warning');
+        exportGraphLocallyWithToast(
+          showToast,
+          currentNodes,
+          currentEdges,
+          {
+            name,
+            description,
+            tags
+          },
+          'Supabase not configured - exported PSG locally',
+          'warning'
+        );
         return;
       }
 
@@ -226,18 +254,36 @@ export const useSupabaseFileOperations = ({
           data: { user }
         } = await sb.auth.getUser();
 
+        if (!user) {
+          exportGraphLocallyWithToast(
+            showToast,
+            currentNodes,
+            currentEdges,
+            {
+              name,
+              description,
+              tags
+            },
+            'Sign in required for cloud save - exported PSG locally instead',
+            'warning'
+          );
+          setShowSaveDialog(false);
+          return;
+        }
+
         const graphData = {
           name: name || `Graph ${new Date().toLocaleDateString()}`,
           description: description || '',
           nodes: currentNodes,
           edges: currentEdges,
-          user_id: user?.id,
+          user_id: user.id,
           is_public: isPublic,
           tags,
           updated_at: new Date().toISOString()
         };
 
-        // Check if we're updating an existing graph
+        // Client filters are not authorization. Cloud graph ownership must be
+        // enforced by Supabase RLS for insert/update/delete operations.
         const savedData = localStorage.getItem('epic1-graph');
         let existingId: string | null = null;
         if (savedData) {
@@ -250,7 +296,7 @@ export const useSupabaseFileOperations = ({
         }
 
         let result;
-        if (existingId && user) {
+        if (existingId) {
           // Update existing graph
           result = await sb
             .from('graphs')
@@ -282,12 +328,15 @@ export const useSupabaseFileOperations = ({
         setShowSaveDialog(false);
       } catch (error) {
         console.error('Error saving to Supabase:', error);
-        exportGraphAsPsg(currentNodes, currentEdges, {
-          name,
-          description,
-          tags
-        });
-        showToast(
+        exportGraphLocallyWithToast(
+          showToast,
+          currentNodes,
+          currentEdges,
+          {
+            name,
+            description,
+            tags
+          },
           'Failed to save to cloud - exported PSG locally instead',
           'error'
         );
@@ -393,10 +442,14 @@ export const useSupabaseFileOperations = ({
           }
 
           if (data.nodes && data.edges) {
-            onNodesChange(data.nodes);
-            onEdgesChange(data.edges);
+            const validated = validateEditorGraphPayload(data);
+            if (!validated.ok) {
+              throw new Error(validated.error);
+            }
+            onNodesChange(validated.data.nodes);
+            onEdgesChange(validated.data.edges);
             onEditorKeyChange(prev => prev + 1);
-            localStorage.setItem('epic1-graph', JSON.stringify(data));
+            localStorage.setItem('epic1-graph', JSON.stringify(validated.data));
             showToast(
               'Legacy JSON graph loaded via compatibility path',
               'success'

@@ -3,6 +3,7 @@ import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
 import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 import { loadReactFlowFromAnyPsgContent } from '../utils/psgDocument';
+import { validateEditorGraphPayload } from '../utils/graphValidation';
 
 interface FileOperationsConfig {
   onNodesChange: (nodes: Node[]) => void;
@@ -217,10 +218,17 @@ export const useFileOperations = ({
             }
 
             if (data.nodes && data.edges) {
-              onNodesChange(data.nodes);
-              onEdgesChange(data.edges);
+              const validated = validateEditorGraphPayload(data);
+              if (!validated.ok) {
+                throw new Error(validated.error);
+              }
+              onNodesChange(validated.data.nodes);
+              onEdgesChange(validated.data.edges);
               onEditorKeyChange(prev => prev + 1);
-              localStorage.setItem('epic1-graph', JSON.stringify(data));
+              localStorage.setItem(
+                'epic1-graph',
+                JSON.stringify(validated.data)
+              );
               showToast(
                 'Legacy JSON graph loaded via compatibility path',
                 'success'

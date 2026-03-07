@@ -3,6 +3,11 @@ import {
   attachNodesToContainerNodes,
   findContainerAtPosition
 } from '../dragDropContainerUtils';
+import {
+  ALLOWED_PRESET_SOURCE_ROOTS,
+  getInlinePresetDocument,
+  isSafePresetSourcePath
+} from '../presetSourcePolicy';
 import type { EditableNodeData } from '../../nodes';
 
 type FlowNode = Node<EditableNodeData>;
@@ -53,6 +58,52 @@ const createChildNode = (
 };
 
 describe('useDragDropHandlers helpers', () => {
+  it('accepts only first-party preset roots for fetched sources', () => {
+    expect(ALLOWED_PRESET_SOURCE_ROOTS).toEqual([
+      '/assets/library/',
+      '/presets/',
+      '/asset-browser/presets/'
+    ]);
+    expect(isSafePresetSourcePath('/assets/library/characters/hero.psg')).toBe(
+      true
+    );
+    expect(isSafePresetSourcePath('/presets/character-name-basic.psglib')).toBe(
+      true
+    );
+    expect(
+      isSafePresetSourcePath(
+        '/asset-browser/presets/character-name-basic.psglib'
+      )
+    ).toBe(true);
+  });
+
+  it('rejects external and traversal-based preset sources', () => {
+    expect(isSafePresetSourcePath('https://example.com/preset.psg')).toBe(
+      false
+    );
+    expect(isSafePresetSourcePath('//example.com/preset.psg')).toBe(false);
+    expect(isSafePresetSourcePath('/presets/../../secret.psg')).toBe(false);
+    expect(isSafePresetSourcePath('/tmp/local.psg')).toBe(false);
+  });
+
+  it('only accepts inline content when it looks like a full preset document', () => {
+    expect(
+      getInlinePresetDocument({
+        content: JSON.stringify({
+          fileType: 'psglib',
+          version: '1.0',
+          nodes: [],
+          edges: []
+        })
+      })
+    ).toContain('"fileType":"psglib"');
+    expect(
+      getInlinePresetDocument({
+        content: JSON.stringify({ metadata: { file: '/presets/test.psg' } })
+      })
+    ).toBeNull();
+  });
+
   it('prefers the deepest visible container when positions overlap', () => {
     const outer = createContainerNode('outer', {
       position: { x: 0, y: 0 },
@@ -70,10 +121,7 @@ describe('useDragDropHandlers helpers', () => {
       data: { width: 240, height: 240 }
     });
 
-    const result = findContainerAtPosition(
-      [outer, inner],
-      { x: 180, y: 180 }
-    );
+    const result = findContainerAtPosition([outer, inner], { x: 180, y: 180 });
 
     expect(result?.id).toBe('inner');
   });
@@ -95,10 +143,7 @@ describe('useDragDropHandlers helpers', () => {
       data: { width: 240, height: 240 }
     });
 
-    const result = findContainerAtPosition(
-      [outer, inner],
-      { x: 40, y: 40 }
-    );
+    const result = findContainerAtPosition([outer, inner], { x: 40, y: 40 });
 
     expect(result?.id).toBe('outer');
   });

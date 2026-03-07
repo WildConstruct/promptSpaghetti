@@ -1,46 +1,109 @@
-import { FastifyInstance } from 'fastify';
-import { z } from 'zod';
+import { FastifyInstance, RouteHandlerMethod } from 'fastify';
+import { z, type ZodTypeAny } from 'zod';
 
-const LLMWrappedRequestSchema = z.object({
-  config: z.record(z.unknown()).optional(),
-  request: z.record(z.unknown())
-});
+const MAX_PROMPT_LENGTH = 12000;
+const MAX_CONTEXT_LENGTH = 8000;
+const MAX_TEXT_LENGTH = 12000;
 
-const LLMDirectRequestSchema = z.record(z.unknown());
+const AllowedLLMConfigSchema = z
+  .object({
+    model: z.string().min(1).max(200).optional(),
+    temperature: z.number().min(0).max(2).optional(),
+    maxTokens: z.number().int().positive().max(4096).optional()
+  })
+  .strict();
 
-const LLMParseBodySchema = z.object({
-  prompt: z.string().min(1),
-  mode: z.string().optional()
-});
+const ChoiceSchema = z
+  .object({
+    text: z.string().min(1).max(1000),
+    weight: z.number().min(0).max(10).optional()
+  })
+  .strict();
 
-type NormalizedLLMRequest = {
-  config?: Record<string, unknown>;
-  request: Record<string, unknown>;
-};
+const InspirationChoiceSchema = z
+  .object({
+    text: z.string().min(1).max(1000),
+    weight: z.number().int().min(1).max(10)
+  })
+  .strict();
 
-const PopulateRequestSchema = z.object({
-  nodeText: z.string().min(1),
-  context: z.string().optional(),
-  count: z.number().int().min(1).max(10).optional()
-});
+const InspirationSuggestionSchema = z
+  .object({
+    theme: z.string().min(1).max(200),
+    choices: z.array(InspirationChoiceSchema).max(10)
+  })
+  .strict();
 
-const OptimizeRequestSchema = z.object({
-  choices: z
-    .array(
-      z.object({
-        text: z.string().min(1),
-        weight: z.number().optional()
-      })
-    )
-    .min(1),
-  context: z.string().optional(),
-  preference: z.string().optional()
-});
+const CompleteRequestSchema = z
+  .object({
+    prompt: z.string().min(1).max(MAX_PROMPT_LENGTH),
+    systemPrompt: z.string().min(1).max(MAX_PROMPT_LENGTH).optional(),
+    model: z.string().min(1).max(200).optional(),
+    temperature: z.number().min(0).max(2).optional(),
+    maxTokens: z.number().int().positive().max(4096).optional()
+  })
+  .strict();
 
-const SuggestRequestSchema = z.object({
-  operation: z.string().optional(),
-  context: z.string().optional()
-});
+const ParseRequestSchema = z
+  .object({
+    prompt: z.string().min(1).max(MAX_PROMPT_LENGTH),
+    mode: z.enum(['standard', 'metadata', 'graph']).optional()
+  })
+  .strict();
+
+const SuggestRequestSchema = z
+  .object({
+    operation: z.literal('inspiration'),
+    context: z.string().max(MAX_CONTEXT_LENGTH).optional()
+  })
+  .strict();
+
+const MetadataRequestSchema = z
+  .object({
+    text: z.string().min(1).max(MAX_TEXT_LENGTH).optional(),
+    content: z
+      .union([z.string().min(1).max(MAX_TEXT_LENGTH), z.record(z.unknown())])
+      .optional(),
+    context: z.string().max(MAX_CONTEXT_LENGTH).optional()
+  })
+  .strict()
+  .refine(
+    value =>
+      typeof value.text === 'string' || typeof value.content !== 'undefined',
+    { message: 'Metadata request requires text or content' }
+  );
+
+const RefineRequestSchema = z
+  .object({
+    text: z.string().min(1).max(MAX_TEXT_LENGTH),
+    instruction: z.string().min(1).max(1000).optional(),
+    mode: z.string().min(1).max(100).optional(),
+    prompt: z.string().min(1).max(1000).optional()
+  })
+  .strict();
+
+const AnalyzeRequestSchema = z
+  .object({
+    graph: z.record(z.unknown()),
+    prompt: z.string().min(1).max(MAX_PROMPT_LENGTH).optional()
+  })
+  .strict();
+
+const PopulateRequestSchema = z
+  .object({
+    nodeText: z.string().min(1).max(MAX_TEXT_LENGTH),
+    context: z.string().max(MAX_CONTEXT_LENGTH).optional(),
+    count: z.number().int().min(1).max(10).optional()
+  })
+  .strict();
+
+const OptimizeRequestSchema = z
+  .object({
+    choices: z.array(ChoiceSchema).min(1).max(10),
+    context: z.string().max(MAX_CONTEXT_LENGTH).optional(),
+    preference: z.string().max(1000).optional()
+  })
+  .strict();
 
 type WeightedChoice = {
   text: string;
@@ -175,9 +238,9 @@ function optimizeHeuristicChoices(
 
 function buildHeuristicInspiration(
   context: string
-): Array<{ theme: string; choices: WeightedChoice[] }> {
+): Array<z.infer<typeof InspirationSuggestionSchema>> {
   const lower = context.toLowerCase();
-  const themes = [
+  const themes: Array<z.infer<typeof InspirationSuggestionSchema>> = [
     {
       theme: 'Character Reactions',
       choices: [
@@ -222,43 +285,25 @@ function buildHeuristicInspiration(
   return themes;
 }
 
-function normalizeLLMRequest(
+function parseEndpointRequest<TSchema extends ZodTypeAny>(
   body: unknown,
-  options: { allowParseBody?: boolean } = {}
-): NormalizedLLMRequest | null {
-  const wrapped = LLMWrappedRequestSchema.safeParse(body);
-  if (wrapped.success) {
-    if (!wrapped.data.request) {
-      return null;
-    }
-    return {
-      config: wrapped.data.config,
-      request: wrapped.data.request
-    };
-  }
-
-  const direct = LLMDirectRequestSchema.safeParse(body);
+  schema: TSchema
+): z.infer<TSchema> | null {
+  const direct = schema.safeParse(body);
   if (direct.success) {
-    const { config, ...request } = direct.data;
-    return {
-      config:
-        config && typeof config === 'object' && !Array.isArray(config)
-          ? (config as Record<string, unknown>)
-          : undefined,
-      request
-    };
+    return direct.data;
   }
 
-  if (options.allowParseBody) {
-    const parseBody = LLMParseBodySchema.safeParse(body);
-    if (parseBody.success) {
-      return {
-        request: {
-          prompt: parseBody.data.prompt,
-          mode: parseBody.data.mode ?? 'standard'
-        }
-      };
-    }
+  const wrapped = z
+    .object({
+      config: AllowedLLMConfigSchema.optional(),
+      request: schema
+    })
+    .strict()
+    .safeParse(body);
+
+  if (wrapped.success) {
+    return wrapped.data.request;
   }
 
   return null;
@@ -267,10 +312,10 @@ function normalizeLLMRequest(
 async function registerAliases(
   app: FastifyInstance,
   paths: string[],
-  handler: any
+  handler: RouteHandlerMethod
 ) {
   for (const path of paths) {
-    app.post(path, handler as any);
+    app.post(path, handler);
   }
 }
 
@@ -279,20 +324,19 @@ export async function llmRoutes(app: FastifyInstance) {
     app,
     ['/api/llm/complete', '/api/llm-complete'],
     async (req, reply) => {
-      const parsed = normalizeLLMRequest(req.body);
+      const parsed = parseEndpointRequest(req.body, CompleteRequestSchema);
       if (!parsed) {
-        return reply.status(400).send({ error: 'Invalid request' });
+        return reply.status(400).send({ error: 'Invalid complete request' });
       }
 
-      // TODO: Wire to real LLMService. For demo, return stubbed response.
       return reply.send({
         content: '[demo] LLM response placeholder',
-        model: 'stub',
-        tokensIn: 0,
-        tokensOut: 0,
-        cost: 0,
-        cached: false,
-        echo: parsed.request
+        model: parsed.model ?? 'stub',
+        usage: {
+          promptTokens: 0,
+          completionTokens: 0,
+          totalTokens: 0
+        }
       });
     }
   );
@@ -301,20 +345,14 @@ export async function llmRoutes(app: FastifyInstance) {
     app,
     ['/api/ai/parse', '/api/llm/parse', '/api/ai-parse', '/api/llm-parse'],
     async (req, reply) => {
-      const parsed = normalizeLLMRequest(req.body, { allowParseBody: true });
+      const parsed = parseEndpointRequest(req.body, ParseRequestSchema);
       if (!parsed) {
-        return reply.status(400).send({ error: 'Invalid request' });
+        return reply.status(400).send({ error: 'Invalid parse request' });
       }
 
-      // Delegate to complete endpoint contract
       return reply.send({
-        content: '[demo] LLM parse response placeholder',
-        model: 'stub',
-        tokensIn: 0,
-        tokensOut: 0,
-        cost: 0,
-        cached: false,
-        echo: parsed.request
+        result: `[demo] Parsed (${parsed.mode ?? 'standard'})`,
+        model: 'stub'
       });
     }
   );
@@ -323,20 +361,14 @@ export async function llmRoutes(app: FastifyInstance) {
     app,
     ['/api/llm/suggest', '/api/llm-suggest'],
     async (req, reply) => {
-      const parsed = normalizeLLMRequest(req.body);
-      const request = parsed?.request ?? {};
-      const suggest = SuggestRequestSchema.safeParse(request);
-
-      if (suggest.success && suggest.data.operation === 'inspiration') {
-        return reply.send({
-          suggestions: buildHeuristicInspiration(suggest.data.context ?? ''),
-          model: 'heuristic-inspiration-v1'
-        });
+      const parsed = parseEndpointRequest(req.body, SuggestRequestSchema);
+      if (!parsed) {
+        return reply.status(400).send({ error: 'Invalid suggest request' });
       }
 
       return reply.send({
-        suggestions: ['Alpha', 'Beta', 'Gamma'],
-        model: 'stub'
+        suggestions: buildHeuristicInspiration(parsed.context ?? ''),
+        model: 'heuristic-inspiration-v1'
       });
     }
   );
@@ -344,16 +376,67 @@ export async function llmRoutes(app: FastifyInstance) {
   await registerAliases(
     app,
     ['/api/llm/metadata', '/api/llm-metadata'],
-    async (_req, reply) => {
-      return reply.send({ metadata: { provider: 'stub', available: true } });
+    async (req, reply) => {
+      const parsed = parseEndpointRequest(req.body, MetadataRequestSchema);
+      if (!parsed) {
+        return reply.status(400).send({ error: 'Invalid metadata request' });
+      }
+
+      const subject =
+        typeof parsed.text === 'string'
+          ? parsed.text
+          : typeof parsed.content === 'string'
+            ? parsed.content
+            : 'structured-content';
+
+      return reply.send({
+        metadata: {
+          provider: 'stub',
+          available: true,
+          subject
+        },
+        model: 'stub'
+      });
     }
   );
 
   await registerAliases(
     app,
     ['/api/llm/refine', '/api/llm-refine'],
-    async (_req, reply) => {
-      return reply.send({ refined: true, model: 'stub' });
+    async (req, reply) => {
+      const parsed = parseEndpointRequest(req.body, RefineRequestSchema);
+      if (!parsed) {
+        return reply.status(400).send({ error: 'Invalid refine request' });
+      }
+
+      return reply.send({
+        refinedText: parsed.text,
+        model: 'stub'
+      });
+    }
+  );
+
+  await registerAliases(
+    app,
+    ['/api/llm/analyze', '/api/llm-analyze'],
+    async (req, reply) => {
+      const parsed = parseEndpointRequest(req.body, AnalyzeRequestSchema);
+      if (!parsed) {
+        return reply.status(400).send({ error: 'Invalid analyze request' });
+      }
+
+      return reply.send({
+        analysis: {
+          nodeCount: Array.isArray(parsed.graph.nodes)
+            ? parsed.graph.nodes.length
+            : 0,
+          edgeCount: Array.isArray(parsed.graph.edges)
+            ? parsed.graph.edges.length
+            : 0,
+          prompt: parsed.prompt ?? null
+        },
+        model: 'stub'
+      });
     }
   );
 
@@ -361,23 +444,18 @@ export async function llmRoutes(app: FastifyInstance) {
     app,
     ['/api/llm/optimize', '/api/llm-optimize'],
     async (req, reply) => {
-      const parsed = normalizeLLMRequest(req.body);
+      const parsed = parseEndpointRequest(req.body, OptimizeRequestSchema);
       if (!parsed) {
-        return reply.status(400).send({ error: 'Invalid request' });
-      }
-
-      const optimize = OptimizeRequestSchema.safeParse(parsed.request);
-      if (!optimize.success) {
         return reply.status(400).send({ error: 'Invalid optimize request' });
       }
 
       return reply.send({
         choices: optimizeHeuristicChoices(
-          optimize.data.choices.map(choice => ({
+          parsed.choices.map(choice => ({
             text: choice.text,
             weight: choice.weight ?? 5
           })),
-          optimize.data.preference ?? 'balanced variety'
+          parsed.preference ?? 'balanced variety'
         ),
         model: 'heuristic-optimize-v1'
       });
@@ -388,21 +466,16 @@ export async function llmRoutes(app: FastifyInstance) {
     app,
     ['/api/llm/populate', '/api/llm-populate'],
     async (req, reply) => {
-      const parsed = normalizeLLMRequest(req.body);
+      const parsed = parseEndpointRequest(req.body, PopulateRequestSchema);
       if (!parsed) {
-        return reply.status(400).send({ error: 'Invalid request' });
-      }
-
-      const populate = PopulateRequestSchema.safeParse(parsed.request);
-      if (!populate.success) {
         return reply.status(400).send({ error: 'Invalid populate request' });
       }
 
       return reply.send({
         choices: buildHeuristicChoices(
-          populate.data.nodeText,
-          populate.data.context ?? '',
-          populate.data.count ?? 5
+          parsed.nodeText,
+          parsed.context ?? '',
+          parsed.count ?? 5
         ),
         model: 'heuristic-populate-v1'
       });

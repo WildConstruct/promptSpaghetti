@@ -10,6 +10,7 @@ import {
   convertPSGToPSGLib
 } from '@promptscape/core/fileFormats/psg';
 import type { PSGLibFile } from '@promptscape/core/fileFormats/psglib';
+import { validateEditorGraphPayload } from './graphValidation';
 
 const CONTAINER_NODE_TYPES = new Set([
   'enhancedBoundingBox',
@@ -189,8 +190,14 @@ export function loadReactFlowFromPsgContent(
   try {
     const fragment = parsePsgWithCompatibility(psgText);
     const psglib: PSGLibFile = convertPSGToPSGLib(fragment);
+    const validated = validateEditorGraphPayload(
+      convertGraphToReactFlow(psglib.graph as Graph)
+    );
+    if (!validated.ok) {
+      throw new Error(validated.error);
+    }
     return {
-      ...convertGraphToReactFlow(psglib.graph as Graph),
+      ...validated.data,
       source: 'flat'
     };
   } catch {

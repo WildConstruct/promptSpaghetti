@@ -12,6 +12,10 @@ import {
   findContainerAtPosition
 } from './dragDropContainerUtils';
 import { debugLogEpic1 } from '../../../utils/debug';
+import {
+  getInlinePresetDocument,
+  isSafePresetSourcePath
+} from './presetSourcePolicy';
 
 type FlowNode = Node<EditableNodeData>;
 type FlowEdge = Edge<EditableNodeData>;
@@ -54,34 +58,6 @@ const toFlowNodes = (nodes: unknown): FlowNode[] =>
 
 const toFlowEdges = (edges: unknown): FlowEdge[] =>
   Array.isArray(edges) ? edges.filter(isFlowEdge) : [];
-
-const looksLikePresetDocument = (value: unknown): value is string => {
-  if (typeof value !== 'string') {
-    return false;
-  }
-
-  try {
-    const parsed = JSON.parse(value);
-    if (!isRecord(parsed)) {
-      return false;
-    }
-
-    if (parsed.fileType === 'psglib') {
-      return true;
-    }
-
-    return (
-      typeof parsed.version === 'string' &&
-      Array.isArray(parsed.nodes) &&
-      (Array.isArray(parsed.edges) ||
-        Array.isArray(parsed.groups) ||
-        Array.isArray(parsed.regions) ||
-        isRecord(parsed.metadata))
-    );
-  } catch {
-    return false;
-  }
-};
 
 const getNodeWidth = (node: FlowNode): number =>
   typeof node.width === 'number'
@@ -262,6 +238,43 @@ export function useDragDropHandlers({
     return `${base}/${path}`;
   }, []);
 
+  const resolveSafePresetPath = useCallback(
+    async (meta: PresetDropPayload): Promise<string | null> => {
+      const explicitPath =
+        (typeof meta?.path === 'string' && meta.path) ||
+        (typeof meta?.file === 'string' && meta.file) ||
+        null;
+      const metadataFile =
+        typeof meta?.metadata?.file === 'string' ? meta.metadata.file : null;
+
+      const ensureSafePath = (candidate: string, source: string): string => {
+        const normalized = normalizePresetPath(candidate);
+        if (!isSafePresetSourcePath(normalized)) {
+          throw new Error(`Rejected unsafe preset ${source}.`);
+        }
+        return normalized;
+      };
+
+      if (explicitPath) {
+        return ensureSafePath(explicitPath, 'path');
+      }
+
+      if (meta?.id) {
+        const resolvedById = await resolvePresetPathById(meta.id);
+        if (resolvedById) {
+          return ensureSafePath(resolvedById, 'manifest path');
+        }
+      }
+
+      if (metadataFile) {
+        return ensureSafePath(metadataFile, 'metadata file path');
+      }
+
+      return null;
+    },
+    [normalizePresetPath, resolvePresetPathById]
+  );
+
   const getContainerAtPosition = useCallback(
     (position: { x: number; y: number }) => {
       if (!reactFlowInstance) {
@@ -298,46 +311,31 @@ export function useDragDropHandlers({
           metadataFile: meta?.metadata?.file
         });
         let content: string | null = null;
-        const inlineContent =
+        const inlineDocument = getInlinePresetDocument(meta);
+        const rawInlineContent =
           meta?.psglib ??
           (typeof meta?.content === 'string' ? meta.content : null);
-        const metadataFile =
-          typeof meta.metadata?.file === 'string' ? meta.metadata.file : null;
-        let presetPath: string | null =
-          (typeof meta?.path === 'string' && meta.path) ||
-          (typeof meta?.file === 'string' && meta.file) ||
-          metadataFile;
+        const presetPath = await resolveSafePresetPath(meta);
 
-        // If we have a concrete file path, prefer it over inline metadata blobs.
-        // Some asset surfaces attach partial "content" objects that are not canonical PSG.
-        if (!presetPath && looksLikePresetDocument(inlineContent)) {
-          content = inlineContent;
-          debugLogEpic1('[DragDrop] Using inline preset content');
-        } else {
-          // Resolve path from payload or manifest by ID
-          if (!presetPath && meta?.id) {
-            presetPath = await resolvePresetPathById(meta.id);
-          }
-
-          if (!presetPath) {
-            if (inlineContent) {
-              throw new Error(
-                'Preset payload contained non-document inline content and no file path.'
-              );
-            }
-            throw new Error('Unable to resolve preset path.');
-          }
-
-          const normalized = normalizePresetPath(presetPath);
-          debugLogEpic1('[DragDrop] Fetching preset path:', normalized);
-          const resp = await fetch(normalized, { cache: 'no-cache' });
+        if (presetPath) {
+          debugLogEpic1('[DragDrop] Fetching preset path:', presetPath);
+          const resp = await fetch(presetPath, { cache: 'no-cache' });
           if (!resp.ok) {
             throw new Error(
               `Failed to load preset: ${resp.status} ${resp.statusText}`
             );
           }
           content = await resp.text();
-          debugLogEpic1('[DragDrop] Loaded preset from path:', normalized);
+          debugLogEpic1('[DragDrop] Loaded preset from path:', presetPath);
+        } else if (inlineDocument) {
+          content = inlineDocument;
+          debugLogEpic1('[DragDrop] Using inline preset content');
+        } else if (rawInlineContent) {
+          throw new Error(
+            'Preset payload contained non-document inline content and no safe file path.'
+          );
+        } else {
+          throw new Error('Unable to resolve preset path.');
         }
 
         if (!content) {
@@ -352,16 +350,18 @@ export function useDragDropHandlers({
 
         // Validate before inserting
         const validation = validatePreset(content, {
+          // Content validation does not prove source provenance; source paths are
+          // restricted separately before fetch.
           preferCanonicalPsg:
             typeof presetPath === 'string' &&
-            normalizePresetPath(presetPath).startsWith('/assets/library/')
+            presetPath.startsWith('/assets/library/')
         });
         if (!validation.valid) {
           console.error('[DragDrop] Preset validation failed', {
             presetId: meta?.id,
             presetName: meta?.name,
             presetPath,
-            hasInlineContent: Boolean(inlineContent),
+            hasInlineContent: Boolean(inlineDocument),
             contentPreview: content.slice(0, 400)
           });
           throw new Error(validation.error || 'Preset failed validation');
@@ -501,9 +501,8 @@ export function useDragDropHandlers({
       addNodeWithBounce,
       attachNodesToContainer,
       getContainerAtPosition,
-      normalizePresetPath,
       reactFlowInstance,
-      resolvePresetPathById,
+      resolveSafePresetPath,
       setEdges,
       setNodes,
       showToast
