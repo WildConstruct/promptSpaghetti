@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Node, Edge } from 'reactflow';
 import { WorkspaceRecovery } from '@promptscape/core/services/WorkspaceRecovery';
+import { validateEditorGraphPayload } from '../utils/graphValidation';
 
 interface UseWorkspaceRecoveryProps {
   onRecover?: (nodes: Node[], edges: Edge[]) => void;
@@ -21,12 +22,14 @@ export const useWorkspaceRecovery = ({
 
   // Check for recoverable workspace on mount
   useEffect(() => {
-    if (!autoCheckOnMount || hasCheckedRecovery) {return;}
+    if (!autoCheckOnMount || hasCheckedRecovery) {
+      return;
+    }
 
-    const checkRecovery = async () => {
-      const hasRecoverable = await WorkspaceRecovery.hasRecoverableWorkspace();
+    const checkRecovery = () => {
+      const hasRecoverable = WorkspaceRecovery.hasRecoverableWorkspace();
       if (hasRecoverable) {
-        const data = await WorkspaceRecovery.getRecoveryData();
+        const data = WorkspaceRecovery.recoverWorkspace();
         if (data) {
           setRecoveryData(data);
           setShowRecoveryDialog(true);
@@ -39,25 +42,40 @@ export const useWorkspaceRecovery = ({
   }, [autoCheckOnMount, hasCheckedRecovery]);
 
   // Handle recovery acceptance
-  const handleRecoveryAccept = useCallback(async () => {
-    if (!recoveryData) {return;}
+  const handleRecoveryAccept = useCallback(() => {
+    if (!recoveryData) {
+      return;
+    }
 
-    // Recover the workspace
-    const { nodes, edges } = recoveryData;
+    const validated = validateEditorGraphPayload(recoveryData);
+    if (!validated.ok) {
+      console.error(
+        '[useWorkspaceRecovery] Rejecting invalid recovery payload:',
+        validated.error
+      );
+      WorkspaceRecovery.clearWorkspace();
+      setShowRecoveryDialog(false);
+      setRecoveryData(null);
+      return;
+    }
 
-    // Call the recovery callback
-    onRecover?.(nodes, edges);
+    onRecover?.(validated.data.nodes, validated.data.edges);
 
-    // Clear recovery data
-    await WorkspaceRecovery.clearRecoveryData();
+    WorkspaceRecovery.clearWorkspace();
     setShowRecoveryDialog(false);
     setRecoveryData(null);
   }, [recoveryData, onRecover]);
 
-  // Handle recovery decline
-  const handleRecoveryDecline = useCallback(async () => {
-    // Clear recovery data
-    await WorkspaceRecovery.clearRecoveryData();
+  // Handle explicit "start fresh"
+  const handleRecoveryDecline = useCallback(() => {
+    WorkspaceRecovery.clearWorkspace();
+    setShowRecoveryDialog(false);
+    setRecoveryData(null);
+  }, []);
+
+  // Handle dismiss for this session without deleting stored workspace
+  const handleRecoveryDismiss = useCallback(() => {
+    WorkspaceRecovery.dismissRecovery();
     setShowRecoveryDialog(false);
     setRecoveryData(null);
   }, []);
@@ -68,8 +86,8 @@ export const useWorkspaceRecovery = ({
   }, []);
 
   // Clear recovery data manually
-  const clearRecovery = useCallback(async () => {
-    await WorkspaceRecovery.clearRecoveryData();
+  const clearRecovery = useCallback(() => {
+    WorkspaceRecovery.clearWorkspace();
     setRecoveryData(null);
   }, []);
 
@@ -79,6 +97,7 @@ export const useWorkspaceRecovery = ({
     hasCheckedRecovery,
     handleRecoveryAccept,
     handleRecoveryDecline,
+    handleRecoveryDismiss,
     saveForRecovery,
     clearRecovery,
     setShowRecoveryDialog

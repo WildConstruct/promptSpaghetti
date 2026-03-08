@@ -95,6 +95,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     recoveryData,
     handleRecoveryAccept,
     handleRecoveryDecline,
+    handleRecoveryDismiss,
     saveForRecovery
   } = useWorkspaceRecovery({
     onRecover: (nodes, edges) => {
@@ -253,10 +254,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
         {showRecoveryDialog && recoveryData && (
           <WorkspaceRecoveryDialog
-            isOpen={showRecoveryDialog}
-            onAccept={handleRecoveryAccept}
-            onDecline={handleRecoveryDecline}
-            timestamp={recoveryData.timestamp}
+            onRecover={handleRecoveryAccept}
+            onStartFresh={handleRecoveryDecline}
+            onDismiss={handleRecoveryDismiss}
           />
         )}
 
