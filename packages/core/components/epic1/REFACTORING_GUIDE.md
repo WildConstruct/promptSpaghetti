@@ -30,7 +30,6 @@ Epic1GraphEditor/
 │   └── useContextMenu.ts (65 lines) - Context menu state
 ├── services/
 │   ├── GraphConverter.ts (120 lines) - Graph conversion logic
-│   ├── GraphPersistence.ts (140 lines) - Save/load functionality
 │   └── NodeFactory.ts (150 lines) - Node creation utilities
 └── (existing components remain unchanged)
 ```
@@ -139,8 +138,7 @@ function MyCustomGraphEditor() {
 ```tsx
 import {
   GraphConverter,
-  NodeFactory,
-  GraphPersistence
+  NodeFactory
 } from '@promptscape/core/components/epic1/services';
 
 // Create nodes programmatically
@@ -148,11 +146,11 @@ const newNode = NodeFactory.createNode('textBlock', { x: 100, y: 100 });
 
 // Convert and validate graphs
 const runtimeGraph = GraphConverter.convertToRuntimeGraph(nodes, edges);
-
-// Save/load graphs
-GraphPersistence.save(nodes, edges);
-const saved = GraphPersistence.load();
 ```
+
+Persistence and recovery now flow through active hooks such as
+`useGraphPersistence`, workspace recovery helpers, and the editor open/save
+paths instead of a standalone `GraphPersistence` service.
 
 ## Testing Strategy
 

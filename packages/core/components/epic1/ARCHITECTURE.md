@@ -35,8 +35,8 @@
 ├─────────────────────────────────────────────────────────────┤
 │                      Service Layer                           │
 │  ┌──────────────┬──────────────────┬──────────────────┐    │
-│  │GraphConverter│GraphPersistence  │NodeFactory       │    │
-│  │(Pure logic)  │(Save/Load)       │(Creation)        │    │
+│  │GraphConverter│Editor persistence│NodeFactory       │    │
+│  │(Pure logic)  │(Hooks/Recovery)  │(Creation)        │    │
 │  └──────────────┴──────────────────┴──────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -66,8 +66,10 @@
 ### 4. **Services** (Pure Functions)
 
 - `GraphConverter` - Graph format conversion
-- `GraphPersistence` - Save/load operations
 - `NodeFactory` - Node creation utilities
+
+Persistence and restore behavior now lives in active hooks and recovery flows
+rather than a standalone `GraphPersistence.ts` service.
 
 ## Benefits Achieved
 
