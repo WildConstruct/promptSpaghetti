@@ -14,9 +14,6 @@ export interface ConcatNodeData extends EditableNodeData {
  */
 export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
   const { showMetadata, setShowMetadata, metadata, flipClassName } = useMetadataFlip(props);
-  const separatorLabel = typeof props.data?.separator === 'string' && props.data.separator.length > 0
-    ? 'Custom separator'
-    : 'Merges connected inputs';
 
   return (
     <BaseEditableNode
@@ -105,10 +102,9 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
         }
 
         return (
-            <>
+          <>
             <div className="epic1-concat-display">
               <div className="epic1-node-type-label">Merge</div>
-              <div className="epic1-merge-sublabel">{separatorLabel}</div>
             </div>
             {/* Custom dual input handles rendered inside the node */}
             <Handle

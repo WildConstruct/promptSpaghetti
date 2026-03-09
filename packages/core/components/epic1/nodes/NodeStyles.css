@@ -5,23 +5,40 @@
   width: 124px;
   min-width: 124px;
   padding: 10px 12px;
-  background: #22c493;
-  border-color: #22c493;
-  color: #08271f;
-  box-shadow: 0 10px 24px rgba(34, 196, 147, 0.22);
+  background: #63d64c;
+  border-color: #63d64c;
+  color: #12310c;
+  box-shadow: 0 10px 24px rgba(99, 214, 76, 0.24);
 }
 
 /* Style the two input handles with labels for visual clarity */
 .concat-input-1::after,
 .concat-input-2::after {
   position: absolute;
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 600;
-  left: 16px;
+  font-size: 10px;
+  color: rgba(18, 49, 12, 0.78);
+  font-weight: 700;
+  left: 18px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
+}
+
+.epic1-editable-node.concat .epic1-handle.target {
+  width: 12px;
+  height: 12px;
+  left: -7px !important;
+  background: #f6fff2;
+  border: 2px solid #2b5f1f;
+  box-shadow: 0 0 0 2px rgba(99, 214, 76, 0.28);
+}
+
+.epic1-editable-node.concat .epic1-handle.source {
+  width: 12px;
+  height: 12px;
+  right: -7px !important;
+  background: #2b5f1f;
+  border: 2px solid #f6fff2;
 }
 
 .concat-input-1::after {
@@ -35,15 +52,6 @@
 .epic1-concat-display,
 .epic1-concat-editor {
   text-align: center;
-}
-
-.epic1-merge-sublabel {
-  font-size: 11px;
-  color: rgba(8, 39, 31, 0.82);
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .epic1-hint {
