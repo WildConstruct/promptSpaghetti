@@ -288,4 +288,62 @@ describe('useDragDropHandlers helpers', () => {
     expect(result.find(edge => edge.id === 'ac')).toBeTruthy();
     expect(result.find(edge => edge.id === 'bd')).toBeTruthy();
   });
+
+  it('skips edge splice when metadata prefers free placement', () => {
+    const existingEdges = [createEdge('edge-1', 'source', 'target')];
+    const nodesToAdd = [createChildNode('inserted')];
+
+    const result = splicePresetIntoEdge(
+      existingEdges,
+      nodesToAdd,
+      [],
+      {
+        edgeId: 'edge-1',
+        sourceId: 'source',
+        targetId: 'target'
+      },
+      {
+        preferredInsertion: 'free-place',
+        entryStrategy: 'single-node',
+        exitStrategy: 'single-node'
+      }
+    );
+
+    expect(result).toHaveLength(1);
+    expect(result.find(edge => edge.id === 'edge-1')).toBeTruthy();
+  });
+
+  it('skips auto splice when metadata requires manual boundaries', () => {
+    const existingEdges = [createEdge('edge-1', 'source', 'target')];
+    const nodesToAdd = [
+      createChildNode('entry'),
+      createChildNode('middle'),
+      createChildNode('exit')
+    ];
+    const edgesToAdd = [
+      createEdge('entry-middle', 'entry', 'middle'),
+      createEdge('middle-exit', 'middle', 'exit')
+    ];
+
+    const result = splicePresetIntoEdge(
+      existingEdges,
+      nodesToAdd,
+      edgesToAdd,
+      {
+        edgeId: 'edge-1',
+        sourceId: 'source',
+        targetId: 'target'
+      },
+      {
+        preferredInsertion: 'insert-edge',
+        entryStrategy: 'manual',
+        exitStrategy: 'manual'
+      }
+    );
+
+    expect(result).toHaveLength(3);
+    expect(result.find(edge => edge.id === 'edge-1')).toBeTruthy();
+    expect(result.find(edge => edge.id === 'entry-middle')).toBeTruthy();
+    expect(result.find(edge => edge.id === 'middle-exit')).toBeTruthy();
+  });
 });
