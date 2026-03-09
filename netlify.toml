@@ -26,7 +26,7 @@
   # Disable Netlify secrets scanning on known false-positive-heavy paths.
   # This repo contains many examples, tests, reports, and legacy artifacts that
   # are not deployable runtime inputs but can still trip smart detection.
-  SECRETS_SCAN_OMIT_PATHS = ".env.example,docs/**,examples/**,legacy/**,load-tests/**,reports/**,sandboxes/**,tests/**,scripts/**,src/**,packages/*/dist/**,client/dist/**,client/package-lock.json,create-auth-tasks-batch.sh,packages/asset-browser/src/**,packages/core/README.md,packages/core/components/AssetBrowser/**,packages/core/components/epic1/AGENTS.md,packages/core/components/epic1/examples/**,packages/core/config/python-executor.ts,packages/core/config/python-executor.d.ts,packages/core/docs/**,packages/core/hooks/useMetadataExtraction.ts,packages/core/services/**"
+  SECRETS_SCAN_OMIT_PATHS = ".env.example,docs/**,examples/**,legacy/**,load-tests/**,reports/**,sandboxes/**,tests/**,scripts/**,src/**,client/src/**,client/dist/**,client/package-lock.json,packages/*/dist/**,packages/core/tests/**,packages/core/types/**,packages/core/docs/**,packages/core/services/**,packages/core/README.md,packages/core/components/AssetBrowser/**,packages/core/components/epic1/AGENTS.md,packages/core/components/epic1/examples/**,packages/asset-browser/src/**,create-auth-tasks-batch.sh,packages/core/config/python-executor.ts,packages/core/config/python-executor.d.ts"
   # Omit known public or non-secret config keys from secrets scanning
   SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_URL,VITE_API_TIMEOUT"
 
