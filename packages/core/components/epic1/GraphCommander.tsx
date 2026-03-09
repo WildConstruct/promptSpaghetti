@@ -21,6 +21,24 @@ function findSuggestionByRole(
   return suggestions.find(suggestion => suggestion.fragment.roles.includes(role)) ?? null;
 }
 
+function findGapSuggestion(
+  suggestions: PlannedFragmentSuggestion[]
+): PlannedFragmentSuggestion | null {
+  return (
+    suggestions.find(suggestion =>
+      suggestion.actionLabel !== 'Place' &&
+      suggestion.fragment.roles.some(role =>
+        role === 'branch-extension' ||
+        role === 'modifier' ||
+        role === 'merge-helper' ||
+        role === 'output-finisher'
+      )
+    ) ??
+    suggestions[0] ??
+    null
+  );
+}
+
 interface GraphCommanderProps {
   isOpen: boolean;
   onClose: () => void;
@@ -130,6 +148,7 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
     const bestBranchExtension = findSuggestionByRole(suggestions, 'branch-extension');
     const bestMergeHelper = findSuggestionByRole(suggestions, 'merge-helper');
     const bestOutputFinisher = findSuggestionByRole(suggestions, 'output-finisher');
+    const bestGapFill = findGapSuggestion(suggestions);
 
     const baseCommands: GraphCommanderCommand[] = [
       {
@@ -146,13 +165,13 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
         }
       },
       {
-        id: 'insert-branch-extension',
-        title: 'Insert Branch Extension',
+        id: 'extend-selected-branch',
+        title: 'Extend Selected Branch',
         description: bestBranchExtension
           ? `${bestBranchExtension.actionLabel} • ${bestBranchExtension.insertionLabel} • ${bestBranchExtension.fragment.name}`
           : 'No branch extension is strongly matched for this selection',
-        keywords: ['branch', 'extension', 'conditional', 'lane'],
-        group: 'Suggestions',
+        keywords: ['branch', 'extension', 'conditional', 'lane', 'extend'],
+        group: 'Structure',
         run: async () => {
           if (!bestBranchExtension) {
             return;
@@ -161,13 +180,13 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
         }
       },
       {
-        id: 'insert-merge-helper',
-        title: 'Insert Merge Helper',
+        id: 'add-missing-merge',
+        title: 'Add Missing Merge',
         description: bestMergeHelper
           ? `${bestMergeHelper.actionLabel} • ${bestMergeHelper.insertionLabel} • ${bestMergeHelper.fragment.name}`
           : 'No merge helper is strongly matched for this selection',
-        keywords: ['merge', 'join', 'combine', 'recombine'],
-        group: 'Suggestions',
+        keywords: ['merge', 'join', 'combine', 'recombine', 'missing'],
+        group: 'Structure',
         run: async () => {
           if (!bestMergeHelper) {
             return;
@@ -176,18 +195,33 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
         }
       },
       {
-        id: 'insert-output-finisher',
-        title: 'Insert Output Finisher',
+        id: 'finish-output-lane',
+        title: 'Finish Output Lane',
         description: bestOutputFinisher
           ? `${bestOutputFinisher.actionLabel} • ${bestOutputFinisher.insertionLabel} • ${bestOutputFinisher.fragment.name}`
           : 'No output finisher is strongly matched for this selection',
-        keywords: ['output', 'finisher', 'polish', 'final'],
-        group: 'Suggestions',
+        keywords: ['output', 'finisher', 'polish', 'final', 'finish'],
+        group: 'Structure',
         run: async () => {
           if (!bestOutputFinisher) {
             return;
           }
           await handleInsertFragment(bestOutputFinisher.fragment);
+        }
+      },
+      {
+        id: 'fill-downstream-gap',
+        title: 'Fill Downstream Gap',
+        description: bestGapFill
+          ? `${bestGapFill.actionLabel} • ${bestGapFill.insertionLabel} • ${bestGapFill.fragment.name}`
+          : 'No strong follow-up fragment is matched for this selection',
+        keywords: ['gap', 'downstream', 'continue', 'missing', 'follow-up'],
+        group: 'Structure',
+        run: async () => {
+          if (!bestGapFill) {
+            return;
+          }
+          await handleInsertFragment(bestGapFill.fragment);
         }
       },
       {
