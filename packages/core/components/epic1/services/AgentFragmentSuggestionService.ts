@@ -85,6 +85,7 @@ function scoreSuggestion(params: {
     if (fragment.roles.includes('branch-extension')) {
       score += 6;
     }
+    score += Math.min(context.branchDepth ?? 0, 3);
   }
 
   if (context.needsMerge) {
@@ -105,8 +106,34 @@ function scoreSuggestion(params: {
     }
   }
 
+  if (context.hasNoOutgoing) {
+    if (fragment.roles.includes('branch-extension')) {
+      score += 8;
+    }
+    if (fragment.placementHints.includes(context.isBranchLane ? 'branch-lane' : 'downstream-of-choice')) {
+      score += 5;
+    }
+  }
+
+  if ((context.outputDistance ?? Infinity) <= 1) {
+    if (fragment.roles.includes('output-finisher')) {
+      score += 8;
+    }
+    if (fragment.placementHints.includes('before-output')) {
+      score += 4;
+    }
+  }
+
+  if ((context.outputDistance ?? Infinity) > 2 && fragment.roles.includes('modifier')) {
+    score += 3;
+  }
+
   if (context.selectedNodeType === 'enhancedBoundingBox' && fragment.placementHints.includes('inside-region')) {
     score += 12;
+  }
+
+  if (context.insideRegion && fragment.placementHints.includes('inside-region')) {
+    score += 6;
   }
 
   if ((context.domainHints ?? []).some(domain => fragment.domains.includes(domain))) {

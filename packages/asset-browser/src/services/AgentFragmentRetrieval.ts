@@ -71,6 +71,10 @@ export type SelectionContext = {
   isBranchLane?: boolean;
   leadsToOutput?: boolean;
   needsMerge?: boolean;
+  hasNoOutgoing?: boolean;
+  outputDistance?: number | null;
+  branchDepth?: number;
+  insideRegion?: boolean;
   domainHints?: FragmentDomain[];
   toneHints?: string[];
 };
@@ -258,6 +262,18 @@ function scoreRecord(
   if (context.leadsToOutput && record.roles.includes('output-finisher')) {
     score += 4;
   }
+  if (context.hasNoOutgoing && record.roles.includes('branch-extension')) {
+    score += 5;
+  }
+  if (context.insideRegion && record.placementHints.includes('inside-region')) {
+    score += 6;
+  }
+  if ((context.outputDistance ?? Infinity) <= 1 && record.roles.includes('output-finisher')) {
+    score += 5;
+  }
+  if ((context.outputDistance ?? Infinity) > 2 && record.roles.includes('modifier')) {
+    score += 2;
+  }
   return score;
 }
 
@@ -363,6 +379,11 @@ export class AgentFragmentRetrievalService {
 
     if (context.needsMerge) {
       desiredRoles.unshift('merge-helper');
+    }
+
+    if (context.hasNoOutgoing) {
+      desiredRoles.push('branch-extension');
+      placementHints.push(context.isBranchLane ? 'branch-lane' : 'downstream-of-choice');
     }
 
     if (context.leadsToOutput) {

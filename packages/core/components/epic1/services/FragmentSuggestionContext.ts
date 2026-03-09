@@ -147,6 +147,74 @@ function needsMerge(
   return false;
 }
 
+function getOutgoingCount(
+  selectedNode: FlowNode,
+  edges: Edge[]
+): number {
+  return edges.filter(edge => edge.source === selectedNode.id).length;
+}
+
+function getOutputDistance(
+  selectedNode: FlowNode,
+  nodes: FlowNode[],
+  edges: Edge[]
+): number | null {
+  const nodeMap = new Map(nodes.map(node => [node.id, node]));
+  const queue: Array<{ id: string; distance: number }> = [
+    { id: selectedNode.id, distance: 0 }
+  ];
+  const visited = new Set<string>();
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current || visited.has(current.id)) {
+      continue;
+    }
+    visited.add(current.id);
+
+    const node = nodeMap.get(current.id);
+    if (node?.type === 'output') {
+      return current.distance;
+    }
+
+    for (const edge of edges) {
+      if (edge.source === current.id && !visited.has(edge.target)) {
+        queue.push({ id: edge.target, distance: current.distance + 1 });
+      }
+    }
+  }
+
+  return null;
+}
+
+function getBranchDepth(
+  selectedNode: FlowNode,
+  nodes: FlowNode[],
+  edges: Edge[]
+): number {
+  const nodeMap = new Map(nodes.map(node => [node.id, node]));
+  let currentId: string | null = selectedNode.id;
+  let depth = 0;
+
+  while (currentId) {
+    const incoming = edges.find(edge => edge.target === currentId);
+    if (!incoming) {
+      break;
+    }
+    if (incoming.sourceHandle?.startsWith('branch-')) {
+      depth += 1;
+    } else {
+      const sourceNode = nodeMap.get(incoming.source);
+      if (sourceNode?.type === 'weightedChoice' && incoming.sourceHandle !== 'output') {
+        depth += 1;
+      }
+    }
+    currentId = incoming.source;
+  }
+
+  return depth;
+}
+
 export function buildFragmentSuggestionContext(params: {
   selectedNode?: FlowNode | null;
   nodes?: FlowNode[];
@@ -163,12 +231,18 @@ export function buildFragmentSuggestionContext(params: {
   }
 
   const contextText = collectContextText(selectedNode, nodes, edges);
+  const outgoingCount = getOutgoingCount(selectedNode, edges);
+  const outputDistance = getOutputDistance(selectedNode, nodes, edges);
 
   return {
     selectedNodeType: selectedNode.type,
     isBranchLane: isBranchLaneNode(selectedNode, nodes, edges),
     leadsToOutput: leadsToOutput(selectedNode, nodes, edges),
     needsMerge: needsMerge(selectedNode, nodes, edges),
+    hasNoOutgoing: outgoingCount === 0 && selectedNode.type !== 'output',
+    outputDistance,
+    branchDepth: getBranchDepth(selectedNode, nodes, edges),
+    insideRegion: Boolean(selectedNode.parentNode),
     domainHints: inferDomains(contextText),
     toneHints: inferToneHints(contextText)
   };
