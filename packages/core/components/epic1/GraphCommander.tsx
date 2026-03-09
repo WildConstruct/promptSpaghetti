@@ -14,6 +14,13 @@ interface GraphCommanderCommand {
   run: () => Promise<void> | void;
 }
 
+function findSuggestionByRole(
+  suggestions: PlannedFragmentSuggestion[],
+  role: AgentFragmentRecord['roles'][number]
+): PlannedFragmentSuggestion | null {
+  return suggestions.find(suggestion => suggestion.fragment.roles.includes(role)) ?? null;
+}
+
 interface GraphCommanderProps {
   isOpen: boolean;
   onClose: () => void;
@@ -120,6 +127,10 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
   );
 
   const commands = React.useMemo<GraphCommanderCommand[]>(() => {
+    const bestBranchExtension = findSuggestionByRole(suggestions, 'branch-extension');
+    const bestMergeHelper = findSuggestionByRole(suggestions, 'merge-helper');
+    const bestOutputFinisher = findSuggestionByRole(suggestions, 'output-finisher');
+
     const baseCommands: GraphCommanderCommand[] = [
       {
         id: 'insert-best-match',
@@ -130,6 +141,51 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
         run: async () => {
           await onInsertTopSuggestion();
           onClose();
+        }
+      },
+      {
+        id: 'insert-branch-extension',
+        title: 'Insert Branch Extension',
+        description: bestBranchExtension
+          ? `${bestBranchExtension.insertionLabel} • ${bestBranchExtension.fragment.name}`
+          : 'No branch extension is strongly matched for this selection',
+        keywords: ['branch', 'extension', 'conditional', 'lane'],
+        group: 'Suggestions',
+        run: async () => {
+          if (!bestBranchExtension) {
+            return;
+          }
+          await handleInsertFragment(bestBranchExtension.fragment);
+        }
+      },
+      {
+        id: 'insert-merge-helper',
+        title: 'Insert Merge Helper',
+        description: bestMergeHelper
+          ? `${bestMergeHelper.insertionLabel} • ${bestMergeHelper.fragment.name}`
+          : 'No merge helper is strongly matched for this selection',
+        keywords: ['merge', 'join', 'combine', 'recombine'],
+        group: 'Suggestions',
+        run: async () => {
+          if (!bestMergeHelper) {
+            return;
+          }
+          await handleInsertFragment(bestMergeHelper.fragment);
+        }
+      },
+      {
+        id: 'insert-output-finisher',
+        title: 'Insert Output Finisher',
+        description: bestOutputFinisher
+          ? `${bestOutputFinisher.insertionLabel} • ${bestOutputFinisher.fragment.name}`
+          : 'No output finisher is strongly matched for this selection',
+        keywords: ['output', 'finisher', 'polish', 'final'],
+        group: 'Suggestions',
+        run: async () => {
+          if (!bestOutputFinisher) {
+            return;
+          }
+          await handleInsertFragment(bestOutputFinisher.fragment);
         }
       },
       {
@@ -185,7 +241,6 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
     return [...baseCommands, ...fragmentCommands];
   }, [
     handleInsertFragment,
-    onClose,
     onExecute,
     onExportGraph,
     onFitView,
