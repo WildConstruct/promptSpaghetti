@@ -59,6 +59,7 @@ import { EdgeRoutingControls } from './EdgeRoutingControls';
 import { PreviewPanel } from './preview/PreviewPanel';
 import { PreviewTray } from '../PreviewTray/PreviewTray';
 import { TabbedSidePanel } from './TabbedSidePanel';
+import { GraphCommander } from './GraphCommander';
 import { NodeTetris } from './NodeTetris';
 import { NodeToolbar } from './NodeToolbar';
 import { NodePalette } from './NodePalette';
@@ -212,6 +213,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   // React Flow instance
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
+  const [isCommanderOpen, setIsCommanderOpen] = useState(false);
 
   // Graph persistence - DISABLED to prevent overriding new nodes
   const { persistedState } = useGraphPersistence([], [], {
@@ -378,6 +380,60 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     ]
   );
 
+  const getFragmentSuggestions = useCallback(async () => {
+    const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+    return AgentFragmentSuggestionService.getSuggestions({
+      selectedNode,
+      nodes,
+      edges
+    });
+  }, [edges, nodes, selectedNodeId]);
+
+  const insertTopFragmentSuggestion = useCallback(async () => {
+    const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+    return AgentFragmentSuggestionService.insertTopSuggestion({
+      selectedNode,
+      nodes,
+      edges,
+      insertPreset: async preset => {
+        const insertionPlan = selectedNode
+          ? planFragmentInsertion({
+              fragment: presetToAgentFragmentRecord(preset),
+              selectedNode,
+              nodes,
+              edges
+            })
+          : reactFlowInstance
+            ? {
+                anchor: 'free-placement' as const,
+                position: reactFlowInstance.screenToFlowPosition({
+                  x: window.innerWidth / 2,
+                  y: window.innerHeight / 2
+                }),
+                notes: ['No selection; using viewport center placement.']
+              }
+            : {
+                anchor: 'free-placement' as const,
+                position: { x: 250, y: 250 },
+                notes: ['No selection or React Flow instance; using fallback position.']
+              };
+
+        await insertPresetByMeta(
+          preset,
+          insertionPlan.position,
+          buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
+        );
+      }
+    });
+  }, [
+    buildEdgeSpliceTarget,
+    edges,
+    insertPresetByMeta,
+    nodes,
+    reactFlowInstance,
+    selectedNodeId
+  ]);
+
   // Drag and drop
   const { isDraggingOver, dropTarget, onDragOver, onDragLeave, onDragEnter, onDrop } =
     useGraphDragDrop(reactFlowInstance, setNodes, {
@@ -452,14 +508,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         __EPIC1_GET_FRAGMENT_SUGGESTIONS__?: (() => Promise<unknown[]>) | null;
         __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
       }
-    ).__EPIC1_GET_FRAGMENT_SUGGESTIONS__ = async () => {
-      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
-      return AgentFragmentSuggestionService.getSuggestions({
-        selectedNode,
-        nodes,
-        edges
-      });
-    };
+    ).__EPIC1_GET_FRAGMENT_SUGGESTIONS__ = getFragmentSuggestions;
     (
       window as typeof window & {
         __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
@@ -467,43 +516,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         __EPIC1_GET_FRAGMENT_SUGGESTIONS__?: (() => Promise<unknown[]>) | null;
         __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
       }
-    ).__EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__ = async () => {
-      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
-      return AgentFragmentSuggestionService.insertTopSuggestion({
-        selectedNode,
-        nodes,
-        edges,
-        insertPreset: async preset => {
-          const insertionPlan = selectedNode
-            ? planFragmentInsertion({
-                fragment: presetToAgentFragmentRecord(preset),
-                selectedNode,
-                nodes,
-                edges
-              })
-            : reactFlowInstance
-              ? {
-                  anchor: 'free-placement' as const,
-                  position: reactFlowInstance.screenToFlowPosition({
-                    x: window.innerWidth / 2,
-                    y: window.innerHeight / 2
-                  }),
-                  notes: ['No selection; using viewport center placement.']
-                }
-              : {
-                  anchor: 'free-placement' as const,
-                  position: { x: 250, y: 250 },
-                  notes: ['No selection or React Flow instance; using fallback position.']
-                };
-
-          await insertPresetByMeta(
-            preset,
-            insertionPlan.position,
-            buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
-          );
-        }
-      });
-    };
+    ).__EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__ = insertTopFragmentSuggestion;
 
     return () => {
       const win = window as typeof window & {
@@ -523,11 +536,35 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   }, [
     buildEdgeSpliceTarget,
     edges,
+    getFragmentSuggestions,
     insertPresetByMeta,
+    insertTopFragmentSuggestion,
     nodes,
     reactFlowInstance,
     selectedNodeId
   ]);
+
+  useEffect(() => {
+    const handleCommanderKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isTypingTarget =
+        target?.tagName === 'INPUT' ||
+        target?.tagName === 'TEXTAREA' ||
+        target?.isContentEditable;
+
+      if (isTypingTarget) {
+        return;
+      }
+
+      if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key.toLowerCase() === 'c') {
+        event.preventDefault();
+        setIsCommanderOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleCommanderKeyDown);
+    return () => window.removeEventListener('keydown', handleCommanderKeyDown);
+  }, []);
 
   // Keyboard shortcuts
   useGraphKeyboardShortcuts(
@@ -1219,6 +1256,17 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           />
         </div>
       </div>
+
+      <GraphCommander
+        isOpen={isCommanderOpen}
+        onClose={() => setIsCommanderOpen(false)}
+        onInsertTopSuggestion={insertTopFragmentSuggestion}
+        onGetSuggestions={getFragmentSuggestions}
+        onTogglePreview={togglePreview}
+        onFitView={fitView}
+        onExecute={handleExecute}
+        onExportGraph={exportGraph}
+      />
 
       {/* Preview Tray - As proper sibling that pushes content up */}
       {showPreview && (
