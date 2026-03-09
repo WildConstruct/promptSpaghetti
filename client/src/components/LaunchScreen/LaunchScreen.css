@@ -149,6 +149,17 @@
 .launch-column-right {
   flex: 0 0 24%;
   min-width: 280px;
+  min-height: 0;
+}
+
+.launch-column-right .launch-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.launch-column-right .launch-tips {
+  flex: 0 0 auto;
 }
 
 /* Sections */
