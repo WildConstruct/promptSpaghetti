@@ -10,65 +10,72 @@ interface TemplateNodeData extends Record<string, unknown> {
   label?: string;
 }
 
-// Simple prebuilt graphs for quick start
-const baseY = 100;
-const gapX = 350; // Increased to accommodate wider weighted choice nodes
-
-function lineGraph(labels: string[]): {
-  nodes: Node<TemplateNodeData>[];
-  edges: Edge[];
-} {
-  const nodes: Node<TemplateNodeData>[] = labels.map((label, i) => {
-    // Determine node type based on label
-    let nodeType = 'textBlock';
-    let data: TemplateNodeData = { nodeType: 'textBlock', label };
-
-    if (label.toLowerCase() === 'output') {
-      nodeType = 'output';
-      data = {
-        nodeType: 'output',
-        outputName: 'output',
-        label: 'Output'
-      };
-    } else if (label.toLowerCase() === 'prompt') {
-      nodeType = 'textBlock';
-      data = {
-        nodeType: 'textBlock',
-        content: 'Enter your prompt here...',
-        text: 'Enter your prompt here...',
-        value: 'Enter your prompt here...', // BaseEditableNode expects 'value'
-        label: 'Prompt'
-      };
-    } else {
-      // Default content nodes with placeholder text
-      nodeType = 'textBlock';
-      data = {
-        nodeType: 'textBlock',
-        content: `${label} content goes here...`,
-        text: `${label} content goes here...`,
-        value: `${label} content goes here...`, // BaseEditableNode expects 'value'
-        label
-      };
+function textNode(
+  id: string,
+  x: number,
+  y: number,
+  label: string,
+  value: string
+): Node<TemplateNodeData> {
+  return {
+    id,
+    position: { x, y },
+    type: 'textBlock',
+    data: {
+      nodeType: 'textBlock',
+      label,
+      content: value,
+      text: value,
+      value
     }
+  };
+}
 
-    return {
-      id: `${label.toLowerCase().replace(/\s+/g, '-')}-${i}`,
-      position: { x: 100 + i * gapX, y: baseY },
-      data,
-      type: nodeType
-    };
-  });
+function weightedChoiceNode(
+  id: string,
+  x: number,
+  y: number,
+  label: string,
+  options: Array<{ id: string; text: string; weight: number; hasBranch?: boolean }>
+): Node<TemplateNodeData> {
+  return {
+    id,
+    position: { x, y },
+    type: 'weightedChoice',
+    data: {
+      nodeType: 'weightedChoice',
+      label,
+      options,
+      value: JSON.stringify({ options, title: label })
+    }
+  };
+}
 
-  const edges: Edge[] = labels.slice(0, -1).map((_, i) => ({
-    id: `e-${i}`,
-    source: nodes[i].id,
-    target: nodes[i + 1].id,
-    type: 'smoothstep',
-    sourceHandle: 'source',
-    targetHandle: 'target'
-  }));
+function concatNode(id: string, x: number, y: number, label: string): Node<TemplateNodeData> {
+  return {
+    id,
+    position: { x, y },
+    type: 'concat',
+    data: {
+      nodeType: 'concat',
+      label,
+      separator: ', ',
+      value: ', '
+    }
+  };
+}
 
-  return { nodes, edges };
+function outputNode(id: string, x: number, y: number, outputName: string): Node<TemplateNodeData> {
+  return {
+    id,
+    position: { x, y },
+    type: 'output',
+    data: {
+      nodeType: 'output',
+      outputName,
+      label: 'Output'
+    }
+  };
 }
 
 // Custom template for character generation with choices - improved layout
@@ -207,18 +214,206 @@ const characterTemplate: QuickStartTemplate = {
   ]
 };
 
+const vehicleFamilyTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode(
+      'vehicle-dna',
+      80,
+      110,
+      'Family DNA',
+      'Late-70s compact sedan, practical silhouette, restrained trim, documentary still'
+    ),
+    weightedChoiceNode('vehicle-color', 430, 40, 'Paint Family', [
+      { id: 'color-1', text: 'faded cream', weight: 35 },
+      { id: 'color-2', text: 'oxidized blue', weight: 35 },
+      { id: 'color-3', text: 'sunburnt tan', weight: 30 }
+    ]),
+    weightedChoiceNode('vehicle-wear', 430, 230, 'Wear Level', [
+      { id: 'wear-1', text: 'light commuter wear', weight: 40 },
+      { id: 'wear-2', text: 'sun-cracked trim', weight: 35 },
+      { id: 'wear-3', text: 'patched daily beater', weight: 25 }
+    ]),
+    concatNode('vehicle-join', 820, 125, 'Resolve Family Member'),
+    outputNode('vehicle-output', 1140, 125, 'vehicle_family_member')
+  ],
+  edges: [
+    {
+      id: 'vehicle-e1',
+      source: 'vehicle-dna',
+      target: 'vehicle-join',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'vehicle-e2',
+      source: 'vehicle-color',
+      target: 'vehicle-join',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'vehicle-e3',
+      source: 'vehicle-wear',
+      target: 'vehicle-output',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    },
+    {
+      id: 'vehicle-e4',
+      source: 'vehicle-join',
+      target: 'vehicle-output',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    }
+  ]
+};
+
+const buildingFamilyTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode(
+      'building-dna',
+      80,
+      120,
+      'Family DNA',
+      'Weathered urban storefront, fixed era signage scale, brick-and-glass facade, lived-in realism'
+    ),
+    weightedChoiceNode('building-signage', 430, 50, 'Signage Variation', [
+      { id: 'sign-1', text: 'hand-painted discount lettering', weight: 35 },
+      { id: 'sign-2', text: 'sun-faded neon remnant', weight: 30 },
+      { id: 'sign-3', text: 'patched vinyl replacement sign', weight: 35 }
+    ]),
+    weightedChoiceNode('building-window', 430, 250, 'Window Dressing', [
+      { id: 'window-1', text: 'crowded display table', weight: 40 },
+      { id: 'window-2', text: 'half-empty practical stock', weight: 35 },
+      { id: 'window-3', text: 'papered-over corner glass', weight: 25 }
+    ]),
+    concatNode('building-join', 820, 145, 'Resolve Family Member'),
+    outputNode('building-output', 1140, 145, 'building_family_member')
+  ],
+  edges: [
+    {
+      id: 'building-e1',
+      source: 'building-dna',
+      target: 'building-join',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'building-e2',
+      source: 'building-signage',
+      target: 'building-join',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'building-e3',
+      source: 'building-window',
+      target: 'building-output',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    },
+    {
+      id: 'building-e4',
+      source: 'building-join',
+      target: 'building-output',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    }
+  ]
+};
+
+const branchingFamilyTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode(
+      'monster-dna',
+      60,
+      150,
+      'Archetype DNA',
+      'Monster-truck creature hybrid, oversized tires, toothy grill face, arena-show bravado, practical destruction realism'
+    ),
+    weightedChoiceNode('monster-family', 430, 130, 'Monster Truck Type', [
+      { id: 'monster-1', text: 'swamp brute', weight: 35, hasBranch: true },
+      { id: 'monster-2', text: 'graveyard brawler', weight: 35, hasBranch: true },
+      { id: 'monster-3', text: 'desert howl rig', weight: 30, hasBranch: true }
+    ]),
+    textNode(
+      'swamp-scene',
+      860,
+      20,
+      'Swamp Brute Scenario',
+      'bog track floodlights, overturned fishing shack props, muddy bite-mark chaos'
+    ),
+    textNode(
+      'graveyard-scene',
+      860,
+      150,
+      'Graveyard Brawler Scenario',
+      'demolition derby cemetery set, cracked headstone ramps, roaring midnight crowd'
+    ),
+    textNode(
+      'desert-scene',
+      860,
+      280,
+      'Desert Howl Scenario',
+      'dust storm jump line, coyote-bone signage, heat shimmer and engine growl'
+    ),
+    outputNode('monster-output', 1240, 150, 'monster_truck_family_member')
+  ],
+  edges: [
+    {
+      id: 'monster-e1',
+      source: 'monster-dna',
+      target: 'monster-family',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    },
+    {
+      id: 'monster-e2',
+      source: 'monster-family',
+      target: 'swamp-scene',
+      type: 'smoothstep',
+      sourceHandle: 'branch-0',
+      targetHandle: 'target'
+    },
+    {
+      id: 'monster-e3',
+      source: 'monster-family',
+      target: 'graveyard-scene',
+      type: 'smoothstep',
+      sourceHandle: 'branch-1',
+      targetHandle: 'target'
+    },
+    {
+      id: 'monster-e4',
+      source: 'monster-family',
+      target: 'desert-scene',
+      type: 'smoothstep',
+      sourceHandle: 'branch-2',
+      targetHandle: 'target'
+    },
+    {
+      id: 'monster-e5',
+      source: 'monster-family',
+      target: 'monster-output',
+      type: 'smoothstep',
+      sourceHandle: 'main',
+      targetHandle: 'target'
+    }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   character_variation: characterTemplate,
-  scene_still: lineGraph([
-    'Base Archetype',
-    'Locked Traits',
-    'Variable Traits',
-    'Output'
-  ]),
-  crowd_scene: lineGraph([
-    'Base Archetype',
-    'Locked Traits',
-    'Variation Rules',
-    'Output'
-  ])
+  scene_still: vehicleFamilyTemplate,
+  crowd_scene: buildingFamilyTemplate,
+  branching_family: branchingFamilyTemplate
 };

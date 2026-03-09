@@ -161,7 +161,7 @@ function createDraftGraphFromSegments(segments: AgentDraftPlan['segments']): {
           id: `${source.id}-${option.id}-${target.id}-${optionIndex}`,
           source: source.id,
           target: target.id,
-          sourceHandle: `option-${optionIndex}`,
+          sourceHandle: `branch-${optionIndex}`,
           targetHandle: 'target',
           type: 'smoothstep'
         });
