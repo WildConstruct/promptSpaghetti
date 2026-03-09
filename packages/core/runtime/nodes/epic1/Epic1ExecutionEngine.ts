@@ -69,12 +69,14 @@ export class Epic1ExecutionEngine {
   private readonly results: Map<string, NodeExecutionResult>;
   private executionOrder: string[];
   private outputNodeId: string | null = null;
+  private readonly selectedBranches: Map<string, number>;
 
   constructor(graph: Epic1Graph, seed?: string | number) {
     this.graph = graph;
     this.context = new Epic1ExecutionContext(seed);
     this.results = new Map();
     this.executionOrder = [];
+    this.selectedBranches = new Map();
   }
 
   /**
@@ -415,6 +417,7 @@ export class Epic1ExecutionEngine {
     debugLogExecution(
       `[ExecutionEngine] WeightedChoice ${nodeId} selected branch index: ${selectedIndex}`
     );
+    this.selectedBranches.set(nodeId, selectedIndex);
 
     // Concatenate input with selected text
     const result = inputStr ? `${inputStr} ${selectedText}` : selectedText;
@@ -435,6 +438,7 @@ export class Epic1ExecutionEngine {
     const config = node.getData().value || node.getData().configuration || {};
     const separator = config.separator !== undefined ? config.separator : ' ';
     const trimInputs = config.trimInputs !== false;
+    const requireAllInputs = config.requireAllInputs === true;
 
     debugLogExecution(
       `[ExecutionEngine] Concat node ${node.serialize().id} config:`,
@@ -451,6 +455,14 @@ export class Epic1ExecutionEngine {
         return trimInputs ? str.trim() : str;
       })
       .filter(str => str.length > 0); // Remove empty after trimming
+
+    const expectedInputCount = this.graph.edges.filter(
+      edge => edge.target === node.serialize().id
+    ).length;
+
+    if (requireAllInputs && processedInputs.length < expectedInputCount) {
+      return '';
+    }
 
     const result = processedInputs.join(separator);
     debugLogExecution(
@@ -572,6 +584,13 @@ export class Epic1ExecutionEngine {
 
     // Collect outputs from source nodes
     for (const edge of incomingEdges) {
+      if (!this.isActiveEdge(edge)) {
+        debugLogExecution(
+          `[ExecutionEngine] Skipping inactive branch edge ${edge.id} from ${edge.source} via ${edge.sourceHandle || 'output'}`
+        );
+        continue;
+      }
+
       const sourceResult = this.results.get(edge.source);
 
       if (sourceResult && !sourceResult.error) {
@@ -596,6 +615,22 @@ export class Epic1ExecutionEngine {
     );
 
     return inputs;
+  }
+
+  private isActiveEdge(edge: Epic1Edge): boolean {
+    const sourceHandle = edge.sourceHandle;
+
+    if (!sourceHandle || !sourceHandle.startsWith('branch-')) {
+      return true;
+    }
+
+    const selectedBranch = this.selectedBranches.get(edge.source);
+    if (selectedBranch === undefined) {
+      return false;
+    }
+
+    const branchIndex = Number.parseInt(sourceHandle.replace('branch-', ''), 10);
+    return Number.isFinite(branchIndex) && branchIndex === selectedBranch;
   }
 
   /**

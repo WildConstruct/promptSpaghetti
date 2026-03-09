@@ -1,6 +1,12 @@
 /* Additional node-specific styles - Dark Mode */
 
 /* Concat Node */
+.epic1-editable-node.concat {
+  width: 136px;
+  min-width: 136px;
+  padding: 10px 12px;
+}
+
 /* Style the two input handles with labels for visual clarity */
 .concat-input-1::after,
 .concat-input-2::after {
@@ -29,9 +35,12 @@
 
 .epic1-separator-preview {
   font-family: 'Courier New', monospace;
-  font-size: 14px;
+  font-size: 12px;
   color: #22c493;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .epic1-hint {

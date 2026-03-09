@@ -17,6 +17,8 @@ export interface ConcatConfig {
   separator: string;
   /** Whether to trim whitespace from inputs before concatenating */
   trimInputs: boolean;
+  /** Whether all expected inputs must be present before emitting output */
+  requireAllInputs?: boolean;
 }
 
 /**
@@ -27,7 +29,11 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
 
   constructor(
     id: string,
-    initialConfig: ConcatConfig = { separator: ' ', trimInputs: true },
+    initialConfig: ConcatConfig = {
+      separator: ' ',
+      trimInputs: true,
+      requireAllInputs: false
+    },
     config: InlineEditableConfig = {}
   ) {
     super(id, initialConfig, config);
@@ -46,6 +52,14 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
    */
   async run(ctx: ExecutionContext): Promise<string> {
     const config = this.getCurrentValue();
+    const requireAllInputs = config.requireAllInputs === true;
+
+    if (
+      requireAllInputs &&
+      this.inputs.some(input => String(input ?? '').trim().length === 0)
+    ) {
+      return '';
+    }
 
     // Process inputs based on configuration
     const processedInputs = this.inputs
@@ -93,6 +107,13 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
     // Validate trimInputs
     if (typeof value.trimInputs !== 'boolean') {
       errors.push('trimInputs must be a boolean');
+    }
+
+    if (
+      value.requireAllInputs !== undefined &&
+      typeof value.requireAllInputs !== 'boolean'
+    ) {
+      errors.push('requireAllInputs must be a boolean');
     }
 
     return {
@@ -148,6 +169,21 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
    */
   getTrimInputs(): boolean {
     return this.getCurrentValue().trimInputs;
+  }
+
+  setRequireAllInputs(requireAllInputs: boolean): void {
+    const config = this.getCurrentValue();
+    const updated = { ...config, requireAllInputs };
+
+    if (this.isEditing()) {
+      this.updateEditBuffer(updated);
+    } else {
+      this.data.value = updated;
+    }
+  }
+
+  getRequireAllInputs(): boolean {
+    return this.getCurrentValue().requireAllInputs === true;
   }
 
   /**

@@ -51,7 +51,14 @@ function weightedChoiceNode(
   };
 }
 
-function concatNode(id: string, x: number, y: number, label: string): Node<TemplateNodeData> {
+function concatNode(
+  id: string,
+  x: number,
+  y: number,
+  label: string,
+  options?: { separator?: string; requireAllInputs?: boolean }
+): Node<TemplateNodeData> {
+  const separator = options?.separator ?? ', ';
   return {
     id,
     position: { x, y },
@@ -59,8 +66,9 @@ function concatNode(id: string, x: number, y: number, label: string): Node<Templ
     data: {
       nodeType: 'concat',
       label,
-      separator: ', ',
-      value: ', '
+      separator,
+      requireAllInputs: options?.requireAllInputs === true,
+      value: separator
     }
   };
 }

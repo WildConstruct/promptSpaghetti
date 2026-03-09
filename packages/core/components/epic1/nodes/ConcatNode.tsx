@@ -5,6 +5,7 @@ import { useMetadataFlip, MetadataDisplay, MetadataToggleButton } from '../hooks
 
 export interface ConcatNodeData extends EditableNodeData {
   separator?: string;
+  requireAllInputs?: boolean;
 }
 
 /**
@@ -18,7 +19,7 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
     <BaseEditableNode
       {...props}
       className={`concat ${flipClassName}`}
-      minWidth={150}
+      minWidth={116}
       minHeight={60}
     >
       {({ isEditing, value, editBuffer, updateBuffer, confirmEdit, cancelEdit }) => {
@@ -105,7 +106,7 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
             <div className="epic1-concat-display">
               <div className="epic1-node-type-label">Concat</div>
               <div className="epic1-separator-preview">
-                {value ? `"${value}"` : <span className="epic1-placeholder">No separator</span>}
+                {value ? `"${value}"` : <span className="epic1-placeholder">Join</span>}
               </div>
             </div>
             {/* Custom dual input handles rendered inside the node */}
