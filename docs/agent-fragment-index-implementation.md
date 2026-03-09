@@ -9,6 +9,16 @@ This note captures the first execution slice of the fragment-retrieval work:
 - generate searchable index artifacts from that manifest
 - expose a local retrieval service for UI and agent use
 
+That initial slice has now expanded into:
+
+- generated retrieval index
+- deterministic suggestion service
+- topology-aware insertion planner
+- shared drop-target classifier
+- retrieval commander
+- first-pass graph-need scoring
+- metadata-aware splice behavior
+
 ## Current Source Of Truth
 
 Canonical content:
@@ -37,6 +47,13 @@ It provides:
 - `queryFragments(query)`
 - `suggestFragmentsForSelection(context)`
 
+The higher-level editor seam now lives across:
+
+- `FragmentSuggestionContext`
+- `AgentFragmentSuggestionService`
+- `FragmentInsertionPlanner`
+- `FragmentDropTargeting`
+
 This is intentionally local-first and deterministic.
 
 ## Build Step
@@ -52,6 +69,12 @@ The generator:
 - reads `assets/library/agent-fragment-manifest.json`
 - writes normalized index artifacts under `assets/library/index`
 - keeps the older asset-browser fragment manifest untouched
+- now normalizes metadata fields like:
+  - `preferredInsertion`
+  - `entryStrategy`
+  - `exitStrategy`
+  - `suggestionWeight`
+  - `requiresBranchLane`
 
 ## Why This Shape
 
@@ -66,25 +89,24 @@ Instead:
 
 ## Next Step
 
-Use the retrieval service to power:
+What now exists:
 
-- deterministic `Suggested Fragments`
-- selection-aware `Suggested Next Nodes`
-- agent retrieval before freeform reasoning
+- `Suggested Fragments` in the asset side panel
+- `C` commander with retrieval-backed structural actions
+- edge `+` affordance and replacement outline during drag
+- initial edge splice execution path
+- metadata-aware gating for splice vs free placement
 
-The next adjacent layer is topology-aware insertion:
+The next adjacent layer is richer metadata-guided execution:
 
-- place suggested fragments near the lane or node they extend
-- show line-adjacent insertion affordances during drag
-- prefer node replacement when a dragged fragment lands directly on a compatible
-  node
-- reuse the same insertion planner for future agent actions
+- improve multi-node splice with explicit entry/exit semantics
+- surface replace-vs-insert-edge intent more explicitly in command execution
+- let the future agent path call the same suggestion/commander/insertion seam
 
-The preferred model is one shared drop-target classifier:
+The preferred runtime model remains one shared targeting contract:
 
 - `replace-node`
 - `insert-edge`
 - `free-place`
 
-That classifier should sit one layer above raw geometry helpers so both manual
-and future agent flows can use the same deterministic targeting logic.
+Both manual and future agent flows should continue to use that same contract.

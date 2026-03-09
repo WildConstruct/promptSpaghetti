@@ -54,7 +54,7 @@ Without normalized metadata, the agent has to guess too much.
 
 ## Required Metadata
 
-Each fragment should eventually carry normalized metadata like:
+Each fragment should now carry or derive normalized metadata like:
 
 - `role`
   - `archetype`
@@ -79,6 +79,16 @@ Each fragment should eventually carry normalized metadata like:
   - `branch-lane`
   - `before-output`
   - `inside-region`
+- `preferredInsertion`
+  - `replace-node`
+  - `insert-edge`
+  - `free-place`
+- `entryStrategy` / `exitStrategy`
+  - `single-node`
+  - `auto-boundary`
+  - `manual`
+- `suggestionWeight`
+- `requiresBranchLane`
 - `tone`
   - optional descriptive tags like `gritty`, `comic`, `cinematic`
 
@@ -108,6 +118,8 @@ Examples:
 
 ### Phase 1: Inventory Audit
 
+Status: done
+
 Audit the modified `assets/library/**/*.psg` set and classify fragments into:
 
 - keep
@@ -121,6 +133,8 @@ Deliverable:
 
 ### Phase 2: Metadata Normalization
 
+Status: done for generated retrieval/index layer, with room for richer curated overrides later
+
 Add or normalize metadata so fragments can be queried reliably.
 
 Deliverable:
@@ -129,6 +143,8 @@ Deliverable:
 - fragments tagged consistently enough for deterministic lookup
 
 ### Phase 3: Deterministic Suggestions
+
+Status: done
 
 Build selection-aware suggestions without LLM dependence.
 
@@ -139,6 +155,8 @@ Deliverable:
 
 ### Phase 4: Agent Retrieval Path
 
+Status: done for local service + editor/commander consumers
+
 Expose the same metadata/query layer to the agent.
 
 Deliverable:
@@ -146,6 +164,8 @@ Deliverable:
 - agent uses fragment retrieval before freeform reasoning
 
 ### Phase 5: Topology-Aware Insertion
+
+Status: partially done
 
 Make fragment suggestions and drag-insert actions land in the graph in a
 structurally clear way instead of dropping everything at a generic position.
@@ -172,6 +192,57 @@ Required behaviors:
 - merge/output finishers should be placed near the path they complete
 - the same planner should be usable later by the agent
 
+Implemented so far:
+
+- selection-aware insertion planner
+- shared drop-target classifier:
+  - `replace-node`
+  - `insert-edge`
+  - `free-place`
+- edge `+` affordance during drag
+- node replacement outline during drag
+- initial edge splice execution:
+  - single-node fragments
+  - simple multi-node fragments with one clear entry/exit
+- metadata-aware splice gating:
+  - `preferredInsertion`
+  - `entryStrategy`
+  - `exitStrategy`
+
+Still missing:
+
+- richer multi-node splice for fragments with ambiguous boundaries
+- fully explicit replace-vs-insert targeting inside commander execution
+- agent-driven execution using the exact same drop-target path as manual drag
+
+### Phase 6: Retrieval Commander
+
+Status: done
+
+Implemented:
+
+- `C` opens the editor commander
+- retrieval-backed commands exist for:
+  - `Insert Best Match`
+  - `Extend Selected Branch`
+  - `Add Missing Merge`
+  - `Finish Output Lane`
+  - `Fill Downstream Gap`
+
+### Phase 7: Graph-Need Ranking
+
+Status: done for first pass
+
+Current structural signals:
+
+- `isBranchLane`
+- `needsMerge`
+- `leadsToOutput`
+- `hasNoOutgoing`
+- `outputDistance`
+- `branchDepth`
+- `insideRegion`
+
 Recommended implementation:
 
 - infer drop target from selected node, nearby edges, hovered nodes, and local
@@ -196,13 +267,8 @@ And it turns the asset browser into infrastructure rather than clutter.
 
 ## Recommended Next Step
 
-Start with Phase 1:
+The next meaningful step is metadata-guided fragment execution:
 
-- audit the current modified fragment set
-- classify role and domain
-- define the metadata schema before writing suggestion code
-
-After deterministic suggestions exist, the next important step is Phase 5:
-
-- build the topology-aware insertion planner
-- use it for both suggested-fragment clicks and manual drag insertion
+- make commander actions more explicit about replace-vs-insert-edge when possible
+- use `preferredInsertion` and boundary metadata to improve richer multi-node splice
+- then let the future agent consumer call the same commander/suggestion/insertion seam instead of a private path
