@@ -33,6 +33,7 @@ describe('LaunchScreen quick actions', () => {
     expect(screen.getByText('Character Archetype')).toBeInTheDocument();
     expect(screen.getByText('Vehicle Family')).toBeInTheDocument();
     expect(screen.getByText('Building Family')).toBeInTheDocument();
+    expect(screen.getByText('Monster Truck Branching')).toBeInTheDocument();
     expect(screen.getByText('Archetype')).toBeInTheDocument();
   });
 });

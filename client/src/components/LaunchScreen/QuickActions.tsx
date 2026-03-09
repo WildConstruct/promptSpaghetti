@@ -58,6 +58,22 @@ const CrowdIcon = () => (
   </svg>
 );
 
+const BranchIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <path d="M6 4v6" />
+    <path d="M6 10h7a4 4 0 0 1 4 4v6" />
+    <path d="M13 10h5" />
+    <path d="M18 7l3 3-3 3" />
+  </svg>
+);
+
 const BlankIcon = () => (
   <svg
     width="24"
@@ -99,6 +115,15 @@ const templates: Template[] = [
       'Weathered urban storefront, fixed era and material language, variations in signage, damage, and window dressing',
     badge: 'Archetype',
     icon: <CrowdIcon />
+  },
+  {
+    id: 'branching_family',
+    title: 'Monster Truck Branching',
+    description: 'Branch a creature-truck family into different scenario arcs',
+    prompt:
+      'Monster trucks that are monsters, with different branches for swamp, graveyard, and desert arena scenarios',
+    badge: 'Conditional Logic',
+    icon: <BranchIcon />
   },
   {
     id: 'empty',
