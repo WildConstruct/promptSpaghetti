@@ -339,73 +339,215 @@ const branchingFamilyTemplate: QuickStartTemplate = {
       'Archetype DNA',
       'Monster-truck creature hybrid, oversized tires, toothy grill face, arena-show bravado, practical destruction realism'
     ),
-    weightedChoiceNode('monster-family', 430, 130, 'Monster Truck Type', [
+    weightedChoiceNode('monster-family', 410, 130, 'Monster Truck Type', [
       { id: 'monster-1', text: 'swamp brute', weight: 35, hasBranch: true },
       { id: 'monster-2', text: 'graveyard brawler', weight: 35, hasBranch: true },
       { id: 'monster-3', text: 'desert howl rig', weight: 30, hasBranch: true }
     ]),
+    concatNode('monster-core', 770, 130, 'Resolve Core Family Member'),
+    weightedChoiceNode('swamp-details', 1120, 20, 'Swamp Brute Details', [
+      { id: 'swamp-1', text: 'tractor-cleat bog tires', weight: 35 },
+      { id: 'swamp-2', text: 'snorkel exhaust stacks', weight: 30 },
+      { id: 'swamp-3', text: 'moss-green flood lamps', weight: 35 }
+    ]),
+    weightedChoiceNode('graveyard-details', 1120, 150, 'Graveyard Brawler Details', [
+      { id: 'grave-1', text: 'coffin-lid side pipes', weight: 35 },
+      { id: 'grave-2', text: 'grave-dirt paddle tires', weight: 30 },
+      { id: 'grave-3', text: 'headstone spotlight rack', weight: 35 }
+    ]),
+    weightedChoiceNode('desert-details', 1120, 280, 'Desert Howl Rig Details', [
+      { id: 'desert-1', text: 'sand-cutter rib tires', weight: 35 },
+      { id: 'desert-2', text: 'twin coyote-howl mufflers', weight: 30 },
+      { id: 'desert-3', text: 'amber dust-chase light bar', weight: 35 }
+    ]),
+    concatNode('swamp-detail-merge', 1480, 20, 'Swamp Detail Merge'),
+    concatNode('graveyard-detail-merge', 1480, 150, 'Graveyard Detail Merge'),
+    concatNode('desert-detail-merge', 1480, 280, 'Desert Detail Merge'),
     textNode(
       'swamp-scene',
-      860,
-      20,
+      1120,
+      80,
       'Swamp Brute Scenario',
       'bog track floodlights, overturned fishing shack props, muddy bite-mark chaos'
     ),
     textNode(
       'graveyard-scene',
-      860,
-      150,
+      1120,
+      210,
       'Graveyard Brawler Scenario',
       'demolition derby cemetery set, cracked headstone ramps, roaring midnight crowd'
     ),
     textNode(
       'desert-scene',
-      860,
-      280,
+      1120,
+      340,
       'Desert Howl Scenario',
       'dust storm jump line, coyote-bone signage, heat shimmer and engine growl'
     ),
-    outputNode('monster-output', 1240, 150, 'monster_truck_family_member')
+    concatNode('swamp-variant', 1720, 20, 'Swamp Variant'),
+    concatNode('graveyard-variant', 1720, 150, 'Graveyard Variant'),
+    concatNode('desert-variant', 1720, 280, 'Desert Variant'),
+    outputNode('monster-output', 1850, 150, 'monster_truck_family_member')
   ],
   edges: [
     {
       id: 'monster-e1',
       source: 'monster-dna',
-      target: 'monster-family',
+      target: 'monster-core',
       type: 'smoothstep',
       sourceHandle: 'source',
-      targetHandle: 'target'
+      targetHandle: 'input1'
     },
     {
       id: 'monster-e2',
       source: 'monster-family',
-      target: 'swamp-scene',
+      target: 'monster-core',
+      type: 'smoothstep',
+      sourceHandle: 'main',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'monster-e3',
+      source: 'monster-family',
+      target: 'swamp-details',
       type: 'smoothstep',
       sourceHandle: 'branch-0',
       targetHandle: 'target'
     },
     {
-      id: 'monster-e3',
+      id: 'monster-e4',
       source: 'monster-family',
-      target: 'graveyard-scene',
+      target: 'graveyard-details',
       type: 'smoothstep',
       sourceHandle: 'branch-1',
       targetHandle: 'target'
     },
     {
-      id: 'monster-e4',
+      id: 'monster-e5',
       source: 'monster-family',
-      target: 'desert-scene',
+      target: 'desert-details',
       type: 'smoothstep',
       sourceHandle: 'branch-2',
       targetHandle: 'target'
     },
     {
-      id: 'monster-e5',
-      source: 'monster-family',
+      id: 'monster-e6',
+      source: 'monster-core',
+      target: 'swamp-detail-merge',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'monster-e7',
+      source: 'monster-core',
+      target: 'graveyard-detail-merge',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'monster-e8',
+      source: 'monster-core',
+      target: 'desert-detail-merge',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'monster-e9',
+      source: 'swamp-details',
+      target: 'swamp-detail-merge',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'monster-e10',
+      source: 'graveyard-details',
+      target: 'graveyard-detail-merge',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'monster-e11',
+      source: 'desert-details',
+      target: 'desert-detail-merge',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'monster-e12',
+      source: 'swamp-detail-merge',
+      target: 'swamp-variant',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'monster-e13',
+      source: 'swamp-scene',
+      target: 'swamp-variant',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'monster-e14',
+      source: 'graveyard-detail-merge',
+      target: 'graveyard-variant',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'monster-e15',
+      source: 'graveyard-scene',
+      target: 'graveyard-variant',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'monster-e16',
+      source: 'desert-detail-merge',
+      target: 'desert-variant',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'monster-e17',
+      source: 'desert-scene',
+      target: 'desert-variant',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'monster-e18',
+      source: 'swamp-variant',
       target: 'monster-output',
       type: 'smoothstep',
-      sourceHandle: 'main',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    },
+    {
+      id: 'monster-e19',
+      source: 'graveyard-variant',
+      target: 'monster-output',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    },
+    {
+      id: 'monster-e20',
+      source: 'desert-variant',
+      target: 'monster-output',
+      type: 'smoothstep',
+      sourceHandle: 'source',
       targetHandle: 'target'
     }
   ]
