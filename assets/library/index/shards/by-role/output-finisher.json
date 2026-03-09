@@ -3,7 +3,7 @@
   "type": "agent-fragment-shard",
   "groupBy": "role",
   "key": "output-finisher",
-  "generatedAt": "2026-03-09T13:01:40.702Z",
+  "generatedAt": "2026-03-09T16:43:25.683Z",
   "totalFragments": 22,
   "fragments": [
     {
@@ -36,7 +36,12 @@
       "tone": [
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-conflict-escalation",
@@ -68,7 +73,12 @@
         "gritty",
         "brutal"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-empathetic-echoes",
@@ -100,7 +110,12 @@
       "tone": [
         "cinematic"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-energy-levels",
@@ -130,7 +145,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-group-mood-fields",
@@ -159,7 +179,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-intensity-modifiers",
@@ -189,7 +214,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-nuanced-feels",
@@ -221,7 +251,12 @@
       "tone": [
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-primary-emotions",
@@ -251,7 +286,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-subtext-signals",
@@ -283,7 +323,12 @@
       "tone": [
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-temporal-mood-shifts",
@@ -315,7 +360,12 @@
       "tone": [
         "cinematic"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "face-eye-descriptors-multi",
@@ -344,7 +394,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 3
+      "nodeCount": 3,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "manual",
+      "exitStrategy": "manual",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
     },
     {
       "id": "face-smile-variations-simple",
@@ -372,7 +427,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
     },
     {
       "id": "setting-architectural-styles",
@@ -401,7 +461,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-atmospherics",
@@ -434,7 +499,12 @@
         "cinematic",
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-backdrop-adjectives",
@@ -464,7 +534,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-crowd-density",
@@ -493,7 +568,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-geology-touches",
@@ -522,7 +602,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-lighting-moods",
@@ -555,7 +640,12 @@
         "cinematic",
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-sound-snippets",
@@ -585,7 +675,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-spatial-relations",
@@ -615,7 +710,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-temporal-markers",
@@ -645,7 +745,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "setting-weather-snapshots",
@@ -677,7 +782,12 @@
       "tone": [
         "cinematic"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     }
   ]
 }

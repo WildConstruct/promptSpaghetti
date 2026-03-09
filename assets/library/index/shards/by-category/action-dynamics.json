@@ -3,7 +3,7 @@
   "type": "agent-fragment-shard",
   "groupBy": "category",
   "key": "action-dynamics",
-  "generatedAt": "2026-03-09T13:01:40.702Z",
+  "generatedAt": "2026-03-09T16:43:25.683Z",
   "totalFragments": 10,
   "fragments": [
     {
@@ -36,7 +36,12 @@
       "tone": [
         "cinematic"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-crowd-behaviors",
@@ -65,7 +70,12 @@
         "downstream-of-choice"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-facial-micro-gestures",
@@ -95,7 +105,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-group-dynamics",
@@ -124,7 +139,12 @@
         "downstream-of-choice"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-high-impact-moves",
@@ -157,7 +177,12 @@
         "heroic",
         "brutal"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-object-interactions",
@@ -187,7 +212,12 @@
         "downstream-of-choice"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-reaction-beats",
@@ -219,7 +249,12 @@
       "tone": [
         "cinematic"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-stealth-movements",
@@ -251,7 +286,12 @@
         "gritty",
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-subtle-micro-actions",
@@ -281,7 +321,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "action-transformative-actions",
@@ -314,7 +359,12 @@
         "surreal",
         "cinematic"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     }
   ]
 }

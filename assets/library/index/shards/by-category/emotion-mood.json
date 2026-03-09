@@ -3,7 +3,7 @@
   "type": "agent-fragment-shard",
   "groupBy": "category",
   "key": "emotion-mood",
-  "generatedAt": "2026-03-09T13:01:40.702Z",
+  "generatedAt": "2026-03-09T16:43:25.683Z",
   "totalFragments": 10,
   "fragments": [
     {
@@ -36,7 +36,12 @@
       "tone": [
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-conflict-escalation",
@@ -68,7 +73,12 @@
         "gritty",
         "brutal"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-empathetic-echoes",
@@ -100,7 +110,12 @@
       "tone": [
         "cinematic"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-energy-levels",
@@ -130,7 +145,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-group-mood-fields",
@@ -159,7 +179,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-intensity-modifiers",
@@ -189,7 +214,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-nuanced-feels",
@@ -221,7 +251,12 @@
       "tone": [
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-primary-emotions",
@@ -251,7 +286,12 @@
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-subtext-signals",
@@ -283,7 +323,12 @@
       "tone": [
         "moody"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     },
     {
       "id": "emotion-temporal-mood-shifts",
@@ -315,7 +360,12 @@
       "tone": [
         "cinematic"
       ],
-      "nodeCount": 1
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
     }
   ]
 }

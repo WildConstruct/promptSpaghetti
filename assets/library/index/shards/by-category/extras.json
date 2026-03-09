@@ -3,7 +3,7 @@
   "type": "agent-fragment-shard",
   "groupBy": "category",
   "key": "extras",
-  "generatedAt": "2026-03-09T13:01:40.702Z",
+  "generatedAt": "2026-03-09T16:43:25.683Z",
   "totalFragments": 1,
   "fragments": [
     {
@@ -36,7 +36,12 @@
       "tone": [
         "cinematic"
       ],
-      "nodeCount": 12
+      "nodeCount": 12,
+      "preferredInsertion": "free-place",
+      "entryStrategy": "manual",
+      "exitStrategy": "manual",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
     }
   ]
 }

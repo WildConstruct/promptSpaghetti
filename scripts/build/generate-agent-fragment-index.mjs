@@ -14,6 +14,68 @@ const manifestPath = path.join(
 );
 const outputRoot = path.join(repoRoot, 'assets', 'library', 'index');
 
+function inferPreferredInsertion(record) {
+  if (record.preferredInsertion) {
+    return record.preferredInsertion;
+  }
+  if (record.placementHints?.includes('inside-region')) {
+    return 'free-place';
+  }
+  if (
+    record.placementHints?.includes('branch-lane') ||
+    record.placementHints?.includes('before-output') ||
+    record.placementHints?.includes('downstream-of-choice')
+  ) {
+    return 'insert-edge';
+  }
+  if (record.nodeCount <= 1 && record.roles?.includes('modifier')) {
+    return 'replace-node';
+  }
+  return 'free-place';
+}
+
+function inferBoundaryStrategy(record) {
+  if (record.entryStrategy && record.exitStrategy) {
+    return {
+      entryStrategy: record.entryStrategy,
+      exitStrategy: record.exitStrategy
+    };
+  }
+  if ((record.nodeCount ?? 0) <= 1) {
+    return {
+      entryStrategy: 'single-node',
+      exitStrategy: 'single-node'
+    };
+  }
+  if (record.nodeTypes?.includes('region')) {
+    return {
+      entryStrategy: 'manual',
+      exitStrategy: 'manual'
+    };
+  }
+  return {
+    entryStrategy: 'auto-boundary',
+    exitStrategy: 'auto-boundary'
+  };
+}
+
+function normalizeRecord(record) {
+  const boundary = inferBoundaryStrategy(record);
+  return {
+    ...record,
+    preferredInsertion: inferPreferredInsertion(record),
+    entryStrategy: boundary.entryStrategy,
+    exitStrategy: boundary.exitStrategy,
+    suggestionWeight: record.suggestionWeight ?? 0,
+    requiresBranchLane:
+      record.requiresBranchLane ??
+      Boolean(
+        record.placementHints?.includes('branch-lane') ||
+          record.roles?.includes('branch-extension')
+      )
+  };
+}
+
 function stableSort(records) {
   return [...records].sort((a, b) => {
     if (a.category !== b.category) {
@@ -57,7 +119,7 @@ async function main() {
     throw new Error(`Unexpected manifest type: ${manifest.type}`);
   }
 
-  const fragments = stableSort(manifest.fragments);
+  const fragments = stableSort(manifest.fragments.map(normalizeRecord));
   const generatedAt = new Date().toISOString();
 
   const fullIndex = {

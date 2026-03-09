@@ -34,6 +34,16 @@ export type PlacementHint =
   | 'before-output'
   | 'inside-region';
 
+export type PreferredInsertion =
+  | 'replace-node'
+  | 'insert-edge'
+  | 'free-place';
+
+export type FragmentBoundaryStrategy =
+  | 'single-node'
+  | 'auto-boundary'
+  | 'manual';
+
 export type AgentFragmentRecord = {
   id: string;
   name: string;
@@ -48,6 +58,11 @@ export type AgentFragmentRecord = {
   tone: string[];
   nodeCount: number;
   priority: number;
+  preferredInsertion: PreferredInsertion;
+  entryStrategy: FragmentBoundaryStrategy;
+  exitStrategy: FragmentBoundaryStrategy;
+  suggestionWeight: number;
+  requiresBranchLane: boolean;
 };
 
 type AgentFragmentManifest = {
@@ -179,6 +194,72 @@ function inferPriority(record: AgentFragmentRecord): number {
   return score + Math.min(record.nodeCount, 4);
 }
 
+function inferPreferredInsertion(
+  record: Pick<AgentFragmentRecord, 'roles' | 'placementHints' | 'nodeCount'>
+): PreferredInsertion {
+  if (record.placementHints.includes('inside-region')) {
+    return 'free-place';
+  }
+  if (
+    record.placementHints.includes('branch-lane') ||
+    record.placementHints.includes('before-output') ||
+    record.placementHints.includes('downstream-of-choice')
+  ) {
+    return 'insert-edge';
+  }
+  if (record.nodeCount === 1 && record.roles.includes('modifier')) {
+    return 'replace-node';
+  }
+  return 'free-place';
+}
+
+function inferBoundaryStrategy(
+  record: Pick<AgentFragmentRecord, 'nodeCount' | 'nodeTypes'>
+): FragmentBoundaryStrategy {
+  if (record.nodeCount <= 1) {
+    return 'single-node';
+  }
+  if (record.nodeTypes.includes('region')) {
+    return 'manual';
+  }
+  return 'auto-boundary';
+}
+
+function normalizeMetadata(
+  record: Omit<AgentFragmentRecord, 'priority'> & Partial<Pick<
+    AgentFragmentRecord,
+    'preferredInsertion' | 'entryStrategy' | 'exitStrategy' | 'suggestionWeight' | 'requiresBranchLane'
+  >>
+): Omit<AgentFragmentRecord, 'priority'> {
+  const preferredInsertion =
+    record.preferredInsertion ?? inferPreferredInsertion(record);
+  const entryStrategy =
+    record.entryStrategy ??
+    inferBoundaryStrategy({
+      nodeCount: record.nodeCount,
+      nodeTypes: record.nodeTypes
+    });
+  const exitStrategy =
+    record.exitStrategy ??
+    inferBoundaryStrategy({
+      nodeCount: record.nodeCount,
+      nodeTypes: record.nodeTypes
+    });
+  const requiresBranchLane =
+    record.requiresBranchLane ??
+    (record.placementHints.includes('branch-lane') ||
+      record.roles.includes('branch-extension'));
+
+  return {
+    ...record,
+    preferredInsertion,
+    entryStrategy,
+    exitStrategy,
+    suggestionWeight: record.suggestionWeight ?? 0,
+    requiresBranchLane
+  };
+}
+
 function toAgentRecord(
   fragment: NonNullable<FragmentManifest['fragments']>[number]
 ): AgentFragmentRecord | null {
@@ -200,6 +281,11 @@ function toAgentRecord(
       placementHints: ['inside-region'],
       tone: inferTone(fragment.tags ?? [], fragment.description),
       nodeCount: fragment.nodeCount,
+      preferredInsertion: 'free-place',
+      entryStrategy: 'manual',
+      exitStrategy: 'manual',
+      suggestionWeight: 4,
+      requiresBranchLane: false,
       priority: 10
     };
     return record;
@@ -224,8 +310,15 @@ function toAgentRecord(
     placementHints: defaults.placementHints,
     tone: inferTone(tags, fragment.description),
     nodeCount: fragment.nodeCount,
+    preferredInsertion: 'free-place',
+    entryStrategy: 'auto-boundary',
+    exitStrategy: 'auto-boundary',
+    suggestionWeight: 0,
+    requiresBranchLane: false,
     priority: 0
   };
+  const normalized = normalizeMetadata(record);
+  Object.assign(record, normalized);
   record.priority = inferPriority(record);
   return record;
 }
@@ -245,7 +338,7 @@ function scoreRecord(
   context: SelectionContext,
   desiredRoles: FragmentRole[]
 ): number {
-  let score = record.priority;
+  let score = record.priority + (record.suggestionWeight ?? 0);
 
   if (desiredRoles.some(role => record.roles.includes(role))) {
     score += 12;
@@ -272,6 +365,12 @@ function scoreRecord(
     score += 5;
   }
   if ((context.outputDistance ?? Infinity) > 2 && record.roles.includes('modifier')) {
+    score += 2;
+  }
+  if (record.requiresBranchLane && !context.isBranchLane) {
+    score -= 6;
+  }
+  if (record.preferredInsertion === 'insert-edge') {
     score += 2;
   }
   return score;
@@ -305,9 +404,9 @@ export class AgentFragmentRetrievalService {
     const agentManifest = await this.loadAgentManifest();
     if (agentManifest) {
       this.cache = agentManifest.fragments.map(fragment => ({
-        ...fragment,
+        ...normalizeMetadata(fragment),
         priority: inferPriority({
-          ...fragment,
+          ...normalizeMetadata(fragment),
           priority: 0
         })
       }));
