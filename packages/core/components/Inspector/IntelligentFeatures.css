@@ -93,6 +93,76 @@
   transition: all 0.3s ease;
 }
 
+.populate-choices-controls {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.populate-choices-controls .populate-choices-btn {
+  flex: 1;
+}
+
+.populate-tune-btn {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.populate-tune-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.populate-tune-btn.active {
+  background: rgba(102, 126, 234, 0.18);
+  border-color: rgba(102, 126, 234, 0.5);
+  color: #fff;
+}
+
+.populate-tune-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.populate-prompt-tuning {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.populate-prompt-tuning label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.populate-prompt-input {
+  width: 100%;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 12px;
+}
+
+.populate-prompt-input::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.populate-prompt-help {
+  font-size: 11px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+
 .populate-choices-btn:hover,
 .optimize-weights-btn:hover,
 .inspiration-btn:hover {

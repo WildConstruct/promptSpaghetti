@@ -50,7 +50,7 @@ describe('SaveGraphDialog', () => {
     });
   });
 
-  it('sanitizes dangerous characters and produces JSON content', async () => {
+  it('sanitizes dangerous characters and produces canonical PSG content', async () => {
     let saved: { blob?: Blob; name?: string } = {};
     openWith((blob, name) => {
       saved = { blob, name };
@@ -66,7 +66,10 @@ describe('SaveGraphDialog', () => {
       expect(saved.name!.toLowerCase().endsWith('.psg')).toBe(true);
       const text = await readBlobText(saved.blob!);
       const parsed = JSON.parse(text);
+      expect(parsed.version).toBe('1.0.0');
+      expect(parsed.name).toBe('my..graph');
       expect(parsed.nodes[0].id).toBe('n1');
+      expect(Array.isArray(parsed.edges)).toBe(true);
     });
   });
 });

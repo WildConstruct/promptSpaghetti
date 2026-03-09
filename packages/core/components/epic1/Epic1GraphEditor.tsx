@@ -580,7 +580,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               id: `tutorial-edge-${sourceNode.id}-option-${optionIndex}-${targetNode.id}`,
               source: sourceNode.id,
               target: targetNode.id,
-              sourceHandle: `option-${optionIndex}`,
+              sourceHandle: `branch-${optionIndex}`,
               targetHandle: 'target',
               type: 'smoothstep',
               animated: false,

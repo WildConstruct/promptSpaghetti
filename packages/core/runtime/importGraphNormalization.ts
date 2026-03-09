@@ -173,7 +173,7 @@ export function annotateLibraryWeightedChoiceBranchUsage<
     if (sourceType !== 'weightedChoice' || !edge.sourceHandle) {
       return;
     }
-    const match = edge.sourceHandle.match(/branch-(\d+)/);
+    const match = edge.sourceHandle.match(/(?:branch|option)-(\d+)/);
     if (!match) {
       return;
     }
@@ -227,6 +227,17 @@ export function repairLegacyImportEdgeHandles<
     }
 
     if (
+      sourceType === 'weightedChoice' &&
+      typeof sourceHandle === 'string' &&
+      /^option-\d+$/.test(sourceHandle)
+    ) {
+      const legacyIndex = sourceHandle.match(/^option-(\d+)$/);
+      if (legacyIndex) {
+        sourceHandle = `branch-${legacyIndex[1]}`;
+      }
+    }
+
+    if (
       sourceHandle === edge.sourceHandle &&
       targetHandle === edge.targetHandle
     ) {
@@ -268,7 +279,8 @@ export function normalizeLibraryImportEdges<
 
     if (sourceType === 'weightedChoice') {
       const isBranch =
-        typeof sourceHandle === 'string' && /^branch-\d+$/.test(sourceHandle);
+        typeof sourceHandle === 'string' &&
+        /^(?:branch|option)-\d+$/.test(sourceHandle);
       if (!isBranch) {
         const sourceNode = nodes.find(node => node.id === edge.source);
         const rawOptions = sourceNode?.data?.options;
@@ -277,6 +289,14 @@ export function normalizeLibraryImportEdges<
           Array.isArray(options) &&
           options.some((option: any) => option?.hasBranch === true);
         sourceHandle = hasBranching ? 'main' : 'source';
+      } else if (
+        typeof sourceHandle === 'string' &&
+        /^option-\d+$/.test(sourceHandle)
+      ) {
+        const legacyIndex = sourceHandle.match(/^option-(\d+)$/);
+        if (legacyIndex) {
+          sourceHandle = `branch-${legacyIndex[1]}`;
+        }
       }
     } else if (sourceType === 'concat') {
       sourceHandle = 'source';

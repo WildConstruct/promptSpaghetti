@@ -10,6 +10,34 @@ import {
 } from '../../services/llm';
 import './IntelligentFeatures.css';
 
+function inferChoiceStyleGuidance(currentChoices: Choice[]): string | null {
+  const filledChoices = currentChoices
+    .map(choice => choice.text?.trim())
+    .filter((text): text is string => Boolean(text));
+
+  if (filledChoices.length === 0) {
+    return null;
+  }
+
+  const hasCommaFreeStyle = filledChoices.every(text => !text.includes(','));
+  const averageWordCount =
+    filledChoices.reduce((sum, text) => sum + text.split(/\s+/).filter(Boolean).length, 0) /
+    filledChoices.length;
+  const looksLikeShortLabels = averageWordCount <= 5;
+
+  const guidance: string[] = ['Match the tone and formatting of the existing options.'];
+
+  if (hasCommaFreeStyle) {
+    guidance.push('Avoid commas and multi-clause descriptions.');
+  }
+
+  if (looksLikeShortLabels) {
+    guidance.push('Prefer concise label-like options rather than long descriptive phrases.');
+  }
+
+  return guidance.join(' ');
+}
+
 interface PopulateChoicesButtonProps {
   nodeText: string;
   context: string;
@@ -31,6 +59,8 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [showCountPrompt, setShowCountPrompt] = useState(false);
   const [choiceCount, setChoiceCount] = useState(3);
+  const [showPromptTuning, setShowPromptTuning] = useState(false);
+  const [promptHint, setPromptHint] = useState('');
 
   const handlePopulate = useCallback(
     async (count?: number) => {
@@ -78,11 +108,16 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
         .filter(c => c.text && c.text.trim() !== '')
         .map(c => c.text)
         .join(', ');
+      const styleGuidance = inferChoiceStyleGuidance(currentChoices);
+      const userGuidance =
+        promptHint.trim().length > 0
+          ? `Additional guidance: ${promptHint.trim()}.`
+          : '';
 
       // Combine nodeText with existing filled options for better context
       const enrichedContext = existingText
-        ? `${context}. Existing options: ${existingText}. Generate ${numToGenerate} additional complementary options.`
-        : `${context}. Generate ${numToGenerate} options based on: ${nodeText}`;
+        ? `${context}. Existing options: ${existingText}. Generate ${numToGenerate} additional complementary options. ${styleGuidance ?? ''} ${userGuidance}`.trim()
+        : `${context}. Generate ${numToGenerate} options based on: ${nodeText}. ${styleGuidance ?? ''} ${userGuidance}`.trim();
 
       try {
         const choices = await intelligenceService.populateChoices(
@@ -151,31 +186,58 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
   // Don't hide the button - always show it when relevant
   return (
     <div className="intelligent-feature">
-      <button
-        className="populate-choices-btn"
-        onClick={() => handlePopulate()}
-        disabled={loading}
-      >
-        {loading ? (
-          <>
-            <span className="spinner" />
-            Generating...
-          </>
-        ) : (
-          <>
-            <svg
-              className="icon"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-            >
-              <path d="M8 0l1.9 5.8H16l-4.9 3.6 1.9 5.8L8 11.6l-4.9 3.6 1.9-5.8L0 5.8h6.1L8 0z" />
-            </svg>
-            Populate Choices
-          </>
-        )}
-      </button>
+      <div className="populate-choices-controls">
+        <button
+          className="populate-choices-btn"
+          onClick={() => handlePopulate()}
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <span className="spinner" />
+              Generating...
+            </>
+          ) : (
+            <>
+              <svg
+                className="icon"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+              >
+                <path d="M8 0l1.9 5.8H16l-4.9 3.6 1.9 5.8L8 11.6l-4.9 3.6 1.9-5.8L0 5.8h6.1L8 0z" />
+              </svg>
+              Populate Choices
+            </>
+          )}
+        </button>
+        <button
+          className={`populate-tune-btn ${showPromptTuning ? 'active' : ''}`}
+          type="button"
+          onClick={() => setShowPromptTuning(current => !current)}
+          disabled={loading}
+          title="Adjust populate guidance"
+        >
+          Tune
+        </button>
+      </div>
+      {showPromptTuning && (
+        <div className="populate-prompt-tuning">
+          <label htmlFor="populate-prompt-hint">Populate guidance</label>
+          <input
+            id="populate-prompt-hint"
+            className="populate-prompt-input"
+            type="text"
+            value={promptHint}
+            onChange={event => setPromptHint(event.target.value)}
+            placeholder="Keep them short and comma-free"
+          />
+          <div className="populate-prompt-help">
+            Existing option style is matched automatically. Use this to add a small steer.
+          </div>
+        </div>
+      )}
       {error && <div className="error-message">{error}</div>}
     </div>
   );
