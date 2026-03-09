@@ -83,6 +83,7 @@ describe('Button Functionality Tests', () => {
       onSaveAs: jest.fn(),
       onImport: jest.fn(),
       onExport: jest.fn(),
+      onExportComfy: jest.fn(),
       onUndo: jest.fn(),
       onRedo: jest.fn(),
       onZoomIn: jest.fn(),
@@ -94,13 +95,13 @@ describe('Button Functionality Tests', () => {
       jest.clearAllMocks();
     });
 
-    it('should call onNew when New Graph is clicked', () => {
+    it('should call onNew when New Document is clicked', () => {
       render(<SimpleMenuBar {...mockHandlers} />);
 
       const fileMenu = screen.getByText('File');
       fireEvent.mouseEnter(fileMenu);
 
-      const newButton = screen.getByText('New Graph');
+      const newButton = screen.getByText('New Document');
       fireEvent.click(newButton);
 
       expect(mockHandlers.onNew).toHaveBeenCalled();
@@ -118,16 +119,28 @@ describe('Button Functionality Tests', () => {
       expect(mockHandlers.onSave).toHaveBeenCalled();
     });
 
-    it('should call onExport when Export is clicked', () => {
+    it('should call onExport when Export PSG is clicked', () => {
       render(<SimpleMenuBar {...mockHandlers} />);
 
       const fileMenu = screen.getByText('File');
       fireEvent.mouseEnter(fileMenu);
 
-      const exportButton = screen.getByText('Export');
+      const exportButton = screen.getByText('Export PSG');
       fireEvent.click(exportButton);
 
       expect(mockHandlers.onExport).toHaveBeenCalled();
+    });
+
+    it('should call onExportComfy when Export Comfy Bridge is clicked', () => {
+      render(<SimpleMenuBar {...mockHandlers} />);
+
+      const fileMenu = screen.getByText('File');
+      fireEvent.mouseEnter(fileMenu);
+
+      const exportButton = screen.getByText('Export Comfy Bridge...');
+      fireEvent.click(exportButton);
+
+      expect(mockHandlers.onExportComfy).toHaveBeenCalled();
     });
 
     it('should call onUndo when Undo is clicked', () => {

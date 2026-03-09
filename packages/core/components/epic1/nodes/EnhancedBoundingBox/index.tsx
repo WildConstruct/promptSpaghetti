@@ -167,6 +167,10 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
 
   // Keep React Flow internals in sync with the rendered size (both initial load and during resize)
   useEffect(() => {
+    if (isResizing) {
+      return;
+    }
+
     setNodes(nodes =>
       nodes.map(node => {
         if (node.id !== id) {
@@ -205,7 +209,11 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       })
     );
     updateNodeInternals(id);
-  }, [currentSize, id, setNodes, updateNodeInternals]);
+  }, [currentSize, id, isResizing, setNodes, updateNodeInternals]);
+
+  useEffect(() => {
+    updateNodeInternals(id);
+  }, [id, isCollapsed, containedNodes.length, updateNodeInternals]);
 
   // Track render performance
   useEffect(() => {
@@ -461,6 +469,32 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         sizeRef.current = finalSize;
         setCurrentSize(finalSize);
 
+        setNodes(nodes =>
+          nodes.map(node =>
+            node.id === id
+              ? {
+                  ...node,
+                  width: finalSize.width,
+                  height: finalSize.height,
+                  measured: {
+                    width: finalSize.width,
+                    height: finalSize.height
+                  },
+                  style: {
+                    ...(node.style ?? {}),
+                    width: finalSize.width,
+                    height: finalSize.height
+                  },
+                  data: {
+                    ...node.data,
+                    width: finalSize.width,
+                    height: finalSize.height
+                  }
+                }
+              : node
+          )
+        );
+        updateNodeInternals(id);
         setIsResizing(false);
         perfMonitor.record('boundingBox.resize', 1);
         document.removeEventListener('mousemove', onMouseMove);
@@ -470,7 +504,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       document.addEventListener('mousemove', onMouseMove, { passive: false });
       document.addEventListener('mouseup', onMouseUp);
     },
-    [canResize, id, perfMonitor, setNodes, xPos, yPos]
+    [canResize, id, perfMonitor, setNodes, updateNodeInternals, xPos, yPos]
   );
 
   /**
