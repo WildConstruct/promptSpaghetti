@@ -437,7 +437,8 @@ const branchingFamilyTemplate: QuickStartTemplate = {
     concatNode('desert-variant', 2080, 575, 'Desert Variant', {
       requireAllInputs: true
     }),
-    outputNode('monster-output', 2420, 335, 'monster_truck_family_member')
+    concatNode('monster-final-merge', 2420, 335, 'Resolve Monster Truck Output'),
+    outputNode('monster-output', 2760, 335, 'monster_truck_family_member')
   ],
   edges: [
     {
@@ -579,22 +580,30 @@ const branchingFamilyTemplate: QuickStartTemplate = {
     {
       id: 'monster-e18',
       source: 'swamp-variant',
-      target: 'monster-output',
+      target: 'monster-final-merge',
       type: 'smoothstep',
       sourceHandle: 'source',
-      targetHandle: 'target'
+      targetHandle: 'input1'
     },
     {
       id: 'monster-e19',
       source: 'graveyard-variant',
-      target: 'monster-output',
+      target: 'monster-final-merge',
       type: 'smoothstep',
       sourceHandle: 'source',
-      targetHandle: 'target'
+      targetHandle: 'input2'
     },
     {
       id: 'monster-e20',
       source: 'desert-variant',
+      target: 'monster-final-merge',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input3'
+    },
+    {
+      id: 'monster-e21',
+      source: 'monster-final-merge',
       target: 'monster-output',
       type: 'smoothstep',
       sourceHandle: 'source',
