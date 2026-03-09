@@ -1,0 +1,108 @@
+{
+  "version": "1.0.0",
+  "name": "MVP Scene Still Demo",
+  "description": "Quick demo graph for scene still setup and art-direction-friendly prompt assembly.",
+  "metadata": {
+    "author": "Prompt Spaghetti",
+    "tags": ["mvp", "demo", "scene", "still"],
+    "source": "docs/examples/mvp-scene-still-demo.psg"
+  },
+  "nodes": [
+    {
+      "id": "subject",
+      "type": "TextBlock",
+      "name": "Subject",
+      "x": 120,
+      "y": 120,
+      "value": "A solitary investigator"
+    },
+    {
+      "id": "setting",
+      "type": "WeightedChoice",
+      "name": "Setting",
+      "x": 120,
+      "y": 280,
+      "options": [
+        { "text": "in a rain-slick alley at dusk", "weight": 4 },
+        { "text": "inside a crowded archive lit by amber lamps", "weight": 2 },
+        { "text": "on a transit platform under harsh fluorescent light", "weight": 2 }
+      ]
+    },
+    {
+      "id": "style",
+      "type": "WeightedChoice",
+      "name": "Style",
+      "x": 460,
+      "y": 280,
+      "options": [
+        { "text": "cinematic still, controlled framing", "weight": 4 },
+        { "text": "editorial photography, natural lensing", "weight": 2 },
+        { "text": "concept-art render, restrained palette", "weight": 2 }
+      ]
+    },
+    {
+      "id": "join-scene",
+      "type": "Concat",
+      "name": "Join Scene",
+      "x": 780,
+      "y": 180,
+      "value": ", "
+    },
+    {
+      "id": "join-style",
+      "type": "Concat",
+      "name": "Join Style",
+      "x": 1100,
+      "y": 220,
+      "value": ", "
+    },
+    {
+      "id": "result",
+      "type": "Output",
+      "name": "Result",
+      "x": 1400,
+      "y": 220,
+      "template": "{{input}}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-subject-join-scene",
+      "source": "subject",
+      "target": "join-scene",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "edge-setting-join-scene",
+      "source": "setting",
+      "target": "join-scene",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "edge-join-scene-join-style",
+      "source": "join-scene",
+      "target": "join-style",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "edge-style-join-style",
+      "source": "style",
+      "target": "join-style",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "edge-join-style-result",
+      "source": "join-style",
+      "target": "result"
+    }
+  ],
+  "regions": [
+    {
+      "id": "scene-region",
+      "name": "Scene Still Setup",
+      "color": "#38bdf8",
+      "nodes": ["subject", "setting", "style", "join-scene", "join-style", "result"],
+      "description": "Golden-path scene still demo region"
+    }
+  ]
+}

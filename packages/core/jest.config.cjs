@@ -1,13 +1,28 @@
 /** @type {import('jest').Config} */
 module.exports = {
   testEnvironment: 'jsdom',
-  roots: ['<rootDir>/tests', '<rootDir>/components'],
+  roots: [
+    '<rootDir>/tests',
+    '<rootDir>/components',
+    '<rootDir>/runtime',
+    '<rootDir>/fileFormats',
+    '<rootDir>/hooks'
+  ],
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
   transform: {
-    '^.+\\.[tj]sx?$': [
-      'babel-jest',
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
       {
-        rootMode: 'upward'
+        diagnostics: false,
+        babelConfig: false,
+        tsconfig: {
+          jsx: 'react-jsx',
+          module: 'commonjs',
+          target: 'ES2020',
+          isolatedModules: true,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true
+        }
       }
     ]
   },
@@ -20,5 +35,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1'
   },
   clearMocks: true,
-  setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts']
+  setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts'],
+  watchman: false,
+  coverageProvider: 'v8'
 };

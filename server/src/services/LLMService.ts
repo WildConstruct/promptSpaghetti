@@ -1,4 +1,8 @@
 import OpenAI from 'openai';
+import type {
+  LLMMode,
+  LLMProvider
+} from '../../../packages/core/services/llm/contracts';
 
 export interface LLMServiceOptions {
   apiKey?: string;
@@ -22,6 +26,13 @@ export interface CompleteResult {
   model: string;
   tokensIn: number;
   tokensOut: number;
+}
+
+export interface LLMRuntimeStatus {
+  available: boolean;
+  mode: LLMMode;
+  provider: LLMProvider;
+  defaultModel: string | null;
 }
 
 export class LLMService {
@@ -66,6 +77,29 @@ export class LLMService {
 
   available(): boolean {
     return !!this.client;
+  }
+
+  private detectProvider(): LLMProvider {
+    if (process.env.OPENAI_API_KEY && !process.env.OPENROUTER_API_KEY) {
+      return 'openai';
+    }
+
+    if (this.opts.baseURL.includes('api.openai.com')) {
+      return 'openai';
+    }
+
+    return 'openrouter';
+  }
+
+  getStatus(): LLMRuntimeStatus {
+    const available = this.available();
+
+    return {
+      available,
+      mode: available ? 'live' : 'heuristic',
+      provider: this.detectProvider(),
+      defaultModel: this.opts.defaultModel || null
+    };
   }
 
   async complete(params: CompleteParams): Promise<CompleteResult> {

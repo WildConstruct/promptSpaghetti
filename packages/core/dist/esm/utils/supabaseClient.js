@@ -1,22 +1,71 @@
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseConfig } from './supabaseFeature';
-const { url, anonKey, enabledByFlag, hasEnv, enabled } = getSupabaseConfig();
+let _client;
+let _diagnosed = false;
 let warned = false;
-const isTest = process.env.NODE_ENV === 'test';
-const isProd = process.env.NODE_ENV === 'production';
-const isCI = process.env.CI === 'true';
-// Warn only in local dev when the feature flag is ON but env is missing
-if (!enabled &&
-    enabledByFlag &&
-    !hasEnv &&
-    !isProd &&
-    !isTest &&
-    !isCI &&
-    !warned) {
-    // eslint-disable-next-line no-console
-    console.warn('[supabase] URL/key missing; storage features are disabled.');
-    warned = true;
+const env = typeof process !== 'undefined' && typeof process.env !== 'undefined'
+    ? process.env
+    : {};
+const isTest = env.NODE_ENV === 'test';
+const isProd = env.NODE_ENV === 'production';
+const isCI = env.CI === 'true';
+export function getSupabase() {
+    if (_client !== undefined) {
+        return _client;
+    }
+    const { url, anonKey, enabledByFlag, hasEnv, enabled, meta } = getSupabaseConfig();
+    if (!_diagnosed) {
+        try {
+            // eslint-disable-next-line no-console
+            console.log('[supabase] env', {
+                enabledByFlag,
+                hasEnv,
+                enabled,
+                urlKey: meta?.urlKey,
+                anonKeyKey: meta?.anonKeyKey,
+                flagKey: meta?.flagKey,
+                urlLen: url ? url.length : 0,
+                anonKeyLen: anonKey ? anonKey.length : 0
+            });
+        }
+        catch {
+            // Ignore diagnostic logging failures.
+        }
+        _diagnosed = true;
+    }
+    if (!enabled &&
+        enabledByFlag &&
+        !hasEnv &&
+        !isProd &&
+        !isTest &&
+        !isCI &&
+        !warned) {
+        // eslint-disable-next-line no-console
+        console.warn('[supabase] URL/key missing; storage features are disabled.');
+        warned = true;
+    }
+    if (enabled) {
+        _client = createClient(url, anonKey);
+        return _client;
+    }
+    // Fallback: try global env shim bag
+    try {
+        const bag = globalThis
+            .__env__;
+        const fbUrl = bag?.['VITE_SUPABASE_URL'] || '';
+        const fbKey = bag?.['VITE_SUPABASE_ANON_KEY'] || '';
+        if (fbUrl && fbKey) {
+            // eslint-disable-next-line no-console
+            console.log('[supabase] using fallback from globalThis.__env__');
+            _client = createClient(fbUrl, fbKey);
+            return _client;
+        }
+    }
+    catch {
+        // Ignore global env shim lookup failures.
+    }
+    _client = null;
+    return _client;
 }
-export const supabase = enabled
-    ? createClient(url, anonKey)
-    : null;
+// Backward-compatible named export used by some legacy tests/modules.
+export const supabase = getSupabase();

@@ -2,19 +2,25 @@
 
 ## Overview
 
+This document contains historical architecture notes.
+
+For the current MVP PSG source contract and live runtime fragment import behavior, use `docs/psg-weekend-mvp-contract.md` as the canonical reference.
+
 The application uses a **hybrid grouping system** with clear separation between two distinct containment mechanisms:
 
-1. **Fragment Containers** - For PSG fragments (reusable components)
+1. **Imported Fragment Wrappers** - For PSG fragments (reusable components)
 2. **Region Boxes** - For manual grouping by users
 
 This architecture resolves the previous conflict where both systems were trying to manage node containment simultaneously.
 
 ## System Separation
 
-### Fragment Containers (Component-based)
+### Imported Fragment Wrappers (Component-based)
 
-- **Node Type**: `fragmentContainer`
-- **Visual Style**: Purple rounded containers (📦)
+Historical note: the live runtime import path is currently centered on `enhancedBoundingBox` wrappers for imported fragments, not `fragmentContainer`.
+
+- **Node Type**: `enhancedBoundingBox` for the live imported-fragment path
+- **Visual Style**: imported-fragment wrapper styling on top of the bounding-box primitive
 - **Containment Method**: React Flow's native `parentNode` relationships
 - **Position System**: Relative to parent container
 - **Movement**: Children automatically move with parent
@@ -24,13 +30,14 @@ This architecture resolves the previous conflict where both systems were trying 
 // Fragment container structure
 {
   id: 'fragment-xyz-123',
-  type: 'fragmentContainer',
+  type: 'enhancedBoundingBox',
   data: {
     title: 'Character Generator',
     description: 'Generates character descriptions',
-    isCollapsed: true,
+    isCollapsed: false,
     fragmentSource: 'characters.psg',
-    nodeCount: 5
+    nodeCount: 5,
+    fragmentImported: true
   }
 }
 
@@ -85,7 +92,7 @@ Never both. This prevents double movement and conflicting behaviors.
 
 Users can immediately identify:
 
-- **Purple rounded** = Fragment Container (component)
+- **Imported wrapper styling** = Imported fragment wrapper (component)
 - **Teal dashed** = Region Box (manual group)
 
 ### 3. Independent Operation
@@ -100,8 +107,8 @@ Users can immediately identify:
 
 The PSG parser (`packages/core/fileFormats/psg.ts`) now:
 
-1. Creates `fragmentContainer` instead of `enhancedBoundingBox` for fragments
-2. Filters out Output nodes from fragments
+1. Creates `enhancedBoundingBox` wrappers for fragment imports in the current live runtime
+2. Preserves Output nodes during PSG conversion; later runtime insertion may deduplicate or retarget them
 3. Sets all fragment nodes with `parentNode` relationship
 4. Uses relative positioning for children
 
@@ -112,9 +119,11 @@ The EnhancedBoundingBox (`packages/core/components/epic1/nodes/EnhancedBoundingB
 1. **Excludes** nodes with `parentNode` from containment
 2. Only uses position-based detection
 3. Only moves position-contained nodes when locked
-4. Ignores `fragmentContainer` nodes
+4. Is also used by the live fragment import path for imported fragment wrappers
 
-### New FragmentContainer Component
+### Historical FragmentContainer Component
+
+Historical note: this section is not the canonical description of the current weekend-MVP PSG fragment contract.
 
 The FragmentContainer (`packages/core/components/epic1/nodes/FragmentContainer.tsx`):
 
@@ -136,7 +145,7 @@ The migration script detects graphs needing migration by checking for:
 ### Migration Process
 
 1. **Identify** fragment boxes (enhancedBoundingBox with children)
-2. **Convert** to FragmentContainer type
+2. **Review** legacy fragment wrapper assumptions against the live runtime contract before converting types
 3. **Clean** node relationships (remove dual membership)
 4. **Validate** edges remain valid
 5. **Add** migration metadata
@@ -153,10 +162,10 @@ The migration script detects graphs needing migration by checking for:
 
 ```javascript
 // When a .psg fragment is dropped:
-1. Create FragmentContainer at drop location
+1. Create an imported fragment wrapper using the live runtime contract
 2. Add all fragment nodes as children (parentNode)
 3. Set relative positions
-4. Start in collapsed state
+4. Preserve imported fragment layout when available
 ```
 
 ### Creating a Region Box
@@ -191,11 +200,11 @@ The migration script detects graphs needing migration by checking for:
 
 ## Testing
 
-### Fragment Container Tests
+### Imported Fragment Wrapper Tests
 
 - Collapse/expand functionality
 - Parent-child relationships
-- Purple visual styling
+- Imported wrapper styling
 - Metadata display
 
 ### Region Box Tests
@@ -240,4 +249,4 @@ The new system maintains backward compatibility through:
 
 ## Conclusion
 
-The hybrid fragment system provides clear separation between reusable components (fragments) and manual grouping (regions), eliminating the previous dual-system conflicts while maintaining both features for different use cases.
+The hybrid fragment system still separates reusable imported fragments from manual grouping, but the live weekend-MVP runtime now does that with imported `enhancedBoundingBox` wrappers plus semantic source `regions`, not a `fragmentContainer`-centered PSG contract.

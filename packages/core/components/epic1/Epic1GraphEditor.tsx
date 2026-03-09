@@ -120,14 +120,13 @@ export interface Epic1GraphEditorProps {
  */
 const TutorialButton: React.FC = () => {
   const { startTutorial } = useTutorial();
-  
   const handleClick = () => {
     startTutorial();
   };
-  
   return (
-    <button 
+    <button
       className="palette-footer-button"
+      data-tutorial-anchor="tutorial-button"
       onClick={handleClick}
       style={{
         padding: '10px 12px',
@@ -711,6 +710,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         {/* Main Graph Canvas */}
         <div
           className="graph-canvas-container"
+          data-tutorial-anchor="canvas"
           style={{ flex: 1, position: 'relative' }}
           onDrop={onDrop}
           onDragOver={onDragOver}
@@ -765,7 +765,11 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                   <button onClick={handleExecute} className="execute-button">
                     Execute
                   </button>
-                  <button onClick={togglePreview} className="preview-button">
+                  <button
+                    onClick={togglePreview}
+                    className="preview-button"
+                    data-tutorial-anchor="preview-button"
+                  >
                     {isPreviewVisible ? 'Hide' : 'Show'} Preview
                   </button>
                 </div>
@@ -796,11 +800,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           </SafeReactFlowWrapper>
 
           {/* NodePalette - positioned outside ReactFlow */}
-          <div style={{ 
-            position: 'absolute', 
-            top: 0, 
-            left: 0, 
-            bottom: 0,
+          <div style={{            position: 'absolute',            top: 0,            left: 0,            bottom: 0,
             zIndex: 100,
             display: 'flex',
             alignItems: 'stretch'
@@ -871,8 +871,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                     Login
                   </button>
                 )}
-                <button 
-                  className="palette-footer-button"
+                <button
+                  className="palette-footer-button prompt-wizard-button"
+                  data-tutorial-anchor="wizard-button"
                   onClick={() => setIsPromptWizardOpen(true)}
                   style={{
                     padding: '10px 12px',

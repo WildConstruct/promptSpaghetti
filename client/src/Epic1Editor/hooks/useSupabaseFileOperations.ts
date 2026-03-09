@@ -4,6 +4,15 @@ import { useToast } from '../../Toast';
 import { getSupabase } from '@promptscape/core/utils/supabaseClient';
 import { looksLikeLegacyGraphWrapper } from '@promptscape/core/utils/psgCodec';
 import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
+import {
+  ApiPsgClient,
+  type PsgAssetRef,
+  type PsgAssembleSceneResponse,
+  type PsgDocument,
+  type PsgExportComfyResponse,
+  type PsgComfyWorkflow,
+  type PsgSceneAssemblyPlan
+} from '@promptscape/core/services/psg';
 import { loadReactFlowFromPsgContent } from '../utils/psgDocument';
 import { validateEditorGraphPayload } from '../utils/graphValidation';
 
@@ -61,14 +70,46 @@ function createPsgDocument(
     tags?: string[];
   } = {}
 ) {
-  return exportGraphToPSG(nodes, edges, {
+  return exportGraphToPSG(
+    nodes as unknown as Parameters<typeof exportGraphToPSG>[0],
+    edges as unknown as Parameters<typeof exportGraphToPSG>[1],
+    {
     name: options.name || 'Prompt Spaghetti Graph',
     description: options.description,
     metadata:
       options.tags && options.tags.length > 0
         ? { tags: options.tags }
         : undefined
-  });
+    }
+  );
+}
+
+function createPsgProtocolDocument(
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  } = {},
+  manifest?: {
+    assets?: PsgAssetRef[];
+    scene?: PsgSceneAssemblyPlan | null;
+  }
+): PsgDocument {
+  const fragment = createPsgDocument(nodes, edges, options);
+  return {
+    version: 'psg/1',
+    kind: 'fragment',
+    metadata: {
+      name: options.name || fragment.name,
+      description: options.description || fragment.description,
+      tags: options.tags
+    },
+    fragment,
+    assets: manifest?.assets || [],
+    scene: manifest?.scene || undefined
+  };
 }
 
 function exportGraphAsPsg(
@@ -105,6 +146,82 @@ function exportGraphLocallyWithToast(
 ) {
   exportGraphAsPsg(nodes, edges, options);
   showToast(message, level);
+}
+
+async function exportGraphAsComfyWorkflow(
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  } = {},
+  manifest?: {
+    assets?: PsgAssetRef[];
+    scene?: PsgSceneAssemblyPlan | null;
+  }
+) {
+  const psg = createPsgProtocolDocument(nodes, edges, options, manifest);
+  return new ApiPsgClient().exportComfy(psg);
+}
+
+async function assembleGraphScene(
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  } = {},
+  manifest?: {
+    assets?: PsgAssetRef[];
+    scene?: PsgSceneAssemblyPlan | null;
+  }
+) {
+  const psg = createPsgProtocolDocument(nodes, edges, options, manifest);
+  return new ApiPsgClient().assembleScene(psg);
+}
+
+function downloadComfyWorkflow(
+  workflow: PsgComfyWorkflow,
+  filenameBase?: string
+) {
+  const baseName = sanitizeFilenameSegment(
+    filenameBase || workflow.metadata.name
+  );
+  downloadTextFile(
+    `${baseName}.comfy.json`,
+    JSON.stringify(workflow, null, 2),
+    'application/json'
+  );
+}
+
+function downloadPsgSceneManifest(
+  document: PsgDocument,
+  filenameBase?: string
+) {
+  const baseName = sanitizeFilenameSegment(
+    filenameBase || document.metadata.name || 'prompt-spaghetti-scene'
+  );
+  downloadTextFile(
+    `${baseName}.psg.scene.json`,
+    JSON.stringify(document, null, 2),
+    'application/json'
+  );
+}
+
+function downloadSceneAssembly(
+  response: PsgAssembleSceneResponse,
+  filenameBase?: string
+) {
+  const baseName = sanitizeFilenameSegment(
+    filenameBase || response.document.metadata.name || 'prompt-spaghetti-scene'
+  );
+  downloadTextFile(
+    `${baseName}.scene-assembly.json`,
+    JSON.stringify(response.assembly, null, 2),
+    'application/json'
+  );
 }
 
 export const useSupabaseFileOperations = ({
@@ -491,6 +608,70 @@ export const useSupabaseFileOperations = ({
     loadGraph,
     deleteGraph,
     fetchSavedGraphs,
+    buildComfyBridge: async (
+      nodes: Node[],
+      edges: Edge[],
+      options: {
+        name?: string;
+        description?: string;
+        tags?: string[];
+      } = {},
+      manifest?: {
+        assets?: PsgAssetRef[];
+        scene?: PsgSceneAssemblyPlan | null;
+      }
+    ): Promise<PsgExportComfyResponse> =>
+      exportGraphAsComfyWorkflow(nodes, edges, options, manifest),
+    downloadComfyBridge: (
+      workflow: PsgComfyWorkflow,
+      filenameBase?: string
+    ) => {
+      downloadComfyWorkflow(workflow, filenameBase);
+      showToast(`Exported "${workflow.metadata.name}" as Comfy bridge`, 'success');
+    },
+    buildPsgSceneManifest: (
+      nodes: Node[],
+      edges: Edge[],
+      options: {
+        name?: string;
+        description?: string;
+        tags?: string[];
+      } = {},
+      manifest?: {
+        assets?: PsgAssetRef[];
+        scene?: PsgSceneAssemblyPlan | null;
+      }
+    ) => createPsgProtocolDocument(nodes, edges, options, manifest),
+    downloadPsgSceneManifest: (document: PsgDocument, filenameBase?: string) => {
+      downloadPsgSceneManifest(document, filenameBase);
+      showToast(
+        `Exported "${document.metadata.name || 'Prompt Spaghetti Graph'}" PSG scene manifest`,
+        'success'
+      );
+    },
+    assembleScenePreview: async (
+      nodes: Node[],
+      edges: Edge[],
+      options: {
+        name?: string;
+        description?: string;
+        tags?: string[];
+      } = {},
+      manifest?: {
+        assets?: PsgAssetRef[];
+        scene?: PsgSceneAssemblyPlan | null;
+      }
+    ) => assembleGraphScene(nodes, edges, options, manifest),
+    downloadSceneAssembly: (
+      response: PsgAssembleSceneResponse,
+      filenameBase?: string
+    ) => {
+      downloadSceneAssembly(response, filenameBase);
+      showToast(
+        `Exported "${response.document.metadata.name || 'Prompt Spaghetti Graph'}" scene assembly`,
+        'success'
+      );
+    },
     // Keep the original interface for compatibility
     handleOpen: getSupabase() ? handleSupabaseOpen : handleLocalOpen,
     handleSave: (nodes: Node[], edges: Edge[]) => {

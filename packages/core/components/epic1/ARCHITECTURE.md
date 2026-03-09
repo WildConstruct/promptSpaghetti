@@ -1,4 +1,12 @@
 # Epic1GraphEditor Complete Architecture
+  
+  Status: historical architecture snapshot for the abandoned `Epic1GraphEditorFinal`
+  direction. This file does not describe the canonical editor used by the package
+  today. For current guidance, follow `SOURCE_OF_TRUTH.md` and `AGENTS.md`.
+
+  Do not treat the component map below as an approved migration target for
+  product imports. The canonical live editor remains `Epic1GraphEditor.tsx`
+  unless the aligned source-of-truth files are changed together.
 
 ## Refactoring Summary
 

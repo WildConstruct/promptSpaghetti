@@ -1,6 +1,10 @@
 /**
- * Minimal Server for Epic 2 Demo
- * Bypasses broken configuration files
+ * Canonical server runtime entrypoint.
+ *
+ * `server/package.json` and `server/tsconfig.json` both point here. Other
+ * server mains in `server/src/` are legacy snapshots or reference builds and
+ * should not be treated as the active runtime without an explicit source-of-
+ * truth update.
  */
 
 import Fastify from 'fastify';
@@ -13,9 +17,15 @@ import { registerEnhancedAdminRoutes } from './admin-panel-enhanced';
 import { filesRoutes } from './routes/files';
 import { agentRoutes } from './routes/agent';
 import { llmRoutes } from './routes/llm';
+import { psgRoutes } from './routes/psg';
 import { themeRoutes } from './theme';
 import { rateLimiter } from './utils/rateLimit';
 import { metrics } from './utils/metrics';
+import {
+  getAdminDisableReason,
+  isAdminSurfaceEnabled,
+  requireAdminAuth
+} from './utils/adminAuth';
 import type { Graph as CoreGraph } from '../../packages/core/graphSchema';
 import type { Graph } from './exporter-standalone';
 
@@ -280,18 +290,30 @@ server.post<{ Body: PreviewBody }>(
 //   }
 // );
 
-// Admin metrics endpoint
-// Combined metrics snapshot for admin dashboard
-server.get(
-  '/api/admin/metrics',
-  { preHandler: rateLimiter({ key: 'admin:metrics', limitPerMinute: 30 }) },
-  async () => {
-    return metrics.snapshot();
-  }
-);
+if (isAdminSurfaceEnabled()) {
+  server.get(
+    '/api/admin/metrics',
+    {
+      preHandler: [
+        (request, reply, done) => {
+          if (!requireAdminAuth(request, reply)) {
+            return;
+          }
+          done();
+        },
+        rateLimiter({ key: 'admin:metrics', limitPerMinute: 30 })
+      ]
+    },
+    async () => {
+      return metrics.snapshot();
+    }
+  );
 
-// Register enhanced admin panel routes
-registerEnhancedAdminRoutes(server);
+  registerEnhancedAdminRoutes(server);
+  server.register(themeRoutes);
+} else {
+  server.log.warn(getAdminDisableReason());
+}
 
 // Register file routes (Supabase-backed)
 server.register(async app => filesRoutes(app));
@@ -299,11 +321,11 @@ server.register(async app => filesRoutes(app));
 // Register LLM routes
 server.register(async app => llmRoutes(app));
 
+// Register PSG protocol routes
+server.register(async app => psgRoutes(app));
+
 // Register bounded agent routes
 server.register(async app => agentRoutes(app));
-
-// Register theme routes
-server.register(themeRoutes);
 
 // Start server
 const start = async () => {

@@ -46,13 +46,13 @@ describe('Tutorial system behaviour', () => {
     );
 
     expect(
-      screen.queryByText('Welcome to Prompt Spaghetti! 🍝')
+      screen.queryByText('Start With Structure')
     ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('start'));
 
-    expect(screen.getByText('Welcome to Prompt Spaghetti! 🍝')).toBeInTheDocument();
-    expect(screen.getByText('Step 1 of 10')).toBeInTheDocument();
+    expect(screen.getByText('Start With Structure')).toBeInTheDocument();
+    expect(screen.getByText('Step 1 of 8')).toBeInTheDocument();
   });
 
   it('allows users to advance steps via keyboard shortcuts', async () => {
@@ -65,13 +65,13 @@ describe('Tutorial system behaviour', () => {
     );
 
     fireEvent.click(screen.getByTestId('start'));
-    expect(screen.getByText('Step 1 of 10')).toBeInTheDocument();
+    expect(screen.getByText('Step 1 of 8')).toBeInTheDocument();
 
     fireEvent.keyDown(window, { key: 'ArrowRight' });
-    await waitFor(() => expect(screen.getByText('Step 2 of 10')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Step 2 of 8')).toBeInTheDocument());
 
     fireEvent.keyDown(window, { key: 'ArrowLeft' });
-    await waitFor(() => expect(screen.getByText('Step 1 of 10')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Step 1 of 8')).toBeInTheDocument());
   });
 
   it('skipTutorial marks tutorial complete and hides overlay', async () => {
@@ -83,14 +83,40 @@ describe('Tutorial system behaviour', () => {
     );
 
     fireEvent.click(screen.getByTestId('start'));
-    expect(screen.getByText('Step 1 of 10')).toBeInTheDocument();
+    expect(screen.getByText('Step 1 of 8')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('Skip tutorial'));
 
     await waitFor(() =>
-      expect(screen.queryByText('Step 1 of 10')).not.toBeInTheDocument()
+      expect(screen.queryByText('Step 1 of 8')).not.toBeInTheDocument()
     );
     expect(screen.getByTestId('status').textContent).toContain('100%');
+  });
+
+  it('uses a spotlight cutout and anchored tooltip for the wizard step', async () => {
+    renderWithTutorial(
+      <>
+        <div data-tutorial-anchor="wizard-button" style={{ position: 'absolute', top: 80, left: 120, width: 120, height: 40 }} />
+        <TutorialControls />
+        <TutorialOverlay />
+      </>
+    );
+
+    fireEvent.click(screen.getByTestId('start'));
+    fireEvent.click(screen.getByTestId('next'));
+    fireEvent.click(screen.getByTestId('next'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('tutorial-overlay')).toHaveAttribute(
+        'data-tutorial-step',
+        'open-wizard'
+      );
+    });
+
+    expect(screen.getByTestId('tutorial-backdrop')).not.toHaveStyle({ clipPath: 'none' });
+    expect(screen.getByTestId('tutorial-highlight')).toBeInTheDocument();
+    expect(screen.getByTestId('tutorial-tooltip').style.top).not.toBe('');
+    expect(screen.getByTestId('tutorial-tooltip').style.left).not.toBe('');
   });
 
   it('OnboardingIntegrationWrapper surfaces callback hooks and lifecycle', async () => {

@@ -7,7 +7,13 @@ export default {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^reactflow$': '<rootDir>/__mocks__/reactflow.tsx',
     '@pkgr/core': '<rootDir>/__mocks__/@pkgr/core.js',
-    synckit: '<rootDir>/__mocks__/synckit.js'
+    synckit: '<rootDir>/__mocks__/synckit.js',
+    '^@promptscape/core$': '<rootDir>/../packages/core/public.ts',
+    '^@promptscape/core/(.*)$': '<rootDir>/../packages/core/$1',
+    '^@promptscape/core/services/llm$':
+      '<rootDir>/../packages/core/services/llm/index.ts',
+    '^@promptscape/core/services/psg$':
+      '<rootDir>/../packages/core/services/psg/index.ts'
   },
   transform: {
     '^.+\\.tsx?$': [

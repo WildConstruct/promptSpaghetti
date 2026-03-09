@@ -1,5 +1,10 @@
 // Simplified LLM Service for Epic 2 MVP
 // This version provides the essential LLM functionality without all dependencies
+//
+// DEPRECATED:
+// `SimpleLLMService` is a legacy browser-config/localStorage surface kept for
+// compatibility with older UI components. New work should use the API-backed
+// client from `ApiLLMService.ts` / `services/llm`.
 
 import { Node, Edge } from 'reactflow';
 
@@ -557,8 +562,9 @@ async function llmEnhancedParse(
       hasBranching = true;
     }
 
-    const hasConditional = group.chunks.some(chunk =>
-      chunk.pos === 'conditional' || /\b(if|when|unless)\b/i.test(chunk.text)
+    const hasConditional = group.chunks.some(
+      chunk =>
+        chunk.pos === 'conditional' || /\b(if|when|unless)\b/i.test(chunk.text)
     );
 
     if (hasConditional) {
@@ -568,7 +574,11 @@ async function llmEnhancedParse(
       hasBranching = true;
     }
 
-    const position = calculateSmartPosition(nodes.length, nodeType, hasBranching);
+    const position = calculateSmartPosition(
+      nodes.length,
+      nodeType,
+      hasBranching
+    );
 
     nodes.push({
       id: nodeId,
@@ -874,7 +884,9 @@ function performMolecularChunking(prompt: string): MolecularChunk[] {
 }
 
 // Helper function: Group molecular chunks into semantic units
-function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): SemanticGroup[] {
+function groupChunksIntoSemanticUnits(
+  chunks: MolecularChunk[]
+): SemanticGroup[] {
   const groups: SemanticGroup[] = [];
 
   let currentGroup: SemanticGroup = {
@@ -885,7 +897,10 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): SemanticGroup[]
   };
 
   const pushGroup = (): void => {
-    const text = currentGroup.chunks.map(chunk => chunk.text).join('').trim();
+    const text = currentGroup.chunks
+      .map(chunk => chunk.text)
+      .join('')
+      .trim();
     if (!text || /^[.,;:!?]+$/.test(text)) {
       currentGroup = {
         text: '',
@@ -926,7 +941,8 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): SemanticGroup[]
         shouldBreak = true;
       }
     } else if (
-      (chunk.text.toLowerCase() === 'model' || chunk.text.toLowerCase() === 'person') &&
+      (chunk.text.toLowerCase() === 'model' ||
+        chunk.text.toLowerCase() === 'person') &&
       nextChunk &&
       nextChunk.pos !== 'adjective' &&
       nextChunk.pos !== 'preposition'
@@ -1050,7 +1066,10 @@ function extractOptionsFromChunks(
   }
 
   if (options.length === 0) {
-    const fallbackText = chunks.map(chunk => chunk.text).join(' ').trim();
+    const fallbackText = chunks
+      .map(chunk => chunk.text)
+      .join(' ')
+      .trim();
     if (fallbackText) {
       options.push({ text: fallbackText, weight: 1 });
     }
@@ -1120,7 +1139,10 @@ function calculateSmartPosition(
 }
 
 // Helper function: Get edge label based on semantic relationship
-function getEdgeLabel(fromGroup: SemanticGroup, toGroup: SemanticGroup): string {
+function getEdgeLabel(
+  fromGroup: SemanticGroup,
+  toGroup: SemanticGroup
+): string {
   if (
     fromGroup.semanticRole === 'condition' &&
     toGroup.semanticRole === 'statement'
@@ -1162,6 +1184,10 @@ function calculateComplexity(
   );
 }
 
+/**
+ * @deprecated Prefer the API-backed client from `ApiLLMService.ts`.
+ * This class remains only for legacy UI compatibility during migration.
+ */
 export class SimpleLLMService {
   private config: LLMConfig;
   private enabled: boolean = false;
@@ -1225,9 +1251,14 @@ export class SimpleLLMService {
   }
 }
 
-// Singleton instance
+// Legacy singleton retained for older UI callsites.
 let serviceInstance: SimpleLLMService | null = null;
 
+/**
+ * @deprecated Prefer constructing or consuming the API-backed client from
+ * `ApiLLMService.ts`. This accessor exists only for legacy UI callsites that
+ * still depend on browser-local configuration.
+ */
 export function getLLMService(): SimpleLLMService {
   if (!serviceInstance) {
     const storedConfig =

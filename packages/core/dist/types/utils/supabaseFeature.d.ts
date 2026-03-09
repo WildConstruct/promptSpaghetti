@@ -5,6 +5,13 @@ export declare function getSupabaseConfig(): {
     readonly enabledByFlag: boolean;
     readonly hasEnv: boolean;
     readonly enabled: boolean;
+    readonly meta: {
+        readonly urlKey: string;
+        readonly anonKeyKey: string;
+        readonly flagKey: string;
+        readonly urlLen: number;
+        readonly anonKeyLen: number;
+    };
 };
 export declare function hasSupabaseEnv(): boolean;
 export declare function isSupabaseFeatureFlagEnabled(): boolean;

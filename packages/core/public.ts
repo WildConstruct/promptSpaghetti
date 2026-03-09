@@ -54,3 +54,6 @@ export {
   type PromptSegment as SegmentedPromptSegment,
   type SegmentKind
 } from './runtime/prompting/PromptSegmentation';
+
+// Canonical PSG API protocol contracts for validation/normalization/expansion.
+export * from './services/psg';

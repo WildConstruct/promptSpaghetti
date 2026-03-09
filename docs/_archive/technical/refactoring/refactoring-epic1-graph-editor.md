@@ -1,4 +1,17 @@
 # Epic1GraphEditor Refactoring Plan
+  
+  Status: historical planning document.
+  
+  This plan describes a refactor direction, not the current product-authoritative
+  editor architecture. For active guidance, use:
+  
+  - `packages/core/components/epic1/SOURCE_OF_TRUTH.md`
+  - `packages/core/components/epic1/AGENTS.md`
+
+  Do not use this document to justify product imports of
+  `Epic1GraphEditorRefactored.tsx`. Until feature parity is proven and the
+  source-of-truth files change, treat the structure and phases below as a
+  historical proposal rather than shipped architecture.
 
 ## Current State Analysis
 

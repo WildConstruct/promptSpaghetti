@@ -73,7 +73,6 @@ export const getContainerPadding = (node: FlowNode): number => {
   if (node.type === 'enhancedBoundingBox') {
     return 0;
   }
-  
   const data = node.data as Record<string, unknown> | undefined;
   const candidates = [data?.padding, data?.innerPadding, node.style?.padding];
   for (const candidate of candidates) {

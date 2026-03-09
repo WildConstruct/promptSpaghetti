@@ -4,21 +4,28 @@
 
 This guide explains how to create reusable asset fragments (PSG files) for the Prompt Spaghetti asset browser. Assets are modular prompt components that can be drag-and-dropped into the graph editor.
 
+For the current MVP PSG source contract, use `docs/psg-weekend-mvp-contract.md` as the canonical reference. This guide is still useful for authoring direction, but some older examples below are historical and not the preferred source schema.
+
+Copyable canonical example:
+
+- `docs/examples/psg-weekend-mvp-canonical-example.psg`
+
 ## Asset Fragment Structure
 
 ### PSG File Format
 
 PSG (Prompt Spaghetti Graph) files are JSON documents that define reusable graph fragments:
 
+Historical note: the preferred weekend-MVP PSG shape is a flat fragment document with top-level `version`, `name`, `description`, `metadata`, `nodes`, `edges`, and optional `regions`. Avoid treating top-level `type` as the canonical fragment discriminator.
+
 ```json
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Fragment Name",
+  "description": "Brief description of what this fragment generates",
   "metadata": {
-    "name": "Fragment Name",
     "category": "category-name",
-    "type": "SIMPLE|MULTI-ASPECT|COMPLEX",
-    "description": "Brief description of what this fragment generates",
+    "type": "ASSET_FRAGMENT",
     "tags": ["tag1", "tag2"],
     "created": "2025-01-15",
     "author": "Author Name"
@@ -31,6 +38,15 @@ PSG (Prompt Spaghetti Graph) files are JSON documents that define reusable graph
 
 ## Node Types
 
+Weekend-MVP authoring subset:
+
+- `WeightedChoice`
+- `TextBlock`
+- `Concat`
+- `Output`
+
+The runtime still supports a wider compatibility set, but new MVP asset authoring should stay inside this four-node subset unless you are intentionally maintaining an older asset.
+
 ### 1. WeightedChoice
 
 Most common node type for generating variations:
@@ -41,18 +57,13 @@ Most common node type for generating variations:
   "type": "WeightedChoice",
   "x": 100,
   "y": 100,
-  "data": {
-    "label": "Node Label",
-    "options": [
-      {
-        "id": "opt-1",
-        "text": "option text",
-        "weight": 10,
-        "mute": false,
-        "solo": false
-      }
-    ]
-  }
+  "options": [
+    {
+      "id": "opt-1",
+      "text": "option text",
+      "weight": 10
+    }
+  ]
 }
 ```
 
@@ -66,16 +77,15 @@ For static text content:
   "type": "TextBlock",
   "x": 100,
   "y": 250,
-  "data": {
-    "label": "Text Label",
-    "text": "Static text content"
-  }
+  "value": "Static text content"
 }
 ```
 
 ### 3. Output (Deprecated for Fragments)
 
-Output nodes should NOT be included in asset fragments. They're only for complete graphs.
+This guidance is stale.
+
+The live runtime preserves `Output` nodes during PSG conversion and may deduplicate or retarget them later during insertion. For weekend MVP, `Output` is allowed in PSG fragments, though authors should still use it intentionally.
 
 ## Region Requirements
 
@@ -86,24 +96,17 @@ Output nodes should NOT be included in asset fragments. They're only for complet
 
 ### Multi-Node Fragments
 
-- MUST be contained within a region box
-- Regions provide visual grouping and metadata
+- Prefer semantic `regions` for fragment grouping
+- Do not model regions as editor bounding-box state in canonical PSG unless you are maintaining backward-compatible legacy assets
 
 ```json
 "regions": [
   {
     "id": "region-fragment-name",
-    "type": "region",
-    "x": 60,
-    "y": 60,
-    "width": 400,
-    "height": 300,
-    "data": {
-      "label": "Fragment Group Name",
-      "description": "What this group does",
-      "color": "#4A90E2",
-      "collapsed": false
-    }
+    "name": "Fragment Group Name",
+    "color": "#4A90E2",
+    "nodes": ["node-a", "node-b"],
+    "description": "What this group does"
   }
 ]
 ```
@@ -134,17 +137,21 @@ As of January 2025, nodes automatically concatenate their inputs:
 
 Define connections between nodes:
 
+Historical note: `output` / `input` are not the canonical default handle ids for the live runtime contract.
+
 ```json
 "edges": [
   {
     "id": "edge-1",
     "source": "node-1",
     "target": "node-2",
-    "sourceHandle": "output",  // Optional, defaults to "output"
-    "targetHandle": "input"     // Optional, defaults to "input"
+    "sourceHandle": "source",  // Optional, preferred generic source handle
+    "targetHandle": "target"   // Optional, preferred generic target handle
   }
 ]
 ```
+
+When handles are omitted, import normalization applies the live runtime defaults. For current canonical handle rules, including `Concat` and weighted branch handles, see `docs/psg-weekend-mvp-contract.md`.
 
 ## Categories
 
@@ -179,6 +186,33 @@ Standard categories for organization:
 - Design for reusability across different contexts
 - Avoid overly specific combinations
 
+### 3.5 Fragment sizing
+
+Aim for semantic chunks, not isolated tokens and not full prompt paragraphs.
+
+Good examples:
+
+- `weathered urban storefront`
+- `with practical trim and worn paint`
+- `under harsh fluorescent light`
+- `cinematic still with restrained palette`
+
+Bad examples:
+
+- `weathered`
+- `urban`
+- `storefront`
+
+Also bad:
+
+- a long fully composed paragraph that only works in one exact asset family
+
+Use this rule:
+
+- if a fragment is too large to reuse across families, it is too large
+- if it is too small to read as a meaningful unit, it is too small
+- if grammar regularly breaks during recombination, that is a future conditional-resolution problem, not a signal to atomize the fragment further
+
 ### 4. Testing
 
 - Test fragments in the editor before saving
@@ -187,15 +221,16 @@ Standard categories for organization:
 
 ## Example: Complete Multi-Node Fragment
 
+Historical note: the example below contains legacy region/editor-shaped fields. Use `docs/psg-weekend-mvp-contract.md` for the preferred minimal source contract.
+
 ```json
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Eye Description System",
+  "description": "Comprehensive eye descriptors",
   "metadata": {
-    "name": "Eye Description System",
     "category": "facial-features",
-    "type": "MULTI-ASPECT",
-    "description": "Comprehensive eye descriptors",
+    "type": "ASSET_FRAGMENT",
     "tags": ["eyes", "facial", "descriptive"],
     "created": "2025-01-15",
     "author": "Your Name"
@@ -206,30 +241,22 @@ Standard categories for organization:
       "type": "WeightedChoice",
       "x": 100,
       "y": 100,
-      "data": {
-        "label": "Eye Shape",
-        "region": "eye-region",
-        "options": [
-          { "id": "1", "text": "almond-shaped", "weight": 20 },
-          { "id": "2", "text": "round", "weight": 15 },
-          { "id": "3", "text": "hooded", "weight": 15 }
-        ]
-      }
+      "options": [
+        { "id": "1", "text": "almond-shaped", "weight": 20 },
+        { "id": "2", "text": "round", "weight": 15 },
+        { "id": "3", "text": "hooded", "weight": 15 }
+      ]
     },
     {
       "id": "eye-color",
       "type": "WeightedChoice",
       "x": 350,
       "y": 100,
-      "data": {
-        "label": "Eye Color",
-        "region": "eye-region",
-        "options": [
-          { "id": "1", "text": "deep brown", "weight": 30 },
-          { "id": "2", "text": "bright blue", "weight": 20 },
-          { "id": "3", "text": "emerald green", "weight": 15 }
-        ]
-      }
+      "options": [
+        { "id": "1", "text": "deep brown", "weight": 30 },
+        { "id": "2", "text": "bright blue", "weight": 20 },
+        { "id": "3", "text": "emerald green", "weight": 15 }
+      ]
     }
   ],
   "edges": [
@@ -242,17 +269,10 @@ Standard categories for organization:
   "regions": [
     {
       "id": "eye-region",
-      "type": "region",
-      "x": 60,
-      "y": 60,
-      "width": 480,
-      "height": 200,
-      "data": {
-        "label": "Eye Descriptors",
-        "description": "Shape and color combinations",
-        "color": "#4A90E2",
-        "collapsed": false
-      }
+      "name": "Eye Descriptors",
+      "description": "Shape and color combinations",
+      "color": "#4A90E2",
+      "nodes": ["eye-shape", "eye-color"]
     }
   ]
 }
@@ -279,7 +299,7 @@ Before adding to the library:
 
 1. **Structure Check**: Ensure valid JSON and required fields
 2. **Node Validation**: All nodes have unique IDs and valid types
-3. **Region Coverage**: Multi-node fragments have regions
+3. **Region Coverage**: Multi-node fragments use semantic `regions` when grouping is needed
 4. **Weight Balance**: Options have reasonable weight distribution
 5. **Concatenation Test**: Fragment works with upstream inputs
 
@@ -310,8 +330,8 @@ The Asset Browser will automatically:
 ### Common Issues
 
 1. **Nodes not connecting**: Check edge sourceHandle/targetHandle match node handles
-2. **No output**: Ensure proper edge connections, avoid Output nodes in fragments
-3. **Region not showing**: Verify region encompasses all nodes with padding
+2. **No output**: Ensure proper edge connections and verify how imported outputs interact with an existing destination output node
+3. **Region not showing**: Verify the fragment uses the expected semantic `regions` shape or a supported legacy compatibility shape
 4. **Concatenation issues**: Update to latest engine supporting auto-concatenation
 
 ### Debug Mode
@@ -331,6 +351,8 @@ This will show:
 
 ## Additional Resources
 
+- [PSG Weekend MVP Contract](./psg-weekend-mvp-contract.md)
+- [Canonical Weekend MVP PSG Example](./examples/psg-weekend-mvp-canonical-example.psg)
 - [PSG Format Specification](./technical-specs/file-format-specification.md)
 - [Node Type Reference](./node-types.md)
 - [Asset Browser Documentation](./asset-browser.md)

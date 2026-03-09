@@ -491,6 +491,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             </span>
 
             <div className="launch-inline-actions">
+              <div className="launch-inline-instruction">
+                Select a trait in the preview, then decide whether it stays fixed or can vary.
+              </div>
               {(() => {
                 const selNode = mergedAnalysis?.nodes.find(
                   n => n.node.id === selectedNodeId

@@ -23,6 +23,16 @@ import {
   useContextMenu,
 } from './hooks';
 
+/**
+ * Historical exploratory refactor.
+ *
+ * This file is not the canonical Epic 1 editor implementation for the live
+ * product. Source-of-truth guidance remains in:
+ * - `SOURCE_OF_TRUTH.md`
+ * - `AGENTS.md`
+ * - `index.ts`
+ */
+
 // Import services
 import { NodeFactory } from './services';
 
@@ -67,8 +77,9 @@ export interface Epic1GraphEditorProps {
 }
 
 /**
- * Refactored Epic 1 Graph Editor - now ~400 lines instead of 1100+
- * Uses extracted hooks and services for better maintainability
+ * Exploratory refactor variant of the Epic 1 graph editor.
+ * Kept for reference and comparison work only unless source-of-truth docs are
+ * updated in the same change.
  */
 const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   initialNodes = [],
@@ -91,7 +102,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Toast system
   const { toasts, showToast, dismissToast } = useToast();
-  
   // Micro-interactions
   const { addNodeWithBounce, highlightConnection } = useNodeInteractions();
   // Use extracted hooks
@@ -250,8 +260,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const onInit = useCallback((instance: ReactFlowInstance) => {
     setReactFlowInstance(instance);
     setTimeout(() => {
-      instance.fitView({ 
-        padding: 0.1,
+      instance.fitView({        padding: 0.1,
         includeHiddenNodes: false,
         minZoom: 0.5,
         maxZoom: 1.5
@@ -318,21 +327,17 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       if (!prompt) {
         return;
       }
-      
       try {
         const parser = new PromptParser();
         const parsed = parser.parse(prompt);
-        
         // Create nodes from parsed prompt
         const newNodes: Node<EditableNodeData>[] = [];
         const newEdges: Edge[] = [];
         let xPos = 100;
         let yPos = 100;
         let lastNodeId: string | null = null;
-        
         parsed.segments.forEach((segment, index) => {
           const nodeId = `parsed-${Date.now()}-${index}`;
-          
           if (segment.type === 'text') {
             newNodes.push(NodeFactory.createNode('textBlock', { x: xPos, y: yPos }, {
               text: segment.content,
@@ -344,13 +349,11 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               text: opt,
               weight: Math.floor(100 / segment.options.length)
             }));
-            
             newNodes.push(NodeFactory.createNode('weightedChoice', { x: xPos, y: yPos }, {
               options,
               value: JSON.stringify(options, null, 2)
             }));
           }
-          
           // Create edge from previous node
           if (lastNodeId) {
             newEdges.push({
@@ -359,7 +362,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               target: nodeId
             });
           }
-          
           lastNodeId = nodeId;
           xPos += 250;
           if (xPos > 800) {
@@ -367,11 +369,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             yPos += 150;
           }
         });
-        
         // Add output node at the end
         const outputNode = NodeFactory.createNode('output', { x: 400, y: yPos + 150 });
         newNodes.push(outputNode);
-        
         if (lastNodeId) {
           newEdges.push({
             id: `edge-${lastNodeId}-${outputNode.id}`,
@@ -379,23 +379,19 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             target: outputNode.id
           });
         }
-        
         setNodes(newNodes);
         setEdges(newEdges);
-        
         if (reactFlowInstance) {
           setTimeout(() => {
             reactFlowInstance.fitView({ padding: 0.2 });
           }, 100);
         }
-        
         showToast('success', 'Prompt parsed and nodes created!');
       } catch (error) {
         console.error('Failed to parse prompt:', error);
         showToast('error', 'Failed to parse prompt');
       }
     };
-    
     window.addEventListener('epic1:promptPasted', handlePromptPasted as EventListener);
     return () => {
       window.removeEventListener('epic1:promptPasted', handlePromptPasted as EventListener);
@@ -496,11 +492,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         <Background variant="dots" gap={16} size={1} color="#333333" />
         <Controls />
         {nodes.length > 0 && (
-          <CustomMinimap 
-            nodes={nodes}
+          <CustomMinimap            nodes={nodes}
             edges={edges}
-            style={{ 
-              left: nodePaletteCollapsed ? 50 : 210,
+            style={{              left: nodePaletteCollapsed ? 50 : 210,
               top: 70,
               width: '200px',
               height: '120px',
@@ -510,19 +504,16 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             }}
           />
         )}
-        
         <Panel position="top-right">
           <div className="epic1-controls">
-            <button 
-              className="epic1-preview-toggle"
+            <button              className="epic1-preview-toggle"
               onClick={handleTogglePreview}
               title="Toggle preview (P)"
             >
               {isPreviewVisible ? '👁️' : '👁️‍🗨️'}
             </button>
             {onExecute && (
-              <button 
-                className="epic1-execute-button"
+              <button                className="epic1-execute-button"
                 onClick={handleExecute}
               >
                 Execute Graph
@@ -538,7 +529,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         </Panel>
 
         <ConnectionFeedback nodes={nodes} edges={edges} />
-        
         <SafeReactFlowWrapper>
           <PanZoomControls position="bottom-right" />
         </SafeReactFlowWrapper>
@@ -555,15 +545,11 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           onDismiss={() => dismissToast(toast.id)}
         />
       ))}
-      
       <NodePalette
         position={assetLibraryPosition}
-        defaultCollapsed={false} 
-        onCollapsedChange={setNodePaletteCollapsed}
+        defaultCollapsed={false}        onCollapsedChange={setNodePaletteCollapsed}
       />
-      
       <NodeToolbar position="top" />
-      
       {(showPreview || showAssetLibrary) && (
         <div
           className={`tabbed-side-panel-wrapper preview-${previewPosition}`}
@@ -584,7 +570,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           />
         </div>
       )}
-      
       <NodeContextMenu
         nodeId={contextMenuNodeId || ''}
         nodeType={nodes.find(n => n.id === contextMenuNodeId)?.type || 'textBlock'}
@@ -592,7 +577,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         onClose={() => setContextMenuPosition(null)}
         onSaveAsPreset={handleSaveAsPreset}
       />
-      
       <SaveAsPresetDialog
         isOpen={!!saveAsPresetNodeId}
         nodeData={saveAsPresetNode?.data || null}

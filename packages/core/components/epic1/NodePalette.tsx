@@ -105,7 +105,10 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
   };
 
   return (
-    <div className={`node-palette ${position} ${collapsed ? 'collapsed' : ''}`}>
+    <div
+      className={`node-palette ${position} ${collapsed ? 'collapsed' : ''}`}
+      data-tutorial-anchor="node-palette"
+    >
       <div className="palette-header">
         <button
           className="collapse-button"

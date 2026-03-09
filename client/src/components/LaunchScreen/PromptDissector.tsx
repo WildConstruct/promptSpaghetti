@@ -14,7 +14,7 @@ import {
   buildSequentialEdges
 } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
-import LLMService from '../../shims/llm-service';
+import { ApiLLMClient } from '@promptscape/core/services/llm';
 import './PromptDissector.css';
 import { TextSelectionModal, TextSelection } from './TextSelectionModal';
 import GrokParsingLoader from './GrokParsingLoader';
@@ -456,7 +456,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   );
 
   // LLM service adapter (browser -> server)
-  const llmServiceRef = useRef(new LLMService({}));
+  const llmServiceRef = useRef(new ApiLLMClient({}));
 
   // Modular parsing function that can be reused
   const performParse = useCallback(
@@ -508,12 +508,10 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       }
 
       try {
-        const rawResult = (await llmServiceRef.current.draftGraphFromPrompt(
-          text,
-          {
-            mode: 'draft'
-          }
-        )) as DraftGraphResponse;
+        const rawResult = (await llmServiceRef.current.draftGraphFromPrompt({
+          prompt: text,
+          mode: 'draft'
+        })) as DraftGraphResponse;
         const draftAnalysis = analysisFromDraftGraphResponse(text, rawResult);
         if (draftAnalysis) {
           finalAnalysis = draftAnalysis;

@@ -1,8 +1,19 @@
 # Epic1GraphEditor Refactoring Guide
+  
+  Status: historical design note, not the active source of truth.
+  
+  The live editor contract remains `Epic1GraphEditor` from `./Epic1GraphEditor.tsx`.
+  `Epic1GraphEditorRefactored.tsx` exists in the tree, but this guide should not be
+  treated as migration guidance unless `SOURCE_OF_TRUTH.md` and `AGENTS.md` are
+  updated in the same change.
 
-## Overview
-
-The Epic1GraphEditor component has been refactored from **1,103 lines** to **~450 lines** through modular extraction, resulting in a **59% reduction** in file size and significantly improved maintainability.
+  Do not switch product imports to `Epic1GraphEditorRefactored.tsx` based on this
+  document. Until feature parity is proven and the source-of-truth files change,
+  treat all refactored-editor examples below as historical architecture sketches.
+ 
+  ## Overview
+  
+  The Epic1GraphEditor component has been refactored from **1,103 lines** to **~450 lines** through modular extraction, resulting in a **59% reduction** in file size and significantly improved maintainability.
 
 ## Architecture Changes
 
@@ -47,16 +58,16 @@ import { Epic1GraphEditor } from '@promptscape/core/components/epic1/Epic1GraphE
 **After:**
 
 ```tsx
-// Use the refactored version
-import { Epic1GraphEditorRefactored } from '@promptscape/core/components/epic1/Epic1GraphEditorRefactored';
-
-// Or keep using the original (still available)
+// Keep using the canonical editor
 import { Epic1GraphEditor } from '@promptscape/core/components/epic1/Epic1GraphEditor';
+
+// Historical note only: do not switch product imports to the refactored file
+// unless `SOURCE_OF_TRUTH.md` and `AGENTS.md` are updated in the same change.
 ```
 
-### 2. The API remains identical
+### 2. Historical API comparison
 
-All props and callbacks work exactly the same:
+This example documents a refactor target, not an approved product import path:
 
 ```tsx
 <Epic1GraphEditorRefactored

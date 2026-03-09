@@ -1,10 +1,12 @@
-import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
+import React, { createContext, useContext, useMemo, useState, useCallback, useEffect } from 'react';
 import {  NodeIntelligenceService,
   TextRefinementService,  GraphAnalyzer,
   MetadataExtractor,
   SimilarityEngine,
   TokenTracker,
-  LLMService
+  LLMService,
+  ApiLLMClient,
+  type LLMStatusResponse
 } from '../../../services/llm';
 import { debugLogEpic1 } from '../../../utils/debug';
 
@@ -67,6 +69,34 @@ export const IntelligenceProvider: React.FC<{children: React.ReactNode}> = ({ ch
       return false;
     }
   });
+  const [status, setStatus] = useState<LLMStatusResponse | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const llmClient = new ApiLLMClient();
+
+    llmClient
+      .getStatus()
+      .then(nextStatus => {
+        if (!cancelled) {
+          setStatus(nextStatus);
+        }
+      })
+      .catch(error => {
+        debugLogEpic1('[IntelligenceContext] Failed to load LLM status:', error);
+        if (!cancelled) {
+          setStatus({
+            available: false,
+            mode: 'heuristic',
+            capabilities: []
+          });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const services = useMemo(() => {
     debugLogEpic1(
@@ -76,43 +106,8 @@ export const IntelligenceProvider: React.FC<{children: React.ReactNode}> = ({ ch
 
     try {
       debugLogEpic1('[IntelligenceContext] Initializing services...');
-      debugLogEpic1('[IntelligenceContext] Available env vars:', process.env);
-      // Create LLM service with proper configuration
-      // Check localStorage for API key first (for demo purposes)
-      const storedApiKey = localStorage.getItem('openrouter-api-key');
-      // In Node/test/CI, use process.env for environment variables.
-      const envApiKey =
-        process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY;
-      const apiKey = storedApiKey || envApiKey;
-      debugLogEpic1('[IntelligenceContext] API key sources:', {
-        hasStoredKey: !!storedApiKey,
-        hasEnvKey: !!envApiKey,
-        envValue: process.env.VITE_OPENROUTER_API_KEY ? 'Found in process.env' : 'Not in process.env',
-        finalKey: apiKey ? `${apiKey.substring(0, 10)}...` : 'None'
-      });
-      if (!apiKey) {
-        debugLogEpic1(
-          '[IntelligenceContext] No API key found. Using offline mode.'
-        );
-        debugLogEpic1(
-          '[IntelligenceContext] To use AI features, set your OpenRouter API key:'
-        );
-        debugLogEpic1(
-          '  localStorage.setItem("openrouter-api-key", "YOUR_API_KEY")'
-        );
-      } else {
-        debugLogEpic1(
-          '[IntelligenceContext] API key found, initializing with real LLM service'
-        );
-      }
-      const llmConfig = {
-        mode: 'development' as const,
-        cacheEnabled: true,
-        dailyLimit: 1000,
-        costLimit: 10,
-        apiKey
-      };
-      const llmService = new LLMService(llmConfig);
+      debugLogEpic1('[IntelligenceContext] Server LLM status:', status);
+      const llmService = new LLMService();
       const nodeIntelligence = new NodeIntelligenceService(llmService);
       const similarityEngine = new SimilarityEngine();
       const costTracker = new TokenTracker();
@@ -155,7 +150,7 @@ export const IntelligenceProvider: React.FC<{children: React.ReactNode}> = ({ ch
         costTracker: null,
       };
     }
-  }, [consentGiven]);
+  }, [consentGiven, status]);
 
   const setConsent = useCallback((consent: boolean) => {
     setConsentGiven(consent);
@@ -169,9 +164,9 @@ export const IntelligenceProvider: React.FC<{children: React.ReactNode}> = ({ ch
   const contextValue = useMemo(() => ({
     ...services,
     consentGiven,
-    isOffline: !consentGiven || !services.textRefinement,
+    isOffline: !consentGiven || !status?.available,
     setConsent
-  }), [services, consentGiven, setConsent]);
+  }), [services, consentGiven, status, setConsent]);
 
   return (
     <IntelligenceContext.Provider value={contextValue}>

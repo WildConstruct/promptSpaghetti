@@ -9,6 +9,9 @@ export interface SimpleMenuBarProps {
   onSaveAs?: () => void;
   onImport?: () => void;
   onExport?: () => void;
+  onExportComfy?: () => void;
+  onPsgSceneAssets?: () => void;
+  onExpandCrowd?: () => void;
   onQuit?: () => void;
   // Edit operations
   onUndo?: () => void;
@@ -52,6 +55,9 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
     props.onSaveAs ? 'saveAs' : null,
     showImportItem ? 'import' : null,
     props.onExport ? 'export' : null,
+    props.onExportComfy ? 'exportComfy' : null,
+    props.onPsgSceneAssets ? 'psgSceneAssets' : null,
+    props.onExpandCrowd ? 'expandCrowd' : null,
     props.onQuit ? 'quit' : null
   ].filter(Boolean);
   const hasFileItems = fileItems.length > 0;
@@ -113,7 +119,11 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
                 Save PSG As...
               </button>
             )}
-            {(showImportItem || props.onExport) &&
+            {(showImportItem ||
+              props.onExport ||
+              props.onExportComfy ||
+              props.onPsgSceneAssets ||
+              props.onExpandCrowd) &&
               (props.onSave || props.onSaveAs) && (
                 <div className="menu-separator" />
               )}
@@ -127,13 +137,31 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
                 Export PSG
               </button>
             )}
+            {props.onExportComfy && (
+              <button onClick={props.onExportComfy} className="menu-item">
+                Export Comfy Bridge...
+              </button>
+            )}
+            {props.onPsgSceneAssets && (
+              <button onClick={props.onPsgSceneAssets} className="menu-item">
+                PSG Scene Assets...
+              </button>
+            )}
+            {props.onExpandCrowd && (
+              <button onClick={props.onExpandCrowd} className="menu-item">
+                Hosted Crowd Expansion...
+              </button>
+            )}
             {props.onQuit &&
               (props.onNew ||
                 props.onOpen ||
                 props.onSave ||
                 props.onSaveAs ||
                 showImportItem ||
-                props.onExport) && <div className="menu-separator" />}
+                props.onExport ||
+                props.onExportComfy ||
+                props.onPsgSceneAssets ||
+                props.onExpandCrowd) && <div className="menu-separator" />}
             {props.onQuit && (
               <button onClick={props.onQuit} className="menu-item">
                 Quit

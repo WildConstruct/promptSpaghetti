@@ -1,8 +1,21 @@
 # Epic1GraphEditor Refactoring Summary
 
+Status: historical refactor note, not the active editor contract.
+
+The live product, public exports, and source-of-truth docs currently treat
+`packages/core/components/epic1/Epic1GraphEditor.tsx` as canonical. This file
+documents a refactor effort and extracted hook work, but it should not be read
+as evidence that the refactored editor path became the authoritative product
+surface.
+
+The line counts and progress claims below are historical campaign notes, not
+current-state measurements for the present checkout.
+
 ## Overview
 
-Successfully refactored the monolithic 2596-line Epic1GraphEditor component into a modular architecture with 11 custom hooks and 2 component modules.
+This note records a refactor effort that described the monolithic
+Epic1GraphEditor as having been broken into a modular architecture with multiple
+hooks and component modules.
 
 ## Refactoring Phases
 

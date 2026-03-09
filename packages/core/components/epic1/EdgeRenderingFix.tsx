@@ -20,7 +20,6 @@ export const DefaultEdge: React.FC<EdgeProps> = props => {
       extraClassName
     );
   }
-  
   // Use smoothstep path since that's what the edges are configured to use
   const [edgePath] = getSmoothStepPath({
     sourceX: props.sourceX,
@@ -43,9 +42,7 @@ export const DefaultEdge: React.FC<EdgeProps> = props => {
         fill="none"
         stroke="transparent"
         strokeWidth={30}
-        style={{ 
-          pointerEvents: 'stroke', 
-          cursor: 'pointer',
+        style={{          pointerEvents: 'stroke',          cursor: 'pointer',
           opacity: 0
         }}
       />
@@ -83,13 +80,11 @@ export const checkEdgeRendering = () => {
   const edges = document.querySelector('.react-flow__edges');
   const svg = document.querySelector('.react-flow__edges svg');
   const paths = document.querySelectorAll('.react-flow__edges path');
-  
   debugLogEpic1('Edge Rendering Check:', {
     edgesContainer: !!edges,
     svgElement: !!svg,
     pathElements: paths.length,
     containerHTML: edges?.innerHTML || 'No edges container'
   });
-  
   return { edges, svg, paths };
 };

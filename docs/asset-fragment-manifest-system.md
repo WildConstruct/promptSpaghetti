@@ -4,6 +4,8 @@
 
 The Asset Fragment Manifest System is a separate manifest type specifically for **modular asset fragments** - reusable building blocks that can be combined into larger graphs. This is distinct from the existing preset and graph manifest systems.
 
+For the canonical weekend-MVP PSG source contract for those fragment files, use `docs/psg-weekend-mvp-contract.md`.
+
 ## Manifest Types in Prompt Spaghetti
 
 1. **Presets Manifest** (`presets/manifest.json`)
@@ -20,6 +22,8 @@ The Asset Fragment Manifest System is a separate manifest type specifically for 
    - Modular building blocks
    - File format: `.psg`
    - Location: `/assets/library/`
+
+The manifest indexes fragment files, but it does not define the canonical internal PSG schema for those files.
 
 ## Asset Fragment Structure
 
@@ -39,6 +43,8 @@ assets/
 ```
 
 ### Manifest Schema
+
+Historical note: fields like `type`, `region`, and `collapsible` below are manifest/discovery metadata, not the canonical PSG fragment source contract.
 
 ```json
 {
@@ -70,7 +76,7 @@ assets/
 
 ## Fragment Design Principles
 
-1. **Single Region Grouping**: Each fragment uses one region for collapsibility
+1. **Single Region Grouping**: Prefer a single semantic region when fragment grouping is needed, but do not treat editor box state as canonical PSG source data
 2. **Self-Contained**: Works standalone but designed for combination
 3. **Consistent Metadata**: Rich metadata for discovery and integration
 4. **Color Coding**: Each fragment type has a distinct region color
@@ -90,7 +96,7 @@ When adding new asset fragments:
 1. Place `.psg` files in appropriate category folder under `/assets/library/`
 2. Update `asset-fragments-manifest.json` with fragment metadata
 3. Ensure unique IDs follow pattern: `fragment-[category]-[name]`
-4. Include all required fields (file, id, name, type, nodes, region, collapsible)
+4. Include all required manifest fields (file, id, name, type, nodes, region, collapsible) while keeping the fragment file itself aligned with `docs/psg-weekend-mvp-contract.md`
 
 ## Integration with Asset Browser
 
@@ -98,7 +104,7 @@ The asset browser should:
 
 - Read `asset-fragments-manifest.json` separately from other manifests
 - Display fragments as draggable components
-- Support collapsing to single region when dropped
+- Treat manifest region/collapse hints as browser metadata, not as the canonical PSG file contract
 - Show fragment type badges (SIMPLE, CONTEXTUAL, etc.)
 
 ## Future Enhancements

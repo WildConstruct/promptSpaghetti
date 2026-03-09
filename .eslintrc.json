@@ -33,6 +33,26 @@
   },
   "rules": {
     // TypeScript-specific rules
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "../../services/SimpleLLMService",
+            "message": "Use the shared API-backed client from services/llm instead of SimpleLLMService."
+          },
+          {
+            "name": "../../../services/SimpleLLMService",
+            "message": "Use the shared API-backed client from services/llm instead of SimpleLLMService."
+          },
+          {
+            "name": "@promptscape/core/services/SimpleLLMService",
+            "message": "Use the shared API-backed client from @promptscape/core/services/llm instead of SimpleLLMService."
+          }
+        ],
+        "patterns": ["**/SimpleLLMService", "**/SimpleLLMService.ts"]
+      }
+    ],
     "@typescript-eslint/no-unused-vars": [
       "warn",
       { "argsIgnorePattern": "^_" }

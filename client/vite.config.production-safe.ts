@@ -62,22 +62,8 @@ export default defineConfig({
       ),
       '@promptscape/core/services/llm': path.resolve(
         __dirname,
-        './src/shims/llm-service.ts'
-      ),
-      '@promptscape/core/services/llm/LLMService': path.resolve(
-        __dirname,
-        './src/shims/llm-service.ts'
-      ),
-      '@promptscape/core/services/SimpleLLMService': path.resolve(
-        __dirname,
-        './src/shims/llm-service.ts'
-      ),
-      [path.resolve(__dirname, '../packages/core/services/llm/LLMService.ts')]:
-        path.resolve(__dirname, './src/shims/llm-service.ts'),
-      [path.resolve(
-        __dirname,
-        '../packages/core/services/SimpleLLMService.ts'
-      )]: path.resolve(__dirname, './src/shims/llm-service.ts')
+        '../packages/core/services/llm/index.ts'
+      )
     }
   },
   optimizeDeps: {

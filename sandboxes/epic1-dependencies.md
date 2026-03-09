@@ -1,5 +1,10 @@
 # Epic1GraphEditor Dependencies
 
+Historical note: this sandbox inventory was written for a recovery/refactor
+campaign. It is not a source-of-truth statement about which Epic 1 editor is
+canonical today. The live product still uses
+`packages/core/components/epic1/Epic1GraphEditor.tsx`.
+
 ## Direct Imports from Epic1GraphEditor.tsx:
 
 ### External Libraries

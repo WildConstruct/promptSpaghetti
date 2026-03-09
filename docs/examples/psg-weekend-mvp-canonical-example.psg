@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Weekend MVP Canonical Example",
+  "description": "Minimal reusable PSG fragment showing the preferred weekend-MVP source contract.",
+  "metadata": {
+    "type": "ASSET_FRAGMENT",
+    "author": "Prompt Spaghetti",
+    "tags": ["example", "canonical", "weekend-mvp"],
+    "source": "docs/examples/psg-weekend-mvp-canonical-example.psg"
+  },
+  "nodes": [
+    {
+      "id": "subject",
+      "type": "WeightedChoice",
+      "name": "Subject",
+      "x": 120,
+      "y": 120,
+      "options": [
+        {
+          "text": "weathered traveler",
+          "weight": 3,
+          "meta": {
+            "tone": "gritty"
+          }
+        },
+        {
+          "text": "young archivist",
+          "weight": 2,
+          "meta": {
+            "tone": "scholarly"
+          }
+        },
+        {
+          "text": "street magician",
+          "weight": 2,
+          "meta": {
+            "tone": "theatrical"
+          }
+        }
+      ]
+    },
+    {
+      "id": "detail",
+      "type": "TextBlock",
+      "name": "Detail",
+      "x": 360,
+      "y": 120,
+      "value": "with a careful, observant expression"
+    },
+    {
+      "id": "join",
+      "type": "Concat",
+      "name": "Join",
+      "x": 620,
+      "y": 120,
+      "value": ", "
+    },
+    {
+      "id": "result",
+      "type": "Output",
+      "name": "Result",
+      "x": 880,
+      "y": 120,
+      "template": "{{input}}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-subject-join",
+      "source": "subject",
+      "target": "join",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "edge-detail-join",
+      "source": "detail",
+      "target": "join",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "edge-join-result",
+      "source": "join",
+      "target": "result"
+    }
+  ],
+  "regions": [
+    {
+      "id": "region-primary",
+      "name": "Primary",
+      "color": "#22d3ee",
+      "nodes": ["subject", "detail", "join", "result"],
+      "description": "Minimal semantic fragment grouping for the canonical example"
+    }
+  ]
+}

@@ -2,7 +2,11 @@
 
 ## Overview
 
-The PSG (Prompt Spaghetti Graph) file format is a JSON-based format for storing prompt generation graphs with full support for inline editing. Version 2.0 introduces comprehensive edit state tracking, enhanced node data structures, and improved metadata for Epic 1 requirements.
+This document describes a historical editor-project PSG shape centered on inline editing and project state.
+
+For the current MVP source contract for reusable PSG fragments, use `docs/psg-weekend-mvp-contract.md` as the canonical reference.
+
+The live runtime parser in `packages/core/fileFormats/psg.ts` does not currently treat this v2 document as the canonical fragment source schema.
 
 ## File Extension
 
@@ -11,6 +15,8 @@ The PSG (Prompt Spaghetti Graph) file format is a JSON-based format for storing 
 - **Format**: JSON
 
 ## Top-Level Structure
+
+The top-level structure below is historical/non-canonical for the weekend MVP fragment source format.
 
 ```json
 {
@@ -225,13 +231,17 @@ Variable storage and reference node:
 
 Connections between nodes:
 
+For the current runtime/import contract, do not treat `output` / `input` as the canonical default handle ids.
+
+The live normalized handle contract is described in `docs/psg-weekend-mvp-contract.md` and currently uses `source` / `target` as the generic defaults, with `input1` / `input2` for `Concat` targets and `branch-N` for weighted branches.
+
 ```json
 {
   "id": "edge-id",
   "source": "source-node-id",
   "target": "target-node-id",
-  "sourceHandle": "output", // Optional
-  "targetHandle": "input", // Optional
+  "sourceHandle": "source", // Optional
+  "targetHandle": "target", // Optional
   "type": "default",
   "animated": false,
   "style": {

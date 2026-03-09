@@ -1,5 +1,9 @@
 # Epic1 Fixes Test Checklist
 
+Historical note: this checklist documents a past Epic 1 fix pass. It should not
+be read as architecture guidance or evidence that any alternate refactor became
+the canonical editor implementation.
+
 ## Fixed Issues:
 
 ### 1. ✅ Green Output Dot Visibility

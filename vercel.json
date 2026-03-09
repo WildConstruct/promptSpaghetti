@@ -9,6 +9,14 @@
   },
   "rewrites": [
     {
+      "source": "/api/admin/:path*",
+      "destination": "/api/admin-debug"
+    },
+    {
+      "source": "/api/check-config",
+      "destination": "/api/admin-debug"
+    },
+    {
       "source": "/api/admin/fonts/:id",
       "destination": "/api/admin/fonts/[id]"
     }

@@ -20,7 +20,10 @@
     "paths": {
       "@/*": ["./src/*"],
       "@promptscape/core": ["../packages/core"],
-      "@promptscape/core/*": ["../packages/core/*"]
+      "@promptscape/core/*": ["../packages/core/*"],
+      "@promptscape/core/services/llm": [
+        "../packages/core/services/llm/index.ts"
+      ]
     }
   },
   "include": ["src"],

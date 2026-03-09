@@ -3,7 +3,18 @@ module.exports = {
   roots: ['<rootDir>/src', '<rootDir>/__tests__'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   transform: {
-    '^.+\\.ts$': 'ts-jest'
+    '^.+\\.ts$': [
+      'ts-jest',
+      {
+        diagnostics: false,
+        tsconfig: {
+          module: 'commonjs',
+          target: 'ES2020',
+          isolatedModules: true,
+          esModuleInterop: true
+        }
+      }
+    ]
   },
   collectCoverageFrom: [
     'src/**/*.ts',
@@ -17,5 +28,6 @@ module.exports = {
       lines: 60,
       statements: 60
     }
-  }
+  },
+  watchman: false
 };

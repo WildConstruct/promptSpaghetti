@@ -1,5 +1,8 @@
 # Deployment Guide
 
+> Historical note: this document describes the older Vercel-unified deployment model.
+> For the current MVP branch reality, use [deployment-current-state.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/deployment-current-state.md).
+
 This document outlines the deployment process for the PromptScape Randomizer Graph application.
 
 ## Overview

@@ -5,6 +5,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTutorial } from './TutorialContext';
 import { PromptPasteDialog } from './PromptPasteDialog';
+import {
+  getSpotlightClipPath,
+  getSpotlightRect,
+  getTutorialTooltipPosition,
+  resolveTutorialTarget
+} from './tutorialLayout';
 import './TutorialOverlay.css';
 
 export const TutorialOverlay: React.FC = () => {
@@ -22,6 +28,7 @@ export const TutorialOverlay: React.FC = () => {
   const [showPasteDialog, setShowPasteDialog] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const skipHintTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [, setLayoutTick] = useState(0);
 
   const step = tutorialSteps[currentStep];
 
@@ -53,16 +60,7 @@ export const TutorialOverlay: React.FC = () => {
     if (!isActive) {return;}
 
     const findTarget = () => {
-      if (step.target) {
-        const element = document.querySelector(step.target) as HTMLElement;
-        if (element) {
-          setTargetElement(element);
-        } else {
-          setTargetElement(null);
-        }
-      } else {
-        setTargetElement(null);
-      }
+      setTargetElement(resolveTutorialTarget(step));
     };
 
     // Try to find immediately
@@ -83,8 +81,7 @@ export const TutorialOverlay: React.FC = () => {
     if (!isActive) {return;}
 
     const checkWizardState = () => {
-      // This will trigger a re-render and position recalculation
-      setTargetElement(prev => prev);
+      setLayoutTick(prev => prev + 1);
     };
 
     // Check for wizard modal changes
@@ -109,6 +106,22 @@ export const TutorialOverlay: React.FC = () => {
     });
 
     return () => observer.disconnect();
+  }, [isActive]);
+
+  useEffect(() => {
+    if (!isActive) {return;}
+
+    const refreshLayout = () => {
+      setLayoutTick(prev => prev + 1);
+    };
+
+    window.addEventListener('resize', refreshLayout);
+    window.addEventListener('scroll', refreshLayout, true);
+
+    return () => {
+      window.removeEventListener('resize', refreshLayout);
+      window.removeEventListener('scroll', refreshLayout, true);
+    };
   }, [isActive]);
 
   // Handle keyboard shortcuts
@@ -182,122 +195,36 @@ export const TutorialOverlay: React.FC = () => {
     );
   }
 
-  const getSpotlightClipPath = () => {
-    if (!step.spotlight || !targetElement) {return '';}
-
-    const rect = targetElement.getBoundingClientRect();
-    const padding = 10;
-
-    // Always create a proper clip-path to cut out the target area
-    return `polygon(
-      0 0,
-      0 100%,
-      ${rect.left - padding}px 100%,
-      ${rect.left - padding}px ${rect.top - padding}px,
-      ${rect.right + padding}px ${rect.top - padding}px,
-      ${rect.right + padding}px ${rect.bottom + padding}px,
-      ${rect.left - padding}px ${rect.bottom + padding}px,
-      ${rect.left - padding}px 100%,
-      100% 100%,
-      100% 0
-    )`;
-  };
-
-  const isWizardStep = step.target === '.prompt-wizard-button';
+  const spotlightRect = step.spotlight ? getSpotlightRect(targetElement) : null;
+  const isWizardStep = step.anchorId === 'wizard-button' || step.target === '.prompt-wizard-button';
   // Only allow clicking through backdrop when we have a specific target with spotlight
   // For 'empty-canvas' or steps without spotlight, keep backdrop clickable
   const shouldAllowClick = step.action === 'click' && step.spotlight === true;
 
   const getTooltipPosition = () => {
-    const tooltipWidth = 400;
-    const tooltipHeight = 250; // Increased to account for content
-    const margin = 20;
-
-    let top = 0;
-    let left = 0;
-
-    // Check if wizard modal is currently open
     const wizardModal = document.querySelector('.prompt-wizard-modal');
     const isWizardOpen = wizardModal !== null;
-
-    // For steps that show the canvas after wizard closes
-    if (step.id === 'see-nodes' || step.id === 'empty-canvas') {
-      // Always position at top-right corner for canvas-related steps
-      top = margin;
-      left = window.innerWidth - tooltipWidth - margin;
-      return { top: `${top}px`, left: `${left}px` };
-    }
-
-    // Special handling for wizard-related steps
-    if (step.id === 'open-wizard' || step.id === 'enter-prompt') {
-      if (isWizardOpen) {
-        // Wizard is open - position at top center to avoid modal
-        top = margin;
-        left = window.innerWidth / 2 - tooltipWidth / 2;
-      } else {
-        // Wizard not open yet - position based on target if available
-        if (targetElement) {
-          const rect = targetElement.getBoundingClientRect();
-          // Position below the wizard button
-          top = rect.bottom + margin;
-          left = rect.left + rect.width / 2 - tooltipWidth / 2;
-          // Keep on screen
-          left = Math.max(margin, Math.min(window.innerWidth - tooltipWidth - margin, left));
-        } else {
-          // Fallback position
-          top = margin;
-          left = window.innerWidth - tooltipWidth - margin;
-        }
-      }
-      return { top: `${top}px`, left: `${left}px` };
-    }
-
-    // For non-wizard steps with target elements
-    if (targetElement) {
-      const rect = targetElement.getBoundingClientRect();
-      
-      switch (step.position) {
-        case 'top':
-          top = rect.top - tooltipHeight - margin;
-          left = rect.left + rect.width / 2 - tooltipWidth / 2;
-          break;
-        case 'right':
-          top = rect.top + rect.height / 2 - tooltipHeight / 2;
-          left = rect.right + margin;
-          break;
-        case 'bottom':
-          top = rect.bottom + margin;
-          left = rect.left + rect.width / 2 - tooltipWidth / 2;
-          break;
-        case 'left':
-          top = rect.top + rect.height / 2 - tooltipHeight / 2;
-          left = rect.left - tooltipWidth - margin;
-          break;
-        default:
-          // Default to top-right
-          top = margin;
-          left = window.innerWidth - tooltipWidth - margin;
-      }
-    } else {
-      // No target element - default position
-      top = margin;
-      left = window.innerWidth - tooltipWidth - margin;
-    }
-
-    // Keep tooltip on screen
-    top = Math.max(margin, Math.min(window.innerHeight - tooltipHeight - margin, top));
-    left = Math.max(margin, Math.min(window.innerWidth - tooltipWidth - margin, left));
-
-    return { top: `${top}px`, left: `${left}px` };
+    return getTutorialTooltipPosition(
+      step,
+      targetElement,
+      { width: window.innerWidth, height: window.innerHeight },
+      { wizardOpen: isWizardOpen }
+    );
   };
 
   return (
-    <div ref={overlayRef} className="tutorial-overlay">
+    <div
+      ref={overlayRef}
+      className="tutorial-overlay"
+      data-testid="tutorial-overlay"
+      data-tutorial-step={step.id}
+    >
       {/* Dark overlay with spotlight */}
       <div
         className={`tutorial-backdrop ${isWizardStep ? 'light-overlay' : ''} ${shouldAllowClick ? 'allow-clicks' : ''}`}
+        data-testid="tutorial-backdrop"
         style={{ 
-          clipPath: step.spotlight ? getSpotlightClipPath() : 'none'
+          clipPath: step.spotlight ? getSpotlightClipPath(spotlightRect) : 'none'
         }}
         onClick={(e) => {
           // Allow clicking to continue for observe steps or specific click steps
@@ -311,6 +238,7 @@ export const TutorialOverlay: React.FC = () => {
       {/* Tooltip */}
       <div
         className="tutorial-tooltip"
+        data-testid="tutorial-tooltip"
         style={getTooltipPosition()}
       >
         {/* Progress */}
@@ -399,15 +327,13 @@ export const TutorialOverlay: React.FC = () => {
       {targetElement && step.spotlight && (
         <div
           className="tutorial-target-highlight"
-          style={(() => {
-            const rect = targetElement.getBoundingClientRect();
-            return {
-              top: `${rect.top - 5}px`,
-              left: `${rect.left - 5}px`,
-              width: `${rect.width + 10}px`,
-              height: `${rect.height + 10}px`
-            };
-          })()}
+          data-testid="tutorial-highlight"
+          style={{
+            top: `${(spotlightRect?.top ?? 0) + 5}px`,
+            left: `${(spotlightRect?.left ?? 0) + 5}px`,
+            width: `${Math.max(0, (spotlightRect?.width ?? 0) - 10)}px`,
+            height: `${Math.max(0, (spotlightRect?.height ?? 0) - 10)}px`
+          }}
         />
       )}
     </div>

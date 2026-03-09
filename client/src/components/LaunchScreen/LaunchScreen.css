@@ -250,6 +250,17 @@
 
 .launch-inline-actions {
   margin-left: auto; /* push to right side */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.launch-inline-instruction {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  max-width: 360px;
+  text-align: right;
 }
 
 .launch-inline-actions-row {

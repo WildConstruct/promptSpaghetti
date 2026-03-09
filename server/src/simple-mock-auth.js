@@ -4,6 +4,9 @@
 
 const http = require('http');
 const url = require('url');
+const { assertMockRuntimeAllowed } = require('./utils/mockRuntimeGuard.js');
+
+assertMockRuntimeAllowed('simple-mock-auth');
 
 // Mock user data
 const users = [

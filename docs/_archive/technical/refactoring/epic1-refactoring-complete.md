@@ -1,8 +1,26 @@
-# Epic1GraphEditor Refactoring Complete ✅
+# Epic1GraphEditor Refactoring Complete 
 
-## Mission Accomplished 🎉
+Status: historical milestone note, not the active editor contract.
 
-Successfully transformed a 2596-line monolithic "God Component" into a clean, modular architecture with **79% code reduction**.
+Despite the title, the repo's live product path and exports still treat
+`packages/core/components/epic1/Epic1GraphEditor.tsx` as the canonical editor.
+Read this as a record of a refactor campaign, not as source-of-truth guidance
+for current product behavior.
+
+Do not switch product imports or package exports based on this document alone.
+`Epic1GraphEditorRefactored.tsx` remains a non-canonical artifact unless the
+source-of-truth docs and public exports are updated together after parity is
+proven.
+
+The completion and file-size claims below are historical snapshot claims from
+that campaign. They should not be treated as measurements of the current
+checkout.
+
+## Historical Milestone Snapshot
+
+This document recorded a refactor campaign that claimed a transformation from a
+2596-line monolith into a much smaller modular architecture. That claim is
+preserved here as historical context only.
 
 ## Final Statistics
 

@@ -10,13 +10,15 @@ describe('ApiLLMService NodeIntelligenceService', () => {
 
   beforeEach(() => {
     llm = {
+      getStatus: jest.fn(),
       complete: jest.fn(),
       suggest: jest.fn(),
       metadata: jest.fn(),
       refine: jest.fn(),
       analyze: jest.fn(),
       populateChoices: jest.fn(),
-      optimizeChoices: jest.fn()
+      optimizeChoices: jest.fn(),
+      draftGraphFromPrompt: jest.fn()
     } as any;
 
     service = new NodeIntelligenceService(llm);
@@ -115,12 +117,105 @@ describe('ApiLLMService request contracts', () => {
     await service.complete('hello');
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const [, init] = fetchMock.mock.calls[0];
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('/api/llm/complete');
     expect(JSON.parse(String(init?.body))).toEqual({
       prompt: 'hello',
       model: 'safe-model',
       temperature: 0.4,
       maxTokens: 128
+    });
+  });
+
+  it('preserves the legacy request-object completion call shape', async () => {
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ content: 'ok', model: 'stub' })
+    });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    const service = new LLMService({
+      model: 'safe-model',
+      temperature: 0.4,
+      maxTokens: 128
+    });
+
+    await service.complete({
+      prompt: 'legacy request',
+      responseFormat: 'json',
+      taskType: 'suggestion'
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('/api/llm/complete');
+    expect(JSON.parse(String(init?.body))).toEqual({
+      prompt: 'legacy request',
+      responseFormat: 'json',
+      taskType: 'suggestion',
+      model: 'safe-model',
+      temperature: 0.4,
+      maxTokens: 128
+    });
+  });
+
+  it('reads status from the canonical server endpoint', async () => {
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        available: true,
+        mode: 'live',
+        provider: 'openrouter',
+        defaultModel: 'openai/gpt-4o-mini',
+        capabilities: ['getStatus', 'draftGraphFromPrompt', 'complete']
+      })
+    });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    const service = new LLMService();
+    const result = await service.getStatus();
+
+    expect(fetchMock).toHaveBeenCalledWith('/api/llm/status', {
+      headers: {}
+    });
+    expect(result).toEqual({
+      available: true,
+      mode: 'live',
+      provider: 'openrouter',
+      defaultModel: 'openai/gpt-4o-mini',
+      capabilities: ['getStatus', 'draftGraphFromPrompt', 'complete']
+    });
+  });
+
+  it('sends graph drafting requests through the shared client contract', async () => {
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        ok: true,
+        summary: 'Draft created',
+        operations: [],
+        notes: [],
+        fallback: false
+      })
+    });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    const service = new LLMService({
+      model: 'safe-model',
+      temperature: 0.4,
+      maxTokens: 128
+    });
+    await service.draftGraphFromPrompt({
+      prompt: 'Build a branching graph from this scene.',
+      mode: 'draft'
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('/api/agent/draft-graph');
+    expect(JSON.parse(String(init?.body))).toEqual({
+      prompt: 'Build a branching graph from this scene.',
+      mode: 'draft'
     });
   });
 

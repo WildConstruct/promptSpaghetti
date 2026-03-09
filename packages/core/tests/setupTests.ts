@@ -4,9 +4,6 @@ import {
   TextEncoder as NodeTextEncoder
 } from 'util';
 
-// Add OpenAI Node.js shim for tests
-import 'openai/shims/node';
-
 // Mock performance API for tests
 Object.defineProperty(global, 'performance', {
   value: {
@@ -164,6 +161,7 @@ const SUPPRESSED_LOG_PATTERNS: RegExp[] = [
   /Dedicated extractMetadata call failed:/i,
   /LLM completion metadata extraction failed:/i,
   /LLM extraction failed, using fallback:/i,
+  /\[ApiLLMService\] populateChoices failed, falling back to offline suggestions:/i,
   /Metadata extraction failed:/i,
   /Failed to decompress data/i,
   /Storage quota exceeded/i,

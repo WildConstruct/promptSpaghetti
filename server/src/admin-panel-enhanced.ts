@@ -6,6 +6,10 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import * as fs from 'fs';
 import * as path from 'path';
+import {
+  getConfiguredAdminPassword,
+  requireAdminAuth
+} from './utils/adminAuth';
 
 interface Message {
   type: 'success' | 'error' | 'info';
@@ -605,32 +609,15 @@ function savePrompts(prompts: PromptTemplate[]) {
  * Register enhanced admin routes
  */
 export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
-  // Basic auth check middleware
+  if (!getConfiguredAdminPassword()) {
+    server.log.warn(
+      'Admin panel not mounted because ADMIN_PASSWORD is missing or invalid'
+    );
+    return;
+  }
+
   const checkAdminAuth = (request: FastifyRequest, reply: FastifyReply) => {
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-    const authHeader = request.headers.authorization;
-
-    if (!authHeader) {
-      reply.header('WWW-Authenticate', 'Basic realm="Admin Panel"');
-      reply.status(401).send('Authentication required');
-      return false;
-    }
-
-    const [type, credentials] = authHeader.split(' ');
-    if (type !== 'Basic') {
-      reply.status(401).send('Invalid authentication type');
-      return false;
-    }
-
-    const [username, password] = Buffer.from(credentials, 'base64')
-      .toString()
-      .split(':');
-    if (username !== 'admin' || password !== adminPassword) {
-      reply.status(401).send('Invalid credentials');
-      return false;
-    }
-
-    return true;
+    return requireAdminAuth(request, reply);
   };
 
   // Enhanced admin panel HTML page
@@ -860,6 +847,12 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
   server.post('/admin/config', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) {return;}
 
+    return reply
+      .status(403)
+      .send(
+        'Runtime configuration mutation is disabled. Use operator-managed environment configuration.'
+      );
+
     const body = request.body as UpdateEnvRequest;
     const envPath = path.join(__dirname, '../.env');
 
@@ -989,6 +982,12 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
   server.post('/admin/delete-key', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) {return;}
 
+    return reply
+      .status(403)
+      .send(
+        'Runtime secret deletion is disabled. Use operator-managed environment configuration.'
+      );
+
     const { key_name, confirmation } = (request.body as DeleteEnvRequest) || {};
     const allowed = new Set([
       'SUPABASE_ANON_KEY',
@@ -1105,6 +1104,12 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
   // Handle model configuration
   server.post('/admin/models', async (request, reply) => {
     if (!checkAdminAuth(request, reply)) {return;}
+
+    return reply
+      .status(403)
+      .send(
+        'Runtime model configuration mutation is disabled. Use operator-managed environment configuration.'
+      );
 
     const body = request.body as ModelConfigRequest;
     const envPath = path.join(__dirname, '../.env');

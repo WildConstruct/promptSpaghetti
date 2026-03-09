@@ -1,9 +1,18 @@
 import { FastifyInstance, RouteHandlerMethod } from 'fastify';
 import { z, type ZodTypeAny } from 'zod';
+import { LLMService, type LLMRuntimeStatus } from '../services/LLMService';
+import { requireRouteAccess } from '../utils/routeAccess';
+import { rateLimiter } from '../utils/rateLimit';
+import {
+  LLM_CAPABILITIES,
+  type LLMStatusContract
+} from '../../../packages/core/services/llm/contracts';
 
 const MAX_PROMPT_LENGTH = 12000;
 const MAX_CONTEXT_LENGTH = 8000;
 const MAX_TEXT_LENGTH = 12000;
+
+type LLMStatusRouteResponse = LLMRuntimeStatus & LLMStatusContract;
 
 const AllowedLLMConfigSchema = z
   .object({
@@ -312,17 +321,43 @@ function parseEndpointRequest<TSchema extends ZodTypeAny>(
 async function registerAliases(
   app: FastifyInstance,
   paths: string[],
+  options: Record<string, unknown>,
   handler: RouteHandlerMethod
 ) {
   for (const path of paths) {
-    app.post(path, handler);
+    app.post(path, options, handler);
   }
 }
 
 export async function llmRoutes(app: FastifyInstance) {
+  const llm = new LLMService();
+  const protectedLlmRouteOptions = {
+    preHandler: [
+      requireRouteAccess({
+        access: 'authenticated-user',
+        capability: 'cloud-llm',
+        quotaBucket: 'cloud-llm'
+      }),
+      rateLimiter({
+        key: 'llm:route',
+        limitPerMinute: Number(process.env.LLM_RATE_LIMIT_PER_MINUTE || 60)
+      })
+    ]
+  };
+
+  app.get('/api/llm/status', async () => {
+    const response: LLMStatusRouteResponse = {
+      ...llm.getStatus(),
+      capabilities: [...LLM_CAPABILITIES]
+    };
+
+    return response;
+  });
+
   await registerAliases(
     app,
     ['/api/llm/complete', '/api/llm-complete'],
+    protectedLlmRouteOptions,
     async (req, reply) => {
       const parsed = parseEndpointRequest(req.body, CompleteRequestSchema);
       if (!parsed) {
@@ -344,6 +379,7 @@ export async function llmRoutes(app: FastifyInstance) {
   await registerAliases(
     app,
     ['/api/ai/parse', '/api/llm/parse', '/api/ai-parse', '/api/llm-parse'],
+    protectedLlmRouteOptions,
     async (req, reply) => {
       const parsed = parseEndpointRequest(req.body, ParseRequestSchema);
       if (!parsed) {
@@ -360,6 +396,7 @@ export async function llmRoutes(app: FastifyInstance) {
   await registerAliases(
     app,
     ['/api/llm/suggest', '/api/llm-suggest'],
+    protectedLlmRouteOptions,
     async (req, reply) => {
       const parsed = parseEndpointRequest(req.body, SuggestRequestSchema);
       if (!parsed) {
@@ -376,6 +413,7 @@ export async function llmRoutes(app: FastifyInstance) {
   await registerAliases(
     app,
     ['/api/llm/metadata', '/api/llm-metadata'],
+    protectedLlmRouteOptions,
     async (req, reply) => {
       const parsed = parseEndpointRequest(req.body, MetadataRequestSchema);
       if (!parsed) {
@@ -403,6 +441,7 @@ export async function llmRoutes(app: FastifyInstance) {
   await registerAliases(
     app,
     ['/api/llm/refine', '/api/llm-refine'],
+    protectedLlmRouteOptions,
     async (req, reply) => {
       const parsed = parseEndpointRequest(req.body, RefineRequestSchema);
       if (!parsed) {
@@ -419,6 +458,7 @@ export async function llmRoutes(app: FastifyInstance) {
   await registerAliases(
     app,
     ['/api/llm/analyze', '/api/llm-analyze'],
+    protectedLlmRouteOptions,
     async (req, reply) => {
       const parsed = parseEndpointRequest(req.body, AnalyzeRequestSchema);
       if (!parsed) {
@@ -443,6 +483,7 @@ export async function llmRoutes(app: FastifyInstance) {
   await registerAliases(
     app,
     ['/api/llm/optimize', '/api/llm-optimize'],
+    protectedLlmRouteOptions,
     async (req, reply) => {
       const parsed = parseEndpointRequest(req.body, OptimizeRequestSchema);
       if (!parsed) {
@@ -465,6 +506,7 @@ export async function llmRoutes(app: FastifyInstance) {
   await registerAliases(
     app,
     ['/api/llm/populate', '/api/llm-populate'],
+    protectedLlmRouteOptions,
     async (req, reply) => {
       const parsed = parseEndpointRequest(req.body, PopulateRequestSchema);
       if (!parsed) {

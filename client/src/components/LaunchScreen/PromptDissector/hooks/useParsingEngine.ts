@@ -6,7 +6,7 @@ import {
   type AnalysisEdge
 } from '../../../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../../../lib/analysisReconciler';
-import LLMService from '../../../../shims/llm-service';
+import { ApiLLMClient } from '@promptscape/core/services/llm';
 
 export type ParseMode = 'standard' | 'llm-enhanced';
 
@@ -162,7 +162,7 @@ export const useParsingEngine = () => {
     'llm-enhanced': ParseResult | null;
   }>({ standard: null, 'llm-enhanced': null });
 
-  const llmServiceRef = useRef(new LLMService({}));
+  const llmServiceRef = useRef(new ApiLLMClient({}));
   const parserRef = useRef<typeof simplePromptParser>(simplePromptParser);
   const debounceTimerRef = useRef<NodeJS.Timeout>();
 
@@ -212,7 +212,8 @@ export const useParsingEngine = () => {
               setIsLLMParsing(true);
               try {
                 const llmParserResult =
-                  (await llmServiceRef.current.draftGraphFromPrompt(text, {
+                  (await llmServiceRef.current.draftGraphFromPrompt({
+                    prompt: text,
                     mode: 'draft'
                   })) as DraftGraphResponse;
 
