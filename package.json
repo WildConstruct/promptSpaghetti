@@ -5,13 +5,13 @@
   "description": "A powerful visual graph editor for creating dynamic, randomized text generation workflows",
   "author": "WildConstruct",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/WildConstruct/prompt_spaghetti_the_revenge",
+  "homepage": "https://github.com/WildConstruct/promptSpaghetti",
   "repository": {
     "type": "git",
-    "url": "https://github.com/WildConstruct/prompt_spaghetti_the_revenge.git"
+    "url": "https://github.com/WildConstruct/promptSpaghetti.git"
   },
   "bugs": {
-    "url": "https://github.com/WildConstruct/prompt_spaghetti_the_revenge/issues"
+    "url": "https://github.com/WildConstruct/promptSpaghetti/issues"
   },
   "keywords": [
     "prompt-engineering",

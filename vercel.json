@@ -1,5 +1,5 @@
 {
-  "buildCommand": "mkdir -p public && echo '<!DOCTYPE html><html><body><h1>API Server</h1><p>Visit <a href=\"/api/admin-enhanced\">/api/admin-enhanced</a> for admin panel</p></body></html>' > public/index.html",
+  "buildCommand": "mkdir -p public && echo '<!DOCTYPE html><html><body><h1>Prompt Spaghetti API Surface</h1><p>This Vercel project only serves the legacy api/ fallback surface. Canonical server runtime remains the standalone server build.</p></body></html>' > public/index.html",
   "installCommand": "echo 'Skipping install for API-only deployment'",
   "outputDirectory": "public",
   "functions": {
@@ -8,14 +8,6 @@
     }
   },
   "rewrites": [
-    {
-      "source": "/api/admin/:path*",
-      "destination": "/api/admin-debug"
-    },
-    {
-      "source": "/api/check-config",
-      "destination": "/api/admin-debug"
-    },
     {
       "source": "/api/admin/fonts/:id",
       "destination": "/api/admin/fonts/[id]"
