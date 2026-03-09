@@ -6,6 +6,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Node, useReactFlow } from 'reactflow';
 import type { Preset } from './types';
+import { findFragmentDropTarget } from '../services/FragmentDropTargeting';
+import type { AgentFragmentRecord } from '@prompt/asset-browser';
 
 export interface NodeReplacementHandlerProps {
   children: React.ReactNode;
@@ -16,8 +18,15 @@ export const NodeReplacementHandler: React.FC<NodeReplacementHandlerProps> = ({
   children, 
   onNodeReplace 
 }) => {
-  const { getNodes, setNodes } = useReactFlow();
+  const { getNodes, getEdges, setNodes, screenToFlowPosition } = useReactFlow();
   const [draggedOverNode, setDraggedOverNode] = useState<string | null>(null);
+
+  const clearHoverState = useCallback(() => {
+    document.querySelectorAll('.drop-hover, .node-replaceable').forEach(el => {
+      el.classList.remove('drop-hover', 'node-replaceable');
+    });
+    setDraggedOverNode(null);
+  }, []);
 
   // Handle drag over event
   const handleDragOver = useCallback((e: DragEvent) => {
@@ -26,25 +35,54 @@ export const NodeReplacementHandler: React.FC<NodeReplacementHandlerProps> = ({
       return;
     }
     e.dataTransfer.dropEffect = 'copy';
-    
-    // Find if we're over a node
-    const target = e.target as HTMLElement;
-    const nodeElement = target.closest('.react-flow__node');
-    
-    if (nodeElement) {
-      const nodeId = nodeElement.getAttribute('data-id');
-      if (nodeId && nodeId !== draggedOverNode) {
-        setDraggedOverNode(nodeId);
+
+    const presetData = e.dataTransfer.getData('application/x-preset');
+    if (!presetData) {
+      if (draggedOverNode) {
+        clearHoverState();
+      }
+      return;
+    }
+
+    try {
+      const preset = JSON.parse(presetData) as Preset;
+      const dropTarget = findFragmentDropTarget({
+        pointer: screenToFlowPosition({
+          x: e.clientX,
+          y: e.clientY
+        }),
+        fragment: presetToAgentFragmentRecord(preset),
+        nodes: getNodes(),
+        edges: getEdges()
+      });
+
+      if (dropTarget.kind !== 'replace-node') {
+        if (draggedOverNode) {
+          clearHoverState();
+        }
+        return;
+      }
+
+      if (dropTarget.nodeId === draggedOverNode) {
+        return;
+      }
+
+      clearHoverState();
+
+      const nodeElement = document.querySelector(
+        `.react-flow__node[data-id="${dropTarget.nodeId}"]`
+      );
+
+      if (nodeElement instanceof HTMLElement) {
+        setDraggedOverNode(dropTarget.nodeId);
         nodeElement.classList.add('node-replaceable', 'drop-hover');
       }
-    } else if (draggedOverNode) {
-      // Clear hover state if not over a node
-      document.querySelectorAll('.drop-hover').forEach(el => {
-        el.classList.remove('drop-hover');
-      });
-      setDraggedOverNode(null);
+    } catch {
+      if (draggedOverNode) {
+        clearHoverState();
+      }
     }
-  }, [draggedOverNode]);
+  }, [clearHoverState, draggedOverNode, getEdges, getNodes, screenToFlowPosition]);
 
   // Handle drag leave event
   const handleDragLeave = useCallback((e: DragEvent) => {
@@ -59,12 +97,7 @@ export const NodeReplacementHandler: React.FC<NodeReplacementHandlerProps> = ({
   // Handle drop event
   const handleDrop = useCallback((e: DragEvent) => {
     e.preventDefault();
-    
-    // Clear all hover states
-    document.querySelectorAll('.drop-hover').forEach(el => {
-      el.classList.remove('drop-hover');
-    });
-    
+
     try {
       if (!e.dataTransfer) {
         return;
@@ -72,55 +105,67 @@ export const NodeReplacementHandler: React.FC<NodeReplacementHandlerProps> = ({
       const presetData = e.dataTransfer.getData('application/x-preset');
       if (!presetData) {return;}
 
-          const preset = JSON.parse(presetData) as Preset;
-      const target = e.target as HTMLElement;
-      const nodeElement = target.closest('.react-flow__node');
+      const preset = JSON.parse(presetData) as Preset;
+      const dropTarget = findFragmentDropTarget({
+        pointer: screenToFlowPosition({
+          x: e.clientX,
+          y: e.clientY
+        }),
+        fragment: presetToAgentFragmentRecord(preset),
+        nodes: getNodes(),
+        edges: getEdges()
+      });
+
+      if (dropTarget.kind !== 'replace-node') {
+        return;
+      }
+
+      const nodeId = dropTarget.nodeId;
+      const nodes = getNodes();
+      const nodeToReplace = nodes.find(n => n.id === nodeId);
       
-      if (nodeElement) {
-        const nodeId = nodeElement.getAttribute('data-id');
-        if (nodeId) {
-          // Get the current node
-          const nodes = getNodes();
-          const nodeToReplace = nodes.find(n => n.id === nodeId);
-          
-          if (nodeToReplace) {
-            // Create new node with same position and connections
-            const newNode: Node = {
-              ...nodeToReplace,
-              type: mapPresetTypeToNodeType(preset.type),
-              data: {
-                ...nodeToReplace.data,
-                label: preset.name,
-                preset: preset,
-                // Preserve any existing connections data
-                ...extractPresetData(preset)
-              }
-            };
-            
-            // Update nodes
-            setNodes(nodes => nodes.map(n => n.id === nodeId ? newNode : n));
-            
-            // Visual feedback
-            nodeElement.classList.add('node-replacement-success');
-            setTimeout(() => {
-              nodeElement.classList.remove('node-replacement-success', 'node-replaceable');
-            }, 600);
-            
-            // Notify parent
-            if (onNodeReplace) {
-              onNodeReplace(nodeId, preset);
-            }
-            
-            console.log(`Replaced node ${nodeId} with preset ${preset.name}`);
+      if (nodeToReplace) {
+        const newNode: Node = {
+          ...nodeToReplace,
+          type: mapPresetTypeToNodeType(preset.type),
+          data: {
+            ...nodeToReplace.data,
+            label: preset.name,
+            preset: preset,
+            ...extractPresetData(preset)
           }
+        };
+        
+        setNodes(currentNodes =>
+          currentNodes.map(n => (n.id === nodeId ? newNode : n))
+        );
+        
+        const nodeElement = document.querySelector(
+          `.react-flow__node[data-id="${nodeId}"]`
+        );
+        if (nodeElement instanceof HTMLElement) {
+          nodeElement.classList.add('node-replacement-success');
+          setTimeout(() => {
+            nodeElement.classList.remove(
+              'node-replacement-success',
+              'node-replaceable',
+              'drop-hover'
+            );
+          }, 600);
         }
+        
+        if (onNodeReplace) {
+          onNodeReplace(nodeId, preset);
+        }
+        
+        console.log(`Replaced node ${nodeId} with preset ${preset.name}`);
       }
     } catch (error) {
       console.error('Error handling drop:', error);
+    } finally {
+      clearHoverState();
     }
-    
-    setDraggedOverNode(null);
-  }, [getNodes, setNodes, onNodeReplace]);
+  }, [clearHoverState, getEdges, getNodes, onNodeReplace, screenToFlowPosition, setNodes]);
 
   // Set up event listeners
   useEffect(() => {
@@ -142,11 +187,9 @@ export const NodeReplacementHandler: React.FC<NodeReplacementHandlerProps> = ({
       container.removeEventListener('drop', dropHandler);
       
       // Clean up any remaining hover states
-      document.querySelectorAll('.drop-hover, .node-replaceable').forEach(el => {
-        el.classList.remove('drop-hover', 'node-replaceable');
-      });
+      clearHoverState();
     };
-  }, [handleDragOver, handleDragLeave, handleDrop]);
+  }, [clearHoverState, handleDragOver, handleDragLeave, handleDrop]);
 
   return <>{children}</>;
 };
@@ -201,6 +244,30 @@ function extractPresetData(preset: Preset): Record<string, unknown> {
   }
   
   return data;
+}
+
+function presetToAgentFragmentRecord(preset: Preset): AgentFragmentRecord {
+  return {
+    id: preset.id,
+    name: preset.name,
+    path: typeof preset.metadata?.file === 'string' ? preset.metadata.file : '',
+    category: preset.category ?? 'uncategorized',
+    description: preset.metadata?.description,
+    tags: preset.tags ?? [],
+    roles: [],
+    domains: [],
+    nodeTypes: preset.nodeType
+      ? [
+          (preset.nodeType === 'concat'
+            ? 'merge'
+            : preset.nodeType) as AgentFragmentRecord['nodeTypes'][number]
+        ]
+      : [],
+    placementHints: [],
+    tone: [],
+    nodeCount: 1,
+    priority: 0
+  };
 }
 
 // CSS for node replacement effects

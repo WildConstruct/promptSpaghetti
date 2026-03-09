@@ -1,0 +1,67 @@
+{
+  "version": "1.0.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "category",
+  "key": "facial-features",
+  "generatedAt": "2026-03-09T13:01:40.702Z",
+  "totalFragments": 2,
+  "fragments": [
+    {
+      "id": "face-eye-descriptors-multi",
+      "name": "Eye Descriptors Multi Aspect",
+      "path": "/assets/library/facial-features/eye-descriptors-multi-aspect.psg",
+      "category": "facial-features",
+      "tags": [
+        "face",
+        "eyes",
+        "multi-aspect"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "region"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 3
+    },
+    {
+      "id": "face-smile-variations-simple",
+      "name": "Smile Variations Simple",
+      "path": "/assets/library/facial-features/smile-variations-simple.psg",
+      "category": "facial-features",
+      "tags": [
+        "face",
+        "smile",
+        "expression"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1
+    }
+  ]
+}

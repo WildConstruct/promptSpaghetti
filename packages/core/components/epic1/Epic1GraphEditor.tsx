@@ -78,9 +78,10 @@ import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { AuthModal } from '../auth/AuthModal';
 import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
 import { TutorialOverlay } from './onboarding/TutorialOverlay';
-import type { Preset } from '@prompt/asset-browser';
+import type { AgentFragmentRecord, Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import { getSupabase } from '../../utils/supabaseClient';
+import { planFragmentInsertion } from './services/FragmentInsertionPlanner';
 
 // Styles
 import './ReactFlowOverrides.css';
@@ -113,6 +114,40 @@ export interface Epic1GraphEditorProps {
   previewSeeds?: (string | number)[];
   showAssetLibrary?: boolean;
   assetLibraryPosition?: 'left' | 'right';
+}
+
+function presetToAgentFragmentRecord(preset: Preset): AgentFragmentRecord {
+  const metadata = (preset.metadata ?? {}) as Record<string, unknown>;
+  const roles = Array.isArray(metadata.roles)
+    ? (metadata.roles.filter((value): value is AgentFragmentRecord['roles'][number] => typeof value === 'string') as AgentFragmentRecord['roles'])
+    : [];
+  const domains = Array.isArray(metadata.domains)
+    ? (metadata.domains.filter((value): value is AgentFragmentRecord['domains'][number] => typeof value === 'string') as AgentFragmentRecord['domains'])
+    : [];
+  const placementHints = Array.isArray(metadata.placementHints)
+    ? (metadata.placementHints.filter((value): value is AgentFragmentRecord['placementHints'][number] => typeof value === 'string') as AgentFragmentRecord['placementHints'])
+    : [];
+
+  return {
+    id: preset.id,
+    name: preset.name,
+    path:
+      typeof preset.path === 'string'
+        ? preset.path
+        : typeof metadata.file === 'string'
+          ? metadata.file
+          : '',
+    category: preset.category ?? 'uncategorized',
+    description: preset.description,
+    tags: preset.tags ?? [],
+    roles,
+    domains,
+    nodeTypes: [],
+    placementHints,
+    tone: [],
+    nodeCount: typeof preset.nodes === 'number' ? preset.nodes : 1,
+    priority: 0
+  };
 }
 
 /**
@@ -272,30 +307,89 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     addNodeWithBounce
   });
 
+  const buildEdgeSpliceTarget = useCallback(
+    (edgeId?: string | null) => {
+      if (!edgeId) {
+        return null;
+      }
+
+      const originalEdge = edges.find(edge => edge.id === edgeId);
+      if (!originalEdge) {
+        return null;
+      }
+
+      return {
+        edgeId: originalEdge.id,
+        sourceId: originalEdge.source,
+        targetId: originalEdge.target,
+        edgeType: originalEdge.type,
+        edgeClassName: originalEdge.className,
+        edgeStyle: originalEdge.style as Record<string, unknown> | undefined,
+        markerEnd: originalEdge.markerEnd,
+        sourceHandle: originalEdge.sourceHandle ?? null,
+        targetHandle: originalEdge.targetHandle ?? null
+      };
+    },
+    [edges]
+  );
+
   const handleAssetInsert = useCallback(
     (item: Preset | Asset) => {
       const preset = item as Preset;
       if (!preset) {
         return;
       }
-      const pos = reactFlowInstance
-        ? reactFlowInstance.screenToFlowPosition({
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2
+      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+      const insertionPlan = selectedNode
+        ? planFragmentInsertion({
+            fragment: presetToAgentFragmentRecord(preset),
+            selectedNode,
+            nodes,
+            edges
           })
-        : { x: 250, y: 250 };
-      void insertPresetByMeta(preset, pos);
+        : reactFlowInstance
+          ? {
+              anchor: 'free-placement' as const,
+              position: reactFlowInstance.screenToFlowPosition({
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2
+              }),
+              notes: ['No selection; using viewport center placement.']
+            }
+          : {
+              anchor: 'free-placement' as const,
+              position: { x: 250, y: 250 },
+              notes: ['No selection or React Flow instance; using fallback position.']
+            };
+      void insertPresetByMeta(
+        preset,
+        insertionPlan.position,
+        buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
+      );
     },
-    [insertPresetByMeta, reactFlowInstance]
+    [
+      buildEdgeSpliceTarget,
+      edges,
+      insertPresetByMeta,
+      nodes,
+      reactFlowInstance,
+      selectedNodeId
+    ]
   );
 
   // Drag and drop
-  const { isDraggingOver, onDragOver, onDragLeave, onDragEnter, onDrop } =
+  const { isDraggingOver, dropTarget, onDragOver, onDragLeave, onDragEnter, onDrop } =
     useGraphDragDrop(reactFlowInstance, setNodes, {
       showToast,
       onNodeCreate: () => void 0,
-      onPresetDrop: (preset, position) => {
-        void insertPresetByMeta(preset, position);
+      onPresetDrop: (preset, position, dragTarget) => {
+        void insertPresetByMeta(
+          preset,
+          position,
+          dragTarget?.kind === 'insert-edge'
+            ? buildEdgeSpliceTarget(dragTarget.edgeId)
+            : null
+        );
       }
     });
 
@@ -316,13 +410,35 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
       }
     ).__EPIC1_INSERT_PRESET__ = async (preset: unknown) => {
-      const pos = reactFlowInstance
-        ? reactFlowInstance.screenToFlowPosition({
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2
+      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+      const insertionPlan = selectedNode
+        ? planFragmentInsertion({
+            fragment: presetToAgentFragmentRecord(
+              preset as Preset
+            ),
+            selectedNode,
+            nodes,
+            edges
           })
-        : { x: 250, y: 250 };
-      await insertPresetByMeta(preset as Parameters<typeof insertPresetByMeta>[0], pos);
+        : reactFlowInstance
+          ? {
+              anchor: 'free-placement' as const,
+              position: reactFlowInstance.screenToFlowPosition({
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2
+              }),
+              notes: ['No selection; using viewport center placement.']
+            }
+          : {
+              anchor: 'free-placement' as const,
+              position: { x: 250, y: 250 },
+              notes: ['No selection or React Flow instance; using fallback position.']
+            };
+      await insertPresetByMeta(
+        preset as Parameters<typeof insertPresetByMeta>[0],
+        insertionPlan.position,
+        buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
+      );
     };
 
     return () => {
@@ -336,7 +452,14 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         win.__EPIC1_INSERT_PRESET__ = null;
       }
     };
-  }, [insertPresetByMeta, reactFlowInstance]);
+  }, [
+    buildEdgeSpliceTarget,
+    edges,
+    insertPresetByMeta,
+    nodes,
+    reactFlowInstance,
+    selectedNodeId
+  ]);
 
   // Keyboard shortcuts
   useGraphKeyboardShortcuts(
@@ -680,6 +803,66 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     [onEdgesChangeBase]
   );
 
+  const edgeInsertIndicator = useMemo(() => {
+    if (
+      !dropTarget ||
+      dropTarget.kind !== 'insert-edge' ||
+      !reactFlowInstance
+    ) {
+      return null;
+    }
+
+    const viewport = reactFlowInstance.getViewport();
+    if (!viewport) {
+      return null;
+    }
+
+    return {
+      left: dropTarget.midpoint.x * viewport.zoom + viewport.x,
+      top: dropTarget.midpoint.y * viewport.zoom + viewport.y
+    };
+  }, [dropTarget, reactFlowInstance]);
+
+  const replaceNodeIndicator = useMemo(() => {
+    if (
+      !dropTarget ||
+      dropTarget.kind !== 'replace-node' ||
+      !reactFlowInstance
+    ) {
+      return null;
+    }
+
+    const node = nodes.find(candidate => candidate.id === dropTarget.nodeId);
+    if (!node) {
+      return null;
+    }
+
+    const viewport = reactFlowInstance.getViewport();
+    if (!viewport) {
+      return null;
+    }
+
+    const width =
+      typeof node.width === 'number'
+        ? node.width
+        : typeof (node.data as Record<string, unknown>)?.width === 'number'
+          ? ((node.data as Record<string, unknown>).width as number)
+          : 180;
+    const height =
+      typeof node.height === 'number'
+        ? node.height
+        : typeof (node.data as Record<string, unknown>)?.height === 'number'
+          ? ((node.data as Record<string, unknown>).height as number)
+          : 72;
+
+    return {
+      left: node.position.x * viewport.zoom + viewport.x,
+      top: node.position.y * viewport.zoom + viewport.y,
+      width: width * viewport.zoom,
+      height: height * viewport.zoom
+    };
+  }, [dropTarget, nodes, reactFlowInstance]);
+
   const content = (
     <div
       className={`epic1-graph-editor ${isDraggingOver ? 'drag-over' : ''}`}
@@ -703,6 +886,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             showAssets={true}
             showPreview={true}
             selectedNode={nodes.find(n => n.id === selectedNodeId)}
+            nodes={nodes}
+            edges={edges}
             onInsert={handleAssetInsert}
           />
         )}
@@ -719,7 +904,37 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         >
           {isDraggingOver && (
             <div className="drop-indicator" aria-live="polite">
-              Drop to insert
+              {dropTarget?.kind === 'replace-node'
+                ? 'Drop to replace node'
+                : dropTarget?.kind === 'insert-edge'
+                  ? 'Drop to insert on edge'
+                  : 'Drop to insert'}
+            </div>
+          )}
+          {edgeInsertIndicator && (
+            <div
+              className="edge-insert-indicator"
+              aria-hidden="true"
+              style={{
+                left: `${edgeInsertIndicator.left}px`,
+                top: `${edgeInsertIndicator.top}px`
+              }}
+            >
+              +
+            </div>
+          )}
+          {replaceNodeIndicator && (
+            <div
+              className="node-replace-indicator"
+              aria-hidden="true"
+              style={{
+                left: `${replaceNodeIndicator.left}px`,
+                top: `${replaceNodeIndicator.top}px`,
+                width: `${replaceNodeIndicator.width}px`,
+                height: `${replaceNodeIndicator.height}px`
+              }}
+            >
+              <span className="node-replace-indicator__label">Replace</span>
             </div>
           )}
           <SafeReactFlowWrapper>

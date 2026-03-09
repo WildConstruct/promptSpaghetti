@@ -8,6 +8,10 @@ import {
   getInlinePresetDocument,
   isSafePresetSourcePath
 } from '../presetSourcePolicy';
+import {
+  findFragmentBoundaryNodes,
+  splicePresetIntoEdge
+} from '../useDragDropHandlers';
 import type { EditableNodeData } from '../../nodes';
 
 type FlowNode = Node<EditableNodeData>;
@@ -56,6 +60,18 @@ const createChildNode = (
     ...rest
   };
 };
+
+const createEdge = (
+  id: string,
+  source: string,
+  target: string,
+  overrides: Record<string, unknown> = {}
+) => ({
+  id,
+  source,
+  target,
+  ...overrides
+});
 
 describe('useDragDropHandlers helpers', () => {
   it('accepts only first-party preset roots for fetched sources', () => {
@@ -180,5 +196,96 @@ describe('useDragDropHandlers helpers', () => {
 
     expect(attached.position.x).toBe(0);
     expect(attached.position.y).toBe(0);
+  });
+
+  it('finds a single entry and exit node for a simple fragment', () => {
+    const nodes = [
+      createChildNode('a'),
+      createChildNode('b'),
+      createChildNode('c')
+    ];
+    const edges = [createEdge('ab', 'a', 'b'), createEdge('bc', 'b', 'c')];
+
+    const result = findFragmentBoundaryNodes(nodes, edges);
+
+    expect(result.entryNode?.id).toBe('a');
+    expect(result.exitNode?.id).toBe('c');
+  });
+
+  it('splices a single-node fragment into an existing edge', () => {
+    const existingEdges = [
+      createEdge('edge-1', 'source', 'target', {
+        type: 'smoothstep',
+        className: 'edge-class',
+        sourceHandle: 'out-1',
+        targetHandle: 'in-1'
+      })
+    ];
+    const nodesToAdd = [createChildNode('inserted')];
+
+    const result = splicePresetIntoEdge(existingEdges, nodesToAdd, [], {
+      edgeId: 'edge-1',
+      sourceId: 'source',
+      targetId: 'target',
+      edgeType: 'smoothstep',
+      edgeClassName: 'edge-class',
+      sourceHandle: 'out-1',
+      targetHandle: 'in-1'
+    });
+
+    expect(result).toHaveLength(2);
+    expect(result.find(edge => edge.source === 'source' && edge.target === 'inserted')).toBeTruthy();
+    expect(result.find(edge => edge.source === 'inserted' && edge.target === 'target')).toBeTruthy();
+    expect(result.find(edge => edge.id === 'edge-1')).toBeFalsy();
+  });
+
+  it('splices a simple multi-node fragment into an existing edge', () => {
+    const existingEdges = [createEdge('edge-1', 'source', 'target')];
+    const nodesToAdd = [
+      createChildNode('entry'),
+      createChildNode('middle'),
+      createChildNode('exit')
+    ];
+    const edgesToAdd = [
+      createEdge('entry-middle', 'entry', 'middle'),
+      createEdge('middle-exit', 'middle', 'exit')
+    ];
+
+    const result = splicePresetIntoEdge(existingEdges, nodesToAdd, edgesToAdd, {
+      edgeId: 'edge-1',
+      sourceId: 'source',
+      targetId: 'target'
+    });
+
+    expect(result).toHaveLength(4);
+    expect(result.find(edge => edge.source === 'source' && edge.target === 'entry')).toBeTruthy();
+    expect(result.find(edge => edge.source === 'exit' && edge.target === 'target')).toBeTruthy();
+    expect(result.find(edge => edge.id === 'entry-middle')).toBeTruthy();
+    expect(result.find(edge => edge.id === 'middle-exit')).toBeTruthy();
+  });
+
+  it('falls back to normal insertion when fragment boundaries are ambiguous', () => {
+    const existingEdges = [createEdge('edge-1', 'source', 'target')];
+    const nodesToAdd = [
+      createChildNode('a'),
+      createChildNode('b'),
+      createChildNode('c'),
+      createChildNode('d')
+    ];
+    const edgesToAdd = [
+      createEdge('ac', 'a', 'c'),
+      createEdge('bd', 'b', 'd')
+    ];
+
+    const result = splicePresetIntoEdge(existingEdges, nodesToAdd, edgesToAdd, {
+      edgeId: 'edge-1',
+      sourceId: 'source',
+      targetId: 'target'
+    });
+
+    expect(result).toHaveLength(3);
+    expect(result.find(edge => edge.id === 'edge-1')).toBeTruthy();
+    expect(result.find(edge => edge.id === 'ac')).toBeTruthy();
+    expect(result.find(edge => edge.id === 'bd')).toBeTruthy();
   });
 });

@@ -567,6 +567,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             defaultTab={showAssetLibrary ? 'assets' : isPreviewVisible ? 'preview' : null}
             showAssets={showAssetLibrary}
             showPreview={showPreview}
+            nodes={nodes}
+            edges={edges}
           />
         </div>
       )}

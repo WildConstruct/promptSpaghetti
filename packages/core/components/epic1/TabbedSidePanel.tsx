@@ -4,8 +4,9 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import type { Node } from 'reactflow';
+import type { Edge, Node } from 'reactflow';
 import { AssetBrowserLoader } from './AssetBrowserLoader';
+import { SuggestedFragmentsPanel } from './SuggestedFragmentsPanel';
 import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
 import { PreviewEngine } from './preview/PreviewEngine';
 import { PreviewPanel } from './preview/PreviewPanel';
@@ -25,6 +26,8 @@ export interface TabbedSidePanelProps {
   showAssets?: boolean;
   showPreview?: boolean;
   selectedNode?: Node<EditableNodeData> | null;
+  nodes?: Node<EditableNodeData>[];
+  edges?: Edge[];
   onSeedChange?: (seeds: Array<string | number>) => void;
 }
 
@@ -40,6 +43,8 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   showAssets = true,
   showPreview = true,
   selectedNode,
+  nodes = [],
+  edges = [],
   onSeedChange
 }) => {
   const defaultWidth = 520;
@@ -212,11 +217,19 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
       <div className="panel-content">
         {activeTab === 'assets' && (
           <div className="assets-container">
-            <AssetBrowserLoader
-              onPresetDrag={onPresetDrag}
-              onPresetSelect={onPresetSelect}
+            <SuggestedFragmentsPanel
+              selectedNode={selectedNode}
+              nodes={nodes}
+              edges={edges}
               onInsert={handlePresetInsert}
             />
+            <div className="assets-browser-panel">
+              <AssetBrowserLoader
+                onPresetDrag={onPresetDrag}
+                onPresetSelect={onPresetSelect}
+                onInsert={handlePresetInsert}
+              />
+            </div>
           </div>
         )}
         {activeTab === 'search' && (

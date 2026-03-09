@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState, DragEvent } from 'react';
 import { Node, ReactFlowInstance, XYPosition } from 'reactflow';
 import { debugLogEpic1 } from '../../../utils/debug';
 import type { PresetDropPayload } from './useDragDropHandlers';
+import { findFragmentDropTarget, type FragmentDropTarget } from '../services/FragmentDropTargeting';
+import type { AgentFragmentRecord } from '@prompt/asset-browser';
 
 interface DraggedItem {
   type: string;
@@ -12,7 +14,11 @@ interface DraggedItem {
 
 interface UseGraphDragDropOptions {
   onNodeCreate?: (node: Node) => void;
-  onPresetDrop?: (preset: PresetDropPayload, position: XYPosition) => void;
+  onPresetDrop?: (
+    preset: PresetDropPayload,
+    position: XYPosition,
+    dropTarget?: FragmentDropTarget | null
+  ) => void;
   showToast?: (type: 'success' | 'error' | 'info', message: string) => void;
 }
 
@@ -46,6 +52,7 @@ export function useGraphDragDrop<NodeData = unknown>(
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [draggedItem, setDraggedItem] = useState<DraggedItem | null>(null);
   const [dropPosition, setDropPosition] = useState<XYPosition | null>(null);
+  const [dropTarget, setDropTarget] = useState<FragmentDropTarget | null>(null);
 
   // Handle drag over event
   const onDragOver = useCallback(
@@ -67,9 +74,16 @@ export function useGraphDragDrop<NodeData = unknown>(
           y: event.clientY
         });
         setDropPosition(position);
+        setDropTarget(
+          resolveDropTarget(
+            reactFlowInstance,
+            position,
+            parseDragData(event.dataTransfer)
+          )
+        );
       }
     },
-    [reactFlowInstance]
+    [parseDragData, reactFlowInstance]
   );
 
   // Handle drag leave event
@@ -79,6 +93,7 @@ export function useGraphDragDrop<NodeData = unknown>(
     if (target.classList.contains('react-flow__pane')) {
       setIsDraggingOver(false);
       setDropPosition(null);
+      setDropTarget(null);
     }
   }, []);
 
@@ -171,11 +186,15 @@ export function useGraphDragDrop<NodeData = unknown>(
 
   // Handle preset drop
   const handlePresetDrop = useCallback(
-    (presetData: string, position: XYPosition) => {
+    (
+      presetData: string,
+      position: XYPosition,
+      activeDropTarget?: FragmentDropTarget | null
+    ) => {
       try {
         const parsed = JSON.parse(presetData) as unknown;
         if (isPresetDropPayload(parsed)) {
-          onPresetDrop?.(parsed, position);
+          onPresetDrop?.(parsed, position, activeDropTarget);
           showToast?.('success', 'Preset loaded');
         } else {
           throw new Error('Preset payload missing required structure');
@@ -241,6 +260,7 @@ export function useGraphDragDrop<NodeData = unknown>(
     (dataTransfer: DataTransfer, clientX: number, clientY: number) => {
       setIsDraggingOver(false);
       setDropPosition(null);
+      setDropTarget(null);
 
       if (!reactFlowInstance) {
         console.error('[useGraphDragDrop] reactFlowInstance is null');
@@ -259,8 +279,14 @@ export function useGraphDragDrop<NodeData = unknown>(
         return;
       }
 
+      const activeDropTarget = resolveDropTarget(
+        reactFlowInstance,
+        position,
+        dragData
+      );
+
       if (dragData.type === 'preset' && dragData.presetData) {
-        handlePresetDrop(dragData.presetData, position);
+        handlePresetDrop(dragData.presetData, position, activeDropTarget);
       } else if (dragData.type === 'asset' && dragData.meta) {
         handleAssetDrop(dragData.meta, position);
       } else if (dragData.type) {
@@ -351,6 +377,13 @@ export function useGraphDragDrop<NodeData = unknown>(
           y: event.clientY
         });
         setDropPosition(position);
+        setDropTarget(
+          resolveDropTarget(
+            reactFlowInstance,
+            position,
+            parseDragData(event.dataTransfer)
+          )
+        );
       }
     };
 
@@ -386,6 +419,7 @@ export function useGraphDragDrop<NodeData = unknown>(
     setDraggedItem(null);
     setIsDraggingOver(false);
     setDropPosition(null);
+    setDropTarget(null);
   }, []);
 
   return {
@@ -393,6 +427,7 @@ export function useGraphDragDrop<NodeData = unknown>(
     isDraggingOver,
     draggedItem,
     dropPosition,
+    dropTarget,
 
     // Event handlers
     onDragOver,
@@ -405,6 +440,63 @@ export function useGraphDragDrop<NodeData = unknown>(
     // Utilities
     parseDragData
   };
+}
+
+function presetPayloadToAgentFragmentRecord(
+  payload: PresetDropPayload
+): AgentFragmentRecord {
+  const metadata = payload.metadata && typeof payload.metadata === 'object'
+    ? (payload.metadata as Record<string, unknown>)
+    : {};
+
+  return {
+    id: payload.id,
+    name: payload.name,
+    path: typeof payload.path === 'string' ? payload.path : '',
+    category: typeof payload.category === 'string' ? payload.category : 'uncategorized',
+    description:
+      typeof metadata.description === 'string' ? metadata.description : undefined,
+    tags: Array.isArray(payload.tags) ? payload.tags : [],
+    roles: [],
+    domains: [],
+    nodeTypes: typeof payload.type === 'string'
+      ? [
+          (payload.type === 'concat'
+            ? 'merge'
+            : payload.type) as AgentFragmentRecord['nodeTypes'][number]
+        ]
+      : [],
+    placementHints: [],
+    tone: [],
+    nodeCount: 1,
+    priority: 0
+  };
+}
+
+function resolveDropTarget(
+  reactFlowInstance: ReactFlowInstance,
+  position: XYPosition,
+  dragData: DraggedItem | null
+): FragmentDropTarget | null {
+  if (!dragData || dragData.type !== 'preset' || !dragData.presetData) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(dragData.presetData) as unknown;
+    if (!isPresetDropPayload(parsed)) {
+      return null;
+    }
+
+    return findFragmentDropTarget({
+      pointer: position,
+      fragment: presetPayloadToAgentFragmentRecord(parsed),
+      nodes: reactFlowInstance.getNodes() as Node[],
+      edges: reactFlowInstance.getEdges()
+    });
+  } catch {
+    return null;
+  }
 }
 
 // Default node data helper (duplicate from useNodeOperations - could be shared)

@@ -224,10 +224,118 @@
   position: relative;
   min-width: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.assets-browser-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.suggested-fragments-panel {
+  flex: 0 0 auto;
+  padding: 12px 12px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    180deg,
+    rgba(26, 32, 44, 0.96),
+    rgba(17, 24, 39, 0.94)
+  );
+}
+
+.suggested-fragments-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.suggested-fragments-header h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #e8f5e9;
+}
+
+.suggested-fragments-context {
+  font-size: 11px;
+  color: rgba(163, 230, 53, 0.82);
+}
+
+.suggested-fragments-empty {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.suggested-fragments-list {
+  display: grid;
+  gap: 8px;
+}
+
+.suggested-fragment-card {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(134, 239, 172, 0.16);
+  background: rgba(20, 83, 45, 0.28);
+  color: #f8fafc;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.suggested-fragment-card:hover {
+  transform: translateY(-1px);
+  background: rgba(22, 101, 52, 0.42);
+  border-color: rgba(134, 239, 172, 0.3);
+}
+
+.suggested-fragment-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.suggested-fragment-meta {
+  font-size: 11px;
+  color: rgba(209, 250, 229, 0.8);
+  margin-bottom: 6px;
+}
+
+.suggested-fragment-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.suggested-fragment-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(236, 253, 245, 0.12);
+  color: #dcfce7;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.suggested-fragment-chip.subtle {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(226, 232, 240, 0.82);
 }
 
 /* Embedded AssetLibraryV2 adjustments */
-.assets-container .asset-library-v2 {
+.assets-browser-panel .asset-library-v2 {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -241,54 +349,54 @@
   box-shadow: none !important;
 }
 
-.assets-container .asset-browser-pro,
-.assets-container .browser-content-pro,
-.assets-container .content-wrapper,
-.assets-container .browser-main-content {
+.assets-browser-panel .asset-browser-pro,
+.assets-browser-panel .browser-content-pro,
+.assets-browser-panel .content-wrapper,
+.assets-browser-panel .browser-main-content {
   min-width: 0 !important;
   max-width: 100% !important;
 }
 
-.assets-container .asset-browser-pro {
+.assets-browser-panel .asset-browser-pro {
   display: flex !important;
   width: 100% !important;
 }
 
-.assets-container .browser-sidebar-pro {
+.assets-browser-panel .browser-sidebar-pro {
   width: clamp(148px, 32%, 188px) !important;
   min-width: clamp(148px, 32%, 188px) !important;
   max-width: 188px !important;
   flex: 0 0 clamp(148px, 32%, 188px) !important;
 }
 
-.assets-container .browser-content-pro {
+.assets-browser-panel .browser-content-pro {
   flex: 1 1 auto !important;
   min-width: 0 !important;
 }
 
-.assets-container .preset-list-header,
-.assets-container .preset-list-item {
+.assets-browser-panel .preset-list-header,
+.assets-browser-panel .preset-list-item {
   grid-template-columns: 20px minmax(0, 1.8fr) minmax(0, 0.95fr) 52px 48px 42px !important;
 }
 
-.assets-container .column-header,
-.assets-container .preset-meta,
-.assets-container .preset-category {
+.assets-browser-panel .column-header,
+.assets-browser-panel .preset-meta,
+.assets-browser-panel .preset-category {
   min-width: 0;
 }
 
-.assets-container .preset-name,
-.assets-container .preset-category {
+.assets-browser-panel .preset-name,
+.assets-browser-panel .preset-category {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.assets-container .library-header-v2 {
+.assets-browser-panel .library-header-v2 {
   display: none; /* Hide the library header when embedded */
 }
 
-.assets-container .library-body-v2 {
+.assets-browser-panel .library-body-v2 {
   height: 100%;
   min-width: 0;
 }

@@ -1,0 +1,320 @@
+{
+  "version": "1.0.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "category",
+  "key": "action-dynamics",
+  "generatedAt": "2026-03-09T13:01:40.702Z",
+  "totalFragments": 10,
+  "fragments": [
+    {
+      "id": "action-aerial-motions",
+      "name": "Aerial Motions",
+      "path": "/assets/library/action-dynamics/aerial-motions.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "aerial",
+        "motion"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-crowd-behaviors",
+      "name": "Crowd Behaviors",
+      "path": "/assets/library/action-dynamics/crowd-behaviors.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "crowd",
+        "behavior"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "crowd",
+        "character"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-facial-micro-gestures",
+      "name": "Facial Micro Gestures",
+      "path": "/assets/library/action-dynamics/facial-micro-gestures.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "facial",
+        "micro-gesture"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-group-dynamics",
+      "name": "Group Dynamics",
+      "path": "/assets/library/action-dynamics/group-dynamics.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "group",
+        "dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "crowd",
+        "character"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-high-impact-moves",
+      "name": "High Impact Moves",
+      "path": "/assets/library/action-dynamics/high-impact-moves.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "impact",
+        "move"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "heroic",
+        "brutal"
+      ],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-object-interactions",
+      "name": "Object Interactions",
+      "path": "/assets/library/action-dynamics/object-interactions.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "object",
+        "interaction"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-reaction-beats",
+      "name": "Reaction Beats",
+      "path": "/assets/library/action-dynamics/reaction-beats.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "reaction",
+        "beat"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-stealth-movements",
+      "name": "Stealth Movements",
+      "path": "/assets/library/action-dynamics/stealth-movements.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "stealth",
+        "movement"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "gritty",
+        "moody"
+      ],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-subtle-micro-actions",
+      "name": "Subtle Micro Actions",
+      "path": "/assets/library/action-dynamics/subtle-micro-actions.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "subtle",
+        "micro"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1
+    },
+    {
+      "id": "action-transformative-actions",
+      "name": "Transformative Actions",
+      "path": "/assets/library/action-dynamics/transformative-actions.psg",
+      "category": "action-dynamics",
+      "tags": [
+        "action",
+        "transformative",
+        "sequence"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "surreal",
+        "cinematic"
+      ],
+      "nodeCount": 1
+    }
+  ]
+}
