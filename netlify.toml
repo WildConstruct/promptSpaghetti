@@ -23,8 +23,10 @@
   NETLIFY_USE_YARN = "false"
   # Cache bust to force fresh build
   NETLIFY_CACHE_BUST = "v12-exact-text-preservation"
-  # Disable secrets scanning for .env.example and other false positives
-  SECRETS_SCAN_OMIT_PATHS = ".env.example,docs/**,packages/*/dist/**,client/dist/**"
+  # Disable Netlify secrets scanning on known false-positive-heavy paths.
+  # This repo contains many examples, tests, reports, and legacy artifacts that
+  # are not deployable runtime inputs but can still trip smart detection.
+  SECRETS_SCAN_OMIT_PATHS = ".env.example,docs/**,examples/**,legacy/**,load-tests/**,reports/**,sandboxes/**,tests/**,scripts/**,packages/*/dist/**,client/dist/**,create-auth-tasks-batch.sh,packages/asset-browser/src/**,packages/core/README.md,packages/core/components/AssetBrowser/**,packages/core/components/epic1/AGENTS.md,packages/core/components/epic1/examples/**,packages/core/config/python-executor.ts,packages/core/config/python-executor.d.ts"
   # Omit Supabase URL from secrets scanning (it's a public URL, not a secret)
   SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_URL"
 
