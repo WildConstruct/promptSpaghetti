@@ -163,7 +163,12 @@ export function agentFragmentRecordToPreset(
       file: record.path,
       roles: record.roles,
       domains: record.domains,
-      placementHints: record.placementHints
+      placementHints: record.placementHints,
+      preferredInsertion: record.preferredInsertion,
+      entryStrategy: record.entryStrategy,
+      exitStrategy: record.exitStrategy,
+      suggestionWeight: record.suggestionWeight,
+      requiresBranchLane: record.requiresBranchLane
     }
   };
 }

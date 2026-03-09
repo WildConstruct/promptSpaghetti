@@ -129,6 +129,27 @@ function presetToAgentFragmentRecord(preset: Preset): AgentFragmentRecord {
   const placementHints = Array.isArray(metadata.placementHints)
     ? (metadata.placementHints.filter((value): value is AgentFragmentRecord['placementHints'][number] => typeof value === 'string') as AgentFragmentRecord['placementHints'])
     : [];
+  const preferredInsertion =
+    metadata.preferredInsertion === 'replace-node' ||
+    metadata.preferredInsertion === 'insert-edge' ||
+    metadata.preferredInsertion === 'free-place'
+      ? metadata.preferredInsertion
+      : 'free-place';
+  const entryStrategy =
+    metadata.entryStrategy === 'single-node' ||
+    metadata.entryStrategy === 'auto-boundary' ||
+    metadata.entryStrategy === 'manual'
+      ? metadata.entryStrategy
+      : 'auto-boundary';
+  const exitStrategy =
+    metadata.exitStrategy === 'single-node' ||
+    metadata.exitStrategy === 'auto-boundary' ||
+    metadata.exitStrategy === 'manual'
+      ? metadata.exitStrategy
+      : 'auto-boundary';
+  const suggestionWeight =
+    typeof metadata.suggestionWeight === 'number' ? metadata.suggestionWeight : 0;
+  const requiresBranchLane = metadata.requiresBranchLane === true;
 
   return {
     id: preset.id,
@@ -148,6 +169,11 @@ function presetToAgentFragmentRecord(preset: Preset): AgentFragmentRecord {
     placementHints,
     tone: [],
     nodeCount: typeof preset.nodes === 'number' ? preset.nodes : 1,
+    preferredInsertion,
+    entryStrategy,
+    exitStrategy,
+    suggestionWeight,
+    requiresBranchLane,
     priority: 0
   };
 }

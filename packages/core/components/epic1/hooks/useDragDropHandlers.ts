@@ -48,6 +48,12 @@ interface EdgeSpliceTarget {
   targetHandle?: string | null;
 }
 
+type PresetInsertionMetadata = {
+  preferredInsertion?: 'replace-node' | 'insert-edge' | 'free-place';
+  entryStrategy?: 'single-node' | 'auto-boundary' | 'manual';
+  exitStrategy?: 'single-node' | 'auto-boundary' | 'manual';
+};
+
 export function findFragmentBoundaryNodes(
   nodes: FlowNode[],
   edges: FlowEdge[]
@@ -83,9 +89,14 @@ export function splicePresetIntoEdge(
   existingEdges: FlowEdge[],
   nodesToAdd: FlowNode[],
   edgesToAdd: FlowEdge[],
-  edgeSpliceTarget?: EdgeSpliceTarget | null
+  edgeSpliceTarget?: EdgeSpliceTarget | null,
+  insertionMetadata?: PresetInsertionMetadata | null
 ): FlowEdge[] {
   if (!edgeSpliceTarget) {
+    return existingEdges.concat(edgesToAdd);
+  }
+
+  if (insertionMetadata?.preferredInsertion === 'free-place') {
     return existingEdges.concat(edgesToAdd);
   }
 
@@ -93,7 +104,11 @@ export function splicePresetIntoEdge(
     edge => edge.id !== edgeSpliceTarget.edgeId
   );
 
-  if (nodesToAdd.length === 1) {
+  if (
+    nodesToAdd.length === 1 &&
+    (insertionMetadata?.entryStrategy ?? 'single-node') === 'single-node' &&
+    (insertionMetadata?.exitStrategy ?? 'single-node') === 'single-node'
+  ) {
     const insertedNode = nodesToAdd[0];
     const spliceEdges: FlowEdge[] = [
       {
@@ -119,6 +134,13 @@ export function splicePresetIntoEdge(
     ];
 
     return untouchedEdges.concat(edgesToAdd, spliceEdges);
+  }
+
+  if (
+    insertionMetadata?.entryStrategy === 'manual' ||
+    insertionMetadata?.exitStrategy === 'manual'
+  ) {
+    return existingEdges.concat(edgesToAdd);
   }
 
   const { entryNode, exitNode } = findFragmentBoundaryNodes(nodesToAdd, edgesToAdd);
@@ -428,7 +450,10 @@ export function useDragDropHandlers({
           name: meta?.name,
           path: meta?.path,
           file: meta?.file,
-          metadataFile: meta?.metadata?.file
+          metadataFile: meta?.metadata?.file,
+          preferredInsertion: meta?.metadata?.preferredInsertion,
+          entryStrategy: meta?.metadata?.entryStrategy,
+          exitStrategy: meta?.metadata?.exitStrategy
         });
         let content: string | null = null;
         const inlineDocument = getInlinePresetDocument(meta);
@@ -601,7 +626,8 @@ export function useDragDropHandlers({
             existingEdges,
             nodesToAdd,
             edgesToAdd,
-            edgeSpliceTarget
+            edgeSpliceTarget,
+            meta?.metadata as PresetInsertionMetadata | null | undefined
           );
         });
 

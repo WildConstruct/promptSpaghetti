@@ -469,6 +469,27 @@ function presetPayloadToAgentFragmentRecord(
     placementHints: [],
     tone: [],
     nodeCount: 1,
+    preferredInsertion:
+      metadata.preferredInsertion === 'replace-node' ||
+      metadata.preferredInsertion === 'insert-edge' ||
+      metadata.preferredInsertion === 'free-place'
+        ? metadata.preferredInsertion
+        : 'free-place',
+    entryStrategy:
+      metadata.entryStrategy === 'single-node' ||
+      metadata.entryStrategy === 'auto-boundary' ||
+      metadata.entryStrategy === 'manual'
+        ? metadata.entryStrategy
+        : 'auto-boundary',
+    exitStrategy:
+      metadata.exitStrategy === 'single-node' ||
+      metadata.exitStrategy === 'auto-boundary' ||
+      metadata.exitStrategy === 'manual'
+        ? metadata.exitStrategy
+        : 'auto-boundary',
+    suggestionWeight:
+      typeof metadata.suggestionWeight === 'number' ? metadata.suggestionWeight : 0,
+    requiresBranchLane: metadata.requiresBranchLane === true,
     priority: 0
   };
 }
