@@ -2,9 +2,13 @@
 
 /* Concat Node */
 .epic1-editable-node.concat {
-  width: 136px;
-  min-width: 136px;
+  width: 124px;
+  min-width: 124px;
   padding: 10px 12px;
+  background: #22c493;
+  border-color: #22c493;
+  color: #08271f;
+  box-shadow: 0 10px 24px rgba(34, 196, 147, 0.22);
 }
 
 /* Style the two input handles with labels for visual clarity */
@@ -33,10 +37,9 @@
   text-align: center;
 }
 
-.epic1-separator-preview {
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  color: #22c493;
+.epic1-merge-sublabel {
+  font-size: 11px;
+  color: rgba(8, 39, 31, 0.82);
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;

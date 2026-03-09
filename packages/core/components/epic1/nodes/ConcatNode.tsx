@@ -14,12 +14,15 @@ export interface ConcatNodeData extends EditableNodeData {
  */
 export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
   const { showMetadata, setShowMetadata, metadata, flipClassName } = useMetadataFlip(props);
+  const separatorLabel = typeof props.data?.separator === 'string' && props.data.separator.length > 0
+    ? 'Custom separator'
+    : 'Merges connected inputs';
 
   return (
     <BaseEditableNode
       {...props}
       className={`concat ${flipClassName}`}
-      minWidth={116}
+      minWidth={104}
       minHeight={60}
     >
       {({ isEditing, value, editBuffer, updateBuffer, confirmEdit, cancelEdit }) => {
@@ -31,7 +34,7 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
                   {/* Front side - editor */}
                   <div className="card-face node-front">
                     <div className="epic1-concat-editor">
-                      <div className="epic1-node-type-label">Concat</div>
+                      <div className="epic1-node-type-label">Merge</div>
                       <input
                         type="text"
                         className="epic1-inline-input"
@@ -102,12 +105,10 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
         }
 
         return (
-          <>
+            <>
             <div className="epic1-concat-display">
-              <div className="epic1-node-type-label">Concat</div>
-              <div className="epic1-separator-preview">
-                {value ? `"${value}"` : <span className="epic1-placeholder">Join</span>}
-              </div>
+              <div className="epic1-node-type-label">Merge</div>
+              <div className="epic1-merge-sublabel">{separatorLabel}</div>
             </div>
             {/* Custom dual input handles rendered inside the node */}
             <Handle
