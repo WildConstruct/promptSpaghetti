@@ -711,7 +711,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         <div
           className="graph-canvas-container"
           data-tutorial-anchor="canvas"
-          style={{ flex: 1, position: 'relative' }}
+          style={{ flex: 1, minWidth: 0, position: 'relative' }}
           onDrop={onDrop}
           onDragOver={onDragOver}
           onDragEnter={onDragEnter}

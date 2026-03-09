@@ -3,6 +3,7 @@ import './SimpleMenuBar.css';
 
 export interface SimpleMenuBarProps {
   // File operations
+  onBackToLaunch?: () => void;
   onNew?: () => void;
   onOpen?: () => void;
   onSave?: () => void;
@@ -49,6 +50,7 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
     props.onImport && props.onImport !== props.onOpen
   );
   const fileItems = [
+    props.onBackToLaunch ? 'backToLaunch' : null,
     props.onNew ? 'new' : null,
     props.onOpen ? 'open' : null,
     props.onSave ? 'save' : null,
@@ -95,6 +97,21 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
         <div className="menu-section">
           <span className="menu-title">File</span>
           <div className="menu-dropdown">
+            {props.onNew && (
+              <>
+                {props.onBackToLaunch && (
+                  <button onClick={props.onBackToLaunch} className="menu-item">
+                    Back to Launch
+                  </button>
+                )}
+                {props.onBackToLaunch && <div className="menu-separator" />}
+              </>
+            )}
+            {!props.onNew && props.onBackToLaunch && (
+              <button onClick={props.onBackToLaunch} className="menu-item">
+                Back to Launch
+              </button>
+            )}
             {props.onNew && (
               <button onClick={props.onNew} className="menu-item">
                 New Document

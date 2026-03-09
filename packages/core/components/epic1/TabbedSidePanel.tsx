@@ -42,6 +42,9 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   selectedNode,
   onSeedChange
 }) => {
+  const defaultWidth = 520;
+  const minWidth = 360;
+  const maxWidth = 760;
   const hasPreviewTab = showPreview && !!previewEngine;
 
   const initialTab = useMemo<TabType>(() => {
@@ -59,10 +62,22 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
+  const [panelWidth, setPanelWidth] = useState(defaultWidth);
 
   useEffect(() => {
     setActiveTab(initialTab);
   }, [initialTab]);
+
+  useEffect(() => {
+    const clampWidth = () => {
+      const viewportCap = Math.max(minWidth, window.innerWidth - 80);
+      setPanelWidth(prev => Math.min(Math.max(prev, minWidth), Math.min(maxWidth, viewportCap)));
+    };
+
+    clampWidth();
+    window.addEventListener('resize', clampWidth);
+    return () => window.removeEventListener('resize', clampWidth);
+  }, []);
 
   const handleTabClick = useCallback((tab: TabType) => {
     setActiveTab(prev => (prev === tab ? null : tab));
@@ -85,8 +100,54 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   const isExpanded = activeTab !== null;
 
+  const handleResizeStart = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const startX = event.clientX;
+      const startWidth = panelWidth;
+
+      const onMouseMove = (moveEvent: MouseEvent) => {
+        const delta =
+          position === 'right'
+            ? startX - moveEvent.clientX
+            : moveEvent.clientX - startX;
+        const viewportCap = Math.max(minWidth, window.innerWidth - 80);
+        const nextWidth = Math.min(
+          Math.max(startWidth + delta, minWidth),
+          Math.min(maxWidth, viewportCap)
+        );
+        setPanelWidth(nextWidth);
+      };
+
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    },
+    [panelWidth, position]
+  );
+
   return (
-    <div className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'}`}>
+    <div
+      className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'}`}
+      style={
+        {
+          '--tabbed-side-panel-width': `${panelWidth}px`
+        } as React.CSSProperties
+      }
+    >
+      {isExpanded && (
+        <div
+          className={`tabbed-side-panel-resize-handle ${position}`}
+          onMouseDown={handleResizeStart}
+          title="Drag to resize panel"
+        />
+      )}
       <div className="tab-buttons">
         {showAssets && (
           <button

@@ -40,6 +40,7 @@ interface Epic1EditorContainerProps {
   initialAnalysis?: PromptAnalysis;
   initialGraph?: { nodes: Node[]; edges: Edge[] };
   startWithTutorial?: boolean;
+  onBackToLaunch?: () => void;
 }
 
 export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
@@ -50,7 +51,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   showOnboarding = false,
   initialAnalysis,
   initialGraph,
-  startWithTutorial = false
+  startWithTutorial = false,
+  onBackToLaunch
 }) => {
   // Component loading state (simplified - using static imports now)
   const [assetLibraryVisible, setAssetLibraryVisible] =
@@ -281,6 +283,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       >
         {showMenuBar && (
           <SimpleMenuBar
+            onBackToLaunch={onBackToLaunch}
             onNew={handleCreateNew}
             onOpen={handleOpen}
             onSave={() => handleSave(currentNodes, currentEdges)}

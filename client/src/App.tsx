@@ -46,6 +46,16 @@ function App() {
     setShowLaunchScreen(false);
   };
 
+  const handleBackToLaunch = () => {
+    setInitialAnalysis(undefined);
+    setInitialGraph(undefined);
+    setStartWithTutorial(false);
+    try {
+      window.localStorage.setItem('psg:last-view', 'launch');
+    } catch {}
+    setShowLaunchScreen(true);
+  };
+
   if (showLaunchScreen) {
     return (
       <ThemeProvider>
@@ -66,6 +76,7 @@ function App() {
           initialAnalysis={initialAnalysis}
           initialGraph={initialGraph}
           startWithTutorial={startWithTutorial}
+          onBackToLaunch={handleBackToLaunch}
         />
       </div>
     </ThemeProvider>

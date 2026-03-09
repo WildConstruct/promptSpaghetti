@@ -4,7 +4,7 @@
 
 .tabbed-side-panel {
   position: relative;
-  --tabbed-side-panel-width: min(420px, calc(100vw - 96px));
+  --tabbed-side-panel-width: 620px;
   height: 100%;
   background: #1a1a1a;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -16,6 +16,38 @@
   min-width: 48px;
   max-width: 100%;
   overflow: hidden;
+}
+
+.tabbed-side-panel-resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  z-index: 20;
+  cursor: ew-resize;
+}
+
+.tabbed-side-panel-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.15s ease;
+}
+
+.tabbed-side-panel-resize-handle:hover::after {
+  background: rgba(103, 126, 234, 0.5);
+}
+
+.tabbed-side-panel-resize-handle.right {
+  left: 0;
+}
+
+.tabbed-side-panel-resize-handle.left {
+  right: 0;
 }
 
 /* Position variants */
@@ -204,6 +236,49 @@
   box-shadow: none !important;
 }
 
+.assets-container .asset-browser-pro,
+.assets-container .browser-content-pro,
+.assets-container .content-wrapper,
+.assets-container .browser-main-content {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.assets-container .asset-browser-pro {
+  display: flex !important;
+  width: 100% !important;
+}
+
+.assets-container .browser-sidebar-pro {
+  width: clamp(148px, 32%, 188px) !important;
+  min-width: clamp(148px, 32%, 188px) !important;
+  max-width: 188px !important;
+  flex: 0 0 clamp(148px, 32%, 188px) !important;
+}
+
+.assets-container .browser-content-pro {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.assets-container .preset-list-header,
+.assets-container .preset-list-item {
+  grid-template-columns: 20px minmax(0, 1.8fr) minmax(0, 0.95fr) 52px 48px 42px !important;
+}
+
+.assets-container .column-header,
+.assets-container .preset-meta,
+.assets-container .preset-category {
+  min-width: 0;
+}
+
+.assets-container .preset-name,
+.assets-container .preset-category {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .assets-container .library-header-v2 {
   display: none; /* Hide the library header when embedded */
 }
@@ -268,7 +343,7 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .tabbed-side-panel {
-    --tabbed-side-panel-width: min(320px, calc(100vw - 64px));
+    --tabbed-side-panel-width: 400px;
   }
 
   .tabbed-side-panel.expanded {
