@@ -229,8 +229,8 @@ const shortcutCategories: ShortcutCategory[] = [
       },
       {
         id: 'command-palette',
-        keys: ['Ctrl/Cmd', 'K'],
-        description: 'Open command palette',
+        keys: ['C'],
+        description: 'Open commander',
         category: 'help',
         available: true,
       },

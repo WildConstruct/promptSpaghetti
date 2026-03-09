@@ -389,6 +389,22 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     });
   }, [edges, nodes, selectedNodeId]);
 
+  const getPlannedFragmentSuggestions = useCallback(async () => {
+    const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+    const suggestions = await AgentFragmentSuggestionService.getSuggestions({
+      selectedNode,
+      nodes,
+      edges
+    });
+
+    return AgentFragmentSuggestionService.getPlannedSuggestions({
+      selectedNode,
+      nodes,
+      edges,
+      suggestions
+    });
+  }, [edges, nodes, selectedNodeId]);
+
   const insertTopFragmentSuggestion = useCallback(async () => {
     const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
     return AgentFragmentSuggestionService.insertTopSuggestion({
@@ -1261,7 +1277,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         isOpen={isCommanderOpen}
         onClose={() => setIsCommanderOpen(false)}
         onInsertTopSuggestion={insertTopFragmentSuggestion}
-        onGetSuggestions={getFragmentSuggestions}
+        onGetSuggestions={getPlannedFragmentSuggestions}
         onTogglePreview={togglePreview}
         onFitView={fitView}
         onExecute={handleExecute}

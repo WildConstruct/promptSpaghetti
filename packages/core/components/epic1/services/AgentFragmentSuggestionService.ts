@@ -6,8 +6,36 @@ import {
 } from '@prompt/asset-browser';
 import type { EditableNodeData } from '../nodes';
 import { buildFragmentSuggestionContext } from './FragmentSuggestionContext';
+import {
+  planFragmentInsertion,
+  type InsertionAnchor,
+  type InsertionPlan
+} from './FragmentInsertionPlanner';
 
 type FlowNode = Node<EditableNodeData>;
+
+export interface PlannedFragmentSuggestion {
+  fragment: AgentFragmentRecord;
+  plan: InsertionPlan | null;
+  insertionLabel: string;
+}
+
+function getInsertionLabel(anchor: InsertionAnchor | null): string {
+  switch (anchor) {
+    case 'branch-lane':
+      return 'Branch lane';
+    case 'before-output':
+      return 'Before output';
+    case 'inside-region':
+      return 'Inside region';
+    case 'downstream-node':
+      return 'Downstream';
+    case 'free-placement':
+      return 'Free place';
+    default:
+      return 'Placement';
+  }
+}
 
 export function agentFragmentRecordToPreset(
   record: AgentFragmentRecord
@@ -31,6 +59,32 @@ export function agentFragmentRecordToPreset(
 }
 
 export class AgentFragmentSuggestionService {
+  static getPlannedSuggestions(params: {
+    selectedNode?: FlowNode | null;
+    nodes?: FlowNode[];
+    edges?: Edge[];
+    suggestions: AgentFragmentRecord[];
+  }): PlannedFragmentSuggestion[] {
+    const { selectedNode, nodes = [], edges = [], suggestions } = params;
+
+    return suggestions.map(fragment => {
+      const plan = selectedNode
+        ? planFragmentInsertion({
+            fragment,
+            selectedNode,
+            nodes,
+            edges
+          })
+        : null;
+
+      return {
+        fragment,
+        plan,
+        insertionLabel: getInsertionLabel(plan?.anchor ?? null)
+      };
+    });
+  }
+
   static async getSuggestions(params: {
     selectedNode?: FlowNode | null;
     nodes?: FlowNode[];

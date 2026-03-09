@@ -1,6 +1,9 @@
 import React from 'react';
 import type { AgentFragmentRecord } from '@prompt/asset-browser';
-import { agentFragmentRecordToPreset } from './services/AgentFragmentSuggestionService';
+import {
+  agentFragmentRecordToPreset,
+  type PlannedFragmentSuggestion
+} from './services/AgentFragmentSuggestionService';
 
 interface GraphCommanderCommand {
   id: string;
@@ -15,7 +18,7 @@ interface GraphCommanderProps {
   isOpen: boolean;
   onClose: () => void;
   onInsertTopSuggestion: () => Promise<AgentFragmentRecord | null>;
-  onGetSuggestions: () => Promise<AgentFragmentRecord[]>;
+  onGetSuggestions: () => Promise<PlannedFragmentSuggestion[]>;
   onTogglePreview: () => void;
   onFitView: () => void;
   onExecute: () => void;
@@ -23,13 +26,14 @@ interface GraphCommanderProps {
 }
 
 function buildFragmentCommand(
-  fragment: AgentFragmentRecord,
+  suggestion: PlannedFragmentSuggestion,
   onInsertFragment: (fragment: AgentFragmentRecord) => Promise<void>
 ): GraphCommanderCommand {
+  const { fragment, insertionLabel } = suggestion;
   return {
     id: `fragment:${fragment.id}`,
     title: `Insert ${fragment.name}`,
-    description: [fragment.roles[0], fragment.domains[0]]
+    description: [insertionLabel, fragment.roles[0], fragment.domains[0]]
       .filter(Boolean)
       .join(' • '),
     keywords: [
@@ -57,7 +61,7 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
   const [query, setQuery] = React.useState('');
   const [isLoadingSuggestions, setIsLoadingSuggestions] = React.useState(false);
   const [highlightedIndex, setHighlightedIndex] = React.useState(0);
-  const [suggestions, setSuggestions] = React.useState<AgentFragmentRecord[]>([]);
+  const [suggestions, setSuggestions] = React.useState<PlannedFragmentSuggestion[]>([]);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
@@ -97,7 +101,7 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
   const handleInsertFragment = React.useCallback(
     async (fragment: AgentFragmentRecord) => {
       const matches = await onGetSuggestions();
-      const match = matches.find(candidate => candidate.id === fragment.id);
+      const match = matches.find(candidate => candidate.fragment.id === fragment.id);
       if (!match) {
         return;
       }
@@ -109,7 +113,7 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
       if (!globalInsert) {
         return;
       }
-      await globalInsert(agentFragmentRecordToPreset(match));
+      await globalInsert(agentFragmentRecordToPreset(match.fragment));
       onClose();
     },
     [onClose, onGetSuggestions]
@@ -174,8 +178,8 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
       }
     ];
 
-    const fragmentCommands = suggestions.slice(0, 5).map(fragment =>
-      buildFragmentCommand(fragment, handleInsertFragment)
+    const fragmentCommands = suggestions.slice(0, 5).map(suggestion =>
+      buildFragmentCommand(suggestion, handleInsertFragment)
     );
 
     return [...baseCommands, ...fragmentCommands];

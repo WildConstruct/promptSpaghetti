@@ -264,7 +264,7 @@ export const VisualKeyboardMap: React.FC<VisualKeyboardMapProps> = ({
             border: '1px solid #e5e7eb',
             borderRadius: '3px',
             fontSize: '11px',
-          }}>{isMac ? '⌘' : 'Ctrl'} K</kbd> for command palette
+          }}>C</kbd> for commander
         </p>
       </div>
     </div>
