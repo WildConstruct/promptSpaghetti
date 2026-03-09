@@ -82,6 +82,7 @@ import type { AgentFragmentRecord, Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import { getSupabase } from '../../utils/supabaseClient';
 import { planFragmentInsertion } from './services/FragmentInsertionPlanner';
+import { AgentFragmentSuggestionService } from './services/AgentFragmentSuggestionService';
 
 // Styles
 import './ReactFlowOverrides.css';
@@ -402,12 +403,16 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       window as typeof window & {
         __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
         __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+        __EPIC1_GET_FRAGMENT_SUGGESTIONS__?: (() => Promise<unknown[]>) | null;
+        __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
       }
     ).__EPIC1_REACT_FLOW__ = reactFlowInstance;
     (
       window as typeof window & {
         __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
         __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+        __EPIC1_GET_FRAGMENT_SUGGESTIONS__?: (() => Promise<unknown[]>) | null;
+        __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
       }
     ).__EPIC1_INSERT_PRESET__ = async (preset: unknown) => {
       const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
@@ -440,16 +445,79 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
       );
     };
+    (
+      window as typeof window & {
+        __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+        __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+        __EPIC1_GET_FRAGMENT_SUGGESTIONS__?: (() => Promise<unknown[]>) | null;
+        __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
+      }
+    ).__EPIC1_GET_FRAGMENT_SUGGESTIONS__ = async () => {
+      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+      return AgentFragmentSuggestionService.getSuggestions({
+        selectedNode,
+        nodes,
+        edges
+      });
+    };
+    (
+      window as typeof window & {
+        __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
+        __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+        __EPIC1_GET_FRAGMENT_SUGGESTIONS__?: (() => Promise<unknown[]>) | null;
+        __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
+      }
+    ).__EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__ = async () => {
+      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+      return AgentFragmentSuggestionService.insertTopSuggestion({
+        selectedNode,
+        nodes,
+        edges,
+        insertPreset: async preset => {
+          const insertionPlan = selectedNode
+            ? planFragmentInsertion({
+                fragment: presetToAgentFragmentRecord(preset),
+                selectedNode,
+                nodes,
+                edges
+              })
+            : reactFlowInstance
+              ? {
+                  anchor: 'free-placement' as const,
+                  position: reactFlowInstance.screenToFlowPosition({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2
+                  }),
+                  notes: ['No selection; using viewport center placement.']
+                }
+              : {
+                  anchor: 'free-placement' as const,
+                  position: { x: 250, y: 250 },
+                  notes: ['No selection or React Flow instance; using fallback position.']
+                };
+
+          await insertPresetByMeta(
+            preset,
+            insertionPlan.position,
+            buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
+          );
+        }
+      });
+    };
 
     return () => {
       const win = window as typeof window & {
         __EPIC1_REACT_FLOW__?: ReactFlowInstance | null;
         __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
+        __EPIC1_GET_FRAGMENT_SUGGESTIONS__?: (() => Promise<unknown[]>) | null;
+        __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
       };
 
       if (win.__EPIC1_REACT_FLOW__ === reactFlowInstance) {
         win.__EPIC1_REACT_FLOW__ = null;
         win.__EPIC1_INSERT_PRESET__ = null;
+        win.__EPIC1_GET_FRAGMENT_SUGGESTIONS__ = null;
+        win.__EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__ = null;
       }
     };
   }, [

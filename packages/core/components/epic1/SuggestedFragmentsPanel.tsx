@@ -1,177 +1,20 @@
 import React from 'react';
 import type { Edge, Node } from 'reactflow';
 import {
-  AgentFragmentRetrievalService,
   type AgentFragmentRecord,
-  type FragmentDomain,
   type Preset
 } from '@prompt/asset-browser';
 import type { EditableNodeData } from './nodes';
+import {
+  AgentFragmentSuggestionService,
+  agentFragmentRecordToPreset
+} from './services/AgentFragmentSuggestionService';
 
 interface SuggestedFragmentsPanelProps {
   selectedNode?: Node<EditableNodeData> | null;
   nodes?: Node<EditableNodeData>[];
   edges?: Edge[];
   onInsert?: (preset: Preset) => void;
-}
-
-function inferDomains(haystack: string): FragmentDomain[] {
-  const domains = new Set<FragmentDomain>();
-
-  if (
-    haystack.includes('truck') ||
-    haystack.includes('vehicle') ||
-    haystack.includes('engine') ||
-    haystack.includes('tire') ||
-    haystack.includes('muffler')
-  ) {
-    domains.add('vehicle');
-  }
-  if (
-    haystack.includes('building') ||
-    haystack.includes('storefront') ||
-    haystack.includes('architecture')
-  ) {
-    domains.add('building');
-  }
-  if (
-    haystack.includes('monster') ||
-    haystack.includes('creature') ||
-    haystack.includes('beast')
-  ) {
-    domains.add('creature');
-  }
-  if (
-    haystack.includes('character') ||
-    haystack.includes('person') ||
-    haystack.includes('citizen') ||
-    haystack.includes('face') ||
-    haystack.includes('body')
-  ) {
-    domains.add('character');
-  }
-  if (
-    haystack.includes('environment') ||
-    haystack.includes('weather') ||
-    haystack.includes('lighting') ||
-    haystack.includes('scene')
-  ) {
-    domains.add('environment');
-  }
-
-  return Array.from(domains);
-}
-
-function inferToneHints(haystack: string): string[] {
-  return ['gritty', 'comic', 'cinematic', 'moody', 'heroic', 'haunted']
-    .filter(tone => haystack.includes(tone));
-}
-
-function collectContextText(
-  selectedNode: Node<EditableNodeData>,
-  nodes: Node<EditableNodeData>[],
-  edges: Edge[]
-): string {
-  const nodeMap = new Map(nodes.map(node => [node.id, node]));
-  const connectedIds = new Set<string>([selectedNode.id]);
-
-  for (const edge of edges) {
-    if (edge.source === selectedNode.id || edge.target === selectedNode.id) {
-      connectedIds.add(edge.source);
-      connectedIds.add(edge.target);
-    }
-  }
-
-  return Array.from(connectedIds)
-    .map(id => nodeMap.get(id))
-    .filter((node): node is Node<EditableNodeData> => Boolean(node))
-    .map(node => JSON.stringify(node.data ?? {}))
-    .join(' ')
-    .toLowerCase();
-}
-
-function isBranchLaneNode(
-  selectedNode: Node<EditableNodeData>,
-  nodes: Node<EditableNodeData>[],
-  edges: Edge[]
-): boolean {
-  const nodeMap = new Map(nodes.map(node => [node.id, node]));
-  return edges.some(edge => {
-    if (edge.target !== selectedNode.id) {
-      return false;
-    }
-    if (edge.sourceHandle?.startsWith('branch-')) {
-      return true;
-    }
-    const sourceNode = nodeMap.get(edge.source);
-    return sourceNode?.type === 'weightedChoice' && edge.sourceHandle !== 'output';
-  });
-}
-
-function leadsToOutput(
-  selectedNode: Node<EditableNodeData>,
-  nodes: Node<EditableNodeData>[],
-  edges: Edge[]
-): boolean {
-  const nodeMap = new Map(nodes.map(node => [node.id, node]));
-  const queue = [selectedNode.id];
-  const visited = new Set<string>();
-
-  while (queue.length > 0) {
-    const currentId = queue.shift();
-    if (!currentId || visited.has(currentId)) {
-      continue;
-    }
-    visited.add(currentId);
-
-    const node = nodeMap.get(currentId);
-    if (node?.type === 'output') {
-      return true;
-    }
-
-    for (const edge of edges) {
-      if (edge.source === currentId && !visited.has(edge.target)) {
-        queue.push(edge.target);
-      }
-    }
-  }
-
-  return false;
-}
-
-function needsMerge(
-  selectedNode: Node<EditableNodeData>,
-  nodes: Node<EditableNodeData>[],
-  edges: Edge[]
-): boolean {
-  const outgoing = edges.filter(edge => edge.source === selectedNode.id);
-  const incoming = edges.filter(edge => edge.target === selectedNode.id);
-  if (selectedNode.type === 'weightedChoice' && outgoing.length > 1) {
-    return true;
-  }
-  if (isBranchLaneNode(selectedNode, nodes, edges) && incoming.length > 0) {
-    return !leadsToOutput(selectedNode, nodes, edges);
-  }
-  return false;
-}
-
-function toPreset(record: AgentFragmentRecord): Preset {
-  return {
-    id: record.id,
-    name: record.name,
-    path: record.path,
-    type: 'graph',
-    category: record.category,
-    tags: [...record.tags, ...record.roles, ...record.domains],
-    nodes: record.nodeCount,
-    description: record.description,
-    metadata: {
-      file: record.path,
-      roles: record.roles,
-      domains: record.domains,
-      placementHints: record.placementHints
-    }
-  };
 }
 
 export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = ({
@@ -181,6 +24,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
   onInsert
 }) => {
   const [status, setStatus] = React.useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const [isInsertingTopSuggestion, setIsInsertingTopSuggestion] = React.useState(false);
   const [suggestions, setSuggestions] = React.useState<AgentFragmentRecord[]>([]);
 
   React.useEffect(() => {
@@ -195,13 +39,10 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
 
       setStatus('loading');
       try {
-        const next = await AgentFragmentRetrievalService.suggestFragmentsForSelection({
-          selectedNodeType: selectedNode.type,
-          isBranchLane: isBranchLaneNode(selectedNode, nodes, edges),
-          leadsToOutput: leadsToOutput(selectedNode, nodes, edges),
-          needsMerge: needsMerge(selectedNode, nodes, edges),
-          domainHints: inferDomains(collectContextText(selectedNode, nodes, edges)),
-          toneHints: inferToneHints(collectContextText(selectedNode, nodes, edges))
+        const next = await AgentFragmentSuggestionService.getSuggestions({
+          selectedNode,
+          nodes,
+          edges
         });
 
         if (!active) {
@@ -238,13 +79,45 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
     );
   }
 
+  const handleInsertTopSuggestion = async () => {
+    if (!selectedNode || !onInsert || isInsertingTopSuggestion) {
+      return;
+    }
+
+    setIsInsertingTopSuggestion(true);
+    try {
+      await AgentFragmentSuggestionService.insertTopSuggestion({
+        selectedNode,
+        nodes,
+        edges,
+        insertPreset: preset => onInsert(preset)
+      });
+    } catch (error) {
+      console.error('[SuggestedFragmentsPanel] failed to insert top suggestion', error);
+    } finally {
+      setIsInsertingTopSuggestion(false);
+    }
+  };
+
   return (
     <section className="suggested-fragments-panel">
       <div className="suggested-fragments-header">
-        <h4>Suggested Fragments</h4>
-        <span className="suggested-fragments-context">
-          For {selectedNode.type ?? 'selection'}
-        </span>
+        <div className="suggested-fragments-heading">
+          <h4>Suggested Fragments</h4>
+          <span className="suggested-fragments-context">
+            For {selectedNode.type ?? 'selection'}
+          </span>
+        </div>
+        <button
+          type="button"
+          className="suggested-fragments-primary"
+          onClick={() => {
+            void handleInsertTopSuggestion();
+          }}
+          disabled={!onInsert || suggestions.length === 0 || isInsertingTopSuggestion}
+        >
+          {isInsertingTopSuggestion ? 'Inserting…' : 'Insert Best Match'}
+        </button>
       </div>
 
       {status === 'loading' && (
@@ -270,7 +143,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
               key={fragment.id}
               type="button"
               className="suggested-fragment-card"
-              onClick={() => onInsert?.(toPreset(fragment))}
+              onClick={() => onInsert?.(agentFragmentRecordToPreset(fragment))}
             >
               <div className="suggested-fragment-title">{fragment.name}</div>
               <div className="suggested-fragment-meta">
