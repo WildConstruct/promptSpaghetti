@@ -24,12 +24,14 @@ import { NewDocumentModal } from './components/NewDocumentModal';
 import { ComfyExportDialog } from './components/ComfyExportDialog';
 import { PsgSceneAssetsDialog } from './components/PsgSceneAssetsDialog';
 import { PsgCrowdExpansionDialog } from './components/PsgCrowdExpansionDialog';
+import { BugReportDialog } from './components/BugReportDialog';
 import ChangelogModal from '@promptscape/core/components/ChangelogModal/ChangelogModal';
 import { useRuntimeMode } from '@promptscape/core/hooks/useRuntimeMode';
 import type {
   PsgAssetRef,
   PsgSceneAssemblyPlan
 } from '@promptscape/core/services/psg';
+import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -97,6 +99,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
 
   const [showChangelog, setShowChangelog] = useState(false);
+  const [showBugReportDialog, setShowBugReportDialog] = useState(false);
   const [showComfyExportDialog, setShowComfyExportDialog] = useState(false);
   const [showPsgSceneAssetsDialog, setShowPsgSceneAssetsDialog] = useState(false);
   const [showPsgCrowdExpansionDialog, setShowPsgCrowdExpansionDialog] =
@@ -248,6 +251,102 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     crowdMembers: psgScene?.crowdMembers.length || 0
   };
 
+  const buildBugReportPayload = useCallback(
+    ({
+      title,
+      details,
+      includePsg
+    }: {
+      title: string;
+      details: string;
+      includePsg: boolean;
+    }) => {
+      const lines = [
+        `Title: ${title.trim()}`,
+        '',
+        'Details:',
+        details.trim() || '(not provided)',
+        '',
+        'Environment:',
+        `- URL: ${window.location.href}`,
+        `- User Agent: ${window.navigator.userAgent}`,
+        `- Build Version: ${import.meta.env.VITE_BUILD_VERSION || 'dev'}`,
+        `- Build Timestamp: ${import.meta.env.VITE_BUILD_TIMESTAMP || 'unknown'}`
+      ];
+
+      if (includePsg) {
+        const psg = exportGraphToPSG(
+          currentNodes as Parameters<typeof exportGraphToPSG>[0],
+          currentEdges as Parameters<typeof exportGraphToPSG>[1],
+          { name: 'bug-report-graph' }
+        );
+        lines.push('', 'PSG:', '```json', JSON.stringify(psg, null, 2), '```');
+      }
+
+      return lines.join('\n');
+    },
+    [currentEdges, currentNodes]
+  );
+
+  const handleCopyBugReport = useCallback(
+    async ({
+      title,
+      details,
+      includePsg
+    }: {
+      title: string;
+      details: string;
+      includePsg: boolean;
+    }) => {
+      try {
+        await navigator.clipboard.writeText(
+          buildBugReportPayload({ title, details, includePsg })
+        );
+        showToast('Copied bug report payload', 'success');
+        return true;
+      } catch (error) {
+        console.error('Failed to copy bug report payload', error);
+        showToast('Failed to copy bug report payload', 'error');
+        return false;
+      }
+    },
+    [buildBugReportPayload, showToast]
+  );
+
+  const handleOpenBugIssue = useCallback(
+    async ({
+      title,
+      details,
+      includePsg
+    }: {
+      title: string;
+      details: string;
+      includePsg: boolean;
+    }) => {
+      const copied = await handleCopyBugReport({ title, details, includePsg });
+      const issueBody = [
+        copied
+          ? 'A full bug report payload has been copied to the clipboard. Paste it below.'
+          : 'Describe the bug below.',
+        '',
+        details.trim() || '(see copied payload for more detail)',
+        '',
+        includePsg
+          ? 'PSG requested: paste the copied payload, including the PSG block.'
+          : 'PSG not included.'
+      ].join('\n');
+
+      const issueUrl = new URL(
+        'https://github.com/WildConstruct/promptSpaghetti/issues/new'
+      );
+      issueUrl.searchParams.set('title', title.trim());
+      issueUrl.searchParams.set('body', issueBody);
+      window.open(issueUrl.toString(), '_blank', 'noopener,noreferrer');
+      showToast('Opened GitHub issue form', 'success');
+    },
+    [handleCopyBugReport, showToast]
+  );
+
   // Edit operations with proper configuration
   const editOps = useEditOperations({
     currentNodes,
@@ -305,6 +404,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             onCopy={handleCopy}
             onPaste={handlePaste}
             onToggleAssetLibrary={() => setAssetLibraryVisible(prev => !prev)}
+            onReportBug={() => setShowBugReportDialog(true)}
             onChangelog={() => setShowChangelog(true)}
           />
         )}
@@ -344,6 +444,13 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             onClose={() => setShowChangelog(false)}
           />
         )}
+
+        <BugReportDialog
+          isOpen={showBugReportDialog}
+          onClose={() => setShowBugReportDialog(false)}
+          onCopyReport={handleCopyBugReport}
+          onOpenIssue={handleOpenBugIssue}
+        />
 
         <SupabaseOpenDialog
           isOpen={showOpenDialog}

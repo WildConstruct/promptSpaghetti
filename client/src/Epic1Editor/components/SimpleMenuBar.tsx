@@ -41,6 +41,7 @@ export interface SimpleMenuBarProps {
   // Help operations
   onDocumentation?: () => void;
   onKeyboardShortcuts?: () => void;
+  onReportBug?: () => void;
   onChangelog?: () => void;
   onAbout?: () => void;
 }
@@ -87,6 +88,7 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
   const hasHelpItems = Boolean(
     props.onDocumentation ||
       props.onKeyboardShortcuts ||
+      props.onReportBug ||
       props.onChangelog ||
       props.onAbout
   );
@@ -329,6 +331,11 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
                 Keyboard Shortcuts
               </button>
             )}
+            {props.onReportBug && (
+              <button onClick={props.onReportBug} className="menu-item">
+                Report a Bug...
+              </button>
+            )}
             {props.onChangelog && (
               <button onClick={props.onChangelog} className="menu-item">
                 What&apos;s New
@@ -337,6 +344,7 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
             {props.onAbout &&
               (props.onDocumentation ||
                 props.onKeyboardShortcuts ||
+                props.onReportBug ||
                 props.onChangelog) && <div className="menu-separator" />}
             {props.onAbout && (
               <button onClick={props.onAbout} className="menu-item">
