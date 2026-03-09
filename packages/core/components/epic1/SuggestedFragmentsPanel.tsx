@@ -7,7 +7,8 @@ import {
 import type { EditableNodeData } from './nodes';
 import {
   AgentFragmentSuggestionService,
-  agentFragmentRecordToPreset
+  agentFragmentRecordToPreset,
+  type PlannedFragmentSuggestion
 } from './services/AgentFragmentSuggestionService';
 
 interface SuggestedFragmentsPanelProps {
@@ -25,7 +26,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
 }) => {
   const [status, setStatus] = React.useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [isInsertingTopSuggestion, setIsInsertingTopSuggestion] = React.useState(false);
-  const [suggestions, setSuggestions] = React.useState<AgentFragmentRecord[]>([]);
+  const [suggestions, setSuggestions] = React.useState<PlannedFragmentSuggestion[]>([]);
 
   React.useEffect(() => {
     let active = true;
@@ -49,7 +50,14 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
           return;
         }
 
-        setSuggestions(next);
+        setSuggestions(
+          AgentFragmentSuggestionService.getPlannedSuggestions({
+            selectedNode,
+            nodes,
+            edges,
+            suggestions: next
+          })
+        );
         setStatus('ready');
       } catch (error) {
         console.error('[SuggestedFragmentsPanel] failed to load suggestions', error);
@@ -116,7 +124,11 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
           }}
           disabled={!onInsert || suggestions.length === 0 || isInsertingTopSuggestion}
         >
-          {isInsertingTopSuggestion ? 'Inserting…' : 'Insert Best Match'}
+          {isInsertingTopSuggestion
+            ? 'Inserting…'
+            : suggestions[0]
+              ? `Insert Best Match • ${suggestions[0].insertionLabel}`
+              : 'Insert Best Match'}
         </button>
       </div>
 
@@ -138,7 +150,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
 
       {suggestions.length > 0 && (
         <div className="suggested-fragments-list">
-          {suggestions.map(fragment => (
+          {suggestions.map(({ fragment, insertionLabel }) => (
             <button
               key={fragment.id}
               type="button"
@@ -150,6 +162,9 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
                 {fragment.roles.join(', ')}
               </div>
               <div className="suggested-fragment-tags">
+                <span className="suggested-fragment-chip intent">
+                  {insertionLabel}
+                </span>
                 {fragment.domains.slice(0, 2).map(domain => (
                   <span key={domain} className="suggested-fragment-chip">
                     {domain}

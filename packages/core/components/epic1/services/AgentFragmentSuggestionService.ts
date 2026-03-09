@@ -37,6 +37,68 @@ function getInsertionLabel(anchor: InsertionAnchor | null): string {
   }
 }
 
+function scoreSuggestion(params: {
+  fragment: AgentFragmentRecord;
+  context: NonNullable<ReturnType<typeof buildFragmentSuggestionContext>>;
+  index: number;
+}): number {
+  const { fragment, context, index } = params;
+  let score = 0;
+
+  score += Math.max(20 - index, 0);
+  score += fragment.priority ?? 0;
+
+  if (context.selectedNodeType === 'weightedChoice') {
+    if (fragment.placementHints.includes('downstream-of-choice')) {
+      score += 8;
+    }
+    if (fragment.roles.includes('branch-extension')) {
+      score += 6;
+    }
+  }
+
+  if (context.isBranchLane) {
+    if (fragment.placementHints.includes('branch-lane')) {
+      score += 10;
+    }
+    if (fragment.roles.includes('branch-extension')) {
+      score += 6;
+    }
+  }
+
+  if (context.needsMerge) {
+    if (fragment.roles.includes('merge-helper')) {
+      score += 10;
+    }
+    if (fragment.roles.includes('output-finisher')) {
+      score += 4;
+    }
+  }
+
+  if (context.leadsToOutput) {
+    if (fragment.placementHints.includes('before-output')) {
+      score += 8;
+    }
+    if (fragment.roles.includes('output-finisher')) {
+      score += 6;
+    }
+  }
+
+  if (context.selectedNodeType === 'enhancedBoundingBox' && fragment.placementHints.includes('inside-region')) {
+    score += 12;
+  }
+
+  if ((context.domainHints ?? []).some(domain => fragment.domains.includes(domain))) {
+    score += 4;
+  }
+
+  if ((context.toneHints ?? []).some(tone => fragment.tone.includes(tone))) {
+    score += 2;
+  }
+
+  return score;
+}
+
 export function agentFragmentRecordToPreset(
   record: AgentFragmentRecord
 ): Preset {
@@ -95,7 +157,19 @@ export class AgentFragmentSuggestionService {
       return [];
     }
 
-    return AgentFragmentRetrievalService.suggestFragmentsForSelection(context);
+    const suggestions = await AgentFragmentRetrievalService.suggestFragmentsForSelection(context);
+
+    return suggestions
+      .map((fragment, index) => ({
+        fragment,
+        score: scoreSuggestion({
+          fragment,
+          context,
+          index
+        })
+      }))
+      .sort((left, right) => right.score - left.score)
+      .map(entry => entry.fragment);
   }
 
   static async insertSuggestion(params: {
