@@ -14,7 +14,12 @@ import {
   buildSequentialEdges
 } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
-import { ApiLLMClient } from '@promptscape/core/services/llm';
+import {
+  ApiLLMClient,
+  TextRefinementService,
+  type RefinementMode
+} from '@promptscape/core/services/llm';
+import { useRuntimeMode } from '@promptscape/core/hooks/useRuntimeMode';
 import './PromptDissector.css';
 import { TextSelectionModal, TextSelection } from './TextSelectionModal';
 import GrokParsingLoader from './GrokParsingLoader';
@@ -60,6 +65,38 @@ const HIGHLIGHT_COLORS = [
   '#DDA0DD', // Plum
   '#FFB347', // Orange
   '#B19CD9' // Purple
+];
+
+type SweeteningStyle = {
+  id: string;
+  label: string;
+  description: string;
+  mode: RefinementMode;
+  prompt: string;
+};
+
+const SWEETENING_STYLES: SweeteningStyle[] = [
+  {
+    id: 'clarify',
+    label: 'Clarify',
+    description: 'Tighten meaning and remove ambiguity',
+    mode: 'correct',
+    prompt: 'clear, structured, and easy to parse'
+  },
+  {
+    id: 'vivid',
+    label: 'Vivid',
+    description: 'Add visual flavor without bloating the prompt',
+    mode: 'expand',
+    prompt: 'vivid, visual, and cinematic while staying concise'
+  },
+  {
+    id: 'tighten',
+    label: 'Tighten',
+    description: 'Trim filler and keep the useful signal',
+    mode: 'contract',
+    prompt: 'concise, direct, and free of filler'
+  }
 ];
 
 type DraftGraphResponse = {
@@ -303,6 +340,10 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   const [llmMode, setLlmMode] = useState<'standard' | 'llm-enhanced'>(
     'standard'
   );
+  const runtimeMode = useRuntimeMode();
+  const [sweeteningStyle, setSweeteningStyle] = useState<string>('clarify');
+  const [isSweetening, setIsSweetening] = useState(false);
+  const [sweeteningNote, setSweeteningNote] = useState<string | null>(null);
   const parsedResultsRef = useRef<{
     standard: { text: string; analysis: PromptAnalysis } | null;
     'llm-enhanced': { text: string; analysis: PromptAnalysis } | null;
@@ -457,6 +498,102 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
   // LLM service adapter (browser -> server)
   const llmServiceRef = useRef(new ApiLLMClient({}));
+  const textRefinementServiceRef = useRef(
+    new TextRefinementService(new ApiLLMClient({}))
+  );
+
+  const applyOfflineSweetening = useCallback(
+    (text: string, styleId: string) => {
+      const normalized = text.replace(/\s+/g, ' ').trim();
+      if (!normalized) {
+        return text;
+      }
+
+      const sentence =
+        /[.!?]$/.test(normalized)
+          ? normalized
+          : `${normalized.charAt(0).toUpperCase()}${normalized.slice(1)}.`;
+
+      switch (styleId) {
+        case 'tighten':
+          return sentence
+            .replace(/\b(very|really|quite|just|actually|basically)\b/gi, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+        case 'vivid':
+          if (/cinematic|vivid|dramatic|weathered|towering|glowing/i.test(sentence)) {
+            return sentence;
+          }
+          return sentence.replace(
+            /(^[A-Z][^.?!]*)([.?!]?)$/,
+            '$1 with vivid visual detail$2'
+          );
+        case 'clarify':
+        default:
+          return sentence
+            .replace(/\s*,\s*/g, ', ')
+            .replace(/\s+/g, ' ')
+            .trim();
+      }
+    },
+    []
+  );
+
+  const handleSweetenPrompt = useCallback(async () => {
+    const source = value.trim();
+    if (!source || isSweetening) {
+      return;
+    }
+
+    const style =
+      SWEETENING_STYLES.find(candidate => candidate.id === sweeteningStyle) ||
+      SWEETENING_STYLES[0];
+
+    setIsSweetening(true);
+    setSweeteningNote(null);
+
+    try {
+      let refinedText = source;
+      let usedCloud = false;
+
+      if (runtimeMode.llm.accessMode === 'cloud') {
+        const result = await textRefinementServiceRef.current.refine(
+          source,
+          style.mode,
+          style.prompt
+        );
+        if (result.refined && result.refined.trim() !== source) {
+          refinedText = result.refined.trim();
+          usedCloud = true;
+        }
+      }
+
+      if (!usedCloud) {
+        refinedText = applyOfflineSweetening(source, style.id);
+      }
+
+      onChange(refinedText);
+      setSweeteningNote(
+        usedCloud
+          ? `Sweetened with hosted AI: ${style.label}`
+          : `Sweetened locally: ${style.label}`
+      );
+    } catch (error) {
+      console.error('[PromptDissector] Sweetening failed:', error);
+      const fallback = applyOfflineSweetening(source, style.id);
+      onChange(fallback);
+      setSweeteningNote(`Sweetened locally: ${style.label}`);
+    } finally {
+      setIsSweetening(false);
+    }
+  }, [
+    applyOfflineSweetening,
+    isSweetening,
+    onChange,
+    runtimeMode.llm.accessMode,
+    sweeteningStyle,
+    value
+  ]);
 
   // Modular parsing function that can be reused
   const performParse = useCallback(
@@ -2166,6 +2303,39 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                   Merge →
                 </button>
                 <div className="dissector-toolbar-sep" />
+                <label
+                  className="dissector-select-wrap"
+                  title="Choose a prompt sweetening style"
+                >
+                  <span className="dissector-select-label">Sweeten</span>
+                  <select
+                    className="dissector-select"
+                    value={sweeteningStyle}
+                    onChange={e => setSweeteningStyle(e.target.value)}
+                    disabled={isSweetening}
+                  >
+                    {SWEETENING_STYLES.map(style => (
+                      <option key={style.id} value={style.id}>
+                        {style.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <button
+                  className="dissector-btn"
+                  onClick={() => {
+                    void handleSweetenPrompt();
+                  }}
+                  title={
+                    runtimeMode.llm.accessMode === 'cloud'
+                      ? 'Sweeten prompt with hosted AI'
+                      : 'Sweeten prompt with local fallback rules'
+                  }
+                  disabled={!value.trim() || isSweetening}
+                >
+                  {isSweetening ? 'Sweetening…' : 'Prompt Sweetening'}
+                </button>
+                <div className="dissector-toolbar-sep" />
                 <button
                   className="dissector-btn"
                   onClick={() => {
@@ -2287,6 +2457,17 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
               </>
             );
           })()}
+        </div>
+      )}
+      {sweeteningNote && (
+        <div className="dissector-sweetening-note" aria-live="polite">
+          {sweeteningNote}
+          {runtimeMode.llm.accessMode !== 'cloud' && (
+            <span className="dissector-sweetening-note-muted">
+              {' '}
+              Hosted sweetening can sit behind a paid/cloud unlock.
+            </span>
+          )}
         </div>
       )}
       {/* Tab interface integrated with text area */}
