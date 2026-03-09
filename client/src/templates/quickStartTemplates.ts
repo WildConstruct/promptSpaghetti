@@ -334,60 +334,60 @@ const branchingFamilyTemplate: QuickStartTemplate = {
   nodes: [
     textNode(
       'monster-dna',
-      60,
-      150,
+      80,
+      280,
       'Archetype DNA',
       'Monster-truck creature hybrid, oversized tires, toothy grill face, arena-show bravado, practical destruction realism'
     ),
-    weightedChoiceNode('monster-family', 410, 130, 'Monster Truck Type', [
+    weightedChoiceNode('monster-family', 500, 260, 'Monster Truck Type', [
       { id: 'monster-1', text: 'swamp brute', weight: 35, hasBranch: true },
       { id: 'monster-2', text: 'graveyard brawler', weight: 35, hasBranch: true },
       { id: 'monster-3', text: 'desert howl rig', weight: 30, hasBranch: true }
     ]),
-    concatNode('monster-core', 770, 130, 'Resolve Core Family Member'),
-    weightedChoiceNode('swamp-details', 1120, 20, 'Swamp Brute Details', [
+    concatNode('monster-core', 940, 280, 'Resolve Core Family Member'),
+    weightedChoiceNode('swamp-details', 1320, 40, 'Swamp Brute Details', [
       { id: 'swamp-1', text: 'tractor-cleat bog tires', weight: 35 },
       { id: 'swamp-2', text: 'snorkel exhaust stacks', weight: 30 },
       { id: 'swamp-3', text: 'moss-green flood lamps', weight: 35 }
     ]),
-    weightedChoiceNode('graveyard-details', 1120, 150, 'Graveyard Brawler Details', [
+    weightedChoiceNode('graveyard-details', 1320, 280, 'Graveyard Brawler Details', [
       { id: 'grave-1', text: 'coffin-lid side pipes', weight: 35 },
       { id: 'grave-2', text: 'grave-dirt paddle tires', weight: 30 },
       { id: 'grave-3', text: 'headstone spotlight rack', weight: 35 }
     ]),
-    weightedChoiceNode('desert-details', 1120, 280, 'Desert Howl Rig Details', [
+    weightedChoiceNode('desert-details', 1320, 520, 'Desert Howl Rig Details', [
       { id: 'desert-1', text: 'sand-cutter rib tires', weight: 35 },
       { id: 'desert-2', text: 'twin coyote-howl mufflers', weight: 30 },
       { id: 'desert-3', text: 'amber dust-chase light bar', weight: 35 }
     ]),
-    concatNode('swamp-detail-merge', 1480, 20, 'Swamp Detail Merge'),
-    concatNode('graveyard-detail-merge', 1480, 150, 'Graveyard Detail Merge'),
-    concatNode('desert-detail-merge', 1480, 280, 'Desert Detail Merge'),
+    concatNode('swamp-detail-merge', 1740, 40, 'Swamp Detail Merge'),
+    concatNode('graveyard-detail-merge', 1740, 280, 'Graveyard Detail Merge'),
+    concatNode('desert-detail-merge', 1740, 520, 'Desert Detail Merge'),
     textNode(
       'swamp-scene',
-      1120,
-      80,
+      1320,
+      150,
       'Swamp Brute Scenario',
       'bog track floodlights, overturned fishing shack props, muddy bite-mark chaos'
     ),
     textNode(
       'graveyard-scene',
-      1120,
-      210,
+      1320,
+      390,
       'Graveyard Brawler Scenario',
       'demolition derby cemetery set, cracked headstone ramps, roaring midnight crowd'
     ),
     textNode(
       'desert-scene',
-      1120,
-      340,
+      1320,
+      630,
       'Desert Howl Scenario',
       'dust storm jump line, coyote-bone signage, heat shimmer and engine growl'
     ),
-    concatNode('swamp-variant', 1720, 20, 'Swamp Variant'),
-    concatNode('graveyard-variant', 1720, 150, 'Graveyard Variant'),
-    concatNode('desert-variant', 1720, 280, 'Desert Variant'),
-    outputNode('monster-output', 1850, 150, 'monster_truck_family_member')
+    concatNode('swamp-variant', 2080, 95, 'Swamp Variant'),
+    concatNode('graveyard-variant', 2080, 335, 'Graveyard Variant'),
+    concatNode('desert-variant', 2080, 575, 'Desert Variant'),
+    outputNode('monster-output', 2420, 335, 'monster_truck_family_member')
   ],
   edges: [
     {

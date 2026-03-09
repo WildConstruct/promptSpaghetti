@@ -63,6 +63,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
   const [panelWidth, setPanelWidth] = useState(defaultWidth);
+  const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -107,6 +108,9 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
       const startX = event.clientX;
       const startWidth = panelWidth;
+      setIsResizing(true);
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'ew-resize';
 
       const onMouseMove = (moveEvent: MouseEvent) => {
         const delta =
@@ -122,6 +126,9 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
       };
 
       const onMouseUp = () => {
+        setIsResizing(false);
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
       };
@@ -134,7 +141,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   return (
     <div
-      className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'}`}
+      className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'} ${isResizing ? 'resizing' : ''}`}
       style={
         {
           '--tabbed-side-panel-width': `${panelWidth}px`
