@@ -233,12 +233,31 @@ export class Epic1ExecutionEngine {
       this.context.incrementDepth();
       this.context.recordNodeExecution(nodeId);
 
+      const incomingEdges = this.graph.edges.filter(edge => edge.target === nodeId);
+      const activeIncomingEdges = incomingEdges.filter(edge => this.isActiveEdge(edge));
+
       // Get inputs for this node
       const inputs = this.getNodeInputs(nodeId);
       debugLogExecution(
         `[ExecutionEngine] Executing node ${nodeId} of type ${node.getNodeType()} with ${inputs.length} inputs:`,
         inputs
       );
+
+      // Branch-aware short circuit: if a node has incoming edges but none of them
+      // are currently active, or all active predecessors resolved to no input,
+      // this node should stay silent instead of behaving like a root node.
+      if (incomingEdges.length > 0 && (activeIncomingEdges.length === 0 || inputs.length === 0)) {
+        this.results.set(nodeId, {
+          nodeId,
+          output: '',
+          duration: Date.now() - startTime
+        });
+        debugLogExecution(
+          `[ExecutionEngine] Node ${nodeId} short-circuited due to inactive or empty incoming branch inputs`
+        );
+        this.context.decrementDepth();
+        return;
+      }
 
       // Execute based on node type
       let output: any = null;

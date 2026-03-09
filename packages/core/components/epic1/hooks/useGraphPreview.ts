@@ -165,8 +165,13 @@ export function useGraphPreview<NodeData = unknown>(
         previewEngineRef.current.setSeeds(seeds);
         const runtimeGraph = convertToRuntimeGraph(nodes, edges);
         if (runtimeGraph) {
-          // Trigger re-execution with new seeds
-          previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
+          // Seed changes should refresh immediately rather than entering the
+          // debounce/cancel cycle, which can leave the tray appearing stuck.
+          void previewEngineRef.current.updatePreviewImmediate(
+            runtimeGraph,
+            nodes,
+            edges
+          );
         }
       }
       showToast?.('info', `Updated ${seeds.length} preview seeds`);
