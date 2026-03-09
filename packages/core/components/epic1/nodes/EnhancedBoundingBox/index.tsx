@@ -74,6 +74,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const [title, setTitle] = useState(data.title || 'Region');
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [description, setDescription] = useState(data.description || '');
+  const [showColorPicker, setShowColorPicker] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(data.isCollapsed || false);
   const [isLocked, setIsLocked] = useState(data.locked || false);
@@ -215,6 +216,12 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     updateNodeInternals(id);
   }, [id, isCollapsed, containedNodes.length, updateNodeInternals]);
 
+  useEffect(() => {
+    if (!selected) {
+      setShowColorPicker(false);
+    }
+  }, [selected]);
+
   // Track render performance
   useEffect(() => {
     perfMonitor.record('boundingBox.render', 1);
@@ -331,6 +338,17 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           if (node.id === id) {
             return {
               ...node,
+              width: COLLAPSED_WIDTH,
+              height: COLLAPSED_HEIGHT,
+              measured: {
+                width: COLLAPSED_WIDTH,
+                height: COLLAPSED_HEIGHT
+              },
+              style: {
+                ...(node.style ?? {}),
+                width: COLLAPSED_WIDTH,
+                height: COLLAPSED_HEIGHT
+              },
               data: {
                 ...node.data,
                 isCollapsed: true,
@@ -343,6 +361,19 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       );
       recalculate();
     } else {
+      const restoredSize = {
+        width: Math.max(
+          MIN_EXPANDED_WIDTH,
+          expandedSizeRef.current.width || data.width || DEFAULT_WIDTH
+        ),
+        height: Math.max(
+          MIN_EXPANDED_HEIGHT,
+          expandedSizeRef.current.height || data.height || DEFAULT_HEIGHT
+        )
+      };
+      sizeRef.current = restoredSize;
+      setCurrentSize(restoredSize);
+
       // Restore hidden nodes
       const boxNode = getNodes().find(n => n.id === id);
       const collapsedNodeIds = boxNode?.data?.collapsedNodeIds || [];
@@ -355,9 +386,22 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           if (node.id === id) {
             return {
               ...node,
+              width: restoredSize.width,
+              height: restoredSize.height,
+              measured: {
+                width: restoredSize.width,
+                height: restoredSize.height
+              },
+              style: {
+                ...(node.style ?? {}),
+                width: restoredSize.width,
+                height: restoredSize.height
+              },
               data: {
                 ...node.data,
                 isCollapsed: false,
+                width: restoredSize.width,
+                height: restoredSize.height,
                 collapsedNodeIds: undefined
               }
             };
@@ -367,7 +411,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       );
       recalculate();
     }
-  }, [isCollapsed, containedNodes, id, setNodes, getNodes, perfMonitor, recalculate]);
+    requestAnimationFrame(() => updateNodeInternals(id));
+  }, [isCollapsed, containedNodes, data.height, data.width, getNodes, id, perfMonitor, recalculate, setNodes, updateNodeInternals]);
 
   /**
    * Handle lock toggle
@@ -396,6 +441,47 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       })
     );
   }, [id, isLocked, containedNodes, setNodes]);
+
+  const handleColorChange = useCallback(
+    (color: string) => {
+      setNodes(nodes =>
+        nodes.map(node =>
+          node.id === id
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  backgroundColor: color,
+                  borderColor: color
+                }
+              }
+            : node
+        )
+      );
+      setShowColorPicker(false);
+    },
+    [id, setNodes]
+  );
+
+  const handleOpacityChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const opacity = Number(event.target.value);
+      setNodes(nodes =>
+        nodes.map(node =>
+          node.id === id
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  opacity
+                }
+              }
+            : node
+        )
+      );
+    },
+    [id, setNodes]
+  );
 
   const canResize = !isCollapsed && !isLocked;
 
@@ -569,13 +655,14 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
 
   const handleBaseStyle: React.CSSProperties = {
     position: 'absolute',
-    background: 'rgba(24, 144, 255, 0.9)',
-    border: '1px solid #fff',
-    borderRadius: 2,
+    background: 'rgba(24, 144, 255, 0.85)',
+    border: '1px solid rgba(255, 255, 255, 0.92)',
+    borderRadius: 999,
     zIndex: 2300,
     pointerEvents: 'auto',
     touchAction: 'none',
-    userSelect: 'none'
+    userSelect: 'none',
+    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.28)'
   };
 
   // Ensure the outer React Flow node wrapper gets updated width/height.
@@ -623,14 +710,14 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     >
       {selected && canResize && (
         <>
-          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -6, left: -6, width: 12, height: 12, cursor: 'nwse-resize' }} onMouseDown={event => startResize('nw', event)} />
-          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -6, right: -6, width: 12, height: 12, cursor: 'nesw-resize' }} onMouseDown={event => startResize('ne', event)} />
-          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -6, left: -6, width: 12, height: 12, cursor: 'nesw-resize' }} onMouseDown={event => startResize('sw', event)} />
-          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -6, right: -6, width: 12, height: 12, cursor: 'nwse-resize' }} onMouseDown={event => startResize('se', event)} />
-          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -5, left: '50%', transform: 'translateX(-50%)', width: 44, height: 10, cursor: 'ns-resize' }} onMouseDown={event => startResize('n', event)} />
-          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -5, left: '50%', transform: 'translateX(-50%)', width: 44, height: 10, cursor: 'ns-resize' }} onMouseDown={event => startResize('s', event)} />
-          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, right: -5, top: '50%', transform: 'translateY(-50%)', width: 10, height: 44, cursor: 'ew-resize' }} onMouseDown={event => startResize('e', event)} />
-          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, left: -5, top: '50%', transform: 'translateY(-50%)', width: 10, height: 44, cursor: 'ew-resize' }} onMouseDown={event => startResize('w', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -4, left: -4, width: 8, height: 8, cursor: 'nwse-resize' }} onMouseDown={event => startResize('nw', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -4, right: -4, width: 8, height: 8, cursor: 'nesw-resize' }} onMouseDown={event => startResize('ne', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -4, left: -4, width: 8, height: 8, cursor: 'nesw-resize' }} onMouseDown={event => startResize('sw', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -4, right: -4, width: 8, height: 8, cursor: 'nwse-resize' }} onMouseDown={event => startResize('se', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, top: -3, left: '50%', transform: 'translateX(-50%)', width: 28, height: 6, cursor: 'ns-resize' }} onMouseDown={event => startResize('n', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, bottom: -3, left: '50%', transform: 'translateX(-50%)', width: 28, height: 6, cursor: 'ns-resize' }} onMouseDown={event => startResize('s', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, right: -3, top: '50%', transform: 'translateY(-50%)', width: 6, height: 28, cursor: 'ew-resize' }} onMouseDown={event => startResize('e', event)} />
+          <div className="ebb-resize-handle nodrag nopan" style={{ ...handleBaseStyle, left: -3, top: '50%', transform: 'translateY(-50%)', width: 6, height: 28, cursor: 'ew-resize' }} onMouseDown={event => startResize('w', event)} />
         </>
       )}
       {isResizing && (
@@ -672,6 +759,93 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         onEditStart={handleEditStart}
         onEditEnd={handleEditEnd}
       />
+
+      {selected && !isCollapsed && (
+        <div
+          className="bounding-box-controls nodrag nopan"
+          style={{
+            position: 'absolute',
+            top: '40px',
+            right: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            zIndex: 2200
+          }}
+        >
+          <div className="color-picker-container" style={{ position: 'relative' }}>
+            <button
+              className="color-picker-button nodrag nopan"
+              onClick={event => {
+                event.stopPropagation();
+                setShowColorPicker(current => !current);
+              }}
+              onMouseDown={event => event.stopPropagation()}
+              title="Region color"
+              style={{
+                width: '18px',
+                height: '18px',
+                borderRadius: '50%',
+                border: '1px solid rgba(255,255,255,0.35)',
+                backgroundColor: data.backgroundColor || DEFAULT_REGION_COLORS[0],
+                cursor: 'pointer',
+                boxShadow: '0 0 0 1px rgba(0,0,0,0.25)'
+              }}
+            />
+            {showColorPicker && (
+              <div
+                className="color-picker-dropdown nodrag nopan"
+                style={{
+                  position: 'absolute',
+                  top: '24px',
+                  right: 0,
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(4, 18px)',
+                  gap: '6px',
+                  padding: '8px',
+                  borderRadius: '8px',
+                  background: 'rgba(20, 20, 20, 0.96)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  boxShadow: '0 10px 20px rgba(0,0,0,0.35)'
+                }}
+              >
+                {DEFAULT_REGION_COLORS.map(color => (
+                  <button
+                    key={color}
+                    className="color-option nodrag nopan"
+                    style={{
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      border: '1px solid rgba(255,255,255,0.22)',
+                      backgroundColor: color,
+                      cursor: 'pointer'
+                    }}
+                    onClick={event => {
+                      event.stopPropagation();
+                      handleColorChange(color);
+                    }}
+                    onMouseDown={event => event.stopPropagation()}
+                    title={color}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+          <input
+            type="range"
+            min="0.1"
+            max="0.5"
+            step="0.05"
+            value={data.opacity || 0.3}
+            onChange={handleOpacityChange}
+            onMouseDown={event => event.stopPropagation()}
+            className="nodrag nopan"
+            title="Region opacity"
+            style={{ width: '72px' }}
+          />
+        </div>
+      )}
 
       {/* Node count indicator */}
       {!isCollapsed && (
