@@ -17,7 +17,28 @@ type FlowNode = Node<EditableNodeData>;
 export interface PlannedFragmentSuggestion {
   fragment: AgentFragmentRecord;
   plan: InsertionPlan | null;
+  actionLabel: string;
   insertionLabel: string;
+}
+
+function getInsertionActionLabel(plan: InsertionPlan | null): string {
+  if (!plan) {
+    return 'Place';
+  }
+
+  if (plan.anchor === 'inside-region') {
+    return 'Place in region';
+  }
+
+  if (plan.targetEdgeId) {
+    return 'Insert on edge';
+  }
+
+  if (plan.sourceNodeId) {
+    return 'Place from selection';
+  }
+
+  return 'Place';
 }
 
 function getInsertionLabel(anchor: InsertionAnchor | null): string {
@@ -142,6 +163,7 @@ export class AgentFragmentSuggestionService {
       return {
         fragment,
         plan,
+        actionLabel: getInsertionActionLabel(plan),
         insertionLabel: getInsertionLabel(plan?.anchor ?? null)
       };
     });

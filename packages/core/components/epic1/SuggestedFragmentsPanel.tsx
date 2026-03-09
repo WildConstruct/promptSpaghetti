@@ -127,7 +127,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
           {isInsertingTopSuggestion
             ? 'Inserting…'
             : suggestions[0]
-              ? `Insert Best Match • ${suggestions[0].insertionLabel}`
+              ? `Insert Best Match • ${suggestions[0].actionLabel}`
               : 'Insert Best Match'}
         </button>
       </div>
@@ -150,7 +150,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
 
       {suggestions.length > 0 && (
         <div className="suggested-fragments-list">
-          {suggestions.map(({ fragment, insertionLabel }) => (
+          {suggestions.map(({ fragment, actionLabel, insertionLabel }) => (
             <button
               key={fragment.id}
               type="button"
@@ -163,6 +163,9 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
               </div>
               <div className="suggested-fragment-tags">
                 <span className="suggested-fragment-chip intent">
+                  {actionLabel}
+                </span>
+                <span className="suggested-fragment-chip intent subtle">
                   {insertionLabel}
                 </span>
                 {fragment.domains.slice(0, 2).map(domain => (
