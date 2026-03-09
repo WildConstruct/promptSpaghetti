@@ -208,10 +208,17 @@ const characterTemplate: QuickStartTemplate = {
 };
 
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
-  character: characterTemplate,
-  scene: lineGraph(['Prompt', 'Setting', 'Mood', 'Output']),
-  story: lineGraph(['Prompt', 'Plot Idea', 'Character', 'Output']),
-  product: lineGraph(['Prompt', 'Features', 'Benefits', 'Output']),
-  art: lineGraph(['Prompt', 'Style', 'Palette', 'Output']),
-  food: lineGraph(['Prompt', 'Ingredients', 'Method', 'Output'])
+  character_variation: characterTemplate,
+  scene_still: lineGraph([
+    'Base Archetype',
+    'Locked Traits',
+    'Variable Traits',
+    'Output'
+  ]),
+  crowd_scene: lineGraph([
+    'Base Archetype',
+    'Locked Traits',
+    'Variation Rules',
+    'Output'
+  ])
 };

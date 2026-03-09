@@ -141,6 +141,149 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
     }, 300);
   }, [mergedAnalysis, onLaunch]);
 
+  const selectedPreviewRole = useMemo(() => {
+    const selectedNode = mergedAnalysis?.nodes.find(
+      node => node.node.id === selectedNodeId
+    )?.node;
+
+    if (!selectedNode) {
+      return null;
+    }
+
+    if (selectedNode.nodeType === 'Choice' || selectedNode.nodeType === 'Variable') {
+      return 'Allowed variation';
+    }
+
+    if (selectedNode.nodeType === 'Output') {
+      return 'Resolved result';
+    }
+
+    return 'Fixed DNA';
+  }, [mergedAnalysis, selectedNodeId]);
+
+  const familySnapshot = useMemo(() => {
+    if (!mergedAnalysis) {
+      return null;
+    }
+
+    const cleanPart = (value: string): string =>
+      value
+        .replace(/\s+/g, ' ')
+        .replace(/\s+([,./])/g, '$1')
+        .trim();
+
+    const pushUnique = (target: string[], value: string) => {
+      const cleaned = cleanPart(value);
+      if (!cleaned) {
+        return;
+      }
+      if (!target.includes(cleaned)) {
+        target.push(cleaned);
+      }
+    };
+
+    const fixedTraits: string[] = [];
+    const variableTraits: string[] = [];
+    const resolvedParts: string[] = [];
+
+    const naturalJoin = (parts: string[]): string => {
+      if (parts.length === 0) {
+        return '';
+      }
+      if (parts.length === 1) {
+        return parts[0];
+      }
+      if (parts.length === 2) {
+        return `${parts[0]} and ${parts[1]}`;
+      }
+      return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
+    };
+
+    mergedAnalysis.nodes.forEach(({ node }) => {
+      if (node.nodeType === 'Output') {
+        return;
+      }
+
+      const data =
+        typeof node.data === 'object' && node.data !== null
+          ? (node.data as Record<string, unknown>)
+          : {};
+      const preview =
+        typeof node.getPreviewText === 'function'
+          ? node.getPreviewText()
+          : typeof data.label === 'string'
+            ? data.label
+            : '';
+
+      if (node.nodeType === 'Choice') {
+        const options = Array.isArray(data.options)
+          ? data.options
+              .map(option =>
+                typeof option === 'string'
+                  ? option
+                  : typeof option === 'object' &&
+                      option !== null &&
+                      typeof (option as Record<string, unknown>).text === 'string'
+                    ? ((option as Record<string, unknown>).text as string)
+                    : null
+              )
+              .filter((option): option is string => Boolean(option))
+          : [];
+        const example = options[0] || preview;
+        pushUnique(variableTraits, preview);
+        if (example) {
+          pushUnique(resolvedParts, example);
+        }
+        return;
+      }
+
+      if (node.nodeType === 'Variable') {
+        pushUnique(variableTraits, preview);
+        if (preview) {
+          pushUnique(resolvedParts, preview);
+        }
+        return;
+      }
+
+      if (preview) {
+        pushUnique(fixedTraits, preview);
+        pushUnique(resolvedParts, preview);
+      }
+    });
+
+    const anchor = fixedTraits[0] || resolvedParts[0] || '';
+    const supportingFixed = fixedTraits.slice(1);
+    const supportingVariable = variableTraits.slice(0, 2);
+    const supportingResolved = resolvedParts.filter(part => part !== anchor);
+
+    let exampleMember = '';
+
+    if (anchor) {
+      const clauses: string[] = [];
+      const fixedClause = naturalJoin(supportingFixed);
+      const variableClause = naturalJoin(supportingVariable);
+
+      if (fixedClause) {
+        clauses.push(fixedClause);
+      }
+      if (variableClause) {
+        clauses.push(`with ${variableClause}`);
+      } else if (supportingResolved.length > 0) {
+        clauses.push(`with ${naturalJoin(supportingResolved.slice(0, 2))}`);
+      }
+
+      exampleMember = clauses.length > 0
+        ? `${anchor}, ${clauses.join(', ')}.`
+        : `${anchor}.`;
+    }
+
+    return {
+      fixedTraits,
+      variableTraits,
+      resolvedPreview: exampleMember
+    };
+  }, [mergedAnalysis]);
+
   // Handle launching with tutorial
   const handleLaunchTutorial = useCallback(() => {
     setIsTransitioning(true);
@@ -152,6 +295,17 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   // Handle quick action selection
   const handleQuickAction = useCallback(
     (templateId: string) => {
+      if (templateId === 'empty') {
+        setIsTransitioning(true);
+        setIsAnalyzing(false);
+        setSelectedNodeId(null);
+        setPromptText('');
+        setTimeout(() => {
+          onLaunch({ kind: 'empty' });
+        }, 300);
+        return;
+      }
+
       // Launch directly with a prebuilt graph
       const tmpl = quickStartTemplates[templateId];
       if (!tmpl) {
@@ -238,7 +392,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             className="launch-logo-image"
           />
           <p className="launch-tagline">
-            Transform your prompts into powerful node graphs
+            Define reusable archetypes, lock design DNA, and generate controlled variations.
           </p>
         </div>
         <div className="launch-header-actions">
@@ -286,7 +440,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         {/* Left Column - Prompt Input & Dissector */}
         <div className="launch-column launch-column-left">
           <div className="launch-section">
-            <h2>Enter Your Prompt</h2>
+            <h2>Describe The Archetype</h2>
             <PromptDissectorErrorBoundary>
               <PromptDissector
                 value={promptText}
@@ -296,7 +450,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                 selectedNodeId={selectedNodeId}
                 onSelectNode={handleNodeSelect}
                 focusOnValueChange
-                placeholder="Type or paste your prompt here... For example: 'A warrior with a sword and shield, wearing armor or leather clothing'"
+                placeholder="Type or paste an archetype prompt... For example: 'A late-70s compact sedan with practical trim, fixed era cues, and controlled variation in color, wheels, and wear level'"
               />
             </PromptDissectorErrorBoundary>
           </div>
@@ -313,7 +467,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         {/* Center Column - Node Preview */}
         <div className="launch-column launch-column-center">
           <div className="launch-section preview-section">
-            <h2>Node Graph Preview</h2>
+            <h2>Family Logic Preview</h2>
             <NodePreview
               analysis={mergedAnalysis}
               onNodeSelect={handleNodeSelect}
@@ -330,7 +484,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
               onClick={handleLaunchEditor}
               disabled={isAnalyzing}
             >
-              {isAnalyzing ? 'Analyzing…' : 'Launch Editor'}
+              {isAnalyzing ? 'Analyzing…' : 'Build Family Graph'}
             </button>
             <span className="launch-hint">
               or press <kbd>⌘</kbd> + <kbd>Enter</kbd>
@@ -349,15 +503,17 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                       className="launch-button-secondary"
                       onClick={() => applyNodeType('Text')}
                       disabled={disabled}
+                      title="Keep this trait stable across the whole family"
                     >
-                      Make Text
+                      Mark Fixed
                     </button>
                     <button
                       className="launch-button-secondary"
                       onClick={() => applyNodeType('Choice')}
                       disabled={disabled}
+                      title="Let this trait vary within the family"
                     >
-                      Make Choice
+                      Allow Variation
                     </button>
                     <button
                       className="launch-button-tertiary"
@@ -366,11 +522,77 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                     >
                       Reset
                     </button>
+                    {selectedPreviewRole && (
+                      <span className="launch-selection-role">
+                        Selected node: {selectedPreviewRole}
+                      </span>
+                    )}
                   </div>
                 );
               })()}
             </div>
           </div>
+
+          {selectedPreviewRole && selectedNodeId && (
+            <div className="launch-role-helper" aria-live="polite">
+              {selectedPreviewRole === 'Fixed DNA'
+                ? 'This trait now reads as part of the stable family identity.'
+                : selectedPreviewRole === 'Allowed variation'
+                  ? 'This trait now reads as something that can change across family members.'
+                  : 'This node resolves the current family member preview.'}
+            </div>
+          )}
+
+          {familySnapshot && (
+            <div className="launch-family-snapshot" aria-label="Family snapshot">
+              <div className="launch-family-column">
+                <span className="launch-family-heading">Fixed DNA</span>
+                <div className="launch-family-tags">
+                  {familySnapshot.fixedTraits.length > 0 ? (
+                    familySnapshot.fixedTraits.map(trait => (
+                      <span key={`fixed-${trait}`} className="launch-family-tag fixed">
+                        {trait}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="launch-family-empty">
+                      Mark a node as fixed to lock the family identity.
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="launch-family-column">
+                <span className="launch-family-heading">Allowed Variation</span>
+                <div className="launch-family-tags">
+                  {familySnapshot.variableTraits.length > 0 ? (
+                    familySnapshot.variableTraits.map(trait => (
+                      <span
+                        key={`variable-${trait}`}
+                        className="launch-family-tag variable"
+                      >
+                        {trait}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="launch-family-empty">
+                      Move traits here when you want bounded family variation.
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="launch-family-column resolved">
+                <span className="launch-family-heading">Example Family Member</span>
+                <span className="launch-family-kicker">One believable in-family output</span>
+                <p className="launch-family-preview">
+                  {familySnapshot.resolvedPreview ||
+                    'Your resolved family member will appear here once the archetype is parsed.'}
+                </p>
+                <p className="launch-family-subtle">
+                  Move a trait between fixed DNA and allowed variation, then watch this rewrite as one in-family output.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Column - Quick Actions */}
@@ -384,12 +606,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           <div className="launch-tips">
             <h3>Pro Tips</h3>
             <ul>
-              <li>Use &quot;or&quot; to create variations</li>
-              <li>Separate concepts with commas</li>
-              <li>
-                Add descriptors with &quot;with&quot; or &quot;wearing&quot;
-              </li>
-              <li>Drag nodes in the preview to rearrange</li>
+              <li>Use quick-start graphs when you want a clean archetype-first demo path</li>
+              <li>Use prompt bootstrap when you want a first graph drafted from text</li>
+              <li>Lock shared traits first, then make only the details you want variable</li>
+              <li>Use the PSG sidecar later when you want references or downstream tinkering</li>
             </ul>
           </div>
         </div>

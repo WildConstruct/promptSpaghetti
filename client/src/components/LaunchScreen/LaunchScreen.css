@@ -256,6 +256,108 @@
   display: inline-flex;
   gap: 0.5rem;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.launch-selection-role {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  padding-left: 0.5rem;
+}
+
+.launch-role-helper {
+  margin-top: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  background: rgba(103, 126, 234, 0.08);
+  border: 1px solid rgba(103, 126, 234, 0.18);
+  color: #c7d2fe;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.launch-family-snapshot {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 1rem;
+}
+
+.launch-family-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.launch-family-column.resolved {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  padding-left: 1rem;
+}
+
+.launch-family-heading {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  font-weight: 700;
+}
+
+.launch-family-kicker {
+  font-size: 0.78rem;
+  color: #818cf8;
+  font-weight: 600;
+}
+
+.launch-family-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.launch-family-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.38rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  border: 1px solid transparent;
+}
+
+.launch-family-tag.fixed {
+  color: #99f6e4;
+  background: rgba(45, 212, 191, 0.1);
+  border-color: rgba(45, 212, 191, 0.25);
+}
+
+.launch-family-tag.variable {
+  color: #fde68a;
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.launch-family-empty {
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.launch-family-preview {
+  margin: 0;
+  color: #e5e7eb;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.launch-family-subtle {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.82rem;
+  line-height: 1.35;
 }
 
 /* Tips */
@@ -494,5 +596,16 @@
 
   .launch-column-right {
     display: none;
+  }
+
+  .launch-family-snapshot {
+    grid-template-columns: 1fr;
+  }
+
+  .launch-family-column.resolved {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1rem;
   }
 }

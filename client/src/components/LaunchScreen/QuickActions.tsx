@@ -10,6 +10,7 @@ interface Template {
   title: string;
   description: string;
   prompt: string;
+  badge?: string;
   icon: React.ReactNode;
 }
 
@@ -41,7 +42,7 @@ const SceneIcon = () => (
   </svg>
 );
 
-const StoryIcon = () => (
+const CrowdIcon = () => (
   <svg
     width="24"
     height="24"
@@ -50,12 +51,14 @@ const StoryIcon = () => (
     stroke="currentColor"
     strokeWidth="2"
   >
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+    <circle cx="8" cy="8" r="3" />
+    <circle cx="16" cy="9" r="2.5" />
+    <path d="M3 19c0-2.5 2.2-4.5 5-4.5s5 2 5 4.5" />
+    <path d="M13 19c.2-1.9 1.9-3.5 4.2-3.5 2.1 0 3.8 1.2 4.3 3" />
   </svg>
 );
 
-const ProductIcon = () => (
+const BlankIcon = () => (
   <svg
     width="24"
     height="24"
@@ -64,88 +67,46 @@ const ProductIcon = () => (
     stroke="currentColor"
     strokeWidth="2"
   >
-    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-    <line x1="8" y1="21" x2="16" y2="21" />
-    <line x1="12" y1="17" x2="12" y2="21" />
-  </svg>
-);
-
-const ArtIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-  </svg>
-);
-
-const RecipeIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M6 2L3 6v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <path d="M16 10a4 4 0 0 1-8 0" />
+    <rect x="4" y="4" width="16" height="16" rx="2" />
+    <path d="M8 12h8" />
+    <path d="M12 8v8" />
   </svg>
 );
 
 const templates: Template[] = [
   {
-    id: 'character',
-    title: 'Character Generator',
-    description: 'Create varied character descriptions',
+    id: 'character_variation',
+    title: 'Character Archetype',
+    description: 'Define shared character DNA with controlled trait variation',
     prompt:
       'A warrior or mage, wearing armor or robes, carrying a sword or staff, with blonde or dark hair',
+    badge: 'Best First Demo',
     icon: <CharacterIcon />
   },
   {
-    id: 'scene',
-    title: 'Scene Description',
-    description: 'Build dynamic scene variations',
+    id: 'scene_still',
+    title: 'Vehicle Family',
+    description: 'Reusable vehicle archetype with stable design language',
     prompt:
-      'A forest or desert landscape, during day or night, with mountains or rivers in the background, peaceful or stormy weather',
+      'Late-70s compact sedan, worn paint, practical trim, variations in color, wheels, and wear level',
     icon: <SceneIcon />
   },
   {
-    id: 'story',
-    title: 'Story Prompt',
-    description: 'Generate story beginnings',
+    id: 'crowd_scene',
+    title: 'Building Family',
+    description: 'Environmental archetype with bounded facade and clutter variation',
     prompt:
-      'Once upon a time, in a kingdom or village, there lived a prince or peasant, who discovered a treasure or curse',
-    icon: <StoryIcon />
+      'Weathered urban storefront, fixed era and material language, variations in signage, damage, and window dressing',
+    badge: 'Archetype',
+    icon: <CrowdIcon />
   },
   {
-    id: 'product',
-    title: 'Product Description',
-    description: 'Create product variations',
-    prompt:
-      'A modern or vintage style chair, made of wood or metal, in red or blue color, for indoor or outdoor use',
-    icon: <ProductIcon />
-  },
-  {
-    id: 'art',
-    title: 'Art Prompt',
-    description: 'Generate art descriptions',
-    prompt:
-      'Abstract or realistic painting, with warm or cool colors, featuring geometric or organic shapes, minimalist or detailed style',
-    icon: <ArtIcon />
-  },
-  {
-    id: 'food',
-    title: 'Recipe Generator',
-    description: 'Create recipe variations',
-    prompt:
-      'A sweet or savory dish, with chicken or tofu, seasoned with herbs or spices, served hot or cold',
-    icon: <RecipeIcon />
+    id: 'empty',
+    title: 'Blank Canvas',
+    description: 'Start from scratch in the editor with no template applied',
+    prompt: 'Open an empty graph and begin authoring manually',
+    badge: 'Manual',
+    icon: <BlankIcon />
   }
 ];
 
@@ -162,6 +123,9 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
             onClick={() => onSelectTemplate(template.id)}
             title={template.prompt}
           >
+            {template.badge && (
+              <span className="template-badge">{template.badge}</span>
+            )}
             <span className="template-icon">{template.icon}</span>
             <span className="template-title">{template.title}</span>
             <span className="template-description">{template.description}</span>
@@ -171,7 +135,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
 
       <div className="quick-actions-footer">
         <p className="hint">
-          Click any template to load it into the prompt editor
+          Click a template to launch straight into the editor with an archetype-oriented starter graph.
         </p>
       </div>
     </div>
