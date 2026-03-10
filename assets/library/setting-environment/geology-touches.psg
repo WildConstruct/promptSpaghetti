@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Geology Touches",
   "metadata": {
     "id": "fragment-geology-touches",
     "name": "Geology Touches",
@@ -8,37 +8,84 @@
     "author": "Aspen (Asset Generator)",
     "created": "2025-01-15",
     "category": "setting-environment",
-    "tags": ["geology", "landscape", "terrain", "formations"]
+    "tags": [
+      "geology",
+      "landscape",
+      "terrain",
+      "formations"
+    ]
   },
   "nodes": [
     {
       "id": "geology-touches-main",
       "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "basalt column hexagons",
+          "weight": 2
+        },
+        {
+          "text": "red-clay mesa layers",
+          "weight": 2
+        },
+        {
+          "text": "karst limestone spires",
+          "weight": 2
+        },
+        {
+          "text": "granite cliff faces",
+          "weight": 2
+        },
+        {
+          "text": "obsidian glass flows",
+          "weight": 1
+        },
+        {
+          "text": "sandstone arch formations",
+          "weight": 2
+        },
+        {
+          "text": "shale cliff striations",
+          "weight": 2
+        },
+        {
+          "text": "crystal cave clusters",
+          "weight": 1
+        },
+        {
+          "text": "volcanic pumice fields",
+          "weight": 1
+        },
+        {
+          "text": "glacier-carved valleys",
+          "weight": 2
+        },
+        {
+          "text": "salt flat expanses",
+          "weight": 1
+        },
+        {
+          "text": "metamorphic fold patterns",
+          "weight": 1
+        }
+      ],
       "data": {
         "label": "Geology Touches",
-        "region": "sienna",
-        "options": [
-          { "text": "basalt column hexagons", "weight": 2 },
-          { "text": "red-clay mesa layers", "weight": 2 },
-          { "text": "karst limestone spires", "weight": 2 },
-          { "text": "granite cliff faces", "weight": 2 },
-          { "text": "obsidian glass flows", "weight": 1 },
-          { "text": "sandstone arch formations", "weight": 2 },
-          { "text": "shale cliff striations", "weight": 2 },
-          { "text": "crystal cave clusters", "weight": 1 },
-          { "text": "volcanic pumice fields", "weight": 1 },
-          { "text": "glacier-carved valleys", "weight": 2 },
-          { "text": "salt flat expanses", "weight": 1 },
-          { "text": "metamorphic fold patterns", "weight": 1 }
-        ]
+        "region": "sienna"
       }
     }
   ],
-  "groups": [
+  "edges": [],
+  "regions": [
     {
       "id": "region-geology-touches",
-      "nodeIds": ["geology-touches-main"],
-      "color": "sienna"
+      "name": "Region 1",
+      "color": "sienna",
+      "nodes": [
+        "geology-touches-main"
+      ]
     }
   ]
 }

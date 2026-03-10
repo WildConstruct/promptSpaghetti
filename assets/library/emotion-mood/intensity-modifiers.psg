@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Intensity Modifiers",
   "metadata": {
     "name": "Intensity Modifiers",
     "category": "emotion-mood",
@@ -13,92 +13,94 @@
       "type": "WeightedChoice",
       "x": 100,
       "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "barely perceptible hint of",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "crackling with electric",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "off-the-charts overwhelming",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "subtly understated",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "explosively uncontrolled",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "steadily building",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "flickering unstable",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "muted and suppressed",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "viscerally raw",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "quietly simmering",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
       "data": {
         "label": "Intensity Modifiers",
         "region": "crimson",
-        "collapsed": false,
-        "options": [
-          {
-            "id": "opt-1",
-            "text": "barely perceptible hint of",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-2",
-            "text": "crackling with electric",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-3",
-            "text": "off-the-charts overwhelming",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-4",
-            "text": "subtly understated",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-5",
-            "text": "explosively uncontrolled",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-6",
-            "text": "steadily building",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-7",
-            "text": "flickering unstable",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-8",
-            "text": "muted and suppressed",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-9",
-            "text": "viscerally raw",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-10",
-            "text": "quietly simmering",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          }
-        ]
+        "collapsed": false
       }
     }
   ],
   "edges": [],
-  "groups": [
+  "regions": [
     {
       "id": "region-intensity-modifiers",
-      "label": "Intensity Modifiers",
-      "nodeIds": ["intensity-modifiers-main"],
-      "color": "crimson"
+      "name": "Intensity Modifiers",
+      "color": "crimson",
+      "nodes": [
+        "intensity-modifiers-main"
+      ]
     }
   ]
 }

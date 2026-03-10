@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Facial Micro-Gestures",
   "metadata": {
     "name": "Facial Micro-Gestures",
     "category": "action-dynamics",
@@ -13,106 +13,108 @@
       "type": "WeightedChoice",
       "x": 100,
       "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "nostril flare of anger",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "jaw clenches tightly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "brow quirks questioningly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "eye twitches involuntarily",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "lip corner curls slightly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "chin lifts defiantly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "temple pulse visible",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "cheek muscle tightens",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "forehead vein throbs",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "tongue darts nervously",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "nose wrinkles in disgust",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "eyelid flutters rapidly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
       "data": {
         "label": "Facial Micro-Gestures",
         "region": "pink",
-        "collapsed": false,
-        "options": [
-          {
-            "id": "opt-1",
-            "text": "nostril flare of anger",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-2",
-            "text": "jaw clenches tightly",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-3",
-            "text": "brow quirks questioningly",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-4",
-            "text": "eye twitches involuntarily",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-5",
-            "text": "lip corner curls slightly",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-6",
-            "text": "chin lifts defiantly",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-7",
-            "text": "temple pulse visible",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-8",
-            "text": "cheek muscle tightens",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-9",
-            "text": "forehead vein throbs",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-10",
-            "text": "tongue darts nervously",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-11",
-            "text": "nose wrinkles in disgust",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-12",
-            "text": "eyelid flutters rapidly",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          }
-        ]
+        "collapsed": false
       }
     }
   ],
   "edges": [],
-  "groups": [
+  "regions": [
     {
       "id": "region-facial-micro-gestures",
-      "label": "Facial Micro-Gestures",
-      "nodeIds": ["facial-micro-gestures-main"],
-      "color": "pink"
+      "name": "Facial Micro-Gestures",
+      "color": "pink",
+      "nodes": [
+        "facial-micro-gestures-main"
+      ]
     }
   ]
 }

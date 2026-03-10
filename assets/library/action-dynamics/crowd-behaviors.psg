@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Crowd Behaviors",
   "metadata": {
     "name": "Crowd Behaviors",
     "category": "action-dynamics",
@@ -13,106 +13,108 @@
       "type": "WeightedChoice",
       "x": 100,
       "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "ripple wave through audience",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "staggered clapping builds",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "collective gasp of shock",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "synchronized head turn",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "crowd surges forward",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "mass exodus begins",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "hushed murmuring spreads",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "standing ovation erupts",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "crowd parts like water",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "unified chanting begins",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "spontaneous circle forms",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "domino effect of movement",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
       "data": {
         "label": "Crowd Behaviors",
         "region": "purple",
-        "collapsed": false,
-        "options": [
-          {
-            "id": "opt-1",
-            "text": "ripple wave through audience",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-2",
-            "text": "staggered clapping builds",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-3",
-            "text": "collective gasp of shock",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-4",
-            "text": "synchronized head turn",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-5",
-            "text": "crowd surges forward",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-6",
-            "text": "mass exodus begins",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-7",
-            "text": "hushed murmuring spreads",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-8",
-            "text": "standing ovation erupts",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-9",
-            "text": "crowd parts like water",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-10",
-            "text": "unified chanting begins",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-11",
-            "text": "spontaneous circle forms",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-12",
-            "text": "domino effect of movement",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          }
-        ]
+        "collapsed": false
       }
     }
   ],
   "edges": [],
-  "groups": [
+  "regions": [
     {
       "id": "region-crowd-behaviors",
-      "label": "Crowd Behaviors",
-      "nodeIds": ["crowd-behaviors-main"],
-      "color": "purple"
+      "name": "Crowd Behaviors",
+      "color": "purple",
+      "nodes": [
+        "crowd-behaviors-main"
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Scars & Tattoos",
   "metadata": {
     "name": "Scars & Tattoos",
     "category": "body-silhouette",
@@ -13,106 +13,108 @@
       "type": "WeightedChoice",
       "x": 100,
       "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "surgical ladder scars down the spine",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "intricate koi sleeve tattoo",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "ritual scarification patterns",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "faded military unit tattoo",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "lightning-tree burn scars",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "geometric blackwork patterns",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "claw mark scars across chest",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "watercolor floral back piece",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "bullet wound scar tissue",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "tribal band around bicep",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "constellation dot tattoos",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "rope burn marks on wrists",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
       "data": {
         "label": "Scars & Tattoos",
         "region": "steel-blue",
-        "collapsed": false,
-        "options": [
-          {
-            "id": "opt-1",
-            "text": "surgical ladder scars down the spine",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-2",
-            "text": "intricate koi sleeve tattoo",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-3",
-            "text": "ritual scarification patterns",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-4",
-            "text": "faded military unit tattoo",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-5",
-            "text": "lightning-tree burn scars",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-6",
-            "text": "geometric blackwork patterns",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-7",
-            "text": "claw mark scars across chest",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-8",
-            "text": "watercolor floral back piece",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-9",
-            "text": "bullet wound scar tissue",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-10",
-            "text": "tribal band around bicep",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-11",
-            "text": "constellation dot tattoos",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-12",
-            "text": "rope burn marks on wrists",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          }
-        ]
+        "collapsed": false
       }
     }
   ],
   "edges": [],
-  "groups": [
+  "regions": [
     {
       "id": "region-scars-tattoos",
-      "label": "Scars & Tattoos",
-      "nodeIds": ["scars-tattoos-main"],
-      "color": "steel-blue"
+      "name": "Scars & Tattoos",
+      "color": "steel-blue",
+      "nodes": [
+        "scars-tattoos-main"
+      ]
     }
   ]
 }

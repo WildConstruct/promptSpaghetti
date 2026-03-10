@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Nuanced Feels",
   "metadata": {
     "name": "Nuanced Feels",
     "category": "emotion-mood",
@@ -13,106 +13,108 @@
       "type": "WeightedChoice",
       "x": 100,
       "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "nostalgic ache for lost times",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "schadenfreude at another's misfortune",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "anticipatory fizz of excitement",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "bittersweet longing",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "existential dread creeping in",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "imposter syndrome anxiety",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "vicarious embarrassment",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "cathartic release",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "ambiguous unease",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "weltschmerz world-weariness",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "frisson of aesthetic pleasure",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "saudade for what never was",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
       "data": {
         "label": "Nuanced Feels",
         "region": "orange",
-        "collapsed": false,
-        "options": [
-          {
-            "id": "opt-1",
-            "text": "nostalgic ache for lost times",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-2",
-            "text": "schadenfreude at another's misfortune",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-3",
-            "text": "anticipatory fizz of excitement",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-4",
-            "text": "bittersweet longing",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-5",
-            "text": "existential dread creeping in",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-6",
-            "text": "imposter syndrome anxiety",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-7",
-            "text": "vicarious embarrassment",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-8",
-            "text": "cathartic release",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-9",
-            "text": "ambiguous unease",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-10",
-            "text": "weltschmerz world-weariness",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-11",
-            "text": "frisson of aesthetic pleasure",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-12",
-            "text": "saudade for what never was",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          }
-        ]
+        "collapsed": false
       }
     }
   ],
   "edges": [],
-  "groups": [
+  "regions": [
     {
       "id": "region-nuanced-feels",
-      "label": "Nuanced Feels",
-      "nodeIds": ["nuanced-feels-main"],
-      "color": "orange"
+      "name": "Nuanced Feels",
+      "color": "orange",
+      "nodes": [
+        "nuanced-feels-main"
+      ]
     }
   ]
 }
