@@ -147,7 +147,7 @@
 }
 
 .launch-column-right {
-  flex: 0 0 24%;
+  flex: 0 0 23%;
   min-width: 280px;
   min-height: 0;
 }
@@ -160,6 +160,7 @@
 
 .launch-column-right .launch-tips {
   flex: 0 0 auto;
+  margin-top: -0.35rem;
 }
 
 /* Sections */
@@ -386,28 +387,31 @@
 .launch-tips {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem 1.1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .launch-tips h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.1rem;
+  margin: 0 0 0.65rem 0;
+  font-size: 0.96rem;
   color: #e1e1e1;
 }
 
 .launch-tips ul {
   margin: 0;
-  padding-left: 1.5rem;
+  padding-left: 0;
   list-style: none;
+  display: grid;
+  gap: 0.45rem;
 }
 
 .launch-tips li {
   position: relative;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   color: #999;
-  font-size: 0.95rem;
-  padding-left: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  padding-left: 0.85rem;
 }
 
 .launch-tips li::before {
