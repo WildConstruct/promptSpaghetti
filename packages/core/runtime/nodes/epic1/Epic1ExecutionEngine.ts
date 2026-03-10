@@ -453,37 +453,8 @@ export class Epic1ExecutionEngine {
     node: ConcatNode,
     inputs: any[]
   ): Promise<string> {
-    // ConcatNode stores its config in 'value' field
-    const config = node.getData().value || node.getData().configuration || {};
-    const separator = config.separator !== undefined ? config.separator : ' ';
-    const trimInputs = config.trimInputs !== false;
-    const requireAllInputs = config.requireAllInputs === true;
-
-    debugLogExecution(
-      `[ExecutionEngine] Concat node ${node.serialize().id} config:`,
-      { separator, trimInputs },
-      'inputs:',
-      inputs
-    );
-
-    // Process inputs
-    const processedInputs = inputs
-      .filter(input => input != null && input !== '') // Remove null/undefined/empty
-      .map(input => {
-        const str = String(input);
-        return trimInputs ? str.trim() : str;
-      })
-      .filter(str => str.length > 0); // Remove empty after trimming
-
-    const expectedInputCount = this.graph.edges.filter(
-      edge => edge.target === node.serialize().id
-    ).length;
-
-    if (requireAllInputs && processedInputs.length < expectedInputCount) {
-      return '';
-    }
-
-    const result = processedInputs.join(separator);
+    node.setInputs(inputs.map(input => String(input ?? '')));
+    const result = await node.run(this.context.getExecutionContext());
     debugLogExecution(
       `[ExecutionEngine] Concat node ${node.serialize().id} result:`,
       result
@@ -660,23 +631,7 @@ export class Epic1ExecutionEngine {
     const visiting = new Set<string>();
     const order: string[] = [];
 
-    // Build adjacency list
-    const adjacency = new Map<string, string[]>();
-    this.graph.nodes.forEach((_, nodeId) => {
-      adjacency.set(nodeId, []);
-    });
-
-    this.graph.edges.forEach(edge => {
-      const neighbors = adjacency.get(edge.source) || [];
-      neighbors.push(edge.target);
-      adjacency.set(edge.source, neighbors);
-    });
-
     debugLogExecution('[ExecutionEngine] Graph edges:', this.graph.edges);
-    debugLogExecution(
-      '[ExecutionEngine] Adjacency list:',
-      Array.from(adjacency.entries())
-    );
 
     // DFS for topological sort
     const visit = (nodeId: string) => {
@@ -707,13 +662,25 @@ export class Epic1ExecutionEngine {
       order.push(nodeId);
     };
 
-    // Start from output node
-    if (this.outputNodeId) {
-      visit(this.outputNodeId);
-    }
+    // Prioritize setup-oriented Variable nodes so disconnected variable
+    // initializers run before template/output consumers while still honoring
+    // explicit graph dependencies.
+    const orderedNodeIds = Array.from(this.graph.nodes.entries())
+      .map(([nodeId, node], index) => ({
+        nodeId,
+        index,
+        priority: node.getNodeType() === Epic1NodeType.Variable ? 0 : 1
+      }))
+      .sort((a, b) => {
+        if (a.priority !== b.priority) {
+          return a.priority - b.priority;
+        }
 
-    // Visit any remaining nodes (disconnected components)
-    this.graph.nodes.forEach((_, nodeId) => {
+        return a.index - b.index;
+      })
+      .map(entry => entry.nodeId);
+
+    orderedNodeIds.forEach(nodeId => {
       if (!visited.has(nodeId)) {
         visit(nodeId);
       }

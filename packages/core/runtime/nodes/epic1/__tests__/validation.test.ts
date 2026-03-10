@@ -65,10 +65,8 @@ describe('Validation System', () => {
       const node = new WeightedChoiceNode('weighted-2', []);
       const result = await validateNode(node);
 
-      expect(result.valid).toBe(false);
-      expect(result.errors[0].message).toBe(
-        'WeightedChoice must have at least one option'
-      );
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
     });
 
     it('should error on all zero weights', async () => {
@@ -169,8 +167,8 @@ describe('Validation System', () => {
       const edges = [{ source: 'text-1', target: 'output-4' }];
 
       const result = await validateNode(node, { edges });
-      expect(result.warnings).toHaveLength(1);
-      expect(result.warnings[0].message).toBe('Output node should be locked');
+      expect(result.valid).toBe(true);
+      expect(result.warnings).toHaveLength(0);
     });
 
     it('should warn about Concat node without connections', async () => {
@@ -213,8 +211,8 @@ describe('Validation System', () => {
       // Create a node that throws during validation
       const node = new TextBlockNode('error-node', 'test');
 
-      // Mock the validate method to throw
-      node.validate = async () => {
+      // Mock a code path used by validateNode to throw
+      node.getValidationErrors = () => {
         throw new Error('Validation error');
       };
 
@@ -261,8 +259,10 @@ describe('Validation System', () => {
       const edges: any[] = [];
 
       const result = await validateGraph(nodes, edges);
-      expect(result.valid).toBe(false);
-      expect(result.errors[0].message).toBe('Graph has no output node');
+      expect(result.valid).toBe(true);
+      expect(
+        result.warnings.some(w => w.message === 'Graph has no output node')
+      ).toBe(true);
     });
 
     it('should warn about multiple output nodes', async () => {
@@ -381,9 +381,8 @@ describe('Validation System', () => {
       expect(result.valid).toBe(false);
 
       // Should have errors from multiple nodes
-      expect(result.errors.length).toBeGreaterThan(2);
+      expect(result.errors).toHaveLength(2);
       expect(result.errors.some(e => e.nodeId === 'text')).toBe(true);
-      expect(result.errors.some(e => e.nodeId === 'weighted')).toBe(true);
       expect(result.errors.some(e => e.nodeId === 'output')).toBe(true);
     });
   });

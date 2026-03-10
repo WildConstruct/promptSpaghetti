@@ -10,8 +10,9 @@ import {
 } from '../presetSourcePolicy';
 import {
   findFragmentBoundaryNodes,
+  replacePresetAtNode,
   splicePresetIntoEdge
-} from '../useDragDropHandlers';
+} from '../../services/FragmentExecution';
 import type { EditableNodeData } from '../../nodes';
 
 type FlowNode = Node<EditableNodeData>;
@@ -345,5 +346,123 @@ describe('useDragDropHandlers helpers', () => {
     expect(result.find(edge => edge.id === 'edge-1')).toBeTruthy();
     expect(result.find(edge => edge.id === 'entry-middle')).toBeTruthy();
     expect(result.find(edge => edge.id === 'middle-exit')).toBeTruthy();
+  });
+
+  it('replaces a single node with a single-node fragment and rewires edges', () => {
+    const existingNodes = [
+      createChildNode('source'),
+      createChildNode('target'),
+      createChildNode('after')
+    ];
+    const existingEdges = [
+      createEdge('source-target', 'source', 'target'),
+      createEdge('target-after', 'target', 'after')
+    ];
+    const nodesToAdd = [createChildNode('inserted')];
+
+    const result = replacePresetAtNode(
+      existingNodes,
+      existingEdges,
+      nodesToAdd,
+      [],
+      { nodeId: 'target' },
+      {
+        preferredInsertion: 'replace-node',
+        entryStrategy: 'single-node',
+        exitStrategy: 'single-node'
+      }
+    );
+
+    expect(result.replaced).toBe(true);
+    expect(result.nodes.find(node => node.id === 'target')).toBeFalsy();
+    expect(result.nodes.find(node => node.id === 'inserted')).toBeTruthy();
+    expect(result.edges.find(edge => edge.source === 'source' && edge.target === 'inserted')).toBeTruthy();
+    expect(result.edges.find(edge => edge.source === 'inserted' && edge.target === 'after')).toBeTruthy();
+    expect(result.edges.find(edge => edge.id === 'source-target')).toBeFalsy();
+    expect(result.edges.find(edge => edge.id === 'target-after')).toBeFalsy();
+  });
+
+  it('replaces a node with a simple multi-node fragment and rewires through boundaries', () => {
+    const existingNodes = [
+      createChildNode('source'),
+      createChildNode('target'),
+      createChildNode('after')
+    ];
+    const existingEdges = [
+      createEdge('source-target', 'source', 'target'),
+      createEdge('target-after', 'target', 'after')
+    ];
+    const nodesToAdd = [
+      createChildNode('entry'),
+      createChildNode('middle'),
+      createChildNode('exit')
+    ];
+    const edgesToAdd = [
+      createEdge('entry-middle', 'entry', 'middle'),
+      createEdge('middle-exit', 'middle', 'exit')
+    ];
+
+    const result = replacePresetAtNode(
+      existingNodes,
+      existingEdges,
+      nodesToAdd,
+      edgesToAdd,
+      { nodeId: 'target' },
+      {
+        preferredInsertion: 'replace-node',
+        entryStrategy: 'auto-boundary',
+        exitStrategy: 'auto-boundary'
+      }
+    );
+
+    expect(result.replaced).toBe(true);
+    expect(result.nodes.find(node => node.id === 'target')).toBeFalsy();
+    expect(result.edges.find(edge => edge.source === 'source' && edge.target === 'entry')).toBeTruthy();
+    expect(result.edges.find(edge => edge.source === 'exit' && edge.target === 'after')).toBeTruthy();
+    expect(result.edges.find(edge => edge.id === 'entry-middle')).toBeTruthy();
+    expect(result.edges.find(edge => edge.id === 'middle-exit')).toBeTruthy();
+  });
+
+  it('falls back to append-only insertion when replacement boundaries are ambiguous', () => {
+    const existingNodes = [
+      createChildNode('source'),
+      createChildNode('target'),
+      createChildNode('after')
+    ];
+    const existingEdges = [
+      createEdge('source-target', 'source', 'target'),
+      createEdge('target-after', 'target', 'after')
+    ];
+    const nodesToAdd = [
+      createChildNode('a'),
+      createChildNode('b'),
+      createChildNode('c'),
+      createChildNode('d')
+    ];
+    const edgesToAdd = [
+      createEdge('ac', 'a', 'c'),
+      createEdge('bd', 'b', 'd')
+    ];
+
+    const result = replacePresetAtNode(
+      existingNodes,
+      existingEdges,
+      nodesToAdd,
+      edgesToAdd,
+      { nodeId: 'target' },
+      {
+        preferredInsertion: 'replace-node',
+        entryStrategy: 'auto-boundary',
+        exitStrategy: 'auto-boundary'
+      }
+    );
+
+    expect(result.replaced).toBe(false);
+    expect(result.nodes.find(node => node.id === 'target')).toBeTruthy();
+    expect(result.nodes.find(node => node.id === 'a')).toBeTruthy();
+    expect(result.edges.find(edge => edge.id === 'source-target')).toBeTruthy();
+    expect(result.edges.find(edge => edge.id === 'target-after')).toBeTruthy();
+    expect(result.edges.find(edge => edge.id === 'ac')).toBeTruthy();
+    expect(result.edges.find(edge => edge.id === 'bd')).toBeTruthy();
   });
 });

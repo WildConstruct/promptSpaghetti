@@ -277,16 +277,17 @@ export class LLMService {
   ): Promise<DraftGraphFromPromptResponse>;
   async draftGraphFromPrompt(
     prompt: string,
-    request?: Omit<DraftGraphFromPromptRequest, 'prompt'>
+    request?: Partial<Omit<DraftGraphFromPromptRequest, 'prompt'>>
   ): Promise<DraftGraphFromPromptResponse>;
   async draftGraphFromPrompt(
     requestOrPrompt: DraftGraphFromPromptRequest | string,
-    requestOverrides: Omit<DraftGraphFromPromptRequest, 'prompt'> = {}
+    requestOverrides: Partial<Omit<DraftGraphFromPromptRequest, 'prompt'>> = {}
   ): Promise<DraftGraphFromPromptResponse> {
-    const request =
+    const request: DraftGraphFromPromptRequest =
       typeof requestOrPrompt === 'string'
         ? {
             prompt: requestOrPrompt,
+            mode: requestOverrides.mode ?? 'draft',
             ...requestOverrides
           }
         : requestOrPrompt;

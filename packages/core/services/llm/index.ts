@@ -56,11 +56,9 @@ export type {
 
 export type {
   LLMConfig,
-  LLMStatusResponse,
-  LLMMode,
-  LLMProvider,
-  LLMCapability
+  LLMStatusResponse
 } from '../ApiLLMService';
+export type { LLMMode, LLMProvider, LLMCapability } from './contracts';
 
 export {
   LLM_CAPABILITIES

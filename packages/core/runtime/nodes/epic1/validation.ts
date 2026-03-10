@@ -141,10 +141,9 @@ async function validateTextBlock(
   }
 
   // Check for unmatched variable syntax
-  const variablePattern = /\{\{(\w+)\}\}/g;
-  const incompletePattern = /\{\{[^}]*$|\{[^{]|[^}]\}\}/;
+  const sanitizedValue = value.replace(/\{\{\w+\}\}/g, '');
 
-  if (incompletePattern.test(value)) {
+  if (sanitizedValue.includes('{') || sanitizedValue.includes('}')) {
     errors.push({
       nodeId: node.serialize().id,
       nodeType: Epic1NodeType.TextBlock,
@@ -302,6 +301,17 @@ async function validateVariable(
         severity: 'warning'
       });
     }
+  }
+
+  if (!/^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/.test(config.name)) {
+    errors.push({
+      nodeId,
+      nodeType: Epic1NodeType.Variable,
+      field: 'name',
+      message:
+        'Invalid variable name: must be alphanumeric with underscores, max 64 chars',
+      severity: 'error'
+    });
   }
 
   // Check for reserved variable names

@@ -3,11 +3,8 @@
  * Initializes custom matchers and global test utilities
  */
 
-import { registerCustomMatchers } from './CustomMatchers';
+import './sharedTestSetup';
 import { TestEnvironmentManager } from './TestingUtilities';
-
-// Register custom Jest matchers
-registerCustomMatchers();
 
 // Global setup for all tests
 beforeEach(() => {
@@ -18,28 +15,6 @@ beforeEach(() => {
 // Global cleanup after all tests
 afterAll(() => {
   TestEnvironmentManager.cleanupAll();
-});
-
-// Increase timeout for async tests
-jest.setTimeout(15000);
-
-// Mock console methods to reduce noise in tests
-const originalConsole = global.console;
-
-beforeAll(() => {
-  global.console = {
-    ...originalConsole,
-    // Suppress console.log in tests unless explicitly needed
-    log: jest.fn<unknown[], unknown>(),
-    debug: jest.fn<unknown[], unknown>(),
-    info: jest.fn<unknown[], unknown>(),
-    warn: jest.fn<unknown[], unknown>(),
-    error: jest.fn<unknown[], unknown>()
-  };
-});
-
-afterAll(() => {
-  global.console = originalConsole;
 });
 
 // Global test utilities available in all tests

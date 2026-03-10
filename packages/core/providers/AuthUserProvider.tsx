@@ -247,7 +247,10 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       switch (event) {
         case 'SIGNED_IN': {
           if (!session || !session.user) {
-            logger.current?.error('Signed in event missing session data');
+            logger.current?.error(
+              'Signed in event missing session data',
+              session
+            );
             setAuthState({
               user: null,
               session: null,
@@ -357,6 +360,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     if (!supabase) {
       throw new Error('Authentication is not available');
     }
+    const supabaseClient = supabase;
 
     // Check rate limiting
     const rateLimitKey = `signin_${email}`;
@@ -375,7 +379,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       authRateLimiter.recordAttempt(rateLimitKey);
 
       const operation = async () => {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
           email,
           password
         });
@@ -418,13 +422,14 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     if (!supabase) {
       throw new Error('Authentication is not available');
     }
+    const supabaseClient = supabase;
 
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
     logger.current?.log('Sign up attempt', { email });
 
     try {
       const operation = async () => {
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await supabaseClient.auth.signUp({
           email,
           password,
           options: {
@@ -496,13 +501,14 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     if (!supabase) {
       throw new Error('Authentication is not available');
     }
+    const supabaseClient = supabase;
 
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
     logger.current?.log('Password reset attempt', { email });
 
     try {
       const operation = async () => {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/auth/reset-password`
         });
 

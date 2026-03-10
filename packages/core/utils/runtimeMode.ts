@@ -241,10 +241,12 @@ export function resolveRuntimeModeStatus(
       : flags.localPsgEnabled
         ? [...LOCAL_PSG_OPERATIONS]
         : [];
-  const psgExportTargets = Array.isArray(psgCapabilities?.exportTargets)
+  const psgExportTargets: PsgCapabilitiesResponse['exportTargets'] = Array.isArray(
+    psgCapabilities?.exportTargets
+  )
     ? [...psgCapabilities.exportTargets]
     : psgAccessMode === 'local'
-      ? ['comfy']
+      ? (['comfy'] as PsgCapabilitiesResponse['exportTargets'])
       : [];
   const localOperations = flags.localPsgEnabled
     ? [...LOCAL_PSG_OPERATIONS]

@@ -4,7 +4,61 @@
  */
 
 /** @type {import('@jest/types').Config.InitialOptions} */
+function hasModule(moduleName) {
+  try {
+    require.resolve(moduleName);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const reporters = ['default'];
+const watchPlugins = [];
+
+if (hasModule('jest-html-reporters')) {
+  reporters.push([
+    'jest-html-reporters',
+    {
+      publicPath: '<rootDir>/coverage/integration/html-report',
+      filename: 'integration-test-report.html',
+      pageTitle: 'Epic 18 Integration Test Report',
+      logoImgPath: undefined,
+      hideIcon: true,
+      expand: true,
+      openReport: false,
+      includeFailureMsg: true,
+      includeSuiteFailure: true
+    }
+  ]);
+}
+
+if (hasModule('jest-junit')) {
+  reporters.push([
+    'jest-junit',
+    {
+      outputDirectory: '<rootDir>/coverage/integration',
+      outputName: 'junit-integration.xml',
+      ancestorSeparator: ' › ',
+      uniqueOutputName: false,
+      suiteNameTemplate: '{filepath}',
+      classNameTemplate: '{classname}',
+      titleTemplate: '{title}',
+      includeConsoleOutput: true
+    }
+  ]);
+}
+
+if (hasModule('jest-watch-typeahead/filename')) {
+  watchPlugins.push('jest-watch-typeahead/filename');
+}
+
+if (hasModule('jest-watch-typeahead/testname')) {
+  watchPlugins.push('jest-watch-typeahead/testname');
+}
+
 module.exports = {
+  rootDir: '../..',
   // Test environment and setup
   testEnvironment: 'node',
   setupFilesAfterEnv: [
@@ -48,7 +102,7 @@ module.exports = {
   },
 
   // Module resolution
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '^~/(.*)$': '<rootDir>/$1'
   },
@@ -101,36 +155,7 @@ module.exports = {
   detectOpenHandles: true, // Detect open handles that prevent Jest from exiting
 
   // Reporters
-  reporters: [
-    'default',
-    [
-      'jest-html-reporters',
-      {
-        publicPath: '<rootDir>/coverage/integration/html-report',
-        filename: 'integration-test-report.html',
-        pageTitle: 'Epic 18 Integration Test Report',
-        logoImgPath: undefined,
-        hideIcon: true,
-        expand: true,
-        openReport: false,
-        includeFailureMsg: true,
-        includeSuiteFailure: true
-      }
-    ],
-    [
-      'jest-junit',
-      {
-        outputDirectory: '<rootDir>/coverage/integration',
-        outputName: 'junit-integration.xml',
-        ancestorSeparator: ' › ',
-        uniqueOutputName: false,
-        suiteNameTemplate: '{filepath}',
-        classNameTemplate: '{classname}',
-        titleTemplate: '{title}',
-        includeConsoleOutput: true
-      }
-    ]
-  ],
+  reporters,
 
   // Global variables for tests
   globals: {
@@ -160,10 +185,7 @@ module.exports = {
   snapshotSerializers: [],
 
   // Watch mode configuration (for development)
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname'
-  ],
+  watchPlugins,
 
   // Performance monitoring
   slowTestThreshold: 10, // Warn about tests taking longer than 10 seconds

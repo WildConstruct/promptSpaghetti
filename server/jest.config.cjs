@@ -28,6 +28,5 @@ module.exports = {
       lines: 60,
       statements: 60
     }
-  },
-  watchman: false
+  }
 };

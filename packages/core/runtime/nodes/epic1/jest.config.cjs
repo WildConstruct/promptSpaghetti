@@ -4,7 +4,7 @@ module.exports = {
   testEnvironment: 'node',
   roots: ['<rootDir>'],
   testMatch: ['**/__tests__/**/*.(test|spec).ts?(x)'],
-  setupFilesAfterEnv: ['<rootDir>/../../../../../../jest.setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/../../../../../tests/utils/sharedTestSetup.ts'],
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', { isolatedModules: true }]
   },
