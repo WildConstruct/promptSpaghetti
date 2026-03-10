@@ -1,8 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import {
-  TextRefinementService,
-  RefinementMode
-} from '../../services/llm';
+import { TextRefinementService, RefinementMode } from '../../services/llm';
 import './PreviewRefinement.css';
 
 export interface RefinementStyle {
@@ -15,46 +12,25 @@ export interface RefinementStyle {
 
 export const REFINEMENT_STYLES: RefinementStyle[] = [
   {
-    id: 'professional',
-    label: 'Professional',
-    description: 'Clear, concise, business-appropriate',
+    id: 'clarify',
+    label: 'Clarify',
+    description: 'Clean up phrasing and sharpen intent',
     mode: 'correct',
-    prompt: 'professional and business-appropriate'
+    prompt: 'clear, structured, and easy to parse'
   },
   {
-    id: 'creative',
-    label: 'Creative',
-    description: 'Imaginative, engaging, vivid',
+    id: 'vivid',
+    label: 'Vivid',
+    description: 'Add flavor without bloating the output',
     mode: 'expand',
-    prompt: 'creative and engaging'
+    prompt: 'vivid, visual, and cinematic while staying concise'
   },
   {
-    id: 'casual',
-    label: 'Casual',
-    description: 'Friendly, conversational, relaxed',
-    mode: 'correct',
-    prompt: 'casual and conversational'
-  },
-  {
-    id: 'concise',
-    label: 'Concise',
-    description: 'Brief, to the point, minimal',
+    id: 'tighten',
+    label: 'Tighten',
+    description: 'Trim filler and keep the useful signal',
     mode: 'contract',
-    prompt: 'brief and concise'
-  },
-  {
-    id: 'elaborate',
-    label: 'Elaborate',
-    description: 'Detailed, comprehensive, thorough',
-    mode: 'expand',
-    prompt: 'detailed and comprehensive'
-  },
-  {
-    id: 'technical',
-    label: 'Technical',
-    description: 'Precise, accurate, specialized',
-    mode: 'correct',
-    prompt: 'technical and precise'
+    prompt: 'concise, direct, and free of filler'
   }
 ];
 
@@ -79,7 +55,7 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
   refinementService,
   onRefined,
   isActive,
-  selectedStyle = 'professional',
+  selectedStyle = 'clarify',
   onStyleChange
 }) => {
   const [isRefining, setIsRefining] = useState(false);
@@ -201,22 +177,26 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
 
   return (
     <div className="preview-refinement">
+      <div className="refinement-badge-row">
+        <span className="refinement-title">Prompt Sweetening</span>
+        <span className="refinement-premium-badge">Cloud finishing pass</span>
+      </div>
       <div className="refinement-header">
         <div className="refinement-status">
           {isRefining ? (
             <>
               <span className="refinement-spinner" />
-              <span>Refining with AI...</span>
+              <span>Sweetening with AI...</span>
             </>
           ) : refinedText ? (
             <>
               <span className="refinement-check">✓</span>
-              <span>Refined</span>
+              <span>Sweetened</span>
             </>
           ) : (
             <>
               <span className="refinement-dot" />
-              <span>Ready</span>
+              <span>Ready to sweeten</span>
             </>
           )}
         </div>
@@ -293,6 +273,11 @@ export const PreviewRefinement: React.FC<PreviewRefinementProps> = ({
           <span>{error}</span>
         </div>
       )}
+
+      <div className="refinement-footnote">
+        Use this to polish the resolved output without changing the graph
+        structure itself.
+      </div>
 
       {showComparison && refinedText && (
         <div className="refinement-comparison">

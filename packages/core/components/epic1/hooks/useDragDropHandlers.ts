@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import { Node, ReactFlowInstance, Edge } from 'reactflow';
+import { Node, ReactFlowInstance } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
 import { validatePreset, insertPreset } from '../../../runtime/presetInsertion';
 import {
@@ -16,9 +16,15 @@ import {
   getInlinePresetDocument,
   isSafePresetSourcePath
 } from './presetSourcePolicy';
-
-type FlowNode = Node<EditableNodeData>;
-type FlowEdge = Edge<EditableNodeData>;
+import {
+  replacePresetAtNode,
+  splicePresetIntoEdge,
+  type EdgeSpliceTarget,
+  type FlowEdge,
+  type FlowNode,
+  type NodeReplacementTarget,
+  type PresetInsertionMetadata
+} from '../services/FragmentExecution';
 
 export interface PresetDropMetadata {
   file?: string;
@@ -34,144 +40,6 @@ export interface PresetDropPayload {
   name?: string;
   metadata?: PresetDropMetadata;
   [key: string]: unknown;
-}
-
-interface EdgeSpliceTarget {
-  edgeId: string;
-  sourceId: string;
-  targetId: string;
-  edgeType?: string;
-  edgeClassName?: string;
-  edgeStyle?: Record<string, unknown>;
-  markerEnd?: unknown;
-  sourceHandle?: string | null;
-  targetHandle?: string | null;
-}
-
-type PresetInsertionMetadata = {
-  preferredInsertion?: 'replace-node' | 'insert-edge' | 'free-place';
-  entryStrategy?: 'single-node' | 'auto-boundary' | 'manual';
-  exitStrategy?: 'single-node' | 'auto-boundary' | 'manual';
-};
-
-export function findFragmentBoundaryNodes(
-  nodes: FlowNode[],
-  edges: FlowEdge[]
-): { entryNode: FlowNode | null; exitNode: FlowNode | null } {
-  const nodeIds = new Set(nodes.map(node => node.id));
-  const incomingCounts = new Map<string, number>();
-  const outgoingCounts = new Map<string, number>();
-
-  for (const node of nodes) {
-    incomingCounts.set(node.id, 0);
-    outgoingCounts.set(node.id, 0);
-  }
-
-  for (const edge of edges) {
-    if (nodeIds.has(edge.target)) {
-      incomingCounts.set(edge.target, (incomingCounts.get(edge.target) ?? 0) + 1);
-    }
-    if (nodeIds.has(edge.source)) {
-      outgoingCounts.set(edge.source, (outgoingCounts.get(edge.source) ?? 0) + 1);
-    }
-  }
-
-  const entryCandidates = nodes.filter(node => (incomingCounts.get(node.id) ?? 0) === 0);
-  const exitCandidates = nodes.filter(node => (outgoingCounts.get(node.id) ?? 0) === 0);
-
-  return {
-    entryNode: entryCandidates.length === 1 ? entryCandidates[0] : null,
-    exitNode: exitCandidates.length === 1 ? exitCandidates[0] : null
-  };
-}
-
-export function splicePresetIntoEdge(
-  existingEdges: FlowEdge[],
-  nodesToAdd: FlowNode[],
-  edgesToAdd: FlowEdge[],
-  edgeSpliceTarget?: EdgeSpliceTarget | null,
-  insertionMetadata?: PresetInsertionMetadata | null
-): FlowEdge[] {
-  if (!edgeSpliceTarget) {
-    return existingEdges.concat(edgesToAdd);
-  }
-
-  if (insertionMetadata?.preferredInsertion === 'free-place') {
-    return existingEdges.concat(edgesToAdd);
-  }
-
-  const untouchedEdges = existingEdges.filter(
-    edge => edge.id !== edgeSpliceTarget.edgeId
-  );
-
-  if (
-    nodesToAdd.length === 1 &&
-    (insertionMetadata?.entryStrategy ?? 'single-node') === 'single-node' &&
-    (insertionMetadata?.exitStrategy ?? 'single-node') === 'single-node'
-  ) {
-    const insertedNode = nodesToAdd[0];
-    const spliceEdges: FlowEdge[] = [
-      {
-        id: `${edgeSpliceTarget.sourceId}->${insertedNode.id}:${Date.now()}:a`,
-        source: edgeSpliceTarget.sourceId,
-        target: insertedNode.id,
-        sourceHandle: edgeSpliceTarget.sourceHandle ?? undefined,
-        type: edgeSpliceTarget.edgeType,
-        className: edgeSpliceTarget.edgeClassName,
-        style: edgeSpliceTarget.edgeStyle as FlowEdge['style'],
-        markerEnd: edgeSpliceTarget.markerEnd as FlowEdge['markerEnd']
-      },
-      {
-        id: `${insertedNode.id}->${edgeSpliceTarget.targetId}:${Date.now()}:b`,
-        source: insertedNode.id,
-        target: edgeSpliceTarget.targetId,
-        targetHandle: edgeSpliceTarget.targetHandle ?? undefined,
-        type: edgeSpliceTarget.edgeType,
-        className: edgeSpliceTarget.edgeClassName,
-        style: edgeSpliceTarget.edgeStyle as FlowEdge['style'],
-        markerEnd: edgeSpliceTarget.markerEnd as FlowEdge['markerEnd']
-      }
-    ];
-
-    return untouchedEdges.concat(edgesToAdd, spliceEdges);
-  }
-
-  if (
-    insertionMetadata?.entryStrategy === 'manual' ||
-    insertionMetadata?.exitStrategy === 'manual'
-  ) {
-    return existingEdges.concat(edgesToAdd);
-  }
-
-  const { entryNode, exitNode } = findFragmentBoundaryNodes(nodesToAdd, edgesToAdd);
-  if (!entryNode || !exitNode) {
-    return existingEdges.concat(edgesToAdd);
-  }
-
-  const passthroughEdges: FlowEdge[] = [
-    {
-      id: `${edgeSpliceTarget.sourceId}->${entryNode.id}:${Date.now()}:a`,
-      source: edgeSpliceTarget.sourceId,
-      target: entryNode.id,
-      sourceHandle: edgeSpliceTarget.sourceHandle ?? undefined,
-      type: edgeSpliceTarget.edgeType,
-      className: edgeSpliceTarget.edgeClassName,
-      style: edgeSpliceTarget.edgeStyle as FlowEdge['style'],
-      markerEnd: edgeSpliceTarget.markerEnd as FlowEdge['markerEnd']
-    },
-    {
-      id: `${exitNode.id}->${edgeSpliceTarget.targetId}:${Date.now()}:b`,
-      source: exitNode.id,
-      target: edgeSpliceTarget.targetId,
-      targetHandle: edgeSpliceTarget.targetHandle ?? undefined,
-      type: edgeSpliceTarget.edgeType,
-      className: edgeSpliceTarget.edgeClassName,
-      style: edgeSpliceTarget.edgeStyle as FlowEdge['style'],
-      markerEnd: edgeSpliceTarget.markerEnd as FlowEdge['markerEnd']
-    }
-  ];
-
-  return untouchedEdges.concat(edgesToAdd, passthroughEdges);
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -196,6 +64,17 @@ const toFlowNodes = (nodes: unknown): FlowNode[] =>
 
 const toFlowEdges = (edges: unknown): FlowEdge[] =>
   Array.isArray(edges) ? edges.filter(isFlowEdge) : [];
+
+function readImportMetaBaseUrl(): string | undefined {
+  try {
+    const env = Function(
+      'return typeof import !== "undefined" && import.meta && import.meta.env ? import.meta.env : undefined;'
+    )() as { BASE_URL?: unknown } | undefined;
+    return typeof env?.BASE_URL === 'string' ? env.BASE_URL : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 const getNodeWidth = (node: FlowNode): number =>
   typeof node.width === 'number'
@@ -280,9 +159,7 @@ export function useDragDropHandlers({
         }
         const loader = (async () => {
           try {
-            const baseUrl =
-              (import.meta as unknown as { env?: { BASE_URL?: string } })?.env
-                ?.BASE_URL || '/';
+            const baseUrl = readImportMetaBaseUrl() || '/';
             const base = String(baseUrl).replace(/\/$/, '');
             const candidates = [
               `${base}/presets/manifest.json`,
@@ -442,7 +319,8 @@ export function useDragDropHandlers({
     async (
       meta: PresetDropPayload,
       position: { x: number; y: number },
-      edgeSpliceTarget?: EdgeSpliceTarget | null
+      edgeSpliceTarget?: EdgeSpliceTarget | null,
+      nodeReplacementTarget?: NodeReplacementTarget | null
     ) => {
       try {
         debugLogEpic1('[DragDrop] insertPresetByMeta start', {
@@ -604,32 +482,53 @@ export function useDragDropHandlers({
           debugLogEpic1('[DragDrop] Edge details:', edgesToAdd);
         }
 
-        setNodes(nds => nds.concat(nodesToAdd));
-        setEdges(existingEdges => {
-          debugLogEpic1(
-            '[DragDrop] Current edges:',
-            existingEdges.length,
-            'New edges to add:',
-            edgesToAdd.length
-          );
-
-          if (edgeSpliceTarget) {
-            debugLogEpic1(
-              nodesToAdd.length === 1
-                ? '[DragDrop] Splicing inserted node into edge'
-                : '[DragDrop] Splicing fragment into edge',
-              edgeSpliceTarget.edgeId
-            );
-          }
-
-          return splicePresetIntoEdge(
-            existingEdges,
+        const insertionMetadata = meta?.metadata as
+          | PresetInsertionMetadata
+          | null
+          | undefined;
+        if (nodeReplacementTarget) {
+          const currentNodes =
+            (reactFlowInstance?.getNodes?.() as FlowNode[] | undefined) ?? [];
+          const currentEdges =
+            (reactFlowInstance?.getEdges?.() as FlowEdge[] | undefined) ?? [];
+          const replacement = replacePresetAtNode(
+            currentNodes,
+            currentEdges,
             nodesToAdd,
             edgesToAdd,
-            edgeSpliceTarget,
-            meta?.metadata as PresetInsertionMetadata | null | undefined
+            nodeReplacementTarget,
+            insertionMetadata
           );
-        });
+          setNodes(replacement.nodes);
+          setEdges(replacement.edges);
+        } else {
+          setNodes(nds => nds.concat(nodesToAdd));
+          setEdges(existingEdges => {
+            debugLogEpic1(
+              '[DragDrop] Current edges:',
+              existingEdges.length,
+              'New edges to add:',
+              edgesToAdd.length
+            );
+
+            if (edgeSpliceTarget) {
+              debugLogEpic1(
+                nodesToAdd.length === 1
+                  ? '[DragDrop] Splicing inserted node into edge'
+                  : '[DragDrop] Splicing fragment into edge',
+                edgeSpliceTarget.edgeId
+              );
+            }
+
+            return splicePresetIntoEdge(
+              existingEdges,
+              nodesToAdd,
+              edgesToAdd,
+              edgeSpliceTarget,
+              insertionMetadata
+            );
+          });
+        }
 
         try {
           if (addNodeWithBounce && nodesToAdd[0]) {

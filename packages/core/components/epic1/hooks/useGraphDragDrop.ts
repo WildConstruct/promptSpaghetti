@@ -2,7 +2,10 @@ import { useCallback, useEffect, useState, DragEvent } from 'react';
 import { Node, ReactFlowInstance, XYPosition } from 'reactflow';
 import { debugLogEpic1 } from '../../../utils/debug';
 import type { PresetDropPayload } from './useDragDropHandlers';
-import { findFragmentDropTarget, type FragmentDropTarget } from '../services/FragmentDropTargeting';
+import {
+  findFragmentDropTarget,
+  type FragmentDropTarget
+} from '../services/FragmentDropTargeting';
 import type { AgentFragmentRecord } from '@prompt/asset-browser';
 
 interface DraggedItem {
@@ -83,7 +86,7 @@ export function useGraphDragDrop<NodeData = unknown>(
         );
       }
     },
-    [parseDragData, reactFlowInstance]
+    [reactFlowInstance]
   );
 
   // Handle drag leave event
@@ -104,85 +107,82 @@ export function useGraphDragDrop<NodeData = unknown>(
   }, []);
 
   // Parse drag data
-  const parseDragData = useCallback(
-    (dataTransfer: DataTransfer): DraggedItem | null => {
-      try {
-        // Check for preset data
-        const presetData =
-          dataTransfer.getData('application/preset') ||
-          dataTransfer.getData('application/x-preset') ||
-          dataTransfer.getData('preset');
-        if (presetData) {
-          return { type: 'preset', presetData };
-        }
-
-        // Check for node type data
-        const nodeType =
-          dataTransfer.getData('application/nodeType') ||
-          dataTransfer.getData('application/node-type');
-        if (nodeType) {
-          return { type: nodeType };
-        }
-
-        // Check for custom data format
-        const customData = dataTransfer.getData('application/reactflow');
-        if (customData) {
-          try {
-            const parsed = JSON.parse(customData);
-            return parsed;
-          } catch {
-            // Some drag sources write plain node type text to this key.
-            return { type: customData };
-          }
-        }
-
-        // Check for asset browser data
-        const assetData = dataTransfer.getData('text/plain');
-        if (assetData) {
-          try {
-            const parsed = JSON.parse(assetData);
-            if (
-              parsed &&
-              typeof parsed === 'object' &&
-              ('path' in parsed ||
-                'file' in parsed ||
-                'psglib' in parsed ||
-                'content' in parsed)
-            ) {
-              return { type: 'preset', presetData: assetData };
-            }
-            if (parsed.type === 'asset' || parsed.assetType) {
-              return {
-                type: 'asset',
-                meta: parsed,
-                data: parsed.data
-              };
-            }
-          } catch {
-            // Not JSON, might be plain text node type
-            return { type: assetData };
-          }
-        }
-
-        const fallbackPreset =
-          typeof window !== 'undefined'
-            ? window.__EPIC1_LAST_PRESET_DRAG__
-            : undefined;
-        if (isPresetDropPayload(fallbackPreset)) {
-          return {
-            type: 'preset',
-            presetData: JSON.stringify(fallbackPreset)
-          };
-        }
-
-        return null;
-      } catch (error) {
-        console.error('Failed to parse drag data:', error);
-        return null;
+  function parseDragData(dataTransfer: DataTransfer): DraggedItem | null {
+    try {
+      // Check for preset data
+      const presetData =
+        dataTransfer.getData('application/preset') ||
+        dataTransfer.getData('application/x-preset') ||
+        dataTransfer.getData('preset');
+      if (presetData) {
+        return { type: 'preset', presetData };
       }
-    },
-    []
-  );
+
+      // Check for node type data
+      const nodeType =
+        dataTransfer.getData('application/nodeType') ||
+        dataTransfer.getData('application/node-type');
+      if (nodeType) {
+        return { type: nodeType };
+      }
+
+      // Check for custom data format
+      const customData = dataTransfer.getData('application/reactflow');
+      if (customData) {
+        try {
+          const parsed = JSON.parse(customData);
+          return parsed;
+        } catch {
+          // Some drag sources write plain node type text to this key.
+          return { type: customData };
+        }
+      }
+
+      // Check for asset browser data
+      const assetData = dataTransfer.getData('text/plain');
+      if (assetData) {
+        try {
+          const parsed = JSON.parse(assetData);
+          if (
+            parsed &&
+            typeof parsed === 'object' &&
+            ('path' in parsed ||
+              'file' in parsed ||
+              'psglib' in parsed ||
+              'content' in parsed)
+          ) {
+            return { type: 'preset', presetData: assetData };
+          }
+          if (parsed.type === 'asset' || parsed.assetType) {
+            return {
+              type: 'asset',
+              meta: parsed,
+              data: parsed.data
+            };
+          }
+        } catch {
+          // Not JSON, might be plain text node type
+          return { type: assetData };
+        }
+      }
+
+      const fallbackPreset =
+        typeof window !== 'undefined'
+          ? window.__EPIC1_LAST_PRESET_DRAG__
+          : undefined;
+      if (isPresetDropPayload(fallbackPreset)) {
+        return {
+          type: 'preset',
+          presetData: JSON.stringify(fallbackPreset)
+        };
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Failed to parse drag data:', error);
+      return null;
+    }
+  }
 
   // Handle preset drop
   const handlePresetDrop = useCallback(
@@ -376,14 +376,11 @@ export function useGraphDragDrop<NodeData = unknown>(
           x: event.clientX,
           y: event.clientY
         });
+        const dragData = event.dataTransfer
+          ? parseDragData(event.dataTransfer)
+          : null;
         setDropPosition(position);
-        setDropTarget(
-          resolveDropTarget(
-            reactFlowInstance,
-            position,
-            parseDragData(event.dataTransfer)
-          )
-        );
+        setDropTarget(resolveDropTarget(reactFlowInstance, position, dragData));
       }
     };
 
@@ -445,27 +442,44 @@ export function useGraphDragDrop<NodeData = unknown>(
 function presetPayloadToAgentFragmentRecord(
   payload: PresetDropPayload
 ): AgentFragmentRecord {
-  const metadata = payload.metadata && typeof payload.metadata === 'object'
-    ? (payload.metadata as Record<string, unknown>)
-    : {};
+  const metadata =
+    payload.metadata && typeof payload.metadata === 'object'
+      ? (payload.metadata as Record<string, unknown>)
+      : {};
+  const id =
+    typeof payload.id === 'string' && payload.id.trim().length > 0
+      ? payload.id
+      : typeof payload.path === 'string' && payload.path.trim().length > 0
+        ? payload.path
+        : 'dragged-preset';
+  const name =
+    typeof payload.name === 'string' && payload.name.trim().length > 0
+      ? payload.name
+      : typeof payload.file === 'string' && payload.file.trim().length > 0
+        ? payload.file
+        : id;
 
   return {
-    id: payload.id,
-    name: payload.name,
+    id,
+    name,
     path: typeof payload.path === 'string' ? payload.path : '',
-    category: typeof payload.category === 'string' ? payload.category : 'uncategorized',
+    category:
+      typeof payload.category === 'string' ? payload.category : 'uncategorized',
     description:
-      typeof metadata.description === 'string' ? metadata.description : undefined,
+      typeof metadata.description === 'string'
+        ? metadata.description
+        : undefined,
     tags: Array.isArray(payload.tags) ? payload.tags : [],
     roles: [],
     domains: [],
-    nodeTypes: typeof payload.type === 'string'
-      ? [
-          (payload.type === 'concat'
-            ? 'merge'
-            : payload.type) as AgentFragmentRecord['nodeTypes'][number]
-        ]
-      : [],
+    nodeTypes:
+      typeof payload.type === 'string'
+        ? [
+            (payload.type === 'concat'
+              ? 'merge'
+              : payload.type) as AgentFragmentRecord['nodeTypes'][number]
+          ]
+        : [],
     placementHints: [],
     tone: [],
     nodeCount: 1,
@@ -488,7 +502,9 @@ function presetPayloadToAgentFragmentRecord(
         ? metadata.exitStrategy
         : 'auto-boundary',
     suggestionWeight:
-      typeof metadata.suggestionWeight === 'number' ? metadata.suggestionWeight : 0,
+      typeof metadata.suggestionWeight === 'number'
+        ? metadata.suggestionWeight
+        : 0,
     requiresBranchLane: metadata.requiresBranchLane === true,
     priority: 0
   };

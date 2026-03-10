@@ -82,8 +82,16 @@ import { TutorialOverlay } from './onboarding/TutorialOverlay';
 import type { AgentFragmentRecord, Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import { getSupabase } from '../../utils/supabaseClient';
-import { planFragmentInsertion } from './services/FragmentInsertionPlanner';
+import {
+  planFragmentInsertion,
+  type InsertionPlan
+} from './services/FragmentInsertionPlanner';
+import type { PresetDropPayload } from './hooks/useDragDropHandlers';
 import { AgentFragmentSuggestionService } from './services/AgentFragmentSuggestionService';
+import {
+  findFragmentDropTarget,
+  type FragmentDropTarget
+} from './services/FragmentDropTargeting';
 
 // Styles
 import './ReactFlowOverrides.css';
@@ -362,48 +370,111 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     [edges]
   );
 
+  const buildViewportFallbackInsertion = useCallback((): InsertionPlan => {
+    return reactFlowInstance
+      ? {
+          anchor: 'free-placement' as const,
+          position: reactFlowInstance.screenToFlowPosition({
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2
+          }),
+          notes: ['No selection; using viewport center placement.']
+        }
+      : {
+          anchor: 'free-placement' as const,
+          position: { x: 250, y: 250 },
+          notes: ['No selection or React Flow instance; using fallback position.']
+        };
+  }, [reactFlowInstance]);
+
+  const executePresetWithTarget = useCallback(
+    (
+      preset: Preset,
+      options?: {
+        dropTarget?: FragmentDropTarget | null;
+        position?: { x: number; y: number } | null;
+      }
+    ) => {
+      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+      const fragment = presetToAgentFragmentRecord(preset);
+      let resolvedTarget = options?.dropTarget ?? null;
+
+      if (!resolvedTarget && selectedNode) {
+        const metadataPrefersReplacement =
+          fragment.preferredInsertion === 'replace-node';
+        if (metadataPrefersReplacement) {
+          resolvedTarget = findFragmentDropTarget({
+            pointer: {
+              x: selectedNode.position.x + (selectedNode.width ?? 180) / 2,
+              y: selectedNode.position.y + (selectedNode.height ?? 72) / 2
+            },
+            fragment,
+            nodes,
+            edges
+          });
+        }
+      }
+
+      if (resolvedTarget?.kind === 'replace-node') {
+        const targetNode = nodes.find(node => node.id === resolvedTarget?.nodeId);
+        if (targetNode) {
+          void insertPresetByMeta(
+            preset,
+            targetNode.position,
+            null,
+            { nodeId: targetNode.id }
+          );
+          return;
+        }
+      }
+
+      if (resolvedTarget?.kind === 'insert-edge') {
+        void insertPresetByMeta(
+          preset,
+          resolvedTarget.midpoint,
+          buildEdgeSpliceTarget(resolvedTarget.edgeId)
+        );
+        return;
+      }
+
+      const insertionPlan = selectedNode
+        ? planFragmentInsertion({
+            fragment,
+            selectedNode,
+            nodes,
+            edges
+          })
+        : buildViewportFallbackInsertion();
+
+      const edgeSpliceTarget = insertionPlan.targetEdgeId
+        ? buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
+        : null;
+
+      void insertPresetByMeta(
+        preset,
+        options?.position ?? insertionPlan.position,
+        edgeSpliceTarget
+      );
+    },
+    [
+      buildEdgeSpliceTarget,
+      buildViewportFallbackInsertion,
+      edges,
+      insertPresetByMeta,
+      nodes,
+      selectedNodeId
+    ]
+  );
+
   const handleAssetInsert = useCallback(
     (item: Preset | Asset) => {
       const preset = item as Preset;
       if (!preset) {
         return;
       }
-      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
-      const insertionPlan = selectedNode
-        ? planFragmentInsertion({
-            fragment: presetToAgentFragmentRecord(preset),
-            selectedNode,
-            nodes,
-            edges
-          })
-        : reactFlowInstance
-          ? {
-              anchor: 'free-placement' as const,
-              position: reactFlowInstance.screenToFlowPosition({
-                x: window.innerWidth / 2,
-                y: window.innerHeight / 2
-              }),
-              notes: ['No selection; using viewport center placement.']
-            }
-          : {
-              anchor: 'free-placement' as const,
-              position: { x: 250, y: 250 },
-              notes: ['No selection or React Flow instance; using fallback position.']
-            };
-      void insertPresetByMeta(
-        preset,
-        insertionPlan.position,
-        buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
-      );
+      executePresetWithTarget(preset);
     },
-    [
-      buildEdgeSpliceTarget,
-      edges,
-      insertPresetByMeta,
-      nodes,
-      reactFlowInstance,
-      selectedNodeId
-    ]
+    [executePresetWithTarget]
   );
 
   const getFragmentSuggestions = useCallback(async () => {
@@ -438,41 +509,13 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       nodes,
       edges,
       insertPreset: async preset => {
-        const insertionPlan = selectedNode
-          ? planFragmentInsertion({
-              fragment: presetToAgentFragmentRecord(preset),
-              selectedNode,
-              nodes,
-              edges
-            })
-          : reactFlowInstance
-            ? {
-                anchor: 'free-placement' as const,
-                position: reactFlowInstance.screenToFlowPosition({
-                  x: window.innerWidth / 2,
-                  y: window.innerHeight / 2
-                }),
-                notes: ['No selection; using viewport center placement.']
-              }
-            : {
-                anchor: 'free-placement' as const,
-                position: { x: 250, y: 250 },
-                notes: ['No selection or React Flow instance; using fallback position.']
-              };
-
-        await insertPresetByMeta(
-          preset,
-          insertionPlan.position,
-          buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
-        );
+        executePresetWithTarget(preset);
       }
     });
   }, [
-    buildEdgeSpliceTarget,
     edges,
-    insertPresetByMeta,
     nodes,
-    reactFlowInstance,
+    executePresetWithTarget,
     selectedNodeId
   ]);
 
@@ -482,12 +525,20 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       showToast,
       onNodeCreate: () => void 0,
       onPresetDrop: (preset, position, dragTarget) => {
-        void insertPresetByMeta(
-          preset,
-          position,
+        const edgeSpliceTarget =
           dragTarget?.kind === 'insert-edge'
             ? buildEdgeSpliceTarget(dragTarget.edgeId)
-            : null
+            : null;
+        const nodeReplacementTarget =
+          dragTarget?.kind === 'replace-node'
+            ? { nodeId: dragTarget.nodeId }
+            : null;
+
+        void insertPresetByMeta(
+          preset as PresetDropPayload,
+          position,
+          edgeSpliceTarget,
+          nodeReplacementTarget
         );
       }
     });
@@ -513,35 +564,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
       }
     ).__EPIC1_INSERT_PRESET__ = async (preset: unknown) => {
-      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
-      const insertionPlan = selectedNode
-        ? planFragmentInsertion({
-            fragment: presetToAgentFragmentRecord(
-              preset as Preset
-            ),
-            selectedNode,
-            nodes,
-            edges
-          })
-        : reactFlowInstance
-          ? {
-              anchor: 'free-placement' as const,
-              position: reactFlowInstance.screenToFlowPosition({
-                x: window.innerWidth / 2,
-                y: window.innerHeight / 2
-              }),
-              notes: ['No selection; using viewport center placement.']
-            }
-          : {
-              anchor: 'free-placement' as const,
-              position: { x: 250, y: 250 },
-              notes: ['No selection or React Flow instance; using fallback position.']
-            };
-      await insertPresetByMeta(
-        preset as Parameters<typeof insertPresetByMeta>[0],
-        insertionPlan.position,
-        buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
-      );
+      executePresetWithTarget(preset as Preset);
     };
     (
       window as typeof window & {
@@ -576,14 +599,13 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       }
     };
   }, [
-    buildEdgeSpliceTarget,
     edges,
     getFragmentSuggestions,
-    insertPresetByMeta,
     insertTopFragmentSuggestion,
     nodes,
     reactFlowInstance,
-    selectedNodeId
+    selectedNodeId,
+    executePresetWithTarget
   ]);
 
   useEffect(() => {

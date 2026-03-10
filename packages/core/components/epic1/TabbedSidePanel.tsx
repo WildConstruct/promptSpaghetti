@@ -8,7 +8,7 @@ import type { Edge, Node } from 'reactflow';
 import { AssetBrowserLoader } from './AssetBrowserLoader';
 import { SuggestedFragmentsPanel } from './SuggestedFragmentsPanel';
 import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
-import { PreviewEngine } from './preview/PreviewEngine';
+import type { PreviewEngine } from './preview/PreviewEngine';
 import { PreviewPanel } from './preview/PreviewPanel';
 import type { Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
