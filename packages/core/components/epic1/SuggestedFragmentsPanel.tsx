@@ -17,6 +17,10 @@ interface SuggestedFragmentsPanelProps {
   onInsert?: (preset: Preset) => void;
 }
 
+function asStringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+}
+
 export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = ({
   selectedNode,
   nodes = [],
@@ -113,13 +117,26 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
       fragment: PlannedFragmentSuggestion['fragment']
     ) => {
       const preset = agentFragmentRecordToPreset(fragment) as Preset & {
-        metadata?: Record<string, unknown>;
         path?: string;
+        type?: string;
+        nodeTypes?: string[];
       };
-      const payload = JSON.stringify({
-        ...preset,
-        metadata: preset.metadata ?? (preset.path ? { file: preset.path } : undefined)
-      });
+      const payloadObject = {
+        id: preset.id,
+        name: preset.name,
+        type: preset.type ?? 'graph',
+        path: preset.path,
+        nodeTypes: preset.nodeTypes,
+        metadata: {
+          file: preset.path
+        }
+      };
+      if (typeof window !== 'undefined') {
+        (
+          window as Window & { __EPIC1_LAST_PRESET_DRAG__?: unknown }
+        ).__EPIC1_LAST_PRESET_DRAG__ = payloadObject;
+      }
+      const payload = JSON.stringify(payloadObject);
 
       event.dataTransfer.setData('application/x-preset', payload);
       event.dataTransfer.setData('preset', payload);
@@ -192,68 +209,78 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
 
       {suggestions.length > 0 && (
         <div className="suggested-fragments-list">
-          {suggestions.map(({ fragment, actionLabel, insertionLabel }) => (
-            <button
-              key={fragment.id}
-              type="button"
-              className={`suggested-fragment-card ${
-                activeFragmentId === fragment.id ? 'is-active' : ''
-              }`}
-              onClick={() => onInsert?.(agentFragmentRecordToPreset(fragment))}
-              onMouseEnter={() => setActiveFragmentId(fragment.id)}
-              onMouseLeave={() =>
-                setActiveFragmentId(current =>
-                  current === fragment.id ? null : current
-                )
-              }
-              onFocus={() => setActiveFragmentId(fragment.id)}
-              onBlur={() =>
-                setActiveFragmentId(current =>
-                  current === fragment.id ? null : current
-                )
-              }
-              onDragStart={event => handleFragmentDragStart(event, fragment)}
-              draggable
-              title="Click to insert from the current selection, or drag into the graph to place it manually."
-              aria-describedby={
-                activeFragmentId === fragment.id
-                  ? `suggested-fragment-tooltip-${fragment.id}`
-                  : undefined
-              }
-            >
-              <div className="suggested-fragment-title">{fragment.name}</div>
-              <div className="suggested-fragment-meta">
-                {fragment.roles.join(', ')}
-              </div>
-              <div className="suggested-fragment-tags">
-                <span className="suggested-fragment-chip intent">
-                  {actionLabel}
-                </span>
-                <span className="suggested-fragment-chip intent subtle">
-                  {insertionLabel}
-                </span>
-                {fragment.domains.slice(0, 2).map(domain => (
-                  <span key={domain} className="suggested-fragment-chip">
-                    {domain}
-                  </span>
-                ))}
-                {fragment.placementHints.slice(0, 2).map(hint => (
-                  <span key={hint} className="suggested-fragment-chip subtle">
-                    {hint}
-                  </span>
-                ))}
-              </div>
-              {activeFragmentId === fragment.id && (
-                <div
-                  id={`suggested-fragment-tooltip-${fragment.id}`}
-                  className="suggested-fragment-tooltip"
-                >
-                  Click to insert from the current selection, or drag into the graph to place
-                  it exactly where you want it.
+          {suggestions.map(({ fragment, actionLabel, insertionLabel }) => {
+            const roles = asStringArray(fragment.roles);
+            const domains = asStringArray(fragment.domains);
+            const placementHints = asStringArray(fragment.placementHints);
+            const fragmentName =
+              typeof fragment.name === 'string' && fragment.name.trim().length > 0
+                ? fragment.name
+                : 'Untitled fragment';
+
+            return (
+              <button
+                key={fragment.id}
+                type="button"
+                className={`suggested-fragment-card ${
+                  activeFragmentId === fragment.id ? 'is-active' : ''
+                }`}
+                onClick={() => onInsert?.(agentFragmentRecordToPreset(fragment))}
+                onMouseEnter={() => setActiveFragmentId(fragment.id)}
+                onMouseLeave={() =>
+                  setActiveFragmentId(current =>
+                    current === fragment.id ? null : current
+                  )
+                }
+                onFocus={() => setActiveFragmentId(fragment.id)}
+                onBlur={() =>
+                  setActiveFragmentId(current =>
+                    current === fragment.id ? null : current
+                  )
+                }
+                onDragStart={event => handleFragmentDragStart(event, fragment)}
+                draggable
+                title="Click to insert from the current selection, or drag into the graph to place it manually."
+                aria-describedby={
+                  activeFragmentId === fragment.id
+                    ? `suggested-fragment-tooltip-${fragment.id}`
+                    : undefined
+                }
+              >
+                <div className="suggested-fragment-title">{fragmentName}</div>
+                <div className="suggested-fragment-meta">
+                  {roles.length > 0 ? roles.join(', ') : 'Suggested fragment'}
                 </div>
-              )}
-            </button>
-          ))}
+                <div className="suggested-fragment-tags">
+                  <span className="suggested-fragment-chip intent">
+                    {actionLabel}
+                  </span>
+                  <span className="suggested-fragment-chip intent subtle">
+                    {insertionLabel}
+                  </span>
+                  {domains.slice(0, 2).map(domain => (
+                    <span key={domain} className="suggested-fragment-chip">
+                      {domain}
+                    </span>
+                  ))}
+                  {placementHints.slice(0, 2).map(hint => (
+                    <span key={hint} className="suggested-fragment-chip subtle">
+                      {hint}
+                    </span>
+                  ))}
+                </div>
+                {activeFragmentId === fragment.id && (
+                  <div
+                    id={`suggested-fragment-tooltip-${fragment.id}`}
+                    className="suggested-fragment-tooltip"
+                  >
+                    Click to insert from the current selection, or drag into the graph to place
+                    it exactly where you want it.
+                  </div>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </section>
