@@ -15,7 +15,9 @@ import type { Asset } from '../../services/assetMatcher';
 import type { EditableNodeData } from './nodes';
 import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
 import RelationshipView from './components/RelationshipView';
+import { ComponentLibraryPanel } from './ComponentLibraryPanel';
 import './TabbedSidePanel.css';
+import type { ComponentDefinition, GraphReferenceEntry } from './services/ComponentModel';
 
 export interface TabbedSidePanelProps {
   previewEngine: PreviewEngine | null;
@@ -23,16 +25,23 @@ export interface TabbedSidePanelProps {
   onPresetSelect?: (preset: Preset) => void;
   onInsert?: (item: Preset | Asset) => void;
   position?: 'left' | 'right';
-  defaultTab?: 'preview' | 'assets' | null;
+  defaultTab?: 'preview' | 'assets' | 'components' | null;
   showAssets?: boolean;
   showPreview?: boolean;
   selectedNode?: Node<EditableNodeData> | null;
   nodes?: Node<EditableNodeData>[];
   edges?: Edge[];
   onSeedChange?: (seeds: Array<string | number>) => void;
+  componentDefinitions?: ComponentDefinition[];
+  componentReferences?: GraphReferenceEntry[];
+  onComponentInsert?: (definition: ComponentDefinition) => void;
+  onSaveSelectionAsComponent?: () => void;
+  onDetachSelectedComponent?: () => void;
+  onRefreshSelectedComponent?: () => void;
+  onRefreshOutdatedComponents?: () => void;
 }
 
-type TabType = 'preview' | 'assets' | 'search' | 'relationships' | null;
+type TabType = 'preview' | 'assets' | 'components' | 'search' | 'relationships' | null;
 
 export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   previewEngine,
@@ -46,8 +55,15 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   selectedNode,
   nodes = [],
   edges = [],
-  onSeedChange
-}) => {
+  onSeedChange,
+  componentDefinitions = [],
+  componentReferences = [],
+  onComponentInsert,
+  onSaveSelectionAsComponent,
+  onDetachSelectedComponent,
+  onRefreshSelectedComponent,
+  onRefreshOutdatedComponents
+}: TabbedSidePanelProps) => {
   const defaultWidth = 520;
   const minWidth = 360;
   const maxWidth = 760;
@@ -193,6 +209,17 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         )}
 
         <button
+          className={`tab-button ${activeTab === 'components' ? 'active' : ''} ${hoveredTab === 'components' ? 'hovered' : ''}`}
+          onClick={() => handleTabClick('components')}
+          onMouseEnter={() => setHoveredTab('components')}
+          onMouseLeave={() => setHoveredTab(null)}
+          title="Components"
+        >
+          <span className="tab-icon">◫</span>
+          <span className="tab-label">Components</span>
+        </button>
+
+        <button
           className={`tab-button ${activeTab === 'search' ? 'active' : ''} ${hoveredTab === 'search' ? 'hovered' : ''}`}
           onClick={() => handleTabClick('search')}
           onMouseEnter={() => setHoveredTab('search')}
@@ -242,6 +269,20 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
               onInsert={handleAssetInsert}
               graphContext={selectedNode?.data || undefined}
               selectedNode={selectedNode as Node<{ label?: string }> | null}
+            />
+          </div>
+        )}
+        {activeTab === 'components' && (
+          <div className="assets-container">
+            <ComponentLibraryPanel
+              definitions={componentDefinitions}
+              references={componentReferences}
+              onInsert={onComponentInsert}
+              onSaveSelection={onSaveSelectionAsComponent}
+              onDetachSelected={onDetachSelectedComponent}
+              onRefreshSelected={onRefreshSelectedComponent}
+              onRefreshOutdated={onRefreshOutdatedComponents}
+              selectedNode={selectedNode}
             />
           </div>
         )}

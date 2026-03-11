@@ -1,92 +1,164 @@
 import React from 'react';
-import type { AgentFragmentRecord } from '@prompt/asset-browser';
-import {
-  agentFragmentRecordToPreset,
-  type PlannedFragmentSuggestion
-} from './services/AgentFragmentSuggestionService';
 
-interface GraphCommanderCommand {
+const COMMANDER_RECENTS_KEY = 'epic1.commander.recents';
+const COMMANDER_COUNTS_KEY = 'epic1.commander.counts';
+const MAX_RECENT_COMMANDS = 12;
+
+export interface GraphCommanderCommand {
   id: string;
-  title: string;
+  label: string;
+  aliases?: string[];
+  category?: string;
+  shortcut?: string;
   description?: string;
-  keywords?: string[];
-  group?: string;
-  run: () => Promise<void> | void;
+  execute: () => Promise<void> | void;
 }
 
-function findSuggestionByRole(
-  suggestions: PlannedFragmentSuggestion[],
-  role: AgentFragmentRecord['roles'][number]
-): PlannedFragmentSuggestion | null {
-  return suggestions.find(suggestion => suggestion.fragment.roles.includes(role)) ?? null;
-}
-
-function findGapSuggestion(
-  suggestions: PlannedFragmentSuggestion[]
-): PlannedFragmentSuggestion | null {
-  return (
-    suggestions.find(suggestion =>
-      suggestion.actionLabel !== 'Place' &&
-      suggestion.fragment.roles.some(role =>
-        role === 'branch-extension' ||
-        role === 'modifier' ||
-        role === 'merge-helper' ||
-        role === 'output-finisher'
-      )
-    ) ??
-    suggestions[0] ??
-    null
-  );
-}
+type RankedCommandEntry = {
+  command: GraphCommanderCommand;
+  score: number;
+};
 
 interface GraphCommanderProps {
   isOpen: boolean;
   onClose: () => void;
-  onInsertTopSuggestion: () => Promise<AgentFragmentRecord | null>;
-  onGetSuggestions: () => Promise<PlannedFragmentSuggestion[]>;
-  onTogglePreview: () => void;
-  onFitView: () => void;
-  onExecute: () => void;
-  onExportGraph: () => void;
+  commands: GraphCommanderCommand[];
 }
 
-function buildFragmentCommand(
-  suggestion: PlannedFragmentSuggestion,
-  onInsertFragment: (fragment: AgentFragmentRecord) => Promise<void>
-): GraphCommanderCommand {
-  const { fragment, actionLabel, insertionLabel } = suggestion;
-  return {
-    id: `fragment:${fragment.id}`,
-    title: `Insert ${fragment.name}`,
-    description: [actionLabel, insertionLabel, fragment.roles[0], fragment.domains[0]]
-      .filter(Boolean)
-      .join(' • '),
-    keywords: [
-      fragment.name,
-      ...fragment.tags,
-      ...fragment.roles,
-      ...fragment.domains,
-      ...fragment.placementHints
-    ],
-    group: 'Suggested Fragments',
-    run: () => onInsertFragment(fragment)
-  };
+function normalize(value: string | undefined | null) {
+  return (value ?? '').trim().toLowerCase();
+}
+
+function readRecentCommands() {
+  if (typeof window === 'undefined') {
+    return [] as string[];
+  }
+
+  try {
+    const raw = window.localStorage.getItem(COMMANDER_RECENTS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed)
+      ? parsed.filter((item): item is string => typeof item === 'string')
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function readCommandCounts() {
+  if (typeof window === 'undefined') {
+    return {} as Record<string, number>;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(COMMANDER_COUNTS_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === 'object'
+      ? Object.fromEntries(
+          Object.entries(parsed).filter(
+            (entry): entry is [string, number] =>
+              typeof entry[0] === 'string' && typeof entry[1] === 'number'
+          )
+        )
+      : {};
+  } catch {
+    return {};
+  }
+}
+
+function persistUsage(commandId: string) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    const nextRecent = [
+      commandId,
+      ...readRecentCommands().filter(id => id !== commandId)
+    ].slice(0, MAX_RECENT_COMMANDS);
+    const counts = readCommandCounts();
+    counts[commandId] = (counts[commandId] ?? 0) + 1;
+    window.localStorage.setItem(COMMANDER_RECENTS_KEY, JSON.stringify(nextRecent));
+    window.localStorage.setItem(COMMANDER_COUNTS_KEY, JSON.stringify(counts));
+  } catch {
+    // no-op
+  }
+}
+
+function scoreCommand(params: {
+  command: GraphCommanderCommand;
+  query: string;
+  recentIds: string[];
+  usageCounts: Record<string, number>;
+}) {
+  const { command, query, recentIds, usageCounts } = params;
+  const normalizedQuery = normalize(query);
+  if (!normalizedQuery) {
+    const recentIndex = recentIds.indexOf(command.id);
+    return (recentIndex >= 0 ? 400 - recentIndex * 10 : 0) + (usageCounts[command.id] ?? 0);
+  }
+
+  const label = normalize(command.label);
+  const category = normalize(command.category);
+  const aliases = (command.aliases ?? []).map(alias => normalize(alias));
+  const description = normalize(command.description);
+
+  let score = 0;
+
+  if (label === normalizedQuery) {
+    score += 1000;
+  }
+  if (label.startsWith(normalizedQuery)) {
+    score += 700;
+  }
+  if (label.includes(normalizedQuery)) {
+    score += 450;
+  }
+  if (aliases.some(alias => alias === normalizedQuery)) {
+    score += 800;
+  }
+  if (aliases.some(alias => alias.startsWith(normalizedQuery))) {
+    score += 500;
+  }
+  if (aliases.some(alias => alias.includes(normalizedQuery))) {
+    score += 320;
+  }
+  if (category.includes(normalizedQuery)) {
+    score += 140;
+  }
+  if (description.includes(normalizedQuery)) {
+    score += 80;
+  }
+
+  for (const token of normalizedQuery.split(/\s+/).filter(Boolean)) {
+    if (label.includes(token)) {
+      score += 45;
+    }
+    if (aliases.some(alias => alias.includes(token))) {
+      score += 30;
+    }
+    if (category.includes(token)) {
+      score += 15;
+    }
+  }
+
+  const recentIndex = recentIds.indexOf(command.id);
+  if (recentIndex >= 0) {
+    score += 150 - recentIndex * 10;
+  }
+  score += Math.min(usageCounts[command.id] ?? 0, 20) * 6;
+
+  return score;
 }
 
 export const GraphCommander: React.FC<GraphCommanderProps> = ({
   isOpen,
   onClose,
-  onInsertTopSuggestion,
-  onGetSuggestions,
-  onTogglePreview,
-  onFitView,
-  onExecute,
-  onExportGraph
+  commands
 }) => {
   const [query, setQuery] = React.useState('');
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = React.useState(false);
   const [highlightedIndex, setHighlightedIndex] = React.useState(0);
-  const [suggestions, setSuggestions] = React.useState<PlannedFragmentSuggestion[]>([]);
+  const [usageVersion, setUsageVersion] = React.useState(0);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
@@ -97,214 +169,30 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
     }
 
     inputRef.current?.focus();
-    let active = true;
-    setIsLoadingSuggestions(true);
-    void onGetSuggestions()
-      .then(results => {
-        if (!active) {
-          return;
+  }, [isOpen]);
+
+  const rankedCommands = React.useMemo(() => {
+    const recentIds = readRecentCommands();
+    const usageCounts = readCommandCounts();
+    return commands
+      .map((command): RankedCommandEntry => ({
+        command,
+        score: scoreCommand({
+          command,
+          query,
+          recentIds,
+          usageCounts
+        })
+      }))
+      .filter((entry: RankedCommandEntry) => !query.trim() || entry.score > 0)
+      .sort((left: RankedCommandEntry, right: RankedCommandEntry) => {
+        if (right.score !== left.score) {
+          return right.score - left.score;
         }
-        setSuggestions(results);
+        return left.command.label.localeCompare(right.command.label);
       })
-      .catch(error => {
-        console.error('[GraphCommander] failed to load suggestions', error);
-        if (active) {
-          setSuggestions([]);
-        }
-      })
-      .finally(() => {
-        if (active) {
-          setIsLoadingSuggestions(false);
-        }
-      });
-
-    return () => {
-      active = false;
-    };
-  }, [isOpen, onGetSuggestions]);
-
-  const handleInsertFragment = React.useCallback(
-    async (fragment: AgentFragmentRecord) => {
-      const matches = await onGetSuggestions();
-      const match = matches.find(candidate => candidate.fragment.id === fragment.id);
-      if (!match) {
-        return;
-      }
-      const globalInsert = (
-        window as typeof window & {
-          __EPIC1_INSERT_PRESET__?: ((preset: unknown) => Promise<void>) | null;
-        }
-      ).__EPIC1_INSERT_PRESET__;
-      if (!globalInsert) {
-        return;
-      }
-      await globalInsert(agentFragmentRecordToPreset(match.fragment));
-      onClose();
-    },
-    [onClose, onGetSuggestions]
-  );
-
-  const commands = React.useMemo<GraphCommanderCommand[]>(() => {
-    const bestBranchExtension = findSuggestionByRole(suggestions, 'branch-extension');
-    const bestMergeHelper = findSuggestionByRole(suggestions, 'merge-helper');
-    const bestOutputFinisher = findSuggestionByRole(suggestions, 'output-finisher');
-    const bestGapFill = findGapSuggestion(suggestions);
-
-    const baseCommands: GraphCommanderCommand[] = [
-      {
-        id: 'insert-best-match',
-        title: 'Insert Best Match',
-        description: suggestions[0]
-          ? `${suggestions[0].actionLabel} • ${suggestions[0].insertionLabel} • ${suggestions[0].fragment.name}`
-          : 'Use the top context-aware fragment suggestion',
-        keywords: ['suggestion', 'fragment', 'insert', 'best'],
-        group: 'Suggestions',
-        run: async () => {
-          await onInsertTopSuggestion();
-          onClose();
-        }
-      },
-      {
-        id: 'extend-selected-branch',
-        title: 'Extend Selected Branch',
-        description: bestBranchExtension
-          ? `${bestBranchExtension.actionLabel} • ${bestBranchExtension.insertionLabel} • ${bestBranchExtension.fragment.name}`
-          : 'No branch extension is strongly matched for this selection',
-        keywords: ['branch', 'extension', 'conditional', 'lane', 'extend'],
-        group: 'Structure',
-        run: async () => {
-          if (!bestBranchExtension) {
-            return;
-          }
-          await handleInsertFragment(bestBranchExtension.fragment);
-        }
-      },
-      {
-        id: 'add-missing-merge',
-        title: 'Add Missing Merge',
-        description: bestMergeHelper
-          ? `${bestMergeHelper.actionLabel} • ${bestMergeHelper.insertionLabel} • ${bestMergeHelper.fragment.name}`
-          : 'No merge helper is strongly matched for this selection',
-        keywords: ['merge', 'join', 'combine', 'recombine', 'missing'],
-        group: 'Structure',
-        run: async () => {
-          if (!bestMergeHelper) {
-            return;
-          }
-          await handleInsertFragment(bestMergeHelper.fragment);
-        }
-      },
-      {
-        id: 'finish-output-lane',
-        title: 'Finish Output Lane',
-        description: bestOutputFinisher
-          ? `${bestOutputFinisher.actionLabel} • ${bestOutputFinisher.insertionLabel} • ${bestOutputFinisher.fragment.name}`
-          : 'No output finisher is strongly matched for this selection',
-        keywords: ['output', 'finisher', 'polish', 'final', 'finish'],
-        group: 'Structure',
-        run: async () => {
-          if (!bestOutputFinisher) {
-            return;
-          }
-          await handleInsertFragment(bestOutputFinisher.fragment);
-        }
-      },
-      {
-        id: 'fill-downstream-gap',
-        title: 'Fill Downstream Gap',
-        description: bestGapFill
-          ? `${bestGapFill.actionLabel} • ${bestGapFill.insertionLabel} • ${bestGapFill.fragment.name}`
-          : 'No strong follow-up fragment is matched for this selection',
-        keywords: ['gap', 'downstream', 'continue', 'missing', 'follow-up'],
-        group: 'Structure',
-        run: async () => {
-          if (!bestGapFill) {
-            return;
-          }
-          await handleInsertFragment(bestGapFill.fragment);
-        }
-      },
-      {
-        id: 'toggle-preview',
-        title: 'Toggle Preview',
-        description: 'Show or hide the preview tray',
-        keywords: ['preview', 'panel', 'toggle'],
-        group: 'Editor',
-        run: () => {
-          onTogglePreview();
-          onClose();
-        }
-      },
-      {
-        id: 'fit-view',
-        title: 'Fit View',
-        description: 'Center and fit the current graph',
-        keywords: ['zoom', 'fit', 'view', 'center'],
-        group: 'Editor',
-        run: () => {
-          onFitView();
-          onClose();
-        }
-      },
-      {
-        id: 'execute-graph',
-        title: 'Execute Graph',
-        description: 'Run the current graph',
-        keywords: ['execute', 'run', 'preview'],
-        group: 'Editor',
-        run: () => {
-          onExecute();
-          onClose();
-        }
-      },
-      {
-        id: 'export-graph',
-        title: 'Export Graph',
-        description: 'Download the current graph as JSON',
-        keywords: ['export', 'download', 'json'],
-        group: 'File',
-        run: () => {
-          onExportGraph();
-          onClose();
-        }
-      }
-    ];
-
-    const fragmentCommands = suggestions.slice(0, 5).map(suggestion =>
-      buildFragmentCommand(suggestion, handleInsertFragment)
-    );
-
-    return [...baseCommands, ...fragmentCommands];
-  }, [
-    handleInsertFragment,
-    onClose,
-    onExecute,
-    onExportGraph,
-    onFitView,
-    onInsertTopSuggestion,
-    onTogglePreview,
-    suggestions
-  ]);
-
-  const filteredCommands = React.useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    if (!normalizedQuery) {
-      return commands;
-    }
-
-    return commands.filter(command => {
-      const haystack = [
-        command.title,
-        command.description,
-        ...(command.keywords ?? []),
-        command.group
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-      return haystack.includes(normalizedQuery);
-    });
-  }, [commands, query]);
+      .map((entry: RankedCommandEntry) => entry.command);
+  }, [commands, query, usageVersion]);
 
   React.useEffect(() => {
     setHighlightedIndex(0);
@@ -318,7 +206,11 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
     if (!command) {
       return;
     }
-    await command.run();
+
+    persistUsage(command.id);
+    setUsageVersion(version => version + 1);
+    await command.execute();
+    onClose();
   };
 
   return (
@@ -331,13 +223,13 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
       />
       <div className="graph-commander">
         <div className="graph-commander-header">
-          <span className="graph-commander-label">Commander</span>
+          <span className="graph-commander-label">Command Palette</span>
           <span className="graph-commander-hint">C to open • Esc to close</span>
         </div>
         <input
           ref={inputRef}
           className="graph-commander-input"
-          placeholder="Search tools and suggestions…"
+          placeholder="Type a command"
           value={query}
           onChange={event => setQuery(event.target.value)}
           onKeyDown={event => {
@@ -350,7 +242,7 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
             if (event.key === 'ArrowDown') {
               event.preventDefault();
               setHighlightedIndex(index =>
-                Math.min(index + 1, Math.max(filteredCommands.length - 1, 0))
+                Math.min(index + 1, Math.max(rankedCommands.length - 1, 0))
               );
               return;
             }
@@ -363,39 +255,40 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
 
             if (event.key === 'Enter') {
               event.preventDefault();
-              void handleRunCommand(filteredCommands[highlightedIndex]);
+              void handleRunCommand(rankedCommands[highlightedIndex]);
             }
           }}
         />
         <div className="graph-commander-results">
-          {isLoadingSuggestions && (
-            <div className="graph-commander-empty">Loading context-aware suggestions…</div>
-          )}
-          {!isLoadingSuggestions && filteredCommands.length === 0 && (
+          {rankedCommands.length === 0 && (
             <div className="graph-commander-empty">No commands match this search.</div>
           )}
-          {!isLoadingSuggestions &&
-            filteredCommands.map((command, index) => (
-              <button
-                key={command.id}
-                type="button"
-                className={`graph-commander-item ${index === highlightedIndex ? 'active' : ''}`}
-                onMouseEnter={() => setHighlightedIndex(index)}
-                onClick={() => {
-                  void handleRunCommand(command);
-                }}
-              >
-                <div className="graph-commander-item-copy">
-                  <div className="graph-commander-item-title">{command.title}</div>
+          {rankedCommands.map((command: GraphCommanderCommand, index: number) => (
+            <button
+              key={command.id}
+              type="button"
+              className={`graph-commander-item ${index === highlightedIndex ? 'active' : ''}`}
+              onMouseEnter={() => setHighlightedIndex(index)}
+              onClick={() => {
+                void handleRunCommand(command);
+              }}
+            >
+              <div className="graph-commander-item-copy">
+                <div className="graph-commander-item-title">{command.label}</div>
+                <div className="graph-commander-item-meta">
+                  {command.category && (
+                    <span className="graph-commander-item-category">{command.category}</span>
+                  )}
                   {command.description && (
-                    <div className="graph-commander-item-description">{command.description}</div>
+                    <span className="graph-commander-item-description">{command.description}</span>
                   )}
                 </div>
-                {command.group && (
-                  <span className="graph-commander-item-group">{command.group}</span>
-                )}
-              </button>
-            ))}
+              </div>
+              {command.shortcut && (
+                <span className="graph-commander-item-shortcut">{command.shortcut}</span>
+              )}
+            </button>
+          ))}
         </div>
       </div>
     </div>

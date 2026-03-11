@@ -395,6 +395,205 @@
   line-height: 1.4;
 }
 
+.component-library-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding: 14px 14px 12px;
+  background: linear-gradient(180deg, rgba(20, 24, 31, 0.96), rgba(15, 18, 24, 0.98));
+}
+
+.component-library-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.component-library-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+.component-library-subtitle {
+  font-size: 11px;
+  color: rgba(203, 213, 225, 0.7);
+}
+
+.component-library-rule {
+  margin-top: 4px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: rgba(148, 163, 184, 0.76);
+}
+
+.component-library-action {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(30, 41, 59, 0.72);
+  color: #e2e8f0;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.component-library-action:hover {
+  background: rgba(51, 65, 85, 0.8);
+}
+
+.component-library-selection-status {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.component-library-selection-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.component-library-selection-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+.component-library-selection-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.16);
+  color: rgba(191, 219, 254, 0.92);
+  font-size: 10px;
+  text-transform: capitalize;
+}
+
+.component-library-selection-badge.detached {
+  background: rgba(148, 163, 184, 0.16);
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.component-library-selection-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 10px;
+  color: rgba(203, 213, 225, 0.76);
+}
+
+.component-library-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.component-library-empty {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px dashed rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.4);
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.component-library-item {
+  width: 100%;
+  text-align: left;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.52);
+  color: #f8fafc;
+  cursor: pointer;
+}
+
+.component-library-item:hover {
+  background: rgba(30, 41, 59, 0.68);
+  border-color: rgba(148, 163, 184, 0.24);
+}
+
+.component-library-item-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.component-library-item-title {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.component-library-item-version {
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.84);
+}
+
+.component-library-item-description {
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.component-library-item-outputs,
+.component-reference-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.component-library-item-output,
+.component-reference-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(226, 232, 240, 0.86);
+  font-size: 10px;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.component-reference-item:hover {
+  background: rgba(51, 65, 85, 0.72);
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+.component-reference-item.copied {
+  background: rgba(37, 99, 235, 0.22);
+  border-color: rgba(96, 165, 250, 0.28);
+  color: #dbeafe;
+}
+
+.component-reference-item-status {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(148, 163, 184, 0.88);
+}
+
+.component-reference-panel {
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  padding-top: 10px;
+}
+
 /* Embedded AssetLibraryV2 adjustments */
 .assets-browser-panel .asset-library-v2 {
   position: absolute !important;

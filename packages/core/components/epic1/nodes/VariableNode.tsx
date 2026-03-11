@@ -2,8 +2,13 @@ import React, { memo } from 'react';
 import { NodeProps, Handle, Position } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
 import { useMetadataFlip, MetadataDisplay, MetadataToggleButton } from '../hooks/useMetadataFlip';
+import type { GraphReferenceEntry, GraphReferenceStatus, ReferenceBinding } from '../services/ComponentModel';
 import './VariableNode.css';
 
+/**
+ * Variable node for Epic 1 - gets or sets variables
+ * Story 1.5: Three-handle data hub with data inlet
+ */
 export interface VariableNodeData extends EditableNodeData {
   variableName: string;
   isGetter?: boolean;
@@ -12,18 +17,25 @@ export interface VariableNodeData extends EditableNodeData {
   dataInletConnected?: boolean;
   resolvedValue?: string | number | boolean | null;
   dataSource?: 'inlet' | 'input' | 'default';
+  graphReferences?: GraphReferenceEntry[];
+  referenceBinding?: ReferenceBinding;
+  referenceBindingStatus?: GraphReferenceStatus | null;
 }
 
-/**
- * Variable node for Epic 1 - gets or sets variables
- * Story 1.5: Three-handle data hub with data inlet
- */
 export const VariableNode = memo((props: NodeProps<VariableNodeData>) => {
   const isGetter = props.data.isGetter ?? false;
   const hasDataInlet = props.data.hasDataInlet !== false; // Default to true for Story 1.5
   const dataInletConnected = props.data.dataInletConnected ?? false;
   const dataSource = props.data.dataSource ?? 'default';
   const { showMetadata, setShowMetadata, metadata, flipClassName } = useMetadataFlip(props);
+  const looksLikeReferencePath = typeof props.data.value === 'string' && props.data.value.includes('.');
+  const bindingStatus = props.data.referenceBindingStatus ?? null;
+  const activeReference = Array.isArray(props.data.graphReferences)
+    ? props.data.graphReferences.find(
+        (reference: GraphReferenceEntry) => reference.readablePath === props.data.value
+      ) ?? null
+    : null;
+  const missingReference = bindingStatus === 'missing' || (looksLikeReferencePath && !activeReference);
 
   return (
     <BaseEditableNode
@@ -33,6 +45,18 @@ export const VariableNode = memo((props: NodeProps<VariableNodeData>) => {
       minHeight={hasDataInlet ? 90 : 70}
     >
       {({ isEditing, value, editBuffer, updateBuffer, confirmEdit, cancelEdit }) => {
+        const sortedReferences = Array.isArray(props.data.graphReferences)
+          ? [...props.data.graphReferences].sort((left: GraphReferenceEntry, right: GraphReferenceEntry) => {
+              const query = editBuffer.trim().toLowerCase();
+              const leftMatches = query.length > 0 && left.readablePath.toLowerCase().includes(query) ? 1 : 0;
+              const rightMatches = query.length > 0 && right.readablePath.toLowerCase().includes(query) ? 1 : 0;
+              if (leftMatches !== rightMatches) {
+                return rightMatches - leftMatches;
+              }
+              return left.readablePath.localeCompare(right.readablePath);
+            })
+          : [];
+
         if (isEditing) {
           return (
             <div className="flip-container">
@@ -62,6 +86,27 @@ export const VariableNode = memo((props: NodeProps<VariableNodeData>) => {
                       placeholder="Variable name..."
                       autoFocus
                     />
+                    {sortedReferences.length > 0 && (
+                      <div className="epic1-variable-reference-picker">
+                        <div className="epic1-variable-reference-label">Graph References</div>
+                        <div className="epic1-variable-reference-list">
+                          {sortedReferences.slice(0, 8).map((reference: GraphReferenceEntry) => (
+                            <button
+                              key={reference.referenceId}
+                              type="button"
+                              className={`epic1-variable-reference-chip ${editBuffer === reference.readablePath ? 'selected' : ''}`}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                updateBuffer(reference.readablePath);
+                              }}
+                              title={reference.description || reference.readablePath}
+                            >
+                              {reference.readablePath}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <MetadataToggleButton 
                     showMetadata={showMetadata} 
@@ -94,6 +139,16 @@ export const VariableNode = memo((props: NodeProps<VariableNodeData>) => {
                 <span className="epic1-variable-prefix">${isGetter ? '' : '='}</span>
                 {value || <span className="epic1-placeholder">unnamed</span>}
               </div>
+              {activeReference && (
+                <div className="epic1-variable-reference-active">
+                  Ref: {activeReference.readablePath}
+                </div>
+              )}
+              {missingReference && (
+                <div className="epic1-variable-reference-active missing">
+                  Missing ref: {props.data.value}
+                </div>
+              )}
               {dataInletConnected && (
                 <div className="epic1-data-source-indicator">
                   <span className="data-source-label">Data: {dataSource}</span>

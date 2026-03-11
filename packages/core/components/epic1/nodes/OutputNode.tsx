@@ -3,13 +3,18 @@ import { NodeProps, Handle, Position, useStore } from 'reactflow';
 import { EditableNodeData } from './BaseEditableNode';
 import { SaveIndicator } from './SaveIndicator';
 import { useEditTransitions } from '../hooks/useEditTransitions';
+import type { GraphReferenceEntry, GraphReferenceStatus, ReferenceBinding } from '../services/ComponentModel';
 import './BaseEditableNode.css';
 import './OutputNode.css';
+import './VariableNode.css';
 import './VisualFeedbackEnhancements.css';
 import '../animations/EditTransitions.css';
 
 export interface OutputNodeData extends EditableNodeData {
   label?: string;
+  graphReferences?: GraphReferenceEntry[];
+  referenceBinding?: ReferenceBinding;
+  referenceBindingStatus?: GraphReferenceStatus | null;
 }
 
 /**
@@ -39,6 +44,14 @@ export const OutputNode = memo((props: NodeProps<OutputNodeData>) => {
     isFocused: selected,
     hasError: false
   });
+  const activeReference = Array.isArray(data.graphReferences)
+    ? data.graphReferences.find(
+        (reference: GraphReferenceEntry) => reference.readablePath === data.value
+      ) ?? null
+    : null;
+  const looksLikeReferencePath = typeof data.value === 'string' && data.value.includes('.');
+  const missingReference =
+    data.referenceBindingStatus === 'missing' || (looksLikeReferencePath && !activeReference);
 
   // Update edit buffer when value changes externally
   React.useEffect(() => {
@@ -154,34 +167,81 @@ export const OutputNode = memo((props: NodeProps<OutputNodeData>) => {
       
       <div className="epic1-node-content">
         {isEditing ? (
-          <div className="epic1-output-editor">
-            <div className="epic1-node-type-label">Output</div>
-            <input
-              type="text"
-              className="epic1-inline-input"
-              value={editBuffer}
-              onChange={(e) => updateBuffer(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  confirmEdit();
-                } else if (e.key === 'Escape') {
-                  e.preventDefault();
-                  cancelEdit();
-                }
-                e.stopPropagation();
-              }}
-              onClick={(e) => e.stopPropagation()}
-              placeholder="Label (optional)"
-              autoFocus
-            />
-          </div>
+          (() => {
+            const sortedReferences = Array.isArray(data.graphReferences)
+              ? [...data.graphReferences].sort((left: GraphReferenceEntry, right: GraphReferenceEntry) => {
+                  const query = editBuffer.trim().toLowerCase();
+                  const leftMatches = query.length > 0 && left.readablePath.toLowerCase().includes(query) ? 1 : 0;
+                  const rightMatches = query.length > 0 && right.readablePath.toLowerCase().includes(query) ? 1 : 0;
+                  if (leftMatches !== rightMatches) {
+                    return rightMatches - leftMatches;
+                  }
+                  return left.readablePath.localeCompare(right.readablePath);
+                })
+              : [];
+
+            return (
+              <div className="epic1-output-editor">
+                <div className="epic1-node-type-label">Output</div>
+                <input
+                  type="text"
+                  className="epic1-inline-input"
+                  value={editBuffer}
+                  onChange={(e) => updateBuffer(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      confirmEdit();
+                    } else if (e.key === 'Escape') {
+                      e.preventDefault();
+                      cancelEdit();
+                    }
+                    e.stopPropagation();
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  placeholder="Label (optional)"
+                  autoFocus
+                />
+                {sortedReferences.length > 0 && (
+                  <div className="epic1-variable-reference-picker">
+                    <div className="epic1-variable-reference-label">Graph References</div>
+                    <div className="epic1-variable-reference-list">
+                      {sortedReferences.slice(0, 8).map((reference: GraphReferenceEntry) => (
+                        <button
+                          key={reference.referenceId}
+                          type="button"
+                          className={`epic1-variable-reference-chip ${editBuffer === reference.readablePath ? 'selected' : ''}`}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            updateBuffer(reference.readablePath);
+                          }}
+                          title={reference.description || reference.readablePath}
+                        >
+                          {reference.readablePath}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })()
         ) : (
           <div className="epic1-output-display">
             <div className="epic1-node-type-label">Output</div>
             <div className="epic1-output-label">
               {data.value || <span className="epic1-output-icon">→</span>}
             </div>
+            {activeReference && (
+              <div className="epic1-variable-reference-active">
+                Ref: {activeReference.readablePath}
+              </div>
+            )}
+            {missingReference && (
+              <div className="epic1-variable-reference-active missing">
+                Missing ref: {data.value}
+              </div>
+            )}
           </div>
         )}
       </div>
