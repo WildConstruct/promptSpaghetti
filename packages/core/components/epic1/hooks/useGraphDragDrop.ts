@@ -57,38 +57,6 @@ export function useGraphDragDrop<NodeData = unknown>(
   const [dropPosition, setDropPosition] = useState<XYPosition | null>(null);
   const [dropTarget, setDropTarget] = useState<FragmentDropTarget | null>(null);
 
-  // Handle drag over event
-  const onDragOver = useCallback(
-    (event: DragEvent) => {
-      event.preventDefault();
-      const effectAllowed = event.dataTransfer.effectAllowed || 'copy';
-      event.dataTransfer.dropEffect =
-        effectAllowed === 'copy' || effectAllowed === 'copyMove'
-          ? 'copy'
-          : effectAllowed === 'move'
-            ? 'move'
-            : 'copy';
-      setIsDraggingOver(true);
-
-      // Calculate drop position
-      if (reactFlowInstance) {
-        const position = reactFlowInstance.screenToFlowPosition({
-          x: event.clientX,
-          y: event.clientY
-        });
-        setDropPosition(position);
-        setDropTarget(
-          resolveDropTarget(
-            reactFlowInstance,
-            position,
-            parseDragData(event.dataTransfer)
-          )
-        );
-      }
-    },
-    [reactFlowInstance]
-  );
-
   // Handle drag leave event
   const onDragLeave = useCallback((event: DragEvent) => {
     // Only set to false if we're leaving the main container
@@ -107,7 +75,7 @@ export function useGraphDragDrop<NodeData = unknown>(
   }, []);
 
   // Parse drag data
-  function parseDragData(dataTransfer: DataTransfer): DraggedItem | null {
+  const parseDragData = useCallback((dataTransfer: DataTransfer): DraggedItem | null => {
     try {
       // Check for preset data
       const presetData =
@@ -182,7 +150,38 @@ export function useGraphDragDrop<NodeData = unknown>(
       console.error('Failed to parse drag data:', error);
       return null;
     }
-  }
+  }, []);
+
+  // Handle drag over event
+  const onDragOver = useCallback(
+    (event: DragEvent) => {
+      event.preventDefault();
+      const effectAllowed = event.dataTransfer.effectAllowed || 'copy';
+      event.dataTransfer.dropEffect =
+        effectAllowed === 'copy' || effectAllowed === 'copyMove'
+          ? 'copy'
+          : effectAllowed === 'move'
+            ? 'move'
+            : 'copy';
+      setIsDraggingOver(true);
+
+      if (reactFlowInstance) {
+        const position = reactFlowInstance.screenToFlowPosition({
+          x: event.clientX,
+          y: event.clientY
+        });
+        setDropPosition(position);
+        setDropTarget(
+          resolveDropTarget(
+            reactFlowInstance,
+            position,
+            parseDragData(event.dataTransfer)
+          )
+        );
+      }
+    },
+    [parseDragData, reactFlowInstance]
+  );
 
   // Handle preset drop
   const handlePresetDrop = useCallback(
@@ -402,7 +401,7 @@ export function useGraphDragDrop<NodeData = unknown>(
       document.removeEventListener('dragover', onDocumentDragOver, true);
       document.removeEventListener('drop', onDocumentDrop, true);
     };
-  }, [handleParsedDrop, reactFlowInstance]);
+  }, [handleParsedDrop, parseDragData, reactFlowInstance]);
 
   // Handle drag start (for internal nodes)
   const onDragStart = useCallback((event: DragEvent, node: Node) => {

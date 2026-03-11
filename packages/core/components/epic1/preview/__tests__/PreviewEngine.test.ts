@@ -10,7 +10,19 @@ import {
 } from '../../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { TextBlockNode } from '../../../../runtime/nodes/epic1/TextBlockNode';
 import { OutputNode } from '../../../../runtime/nodes/epic1/OutputNode';
-import type { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'reactflow';
+
+type TestReactFlowNode = {
+  id: string;
+  type: string;
+  data: Record<string, unknown>;
+  position: { x: number; y: number };
+};
+
+type TestReactFlowEdge = {
+  id: string;
+  source: string;
+  target: string;
+};
 
 // Mock the execution engine
 jest.mock('../../../../runtime/nodes/epic1/Epic1ExecutionEngine', () => {
@@ -26,7 +38,7 @@ jest.mock('../../../../runtime/nodes/epic1/Epic1ExecutionEngine', () => {
           errors: [],
           warnings: []
         },
-        context: {}
+        context: {} as ExecutionResult['context']
       })
     }))
   };
@@ -38,8 +50,8 @@ const mockedExecutionEngine = Epic1ExecutionEngine as jest.MockedClass<
 describe('PreviewEngine', () => {
   let engine: PreviewEngine;
   let mockGraph: Epic1Graph;
-  let reactFlowNodes: ReactFlowNode[];
-  let reactFlowEdges: ReactFlowEdge[];
+  let reactFlowNodes: TestReactFlowNode[];
+  let reactFlowEdges: TestReactFlowEdge[];
 
   beforeEach(() => {
     // Clear all timers
@@ -48,11 +60,11 @@ describe('PreviewEngine', () => {
     mockedExecutionEngine.mockClear();
 
     // Create test graph
-    const textNode = new TextBlockNode({ id: 'node1', text: 'Hello' });
-    const outputNode = new OutputNode({ id: 'node2', label: 'Output' });
+    const textNode = new TextBlockNode('node1', 'Hello');
+    const outputNode = new OutputNode('node2', 'Output');
 
     mockGraph = {
-      nodes: new Map([
+      nodes: new Map<string, any>([
         ['node1', textNode],
         ['node2', outputNode]
       ]),
@@ -302,6 +314,22 @@ describe('PreviewEngine', () => {
       expect(lastCall.results).toHaveLength(1);
       expect(lastCall.results[0].output).toContain('999');
     });
+
+    it('should go idle immediately when seeds are cleared', () => {
+      const callback = jest.fn();
+      engine.subscribe(callback);
+
+      engine.setSeeds([]);
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
+
+      expect(engine.getState()).toBe(PreviewState.IDLE);
+      expect(callback).toHaveBeenCalledWith(
+        expect.objectContaining({
+          state: PreviewState.IDLE,
+          results: []
+        })
+      );
+    });
   });
 
   describe('Debounce delay management', () => {
@@ -344,9 +372,12 @@ describe('PreviewEngine', () => {
   describe('Error handling', () => {
     it('should handle execution errors', async () => {
       // Mock execution to fail
-      mockedExecutionEngine.mockImplementationOnce(() => ({
-        execute: jest.fn().mockRejectedValue(new Error('Execution failed'))
-      }));
+      mockedExecutionEngine.mockImplementationOnce(
+        () =>
+          ({
+            execute: jest.fn().mockRejectedValue(new Error('Execution failed'))
+          }) as unknown as Epic1ExecutionEngine
+      );
 
       const callback = jest.fn();
       engine.subscribe(callback);
@@ -376,14 +407,17 @@ describe('PreviewEngine', () => {
       });
 
       // Mock slow execution
-      mockedExecutionEngine.mockImplementationOnce(() => ({
-        execute: jest.fn(
-          () =>
-            new Promise(resolve => {
-              setTimeout(resolve, 1000);
-            })
-        )
-      }));
+      mockedExecutionEngine.mockImplementationOnce(
+        () =>
+          ({
+            execute: jest.fn(
+              () =>
+                new Promise(resolve => {
+                  setTimeout(resolve, 1000);
+                })
+            )
+          }) as unknown as Epic1ExecutionEngine
+      );
 
       const callback = jest.fn();
       timeoutEngine.subscribe(callback);
@@ -427,14 +461,17 @@ describe('PreviewEngine', () => {
     it('should not update state after cancellation', async () => {
       // Mock slow execution
       let resolveExecution: any;
-      mockedExecutionEngine.mockImplementationOnce(() => ({
-        execute: jest.fn(
-          () =>
-            new Promise(resolve => {
-              resolveExecution = resolve;
-            })
-        )
-      }));
+      mockedExecutionEngine.mockImplementationOnce(
+        () =>
+          ({
+            execute: jest.fn(
+              () =>
+                new Promise(resolve => {
+                  resolveExecution = resolve;
+                })
+            )
+          }) as unknown as Epic1ExecutionEngine
+      );
 
       const callback = jest.fn();
       engine.subscribe(callback);
@@ -459,6 +496,67 @@ describe('PreviewEngine', () => {
 
       // Should not have received any updates after disposal
       expect(callback).not.toHaveBeenCalled();
+    });
+
+    it('should cancel an in-flight execution before returning cached results', async () => {
+      const callback = jest.fn();
+      engine.subscribe(callback);
+
+      const executeSpy = jest
+        .spyOn(
+          engine as unknown as {
+            executeOnMainThread: (
+              graph: Epic1Graph,
+              signal: AbortSignal
+            ) => Promise<ExecutionResult[]>;
+          },
+          'executeOnMainThread'
+        )
+        .mockImplementationOnce(
+          (_graph: Epic1Graph, signal: AbortSignal) =>
+            new Promise<ExecutionResult[]>((_, reject) => {
+              signal.addEventListener('abort', () =>
+                reject(new Error('Execution cancelled'))
+              );
+            })
+        )
+        .mockResolvedValueOnce([
+          {
+            success: true,
+            output: 'fresh result',
+            results: new Map(),
+            stats: {
+              totalDuration: 50,
+              nodesExecuted: 2,
+              errors: [],
+              warnings: []
+            },
+            context: {} as ExecutionResult['context']
+          } as ExecutionResult
+        ]);
+
+      engine.updatePreview(mockGraph, reactFlowNodes, reactFlowEdges);
+      jest.advanceTimersByTime(150);
+      expect(engine.getState()).toBe(PreviewState.EXECUTING);
+
+      await engine.updatePreviewImmediate(
+        mockGraph,
+        reactFlowNodes,
+        reactFlowEdges
+      );
+      expect([PreviewState.IDLE, PreviewState.CACHED]).toContain(
+        engine.getState()
+      );
+
+      expect(callback).toHaveBeenCalledWith(
+        expect.objectContaining({
+          state: PreviewState.IDLE,
+          results: expect.arrayContaining([
+            expect.objectContaining({ output: 'fresh result' })
+          ])
+        })
+      );
+      executeSpy.mockRestore();
     });
   });
 
@@ -519,7 +617,7 @@ describe('PreviewEngine', () => {
               output: `Mock output ${seed}`,
               results: new Map(),
               stats: baseStats,
-              context: {}
+              context: {} as ExecutionResult['context']
             }))
           );
         });

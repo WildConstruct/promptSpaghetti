@@ -8,7 +8,8 @@ import React, {
   useCallback,
   useRef,
   useEffect,
-  useLayoutEffect
+  useLayoutEffect,
+  useMemo
 } from 'react';
 import {
   useReactFlow,
@@ -634,9 +635,13 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   };
 
   // Box style with animations
-  const effectiveSize = isCollapsed
-    ? { width: COLLAPSED_WIDTH, height: COLLAPSED_HEIGHT }
-    : currentSize;
+  const effectiveSize = useMemo(
+    () =>
+      isCollapsed
+        ? { width: COLLAPSED_WIDTH, height: COLLAPSED_HEIGHT }
+        : currentSize,
+    [currentSize, isCollapsed]
+  );
 
   const boxStyle: React.CSSProperties = {
     width: effectiveSize.width,

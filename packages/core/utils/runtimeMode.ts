@@ -31,14 +31,18 @@ function readEnvVar(key: string): string | undefined {
   ).__env__;
   if (globalEnv && Object.prototype.hasOwnProperty.call(globalEnv, key)) {
     const value = globalEnv[key];
-    return typeof value === 'string' ? value : value != null ? String(value) : undefined;
+    return typeof value === 'string'
+      ? value
+      : value !== null && typeof value !== 'undefined'
+        ? String(value)
+        : undefined;
   }
 
   return undefined;
 }
 
 function parseBoolean(value: string | undefined, fallback: boolean): boolean {
-  if (value == null || value.trim() === '') {
+  if ((value === null || typeof value === 'undefined') || value.trim() === '') {
     return fallback;
   }
 

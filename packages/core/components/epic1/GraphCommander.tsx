@@ -277,6 +277,7 @@ export const GraphCommander: React.FC<GraphCommanderProps> = ({
     return [...baseCommands, ...fragmentCommands];
   }, [
     handleInsertFragment,
+    onClose,
     onExecute,
     onExportGraph,
     onFitView,

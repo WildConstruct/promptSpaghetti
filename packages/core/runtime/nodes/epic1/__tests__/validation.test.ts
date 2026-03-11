@@ -19,6 +19,7 @@ import {
   OutputNode,
   Epic1NodeType
 } from '../index';
+import { BaseInlineEditableNode } from '../BaseInlineEditableNode';
 
 describe('Validation System', () => {
   describe('validateNode', () => {
@@ -196,7 +197,7 @@ describe('Validation System', () => {
       const var1 = new VariableNode('var-1', { name: 'duplicateName' });
       const var2 = new VariableNode('var-2', { name: 'duplicateName' });
 
-      const nodes = new Map([
+      const nodes = new Map<string, BaseInlineEditableNode>([
         ['var-1', var1],
         ['var-2', var2]
       ]);
@@ -241,7 +242,7 @@ describe('Validation System', () => {
       const output = new OutputNode('output');
       output.lock();
 
-      const nodes = new Map([
+      const nodes = new Map<string, BaseInlineEditableNode>([
         ['text', text],
         ['output', output]
       ]);
@@ -255,7 +256,7 @@ describe('Validation System', () => {
 
     it('should detect missing output node', async () => {
       const text = new TextBlockNode('text', 'Hello');
-      const nodes = new Map([['text', text]]);
+      const nodes = new Map<string, BaseInlineEditableNode>([['text', text]]);
       const edges: any[] = [];
 
       const result = await validateGraph(nodes, edges);
@@ -269,7 +270,7 @@ describe('Validation System', () => {
       const output1 = new OutputNode('output1');
       const output2 = new OutputNode('output2');
 
-      const nodes = new Map([
+      const nodes = new Map<string, BaseInlineEditableNode>([
         ['output1', output1],
         ['output2', output2]
       ]);
@@ -289,7 +290,7 @@ describe('Validation System', () => {
       const text2 = new TextBlockNode('text2', 'Orphaned');
       const output = new OutputNode('output');
 
-      const nodes = new Map([
+      const nodes = new Map<string, BaseInlineEditableNode>([
         ['text1', text1],
         ['text2', text2],
         ['output', output]
@@ -312,7 +313,7 @@ describe('Validation System', () => {
       const node2 = new TextBlockNode('node2', 'B');
       const node3 = new TextBlockNode('node3', 'C');
 
-      const nodes = new Map([
+      const nodes = new Map<string, BaseInlineEditableNode>([
         ['node1', node1],
         ['node2', node2],
         ['node3', node3]
@@ -344,7 +345,7 @@ describe('Validation System', () => {
       const output = new OutputNode('output');
       output.lock();
 
-      const nodes = new Map([
+      const nodes = new Map<string, BaseInlineEditableNode>([
         ['var1', var1],
         ['text1', text1],
         ['text2', text2],
@@ -369,7 +370,7 @@ describe('Validation System', () => {
       const weighted = new WeightedChoiceNode('weighted', []);
       const output = new OutputNode('output');
 
-      const nodes = new Map([
+      const nodes = new Map<string, BaseInlineEditableNode>([
         ['text', text],
         ['weighted', weighted],
         ['output', output]

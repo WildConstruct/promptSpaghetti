@@ -11,7 +11,7 @@ describe('engine-basic comprehensive behavior', () => {
 
   beforeEach(() => {
     jest.restoreAllMocks();
-    logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    logSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
@@ -19,7 +19,7 @@ describe('engine-basic comprehensive behavior', () => {
   });
 
   it('initializes analytics without throwing', () => {
-    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
     expect(() => initializeAnalytics()).not.toThrow();
     expect(logSpy).toHaveBeenCalledWith('Analytics initialized (basic mode)');
   });
@@ -96,7 +96,7 @@ describe('engine-basic comprehensive behavior', () => {
   });
 
   it('handles unsupported node types as empty string', async () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     const graph = asGraph([
       { id: 'x1', type: 'Markov' } as Node,
       { id: 'out1', type: 'Output', inputs: ['x1'] } as Node
@@ -121,7 +121,7 @@ describe('engine-basic comprehensive behavior', () => {
   });
 
   it('captures missing upstream node errors in output payload', async () => {
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
     const graph = asGraph([
       { id: 'out1', type: 'Output', inputs: ['missing-node'] } as Node
     ]);

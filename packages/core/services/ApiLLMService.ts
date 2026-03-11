@@ -17,9 +17,6 @@ import type {
   DraftGraphFromPromptResponse
 } from './agenticGraph';
 import type {
-  LLMCapability,
-  LLMMode,
-  LLMProvider,
   LLMStatusContract
 } from './llm/contracts';
 
@@ -169,18 +166,22 @@ export class LLMService {
   private filterRequestPayload(data: JsonObject): JsonObject {
     const payload: JsonObject = { ...data };
 
-    if (typeof this.config.model === 'string' && payload.model == null) {
+    if (
+      typeof this.config.model === 'string' &&
+      (payload.model === null || typeof payload.model === 'undefined')
+    ) {
       payload.model = this.config.model;
     }
     if (
       typeof this.config.temperature === 'number' &&
-      payload.temperature == null
+      (payload.temperature === null ||
+        typeof payload.temperature === 'undefined')
     ) {
       payload.temperature = this.config.temperature;
     }
     if (
       typeof this.config.maxTokens === 'number' &&
-      payload.maxTokens == null
+      (payload.maxTokens === null || typeof payload.maxTokens === 'undefined')
     ) {
       payload.maxTokens = this.config.maxTokens;
     }

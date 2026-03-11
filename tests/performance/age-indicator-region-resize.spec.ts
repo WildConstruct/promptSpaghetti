@@ -1,6 +1,31 @@
 import type { Locator, Page } from '@playwright/test';
 import { expect, test } from '@playwright/test';
 
+type FlowNodeLike = {
+  id: string;
+  type?: string;
+  parentNode?: string;
+  position?: { x?: number; y?: number };
+  measured?: { width?: number; height?: number };
+  style?: { width?: number | string; height?: number | string };
+  data?: {
+    title?: string;
+    width?: number | string;
+    height?: number | string;
+  };
+};
+
+type FlowInstanceLike = {
+  getNodes: () => FlowNodeLike[];
+};
+
+declare global {
+  interface Window {
+    __EPIC1_REACT_FLOW__?: FlowInstanceLike;
+    __EPIC1_INSERT_PRESET__?: ((meta: unknown) => Promise<void>) | null;
+  }
+}
+
 type RegionFragmentCandidate = {
   name: string;
   path: string;
@@ -18,7 +43,9 @@ async function loadRegionFragmentCandidatesFromBrowser(
     const safeFetchJson = async (url: string) => {
       try {
         const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) return null;
+        if (!res.ok) {
+          return null;
+        }
         const text = await res.text();
         const trimmed = text.trim();
         if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html')) {
@@ -92,17 +119,19 @@ async function maybeClick(page: Page, locatorSelector: string | Locator) {
 
 async function sizeOf(locator: Locator) {
   const box = await locator.boundingBox();
-  if (!box) throw new Error('Element not visible for boundingBox()');
+  if (!box) {
+    throw new Error('Element not visible for boundingBox()');
+  }
   return { width: box.width, height: box.height, x: box.x, y: box.y };
 }
 
 async function getRegionSize(page: Page, regionId: string) {
   return page.evaluate(id => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     if (!instance) {
       return null;
     }
-    const node = instance.getNodes().find((n: any) => n.id === id);
+    const node = instance.getNodes().find((n: FlowNodeLike) => n.id === id);
     if (!node) {
       return null;
     }
@@ -118,15 +147,15 @@ async function getRegionSize(page: Page, regionId: string) {
 
 async function getWrapperSnapshots(page: Page) {
   return page.evaluate(() => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     if (!instance) {
       return [];
     }
 
     return instance
       .getNodes()
-      .filter((node: any) => node.type === 'enhancedBoundingBox')
-      .map((node: any) => ({
+      .filter((node: FlowNodeLike) => node.type === 'enhancedBoundingBox')
+      .map((node: FlowNodeLike) => ({
         id: node.id,
         title: node.data?.title,
         position: node.position,
@@ -161,11 +190,7 @@ async function insertPresetDirect(
   candidate: RegionFragmentCandidate
 ) {
   await page.evaluate(async preset => {
-    const insertPreset = (
-      window as typeof window & {
-        __EPIC1_INSERT_PRESET__?: ((meta: unknown) => Promise<void>) | null;
-      }
-    ).__EPIC1_INSERT_PRESET__;
+    const insertPreset = window.__EPIC1_INSERT_PRESET__;
 
     if (!insertPreset) {
       throw new Error('Editor preset insert helper is not available.');
@@ -350,7 +375,7 @@ async function waitForNodeCountIncrease(
       })
       .toBeGreaterThan(before);
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -483,20 +508,20 @@ test.describe('Region fragment box sizing and resize', () => {
     expect(inserted).toBeTruthy();
 
     const regionInfo = await page.evaluate(() => {
-      const instance = (window as any).__EPIC1_REACT_FLOW__;
+      const instance = window.__EPIC1_REACT_FLOW__;
       if (!instance) {
         return null;
       }
       const nodes = instance.getNodes();
       const regionNode = nodes.find(
-        (node: any) => node.type === 'enhancedBoundingBox'
+        (node: FlowNodeLike) => node.type === 'enhancedBoundingBox'
       );
       if (!regionNode) {
         return null;
       }
       const childIds = nodes
-        .filter((node: any) => node.parentNode === regionNode.id)
-        .map((node: any) => node.id);
+        .filter((node: FlowNodeLike) => node.parentNode === regionNode.id)
+        .map((node: FlowNodeLike) => node.id);
       return { id: regionNode.id, childIds };
     });
 
@@ -536,11 +561,13 @@ test.describe('Region fragment box sizing and resize', () => {
     const handleSE = await getSouthEastResizeHandle(region);
     await expect(handleSE).toBeVisible();
 
-    const beforeSize = await getRegionSize(page, regionInfo.id);
-    const before = beforeSize || (await sizeOf(regionNode));
+    await getRegionSize(page, regionInfo.id);
+    await sizeOf(regionNode);
 
     const hBox = await handleSE.boundingBox();
-    if (!hBox) throw new Error('Resize handle not interactable');
+    if (!hBox) {
+      throw new Error('Resize handle not interactable');
+    }
 
     // Drag handle diagonally to increase size
     const startX = hBox.x + hBox.width / 2;
@@ -551,8 +578,8 @@ test.describe('Region fragment box sizing and resize', () => {
     await page.mouse.up();
 
     await page.waitForTimeout(80);
-    const afterSize = await getRegionSize(page, regionInfo.id);
-    const after = afterSize || (await sizeOf(regionNode));
+    await getRegionSize(page, regionInfo.id);
+    await sizeOf(regionNode);
 
     // 12) Re-check that all contained nodes remain within the region after resize
     for (const locator of childLocators) {
@@ -573,7 +600,6 @@ test.describe('Region fragment box sizing and resize', () => {
 
     const canvas = page.locator('div.graph-canvas-container');
     await expect(canvas).toBeVisible();
-    const nodeLocator = page.locator('.react-flow__node');
 
     const candidates = await loadRegionFragmentCandidatesFromBrowser(page);
     expect(candidates.length).toBeGreaterThan(1);

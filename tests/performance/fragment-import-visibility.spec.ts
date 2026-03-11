@@ -1,5 +1,41 @@
 import { expect, Page, test } from '@playwright/test';
 
+type FlowNodeLike = {
+  id: string;
+  type?: string;
+  parentNode?: string;
+  hidden?: boolean;
+  data?: {
+    title?: string;
+    nodeCount?: string | number;
+    label?: string;
+    value?: string;
+    fragmentImported?: boolean;
+    parentNode?: string;
+    options?: unknown[];
+  };
+};
+
+type FlowEdgeLike = {
+  id: string;
+  source: string;
+  target: string;
+  sourceHandle?: string | null;
+  targetHandle?: string | null;
+};
+
+type FlowInstanceLike = {
+  getNodes: () => FlowNodeLike[];
+  getEdges: () => FlowEdgeLike[];
+};
+
+declare global {
+  interface Window {
+    __EPIC1_REACT_FLOW__?: FlowInstanceLike;
+    __EPIC1_LAST_PRESET_DRAG__?: unknown;
+  }
+}
+
 async function openEditor(page: Page): Promise<void> {
   await page.addInitScript(() => {
     try {
@@ -31,7 +67,7 @@ async function ensureAssetBrowserOpen(page: Page): Promise<void> {
       await assets
         .first()
         .click()
-        .catch(() => {});
+        .catch(() => undefined);
     }
   }
 
@@ -62,7 +98,7 @@ async function insertFragmentFromBrowser(
     .first();
   await expect(insertButton).toBeVisible({ timeout: 5_000 });
   const beforeWrapperCount = await page.evaluate(() => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     if (!instance) {
       return 0;
     }
@@ -70,13 +106,13 @@ async function insertFragmentFromBrowser(
     return instance
       .getNodes()
       .filter(
-        (node: any) =>
+        (node: FlowNodeLike) =>
           node.type === 'enhancedBoundingBox' &&
           node.data?.fragmentImported === true
       ).length;
   });
   const beforeNodeCount = await page.evaluate(() => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     if (!instance) {
       return 0;
     }
@@ -89,14 +125,14 @@ async function insertFragmentFromBrowser(
   const insertedViaPlaywrightClick = await page
     .waitForFunction(
       ({ previousWrapperCount, previousNodeCount }) => {
-        const instance = (window as any).__EPIC1_REACT_FLOW__;
+        const instance = window.__EPIC1_REACT_FLOW__;
         if (!instance) {
           return false;
         }
 
         const nodes = instance.getNodes();
         const importedWrapperCount = nodes.filter(
-          (node: any) =>
+          (node: FlowNodeLike) =>
             node.type === 'enhancedBoundingBox' &&
             node.data?.fragmentImported === true
         ).length;
@@ -199,13 +235,13 @@ async function loadMultiNodeAssetFragmentCandidates(
 
 async function getImportedFragmentSummary(page: Page) {
   return page.evaluate(() => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     if (!instance) {
       return null;
     }
 
-    const nodes = instance.getNodes() as Array<any>;
-    const edges = instance.getEdges() as Array<any>;
+    const nodes = instance.getNodes();
+    const edges = instance.getEdges();
     const wrappers = nodes.filter(
       node =>
         node.type === 'enhancedBoundingBox' &&
@@ -265,9 +301,7 @@ async function dragFragmentFromBrowserToCanvas(
       )
     );
     const match = rows.find(row => row.innerText.includes(name));
-    const dragPayload = (
-      window as Window & { __EPIC1_LAST_PRESET_DRAG__?: unknown }
-    ).__EPIC1_LAST_PRESET_DRAG__;
+    const dragPayload = window.__EPIC1_LAST_PRESET_DRAG__;
     if (
       dragPayload &&
       typeof dragPayload === 'object' &&
@@ -317,7 +351,7 @@ async function dragFragmentFromBrowserToCanvas(
     throw new Error('React Flow pane is not visible for drag target.');
   }
   const beforeWrapperCount = await page.evaluate(() => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     if (!instance) {
       return 0;
     }
@@ -325,7 +359,7 @@ async function dragFragmentFromBrowserToCanvas(
     return instance
       .getNodes()
       .filter(
-        (node: any) =>
+        (node: FlowNodeLike) =>
           node.type === 'enhancedBoundingBox' &&
           node.data?.fragmentImported === true
       ).length;
@@ -347,7 +381,7 @@ async function dragFragmentFromBrowserToCanvas(
   const dragInserted = await page
     .waitForFunction(
       previous => {
-        const instance = (window as any).__EPIC1_REACT_FLOW__;
+        const instance = window.__EPIC1_REACT_FLOW__;
         if (!instance) {
           return false;
         }
@@ -356,7 +390,7 @@ async function dragFragmentFromBrowserToCanvas(
           instance
             .getNodes()
             .filter(
-              (node: any) =>
+              (node: FlowNodeLike) =>
                 node.type === 'enhancedBoundingBox' &&
                 node.data?.fragmentImported === true
             ).length > previous
@@ -369,7 +403,7 @@ async function dragFragmentFromBrowserToCanvas(
     .catch(() => false);
 
   const currentWrapperCount = await page.evaluate(() => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     if (!instance) {
       return 0;
     }
@@ -377,7 +411,7 @@ async function dragFragmentFromBrowserToCanvas(
     return instance
       .getNodes()
       .filter(
-        (node: any) =>
+        (node: FlowNodeLike) =>
           node.type === 'enhancedBoundingBox' &&
           node.data?.fragmentImported === true
       ).length;
@@ -440,7 +474,7 @@ async function dragFragmentFromBrowserToCanvas(
     const insertedViaSyntheticDrop = await page
       .waitForFunction(
         previous => {
-          const instance = (window as any).__EPIC1_REACT_FLOW__;
+          const instance = window.__EPIC1_REACT_FLOW__;
           if (!instance) {
             return false;
           }
@@ -449,7 +483,7 @@ async function dragFragmentFromBrowserToCanvas(
             instance
               .getNodes()
               .filter(
-                (node: any) =>
+                (node: FlowNodeLike) =>
                   node.type === 'enhancedBoundingBox' &&
                   node.data?.fragmentImported === true
               ).length > previous
@@ -568,11 +602,40 @@ test.describe('Fragment Import Visibility', () => {
     await expect
       .poll(
         async () =>
-          page
-            .getByRole('button', {
-              name: /Concat\s+" "/i
-            })
-            .count(),
+          page.evaluate(() => {
+            const instance = window.__EPIC1_REACT_FLOW__;
+            if (!instance) {
+              return { concatCount: 0, outputCount: 0, edgeCount: 0 };
+            }
+
+            const nodes = instance.getNodes();
+            const edges = instance.getEdges();
+            const concatCount = nodes.filter((node: FlowNodeLike) => node.type === 'concat').length;
+            const outputCount = nodes.filter((node: FlowNodeLike) => node.type === 'output').length;
+
+            return {
+              concatCount,
+              outputCount,
+              edgeCount: edges.length
+            };
+          }),
+        { timeout: 10_000 }
+      )
+      .toMatchObject({ outputCount: 1 });
+
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(() => {
+            const instance = window.__EPIC1_REACT_FLOW__;
+            if (!instance) {
+              return 0;
+            }
+
+            return instance
+              .getNodes()
+              .filter((node: FlowNodeLike) => node.type === 'concat').length;
+          }),
         { timeout: 10_000 }
       )
       .toBeGreaterThan(0);
@@ -584,13 +647,13 @@ test.describe('Fragment Import Visibility', () => {
     ).toBeVisible({ timeout: 10_000 });
 
     const graphState = await page.evaluate(() => {
-      const instance = (window as any).__EPIC1_REACT_FLOW__;
+      const instance = window.__EPIC1_REACT_FLOW__;
       if (!instance) {
         return null;
       }
 
       return {
-        nodes: instance.getNodes().map((node: any) => ({
+        nodes: instance.getNodes().map((node: FlowNodeLike) => ({
           id: node.id,
           type: node.type,
           parentNode: node.parentNode,
@@ -604,7 +667,7 @@ test.describe('Fragment Import Visibility', () => {
               : undefined
           }
         })),
-        edges: instance.getEdges().map((edge: any) => ({
+        edges: instance.getEdges().map((edge: FlowEdgeLike) => ({
           id: edge.id,
           source: edge.source,
           target: edge.target,
@@ -738,24 +801,24 @@ test.describe('Fragment Import Visibility', () => {
       .poll(
         async () =>
           page.evaluate(() => {
-            const instance = (window as any).__EPIC1_REACT_FLOW__;
+            const instance = window.__EPIC1_REACT_FLOW__;
             if (!instance) {
               return 0;
             }
 
             const nodes = instance.getNodes();
             const wrappers = nodes.filter(
-              (node: any) => node.type === 'enhancedBoundingBox'
+              (node: FlowNodeLike) => node.type === 'enhancedBoundingBox'
             );
             const wrapper = wrappers.find(
-              (node: any) =>
+              (node: FlowNodeLike) =>
                 node.data?.title === 'Eye Descriptor Asset Fragment'
             );
             if (!wrapper) {
               return 0;
             }
 
-            return nodes.filter((node: any) => node.parentNode === wrapper.id)
+            return nodes.filter((node: FlowNodeLike) => node.parentNode === wrapper.id)
               .length;
           }),
         { timeout: 10_000 }
@@ -766,7 +829,7 @@ test.describe('Fragment Import Visibility', () => {
       .poll(
         async () =>
           page.evaluate(() => {
-            const instance = (window as any).__EPIC1_REACT_FLOW__;
+            const instance = window.__EPIC1_REACT_FLOW__;
             if (!instance) {
               return 0;
             }
@@ -774,10 +837,10 @@ test.describe('Fragment Import Visibility', () => {
             const nodes = instance.getNodes();
             const edges = instance.getEdges();
             const wrappers = nodes.filter(
-              (node: any) => node.type === 'enhancedBoundingBox'
+              (node: FlowNodeLike) => node.type === 'enhancedBoundingBox'
             );
             const wrapper = wrappers.find(
-              (node: any) =>
+              (node: FlowNodeLike) =>
                 node.data?.title === 'Eye Descriptor Asset Fragment'
             );
             if (!wrapper) {
@@ -786,11 +849,11 @@ test.describe('Fragment Import Visibility', () => {
 
             const childIds = new Set(
               nodes
-                .filter((node: any) => node.parentNode === wrapper.id)
-                .map((node: any) => node.id)
+                .filter((node: FlowNodeLike) => node.parentNode === wrapper.id)
+                .map((node: FlowNodeLike) => node.id)
             );
             return edges.filter(
-              (edge: any) =>
+              (edge: FlowEdgeLike) =>
                 childIds.has(edge.source) && childIds.has(edge.target)
             ).length;
           }),
@@ -799,7 +862,7 @@ test.describe('Fragment Import Visibility', () => {
       .toBe(2);
 
     const graphState = await page.evaluate(() => {
-      const instance = (window as any).__EPIC1_REACT_FLOW__;
+      const instance = window.__EPIC1_REACT_FLOW__;
       if (!instance) {
         return null;
       }
@@ -807,21 +870,21 @@ test.describe('Fragment Import Visibility', () => {
       const nodes = instance.getNodes();
       const edges = instance.getEdges();
       const wrappers = nodes.filter(
-        (node: any) => node.type === 'enhancedBoundingBox'
+        (node: FlowNodeLike) => node.type === 'enhancedBoundingBox'
       );
       const wrapper = wrappers.find(
-        (node: any) => node.data?.title === 'Eye Descriptor Asset Fragment'
+        (node: FlowNodeLike) => node.data?.title === 'Eye Descriptor Asset Fragment'
       );
       if (!wrapper) {
         return null;
       }
 
       const children = nodes.filter(
-        (node: any) => node.parentNode === wrapper.id
+        (node: FlowNodeLike) => node.parentNode === wrapper.id
       );
-      const childIds = new Set(children.map((node: any) => node.id));
+      const childIds = new Set(children.map((node: FlowNodeLike) => node.id));
       const containedEdges = edges.filter(
-        (edge: any) => childIds.has(edge.source) && childIds.has(edge.target)
+        (edge: FlowEdgeLike) => childIds.has(edge.source) && childIds.has(edge.target)
       );
 
       return {
@@ -830,14 +893,14 @@ test.describe('Fragment Import Visibility', () => {
         wrapperNodeCount: wrapper.data?.nodeCount,
         childCount: children.length,
         containedEdgeCount: containedEdges.length,
-        children: children.map((node: any) => ({
+        children: children.map((node: FlowNodeLike) => ({
           id: node.id,
           type: node.type,
           parentNode: node.parentNode,
           label: node.data?.label,
           value: node.data?.value
         })),
-        edges: containedEdges.map((edge: any) => ({
+        edges: containedEdges.map((edge: FlowEdgeLike) => ({
           id: edge.id,
           source: edge.source,
           target: edge.target,

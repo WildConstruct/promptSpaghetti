@@ -147,6 +147,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
             className="template-card"
             onClick={() => onSelectTemplate(template.id)}
             title={template.prompt}
+            data-testid={`quick-action-${template.id}`}
           >
             {template.badge && (
               <span className="template-badge">{template.badge}</span>

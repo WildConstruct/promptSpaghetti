@@ -23,14 +23,11 @@ export {
   FragmentManifestLoader
 } from '../../../../packages/asset-browser/src/services/FragmentManifestLoader';
 
-const passthrough =
-  <P extends object>(displayName: string): React.FC<React.PropsWithChildren<P>> =>
-  ({ children }) => {
-    const Component = 'div';
-    return <Component data-testid={displayName}>{children}</Component>;
+export const UserProvider: React.FC<React.PropsWithChildren<Record<string, never>>> =
+  function UserProvider({ children }: React.PropsWithChildren<Record<string, never>>) {
+    return <div data-testid="asset-browser-user-provider">{children}</div>;
   };
 
-export const UserProvider = passthrough('asset-browser-user-provider');
 export const OriginalUserProvider = UserProvider;
 
 export const useUserId = (): string => 'test-user';

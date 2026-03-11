@@ -49,7 +49,7 @@ function isCapabilityEnabled(capability: RouteCapability): boolean {
 }
 
 function parseBoolean(value: string | undefined, fallback: boolean): boolean {
-  if (value == null || value.trim() === '') {
+  if ((value === null || typeof value === 'undefined') || value.trim() === '') {
     return fallback;
   }
 

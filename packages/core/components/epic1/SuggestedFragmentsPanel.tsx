@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Edge, Node } from 'reactflow';
 import {
-  type AgentFragmentRecord,
   type Preset
 } from '@prompt/asset-browser';
 import type { EditableNodeData } from './nodes';

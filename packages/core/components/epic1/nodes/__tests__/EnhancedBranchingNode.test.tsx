@@ -56,9 +56,15 @@ describe('EnhancedBranchingNode', () => {
     jest.clearAllMocks();
     Object.defineProperty(global, 'ResizeObserver', {
       value: class ResizeObserver {
-        observe() {}
-        unobserve() {}
-        disconnect() {}
+        observe() {
+          return undefined;
+        }
+        unobserve() {
+          return undefined;
+        }
+        disconnect() {
+          return undefined;
+        }
       },
       writable: true,
       configurable: true

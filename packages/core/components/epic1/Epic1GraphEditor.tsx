@@ -40,7 +40,6 @@ import { useGraphDragDrop } from './hooks/useGraphDragDrop';
 import { useDragDropHandlers } from './hooks/useDragDropHandlers';
 import { useGraphKeyboardShortcuts } from './hooks/useGraphKeyboardShortcuts';
 import { usePreviewTrayLayout } from './hooks/usePreviewTrayLayout';
-import { usePreviewEngine } from './hooks/usePreviewEngine';
 import { useGraphViewControls } from './hooks/useGraphViewControls';
 import { useGraphImportExport } from './hooks/useGraphImportExport';
 import { useGraphSelection } from './hooks/useGraphSelection';
@@ -679,7 +678,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     togglePreview,
     updateSeeds,
     executePreview,
-    exportPreviewResults
+    exportPreviewResults,
+    previewEngine
   } = useGraphPreview(nodes, edges, {
     showToast,
     defaultSeeds: previewSeeds
@@ -688,18 +688,10 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     debounceDelay: previewDebounceDelay
   });
 
+  const previewTrayIsOpen = usePreviewTrayStore().isOpen;
+
   // Preview tray layout
   usePreviewTrayLayout(showPreview);
-
-  // Preview engine (for backward compatibility)
-  const { previewEngine, handlePreviewSeedChange } = usePreviewEngine({
-    previewDebounceDelay,
-    previewSeeds,
-    nodes,
-    edges,
-    isPreviewVisible,
-    isDragging: isDraggingOver
-  });
 
   // Konami code Easter egg
   const [tetrisMode, setTetrisMode] = useState(false);
@@ -948,6 +940,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   // Handle execute button
   const handleExecute = () => {
+    void executePreview();
     onExecute?.(enhancedNodes, edges);
   };
 
@@ -1154,7 +1147,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                     className="preview-button"
                     data-tutorial-anchor="preview-button"
                   >
-                    {isPreviewVisible ? 'Hide' : 'Show'} Preview
+                    {previewTrayIsOpen ? 'Hide' : 'Show'} Preview
                   </button>
                 </div>
               </Panel>
@@ -1341,6 +1334,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             error={previewError}
             seeds={currentSeeds}
             onSeedsChange={updateSeeds}
+            onExecute={() => {
+              void executePreview();
+            }}
             onExport={exportPreviewResults}
           />
         </div>

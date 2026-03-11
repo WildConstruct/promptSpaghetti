@@ -29,20 +29,6 @@ const ChoiceSchema = z
   })
   .strict();
 
-const InspirationChoiceSchema = z
-  .object({
-    text: z.string().min(1).max(1000),
-    weight: z.number().int().min(1).max(10)
-  })
-  .strict();
-
-const InspirationSuggestionSchema = z
-  .object({
-    theme: z.string().min(1).max(200),
-    choices: z.array(InspirationChoiceSchema).max(10)
-  })
-  .strict();
-
 const CompleteRequestSchema = z
   .object({
     prompt: z.string().min(1).max(MAX_PROMPT_LENGTH),
@@ -111,6 +97,13 @@ const OptimizeRequestSchema = z
     choices: z.array(ChoiceSchema).min(1).max(10),
     context: z.string().max(MAX_CONTEXT_LENGTH).optional(),
     preference: z.string().max(1000).optional()
+  })
+  .strict();
+
+const InspirationSuggestionSchema = z
+  .object({
+    theme: z.string().min(1).max(200),
+    choices: z.array(ChoiceSchema).min(1).max(10)
   })
   .strict();
 

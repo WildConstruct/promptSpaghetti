@@ -160,7 +160,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     showPromptDissector,
     nodeCreationMode,
     handlePromptAnalysisComplete,
-    openPromptDissector,
     processExistingAnalysis
   } = usePromptParsing({
     initialAnalysis,
@@ -232,8 +231,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     buildComfyBridge,
     downloadComfyBridge,
     loadGraph,
-    deleteGraph,
-    handleQuit
+    deleteGraph
   } = fileOps;
   const runtimeMode = useRuntimeMode({
     subscriptionActive: isAuthenticated

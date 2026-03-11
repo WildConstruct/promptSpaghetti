@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
 import type {
   LLMMode,
   LLMProvider
@@ -121,23 +122,25 @@ export class LLMService {
       this.opts.requestTimeoutMs
     );
     try {
-      const completion = await this.client.chat.completions.create(
-        {
-          model,
-          temperature,
-          max_tokens: maxTokens,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ],
-          ...(params.responseFormat === 'json_object'
-            ? {
-                response_format: {
-                  type: 'json_object' as const
-                }
+      const request: ChatCompletionCreateParamsNonStreaming = {
+        model,
+        temperature,
+        max_tokens: maxTokens,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt }
+        ],
+        ...(params.responseFormat === 'json_object'
+          ? {
+              response_format: {
+                type: 'json_object' as const
               }
-            : {})
-        } as any,
+            }
+          : {})
+      };
+
+      const completion = await this.client.chat.completions.create(
+        request,
         { signal: controller.signal as AbortSignal }
       );
 

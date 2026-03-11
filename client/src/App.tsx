@@ -42,7 +42,11 @@ function App() {
       setInitialAnalysis(undefined);
       setStartWithTutorial(false);
     }
-    try { window.localStorage.setItem('psg:last-view', 'editor'); } catch {}
+    try {
+      window.localStorage.setItem('psg:last-view', 'editor');
+    } catch {
+      return;
+    }
     setShowLaunchScreen(false);
   };
 
@@ -52,7 +56,9 @@ function App() {
     setStartWithTutorial(false);
     try {
       window.localStorage.setItem('psg:last-view', 'launch');
-    } catch {}
+    } catch {
+      return;
+    }
     setShowLaunchScreen(true);
   };
 

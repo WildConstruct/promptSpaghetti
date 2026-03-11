@@ -295,14 +295,17 @@ export class PsgService {
     }
 
     const fragment = normalized.document.fragment;
-    const nodeIdMap = new Map(
+    const nodeIdMap = new Map<string, string>(
       fragment.nodes.map((node, index) => [node.id, String(index + 1)])
     );
     const edgeOrder = new Map<string, number>();
     const nodes: Record<string, PsgComfyNode> = {};
 
     fragment.nodes.forEach(node => {
-      const comfyId = nodeIdMap.get(node.id)!;
+      const comfyId = nodeIdMap.get(node.id);
+      if (!comfyId) {
+        return;
+      }
       nodes[comfyId] = {
         id: comfyId,
         class_type: this.mapNodeTypeToComfyClass(node.type),

@@ -6,22 +6,46 @@ type RegionFragmentCandidate = {
   path: string;
 };
 
+type FlowNodeLike = {
+  id: string;
+  type?: string;
+  parentNode?: string;
+  hidden?: boolean;
+  data?: {
+    isCollapsed?: boolean;
+    title?: string;
+    fragmentImported?: boolean;
+    parentNode?: string;
+  };
+};
+
+type FlowInstanceLike = {
+  getNodes?: () => FlowNodeLike[];
+};
+
+declare global {
+  interface Window {
+    __EPIC1_REACT_FLOW__?: FlowInstanceLike;
+    __EPIC1_INSERT_PRESET__?: ((meta: unknown) => Promise<void>) | null;
+  }
+}
+
 async function getFlowNodeCount(page: Page): Promise<number> {
   return page.evaluate(() => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     return instance?.getNodes?.().length ?? 0;
   });
 }
 
 async function getRegionWrapperCount(page: Page): Promise<number> {
   return page.evaluate(() => {
-    const instance = (window as any).__EPIC1_REACT_FLOW__;
+    const instance = window.__EPIC1_REACT_FLOW__;
     if (!instance?.getNodes) {
       return 0;
     }
     return instance
       .getNodes()
-      .filter((node: any) => node.type === 'enhancedBoundingBox').length;
+      .filter((node: FlowNodeLike) => node.type === 'enhancedBoundingBox').length;
   });
 }
 
@@ -31,11 +55,7 @@ async function insertPresetDirect(
 ): Promise<boolean> {
   return page
     .evaluate(async preset => {
-      const insertPreset = (
-        window as typeof window & {
-          __EPIC1_INSERT_PRESET__?: ((meta: unknown) => Promise<void>) | null;
-        }
-      ).__EPIC1_INSERT_PRESET__;
+      const insertPreset = window.__EPIC1_INSERT_PRESET__;
 
       if (!insertPreset) {
         return false;
@@ -93,7 +113,7 @@ async function maybeClickSkipToEditor(page: Page): Promise<void> {
     await skip
       .first()
       .click({ timeout: 2000 })
-      .catch(() => {});
+      .catch(() => undefined);
   }
 }
 
@@ -112,7 +132,7 @@ async function ensureAssetBrowserOpen(page: Page): Promise<void> {
       await assets
         .first()
         .click()
-        .catch(() => {});
+        .catch(() => undefined);
     }
   }
 
@@ -275,13 +295,13 @@ test.describe('Editor Interaction E2E', () => {
     expect(paneBox).not.toBeNull();
 
     const beforeRegionCount = await page.evaluate(() => {
-      const instance = (window as any).__EPIC1_REACT_FLOW__;
+      const instance = window.__EPIC1_REACT_FLOW__;
       if (!instance) {
         return 0;
       }
       return instance
         .getNodes()
-        .filter((n: any) => n.type === 'enhancedBoundingBox').length;
+        .filter((n: FlowNodeLike) => n.type === 'enhancedBoundingBox').length;
     });
 
     const dropX = Math.floor((paneBox?.x ?? 100) + 260);
@@ -322,13 +342,13 @@ test.describe('Editor Interaction E2E', () => {
       .poll(
         async () =>
           page.evaluate(previous => {
-            const instance = (window as any).__EPIC1_REACT_FLOW__;
+            const instance = window.__EPIC1_REACT_FLOW__;
             if (!instance) {
               return false;
             }
             const count = instance
               .getNodes()
-              .filter((n: any) => n.type === 'enhancedBoundingBox').length;
+              .filter((n: FlowNodeLike) => n.type === 'enhancedBoundingBox').length;
             return count > previous;
           }, beforeRegionCount),
         { timeout: 10_000 }
@@ -336,13 +356,13 @@ test.describe('Editor Interaction E2E', () => {
       .toBe(true);
 
     const newestRegionId = await page.evaluate(() => {
-      const instance = (window as any).__EPIC1_REACT_FLOW__;
+      const instance = window.__EPIC1_REACT_FLOW__;
       if (!instance) {
         return null;
       }
       const regions = instance
         .getNodes()
-        .filter((n: any) => n.type === 'enhancedBoundingBox');
+        .filter((n: FlowNodeLike) => n.type === 'enhancedBoundingBox');
       if (!regions.length) {
         return null;
       }
@@ -427,18 +447,18 @@ test.describe('Editor Interaction E2E', () => {
       .poll(
         async () =>
           page.evaluate(() => {
-            const instance = (window as any).__EPIC1_REACT_FLOW__;
+            const instance = window.__EPIC1_REACT_FLOW__;
             if (!instance) {
               return false;
             }
             const nodes = instance.getNodes();
             const region = nodes.find(
-              (n: any) => n.type === 'enhancedBoundingBox'
+              (n: FlowNodeLike) => n.type === 'enhancedBoundingBox'
             );
             if (!region) {
               return false;
             }
-            return nodes.some((n: any) => n.parentNode === region.id);
+            return nodes.some((n: FlowNodeLike) => n.parentNode === region.id);
           }),
         { timeout: 10000 }
       )
@@ -479,14 +499,14 @@ test.describe('Editor Interaction E2E', () => {
 
     const inserted = await page.evaluate(
       ({ beforeNodes, beforeWrappers }) => {
-        const instance = (window as any).__EPIC1_REACT_FLOW__;
+        const instance = window.__EPIC1_REACT_FLOW__;
         if (!instance?.getNodes) {
           return false;
         }
         const nodes = instance.getNodes();
         const nodeCount = nodes.length;
         const wrapperCount = nodes.filter(
-          (node: any) => node.type === 'enhancedBoundingBox'
+          (node: FlowNodeLike) => node.type === 'enhancedBoundingBox'
         ).length;
         return nodeCount > beforeNodes || wrapperCount > beforeWrappers;
       },
@@ -495,16 +515,16 @@ test.describe('Editor Interaction E2E', () => {
     expect(inserted).toBe(true);
 
     const regionInfo = await page.evaluate(() => {
-      const instance = (window as any).__EPIC1_REACT_FLOW__;
+      const instance = window.__EPIC1_REACT_FLOW__;
       if (!instance) {
         return null;
       }
       const nodes = instance.getNodes();
-      const region = nodes.find((n: any) => n.type === 'enhancedBoundingBox');
+      const region = nodes.find((n: FlowNodeLike) => n.type === 'enhancedBoundingBox');
       if (!region) {
         return null;
       }
-      const child = nodes.find((n: any) => n.parentNode === region.id);
+      const child = nodes.find((n: FlowNodeLike) => n.parentNode === region.id);
       if (!child) {
         return { regionId: region.id, childId: null };
       }
@@ -531,8 +551,8 @@ test.describe('Editor Interaction E2E', () => {
       .poll(
         async () =>
           page.evaluate(id => {
-            const instance = (window as any).__EPIC1_REACT_FLOW__;
-            const region = instance?.getNodes?.().find((n: any) => n.id === id);
+            const instance = window.__EPIC1_REACT_FLOW__;
+            const region = instance?.getNodes?.().find((n: FlowNodeLike) => n.id === id);
             return Boolean(region?.data?.isCollapsed);
           }, regionInfo.regionId),
         { timeout: 10000 }
@@ -544,14 +564,14 @@ test.describe('Editor Interaction E2E', () => {
         .poll(
           async () =>
             page.evaluate(id => {
-              const instance = (window as any).__EPIC1_REACT_FLOW__;
-              const node = instance?.getNodes?.().find((n: any) => n.id === id);
+              const instance = window.__EPIC1_REACT_FLOW__;
+              const node = instance?.getNodes?.().find((n: FlowNodeLike) => n.id === id);
               return Boolean(node?.hidden);
             }, regionInfo.childId),
           { timeout: 3000 }
         )
         .toBe(true)
-        .catch(() => {});
+        .catch(() => undefined);
     }
 
     const expandToggle = regionNode
@@ -561,12 +581,12 @@ test.describe('Editor Interaction E2E', () => {
       .poll(
         async () => {
           const isCollapsed = await page.evaluate(id => {
-            const instance = (window as any).__EPIC1_REACT_FLOW__;
-            const region = instance?.getNodes?.().find((n: any) => n.id === id);
+            const instance = window.__EPIC1_REACT_FLOW__;
+            const region = instance?.getNodes?.().find((n: FlowNodeLike) => n.id === id);
             return Boolean(region?.data?.isCollapsed);
           }, regionInfo.regionId);
           if (isCollapsed) {
-            await expandToggle.click({ force: true }).catch(() => {});
+            await expandToggle.click({ force: true }).catch(() => undefined);
           }
           return isCollapsed;
         },
@@ -579,14 +599,14 @@ test.describe('Editor Interaction E2E', () => {
         .poll(
           async () =>
             page.evaluate(id => {
-              const instance = (window as any).__EPIC1_REACT_FLOW__;
-              const node = instance?.getNodes?.().find((n: any) => n.id === id);
+              const instance = window.__EPIC1_REACT_FLOW__;
+              const node = instance?.getNodes?.().find((n: FlowNodeLike) => n.id === id);
               return Boolean(node?.hidden);
             }, regionInfo.childId),
           { timeout: 3000 }
         )
         .toBe(false)
-        .catch(() => {});
+        .catch(() => undefined);
     }
   });
 

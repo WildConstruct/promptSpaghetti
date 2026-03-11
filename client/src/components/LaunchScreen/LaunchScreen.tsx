@@ -87,44 +87,23 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       const listener = supabase.auth.onAuthStateChange((_event, session) => {
         setAuthEmail(session?.user?.email ?? null);
       });
-      unsub = listener.data as any;
+      unsub = listener.data as { subscription: { unsubscribe: () => void } };
     })();
     return () => {
-      try { unsub?.subscription?.unsubscribe(); } catch {}
+      try {
+        unsub?.subscription?.unsubscribe();
+      } catch {
+        return;
+      }
     };
   }, []);
 
   const hasSupabase = useMemo(() => Boolean(getSupabase()), []);
 
-  const signInWithProvider = useCallback(async (provider: 'google' | 'discord') => {
-    const supabase = getSupabase();
-    if (!supabase) { return; }
-    await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin } });
-  }, []);
-
   const signOut = useCallback(async () => {
     const supabase = getSupabase();
     if (!supabase) { return; }
     await supabase.auth.signOut();
-  }, []);
-
-  const signInWithEmail = useCallback(async () => {
-    const supabase = getSupabase();
-    if (!supabase) { return; }
-    const email = window.prompt('Enter your email to receive a magic login link:');
-    if (!email) { return; }
-    try {
-      const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
-      if (error) { throw error; }
-      // optionally: show a minimal confirmation UI; keeping it silent to avoid adding UI deps
-      // eslint-disable-next-line no-alert
-      window.alert('Check your email for a magic login link.');
-    } catch (e) {
-      // eslint-disable-next-line no-alert
-      window.alert('Failed to send magic link.');
-      // eslint-disable-next-line no-console
-      console.error('Magic link error', e);
-    }
   }, []);
 
   // Handle launching the editor

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PreviewEngine, PreviewState } from '../preview/PreviewEngine';
 import { usePreviewTrayStore } from '../../../stores/previewTrayStore';
@@ -14,7 +14,79 @@ interface UseGraphPreviewOptions {
   cacheMaxSize?: number;
   cacheMaxAgeMinutes?: number;
   enableWebWorker?: boolean;
+  maxExecutionTime?: number;
   workerPoolSize?: number;
+}
+
+function getExecutionRelevantNodeData(
+  node: Node<unknown>
+): Record<string, unknown> | null {
+  const data = (node.data ?? {}) as Record<string, unknown>;
+
+  switch (node.type) {
+    case 'textBlock':
+      return {
+        text:
+          typeof data.text === 'string' && data.text.length > 0
+            ? data.text
+            : typeof data.value === 'string'
+              ? data.value
+              : ''
+      };
+
+    case 'weightedChoice':
+      return {
+        options: data.options ?? null
+      };
+
+    case 'concat':
+      return {
+        separator:
+          typeof data.separator === 'string' ? data.separator : null,
+        trimInputs: data.trimInputs !== false,
+        requireAllInputs: data.requireAllInputs === true
+      };
+
+    case 'variable':
+      return {
+        mode: typeof data.mode === 'string' ? data.mode : 'both',
+        variableName:
+          typeof data.variableName === 'string' ? data.variableName : null,
+        name: typeof data.name === 'string' ? data.name : null,
+        defaultValue:
+          data.defaultValue !== undefined && data.defaultValue !== null
+            ? String(data.defaultValue)
+            : null,
+        value:
+          data.value !== undefined && data.value !== null
+            ? String(data.value)
+            : null
+      };
+
+    case 'output':
+      return {
+        label: typeof data.label === 'string' ? data.label : null
+      };
+
+    default:
+      return null;
+  }
+}
+
+interface PreviewDebugState {
+  autoUpdateCount: number;
+  lastAutoUpdateAt?: number;
+  lastAutoUpdateSignature?: string;
+  lastSubscriptionState?: string;
+  lastSubscriptionAt?: number;
+  lastSeedUpdateAt?: number;
+  lastSeeds?: number[];
+}
+
+declare global {
+  interface Window {
+    __PSG_PREVIEW_DEBUG__?: PreviewDebugState;
+  }
 }
 
 /**
@@ -50,68 +122,122 @@ export function useGraphPreview<NodeData = unknown>(
 
   // Preview engine reference
   const previewEngineRef = useRef<PreviewEngine | null>(null);
+  const currentSeedsRef = useRef<number[]>(defaultSeeds);
+
+  useEffect(() => {
+    currentSeedsRef.current = currentSeeds;
+  }, [currentSeeds]);
+
+  const executionGraphSignature = useMemo(
+    () =>
+      JSON.stringify({
+        nodes: nodes
+          .map(node => ({
+            id: node.id,
+            type: node.type,
+            data: getExecutionRelevantNodeData(node)
+          }))
+          .filter(node => node.data !== null),
+        edges: edges.map(edge => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          sourceHandle: edge.sourceHandle ?? null,
+          targetHandle: edge.targetHandle ?? null
+        }))
+      }),
+    [nodes, edges]
+  );
+
+  const updatePreviewDebug = useCallback(
+    (
+      updates:
+        | Partial<PreviewDebugState>
+        | ((current: PreviewDebugState) => Partial<PreviewDebugState>)
+    ) => {
+      if (typeof window === 'undefined') {
+        return;
+      }
+      const current = window.__PSG_PREVIEW_DEBUG__ ?? {
+        autoUpdateCount: 0
+      };
+      const nextUpdates =
+        typeof updates === 'function' ? updates(current) : updates;
+      window.__PSG_PREVIEW_DEBUG__ = {
+        ...current,
+        ...nextUpdates
+      };
+      console.log('[PSG_PREVIEW_DEBUG]', window.__PSG_PREVIEW_DEBUG__);
+    },
+    []
+  );
 
   // Initialize preview engine
   useEffect(() => {
-    if (!previewEngineRef.current) {
-      previewEngineRef.current = new PreviewEngine({
-        debounceDelay,
-        seeds: currentSeeds,
-        enableCache,
-        cacheMaxSize,
-        cacheMaxAgeMinutes,
-        enableWebWorker,
-        workerPoolSize
+    const previewEngine = new PreviewEngine({
+      debounceDelay,
+      seeds: currentSeedsRef.current,
+      enableCache,
+      cacheMaxSize,
+      cacheMaxAgeMinutes,
+      enableWebWorker,
+      workerPoolSize
+    });
+    previewEngineRef.current = previewEngine;
+
+    const unsubscribe = previewEngine.subscribe(update => {
+      updatePreviewDebug({
+        lastSubscriptionState: update.state,
+        lastSubscriptionAt: Date.now()
       });
+      const isExecuting =
+        update.state === PreviewState.EXECUTING ||
+        update.state === PreviewState.PENDING;
+      setIsPreviewExecuting(isExecuting);
 
-      // Subscribe to preview updates
-      const unsubscribe = previewEngineRef.current.subscribe(update => {
-        const isExecuting =
-          update.state === PreviewState.EXECUTING ||
-          update.state === PreviewState.PENDING;
-        setIsPreviewExecuting(isExecuting);
+      if (Array.isArray(update.results)) {
+        const mappedResults = update.results.map(result => {
+          const withSeed = result as typeof result & { seed?: number };
+          const seedValue =
+            typeof withSeed.seed === 'number'
+              ? withSeed.seed
+              : Array.isArray(currentSeedsRef.current)
+                ? currentSeedsRef.current[0]
+                : 0;
+          const outputValue =
+            typeof result.output === 'string'
+              ? result.output
+              : JSON.stringify(result.output ?? '');
+          return {
+            seed: seedValue,
+            result: outputValue
+          };
+        });
+        setPreviewResults(mappedResults);
+      }
 
-        if (Array.isArray(update.results)) {
-          const mappedResults = update.results.map(result => {
-            const withSeed = result as typeof result & { seed?: number };
-            const seedValue =
-              typeof withSeed.seed === 'number'
-                ? withSeed.seed
-                : Array.isArray(currentSeeds)
-                  ? currentSeeds[0]
-                  : 0;
-            const outputValue =
-              typeof result.output === 'string'
-                ? result.output
-                : JSON.stringify(result.output ?? '');
-            return {
-              seed: seedValue,
-              result: outputValue
-            };
-          });
-          setPreviewResults(mappedResults);
-        }
+      if (update.error) {
+        console.error('[Preview] Error:', update.error);
+        setPreviewError(update.error);
+      } else if (update.state !== PreviewState.ERROR) {
+        setPreviewError(undefined);
+      }
+    });
 
-        if (update.error) {
-          console.error('[Preview] Error:', update.error);
-          setPreviewError(update.error);
-        } else if (update.state !== PreviewState.ERROR) {
-          setPreviewError(undefined);
-        }
-      });
-
-      return () => {
-        unsubscribe();
-        previewEngineRef.current?.dispose();
-      };
-    }
+    return () => {
+      unsubscribe();
+      previewEngine.dispose();
+      if (previewEngineRef.current === previewEngine) {
+        previewEngineRef.current = null;
+      }
+    };
   }, [
     debounceDelay,
-    currentSeeds,
     enableCache,
     cacheMaxSize,
     cacheMaxAgeMinutes,
     enableWebWorker,
+    updatePreviewDebug,
     workerPoolSize
   ]);
 
@@ -125,12 +251,17 @@ export function useGraphPreview<NodeData = unknown>(
     if (nodes.length > 0) {
       const runtimeGraph = convertToRuntimeGraph(nodes, edges);
       if (runtimeGraph) {
+        updatePreviewDebug(current => ({
+          autoUpdateCount: current.autoUpdateCount + 1,
+          lastAutoUpdateAt: Date.now(),
+          lastAutoUpdateSignature: executionGraphSignature
+        }));
         previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
       } else {
         // Conversion failed; avoid spamming logs in production
       }
     }
-  }, [nodes, edges]);
+  }, [edges, executionGraphSignature, nodes, updatePreviewDebug]);
 
   // Toggle preview visibility
   const togglePreview = useCallback(() => {
@@ -161,22 +292,20 @@ export function useGraphPreview<NodeData = unknown>(
   const updateSeeds = useCallback(
     (seeds: number[]) => {
       setCurrentSeeds(seeds);
+      updatePreviewDebug({
+        lastSeedUpdateAt: Date.now(),
+        lastSeeds: seeds
+      });
       if (previewEngineRef.current) {
         previewEngineRef.current.setSeeds(seeds);
         const runtimeGraph = convertToRuntimeGraph(nodes, edges);
         if (runtimeGraph) {
-          // Seed changes should refresh immediately rather than entering the
-          // debounce/cancel cycle, which can leave the tray appearing stuck.
-          void previewEngineRef.current.updatePreviewImmediate(
-            runtimeGraph,
-            nodes,
-            edges
-          );
+          previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
         }
       }
       showToast?.('info', `Updated ${seeds.length} preview seeds`);
     },
-    [nodes, edges, showToast]
+    [edges, nodes, showToast, updatePreviewDebug]
   );
 
   // Add a seed
@@ -191,7 +320,9 @@ export function useGraphPreview<NodeData = unknown>(
   // Remove a seed
   const removeSeed = useCallback(
     (index: number) => {
-      const newSeeds = currentSeeds.filter((_, i) => i !== index);
+      const newSeeds = currentSeeds.filter(
+        (_seed: number, i: number) => i !== index
+      );
       updateSeeds(newSeeds);
     },
     [currentSeeds, updateSeeds]
@@ -209,14 +340,18 @@ export function useGraphPreview<NodeData = unknown>(
   );
 
   // Execute preview manually
-  const executePreview = useCallback(() => {
+  const executePreview = useCallback(async () => {
     if (!previewEngineRef.current) {
       return;
     }
 
     const runtimeGraph = convertToRuntimeGraph(nodes, edges);
     if (runtimeGraph) {
-      previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);
+      await previewEngineRef.current.updatePreviewImmediate(
+        runtimeGraph,
+        nodes,
+        edges
+      );
       showToast?.('info', 'Executing preview...');
     } else {
       showToast?.('error', 'Failed to convert graph for preview');

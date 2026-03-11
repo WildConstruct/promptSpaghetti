@@ -22,7 +22,8 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
       minWidth={104}
       minHeight={60}
     >
-      {({ isEditing, value, editBuffer, updateBuffer, confirmEdit, cancelEdit }) => {
+      {({ isEditing, editBuffer, updateBuffer, confirmEdit, cancelEdit }) => {
+
         if (isEditing) {
           return (
             <>

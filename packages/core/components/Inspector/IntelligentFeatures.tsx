@@ -142,6 +142,7 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
       nodeText,
       context,
       currentChoices,
+      promptHint,
       requestedCount,
       intelligenceService,
       onChoicesGenerated

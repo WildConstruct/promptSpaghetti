@@ -1,6 +1,6 @@
 import { normalizeLegacyFlatPsgShape } from '../runtime/importGraphNormalization';
 
-type JsonRecord = Record<string, any>;
+type JsonRecord = Record<string, unknown>;
 
 export function isPsgRepairSafeStatus(status: PsgRepairStatus): boolean {
   return status === 'canonical' || status === 'rewritten';
@@ -141,10 +141,6 @@ function deepClone<T>(value: T): T {
 
 function addChange(changes: Set<string>, change: string) {
   changes.add(change);
-}
-
-function toFiniteNumber(value: unknown, fallback: number): number {
-  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
 
 function stableStringify(value: unknown): string {
