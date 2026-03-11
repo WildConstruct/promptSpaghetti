@@ -304,15 +304,19 @@ export function useDragDropHandlers({
   );
 
   const attachNodesToContainer = useCallback(
-    (
-      nodes: FlowNode[],
-      container: Node<Record<string, unknown>>
-    ): FlowNode[] => {
+    (nodes: FlowNode[], container: unknown): FlowNode[] => {
       const containerNode = container as FlowNode;
       return attachNodesToContainerNodes(nodes, containerNode);
     },
     []
   );
+
+  const forceGraphRefresh = useCallback(() => {
+    requestAnimationFrame(() => {
+      setNodes(nodes => nodes.map(node => ({ ...node })));
+      setEdges(edges => edges.map(edge => ({ ...edge })));
+    });
+  }, [setEdges, setNodes]);
 
   // Shared insertion routine for both drop and explicit insert actions
   const insertPresetByMeta = useCallback(
@@ -530,6 +534,8 @@ export function useDragDropHandlers({
           });
         }
 
+        forceGraphRefresh();
+
         try {
           if (addNodeWithBounce && nodesToAdd[0]) {
             addNodeWithBounce(nodesToAdd[0]);
@@ -565,7 +571,8 @@ export function useDragDropHandlers({
       resolveSafePresetPath,
       setEdges,
       setNodes,
-      showToast
+      showToast,
+      forceGraphRefresh
     ]
   );
 

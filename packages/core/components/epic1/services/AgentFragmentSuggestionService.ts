@@ -14,6 +14,12 @@ import {
 
 type FlowNode = Node<EditableNodeData>;
 
+function asStringArray(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string')
+    : [];
+}
+
 export interface PlannedFragmentSuggestion {
   fragment: AgentFragmentRecord;
   plan: InsertionPlan | null;
@@ -64,83 +70,87 @@ function scoreSuggestion(params: {
   index: number;
 }): number {
   const { fragment, context, index } = params;
+  const roles = asStringArray(fragment.roles);
+  const placementHints = asStringArray(fragment.placementHints);
+  const domains = asStringArray(fragment.domains);
+  const tone = asStringArray(fragment.tone);
   let score = 0;
 
   score += Math.max(20 - index, 0);
   score += fragment.priority ?? 0;
 
   if (context.selectedNodeType === 'weightedChoice') {
-    if (fragment.placementHints.includes('downstream-of-choice')) {
+    if (placementHints.includes('downstream-of-choice')) {
       score += 8;
     }
-    if (fragment.roles.includes('branch-extension')) {
+    if (roles.includes('branch-extension')) {
       score += 6;
     }
   }
 
   if (context.isBranchLane) {
-    if (fragment.placementHints.includes('branch-lane')) {
+    if (placementHints.includes('branch-lane')) {
       score += 10;
     }
-    if (fragment.roles.includes('branch-extension')) {
+    if (roles.includes('branch-extension')) {
       score += 6;
     }
     score += Math.min(context.branchDepth ?? 0, 3);
   }
 
   if (context.needsMerge) {
-    if (fragment.roles.includes('merge-helper')) {
+    if (roles.includes('merge-helper')) {
       score += 10;
     }
-    if (fragment.roles.includes('output-finisher')) {
+    if (roles.includes('output-finisher')) {
       score += 4;
     }
   }
 
   if (context.leadsToOutput) {
-    if (fragment.placementHints.includes('before-output')) {
+    if (placementHints.includes('before-output')) {
       score += 8;
     }
-    if (fragment.roles.includes('output-finisher')) {
+    if (roles.includes('output-finisher')) {
       score += 6;
     }
   }
 
   if (context.hasNoOutgoing) {
-    if (fragment.roles.includes('branch-extension')) {
+    if (roles.includes('branch-extension')) {
       score += 8;
     }
-    if (fragment.placementHints.includes(context.isBranchLane ? 'branch-lane' : 'downstream-of-choice')) {
+    if (placementHints.includes(context.isBranchLane ? 'branch-lane' : 'downstream-of-choice')) {
       score += 5;
     }
   }
 
   if ((context.outputDistance ?? Infinity) <= 1) {
-    if (fragment.roles.includes('output-finisher')) {
+    if (roles.includes('output-finisher')) {
       score += 8;
     }
-    if (fragment.placementHints.includes('before-output')) {
+    if (placementHints.includes('before-output')) {
       score += 4;
     }
   }
 
-  if ((context.outputDistance ?? Infinity) > 2 && fragment.roles.includes('modifier')) {
+  if ((context.outputDistance ?? Infinity) > 2 && roles.includes('modifier')) {
     score += 3;
   }
 
-  if (context.selectedNodeType === 'enhancedBoundingBox' && fragment.placementHints.includes('inside-region')) {
+  if (context.selectedNodeType === 'enhancedBoundingBox' && placementHints.includes('inside-region')) {
     score += 12;
   }
 
-  if (context.insideRegion && fragment.placementHints.includes('inside-region')) {
+  if (context.insideRegion && placementHints.includes('inside-region')) {
     score += 6;
   }
 
-  if ((context.domainHints ?? []).some(domain => fragment.domains.includes(domain))) {
+  if ((context.domainHints ?? []).some(domain => domains.includes(domain))) {
     score += 4;
   }
 
-  if ((context.toneHints ?? []).some(tone => fragment.tone.includes(tone))) {
+  if ((context.toneHints ?? []).some(toneHint => tone.includes(toneHint))) {
     score += 2;
   }
 
@@ -150,20 +160,24 @@ function scoreSuggestion(params: {
 export function agentFragmentRecordToPreset(
   record: AgentFragmentRecord
 ): Preset {
+  const tags = asStringArray(record.tags);
+  const roles = asStringArray(record.roles);
+  const domains = asStringArray(record.domains);
+  const placementHints = asStringArray(record.placementHints);
   return {
     id: record.id,
     name: record.name,
     path: record.path,
     type: 'graph',
     category: record.category,
-    tags: [...record.tags, ...record.roles, ...record.domains],
+    tags: [...tags, ...roles, ...domains],
     nodes: record.nodeCount,
     description: record.description,
     metadata: {
       file: record.path,
-      roles: record.roles,
-      domains: record.domains,
-      placementHints: record.placementHints,
+      roles,
+      domains,
+      placementHints,
       preferredInsertion: record.preferredInsertion,
       entryStrategy: record.entryStrategy,
       exitStrategy: record.exitStrategy,

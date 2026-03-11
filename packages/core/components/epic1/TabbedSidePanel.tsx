@@ -7,12 +7,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Edge, Node } from 'reactflow';
 import { AssetBrowserLoader } from './AssetBrowserLoader';
 import { SuggestedFragmentsPanel } from './SuggestedFragmentsPanel';
-import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
-import type { PreviewEngine } from './preview/PreviewEngine';
 import { PreviewPanel } from './preview/PreviewPanel';
+import { AssetLibraryErrorBoundary } from './asset-library/AssetLibraryErrorBoundary';
+import type { PreviewEngine } from './preview/PreviewEngine';
 import type { Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import type { EditableNodeData } from './nodes';
+import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
 import RelationshipView from './components/RelationshipView';
 import './TabbedSidePanel.css';
 
@@ -217,12 +218,14 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
       <div className="panel-content">
         {activeTab === 'assets' && (
           <div className="assets-container">
-            <SuggestedFragmentsPanel
-              selectedNode={selectedNode}
-              nodes={nodes}
-              edges={edges}
-              onInsert={handlePresetInsert}
-            />
+            <AssetLibraryErrorBoundary>
+              <SuggestedFragmentsPanel
+                selectedNode={selectedNode}
+                nodes={nodes}
+                edges={edges}
+                onInsert={handlePresetInsert}
+              />
+            </AssetLibraryErrorBoundary>
             <div className="assets-browser-panel">
               <AssetBrowserLoader
                 onPresetDrag={onPresetDrag}
