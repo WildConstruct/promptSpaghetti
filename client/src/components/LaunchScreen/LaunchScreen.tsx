@@ -81,7 +81,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
     let unsub: { subscription: { unsubscribe: () => void } } | null = null;
     (async () => {
       const supabase = getSupabase();
-      if (!supabase) { return; }
+      if (!supabase) {
+        return;
+      }
       const { data } = await supabase.auth.getSession();
       setAuthEmail(data.session?.user?.email ?? null);
       const listener = supabase.auth.onAuthStateChange((_event, session) => {
@@ -102,7 +104,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
   const signOut = useCallback(async () => {
     const supabase = getSupabase();
-    if (!supabase) { return; }
+    if (!supabase) {
+      return;
+    }
     await supabase.auth.signOut();
   }, []);
 
@@ -129,7 +133,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       return null;
     }
 
-    if (selectedNode.nodeType === 'Choice' || selectedNode.nodeType === 'Variable') {
+    if (
+      selectedNode.nodeType === 'Choice' ||
+      selectedNode.nodeType === 'Variable'
+    ) {
       return 'Allowed variation';
     }
 
@@ -202,7 +209,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                   ? option
                   : typeof option === 'object' &&
                       option !== null &&
-                      typeof (option as Record<string, unknown>).text === 'string'
+                      typeof (option as Record<string, unknown>).text ===
+                        'string'
                     ? ((option as Record<string, unknown>).text as string)
                     : null
               )
@@ -251,9 +259,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         clauses.push(`with ${naturalJoin(supportingResolved.slice(0, 2))}`);
       }
 
-      exampleMember = clauses.length > 0
-        ? `${anchor}, ${clauses.join(', ')}.`
-        : `${anchor}.`;
+      exampleMember =
+        clauses.length > 0 ? `${anchor}, ${clauses.join(', ')}.` : `${anchor}.`;
     }
 
     return {
@@ -360,6 +367,18 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
     });
   }, [selectedNodeId]);
 
+  const trustItems = [
+    'Keep your family DNA stable while only the details vary',
+    'Reusable graph-first workflow instead of one-off prompt drafts',
+    'Account layer ready for saved graphs and deeper product features'
+  ];
+
+  const legalLinks = [
+    { label: 'Terms of Service', href: '#/legal/terms' },
+    { label: 'Privacy Policy', href: '#/legal/privacy' },
+    { label: 'Acceptable Use', href: '#/legal/acceptable-use' }
+  ];
+
   return (
     <div className={`launch-screen ${isTransitioning ? 'transitioning' : ''}`}>
       {/* Header */}
@@ -371,8 +390,21 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             className="launch-logo-image"
           />
           <p className="launch-tagline">
-            Define reusable archetypes, lock design DNA, and generate controlled variations.
+            Define reusable archetypes, lock design DNA, and generate controlled
+            variations.
           </p>
+          <div className="launch-sales-copy">
+            <h1>
+              Build character families and reusable prompt systems that stay
+              coherent.
+            </h1>
+            <p>
+              Prompt Spaghetti turns loose prompt ideas into structured graph
+              logic you can inspect, refine, and reuse. Lock the identity,
+              expose the variation, and keep outputs on-model across an entire
+              family.
+            </p>
+          </div>
         </div>
         <div className="launch-header-actions">
           <button
@@ -413,6 +445,17 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           ) : null}
         </div>
       </header>
+
+      <section
+        className="launch-trust-strip"
+        aria-label="Product value highlights"
+      >
+        {trustItems.map(item => (
+          <div key={item} className="launch-trust-item">
+            {item}
+          </div>
+        ))}
+      </section>
 
       {/* Main Content */}
       <div className="launch-content">
@@ -458,20 +501,38 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
           {/* Launch Button */}
           <div className="launch-actions">
-            <button
-              className="launch-button-primary"
-              onClick={handleLaunchEditor}
-              disabled={isAnalyzing}
-            >
-              {isAnalyzing ? 'Analyzing…' : 'Build Family Graph'}
-            </button>
-            <span className="launch-hint">
-              or press <kbd>⌘</kbd> + <kbd>Enter</kbd>
-            </span>
+            <div className="launch-primary-cta">
+              <div className="launch-cta-copy">
+                <span className="launch-cta-eyebrow">
+                  Structured prompt archetyping
+                </span>
+                <h3>
+                  Go from raw prompt idea to reusable family graph in one pass.
+                </h3>
+                <p>
+                  Start with prompt bootstrap, quick-start templates, or a blank
+                  graph and keep the result editable instead of locked into a
+                  one-shot generation.
+                </p>
+              </div>
+              <div className="launch-cta-actions">
+                <button
+                  className="launch-button-primary"
+                  onClick={handleLaunchEditor}
+                  disabled={isAnalyzing}
+                >
+                  {isAnalyzing ? 'Analyzing…' : 'Build Family Graph'}
+                </button>
+                <span className="launch-hint">
+                  or press <kbd>⌘</kbd> + <kbd>Enter</kbd>
+                </span>
+              </div>
+            </div>
 
             <div className="launch-inline-actions">
               <div className="launch-inline-instruction">
-                Select a trait in the preview, then decide whether it stays fixed or can vary.
+                Select a trait in the preview, then decide whether it stays
+                fixed or can vary.
               </div>
               {(() => {
                 const selNode = mergedAnalysis?.nodes.find(
@@ -526,13 +587,19 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           )}
 
           {familySnapshot && (
-            <div className="launch-family-snapshot" aria-label="Family snapshot">
+            <div
+              className="launch-family-snapshot"
+              aria-label="Family snapshot"
+            >
               <div className="launch-family-column">
                 <span className="launch-family-heading">Fixed DNA</span>
                 <div className="launch-family-tags">
                   {familySnapshot.fixedTraits.length > 0 ? (
                     familySnapshot.fixedTraits.map(trait => (
-                      <span key={`fixed-${trait}`} className="launch-family-tag fixed">
+                      <span
+                        key={`fixed-${trait}`}
+                        className="launch-family-tag fixed"
+                      >
                         {trait}
                       </span>
                     ))
@@ -563,14 +630,19 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                 </div>
               </div>
               <div className="launch-family-column resolved">
-                <span className="launch-family-heading">Example Family Member</span>
-                <span className="launch-family-kicker">One believable in-family output</span>
+                <span className="launch-family-heading">
+                  Example Family Member
+                </span>
+                <span className="launch-family-kicker">
+                  One believable in-family output
+                </span>
                 <p className="launch-family-preview">
                   {familySnapshot.resolvedPreview ||
                     'Your resolved family member will appear here once the archetype is parsed.'}
                 </p>
                 <p className="launch-family-subtle">
-                  Move a trait between fixed DNA and allowed variation, then watch this rewrite as one in-family output.
+                  Move a trait between fixed DNA and allowed variation, then
+                  watch this rewrite as one in-family output.
                 </p>
               </div>
             </div>
@@ -588,10 +660,22 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           <div className="launch-tips">
             <h3>Pro Tips</h3>
             <ul>
-              <li>Use quick-start graphs when you want a clean archetype-first demo path</li>
-              <li>Use prompt bootstrap when you want a first graph drafted from text</li>
-              <li>Lock shared traits first, then make only the details you want variable</li>
-              <li>Use the PSG sidecar later when you want references or downstream tinkering</li>
+              <li>
+                Use quick-start graphs when you want a clean archetype-first
+                demo path
+              </li>
+              <li>
+                Use prompt bootstrap when you want a first graph drafted from
+                text
+              </li>
+              <li>
+                Lock shared traits first, then make only the details you want
+                variable
+              </li>
+              <li>
+                Use the PSG sidecar later when you want references or downstream
+                tinkering
+              </li>
             </ul>
           </div>
         </div>
@@ -599,12 +683,35 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
       {/* Footer */}
       <footer className="launch-footer">
-        <button
-          className="skip-button"
-          onClick={() => onLaunch({ kind: 'empty' })}
-        >
-          Skip to Editor →
-        </button>
+        <div className="launch-footer-copy">
+          <div className="launch-footer-brand">
+            <strong>Prompt Spaghetti</strong>
+            <span>
+              Graph-first prompt tooling for reusable families, controlled
+              variation, and future saved assets.
+            </span>
+          </div>
+          <div className="launch-footer-trust">
+            <span>Early product surface</span>
+            <span>Supabase-backed auth available when configured</span>
+            <span>Legal and policy links ready for product wiring</span>
+          </div>
+        </div>
+        <div className="launch-footer-actions">
+          <nav className="launch-footer-legal" aria-label="Legal links">
+            {legalLinks.map(link => (
+              <a key={link.label} href={link.href}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+          <button
+            className="skip-button"
+            onClick={() => onLaunch({ kind: 'empty' })}
+          >
+            Skip to Editor →
+          </button>
+        </div>
       </footer>
 
       {/* Auth Modal */}

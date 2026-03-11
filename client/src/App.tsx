@@ -1,17 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Epic1EditorContainer } from './Epic1Editor';
 import { LaunchScreen } from './components/LaunchScreen/LaunchScreen';
 import type { LaunchPayload } from './components/LaunchScreen/LaunchScreen';
+import {
+  LegalPage,
+  type LegalDocumentKey
+} from './components/LegalPage/LegalPage';
 import type { Node, Edge } from 'reactflow';
 import type { PromptAnalysis } from './lib/simplePromptParser';
 import { ThemeProvider } from './ThemeProvider';
 import './App.css';
 
+function getLegalDocumentFromHash(hash: string): LegalDocumentKey | null {
+  const normalized = hash.replace(/^#/, '').toLowerCase();
+
+  if (normalized === 'legal/terms') {
+    return 'terms';
+  }
+
+  if (normalized === 'legal/privacy') {
+    return 'privacy';
+  }
+
+  if (normalized === 'legal/acceptable-use') {
+    return 'acceptable-use';
+  }
+
+  return null;
+}
+
 // Version: 2025-01-10-20:10 - Fixed hyphenated API paths for Vercel
 function App() {
+  const [legalDocument, setLegalDocument] = useState<LegalDocumentKey | null>(
+    () => {
+      if (typeof window === 'undefined') {
+        return null;
+      }
+
+      return getLegalDocumentFromHash(window.location.hash);
+    }
+  );
   const [showLaunchScreen, setShowLaunchScreen] = useState<boolean>(() => {
     try {
-      return (typeof window !== 'undefined' && window.localStorage.getItem('psg:last-view') === 'editor') ? false : true;
+      return typeof window !== 'undefined' &&
+        window.localStorage.getItem('psg:last-view') === 'editor'
+        ? false
+        : true;
     } catch {
       return true;
     }
@@ -23,6 +57,45 @@ function App() {
     { nodes: Node[]; edges: Edge[] } | undefined
   >();
   const [startWithTutorial, setStartWithTutorial] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const handleHashChange = () => {
+      setLegalDocument(getLegalDocumentFromHash(window.location.hash));
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const legalPage = useMemo(() => {
+    if (!legalDocument) {
+      return null;
+    }
+
+    return (
+      <ThemeProvider>
+        <LegalPage
+          documentKey={legalDocument}
+          onBack={() => {
+            if (typeof window === 'undefined') {
+              return;
+            }
+
+            window.history.replaceState(
+              null,
+              '',
+              window.location.pathname + window.location.search
+            );
+            setLegalDocument(null);
+          }}
+        />
+      </ThemeProvider>
+    );
+  }, [legalDocument]);
 
   const handleLaunch = (payload: LaunchPayload) => {
     if (payload.kind === 'analysis') {
@@ -61,6 +134,10 @@ function App() {
     }
     setShowLaunchScreen(true);
   };
+
+  if (legalPage) {
+    return legalPage;
+  }
 
   if (showLaunchScreen) {
     return (
