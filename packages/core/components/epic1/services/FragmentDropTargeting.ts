@@ -16,6 +16,12 @@ export type FragmentDropTarget =
       reason: string;
     }
   | {
+      kind: 'inside-container';
+      nodeId: string;
+      nodeType?: string;
+      reason: string;
+    }
+  | {
       kind: 'insert-edge';
       edgeId: string;
       sourceId: string;
@@ -47,7 +53,14 @@ function isPointerInsideNode(pointer: XYPosition, node: FlowNode) {
   );
 }
 
+function isContainerNode(node: FlowNode) {
+  return node.type === 'enhancedBoundingBox' || node.type === 'fragmentContainer';
+}
+
 function canReplaceNode(fragment: AgentFragmentRecord, node: FlowNode) {
+  if (isContainerNode(node)) {
+    return false;
+  }
   if (!fragment.nodeTypes.length) {
     return true;
   }
@@ -86,6 +99,29 @@ function findNodeReplacementTarget(params: {
   return null;
 }
 
+function findContainerPlacementTarget(params: {
+  pointer: XYPosition;
+  nodes: FlowNode[];
+}) {
+  const { pointer, nodes } = params;
+
+  for (let index = nodes.length - 1; index >= 0; index -= 1) {
+    const node = nodes[index];
+    if (!isContainerNode(node) || !isPointerInsideNode(pointer, node)) {
+      continue;
+    }
+
+    return {
+      kind: 'inside-container' as const,
+      nodeId: node.id,
+      nodeType: node.type,
+      reason: 'Pointer is inside a region/container placement target.'
+    };
+  }
+
+  return null;
+}
+
 function edgeTargetToDropTarget(target: EdgeInsertionTarget): FragmentDropTarget {
   return {
     kind: 'insert-edge',
@@ -112,6 +148,14 @@ export function findFragmentDropTarget(params: {
   });
   if (replacementTarget) {
     return replacementTarget;
+  }
+
+  const containerTarget = findContainerPlacementTarget({
+    pointer,
+    nodes
+  });
+  if (containerTarget) {
+    return containerTarget;
   }
 
   const edgeTarget = findNearestEdgeInsertionTarget({

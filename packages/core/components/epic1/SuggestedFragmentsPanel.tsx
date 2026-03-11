@@ -26,6 +26,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
   const [status, setStatus] = React.useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [isInsertingTopSuggestion, setIsInsertingTopSuggestion] = React.useState(false);
   const [suggestions, setSuggestions] = React.useState<PlannedFragmentSuggestion[]>([]);
+  const [activeFragmentId, setActiveFragmentId] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     let active = true;
@@ -106,6 +107,48 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
     }
   };
 
+  const handleFragmentDragStart = React.useCallback(
+    (
+      event: React.DragEvent<HTMLButtonElement>,
+      fragment: PlannedFragmentSuggestion['fragment']
+    ) => {
+      const preset = agentFragmentRecordToPreset(fragment) as Preset & {
+        metadata?: Record<string, unknown>;
+        path?: string;
+      };
+      const payload = JSON.stringify({
+        ...preset,
+        metadata: preset.metadata ?? (preset.path ? { file: preset.path } : undefined)
+      });
+
+      event.dataTransfer.setData('application/x-preset', payload);
+      event.dataTransfer.setData('preset', payload);
+      event.dataTransfer.setData('application/json', payload);
+      event.dataTransfer.setData('text/plain', payload);
+      event.dataTransfer.effectAllowed = 'copy';
+
+      const dragImage = document.createElement('div');
+      dragImage.textContent = fragment.name;
+      dragImage.style.position = 'absolute';
+      dragImage.style.top = '-1000px';
+      dragImage.style.left = '-1000px';
+      dragImage.style.padding = '10px 14px';
+      dragImage.style.borderRadius = '12px';
+      dragImage.style.border = '2px dashed rgba(134, 239, 172, 0.88)';
+      dragImage.style.background = 'rgba(15, 23, 42, 0.92)';
+      dragImage.style.color = '#f8fafc';
+      dragImage.style.fontSize = '12px';
+      dragImage.style.fontWeight = '700';
+      dragImage.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.35)';
+      document.body.appendChild(dragImage);
+      event.dataTransfer.setDragImage(dragImage, 18, 18);
+      window.setTimeout(() => {
+        dragImage.remove();
+      }, 0);
+    },
+    []
+  );
+
   return (
     <section className="suggested-fragments-panel">
       <div className="suggested-fragments-header">
@@ -153,8 +196,30 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
             <button
               key={fragment.id}
               type="button"
-              className="suggested-fragment-card"
+              className={`suggested-fragment-card ${
+                activeFragmentId === fragment.id ? 'is-active' : ''
+              }`}
               onClick={() => onInsert?.(agentFragmentRecordToPreset(fragment))}
+              onMouseEnter={() => setActiveFragmentId(fragment.id)}
+              onMouseLeave={() =>
+                setActiveFragmentId(current =>
+                  current === fragment.id ? null : current
+                )
+              }
+              onFocus={() => setActiveFragmentId(fragment.id)}
+              onBlur={() =>
+                setActiveFragmentId(current =>
+                  current === fragment.id ? null : current
+                )
+              }
+              onDragStart={event => handleFragmentDragStart(event, fragment)}
+              draggable
+              title="Click to insert from the current selection, or drag into the graph to place it manually."
+              aria-describedby={
+                activeFragmentId === fragment.id
+                  ? `suggested-fragment-tooltip-${fragment.id}`
+                  : undefined
+              }
             >
               <div className="suggested-fragment-title">{fragment.name}</div>
               <div className="suggested-fragment-meta">
@@ -178,6 +243,15 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
                   </span>
                 ))}
               </div>
+              {activeFragmentId === fragment.id && (
+                <div
+                  id={`suggested-fragment-tooltip-${fragment.id}`}
+                  className="suggested-fragment-tooltip"
+                >
+                  Click to insert from the current selection, or drag into the graph to place
+                  it exactly where you want it.
+                </div>
+              )}
             </button>
           ))}
         </div>

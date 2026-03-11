@@ -331,7 +331,11 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   // View controls
   const { zoomIn, zoomOut, resetZoom, fitView, panToCenter, panToNode } =
-    useGraphViewControls(reactFlowInstance, { showToast });
+    useGraphViewControls(reactFlowInstance, {
+      showToast,
+      minZoom: 0.02,
+      maxZoom: 4
+    });
 
   // Node interactions and drag-drop helpers
   const { addNodeWithBounce } = useNodeInteractions();
@@ -414,8 +418,11 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         }
       }
 
-      if (resolvedTarget?.kind === 'replace-node') {
-        const targetNode = nodes.find(node => node.id === resolvedTarget?.nodeId);
+      const replacementTarget =
+        resolvedTarget?.kind === 'replace-node' ? resolvedTarget : null;
+
+      if (replacementTarget) {
+        const targetNode = nodes.find(node => node.id === replacementTarget.nodeId);
         if (targetNode) {
           void insertPresetByMeta(
             preset,
@@ -899,8 +906,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           reactFlowInstance.fitView({
             padding: 0.2,
             includeHiddenNodes: false,
-            minZoom: 0.5,
-            maxZoom: 1.5
+            minZoom: 0.02,
+            maxZoom: 2
           });
         }
       }, 100);
@@ -1025,6 +1032,46 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     };
   }, [dropTarget, nodes, reactFlowInstance]);
 
+  const containerDropIndicator = useMemo(() => {
+    if (
+      !dropTarget ||
+      dropTarget.kind !== 'inside-container' ||
+      !reactFlowInstance
+    ) {
+      return null;
+    }
+
+    const node = nodes.find(candidate => candidate.id === dropTarget.nodeId);
+    if (!node) {
+      return null;
+    }
+
+    const viewport = reactFlowInstance.getViewport();
+    if (!viewport) {
+      return null;
+    }
+
+    const width =
+      typeof node.width === 'number'
+        ? node.width
+        : typeof (node.data as Record<string, unknown>)?.width === 'number'
+          ? ((node.data as Record<string, unknown>).width as number)
+          : 400;
+    const height =
+      typeof node.height === 'number'
+        ? node.height
+        : typeof (node.data as Record<string, unknown>)?.height === 'number'
+          ? ((node.data as Record<string, unknown>).height as number)
+          : 300;
+
+    return {
+      left: node.position.x * viewport.zoom + viewport.x,
+      top: node.position.y * viewport.zoom + viewport.y,
+      width: width * viewport.zoom,
+      height: height * viewport.zoom
+    };
+  }, [dropTarget, nodes, reactFlowInstance]);
+
   const content = (
     <div
       className={`epic1-graph-editor ${isDraggingOver ? 'drag-over' : ''}`}
@@ -1099,6 +1146,20 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               <span className="node-replace-indicator__label">Replace</span>
             </div>
           )}
+          {containerDropIndicator && (
+            <div
+              className="node-replace-indicator"
+              aria-hidden="true"
+              style={{
+                left: `${containerDropIndicator.left}px`,
+                top: `${containerDropIndicator.top}px`,
+                width: `${containerDropIndicator.width}px`,
+                height: `${containerDropIndicator.height}px`
+              }}
+            >
+              <span className="node-replace-indicator__label">Drop In Region</span>
+            </div>
+          )}
           <SafeReactFlowWrapper>
             <ReactFlow
               nodes={enhancedNodes}
@@ -1121,12 +1182,16 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               connectionLineType={ConnectionLineType.SmoothStep}
               selectionMode={SelectionMode.Partial}
               fitView
+              fitViewOptions={{ padding: 0.2, minZoom: 0.02, maxZoom: 2 }}
+              minZoom={0.02}
+              maxZoom={4}
               snapToGrid
               snapGrid={[15, 15]}
               deleteKeyCode={['Delete', 'Backspace']}
               multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
               panOnScroll={false}
-              panOnDrag={[1, 2]}
+              panOnDrag
+              panActivationKeyCode="Space"
               zoomOnScroll={true}
               zoomOnDoubleClick
               isValidConnection={isValidConnection}
