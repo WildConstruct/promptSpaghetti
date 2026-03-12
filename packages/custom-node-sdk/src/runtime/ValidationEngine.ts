@@ -472,6 +472,15 @@ export class ValidationEngine {
     const val = validation as PrimitiveValidationRule | undefined;
 
     if (type === 'string') {
+      if (
+        val?.minLength !== undefined &&
+        val?.maxLength !== undefined &&
+        val.minLength > val.maxLength
+      ) {
+        errors.push(
+          `Input '${inputName}': minLength cannot be greater than maxLength`
+        );
+      }
       if (val?.min !== undefined || val?.max !== undefined) {
         errors.push(
           `Input '${inputName}': use minLength/maxLength for strings, not min/max`
@@ -485,6 +494,13 @@ export class ValidationEngine {
         }
       }
     } else if (type === 'number') {
+      if (
+        val?.min !== undefined &&
+        val?.max !== undefined &&
+        val.min > val.max
+      ) {
+        errors.push(`Input '${inputName}': min cannot be greater than max`);
+      }
       if (val?.minLength !== undefined || val?.maxLength !== undefined) {
         errors.push(
           `Input '${inputName}': use min/max for numbers, not minLength/maxLength`
@@ -496,6 +512,15 @@ export class ValidationEngine {
         );
       }
     } else if (type === 'array') {
+      if (
+        val?.minLength !== undefined &&
+        val?.maxLength !== undefined &&
+        val.minLength > val.maxLength
+      ) {
+        errors.push(
+          `Input '${inputName}': minLength cannot be greater than maxLength`
+        );
+      }
       if (val?.min !== undefined || val?.max !== undefined) {
         errors.push(
           `Input '${inputName}': use minLength/maxLength for arrays, not min/max`

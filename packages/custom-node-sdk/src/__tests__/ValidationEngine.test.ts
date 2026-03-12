@@ -179,4 +179,60 @@ describe('ValidationEngine enum validation', () => {
     expect(engine.validateInputs({ items: [] }).valid).toBe(true);
     expect(engine.validateInputs({ items: ['x'] }).valid).toBe(false);
   });
+
+  it('rejects contradictory string length bounds', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        name: {
+          type: 'string',
+          required: true,
+          validation: {
+            minLength: 5,
+            maxLength: 3
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'string'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'name': minLength cannot be greater than maxLength"
+    );
+  });
+
+  it('rejects contradictory numeric bounds', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        count: {
+          type: 'number',
+          required: true,
+          validation: {
+            min: 10,
+            max: 3
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'number'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'count': min cannot be greater than max"
+    );
+  });
 });
