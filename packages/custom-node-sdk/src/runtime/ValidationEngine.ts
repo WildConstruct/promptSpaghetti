@@ -45,6 +45,14 @@ const valueMatchesDeclaredType = (value: unknown, type: string): boolean => {
   }
 };
 
+const tryCreateRegExp = (pattern: string): RegExp | null => {
+  try {
+    return new RegExp(pattern);
+  } catch {
+    return null;
+  }
+};
+
 const isZodSchema = (value: unknown): value is z.ZodTypeAny =>
   typeof value === 'object' &&
   value !== null &&
@@ -355,9 +363,10 @@ export class ValidationEngine {
           schema = (schema as z.ZodString).max(validation.maxLength);
         }
         if (validation?.pattern) {
-          schema = (schema as z.ZodString).regex(
-            new RegExp(validation.pattern)
-          );
+          const regex = tryCreateRegExp(validation.pattern);
+          if (regex) {
+            schema = (schema as z.ZodString).regex(regex);
+          }
         }
         break;
       }
@@ -467,6 +476,13 @@ export class ValidationEngine {
         errors.push(
           `Input '${inputName}': use minLength/maxLength for strings, not min/max`
         );
+      }
+      if (val?.pattern) {
+        if (!tryCreateRegExp(val.pattern)) {
+          errors.push(
+            `Input '${inputName}': pattern must be a valid regular expression`
+          );
+        }
       }
     } else if (type === 'number') {
       if (val?.minLength !== undefined || val?.maxLength !== undefined) {

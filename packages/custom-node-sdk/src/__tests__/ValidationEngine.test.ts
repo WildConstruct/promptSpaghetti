@@ -104,4 +104,31 @@ describe('ValidationEngine enum validation', () => {
       "Input 'mode' default value violates its validation rules"
     );
   });
+
+  it('surfaces invalid regex patterns as schema validation errors', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        name: {
+          type: 'string',
+          required: true,
+          validation: {
+            pattern: '['
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'string'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'name': pattern must be a valid regular expression"
+    );
+  });
 });
