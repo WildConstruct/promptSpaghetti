@@ -356,10 +356,10 @@ export class ValidationEngine {
         const validation = validationRule as
           | PrimitiveValidationRule
           | undefined;
-        if (validation?.minLength) {
+        if (validation?.minLength !== undefined) {
           schema = (schema as z.ZodString).min(validation.minLength);
         }
-        if (validation?.maxLength) {
+        if (validation?.maxLength !== undefined) {
           schema = (schema as z.ZodString).max(validation.maxLength);
         }
         if (validation?.pattern) {
@@ -395,12 +395,12 @@ export class ValidationEngine {
         const validation = validationRule as
           | PrimitiveValidationRule
           | undefined;
-        if (validation?.minLength) {
+        if (validation?.minLength !== undefined) {
           schema = (schema as z.ZodArray<z.ZodUnknown>).min(
             validation.minLength
           );
         }
-        if (validation?.maxLength) {
+        if (validation?.maxLength !== undefined) {
           schema = (schema as z.ZodArray<z.ZodUnknown>).max(
             validation.maxLength
           );

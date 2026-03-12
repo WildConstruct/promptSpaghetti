@@ -131,4 +131,52 @@ describe('ValidationEngine enum validation', () => {
       "Input 'name': pattern must be a valid regular expression"
     );
   });
+
+  it('applies zero-valued maxLength constraints to strings', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        name: {
+          type: 'string',
+          required: true,
+          validation: {
+            maxLength: 0
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'string'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+
+    expect(engine.validateInputs({ name: '' }).valid).toBe(true);
+    expect(engine.validateInputs({ name: 'x' }).valid).toBe(false);
+  });
+
+  it('applies zero-valued maxLength constraints to arrays', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        items: {
+          type: 'array',
+          required: true,
+          validation: {
+            maxLength: 0
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'array'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+
+    expect(engine.validateInputs({ items: [] }).valid).toBe(true);
+    expect(engine.validateInputs({ items: ['x'] }).valid).toBe(false);
+  });
 });
