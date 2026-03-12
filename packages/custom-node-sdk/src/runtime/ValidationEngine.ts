@@ -95,14 +95,26 @@ export class ValidationEngine {
 
         // Check for default value type compatibility
         if (inputSpec.default !== undefined) {
-          const defaultValidation = this.validateValueType(
-            inputSpec.default,
-            inputSpec.type
-          );
-          if (!defaultValidation.valid) {
-            errors.push(
-              `Input '${inputName}' default value doesn't match specified type`
+          const validator = this.inputValidators.get(inputName);
+
+          if (validator) {
+            try {
+              validator.parse(inputSpec.default);
+            } catch {
+              errors.push(
+                `Input '${inputName}' default value violates its validation rules`
+              );
+            }
+          } else {
+            const defaultValidation = this.validateValueType(
+              inputSpec.default,
+              inputSpec.type
             );
+            if (!defaultValidation.valid) {
+              errors.push(
+                `Input '${inputName}' default value doesn't match specified type`
+              );
+            }
           }
         }
       }

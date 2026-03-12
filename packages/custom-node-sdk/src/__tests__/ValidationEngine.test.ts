@@ -76,4 +76,32 @@ describe('ValidationEngine enum validation', () => {
       "Input 'enabled': enum values must match the declared boolean type"
     );
   });
+
+  it('rejects default values that violate enum validation', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        mode: {
+          type: 'number',
+          required: true,
+          default: 4,
+          validation: {
+            enum: [1, 2, 3]
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'number'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'mode' default value violates its validation rules"
+    );
+  });
 });
