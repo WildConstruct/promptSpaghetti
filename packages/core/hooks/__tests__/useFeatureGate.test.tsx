@@ -15,6 +15,18 @@ import {
 } from '../useFeatureGate';
 import { AuthUserProvider } from '../../providers/AuthUserProvider';
 
+const getMockUseAuth = () =>
+  require('../../providers/AuthUserProvider').useAuth as jest.Mock;
+
+const resetMockAuth = () => {
+  getMockUseAuth().mockReturnValue({
+    isAuthenticated: false,
+    user: null,
+    loading: false,
+    error: null
+  });
+};
+
 // Mock AuthUserProvider
 jest.mock('../../providers/AuthUserProvider', () => ({
   AuthUserProvider: ({ children }: { children: React.ReactNode }) => (
@@ -47,6 +59,7 @@ const clearEnv = () => {
 describe('getFeatureConfig', () => {
   beforeEach(() => {
     clearEnv();
+    resetMockAuth();
   });
 
   it('should return default config when no env vars set', () => {
@@ -55,7 +68,7 @@ describe('getFeatureConfig', () => {
     expect(config.auth.enabled).toBe(false);
     expect(config.auth.required).toBe(false);
     expect(config.auth.optional).toBe(true);
-    expect(config.supabase.enabled).toBe(false);
+    expect(config.supabase.enabled).toBe(true);
   });
 
   it('should read Next.js environment variables', () => {
@@ -94,6 +107,7 @@ describe('getFeatureConfig', () => {
 describe('useFeatureFlags', () => {
   beforeEach(() => {
     clearEnv();
+    resetMockAuth();
   });
 
   it('should return feature configuration', () => {
@@ -123,6 +137,7 @@ describe('useFeatureGate', () => {
   beforeEach(() => {
     clearEnv();
     jest.clearAllMocks();
+    resetMockAuth();
   });
 
   it('should enable feature when no requirements', () => {
@@ -143,8 +158,7 @@ describe('useFeatureGate', () => {
     mockEnv({ NEXT_PUBLIC_FEATURE_AUTH: 'true' });
 
     // Mock authenticated state
-    const mockUseAuth = require('../../providers/AuthUserProvider').useAuth;
-    mockUseAuth.mockReturnValue({
+    getMockUseAuth().mockReturnValue({
       isAuthenticated: true,
       user: { id: 'user-123' }
     });
@@ -154,7 +168,9 @@ describe('useFeatureGate', () => {
     expect(result.current.isEnabled).toBe(true);
   });
 
-  it('should disable feature when Supabase required but not enabled', () => {
+  it('should disable feature when Supabase required but feature flag is off', () => {
+    mockEnv({ NEXT_PUBLIC_FEATURE_SUPABASE: 'false' });
+
     const { result } = renderHook(() =>
       useFeatureGate({ requireSupabase: true })
     );
@@ -191,6 +207,7 @@ describe('useFeatureGate', () => {
 describe('Gate component', () => {
   beforeEach(() => {
     clearEnv();
+    resetMockAuth();
   });
 
   it('should render children when enabled', () => {
@@ -249,6 +266,7 @@ describe('useFeatureAvailability', () => {
   beforeEach(() => {
     clearEnv();
     jest.clearAllMocks();
+    resetMockAuth();
   });
 
   it('should check core features availability', () => {
@@ -274,8 +292,7 @@ describe('useFeatureAvailability', () => {
     });
 
     // Mock authenticated state
-    const mockUseAuth = require('../../providers/AuthUserProvider').useAuth;
-    mockUseAuth.mockReturnValue({
+    getMockUseAuth().mockReturnValue({
       isAuthenticated: true,
       user: { id: 'user-123' }
     });
@@ -305,6 +322,7 @@ describe('useUnavailableFeatures', () => {
   beforeEach(() => {
     clearEnv();
     jest.clearAllMocks();
+    resetMockAuth();
   });
 
   it('should list unavailable features for anonymous user', () => {
@@ -328,8 +346,7 @@ describe('useUnavailableFeatures', () => {
     });
 
     // Mock authenticated state
-    const mockUseAuth = require('../../providers/AuthUserProvider').useAuth;
-    mockUseAuth.mockReturnValue({
+    getMockUseAuth().mockReturnValue({
       isAuthenticated: true,
       user: { id: 'user-123' }
     });
@@ -346,8 +363,7 @@ describe('useUnavailableFeatures', () => {
     });
 
     // Mock authenticated state
-    const mockUseAuth = require('../../providers/AuthUserProvider').useAuth;
-    mockUseAuth.mockReturnValue({
+    getMockUseAuth().mockReturnValue({
       isAuthenticated: true,
       user: { id: 'user-123' }
     });

@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { getLLMService } from '../../services/SimpleLLMService';
+import React from 'react';
+import type { LLMStatusResponse } from '../../services/llm';
+import { useRuntimeMode } from '../../hooks/useRuntimeMode';
 
 const styles = {
   overlay: {
@@ -49,42 +50,6 @@ const styles = {
     marginBottom: '12px',
     color: '#333'
   },
-  formGroup: {
-    marginBottom: '16px'
-  },
-  label: {
-    display: 'block',
-    marginBottom: '6px',
-    fontSize: '14px',
-    fontWeight: '500',
-    color: '#555'
-  },
-  input: {
-    width: '100%',
-    padding: '8px 12px',
-    borderRadius: '6px',
-    border: '1px solid #ddd',
-    fontSize: '14px'
-  },
-  select: {
-    width: '100%',
-    padding: '8px 12px',
-    borderRadius: '6px',
-    border: '1px solid #ddd',
-    fontSize: '14px',
-    background: '#fff'
-  },
-  apiKeyInput: {
-    display: 'flex',
-    gap: '8px'
-  },
-  toggleButton: {
-    padding: '8px',
-    borderRadius: '6px',
-    border: '1px solid #ddd',
-    background: '#fff',
-    cursor: 'pointer'
-  },
   small: {
     display: 'block',
     marginTop: '4px',
@@ -130,23 +95,91 @@ const styles = {
   costValue: {
     fontWeight: '600',
     color: '#667eea'
+  },
+  statusBadge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '8px 12px',
+    borderRadius: '999px',
+    fontSize: '14px',
+    fontWeight: '600'
+  },
+  statusBadgeAvailable: {
+    background: '#dcfce7',
+    color: '#166534'
+  },
+  statusBadgeUnavailable: {
+    background: '#fef3c7',
+    color: '#92400e'
+  },
+  detailList: {
+    display: 'grid',
+    gap: '12px'
+  },
+  detailItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: '16px',
+    fontSize: '14px'
+  },
+  detailLabel: {
+    color: '#666',
+    fontWeight: '500'
+  },
+  detailValue: {
+    color: '#111827',
+    textAlign: 'right' as const
+  },
+  capabilityList: {
+    display: 'flex',
+    flexWrap: 'wrap' as const,
+    gap: '8px'
+  },
+  capabilityChip: {
+    padding: '6px 10px',
+    borderRadius: '999px',
+    background: '#eef2ff',
+    color: '#4338ca',
+    fontSize: '12px',
+    fontWeight: '600'
+  },
+  loadingState: {
+    fontSize: '14px',
+    color: '#666'
+  },
+  noteCard: {
+    background: '#f8f9fa',
+    padding: '12px',
+    borderRadius: '8px',
+    border: '1px solid #e5e7eb'
+  },
+  routeRow: {
+    display: 'flex',
+    gap: '8px',
+    flexWrap: 'wrap' as const,
+    marginTop: '12px'
+  },
+  routeBadge: {
+    padding: '6px 10px',
+    borderRadius: '999px',
+    fontSize: '12px',
+    fontWeight: '700'
+  },
+  routeBadgeActive: {
+    background: '#dcfce7',
+    color: '#166534'
+  },
+  routeBadgeMuted: {
+    background: '#e5e7eb',
+    color: '#4b5563'
   }
 };
-
-type LLMProvider = 'openrouter' | 'openai' | 'anthropic';
-
-export interface LLMConfig {
-  provider: LLMProvider;
-  apiKey: string;
-  model: string;
-  temperature: number;
-  maxTokens: number;
-}
 
 export interface LLMConfigDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave?: (config: LLMConfig) => void;
+  onSave?: (status: LLMStatusResponse | null) => void;
 }
 
 export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
@@ -154,40 +187,9 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
   onClose,
   onSave
 }) => {
-  const [provider, setProvider] = useState<LLMProvider>('openrouter');
-  const [apiKey, setApiKey] = useState('');
-  const [model, setModel] = useState('openai/gpt-3.5-turbo');
-  const [temperature, setTemperature] = useState(0.7);
-  const [maxTokens, setMaxTokens] = useState(500);
-  const [showApiKey, setShowApiKey] = useState(false);
-
-  const handleProviderChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const nextProvider = event.target.value as LLMProvider;
-      setProvider(nextProvider);
-    },
-    []
-  );
-
-  const handleSave = useCallback(() => {
-    const config: LLMConfig = {
-      provider,
-      apiKey,
-      model,
-      temperature,
-      maxTokens
-    };
-
-    // Update the service
-    const llmService = getLLMService();
-    llmService.updateConfig(config);
-
-    // Save to localStorage for persistence
-    localStorage.setItem('llm-config', JSON.stringify(config));
-
-    onSave?.(config);
-    onClose();
-  }, [provider, apiKey, model, temperature, maxTokens, onSave, onClose]);
+  const runtime = useRuntimeMode();
+  const status = runtime.llmStatus;
+  const isLoading = isOpen && runtime.loading;
 
   if (!isOpen) {
     return null;
@@ -197,7 +199,7 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
     <div style={styles.overlay} onClick={onClose}>
       <div style={styles.dialog} onClick={e => e.stopPropagation()}>
         <div style={styles.header}>
-          <h2 style={{ margin: 0 }}>AI Parser Configuration</h2>
+          <h2 style={{ margin: 0 }}>AI Parser Status</h2>
           <button style={styles.closeButton} onClick={onClose}>
             ×
           </button>
@@ -205,133 +207,212 @@ export const LLMConfigDialog: React.FC<LLMConfigDialogProps> = ({
 
         <div style={styles.body}>
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Provider Settings</h3>
-
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Provider</label>
-              <select
-                style={styles.select}
-                value={provider}
-                onChange={handleProviderChange}
+            <h3 style={styles.sectionTitle}>Runtime Mode</h3>
+            {isLoading ? (
+              <div style={styles.loadingState}>Checking runtime capabilities...</div>
+            ) : (
+              <div
+                style={{
+                  ...styles.statusBadge,
+                  ...(runtime.llm.available || runtime.psg.available
+                    ? styles.statusBadgeAvailable
+                    : styles.statusBadgeUnavailable)
+                }}
               >
-                <option value="openrouter">OpenRouter</option>
-                <option value="openai">OpenAI</option>
-                <option value="anthropic">Anthropic</option>
-              </select>
-            </div>
-
-            <div style={styles.formGroup}>
-              <label style={styles.label}>API Key</label>
-              <div style={styles.apiKeyInput}>
-                <input
-                  style={{ ...styles.input, flex: 1 }}
-                  type={showApiKey ? 'text' : 'password'}
-                  value={apiKey}
-                  onChange={e => setApiKey(e.target.value)}
-                  placeholder="sk-..."
-                />
-                <button
-                  style={styles.toggleButton}
-                  onClick={() => setShowApiKey(!showApiKey)}
-                >
-                  {showApiKey ? '🙈' : '👁️'}
-                </button>
+                <span>
+                  {runtime.mode === 'cloud' ? 'Cloud mode' : 'Local mode'}
+                </span>
+                <span>
+                  {runtime.mode === 'cloud'
+                    ? 'Hosted capabilities available'
+                    : 'BYO/local-first workflow'}
+                </span>
               </div>
-              <small style={styles.small}>
-                Your API key is stored locally and never sent to our servers
-              </small>
-            </div>
+            )}
+            <small style={styles.small}>
+              Browser SaaS cannot read a local `.env`; local keys only work in self-hosted or local runtime flows.
+            </small>
+          </div>
 
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Model</label>
-              <select
-                style={styles.select}
-                value={model}
-                onChange={e => setModel(e.target.value)}
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>AI Runtime</h3>
+            <div style={styles.detailList}>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Access mode</span>
+                <span style={styles.detailValue}>{runtime.llm.accessMode}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Provider</span>
+                <span style={styles.detailValue}>{status?.provider ?? 'Unavailable'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Default model</span>
+                <span style={styles.detailValue}>{status?.defaultModel ?? 'Unavailable'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Mode</span>
+                <span style={styles.detailValue}>{status?.mode ?? 'heuristic'}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Proxy routing</span>
+                <span style={styles.detailValue}>
+                  {runtime.llm.usesProxy ? 'Server-routed' : 'Local/offline'}
+                </span>
+              </div>
+            </div>
+            <small style={styles.small}>
+              AI provider keys and routing are configured on the server, not in your browser.
+            </small>
+          </div>
+
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>AI Capabilities</h3>
+            <div style={styles.capabilityList}>
+              {(status?.capabilities ?? []).length > 0 ? (
+                (status?.capabilities ?? []).map(capability => (
+                  <span key={capability} style={styles.capabilityChip}>
+                    {capability}
+                  </span>
+                ))
+              ) : (
+                <span style={styles.loadingState}>No live AI capabilities reported.</span>
+              )}
+            </div>
+          </div>
+
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>PSG Runtime</h3>
+            <div style={styles.detailList}>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Access mode</span>
+                <span style={styles.detailValue}>{runtime.psg.accessMode}</span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Available operations</span>
+                <span style={styles.detailValue}>
+                  {runtime.psg.operations.length > 0
+                    ? runtime.psg.operations.join(', ')
+                    : 'None reported'}
+                </span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Export targets</span>
+                <span style={styles.detailValue}>
+                  {runtime.psg.exportTargets.length > 0
+                    ? runtime.psg.exportTargets.join(', ')
+                    : 'None reported'}
+                </span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Included locally</span>
+                <span style={styles.detailValue}>
+                  {runtime.psg.localOperations.length > 0
+                    ? runtime.psg.localOperations.join(', ')
+                    : 'Unavailable'}
+                </span>
+              </div>
+              <div style={styles.detailItem}>
+                <span style={styles.detailLabel}>Hosted upgrade path</span>
+                <span style={styles.detailValue}>
+                  {runtime.psg.hostedUpgradeOperations.length > 0
+                    ? runtime.psg.hostedUpgradeOperations.join(', ')
+                    : 'No hosted-only PSG operations reported'}
+                </span>
+              </div>
+            </div>
+            <div style={styles.capabilityList}>
+              {runtime.psg.supportedKinds.map(kind => (
+                <span key={kind} style={styles.capabilityChip}>
+                  {kind}
+                </span>
+              ))}
+              {runtime.psg.exportTargets.map(target => (
+                <span key={target} style={styles.capabilityChip}>
+                  export:{target}
+                </span>
+              ))}
+            </div>
+            <div style={styles.routeRow}>
+              <span
+                style={{
+                  ...styles.routeBadge,
+                  ...(runtime.psg.localAvailable
+                    ? styles.routeBadgeActive
+                    : styles.routeBadgeMuted)
+                }}
               >
-                {provider === 'openrouter' && (
-                  <>
-                    <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                    <option value="openai/gpt-4">GPT-4</option>
-                    <option value="anthropic/claude-2">Claude 2</option>
-                    <option value="google/palm-2">PaLM 2</option>
-                  </>
-                )}
-                {provider === 'openai' && (
-                  <>
-                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                    <option value="gpt-4">GPT-4</option>
-                    <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                  </>
-                )}
-                {provider === 'anthropic' && (
-                  <>
-                    <option value="claude-2">Claude 2</option>
-                    <option value="claude-instant">Claude Instant</option>
-                  </>
-                )}
-              </select>
+                {runtime.psg.localAvailable
+                  ? 'Local PSG available'
+                  : 'Local PSG unavailable'}
+              </span>
+              <span
+                style={{
+                  ...styles.routeBadge,
+                  ...(runtime.psg.cloudAvailable
+                    ? styles.routeBadgeActive
+                    : styles.routeBadgeMuted)
+                }}
+              >
+                {runtime.psg.cloudAvailable
+                  ? 'Hosted PSG available'
+                  : 'Hosted PSG unavailable'}
+              </span>
+              <span
+                style={{
+                  ...styles.routeBadge,
+                  ...(runtime.subscription.state === 'active'
+                    ? styles.routeBadgeActive
+                    : styles.routeBadgeMuted)
+                }}
+              >
+                Subscription: {runtime.subscription.state}
+              </span>
             </div>
           </div>
 
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Generation Settings</h3>
-
-            <div style={styles.formGroup}>
-              <label style={styles.label}>
-                Temperature: {temperature.toFixed(1)}
-              </label>
-              <input
-                style={{ ...styles.input, cursor: 'pointer' }}
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={temperature}
-                onChange={e => setTemperature(parseFloat(e.target.value))}
-              />
-              <small style={styles.small}>
-                Higher values make output more creative
-              </small>
-            </div>
-
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Max Tokens</label>
-              <input
-                style={styles.input}
-                type="number"
-                min="50"
-                max="2000"
-                value={maxTokens}
-                onChange={e => setMaxTokens(parseInt(e.target.value))}
-              />
-              <small style={styles.small}>
-                Maximum length of generated content
-              </small>
-            </div>
-          </div>
-
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Cost Estimation</h3>
+            <h3 style={styles.sectionTitle}>Usage Notes</h3>
             <div style={styles.costInfo}>
               <div style={styles.costItem}>
-                <span>Estimated cost per parse:</span>
-                <span style={styles.costValue}>$0.0001 - $0.001</span>
+                <span>Local authoring</span>
+                <span style={styles.costValue}>PSG files + BYO workflow</span>
+              </div>
+              <div style={styles.costItem}>
+                <span>Hosted subscription path</span>
+                <span style={styles.costValue}>Supabase + routed AI/PSG</span>
               </div>
               <div style={{ ...styles.costItem, marginBottom: 0 }}>
-                <span>Monthly estimate (1000 parses):</span>
-                <span style={styles.costValue}>$0.10 - $1.00</span>
+                <span>Comfy bridge</span>
+                <span style={styles.costValue}>
+                  {runtime.psg.exportTargets.includes('comfy')
+                    ? 'Available'
+                    : 'Unavailable'}
+                </span>
               </div>
+            </div>
+            <div style={{ ...styles.noteCard, marginTop: 12 }}>
+              <small style={{ ...styles.small, marginTop: 0 }}>
+                Local users should still be able to validate, normalize, and
+                export PSG documents. Hosted subscriptions should unlock
+                higher-value workflow operations such as crowd expansion and
+                future batch orchestration.
+              </small>
             </div>
           </div>
         </div>
 
         <div style={styles.footer}>
           <button style={styles.btnSecondary} onClick={onClose}>
-            Cancel
+            Close
           </button>
-          <button style={styles.btnPrimary} onClick={handleSave}>
-            Save Configuration
+          <button
+            style={styles.btnPrimary}
+            onClick={() => {
+              onSave?.(status);
+              onClose();
+            }}
+          >
+            Done
           </button>
         </div>
       </div>

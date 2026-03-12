@@ -188,19 +188,21 @@ describe('EnhancedBoundingBox', () => {
       // Check that setNodes was called to hide nodes
       expect(mockSetNodes).toHaveBeenCalled();
       
-      // The actual hiding logic is in the mock, we just verify the function was called
-      if (mockSetNodes.mock.calls.length > 0) {
-        const setNodesCall = mockSetNodes.mock.calls[0][0];
-        if (typeof setNodesCall === 'function') {
-          const updatedNodes = setNodesCall([
-            { id: 'test-box', position: { x: 100, y: 100 } },
-            { id: 'node-1', position: { x: 150, y: 150 }, hidden: false },
-          ]);
-          
-          const containedNode = updatedNodes.find((n: any) => n.id === 'node-1');
-          expect(containedNode.hidden).toBe(true);
-        }
-      }
+      const callbacks = mockSetNodes.mock.calls
+        .map(call => call[0])
+        .filter((fn): fn is (nodes: any[]) => any[] => typeof fn === 'function');
+      expect(callbacks.length).toBeGreaterThan(0);
+
+      const candidateResults = callbacks.map(fn =>
+        fn([
+          { id: 'test-box', position: { x: 100, y: 100 } },
+          { id: 'node-1', position: { x: 150, y: 150 }, hidden: false },
+        ])
+      );
+      const resultWithHiddenNode = candidateResults.find(updatedNodes =>
+        updatedNodes.find((n: any) => n.id === 'node-1')?.hidden === true
+      );
+      expect(resultWithHiddenNode).toBeDefined();
     });
   });
 

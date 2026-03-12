@@ -15,6 +15,15 @@ type PrimitiveValidationRule = {
   enum?: unknown[];
 };
 
+type LiteralPrimitive = string | number | boolean | null | undefined;
+
+const isLiteralPrimitive = (value: unknown): value is LiteralPrimitive =>
+  typeof value === 'string' ||
+  typeof value === 'number' ||
+  typeof value === 'boolean' ||
+  value === null ||
+  typeof value === 'undefined';
+
 const isZodSchema = (value: unknown): value is z.ZodTypeAny =>
   typeof value === 'object' && value !== null && 'parse' in value &&
   typeof (value as z.ZodTypeAny).parse === 'function';
@@ -314,7 +323,7 @@ export class ValidationEngine {
           );
         }
         const enumValues = Array.isArray(validation?.enum)
-          ? validation.enum
+          ? validation.enum.filter(isLiteralPrimitive)
           : undefined;
 
         if (enumValues && enumValues.length > 0) {

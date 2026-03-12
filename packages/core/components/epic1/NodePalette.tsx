@@ -50,35 +50,65 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
   onCollapsedChange,
   children,
 }) => {
-  console.log('[NodePalette] Component rendering with props:', { position, controlledCollapsed, defaultCollapsed });
   const [collapsed, setCollapsed] = React.useState(controlledCollapsed ?? defaultCollapsed);
-  
+  const dragImageRef = React.useRef<HTMLDivElement | null>(null);
+
   React.useEffect(() => {
     if (controlledCollapsed !== undefined) {
       setCollapsed(controlledCollapsed);
     }
   }, [controlledCollapsed]);
-  
+
   React.useEffect(() => {
-    console.log('[NodePalette] Mounted, position:', position, 'collapsed:', collapsed);
     debugLogEpic1('[NodePalette] Mounted, position:', position, 'collapsed:', collapsed);
     onCollapsedChange?.(collapsed);
   }, [position, collapsed, onCollapsedChange]);
 
+  React.useEffect(
+    () => () => {
+      if (dragImageRef.current) {
+        dragImageRef.current.remove();
+        dragImageRef.current = null;
+      }
+    },
+    []
+  );
+
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
-    console.log('[NodePalette] Drag started for node type:', nodeType);
     debugLogEpic1('[NodePalette] Drag started for node type:', nodeType);
     // Use text/plain as primary for better compatibility
     event.dataTransfer.setData('text/plain', nodeType);
-    event.dataTransfer.setData('application/nodeType', nodeType); // Fixed: capital T to match hook
+    event.dataTransfer.setData('application/nodeType', nodeType);
+    event.dataTransfer.setData('application/node-type', nodeType);
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'copy';
+
+    // Explicit drag image improves visual feedback across browsers/WSL remoting.
+    const dragImage = document.createElement('div');
+    dragImage.className = 'node-item drag-ghost';
+    dragImage.textContent = nodeType === 'enhancedBoundingBox' ? 'Region Box' : nodeType;
+    dragImage.style.position = 'absolute';
+    dragImage.style.top = '-9999px';
+    dragImage.style.left = '-9999px';
+    dragImage.style.pointerEvents = 'none';
+    dragImage.style.padding = '8px 12px';
+    dragImage.style.borderRadius = '6px';
+    dragImage.style.background = 'rgba(30, 30, 30, 0.92)';
+    dragImage.style.border = '1px solid rgba(103, 126, 234, 0.5)';
+    dragImage.style.color = '#e0e0e0';
+    dragImage.style.fontSize = '12px';
+    dragImage.style.fontWeight = '600';
+    dragImage.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.35)';
+    document.body.appendChild(dragImage);
+    dragImageRef.current = dragImage;
+    event.dataTransfer.setDragImage(dragImage, 12, 12);
   };
 
-  console.log('[NodePalette] Rendering component, collapsed:', collapsed, 'has children:', !!children);
-  
   return (
-    <div className={`node-palette ${position} ${collapsed ? 'collapsed' : ''}`}>
+    <div
+      className={`node-palette ${position} ${collapsed ? 'collapsed' : ''}`}
+      data-tutorial-anchor="node-palette"
+    >
       <div className="palette-header">
         <button
           className="collapse-button"
@@ -89,7 +119,7 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
         </button>
         {!collapsed && <span className="palette-title">Nodes</span>}
       </div>
-      
+
       {!collapsed && (
         <div className="node-list">
           {nodeTypes.map((node) => (
@@ -99,8 +129,11 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
               draggable={true}
               onDragStart={(e) => onDragStart(e, node.type)}
               onDragEnd={() => {
-                console.log('[NodePalette] Drag ended for', node.type);
                 debugLogEpic1('[NodePalette] Drag ended for', node.type);
+                if (dragImageRef.current) {
+                  dragImageRef.current.remove();
+                  dragImageRef.current = null;
+                }
               }}
               title={node.label}
             >
@@ -111,7 +144,6 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
         </div>
       )}
       {!collapsed && children && (
-        console.log('[NodePalette] Rendering footer with children:', children),
         <div className="palette-footer">
           {children}
         </div>

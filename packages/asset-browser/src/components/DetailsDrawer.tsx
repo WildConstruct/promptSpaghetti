@@ -5,6 +5,10 @@ import { BranchVisualization } from './branch/BranchVisualization';
 import { usePreviewGenerator } from '../hooks/usePreviewGenerator';
 import { usePreviewCache } from '../utils/usePreviewCache';
 
+const PREVIEW_UNAVAILABLE_MESSAGE =
+  'Preview generation is not available in this MVP build.';
+const PREVIEW_ACTIONS_ENABLED = false;
+
 export function DetailsDrawer({
   open,
   selectedId
@@ -102,17 +106,23 @@ export function DetailsDrawer({
               <button
                 type="button"
                 onClick={onSimulate}
-                disabled={!preset || simLoading}
+                disabled={!preset || simLoading || !PREVIEW_ACTIONS_ENABLED}
                 aria-label="Simulate"
               >
                 {simLoading ? 'Simulating…' : 'Simulate'}
               </button>
             </div>
+            <div
+              role="note"
+              style={{ color: '#6b7280', fontSize: 12, marginBottom: 8 }}
+            >
+              {PREVIEW_UNAVAILABLE_MESSAGE}
+            </div>
             {simError && (
               <div
                 role="status"
                 aria-live="polite"
-                style={{ color: 'crimson' }}
+                style={{ color: '#6b7280' }}
               >
                 {simError}
               </div>
@@ -146,17 +156,24 @@ export function DetailsDrawer({
               <button
                 type="button"
                 onClick={onToggleBranch}
+                disabled={!preset || !PREVIEW_ACTIONS_ENABLED}
                 aria-pressed={showBranch}
                 aria-label="Toggle branch visualization"
               >
                 {showBranch ? 'Hide' : 'Show'}
               </button>
             </div>
+            <div
+              role="note"
+              style={{ color: '#6b7280', fontSize: 12, marginBottom: 8 }}
+            >
+              {PREVIEW_UNAVAILABLE_MESSAGE}
+            </div>
             {branchError && (
               <div
                 role="status"
                 aria-live="polite"
-                style={{ color: 'crimson' }}
+                style={{ color: '#6b7280' }}
               >
                 {branchError}
               </div>

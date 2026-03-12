@@ -7,6 +7,9 @@
 
 import Fastify from 'fastify';
 import { authRoutes } from './auth/routes';
+import { assertMockRuntimeAllowed } from './utils/mockRuntimeGuard';
+
+assertMockRuntimeAllowed('minimal-auth-server');
 
 const server = Fastify({
   logger: true,

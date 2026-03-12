@@ -18,11 +18,21 @@ import { ProAssetBrowser } from './components/ProAssetBrowser';
 
 // Services
 import { FragmentManifestLoader } from './services/FragmentManifestLoader';
+import { AgentFragmentRetrievalService } from './services/AgentFragmentRetrieval';
 export type {
   FragmentManifest,
   FragmentCategory,
   FragmentEntry
 } from './services/FragmentManifestLoader';
+export type {
+  AgentFragmentRecord,
+  FragmentQuery,
+  SelectionContext,
+  FragmentRole,
+  FragmentDomain,
+  FragmentNodeType,
+  PlacementHint
+} from './services/AgentFragmentRetrieval';
 
 // Our new UserProvider wrapper for compatibility
 import { UserProvider } from './providers/UserProvider';
@@ -57,6 +67,7 @@ export {
   EnhancedPresetCard,
   ProAssetBrowser,
   FragmentManifestLoader,
+  AgentFragmentRetrievalService,
   useAssetBrowserStore
 };
 

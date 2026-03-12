@@ -25,6 +25,7 @@ export interface ReadPsgOptions {
     strictValidation?: boolean;
     allowLegacyFormat?: boolean;
 }
+export declare function looksLikeLegacyGraphWrapper(value: unknown): value is PSGFile;
 export declare function readPsg(text: string, options?: ReadPsgOptions): PSGFile;
 export declare function writePsg(psg: PSGFile): string;
 export declare function fromLegacyGraph(name: string, graph: Graph, options?: {

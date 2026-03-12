@@ -1,23 +1,45 @@
 /** @type {import('jest').Config} */
 module.exports = {
   testEnvironment: 'jsdom',
-  roots: ['<rootDir>/tests', '<rootDir>/components'],
+  roots: [
+    '<rootDir>/tests',
+    '<rootDir>/components',
+    '<rootDir>/runtime',
+    '<rootDir>/fileFormats',
+    '<rootDir>/hooks'
+  ],
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
+  testPathIgnorePatterns: [
+    '<rootDir>/runtime/nodes/__tests__/Conditional.test.ts',
+    '<rootDir>/runtime/nodes/__tests__/Sequential.test.ts',
+    '<rootDir>/runtime/__tests__/io-system.test.ts'
+  ],
   transform: {
-    '^.+\\.[tj]sx?$': [
-      'babel-jest',
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
       {
-        rootMode: 'upward'
+        diagnostics: false,
+        babelConfig: false,
+        tsconfig: {
+          jsx: 'react-jsx',
+          module: 'commonjs',
+          target: 'ES2020',
+          isolatedModules: true,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true
+        }
       }
     ]
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!.*(react-dnd|dnd-core|react-markdown|remark|rehype|unist|mdast|hast|micromark|mdurl|vfile|is-plain-obj|bail|devlop|trough|space-separated-tokens|comma-separated-tokens|property-information|decode-named-character-reference|character-entities|estree-util|html-url-attributes|trim-lines|unified))'
+    // Keep the ESM allowlist narrow; current core tests still need react-dnd.
+    '/node_modules/(?!.*(react-dnd|react-dnd-html5-backend|dnd-core))'
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '^@/(.*)$': '<rootDir>/$1'
+    '^@/(.*)$': '<rootDir>/$1',
+    '^@prompt/asset-browser$': '<rootDir>/tests/mocks/promptAssetBrowser.tsx'
   },
   clearMocks: true,
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts']

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { getLLMService } from '../../services/SimpleLLMService';
+import { ApiLLMClient } from '../../services/llm';
 import './LLMToggleInline.css';
 
 export interface LLMToggleInlineProps {
@@ -17,11 +17,27 @@ export const LLMToggleInline: React.FC<LLMToggleInlineProps> = ({
 }) => {
   const [mode, setMode] = useState<'standard' | 'llm-enhanced'>(initialMode);
   const [isEnabled, setIsEnabled] = useState(false);
-  const llmService = getLLMService();
 
   useEffect(() => {
-    setIsEnabled(llmService.isEnabled());
-  }, [llmService]);
+    let cancelled = false;
+
+    new ApiLLMClient()
+      .getStatus()
+      .then(status => {
+        if (!cancelled) {
+          setIsEnabled(status.available);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setIsEnabled(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleToggle = useCallback(() => {
     const newMode = mode === 'standard' ? 'llm-enhanced' : 'standard';
@@ -39,7 +55,7 @@ export const LLMToggleInline: React.FC<LLMToggleInlineProps> = ({
         title={
           isEnabled
             ? `Click to switch to ${mode === 'standard' ? 'AI-Enhanced' : 'Standard'} mode`
-            : 'AI parser not configured'
+            : 'AI parser unavailable'
         }
       >
         <div className="llm-toggle-slider">
@@ -53,7 +69,7 @@ export const LLMToggleInline: React.FC<LLMToggleInlineProps> = ({
           className="llm-toggle-config"
           onClick={onConfigClick}
           aria-label="Configure LLM settings"
-          title="Configure AI settings"
+          title="View AI status"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path

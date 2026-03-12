@@ -4,16 +4,20 @@ import { getSupabaseConfig } from './supabaseFeature';
 let _client: SupabaseClient | null | undefined;
 let _diagnosed = false;
 let warned = false;
-const env = (typeof process !== 'undefined' && typeof process.env !== 'undefined')
-  ? (process.env as Record<string, string | undefined>)
-  : ({} as Record<string, string | undefined>);
+const env =
+  typeof process !== 'undefined' && typeof process.env !== 'undefined'
+    ? (process.env as Record<string, string | undefined>)
+    : ({} as Record<string, string | undefined>);
 const isTest = env.NODE_ENV === 'test';
 const isProd = env.NODE_ENV === 'production';
 const isCI = env.CI === 'true';
 
 export function getSupabase(): SupabaseClient | null {
-  if (_client !== undefined) { return _client; }
-  const { url, anonKey, enabledByFlag, hasEnv, enabled, meta } = getSupabaseConfig();
+  if (_client !== undefined) {
+    return _client;
+  }
+  const { url, anonKey, enabledByFlag, hasEnv, enabled, meta } =
+    getSupabaseConfig();
 
   if (!_diagnosed) {
     try {
@@ -28,7 +32,9 @@ export function getSupabase(): SupabaseClient | null {
         urlLen: url ? url.length : 0,
         anonKeyLen: anonKey ? anonKey.length : 0
       });
-    } catch {}
+    } catch {
+      // Ignore diagnostic logging failures.
+    }
     _diagnosed = true;
   }
 
@@ -53,7 +59,8 @@ export function getSupabase(): SupabaseClient | null {
 
   // Fallback: try global env shim bag
   try {
-    const bag = (globalThis as unknown as { __env__?: Record<string, unknown> }).__env__;
+    const bag = (globalThis as unknown as { __env__?: Record<string, unknown> })
+      .__env__;
     const fbUrl = (bag?.['VITE_SUPABASE_URL'] as string) || '';
     const fbKey = (bag?.['VITE_SUPABASE_ANON_KEY'] as string) || '';
     if (fbUrl && fbKey) {
@@ -62,10 +69,15 @@ export function getSupabase(): SupabaseClient | null {
       _client = createClient(fbUrl, fbKey);
       return _client;
     }
-  } catch {}
+  } catch {
+    // Ignore global env shim lookup failures.
+  }
 
   _client = null;
   return _client;
 }
+
+// Backward-compatible named export used by some legacy tests/modules.
+export const supabase = getSupabase();
 
 export type { SupabaseClient };

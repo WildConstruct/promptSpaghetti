@@ -7,31 +7,18 @@ export type BranchNode = { id: string };
 export type BranchEdge = { from: string; to: string; weight?: number };
 export type BranchMap = { nodes: BranchNode[]; edges: BranchEdge[] };
 
+const PREVIEW_UNAVAILABLE_ERROR =
+  'Preset preview generation is not available in this MVP build.';
+
 export const PreviewService = {
   async simulate(
-    preset: Preset,
-    opts: SimulateOptions
+    _preset: Preset,
+    _opts: SimulateOptions
   ): Promise<SimulateResult> {
-    const { seeds } = opts;
-    // Simple deterministic stub based on preset id and seed
-    return seeds.map(seed => ({
-      seed,
-      text: `Sample for ${preset.name} (seed ${seed})`
-    }));
+    throw new Error(PREVIEW_UNAVAILABLE_ERROR);
   },
 
-  async branchMap(preset: Preset): Promise<BranchMap> {
-    // Minimal placeholder graph based on preset id length
-    const base = preset.id.slice(0, 3) || 'pre';
-    const nodes: BranchNode[] = [
-      { id: `${base}-A` },
-      { id: `${base}-B` },
-      { id: `${base}-C` }
-    ];
-    const edges: BranchEdge[] = [
-      { from: nodes[0].id, to: nodes[1].id, weight: 1 },
-      { from: nodes[1].id, to: nodes[2].id, weight: 2 }
-    ];
-    return { nodes, edges };
+  async branchMap(_preset: Preset): Promise<BranchMap> {
+    throw new Error(PREVIEW_UNAVAILABLE_ERROR);
   }
 };

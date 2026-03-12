@@ -24,18 +24,26 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      return;
+    }
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+      }
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) onClose();
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
   };
 
   return (
@@ -155,8 +163,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   window.alert('Supabase is not configured. Set VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, and VITE_FEATURE_SUPABASE=1.');
                   return;
                 }
+                // eslint-disable-next-line no-alert
                 const email = window.prompt('Enter your email to receive a magic login link:');
-                if (!email) return;
+                if (!email) {
+                  return;
+                }
                 const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
                 if (error) {
                   // eslint-disable-next-line no-console

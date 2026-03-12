@@ -7,14 +7,22 @@ server/dist
 coverage
 **/dist/
 **/_build/
+dist-epic1/
+playwright-report/
+test-results/
+.turbo/
+**/.turbo/
+*.tsbuildinfo
 
 # Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
 
 # Env
 .env
+.env.*
 
 # Mac
 .DS_Store
@@ -43,6 +51,11 @@ load-tests/*.log
 # Generated assets
 assets/generated/
 asset-gen
+# Metagrinder prototype generated outputs
+packages/core/tests/output/metagrinder/
 # Ignore stray Windows device filename artifact
 nul
 .vercel
+.tmp-*
+cloudscape
+cloudscape.pub

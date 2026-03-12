@@ -29,13 +29,27 @@ export function useNodeContainment(
   const cacheRef = useRef<Map<string, ContainmentCache>>(new Map());
   const hitCountRef = useRef(0);
   const missCountRef = useRef(0);
+  const boxX = boxPosition.x;
+  const boxY = boxPosition.y;
+  const boxWidth = boxSize.width;
+  const boxHeight = boxSize.height;
+  const expandedWidth = expandedSize.width;
+  const expandedHeight = expandedSize.height;
 
   const containedNodes = useMemo(() => {
+    const boxNode = allNodes.find(n => n.id === boxId);
+    if (!boxNode) {
+      return [];
+    }
+
     const nodeGeoSignature = allNodes
-      .map(n => `${n.id}:${n.position?.x ?? 0}:${n.position?.y ?? 0}:${n.width ?? 0}:${n.height ?? 0}`)
+      .map(
+        n =>
+          `${n.id}:${n.position?.x ?? 0}:${n.position?.y ?? 0}:${n.width ?? 0}:${n.height ?? 0}:${n.parentNode ?? (n.data as { parentNode?: string } | undefined)?.parentNode ?? ''}`
+      )
       .sort()
       .join('|');
-    const boxSignature = `${boxPosition.x}:${boxPosition.y}:${boxSize.width}:${boxSize.height}:${expandedSize.width}:${expandedSize.height}:${isCollapsed}`;
+    const boxSignature = `${boxX}:${boxY}:${boxWidth}:${boxHeight}:${expandedWidth}:${expandedHeight}:${isCollapsed}`;
     const cacheKey = `${boxId}:${nodeGeoSignature}:${boxSignature}`;
 
     // Check cache first
@@ -56,10 +70,30 @@ export function useNodeContainment(
 
     const start = performance.now();
 
-    const checkSize = isCollapsed ? expandedSize : boxSize;
+    const checkWidth = isCollapsed ? expandedWidth : boxWidth;
+    const checkHeight = isCollapsed ? expandedHeight : boxHeight;
+
     const contained = allNodes.filter(node => {
-      if (node.parentNode === boxId) {
-        return true;
+      if (node.id === boxId) {
+        return false;
+      }
+
+      const isContainerNode =
+        node.type === 'enhancedBoundingBox' ||
+        node.type === 'boundingBox' ||
+        node.type === 'fragmentContainer';
+
+      if (isContainerNode) {
+        return false;
+      }
+
+      const directParent = (node as { parentNode?: string }).parentNode;
+      const dataParent = (node.data as { parentNode?: string } | undefined)
+        ?.parentNode;
+      const explicitParent = directParent || dataParent;
+
+      if (explicitParent) {
+        return explicitParent === boxId;
       }
 
       const nodeX = node.position?.x ?? 0;
@@ -68,11 +102,9 @@ export function useNodeContainment(
       const nodeHeight = node.height ?? 0;
 
       const withinHorizontal =
-        nodeX >= boxPosition.x - 1 &&
-        nodeX + nodeWidth <= boxPosition.x + checkSize.width + 1;
+        nodeX >= boxX - 1 && nodeX + nodeWidth <= boxX + checkWidth + 1;
       const withinVertical =
-        nodeY >= boxPosition.y - 1 &&
-        nodeY + nodeHeight <= boxPosition.y + checkSize.height + 1;
+        nodeY >= boxY - 1 && nodeY + nodeHeight <= boxY + checkHeight + 1;
 
       return withinHorizontal && withinVertical;
     });
@@ -96,13 +128,24 @@ export function useNodeContainment(
     }
 
     return contained;
-  }, [allNodes, boxId, perfMonitor]);
+  }, [
+    allNodes,
+    boxId,
+    perfMonitor,
+    boxHeight,
+    boxWidth,
+    boxX,
+    boxY,
+    expandedHeight,
+    expandedWidth,
+    isCollapsed
+  ]);
 
   // Force recalculation
   const recalculate = useCallback(() => {
     cacheRef.current.clear();
-    console.debug(`[Cache Clear] Forced recalculation for ${boxId}`);
-  }, [boxId]);
+    // Silent clear to avoid noisy logs during drag/resize
+  }, []);
 
   // Calculate cache hit rate
   const totalLookups = hitCountRef.current + missCountRef.current;

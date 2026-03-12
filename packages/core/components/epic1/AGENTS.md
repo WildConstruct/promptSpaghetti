@@ -6,6 +6,7 @@ Rules for automated agents and developers:
 
 - Editor
   - Use `Epic1GraphEditor` from `./Epic1GraphEditor.tsx` (Monolithic) as the canonical editor.
+  - Treat `Epic1GraphEditorRefactored.tsx` as exploratory and non-canonical unless this file and `SOURCE_OF_TRUTH.md` are updated together.
   - Do NOT import or reference `Epic1GraphEditorFinal.tsx` or anything under `_quarantined/`.
 
 - WeightedChoice node
@@ -20,5 +21,6 @@ Rules for automated agents and developers:
 - If extending functionality
   - Add new behavior behind props or context in `EnhancedBranchingNode` rather than creating parallel node types.
   - Update tests and documentation accordingly.
+  - If reviving the refactored editor, update `SOURCE_OF_TRUTH.md`, this file, and the public barrel in the same change.
 
 Rationale: These constraints avoid ambiguity and regressions during development and ensure consistent behavior across the codebase and demos.

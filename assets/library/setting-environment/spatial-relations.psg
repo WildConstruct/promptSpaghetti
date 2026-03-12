@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Spatial Relations",
   "metadata": {
     "id": "fragment-spatial-relations",
     "name": "Spatial Relations",
@@ -8,37 +8,84 @@
     "author": "Aspen (Asset Generator)",
     "created": "2025-01-15",
     "category": "setting-environment",
-    "tags": ["spatial", "dimensions", "architecture", "space"]
+    "tags": [
+      "spatial",
+      "dimensions",
+      "architecture",
+      "space"
+    ]
   },
   "nodes": [
     {
       "id": "spatial-relations-main",
       "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "tight corridor squeeze",
+          "weight": 2
+        },
+        {
+          "text": "yawning chasm below",
+          "weight": 2
+        },
+        {
+          "text": "tiered balcony layers",
+          "weight": 2
+        },
+        {
+          "text": "vast open plaza",
+          "weight": 2
+        },
+        {
+          "text": "claustrophobic alcove",
+          "weight": 2
+        },
+        {
+          "text": "spiraling vertical shaft",
+          "weight": 1
+        },
+        {
+          "text": "interconnected chambers",
+          "weight": 2
+        },
+        {
+          "text": "cavernous ceiling vault",
+          "weight": 2
+        },
+        {
+          "text": "narrow ledge path",
+          "weight": 2
+        },
+        {
+          "text": "amphitheater bowl",
+          "weight": 2
+        },
+        {
+          "text": "maze-like passages",
+          "weight": 2
+        },
+        {
+          "text": "suspended platforms",
+          "weight": 2
+        }
+      ],
       "data": {
         "label": "Spatial Relations",
-        "region": "teal",
-        "options": [
-          { "text": "tight corridor squeeze", "weight": 2 },
-          { "text": "yawning chasm below", "weight": 2 },
-          { "text": "tiered balcony layers", "weight": 2 },
-          { "text": "vast open plaza", "weight": 2 },
-          { "text": "claustrophobic alcove", "weight": 2 },
-          { "text": "spiraling vertical shaft", "weight": 1 },
-          { "text": "interconnected chambers", "weight": 2 },
-          { "text": "cavernous ceiling vault", "weight": 2 },
-          { "text": "narrow ledge path", "weight": 2 },
-          { "text": "amphitheater bowl", "weight": 2 },
-          { "text": "maze-like passages", "weight": 2 },
-          { "text": "suspended platforms", "weight": 2 }
-        ]
+        "region": "teal"
       }
     }
   ],
-  "groups": [
+  "edges": [],
+  "regions": [
     {
       "id": "region-spatial-relations",
-      "nodeIds": ["spatial-relations-main"],
-      "color": "teal"
+      "name": "Region 1",
+      "color": "teal",
+      "nodes": [
+        "spatial-relations-main"
+      ]
     }
   ]
 }

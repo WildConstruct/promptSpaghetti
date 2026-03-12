@@ -1,4 +1,4 @@
-import { getSupabase } from './supabaseClient';
+import * as supabaseClient from './supabaseClient';
 
 const BUCKET = 'graphs';
 const pathPrefix = (userId: string) => `users/${userId}/graphs/` as const;
@@ -9,6 +9,19 @@ export type StorageError = { message: string; code?: string };
 export type StorageResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: StorageError };
+
+function resolveSupabase() {
+  const moduleRef = supabaseClient as {
+    default?: { getSupabase?: () => unknown; supabase?: unknown };
+    getSupabase?: () => unknown;
+    supabase?: unknown;
+  };
+  const getter = moduleRef.getSupabase ?? moduleRef.default?.getSupabase;
+  if (typeof getter === 'function') {
+    return getter();
+  }
+  return moduleRef.supabase ?? moduleRef.default?.supabase ?? null;
+}
 
 /**
  * GlobalThis extensions for browser APIs
@@ -26,7 +39,16 @@ interface ExtendedGlobalThis {
 export async function listUserGraphs(
   userId: string
 ): Promise<StorageResult<{ name: string }[]>> {
-  const supabase = getSupabase();
+  const supabase = resolveSupabase() as {
+    storage: {
+      from: (bucket: string) => {
+        list: (...args: unknown[]) => Promise<{
+          data: { name: string }[] | null;
+          error: { message: string } | null;
+        }>;
+      };
+    };
+  } | null;
   if (!supabase) {
     return { ok: false, error: { message: 'Supabase not configured' } };
   }
@@ -48,7 +70,15 @@ export async function getUserGraph(
   userId: string,
   name: string
 ): Promise<StorageResult<string>> {
-  const supabase = getSupabase();
+  const supabase = resolveSupabase() as {
+    storage: {
+      from: (bucket: string) => {
+        download: (
+          path: string
+        ) => Promise<{ data: unknown; error: { message: string } | null }>;
+      };
+    };
+  } | null;
   if (!supabase) {
     return { ok: false, error: { message: 'Supabase not configured' } };
   }
@@ -112,7 +142,17 @@ export async function putUserGraph(
   name: string,
   content: string
 ): Promise<StorageResult<{ path: string }>> {
-  const supabase = getSupabase();
+  const supabase = resolveSupabase() as {
+    storage: {
+      from: (bucket: string) => {
+        upload: (
+          path: string,
+          content: Blob,
+          options: { upsert: boolean; contentType: string }
+        ) => Promise<{ error: { message: string } | null }>;
+      };
+    };
+  } | null;
   if (!supabase) {
     return { ok: false, error: { message: 'Supabase not configured' } };
   }

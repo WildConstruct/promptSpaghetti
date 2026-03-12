@@ -7,9 +7,8 @@
 export * from './TestingUtilities';
 export * from './RefactoringTestUtils';
 export * from './CustomMatchers';
-
-// Global setup (imported by Jest config)
-export * from './globalTestSetup';
+export * from './consoleFilter';
+export * from './sharedTestSetup';
 
 // Re-export main classes for convenience
 export {

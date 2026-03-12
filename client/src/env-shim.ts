@@ -15,7 +15,7 @@ declare global {
       VITE_SUPABASE_ANON_KEY: SB_ANON || '',
       VITE_FEATURE_SUPABASE: SB_FLAG ?? '1'
     };
-    (globalThis as any).__env__ = bag;
+    globalThis.__env__ = bag;
     // Minimal presence log; no secrets
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line no-console

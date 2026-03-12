@@ -204,8 +204,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         >
           I agree to the{' '}
           <a
-            href="#"
-            onClick={e => e.preventDefault()}
+            href="#/legal/terms"
             style={{
               color: '#60a5fa',
               textDecoration: 'underline'
@@ -215,8 +214,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           </a>{' '}
           and{' '}
           <a
-            href="#"
-            onClick={e => e.preventDefault()}
+            href="#/legal/privacy"
             style={{
               color: '#60a5fa',
               textDecoration: 'underline'
@@ -288,8 +286,8 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           lineHeight: '1.5'
         }}
       >
-        By signing up, you&apos;ll get access to save your graphs, collaborate with
-        others, and use advanced features.
+        By signing up, you&apos;ll get access to save your graphs, collaborate
+        with others, and use advanced features.
       </p>
     </form>
   );

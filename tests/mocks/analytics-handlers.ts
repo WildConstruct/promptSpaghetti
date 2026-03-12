@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import type { RestContext, RestRequest, ResponseComposition } from 'msw';
 import { faker } from '@faker-js/faker';
 
 type TimeRange = '1d' | '7d' | '30d';
@@ -108,123 +109,135 @@ const getRangeDays = (range: string | null): number => {
 };
 
 const analyticsHandlers = [
-  rest.get('/api/analytics/overview', (req: any, res: any, ctx: any) => {
-    const rangeParam = req.url.searchParams.get('range');
-    const days = getRangeDays(rangeParam);
-    const recentStats = dailyStats.slice(0, days);
+  rest.get(
+    '/api/analytics/overview',
+    (req: RestRequest, res: ResponseComposition, ctx: RestContext) => {
+      const rangeParam = req.url.searchParams.get('range');
+      const days = getRangeDays(rangeParam);
+      const recentStats = dailyStats.slice(0, days);
 
-    const totals = recentStats.reduce(
-      (acc, stat) => ({
-        activeUsers: acc.activeUsers + stat.activeUsers,
-        newUsers: acc.newUsers + stat.newUsers,
-        templateViews: acc.templateViews + stat.templateViews,
-        templateDownloads: acc.templateDownloads + stat.templateDownloads,
-        templatesCreated: acc.templatesCreated + stat.templatesCreated,
-        searchQueries: acc.searchQueries + stat.searchQueries
-      }),
-      {
-        activeUsers: 0,
-        newUsers: 0,
-        templateViews: 0,
-        templateDownloads: 0,
-        templatesCreated: 0,
-        searchQueries: 0
-      }
-    );
-
-    const averages = {
-      avgSessionDuration:
-        recentStats.reduce((sum, stat) => sum + stat.avgSessionDuration, 0) /
-        days,
-      bounceRate:
-        recentStats.reduce((sum, stat) => sum + stat.bounceRate, 0) / days,
-      conversionRate:
-        recentStats.reduce((sum, stat) => sum + stat.conversionRate, 0) / days
-    };
-
-    return res(
-      ctx.status(200),
-      ctx.json({
-        timeRange: rangeParam ?? '7d',
-        overview: {
-          ...totals,
-          ...averages,
-          totalUsers: faker.number.int({ min: 5000, max: 15000 }),
-          totalTemplates: faker.number.int({ min: 800, max: 6000 }),
-          totalCategories: faker.number.int({ min: 20, max: 120 })
-        },
-        trends: recentStats,
-        topTemplates: templateMetrics.slice(0, 10)
-      })
-    );
-  }),
-
-  rest.get('/api/analytics/users', (req: any, res: any, ctx: any) => {
-    const rangeParam = req.url.searchParams.get('range');
-    const days = getRangeDays(rangeParam);
-    const recentStats = dailyStats.slice(0, days);
-
-    const acquisition = recentStats.map(stat => ({
-      date: stat.date,
-      newUsers: stat.newUsers,
-      returningUsers: Math.max(stat.activeUsers - stat.newUsers, 0)
-    }));
-
-    return res(
-      ctx.status(200),
-      ctx.json({
-        timeRange: rangeParam ?? '7d',
-        acquisition,
-        segments: {
-          new: faker.number.int({ min: 200, max: 800 }),
-          active: faker.number.int({ min: 600, max: 2000 }),
-          returning: faker.number.int({ min: 250, max: 1000 }),
-          churned: faker.number.int({ min: 80, max: 250 })
-        },
-        demographics: {
-          countries: ['United States', 'United Kingdom', 'Canada', 'Germany'].map(
-            country => ({
-              country,
-              users: faker.number.int({ min: 80, max: 500 })
-            })
-          ),
-          industries: ['Marketing', 'Product', 'Engineering', 'Operations'].map(
-            industry => ({
-              industry,
-              users: faker.number.int({ min: 60, max: 300 })
-            })
-          )
+      const totals = recentStats.reduce(
+        (acc, stat) => ({
+          activeUsers: acc.activeUsers + stat.activeUsers,
+          newUsers: acc.newUsers + stat.newUsers,
+          templateViews: acc.templateViews + stat.templateViews,
+          templateDownloads: acc.templateDownloads + stat.templateDownloads,
+          templatesCreated: acc.templatesCreated + stat.templatesCreated,
+          searchQueries: acc.searchQueries + stat.searchQueries
+        }),
+        {
+          activeUsers: 0,
+          newUsers: 0,
+          templateViews: 0,
+          templateDownloads: 0,
+          templatesCreated: 0,
+          searchQueries: 0
         }
-      })
-    );
-  }),
+      );
 
-  rest.get('/api/analytics/templates', (_req: any, res: any, ctx: any) => {
-    const ranked = [...templateMetrics].sort((a, b) => b.views - a.views);
+      const averages = {
+        avgSessionDuration:
+          recentStats.reduce((sum, stat) => sum + stat.avgSessionDuration, 0) /
+          days,
+        bounceRate:
+          recentStats.reduce((sum, stat) => sum + stat.bounceRate, 0) / days,
+        conversionRate:
+          recentStats.reduce((sum, stat) => sum + stat.conversionRate, 0) / days
+      };
 
-    return res(
-      ctx.status(200),
-      ctx.json({
-        topTemplates: ranked.slice(0, 15),
-        mostDownloaded: [...templateMetrics]
-          .sort((a, b) => b.downloads - a.downloads)
-          .slice(0, 10),
-        highestRated: [...templateMetrics]
-          .sort((a, b) => b.rating - a.rating)
-          .slice(0, 10)
-      })
-    );
-  }),
+      return res(
+        ctx.status(200),
+        ctx.json({
+          timeRange: rangeParam ?? '7d',
+          overview: {
+            ...totals,
+            ...averages,
+            totalUsers: faker.number.int({ min: 5000, max: 15000 }),
+            totalTemplates: faker.number.int({ min: 800, max: 6000 }),
+            totalCategories: faker.number.int({ min: 20, max: 120 })
+          },
+          trends: recentStats,
+          topTemplates: templateMetrics.slice(0, 10)
+        })
+      );
+    }
+  ),
 
-  rest.get('/api/analytics/system', (_req: any, res: any, ctx: any) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        metrics: systemMetrics,
-        timestamp: new Date().toISOString()
-      })
-    );
-  })
+  rest.get(
+    '/api/analytics/users',
+    (req: RestRequest, res: ResponseComposition, ctx: RestContext) => {
+      const rangeParam = req.url.searchParams.get('range');
+      const days = getRangeDays(rangeParam);
+      const recentStats = dailyStats.slice(0, days);
+
+      const acquisition = recentStats.map(stat => ({
+        date: stat.date,
+        newUsers: stat.newUsers,
+        returningUsers: Math.max(stat.activeUsers - stat.newUsers, 0)
+      }));
+
+      return res(
+        ctx.status(200),
+        ctx.json({
+          timeRange: rangeParam ?? '7d',
+          acquisition,
+          segments: {
+            new: faker.number.int({ min: 200, max: 800 }),
+            active: faker.number.int({ min: 600, max: 2000 }),
+            returning: faker.number.int({ min: 250, max: 1000 }),
+            churned: faker.number.int({ min: 80, max: 250 })
+          },
+          demographics: {
+            countries: ['United States', 'United Kingdom', 'Canada', 'Germany'].map(
+              country => ({
+                country,
+                users: faker.number.int({ min: 80, max: 500 })
+              })
+            ),
+            industries: ['Marketing', 'Product', 'Engineering', 'Operations'].map(
+              industry => ({
+                industry,
+                users: faker.number.int({ min: 60, max: 300 })
+              })
+            )
+          }
+        })
+      );
+    }
+  ),
+
+  rest.get(
+    '/api/analytics/templates',
+    (_req: RestRequest, res: ResponseComposition, ctx: RestContext) => {
+      const ranked = [...templateMetrics].sort((a, b) => b.views - a.views);
+
+      return res(
+        ctx.status(200),
+        ctx.json({
+          topTemplates: ranked.slice(0, 15),
+          mostDownloaded: [...templateMetrics]
+            .sort((a, b) => b.downloads - a.downloads)
+            .slice(0, 10),
+          highestRated: [...templateMetrics]
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 10)
+        })
+      );
+    }
+  ),
+
+  rest.get(
+    '/api/analytics/system',
+    (_req: RestRequest, res: ResponseComposition, ctx: RestContext) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          metrics: systemMetrics,
+          timestamp: new Date().toISOString()
+        })
+      );
+    }
+  )
 ];
 
 export default analyticsHandlers;

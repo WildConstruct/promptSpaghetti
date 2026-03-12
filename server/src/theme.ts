@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { getSupabaseAdmin } from './services/supabase';
 import { rateLimiter } from './utils/rateLimit';
+import { requireAdminAuth } from './utils/adminAuth';
 import { Pool } from 'pg';
 import multipart from '@fastify/multipart';
 
@@ -11,10 +12,21 @@ const pool = new Pool({
 
 export async function themeRoutes(app: FastifyInstance) {
   app.register(multipart);
+  const adminAuthHandler = (request, reply, done) => {
+    if (!requireAdminAuth(request, reply)) {
+      return;
+    }
+    done();
+  };
 
   app.get(
     '/api/admin/theme',
-    { preHandler: rateLimiter({ key: 'admin:theme', limitPerMinute: 60 }) },
+    {
+      preHandler: [
+        adminAuthHandler,
+        rateLimiter({ key: 'admin:theme', limitPerMinute: 60 })
+      ]
+    },
     async (req, reply) => {
       try {
         const result = await pool.query(
@@ -33,7 +45,10 @@ export async function themeRoutes(app: FastifyInstance) {
   app.put(
     '/api/admin/theme',
     {
-      preHandler: rateLimiter({ key: 'admin:theme:update', limitPerMinute: 30 })
+      preHandler: [
+        adminAuthHandler,
+        rateLimiter({ key: 'admin:theme:update', limitPerMinute: 30 })
+      ]
     },
     async (req, reply) => {
       const schema = z.object({
@@ -65,10 +80,13 @@ export async function themeRoutes(app: FastifyInstance) {
     app.post(
       '/api/admin/fonts',
       {
-        preHandler: rateLimiter({
-          key: 'admin:fonts:upload',
-          limitPerMinute: 30
-        })
+        preHandler: [
+          adminAuthHandler,
+          rateLimiter({
+            key: 'admin:fonts:upload',
+            limitPerMinute: 30
+          })
+        ]
       },
       async (req, reply) => {
         try {
@@ -116,10 +134,13 @@ export async function themeRoutes(app: FastifyInstance) {
     app.delete(
       '/api/admin/fonts/:id',
       {
-        preHandler: rateLimiter({
-          key: 'admin:fonts:delete',
-          limitPerMinute: 30
-        })
+        preHandler: [
+          adminAuthHandler,
+          rateLimiter({
+            key: 'admin:fonts:delete',
+            limitPerMinute: 30
+          })
+        ]
       },
       async (req, reply) => {
         const { id } = req.params as { id: string };
@@ -162,10 +183,13 @@ export async function themeRoutes(app: FastifyInstance) {
     app.post(
       '/api/admin/logo',
       {
-        preHandler: rateLimiter({
-          key: 'admin:logo:upload',
-          limitPerMinute: 30
-        })
+        preHandler: [
+          adminAuthHandler,
+          rateLimiter({
+            key: 'admin:logo:upload',
+            limitPerMinute: 30
+          })
+        ]
       },
       async (req, reply) => {
         try {
@@ -229,10 +253,13 @@ export async function themeRoutes(app: FastifyInstance) {
     app.delete(
       '/api/admin/logo',
       {
-        preHandler: rateLimiter({
-          key: 'admin:logo:delete',
-          limitPerMinute: 30
-        })
+        preHandler: [
+          adminAuthHandler,
+          rateLimiter({
+            key: 'admin:logo:delete',
+            limitPerMinute: 30
+          })
+        ]
       },
       async (req, reply) => {
         try {

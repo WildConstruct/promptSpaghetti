@@ -8,7 +8,6 @@ import { useAuthStore } from '../stores/authStore';
 type AuthStoreSnapshot = {
   accessToken?: string | null;
   token?: string | null;
-  user?: { id?: string | number | null } | null;
 };
 
 type AuthStoreWithGetState = {
@@ -107,15 +106,11 @@ class FileService {
     const state = authStore.getState?.() ?? {};
     const token =
       state?.accessToken ?? state?.token ?? this.deps.authProvider.getToken();
-    const userId = state?.user?.id || null;
     const headers: Record<string, string> = {
       'Content-Type': 'application/json'
     };
     if (token) {
       headers.Authorization = `Bearer ${token}`;
-    }
-    if (userId) {
-      headers['X-User-Id'] = String(userId);
     }
     return headers;
   }
@@ -654,7 +649,8 @@ class DefaultHttpClient implements HttpClient {
 
 class AuthStoreProvider implements AuthProvider {
   getToken(): string | null {
-    return useAuthStore.getState().token;
+    const state = useAuthStore.getState() as AuthStoreSnapshot;
+    return state.accessToken ?? state.token ?? null;
   }
 }
 

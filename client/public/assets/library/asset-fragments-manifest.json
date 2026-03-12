@@ -4,13 +4,13 @@
   "name": "Modular Asset Fragments Library",
   "description": "Reusable asset fragments for character and scene generation",
   "created": "2025-01-15",
-  "lastUpdated": "2025-08-16T03:00:27Z",
+  "lastUpdated": "2026-03-07T19:53:13Z",
   "author": "Aspen (Asset Generator)",
   "fragments": [
     {
       "id": "fragment-smile-simple",
-      "name": "Simple Smile Variations",
-      "description": "Basic smile descriptors and expressions",
+      "name": "Simple Smile Variations (Expanded)",
+      "description": "SIMPLE SYSTEM - Direct smile expressions without modifiers, expanded from 3 to 12 variations",
       "path": "./facial-features/smile-variations-simple.psg",
       "category": "facial-features",
       "tags": ["face", "smile", "expression", "emotion"],
@@ -24,25 +24,9 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-smile-contextual",
-      "name": "Contextual Smile System",
-      "description": "Context-aware smile variations",
-      "path": "./facial-features/smile-variations-contextual.psg",
-      "category": "facial-features",
-      "tags": ["face", "smile", "contextual", "emotion"],
-      "nodeCount": 3,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
       "id": "fragment-eyes-multi",
-      "name": "Multi-Aspect Eye System",
-      "description": "Comprehensive eye descriptors",
+      "name": "Multi-Aspect Eye Description System",
+      "description": "Comprehensive eye descriptor system with shape, color/features, and positioning aspects",
       "path": "./facial-features/eye-descriptors-multi-aspect.psg",
       "category": "facial-features",
       "tags": ["face", "eyes", "multi-aspect", "features"],
@@ -56,25 +40,9 @@
       "edgeCount": 2
     },
     {
-      "id": "fragment-skin-undertones",
-      "name": "Skin Undertones",
-      "description": "Skin color and undertone variations",
-      "path": "./facial-features/skin-undertones.psg",
-      "category": "facial-features",
-      "tags": ["face", "skin", "color", "undertones"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
       "id": "fragment-age-indicators",
-      "name": "Age Indicators",
-      "description": "Age-related facial characteristics",
+      "name": "Age Indicators Asset Fragment",
+      "description": "Skin texture and age-related descriptors for character generation",
       "path": "./facial-features/age-indicators.psg",
       "category": "facial-features",
       "tags": ["face", "age", "wrinkles", "features"],
@@ -88,89 +56,9 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-facial-hair",
-      "name": "Facial Hair Styles",
-      "description": "Beard, mustache, and facial hair variations",
-      "path": "./facial-features/facial-hair-styles.psg",
-      "category": "facial-features",
-      "tags": ["face", "hair", "beard", "mustache"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-facial-symmetry",
-      "name": "Facial Symmetry",
-      "description": "Symmetry and balance descriptors",
-      "path": "./facial-features/facial-symmetry.psg",
-      "category": "facial-features",
-      "tags": ["face", "symmetry", "balance", "features"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-makeup",
-      "name": "Make-up Accents",
-      "description": "Makeup styles and applications",
-      "path": "./facial-features/makeup-accents.psg",
-      "category": "facial-features",
-      "tags": ["face", "makeup", "cosmetics", "style"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-piercings",
-      "name": "Piercings & Mods",
-      "description": "Facial piercings and modifications",
-      "path": "./facial-features/piercings-mods.psg",
-      "category": "facial-features",
-      "tags": ["face", "piercings", "mods", "accessories"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-iconic-features",
-      "name": "Iconic Features",
-      "description": "Distinctive facial characteristics",
-      "path": "./facial-features/iconic-features.psg",
-      "category": "facial-features",
-      "tags": ["face", "iconic", "distinctive", "features"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
       "id": "fragment-hair-lengths",
-      "name": "Hair Lengths",
-      "description": "Hair length variations",
+      "name": "Basic Hair Lengths Asset Fragment",
+      "description": "Hair length descriptors from buzzed to floor-length",
       "path": "./hair/hair-lengths.psg",
       "category": "hair",
       "tags": ["hair", "length", "style", "appearance"],
@@ -185,8 +73,8 @@
     },
     {
       "id": "fragment-hair-textures",
-      "name": "Hair Textures",
-      "description": "Hair texture and curl patterns",
+      "name": "Hair Textures Asset Fragment",
+      "description": "Hair texture patterns from straight to kinky coils",
       "path": "./hair/hair-textures.psg",
       "category": "hair",
       "tags": ["hair", "texture", "curls", "waves"],
@@ -201,8 +89,8 @@
     },
     {
       "id": "fragment-hair-colors-natural",
-      "name": "Natural Hair Colors",
-      "description": "Natural hair color variations",
+      "name": "Natural Hair Colors Asset Fragment",
+      "description": "Natural hair color variations found in human populations",
       "path": "./hair/hair-colors-natural.psg",
       "category": "hair",
       "tags": ["hair", "color", "natural", "shades"],
@@ -216,121 +104,8 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-hair-colors-fantasy",
-      "name": "Fantasy Hair Colors",
-      "description": "Unnatural and fantasy hair colors",
-      "path": "./hair/hair-colors-fantasy.psg",
-      "category": "hair",
-      "tags": ["hair", "color", "fantasy", "vibrant"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-hair-cuts-neutral",
-      "name": "Gender-Neutral Cuts",
-      "description": "Gender-neutral haircut styles",
-      "path": "./hair/hair-cuts-neutral.psg",
-      "category": "hair",
-      "tags": ["hair", "cuts", "neutral", "unisex"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-hair-styles-masculine",
-      "name": "Masculine Styles",
-      "description": "Masculine-coded hairstyles",
-      "path": "./hair/hair-styles-masculine.psg",
-      "category": "hair",
-      "tags": ["hair", "masculine", "styles", "men"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-hair-styles-feminine",
-      "name": "Feminine Styles",
-      "description": "Feminine-coded hairstyles",
-      "path": "./hair/hair-styles-feminine.psg",
-      "category": "hair",
-      "tags": ["hair", "feminine", "styles", "women"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-hair-accessories",
-      "name": "Hair Accessories",
-      "description": "Hair decorations and accessories",
-      "path": "./hair/hair-accessories.psg",
-      "category": "hair",
-      "tags": ["hair", "accessories", "decoration", "style"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-hair-weathered",
-      "name": "Weathered Details",
-      "description": "Weather-affected hair states",
-      "path": "./hair/hair-weathered-details.psg",
-      "category": "hair",
-      "tags": ["hair", "weathered", "environmental", "effects"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-hair-motion",
-      "name": "Motion Cues",
-      "description": "Hair movement and dynamics",
-      "path": "./hair/hair-motion-cues.psg",
-      "category": "hair",
-      "tags": ["hair", "motion", "movement", "dynamics"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
       "id": "fragment-body-types",
       "name": "Body Types",
-      "description": "Body build variations",
       "path": "./body-silhouette/body-types.psg",
       "category": "body-silhouette",
       "tags": ["body", "types", "build", "physique"],
@@ -344,153 +119,8 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-posture-keys",
-      "name": "Posture Keys",
-      "description": "Body posture and stance",
-      "path": "./body-silhouette/posture-keys.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "posture", "stance", "position"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-movement-quality",
-      "name": "Movement Quality",
-      "description": "Movement characteristics",
-      "path": "./body-silhouette/movement-quality.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "movement", "quality", "dynamics"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-scars-tattoos",
-      "name": "Scars & Tattoos",
-      "description": "Body markings and modifications",
-      "path": "./body-silhouette/scars-tattoos.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "scars", "tattoos", "markings"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-clothing-fit",
-      "name": "Clothing Fit",
-      "description": "Clothing fit and drape",
-      "path": "./body-silhouette/clothing-fit.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "clothing", "fit", "fashion"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-accessory-silhouettes",
-      "name": "Accessory Silhouettes",
-      "description": "Accessory shapes and forms",
-      "path": "./body-silhouette/accessory-silhouettes.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "accessories", "silhouette", "fashion"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-athletic-markers",
-      "name": "Athletic Markers",
-      "description": "Athletic and fitness indicators",
-      "path": "./body-silhouette/athletic-markers.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "athletic", "fitness", "sports"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-assistive-gear",
-      "name": "Assistive Gear",
-      "description": "Mobility and assistive devices",
-      "path": "./body-silhouette/assistive-gear.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "assistive", "disability", "mobility"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-stage-presence",
-      "name": "Stage Presence Flags",
-      "description": "Performance and presence indicators",
-      "path": "./body-silhouette/stage-presence.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "presence", "performance", "charisma"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-gesture-starters",
-      "name": "Gesture Starters",
-      "description": "Hand and body gestures",
-      "path": "./body-silhouette/gesture-starters.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "gestures", "hands", "communication"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
       "id": "fragment-primary-emotions",
       "name": "Primary Emotion Tags",
-      "description": "Basic emotional states",
       "path": "./emotion-mood/primary-emotions.psg",
       "category": "emotion-mood",
       "tags": ["emotion", "mood", "feelings", "primary"],
@@ -504,313 +134,8 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-nuanced-feels",
-      "name": "Nuanced Feels",
-      "description": "Complex emotional states",
-      "path": "./emotion-mood/nuanced-feels.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "mood", "nuanced", "complex"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-intensity-modifiers",
-      "name": "Intensity Modifiers",
-      "description": "Emotional intensity levels",
-      "path": "./emotion-mood/intensity-modifiers.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "intensity", "level", "modifier"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-affect-masks",
-      "name": "Affect Masks",
-      "description": "Emotional facades and masks",
-      "path": "./emotion-mood/affect-masks.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "mask", "facade", "pretense"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-temporal-mood-shifts",
-      "name": "Temporal Mood Shifts",
-      "description": "Time-based emotional changes",
-      "path": "./emotion-mood/temporal-mood-shifts.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "temporal", "shift", "change"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-group-mood-fields",
-      "name": "Group Mood Fields",
-      "description": "Collective emotional states",
-      "path": "./emotion-mood/group-mood-fields.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "group", "collective", "crowd"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-subtext-signals",
-      "name": "Subtext Signals",
-      "description": "Underlying emotional signals",
-      "path": "./emotion-mood/subtext-signals.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "subtext", "hidden", "underlying"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-energy-levels",
-      "name": "Energy Levels",
-      "description": "Energy and vitality states",
-      "path": "./emotion-mood/energy-levels.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "energy", "vitality", "vigor"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-empathetic-echoes",
-      "name": "Empathetic Echoes",
-      "description": "Empathetic responses and mirroring",
-      "path": "./emotion-mood/empathetic-echoes.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "empathy", "mirror", "response"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-conflict-escalation",
-      "name": "Conflict Escalation Stages",
-      "description": "Stages of conflict intensity",
-      "path": "./emotion-mood/conflict-escalation.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "conflict", "escalation", "tension"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-high-impact-moves",
-      "name": "High-Impact Moves",
-      "description": "Powerful action movements",
-      "path": "./action-dynamics/high-impact-moves.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "impact", "movement", "power"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-subtle-micro-actions",
-      "name": "Subtle Micro-Actions",
-      "description": "Small subtle movements",
-      "path": "./action-dynamics/subtle-micro-actions.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "subtle", "micro", "small"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-crowd-behaviors",
-      "name": "Crowd Behaviors",
-      "description": "Group movement patterns",
-      "path": "./action-dynamics/crowd-behaviors.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "crowd", "group", "collective"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-facial-micro-gestures",
-      "name": "Facial Micro-Gestures",
-      "description": "Small facial movements",
-      "path": "./action-dynamics/facial-micro-gestures.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "facial", "micro", "gesture"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-object-interactions",
-      "name": "Object Interactions",
-      "description": "Interactions with objects",
-      "path": "./action-dynamics/object-interactions.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "object", "interaction", "manipulation"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-group-dynamics",
-      "name": "Emergent Group Dynamics",
-      "description": "Emergent group behaviors",
-      "path": "./action-dynamics/group-dynamics.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "group", "emergent", "dynamics"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-stealth-movements",
-      "name": "Stealth Movements",
-      "description": "Stealthy and sneaky movements",
-      "path": "./action-dynamics/stealth-movements.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "stealth", "sneak", "quiet"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-aerial-motions",
-      "name": "Aerial Motions",
-      "description": "Airborne movements",
-      "path": "./action-dynamics/aerial-motions.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "aerial", "flying", "airborne"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-reaction-beats",
-      "name": "Reaction Beats",
-      "description": "Reaction movements and responses",
-      "path": "./action-dynamics/reaction-beats.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "reaction", "response", "reflex"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-transformative-actions",
-      "name": "Transformative Actions",
-      "description": "Shape-changing and transformative movements",
-      "path": "./action-dynamics/transformative-actions.psg",
-      "category": "action-dynamics",
-      "tags": ["action", "transform", "change", "morph"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
       "id": "fragment-lighting-moods",
       "name": "Lighting Moods",
-      "description": "Cinematic and atmospheric lighting",
       "path": "./setting-environment/lighting-moods.psg",
       "category": "setting-environment",
       "tags": ["environment", "lighting", "atmosphere", "mood"],
@@ -826,7 +151,6 @@
     {
       "id": "fragment-weather-snapshots",
       "name": "Weather Snapshots",
-      "description": "Weather conditions and phenomena",
       "path": "./setting-environment/weather-snapshots.psg",
       "category": "setting-environment",
       "tags": ["environment", "weather", "climate", "conditions"],
@@ -840,25 +164,8 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-geology-touches",
-      "name": "Geology Touches",
-      "description": "Geological formations and features",
-      "path": "./setting-environment/geology-touches.psg",
-      "category": "setting-environment",
-      "tags": ["environment", "geology", "terrain", "landscape"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
       "id": "fragment-architectural-styles",
       "name": "Architectural Styles",
-      "description": "Building and architectural styles",
       "path": "./setting-environment/architectural-styles.psg",
       "category": "setting-environment",
       "tags": ["environment", "architecture", "buildings", "structures"],
@@ -872,73 +179,8 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-temporal-markers",
-      "name": "Temporal Markers",
-      "description": "Time-of-day indicators",
-      "path": "./setting-environment/temporal-markers.psg",
-      "category": "setting-environment",
-      "tags": ["environment", "time", "temporal", "daylight"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-atmospherics",
-      "name": "Atmospherics",
-      "description": "Atmospheric particles and effects",
-      "path": "./setting-environment/atmospherics.psg",
-      "category": "setting-environment",
-      "tags": ["environment", "atmosphere", "particles", "effects"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-sound-snippets",
-      "name": "Sound Snippets",
-      "description": "Environmental sounds and audio",
-      "path": "./setting-environment/sound-snippets.psg",
-      "category": "setting-environment",
-      "tags": ["environment", "sound", "audio", "ambience"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-crowd-density",
-      "name": "Crowd Density Tags",
-      "description": "Population density descriptions",
-      "path": "./setting-environment/crowd-density.psg",
-      "category": "setting-environment",
-      "tags": ["environment", "crowd", "density", "population"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
       "id": "fragment-backdrop-adjectives",
       "name": "Backdrop Adjectives",
-      "description": "Scene-setting descriptors",
       "path": "./setting-environment/backdrop-adjectives.psg",
       "category": "setting-environment",
       "tags": ["environment", "backdrop", "scene", "descriptive"],
@@ -950,61 +192,16 @@
         "version": "1.0.0"
       },
       "edgeCount": 0
-    },
-    {
-      "id": "fragment-spatial-relations",
-      "name": "Spatial Relations",
-      "description": "Spatial dimensions and relationships",
-      "path": "./setting-environment/spatial-relations.psg",
-      "category": "setting-environment",
-      "tags": ["environment", "spatial", "dimensions", "space"],
-      "nodeCount": 1,
-      "metadata": {},
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-weapons-axe-techniques",
-      "name": "Axe Techniques",
-      "description": "Axe handling and attack variations",
-      "path": "./weapons-armor-combat/axe-techniques.psg",
-      "category": "weapons-armor-combat",
-      "tags": ["weapons", "axe", "technique"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-08-15",
-        "updated": "2025-08-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-weapons-edge-alignment-cues",
-      "name": "Edge Alignment Cues",
-      "description": "Cutting edge alignment and angles",
-      "path": "./weapons-armor-combat/edge-alignment-cues.psg",
-      "category": "weapons-armor-combat",
-      "tags": ["weapons", "blade", "alignment"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-08-15",
-        "updated": "2025-08-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
     }
   ],
   "statistics": {
-    "total_fragments": 62,
+    "total_fragments": 12,
     "categories": [
-      "facial-features",
-      "hair",
       "body-silhouette",
       "emotion-mood",
-      "action-dynamics",
-      "setting-environment",
-      "weapons-armor-combat"
+      "facial-features",
+      "hair",
+      "setting-environment"
     ]
   }
 }

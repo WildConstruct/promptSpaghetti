@@ -155,7 +155,7 @@ export const VisualKeyboardMap: React.FC<VisualKeyboardMapProps> = ({
       { label: 'G' },
       { label: 'H' },
       { label: 'J' },
-      { label: 'K', shortcuts: ['Command palette (with Cmd/Ctrl)'] },
+      { label: 'K' },
       { label: 'L' },
       { label: ';' },
       { label: "'" },
@@ -166,7 +166,7 @@ export const VisualKeyboardMap: React.FC<VisualKeyboardMapProps> = ({
       { label: 'Shift', width: 100, modifier: true, shortcuts: ['Multi-select', 'Box select'] },
       { label: 'Z', shortcuts: ['Undo (with Cmd/Ctrl)'] },
       { label: 'X' },
-      { label: 'C' },
+      { label: 'C', shortcuts: ['Command palette'] },
       { label: 'V' },
       { label: 'B', shortcuts: ['Toggle sidebar (with Cmd/Ctrl)'] },
       { label: 'N', shortcuts: ['New project (with Cmd/Ctrl)'] },
@@ -264,7 +264,7 @@ export const VisualKeyboardMap: React.FC<VisualKeyboardMapProps> = ({
             border: '1px solid #e5e7eb',
             borderRadius: '3px',
             fontSize: '11px',
-          }}>{isMac ? '⌘' : 'Ctrl'} K</kbd> for command palette
+          }}>C</kbd> for commander
         </p>
       </div>
     </div>

@@ -1,8 +1,9 @@
 /** @type {import('jest').Config} */
 module.exports = {
-  // Delegate to package-level Jest configs so each package controls its env/setup
+  // Canonical root unit-test entrypoint for package-owned Jest suites.
   projects: [
     '<rootDir>/packages/asset-browser/jest.config.cjs',
-    '<rootDir>/packages/core/jest.config.cjs'
+    '<rootDir>/packages/core/jest.config.cjs',
+    '<rootDir>/server/jest.config.cjs'
   ]
 };

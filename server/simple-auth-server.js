@@ -7,6 +7,9 @@
 
 const http = require('http');
 const url = require('url');
+const { assertMockRuntimeAllowed } = require('./src/utils/mockRuntimeGuard.js');
+
+assertMockRuntimeAllowed('simple-auth-server');
 
 // Simple in-memory "database"
 const users = [

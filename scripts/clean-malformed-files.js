@@ -2,7 +2,7 @@
 
 /**
  * Clean Malformed Files Script
- * Automatically removes malformed transpiled JS files that have TS/TSX counterparts
+ * Automatically removes malformed transpiled JS files based on content patterns
  */
 
 const fs = require('fs');
@@ -29,22 +29,11 @@ class MalformedFileCleaner {
    * Check if a JS file should be removed
    */
   shouldRemoveFile(jsFilePath) {
-    const dir = path.dirname(jsFilePath);
-    const baseName = path.basename(jsFilePath, '.js');
-    const tsFile = path.join(dir, `${baseName}.ts`);
-    const tsxFile = path.join(dir, `${baseName}.tsx`);
-
-    // Remove if corresponding .ts or .tsx exists
-    if (fs.existsSync(tsFile) || fs.existsSync(tsxFile)) {
-      return { shouldRemove: true, reason: 'has TS/TSX counterpart' };
-    }
-
     // Check for malformed content patterns
     try {
       const content = fs.readFileSync(jsFilePath, 'utf8');
       const lines = content.split('\n');
 
-      let hasOrphanedReturn = false;
       let hasOrphanedJSX = false;
       let inFunction = false;
       let braceCount = 0;
@@ -70,17 +59,9 @@ class MalformedFileCleaner {
         }
 
         // Check for problematic patterns
-        if (trimmed.startsWith('return ') && !inFunction) {
-          hasOrphanedReturn = true;
-        }
-
         if ((trimmed.includes('_jsx') || trimmed.includes('_jsxs')) && !inFunction) {
           hasOrphanedJSX = true;
         }
-      }
-
-      if (hasOrphanedReturn) {
-        return { shouldRemove: true, reason: 'orphaned return statement' };
       }
 
       if (hasOrphanedJSX) {
@@ -181,9 +162,7 @@ Options:
   --help, -h   Show this help message
 
 This script removes malformed transpiled .js files that:
-1. Have corresponding .ts/.tsx files
-2. Contain orphaned return statements
-3. Contain orphaned JSX outside function scope
+1. Contain orphaned JSX outside function scope
 `);
   process.exit(0);
 }

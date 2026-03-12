@@ -21,7 +21,17 @@ import { WorkspaceRecoveryDialog } from '@promptscape/core/components/WorkspaceR
 import { SupabaseOpenDialog } from './components/SupabaseOpenDialog';
 import { SupabaseSaveDialog } from './components/SupabaseSaveDialog';
 import { NewDocumentModal } from './components/NewDocumentModal';
+import { ComfyExportDialog } from './components/ComfyExportDialog';
+import { PsgSceneAssetsDialog } from './components/PsgSceneAssetsDialog';
+import { PsgCrowdExpansionDialog } from './components/PsgCrowdExpansionDialog';
+import { BugReportDialog } from './components/BugReportDialog';
 import ChangelogModal from '@promptscape/core/components/ChangelogModal/ChangelogModal';
+import { useRuntimeMode } from '@promptscape/core/hooks/useRuntimeMode';
+import type {
+  PsgAssetRef,
+  PsgSceneAssemblyPlan
+} from '@promptscape/core/services/psg';
+import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -32,6 +42,7 @@ interface Epic1EditorContainerProps {
   initialAnalysis?: PromptAnalysis;
   initialGraph?: { nodes: Node[]; edges: Edge[] };
   startWithTutorial?: boolean;
+  onBackToLaunch?: () => void;
 }
 
 export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
@@ -42,7 +53,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   showOnboarding = false,
   initialAnalysis,
   initialGraph,
-  startWithTutorial = false
+  startWithTutorial = false,
+  onBackToLaunch
 }) => {
   // Component loading state (simplified - using static imports now)
   const [assetLibraryVisible, setAssetLibraryVisible] =
@@ -87,7 +99,47 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
 
   const [showChangelog, setShowChangelog] = useState(false);
+  const [showBugReportDialog, setShowBugReportDialog] = useState(false);
+  const [showComfyExportDialog, setShowComfyExportDialog] = useState(false);
+  const [showPsgSceneAssetsDialog, setShowPsgSceneAssetsDialog] = useState(false);
+  const [showPsgCrowdExpansionDialog, setShowPsgCrowdExpansionDialog] =
+    useState(false);
+  const [psgAssets, setPsgAssets] = useState<PsgAssetRef[]>([]);
+  const [psgScene, setPsgScene] = useState<PsgSceneAssemblyPlan | null>(null);
   const noop = useCallback(() => undefined, []);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('epic1-psg-scene-manifest');
+      if (!raw) {
+        return;
+      }
+
+      const parsed = JSON.parse(raw) as {
+        assets?: PsgAssetRef[];
+        scene?: PsgSceneAssemblyPlan | null;
+      };
+      setPsgAssets(Array.isArray(parsed.assets) ? parsed.assets : []);
+      setPsgScene(parsed.scene || null);
+    } catch (error) {
+      console.warn('Failed to restore PSG scene manifest draft', error);
+    }
+  }, []);
+
+  const persistPsgSceneManifest = useCallback(
+    (nextAssets: PsgAssetRef[], nextScene: PsgSceneAssemblyPlan | null) => {
+      setPsgAssets(nextAssets);
+      setPsgScene(nextScene);
+      localStorage.setItem(
+        'epic1-psg-scene-manifest',
+        JSON.stringify({
+          assets: nextAssets,
+          scene: nextScene
+        })
+      );
+    },
+    []
+  );
 
   // Custom hooks
   const {
@@ -95,6 +147,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     recoveryData,
     handleRecoveryAccept,
     handleRecoveryDecline,
+    handleRecoveryDismiss,
     saveForRecovery
   } = useWorkspaceRecovery({
     onRecover: (nodes, edges) => {
@@ -107,7 +160,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     showPromptDissector,
     nodeCreationMode,
     handlePromptAnalysisComplete,
-    openPromptDissector,
     processExistingAnalysis
   } = usePromptParsing({
     initialAnalysis,
@@ -176,10 +228,122 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     confirmNewDocument,
     cancelNewDocument,
     handleSupabaseSave,
+    buildComfyBridge,
+    downloadComfyBridge,
     loadGraph,
-    deleteGraph,
-    handleQuit
+    deleteGraph
   } = fileOps;
+  const runtimeMode = useRuntimeMode({
+    subscriptionActive: isAuthenticated
+  });
+  const canExportComfy = runtimeMode.psg.operations.includes('export-comfy');
+  const canExpandCrowdHosted =
+    runtimeMode.psg.accessMode === 'cloud' &&
+    runtimeMode.psg.hostedUpgradeOperations.includes('expand-crowd');
+  const sceneAssetSummary = {
+    totalAssets: psgAssets.length,
+    derivedAssets: psgAssets.filter(
+      asset => asset.provenance.source === 'derived'
+    ).length,
+    placements: psgScene?.placements.length || 0,
+    crowdMembers: psgScene?.crowdMembers.length || 0
+  };
+
+  const buildBugReportPayload = useCallback(
+    ({
+      title,
+      details,
+      includePsg
+    }: {
+      title: string;
+      details: string;
+      includePsg: boolean;
+    }) => {
+      const lines = [
+        `Title: ${title.trim()}`,
+        '',
+        'Details:',
+        details.trim() || '(not provided)',
+        '',
+        'Environment:',
+        `- URL: ${window.location.href}`,
+        `- User Agent: ${window.navigator.userAgent}`,
+        `- Build Version: ${import.meta.env.VITE_BUILD_VERSION || 'dev'}`,
+        `- Build Timestamp: ${import.meta.env.VITE_BUILD_TIMESTAMP || 'unknown'}`
+      ];
+
+      if (includePsg) {
+        const psg = exportGraphToPSG(
+          currentNodes as Parameters<typeof exportGraphToPSG>[0],
+          currentEdges as Parameters<typeof exportGraphToPSG>[1],
+          { name: 'bug-report-graph' }
+        );
+        lines.push('', 'PSG:', '```json', JSON.stringify(psg, null, 2), '```');
+      }
+
+      return lines.join('\n');
+    },
+    [currentEdges, currentNodes]
+  );
+
+  const handleCopyBugReport = useCallback(
+    async ({
+      title,
+      details,
+      includePsg
+    }: {
+      title: string;
+      details: string;
+      includePsg: boolean;
+    }) => {
+      try {
+        await navigator.clipboard.writeText(
+          buildBugReportPayload({ title, details, includePsg })
+        );
+        showToast('Copied bug report payload', 'success');
+        return true;
+      } catch (error) {
+        console.error('Failed to copy bug report payload', error);
+        showToast('Failed to copy bug report payload', 'error');
+        return false;
+      }
+    },
+    [buildBugReportPayload, showToast]
+  );
+
+  const handleOpenBugIssue = useCallback(
+    async ({
+      title,
+      details,
+      includePsg
+    }: {
+      title: string;
+      details: string;
+      includePsg: boolean;
+    }) => {
+      const copied = await handleCopyBugReport({ title, details, includePsg });
+      const issueBody = [
+        copied
+          ? 'A full bug report payload has been copied to the clipboard. Paste it below.'
+          : 'Describe the bug below.',
+        '',
+        details.trim() || '(see copied payload for more detail)',
+        '',
+        includePsg
+          ? 'PSG requested: paste the copied payload, including the PSG block.'
+          : 'PSG not included.'
+      ].join('\n');
+
+      const issueUrl = new URL(
+        'https://github.com/WildConstruct/promptSpaghetti/issues/new'
+      );
+      issueUrl.searchParams.set('title', title.trim());
+      issueUrl.searchParams.set('body', issueBody);
+      window.open(issueUrl.toString(), '_blank', 'noopener,noreferrer');
+      showToast('Opened GitHub issue form', 'success');
+    },
+    [handleCopyBugReport, showToast]
+  );
 
   // Edit operations with proper configuration
   const editOps = useEditOperations({
@@ -216,20 +380,29 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       >
         {showMenuBar && (
           <SimpleMenuBar
+            onBackToLaunch={onBackToLaunch}
             onNew={handleCreateNew}
             onOpen={handleOpen}
             onSave={() => handleSave(currentNodes, currentEdges)}
             onSaveAs={() => handleSaveAs(currentNodes, currentEdges)}
             onImport={handleLocalOpen}
-            onExport={() => handleSaveAs(currentNodes, currentEdges)}
-            onQuit={() => handleQuit(currentNodes, currentEdges)}
+            onExportComfy={
+              canExportComfy
+                ? () => setShowComfyExportDialog(true)
+                : undefined
+            }
+            onPsgSceneAssets={() => setShowPsgSceneAssetsDialog(true)}
+            onExpandCrowd={
+              canExpandCrowdHosted
+                ? () => setShowPsgCrowdExpansionDialog(true)
+                : undefined
+            }
             onUndo={handleUndo}
             onRedo={handleRedo}
             onCopy={handleCopy}
             onPaste={handlePaste}
             onToggleAssetLibrary={() => setAssetLibraryVisible(prev => !prev)}
-            onDocumentation={() => openPromptDissector('new-project')}
-            onPreferences={() => openPromptDissector('add-to-existing')}
+            onReportBug={() => setShowBugReportDialog(true)}
             onChangelog={() => setShowChangelog(true)}
           />
         )}
@@ -257,10 +430,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
         {showRecoveryDialog && recoveryData && (
           <WorkspaceRecoveryDialog
-            isOpen={showRecoveryDialog}
-            onAccept={handleRecoveryAccept}
-            onDecline={handleRecoveryDecline}
-            timestamp={recoveryData.timestamp}
+            onRecover={handleRecoveryAccept}
+            onStartFresh={handleRecoveryDecline}
+            onDismiss={handleRecoveryDismiss}
           />
         )}
 
@@ -271,10 +443,18 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           />
         )}
 
+        <BugReportDialog
+          isOpen={showBugReportDialog}
+          onClose={() => setShowBugReportDialog(false)}
+          onCopyReport={handleCopyBugReport}
+          onOpenIssue={handleOpenBugIssue}
+        />
+
         <SupabaseOpenDialog
           isOpen={showOpenDialog}
           onClose={() => setShowOpenDialog(false)}
           graphs={savedGraphs}
+          currentUserId={fileOps.currentUserId}
           onLoad={graph => {
             loadGraph(graph);
             setShowOpenDialog(false);
@@ -311,6 +491,78 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           isOpen={showNewDocumentModal}
           onConfirm={confirmNewDocument}
           onCancel={cancelNewDocument}
+        />
+
+        <ComfyExportDialog
+          isOpen={showComfyExportDialog}
+          onClose={() => setShowComfyExportDialog(false)}
+          buildComfyBridge={(nodes, edges, options) =>
+            buildComfyBridge(nodes, edges, options, {
+              assets: psgAssets,
+              scene: psgScene
+            })
+          }
+          onDownload={downloadComfyBridge}
+          currentNodes={currentNodes}
+          currentEdges={currentEdges}
+          runtimeMode={runtimeMode.mode}
+          psgAccessMode={runtimeMode.psg.accessMode}
+          subscriptionState={runtimeMode.subscription.state}
+          psgCloudAvailable={runtimeMode.psg.cloudAvailable}
+          psgLocalAvailable={runtimeMode.psg.localAvailable}
+          localOperations={runtimeMode.psg.localOperations}
+          hostedUpgradeOperations={runtimeMode.psg.hostedUpgradeOperations}
+          sceneAssetSummary={sceneAssetSummary}
+        />
+
+        <PsgSceneAssetsDialog
+          isOpen={showPsgSceneAssetsDialog}
+          onClose={() => setShowPsgSceneAssetsDialog(false)}
+          assets={psgAssets}
+          scene={psgScene}
+          cloudAssetReady={runtimeMode.mode === 'cloud' && runtimeMode.supabase.cloudSyncAvailable}
+          onSave={({ assets, scene }) => persistPsgSceneManifest(assets, scene)}
+          onExportManifest={() => {
+            const document = fileOps.buildPsgSceneManifest(
+              currentNodes,
+              currentEdges,
+              {},
+              {
+                assets: psgAssets,
+                scene: psgScene
+              }
+            );
+            fileOps.downloadPsgSceneManifest(document, document.metadata.name);
+          }}
+          onAssembleScene={() =>
+            fileOps.assembleScenePreview(currentNodes, currentEdges, {}, {
+              assets: psgAssets,
+              scene: psgScene
+            })
+          }
+          onDownloadAssembly={(response, filenameBase) =>
+            fileOps.downloadSceneAssembly(response, filenameBase)
+          }
+        />
+
+        <PsgCrowdExpansionDialog
+          isOpen={showPsgCrowdExpansionDialog}
+          onClose={() => setShowPsgCrowdExpansionDialog(false)}
+          psgAccessMode={runtimeMode.psg.accessMode}
+          hostedUpgradeOperations={runtimeMode.psg.hostedUpgradeOperations}
+          existingScene={psgScene}
+          onApply={({ crowdMembers }) => {
+            persistPsgSceneManifest(psgAssets, {
+              ...(psgScene || {
+                stillAssetIds: [],
+                motionAssetIds: [],
+                placements: [],
+                crowdMembers: [],
+                renderTargets: []
+              }),
+              crowdMembers
+            });
+          }}
         />
 
         <ToastContainer toasts={toasts} onDismiss={dismissToast} />

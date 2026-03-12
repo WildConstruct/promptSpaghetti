@@ -4,6 +4,7 @@
 
 import { useMemo, ReactNode } from 'react';
 import { useAuth } from '../providers/AuthUserProvider';
+import { getRuntimeFeatureFlags } from '../utils/runtimeMode';
 
 /**
  * Feature gate configuration
@@ -34,32 +35,16 @@ export interface FeatureConfig {
  * Get feature configuration from environment variables
  */
 export function getFeatureConfig(): FeatureConfig {
-  const isClient = typeof window !== 'undefined';
-  
-  // Support both Next.js and Vite environments
-  const getEnvVar = (key: string): string => {
-    if (isClient) {
-      // Client-side: check window object for Vite
-      if (typeof (window as any).import !== 'undefined' && (window as any).import.meta?.env) {
-        return (window as any).import.meta.env[key] || '';
-      }
-    }
-    // Server-side or Next.js
-    return process.env[key] || '';
-  };
-  
+  const flags = getRuntimeFeatureFlags();
+
   return {
     auth: {
-      enabled: getEnvVar('NEXT_PUBLIC_FEATURE_AUTH') === 'true' || 
-               getEnvVar('VITE_FEATURE_AUTH') === 'true',
-      required: getEnvVar('NEXT_PUBLIC_REQUIRE_AUTH') === 'true' || 
-                getEnvVar('VITE_REQUIRE_AUTH') === 'true',
-      optional: getEnvVar('NEXT_PUBLIC_AUTH_OPTIONAL') !== 'false' && 
-                getEnvVar('VITE_AUTH_OPTIONAL') !== 'false'
+      enabled: flags.authEnabled,
+      required: flags.authRequired,
+      optional: !flags.authRequired
     },
     supabase: {
-      enabled: getEnvVar('NEXT_PUBLIC_FEATURE_SUPABASE') === 'true' || 
-               getEnvVar('VITE_FEATURE_SUPABASE') === 'true'
+      enabled: flags.supabaseEnabled
     }
   };
 }
@@ -113,7 +98,7 @@ export function useFeatureGate(config: FeatureGateConfig = {}) {
   // Gate component for conditional rendering
   const Gate = ({ children, fallback }: GateProps) => {
     const finalFallback = fallback ?? config.fallback;
-    return isEnabled ? <>{children}</> : <>{finalFallback}</>;
+    return isEnabled ? children : finalFallback ?? null;
   };
   
   return {

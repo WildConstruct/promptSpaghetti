@@ -265,10 +265,29 @@ export abstract class BaseInlineEditableNode<
       value: this.cloneValue(data.value),
       configuration:
         data.configuration !== undefined
-          ? this.cloneValue(data.configuration)
+          ? this.cloneUnknown(data.configuration)
           : this.cloneValue(data.value),
-      editState: { ...data.editState }
+      editState: {
+        ...this.createDefaultEditState(),
+        ...data.editState
+      }
     };
+  }
+
+  protected cloneUnknown<T>(value: T): T {
+    if (value === null || value === undefined) {
+      return value;
+    }
+
+    if (typeof value !== 'object') {
+      return value;
+    }
+
+    try {
+      return JSON.parse(JSON.stringify(value)) as T;
+    } catch {
+      return value;
+    }
   }
 
   /**

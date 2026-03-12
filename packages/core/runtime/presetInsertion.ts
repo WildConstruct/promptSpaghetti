@@ -11,7 +11,17 @@ import {
   type PSGLibNode,
   type PSGLibEdge
 } from '../fileFormats/psglib';
-import { parsePSG, convertPSGToPSGLib } from '../fileFormats/psg';
+import {
+  parseCanonicalPsg,
+  parsePsgWithCompatibility,
+  convertCanonicalPSGToPSGLib,
+  convertCompatiblePSGToPSGLib
+} from '../fileFormats/psg';
+import {
+  canonicalizeImportedNodeType,
+  getImportedFragmentWrapperPolicy,
+  normalizeImportedEdges
+} from './importGraphNormalization';
 
 export interface InsertionOptions {
   position?: { x: number; y: number };
@@ -35,107 +45,117 @@ export interface InsertionResult {
   };
 }
 
-/**
- * Map edge handles based on node types and enable branch outputs
- */
-function mapEdgeHandles(
-  edges: PSGLibEdge[],
-  nodeTypeMap: Map<string, string>,
-  nodes: PSGLibNode[]
-): PSGLibEdge[] {
+type ParsedPresetDocument =
+  | { kind: 'psglib'; data: any; psglib: PSGLibFile }
+  | { kind: 'psg'; data: any; psglib: PSGLibFile };
 
-  // Track which weighted choice nodes have branch connections
-  const branchConnections = new Map<string, Set<number>>();
+class PresetParseError extends Error {
+  constructor(
+    message: string,
+    public readonly category: 'json' | 'unrecognized' | 'psglib' | 'psg'
+  ) {
+    super(message);
+    this.name = 'PresetParseError';
+  }
+}
 
-  edges.forEach(edge => {
-    const sourceType = nodeTypeMap.get(edge.source);
-    if (sourceType === 'weightedChoice' && edge.sourceHandle) {
-      // Check if this is a branch output (e.g., branch-0, branch-1, etc.)
-      const branchMatch = edge.sourceHandle.match(/branch-(\d+)/);
-      if (branchMatch) {
-        const branchIndex = parseInt(branchMatch[1]);
-        if (!branchConnections.has(edge.source)) {
-          branchConnections.set(edge.source, new Set());
-        }
-        branchConnections.get(edge.source)!.add(branchIndex);
-      }
-    }
-  });
+function parsePresetJson(presetContent: string): any {
+  try {
+    return JSON.parse(presetContent);
+  } catch {
+    throw new PresetParseError('Invalid JSON format', 'json');
+  }
+}
 
-  // Track concat input usage so we can assign inputs deterministically
-  const concatInputUsage = new Map<string, Set<string>>();
-  edges.forEach(e => {
-    const tType = nodeTypeMap.get(e.target);
-    if (tType === 'concat') {
-      const used = concatInputUsage.get(e.target) || new Set<string>();
-      if (e.targetHandle === 'input1' || e.targetHandle === 'input2') {
-        used.add(e.targetHandle);
-      }
-      concatInputUsage.set(e.target, used);
-    }
-  });
+function parsePSGLibPreset(
+  presetContent: string,
+  data: any
+): ParsedPresetDocument {
+  if (data.fileType !== 'psglib') {
+    throw new PresetParseError('Not a PSGLib preset', 'psglib');
+  }
 
-  // Enable hasBranch for connected options and compute weightedChoice main output policy
-  const weightedChoiceHasBranch = new Map<string, boolean>();
-  nodes.forEach(node => {
-    if (node.type === 'WeightedChoice' || node.type === 'weightedChoice') {
-      const connections = branchConnections.get(node.id);
-      if (connections && node.data.options) {
-        node.data.options.forEach((option: any, index: number) => {
-          option.hasBranch = connections.has(index);
-        });
-      }
-      const opts = (node as any)?.data?.options;
-      const has = Array.isArray(opts) && opts.some((o: any) => o?.hasBranch === true);
-      weightedChoiceHasBranch.set(node.id, !!has);
-    }
-  });
-
-  return edges.map(edge => {
-    const sourceType = nodeTypeMap.get(edge.source);
-    const targetType = nodeTypeMap.get(edge.target);
-
-    // Map source handle based on source node type
-    let sourceHandle = edge.sourceHandle;
-    if (sourceType === 'weightedChoice') {
-      // Preserve explicit branch-N handles
-      const isBranch = typeof sourceHandle === 'string' && /^branch-\d+$/.test(sourceHandle);
-      if (!isBranch) {
-        const has = weightedChoiceHasBranch.get(edge.source) === true;
-        if (!sourceHandle || sourceHandle === 'output' || sourceHandle === 'main') {
-          sourceHandle = has ? 'main-output' : 'source';
-        }
-        // If sourceHandle is 'main-output' or 'source', leave as-is
-      }
-    }
-
-    // Map target handle if needed
-    let targetHandle = edge.targetHandle;
-    // Concat nodes have two named inputs: input1 and input2. Preserve if provided;
-    // otherwise assign the next available input.
-    if (targetType === 'concat') {
-      const used = concatInputUsage.get(edge.target) || new Set<string>();
-      if (targetHandle !== 'input1' && targetHandle !== 'input2') {
-        if (!used.has('input1')) {
-          targetHandle = 'input1';
-          used.add('input1');
-        } else if (!used.has('input2')) {
-          targetHandle = 'input2';
-          used.add('input2');
-        } else {
-          // More than two incoming edges: default to input2 (will visually stack)
-          targetHandle = 'input2';
-        }
-        concatInputUsage.set(edge.target, used);
-      }
-    }
-
+  try {
     return {
-      ...edge,
-      sourceHandle,
-      targetHandle
+      kind: 'psglib',
+      data,
+      psglib: parsePSGLib(presetContent)
     };
-  });
+  } catch (error) {
+    throw new PresetParseError(
+      error instanceof Error ? error.message : 'Invalid PSGLib preset',
+      'psglib'
+    );
+  }
+}
+
+function parseCanonicalOrLibraryPsgPreset(
+  presetContent: string,
+  data: any
+): ParsedPresetDocument {
+  if (!(data.version && data.nodes && !data.fileType)) {
+    throw new PresetParseError('Not a PSG fragment preset', 'psg');
+  }
+
+  try {
+    return {
+      kind: 'psg',
+      data,
+      psglib: convertCanonicalPSGToPSGLib(parseCanonicalPsg(presetContent))
+    };
+  } catch (error) {
+    try {
+      return parseCompatiblePsgPreset(presetContent, data);
+    } catch {
+      throw new PresetParseError(
+        `Invalid PSG fragment: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'psg'
+      );
+    }
+  }
+}
+
+function parseCompatiblePsgPreset(
+  presetContent: string,
+  data: any
+): ParsedPresetDocument {
+  if (!(data.version && data.nodes && !data.fileType)) {
+    throw new PresetParseError('Not a PSG fragment preset', 'psg');
+  }
+
+  try {
+    return {
+      kind: 'psg',
+      data,
+      psglib: convertCompatiblePSGToPSGLib(
+        parsePsgWithCompatibility(presetContent)
+      )
+    };
+  } catch (error) {
+    throw new PresetParseError(
+      `Invalid PSG fragment: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      'psg'
+    );
+  }
+}
+
+function parsePresetDocument(
+  presetContent: string,
+  options: { preferCanonicalPsg?: boolean } = {}
+): ParsedPresetDocument {
+  const data = parsePresetJson(presetContent);
+
+  if (data.fileType === 'psglib') {
+    return parsePSGLibPreset(presetContent, data);
+  }
+
+  if (data.version && data.nodes && !data.fileType) {
+    return options.preferCanonicalPsg
+      ? parseCanonicalOrLibraryPsgPreset(presetContent, data)
+      : parseCompatiblePsgPreset(presetContent, data);
+  }
+
+  throw new PresetParseError('Unrecognized preset format', 'unrecognized');
 }
 
 /**
@@ -154,22 +174,9 @@ export async function insertPreset(
   } = options;
 
   try {
-    // Parse the preset - detect format and convert if needed
-    let psglib: PSGLibFile;
-
-    // Try to parse as JSON first to detect format
-    const data = JSON.parse(presetContent);
-
-    if (data.fileType === 'psglib') {
-      // It's already a PSGLib file
-      psglib = parsePSGLib(presetContent);
-    } else if (data.version && data.nodes && !data.fileType) {
-      // It's a PSG fragment file - convert it
-      const psg = parsePSG(presetContent);
-      psglib = convertPSGToPSGLib(psg);
-    } else {
-      throw new Error('Unrecognized preset format');
-    }
+    const { psglib } = parsePresetDocument(presetContent, {
+      preferCanonicalPsg: true
+    });
 
     // Track usage for analytics
     trackPresetUsage(psglib, 'import');
@@ -201,61 +208,70 @@ export async function insertPreset(
 
     // Parent inserted content nodes to EnhancedBoundingBox if present
     const boxes = positionedNodes.filter(n => n.type === 'enhancedBoundingBox');
+    const hasExistingParenting = positionedNodes.some(
+      n => typeof (n as any).parentNode === 'string'
+    );
     const getBoxSize = (b: any) => ({
-      width: (b.size && b.size.width) || (b.data && b.data.width) || (b.style && b.style.width) || 400,
-      height: (b.size && b.size.height) || (b.data && b.data.height) || (b.style && b.style.height) || 300
+      width:
+        (b.size && b.size.width) ||
+        (b.data && b.data.width) ||
+        (b.style && b.style.width) ||
+        400,
+      height:
+        (b.size && b.size.height) ||
+        (b.data && b.data.height) ||
+        (b.style && b.style.height) ||
+        300
     });
-    const PADDING_X = 40;
-    const HEADER_Y = 80;
-    const positionedWithParent = boxes.length
-      ? positionedNodes.map(n => {
-          if (n.type === 'enhancedBoundingBox' || (n as any).parentNode) {
-            return n;
-          }
-          // Single box: parent all; multiple: parent if inside bounds
-          const targetBox = boxes.length === 1
-            ? boxes[0]
-            : boxes.find(b => {
-                const { width, height } = getBoxSize(b);
-                const x0 = (b as any).position?.x ?? 0;
-                const y0 = (b as any).position?.y ?? 0;
-                const x1 = x0 + width;
-                const y1 = y0 + height;
-                const nx = (n as any).position?.x ?? 0;
-                const ny = (n as any).position?.y ?? 0;
-                return nx >= x0 && nx <= x1 && ny >= y0 && ny <= y1;
-              });
-          if (!targetBox) {
-            return n;
-          }
-          const bx = (targetBox as any).position?.x ?? 0;
-          const by = (targetBox as any).position?.y ?? 0;
-          const nx = (n as any).position?.x ?? 0;
-          const ny = (n as any).position?.y ?? 0;
-          return {
-            ...n,
-            parentNode: (targetBox as any).id,
-            extent: 'parent',
-            position: {
-              x: nx - bx - PADDING_X,
-              y: ny - by - HEADER_Y
+    const positionedWithParent =
+      boxes.length && !hasExistingParenting
+        ? positionedNodes.map(n => {
+            if (n.type === 'enhancedBoundingBox' || (n as any).parentNode) {
+              return n;
             }
-          } as any;
-        })
-      : positionedNodes;
+            // Single box: parent all; multiple: parent if inside bounds
+            const targetBox =
+              boxes.length === 1
+                ? boxes[0]
+                : boxes.find(b => {
+                    const { width, height } = getBoxSize(b);
+                    const x0 = (b as any).position?.x ?? 0;
+                    const y0 = (b as any).position?.y ?? 0;
+                    const x1 = x0 + width;
+                    const y1 = y0 + height;
+                    const nx = (n as any).position?.x ?? 0;
+                    const ny = (n as any).position?.y ?? 0;
+                    return nx >= x0 && nx <= x1 && ny >= y0 && ny <= y1;
+                  });
+            if (!targetBox) {
+              return n;
+            }
+            const bx = (targetBox as any).position?.x ?? 0;
+            const by = (targetBox as any).position?.y ?? 0;
+            const nx = (n as any).position?.x ?? 0;
+            const ny = (n as any).position?.y ?? 0;
+            return {
+              ...n,
+              parentNode: (targetBox as any).id,
+              extent: 'parent',
+              expandParent: true,
+              position: {
+                x: nx - bx,
+                y: ny - by
+              }
+            } as any;
+          })
+        : positionedNodes;
 
     // Create node type map for edge handle mapping
-    const nodeTypeMap = new Map<string, string>();
-    positionedWithParent.forEach(node => {
-      nodeTypeMap.set(node.id, node.type);
-    });
-
-    // Map edge handles based on node types and enable branch outputs
-    const mappedEdges = mapEdgeHandles(edges, nodeTypeMap, positionedWithParent);
+    const mappedEdges = normalizeImportedEdges(
+      edges,
+      positionedWithParent as PSGLibNode[]
+    );
 
     // Mark nodes as selected if requested
     if (selectAfterInsert) {
-      positionedNodes.forEach(node => {
+      positionedWithParent.forEach(node => {
         (node as any).selected = true;
       });
       // Also select regions
@@ -304,8 +320,16 @@ function calculateBounds(nodes: PSGLibNode[]): {
   for (const node of nodes) {
     const x = (node as any).position?.x ?? 0;
     const y = (node as any).position?.y ?? 0;
-    const width = (node as any).size?.width || 150;
-    const height = (node as any).size?.height || 50;
+    const width =
+      (node as any).size?.width ||
+      (node as any).width ||
+      (node as any).data?.width ||
+      150;
+    const height =
+      (node as any).size?.height ||
+      (node as any).height ||
+      (node as any).data?.height ||
+      50;
 
     minX = Math.min(minX, x);
     minY = Math.min(minY, y);
@@ -319,32 +343,11 @@ function calculateBounds(nodes: PSGLibNode[]): {
 /**
  * Map PSGLib node types to ReactFlow node types
  */
-function mapNodeType(type: string): string {
-  const typeMap: Record<string, string> = {
-    WeightedChoice: 'weightedChoice',
-    weightedChoice: 'weightedChoice',
-    Concat: 'concat',
-    concat: 'concat',
-    Output: 'output',
-    output: 'output',
-    TextBlock: 'textBlock',
-    textBlock: 'textBlock',
-    Variable: 'variable',
-    variable: 'variable',
-    SetVariable: 'setVariable',
-    GetVariable: 'getVariable',
-    Include: 'include',
-    boundingBox: 'boundingBox'
-  };
-
-  return typeMap[type] || type;
-}
-
 /**
  * Convert PSGLib node data to ReactFlow node data
  */
 function convertNodeData(type: string, data: any): any {
-  const nodeType = mapNodeType(type);
+  const nodeType = canonicalizeImportedNodeType(type);
 
   switch (nodeType) {
     case 'weightedChoice': {
@@ -366,7 +369,11 @@ function convertNodeData(type: string, data: any): any {
       break;
     }
     case 'concat':
-      return { ...data, nodeType: 'concat', value: (data as any).separator || ' ' };
+      return {
+        ...data,
+        nodeType: 'concat',
+        value: (data as any).separator || ' '
+      };
     case 'output':
       return {
         ...data,
@@ -389,7 +396,12 @@ function convertNodeData(type: string, data: any): any {
         nodeType,
         value: (data as any).variableName || 'myVariable',
         variableName: (data as any).variableName || 'myVariable',
-        mode: nodeType === 'setVariable' ? 'set' : nodeType === 'getVariable' ? 'get' : 'both'
+        mode:
+          nodeType === 'setVariable'
+            ? 'set'
+            : nodeType === 'getVariable'
+              ? 'get'
+              : 'both'
       };
   }
 
@@ -411,6 +423,9 @@ function positionNodes(
     containerSize?: { width: number; height: number };
   } = {}
 ): PSGLibNode[] {
+  const hasParentedNodes = nodes.some(
+    node => (node as any).parentNode !== undefined
+  );
   // Check if nodes are stacked (all at same position)
   const firstPos = nodes[0]?.position;
   const areStacked =
@@ -418,6 +433,41 @@ function positionNodes(
     nodes.every(
       node => node.position.x === firstPos.x && node.position.y === firstPos.y
     );
+
+  // If nodes include parent/child relationships, preserve their relative layout
+  if (hasParentedNodes) {
+    const topLevelNodes = nodes.filter(n => !(n as any).parentNode);
+    const layoutBounds =
+      topLevelNodes.length > 0 ? calculateBounds(topLevelNodes) : bounds;
+    const centerX =
+      layoutBounds.minX + (layoutBounds.maxX - layoutBounds.minX) / 2;
+    const centerY =
+      layoutBounds.minY + (layoutBounds.maxY - layoutBounds.minY) / 2;
+    const offsetX = position.x - centerX;
+    const offsetY = position.y - centerY;
+
+    return nodes.map(node => {
+      const hasParent = !!(node as any).parentNode;
+      let x = node.position.x;
+      let y = node.position.y;
+      // Only offset top-level nodes; children stay relative to their parent
+      if (!hasParent) {
+        x += offsetX;
+        y += offsetY;
+        if (snapToGrid) {
+          x = Math.round(x / gridSize) * gridSize;
+          y = Math.round(y / gridSize) * gridSize;
+        }
+      }
+
+      return {
+        ...node,
+        type: canonicalizeImportedNodeType(node.type),
+        position: { x, y },
+        data: convertNodeData(node.type, node.data)
+      };
+    });
+  }
 
   // If nodes are stacked or bounds indicate no layout, don't preserve positions
   const shouldPreserve =
@@ -446,7 +496,7 @@ function positionNodes(
 
       return {
         ...node,
-        type: mapNodeType(node.type),
+        type: canonicalizeImportedNodeType(node.type),
         position: { x, y },
         data: convertNodeData(node.type, node.data)
       };
@@ -459,7 +509,7 @@ function positionNodes(
     return [
       {
         ...nodes[0],
-        type: mapNodeType(nodes[0].type),
+        type: canonicalizeImportedNodeType(nodes[0].type),
         position: snapToGrid
           ? {
               x: Math.round(position.x / gridSize) * gridSize,
@@ -512,7 +562,7 @@ function positionNodes(
 
     return {
       ...node,
-      type: mapNodeType(node.type),
+      type: canonicalizeImportedNodeType(node.type),
       position: { x, y },
       data: convertNodeData(node.type, node.data)
     };
@@ -555,17 +605,21 @@ export async function insertPresetFromDrop(
 ): Promise<InsertionResult> {
   const graphPosition = viewportTransform
     ? {
-        x: (dropPosition.x - (viewportTransform as any).x) / (viewportTransform as any).zoom,
-        y: (dropPosition.y - (viewportTransform as any).y) / (viewportTransform as any).zoom
+        x:
+          (dropPosition.x - (viewportTransform as any).x) /
+          (viewportTransform as any).zoom,
+        y:
+          (dropPosition.y - (viewportTransform as any).y) /
+          (viewportTransform as any).zoom
       }
     : dropPosition;
 
   let preservePositions = false;
   try {
     const data = JSON.parse(presetContent);
-    if ((data as any).graph?.nodes?.some((n: any) => n.type === 'enhancedBoundingBox')) {
-      preservePositions = true;
-    }
+    preservePositions = getImportedFragmentWrapperPolicy({
+      presetData: data
+    }).shouldPreservePositions;
   } catch {}
 
   return insertPreset(presetContent, {
@@ -577,53 +631,29 @@ export async function insertPresetFromDrop(
 }
 
 /**
- * Load preset from file path (for Asset Browser integration)
- */
-export async function loadPresetFromPath(
-  path: string,
-  options: InsertionOptions = {}
-): Promise<InsertionResult> {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Failed to load preset: ${response.statusText}`);
-  }
-  const content = await response.text();
-  return insertPreset(content, options);
-}
-
-/**
  * Validate preset before insertion
  */
-export function validatePreset(presetContent: string): {
+export function validatePreset(
+  presetContent: string,
+  options: { preferCanonicalPsg?: boolean } = {}
+): {
   valid: boolean;
   error?: string;
   nodeCount?: number;
   edgeCount?: number;
 } {
   try {
-    let data: any;
+    let parsed: ParsedPresetDocument;
     try {
-      data = JSON.parse(presetContent);
+      parsed = parsePresetDocument(presetContent, options);
     } catch (e) {
-      return { valid: false, error: 'Invalid JSON format' };
+      if (e instanceof PresetParseError) {
+        return { valid: false, error: e.message };
+      }
+      return { valid: false, error: 'Invalid preset file' };
     }
 
-    let psglib: PSGLibFile;
-    if (data.fileType === 'psglib') {
-      psglib = parsePSGLib(presetContent);
-    } else if (data.version && data.nodes && !data.fileType) {
-      try {
-        const psg = parsePSG(presetContent);
-        psglib = convertPSGToPSGLib(psg);
-      } catch (psgError) {
-        return {
-          valid: false,
-          error: `Invalid PSG fragment: ${psgError instanceof Error ? psgError.message : 'Unknown error'}`
-        };
-      }
-    } else {
-      return { valid: false, error: 'Unrecognized preset format' };
-    }
+    const { psglib } = parsed;
 
     if (psglib.graph.nodes.length === 0) {
       return { valid: false, error: 'Preset contains no nodes' };
@@ -632,7 +662,10 @@ export function validatePreset(presetContent: string): {
     const nodeIds = new Set(psglib.graph.nodes.map(n => n.id));
     for (const edge of psglib.graph.edges) {
       if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) {
-        return { valid: false, error: 'Preset contains invalid edge references' };
+        return {
+          valid: false,
+          error: 'Preset contains invalid edge references'
+        };
       }
     }
 
@@ -642,7 +675,10 @@ export function validatePreset(presetContent: string): {
       edgeCount: psglib.graph.edges.length
     };
   } catch (error) {
-    return { valid: false, error: error instanceof Error ? error.message : 'Invalid preset file' };
+    return {
+      valid: false,
+      error: error instanceof Error ? error.message : 'Invalid preset file'
+    };
   }
 }
 

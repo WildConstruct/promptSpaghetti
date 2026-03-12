@@ -27,7 +27,9 @@ try {
       }
     });
   }
-} catch {}
+} catch {
+  void 0;
+}
 
 const rootElement = document.getElementById('root');
 

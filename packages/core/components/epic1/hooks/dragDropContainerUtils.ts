@@ -73,7 +73,6 @@ export const getContainerPadding = (node: FlowNode): number => {
   if (node.type === 'enhancedBoundingBox') {
     return 0;
   }
-  
   const data = node.data as Record<string, unknown> | undefined;
   const candidates = [data?.padding, data?.innerPadding, node.style?.padding];
   for (const candidate of candidates) {
@@ -202,6 +201,10 @@ export const attachNodesToContainerNodes = (
       extent: 'parent',
       position: relative
     };
+
+    if (container.type === 'enhancedBoundingBox') {
+      (next as FlowNode & { expandParent?: boolean }).expandParent = true;
+    }
 
     if (isCollapsed) {
       next.hidden = true;

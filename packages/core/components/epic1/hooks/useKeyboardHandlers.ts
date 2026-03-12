@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
 import { useAutoLayout } from './useAutoLayout';
+import { validateEditorGraphPayload } from './graphValidation';
 
 interface UseKeyboardHandlersProps {
   nodes: Node<EditableNodeData>[];
@@ -33,10 +34,21 @@ export function useKeyboardHandlers({
   const handleLoad = useCallback(() => {
     const saved = localStorage.getItem('epic1-graph');
     if (saved) {
-      const { nodes: loadedNodes, edges: loadedEdges } = JSON.parse(saved);
-      setNodes(loadedNodes);
-      setEdges(loadedEdges);
-      showToast('success', 'Graph loaded!');
+      try {
+        const parsed = JSON.parse(saved);
+        const validated = validateEditorGraphPayload(parsed);
+        if (!validated.ok) {
+          showToast('error', `Failed to load graph: ${validated.error}`);
+          return;
+        }
+        setNodes(validated.data.nodes as Node<EditableNodeData>[]);
+        setEdges(validated.data.edges);
+        showToast('success', 'Graph loaded!');
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Saved graph is invalid';
+        showToast('error', `Failed to load graph: ${message}`);
+      }
     } else {
       showToast('info', 'No saved graph found');
     }

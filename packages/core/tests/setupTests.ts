@@ -1,34 +1,32 @@
-import '@testing-library/jest-dom';
+import '../../../tests/utils/browserTestSetup';
 import {
   TextDecoder as NodeTextDecoder,
   TextEncoder as NodeTextEncoder
 } from 'util';
-
-// Add OpenAI Node.js shim for tests
-import 'openai/shims/node';
+import { installConsoleFilter } from '../../../tests/utils/consoleFilter';
 
 // Mock performance API for tests
 Object.defineProperty(global, 'performance', {
   value: {
-    now: jest.fn(() => Date.now()),
+    now: jest.fn(() => Date.now())
   },
-  writable: true,
+  writable: true
 });
 
 // Mock navigation API to prevent jsdom errors
 Object.defineProperty(window, 'navigation', {
   value: {
-    navigate: jest.fn(),
+    navigate: jest.fn()
   },
-  writable: true,
+  writable: true
 });
 
 // Mock URL navigation to prevent jsdom errors
 const originalLocation = window.location;
 delete window.location;
-window.location = { 
-  ...originalLocation, 
-  assign: jest.fn(), 
+window.location = {
+  ...originalLocation,
+  assign: jest.fn(),
   replace: jest.fn(),
   href: 'http://localhost:3000',
   origin: 'http://localhost:3000',
@@ -43,14 +41,18 @@ window.location = {
 
 // Mock HTMLAnchorElement.prototype to prevent navigation errors
 Object.defineProperty(HTMLAnchorElement.prototype, 'href', {
-  get() { return this.getAttribute('href') || ''; },
-  set(value) { this.setAttribute('href', value); }
+  get() {
+    return this.getAttribute('href') || '';
+  },
+  set(value) {
+    this.setAttribute('href', value);
+  }
 });
 
 // Stop all navigation attempts
 Object.defineProperty(window, 'onbeforeunload', {
   value: null,
-  writable: true,
+  writable: true
 });
 
 // Add fetch polyfill for OpenAI
@@ -130,7 +132,9 @@ if (typeof globalThis.TextDecoder === 'undefined') {
   }
 
   if (typeof proto.arrayBuffer !== 'function') {
-    proto.arrayBuffer = function arrayBufferShim(this: Blob): Promise<ArrayBuffer> {
+    proto.arrayBuffer = function arrayBufferShim(
+      this: Blob
+    ): Promise<ArrayBuffer> {
       if (ResponseCtor) {
         return new ResponseCtor(this).arrayBuffer();
       }
@@ -140,3 +144,27 @@ if (typeof globalThis.TextDecoder === 'undefined') {
     };
   }
 })();
+
+const SUPPRESSED_LOG_PATTERNS: RegExp[] = [
+  /Warning: An update to .* inside a test was not wrapped in act/i,
+  /Not implemented: navigation \(except hash changes\)/i,
+  /\[TutorialStepValidator\] Validating step:/i,
+  /\[ElementDetector\] querySelector failed/i,
+  /\[ElementDetector\] Element ".*" not found after/i,
+  /\[ElementDetector\] Timeout: Element ".*" not found within/i,
+  /\[ElementDetector\] Found element ".*"( immediately| after \d+ attempts| via MutationObserver)/i,
+  /LLM parse attempt \d+ failed:/i,
+  /LLM parse failed, falling back to standard/i,
+  /LLM parsing failed:/i,
+  /\[Parser Notice\] Using standard parser due to LLM unavailability/i,
+  /Dedicated extractMetadata call failed:/i,
+  /LLM completion metadata extraction failed:/i,
+  /LLM extraction failed, using fallback:/i,
+  /\[ApiLLMService\] populateChoices failed, falling back to offline suggestions:/i,
+  /Metadata extraction failed:/i,
+  /Failed to decompress data/i,
+  /Storage quota exceeded/i,
+  /Error saving state:/i
+];
+
+installConsoleFilter(SUPPRESSED_LOG_PATTERNS);

@@ -88,14 +88,6 @@ export interface BoundingBoxHeaderProps {
   onEditEnd: () => void;
 }
 
-export interface ResizeHandlesProps {
-  visible: boolean;
-  isLocked: boolean;
-  onResizeStart: (e: React.MouseEvent, direction: ResizeDirection) => void;
-}
-
-export type ResizeDirection = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
-
 export interface PortSystemProps {
   isCollapsed: boolean;
   ports: Port[];

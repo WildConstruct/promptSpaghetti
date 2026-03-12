@@ -26,7 +26,7 @@ const getBoolEnvVar = (key: string, fallback: boolean = false): boolean => {
 // Environment configuration
 export const env: EnvironmentConfig = {
   // API endpoints
-  API_URL: getEnvVar('VITE_API_URL', ''),
+  API_URL: getEnvVar('VITE_API_URL', getEnvVar('VITE_API_BASE_URL', '')),
   PYTHON_EXECUTOR_URL: getEnvVar('VITE_PYTHON_EXECUTOR_URL', ''),
   WEBSOCKET_URL: getEnvVar('VITE_WEBSOCKET_URL', ''),
   // Feature flags

@@ -152,20 +152,33 @@
   background: transparent;
   border-radius: 8px;
   overflow: hidden;
+  --prompt-editor-padding-y: 16px;
+  --prompt-editor-padding-x: 20px;
+  --prompt-editor-font-size: 14px;
+  --prompt-editor-line-height: 1.6;
+  --prompt-editor-font-family:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas,
+    'Liberation Mono', monospace;
 }
 
 /* Textarea styling */
 .prompt-dissector-textarea {
   width: 100%;
   height: 100%;
-  padding: 1rem;
+  padding: var(--prompt-editor-padding-y) var(--prompt-editor-padding-x);
   background: transparent;
   border: none;
   outline: none;
   color: #e0e0e0;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  font-size: 14px;
-  line-height: 1.6;
+  font-family: var(--prompt-editor-font-family);
+  font-size: var(--prompt-editor-font-size);
+  line-height: var(--prompt-editor-line-height);
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  letter-spacing: normal;
+  text-rendering: auto;
+  box-sizing: border-box;
+  display: block;
   resize: none;
 }
 
@@ -176,10 +189,17 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 1rem;
+  padding: var(--prompt-editor-padding-y) var(--prompt-editor-padding-x);
   pointer-events: none;
   overflow: hidden;
   color: #e0e0e0;
+  font-family: var(--prompt-editor-font-family);
+  font-size: var(--prompt-editor-font-size);
+  line-height: var(--prompt-editor-line-height);
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  letter-spacing: normal;
+  box-sizing: border-box;
 }
 
 /* Tab Interface - Integrated with text area */
@@ -389,6 +409,54 @@
   cursor: not-allowed;
 }
 
+.dissector-select-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px;
+  color: rgba(225, 225, 225, 0.8);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.dissector-select-label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dissector-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid rgba(103, 126, 234, 0.4);
+  background: rgba(8, 11, 28, 0.9);
+  color: #e1e1e1;
+  font-size: 12px;
+  line-height: 1;
+  padding: 6px 24px 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dissector-select:focus,
+.dissector-select:focus-visible {
+  outline: none;
+  border-color: rgba(103, 126, 234, 0.7);
+}
+
+.dissector-sweetening-note {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(122, 191, 111, 0.3);
+  background: rgba(76, 140, 64, 0.12);
+  color: #d9f0d4;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.dissector-sweetening-note-muted {
+  color: rgba(217, 240, 212, 0.72);
+}
+
 /* Debug chip to confirm UI is active */
 .dissector-debug-chip {
   display: inline-flex;
@@ -549,18 +617,23 @@
 .dissector-textarea-simple {
   width: 100%;
   height: calc(100% - 60px); /* Leave space for buttons */
-  padding: 16px 20px; /* Proper inset */
+  padding: var(--prompt-editor-padding-y) var(--prompt-editor-padding-x); /* Proper inset */
   background: transparent;
   border: none !important;
   outline: none !important;
   border-radius: 0;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  font-size: 14px;
-  line-height: 1.6; /* Match content display line height */
+  font-family: var(--prompt-editor-font-family);
+  font-size: var(--prompt-editor-font-size);
+  line-height: var(--prompt-editor-line-height); /* Match content display line height */
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  letter-spacing: normal;
   color: #e1e1e1;
   resize: none;
   white-space: pre-wrap;
   word-wrap: break-word;
+  box-sizing: border-box;
+  display: block;
 }
 
 /* Initial state - no background */
@@ -587,10 +660,13 @@
 
 /* Content display with inline spans */
 .dissector-content-display {
-  padding: 16px 20px; /* Proper inset matching textarea */
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  font-size: 14px;
-  line-height: 1.6; /* Consistent line spacing */
+  padding: var(--prompt-editor-padding-y) var(--prompt-editor-padding-x); /* Proper inset matching textarea */
+  font-family: var(--prompt-editor-font-family);
+  font-size: var(--prompt-editor-font-size);
+  line-height: var(--prompt-editor-line-height); /* Consistent line spacing */
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  letter-spacing: normal;
   color: #e1e1e1;
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -598,6 +674,7 @@
   max-height: calc(100% - 60px); /* Leave space for buttons */
   overflow: auto;
   position: relative;
+  box-sizing: border-box;
 }
 
 .dissector-caret {

@@ -8,6 +8,7 @@ import { EnhancedBranchingNode } from './EnhancedBranchingNode';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
+import { ComponentInstanceNode } from './ComponentInstanceNode';
 import { NodeContextMenu } from './NodeContextMenu';
 import { PostItNote } from './PostItNote';
 import { BoundingBox } from './BoundingBox';
@@ -41,6 +42,9 @@ export type { VariableNodeData } from './VariableNode';
 export { OutputNode };
 export type { OutputNodeData } from './OutputNode';
 
+export { ComponentInstanceNode };
+export type { ComponentInstanceNodeData } from './ComponentInstanceNode';
+
 export { NodeContextMenu };
 export type { ContextMenuPosition } from './NodeContextMenu';
 
@@ -64,6 +68,7 @@ export const epic1NodeTypes = {
   setVariable: VariableNode,
   getVariable: VariableNode,
   output: OutputNode,
+  componentInstance: ComponentInstanceNode,
   postItNote: PostItNote,
   boundingBox: BoundingBox,
   enhancedBoundingBox: EnhancedBoundingBox, // Enhanced version with collapse/expand

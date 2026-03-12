@@ -15,7 +15,7 @@ export function useGraphViewControls(
   reactFlowInstance: ReactFlowInstance | null,
   options: UseGraphViewControlsOptions = {}
 ) {
-  const { showToast, defaultZoom = 1, minZoom = 0.1, maxZoom = 4 } = options;
+  const { showToast, defaultZoom = 1, minZoom = 0.02, maxZoom = 4 } = options;
 
   const [viewport, setViewport] = useState<Viewport>({
     x: 0,

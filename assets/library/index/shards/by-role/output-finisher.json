@@ -1,0 +1,793 @@
+{
+  "version": "1.0.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "role",
+  "key": "output-finisher",
+  "generatedAt": "2026-03-09T16:43:25.683Z",
+  "totalFragments": 22,
+  "fragments": [
+    {
+      "id": "emotion-affect-masks",
+      "name": "Affect Masks",
+      "path": "/assets/library/emotion-mood/affect-masks.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "mask",
+        "subtext"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-conflict-escalation",
+      "name": "Conflict Escalation",
+      "path": "/assets/library/emotion-mood/conflict-escalation.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "conflict",
+        "escalation"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane"
+      ],
+      "tone": [
+        "gritty",
+        "brutal"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-empathetic-echoes",
+      "name": "Empathetic Echoes",
+      "path": "/assets/library/emotion-mood/empathetic-echoes.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "empathy",
+        "echo"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-energy-levels",
+      "name": "Energy Levels",
+      "path": "/assets/library/emotion-mood/energy-levels.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "energy",
+        "intensity"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-group-mood-fields",
+      "name": "Group Mood Fields",
+      "path": "/assets/library/emotion-mood/group-mood-fields.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "group",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "crowd",
+        "character"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-intensity-modifiers",
+      "name": "Intensity Modifiers",
+      "path": "/assets/library/emotion-mood/intensity-modifiers.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "intensity",
+        "modifier"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-nuanced-feels",
+      "name": "Nuanced Feels",
+      "path": "/assets/library/emotion-mood/nuanced-feels.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "nuance",
+        "feelings"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-primary-emotions",
+      "name": "Primary Emotions",
+      "path": "/assets/library/emotion-mood/primary-emotions.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "primary",
+        "feelings"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-subtext-signals",
+      "name": "Subtext Signals",
+      "path": "/assets/library/emotion-mood/subtext-signals.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "subtext",
+        "signals"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-temporal-mood-shifts",
+      "name": "Temporal Mood Shifts",
+      "path": "/assets/library/emotion-mood/temporal-mood-shifts.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "temporal",
+        "shift"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "face-eye-descriptors-multi",
+      "name": "Eye Descriptors Multi Aspect",
+      "path": "/assets/library/facial-features/eye-descriptors-multi-aspect.psg",
+      "category": "facial-features",
+      "tags": [
+        "face",
+        "eyes",
+        "multi-aspect"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "region"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 3,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "manual",
+      "exitStrategy": "manual",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "face-smile-variations-simple",
+      "name": "Smile Variations Simple",
+      "path": "/assets/library/facial-features/smile-variations-simple.psg",
+      "category": "facial-features",
+      "tags": [
+        "face",
+        "smile",
+        "expression"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "setting-architectural-styles",
+      "name": "Architectural Styles",
+      "path": "/assets/library/setting-environment/architectural-styles.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "architecture",
+        "building"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-atmospherics",
+      "name": "Atmospherics",
+      "path": "/assets/library/setting-environment/atmospherics.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "atmosphere",
+        "scene"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [
+        "cinematic",
+        "moody"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-backdrop-adjectives",
+      "name": "Backdrop Adjectives",
+      "path": "/assets/library/setting-environment/backdrop-adjectives.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "backdrop",
+        "scene"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-crowd-density",
+      "name": "Crowd Density",
+      "path": "/assets/library/setting-environment/crowd-density.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "crowd",
+        "density"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-geology-touches",
+      "name": "Geology Touches",
+      "path": "/assets/library/setting-environment/geology-touches.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "geology",
+        "terrain"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-lighting-moods",
+      "name": "Lighting Moods",
+      "path": "/assets/library/setting-environment/lighting-moods.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "lighting",
+        "mood"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [
+        "cinematic",
+        "moody"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-sound-snippets",
+      "name": "Sound Snippets",
+      "path": "/assets/library/setting-environment/sound-snippets.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "sound",
+        "scene"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "vehicle",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-spatial-relations",
+      "name": "Spatial Relations",
+      "path": "/assets/library/setting-environment/spatial-relations.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "spatial",
+        "composition"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-temporal-markers",
+      "name": "Temporal Markers",
+      "path": "/assets/library/setting-environment/temporal-markers.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "time",
+        "temporal"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-weather-snapshots",
+      "name": "Weather Snapshots",
+      "path": "/assets/library/setting-environment/weather-snapshots.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "weather",
+        "climate"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    }
+  ]
+}

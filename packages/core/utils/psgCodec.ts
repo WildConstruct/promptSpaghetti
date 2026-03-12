@@ -79,6 +79,23 @@ export interface ReadPsgOptions {
   allowLegacyFormat?: boolean;
 }
 
+// Legacy graph-wrapper PSG codec.
+// The active MVP source contract is the flat PSG format in fileFormats/psg.ts.
+
+export function looksLikeLegacyGraphWrapper(value: unknown): value is PSGFile {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const record = value as Record<string, unknown>;
+  return (
+    record.kind === 'graph' &&
+    typeof record.version === 'string' &&
+    !!record.graph &&
+    typeof record.graph === 'object'
+  );
+}
+
 export function readPsg(text: string, options: ReadPsgOptions = {}): PSGFile {
   const { maxFileSize = 10 * 1024 * 1024, strictValidation = true } = options;
 

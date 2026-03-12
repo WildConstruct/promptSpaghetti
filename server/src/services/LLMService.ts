@@ -1,4 +1,9 @@
 import OpenAI from 'openai';
+import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
+import type {
+  LLMMode,
+  LLMProvider
+} from '../../../packages/core/services/llm/contracts';
 
 export interface LLMServiceOptions {
   apiKey?: string;
@@ -10,8 +15,10 @@ export interface LLMServiceOptions {
 export interface CompleteParams {
   prompt: string;
   model?: string;
+  systemPrompt?: string;
   temperature?: number;
   maxTokens?: number;
+  responseFormat?: 'text' | 'json_object';
 }
 
 export interface CompleteResult {
@@ -20,6 +27,13 @@ export interface CompleteResult {
   model: string;
   tokensIn: number;
   tokensOut: number;
+}
+
+export interface LLMRuntimeStatus {
+  available: boolean;
+  mode: LLMMode;
+  provider: LLMProvider;
+  defaultModel: string | null;
 }
 
 export class LLMService {
@@ -66,6 +80,29 @@ export class LLMService {
     return !!this.client;
   }
 
+  private detectProvider(): LLMProvider {
+    if (process.env.OPENAI_API_KEY && !process.env.OPENROUTER_API_KEY) {
+      return 'openai';
+    }
+
+    if (this.opts.baseURL.includes('api.openai.com')) {
+      return 'openai';
+    }
+
+    return 'openrouter';
+  }
+
+  getStatus(): LLMRuntimeStatus {
+    const available = this.available();
+
+    return {
+      available,
+      mode: available ? 'live' : 'heuristic',
+      provider: this.detectProvider(),
+      defaultModel: this.opts.defaultModel || null
+    };
+  }
+
   async complete(params: CompleteParams): Promise<CompleteResult> {
     if (!this.client) {
       throw new Error('LLMService unavailable: missing API key');
@@ -74,6 +111,7 @@ export class LLMService {
     const model = params.model || this.opts.defaultModel;
     const temperature = params.temperature ?? 0.4;
     const maxTokens = Math.min(params.maxTokens ?? 256, 1024);
+    const systemPrompt = params.systemPrompt || 'You are a helpful assistant.';
 
     const prompt = params.prompt?.toString() ?? '';
     const tokensIn = Math.ceil(prompt.length / 4); // rough estimate
@@ -84,16 +122,25 @@ export class LLMService {
       this.opts.requestTimeoutMs
     );
     try {
+      const request: ChatCompletionCreateParamsNonStreaming = {
+        model,
+        temperature,
+        max_tokens: maxTokens,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt }
+        ],
+        ...(params.responseFormat === 'json_object'
+          ? {
+              response_format: {
+                type: 'json_object' as const
+              }
+            }
+          : {})
+      };
+
       const completion = await this.client.chat.completions.create(
-        {
-          model,
-          temperature,
-          max_tokens: maxTokens,
-          messages: [
-            { role: 'system', content: 'You are a helpful assistant.' },
-            { role: 'user', content: prompt }
-          ]
-        },
+        request,
         { signal: controller.signal as AbortSignal }
       );
 

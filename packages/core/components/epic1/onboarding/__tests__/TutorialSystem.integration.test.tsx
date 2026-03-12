@@ -62,10 +62,10 @@ describe('Tutorial system integration', () => {
     });
 
     act(() => {
-      result.current.nextStep(); // empty canvas
+      result.current.nextStep(); // canvas
       result.current.nextStep(); // open wizard
       result.current.nextStep(); // enter prompt
-      result.current.nextStep({ nodes }); // see nodes
+      result.current.nextStep({ nodes }); // nodes created
     });
 
     expect(result.current.currentStep).toBeGreaterThan(0);

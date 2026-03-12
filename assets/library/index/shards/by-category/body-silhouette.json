@@ -1,0 +1,340 @@
+{
+  "version": "1.0.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "category",
+  "key": "body-silhouette",
+  "generatedAt": "2026-03-09T16:43:25.683Z",
+  "totalFragments": 10,
+  "fragments": [
+    {
+      "id": "body-accessory-silhouettes",
+      "name": "Accessory Silhouettes",
+      "path": "/assets/library/body-silhouette/accessory-silhouettes.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "silhouette",
+        "accessories"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-assistive-gear",
+      "name": "Assistive Gear",
+      "path": "/assets/library/body-silhouette/assistive-gear.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "gear",
+        "assistive"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-athletic-markers",
+      "name": "Athletic Markers",
+      "path": "/assets/library/body-silhouette/athletic-markers.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "athletic",
+        "markers"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-types",
+      "name": "Body Types",
+      "path": "/assets/library/body-silhouette/body-types.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "types",
+        "physique"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-clothing-fit",
+      "name": "Clothing Fit",
+      "path": "/assets/library/body-silhouette/clothing-fit.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "clothing",
+        "fit"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-gesture-starters",
+      "name": "Gesture Starters",
+      "path": "/assets/library/body-silhouette/gesture-starters.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "gesture",
+        "pose"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "body-movement-quality",
+      "name": "Movement Quality",
+      "path": "/assets/library/body-silhouette/movement-quality.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "movement",
+        "quality"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "body-posture-keys",
+      "name": "Posture Keys",
+      "path": "/assets/library/body-silhouette/posture-keys.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "posture",
+        "silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-scars-tattoos",
+      "name": "Scars Tattoos",
+      "path": "/assets/library/body-silhouette/scars-tattoos.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "scars",
+        "tattoos"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [
+        "gritty"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-stage-presence",
+      "name": "Stage Presence",
+      "path": "/assets/library/body-silhouette/stage-presence.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "presence",
+        "performance"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    }
+  ]
+}

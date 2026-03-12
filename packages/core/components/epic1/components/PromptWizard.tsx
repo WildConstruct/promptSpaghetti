@@ -93,7 +93,10 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
   // Check if tutorial is active and targeting this wizard
   return (
     <div className="prompt-wizard-overlay">
-      <div className={`prompt-wizard-modal ${isTutorialTarget ? 'tutorial-focus' : ''}`}>
+      <div
+        className={`prompt-wizard-modal ${isTutorialTarget ? 'tutorial-focus' : ''}`}
+        data-tutorial-anchor="wizard-modal"
+      >
         <div className="prompt-wizard-header">
           <h2>Prompt Wizard</h2>
           <button className="prompt-wizard-close" onClick={onClose}>×</button>

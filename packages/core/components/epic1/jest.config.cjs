@@ -6,7 +6,7 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.(test|spec).ts?(x)'],
   setupFilesAfterEnv: [
     '<rootDir>/../../../../jest.setup.js',
-    '<rootDir>/../../../../tests/utils/globalTestSetup.ts',
+    '<rootDir>/../../../../tests/utils/sharedTestSetup.ts',
     '<rootDir>/../../../../tests/utils/axeSetup.ts'
   ],
   transform: {

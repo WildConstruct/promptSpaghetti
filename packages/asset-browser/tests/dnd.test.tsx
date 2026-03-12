@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AssetBrowser } from '../src/components/AssetBrowser';
+import { PresetCard } from '../src/components/PresetCard';
 
 class DT {
   data: Record<string, string> = {};
@@ -15,16 +16,30 @@ class DT {
 
 describe('Drag and keyboard insert', () => {
   test('drag handle sets preset payload', async () => {
-    render(<AssetBrowser />);
-    const handle = await screen.findAllByTestId('preset-drag-handle');
-    expect(handle.length).toBeGreaterThan(0);
+    render(
+      <PresetCard
+        preset={{
+          id: 'fragment-1',
+          name: 'Fragment 1',
+          tags: ['fragment'],
+          type: 'graph',
+          path: '/assets/library/fragment-1.psg',
+          metadata: {
+            file: '/assets/library/fragment-1.psg'
+          }
+        }}
+      />
+    );
+    const handle = await screen.findByTestId('preset-drag-handle');
     const dt = new DT();
-    fireEvent.dragStart(handle[0], { dataTransfer: dt as any });
+    fireEvent.dragStart(handle, { dataTransfer: dt as any });
     const payload = dt.getData('application/x-preset');
     expect(payload).toBeTruthy();
     const parsed = JSON.parse(payload);
     expect(parsed).toHaveProperty('id');
     expect(parsed).toHaveProperty('name');
+    expect(parsed.path).toBe('/assets/library/fragment-1.psg');
+    expect(parsed.metadata?.file).toBe('/assets/library/fragment-1.psg');
   });
 
   test('Insert button triggers onInsert callback', async () => {

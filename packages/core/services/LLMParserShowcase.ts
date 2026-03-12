@@ -1,73 +1,36 @@
-// Showcase the difference between Standard and LLM-Enhanced parsing
-import { SimpleLLMService } from './SimpleLLMService';
+// Showcase the shared API-backed browser LLM client
+import { ApiLLMClient } from './llm';
 
 export async function demonstrateParsing(prompt: string) {
-  const service = new SimpleLLMService({
-    apiKey: 'demo',
-    provider: 'openrouter',
-    model: 'gpt-4'
-  });
+  const service = new ApiLLMClient();
 
   console.log('━'.repeat(80));
   console.log('PROMPT:', prompt);
   console.log('━'.repeat(80));
 
-  // Standard parsing
-  console.log('\n📝 STANDARD PARSING:');
+  console.log('\nSERVER STATUS:');
   console.log('─'.repeat(40));
-  const standardResult = await service.parse(prompt, { mode: 'standard' });
+  const status = await service.getStatus();
+  console.log(status);
 
-  console.log(`Nodes created: ${standardResult.nodes.length}`);
-  standardResult.nodes.forEach(node => {
-    console.log(`  • [${node.type}] ${node.data.label?.substring(0, 50)}...`);
-  });
-  console.log(`Edges: ${standardResult.edges.length}`);
-  console.log(`Metadata:`, standardResult.metadata);
-
-  // LLM-Enhanced parsing
-  console.log('\n🧠 LLM-ENHANCED PARSING:');
+  console.log('\n🧠 SHARED CLIENT DRAFT GRAPH:');
   console.log('─'.repeat(40));
-  const llmResult = await service.parse(prompt, { mode: 'llm-enhanced' });
+  const llmResult = await service.draftGraphFromPrompt(prompt);
 
-  console.log(`Nodes created: ${llmResult.nodes.length}`);
-  llmResult.nodes.forEach(node => {
-    console.log(`  • [${node.type}] ${node.data.label?.substring(0, 50)}...`);
-    if (node.data.metadata) {
-      console.log(
-        `    → Chunks: ${node.data.metadata.chunks?.length || 0}, Role: ${node.data.metadata.semanticRole}`
-      );
-    }
-    if (node.data.suggestions) {
-      console.log(`    → Suggestions: ${node.data.suggestions.join(', ')}`);
-    }
-  });
-  console.log(`Edges: ${llmResult.edges.length}`);
-  llmResult.edges.forEach(edge => {
-    if (edge.data?.label) {
-      console.log(`  • ${edge.source} → ${edge.target}: "${edge.data.label}"`);
-    }
-  });
-  console.log(`Metadata:`, llmResult.metadata);
+  console.log(`Success: ${llmResult.ok}`);
+  console.log(`Nodes created: ${llmResult.graph?.nodes?.length ?? 0}`);
+  console.log(`Edges: ${llmResult.graph?.edges?.length ?? 0}`);
+  console.log(`Provider: ${llmResult.metadata?.provider ?? status.provider ?? 'unknown'}`);
+  console.log(`Model: ${llmResult.metadata?.model ?? status.defaultModel ?? 'unknown'}`);
 
   console.log('\n📊 COMPARISON:');
   console.log('─'.repeat(40));
-  console.log(
-    `Standard nodes: ${standardResult.nodes.length} vs Enhanced nodes: ${llmResult.nodes.length}`
-  );
-  console.log(
-    `Standard detected variables: ${standardResult.metadata.intelligence?.detectedVariables?.length || 0}`
-  );
-  console.log(
-    `Enhanced detected variables: ${llmResult.metadata.intelligence?.detectedVariables?.length || 0}`
-  );
-  console.log(
-    `Enhanced structure type: ${llmResult.metadata.intelligence?.structureType}`
-  );
-  console.log(
-    `Enhanced confidence: ${llmResult.metadata.intelligence?.confidence}`
-  );
+  console.log(`Status available: ${status.available}`);
+  console.log(`Status mode: ${status.mode}`);
+  console.log(`Capabilities: ${(status.capabilities ?? []).join(', ')}`);
+  console.log(`Draft graph success: ${llmResult.ok}`);
 
-  return { standard: standardResult, enhanced: llmResult };
+  return { status, draft: llmResult };
 }
 
 // Test with the cinematic fashion prompt

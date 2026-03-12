@@ -2,11 +2,19 @@ import { useCallback, useState, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
 import { getSupabase } from '@promptscape/core/utils/supabaseClient';
-import { readPsg, type PSGFile } from '@promptscape/core';
-import type {
-  GraphNode as PSGGraphNode,
-  GraphEdge as PSGGraphEdge
-} from '@promptscape/core';
+import { looksLikeLegacyGraphWrapper } from '@promptscape/core/utils/psgCodec';
+import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
+import {
+  ApiPsgClient,
+  type PsgAssetRef,
+  type PsgAssembleSceneResponse,
+  type PsgDocument,
+  type PsgExportComfyResponse,
+  type PsgComfyWorkflow,
+  type PsgSceneAssemblyPlan
+} from '@promptscape/core/services/psg';
+import { loadReactFlowFromPsgContent } from '../utils/psgDocument';
+import { validateEditorGraphPayload } from '../utils/graphValidation';
 
 // Resolve Supabase client lazily at call sites to avoid capturing null
 
@@ -30,6 +38,192 @@ interface SupabaseGraph {
   description?: string;
 }
 
+function sanitizeFilenameSegment(value: string): string {
+  const trimmed = value.trim();
+  const normalized = trimmed.length > 0 ? trimmed : 'prompt-spaghetti-graph';
+  return normalized
+    .replace(/[^a-z0-9._-]+/gi, '_')
+    .replace(/^_+|_+$/g, '')
+    .toLowerCase();
+}
+
+function downloadTextFile(
+  filename: string,
+  content: string,
+  mimeType = 'application/json'
+) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+function createPsgDocument(
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  } = {}
+) {
+  return exportGraphToPSG(
+    nodes as unknown as Parameters<typeof exportGraphToPSG>[0],
+    edges as unknown as Parameters<typeof exportGraphToPSG>[1],
+    {
+    name: options.name || 'Prompt Spaghetti Graph',
+    description: options.description,
+    metadata:
+      options.tags && options.tags.length > 0
+        ? { tags: options.tags }
+        : undefined
+    }
+  );
+}
+
+function createPsgProtocolDocument(
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  } = {},
+  manifest?: {
+    assets?: PsgAssetRef[];
+    scene?: PsgSceneAssemblyPlan | null;
+  }
+): PsgDocument {
+  const fragment = createPsgDocument(nodes, edges, options);
+  return {
+    version: 'psg/1',
+    kind: 'fragment',
+    metadata: {
+      name: options.name || fragment.name,
+      description: options.description || fragment.description,
+      tags: options.tags
+    },
+    fragment,
+    assets: manifest?.assets || [],
+    scene: manifest?.scene || undefined
+  };
+}
+
+function exportGraphAsPsg(
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  } = {}
+) {
+  const psg = createPsgDocument(nodes, edges, options);
+  const content = JSON.stringify(psg, null, 2);
+  const baseName = sanitizeFilenameSegment(options.name || psg.name);
+  downloadTextFile(
+    `${baseName}.psg`,
+    content,
+    'application/x-promptspaghetti-graph'
+  );
+  return psg;
+}
+
+function exportGraphLocallyWithToast(
+  showToast: ReturnType<typeof useToast>['showToast'],
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  },
+  message: string,
+  level: Parameters<ReturnType<typeof useToast>['showToast']>[1]
+) {
+  exportGraphAsPsg(nodes, edges, options);
+  showToast(message, level);
+}
+
+async function exportGraphAsComfyWorkflow(
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  } = {},
+  manifest?: {
+    assets?: PsgAssetRef[];
+    scene?: PsgSceneAssemblyPlan | null;
+  }
+) {
+  const psg = createPsgProtocolDocument(nodes, edges, options, manifest);
+  return new ApiPsgClient().exportComfy(psg);
+}
+
+async function assembleGraphScene(
+  nodes: Node[],
+  edges: Edge[],
+  options: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+  } = {},
+  manifest?: {
+    assets?: PsgAssetRef[];
+    scene?: PsgSceneAssemblyPlan | null;
+  }
+) {
+  const psg = createPsgProtocolDocument(nodes, edges, options, manifest);
+  return new ApiPsgClient().assembleScene(psg);
+}
+
+function downloadComfyWorkflow(
+  workflow: PsgComfyWorkflow,
+  filenameBase?: string
+) {
+  const baseName = sanitizeFilenameSegment(
+    filenameBase || workflow.metadata.name
+  );
+  downloadTextFile(
+    `${baseName}.comfy.json`,
+    JSON.stringify(workflow, null, 2),
+    'application/json'
+  );
+}
+
+function downloadPsgSceneManifest(
+  document: PsgDocument,
+  filenameBase?: string
+) {
+  const baseName = sanitizeFilenameSegment(
+    filenameBase || document.metadata.name || 'prompt-spaghetti-scene'
+  );
+  downloadTextFile(
+    `${baseName}.psg.scene.json`,
+    JSON.stringify(document, null, 2),
+    'application/json'
+  );
+}
+
+function downloadSceneAssembly(
+  response: PsgAssembleSceneResponse,
+  filenameBase?: string
+) {
+  const baseName = sanitizeFilenameSegment(
+    filenameBase || response.document.metadata.name || 'prompt-spaghetti-scene'
+  );
+  downloadTextFile(
+    `${baseName}.scene-assembly.json`,
+    JSON.stringify(response.assembly, null, 2),
+    'application/json'
+  );
+}
+
 export const useSupabaseFileOperations = ({
   onNodesChange,
   onEdgesChange,
@@ -37,6 +231,7 @@ export const useSupabaseFileOperations = ({
   showToast
 }: FileOperationsConfig) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [savedGraphs, setSavedGraphs] = useState<SupabaseGraph[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showOpenDialog, setShowOpenDialog] = useState(false);
@@ -50,15 +245,21 @@ export const useSupabaseFileOperations = ({
   // Check authentication status
   useEffect(() => {
     const sb = getSupabase();
-    if (!sb) { return; }
+    if (!sb) {
+      return;
+    }
 
     sb.auth.getSession().then(({ data: { session } }) => {
       setIsAuthenticated(!!session);
+      setCurrentUserId(session?.user?.id ?? null);
     });
 
-    const { data: authListener } = sb.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session);
-    });
+    const { data: authListener } = sb.auth.onAuthStateChange(
+      (_event, session) => {
+        setIsAuthenticated(!!session);
+        setCurrentUserId(session?.user?.id ?? null);
+      }
+    );
 
     return () => {
       authListener?.subscription.unsubscribe();
@@ -94,7 +295,9 @@ export const useSupabaseFileOperations = ({
 
       const { data, error } = await query;
 
-      if (error) { throw error; }
+      if (error) {
+        throw error;
+      }
       setSavedGraphs(data || []);
     } catch (error) {
       console.error('Error fetching graphs:', error);
@@ -113,14 +316,19 @@ export const useSupabaseFileOperations = ({
   // Load a specific graph
   const loadGraph = useCallback(
     (graph: SupabaseGraph) => {
-      onNodesChange(graph.nodes);
-      onEdgesChange(graph.edges);
+      const validated = validateEditorGraphPayload(graph);
+      if (!validated.ok) {
+        showToast(`Failed to load graph: ${validated.error}`, 'error');
+        return;
+      }
+      onNodesChange(validated.data.nodes);
+      onEdgesChange(validated.data.edges);
       onEditorKeyChange(prev => prev + 1);
       localStorage.setItem(
         'epic1-graph',
         JSON.stringify({
-          nodes: graph.nodes,
-          edges: graph.edges,
+          nodes: validated.data.nodes,
+          edges: validated.data.edges,
           supabase_id: graph.id
         })
       );
@@ -142,24 +350,18 @@ export const useSupabaseFileOperations = ({
     ) => {
       const sb = getSupabase();
       if (!sb) {
-        showToast('Supabase not configured - saving locally', 'warning');
-        // Fall back to local save
-        const blob = new Blob(
-          [
-            JSON.stringify(
-              { nodes: currentNodes, edges: currentEdges },
-              null,
-              2
-            )
-          ],
-          { type: 'application/json' }
+        exportGraphLocallyWithToast(
+          showToast,
+          currentNodes,
+          currentEdges,
+          {
+            name,
+            description,
+            tags
+          },
+          'Supabase not configured - exported PSG locally',
+          'warning'
         );
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `graph-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
         return;
       }
 
@@ -169,18 +371,36 @@ export const useSupabaseFileOperations = ({
           data: { user }
         } = await sb.auth.getUser();
 
+        if (!user) {
+          exportGraphLocallyWithToast(
+            showToast,
+            currentNodes,
+            currentEdges,
+            {
+              name,
+              description,
+              tags
+            },
+            'Sign in required for cloud save - exported PSG locally instead',
+            'warning'
+          );
+          setShowSaveDialog(false);
+          return;
+        }
+
         const graphData = {
           name: name || `Graph ${new Date().toLocaleDateString()}`,
           description: description || '',
           nodes: currentNodes,
           edges: currentEdges,
-          user_id: user?.id,
+          user_id: user.id,
           is_public: isPublic,
           tags,
           updated_at: new Date().toISOString()
         };
 
-        // Check if we're updating an existing graph
+        // Client filters are not authorization. Cloud graph ownership must be
+        // enforced by Supabase RLS for insert/update/delete operations.
         const savedData = localStorage.getItem('epic1-graph');
         let existingId: string | null = null;
         if (savedData) {
@@ -193,7 +413,7 @@ export const useSupabaseFileOperations = ({
         }
 
         let result;
-        if (existingId && user) {
+        if (existingId) {
           // Update existing graph
           result = await sb
             .from('graphs')
@@ -204,14 +424,12 @@ export const useSupabaseFileOperations = ({
             .single();
         } else {
           // Create new graph
-          result = await sb
-            .from('graphs')
-            .insert(graphData)
-            .select()
-            .single();
+          result = await sb.from('graphs').insert(graphData).select().single();
         }
 
-        if (result.error) {throw result.error;}
+        if (result.error) {
+          throw result.error;
+        }
 
         // Update local storage with the Supabase ID
         localStorage.setItem(
@@ -227,25 +445,18 @@ export const useSupabaseFileOperations = ({
         setShowSaveDialog(false);
       } catch (error) {
         console.error('Error saving to Supabase:', error);
-        showToast('Failed to save to cloud - saving locally instead', 'error');
-
-        // Fall back to local save
-        const blob = new Blob(
-          [
-            JSON.stringify(
-              { nodes: currentNodes, edges: currentEdges },
-              null,
-              2
-            )
-          ],
-          { type: 'application/json' }
+        exportGraphLocallyWithToast(
+          showToast,
+          currentNodes,
+          currentEdges,
+          {
+            name,
+            description,
+            tags
+          },
+          'Failed to save to cloud - exported PSG locally instead',
+          'error'
         );
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `graph-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
       } finally {
         setIsLoading(false);
       }
@@ -257,11 +468,14 @@ export const useSupabaseFileOperations = ({
   const deleteGraph = useCallback(
     async (graphId: string) => {
       const sb = getSupabase();
-      if (!sb) { return; }
+      if (!sb) {
+        return;
+      }
 
       // eslint-disable-next-line no-alert
-      if (!window.confirm('Are you sure you want to delete this graph?'))
-        {return;}
+      if (!window.confirm('Are you sure you want to delete this graph?')) {
+        return;
+      }
 
       setIsLoading(true);
       try {
@@ -280,7 +494,9 @@ export const useSupabaseFileOperations = ({
           .eq('id', graphId)
           .eq('user_id', user.id);
 
-        if (error) {throw error;}
+        if (error) {
+          throw error;
+        }
 
         showToast('Graph deleted', 'success');
         await fetchSavedGraphs();
@@ -294,219 +510,93 @@ export const useSupabaseFileOperations = ({
     [showToast, fetchSavedGraphs]
   );
 
-  // Convert a PSG file to React Flow nodes/edges with sensible defaults
-  const convertPsgToReactFlow = useCallback(
-    (psg: PSGFile): { nodes: Node[]; edges: Edge[] } => {
-      const layout = psg.graph.layout as Record<string, unknown> | undefined;
-      const positionsUnknown =
-        layout && (layout as Record<string, unknown>).positions;
-      const isPositionsMap = (
-        val: unknown
-      ): val is Record<string, { x: number; y: number }> => {
-        if (!val || typeof val !== 'object') {return false;}
-        // shallow check for at least one entry with numeric x/y
-        for (const v of Object.values(val as Record<string, unknown>)) {
-          if (
-            v &&
-            typeof v === 'object' &&
-            typeof (v as Record<string, unknown>).x === 'number' &&
-            typeof (v as Record<string, unknown>).y === 'number'
-          ) {
-            return true;
-          }
-        }
-        return true; // treat empty object as valid
-      };
-      const positions: Record<string, { x: number; y: number }> =
-        isPositionsMap(positionsUnknown)
-          ? (positionsUnknown as Record<string, { x: number; y: number }>)
-          : {};
-
-      const xSpacing = 300;
-      const ySpacing = 160;
-      const cols = 3;
-
-      const nodes: Node[] = (psg.graph.nodes as PSGGraphNode[]).map(
-        (gn: PSGGraphNode, index: number) => {
-          const pos = positions[gn.id] || {
-            x: (index % cols) * xSpacing + 200,
-            y: Math.floor(index / cols) * ySpacing + 120
-          };
-          const type = gn.type || 'textBlock';
-          const dataRaw = (gn.data || {}) as Record<string, unknown>;
-          const labelFromData =
-            typeof dataRaw['label'] === 'string'
-              ? (dataRaw['label'] as string)
-              : undefined;
-          const label = gn.label || labelFromData || gn.id;
-
-          // Normalize data shape expected by Epic1 editor nodes
-          let data: Record<string, unknown> = { label };
-          switch (type) {
-            case 'textBlock': {
-              const contentVal = dataRaw['content'];
-              const textVal = dataRaw['text'];
-              const valueVal = dataRaw['value'];
-              const content =
-                typeof contentVal === 'string'
-                  ? contentVal
-                  : typeof textVal === 'string'
-                    ? textVal
-                    : label;
-              const value = typeof valueVal === 'string' ? valueVal : content;
-              data = {
-                nodeType: 'textBlock',
-                content,
-                text: content,
-                value,
-                label
-              };
-              break;
-            }
-            case 'weightedChoice': {
-              const optionsVal = dataRaw['options'];
-              const options = Array.isArray(optionsVal) ? optionsVal : [];
-              data = {
-                nodeType: 'weightedChoice',
-                options,
-                label: label || 'Choice'
-              };
-              break;
-            }
-            case 'output': {
-              const outVal = dataRaw['outputName'];
-              const outputName = typeof outVal === 'string' ? outVal : 'output';
-              data = { nodeType: 'output', outputName, label: 'Output' };
-              break;
-            }
-            default: {
-              data = { label };
-            }
-          }
-
-          return {
-            id: gn.id,
-            type,
-            position: pos,
-            data
-          } as Node;
-        }
-      );
-
-      const edges: Edge[] = (psg.graph.edges as PSGGraphEdge[]).map(
-        (ge: PSGGraphEdge) => ({
-          id: ge.id,
-          source: ge.source,
-          target: ge.target,
-          type: 'smoothstep',
-          sourceHandle: 'source',
-          targetHandle: 'target'
-        })
-      );
-
-      return { nodes, edges };
-    },
-    []
-  );
-
-  // Programmatically load PSG content (as string) into the editor
   const loadFromPsgContent = useCallback(
-    (psgText: string) => {
+    (psgText: string, strictValidation = true) => {
       try {
-        const psg = readPsg(psgText, { strictValidation: true });
-        const { nodes, edges } = convertPsgToReactFlow(psg);
+        const { nodes, edges } = loadReactFlowFromPsgContent(
+          psgText,
+          strictValidation
+        );
         onNodesChange(nodes);
         onEdgesChange(edges);
         onEditorKeyChange(prev => prev + 1);
         localStorage.setItem('epic1-graph', JSON.stringify({ nodes, edges }));
-        showToast('Graph loaded from PSG', 'success');
-      } catch (err) {
-        console.error('Failed to parse PSG content:', err);
+        showToast('PSG document loaded successfully', 'success');
+      } catch (error) {
+        console.error('Failed to parse PSG content:', error);
         showToast('Failed to load PSG content', 'error');
       }
     },
-    [
-      convertPsgToReactFlow,
-      onNodesChange,
-      onEdgesChange,
-      onEditorKeyChange,
-      showToast
-    ]
+    [onNodesChange, onEdgesChange, onEditorKeyChange, showToast]
   );
 
   // Handle opening from local file (fallback)
   const handleLocalOpen = useCallback(() => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.json,.psg';
-    input.onchange = e => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = evt => {
-          try {
-            const text = String(evt.target?.result || '');
-            const name = file.name.toLowerCase();
-            if (name.endsWith('.psg')) {
-              const psg = readPsg(text, { strictValidation: true });
-              const { nodes, edges } = convertPsgToReactFlow(psg);
-              onNodesChange(nodes);
-              onEdgesChange(edges);
-              onEditorKeyChange(prev => prev + 1);
-              localStorage.setItem(
-                'epic1-graph',
-                JSON.stringify({ nodes, edges })
-              );
-              showToast('Graph loaded from PSG file', 'success');
-              return;
-            }
-
-            // Try JSON; if it looks like PSG, parse accordingly
-            const data = JSON.parse(text);
-            if (data && data.kind === 'graph' && data.version && data.graph) {
-              const psg = readPsg(text, { strictValidation: false });
-              const { nodes, edges } = convertPsgToReactFlow(psg);
-              onNodesChange(nodes);
-              onEdgesChange(edges);
-              onEditorKeyChange(prev => prev + 1);
-              localStorage.setItem(
-                'epic1-graph',
-                JSON.stringify({ nodes, edges })
-              );
-              showToast('Graph loaded from PSG file', 'success');
-              return;
-            }
-
-            if (data.nodes && data.edges) {
-              onNodesChange(data.nodes);
-              onEdgesChange(data.edges);
-              onEditorKeyChange(prev => prev + 1);
-              localStorage.setItem('epic1-graph', JSON.stringify(data));
-              showToast('Graph loaded from JSON file', 'success');
-              return;
-            }
-
-            throw new Error('Unrecognized file format');
-          } catch (error) {
-            console.error('Failed to load file:', error);
-            showToast('Failed to load file', 'error');
-          }
-        };
-        reader.readAsText(file);
+    input.accept = '.psg';
+    input.onchange = event => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) {
+        return;
       }
+
+      const reader = new FileReader();
+      reader.onload = loadEvent => {
+        try {
+          const text = String(loadEvent.target?.result || '');
+          const name = file.name.toLowerCase();
+
+          if (name.endsWith('.psg')) {
+            loadFromPsgContent(text);
+            return;
+          }
+
+          const data = JSON.parse(text);
+          if (looksLikeLegacyGraphWrapper(data)) {
+            loadFromPsgContent(text, false);
+            return;
+          }
+
+          if (data.nodes && data.edges) {
+            const validated = validateEditorGraphPayload(data);
+            if (!validated.ok) {
+              throw new Error(validated.error);
+            }
+            onNodesChange(validated.data.nodes);
+            onEdgesChange(validated.data.edges);
+            onEditorKeyChange(prev => prev + 1);
+            localStorage.setItem('epic1-graph', JSON.stringify(validated.data));
+            showToast(
+              'Legacy JSON graph loaded via compatibility path',
+              'success'
+            );
+            return;
+          }
+
+          throw new Error('Unrecognized file format');
+        } catch (error) {
+          console.error('Failed to load file:', error);
+          showToast('Failed to load file', 'error');
+        }
+      };
+
+      reader.readAsText(file);
     };
+
     input.click();
   }, [
+    loadFromPsgContent,
     onNodesChange,
     onEdgesChange,
     onEditorKeyChange,
-    showToast,
-    convertPsgToReactFlow
+    showToast
   ]);
 
   return {
     isAuthenticated,
     savedGraphs,
+    currentUserId,
     isLoading,
     showOpenDialog,
     showSaveDialog,
@@ -518,27 +608,101 @@ export const useSupabaseFileOperations = ({
     loadGraph,
     deleteGraph,
     fetchSavedGraphs,
+    buildComfyBridge: async (
+      nodes: Node[],
+      edges: Edge[],
+      options: {
+        name?: string;
+        description?: string;
+        tags?: string[];
+      } = {},
+      manifest?: {
+        assets?: PsgAssetRef[];
+        scene?: PsgSceneAssemblyPlan | null;
+      }
+    ): Promise<PsgExportComfyResponse> =>
+      exportGraphAsComfyWorkflow(nodes, edges, options, manifest),
+    downloadComfyBridge: (
+      workflow: PsgComfyWorkflow,
+      filenameBase?: string
+    ) => {
+      downloadComfyWorkflow(workflow, filenameBase);
+      showToast(`Exported "${workflow.metadata.name}" as Comfy bridge`, 'success');
+    },
+    buildPsgSceneManifest: (
+      nodes: Node[],
+      edges: Edge[],
+      options: {
+        name?: string;
+        description?: string;
+        tags?: string[];
+      } = {},
+      manifest?: {
+        assets?: PsgAssetRef[];
+        scene?: PsgSceneAssemblyPlan | null;
+      }
+    ) => createPsgProtocolDocument(nodes, edges, options, manifest),
+    downloadPsgSceneManifest: (document: PsgDocument, filenameBase?: string) => {
+      downloadPsgSceneManifest(document, filenameBase);
+      showToast(
+        `Exported "${document.metadata.name || 'Prompt Spaghetti Graph'}" PSG scene manifest`,
+        'success'
+      );
+    },
+    assembleScenePreview: async (
+      nodes: Node[],
+      edges: Edge[],
+      options: {
+        name?: string;
+        description?: string;
+        tags?: string[];
+      } = {},
+      manifest?: {
+        assets?: PsgAssetRef[];
+        scene?: PsgSceneAssemblyPlan | null;
+      }
+    ) => assembleGraphScene(nodes, edges, options, manifest),
+    downloadSceneAssembly: (
+      response: PsgAssembleSceneResponse,
+      filenameBase?: string
+    ) => {
+      downloadSceneAssembly(response, filenameBase);
+      showToast(
+        `Exported "${response.document.metadata.name || 'Prompt Spaghetti Graph'}" scene assembly`,
+        'success'
+      );
+    },
     // Keep the original interface for compatibility
     handleOpen: getSupabase() ? handleSupabaseOpen : handleLocalOpen,
     handleSave: (nodes: Node[], edges: Edge[]) => {
       if (getSupabase()) {
         setShowSaveDialog(true);
       } else {
-        // Fall back to local save
-        const blob = new Blob([JSON.stringify({ nodes, edges }, null, 2)], {
-          type: 'application/json'
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `graph-${Date.now()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        showToast('Graph saved locally', 'success');
+        const psg = exportGraphAsPsg(nodes, edges);
+        localStorage.setItem('epic1-graph', JSON.stringify({ nodes, edges }));
+        showToast(`Exported "${psg.name}" as PSG`, 'success');
       }
     },
-    handleSaveAs: () => {
-      setShowSaveDialog(true);
+    handleSaveAs: (nodes?: Node[], edges?: Edge[]) => {
+      if (getSupabase()) {
+        setShowSaveDialog(true);
+        return;
+      }
+
+      const name =
+        // eslint-disable-next-line no-alert
+        window.prompt(
+          'Enter a name for this PSG document:',
+          'Prompt Spaghetti Graph'
+        ) || 'Prompt Spaghetti Graph';
+      const nextNodes = nodes || [];
+      const nextEdges = edges || [];
+      const psg = exportGraphAsPsg(nextNodes, nextEdges, { name });
+      localStorage.setItem(
+        'epic1-graph',
+        JSON.stringify({ nodes: nextNodes, edges: nextEdges })
+      );
+      showToast(`Exported "${psg.name}" as PSG`, 'success');
     },
     handleNew: (demoNodes: Node[], demoEdges: Edge[]) => {
       setPendingNewDocument({ nodes: demoNodes, edges: demoEdges });

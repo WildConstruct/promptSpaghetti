@@ -19,6 +19,7 @@ interface SupabaseOpenDialogProps {
   isOpen: boolean;
   onClose: () => void;
   graphs: SupabaseGraph[];
+  currentUserId?: string | null;
   onLoad: (graph: SupabaseGraph) => void;
   onDelete?: (graphId: string) => void;
   isLoading: boolean;
@@ -30,6 +31,7 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
   isOpen,
   onClose,
   graphs,
+  currentUserId,
   onLoad,
   onDelete,
   isLoading,
@@ -42,10 +44,17 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
   const [filter, setFilter] = useState<'all' | 'mine' | 'public'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
+  const isOwnedByCurrentUser = (graph: SupabaseGraph) =>
+    Boolean(currentUserId && graph.user_id && graph.user_id === currentUserId);
+
   const filteredGraphs = graphs.filter(graph => {
     // Apply filter
-    if (filter === 'mine' && !graph.user_id) {return false;}
-    if (filter === 'public' && !graph.is_public) {return false;}
+    if (filter === 'mine' && !isOwnedByCurrentUser(graph)) {
+      return false;
+    }
+    if (filter === 'public' && !graph.is_public) {
+      return false;
+    }
 
     // Apply search
     if (searchQuery) {
@@ -60,13 +69,15 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
     return true;
   });
 
-  if (!isOpen) {return null;}
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="supabase-dialog-overlay" onClick={onClose}>
       <div className="supabase-dialog" onClick={e => e.stopPropagation()}>
         <div className="dialog-header">
-          <h2>Open Graph</h2>
+          <h2>Open PSG Document</h2>
           <button className="close-button" onClick={onClose}>
             ×
           </button>
@@ -77,14 +88,14 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
             className={`tab-button ${filter === 'all' ? 'active' : ''}`}
             onClick={() => setFilter('all')}
           >
-            All Graphs
+            All Documents
           </button>
           {isAuthenticated && (
             <button
               className={`tab-button ${filter === 'mine' ? 'active' : ''}`}
               onClick={() => setFilter('mine')}
             >
-              My Graphs
+              My Documents
             </button>
           )}
           <button
@@ -98,7 +109,7 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
         <div className="dialog-search">
           <input
             type="text"
-            placeholder="Search graphs..."
+            placeholder="Search PSG documents..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             className="search-input"
@@ -109,13 +120,15 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
           {isLoading ? (
             <div className="loading-state">
               <div className="spinner"></div>
-              <p>Loading graphs...</p>
+              <p>Loading PSG documents...</p>
             </div>
           ) : filteredGraphs.length === 0 ? (
             <div className="empty-state">
-              <p>No graphs found</p>
+              <p>No PSG documents found</p>
               {!isAuthenticated && (
-                <p className="hint">Sign in to access your saved graphs</p>
+                <p className="hint">
+                  Sign in to access your saved PSG documents
+                </p>
               )}
             </div>
           ) : (
@@ -139,7 +152,7 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
                       {graph.is_public && (
                         <span className="badge public">Public</span>
                       )}
-                      {graph.user_id && isAuthenticated && (
+                      {isOwnedByCurrentUser(graph) && isAuthenticated && (
                         <span className="badge mine">Mine</span>
                       )}
                       <span className="node-count">
@@ -156,7 +169,7 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
                       </div>
                     )}
                   </div>
-                  {isAuthenticated && graph.user_id && onDelete && (
+                  {isOwnedByCurrentUser(graph) && onDelete && (
                     <button
                       className="delete-button"
                       onClick={e => {
@@ -176,7 +189,7 @@ export const SupabaseOpenDialog: React.FC<SupabaseOpenDialogProps> = ({
 
         <div className="dialog-footer">
           <button className="button secondary" onClick={onLocalOpen}>
-            Open Local File
+            Open Local .psg File
           </button>
           <div className="footer-actions">
             <button className="button secondary" onClick={onClose}>

@@ -19,7 +19,8 @@ describe('supabaseClient gating', () => {
     delete process.env.VITE_SUPABASE_ANON_KEY;
     delete process.env.NEXT_PUBLIC_FEATURE_SUPABASE;
 
-    const { supabase } = await import('../utils/supabaseClient');
+    const { getSupabase, supabase } = await import('../utils/supabaseClient');
+    expect(getSupabase()).toBeNull();
     expect(supabase).toBeNull();
   });
 
@@ -28,11 +29,13 @@ describe('supabaseClient gating', () => {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'anon';
     process.env.NEXT_PUBLIC_FEATURE_SUPABASE = '1';
 
-    const { supabase } = await import('../utils/supabaseClient');
+    const { getSupabase, supabase } = await import('../utils/supabaseClient');
+    const client = getSupabase();
+    expect(client).not.toBeNull();
     expect(supabase).not.toBeNull();
     // has method
     // @ts-expect-error runtime check only
-    expect(typeof supabase.from).toBe('function');
+    expect(typeof client.from).toBe('function');
   });
 
   test('suppresses warnings in test/CI', async () => {

@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "category",
+  "key": "extras",
+  "generatedAt": "2026-03-09T16:43:25.683Z",
+  "totalFragments": 1,
+  "fragments": [
+    {
+      "id": "roman-citizen",
+      "name": "Roman Citizen",
+      "path": "/assets/library/RomanCitizen.psg",
+      "category": "extras",
+      "description": "Reusable Roman citizen archetype graph for extras and scene population.",
+      "tags": [
+        "roman",
+        "citizen",
+        "extras",
+        "archetype"
+      ],
+      "roles": [
+        "archetype"
+      ],
+      "domains": [
+        "character",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "region",
+        "output"
+      ],
+      "placementHints": [
+        "inside-region"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "nodeCount": 12,
+      "preferredInsertion": "free-place",
+      "entryStrategy": "manual",
+      "exitStrategy": "manual",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    }
+  ]
+}

@@ -7,6 +7,10 @@
 
 const express = require('express');
 const cors = require('cors');
+const { assertMockRuntimeAllowed } = require('./utils/mockRuntimeGuard.js');
+
+assertMockRuntimeAllowed('mock-auth-server');
+
 const app = express();
 
 // Enable CORS and JSON parsing

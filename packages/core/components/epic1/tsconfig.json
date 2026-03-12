@@ -1,0 +1,34 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "incremental": false,
+    "baseUrl": "../../../../",
+    "types": ["node"],
+    "typeRoots": ["../../../../node_modules/@types"],
+    "paths": {
+      "@prompt/asset-browser": ["packages/asset-browser/src/index.tsx"],
+      "@prompt/asset-browser/*": ["packages/asset-browser/src/*"]
+    }
+  },
+  "include": ["./**/*.ts", "./**/*.tsx"],
+  "exclude": [
+    "./**/__tests__/**",
+    "./**/*.test.ts",
+    "./**/*.test.tsx",
+    "./delightful/**",
+    "./dist/**",
+    "./node_modules/**"
+  ]
+}

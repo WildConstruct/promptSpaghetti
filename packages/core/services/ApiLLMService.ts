@@ -12,7 +12,13 @@ import type {
   RefinementMode,
   RefinementResult
 } from './llm/TextRefinementService';
-import type { RefinementResponse } from './llm/types';
+import type {
+  DraftGraphFromPromptRequest,
+  DraftGraphFromPromptResponse
+} from './agenticGraph';
+import type {
+  LLMStatusContract
+} from './llm/contracts';
 
 export interface LLMConfig {
   apiKey?: string;
@@ -24,10 +30,50 @@ export interface LLMConfig {
 
 type JsonObject = Record<string, unknown>;
 
+function readImportMetaEnv(): Record<string, string | undefined> | undefined {
+  try {
+    return Function(
+      'return typeof import !== "undefined" && import.meta && import.meta.env ? import.meta.env : undefined;'
+    )() as Record<string, string | undefined> | undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const IMPORT_META_ENV = readImportMetaEnv();
+
+const ENV_VARS: Record<string, string | undefined> = IMPORT_META_ENV ?? {
+  VITE_API_URL: undefined,
+  VITE_API_BASE_URL: undefined,
+  VITE_VERCEL_PROTECTION_BYPASS: undefined
+};
+
+const API_BASE = ENV_VARS.VITE_API_URL ?? ENV_VARS.VITE_API_BASE_URL ?? '';
+
+function withBase(path: string): string {
+  if (!path) {
+    return path;
+  }
+
+  if (!API_BASE || API_BASE === '/' || API_BASE === '') {
+    return path;
+  }
+
+  if (path.startsWith('http')) {
+    return path;
+  }
+
+  const base = API_BASE.replace(/\/$/, '');
+  return path.startsWith('/') ? `${base}${path}` : `${base}/${path}`;
+}
+
 export interface LLMCompletionResponse extends JsonObject {
+  content?: string;
   output?: string;
   outputs?: string[];
 }
+
+export type LLMStatusResponse = JsonObject & LLMStatusContract;
 
 export class LLMService {
   private config: LLMConfig;
@@ -36,72 +82,341 @@ export class LLMService {
     this.config = config;
   }
 
-  private async callAPI<T>(endpoint: string, data: JsonObject): Promise<T> {
-    const response = await fetch(`/api/${endpoint}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ ...data, config: this.config })
+  private async request<T>(
+    path: string,
+    init: RequestInit = {}
+  ): Promise<T> {
+    const headers: Record<string, string> = {
+      ...(init.headers as Record<string, string> | undefined)
+    };
+
+    const protectionBypass =
+      ENV_VARS.VITE_VERCEL_PROTECTION_BYPASS;
+
+    if (protectionBypass) {
+      headers['x-vercel-protection-bypass'] = protectionBypass;
+    }
+
+    const response = await fetch(withBase(path), {
+      ...init,
+      headers
     });
 
     if (!response.ok) {
-      throw new Error(`API call failed: ${response.statusText}`);
+      let errorMessage = `API call failed: ${response.statusText}`;
+
+      try {
+        const errorData = await response.json();
+
+        if (
+          typeof errorData === 'object' &&
+          errorData !== null &&
+          'error' in errorData &&
+          typeof errorData.error === 'string'
+        ) {
+          errorMessage = errorData.error;
+        }
+      } catch {
+        if (response.statusText) {
+          errorMessage = `API call failed: ${response.status} ${response.statusText}`;
+        }
+      }
+
+      throw new Error(errorMessage);
     }
 
     return response.json();
   }
 
-  async complete(
-    prompt: string,
-    options: JsonObject = {}
-  ): Promise<LLMCompletionResponse> {
-    return this.callAPI<LLMCompletionResponse>('llm-complete', {
-      prompt,
-      ...options
+  private async requestWithFallback<T>(
+    paths: string[],
+    init: RequestInit = {}
+  ): Promise<T> {
+    let lastError: unknown;
+
+    for (const path of paths) {
+      try {
+        return await this.request<T>(path, init);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError instanceof Error
+      ? lastError
+      : new Error('API call failed');
+  }
+
+  private async callAPI<T>(
+    paths: string[],
+    data: JsonObject,
+    options: { includeConfig?: boolean } = {}
+  ): Promise<T> {
+    return this.requestWithFallback<T>(paths, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(
+        options.includeConfig ? this.filterRequestPayload(data) : data
+      )
     });
   }
 
-  async suggest<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
-    return this.callAPI<TResponse>('llm-suggest', request);
+  private filterRequestPayload(data: JsonObject): JsonObject {
+    const payload: JsonObject = { ...data };
+
+    if (
+      typeof this.config.model === 'string' &&
+      (payload.model === null || typeof payload.model === 'undefined')
+    ) {
+      payload.model = this.config.model;
+    }
+    if (
+      typeof this.config.temperature === 'number' &&
+      (payload.temperature === null ||
+        typeof payload.temperature === 'undefined')
+    ) {
+      payload.temperature = this.config.temperature;
+    }
+    if (
+      typeof this.config.maxTokens === 'number' &&
+      (payload.maxTokens === null || typeof payload.maxTokens === 'undefined')
+    ) {
+      payload.maxTokens = this.config.maxTokens;
+    }
+
+    return payload;
   }
 
-  async metadata<TResponse>(
+  async complete(
+    prompt: string,
+    options?: JsonObject
+  ): Promise<LLMCompletionResponse>;
+  async complete(
     request: JsonObject
-  ): Promise<TResponse> {
-    return this.callAPI<TResponse>('llm-metadata', request);
+  ): Promise<LLMCompletionResponse>;
+  async complete(
+    promptOrRequest: string | JsonObject,
+    options: JsonObject = {}
+  ): Promise<LLMCompletionResponse> {
+    const request =
+      typeof promptOrRequest === 'string'
+        ? {
+            prompt: promptOrRequest,
+            ...options
+          }
+        : promptOrRequest;
+
+    return this.callAPI<LLMCompletionResponse>(
+      ['/api/llm/complete', '/api/llm-complete'],
+      request,
+      {
+        includeConfig: true
+      }
+    );
   }
 
-  async refine<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
-    return this.callAPI<TResponse>('llm-refine', request);
+  async getStatus(): Promise<LLMStatusResponse> {
+    return this.request<LLMStatusResponse>('/api/llm/status');
   }
 
-  async analyze<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
-    return this.callAPI<TResponse>('llm-analyze', request);
+  async parse(prompt: string, request: JsonObject = {}): Promise<JsonObject> {
+    return this.callAPI<JsonObject>(
+      ['/api/ai/parse', '/api/llm/parse', '/api/ai-parse', '/api/llm-parse'],
+      {
+        prompt,
+        ...request
+      }
+    );
   }
 
-  async populateChoices<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
-    return this.callAPI<TResponse>('llm-populate', request);
+  async suggest<TResponse>(request: JsonObject): Promise<TResponse> {
+    return this.callAPI<TResponse>(
+      ['/api/llm/suggest', '/api/llm-suggest'],
+      request
+    );
   }
 
-  async optimizeChoices<TResponse>(
-    request: JsonObject
-  ): Promise<TResponse> {
-    return this.callAPI<TResponse>('llm-optimize', request);
+  async metadata<TResponse>(request: JsonObject): Promise<TResponse> {
+    return this.callAPI<TResponse>(
+      ['/api/llm/metadata', '/api/llm-metadata'],
+      request
+    );
+  }
+
+  async refine<TResponse>(request: JsonObject): Promise<TResponse> {
+    return this.callAPI<TResponse>(
+      ['/api/llm/refine', '/api/llm-refine'],
+      request
+    );
+  }
+
+  async analyze<TResponse>(request: JsonObject): Promise<TResponse> {
+    return this.callAPI<TResponse>(
+      ['/api/llm/analyze', '/api/llm-analyze'],
+      request
+    );
+  }
+
+  async populateChoices<TResponse>(request: JsonObject): Promise<TResponse> {
+    return this.callAPI<TResponse>(
+      ['/api/llm/populate', '/api/llm-populate'],
+      request
+    );
+  }
+
+  async optimizeChoices<TResponse>(request: JsonObject): Promise<TResponse> {
+    return this.callAPI<TResponse>(
+      ['/api/llm/optimize', '/api/llm-optimize'],
+      request
+    );
+  }
+
+  async draftGraphFromPrompt(
+    request: DraftGraphFromPromptRequest
+  ): Promise<DraftGraphFromPromptResponse>;
+  async draftGraphFromPrompt(
+    prompt: string,
+    request?: Partial<Omit<DraftGraphFromPromptRequest, 'prompt'>>
+  ): Promise<DraftGraphFromPromptResponse>;
+  async draftGraphFromPrompt(
+    requestOrPrompt: DraftGraphFromPromptRequest | string,
+    requestOverrides: Partial<Omit<DraftGraphFromPromptRequest, 'prompt'>> = {}
+  ): Promise<DraftGraphFromPromptResponse> {
+    const request: DraftGraphFromPromptRequest =
+      typeof requestOrPrompt === 'string'
+        ? {
+            prompt: requestOrPrompt,
+            mode: requestOverrides.mode ?? 'draft',
+            ...requestOverrides
+          }
+        : requestOrPrompt;
+
+    return this.callAPI<DraftGraphFromPromptResponse>(
+      ['/api/agent/draft-graph'],
+      request as JsonObject
+    );
   }
 }
+
+export class ApiLLMClient extends LLMService {}
 
 // Mock services that use the API-based LLM service
 export class NodeIntelligenceService {
   constructor(private llm: LLMService) {}
+
+  private variablePattern = /\{([^}]+)\}/g;
+
+  private extractVariables(text: string): string[] {
+    const matches = text.match(this.variablePattern);
+    return matches ? Array.from(new Set(matches)) : [];
+  }
+
+  private preserveVariables(
+    originalText: string,
+    generatedText: string
+  ): string {
+    const variables = this.extractVariables(originalText);
+    if (variables.length === 0) {
+      return generatedText.trim();
+    }
+
+    let result = generatedText.trim();
+    for (const variable of variables) {
+      if (!result.includes(variable)) {
+        result = `${variable} ${result}`.trim();
+      }
+    }
+
+    return result;
+  }
+
+  private normalizeChoices(
+    nodeText: string,
+    choices: Array<{ text?: string; weight?: number }>
+  ): Choice[] {
+    const seen = new Set<string>();
+
+    return choices
+      .map(choice => ({
+        text: this.preserveVariables(
+          nodeText,
+          String(choice.text ?? '').trim()
+        ),
+        weight: Number.isFinite(choice.weight)
+          ? Math.max(1, Math.min(10, Math.round(Number(choice.weight))))
+          : 5
+      }))
+      .filter(choice => choice.text.length > 0)
+      .filter(choice => {
+        const key = choice.text.trim().toLowerCase();
+        if (!key || seen.has(key)) {
+          return false;
+        }
+        seen.add(key);
+        return true;
+      });
+  }
+
+  private isChoiceLike(
+    value: unknown
+  ): value is { text?: string; weight?: number } {
+    return typeof value === 'object' && value !== null;
+  }
+
+  private parseChoiceResponse(
+    value: unknown
+  ): Array<{ text?: string; weight?: number }> | null {
+    if (
+      typeof value !== 'object' ||
+      value === null ||
+      !Array.isArray((value as { choices?: unknown }).choices)
+    ) {
+      return null;
+    }
+
+    const choices = (value as { choices: unknown[] }).choices.filter(
+      (choice): choice is { text?: string; weight?: number } =>
+        this.isChoiceLike(choice)
+    );
+
+    return choices.length > 0 ? choices : null;
+  }
+
+  private isInspirationSuggestionLike(
+    value: unknown
+  ): value is InspirationSuggestion {
+    if (typeof value !== 'object' || value === null) {
+      return false;
+    }
+
+    const candidate = value as InspirationSuggestion;
+    return (
+      typeof candidate.theme === 'string' && Array.isArray(candidate.choices)
+    );
+  }
+
+  private parseInspirationResponse(
+    value: unknown
+  ): InspirationSuggestion[] | null {
+    if (
+      typeof value !== 'object' ||
+      value === null ||
+      !Array.isArray((value as { suggestions?: unknown }).suggestions)
+    ) {
+      return null;
+    }
+
+    const suggestions = (
+      value as { suggestions: unknown[] }
+    ).suggestions.filter(
+      (suggestion): suggestion is InspirationSuggestion =>
+        this.isInspirationSuggestionLike(suggestion)
+    );
+
+    return suggestions.length > 0 ? suggestions : null;
+  }
 
   async getSuggestions<TResponse extends JsonObject>(
     nodeType: string,
@@ -116,26 +431,18 @@ export class NodeIntelligenceService {
     count: number = 5
   ): Promise<Choice[]> {
     try {
-      const response = await this.llm.populateChoices<{
-        choices?: Array<{ text?: string; weight?: number }>;
-      }>({
+      const response = await this.llm.populateChoices<unknown>({
         nodeText,
         context,
         count
       });
 
-      if (Array.isArray(response?.choices)) {
-        const normalised = response.choices
-          .map(choice => ({
-            text: String(choice.text ?? '').trim(),
-            weight: Number.isFinite(choice.weight)
-              ? Math.max(1, Math.min(10, Math.round(Number(choice.weight))))
-              : 5
-          }))
-          .filter(choice => choice.text.length > 0);
+      const parsedChoices = this.parseChoiceResponse(response);
+      if (parsedChoices) {
+        const normalised = this.normalizeChoices(nodeText, parsedChoices);
 
         if (normalised.length > 0) {
-          return normalised;
+          return normalised.slice(0, count);
         }
       }
     } catch (error) {
@@ -154,19 +461,20 @@ export class NodeIntelligenceService {
     preference: string = 'balanced variety'
   ): Promise<WeightOptimizationResult> {
     try {
-      const response = await this.llm.optimizeChoices<{ choices?: Choice[] }>({
+      const response = await this.llm.optimizeChoices<unknown>({
         choices,
         context,
         preference
       });
 
-      if (Array.isArray(response?.choices) && response.choices.length > 0) {
-        const optimised = response.choices.map((choice, index) => ({
+      const parsedChoices = this.parseChoiceResponse(response);
+      if (parsedChoices) {
+        const optimised = parsedChoices.map((choice, index) => ({
           ...choices[index],
           ...choice,
           weight: Number.isFinite(choice.weight)
             ? Math.max(1, Math.min(10, Math.round(Number(choice.weight))))
-            : choices[index]?.weight ?? 5
+            : (choices[index]?.weight ?? 5)
         }));
 
         return {
@@ -193,15 +501,14 @@ export class NodeIntelligenceService {
     upstreamContext: string
   ): Promise<InspirationSuggestion[]> {
     try {
-      const response = await this.llm.suggest<{
-        suggestions?: InspirationSuggestion[];
-      }>({
+      const response = await this.llm.suggest<unknown>({
         operation: 'inspiration',
         context: upstreamContext
       });
 
-      if (Array.isArray(response?.suggestions)) {
-        return response.suggestions.map(suggestion => ({
+      const parsedSuggestions = this.parseInspirationResponse(response);
+      if (parsedSuggestions) {
+        return parsedSuggestions.map(suggestion => ({
           theme: suggestion.theme || 'Inspiration',
           choices: Array.isArray(suggestion.choices)
             ? suggestion.choices.map(choice => ({
@@ -275,7 +582,7 @@ export class NodeIntelligenceService {
       category = 'weather';
     }
 
-    return fallback[category].slice(0, count);
+    return this.normalizeChoices(text, fallback[category]).slice(0, count);
   }
 
   private getOfflineInspiration(): InspirationSuggestion[] {
@@ -320,14 +627,19 @@ export class TextRefinementService {
     prompt?: string
   ): Promise<RefinementResult> {
     try {
-      const result = await this.llm.refine<RefinementResponse>({
+      const result = await this.llm.refine<{
+        refinedText?: string;
+        model?: string;
+        changes?: unknown;
+        original?: string;
+      }>({
         text,
         mode,
-        prompt
+        instruction: prompt
       });
 
       const refined =
-        typeof result?.refined === 'string' ? result.refined : text;
+        typeof result?.refinedText === 'string' ? result.refinedText : text;
 
       return {
         original: result?.original || text,

@@ -4,16 +4,23 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { TutorialStepValidator, TutorialValidationContext } from './TutorialStepValidator';
+import {
+  tutorialSteps,
+  type TutorialPlacement,
+  type TutorialAnchorId
+} from './tutorialModel';
 
 export interface TutorialStep {
   id: string;
   title: string;
   description: string;
-  target: string; // CSS selector
+  target?: string; // CSS selector
+  targetSelectors?: string[];
+  anchorId?: TutorialAnchorId;
   action: 'click' | 'drag' | 'type' | 'observe' | 'paste';
   validation?: () => boolean;
   hint?: string;
-  position?: 'top' | 'right' | 'bottom' | 'left';
+  position?: TutorialPlacement;
   spotlight?: boolean;
 }
 
@@ -59,100 +66,6 @@ const defaultOnboardingState: OnboardingState = {
     keyboardShortcutsOverlay: true,
   },
 };
-
-const tutorialSteps: TutorialStep[] = [
-  {
-    id: 'welcome',
-    title: 'Welcome to Prompt Spaghetti! 🍝',
-    description: 'Create dynamic prompts with our visual node editor. Let\'s learn by building a medieval character generator!',
-    target: '.tutorial-welcome',
-    action: 'observe',
-    position: 'bottom',
-  },
-  {
-    id: 'empty-canvas',
-    title: 'Your Creative Canvas',
-    description: 'This is where you\'ll build your prompt graphs. Click anywhere to continue.',
-    target: '.react-flow__viewport',
-    action: 'click',
-    position: 'bottom',
-    spotlight: false, // Don't use spotlight here to avoid blocking
-  },
-  {
-    id: 'open-wizard',
-    title: 'Open the Prompt Wizard',
-    description: 'Click the Wizard button to open the prompt parser where you can enter text.',
-    target: '.prompt-wizard-button',
-    action: 'click',
-    hint: 'The wizard accepts brackets like {brave|cunning|wise} for choices',
-    position: 'bottom',
-    spotlight: true,
-  },
-  {
-    id: 'enter-prompt',
-    title: 'Enter Your Prompt',
-    description: 'Type or paste: "A {brave|cunning|wise} {knight|wizard|rogue} ventures into the {dark forest|ancient ruins|dragon\'s lair}"',
-    target: '.prompt-wizard-modal',
-    action: 'observe',
-    hint: 'The brackets {} create weighted choice nodes automatically',
-    position: 'top',
-    spotlight: false, // Don't block the modal
-  },
-  {
-    id: 'see-nodes',
-    title: 'Look at Your Nodes!',
-    description: 'Great! The prompt was automatically parsed into visual nodes with proper connections to the Output.',
-    target: '.react-flow__node',
-    action: 'observe',
-    position: 'right',
-    spotlight: true,
-  },
-  {
-    id: 'manual-node-creation',
-    title: 'Create Nodes Manually',
-    description: 'You can also drag nodes from the toolbar on the left. Try dragging a "Weighted Choice" node to the canvas!',
-    target: '.toolbar',
-    action: 'drag',
-    hint: 'Drag any node type from the toolbar to add it to your graph',
-    position: 'right',
-    spotlight: true,
-  },
-  {
-    id: 'asset-browser',
-    title: 'Use Pre-built Assets',
-    description: 'The Asset Browser contains ready-made prompt fragments. Click to open it and explore!',
-    target: '.asset-browser-button',
-    action: 'click',
-    hint: 'Browse and drag pre-built components into your graph',
-    position: 'left',
-    spotlight: true,
-  },
-  {
-    id: 'inline-edit',
-    title: 'Edit Inline',
-    description: 'Double-click any text in a node to edit it directly. Try changing any text!',
-    target: '.react-flow__node-weightedChoice',
-    action: 'click',
-    position: 'right',
-    spotlight: true,
-  },
-  {
-    id: 'preview-update',
-    title: 'See Your Changes',
-    description: 'Notice how the preview updates instantly? Click the Preview button to generate variations.',
-    target: '.preview-button',
-    action: 'click',
-    position: 'left',
-  },
-  {
-    id: 'completion',
-    title: 'You Did It! 🎉',
-    description: 'You\'ve mastered the basics! Press ? anytime to see keyboard shortcuts, or explore more features.',
-    target: '.tutorial-complete',
-    action: 'observe',
-    position: 'bottom',
-  },
-];
 
 const TutorialContext = createContext<TutorialContextType | null>(null);
 

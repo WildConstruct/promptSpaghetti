@@ -5,12 +5,17 @@
     "moduleResolution": "Bundler",
     "target": "ES2020",
     "jsx": "react-jsx",
-    "types": ["jest", "node", "testing-library__jest-dom"],
+    "types": ["jest", "node"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
     "isolatedModules": true,
     "baseUrl": "."
   },
-  "include": ["src", "tests", "scripts/**/*.d.ts", "scripts/**/*.d.cts"]
+  "include": [
+    "src",
+    "tests",
+    "scripts/**/*.d.ts",
+    "scripts/**/*.d.cts"
+  ]
 }

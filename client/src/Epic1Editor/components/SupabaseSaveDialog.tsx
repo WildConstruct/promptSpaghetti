@@ -26,7 +26,9 @@ export const SupabaseSaveDialog: React.FC<SupabaseSaveDialogProps> = ({
   currentNodes,
   currentEdges
 }) => {
-  const [name, setName] = useState(`Graph ${new Date().toLocaleDateString()}`);
+  const [name, setName] = useState(
+    `PSG Document ${new Date().toLocaleDateString()}`
+  );
   const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
@@ -60,7 +62,9 @@ export const SupabaseSaveDialog: React.FC<SupabaseSaveDialogProps> = ({
     }
   };
 
-  if (!isOpen) {return null;}
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="supabase-dialog-overlay" onClick={onClose}>
@@ -69,7 +73,7 @@ export const SupabaseSaveDialog: React.FC<SupabaseSaveDialogProps> = ({
         onClick={e => e.stopPropagation()}
       >
         <div className="dialog-header">
-          <h2>Save Graph to Cloud</h2>
+          <h2>Save PSG Document to Cloud</h2>
           <button className="close-button" onClick={onClose}>
             ×
           </button>
@@ -84,7 +88,7 @@ export const SupabaseSaveDialog: React.FC<SupabaseSaveDialogProps> = ({
               value={name}
               onChange={e => setName(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Enter graph name..."
+              placeholder="Enter PSG document name..."
               className="form-input"
               autoFocus
             />
@@ -96,7 +100,7 @@ export const SupabaseSaveDialog: React.FC<SupabaseSaveDialogProps> = ({
               id="description"
               value={description}
               onChange={e => setDescription(e.target.value)}
-              placeholder="Describe your graph (optional)..."
+              placeholder="Describe your PSG document (optional)..."
               className="form-textarea"
               rows={3}
             />
@@ -148,20 +152,22 @@ export const SupabaseSaveDialog: React.FC<SupabaseSaveDialogProps> = ({
                   checked={isPublic}
                   onChange={e => setIsPublic(e.target.checked)}
                 />
-                <span>Make this graph public (share with community)</span>
+                <span>
+                  Make this PSG document public (share with community)
+                </span>
               </label>
             </div>
           )}
 
           <div className="graph-info">
             <p className="info-text">
-              This graph contains {currentNodes.length} nodes and{' '}
+              This PSG document contains {currentNodes.length} nodes and{' '}
               {currentEdges.length} edges.
             </p>
             {!isAuthenticated && (
               <p className="warning-text">
-                ⚠️ You&apos;re not signed in. This graph will be saved locally
-                only.
+                ⚠️ You&apos;re not signed in. This PSG document will be exported
+                locally only.
               </p>
             )}
           </div>

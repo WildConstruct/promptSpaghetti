@@ -4,16 +4,20 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import type { Node } from 'reactflow';
+import type { Edge, Node } from 'reactflow';
 import { AssetBrowserLoader } from './AssetBrowserLoader';
-import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
-import { PreviewEngine } from './preview/PreviewEngine';
+import { SuggestedFragmentsPanel } from './SuggestedFragmentsPanel';
 import { PreviewPanel } from './preview/PreviewPanel';
+import { AssetLibraryErrorBoundary } from './asset-library/AssetLibraryErrorBoundary';
+import type { PreviewEngine } from './preview/PreviewEngine';
 import type { Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import type { EditableNodeData } from './nodes';
+import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
 import RelationshipView from './components/RelationshipView';
+import { ComponentLibraryPanel } from './ComponentLibraryPanel';
 import './TabbedSidePanel.css';
+import type { ComponentDefinition, GraphReferenceEntry } from './services/ComponentModel';
 
 export interface TabbedSidePanelProps {
   previewEngine: PreviewEngine | null;
@@ -21,14 +25,23 @@ export interface TabbedSidePanelProps {
   onPresetSelect?: (preset: Preset) => void;
   onInsert?: (item: Preset | Asset) => void;
   position?: 'left' | 'right';
-  defaultTab?: 'preview' | 'assets' | null;
+  defaultTab?: 'preview' | 'assets' | 'components' | null;
   showAssets?: boolean;
   showPreview?: boolean;
   selectedNode?: Node<EditableNodeData> | null;
+  nodes?: Node<EditableNodeData>[];
+  edges?: Edge[];
   onSeedChange?: (seeds: Array<string | number>) => void;
+  componentDefinitions?: ComponentDefinition[];
+  componentReferences?: GraphReferenceEntry[];
+  onComponentInsert?: (definition: ComponentDefinition) => void;
+  onSaveSelectionAsComponent?: () => void;
+  onDetachSelectedComponent?: () => void;
+  onRefreshSelectedComponent?: () => void;
+  onRefreshOutdatedComponents?: () => void;
 }
 
-type TabType = 'preview' | 'assets' | 'search' | 'relationships' | null;
+type TabType = 'preview' | 'assets' | 'components' | 'search' | 'relationships' | null;
 
 export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   previewEngine,
@@ -40,8 +53,20 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   showAssets = true,
   showPreview = true,
   selectedNode,
-  onSeedChange
-}) => {
+  nodes = [],
+  edges = [],
+  onSeedChange,
+  componentDefinitions = [],
+  componentReferences = [],
+  onComponentInsert,
+  onSaveSelectionAsComponent,
+  onDetachSelectedComponent,
+  onRefreshSelectedComponent,
+  onRefreshOutdatedComponents
+}: TabbedSidePanelProps) => {
+  const defaultWidth = 520;
+  const minWidth = 360;
+  const maxWidth = 760;
   const hasPreviewTab = showPreview && !!previewEngine;
 
   const initialTab = useMemo<TabType>(() => {
@@ -59,10 +84,23 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
+  const [panelWidth, setPanelWidth] = useState(defaultWidth);
+  const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
     setActiveTab(initialTab);
   }, [initialTab]);
+
+  useEffect(() => {
+    const clampWidth = () => {
+      const viewportCap = Math.max(minWidth, window.innerWidth - 80);
+      setPanelWidth(prev => Math.min(Math.max(prev, minWidth), Math.min(maxWidth, viewportCap)));
+    };
+
+    clampWidth();
+    window.addEventListener('resize', clampWidth);
+    return () => window.removeEventListener('resize', clampWidth);
+  }, []);
 
   const handleTabClick = useCallback((tab: TabType) => {
     setActiveTab(prev => (prev === tab ? null : tab));
@@ -85,8 +123,60 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   const isExpanded = activeTab !== null;
 
+  const handleResizeStart = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const startX = event.clientX;
+      const startWidth = panelWidth;
+      setIsResizing(true);
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'ew-resize';
+
+      const onMouseMove = (moveEvent: MouseEvent) => {
+        const delta =
+          position === 'right'
+            ? startX - moveEvent.clientX
+            : moveEvent.clientX - startX;
+        const viewportCap = Math.max(minWidth, window.innerWidth - 80);
+        const nextWidth = Math.min(
+          Math.max(startWidth + delta, minWidth),
+          Math.min(maxWidth, viewportCap)
+        );
+        setPanelWidth(nextWidth);
+      };
+
+      const onMouseUp = () => {
+        setIsResizing(false);
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    },
+    [panelWidth, position]
+  );
+
   return (
-    <div className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'}`}>
+    <div
+      className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'} ${isResizing ? 'resizing' : ''}`}
+      style={
+        {
+          '--tabbed-side-panel-width': `${panelWidth}px`
+        } as React.CSSProperties
+      }
+    >
+      {isExpanded && (
+        <div
+          className={`tabbed-side-panel-resize-handle ${position}`}
+          onMouseDown={handleResizeStart}
+          title="Drag to resize panel"
+        />
+      )}
       <div className="tab-buttons">
         {showAssets && (
           <button
@@ -119,6 +209,17 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         )}
 
         <button
+          className={`tab-button ${activeTab === 'components' ? 'active' : ''} ${hoveredTab === 'components' ? 'hovered' : ''}`}
+          onClick={() => handleTabClick('components')}
+          onMouseEnter={() => setHoveredTab('components')}
+          onMouseLeave={() => setHoveredTab(null)}
+          title="Components"
+        >
+          <span className="tab-icon">◫</span>
+          <span className="tab-label">Components</span>
+        </button>
+
+        <button
           className={`tab-button ${activeTab === 'search' ? 'active' : ''} ${hoveredTab === 'search' ? 'hovered' : ''}`}
           onClick={() => handleTabClick('search')}
           onMouseEnter={() => setHoveredTab('search')}
@@ -144,11 +245,21 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
       <div className="panel-content">
         {activeTab === 'assets' && (
           <div className="assets-container">
-            <AssetBrowserLoader
-              onPresetDrag={onPresetDrag}
-              onPresetSelect={onPresetSelect}
-              onInsert={handlePresetInsert}
-            />
+            <AssetLibraryErrorBoundary>
+              <SuggestedFragmentsPanel
+                selectedNode={selectedNode}
+                nodes={nodes}
+                edges={edges}
+                onInsert={handlePresetInsert}
+              />
+            </AssetLibraryErrorBoundary>
+            <div className="assets-browser-panel">
+              <AssetBrowserLoader
+                onPresetDrag={onPresetDrag}
+                onPresetSelect={onPresetSelect}
+                onInsert={handlePresetInsert}
+              />
+            </div>
           </div>
         )}
         {activeTab === 'search' && (
@@ -158,6 +269,20 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
               onInsert={handleAssetInsert}
               graphContext={selectedNode?.data || undefined}
               selectedNode={selectedNode as Node<{ label?: string }> | null}
+            />
+          </div>
+        )}
+        {activeTab === 'components' && (
+          <div className="assets-container">
+            <ComponentLibraryPanel
+              definitions={componentDefinitions}
+              references={componentReferences}
+              onInsert={onComponentInsert}
+              onSaveSelection={onSaveSelectionAsComponent}
+              onDetachSelected={onDetachSelectedComponent}
+              onRefreshSelected={onRefreshSelectedComponent}
+              onRefreshOutdated={onRefreshOutdatedComponents}
+              selectedNode={selectedNode}
             />
           </div>
         )}

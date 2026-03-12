@@ -5,6 +5,7 @@ import { useMetadataFlip, MetadataDisplay, MetadataToggleButton } from '../hooks
 
 export interface ConcatNodeData extends EditableNodeData {
   separator?: string;
+  requireAllInputs?: boolean;
 }
 
 /**
@@ -18,10 +19,11 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
     <BaseEditableNode
       {...props}
       className={`concat ${flipClassName}`}
-      minWidth={150}
+      minWidth={104}
       minHeight={60}
     >
-      {({ isEditing, value, editBuffer, updateBuffer, confirmEdit, cancelEdit }) => {
+      {({ isEditing, editBuffer, updateBuffer, confirmEdit, cancelEdit }) => {
+
         if (isEditing) {
           return (
             <>
@@ -30,7 +32,7 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
                   {/* Front side - editor */}
                   <div className="card-face node-front">
                     <div className="epic1-concat-editor">
-                      <div className="epic1-node-type-label">Concat</div>
+                      <div className="epic1-node-type-label">Merge</div>
                       <input
                         type="text"
                         className="epic1-inline-input"
@@ -52,28 +54,19 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
                       />
                       <div className="epic1-hint">Leave empty for no separator</div>
                     </div>
-                    <MetadataToggleButton 
-                      showMetadata={showMetadata} 
-                      onClick={() => setShowMetadata(!showMetadata)} 
-                    />
+                    <MetadataToggleButton                      showMetadata={showMetadata}                      onClick={() => setShowMetadata(!showMetadata)}                    />
                   </div>
-                  
                   {/* Back side - metadata */}
-                  <MetadataDisplay 
-                    metadata={metadata} 
-                    onClose={() => setShowMetadata(false)} 
-                  />
+                  <MetadataDisplay                    metadata={metadata}                    onClose={() => setShowMetadata(false)}                  />
                 </div>
               </div>
-              
               {/* Custom dual input handles rendered outside flip container */}
               <Handle
                 type="target"
                 position={Position.Left}
                 id="input1"
                 className="epic1-handle target concat-input-1"
-                style={{ 
-                  position: 'absolute',
+                style={{                  position: 'absolute',
                   top: '30%',
                   left: '-5px',
                   transform: 'translateY(-50%)',
@@ -85,10 +78,22 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
                 position={Position.Left}
                 id="input2"
                 className="epic1-handle target concat-input-2"
-                style={{ 
-                  position: 'absolute',
+                style={{                  position: 'absolute',
                   top: '70%',
                   left: '-5px',
+                  transform: 'translateY(-50%)',
+                  zIndex: 1000
+                }}
+              />
+              <Handle
+                type="source"
+                position={Position.Right}
+                id="source"
+                className="epic1-handle source concat-output"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '-5px',
                   transform: 'translateY(-50%)',
                   zIndex: 1000
                 }}
@@ -100,20 +105,15 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
         return (
           <>
             <div className="epic1-concat-display">
-              <div className="epic1-node-type-label">Concat</div>
-              <div className="epic1-separator-preview">
-                {value ? `"${value}"` : <span className="epic1-placeholder">No separator</span>}
-              </div>
+              <div className="epic1-node-type-label">Merge</div>
             </div>
-            
             {/* Custom dual input handles rendered inside the node */}
             <Handle
               type="target"
               position={Position.Left}
               id="input1"
               className="epic1-handle target concat-input-1"
-              style={{ 
-                position: 'absolute',
+              style={{                position: 'absolute',
                 top: '30%',
                 left: '-5px',
                 transform: 'translateY(-50%)',
@@ -125,10 +125,22 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
               position={Position.Left}
               id="input2"
               className="epic1-handle target concat-input-2"
-              style={{ 
-                position: 'absolute',
+              style={{                position: 'absolute',
                 top: '70%',
                 left: '-5px',
+                transform: 'translateY(-50%)',
+                zIndex: 1000
+              }}
+            />
+            <Handle
+              type="source"
+              position={Position.Right}
+              id="source"
+              className="epic1-handle source concat-output"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '-5px',
                 transform: 'translateY(-50%)',
                 zIndex: 1000
               }}

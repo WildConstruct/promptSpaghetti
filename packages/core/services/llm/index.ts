@@ -4,6 +4,7 @@
 // Export API-based services instead of OpenAI-dependent ones
 export {
   LLMService,
+  ApiLLMClient,
   NodeIntelligenceService,
   TextRefinementService,
   GraphAnalyzer,
@@ -52,6 +53,20 @@ export type {
   ComplianceReport,
   DeletionRequest
 } from './ComplianceAuditSystem';
+
+export type {
+  LLMConfig,
+  LLMStatusResponse
+} from '../ApiLLMService';
+export type { LLMMode, LLMProvider, LLMCapability } from './contracts';
+
+export {
+  LLM_CAPABILITIES
+} from './contracts';
+
+export type {
+  LLMStatusContract
+} from './contracts';
 
 export type {
   Choice,

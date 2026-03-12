@@ -1,9 +1,5 @@
-/**
- * Admin logout endpoint
- */
+import { respondLegacySurfaceDisabled } from './_disabled.js';
 
-export default function handler(req, res) {
-  // Simply redirect back to admin login page
-  res.writeHead(302, { Location: '/api/admin-enhanced' });
-  res.end();
+export default function handler(_req, res) {
+  return respondLegacySurfaceDisabled(res);
 }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PSGValidationError = exports.PSGErrorType = void 0;
+exports.looksLikeLegacyGraphWrapper = looksLikeLegacyGraphWrapper;
 exports.readPsg = readPsg;
 exports.writePsg = writePsg;
 exports.fromLegacyGraph = fromLegacyGraph;
@@ -68,6 +69,18 @@ const PSGFileSchema = zod_1.z.object({
         .catchall(zod_1.z.unknown())
         .optional()
 });
+// Legacy graph-wrapper PSG codec.
+// The active MVP source contract is the flat PSG format in fileFormats/psg.ts.
+function looksLikeLegacyGraphWrapper(value) {
+    if (!value || typeof value !== 'object') {
+        return false;
+    }
+    const record = value;
+    return (record.kind === 'graph' &&
+        typeof record.version === 'string' &&
+        !!record.graph &&
+        typeof record.graph === 'object');
+}
 function readPsg(text, options = {}) {
     const { maxFileSize = 10 * 1024 * 1024, strictValidation = true } = options;
     if (text.length > maxFileSize) {
@@ -152,7 +165,8 @@ function checkSecurityViolations(obj, path = '') {
     }
     const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
     const xssPatterns = [/javascript:/i, /<script/i, /eval\(/i];
-    for (const key of Object.keys(obj)) {
+    const record = obj;
+    for (const key of Object.keys(record)) {
         const currentPath = path ? `${path}.${key}` : key;
         if (dangerousKeys.includes(key)) {
             return {
@@ -162,7 +176,7 @@ function checkSecurityViolations(obj, path = '') {
                 suggestions: ['Remove dangerous properties from the file']
             };
         }
-        const value = obj[key];
+        const value = record[key];
         if (typeof value === 'string') {
             for (const pattern of xssPatterns) {
                 if (pattern.test(value)) {

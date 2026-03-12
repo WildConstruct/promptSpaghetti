@@ -28,6 +28,8 @@ interface PreviewNodeData {
   label: string;
   nodeType: string;
   color?: string;
+  familyRole: 'fixed' | 'variable' | 'resolved';
+  familyLabel: string;
 }
 
 // Simple preview node component
@@ -36,17 +38,23 @@ const PreviewNode: React.FC<{
   selected: boolean;
 }> = ({ data, selected }) => {
   const nodeColor = data.color || '#666';
+  const roleClass = `preview-node-${data.familyRole}`;
 
   return (
     <div
-      className={`preview-node ${selected ? 'selected' : ''}`}
+      className={`preview-node ${roleClass} ${selected ? 'selected' : ''}`}
       style={{
         borderColor: nodeColor,
         backgroundColor: selected ? `${nodeColor}22` : 'transparent'
       }}
     >
       <Handle id="target" type="target" position={Position.Left} />
-      <div className="preview-node-type">{data.nodeType}</div>
+      <div className="preview-node-meta">
+        <div className="preview-node-type">{data.nodeType}</div>
+        <div className={`preview-node-family-badge ${roleClass}`}>
+          {data.familyLabel}
+        </div>
+      </div>
       <div className="preview-node-content">{data.label}</div>
       <Handle id="source" type="source" position={Position.Right} />
     </div>
@@ -55,6 +63,19 @@ const PreviewNode: React.FC<{
 
 const nodeTypes: NodeTypes = {
   preview: PreviewNode
+};
+
+const familyRoleForNodeType = (
+  nodeType: string
+): Pick<PreviewNodeData, 'familyRole' | 'familyLabel'> => {
+  const normalized = nodeType.toLowerCase();
+  if (normalized === 'choice' || normalized === 'variable') {
+    return { familyRole: 'variable', familyLabel: 'Allowed variation' };
+  }
+  if (normalized === 'output') {
+    return { familyRole: 'resolved', familyLabel: 'Resolved result' };
+  }
+  return { familyRole: 'fixed', familyLabel: 'Fixed DNA' };
 };
 
 export const NodePreview: React.FC<NodePreviewProps> = ({
@@ -85,6 +106,7 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
             : node.id;
       const nodeType =
         typeof node.data?.nodeType === 'string' ? node.data.nodeType : 'Text';
+      const { familyRole, familyLabel } = familyRoleForNodeType(nodeType);
 
       return {
         id: node.id,
@@ -93,7 +115,9 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
         data: {
           label: labelCandidate,
           nodeType,
-          color
+          color,
+          familyRole,
+          familyLabel
         },
         selected: node.id === selectedNodeId
       };
@@ -174,9 +198,9 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
             <rect x="14" y="14" width="7" height="7" rx="1" />
             <path d="M10 7h4M7 10v4M17 10v4M10 17h4" strokeLinecap="round" />
           </svg>
-          <p>Enter a prompt to see the node graph</p>
+          <p>Describe an archetype to see the family logic</p>
           <p className="empty-hint">
-            Your text will be automatically parsed into interconnected nodes
+            The app will separate stable design DNA from the traits you can vary
           </p>
         </div>
       </div>

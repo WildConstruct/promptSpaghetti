@@ -6,7 +6,6 @@ const withProviders = ({ children }: PropsWithChildren) => <>{children}</>;
 export function renderWithProviders(
   ui: React.ReactElement,
   options?: RenderOptions
-) {
+): ReturnType<typeof render> {
   return render(ui, { wrapper: withProviders, ...options });
 }
-

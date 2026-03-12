@@ -85,15 +85,15 @@ jobs:
 
       - name: Run unit tests
         if: matrix.test-type == 'unit'
-        run: pnpm test:unit-only
+        run: pnpm test:packages
 
       - name: Run integration tests
         if: matrix.test-type == 'integration'
-        run: pnpm test:comprehensive --integration-only
+        run: pnpm test:integration
 
       - name: Run performance tests
         if: matrix.test-type == 'performance'
-        run: pnpm test:performance-only
+        run: pnpm test:performance-integration
 
       - name: Run documentation tests
         if: matrix.test-type == 'documentation'

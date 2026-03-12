@@ -10,11 +10,16 @@ import {
   PromptAnalysis,
   GeneratedNode,
   NodeMapping,
+  AnalysisEdge,
   buildSequentialEdges
 } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
-import { normalizeLLMResult, mergeLLMResult } from '../../lib/llmAnalysisMerge';
-import LLMService from '../../shims/llm-service';
+import {
+  ApiLLMClient,
+  TextRefinementService,
+  type RefinementMode
+} from '@promptscape/core/services/llm';
+import { useRuntimeMode } from '@promptscape/core/hooks/useRuntimeMode';
 import './PromptDissector.css';
 import { TextSelectionModal, TextSelection } from './TextSelectionModal';
 import GrokParsingLoader from './GrokParsingLoader';
@@ -61,6 +66,160 @@ const HIGHLIGHT_COLORS = [
   '#FFB347', // Orange
   '#B19CD9' // Purple
 ];
+
+type SweeteningStyle = {
+  id: string;
+  label: string;
+  description: string;
+  mode: RefinementMode;
+  prompt: string;
+};
+
+const SWEETENING_STYLES: SweeteningStyle[] = [
+  {
+    id: 'clarify',
+    label: 'Clarify',
+    description: 'Tighten meaning and remove ambiguity',
+    mode: 'correct',
+    prompt: 'clear, structured, and easy to parse'
+  },
+  {
+    id: 'vivid',
+    label: 'Vivid',
+    description: 'Add visual flavor without bloating the prompt',
+    mode: 'expand',
+    prompt: 'vivid, visual, and cinematic while staying concise'
+  },
+  {
+    id: 'tighten',
+    label: 'Tighten',
+    description: 'Trim filler and keep the useful signal',
+    mode: 'contract',
+    prompt: 'concise, direct, and free of filler'
+  }
+];
+
+type DraftGraphResponse = {
+  ok?: boolean;
+  summary?: string;
+  operations?: Array<{
+    kind?: string;
+    nodes?: Array<Record<string, unknown>>;
+    edges?: Array<Record<string, unknown>>;
+  }>;
+  notes?: string[];
+  model?: string;
+  fallback?: boolean;
+};
+
+const mapDraftNodeType = (type: unknown): GeneratedNode['node']['nodeType'] => {
+  const normalized = typeof type === 'string' ? type.toLowerCase() : '';
+  if (normalized.includes('choice')) {
+    return 'Choice';
+  }
+  if (normalized.includes('variable')) {
+    return 'Variable';
+  }
+  if (normalized.includes('output')) {
+    return 'Output';
+  }
+  return 'Text';
+};
+
+const analysisFromDraftGraphResponse = (
+  prompt: string,
+  response: DraftGraphResponse
+): PromptAnalysis | null => {
+  const draftInsert = Array.isArray(response.operations)
+    ? response.operations.find(operation => operation.kind === 'insertNodes')
+    : null;
+
+  if (!draftInsert || !Array.isArray(draftInsert.nodes)) {
+    return null;
+  }
+
+  const baseline = simplePromptParser.parse(prompt);
+  const nodes: GeneratedNode[] = draftInsert.nodes.map((node, index) => {
+    const nodeId =
+      typeof node.id === 'string' ? node.id : `draft-node-${index}`;
+    const data =
+      typeof node.data === 'object' && node.data !== null
+        ? (node.data as Record<string, unknown>)
+        : {};
+    const previewText =
+      typeof data.text === 'string'
+        ? data.text
+        : typeof data.content === 'string'
+          ? data.content
+          : typeof data.label === 'string'
+            ? data.label
+            : 'Node';
+
+    return {
+      node: {
+        id: nodeId,
+        nodeType: mapDraftNodeType(node.type),
+        variableName:
+          typeof data.variableName === 'string' ? data.variableName : undefined,
+        getPreviewText: () => previewText,
+        data
+      }
+    };
+  });
+
+  const mappings = baseline.mappings
+    .slice(0, Math.max(0, nodes.length - 1))
+    .map((mapping, index) => ({
+      ...mapping,
+      nodeId: nodes[index]?.node.id || mapping.nodeId,
+      highlightColor: HIGHLIGHT_COLORS[index % HIGHLIGHT_COLORS.length]
+    }));
+
+  const edges: AnalysisEdge[] = Array.isArray(draftInsert.edges)
+    ? draftInsert.edges.reduce<AnalysisEdge[]>((acc, edge, index) => {
+        const source =
+          typeof edge.source === 'string' ? edge.source : undefined;
+        const target =
+          typeof edge.target === 'string' ? edge.target : undefined;
+        if (!source || !target) {
+          return acc;
+        }
+
+        acc.push({
+          id:
+            typeof edge.id === 'string'
+              ? edge.id
+              : `${source}__${target}__${index}`,
+          source,
+          target,
+          sourceHandle:
+            typeof edge.sourceHandle === 'string'
+              ? edge.sourceHandle
+              : undefined,
+          targetHandle:
+            typeof edge.targetHandle === 'string'
+              ? edge.targetHandle
+              : undefined
+        });
+        return acc;
+      }, [])
+    : baseline.edges;
+
+  return {
+    segments: baseline.segments,
+    nodes,
+    mappings,
+    edges,
+    rawPrompt: prompt,
+    llmMetadata: {
+      parserMode: 'llm-enhanced',
+      summary: response.summary,
+      notes: response.notes || [],
+      model: response.model || 'heuristic-segmentation-v1',
+      fallback: response.fallback !== false
+    }
+  };
+};
 
 const splitChoiceOptions = (raw: string): string[] => {
   const text = raw.trim();
@@ -181,6 +340,10 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   const [llmMode, setLlmMode] = useState<'standard' | 'llm-enhanced'>(
     'standard'
   );
+  const runtimeMode = useRuntimeMode();
+  const [sweeteningStyle, setSweeteningStyle] = useState<string>('clarify');
+  const [isSweetening, setIsSweetening] = useState(false);
+  const [sweeteningNote, setSweeteningNote] = useState<string | null>(null);
   const parsedResultsRef = useRef<{
     standard: { text: string; analysis: PromptAnalysis } | null;
     'llm-enhanced': { text: string; analysis: PromptAnalysis } | null;
@@ -334,7 +497,103 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   );
 
   // LLM service adapter (browser -> server)
-  const llmServiceRef = useRef(new LLMService({}));
+  const llmServiceRef = useRef(new ApiLLMClient({}));
+  const textRefinementServiceRef = useRef(
+    new TextRefinementService(new ApiLLMClient({}))
+  );
+
+  const applyOfflineSweetening = useCallback(
+    (text: string, styleId: string) => {
+      const normalized = text.replace(/\s+/g, ' ').trim();
+      if (!normalized) {
+        return text;
+      }
+
+      const sentence =
+        /[.!?]$/.test(normalized)
+          ? normalized
+          : `${normalized.charAt(0).toUpperCase()}${normalized.slice(1)}.`;
+
+      switch (styleId) {
+        case 'tighten':
+          return sentence
+            .replace(/\b(very|really|quite|just|actually|basically)\b/gi, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+        case 'vivid':
+          if (/cinematic|vivid|dramatic|weathered|towering|glowing/i.test(sentence)) {
+            return sentence;
+          }
+          return sentence.replace(
+            /(^[A-Z][^.?!]*)([.?!]?)$/,
+            '$1 with vivid visual detail$2'
+          );
+        case 'clarify':
+        default:
+          return sentence
+            .replace(/\s*,\s*/g, ', ')
+            .replace(/\s+/g, ' ')
+            .trim();
+      }
+    },
+    []
+  );
+
+  const handleSweetenPrompt = useCallback(async () => {
+    const source = value.trim();
+    if (!source || isSweetening) {
+      return;
+    }
+
+    const style =
+      SWEETENING_STYLES.find(candidate => candidate.id === sweeteningStyle) ||
+      SWEETENING_STYLES[0];
+
+    setIsSweetening(true);
+    setSweeteningNote(null);
+
+    try {
+      let refinedText = source;
+      let usedCloud = false;
+
+      if (runtimeMode.llm.accessMode === 'cloud') {
+        const result = await textRefinementServiceRef.current.refine(
+          source,
+          style.mode,
+          style.prompt
+        );
+        if (result.refined && result.refined.trim() !== source) {
+          refinedText = result.refined.trim();
+          usedCloud = true;
+        }
+      }
+
+      if (!usedCloud) {
+        refinedText = applyOfflineSweetening(source, style.id);
+      }
+
+      onChange(refinedText);
+      setSweeteningNote(
+        usedCloud
+          ? `Sweetened with hosted AI: ${style.label}`
+          : `Sweetened locally: ${style.label}`
+      );
+    } catch (error) {
+      console.error('[PromptDissector] Sweetening failed:', error);
+      const fallback = applyOfflineSweetening(source, style.id);
+      onChange(fallback);
+      setSweeteningNote(`Sweetened locally: ${style.label}`);
+    } finally {
+      setIsSweetening(false);
+    }
+  }, [
+    applyOfflineSweetening,
+    isSweetening,
+    onChange,
+    runtimeMode.llm.accessMode,
+    sweeteningStyle,
+    value
+  ]);
 
   // Modular parsing function that can be reused
   const performParse = useCallback(
@@ -386,12 +645,13 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       }
 
       try {
-        const rawResult = await llmServiceRef.current.parse(text, {
-          mode: 'llm-enhanced'
-        });
-        const normalized = normalizeLLMResult(rawResult);
-        if (normalized) {
-          finalAnalysis = mergeLLMResult(baselineAnalysis, normalized);
+        const rawResult = (await llmServiceRef.current.draftGraphFromPrompt({
+          prompt: text,
+          mode: 'draft'
+        })) as DraftGraphResponse;
+        const draftAnalysis = analysisFromDraftGraphResponse(text, rawResult);
+        if (draftAnalysis) {
+          finalAnalysis = draftAnalysis;
         } else {
           finalAnalysis = {
             ...baselineAnalysis,
@@ -2043,6 +2303,39 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                   Merge →
                 </button>
                 <div className="dissector-toolbar-sep" />
+                <label
+                  className="dissector-select-wrap"
+                  title="Choose a prompt sweetening style"
+                >
+                  <span className="dissector-select-label">Sweeten</span>
+                  <select
+                    className="dissector-select"
+                    value={sweeteningStyle}
+                    onChange={e => setSweeteningStyle(e.target.value)}
+                    disabled={isSweetening}
+                  >
+                    {SWEETENING_STYLES.map(style => (
+                      <option key={style.id} value={style.id}>
+                        {style.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <button
+                  className="dissector-btn"
+                  onClick={() => {
+                    void handleSweetenPrompt();
+                  }}
+                  title={
+                    runtimeMode.llm.accessMode === 'cloud'
+                      ? 'Sweeten prompt with hosted AI'
+                      : 'Sweeten prompt with local fallback rules'
+                  }
+                  disabled={!value.trim() || isSweetening}
+                >
+                  {isSweetening ? 'Sweetening…' : 'Prompt Sweetening'}
+                </button>
+                <div className="dissector-toolbar-sep" />
                 <button
                   className="dissector-btn"
                   onClick={() => {
@@ -2164,6 +2457,17 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
               </>
             );
           })()}
+        </div>
+      )}
+      {sweeteningNote && (
+        <div className="dissector-sweetening-note" aria-live="polite">
+          {sweeteningNote}
+          {runtimeMode.llm.accessMode !== 'cloud' && (
+            <span className="dissector-sweetening-note-muted">
+              {' '}
+              Hosted sweetening can sit behind a paid/cloud unlock.
+            </span>
+          )}
         </div>
       )}
       {/* Tab interface integrated with text area */}
@@ -2380,7 +2684,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
               }
             }}
           >
-            AI-Enhanced
+            Agent Draft
           </button>
         </div>
         {/* Input container inside tabs container */}
@@ -2663,7 +2967,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
               animation: 'spin 1s linear infinite'
             }}
           />
-          <span>AI is analyzing your prompt...</span>
+          <span>Agent is drafting your graph...</span>
         </div>
       )}
       {/* Removed Node Types legend as requested */}

@@ -6,7 +6,18 @@
  */
 
 import { ExecutionResult } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
-import { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'reactflow';
+
+type CacheNode = {
+  id: string;
+  type?: string;
+  data?: unknown;
+};
+
+type CacheEdge = {
+  id: string;
+  source: string;
+  target: string;
+};
 
 export interface CacheEntry {
   hash: string;
@@ -45,8 +56,8 @@ export class PreviewCache {
    * Generate a cache key from nodes, edges, and seeds
    */
   private generateKey(
-    nodes: ReactFlowNode[],
-    edges: ReactFlowEdge[],
+    nodes: CacheNode[],
+    edges: CacheEdge[],
     seeds: number[]
   ): string {
     const graphHash = this.hashGraph(nodes, edges);
@@ -57,7 +68,7 @@ export class PreviewCache {
   /**
    * Create a deterministic hash of the graph structure
    */
-  private hashGraph(nodes: ReactFlowNode[], edges: ReactFlowEdge[]): string {
+  private hashGraph(nodes: CacheNode[], edges: CacheEdge[]): string {
     // Sort nodes and edges for consistent hashing
     const sortedNodes = [...nodes].sort((a, b) => a.id.localeCompare(b.id));
     const sortedEdges = [...edges].sort((a, b) => a.id.localeCompare(b.id));
@@ -83,8 +94,8 @@ export class PreviewCache {
    * Get cached results if available and fresh
    */
   get(
-    nodes: ReactFlowNode[],
-    edges: ReactFlowEdge[],
+    nodes: CacheNode[],
+    edges: CacheEdge[],
     seeds: number[]
   ): ExecutionResult[] | null {
     const key = this.generateKey(nodes, edges, seeds);
@@ -122,8 +133,8 @@ export class PreviewCache {
    * Store results in cache
    */
   set(
-    nodes: ReactFlowNode[],
-    edges: ReactFlowEdge[],
+    nodes: CacheNode[],
+    edges: CacheEdge[],
     seeds: number[],
     results: ExecutionResult[]
   ): void {
@@ -205,15 +216,13 @@ export class PreviewCache {
   /**
    * Check if a specific graph configuration is cached
    */
-  has(
-    nodes: ReactFlowNode[],
-    edges: ReactFlowEdge[],
-    seeds: number[]
-  ): boolean {
+  has(nodes: CacheNode[], edges: CacheEdge[], seeds: number[]): boolean {
     const key = this.generateKey(nodes, edges, seeds);
     const entry = this.cache.get(key);
 
-    if (!entry) {return false;}
+    if (!entry) {
+      return false;
+    }
 
     // Check if expired
     const age = Date.now() - entry.timestamp;
@@ -224,14 +233,16 @@ export class PreviewCache {
    * Get the age of a cache entry in milliseconds
    */
   getAge(
-    nodes: ReactFlowNode[],
-    edges: ReactFlowEdge[],
+    nodes: CacheNode[],
+    edges: CacheEdge[],
     seeds: number[]
   ): number | null {
     const key = this.generateKey(nodes, edges, seeds);
     const entry = this.cache.get(key);
 
-    if (!entry) {return null;}
+    if (!entry) {
+      return null;
+    }
 
     return Date.now() - entry.timestamp;
   }
@@ -251,7 +262,10 @@ export class PreviewCache {
    * Export cache for persistence (optional)
    */
   export(): string {
-    const entries: CacheEntry[] = Array.from(this.cache.values());
+    const entries: CacheEntry[] = [];
+    for (const entry of this.cache.values()) {
+      entries.push(entry);
+    }
     return JSON.stringify({
       entries,
       stats: this.stats,

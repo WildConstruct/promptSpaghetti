@@ -43,8 +43,8 @@ module.exports = {
     {
       files: ['**/*.test.ts', '**/*.test.tsx', '**/__tests__/**/*'],
       rules: {
-        '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
         'no-unused-vars': 'off'
       }
     }
@@ -52,6 +52,30 @@ module.exports = {
   rules: {
     // Development-friendly rules - prioritize productivity over perfection
     'max-len': 'off', // Disable line length limits
+
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: '../../services/SimpleLLMService',
+            message:
+              'Use the shared API-backed client from services/llm instead of SimpleLLMService.'
+          },
+          {
+            name: '../../../services/SimpleLLMService',
+            message:
+              'Use the shared API-backed client from services/llm instead of SimpleLLMService.'
+          },
+          {
+            name: '@promptscape/core/services/SimpleLLMService',
+            message:
+              'Use the shared API-backed client from @promptscape/core/services/llm instead of SimpleLLMService.'
+          }
+        ],
+        patterns: ['**/SimpleLLMService', '**/SimpleLLMService.ts']
+      }
+    ],
 
     // React rules
     'react/react-in-jsx-scope': 'off',

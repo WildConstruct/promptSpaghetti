@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { Preset } from '../types';
-import { LibraryService } from '../services/LibraryService';
 import Fuse from 'fuse.js';
 import {
   parseManifest,
@@ -95,7 +94,12 @@ export const useAssetBrowserStore = create<AssetBrowserState>((set, get) => ({
       id: p.id,
       name: p.id,
       tags: p.tags,
-      type: 'unknown'
+      type: 'unknown',
+      path: p.path,
+      nodeTypes: p.nodeTypes,
+      metadata: {
+        file: p.path
+      } as any
     }));
     const tags = Array.from(new Set(uiPresets.flatMap(p => p.tags))).sort();
     const filtered = applyFilters(uiPresets, get().activeTags, get().query);
@@ -195,11 +199,11 @@ function applyFilters(presets: Preset[], tags: string[], query: string) {
 
 // bootstrap with stub data for now
 void (async () => {
-  const data = await LibraryService.listPresets();
-  const tags = Array.from(new Set(data.flatMap(p => p.tags))).sort();
   useAssetBrowserStore.setState({
-    presets: data,
-    filteredPresets: data,
-    availableTags: tags
+    presets: [],
+    filteredPresets: [],
+    availableTags: [],
+    scanStatus: 'done',
+    error: null
   });
 })();

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { getLLMService } from '../../services/SimpleLLMService';
+import { ApiLLMClient } from '../../services/llm';
 
 export interface LLMToggleProps {
   onModeChange?: (mode: 'standard' | 'llm-enhanced') => void;
@@ -163,12 +163,33 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
   const [showTooltip, setShowTooltip] = useState(false);
   const [estimatedCost, setEstimatedCost] = useState<number>(0);
 
-  const llmService = useMemo(() => getLLMService(), []);
+  const llmClient = useMemo(() => new ApiLLMClient(), []);
+
+  const estimateCost = useCallback((prompt: string) => {
+    const estimatedTokens = Math.ceil(prompt.length / 4);
+    return estimatedTokens * 0.000001;
+  }, []);
 
   useEffect(() => {
-    // Check if LLM service is available
-    setIsEnabled(llmService.isEnabled());
-  }, [llmService]);
+    let cancelled = false;
+
+    llmClient
+      .getStatus()
+      .then(status => {
+        if (!cancelled) {
+          setIsEnabled(status.available);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setIsEnabled(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [llmClient]);
 
   const handleToggle = useCallback(() => {
     const newMode = mode === 'standard' ? 'llm-enhanced' : 'standard';
@@ -177,12 +198,12 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
 
     // Show cost estimate briefly when enabling LLM mode
     if (newMode === 'llm-enhanced') {
-      const cost = llmService.estimateCost('sample prompt');
+      const cost = estimateCost('sample prompt');
       setEstimatedCost(cost);
       setShowTooltip(true);
       setTimeout(() => setShowTooltip(false), 3000);
     }
-  }, [mode, onModeChange, llmService]);
+  }, [estimateCost, mode, onModeChange]);
 
   const getSwitchIcon = () => {
     if (mode === 'llm-enhanced') {
@@ -260,7 +281,7 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
           title={
             isEnabled
               ? `Switch to ${mode === 'standard' ? 'AI-Enhanced' : 'Standard'} parser`
-              : 'AI parser not configured'
+              : 'AI parser unavailable'
           }
         >
           <div style={knobStyle}>{getSwitchIcon()}</div>
@@ -282,7 +303,7 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
           style={styles.configButton}
           onClick={onConfigClick}
           aria-label="Configure LLM settings"
-          title="Configure AI settings"
+          title="View AI status"
           onMouseEnter={e => {
             e.currentTarget.style.borderColor = '#667eea';
             e.currentTarget.style.color = '#667eea';
@@ -349,7 +370,7 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
               strokeLinejoin="round"
             />
           </svg>
-          <span>AI parser not configured</span>
+          <span>AI parser unavailable on the server</span>
           {onConfigClick && (
             <a
               href="#"
@@ -359,7 +380,7 @@ export const LLMToggle: React.FC<LLMToggleProps> = ({
               }}
               style={styles.statusLink}
             >
-              Configure
+              Details
             </a>
           )}
         </div>

@@ -306,7 +306,7 @@ export const useCommonShortcuts = () => {
     if (handlers.onCommandPalette) {
       manager.registerShortcut({
         id: 'command-palette',
-        keys: ['Ctrl/Cmd', 'K'],
+        keys: ['C'],
         handler: handlers.onCommandPalette,
         description: 'Open command palette',
         category: 'navigation',

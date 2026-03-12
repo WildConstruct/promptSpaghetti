@@ -69,12 +69,14 @@ export class Epic1ExecutionEngine {
   private readonly results: Map<string, NodeExecutionResult>;
   private executionOrder: string[];
   private outputNodeId: string | null = null;
+  private readonly selectedBranches: Map<string, number>;
 
   constructor(graph: Epic1Graph, seed?: string | number) {
     this.graph = graph;
     this.context = new Epic1ExecutionContext(seed);
     this.results = new Map();
     this.executionOrder = [];
+    this.selectedBranches = new Map();
   }
 
   /**
@@ -231,12 +233,31 @@ export class Epic1ExecutionEngine {
       this.context.incrementDepth();
       this.context.recordNodeExecution(nodeId);
 
+      const incomingEdges = this.graph.edges.filter(edge => edge.target === nodeId);
+      const activeIncomingEdges = incomingEdges.filter(edge => this.isActiveEdge(edge));
+
       // Get inputs for this node
       const inputs = this.getNodeInputs(nodeId);
       debugLogExecution(
         `[ExecutionEngine] Executing node ${nodeId} of type ${node.getNodeType()} with ${inputs.length} inputs:`,
         inputs
       );
+
+      // Branch-aware short circuit: if a node has incoming edges but none of them
+      // are currently active, or all active predecessors resolved to no input,
+      // this node should stay silent instead of behaving like a root node.
+      if (incomingEdges.length > 0 && (activeIncomingEdges.length === 0 || inputs.length === 0)) {
+        this.results.set(nodeId, {
+          nodeId,
+          output: '',
+          duration: Date.now() - startTime
+        });
+        debugLogExecution(
+          `[ExecutionEngine] Node ${nodeId} short-circuited due to inactive or empty incoming branch inputs`
+        );
+        this.context.decrementDepth();
+        return;
+      }
 
       // Execute based on node type
       let output: any = null;
@@ -415,6 +436,7 @@ export class Epic1ExecutionEngine {
     debugLogExecution(
       `[ExecutionEngine] WeightedChoice ${nodeId} selected branch index: ${selectedIndex}`
     );
+    this.selectedBranches.set(nodeId, selectedIndex);
 
     // Concatenate input with selected text
     const result = inputStr ? `${inputStr} ${selectedText}` : selectedText;
@@ -431,28 +453,8 @@ export class Epic1ExecutionEngine {
     node: ConcatNode,
     inputs: any[]
   ): Promise<string> {
-    // ConcatNode stores its config in 'value' field
-    const config = node.getData().value || node.getData().configuration || {};
-    const separator = config.separator !== undefined ? config.separator : ' ';
-    const trimInputs = config.trimInputs !== false;
-
-    debugLogExecution(
-      `[ExecutionEngine] Concat node ${node.serialize().id} config:`,
-      { separator, trimInputs },
-      'inputs:',
-      inputs
-    );
-
-    // Process inputs
-    const processedInputs = inputs
-      .filter(input => input != null && input !== '') // Remove null/undefined/empty
-      .map(input => {
-        const str = String(input);
-        return trimInputs ? str.trim() : str;
-      })
-      .filter(str => str.length > 0); // Remove empty after trimming
-
-    const result = processedInputs.join(separator);
+    node.setInputs(inputs.map(input => String(input ?? '')));
+    const result = await node.run(this.context.getExecutionContext());
     debugLogExecution(
       `[ExecutionEngine] Concat node ${node.serialize().id} result:`,
       result
@@ -572,6 +574,13 @@ export class Epic1ExecutionEngine {
 
     // Collect outputs from source nodes
     for (const edge of incomingEdges) {
+      if (!this.isActiveEdge(edge)) {
+        debugLogExecution(
+          `[ExecutionEngine] Skipping inactive branch edge ${edge.id} from ${edge.source} via ${edge.sourceHandle || 'output'}`
+        );
+        continue;
+      }
+
       const sourceResult = this.results.get(edge.source);
 
       if (sourceResult && !sourceResult.error) {
@@ -598,6 +607,22 @@ export class Epic1ExecutionEngine {
     return inputs;
   }
 
+  private isActiveEdge(edge: Epic1Edge): boolean {
+    const sourceHandle = edge.sourceHandle;
+
+    if (!sourceHandle || !sourceHandle.startsWith('branch-')) {
+      return true;
+    }
+
+    const selectedBranch = this.selectedBranches.get(edge.source);
+    if (selectedBranch === undefined) {
+      return false;
+    }
+
+    const branchIndex = Number.parseInt(sourceHandle.replace('branch-', ''), 10);
+    return Number.isFinite(branchIndex) && branchIndex === selectedBranch;
+  }
+
   /**
    * Build execution order using topological sort
    */
@@ -606,23 +631,7 @@ export class Epic1ExecutionEngine {
     const visiting = new Set<string>();
     const order: string[] = [];
 
-    // Build adjacency list
-    const adjacency = new Map<string, string[]>();
-    this.graph.nodes.forEach((_, nodeId) => {
-      adjacency.set(nodeId, []);
-    });
-
-    this.graph.edges.forEach(edge => {
-      const neighbors = adjacency.get(edge.source) || [];
-      neighbors.push(edge.target);
-      adjacency.set(edge.source, neighbors);
-    });
-
     debugLogExecution('[ExecutionEngine] Graph edges:', this.graph.edges);
-    debugLogExecution(
-      '[ExecutionEngine] Adjacency list:',
-      Array.from(adjacency.entries())
-    );
 
     // DFS for topological sort
     const visit = (nodeId: string) => {
@@ -653,13 +662,25 @@ export class Epic1ExecutionEngine {
       order.push(nodeId);
     };
 
-    // Start from output node
-    if (this.outputNodeId) {
-      visit(this.outputNodeId);
-    }
+    // Prioritize setup-oriented Variable nodes so disconnected variable
+    // initializers run before template/output consumers while still honoring
+    // explicit graph dependencies.
+    const orderedNodeIds = Array.from(this.graph.nodes.entries())
+      .map(([nodeId, node], index) => ({
+        nodeId,
+        index,
+        priority: node.getNodeType() === Epic1NodeType.Variable ? 0 : 1
+      }))
+      .sort((a, b) => {
+        if (a.priority !== b.priority) {
+          return a.priority - b.priority;
+        }
 
-    // Visit any remaining nodes (disconnected components)
-    this.graph.nodes.forEach((_, nodeId) => {
+        return a.index - b.index;
+      })
+      .map(entry => entry.nodeId);
+
+    orderedNodeIds.forEach(nodeId => {
       if (!visited.has(nodeId)) {
         visit(nodeId);
       }

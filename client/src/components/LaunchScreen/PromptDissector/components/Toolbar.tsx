@@ -43,9 +43,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           className={`mode-button ${llmMode === 'llm-enhanced' ? 'active' : ''}`}
           onClick={() => onModeChange('llm-enhanced')}
           disabled={isLLMParsing}
-          title="LLM-enhanced parsing mode"
+          title="Agent-assisted graph drafting mode"
         >
-          LLM Enhanced
+          Agent Draft
         </button>
       </div>
 
@@ -91,7 +91,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 
       {isLLMParsing && (
         <div className="parsing-indicator">
-          <span className="spinner">⟳</span> Analyzing with LLM...
+          <span className="spinner">⟳</span> Drafting with agent...
         </div>
       )}
     </div>

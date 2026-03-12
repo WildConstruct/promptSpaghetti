@@ -1,4 +1,5 @@
 import React from 'react';
+import { exportGraphToPSG } from '@promptscape/core';
 import { deriveEnableSupabaseProp } from '@promptscape/core/utils/supabaseFeature';
 import { useUserId } from '../user/UserProvider';
 
@@ -44,6 +45,29 @@ function ensurePsg(name: string): string {
   return name.toLowerCase().endsWith('.psg') ? name : `${name}.psg`;
 }
 
+function looksLikeGraphBatch(
+  graph: unknown
+): graph is { nodes: unknown[]; edges: unknown[] } {
+  return Boolean(
+    graph &&
+      typeof graph === 'object' &&
+      Array.isArray((graph as { nodes?: unknown[] }).nodes) &&
+      Array.isArray((graph as { edges?: unknown[] }).edges)
+  );
+}
+
+function toPsgText(graph: unknown, filename: string): string {
+  if (!looksLikeGraphBatch(graph)) {
+    throw new Error('This graph cannot be exported as a .psg file');
+  }
+
+  const baseName = filename.replace(/\.psg$/i, '') || DEFAULT_NAME;
+  const psg = exportGraphToPSG(graph.nodes as any[], graph.edges as any[], {
+    name: baseName
+  });
+  return JSON.stringify(psg, null, 2);
+}
+
 export function SaveGraphDialog({
   isOpen,
   onClose,
@@ -77,6 +101,7 @@ export function SaveGraphDialog({
   const finalName = ensurePsg(base64 || DEFAULT_NAME);
   const isValid =
     Boolean(base64) && !base64.startsWith('.') && !base64.endsWith('.');
+  const canExportPsg = looksLikeGraphBatch(graph);
   const effectiveUserId = userId ?? ctxUserId ?? null;
   const supabaseEnabled = enableSupabase ?? deriveEnableSupabaseProp();
   const canSaveToSupabase = Boolean(
@@ -84,15 +109,19 @@ export function SaveGraphDialog({
   );
 
   async function handleSaveSupabase() {
-    if (!isValid || !canSaveToSupabase) {
-      setError('Please enter a valid name');
+    if (!isValid || !canSaveToSupabase || !canExportPsg) {
+      setError(
+        canExportPsg
+          ? 'Please enter a valid name'
+          : 'This graph cannot be exported as a .psg file'
+      );
       return;
     }
+
     setSavingSupabase(true);
     setError(null);
     try {
-      // Placeholder serializer: stable JSON stringify until psgCodec.writePsg is available
-      const json = JSON.stringify(graph, null, 2);
+      const json = toPsgText(graph, finalName);
       const res = await supabasePut!(effectiveUserId!, finalName, json);
       if (res.ok) {
         onSupabaseSaved?.(finalName, res.data.path);
@@ -114,15 +143,20 @@ export function SaveGraphDialog({
   }
 
   async function handleSave() {
-    if (!isValid) {
-      setError('Please enter a valid name');
+    if (!isValid || !canExportPsg) {
+      setError(
+        canExportPsg
+          ? 'Please enter a valid name'
+          : 'This graph cannot be exported as a .psg file'
+      );
       return;
     }
     setSaving(true);
     try {
-      // Placeholder serializer: stable JSON stringify until psgCodec.writePsg is available
-      const json = JSON.stringify(graph, null, 2);
-      const blob = new Blob([json], { type: 'application/json' });
+      const json = toPsgText(graph, finalName);
+      const blob = new Blob([json], {
+        type: 'application/x-promptspaghetti-graph'
+      });
 
       onSaveBlob?.(blob, finalName);
 
@@ -174,6 +208,19 @@ export function SaveGraphDialog({
             <div aria-live="polite" style={{ fontSize: 12, color: '#555' }}>
               Will save as: <code>{finalName}</code>
             </div>
+            <div style={{ fontSize: 12, color: '#555' }}>
+              Exports the current graph as a flat <code>.psg</code> file using
+              the current MVP contract.
+            </div>
+            {!canExportPsg && (
+              <div
+                role="status"
+                aria-live="polite"
+                style={{ fontSize: 12, color: '#b00' }}
+              >
+                Only node/edge graph batches can be exported from this dialog.
+              </div>
+            )}
           </label>
           {error && (
             <div role="alert" aria-live="assertive" style={{ color: '#b00' }}>
@@ -187,7 +234,7 @@ export function SaveGraphDialog({
           </button>
           <button
             type="button"
-            disabled={!isValid || saving}
+            disabled={!isValid || saving || !canExportPsg}
             onClick={handleSave}
           >
             {saving ? <Spinner /> : 'Save'}
@@ -196,10 +243,10 @@ export function SaveGraphDialog({
             <button
               type="button"
               aria-label="Save to Supabase"
-              disabled={savingSupabase}
+              disabled={savingSupabase || !canExportPsg}
               onClick={handleSaveSupabase}
             >
-              {savingSupabase ? <Spinner /> : 'Save to Supabase'}
+              {savingSupabase ? <Spinner /> : 'Save .psg to Supabase'}
             </button>
           )}
         </footer>

@@ -50,15 +50,7 @@ export {
 export { VisualKeyboardMap, CompactKeyboardView } from './VisualKeyboardMap';
 
 // Tutorial step IDs for external reference
-export const TUTORIAL_STEPS = {
-  WELCOME: 'welcome',
-  EMPTY_CANVAS: 'empty-canvas',
-  PASTE_PROMPT: 'paste-prompt',
-  NODES_CREATED: 'nodes-created',
-  INLINE_EDIT: 'inline-edit',
-  PREVIEW_UPDATE: 'preview-update',
-  COMPLETION: 'completion'
-} as const;
+export { TUTORIAL_STEP_IDS as TUTORIAL_STEPS } from './tutorialModel';
 
 // Achievement IDs
 export const ACHIEVEMENTS = {

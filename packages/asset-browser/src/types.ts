@@ -17,4 +17,12 @@ export type Preset = {
   createdAt?: string;
   updatedAt?: string;
   thumbnail?: string;
+  metadata?: {
+    file?: string;
+    nodes?: number;
+    options?: number;
+    combinations?: number;
+    region?: string;
+    [key: string]: unknown;
+  };
 };

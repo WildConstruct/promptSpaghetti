@@ -7,6 +7,28 @@ interface ChangelogModalProps {
   onClose: () => void;
 }
 
+const FALLBACK_WHATS_NEW = `# Prompt Spaghetti Launch
+
+## Shipping now
+
+- Archetype-first launch flow with faster graph scaffolding
+- Clear fixed DNA vs allowed variation framing on first run
+- Launch-aligned quick starts for characters, vehicles, and buildings
+- PSG export flow with Comfy bridge support
+
+## Recent polish
+
+- Right sidebar is resizable from its left edge
+- Region boxes support collapse, resizing, and visual grouping again
+- Security hardening completed for deployable admin and API surfaces
+
+## Coming next
+
+- External Supabase verification for cloud isolation
+- Additional asset-browser and region-box polish
+- Tighter family-preview and export workflows
+`;
+
 export const ChangelogModal: React.FC<ChangelogModalProps> = ({
   isOpen,
   onClose
@@ -26,23 +48,35 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({
     setError(null);
 
     try {
-      // Try to fetch from API first
+      const latestResponse = await fetch('/whats-new.md');
+      if (latestResponse.ok) {
+        const text = await latestResponse.text();
+        setChangelog(text);
+        return;
+      }
+
       const response = await fetch('/api/changelog');
       if (response.ok) {
         const data = await response.json();
-        setChangelog(data.content);
-      } else {
-        // Fallback to static file
-        const staticResponse = await fetch('/CHANGELOG.md');
-        if (staticResponse.ok) {
-          const text = await staticResponse.text();
-          setChangelog(text);
-        } else {
-          throw new Error('Failed to load changelog');
-        }
+        const content =
+          typeof data.content === 'string' && data.content.trim().length > 0
+            ? data.content
+            : FALLBACK_WHATS_NEW;
+        setChangelog(content);
+        return;
       }
+
+      const staticResponse = await fetch('/CHANGELOG.md');
+      if (staticResponse.ok) {
+        const text = await staticResponse.text();
+        setChangelog(text);
+        return;
+      }
+
+      setChangelog(FALLBACK_WHATS_NEW);
     } catch (err) {
-      setError('Failed to load changelog. Please try again later.');
+      setChangelog(FALLBACK_WHATS_NEW);
+      setError(null);
       console.error('Error loading changelog:', err);
     } finally {
       setLoading(false);
@@ -126,12 +160,12 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({
         </div>
 
         <div className="changelog-modal-footer">
-          <div className="changelog-version">Version 1.0.0-demo</div>
+          <div className="changelog-version">Prompt Spaghetti Launch</div>
           <button
             className="changelog-github-link"
             onClick={() => {
               window.open(
-                'https://github.com/WildConstruct/prompt_spaghetti_the_revenge/releases',
+                'https://github.com/WildConstruct/promptSpaghetti/releases',
                 '_blank'
               );
             }}

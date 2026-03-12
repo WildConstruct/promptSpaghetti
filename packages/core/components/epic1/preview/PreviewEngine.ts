@@ -12,7 +12,24 @@ import {
 } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { PreviewCache } from './PreviewCache';
 import { WorkerPool } from './WorkerPool';
-import { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'reactflow';
+
+type PreviewReactFlowNode = {
+  id: string;
+  type?: string;
+  data?: unknown;
+  position?: {
+    x: number;
+    y: number;
+  };
+};
+
+type PreviewReactFlowEdge = {
+  id: string;
+  source: string;
+  target: string;
+  sourceHandle?: string | null;
+  targetHandle?: string | null;
+};
 
 export enum PreviewState {
   IDLE = 'idle',
@@ -74,8 +91,8 @@ export class PreviewEngine {
   private updateCallbacks: Set<PreviewUpdateCallback> = new Set();
 
   // Track current graph for caching
-  private currentNodes: ReactFlowNode[] = [];
-  private currentEdges: ReactFlowEdge[] = [];
+  private currentNodes: PreviewReactFlowNode[] = [];
+  private currentEdges: PreviewReactFlowEdge[] = [];
 
   constructor(options: PreviewOptions = {}) {
     this.debounceDelay = options.debounceDelay ?? 300;
@@ -138,12 +155,25 @@ export class PreviewEngine {
    */
   updatePreview(
     graph: Epic1Graph,
-    nodes: ReactFlowNode[],
-    edges: ReactFlowEdge[]
+    nodes: PreviewReactFlowNode[],
+    edges: PreviewReactFlowEdge[]
   ): void {
     // Store current graph structure for caching
     this.currentNodes = nodes;
     this.currentEdges = edges;
+
+    // Cancel any pending debounce or in-progress execution first so stale work
+    // cannot keep the preview in a refresh/loading state.
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = null;
+    }
+    this.cancelCurrentExecution();
+
+    if (this.seeds.length === 0) {
+      this.setState(PreviewState.IDLE, []);
+      return;
+    }
 
     // Check cache first
     if (this.cache) {
@@ -162,15 +192,6 @@ export class PreviewEngine {
         return;
       }
     }
-
-    // Not in cache - proceed with debouncing
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = null;
-    }
-
-    // Cancel any in-progress execution
-    this.cancelCurrentExecution();
 
     // Update state to pending
     this.setState(PreviewState.PENDING);
@@ -186,12 +207,25 @@ export class PreviewEngine {
    */
   async updatePreviewImmediate(
     graph: Epic1Graph,
-    nodes: ReactFlowNode[],
-    edges: ReactFlowEdge[]
+    nodes: PreviewReactFlowNode[],
+    edges: PreviewReactFlowEdge[]
   ): Promise<void> {
     // Store current graph structure for caching
     this.currentNodes = nodes;
     this.currentEdges = edges;
+
+    // Cancel any pending debounce or in-progress execution first so manual
+    // refreshes and seed changes cannot leave stale executions alive.
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = null;
+    }
+    this.cancelCurrentExecution();
+
+    if (this.seeds.length === 0) {
+      this.setState(PreviewState.IDLE, []);
+      return;
+    }
 
     // Check cache first
     if (this.cache) {
@@ -210,15 +244,6 @@ export class PreviewEngine {
         return;
       }
     }
-
-    // Cancel any pending debounce
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = null;
-    }
-
-    // Cancel any in-progress execution
-    this.cancelCurrentExecution();
 
     // Execute immediately
     await this.executeGraph(graph);

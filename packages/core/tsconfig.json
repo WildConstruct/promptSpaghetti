@@ -23,7 +23,8 @@
     "utils/psgStorage.ts",
     "utils/supabaseClient.ts",
     "utils/supabaseFeature.ts",
-    "utils/persistenceUtils.ts"
+    "utils/persistenceUtils.ts",
+    "types/vite-client.d.ts"
   ],
   "exclude": [
     "node_modules",

@@ -3,12 +3,16 @@ import './SimpleMenuBar.css';
 
 export interface SimpleMenuBarProps {
   // File operations
+  onBackToLaunch?: () => void;
   onNew?: () => void;
   onOpen?: () => void;
   onSave?: () => void;
   onSaveAs?: () => void;
   onImport?: () => void;
   onExport?: () => void;
+  onExportComfy?: () => void;
+  onPsgSceneAssets?: () => void;
+  onExpandCrowd?: () => void;
   onQuit?: () => void;
   // Edit operations
   onUndo?: () => void;
@@ -37,99 +41,319 @@ export interface SimpleMenuBarProps {
   // Help operations
   onDocumentation?: () => void;
   onKeyboardShortcuts?: () => void;
+  onReportBug?: () => void;
   onChangelog?: () => void;
   onAbout?: () => void;
 }
 
 export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
+  const showImportItem = Boolean(
+    props.onImport && props.onImport !== props.onOpen
+  );
+  const fileItems = [
+    props.onBackToLaunch ? 'backToLaunch' : null,
+    props.onNew ? 'new' : null,
+    props.onOpen ? 'open' : null,
+    props.onSave ? 'save' : null,
+    props.onSaveAs ? 'saveAs' : null,
+    showImportItem ? 'import' : null,
+    props.onExport ? 'export' : null,
+    props.onExportComfy ? 'exportComfy' : null,
+    props.onPsgSceneAssets ? 'psgSceneAssets' : null,
+    props.onExpandCrowd ? 'expandCrowd' : null,
+    props.onQuit ? 'quit' : null
+  ].filter(Boolean);
+  const hasFileItems = fileItems.length > 0;
+  const hasEditItems = Boolean(
+    props.onUndo ||
+      props.onRedo ||
+      props.onCopy ||
+      props.onPaste ||
+      props.onCut ||
+      props.onSelectAll ||
+      props.onFind ||
+      props.onPreferences
+  );
+  const hasViewItems = Boolean(
+    props.onZoomIn ||
+      props.onZoomOut ||
+      props.onFitView ||
+      props.onToggleGrid ||
+      props.onToggleMinimap ||
+      props.onToggleInspector ||
+      props.onToggleAssetLibrary ||
+      props.onToggleFullscreen ||
+      props.onToggleTheme
+  );
+  const hasHelpItems = Boolean(
+    props.onDocumentation ||
+      props.onKeyboardShortcuts ||
+      props.onReportBug ||
+      props.onChangelog ||
+      props.onAbout
+  );
+
   return (
     <div className="simple-menu-bar">
-      <div className="menu-section">
-        <span className="menu-title">File</span>
-        <div className="menu-dropdown">
-          <button onClick={props.onNew} className="menu-item">
-            New Graph
-          </button>
-          <button onClick={props.onOpen} className="menu-item">
-            Open...
-          </button>
-          <div className="menu-separator" />
-          <button onClick={props.onSave} className="menu-item">
-            Save
-          </button>
-          <button onClick={props.onSaveAs} className="menu-item">
-            Save As...
-          </button>
-          <div className="menu-separator" />
-          <button onClick={props.onImport} className="menu-item">
-            Import
-          </button>
-          <button onClick={props.onExport} className="menu-item">
-            Export
-          </button>
+      {hasFileItems && (
+        <div className="menu-section">
+          <span className="menu-title">File</span>
+          <div className="menu-dropdown">
+            {props.onNew && (
+              <>
+                {props.onBackToLaunch && (
+                  <button onClick={props.onBackToLaunch} className="menu-item">
+                    Back to Launch
+                  </button>
+                )}
+                {props.onBackToLaunch && <div className="menu-separator" />}
+              </>
+            )}
+            {!props.onNew && props.onBackToLaunch && (
+              <button onClick={props.onBackToLaunch} className="menu-item">
+                Back to Launch
+              </button>
+            )}
+            {props.onNew && (
+              <button onClick={props.onNew} className="menu-item">
+                New Document
+              </button>
+            )}
+            {props.onOpen && (
+              <button onClick={props.onOpen} className="menu-item">
+                Open PSG...
+              </button>
+            )}
+            {(props.onSave || props.onSaveAs) &&
+              (props.onNew || props.onOpen) && (
+                <div className="menu-separator" />
+              )}
+            {props.onSave && (
+              <button onClick={props.onSave} className="menu-item">
+                Save
+              </button>
+            )}
+            {props.onSaveAs && (
+              <button onClick={props.onSaveAs} className="menu-item">
+                Save PSG As...
+              </button>
+            )}
+            {(showImportItem ||
+              props.onExport ||
+              props.onExportComfy ||
+              props.onPsgSceneAssets ||
+              props.onExpandCrowd) &&
+              (props.onSave || props.onSaveAs) && (
+                <div className="menu-separator" />
+              )}
+            {showImportItem && (
+              <button onClick={props.onImport} className="menu-item">
+                Open Local PSG...
+              </button>
+            )}
+            {props.onExport && (
+              <button onClick={props.onExport} className="menu-item">
+                Export PSG
+              </button>
+            )}
+            {props.onExportComfy && (
+              <button onClick={props.onExportComfy} className="menu-item">
+                Export Comfy Bridge...
+              </button>
+            )}
+            {props.onPsgSceneAssets && (
+              <button onClick={props.onPsgSceneAssets} className="menu-item">
+                PSG Scene Assets...
+              </button>
+            )}
+            {props.onExpandCrowd && (
+              <button onClick={props.onExpandCrowd} className="menu-item">
+                Hosted Crowd Expansion...
+              </button>
+            )}
+            {props.onQuit &&
+              (props.onNew ||
+                props.onOpen ||
+                props.onSave ||
+                props.onSaveAs ||
+                showImportItem ||
+                props.onExport ||
+                props.onExportComfy ||
+                props.onPsgSceneAssets ||
+                props.onExpandCrowd) && <div className="menu-separator" />}
+            {props.onQuit && (
+              <button onClick={props.onQuit} className="menu-item">
+                Quit
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="menu-section">
-        <span className="menu-title">Edit</span>
-        <div className="menu-dropdown">
-          <button onClick={props.onUndo} className="menu-item">
-            Undo
-          </button>
-          <button onClick={props.onRedo} className="menu-item">
-            Redo
-          </button>
-          <div className="menu-separator" />
-          <button onClick={props.onSelectAll} className="menu-item">
-            Select All
-          </button>
-          <div className="menu-separator" />
-          <button onClick={props.onPreferences} className="menu-item">
-            Preferences
-          </button>
+      {hasEditItems && (
+        <div className="menu-section">
+          <span className="menu-title">Edit</span>
+          <div className="menu-dropdown">
+            {props.onUndo && (
+              <button onClick={props.onUndo} className="menu-item">
+                Undo
+              </button>
+            )}
+            {props.onRedo && (
+              <button onClick={props.onRedo} className="menu-item">
+                Redo
+              </button>
+            )}
+            {(props.onCopy || props.onPaste || props.onCut) &&
+              (props.onUndo || props.onRedo) && (
+                <div className="menu-separator" />
+              )}
+            {props.onCut && (
+              <button onClick={props.onCut} className="menu-item">
+                Cut
+              </button>
+            )}
+            {props.onCopy && (
+              <button onClick={props.onCopy} className="menu-item">
+                Copy
+              </button>
+            )}
+            {props.onPaste && (
+              <button onClick={props.onPaste} className="menu-item">
+                Paste
+              </button>
+            )}
+            {props.onSelectAll && (
+              <>
+                {(props.onCopy || props.onPaste || props.onCut) && (
+                  <div className="menu-separator" />
+                )}
+                <button onClick={props.onSelectAll} className="menu-item">
+                  Select All
+                </button>
+              </>
+            )}
+            {props.onFind && (
+              <button onClick={props.onFind} className="menu-item">
+                Find
+              </button>
+            )}
+            {props.onPreferences && (
+              <>
+                {(props.onSelectAll || props.onFind) && (
+                  <div className="menu-separator" />
+                )}
+                <button onClick={props.onPreferences} className="menu-item">
+                  Add Prompt to Graph
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="menu-section">
-        <span className="menu-title">View</span>
-        <div className="menu-dropdown">
-          <button onClick={props.onZoomIn} className="menu-item">
-            Zoom In
-          </button>
-          <button onClick={props.onZoomOut} className="menu-item">
-            Zoom Out
-          </button>
-          <button onClick={props.onFitView} className="menu-item">
-            Fit to View
-          </button>
-          <div className="menu-separator" />
-          <button onClick={props.onToggleGrid} className="menu-item">
-            Toggle Grid
-          </button>
-          <button onClick={props.onToggleMinimap} className="menu-item">
-            Toggle Minimap
-          </button>
-          <button onClick={props.onToggleAssetLibrary} className="menu-item">
-            Toggle Asset Library
-          </button>
+      {hasViewItems && (
+        <div className="menu-section">
+          <span className="menu-title">View</span>
+          <div className="menu-dropdown">
+            {props.onZoomIn && (
+              <button onClick={props.onZoomIn} className="menu-item">
+                Zoom In
+              </button>
+            )}
+            {props.onZoomOut && (
+              <button onClick={props.onZoomOut} className="menu-item">
+                Zoom Out
+              </button>
+            )}
+            {props.onFitView && (
+              <button onClick={props.onFitView} className="menu-item">
+                Fit to View
+              </button>
+            )}
+            {(props.onToggleGrid ||
+              props.onToggleMinimap ||
+              props.onToggleInspector ||
+              props.onToggleAssetLibrary ||
+              props.onToggleFullscreen ||
+              props.onToggleTheme) &&
+              (props.onZoomIn || props.onZoomOut || props.onFitView) && (
+                <div className="menu-separator" />
+              )}
+            {props.onToggleGrid && (
+              <button onClick={props.onToggleGrid} className="menu-item">
+                Toggle Grid
+              </button>
+            )}
+            {props.onToggleMinimap && (
+              <button onClick={props.onToggleMinimap} className="menu-item">
+                Toggle Minimap
+              </button>
+            )}
+            {props.onToggleInspector && (
+              <button onClick={props.onToggleInspector} className="menu-item">
+                Toggle Inspector
+              </button>
+            )}
+            {props.onToggleAssetLibrary && (
+              <button
+                onClick={props.onToggleAssetLibrary}
+                className="menu-item"
+              >
+                Toggle Asset Library
+              </button>
+            )}
+            {props.onToggleFullscreen && (
+              <button onClick={props.onToggleFullscreen} className="menu-item">
+                Toggle Fullscreen
+              </button>
+            )}
+            {props.onToggleTheme && (
+              <button onClick={props.onToggleTheme} className="menu-item">
+                Toggle Theme
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="menu-section">
-        <span className="menu-title">Help</span>
-        <div className="menu-dropdown">
-          <button onClick={props.onKeyboardShortcuts} className="menu-item">
-            Keyboard Shortcuts
-          </button>
-          <button onClick={props.onChangelog} className="menu-item">
-            What&apos;s New
-          </button>
-          <div className="menu-separator" />
-          <button onClick={props.onAbout} className="menu-item">
-            About
-          </button>
+      {hasHelpItems && (
+        <div className="menu-section">
+          <span className="menu-title">Help</span>
+          <div className="menu-dropdown">
+            {props.onDocumentation && (
+              <button onClick={props.onDocumentation} className="menu-item">
+                Prompt to Graph Draft
+              </button>
+            )}
+            {props.onKeyboardShortcuts && (
+              <button onClick={props.onKeyboardShortcuts} className="menu-item">
+                Keyboard Shortcuts
+              </button>
+            )}
+            {props.onReportBug && (
+              <button onClick={props.onReportBug} className="menu-item">
+                Report a Bug...
+              </button>
+            )}
+            {props.onChangelog && (
+              <button onClick={props.onChangelog} className="menu-item">
+                What&apos;s New
+              </button>
+            )}
+            {props.onAbout &&
+              (props.onDocumentation ||
+                props.onKeyboardShortcuts ||
+                props.onReportBug ||
+                props.onChangelog) && <div className="menu-separator" />}
+            {props.onAbout && (
+              <button onClick={props.onAbout} className="menu-item">
+                About
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

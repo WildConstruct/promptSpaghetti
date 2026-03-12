@@ -145,7 +145,8 @@ export function nodeDataToRuntimeNode(
               : ' ';
         return new ConcatNode(id, {
           separator: separator,
-          trimInputs: data.trimInputs !== false
+          trimInputs: data.trimInputs !== false,
+          requireAllInputs: data.requireAllInputs === true
         });
       }
 

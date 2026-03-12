@@ -66,8 +66,6 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
 }) => {
   // Get intelligence services from context
   const { textRefinement } = useIntelligence();
-  console.log('[PreviewTray] Rendering with results:', results);
-  console.log('[PreviewTray] Seeds:', seeds);
 
   const {
     isOpen,
@@ -135,8 +133,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
     const allResults = results
       .map(r => {
         const refined = refinedResults.get(`${r.seed}`);
-        const text =
-          llmMode === 'llm-enhanced' && refined ? refined : r.result;
+        const text = llmMode === 'llm-enhanced' && refined ? refined : r.result;
         return `Seed ${r.seed}: ${text}`;
       })
       .join('\n');
@@ -514,15 +511,6 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                             : r.seed;
                         return resultSeedNum === seedNum;
                       });
-                      console.log(
-                        `[PreviewTray] Looking for result with seed ${seedNum}:`,
-                        result
-                      );
-                      console.log(`[PreviewTray] Available results:`, results);
-                      console.log(
-                        `[PreviewTray] Seed types - current: ${typeof seed}, in results:`,
-                        results.map(r => `${r.seed} (${typeof r.seed})`)
-                      );
                       return (
                         <div
                           key={`seed-${seed}-${index}`}
@@ -751,7 +739,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                                   }}
                                 >
                                   {(() => {
-                                    const refined = refinedResults.get(`${seed}`);
+                                    const refined = refinedResults.get(
+                                      `${seed}`
+                                    );
                                     if (llmMode === 'llm-enhanced' && refined) {
                                       return refined;
                                     }

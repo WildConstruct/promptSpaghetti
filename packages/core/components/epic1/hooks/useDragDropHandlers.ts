@@ -1,15 +1,30 @@
 import { useCallback, useRef } from 'react';
-import { Node, ReactFlowInstance, Edge } from 'reactflow';
+import { Node, ReactFlowInstance } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
 import { validatePreset, insertPreset } from '../../../runtime/presetInsertion';
+import {
+  getImportedFragmentWrapperPolicy,
+  prepareImportedGraphBatch
+} from '../../../runtime/importGraphNormalization';
 import { layoutNewNodes } from '../../../utils/layoutAlgorithms';
 import {
   attachNodesToContainerNodes,
   findContainerAtPosition
 } from './dragDropContainerUtils';
-
-type FlowNode = Node<EditableNodeData>;
-type FlowEdge = Edge<EditableNodeData>;
+import { debugLogEpic1 } from '../../../utils/debug';
+import {
+  getInlinePresetDocument,
+  isSafePresetSourcePath
+} from './presetSourcePolicy';
+import {
+  replacePresetAtNode,
+  splicePresetIntoEdge,
+  type EdgeSpliceTarget,
+  type FlowEdge,
+  type FlowNode,
+  type NodeReplacementTarget,
+  type PresetInsertionMetadata
+} from '../services/FragmentExecution';
 
 export interface PresetDropMetadata {
   file?: string;
@@ -21,7 +36,7 @@ export interface PresetDropPayload {
   path?: string;
   file?: string;
   psglib?: string;
-  content?: string;
+  content?: unknown;
   name?: string;
   metadata?: PresetDropMetadata;
   [key: string]: unknown;
@@ -49,6 +64,58 @@ const toFlowNodes = (nodes: unknown): FlowNode[] =>
 
 const toFlowEdges = (edges: unknown): FlowEdge[] =>
   Array.isArray(edges) ? edges.filter(isFlowEdge) : [];
+
+function readImportMetaBaseUrl(): string | undefined {
+  try {
+    const env = Function(
+      'return typeof import !== "undefined" && import.meta && import.meta.env ? import.meta.env : undefined;'
+    )() as { BASE_URL?: unknown } | undefined;
+    return typeof env?.BASE_URL === 'string' ? env.BASE_URL : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const getNodeWidth = (node: FlowNode): number =>
+  typeof node.width === 'number'
+    ? node.width
+    : typeof (node.data as Record<string, unknown>)?.width === 'number'
+      ? ((node.data as Record<string, unknown>).width as number)
+      : 400;
+
+const getNodeHeight = (node: FlowNode): number =>
+  (() => {
+    const explicitHeight =
+      typeof node.height === 'number'
+        ? node.height
+        : typeof (node.data as Record<string, unknown>)?.height === 'number'
+          ? ((node.data as Record<string, unknown>).height as number)
+          : undefined;
+
+    const data = (node.data ?? {}) as Record<string, unknown>;
+    const isWeightedChoice =
+      node.type === 'weightedChoice' || data.nodeType === 'weightedChoice';
+    if (!isWeightedChoice) {
+      return explicitHeight ?? 300;
+    }
+
+    let options = Array.isArray(data.options)
+      ? (data.options as unknown[])
+      : [];
+    if (!options.length && typeof data.value === 'string') {
+      try {
+        const parsed = JSON.parse(data.value);
+        if (Array.isArray(parsed)) {
+          options = parsed;
+        }
+      } catch {
+        // ignore invalid JSON and fall back to default estimate
+      }
+    }
+    // WeightedChoice editor grows substantially with option count and control rows.
+    const estimatedHeight = Math.max(340, 170 + options.length * 42);
+    return Math.max(explicitHeight ?? 0, estimatedHeight);
+  })();
 
 interface UseDragDropHandlersProps {
   setNodes: (nodes: FlowNode[] | ((nodes: FlowNode[]) => FlowNode[])) => void;
@@ -92,9 +159,7 @@ export function useDragDropHandlers({
         }
         const loader = (async () => {
           try {
-            const baseUrl =
-              (import.meta as unknown as { env?: { BASE_URL?: string } })?.env
-                ?.BASE_URL || '/';
+            const baseUrl = readImportMetaBaseUrl() || '/';
             const base = String(baseUrl).replace(/\/$/, '');
             const candidates = [
               `${base}/presets/manifest.json`,
@@ -158,6 +223,20 @@ export function useDragDropHandlers({
     if (/^https?:\/\//i.test(path) || path.startsWith('/')) {
       return path;
     }
+    // Asset fragments live under /assets/library; normalize relative PSG paths there
+    if (path.endsWith('.psg')) {
+      if (path.startsWith('./')) {
+        return `/assets/library/${path.slice(2)}`;
+      }
+      if (path.startsWith('assets/library/')) {
+        return `/${path}`;
+      }
+      if (path.startsWith('asset-browser/assets/library/')) {
+        return `/${path}`;
+      }
+      // Default for bare PSG file names
+      return `/assets/library/${path.replace(/^\.?\/*/, '')}`;
+    }
     const base = manifestBaseRef.current || '/presets';
     if (path.startsWith('./')) {
       return `${base}/${path.slice(2)}`;
@@ -174,6 +253,43 @@ export function useDragDropHandlers({
     return `${base}/${path}`;
   }, []);
 
+  const resolveSafePresetPath = useCallback(
+    async (meta: PresetDropPayload): Promise<string | null> => {
+      const explicitPath =
+        (typeof meta?.path === 'string' && meta.path) ||
+        (typeof meta?.file === 'string' && meta.file) ||
+        null;
+      const metadataFile =
+        typeof meta?.metadata?.file === 'string' ? meta.metadata.file : null;
+
+      const ensureSafePath = (candidate: string, source: string): string => {
+        const normalized = normalizePresetPath(candidate);
+        if (!isSafePresetSourcePath(normalized)) {
+          throw new Error(`Rejected unsafe preset ${source}.`);
+        }
+        return normalized;
+      };
+
+      if (explicitPath) {
+        return ensureSafePath(explicitPath, 'path');
+      }
+
+      if (meta?.id) {
+        const resolvedById = await resolvePresetPathById(meta.id);
+        if (resolvedById) {
+          return ensureSafePath(resolvedById, 'manifest path');
+        }
+      }
+
+      if (metadataFile) {
+        return ensureSafePath(metadataFile, 'metadata file path');
+      }
+
+      return null;
+    },
+    [normalizePresetPath, resolvePresetPathById]
+  );
+
   const getContainerAtPosition = useCallback(
     (position: { x: number; y: number }) => {
       if (!reactFlowInstance) {
@@ -188,81 +304,114 @@ export function useDragDropHandlers({
   );
 
   const attachNodesToContainer = useCallback(
-    (
-      nodes: FlowNode[],
-      container: Node<Record<string, unknown>>
-    ): FlowNode[] => {
+    (nodes: FlowNode[], container: unknown): FlowNode[] => {
       const containerNode = container as FlowNode;
       return attachNodesToContainerNodes(nodes, containerNode);
     },
     []
   );
 
+  const forceGraphRefresh = useCallback(() => {
+    requestAnimationFrame(() => {
+      setNodes(nodes => nodes.map(node => ({ ...node })));
+      setEdges(edges => edges.map(edge => ({ ...edge })));
+    });
+  }, [setEdges, setNodes]);
+
   // Shared insertion routine for both drop and explicit insert actions
   const insertPresetByMeta = useCallback(
-    async (meta: PresetDropPayload, position: { x: number; y: number }) => {
+    async (
+      meta: PresetDropPayload,
+      position: { x: number; y: number },
+      edgeSpliceTarget?: EdgeSpliceTarget | null,
+      nodeReplacementTarget?: NodeReplacementTarget | null
+    ) => {
       try {
+        debugLogEpic1('[DragDrop] insertPresetByMeta start', {
+          id: meta?.id,
+          name: meta?.name,
+          path: meta?.path,
+          file: meta?.file,
+          metadataFile: meta?.metadata?.file,
+          preferredInsertion: meta?.metadata?.preferredInsertion,
+          entryStrategy: meta?.metadata?.entryStrategy,
+          exitStrategy: meta?.metadata?.exitStrategy
+        });
         let content: string | null = null;
+        const inlineDocument = getInlinePresetDocument(meta);
+        const rawInlineContent =
+          meta?.psglib ??
+          (typeof meta?.content === 'string' ? meta.content : null);
+        const presetPath = await resolveSafePresetPath(meta);
 
-        // Prefer inline PSG content if provided
-        if (meta?.psglib || meta?.content) {
-          content = String(meta.psglib ?? meta.content);
-          console.log('[DragDrop] Using inline preset content');
-        } else {
-          // Resolve path from payload or manifest by ID
-          const metadataFile =
-            typeof meta.metadata?.file === 'string' ? meta.metadata.file : null;
-          let presetPath: string | null =
-            (typeof meta?.path === 'string' && meta.path) ||
-            (typeof meta?.file === 'string' && meta.file) ||
-            metadataFile;
-
-          if (!presetPath && meta?.id) {
-            presetPath = await resolvePresetPathById(meta.id);
-          }
-
-          if (!presetPath) {
-            throw new Error('Unable to resolve preset path.');
-          }
-
-          const normalized = normalizePresetPath(presetPath);
-          console.log('[DragDrop] Fetching preset path:', normalized);
-          const resp = await fetch(normalized, { cache: 'no-cache' });
+        if (presetPath) {
+          debugLogEpic1('[DragDrop] Fetching preset path:', presetPath);
+          const resp = await fetch(presetPath, { cache: 'no-cache' });
           if (!resp.ok) {
             throw new Error(
               `Failed to load preset: ${resp.status} ${resp.statusText}`
             );
           }
           content = await resp.text();
-          console.log('[DragDrop] Loaded preset from path:', normalized);
+          debugLogEpic1('[DragDrop] Loaded preset from path:', presetPath);
+        } else if (inlineDocument) {
+          content = inlineDocument;
+          debugLogEpic1('[DragDrop] Using inline preset content');
+        } else if (rawInlineContent) {
+          throw new Error(
+            'Preset payload contained non-document inline content and no safe file path.'
+          );
+        } else {
+          throw new Error('Unable to resolve preset path.');
         }
 
         if (!content) {
           throw new Error('Preset content is empty.');
         }
 
+        debugLogEpic1('[DragDrop] Validating preset content', {
+          id: meta?.id,
+          name: meta?.name,
+          presetPath
+        });
+
         // Validate before inserting
-        const validation = validatePreset(content);
+        const validation = validatePreset(content, {
+          // Content validation does not prove source provenance; source paths are
+          // restricted separately before fetch.
+          preferCanonicalPsg:
+            typeof presetPath === 'string' &&
+            presetPath.startsWith('/assets/library/')
+        });
         if (!validation.valid) {
+          console.error('[DragDrop] Preset validation failed', {
+            presetId: meta?.id,
+            presetName: meta?.name,
+            presetPath,
+            hasInlineContent: Boolean(inlineDocument),
+            contentPreview: content.slice(0, 400)
+          });
           throw new Error(validation.error || 'Preset failed validation');
         }
 
-        // Check if this is a fragment (has regions) to preserve positions
+        debugLogEpic1('[DragDrop] Preset validated', {
+          id: meta?.id,
+          name: meta?.name,
+          presetPath,
+          nodeCount: validation.nodeCount,
+          edgeCount: validation.edgeCount
+        });
+
+        let parsedPresetData: unknown;
         let shouldPreservePositions = false;
         try {
-          const data = JSON.parse(content);
-          const graphNodes = Array.isArray(data?.graph?.nodes)
-            ? data.graph.nodes
-            : [];
-          const hasRegions =
-            Array.isArray(data?.regions) && data.regions.length > 0;
-          const hasEnhancedBoundingBox = graphNodes.some(
-            (node: unknown) =>
-              isRecord(node) && node.type === 'enhancedBoundingBox'
-          );
-          if (hasRegions || hasEnhancedBoundingBox) {
-            shouldPreservePositions = true;
-            console.log('[DragDrop] Fragment detected, preserving positions');
+          parsedPresetData = JSON.parse(content);
+          const importPolicy = getImportedFragmentWrapperPolicy<FlowNode>({
+            presetData: parsedPresetData
+          });
+          shouldPreservePositions = importPolicy.shouldPreservePositions;
+          if (shouldPreservePositions) {
+            debugLogEpic1('[DragDrop] Fragment detected, preserving positions');
           }
         } catch {
           // Not JSON or can't parse, use default
@@ -270,117 +419,142 @@ export function useDragDropHandlers({
 
         const result = await insertPreset(content, {
           position,
-          preservePositions: shouldPreservePositions, // Preserve for fragments
+          preservePositions: shouldPreservePositions,
           snapToGrid: true,
           selectAfterInsert: true
         });
 
-        // Check if result has nodes
         if (!result || !result.nodes) {
           throw new Error('Preset insertion returned no nodes');
         }
 
-        // Apply auto-layout if multiple nodes (but not for fragments with preserved positions)
         const resultNodes = toFlowNodes(result.nodes);
-        let resultEdges = toFlowEdges(result.edges);
-        let nodesToAdd: FlowNode[] = resultNodes;
-        if (nodesToAdd && nodesToAdd.length > 1 && !shouldPreservePositions) {
-          console.log(
-            '[DragDrop] Applying auto-layout to',
-            nodesToAdd.length,
-            'nodes'
-          );
-          // Get existing nodes for layout context
-          const existingNodes: FlowNode[] = [];
-          const layoutedNodes = layoutNewNodes(
-            existingNodes,
-            nodesToAdd,
-            position,
-            resultEdges
-          );
-
-          // Only use layouted nodes if the layout succeeded
-          if (layoutedNodes && layoutedNodes.length > 0) {
-            nodesToAdd = layoutedNodes;
-            console.log('[DragDrop] Layout applied successfully');
-          } else {
+        const resultEdges = toFlowEdges(result.edges);
+        const existingNodes =
+          (reactFlowInstance?.getNodes?.() as FlowNode[] | undefined) ?? [];
+        const containerNode = getContainerAtPosition(position);
+        const preparedBatch = prepareImportedGraphBatch<FlowNode, FlowEdge>({
+          presetData: parsedPresetData,
+          nodes: resultNodes,
+          edges: resultEdges,
+          preservePositionsRequested: shouldPreservePositions,
+          existingNodes,
+          getNodeWidth,
+          getNodeHeight,
+          containerNode: (containerNode as FlowNode | null) ?? null,
+          attachNodesToContainer,
+          layoutNodes: (nodes, edges) => {
+            debugLogEpic1(
+              '[DragDrop] Applying auto-layout to',
+              nodes.length,
+              'nodes'
+            );
+            const layoutedNodes = layoutNewNodes([], nodes, position, edges);
+            if (layoutedNodes && layoutedNodes.length > 0) {
+              debugLogEpic1('[DragDrop] Layout applied successfully');
+              return layoutedNodes as FlowNode[];
+            }
             console.warn('[DragDrop] Layout failed, using original positions');
+            return nodes;
           }
-        } else if (shouldPreservePositions) {
-          console.log(
+        });
+
+        const nodesToAdd: FlowNode[] = preparedBatch.nodes;
+        const edgesToAdd: FlowEdge[] = preparedBatch.edges;
+
+        if (preparedBatch.policy.shouldSkipAutoLayout) {
+          debugLogEpic1(
             '[DragDrop] Skipping auto-layout for fragment with preserved positions'
           );
         }
 
-        // If an Output node already exists in the current graph, do not insert new outputs
-        // and retarget edges that pointed to the inserted outputs to the existing output.
-        try {
-          const existing = reactFlowInstance?.getNodes?.() as FlowNode[] | undefined;
-          const existingOutput = existing?.find?.(n => n.type === 'output');
-          if (existingOutput) {
-            const removedOutputIds = new Set<string>(
-              nodesToAdd.filter(n => n.type === 'output').map(n => n.id)
+        const importedBoxes = nodesToAdd.filter(
+          node => node.type === 'enhancedBoundingBox'
+        );
+        if (
+          importedBoxes.length > 0 &&
+          preparedBatch.policy.shouldSkipParentRepair
+        ) {
+          debugLogEpic1(
+            '[DragDrop] Preserving imported fragment wrapper geometry without repair pass'
+          );
+        }
+
+        debugLogEpic1('[DragDrop] Adding nodes:', nodesToAdd.length, 'nodes');
+        debugLogEpic1('[DragDrop] Adding edges:', edgesToAdd.length, 'edges');
+        if (edgesToAdd.length > 0) {
+          debugLogEpic1('[DragDrop] Edge details:', edgesToAdd);
+        }
+
+        const insertionMetadata = meta?.metadata as
+          | PresetInsertionMetadata
+          | null
+          | undefined;
+        if (nodeReplacementTarget) {
+          const currentNodes =
+            (reactFlowInstance?.getNodes?.() as FlowNode[] | undefined) ?? [];
+          const currentEdges =
+            (reactFlowInstance?.getEdges?.() as FlowEdge[] | undefined) ?? [];
+          const replacement = replacePresetAtNode(
+            currentNodes,
+            currentEdges,
+            nodesToAdd,
+            edgesToAdd,
+            nodeReplacementTarget,
+            insertionMetadata
+          );
+          setNodes(replacement.nodes);
+          setEdges(replacement.edges);
+        } else {
+          setNodes(nds => nds.concat(nodesToAdd));
+          setEdges(existingEdges => {
+            debugLogEpic1(
+              '[DragDrop] Current edges:',
+              existingEdges.length,
+              'New edges to add:',
+              edgesToAdd.length
             );
-            if (removedOutputIds.size > 0) {
-              nodesToAdd = nodesToAdd.filter(n => n.type !== 'output');
-              resultEdges = resultEdges.map(e =>
-                removedOutputIds.has(e.target)
-                  ? {
-                      ...e,
-                      target: existingOutput.id,
-                      targetHandle: 'target'
-                    }
-                  : e
+
+            if (edgeSpliceTarget) {
+              debugLogEpic1(
+                nodesToAdd.length === 1
+                  ? '[DragDrop] Splicing inserted node into edge'
+                  : '[DragDrop] Splicing fragment into edge',
+                edgeSpliceTarget.edgeId
               );
             }
-          }
-        } catch {
-          // non-fatal
+
+            return splicePresetIntoEdge(
+              existingEdges,
+              nodesToAdd,
+              edgesToAdd,
+              edgeSpliceTarget,
+              insertionMetadata
+            );
+          });
         }
 
-        const containerNode = getContainerAtPosition(position);
-        if (containerNode) {
-          nodesToAdd = attachNodesToContainer(nodesToAdd, containerNode);
-        }
+        forceGraphRefresh();
 
-        // Debug logging for edges
-        console.log('[DragDrop] Adding nodes:', nodesToAdd.length, 'nodes');
-        console.log(
-          '[DragDrop] Adding edges:',
-          result.edges?.length || 0,
-          'edges'
-        );
-        if (result.edges && result.edges.length > 0) {
-          console.log('[DragDrop] Edge details:', result.edges);
-        }
-
-        setNodes(nds => nds.concat(nodesToAdd));
-        const newEdges = resultEdges;
-        setEdges(eds => {
-          console.log(
-            '[DragDrop] Current edges:',
-            eds.length,
-            'New edges to add:',
-            newEdges.length
-          );
-          return eds.concat(newEdges);
-        });
-
-        // Optional: bounce first node for feedback
         try {
           if (addNodeWithBounce && nodesToAdd[0]) {
             addNodeWithBounce(nodesToAdd[0]);
           }
-        } catch {
-          // non-fatal
+        } catch (bounceError) {
+          console.warn('Bounce animation failed:', bounceError);
         }
 
-        const name = meta?.name ? ` "${meta.name}"` : '';
-        const count =
-          (validation.nodeCount ?? 0) > 0
-            ? ` (${validation.nodeCount} nodes)`
-            : '';
-        showToast('success', `Inserted preset${name}${count}`);
+        showToast(
+          'success',
+          `Inserted preset "${meta?.name || meta?.id || 'Preset'}"`
+        );
+        debugLogEpic1('[DragDrop] Preset inserted successfully', {
+          id: meta?.id,
+          name: meta?.name,
+          presetPath,
+          addedNodes: nodesToAdd.length,
+          addedEdges: edgesToAdd.length
+        });
       } catch (error) {
         console.error('[DragDrop] Preset insertion failed:', error);
         showToast(
@@ -391,17 +565,17 @@ export function useDragDropHandlers({
     },
     [
       addNodeWithBounce,
-      setNodes,
-      setEdges,
-      showToast,
-      normalizePresetPath,
-      resolvePresetPathById,
       attachNodesToContainer,
-      getContainerAtPosition
+      getContainerAtPosition,
+      reactFlowInstance,
+      resolveSafePresetPath,
+      setEdges,
+      setNodes,
+      showToast,
+      forceGraphRefresh
     ]
   );
 
-  // Handle node drop from toolbar
   const handleNodeDrop = useCallback(
     (nodeType: string, position: { x: number; y: number }) => {
       const validPosition = {
@@ -468,16 +642,39 @@ export function useDragDropHandlers({
           ...(nodeType === 'output' && {
             value: 'output',
             label: 'output'
+          }),
+          ...(nodeType === 'enhancedBoundingBox' && {
+            title: 'Region',
+            description: '',
+            backgroundColor: '#1a202c',
+            opacity: 0.1,
+            borderColor: '#22d3ee',
+            borderStyle: 'solid',
+            borderWidth: 2,
+            locked: false,
+            isCollapsed: false,
+            width: 400,
+            height: 300
           })
         }
       };
 
+      if (nodeType === 'enhancedBoundingBox') {
+        newNode = {
+          ...newNode,
+          width: 400,
+          height: 300,
+          style: {
+            ...(newNode.style ?? {}),
+            width: 400,
+            height: 300
+          }
+        };
+      }
+
       const containerNode = getContainerAtPosition(validPosition);
       if (containerNode) {
-        const [attachedNode] = attachNodesToContainerNodes(
-          [newNode],
-          containerNode as FlowNode
-        );
+        const [attachedNode] = attachNodesToContainer([newNode], containerNode);
         if (attachedNode) {
           newNode = attachedNode;
         }
@@ -500,7 +697,8 @@ export function useDragDropHandlers({
       setNodes,
       addNodeWithBounce,
       showToast,
-      getContainerAtPosition
+      getContainerAtPosition,
+      attachNodesToContainer
     ]
   );
 
@@ -516,17 +714,31 @@ export function useDragDropHandlers({
       event.preventDefault();
       event.stopPropagation();
 
-      // First: check for Asset Browser preset payload
-      let presetPayload = '';
+      // First: check for Asset Browser preset payloads
+      const presetPayloads: string[] = [];
       try {
-        presetPayload = event.dataTransfer.getData('application/x-preset');
+        const xpreset = event.dataTransfer.getData('application/x-preset');
+        if (xpreset) {
+          presetPayloads.push(xpreset);
+        }
+      } catch {
+        // ignore
+      }
+      try {
+        const jsonPayload = event.dataTransfer.getData('application/json');
+        if (jsonPayload) {
+          presetPayloads.push(jsonPayload);
+        }
       } catch {
         // ignore
       }
 
-      if (presetPayload) {
+      for (const raw of presetPayloads) {
+        if (!raw) {
+          continue;
+        }
         try {
-          const parsed = JSON.parse(presetPayload);
+          const parsed = JSON.parse(raw);
           if (!isRecord(parsed)) {
             throw new Error('Preset payload must be an object');
           }
@@ -550,6 +762,32 @@ export function useDragDropHandlers({
       let nodeType = event.dataTransfer.getData('application/reactflow');
       if (!nodeType) {
         nodeType = event.dataTransfer.getData('application/node-type');
+      }
+      if (!nodeType) {
+        // If we somehow get here with a JSON fragment payload, try routing it
+        // through preset insertion so asset fragments still work.
+        try {
+          const jsonPayload = event.dataTransfer.getData('application/json');
+          if (jsonPayload) {
+            const parsed = JSON.parse(jsonPayload);
+            const parsedPath =
+              isRecord(parsed) && typeof parsed.path === 'string'
+                ? parsed.path
+                : null;
+            if (parsedPath) {
+              const pos = reactFlowInstance
+                ? reactFlowInstance.screenToFlowPosition({
+                    x: event.clientX,
+                    y: event.clientY
+                  })
+                : { x: 250, y: 250 };
+              void insertPresetByMeta(parsed as PresetDropPayload, pos);
+              return;
+            }
+          }
+        } catch {
+          // fall back to regular handling
+        }
       }
       if (!nodeType) {
         nodeType = event.dataTransfer.getData('text/plain');

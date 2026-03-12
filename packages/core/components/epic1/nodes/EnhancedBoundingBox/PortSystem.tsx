@@ -174,11 +174,31 @@ const PortSystemComponent: React.FC<PortSystemProps> = ({
   // Separate input and output ports
   const inputPorts = portsToRender.filter(p => p.direction === 'input');
   const outputPorts = portsToRender.filter(p => p.direction === 'output');
+  const ensuredInputPorts =
+    inputPorts.length > 0
+      ? inputPorts
+      : [
+          {
+            ...DEFAULT_PORTS[0],
+            nodeId: boundingBoxId,
+            id: `${boundingBoxId}-${DEFAULT_PORTS[0].id}`
+          }
+        ];
+  const ensuredOutputPorts =
+    outputPorts.length > 0
+      ? outputPorts
+      : [
+          {
+            ...DEFAULT_PORTS[1],
+            nodeId: boundingBoxId,
+            id: `${boundingBoxId}-${DEFAULT_PORTS[1].id}`
+          }
+        ];
   
   return (
     <div className="port-system">
       {/* Input Ports (Left) */}
-      {inputPorts.map((port, index) => (
+      {ensuredInputPorts.map((port, index) => (
         <React.Fragment key={`${port.id}-input-${index}`}>
           <PortHandle
             port={port}
@@ -190,7 +210,7 @@ const PortSystemComponent: React.FC<PortSystemProps> = ({
       ))}
       
       {/* Output Ports (Right) */}
-      {outputPorts.map((port, index) => (
+      {ensuredOutputPorts.map((port, index) => (
         <React.Fragment key={`${port.id}-output-${index}`}>
           <PortHandle
             port={port}

@@ -1,5 +1,5 @@
 {
-  "buildCommand": "mkdir -p public && echo '<!DOCTYPE html><html><body><h1>API Server</h1><p>Visit <a href=\"/api/admin-enhanced\">/api/admin-enhanced</a> for admin panel</p></body></html>' > public/index.html",
+  "buildCommand": "node scripts/build/vercel-api-placeholder.js",
   "installCommand": "echo 'Skipping install for API-only deployment'",
   "outputDirectory": "public",
   "functions": {

@@ -1,22 +1,6 @@
 /* Supabase feature gating utilities */
-const STATIC_VITE_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as
-  | string
-  | undefined;
-const STATIC_VITE_SUPABASE_ANON_KEY = import.meta.env
-  .VITE_SUPABASE_ANON_KEY as string | undefined;
-const STATIC_VITE_FEATURE_SUPABASE = import.meta.env
-  .VITE_FEATURE_SUPABASE as string | undefined;
 
 function getEnvVar(key: string): string | undefined {
-  if (key === 'VITE_SUPABASE_URL' && STATIC_VITE_SUPABASE_URL) {
-    return STATIC_VITE_SUPABASE_URL;
-  }
-  if (key === 'VITE_SUPABASE_ANON_KEY' && STATIC_VITE_SUPABASE_ANON_KEY) {
-    return STATIC_VITE_SUPABASE_ANON_KEY;
-  }
-  if (key === 'VITE_FEATURE_SUPABASE' && STATIC_VITE_FEATURE_SUPABASE) {
-    return STATIC_VITE_FEATURE_SUPABASE;
-  }
   // Prefer process.env in Node/test/CI. Fallback to import.meta.env in browser builds.
   if (
     typeof process !== 'undefined' &&
@@ -25,13 +9,6 @@ function getEnvVar(key: string): string | undefined {
   ) {
     return (process.env as Record<string, string | undefined>)[key];
   }
-  try {
-    const im: any = (import.meta as unknown) as { env?: Record<string, unknown> };
-    if (im && im.env && Object.prototype.hasOwnProperty.call(im.env, key)) {
-      const val = im.env[key];
-      return typeof val === 'string' ? val : val != null ? String(val) : undefined;
-    }
-  } catch {}
   // Try to read from global import.meta.env and also from a global env bag
   const meta = (
     globalThis as unknown as {
@@ -48,7 +25,9 @@ function getEnvVar(key: string): string | undefined {
         ? String(val)
         : undefined;
   }
-  const globalEnv = (globalThis as unknown as { __env__?: Record<string, unknown> }).__env__;
+  const globalEnv = (
+    globalThis as unknown as { __env__?: Record<string, unknown> }
+  ).__env__;
   if (globalEnv && Object.prototype.hasOwnProperty.call(globalEnv, key)) {
     const val = globalEnv[key];
     return typeof val === 'string'
@@ -61,11 +40,19 @@ function getEnvVar(key: string): string | undefined {
 }
 
 function parseBoolean(value: unknown, fallback = true): boolean {
-  if (value === undefined || value === null || value === '') {return fallback;}
-  if (typeof value === 'boolean') {return value;}
+  if (value === undefined || value === null || value === '') {
+    return fallback;
+  }
+  if (typeof value === 'boolean') {
+    return value;
+  }
   const s = String(value).toLowerCase().trim();
-  if (['1', 'true', 'yes', 'on', 'enabled'].includes(s)) {return true;}
-  if (['0', 'false', 'no', 'off', 'disabled'].includes(s)) {return false;}
+  if (['1', 'true', 'yes', 'on', 'enabled'].includes(s)) {
+    return true;
+  }
+  if (['0', 'false', 'no', 'off', 'disabled'].includes(s)) {
+    return false;
+  }
   return fallback;
 }
 
@@ -118,7 +105,15 @@ export function getSupabaseConfig() {
     anonKeyLen: anonKey ? anonKey.length : 0
   } as const;
 
-  return { url, anonKey, flagRaw, enabledByFlag, hasEnv, enabled, meta } as const;
+  return {
+    url,
+    anonKey,
+    flagRaw,
+    enabledByFlag,
+    hasEnv,
+    enabled,
+    meta
+  } as const;
 }
 
 export function hasSupabaseEnv(): boolean {

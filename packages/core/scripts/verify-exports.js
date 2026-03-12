@@ -18,6 +18,17 @@ function assertExists(relPath, label) {
   }
 }
 
+function readText(relPath, label) {
+  assertExists(relPath, label);
+  return fs.readFileSync(path.join(root, relPath), 'utf8');
+}
+
+function assertContains(text, expected, label) {
+  if (!text.includes(expected)) {
+    throw new Error(`Missing ${label}: ${expected}`);
+  }
+}
+
 function logOk(msg) {
   process.stdout.write(`✔ ${msg}\n`);
 }
@@ -61,5 +72,27 @@ assertExists('dist/esm/public.js', 'ESM public.js');
 assertExists('dist/cjs/public.js', 'CJS public.js');
 assertExists('dist/types/public.d.ts', 'Types public.d.ts');
 logOk('Public entrypoint files present');
+
+const publicSource = readText('public.ts', 'source public.ts');
+const publicTypes = readText(
+  'dist/types/public.d.ts',
+  'generated public types'
+);
+const requiredPublicSymbols = [
+  'readPsg',
+  'looksLikeLegacyGraphWrapper',
+  'parsePsgWithCompatibility',
+  'exportGraphToPSG'
+];
+
+for (const symbol of requiredPublicSymbols) {
+  assertContains(publicSource, symbol, `source public symbol in public.ts`);
+  assertContains(
+    publicTypes,
+    symbol,
+    `generated public symbol in dist/types/public.d.ts`
+  );
+}
+logOk('Required public symbols exist in source and generated types');
 
 process.stdout.write('All export checks passed.\n');

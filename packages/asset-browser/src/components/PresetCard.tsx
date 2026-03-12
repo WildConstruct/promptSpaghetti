@@ -20,7 +20,10 @@ export function PresetCard({
         id: preset.id,
         name: preset.name,
         tags: preset.tags,
-        type: preset.type
+        type: preset.type,
+        path: preset.path,
+        metadata:
+          preset.metadata ?? (preset.path ? { file: preset.path } : undefined)
       });
       e.dataTransfer.setData('application/x-preset', payload);
       e.dataTransfer.effectAllowed = 'copy';
