@@ -548,6 +548,12 @@ export class ValidationEngine {
     const enumValues = val && Array.isArray(val.enum) ? val.enum : undefined;
 
     if (enumValues) {
+      if (enumValues.length === 0) {
+        errors.push(
+          `Input '${inputName}': enum must contain at least one value`
+        );
+      }
+
       const invalidEnumValues = enumValues.filter(
         enumValue => !valueMatchesDeclaredType(enumValue, type)
       );

@@ -316,4 +316,31 @@ describe('ValidationEngine enum validation', () => {
       "Input 'items': pattern validation is only valid for strings"
     );
   });
+
+  it('rejects empty enum declarations', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        mode: {
+          type: 'string',
+          required: true,
+          validation: {
+            enum: []
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'string'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'mode': enum must contain at least one value"
+    );
+  });
 });
