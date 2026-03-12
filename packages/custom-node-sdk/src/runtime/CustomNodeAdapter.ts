@@ -11,6 +11,7 @@ import {
 } from '@promptscape/core';
 import {
   CustomNodeBase,
+  AdvancedCustomNode,
   CustomNodeConfig,
   CustomNodeRuntime,
   CustomNodeResult
@@ -89,10 +90,12 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
    */
   async run(ctx: AdvancedExecutionContext): Promise<unknown> {
     const startTime = Date.now();
+    let monitoringStarted = false;
 
     try {
       // Security check
       await this.securityManager.checkExecution(ctx);
+      monitoringStarted = true;
 
       // Extract and validate inputs
       const inputs = this.extractInputs(ctx);
@@ -101,6 +104,15 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       if (!inputValidation.valid) {
         throw new Error(
           `Input validation failed: ${inputValidation.errors.join(', ')}`
+        );
+      }
+
+      const dynamicValidation = (
+        this.customNode as AdvancedCustomNode
+      ).validateDynamic?.(inputs);
+      if (dynamicValidation && !dynamicValidation.valid) {
+        throw new Error(
+          `Dynamic input validation failed: ${dynamicValidation.errors.join(', ')}`
         );
       }
 
@@ -140,13 +152,19 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
       const executionTime = Date.now() - startTime;
       this.logExecutionError(ctx, error as Error, executionTime);
       throw error;
+    } finally {
+      if (monitoringStarted) {
+        this.securityManager.finalizeExecution();
+      }
     }
   }
 
   /**
    * Extract inputs from the execution context based on the node's schema
    */
-  private extractInputs(ctx: AdvancedExecutionContext): Record<string, unknown> {
+  private extractInputs(
+    ctx: AdvancedExecutionContext
+  ): Record<string, unknown> {
     const inputs: Record<string, unknown> = {};
     const schema = this.customConfig.schema;
 

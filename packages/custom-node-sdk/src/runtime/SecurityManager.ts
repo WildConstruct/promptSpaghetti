@@ -15,6 +15,7 @@ export class SecurityManager {
   private securityConfig: CustomNodeConfig['security'];
   private executionStartTime?: number;
   private memoryUsageStart?: number;
+  private executionTimeout?: ReturnType<typeof setTimeout>;
 
   constructor(securityConfig?: CustomNodeConfig['security']) {
     this.securityConfig = {
@@ -96,7 +97,7 @@ export class SecurityManager {
 
     // Set up timeout if configured
     if (this.securityConfig?.maxExecutionTime) {
-      setTimeout(() => {
+      this.executionTimeout = setTimeout(() => {
         if (this.executionStartTime) {
           throw new SecurityError(
             `Execution timeout exceeded: ${this.securityConfig?.maxExecutionTime ?? 'unknown'}ms`
@@ -273,6 +274,11 @@ export class SecurityManager {
     const memoryUsed = this.memoryUsageStart
       ? currentMemory - this.memoryUsageStart
       : 0;
+
+    if (this.executionTimeout) {
+      clearTimeout(this.executionTimeout);
+      this.executionTimeout = undefined;
+    }
 
     // Clear monitoring
     this.executionStartTime = undefined;
