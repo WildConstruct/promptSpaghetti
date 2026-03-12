@@ -289,4 +289,31 @@ describe('ValidationEngine enum validation', () => {
       "Input 'items': maxLength cannot be negative"
     );
   });
+
+  it('rejects pattern validation on arrays', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        items: {
+          type: 'array',
+          required: true,
+          validation: {
+            pattern: '^foo$'
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'array'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'items': pattern validation is only valid for strings"
+    );
+  });
 });

@@ -538,6 +538,11 @@ export class ValidationEngine {
           `Input '${inputName}': use minLength/maxLength for arrays, not min/max`
         );
       }
+      if (val?.pattern) {
+        errors.push(
+          `Input '${inputName}': pattern validation is only valid for strings`
+        );
+      }
     }
 
     const enumValues = val && Array.isArray(val.enum) ? val.enum : undefined;
