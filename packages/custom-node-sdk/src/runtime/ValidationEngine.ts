@@ -24,8 +24,31 @@ const isLiteralPrimitive = (value: unknown): value is LiteralPrimitive =>
   value === null ||
   typeof value === 'undefined';
 
+const valueMatchesDeclaredType = (value: unknown, type: string): boolean => {
+  switch (type) {
+    case 'string':
+      return typeof value === 'string';
+    case 'number':
+      return typeof value === 'number' && !Number.isNaN(value);
+    case 'boolean':
+      return typeof value === 'boolean';
+    case 'array':
+      return Array.isArray(value);
+    case 'object':
+      return (
+        typeof value === 'object' && value !== null && !Array.isArray(value)
+      );
+    case 'any':
+      return true;
+    default:
+      return false;
+  }
+};
+
 const isZodSchema = (value: unknown): value is z.ZodTypeAny =>
-  typeof value === 'object' && value !== null && 'parse' in value &&
+  typeof value === 'object' &&
+  value !== null &&
+  'parse' in value &&
   typeof (value as z.ZodTypeAny).parse === 'function';
 
 /**
@@ -310,7 +333,9 @@ export class ValidationEngine {
     switch (type) {
       case 'string': {
         schema = z.string();
-        const validation = validationRule as PrimitiveValidationRule | undefined;
+        const validation = validationRule as
+          | PrimitiveValidationRule
+          | undefined;
         if (validation?.minLength) {
           schema = (schema as z.ZodString).min(validation.minLength);
         }
@@ -322,29 +347,14 @@ export class ValidationEngine {
             new RegExp(validation.pattern)
           );
         }
-        const enumValues = Array.isArray(validation?.enum)
-          ? validation.enum.filter(isLiteralPrimitive)
-          : undefined;
-
-        if (enumValues && enumValues.length > 0) {
-          const literals = enumValues.map(value => z.literal(value));
-          schema =
-            literals.length === 1
-              ? literals[0]
-              : z.union(
-                  literals as [
-                    z.ZodLiteral<unknown>,
-                    z.ZodLiteral<unknown>,
-                    ...z.ZodLiteral<unknown>[]
-                  ]
-                );
-        }
         break;
       }
 
       case 'number': {
         schema = z.number();
-        const validation = validationRule as PrimitiveValidationRule | undefined;
+        const validation = validationRule as
+          | PrimitiveValidationRule
+          | undefined;
         if (validation?.min !== undefined) {
           schema = (schema as z.ZodNumber).gte(validation.min);
         }
@@ -361,12 +371,18 @@ export class ValidationEngine {
 
       case 'array': {
         schema = z.array(z.unknown());
-        const validation = validationRule as PrimitiveValidationRule | undefined;
+        const validation = validationRule as
+          | PrimitiveValidationRule
+          | undefined;
         if (validation?.minLength) {
-          schema = (schema as z.ZodArray<z.ZodUnknown>).min(validation.minLength);
+          schema = (schema as z.ZodArray<z.ZodUnknown>).min(
+            validation.minLength
+          );
         }
         if (validation?.maxLength) {
-          schema = (schema as z.ZodArray<z.ZodUnknown>).max(validation.maxLength);
+          schema = (schema as z.ZodArray<z.ZodUnknown>).max(
+            validation.maxLength
+          );
         }
         break;
       }
@@ -381,6 +397,28 @@ export class ValidationEngine {
         schema = z.unknown();
         break;
       }
+    }
+
+    const enumValues = Array.isArray(
+      (validationRule as PrimitiveValidationRule | undefined)?.enum
+    )
+      ? (validationRule as PrimitiveValidationRule).enum?.filter(value =>
+          isLiteralPrimitive(value)
+        )
+      : undefined;
+
+    if (enumValues && enumValues.length > 0) {
+      const literals = enumValues.map(value => z.literal(value));
+      schema =
+        literals.length === 1
+          ? literals[0]
+          : z.union(
+              literals as [
+                z.ZodLiteral<unknown>,
+                z.ZodLiteral<unknown>,
+                ...z.ZodLiteral<unknown>[]
+              ]
+            );
     }
 
     return required ? schema : schema.optional();
@@ -419,10 +457,7 @@ export class ValidationEngine {
         );
       }
     } else if (type === 'number') {
-      if (
-        val?.minLength !== undefined ||
-        val?.maxLength !== undefined
-      ) {
+      if (val?.minLength !== undefined || val?.maxLength !== undefined) {
         errors.push(
           `Input '${inputName}': use min/max for numbers, not minLength/maxLength`
         );
@@ -436,6 +471,20 @@ export class ValidationEngine {
       if (val?.min !== undefined || val?.max !== undefined) {
         errors.push(
           `Input '${inputName}': use minLength/maxLength for arrays, not min/max`
+        );
+      }
+    }
+
+    const enumValues = val && Array.isArray(val.enum) ? val.enum : undefined;
+
+    if (enumValues) {
+      const invalidEnumValues = enumValues.filter(
+        enumValue => !valueMatchesDeclaredType(enumValue, type)
+      );
+
+      if (invalidEnumValues.length > 0) {
+        errors.push(
+          `Input '${inputName}': enum values must match the declared ${type} type`
         );
       }
     }
