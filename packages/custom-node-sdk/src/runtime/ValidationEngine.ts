@@ -472,6 +472,12 @@ export class ValidationEngine {
     const val = validation as PrimitiveValidationRule | undefined;
 
     if (type === 'string') {
+      if (val?.minLength !== undefined && val.minLength < 0) {
+        errors.push(`Input '${inputName}': minLength cannot be negative`);
+      }
+      if (val?.maxLength !== undefined && val.maxLength < 0) {
+        errors.push(`Input '${inputName}': maxLength cannot be negative`);
+      }
       if (
         val?.minLength !== undefined &&
         val?.maxLength !== undefined &&
@@ -512,6 +518,12 @@ export class ValidationEngine {
         );
       }
     } else if (type === 'array') {
+      if (val?.minLength !== undefined && val.minLength < 0) {
+        errors.push(`Input '${inputName}': minLength cannot be negative`);
+      }
+      if (val?.maxLength !== undefined && val.maxLength < 0) {
+        errors.push(`Input '${inputName}': maxLength cannot be negative`);
+      }
       if (
         val?.minLength !== undefined &&
         val?.maxLength !== undefined &&

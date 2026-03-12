@@ -235,4 +235,58 @@ describe('ValidationEngine enum validation', () => {
       "Input 'count': min cannot be greater than max"
     );
   });
+
+  it('rejects negative string length bounds', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        name: {
+          type: 'string',
+          required: true,
+          validation: {
+            minLength: -1
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'string'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'name': minLength cannot be negative"
+    );
+  });
+
+  it('rejects negative array length bounds', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        items: {
+          type: 'array',
+          required: true,
+          validation: {
+            maxLength: -1
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'array'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'items': maxLength cannot be negative"
+    );
+  });
 });
