@@ -262,6 +262,107 @@ describe('PsgSceneAssetsDialog', () => {
     });
   });
 
+  it('saves a public image url for vendor-backed preview conditioning', () => {
+    const onSave = jest.fn();
+
+    render(
+      <PsgSceneAssetsDialog
+        isOpen={true}
+        onClose={jest.fn()}
+        assets={[]}
+        scene={null}
+        cloudAssetReady={false}
+        onSave={onSave}
+        onExportManifest={jest.fn()}
+        onAssembleScene={jest.fn()}
+        onDownloadAssembly={jest.fn()}
+      />
+    );
+
+    const initialAssetIdInputs = screen.getAllByPlaceholderText('asset id');
+    fireEvent.change(initialAssetIdInputs[0], {
+      target: { value: 'prop-public-1' }
+    });
+    fireEvent.change(screen.getByPlaceholderText('storage uri'), {
+      target: { value: 'file://prop-public-1.png' }
+    });
+    fireEvent.change(
+      screen.getByPlaceholderText('public image url (for vendor preview)'),
+      {
+        target: { value: 'https://cdn.example.com/prop-public-1.png' }
+      }
+    );
+    fireEvent.click(screen.getByText('Add or Update Asset'));
+    fireEvent.click(screen.getByText('Save Scene Assets'));
+
+    expect(onSave).toHaveBeenCalledWith({
+      assets: [
+        expect.objectContaining({
+          id: 'prop-public-1',
+          metadata: expect.objectContaining({
+            publicImageUrl: 'https://cdn.example.com/prop-public-1.png'
+          })
+        })
+      ],
+      scene: expect.objectContaining({
+        stillAssetIds: ['prop-public-1']
+      })
+    });
+  });
+
+  it('renders persisted image bootstrap reuse signals for attached assets', () => {
+    render(
+      <PsgSceneAssetsDialog
+        isOpen={true}
+        onClose={jest.fn()}
+        assets={[
+          {
+            id: 'prop-1',
+            kind: 'reference-still',
+            role: 'hero-prop',
+            storage: {
+              provider: 'local',
+              uri: 'file://prop-1.png',
+              contentType: 'image/png'
+            },
+            provenance: {
+              source: 'upload'
+            },
+            metadata: {
+              imageBootstrapFixture: 'hero-prop-venue',
+              imageBootstrapFixtureSelectionMode: 'explicit',
+              imageBootstrapPreferredComparableRefs: [
+                {
+                  id: 'comp-1',
+                  label: 'rusted venue prop fragment'
+                }
+              ]
+            }
+          }
+        ]}
+        scene={{
+          stillAssetIds: ['prop-1'],
+          motionAssetIds: [],
+          placements: [],
+          crowdMembers: [],
+          renderTargets: []
+        }}
+        cloudAssetReady={false}
+        onSave={jest.fn()}
+        onExportManifest={jest.fn()}
+        onAssembleScene={jest.fn()}
+        onDownloadAssembly={jest.fn()}
+      />
+    );
+
+    expect(
+      screen.getByText(/image bootstrap fixture: hero-prop-venue \(explicit\)/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/preferred comparables: rusted venue prop fragment/i)
+    ).toBeInTheDocument();
+  });
+
   it('attaches a local reference file to an existing asset stub', () => {
     const onSave = jest.fn();
 

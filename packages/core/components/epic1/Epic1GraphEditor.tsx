@@ -216,10 +216,10 @@ const TutorialButton: React.FC = () => {
       onClick={handleClick}
       style={{
         padding: '10px 12px',
-        background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-        border: '1px solid rgba(103, 126, 234, 0.3)',
+        background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(8, 145, 178, 0.24) 100%)',
+        border: '1px solid rgba(103, 232, 249, 0.22)',
         borderRadius: '6px',
-        color: '#e0e0e0',
+        color: '#e8f7ff',
         cursor: 'pointer',
         fontSize: '13px',
         fontWeight: '500',
@@ -1914,11 +1914,12 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   const content = (
     <div
-      className={`epic1-graph-editor ${isDraggingOver ? 'drag-over' : ''}`}
+      className={`bg-background text-text font-body h-screen w-screen overflow-hidden antialiased flex flex-col ${isDraggingOver ? 'drag-over' : ''}`}
       style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
     >
       {/* Main horizontal container for everything except preview tray */}
       <div
+        className="flex flex-1 overflow-hidden relative"
         style={{
           flex: showPreview ? '1 1 auto' : '1',
           display: 'flex',
@@ -1926,31 +1927,106 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           minHeight: 0
         }}
       >
-        {/* Tabbed Side Panel with Asset Library */}
-        {showAssetLibrary && (
-          <TabbedSidePanel
-            position={assetLibraryPosition}
-            previewEngine={previewEngine}
-            defaultTab="assets"
-            showAssets={true}
-            showPreview={true}
-            selectedNode={nodes.find(n => n.id === selectedNodeId)}
-            nodes={nodes}
-            edges={edges}
-            onInsert={handleAssetInsert}
-            componentDefinitions={componentDefinitions}
-            componentReferences={graphReferences}
-            onComponentInsert={insertComponentDefinition}
-            onSaveSelectionAsComponent={saveSelectionAsComponent}
-            onDetachSelectedComponent={detachSelectedComponentInstance}
-            onRefreshSelectedComponent={refreshSelectedComponentInstance}
-            onRefreshOutdatedComponents={refreshOutdatedComponentInstances}
-          />
-        )}
+        {/* Left Sidebar: NodePalette */}
+        <aside className="w-14 surface-panel border-r border-white/10 flex flex-col items-center py-4 gap-4 z-40 bg-[rgba(11,11,14,0.94)]" style={{minWidth: '3.5rem'}}>
+          <NodePalette
+            collapsed={nodePaletteCollapsed}
+            onCollapsedChange={setNodePaletteCollapsed}
+          >
+            {/* Footer buttons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+              {currentUser ? (
+                <button
+                  className="palette-footer-button"
+                  onClick={async () => {
+                    const sb = getSupabase();
+                    if (!sb) { return; }
+                    await sb.auth.signOut();
+                  }}
+                  style={{
+                    padding: '10px 12px',
+                    background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(8, 145, 178, 0.24) 100%)',
+                    border: '1px solid rgba(103, 232, 249, 0.22)',
+                    borderRadius: '6px',
+                    color: '#e8f7ff',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}
+                  title={currentUser?.email || ''}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                    <path d="M3 8a.5.5 0 0 1 .5-.5H10V5.707a.5.5 0 0 1 .854-.353l3 3a.5.5 0 0 1 0 .707l-3 3A.5.5 0 0 1 10 11.707V9.5H3.5A.5.5 0 0 1 3 9V8z"/>
+                  </svg>
+                  Sign out
+                </button>
+              ) : (
+                <button
+                  className="palette-footer-button"
+                  onClick={() => setIsAuthModalOpen(true)}
+                  style={{
+                    padding: '10px 12px',
+                    background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(8, 145, 178, 0.24) 100%)',
+                    border: '1px solid rgba(103, 232, 249, 0.22)',
+                    borderRadius: '6px',
+                    color: '#e8f7ff',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                  </svg>
+                  Login
+                </button>
+              )}
+              <button
+                className="palette-footer-button prompt-wizard-button"
+                data-tutorial-anchor="wizard-button"
+                onClick={() => setIsPromptWizardOpen(true)}
+                style={{
+                  padding: '10px 12px',
+                  background: 'linear-gradient(135deg, rgba(34, 211, 238, 0.12) 0%, rgba(8, 145, 178, 0.24) 100%)',
+                  border: '1px solid rgba(103, 232, 249, 0.22)',
+                  borderRadius: '6px',
+                  color: '#e8f7ff',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  width: '100%',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
+                  <path d="M9.5 1L8 2.5 6.5 1 5 2.5 3.5 1 2 2.5 0.5 1v14l1.5-1.5L3.5 15 5 13.5 6.5 15 8 13.5 9.5 15l1.5-1.5L12.5 15l1.5-1.5L15.5 15V1l-1.5 1.5L12.5 1 11 2.5 9.5 1zM3 4h10v1H3V4zm0 3h10v1H3V7zm0 3h7v1H3v-1z"/>
+                </svg>
+                Wizard
+              </button>
+              <TutorialButton />
+            </div>
+          </NodePalette>
+        </aside>
 
         {/* Main Graph Canvas */}
-        <div
-          className="graph-canvas-container"
+        <main
+          className="flex-1 relative overflow-hidden bg-background"
           data-tutorial-anchor="canvas"
           style={{ flex: 1, minWidth: 0, position: 'relative' }}
           onDrop={onDrop}
@@ -1958,6 +2034,11 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           onDragEnter={onDragEnter}
           onDragLeave={onDragLeave}
         >
+          {/* Radial Gradient & Dot Grid */}
+          <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(24,28,38,0.72)_0%,rgba(9,10,14,0.96)_48%,rgba(5,5,7,1)_100%)] pointer-events-none"></div>
+          <div className="absolute inset-0 bg-dot-grid-large bg-dot-size-large opacity-45 z-0 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-dot-grid bg-dot-size opacity-72 z-0 pointer-events-none"></div>
+
           {isDraggingOver && (
             <div className="drop-indicator" aria-live="polite">
               {dropTarget?.kind === 'replace-node'
@@ -2088,109 +2169,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             </ReactFlow>
           </SafeReactFlowWrapper>
 
-          {/* NodePalette - positioned outside ReactFlow */}
-          <div style={{            position: 'absolute',            top: 0,            left: 0,            bottom: 0,
-            zIndex: 100,
-            display: 'flex',
-            alignItems: 'stretch'
-          }}>
-            <NodePalette
-              collapsed={nodePaletteCollapsed}
-              onCollapsedChange={setNodePaletteCollapsed}
-            >
-              {/* Footer buttons */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
-                {currentUser ? (
-                  <button
-                    className="palette-footer-button"
-                    onClick={async () => {
-                      const sb = getSupabase();
-                      if (!sb) { return; }
-                      await sb.auth.signOut();
-                    }}
-                    style={{
-                      padding: '10px 12px',
-                      background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-                      border: '1px solid rgba(103, 126, 234, 0.3)',
-                      borderRadius: '6px',
-                      color: '#e0e0e0',
-                      cursor: 'pointer',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      transition: 'all 0.3s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      width: '100%',
-                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-                    }}
-                    title={currentUser?.email || ''}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
-                      <path d="M3 8a.5.5 0 0 1 .5-.5H10V5.707a.5.5 0 0 1 .854-.353l3 3a.5.5 0 0 1 0 .707l-3 3A.5.5 0 0 1 10 11.707V9.5H3.5A.5.5 0 0 1 3 9V8z"/>
-                    </svg>
-                    Sign out
-                  </button>
-                ) : (
-                  <button
-                    className="palette-footer-button"
-                    onClick={() => {
-                      setIsAuthModalOpen(true);
-                    }}
-                    style={{
-                      padding: '10px 12px',
-                      background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-                      border: '1px solid rgba(103, 126, 234, 0.3)',
-                      borderRadius: '6px',
-                      color: '#e0e0e0',
-                      cursor: 'pointer',
-                      fontSize: '13px',
-                      fontWeight: '500',
-                      transition: 'all 0.3s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      width: '100%',
-                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-                    }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
-                      <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                    </svg>
-                    Login
-                  </button>
-                )}
-                <button
-                  className="palette-footer-button prompt-wizard-button"
-                  data-tutorial-anchor="wizard-button"
-                  onClick={() => setIsPromptWizardOpen(true)}
-                  style={{
-                    padding: '10px 12px',
-                    background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-                    border: '1px solid rgba(103, 126, 234, 0.3)',
-                    borderRadius: '6px',
-                    color: '#e0e0e0',
-                    cursor: 'pointer',
-                    fontSize: '13px',
-                    fontWeight: '500',
-                    transition: 'all 0.3s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    width: '100%',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.6 }}>
-                    <path d="M9.5 1L8 2.5 6.5 1 5 2.5 3.5 1 2 2.5 0.5 1v14l1.5-1.5L3.5 15 5 13.5 6.5 15 8 13.5 9.5 15l1.5-1.5L12.5 15l1.5-1.5L15.5 15V1l-1.5 1.5L12.5 1 11 2.5 9.5 1zM3 4h10v1H3V4zm0 3h10v1H3V7zm0 3h7v1H3v-1z"/>
-                  </svg>
-                  Wizard
-                </button>
-                <TutorialButton />
-              </div>
-            </NodePalette>
-          </div>
-
           {/* Modals */}
           <GraphModals
             isPromptWizardOpen={isPromptWizardOpen}
@@ -2233,7 +2211,32 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               }
             }}
           />
-        </div>
+        </main>
+
+        {/* Right Sidebar: Tabbed Side Panel with Asset Library */}
+        {showAssetLibrary && (
+          <aside className="w-80 surface-panel border-l border-white/10 flex flex-col z-40 bg-[rgba(11,11,14,0.94)]">
+            <TabbedSidePanel
+              position={assetLibraryPosition}
+              previewEngine={previewEngine}
+              defaultTab="assets"
+              showTabRail={assetLibraryPosition !== 'right'}
+              showAssets={true}
+              showPreview={true}
+              selectedNode={nodes.find(n => n.id === selectedNodeId)}
+              nodes={nodes}
+              edges={edges}
+              onInsert={handleAssetInsert}
+              componentDefinitions={componentDefinitions}
+              componentReferences={graphReferences}
+              onComponentInsert={insertComponentDefinition}
+              onSaveSelectionAsComponent={saveSelectionAsComponent}
+              onDetachSelectedComponent={detachSelectedComponentInstance}
+              onRefreshSelectedComponent={refreshSelectedComponentInstance}
+              onRefreshOutdatedComponents={refreshOutdatedComponentInstances}
+            />
+          </aside>
+        )}
       </div>
 
       <GraphCommander
@@ -2242,9 +2245,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         commands={commandPaletteCommands}
       />
 
-      {/* Preview Tray - As proper sibling that pushes content up */}
+      {/* Preview Tray - As proper footer */}
       {showPreview && (
-        <div style={{ flexShrink: 0 }}>
+        <footer className="h-64 surface-panel border-t border-white/10 flex flex-col z-50 bg-[rgba(11,11,14,0.94)]" style={{ flexShrink: 0 }}>
           <PreviewTray
             results={previewResults}
             isExecuting={isPreviewExecuting}
@@ -2256,7 +2259,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             }}
             onExport={exportPreviewResults}
           />
-        </div>
+        </footer>
       )}
 
       {/* Tetris Mode */}

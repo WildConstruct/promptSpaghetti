@@ -13,6 +13,8 @@ import {
   PsgCrowdPlanSchema,
   PsgDocumentInputSchema,
   PsgDocumentSchema,
+  PsgReviewCheckpointSchema,
+  PsgReviewGuidanceSchema,
   PsgSceneAssemblyPlanSchema,
   type PsgCapabilitiesResponse,
   type PsgAssetRef,
@@ -21,9 +23,19 @@ import {
   type PsgComfyNode,
   type PsgDocument,
   type PsgDocumentInput,
+  type PsgGenerationBatchRequest,
+  type PsgImagePreviewRequestBody,
+  type PsgReviewCheckpoint,
+  type PsgReviewGuidance,
   type PsgSceneAssemblyPlan,
   type PsgValidationIssue
 } from '../../../packages/core/services/psg/contracts';
+import { ImageBootstrapAnalysisService } from './ImageBootstrapAnalysisService';
+import {
+  listPreviewBackends,
+  resolvePreviewBackend
+} from './imagePreviewBackends';
+import { generatePreviewPayload } from './imagePreviewProviders';
 
 type NormalizeDocumentResult = {
   document: PsgDocument;
@@ -81,13 +93,16 @@ function stableVariantValue(
 }
 
 export class PsgService {
+  private imageBootstrapAnalysis = new ImageBootstrapAnalysisService();
+
   getCapabilities(): PsgCapabilitiesResponse {
     return PsgCapabilitiesResponseSchema.parse({
       ok: true,
       version: PSG_PROTOCOL_VERSION,
       supportedKinds: [...PSG_DOCUMENT_KINDS],
       operations: [...PSG_OPERATIONS],
-      exportTargets: [...PSG_EXPORT_TARGETS]
+      exportTargets: [...PSG_EXPORT_TARGETS],
+      previewBackends: listPreviewBackends()
     });
   }
 
@@ -376,6 +391,237 @@ export class PsgService {
         scene: assembly
       }),
       assembly,
+      issues: normalized.issues
+    };
+  }
+
+  registerImageBatch(input: unknown, assetsInput: PsgAssetRef[]) {
+    return this.registerAssets(input, assetsInput);
+  }
+
+  async analyzeImages(input: unknown, assetIds: string[], userIntent?: string) {
+    const normalized = this.normalizeDocument(input);
+    const matchedAssets = normalized.document.assets.filter(asset =>
+      assetIds.includes(asset.id)
+    );
+    const { analyses, exactMatches, comparableMatches, checkpoint } =
+      await this.imageBootstrapAnalysis.analyzeAssetsAsync({
+        assets: matchedAssets,
+        userIntent
+      });
+
+    return {
+      ok: true as const,
+      document: normalized.document,
+      analyses,
+      exactMatches,
+      comparableMatches,
+      checkpoint,
+      issues: normalized.issues
+    };
+  }
+
+  applyImageReview(
+    input: unknown,
+    checkpointInput: PsgReviewCheckpoint,
+    guidanceInput: PsgReviewGuidance
+  ) {
+    const normalized = this.normalizeDocument(input);
+    const guidance = PsgReviewGuidanceSchema.parse(guidanceInput);
+    const checkpoint = this.imageBootstrapAnalysis.applyReviewGuidance({
+      checkpoint: PsgReviewCheckpointSchema.parse({
+        ...checkpointInput,
+        guidance
+      }),
+      guidance
+    });
+
+    return {
+      ok: true as const,
+      document: normalized.document,
+      checkpoint,
+      issues: normalized.issues
+    };
+  }
+
+  draftGraphFromImages(input: unknown, checkpointInput: PsgReviewCheckpoint) {
+    const normalized = this.normalizeDocument(input);
+    const checkpoint = PsgReviewCheckpointSchema.parse(checkpointInput);
+    const bootstrapMode =
+      checkpoint.guidance?.bootstrapMode ||
+      checkpoint.bootstrapMode ||
+      checkpoint.analyses[0]?.bootstrapMode ||
+      'character-variation';
+    const preferredComparableIds =
+      checkpoint.guidance?.preferredComparableMatchIds || [];
+    const preferredComparables = checkpoint.comparableMatches.filter(match =>
+      preferredComparableIds.includes(match.id)
+    );
+    const preferredComparableRefs = preferredComparables.map(match => ({
+      id: match.id,
+      label: match.label,
+      origin: match.origin,
+      score: match.score,
+      sourceRef: match.sourceRef,
+      reasonCodes: match.reasonCodes
+    }));
+    const forceSynthesisKeys = checkpoint.guidance?.forceSynthesisKeys || [];
+    const variableTraits = checkpoint.analyses[0]?.variableTraits || [];
+    const analysisSources = checkpoint.analyses.map(analysis => ({
+      assetId: analysis.assetId,
+      fixtureId: analysis.analysisSource?.fixtureId,
+      selectionMode: analysis.analysisSource?.selectionMode
+    }));
+    const traitKeys = variableTraits.length > 0
+      ? variableTraits.map(trait => trait.key)
+      : ['variation'];
+    const traitLabels = traitKeys.length > 0 ? traitKeys : ['variation'];
+
+    const draftFragment = {
+      version: '1.0.0',
+      name: `Image Bootstrap Draft (${bootstrapMode})`,
+      metadata: {
+        imageBootstrap: {
+          bootstrapMode,
+          reviewId: checkpoint.reviewId,
+          preferredComparableRefs,
+          forceSynthesisKeys,
+          lockedTraitKeys: checkpoint.guidance?.lockedTraitKeys || [],
+          variableTraitKeys: checkpoint.guidance?.variableTraitKeys || [],
+          notes: checkpoint.guidance?.notes || '',
+          assetIds: checkpoint.analyses.map(analysis => analysis.assetId),
+          analysisSources
+        }
+      },
+      nodes: [
+        {
+          id: 'n1',
+          type: 'TextBlock',
+          x: 0,
+          y: 0,
+          value: checkpoint.guidance?.notes || `${bootstrapMode} reference`,
+          data: {
+            bootstrapMode,
+            preferredComparableRefs,
+            forceSynthesisKeys,
+            lockedTraitKeys: checkpoint.guidance?.lockedTraitKeys || [],
+            variableTraitKeys: checkpoint.guidance?.variableTraitKeys || [],
+            notes: checkpoint.guidance?.notes || '',
+            assetIds: checkpoint.analyses.map(analysis => analysis.assetId),
+            analysisSources
+          }
+        },
+        {
+          id: 'n2',
+          type: 'WeightedChoice',
+          x: 220,
+          y: 0,
+          data: {
+            bootstrapMode,
+            preferredComparableRefs,
+            forceSynthesisKeys,
+            lockedTraitKeys: checkpoint.guidance?.lockedTraitKeys || [],
+            variableTraitKeys: checkpoint.guidance?.variableTraitKeys || [],
+            notes: checkpoint.guidance?.notes || '',
+            assetIds: checkpoint.analyses.map(analysis => analysis.assetId),
+            analysisSources
+          },
+          options: traitLabels.map((label, index) => {
+            const trait = variableTraits.find(candidate => candidate.key === label);
+            return {
+              id: `opt-${index + 1}`,
+              label,
+              text: trait?.value || label,
+              weight: 1,
+              meta: {
+                traitKey: label,
+                classification: trait?.classification || 'variable',
+                forceSynthesis: forceSynthesisKeys.includes(label),
+                preferredComparableRefs
+              }
+            };
+          })
+        },
+        {
+          id: 'n3',
+          type: 'Output',
+          x: 440,
+          y: 0,
+          template: '{n1} {n2}',
+          data: {
+            bootstrapMode,
+            preferredComparableRefs,
+            forceSynthesisKeys,
+            lockedTraitKeys: checkpoint.guidance?.lockedTraitKeys || [],
+            variableTraitKeys: checkpoint.guidance?.variableTraitKeys || [],
+            notes: checkpoint.guidance?.notes || '',
+            assetIds: checkpoint.analyses.map(analysis => analysis.assetId),
+            analysisSources
+          }
+        }
+      ],
+      edges: [
+        { id: 'e1', source: 'n1', target: 'n3' },
+        { id: 'e2', source: 'n2', target: 'n3' }
+      ]
+    };
+
+    return {
+      ok: true as const,
+      document: normalized.document,
+      draftFragment,
+      checkpoint,
+      issues: normalized.issues
+    };
+  }
+
+  async previewImages(
+    input: unknown,
+    checkpointInput: PsgReviewCheckpoint,
+    requestInput: PsgImagePreviewRequestBody
+  ) {
+    const normalized = this.normalizeDocument(input);
+    const checkpoint = PsgReviewCheckpointSchema.parse(checkpointInput);
+    const request = requestInput;
+    const resolvedPreview = resolvePreviewBackend(request);
+    const generated = await generatePreviewPayload({
+      document: normalized.document,
+      checkpoint,
+      request,
+      resolvedBackend: resolvedPreview
+    });
+
+    return {
+      ok: true as const,
+      document: normalized.document,
+      checkpoint,
+      preview: generated.preview,
+      issues: [...normalized.issues, ...resolvedPreview.issues, ...generated.issues]
+    };
+  }
+
+  generateImageBatch(
+    input: unknown,
+    checkpointInput: PsgReviewCheckpoint,
+    requestInput: PsgGenerationBatchRequest
+  ) {
+    const normalized = this.normalizeDocument(input);
+    const checkpoint = PsgReviewCheckpointSchema.parse(checkpointInput);
+    const request = requestInput;
+    const locked = checkpoint.guidance?.lockedTraitKeys || request.lockTraitKeys;
+    const variable =
+      checkpoint.guidance?.variableTraitKeys || request.varyTraitKeys;
+
+    return {
+      ok: true as const,
+      document: normalized.document,
+      checkpoint,
+      batch: {
+        count: request.count,
+        seed: request.seed,
+        promptBlueprint: `locked:${locked.join(',') || 'world'} | vary:${variable.join(',') || 'details'}`,
+        previewAssetIds: normalized.document.assets.map(asset => asset.id)
+      },
       issues: normalized.issues
     };
   }

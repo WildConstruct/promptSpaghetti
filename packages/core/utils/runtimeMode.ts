@@ -15,7 +15,14 @@ export const LOCAL_PSG_OPERATIONS: PsgOperation[] = [
   'export-comfy'
 ];
 
-export const HOSTED_PSG_UPGRADE_OPERATIONS: PsgOperation[] = ['expand-crowd'];
+export const HOSTED_PSG_UPGRADE_OPERATIONS: PsgOperation[] = [
+  'expand-crowd',
+  'images-analyze',
+  'images-review',
+  'images-draft-graph',
+  'images-preview',
+  'images-generate-batch'
+];
 
 function readEnvVar(key: string): string | undefined {
   if (

@@ -20,7 +20,13 @@ export const PSG_OPERATIONS = [
   'export-comfy',
   'assets-register',
   'assets-derive',
-  'scene-assemble'
+  'scene-assemble',
+  'images-register-batch',
+  'images-analyze',
+  'images-review',
+  'images-draft-graph',
+  'images-preview',
+  'images-generate-batch'
 ] as const;
 
 export const PSG_ASSET_KINDS = [
@@ -50,6 +56,36 @@ export const PsgOperationSchema = z.enum(PSG_OPERATIONS);
 export const PsgAssetKindSchema = z.enum(PSG_ASSET_KINDS);
 export const PsgStorageProviderSchema = z.enum(PSG_STORAGE_PROVIDERS);
 export const PsgAssetSourceSchema = z.enum(PSG_ASSET_SOURCES);
+export const PsgBootstrapModeSchema = z.enum([
+  'character-variation',
+  'prop-variation',
+  'set-dressing-variation',
+  'environment-world-anchor',
+  'crowd-archetype-expansion'
+]);
+export const PsgSubjectKindSchema = z.enum([
+  'person',
+  'prop',
+  'vehicle',
+  'architecture',
+  'environment',
+  'texture',
+  'graphic',
+  'mixed',
+  'unknown'
+]);
+export const PsgEvidenceSourceSchema = z.enum([
+  'segmentation',
+  'multimodal-model',
+  'retrieval',
+  'heuristic',
+  'human'
+]);
+export const PsgRetrievalOriginSchema = z.enum([
+  'exact',
+  'comparable',
+  'synthesized'
+]);
 
 export const PsgProtocolMetadataSchema = z
   .object({
@@ -160,6 +196,177 @@ export const PsgCrowdPlanSchema = z
   })
   .strict();
 
+export const PsgDetectedRegionSchema = z
+  .object({
+    id: z.string().min(1),
+    label: z.string().min(1).optional(),
+    kind: z.enum(['subject', 'part', 'background', 'material', 'unknown']).default('unknown'),
+    bbox: z
+      .object({
+        x: z.number().finite().min(0),
+        y: z.number().finite().min(0),
+        width: z.number().positive(),
+        height: z.number().positive()
+      })
+      .strict()
+      .optional(),
+    maskAssetId: z.string().min(1).optional(),
+    confidence: z.number().min(0).max(1).optional(),
+    tags: z.array(z.string().min(1)).max(50).default([])
+  })
+  .strict();
+
+export const PsgDetectedSubjectSchema = z
+  .object({
+    id: z.string().min(1),
+    subjectKind: PsgSubjectKindSchema.default('unknown'),
+    label: z.string().min(1).optional(),
+    confidence: z.number().min(0).max(1).optional(),
+    primary: z.boolean().optional(),
+    regionIds: z.array(z.string().min(1)).max(100).default([]),
+    tags: z.array(z.string().min(1)).max(50).default([])
+  })
+  .strict();
+
+export const PsgVariationAxisSchema = z
+  .object({
+    id: z.string().min(1),
+    label: z.string().min(1),
+    kind: z.enum(['locked', 'variable']).default('variable'),
+    values: z.array(z.string().min(1)).max(50).default([]),
+    confidence: z.number().min(0).max(1).optional(),
+    sourceIds: z.array(z.string().min(1)).max(20).default([])
+  })
+  .strict();
+
+export const PsgEvidenceSchema = z
+  .object({
+    source: PsgEvidenceSourceSchema,
+    sourceId: z.string().min(1).optional(),
+    score: z.number().min(0).max(1),
+    summary: z.string().min(1).optional()
+  })
+  .strict();
+
+export const PsgReconciledTraitSchema = z
+  .object({
+    key: z.string().min(1),
+    value: z.string().min(1),
+    classification: z.enum(['locked', 'variable', 'unknown']).default('unknown'),
+    confidence: z.number().min(0).max(1),
+    provenance: z.array(PsgEvidenceSourceSchema).min(1).max(10),
+    evidence: z.array(PsgEvidenceSchema).max(20).default([]),
+    conflicts: z.array(z.string().min(1)).max(20).default([])
+  })
+  .strict();
+
+export const PsgComparableMatchSchema = z
+  .object({
+    id: z.string().min(1),
+    origin: PsgRetrievalOriginSchema,
+    kind: z.enum(['fragment', 'asset', 'graph-template', 'crowd-archetype']),
+    label: z.string().min(1),
+    score: z.number().min(0).max(1),
+    reasonCodes: z.array(z.string().min(1)).max(20).default([]),
+    sourceRef: z.string().min(1).optional()
+  })
+  .strict();
+
+export const PsgImageAnalysisRecordSchema = z
+  .object({
+    assetId: z.string().min(1),
+    subjectKind: PsgSubjectKindSchema.default('unknown'),
+    bootstrapMode: PsgBootstrapModeSchema.optional(),
+    analysisSource: z
+      .object({
+        fixtureId: z.string().min(1).optional(),
+        selectionMode: z.enum(['explicit', 'heuristic', 'derived']).optional()
+      })
+      .strict()
+      .optional(),
+    subjects: z.array(PsgDetectedSubjectSchema).max(100).default([]),
+    regions: z.array(PsgDetectedRegionSchema).max(500).default([]),
+    lockedTraits: z.array(PsgReconciledTraitSchema).max(100).default([]),
+    variableTraits: z.array(PsgReconciledTraitSchema).max(100).default([]),
+    variationAxes: z.array(PsgVariationAxisSchema).max(50).default([]),
+    segmentationFindings: z.array(z.string().min(1)).max(100).default([]),
+    modelFindings: z.array(z.string().min(1)).max(100).default([]),
+    comparableSearchTerms: z.array(z.string().min(1)).max(50).default([]),
+    confidence: z.number().min(0).max(1).optional()
+  })
+  .strict();
+
+export const PsgReviewGuidanceSchema = z
+  .object({
+    bootstrapMode: PsgBootstrapModeSchema.optional(),
+    primarySubjectId: z.string().min(1).optional(),
+    excludedRegionIds: z.array(z.string().min(1)).max(100).default([]),
+    lockedTraitKeys: z.array(z.string().min(1)).max(100).default([]),
+    variableTraitKeys: z.array(z.string().min(1)).max(100).default([]),
+    rejectedTraitKeys: z.array(z.string().min(1)).max(100).default([]),
+    addedLockedTraits: z.array(z.string().min(1)).max(50).default([]),
+    addedVariableTraits: z.array(z.string().min(1)).max(50).default([]),
+    explicitFixtureSelections: z
+      .array(
+        z
+          .object({
+            assetId: z.string().min(1),
+            fixtureId: z.string().min(1)
+          })
+          .strict()
+      )
+      .max(50)
+      .default([]),
+    preferredComparableMatchIds: z.array(z.string().min(1)).max(50).default([]),
+    forceSynthesisKeys: z.array(z.string().min(1)).max(50).default([]),
+    notes: z.string().max(5000).optional()
+  })
+  .strict();
+
+export const PsgReviewCheckpointSchema = z
+  .object({
+    reviewId: z.string().min(1),
+    bootstrapMode: PsgBootstrapModeSchema.optional(),
+    analyses: z.array(PsgImageAnalysisRecordSchema).min(1).max(200),
+    exactMatches: z.array(PsgComparableMatchSchema).max(100).default([]),
+    comparableMatches: z.array(PsgComparableMatchSchema).max(100).default([]),
+    uncertainTraits: z.array(PsgReconciledTraitSchema).max(100).default([]),
+    guidance: PsgReviewGuidanceSchema.optional()
+  })
+  .strict();
+
+export const PsgGenerationBatchRequestSchema = z
+  .object({
+    count: z.number().int().min(1).max(100).default(20),
+    seed: z.number().int().optional(),
+    lockTraitKeys: z.array(z.string().min(1)).max(100).default([]),
+    varyTraitKeys: z.array(z.string().min(1)).max(100).default([]),
+    diversityTarget: z.enum(['low', 'medium', 'high']).default('medium'),
+    previewOnly: z.boolean().default(true)
+  })
+  .strict();
+
+export const PsgPreviewBackendSchema = z
+  .object({
+    id: z.string().min(1),
+    mode: z.enum(['mock', 'vendor']),
+    label: z.string().min(1),
+    profile: z.enum(['bootstrap', 'scene']).optional(),
+    model: z.string().min(1).optional(),
+    supportedModels: z.array(z.string().min(1)).default([]).optional()
+  })
+  .strict();
+
+export const PsgImagePreviewRequestBodySchema = z
+  .object({
+    count: z.number().int().min(1).max(8).default(4),
+    seed: z.number().int().optional(),
+    backendId: z.string().min(1).optional(),
+    model: z.string().min(1).optional(),
+    includePromptBlueprint: z.boolean().default(true)
+  })
+  .strict();
+
 export const PsgDocumentInputSchema = z
   .object({
     version: z.literal(PSG_PROTOCOL_VERSION),
@@ -224,7 +431,8 @@ export const PsgCapabilitiesResponseSchema = z
     version: z.literal(PSG_PROTOCOL_VERSION),
     supportedKinds: z.array(PsgDocumentKindSchema),
     operations: z.array(PsgOperationSchema),
-    exportTargets: z.array(z.enum(PSG_EXPORT_TARGETS))
+    exportTargets: z.array(z.enum(PSG_EXPORT_TARGETS)),
+    previewBackends: z.array(PsgPreviewBackendSchema).default([])
   })
   .strict();
 
@@ -337,6 +545,52 @@ export const PsgAssembleSceneRequestSchema = z
   })
   .strict();
 
+export const PsgImageRegisterBatchRequestSchema = z
+  .object({
+    document: z.unknown(),
+    assets: z.array(PsgAssetRefSchema).min(1).max(50)
+  })
+  .strict();
+
+export const PsgImageAnalyzeRequestSchema = z
+  .object({
+    document: z.unknown(),
+    assetIds: z.array(z.string().min(1)).min(1).max(50),
+    userIntent: z.string().max(2000).optional()
+  })
+  .strict();
+
+export const PsgImageReviewRequestSchema = z
+  .object({
+    document: z.unknown(),
+    checkpoint: PsgReviewCheckpointSchema,
+    guidance: PsgReviewGuidanceSchema
+  })
+  .strict();
+
+export const PsgImageDraftGraphRequestSchema = z
+  .object({
+    document: z.unknown(),
+    checkpoint: PsgReviewCheckpointSchema
+  })
+  .strict();
+
+export const PsgImageGenerateBatchRequestSchema = z
+  .object({
+    document: z.unknown(),
+    checkpoint: PsgReviewCheckpointSchema,
+    request: PsgGenerationBatchRequestSchema
+  })
+  .strict();
+
+export const PsgImagePreviewRequestSchema = z
+  .object({
+    document: z.unknown(),
+    checkpoint: PsgReviewCheckpointSchema,
+    request: PsgImagePreviewRequestBodySchema
+  })
+  .strict();
+
 export const PsgExpandCrowdResponseSchema = z
   .object({
     ok: z.literal(true),
@@ -384,6 +638,105 @@ export const PsgAssembleSceneResponseSchema = z
   })
   .strict();
 
+export const PsgImageRegisterBatchResponseSchema = z
+  .object({
+    ok: z.literal(true),
+    document: PsgDocumentSchema,
+    registeredAssets: z.array(PsgAssetRefSchema),
+    issues: z.array(PsgValidationIssueSchema)
+  })
+  .strict();
+
+export const PsgImageAnalyzeResponseSchema = z
+  .object({
+    ok: z.literal(true),
+    document: PsgDocumentSchema,
+    analyses: z.array(PsgImageAnalysisRecordSchema),
+    exactMatches: z.array(PsgComparableMatchSchema),
+    comparableMatches: z.array(PsgComparableMatchSchema),
+    checkpoint: PsgReviewCheckpointSchema,
+    issues: z.array(PsgValidationIssueSchema)
+  })
+  .strict();
+
+export const PsgImageReviewResponseSchema = z
+  .object({
+    ok: z.literal(true),
+    document: PsgDocumentSchema,
+    checkpoint: PsgReviewCheckpointSchema,
+    issues: z.array(PsgValidationIssueSchema)
+  })
+  .strict();
+
+export const PsgImageDraftGraphResponseSchema = z
+  .object({
+    ok: z.literal(true),
+    document: PsgDocumentSchema,
+    draftFragment: PSGFileSchema,
+    checkpoint: PsgReviewCheckpointSchema,
+    issues: z.array(PsgValidationIssueSchema)
+  })
+  .strict();
+
+export const PsgImagePreviewResponseSchema = z
+  .object({
+    ok: z.literal(true),
+    document: PsgDocumentSchema,
+    checkpoint: PsgReviewCheckpointSchema,
+    preview: z
+      .object({
+        backend: PsgPreviewBackendSchema,
+        count: z.number().int().min(1),
+        seed: z.number().int().optional(),
+        promptBlueprint: z.string().min(1).optional(),
+        results: z
+          .array(
+            z
+              .object({
+                id: z.string().min(1),
+                seed: z.number().int(),
+                prompt: z.string().min(1),
+                imageUrl: z.string().min(1),
+                width: z.number().int().positive(),
+                height: z.number().int().positive(),
+                metadata: z
+                  .object({
+                    assetIds: z.array(z.string().min(1)).default([]),
+                    preferredComparableLabels: z.array(z.string().min(1)).default([]),
+                    lockedTraitKeys: z.array(z.string().min(1)).default([]),
+                    variableTraitKeys: z.array(z.string().min(1)).default([]),
+                    forceSynthesisKeys: z.array(z.string().min(1)).default([]),
+                    guidanceNotes: z.string().default('')
+                  })
+                  .strict()
+              })
+              .strict()
+          )
+          .max(8)
+          .default([])
+      })
+      .strict(),
+    issues: z.array(PsgValidationIssueSchema)
+  })
+  .strict();
+
+export const PsgImageGenerateBatchResponseSchema = z
+  .object({
+    ok: z.literal(true),
+    document: PsgDocumentSchema,
+    checkpoint: PsgReviewCheckpointSchema,
+    batch: z
+      .object({
+        count: z.number().int().min(1),
+        seed: z.number().int().optional(),
+        promptBlueprint: z.string().min(1),
+        previewAssetIds: z.array(z.string().min(1)).default([])
+      })
+      .strict(),
+    issues: z.array(PsgValidationIssueSchema)
+  })
+  .strict();
+
 export type PsgProtocolMetadata = z.infer<typeof PsgProtocolMetadataSchema>;
 export type PsgDocumentInput = z.infer<typeof PsgDocumentInputSchema>;
 export type PsgDocument = z.infer<typeof PsgDocumentSchema>;
@@ -396,6 +749,10 @@ export type PsgScenePlacement = z.infer<typeof PsgScenePlacementSchema>;
 export type PsgSceneCrowdMember = z.infer<typeof PsgSceneCrowdMemberSchema>;
 export type PsgSceneAssemblyPlan = z.infer<typeof PsgSceneAssemblyPlanSchema>;
 export type PsgValidationIssue = z.infer<typeof PsgValidationIssueSchema>;
+export type PsgBootstrapMode = z.infer<typeof PsgBootstrapModeSchema>;
+export type PsgSubjectKind = z.infer<typeof PsgSubjectKindSchema>;
+export type PsgEvidenceSource = z.infer<typeof PsgEvidenceSourceSchema>;
+export type PsgRetrievalOrigin = z.infer<typeof PsgRetrievalOriginSchema>;
 export type PsgCapabilitiesResponse = z.infer<
   typeof PsgCapabilitiesResponseSchema
 >;
@@ -414,7 +771,35 @@ export type PsgExportComfyRequest = z.infer<typeof PsgExportComfyRequestSchema>;
 export type PsgAssembleSceneRequest = z.infer<
   typeof PsgAssembleSceneRequestSchema
 >;
+export type PsgImageRegisterBatchRequest = z.infer<
+  typeof PsgImageRegisterBatchRequestSchema
+>;
+export type PsgImageAnalyzeRequest = z.infer<typeof PsgImageAnalyzeRequestSchema>;
+export type PsgImageReviewRequest = z.infer<typeof PsgImageReviewRequestSchema>;
+export type PsgImageDraftGraphRequest = z.infer<
+  typeof PsgImageDraftGraphRequestSchema
+>;
+export type PsgImagePreviewRequest = z.infer<typeof PsgImagePreviewRequestSchema>;
+export type PsgImageGenerateBatchRequest = z.infer<
+  typeof PsgImageGenerateBatchRequestSchema
+>;
 export type PsgCrowdMember = z.infer<typeof PsgCrowdMemberSchema>;
+export type PsgDetectedRegion = z.infer<typeof PsgDetectedRegionSchema>;
+export type PsgDetectedSubject = z.infer<typeof PsgDetectedSubjectSchema>;
+export type PsgVariationAxis = z.infer<typeof PsgVariationAxisSchema>;
+export type PsgEvidence = z.infer<typeof PsgEvidenceSchema>;
+export type PsgReconciledTrait = z.infer<typeof PsgReconciledTraitSchema>;
+export type PsgComparableMatch = z.infer<typeof PsgComparableMatchSchema>;
+export type PsgImageAnalysisRecord = z.infer<typeof PsgImageAnalysisRecordSchema>;
+export type PsgReviewGuidance = z.infer<typeof PsgReviewGuidanceSchema>;
+export type PsgReviewCheckpoint = z.infer<typeof PsgReviewCheckpointSchema>;
+export type PsgGenerationBatchRequest = z.infer<
+  typeof PsgGenerationBatchRequestSchema
+>;
+export type PsgPreviewBackend = z.infer<typeof PsgPreviewBackendSchema>;
+export type PsgImagePreviewRequestBody = z.infer<
+  typeof PsgImagePreviewRequestBodySchema
+>;
 export type PsgExpandCrowdResponse = z.infer<
   typeof PsgExpandCrowdResponseSchema
 >;
@@ -431,5 +816,21 @@ export type PsgDeriveAssetResponse = z.infer<
 >;
 export type PsgAssembleSceneResponse = z.infer<
   typeof PsgAssembleSceneResponseSchema
+>;
+export type PsgImageRegisterBatchResponse = z.infer<
+  typeof PsgImageRegisterBatchResponseSchema
+>;
+export type PsgImageAnalyzeResponse = z.infer<
+  typeof PsgImageAnalyzeResponseSchema
+>;
+export type PsgImageReviewResponse = z.infer<typeof PsgImageReviewResponseSchema>;
+export type PsgImageDraftGraphResponse = z.infer<
+  typeof PsgImageDraftGraphResponseSchema
+>;
+export type PsgImagePreviewResponse = z.infer<
+  typeof PsgImagePreviewResponseSchema
+>;
+export type PsgImageGenerateBatchResponse = z.infer<
+  typeof PsgImageGenerateBatchResponseSchema
 >;
 export type CanonicalPsgFragment = PSGFile;

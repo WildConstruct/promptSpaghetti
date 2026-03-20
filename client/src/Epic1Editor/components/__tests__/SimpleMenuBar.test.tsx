@@ -13,6 +13,7 @@ describe('SimpleMenuBar', () => {
       onExport: jest.fn(),
       onExportComfy: jest.fn(),
       onPsgSceneAssets: jest.fn(),
+      onImageBootstrap: jest.fn(),
       onExpandCrowd: jest.fn()
     };
 
@@ -22,10 +23,12 @@ describe('SimpleMenuBar', () => {
     const comfyButton = screen.getByText('Export Comfy Bridge...');
     fireEvent.click(comfyButton);
     fireEvent.click(screen.getByText('PSG Scene Assets...'));
+    fireEvent.click(screen.getByText('Image Bootstrap...'));
     fireEvent.click(screen.getByText('Hosted Crowd Expansion...'));
 
     expect(handlers.onExportComfy).toHaveBeenCalledTimes(1);
     expect(handlers.onPsgSceneAssets).toHaveBeenCalledTimes(1);
+    expect(handlers.onImageBootstrap).toHaveBeenCalledTimes(1);
     expect(handlers.onExpandCrowd).toHaveBeenCalledTimes(1);
   });
 

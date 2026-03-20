@@ -312,8 +312,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
       }}
     >
       <div
-        className="preview-tray-header"
-        style={{ cursor: 'pointer' }}
+        className="px-4 py-3 flex items-center justify-between border-b border-white/5 bg-[rgba(15,23,42,0.94)] relative shrink-0 cursor-pointer"
         onClick={e => {
           // Ignore clicks on handle or controls
           const t = e.target as HTMLElement;
@@ -328,84 +327,62 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
       >
         {resizable && isOpen && (
           <div
-            className="preview-tray-drag-handle"
+            className="absolute top-0 left-0 right-0 h-1.5 -mt-0.5 cursor-ns-resize z-20 hover:bg-white/10 transition-colors preview-tray-drag-handle"
             onMouseDown={handleDragStart}
           />
         )}
-        <div
-          className="preview-tray-title"
-          style={{
-            fontWeight: 500,
-            fontSize: '14px',
-            color: '#e8e8e8',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <span style={{ textTransform: 'uppercase' }}>Preview Output</span>
-          {seeds.length > 0 && (
-            <span
-              style={{
-                fontSize: '12px',
-                color: '#999',
-                fontWeight: 'normal'
-              }}
-            >
-              {seeds.length} seed{seeds.length === 1 ? '' : 's'}
-            </span>
-          )}
+        <div className="flex items-center gap-4">
+          <h2 className="text-sm font-medium text-text uppercase flex items-center gap-2">
+            Preview Output
+            {seeds.length > 0 && (
+              <span className="text-xs font-normal text-text-muted normal-case flex items-center">
+                {seeds.length} seed{seeds.length === 1 ? '' : 's'}
+              </span>
+            )}
+          </h2>
         </div>
 
-        {/* LLM Mode Toggle */}
-        <div style={{ marginLeft: 'auto', marginRight: '12px' }}>
-          <LLMToggleInline
-            initialMode={llmMode}
-            onModeChange={onLLMModeChange}
-            onConfigClick={onLLMConfigClick}
-          />
-        </div>
+        {/* Controls Container */}
+        <div className="flex items-center gap-3 preview-tray-controls pr-2">
+          {/* LLM Mode Toggle */}
+          <div className="flex items-center mr-2">
+            <LLMToggleInline
+              initialMode={llmMode}
+              onModeChange={onLLMModeChange}
+              onConfigClick={onLLMConfigClick}
+            />
+          </div>
 
-        <div className="preview-tray-controls">
           <button
-            className="tray-control-btn minimize"
+            className="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 text-text-muted hover:text-text transition-colors"
             onClick={e => {
               e.stopPropagation();
               toggleMinimized();
             }}
             title={minimized ? 'Expand' : 'Minimize'}
-            aria-label={
-              minimized ? 'Expand preview tray' : 'Minimize preview tray'
-            }
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
           >
             <svg
-              width="8"
-              height="8"
-              viewBox="0 0 8 8"
-              style={{
-                transform: minimized ? 'rotate(-90deg)' : 'rotate(0deg)',
-                transition: 'transform 150ms ease',
-                fill: 'currentColor'
-              }}
+              width="10"
+              height="10"
+              viewBox="0 0 10 10"
+              fill="currentColor"
+              className={`transition-transform duration-200 ${minimized ? '-rotate-90' : ''}`}
             >
-              <path d="M0 0 L8 4 L0 8 Z" />
+              <path d="M1 2.5 L5 6.5 L9 2.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
           <button
-            className="tray-control-btn close"
+            className="w-7 h-7 flex items-center justify-center rounded hover:bg-red-500/20 text-text-muted hover:text-red-400 transition-colors"
             onClick={e => {
               e.stopPropagation();
               handleClose();
             }}
             title="Close"
-            aria-label="Close preview tray"
           >
-            ×
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </button>
         </div>
       </div>
@@ -431,30 +408,11 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
 
           {!isExecuting && !error && (
             <div
-              className="preview-results-container"
-              style={{
-                display: 'flex',
-                height: '100%',
-                position: 'relative'
-              }}
+              className="flex-1 overflow-x-auto custom-scrollbar p-4 flex gap-4 bg-black/20 relative min-h-0"
             >
               <div
                 ref={scrollContainerRef}
-                className="preview-results-scroll"
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  right: '400px', // Updated to match much wider actions panel
-                  bottom: 0,
-                  display: 'flex',
-                  gap: '10px', // Slightly smaller gap to fit 4 boxes better
-                  padding: '0 10px', // Consistent smaller padding
-                  paddingRight: '10px',
-                  overflowX: 'auto',
-                  overflowY: 'hidden',
-                  scrollBehavior: 'smooth'
-                }}
+                className="flex gap-4 min-w-max h-full pb-2"
               >
                 {/* Show empty state if no results yet */}
                 {results.length === 0 ? (
@@ -466,7 +424,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                       flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#666',
+                      color: '#94a3b8',
                       gap: '16px'
                     }}
                   >
@@ -477,20 +435,24 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                         className="execute-btn"
                         style={{
                           padding: '8px 16px',
-                          background: '#2a2a2a',
-                          border: '1px solid #444',
-                          borderRadius: '6px',
-                          color: '#e8e8e8',
+                          background: 'linear-gradient(180deg, #22d3ee, #0891b2)',
+                          border: '1px solid rgba(103, 232, 249, 0.24)',
+                          borderRadius: '999px',
+                          color: '#ecfeff',
                           cursor: 'pointer',
                           transition: 'all 0.2s'
                         }}
                         onMouseEnter={e => {
-                          e.currentTarget.style.background = '#333';
-                          e.currentTarget.style.borderColor = '#4a9eff';
+                          e.currentTarget.style.background =
+                            'linear-gradient(180deg, #67e8f9, #0891b2)';
+                          e.currentTarget.style.borderColor =
+                            'rgba(103, 232, 249, 0.32)';
                         }}
                         onMouseLeave={e => {
-                          e.currentTarget.style.background = '#2a2a2a';
-                          e.currentTarget.style.borderColor = '#444';
+                          e.currentTarget.style.background =
+                            'linear-gradient(180deg, #22d3ee, #0891b2)';
+                          e.currentTarget.style.borderColor =
+                            'rgba(103, 232, 249, 0.24)';
                         }}
                       >
                         Generate Preview
@@ -514,175 +476,58 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                       return (
                         <div
                           key={`seed-${seed}-${index}`}
-                          className="preview-result-box"
-                          style={{
-                            flex: '0 0 440px', // Wider boxes to better fill space
-                            minWidth: '440px',
-                            border: '1px solid #444',
-                            borderRadius: '6px',
-                            background: '#1a1a1a',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            position: 'relative',
-                            overflow: 'hidden'
-                          }}
+                          className="w-96 shrink-0 surface-panel rounded-xl border border-white/10 flex flex-col hover:border-white/20 transition-colors bg-[rgba(15,23,42,0.94)] relative overflow-hidden shadow-lg h-full"
                         >
-                          {/* Delete button */}
-                          {seeds.length > 1 && (
-                            <button
-                              className="preview-delete-seed"
-                              onClick={() => handleDeleteSeed(index)}
-                              style={{
-                                position: 'absolute',
-                                top: '8px',
-                                right: '8px',
-                                width: '20px',
-                                height: '20px',
-                                border: 'none',
-                                background: 'rgba(255, 255, 255, 0.1)',
-                                color: '#888',
-                                borderRadius: '3px',
-                                cursor: 'pointer',
-                                fontSize: '14px',
-                                lineHeight: '1',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                zIndex: 10,
-                                transition: 'background 0.2s, color 0.2s'
-                              }}
-                              onMouseEnter={e => {
-                                e.currentTarget.style.background =
-                                  'rgba(239, 68, 68, 0.2)';
-                                e.currentTarget.style.color = '#ef4444';
-                              }}
-                              onMouseLeave={e => {
-                                e.currentTarget.style.background =
-                                  'rgba(255, 255, 255, 0.1)';
-                                e.currentTarget.style.color = '#888';
-                              }}
-                              title="Delete seed"
-                            >
-                              ×
-                            </button>
-                          )}
-
                           {/* Seed label with inline edit */}
                           <div
-                            style={{
-                              position: 'absolute',
-                              top: '6px',
-                              left: '12px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px'
-                            }}
+                            className="px-3 py-2 border-b border-white/10 flex items-center justify-between bg-white/[0.02]"
                           >
-                            <span
-                              style={{
-                                color: '#666',
-                                fontSize: '11px',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.5px'
-                              }}
-                            >
-                              Seed
-                            </span>
-                            {editingSeedIndex === index ? (
-                              <input
-                                type="number"
-                                value={editingSeedValue}
-                                onChange={e =>
-                                  setEditingSeedValue(e.target.value)
-                                }
-                                onBlur={handleSeedSave}
-                                onKeyDown={e => {
-                                  if (e.key === 'Enter') {
-                                    handleSeedSave();
-                                  }
-                                  if (e.key === 'Escape') {
-                                    setEditingSeedIndex(null);
-                                  }
-                                }}
-                                autoFocus
-                                style={{
-                                  width: '60px',
-                                  padding: '1px 4px',
-                                  background: '#1a1a1a',
-                                  border: '1px solid #4a9eff',
-                                  borderRadius: '3px',
-                                  color: '#fff',
-                                  fontSize: '12px',
-                                  outline: 'none'
-                                }}
-                              />
-                            ) : (
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-medium text-text-muted">Seed</span>
+                              {editingSeedIndex === index ? (
+                                <input
+                                  type="number"
+                                  value={editingSeedValue}
+                                  onChange={e => setEditingSeedValue(e.target.value)}
+                                  onBlur={handleSeedSave}
+                                  onKeyDown={e => {
+                                    if (e.key === 'Enter') handleSeedSave();
+                                    if (e.key === 'Escape') setEditingSeedIndex(null);
+                                  }}
+                                  autoFocus
+                                  className="w-16 px-1.5 py-0.5 bg-black/40 border border-primary/30 rounded text-xs text-text focus:outline-none focus:border-primary/60"
+                                />
+                              ) : (
+                                <button
+                                  onClick={() => handleSeedEdit(index)}
+                                  className="text-xs font-mono text-text hover:text-primary transition-colors px-1.5 py-0.5 rounded hover:bg-white/5"
+                                >
+                                  {seed}
+                                </button>
+                              )}
                               <button
-                                onClick={() => handleSeedEdit(index)}
-                                style={{
-                                  padding: '1px 4px',
-                                  background: 'transparent',
-                                  border: '1px solid transparent',
-                                  borderRadius: '3px',
-                                  color: '#e8e8e8',
-                                  fontSize: '12px',
-                                  cursor: 'pointer',
-                                  transition: 'border-color 0.2s'
-                                }}
-                                onMouseEnter={e =>
-                                  (e.currentTarget.style.borderColor = '#444')
-                                }
-                                onMouseLeave={e =>
-                                  (e.currentTarget.style.borderColor =
-                                    'transparent')
-                                }
+                                onClick={() => handleRandomizeSeed(index)}
+                                className="p-1 rounded hover:bg-white/10 text-text-muted hover:text-text transition-colors"
+                                title="Randomize seed"
                               >
-                                {seed}
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                                </svg>
+                              </button>
+                            </div>
+
+                            {/* Delete button moved inside header */}
+                            {seeds.length > 1 && (
+                              <button
+                                className="p-1 rounded text-text-muted hover:text-red-400 hover:bg-red-400/10 transition-colors"
+                                onClick={() => handleDeleteSeed(index)}
+                                title="Delete seed"
+                              >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <path d="M18 6L6 18M6 6l12 12"/>
+                                </svg>
                               </button>
                             )}
-                            <button
-                              onClick={() => handleRandomizeSeed(index)}
-                              style={{
-                                width: '20px',
-                                height: '20px',
-                                border: 'none',
-                                background: 'rgba(255, 255, 255, 0.05)',
-                                borderRadius: '3px',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                transition: 'background 0.2s'
-                              }}
-                              onMouseEnter={e =>
-                                (e.currentTarget.style.background =
-                                  'rgba(74, 158, 255, 0.2)')
-                              }
-                              onMouseLeave={e =>
-                                (e.currentTarget.style.background =
-                                  'rgba(255, 255, 255, 0.05)')
-                              }
-                              title="Randomize seed"
-                            >
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="#fff"
-                                strokeWidth="2"
-                              >
-                                <rect
-                                  x="3"
-                                  y="3"
-                                  width="18"
-                                  height="18"
-                                  rx="2"
-                                />
-                                <circle cx="8.5" cy="8.5" r="1.5" />
-                                <circle cx="15.5" cy="15.5" r="1.5" />
-                              </svg>
-                            </button>
                           </div>
 
                           {/* Result content */}
@@ -690,7 +535,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                             style={{
                               flex: 1,
                               padding: '8px 12px',
-                              paddingTop: '26px', // Just enough space for seed label
+                              paddingTop: '26px',
                               overflow: 'auto',
                               cursor: 'pointer'
                             }}
@@ -731,7 +576,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                                   style={{
                                     whiteSpace: 'pre-wrap',
                                     wordBreak: 'break-word',
-                                    color: '#e8e8e8',
+                                    color: '#e2e8f0',
                                     fontSize: '14px',
                                     lineHeight: '1.5',
                                     marginTop:
@@ -752,7 +597,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                             ) : (
                               <div
                                 style={{
-                                  color: '#666',
+                                  color: '#64748b',
                                   fontSize: '14px',
                                   fontStyle: 'italic'
                                 }}
@@ -781,10 +626,10 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                         style={{
                           width: '40px',
                           height: '40px',
-                          border: '2px dashed #444',
-                          borderRadius: '6px',
+                          border: '1px dashed rgba(103, 232, 249, 0.24)',
+                          borderRadius: '14px',
                           background: 'transparent',
-                          color: '#666',
+                          color: '#7dd3fc',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
@@ -792,14 +637,15 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                           transition: 'all 0.2s'
                         }}
                         onMouseEnter={e => {
-                          e.currentTarget.style.borderColor = '#4a9eff';
-                          e.currentTarget.style.color = '#4a9eff';
+                          e.currentTarget.style.borderColor = '#22d3ee';
+                          e.currentTarget.style.color = '#67e8f9';
                           e.currentTarget.style.background =
-                            'rgba(74, 158, 255, 0.1)';
+                            'rgba(34, 211, 238, 0.1)';
                         }}
                         onMouseLeave={e => {
-                          e.currentTarget.style.borderColor = '#444';
-                          e.currentTarget.style.color = '#666';
+                          e.currentTarget.style.borderColor =
+                            'rgba(103, 232, 249, 0.24)';
+                          e.currentTarget.style.color = '#7dd3fc';
                           e.currentTarget.style.background = 'transparent';
                         }}
                         title="Add new seed"
@@ -829,14 +675,15 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   right: '0',
                   top: '0',
                   bottom: '0',
-                  width: '400px', // Doubled the width
+                  width: '320px',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '12px',
                   padding: '16px',
-                  paddingLeft: '28px', // More padding for divider space
-                  background: '#2a2a2a',
-                  boxShadow: '-4px 0 8px rgba(0, 0, 0, 0.2)'
+                  paddingLeft: '24px',
+                  background:
+                    'linear-gradient(180deg, rgba(8, 12, 20, 0.96), rgba(10, 16, 28, 0.9))',
+                  boxShadow: '-12px 0 24px rgba(2, 6, 23, 0.24)'
                 }}
               >
                 {/* Vertical divider line */}
@@ -847,17 +694,17 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                     top: '0',
                     bottom: '0',
                     width: '3px',
-                    background: '#3a3a3a'
+                    background: 'rgba(103, 232, 249, 0.14)'
                   }}
                 />
                 <button
                   onClick={handleCopyAll}
                   style={{
                     padding: '10px 12px',
-                    background: '#1a1a1a',
-                    border: '1px solid #444',
-                    borderRadius: '6px',
-                    color: '#e8e8e8',
+                    background: 'rgba(15, 23, 42, 0.58)',
+                    border: '1px solid rgba(103, 232, 249, 0.12)',
+                    borderRadius: '12px',
+                    color: '#e8f7ff',
                     fontSize: '13px',
                     fontWeight: '500',
                     cursor: 'pointer',
@@ -868,12 +715,14 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                     gap: '6px'
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.background = '#333';
-                    e.currentTarget.style.borderColor = '#4a9eff';
+                    e.currentTarget.style.background = 'rgba(34, 211, 238, 0.1)';
+                    e.currentTarget.style.borderColor =
+                      'rgba(103, 232, 249, 0.24)';
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.background = '#1a1a1a';
-                    e.currentTarget.style.borderColor = '#444';
+                    e.currentTarget.style.background = 'rgba(15, 23, 42, 0.58)';
+                    e.currentTarget.style.borderColor =
+                      'rgba(103, 232, 249, 0.12)';
                   }}
                 >
                   <svg
@@ -895,10 +744,10 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                     onClick={() => onExport('json')}
                     style={{
                       padding: '10px 12px',
-                      background: '#1a1a1a',
-                      border: '1px solid #444',
-                      borderRadius: '6px',
-                      color: '#e8e8e8',
+                      background: 'rgba(15, 23, 42, 0.58)',
+                      border: '1px solid rgba(103, 232, 249, 0.12)',
+                      borderRadius: '12px',
+                      color: '#e8f7ff',
                       fontSize: '13px',
                       fontWeight: '500',
                       cursor: 'pointer',
@@ -909,12 +758,16 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                       gap: '6px'
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.background = '#333';
-                      e.currentTarget.style.borderColor = '#4a9eff';
+                      e.currentTarget.style.background =
+                        'rgba(34, 211, 238, 0.1)';
+                      e.currentTarget.style.borderColor =
+                        'rgba(103, 232, 249, 0.24)';
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.background = '#1a1a1a';
-                      e.currentTarget.style.borderColor = '#444';
+                      e.currentTarget.style.background =
+                        'rgba(15, 23, 42, 0.58)';
+                      e.currentTarget.style.borderColor =
+                        'rgba(103, 232, 249, 0.12)';
                     }}
                   >
                     <svg

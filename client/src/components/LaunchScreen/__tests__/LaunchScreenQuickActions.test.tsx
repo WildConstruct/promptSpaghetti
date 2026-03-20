@@ -36,4 +36,16 @@ describe('LaunchScreen quick actions', () => {
     expect(screen.getByText('Monster Truck Branching')).toBeInTheDocument();
     expect(screen.getByText('Archetype')).toBeInTheDocument();
   });
+
+  it('offers a direct path to open the editor for image upload', () => {
+    const onLaunch = jest.fn();
+
+    render(<LaunchScreen onLaunch={onLaunch} />);
+
+    fireEvent.click(screen.getByText('Open Editor To Add Images'));
+    jest.advanceTimersByTime(350);
+
+    expect(onLaunch).toHaveBeenCalledWith({ kind: 'empty' });
+    expect(screen.getByText(/PSG Scene Assets/i)).toBeInTheDocument();
+  });
 });

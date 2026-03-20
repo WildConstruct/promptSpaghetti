@@ -1,0 +1,198 @@
+{
+  "version": "1.0.0",
+  "name": "Fantasy Wizard Generating System",
+  "description": "Randomizable prompt for generating an epic fantasy wizard.",
+  "metadata": {
+    "type": "ASSET_FRAGMENT",
+    "category": "fantasy",
+    "tags": [
+      "fantasy",
+      "wizard",
+      "magic",
+      "rpg"
+    ],
+    "original_version": "1.0.0",
+    "entrypoints": [
+      "wizard_prompt"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "wizard_element",
+      "type": "WeightedChoice",
+      "name": "Primary Element",
+      "description": "The element the wizard controls.",
+      "x": 0,
+      "y": 0,
+      "options": [
+        {
+          "id": "elem-fire",
+          "text": "crackling fire and embers",
+          "weight": 40
+        },
+        {
+          "id": "elem-ice",
+          "text": "frost, snow, and freezing winds",
+          "weight": 30
+        },
+        {
+          "id": "elem-storm",
+          "text": "lightning arcs and storm clouds",
+          "weight": 20
+        },
+        {
+          "id": "elem-void",
+          "text": "dark cosmic void energy",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "wizard_clothing",
+      "type": "WeightedChoice",
+      "name": "Wizard Garments",
+      "description": "The wizard's clothing style.",
+      "x": 220,
+      "y": 0,
+      "options": [
+        {
+          "id": "cloth-classic",
+          "text": "traditional sweeping robes with a pointed hat",
+          "weight": 35
+        },
+        {
+          "id": "cloth-battle",
+          "text": "armored battle-robes with glowing runes",
+          "weight": 40
+        },
+        {
+          "id": "cloth-ragged",
+          "text": "ragged, ancient hermit clothing covered in moss",
+          "weight": 15
+        },
+        {
+          "id": "cloth-noble",
+          "text": "extravagant, silk court-mage attire with gold trim",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "wizard_artifact",
+      "type": "WeightedChoice",
+      "name": "Magical Artifact",
+      "description": "The item they channel power through.",
+      "x": 440,
+      "y": 0,
+      "options": [
+        {
+          "id": "art-staff",
+          "text": "a towering wooden staff topped with a glowing crystal",
+          "weight": 50
+        },
+        {
+          "id": "art-orb",
+          "text": "a floating glass orb filled with swirling energy",
+          "weight": 30
+        },
+        {
+          "id": "art-tome",
+          "text": "an ancient grimoire floating in mid-air whose pages glow",
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "id": "wizard_companion",
+      "type": "WeightedChoice",
+      "name": "Familiar",
+      "description": "Animal companion",
+      "x": 660,
+      "y": 0,
+      "options": [
+        {
+          "id": "comp-owl",
+          "text": "a spectral owl perched on their shoulder",
+          "weight": 30
+        },
+        {
+          "id": "comp-dragon",
+          "text": "a tiny elemental wyrm coiled around their arm",
+          "weight": 30
+        },
+        {
+          "id": "comp-none",
+          "text": "no visible familiar",
+          "weight": 40
+        }
+      ]
+    },
+    {
+      "id": "wizard_environment",
+      "type": "WeightedChoice",
+      "name": "Background",
+      "description": "Where the wizard is located.",
+      "x": 0,
+      "y": 250,
+      "options": [
+        {
+          "id": "env-tower",
+          "text": "inside a cluttered magical alchemy tower",
+          "weight": 30
+        },
+        {
+          "id": "env-mountain",
+          "text": "standing atop a jagged, snow-swept mountain peak",
+          "weight": 30
+        },
+        {
+          "id": "env-dungeon",
+          "text": "deep within a dark, bioluminescent cave",
+          "weight": 20
+        },
+        {
+          "id": "env-战场",
+          "text": "in the middle of a war-torn battlefield",
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "id": "wizard_prompt",
+      "type": "Output",
+      "x": 330,
+      "y": 250,
+      "template": "A powerful fantasy wizard generating {{wizard_element}} magic. They are wearing {{wizard_clothing}} and channeling their power through {{wizard_artifact}}. They are accompanied by {{wizard_companion}}. The scene takes place {{wizard_environment}}. Cinematic lighting, highly detailed, fantasy art style concept.",
+      "data": {
+        "label": "Final Prompt"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-elem-prompt",
+      "source": "wizard_element",
+      "target": "wizard_prompt"
+    },
+    {
+      "id": "edge-cloth-prompt",
+      "source": "wizard_clothing",
+      "target": "wizard_prompt"
+    },
+    {
+      "id": "edge-art-prompt",
+      "source": "wizard_artifact",
+      "target": "wizard_prompt"
+    },
+    {
+      "id": "edge-comp-prompt",
+      "source": "wizard_companion",
+      "target": "wizard_prompt"
+    },
+    {
+      "id": "edge-env-prompt",
+      "source": "wizard_environment",
+      "target": "wizard_prompt"
+    }
+  ]
+}

@@ -74,21 +74,6 @@ const BranchIcon = () => (
   </svg>
 );
 
-const BlankIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <rect x="4" y="4" width="16" height="16" rx="2" />
-    <path d="M8 12h8" />
-    <path d="M12 8v8" />
-  </svg>
-);
-
 const templates: Template[] = [
   {
     id: 'character_variation',
@@ -124,14 +109,6 @@ const templates: Template[] = [
       'Monster trucks that are monsters, with different branches for swamp, graveyard, and desert arena scenarios',
     badge: 'Conditional Logic',
     icon: <BranchIcon />
-  },
-  {
-    id: 'empty',
-    title: 'Blank Canvas',
-    description: 'Start from scratch in the editor with no template applied',
-    prompt: 'Open an empty graph and begin authoring manually',
-    badge: 'Manual',
-    icon: <BlankIcon />
   }
 ];
 

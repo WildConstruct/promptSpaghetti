@@ -3,6 +3,7 @@ import type { PSGFile } from '../types/graph';
 
 export const DraftGraphFromPromptRequestSchema = z.object({
   prompt: z.string().min(1),
+  imageUrl: z.string().optional(),
   mode: z.enum(['draft', 'expand-existing']).default('draft'),
   targetDocument: z.custom<PSGFile>().optional(),
   selection: z

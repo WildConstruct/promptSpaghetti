@@ -286,6 +286,7 @@ export class AgentDraftService {
     try {
       const completion = await this.llm.complete({
         prompt: buildDraftPrompt(request, fallbackPlan),
+        imageUrl: request.imageUrl,
         systemPrompt:
           'You generate structured PSG graph draft plans. Output valid JSON only.',
         model: process.env.OPENAI_AGENT_DRAFT_MODEL || process.env.OPENAI_DEFAULT_MODEL,

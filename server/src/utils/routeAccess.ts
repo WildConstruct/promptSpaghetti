@@ -69,6 +69,37 @@ function parseBoolean(value: string | undefined, fallback: boolean): boolean {
   }
 }
 
+function buildLocalTestAuthContext(
+  capability?: RouteCapability
+): SupabaseAuthContext {
+  return {
+    userId: 'local-test-user',
+    email: null,
+    appMetadata: {},
+    userMetadata: {},
+    capabilities: capability ? [capability] : ['cloud-psg'],
+    subscriptionActive: true,
+    subscriptionState: 'active',
+    plan: 'test'
+  };
+}
+
+function resolveTestAuthContext(
+  token: string | undefined,
+  capability?: RouteCapability
+): SupabaseAuthContext | null {
+  const expectedToken = process.env.LOCAL_TEST_AUTH_TOKEN;
+  if (
+    typeof expectedToken !== 'string' ||
+    expectedToken.trim().length === 0 ||
+    token !== expectedToken
+  ) {
+    return null;
+  }
+
+  return buildLocalTestAuthContext(capability);
+}
+
 function normalizeCapability(value: string): string {
   return value.trim().toLowerCase();
 }
@@ -136,6 +167,13 @@ export function requireRouteAccess(options: {
     }
 
     const token = extractBearerToken(request);
+    const testAuthContext = resolveTestAuthContext(token, options.capability);
+    if (testAuthContext) {
+      request.authUserId = testAuthContext.userId;
+      request.authContext = testAuthContext;
+      return;
+    }
+
     const authContext = await getSupabaseAuthContext(token);
     if (!authContext) {
       return reply.status(401).send({ error: 'Authentication required' });

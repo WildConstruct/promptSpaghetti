@@ -543,6 +543,12 @@ export class ValidationEngine {
           `Input '${inputName}': pattern validation is only valid for strings`
         );
       }
+    } else if (type === 'boolean') {
+      if (val?.pattern) {
+        errors.push(
+          `Input '${inputName}': pattern validation is only valid for strings`
+        );
+      }
     }
 
     const enumValues = val && Array.isArray(val.enum) ? val.enum : undefined;

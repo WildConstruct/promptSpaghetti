@@ -4,7 +4,9 @@
   width: 100%;
   height: 100%;
   position: relative;
-  background: #0f0f0f;
+  background:
+    radial-gradient(circle at top, rgba(34, 211, 238, 0.08), transparent 24%),
+    linear-gradient(180deg, #090d16 0%, #0a1120 48%, #060913 100%);
   display: flex;
   flex-direction: column;
   /* Prevent text selection to avoid Cmd+A selecting text */
@@ -15,6 +17,12 @@
 }
 
 /* Main layout container that shrinks when tray is open */
+.epic1-workspace-shell {
+  padding: 10px 12px 0;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
 .epic1-main-layout {
   flex: 1 1 auto; /* Allow shrinking when preview tray opens */
   width: 100%;
@@ -31,20 +39,20 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background: #0a0a0a;
+  background: #050811;
 }
 
 /* Dark theme for ReactFlow canvas */
 .react-flow {
-  background-color: #0a0a0a;
+  background-color: #050811;
 }
 
 .react-flow__background {
-  background-color: #0a0a0a;
+  background-color: #050811;
 }
 
 .react-flow__background pattern {
-  stroke: #1a1a1a;
+  stroke: rgba(148, 163, 184, 0.08);
 }
 
 /* Ensure drag and drop works properly */
@@ -181,7 +189,6 @@
 /* Prevent drag ghost/preview box when dragging connections */
 .epic1-graph-editor .react-flow__handle {
   -webkit-user-drag: none;
-  user-drag: none;
 }
 
 /* Hide any drag preview elements */
@@ -192,7 +199,6 @@
 /* Only prevent drag preview on specific draggable elements that aren't our drag handles */
 .epic1-graph-editor .enhanced-option-row[draggable='true'] {
   -webkit-user-drag: none;
-  user-drag: none;
 }
 
 .epic1-graph-editor .react-flow__handle {
@@ -224,29 +230,38 @@
 .epic1-controls {
   display: flex;
   gap: 8px;
-  padding: 12px;
-  background: rgba(26, 26, 26, 0.95);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  padding: 10px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(2, 6, 23, 0.82));
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(2, 6, 23, 0.24);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(16px);
 }
 
 .epic1-execute-button {
-  padding: 8px 16px;
-  background: #5b9eff;
+  padding: 9px 16px;
+  background: linear-gradient(180deg, #3b82f6, #2563eb);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 10px 20px rgba(37, 99, 235, 0.28);
   transition: all 0.2s ease;
 }
 
 .epic1-execute-button:hover:not(:disabled) {
-  background: #4a8ee6;
+  background: linear-gradient(180deg, #60a5fa, #2563eb);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(91, 158, 255, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 14px 28px rgba(37, 99, 235, 0.32);
 }
 
 .epic1-execute-button:disabled {
@@ -256,44 +271,48 @@
 
 /* Preview toggle button */
 .epic1-preview-toggle {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #1a1a1a;
-  color: #5b9eff;
-  border: 2px solid #5b9eff;
-  border-radius: 6px;
-  font-size: 20px;
+  background: rgba(15, 23, 42, 0.86);
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.32);
+  border-radius: 12px;
+  font-size: 18px;
   cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: all 0.2s ease;
 }
 
 .epic1-preview-toggle:hover {
-  background: #5b9eff;
+  background: rgba(37, 99, 235, 0.22);
   color: white;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(91, 158, 255, 0.4);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
 }
 
 /* Instructions panel */
 .epic1-instructions {
   padding: 8px 16px;
-  background: rgba(26, 26, 26, 0.9);
-  color: #e0e0e0;
-  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.78);
+  color: rgba(226, 232, 240, 0.88);
+  border-radius: 999px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.3px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(12px);
 }
 
 /* MiniMap styling */
 .epic1-graph-editor .react-flow__minimap {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  background: rgba(8, 12, 20, 0.92);
+  border: 1px solid rgba(103, 232, 249, 0.14);
+  border-radius: 16px;
+  box-shadow: 0 16px 32px rgba(2, 6, 23, 0.28);
+  backdrop-filter: blur(16px);
   overflow: hidden;
   /* Force minimap to be visible even in demo mode */
   opacity: 1 !important;
@@ -335,22 +354,24 @@
 
 /* Controls styling */
 .epic1-graph-editor .react-flow__controls {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  background: rgba(8, 12, 20, 0.92);
+  border: 1px solid rgba(103, 232, 249, 0.14);
+  border-radius: 16px;
+  box-shadow: 0 16px 32px rgba(2, 6, 23, 0.28);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
 }
 
 .epic1-graph-editor .react-flow__controls-button {
-  background: #1a1a1a;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  width: 36px;
-  height: 36px;
-  color: #e0e0e0;
+  background: rgba(8, 12, 20, 0.84);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  width: 40px;
+  height: 40px;
+  color: rgba(226, 232, 240, 0.92);
 }
 
 .epic1-graph-editor .react-flow__controls-button:hover {
-  background: #2a2a2a;
+  background: rgba(8, 145, 178, 0.18);
 }
 
 .epic1-graph-editor .react-flow__controls-button:last-child {
@@ -359,7 +380,9 @@
 
 /* Background customization */
 .epic1-graph-editor .react-flow__background {
-  background-color: #0f0f0f;
+  background:
+    radial-gradient(circle at top, rgba(34, 211, 238, 0.08), transparent 24%),
+    linear-gradient(180deg, #090d16 0%, #0b1220 45%, #060913 100%);
 }
 
 /* Selection box - make it more visible */
@@ -379,6 +402,82 @@
 .epic1-graph-editor .react-flow__connection-path {
   stroke: #5b9eff;
   stroke-width: 2;
+}
+
+.graph-canvas-container {
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(2, 6, 23, 0.32);
+  border: 1px solid rgba(103, 232, 249, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    0 20px 40px rgba(2, 6, 23, 0.24);
+}
+
+.epic1-canvas-shell {
+  margin-bottom: 10px;
+}
+
+.epic1-node-palette-shell {
+  padding: 12px 0 12px 12px;
+  box-sizing: border-box;
+}
+
+.epic1-preview-tray-shell {
+  padding: 0 12px 12px;
+  box-sizing: border-box;
+}
+
+.panel-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background:
+    linear-gradient(180deg, rgba(8, 12, 20, 0.94), rgba(8, 12, 20, 0.82));
+  border: 1px solid rgba(103, 232, 249, 0.14);
+  border-radius: 18px;
+  box-shadow: 0 18px 36px rgba(2, 6, 23, 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.execute-button,
+.preview-button {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.execute-button {
+  background: linear-gradient(180deg, #22d3ee, #0891b2);
+  color: #ecfeff;
+  border-color: rgba(103, 232, 249, 0.28);
+  box-shadow: 0 12px 24px rgba(8, 145, 178, 0.2);
+}
+
+.execute-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(8, 145, 178, 0.26);
+}
+
+.preview-button {
+  background: rgba(15, 23, 42, 0.58);
+  color: rgba(226, 232, 240, 0.92);
+  border-color: rgba(148, 163, 184, 0.14);
+}
+
+.preview-button:hover {
+  transform: translateY(-1px);
+  background: rgba(8, 145, 178, 0.14);
+  border-color: rgba(103, 232, 249, 0.22);
 }
 
 /* Attribution hiding (optional) */

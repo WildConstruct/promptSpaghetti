@@ -1,6 +1,8 @@
-/* Professional Dark Theme (inspired by Cinema 4D & Substance Designer) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Import centralized color system */
+/* Import legacy centralized color system for backward compatibility */
 @import './styles/colors.css';
 
 /* CSS Custom Properties - Professional Design System */
@@ -77,22 +79,13 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-primary);
-  font-size: var(--font-size-base);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  font-variant-numeric: tabular-nums;
-}
-
-* {
-  box-sizing: border-box;
+/* Tailwind handles box-sizing and basic resets in base */
+@layer base {
+  body {
+    @apply bg-background text-text font-body antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 /* Global smooth transitions for better UX - excluding React Flow */
@@ -238,21 +231,23 @@ textarea,
 
 /* Override React Flow default styles for dark mode */
 .react-flow__edge-path {
-  stroke: var(--color-node-connection) !important;
-  stroke-width: 3px !important;
+  stroke: rgba(255, 255, 255, 0.2) !important;
+  stroke-width: 2px !important;
   opacity: 1 !important;
   visibility: visible !important;
   fill: none !important;
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
-  stroke: var(--color-node-connection-selected);
-  stroke-width: 2px;
+  stroke: rgba(0, 240, 255, 0.8) !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
 }
 
 .react-flow__connection-path {
-  stroke: var(--color-node-connection);
-  stroke-width: 2px;
+  stroke: rgba(0, 240, 255, 0.5) !important;
+  stroke-width: 2px !important;
+  stroke-dasharray: 5, 5;
 }
 
 .react-flow__controls {

@@ -117,6 +117,46 @@ const getNodeHeight = (node: FlowNode): number =>
     return Math.max(explicitHeight ?? 0, estimatedHeight);
   })();
 
+const expandContainerNode = (
+  container: FlowNode,
+  children: FlowNode[]
+): FlowNode => {
+  if (container.type !== 'enhancedBoundingBox' || children.length === 0) {
+    return container;
+  }
+  const currentWidth = getNodeWidth(container);
+  const currentHeight = getNodeHeight(container);
+  const padding = 40;
+  const requiredWidth = children.reduce((max, child) => {
+    const right = (child.position?.x ?? 0) + getNodeWidth(child);
+    return Math.max(max, right + padding);
+  }, currentWidth);
+  const requiredHeight = children.reduce((max, child) => {
+    const bottom = (child.position?.y ?? 0) + getNodeHeight(child);
+    return Math.max(max, bottom + padding);
+  }, currentHeight);
+
+  if (requiredWidth === currentWidth && requiredHeight === currentHeight) {
+    return container;
+  }
+
+  return {
+    ...container,
+    width: requiredWidth,
+    height: requiredHeight,
+    style: {
+      ...(container.style || {}),
+      width: requiredWidth,
+      height: requiredHeight
+    },
+    data: {
+      ...((container.data as Record<string, unknown>) || {}),
+      width: requiredWidth,
+      height: requiredHeight
+    }
+  } as FlowNode;
+};
+
 interface UseDragDropHandlersProps {
   setNodes: (nodes: FlowNode[] | ((nodes: FlowNode[]) => FlowNode[])) => void;
   setEdges: (edges: FlowEdge[] | ((edges: FlowEdge[]) => FlowEdge[])) => void;
@@ -506,7 +546,17 @@ export function useDragDropHandlers({
           setNodes(replacement.nodes);
           setEdges(replacement.edges);
         } else {
-          setNodes(nds => nds.concat(nodesToAdd));
+          setNodes(nds => {
+            let nextNodes = [...nds];
+            if (containerNode) {
+              const children = nodesToAdd.filter(n => n.parentNode === containerNode.id);
+              const updatedContainer = expandContainerNode(containerNode as FlowNode, children);
+              if (updatedContainer !== containerNode) {
+                nextNodes = nextNodes.map(n => n.id === updatedContainer.id ? updatedContainer : n);
+              }
+            }
+            return nextNodes.concat(nodesToAdd);
+          });
           setEdges(existingEdges => {
             debugLogEpic1(
               '[DragDrop] Current edges:',
@@ -680,7 +730,16 @@ export function useDragDropHandlers({
         }
       }
 
-      setNodes(nds => nds.concat(newNode));
+      setNodes(nds => {
+        let nextNodes = [...nds];
+        if (containerNode && newNode.parentNode === containerNode.id) {
+          const updatedContainer = expandContainerNode(containerNode as FlowNode, [newNode]);
+          if (updatedContainer !== containerNode) {
+            nextNodes = nextNodes.map(n => n.id === updatedContainer.id ? updatedContainer : n);
+          }
+        }
+        return nextNodes.concat(newNode);
+      });
 
       try {
         if (addNodeWithBounce) {

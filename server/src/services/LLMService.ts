@@ -14,6 +14,7 @@ export interface LLMServiceOptions {
 
 export interface CompleteParams {
   prompt: string;
+  imageUrl?: string;
   model?: string;
   systemPrompt?: string;
   temperature?: number;
@@ -127,9 +128,16 @@ export class LLMService {
         temperature,
         max_tokens: maxTokens,
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: prompt }
-        ],
+            {
+              role: 'user',
+              content: params.imageUrl
+                ? [
+                    { type: 'text', text: prompt },
+                    { type: 'image_url', image_url: { url: params.imageUrl } }
+                  ]
+                : prompt
+            }
+          ],
         ...(params.responseFormat === 'json_object'
           ? {
               response_format: {

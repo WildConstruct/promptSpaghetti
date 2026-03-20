@@ -40,6 +40,7 @@ export interface PromptAnalysis {
   edges: AnalysisEdge[];
   llmMetadata?: Record<string, unknown>;
   rawPrompt?: string;
+  imageUrl?: string;
 }
 
 export const buildSequentialEdges = (

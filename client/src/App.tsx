@@ -9,6 +9,8 @@ import {
 import type { Node, Edge } from 'reactflow';
 import type { PromptAnalysis } from './lib/simplePromptParser';
 import { ThemeProvider } from './ThemeProvider';
+import { readScenePreviewV1Flag } from './utils/featureFlags';
+import { readInitialEditorSeedFromStorage } from './utils/initialEditorSeed';
 import './App.css';
 
 function getLegalDocumentFromHash(hash: string): LegalDocumentKey | null {
@@ -55,8 +57,29 @@ function App() {
   >();
   const [initialGraph, setInitialGraph] = useState<
     { nodes: Node[]; edges: Edge[] } | undefined
-  >();
+  >(() => {
+    try {
+      if (typeof window === 'undefined') {
+        return undefined;
+      }
+
+      return readInitialEditorSeedFromStorage(window.localStorage);
+    } catch {
+      return undefined;
+    }
+  });
   const [startWithTutorial, setStartWithTutorial] = useState(false);
+  const [scenePreviewV1Enabled] = useState<boolean>(() => {
+    try {
+      if (typeof window === 'undefined') {
+        return false;
+      }
+
+      return readScenePreviewV1Flag(window.localStorage);
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -158,6 +181,7 @@ function App() {
           showOnboarding={false}
           initialAnalysis={initialAnalysis}
           initialGraph={initialGraph}
+          scenePreviewV1Enabled={scenePreviewV1Enabled}
           startWithTutorial={startWithTutorial}
           onBackToLaunch={handleBackToLaunch}
         />

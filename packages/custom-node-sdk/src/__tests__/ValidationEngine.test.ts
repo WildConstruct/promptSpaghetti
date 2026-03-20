@@ -343,4 +343,31 @@ describe('ValidationEngine enum validation', () => {
       "Input 'mode': enum must contain at least one value"
     );
   });
+
+  it('rejects pattern validation on booleans', () => {
+    const schema: NodeIOSchema = {
+      inputs: {
+        enabled: {
+          type: 'boolean',
+          required: true,
+          validation: {
+            pattern: '^true$'
+          }
+        }
+      },
+      outputs: {
+        result: {
+          type: 'boolean'
+        }
+      }
+    };
+
+    const engine = new ValidationEngine(schema);
+    const result = engine.validateSchema();
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain(
+      "Input 'enabled': pattern validation is only valid for strings"
+    );
+  });
 });

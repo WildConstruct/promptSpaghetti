@@ -1,14 +1,11 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { getSupabase } from '@promptscape/core/utils/supabaseClient';
 import { AuthModal } from '../AuthModal';
-
 import { PromptDissector } from './PromptDissector';
 import { PromptDissectorErrorBoundary } from './PromptDissectorErrorBoundary';
-import { NodePreview } from './NodePreview';
-import { QuickActions } from './QuickActions';
+import { ApiLLMService } from '@promptscape/core/services/ApiLLMService';
 import type { PromptAnalysis } from '../../lib/simplePromptParser';
 import type { Node, Edge } from 'reactflow';
-import { quickStartTemplates } from '../../templates/quickStartTemplates';
 import './LaunchScreen.css';
 
 export type LaunchPayload =
@@ -22,68 +19,21 @@ interface LaunchScreenProps {
 }
 
 export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
+  const [step, setStep] = useState<1 | 2>(1);
   const [promptText, setPromptText] = useState('');
   const [analysis, setAnalysis] = useState<PromptAnalysis | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [llmGraph, setLlmGraph] = useState<{ nodes: Node[]; edges: Edge[] } | null>(null);
   const [authEmail, setAuthEmail] = useState<string | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-
-  // node overrides
-  const [nodeOverrides, setNodeOverrides] = useState<
-    Record<string, { nodeType: 'Text' | 'Choice' }>
-  >({});
-
-  // Handle prompt text changes
-  const handlePromptChange = useCallback((text: string) => {
-    const trimmed = text.trim();
-    setPromptText(text);
-
-    // Clear analysis when prompt is cleared
-    if (trimmed.length === 0) {
-      setAnalysis(null);
-      setIsAnalyzing(false);
-      setSelectedNodeId(null);
-      setNodeOverrides({});
-    }
-    // Don't automatically set isAnalyzing - let PromptDissector control when analysis starts
-  }, []);
-
-  // Handle analysis results from PromptDissector
-  const handleAnalysisComplete = useCallback((newAnalysis: PromptAnalysis) => {
-    setAnalysis(newAnalysis);
-    setIsAnalyzing(false);
-  }, []);
-
-  // merge overrides into analysis so UI and launch use the swapped types
-  const mergedAnalysis = useMemo(() => {
-    if (!analysis) {
-      return null;
-    }
-    const newNodes = analysis.nodes.map(gen => {
-      const ov = nodeOverrides[gen.node.id];
-      if (!ov) {
-        return gen;
-      }
-      return {
-        node: {
-          ...gen.node,
-          nodeType: ov.nodeType
-        }
-      };
-    });
-    return { ...analysis, nodes: newNodes } as PromptAnalysis;
-  }, [analysis, nodeOverrides]);
 
   // Supabase auth session
   useEffect(() => {
     let unsub: { subscription: { unsubscribe: () => void } } | null = null;
     (async () => {
       const supabase = getSupabase();
-      if (!supabase) {
-        return;
-      }
+      if (!supabase) return;
       const { data } = await supabase.auth.getSession();
       setAuthEmail(data.session?.user?.email ?? null);
       const listener = supabase.auth.onAuthStateChange((_event, session) => {
@@ -92,11 +42,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       unsub = listener.data as { subscription: { unsubscribe: () => void } };
     })();
     return () => {
-      try {
-        unsub?.subscription?.unsubscribe();
-      } catch {
-        return;
-      }
+      unsub?.subscription?.unsubscribe();
     };
   }, []);
 
@@ -104,341 +50,160 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
   const signOut = useCallback(async () => {
     const supabase = getSupabase();
-    if (!supabase) {
-      return;
-    }
+    if (!supabase) return;
     await supabase.auth.signOut();
   }, []);
 
-  // Handle launching the editor
-  const handleLaunchEditor = useCallback(() => {
-    setIsTransitioning(true);
-
-    // Delay to allow animation
-    setTimeout(() => {
-      if (mergedAnalysis) {
-        onLaunch({ kind: 'analysis', analysis: mergedAnalysis });
-      } else {
-        onLaunch({ kind: 'empty' });
-      }
-    }, 300);
-  }, [mergedAnalysis, onLaunch]);
-
-  const selectedPreviewRole = useMemo(() => {
-    const selectedNode = mergedAnalysis?.nodes.find(
-      node => node.node.id === selectedNodeId
-    )?.node;
-
-    if (!selectedNode) {
-      return null;
-    }
-
-    if (
-      selectedNode.nodeType === 'Choice' ||
-      selectedNode.nodeType === 'Variable'
-    ) {
-      return 'Allowed variation';
-    }
-
-    if (selectedNode.nodeType === 'Output') {
-      return 'Resolved result';
-    }
-
-    return 'Fixed DNA';
-  }, [mergedAnalysis, selectedNodeId]);
-
-  const familySnapshot = useMemo(() => {
-    if (!mergedAnalysis) {
-      return null;
-    }
-
-    const cleanPart = (value: string): string =>
-      value
-        .replace(/\s+/g, ' ')
-        .replace(/\s+([,./])/g, '$1')
-        .trim();
-
-    const pushUnique = (target: string[], value: string) => {
-      const cleaned = cleanPart(value);
-      if (!cleaned) {
-        return;
-      }
-      if (!target.includes(cleaned)) {
-        target.push(cleaned);
-      }
-    };
-
-    const fixedTraits: string[] = [];
-    const variableTraits: string[] = [];
-    const resolvedParts: string[] = [];
-
-    const naturalJoin = (parts: string[]): string => {
-      if (parts.length === 0) {
-        return '';
-      }
-      if (parts.length === 1) {
-        return parts[0];
-      }
-      if (parts.length === 2) {
-        return `${parts[0]} and ${parts[1]}`;
-      }
-      return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
-    };
-
-    mergedAnalysis.nodes.forEach(({ node }) => {
-      if (node.nodeType === 'Output') {
-        return;
-      }
-
-      const data =
-        typeof node.data === 'object' && node.data !== null
-          ? (node.data as Record<string, unknown>)
-          : {};
-      const preview =
-        typeof node.getPreviewText === 'function'
-          ? node.getPreviewText()
-          : typeof data.label === 'string'
-            ? data.label
-            : '';
-
-      if (node.nodeType === 'Choice') {
-        const options = Array.isArray(data.options)
-          ? data.options
-              .map(option =>
-                typeof option === 'string'
-                  ? option
-                  : typeof option === 'object' &&
-                      option !== null &&
-                      typeof (option as Record<string, unknown>).text ===
-                        'string'
-                    ? ((option as Record<string, unknown>).text as string)
-                    : null
-              )
-              .filter((option): option is string => Boolean(option))
-          : [];
-        const example = options[0] || preview;
-        pushUnique(variableTraits, preview);
-        if (example) {
-          pushUnique(resolvedParts, example);
-        }
-        return;
-      }
-
-      if (node.nodeType === 'Variable') {
-        pushUnique(variableTraits, preview);
-        if (preview) {
-          pushUnique(resolvedParts, preview);
-        }
-        return;
-      }
-
-      if (preview) {
-        pushUnique(fixedTraits, preview);
-        pushUnique(resolvedParts, preview);
-      }
-    });
-
-    const anchor = fixedTraits[0] || resolvedParts[0] || '';
-    const supportingFixed = fixedTraits.slice(1);
-    const supportingVariable = variableTraits.slice(0, 2);
-    const supportingResolved = resolvedParts.filter(part => part !== anchor);
-
-    let exampleMember = '';
-
-    if (anchor) {
-      const clauses: string[] = [];
-      const fixedClause = naturalJoin(supportingFixed);
-      const variableClause = naturalJoin(supportingVariable);
-
-      if (fixedClause) {
-        clauses.push(fixedClause);
-      }
-      if (variableClause) {
-        clauses.push(`with ${variableClause}`);
-      } else if (supportingResolved.length > 0) {
-        clauses.push(`with ${naturalJoin(supportingResolved.slice(0, 2))}`);
-      }
-
-      exampleMember =
-        clauses.length > 0 ? `${anchor}, ${clauses.join(', ')}.` : `${anchor}.`;
-    }
-
-    return {
-      fixedTraits,
-      variableTraits,
-      resolvedPreview: exampleMember
-    };
-  }, [mergedAnalysis]);
-
-  // Handle launching with tutorial
-  const handleLaunchTutorial = useCallback(() => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      onLaunch({ kind: 'tutorial' });
-    }, 300);
-  }, [onLaunch]);
-
-  // Handle quick action selection
-  const handleQuickAction = useCallback(
-    (templateId: string) => {
-      if (templateId === 'empty') {
-        setIsTransitioning(true);
-        setIsAnalyzing(false);
-        setSelectedNodeId(null);
-        setPromptText('');
-        setTimeout(() => {
-          onLaunch({ kind: 'empty' });
-        }, 300);
-        return;
-      }
-
-      // Launch directly with a prebuilt graph
-      const tmpl = quickStartTemplates[templateId];
-      if (!tmpl) {
-        return;
-      }
-      setIsTransitioning(true);
+  const handlePromptChange = useCallback((text: string) => {
+    const trimmed = text.trim();
+    setPromptText(text);
+    if (trimmed.length === 0) {
+      setAnalysis(null);
       setIsAnalyzing(false);
-      setSelectedNodeId(null);
-      setPromptText('');
-      setTimeout(() => {
-        onLaunch({
-          kind: 'template',
-          graph: { nodes: tmpl.nodes, edges: tmpl.edges }
-        });
-      }, 300);
-    },
-    [onLaunch]
-  );
-
-  // Handle node selection in preview
-  const handleNodeSelect = useCallback((nodeId: string | null) => {
-    setSelectedNodeId(nodeId);
+    }
   }, []);
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Cmd/Ctrl + Enter to launch
-      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && mergedAnalysis) {
-        handleLaunchEditor();
-      }
-    };
+  const handleAnalysisComplete = useCallback((newAnalysis: PromptAnalysis) => {
+    setAnalysis(newAnalysis);
+    setIsAnalyzing(false);
+  }, []);
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [mergedAnalysis, handleLaunchEditor]);
+  const handleLaunchEditor = useCallback(() => {
+    if (llmGraph) {
+      onLaunch({ kind: 'template', graph: llmGraph });
+    } else if (analysis) {
+      onLaunch({ kind: 'analysis', analysis: { ...analysis, imageUrl: imageUrl ?? undefined } });
+    } else {
+      onLaunch({ kind: 'empty' });
+    }
+  }, [analysis, imageUrl, llmGraph, onLaunch]);
 
-  // node actions: swap type helpers
-  const applyNodeType = useCallback(
-    (type: 'Text' | 'Choice') => {
-      if (!selectedNodeId) {
-        return;
-      }
-      if (selectedNodeId === 'output') {
-        return; // don't edit Output node
-      }
-      setNodeOverrides(prev => ({
-        ...prev,
-        [selectedNodeId]: {
-          nodeType: type
+  const handleContinueToReview = useCallback(async () => {
+    if (imageUrl) {
+      setIsAnalyzing(true);
+      try {
+        const llmService = new ApiLLMService({});
+        const response = await llmService.draftGraphFromPrompt({
+          prompt: promptText.trim() || 'Describe this image and create a graph',
+          mode: 'draft',
+          imageUrl: imageUrl,
+          options: { maxNewNodes: 10 }
+        });
+        
+        if (response.ok && response.operations?.[0]?.kind === 'insertNodes') {
+          const { nodes, edges } = response.operations[0];
+          
+          // Apply native auto-layout to prevent overlapping nodes
+          const incomingEdgeCounts = new Map<string, number>();
+          (nodes as Node[]).forEach(n => incomingEdgeCounts.set(n.id, 0));
+          (edges as Edge[]).forEach(e => {
+            incomingEdgeCounts.set(e.target, (incomingEdgeCounts.get(e.target) || 0) + 1);
+          });
+          
+          const levels = new Map<string, number>();
+          const queue: {id: string, level: number}[] = [];
+          
+          (nodes as Node[]).forEach(n => {
+            if (incomingEdgeCounts.get(n.id) === 0) queue.push({id: n.id, level: 0});
+          });
+
+          if (queue.length === 0 && nodes.length > 0) queue.push({id: nodes[0].id, level: 0});
+
+          while (queue.length > 0) {
+            const {id, level} = queue.shift()!;
+            if (!levels.has(id)) {
+              levels.set(id, level);
+              const outgoingEdges = (edges as Edge[]).filter(e => e.source === id);
+              outgoingEdges.forEach(e => queue.push({id: e.target, level: level + 1}));
+            }
+          }
+
+          const levelBuckets: Record<number, Node[]> = {};
+          (nodes as Node[]).forEach(n => {
+            const level = levels.get(n.id) || 0;
+            if (!levelBuckets[level]) levelBuckets[level] = [];
+            levelBuckets[level].push(n);
+          });
+
+          const X_SPACING = 350;
+          const Y_SPACING = 200;
+          
+          const positionedNodes = (nodes as Node[]).map(n => {
+            const level = levels.get(n.id) || 0;
+            const bucket = levelBuckets[level];
+            const index = bucket.findIndex(b => b.id === n.id);
+            const totalHeight = (bucket.length - 1) * Y_SPACING;
+            const startY = -totalHeight / 2;
+            return {
+              ...n,
+              position: {
+                x: 100 + level * X_SPACING,
+                y: 300 + startY + (index * Y_SPACING) 
+              }
+            };
+          });
+
+          setLlmGraph({ nodes: positionedNodes, edges: edges as Edge[] });
         }
-      }));
-    },
-    [selectedNodeId]
-  );
-
-  // Variable name change handler removed - no longer supporting Variables
-
-  const resetNodeOverride = useCallback(() => {
-    if (!selectedNodeId) {
-      return;
-    }
-    if (selectedNodeId === 'output') {
-      return; // don't edit Output node
-    }
-    setNodeOverrides(prev => {
-      const next = { ...prev };
-      const nodeId = selectedNodeId;
-      if (nodeId) {
-        delete next[nodeId];
+      } catch (e) {
+        console.error('Failed to generate graph from image:', e);
+      } finally {
+        setIsAnalyzing(false);
+        setStep(2);
       }
-      return next;
-    });
-  }, [selectedNodeId]);
+    } else {
+      setStep(2);
+    }
+  }, [imageUrl, promptText]);
 
-  const trustItems = [
-    'Keep your family DNA stable while only the details vary',
-    'Reusable graph-first workflow instead of one-off prompt drafts',
-    'Account layer ready for saved graphs and deeper product features'
-  ];
+  const handleImageDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrl(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }, []);
 
-  const legalLinks = [
-    { label: 'Terms of Service', href: '#/legal/terms' },
-    { label: 'Privacy Policy', href: '#/legal/privacy' },
-    { label: 'Acceptable Use', href: '#/legal/acceptable-use' }
-  ];
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrl(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }, []);
 
   return (
-    <div className={`launch-screen ${isTransitioning ? 'transitioning' : ''}`}>
+    <div className="bg-background text-text font-body antialiased min-h-screen relative flex flex-col">
+      <div className="fixed inset-0 bg-dot-grid opacity-70 pointer-events-none z-0"></div>
+      
       {/* Header */}
-      <header className="launch-header">
-        <div className="launch-logo">
-          <img
-            src="/images/PromptSpaghettiLogo.png"
-            alt="Prompt Spaghetti"
-            className="launch-logo-image"
-          />
-          <p className="launch-tagline">
-            Define reusable archetypes, lock design DNA, and generate controlled
-            variations.
-          </p>
-          <div className="launch-sales-copy">
-            <h1>
-              Build character families and reusable prompt systems that stay
-              coherent.
-            </h1>
-            <p>
-              Prompt Spaghetti turns loose prompt ideas into structured graph
-              logic you can inspect, refine, and reuse. Lock the identity,
-              expose the variation, and keep outputs on-model across an entire
-              family.
-            </p>
-          </div>
-        </div>
-        <div className="launch-header-actions">
-          <button
-            className="tutorial-button"
-            onClick={handleLaunchTutorial}
-            title="Start the interactive tutorial"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              style={{ marginRight: '8px' }}
-            >
-              <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.81 8.985.936 8 1.783z" />
+      <header className="relative z-20 flex items-center justify-between border-b border-white/10 px-6 py-1 bg-black/40">
+        <div className="flex items-center gap-4">
+          <div className="w-6 h-6 text-primary">
+            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path>
             </svg>
-            Start Tutorial
-          </button>
-          {/* Auth Controls */}
+          </div>
+          <h1 className="text-white text-[1rem] font-display font-bold tracking-tight uppercase leading-none">
+            Prompt Spaghetti
+            <span className="text-[8px] font-mono text-muted ml-2 tracking-[0.22em] uppercase align-middle">Beta</span>
+          </h1>
+        </div>
+        <div className="flex items-center gap-3">
           {hasSupabase ? (
             authEmail ? (
-              <button
-                className="tutorial-button"
-                onClick={signOut}
-                title={`Signed in as ${authEmail}`}
-              >
-                Sign out
+              <button className="border border-white/10 bg-white/5 px-4 py-1.5 font-mono text-[11px] uppercase text-muted hover:text-white" onClick={signOut}>
+                Sign out ({authEmail})
               </button>
             ) : (
-              <button
-                className="tutorial-button"
-                onClick={() => setIsAuthModalOpen(true)}
-                title="Sign in"
-              >
+              <button className="border border-primary/30 bg-primary/10 px-4 py-1.5 font-mono text-[11px] uppercase text-primary hover:bg-primary/20" onClick={() => setIsAuthModalOpen(true)}>
                 Sign in
               </button>
             )
@@ -446,275 +211,186 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         </div>
       </header>
 
-      <section
-        className="launch-trust-strip"
-        aria-label="Product value highlights"
-      >
-        {trustItems.map(item => (
-          <div key={item} className="launch-trust-item">
-            {item}
-          </div>
-        ))}
-      </section>
+      {/* Main Container */}
+      <div className="relative z-10 flex min-h-[calc(100vh-44px)] flex-1">
+        
+        {/* Simplified Sidebar */}
+        <aside className="bg-surface w-14 border-r border-white/10 flex flex-col items-center gap-4 py-4 z-20 shadow-panel">
+           <div className="relative rounded p-2 text-primary hover:bg-primary/10 cursor-pointer" title="Text Block">
+             <span className="material-symbols-outlined block text-[20px]">description</span>
+           </div>
+           <div className="relative rounded p-2 text-primary hover:bg-primary/10 cursor-pointer" title="Weighted Choice">
+             <span className="material-symbols-outlined block text-[20px]">balance</span>
+           </div>
+           <div className="relative rounded p-2 text-primary hover:bg-primary/10 cursor-pointer" title="Concatenate">
+             <span className="material-symbols-outlined block text-[20px]">merge</span>
+           </div>
+        </aside>
 
-      {/* Main Content */}
-      <div className="launch-content">
-        {/* Left Column - Prompt Input & Dissector */}
-        <div className="launch-column launch-column-left">
-          <div className="launch-section">
-            <h2>Describe The Archetype</h2>
-            <PromptDissectorErrorBoundary>
-              <PromptDissector
-                value={promptText}
-                onChange={handlePromptChange}
-                onAnalysisComplete={handleAnalysisComplete}
-                onAnalysisStart={() => setIsAnalyzing(true)}
-                selectedNodeId={selectedNodeId}
-                onSelectNode={handleNodeSelect}
-                focusOnValueChange
-                placeholder="Type or paste an archetype prompt... For example: 'A late-70s compact sedan with practical trim, fixed era cues, and controlled variation in color, wheels, and wear level'"
-              />
-            </PromptDissectorErrorBoundary>
-          </div>
-
-          {/* Analysis Status */}
-          {isAnalyzing && (
-            <div className="analysis-status" role="status" aria-live="polite">
-              <div className="analysis-spinner" />
-              <span>Analyzing prompt...</span>
-            </div>
-          )}
-        </div>
-
-        {/* Center Column - Node Preview */}
-        <div className="launch-column launch-column-center">
-          <div className="launch-section preview-section">
-            <h2>Family Logic Preview</h2>
-            <NodePreview
-              analysis={mergedAnalysis}
-              onNodeSelect={handleNodeSelect}
-              selectedNodeId={selectedNodeId}
-            />
-          </div>
-
-          {/* Node Actions are now persistent and placed near Launch Editor */}
-
-          {/* Launch Button */}
-          <div className="launch-actions">
-            <div className="launch-primary-cta">
-              <div className="launch-cta-copy">
-                <span className="launch-cta-eyebrow">
-                  Structured prompt archetyping
-                </span>
-                <h3>
-                  Go from raw prompt idea to reusable family graph in one pass.
-                </h3>
-                <p>
-                  Start with prompt bootstrap, quick-start templates, or a blank
-                  graph and keep the result editable instead of locked into a
-                  one-shot generation.
-                </p>
-              </div>
-              <div className="launch-cta-actions">
-                <button
-                  className="launch-button-primary"
-                  onClick={handleLaunchEditor}
-                  disabled={isAnalyzing}
-                >
-                  {isAnalyzing ? 'Analyzing…' : 'Build Family Graph'}
-                </button>
-                <span className="launch-hint">
-                  or press <kbd>⌘</kbd> + <kbd>Enter</kbd>
-                </span>
-              </div>
-            </div>
-
-            <div className="launch-inline-actions">
-              <div className="launch-inline-instruction">
-                Select a trait in the preview, then decide whether it stays
-                fixed or can vary.
-              </div>
-              {(() => {
-                const selNode = mergedAnalysis?.nodes.find(
-                  n => n.node.id === selectedNodeId
-                )?.node;
-                const disabled =
-                  !selectedNodeId || !selNode || selNode.nodeType === 'Output';
-                return (
-                  <div className="launch-inline-actions-row">
-                    <button
-                      className="launch-button-secondary"
-                      onClick={() => applyNodeType('Text')}
-                      disabled={disabled}
-                      title="Keep this trait stable across the whole family"
-                    >
-                      Mark Fixed
-                    </button>
-                    <button
-                      className="launch-button-secondary"
-                      onClick={() => applyNodeType('Choice')}
-                      disabled={disabled}
-                      title="Let this trait vary within the family"
-                    >
-                      Allow Variation
-                    </button>
-                    <button
-                      className="launch-button-tertiary"
-                      onClick={resetNodeOverride}
-                      disabled={disabled}
-                    >
-                      Reset
-                    </button>
-                    {selectedPreviewRole && (
-                      <span className="launch-selection-role">
-                        Selected node: {selectedPreviewRole}
-                      </span>
-                    )}
+        {/* Content Area */}
+        <main className="relative flex-1 px-6 py-5 overflow-auto">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#06070A33] to-[#06070A7A] z-0"></div>
+          
+          <div className="relative z-10 mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-84px)] max-w-[1520px]">
+            <div className="flex w-full max-w-[1480px] items-start justify-center gap-6 flex-col lg:flex-row">
+              
+              {/* STEP 1 PANEL */}
+              <div className={`min-w-0 flex-1 transition-opacity duration-300 ${step === 2 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted border border-white/10 bg-white/5">
+                    <span className="text-primary">Step 1</span>
+                    <span>Enter prompt / image</span>
                   </div>
-                );
-              })()}
-            </div>
-          </div>
+                </div>
 
-          {selectedPreviewRole && selectedNodeId && (
-            <div className="launch-role-helper" aria-live="polite">
-              {selectedPreviewRole === 'Fixed DNA'
-                ? 'This trait now reads as part of the stable family identity.'
-                : selectedPreviewRole === 'Allowed variation'
-                  ? 'This trait now reads as something that can change across family members.'
-                  : 'This node resolves the current family member preview.'}
-            </div>
-          )}
+                <div className="bg-[#0F1319F5] border border-white/10 shadow-panel rounded-[10px] relative overflow-hidden text-left">
+                  <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+                    <div>
+                      <div className="font-display text-[29px] font-bold leading-none text-primary">PROMPT WIZARD</div>
+                      <p className="mt-3 max-w-[52ch] text-[13px] leading-[1.55] text-muted">Enter a prompt below. Add an image if you want one. This is the first screen in the launch flow.</p>
+                    </div>
+                  </div>
 
-          {familySnapshot && (
-            <div
-              className="launch-family-snapshot"
-              aria-label="Family snapshot"
-            >
-              <div className="launch-family-column">
-                <span className="launch-family-heading">Fixed DNA</span>
-                <div className="launch-family-tags">
-                  {familySnapshot.fixedTraits.length > 0 ? (
-                    familySnapshot.fixedTraits.map(trait => (
-                      <span
-                        key={`fixed-${trait}`}
-                        className="launch-family-tag fixed"
-                      >
-                        {trait}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="launch-family-empty">
-                      Mark a node as fixed to lock the family identity.
-                    </span>
-                  )}
+                  <section className="p-5">
+                     <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+                        <div className="group transition-all">
+                          <label className="mb-3 block font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Prompt</label>
+                          <div className="border border-white/10 bg-black/20 focus-within:border-primary/40 p-1">
+                            <div className="min-h-[208px] text-[14px] text-white">
+                              <PromptDissectorErrorBoundary>
+                                <PromptDissector
+                                  value={promptText}
+                                  onChange={handlePromptChange}
+                                  onAnalysisComplete={handleAnalysisComplete}
+                                  onAnalysisStart={() => setIsAnalyzing(true)}
+                                  selectedNodeId={null}
+                                  onSelectNode={() => {}}
+                                  focusOnValueChange
+                                  placeholder="Type or paste an archetype prompt..."
+                                />
+                              </PromptDissectorErrorBoundary>
+                            </div>
+                          </div>
+                          <div className="mt-2.5 flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                            <span className="border border-white/10 bg-white/[0.03] px-2 py-1">Cmd+Enter analyze</span>
+                          </div>
+                        </div>
+
+                        <div className="transition-all">
+                          <div className="mb-3 flex items-center justify-between">
+                            <label className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Image</label>
+                            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Optional</span>
+                          </div>
+                          
+                          <div 
+                            className="bg-[#141922E0] border border-dashed border-white/10 flex min-h-[152px] flex-col items-center justify-center px-5 text-center relative overflow-hidden"
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={handleImageDrop}
+                          >
+                            {imageUrl ? (
+                              <img src={imageUrl} alt="Uploaded preview" className="absolute inset-0 w-full h-full object-cover opacity-60" />
+                            ) : null}
+                            <span className="material-symbols-outlined text-[40px] text-primary/80 z-10 relative">add_photo_alternate</span>
+                            <div className="mt-3 text-[16px] font-medium text-white z-10 relative">
+                              {imageUrl ? 'Image uploaded' : 'Drop image or browse'}
+                            </div>
+                            <label className="mt-5 border border-white/10 bg-black/60 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-white hover:border-primary/30 hover:text-primary cursor-pointer z-10 relative">
+                              Browse files
+                              <input type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
+                            </label>
+                          </div>
+                        </div>
+                     </div>
+
+                     <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
+                        <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Step 1 of 2</div>
+                        <button 
+                          className="flex h-11 items-center justify-center gap-2 border border-primary/30 bg-primary px-5 font-mono text-[12px] uppercase tracking-[0.16em] text-black shadow-glow hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                          onClick={handleContinueToReview}
+                          disabled={(!analysis && !imageUrl) || isAnalyzing}
+                        >
+                          {isAnalyzing ? 'Analyzing Image...' : 'Continue to review'}
+                          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        </button>
+                      </div>
+                  </section>
                 </div>
               </div>
-              <div className="launch-family-column">
-                <span className="launch-family-heading">Allowed Variation</span>
-                <div className="launch-family-tags">
-                  {familySnapshot.variableTraits.length > 0 ? (
-                    familySnapshot.variableTraits.map(trait => (
-                      <span
-                        key={`variable-${trait}`}
-                        className="launch-family-tag variable"
+
+              {/* ARROW INDICATOR */}
+              <div className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/10 lg:flex mt-32">
+                <span className="material-symbols-outlined text-primary">east</span>
+              </div>
+
+              {/* STEP 2 PANEL */}
+              <div className={`min-w-0 flex-1 transition-opacity duration-300 ${step === 1 ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted border border-white/10 bg-white/5">
+                    <span className="text-primary">Step 2</span>
+                    <span>Review before main screen</span>
+                  </div>
+                </div>
+
+                <div className="bg-[#0F1319F5] border border-white/10 shadow-panel rounded-[10px] relative overflow-hidden text-left">
+                  <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+                    <div>
+                      <div className="font-display text-[29px] font-bold leading-none text-primary">REVIEW LAUNCH</div>
+                      <p className="mt-3 max-w-[48ch] text-[13px] leading-[1.55] text-muted">Review the graph breakdown, then open the main workspace.</p>
+                    </div>
+                  </div>
+
+                  <section className="p-4">
+                    <div className="mb-4">
+                      <div className="bg-[#141922E0] px-4 py-3 border border-white/10">
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Graph breakdown</div>
+                          </div>
+                          <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">{llmGraph ? llmGraph.nodes.length : analysis?.nodes?.length || 0} nodes</div>
+                        </div>
+                        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                          <div className="border border-white/10 bg-white/5 px-3 py-2.5">
+                            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">01</div>
+                            <div className="mt-1 text-[13px] text-white">Source prompt</div>
+                            <div className="mt-1 text-[12px] leading-[1.4] text-muted">{imageUrl ? 'Image analyzed successfully.' : 'Primary text block with the initial concept string.'}</div>
+                          </div>
+                          <div className="border border-white/10 bg-white/5 px-3 py-2.5">
+                            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">02</div>
+                            <div className="mt-1 text-[13px] text-white">Trait splits</div>
+                            <div className="mt-1 text-[12px] leading-[1.4] text-muted">{llmGraph ? 'Nodes generated by AI agent.' : 'Choice nodes extracted from prompt variations.'}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-3.5 flex items-center justify-between gap-3 border-t border-white/10 pt-3.5">
+                      <button 
+                        className="flex h-11 items-center justify-center border border-white/20 bg-transparent px-5 font-mono text-[12px] uppercase tracking-[0.16em] text-white hover:bg-white/10"
+                        onClick={() => setStep(1)}
                       >
-                        {trait}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="launch-family-empty">
-                      Move traits here when you want bounded family variation.
-                    </span>
-                  )}
+                        Back
+                      </button>
+                      <button 
+                        className="flex h-11 items-center justify-center gap-2 border border-primary/30 bg-primary px-5 font-mono text-[12px] uppercase tracking-[0.16em] text-black shadow-glow hover:bg-white"
+                        onClick={handleLaunchEditor}
+                      >
+                        Open main screen
+                        <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                      </button>
+                    </div>
+                  </section>
                 </div>
               </div>
-              <div className="launch-family-column resolved">
-                <span className="launch-family-heading">
-                  Example Family Member
-                </span>
-                <span className="launch-family-kicker">
-                  One believable in-family output
-                </span>
-                <p className="launch-family-preview">
-                  {familySnapshot.resolvedPreview ||
-                    'Your resolved family member will appear here once the archetype is parsed.'}
-                </p>
-                <p className="launch-family-subtle">
-                  Move a trait between fixed DNA and allowed variation, then
-                  watch this rewrite as one in-family output.
-                </p>
-              </div>
             </div>
-          )}
-        </div>
+            
+            <div className="mt-10 font-mono text-[12px] uppercase text-muted tracking-widest cursor-pointer hover:text-white" onClick={() => onLaunch({kind: 'empty'})}>
+               Skip to Editor &rarr;
+            </div>
 
-        {/* Right Column - Quick Actions */}
-        <div className="launch-column launch-column-right">
-          <div className="launch-section">
-            <h2>Quick Start Templates</h2>
-            <QuickActions onSelectTemplate={handleQuickAction} />
           </div>
-
-          {/* Tips */}
-          <div className="launch-tips">
-            <h3>Pro Tips</h3>
-            <ul>
-              <li>
-                Use quick-start graphs when you want a clean archetype-first
-                demo path
-              </li>
-              <li>
-                Use prompt bootstrap when you want a first graph drafted from
-                text
-              </li>
-              <li>
-                Lock shared traits first, then make only the details you want
-                variable
-              </li>
-              <li>
-                Use the PSG sidecar later when you want references or downstream
-                tinkering
-              </li>
-            </ul>
-          </div>
-        </div>
+        </main>
       </div>
 
-      {/* Footer */}
-      <footer className="launch-footer">
-        <div className="launch-footer-copy">
-          <div className="launch-footer-brand">
-            <strong>Prompt Spaghetti</strong>
-            <span>
-              Graph-first prompt tooling for reusable families, controlled
-              variation, and future saved assets.
-            </span>
-          </div>
-          <div className="launch-footer-trust">
-            <span>Early product surface</span>
-            <span>Supabase-backed auth available when configured</span>
-            <span>Legal and policy links ready for product wiring</span>
-          </div>
-        </div>
-        <div className="launch-footer-actions">
-          <nav className="launch-footer-legal" aria-label="Legal links">
-            {legalLinks.map(link => (
-              <a key={link.label} href={link.href}>
-                {link.label}
-              </a>
-            ))}
-          </nav>
-          <button
-            className="skip-button"
-            onClick={() => onLaunch({ kind: 'empty' })}
-          >
-            Skip to Editor →
-          </button>
-        </div>
-      </footer>
-
-      {/* Auth Modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}

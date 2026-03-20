@@ -74,6 +74,7 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
   const [assetSource, setAssetSource] = useState<AssetSource>('upload');
   const [assetVendor, setAssetVendor] = useState('');
   const [assetModel, setAssetModel] = useState('');
+  const [assetPublicImageUrl, setAssetPublicImageUrl] = useState('');
   const [parentAssetIds, setParentAssetIds] = useState('');
   const [assetNotes, setAssetNotes] = useState('');
   const [assetContentType, setAssetContentType] = useState('');
@@ -203,6 +204,11 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
     setAssetSource(asset.provenance.source);
     setAssetVendor(asset.provenance.vendor || '');
     setAssetModel(asset.provenance.model || '');
+    setAssetPublicImageUrl(
+      typeof asset.metadata?.publicImageUrl === 'string'
+        ? asset.metadata.publicImageUrl
+        : ''
+    );
     setParentAssetIds((asset.provenance.parentAssetIds || []).join(', '));
     setAssetNotes(
       typeof asset.metadata?.notes === 'string' ? asset.metadata.notes : ''
@@ -335,19 +341,34 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
                 .map(value => value.trim())
                 .filter(Boolean)
             : undefined
-      },
-      metadata: assetNotes.trim() ? { notes: assetNotes.trim() } : undefined
+      }
     };
+    const nextMetadata =
+      assetNotes.trim() || assetPublicImageUrl.trim()
+        ? {
+            ...(assetNotes.trim() ? { notes: assetNotes.trim() } : {}),
+            ...(assetPublicImageUrl.trim()
+              ? { publicImageUrl: assetPublicImageUrl.trim() }
+              : {})
+          }
+        : undefined;
 
     setDraftAssets(prev => {
       const filtered = prev.filter(asset => asset.id !== nextAsset.id);
-      return [...filtered, nextAsset];
+      return [
+        ...filtered,
+        {
+          ...nextAsset,
+          metadata: nextMetadata
+        }
+      ];
     });
     setAssetId('');
     setAssetRole('');
     setAssetUri('');
     setAssetVendor('');
     setAssetModel('');
+    setAssetPublicImageUrl('');
     setParentAssetIds('');
     setAssetNotes('');
     setAssetContentType('');
@@ -511,6 +532,12 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
                 style={styles.input}
               />
               <input
+                placeholder="public image url (for vendor preview)"
+                value={assetPublicImageUrl}
+                onChange={event => setAssetPublicImageUrl(event.target.value)}
+                style={{ ...styles.input, gridColumn: '1 / -1' }}
+              />
+              <input
                 placeholder="parent asset ids, comma separated"
                 value={parentAssetIds}
                 onChange={event => setParentAssetIds(event.target.value)}
@@ -550,6 +577,38 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
                     {asset.metadata?.cloudReady === true && (
                       <div style={styles.muted}>cloud-ready reference</div>
                     )}
+                    {typeof asset.metadata?.publicImageUrl === 'string' &&
+                    asset.metadata.publicImageUrl.length > 0 ? (
+                      <div style={styles.muted}>
+                        public image url: {asset.metadata.publicImageUrl}
+                      </div>
+                    ) : null}
+                    {typeof asset.metadata?.imageBootstrapFixture === 'string' && (
+                      <div style={styles.muted}>
+                        image bootstrap fixture: {asset.metadata.imageBootstrapFixture}
+                        {typeof asset.metadata?.imageBootstrapFixtureSelectionMode ===
+                        'string'
+                          ? ` (${asset.metadata.imageBootstrapFixtureSelectionMode})`
+                          : ''}
+                      </div>
+                    )}
+                    {Array.isArray(asset.metadata?.imageBootstrapPreferredComparableRefs) &&
+                      asset.metadata.imageBootstrapPreferredComparableRefs.length > 0 && (
+                        <div style={styles.muted}>
+                          preferred comparables:{' '}
+                          {asset.metadata.imageBootstrapPreferredComparableRefs
+                            .map(ref =>
+                              typeof ref === 'object' &&
+                              ref &&
+                              'label' in ref &&
+                              typeof ref.label === 'string'
+                                ? ref.label
+                                : null
+                            )
+                            .filter(Boolean)
+                            .join(', ')}
+                        </div>
+                      )}
                     {typeof asset.metadata?.notes === 'string' &&
                       asset.metadata.notes.length > 0 && (
                         <div style={styles.muted}>{asset.metadata.notes}</div>

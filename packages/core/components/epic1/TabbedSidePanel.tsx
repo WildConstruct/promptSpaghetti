@@ -26,6 +26,7 @@ export interface TabbedSidePanelProps {
   onInsert?: (item: Preset | Asset) => void;
   position?: 'left' | 'right';
   defaultTab?: 'preview' | 'assets' | 'components' | null;
+  showTabRail?: boolean;
   showAssets?: boolean;
   showPreview?: boolean;
   selectedNode?: Node<EditableNodeData> | null;
@@ -50,6 +51,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   onInsert,
   position = 'left',
   defaultTab = null,
+  showTabRail = true,
   showAssets = true,
   showPreview = true,
   selectedNode,
@@ -68,8 +70,13 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   const minWidth = 360;
   const maxWidth = 760;
   const hasPreviewTab = showPreview && !!previewEngine;
+  const showSuggestedFragments = Boolean(selectedNode);
 
   const initialTab = useMemo<TabType>(() => {
+    if (!showTabRail) {
+      return defaultTab ?? (showAssets ? 'assets' : hasPreviewTab ? 'preview' : null);
+    }
+
     if (defaultTab) {
       return defaultTab;
     }
@@ -80,7 +87,21 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
       return 'preview';
     }
     return null;
-  }, [defaultTab, showAssets, hasPreviewTab]);
+  }, [defaultTab, hasPreviewTab, showAssets, showTabRail]);
+
+  const availableTabs = useMemo<TabType[]>(() => {
+    if (!showTabRail) {
+      return initialTab ? [initialTab] : [];
+    }
+
+    return [
+      showAssets ? 'assets' : null,
+      hasPreviewTab ? 'preview' : null,
+      'components',
+      'search',
+      'relationships'
+    ].filter((tab): tab is Exclude<TabType, null> => tab !== null);
+  }, [hasPreviewTab, initialTab, showAssets, showTabRail]);
 
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
@@ -88,8 +109,14 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => {
-    setActiveTab(initialTab);
-  }, [initialTab]);
+    setActiveTab((current: TabType) => {
+      if (current && availableTabs.includes(current)) {
+        return current;
+      }
+
+      return availableTabs[0] ?? null;
+    });
+  }, [availableTabs]);
 
   useEffect(() => {
     const clampWidth = () => {
@@ -103,8 +130,13 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   }, []);
 
   const handleTabClick = useCallback((tab: TabType) => {
+    if (!showTabRail) {
+      setActiveTab(tab);
+      return;
+    }
+
     setActiveTab(prev => (prev === tab ? null : tab));
-  }, []);
+  }, [showTabRail]);
 
   const handlePresetInsert = useCallback(
     (preset: Preset) => {
@@ -163,97 +195,110 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   return (
     <div
-      className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'} ${isResizing ? 'resizing' : ''}`}
-      style={
-        {
-          '--tabbed-side-panel-width': `${panelWidth}px`
-        } as React.CSSProperties
-      }
+      className={`relative h-full flex flex-col w-full overflow-hidden ${isResizing ? 'pointer-events-none' : ''}`}
     >
-      {isExpanded && (
+      {showTabRail && isExpanded && (
         <div
-          className={`tabbed-side-panel-resize-handle ${position}`}
+          className={`absolute top-0 bottom-0 w-2 z-20 cursor-ew-resize hover:bg-white/10 transition-colors ${position === 'right' ? 'left-0' : 'right-0'}`}
           onMouseDown={handleResizeStart}
           title="Drag to resize panel"
         />
       )}
-      <div className="tab-buttons">
-        {showAssets && (
-          <button
-            className={`tab-button ${activeTab === 'assets' ? 'active' : ''} ${hoveredTab === 'assets' ? 'hovered' : ''}`}
-            onClick={() => handleTabClick('assets')}
-            onMouseEnter={() => setHoveredTab('assets')}
-            onMouseLeave={() => setHoveredTab(null)}
-            title="Asset Browser"
-          >
-            <span className="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.94 1.475l-.64 6.038A1.5 1.5 0 0 1 13.81 15H2.19a1.5 1.5 0 0 1-1.49-1.347l-.64-6.038c0-.599.37-1.21.94-1.475V5.5A1.5 1.5 0 0 1 1 3.5zm1.5 0v2.695a.5.5 0 0 1-.336.473 1.4 1.4 0 0 0-.64.644l.64 6.038a.5.5 0 0 0 .496.45h11.18a.5.5 0 0 0 .496-.45l.64-6.038a1.4 1.4 0 0 0-.64-.644.5.5 0 0 1-.336-.473V5.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.76-.56-2.311-1.184C6.279 3.352 5.784 3 5.264 3H2.5a.5.5 0 0 0-.5.5z"/>
-              </svg>
-            </span>
-            <span className="tab-label">Assets</span>
-          </button>
-        )}
+      {showTabRail && (
+        <div className="flex items-center gap-4 px-4 py-3 border-b border-white/5 overflow-x-auto no-scrollbar shrink-0 pl-4">
+          {availableTabs.includes('assets') && (
+            <button
+              className={`text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === 'assets' ? 'text-text hover:text-white' : 'text-text-muted hover:text-white'}`}
+              onClick={() => handleTabClick('assets')}
+              onMouseEnter={() => setHoveredTab('assets')}
+              onMouseLeave={() => setHoveredTab(null)}
+              title="Assets"
+            >
+              Assets
+              {activeTab === 'assets' && (
+                <span className="absolute -bottom-3 left-0 w-full h-[2px] bg-primary rounded-t-sm"></span>
+              )}
+            </button>
+          )}
 
-        {hasPreviewTab && (
-          <button
-            className={`tab-button ${activeTab === 'preview' ? 'active' : ''} ${hoveredTab === 'preview' ? 'hovered' : ''}`}
-            onClick={() => handleTabClick('preview')}
-            onMouseEnter={() => setHoveredTab('preview')}
-            onMouseLeave={() => setHoveredTab(null)}
-            title="Preview"
-          >
-            <span className="tab-icon">👁️</span>
-            <span className="tab-label">Preview</span>
-          </button>
-        )}
+          {hasPreviewTab && (
+            <button
+              className={`text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === 'preview' ? 'text-text hover:text-white' : 'text-text-muted hover:text-white'}`}
+              onClick={() => handleTabClick('preview')}
+              onMouseEnter={() => setHoveredTab('preview')}
+              onMouseLeave={() => setHoveredTab(null)}
+              title="Preview"
+            >
+              Preview
+              {activeTab === 'preview' && (
+                <span className="absolute -bottom-3 left-0 w-full h-[2px] bg-primary rounded-t-sm"></span>
+              )}
+            </button>
+          )}
 
-        <button
-          className={`tab-button ${activeTab === 'components' ? 'active' : ''} ${hoveredTab === 'components' ? 'hovered' : ''}`}
-          onClick={() => handleTabClick('components')}
-          onMouseEnter={() => setHoveredTab('components')}
-          onMouseLeave={() => setHoveredTab(null)}
-          title="Components"
-        >
-          <span className="tab-icon">◫</span>
-          <span className="tab-label">Components</span>
-        </button>
+          {availableTabs.includes('components') && (
+            <button
+              className={`text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === 'components' ? 'text-text hover:text-white' : 'text-text-muted hover:text-white'}`}
+              onClick={() => handleTabClick('components')}
+              onMouseEnter={() => setHoveredTab('components')}
+              onMouseLeave={() => setHoveredTab(null)}
+              title="Components"
+            >
+              Components
+              {activeTab === 'components' && (
+                <span className="absolute -bottom-3 left-0 w-full h-[2px] bg-primary rounded-t-sm"></span>
+              )}
+            </button>
+          )}
 
-        <button
-          className={`tab-button ${activeTab === 'search' ? 'active' : ''} ${hoveredTab === 'search' ? 'hovered' : ''}`}
-          onClick={() => handleTabClick('search')}
-          onMouseEnter={() => setHoveredTab('search')}
-          onMouseLeave={() => setHoveredTab(null)}
-          title="Search"
-        >
-          <span className="tab-icon">🔍</span>
-          <span className="tab-label">Search</span>
-        </button>
+          {availableTabs.includes('search') && (
+            <button
+              className={`text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === 'search' ? 'text-text hover:text-white' : 'text-text-muted hover:text-white'}`}
+              onClick={() => handleTabClick('search')}
+              onMouseEnter={() => setHoveredTab('search')}
+              onMouseLeave={() => setHoveredTab(null)}
+              title="Search"
+            >
+              Search
+              {activeTab === 'search' && (
+                <span className="absolute -bottom-3 left-0 w-full h-[2px] bg-primary rounded-t-sm"></span>
+              )}
+            </button>
+          )}
 
-        <button
-          className={`tab-button ${activeTab === 'relationships' ? 'active' : ''} ${hoveredTab === 'relationships' ? 'hovered' : ''}`}
-          onClick={() => handleTabClick('relationships')}
-          onMouseEnter={() => setHoveredTab('relationships')}
-          onMouseLeave={() => setHoveredTab(null)}
-          title="Relationships"
-        >
-          <span className="tab-icon">🕸️</span>
-          <span className="tab-label">Relationships</span>
-        </button>
-      </div>
+          {availableTabs.includes('relationships') && (
+            <button
+              className={`text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === 'relationships' ? 'text-text hover:text-white' : 'text-text-muted hover:text-white'}`}
+              onClick={() => handleTabClick('relationships')}
+              onMouseEnter={() => setHoveredTab('relationships')}
+              onMouseLeave={() => setHoveredTab(null)}
+              title="Relationships"
+            >
+              Relationships
+              {activeTab === 'relationships' && (
+                <span className="absolute -bottom-3 left-0 w-full h-[2px] bg-primary rounded-t-sm"></span>
+              )}
+            </button>
+          )}
+        </div>
+      )}
 
-      <div className="panel-content">
+      <div className="flex-1 overflow-y-auto custom-scrollbar p-3 flex flex-col gap-3 min-h-0 bg-transparent relative">
         {activeTab === 'assets' && (
-          <div className="assets-container">
-            <AssetLibraryErrorBoundary>
-              <SuggestedFragmentsPanel
-                selectedNode={selectedNode}
-                nodes={nodes}
-                edges={edges}
-                onInsert={handlePresetInsert}
-              />
-            </AssetLibraryErrorBoundary>
-            <div className="assets-browser-panel">
+          <div className="flex-1 min-h-0 relative flex flex-col">
+            {showSuggestedFragments && (
+              <AssetLibraryErrorBoundary>
+                <div className="mb-4">
+                  <SuggestedFragmentsPanel
+                    selectedNode={selectedNode}
+                    nodes={nodes}
+                    edges={edges}
+                    onInsert={handlePresetInsert}
+                  />
+                </div>
+              </AssetLibraryErrorBoundary>
+            )}
+            <div className="flex-1 min-h-0 relative">
               <AssetBrowserLoader
                 onPresetDrag={onPresetDrag}
                 onPresetSelect={onPresetSelect}
@@ -263,7 +308,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
           </div>
         )}
         {activeTab === 'search' && (
-          <div className="assets-container">
+          <div className="flex-1 min-h-0 relative flex flex-col">
             <AssetSearchPanel
               assets={[]}
               onInsert={handleAssetInsert}
@@ -273,7 +318,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
           </div>
         )}
         {activeTab === 'components' && (
-          <div className="assets-container">
+          <div className="flex-1 min-h-0 relative flex flex-col">
             <ComponentLibraryPanel
               definitions={componentDefinitions}
               references={componentReferences}
@@ -287,18 +332,18 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
           </div>
         )}
         {activeTab === 'relationships' && (
-          <div className="assets-container">
+          <div className="flex-1 min-h-0 relative flex flex-col">
             <RelationshipView />
           </div>
         )}
         {activeTab === 'preview' && hasPreviewTab && previewEngine && (
-          <div className="preview-container">
+          <div className="flex-1 min-h-0 relative flex flex-col p-2">
             <PreviewPanel previewEngine={previewEngine} onSeedChange={onSeedChange} />
           </div>
         )}
         {!activeTab && (
-          <div className="panel-hint">
-            <div className="hint-arrow">⇦</div>
+          <div className="flex-1 flex items-center justify-center text-text-muted opacity-50">
+            <div>Select a tab</div>
           </div>
         )}
       </div>

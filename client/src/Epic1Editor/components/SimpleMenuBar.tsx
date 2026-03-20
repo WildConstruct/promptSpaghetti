@@ -12,6 +12,7 @@ export interface SimpleMenuBarProps {
   onExport?: () => void;
   onExportComfy?: () => void;
   onPsgSceneAssets?: () => void;
+  onImageBootstrap?: () => void;
   onExpandCrowd?: () => void;
   onQuit?: () => void;
   // Edit operations
@@ -44,6 +45,10 @@ export interface SimpleMenuBarProps {
   onReportBug?: () => void;
   onChangelog?: () => void;
   onAbout?: () => void;
+  onPresets?: () => void;
+  presetsActive?: boolean;
+  onManageSubscription?: () => void;
+  isSubscriptionActive?: boolean;
 }
 
 export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
@@ -60,6 +65,7 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
     props.onExport ? 'export' : null,
     props.onExportComfy ? 'exportComfy' : null,
     props.onPsgSceneAssets ? 'psgSceneAssets' : null,
+    props.onImageBootstrap ? 'imageBootstrap' : null,
     props.onExpandCrowd ? 'expandCrowd' : null,
     props.onQuit ? 'quit' : null
   ].filter(Boolean);
@@ -142,6 +148,7 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
               props.onExport ||
               props.onExportComfy ||
               props.onPsgSceneAssets ||
+              props.onImageBootstrap ||
               props.onExpandCrowd) &&
               (props.onSave || props.onSaveAs) && (
                 <div className="menu-separator" />
@@ -166,6 +173,11 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
                 PSG Scene Assets...
               </button>
             )}
+            {props.onImageBootstrap && (
+              <button onClick={props.onImageBootstrap} className="menu-item">
+                Image Bootstrap...
+              </button>
+            )}
             {props.onExpandCrowd && (
               <button onClick={props.onExpandCrowd} className="menu-item">
                 Hosted Crowd Expansion...
@@ -180,6 +192,7 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
                 props.onExport ||
                 props.onExportComfy ||
                 props.onPsgSceneAssets ||
+                props.onImageBootstrap ||
                 props.onExpandCrowd) && <div className="menu-separator" />}
             {props.onQuit && (
               <button onClick={props.onQuit} className="menu-item">
@@ -352,6 +365,29 @@ export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
               </button>
             )}
           </div>
+        </div>
+      )}
+
+      {props.onPresets && (
+        <div className="menu-section menu-section--actions">
+          <button
+            type="button"
+            className={`menu-action-button ${props.presetsActive ? 'active' : ''}`}
+            onClick={props.onPresets}
+          >
+            Presets
+          </button>
+        </div>
+      {props.onManageSubscription && (
+        <div className="menu-section menu-section--actions">
+          <button
+            type="button"
+            className={`menu-action-button ${props.isSubscriptionActive ? '' : 'upgrade'}`}
+            style={props.isSubscriptionActive ? {} : { color: '#00f0ff', borderColor: '#00f0ff' }}
+            onClick={props.onManageSubscription}
+          >
+            {props.isSubscriptionActive ? 'Manage Subscription' : 'Upgrade to Pro'}
+          </button>
         </div>
       )}
     </div>

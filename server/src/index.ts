@@ -18,6 +18,7 @@ import { filesRoutes } from './routes/files';
 import { agentRoutes } from './routes/agent';
 import { llmRoutes } from './routes/llm';
 import { psgRoutes } from './routes/psg';
+import { stripeRoutes } from './routes/stripeRoutes';
 import { themeRoutes } from './theme';
 import { rateLimiter } from './utils/rateLimit';
 import { metrics } from './utils/metrics';
@@ -326,6 +327,9 @@ server.register(async app => psgRoutes(app));
 
 // Register bounded agent routes
 server.register(async app => agentRoutes(app));
+
+// Register Stripe billing and webhook routes
+server.register(async app => stripeRoutes(app));
 
 // Start server
 const start = async () => {

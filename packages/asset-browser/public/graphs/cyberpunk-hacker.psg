@@ -1,0 +1,172 @@
+{
+  "version": "1.0.0",
+  "name": "Cyberpunk Hacker Fragment",
+  "description": "Generates randomized cyberpunk character concepts.",
+  "metadata": {
+    "type": "ASSET_FRAGMENT",
+    "category": "sci-fi",
+    "tags": [
+      "cyberpunk",
+      "sci-fi",
+      "character"
+    ],
+    "original_version": "1.0.0",
+    "entrypoints": [
+      "cyberpunk_prompt"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "char_class",
+      "type": "WeightedChoice",
+      "name": "Archetype",
+      "description": "Character archetype",
+      "x": 0,
+      "y": 0,
+      "options": [
+        {
+          "id": "arch-netrunner",
+          "text": "elite netrunner",
+          "weight": 40
+        },
+        {
+          "id": "arch-solo",
+          "text": "solo mercenary",
+          "weight": 30
+        },
+        {
+          "id": "arch-tech",
+          "text": "black-market ripperdoc",
+          "weight": 20
+        },
+        {
+          "id": "arch-corp",
+          "text": "corrupt corporate executive",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "cyberware",
+      "type": "WeightedChoice",
+      "name": "Cybernetics",
+      "description": "Visible modifications",
+      "x": 220,
+      "y": 0,
+      "options": [
+        {
+          "id": "aug-eyes",
+          "text": "glowing synthetic optical implants",
+          "weight": 30
+        },
+        {
+          "id": "aug-arm",
+          "text": "a heavy chrome prosthetic arm",
+          "weight": 30
+        },
+        {
+          "id": "aug-neural",
+          "text": "visible neural jacks along the spine and neck",
+          "weight": 20
+        },
+        {
+          "id": "aug-synth",
+          "text": "full synthetic skin with metallic panel seams",
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "id": "clothing",
+      "type": "WeightedChoice",
+      "name": "Streetwear",
+      "description": "Clothing style",
+      "x": 440,
+      "y": 0,
+      "options": [
+        {
+          "id": "wear-tech",
+          "text": "tactical tech-wear with neon glow strips",
+          "weight": 35
+        },
+        {
+          "id": "wear-leather",
+          "text": "a worn leather trench coat with LED collar",
+          "weight": 35
+        },
+        {
+          "id": "wear-suit",
+          "text": "a slick, tailored high-fashion suit",
+          "weight": 15
+        },
+        {
+          "id": "wear-street",
+          "text": "oversized punk streetwear with graffiti decals",
+          "weight": 15
+        }
+      ]
+    },
+    {
+      "id": "location",
+      "type": "WeightedChoice",
+      "name": "Setting",
+      "description": "Scene background",
+      "x": 660,
+      "y": 0,
+      "options": [
+        {
+          "id": "loc-alley",
+          "text": "in a rain-slicked neon alleyway",
+          "weight": 40
+        },
+        {
+          "id": "loc-club",
+          "text": "inside a booming underground cyber-club",
+          "weight": 30
+        },
+        {
+          "id": "loc-lab",
+          "text": "in a high-tech corporate research lab",
+          "weight": 20
+        },
+        {
+          "id": "loc-roof",
+          "text": "on a dizzying skyscraper roof overlooking a sprawling mega-city",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "cyberpunk_prompt",
+      "type": "Output",
+      "x": 330,
+      "y": 250,
+      "template": "A highly detailed cyberpunk portrait of a {{char_class}} featuring {{cyberware}}. They are wearing {{clothing}}. The scene takes place {{location}}. Moody rim lighting, neon reflection, 8k resolution, volumetric fog, photorealistic.",
+      "data": {
+        "label": "Cyberpunk Prompt"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-class-prompt",
+      "source": "char_class",
+      "target": "cyberpunk_prompt"
+    },
+    {
+      "id": "edge-aug-prompt",
+      "source": "cyberware",
+      "target": "cyberpunk_prompt"
+    },
+    {
+      "id": "edge-wear-prompt",
+      "source": "clothing",
+      "target": "cyberpunk_prompt"
+    },
+    {
+      "id": "edge-loc-prompt",
+      "source": "location",
+      "target": "cyberpunk_prompt"
+    }
+  ]
+}

@@ -104,47 +104,39 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
     event.dataTransfer.setDragImage(dragImage, 12, 12);
   };
 
+  // For the Semantic IDE, the node palette is always a narrow icon rail
   return (
     <div
-      className={`node-palette ${position} ${collapsed ? 'collapsed' : ''}`}
+      className={`flex flex-col items-center w-full h-full py-2`}
       data-tutorial-anchor="node-palette"
     >
-      <div className="palette-header">
-        <button
-          className="collapse-button"
-          onClick={() => setCollapsed(!collapsed)}
-          title={collapsed ? 'Expand' : 'Collapse'}
-        >
-          {collapsed ? '▶' : '◀'}
-        </button>
-        {!collapsed && <span className="palette-title">Nodes</span>}
+      <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary mb-4 mt-2 shrink-0" title="Nodes">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       </div>
 
-      {!collapsed && (
-        <div className="node-list">
-          {nodeTypes.map((node) => (
-            <div
-              key={node.type}
-              className="node-item"
-              draggable={true}
-              onDragStart={(e) => onDragStart(e, node.type)}
-              onDragEnd={() => {
-                debugLogEpic1('[NodePalette] Drag ended for', node.type);
-                if (dragImageRef.current) {
-                  dragImageRef.current.remove();
-                  dragImageRef.current = null;
-                }
-              }}
-              title={node.label}
-            >
-              <span className="node-icon" dangerouslySetInnerHTML={{ __html: node.icon }} />
-              <span className="node-label">{node.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
-      {!collapsed && children && (
-        <div className="palette-footer">
+      <div className="flex flex-col gap-3 w-full items-center flex-1 overflow-y-auto overflow-x-hidden no-scrollbar pb-4">
+        {nodeTypes.map((node) => (
+          <div
+            key={node.type}
+            className="w-10 h-10 rounded-xl flex items-center justify-center text-text-muted hover:text-text hover:bg-surface-active transition-colors relative cursor-grab active:cursor-grabbing border border-transparent hover:border-white/5"
+            draggable={true}
+            onDragStart={(e) => onDragStart(e, node.type)}
+            onDragEnd={() => {
+              debugLogEpic1('[NodePalette] Drag ended for', node.type);
+              if (dragImageRef.current) {
+                dragImageRef.current.remove();
+                dragImageRef.current = null;
+              }
+            }}
+            title={node.label}
+          >
+            <span className="w-5 h-5 flex items-center justify-center pointer-events-none" dangerouslySetInnerHTML={{ __html: node.icon }} />
+          </div>
+        ))}
+      </div>
+      
+      {children && (
+        <div className="mt-auto flex flex-col gap-3 w-full items-center px-1">
           {children}
         </div>
       )}

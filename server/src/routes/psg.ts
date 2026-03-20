@@ -4,6 +4,12 @@ import {
   PsgDeriveAssetRequestSchema,
   PsgExpandCrowdRequestSchema,
   PsgExportComfyRequestSchema,
+  PsgImageAnalyzeRequestSchema,
+  PsgImageDraftGraphRequestSchema,
+  PsgImagePreviewRequestSchema,
+  PsgImageGenerateBatchRequestSchema,
+  PsgImageRegisterBatchRequestSchema,
+  PsgImageReviewRequestSchema,
   PsgNormalizeRequestSchema,
   PsgRegisterAssetsRequestSchema,
   PsgValidateRequestSchema
@@ -35,6 +41,242 @@ export async function psgRoutes(app: FastifyInstance) {
     metrics.mark('psg.capabilities');
     return psgService.getCapabilities();
   });
+
+  app.post(
+    '/api/psg/images/register-batch',
+    {
+      preHandler: protectedPsgRoutePreHandler
+    },
+    async (req, reply) => {
+      try {
+        assertPsgRequestWithinLimits(req.body);
+      } catch (error) {
+        return reply.status(413).send({
+          error: error instanceof Error ? error.message : 'PSG payload too large'
+        });
+      }
+
+      const parsed = PsgImageRegisterBatchRequestSchema.safeParse(req.body);
+      if (!parsed.success) {
+        metrics.markError('psg.images-register-batch.invalid');
+        return reply
+          .status(400)
+          .send({ error: 'Invalid PSG image batch registration payload' });
+      }
+
+      try {
+        metrics.mark('psg.images-register-batch');
+        assertPsgDocumentWithinLimits(parsed.data.document);
+        return psgService.registerImageBatch(
+          parsed.data.document,
+          parsed.data.assets
+        );
+      } catch (error) {
+        metrics.markError('psg.images-register-batch.error');
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Failed to register PSG image batch';
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    '/api/psg/images/analyze',
+    {
+      preHandler: protectedPsgRoutePreHandler
+    },
+    async (req, reply) => {
+      try {
+        assertPsgRequestWithinLimits(req.body);
+      } catch (error) {
+        return reply.status(413).send({
+          error: error instanceof Error ? error.message : 'PSG payload too large'
+        });
+      }
+
+      const parsed = PsgImageAnalyzeRequestSchema.safeParse(req.body);
+      if (!parsed.success) {
+        metrics.markError('psg.images-analyze.invalid');
+        return reply
+          .status(400)
+          .send({ error: 'Invalid PSG image analyze payload' });
+      }
+
+      try {
+        metrics.mark('psg.images-analyze');
+        assertPsgDocumentWithinLimits(parsed.data.document);
+        return await psgService.analyzeImages(
+          parsed.data.document,
+          parsed.data.assetIds,
+          parsed.data.userIntent
+        );
+      } catch (error) {
+        metrics.markError('psg.images-analyze.error');
+        const message =
+          error instanceof Error ? error.message : 'Failed to analyze images';
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    '/api/psg/images/review',
+    {
+      preHandler: protectedPsgRoutePreHandler
+    },
+    async (req, reply) => {
+      try {
+        assertPsgRequestWithinLimits(req.body);
+      } catch (error) {
+        return reply.status(413).send({
+          error: error instanceof Error ? error.message : 'PSG payload too large'
+        });
+      }
+
+      const parsed = PsgImageReviewRequestSchema.safeParse(req.body);
+      if (!parsed.success) {
+        metrics.markError('psg.images-review.invalid');
+        return reply
+          .status(400)
+          .send({ error: 'Invalid PSG image review payload' });
+      }
+
+      try {
+        metrics.mark('psg.images-review');
+        assertPsgDocumentWithinLimits(parsed.data.document);
+        return psgService.applyImageReview(
+          parsed.data.document,
+          parsed.data.checkpoint,
+          parsed.data.guidance
+        );
+      } catch (error) {
+        metrics.markError('psg.images-review.error');
+        const message =
+          error instanceof Error ? error.message : 'Failed to apply image review';
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    '/api/psg/images/draft-graph',
+    {
+      preHandler: protectedPsgRoutePreHandler
+    },
+    async (req, reply) => {
+      try {
+        assertPsgRequestWithinLimits(req.body);
+      } catch (error) {
+        return reply.status(413).send({
+          error: error instanceof Error ? error.message : 'PSG payload too large'
+        });
+      }
+
+      const parsed = PsgImageDraftGraphRequestSchema.safeParse(req.body);
+      if (!parsed.success) {
+        metrics.markError('psg.images-draft-graph.invalid');
+        return reply
+          .status(400)
+          .send({ error: 'Invalid PSG image draft payload' });
+      }
+
+      try {
+        metrics.mark('psg.images-draft-graph');
+        assertPsgDocumentWithinLimits(parsed.data.document);
+        return psgService.draftGraphFromImages(
+          parsed.data.document,
+          parsed.data.checkpoint
+        );
+      } catch (error) {
+        metrics.markError('psg.images-draft-graph.error');
+        const message =
+          error instanceof Error ? error.message : 'Failed to draft graph from images';
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    '/api/psg/images/preview',
+    {
+      preHandler: protectedPsgRoutePreHandler
+    },
+    async (req, reply) => {
+      try {
+        assertPsgRequestWithinLimits(req.body);
+      } catch (error) {
+        return reply.status(413).send({
+          error: error instanceof Error ? error.message : 'PSG payload too large'
+        });
+      }
+
+      const parsed = PsgImagePreviewRequestSchema.safeParse(req.body);
+      if (!parsed.success) {
+        metrics.markError('psg.images-preview.invalid');
+        return reply
+          .status(400)
+          .send({ error: 'Invalid PSG image preview payload' });
+      }
+
+      try {
+        metrics.mark('psg.images-preview');
+        assertPsgDocumentWithinLimits(parsed.data.document);
+        return await psgService.previewImages(
+          parsed.data.document,
+          parsed.data.checkpoint,
+          parsed.data.request
+        );
+      } catch (error) {
+        metrics.markError('psg.images-preview.error');
+        const message =
+          error instanceof Error ? error.message : 'Failed to preview images';
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
+
+  app.post(
+    '/api/psg/images/generate-batch',
+    {
+      preHandler: protectedPsgRoutePreHandler
+    },
+    async (req, reply) => {
+      try {
+        assertPsgRequestWithinLimits(req.body);
+      } catch (error) {
+        return reply.status(413).send({
+          error: error instanceof Error ? error.message : 'PSG payload too large'
+        });
+      }
+
+      const parsed = PsgImageGenerateBatchRequestSchema.safeParse(req.body);
+      if (!parsed.success) {
+        metrics.markError('psg.images-generate-batch.invalid');
+        return reply
+          .status(400)
+          .send({ error: 'Invalid PSG image generate batch payload' });
+      }
+
+      try {
+        metrics.mark('psg.images-generate-batch');
+        assertPsgDocumentWithinLimits(parsed.data.document);
+        return psgService.generateImageBatch(
+          parsed.data.document,
+          parsed.data.checkpoint,
+          parsed.data.request
+        );
+      } catch (error) {
+        metrics.markError('psg.images-generate-batch.error');
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Failed to generate image batch';
+        return reply.status(400).send({ error: message });
+      }
+    }
+  );
 
   app.post(
     '/api/psg/validate',
