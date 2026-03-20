@@ -693,6 +693,11 @@ export function useDragDropHandlers({
             value: 'output',
             label: 'output'
           }),
+          ...(nodeType === 'promptWizard' && {
+            wizardType: 'multimodal',
+            inputPrompt: '',
+            isLocked: false
+          }),
           ...(nodeType === 'enhancedBoundingBox' && {
             title: 'Region',
             description: '',

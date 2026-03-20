@@ -13,6 +13,7 @@ import { NodeContextMenu } from './NodeContextMenu';
 import { PostItNote } from './PostItNote';
 import { BoundingBox } from './BoundingBox';
 import { EnhancedBoundingBox } from './EnhancedBoundingBox';
+import { PromptWizardNode } from './PromptWizardNode';
 import GroupNode from './GroupNode';
 
 // Export components and types
@@ -57,6 +58,9 @@ export type { BoundingBoxData } from './BoundingBox';
 export { EnhancedBoundingBox };
 export type { EnhancedBoundingBoxData } from './EnhancedBoundingBox';
 
+export { PromptWizardNode };
+export type { PromptWizardNodeData } from './PromptWizardNode';
+
 export { GroupNode };
 
 // Now we can safely create the node type mapping
@@ -72,6 +76,7 @@ export const epic1NodeTypes = {
   postItNote: PostItNote,
   boundingBox: BoundingBox,
   enhancedBoundingBox: EnhancedBoundingBox, // Enhanced version with collapse/expand
+  promptWizard: PromptWizardNode, // Launch screen node extraction
   group: GroupNode
 };
 

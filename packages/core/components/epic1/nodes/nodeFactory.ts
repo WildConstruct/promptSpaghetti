@@ -210,6 +210,7 @@ export function nodeDataToRuntimeNode(
       case 'enhancedBoundingBox':
       case 'postItNote':
       case 'group':
+      case 'promptWizard':
         // These are UI-only nodes, no runtime conversion needed
         debugLogEpic1(`[nodeFactory] Skipping UI-only node type: ${type}`);
         return null;
