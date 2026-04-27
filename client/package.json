@@ -16,7 +16,7 @@
     "@heroicons/react": "^2.2.0",
     "@prompt/asset-browser": "workspace:^",
     "@promptscape/core": "workspace:^",
-    "@sentry/react": "^7.120.0",
+    "@sentry/react": "^10.50.0",
     "@supabase/supabase-js": "^2.54.0",
     "framer-motion": "^12.23.12",
     "lodash": "^4.17.21",
