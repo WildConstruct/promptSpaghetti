@@ -71,7 +71,7 @@
     "react-window": "^1.8.11",
     "reactflow": "^11.11.4",
     "seedrandom": "^3.0.5",
-    "zod": "^3.25.76",
+    "zod": "^4.3.6",
     "zustand": "^4.5.7"
   },
   "devDependencies": {
