@@ -58,7 +58,7 @@
   "dependencies": {
     "@promptscape/core": "workspace:*",
     "chalk": "^5.4.1",
-    "commander": "^12.1.0",
+    "commander": "^14.0.3",
     "inquirer": "^12.9.1",
     "zod": "^3.25.76"
   },
