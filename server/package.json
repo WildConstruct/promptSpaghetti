@@ -28,7 +28,7 @@
     "argon2": "^0.31.2",
     "base32": "^0.0.7",
     "better-sqlite3": "^12.2.0",
-    "commander": "^11.1.0",
+    "commander": "^14.0.3",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "dotenv": "^16.4.5",
