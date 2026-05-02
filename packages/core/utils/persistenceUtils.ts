@@ -13,8 +13,8 @@ export const MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
 
 // Persisted state schema for validation
 export const PersistedStateSchema = z.object({
-  nodes: z.array(z.any()), // Using any for now, could be more specific
-  edges: z.array(z.any()),
+  nodes: z.array(z.unknown()),
+  edges: z.array(z.unknown()),
   viewport: z
     .object({
       x: z.number(),

@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom';
 import { jest } from '@jest/globals';
 
+globalThis.jest = jest;
+
 // Mock ResizeObserver which isn't available in JSDOM
 global.ResizeObserver = class {
   observe() {

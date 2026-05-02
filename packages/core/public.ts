@@ -1,13 +1,15 @@
 // Minimal stable public API for @promptscape/core
 
 // Re-export core graph/types that are used by stable utils
-export type { GraphNode, GraphEdge, Graph, PSGFile } from './types/graph';
-
-// Runtime system exports - commented out to fix Netlify build
-// export type {
-//   ExecutionContext,
-//   RuntimeNode
-// } from './runtime';
+export type {
+  ExportableGraph,
+  ExportableGraphEdge,
+  ExportableGraphNode,
+  GraphNode,
+  GraphEdge,
+  Graph,
+  PSGFile
+} from './types/graph';
 
 // Export both types and classes for Advanced runtime
 export {
@@ -16,9 +18,6 @@ export {
   type AdvancedNodeConfig,
   type ValidationResult
 } from './runtime';
-
-// Public Utils surface - temporarily disabled due to import issues
-// export * from './utils/index';
 
 // Legacy graph-wrapper PSG codec.
 // Keep exported for compatibility while active surfaces migrate away from it.
@@ -41,12 +40,6 @@ export {
   type PSGRegion
 } from './fileFormats/psg';
 
-// Epic 2 LLM components and services - commented out to fix Netlify build
-// export { LLMToggle } from './components/LLMToggle/LLMToggle';
-// export { LLMConfigDialog } from './components/LLMConfigDialog/LLMConfigDialog';
-// export { SimpleLLMService, getLLMService } from './services/SimpleLLMService';
-// export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMService';
-
 // Shared prompt segmentation helpers (used by splash-screen preview + runtime parser)
 export {
   segmentPrompt,
@@ -57,3 +50,6 @@ export {
 
 // Canonical PSG API protocol contracts for validation/normalization/expansion.
 export * from './services/psg';
+
+// Local-only image sandbox contracts for batch generation demos.
+export * from './services/localImage';

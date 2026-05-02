@@ -200,7 +200,7 @@ export interface ConnectionAnnotation {
   showEndMarker?: boolean;
   isHighlighted?: boolean;
   category?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   author: string;
   timestamp: string;
   lastModified: string;
@@ -365,6 +365,21 @@ export interface GraphState {
   loadGraphData: (nodes: Node[], edges: Edge[]) => void;
 }
 
+type VariationNodeData = Record<string, unknown> & { variations?: string[] };
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function getNodeData(node: Node): VariationNodeData {
+  return isRecord(node.data) ? node.data : {};
+}
+
+function getVariations(node: Node): string[] {
+  const variations = getNodeData(node).variations;
+  return Array.isArray(variations) ? variations : [];
+}
+
 export const useGraphStore = create<GraphState>((set, get) => ({
   // Initial state
   nodes: [],
@@ -409,8 +424,8 @@ export const useGraphStore = create<GraphState>((set, get) => ({
       nodes: state.nodes.map(n => {
         if (n.id !== nodeId) return n;
         const merged: Node = { ...n, ...updates } as Node;
-        if ((updates as any)?.data) {
-          merged.data = { ...(n as any).data, ...(updates as any).data };
+        if (isRecord(updates.data)) {
+          merged.data = { ...getNodeData(n), ...updates.data };
         }
         return merged;
       }),
@@ -425,13 +440,8 @@ export const useGraphStore = create<GraphState>((set, get) => ({
           ? ({
               ...n,
               data: {
-                ...(n as any).data,
-                variations: [
-                  ...((Array.isArray((n as any).data?.variations)
-                    ? (n as any).data.variations
-                    : []) as string[]),
-                  variation
-                ]
+                ...getNodeData(n),
+                variations: [...getVariations(n), variation]
               }
             } as Node)
           : n
@@ -442,13 +452,11 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     set(state => ({
       nodes: state.nodes.map(n => {
         if (n.id !== nodeId) return n;
-        const arr: string[] = Array.isArray((n as any).data?.variations)
-          ? ((n as any).data.variations as string[])
-          : [];
+        const arr = getVariations(n);
         return {
           ...n,
           data: {
-            ...(n as any).data,
+            ...getNodeData(n),
             variations: arr.filter((_, i) => i !== variationIndex)
           }
         } as Node;
@@ -459,11 +467,9 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     set(state => ({
       nodes: state.nodes.map(n => {
         if (n.id !== nodeId) return n;
-        const arr: string[] = Array.isArray((n as any).data?.variations)
-          ? [...((n as any).data.variations as string[])]
-          : [];
+        const arr = [...getVariations(n)];
         arr[variationIndex] = newValue;
-        return { ...n, data: { ...(n as any).data, variations: arr } } as Node;
+        return { ...n, data: { ...getNodeData(n), variations: arr } } as Node;
       }),
       hasUnsavedChanges: true
     })),
@@ -471,9 +477,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     set(state => ({
       nodes: state.nodes.map(n => {
         if (n.id !== nodeId) return n;
-        const arr: string[] = Array.isArray((n as any).data?.variations)
-          ? [...((n as any).data.variations as string[])]
-          : [];
+        const arr = [...getVariations(n)];
         if (
           fromIndex < 0 ||
           fromIndex >= arr.length ||
@@ -483,7 +487,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
           return n;
         const [moved] = arr.splice(fromIndex, 1);
         arr.splice(toIndex, 0, moved);
-        return { ...n, data: { ...(n as any).data, variations: arr } } as Node;
+        return { ...n, data: { ...getNodeData(n), variations: arr } } as Node;
       }),
       hasUnsavedChanges: true
     })),
@@ -496,10 +500,10 @@ export const useGraphStore = create<GraphState>((set, get) => ({
         ...src,
         id: `${src.id}-copy-${Date.now()}`,
         position: {
-          x: (src as any).position?.x + 100 || 100,
-          y: (src as any).position?.y + 100 || 100
+          x: src.position.x + 100 || 100,
+          y: src.position.y + 100 || 100
         },
-        data: { ...(src as any).data }
+        data: { ...getNodeData(src) }
       } as Node;
       return { nodes: [...state.nodes, copy], hasUnsavedChanges: true };
     }),
@@ -507,7 +511,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({
     set(state => ({
       nodes: state.nodes.filter(n => n.id !== nodeId),
       edges: state.edges.filter(
-        e => (e as any).source !== nodeId && (e as any).target !== nodeId
+        e => e.source !== nodeId && e.target !== nodeId
       ),
       hasUnsavedChanges: true
     })),

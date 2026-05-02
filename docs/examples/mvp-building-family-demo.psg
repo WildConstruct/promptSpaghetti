@@ -1,0 +1,105 @@
+{
+  "version": "1.0.0",
+  "name": "Building Family Demo",
+  "description": "Environmental storefront family with fixed era DNA and bounded facade variation.",
+  "metadata": {
+    "demoType": "mvp-golden-path",
+    "quickStartId": "building_family",
+    "category": "building"
+  },
+  "nodes": [
+    {
+      "id": "building-dna",
+      "type": "TextBlock",
+      "name": "Family DNA",
+      "x": 80,
+      "y": 120,
+      "value": "Weathered urban storefront, fixed era signage scale, brick-and-glass facade, lived-in realism"
+    },
+    {
+      "id": "building-signage",
+      "type": "WeightedChoice",
+      "name": "Signage Variation",
+      "x": 430,
+      "y": 50,
+      "options": [
+        {
+          "text": "hand-painted discount lettering",
+          "weight": 35
+        },
+        {
+          "text": "sun-faded neon remnant",
+          "weight": 30
+        },
+        {
+          "text": "patched vinyl replacement sign",
+          "weight": 35
+        }
+      ]
+    },
+    {
+      "id": "building-window",
+      "type": "WeightedChoice",
+      "name": "Window Dressing",
+      "x": 430,
+      "y": 250,
+      "options": [
+        {
+          "text": "crowded display table",
+          "weight": 40
+        },
+        {
+          "text": "half-empty practical stock",
+          "weight": 35
+        },
+        {
+          "text": "papered-over corner glass",
+          "weight": 25
+        }
+      ]
+    },
+    {
+      "id": "building-join",
+      "type": "Concat",
+      "name": "Resolve Family Member",
+      "x": 820,
+      "y": 145,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "building-output",
+      "type": "Output",
+      "name": "Output",
+      "x": 1140,
+      "y": 145,
+      "template": "{prompt}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "building-e1",
+      "source": "building-dna",
+      "target": "building-join",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "building-e2",
+      "source": "building-signage",
+      "target": "building-join",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "building-e3",
+      "source": "building-window",
+      "target": "building-output"
+    },
+    {
+      "id": "building-e4",
+      "source": "building-join",
+      "target": "building-output"
+    }
+  ]
+}

@@ -107,7 +107,9 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
   useEffect(() => {
     return () => {
       Object.values(draftPreviewUrls).forEach(url => {
-        URL.revokeObjectURL(url);
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
       });
     };
   }, [draftPreviewUrls]);
@@ -193,6 +195,16 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
   if (!isOpen) {
     return null;
   }
+
+  const getAssetPreviewUrl = (asset: PsgAssetRef) => {
+    if (draftPreviewUrls[asset.id]) {
+      return draftPreviewUrls[asset.id];
+    }
+
+    return typeof asset.metadata?.localPreviewUrl === 'string'
+      ? asset.metadata.localPreviewUrl
+      : null;
+  };
 
   const loadAssetIntoForm = (asset: PsgAssetRef) => {
     setAssetId(asset.id);
@@ -535,9 +547,9 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
                     <div style={styles.muted}>
                       {asset.kind} · {asset.storage.provider} · {asset.storage.uri}
                     </div>
-                    {draftPreviewUrls[asset.id] && (
+                    {getAssetPreviewUrl(asset) && (
                       <img
-                        src={draftPreviewUrls[asset.id]}
+                        src={getAssetPreviewUrl(asset) || undefined}
                         alt={`${asset.id} preview`}
                         style={styles.assetPreview}
                       />
@@ -554,6 +566,11 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
                       asset.metadata.notes.length > 0 && (
                         <div style={styles.muted}>{asset.metadata.notes}</div>
                       )}
+                    {typeof asset.metadata?.localSandboxManifestPath === 'string' && (
+                      <div style={styles.muted}>
+                        sandbox manifest: {asset.metadata.localSandboxManifestPath}
+                      </div>
+                    )}
                   </div>
                   <div style={styles.assetActions}>
                     <button

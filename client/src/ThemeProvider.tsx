@@ -18,6 +18,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   useEffect(() => {
+    if (typeof fetch !== 'function') {
+      return;
+    }
+
     fetch('/api/admin/theme')
       .then(async res => {
         if (!res.ok) {

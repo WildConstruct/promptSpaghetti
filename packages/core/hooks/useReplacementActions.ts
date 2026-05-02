@@ -1,9 +1,39 @@
 import { useCallback } from 'react';
+import type { Edge, Node } from 'reactflow';
 import {
   mapAssetToNodeType,
   mapReactFlowTypeToCompat,
   canConnect
 } from '../services/assetTypeMapping';
+
+type ReplacementAsset = {
+  name: string;
+  metadata?: { keywords?: unknown };
+};
+
+type WeightedOption = {
+  text: string;
+  weight?: number;
+  hasBranch?: boolean;
+};
+
+type ReplacementNodeData = Record<string, unknown> & {
+  label?: string;
+  type?: string;
+  options?: WeightedOption[];
+};
+
+type ReplacementNode = Node<ReplacementNodeData>;
+type ReplacementEdge = Edge;
+
+function getNodeData(node: ReplacementNode): ReplacementNodeData {
+  return node.data ?? {};
+}
+
+function getNodeCompatType(node: ReplacementNode | undefined): string {
+  const data = node ? getNodeData(node) : undefined;
+  return String(data?.type || node?.type);
+}
 
 export function useReplacementActions({
   nodes,
@@ -12,28 +42,29 @@ export function useReplacementActions({
   setEdges,
   notify
 }: {
-  nodes: any[];
-  edges: any[];
-  setNodes: (fn: (prev: any[]) => any[]) => void;
-  setEdges: (fn: (prev: any[]) => any[]) => void;
+  nodes: ReplacementNode[];
+  edges: ReplacementEdge[];
+  setNodes: (fn: (prev: ReplacementNode[]) => ReplacementNode[]) => void;
+  setEdges: (fn: (prev: ReplacementEdge[]) => ReplacementEdge[]) => void;
   notify: (type: 'success' | 'info' | 'error', msg: string) => void;
 }) {
   const mergeChoices = useCallback(
-    (targetNodeId: string, asset: { name: string }) => {
+    (targetNodeId: string, asset: ReplacementAsset) => {
       setNodes(nds =>
         nds.map(n => {
           if (n.id !== targetNodeId) return n;
-          const options = Array.isArray((n.data as any)?.options)
-            ? (n.data as any).options
+          const data = getNodeData(n);
+          const options = Array.isArray(data.options)
+            ? data.options
             : [];
           const exists = options.some(
-            (o: any) =>
-              String(o.text).toLowerCase() === String(asset.name).toLowerCase()
+            option =>
+              option.text.toLowerCase() === asset.name.toLowerCase()
           );
           const newOptions = exists
             ? options
             : options.concat({ text: asset.name, weight: 5, hasBranch: false });
-          return { ...n, data: { ...n.data, options: newOptions } } as any;
+          return { ...n, data: { ...data, options: newOptions } };
         })
       );
       notify('success', 'Merged choices');
@@ -46,40 +77,41 @@ export function useReplacementActions({
       const src = nodes.find(n => n.id === targetNodeId);
       if (!src) return;
       const newId = `variant-${Date.now()}`;
-      const pos = (src as any).position || { x: 0, y: 0 };
+      const pos = src.position || { x: 0, y: 0 };
+      const data = getNodeData(src);
       const newNode = {
         ...src,
         id: newId,
         data: {
-          ...src.data,
-          label: `${(src.data as any)?.label || src.id} (variant)`
+          ...data,
+          label: `${data.label || src.id} (variant)`
         },
         position: { x: pos.x + 80, y: pos.y + 40 }
-      } as any;
+      };
       setNodes(nds => nds.concat(newNode));
       const incoming = edges
-        .filter((e: any) => e.target === targetNodeId)
-        .map((e: any) => ({
+        .filter(e => e.target === targetNodeId)
+        .map(e => ({
           ...e,
           id: `${e.id || ''}-${newId}`,
           target: newId
         }));
       const outgoing = edges
-        .filter((e: any) => e.source === targetNodeId)
-        .map((e: any) => ({
+        .filter(e => e.source === targetNodeId)
+        .map(e => ({
           ...e,
           id: `${e.id || ''}-${newId}`,
           source: newId
         }));
-      setEdges(eds => eds.concat(incoming as any).concat(outgoing as any));
+      setEdges(eds => eds.concat(incoming).concat(outgoing));
       notify('success', 'Created variant branch');
     },
     [nodes, edges, setNodes, setEdges, notify]
   );
 
   const smartSwap = useCallback(
-    (targetNodeId: string, asset: { name: string }) => {
-      const mapped = mapAssetToNodeType(asset as any);
+    (targetNodeId: string, asset: ReplacementAsset) => {
+      const mapped = mapAssetToNodeType(asset);
       setNodes(nds =>
         nds.map(n =>
           n.id === targetNodeId
@@ -87,7 +119,7 @@ export function useReplacementActions({
                 ...n,
                 type: mapped.reactFlowType,
                 data: {
-                  ...n.data,
+                  ...getNodeData(n),
                   type: mapped.reactFlowType,
                   label: asset.name
                 }
@@ -103,7 +135,7 @@ export function useReplacementActions({
           const neighborId = isOutgoing ? e.target : e.source;
           const neighbor = nodes.find(n => n.id === neighborId);
           const neighborCompat = mapReactFlowTypeToCompat(
-            String((neighbor?.data as any)?.type || neighbor?.type)
+            getNodeCompatType(neighbor)
           );
           const newCompat = mapped.compatType;
           return isOutgoing
@@ -117,16 +149,16 @@ export function useReplacementActions({
   );
 
   const replaceAllSimilar = useCallback(
-    (targetNodeId: string, asset: { name: string }) => {
+    (targetNodeId: string, asset: ReplacementAsset) => {
       const target = nodes.find(n => n.id === targetNodeId);
       if (!target) return;
       const targetCompat = mapReactFlowTypeToCompat(
-        String((target.data as any)?.type || target.type)
+        getNodeCompatType(target)
       );
-      const mapped = mapAssetToNodeType(asset as any);
+      const mapped = mapAssetToNodeType(asset);
       const toReplace = nodes.filter(
         n =>
-          mapReactFlowTypeToCompat(String((n.data as any)?.type || n.type)) ===
+          mapReactFlowTypeToCompat(getNodeCompatType(n)) ===
           targetCompat
       );
       toReplace.forEach(n => {
@@ -137,7 +169,7 @@ export function useReplacementActions({
                   ...x,
                   type: mapped.reactFlowType,
                   data: {
-                    ...x.data,
+                    ...getNodeData(x),
                     type: mapped.reactFlowType,
                     label: asset.name
                   }
@@ -152,7 +184,7 @@ export function useReplacementActions({
             const neighborId = isOutgoing ? e.target : e.source;
             const neighbor = nodes.find(nn => nn.id === neighborId);
             const neighborCompat = mapReactFlowTypeToCompat(
-              String((neighbor?.data as any)?.type || neighbor?.type)
+              getNodeCompatType(neighbor)
             );
             return isOutgoing
               ? canConnect(mapped.compatType, neighborCompat)

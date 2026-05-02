@@ -457,8 +457,7 @@ export class GraphAnalyzer {
   ): Promise<PreviewVariation[]> {
     const previews: PreviewVariation[] = [];
 
-    // This would normally execute the graph with different seeds
-    // For now, return mock previews
+    // Synthetic previews until this service is wired to the graph executor.
     for (let i = 0; i < count; i++) {
       const seed = Math.floor(Math.random() * 10000);
       previews.push({

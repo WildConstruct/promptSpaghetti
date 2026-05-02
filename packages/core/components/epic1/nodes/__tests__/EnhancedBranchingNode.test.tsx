@@ -2,10 +2,13 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import type { NodeProps } from 'reactflow';
 import { EnhancedBranchingNode } from '../EnhancedBranchingNode';
+import type { NodeIntelligenceService } from '../../../../services/llm';
 import { useIntelligence } from '../../contexts/IntelligenceContext';
+import type { BaseEditableNodeProps } from '../BaseEditableNode';
 
 jest.mock('reactflow', () => ({
   Handle: () => null,
+  useUpdateNodeInternals: () => jest.fn(),
   Position: {
     Left: 'left',
     Right: 'right'
@@ -13,7 +16,10 @@ jest.mock('reactflow', () => ({
 }));
 
 jest.mock('../BaseEditableNode', () => ({
-  BaseEditableNode: ({ children, data }: any) => (
+  BaseEditableNode: ({
+    children,
+    data
+  }: Pick<BaseEditableNodeProps, 'children' | 'data'>) => (
     <div data-testid="base-editable-node">
       {children({
         isEditing: true,
@@ -74,7 +80,10 @@ describe('EnhancedBranchingNode', () => {
         populateChoices: jest.fn(),
         optimizeWeights: jest.fn(),
         getInspiration: jest.fn()
-      } as any,
+      } as Pick<
+        NodeIntelligenceService,
+        'populateChoices' | 'optimizeWeights' | 'getInspiration'
+      >,
       textRefinement: null,
       graphAnalyzer: null,
       metadataExtractor: null,

@@ -371,7 +371,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             className="launch-logo-image"
           />
           <p className="launch-tagline">
-            Define reusable archetypes, lock design DNA, and generate controlled variations.
+            PSG-first authoring for reusable archetypes, locked design DNA, and controlled variation.
           </p>
         </div>
         <div className="launch-header-actions">
@@ -419,7 +419,11 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         {/* Left Column - Prompt Input & Dissector */}
         <div className="launch-column launch-column-left">
           <div className="launch-section">
-            <h2>Describe The Archetype</h2>
+            <h2>Define The Archetype DNA</h2>
+            <p className="launch-section-copy">
+              Start from a reusable family idea, then let Prompt Spaghetti break
+              it into stable DNA and bounded variation.
+            </p>
             <PromptDissectorErrorBoundary>
               <PromptDissector
                 value={promptText}
@@ -447,6 +451,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         <div className="launch-column launch-column-center">
           <div className="launch-section preview-section">
             <h2>Family Logic Preview</h2>
+            <p className="launch-section-copy">
+              Review the first pass of graph logic before you enter the editor,
+              then decide what stays fixed and what can vary.
+            </p>
             <NodePreview
               analysis={mergedAnalysis}
               onNodeSelect={handleNodeSelect}
@@ -463,15 +471,15 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
               onClick={handleLaunchEditor}
               disabled={isAnalyzing}
             >
-              {isAnalyzing ? 'Analyzing…' : 'Build Family Graph'}
+              {isAnalyzing ? 'Analyzing...' : 'Build PSG Family Graph'}
             </button>
             <span className="launch-hint">
-              or press <kbd>⌘</kbd> + <kbd>Enter</kbd>
+              or press <kbd>Ctrl/Cmd</kbd> + <kbd>Enter</kbd>
             </span>
 
             <div className="launch-inline-actions">
               <div className="launch-inline-instruction">
-                Select a trait in the preview, then decide whether it stays fixed or can vary.
+                Select a trait in the preview, then decide whether it stays fixed DNA or becomes allowed variation.
               </div>
               {(() => {
                 const selNode = mergedAnalysis?.nodes.find(
@@ -518,10 +526,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           {selectedPreviewRole && selectedNodeId && (
             <div className="launch-role-helper" aria-live="polite">
               {selectedPreviewRole === 'Fixed DNA'
-                ? 'This trait now reads as part of the stable family identity.'
+                ? 'This trait now reads as part of the stable family DNA.'
                 : selectedPreviewRole === 'Allowed variation'
-                  ? 'This trait now reads as something that can change across family members.'
-                  : 'This node resolves the current family member preview.'}
+                  ? 'This trait now reads as something that can change across in-family outputs.'
+                  : 'This node resolves a deterministic family member preview.'}
             </div>
           )}
 
@@ -580,7 +588,11 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         {/* Right Column - Quick Actions */}
         <div className="launch-column launch-column-right">
           <div className="launch-section">
-            <h2>Quick Start Templates</h2>
+            <h2>Quick Start Family Graphs</h2>
+            <p className="launch-section-copy">
+              Use the primary demos for the cleanest archetype-first walkthrough,
+              then reach for advanced or manual starts only when you need them.
+            </p>
             <QuickActions onSelectTemplate={handleQuickAction} />
           </div>
 
@@ -588,10 +600,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           <div className="launch-tips">
             <h3>Pro Tips</h3>
             <ul>
-              <li>Use quick-start graphs when you want a clean archetype-first demo path</li>
-              <li>Use prompt bootstrap when you want a first graph drafted from text</li>
+              <li>Start with a quick-start family graph when you want the cleanest MVP walkthrough</li>
+              <li>Use prompt bootstrap when you want a first PSG graph drafted from text</li>
               <li>Lock shared traits first, then make only the details you want variable</li>
-              <li>Use the PSG sidecar later when you want references or downstream tinkering</li>
+              <li>Treat Comfy export as the main downstream handoff and sidecar tools as advanced follow-on work</li>
             </ul>
           </div>
         </div>
@@ -603,7 +615,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           className="skip-button"
           onClick={() => onLaunch({ kind: 'empty' })}
         >
-          Skip to Editor →
+          Open Blank Editor -&gt;
         </button>
       </footer>
 

@@ -29,7 +29,6 @@ const BrandingSection: React.FC<BrandingSectionProps> = ({
           />
         </label>
       </div>
-      {/* Logo upload placeholder */}
       <div style={{ marginBottom: '10px' }}>
         <label>Logo Upload:</label>
         <input type="file" accept="image/*" />

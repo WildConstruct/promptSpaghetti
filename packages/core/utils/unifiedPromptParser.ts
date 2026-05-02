@@ -221,11 +221,8 @@ export class UnifiedPromptParser {
    * Advanced parsing with grammar understanding
    */
   parseWithGrammar(input: string): ParseResult {
-    // This could be extended with more sophisticated grammar rules
-    // For now, it uses the same logic as parse() but could be enhanced
     const result = this.parse(input);
 
-    // Apply grammar-based enhancements
     result.nodes = this.applyGrammarRules(result.nodes);
 
     return result;

@@ -17,7 +17,27 @@ import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
 import RelationshipView from './components/RelationshipView';
 import { ComponentLibraryPanel } from './ComponentLibraryPanel';
 import './TabbedSidePanel.css';
-import type { ComponentDefinition, GraphReferenceEntry } from './services/ComponentModel';
+import type {
+  ComponentDefinition,
+  GraphReferenceEntry
+} from './services/ComponentModel';
+
+export type SidePanelTabId =
+  | 'preview'
+  | 'assets'
+  | 'components'
+  | 'search'
+  | 'relationships';
+
+export interface SidePanelTabDefinition {
+  id: SidePanelTabId;
+  label: string;
+  title: string;
+  ariaLabel?: string;
+  tier: 'core' | 'advanced';
+  availability: 'available' | 'hosted_only' | 'disabled';
+  helperText: string;
+}
 
 export interface TabbedSidePanelProps {
   previewEngine: PreviewEngine | null;
@@ -28,6 +48,7 @@ export interface TabbedSidePanelProps {
   defaultTab?: 'preview' | 'assets' | 'components' | null;
   showAssets?: boolean;
   showPreview?: boolean;
+  tabDefinitions?: SidePanelTabDefinition[];
   selectedNode?: Node<EditableNodeData> | null;
   nodes?: Node<EditableNodeData>[];
   edges?: Edge[];
@@ -41,7 +62,112 @@ export interface TabbedSidePanelProps {
   onRefreshOutdatedComponents?: () => void;
 }
 
-type TabType = 'preview' | 'assets' | 'components' | 'search' | 'relationships' | null;
+type TabType = SidePanelTabId | null;
+
+const createDefaultTabDefinitions = (
+  hasPreviewTab: boolean,
+  showAssets: boolean
+): SidePanelTabDefinition[] => {
+  const tabs: SidePanelTabDefinition[] = [];
+
+  if (showAssets) {
+    tabs.push({
+      id: 'assets',
+      label: 'Library',
+      title: 'Fragment library',
+      ariaLabel: 'Fragment library',
+      tier: 'core',
+      availability: 'available',
+      helperText:
+        'Use fragments and presets here to keep the graph focused on reusable family logic.'
+    });
+  }
+
+  if (hasPreviewTab) {
+    tabs.push({
+      id: 'preview',
+      label: 'Preview',
+      title: 'Preview',
+      ariaLabel: 'Preview',
+      tier: 'core',
+      availability: 'available',
+      helperText:
+        'Use preview to check deterministic outputs before downstream export.'
+    });
+  }
+
+  tabs.push(
+    {
+      id: 'components',
+      label: 'Linked',
+      title: 'Advanced linked components',
+      ariaLabel: 'Advanced linked components',
+      tier: 'advanced',
+      availability: 'available',
+      helperText:
+        'Linked components are useful, but they are secondary to the first-pass MVP wedge.'
+    },
+    {
+      id: 'search',
+      label: 'Explore',
+      title: 'Advanced search and exploration',
+      ariaLabel: 'Advanced search and exploration',
+      tier: 'advanced',
+      availability: 'available',
+      helperText:
+        'Search is exploratory support tooling, not part of the primary archetype-first walkthrough.'
+    },
+    {
+      id: 'relationships',
+      label: 'Graph',
+      title: 'Advanced graph relationships',
+      ariaLabel: 'Advanced graph relationships',
+      tier: 'advanced',
+      availability: 'available',
+      helperText:
+        'Relationship views are informative, but they are not the core MVP authoring loop.'
+    }
+  );
+
+  return tabs;
+};
+
+const renderTabIcon = (tabId: SidePanelTabId) => {
+  switch (tabId) {
+    case 'assets':
+      return (
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.94 1.475l-.64 6.038A1.5 1.5 0 0 1 13.81 15H2.19a1.5 1.5 0 0 1-1.49-1.347l-.64-6.038c0-.599.37-1.21.94-1.475V5.5A1.5 1.5 0 0 1 1 3.5zm1.5 0v2.695a.5.5 0 0 1-.336.473 1.4 1.4 0 0 0-.64.644l.64 6.038a.5.5 0 0 0 .496.45h11.18a.5.5 0 0 0 .496-.45l.64-6.038a1.4 1.4 0 0 0-.64-.644.5.5 0 0 1-.336-.473V5.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.76-.56-2.311-1.184C6.279 3.352 5.784 3 5.264 3H2.5a.5.5 0 0 0-.5.5z" />
+        </svg>
+      );
+    case 'preview':
+      return (
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.12 12.5 8 12.5s-3.879-1.168-5.168-2.457A13.133 13.133 0 0 1 1.172 8z" />
+          <path d="M8 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5z" />
+        </svg>
+      );
+    case 'components':
+      return (
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M5.5 1A1.5 1.5 0 0 0 4 2.5v2A1.5 1.5 0 0 0 5.5 6h2A1.5 1.5 0 0 0 9 4.5v-2A1.5 1.5 0 0 0 7.5 1h-2zm0 1h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5zm5 4A1.5 1.5 0 0 0 9 7.5v2A1.5 1.5 0 0 0 10.5 11h2A1.5 1.5 0 0 0 14 9.5v-2A1.5 1.5 0 0 0 12.5 6h-2zm0 1h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5zm-5 4A1.5 1.5 0 0 0 4 12.5v2A1.5 1.5 0 0 0 5.5 16h2A1.5 1.5 0 0 0 9 14.5v-2A1.5 1.5 0 0 0 7.5 11h-2zm0 1h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5z" />
+        </svg>
+      );
+    case 'search':
+      return (
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85l.708-.708l-3.85-3.85zm-5.242.656a5.5 5.5 0 1 1 0-11a5.5 5.5 0 0 1 0 11z" />
+        </svg>
+      );
+    case 'relationships':
+      return (
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M6.354 5.5H4a2.5 2.5 0 0 0 0 5h2.354a2.5 2.5 0 0 1 0-1H4a1.5 1.5 0 0 1 0-3h2.354a2.5 2.5 0 0 1 0-1zm3.292 0a2.5 2.5 0 0 1 0 1H12a1.5 1.5 0 0 1 0 3H9.646a2.5 2.5 0 0 1 0 1H12a2.5 2.5 0 0 0 0-5H9.646z" />
+          <path d="M5.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6A.5.5 0 0 1 5.5 8z" />
+        </svg>
+      );
+  }
+};
 
 export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   previewEngine,
@@ -52,6 +178,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   defaultTab = null,
   showAssets = true,
   showPreview = true,
+  tabDefinitions,
   selectedNode,
   nodes = [],
   edges = [],
@@ -69,23 +196,60 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   const maxWidth = 760;
   const hasPreviewTab = showPreview && !!previewEngine;
 
+  const resolvedTabDefinitions = useMemo(() => {
+    const provided =
+      tabDefinitions ?? createDefaultTabDefinitions(hasPreviewTab, showAssets);
+
+    return provided.filter(tab => {
+      if (tab.availability === 'disabled') {
+        return false;
+      }
+      if (tab.id === 'preview') {
+        return hasPreviewTab;
+      }
+      if (tab.id === 'assets') {
+        return showAssets;
+      }
+      return true;
+    });
+  }, [hasPreviewTab, showAssets, tabDefinitions]);
+
   const initialTab = useMemo<TabType>(() => {
-    if (defaultTab) {
+    if (
+      defaultTab &&
+      resolvedTabDefinitions.some(tab => tab.id === defaultTab)
+    ) {
       return defaultTab;
     }
-    if (showAssets) {
-      return 'assets';
-    }
-    if (hasPreviewTab) {
-      return 'preview';
-    }
-    return null;
-  }, [defaultTab, showAssets, hasPreviewTab]);
+
+    return resolvedTabDefinitions[0]?.id ?? null;
+  }, [defaultTab, resolvedTabDefinitions]);
 
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
   const [panelWidth, setPanelWidth] = useState(defaultWidth);
   const [isResizing, setIsResizing] = useState(false);
+
+  const activeTabDefinition = useMemo(
+    () =>
+      resolvedTabDefinitions.find(tab => tab.id === activeTab) ?? null,
+    [activeTab, resolvedTabDefinitions]
+  );
+
+  const activeTabNote = useMemo(() => {
+    if (!activeTabDefinition) {
+      return null;
+    }
+
+    return {
+      title:
+        activeTabDefinition.tier === 'core'
+          ? 'Core MVP surface'
+          : 'Advanced surface',
+      body: activeTabDefinition.helperText,
+      tone: activeTabDefinition.tier
+    };
+  }, [activeTabDefinition]);
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -94,7 +258,9 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   useEffect(() => {
     const clampWidth = () => {
       const viewportCap = Math.max(minWidth, window.innerWidth - 80);
-      setPanelWidth(prev => Math.min(Math.max(prev, minWidth), Math.min(maxWidth, viewportCap)));
+      setPanelWidth(prev =>
+        Math.min(Math.max(prev, minWidth), Math.min(maxWidth, viewportCap))
+      );
     };
 
     clampWidth();
@@ -178,71 +344,29 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         />
       )}
       <div className="tab-buttons">
-        {showAssets && (
+        {resolvedTabDefinitions.map(tab => (
           <button
-            className={`tab-button ${activeTab === 'assets' ? 'active' : ''} ${hoveredTab === 'assets' ? 'hovered' : ''}`}
-            onClick={() => handleTabClick('assets')}
-            onMouseEnter={() => setHoveredTab('assets')}
+            key={tab.id}
+            className={`tab-button ${activeTab === tab.id ? 'active' : ''} ${hoveredTab === tab.id ? 'hovered' : ''}`}
+            onClick={() => handleTabClick(tab.id)}
+            onMouseEnter={() => setHoveredTab(tab.id)}
             onMouseLeave={() => setHoveredTab(null)}
-            title="Asset Browser"
+            title={tab.title}
+            aria-label={tab.ariaLabel ?? tab.label}
           >
-            <span className="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.94 1.475l-.64 6.038A1.5 1.5 0 0 1 13.81 15H2.19a1.5 1.5 0 0 1-1.49-1.347l-.64-6.038c0-.599.37-1.21.94-1.475V5.5A1.5 1.5 0 0 1 1 3.5zm1.5 0v2.695a.5.5 0 0 1-.336.473 1.4 1.4 0 0 0-.64.644l.64 6.038a.5.5 0 0 0 .496.45h11.18a.5.5 0 0 0 .496-.45l.64-6.038a1.4 1.4 0 0 0-.64-.644.5.5 0 0 1-.336-.473V5.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.76-.56-2.311-1.184C6.279 3.352 5.784 3 5.264 3H2.5a.5.5 0 0 0-.5.5z"/>
-              </svg>
-            </span>
-            <span className="tab-label">Assets</span>
+            <span className="tab-icon">{renderTabIcon(tab.id)}</span>
+            <span className="tab-label">{tab.label}</span>
           </button>
-        )}
-
-        {hasPreviewTab && (
-          <button
-            className={`tab-button ${activeTab === 'preview' ? 'active' : ''} ${hoveredTab === 'preview' ? 'hovered' : ''}`}
-            onClick={() => handleTabClick('preview')}
-            onMouseEnter={() => setHoveredTab('preview')}
-            onMouseLeave={() => setHoveredTab(null)}
-            title="Preview"
-          >
-            <span className="tab-icon">👁️</span>
-            <span className="tab-label">Preview</span>
-          </button>
-        )}
-
-        <button
-          className={`tab-button ${activeTab === 'components' ? 'active' : ''} ${hoveredTab === 'components' ? 'hovered' : ''}`}
-          onClick={() => handleTabClick('components')}
-          onMouseEnter={() => setHoveredTab('components')}
-          onMouseLeave={() => setHoveredTab(null)}
-          title="Components"
-        >
-          <span className="tab-icon">◫</span>
-          <span className="tab-label">Components</span>
-        </button>
-
-        <button
-          className={`tab-button ${activeTab === 'search' ? 'active' : ''} ${hoveredTab === 'search' ? 'hovered' : ''}`}
-          onClick={() => handleTabClick('search')}
-          onMouseEnter={() => setHoveredTab('search')}
-          onMouseLeave={() => setHoveredTab(null)}
-          title="Search"
-        >
-          <span className="tab-icon">🔍</span>
-          <span className="tab-label">Search</span>
-        </button>
-
-        <button
-          className={`tab-button ${activeTab === 'relationships' ? 'active' : ''} ${hoveredTab === 'relationships' ? 'hovered' : ''}`}
-          onClick={() => handleTabClick('relationships')}
-          onMouseEnter={() => setHoveredTab('relationships')}
-          onMouseLeave={() => setHoveredTab(null)}
-          title="Relationships"
-        >
-          <span className="tab-icon">🕸️</span>
-          <span className="tab-label">Relationships</span>
-        </button>
+        ))}
       </div>
 
       <div className="panel-content">
+        {activeTabNote && (
+          <div className={`tab-context-note ${activeTabNote.tone}`}>
+            <div className="tab-context-title">{activeTabNote.title}</div>
+            <div className="tab-context-body">{activeTabNote.body}</div>
+          </div>
+        )}
         {activeTab === 'assets' && (
           <div className="assets-container">
             <AssetLibraryErrorBoundary>
@@ -293,7 +417,10 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         )}
         {activeTab === 'preview' && hasPreviewTab && previewEngine && (
           <div className="preview-container">
-            <PreviewPanel previewEngine={previewEngine} onSeedChange={onSeedChange} />
+            <PreviewPanel
+              previewEngine={previewEngine}
+              onSeedChange={onSeedChange}
+            />
           </div>
         )}
         {!activeTab && (

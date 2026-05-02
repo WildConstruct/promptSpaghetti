@@ -105,6 +105,58 @@ Canonical commands:
 - `pnpm test:e2e`
 - `pnpm test:mobile`
 
+## Phase 4a Active Validation Lane
+
+The local MVP validation entrypoint is:
+
+- `pnpm run validate:active`
+
+Focused smoke helpers are:
+
+- `pnpm run validate:active:server-smoke`
+- `pnpm run validate:active:client-smoke`
+- `pnpm run validate:demo:flows`
+- `pnpm run validate:mvp:ship`
+- `pnpm run validate:artifacts:active`
+
+Notes:
+
+- These are operational validation commands, not a new Jest ownership layer.
+- They intentionally orchestrate a narrow sequence of typecheck, build, and
+  smoke work for the active MVP surface.
+- `validate:artifacts:active` is the generated-artifact hygiene companion for
+  that same MVP surface.
+- `validate:demo:flows` adds the saved-demo and PSG-sidecar checks that matter
+  for teammate-run MVP walkthroughs.
+- `validate:mvp:ship` is the canonical automated ship subset for the current
+  branch.
+- The source of truth for this lane lives in
+  [docs/active-validation-lane.md](/C:/Users/behmb/Documents/Cascade%20Projects/prompt_spaghetti/docs/active-validation-lane.md).
+
+## Repo Quality Lane
+
+The maintained repo-hygiene entrypoints are:
+
+- `pnpm run validate:unused`
+- `pnpm run validate:cycles`
+- `pnpm run validate:repo:quality`
+
+Notes:
+
+- These checks enforce unused-code detection, cycle detection, and the blocked
+  Epic 1 source-of-truth Jest slice.
+- `validate:unused` is intentionally scoped to the maintained production
+  workspaces (`client`, `server`, `packages/core`, and
+  `packages/asset-browser`).
+- PowerShell-launched root runner scripts remain covered by their explicit
+  validation commands rather than by `knip`, which cannot truthfully trace that
+  invocation model here.
+- They are intentionally separate from `validate:active` and
+  `validate:deploy:active`, which remain product-confidence lanes.
+- The canonical general CI workflow now runs the active validation lane, deploy
+  packaging lane, and the repo-hygiene checks instead of the retired enhanced
+  workflow family.
+
 ## Canonical vs Legacy
 
 Treat these as canonical:

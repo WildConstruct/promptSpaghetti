@@ -5,7 +5,7 @@
  * creates natural flow, and groups related content together.
  */
 
-import { GeneratedNode } from './PromptParser';
+import type { GeneratedNode } from './generatedNodeTypes';
 import { Epic1NodeType } from './nodeTypes';
 
 /**

@@ -5,7 +5,7 @@ import { PresetGrid } from './PresetGrid';
 import { DetailsDrawer } from './DetailsDrawer';
 import { KeyboardNavigatorProvider } from '../providers/KeyboardNavigator';
 import { useAssetBrowserStore } from '../stores/assetBrowserStore';
-import type { AssetBrowserProps } from '../index';
+import type { AssetBrowserProps } from '../types/assetBrowserProps';
 
 export function AssetBrowser({ onInsert }: AssetBrowserProps) {
   const selectedId = useAssetBrowserStore(s => s.selectedPresetId);

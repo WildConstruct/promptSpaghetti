@@ -20,6 +20,11 @@
       "import": "./dist/esm/utils/*.js",
       "require": "./dist/cjs/utils/*.js"
     },
+    "./fileFormats/*": {
+      "types": "./dist/types/fileFormats/*.d.ts",
+      "import": "./dist/esm/fileFormats/*.js",
+      "require": "./dist/cjs/fileFormats/*.js"
+    },
     "./components/epic1": {
       "types": "./components/epic1/index.d.ts",
       "import": "./components/epic1/index.js",
@@ -40,7 +45,7 @@
   },
   "private": true,
   "scripts": {
-    "build": "npm run build:esm && npm run build:cjs && npm run build:types",
+    "build": "tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json && tsc --project tsconfig.types.json",
     "build:esm": "tsc --project tsconfig.esm.json",
     "build:cjs": "tsc --project tsconfig.cjs.json",
     "build:types": "tsc --project tsconfig.types.json",

@@ -1,8 +1,3 @@
-/**
- * Node manipulation utilities
- * REFACTOR-001: EnhancedGraphEditor Data Extraction
- */
-
 import { NodeTemplate, OptionConfig, NodeOption } from '../data/nodeTemplates/types';
 
 type Position = { x: number; y: number };

@@ -2,9 +2,9 @@ import React from 'react';
 import { deriveEnableSupabaseProp } from '@promptscape/core/utils/supabaseFeature';
 import {
   looksLikeLegacyGraphWrapper,
-  parsePsgWithCompatibility,
   readPsg
-} from '@promptscape/core';
+} from '@promptscape/core/utils/psgCodec';
+import { parsePsgWithCompatibility } from '@promptscape/core/fileFormats/psg';
 import { useUserId } from '../user/UserProvider';
 import {
   loadServerGraphs,
@@ -45,6 +45,14 @@ async function fetchText(url: string): Promise<string> {
     return typeof data === 'string' ? data : JSON.stringify(data);
   }
   throw new Error('Unsupported response shape');
+}
+
+function formatGraphEntryMeta(graph: GraphEntry): string {
+  if (!graph.updatedAt) {
+    return graph.filename;
+  }
+
+  return `${graph.filename} • ${new Date(graph.updatedAt).toLocaleString()}`;
 }
 
 function parseGraphPayload(text: string, nameHint = ''): unknown {
@@ -408,7 +416,7 @@ function ServerPane({ onOpenGraph }: { onOpenGraph: (g: unknown) => void }) {
                 <div style={{ flex: 1 }}>
                   <strong>{g.title}</strong>
                   <div style={{ fontSize: 12, color: '#555' }}>
-                    {g.filename} • {new Date(g.updatedAt).toLocaleString()}
+                    {formatGraphEntryMeta(g)}
                   </div>
                 </div>
                 <button

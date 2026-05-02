@@ -39,10 +39,13 @@ describe('OpenGraphDialog', () => {
     const manifest = [
       {
         filename: 'a.psg',
-        title: 'Alpha',
-        updatedAt: new Date().toISOString()
+        title: 'Alpha'
       },
-      { filename: 'b.psg', title: 'Beta', updatedAt: new Date().toISOString() }
+      {
+        filename: 'b.psg',
+        title: 'Beta',
+        updatedAt: '2024-01-02T03:04:05.000Z'
+      }
     ];
 
     const opened: any[] = [];
@@ -54,7 +57,18 @@ describe('OpenGraphDialog', () => {
       // file download
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ nodes: [], edges: [], opened: true })
+        text: async () =>
+          JSON.stringify({
+            kind: 'graph',
+            version: '1.0',
+            meta: {
+              id: 'opened-graph',
+              name: 'Opened Graph',
+              createdAt: '2024-01-02T03:04:05.000Z',
+              updatedAt: '2024-01-02T03:04:05.000Z'
+            },
+            graph: { nodes: [], edges: [] }
+          })
       } as any);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,6 +82,7 @@ describe('OpenGraphDialog', () => {
       ).not.toThrow();
       expect(() => screen.getByText('Alpha')).not.toThrow();
       expect(() => screen.getByText('Beta')).not.toThrow();
+      expect(() => screen.getByText('a.psg')).not.toThrow();
     });
 
     const openButtons = screen.getAllByRole('button', { name: 'Open' });
@@ -77,7 +92,8 @@ describe('OpenGraphDialog', () => {
 
     await waitFor(() => {
       expect(opened.length).toBe(1);
-      expect((opened[0] as any).opened).toBe(true);
+      expect((opened[0] as any).kind).toBe('graph');
+      expect((opened[0] as any).meta?.id).toBe('opened-graph');
     });
   });
 
@@ -89,9 +105,7 @@ describe('OpenGraphDialog', () => {
       // manifest succeeds on retry
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => [
-          { filename: 'x.psg', title: 'X', updatedAt: new Date().toISOString() }
-        ]
+        json: async () => [{ filename: 'x.psg', title: 'X' }]
       } as any);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -126,11 +140,23 @@ describe('OpenGraphDialog', () => {
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Local' }));
     });
-    const input = screen.getByLabelText('Local Graph File') as HTMLInputElement;
+    const input = screen.getByLabelText('Local PSG File') as HTMLInputElement;
 
     // Valid .psg
     const valid = new File(
-      [JSON.stringify({ nodes: [], edges: [] })],
+      [
+        JSON.stringify({
+          kind: 'graph',
+          version: '1.0',
+          meta: {
+            id: 'local-graph',
+            name: 'Local Graph',
+            createdAt: '2024-01-02T03:04:05.000Z',
+            updatedAt: '2024-01-02T03:04:05.000Z'
+          },
+          graph: { nodes: [], edges: [] }
+        })
+      ],
       'foo.psg',
       { type: 'application/json' }
     );
@@ -154,7 +180,9 @@ describe('OpenGraphDialog', () => {
       const alerts = screen.getAllByRole('alert');
       expect(
         alerts.some(a =>
-          /Invalid file|Failed to read/i.test(a.textContent || '')
+          /Invalid or unsupported \.psg file|Failed to read/i.test(
+            a.textContent || ''
+          )
         )
       ).toBe(true);
     });

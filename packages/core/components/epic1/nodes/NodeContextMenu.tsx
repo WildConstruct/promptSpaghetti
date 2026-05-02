@@ -1,8 +1,3 @@
-/**
- * Context Menu for Node Operations
- * Provides right-click menu for node actions including Save as Preset
- */
-
 import React, { useCallback, useEffect, useRef } from 'react';
 import { getDocUrl } from '../docsMap';
 import './NodeContextMenu.css';
@@ -35,7 +30,6 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -67,7 +61,6 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
 
   if (!position) {return null;}
 
-  // Adjust position to ensure menu stays within viewport
   const menuStyle: React.CSSProperties = {
     position: 'fixed',
     top: Math.min(position.y, window.innerHeight - 200),
@@ -89,12 +82,7 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
         <button
           className="context-menu-item"
           onClick={() => {
-            try {
-              const url = getDocUrl(`${nodeType}Node`);
-              window.open(url, '_blank');
-            } catch {
-              window.open('/docs/index.md', '_blank');
-            }
+            window.open(getDocUrl(`${nodeType}Node`), '_blank');
             onClose();
           }}
         >

@@ -11,12 +11,7 @@ import { DetailsDrawer } from './DetailsDrawer';
 import { KeyboardNavigatorProvider } from '../providers/KeyboardNavigator';
 import { useAssetBrowserStore } from '../stores/assetBrowserStore';
 import { FragmentManifestLoader } from '../services/FragmentManifestLoader';
-import type { AssetBrowserProps } from '../index';
-
-export interface EnhancedAssetBrowserProps extends AssetBrowserProps {
-  onNodeReplace?: (nodeId: string, preset: any) => void;
-  enableFragmentManifest?: boolean;
-}
+import type { EnhancedAssetBrowserProps } from '../types/assetBrowserProps';
 
 export function EnhancedAssetBrowser({
   onInsert,

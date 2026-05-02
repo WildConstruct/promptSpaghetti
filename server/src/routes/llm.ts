@@ -347,6 +347,8 @@ export async function llmRoutes(app: FastifyInstance) {
     return response;
   });
 
+  // Secondary authenticated authoring helpers. The primary AI product path
+  // remains `/api/agent/draft-graph`.
   await registerAliases(
     app,
     ['/api/llm/complete', '/api/llm-complete'],

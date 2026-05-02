@@ -168,7 +168,7 @@ const characterTemplate: QuickStartTemplate = {
       type: 'output',
       data: {
         nodeType: 'output',
-        outputName: 'character',
+        outputName: 'character_family_member',
         label: 'Output'
       }
     }
@@ -614,6 +614,8 @@ const branchingFamilyTemplate: QuickStartTemplate = {
 
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   character_variation: characterTemplate,
+  vehicle_family: vehicleFamilyTemplate,
+  building_family: buildingFamilyTemplate,
   scene_still: vehicleFamilyTemplate,
   crowd_scene: buildingFamilyTemplate,
   branching_family: branchingFamilyTemplate

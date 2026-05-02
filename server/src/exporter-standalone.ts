@@ -1,31 +1,32 @@
 // Standalone graph exporter with minimal dependencies
 import { z } from 'zod';
+import type {
+  ExportableGraph,
+  ExportableGraphEdge,
+  ExportableGraphNode
+} from '../../packages/core/types/graph';
 
-/**
- * Minimal Graph type definition to avoid corrupted imports
- */
-export interface Graph {
-  id?: string;
-  nodes?: GraphNode[];
-  edges?: GraphEdge[];
-  seed?: number;
-  metadata?: Record<string, unknown>;
-}
+export type Graph = ExportableGraph;
+export type GraphNode = ExportableGraphNode;
+export type GraphEdge = ExportableGraphEdge;
 
-export interface GraphNode {
-  id: string;
-  type: string;
-  inputs?: string[];
-  [key: string]: unknown;
-}
+const GeneratorBundleNodeSchema = z
+  .object({
+    id: z.string(),
+    type: z.string(),
+    inputs: z.array(z.string()).optional()
+  })
+  .catchall(z.unknown());
 
-export interface GraphEdge {
-  id: string;
-  source: string;
-  target: string;
-  sourceHandle?: string;
-  targetHandle?: string;
-}
+const GeneratorBundleEdgeSchema = z
+  .object({
+    id: z.string(),
+    source: z.string(),
+    target: z.string(),
+    sourceHandle: z.string().optional(),
+    targetHandle: z.string().optional()
+  })
+  .catchall(z.unknown());
 
 /**
  * GeneratorBundle format for external compatibility
@@ -43,10 +44,10 @@ export const GeneratorBundleSchema = z.object({
     complexity: z.enum(['simple', 'moderate', 'complex']).default('simple')
   }),
   graph: z.object({
-    nodes: z.array(z.any()),
-    edges: z.array(z.any()).default([]),
+    nodes: z.array(GeneratorBundleNodeSchema),
+    edges: z.array(GeneratorBundleEdgeSchema).default([]),
     seed: z.number().optional(),
-    variables: z.record(z.string(), z.any()).default({})
+    variables: z.record(z.string(), z.unknown()).default({})
   }),
   execution: z.object({
     deterministic: z.boolean().default(true),
@@ -157,10 +158,15 @@ export function bundleToGraph(bundle: GeneratorBundle): Graph {
     inputsByNode.set(edge.target, list);
   });
 
-  const nodes: GraphNode[] = (bundle.graph.nodes ?? []).map(node => ({
-    ...node,
-    inputs: inputsByNode.get((node as GraphNode).id) ?? []
-  }));
+  const nodes: GraphNode[] = (bundle.graph.nodes ?? []).map(node => {
+    const graphNode = node as GraphNode;
+    return {
+      ...graphNode,
+      id: graphNode.id,
+      type: graphNode.type,
+      inputs: inputsByNode.get(graphNode.id) ?? []
+    };
+  });
 
   return {
     nodes,

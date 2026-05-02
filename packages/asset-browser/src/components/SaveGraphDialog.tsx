@@ -1,12 +1,12 @@
 import React from 'react';
-import { exportGraphToPSG } from '@promptscape/core';
 import { deriveEnableSupabaseProp } from '@promptscape/core/utils/supabaseFeature';
+import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 import { useUserId } from '../user/UserProvider';
 
 export type SaveGraphDialogProps = {
   isOpen: boolean;
   onClose: () => void;
-  graph: unknown; // replace with concrete graph type when codec available
+  graph: unknown;
   // Optional test hook: receive the blob and filename that would be saved
   onSaveBlob?: (blob: Blob, filename: string) => void;
   // Supabase save (gated)
@@ -34,6 +34,29 @@ function Spinner() {
 
 const DEFAULT_NAME = 'graph';
 
+type SaveableGraphNode = {
+  id: string;
+  type?: string;
+  position?: { x?: number; y?: number };
+  width?: number;
+  height?: number;
+  parentNode?: string;
+  data?: Record<string, unknown>;
+};
+
+type SaveableGraphEdge = {
+  id: string;
+  source: string;
+  target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+};
+
+type SaveableGraphBatch = {
+  nodes: SaveableGraphNode[];
+  edges: SaveableGraphEdge[];
+};
+
 function sanitizeBase(name: string): string {
   const trimmed = name.trim();
   // allow letters, numbers, dash, underscore, dot, and spaces turned to dashes
@@ -45,14 +68,37 @@ function ensurePsg(name: string): string {
   return name.toLowerCase().endsWith('.psg') ? name : `${name}.psg`;
 }
 
-function looksLikeGraphBatch(
-  graph: unknown
-): graph is { nodes: unknown[]; edges: unknown[] } {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isSaveableGraphNode(node: unknown): node is SaveableGraphNode {
+  if (!isRecord(node) || typeof node.id !== 'string') {
+    return false;
+  }
+
+  const data = node.data;
+  return (
+    typeof node.type === 'undefined' || typeof node.type === 'string'
+  ) && (typeof data === 'undefined' || isRecord(data));
+}
+
+function isSaveableGraphEdge(edge: unknown): edge is SaveableGraphEdge {
+  return (
+    isRecord(edge) &&
+    typeof edge.id === 'string' &&
+    typeof edge.source === 'string' &&
+    typeof edge.target === 'string'
+  );
+}
+
+function looksLikeGraphBatch(graph: unknown): graph is SaveableGraphBatch {
   return Boolean(
-    graph &&
-      typeof graph === 'object' &&
-      Array.isArray((graph as { nodes?: unknown[] }).nodes) &&
-      Array.isArray((graph as { edges?: unknown[] }).edges)
+    isRecord(graph) &&
+      Array.isArray(graph.nodes) &&
+      Array.isArray(graph.edges) &&
+      graph.nodes.every(isSaveableGraphNode) &&
+      graph.edges.every(isSaveableGraphEdge)
   );
 }
 
@@ -62,7 +108,7 @@ function toPsgText(graph: unknown, filename: string): string {
   }
 
   const baseName = filename.replace(/\.psg$/i, '') || DEFAULT_NAME;
-  const psg = exportGraphToPSG(graph.nodes as any[], graph.edges as any[], {
+  const psg = exportGraphToPSG(graph.nodes, graph.edges, {
     name: baseName
   });
   return JSON.stringify(psg, null, 2);

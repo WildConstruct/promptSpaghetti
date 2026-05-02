@@ -11,6 +11,7 @@ interface Template {
   description: string;
   prompt: string;
   badge?: string;
+  tier: 'primary' | 'advanced' | 'manual';
   icon: React.ReactNode;
 }
 
@@ -96,24 +97,28 @@ const templates: Template[] = [
     description: 'Define shared character DNA with controlled trait variation',
     prompt:
       'A warrior or mage, wearing armor or robes, carrying a sword or staff, with blonde or dark hair',
-    badge: 'Best First Demo',
+    badge: 'Primary Demo',
+    tier: 'primary',
     icon: <CharacterIcon />
   },
   {
-    id: 'scene_still',
+    id: 'vehicle_family',
     title: 'Vehicle Family',
     description: 'Reusable vehicle archetype with stable design language',
     prompt:
       'Late-70s compact sedan, worn paint, practical trim, variations in color, wheels, and wear level',
+    badge: 'Primary Demo',
+    tier: 'primary',
     icon: <SceneIcon />
   },
   {
-    id: 'crowd_scene',
+    id: 'building_family',
     title: 'Building Family',
     description: 'Environmental archetype with bounded facade and clutter variation',
     prompt:
       'Weathered urban storefront, fixed era and material language, variations in signage, damage, and window dressing',
-    badge: 'Archetype',
+    badge: 'Primary Demo',
+    tier: 'primary',
     icon: <CrowdIcon />
   },
   {
@@ -122,7 +127,8 @@ const templates: Template[] = [
     description: 'Branch a creature-truck family into different scenario arcs',
     prompt:
       'Monster trucks that are monsters, with different branches for swamp, graveyard, and desert arena scenarios',
-    badge: 'Conditional Logic',
+    badge: 'Advanced',
+    tier: 'advanced',
     icon: <BranchIcon />
   },
   {
@@ -131,6 +137,7 @@ const templates: Template[] = [
     description: 'Start from scratch in the editor with no template applied',
     prompt: 'Open an empty graph and begin authoring manually',
     badge: 'Manual',
+    tier: 'manual',
     icon: <BlankIcon />
   }
 ];
@@ -138,30 +145,68 @@ const templates: Template[] = [
 export const QuickActions: React.FC<QuickActionsProps> = ({
   onSelectTemplate
 }) => {
+  const primaryTemplates = templates.filter(template => template.tier === 'primary');
+  const secondaryTemplates = templates.filter(template => template.tier !== 'primary');
+
   return (
     <div className="quick-actions">
-      <div className="template-grid">
-        {templates.map(template => (
-          <button
-            key={template.id}
-            className="template-card"
-            onClick={() => onSelectTemplate(template.id)}
-            title={template.prompt}
-            data-testid={`quick-action-${template.id}`}
-          >
-            {template.badge && (
-              <span className="template-badge">{template.badge}</span>
-            )}
-            <span className="template-icon">{template.icon}</span>
-            <span className="template-title">{template.title}</span>
-            <span className="template-description">{template.description}</span>
-          </button>
-        ))}
+      <div className="template-group">
+        <div className="template-group-header">
+          <span className="template-group-kicker">Primary Demos</span>
+          <p className="template-group-copy">
+            Start with reusable family graphs that show locked DNA and bounded variation.
+          </p>
+        </div>
+        <div className="template-grid">
+          {primaryTemplates.map(template => (
+            <button
+              key={template.id}
+              className={`template-card template-card-${template.tier}`}
+              onClick={() => onSelectTemplate(template.id)}
+              title={template.prompt}
+              data-testid={`quick-action-${template.id}`}
+            >
+              {template.badge && (
+                <span className="template-badge">{template.badge}</span>
+              )}
+              <span className="template-icon">{template.icon}</span>
+              <span className="template-title">{template.title}</span>
+              <span className="template-description">{template.description}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="template-group template-group-secondary">
+        <div className="template-group-header">
+          <span className="template-group-kicker">Advanced And Manual</span>
+          <p className="template-group-copy">
+            Use these when you want branching experiments or a blank PSG canvas.
+          </p>
+        </div>
+        <div className="template-grid template-grid-secondary">
+          {secondaryTemplates.map(template => (
+            <button
+              key={template.id}
+              className={`template-card template-card-${template.tier}`}
+              onClick={() => onSelectTemplate(template.id)}
+              title={template.prompt}
+              data-testid={`quick-action-${template.id}`}
+            >
+              {template.badge && (
+                <span className="template-badge">{template.badge}</span>
+              )}
+              <span className="template-icon">{template.icon}</span>
+              <span className="template-title">{template.title}</span>
+              <span className="template-description">{template.description}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="quick-actions-footer">
         <p className="hint">
-          Click a template to launch straight into the editor with an archetype-oriented starter graph.
+          Click a template to launch straight into PSG-first authoring with an archetype-oriented starter graph.
         </p>
       </div>
     </div>

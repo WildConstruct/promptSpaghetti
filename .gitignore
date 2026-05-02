@@ -20,6 +20,11 @@ yarn-debug.log*
 yarn-error.log*
 *.log
 
+# Local Codex/runtime artifacts
+.local-output/
+.local-runtime/
+server/.local-output/
+
 # Env
 .env
 .env.*

@@ -1,4 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import {
+  readStoredNumberInRange,
+  readStoredString,
+  writeStoredString
+} from '../utils/storage';
 
 interface UseResizableOptions {
   initialWidth?: number;
@@ -17,22 +22,18 @@ export function useResizable({
 }: UseResizableOptions = {}) {
   // Load saved width from localStorage
   const getSavedWidth = () => {
-    if (typeof window === 'undefined') return initialWidth;
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      const parsed = parseInt(saved, 10);
-      if (!isNaN(parsed) && parsed >= minWidth && parsed <= maxWidth) {
-        return parsed;
-      }
-    }
-    return initialWidth;
+    return readStoredNumberInRange(
+      storageKey,
+      initialWidth,
+      minWidth,
+      maxWidth
+    );
   };
 
   const [width, setWidth] = useState(getSavedWidth);
   const [isResizing, setIsResizing] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('assetBrowser.collapsed') === 'true';
+    return readStoredString('assetBrowser.collapsed') === 'true';
   });
 
   const resizeRef = useRef<HTMLDivElement>(null);
@@ -42,9 +43,7 @@ export function useResizable({
   // Save width to localStorage
   const saveWidth = useCallback(
     (newWidth: number) => {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(storageKey, String(newWidth));
-      }
+      writeStoredString(storageKey, String(newWidth));
     },
     [storageKey]
   );
@@ -93,9 +92,7 @@ export function useResizable({
   const toggleCollapse = useCallback(() => {
     const newCollapsed = !isCollapsed;
     setIsCollapsed(newCollapsed);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('assetBrowser.collapsed', String(newCollapsed));
-    }
+    writeStoredString('assetBrowser.collapsed', String(newCollapsed));
   }, [isCollapsed]);
 
   // Set up global mouse listeners

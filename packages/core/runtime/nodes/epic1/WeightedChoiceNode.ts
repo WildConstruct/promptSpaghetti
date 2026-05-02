@@ -8,21 +8,10 @@ import {
   BaseInlineEditableNode,
   InlineEditableConfig
 } from './BaseInlineEditableNode';
+import type { WeightedOption } from '../../../types/epic1';
 import seedrandom from 'seedrandom';
 
-/**
- * Individual choice option with weight
- */
-export interface WeightedOption {
-  /** Unique identifier for the option */
-  id: string;
-  /** The text content of the option */
-  text: string;
-  /** The weight of this option (relative to others) */
-  weight: number;
-  /** Optional color for UI representation */
-  color?: string;
-}
+export type { WeightedOption } from '../../../types/epic1';
 
 /**
  * Value type for WeightedChoice nodes

@@ -1,6 +1,6 @@
 # Vercel Convergence Decision
 
-_Last updated: 2026-03-08_
+_Last updated: 2026-04-13_
 
 This note exists to remove ambiguity around Vercel for the MVP branch.
 
@@ -9,6 +9,8 @@ This note exists to remove ambiguity around Vercel for the MVP branch.
 - The canonical backend runtime is [server/src/index.ts](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/server/src/index.ts).
 - The root Vercel surface is still configured by [vercel.json](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/vercel.json) as a legacy API-only deployment around the `api/` directory.
 - The frontend build/deploy path is currently better represented by Netlify plus `client/public/_redirects`.
+- The canonical hosted backend origin for the current split deploy model is:
+  - `https://prompt-spaghetti-client.vercel.app`
 
 ## Decision for MVP
 
@@ -19,6 +21,8 @@ Reason:
 - it changes deployment architecture, not just implementation
 - current remote verification is blocked by invalid Vercel CLI credentials
 - the MVP already has a working deploy check through:
+  - `pnpm run validate:artifacts:active`
+  - `pnpm run validate:deploy:active`
   - `pnpm run build:netlify`
   - `pnpm run build:vercel-api`
 

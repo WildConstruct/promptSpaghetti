@@ -14,7 +14,6 @@ describe('GraphManifestLoader', () => {
         {
           filename: 'a.psg',
           title: 'A',
-          updatedAt: new Date().toISOString(),
           tags: []
         }
       ]
@@ -22,6 +21,7 @@ describe('GraphManifestLoader', () => {
     const list = await loadServerGraphs('');
     expect(Array.isArray(list)).toBe(true);
     expect(list[0].filename).toBe('a.psg');
+    expect(list[0].updatedAt).toBeUndefined();
   });
 
   it('returns empty when payload is not array', async () => {

@@ -59,6 +59,21 @@ describe('useRuntimeMode', () => {
           });
         }
 
+        if (url.endsWith('/api/local-image/status')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              ok: true,
+              provider: 'comfy-local',
+              available: true,
+              apiUrl: 'http://127.0.0.1:8188',
+              outputDir: 'C:/tmp/local-image',
+              defaultCount: 20,
+              maxCount: 20
+            })
+          });
+        }
+
         return Promise.reject(new Error(`Unexpected fetch: ${url}`));
       }) as unknown as typeof fetch;
 
@@ -75,6 +90,8 @@ describe('useRuntimeMode', () => {
     expect(result.current.llm.capabilities).toContain('complete');
     expect(result.current.psg.accessMode).toBe('cloud');
     expect(result.current.psg.exportTargets).toContain('comfy');
+    expect(result.current.localImage.available).toBe(true);
+    expect(result.current.localImage.accessMode).toBe('local');
     expect(result.current.subscription.state).toBe('unknown');
   });
 });

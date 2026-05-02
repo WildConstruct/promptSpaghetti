@@ -2,7 +2,11 @@
 // Processes and validates LLM parsing responses
 
 import { Edge, Node } from 'reactflow';
-import { LLMParseResponse, ParserOptions, ParseResult } from './PromptParser';
+import type {
+  LLMParseResponse,
+  ParserOptions,
+  ParseResult
+} from './PromptParserContracts';
 
 type ParsedNode = LLMParseResponse['nodes'][number];
 type ParsedEdge = LLMParseResponse['edges'][number];

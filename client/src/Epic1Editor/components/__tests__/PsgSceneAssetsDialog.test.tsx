@@ -167,7 +167,7 @@ describe('PsgSceneAssetsDialog', () => {
     );
 
     fireEvent.click(screen.getByText('Create Reference Asset'));
-    expect(screen.getByText('guard-1-reference')).toBeInTheDocument();
+    expect(screen.getAllByText('guard-1-reference').length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByText('Save Scene Assets'));
 

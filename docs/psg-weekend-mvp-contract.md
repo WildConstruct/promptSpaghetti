@@ -328,9 +328,9 @@ And treat the following as compatibility-only, not canonical:
 
 Copyable canonical example:
 
-- `docs/examples/psg-weekend-mvp-canonical-example.psg`
+- `docs/examples/mvp-character-archetype-demo.psg`
 
 Note on examples in `assets/library/`:
 
 - many existing library assets are runtime-compatible but richer than the minimum recommended authoring contract
-- contributors should copy from `docs/examples/psg-weekend-mvp-canonical-example.psg` when creating new MVP-aligned source files
+- contributors should copy from `docs/examples/mvp-character-archetype-demo.psg` when creating new MVP-aligned source files

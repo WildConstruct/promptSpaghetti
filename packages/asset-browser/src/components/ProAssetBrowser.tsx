@@ -7,6 +7,11 @@ import {
   ValidationResult
 } from '../services/FragmentValidator';
 import { useSectionResize } from '../hooks/useSectionResize';
+import {
+  readStoredJson,
+  readStoredNumberInRange,
+  writeStoredString
+} from '../utils/storage';
 
 // Inline SVG icons for a more polished, Logic-like look
 const IconList = () => (
@@ -89,6 +94,58 @@ type ManifestPresetEntry = {
 // Computed chips from manifest
 const unique = (arr: string[]) => Array.from(new Set(arr));
 
+type PresetGraphNode = {
+  type?: unknown;
+  template?: unknown;
+  data?: {
+    type?: unknown;
+    template?: unknown;
+    options?: unknown;
+  };
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function getPresetGraphNodes(data: unknown): PresetGraphNode[] | null {
+  if (!isRecord(data) || !Array.isArray(data.nodes)) {
+    return null;
+  }
+
+  return data.nodes.filter(isRecord);
+}
+
+function getPresetNodeType(node: PresetGraphNode): string {
+  const type = typeof node.type === 'string' ? node.type : node.data?.type;
+  return typeof type === 'string' ? type : 'Node';
+}
+
+function getPresetNodeTemplate(node: PresetGraphNode): string | null {
+  const template =
+    typeof node.data?.template === 'string'
+      ? node.data.template
+      : node.template;
+  return typeof template === 'string' ? template : null;
+}
+
+function getFirstOptionText(options: unknown): string | null {
+  if (!Array.isArray(options) || options.length === 0) {
+    return null;
+  }
+
+  const firstOption = options[0];
+  if (typeof firstOption === 'string') {
+    return firstOption;
+  }
+
+  if (isRecord(firstOption) && typeof firstOption.text === 'string') {
+    return firstOption.text;
+  }
+
+  return null;
+}
+
 export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -122,16 +179,13 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
 
   // Load saved preview seeds on mount
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('assetBrowser.previewSeeds');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          setPreviewSeeds(parsed);
-        }
-      }
-    } catch (e) {
-      // Ignore localStorage errors
+    const savedSeeds = readStoredJson<string[] | null>(
+      'assetBrowser.previewSeeds',
+      null,
+      (value): value is string[] => Array.isArray(value)
+    );
+    if (savedSeeds) {
+      setPreviewSeeds(savedSeeds);
     }
   }, []);
   const [loading, setLoading] = useState<boolean>(false);
@@ -232,10 +286,9 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
           const validatedFragments: typeof fragmentPresets = [];
           const validationErrors: Array<{ id: string; errors: string[] }> = [];
 
-          // Validate each fragment before adding
+          // Manifest entries are trusted here; file-level validation requires
+          // loading each fragment body.
           for (const fp of fragmentPresets) {
-            // Skip validation for now if we can't load the content
-            // In production, we'd load and validate the actual fragment file
             validatedFragments.push(fp);
           }
 
@@ -248,7 +301,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
             category: fp.category,
             // Add metadata fields if they exist
             nodes: fp.metadata?.nodes as number | undefined,
-            path: (fp as any).path || fp.metadata?.file
+            path: fp.path || fp.metadata?.file
           }));
 
           // Combine regular presets with validated fragment presets
@@ -401,18 +454,15 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
 
   const getSampleOutput = (preset: Preset): string | null => {
     try {
-      const graphData = preset.data as any;
-      if (graphData?.nodes) {
-        const outputNodes = graphData.nodes.filter(
-          (n: any) =>
-            n.type === 'Output' ||
-            n.type === 'output' ||
-            n.data?.type === 'Output'
-        );
+      const graphNodes = getPresetGraphNodes(preset.data);
+      if (graphNodes) {
+        const outputNodes = graphNodes.filter(node => {
+          const type = getPresetNodeType(node);
+          return type === 'Output' || type === 'output';
+        });
 
         if (outputNodes.length > 0) {
-          const template =
-            outputNodes[0].data?.template || outputNodes[0].template;
+          const template = getPresetNodeTemplate(outputNodes[0]);
           if (template) {
             const output =
               template.length > 80
@@ -422,20 +472,13 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
           }
         }
 
-        const weightedNodes = graphData.nodes.filter(
-          (n: any) =>
-            n.type === 'WeightedChoice' ||
-            n.type === 'weightedChoice' ||
-            n.data?.type === 'WeightedChoice'
-        );
+        const weightedNodes = graphNodes.filter(node => {
+          const type = getPresetNodeType(node);
+          return type === 'WeightedChoice' || type === 'weightedChoice';
+        });
 
         if (weightedNodes.length > 0) {
-          const options = weightedNodes[0].data?.options || [];
-          if (options.length > 0) {
-            const firstOption =
-              typeof options[0] === 'object' ? options[0].text : options[0];
-            return firstOption || null;
-          }
+          return getFirstOptionText(weightedNodes[0].data?.options);
         }
       }
       return null;
@@ -523,8 +566,12 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
 
   // Details panel height state with localStorage persistence
   const [detailsPanelHeight, setDetailsPanelHeight] = useState(() => {
-    const saved = localStorage.getItem('assetBrowser.detailsPanelHeight');
-    return saved ? parseInt(saved, 10) : 120;
+    return readStoredNumberInRange(
+      'assetBrowser.detailsPanelHeight',
+      120,
+      100,
+      200
+    );
   });
 
   const [isResizingDetails, setIsResizingDetails] = useState(false);
@@ -556,7 +603,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
       setIsResizingDetails(false);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      localStorage.setItem(
+      writeStoredString(
         'assetBrowser.detailsPanelHeight',
         detailsPanelHeight.toString()
       );
@@ -1122,16 +1169,16 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                     <div style={{ paddingLeft: '8px' }}>
                       • {preset.nodes || 0} nodes
                     </div>
-                    {(preset.data as { nodes?: any[] })?.nodes && (
+                    {getPresetGraphNodes(preset.data) && (
                       <>
-                        {(preset.data as { nodes?: any[] }).nodes
+                        {getPresetGraphNodes(preset.data)
                           ?.slice(0, 2)
-                          .map((node: any, idx: number) => (
+                          .map((node, idx) => (
                             <div
                               key={idx}
                               style={{ paddingLeft: '16px', fontSize: '10px' }}
                             >
-                              - {node.type || node.data?.type || 'Node'}
+                              - {getPresetNodeType(node)}
                             </div>
                           ))}
                       </>

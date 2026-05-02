@@ -29,7 +29,11 @@ export function rateLimiter({
       bucket.tokens -= 1;
       buckets.set(id, bucket);
       done();
-    } catch {
+    } catch (error) {
+      console.warn(
+        '[rateLimiter] Failed to evaluate bucket; allowing request',
+        error
+      );
       done();
     }
   };

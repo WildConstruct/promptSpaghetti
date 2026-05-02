@@ -1,4 +1,7 @@
-import { segmentPrompt, SegmentKind } from '@promptscape/core';
+import {
+  segmentPrompt,
+  type SegmentKind
+} from '@promptscape/core/runtime/prompting/PromptSegmentation';
 
 export interface PromptSegment {
   text: string;

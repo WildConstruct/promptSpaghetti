@@ -107,7 +107,7 @@ export const SequentialNodeSchema = BaseNode.extend({
     config: z.object({
       weights: z.array(z.number()).optional(),
       allowRepeats: z.boolean().optional(),
-      custom: z.record(z.any()).optional()
+      custom: z.record(z.unknown()).optional()
     }).optional()
   }).optional()
 });
@@ -122,7 +122,7 @@ export const MarkovNodeSchema = BaseNode.extend({
     normalizeProbabilities: z.boolean().optional(),
     terminationStates: z.array(z.string()).optional(),
     detectLoops: z.boolean().optional(),
-    custom: z.record(z.any()).optional()
+    custom: z.record(z.unknown()).optional()
   }).optional()
 });
 

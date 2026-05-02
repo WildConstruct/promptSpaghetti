@@ -1,0 +1,123 @@
+{
+  "version": "1.0.0",
+  "name": "Tree Family Sandbox Demo",
+  "description": "Local sandbox tree-family prompt for deterministic twenty-image batches.",
+  "metadata": {
+    "demoType": "local-sandbox",
+    "category": "environment",
+    "runtime": "comfy-local"
+  },
+  "nodes": [
+    {
+      "id": "tree-dna",
+      "type": "TextBlock",
+      "name": "Tree DNA",
+      "x": 80,
+      "y": 120,
+      "value": "oak tree archetype, shared trunk DNA, documentary still, natural light"
+    },
+    {
+      "id": "tree-silhouette",
+      "type": "WeightedChoice",
+      "name": "Silhouette Variation",
+      "x": 430,
+      "y": 40,
+      "options": [
+        {
+          "text": "broad rounded canopy with asymmetrical reach",
+          "weight": 40
+        },
+        {
+          "text": "taller narrow silhouette with wind-shaped crown",
+          "weight": 35
+        },
+        {
+          "text": "low sprawling canopy with sculpted negative space",
+          "weight": 25
+        }
+      ]
+    },
+    {
+      "id": "tree-detail",
+      "type": "WeightedChoice",
+      "name": "Surface Detail",
+      "x": 430,
+      "y": 250,
+      "options": [
+        {
+          "text": "deep bark ridges and moss pockets",
+          "weight": 40
+        },
+        {
+          "text": "sunlit spring leaves with lighter tips",
+          "weight": 35
+        },
+        {
+          "text": "late-summer dusting and exposed root flare",
+          "weight": 25
+        }
+      ]
+    },
+    {
+      "id": "tree-join",
+      "type": "Concat",
+      "name": "Resolve Tree Prompt",
+      "x": 830,
+      "y": 145,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "tree-join-detail",
+      "type": "Concat",
+      "name": "Refine Tree Prompt",
+      "x": 1140,
+      "y": 145,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "tree-output",
+      "type": "Output",
+      "name": "Output",
+      "x": 1450,
+      "y": 145,
+      "template": "{prompt}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "tree-e1",
+      "source": "tree-dna",
+      "target": "tree-join",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "tree-e2",
+      "source": "tree-silhouette",
+      "target": "tree-join",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "tree-e3",
+      "source": "tree-join",
+      "target": "tree-join-detail",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "tree-e4",
+      "source": "tree-detail",
+      "target": "tree-join-detail",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "tree-e5",
+      "source": "tree-join-detail",
+      "target": "tree-output"
+    }
+  ]
+}

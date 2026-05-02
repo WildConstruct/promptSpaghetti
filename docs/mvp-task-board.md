@@ -1,6 +1,6 @@
 # MVP Task Board
 
-_Last updated: 2026-03-08_
+_Last updated: 2026-04-16_
 
 This board is the working execution list for the Prompt Spaghetti MVP.
 
@@ -36,7 +36,7 @@ Must be true:
 Files:
 
 - `docs/psg-weekend-mvp-contract.md`
-- `docs/examples/psg-weekend-mvp-canonical-example.psg`
+- `docs/examples/mvp-character-archetype-demo.psg`
 - `docs/psg-format-v2.md`
 - `docs/asset-creation-guide.md`
 - `docs/fragment-system-architecture.md`
@@ -53,6 +53,25 @@ Weekend MVP node subset:
 - `Output`
 
 Keep wider node support as compatibility, not authoring guidance.
+
+### P0.3 Active tooling lane
+
+Status: complete
+
+Must be true:
+
+- one canonical PR/push workflow runs the real active validation lane
+- repo hygiene checks are first-class and separate from product-confidence checks
+- root repo-quality commands run from the repo root, with unused-file detection
+  scoped to the maintained production workspaces
+- legacy enhanced CI workflow variants are retired rather than preserved as broken paths
+
+Primary files:
+
+- `.github/workflows/active-checks.yml`
+- `knip.json`
+- `package.json`
+- `docs/test-script-catalog.md`
 
 ## P1: File Flow
 
@@ -208,9 +227,9 @@ Build one polished demo graph around the actual origin use case:
 
 Current demo pack:
 
-- `docs/examples/mvp-character-variation-demo.psg`
-- `docs/examples/mvp-scene-still-demo.psg`
-- `docs/examples/mvp-crowd-scene-demo.psg`
+- `docs/examples/mvp-character-archetype-demo.psg`
+- `docs/examples/mvp-vehicle-family-demo.psg`
+- `docs/examples/mvp-building-family-demo.psg`
 
 Remaining work:
 
@@ -306,15 +325,18 @@ Reference:
 
 - `docs/mvp-finish-plan.md`
 - `docs/demo-checklist.md`
-- `docs/examples/mvp-character-variation-demo.psg`
-- `docs/examples/mvp-scene-still-demo.psg`
-- `docs/examples/mvp-crowd-scene-demo.psg`
+- `docs/examples/mvp-character-archetype-demo.psg`
+- `docs/examples/mvp-vehicle-family-demo.psg`
+- `docs/examples/mvp-building-family-demo.psg`
 
 ## Release Checklist
 
 The MVP candidate is ready when all are true:
 
 - `pnpm run typecheck:active` passes
+- `pnpm run validate:unused` passes
+- `pnpm run validate:cycles` passes
+- `pnpm run validate:repo:quality` passes
 - `pnpm --filter client build` passes
 - `pnpm --filter server build` passes
 - fragment Playwright suite passes

@@ -39,7 +39,8 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^@/(.*)$': '<rootDir>/$1',
-    '^@prompt/asset-browser$': '<rootDir>/tests/mocks/promptAssetBrowser.tsx'
+    '^@prompt/asset-browser$': '<rootDir>/tests/mocks/promptAssetBrowser.tsx',
+    '^react-markdown$': '<rootDir>/tests/mocks/reactMarkdown.tsx'
   },
   clearMocks: true,
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts']

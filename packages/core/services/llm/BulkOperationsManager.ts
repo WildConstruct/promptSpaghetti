@@ -214,8 +214,7 @@ export class BulkOperationsManager {
         const batchResults = await Promise.all(
           batch.map(async id => {
             try {
-              // In production, this would update the actual items
-              // For now, simulate the operation
+              // Simulate persistence until bulk item updates are wired in.
               await this.simulateDelay(100);
               operation.completed++;
               return { id, success: true };

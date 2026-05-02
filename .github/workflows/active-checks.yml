@@ -1,26 +1,49 @@
-name: Active Code Quality Checks
+name: Active Quality Lane
 
 on:
   push:
-    branches: [main]
+    branches: [main, alpha, dev]
   pull_request:
-    branches: [main]
+    branches: [main, alpha, dev]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  active-checks:
-    runs-on: ubuntu-latest
+  active-quality:
+    name: Active Validation and Repo Hygiene
+    runs-on: windows-latest
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - name: TypeScript (active)
-        run: npx tsc -p tsconfig.active.json --noEmit --skipLibCheck
-      - name: ESLint (active paths)
-        run: |
-          ACTIVE_GLOBS="packages/asset-browser/**/*.ts packages/asset-browser/**/*.tsx packages/core/components/**/*.ts packages/core/components/**/*.tsx packages/core/types/**/*.ts packages/core/utils/**/*.ts packages/core/index.ts"
-          npx eslint --max-warnings 100 $ACTIVE_GLOBS || true
-      - name: Prettier check (repo)
-        run: npx prettier --check "**/*.{ts,tsx,js,jsx,json}" || true
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Active validation lane
+        run: pnpm run validate:active
+
+      - name: Active deploy packaging lane
+        run: pnpm run validate:deploy:active
+
+      - name: Unused code check
+        run: pnpm run validate:unused
+
+      - name: Circular dependency check
+        run: pnpm run validate:cycles

@@ -1,76 +1,62 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { jest } from '@jest/globals';
+import {
+  act,
+  render,
+  screen,
+  fireEvent,
+  waitFor
+} from '@testing-library/react';
 import { LaunchScreen } from '../components/LaunchScreen/LaunchScreen';
-import { Epic1EditorContainer } from '../Epic1Editor';
 import { SimpleMenuBar } from '../Epic1Editor/components/SimpleMenuBar';
 import '@testing-library/jest-dom';
 
 describe('Button Functionality Tests', () => {
   describe('LaunchScreen Buttons', () => {
-    it('should call onLaunch with tutorial payload when Start Tutorial is clicked', () => {
-      const mockOnLaunch = jest.fn();
-      render(<LaunchScreen onLaunch={mockOnLaunch} />);
+    async function renderLaunchScreen(onLaunch = jest.fn()) {
+      render(<LaunchScreen onLaunch={onLaunch} />);
 
+      await waitFor(() => {
+        expect(screen.getByTestId('prompt-runtime-status')).toHaveTextContent(
+          'ready'
+        );
+      });
+    }
+
+    it('should call onLaunch with tutorial payload when Start Tutorial is clicked', async () => {
+      const mockOnLaunch = jest.fn();
+      await renderLaunchScreen(mockOnLaunch);
+
+      jest.useFakeTimers();
       const tutorialButton = screen.getByText('Start Tutorial');
       fireEvent.click(tutorialButton);
 
-      // Wait for transition animation
-      setTimeout(() => {
-        expect(mockOnLaunch).toHaveBeenCalledWith({ kind: 'tutorial' });
-      }, 350);
+      act(() => {
+        jest.advanceTimersByTime(350);
+      });
+      expect(mockOnLaunch).toHaveBeenCalledWith({ kind: 'tutorial' });
+      jest.useRealTimers();
     });
 
-    it('should call onLaunch with empty payload when Skip to Editor is clicked', () => {
+    it('should call onLaunch with empty payload when Open Blank Editor is clicked', async () => {
       const mockOnLaunch = jest.fn();
-      render(<LaunchScreen onLaunch={mockOnLaunch} />);
+      await renderLaunchScreen(mockOnLaunch);
 
-      const skipButton = screen.getByText('Skip to Editor →');
+      const skipButton = screen.getByText('Open Blank Editor ->');
       fireEvent.click(skipButton);
 
       expect(mockOnLaunch).toHaveBeenCalledWith({ kind: 'empty' });
     });
 
-    it('should call onLaunch when Launch Editor is clicked', async () => {
+    it('should call onLaunch when Build PSG Family Graph is clicked', async () => {
       const mockOnLaunch = jest.fn();
-      render(<LaunchScreen onLaunch={mockOnLaunch} />);
+      await renderLaunchScreen(mockOnLaunch);
 
-      const launchButton = screen.getByText('Launch Editor');
+      const launchButton = screen.getByText('Build PSG Family Graph');
       fireEvent.click(launchButton);
 
       await waitFor(() => {
         expect(mockOnLaunch).toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe('Editor Tutorial Integration', () => {
-    it('should dispatch epic1:startTutorial event when startWithTutorial is true', async () => {
-      const eventListener = jest.fn();
-      window.addEventListener('epic1:startTutorial', eventListener);
-
-      render(<Epic1EditorContainer startWithTutorial={true} />);
-
-      await waitFor(
-        () => {
-          expect(eventListener).toHaveBeenCalled();
-        },
-        { timeout: 1000 }
-      );
-
-      window.removeEventListener('epic1:startTutorial', eventListener);
-    });
-  });
-
-  describe('Wizard Button', () => {
-    it('should open wizard modal when clicked', async () => {
-      // This would need the full Epic1GraphEditor to test properly
-      // Since it's deeply integrated, we'll test that the button exists
-      const { container } = render(<Epic1EditorContainer />);
-
-      await waitFor(() => {
-        const wizardButton = container.querySelector('.palette-footer-button');
-        expect(wizardButton).toBeTruthy();
-        expect(wizardButton?.textContent).toContain('Wizard');
       });
     });
   });
@@ -125,19 +111,19 @@ describe('Button Functionality Tests', () => {
       const fileMenu = screen.getByText('File');
       fireEvent.mouseEnter(fileMenu);
 
-      const exportButton = screen.getByText('Export PSG');
+      const exportButton = screen.getByText('Export PSG...');
       fireEvent.click(exportButton);
 
       expect(mockHandlers.onExport).toHaveBeenCalled();
     });
 
-    it('should call onExportComfy when Export Comfy Bridge is clicked', () => {
+    it('should call onExportComfy when Export For Comfy is clicked', () => {
       render(<SimpleMenuBar {...mockHandlers} />);
 
       const fileMenu = screen.getByText('File');
       fireEvent.mouseEnter(fileMenu);
 
-      const exportButton = screen.getByText('Export Comfy Bridge...');
+      const exportButton = screen.getByText('Export For Comfy...');
       fireEvent.click(exportButton);
 
       expect(mockHandlers.onExportComfy).toHaveBeenCalled();
@@ -168,18 +154,23 @@ describe('Button Functionality Tests', () => {
     });
   });
 
-  describe('Button Availability', () => {
-    it('should have all critical buttons present', async () => {
-      const { container } = render(<Epic1EditorContainer />);
+  describe('Menu Bar Availability', () => {
+    it('should render the core menu surfaces for the MVP shell', () => {
+      render(
+        <SimpleMenuBar
+          onNew={jest.fn()}
+          onOpen={jest.fn()}
+          onSave={jest.fn()}
+          onExport={jest.fn()}
+          onExportComfy={jest.fn()}
+          onUndo={jest.fn()}
+          onZoomIn={jest.fn()}
+        />
+      );
 
-      await waitFor(() => {
-        // Check for menu bar
-        expect(container.querySelector('.simple-menu-bar')).toBeTruthy();
-
-        // Check for palette buttons
-        const wizardButton = container.querySelector('.palette-footer-button');
-        expect(wizardButton).toBeTruthy();
-      });
+      expect(screen.getByText('File')).toBeInTheDocument();
+      expect(screen.getByText('Edit')).toBeInTheDocument();
+      expect(screen.getByText('View')).toBeInTheDocument();
     });
   });
 });

@@ -541,7 +541,11 @@ function getDefaultNodeData(type: string): Record<string, unknown> {
     case 'textBlock':
       return { text: 'New text block', variations: [] };
     case 'weightedChoice':
-      return { options: [{ text: 'Option 1', weight: 1 }] };
+      return {
+        options: [
+          { id: 'option-1', text: 'Option 1', weight: 1, hasBranch: false }
+        ]
+      };
     case 'concat':
       return { separator: ' ' };
     case 'output':

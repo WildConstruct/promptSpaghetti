@@ -1,8 +1,9 @@
 # MVP Finish Plan
 
-_Last updated: 2026-03-08_
+_Last updated: 2026-04-12_
 
-This note defines the remaining architecture and delivery scope required to call Prompt Spaghetti "finished enough" for an MVP demo.
+This note defines the remaining architecture and delivery scope required to call
+Prompt Spaghetti "finished enough" for an MVP demo.
 
 It is intentionally not a long-range roadmap.
 
@@ -59,10 +60,13 @@ Do not change for MVP:
 Canonical surfaces:
 
 - launch screen
-- Epic 1 monolith editor
+- Epic 1 editor shell in `client/src/Epic1Editor/Epic1EditorContainer-refactored.tsx`
+- shell-owned editor surface policy in `client/src/Epic1Editor/editorSurfacePolicy.ts`
+- Epic 1 graph canvas in `packages/core/components/epic1/Epic1GraphEditor.tsx`
 - flat PSG import/export
 - preview/export path
-- one AI bootstrap path
+- one primary AI bootstrap path via `draft-graph`
+- secondary authenticated LLM helper routes for parsing/refinement/metadata work
 - archetype-first quick-start/demo pack
 - one PSG sidecar path for scene/media references
 
@@ -71,6 +75,12 @@ Non-goals for MVP:
 - alternate editor architecture
 - duplicate AI clients
 - multiple server mains
+
+Source-of-truth companions for this section:
+
+- `ACTIVE_SURFACE.md`
+- `packages/core/components/epic1/SOURCE_OF_TRUTH.md`
+- `docs/deployment-current-state.md`
 
 ### 3. Local vs Cloud Split
 
@@ -83,9 +93,10 @@ The MVP cloud model should be honest and simple:
   - local PSG export works
 - cloud mode:
   - auth + Supabase sync
-  - hosted PSG operations
+  - authenticated hosted PSG operations
   - hosted crowd expansion
   - cloud-ready asset promotion path
+  - secondary authenticated LLM helper routes
 
 The MVP should not claim:
 
@@ -97,6 +108,7 @@ The MVP should not claim:
 MVP AI should stay narrow:
 
 - primary supported action: `Prompt -> Graph Draft`
+- secondary supported helpers: parse, refine, metadata, analyze, optimize, populate, suggest, complete
 
 Everything else should be clearly secondary or hidden.
 
@@ -111,7 +123,8 @@ The current sidecar/scene layer is enough for MVP if it supports:
 - local attachment metadata
 - cloud-ready promotion state
 
-That is enough to demonstrate where the system is going without forcing full renderer integration now.
+That is enough to demonstrate where the system is going without forcing full
+renderer integration now.
 
 ### 6. Visible Product Framing
 
@@ -128,14 +141,16 @@ The launch story should not lead with:
 - crowd planning
 - renderer orchestration
 
-Those can stay in the repo and architecture, but they should read as supporting infrastructure rather than the MVP headline.
+Those can stay in the repo and architecture, but they should read as supporting
+infrastructure rather than the MVP headline.
 
 ## Current State Audit
 
 ### What already exists and is strong enough
 
 - canonical flat `.psg` direction
-- active Epic 1 monolith source of truth
+- active launch screen and prompt bootstrap path
+- active editor shell plus monolithic graph canvas split
 - tutorial system is less brittle and more deterministic
 - shared LLM/browser client migration
 - PSG API routes for validate/normalize/expand/export
@@ -150,6 +165,12 @@ Those can stay in the repo and architecture, but they should read as supporting 
 
 - manual verification/build confidence still needs a practical ship bar
 - some client test harness behavior remains noisy
+- the brownfield repo still needs stronger source-of-truth boundaries around active vs support-only vs quarantined surfaces
+
+Current ownership rule:
+
+- the client shell owns surface labels, menu grouping, tab ordering, and capability wording
+- the core canvas owns graph mechanics and rendering
 
 ## MVP Finish Line
 
@@ -231,6 +252,19 @@ Stories:
 - document known non-MVP deferrals
 - remove or quarantine any last misleading UI paths
 
+### Epic D: Source-Of-Truth Hardening
+
+Goal:
+
+- make the repo legible enough that follow-on build and deploy work lands in the right surface
+
+Stories:
+
+- refresh `ACTIVE_SURFACE.md` to match the actual runtime path
+- align the Epic 1 source-of-truth note with the live shell-plus-canvas split
+- publish one brownfield architecture map and one prioritized risk register
+- publish one ordered MVP recovery backlog before deeper stabilization
+
 ## Quick-Start Audit
 
 The quick-start system still exists in code:
@@ -246,9 +280,9 @@ Current issue:
 
 Current demo pack:
 
-- [mvp-character-variation-demo.psg](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/examples/mvp-character-variation-demo.psg)
-- [mvp-scene-still-demo.psg](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/examples/mvp-scene-still-demo.psg)
-- [mvp-crowd-scene-demo.psg](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/examples/mvp-crowd-scene-demo.psg)
+- [mvp-character-archetype-demo.psg](examples/mvp-character-archetype-demo.psg)
+- [mvp-vehicle-family-demo.psg](examples/mvp-vehicle-family-demo.psg)
+- [mvp-building-family-demo.psg](examples/mvp-building-family-demo.psg)
 
 MVP recommendation:
 
@@ -284,8 +318,7 @@ Do not let these expand MVP scope:
 
 ## Recommended Immediate Work Order
 
-1. Finish Launch & Quick-Start Polish
-2. Build the Golden-Path Demo Pack
-3. Run MVP verification/button-up pass
-
-That is the shortest path to something demoable that you can hand to the team.
+1. Finish Source-Of-Truth Hardening
+2. Finish Launch & Quick-Start Polish
+3. Build the Golden-Path Demo Pack
+4. Run MVP verification/button-up pass

@@ -262,22 +262,16 @@ export function generateSecureToken(length: number = 32): string {
 }
 
 /**
- * Hash password using a simple implementation
- * Note: In production, use bcrypt or similar
+ * Compatibility-only password encoding. Do not use for new authentication.
  */
 export function hashPassword(password: string): string {
-  // This is a placeholder implementation
-  // In production, use bcrypt.hash(password, saltRounds)
   return Buffer.from(password).toString('base64');
 }
 
 /**
- * Verify password against hash
- * Note: In production, use bcrypt or similar
+ * Verify passwords encoded by hashPassword.
  */
 export function verifyPassword(password: string, hash: string): boolean {
-  // This is a placeholder implementation
-  // In production, use bcrypt.compare(password, hash)
   return Buffer.from(password).toString('base64') === hash;
 }
 

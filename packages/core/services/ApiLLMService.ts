@@ -691,7 +691,7 @@ export class MetadataExtractor {
 
 export class SimilarityEngine {
   async compare(a: string, b: string): Promise<number> {
-    // Simple client-side similarity for now
+    // Lightweight lexical fallback used when semantic scoring is unavailable.
     const aWords = new Set(a.toLowerCase().split(/\s+/));
     const bWords = new Set(b.toLowerCase().split(/\s+/));
     const intersection = new Set([...aWords].filter(x => bWords.has(x)));

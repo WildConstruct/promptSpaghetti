@@ -31,7 +31,7 @@ interface ExecutionContext {
 }
 
 /**
- * Simple analytics stub
+ * Basic-mode analytics initialization hook.
  */
 export function initializeAnalytics(): void {
   console.log('Analytics initialized (basic mode)');
@@ -96,12 +96,10 @@ export async function executeGraph(
       }
     }
 
-    // Execute the node based on its type
     let result: unknown;
 
     switch (node.type) {
       case 'Output':
-        // Output node just returns the first input, or template if available
         result = inputValues[0] || node.template || '';
         break;
 
@@ -181,7 +179,6 @@ export async function executeGraph(
       }
 
       case 'Include': {
-        // Simple include - just return the name or empty string
         if (!isIncludeNode(node)) {
           result = '';
           break;

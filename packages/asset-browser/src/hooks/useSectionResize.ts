@@ -1,4 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import {
+  readStoredJson,
+  writeStoredJson
+} from '../utils/storage';
 
 interface Section {
   id: string;
@@ -18,15 +22,17 @@ interface SectionState {
   collapsed: boolean;
 }
 
+type MsUserSelectStyle = CSSStyleDeclaration & { msUserSelect?: string };
+
 // Throttle function to limit update frequency
-function throttle<T extends (...args: any[]) => any>(
-  func: T,
+function throttle<TArgs extends unknown[]>(
+  func: (...args: TArgs) => void,
   delay: number
-): (...args: Parameters<T>) => void {
+): (...args: TArgs) => void {
   let lastCall = 0;
   let timeout: NodeJS.Timeout | null = null;
 
-  return (...args: Parameters<T>) => {
+  return (...args: TArgs) => {
     const now = Date.now();
 
     if (now - lastCall >= delay) {
@@ -53,15 +59,14 @@ export function useSectionResize({
 }: UseSectionResizeOptions) {
   // Load saved heights from localStorage
   const getSavedHeights = (): Record<string, SectionState> => {
-    if (typeof window === 'undefined') return {};
-
-    const saved = localStorage.getItem(storageKey);
+    const saved = readStoredJson<Record<string, SectionState> | null>(
+      storageKey,
+      null,
+      (value): value is Record<string, SectionState> =>
+        Boolean(value) && typeof value === 'object' && !Array.isArray(value)
+    );
     if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        // Invalid JSON, return empty
-      }
+      return saved;
     }
 
     // Return default heights
@@ -88,9 +93,7 @@ export function useSectionResize({
   // Save heights to localStorage
   const saveHeights = useCallback(
     (states: Record<string, SectionState>) => {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(storageKey, JSON.stringify(states));
-      }
+      writeStoredJson(storageKey, states);
     },
     [storageKey]
   );
@@ -111,7 +114,7 @@ export function useSectionResize({
       document.body.style.userSelect = 'none';
       // Prevent text selection during drag
       document.body.style.webkitUserSelect = 'none';
-      (document.body.style as any).msUserSelect = 'none';
+      (document.body.style as MsUserSelectStyle).msUserSelect = 'none';
     },
     [sectionStates]
   );
@@ -181,7 +184,7 @@ export function useSectionResize({
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
     document.body.style.webkitUserSelect = '';
-    (document.body.style as any).msUserSelect = '';
+    (document.body.style as MsUserSelectStyle).msUserSelect = '';
   }, [resizingSection, tempHeight, saveHeights, onHeightChange]);
 
   // Toggle section collapse

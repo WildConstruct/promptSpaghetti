@@ -2,6 +2,31 @@
 
 This file defines the intended status of the root `test:*` scripts.
 
+## Validation Companions
+
+These canonical validation commands sit outside the `test:*` namespace because
+they orchestrate typecheck, build, and focused smoke checks together:
+
+- `validate:active`
+- `validate:active:server-smoke`
+- `validate:active:client-smoke`
+- `validate:unused`
+- `validate:cycles`
+- `validate:repo:quality`
+- `validate:demo:flows`
+- `validate:mvp:ship`
+- `validate:artifacts:active`
+
+Treat them as the supported Phase 4a local-validation entrypoints for the
+active MVP lane, the repo-hygiene companion lane, the focused demo-flow
+companion, and the narrow ship subset.
+
+For repo hygiene specifically:
+
+- `validate:unused` covers maintained production source surfaces only
+- `validate:cycles` covers maintained source import graphs
+- `validate:repo:quality` adds the targeted Epic 1 source-of-truth Jest slice
+
 ## Canonical
 
 - `test`

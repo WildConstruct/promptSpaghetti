@@ -70,10 +70,7 @@ function createPsgDocument(
     tags?: string[];
   } = {}
 ) {
-  return exportGraphToPSG(
-    nodes as unknown as Parameters<typeof exportGraphToPSG>[0],
-    edges as unknown as Parameters<typeof exportGraphToPSG>[1],
-    {
+  return exportGraphToPSG(nodes, edges, {
     name: options.name || 'Prompt Spaghetti Graph',
     description: options.description,
     metadata:
@@ -674,6 +671,19 @@ export const useSupabaseFileOperations = ({
     },
     // Keep the original interface for compatibility
     handleOpen: getSupabase() ? handleSupabaseOpen : handleLocalOpen,
+    handleExportPsg: (
+      nodes: Node[],
+      edges: Edge[],
+      options: {
+        name?: string;
+        description?: string;
+        tags?: string[];
+      } = {}
+    ) => {
+      const psg = exportGraphAsPsg(nodes, edges, options);
+      localStorage.setItem('epic1-graph', JSON.stringify({ nodes, edges }));
+      showToast(`Exported "${psg.name}" as PSG`, 'success');
+    },
     handleSave: (nodes: Node[], edges: Edge[]) => {
       if (getSupabase()) {
         setShowSaveDialog(true);

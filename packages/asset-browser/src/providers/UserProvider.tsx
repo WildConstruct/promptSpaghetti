@@ -5,9 +5,16 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
+export interface AssetBrowserUser {
+  id?: string;
+  email?: string;
+  name?: string;
+  [key: string]: unknown;
+}
+
 interface UserContextType {
-  user: any;
-  setUser: (user: any) => void;
+  user: AssetBrowserUser | null;
+  setUser: (user: AssetBrowserUser | null) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -15,7 +22,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<AssetBrowserUser | null>(null);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

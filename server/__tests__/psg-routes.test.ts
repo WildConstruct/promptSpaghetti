@@ -1,6 +1,10 @@
 import Fastify from 'fastify';
 import { psgRoutes } from '../src/routes/psg';
 
+jest.mock('../src/utils/routeAccess', () => ({
+  requireRouteAccess: jest.fn(() => async () => undefined)
+}));
+
 describe('psgRoutes', () => {
   async function buildApp() {
     const app = Fastify();

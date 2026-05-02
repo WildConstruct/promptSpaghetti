@@ -1,0 +1,356 @@
+{
+  "version": "1.0.0",
+  "name": "Tree Branch Direction Demo",
+  "description": "Branched tree-family graph for preview-first and local-sandbox verification.",
+  "metadata": {
+    "demoType": "local-sandbox",
+    "category": "environment",
+    "runtime": "comfy-local",
+    "demoFocus": "branching-tree-directions"
+  },
+  "nodes": [
+    {
+      "id": "tree-dna",
+      "type": "TextBlock",
+      "name": "Tree Family DNA",
+      "x": 80,
+      "y": 280,
+      "value": "hero tree archetype, documentary still, natural light, single mature tree, grounded realism, clean silhouette"
+    },
+    {
+      "id": "tree-direction",
+      "type": "WeightedChoice",
+      "name": "Tree Direction",
+      "x": 500,
+      "y": 260,
+      "options": [
+        {
+          "text": "oak sentinel with broad balanced crown",
+          "weight": 35,
+          "meta": {
+            "hasBranch": true
+          }
+        },
+        {
+          "text": "wind-shaped cedar with diagonal lean",
+          "weight": 35,
+          "meta": {
+            "hasBranch": true
+          }
+        },
+        {
+          "text": "low sprawling fig with heavy lateral reach",
+          "weight": 30,
+          "meta": {
+            "hasBranch": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "tree-core",
+      "type": "Concat",
+      "name": "Resolve Core Tree",
+      "x": 940,
+      "y": 280,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "oak-detail",
+      "type": "WeightedChoice",
+      "name": "Oak Detail",
+      "x": 1540,
+      "y": 20,
+      "options": [
+        {
+          "text": "deep bark ridges and moss pockets",
+          "weight": 35
+        },
+        {
+          "text": "broad rounded canopy with asymmetrical reach",
+          "weight": 35
+        },
+        {
+          "text": "heavy root flare gripping exposed soil",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "cedar-detail",
+      "type": "WeightedChoice",
+      "name": "Cedar Detail",
+      "x": 1540,
+      "y": 300,
+      "options": [
+        {
+          "text": "wind-combed crown with layered bough shelves",
+          "weight": 35
+        },
+        {
+          "text": "fibrous bark with weathered trunk twists",
+          "weight": 35
+        },
+        {
+          "text": "narrow conical mass broken by storm gaps",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "fig-detail",
+      "type": "WeightedChoice",
+      "name": "Fig Detail",
+      "x": 1540,
+      "y": 580,
+      "options": [
+        {
+          "text": "lateral limbs with weighty downward sweep",
+          "weight": 35
+        },
+        {
+          "text": "dense leaf clusters with pockets of shadow",
+          "weight": 35
+        },
+        {
+          "text": "exposed surface roots spreading beyond the trunk",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "oak-context",
+      "type": "WeightedChoice",
+      "name": "Oak Context",
+      "x": 1540,
+      "y": 150,
+      "options": [
+        {
+          "text": "meadow edge after light rain",
+          "weight": 35
+        },
+        {
+          "text": "old estate field with trimmed grass",
+          "weight": 35
+        },
+        {
+          "text": "quiet park rise with morning haze",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "cedar-context",
+      "type": "WeightedChoice",
+      "name": "Cedar Context",
+      "x": 1540,
+      "y": 430,
+      "options": [
+        {
+          "text": "coastal bluff with salt air haze",
+          "weight": 35
+        },
+        {
+          "text": "mountain overlook with cool overcast light",
+          "weight": 35
+        },
+        {
+          "text": "ridge trail with distant fog bands",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "fig-context",
+      "type": "WeightedChoice",
+      "name": "Fig Context",
+      "x": 1540,
+      "y": 710,
+      "options": [
+        {
+          "text": "sun-warmed courtyard edge",
+          "weight": 35
+        },
+        {
+          "text": "dry stone terrace with scattered leaves",
+          "weight": 35
+        },
+        {
+          "text": "garden wall backdrop with late afternoon light",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "oak-variant",
+      "type": "Concat",
+      "name": "Oak Variant",
+      "x": 2140,
+      "y": 100,
+      "value": ", ",
+      "data": {
+        "separator": ", ",
+        "requireAllInputs": true
+      }
+    },
+    {
+      "id": "cedar-variant",
+      "type": "Concat",
+      "name": "Cedar Variant",
+      "x": 2140,
+      "y": 380,
+      "value": ", ",
+      "data": {
+        "separator": ", ",
+        "requireAllInputs": true
+      }
+    },
+    {
+      "id": "fig-variant",
+      "type": "Concat",
+      "name": "Fig Variant",
+      "x": 2140,
+      "y": 660,
+      "value": ", ",
+      "data": {
+        "separator": ", ",
+        "requireAllInputs": true
+      }
+    },
+    {
+      "id": "tree-final",
+      "type": "Concat",
+      "name": "Resolve Tree Output",
+      "x": 2580,
+      "y": 380,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "tree-output",
+      "type": "Output",
+      "name": "Output",
+      "x": 2940,
+      "y": 380,
+      "template": "{prompt}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "tree-e1",
+      "source": "tree-dna",
+      "target": "tree-core",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "tree-e2",
+      "source": "tree-direction",
+      "sourceHandle": "main",
+      "target": "tree-core",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "tree-e3",
+      "source": "tree-direction",
+      "sourceHandle": "branch-0",
+      "target": "oak-detail",
+      "targetHandle": "target"
+    },
+    {
+      "id": "tree-e4",
+      "source": "tree-direction",
+      "sourceHandle": "branch-1",
+      "target": "cedar-detail",
+      "targetHandle": "target"
+    },
+    {
+      "id": "tree-e5",
+      "source": "tree-direction",
+      "sourceHandle": "branch-2",
+      "target": "fig-detail",
+      "targetHandle": "target"
+    },
+    {
+      "id": "tree-e6",
+      "source": "tree-core",
+      "target": "oak-variant",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "tree-e7",
+      "source": "tree-core",
+      "target": "cedar-variant",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "tree-e8",
+      "source": "tree-core",
+      "target": "fig-variant",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "tree-e9",
+      "source": "oak-detail",
+      "target": "oak-variant",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "tree-e10",
+      "source": "oak-context",
+      "target": "oak-variant",
+      "targetHandle": "input3"
+    },
+    {
+      "id": "tree-e11",
+      "source": "cedar-detail",
+      "target": "cedar-variant",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "tree-e12",
+      "source": "cedar-context",
+      "target": "cedar-variant",
+      "targetHandle": "input3"
+    },
+    {
+      "id": "tree-e13",
+      "source": "fig-detail",
+      "target": "fig-variant",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "tree-e14",
+      "source": "fig-context",
+      "target": "fig-variant",
+      "targetHandle": "input3"
+    },
+    {
+      "id": "tree-e15",
+      "source": "oak-variant",
+      "target": "tree-final",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "tree-e16",
+      "source": "cedar-variant",
+      "target": "tree-final",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "tree-e17",
+      "source": "fig-variant",
+      "target": "tree-final",
+      "targetHandle": "input3"
+    },
+    {
+      "id": "tree-e18",
+      "source": "tree-final",
+      "target": "tree-output"
+    }
+  ]
+}

@@ -1,13 +1,6 @@
-// packages/core/runtime/index.ts
-// Runtime node classes for deterministic graph execution.
-// Each class exposes an async `run` method that takes input/context
-// and returns output plus possibly mutated context.
-// These are thin stubs for now; they will be fully implemented in later tasks.
-
 import { SecurityValidation } from '../validation/security';
 import { ExecutionContext, RuntimeNode } from './types.js';
 
-// Re-export types
 export type { ExecutionContext, RuntimeNode } from './types.js';
 export {
   AdvancedRuntimeNode,
@@ -15,8 +8,6 @@ export {
   type AdvancedNodeConfig,
   type ValidationResult
 } from './advanced.js';
-
-/* ------------------------- Core node runtimes ------------------------- */
 
 export class WeightedChoiceNode extends RuntimeNode<string> {
   constructor(
@@ -177,21 +168,10 @@ export class GetVariableNode extends RuntimeNode<unknown> {
   }
 }
 
-/* ----------------------------- Utilities ------------------------------ */
-
 import seedrandom from 'seedrandom';
 
 function seededRandom(seed: string | number): number {
   return seedrandom(String(seed))();
 }
 
-/* ----------------------------- Advanced Nodes (Epic 7) ------------------------------ */
-
-// Re-export all advanced node capabilities
 export * from './advanced';
-
-/* ----------------------------- Python Integration (Epic 8) ------------------------------ */
-
-// Python executor temporarily disabled - moved to backlog for future implementation
-// The Python executor service and TypeScript client need to be rebuilt
-// export * from './nodes/PythonTransform';

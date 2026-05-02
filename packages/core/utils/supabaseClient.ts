@@ -19,7 +19,7 @@ export function getSupabase(): SupabaseClient | null {
   const { url, anonKey, enabledByFlag, hasEnv, enabled, meta } =
     getSupabaseConfig();
 
-  if (!_diagnosed) {
+  if (!_diagnosed && !isTest && !isCI) {
     try {
       // eslint-disable-next-line no-console
       console.log('[supabase] env', {
@@ -57,7 +57,6 @@ export function getSupabase(): SupabaseClient | null {
     return _client;
   }
 
-  // Fallback: try global env shim bag
   try {
     const bag = (globalThis as unknown as { __env__?: Record<string, unknown> })
       .__env__;
@@ -77,7 +76,6 @@ export function getSupabase(): SupabaseClient | null {
   return _client;
 }
 
-// Backward-compatible named export used by some legacy tests/modules.
 export const supabase = getSupabase();
 
 export type { SupabaseClient };

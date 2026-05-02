@@ -1,83 +1,28 @@
 // Enhanced Prompt Parser Service with LLM Mode Toggle
 // Story 2.6 Implementation
 
-import { z } from 'zod';
 import { LLMService } from './llm/LLMService';
 import { LLMRequest } from './llm/types';
 import { promptParser as standardParser } from '../runtime/nodes/epic1/PromptParser';
 import { ParserSecurity } from './ParserSecurity';
 import { ParserFallback } from './ParserFallback';
 import { LLMResponseProcessor } from './LLMResponseProcessor';
-import { Node, Edge } from 'reactflow';
+import type { Node, Edge } from 'reactflow';
+import {
+  LLMResponseSchema,
+  LLMResponseSchemaStrict,
+  type LLMParseResponse,
+  type ParserOptions,
+  type ParseResult
+} from './PromptParserContracts';
 
-// Parser options interface
-export interface ParserOptions {
-  mode: 'standard' | 'llm-enhanced';
-  preserveVariables: boolean;
-  autoConnect: boolean;
-  allowInferredVariables?: boolean;
-}
-
-// Parse result interface
-type ParseMetadata = {
-  parserMode?: string;
-  fallbackReason?: string;
-  parseTime?: number;
-  cacheHit?: boolean;
-  segmentCount?: number;
-} & Record<string, unknown>;
-
-export interface ParseResult {
-  nodes: Node[];
-  edges: Edge[];
-  metadata: ParseMetadata;
-}
-
-// LLM response schema with permissive validation
-export const LLMResponseSchema = z
-  .object({
-    version: z.literal('psg-parse-v1'),
-    nodes: z.array(
-      z.object({
-        type: z.enum(['Variable', 'WeightedChoice', 'TextBlock', 'Sequential']),
-        content: z.string(),
-        metadata: z.record(z.unknown()).optional(),
-        variables: z.array(z.string()).optional()
-      })
-    ),
-    edges: z.array(
-      z.object({
-        source: z.number(),
-        target: z.number(),
-        label: z.string().optional()
-      })
-    )
-  })
-  .passthrough(); // Allow additional fields like 'segments'
-
-// Strict version for testing - rejects extra fields
-export const LLMResponseSchemaStrict = z
-  .object({
-    version: z.literal('psg-parse-v1'),
-    nodes: z.array(
-      z.object({
-        type: z.enum(['Variable', 'WeightedChoice', 'TextBlock', 'Sequential']),
-        content: z.string(),
-        metadata: z.record(z.unknown()).optional(),
-        variables: z.array(z.string()).optional()
-      })
-    ),
-    edges: z.array(
-      z.object({
-        source: z.number(),
-        target: z.number(),
-        label: z.string().optional()
-      })
-    )
-  })
-  .strict(); // Reject additional fields
-
-export type LLMParseResponse = z.infer<typeof LLMResponseSchema>;
+export type {
+  ParserOptions,
+  ParseMetadata,
+  ParseResult,
+  LLMParseResponse
+} from './PromptParserContracts';
+export { LLMResponseSchema, LLMResponseSchemaStrict };
 
 export class PromptParser {
   private llmService: LLMService | null = null;

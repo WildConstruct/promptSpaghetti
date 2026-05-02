@@ -4,8 +4,10 @@ import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
 import { BaseInlineEditableNode } from './BaseInlineEditableNode';
 import { Epic1NodeType } from './nodeTypes';
+import type { GeneratedNode } from './generatedNodeTypes';
 import { smartNodePositioner } from './SmartNodePositioning';
 import { segmentPrompt, SegmentKind } from '../../prompting/PromptSegmentation';
+export type { GeneratedNode } from './generatedNodeTypes';
 
 /**
  * Represents a parsed segment of the prompt
@@ -35,15 +37,6 @@ export interface PromptAnalysis {
   nodes: GeneratedNode[];
   mappings: NodeMapping[];
   edges?: Array<{ source: string; target: string }>;
-}
-
-/**
- * Generated node with metadata about its source
- */
-export interface GeneratedNode {
-  node: BaseInlineEditableNode;
-  sourceSegments: number[]; // indices into segments array
-  position?: { x: number; y: number };
 }
 
 /**

@@ -7,6 +7,8 @@
 
 // Export promotion interfaces
 export * from './PromotionTypes';
+export * from './epic1';
+export * from './graph';
 
 // Export existing types for compatibility
 export * from './TrustTypes';

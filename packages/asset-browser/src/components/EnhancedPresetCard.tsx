@@ -89,7 +89,7 @@ export function EnhancedPresetCard({
     }
   };
 
-  const metadata = (preset as any).metadata;
+  const metadata = preset.metadata;
   const hasMetadata =
     metadata && (metadata.options || metadata.combinations || metadata.nodes);
 

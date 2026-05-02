@@ -27,12 +27,10 @@ import 'reactflow/dist/style.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-// Node types and components
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
 
-// Custom hooks - using all extracted functionality
 import { useKonamiCode } from './hooks/useKonamiCode';
 import { useGraphHistory } from './hooks/useGraphHistory';
 import { useGraphPersistence } from './hooks/useGraphPersistence';
@@ -46,7 +44,6 @@ import { useGraphImportExport } from './hooks/useGraphImportExport';
 import { useGraphSelection } from './hooks/useGraphSelection';
 import { useGraphPreview } from './hooks/useGraphPreview';
 
-// Components
 import { GraphModals, WizardPreviewResult } from './components/GraphModals';
 import {
   ConnectionFeedback,
@@ -58,7 +55,10 @@ import { PanZoomControls } from './PanZoomControls';
 import { EdgeRoutingControls } from './EdgeRoutingControls';
 import { PreviewPanel } from './preview/PreviewPanel';
 import { PreviewTray } from '../PreviewTray/PreviewTray';
-import { TabbedSidePanel } from './TabbedSidePanel';
+import {
+  TabbedSidePanel,
+  type SidePanelTabDefinition
+} from './TabbedSidePanel';
 import { GraphCommander, type GraphCommanderCommand } from './GraphCommander';
 import { NodeTetris } from './NodeTetris';
 import { NodeToolbar } from './NodeToolbar';
@@ -108,14 +108,13 @@ import {
   type ComponentSaveDraft
 } from './ComponentSaveDialog';
 
-// Styles
 import './ReactFlowOverrides.css';
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './nodes/EnhancedBoundingBox.css';
 import './PanZoomControls.css';
 
-// Provider placeholders
+// Local no-op adapters for optional editor integrations.
 const IntelligenceProvider = ({ children }: any) => children;
 const NeatenSettingsProvider = ({ children }: any) => children;
 const HistoryPalette = () => null;
@@ -139,6 +138,7 @@ export interface Epic1GraphEditorProps {
   previewSeeds?: (string | number)[];
   showAssetLibrary?: boolean;
   assetLibraryPosition?: 'left' | 'right';
+  sidePanelTabDefinitions?: SidePanelTabDefinition[];
 }
 
 function presetToAgentFragmentRecord(preset: Preset): AgentFragmentRecord {
@@ -254,7 +254,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   previewDebounceDelay = 300,
   previewSeeds,
   showAssetLibrary = true,
-  assetLibraryPosition = 'left'
+  assetLibraryPosition = 'left',
+  sidePanelTabDefinitions
 }) => {
   // Node types based on asset library visibility
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
@@ -264,7 +265,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     useState<ReactFlowInstance | null>(null);
   const [isCommanderOpen, setIsCommanderOpen] = useState(false);
 
-  // Graph persistence - DISABLED to prevent overriding new nodes
+  // Initial props remain the source of truth for this editor mount.
   const { persistedState } = useGraphPersistence([], [], {
     autoSave: false,
     onLoadSuccess: state => state && state.nodes?.length,
@@ -1933,7 +1934,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             previewEngine={previewEngine}
             defaultTab="assets"
             showAssets={true}
-            showPreview={true}
+            showPreview={showPreview}
+            tabDefinitions={sidePanelTabDefinitions}
             selectedNode={nodes.find(n => n.id === selectedNodeId)}
             nodes={nodes}
             edges={edges}

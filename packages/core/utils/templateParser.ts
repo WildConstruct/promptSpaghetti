@@ -649,8 +649,7 @@ class TemplateParser {
   private highlightVariables(
     template: string
   ): string {
-    // This would be used by the UI to highlight variables
-    // For now, return template as-is since highlighting is done in React
+    // Highlighting is handled by the React view layer.
     return template;
   }
 
@@ -924,8 +923,7 @@ class TemplateParser {
    * Find related variables based on co-occurrence patterns
    */
   private findRelatedVariables(): string[] {
-    // This could be enhanced to track actual co-occurrence patterns
-    // For now, return empty array but structure is in place
+    // Co-occurrence tracking is not collected yet.
     return [];
   }
   /**

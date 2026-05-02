@@ -19,7 +19,7 @@ interface AssetMetadataLike {
 }
 
 interface AssetSummary {
-  id: string;
+  id?: string;
   name?: string;
   type?: string;
   metadata?: AssetMetadataLike;

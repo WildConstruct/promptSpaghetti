@@ -11,7 +11,7 @@ const baseNodeSchema = z.object({
 });
 
 // Enhanced schemas for each node type
-export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
+export const nodeSchemas: Record<string, z.ZodTypeAny> = {
   Subject: baseNodeSchema.extend({
     type: z.literal('Subject').default('Subject'),
     subjects: z.array(z.string()).default(['subject']),
@@ -104,12 +104,12 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
 };
 
 // Helper to get schema for a node type
-export function getNodeSchema(nodeType: string): z.ZodSchema<any> | undefined {
+export function getNodeSchema(nodeType: string): z.ZodTypeAny | undefined {
   return nodeSchemas[nodeType];
 }
 
 // Helper to validate node data
-export function validateNodeData(nodeType: string, data: any): any {
+export function validateNodeData(nodeType: string, data: unknown): unknown {
   const schema = getNodeSchema(nodeType);
   if (!schema) {
     throw new Error(`Unknown node type: ${nodeType}`);

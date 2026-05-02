@@ -41,16 +41,15 @@ import { UserProvider } from './providers/UserProvider';
 import { useAssetBrowserStore } from './stores/assetBrowserStore';
 
 import type { Preset } from './types';
+import type {
+  AssetBrowserProps,
+  EnhancedAssetBrowserProps
+} from './types/assetBrowserProps';
 export type { Preset } from './types';
-
-export type AssetBrowserProps = {
-  onInsert?: (preset: Preset) => void;
-};
-
-export interface EnhancedAssetBrowserProps extends AssetBrowserProps {
-  onNodeReplace?: (nodeId: string, preset: any) => void;
-  enableFragmentManifest?: boolean;
-}
+export type {
+  AssetBrowserProps,
+  EnhancedAssetBrowserProps
+} from './types/assetBrowserProps';
 
 export {
   AssetBrowser,

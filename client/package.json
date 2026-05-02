@@ -10,7 +10,7 @@
     "build-standalone": "node build-standalone.js",
     "preview": "vite preview",
     "vercel-build": "vite build",
-    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --passWithNoTests"
+    "test": "node --experimental-vm-modules --no-warnings ./node_modules/jest/bin/jest.js --passWithNoTests"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

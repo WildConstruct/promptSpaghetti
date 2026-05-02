@@ -1,7 +1,6 @@
 import React from 'react';
 import { jest } from '@jest/globals';
 
-// Very small subset of the public API that App and our tests actually use.
 export interface XYPosition {
   x: number;
   y: number;
@@ -30,7 +29,6 @@ export interface Connection {
   targetHandle?: string;
 }
 
-// Add missing enum exports
 export enum ConnectionLineType {
   Bezier = 'default',
   Straight = 'straight',
@@ -42,8 +40,6 @@ export enum MarkerType {
   Arrow = 'arrow',
   ArrowClosed = 'arrowclosed'
 }
-
-// Position enum removed - using const object below instead to avoid duplication
 
 interface ReactFlowProps {
   nodes: Node[];
@@ -66,7 +62,7 @@ interface ReactFlowProps {
   nodeOrigin?: [number, number];
   className?: string;
   children?: React.ReactNode;
-  [key: string]: unknown; // Allow any additional props
+  [key: string]: unknown;
 }
 
 export const ReactFlow: React.FC<ReactFlowProps> = ({
@@ -79,10 +75,8 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
   children,
   style,
   className
-  // Additional props are accepted but not used in mock
 }) => {
   const handleDrop = (e: React.DragEvent) => {
-    // Ensure clientX and clientY are available for tests
     if (!e.clientX && !e.clientY) {
       Object.defineProperty(e, 'clientX', { value: 100, writable: true });
       Object.defineProperty(e, 'clientY', { value: 100, writable: true });
@@ -151,6 +145,16 @@ export const MiniMap: React.FC = () => (
 export const Controls: React.FC = () => (
   <div data-testid="reactflow-controls">Controls</div>
 );
+export const Panel: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => <div data-testid="reactflow-panel">{children}</div>;
+export const EdgeLabelRenderer: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => <>{children}</>;
+export const BaseEdge: React.FC = () => <div data-testid="reactflow-base-edge" />;
+export const NodeToolbar: React.FC<{ children?: React.ReactNode }> = ({
+  children
+}) => <div data-testid="reactflow-node-toolbar">{children}</div>;
 export const ReactFlowProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => <div data-testid="reactflow-provider">{children}</div>;
@@ -170,6 +174,15 @@ export const useReactFlow = () => ({
   zoomIn: () => undefined,
   zoomOut: () => undefined
 });
+
+export const useViewport = jest.fn(() => ({ x: 0, y: 0, zoom: 1 }));
+export const useOnSelectionChange = jest.fn(() => undefined);
+export const useNodesInitialized = jest.fn(() => true);
+export const useKeyPress = jest.fn(() => false);
+export const useNodeId = jest.fn(() => null);
+export const useInternalNode = jest.fn(() => null);
+export const useHandleConnections = jest.fn(() => []);
+export const useUpdateNodeInternals = jest.fn(() => jest.fn());
 
 export const Position = {
   Left: 'left',
@@ -207,7 +220,6 @@ export const Handle: React.FC<{
   </div>
 );
 
-// Add missing types for compatibility
 export interface NodeProps {
   id: string;
   data: unknown;
@@ -219,39 +231,105 @@ export interface NodeProps {
   zIndex?: number;
 }
 
-// Add missing enum exports
 export const ConnectionMode = {
   Strict: 'strict',
   Loose: 'loose'
 } as const;
 
-// Add utility functions
+export const SelectionMode = {
+  Partial: 'partial',
+  Full: 'full'
+} as const;
+
+export const BackgroundVariant = {
+  Dots: 'dots',
+  Lines: 'lines',
+  Cross: 'cross'
+} as const;
+
+const mockStoreState = {
+  nodes: [] as Node[],
+  edges: [] as Edge[],
+  nodeInternals: new Map(),
+  connectionNodeId: null,
+  connectionHandleType: null,
+  transform: [0, 0, 1],
+  width: 1024,
+  height: 768
+};
+
+export const useStore = jest.fn(
+  <T,>(selector: (state: typeof mockStoreState) => T): T =>
+    selector(mockStoreState)
+);
+
+export const useStoreApi = jest.fn(() => ({
+  getState: () => mockStoreState,
+  setState: jest.fn(),
+  subscribe: jest.fn(() => jest.fn())
+}));
+
+export const applyNodeChanges = jest.fn(
+  (changes: unknown[], nodes: Node[]) => nodes
+);
+export const applyEdgeChanges = jest.fn(
+  (changes: unknown[], edges: Edge[]) => edges
+);
+export const getBezierPath = jest.fn(() => ['M0,0 C0,0 0,0 0,0', 0, 0]);
+export const getSmoothStepPath = jest.fn(() => ['M0,0 L0,0', 0, 0]);
+export const getStraightPath = jest.fn(() => ['M0,0 L0,0', 0, 0]);
 export const addEdge = jest.fn((connection: Connection, edges: Edge[]) => [
   ...edges,
   { ...connection, id: `e-${Date.now()}` }
 ]);
 export const useNodesState = jest.fn((initialNodes: Node[]) => [
   initialNodes,
+  jest.fn<unknown[], unknown>(),
   jest.fn<unknown[], unknown>()
 ]);
 export const useEdgesState = jest.fn((initialEdges: Edge[]) => [
   initialEdges,
+  jest.fn<unknown[], unknown>(),
   jest.fn<unknown[], unknown>()
 ]);
+export const useNodes = jest.fn(() => []);
+export const useEdges = jest.fn(() => []);
 
-// Default export fallback
 export default {
   __esModule: true,
   ReactFlow,
   Background,
   Controls,
+  Panel,
+  EdgeLabelRenderer,
+  BaseEdge,
+  NodeToolbar,
   MiniMap,
   ReactFlowProvider,
   Handle,
   useReactFlow,
+  useViewport,
+  useOnSelectionChange,
+  useNodesInitialized,
+  useKeyPress,
+  useNodeId,
+  useInternalNode,
+  useHandleConnections,
+  useStore,
+  useStoreApi,
   Position,
   ConnectionMode,
+  SelectionMode,
+  BackgroundVariant,
+  applyNodeChanges,
+  applyEdgeChanges,
+  getBezierPath,
+  getSmoothStepPath,
+  getStraightPath,
+  useUpdateNodeInternals,
   addEdge,
+  useNodes,
+  useEdges,
   useNodesState,
   useEdgesState
 };

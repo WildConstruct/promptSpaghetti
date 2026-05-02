@@ -1,6 +1,6 @@
 /**
  * Asset Browser Loader Component
- * Conditionally loads the new asset browser or falls back to AssetLibraryV2
+ * Loads the integrated asset browser or falls back to AssetLibraryV2.
  */
 
 import React from 'react';

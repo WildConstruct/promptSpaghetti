@@ -574,8 +574,7 @@ export class SimilarityEngine {
   private async getAssetData(
     assetId: string
   ): Promise<{ text?: string; metadata?: SegmentMetadata } | null> {
-    // In production, this would retrieve from a database
-    // For now, return mock data
+    // Synthetic data until this service has a repository-backed asset lookup.
     return {
       text: `Asset ${assetId} content`,
       metadata: { tags: ['sample'] }

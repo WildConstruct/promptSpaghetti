@@ -44,9 +44,15 @@ export function applyPresetToNode(
       if (isWeightedChoicePreset(preset)) {
         const options = preset.value.options;
         if (Array.isArray(options)) {
+          const normalizedOptions = options.map((option, index) => ({
+            id: `option-${index + 1}`,
+            text: option.text,
+            weight: option.weight,
+            hasBranch: false
+          }));
           updatedData.value = JSON.stringify(options);
-          updatedData.options = options;
-          updatedData.editBuffer = JSON.stringify(options, null, 2);
+          updatedData.options = normalizedOptions;
+          updatedData.editBuffer = JSON.stringify(normalizedOptions, null, 2);
         }
       }
       break;

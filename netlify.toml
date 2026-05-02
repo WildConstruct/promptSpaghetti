@@ -1,9 +1,8 @@
 [build]
   # Build from root to handle monorepo properly
   base = ""
-  # pnpm is auto-detected and installed by Netlify, just run the build
-  # Generate graph manifest before building client
-  command = "pnpm install && cd packages/asset-browser && npm run prebuild && cd ../.. && pnpm --filter client build"
+  # Use the same frontend packaging path as the local deploy lane.
+  command = "pnpm --filter @prompt/asset-browser prebuild && pnpm --filter client build"
   publish = "client/dist"
 
 [build.environment]

@@ -1,198 +1,177 @@
 # Demo Checklist
 
-_Last updated: 2026-03-08_
+_Last updated: 2026-04-13_
 
 This is the shortest reliable walkthrough for showing the Prompt Spaghetti MVP to a teammate.
-
-## Goal
-
-Show that the app can:
-
-- launch cleanly
-- open useful archetype-first starter flows
-- bootstrap from prompt text
-- author/export flat `.psg`
-- demonstrate reusable variation logic
-- demonstrate the PSG sidecar without making it the headline
-- emit a structured PSG API output
 
 ## Prep
 
 Before demoing, confirm:
 
-- the app starts
-- launch screen is visible on first load
-- server/API routes are available
-- if cloud/demo mode is being shown, auth + Supabase are configured
+- `pnpm run validate:mvp:ship` passes
+- `pnpm run validate:local-sandbox:runtime` passes if you plan to show the local tree demo
+- the launch screen is visible on first load
+- the three canonical demo artifacts are available in `docs/examples/`
+- if you plan to show hosted PSG helpers, auth + Supabase are configured
 
-Demo assets to have ready:
+Canonical demo artifacts:
 
-- [mvp-character-variation-demo.psg](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/examples/mvp-character-variation-demo.psg)
-- [mvp-scene-still-demo.psg](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/examples/mvp-scene-still-demo.psg)
-- [mvp-crowd-scene-demo.psg](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/examples/mvp-crowd-scene-demo.psg)
+- [mvp-character-archetype-demo.psg](examples/mvp-character-archetype-demo.psg)
+- [mvp-vehicle-family-demo.psg](examples/mvp-vehicle-family-demo.psg)
+- [mvp-building-family-demo.psg](examples/mvp-building-family-demo.psg)
+- [mvp-tree-family-sandbox-demo.psg](examples/mvp-tree-family-sandbox-demo.psg)
 
-## Demo Flow
+Branching pedagogy artifact:
 
-### 1. Launch Screen
+- [mvp-tree-branch-direction-demo.psg](examples/mvp-tree-branch-direction-demo.psg)
+
+## Core Walkthrough
+
+### 1. Frame the launch screen
 
 Show:
 
 - `Character Archetype`
 - `Vehicle Family`
 - `Building Family`
-- `Blank Canvas`
-- `Start Tutorial`
-- `Skip to Editor`
+- `Build PSG Family Graph`
 
 Say:
 
-- the launch screen supports both prompt bootstrap and quick-start graphs
-- the examples are aligned to the actual MVP story: reusable archetypes with controlled variation
-- the same three examples also exist as saved `.psg` demo artifacts for backup
+- the MVP is about reusable archetypes, locked DNA, and controlled variation
+- the three primary quick starts are the canonical golden-path examples
+- the same three examples also exist as saved flat `.psg` demo files
 
-### 2. Character Archetype Quick Start
+### 2. Open the character quick start
 
 Click:
 
 - `Character Archetype`
 
-Show in editor:
-
-- starter graph opens directly
-- weighted choices are visible
-- graph can be read immediately without setup
-
-Say:
-
-- this is the cleanest first-run example of shared design DNA plus controlled variation
-
-### 3. Prompt Bootstrap
-
-Return to launch or refresh if needed.
-
-Enter a short prompt in the launch prompt area.
-
-Click:
-
-- `Build Family Graph`
-
 Show:
 
-- prompt becomes a graph
-- graph is editable after launch
+- family DNA is visible immediately
+- weighted choices clearly read as allowed variation
+- the graph already looks like a usable family archetype, not a blank scaffold
+
+### 3. Show prompt bootstrap
+
+Return to launch or refresh.
+
+Enter a short archetype prompt, then click:
+
+- `Build PSG Family Graph`
 
 Say:
 
-- MVP supports one honest AI/bootstrap flow: `Prompt -> Graph Draft`
+- MVP supports one honest AI/bootstrap path: `Prompt -> Graph Draft`
+- the result is still a graph you can edit, save, and export as flat `.psg`
 
-### 4. Archetype Persistence And Sidecar
+### 4. Show the sidecar as support, not headline
 
 Open:
 
-- `File -> PSG Scene Assets...`
+- `File -> Advanced PSG Scene Assets...`
 
 Show:
 
 - asset refs
 - placements
-- crowd members section
-- local attachment support
-- cloud-ready promotion metadata when applicable
+- local attachment metadata
+- crowd members when present
 
 Say:
 
 - flat `.psg` stays canonical
-- richer scene/media state lives in the sidecar/export layer
-- the sidecar supports the workflow, but the archetype graph remains the core product object
+- sidecar assets support the workflow, but the archetype graph remains the core product object
 
-### 5. Optional Hosted PSG Surface
+### 5. Show one tangible downstream output
 
-If cloud/hosted PSG is active:
+From the editor or sidecar flow, show one of:
 
-Open:
-
-- `File -> Hosted Crowd Expansion...`
-
-Generate preview members and save them into the sidecar.
-
-Then reopen:
-
-- `PSG Scene Assets...`
-
-Show:
-
-- crowd members are now present
-- members can create reference asset stubs
+- `Export For Comfy...`
+- `Assemble Scene JSON`
 
 Say:
 
-- hosted operations are explicit and separate from the core local-first archetype workflow
+- Comfy export is the primary downstream handoff
+- structured PSG-sidecar output exists, but it is still secondary to archetype authoring
 
-### 6. Tinkering Path
+## Optional Local Sandbox Branch
 
-Inside `PSG Scene Assets...`:
+Only if a local Comfy-compatible runtime is configured:
 
-- create a reference asset from a crowd member
-- attach a local image file if desired
-- show editability of the asset record
-
-Say:
-
-- this is enough for tinkering without pretending the renderer pipeline is finished
-
-### 7. API Output
-
-Still inside `PSG Scene Assets...`:
-
-- click `Assemble Scene JSON`
-- preview the structured output
-- click `Download Assembly`
-
-Optional:
-
-- also show `Export Comfy Bridge...`
+- set `ENABLE_LOCAL_IMAGE_SANDBOX=true`
+- set `LOCAL_IMAGE_COMFY_CHECKPOINT` to a checkpoint available in the local Comfy runtime
+- run `pnpm run validate:local-sandbox:runtime`
+- open `docs/examples/mvp-tree-family-sandbox-demo.psg`
+- open `File -> Local Sandbox Generation (Local Only)...`
+- show that the dialog derives the request from the active tree graph
+- generate a batch of `20`
+- capture the returned images into `PSG Scene Assets`
+- show the returned images, seeds, local output folder, and captured render assets
 
 Say:
 
-- the PSG/API layer emits real structured output that downstream tools can consume
-- but the launch story is still archetype definition and bounded variation first
+- this is a local demo lane, not a hosted MVP promise
+- the tree batch shares family DNA, inherits bounded variation from the graph, and varies deterministically by seed
+- Comfy export remains the primary downstream handoff; local sandbox generation sits beside it as an execution demo
 
-### 8. File Contract
+## Optional Branching Tree Check
 
-Show:
+Use this when you want to explicitly teach branch handles and direction lanes:
 
-- export flat `.psg`
-- export scene manifest / sidecar
+- open `docs/examples/mvp-tree-branch-direction-demo.psg`
+- keep Preview visible
+- run at least `5` preview seeds
+- confirm outputs stay in-family while splitting into oak, cedar, and fig directions
+- then open `File -> Local Sandbox Generation (Local Only)...`
+- confirm the dialog derives from the branched graph before running a local batch
 
 Say:
 
-- `.psg` remains the portable graph format
-- scene/media context is layered around it, not baked into it
+- one branch choice changes the family direction without changing the shared tree DNA
+- branch lanes add detail and context before everything resolves back into one output
+- Preview is the first output check; Local Sandbox Generation is the second
+
+## Optional Hosted Branch
+
+Only if hosted PSG is configured:
+
+- open `Hosted Crowd Expansion (Cloud)...`
+- generate preview members
+- save them back into the scene sidecar
+- reopen `Advanced PSG Scene Assets...` and confirm the members are present
+
+Say:
+
+- hosted helpers are real, but optional
+- the MVP stays honest about local-first authoring versus hosted upgrades
 
 ## Minimum Success Criteria
 
-The demo is successful if all of these work:
+The walkthrough is successful if all of these work:
 
-- launch screen actions respond correctly
-- at least one quick-start opens correctly
-- prompt bootstrap launches to the editor
-- scene assets dialog opens
-- hosted crowd expansion works when cloud mode is active
-- scene assembly JSON can be previewed and downloaded
+- the three primary launch examples are visible
+- `Character Archetype` opens cleanly
+- prompt bootstrap lands in the editor
+- sidecar assets dialog opens and saves
+- one downstream output path works
+- optional local sandbox generation is clearly labeled local-only when shown
+- hosted crowd expansion is shown only as an optional branch when cloud mode is active
 
 ## If Cloud Mode Is Unavailable
 
 Still demo:
 
-- quick-start templates
+- the three quick-start family graphs
 - prompt bootstrap
 - flat `.psg` export
-- local sidecar asset editing
-- local attachment flow
-- Comfy bridge export if available locally
+- local sidecar editing
+- Comfy export if locally available
 
 Do not fake:
 
 - hosted crowd expansion
-- real cloud uploads
+- real cloud upload behavior
 - subscription-only capabilities

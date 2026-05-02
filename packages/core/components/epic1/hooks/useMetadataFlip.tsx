@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
 import type { NodeProps } from 'reactflow';
-import type { EditableNodeData } from '../nodes';
+import type { EditableNodeData } from '../nodes/BaseEditableNode';
 
 type MetadataFlipProps = Pick<
   NodeProps<EditableNodeData>,

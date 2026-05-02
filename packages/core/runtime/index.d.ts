@@ -35,5 +35,4 @@ export declare class GetVariableNode extends RuntimeNode<unknown> {
     run(ctx: ExecutionContext): unknown;
 
 export * from './advanced';
-export * from './nodes/PythonTransform';
 //# sourceMappingURL=index.d.ts.map

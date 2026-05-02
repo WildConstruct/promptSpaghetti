@@ -15,6 +15,7 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '^reactflow$': '<rootDir>/../../../../client/__mocks__/reactflow.tsx',
+    '^react-markdown$': '<rootDir>/../../../tests/mocks/reactMarkdown.tsx',
     '^@packages/(.*)$': '<rootDir>/../../../$1',
     '^@client/(.*)$': '<rootDir>/../../../../client/$1',
     '^@server/(.*)$': '<rootDir>/../../../../server/$1'

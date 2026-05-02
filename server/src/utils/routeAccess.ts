@@ -5,6 +5,7 @@ import {
 } from '../services/supabase';
 import { requireAdminAuth } from './adminAuth';
 import { consumeUserQuota } from './usageQuota';
+import { parseBoolean } from '../../../packages/core/utils/env';
 
 export type RouteAccessLevel =
   | 'public-demo'
@@ -45,27 +46,6 @@ function isCapabilityEnabled(capability: RouteCapability): boolean {
       return process.env.ENABLE_ADMIN === 'true';
     default:
       return false;
-  }
-}
-
-function parseBoolean(value: string | undefined, fallback: boolean): boolean {
-  if ((value === null || typeof value === 'undefined') || value.trim() === '') {
-    return fallback;
-  }
-
-  switch (value.trim().toLowerCase()) {
-    case '1':
-    case 'true':
-    case 'yes':
-    case 'on':
-      return true;
-    case '0':
-    case 'false':
-    case 'no':
-    case 'off':
-      return false;
-    default:
-      return fallback;
   }
 }
 

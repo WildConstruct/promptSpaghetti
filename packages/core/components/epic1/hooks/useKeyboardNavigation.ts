@@ -6,15 +6,8 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { Node } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
-
-export interface KeyboardNavigationOptions {
-  nodes: Node<EditableNodeData>[];
-  selectedNodeId?: string | null;
-  onNodeSelect: (nodeId: string) => void;
-  onEscapePress?: () => void;
-  onEditCancel?: (nodeId: string) => void;
-  enabled?: boolean;
-}
+import type { KeyboardNavigationOptions } from './keyboardNavigationTypes';
+export type { KeyboardNavigationOptions } from './keyboardNavigationTypes';
 
 export function useKeyboardNavigation({
   nodes,
@@ -23,7 +16,7 @@ export function useKeyboardNavigation({
   onEscapePress,
   onEditCancel,
   enabled = true
-}: KeyboardNavigationOptions) {
+}: KeyboardNavigationOptions<Node<EditableNodeData>>) {
   const focusHistoryRef = useRef<string[]>([]);
 
   // Get only editable nodes that are currently in edit mode

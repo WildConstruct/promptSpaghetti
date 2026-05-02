@@ -22,7 +22,7 @@ describe('ServerTab', () => {
       const statuses = screen.getAllByRole('status');
       expect(
         statuses.some(s =>
-          /No server graphs available/i.test(s.textContent || '')
+          /No server \.psg assets/i.test(s.textContent || '')
         )
       ).toBe(true);
     });
@@ -35,13 +35,12 @@ describe('ServerTab', () => {
       json: async () => [
         {
           filename: 'a.psg',
-          title: 'Alpha',
-          updatedAt: new Date().toISOString()
+          title: 'Alpha'
         },
         {
           filename: 'b.psg',
           title: 'Beta',
-          updatedAt: new Date().toISOString()
+          updatedAt: '2024-01-02T03:04:05.000Z'
         }
       ]
     })) as any;
@@ -49,16 +48,16 @@ describe('ServerTab', () => {
     render(<ServerTab />);
 
     await waitFor(() => {
-      // existence assertions without jest-dom matchers
       expect(() => screen.getByText('Alpha')).not.toThrow();
       expect(() => screen.getByText('Beta')).not.toThrow();
-      expect(() => screen.getByLabelText('Server Graph List')).not.toThrow();
+      expect(() => screen.getByLabelText('Server PSG Asset List')).not.toThrow();
+      expect(() => screen.getByText('a.psg')).not.toThrow();
     });
   });
 
   it('shows error and allows retry', async () => {
     const success = [
-      { filename: 'a.psg', title: 'Alpha', updatedAt: new Date().toISOString() }
+      { filename: 'a.psg', title: 'Alpha' }
     ];
     const fetchMock = jest
       .fn()
@@ -111,7 +110,7 @@ describe('ServerTab', () => {
       const statuses = screen.getAllByRole('status');
       expect(
         statuses.some(s =>
-          /No server graphs available/i.test(s.textContent || '')
+          /No server manifest found/i.test(s.textContent || '')
         )
       ).toBe(true);
 

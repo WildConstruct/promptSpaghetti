@@ -1,4 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import {
+  readStoredJson,
+  writeStoredJson
+} from '../utils/storage';
 
 interface Column {
   id: string;
@@ -20,15 +24,14 @@ export function useColumnResize({
 }: UseColumnResizeOptions) {
   // Load saved widths from localStorage
   const getSavedWidths = (): Record<string, number> => {
-    if (typeof window === 'undefined') return {};
-
-    const saved = localStorage.getItem(storageKey);
+    const saved = readStoredJson<Record<string, number> | null>(
+      storageKey,
+      null,
+      (value): value is Record<string, number> =>
+        Boolean(value) && typeof value === 'object' && !Array.isArray(value)
+    );
     if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        // Invalid JSON, return empty
-      }
+      return saved;
     }
 
     // Return default widths
@@ -49,9 +52,7 @@ export function useColumnResize({
   // Save widths to localStorage
   const saveWidths = useCallback(
     (widths: Record<string, number>) => {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(storageKey, JSON.stringify(widths));
-      }
+      writeStoredJson(storageKey, widths);
     },
     [storageKey]
   );

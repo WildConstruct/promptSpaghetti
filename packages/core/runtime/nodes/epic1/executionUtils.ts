@@ -10,7 +10,7 @@ import {
   Epic1Graph,
   ExecutionResult
 } from './Epic1ExecutionEngine';
-import { createNodeFromData } from './index';
+import { createNodeFromData } from './nodeFactory';
 
 /**
  * Simple graph builder for testing and examples

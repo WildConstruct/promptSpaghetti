@@ -9,6 +9,8 @@ This checklist captures the remaining manual setup for the new GitHub repo and h
 - GitHub Actions workflows are recognized by the new repo
 - Netlify build config passes locally via `pnpm run build:netlify`
 - Vercel API build config passes locally via `pnpm run build:vercel-api`
+- Full local deploy packaging passes via `pnpm run validate:deploy:active`
+- Generated artifact hygiene passes via `pnpm run validate:artifacts:active`
 
 ## Netlify
 
@@ -16,7 +18,7 @@ This checklist captures the remaining manual setup for the new GitHub repo and h
 - Confirm build command comes from [netlify.toml](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/netlify.toml#L1)
 - Confirm publish directory is `client/dist`
 - Confirm the client site uses the `/api/*` redirect target now set to:
-  - `https://promptspaghetti.vercel.app/api/:splat`
+  - `https://prompt-spaghetti-client.vercel.app/api/:splat`
 - Set any required frontend env vars in Netlify UI:
   - Supabase public URL / anon key if cloud mode is enabled
   - any feature flags you want active for production
@@ -25,7 +27,7 @@ This checklist captures the remaining manual setup for the new GitHub repo and h
 
 - Connect the new repo or target project for the backend/API surface
 - Confirm the intended hostname for the API proxy is:
-  - `https://promptspaghetti.vercel.app`
+  - `https://prompt-spaghetti-client.vercel.app`
 - Confirm `vercel.json` no longer routes legacy admin/debug rewrites
 - If canonical server runtime is moving off legacy `api/`, treat this Vercel surface as transitional until that migration is done
 

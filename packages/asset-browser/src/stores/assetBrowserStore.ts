@@ -70,7 +70,6 @@ export const useAssetBrowserStore = create<AssetBrowserState>((set, get) => ({
   setDetailsOpen: o => set({ detailsOpen: o }),
   selectPreset: id => set({ selectedPresetId: id }),
   scan: async (manifests: unknown[]) => {
-    // Start scan
     set({ scanStatus: 'scanning', error: null });
     const errors: string[] = [];
     const collected: NormalizedPresetEntry[] = [];
@@ -99,7 +98,7 @@ export const useAssetBrowserStore = create<AssetBrowserState>((set, get) => ({
       nodeTypes: p.nodeTypes,
       metadata: {
         file: p.path
-      } as any
+      }
     }));
     const tags = Array.from(new Set(uiPresets.flatMap(p => p.tags))).sort();
     const filtered = applyFilters(uiPresets, get().activeTags, get().query);
@@ -197,7 +196,7 @@ function applyFilters(presets: Preset[], tags: string[], query: string) {
   return pool;
 }
 
-// bootstrap with stub data for now
+// Initialize the empty library state for hosts that do not call scan().
 void (async () => {
   useAssetBrowserStore.setState({
     presets: [],

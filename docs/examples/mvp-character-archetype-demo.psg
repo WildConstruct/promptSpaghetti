@@ -1,0 +1,123 @@
+{
+  "version": "1.0.0",
+  "name": "Character Archetype Demo",
+  "description": "Reusable character family DNA with bounded role and signature-detail variation.",
+  "metadata": {
+    "demoType": "mvp-golden-path",
+    "quickStartId": "character_variation",
+    "category": "character"
+  },
+  "nodes": [
+    {
+      "id": "character-dna",
+      "type": "TextBlock",
+      "name": "Family DNA",
+      "x": 80,
+      "y": 120,
+      "value": "Frontier ranger, grounded wardrobe, documentary portrait, weathered leather, natural light"
+    },
+    {
+      "id": "character-role",
+      "type": "WeightedChoice",
+      "name": "Role Accent",
+      "x": 430,
+      "y": 50,
+      "options": [
+        {
+          "text": "trail scout with field notebook",
+          "weight": 35
+        },
+        {
+          "text": "salvage runner with practical kit",
+          "weight": 35
+        },
+        {
+          "text": "watch captain with stitched insignia",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "character-detail",
+      "type": "WeightedChoice",
+      "name": "Signature Detail",
+      "x": 430,
+      "y": 250,
+      "options": [
+        {
+          "text": "sun-bleached scarf and map stains",
+          "weight": 35
+        },
+        {
+          "text": "scarred satchel with repair thread",
+          "weight": 35
+        },
+        {
+          "text": "weathered compass charm at the collar",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "character-join",
+      "type": "Concat",
+      "name": "Resolve Family Member",
+      "x": 820,
+      "y": 145,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "character-join-detail",
+      "type": "Concat",
+      "name": "Refine Family Member",
+      "x": 1140,
+      "y": 145,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "character-output",
+      "type": "Output",
+      "name": "Output",
+      "x": 1460,
+      "y": 145,
+      "template": "{prompt}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "character-e1",
+      "source": "character-dna",
+      "target": "character-join",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "character-e2",
+      "source": "character-role",
+      "target": "character-join",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "character-e3",
+      "source": "character-join",
+      "target": "character-join-detail",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "character-e4",
+      "source": "character-detail",
+      "target": "character-join-detail",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "character-e5",
+      "source": "character-join-detail",
+      "target": "character-output"
+    }
+  ]
+}

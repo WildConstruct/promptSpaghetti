@@ -386,8 +386,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
    * Get edge connection position on node
    */
   private getEdgePosition(node: Node): XYPosition {
-    // Simple center position for now
-    // In production, calculate based on handle position
+    // Handle positions are unavailable here, so route from node center.
     return {
       x: node.position.x + (node.width || 100) / 2,
       y: node.position.y + (node.height || 50) / 2

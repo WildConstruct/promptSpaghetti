@@ -19,7 +19,7 @@ function toTitleCase(name) {
 /**
  * Collect graph entries from a directory containing .psg files.
  * @param {string} dir absolute or relative directory path
- * @returns {Promise<Array<{ filename: string; title: string; updatedAt: string; tags?: string[] }>>}
+ * @returns {Promise<Array<{ filename: string; title: string; updatedAt?: string; tags?: string[] }>>}
  */
 async function collectGraphEntries(dir) {
   const abs = path.resolve(dir);
@@ -36,15 +36,10 @@ async function collectGraphEntries(dir) {
     if (!d.name.toLowerCase().endsWith('.psg')) continue;
     const filename = d.name;
     const filePath = path.join(abs, filename);
-    let stat;
-    try {
-      stat = await fs.promises.stat(filePath);
-    } catch {
-      continue;
-    }
     // Validate .psg file using psgCodec if available, fallback to basic validation
     let extractedTags = [];
     let extractedTitle = null;
+    let extractedUpdatedAt = undefined;
     try {
       const raw = await fs.promises.readFile(filePath, 'utf8');
       
@@ -59,6 +54,9 @@ async function collectGraphEntries(dir) {
         }
         if (psgFile.meta?.name) {
           extractedTitle = psgFile.meta.name;
+        }
+        if (typeof psgFile.meta?.updatedAt === 'string') {
+          extractedUpdatedAt = psgFile.meta.updatedAt;
         }
       } catch (codecError) {
         // Fallback to basic validation if codec not available or validation fails
@@ -80,6 +78,9 @@ async function collectGraphEntries(dir) {
           if (json.meta?.name) {
             extractedTitle = json.meta.name;
           }
+          if (typeof json.meta?.updatedAt === 'string') {
+            extractedUpdatedAt = json.meta.updatedAt;
+          }
         } else if (json.nodes && json.edges) {
           // Legacy format, basic validation
           if (!Array.isArray(json.nodes) || !Array.isArray(json.edges)) {
@@ -100,12 +101,15 @@ async function collectGraphEntries(dir) {
     }
     const base = path.basename(filename, path.extname(filename));
     const title = extractedTitle || toTitleCase(base);
-    entries.push({
+    const entry = {
       filename,
       title,
-      tags: extractedTags,
-      updatedAt: new Date(stat.mtimeMs).toISOString(),
-    });
+      tags: extractedTags
+    };
+    if (extractedUpdatedAt) {
+      entry.updatedAt = extractedUpdatedAt;
+    }
+    entries.push(entry);
   }
   // deterministic sort by title asc
   entries.sort((a, b) => a.title.localeCompare(b.title));

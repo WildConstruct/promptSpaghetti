@@ -314,8 +314,7 @@ export class AdvancedMatcherService {
       return cachedScore;
     }
 
-    // In production, this would query usage analytics
-    // For now, use a simple heuristic
+    // Heuristic fallback until usage analytics are available.
     let score = 0.5;
 
     // Boost popular categories

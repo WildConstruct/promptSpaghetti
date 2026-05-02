@@ -3,6 +3,10 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import {
+  readStoredNumberInRange,
+  writeStoredString
+} from '../utils/storage';
 
 interface UsePanelResizeOptions {
   defaultWidth?: number;
@@ -29,20 +33,12 @@ export function usePanelResize({
 }: UsePanelResizeOptions = {}): UsePanelResizeReturn {
   // Load saved width from localStorage
   const getSavedWidth = () => {
-    if (typeof window === 'undefined') return defaultWidth;
-
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        const parsed = parseInt(saved, 10);
-        if (!isNaN(parsed) && parsed >= minWidth && parsed <= maxWidth) {
-          return parsed;
-        }
-      }
-    } catch (e) {
-      // Ignore localStorage errors
-    }
-    return defaultWidth;
+    return readStoredNumberInRange(
+      storageKey,
+      defaultWidth,
+      minWidth,
+      maxWidth
+    );
   };
 
   const [width, setWidthState] = useState(getSavedWidth);
@@ -53,11 +49,7 @@ export function usePanelResize({
   // Save width to localStorage
   const saveWidth = useCallback(
     (newWidth: number) => {
-      try {
-        localStorage.setItem(storageKey, newWidth.toString());
-      } catch (e) {
-        // Ignore localStorage errors
-      }
+      writeStoredString(storageKey, newWidth.toString());
     },
     [storageKey]
   );

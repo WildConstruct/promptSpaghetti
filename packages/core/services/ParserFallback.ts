@@ -5,7 +5,7 @@
 // structures from PromptParser before re-enabling ESLint.
 
 import { promptParser as standardParser } from '../runtime/nodes/epic1/PromptParser';
-import { ParserOptions, ParseResult } from './PromptParser';
+import type { ParserOptions, ParseResult } from './PromptParserContracts';
 import { Node, Edge } from 'reactflow';
 
 interface SerializedPromptNode {
@@ -371,11 +371,8 @@ export class ParserFallback {
    * Notify user about fallback (non-blocking)
    */
   private notifyUser(message: string): void {
-    // In a real implementation, this would show a toast or notification
-    // For now, we'll just log it
     console.info(`[Parser Notice] ${message}`);
 
-    // If we have access to a notification system, use it
     if (typeof window !== 'undefined') {
       const win = window as typeof window & {
         showNotification?: (payload: {

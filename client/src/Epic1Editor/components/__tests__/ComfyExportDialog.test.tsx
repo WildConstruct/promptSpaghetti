@@ -59,14 +59,19 @@ describe('ComfyExportDialog', () => {
     });
 
     expect(screen.getByText('Comfy bridge JSON')).toBeInTheDocument();
-    expect(screen.getByText('Hosted PSG available')).toBeInTheDocument();
-    expect(screen.getByText('Local export available')).toBeInTheDocument();
-    expect(screen.getByText('Included Locally')).toBeInTheDocument();
-    expect(screen.getByText('Hosted Upgrade Path')).toBeInTheDocument();
+    expect(screen.getByText('Hosted PSG helpers ready')).toBeInTheDocument();
+    expect(screen.getByText('Local PSG export ready')).toBeInTheDocument();
+    expect(screen.getByText('Local PSG Operations')).toBeInTheDocument();
+    expect(screen.getByText('Hosted PSG Helpers')).toBeInTheDocument();
     expect(screen.getByText(/expand-crowd/)).toBeInTheDocument();
     expect(screen.getByText('3 assets')).toBeInTheDocument();
     expect(screen.getByText('1 derived, 2 placements')).toBeInTheDocument();
     expect(screen.getByText('12 members')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /This Comfy bridge is being generated through the hosted PSG helper path\./
+      )
+    ).toBeInTheDocument();
     expect(screen.getByText(/promptscape-comfy\/1/)).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('Download JSON'));

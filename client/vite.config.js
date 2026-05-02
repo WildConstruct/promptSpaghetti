@@ -2,6 +2,65 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 // https://vitejs.dev/config/
+const BUILD_SAFE =
+  process.env.BUILD_SAFE === 'true' || process.env.BUILD_SAFE === '1';
+
+function getManualChunk(id) {
+  const normalizedId = id.replace(/\\/g, '/');
+  if (normalizedId.includes('node_modules')) {
+    if (normalizedId.includes('reactflow')) {
+      return 'flow';
+    }
+    if (normalizedId.includes('/zod/') || normalizedId.includes('/zustand/')) {
+      return 'utils';
+    }
+    if (normalizedId.includes('/react/') || normalizedId.includes('/react-dom/')) {
+      return 'vendor';
+    }
+    if (normalizedId.includes('@supabase/supabase-js')) {
+      return 'supabase';
+    }
+    return undefined;
+  }
+  if (normalizedId.includes('/client/src/components/LaunchScreen/')) {
+    return 'launch-screen';
+  }
+  if (normalizedId.includes('/client/src/Epic1Editor/')) {
+    return 'editor-shell';
+  }
+  if (normalizedId.includes('/packages/core/components/epic1/')) {
+    if (normalizedId.includes('/packages/core/components/epic1/nodes/')) {
+      return 'epic1-nodes';
+    }
+    if (normalizedId.includes('/packages/core/components/epic1/preview/')) {
+      return 'epic1-preview';
+    }
+    if (
+      normalizedId.includes('/packages/core/components/epic1/interactions/') ||
+      normalizedId.includes('/packages/core/components/epic1/hooks/')
+    ) {
+      return 'epic1-interactions';
+    }
+    if (
+      normalizedId.includes('/packages/core/components/epic1/asset-browser-integration/') ||
+      normalizedId.includes('/packages/core/components/epic1/asset-library/')
+    ) {
+      return 'epic1-assets';
+    }
+    return 'epic1-core';
+  }
+  if (normalizedId.includes('/packages/asset-browser/src/')) {
+    return 'asset-browser-ui';
+  }
+  if (
+    normalizedId.includes('/packages/core/services/llm/') ||
+    normalizedId.includes('/client/src/lib/simplePromptParser') ||
+    normalizedId.includes('/client/src/lib/analysisReconciler')
+  ) {
+    return 'authoring-tools';
+  }
+  return undefined;
+}
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -12,11 +71,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          flow: ['reactflow'],
-          utils: ['zod', 'zustand']
-        }
+        manualChunks: BUILD_SAFE ? undefined : getManualChunk
       }
     }
   },

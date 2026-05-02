@@ -11,7 +11,7 @@ const PSGNodeSchema = z.object({
   type: z.string(),
   x: z.number(),
   y: z.number(),
-  data: z.record(z.any()).optional()
+  data: z.record(z.unknown()).optional()
 });
 
 const PSGEdgeSchema = z.object({
@@ -27,9 +27,9 @@ const PSGFragmentSchema = z.object({
   name: z.string().optional(),
   nodes: z.array(PSGNodeSchema),
   edges: z.array(PSGEdgeSchema),
-  metadata: z.record(z.any()).optional(),
-  regions: z.array(z.any()).optional(),
-  groups: z.array(z.any()).optional()
+  metadata: z.record(z.unknown()).optional(),
+  regions: z.array(z.unknown()).optional(),
+  groups: z.array(z.unknown()).optional()
 });
 
 // PSGLib schema
@@ -37,7 +37,7 @@ const PSGLibNodeSchema = z.object({
   id: z.string(),
   type: z.string(),
   position: z.object({ x: z.number(), y: z.number() }),
-  data: z.record(z.any()).optional()
+  data: z.record(z.unknown()).optional()
 });
 
 const PSGLibFragmentSchema = z.object({
@@ -75,7 +75,7 @@ export class FragmentValidator {
 
     try {
       // Parse JSON
-      const data = JSON.parse(content);
+      const data: unknown = JSON.parse(content);
 
       // Detect format
       const format = this.detectFormat(data);
@@ -107,7 +107,7 @@ export class FragmentValidator {
   /**
    * Validate PSG format fragment
    */
-  private static validatePSG(data: any): ValidationResult {
+  private static validatePSG(data: unknown): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -183,7 +183,7 @@ export class FragmentValidator {
   /**
    * Validate PSGLib format fragment
    */
-  private static validatePSGLib(data: any): ValidationResult {
+  private static validatePSGLib(data: unknown): ValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -244,7 +244,10 @@ export class FragmentValidator {
   /**
    * Detect fragment format
    */
-  private static detectFormat(data: any): 'psg' | 'psglib' | null {
+  private static detectFormat(data: unknown): 'psg' | 'psglib' | null {
+    if (!isRecord(data)) {
+      return null;
+    }
     if (data.fileType === 'psglib') {
       return 'psglib';
     }
@@ -265,4 +268,8 @@ export class FragmentValidator {
       return false;
     }
   }
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }

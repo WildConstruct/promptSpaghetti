@@ -2,14 +2,10 @@ import React, { useState, useRef, useEffect, memo, useCallback } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { SaveIndicator } from './SaveIndicator';
 import { useEditTransitions } from '../hooks/useEditTransitions';
+import type { WeightedOption } from '../../../types/epic1';
 import './BaseEditableNode.css';
 import './VisualFeedbackEnhancements.css';
 import '../animations/EditTransitions.css';
-
-interface BranchOption {
-  hasBranch?: boolean;
-  [key: string]: unknown;
-}
 
 export interface EditableNodeData {
   isEditing?: boolean;
@@ -20,7 +16,7 @@ export interface EditableNodeData {
   onEditStart?: () => void;
   onEditEnd?: () => void;
   onContextMenu?: (event: React.MouseEvent) => void;
-  options?: BranchOption[];
+  options?: WeightedOption[];
   [key: string]: unknown;
 }
 

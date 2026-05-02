@@ -1,6 +1,7 @@
 import React, { memo, useState, useCallback, useRef, useLayoutEffect, useEffect } from 'react';
-import { NodeProps, Handle, Position } from 'reactflow';
+import { NodeProps, Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
+import type { WeightedOption } from '../../../types/epic1';
 import {
   PopulateChoicesButton,
   OptimizeWeightsButton,
@@ -12,13 +13,7 @@ import type { SegmentMetadata } from '../../../services/llm/MetadataExtractor';
 import './EnhancedBranching.css';
 import { debugLogEpic1 } from '../../../utils/debug';
 
-export interface WeightedOption {
-  id?: string;
-  text: string;
-  weight: number;
-  hasBranch?: boolean;
-  [key: string]: unknown;
-}
+export type { WeightedOption } from '../../../types/epic1';
 
 export interface EnhancedBranchingNodeData extends EditableNodeData {
   options?: WeightedOption[];
@@ -26,8 +21,31 @@ export interface EnhancedBranchingNodeData extends EditableNodeData {
   metadata?: SegmentMetadata;
 }
 
+const EDITING_BRANCH_HANDLE_BASE_TOP = 132;
+const EDITING_BRANCH_HANDLE_ROW_SPACING = 88;
+const DISPLAY_BRANCH_HANDLE_BASE_TOP = 72;
+const DISPLAY_BRANCH_HANDLE_ROW_SPACING = 42;
+const MAIN_HANDLE_RIGHT_OFFSET = -18;
+const BRANCH_HANDLE_RIGHT_OFFSET = -38;
+
 function normalizedChoiceKey(text: string): string {
   return text.trim().toLowerCase();
+}
+
+function getFallbackBranchHandleTop(index: number, isEditing: boolean): number {
+  const baseTop = isEditing
+    ? EDITING_BRANCH_HANDLE_BASE_TOP
+    : DISPLAY_BRANCH_HANDLE_BASE_TOP;
+  const rowSpacing = isEditing
+    ? EDITING_BRANCH_HANDLE_ROW_SPACING
+    : DISPLAY_BRANCH_HANDLE_ROW_SPACING;
+
+  return baseTop + index * rowSpacing;
+}
+
+function areNumberArraysEqual(a: number[], b: number[]): boolean {
+  if (a.length !== b.length) {return false;}
+  return a.every((value, index) => value === b[index]);
 }
 
 export function normalizeWeightedOptions(
@@ -99,6 +117,7 @@ export function mergeGeneratedChoicesIntoOptions(
       if (choiceIndex < uniqueChoices.length) {
         const choice = uniqueChoices[choiceIndex++];
         return {
+          id: opt.id || `option-${choiceIndex}`,
           text: choice.text,
           weight: choice.weight || 50,
           hasBranch: opt.hasBranch || false
@@ -111,7 +130,8 @@ export function mergeGeneratedChoicesIntoOptions(
   }
 
   if (uniqueChoices.length > 0) {
-    const newOptions = uniqueChoices.map(choice => ({
+    const newOptions = uniqueChoices.map((choice, index) => ({
+      id: `option-${options.length + index + 1}`,
       text: choice.text,
       weight: choice.weight || 50,
       hasBranch: false
@@ -122,7 +142,6 @@ export function mergeGeneratedChoicesIntoOptions(
   return options;
 }
 
-// Brighter drag handle icon
 const DragHandleIcon = () => (
   <svg width="6" height="12" viewBox="0 0 6 12" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="1.5" cy="1.5" r="1" fill="currentColor" opacity="0.6"/>
@@ -134,7 +153,6 @@ const DragHandleIcon = () => (
   </svg>
 );
 
-// Simplified radio dial component - independent weight control
 const RadioDial = ({ value, onChange, disabled = false }: {
   value: number;
   onChange: (val: number) => void;
@@ -335,7 +353,11 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       try {
         const parsed = JSON.parse(props.data.value);
         if (Array.isArray(parsed.options)) {
-          return parsed.options.map((opt: Partial<WeightedOption>) => ({
+          return parsed.options.map((opt: Partial<WeightedOption>, index: number) => ({
+            id:
+              typeof opt.id === 'string' && opt.id.trim().length > 0
+                ? opt.id
+                : `option-${index + 1}`,
             text: opt.text ?? '',
             weight: typeof opt.weight === 'number' ? opt.weight : 50,
             hasBranch: opt.hasBranch === true
@@ -348,8 +370,8 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
 
     // Default options with branching OFF
     return [
-      { text: '', weight: 50, hasBranch: false },
-      { text: '', weight: 50, hasBranch: false }
+      { id: 'option-1', text: '', weight: 50, hasBranch: false },
+      { id: 'option-2', text: '', weight: 50, hasBranch: false }
     ];
   };
 
@@ -360,6 +382,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   const [mainHandleTop, setMainHandleTop] = useState(35);
   const [branchHandleTops, setBranchHandleTops] = useState<number[]>([]);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const updateNodeInternals = useUpdateNodeInternals();
 
   const hasBranching = options.some(opt => opt.hasBranch);
   const suggestionIntelligence = intelligence.nodeIntelligence;
@@ -436,25 +459,33 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       const currentEditor = nodeRef.current;
       if (!currentEditor) {return;}
       const contentRect = currentEditor.getBoundingClientRect();
+      const isEditorLayout =
+        currentEditor.classList.contains('enhanced-branching-editor') ||
+        currentEditor.querySelector('.option-row') !== null;
 
       // Title center for main handle
       const titleElement = currentEditor.querySelector('.enhanced-title-section, .display-title') as HTMLElement | null;
       if (titleElement) {
         const titleRect = titleElement.getBoundingClientRect();
         const relativeTop = titleRect.top - contentRect.top + titleRect.height / 2;
-        setMainHandleTop(relativeTop);
+        setMainHandleTop((previousTop) => previousTop === relativeTop ? previousTop : relativeTop);
       }
 
       // Option row centers for branch handles
       const tops = options.map((_, i) => {
         const rowEl = optionRefs.current[i];
-        if (!rowEl) {return 0;}
+        if (!rowEl) {
+          return getFallbackBranchHandleTop(i, isEditorLayout);
+        }
         const r = rowEl.getBoundingClientRect();
         return r.top - contentRect.top + r.height / 2;
       });
-      setBranchHandleTops(tops);
+      setBranchHandleTops((previousTops) => (
+        areNumberArraysEqual(previousTops, tops) ? previousTops : tops
+      ));
       // Keep optionRefs array in sync with options length
       optionRefs.current.length = options.length;
+      requestAnimationFrame(() => updateNodeInternals(props.id));
     };
 
     // Run once after layout, and schedule follow-ups to catch async ref assignments
@@ -477,26 +508,22 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
         requestAnimationFrame(() => calcPositions());
         setTimeout(() => calcPositions(), 0);
       });
-      mo.observe(editorElement, { childList: true, subtree: true, attributes: true });
+      mo.observe(editorElement, { childList: true, subtree: true });
     }
 
     // Also listen to window resize (zoom/layout changes)
     window.addEventListener('resize', calcPositions);
 
     return () => {
-      try {
-        ro.disconnect();
-      } catch (error) {
-        debugLogEpic1('ResizeObserver cleanup failed', error);
-      }
-      try {
-        mo?.disconnect();
-      } catch (error) {
-        debugLogEpic1('MutationObserver cleanup failed', error);
-      }
+      ro.disconnect();
+      mo?.disconnect();
       window.removeEventListener('resize', calcPositions);
     };
-  }, [hasBranching, options, title]);
+  }, [hasBranching, options, props.id, title, updateNodeInternals]);
+
+  useEffect(() => {
+    requestAnimationFrame(() => updateNodeInternals(props.id));
+  }, [branchHandleTops, hasBranching, mainHandleTop, options.length, props.id, updateNodeInternals]);
 
   const calculatePercentages = useCallback((opts: WeightedOption[]) => {
     const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
@@ -568,7 +595,15 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   };
 
   const addOption = () => {
-    setOptions([...options, { text: '', weight: 50, hasBranch: false }]);
+    setOptions([
+      ...options,
+      {
+        id: `option-${options.length + 1}`,
+        text: '',
+        weight: 50,
+        hasBranch: false
+      }
+    ]);
   };
 
   const removeOption = (index: number) => {
@@ -649,12 +684,14 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       minHeight={140}
       data={{
         ...props.data,
+        value: String(props.data.value ?? ''),
         nodeType: 'weightedChoice', // Use weightedChoice for compatibility
         options, // Pass current options state so BaseEditableNode can check hasBranch
         title,
         onEdit: (_nextValue: string) => {
           void _nextValue;
-          props.data.onEdit?.(JSON.stringify({ options, title }));
+          const handleEdit = props.data.onEdit as EditableNodeData['onEdit'];
+          handleEdit?.(JSON.stringify({ options, title }));
         }
       }}
     >
@@ -818,8 +855,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       style={{ pointerEvents: 'all' }}
                     />
 
-                    {/* Simplified radio dial with proper event handling */}
-                    <RadioDial
+      <RadioDial
                       value={option.weight}
                       onChange={val => updateOptionWeight(index, val)}
                     />
@@ -950,12 +986,13 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       style={{
                         position: 'absolute',
                         top: branchHandleTops[index] ?? 0,
+                        right: `${BRANCH_HANDLE_RIGHT_OFFSET}px`,
                         transform: 'translateY(-50%)',
                         zIndex: 1000,
                         background: '#f59e0b',
                         border: '2px solid #fff',
-                        width: '12px',
-                        height: '12px',
+                        width: '14px',
+                        height: '14px',
                         borderRadius: '50%'
                       }}
                     />
@@ -967,6 +1004,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       style={{
                         position: 'absolute',
                         top: branchHandleTops[index] ?? 0,
+                        right: `${BRANCH_HANDLE_RIGHT_OFFSET}px`,
                         transform: 'translateY(-50%)',
                         zIndex: 999,
                         opacity: 0,
@@ -989,6 +1027,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 style={{
                   position: 'absolute',
                   top: mainHandleTop,
+                  right: `${MAIN_HANDLE_RIGHT_OFFSET}px`,
                   transform: 'translateY(-50%)',
                   zIndex: 1000,
                   background: '#10b981',
@@ -1179,12 +1218,13 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     style={{
                       position: 'absolute',
                       top: branchHandleTops[index] ?? 0,
+                      right: `${BRANCH_HANDLE_RIGHT_OFFSET}px`,
                       transform: 'translateY(-50%)',
                       zIndex: 1000,
                       background: '#f59e0b',
                       border: '2px solid #fff',
-                      width: '12px',
-                      height: '12px',
+                      width: '14px',
+                      height: '14px',
                       borderRadius: '50%'
                     }}
                   />
@@ -1196,6 +1236,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     style={{
                       position: 'absolute',
                       top: branchHandleTops[index] ?? 0,
+                      right: `${BRANCH_HANDLE_RIGHT_OFFSET}px`,
                       transform: 'translateY(-50%)',
                       zIndex: 999,
                       opacity: 0,
@@ -1218,6 +1259,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 style={{
                   position: 'absolute',
                   top: mainHandleTop,
+                  right: `${MAIN_HANDLE_RIGHT_OFFSET}px`,
                   transform: 'translateY(-50%)',
                   zIndex: 1000,
                   background: '#10b981',

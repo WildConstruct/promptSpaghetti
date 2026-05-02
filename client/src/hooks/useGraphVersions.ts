@@ -14,16 +14,14 @@ export const useGraphVersions = (graphId: string) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Stub implementation - would normally fetch from API
+    // Version persistence is not wired for this hook yet.
     setVersions([]);
   }, [graphId]);
 
   const saveVersion = async (description?: string) => {
     void description;
-    // Stub implementation
     setLoading(true);
     try {
-      // Would normally save to API
       setLoading(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save version');
@@ -33,7 +31,6 @@ export const useGraphVersions = (graphId: string) => {
 
   const loadVersion = async (versionId: string) => {
     void versionId;
-    // Stub implementation
     return null;
   };
 

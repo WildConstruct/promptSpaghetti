@@ -17,6 +17,22 @@ export type Graph = {
     layout?: Record<string, unknown>;
     settings?: Record<string, unknown>;
 };
+export type ExportableGraphNode = GraphNode & {
+    inputs?: string[];
+    [key: string]: unknown;
+};
+export type ExportableGraphEdge = GraphEdge & {
+    sourceHandle?: string;
+    targetHandle?: string;
+    [key: string]: unknown;
+};
+export type ExportableGraph = Partial<Omit<Graph, "nodes" | "edges">> & {
+    id?: string;
+    nodes?: ExportableGraphNode[];
+    edges?: ExportableGraphEdge[];
+    seed?: number;
+    metadata?: Record<string, unknown>;
+};
 export type PSGFile = {
     version: string;
     kind: "graph";

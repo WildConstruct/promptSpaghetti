@@ -17,25 +17,21 @@ import {
   type PsgRegisterAssetsResponse,
   type PsgValidateResponse
 } from './contracts';
+import {
+  getJsonErrorMessage,
+  readJsonResponse
+} from '../http';
 
 type RequestInitLike = RequestInit & {
   headers?: Record<string, string>;
 };
-
-async function readJson(response: Response): Promise<unknown> {
-  try {
-    return await response.json();
-  } catch {
-    return null;
-  }
-}
 
 export class ApiPsgClient {
   constructor(private readonly baseUrl = '') {}
 
   async getCapabilities(): Promise<PsgCapabilitiesResponse> {
     const response = await fetch(`${this.baseUrl}/api/psg/capabilities`);
-    const payload = await readJson(response);
+    const payload = await readJsonResponse(response);
     if (!response.ok) {
       throw new Error('Failed to load PSG capabilities');
     }
@@ -116,13 +112,9 @@ export class ApiPsgClient {
       ...init
     });
 
-    const payload = await readJson(response);
+    const payload = await readJsonResponse(response);
     if (!response.ok) {
-      const message =
-        payload && typeof payload === 'object' && 'error' in payload
-          ? String((payload as { error?: unknown }).error || 'Request failed')
-          : 'Request failed';
-      throw new Error(message);
+      throw new Error(getJsonErrorMessage(payload));
     }
 
     return schema.parse(payload);

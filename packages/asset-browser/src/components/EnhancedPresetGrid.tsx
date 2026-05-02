@@ -23,7 +23,7 @@ const CARD_H = 180; // Increased from 160 for preview area
 
 export interface EnhancedPresetGridProps {
   onInsert?: (p: Preset) => void;
-  onNodeReplace?: (nodeId: string, preset: any) => void;
+  onNodeReplace?: (nodeId: string, preset: Preset) => void;
 }
 
 export function EnhancedPresetGrid({
@@ -55,7 +55,7 @@ export function EnhancedPresetGrid({
 
       // Generate example output based on preset metadata
       let preview = '';
-      const metadata = (preset as any).metadata;
+      const metadata = preset.metadata;
 
       if (metadata) {
         if (metadata.combinations) {

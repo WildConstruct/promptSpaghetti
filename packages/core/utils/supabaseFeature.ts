@@ -1,60 +1,6 @@
 /* Supabase feature gating utilities */
 
-function getEnvVar(key: string): string | undefined {
-  // Prefer process.env in Node/test/CI. Fallback to import.meta.env in browser builds.
-  if (
-    typeof process !== 'undefined' &&
-    typeof process.env !== 'undefined' &&
-    Object.prototype.hasOwnProperty.call(process.env, key)
-  ) {
-    return (process.env as Record<string, string | undefined>)[key];
-  }
-  // Try to read from global import.meta.env and also from a global env bag
-  const meta = (
-    globalThis as unknown as {
-      import?: { meta?: { env?: Record<string, unknown> } };
-      __env__?: Record<string, unknown>;
-    }
-  ).import?.meta;
-  const metaEnv = meta?.env;
-  if (metaEnv && Object.prototype.hasOwnProperty.call(metaEnv, key)) {
-    const val = metaEnv[key];
-    return typeof val === 'string'
-      ? val
-      : val !== null
-        ? String(val)
-        : undefined;
-  }
-  const globalEnv = (
-    globalThis as unknown as { __env__?: Record<string, unknown> }
-  ).__env__;
-  if (globalEnv && Object.prototype.hasOwnProperty.call(globalEnv, key)) {
-    const val = globalEnv[key];
-    return typeof val === 'string'
-      ? val
-      : val !== null
-        ? String(val)
-        : undefined;
-  }
-  return undefined;
-}
-
-function parseBoolean(value: unknown, fallback = true): boolean {
-  if (value === undefined || value === null || value === '') {
-    return fallback;
-  }
-  if (typeof value === 'boolean') {
-    return value;
-  }
-  const s = String(value).toLowerCase().trim();
-  if (['1', 'true', 'yes', 'on', 'enabled'].includes(s)) {
-    return true;
-  }
-  if (['0', 'false', 'no', 'off', 'disabled'].includes(s)) {
-    return false;
-  }
-  return fallback;
-}
+import { parseBoolean, readEnvVar } from './env';
 
 export function getSupabaseConfig() {
   const URL_KEYS = [
@@ -77,7 +23,7 @@ export function getSupabaseConfig() {
 
   function pickFirst(keys: string[]) {
     for (const k of keys) {
-      const v = getEnvVar(k);
+      const v = readEnvVar(k);
       if (v && String(v).trim() !== '') {
         return { key: k, value: String(v) } as const;
       }

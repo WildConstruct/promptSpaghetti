@@ -118,8 +118,8 @@ export const PsgCrowdExpansionDialog: React.FC<PsgCrowdExpansionDialogProps> = (
           <div>
             <h2 style={styles.title}>Hosted Crowd Expansion</h2>
             <p style={styles.subtitle}>
-              Generate weighted crowd members through the hosted PSG path and
-              save them into the scene sidecar.
+              Generate weighted crowd members through the hosted PSG upgrade
+              path and save them into the scene sidecar.
             </p>
           </div>
           <button onClick={onClose} style={styles.closeButton}>
@@ -129,8 +129,8 @@ export const PsgCrowdExpansionDialog: React.FC<PsgCrowdExpansionDialogProps> = (
 
         <div style={styles.note}>
           {canUseHostedExpansion
-            ? 'This is a hosted PSG feature. It previews structured crowd members before you save them into the scene manifest.'
-            : 'Hosted crowd expansion is currently unavailable. Local PSG can still author/export, but expansion is a hosted upgrade path.'}
+            ? 'This is a hosted PSG upgrade helper. It previews structured crowd members before you save them into the scene manifest.'
+            : 'Crowd expansion is a hosted PSG upgrade helper. Local PSG authoring/export still works, but structured expansion needs cloud access.'}
         </div>
 
         <div style={styles.grid}>

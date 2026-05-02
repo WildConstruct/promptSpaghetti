@@ -5,6 +5,11 @@ import type {
 import type {
   PsgCapabilitiesResponse
 } from '../services/psg';
+import type { LocalImageRuntimeStatus } from '../services/localImage';
+import {
+  parseBoolean,
+  readEnvVar
+} from './env';
 import { getSupabaseConfig } from './supabaseFeature';
 
 type PsgOperation = PsgCapabilitiesResponse['operations'][number];
@@ -17,56 +22,10 @@ export const LOCAL_PSG_OPERATIONS: PsgOperation[] = [
 
 export const HOSTED_PSG_UPGRADE_OPERATIONS: PsgOperation[] = ['expand-crowd'];
 
-function readEnvVar(key: string): string | undefined {
-  if (
-    typeof process !== 'undefined' &&
-    typeof process.env !== 'undefined' &&
-    Object.prototype.hasOwnProperty.call(process.env, key)
-  ) {
-    return (process.env as Record<string, string | undefined>)[key];
-  }
-
-  const globalEnv = (
-    globalThis as unknown as { __env__?: Record<string, unknown> }
-  ).__env__;
-  if (globalEnv && Object.prototype.hasOwnProperty.call(globalEnv, key)) {
-    const value = globalEnv[key];
-    return typeof value === 'string'
-      ? value
-      : value !== null && typeof value !== 'undefined'
-        ? String(value)
-        : undefined;
-  }
-
-  return undefined;
-}
-
-function parseBoolean(value: string | undefined, fallback: boolean): boolean {
-  if ((value === null || typeof value === 'undefined') || value.trim() === '') {
-    return fallback;
-  }
-
-  switch (value.trim().toLowerCase()) {
-    case '1':
-    case 'true':
-    case 'yes':
-    case 'on':
-    case 'enabled':
-      return true;
-    case '0':
-    case 'false':
-    case 'no':
-    case 'off':
-    case 'disabled':
-      return false;
-    default:
-      return fallback;
-  }
-}
-
 export type RuntimeMode = 'local' | 'cloud';
 export type LLMAccessMode = 'offline' | 'local-byo' | 'cloud';
 export type PsgAccessMode = 'offline' | 'local' | 'cloud';
+export type LocalImageAccessMode = 'offline' | 'local';
 export type SubscriptionState = 'unknown' | 'inactive' | 'active';
 
 export interface RuntimeFeatureFlags {
@@ -93,6 +52,21 @@ export interface RuntimeModeInput {
   psgCapabilities?: Pick<
     PsgCapabilitiesResponse,
     'supportedKinds' | 'operations' | 'exportTargets'
+  > | null;
+  localImageStatus?: Pick<
+    LocalImageRuntimeStatus,
+    | 'available'
+    | 'provider'
+    | 'reason'
+    | 'outputDir'
+    | 'apiUrl'
+    | 'checkpoint'
+    | 'checkpointStatus'
+    | 'runtimeReachable'
+    | 'outputDirWritable'
+    | 'lastError'
+    | 'defaultCount'
+    | 'maxCount'
   > | null;
 }
 
@@ -132,6 +106,21 @@ export interface RuntimeModeStatus {
     localAvailable: boolean;
     localOperations: PsgOperation[];
     hostedUpgradeOperations: PsgOperation[];
+  };
+  localImage: {
+    accessMode: LocalImageAccessMode;
+    available: boolean;
+    provider?: string;
+    reason?: string;
+    outputDir?: string;
+    apiUrl?: string;
+    checkpoint?: string;
+    checkpointStatus?: LocalImageRuntimeStatus['checkpointStatus'];
+    runtimeReachable?: boolean;
+    outputDirWritable?: boolean;
+    lastError?: string;
+    defaultCount?: number;
+    maxCount?: number;
   };
 }
 
@@ -196,7 +185,8 @@ export function resolveRuntimeModeStatus(
     hasSupabase,
     hasCloudSubscription,
     llmStatus,
-    psgCapabilities
+    psgCapabilities,
+    localImageStatus
   } = input;
 
   const cloudAccessAllowed =
@@ -258,6 +248,8 @@ export function resolveRuntimeModeStatus(
   const hostedUpgradeOperations = remotePsgOperations.filter(operation =>
     HOSTED_PSG_UPGRADE_OPERATIONS.includes(operation)
   );
+  const localImageAccessMode: LocalImageAccessMode =
+    localImageStatus?.available ? 'local' : 'offline';
 
   return {
     mode,
@@ -305,6 +297,21 @@ export function resolveRuntimeModeStatus(
       localAvailable: flags.localPsgEnabled,
       localOperations,
       hostedUpgradeOperations
+    },
+    localImage: {
+      accessMode: localImageAccessMode,
+      available: Boolean(localImageStatus?.available),
+      provider: localImageStatus?.provider,
+      reason: localImageStatus?.reason,
+      outputDir: localImageStatus?.outputDir,
+      apiUrl: localImageStatus?.apiUrl,
+      checkpoint: localImageStatus?.checkpoint,
+      checkpointStatus: localImageStatus?.checkpointStatus,
+      runtimeReachable: localImageStatus?.runtimeReachable,
+      outputDirWritable: localImageStatus?.outputDirWritable,
+      lastError: localImageStatus?.lastError,
+      defaultCount: localImageStatus?.defaultCount,
+      maxCount: localImageStatus?.maxCount
     }
   };
 }

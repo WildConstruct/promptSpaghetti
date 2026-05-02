@@ -312,8 +312,7 @@ export class ParserSecurity {
       console.log('[Security Audit]', logEntry);
     }
 
-    // In production, this could send to a security monitoring service
-    // For now, just store in memory or localStorage
+    // Browser sessions keep a bounded local audit trail.
     if (typeof window !== 'undefined' && window.localStorage) {
       const logs = this.getStoredLogs(localStorage.getItem('securityLogs'));
       logs.push(logEntry);

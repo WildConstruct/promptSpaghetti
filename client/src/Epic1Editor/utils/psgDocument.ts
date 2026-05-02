@@ -1,10 +1,10 @@
 import type { Node, Edge } from 'reactflow';
-import { readPsg } from '@promptscape/core';
+import { readPsg } from '@promptscape/core/utils/psgCodec';
 import type {
   Graph,
   GraphNode as PSGGraphNode,
   GraphEdge as PSGGraphEdge
-} from '@promptscape/core';
+} from '@promptscape/core/types/graph';
 import {
   parsePsgWithCompatibility,
   convertPSGToPSGLib

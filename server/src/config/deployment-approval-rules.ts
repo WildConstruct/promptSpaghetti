@@ -577,14 +577,13 @@ export function getReviewerAssignments(
     break;
 
   case 'round-robin':
-    // TODO: Implement round-robin logic with persistent state
+    // Deterministic fallback until assignment state is persisted.
     assignment.reviewerPools.forEach(pool => {
       const availableMembers = assignment.excludeRequestor 
         ? pool.members.filter(member => member !== requestorEmail)
         : pool.members;
         
       if (availableMembers.length > 0) {
-        // For now, just use first member (would implement rotation logic)
         reviewers.push(availableMembers[0]);
         pools.push(pool.name);
       }
@@ -592,14 +591,13 @@ export function getReviewerAssignments(
     break;
 
   case 'load-balanced':
-    // TODO: Implement load-balanced assignment based on current workload
+    // Deterministic fallback until reviewer workload data is available.
     assignment.reviewerPools.forEach(pool => {
       const availableMembers = assignment.excludeRequestor 
         ? pool.members.filter(member => member !== requestorEmail)
         : pool.members;
         
       if (availableMembers.length > 0) {
-        // For now, just use first member (would implement load balancing)
         reviewers.push(availableMembers[0]);
         pools.push(pool.name);
       }

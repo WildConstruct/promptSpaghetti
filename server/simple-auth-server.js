@@ -1,17 +1,11 @@
 #!/usr/bin/env node
 
-/**
- * Simple Authentication Server - Using Node.js built-in HTTP module
- * Provides basic login/register endpoints for testing frontend
- */
-
 const http = require('http');
 const url = require('url');
 const { assertMockRuntimeAllowed } = require('./src/utils/mockRuntimeGuard.js');
 
 assertMockRuntimeAllowed('simple-auth-server');
 
-// Simple in-memory "database"
 const users = [
   {
     id: '1',
@@ -33,21 +27,18 @@ const users = [
   }
 ];
 
-// Mock JWT token creation
-const createMockToken = user => {
-  return Buffer.from(
+const createMockToken = user =>
+  Buffer.from(
     JSON.stringify({
       userId: user.id,
       email: user.email,
       roles: user.roles,
-      exp: Date.now() + 15 * 60 * 1000 // 15 minutes
+      exp: Date.now() + 15 * 60 * 1000
     })
   ).toString('base64');
-};
 
-// Parse JSON body
-const parseJSON = req => {
-  return new Promise((resolve, reject) => {
+const parseJSON = req =>
+  new Promise((resolve, reject) => {
     let body = '';
     req.on('data', chunk => {
       body += chunk.toString();
@@ -55,14 +46,12 @@ const parseJSON = req => {
     req.on('end', () => {
       try {
         resolve(body ? JSON.parse(body) : {});
-      } catch (err) {
-        reject(err);
+      } catch (error) {
+        reject(error);
       }
     });
   });
-};
 
-// Send JSON response
 const sendJSON = (res, statusCode, data) => {
   res.writeHead(statusCode, {
     'Content-Type': 'application/json',
@@ -73,11 +62,9 @@ const sendJSON = (res, statusCode, data) => {
   res.end(JSON.stringify(data));
 };
 
-// Create server
 const server = http.createServer(async (req, res) => {
   const { pathname, method } = url.parse(req.url, true);
 
-  // Handle CORS preflight
   if (method === 'OPTIONS') {
     res.writeHead(200, {
       'Access-Control-Allow-Origin': '*',
@@ -89,13 +76,12 @@ const server = http.createServer(async (req, res) => {
   }
 
   try {
-    // LOGIN endpoint
     if (pathname === '/api/auth/login' && method === 'POST') {
       const { email, password } = await parseJSON(req);
-      console.log('🔐 Login request:', { email });
+      console.log('[auth] login request:', { email });
 
       const user = users.find(
-        u => u.email === email && u.password === password
+        currentUser => currentUser.email === email && currentUser.password === password
       );
 
       if (!user) {
@@ -103,7 +89,7 @@ const server = http.createServer(async (req, res) => {
       }
 
       const accessToken = createMockToken(user);
-      const refreshToken = createMockToken(user) + '_refresh';
+      const refreshToken = `${accessToken}_refresh`;
 
       sendJSON(res, 200, {
         user: {
@@ -118,14 +104,14 @@ const server = http.createServer(async (req, res) => {
         refreshToken,
         expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
       });
+      return;
     }
 
-    // REGISTER endpoint
-    else if (pathname === '/api/auth/register' && method === 'POST') {
+    if (pathname === '/api/auth/register' && method === 'POST') {
       const { email, password, firstName, lastName } = await parseJSON(req);
-      console.log('📝 Register request:', { email });
+      console.log('[auth] register request:', { email });
 
-      if (users.find(u => u.email === email)) {
+      if (users.find(currentUser => currentUser.email === email)) {
         return sendJSON(res, 400, {
           message: 'User with this email already exists'
         });
@@ -144,8 +130,7 @@ const server = http.createServer(async (req, res) => {
       users.push(newUser);
 
       sendJSON(res, 200, {
-        message:
-          'Registration successful. Please check your email for verification.',
+        message: 'Registration successful. Please check your email for verification.',
         user: {
           id: newUser.id,
           email: newUser.email,
@@ -155,10 +140,10 @@ const server = http.createServer(async (req, res) => {
           roles: newUser.roles
         }
       });
+      return;
     }
 
-    // ME endpoint
-    else if (pathname === '/api/auth/me' && method === 'GET') {
+    if (pathname === '/api/auth/me' && method === 'GET') {
       const authHeader = req.headers.authorization;
 
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -168,8 +153,8 @@ const server = http.createServer(async (req, res) => {
       try {
         const token = authHeader.substring(7);
         const payload = JSON.parse(Buffer.from(token, 'base64').toString());
+        const user = users.find(currentUser => currentUser.id === payload.userId);
 
-        const user = users.find(u => u.id === payload.userId);
         if (!user) {
           return sendJSON(res, 401, { message: 'Invalid token' });
         }
@@ -182,13 +167,13 @@ const server = http.createServer(async (req, res) => {
           isEmailVerified: user.isEmailVerified,
           roles: user.roles
         });
-      } catch {
+      } catch (error) {
         sendJSON(res, 401, { message: 'Invalid token' });
       }
+      return;
     }
 
-    // REFRESH endpoint
-    else if (pathname === '/api/auth/refresh' && method === 'POST') {
+    if (pathname === '/api/auth/refresh' && method === 'POST') {
       const { refreshToken } = await parseJSON(req);
 
       if (!refreshToken) {
@@ -198,28 +183,28 @@ const server = http.createServer(async (req, res) => {
       const mockUser = users[0];
       sendJSON(res, 200, {
         accessToken: createMockToken(mockUser),
-        refreshToken: refreshToken,
+        refreshToken,
         expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString()
       });
+      return;
     }
 
-    // LOGOUT endpoint
-    else if (pathname === '/api/auth/logout' && method === 'POST') {
-      console.log('👋 Logout request');
+    if (pathname === '/api/auth/logout' && method === 'POST') {
+      console.log('[auth] logout request');
       sendJSON(res, 200, { message: 'Logged out successfully' });
+      return;
     }
 
-    // Health check
-    else if (pathname === '/api/health' && method === 'GET') {
+    if (pathname === '/api/health' && method === 'GET') {
       sendJSON(res, 200, {
         status: 'ok',
         message: 'Simple Auth Server Running',
         timestamp: new Date().toISOString()
       });
+      return;
     }
 
-    // Root endpoint
-    else if (pathname === '/' && method === 'GET') {
+    if (pathname === '/' && method === 'GET') {
       sendJSON(res, 200, {
         message: 'Simple Auth Server',
         endpoints: [
@@ -235,42 +220,39 @@ const server = http.createServer(async (req, res) => {
           { email: 'admin@example.com', password: 'admin123', role: 'admin' }
         ]
       });
+      return;
     }
 
-    // 404 Not Found
-    else {
-      sendJSON(res, 404, { message: 'Endpoint not found' });
-    }
+    sendJSON(res, 404, { message: 'Endpoint not found' });
   } catch (error) {
     console.error('Server error:', error);
     sendJSON(res, 500, { message: 'Internal server error' });
   }
 });
 
-// Start server
 const PORT = process.env.PORT || 8000;
 const HOST = process.env.HOST || '0.0.0.0';
 
 server.listen(PORT, HOST, () => {
-  console.log(`🚀 Simple Auth Server running on http://localhost:${PORT}`);
+  console.log(`Simple Auth Server running on http://localhost:${PORT}`);
   console.log('');
-  console.log('🔐 Test credentials:');
-  console.log('   Regular user: test@example.com / password123');
-  console.log('   Admin user:   admin@example.com / admin123');
+  console.log('Test credentials:');
+  console.log('  Regular user: test@example.com / password123');
+  console.log('  Admin user:   admin@example.com / admin123');
   console.log('');
-  console.log('📋 Available endpoints:');
-  console.log('   POST /api/auth/login');
-  console.log('   POST /api/auth/register');
-  console.log('   GET  /api/auth/me');
-  console.log('   POST /api/auth/refresh');
-  console.log('   POST /api/auth/logout');
-  console.log('   GET  /api/health');
-  console.log('   GET  / (info)');
+  console.log('Available endpoints:');
+  console.log('  POST /api/auth/login');
+  console.log('  POST /api/auth/register');
+  console.log('  GET  /api/auth/me');
+  console.log('  POST /api/auth/refresh');
+  console.log('  POST /api/auth/logout');
+  console.log('  GET  /api/health');
+  console.log('  GET  / (info)');
   console.log('');
-  console.log('🌐 Frontend should connect to: http://localhost:' + PORT);
+  console.log(`Frontend should connect to: http://localhost:${PORT}`);
 });
 
 process.on('SIGINT', () => {
-  console.log('\n👋 Shutting down Simple Auth Server');
+  console.log('\nShutting down Simple Auth Server');
   process.exit(0);
 });

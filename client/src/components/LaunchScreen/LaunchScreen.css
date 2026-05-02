@@ -67,8 +67,10 @@
 .launch-tagline {
   margin: 0.5rem 0 0 0;
   font-size: 1.1rem;
-  color: #999;
-  font-weight: 300;
+  color: #b7bfd0;
+  font-weight: 400;
+  max-width: 42rem;
+  text-align: center;
 }
 
 /* Header Actions */
@@ -185,6 +187,14 @@
   color: #e1e1e1;
 }
 
+.launch-section-copy {
+  margin: -0.35rem 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #94a3b8;
+  max-width: 40rem;
+}
+
 /* Analysis Status */
 .analysis-status {
   display: flex;
@@ -247,7 +257,7 @@
 }
 
 .launch-hint {
-  color: #666;
+  color: #7d8594;
   font-size: 0.9rem;
 }
 
@@ -270,7 +280,7 @@
 
 .launch-inline-instruction {
   font-size: 0.82rem;
-  color: #94a3b8;
+  color: #b7bfd0;
   max-width: 360px;
   text-align: right;
 }

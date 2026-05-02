@@ -1,0 +1,105 @@
+{
+  "version": "1.0.0",
+  "name": "Vehicle Family Demo",
+  "description": "Vehicle archetype with locked design DNA and bounded material variation.",
+  "metadata": {
+    "demoType": "mvp-golden-path",
+    "quickStartId": "vehicle_family",
+    "category": "vehicle"
+  },
+  "nodes": [
+    {
+      "id": "vehicle-dna",
+      "type": "TextBlock",
+      "name": "Family DNA",
+      "x": 80,
+      "y": 110,
+      "value": "Late-70s compact sedan, practical silhouette, restrained trim, documentary still"
+    },
+    {
+      "id": "vehicle-color",
+      "type": "WeightedChoice",
+      "name": "Paint Family",
+      "x": 430,
+      "y": 40,
+      "options": [
+        {
+          "text": "faded cream",
+          "weight": 35
+        },
+        {
+          "text": "oxidized blue",
+          "weight": 35
+        },
+        {
+          "text": "sunburnt tan",
+          "weight": 30
+        }
+      ]
+    },
+    {
+      "id": "vehicle-wear",
+      "type": "WeightedChoice",
+      "name": "Wear Level",
+      "x": 430,
+      "y": 230,
+      "options": [
+        {
+          "text": "light commuter wear",
+          "weight": 40
+        },
+        {
+          "text": "sun-cracked trim",
+          "weight": 35
+        },
+        {
+          "text": "patched daily beater",
+          "weight": 25
+        }
+      ]
+    },
+    {
+      "id": "vehicle-join",
+      "type": "Concat",
+      "name": "Resolve Family Member",
+      "x": 820,
+      "y": 125,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "vehicle-output",
+      "type": "Output",
+      "name": "Output",
+      "x": 1140,
+      "y": 125,
+      "template": "{prompt}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "vehicle-e1",
+      "source": "vehicle-dna",
+      "target": "vehicle-join",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "vehicle-e2",
+      "source": "vehicle-color",
+      "target": "vehicle-join",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "vehicle-e3",
+      "source": "vehicle-wear",
+      "target": "vehicle-output"
+    },
+    {
+      "id": "vehicle-e4",
+      "source": "vehicle-join",
+      "target": "vehicle-output"
+    }
+  ]
+}

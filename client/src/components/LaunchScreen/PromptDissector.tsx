@@ -2243,6 +2243,22 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           role="toolbar"
           aria-label="Inline segment tools"
         >
+          <span
+            data-testid="prompt-runtime-status"
+            style={{
+              position: 'absolute',
+              width: '1px',
+              height: '1px',
+              padding: 0,
+              margin: '-1px',
+              overflow: 'hidden',
+              clip: 'rect(0, 0, 0, 0)',
+              whiteSpace: 'nowrap',
+              border: 0
+            }}
+          >
+            {runtimeMode.loading ? 'loading' : 'ready'}
+          </span>
           {(() => {
             const firstMappedIndexRender = highlightSegments.findIndex(
               s => !!s.nodeId
@@ -2321,18 +2337,18 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                     ))}
                   </select>
                 </label>
-                <button
-                  className="dissector-btn"
-                  onClick={() => {
-                    void handleSweetenPrompt();
-                  }}
-                  title={
-                    runtimeMode.llm.accessMode === 'cloud'
-                      ? 'Sweeten prompt with hosted AI'
+                  <button
+                    className="dissector-btn"
+                    onClick={() => {
+                      void handleSweetenPrompt();
+                    }}
+                    title={
+                      runtimeMode.llm.accessMode === 'cloud'
+                      ? 'Sweeten prompt with a hosted authoring helper'
                       : 'Sweeten prompt with local fallback rules'
-                  }
-                  disabled={!value.trim() || isSweetening}
-                >
+                    }
+                    disabled={!value.trim() || isSweetening}
+                  >
                   {isSweetening ? 'Sweetening…' : 'Prompt Sweetening'}
                 </button>
                 <div className="dissector-toolbar-sep" />
@@ -2465,7 +2481,8 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           {runtimeMode.llm.accessMode !== 'cloud' && (
             <span className="dissector-sweetening-note-muted">
               {' '}
-              Hosted sweetening can sit behind a paid/cloud unlock.
+              Hosted sweetening is a secondary cloud helper. Local prompt
+              bootstrap still works without it.
             </span>
           )}
         </div>

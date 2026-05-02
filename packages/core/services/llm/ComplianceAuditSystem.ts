@@ -283,8 +283,7 @@ export class ComplianceAuditSystem {
     const deletedItems: string[] = [];
 
     try {
-      // In production, this would delete from all systems
-      // For now, simulate deletion process
+      // Simulate deletion until all storage backends are connected.
       await this.simulateDelay(1000);
 
       // Mark related data for deletion
@@ -558,20 +557,19 @@ export class ComplianceAuditSystem {
   }
 
   private async persistAuditEntry(entry: AuditEntry): Promise<void> {
-    // In production, this would write to a database
-    // For now, just log to console in development
+    // Development-only sink until audit persistence is configured.
     if (process.env.NODE_ENV === 'development') {
       console.debug('Audit:', entry);
     }
   }
 
   private async archiveAuditEntry(entry: AuditEntry): Promise<void> {
-    // In production, this would move to cold storage
+    // Development-only sink until cold storage is configured.
     console.debug('Archiving audit entry:', entry.id);
   }
 
   private async archiveConsentRecord(record: ConsentRecord): Promise<void> {
-    // In production, this would move to cold storage
+    // Development-only sink until cold storage is configured.
     console.debug('Archiving consent record:', record.id);
   }
 

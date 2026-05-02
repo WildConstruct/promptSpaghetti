@@ -344,7 +344,9 @@ export const ComfyExportDialog: React.FC<ComfyExportDialogProps> = ({
                   : styles.routeBadgeMuted)
               }}
             >
-              {psgLocalAvailable ? 'Local export available' : 'Local export unavailable'}
+              {psgLocalAvailable
+                ? 'Local PSG export ready'
+                : 'Local PSG export unavailable'}
             </span>
             <span
               style={{
@@ -354,7 +356,9 @@ export const ComfyExportDialog: React.FC<ComfyExportDialogProps> = ({
                   : styles.routeBadgeMuted)
               }}
             >
-              {psgCloudAvailable ? 'Hosted PSG available' : 'Hosted PSG unavailable'}
+              {psgCloudAvailable
+                ? 'Hosted PSG helpers ready'
+                : 'Hosted PSG helpers unavailable'}
             </span>
             <span
               style={{
@@ -370,10 +374,10 @@ export const ComfyExportDialog: React.FC<ComfyExportDialogProps> = ({
 
           <div style={styles.note}>
             {psgAccessMode === 'cloud'
-              ? 'This export is being generated through the hosted PSG path.'
+              ? 'This Comfy bridge is being generated through the hosted PSG helper path.'
               : psgAccessMode === 'local'
-                ? 'This export is available in local mode and does not require hosted PSG access.'
-                : 'PSG export is currently unavailable in this runtime mode.'}{' '}
+                ? 'This Comfy bridge is being generated from local PSG data. Hosted PSG remains optional for upgrade-only helpers like crowd expansion.'
+                : 'Comfy bridge export is unavailable in this runtime mode. Base PSG authoring/export should remain the portable default.'}{' '}
             This bridge format is intentionally stable and inspectable, not a
             claim of full Comfy node parity.
           </div>
@@ -391,7 +395,7 @@ export const ComfyExportDialog: React.FC<ComfyExportDialogProps> = ({
 
           <div style={styles.cards}>
             <div style={styles.card}>
-              <span style={styles.cardLabel}>Included Locally</span>
+              <span style={styles.cardLabel}>Local PSG Operations</span>
               <span style={styles.cardValue}>
                 {localOperations.length > 0
                   ? localOperations.join(', ')
@@ -399,7 +403,7 @@ export const ComfyExportDialog: React.FC<ComfyExportDialogProps> = ({
               </span>
             </div>
             <div style={styles.card}>
-              <span style={styles.cardLabel}>Hosted Upgrade Path</span>
+              <span style={styles.cardLabel}>Hosted PSG Helpers</span>
               <span style={styles.cardValue}>
                 {hostedUpgradeOperations.length > 0
                   ? hostedUpgradeOperations.join(', ')

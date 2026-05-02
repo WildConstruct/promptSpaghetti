@@ -92,6 +92,8 @@ describe('runtimeMode', () => {
     expect(result.psg.accessMode).toBe('cloud');
     expect(result.psg.operations).toContain('export-comfy');
     expect(result.psg.usesProxy).toBe(true);
+    expect(result.localImage.accessMode).toBe('offline');
+    expect(result.localImage.available).toBe(false);
   });
 
   it('falls back to local-byo mode when cloud access is not allowed', () => {
@@ -121,6 +123,7 @@ describe('runtimeMode', () => {
     expect(result.psg.accessMode).toBe('local');
     expect(result.psg.available).toBe(true);
     expect(result.subscription.state).toBe('inactive');
+    expect(result.localImage.accessMode).toBe('offline');
   });
 
   it('falls back to offline mode when neither cloud nor local llm is enabled', () => {
@@ -149,5 +152,45 @@ describe('runtimeMode', () => {
     expect(result.llm.available).toBe(false);
     expect(result.psg.accessMode).toBe('offline');
     expect(result.psg.available).toBe(false);
+    expect(result.localImage.available).toBe(false);
+  });
+
+  it('surfaces local sandbox generation when the local runtime reports availability', () => {
+    const flags: RuntimeFeatureFlags = {
+      authEnabled: false,
+      authRequired: false,
+      supabaseEnabled: false,
+      cloudLlmEnabled: true,
+      localLlmEnabled: true,
+      cloudPsgEnabled: true,
+      localPsgEnabled: true,
+      subscriptionsEnabled: false,
+      subscriptionRequiredForCloud: false
+    };
+
+    const result = resolveRuntimeModeStatus({
+      flags,
+      isAuthenticated: false,
+      hasSupabase: false,
+      hasCloudSubscription: false,
+      llmStatus: null,
+      psgCapabilities: null,
+      localImageStatus: {
+        available: true,
+        provider: 'comfy-local',
+        apiUrl: 'http://127.0.0.1:8188',
+        outputDir: 'C:/tmp/local-image',
+        defaultCount: 20,
+        maxCount: 20
+      }
+    });
+
+    expect(result.localImage).toMatchObject({
+      accessMode: 'local',
+      available: true,
+      provider: 'comfy-local',
+      defaultCount: 20,
+      maxCount: 20
+    });
   });
 });

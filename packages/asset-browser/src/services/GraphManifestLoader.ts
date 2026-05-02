@@ -1,7 +1,7 @@
 export type GraphEntry = {
   filename: string;
   title: string;
-  updatedAt: string; // ISO string
+  updatedAt?: string; // ISO string when present in PSG content
   tags?: string[];
 };
 
@@ -24,6 +24,9 @@ export async function loadServerGraphs(
   if (!Array.isArray(data)) return [];
   // Minimal shape validation
   return data.filter(
-    e => typeof e?.filename === 'string' && typeof e?.title === 'string'
+    e =>
+      typeof e?.filename === 'string' &&
+      typeof e?.title === 'string' &&
+      (typeof e?.updatedAt === 'undefined' || typeof e?.updatedAt === 'string')
   );
 }

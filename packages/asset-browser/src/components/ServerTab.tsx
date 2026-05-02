@@ -7,6 +7,14 @@ import { EmptyState } from './ui/EmptyState';
 import { ErrorState } from './ui/ErrorState';
 import { retryWithBackoff } from '../utils/retry';
 
+function formatGraphEntryMeta(graph: GraphEntry): string {
+  if (!graph.updatedAt) {
+    return graph.filename;
+  }
+
+  return `${graph.filename} • ${new Date(graph.updatedAt).toLocaleString()}`;
+}
+
 export function ServerTab(): JSX.Element {
   const [status, setStatus] = React.useState<
     'idle' | 'loading' | 'done' | 'error'
@@ -114,7 +122,7 @@ export function ServerTab(): JSX.Element {
             <li key={g.filename}>
               <strong>{g.title}</strong>
               <div style={{ fontSize: 12, color: '#555' }}>
-                {g.filename} • {new Date(g.updatedAt).toLocaleString()}
+                {formatGraphEntryMeta(g)}
               </div>
             </li>
           ))}

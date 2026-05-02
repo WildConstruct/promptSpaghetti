@@ -1,0 +1,110 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignore": [
+    ".local-output/**",
+    ".local-runtime/**",
+    "node_modules/**",
+    "*.js",
+    "*.ts",
+    "*.cjs",
+    "*.mjs",
+    "client/dist/**",
+    "server/dist/**",
+    "packages/asset-browser/dist/**",
+    "packages/core/dist/**",
+    "packages/asset-browser/public/graphs/manifest.json",
+    "docs/examples/**",
+    "api/**",
+    "scripts/**",
+    "scripts/*.js",
+    "scripts/*.ts",
+    "scripts/*.mjs",
+    "scripts/*.cjs",
+    "scripts/maintenance/**",
+    "scripts/rollback/**",
+    "tests/**",
+    "tools/**",
+    "types/**",
+    "packages/custom-node-sdk/**"
+  ],
+  "ignoreBinaries": [
+    "chmod",
+    "curl",
+    "date",
+    "docker",
+    "find",
+    "git",
+    "grep",
+    "head",
+    "jq",
+    "kill",
+    "mkdir",
+    "open",
+    "powershell",
+    "pwsh",
+    "rimraf",
+    "sleep",
+    "sudo"
+  ],
+  "workspaces": {
+    "client": {
+      "entry": [
+        "build-standalone.js",
+        "vite.config.js",
+        "vite.config.ts",
+        "src/main.tsx",
+        "src/App.tsx"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx,js,jsx}",
+        "*.js",
+        "*.ts"
+      ]
+    },
+    "server": {
+      "entry": [
+        "src/index.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx,js,jsx}",
+        "*.js",
+        "*.ts"
+      ]
+    },
+    "packages/core": {
+      "entry": [
+        "index.ts",
+        "public.ts",
+        "runtime/index.ts"
+      ],
+      "project": [
+        "components/**/*.{ts,tsx,js,jsx,cjs}",
+        "fileFormats/**/*.{ts,tsx,js,jsx}",
+        "hooks/**/*.{ts,tsx,js,jsx}",
+        "runtime/**/*.{ts,tsx,js,jsx,cjs}",
+        "services/**/*.{ts,tsx,js,jsx}",
+        "types/**/*.{ts,tsx,js,jsx}",
+        "utils/**/*.{ts,tsx,js,jsx}",
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.cjs"
+      ]
+    },
+    "packages/asset-browser": {
+      "entry": [
+        "src/index.tsx",
+        "scripts/build/generate-graph-manifest.mjs"
+      ],
+      "project": [
+        "src/**/*.{ts,tsx,js,jsx}",
+        "scripts/**/*.{js,mjs,cjs,ts}",
+        "*.js",
+        "*.cjs",
+        "*.mjs",
+        "*.ts",
+        "*.tsx"
+      ]
+    }
+  }
+}

@@ -38,32 +38,21 @@ describe('generate-graph-manifest helper', () => {
     expect(entries[0].filename).toBe('good.psg');
   });
 
-  it('skips invalid .psg files lacking nodes/edges', async () => {
-    const tmp = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'psg-'));
-    const graphsDir = path.join(tmp, 'graphs');
-    await fs.promises.mkdir(graphsDir);
-    // invalid: no nodes/edges
-    await fs.promises.writeFile(
-      path.join(graphsDir, 'bad.psg'),
-      '{"title":"Bad"}'
-    );
-    // valid minimal shape
-    await fs.promises.writeFile(
-      path.join(graphsDir, 'good.psg'),
-      '{"nodes":[],"edges":[]}'
-    );
-    const entries = await collectGraphEntries(graphsDir);
-    expect(entries.length).toBe(1);
-    expect(entries[0].filename).toBe('good.psg');
-  });
-
-  it('collects .psg files with title and updatedAt and sorts by title', async () => {
+  it('collects .psg files deterministically and sorts by title', async () => {
     const tmp = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'psg-'));
     const graphsDir = path.join(tmp, 'graphs');
     await fs.promises.mkdir(graphsDir);
     await fs.promises.writeFile(
       path.join(graphsDir, 'b-forest-path.psg'),
-      '{"nodes":[],"edges":[]}'
+      JSON.stringify({
+        kind: 'graph',
+        version: '1.0',
+        meta: {
+          name: 'Forest Path',
+          updatedAt: '2024-01-02T03:04:05.000Z'
+        },
+        graph: { nodes: [], edges: [] }
+      })
     );
     await fs.promises.writeFile(
       path.join(graphsDir, 'a-medieval-market.psg'),
@@ -71,21 +60,28 @@ describe('generate-graph-manifest helper', () => {
     );
     await fs.promises.writeFile(path.join(graphsDir, 'ignore.txt'), '');
 
-    const entries = await collectGraphEntries(graphsDir);
-    expect(Array.isArray(entries)).toBe(true);
-    // Should only include two .psg files
-    expect(entries.length).toBe(2);
-    // Sorted by title asc: Forest Path, Medieval Market
-    expect(entries.map((e: any) => e.title)).toEqual(
-      ['A Medieval Market', 'B Forest Path'].map(toTitleCase)
+    const filePath = path.join(graphsDir, 'a-medieval-market.psg');
+    const firstEntries = await collectGraphEntries(graphsDir);
+    await fs.promises.utimes(
+      filePath,
+      new Date('2026-01-01T00:00:00.000Z'),
+      new Date('2026-01-01T00:00:00.000Z')
     );
-    // Has required fields
-    for (const e of entries) {
-      expect(typeof e.filename).toBe('string');
-      expect(typeof e.title).toBe('string');
-      expect(typeof e.updatedAt).toBe('string');
-      expect(Array.isArray(e.tags)).toBe(true);
-    }
+    const secondEntries = await collectGraphEntries(graphsDir);
+
+    expect(secondEntries).toEqual(firstEntries);
+
+    const entries = firstEntries;
+    expect(Array.isArray(entries)).toBe(true);
+    expect(entries.length).toBe(2);
+    expect(entries.map((e: any) => e.title)).toEqual([
+      'A Medieval Market',
+      'Forest Path'
+    ]);
+    expect(entries[0].updatedAt).toBeUndefined();
+    expect(entries[1].updatedAt).toBe('2024-01-02T03:04:05.000Z');
+    expect(Array.isArray(entries[0].tags)).toBe(true);
+    expect(Array.isArray(entries[1].tags)).toBe(true);
   });
 
   it('returns empty list when directory does not exist', async () => {
