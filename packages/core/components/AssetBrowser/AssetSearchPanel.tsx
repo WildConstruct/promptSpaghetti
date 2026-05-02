@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import type { Node } from 'reactflow';
 import { NaturalLanguageSearch } from '../../services/NaturalLanguageSearch';
 import type { Asset } from '../../services/assetMatcher';
+import './AssetSearchPanel.css';
 
 type GraphContext = Record<string, unknown>;
 
@@ -27,27 +28,31 @@ export const AssetSearchPanel: React.FC<AssetSearchPanelProps> = ({
   const [exclude, setExclude] = useState('');
   const [streaming, setStreaming] = useState(false);
   const [internalAssets, setInternalAssets] = useState<Asset[]>(assets);
+  const [hasSearched, setHasSearched] = useState(false);
 
-  // Load assets from manifest if not provided
   const loadAssets = useCallback(async () => {
     if (assets && assets.length > 0) {
       setInternalAssets(assets);
       return;
     }
+
     try {
       const baseCandidates = [
         '/presets/manifest.json',
         '/asset-browser/presets/manifest.json'
       ];
+
       for (const url of baseCandidates) {
         const res = await fetch(url, { cache: 'no-cache' });
         if (!res.ok) {
           continue;
         }
+
         const text = await res.text();
         if (text.trim().startsWith('<')) {
           continue;
         }
+
         const json = JSON.parse(text) as {
           presets?: Array<{ id?: string; name?: string; path?: string }>;
         };
@@ -61,14 +66,14 @@ export const AssetSearchPanel: React.FC<AssetSearchPanelProps> = ({
         return;
       }
     } catch {
-      // ignore manifest loading errors; component falls back to provided assets
+      // The panel can still search caller-provided assets if the manifest is unavailable.
     }
   }, [assets]);
+
   React.useEffect(() => {
     void loadAssets();
   }, [loadAssets]);
 
-  // Hook to global asset registry events
   React.useEffect(() => {
     const handler: EventListener = event => {
       const customEvent = event as CustomEvent<{ assets: Asset[] }>;
@@ -76,64 +81,80 @@ export const AssetSearchPanel: React.FC<AssetSearchPanelProps> = ({
         setInternalAssets(customEvent.detail.assets);
       }
     };
+
     window.addEventListener('assetRegistry:update', handler);
-    // Expose a simple registry helper for external callers
     const windowWithRegistry = window as typeof window & {
       assetRegistry?: { update?: (assets: Asset[]) => void };
     };
+
     if (!windowWithRegistry.assetRegistry) {
       windowWithRegistry.assetRegistry = {};
     }
+
     windowWithRegistry.assetRegistry.update = (nextAssets: Asset[]) => {
       window.dispatchEvent(
         new CustomEvent('assetRegistry:update', { detail: { assets: nextAssets } })
       );
     };
+
     return () => window.removeEventListener('assetRegistry:update', handler);
   }, []);
 
-  const runSearch = useCallback(async () => {
+  const runSearch = useCallback(async (queryOverride = query) => {
     setBusy(true);
-    const fullQuery = exclude ? `${query} but not ${exclude}` : query;
+    setHasSearched(true);
+    const fullQuery = exclude
+      ? `${queryOverride} but not ${exclude}`
+      : queryOverride;
     const res = await nls.search(fullQuery, internalAssets, {
       limit: 50,
       graphContext
     });
+
     if (streaming) {
-      // Simulate streaming by chunking updates
       const chunk = 10;
       setResults([]);
       for (let i = 0; i < res.assets.length; i += chunk) {
         const slice = res.assets.slice(i, i + chunk);
         setResults(prev => prev.concat(slice));
-        await new Promise(r => setTimeout(r, 60));
+        await new Promise(resolve => setTimeout(resolve, 60));
       }
     } else {
       setResults(res.assets);
     }
+
     setTotal(res.totalMatches);
     setTimeMs(Math.round(res.executionTime));
     setBusy(false);
   }, [exclude, graphContext, internalAssets, nls, query, streaming]);
 
+  const visibleAssets = hasSearched ? results : internalAssets.slice(0, 24);
+  const statusText = busy
+    ? 'Searching...'
+    : hasSearched
+      ? `Results ${results.length}/${total} · ${timeMs}ms`
+      : `Indexed ${internalAssets.length}`;
+
   return (
-    <div
-      style={{
-        background: '#0b0b0b',
-        color: '#fff',
-        border: '1px solid rgba(255,255,255,0.15)',
-        borderRadius: 8,
-        padding: 10
-      }}
-    >
-      <div
-        style={{ marginBottom: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}
-      >
+    <div className="asset-search-panel">
+      <div className="asset-search-header">
+        <div>
+          <h3>Explore Library</h3>
+          <p>
+            {selectedNode
+              ? `Context: ${selectedNode.data?.label || selectedNode.id}`
+              : 'Context: active graph'}
+          </p>
+        </div>
+        <div className="asset-search-status">{statusText}</div>
+      </div>
+
+      <div className="asset-search-controls">
         <input
+          className="asset-search-input asset-search-query"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          placeholder="Search assets (e.g., find tense urban chase)"
-          style={{ flex: 1 }}
+          placeholder="Search assets"
           onKeyDown={e => {
             if (e.key === 'Enter') {
               void runSearch();
@@ -141,73 +162,66 @@ export const AssetSearchPanel: React.FC<AssetSearchPanelProps> = ({
           }}
         />
         <input
+          className="asset-search-input asset-search-exclude"
           value={exclude}
           onChange={e => setExclude(e.target.value)}
-          placeholder="Exclude (e.g., fantasy)"
-          style={{ minWidth: 160 }}
+          placeholder="Exclude"
           onKeyDown={e => {
             if (e.key === 'Enter') {
               void runSearch();
             }
           }}
         />
-        <button onClick={() => runSearch()} disabled={busy}>
+        <button
+          className="asset-search-button primary"
+          onClick={() => runSearch()}
+          disabled={busy}
+        >
           Search
         </button>
         {selectedNode && (
           <button
+            className="asset-search-button secondary"
             onClick={() => {
-              setQuery(
-                `similar to ${selectedNode.data?.label || selectedNode.id}`
-              );
-              void runSearch();
+              const similarQuery =
+                `similar to ${selectedNode.data?.label || selectedNode.id}`;
+              setQuery(similarQuery);
+              void runSearch(similarQuery);
             }}
           >
-            Similar to selected
+            Similar
           </button>
         )}
-        <label
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: 12
-          }}
-        >
+        <label className="asset-search-toggle">
           <input
             type="checkbox"
             checked={streaming}
             onChange={e => setStreaming(e.target.checked)}
           />
-          <span>Stream results</span>
+          <span>Stream</span>
         </label>
       </div>
-      <div style={{ fontSize: 12, opacity: 0.85, marginBottom: 6 }}>
-        {busy
-          ? 'Searching...'
-          : `Results: ${results.length}/${total} • ${timeMs}ms`}
-      </div>
-      <div style={{ maxHeight: 260, overflow: 'auto' }}>
-        {results.map(asset => (
+
+      <div className="asset-search-results">
+        {visibleAssets.map(asset => (
           <div
             key={asset.id}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '6px 0',
-              borderBottom: '1px solid rgba(255,255,255,0.06)'
-            }}
+            className="asset-search-result"
           >
-            <div>
-              <div style={{ fontWeight: 600 }}>{asset.name}</div>
-              <div style={{ fontSize: 12, opacity: 0.8 }}>{asset.type}</div>
+            <div className="asset-search-result-copy">
+              <div className="asset-search-result-name">{asset.name}</div>
+              <div className="asset-search-result-type">{asset.type}</div>
             </div>
-            <button onClick={() => onInsert(asset)}>Insert</button>
+            <button
+              className="asset-search-insert"
+              onClick={() => onInsert(asset)}
+            >
+              Insert
+            </button>
           </div>
         ))}
-        {results.length === 0 && !busy && (
-          <div style={{ opacity: 0.75 }}>No results</div>
+        {visibleAssets.length === 0 && !busy && (
+          <div className="asset-search-empty">No results</div>
         )}
       </div>
     </div>

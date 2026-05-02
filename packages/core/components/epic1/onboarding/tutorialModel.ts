@@ -82,8 +82,8 @@ export const tutorialSteps: TutorialStepDefinition[] = [
     id: TUTORIAL_STEP_IDS.ENTER_PROMPT,
     title: 'Compose A Prompt',
     description:
-      'Enter a short prompt and let the parser segment it into nodes. The tutorial will stay clear of the modal so the workspace remains usable.',
-    action: 'observe',
+      'Enter a short prompt and let the parser segment it into nodes.',
+    action: 'paste',
     hint: 'Example: A {brave|cunning|wise} hero enters the {ancient ruins|dark forest}.',
     position: 'top',
     spotlight: false,

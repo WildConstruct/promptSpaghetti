@@ -1,4 +1,5 @@
 import React from 'react';
+import { Download, Play, Save, ShieldCheck } from 'lucide-react';
 import './SimpleMenuBar.css';
 
 export type MenuAvailability = 'available' | 'hosted_only' | 'disabled';
@@ -483,19 +484,93 @@ const renderMenuEntry = (item: MenuEntryModel) => {
   );
 };
 
+const findAction = (
+  menuModel: MenuModel,
+  id: string
+): MenuActionModel | undefined => {
+  for (const section of menuModel.sections) {
+    for (const item of section.items) {
+      if (item.type === 'action' && item.id === id) {
+        return item;
+      }
+    }
+  }
+  return undefined;
+};
+
 export const SimpleMenuBar: React.FC<SimpleMenuBarProps> = props => {
   const menuModel = props.menuModel ?? buildLegacyMenuModel(props);
+  const saveAction = findAction(menuModel, 'save');
+  const exportAction = findAction(menuModel, 'export');
+  const comfyAction = findAction(menuModel, 'exportComfy');
 
   return (
     <div className="simple-menu-bar">
-      {menuModel.sections.map(section => (
-        <div key={section.id} className="menu-section">
-          <span className="menu-title">{section.title}</span>
-          <div className="menu-dropdown">
-            {section.items.map(renderMenuEntry)}
+      <div className="menu-brand-block">
+        <span className="menu-brand-copy">
+          <span className="menu-brand-title">Prompt Spaghetti</span>
+          <span className="menu-brand-subtitle">Active Graph</span>
+        </span>
+      </div>
+
+      <div className="menu-sections-strip" aria-label="Editor menus">
+        {menuModel.sections.map(section => (
+          <div key={section.id} className="menu-section">
+            <span className="menu-title">{section.title}</span>
+            <div className="menu-dropdown">
+              {section.items.map(renderMenuEntry)}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+
+      <div className="menu-context-strip" aria-label="Graph context">
+        <span className="menu-context-pill">Active test graph</span>
+        <span className="menu-context-pill muted">Flat PSG</span>
+        <span className="menu-health-pill">
+          <ShieldCheck size={14} aria-hidden="true" />
+          Local ready
+        </span>
+      </div>
+
+      <div className="menu-command-strip" aria-label="Primary graph actions">
+        {saveAction && (
+          <button
+            type="button"
+            className="menu-command-button secondary"
+            onClick={saveAction.onClick}
+            disabled={saveAction.disabled}
+            title={saveAction.title}
+          >
+            <Save size={14} aria-hidden="true" />
+            Save PSG
+          </button>
+        )}
+        {comfyAction && (
+          <button
+            type="button"
+            className="menu-command-button secondary"
+            onClick={comfyAction.onClick}
+            disabled={comfyAction.disabled}
+            title={comfyAction.title}
+          >
+            <Play size={14} aria-hidden="true" />
+            Comfy Handoff
+          </button>
+        )}
+        {exportAction && (
+          <button
+            type="button"
+            className="menu-command-button primary"
+            onClick={exportAction.onClick}
+            disabled={exportAction.disabled}
+            title={exportAction.title}
+          >
+            <Download size={14} aria-hidden="true" />
+            Export Project
+          </button>
+        )}
+      </div>
     </div>
   );
 };

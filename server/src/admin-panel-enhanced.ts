@@ -10,6 +10,7 @@ import {
   getConfiguredAdminPassword,
   requireAdminAuth
 } from './utils/adminAuth';
+import { LLMService } from './services/LLMService';
 
 interface Message {
   type: 'success' | 'error' | 'info';
@@ -159,6 +160,10 @@ interface DeleteEnvRequest {
 interface PromptTestRequest {
   prompt: string;
   model: string;
+}
+
+interface FeatureTestRequest extends PromptTestRequest {
+  feature: 'parse' | 'choices' | 'metadata' | 'weights';
 }
 
 interface ModelConfigRequest {
@@ -603,6 +608,97 @@ function loadPrompts(): PromptTemplate[] {
 function savePrompts(prompts: PromptTemplate[]) {
   const promptsPath = path.join(__dirname, '../prompts.json');
   fs.writeFileSync(promptsPath, JSON.stringify(prompts, null, 2));
+}
+
+function extractChoiceGroups(prompt: string) {
+  return Array.from(prompt.matchAll(/\{([^{}]+)\}/g)).map((match, index) => {
+    const options = match[1]
+      .split('|')
+      .map(option => option.trim())
+      .filter(Boolean);
+
+    return {
+      id: `choice-${index + 1}`,
+      placeholder: match[0],
+      options,
+      count: options.length
+    };
+  });
+}
+
+function inferPromptTags(prompt: string): string[] {
+  const haystack = prompt.toLowerCase();
+  const matchers: Array<[string, RegExp]> = [
+    ['character', /\b(person|driver|mechanic|fan|spectator|hero|knight)\b/],
+    ['crowd', /\b(crowd|grandstand|spectator|fans|extras)\b/],
+    ['vehicle', /\b(car|race car|truck|vehicle|indy)\b/],
+    ['setting', /\b(track|speedway|castle|forest|street|courtyard)\b/],
+    ['wardrobe', /\b(shirt|jacket|cap|helmet|uniform|dress|gloves)\b/],
+    ['action', /\b(watches|runs|fights|drives|stands|sits)\b/]
+  ];
+
+  return matchers
+    .filter(([, pattern]) => pattern.test(haystack))
+    .map(([tag]) => tag);
+}
+
+function runFeatureDiagnostic(feature: FeatureTestRequest['feature'], prompt: string) {
+  const choiceGroups = extractChoiceGroups(prompt);
+  const words = prompt.split(/\s+/).filter(Boolean);
+
+  if (feature === 'parse') {
+    return {
+      mode: 'heuristic-parse-v1',
+      summary: {
+        characterCount: prompt.length,
+        wordCount: words.length,
+        choiceGroupCount: choiceGroups.length
+      },
+      choiceGroups,
+      clauses: prompt
+        .split(/[.;\n]+/)
+        .map(part => part.trim())
+        .filter(Boolean)
+    };
+  }
+
+  if (feature === 'choices') {
+    return {
+      mode: 'heuristic-choice-inspection-v1',
+      choiceGroups,
+      recommendation:
+        choiceGroups.length > 0
+          ? 'Use these groups as Weighted Choice nodes.'
+          : 'No {a|b|c} groups found; add explicit braces to create choice nodes.'
+    };
+  }
+
+  if (feature === 'metadata') {
+    return {
+      mode: 'heuristic-metadata-v1',
+      tags: inferPromptTags(prompt),
+      estimatedComplexity:
+        choiceGroups.length >= 3 || words.length > 28 ? 'high' : 'normal'
+    };
+  }
+
+  return {
+    mode: 'heuristic-weight-normalization-v1',
+    groups: choiceGroups.map(group => {
+      const weight = group.options.length > 0
+        ? Math.floor(100 / group.options.length)
+        : 0;
+
+      return {
+        id: group.id,
+        options: group.options.map(option => ({ text: option, weight }))
+      };
+    }),
+    recommendation:
+      choiceGroups.length > 0
+        ? 'Initial equal weights generated. Adjust for desired frequency.'
+        : 'No choice groups found to weight.'
+  };
 }
 
 /**
@@ -1265,18 +1361,64 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
     if (!checkAdminAuth(request, reply)) {return;}
 
     const { prompt, model } = request.body as PromptTestRequest;
+    const llm = new LLMService({ defaultModel: model || undefined });
 
-    // Mock test for now - would connect to actual LLM service
+    if (!llm.available()) {
+      return reply.status(503).send({
+        success: false,
+        error: 'No server-side LLM provider is configured',
+        requiredEnv: ['OPENROUTER_API_KEY', 'OPENAI_API_KEY']
+      });
+    }
+
+    const startedAt = Date.now();
+    const completion = await llm.complete({
+      prompt: prompt || 'Return a short readiness confirmation.',
+      model: model || undefined,
+      maxTokens: 120,
+      temperature: 0.2
+    });
+
     return {
       success: true,
-      model: model || 'mock',
+      model: completion.model,
       prompt: prompt,
       response: {
-        text: `Mock response for: "${prompt}"`,
-        tokens: { input: 45, output: 25 },
-        latency: 234,
-        cost: 0.002
+        text: completion.content,
+        tokens: {
+          input: completion.tokensIn,
+          output: completion.tokensOut
+        },
+        latency: Date.now() - startedAt
       },
+      timestamp: new Date().toISOString()
+    };
+  });
+
+  server.post('/admin/test-feature', async (request, reply) => {
+    if (!checkAdminAuth(request, reply)) {return;}
+
+    const { feature, prompt } = request.body as FeatureTestRequest;
+    if (!['parse', 'choices', 'metadata', 'weights'].includes(feature)) {
+      return reply.status(400).send({
+        success: false,
+        error: 'Unknown admin feature diagnostic'
+      });
+    }
+
+    const text = prompt?.trim();
+    if (!text) {
+      return reply.status(400).send({
+        success: false,
+        error: 'Prompt is required for feature diagnostics'
+      });
+    }
+
+    return {
+      success: true,
+      feature,
+      prompt: text,
+      result: runFeatureDiagnostic(feature, text),
       timestamp: new Date().toISOString()
     };
   });

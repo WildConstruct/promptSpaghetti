@@ -19,6 +19,10 @@ const demoExamples = [
     name: 'Building Family Demo'
   },
   {
+    filename: 'mvp-indy-500-crowd-card-demo.psg',
+    name: 'Indy 500 Crowd Card Demo'
+  },
+  {
     filename: 'mvp-tree-branch-direction-demo.psg',
     name: 'Tree Branch Direction Demo'
   }

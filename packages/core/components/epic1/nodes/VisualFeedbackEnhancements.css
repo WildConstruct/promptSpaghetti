@@ -61,7 +61,7 @@
 .epic1-handle:hover::after {
   background: radial-gradient(
     circle at center,
-    rgba(74, 158, 255, 0.3) 0%,
+    rgba(248, 200, 74, 0.24) 0%,
     transparent 70%
   );
   animation: handlePulse 1s ease-in-out infinite;
@@ -136,13 +136,13 @@
 
 /* Focus ring for accessibility */
 .epic1-editable-node:focus-within {
-  outline: 2px solid #4a9eff;
+  outline: 2px solid #f4c64d;
   outline-offset: 2px;
 }
 
 /* Smooth hover states */
 .epic1-editable-node:hover:not(.editing) {
-  border-color: #4a9eff;
+  border-color: #f4c64d;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
 }
@@ -151,8 +151,8 @@
 .epic1-inline-input:focus,
 .epic1-inline-textarea:focus {
   background: #ffffff;
-  border-color: #4a9eff;
-  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+  border-color: #f4c64d;
+  box-shadow: 0 0 0 3px rgba(248, 200, 74, 0.1);
 }
 
 /* Slider enhancements */
@@ -229,8 +229,8 @@
 }
 
 .epic1-editable-node.editing .epic1-node-type-label {
-  background: rgba(74, 158, 255, 0.1);
-  color: #357abd;
+  background: rgba(248, 200, 74, 0.1);
+  color: #f4c64d;
 }
 
 /* Completion checkmark animation */

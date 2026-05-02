@@ -144,8 +144,8 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
       kind: 'reference-still',
       role: `${member.label} reference`,
       storage: {
-        provider: 'supabase',
-        uri: `supabase://scene-assets/${nextAssetId}.png`,
+        provider: 'local',
+        uri: `local-draft://scene-assets/${nextAssetId}.png`,
         contentType: 'image/png'
       },
       provenance: {
@@ -157,8 +157,9 @@ export const PsgSceneAssetsDialog: React.FC<PsgSceneAssetsDialogProps> = ({
         memberId: member.id,
         archetypeId: member.archetypeId,
         promptHints: member.promptHints,
-        notes: `${member.label} reference stub`
-      }
+        notes: `${member.label} reference draft; replace with generated or uploaded media before production handoff`
+      },
+      tags: ['draft-reference', 'needs-media']
     };
 
     setDraftAssets(prev => {

@@ -207,17 +207,14 @@ Suggested usage:
 - treat separately from the fragment packs
 - use as archetype/demo inventory, not generic insertion fragment
 
-## DELETE OR ARCHIVE
+## Deleted Placeholder
 
-### Placeholder
+The placeholder below was removed from the active library so retrieval cannot
+surface it as usable weapon/armor content.
 
 File:
 
 - `assets/library/weapons-armor-combat/complete-batch-placeholder.psg`
-
-Recommended action:
-
-- `DELETE_SAFE` or replace with real content before surfacing this domain
 
 Reason:
 

@@ -1,6 +1,6 @@
 # Demo Checklist
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-05-01_
 
 This is the shortest reliable walkthrough for showing the Prompt Spaghetti MVP to a teammate.
 
@@ -11,12 +11,24 @@ Before demoing, confirm:
 - `pnpm run validate:mvp:ship` passes
 - `pnpm run validate:local-sandbox:runtime` passes if you plan to show the local tree demo
 - the launch screen is visible on first load
-- the three canonical demo artifacts are available in `docs/examples/`
+- the canonical demo artifacts plus the Indy active-testing artifact are available in `docs/examples/`
 - if you plan to show hosted PSG helpers, auth + Supabase are configured
+
+2026-05-02 active-testing proof:
+
+- `pnpm run validate:mvp:ship` passed after escalation for the local esbuild
+  spawn restriction in this Codex sandbox
+- `pnpm run validate:repo:quality`, `pnpm run validate:cycles`, and
+  `pnpm run validate:artifacts:active` passed
+- focused launch, PSG sidecar, Comfy export, hosted crowd, LLM/server route,
+  tutorial, and demo PSG parser tests passed
+- live browser smoke used `http://localhost:3001/` because `3000` was already
+  occupied; the Indy quick start reached the editor without a runtime overlay
 
 Canonical demo artifacts:
 
 - [mvp-character-archetype-demo.psg](examples/mvp-character-archetype-demo.psg)
+- [mvp-indy-500-crowd-card-demo.psg](examples/mvp-indy-500-crowd-card-demo.psg)
 - [mvp-vehicle-family-demo.psg](examples/mvp-vehicle-family-demo.psg)
 - [mvp-building-family-demo.psg](examples/mvp-building-family-demo.psg)
 - [mvp-tree-family-sandbox-demo.psg](examples/mvp-tree-family-sandbox-demo.psg)
@@ -32,6 +44,7 @@ Branching pedagogy artifact:
 Show:
 
 - `Character Archetype`
+- `Indy 500 Crowd Card`
 - `Vehicle Family`
 - `Building Family`
 - `Build PSG Family Graph`
@@ -40,7 +53,8 @@ Say:
 
 - the MVP is about reusable archetypes, locked DNA, and controlled variation
 - the three primary quick starts are the canonical golden-path examples
-- the same three examples also exist as saved flat `.psg` demo files
+- the Indy quick start is the active-testing bridge for the EraCrowd Indianapolis 500 work
+- the same examples also exist as saved flat `.psg` demo files
 
 ### 2. Open the character quick start
 
@@ -79,11 +93,13 @@ Show:
 - placements
 - local attachment metadata
 - crowd members when present
+- local draft references marked as media still needed
 
 Say:
 
 - flat `.psg` stays canonical
 - sidecar assets support the workflow, but the archetype graph remains the core product object
+- local draft references are placeholders for actual media work, not cloud uploads
 
 ### 5. Show one tangible downstream output
 

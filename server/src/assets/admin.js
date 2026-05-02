@@ -126,8 +126,39 @@ async function testLLM() {
 }
 
 async function testFeature(name) {
-  console.warn('Not implemented: ' + name);
-  showErrorMessage('Feature not implemented: ' + name);
+  const resultDiv = document.getElementById('test-result');
+  if (!resultDiv) {
+    return;
+  }
+
+  resultDiv.innerHTML = 'Running ' + name + ' diagnostic...';
+
+  try {
+    const pw = await getAdminPassword();
+    const promptField = document.getElementById('test-prompt');
+    const modelField = document.getElementById('test-model');
+    const promptValue =
+      promptField && 'value' in promptField ? String(promptField.value) : '';
+    const modelValue =
+      modelField && 'value' in modelField ? String(modelField.value) : '';
+    const response = await fetch('/admin/test-feature', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(`admin:${pw || ''}`)
+      },
+      body: JSON.stringify({
+        feature: name,
+        prompt: promptValue,
+        model: modelValue
+      })
+    });
+    const result = await response.json();
+    resultDiv.innerHTML = '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    resultDiv.innerHTML = '<div class="error">Diagnostic failed: ' + message + '</div>';
+  }
 }
 
 window.onload = function() { switchTab('config'); };

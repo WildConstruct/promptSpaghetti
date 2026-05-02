@@ -1,6 +1,6 @@
 # MVP Ship Verification
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-05-02_
 
 This is the practical verification bar for calling the current branch a demoable MVP candidate.
 
@@ -8,15 +8,15 @@ It is intentionally narrower than full long-term product verification.
 
 ## A. Build / Typecheck
 
-- [ ] `pnpm run validate:mvp:ship` passes
-- [ ] `pnpm run validate:active` passes
-- [ ] `pnpm run validate:artifacts:active` passes
-- [ ] active typecheck path passes
-- [ ] client build passes
-- [ ] server build passes
+- [x] `pnpm run validate:mvp:ship` passes
+- [x] `pnpm run validate:active` passes
+- [x] `pnpm run validate:artifacts:active` passes
+- [x] active typecheck path passes
+- [x] client build passes
+- [x] server build passes
 - [ ] `pnpm run build:netlify` passes
 - [ ] `pnpm run build:vercel-api` passes
-- [ ] core/server targeted PSG tests remain green
+- [x] core/server targeted PSG tests remain green
 
 Notes:
 
@@ -28,10 +28,14 @@ Notes:
   focused active-lane smoke slice
 - use focused tests plus manual walkthroughs where the broader harness is
   unreliable
+- 2026-05-02: active/MVP validation and client build require running outside
+  the sandbox in this Codex environment because esbuild process spawning fails
+  with `EPERM` inside the sandbox; the same commands passed after escalation
 
 ## B. Launch Screen
 
 - [ ] `Character Archetype` quick start opens a graph
+- [ ] `Indy 500 Crowd Card` quick start opens an active-testing graph
 - [ ] `Vehicle Family` quick start opens a graph
 - [ ] `Building Family` quick start opens a graph
 - [ ] `Blank Canvas` opens an empty editor
@@ -50,8 +54,20 @@ Primary files:
 Reference demo files:
 
 - `docs/examples/mvp-character-archetype-demo.psg`
+- `docs/examples/mvp-indy-500-crowd-card-demo.psg`
 - `docs/examples/mvp-vehicle-family-demo.psg`
 - `docs/examples/mvp-building-family-demo.psg`
+
+Automated proof:
+
+- `client/src/components/LaunchScreen/__tests__/LaunchScreenQuickActions.test.tsx`
+  confirms every visible quick action maps to a template or explicit empty
+  editor launch
+- `packages/core/fileFormats/__tests__/mvpDemoExamples.test.ts` confirms the
+  Indy active-testing demo parses as a flat PSG artifact
+- 2026-05-02 live smoke on `http://localhost:3001/` confirmed launch cards
+  render and the Indy quick start reaches the editor without a runtime overlay;
+  port `3000` was already occupied by an older dev server in this workspace
 
 ## C. Editor Core
 
@@ -65,10 +81,16 @@ Reference demo files:
 - [ ] assets can be added manually
 - [ ] placements can be added manually
 - [ ] crowd members render in the sidecar when present
-- [ ] crowd member can create a reference asset stub
+- [ ] crowd member can create a local draft reference asset
 - [ ] existing asset can be edited
 - [ ] local image attachment updates the asset record
 - [ ] cloud-ready promotion only appears in cloud-capable mode
+
+Notes:
+
+- crowd-derived reference assets use `local-draft://` URIs plus `needs-media`
+  tags until a real local attachment or cloud media object replaces them
+- local draft references are not cloud upload claims
 
 Primary files:
 
@@ -92,6 +114,14 @@ Primary files:
 
 This section is the real "people can tinker" bar.
 
+Automated proof:
+
+- `client/src/Epic1Editor/components/__tests__/ComfyExportDialog.test.tsx`
+  covers Comfy workflow preview/download
+- `client/src/Epic1Editor/components/__tests__/PsgSceneAssetsDialog.test.tsx`
+  covers scene manifest state, local draft references, local attachments, and
+  scene assembly preview/download
+
 ## G. Optional Local Sandbox Demo
 
 - [ ] `pnpm run validate:local-sandbox:runtime` passes
@@ -114,11 +144,18 @@ Branching tree acceptance:
 - [ ] at least `5` preview seeds on the branching tree demo produce readable oak / cedar / fig direction outputs
 - [ ] the local sandbox dialog derives a graph summary from the branching tree demo before generation
 
+Automated proof:
+
+- `server/__tests__/local-image-routes.test.ts` and
+  `server/__tests__/local-image-sandbox-service.test.ts` passed for the
+  unavailable/configured service contract; runtime demo remains optional
+
 ## H. Product Honesty
 
 - [ ] no claims of browser access to local `.env`
 - [ ] no fake cloud upload claims
 - [ ] no hidden duplicate source-of-truth docs in the active flow
+- [ ] admin diagnostics are internal operator tooling, not product features
 - [ ] hosted-only operations are labeled as such
 
 ## I. Deferred But Acceptable For MVP

@@ -1,15 +1,63 @@
 .simple-menu-bar {
   display: flex;
-  background: rgba(17, 24, 39, 0.95);
-  border-bottom: 1px solid rgba(107, 114, 128, 0.2);
-  padding: 0;
-  font-size: 13px;
+  align-items: center;
+  gap: 18px;
+  min-height: 58px;
+  background:
+    linear-gradient(180deg, rgba(17, 19, 23, 0.98), rgba(10, 12, 15, 0.98));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 12px;
+  font-size: 12px;
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: rgba(243, 244, 246, 0.9);
-  backdrop-filter: blur(8px);
+  color: rgba(236, 238, 241, 0.92);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 28px rgba(0, 0, 0, 0.22);
   z-index: 1000;
   position: relative;
+}
+
+.menu-brand-block {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-width: 170px;
+  padding-right: 18px;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.menu-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.menu-brand-title {
+  font-size: 15px;
+  font-weight: 720;
+  color: #f5f7fa;
+  line-height: 1.1;
+}
+
+.menu-brand-subtitle {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8f98a5;
+}
+
+.menu-sections-strip,
+.menu-context-strip,
+.menu-command-strip {
+  display: flex;
+  align-items: center;
+}
+
+.menu-sections-strip {
+  gap: 2px;
 }
 
 .menu-section {
@@ -19,16 +67,19 @@
 }
 
 .menu-title {
-  padding: 8px 16px;
+  padding: 8px 10px;
   cursor: pointer;
   transition: background-color 0.15s ease;
-  border-radius: 4px;
-  margin: 2px;
+  border-radius: 2px;
+  margin: 0;
   user-select: none;
+  color: rgba(221, 226, 232, 0.86);
+  font-weight: 600;
 }
 
 .menu-title:hover {
-  background: rgba(107, 114, 128, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff7db;
 }
 
 .menu-section:hover .menu-dropdown {
@@ -40,10 +91,10 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background: rgba(17, 24, 39, 0.98);
-  border: 1px solid rgba(107, 114, 128, 0.3);
-  border-radius: 6px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  background: rgba(18, 20, 24, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.48);
   backdrop-filter: blur(12px);
   min-width: 180px;
   z-index: 1001;
@@ -56,17 +107,17 @@
   text-align: left;
   background: none;
   border: none;
-  color: rgba(243, 244, 246, 0.9);
-  padding: 8px 16px;
+  color: rgba(235, 238, 242, 0.9);
+  padding: 8px 14px;
   cursor: pointer;
   transition: background-color 0.15s ease;
-  font-size: 13px;
+  font-size: 12px;
   font-family: inherit;
 }
 
 .menu-item:hover {
-  background: rgba(59, 130, 246, 0.15);
-  color: rgb(147, 197, 253);
+  background: rgba(248, 200, 74, 0.12);
+  color: #ffe49a;
 }
 
 .menu-item.advanced {
@@ -92,7 +143,7 @@
 }
 
 .menu-section-label.core {
-  color: rgba(191, 219, 254, 0.88);
+  color: rgba(185, 216, 255, 0.88);
 }
 
 .menu-section-label.advanced {
@@ -103,4 +154,89 @@
   height: 1px;
   background: rgba(107, 114, 128, 0.2);
   margin: 4px 8px;
+}
+
+.menu-context-strip {
+  gap: 8px;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.menu-context-pill,
+.menu-health-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: rgba(24, 28, 34, 0.86);
+  color: #c9d0d8;
+  font-size: 11px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.menu-context-pill.muted {
+  color: #8d96a3;
+}
+
+.menu-health-pill {
+  border-color: rgba(95, 214, 121, 0.28);
+  background: rgba(31, 86, 45, 0.28);
+  color: #98e6a7;
+}
+
+.menu-command-strip {
+  gap: 8px;
+}
+
+.menu-command-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(30, 34, 40, 0.9);
+  color: #e8edf3;
+  font-size: 12px;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.menu-command-button:hover:not(:disabled) {
+  border-color: rgba(248, 200, 74, 0.42);
+  background: rgba(43, 39, 27, 0.92);
+  color: #ffe8a8;
+}
+
+.menu-command-button.primary {
+  border-color: rgba(248, 200, 74, 0.56);
+  background: linear-gradient(180deg, #f8c84a, #d99a18);
+  color: #15130d;
+  box-shadow: 0 0 0 1px rgba(255, 224, 139, 0.15);
+}
+
+.menu-command-button.primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #ffd766, #e5a922);
+  color: #111;
+}
+
+.menu-command-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1180px) {
+  .menu-context-strip {
+    display: none;
+  }
+
+  .menu-brand-block {
+    min-width: 172px;
+  }
 }

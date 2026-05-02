@@ -2978,7 +2978,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
             style={{
               width: '16px',
               height: '16px',
-              border: '2px solid #667eea',
+              border: '2px solid #f4c64d',
               borderTopColor: 'transparent',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite'

@@ -205,7 +205,7 @@ Notes:
 
 ### P4.1 Make prompt output usable
 
-Status: pending
+Status: in progress
 
 Must be true:
 
@@ -213,6 +213,12 @@ Must be true:
 - rerun path is fast
 - seed behavior is predictable
 - copy/export path is frictionless
+
+Notes:
+
+- targeted button and active-lane smoke tests cover the preview/export surface
+- live manual review of the final emitted prompt presentation remains useful
+  before active tester handoff
 
 ### P4.2 Golden-path graph
 
@@ -228,6 +234,7 @@ Build one polished demo graph around the actual origin use case:
 Current demo pack:
 
 - `docs/examples/mvp-character-archetype-demo.psg`
+- `docs/examples/mvp-indy-500-crowd-card-demo.psg`
 - `docs/examples/mvp-vehicle-family-demo.psg`
 - `docs/examples/mvp-building-family-demo.psg`
 
@@ -240,7 +247,7 @@ Remaining work:
 
 ### P5.1 Keep one real AI workflow
 
-Status: pending
+Status: mostly complete
 
 Primary supported action:
 
@@ -250,15 +257,26 @@ Must be true:
 
 - graph-native output
 - PSG-compatible result
-- honest fallback behavior
+- honest unavailable/heuristic behavior when no provider is configured
+
+Notes:
+
+- live completion now requires an explicitly configured provider
+- heuristic parse/refine/metadata helpers report `heuristic-*` model labels
+- server agent-draft and LLM route tests pass for the active testing contract
 
 ### P5.2 Remove ambiguous AI surfaces
 
-Status: pending
+Status: mostly complete
 
 Must be true:
 
 - generic text-in/text-out LLM routes are hidden, retired, or clearly secondary
+
+Notes:
+
+- secondary LLM helpers are no longer presented as live model success in unconfigured mode
+- `/admin/test-feature` is an internal deterministic diagnostic route
 
 ## P6: Product Honesty
 
@@ -270,13 +288,14 @@ Must be true:
 
 - no no-op menu items
 - no fake PSG save/open flows
-- no visible stub-only features positioned as complete
+- no visible placeholder-only features positioned as complete
 
 Notes:
 
 - misleading editor menu items and duplicate file actions were removed from the active shell
 - asset-browser save/open dialogs now prefer explicit `.psg` behavior over generic raw-JSON flows
-- stub preset fallback, fabricated preview simulation, fabricated branch visualization, and synthetic thumbnails were removed or replaced with explicit unavailable states
+- old preset placeholder behavior, fabricated preview simulation, fabricated branch visualization, and synthetic thumbnails were removed or replaced with explicit unavailable states
+- crowd-member reference assets now use local draft/needs-media semantics instead of placeholder media claims
 
 ## P7: Launch & Demo Polish
 
@@ -300,7 +319,7 @@ Primary files:
 Notes:
 
 - quick-start templates still exist in the launch screen today
-- the quick-start set is now demo-aligned and needs final manual walkthrough verification
+- the quick-start set is now demo-aligned, includes the Indy 500 active-test card, and needs final manual walkthrough verification
 
 ### P7.2 Golden-path demo pack
 
@@ -326,6 +345,7 @@ Reference:
 - `docs/mvp-finish-plan.md`
 - `docs/demo-checklist.md`
 - `docs/examples/mvp-character-archetype-demo.psg`
+- `docs/examples/mvp-indy-500-crowd-card-demo.psg`
 - `docs/examples/mvp-vehicle-family-demo.psg`
 - `docs/examples/mvp-building-family-demo.psg`
 

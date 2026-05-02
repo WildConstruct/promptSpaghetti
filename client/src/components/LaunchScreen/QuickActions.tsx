@@ -102,6 +102,16 @@ const templates: Template[] = [
     icon: <CharacterIcon />
   },
   {
+    id: 'indy_500_crowd_card',
+    title: 'Indy 500 Crowd Card',
+    description: 'Author race-day spectator card prompts for EraCrowd layout review',
+    prompt:
+      '1960s Indianapolis 500 spectator, single full-body card, controlled wardrobe and grandstand variation',
+    badge: 'Active Test',
+    tier: 'primary',
+    icon: <CrowdIcon />
+  },
+  {
     id: 'vehicle_family',
     title: 'Vehicle Family',
     description: 'Reusable vehicle archetype with stable design language',
@@ -166,12 +176,14 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
               title={template.prompt}
               data-testid={`quick-action-${template.id}`}
             >
+              <span className="template-icon">{template.icon}</span>
+              <span className="template-copy">
+                <span className="template-title">{template.title}</span>
+                <span className="template-description">{template.description}</span>
+              </span>
               {template.badge && (
                 <span className="template-badge">{template.badge}</span>
               )}
-              <span className="template-icon">{template.icon}</span>
-              <span className="template-title">{template.title}</span>
-              <span className="template-description">{template.description}</span>
             </button>
           ))}
         </div>
@@ -193,12 +205,14 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
               title={template.prompt}
               data-testid={`quick-action-${template.id}`}
             >
+              <span className="template-icon">{template.icon}</span>
+              <span className="template-copy">
+                <span className="template-title">{template.title}</span>
+                <span className="template-description">{template.description}</span>
+              </span>
               {template.badge && (
                 <span className="template-badge">{template.badge}</span>
               )}
-              <span className="template-icon">{template.icon}</span>
-              <span className="template-title">{template.title}</span>
-              <span className="template-description">{template.description}</span>
             </button>
           ))}
         </div>

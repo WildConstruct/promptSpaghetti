@@ -495,9 +495,6 @@ export const buildEditorSurfacePolicy = ({
   if (showAssetLibrary) {
     tabDefinitions.push(mapTab('assets', surfaces['tab.library']));
   }
-  if (showPreview) {
-    tabDefinitions.push(mapTab('preview', surfaces['tab.preview']));
-  }
   tabDefinitions.push(mapTab('components', surfaces['tab.linked']));
   tabDefinitions.push(mapTab('search', surfaces['tab.explore']));
   tabDefinitions.push(mapTab('relationships', surfaces['tab.graph']));

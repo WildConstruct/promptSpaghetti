@@ -112,6 +112,15 @@ type WeightedChoice = {
   weight: number;
 };
 
+function unavailableLiveLLM(operation: string) {
+  return {
+    error: `${operation} requires a configured server-side LLM provider`,
+    available: false,
+    mode: 'unavailable',
+    requiredEnv: ['OPENROUTER_API_KEY', 'OPENAI_API_KEY']
+  };
+}
+
 function normalizeTextKey(value: string): string {
   return value.trim().toLowerCase();
 }
@@ -287,6 +296,66 @@ function buildHeuristicInspiration(
   return themes;
 }
 
+function buildHeuristicParse(prompt: string, mode: string = 'standard') {
+  const variables = extractTemplateVariables(prompt);
+  const clauses = prompt
+    .split(/[.;\n]+/)
+    .map(part => part.trim())
+    .filter(Boolean)
+    .slice(0, 20);
+
+  return {
+    mode,
+    text: prompt,
+    variables,
+    clauses,
+    summary: {
+      characterCount: prompt.length,
+      wordCount: prompt.split(/\s+/).filter(Boolean).length,
+      variableCount: variables.length,
+      clauseCount: clauses.length
+    }
+  };
+}
+
+function buildHeuristicMetadata(
+  subject: string,
+  context: string = ''
+): Record<string, unknown> {
+  const haystack = `${subject} ${context}`.toLowerCase();
+  const tagMatchers: Array<[string, RegExp]> = [
+    ['crowd', /\b(crowd|spectator|fans|extras|grandstand)\b/],
+    ['vehicle', /\b(car|race car|truck|vehicle|indy)\b/],
+    ['track', /\b(track|speedway|pit|lane|garage|oval)\b/],
+    ['era', /\b(1960s|1970s|vintage|period|era)\b/],
+    ['wardrobe', /\b(outfit|wardrobe|helmet|jacket|uniform|dress)\b/]
+  ];
+  const tags = tagMatchers
+    .filter(([, pattern]) => pattern.test(haystack))
+    .map(([tag]) => tag);
+
+  return {
+    provider: 'heuristic',
+    subject,
+    tags,
+    wordCount: subject.split(/\s+/).filter(Boolean).length
+  };
+}
+
+function refineTextHeuristically(text: string) {
+  const refinedText = text
+    .replace(/\s+/g, ' ')
+    .replace(/\s+([,.!?;:])/g, '$1')
+    .trim();
+
+  const changes =
+    refinedText === text
+      ? ['No deterministic cleanup needed']
+      : ['Collapsed whitespace', 'Normalized punctuation spacing'];
+
+  return { refinedText, changes };
+}
+
 function parseEndpointRequest<TSchema extends ZodTypeAny>(
   body: unknown,
   schema: TSchema
@@ -359,13 +428,25 @@ export async function llmRoutes(app: FastifyInstance) {
         return reply.status(400).send({ error: 'Invalid complete request' });
       }
 
+      if (!llm.available()) {
+        return reply.status(503).send(unavailableLiveLLM('Completion'));
+      }
+
+      const completion = await llm.complete({
+        prompt: parsed.prompt,
+        model: parsed.model,
+        systemPrompt: parsed.systemPrompt,
+        temperature: parsed.temperature,
+        maxTokens: parsed.maxTokens
+      });
+
       return reply.send({
-        content: '[demo] LLM response placeholder',
-        model: parsed.model ?? 'stub',
+        content: completion.content,
+        model: completion.model,
         usage: {
-          promptTokens: 0,
-          completionTokens: 0,
-          totalTokens: 0
+          promptTokens: completion.tokensIn,
+          completionTokens: completion.tokensOut,
+          totalTokens: completion.tokensIn + completion.tokensOut
         }
       });
     }
@@ -382,8 +463,8 @@ export async function llmRoutes(app: FastifyInstance) {
       }
 
       return reply.send({
-        result: `[demo] Parsed (${parsed.mode ?? 'standard'})`,
-        model: 'stub'
+        result: buildHeuristicParse(parsed.prompt, parsed.mode ?? 'standard'),
+        model: 'heuristic-parse-v1'
       });
     }
   );
@@ -424,11 +505,11 @@ export async function llmRoutes(app: FastifyInstance) {
 
       return reply.send({
         metadata: {
-          provider: 'stub',
+          ...buildHeuristicMetadata(subject, parsed.context),
           available: true,
           subject
         },
-        model: 'stub'
+        model: 'heuristic-metadata-v1'
       });
     }
   );
@@ -443,9 +524,23 @@ export async function llmRoutes(app: FastifyInstance) {
         return reply.status(400).send({ error: 'Invalid refine request' });
       }
 
+      if (llm.available()) {
+        const completion = await llm.complete({
+          prompt: `Refine this text according to the instruction. Return only the refined text.\n\nInstruction: ${parsed.instruction ?? parsed.mode ?? 'Improve clarity while preserving meaning'}\n\nText:\n${parsed.text}`,
+          temperature: 0.2,
+          maxTokens: 800
+        });
+
+        return reply.send({
+          refinedText: completion.content.trim(),
+          model: completion.model
+        });
+      }
+
+      const refined = refineTextHeuristically(parsed.text);
       return reply.send({
-        refinedText: parsed.text,
-        model: 'stub'
+        ...refined,
+        model: 'heuristic-refine-v1'
       });
     }
   );
@@ -470,7 +565,7 @@ export async function llmRoutes(app: FastifyInstance) {
             : 0,
           prompt: parsed.prompt ?? null
         },
-        model: 'stub'
+        model: 'heuristic-graph-analysis-v1'
       });
     }
   );

@@ -41,6 +41,10 @@ export class LLMService {
   private opts: Required<LLMServiceOptions>;
 
   constructor(opts: LLMServiceOptions = {}) {
+    const openRouterKey = opts.apiKey || process.env.OPENROUTER_API_KEY || '';
+    const openAiKey = process.env.OPENAI_API_KEY || '';
+    const useOpenAiDirect = !openRouterKey && !!openAiKey;
+
     this.opts = {
       apiKey:
         opts.apiKey ||
@@ -50,11 +54,14 @@ export class LLMService {
       baseURL:
         opts.baseURL ||
         process.env.OPENAI_BASE_URL ||
-        'https://openrouter.ai/api/v1',
+        (useOpenAiDirect
+          ? 'https://api.openai.com/v1'
+          : 'https://openrouter.ai/api/v1'),
       defaultModel:
         opts.defaultModel ||
         process.env.OPENAI_DEFAULT_MODEL ||
-        'openai/gpt-4o-mini',
+        process.env.PRIMARY_MODEL ||
+        (useOpenAiDirect ? 'gpt-4o-mini' : 'openai/gpt-4o-mini'),
       requestTimeoutMs:
         opts.requestTimeoutMs ||
         Number(

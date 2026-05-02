@@ -75,12 +75,12 @@ describe('buildEditorSurfacePolicy', () => {
     );
   });
 
-  it('orders the side-panel tabs with core surfaces first and omits preview when unavailable', () => {
+  it('orders the side-panel tabs around the library and keeps preview in the bottom tray', () => {
     const policy = buildEditorSurfacePolicy({
       canExportComfy: true,
       canUseLocalSandboxGeneration: true,
       canExpandCrowdHosted: false,
-      showPreview: false,
+      showPreview: true,
       showAssetLibrary: true,
       actions
     });

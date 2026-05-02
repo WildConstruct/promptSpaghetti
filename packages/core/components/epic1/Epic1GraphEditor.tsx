@@ -2054,14 +2054,14 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               <Panel position="top-right">
                 <div className="panel-controls">
                   <button onClick={handleExecute} className="execute-button">
-                    Execute
+                    Simulate
                   </button>
                   <button
                     onClick={togglePreview}
                     className="preview-button"
                     data-tutorial-anchor="preview-button"
                   >
-                    {previewTrayIsOpen ? 'Hide' : 'Show'} Preview
+                    {previewTrayIsOpen ? 'Hide Output' : 'Test Output'}
                   </button>
                 </div>
               </Panel>

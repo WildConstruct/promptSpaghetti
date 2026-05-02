@@ -47,12 +47,11 @@ export default async function handler(req, res) {
     const openrouterKey = process.env.OPENROUTER_API_KEY;
 
     if (!openaiKey && !openrouterKey) {
-      // Return mock suggestions when no API keys
-      console.log('[API] No API keys - returning mock suggestions');
-      return res.status(200).json({
-        suggestions: ['Alpha variant', 'Beta variant', 'Gamma variant'],
-        model: 'stub',
-        success: true
+      return res.status(503).json({
+        error: 'Suggestion generation requires OPENROUTER_API_KEY or OPENAI_API_KEY',
+        available: false,
+        success: false,
+        requiredEnv: ['OPENROUTER_API_KEY', 'OPENAI_API_KEY']
       });
     }
 

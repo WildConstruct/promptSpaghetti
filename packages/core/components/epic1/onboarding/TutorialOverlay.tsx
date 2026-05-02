@@ -149,19 +149,14 @@ export const TutorialOverlay: React.FC = () => {
     // Show the paste dialog for the paste step
     setShowPasteDialog(true);
   }, [isActive, step.action]);
-  
+
   // Handle prompt paste from dialog
   const handlePromptPaste = (prompt: string) => {
-    console.log('Prompt pasted:', prompt);
-    // TODO: Parse the prompt and create nodes
-    // For now, just advance the tutorial
     setShowPasteDialog(false);
-    nextStep();
-    
-    // Dispatch event for the main editor to handle
-    window.dispatchEvent(new CustomEvent('epic1:promptPasted', { 
-      detail: { prompt } 
+    window.dispatchEvent(new CustomEvent('epic1:promptPasted', {
+      detail: { prompt }
     }));
+    nextStep();
   };
 
   // Handle click action

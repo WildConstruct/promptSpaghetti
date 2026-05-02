@@ -612,8 +612,109 @@ const branchingFamilyTemplate: QuickStartTemplate = {
   ]
 };
 
+const indyCrowdCardTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode(
+      'indy-dna',
+      80,
+      120,
+      'Era / Venue DNA',
+      '1960s Indianapolis 500 spectator card, documentary race-day realism, full-body single person, neutral card background, clean silhouette for EraCrowd layout'
+    ),
+    weightedChoiceNode('indy-spectator-role', 520, 20, 'Spectator Role', [
+      { id: 'indy-role-1', text: 'grandstand race fan', weight: 35 },
+      { id: 'indy-role-2', text: 'pit-lane crew observer', weight: 25 },
+      { id: 'indy-role-3', text: 'trackside photographer', weight: 20 },
+      { id: 'indy-role-4', text: 'family spectator with program', weight: 20 }
+    ]),
+    weightedChoiceNode('indy-wardrobe', 520, 220, 'Wardrobe Variation', [
+      { id: 'indy-wardrobe-1', text: 'short-sleeve button shirt, slacks, sunglasses', weight: 35 },
+      { id: 'indy-wardrobe-2', text: 'light jacket, cap, folded race program', weight: 30 },
+      { id: 'indy-wardrobe-3', text: 'crew coveralls, headset around neck', weight: 20 },
+      { id: 'indy-wardrobe-4', text: 'summer dress, gloves, small handbag', weight: 15 }
+    ]),
+    weightedChoiceNode('indy-zone', 520, 420, 'Layout Zone Cue', [
+      { id: 'indy-zone-1', text: 'grandstand seated, facing track', weight: 45 },
+      { id: 'indy-zone-2', text: 'concourse standing, mid-distance', weight: 25 },
+      { id: 'indy-zone-3', text: 'pit wall background extra, three-quarter view', weight: 20 },
+      { id: 'indy-zone-4', text: 'VIP box seated, relaxed posture', weight: 10 }
+    ]),
+    textNode(
+      'indy-card-constraints',
+      920,
+      320,
+      'Card Constraints',
+      'one person only, feet visible, no duplicate bodies, no modern logos, no car blocking silhouette, no crowd merging into subject'
+    ),
+    concatNode('indy-join-a', 920, 110, 'Resolve Person'),
+    concatNode('indy-join-b', 1260, 250, 'Resolve Card Prompt', {
+      requireAllInputs: true
+    }),
+    outputNode('indy-output', 1600, 250, 'indy_500_crowd_card_prompt')
+  ],
+  edges: [
+    {
+      id: 'indy-e1',
+      source: 'indy-dna',
+      target: 'indy-join-a',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'indy-e2',
+      source: 'indy-spectator-role',
+      target: 'indy-join-a',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'indy-e3',
+      source: 'indy-wardrobe',
+      target: 'indy-join-b',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'indy-e4',
+      source: 'indy-zone',
+      target: 'indy-join-b',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input2'
+    },
+    {
+      id: 'indy-e5',
+      source: 'indy-join-a',
+      target: 'indy-join-b',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input3'
+    },
+    {
+      id: 'indy-e6',
+      source: 'indy-card-constraints',
+      target: 'indy-join-b',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'input4'
+    },
+    {
+      id: 'indy-e7',
+      source: 'indy-join-b',
+      target: 'indy-output',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   character_variation: characterTemplate,
+  indy_500_crowd_card: indyCrowdCardTemplate,
   vehicle_family: vehicleFamilyTemplate,
   building_family: buildingFamilyTemplate,
   scene_still: vehicleFamilyTemplate,

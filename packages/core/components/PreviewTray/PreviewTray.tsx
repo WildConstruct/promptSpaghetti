@@ -486,7 +486,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                         }}
                         onMouseEnter={e => {
                           e.currentTarget.style.background = '#333';
-                          e.currentTarget.style.borderColor = '#4a9eff';
+                          e.currentTarget.style.borderColor = '#f4c64d';
                         }}
                         onMouseLeave={e => {
                           e.currentTarget.style.background = '#2a2a2a';
@@ -609,7 +609,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                                   width: '60px',
                                   padding: '1px 4px',
                                   background: '#1a1a1a',
-                                  border: '1px solid #4a9eff',
+                                  border: '1px solid #f4c64d',
                                   borderRadius: '3px',
                                   color: '#fff',
                                   fontSize: '12px',
@@ -656,7 +656,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                               }}
                               onMouseEnter={e =>
                                 (e.currentTarget.style.background =
-                                  'rgba(74, 158, 255, 0.2)')
+                                  'rgba(248, 200, 74, 0.16)')
                               }
                               onMouseLeave={e =>
                                 (e.currentTarget.style.background =
@@ -792,10 +792,10 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                           transition: 'all 0.2s'
                         }}
                         onMouseEnter={e => {
-                          e.currentTarget.style.borderColor = '#4a9eff';
-                          e.currentTarget.style.color = '#4a9eff';
+                          e.currentTarget.style.borderColor = '#f4c64d';
+                          e.currentTarget.style.color = '#f4c64d';
                           e.currentTarget.style.background =
-                            'rgba(74, 158, 255, 0.1)';
+                            'rgba(248, 200, 74, 0.12)';
                         }}
                         onMouseLeave={e => {
                           e.currentTarget.style.borderColor = '#444';
@@ -869,7 +869,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.background = '#333';
-                    e.currentTarget.style.borderColor = '#4a9eff';
+                    e.currentTarget.style.borderColor = '#f4c64d';
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.background = '#1a1a1a';
@@ -910,7 +910,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                     }}
                     onMouseEnter={e => {
                       e.currentTarget.style.background = '#333';
-                      e.currentTarget.style.borderColor = '#4a9eff';
+                      e.currentTarget.style.borderColor = '#f4c64d';
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.background = '#1a1a1a';

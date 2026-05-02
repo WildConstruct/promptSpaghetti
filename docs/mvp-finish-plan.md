@@ -101,7 +101,7 @@ The MVP cloud model should be honest and simple:
 The MVP should not claim:
 
 - browser access to a user's local `.env`
-- finished cloud media upload pipeline if it is not implemented
+- finished cloud media upload pipeline before that pipeline exists
 
 ### 4. AI Surface
 

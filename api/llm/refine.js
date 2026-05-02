@@ -52,14 +52,11 @@ export default async function handler(req, res) {
     const openrouterKey = process.env.OPENROUTER_API_KEY;
 
     if (!openaiKey && !openrouterKey) {
-      // Return simple refinement when no API keys
-      console.log('[API] No API keys - returning simple refinement');
-      return res.status(200).json({
-        refined: text,
-        original: text,
-        model: 'stub',
-        changes: [],
-        success: true
+      return res.status(503).json({
+        error: 'Text refinement requires OPENROUTER_API_KEY or OPENAI_API_KEY',
+        available: false,
+        success: false,
+        requiredEnv: ['OPENROUTER_API_KEY', 'OPENAI_API_KEY']
       });
     }
 

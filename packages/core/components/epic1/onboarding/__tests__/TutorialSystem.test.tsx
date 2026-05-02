@@ -4,7 +4,6 @@
 
 import React from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { renderWithTutorial, resetOnboardingStorage } from './testUtils';
 import { TutorialOverlay } from '../TutorialOverlay';
 import { useTutorial } from '../TutorialContext';
@@ -119,10 +118,47 @@ describe('Tutorial system behaviour', () => {
     expect(screen.getByTestId('tutorial-tooltip').style.left).not.toBe('');
   });
 
+  it('dispatches pasted tutorial prompts to the editor event bridge', async () => {
+    const promptListener = jest.fn();
+    window.addEventListener('epic1:promptPasted', promptListener);
+
+    renderWithTutorial(
+      <>
+        <div data-tutorial-anchor="wizard-button" />
+        <TutorialControls />
+        <TutorialOverlay />
+      </>
+    );
+
+    fireEvent.click(screen.getByTestId('start'));
+    fireEvent.click(screen.getByTestId('next'));
+    fireEvent.click(screen.getByTestId('next'));
+    fireEvent.click(screen.getByTestId('next'));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Paste Your Prompt/)).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByPlaceholderText(/paste your prompt here/i), {
+      target: { value: 'A {driver|mechanic} watches the Indy 500 from the grandstand' }
+    });
+    fireEvent.click(screen.getByText('Create Nodes'));
+
+    await waitFor(() => {
+      expect(promptListener).toHaveBeenCalledTimes(1);
+    });
+    expect(promptListener.mock.calls[0][0]).toMatchObject({
+      detail: {
+        prompt: 'A {driver|mechanic} watches the Indy 500 from the grandstand'
+      }
+    });
+
+    window.removeEventListener('epic1:promptPasted', promptListener);
+  });
+
   it('OnboardingIntegrationWrapper surfaces callback hooks and lifecycle', async () => {
     const onFirstEdit = jest.fn();
     const onComplete = jest.fn();
-    const user = userEvent.setup();
 
     const TestApp: React.FC = () => {
       const { startTutorial, nextStep, onboardingState, isActive, tutorialSteps } =
@@ -151,8 +187,8 @@ describe('Tutorial system behaviour', () => {
 
     expect(screen.getByTestId('active').textContent).toBe('inactive');
 
-    await act(async () => {
-      await user.click(screen.getByTestId('start'));
+    act(() => {
+      fireEvent.click(screen.getByTestId('start'));
     });
     expect(screen.getByTestId('active').textContent).toBe('active');
 
@@ -168,8 +204,8 @@ describe('Tutorial system behaviour', () => {
 
     const totalSteps = Number(screen.getByTestId('total-steps').textContent);
     for (let i = 0; i < totalSteps; i += 1) {
-      await act(async () => {
-        await user.click(screen.getByTestId('advance'));
+      act(() => {
+        fireEvent.click(screen.getByTestId('advance'));
       });
     }
 

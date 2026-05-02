@@ -154,8 +154,6 @@ const TONE_HINTS = [
   'surreal'
 ] as const;
 
-const OMIT_IDS = new Set(['complete-batch-placeholder']);
-
 function normalizePath(path: string): string {
   return path.startsWith('/assets/')
     ? path
@@ -263,10 +261,6 @@ function normalizeMetadata(
 function toAgentRecord(
   fragment: NonNullable<FragmentManifest['fragments']>[number]
 ): AgentFragmentRecord | null {
-  if (OMIT_IDS.has(fragment.id)) {
-    return null;
-  }
-
   if (fragment.id === 'roman-citizen' || fragment.name.includes('Roman Citizen')) {
     const record: AgentFragmentRecord = {
       id: fragment.id,

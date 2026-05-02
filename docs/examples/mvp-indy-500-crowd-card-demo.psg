@@ -1,0 +1,178 @@
+{
+  "version": "1.0.0",
+  "name": "Indy 500 Crowd Card Demo",
+  "description": "Active-testing crowd-card graph for EraCrowd Indianapolis 500 spectator extras.",
+  "metadata": {
+    "demoType": "mvp-active-test",
+    "quickStartId": "indy_500_crowd_card",
+    "category": "people-extras",
+    "handoff": "eracrowd"
+  },
+  "nodes": [
+    {
+      "id": "indy-dna",
+      "type": "TextBlock",
+      "name": "Era / Venue DNA",
+      "x": 80,
+      "y": 120,
+      "value": "1960s Indianapolis 500 spectator card, documentary race-day realism, full-body single person, neutral card background, clean silhouette for EraCrowd layout"
+    },
+    {
+      "id": "indy-spectator-role",
+      "type": "WeightedChoice",
+      "name": "Spectator Role",
+      "x": 520,
+      "y": 20,
+      "options": [
+        {
+          "text": "grandstand race fan",
+          "weight": 35
+        },
+        {
+          "text": "pit-lane crew observer",
+          "weight": 25
+        },
+        {
+          "text": "trackside photographer",
+          "weight": 20
+        },
+        {
+          "text": "family spectator with program",
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "id": "indy-wardrobe",
+      "type": "WeightedChoice",
+      "name": "Wardrobe Variation",
+      "x": 520,
+      "y": 220,
+      "options": [
+        {
+          "text": "short-sleeve button shirt, slacks, sunglasses",
+          "weight": 35
+        },
+        {
+          "text": "light jacket, cap, folded race program",
+          "weight": 30
+        },
+        {
+          "text": "crew coveralls, headset around neck",
+          "weight": 20
+        },
+        {
+          "text": "summer dress, gloves, small handbag",
+          "weight": 15
+        }
+      ]
+    },
+    {
+      "id": "indy-zone",
+      "type": "WeightedChoice",
+      "name": "Layout Zone Cue",
+      "x": 520,
+      "y": 420,
+      "options": [
+        {
+          "text": "grandstand seated, facing track",
+          "weight": 45
+        },
+        {
+          "text": "concourse standing, mid-distance",
+          "weight": 25
+        },
+        {
+          "text": "pit wall background extra, three-quarter view",
+          "weight": 20
+        },
+        {
+          "text": "VIP box seated, relaxed posture",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "id": "indy-card-constraints",
+      "type": "TextBlock",
+      "name": "Card Constraints",
+      "x": 920,
+      "y": 320,
+      "value": "one person only, feet visible, no duplicate bodies, no modern logos, no car blocking silhouette, no crowd merging into subject"
+    },
+    {
+      "id": "indy-join-a",
+      "type": "Concat",
+      "name": "Resolve Person",
+      "x": 920,
+      "y": 110,
+      "value": ", ",
+      "data": {
+        "separator": ", "
+      }
+    },
+    {
+      "id": "indy-join-b",
+      "type": "Concat",
+      "name": "Resolve Card Prompt",
+      "x": 1260,
+      "y": 250,
+      "value": ", ",
+      "data": {
+        "separator": ", ",
+        "requireAllInputs": true
+      }
+    },
+    {
+      "id": "indy-output",
+      "type": "Output",
+      "name": "Output",
+      "x": 1600,
+      "y": 250,
+      "template": "{prompt}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "indy-e1",
+      "source": "indy-dna",
+      "target": "indy-join-a",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "indy-e2",
+      "source": "indy-spectator-role",
+      "target": "indy-join-a",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "indy-e3",
+      "source": "indy-wardrobe",
+      "target": "indy-join-b",
+      "targetHandle": "input1"
+    },
+    {
+      "id": "indy-e4",
+      "source": "indy-zone",
+      "target": "indy-join-b",
+      "targetHandle": "input2"
+    },
+    {
+      "id": "indy-e5",
+      "source": "indy-join-a",
+      "target": "indy-join-b",
+      "targetHandle": "input3"
+    },
+    {
+      "id": "indy-e6",
+      "source": "indy-card-constraints",
+      "target": "indy-join-b",
+      "targetHandle": "input4"
+    },
+    {
+      "id": "indy-e7",
+      "source": "indy-join-b",
+      "target": "indy-output"
+    }
+  ]
+}

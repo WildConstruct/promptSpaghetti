@@ -65,7 +65,6 @@ export interface TabbedSidePanelProps {
 type TabType = SidePanelTabId | null;
 
 const createDefaultTabDefinitions = (
-  hasPreviewTab: boolean,
   showAssets: boolean
 ): SidePanelTabDefinition[] => {
   const tabs: SidePanelTabDefinition[] = [];
@@ -80,19 +79,6 @@ const createDefaultTabDefinitions = (
       availability: 'available',
       helperText:
         'Use fragments and presets here to keep the graph focused on reusable family logic.'
-    });
-  }
-
-  if (hasPreviewTab) {
-    tabs.push({
-      id: 'preview',
-      label: 'Preview',
-      title: 'Preview',
-      ariaLabel: 'Preview',
-      tier: 'core',
-      availability: 'available',
-      helperText:
-        'Use preview to check deterministic outputs before downstream export.'
     });
   }
 
@@ -156,7 +142,8 @@ const renderTabIcon = (tabId: SidePanelTabId) => {
     case 'search':
       return (
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85l.708-.708l-3.85-3.85zm-5.242.656a5.5 5.5 0 1 1 0-11a5.5 5.5 0 0 1 0 11z" />
+          <path d="M8 1.25a6.75 6.75 0 1 0 0 13.5a6.75 6.75 0 0 0 0-13.5zm0 1.1a5.65 5.65 0 1 1 0 11.3a5.65 5.65 0 0 1 0-11.3z" />
+          <path d="M10.92 4.72L9.55 9.05a.78.78 0 0 1-.5.5l-4.33 1.37a.24.24 0 0 1-.3-.3l1.37-4.33a.78.78 0 0 1 .5-.5l4.33-1.37a.24.24 0 0 1 .3.3zM7.18 7.18l-.66 2.08l2.08-.66l.66-2.08l-2.08.66z" />
         </svg>
       );
     case 'relationships':
@@ -198,7 +185,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   const resolvedTabDefinitions = useMemo(() => {
     const provided =
-      tabDefinitions ?? createDefaultTabDefinitions(hasPreviewTab, showAssets);
+      tabDefinitions ?? createDefaultTabDefinitions(showAssets);
 
     return provided.filter(tab => {
       if (tab.availability === 'disabled') {
@@ -229,27 +216,6 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
   const [panelWidth, setPanelWidth] = useState(defaultWidth);
   const [isResizing, setIsResizing] = useState(false);
-
-  const activeTabDefinition = useMemo(
-    () =>
-      resolvedTabDefinitions.find(tab => tab.id === activeTab) ?? null,
-    [activeTab, resolvedTabDefinitions]
-  );
-
-  const activeTabNote = useMemo(() => {
-    if (!activeTabDefinition) {
-      return null;
-    }
-
-    return {
-      title:
-        activeTabDefinition.tier === 'core'
-          ? 'Core MVP surface'
-          : 'Advanced surface',
-      body: activeTabDefinition.helperText,
-      tone: activeTabDefinition.tier
-    };
-  }, [activeTabDefinition]);
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -361,12 +327,6 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
       </div>
 
       <div className="panel-content">
-        {activeTabNote && (
-          <div className={`tab-context-note ${activeTabNote.tone}`}>
-            <div className="tab-context-title">{activeTabNote.title}</div>
-            <div className="tab-context-body">{activeTabNote.body}</div>
-          </div>
-        )}
         {activeTab === 'assets' && (
           <div className="assets-container">
             <AssetLibraryErrorBoundary>

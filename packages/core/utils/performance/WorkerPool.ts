@@ -530,7 +530,7 @@ export class WorkerPool<T = unknown> {
         return this.calculateGroupBoundsFallback(task.data) as T;
 
       default:
-        throw new Error(`Fallback not implemented for task type: ${task.type}`);
+        throw new Error(`No worker fallback is registered for task type: ${task.type}`);
     }
   }
 

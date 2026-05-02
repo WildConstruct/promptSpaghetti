@@ -133,7 +133,7 @@ describe('PsgSceneAssetsDialog', () => {
     });
   });
 
-  it('creates a reference asset stub from a crowd member and saves its placement lineage', () => {
+  it('creates a local draft reference asset from a crowd member and saves its placement lineage', () => {
     const onSave = jest.fn();
 
     render(
@@ -176,6 +176,11 @@ describe('PsgSceneAssetsDialog', () => {
         expect.objectContaining({
           id: 'guard-1-reference',
           kind: 'reference-still',
+          storage: expect.objectContaining({
+            provider: 'local',
+            uri: 'local-draft://scene-assets/guard-1-reference.png'
+          }),
+          tags: expect.arrayContaining(['draft-reference', 'needs-media']),
           metadata: expect.objectContaining({
             memberId: 'guard-1',
             archetypeId: 'guard'
@@ -215,7 +220,7 @@ describe('PsgSceneAssetsDialog', () => {
               source: 'derived'
             },
             metadata: {
-              notes: 'initial stub'
+              notes: 'initial draft'
             }
           }
         ]}
@@ -262,7 +267,7 @@ describe('PsgSceneAssetsDialog', () => {
     });
   });
 
-  it('attaches a local reference file to an existing asset stub', () => {
+  it('attaches a local reference file to an existing draft asset', () => {
     const onSave = jest.fn();
 
     const { container } = render(

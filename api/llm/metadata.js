@@ -47,7 +47,7 @@ export default async function handler(req, res) {
       ? 'openrouter'
       : openaiKey
         ? 'openai'
-        : 'stub';
+        : 'unavailable';
     const primaryModel = process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini';
 
     // Available models based on provider
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
         'gpt-4-turbo'
       ];
     } else {
-      availableModels = ['stub'];
+      availableModels = [];
     }
 
     const metadata = {
@@ -87,9 +87,9 @@ export default async function handler(req, res) {
         functionCalling: provider === 'openai'
       },
       limits: {
-        maxTokens: provider === 'stub' ? 100 : 4096,
-        maxPromptLength: provider === 'stub' ? 500 : 8000,
-        rateLimit: provider === 'stub' ? '10/min' : '60/min'
+        maxTokens: hasKeys ? 4096 : 0,
+        maxPromptLength: hasKeys ? 8000 : 0,
+        rateLimit: hasKeys ? '60/min' : 'unavailable'
       },
       version: '1.0.0',
       timestamp: new Date().toISOString()

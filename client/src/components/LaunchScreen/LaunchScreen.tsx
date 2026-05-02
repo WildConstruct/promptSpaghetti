@@ -29,6 +29,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [authEmail, setAuthEmail] = useState<string | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isFamilyPreviewOpen, setIsFamilyPreviewOpen] = useState(false);
 
   // node overrides
   const [nodeOverrides, setNodeOverrides] = useState<
@@ -415,7 +416,11 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       </header>
 
       {/* Main Content */}
-      <div className="launch-content">
+      <div
+        className={`launch-content ${
+          isFamilyPreviewOpen ? 'family-preview-open' : 'family-preview-collapsed'
+        }`}
+      >
         {/* Left Column - Prompt Input & Dissector */}
         <div className="launch-column launch-column-left">
           <div className="launch-section">
@@ -449,17 +454,41 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
         {/* Center Column - Node Preview */}
         <div className="launch-column launch-column-center">
-          <div className="launch-section preview-section">
-            <h2>Family Logic Preview</h2>
-            <p className="launch-section-copy">
-              Review the first pass of graph logic before you enter the editor,
-              then decide what stays fixed and what can vary.
-            </p>
-            <NodePreview
-              analysis={mergedAnalysis}
-              onNodeSelect={handleNodeSelect}
-              selectedNodeId={selectedNodeId}
-            />
+          <div
+            className={`launch-section preview-section ${
+              isFamilyPreviewOpen ? 'expanded' : 'collapsed'
+            }`}
+          >
+            <div className="preview-section-header">
+              <div>
+                <h2>Family Logic Preview</h2>
+                {!isFamilyPreviewOpen && (
+                  <p className="launch-section-copy compact">
+                    Hidden until you need to inspect the generated graph pass.
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                className="launch-button-secondary preview-toggle-button"
+                onClick={() => setIsFamilyPreviewOpen(open => !open)}
+              >
+                {isFamilyPreviewOpen ? 'Collapse' : 'Show Preview'}
+              </button>
+            </div>
+            {isFamilyPreviewOpen && (
+              <>
+                <p className="launch-section-copy">
+                  Review the first pass of graph logic before you enter the editor,
+                  then decide what stays fixed and what can vary.
+                </p>
+                <NodePreview
+                  analysis={mergedAnalysis}
+                  onNodeSelect={handleNodeSelect}
+                  selectedNodeId={selectedNodeId}
+                />
+              </>
+            )}
           </div>
 
           {/* Node Actions are now persistent and placed near Launch Editor */}

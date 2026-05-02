@@ -1,14 +1,16 @@
 .node-palette {
   height: 100%;
-  background: rgba(26, 26, 26, 0.95);
-  border: 1px solid rgba(103, 126, 234, 0.3);
-  border-radius: 0 8px 8px 0;
+  background: rgba(15, 18, 22, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 0;
   border-left: none;
   transition: width 0.3s ease;
   z-index: 100;
   display: flex !important;
   flex-direction: column;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    8px 0 28px rgba(0, 0, 0, 0.24),
+    inset -1px 0 0 rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(10px);
   visibility: visible !important;
   opacity: 1 !important;
@@ -33,10 +35,10 @@
 .palette-header {
   display: flex;
   align-items: center;
-  padding: 12px;
-  border-bottom: 1px solid rgba(103, 126, 234, 0.3);
-  background: rgba(30, 32, 38, 0.95);
-  border-radius: 8px 8px 0 0;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(20, 24, 29, 0.98);
+  border-radius: 0;
 }
 
 .collapse-button {
@@ -55,16 +57,17 @@
 
 .palette-title {
   margin-left: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #e0e0e0;
+  font-size: 12px;
+  font-weight: 760;
+  color: #f0f2f5;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
-
 .node-list {
-  flex: 1;
+  flex: 0 0 auto;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 8px;
+  padding: 0;
   min-height: 0; /* Important for flex children to scroll properly */
   /* Smooth scrolling optimization */
   scroll-behavior: smooth;
@@ -73,29 +76,50 @@
 }
 
 .palette-footer {
-  border-top: 1px solid rgba(103, 126, 234, 0.2);
-  padding: 12px;
-  background: rgba(20, 20, 20, 0.8);
-  margin-top: auto; /* Push to bottom */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0;
+  background: rgba(12, 14, 18, 0.92);
+  margin-top: 0;
+  flex: 0 0 auto;
+}
+
+.palette-footer > div,
+.palette-footer > section {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Footer button styles */
 .palette-footer-button {
   position: relative;
   overflow: hidden;
+  background: rgba(30, 34, 40, 0.96) !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0 !important;
+  color: #e8edf3 !important;
+  margin: 0 !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  width: 100% !important;
+  padding: 0 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.palette-footer-button + .palette-footer-button {
+  margin-top: 0 !important;
 }
 
 .palette-footer-button:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(103, 126, 234, 0.25) 0%,
-    rgba(103, 126, 234, 0.35) 100%
-  ) !important;
-  border-color: rgba(103, 126, 234, 0.5) !important;
-  transform: translateY(-1px);
-  box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  background: rgba(54, 48, 31, 0.92) !important;
+  border-bottom-color: rgba(248, 200, 74, 0.42) !important;
+  transform: none;
+  box-shadow: inset 3px 0 0 rgba(248, 200, 74, 0.78) !important;
 }
 
 .palette-footer-button:hover svg {
@@ -104,11 +128,7 @@
 
 .palette-footer-button:active {
   transform: translateY(0);
-  background: linear-gradient(
-    135deg,
-    rgba(103, 126, 234, 0.2) 0%,
-    rgba(103, 126, 234, 0.3) 100%
-  ) !important;
+  background: rgba(48, 41, 24, 0.96) !important;
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.2),
     inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
@@ -143,21 +163,20 @@
   display: flex;
   align-items: center;
   padding: 10px 12px;
-  margin-bottom: 6px;
-  background: linear-gradient(
-    135deg,
-    rgba(40, 40, 40, 0.8) 0%,
-    rgba(45, 45, 45, 0.8) 100%
-  );
-  border: 1px solid rgba(103, 126, 234, 0.2);
-  border-radius: 6px;
+  margin: 0;
+  min-height: 44px;
+  background: rgba(25, 29, 35, 0.86);
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
   cursor: grab;
-  transition: all 0.3s ease;
+  transition:
+    background-color 0.14s ease,
+    color 0.14s ease,
+    box-shadow 0.14s ease;
   position: relative;
   overflow: hidden;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow: none;
 }
 
 .node-item::before {
@@ -170,23 +189,16 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(103, 126, 234, 0.1),
+    rgba(248, 200, 74, 0.12),
     transparent
   );
   transition: left 0.5s ease;
 }
 
 .node-item:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(103, 126, 234, 0.15) 0%,
-    rgba(103, 126, 234, 0.25) 100%
-  );
-  border-color: rgba(103, 126, 234, 0.4);
-  transform: translateX(2px);
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: rgba(54, 48, 31, 0.92);
+  transform: none;
+  box-shadow: inset 3px 0 0 rgba(248, 200, 74, 0.78);
 }
 
 .node-item:hover::before {
@@ -199,7 +211,7 @@
 
 .node-icon {
   font-size: 16px;
-  margin-right: 8px;
+  margin-right: 10px;
   opacity: 0.6;
   display: flex;
   align-items: center;
@@ -210,14 +222,14 @@
 }
 
 .node-label {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 650;
   color: #e0e0e0;
 }
 
 /* Collapsed state */
 .node-palette.collapsed .node-item {
-  padding: 8px;
+  padding: 8px 0;
   justify-content: center;
 }
 
