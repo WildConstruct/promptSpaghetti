@@ -64,7 +64,7 @@
   visibility: visible !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
-  cursor: pointer !important;
+  cursor: default !important;
 }
 
 /* Visible edge path doesn't handle clicks */
@@ -75,15 +75,16 @@
 /* Invisible wider hit area for easier edge selection */
 .react-flow__edge {
   pointer-events: all !important;
+  cursor: default !important;
 }
 
 .react-flow__edge-interaction {
-  stroke-width: 30px !important;
-  stroke: transparent !important;
+  stroke-width: 56px !important;
+  stroke: rgba(255, 255, 255, 0.001) !important;
   fill: none !important;
   pointer-events: stroke !important;
-  cursor: pointer !important;
-  opacity: 0 !important;
+  cursor: default !important;
+  opacity: 1 !important;
 }
 
 /* Hover effect for edges */
@@ -105,6 +106,7 @@
 /* Individual edges must accept pointer events */
 .react-flow__edges .react-flow__edge {
   pointer-events: all !important;
+  cursor: default !important;
 }
 
 /* Ensure SVG element exists and is visible */
@@ -124,8 +126,8 @@
   width: 12px !important;
   height: 12px !important;
   border-radius: 50% !important;
-  background: #3b82f6 !important;
-  border: 2px solid #1e293b !important;
+  background: #f8c84a !important;
+  border: 2px solid #1a1a1a !important;
 }
 
 .react-flow__handle-left {
@@ -152,13 +154,13 @@
   transition: none !important;
 }
 
-/* Activated edges - animated cyan with dashes */
+/* Activated edges - animated yellow with dashes */
 .react-flow__edge.activated .react-flow__edge-path {
-  stroke: #22d3ee !important; /* Cyan */
+  stroke: #f8c84a !important;
   stroke-width: 4px !important;
   stroke-dasharray: 5;
   animation: dashdraw 0.5s linear infinite;
-  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.6)) !important;
+  filter: drop-shadow(0 0 4px rgba(248, 200, 74, 0.6)) !important;
   opacity: 1 !important;
 }
 
@@ -173,20 +175,20 @@
 
 /* Selection box styling */
 .react-flow__selectionpane {
-  background: rgba(59, 130, 246, 0.08) !important;
-  border: 1px solid rgba(59, 130, 246, 0.5) !important;
+  background: rgba(248, 200, 74, 0.08) !important;
+  border: 1px solid rgba(248, 200, 74, 0.5) !important;
 }
 
-/* Selected edge styling - cyan */
+/* Selected edge styling */
 .react-flow
   .react-flow__edges
   .react-flow__edge.selected
   .react-flow__edge-path,
 .react-flow .react-flow__edge.selected path.react-flow__edge-path,
 .react-flow__edge[class*='selected'] .react-flow__edge-path {
-  stroke: #22d3ee !important; /* Cyan for selected state */
+  stroke: #f8c84a !important;
   stroke-width: 4px !important;
-  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.6)) !important;
+  filter: drop-shadow(0 0 4px rgba(248, 200, 74, 0.6)) !important;
   opacity: 1 !important;
 }
 
@@ -199,8 +201,8 @@
 
 /* Ensure selection box is visible */
 .react-flow__selection {
-  background: rgba(59, 130, 246, 0.1) !important;
-  border: 1px solid #3b82f6 !important;
+  background: rgba(248, 200, 74, 0.1) !important;
+  border: 1px solid #f8c84a !important;
 }
 
 /* Force minimap to be visible in Epic1 editor */
@@ -213,8 +215,8 @@
 
 /* Ensure minimap mask shows viewport */
 .epic1-graph-editor .react-flow__minimap-mask {
-  fill: rgba(255, 255, 255, 0.1) !important;
-  stroke: #5b9eff !important;
+  fill: rgba(248, 200, 74, 0.1) !important;
+  stroke: #f8c84a !important;
   stroke-width: 2px !important;
 }
 
@@ -240,9 +242,9 @@
 
 /* Ensure minimap viewport rect is visible */
 .epic1-graph-editor .react-flow__minimap-mask {
-  fill: rgba(255, 255, 255, 0.1) !important;
+  fill: rgba(248, 200, 74, 0.1) !important;
   fill-opacity: 0.1 !important;
-  stroke: #5b9eff !important;
+  stroke: #f8c84a !important;
   stroke-width: 2px !important;
   stroke-opacity: 1 !important;
 }

@@ -77,9 +77,9 @@
 /* Editing state - glow effect */
 .epic1-editable-node.editing {
   box-shadow:
-    0 0 12px rgba(91, 158, 255, 0.8),
-    /* Smaller, tighter glow */ 0 0 24px rgba(91, 158, 255, 0.4); /* Subtle outer glow */
-  border-color: #5b9eff;
+    0 0 12px rgba(248, 200, 74, 0.8),
+    /* Smaller, tighter glow */ 0 0 24px rgba(248, 200, 74, 0.4); /* Subtle outer glow */
+  border-color: #f8c84a;
   border-width: 2px; /* Keep same border width to avoid layout shift */
   border-radius: 12px; /* Ensure radius is maintained */
   cursor: default;
@@ -122,7 +122,7 @@
 .epic1-handle {
   width: 12px;
   height: 12px;
-  background: #5b9eff;
+  background: #f8c84a;
   border: 2px solid #1a1a1a;
   border-radius: 50%;
   transition: all 0.2s ease;
@@ -133,9 +133,9 @@
 }
 
 .epic1-handle:hover {
-  background: #4a8ee6;
+  background: #ffd867;
   border-color: #0f0f0f;
-  box-shadow: 0 0 12px rgba(91, 158, 255, 1); /* More saturated glow */
+  box-shadow: 0 0 12px rgba(248, 200, 74, 1); /* More saturated glow */
   /* Keep same size to avoid layout shift */
   width: 12px;
   height: 12px;
@@ -210,7 +210,7 @@
   right: -8px;
   width: 16px;
   height: 16px;
-  background: #5b9eff;
+  background: #f8c84a;
   border-radius: 50%;
   animation: pulse 1.5s infinite;
 }
@@ -221,7 +221,7 @@
   right: -4px;
   width: 8px;
   height: 8px;
-  background: #5b9eff;
+  background: #f8c84a;
   border-radius: 50%;
 }
 
@@ -245,7 +245,7 @@
 .epic1-inline-input {
   width: 100%;
   padding: 8px;
-  border: 1px solid #5b9eff;
+  border: 1px solid #f8c84a;
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
@@ -257,7 +257,7 @@
 
 .epic1-inline-input:focus {
   background: #333333;
-  box-shadow: 0 0 0 2px rgba(91, 158, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(248, 200, 74, 0.3);
 }
 
 /* Textarea styles for multiline editing */
@@ -265,7 +265,7 @@
   width: 100%;
   min-height: 60px;
   padding: 8px;
-  border: 1px solid #5b9eff;
+  border: 1px solid #f8c84a;
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
@@ -278,7 +278,7 @@
 
 .epic1-inline-textarea:focus {
   background: #333333;
-  box-shadow: 0 0 0 2px rgba(91, 158, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(248, 200, 74, 0.3);
 }
 
 /* Node type specific colors */
@@ -301,11 +301,11 @@
 }
 
 .epic1-editable-node.weighted-choice.editing {
-  border-color: #22d3ee !important; /* Bright cyan when editing */
+  border-color: #f8c84a !important;
   box-shadow:
-    0 0 0 1px rgba(34, 211, 238, 0.6),
-    0 0 12px rgba(34, 211, 238, 0.8),
-    0 0 24px rgba(34, 211, 238, 0.4);
+    0 0 0 1px rgba(248, 200, 74, 0.6),
+    0 0 12px rgba(248, 200, 74, 0.8),
+    0 0 24px rgba(248, 200, 74, 0.4);
   border-radius: 12px; /* Maintain rounded corners */
 }
 
@@ -358,7 +358,7 @@
   top: 50% !important;
   transform: translateY(-50%) !important;
   z-index: 10;
-  background: #5b9eff;
+  background: #f8c84a;
   border: 2px solid #1a1a1a;
   width: 12px;
   height: 12px;
@@ -375,8 +375,8 @@
 /* IMPORTANT: Weighted choice selected state override - MUST BE LAST */
 .react-flow__node.selected .epic1-editable-node.weighted-choice:not(.editing),
 .epic1-editable-node.weighted-choice.selected:not(.editing) {
-  border-color: #22d3ee !important; /* Bright cyan for selected state */
+  border-color: #f8c84a !important;
   border-width: 2px !important;
-  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.3) !important;
+  box-shadow: 0 0 0 1px rgba(248, 200, 74, 0.3) !important;
   background: #1e1e1e !important; /* Keep the lighter background */
 }

@@ -13,6 +13,8 @@ import {
   useReactFlow
 } from 'reactflow';
 
+const EDGE_HIT_STROKE_WIDTH = 56;
+
 export type EdgeRoutingAlgorithm = 'bezier' | 'smoothstep' | 'straight' | 'step';
 
 interface ControlPoint {
@@ -229,11 +231,14 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
         
         {/* Invisible wider path for better interaction */}
         <path
+          className="react-flow__edge-interaction"
           style={{
             ...edgeStyle,
-            strokeWidth: 20,
-            opacity: 0,
-            cursor: 'pointer'
+            stroke: 'rgba(255, 255, 255, 0.001)',
+            strokeWidth: EDGE_HIT_STROKE_WIDTH,
+            opacity: 1,
+            cursor: 'default',
+            pointerEvents: 'stroke'
           }}
           d={edgePath}
           fill="none"

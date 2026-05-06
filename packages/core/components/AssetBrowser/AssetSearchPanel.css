@@ -3,7 +3,7 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: #101318;
+  background: #111111;
   color: #eef2f7;
   border: 0;
 }
@@ -54,7 +54,7 @@
   grid-template-columns: minmax(0, 1fr) 120px auto auto auto;
   gap: 0;
   padding: 8px 10px;
-  background: #171b21;
+  background: #1b1b1b;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -71,7 +71,7 @@
   padding: 0 8px;
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-right: 0;
-  background: #222833;
+  background: #242424;
   color: #edf0f5;
   outline: none;
 }
@@ -100,7 +100,7 @@
 
 .asset-search-button.secondary {
   border-left: 0;
-  background: rgba(30, 34, 40, 0.96);
+  background: rgba(34, 34, 34, 0.96);
   color: #d4d9e1;
 }
 
@@ -121,7 +121,7 @@
   padding: 0 9px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-left: 0;
-  background: rgba(30, 34, 40, 0.96);
+  background: rgba(34, 34, 34, 0.96);
   color: #b8c0cc;
   font-weight: 700;
   cursor: pointer;
@@ -137,7 +137,7 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
-  background: #101318;
+  background: #111111;
 }
 
 .asset-search-result {
@@ -148,7 +148,7 @@
   min-height: 34px;
   padding: 4px 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(20, 24, 29, 0.76);
+  background: rgba(24, 24, 24, 0.76);
 }
 
 .asset-search-result:hover {
@@ -192,7 +192,7 @@
   margin: 10px;
   padding: 18px 10px;
   border: 1px dashed rgba(255, 255, 255, 0.14);
-  background: rgba(15, 18, 22, 0.86);
+  background: rgba(18, 18, 18, 0.86);
   color: #8f98a5;
   font-size: 12px;
   text-align: center;

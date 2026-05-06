@@ -106,6 +106,7 @@ handoff/security posture.
 - `/docs/vercel-convergence-decision.md`
 - `/docs/psg-storage-architecture.md`
 - `/docs/psg-weekend-mvp-contract.md`
+- `/docs/metagrinder-psg-authoring-guide.md`
 - `/docs/active-validation-lane.md`
 - `/docs/active-deploy-packaging-lane.md`
 - `/docs/generated-artifact-policy.md`

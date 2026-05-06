@@ -82,7 +82,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
     let unsub: { subscription: { unsubscribe: () => void } } | null = null;
     (async () => {
       const supabase = getSupabase();
-      if (!supabase) { return; }
+      if (!supabase) {
+        return;
+      }
       const { data } = await supabase.auth.getSession();
       setAuthEmail(data.session?.user?.email ?? null);
       const listener = supabase.auth.onAuthStateChange((_event, session) => {
@@ -103,7 +105,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
   const signOut = useCallback(async () => {
     const supabase = getSupabase();
-    if (!supabase) { return; }
+    if (!supabase) {
+      return;
+    }
     await supabase.auth.signOut();
   }, []);
 
@@ -130,7 +134,10 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       return null;
     }
 
-    if (selectedNode.nodeType === 'Choice' || selectedNode.nodeType === 'Variable') {
+    if (
+      selectedNode.nodeType === 'Choice' ||
+      selectedNode.nodeType === 'Variable'
+    ) {
       return 'Allowed variation';
     }
 
@@ -203,7 +210,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                   ? option
                   : typeof option === 'object' &&
                       option !== null &&
-                      typeof (option as Record<string, unknown>).text === 'string'
+                      typeof (option as Record<string, unknown>).text ===
+                        'string'
                     ? ((option as Record<string, unknown>).text as string)
                     : null
               )
@@ -252,9 +260,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         clauses.push(`with ${naturalJoin(supportingResolved.slice(0, 2))}`);
       }
 
-      exampleMember = clauses.length > 0
-        ? `${anchor}, ${clauses.join(', ')}.`
-        : `${anchor}.`;
+      exampleMember =
+        clauses.length > 0 ? `${anchor}, ${clauses.join(', ')}.` : `${anchor}.`;
     }
 
     return {
@@ -366,13 +373,14 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       {/* Header */}
       <header className="launch-header">
         <div className="launch-logo">
-          <img
-            src="/images/PromptSpaghettiLogo.png"
-            alt="Prompt Spaghetti"
-            className="launch-logo-image"
+          <span
+            className="launch-logo-mark"
+            role="img"
+            aria-label="Prompt Spaghetti"
           />
           <p className="launch-tagline">
-            PSG-first authoring for reusable archetypes, locked design DNA, and controlled variation.
+            PSG-first authoring for reusable archetypes, locked design DNA, and
+            controlled variation.
           </p>
         </div>
         <div className="launch-header-actions">
@@ -418,7 +426,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       {/* Main Content */}
       <div
         className={`launch-content ${
-          isFamilyPreviewOpen ? 'family-preview-open' : 'family-preview-collapsed'
+          isFamilyPreviewOpen
+            ? 'family-preview-open'
+            : 'family-preview-collapsed'
         }`}
       >
         {/* Left Column - Prompt Input & Dissector */}
@@ -479,8 +489,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             {isFamilyPreviewOpen && (
               <>
                 <p className="launch-section-copy">
-                  Review the first pass of graph logic before you enter the editor,
-                  then decide what stays fixed and what can vary.
+                  Review the first pass of graph logic before you enter the
+                  editor, then decide what stays fixed and what can vary.
                 </p>
                 <NodePreview
                   analysis={mergedAnalysis}
@@ -508,7 +518,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
             <div className="launch-inline-actions">
               <div className="launch-inline-instruction">
-                Select a trait in the preview, then decide whether it stays fixed DNA or becomes allowed variation.
+                Select a trait in the preview, then decide whether it stays
+                fixed DNA or becomes allowed variation.
               </div>
               {(() => {
                 const selNode = mergedAnalysis?.nodes.find(
@@ -563,13 +574,19 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           )}
 
           {familySnapshot && (
-            <div className="launch-family-snapshot" aria-label="Family snapshot">
+            <div
+              className="launch-family-snapshot"
+              aria-label="Family snapshot"
+            >
               <div className="launch-family-column">
                 <span className="launch-family-heading">Fixed DNA</span>
                 <div className="launch-family-tags">
                   {familySnapshot.fixedTraits.length > 0 ? (
                     familySnapshot.fixedTraits.map(trait => (
-                      <span key={`fixed-${trait}`} className="launch-family-tag fixed">
+                      <span
+                        key={`fixed-${trait}`}
+                        className="launch-family-tag fixed"
+                      >
                         {trait}
                       </span>
                     ))
@@ -600,14 +617,19 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
                 </div>
               </div>
               <div className="launch-family-column resolved">
-                <span className="launch-family-heading">Example Family Member</span>
-                <span className="launch-family-kicker">One believable in-family output</span>
+                <span className="launch-family-heading">
+                  Example Family Member
+                </span>
+                <span className="launch-family-kicker">
+                  One believable in-family output
+                </span>
                 <p className="launch-family-preview">
                   {familySnapshot.resolvedPreview ||
                     'Your resolved family member will appear here once the archetype is parsed.'}
                 </p>
                 <p className="launch-family-subtle">
-                  Move a trait between fixed DNA and allowed variation, then watch this rewrite as one in-family output.
+                  Move a trait between fixed DNA and allowed variation, then
+                  watch this rewrite as one in-family output.
                 </p>
               </div>
             </div>
@@ -619,8 +641,9 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           <div className="launch-section">
             <h2>Quick Start Family Graphs</h2>
             <p className="launch-section-copy">
-              Use the primary demos for the cleanest archetype-first walkthrough,
-              then reach for advanced or manual starts only when you need them.
+              Use the primary demos for the cleanest archetype-first
+              walkthrough, then reach for advanced or manual starts only when
+              you need them.
             </p>
             <QuickActions onSelectTemplate={handleQuickAction} />
           </div>
@@ -629,10 +652,22 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
           <div className="launch-tips">
             <h3>Pro Tips</h3>
             <ul>
-              <li>Start with a quick-start family graph when you want the cleanest MVP walkthrough</li>
-              <li>Use prompt bootstrap when you want a first PSG graph drafted from text</li>
-              <li>Lock shared traits first, then make only the details you want variable</li>
-              <li>Treat Comfy export as the main downstream handoff and sidecar tools as advanced follow-on work</li>
+              <li>
+                Start with a quick-start family graph when you want the cleanest
+                MVP walkthrough
+              </li>
+              <li>
+                Use prompt bootstrap when you want a first PSG graph drafted
+                from text
+              </li>
+              <li>
+                Lock shared traits first, then make only the details you want
+                variable
+              </li>
+              <li>
+                Treat Comfy export as the main downstream handoff and sidecar
+                tools as advanced follow-on work
+              </li>
             </ul>
           </div>
         </div>

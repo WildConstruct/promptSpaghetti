@@ -46,6 +46,16 @@
   background-color: #f0f0f0;
 }
 
+.context-menu-item:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.context-menu-item:disabled:hover {
+  background: none;
+}
+
 .context-menu-item.danger {
   color: #d32f2f;
 }
@@ -71,4 +81,30 @@
   font-size: 12px;
   color: #999;
   padding-left: 16px;
+}
+
+.layout-context-menu {
+  min-width: 240px;
+}
+
+.context-menu-section-label {
+  padding: 6px 16px 4px;
+  color: #666;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.context-menu-preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 2px 8px 8px;
+  gap: 2px;
+}
+
+.context-menu-item.compact {
+  justify-content: center;
+  padding: 6px 8px;
+  font-size: 12px;
 }

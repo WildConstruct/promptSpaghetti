@@ -23,8 +23,8 @@
 }
 
 .prompt-wizard-modal {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: #1f1f1f;
+  border: 1px solid #444;
   border-radius: 12px;
   width: 90%;
   max-width: 800px;
@@ -55,7 +55,7 @@
 
 .prompt-wizard-header {
   padding: 20px;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid #444;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -105,8 +105,8 @@
 .prompt-wizard-input {
   width: 100%;
   padding: 12px;
-  background: #0f172a;
-  border: 1px solid #334155;
+  background: #111111;
+  border: 1px solid #444;
   border-radius: 8px;
   color: #e2e8f0;
   font-family: inherit;
@@ -162,7 +162,7 @@
 
 .prompt-wizard-footer {
   padding: 20px;
-  border-top: 1px solid #334155;
+  border-top: 1px solid #444;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -208,8 +208,8 @@
 .prompt-wizard-dissector-wrapper {
   margin: 20px 0;
   padding: 15px;
-  background: #0f172a;
-  border: 1px solid #334155;
+  background: #111111;
+  border: 1px solid #444;
   border-radius: 8px;
   min-height: 200px;
 }
@@ -222,7 +222,7 @@
 }
 
 .prompt-wizard-dissector-wrapper .prompt-dissector-textarea {
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(24, 24, 24, 0.5);
   border-color: #475569;
   color: #e2e8f0;
 }
@@ -237,6 +237,6 @@
 }
 
 .prompt-wizard-dissector-wrapper .prompt-dissector-toolbar {
-  background: rgba(30, 41, 59, 0.9);
+  background: rgba(38, 38, 38, 0.9);
   border-color: #475569;
 }

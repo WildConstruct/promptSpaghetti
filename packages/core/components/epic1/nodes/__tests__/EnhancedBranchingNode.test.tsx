@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import type { NodeProps } from 'reactflow';
 import { EnhancedBranchingNode } from '../EnhancedBranchingNode';
 import type { NodeIntelligenceService } from '../../../../services/llm';
@@ -110,5 +110,74 @@ describe('EnhancedBranchingNode', () => {
     expect(
       screen.getByText(/offline suggestions available/i)
     ).toBeInTheDocument();
+  });
+
+  it('uses label as the editable display title before legacy title', () => {
+    render(
+      <EnhancedBranchingNode
+        {...defaultProps}
+        data={{
+          ...defaultProps.data,
+          label: 'Age',
+          title: 'Weighted Choice'
+        }}
+      />
+    );
+
+    expect(screen.getByText('AGE')).toBeInTheDocument();
+  });
+
+  it('persists title edits through the title-specific callback', () => {
+    const onEdit = jest.fn();
+    const onTitleEdit = jest.fn();
+    const { container } = render(
+      <EnhancedBranchingNode
+        {...defaultProps}
+        data={{
+          ...defaultProps.data,
+          label: 'Weighted Choice',
+          title: 'Weighted Choice',
+          onEdit,
+          onTitleEdit
+        }}
+      />
+    );
+
+    const editButton = container.querySelector(
+      '.title-edit-btn'
+    ) as HTMLButtonElement;
+    fireEvent.click(editButton);
+
+    const input = screen.getByDisplayValue('Weighted Choice');
+    fireEvent.change(input, { target: { value: 'Sex' } });
+    fireEvent.blur(input);
+
+    expect(onTitleEdit).toHaveBeenCalledWith('Sex');
+    expect(onEdit).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the default title when a title edit is blank', () => {
+    const onTitleEdit = jest.fn();
+    const { container } = render(
+      <EnhancedBranchingNode
+        {...defaultProps}
+        data={{
+          ...defaultProps.data,
+          label: 'Weighted Choice',
+          onTitleEdit
+        }}
+      />
+    );
+
+    const editButton = container.querySelector(
+      '.title-edit-btn'
+    ) as HTMLButtonElement;
+    fireEvent.click(editButton);
+
+    const input = screen.getByDisplayValue('Weighted Choice');
+    fireEvent.change(input, { target: { value: '   ' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    expect(onTitleEdit).toHaveBeenCalledWith('Weighted Choice');
   });
 });

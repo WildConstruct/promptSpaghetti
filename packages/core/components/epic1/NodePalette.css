@@ -1,6 +1,6 @@
 .node-palette {
   height: 100%;
-  background: rgba(15, 18, 22, 0.97);
+  background: rgba(18, 18, 18, 0.97);
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 0;
   border-left: none;
@@ -37,7 +37,7 @@
   align-items: center;
   padding: 10px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(20, 24, 29, 0.98);
+  background: rgba(24, 24, 24, 0.98);
   border-radius: 0;
 }
 
@@ -78,7 +78,7 @@
 .palette-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0;
-  background: rgba(12, 14, 18, 0.92);
+  background: rgba(14, 14, 14, 0.92);
   margin-top: 0;
   flex: 0 0 auto;
 }
@@ -96,7 +96,7 @@
 .palette-footer-button {
   position: relative;
   overflow: hidden;
-  background: rgba(30, 34, 40, 0.96) !important;
+  background: rgba(34, 34, 34, 0.96) !important;
   border: 0 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 0 !important;
@@ -165,7 +165,7 @@
   padding: 10px 12px;
   margin: 0;
   min-height: 44px;
-  background: rgba(25, 29, 35, 0.86);
+  background: rgba(25, 25, 25, 0.86);
   border: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0;

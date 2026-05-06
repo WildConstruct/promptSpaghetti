@@ -43,6 +43,11 @@ import { useGraphViewControls } from './hooks/useGraphViewControls';
 import { useGraphImportExport } from './hooks/useGraphImportExport';
 import { useGraphSelection } from './hooks/useGraphSelection';
 import { useGraphPreview } from './hooks/useGraphPreview';
+import { useAutoLayout } from './hooks/useAutoLayout';
+import {
+  NeatenSettingsProvider,
+  useNeatenSettings
+} from './contexts/NeatenSettingsContext';
 
 import { GraphModals, WizardPreviewResult } from './components/GraphModals';
 import {
@@ -63,6 +68,7 @@ import { GraphCommander, type GraphCommanderCommand } from './GraphCommander';
 import { NodeTetris } from './NodeTetris';
 import { NodeToolbar } from './NodeToolbar';
 import { NodePalette } from './NodePalette';
+import { LayoutContextMenu } from './nodes/LayoutContextMenu';
 import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import {
   SelectionFeedback,
@@ -116,14 +122,20 @@ import './PanZoomControls.css';
 
 // Local no-op adapters for optional editor integrations.
 const IntelligenceProvider = ({ children }: any) => children;
-const NeatenSettingsProvider = ({ children }: any) => children;
 const HistoryPalette = () => null;
-const useAutoLayout = () => ({
-  neatenSelection: () => {},
-  neatenAll: () => {},
-  cleanupNodes: () => {},
-  cleanupAll: () => {}
-});
+
+type LayoutContextMenuState =
+  | {
+      kind: 'node';
+      nodeId: string;
+      nodeType?: string;
+      position: { x: number; y: number };
+    }
+  | {
+      kind: 'canvas';
+      position: { x: number; y: number };
+    }
+  | null;
 
 export interface Epic1GraphEditorProps {
   initialNodes?: Node<EditableNodeData>[];
@@ -321,6 +333,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     distributeNodes,
     handleNodeClick,
     handlePaneClick,
+    setSelectedNodeId,
     onConnect,
     onNodesDelete,
     onEdgesDelete
@@ -761,6 +774,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   // Layout utilities
   const { neatenSelection, neatenAll, cleanupNodes, cleanupAll } =
     useAutoLayout();
+  const { setGridSize, setRowSnap } = useNeatenSettings();
+  const [layoutContextMenu, setLayoutContextMenu] =
+    useState<LayoutContextMenuState>(null);
 
   // Micro interactions
   const { interactions, trigger } = useMicroInteractions();
@@ -891,6 +907,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             position,
             data: {
               nodeType: 'weightedChoice',
+              label: 'Weighted Choice',
+              title: 'Weighted Choice',
               options,
               value: JSON.stringify(options, null, 2)
             }
@@ -1058,6 +1076,98 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     [graphReferences, setNodes]
   );
 
+  const normalizeWeightedChoiceLabel = useCallback((value: unknown) => {
+    return typeof value === 'string' && value.trim().length > 0
+      ? value.trim()
+      : 'Weighted Choice';
+  }, []);
+
+  const normalizeWeightedChoiceOptions = useCallback((value: unknown) => {
+    return Array.isArray(value)
+      ? value.map((option: any, index: number) => ({
+          id:
+            typeof option?.id === 'string' && option.id.trim().length > 0
+              ? option.id
+              : `option-${index + 1}`,
+          text:
+            typeof option?.text === 'string'
+              ? option.text
+              : typeof option?.label === 'string'
+                ? option.label
+                : '',
+          weight:
+            typeof option?.weight === 'number' && Number.isFinite(option.weight)
+              ? option.weight
+              : 50,
+          hasBranch: option?.hasBranch === true
+        }))
+      : null;
+  }, []);
+
+  const handleWeightedChoiceTitleEdit = useCallback(
+    (nodeId: string, nextTitle: string) => {
+      const label = normalizeWeightedChoiceLabel(nextTitle);
+
+      setNodes((currentNodes: Node<EditableNodeData>[]) =>
+        currentNodes.map((node: Node<EditableNodeData>) =>
+          node.id === nodeId
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  label,
+                  title: label
+                }
+              }
+            : node
+        )
+      );
+    },
+    [normalizeWeightedChoiceLabel, setNodes]
+  );
+
+  const handleWeightedChoiceNodeEdit = useCallback(
+    (nodeId: string, payload: string) => {
+      let parsed: any = null;
+      try {
+        parsed = JSON.parse(payload);
+      } catch {
+        parsed = null;
+      }
+
+      setNodes((currentNodes: Node<EditableNodeData>[]) =>
+        currentNodes.map((node: Node<EditableNodeData>) => {
+          if (node.id !== nodeId) {
+            return node;
+          }
+
+          const rawOptions = Array.isArray(parsed)
+            ? parsed
+            : Array.isArray(parsed?.options)
+              ? parsed.options
+              : node.data.options;
+          const nextOptions =
+            normalizeWeightedChoiceOptions(rawOptions) ?? node.data.options;
+          const label = normalizeWeightedChoiceLabel(
+            parsed?.label ?? parsed?.title ?? node.data.label ?? node.data.title
+          );
+
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              options: nextOptions,
+              value: JSON.stringify(nextOptions ?? [], null, 2),
+              label,
+              title: label
+            }
+          };
+        })
+      );
+    },
+    [normalizeWeightedChoiceLabel, normalizeWeightedChoiceOptions, setNodes]
+  );
+
   // Enhanced nodes with edit handlers
   const enhancedNodes = useMemo(() => {
     return nodes.map((node: Node<EditableNodeData>) => ({
@@ -1108,9 +1218,16 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           onEdit: (newValue: string) =>
             node.type === 'componentInstance'
               ? handleComponentInstanceNamespaceEdit(node.id, newValue)
+              : node.type === 'weightedChoice'
+                ? handleWeightedChoiceNodeEdit(node.id, newValue)
               : node.type === 'variable' || node.type === 'textBlock' || node.type === 'output'
                 ? handleGraphReferenceAwareNodeEdit(node.id, newValue)
                 : handleNodeEdit(node.id, newValue),
+          onTitleEdit:
+            node.type === 'weightedChoice'
+              ? (nextTitle: string) =>
+                  handleWeightedChoiceTitleEdit(node.id, nextTitle)
+              : undefined,
           onEditStart: () => {},
           onEditEnd: () => {}
         };
@@ -1119,7 +1236,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       width: node.width || undefined,
       height: node.height || undefined
     }));
-  }, [componentDefinitions, graphReferences, handleComponentInstanceNamespaceEdit, handleGraphReferenceAwareNodeEdit, nodes, selectedNodeId, handleNodeEdit]);
+  }, [componentDefinitions, graphReferences, handleComponentInstanceNamespaceEdit, handleGraphReferenceAwareNodeEdit, handleWeightedChoiceNodeEdit, handleWeightedChoiceTitleEdit, nodes, selectedNodeId, handleNodeEdit]);
 
   // Notify parent of changes
   useEffect(() => {
@@ -1854,6 +1971,72 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     setReactFlowInstance(instance);
   }, []);
 
+  const closeLayoutContextMenu = useCallback(() => {
+    setLayoutContextMenu(null);
+  }, []);
+
+  const selectedLayoutNodes = useMemo(
+    () => nodes.filter(node => node.selected || node.id === selectedNodeId),
+    [nodes, selectedNodeId]
+  );
+
+  const handleNodeContextMenu = useCallback(
+    (event: React.MouseEvent, node: Node<EditableNodeData>) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      setNodes(currentNodes => {
+        const clickedNodeIsSelected = currentNodes.some(
+          currentNode => currentNode.id === node.id && currentNode.selected
+        );
+
+        return currentNodes.map(currentNode => ({
+          ...currentNode,
+          selected: clickedNodeIsSelected
+            ? Boolean(currentNode.selected)
+            : currentNode.id === node.id
+        }));
+      });
+
+      setSelectedNodeId(node.id);
+      setLayoutContextMenu({
+        kind: 'node',
+        nodeId: node.id,
+        nodeType: node.type ?? node.data?.nodeType,
+        position: { x: event.clientX, y: event.clientY }
+      });
+    },
+    [setNodes, setSelectedNodeId]
+  );
+
+  const handlePaneContextMenu = useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
+    setLayoutContextMenu({
+      kind: 'canvas',
+      position: { x: event.clientX, y: event.clientY }
+    });
+  }, []);
+
+  const handlePaneClickWithContextMenuClose = useCallback(() => {
+    closeLayoutContextMenu();
+    handlePaneClick();
+  }, [closeLayoutContextMenu, handlePaneClick]);
+
+  const runLayoutContextAction = useCallback(
+    (action: () => void) => {
+      action();
+      closeLayoutContextMenu();
+    },
+    [closeLayoutContextMenu]
+  );
+
+  const cleanupSelectedLayoutNodes = useCallback(() => {
+    if (selectedLayoutNodes.length === 0) {
+      return;
+    }
+    cleanupNodes(selectedLayoutNodes);
+  }, [cleanupNodes, selectedLayoutNodes]);
+
   // Wrapper for nodes change to support undo/redo
   const onNodesChange = useCallback(
     (changes: any[]) => {
@@ -2075,7 +2258,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               onConnect={onConnect}
               onInit={onInit}
               onNodeClick={handleNodeClick}
-              onPaneClick={handlePaneClick}
+              onNodeContextMenu={handleNodeContextMenu}
+              onPaneClick={handlePaneClickWithContextMenuClose}
+              onPaneContextMenu={handlePaneContextMenu}
               onNodesDelete={onNodesDelete}
               onEdgesDelete={onEdgesDelete}
               onDragOver={onDragOver}
@@ -2087,6 +2272,10 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               connectionMode={ConnectionMode.Loose}
               connectionLineType={ConnectionLineType.SmoothStep}
               selectionMode={SelectionMode.Partial}
+              selectionOnDrag
+              selectNodesOnDrag
+              nodesDraggable
+              nodesConnectable
               fitView
               fitViewOptions={{ padding: 0.2, minZoom: 0.02, maxZoom: 2 }}
               minZoom={0.02}
@@ -2096,7 +2285,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               deleteKeyCode={['Delete', 'Backspace']}
               multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
               panOnScroll={false}
-              panOnDrag
+              panOnDrag={[1]}
               panActivationKeyCode="Space"
               zoomOnScroll={true}
               zoomOnDoubleClick
@@ -2146,6 +2335,48 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               ))}
             </ReactFlow>
           </SafeReactFlowWrapper>
+
+          <LayoutContextMenu
+            mode={layoutContextMenu?.kind ?? null}
+            position={layoutContextMenu?.position ?? null}
+            nodeType={
+              layoutContextMenu?.kind === 'node'
+                ? layoutContextMenu.nodeType
+                : undefined
+            }
+            selectedCount={selectedLayoutNodes.length}
+            totalNodeCount={nodes.length}
+            onClose={closeLayoutContextMenu}
+            onNeatenSelection={() =>
+              runLayoutContextAction(() => neatenSelection())
+            }
+            onCleanupSelection={() =>
+              runLayoutContextAction(cleanupSelectedLayoutNodes)
+            }
+            onAlignHorizontal={() =>
+              runLayoutContextAction(() => alignNodes('horizontal'))
+            }
+            onAlignVertical={() =>
+              runLayoutContextAction(() => alignNodes('vertical'))
+            }
+            onDistributeHorizontal={() =>
+              runLayoutContextAction(() => distributeNodes('horizontal'))
+            }
+            onDistributeVertical={() =>
+              runLayoutContextAction(() => distributeNodes('vertical'))
+            }
+            onDuplicate={() => runLayoutContextAction(duplicateNodes)}
+            onDelete={() => runLayoutContextAction(deleteSelectedNodes)}
+            onNeatenAll={() => runLayoutContextAction(() => neatenAll())}
+            onCleanupAll={() => runLayoutContextAction(cleanupAll)}
+            onFitView={() => runLayoutContextAction(fitView)}
+            onSetGridSize={value =>
+              runLayoutContextAction(() => setGridSize(value))
+            }
+            onSetRowSnap={value =>
+              runLayoutContextAction(() => setRowSnap(value))
+            }
+          />
 
           {/* NodePalette - positioned outside ReactFlow */}
           <div style={{            position: 'absolute',            top: 0,            left: 0,            bottom: 0,
@@ -2333,7 +2564,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <NeatenSettingsProvider>{content}</NeatenSettingsProvider>
+      {content}
     </DndProvider>
   );
 };
@@ -2344,8 +2575,10 @@ const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = props => {
     <TutorialProvider>
       <IntelligenceProvider>
         <ReactFlowProvider>
-          <Epic1GraphEditorClean {...props} />
-          <TutorialOverlay />
+          <NeatenSettingsProvider>
+            <Epic1GraphEditorClean {...props} />
+            <TutorialOverlay />
+          </NeatenSettingsProvider>
         </ReactFlowProvider>
       </IntelligenceProvider>
     </TutorialProvider>

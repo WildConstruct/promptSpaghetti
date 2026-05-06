@@ -286,7 +286,7 @@ textarea,
 
 /* Minimap viewport indicator */
 .react-flow__minimap-mask {
-  fill: rgba(255, 255, 255, 0.1) !important;
+  fill: rgba(248, 200, 74, 0.1) !important;
 }
 
 .react-flow__selection {

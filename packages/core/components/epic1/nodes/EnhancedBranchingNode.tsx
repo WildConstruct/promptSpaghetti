@@ -17,10 +17,13 @@ export type { WeightedOption } from '../../../types/epic1';
 
 export interface EnhancedBranchingNodeData extends EditableNodeData {
   options?: WeightedOption[];
+  label?: string;
   title?: string;
+  onTitleEdit?: (nextTitle: string) => void;
   metadata?: SegmentMetadata;
 }
 
+const DEFAULT_WEIGHTED_CHOICE_TITLE = 'Weighted Choice';
 const EDITING_BRANCH_HANDLE_BASE_TOP = 132;
 const EDITING_BRANCH_HANDLE_ROW_SPACING = 88;
 const DISPLAY_BRANCH_HANDLE_BASE_TOP = 72;
@@ -46,6 +49,16 @@ function getFallbackBranchHandleTop(index: number, isEditing: boolean): number {
 function areNumberArraysEqual(a: number[], b: number[]): boolean {
   if (a.length !== b.length) {return false;}
   return a.every((value, index) => value === b[index]);
+}
+
+function normalizeWeightedChoiceTitle(value: unknown): string {
+  return typeof value === 'string' && value.trim().length > 0
+    ? value.trim()
+    : DEFAULT_WEIGHTED_CHOICE_TITLE;
+}
+
+function getWeightedChoiceTitle(data: EnhancedBranchingNodeData): string {
+  return normalizeWeightedChoiceTitle(data.label || data.title);
 }
 
 export function normalizeWeightedOptions(
@@ -376,13 +389,19 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   };
 
   const [options, setOptions] = useState<WeightedOption[]>(initializeOptions());
-  const [title, setTitle] = useState(props.data?.title || 'Weighted Choice');
+  const [title, setTitle] = useState(() => getWeightedChoiceTitle(props.data));
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [mainHandleTop, setMainHandleTop] = useState(35);
   const [branchHandleTops, setBranchHandleTops] = useState<number[]>([]);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const updateNodeInternals = useUpdateNodeInternals();
+
+  useEffect(() => {
+    if (!isEditingTitle) {
+      setTitle(getWeightedChoiceTitle(props.data));
+    }
+  }, [props.data.label, props.data.title, props.data, isEditingTitle]);
 
   const hasBranching = options.some(opt => opt.hasBranch);
   const suggestionIntelligence = intelligence.nodeIntelligence;
@@ -394,7 +413,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       .map(opt => opt.text?.trim())
       .filter((text): text is string => Boolean(text))
       .join(', ') || title || 'weighted choice node';
-  const optimizationContext = `Node title: ${title || 'Weighted Choice'}. Options: ${
+  const optimizationContext = `Node title: ${title || DEFAULT_WEIGHTED_CHOICE_TITLE}. Options: ${
     options
       .map(opt => opt.text?.trim())
       .filter((text): text is string => Boolean(text))
@@ -606,6 +625,16 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     ]);
   };
 
+  const commitTitleEdit = useCallback(
+    (nextTitle: string) => {
+      const normalizedTitle = normalizeWeightedChoiceTitle(nextTitle);
+      setTitle(normalizedTitle);
+      setIsEditingTitle(false);
+      props.data.onTitleEdit?.(normalizedTitle);
+    },
+    [props.data]
+  );
+
   const removeOption = (index: number) => {
     if (options.length > 1) {
       setOptions(options.filter((_, i) => i !== index));
@@ -687,11 +716,12 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
         value: String(props.data.value ?? ''),
         nodeType: 'weightedChoice', // Use weightedChoice for compatibility
         options, // Pass current options state so BaseEditableNode can check hasBranch
+        label: title,
         title,
         onEdit: (_nextValue: string) => {
           void _nextValue;
           const handleEdit = props.data.onEdit as EditableNodeData['onEdit'];
-          handleEdit?.(JSON.stringify({ options, title }));
+          handleEdit?.(JSON.stringify({ options, label: title, title }));
         }
       }}
     >
@@ -713,9 +743,16 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     className="title-edit-input"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    onBlur={() => setIsEditingTitle(false)}
+                    onBlur={() => commitTitleEdit(title)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {setIsEditingTitle(false);}
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        commitTitleEdit(title);
+                      } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        setTitle(getWeightedChoiceTitle(props.data));
+                        setIsEditingTitle(false);
+                      }
                       e.stopPropagation(); // Prevent node keyboard shortcuts
                     }}
                     onPaste={(e) => e.stopPropagation()}

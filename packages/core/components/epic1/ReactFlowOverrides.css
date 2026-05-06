@@ -106,7 +106,7 @@
 /* Edge hover state */
 .react-flow__edge:hover .react-flow__edge-path {
   stroke-width: 3 !important;
-  cursor: pointer;
+  cursor: default;
 }
 
 /* CRITICAL: Force overflow visible for handle positioning */
@@ -153,5 +153,13 @@
 }
 
 .react-flow__edge {
+  pointer-events: all !important;
+  cursor: default !important;
+}
+
+.react-flow__edge-interaction {
+  stroke-width: 56px !important;
+  stroke: rgba(255, 255, 255, 0.001) !important;
   pointer-events: stroke !important;
+  cursor: default !important;
 }

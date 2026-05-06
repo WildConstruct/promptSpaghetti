@@ -278,7 +278,7 @@
   left: -1px;
   right: -1px;
   height: 3px;
-  background: rgba(13, 16, 20, 0.96); /* Match container background */
+  background: rgba(16, 16, 16, 0.96); /* Match container background */
   z-index: 10;
 }
 
@@ -379,7 +379,7 @@
 .launch-screen .dissector-toolbar {
   min-height: 34px;
   padding: 5px 0;
-  background: rgba(12, 15, 19, 0.72);
+  background: rgba(16, 16, 16, 0.72);
 }
 
 .dissector-toolbar-sep {
@@ -448,7 +448,7 @@
   padding: 0 8px;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
   border-right: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(18, 22, 27, 0.62);
+  background: rgba(22, 22, 22, 0.62);
 }
 
 .dissector-select-label {
@@ -464,7 +464,7 @@
   appearance: none;
   -webkit-appearance: none;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(8, 11, 28, 0.9);
+  background: rgba(14, 14, 14, 0.9);
   color: #e1e1e1;
   font-size: 12px;
   line-height: 1;
@@ -691,7 +691,7 @@
 }
 
 .dissector-textarea-simple.edit-mode {
-  background: rgba(20, 22, 28, 0.98) !important;
+  background: rgba(24, 24, 24, 0.98) !important;
   border: none !important;
   outline: none !important;
 }
@@ -859,7 +859,7 @@
 
 /* In edit mode, give textarea a background and text cursor */
 .dissector-textarea.edit-mode {
-  background: rgba(20, 22, 28, 0.98) !important;
+  background: rgba(24, 24, 24, 0.98) !important;
   z-index: 10;
   cursor: text;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -871,7 +871,7 @@
   right: 12px;
   bottom: 12px;
   padding: 6px 16px;
-  background: rgba(30, 32, 38, 0.9);
+  background: rgba(34, 34, 34, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0;
   color: #e1e1e1;
@@ -884,7 +884,7 @@
 }
 
 .dissector-edit-trigger-btn:hover {
-  background: rgba(40, 42, 48, 0.95);
+  background: rgba(44, 44, 44, 0.95);
   border-color: rgba(255, 255, 255, 0.25);
   transform: none;
 }
@@ -909,7 +909,7 @@
   display: inline-flex;
   gap: 0;
   padding: 0;
-  background: rgba(30, 32, 38, 0.95);
+  background: rgba(34, 34, 34, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);

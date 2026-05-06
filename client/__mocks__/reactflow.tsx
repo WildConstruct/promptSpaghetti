@@ -45,12 +45,14 @@ interface ReactFlowProps {
   nodes: Node[];
   edges: Edge[];
   onNodeClick?: (evt: React.MouseEvent, node: Node) => void;
+  onNodeContextMenu?: (evt: React.MouseEvent, node: Node) => void;
   onNodesChange?: (changes: unknown[]) => void;
   onEdgesChange?: (changes: unknown[]) => void;
   onConnect?: (connection: unknown) => void;
   onDrop?: (e: React.DragEvent) => void;
   onDragOver?: (e: React.DragEvent) => void;
   onPaneClick?: () => void;
+  onPaneContextMenu?: (evt: React.MouseEvent) => void;
   nodeTypes?: Record<string, React.ComponentType>;
   connectionMode?: string;
   snapToGrid?: boolean;
@@ -69,9 +71,11 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
   nodes,
   edges,
   onNodeClick,
+  onNodeContextMenu,
   onDrop,
   onDragOver,
   onPaneClick,
+  onPaneContextMenu,
   children,
   style,
   className
@@ -94,6 +98,10 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
           onDrop={handleDrop}
           onDragOver={onDragOver ?? (e => e.preventDefault())}
           onClick={onPaneClick}
+          onContextMenu={e => {
+            e.preventDefault();
+            onPaneContextMenu?.(e);
+          }}
         >
           <div data-testid="node-container">
             {nodes.map(node => (
@@ -105,6 +113,11 @@ export const ReactFlow: React.FC<ReactFlowProps> = ({
                 onClick={e => {
                   e.stopPropagation();
                   onNodeClick?.(e, node);
+                }}
+                onContextMenu={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onNodeContextMenu?.(e, node);
                 }}
                 style={{
                   cursor: 'pointer',
@@ -151,7 +164,9 @@ export const Panel: React.FC<{ children?: React.ReactNode }> = ({
 export const EdgeLabelRenderer: React.FC<{ children?: React.ReactNode }> = ({
   children
 }) => <>{children}</>;
-export const BaseEdge: React.FC = () => <div data-testid="reactflow-base-edge" />;
+export const BaseEdge: React.FC = () => (
+  <div data-testid="reactflow-base-edge" />
+);
 export const NodeToolbar: React.FC<{ children?: React.ReactNode }> = ({
   children
 }) => <div data-testid="reactflow-node-toolbar">{children}</div>;
@@ -241,6 +256,8 @@ export const SelectionMode = {
   Full: 'full'
 } as const;
 
+export default ReactFlow;
+
 export const BackgroundVariant = {
   Dots: 'dots',
   Lines: 'lines',
@@ -294,42 +311,3 @@ export const useEdgesState = jest.fn((initialEdges: Edge[]) => [
 ]);
 export const useNodes = jest.fn(() => []);
 export const useEdges = jest.fn(() => []);
-
-export default {
-  __esModule: true,
-  ReactFlow,
-  Background,
-  Controls,
-  Panel,
-  EdgeLabelRenderer,
-  BaseEdge,
-  NodeToolbar,
-  MiniMap,
-  ReactFlowProvider,
-  Handle,
-  useReactFlow,
-  useViewport,
-  useOnSelectionChange,
-  useNodesInitialized,
-  useKeyPress,
-  useNodeId,
-  useInternalNode,
-  useHandleConnections,
-  useStore,
-  useStoreApi,
-  Position,
-  ConnectionMode,
-  SelectionMode,
-  BackgroundVariant,
-  applyNodeChanges,
-  applyEdgeChanges,
-  getBezierPath,
-  getSmoothStepPath,
-  getStraightPath,
-  useUpdateNodeInternals,
-  addEdge,
-  useNodes,
-  useEdges,
-  useNodesState,
-  useEdgesState
-};

@@ -4,6 +4,8 @@ import { AttachmentEdge } from './edges/AttachmentEdge';
 import EdgeRouter from './edges/EdgeRouter';
 import { debugLogEpic1 } from '../../utils/debug';
 
+const EDGE_HIT_STROKE_WIDTH = 56;
+
 // Default edge component that forces rendering
 export const DefaultEdge: React.FC<EdgeProps> = props => {
   const extraClassName =
@@ -40,10 +42,11 @@ export const DefaultEdge: React.FC<EdgeProps> = props => {
         className="react-flow__edge-interaction"
         d={edgePath}
         fill="none"
-        stroke="transparent"
-        strokeWidth={30}
-        style={{          pointerEvents: 'stroke',          cursor: 'pointer',
-          opacity: 0
+        stroke="rgba(255, 255, 255, 0.001)"
+        strokeWidth={EDGE_HIT_STROKE_WIDTH}
+        style={{
+          pointerEvents: 'stroke',
+          cursor: 'default'
         }}
       />
       {/* Visible edge path */}
@@ -52,7 +55,7 @@ export const DefaultEdge: React.FC<EdgeProps> = props => {
         style={{
           ...props.style,
           pointerEvents: 'none', // Let the interaction path handle clicks
-          cursor: 'pointer'
+          cursor: 'default'
         }}
         className="react-flow__edge-path"
         d={edgePath}

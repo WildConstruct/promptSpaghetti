@@ -2,7 +2,7 @@
 
 .epic1-panzoom-controls {
   position: absolute;
-  background: rgba(15, 18, 22, 0.96);
+  background: rgba(18, 18, 18, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 7px;
   padding: 10px;
@@ -50,7 +50,7 @@
   width: 32px;
   height: 32px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(30, 34, 40, 0.94);
+  background: rgba(34, 34, 34, 0.94);
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
@@ -81,7 +81,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(8, 10, 13, 0.88);
+  background: rgba(12, 12, 12, 0.88);
   padding: 6px;
   border-radius: 6px;
 }
@@ -90,7 +90,7 @@
   width: 28px;
   height: 28px;
   border: none;
-  background: rgba(30, 34, 40, 0.94);
+  background: rgba(34, 34, 34, 0.94);
   border-radius: 4px;
   font-size: 18px;
   font-weight: 600;
@@ -199,7 +199,7 @@
   right: 16px;
   width: 200px;
   height: 150px;
-  background: rgba(15, 18, 22, 0.96);
+  background: rgba(18, 18, 18, 0.96);
   border: 1px solid rgba(248, 200, 74, 0.22);
   border-radius: 7px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

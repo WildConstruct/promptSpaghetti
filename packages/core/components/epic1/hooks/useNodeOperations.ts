@@ -194,7 +194,9 @@ export function useNodeOperations<NodeData = unknown>(
   // Delete selected nodes
   const deleteSelectedNodes = useCallback(() => {
     const nodesToDelete = nodes.filter(n => n.selected).map(n => n.id);
-    if (nodesToDelete.length === 0) {return;}
+    if (nodesToDelete.length === 0) {
+      return;
+    }
 
     setNodes(nds => nds.filter(n => !nodesToDelete.includes(n.id)));
     setEdges(eds =>
@@ -399,6 +401,8 @@ function getDefaultNodeData(type: string): Record<string, unknown> {
       return { text: 'New text block', variations: [] };
     case 'weightedChoice':
       return {
+        label: 'Weighted Choice',
+        title: 'Weighted Choice',
         options: [
           { id: 'option-1', text: 'Option 1', weight: 1, hasBranch: false }
         ]
