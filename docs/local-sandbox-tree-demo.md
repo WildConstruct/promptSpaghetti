@@ -1,6 +1,6 @@
 # Local Sandbox Tree Demo
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-05-06_
 
 This is the supported operator path for the local-only tree-generation demo.
 
@@ -12,7 +12,7 @@ The supported v1 target is intentionally narrow:
 
 ## 1. Configure the local sandbox env
 
-1. Copy [`.env.local-sandbox.example`](/C:/Users/behmb/Documents/Cascade%20Projects/prompt_spaghetti/.env.local-sandbox.example) to either:
+1. Copy [`.env.local-sandbox.example`](/C:/Users/Owner/CascadeProjects/prompt-spaghetti/.env.local-sandbox.example) to either:
    - `.env.local-sandbox`
    - `server/.env.local-sandbox`
 2. Keep these values aligned with the supported demo target:
@@ -70,7 +70,7 @@ If you only want the code-path tests without a live runtime, run:
 ## 5. Generate 20 trees in the app
 
 1. Start Prompt Spaghetti with `pnpm run dev:local-sandbox` or your normal dev flow.
-2. Open [mvp-tree-family-sandbox-demo.psg](/C:/Users/behmb/Documents/Cascade%20Projects/prompt_spaghetti/docs/examples/mvp-tree-family-sandbox-demo.psg) in the editor.
+2. Open [mvp-tree-family-sandbox-demo.psg](/C:/Users/Owner/CascadeProjects/prompt-spaghetti/docs/examples/mvp-tree-family-sandbox-demo.psg) in the editor.
 3. Go to `File -> Local Sandbox Generation (Local Only)...`
 4. Confirm the dialog says it is using the graph-derived tree archetype flow.
 5. Review the derived family DNA and variation axes, then keep the canonical defaults:

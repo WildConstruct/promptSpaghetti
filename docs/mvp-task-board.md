@@ -14,9 +14,8 @@ Product target:
 Reference docs:
 
 - [psg-weekend-mvp-contract.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/psg-weekend-mvp-contract.md)
-- [legacy-psg-compat-audit.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/legacy-psg-compat-audit.md)
-- [prompt-spaghetti-agentic-prd.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/prompt-spaghetti-agentic-prd.md)
-- [repo-recovery-strategy.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/repo-recovery-strategy.md)
+- [mvp-recovery-backlog.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/mvp-recovery-backlog.md)
+- [ralph-roadmap-progress.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/ralph-roadmap-progress.md)
 - [mvp-finish-plan.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/mvp-finish-plan.md)
 - [demo-checklist.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/demo-checklist.md)
 - [mvp-ship-verification.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/mvp-ship-verification.md)
@@ -96,7 +95,8 @@ Primary files:
 Notes:
 
 - flat PSG is now the active authoring format
-- legacy graph-wrapper PSG remains behind explicit compatibility boundaries documented in `docs/legacy-psg-compat-audit.md`
+- legacy graph-wrapper PSG remains a compatibility-only fallback; keep that
+  boundary reflected in PSG parser/import tests and current recovery docs
 
 ### P1.2 Remove fake PSG paths
 

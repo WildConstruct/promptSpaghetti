@@ -95,19 +95,18 @@ describe('TabbedSidePanel', () => {
     expect(screen.getByText('Library')).toBeInTheDocument();
     expect(screen.getByText('Preview')).toBeInTheDocument();
     expect(screen.getByText('Linked')).toBeInTheDocument();
-    expect(screen.getByText('Core MVP surface')).toBeInTheDocument();
-    expect(screen.getByText('Core library surface')).toBeInTheDocument();
+    expect(screen.getByText('Suggested Fragments')).toBeInTheDocument();
+    expect(screen.getByText('Asset Browser Loader')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Advanced linked components' }));
 
-    expect(screen.getByText('Advanced surface')).toBeInTheDocument();
-    expect(screen.getByText('Advanced linked components')).toBeInTheDocument();
+    expect(screen.getByText('Component Library Panel')).toBeInTheDocument();
 
     fireEvent.click(
       screen.getByRole('button', { name: 'Advanced graph relationships' })
     );
 
-    expect(screen.getByText('Advanced graph relationships')).toBeInTheDocument();
+    expect(screen.getByText('Relationship View')).toBeInTheDocument();
   });
 
   it('omits preview when the explicit tab definitions do not include it', () => {

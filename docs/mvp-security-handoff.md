@@ -19,9 +19,11 @@ Key launch-facing references:
 - Launch copy and quick starts now use archetype and family language consistently.
 - Preview behavior teaches fixed DNA, allowed variation, and resolved family output.
 - `Example Family Member` / `One believable in-family output` was hardened to read like production-facing language rather than debug output.
-- Manual walkthrough guidance and findings are captured in:
-  - [first-run-walkthrough-note.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/first-run-walkthrough-note.md#L1)
-  - [first-run-walkthrough-findings.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/first-run-walkthrough-findings.md#L1)
+- Historical first-run walkthrough notes are no longer retained as standalone
+  files; current launch walkthrough expectations live in
+  [demo-checklist.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/demo-checklist.md#L1)
+  and
+  [mvp-ship-verification.md](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/docs/mvp-ship-verification.md#L1).
 
 Current expectation:
 

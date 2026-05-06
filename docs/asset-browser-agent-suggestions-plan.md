@@ -165,7 +165,7 @@ Deliverable:
 
 ### Phase 5: Topology-Aware Insertion
 
-Status: partially done
+Status: mostly done for active suggestion/drag paths; richer boundary metadata still deferred
 
 Make fragment suggestions and drag-insert actions land in the graph in a
 structurally clear way instead of dropping everything at a generic position.
@@ -195,6 +195,11 @@ Required behaviors:
 Implemented so far:
 
 - selection-aware insertion planner
+- explicit planner intent:
+  - `replace-node`
+  - `insert-edge`
+  - `inside-container`
+  - `free-place`
 - shared drop-target classifier:
   - `replace-node`
   - `insert-edge`
@@ -208,12 +213,16 @@ Implemented so far:
   - `preferredInsertion`
   - `entryStrategy`
   - `exitStrategy`
+- suggested-fragment click/top-insert path now passes the shared insertion plan
+  into editor execution instead of relying on label heuristics
+- future agent hook `window.__EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__` uses the
+  same suggestion service, planner, and editor insertion seam
 
 Still missing:
 
 - richer multi-node splice for fragments with ambiguous boundaries
-- fully explicit replace-vs-insert targeting inside commander execution
-- agent-driven execution using the exact same drop-target path as manual drag
+- explicit boundary IDs in curated metadata for ambiguous multi-node fragments
+- live agent consumer beyond the current deterministic editor hook
 
 ### Phase 6: Retrieval Commander
 
@@ -267,8 +276,9 @@ And it turns the asset browser into infrastructure rather than clutter.
 
 ## Recommended Next Step
 
-The next meaningful step is metadata-guided fragment execution:
+The next meaningful step is boundary-guided fragment execution:
 
-- make commander actions more explicit about replace-vs-insert-edge when possible
-- use `preferredInsertion` and boundary metadata to improve richer multi-node splice
-- then let the future agent consumer call the same commander/suggestion/insertion seam instead of a private path
+- add explicit entry/exit boundary metadata for fragments that cannot be inferred
+  from one clear source/sink pair
+- use that metadata in `splicePresetIntoEdge` and `replacePresetAtNode`
+- wire the live agent consumer to the existing suggestion/planner/editor seam

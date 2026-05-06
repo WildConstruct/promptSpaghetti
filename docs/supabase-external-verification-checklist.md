@@ -2,6 +2,25 @@
 
 This checklist is the next gate for proving cloud-object isolation against the deployed Supabase project.
 
+## 2026-05-06 Project 7 Status
+
+Local application checks completed:
+
+- Fastify route-access middleware now has focused smoke coverage for:
+  - missing bearer auth returning `401`
+  - disabled cloud capability returning `403`
+  - missing account capability returning `403`
+  - quota exhaustion returning `429`
+  - protected handlers not running after denial
+- The active validation lane includes that route-access smoke coverage.
+
+Still external / not proved in this workspace:
+
+- Supabase URL, anon key, and service-role key are not configured locally.
+- Live Supabase login/session restore cannot be exercised here.
+- Live two-user graph read/update/delete isolation cannot be exercised here.
+- Live storage bucket list/read/write/delete isolation cannot be exercised here.
+
 ## RLS Policy Review
 
 - Confirm the `graphs` table has explicit `select`, `insert`, `update`, and `delete` policies.

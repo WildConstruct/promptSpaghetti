@@ -77,6 +77,27 @@ function main() {
     assertIncludes(contents, DEPLOYMENT_SURFACE.backendApiOrigin, label);
   }
 
+  assertIncludes(
+    convergenceDoc,
+    DEPLOYMENT_SURFACE.postMvpBackendDirection,
+    'docs/vercel-convergence-decision.md post-MVP backend direction'
+  );
+  assertIncludes(
+    convergenceDoc,
+    DEPLOYMENT_SURFACE.canonicalBackendEntry,
+    'docs/vercel-convergence-decision.md canonical backend entry'
+  );
+  assertIncludes(
+    deploymentDoc,
+    DEPLOYMENT_SURFACE.postMvpBackendDirection,
+    'docs/deployment-current-state.md post-MVP backend direction'
+  );
+  assertIncludes(
+    deployLaneDoc,
+    DEPLOYMENT_SURFACE.canonicalBackendEntry,
+    'docs/active-deploy-packaging-lane.md canonical backend entry'
+  );
+
   console.log('Deploy surface config is consistent.');
 }
 

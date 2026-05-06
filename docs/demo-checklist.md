@@ -1,6 +1,6 @@
 # Demo Checklist
 
-_Last updated: 2026-05-01_
+_Last updated: 2026-05-05_
 
 This is the shortest reliable walkthrough for showing the Prompt Spaghetti MVP to a teammate.
 
@@ -24,6 +24,21 @@ Before demoing, confirm:
   tutorial, and demo PSG parser tests passed
 - live browser smoke used `http://localhost:3001/` because `3000` was already
   occupied; the Indy quick start reached the editor without a runtime overlay
+
+2026-05-05 integration-branch proof:
+
+- branch: `codex/integrate-stabilize-baseline-to-main`
+- `validate:active`, `validate:mvp:ship`, `validate:deploy:active`,
+  `validate:artifacts:active`, `build:netlify`, and `build:vercel-api` passed
+  after the branch-biased merge
+- live browser smoke used the existing app at `http://localhost:3000/`
+- Character, Indy 500, Vehicle, Building, Blank Canvas, Tutorial, prompt
+  bootstrap, parsed family preview, local PSG import, and flat PSG export paths
+  passed
+- `Advanced PSG Scene Assets...` opened from the Indy quick start and exposed
+  crowd-sidecar surfaces
+- Comfy export, Local Sandbox Generation, and Hosted Crowd Expansion were
+  visible but runtime/capability gated in the local environment
 
 Canonical demo artifacts:
 

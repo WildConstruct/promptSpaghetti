@@ -15,6 +15,40 @@ This trim is motivated by three concrete problems:
 - the public launch branch should reflect the shipped product, not the entire
   research and task-orchestration history
 
+## Project 9 Trim Status
+
+First reviewed deletion batch completed:
+
+- root one-off QA/status/report files listed below, except
+  `/performance-test-runner.js`
+- obsolete root helper scripts listed below
+- root temporary/generated analysis outputs listed below
+- obsolete alternate deploy config files listed below
+- one generated server performance report:
+  `/server/performance-report-2025-07-23T03-09-11-472Z.html`
+
+Deferred from this batch:
+
+- `/performance-test-runner.js` remains because
+  `/scripts/run-performance-tests.js` and
+  `/tests/performance/PerformanceTestSuite.ts` still reference it. Review the
+  performance harness ownership before deleting it.
+
+Docs review batch 1 completed:
+
+- removed `/docs/agent-reports` after confirming it had no surviving repo
+  references
+- preserved the actionable technical-debt themes in
+  `/docs/mvp-recovery-backlog.md`
+
+Docs review batch 2 completed:
+
+- promoted current project handoff, validation, local sandbox, agent retrieval,
+  test harness, generated artifact, and example PSG docs into the launch keep
+  list
+- removed superseded historical context docs after preserving current decisions
+  in active backlog and retrieval handoff docs
+
 ## Keep For Launch
 
 These paths are part of the active MVP product, current deploy model, or active
@@ -72,6 +106,21 @@ handoff/security posture.
 - `/docs/vercel-convergence-decision.md`
 - `/docs/psg-storage-architecture.md`
 - `/docs/psg-weekend-mvp-contract.md`
+- `/docs/active-validation-lane.md`
+- `/docs/active-deploy-packaging-lane.md`
+- `/docs/generated-artifact-policy.md`
+- `/docs/local-sandbox-tree-demo.md`
+- `/docs/epic-auth-billing-cloud-psg-readiness.md`
+- `/docs/deferred-image-generation-review.md`
+- `/docs/agent-fragment-index-implementation.md`
+- `/docs/asset-browser-agent-suggestions-plan.md`
+- `/docs/test-harness-canonical-layers.md`
+- `/docs/test-harness-repair-epic.md`
+- `/docs/test-script-catalog.md`
+- `/docs/mvp-recovery-backlog.md`
+- `/docs/mvp-handoff-status.md`
+- `/docs/ralph-roadmap-progress.md`
+- `/docs/examples/*.psg`
 - `/docs/launch-repo-trim-plan.md`
 
 ## Safe To Remove Now
@@ -119,6 +168,10 @@ Rationale:
 
 ### Root one-off files with no launch value
 
+Project 9 first batch status: removed all listed files except
+`/performance-test-runner.js`, which is deferred while referenced by the
+performance test harness.
+
 - `/QA-FINAL-REPORT-2025-01-28.md`
 - `/QA-PHASE2-COMPLETE-2025-01-28.md`
 - `/QA-PHASE3-PROGRESS-2025-01-28.md`
@@ -151,6 +204,18 @@ These paths are likely removable, but they should get one quick dependency and
 handoff review before deletion.
 
 ### Docs
+
+Project 9 docs batch 1 status: removed `/docs/agent-reports` as historical
+internal assessment material after preserving the actionable backlog themes in
+`/docs/mvp-recovery-backlog.md`.
+
+Project 9 docs batch 2 status: removed these unreferenced or superseded
+historical context docs after preserving their active decisions elsewhere:
+
+- `/docs/brownfield-architecture-map.md`
+- `/docs/brownfield-risk-register.md`
+- `/docs/asset-browser-fragment-audit.md`
+- `/docs/first-pass-cruft-inventory.md`
 
 Review the full `/docs` tree and keep only the MVP, deploy, security, and PSG
 contract docs listed above.

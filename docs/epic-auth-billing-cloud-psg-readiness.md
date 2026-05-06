@@ -211,3 +211,133 @@ Use this epic as the checklist for the next concrete validation run:
 3. reload and reopen it from the cloud dialog
 4. validate cross-user isolation in the deployed Supabase project
 5. only then start building the Stripe checkout/webhook path
+
+## RALPH Project 3 Pass - 2026-05-05
+
+### R - Read
+
+Reviewed the active branch docs and implementation paths for Cloud PSG/Auth:
+
+- `docs/epic-auth-billing-cloud-psg-readiness.md`
+- `docs/supabase-external-verification-checklist.md`
+- `docs/object-access-review-matrix.md`
+- `client/src/Epic1Editor/hooks/useSupabaseFileOperations.ts`
+- `client/src/Epic1Editor/components/SupabaseOpenDialog.tsx`
+- `client/src/Epic1Editor/components/SupabaseSaveDialog.tsx`
+- `packages/core/utils/supabaseClient.ts`
+- `packages/core/utils/supabaseFeature.ts`
+- `packages/core/utils/runtimeMode.ts`
+- `server/src/services/supabase.ts`
+- `server/src/utils/routeAccess.ts`
+
+### A - Assess
+
+The local code is ready for a live Supabase verification pass, but the current
+workspace cannot complete that pass because Supabase credentials are not
+configured:
+
+- `.env` contains empty `NEXT_PUBLIC_SUPABASE_URL`
+- `.env` contains empty `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `.env` contains empty `VITE_SUPABASE_URL`
+- `.env` contains empty `VITE_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_FEATURE_SUPABASE=1` is set, so the feature flag is on but the
+  project URL/key are absent
+
+Local code findings:
+
+- Client session restore uses `sb.auth.getSession()` plus
+  `onAuthStateChange`.
+- Cloud graph list uses the `graphs` table and filters owned/public rows in the
+  client.
+- Cloud save inserts or updates `graphs` with `user_id = user.id`.
+- Cloud update/delete add `.eq('user_id', user.id)` client-side filters.
+- The hook now explicitly documents that client filters are not authorization
+  and that Supabase RLS must enforce insert/update/delete ownership.
+- Server protected PSG routes require bearer auth, capability checks, and quota
+  checks through `requireRouteAccess`.
+
+Blockers:
+
+- Environment: live Supabase URL/key and two non-admin test accounts are
+  missing.
+- External service: deployed `graphs` RLS and storage policies must be reviewed
+  in the Supabase project.
+- Product: billing/subscription source of truth must be defined before adding
+  Stripe behavior.
+
+### L - List
+
+Completed in this slice:
+
+- Confirmed local Supabase config is absent without exposing secret values.
+- Confirmed client cloud PSG save/open/update/delete paths exist.
+- Confirmed server PSG routes have auth/capability/quota gates.
+- Confirmed live cross-user isolation remains an external verification gate.
+- Added the billing/subscription source-of-truth decision below.
+
+Deferred to live environment:
+
+- email/password login success/failure
+- session restore after reload against real Supabase
+- cloud PSG save/open/update/delete against real `graphs`
+- two-user read/update/delete denial tests
+- storage bucket isolation tests
+- route capability-denial and quota-denial tests against deployed config
+
+### P - Patch
+
+Documentation-only patch. No product code was changed because the blocker is
+environment/external-service verification, not an identified local code defect.
+
+### H - Handoff
+
+Run the external checklist in `docs/supabase-external-verification-checklist.md`
+as soon as a Supabase project and two test accounts are available.
+
+Do not add Stripe checkout, portal, or webhook behavior until the billing source
+of truth below is accepted.
+
+## Billing / Subscription Source Of Truth
+
+Stripe should not be the direct source of truth consulted by runtime feature
+gates.
+
+Canonical runtime source of truth:
+
+- Supabase auth user metadata or an owner-scoped Supabase profile/subscription
+  table.
+
+Stripe's role:
+
+- Stripe is the payment event source.
+- Stripe webhooks update the canonical Supabase subscription state.
+- Runtime route gates and client runtime mode read the canonical Supabase state,
+  not Stripe directly.
+
+Canonical fields:
+
+- `plan`: `free`, `pro`, `team`, or a future explicit plan id
+- `subscription_state`: `active`, `trialing`, `inactive`, `canceled`,
+  `expired`, or `past_due`
+- `subscription_active`: boolean derived from the state
+- `capabilities`: explicit string array such as `cloud-psg`, `cloud-llm`,
+  `cloud-agent`
+- `stripe_customer_id`: stored server-side only
+- `stripe_subscription_id`: stored server-side only
+- `subscription_updated_at`: ISO timestamp from the webhook sync
+
+Runtime interpretation:
+
+- Server route gates use `server/src/services/supabase.ts` to resolve plan,
+  subscription state, and capabilities from the verified Supabase user.
+- `requireRouteAccess` remains the enforcement point for protected routes.
+- Client runtime mode may display availability, but client state is never the
+  authorization boundary.
+
+Stripe implementation prerequisites:
+
+- webhook signature verification
+- idempotent event handling
+- service-role-only writes to subscription fields
+- downgrade path for canceled, expired, or payment-failed subscriptions
+- tests proving capability changes affect `requireRouteAccess`

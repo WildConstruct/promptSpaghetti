@@ -1,6 +1,7 @@
 export const SERVER_SMOKE_TESTS = [
   '__tests__/llm-routes.test.ts',
   '__tests__/psg-routes.test.ts',
+  '__tests__/route-access.test.ts',
   '__tests__/route-surface-catalog.test.ts'
 ];
 

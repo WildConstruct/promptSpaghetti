@@ -398,11 +398,19 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             x: window.innerWidth / 2,
             y: window.innerHeight / 2
           }),
+          intent: {
+            kind: 'free-place',
+            reason: 'No selection; using viewport center placement.'
+          },
           notes: ['No selection; using viewport center placement.']
         }
       : {
           anchor: 'free-placement' as const,
           position: { x: 250, y: 250 },
+          intent: {
+            kind: 'free-place',
+            reason: 'No selection or React Flow instance is available.'
+          },
           notes: ['No selection or React Flow instance; using fallback position.']
         };
   }, [reactFlowInstance]);
@@ -412,12 +420,51 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       preset: Preset,
       options?: {
         dropTarget?: FragmentDropTarget | null;
+        insertionPlan?: InsertionPlan | null;
         position?: { x: number; y: number } | null;
       }
     ) => {
       const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
       const fragment = presetToAgentFragmentRecord(preset);
       let resolvedTarget = options?.dropTarget ?? null;
+      const plannedInsertion = options?.insertionPlan ?? null;
+      const plannedIntent = plannedInsertion?.intent ?? null;
+
+      if (plannedIntent?.kind === 'replace-node') {
+        const targetNode = nodes.find(
+          node => node.id === plannedIntent.nodeId
+        );
+        if (targetNode) {
+          void insertPresetByMeta(
+            preset,
+            targetNode.position,
+            null,
+            { nodeId: targetNode.id }
+          );
+          return;
+        }
+      }
+
+      if (plannedIntent?.kind === 'insert-edge' && plannedInsertion) {
+        void insertPresetByMeta(
+          preset,
+          options?.position ?? plannedInsertion.position,
+          buildEdgeSpliceTarget(plannedIntent.edgeId)
+        );
+        return;
+      }
+
+      if (
+        (plannedIntent?.kind === 'inside-container' ||
+          plannedIntent?.kind === 'free-place') &&
+        plannedInsertion
+      ) {
+        void insertPresetByMeta(
+          preset,
+          options?.position ?? plannedInsertion.position
+        );
+        return;
+      }
 
       if (!resolvedTarget && selectedNode) {
         const metadataPrefersReplacement =
@@ -469,7 +516,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
           })
         : buildViewportFallbackInsertion();
 
-      const edgeSpliceTarget = insertionPlan.targetEdgeId
+      const edgeSpliceTarget =
+        insertionPlan.intent.kind === 'insert-edge' && insertionPlan.targetEdgeId
         ? buildEdgeSpliceTarget(insertionPlan.targetEdgeId)
         : null;
 
@@ -490,12 +538,12 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   );
 
   const handleAssetInsert = useCallback(
-    (item: Preset | Asset) => {
+    (item: Preset | Asset, plan?: InsertionPlan | null) => {
       const preset = item as Preset;
       if (!preset) {
         return;
       }
-      executePresetWithTarget(preset);
+      executePresetWithTarget(preset, { insertionPlan: plan });
     },
     [executePresetWithTarget]
   );
@@ -571,7 +619,16 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         __EPIC1_GET_FRAGMENT_SUGGESTIONS__?: (() => Promise<unknown[]>) | null;
         __EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__?: (() => Promise<unknown | null>) | null;
       }
-    ).__EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__ = null;
+    ).__EPIC1_INSERT_TOP_FRAGMENT_SUGGESTION__ = async () => {
+      const selectedNode = nodes.find(n => n.id === selectedNodeId) ?? null;
+      return AgentFragmentSuggestionService.insertTopSuggestion({
+        selectedNode,
+        nodes,
+        edges,
+        insertPreset: (preset, plan) =>
+          executePresetWithTarget(preset, { insertionPlan: plan })
+      });
+    };
 
     return () => {
       const win = window as typeof window & {

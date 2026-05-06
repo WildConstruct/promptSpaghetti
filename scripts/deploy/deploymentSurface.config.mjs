@@ -2,6 +2,8 @@ export const DEPLOYMENT_SURFACE = {
   frontendPublishDir: 'client/dist',
   backendApiOrigin: 'https://prompt-spaghetti-client.vercel.app',
   apiProxyTarget: 'https://prompt-spaghetti-client.vercel.app/api/:splat',
+  canonicalBackendEntry: 'server/src/index.ts',
+  postMvpBackendDirection: 'dedicated-fastify-backend',
   netlifyBuildCommand:
     'pnpm --filter @prompt/asset-browser prebuild && pnpm --filter client build',
   vercelMode: 'legacy-api-compatibility',

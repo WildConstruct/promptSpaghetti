@@ -16,12 +16,31 @@ path.
 Make the repo legible enough that implementation lands in the supported launch
 surface.
 
+### Active Boundary Snapshot
+
+- Canonical frontend path:
+  `client/src/main.tsx` -> `client/src/App.tsx` -> launch screen -> Epic 1
+  editor container.
+- Canonical editor path:
+  client editor shell plus `packages/core/components/epic1/Epic1GraphEditor.tsx`.
+- Canonical backend path:
+  `server/src/index.ts` with LLM, PSG, agent, file, health, and capability
+  routes governed by the route-access policy.
+- Canonical durable document path:
+  flat PSG import/export helpers and shared PSG service contracts.
+- Support-only or compatibility surfaces:
+  CLI/SDK-adjacent packages, legacy `api/` deployment compatibility, broad
+  performance/test infrastructure, and publish-compat output.
+- Quarantined or historical surfaces:
+  alternate server mains, exploratory editor variants, backup/original/cleaned
+  files, and archived task/report material.
+
 ### Work
 
 - keep `ACTIVE_SURFACE.md` aligned to the actual runtime path
 - keep `packages/core/components/epic1/SOURCE_OF_TRUTH.md` aligned to the live
   shell-plus-canvas split
-- keep brownfield architecture, deployment, and route policy docs consistent
+- keep deployment, route policy, and active validation docs consistent
 - mark support-only and quarantined surfaces explicitly without deleting them
 
 ### Acceptance Criteria
@@ -43,9 +62,15 @@ grab bag of adjacent features.
 - define the golden path as:
   launch -> prompt/template bootstrap -> editor -> deterministic preview ->
   save/open/import/export -> one downstream handoff
+- keep Character Archetype, Vehicle Family, and Building Family framed as the
+  primary quick starts; keep Blank Canvas and richer examples framed as manual
+  or advanced paths
 - review launch-screen copy and quick-start framing against the archetype-first
   MVP story
-- review visible editor actions and tabs for mismatch with the golden path
+- review visible editor actions and tabs for mismatch with the golden path:
+  preview and fragment library are core, while scene assets, hosted crowd
+  expansion, Comfy export, search, relationships, and components are advanced
+  or downstream surfaces
 - identify no-op, misleading, or premature actions that should be hidden,
   relabeled, or deferred
 
@@ -98,12 +123,58 @@ Prepare later cleanup without introducing current-session deletion risk.
 - no broad deletion is required to continue MVP recovery
 - trim work can be executed later without rediscovering repo boundaries
 
+## 5. Post-MVP Structural Cleanup
+
+### Goal
+
+Reduce drift in active-adjacent code only after launch paths are stable.
+
+### Work
+
+- reduce duplication between the client editor shell and core graph canvas
+  where ownership is now clear
+- narrow alternate deployment/runtime paths after deployment convergence chooses
+  a single backend packaging model
+- split advanced editor actions into clearer feature boundaries before hiding or
+  deleting user-facing surfaces
+- keep package-boundary work scoped so CLI, SDK, and Python-adjacent code do not
+  distract from the active MVP app
+
+### Acceptance Criteria
+
+- cleanup lands against a documented source-of-truth owner
+- active validation and MVP ship gates stay green after each batch
+- compatibility behavior remains covered before historical paths are deleted
+
 ## Explicit Deferrals
 
 - Jest harness simplification and root test command rationalization
 - build-path and deployment convergence work
 - aggressive repo deletion or branch-wide pruning
 - expansion of non-MVP orchestration, scene assembly, or generalized AI surfaces
+
+## Post-MVP Technical Backlog
+
+These items preserve the actionable themes from the historical internal
+agent-report notes without keeping those launch-irrelevant reports in the repo.
+
+- Finish unused-code pruning after each candidate has a current owner/reference
+  check.
+- Continue legacy/fallback cleanup around orphaned Epic 1 node variants, but
+  keep parser fallback and PSG repair paths until replacement coverage exists.
+- Consolidate duplicate or fragmented shared types only where one canonical
+  runtime contract is already clear.
+- Keep reducing broad `any` usage in active editor, asset-browser, and local
+  sandbox paths.
+- Keep circular-dependency checks in the repo-quality lane and avoid new
+  cross-package import cycles between Epic 1 UI, runtime helpers, and services.
+- Narrow defensive `try/catch` blocks to real I/O and compatibility boundaries;
+  avoid catch-and-hide behavior in pure product logic.
+- Replace misleading comments and stale TODOs with either working behavior,
+  tracked backlog items, or removal.
+- Keep launch-facing docs focused on current handoff and route/product
+  boundaries; consolidate historical architecture, risk, and cruft notes into
+  this backlog before deletion.
 
 ## Default Rule
 

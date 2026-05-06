@@ -9,10 +9,15 @@ import { buildFragmentSuggestionContext } from './FragmentSuggestionContext';
 import {
   planFragmentInsertion,
   type InsertionAnchor,
+  type InsertionIntent,
   type InsertionPlan
 } from './FragmentInsertionPlanner';
 
 type FlowNode = Node<EditableNodeData>;
+type PresetInsertionExecutor = (
+  preset: Preset,
+  plan?: InsertionPlan | null
+) => Promise<void> | void;
 
 function asStringArray(value: unknown): string[] {
   return Array.isArray(value)
@@ -23,6 +28,7 @@ function asStringArray(value: unknown): string[] {
 export interface PlannedFragmentSuggestion {
   fragment: AgentFragmentRecord;
   plan: InsertionPlan | null;
+  executionIntent: InsertionIntent | null;
   actionLabel: string;
   insertionLabel: string;
 }
@@ -32,16 +38,15 @@ function getInsertionActionLabel(plan: InsertionPlan | null): string {
     return 'Place';
   }
 
-  if (plan.anchor === 'inside-region') {
-    return 'Place in region';
-  }
-
-  if (plan.targetEdgeId) {
-    return 'Insert on edge';
-  }
-
-  if (plan.sourceNodeId) {
-    return 'Place from selection';
+  switch (plan.intent.kind) {
+    case 'replace-node':
+      return 'Replace selected node';
+    case 'insert-edge':
+      return 'Insert on edge';
+    case 'inside-container':
+      return 'Place in region';
+    case 'free-place':
+      return plan.sourceNodeId ? 'Place from selection' : 'Place';
   }
 
   return 'Place';
@@ -49,6 +54,8 @@ function getInsertionActionLabel(plan: InsertionPlan | null): string {
 
 function getInsertionLabel(anchor: InsertionAnchor | null): string {
   switch (anchor) {
+    case 'replace-node':
+      return 'Replace node';
     case 'branch-lane':
       return 'Branch lane';
     case 'before-output':
@@ -120,7 +127,11 @@ function scoreSuggestion(params: {
     if (roles.includes('branch-extension')) {
       score += 8;
     }
-    if (placementHints.includes(context.isBranchLane ? 'branch-lane' : 'downstream-of-choice')) {
+    if (
+      placementHints.includes(
+        context.isBranchLane ? 'branch-lane' : 'downstream-of-choice'
+      )
+    ) {
       score += 5;
     }
   }
@@ -138,7 +149,10 @@ function scoreSuggestion(params: {
     score += 3;
   }
 
-  if (context.selectedNodeType === 'enhancedBoundingBox' && placementHints.includes('inside-region')) {
+  if (
+    context.selectedNodeType === 'enhancedBoundingBox' &&
+    placementHints.includes('inside-region')
+  ) {
     score += 12;
   }
 
@@ -187,6 +201,31 @@ export function agentFragmentRecordToPreset(
   };
 }
 
+export function buildPlannedPresetInsertion(params: {
+  suggestion: AgentFragmentRecord;
+  selectedNode?: FlowNode | null;
+  nodes?: FlowNode[];
+  edges?: Edge[];
+}): {
+  preset: Preset;
+  plan: InsertionPlan | null;
+} {
+  const { suggestion, selectedNode, nodes = [], edges = [] } = params;
+  const plan = selectedNode
+    ? planFragmentInsertion({
+        fragment: suggestion,
+        selectedNode,
+        nodes,
+        edges
+      })
+    : null;
+
+  return {
+    preset: agentFragmentRecordToPreset(suggestion),
+    plan
+  };
+}
+
 export class AgentFragmentSuggestionService {
   static getPlannedSuggestions(params: {
     selectedNode?: FlowNode | null;
@@ -209,6 +248,7 @@ export class AgentFragmentSuggestionService {
       return {
         fragment,
         plan,
+        executionIntent: plan?.intent ?? null,
         actionLabel: getInsertionActionLabel(plan),
         insertionLabel: getInsertionLabel(plan?.anchor ?? null)
       };
@@ -225,7 +265,8 @@ export class AgentFragmentSuggestionService {
       return [];
     }
 
-    const suggestions = await AgentFragmentRetrievalService.suggestFragmentsForSelection(context);
+    const suggestions =
+      await AgentFragmentRetrievalService.suggestFragmentsForSelection(context);
 
     return suggestions
       .map((fragment, index) => ({
@@ -242,16 +283,26 @@ export class AgentFragmentSuggestionService {
 
   static async insertSuggestion(params: {
     suggestion: AgentFragmentRecord;
-    insertPreset: (preset: Preset) => Promise<void> | void;
+    selectedNode?: FlowNode | null;
+    nodes?: FlowNode[];
+    edges?: Edge[];
+    insertPreset: PresetInsertionExecutor;
   }): Promise<void> {
-    await params.insertPreset(agentFragmentRecordToPreset(params.suggestion));
+    const plannedInsertion = buildPlannedPresetInsertion({
+      suggestion: params.suggestion,
+      selectedNode: params.selectedNode,
+      nodes: params.nodes,
+      edges: params.edges
+    });
+
+    await params.insertPreset(plannedInsertion.preset, plannedInsertion.plan);
   }
 
   static async insertTopSuggestion(params: {
     selectedNode?: FlowNode | null;
     nodes?: FlowNode[];
     edges?: Edge[];
-    insertPreset: (preset: Preset) => Promise<void> | void;
+    insertPreset: PresetInsertionExecutor;
   }): Promise<AgentFragmentRecord | null> {
     const suggestions = await this.getSuggestions({
       selectedNode: params.selectedNode,
@@ -266,6 +317,9 @@ export class AgentFragmentSuggestionService {
 
     await this.insertSuggestion({
       suggestion: topSuggestion,
+      selectedNode: params.selectedNode,
+      nodes: params.nodes,
+      edges: params.edges,
       insertPreset: params.insertPreset
     });
 

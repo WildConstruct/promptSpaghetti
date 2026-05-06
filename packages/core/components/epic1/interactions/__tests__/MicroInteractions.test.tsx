@@ -312,13 +312,20 @@ describe('NodeInteractionEnhancer', () => {
 
     const { container } = render(
       <ReactFlowProvider>
-        <NodeInteractionEnhancer nodeId="test-node" enableHoverEffects>
+        <NodeInteractionEnhancer
+          nodeId="test-node"
+          enableBounce={false}
+          enableHoverEffects
+        >
           <div>Test Node</div>
         </NodeInteractionEnhancer>
       </ReactFlowProvider>
     );
 
-    fireEvent.mouseEnter(container.firstChild as Element);
+    const enhancer = container.querySelector('.node-interaction-enhancer');
+    expect(enhancer).toBeInTheDocument();
+
+    fireEvent.mouseEnter(enhancer as Element);
 
     expect(mockTrigger).toHaveBeenCalledWith(
       'hover',
@@ -339,13 +346,20 @@ describe('NodeInteractionEnhancer', () => {
 
     const { container } = render(
       <ReactFlowProvider>
-        <NodeInteractionEnhancer nodeId="test-node" enableClickFeedback>
+        <NodeInteractionEnhancer
+          nodeId="test-node"
+          enableBounce={false}
+          enableClickFeedback
+        >
           <div>Test Node</div>
         </NodeInteractionEnhancer>
       </ReactFlowProvider>
     );
 
-    fireEvent.click(container.firstChild as Element);
+    const enhancer = container.querySelector('.node-interaction-enhancer');
+    expect(enhancer).toBeInTheDocument();
+
+    fireEvent.click(enhancer as Element);
 
     expect(mockTrigger).toHaveBeenCalledWith(
       'click',
@@ -364,13 +378,21 @@ describe('NodeInteractionEnhancer', () => {
 
     const { container } = render(
       <ReactFlowProvider>
-        <NodeInteractionEnhancer nodeId="test-node" enableClickFeedback enableHaptic={false}>
+        <NodeInteractionEnhancer
+          nodeId="test-node"
+          enableBounce={false}
+          enableClickFeedback
+          enableHaptic={false}
+        >
           <div>Test Node</div>
         </NodeInteractionEnhancer>
       </ReactFlowProvider>
     );
 
-    fireEvent.click(container.firstChild as Element);
+    const enhancer = container.querySelector('.node-interaction-enhancer');
+    expect(enhancer).toBeInTheDocument();
+
+    fireEvent.click(enhancer as Element);
 
     expect(mockTrigger).toHaveBeenCalledWith(
       'click',

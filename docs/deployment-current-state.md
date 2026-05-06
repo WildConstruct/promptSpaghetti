@@ -1,6 +1,6 @@
 # Deployment Current State
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-05-05_
 
 This is the current deployment truth for the MVP branch.
 
@@ -77,6 +77,12 @@ The branch is deployment-ready enough for MVP handoff when these are true:
 
 ## Deferred deployment work
 
-- migrate Vercel from legacy `api/` functions to the canonical Fastify runtime
-- refresh Vercel CLI auth and verify the linked remote project directly
-- decide whether Vercel remains backend-only or becomes a unified hosting target
+- post-MVP backend direction is `dedicated-fastify-backend`
+- move the canonical Fastify runtime, `server/src/index.ts`, to a dedicated
+  backend host
+- update Netlify proxy origin once the dedicated backend host exists
+- retire the legacy Vercel `api/` compatibility surface after the new backend
+  passes health, route catalog, auth/capability, quota, PSG, LLM, and deploy
+  packaging checks
+- refresh Vercel CLI auth only if the transitional Vercel surface needs remote
+  maintenance before retirement

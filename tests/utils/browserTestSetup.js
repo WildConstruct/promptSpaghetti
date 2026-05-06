@@ -4,7 +4,8 @@ const { TextDecoder, TextEncoder } = require('util');
 
 process.env.NODE_ENV = 'test';
 process.env.JWT_SECRET =
-  process.env.JWT_SECRET || 'test-secret-key-for-jest-testing-only-not-production';
+  process.env.JWT_SECRET ||
+  'test-secret-key-for-jest-testing-only-not-production';
 process.env.SESSION_SECRET =
   process.env.SESSION_SECRET || 'test-session-secret-for-jest-testing-only';
 process.env.DATABASE_URL = process.env.DATABASE_URL || 'sqlite://test.db';
@@ -30,7 +31,10 @@ if (typeof global.ResizeObserver === 'undefined') {
     }
 
     observe(target) {
-      this.callback([{ target, contentRect: { width: 800, height: 600 } }], this);
+      this.callback(
+        [{ target, contentRect: { width: 800, height: 600 } }],
+        this
+      );
     }
 
     unobserve() {
@@ -127,23 +131,31 @@ if (typeof global.getComputedStyle === 'function') {
 jest.mock(
   '@testing-library/user-event',
   () => {
-    const mockMouseEvent = global.MouseEvent;
-    const mockEvent = global.Event;
+    const { act, fireEvent } = require('@testing-library/react');
+    const dispatchTextInput = (el, value) => {
+      act(() => {
+        fireEvent.change(el, { target: { value } });
+      });
+    };
+    const userEvent = {
+      click: async el => act(() => fireEvent.click(el)),
+      type: async (el, text) => {
+        dispatchTextInput(el, (el.value || '') + text);
+      },
+      clear: async el => {
+        dispatchTextInput(el, '');
+      },
+      hover: async el => act(() => fireEvent.mouseOver(el)),
+      unhover: async el => act(() => fireEvent.mouseOut(el))
+    };
 
     return {
       __esModule: true,
       default: {
-        click: async el =>
-          el.dispatchEvent(new mockMouseEvent('click', { bubbles: true })),
-        type: async (el, text) => {
-          el.value = (el.value || '') + text;
-          el.dispatchEvent(new mockEvent('input', { bubbles: true }));
-        },
-        clear: async el => {
-          el.value = '';
-          el.dispatchEvent(new mockEvent('input', { bubbles: true }));
-        }
-      }
+        ...userEvent,
+        setup: () => userEvent
+      },
+      userEvent
     };
   },
   { virtual: true }

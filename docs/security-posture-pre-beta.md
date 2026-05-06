@@ -25,12 +25,17 @@ It defines what is currently verified in application code versus what still depe
 - File storage has a server-enforced owner boundary.
 - Basic per-user quotas and capability checks exist on authenticated cloud routes.
 - Server logging has been reviewed to avoid accidental provider payload or project-content leakage in active beta-facing paths.
+- 2026-05-06 local beta verification added focused route-access smoke coverage
+  for missing bearer auth (`401`), disabled capability (`403`), missing account
+  capability (`403`), and exhausted quota (`429`) before protected handlers run.
 
 ## External Dependencies Not Yet Verified
 
 - Cloud saved graph isolation currently depends on Supabase row-level security and storage policies that are not defined in this repository.
 - Deployed Supabase project policies have not yet been verified through policy audit or live cross-user access tests.
 - Full tenant isolation across all persisted cloud objects therefore remains an external verification step.
+- The current workspace has no Supabase URL/key configured, so live login,
+  cross-user graph isolation, and storage policy checks cannot be proven here.
 
 ## Beta Verification Gate
 

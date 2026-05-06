@@ -8,7 +8,8 @@ describe('LocalSandboxGenerationDialog', () => {
   const derivedRequest: DerivedSandboxRequest = {
     status: 'ready',
     sourceLabel: 'Supported v1 tree archetype flow',
-    sourceDescription: 'The active graph exposes family DNA and bounded variation.',
+    sourceDescription:
+      'The active graph exposes family DNA and bounded variation.',
     prompt:
       'oak tree archetype, shared trunk DNA, documentary still, natural light, bounded silhouette: broad rounded canopy',
     negativePrompt:
@@ -53,7 +54,12 @@ describe('LocalSandboxGenerationDialog', () => {
     expect(
       screen.getByRole('button', { name: 'Generate 20 Trees' })
     ).toBeDisabled();
-    expect(screen.getByText('Local sandbox generation is disabled.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Local sandbox generation is disabled.')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('flux1-schnell-fp8.safetensors')
+    ).toBeInTheDocument();
     expect(
       screen.getAllByText(/Supported v1 tree archetype flow/i)
     ).toHaveLength(2);
@@ -123,6 +129,12 @@ describe('LocalSandboxGenerationDialog', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Generate 20 Trees' }));
 
+    expect(
+      screen.getByText(
+        /Ready: the pinned Flux Schnell FP8 checkpoint and local Comfy runtime are available/i
+      )
+    ).toBeInTheDocument();
+
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
         '/api/local-image/batch',
@@ -133,11 +145,15 @@ describe('LocalSandboxGenerationDialog', () => {
       );
     });
 
-    expect(await screen.findByText('20 local images generated')).toBeInTheDocument();
+    expect(
+      await screen.findByText('20 local images generated')
+    ).toBeInTheDocument();
     expect(screen.getByText('#1 seed 1200')).toBeInTheDocument();
     expect(screen.getByText(/manifest\.json/i)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Capture To Scene Assets' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Capture To Scene Assets' })
+    );
 
     expect(onCaptureBatch).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -146,7 +162,9 @@ describe('LocalSandboxGenerationDialog', () => {
       })
     );
     expect(
-      screen.getByText(/Captured this run into the PSG Scene Assets sidecar draft/i)
+      screen.getByText(
+        /Captured this run into the PSG Scene Assets sidecar draft/i
+      )
     ).toBeInTheDocument();
   });
 });

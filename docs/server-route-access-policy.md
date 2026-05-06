@@ -1,6 +1,6 @@
 # Server Route Access Policy
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-05-06_
 
 This file describes the active Fastify route surface for the MVP/beta hardening
 phase.
@@ -63,6 +63,9 @@ product-story classification. This document mirrors that contract in human form.
   state alone.
 - Capability checks and quota enforcement are owned by
   `server/src/utils/routeAccess.ts`.
+- `server/__tests__/route-access.test.ts` is part of the active server smoke
+  lane and verifies the local `401`, `403`, and `429` denial behavior before
+  protected handlers run.
 - Compatibility aliases in the LLM family stay mounted for now; they are not a
   signal that multiple AI products are in scope.
 - Legacy `api/` deployment surfaces remain compatibility-only and should not be

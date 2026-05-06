@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   ApiLocalImageClient,
+  LOCAL_IMAGE_PINNED_CHECKPOINT,
   type LocalImageBatchResponse,
   type LocalImageRuntimeStatus
 } from '@promptscape/core/services/localImage';
@@ -79,7 +80,7 @@ export const LocalSandboxGenerationDialog: React.FC<
     }
 
     if (status.available) {
-      return 'Ready: the pinned SDXL checkpoint and local Comfy runtime are available for graph-aware tree batches.';
+      return 'Ready: the pinned Flux Schnell FP8 checkpoint and local Comfy runtime are available for graph-aware tree batches.';
     }
 
     if (status.reason) {
@@ -118,9 +119,9 @@ export const LocalSandboxGenerationDialog: React.FC<
     }
 
     if (derivedRequest.status === 'partial') {
-      return `${derivedRequest.sourceLabel}: review the derived prompt before generating. ${
-        derivedRequest.missingReasons.join(' ')
-      }`;
+      return `${derivedRequest.sourceLabel}: review the derived prompt before generating. ${derivedRequest.missingReasons.join(
+        ' '
+      )}`;
     }
 
     return `${derivedRequest.sourceLabel}: ${derivedRequest.sourceDescription}`;
@@ -253,8 +254,8 @@ export const LocalSandboxGenerationDialog: React.FC<
         <div style={derivationTone}>{derivationMessage}</div>
 
         <div style={styles.note}>
-          This lane is a local demo capability, not a hosted MVP promise. Use
-          it to generate a deterministic batch such as twenty related trees that
+          This lane is a local demo capability, not a hosted MVP promise. Use it
+          to generate a deterministic batch such as twenty related trees that
           share family DNA but vary by seed, then capture the results into PSG
           Scene Assets.
         </div>
@@ -263,7 +264,7 @@ export const LocalSandboxGenerationDialog: React.FC<
           <div>
             <strong>Pinned checkpoint</strong>
             <div style={styles.resultMeta}>
-              {status?.checkpoint || 'sd_xl_base_1.0.safetensors'}
+              {status?.checkpoint || LOCAL_IMAGE_PINNED_CHECKPOINT}
             </div>
           </div>
           <div>
@@ -282,7 +283,9 @@ export const LocalSandboxGenerationDialog: React.FC<
           </div>
           <div>
             <strong>API URL</strong>
-            <div style={styles.resultMeta}>{status?.apiUrl || 'not configured'}</div>
+            <div style={styles.resultMeta}>
+              {status?.apiUrl || 'not configured'}
+            </div>
           </div>
         </div>
 
@@ -379,7 +382,9 @@ export const LocalSandboxGenerationDialog: React.FC<
           <div>
             Output folder: {status?.outputDir || 'local runtime not configured'}
           </div>
-          {status?.lastError && <div>Last runtime error: {status.lastError}</div>}
+          {status?.lastError && (
+            <div>Last runtime error: {status.lastError}</div>
+          )}
         </div>
 
         {error && <div style={styles.error}>{error}</div>}
@@ -389,8 +394,12 @@ export const LocalSandboxGenerationDialog: React.FC<
             <div style={styles.resultsSummary}>
               <strong>{result.count} local images generated</strong>
               <span>{result.outputDir}</span>
-              <span style={styles.resultMeta}>Manifest: {result.manifestPath}</span>
-              {seedsUsed && <span style={styles.resultMeta}>Seeds: {seedsUsed}</span>}
+              <span style={styles.resultMeta}>
+                Manifest: {result.manifestPath}
+              </span>
+              {seedsUsed && (
+                <span style={styles.resultMeta}>Seeds: {seedsUsed}</span>
+              )}
             </div>
             {hasCapturedBatch && (
               <div style={styles.successNote}>

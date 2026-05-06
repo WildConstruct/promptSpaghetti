@@ -55,6 +55,9 @@ describe('FragmentContainer', () => {
     ]);
   });
 
+  const getFragmentContainerElement = () =>
+    screen.getByText('Test Fragment').parentElement?.parentElement as HTMLElement;
+
   it('renders with correct title and description', () => {
     render(
       <ReactFlowProvider>
@@ -177,7 +180,7 @@ describe('FragmentContainer', () => {
       </ReactFlowProvider>
     );
 
-    const containerDiv = container.firstChild as HTMLElement;
+    const containerDiv = getFragmentContainerElement();
     expect(containerDiv.style.border).toContain('#8e44ad');
     expect(containerDiv.style.boxShadow).toContain('rgba(155, 89, 182');
   });
@@ -191,7 +194,7 @@ describe('FragmentContainer', () => {
       </ReactFlowProvider>
     );
 
-    const containerDiv = container.firstChild as HTMLElement;
+    const containerDiv = getFragmentContainerElement();
     expect(containerDiv).toHaveStyle({ opacity: '0.7' });
   });
 
@@ -215,7 +218,7 @@ describe('FragmentContainer', () => {
       </ReactFlowProvider>
     );
 
-    const containerDiv = container.firstChild as HTMLElement;
+    const containerDiv = getFragmentContainerElement();
     expect(containerDiv.style.borderRadius).toBe('12px');
     expect(containerDiv.style.boxShadow).toContain('0 4px 12px');
   });

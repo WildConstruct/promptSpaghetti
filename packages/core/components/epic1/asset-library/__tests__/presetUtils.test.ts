@@ -68,11 +68,15 @@ describe('presetUtils', () => {
       };
 
       const result = applyPresetToNode(nodeData, preset, 'weightedChoice');
+      const normalizedOptions = [
+        { id: 'option-1', text: 'option1', weight: 70, hasBranch: false },
+        { id: 'option-2', text: 'option2', weight: 30, hasBranch: false }
+      ];
 
       expect(result.value).toBe(JSON.stringify(preset.value.options));
-      expect(result.options).toEqual(preset.value.options);
+      expect(result.options).toEqual(normalizedOptions);
       expect(result.editBuffer).toBe(
-        JSON.stringify(preset.value.options, null, 2)
+        JSON.stringify(normalizedOptions, null, 2)
       );
     });
 

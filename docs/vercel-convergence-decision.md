@@ -1,6 +1,6 @@
 # Vercel Convergence Decision
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-05-05_
 
 This note exists to remove ambiguity around Vercel for the MVP branch.
 
@@ -41,7 +41,28 @@ Do not say:
 
 ## Post-MVP options
 
-Only after MVP handoff, choose one:
+Only after MVP handoff, the selected direction is:
+
+**Move the backend off Vercel to a dedicated canonical Fastify host.**
+
+Decision id: `dedicated-fastify-backend`
+
+Why:
+
+- the canonical backend is already `server/src/index.ts`
+- the active route catalog, access policy, quotas, and validation lane are
+  Fastify-owned
+- keeping Vercel API-only would formalize a legacy compatibility surface as
+  product infrastructure
+- migrating Vercel to Fastify is possible, but it still keeps the architecture
+  tied to a platform that is currently represented by a placeholder/API-only
+  config in this repo
+- a dedicated Fastify host makes health checks, route catalog verification,
+  auth/capability middleware, and local parity easier to reason about
+
+MVP config remains unchanged until that migration is executed.
+
+Rejected options:
 
 1. Keep Vercel backend-only
 - Treat `api/` as the supported hosted backend surface.
@@ -61,4 +82,16 @@ For MVP:
 
 - freeze Vercel architecture changes
 - keep the deployment story honest
-- defer convergence until product direction settles and Vercel credentials are available
+- defer config migration until a dedicated Fastify backend host is selected and
+  credentials are available
+
+## Packaging Validation
+
+The current local packaging lane already proves the chosen runtime compiles:
+
+- `pnpm --filter server build`
+- canonical entry: `server/src/index.ts`
+
+`scripts/deploy/verifyDeploymentSurface.mjs` now checks that this decision doc,
+the deployment-state doc, and the active deploy lane agree on the post-MVP
+backend direction and canonical backend entry.

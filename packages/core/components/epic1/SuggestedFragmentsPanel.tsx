@@ -9,12 +9,13 @@ import {
   agentFragmentRecordToPreset,
   type PlannedFragmentSuggestion
 } from './services/AgentFragmentSuggestionService';
+import type { InsertionPlan } from './services/FragmentInsertionPlanner';
 
 interface SuggestedFragmentsPanelProps {
   selectedNode?: Node<EditableNodeData> | null;
   nodes?: Node<EditableNodeData>[];
   edges?: Edge[];
-  onInsert?: (preset: Preset) => void;
+  onInsert?: (preset: Preset, plan?: InsertionPlan | null) => void;
 }
 
 function asStringArray(value: unknown): string[] {
@@ -78,39 +79,6 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
     };
   }, [selectedNode, nodes, edges]);
 
-  if (!selectedNode) {
-    return (
-      <section className="suggested-fragments-panel">
-        <div className="suggested-fragments-header">
-          <h4>Suggested Fragments</h4>
-        </div>
-        <p className="suggested-fragments-empty">
-          Select a node to surface useful fragment suggestions.
-        </p>
-      </section>
-    );
-  }
-
-  const handleInsertTopSuggestion = async () => {
-    if (!selectedNode || !onInsert || isInsertingTopSuggestion) {
-      return;
-    }
-
-    setIsInsertingTopSuggestion(true);
-    try {
-      await AgentFragmentSuggestionService.insertTopSuggestion({
-        selectedNode,
-        nodes,
-        edges,
-        insertPreset: preset => onInsert(preset)
-      });
-    } catch (error) {
-      console.error('[SuggestedFragmentsPanel] failed to insert top suggestion', error);
-    } finally {
-      setIsInsertingTopSuggestion(false);
-    }
-  };
-
   const handleFragmentDragStart = React.useCallback(
     (
       event: React.DragEvent<HTMLButtonElement>,
@@ -126,8 +94,9 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
         name: preset.name,
         type: preset.type ?? 'graph',
         path: preset.path,
-        nodeTypes: preset.nodeTypes,
+        nodeTypes: fragment.nodeTypes,
         metadata: {
+          ...((preset.metadata ?? {}) as Record<string, unknown>),
           file: preset.path
         }
       };
@@ -165,6 +134,39 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
     },
     []
   );
+
+  if (!selectedNode) {
+    return (
+      <section className="suggested-fragments-panel">
+        <div className="suggested-fragments-header">
+          <h4>Suggested Fragments</h4>
+        </div>
+        <p className="suggested-fragments-empty">
+          Select a node to surface useful fragment suggestions.
+        </p>
+      </section>
+    );
+  }
+
+  const handleInsertTopSuggestion = async () => {
+    if (!selectedNode || !onInsert || isInsertingTopSuggestion) {
+      return;
+    }
+
+    setIsInsertingTopSuggestion(true);
+    try {
+      await AgentFragmentSuggestionService.insertTopSuggestion({
+        selectedNode,
+        nodes,
+        edges,
+        insertPreset: (preset, plan) => onInsert(preset, plan)
+      });
+    } catch (error) {
+      console.error('[SuggestedFragmentsPanel] failed to insert top suggestion', error);
+    } finally {
+      setIsInsertingTopSuggestion(false);
+    }
+  };
 
   return (
     <section className="suggested-fragments-panel">
@@ -209,7 +211,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
 
       {suggestions.length > 0 && (
         <div className="suggested-fragments-list">
-          {suggestions.map(({ fragment, actionLabel, insertionLabel }) => {
+          {suggestions.map(({ fragment, plan, actionLabel, insertionLabel }) => {
             const roles = asStringArray(fragment.roles);
             const domains = asStringArray(fragment.domains);
             const placementHints = asStringArray(fragment.placementHints);
@@ -225,7 +227,9 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
                 className={`suggested-fragment-card ${
                   activeFragmentId === fragment.id ? 'is-active' : ''
                 }`}
-                onClick={() => onInsert?.(agentFragmentRecordToPreset(fragment))}
+                onClick={() =>
+                  onInsert?.(agentFragmentRecordToPreset(fragment), plan)
+                }
                 onMouseEnter={() => setActiveFragmentId(fragment.id)}
                 onMouseLeave={() =>
                   setActiveFragmentId(current =>

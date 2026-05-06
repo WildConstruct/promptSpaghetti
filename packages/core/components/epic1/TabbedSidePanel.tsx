@@ -17,6 +17,7 @@ import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
 import RelationshipView from './components/RelationshipView';
 import { ComponentLibraryPanel } from './ComponentLibraryPanel';
 import './TabbedSidePanel.css';
+import type { InsertionPlan } from './services/FragmentInsertionPlanner';
 import type {
   ComponentDefinition,
   GraphReferenceEntry
@@ -43,7 +44,7 @@ export interface TabbedSidePanelProps {
   previewEngine: PreviewEngine | null;
   onPresetDrag?: (preset: Preset) => void;
   onPresetSelect?: (preset: Preset) => void;
-  onInsert?: (item: Preset | Asset) => void;
+  onInsert?: (item: Preset | Asset, plan?: InsertionPlan | null) => void;
   position?: 'left' | 'right';
   defaultTab?: 'preview' | 'assets' | 'components' | null;
   showAssets?: boolean;
@@ -239,9 +240,9 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   }, []);
 
   const handlePresetInsert = useCallback(
-    (preset: Preset) => {
+    (preset: Preset, plan?: InsertionPlan | null) => {
       console.log('[TabbedSidePanel] Forwarding preset insert', preset?.id);
-      onInsert?.(preset);
+      onInsert?.(preset, plan);
     },
     [onInsert]
   );

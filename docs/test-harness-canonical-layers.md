@@ -131,7 +131,7 @@ Notes:
 - `validate:mvp:ship` is the canonical automated ship subset for the current
   branch.
 - The source of truth for this lane lives in
-  [docs/active-validation-lane.md](/C:/Users/behmb/Documents/Cascade%20Projects/prompt_spaghetti/docs/active-validation-lane.md).
+  [active-validation-lane.md](active-validation-lane.md).
 
 ## Repo Quality Lane
 

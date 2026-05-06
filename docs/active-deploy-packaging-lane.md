@@ -1,6 +1,6 @@
 # Active Deploy Packaging Lane
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-05-05_
 
 This note defines the canonical local packaging lane for the current MVP deploy
 model.
@@ -34,6 +34,8 @@ The full local packaging lane runs these phases in order:
 - client `/api/*` proxy target:
   `https://prompt-spaghetti-client.vercel.app/api/:splat`
 - Vercel mode for MVP: legacy `api/` compatibility only
+- canonical backend entry packaged by this lane: `server/src/index.ts`
+- post-MVP backend direction: `dedicated-fastify-backend`
 - `packages/core/dist/**` remains publish-compat output, not active deploy source of truth
 
 ## What This Lane Proves

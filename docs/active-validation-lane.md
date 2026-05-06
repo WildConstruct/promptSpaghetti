@@ -40,12 +40,13 @@ Use `validate:mvp:ship` when you want the narrow teammate-facing ship subset on 
 
 ## What This Lane Covers
 
-- active TypeScript contract check via [tsconfig.active.json](/C:/Users/behmb/Documents/Cascade%20Projects/prompt_spaghetti/tsconfig.active.json)
-- canonical client build via [client/package.json](/C:/Users/behmb/Documents/Cascade%20Projects/prompt_spaghetti/client/package.json)
-- canonical server build via [server/package.json](/C:/Users/behmb/Documents/Cascade%20Projects/prompt_spaghetti/server/package.json)
+- active TypeScript contract check via [tsconfig.active.json](../tsconfig.active.json)
+- canonical client build via [client/package.json](../client/package.json)
+- canonical server build via [server/package.json](../server/package.json)
 - route catalog, LLM, and PSG runtime smoke in `server`
 - launch, editor surface policy, Comfy export, crowd expansion, and button-path smoke in `client`
-- generated artifact policy enforcement via [generated-artifact-policy.md](/C:/Users/behmb/Documents/Cascade%20Projects/prompt_spaghetti/docs/generated-artifact-policy.md)
+- route access denial behavior for authenticated cloud routes in `server`
+- generated artifact policy enforcement via [generated-artifact-policy.md](generated-artifact-policy.md)
 
 ## Generated Artifact Truth
 

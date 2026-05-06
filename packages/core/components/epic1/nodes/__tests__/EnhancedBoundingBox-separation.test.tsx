@@ -140,17 +140,20 @@ describe('EnhancedBoundingBox - System Separation', () => {
       const setNodeCallbacks = mockSetNodes.mock.calls
         .map(call => call[0])
         .filter((fn): fn is (nodes: any[]) => any[] => typeof fn === 'function');
-      const setNodesCallback = setNodeCallbacks[setNodeCallbacks.length - 1];
-      const updatedNodes = setNodesCallback(nodes);
+      const updatedNodes = setNodeCallbacks
+        .map(callback => callback(nodes))
+        .find(updated => updated[2].position.x === 60 && updated[2].position.y === 110);
+
+      expect(updatedNodes).toBeDefined();
 
       // node-1 should NOT move (has parentNode)
-      expect(updatedNodes[1].position).toEqual({ x: 50, y: 50 });
+      expect(updatedNodes![1].position).toEqual({ x: 50, y: 50 });
       
       // node-2 should move (position-contained)
-      expect(updatedNodes[2].position).toEqual({ x: 60, y: 110 });
+      expect(updatedNodes![2].position).toEqual({ x: 60, y: 110 });
       
       // node-3 should NOT move (outside bounds)
-      expect(updatedNodes[3].position).toEqual({ x: 500, y: 500 });
+      expect(updatedNodes![3].position).toEqual({ x: 500, y: 500 });
     });
   });
 

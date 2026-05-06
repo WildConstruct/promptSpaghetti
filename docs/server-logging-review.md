@@ -14,7 +14,9 @@ This document captures the Phase 2 logging/privacy review for active beta-facing
 
 - [server/src/utils/privacy.ts](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/server/src/utils/privacy.ts#L1) provides `redactPII`, but it is not globally enforced across all logging paths.
 - Admin-only code still contains `console.error(...)` calls in [server/src/admin-panel-enhanced.ts](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/server/src/admin-panel-enhanced.ts#L592) and adjacent handlers. Those routes are now opt-in and gated, but they should still be treated as operator surfaces, not user surfaces.
-- Quarantined mock auth utilities still log raw request bodies, for example [server/src/mock-auth-server.js](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/server/src/mock-auth-server.js#L46). They are now blocked from production-like runtime, but they remain noisy dev utilities and should stay quarantined.
+- Quarantined mock auth utilities remain dev-only and should stay blocked from
+  production-like runtime. Do not reintroduce request-body logging in those
+  paths.
 
 ## Risk classification
 
