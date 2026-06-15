@@ -48,6 +48,20 @@ export {
   type SegmentKind
 } from './runtime/prompting/PromptSegmentation';
 
+// Natural-language prompt assembly helpers (Concat join rules + Template/slot fill).
+export {
+  assemble,
+  fillTemplate,
+  templateSlots,
+  indefiniteArticle,
+  normalizePrompt,
+  capitalizeFirst,
+  oxfordJoin,
+  type JoinStyle,
+  type AssembleOptions,
+  type FillTemplateOptions
+} from './runtime/assembly';
+
 // Canonical PSG API protocol contracts for validation/normalization/expansion.
 export * from './services/psg';
 
