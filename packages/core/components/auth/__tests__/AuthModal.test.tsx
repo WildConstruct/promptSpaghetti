@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import userEvent from '../../../tests/utils/userEvent';
 import '@testing-library/jest-dom';
 import type { User } from '@supabase/supabase-js';
 import { act } from 'react';

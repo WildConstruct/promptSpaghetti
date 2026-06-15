@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import userEvent from '../../../../tests/utils/userEvent';
 import { BaseEditableNode } from '../BaseEditableNode';
 import { NodeProps } from 'reactflow';
 

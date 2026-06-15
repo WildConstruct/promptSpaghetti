@@ -9,23 +9,12 @@ module.exports = {
     '<rootDir>/hooks'
   ],
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
-  testPathIgnorePatterns: [
-    // Retired advanced-tier nodes (parked, off the product schema surface).
-    '<rootDir>/runtime/nodes/__tests__/Conditional.test.ts',
-    '<rootDir>/runtime/nodes/__tests__/Sequential.test.ts',
-    '<rootDir>/runtime/nodes/__tests__/Markov.test.ts',
-    '<rootDir>/runtime/nodes/__tests__/WeightedAdvanced.test.ts',
-    '<rootDir>/runtime/__tests__/io-system.test.ts',
-    // Retired/parked tiers: the advanced runtime (advanced.ts), the dead base
-    // RuntimeNode path (runtime/index.ts, used by neither engine), and the
-    // Conditional expression-evaluator security framework. The canonical engine
-    // is Epic1ExecutionEngine; these suites exercise code that is no longer on
-    // the product surface (see docs/engine-unification-design.md).
-    '<rootDir>/runtime/__tests__/advanced.test.ts',
-    '<rootDir>/runtime/__tests__/runtime.test.ts',
-    '<rootDir>/runtime/__tests__/runtime-comprehensive.test.ts',
-    '<rootDir>/runtime/__tests__/expression-evaluator.test.ts'
-  ],
+  // The advanced-node tier (advanced.ts, io-system.ts, Conditional/Sequential/
+  // Markov/WeightedAdvanced) is intentionally parked off the product schema
+  // surface (see graphSchema.ts and docs/engine-unification-design.md). Its
+  // broken, never-run test suites were removed in the forensic cleanup; the
+  // parked source modules remain. Re-add testPathIgnorePatterns here only if
+  // those suites are revived.
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
@@ -34,6 +23,24 @@ module.exports = {
         babelConfig: false,
         tsconfig: {
           jsx: 'react-jsx',
+          module: 'commonjs',
+          target: 'ES2020',
+          isolatedModules: true,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true
+        }
+      }
+    ],
+    // Down-level the ESM-only .js deps allowlisted below (react-dnd ships
+    // `export ...` that jest would otherwise choke on with "Unexpected token
+    // 'export'"). allowJs lets ts-jest transpile them to CJS.
+    '^.+\\.js$': [
+      'ts-jest',
+      {
+        diagnostics: false,
+        babelConfig: false,
+        tsconfig: {
+          allowJs: true,
           module: 'commonjs',
           target: 'ES2020',
           isolatedModules: true,

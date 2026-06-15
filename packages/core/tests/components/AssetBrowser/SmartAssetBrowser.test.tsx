@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '../../utils/userEvent';
+import { toggleCheckbox } from '../../utils/toggleCheckbox';
 import { SmartAssetBrowser, type Asset } from '../../../components/AssetBrowser/SmartAssetBrowser';
 
 const baseAssets: Asset[] = [
@@ -69,12 +70,12 @@ describe('SmartAssetBrowser', () => {
     );
 
     const smartMatchToggle = screen.getByLabelText('Smart Match');
-    await userEvent.click(smartMatchToggle);
+    toggleCheckbox(smartMatchToggle);
 
-    expect(calculateRelevance).toHaveBeenCalled();
+    await waitFor(() => expect(calculateRelevance).toHaveBeenCalled());
+    expect(await screen.findByText(/1 matches/)).toBeInTheDocument();
     expect(screen.getByText('Urban Streets')).toBeInTheDocument();
     expect(screen.queryByText('Medieval Castle')).not.toBeInTheDocument();
-    expect(screen.getByText(/1 matches/)).toBeInTheDocument();
   });
 
   it('extracts metadata in background for assets missing metadata', async () => {
@@ -106,9 +107,11 @@ describe('SmartAssetBrowser', () => {
       />
     );
 
-    await userEvent.click(screen.getByLabelText('Smart Match'));
+    toggleCheckbox(screen.getByLabelText('Smart Match'));
 
-    expect(extractInBackground).toHaveBeenCalledWith('Lonely Road');
+    await waitFor(() =>
+      expect(extractInBackground).toHaveBeenCalledWith('Lonely Road')
+    );
 
     await userEvent.click(screen.getByText('Lonely Road'));
     expect(onAssetSelect).toHaveBeenCalledWith(
