@@ -176,9 +176,12 @@ Each phase is independently committable and leaves the supported build/typecheck
 - **Phase 0 — Baseline.** ✅ `pnpm typecheck` green captured as the safety net.
 - **Phase 1 — Strip-out.** ✅ Tier 1 deletions + handbook workflow + duplicate vercel/eslint configs +
   dead `usePreviewSeeds`/`node-adapter`. (Tier 3 doc archive still pending.)
-- **Phase 2 — Engine unification + schema lock.** ◐ Stage 0 done: advanced/Python tier retired from
-  the schema surface (`graphSchema.ts`), verified green. Stages 1–3 (single shared executor so
-  preview == export) pending — see `engine-unification-design.md`.
+- **Phase 2 — Engine unification + schema lock.** ✅ for launch. Stage 0 done: advanced/Python tier
+  retired from the schema surface (`graphSchema.ts`) + schema-lock test, verified green.
+  Investigation showed **preview == export is already true on the client path** (UI runs
+  `Epic1ExecutionEngine` on the ReactFlow graph it also exports); the server `engine-basic` is
+  unused legacy and the CLI is vestigial. Full two-engine merge deferred post-launch pending a
+  canonical-file-format decision — see `engine-unification-design.md`.
 - **Phase 3 — Variation node + real Include.** Implement the `Variation` node (locked / exposed /
   constrained). Make `Include` compose & execute fragment subgraphs. Confirm `solo`/`mute` =
   lock/veto. This is the heart of the fun: vary your own fragments and watch the prompt change.
@@ -204,7 +207,8 @@ Each phase is independently committable and leaves the supported build/typecheck
 ## 7. Launch readiness checklist (maps to launch doc §15)
 
 - [x] Repo clean enough to withstand scrutiny (Phase 1) — core cleanup done; Tier 3 doc archive pending.
-- [~] Preview == export (Phase 2) — schema retired/locked-in-progress; shared executor pending.
+- [x] Preview == export (Phase 2) — already true on the canonical client path (Epic1 engine +
+      ReactFlow-graph export); server engine deprecated. Schema retired + locked.
 - [x] Natural-language assembly engine (Phase 3b) — `assemble`/`fillTemplate` utilities + Concat join
       rules, tested (35 tests green).
 - [ ] One legible variation story demoable end-to-end: break up a prompt, vary fragments, preview (Phase 3).

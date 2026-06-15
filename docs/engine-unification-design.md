@@ -82,6 +82,31 @@ sort, per-node PRNG, etc. "What you preview is what you ship" ⇒ the server run
 - **PythonTransform** — running it server-side is a security/behavior change, not a refactor; park or
   scope explicitly.
 
+## Resolution / launch decision (2026-06-15)
+
+Investigation of the actual consumers changes the risk calculus:
+
+- The UI **never calls the server**. Live preview runs `Epic1ExecutionEngine` client-side on the
+  ReactFlow graph (`PreviewEngine` → `useGraphPreview`); the dead `usePreviewSeeds` hook (the only
+  `POST /preview` caller) was removed.
+- **Export** writes the ReactFlow-graph JSON via `GraphConverter.exportGraph` — i.e. the *same*
+  representation the canonical engine previews. So **preview == export is already effectively true
+  on the client path.**
+- The server `engine-basic` + `POST /preview` are consumed **only by tests** (plus the orphaned
+  repo-root `tests/` dir). The `@promptscape/cli` package has **no source at all** — just a
+  `package.json`, one test, and a fixture. It is vestigial.
+
+**Decision for launch:** the canonical path is **client-side `Epic1ExecutionEngine` + ReactFlow-graph
+export**. The server `engine-basic` (and its lossy PSG `inputs[]` format) is treated as **legacy /
+deprecated**, not on the launch path. No risky two-engine merge is required to ship.
+
+**Deferred (post-launch, only if the server path gains real consumers):** the full Stages 1–3 merge
+above, plus the open product decision it forces — **which is the canonical persisted file format**:
+the documented PSG `inputs[]` format (CLAUDE.md) vs. the ReactFlow-graph JSON that export actually
+emits. These two diverge on edges/handles (branch routing) and the variable model
+(`SetVariable`/`GetVariable` vs unified `Variable`); reconciling them is a product decision, not a
+mechanical refactor, so it is intentionally left to a human call.
+
 ## "Lock the schema" = concretely
 
 1. `AnyNodeSchema` contains exactly the node types the canonical engine executes — no advanced/Python
