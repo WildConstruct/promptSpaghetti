@@ -39,7 +39,13 @@ export function useGroupMovement(
       const start = performance.now();
 
       // Get IDs of nodes to move for efficient lookup
-      const nodeIdsToMove = new Set(containedNodes.map(n => n.id));
+      // Exclude true ReactFlow children (parentNode === boxId): React Flow
+      // already moves them with the parent, so manual movement would double-shift.
+      const nodeIdsToMove = new Set(
+        containedNodes
+          .filter(n => (n as { parentNode?: string }).parentNode !== boxId)
+          .map(n => n.id)
+      );
 
       // Update all contained nodes' positions
       setNodes(nodes =>
@@ -85,7 +91,13 @@ export function useGroupMovement(
       if (!isLocked || containedNodes.length === 0) {return;}
 
       const start = performance.now();
-      const nodeIdsToMove = new Set(containedNodes.map(n => n.id));
+      // Exclude true ReactFlow children (parentNode === boxId): React Flow
+      // already moves them with the parent, so manual movement would double-shift.
+      const nodeIdsToMove = new Set(
+        containedNodes
+          .filter(n => (n as { parentNode?: string }).parentNode !== boxId)
+          .map(n => n.id)
+      );
 
       setNodes(nodes =>
         nodes.map(node => {

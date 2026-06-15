@@ -1,6 +1,6 @@
 /**
  * EnhancedBoundingBox Component - Refactored Version
- * Main container component that orchestrates all sub-components and hooks
+ * Main container component that orchestrates all sub-components and hooks.
  */
 
 import React, {
@@ -141,13 +141,15 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
 
   // Sync externally-provided dimensions into local resize state when the node
   // is updated by import/drop logic rather than manual pointer resizing.
+  // Uses sizeRef as fallback so absent data.width/height never overwrites
+  // a manually-resized size with DEFAULT values.
   useEffect(() => {
     if (isAnimating || isResizing || isCollapsed) {
       return;
     }
 
-    const nextWidth = data.width || DEFAULT_WIDTH;
-    const nextHeight = data.height || DEFAULT_HEIGHT;
+    const nextWidth = data.width || sizeRef.current.width;
+    const nextHeight = data.height || sizeRef.current.height;
     if (
       nextWidth === sizeRef.current.width &&
       nextHeight === sizeRef.current.height
@@ -375,13 +377,24 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       sizeRef.current = restoredSize;
       setCurrentSize(restoredSize);
 
-      // Restore hidden nodes
+      // Restore hidden nodes — use BOTH the stored list AND any node whose
+      // parentNode matches this box. This prevents nodes vanishing when the
+      // collapse path failed to capture them into collapsedNodeIds.
       const boxNode = getNodes().find(n => n.id === id);
-      const collapsedNodeIds = boxNode?.data?.collapsedNodeIds || [];
+      const storedIds: string[] = boxNode?.data?.collapsedNodeIds || [];
 
-      setNodes((nodes) =>
-        nodes.map((node) => {
-          if (collapsedNodeIds.includes(node.id)) {
+      setNodes((nodes) => {
+        const allChildIds = new Set(storedIds);
+        for (const node of nodes) {
+          const directParent = (node as { parentNode?: string }).parentNode;
+          const dataParent = (node.data as { parentNode?: string } | undefined)?.parentNode;
+          if (directParent === id || dataParent === id) {
+            allChildIds.add(node.id);
+          }
+        }
+
+        return nodes.map((node) => {
+          if (allChildIds.has(node.id)) {
             return { ...node, hidden: false };
           }
           if (node.id === id) {
@@ -408,8 +421,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
             };
           }
           return node;
-        })
-      );
+        });
+      });
       recalculate();
     }
     requestAnimationFrame(() => updateNodeInternals(id));
@@ -449,13 +462,13 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         nodes.map(node =>
           node.id === id
             ? {
-                ...node,
-                data: {
-                  ...node.data,
-                  backgroundColor: color,
-                  borderColor: color
-                }
+              ...node,
+              data: {
+                ...node.data,
+                backgroundColor: color,
+                borderColor: color
               }
+            }
             : node
         )
       );
@@ -471,12 +484,12 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         nodes.map(node =>
           node.id === id
             ? {
-                ...node,
-                data: {
-                  ...node.data,
-                  opacity
-                }
+              ...node,
+              data: {
+                ...node.data,
+                opacity
               }
+            }
             : node
         )
       );
@@ -539,9 +552,9 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           nodes.map(node =>
             node.id === id
               ? {
-                  ...node,
-                  position: { x: nextPosX, y: nextPosY }
-                }
+                ...node,
+                position: { x: nextPosX, y: nextPosY }
+              }
               : node
           )
         );
@@ -560,24 +573,24 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           nodes.map(node =>
             node.id === id
               ? {
-                  ...node,
+                ...node,
+                width: finalSize.width,
+                height: finalSize.height,
+                measured: {
                   width: finalSize.width,
-                  height: finalSize.height,
-                  measured: {
-                    width: finalSize.width,
-                    height: finalSize.height
-                  },
-                  style: {
-                    ...(node.style ?? {}),
-                    width: finalSize.width,
-                    height: finalSize.height
-                  },
-                  data: {
-                    ...node.data,
-                    width: finalSize.width,
-                    height: finalSize.height
-                  }
+                  height: finalSize.height
+                },
+                style: {
+                  ...(node.style ?? {}),
+                  width: finalSize.width,
+                  height: finalSize.height
+                },
+                data: {
+                  ...node.data,
+                  width: finalSize.width,
+                  height: finalSize.height
                 }
+              }
               : node
           )
         );
@@ -646,6 +659,8 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const boxStyle: React.CSSProperties = {
     width: effectiveSize.width,
     height: effectiveSize.height,
+    minWidth: effectiveSize.width,
+    minHeight: effectiveSize.height,
     border: `${data.borderWidth || 2}px solid ${data.borderColor || DEFAULT_REGION_COLORS[0]}`,
     borderRadius: `${BORDER_RADIUS}px`,
     position: 'relative',
@@ -675,7 +690,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   // so force-sync it when currentSize changes to avoid stale measurements.
   useLayoutEffect(() => {
     const wrapper = rootRef.current?.closest<HTMLElement>('.react-flow__node');
-    if (!wrapper) {return;}
+    if (!wrapper) { return; }
 
     // React Flow may rewrite these dimensions from cached measurements.
     // Use priority here so manual resize/collapse state remains visible.
@@ -741,8 +756,9 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
           bottom: 0,
           backgroundColor: getBackgroundWithOpacity(
             data.backgroundColor || DEFAULT_REGION_COLORS[0],
-            data.opacity || 0.3
+            Math.max(data.opacity || 0.3, 0.15)
           ),
+          border: '2px dashed rgba(255, 100, 100, 0.8)',
           borderRadius: `${BORDER_RADIUS}px`,
           zIndex: BACKGROUND,
           pointerEvents: 'none'
