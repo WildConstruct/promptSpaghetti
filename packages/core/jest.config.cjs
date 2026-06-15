@@ -10,8 +10,11 @@ module.exports = {
   ],
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
   testPathIgnorePatterns: [
+    // Retired advanced-tier nodes (parked, off the product schema surface).
     '<rootDir>/runtime/nodes/__tests__/Conditional.test.ts',
     '<rootDir>/runtime/nodes/__tests__/Sequential.test.ts',
+    '<rootDir>/runtime/nodes/__tests__/Markov.test.ts',
+    '<rootDir>/runtime/nodes/__tests__/WeightedAdvanced.test.ts',
     '<rootDir>/runtime/__tests__/io-system.test.ts'
   ],
   transform: {
