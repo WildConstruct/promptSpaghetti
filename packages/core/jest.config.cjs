@@ -15,7 +15,16 @@ module.exports = {
     '<rootDir>/runtime/nodes/__tests__/Sequential.test.ts',
     '<rootDir>/runtime/nodes/__tests__/Markov.test.ts',
     '<rootDir>/runtime/nodes/__tests__/WeightedAdvanced.test.ts',
-    '<rootDir>/runtime/__tests__/io-system.test.ts'
+    '<rootDir>/runtime/__tests__/io-system.test.ts',
+    // Retired/parked tiers: the advanced runtime (advanced.ts), the dead base
+    // RuntimeNode path (runtime/index.ts, used by neither engine), and the
+    // Conditional expression-evaluator security framework. The canonical engine
+    // is Epic1ExecutionEngine; these suites exercise code that is no longer on
+    // the product surface (see docs/engine-unification-design.md).
+    '<rootDir>/runtime/__tests__/advanced.test.ts',
+    '<rootDir>/runtime/__tests__/runtime.test.ts',
+    '<rootDir>/runtime/__tests__/runtime-comprehensive.test.ts',
+    '<rootDir>/runtime/__tests__/expression-evaluator.test.ts'
   ],
   transform: {
     '^.+\\.(ts|tsx)$': [
