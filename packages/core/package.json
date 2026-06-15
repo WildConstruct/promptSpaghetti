@@ -57,8 +57,6 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@stripe/react-stripe-js": "^3.9.0",
-    "@stripe/stripe-js": "^7.8.0",
     "@supabase/supabase-js": "^2.54.0",
     "@types/d3-force": "^3.0.10",
     "@types/dagre": "^0.7.53",

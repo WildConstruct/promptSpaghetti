@@ -20,7 +20,6 @@
     "scripts/*.ts",
     "scripts/*.mjs",
     "scripts/*.cjs",
-    "scripts/maintenance/**",
     "scripts/rollback/**",
     "tests/**",
     "tools/**",

@@ -1,5 +1,9 @@
 import { useCallback, useState } from 'react';
 import { Node, Edge, Connection, addEdge, ReactFlowInstance } from 'reactflow';
+import {
+  createNodeId as sharedCreateNodeId,
+  getDefaultNodeData
+} from '../utils/nodeDefaults';
 
 interface UseNodeOperationsOptions {
   onNodeSelect?: (nodeId: string | null) => void;
@@ -38,14 +42,11 @@ export function useNodeOperations<NodeData = unknown>(
     new Set()
   );
 
-  // Generate unique node ID
-  const createNodeId = useCallback((type?: string) => {
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substring(2, 8);
-    return type
-      ? `${type}-${timestamp}-${random}`
-      : `node-${timestamp}-${random}`;
-  }, []);
+  // Generate unique node ID (shared implementation)
+  const createNodeId = useCallback(
+    (type?: string) => sharedCreateNodeId(type),
+    []
+  );
 
   // Handle node data updates (for inline editing)
   const handleNodeEdit = useCallback(
@@ -53,25 +54,50 @@ export function useNodeOperations<NodeData = unknown>(
       setNodes(nds =>
         nds.map(node => {
           if (node.id === nodeId) {
+            // For concat nodes, try to parse structured config JSON
+            const concatExtras: Record<string, unknown> =
+              node.type === 'concat'
+                ? (() => {
+                  try {
+                    const parsed = JSON.parse(newValue) as Record<string, unknown>;
+                    if (parsed && typeof parsed === 'object' && 'separator' in parsed) {
+                      return {
+                        separator: String(parsed.separator ?? ''),
+                        joinStyle: parsed.joinStyle,
+                        dedupe: parsed.dedupe === true
+                      };
+                    }
+                  } catch {
+                    // Not JSON — treat as plain separator string (legacy)
+                  }
+                  return { separator: newValue };
+                })()
+                : {};
+
             return {
               ...node,
               data: {
                 ...node.data,
-                value: newValue,
+                value: node.type === 'concat'
+                  ? String(concatExtras.separator ?? newValue)
+                  : newValue,
                 text: newValue, // For TextBlock nodes
                 variableName: newValue, // For Variable nodes
-                separator: newValue, // For Concat nodes
+                separator: node.type === 'concat'
+                  ? String(concatExtras.separator ?? newValue)
+                  : newValue, // For Concat nodes
                 label: newValue, // For Output nodes
+                ...(node.type === 'concat' ? concatExtras : {}),
                 // For WeightedChoice nodes, parse the JSON
                 options:
                   node.type === 'weightedChoice'
                     ? (() => {
-                        try {
-                          return JSON.parse(newValue);
-                        } catch {
-                          return (node.data as { options?: unknown })?.options;
-                        }
-                      })()
+                      try {
+                        return JSON.parse(newValue);
+                      } catch {
+                        return (node.data as { options?: unknown })?.options;
+                      }
+                    })()
                     : (node.data as { options?: unknown })?.options
               }
             };
@@ -194,7 +220,7 @@ export function useNodeOperations<NodeData = unknown>(
   // Delete selected nodes
   const deleteSelectedNodes = useCallback(() => {
     const nodesToDelete = nodes.filter(n => n.selected).map(n => n.id);
-    if (nodesToDelete.length === 0) {return;}
+    if (nodesToDelete.length === 0) { return; }
 
     setNodes(nds => nds.filter(n => !nodesToDelete.includes(n.id)));
     setEdges(eds =>
@@ -390,26 +416,4 @@ export function useNodeOperations<NodeData = unknown>(
     onNodesDelete,
     onEdgesDelete
   };
-}
-
-// Default node data based on type
-function getDefaultNodeData(type: string): Record<string, unknown> {
-  switch (type) {
-    case 'textBlock':
-      return { text: 'New text block', variations: [] };
-    case 'weightedChoice':
-      return {
-        options: [
-          { id: 'option-1', text: 'Option 1', weight: 1, hasBranch: false }
-        ]
-      };
-    case 'concat':
-      return { separator: ' ' };
-    case 'output':
-      return { label: 'Output' };
-    case 'variable':
-      return { variableName: 'myVariable', value: '' };
-    default:
-      return {};
-  }
 }

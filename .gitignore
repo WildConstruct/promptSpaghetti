@@ -64,3 +64,12 @@ nul
 .tmp-*
 cloudscape
 cloudscape.pub
+
+# Stray TS declaration/source maps emitted next to source. The canonical,
+# checked-in build output lives under packages/core/dist/ (see
+# generatedArtifactPolicy.mjs) and is intentionally NOT ignored here.
+packages/core/config/**/*.map
+packages/core/runtime/**/*.map
+packages/core/types/**/*.map
+packages/core/utils/**/*.map
+server/src/**/*.map

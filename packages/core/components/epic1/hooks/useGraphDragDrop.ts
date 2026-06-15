@@ -7,6 +7,7 @@ import {
   type FragmentDropTarget
 } from '../services/FragmentDropTargeting';
 import type { AgentFragmentRecord } from '@prompt/asset-browser';
+import { createNodeId, getDefaultNodeData } from '../utils/nodeDefaults';
 
 interface DraggedItem {
   type: string;
@@ -232,7 +233,7 @@ export function useGraphDragDrop<NodeData = unknown>(
         (getDefaultNodeData(nodeType) as NodeData);
 
       const newNode: Node<NodeData> = {
-        id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: createNodeId(nodeType),
         type: nodeType,
         position,
         data: nodeData
@@ -535,42 +536,5 @@ function resolveDropTarget(
   }
 }
 
-// Default node data helper (duplicate from useNodeOperations - could be shared)
-function getDefaultNodeData(type: string): Record<string, unknown> {
-  switch (type) {
-    case 'textBlock':
-      return { text: 'New text block', variations: [] };
-    case 'weightedChoice':
-      return {
-        options: [
-          { id: 'option-1', text: 'Option 1', weight: 1, hasBranch: false }
-        ]
-      };
-    case 'concat':
-      return { separator: ' ' };
-    case 'output':
-      return { label: 'Output' };
-    case 'variable':
-    case 'setVariable':
-    case 'getVariable':
-      return { variableName: 'myVariable', value: '' };
-    case 'enhancedBoundingBox':
-      return {
-        title: 'Region',
-        description: '',
-        backgroundColor: '#1a202c',
-        opacity: 0.1,
-        borderColor: '#22d3ee',
-        borderStyle: 'solid',
-        borderWidth: 2,
-        locked: false,
-        isCollapsed: false,
-        width: 400,
-        height: 300
-      };
-    default:
-      return {};
-  }
-}
 const isPresetDropPayload = (value: unknown): value is PresetDropPayload =>
   typeof value === 'object' && value !== null;
