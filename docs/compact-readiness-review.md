@@ -141,15 +141,29 @@ Confirmed against `ACTIVE_SURFACE.md` (which marks the quarantined/disposable se
   `exporter.js`, `exporter-standalone.ts`.
 
 ### Tier 2 — consolidate (verify CI first)
-- ESLint: keep one of `.eslintrc.js` / `.eslintrc.json`.
-- Lint-staged: keep one of `.lintstagedrc{.js,.safe.js,.improved.js}`.
-- Vercel: keep `vercel.json`; remove `vercel-minimal.json`, `vercel-full-app.json`.
+- ESLint: removed shadowed `.eslintrc.json` (ESLint already prefers `.eslintrc.js`). ✅
+- Vercel: removed `vercel-minimal.json`, `vercel-full-app.json` (unreferenced). ✅
+- Lint-staged: **deferred** — `.lintstagedrc.improved.js` is referenced by husky variant hooks;
+  needs husky-hook consolidation first.
 - TS: review `tsconfig.active.json`, `server/tsconfig.minimal.json`.
 
 ### Tier 3 — relocate
 - Archive historical planning/assessment docs under `docs/archive/`.
 - Decide `python-executor/` (412 KB) and `tools/` (192 KB): out of launch scope per ACTIVE_SURFACE;
   keep or move to a tooling repo.
+
+### Deferred to Phase 2 (build pipeline)
+- Untrack `packages/core/dist/` (32 files) and 77 tracked `*.d.ts.map` build artifacts. `**/dist/`
+  is already gitignored but these are committed; core's `package.json` resolves `main`/`module` to
+  `dist/`, and the Vercel preview is currently green with dist committed — untracking must be paired
+  with a verified core build step in the deploy pipeline.
+
+### CI health (pre-existing, not regressions)
+- `build-handbook` workflow removed — it built a `content-authoring-handbook` package that does not
+  exist in the repo. ✅
+- `dependency-checks` fails on `pnpm audit` (129 vulns: 3 critical / 69 high). Separate
+  security-debt workstream; do **not** weaken the gate to make it pass. Coordinate with the open
+  dependabot PRs.
 
 ---
 
@@ -168,12 +182,14 @@ Each phase is independently committable and leaves the supported build/typecheck
   constrained). Make `Include` compose & execute fragment subgraphs. Confirm `solo`/`mute` =
   lock/veto. This is the heart of the fun: vary your own fragments and watch the prompt change.
 - **Phase 3b — Natural-language assembly.** Prompts must read as prose, not tag lists. Today the
-  runtime `ConcatNode` does `inputs.join('')` and the engine ignores the `separator` field. Fix:
-  (1) honor `separator` consistently across both execution paths; (2) add a prose-assembly mode
-  (connectors/articles, capitalization of sentence starts, spacing/punctuation normalization,
-  de-duplication, whitespace trim) as the default for prompt output; (3) ensure shipped
-  templates/fragments are authored to read as sentences; (4) optional deterministic-off LLM
-  "naturalize" pass via the existing server LLM route. Default behavior stays deterministic.
+  runtime `ConcatNode` does `inputs.join('')` and the engine ignores the `separator` field.
+  Grammar/joining is an **assembly** concern, not a **selection** concern — so it should live in the
+  assembly layer, keeping `WeightedChoice` a clean "pick one" node. **Decision: smart join rules on
+  Concat is the primary mechanism.** Concat gains a selectable join style (space / comma list /
+  "and" list / sentence) plus automatic article insertion (a/an), first-word capitalization,
+  punctuation + whitespace normalization, and de-duplication — applied consistently across both
+  execution paths. Optional layers, deferred: a template/slot node, per-choice affixes, and an LLM
+  "naturalize" pass (default deterministic and off).
 - **Phase 4 — Save/load + PSG persistence.** Keep the editor's save/load simple and PSG-first; the
   format may carry recipe/seed metadata for the broader system, but the UI surfaces only the
   assembled prompt and easy share. _(Structured-recipe export UI is deferred — out of scope.)_
