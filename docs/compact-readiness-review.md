@@ -43,6 +43,13 @@ The **PSG file format** has heavier requirements (recipes, manifests, seeds, ran
 because it serves the larger system — but the public editor should not surface that machinery.
 Format depth ≠ UI depth. When in doubt, the utility stays simple.
 
+**D. Fragments are a first-class feature and meant to grow.** The fragment corpus
+(`assets/library/`, 161 `.psg` files, plus `.psglib` presets) is core to the tinker-tool appeal —
+people grab a fragment, break their prompt apart, swap and vary pieces. We keep the corpus, make
+`Include` actually compose it (Phase 3), and treat "ship more fragments" as an ongoing content
+lane, not a one-time set. Nothing in the strip-out (§5) removes corpus content; only an analysis
+_report about_ the corpus is deleted.
+
 ---
 
 ## 2. Compact scorecard
@@ -98,7 +105,7 @@ Minimal, legible, Compact-aligned set. Every node maps to a principle and to the
 | **WeightedChoice** | Categorical variation | Weighted options; `solo`=lock, `mute`=veto | III, IX |
 | **Variation** (new) | Bounded numeric/parametric variation | base value + range/bounds + lock flag (the WCX locked/exposed/constrained model) | III, VI |
 | **Variable / Lock** | Stable-across-outputs continuity | resolve once, reuse | VI |
-| **Concat** | Assembly | join parts | III |
+| **Concat / Assemble** | Assembly into **natural language** | prose join: connectors, articles, capitalization, punctuation, de-dup — not delimiter lists | III |
 | **Include** (fix) | Real fragment composition | inline + execute referenced `.psg` | III, X |
 | **Output** | Text result (default) | renders the assembled prompt; copy/share | III, VIII |
 
@@ -160,6 +167,13 @@ Each phase is independently committable and leaves the supported build/typecheck
 - **Phase 3 — Variation node + real Include.** Implement the `Variation` node (locked / exposed /
   constrained). Make `Include` compose & execute fragment subgraphs. Confirm `solo`/`mute` =
   lock/veto. This is the heart of the fun: vary your own fragments and watch the prompt change.
+- **Phase 3b — Natural-language assembly.** Prompts must read as prose, not tag lists. Today the
+  runtime `ConcatNode` does `inputs.join('')` and the engine ignores the `separator` field. Fix:
+  (1) honor `separator` consistently across both execution paths; (2) add a prose-assembly mode
+  (connectors/articles, capitalization of sentence starts, spacing/punctuation normalization,
+  de-duplication, whitespace trim) as the default for prompt output; (3) ensure shipped
+  templates/fragments are authored to read as sentences; (4) optional deterministic-off LLM
+  "naturalize" pass via the existing server LLM route. Default behavior stays deterministic.
 - **Phase 4 — Save/load + PSG persistence.** Keep the editor's save/load simple and PSG-first; the
   format may carry recipe/seed metadata for the broader system, but the UI surfaces only the
   assembled prompt and easy share. _(Structured-recipe export UI is deferred — out of scope.)_
