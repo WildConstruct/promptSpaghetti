@@ -105,7 +105,8 @@ Minimal, legible, Compact-aligned set. Every node maps to a principle and to the
 | **WeightedChoice** | Categorical variation | Weighted options; `solo`=lock, `mute`=veto | III, IX |
 | **Variation** (new) | Bounded numeric/parametric variation | base value + range/bounds + lock flag (the WCX locked/exposed/constrained model) | III, VI |
 | **Variable / Lock** | Stable-across-outputs continuity | resolve once, reuse | VI |
-| **Concat / Assemble** | Assembly into **natural language** | prose join: connectors, articles, capitalization, punctuation, de-dup — not delimiter lists | III |
+| **Template** (new, primary NL path) | Sentence skeleton with `{slots}` filled by variation nodes | reads as prose by construction; human authors the sentence | I, II, III |
+| **Concat / Assemble** | Secondary assembly | optional smart join rules (articles, capitalization, punctuation, de-dup) for non-template flows | III |
 | **Include** (fix) | Real fragment composition | inline + execute referenced `.psg` | III, X |
 | **Output** | Text result (default) | renders the assembled prompt; copy/share | III, VIII |
 
@@ -184,12 +185,13 @@ Each phase is independently committable and leaves the supported build/typecheck
 - **Phase 3b — Natural-language assembly.** Prompts must read as prose, not tag lists. Today the
   runtime `ConcatNode` does `inputs.join('')` and the engine ignores the `separator` field.
   Grammar/joining is an **assembly** concern, not a **selection** concern — so it should live in the
-  assembly layer, keeping `WeightedChoice` a clean "pick one" node. **Decision: smart join rules on
-  Concat is the primary mechanism.** Concat gains a selectable join style (space / comma list /
-  "and" list / sentence) plus automatic article insertion (a/an), first-word capitalization,
-  punctuation + whitespace normalization, and de-duplication — applied consistently across both
-  execution paths. Optional layers, deferred: a template/slot node, per-choice affixes, and an LLM
-  "naturalize" pass (default deterministic and off).
+  assembly layer, keeping `WeightedChoice` a clean "pick one" node. **Decision: a Template/slot node
+  is the primary mechanism.** The human writes a sentence skeleton —
+  `"a {age} {profession} with {hair} hair, wearing {outfit}, looking {mood}"` — and the connected
+  variation nodes fill the slots, so output reads as prose by construction (Compact I/II; variation
+  fills bounded slots, III; deterministic, V/VI). Secondary/optional layers: smart join rules on
+  Concat (articles, capitalization, punctuation, de-dup) for non-template flows; optional per-choice
+  affixes (progressive disclosure); optional LLM "naturalize" pass (default deterministic and off).
 - **Phase 4 — Save/load + PSG persistence.** Keep the editor's save/load simple and PSG-first; the
   format may carry recipe/seed metadata for the broader system, but the UI surfaces only the
   assembled prompt and easy share. _(Structured-recipe export UI is deferred — out of scope.)_
