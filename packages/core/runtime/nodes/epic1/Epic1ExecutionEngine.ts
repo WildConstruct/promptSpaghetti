@@ -8,6 +8,7 @@ import { Epic1ExecutionContext } from './Epic1ExecutionContext';
 import { Epic1NodeType } from './nodeTypes';
 import { TextBlockNode } from './TextBlockNode';
 import { WeightedChoiceNode } from './WeightedChoiceNode';
+import { applyWeightDistribution } from './weightDistribution';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode, VariableMode } from './VariableNode';
 import { OutputNode } from './OutputNode';
@@ -396,11 +397,15 @@ export class Epic1ExecutionEngine {
         `[ExecutionEngine] WeightedChoice ${nodeId} single option, selected: "${selectedText}"`
       );
     } else {
+      // Reshape weights by the node's configured distribution before selection
+      // (linear/absent == identity, so existing graphs are unchanged).
+      const weighted = applyWeightDistribution(options, node.getDistribution());
+
       // Calculate total weight
-      const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
+      const totalWeight = weighted.reduce((sum, opt) => sum + opt.weight, 0);
 
       if (totalWeight === 0) {
-        selectedText = options[0].text; // Fallback to first option
+        selectedText = weighted[0].text; // Fallback to first option
         selectedIndex = 0;
       } else {
         // Get node-specific PRNG for deterministic selection
@@ -409,8 +414,8 @@ export class Epic1ExecutionEngine {
 
         // Select based on weight
         let accumulator = 0;
-        for (let i = 0; i < options.length; i++) {
-          const option = options[i];
+        for (let i = 0; i < weighted.length; i++) {
+          const option = weighted[i];
           accumulator += option.weight;
           if (random <= accumulator) {
             // Substitute variables in the selected text
@@ -424,9 +429,9 @@ export class Epic1ExecutionEngine {
         }
 
         // Fallback (shouldn't reach here)
-        if (!selectedText && options.length > 0) {
-          selectedText = options[options.length - 1].text;
-          selectedIndex = options.length - 1;
+        if (!selectedText && weighted.length > 0) {
+          selectedText = weighted[weighted.length - 1].text;
+          selectedIndex = weighted.length - 1;
         }
       }
     }

@@ -10,6 +10,7 @@ import {
   WeightedChoiceNode,
   WeightedOption
 } from '../../../runtime/nodes/epic1/WeightedChoiceNode';
+import type { WeightDistribution } from '../../../types/epic1';
 import { ConcatNode } from '../../../runtime/nodes/epic1/ConcatNode';
 import type { JoinStyle } from '../../../runtime/assembly';
 import {
@@ -126,12 +127,16 @@ export function nodeDataToRuntimeNode(
           ];
         }
 
+        // Optional weight-distribution reshaping (linear/absent == today's behavior).
+        const distribution = (data as { distribution?: WeightDistribution })
+          .distribution;
+
         debugLogEpic1(
           '[nodeFactory] Parsed options for WeightedChoice:',
           options
         );
-        // WeightedChoiceNode constructor takes (id, options)
-        return new WeightedChoiceNode(id, options);
+        // WeightedChoiceNode constructor takes (id, options, config)
+        return new WeightedChoiceNode(id, options, { distribution });
       }
 
       case 'concat': {

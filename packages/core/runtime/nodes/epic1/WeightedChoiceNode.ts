@@ -8,7 +8,8 @@ import {
   BaseInlineEditableNode,
   InlineEditableConfig
 } from './BaseInlineEditableNode';
-import type { WeightedOption } from '../../../types/epic1';
+import type { WeightedOption, WeightDistribution } from '../../../types/epic1';
+import { applyWeightDistribution } from './weightDistribution';
 import seedrandom from 'seedrandom';
 
 export type { WeightedOption } from '../../../types/epic1';
@@ -32,6 +33,11 @@ export interface WeightedChoiceConfig extends InlineEditableConfig {
   minOptions?: number;
   /** Maximum number of options allowed */
   maxOptions?: number;
+  /**
+   * Optional weight-distribution reshaping applied before selection.
+   * Absent == flat proportional selection (historical behavior).
+   */
+  distribution?: WeightDistribution;
 }
 
 /**
@@ -71,16 +77,19 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<
    * Execute the node - select a weighted random option
    */
   async run(ctx: ExecutionContext): Promise<string> {
-    const options = this.getCurrentValue();
+    const rawOptions = this.getCurrentValue();
 
-    if (options.length === 0) {
+    if (rawOptions.length === 0) {
       return '';
     }
 
     // If there's only one option, return it directly
-    if (options.length === 1) {
-      return options[0].text;
+    if (rawOptions.length === 1) {
+      return rawOptions[0].text;
     }
+
+    // Reshape weights by the configured distribution (linear/absent == identity).
+    const options = applyWeightDistribution(rawOptions, this.config.distribution);
 
     // Calculate total weight
     const totalWeight = options.reduce((sum, option) => sum + option.weight, 0);
@@ -350,6 +359,13 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<
    */
   getWeightedConfig(): WeightedChoiceConfig {
     return { ...this.config };
+  }
+
+  /**
+   * Get the configured weight distribution, if any.
+   */
+  getDistribution(): WeightDistribution | undefined {
+    return this.config.distribution;
   }
 
   /**

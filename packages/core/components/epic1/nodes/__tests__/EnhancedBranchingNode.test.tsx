@@ -9,6 +9,7 @@ import type { BaseEditableNodeProps } from '../BaseEditableNode';
 jest.mock('reactflow', () => ({
   Handle: () => null,
   useUpdateNodeInternals: () => jest.fn(),
+  useReactFlow: () => ({ setNodes: jest.fn() }),
   Position: {
     Left: 'left',
     Right: 'right'

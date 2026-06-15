@@ -5,3 +5,22 @@ export interface WeightedOption {
   color?: string;
   hasBranch?: boolean;
 }
+
+/**
+ * Optional weight-reshaping applied to a WeightedChoice before selection.
+ * Absent or `linear` == the historical flat-proportional behavior (no change).
+ * Mined from the parked `WeightedAdvanced` tier — see
+ * docs/parked-implementations/README.md.
+ */
+export type WeightDistributionType = 'linear' | 'exponential' | 'gaussian';
+
+export interface WeightDistribution {
+  type: WeightDistributionType;
+  /**
+   * - exponential: `factor` (default 2). >1 sharpens toward heavy options, <1 flattens.
+   * - gaussian: `mean` (default 0.5) / `std` (default 0.2). Biases by option POSITION.
+   */
+  parameters?: { factor?: number; mean?: number; std?: number };
+  /** Optional floor applied to each weight after the transform. */
+  minWeight?: number;
+}

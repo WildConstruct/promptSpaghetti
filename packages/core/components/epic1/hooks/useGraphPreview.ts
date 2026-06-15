@@ -36,7 +36,8 @@ function getExecutionRelevantNodeData(
 
     case 'weightedChoice':
       return {
-        options: data.options ?? null
+        options: data.options ?? null,
+        distribution: data.distribution ?? null
       };
 
     case 'concat':
