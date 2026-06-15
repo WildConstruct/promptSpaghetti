@@ -11,6 +11,7 @@ import {
   WeightedOption
 } from '../../../runtime/nodes/epic1/WeightedChoiceNode';
 import { ConcatNode } from '../../../runtime/nodes/epic1/ConcatNode';
+import type { JoinStyle } from '../../../runtime/assembly';
 import {
   VariableNode,
   VariableMode,
@@ -143,10 +144,26 @@ export function nodeDataToRuntimeNode(
             : typeof separatorCandidate === 'string'
               ? separatorCandidate
               : ' ';
+        // Optional natural-language join controls (off by default → legacy join).
+        const joinStyleCandidate = (data as { joinStyle?: unknown }).joinStyle;
+        const allowedJoinStyles = [
+          'separator',
+          'space',
+          'comma',
+          'and',
+          'sentence'
+        ];
+        const joinStyle =
+          typeof joinStyleCandidate === 'string' &&
+          allowedJoinStyles.includes(joinStyleCandidate)
+            ? (joinStyleCandidate as JoinStyle)
+            : undefined;
         return new ConcatNode(id, {
           separator: separator,
           trimInputs: data.trimInputs !== false,
-          requireAllInputs: data.requireAllInputs === true
+          requireAllInputs: data.requireAllInputs === true,
+          joinStyle,
+          dedupe: (data as { dedupe?: unknown }).dedupe === true
         });
       }
 
