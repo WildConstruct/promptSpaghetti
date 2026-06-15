@@ -7,8 +7,8 @@ export declare const STORAGE_VERSION = 1;
 export declare const COMPRESSION_THRESHOLD: number;
 export declare const MAX_STORAGE_SIZE: number;
 export declare const PersistedStateSchema: z.ZodObject<{
-    nodes: z.ZodArray<z.ZodAny, "many">;
-    edges: z.ZodArray<z.ZodAny, "many">;
+    nodes: z.ZodArray<z.ZodUnknown, "many">;
+    edges: z.ZodArray<z.ZodUnknown, "many">;
     viewport: z.ZodOptional<z.ZodObject<{
         x: z.ZodNumber;
         y: z.ZodNumber;
@@ -24,8 +24,8 @@ export declare const PersistedStateSchema: z.ZodObject<{
     }>>;
     lastModified: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    nodes?: any[];
-    edges?: any[];
+    nodes?: unknown[];
+    edges?: unknown[];
     viewport?: {
         x?: number;
         y?: number;
@@ -33,8 +33,8 @@ export declare const PersistedStateSchema: z.ZodObject<{
     };
     lastModified?: string;
 }, {
-    nodes?: any[];
-    edges?: any[];
+    nodes?: unknown[];
+    edges?: unknown[];
     viewport?: {
         x?: number;
         y?: number;
