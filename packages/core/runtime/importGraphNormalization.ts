@@ -138,7 +138,7 @@ export function normalizeLegacyFlatPsgShape(data: any): any {
             : typeof region?.label === 'string' && region.label.length > 0
               ? region.label
               : typeof region?.data?.label === 'string' &&
-                  region.data.label.length > 0
+                region.data.label.length > 0
                 ? region.data.label
                 : `Region ${index + 1}`,
         nodes: Array.isArray(region?.nodes)
@@ -442,14 +442,14 @@ export function repairImportedFragmentWrapperNodes<
       importedBoxes.length === 1
         ? importedBoxes[0]
         : importedBoxes.find(box => {
-            const width = getNodeWidth(box);
-            const height = getNodeHeight(box);
-            const x = node.position?.x ?? 0;
-            const y = node.position?.y ?? 0;
-            const bx = box.position?.x ?? 0;
-            const by = box.position?.y ?? 0;
-            return x >= bx && x <= bx + width && y >= by && y <= by + height;
-          });
+          const width = getNodeWidth(box);
+          const height = getNodeHeight(box);
+          const x = node.position?.x ?? 0;
+          const y = node.position?.y ?? 0;
+          const bx = box.position?.x ?? 0;
+          const by = box.position?.y ?? 0;
+          return x >= bx && x <= bx + width && y >= by && y <= by + height;
+        });
 
     if (!matchBox) {
       return node;
@@ -613,6 +613,83 @@ export function repairImportedFragmentWrapperNodes<
   return nodes;
 }
 
+/**
+ * Resize any imported bounding-box containers so they are large enough to
+ * contain all of their parented children. This is intentionally separated
+ * from the full parent-repair pass so it can run even when parent
+ * assignments are already correct (shouldSkipParentRepair === true).
+ */
+export function resizeContainersToFitChildren<
+  TNode extends NodeLike
+>(params: {
+  nodes: TNode[];
+  getNodeWidth: (node: TNode) => number;
+  getNodeHeight: (node: TNode) => number;
+}): TNode[] {
+  const { nodes, getNodeWidth, getNodeHeight } = params;
+
+  const boxIds = new Set(
+    nodes
+      .filter(n => canonicalizeImportedNodeType(n.type) === 'enhancedBoundingBox')
+      .map(n => n.id)
+  );
+  if (boxIds.size === 0) {
+    return nodes;
+  }
+
+  const childrenByBox = new Map<string, TNode[]>();
+  nodes.forEach(node => {
+    const parent = node.parentNode;
+    if (parent && boxIds.has(parent)) {
+      const existing = childrenByBox.get(parent) || [];
+      existing.push(node);
+      childrenByBox.set(parent, existing);
+    }
+  });
+
+  return nodes.map(node => {
+    if (canonicalizeImportedNodeType(node.type) !== 'enhancedBoundingBox') {
+      return node;
+    }
+    const children = childrenByBox.get(node.id) || [];
+    if (children.length === 0) {
+      return node;
+    }
+
+    const currentWidth = getNodeWidth(node);
+    const currentHeight = getNodeHeight(node);
+    const padding = 40;
+    const requiredWidth = children.reduce((max, child) => {
+      const right = (child.position?.x ?? 0) + getNodeWidth(child);
+      return Math.max(max, right + padding);
+    }, currentWidth);
+    const requiredHeight = children.reduce((max, child) => {
+      const bottom = (child.position?.y ?? 0) + getNodeHeight(child);
+      return Math.max(max, bottom + padding);
+    }, currentHeight);
+
+    if (requiredWidth === currentWidth && requiredHeight === currentHeight) {
+      return node;
+    }
+
+    return {
+      ...node,
+      width: requiredWidth,
+      height: requiredHeight,
+      style: {
+        ...(node.style ?? {}),
+        width: requiredWidth,
+        height: requiredHeight
+      },
+      data: {
+        ...(node.data ?? {}),
+        width: requiredWidth,
+        height: requiredHeight
+      }
+    };
+  });
+}
+
 export function prepareImportedGraphBatch<
   TNode extends NodeLike,
   TEdge extends EdgeLike
@@ -670,6 +747,16 @@ export function prepareImportedGraphBatch<
     });
   }
 
+  // Always resize containers to fit children, even when the full parent
+  // repair was skipped (parent assignments may be correct but geometry wrong).
+  if (importedBoxes.length > 0) {
+    nodes = resizeContainersToFitChildren({
+      nodes,
+      getNodeWidth,
+      getNodeHeight
+    });
+  }
+
   const existingOutput = existingNodes.find(
     node => canonicalizeImportedNodeType(node.type) === 'output'
   );
@@ -686,10 +773,10 @@ export function prepareImportedGraphBatch<
       edges = edges.map(edge =>
         removedOutputIds.has(edge.target)
           ? {
-              ...edge,
-              target: existingOutput.id,
-              targetHandle: undefined
-            }
+            ...edge,
+            target: existingOutput.id,
+            targetHandle: undefined
+          }
           : edge
       ) as TEdge[];
     }

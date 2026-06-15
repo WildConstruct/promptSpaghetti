@@ -11,9 +11,8 @@
   box-shadow: 0 10px 24px rgba(99, 214, 76, 0.24);
 }
 
-/* Style the two input handles with labels for visual clarity */
-.concat-input-1::after,
-.concat-input-2::after {
+/* Style all concat input handles with index labels */
+.concat-input::after {
   position: absolute;
   font-size: 10px;
   color: rgba(18, 49, 12, 0.78);
@@ -41,12 +40,37 @@
   border: 2px solid #f6fff2;
 }
 
+/* Number labels for up to 8 handles (CSS content can't use attr() for ::after content in all browsers) */
 .concat-input-1::after {
   content: '1';
 }
 
 .concat-input-2::after {
   content: '2';
+}
+
+.concat-input-3::after {
+  content: '3';
+}
+
+.concat-input-4::after {
+  content: '4';
+}
+
+.concat-input-5::after {
+  content: '5';
+}
+
+.concat-input-6::after {
+  content: '6';
+}
+
+.concat-input-7::after {
+  content: '7';
+}
+
+.concat-input-8::after {
+  content: '8';
 }
 
 .epic1-concat-display,
@@ -59,6 +83,47 @@
   color: #8b8b8b;
   margin-top: 4px;
   font-style: italic;
+}
+
+.epic1-concat-dedupe-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #12310c;
+  margin-top: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.epic1-concat-dedupe-label input[type="checkbox"] {
+  accent-color: #2b5f1f;
+}
+
+.epic1-concat-apply-btn {
+  margin-top: 6px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #2b5f1f;
+  color: #f6fff2;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.epic1-concat-apply-btn:hover {
+  background: #1a4013;
+}
+
+.epic1-concat-join-badge {
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(43, 95, 31, 0.2);
+  color: #12310c;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-top: 2px;
 }
 
 /* Variable Node */
