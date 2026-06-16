@@ -366,7 +366,8 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 : `option-${index + 1}`,
             text: opt.text ?? '',
             weight: typeof opt.weight === 'number' ? opt.weight : 50,
-            hasBranch: opt.hasBranch === true
+            hasBranch: opt.hasBranch === true,
+            locked: opt.locked === true
           }));
         }
       } catch (error) {
@@ -603,6 +604,17 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     };
     setOptions(newOptions);
   };
+
+  // Lock ("fixed DNA") is exclusive: locking an option clears every other
+  // lock so the node has at most one pinned choice.
+  const toggleLock = (index: number) => {
+    const willLock = !options[index].locked;
+    setOptions(
+      options.map((opt, i) => ({ ...opt, locked: willLock && i === index }))
+    );
+  };
+
+  const lockedIndex = options.findIndex(opt => opt.locked);
 
   const updateOptionText = (index: number, text: string) => {
     const newOptions = [...options];
@@ -902,6 +914,23 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       value={option.weight}
                       onChange={val => updateOptionWeight(index, val)}
                     />
+
+                    {/* Lock toggle (fixed DNA) */}
+                    <button
+                      className={`lock-toggle nodrag ${option.locked ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleLock(index);
+                      }}
+                      onMouseDown={(e) => e.stopPropagation()}
+                      title={
+                        option.locked
+                          ? 'Locked: always selected. Click to unlock.'
+                          : 'Lock this choice (always selected)'
+                      }
+                    >
+                      {option.locked ? '🔒' : '🔓'}
+                    </button>
 
                     {/* Branch toggle */}
                     <button
@@ -1310,9 +1339,16 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   ref={(el) => { optionRefs.current[index] = el; }}
                 >
                   <span className="option-text">
+                    {option.locked ? '🔒 ' : ''}
                     {option.text || 'Empty option'}
                   </span>
-                  <span className="option-percentage">{percentages[index]}%</span>
+                  <span className="option-percentage">
+                    {lockedIndex >= 0
+                      ? option.locked
+                        ? 'fixed'
+                        : '—'
+                      : `${percentages[index]}%`}
+                  </span>
                   {/* This option's branch output, aligned to its own row. */}
                   {option.hasBranch && (
                     <>

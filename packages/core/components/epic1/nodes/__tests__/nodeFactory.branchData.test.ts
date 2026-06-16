@@ -15,8 +15,8 @@ describe('nodeFactory WeightedChoice conversion', () => {
       data: {
         nodeType: 'weightedChoice',
         options: [
-          { id: '1', text: 'A', weight: 50, hasBranch: true },
-          { id: '2', text: 'B', weight: 50, hasBranch: false }
+          { id: '1', text: 'A', weight: 50, hasBranch: true, locked: false },
+          { id: '2', text: 'B', weight: 50, hasBranch: false, locked: true }
         ]
       }
     } as any;
@@ -28,6 +28,8 @@ describe('nodeFactory WeightedChoice conversion', () => {
     expect(options).toHaveLength(2);
     expect(options[0].hasBranch).toBe(true);
     expect(options[1].hasBranch).toBe(false);
+    expect(options[0].locked).toBe(false);
+    expect(options[1].locked).toBe(true);
   });
 
   it('defaults hasBranch to false when absent', () => {

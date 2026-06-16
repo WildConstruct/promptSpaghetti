@@ -48,8 +48,16 @@ const toWeightedOption = (
       : undefined;
   // Preserve hasBranch so the engine can route the selected option to its own
   // branch (and suppress the default output) instead of treating every option
-  // as flowing through the default path.
-  return { id, text, weight, color, hasBranch: input.hasBranch === true };
+  // as flowing through the default path. Preserve locked ("fixed DNA") so the
+  // engine can force-select it.
+  return {
+    id,
+    text,
+    weight,
+    color,
+    hasBranch: input.hasBranch === true,
+    locked: input.locked === true
+  };
 };
 
 const collectWeightedOptions = (source: unknown): WeightedOption[] => {

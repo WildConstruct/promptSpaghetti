@@ -393,8 +393,20 @@ export class Epic1ExecutionEngine {
     let selectedText = '';
     let selectedIndex = 0;
 
-    // If there's only one option, return it directly
-    if (options.length === 1) {
+    // Locked option ("fixed DNA") wins over weighted randomness: always select
+    // it. First locked option wins if several are somehow set.
+    const lockedIndex = options.findIndex(
+      (opt: { locked?: boolean }) => opt.locked
+    );
+
+    if (lockedIndex >= 0) {
+      selectedText = this.context.substituteVariables(options[lockedIndex].text);
+      selectedIndex = lockedIndex;
+      debugLogExecution(
+        `[ExecutionEngine] WeightedChoice ${nodeId} locked option ${lockedIndex} selected: "${selectedText}"`
+      );
+    } else if (options.length === 1) {
+      // If there's only one option, return it directly
       selectedText = this.context.substituteVariables(options[0].text);
       selectedIndex = 0;
       debugLogExecution(
