@@ -1117,7 +1117,10 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 <Handle
                   type="source"
                   position={Position.Right}
-                  id="main"
+                  /* Stable id: the default output is `source` whether or not any
+                     option branches, so toggling a branch never orphans an edge
+                     already wired to this node's default output. */
+                  id="source"
                   className="epic1-handle enhanced-handle main-output"
                 style={{
                   position: 'absolute',
@@ -1349,7 +1352,8 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
               <Handle
                 type="source"
                 position={Position.Right}
-                id="main"
+                /* Stable id (see edit-mode handle above): always `source`. */
+                id="source"
                 className="epic1-handle enhanced-handle main-output"
                 style={{
                   position: 'absolute',

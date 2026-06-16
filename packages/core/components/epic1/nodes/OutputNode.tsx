@@ -158,6 +158,7 @@ export const OutputNode = memo((props: NodeProps<OutputNodeData>) => {
       <Handle
         type="target"
         position={Position.Left}
+        id="target"
         className={`epic1-handle target ${!hasConnection ? 'hidden-handle' : ''}`}
         style={{
           opacity: hasConnection ? 1 : 0,

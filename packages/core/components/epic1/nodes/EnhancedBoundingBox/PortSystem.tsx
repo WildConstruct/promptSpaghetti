@@ -162,13 +162,17 @@ const PortSystemComponent: React.FC<PortSystemProps> = ({
     }
   });
 
+  // Port ids stay bare here; PortHandle prefixes them with the box id exactly
+  // once. Pre-prefixing default ports here caused double-prefixed handle ids
+  // (`${box}-${box}-default-input`) that detected ports never had, so edges to a
+  // collapsed box's default ports couldn't be matched on reload.
   const portsToRender =
     allPorts.length > 0
       ? allPorts
       : DEFAULT_PORTS.map(port => ({
           ...port,
           nodeId: boundingBoxId,
-          id: `${boundingBoxId}-${port.id}`
+          id: port.id
         }));
   
   // Separate input and output ports
@@ -181,7 +185,7 @@ const PortSystemComponent: React.FC<PortSystemProps> = ({
           {
             ...DEFAULT_PORTS[0],
             nodeId: boundingBoxId,
-            id: `${boundingBoxId}-${DEFAULT_PORTS[0].id}`
+            id: DEFAULT_PORTS[0].id
           }
         ];
   const ensuredOutputPorts =
@@ -191,7 +195,7 @@ const PortSystemComponent: React.FC<PortSystemProps> = ({
           {
             ...DEFAULT_PORTS[1],
             nodeId: boundingBoxId,
-            id: `${boundingBoxId}-${DEFAULT_PORTS[1].id}`
+            id: DEFAULT_PORTS[1].id
           }
         ];
   

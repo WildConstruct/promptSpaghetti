@@ -615,7 +615,18 @@ export class Epic1ExecutionEngine {
   private isActiveEdge(edge: Epic1Edge): boolean {
     const sourceHandle = edge.sourceHandle;
 
-    if (!sourceHandle || !sourceHandle.startsWith('branch-')) {
+    // Per-option branch outputs are gated by which option the WeightedChoice
+    // selected. Modern handles are `branch-${i}`; legacy graphs persisted the
+    // same wiring as `option-${i}`. Both must gate identically — otherwise a
+    // legacy `option-` edge (which does not start with `branch-`) would be
+    // treated as always-active and fire regardless of the selected option.
+    const branchPrefix = sourceHandle?.startsWith('branch-')
+      ? 'branch-'
+      : sourceHandle?.startsWith('option-')
+        ? 'option-'
+        : null;
+
+    if (!branchPrefix) {
       return true;
     }
 
@@ -624,7 +635,10 @@ export class Epic1ExecutionEngine {
       return false;
     }
 
-    const branchIndex = Number.parseInt(sourceHandle.replace('branch-', ''), 10);
+    const branchIndex = Number.parseInt(
+      sourceHandle!.replace(branchPrefix, ''),
+      10
+    );
     return Number.isFinite(branchIndex) && branchIndex === selectedBranch;
   }
 
