@@ -1,5 +1,5 @@
-import { SimilarityEngine } from '../SimilarityEngine';
-import type { SegmentMetadata } from '../MetadataExtractor';
+import { SimilarityEngine } from '../../../services/llm/SimilarityEngine';
+import type { SegmentMetadata } from '../../../services/llm/MetadataExtractor';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 

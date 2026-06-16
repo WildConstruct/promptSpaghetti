@@ -35,13 +35,7 @@
       "import": "./components/epic1/*.js",
       "require": "./components/epic1/*.js"
     },
-    "./components/epic1/*.css": "./components/epic1/*.css",
-    "./components/MenuBar/*": {
-      "types": "./components/MenuBar/*.d.ts",
-      "import": "./components/MenuBar/*.js",
-      "require": "./components/MenuBar/*.js"
-    },
-    "./components/MenuBar/*.css": "./components/MenuBar/*.css"
+    "./components/epic1/*.css": "./components/epic1/*.css"
   },
   "private": true,
   "scripts": {
@@ -53,10 +47,6 @@
     "verify:exports": "node scripts/verify-exports.js"
   },
   "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/modifiers": "^9.0.0",
-    "@dnd-kit/sortable": "^10.0.0",
-    "@dnd-kit/utilities": "^3.2.2",
     "@supabase/supabase-js": "^2.54.0",
     "@types/d3-force": "^3.0.10",
     "@types/dagre": "^0.7.53",

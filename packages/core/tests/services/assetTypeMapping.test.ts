@@ -2,7 +2,7 @@ import {
   mapAssetToNodeType,
   mapReactFlowTypeToCompat,
   canConnect
-} from '../assetTypeMapping';
+} from '../../services/assetTypeMapping';
 
 describe('assetTypeMapping', () => {
   test('mapAssetToNodeType maps by name/keywords', () => {

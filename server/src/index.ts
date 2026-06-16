@@ -11,7 +11,6 @@ import Fastify from 'fastify';
 import path from 'path';
 import dotenv from 'dotenv';
 import cors from '@fastify/cors';
-import { executeGraph } from './engine-basic';
 import { Sentry } from './sentry';
 import { registerEnhancedAdminRoutes } from './admin-panel-enhanced';
 import { filesRoutes } from './routes/files';
@@ -27,8 +26,6 @@ import {
   isAdminSurfaceEnabled,
   requireAdminAuth
 } from './utils/adminAuth';
-import type { Graph as CoreGraph } from '../../packages/core/graphSchema';
-import type { Graph } from './exporter-standalone';
 
 // Load environment from root/server env files. Sandbox-specific files layer on
 // top without replacing the standard `.env` flow.
@@ -57,20 +54,6 @@ const server = Fastify({
   logger: true,
   bodyLimit // cap request body to mitigate abuse
 });
-
-type PreviewBody = {
-  graph: Graph;
-  runs?: number;
-  seedStart?: number;
-};
-
-// Convert from API Graph type to Core Graph type
-function convertToCoreGraph(apiGraph: Graph): CoreGraph {
-  return {
-    nodes: (apiGraph.nodes || []) as CoreGraph['nodes'],
-    seed: apiGraph.seed
-  };
-}
 
 // Accept classic HTML form posts from the admin panel
 // Fastify rejects application/x-www-form-urlencoded by default without a parser
@@ -146,62 +129,6 @@ server.get('/health', async () => {
 server.get('/api/healthz', async () => {
   return { status: 'ok', timestamp: new Date().toISOString() };
 });
-
-// Preview endpoint - core functionality
-server.post<{ Body: PreviewBody }>(
-  '/preview',
-  {
-    preHandler: rateLimiter({
-      key: 'preview',
-      limitPerMinute: Number(process.env.PREVIEW_RATE_LIMIT_PER_MINUTE || 60)
-    })
-  },
-  async (request, reply) => {
-    try {
-      const { graph, runs = 3, seedStart = 1 } = request.body;
-
-      if (!graph || !graph.nodes) {
-        return reply.status(400).send({ error: 'Invalid graph structure' });
-      }
-
-      metrics.mark('preview.request');
-      const results = [] as Array<{
-        seed: number;
-        output: string;
-        error?: string;
-      }>;
-      for (let i = 0; i < runs; i++) {
-        const seed = seedStart + i;
-        try {
-          // Convert API graph to core graph format and set seed
-          const coreGraph = convertToCoreGraph(graph);
-          coreGraph.seed = seed;
-          const result = await executeGraph(coreGraph);
-          results.push({
-            seed,
-            output: result.outputs.join('\n')
-          });
-        } catch (error) {
-          console.error(`Error executing graph with seed ${seed}:`, error);
-          metrics.markError('preview.error');
-          results.push({
-            seed,
-            output: '',
-            error: 'Execution failed'
-          });
-        }
-      }
-
-      return { results };
-    } catch (error) {
-      console.error('Preview error:', error);
-      metrics.markError('preview.fatal');
-      const message =
-        error instanceof Error ? error.message : 'Internal server error';
-      return reply.status(500).send({ error: message });
-    }
-  }
-);
 
 if (isAdminSurfaceEnabled()) {
   server.get(
