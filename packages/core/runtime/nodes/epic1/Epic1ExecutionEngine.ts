@@ -71,6 +71,9 @@ export class Epic1ExecutionEngine {
   private executionOrder: string[];
   private outputNodeId: string | null = null;
   private readonly selectedBranches: Map<string, number>;
+  // WeightedChoice nodes whose *selected* option carries its own branch. Their
+  // default output is suppressed (router semantics): the branch takes over.
+  private readonly branchedSelections: Set<string>;
 
   constructor(graph: Epic1Graph, seed?: string | number) {
     this.graph = graph;
@@ -78,6 +81,7 @@ export class Epic1ExecutionEngine {
     this.results = new Map();
     this.executionOrder = [];
     this.selectedBranches = new Map();
+    this.branchedSelections = new Set();
   }
 
   /**
@@ -443,6 +447,12 @@ export class Epic1ExecutionEngine {
     );
     this.selectedBranches.set(nodeId, selectedIndex);
 
+    // Router semantics: if the chosen option has its own branch, the default
+    // output is suppressed so only the branch path fires for this selection.
+    if (options[selectedIndex]?.hasBranch) {
+      this.branchedSelections.add(nodeId);
+    }
+
     // Concatenate input with selected text
     const result = inputStr ? `${inputStr} ${selectedText}` : selectedText;
     debugLogExecution(
@@ -627,7 +637,12 @@ export class Epic1ExecutionEngine {
         : null;
 
     if (!branchPrefix) {
-      return true;
+      // Default/main/source output. Under router semantics, when the selected
+      // option of the source WeightedChoice has its own branch, that branch
+      // carries the value and the default output is suppressed. For every other
+      // source (non-branched selection, or any non-WeightedChoice node) the
+      // default output stays active.
+      return !this.branchedSelections.has(edge.source);
     }
 
     const selectedBranch = this.selectedBranches.get(edge.source);

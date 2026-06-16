@@ -46,7 +46,10 @@ const toWeightedOption = (
     typeof input.color === 'string' && input.color.trim().length > 0
       ? input.color
       : undefined;
-  return { id, text, weight, color };
+  // Preserve hasBranch so the engine can route the selected option to its own
+  // branch (and suppress the default output) instead of treating every option
+  // as flowing through the default path.
+  return { id, text, weight, color, hasBranch: input.hasBranch === true };
 };
 
 const collectWeightedOptions = (source: unknown): WeightedOption[] => {

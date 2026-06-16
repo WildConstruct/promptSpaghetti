@@ -103,3 +103,102 @@ describe('WeightedChoice branch routing', () => {
     expect(await run('option-1')).not.toContain(MARKER);
   });
 });
+
+/**
+ * Router semantics: when the SELECTED option has its own branch (option.hasBranch),
+ * the default output is suppressed and only the branch path fires. When the
+ * selected option is NOT branched, the default path fires and branches stay off.
+ *
+ * Two distinct downstream texts (DEF on the default path, BR on the branch path)
+ * make it visible which path actually fired.
+ */
+const DEF = 'DEFAULTPATH';
+const BR = 'BRANCHPATH';
+
+function buildRouterGraph(opts: {
+  selectedHasBranch: boolean;
+  branchEdgeHandle?: string;
+  branchedIndex?: number;
+}) {
+  const { selectedHasBranch, branchEdgeHandle = 'branch-0' } = opts;
+  // Option index 0 ('A', weight 100) is always selected. `branchedIndex` marks
+  // which option carries hasBranch; default = the selected option (0).
+  const branchedIndex = opts.branchedIndex ?? 0;
+  const options = [
+    { id: '1', text: 'A', weight: 100, hasBranch: false },
+    { id: '2', text: 'B', weight: 0, hasBranch: false }
+  ];
+  options[branchedIndex].hasBranch = branchedIndex === 0 ? selectedHasBranch : true;
+
+  const wc = new WeightedChoiceNode('wc', options);
+  const tbDef = new TextBlockNode('tbDef', DEF);
+  const tbBr = new TextBlockNode('tbBr', BR);
+  const concat = new ConcatNode('concat', { separator: ' ', trimInputs: true });
+  const out = new OutputNode('out');
+  out.lock();
+
+  const nodes = new Map<string, any>([
+    ['wc', wc],
+    ['tbDef', tbDef],
+    ['tbBr', tbBr],
+    ['concat', concat],
+    ['out', out]
+  ]);
+
+  const edges: Epic1Edge[] = [
+    { id: 'e-def', source: 'wc', sourceHandle: 'source', target: 'tbDef' },
+    { id: 'e-br', source: 'wc', sourceHandle: branchEdgeHandle, target: 'tbBr' },
+    {
+      id: 'e-def-c',
+      source: 'tbDef',
+      sourceHandle: 'source',
+      target: 'concat',
+      targetHandle: 'input1'
+    },
+    {
+      id: 'e-br-c',
+      source: 'tbBr',
+      sourceHandle: 'source',
+      target: 'concat',
+      targetHandle: 'input2'
+    },
+    { id: 'e-out', source: 'concat', sourceHandle: 'source', target: 'out' }
+  ];
+  return { nodes, edges };
+}
+
+async function runRouter(opts: Parameters<typeof buildRouterGraph>[0]): Promise<string> {
+  const engine = new Epic1ExecutionEngine(buildRouterGraph(opts), 'seed-1');
+  const result = await engine.execute();
+  expect(result.success).toBe(true);
+  return String(result.output ?? '');
+}
+
+describe('WeightedChoice router semantics (default suppression)', () => {
+  it('suppresses the default output when the selected option is branched', async () => {
+    // Selected option 0 IS branched -> only the branch path fires.
+    const output = await runRouter({ selectedHasBranch: true });
+    expect(output).toContain(BR);
+    expect(output).not.toContain(DEF);
+  });
+
+  it('fires the default output when the selected option is NOT branched', async () => {
+    // Selected option 0 is NOT branched; option 1 is branched but never selected.
+    const output = await runRouter({
+      selectedHasBranch: false,
+      branchedIndex: 1,
+      branchEdgeHandle: 'branch-1'
+    });
+    expect(output).toContain(DEF);
+    expect(output).not.toContain(BR);
+  });
+
+  it('applies router suppression to legacy `option-N` branches too', async () => {
+    const output = await runRouter({
+      selectedHasBranch: true,
+      branchEdgeHandle: 'option-0'
+    });
+    expect(output).toContain(BR);
+    expect(output).not.toContain(DEF);
+  });
+});
