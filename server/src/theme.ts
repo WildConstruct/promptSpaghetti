@@ -163,7 +163,7 @@ export async function themeRoutes(app: FastifyInstance) {
               .from('fonts')
               .remove([font.file_path]);
             if (error) {
-              app.log.error('Failed to delete font from storage:', error);
+              app.log.error({ err: error }, 'Failed to delete font from storage');
             }
           }
 
@@ -280,7 +280,7 @@ export async function themeRoutes(app: FastifyInstance) {
               .from('logos')
               .remove([logo.file_path]);
             if (error) {
-              app.log.error('Failed to delete logo from storage:', error);
+              app.log.error({ err: error }, 'Failed to delete logo from storage');
             }
           }
 
