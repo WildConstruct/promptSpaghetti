@@ -142,6 +142,17 @@ const templates: Template[] = [
     icon: <BranchIcon />
   },
   {
+    id: 'tech_panel',
+    title: 'Anachronistic Tech Panel',
+    description:
+      'Retro-futuristic control panel: locked design DNA, multi-branch screen type, and a nested branch',
+    prompt:
+      'A retro-futuristic control panel with a locked aesthetic, where the screen type branches (CRT, vector, LED, or no screen) and the CRT path branches again on phosphor color',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <BranchIcon />
+  },
+  {
     id: 'empty',
     title: 'Blank Canvas',
     description: 'Start from scratch in the editor with no template applied',

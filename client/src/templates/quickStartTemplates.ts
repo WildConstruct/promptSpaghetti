@@ -36,7 +36,13 @@ function weightedChoiceNode(
   x: number,
   y: number,
   label: string,
-  options: Array<{ id: string; text: string; weight: number; hasBranch?: boolean }>
+  options: Array<{
+    id: string;
+    text: string;
+    weight: number;
+    hasBranch?: boolean;
+    locked?: boolean;
+  }>
 ): Node<TemplateNodeData> {
   return {
     id,
@@ -712,7 +718,122 @@ const indyCrowdCardTemplate: QuickStartTemplate = {
   ]
 };
 
+// Anachronistic Tech Panel — recreation of the original HTML generator as a
+// branching graph. Demonstrates: a LOCKED "design DNA" choice (aesthetic), a
+// MULTI-BRANCH choice (Screen Type → CRT / Vector / No-Screen each take their
+// own path; LED falls through the default), and a NESTED branch (the CRT path's
+// phosphor choice itself branches on "amber"). Exactly one path fires per roll.
+const techPanelTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode(
+      'tp-dna',
+      80,
+      120,
+      'Panel DNA',
+      'Anachronistic technology control panel, retro-futuristic, tangibly from a past era’s vision of the future'
+    ),
+    // Locked "fixed DNA": the aesthetic is pinned, everything else varies.
+    weightedChoiceNode('tp-aesthetic', 80, 320, 'Aesthetic (locked DNA)', [
+      { id: 'aes-1', text: 'Star Wars used-future analog', weight: 30 },
+      {
+        id: 'aes-2',
+        text: 'cassette-futurism CRT grit',
+        weight: 30,
+        locked: true
+      },
+      { id: 'aes-3', text: 'dieselpunk interwar machinery', weight: 20 },
+      { id: 'aes-4', text: 'atompunk raygun-gothic chrome', weight: 20 }
+    ]),
+    // Panel archetype — one option branches to a reactor detail.
+    weightedChoiceNode('tp-archetype', 480, 120, 'Panel Archetype', [
+      { id: 'arch-1', text: 'cockpit control surface', weight: 35 },
+      { id: 'arch-2', text: 'bridge command console', weight: 35 },
+      {
+        id: 'arch-3',
+        text: 'engineering reactor panel',
+        weight: 30,
+        hasBranch: true
+      }
+    ]),
+    weightedChoiceNode('tp-reactor', 900, 40, 'Reactor Detail', [
+      { id: 'rx-1', text: 'with a glowing fusion core behind armored glass', weight: 34 },
+      { id: 'rx-2', text: 'with a brass valve cluster and pressure gauges', weight: 33 },
+      { id: 'rx-3', text: 'with exposed coolant pipes and warning placards', weight: 33 }
+    ]),
+    concatNode('tp-archetype-merge', 1320, 120, 'Archetype Merge'),
+    // Screen Type — the multi-branch node.
+    weightedChoiceNode('tp-screen', 480, 440, 'Screen Type', [
+      { id: 'scr-1', text: 'a monochrome CRT', weight: 30, hasBranch: true },
+      { id: 'scr-2', text: 'a flickering vector display', weight: 25, hasBranch: true },
+      { id: 'scr-3', text: 'red/green LED segment readouts', weight: 25 },
+      {
+        id: 'scr-4',
+        text: 'no digital screen at all',
+        weight: 20,
+        hasBranch: true
+      }
+    ]),
+    // Nested branch: CRT phosphor choice branches again on "amber".
+    weightedChoiceNode('tp-crt-color', 900, 320, 'CRT Phosphor', [
+      { id: 'crt-1', text: 'in cold green phosphor', weight: 35 },
+      { id: 'crt-2', text: 'in warm amber phosphor', weight: 35, hasBranch: true },
+      { id: 'crt-3', text: 'in pale blue-gray phosphor', weight: 30 }
+    ]),
+    textNode(
+      'tp-amber-special',
+      1320,
+      360,
+      'Amber Flourish',
+      'with rolling scan-line flicker and a burnt-amber glow that hazes the labels'
+    ),
+    concatNode('tp-crt-merge', 1320, 480, 'CRT Merge'),
+    textNode(
+      'tp-vector-detail',
+      900,
+      560,
+      'Vector Detail',
+      'drawing wireframe shapes in thin, jittering glowing lines'
+    ),
+    textNode(
+      'tp-noscreen',
+      900,
+      720,
+      'No-Screen Detail',
+      '— relying entirely on physical gauges, analog dials, and indicator lights'
+    ),
+    concatNode('tp-screen-merge', 1760, 480, 'Screen Merge'),
+    concatNode('tp-main', 2160, 300, 'Assemble Panel'),
+    outputNode('tp-output', 2520, 300, 'anachronistic_tech_panel')
+  ],
+  edges: [
+    // DNA + aesthetic into the main assembly.
+    { id: 'tp-e1', source: 'tp-dna', target: 'tp-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tp-e2', source: 'tp-aesthetic', target: 'tp-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    // Archetype: default + reactor branch -> archetype merge -> main.
+    { id: 'tp-e3', source: 'tp-archetype', target: 'tp-archetype-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tp-e4', source: 'tp-archetype', target: 'tp-reactor', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'tp-e5', source: 'tp-reactor', target: 'tp-archetype-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tp-e6', source: 'tp-archetype-merge', target: 'tp-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    // Screen: three branches + the LED default, all merging into screen-merge.
+    { id: 'tp-e7', source: 'tp-screen', target: 'tp-crt-color', type: 'smoothstep', sourceHandle: 'branch-0', targetHandle: 'target' },
+    { id: 'tp-e8', source: 'tp-screen', target: 'tp-vector-detail', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'tp-e9', source: 'tp-screen', target: 'tp-noscreen', type: 'smoothstep', sourceHandle: 'branch-3', targetHandle: 'target' },
+    { id: 'tp-e10', source: 'tp-screen', target: 'tp-screen-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    // Nested: CRT phosphor default + amber branch -> crt-merge -> screen-merge.
+    { id: 'tp-e11', source: 'tp-crt-color', target: 'tp-crt-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tp-e12', source: 'tp-crt-color', target: 'tp-amber-special', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'tp-e13', source: 'tp-amber-special', target: 'tp-crt-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tp-e14', source: 'tp-crt-merge', target: 'tp-screen-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tp-e15', source: 'tp-vector-detail', target: 'tp-screen-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'tp-e16', source: 'tp-noscreen', target: 'tp-screen-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'tp-e17', source: 'tp-screen-merge', target: 'tp-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    // Final assembly.
+    { id: 'tp-e18', source: 'tp-main', target: 'tp-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
+  tech_panel: techPanelTemplate,
   character_variation: characterTemplate,
   indy_500_crowd_card: indyCrowdCardTemplate,
   vehicle_family: vehicleFamilyTemplate,
