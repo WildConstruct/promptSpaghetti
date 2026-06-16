@@ -25,7 +25,7 @@ export type {
 } from './BaseInlineEditableNode';
 
 // Re-export EditState from its original location
-export type { EditState } from '../../schemas/psgSchemaV2';
+export type { EditState } from './BaseInlineEditableNode';
 
 // Node implementations
 export { TextBlockNode } from './TextBlockNode';
