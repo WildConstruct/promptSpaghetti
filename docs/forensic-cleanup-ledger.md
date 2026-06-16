@@ -69,6 +69,42 @@ Eight forensic crawlers produced 99 raw findings across debug scaffolding, dead 
 
 ---
 
+## Tier C — Config & docs (executed `claude/cleanup-tier-c-config`)
+
+**knip.json:** collapsed 49 self-reported config hints to a clean minimal config.
+Removed redundant default ignores, harmful source-extension ignores
+(`*.ts/*.cjs/*.mjs`), all recognized `ignoreBinaries`, and no-match/redundant
+entry+project globs. Kept an explicit `packages/core` entry because that package's
+`package.json` exports map is broken (points at non-existent built `.d.ts`/`.js`
+under `components/epic1` and `components/MenuBar`) so knip can't auto-detect it.
+**Residual, out of scope:** that broken core exports map is a real packaging bug —
+fixing it needs a deliberate exports rewrite + rebuild and risks consumers, so it's
+left noted, not touched.
+
+**Stray deps (server):** removed `base32` (zero usages) and `express` (only
+consumer was the self-referential `APIErrorScenarios.test.ts`). Culled the orphaned
+Epic 18 error-scenario harness with it: `tests/integration/*`,
+`tests/utils/globalTestSetup.ts`, `scripts/run-error-scenarios.sh`, and the
+`test:integration` script.
+
+**Tier B loose ends (package.json scripts):** removed `test:regression*` and
+`test:performance-benchmarks` entries pointing at files deleted in Tier B (verified
+gone); dropped the benchmarks step from `test:performance-full`. Kept
+`test:performance-scenarios` (target survives).
+
+**CLAUDE.md rewrite (resolves the Tier 3 rows above):** replaced ~70% fiction with
+verified reality. Removed the Professional Features / Command Palette section
+(`CommandPalette/` doesn't exist), the `src/`-based multi-agent task system
+(`finish-task.js`/`grab-tasks.js`/`fix-system.js`/… all missing), cost tracking,
+"Database v2.0.0", and every "Epic 7 ✅ COMPLETE" claim (contradicted by
+`graphSchema.ts` + the parked tier). Removed references to the deleted
+`server/src/engine.ts` and `/preview` route and the non-existent `packages/cli`.
+Repointed to what's real: `Epic1ExecutionEngine` as canonical, the parked tiers,
+`nodeRegistry.ts`, `fileFormats/psg(lib).ts`, `assetValidator.ts`, and the actual
+`scripts/` automation. Every path in the new file was existence-checked.
+
+---
+
 ## Tier C — Test-cruft trim (executed `claude/cleanup-tier-c-tests`)
 
 Follow-up to the "how many of the ~1,000 tests do useful work?" analysis. Scope was
