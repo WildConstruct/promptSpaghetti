@@ -150,8 +150,12 @@ export function useKeyboardHandlers({
         }
       }
 
-      // Cmd+Shift+L for layout cleanup
-      if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'l') {
+      // Cmd/Ctrl+Shift+L for layout cleanup (Ctrl so it works on Windows/Linux)
+      if (
+        (event.metaKey || event.ctrlKey) &&
+        event.shiftKey &&
+        event.key.toLowerCase() === 'l'
+      ) {
         event.preventDefault();
         handleLayoutCleanup();
       }
