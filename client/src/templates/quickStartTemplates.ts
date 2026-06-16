@@ -454,7 +454,7 @@ const branchingFamilyTemplate: QuickStartTemplate = {
       source: 'monster-family',
       target: 'monster-core',
       type: 'smoothstep',
-      sourceHandle: 'main',
+      sourceHandle: 'source',
       targetHandle: 'input2'
     },
     {

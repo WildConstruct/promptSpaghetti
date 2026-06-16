@@ -228,6 +228,16 @@ export function repairLegacyImportEdgeHandles<
 
     if (
       sourceType === 'weightedChoice' &&
+      (sourceHandle === 'main' ||
+        sourceHandle === 'main-output' ||
+        sourceHandle === 'output')
+    ) {
+      // Legacy default-output handle id for a (branched) WeightedChoice.
+      sourceHandle = 'source';
+    }
+
+    if (
+      sourceType === 'weightedChoice' &&
       typeof sourceHandle === 'string' &&
       /^option-\d+$/.test(sourceHandle)
     ) {
@@ -282,13 +292,10 @@ export function normalizeLibraryImportEdges<
         typeof sourceHandle === 'string' &&
         /^(?:branch|option)-\d+$/.test(sourceHandle);
       if (!isBranch) {
-        const sourceNode = nodes.find(node => node.id === edge.source);
-        const rawOptions = sourceNode?.data?.options;
-        const options = Array.isArray(rawOptions) ? rawOptions : undefined;
-        const hasBranching =
-          Array.isArray(options) &&
-          options.some((option: any) => option?.hasBranch === true);
-        sourceHandle = hasBranching ? 'main' : 'source';
+        // The WeightedChoice default output is always `source` now (a branched
+        // node no longer swaps it to `main`), so any non-branch output handle
+        // (`main`, `main-output`, `output`, undefined) normalizes to `source`.
+        sourceHandle = 'source';
       } else if (
         typeof sourceHandle === 'string' &&
         /^option-\d+$/.test(sourceHandle)
