@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import userEvent from '../../../tests/utils/userEvent';
+import { toggleCheckbox } from '../../../tests/utils/toggleCheckbox';
 import '@testing-library/jest-dom';
 import { NodeReplacementModal } from '../NodeReplacementModal';
 import { NodeType } from '../../../types';
@@ -179,9 +180,9 @@ describe('NodeReplacementModal', () => {
       const batchCheckbox = screen.getByLabelText(
         /replace all text block nodes/i
       );
-      await user.click(batchCheckbox);
+      toggleCheckbox(batchCheckbox);
 
-      const replaceButton = screen.getByRole('button', {
+      const replaceButton = await screen.findByRole('button', {
         name: /replace all/i
       });
       await user.click(replaceButton);
@@ -203,10 +204,10 @@ describe('NodeReplacementModal', () => {
       await user.click(outputOption);
 
       const batchCheckbox = screen.getByLabelText(/replace all/i);
-      await user.click(batchCheckbox);
+      toggleCheckbox(batchCheckbox);
 
       expect(
-        screen.getByText(/this will replace \d+ nodes/i)
+        await screen.findByText(/this will replace \d+ nodes/i)
       ).toBeInTheDocument();
     });
   });
@@ -231,7 +232,8 @@ describe('NodeReplacementModal', () => {
       await user.click(variableOption);
 
       const preserveCheckbox = screen.getByLabelText(/preserve content/i);
-      await user.click(preserveCheckbox);
+      toggleCheckbox(preserveCheckbox);
+      await waitFor(() => expect(preserveCheckbox).toBeChecked());
 
       const replaceButton = screen.getByRole('button', {
         name: /^replace node$/i

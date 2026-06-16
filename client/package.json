@@ -31,8 +31,7 @@
     "zod": "^3.25.76",
     "zustand": "^4.5.7",
     "react-color": "^2.19.3",
-    "react-dropzone": "^14.2.3",
-    "webfontloader": "^1.6.28"
+    "react-dropzone": "^14.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",

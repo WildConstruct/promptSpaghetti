@@ -346,7 +346,6 @@ pnpm prepare
 
 - `packages/` — main workspaces (active development)
 - `sandboxes/` — ad‑hoc demos, debug scripts, and manual test harnesses moved from the repo root to reduce clutter. Not part of CI/builds. See `sandboxes/README.md`.
-- `scripts/maintenance/` — helper scripts for local maintenance, diagnostics, refactors (e.g., `fix-*.js`, `analyze-*.js`). Not used by CI/builds. See `scripts/maintenance/README.md`.
 - `scripts/build/` — historical build scripts (e.g., `netlify-build-*.sh`). Prefer `package.json` scripts and CI workflows. See `scripts/build/README.md`.
 - `legacy/` — reserved for deprecated code; to be populated in a later cleanup. Active builds exclude legacy paths.
 

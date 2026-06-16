@@ -1,7 +1,11 @@
 import React, { memo, useState, useCallback, useRef, useLayoutEffect, useEffect } from 'react';
-import { NodeProps, Handle, Position, useUpdateNodeInternals } from 'reactflow';
+import { NodeProps, Handle, Position, useUpdateNodeInternals, useReactFlow } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
-import type { WeightedOption } from '../../../types/epic1';
+import type {
+  WeightedOption,
+  WeightDistribution,
+  WeightDistributionType
+} from '../../../types/epic1';
 import {
   PopulateChoicesButton,
   OptimizeWeightsButton,
@@ -383,6 +387,23 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   const [branchHandleTops, setBranchHandleTops] = useState<number[]>([]);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const updateNodeInternals = useUpdateNodeInternals();
+  const { setNodes } = useReactFlow();
+
+  // Weight distribution: absent == proportional (historical default).
+  const distribution = (props.data as { distribution?: WeightDistribution })
+    .distribution;
+  const updateDistribution = useCallback(
+    (next: WeightDistribution | undefined) => {
+      setNodes(nodes =>
+        nodes.map(node =>
+          node.id === props.id
+            ? { ...node, data: { ...node.data, distribution: next } }
+            : node
+        )
+      );
+    },
+    [props.id, setNodes]
+  );
 
   const hasBranching = options.some(opt => opt.hasBranch);
   const suggestionIntelligence = intelligence.nodeIntelligence;
@@ -899,6 +920,80 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     )}
                   </div>
                 ))}
+              </div>
+
+              {/* Weight distribution selector */}
+              <div
+                className="distribution-control nodrag nopan"
+                onMouseDown={(e) => e.stopPropagation()}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 10px',
+                  borderTop: '1px solid #333',
+                  fontSize: '11px',
+                  color: 'rgba(255,255,255,0.75)'
+                }}
+              >
+                <label
+                  htmlFor={`dist-${props.id}`}
+                  style={{ whiteSpace: 'nowrap' }}
+                >
+                  Weighting
+                </label>
+                <select
+                  id={`dist-${props.id}`}
+                  className="nodrag"
+                  value={distribution?.type ?? 'linear'}
+                  onChange={(e) => {
+                    const type = e.target.value as WeightDistributionType;
+                    updateDistribution(
+                      type === 'linear'
+                        ? undefined
+                        : { type, parameters: distribution?.parameters }
+                    );
+                  }}
+                  style={{
+                    flex: 1,
+                    background: '#1a1a1a',
+                    color: '#fff',
+                    border: '1px solid #444',
+                    borderRadius: '4px',
+                    padding: '2px 4px'
+                  }}
+                >
+                  <option value="linear">Proportional (default)</option>
+                  <option value="exponential">Sharpen — favor heavier</option>
+                  <option value="gaussian">Center bias (by position)</option>
+                </select>
+                {distribution?.type === 'exponential' && (
+                  <input
+                    type="number"
+                    className="nodrag"
+                    min={0.1}
+                    step={0.1}
+                    title="Exponent (>1 sharpens, <1 flattens)"
+                    value={distribution.parameters?.factor ?? 2}
+                    onChange={(e) =>
+                      updateDistribution({
+                        type: 'exponential',
+                        parameters: {
+                          ...distribution.parameters,
+                          factor: Number(e.target.value)
+                        }
+                      })
+                    }
+                    style={{
+                      width: '52px',
+                      background: '#1a1a1a',
+                      color: '#fff',
+                      border: '1px solid #444',
+                      borderRadius: '4px',
+                      padding: '2px 4px'
+                    }}
+                  />
+                )}
               </div>
 
               {/* Footer with hints and controls */}

@@ -49,7 +49,6 @@ sandboxes/**
 # Configuration files managed manually
 .husky/
 scripts/*.js
-scripts/maintenance/*.js
 scripts/build/*.sh
 
 # Temporary and backup files

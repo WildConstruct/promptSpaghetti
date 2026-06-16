@@ -10,7 +10,9 @@ import {
   WeightedChoiceNode,
   WeightedOption
 } from '../../../runtime/nodes/epic1/WeightedChoiceNode';
+import type { WeightDistribution } from '../../../types/epic1';
 import { ConcatNode } from '../../../runtime/nodes/epic1/ConcatNode';
+import type { JoinStyle } from '../../../runtime/assembly';
 import {
   VariableNode,
   VariableMode,
@@ -125,12 +127,16 @@ export function nodeDataToRuntimeNode(
           ];
         }
 
+        // Optional weight-distribution reshaping (linear/absent == today's behavior).
+        const distribution = (data as { distribution?: WeightDistribution })
+          .distribution;
+
         debugLogEpic1(
           '[nodeFactory] Parsed options for WeightedChoice:',
           options
         );
-        // WeightedChoiceNode constructor takes (id, options)
-        return new WeightedChoiceNode(id, options);
+        // WeightedChoiceNode constructor takes (id, options, config)
+        return new WeightedChoiceNode(id, options, { distribution });
       }
 
       case 'concat': {
@@ -143,10 +149,26 @@ export function nodeDataToRuntimeNode(
             : typeof separatorCandidate === 'string'
               ? separatorCandidate
               : ' ';
+        // Optional natural-language join controls (off by default → legacy join).
+        const joinStyleCandidate = (data as { joinStyle?: unknown }).joinStyle;
+        const allowedJoinStyles = [
+          'separator',
+          'space',
+          'comma',
+          'and',
+          'sentence'
+        ];
+        const joinStyle =
+          typeof joinStyleCandidate === 'string' &&
+          allowedJoinStyles.includes(joinStyleCandidate)
+            ? (joinStyleCandidate as JoinStyle)
+            : undefined;
         return new ConcatNode(id, {
           separator: separator,
           trimInputs: data.trimInputs !== false,
-          requireAllInputs: data.requireAllInputs === true
+          requireAllInputs: data.requireAllInputs === true,
+          joinStyle,
+          dedupe: (data as { dedupe?: unknown }).dedupe === true
         });
       }
 

@@ -98,7 +98,7 @@ describe('engine-basic comprehensive behavior', () => {
   it('handles unsupported node types as empty string', async () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
     const graph = asGraph([
-      { id: 'x1', type: 'Markov' } as Node,
+      { id: 'x1', type: 'Markov' } as unknown as Node,
       { id: 'out1', type: 'Output', inputs: ['x1'] } as Node
     ]);
 

@@ -1,5 +1,5 @@
 import { useCallback, useRef } from 'react';
-import { Node, ReactFlowInstance } from 'reactflow';
+import { ReactFlowInstance } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
 import { validatePreset, insertPreset } from '../../../runtime/presetInsertion';
 import {
@@ -12,6 +12,7 @@ import {
   findContainerAtPosition
 } from './dragDropContainerUtils';
 import { debugLogEpic1 } from '../../../utils/debug';
+import { createNodeId as sharedCreateNodeId } from '../utils/nodeDefaults';
 import {
   getInlinePresetDocument,
   isSafePresetSourcePath
@@ -137,14 +138,8 @@ export function useDragDropHandlers({
   const manifestBaseRef = useRef<string>('/presets');
   const manifestLoadPromiseRef = useRef<Promise<unknown> | null>(null);
 
-  // Create unique ID for new nodes
-  const createNodeId = useCallback(() => {
-    // Use high precision timestamp and random to ensure uniqueness
-    const timestamp = Date.now();
-    const random = Math.random().toString(36).substr(2, 9);
-    const counter = Math.floor(Math.random() * 10000);
-    return `node-${timestamp}-${random}-${counter}`;
-  }, []);
+  // Create unique ID for new nodes (shared implementation)
+  const createNodeId = useCallback(() => sharedCreateNodeId(), []);
 
   // Resolve preset path by ID using the published manifest
   const resolvePresetPathById = useCallback(
@@ -506,7 +501,16 @@ export function useDragDropHandlers({
           setNodes(replacement.nodes);
           setEdges(replacement.edges);
         } else {
-          setNodes(nds => nds.concat(nodesToAdd));
+          // React Flow resolves a child's absolute position from its parent
+          // during the SAME nodes-array pass, requiring each parent to be
+          // ordered before its children. Add everything in one atomic update
+          // with parents first so fragment children render inside their region
+          // box on first paint (never split parent/child across renders).
+          const parentsFirst = [
+            ...nodesToAdd.filter(node => !node.parentNode),
+            ...nodesToAdd.filter(node => Boolean(node.parentNode))
+          ];
+          setNodes(nds => nds.concat(parentsFirst));
           setEdges(existingEdges => {
             debugLogEpic1(
               '[DragDrop] Current edges:',

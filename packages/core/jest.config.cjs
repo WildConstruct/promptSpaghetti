@@ -9,11 +9,12 @@ module.exports = {
     '<rootDir>/hooks'
   ],
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
-  testPathIgnorePatterns: [
-    '<rootDir>/runtime/nodes/__tests__/Conditional.test.ts',
-    '<rootDir>/runtime/nodes/__tests__/Sequential.test.ts',
-    '<rootDir>/runtime/__tests__/io-system.test.ts'
-  ],
+  // The advanced-node tier (advanced.ts, io-system.ts, Conditional/Sequential/
+  // Markov/WeightedAdvanced) is intentionally parked off the product schema
+  // surface (see graphSchema.ts and docs/engine-unification-design.md). Its
+  // broken, never-run test suites were removed in the forensic cleanup; the
+  // parked source modules remain. Re-add testPathIgnorePatterns here only if
+  // those suites are revived.
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
@@ -22,6 +23,24 @@ module.exports = {
         babelConfig: false,
         tsconfig: {
           jsx: 'react-jsx',
+          module: 'commonjs',
+          target: 'ES2020',
+          isolatedModules: true,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true
+        }
+      }
+    ],
+    // Down-level the ESM-only .js deps allowlisted below (react-dnd ships
+    // `export ...` that jest would otherwise choke on with "Unexpected token
+    // 'export'"). allowJs lets ts-jest transpile them to CJS.
+    '^.+\\.js$': [
+      'ts-jest',
+      {
+        diagnostics: false,
+        babelConfig: false,
+        tsconfig: {
+          allowJs: true,
           module: 'commonjs',
           target: 'ES2020',
           isolatedModules: true,

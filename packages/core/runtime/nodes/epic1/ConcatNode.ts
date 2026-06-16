@@ -4,6 +4,7 @@
  */
 
 import { ExecutionContext } from '../../types';
+import { assemble, JoinStyle } from '../../assembly';
 import {
   BaseInlineEditableNode,
   InlineEditableConfig
@@ -19,6 +20,14 @@ export interface ConcatConfig {
   trimInputs: boolean;
   /** Whether all expected inputs must be present before emitting output */
   requireAllInputs?: boolean;
+  /**
+   * Natural-language join strategy. When set to a prose style ('space', 'comma',
+   * 'and', 'sentence'), inputs are assembled to read as natural language instead
+   * of being glued with `separator`. Omitted/`'separator'` keeps legacy behavior.
+   */
+  joinStyle?: JoinStyle;
+  /** Remove case-insensitive duplicate inputs before joining. */
+  dedupe?: boolean;
 }
 
 /**
@@ -61,7 +70,17 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
       return '';
     }
 
-    // Process inputs based on configuration
+    // Natural-language assembly path (opt-in via joinStyle).
+    if (config.joinStyle && config.joinStyle !== 'separator') {
+      return assemble(this.inputs, {
+        style: config.joinStyle,
+        trim: config.trimInputs,
+        dropEmpty: config.trimInputs,
+        dedupe: config.dedupe
+      });
+    }
+
+    // Legacy path: process inputs then glue with the separator.
     const processedInputs = this.inputs
       .map(input => {
         // Convert to string if needed
@@ -114,6 +133,24 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
       typeof value.requireAllInputs !== 'boolean'
     ) {
       errors.push('requireAllInputs must be a boolean');
+    }
+
+    const allowedJoinStyles: JoinStyle[] = [
+      'separator',
+      'space',
+      'comma',
+      'and',
+      'sentence'
+    ];
+    if (
+      value.joinStyle !== undefined &&
+      !allowedJoinStyles.includes(value.joinStyle)
+    ) {
+      errors.push('joinStyle must be one of: ' + allowedJoinStyles.join(', '));
+    }
+
+    if (value.dedupe !== undefined && typeof value.dedupe !== 'boolean') {
+      errors.push('dedupe must be a boolean');
     }
 
     return {
@@ -206,6 +243,15 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
    */
   preview(sampleInputs: string[]): string {
     const config = this.getCurrentValue();
+
+    if (config.joinStyle && config.joinStyle !== 'separator') {
+      return assemble(sampleInputs, {
+        style: config.joinStyle,
+        trim: config.trimInputs,
+        dropEmpty: config.trimInputs,
+        dedupe: config.dedupe
+      });
+    }
 
     const processed = sampleInputs
       .map(input => {

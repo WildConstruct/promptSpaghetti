@@ -21,8 +21,8 @@ exports.COMPRESSION_THRESHOLD = 100 * 1024; // 100KB
 exports.MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
 // Persisted state schema for validation
 exports.PersistedStateSchema = zod_1.z.object({
-    nodes: zod_1.z.array(zod_1.z.any()), // Using any for now, could be more specific
-    edges: zod_1.z.array(zod_1.z.any()),
+    nodes: zod_1.z.array(zod_1.z.unknown()),
+    edges: zod_1.z.array(zod_1.z.unknown()),
     viewport: zod_1.z
         .object({
         x: zod_1.z.number(),

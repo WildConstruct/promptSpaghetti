@@ -10,14 +10,7 @@ export const NodeTypeEnum = z.enum([
   'Output',
   'Include',
   'SetVariable',
-  'GetVariable',
-  // Epic 7 Advanced Node Types
-  'WeightedAdvanced',
-  'Conditional',
-  'Sequential',
-  'Markov',
-  // Epic 8 Python Integration
-  'PythonTransform'
+  'GetVariable'
 ]);
 
 export const BaseNode = z.object({
@@ -68,80 +61,11 @@ export const GetVariableNodeSchema = BaseNode.extend({
   key: SecurityValidation.variableName()
 });
 
-// Epic 7 Advanced Node Schemas
-export const WeightedAdvancedNodeSchema = BaseNode.extend({
-  type: z.literal('WeightedAdvanced'),
-  choices: z.array(
-    z.object({ value: z.string(), weight: z.number().min(0) })
-  ).optional(),
-  distributionConfig: z.object({
-    type: z.enum(['linear', 'exponential', 'gaussian', 'custom']),
-    parameters: z.record(z.number()).optional(),
-    normalize: z.boolean().optional(),
-    minWeight: z.number().min(0).optional()
-  }).optional()
-});
-
-export const ConditionalNodeSchema = BaseNode.extend({
-  type: z.literal('Conditional'),
-  branches: z.array(
-    z.object({
-      condition: SecurityValidation.safeExpression(),
-      output: SecurityValidation.safeString(),
-      label: SecurityValidation.safeString().optional()
-    })
-  ).optional(),
-  defaultOutput: SecurityValidation.safeString().optional(),
-  conditionalConfig: z.object({
-    allowVariableAccess: z.boolean().optional(),
-    strictMode: z.boolean().optional(),
-    customFunctions: z.record(SecurityValidation.safeValue()).optional()
-  }).optional()
-});
-
-export const SequentialNodeSchema = BaseNode.extend({
-  type: z.literal('Sequential'),
-  sequence: z.array(z.string()).optional(),
-  pattern: z.object({
-    type: z.enum(['linear', 'cyclical', 'random', 'weighted']),
-    config: z.object({
-      weights: z.array(z.number()).optional(),
-      allowRepeats: z.boolean().optional(),
-      custom: z.record(z.unknown()).optional()
-    }).optional()
-  }).optional()
-});
-
-export const MarkovNodeSchema = BaseNode.extend({
-  type: z.literal('Markov'),
-  states: z.array(z.string()).optional(),
-  transitions: z.record(z.record(z.number())).optional(),
-  initialState: z.string().optional(),
-  markovConfig: z.object({
-    maxTransitions: z.number().positive().optional(),
-    normalizeProbabilities: z.boolean().optional(),
-    terminationStates: z.array(z.string()).optional(),
-    detectLoops: z.boolean().optional(),
-    custom: z.record(z.unknown()).optional()
-  }).optional()
-});
-
-// Epic 8 Python Integration
-export const PythonTransformNodeSchema = BaseNode.extend({
-  type: z.literal('PythonTransform'),
-  code: z.string(),
-  timeout: z.number().positive().optional(),
-  memoryLimit: z.string().optional(),
-  allowedModules: z.array(z.string()).optional(),
-  pythonConfig: z.object({
-    strictMode: z.boolean().optional(),
-    enableCaching: z.boolean().optional(),
-    executorUrl: z.string().optional(),
-    retryAttempts: z.number().min(0).optional(),
-    fallbackBehavior: z.enum(['error', 'skip', 'default']).optional(),
-    defaultOutput: z.string().optional()
-  }).optional()
-});
+// NOTE: The Epic 7 advanced tier (WeightedAdvanced/Conditional/Sequential/Markov) and the Epic 8
+// PythonTransform node were retired from the product schema surface — they were never registered,
+// never executed by either engine, and read as ML "circuit diagram" plumbing (Compact Principle II).
+// Their implementations remain parked under runtime/ for potential future use; see
+// docs/engine-unification-design.md.
 
 export const AnyNodeSchema = z.discriminatedUnion('type', [
   WeightedChoiceNodeSchema,
@@ -149,14 +73,7 @@ export const AnyNodeSchema = z.discriminatedUnion('type', [
   OutputNodeSchema,
   IncludeNodeSchema,
   SetVariableNodeSchema,
-  GetVariableNodeSchema,
-  // Epic 7 Advanced Nodes
-  WeightedAdvancedNodeSchema,
-  ConditionalNodeSchema,
-  SequentialNodeSchema,
-  MarkovNodeSchema,
-  // Epic 8 Python Integration
-  PythonTransformNodeSchema
+  GetVariableNodeSchema
 ]);
 
 export const GraphSchema = z.object({
