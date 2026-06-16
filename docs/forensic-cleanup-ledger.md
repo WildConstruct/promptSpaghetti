@@ -69,6 +69,38 @@ Eight forensic crawlers produced 99 raw findings across debug scaffolding, dead 
 
 ---
 
+## Tier C — Test-cruft trim (executed `claude/cleanup-tier-c-tests`)
+
+Follow-up to the "how many of the ~1,000 tests do useful work?" analysis. Scope was
+**never-run / rotted test files only** — no live-running test was deleted.
+
+**Deleted — 14 orphaned files (outside `jest.config.cjs` roots → Jest never ran them):**
+- 5 stale duplicates of live `tests/services/llm/` suites: `LLMService`, `ModelSelector`,
+  `PrivacyFilter` (×2), `TokenTracker`.
+- 7 unique-but-rotted (fail against current code — drift caught only because they were
+  finally run): `node-groups`, `LRUCache`, `edge-routing`, `assetValidator`,
+  `AuthUserProvider`, `PerformanceMonitor`, `NodeIntelligence`.
+
+**Relocated into the live root (passed + unique → preserve real coverage):**
+- `services/llm/__tests__/SimilarityEngine.test.ts` → `tests/services/llm/`
+- `services/__tests__/assetTypeMapping.test.ts` → `tests/services/`
+  (imports repointed to the `tests/` depth convention; both now actually execute).
+
+**Deleted — low-value live suite:** `demos/__tests__/MedievalDemoShowcase.test.tsx`
+(asserted emoji/literal strings on an unshipped demo).
+
+**Kept deliberately (flagged "revisit" but cover real/coherent code):**
+- `interactions/__tests__/MicroInteractions.test.tsx` — covers **wired** code
+  (`triggerHaptic`, `useMagneticSnap`, `NodeInteractionEnhancer`). Real coverage.
+- `delightful/__tests__/DelightfulFeatures.test.tsx` — the parked `delightful/*` UX
+  layer's executable spec; documented in
+  [`docs/parked-implementations/README.md`](parked-implementations/README.md#parked-ux-subsystem--delightful-features).
+
+**Result:** core suite `97 suites / 1006` → `98 suites / 996`, all green. The 2 relocated
+suites now run for the first time; net test-count drop is the removed showcase test.
+
+---
+
 ### Notes on lowered-confidence / conflict items
 - **B's "dead code" ↔ E/graphSchema "intentionally parked":** resolved as parked-by-design → Tier 2, not a free delete.
 - **E's "Epic 7 COMPLETE" claim ↔ graphSchema "retired":** schema wins → Tier 3 doc fix.

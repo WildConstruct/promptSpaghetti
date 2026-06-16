@@ -132,3 +132,33 @@ revival design captured here; start fresh against current model APIs if pursued.
 
 > Everything above is recoverable from git history regardless — this doc exists so the
 > *intent* survives even when the files don't.
+
+---
+
+## Parked UX subsystem — "delightful" features
+
+Separate from the runtime nodes above: `packages/core/components/epic1/delightful/`
+is a self-contained **"delight" UX layer** (Konami-code easter eggs, playful loading
+states, unexpected micro-animations). It is **fully parked — 0 live importers.** None
+of `DelightfulIntegration`, `EasterEggManager`, `PlayfulLoadingStates`, or
+`UnexpectedAnimations` is mounted anywhere in the app.
+
+| Path | Live? | Notes |
+|---|---|---|
+| `delightful/DelightfulIntegration.tsx` | No (0 importers) | Top-level wrapper that wires the others together. The single re-entry point if revived. |
+| `delightful/EasterEggManager.tsx` | No | Konami-sequence detector + reward animations. |
+| `delightful/PlayfulLoadingStates.tsx` | No | `PlayfulLoadingStates`, `PlayfulProgressBar`. |
+| `delightful/UnexpectedAnimations.tsx` | No | Random celebratory flourishes; exports `celebrateNodeClick`. |
+| `delightful/__tests__/DelightfulFeatures.test.tsx` | Runs, passes | Kept. It's the **executable spec** for the parked layer — read it to see intended behavior before reviving. |
+
+**Why this is kept, not deleted:** the code is coherent and the test passes; it was
+flagged for *revisit*, not removal. To revive, mount `<DelightfulIntegration>` near the
+canvas root and verify against the existing test. To retire instead, delete the
+`delightful/` folder and its test together (nothing else imports it).
+
+> **Not parked — leave alone:** the neighboring `animations/MicroInteractions.tsx`
+> (haptics, `triggerHaptic`, `useMicroInteractions`) and `interactions/`
+> (`MagneticSnapHandler`, `NodeInteractionEnhancer`) **are wired live** (2 and 1
+> importers respectively). Their shared test
+> `interactions/__tests__/MicroInteractions.test.tsx` is real coverage of shipped
+> behavior — do not confuse it with the parked delight layer.
