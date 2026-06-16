@@ -153,6 +153,17 @@ const templates: Template[] = [
     icon: <BranchIcon />
   },
   {
+    id: 'tile_builder',
+    title: 'Modular Tile Builder',
+    description:
+      'City tile generator: locked block scale, structure type branches (skyscraper/derelict), and a nested decay branch',
+    prompt:
+      'A modular isometric city tile with a locked block scale, where the structure type branches into skyscraper-style and derelict-decay paths, and the decay path branches again on fire damage',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <BranchIcon />
+  },
+  {
     id: 'empty',
     title: 'Blank Canvas',
     description: 'Start from scratch in the editor with no template applied',

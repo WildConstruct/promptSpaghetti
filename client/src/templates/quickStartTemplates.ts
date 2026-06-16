@@ -832,8 +832,93 @@ const techPanelTemplate: QuickStartTemplate = {
   ]
 };
 
+// Modular Tile Builder — recreation of the original city-tile randomizer.
+// Locked block-scale "DNA", a multi-branch structure type (skyscraper → style,
+// derelict row → decay), and a nested branch (decay → fire-gutted → scorch).
+const tileBuilderTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode(
+      'tile-dna',
+      80,
+      120,
+      'Tile DNA',
+      'Modular city tile, isometric game-ready render, clean neutral lighting'
+    ),
+    weightedChoiceNode('tile-scale', 80, 340, 'Block Scale (locked DNA)', [
+      { id: 'sc-1', text: 'a single prominent building facade', weight: 25 },
+      {
+        id: 'sc-2',
+        text: 'a row of 3–4 varied building facades',
+        weight: 25,
+        locked: true
+      },
+      { id: 'sc-3', text: 'a half city block of facades', weight: 25 },
+      { id: 'sc-4', text: 'a dense cluster of towers', weight: 25 }
+    ]),
+    weightedChoiceNode('tile-type', 480, 200, 'Primary Structure', [
+      { id: 'ty-1', text: 'a modern apartment building', weight: 25 },
+      { id: 'ty-2', text: 'a cozy corner bookstore', weight: 20 },
+      { id: 'ty-3', text: 'a skyscraper', weight: 20, hasBranch: true },
+      { id: 'ty-4', text: 'a run-down derelict row', weight: 20, hasBranch: true },
+      { id: 'ty-5', text: 'an art gallery', weight: 15 }
+    ]),
+    weightedChoiceNode('tile-sky-style', 900, 60, 'Skyscraper Style', [
+      { id: 'sk-1', text: 'clad in a glass curtain wall', weight: 34 },
+      { id: 'sk-2', text: 'in brutalist board-formed concrete', weight: 33 },
+      { id: 'sk-3', text: 'with art-deco stepped setbacks', weight: 33 }
+    ]),
+    weightedChoiceNode('tile-decay', 900, 300, 'Decay State', [
+      { id: 'dk-1', text: 'with boarded-up windows and faded signage', weight: 35 },
+      { id: 'dk-2', text: 'fire-gutted', weight: 30, hasBranch: true },
+      { id: 'dk-3', text: 'overgrown with vines and rust', weight: 35 }
+    ]),
+    textNode(
+      'tile-fire-detail',
+      1320,
+      340,
+      'Fire Detail',
+      '— scorched brick, collapsed roof beams, and soot-streaked walls'
+    ),
+    concatNode('tile-decay-merge', 1320, 460, 'Decay Merge'),
+    concatNode('tile-type-merge', 1760, 300, 'Structure Merge'),
+    weightedChoiceNode('tile-height', 480, 480, 'Height', [
+      { id: 'ht-1', text: '2 stories tall', weight: 30 },
+      { id: 'ht-2', text: '5 stories tall', weight: 30 },
+      { id: 'ht-3', text: '20 stories tall', weight: 25 },
+      { id: 'ht-4', text: '50+ stories tall', weight: 15 }
+    ]),
+    weightedChoiceNode('tile-context', 480, 660, 'Urban Context', [
+      { id: 'cx-1', text: 'in a busy downtown core', weight: 34 },
+      { id: 'cx-2', text: 'on a quiet residential street', weight: 33 },
+      { id: 'cx-3', text: 'along a gritty industrial edge', weight: 33 }
+    ]),
+    concatNode('tile-main', 2160, 360, 'Assemble Tile'),
+    outputNode('tile-output', 2520, 360, 'modular_city_tile')
+  ],
+  edges: [
+    { id: 'tl-e1', source: 'tile-dna', target: 'tile-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tl-e2', source: 'tile-scale', target: 'tile-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    // Structure: default + skyscraper branch + derelict branch -> structure merge.
+    { id: 'tl-e3', source: 'tile-type', target: 'tile-type-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tl-e4', source: 'tile-type', target: 'tile-sky-style', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'tl-e5', source: 'tile-sky-style', target: 'tile-type-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tl-e6', source: 'tile-type', target: 'tile-decay', type: 'smoothstep', sourceHandle: 'branch-3', targetHandle: 'target' },
+    // Nested: decay default + fire branch -> decay merge -> structure merge.
+    { id: 'tl-e7', source: 'tile-decay', target: 'tile-decay-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tl-e8', source: 'tile-decay', target: 'tile-fire-detail', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'tl-e9', source: 'tile-fire-detail', target: 'tile-decay-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tl-e10', source: 'tile-decay-merge', target: 'tile-type-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'tl-e11', source: 'tile-type-merge', target: 'tile-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    // Height + context.
+    { id: 'tl-e12', source: 'tile-height', target: 'tile-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'tl-e13', source: 'tile-context', target: 'tile-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'tl-e14', source: 'tile-main', target: 'tile-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   tech_panel: techPanelTemplate,
+  tile_builder: tileBuilderTemplate,
   character_variation: characterTemplate,
   indy_500_crowd_card: indyCrowdCardTemplate,
   vehicle_family: vehicleFamilyTemplate,
