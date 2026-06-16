@@ -5,7 +5,6 @@
 
 // Core testing utilities
 export * from './TestingUtilities';
-export * from './RefactoringTestUtils';
 export * from './CustomMatchers';
 export * from './consoleFilter';
 export * from './sharedTestSetup';
@@ -18,12 +17,6 @@ export {
   MockDataUtils,
   PerformanceTestingUtils
 } from './TestingUtilities';
-
-export {
-  MigrationTestHelper,
-  LegacySystemMock,
-  RefactoringValidator
-} from './RefactoringTestUtils';
 
 export { registerCustomMatchers } from './CustomMatchers';
 
