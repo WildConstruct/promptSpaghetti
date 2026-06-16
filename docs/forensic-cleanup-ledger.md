@@ -105,6 +105,46 @@ Repointed to what's real: `Epic1ExecutionEngine` as canonical, the parked tiers,
 
 ---
 
+## Tier C — Exports map & dependency cull (executed `claude/cleanup-tier-c-exports-deps`)
+
+**`packages/core` exports map:** the "broken exports" knip flagged were *stale*,
+not *breaking* — the client resolves `@promptscape/core` via tsconfig-paths + a
+vite alias straight to source (`client/tsconfig.json`, `client/vite.config.ts`),
+never through the package `exports` map, and the package is `private` with no
+external consumers. Removed the dead `./components/MenuBar/*` export entries (the
+directory doesn't exist; zero references). Left the `./components/epic1/*` entries
+(functional at runtime; their only flag is missing `.d.ts` for a path nobody
+imports bare — cosmetic, not worth the risk of editing a working map).
+
+**Dependency cull:** knip's unused-deps list is false-positive-heavy (it flags
+`zod`/`fastify` as unused), so every candidate was **independently grep-verified at
+0 imports repo-wide** before removal — not trusted from the tool. Removed ~40
+confirmed-dead deps:
+- **server (10 runtime + 5 @types):** `argon2`, `jsonwebtoken`, `ioredis`,
+  `node-cron`, `otplib`, `pdf-lib`, `qrcode`, `sharp`, `better-sqlite3`, `uuid` —
+  MFA/image/cron/PDF features that were typed but never wired (auth is Supabase-only).
+- **root:** `@simplewebauthn/*`, `web-vitals`, `antd`, `recharts`,
+  `@ant-design/icons`, `@heroicons/react`, `react-icons`, `yjs`, `lib0`,
+  `markdown-it`, `remark`, `remark-parse`, `semver`, `redis`, `supertest`,
+  `puppeteer`, `puppeteer-core`, `better-sqlite3`.
+- **packages/core:** `@dnd-kit/{core,modifiers,sortable,utilities}` (core uses
+  `react-dnd`, a different lib).
+- **client:** `@heroicons/react`, `lodash`, `tmp`, `vite-plugin-node-polyfills`.
+
+Verified: server `tsc` clean; core 993/993; server 26/26; client `tsc` error count
+unchanged (50→50); asset-browser failures unchanged (18→18). No suite regressed.
+
+**Deferred (noted, not done):** cross-workspace duplicate declarations
+(`react-dnd`/`react-router-dom`/`seedrandom`/`uuid` declared in `client` but used
+elsewhere — removing from the app manifest is higher-stakes), the unused
+`eslint-config-airbnb-*` (eslint-config fragility), and the **unlisted deps**
+(`@prompt/asset-browser`, `openai`, `@jest/globals` used but undeclared) +
+**unresolved imports** (~15 broken type paths in `packages/core/types/index.ts`,
+`epic1/delightful/*`) that knip surfaced — those are a separate "fix broken imports"
+task, not dependency cleanup.
+
+---
+
 ## Tier C — Test-cruft trim (executed `claude/cleanup-tier-c-tests`)
 
 Follow-up to the "how many of the ~1,000 tests do useful work?" analysis. Scope was
