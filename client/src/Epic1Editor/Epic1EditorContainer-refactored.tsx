@@ -493,6 +493,12 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           onPaste: handlePaste,
           onToggleAssetLibrary: () =>
             setAssetLibraryVisible(prev => !prev),
+          onOrganizeNodes: () =>
+            (
+              window as typeof window & {
+                __EPIC1_ORGANIZE_NODES__?: (() => void) | null;
+              }
+            ).__EPIC1_ORGANIZE_NODES__?.(),
           onReportBug: () => setShowBugReportDialog(true),
           onChangelog: () => setShowChangelog(true)
         }

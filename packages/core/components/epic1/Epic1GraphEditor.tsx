@@ -744,6 +744,18 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     }, 60);
   }, [edges, setNodes, reactFlowInstance]);
 
+  // Expose Organize Nodes so the client-built View menu can invoke it (the
+  // layout function lives here; the menu lives across the client boundary).
+  useEffect(() => {
+    const win = window as typeof window & {
+      __EPIC1_ORGANIZE_NODES__?: (() => void) | null;
+    };
+    win.__EPIC1_ORGANIZE_NODES__ = handleOrganizeNodes;
+    return () => {
+      win.__EPIC1_ORGANIZE_NODES__ = null;
+    };
+  }, [handleOrganizeNodes]);
+
   // Micro interactions
   const { interactions, trigger } = useMicroInteractions();
 
@@ -2151,7 +2163,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                       type: 'postItNote',
                       position: flow,
                       data: { nodeType: 'postItNote', text: '' }
-                    } as Node<EditableNodeData>
+                    } as unknown as Node<EditableNodeData>
                   ]);
                 }}
               />

@@ -60,6 +60,7 @@ interface EditorSurfacePolicyActions {
   onCopy?: () => void;
   onPaste?: () => void;
   onToggleAssetLibrary?: () => void;
+  onOrganizeNodes?: () => void;
   onReportBug?: () => void;
   onChangelog?: () => void;
 }
@@ -445,6 +446,17 @@ export const buildEditorSurfacePolicy = ({
   );
 
   const viewItems: MenuSectionModel['items'] = [];
+  pushAction(
+    viewItems,
+    actions.onOrganizeNodes
+      ? {
+          type: 'action',
+          id: 'organizeNodes',
+          label: 'Organize Nodes',
+          onClick: actions.onOrganizeNodes
+        }
+      : null
+  );
   pushAction(
     viewItems,
     actions.onToggleAssetLibrary
