@@ -149,7 +149,14 @@ export const ComponentLibraryPanel = ({
 
       <div className="component-library-list">
         {definitions.length === 0 && (
-          <div className="component-library-empty">Save a selected cluster with output nodes to create your first component.</div>
+          <div className="component-library-empty">
+            <strong className="component-library-empty-title">No linked components yet</strong>
+            <span className="component-library-empty-body">
+              Linked components are reusable node clusters you can drop into any graph.
+              Select a cluster that ends in an Output node, then use “Save as component” to
+              create your first one — it will appear here.
+            </span>
+          </div>
         )}
         {definitions.map((definition: ComponentDefinition) => (
           <button

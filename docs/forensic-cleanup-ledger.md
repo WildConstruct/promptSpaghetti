@@ -105,6 +105,36 @@ Repointed to what's real: `Epic1ExecutionEngine` as canonical, the parked tiers,
 
 ---
 
+## Tier C — Broken imports (executed `claude/cleanup-tier-c-broken-imports`)
+
+Resolved the genuine broken imports knip surfaced (19 → 7). The 12 fixed were
+real missing-file references; the 7 remaining are knip blind spots (5 `@/`-alias
+imports that resolve fine in jest/the client — `graphStore`, `PerformanceMonitor`,
+both files exist), one config self-reference, and `tsconfig-paths/register` (an
+undeclared dep used only by the server k6 perf scripts — left noted).
+
+- **`runtime/nodes/epic1/index.ts`** (product engine barrel): `export type
+  { EditState } from '../../schemas/psgSchemaV2'` pointed at a non-existent path.
+  `EditState` actually lives in `./BaseInlineEditableNode` — repointed there. (It
+  survived only because `export type` is elided under ts-jest `isolatedModules`; a
+  real `tsc` build would have failed.)
+- **`types/index.ts`**: a dead "Epic 17" policy/promotion barrel re-exporting 7
+  non-existent modules (`./PromotionTypes`, `./TrustTypes`, `./EnforcementTypes`,
+  `./PolicyInterfaces`, `./PromotionInterfaces`, `./PolicyServices`,
+  `./PolicyEvents`). Zero importers of any policy/promotion symbol. Stripped to the
+  two real re-exports (`./epic1`, `./graph`).
+- **`types/index.d.ts`**: stray generated artifact (`//# sourceMappingURL`,
+  contained syntax errors, shadowed by `index.ts`) committed into source — deleted.
+- **`examples/FlippableNodeExample.tsx`**: imported a non-existent `FlippableNode`;
+  its only reference was a vacuous `Epic2.integration.test.ts` smoke test that did
+  `import(...).catch(() => null)` and asserted `true`. Deleted the example and the
+  dangling import (kept the test as a trivial marker).
+
+Verified: core 993/993; targeted `tsc` on the two edited barrels shows no remaining
+module-resolution errors.
+
+---
+
 ## Tier C — Exports map & dependency cull (executed `claude/cleanup-tier-c-exports-deps`)
 
 **`packages/core` exports map:** the "broken exports" knip flagged were *stale*,

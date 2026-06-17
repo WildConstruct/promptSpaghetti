@@ -4,6 +4,11 @@ export interface WeightedOption {
   weight: number;
   color?: string;
   hasBranch?: boolean;
+  /**
+   * "Fixed DNA": when set, this option is always selected, bypassing weighted
+   * randomness. At most one option per node should be locked.
+   */
+  locked?: boolean;
 }
 
 /**

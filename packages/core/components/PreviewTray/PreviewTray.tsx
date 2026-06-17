@@ -90,6 +90,44 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   const [editingSeedIndex, setEditingSeedIndex] = useState<number | null>(null);
   const [editingSeedValue, setEditingSeedValue] = useState<string>('');
 
+  // Which seed's result was just copied (drives the "Copied!" confirmation).
+  const [copiedSeed, setCopiedSeed] = useState<number | string | null>(null);
+  const copiedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleCopyResult = useCallback(
+    (seed: number | string, text: string) => {
+      const writeFallback = () => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+        } catch {
+          /* ignore */
+        }
+        document.body.removeChild(ta);
+      };
+      try {
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(text).catch(writeFallback);
+        } else {
+          writeFallback();
+        }
+      } catch {
+        writeFallback();
+      }
+      setCopiedSeed(seed);
+      if (copiedTimerRef.current) {
+        clearTimeout(copiedTimerRef.current);
+      }
+      copiedTimerRef.current = setTimeout(() => setCopiedSeed(null), 1600);
+    },
+    []
+  );
+
   // State for refinement
   const [refinementStyle, setRefinementStyle] =
     useState<string>('professional');
@@ -527,6 +565,43 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                             overflow: 'hidden'
                           }}
                         >
+                          {/* Copy affordance / confirmation (bottom-right) */}
+                          {result && (
+                            <div
+                              className={
+                                copiedSeed === seed
+                                  ? 'preview-copy-chip copied'
+                                  : 'preview-copy-chip'
+                              }
+                              style={{
+                                position: 'absolute',
+                                bottom: '8px',
+                                right: '8px',
+                                zIndex: 5,
+                                pointerEvents: 'none',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                padding: '3px 8px',
+                                borderRadius: '999px',
+                                fontSize: '11px',
+                                fontWeight: 600,
+                                letterSpacing: '0.02em',
+                                transition: 'all 0.18s ease',
+                                background:
+                                  copiedSeed === seed ? '#10b981' : 'rgba(0,0,0,0.55)',
+                                color:
+                                  copiedSeed === seed ? '#ffffff' : 'rgba(255,255,255,0.55)',
+                                border:
+                                  copiedSeed === seed
+                                    ? '1px solid #10b981'
+                                    : '1px solid rgba(255,255,255,0.15)'
+                              }}
+                            >
+                              {copiedSeed === seed ? '✓ Copied' : '⧉ Click to copy'}
+                            </div>
+                          )}
+
                           {/* Delete button */}
                           {seeds.length > 1 && (
                             <button
@@ -694,6 +769,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                               overflow: 'auto',
                               cursor: 'pointer'
                             }}
+                            title="Click to copy this result"
                             onClick={() => {
                               if (result) {
                                 // Copy refined text if available, otherwise original
@@ -702,7 +778,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                                   llmMode === 'llm-enhanced' && refined
                                     ? refined
                                     : result.result;
-                                navigator.clipboard.writeText(textToCopy);
+                                handleCopyResult(seed, textToCopy);
                               }
                             }}
                           >

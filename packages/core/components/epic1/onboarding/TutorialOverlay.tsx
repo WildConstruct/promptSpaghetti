@@ -310,9 +310,7 @@ export const TutorialOverlay: React.FC = () => {
               }}
               title={step.action !== 'observe' ? 'Skip this step' : ''}
             >
-              {currentStep === tutorialSteps.length - 1 ? 'Finish' : 
-               step.action === 'observe' ? 'Continue' : 
-               showSkipHint ? 'Skip (Press to continue)' : 'Skip'}
+              {currentStep === tutorialSteps.length - 1 ? 'Finish' : 'Next'}
             </button>
           </div>
         </div>

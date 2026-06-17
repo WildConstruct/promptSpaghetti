@@ -38,6 +38,11 @@ import type {
   PsgSceneAssemblyPlan
 } from '@promptscape/core/services/psg';
 import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
+import {
+  TEMPLATE_CATALOG,
+  TEMPLATE_CATEGORY_LABELS
+} from '../templates/templateCatalog';
+import { quickStartTemplates } from '../templates/quickStartTemplates';
 
 const PromptDissector = lazy(async () => {
   const module = await import('../components/LaunchScreen/PromptDissector');
@@ -94,6 +99,11 @@ const BugReportDialog = lazy(async () => {
 const ChangelogModal = lazy(
   () => import('@promptscape/core/components/ChangelogModal/ChangelogModal')
 );
+
+const GuideModal = lazy(async () => {
+  const module = await import('./components/GuideModal');
+  return { default: module.GuideModal };
+});
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -161,6 +171,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
 
   const [showChangelog, setShowChangelog] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  const [guideTab, setGuideTab] = useState<'getting-started' | 'user-guide'>('getting-started');
   const [showBugReportDialog, setShowBugReportDialog] = useState(false);
   const [showComfyExportDialog, setShowComfyExportDialog] = useState(false);
   const [showPsgSceneAssetsDialog, setShowPsgSceneAssetsDialog] = useState(false);
@@ -466,6 +478,51 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     handleNew([], []);
   }, [handleNew]);
 
+  // Explore tab: full PSG-document templates (the same catalog as the splash
+  // launcher), surfaced inside the editor so a document can be opened without
+  // going back to the launch screen.
+  const exploreDocuments = useMemo(
+    () =>
+      TEMPLATE_CATALOG.map(entry => ({
+        id: entry.id,
+        title: entry.title,
+        description: entry.description,
+        category: entry.category,
+        categoryLabel: TEMPLATE_CATEGORY_LABELS[entry.category],
+        branching: entry.branching,
+        nodeCount: quickStartTemplates[entry.id]?.nodes.length
+      })),
+    []
+  );
+
+  const handleOpenDocument = useCallback(
+    (id: string) => {
+      const tmpl = quickStartTemplates[id];
+      if (!tmpl) {
+        showToast('That document is unavailable', 'error');
+        return;
+      }
+      const title =
+        TEMPLATE_CATALOG.find(entry => entry.id === id)?.title ?? 'document';
+
+      // Close-before-open: only prompt when there is work that would be lost.
+      if (currentNodes.length > 0) {
+        const proceed = window.confirm(
+          `Open “${title}”? This replaces the current graph. Unsaved changes will be lost.`
+        );
+        if (!proceed) {
+          return;
+        }
+      }
+
+      handleNodesChange(tmpl.nodes as Node[]);
+      handleEdgesChange(tmpl.edges as Edge[]);
+      setEditorKey(prev => prev + 1);
+      showToast(`Opened “${title}”`, 'success');
+    },
+    [currentNodes.length, handleNodesChange, handleEdgesChange, showToast]
+  );
+
   const editorSurfacePolicy = useMemo(
     () =>
       buildEditorSurfacePolicy({
@@ -493,8 +550,22 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           onPaste: handlePaste,
           onToggleAssetLibrary: () =>
             setAssetLibraryVisible(prev => !prev),
+          onOrganizeNodes: () =>
+            (
+              window as typeof window & {
+                __EPIC1_ORGANIZE_NODES__?: (() => void) | null;
+              }
+            ).__EPIC1_ORGANIZE_NODES__?.(),
           onReportBug: () => setShowBugReportDialog(true),
-          onChangelog: () => setShowChangelog(true)
+          onChangelog: () => setShowChangelog(true),
+          onGettingStarted: () => {
+            setGuideTab('getting-started');
+            setShowGuide(true);
+          },
+          onUserGuide: () => {
+            setGuideTab('user-guide');
+            setShowGuide(true);
+          }
         }
       }),
     [
@@ -559,6 +630,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           showAssetLibrary={assetLibraryVisible}
           assetLibraryPosition={assetLibraryPosition}
           sidePanelTabDefinitions={editorSurfacePolicy.tabDefinitions}
+          exploreDocuments={exploreDocuments}
+          onOpenDocument={handleOpenDocument}
         />
 
         {/* Modals */}
@@ -587,6 +660,15 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             <ChangelogModal
               isOpen={showChangelog}
               onClose={() => setShowChangelog(false)}
+            />
+          )}
+
+        {showGuide &&
+          renderDeferredSurface(
+            <GuideModal
+              isOpen={showGuide}
+              onClose={() => setShowGuide(false)}
+              initial={guideTab}
             />
           )}
 

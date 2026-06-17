@@ -366,6 +366,19 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       {/* Header */}
       <header className="launch-header">
         <div className="launch-logo">
+          <p
+            className="launch-kicker"
+            style={{
+              margin: '0 0 6px',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '3px',
+              textTransform: 'uppercase',
+              color: '#e6a23c'
+            }}
+          >
+            Wild Construct
+          </p>
           <img
             src="/images/PromptSpaghettiLogo.png"
             alt="Prompt Spaghetti"

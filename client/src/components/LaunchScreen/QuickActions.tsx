@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './QuickActions.css';
+import { quickStartTemplates } from '../../templates/quickStartTemplates';
 
 interface QuickActionsProps {
   onSelectTemplate: (templateId: string) => void;
 }
+
+type LaunchCategory = 'characters' | 'crowds' | 'worlds' | 'start';
 
 interface Template {
   id: string;
@@ -14,6 +17,32 @@ interface Template {
   tier: 'primary' | 'advanced' | 'manual';
   icon: React.ReactNode;
 }
+
+const CATEGORY_TABS: { id: LaunchCategory | 'all'; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'characters', label: 'Characters' },
+  { id: 'crowds', label: 'Crowds & Scenes' },
+  { id: 'worlds', label: 'Worlds & Objects' },
+  { id: 'start', label: 'Start Fresh' }
+];
+
+const CATEGORY_BY_ID: Record<string, LaunchCategory> = {
+  character_variation: 'characters',
+  gangsters: 'characters',
+  underworld_skilltree: 'characters',
+  diner_patrons: 'characters',
+  spaghetti_western: 'characters',
+  indy_500_crowd_card: 'crowds',
+  baseball_fans: 'crowds',
+  punk_fans: 'crowds',
+  medieval_village: 'crowds',
+  vehicle_family: 'worlds',
+  building_family: 'worlds',
+  tech_panel: 'worlds',
+  tile_builder: 'worlds',
+  branching_family: 'worlds',
+  empty: 'start'
+};
 
 // SVG Icons for consistent palette
 const CharacterIcon = () => (
@@ -142,6 +171,105 @@ const templates: Template[] = [
     icon: <BranchIcon />
   },
   {
+    id: 'tech_panel',
+    title: 'Anachronistic Tech Panel',
+    description:
+      'Retro-futuristic control panel: locked design DNA, multi-branch screen type, and a nested branch',
+    prompt:
+      'A retro-futuristic control panel with a locked aesthetic, where the screen type branches (CRT, vector, LED, or no screen) and the CRT path branches again on phosphor color',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <BranchIcon />
+  },
+  {
+    id: 'tile_builder',
+    title: 'Modular Tile Builder',
+    description:
+      'City tile generator: locked block scale, structure type branches (skyscraper/derelict), and a nested decay branch',
+    prompt:
+      'A modular isometric city tile with a locked block scale, where the structure type branches into skyscraper-style and derelict-decay paths, and the decay path branches again on fire damage',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <BranchIcon />
+  },
+  {
+    id: 'gangsters',
+    title: '1930s Chicago Gangsters',
+    description:
+      'Prohibition-era gangster: locked rank, role branches (enforcer/speakeasy), and a nested Tommy-gun branch',
+    prompt:
+      'A 1930s Chicago gangster with a locked rank, where the role branches into an enforcer weapon path and a speakeasy venue path, and the enforcer Tommy gun branches again to a drum magazine',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <BranchIcon />
+  },
+  {
+    id: 'underworld_skilltree',
+    title: 'Chicago Underworld — Skill Trees',
+    description:
+      'Advanced: employment branches into dock/heist/bootleg skill trees, each with a nested specialty — three levels of branching',
+    prompt:
+      'A 1930s Chicago underworld character whose trade (docks, bank-robbing, bootlegging) opens its own skill tree, each branching again into a specialty',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <BranchIcon />
+  },
+  {
+    id: 'baseball_fans',
+    title: 'Baseball Game Attendees',
+    description:
+      'Ballpark spectator: locked era, fan-type branches (superfan/vendor), and a nested painted-face branch',
+    prompt:
+      'A baseball game spectator with a locked era, where the fan type branches into a superfan gear path and a vendor cart path, and the superfan painted-face branches again to team colors',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <CrowdIcon />
+  },
+  {
+    id: 'punk_fans',
+    title: 'Punk Concert Goers',
+    description:
+      'Basement-show punk: locked scene, look branches (mohawk/spikes), and a nested bleached-hair branch',
+    prompt:
+      'A 1980s punk concert goer with a locked scene, where the look branches into a mohawk color path and a liberty-spikes path, and the bleached mohawk branches again to a roots detail',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <CrowdIcon />
+  },
+  {
+    id: 'diner_patrons',
+    title: 'Diner Patrons',
+    description:
+      '1950s diner patron: locked time of day, patron branches (trucker/teen), and a nested blue-plate branch',
+    prompt:
+      'A 1950s roadside diner patron with a locked time of day, where the patron type branches into a trucker meal path and a teen milkshake path, and the blue-plate special branches again to a gravy detail',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <CharacterIcon />
+  },
+  {
+    id: 'spaghetti_western',
+    title: 'Spaghetti Western Character',
+    description:
+      'Frontier archetype: locked town, archetype branches (bounty hunter/stranger), and a nested revolver branch',
+    prompt:
+      'A spaghetti western character with a locked town setting, where the archetype branches into a bounty-hunter weapon path and a mysterious-stranger poncho path, and twin revolvers branch again to engraving',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <CharacterIcon />
+  },
+  {
+    id: 'medieval_village',
+    title: 'Medieval Village Generator',
+    description:
+      'Village scene: locked era, structure branches (forge/tavern), and a nested swords-and-armor branch',
+    prompt:
+      'A medieval village scene with a locked era, where the focal structure branches into a blacksmith forge path and a tavern sign path, and forging swords and armor branches again to a quality detail',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <SceneIcon />
+  },
+  {
     id: 'empty',
     title: 'Blank Canvas',
     description: 'Start from scratch in the editor with no template applied',
@@ -155,52 +283,57 @@ const templates: Template[] = [
 export const QuickActions: React.FC<QuickActionsProps> = ({
   onSelectTemplate
 }) => {
-  const primaryTemplates = templates.filter(template => template.tier === 'primary');
-  const secondaryTemplates = templates.filter(template => template.tier !== 'primary');
+  const [activeCategory, setActiveCategory] = useState<LaunchCategory | 'all'>(
+    'all'
+  );
+
+  const visibleTemplates =
+    activeCategory === 'all'
+      ? templates
+      : templates.filter(
+          template => CATEGORY_BY_ID[template.id] === activeCategory
+        );
 
   return (
     <div className="quick-actions">
-      <div className="template-group">
-        <div className="template-group-header">
-          <span className="template-group-kicker">Primary Demos</span>
-          <p className="template-group-copy">
-            Start with reusable family graphs that show locked DNA and bounded variation.
-          </p>
-        </div>
-        <div className="template-grid">
-          {primaryTemplates.map(template => (
+      <div
+        className="template-nav"
+        role="tablist"
+        aria-label="Example categories"
+      >
+        {CATEGORY_TABS.map(tab => {
+          const count =
+            tab.id === 'all'
+              ? templates.length
+              : templates.filter(t => CATEGORY_BY_ID[t.id] === tab.id).length;
+          return (
             <button
-              key={template.id}
-              className={`template-card template-card-${template.tier}`}
-              onClick={() => onSelectTemplate(template.id)}
-              title={template.prompt}
-              data-testid={`quick-action-${template.id}`}
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={activeCategory === tab.id}
+              className={`template-nav-chip ${
+                activeCategory === tab.id ? 'active' : ''
+              }`}
+              onClick={() => setActiveCategory(tab.id)}
             >
-              <span className="template-icon">{template.icon}</span>
-              <span className="template-copy">
-                <span className="template-title">{template.title}</span>
-                <span className="template-description">{template.description}</span>
-              </span>
-              {template.badge && (
-                <span className="template-badge">{template.badge}</span>
-              )}
+              {tab.label}
+              <span className="template-nav-count">{count}</span>
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
-      <div className="template-group template-group-secondary">
-        <div className="template-group-header">
-          <span className="template-group-kicker">Advanced And Manual</span>
-          <p className="template-group-copy">
-            Use these when you want branching experiments or a blank PSG canvas.
-          </p>
-        </div>
-        <div className="template-grid template-grid-secondary">
-          {secondaryTemplates.map(template => (
+      <div className="template-grid template-grid-nav">
+        {visibleTemplates.map(template => {
+          const nodeCount = quickStartTemplates[template.id]?.nodes.length;
+          const isBranching = template.badge === 'Branching';
+          return (
             <button
               key={template.id}
-              className={`template-card template-card-${template.tier}`}
+              className={`template-card template-card-${template.tier} ${
+                isBranching ? 'is-branching' : ''
+              }`}
               onClick={() => onSelectTemplate(template.id)}
               title={template.prompt}
               data-testid={`quick-action-${template.id}`}
@@ -208,19 +341,32 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
               <span className="template-icon">{template.icon}</span>
               <span className="template-copy">
                 <span className="template-title">{template.title}</span>
-                <span className="template-description">{template.description}</span>
+                <span className="template-description">
+                  {template.description}
+                </span>
+                <span className="template-meta">
+                  {isBranching && (
+                    <span className="template-tag template-tag-branching">
+                      ⑂ Branching
+                    </span>
+                  )}
+                  {typeof nodeCount === 'number' && (
+                    <span className="template-tag">{nodeCount} nodes</span>
+                  )}
+                  {template.tier === 'manual' && (
+                    <span className="template-tag">Blank</span>
+                  )}
+                </span>
               </span>
-              {template.badge && (
-                <span className="template-badge">{template.badge}</span>
-              )}
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
       <div className="quick-actions-footer">
         <p className="hint">
-          Click a template to launch straight into PSG-first authoring with an archetype-oriented starter graph.
+          Pick a category, then click an example to launch it. Branching
+          examples show locked DNA, multi-branch choices, and nested branches.
         </p>
       </div>
     </div>

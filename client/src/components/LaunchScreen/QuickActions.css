@@ -34,7 +34,7 @@
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #f4c64d;
+  color: #e6a23c;
   font-weight: 700;
 }
 
@@ -80,13 +80,13 @@
 .template-card:hover {
   background: rgba(54, 48, 31, 0.92);
   transform: none;
-  box-shadow: inset 3px 0 0 rgba(248, 200, 74, 0.78);
+  box-shadow: inset 3px 0 0 rgba(230, 162, 60, 0.78);
 }
 
 .template-card-primary {
   background: linear-gradient(
     180deg,
-    rgba(248, 200, 74, 0.1),
+    rgba(230, 162, 60, 0.1),
     rgba(31, 35, 42, 0.82)
   );
 }
@@ -102,9 +102,9 @@
   margin-left: auto;
   padding: 2px 6px;
   border-radius: 3px;
-  background: rgba(248, 200, 74, 0.12);
-  border: 1px solid rgba(248, 200, 74, 0.3);
-  color: #ffe49a;
+  background: rgba(230, 162, 60, 0.12);
+  border: 1px solid rgba(230, 162, 60, 0.3);
+  color: #f0bd6e;
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -122,7 +122,7 @@
   width: 28px;
   height: 28px;
   margin-bottom: 0;
-  color: #f4c64d;
+  color: #e6a23c;
   transition: all 0.2s ease;
 }
 
@@ -135,7 +135,7 @@
 }
 
 .template-card:hover .template-icon {
-  color: #ffd76f;
+  color: #f0bd6e;
   transform: none;
 }
 
@@ -241,4 +241,115 @@
 }
 .template-card:nth-child(6) {
   animation-delay: 0.3s;
+}
+
+/* ===== Category navigator ===== */
+.template-grid-nav {
+  grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
+  gap: 7px;
+  padding-top: 9px;
+}
+
+.template-grid-nav .template-card {
+  align-items: flex-start;
+  min-height: 0;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.template-nav {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 6px 0 8px;
+  background: linear-gradient(
+    180deg,
+    rgba(17, 19, 24, 0.96),
+    rgba(17, 19, 24, 0.86)
+  );
+  backdrop-filter: blur(4px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.template-nav-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(31, 35, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #aeb4be;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.template-nav-chip:hover {
+  color: #f0bd6e;
+  border-color: rgba(230, 162, 60, 0.4);
+}
+
+.template-nav-chip.active {
+  background: rgba(230, 162, 60, 0.16);
+  border-color: rgba(230, 162, 60, 0.65);
+  color: #f0bd6e;
+}
+
+.template-nav-count {
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  font-size: 0.62rem;
+  line-height: 16px;
+  text-align: center;
+}
+
+.template-nav-chip.active .template-nav-count {
+  background: rgba(230, 162, 60, 0.28);
+}
+
+/* Branching cards get a cyan accent so they read as "interactive" examples */
+.template-card.is-branching {
+  box-shadow: inset 3px 0 0 rgba(34, 211, 238, 0.55);
+}
+
+.template-card.is-branching:hover {
+  box-shadow: inset 3px 0 0 rgba(34, 211, 238, 0.9);
+}
+
+.template-card.is-branching .template-icon {
+  color: #5fd6e8;
+}
+
+.template-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 3px;
+}
+
+.template-tag {
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #9aa1ad;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.template-tag-branching {
+  background: rgba(34, 211, 238, 0.14);
+  border-color: rgba(34, 211, 238, 0.4);
+  color: #8be7f4;
 }

@@ -324,7 +324,13 @@
   overflow: visible !important;
   z-index: 1 !important;
   box-sizing: border-box;
-  position: relative;
+  /* React Flow positions every node wrapper `position: absolute`. Overriding it
+     to `relative` put the box back into normal flow, so a child node (rendered
+     as a later DOM sibling with `top: auto`) took its static position *below*
+     the box's full height instead of being placed purely by its transform —
+     the "fragment child renders outside its region box" bug. Keep it absolute;
+     it still establishes the containing block the header/handles need. */
+  position: absolute;
   display: block !important;
 }
 

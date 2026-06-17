@@ -111,11 +111,12 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
     }
   };
 
-  const handleFragmentDragStart = React.useCallback(
-    (
-      event: React.DragEvent<HTMLButtonElement>,
-      fragment: PlannedFragmentSuggestion['fragment']
-    ) => {
+  // Plain function (not useCallback) on purpose: it sits after an early return,
+  // so as a hook it caused "Rendered more hooks than during the previous render".
+  const handleFragmentDragStart = (
+    event: React.DragEvent<HTMLButtonElement>,
+    fragment: PlannedFragmentSuggestion['fragment']
+  ) => {
       const preset = agentFragmentRecordToPreset(fragment) as Preset & {
         path?: string;
         type?: string;
@@ -162,9 +163,7 @@ export const SuggestedFragmentsPanel: React.FC<SuggestedFragmentsPanelProps> = (
       window.setTimeout(() => {
         dragImage.remove();
       }, 0);
-    },
-    []
-  );
+  };
 
   return (
     <section className="suggested-fragments-panel">

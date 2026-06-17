@@ -30,6 +30,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
+import { CanvasContextMenu } from './nodes/CanvasContextMenu';
+import { applyDagreLayout } from '../../utils/layoutAlgorithms';
 
 import { useKonamiCode } from './hooks/useKonamiCode';
 import { useGraphHistory } from './hooks/useGraphHistory';
@@ -59,6 +61,7 @@ import {
   TabbedSidePanel,
   type SidePanelTabDefinition
 } from './TabbedSidePanel';
+import type { DocumentSummary } from './DocumentLibraryPanel';
 import { GraphCommander, type GraphCommanderCommand } from './GraphCommander';
 import { NodeTetris } from './NodeTetris';
 import { NodeToolbar } from './NodeToolbar';
@@ -139,6 +142,8 @@ export interface Epic1GraphEditorProps {
   showAssetLibrary?: boolean;
   assetLibraryPosition?: 'left' | 'right';
   sidePanelTabDefinitions?: SidePanelTabDefinition[];
+  exploreDocuments?: DocumentSummary[];
+  onOpenDocument?: (id: string) => void;
 }
 
 function presetToAgentFragmentRecord(preset: Preset): AgentFragmentRecord {
@@ -216,8 +221,8 @@ const TutorialButton: React.FC = () => {
       onClick={handleClick}
       style={{
         padding: '10px 12px',
-        background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-        border: '1px solid rgba(103, 126, 234, 0.3)',
+        background: 'linear-gradient(135deg, rgba(230, 162, 60, 0.15) 0%, rgba(230, 162, 60, 0.25) 100%)',
+        border: '1px solid rgba(230, 162, 60, 0.3)',
         borderRadius: '6px',
         color: '#e0e0e0',
         cursor: 'pointer',
@@ -255,7 +260,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   previewSeeds,
   showAssetLibrary = true,
   assetLibraryPosition = 'left',
-  sidePanelTabDefinitions
+  sidePanelTabDefinitions,
+  exploreDocuments,
+  onOpenDocument
 }) => {
   // Node types based on asset library visibility
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
@@ -353,6 +360,20 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       minZoom: 0.02,
       maxZoom: 4
     });
+
+  // Graph outline (Graph tab): center on a node and highlight it.
+  const handleFocusNode = useCallback(
+    (nodeId: string) => {
+      panToNode(nodeId);
+      setNodes(currentNodes =>
+        currentNodes.map(node => ({
+          ...node,
+          selected: node.id === nodeId
+        }))
+      );
+    },
+    [panToNode, setNodes]
+  );
 
   // Node interactions and drag-drop helpers
   const { addNodeWithBounce } = useNodeInteractions();
@@ -704,6 +725,55 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   // Layout utilities
   const { neatenSelection, neatenAll, cleanupNodes, cleanupAll } =
     useAutoLayout();
+
+  // Right-click canvas menu (Organize Nodes lives here).
+  const [paneContextMenu, setPaneContextMenu] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  // Organize: run a left-to-right hierarchical layout. Uses the editor's own
+  // setNodes (useAutoLayout's cleanup writes React Flow's internal store, which
+  // this controlled editor immediately overwrites, so it can't be used here).
+  const handleOrganizeNodes = useCallback(() => {
+    setNodes(currentNodes => {
+      if (currentNodes.length === 0) {
+        return currentNodes;
+      }
+      const laidOut = applyDagreLayout(currentNodes, edges, {
+        direction: 'LR',
+        nodeSpacing: 60,
+        rankSpacing: 140
+      });
+      const positionById = new Map(
+        laidOut.map(node => [node.id, node.position])
+      );
+      return currentNodes.map(node => {
+        const position = positionById.get(node.id);
+        // Don't move children of a region box — their position is relative to
+        // the parent and is managed by the box.
+        if (!position || node.parentNode) {
+          return node;
+        }
+        return { ...node, position };
+      });
+    });
+    setTimeout(() => {
+      reactFlowInstance?.fitView({ padding: 0.15, duration: 400 });
+    }, 60);
+  }, [edges, setNodes, reactFlowInstance]);
+
+  // Expose Organize Nodes so the client-built View menu can invoke it (the
+  // layout function lives here; the menu lives across the client boundary).
+  useEffect(() => {
+    const win = window as typeof window & {
+      __EPIC1_ORGANIZE_NODES__?: (() => void) | null;
+    };
+    win.__EPIC1_ORGANIZE_NODES__ = handleOrganizeNodes;
+    return () => {
+      win.__EPIC1_ORGANIZE_NODES__ = null;
+    };
+  }, [handleOrganizeNodes]);
 
   // Micro interactions
   const { interactions, trigger } = useMicroInteractions();
@@ -1936,6 +2006,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             showAssets={true}
             showPreview={showPreview}
             tabDefinitions={sidePanelTabDefinitions}
+            exploreDocuments={exploreDocuments}
+            onOpenDocument={onOpenDocument}
+            onFocusNode={handleFocusNode}
             selectedNode={nodes.find(n => n.id === selectedNodeId)}
             nodes={nodes}
             edges={edges}
@@ -2019,6 +2092,10 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               onInit={onInit}
               onNodeClick={handleNodeClick}
               onPaneClick={handlePaneClick}
+              onPaneContextMenu={event => {
+                event.preventDefault();
+                setPaneContextMenu({ x: event.clientX, y: event.clientY });
+              }}
               onNodesDelete={onNodesDelete}
               onEdgesDelete={onEdgesDelete}
               onDragOver={onDragOver}
@@ -2088,6 +2165,31 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                 <MicroInteraction key={interaction.id} {...interaction} />
               ))}
             </ReactFlow>
+
+            {paneContextMenu && (
+              <CanvasContextMenu
+                position={paneContextMenu}
+                onClose={() => setPaneContextMenu(null)}
+                onLayoutCleanup={handleOrganizeNodes}
+                onAddNote={() => {
+                  const flow = reactFlowInstance
+                    ? reactFlowInstance.screenToFlowPosition({
+                        x: paneContextMenu.x,
+                        y: paneContextMenu.y
+                      })
+                    : { x: 0, y: 0 };
+                  setNodes(current => [
+                    ...current,
+                    {
+                      id: `note-${Date.now()}`,
+                      type: 'postItNote',
+                      position: flow,
+                      data: { nodeType: 'postItNote', text: '' }
+                    } as unknown as Node<EditableNodeData>
+                  ]);
+                }}
+              />
+            )}
           </SafeReactFlowWrapper>
 
           {/* NodePalette - positioned outside ReactFlow */}
@@ -2112,8 +2214,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                     }}
                     style={{
                       padding: '10px 12px',
-                      background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-                      border: '1px solid rgba(103, 126, 234, 0.3)',
+                      background: 'linear-gradient(135deg, rgba(230, 162, 60, 0.15) 0%, rgba(230, 162, 60, 0.25) 100%)',
+                      border: '1px solid rgba(230, 162, 60, 0.3)',
                       borderRadius: '6px',
                       color: '#e0e0e0',
                       cursor: 'pointer',
@@ -2141,8 +2243,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                     }}
                     style={{
                       padding: '10px 12px',
-                      background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-                      border: '1px solid rgba(103, 126, 234, 0.3)',
+                      background: 'linear-gradient(135deg, rgba(230, 162, 60, 0.15) 0%, rgba(230, 162, 60, 0.25) 100%)',
+                      border: '1px solid rgba(230, 162, 60, 0.3)',
                       borderRadius: '6px',
                       color: '#e0e0e0',
                       cursor: 'pointer',
@@ -2168,8 +2270,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                   onClick={() => setIsPromptWizardOpen(true)}
                   style={{
                     padding: '10px 12px',
-                    background: 'linear-gradient(135deg, rgba(103, 126, 234, 0.15) 0%, rgba(103, 126, 234, 0.25) 100%)',
-                    border: '1px solid rgba(103, 126, 234, 0.3)',
+                    background: 'linear-gradient(135deg, rgba(230, 162, 60, 0.15) 0%, rgba(230, 162, 60, 0.25) 100%)',
+                    border: '1px solid rgba(230, 162, 60, 0.3)',
                     borderRadius: '6px',
                     color: '#e0e0e0',
                     cursor: 'pointer',

@@ -166,9 +166,20 @@
   transform: translateX(-50%) !important;
 }
 
-.react-flow__handle-left.epic1-handle {
+.react-flow__handle-left.epic1-handle:not(.concat-input) {
   left: -6px !important;
   top: 50% !important;
+  right: auto !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Concat inputs are stacked one-per-row; their vertical position comes from the
+   inline `--handle-top` CSS var (33% / 66% / …) so they don't all pile up at 50%. */
+.epic1-handle.concat-input {
+  top: var(--handle-top, 50%) !important;
+}
+.react-flow__handle-left.epic1-handle.concat-input {
+  left: -6px !important;
   right: auto !important;
   transform: translateY(-50%) !important;
 }
@@ -296,7 +307,7 @@
 }
 
 .epic1-editable-node.weighted-choice {
-  border-color: #475569; /* Dark blue-gray for normal/deselected state */
+  border-color: #4a4a4a; /* Dark blue-gray for normal/deselected state */
   border-radius: 12px; /* Maintain rounded corners */
 }
 

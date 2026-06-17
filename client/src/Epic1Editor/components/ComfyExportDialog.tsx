@@ -126,7 +126,7 @@ const styles = {
     fontWeight: 700
   },
   panel: {
-    background: '#0f172a',
+    background: '#151515',
     color: '#e5eefb',
     borderRadius: '14px',
     padding: '16px',
@@ -146,7 +146,7 @@ const styles = {
     borderRadius: '12px',
     background: '#f8fafc',
     border: '1px solid #e2e8f0',
-    color: '#475569',
+    color: '#4a4a4a',
     fontSize: '13px',
     lineHeight: 1.5
   },
@@ -196,7 +196,7 @@ const styles = {
   },
   loading: {
     fontSize: '14px',
-    color: '#475569'
+    color: '#4a4a4a'
   },
   error: {
     padding: '12px 14px',

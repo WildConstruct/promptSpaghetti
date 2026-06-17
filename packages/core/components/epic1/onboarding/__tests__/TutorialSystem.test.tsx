@@ -50,7 +50,7 @@ describe('Tutorial system behaviour', () => {
 
     fireEvent.click(screen.getByTestId('start'));
 
-    expect(screen.getByText('Start With Structure')).toBeInTheDocument();
+    expect(screen.getByText('Start with structure')).toBeInTheDocument();
     expect(screen.getByText('Step 1 of 8')).toBeInTheDocument();
   });
 
@@ -136,13 +136,13 @@ describe('Tutorial system behaviour', () => {
     fireEvent.click(screen.getByTestId('next'));
 
     await waitFor(() => {
-      expect(screen.getByText(/Paste Your Prompt/)).toBeInTheDocument();
+      expect(screen.getByText(/Paste your prompt/)).toBeInTheDocument();
     });
 
     fireEvent.change(screen.getByPlaceholderText(/paste your prompt here/i), {
       target: { value: 'A {driver|mechanic} watches the Indy 500 from the grandstand' }
     });
-    fireEvent.click(screen.getByText('Create Nodes'));
+    fireEvent.click(screen.getByText('Create nodes'));
 
     await waitFor(() => {
       expect(promptListener).toHaveBeenCalledTimes(1);

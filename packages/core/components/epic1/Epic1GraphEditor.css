@@ -56,7 +56,7 @@
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px)
       0 0 / 20% 100%,
-    radial-gradient(circle at 42% 18%, rgba(248, 200, 74, 0.055), transparent 28%),
+    radial-gradient(circle at 42% 18%, rgba(230, 162, 60, 0.055), transparent 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 34%);
 }
 
@@ -228,9 +228,9 @@
 
 /* Ensure selected state is clearly visible */
 .epic1-graph-editor .react-flow__edge.selected .react-flow__edge-path {
-  stroke: #f8c84a !important;
+  stroke: #e6a23c !important;
   stroke-width: 3px !important;
-  filter: drop-shadow(0 0 5px rgba(248, 200, 74, 0.44));
+  filter: drop-shadow(0 0 5px rgba(230, 162, 60, 0.44));
 }
 
 /* Controls panel */
@@ -249,7 +249,7 @@
 
 .epic1-execute-button {
   padding: 7px 12px;
-  background: linear-gradient(180deg, #f8c84a, #d99a18);
+  background: linear-gradient(180deg, #e6a23c, #d99a18);
   color: #15130d;
   border: 1px solid rgba(255, 223, 130, 0.38);
   border-radius: 2px;
@@ -262,7 +262,7 @@
 .epic1-execute-button:hover:not(:disabled) {
   background: linear-gradient(180deg, #ffd867, #e6a923);
   transform: none;
-  box-shadow: 0 6px 16px rgba(248, 200, 74, 0.2);
+  box-shadow: 0 6px 16px rgba(230, 162, 60, 0.2);
 }
 
 .epic1-execute-button:disabled {
@@ -289,8 +289,8 @@
 
 .epic1-preview-toggle:hover {
   background: rgba(48, 52, 60, 0.98);
-  color: #ffe49a;
-  border-color: rgba(248, 200, 74, 0.38);
+  color: #f0bd6e;
+  border-color: rgba(230, 162, 60, 0.38);
   transform: none;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.26);
 }
@@ -320,7 +320,7 @@
 
 .panel-controls .execute-button {
   border: 1px solid rgba(255, 223, 130, 0.38);
-  background: linear-gradient(180deg, #f8c84a, #d99a18);
+  background: linear-gradient(180deg, #e6a23c, #d99a18);
   color: #15130d;
 }
 
@@ -337,8 +337,8 @@
 }
 
 .panel-controls .preview-button:hover {
-  color: #ffe49a;
-  border-color: rgba(248, 200, 74, 0.38);
+  color: #f0bd6e;
+  border-color: rgba(230, 162, 60, 0.38);
 }
 
 /* Instructions panel */
@@ -356,7 +356,7 @@
 /* MiniMap styling */
 .epic1-graph-editor .react-flow__minimap {
   background: rgba(13, 16, 20, 0.9);
-  border: 1px solid rgba(248, 200, 74, 0.32);
+  border: 1px solid rgba(230, 162, 60, 0.32);
   border-radius: 8px;
   overflow: hidden;
   /* Force minimap to be visible even in demo mode */

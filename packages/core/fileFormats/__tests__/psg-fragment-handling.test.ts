@@ -170,7 +170,7 @@ describe('PSG Fragment Handling', () => {
         result.graph.edges.find((edge: any) => edge.id === id);
 
       expect(findEdge('edge-choice-main')).toMatchObject({
-        sourceHandle: 'main',
+        sourceHandle: 'source',
         targetHandle: 'input1'
       });
       expect(findEdge('edge-choice-branch')).toMatchObject({

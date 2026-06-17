@@ -13,9 +13,9 @@ import type { PreviewEngine } from './preview/PreviewEngine';
 import type { Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import type { EditableNodeData } from './nodes';
-import AssetSearchPanel from '../AssetBrowser/AssetSearchPanel';
-import RelationshipView from './components/RelationshipView';
 import { ComponentLibraryPanel } from './ComponentLibraryPanel';
+import { DocumentLibraryPanel, type DocumentSummary } from './DocumentLibraryPanel';
+import { GraphOutlinePanel } from './GraphOutlinePanel';
 import './TabbedSidePanel.css';
 import type {
   ComponentDefinition,
@@ -60,6 +60,12 @@ export interface TabbedSidePanelProps {
   onDetachSelectedComponent?: () => void;
   onRefreshSelectedComponent?: () => void;
   onRefreshOutdatedComponents?: () => void;
+  /** Full PSG-document templates surfaced in the Explore tab. */
+  exploreDocuments?: DocumentSummary[];
+  /** Open a full PSG document by id (host handles confirm-if-dirty + load). */
+  onOpenDocument?: (id: string) => void;
+  /** Select + center the editor on a node (Graph outline tab). */
+  onFocusNode?: (id: string) => void;
 }
 
 type TabType = SidePanelTabId | null;
@@ -96,12 +102,12 @@ const createDefaultTabDefinitions = (
     {
       id: 'search',
       label: 'Explore',
-      title: 'Advanced search and exploration',
-      ariaLabel: 'Advanced search and exploration',
+      title: 'Open a full PSG document',
+      ariaLabel: 'Explore full PSG documents',
       tier: 'advanced',
       availability: 'available',
       helperText:
-        'Search is exploratory support tooling, not part of the primary archetype-first walkthrough.'
+        'Explore browses full PSG-document templates — the same examples as the launch screen — and opens them into the editor.'
     },
     {
       id: 'relationships',
@@ -176,7 +182,10 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   onSaveSelectionAsComponent,
   onDetachSelectedComponent,
   onRefreshSelectedComponent,
-  onRefreshOutdatedComponents
+  onRefreshOutdatedComponents,
+  exploreDocuments = [],
+  onOpenDocument,
+  onFocusNode
 }: TabbedSidePanelProps) => {
   const defaultWidth = 520;
   const minWidth = 360;
@@ -242,13 +251,6 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
     (preset: Preset) => {
       console.log('[TabbedSidePanel] Forwarding preset insert', preset?.id);
       onInsert?.(preset);
-    },
-    [onInsert]
-  );
-
-  const handleAssetInsert = useCallback(
-    (asset: Asset) => {
-      onInsert?.(asset);
     },
     [onInsert]
   );
@@ -348,11 +350,9 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         )}
         {activeTab === 'search' && (
           <div className="assets-container">
-            <AssetSearchPanel
-              assets={[]}
-              onInsert={handleAssetInsert}
-              graphContext={selectedNode?.data || undefined}
-              selectedNode={selectedNode as Node<{ label?: string }> | null}
+            <DocumentLibraryPanel
+              documents={exploreDocuments}
+              onOpenDocument={onOpenDocument}
             />
           </div>
         )}
@@ -372,7 +372,11 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         )}
         {activeTab === 'relationships' && (
           <div className="assets-container">
-            <RelationshipView />
+            <GraphOutlinePanel
+              nodes={nodes}
+              edges={edges}
+              onFocusNode={onFocusNode}
+            />
           </div>
         )}
         {activeTab === 'preview' && hasPreviewTab && previewEngine && (

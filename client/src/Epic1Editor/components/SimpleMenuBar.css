@@ -116,8 +116,8 @@
 }
 
 .menu-item:hover {
-  background: rgba(248, 200, 74, 0.12);
-  color: #ffe49a;
+  background: rgba(230, 162, 60, 0.12);
+  color: #f0bd6e;
 }
 
 .menu-item.advanced {
@@ -209,14 +209,14 @@
 }
 
 .menu-command-button:hover:not(:disabled) {
-  border-color: rgba(248, 200, 74, 0.42);
+  border-color: rgba(230, 162, 60, 0.42);
   background: rgba(43, 39, 27, 0.92);
   color: #ffe8a8;
 }
 
 .menu-command-button.primary {
-  border-color: rgba(248, 200, 74, 0.56);
-  background: linear-gradient(180deg, #f8c84a, #d99a18);
+  border-color: rgba(230, 162, 60, 0.56);
+  background: linear-gradient(180deg, #e6a23c, #d99a18);
   color: #15130d;
   box-shadow: 0 0 0 1px rgba(255, 224, 139, 0.15);
 }

@@ -86,11 +86,11 @@ export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
       className={`epic1-handle target concat-input concat-input-${i + 1}`}
       style={{
         position: 'absolute',
-        top: `${pct}%`,
+        ['--handle-top' as string]: `${pct}%`,
         left: '-5px',
         transform: 'translateY(-50%)',
         zIndex: 1000
-      }}
+      } as React.CSSProperties}
     />
   ));
 

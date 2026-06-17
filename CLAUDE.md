@@ -133,12 +133,47 @@ branch over the default branch.
 - `nodeSchemas.ts` — UI-focused schemas for form generation
 - `validation.ts` — connection validation (cycles, invalid edges)
 
-### UI components
-- `GraphEditor.tsx` — main React Flow editor (modular; autosave + validation)
-- Inspector system: `packages/core/components/Inspector/` with editors under
-  `components/Inspector/editors/` (`BaseNodeEditor`, `WeightedChoiceEditor`, …)
-- `PreviewModal.tsx` — multi-seed execution results
-- State: `stores/graphStore.ts` (Zustand)
+### UI components & editor surfaces
+- **Main editor:** `packages/core/components/epic1/Epic1GraphEditor.tsx` (the
+  real entry point — modular React Flow editor; autosave + validation). The
+  client wraps it in `client/src/Epic1Editor/Epic1EditorContainer-refactored.tsx`.
+- **Nodes:** `packages/core/components/epic1/nodes/` — `TextBlockNode`,
+  `EnhancedBranchingNode` (the `weightedChoice` React Flow type), `ConcatNode`,
+  `VariableNode`, `OutputNode`, `PostItNote`, `EnhancedBoundingBox`. Registry:
+  `nodes/index.ts` (`epic1NodeTypes`). Inline editors via `BaseEditableNode`.
+- **Right side panel:** `packages/core/components/epic1/TabbedSidePanel.tsx` with
+  four tabs (definitions in `client/src/Epic1Editor/editorSurfacePolicy.ts`):
+  - **Library** (`assets`) — fragment suggestions + asset/preset browser.
+  - **Linked** (`components`) — `ComponentLibraryPanel`; save a selection as a
+    reusable linked component.
+  - **Explore** (`search`) — `DocumentLibraryPanel`; browses full PSG-document
+    templates (same set as the splash) and opens them with a confirm-if-dirty load.
+  - **Graph** (`relationships`) — `GraphOutlinePanel`; outline of the current
+    document by node type, click-to-focus.
+- **Preview:** `packages/core/components/PreviewTray/PreviewTray.tsx` — bottom
+  tray, multi-seed deterministic results (NOT a `PreviewModal`).
+- **Prompt Wizard:** `packages/core/components/epic1/components/PromptWizard.tsx`
+  wraps `client/src/components/LaunchScreen/PromptDissector.tsx` (the parse-to-graph
+  toolbar). Opened from the left-rail "Wizard" button.
+- **Onboarding/tutorial:** `packages/core/components/epic1/onboarding/` —
+  `TutorialOverlay` + `TutorialContext` + `tutorialModel` (active system);
+  `PromptPasteDialog` is the tutorial's paste step. Triggered by the
+  `epic1:startTutorial` window event. `InteractiveTutorial.tsx` is orphaned.
+- **Launch screen & examples:** `client/src/components/LaunchScreen/` +
+  `client/src/templates/quickStartTemplates.ts` (executable example graphs) with
+  display metadata in `templateCatalog.ts`. See `docs/examples-catalog.md`.
+- **Card Normalization** (standalone route `/#/card-normalization`, mounted in
+  `client/src/App.tsx`): `client/src/CardNormalization/` (UI) on the
+  `packages/core/services/cardNormalization` model. Calibrates crowd-card scale
+  via the head as a known-size ruler; feeds scene composition. See
+  `docs/card-normalization-plan.md`.
+- **State:** `stores/graphStore.ts` (Zustand).
+
+### Branding
+Wild Construct / Signal Lab palette: gold `#e6a23c` (light `#f0bd6e`, text-on-gold
+`#1a1206`), neutral charcoal backgrounds (no blue tint), near-white text `#f1f6f9`,
+uppercase 3px-tracked kicker. Splash carries a "Wild Construct" kicker. Don't
+reintroduce the old purple/indigo accents or blue-tinted darks.
 
 ## API surface
 
@@ -183,4 +218,9 @@ parked-implementations doc for the captured algorithms).
 ## Reference docs
 - [`docs/parked-implementations/README.md`](docs/parked-implementations/README.md) — parked advanced node tier + parked "delightful" UX layer
 - [`docs/forensic-cleanup-ledger.md`](docs/forensic-cleanup-ledger.md) — cleanup history and tiered actions
+- [`docs/examples-catalog.md`](docs/examples-catalog.md) — example library + branching / branching-on-branching wiring (the `branch-N` handle model, locked options)
+- [`docs/card-normalization-plan.md`](docs/card-normalization-plan.md) — the Card Normalization feature (data model, milestones, scene-composition payoff)
+- [`docs/node-ux-audit.md`](docs/node-ux-audit.md) — per-node usability audit + cross-cutting fixes
+- [`docs/sidebar-tabs-investigation.md`](docs/sidebar-tabs-investigation.md) — what the Library / Linked / Explore / Graph tabs do
 - `packages/core/graphSchema.ts` — authoritative executable node vocabulary
+- Memory: Wild Construct brand tokens + Card Normalization purpose are saved in `memory/`.

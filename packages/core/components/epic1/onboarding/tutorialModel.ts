@@ -50,18 +50,18 @@ export const TUTORIAL_ANCHOR_SELECTORS: Record<TutorialAnchorId, string[]> = {
 export const tutorialSteps: TutorialStepDefinition[] = [
   {
     id: TUTORIAL_STEP_IDS.WELCOME,
-    title: 'Start With Structure',
+    title: 'Start with structure',
     description:
-      'Prompt Spaghetti turns a prompt into a visual system. You will open the wizard, create a small graph, and preview the result in a few steps.',
+      'Prompt Spaghetti turns a prompt into a visual system. In a few steps you will open the wizard, create a small graph, and preview the result.',
     action: 'observe',
     position: 'center',
     spotlight: false
   },
   {
     id: TUTORIAL_STEP_IDS.CANVAS,
-    title: 'This Is Your Working Surface',
+    title: 'Your working surface',
     description:
-      'The canvas is where prompt logic becomes visible. Pan, zoom, and arrange nodes here as your graph grows.',
+      'The canvas is where prompt logic becomes visible. You pan, zoom, and arrange nodes here as your graph grows.',
     action: 'observe',
     position: 'top-right',
     spotlight: false,
@@ -69,31 +69,31 @@ export const tutorialSteps: TutorialStepDefinition[] = [
   },
   {
     id: TUTORIAL_STEP_IDS.OPEN_WIZARD,
-    title: 'Open The Wizard',
+    title: 'The wizard turns words into a graph',
     description:
-      'Use the Wizard to turn plain language into a first-pass graph. This is the fastest way to begin.',
-    action: 'click',
-    hint: 'Start with a sentence that has a few choices or alternatives.',
+      'The wizard parses plain language into a first-pass graph — the fastest way to begin. Choices written as {a|b|c} become weighted-choice branches.',
+    action: 'observe',
+    hint: 'Next, you will paste an example prompt with a few alternatives.',
     position: 'right',
     spotlight: true,
     anchorId: 'wizard-button'
   },
   {
     id: TUTORIAL_STEP_IDS.ENTER_PROMPT,
-    title: 'Compose A Prompt',
+    title: 'Compose a prompt',
     description:
-      'Enter a short prompt and let the parser segment it into nodes.',
+      'We pre-filled an example. Press Create nodes to parse it into a graph — or edit it first.',
     action: 'paste',
-    hint: 'Example: A {brave|cunning|wise} hero enters the {ancient ruins|dark forest}.',
+    hint: 'Words inside {a|b|c} become weighted-choice branches.',
     position: 'top',
     spotlight: false,
     anchorId: 'wizard-modal'
   },
   {
     id: TUTORIAL_STEP_IDS.NODES_CREATED,
-    title: 'Read The Graph',
+    title: 'Read the graph',
     description:
-      'Once the graph appears, notice how choices, text, and flow become explicit. This is the core editing model of the app.',
+      'See how choices, text, and flow become explicit nodes. This is the core editing model — every branch and join is visible and editable.',
     action: 'observe',
     position: 'right',
     spotlight: true,
@@ -101,30 +101,30 @@ export const tutorialSteps: TutorialStepDefinition[] = [
   },
   {
     id: TUTORIAL_STEP_IDS.NODE_PALETTE,
-    title: 'Add Nodes Manually',
+    title: 'Add nodes by hand',
     description:
-      'The node palette is the manual entry point. Drag from here when you want to refine the structure beyond the initial parse.',
-    action: 'drag',
-    hint: 'Weighted Choice is a good next node to try.',
+      'The node palette is the manual entry point. Drag from here to refine the structure beyond the initial parse.',
+    action: 'observe',
+    hint: 'Weighted Choice is a good next node to try — it is how branches are made.',
     position: 'right',
     spotlight: true,
     anchorId: 'node-palette'
   },
   {
     id: TUTORIAL_STEP_IDS.PREVIEW_UPDATE,
-    title: 'Preview The Output',
+    title: 'Preview the output',
     description:
-      'Use Preview to test the graph and inspect the generated variations. This closes the authoring loop.',
-    action: 'click',
+      'Preview runs the graph and shows the generated variations per seed. Same graph and seed always produce the same prompt — this closes the authoring loop.',
+    action: 'observe',
     position: 'left',
     spotlight: true,
     anchorId: 'preview-button'
   },
   {
     id: TUTORIAL_STEP_IDS.COMPLETION,
-    title: 'You Have The Core Loop',
+    title: 'You have the core loop',
     description:
-      'You can now parse, inspect, refine, and preview. From here, the editor should feel discoverable rather than overwhelming.',
+      'You can now parse, inspect, refine, and preview. From here the editor should feel discoverable rather than overwhelming.',
     action: 'observe',
     position: 'center',
     spotlight: false

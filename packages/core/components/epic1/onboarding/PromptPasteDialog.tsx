@@ -19,15 +19,28 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
 }) => {
   const [prompt, setPrompt] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  
-  // Example prompt for tutorial
-  const examplePrompt = 'A {brave|cunning|wise} {knight|wizard|rogue} ventures into the {dark forest|ancient ruins|dragon\'s lair}';
+
+  // Example prompt for the tutorial — themed to the app's racegoer examples and
+  // showing how "{a|b|c}" alternatives become weighted-choice branches.
+  const examplePrompt =
+    "A {weathered|grinning|stoic} 1960s {racegoer|mechanic|vendor} in a {flat cap|straw boater|fedora}, watching from the grandstand";
+
+  const isTutorial = Boolean(tutorialStep);
 
   useEffect(() => {
-    if (isOpen && textareaRef.current) {
-      textareaRef.current.focus();
+    if (isOpen) {
+      // Pre-fill the example during the tutorial so a learner has something to run.
+      if (isTutorial) {
+        setPrompt(examplePrompt);
+      }
+      textareaRef.current?.focus();
     }
-  }, [isOpen]);
+  }, [isOpen, isTutorial]);
+
+  const handleUseExample = () => {
+    setPrompt(examplePrompt);
+    textareaRef.current?.focus();
+  };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
@@ -40,23 +53,6 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
     const trimmed = prompt.trim();
     if (trimmed) {
       onPaste(trimmed);
-    }
-  };
-
-  const handleCopyExample = async () => {
-    try {
-      await navigator.clipboard.writeText(examplePrompt);
-    } catch (error) {
-      console.warn('[PromptPasteDialog] Failed to copy example prompt', error);
-    }
-
-    // Show a temporary message
-    const button = document.getElementById('copy-button');
-    if (button) {
-      button.textContent = 'Copied!';
-      setTimeout(() => {
-        button.textContent = 'Copy Example';
-      }, 2000);
     }
   };
 
@@ -90,62 +86,63 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
       animation: 'fadeIn 0.3s ease'
     }} onClick={handleOverlayClick}>
       <div style={{
-        background: 'white',
+        background: '#1f1f1f',
+        border: '1px solid rgba(255, 255, 255, 0.09)',
         borderRadius: '12px',
-        padding: '32px',
+        padding: '28px',
         maxWidth: '600px',
         width: '90%',
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.45)',
         animation: 'slideUp 0.3s ease'
       }}>
         <h2 style={{
           margin: '0 0 16px 0',
-          fontSize: '24px',
-          fontWeight: '600',
-          color: '#1a202c'
+          fontSize: '22px',
+          fontWeight: 600,
+          color: '#e6a23c'
         }}>
-          🍝 Paste Your Prompt
+          Paste your prompt
         </h2>
-        
-        {tutorialStep === 'paste-prompt' && (
+
+        {isTutorial && (
           <div style={{
-            background: '#f0f9ff',
-            border: '1px solid #3182ce',
+            background: 'rgba(230, 162, 60, 0.07)',
+            border: '1px solid rgba(230, 162, 60, 0.28)',
             borderRadius: '8px',
-            padding: '12px',
-            marginBottom: '20px'
+            padding: '12px 14px',
+            marginBottom: '18px'
           }}>
-            <p style={{ margin: '0 0 12px 0', color: '#2c5282' }}>
-              <strong>Tutorial Tip:</strong> Copy the example below, then paste it in the text area!
+            <p style={{ margin: '0 0 10px 0', color: '#9aa1ad', fontSize: '13px', lineHeight: 1.5 }}>
+              We pre-filled an example below. Words in <code style={{ color: '#f0bd6e' }}>{'{a|b|c}'}</code> become weighted-choice branches. Edit it or just press Create nodes.
             </p>
             <div style={{
-              background: '#e6fffa',
-              border: '1px solid #38b2ac',
-              borderRadius: '4px',
-              padding: '12px',
+              background: '#111111',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '6px',
+              padding: '10px 12px',
               fontFamily: 'monospace',
-              fontSize: '14px',
-              marginBottom: '12px'
+              fontSize: '12.5px',
+              color: '#cfd3da',
+              marginBottom: '10px'
             }}>
               {examplePrompt}
             </div>
             <button
               id="copy-button"
-              onClick={handleCopyExample}
+              onClick={handleUseExample}
               style={{
-                background: '#3182ce',
-                color: 'white',
-                border: 'none',
+                background: '#262626',
+                color: '#dfe2e8',
+                border: '1px solid rgba(255, 255, 255, 0.14)',
                 borderRadius: '6px',
-                padding: '8px 16px',
-                fontSize: '14px',
-                cursor: 'pointer',
-                transition: 'background 0.2s'
+                padding: '7px 14px',
+                fontSize: '13px',
+                cursor: 'pointer'
               }}
-              onMouseOver={(e) => e.currentTarget.style.background = '#2563eb'}
-              onMouseOut={(e) => e.currentTarget.style.background = '#3182ce'}
+              onMouseOver={(e) => (e.currentTarget.style.background = '#2e2e2e')}
+              onMouseOut={(e) => (e.currentTarget.style.background = '#262626')}
             >
-              Copy Example
+              Use example
             </button>
           </div>
         )}
@@ -154,9 +151,9 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
           <label style={{
             display: 'block',
             marginBottom: '8px',
-            fontSize: '14px',
-            fontWeight: '500',
-            color: '#4a5568'
+            fontSize: '13px',
+            fontWeight: 500,
+            color: '#9aa1ad'
           }}>
             Paste or type your prompt here:
           </label>
@@ -171,16 +168,18 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
               width: '100%',
               minHeight: '120px',
               padding: '12px',
-              border: '2px solid #e2e8f0',
+              background: '#111111',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
               borderRadius: '8px',
-              fontSize: '16px',
+              fontSize: '15px',
+              color: '#e7e9ee',
               fontFamily: 'inherit',
               resize: 'vertical',
               outline: 'none',
               transition: 'border-color 0.2s'
             }}
-            onFocus={(e) => e.currentTarget.style.borderColor = '#3182ce'}
-            onBlur={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+            onFocus={(e) => (e.currentTarget.style.borderColor = '#e6a23c')}
+            onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)')}
           />
         </div>
 
@@ -192,18 +191,17 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
           <button
             onClick={onClose}
             style={{
-              padding: '10px 20px',
-              background: '#e2e8f0',
-              color: '#4a5568',
-              border: 'none',
+              padding: '9px 18px',
+              background: '#262626',
+              color: '#dfe2e8',
+              border: '1px solid rgba(255, 255, 255, 0.14)',
               borderRadius: '6px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'background 0.2s'
+              fontSize: '15px',
+              fontWeight: 500,
+              cursor: 'pointer'
             }}
-            onMouseOver={(e) => e.currentTarget.style.background = '#cbd5e0'}
-            onMouseOut={(e) => e.currentTarget.style.background = '#e2e8f0'}
+            onMouseOver={(e) => (e.currentTarget.style.background = '#2e2e2e')}
+            onMouseOut={(e) => (e.currentTarget.style.background = '#262626')}
           >
             Cancel
           </button>
@@ -211,28 +209,27 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
             onClick={handleSubmit}
             disabled={!prompt.trim()}
             style={{
-              padding: '10px 20px',
-              background: prompt.trim() ? '#3182ce' : '#cbd5e0',
-              color: 'white',
+              padding: '9px 18px',
+              background: prompt.trim() ? '#e6a23c' : '#3c3c3c',
+              color: prompt.trim() ? '#1a1206' : '#8b919c',
               border: 'none',
               borderRadius: '6px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: prompt.trim() ? 'pointer' : 'not-allowed',
-              transition: 'background 0.2s'
+              fontSize: '15px',
+              fontWeight: 500,
+              cursor: prompt.trim() ? 'pointer' : 'not-allowed'
             }}
             onMouseOver={(e) => {
               if (prompt.trim()) {
-                e.currentTarget.style.background = '#2563eb';
+                e.currentTarget.style.background = '#f0bd6e';
               }
             }}
             onMouseOut={(e) => {
               if (prompt.trim()) {
-                e.currentTarget.style.background = '#3182ce';
+                e.currentTarget.style.background = '#e6a23c';
               }
             }}
           >
-            Create Nodes
+            Create nodes
           </button>
         </div>
       </div>

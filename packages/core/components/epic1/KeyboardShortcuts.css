@@ -101,7 +101,7 @@
 .epic1-help-close {
   margin-top: 24px;
   padding: 10px 20px;
-  background: #f4c64d;
+  background: #e6a23c;
   color: #15130d;
   border: none;
   border-radius: 6px;
@@ -113,7 +113,7 @@
 }
 
 .epic1-help-close:hover {
-  background: #ffd76f;
+  background: #f0bd6e;
   transform: translateY(-1px);
 }
 
@@ -146,7 +146,7 @@
 
 /* Focus indicator for keyboard navigation */
 .react-flow__node.selected {
-  outline: 2px solid #f4c64d !important;
+  outline: 2px solid #e6a23c !important;
   outline-offset: 2px;
 }
 
@@ -217,7 +217,7 @@
 
 .epic1-node-navigation-breadcrumb .current {
   font-weight: 600;
-  color: #f4c64d;
+  color: #e6a23c;
 }
 
 /* Removed smooth pan/zoom transitions to fix panning easing issue */

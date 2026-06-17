@@ -60,8 +60,11 @@ interface EditorSurfacePolicyActions {
   onCopy?: () => void;
   onPaste?: () => void;
   onToggleAssetLibrary?: () => void;
+  onOrganizeNodes?: () => void;
   onReportBug?: () => void;
   onChangelog?: () => void;
+  onGettingStarted?: () => void;
+  onUserGuide?: () => void;
 }
 
 interface EditorSurfacePolicyArgs {
@@ -238,7 +241,7 @@ export const buildEditorSurfacePolicy = ({
     'tab.explore': createSurface(
       'tab.explore',
       'Explore',
-      'Advanced search and exploration support, not the primary authoring loop.',
+      'Browse and open full PSG-document templates — the same examples as the launch screen — without leaving the editor.',
       'advanced',
       'available',
       'tab'
@@ -246,7 +249,7 @@ export const buildEditorSurfacePolicy = ({
     'tab.graph': createSurface(
       'tab.graph',
       'Graph',
-      'Advanced relationship tooling for inspecting graph structure.',
+      'Outline of the current document — every node grouped by type; click one to jump to it on the canvas.',
       'advanced',
       'available',
       'tab'
@@ -447,6 +450,17 @@ export const buildEditorSurfacePolicy = ({
   const viewItems: MenuSectionModel['items'] = [];
   pushAction(
     viewItems,
+    actions.onOrganizeNodes
+      ? {
+          type: 'action',
+          id: 'organizeNodes',
+          label: 'Organize Nodes',
+          onClick: actions.onOrganizeNodes
+        }
+      : null
+  );
+  pushAction(
+    viewItems,
     actions.onToggleAssetLibrary
       ? {
           type: 'action',
@@ -459,6 +473,28 @@ export const buildEditorSurfacePolicy = ({
   );
 
   const helpItems: MenuSectionModel['items'] = [];
+  pushAction(
+    helpItems,
+    actions.onGettingStarted
+      ? {
+          type: 'action',
+          id: 'gettingStarted',
+          label: 'Getting started',
+          onClick: actions.onGettingStarted
+        }
+      : null
+  );
+  pushAction(
+    helpItems,
+    actions.onUserGuide
+      ? {
+          type: 'action',
+          id: 'userGuide',
+          label: 'User guide',
+          onClick: actions.onUserGuide
+        }
+      : null
+  );
   pushAction(
     helpItems,
     actions.onReportBug

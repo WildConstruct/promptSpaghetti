@@ -73,21 +73,21 @@
 }
 
 .segment-handle-start:hover {
-  border-left-color: #f4c64d;
+  border-left-color: #e6a23c;
 }
 
 .segment-handle-end:hover {
-  border-right-color: #f4c64d;
+  border-right-color: #e6a23c;
 }
 
 /* Active dragging state */
 .segment-marker.dragging .segment-handle {
-  background: rgba(248, 200, 74, 0.24);
+  background: rgba(230, 162, 60, 0.24);
 }
 
 /* Selection indicator */
 .segment-marker.selected {
-  outline: 2px solid rgba(248, 200, 74, 0.48);
+  outline: 2px solid rgba(230, 162, 60, 0.48);
   outline-offset: 2px;
   animation: pulse 2s ease-in-out infinite;
 }
@@ -95,10 +95,10 @@
 @keyframes pulse {
   0%,
   100% {
-    outline-color: rgba(248, 200, 74, 0.48);
+    outline-color: rgba(230, 162, 60, 0.48);
   }
   50% {
-    outline-color: rgba(248, 200, 74, 0.7);
+    outline-color: rgba(230, 162, 60, 0.7);
   }
 }
 

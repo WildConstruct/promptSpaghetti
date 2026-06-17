@@ -356,7 +356,7 @@ describe('importGraphNormalization', () => {
       }),
       expect.objectContaining({
         id: 'edge-main',
-        sourceHandle: 'main',
+        sourceHandle: 'source',
         targetHandle: undefined
       }),
       expect.objectContaining({
@@ -382,7 +382,7 @@ describe('importGraphNormalization', () => {
     ]);
   });
 
-  it('maps weighted-choice branch usage and preserves main-vs-source defaults', () => {
+  it('maps weighted-choice branch usage and normalizes weighted-choice default output to source', () => {
     const nodes: TestImportedNode[] = [
       {
         id: 'weighted-branching',
@@ -451,7 +451,7 @@ describe('importGraphNormalization', () => {
       }),
       expect.objectContaining({
         id: 'edge-main',
-        sourceHandle: 'main',
+        sourceHandle: 'source',
         targetHandle: undefined
       }),
       expect.objectContaining({

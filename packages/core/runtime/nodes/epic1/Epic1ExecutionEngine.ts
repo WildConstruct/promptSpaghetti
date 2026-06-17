@@ -71,6 +71,9 @@ export class Epic1ExecutionEngine {
   private executionOrder: string[];
   private outputNodeId: string | null = null;
   private readonly selectedBranches: Map<string, number>;
+  // WeightedChoice nodes whose *selected* option carries its own branch. Their
+  // default output is suppressed (router semantics): the branch takes over.
+  private readonly branchedSelections: Set<string>;
 
   constructor(graph: Epic1Graph, seed?: string | number) {
     this.graph = graph;
@@ -78,6 +81,7 @@ export class Epic1ExecutionEngine {
     this.results = new Map();
     this.executionOrder = [];
     this.selectedBranches = new Map();
+    this.branchedSelections = new Set();
   }
 
   /**
@@ -389,8 +393,20 @@ export class Epic1ExecutionEngine {
     let selectedText = '';
     let selectedIndex = 0;
 
-    // If there's only one option, return it directly
-    if (options.length === 1) {
+    // Locked option ("fixed DNA") wins over weighted randomness: always select
+    // it. First locked option wins if several are somehow set.
+    const lockedIndex = options.findIndex(
+      (opt: { locked?: boolean }) => opt.locked
+    );
+
+    if (lockedIndex >= 0) {
+      selectedText = this.context.substituteVariables(options[lockedIndex].text);
+      selectedIndex = lockedIndex;
+      debugLogExecution(
+        `[ExecutionEngine] WeightedChoice ${nodeId} locked option ${lockedIndex} selected: "${selectedText}"`
+      );
+    } else if (options.length === 1) {
+      // If there's only one option, return it directly
       selectedText = this.context.substituteVariables(options[0].text);
       selectedIndex = 0;
       debugLogExecution(
@@ -442,6 +458,12 @@ export class Epic1ExecutionEngine {
       `[ExecutionEngine] WeightedChoice ${nodeId} selected branch index: ${selectedIndex}`
     );
     this.selectedBranches.set(nodeId, selectedIndex);
+
+    // Router semantics: if the chosen option has its own branch, the default
+    // output is suppressed so only the branch path fires for this selection.
+    if (options[selectedIndex]?.hasBranch) {
+      this.branchedSelections.add(nodeId);
+    }
 
     // Concatenate input with selected text
     const result = inputStr ? `${inputStr} ${selectedText}` : selectedText;
@@ -615,8 +637,24 @@ export class Epic1ExecutionEngine {
   private isActiveEdge(edge: Epic1Edge): boolean {
     const sourceHandle = edge.sourceHandle;
 
-    if (!sourceHandle || !sourceHandle.startsWith('branch-')) {
-      return true;
+    // Per-option branch outputs are gated by which option the WeightedChoice
+    // selected. Modern handles are `branch-${i}`; legacy graphs persisted the
+    // same wiring as `option-${i}`. Both must gate identically — otherwise a
+    // legacy `option-` edge (which does not start with `branch-`) would be
+    // treated as always-active and fire regardless of the selected option.
+    const branchPrefix = sourceHandle?.startsWith('branch-')
+      ? 'branch-'
+      : sourceHandle?.startsWith('option-')
+        ? 'option-'
+        : null;
+
+    if (!branchPrefix) {
+      // Default/main/source output. Under router semantics, when the selected
+      // option of the source WeightedChoice has its own branch, that branch
+      // carries the value and the default output is suppressed. For every other
+      // source (non-branched selection, or any non-WeightedChoice node) the
+      // default output stays active.
+      return !this.branchedSelections.has(edge.source);
     }
 
     const selectedBranch = this.selectedBranches.get(edge.source);
@@ -624,7 +662,10 @@ export class Epic1ExecutionEngine {
       return false;
     }
 
-    const branchIndex = Number.parseInt(sourceHandle.replace('branch-', ''), 10);
+    const branchIndex = Number.parseInt(
+      sourceHandle!.replace(branchPrefix, ''),
+      10
+    );
     return Number.isFinite(branchIndex) && branchIndex === selectedBranch;
   }
 

@@ -112,7 +112,7 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 1000,
-            background: '#1e293b',
+            background: '#242424',
             border: '2px solid #3b82f6',
             borderRadius: '8px',
             padding: '16px',
@@ -131,7 +131,7 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
               onClick={() => setPendingWizardNodes(null)}
               style={{
                 padding: '8px 16px',
-                background: '#475569',
+                background: '#4a4a4a',
                 border: 'none',
                 borderRadius: '4px',
                 color: '#fff',

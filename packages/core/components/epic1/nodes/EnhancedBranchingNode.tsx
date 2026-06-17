@@ -29,8 +29,10 @@ const EDITING_BRANCH_HANDLE_BASE_TOP = 132;
 const EDITING_BRANCH_HANDLE_ROW_SPACING = 88;
 const DISPLAY_BRANCH_HANDLE_BASE_TOP = 72;
 const DISPLAY_BRANCH_HANDLE_ROW_SPACING = 42;
-const MAIN_HANDLE_RIGHT_OFFSET = -18;
-const BRANCH_HANDLE_RIGHT_OFFSET = -38;
+// Per-row handles are rendered *inside* their (position: relative) row/title,
+// so they track the row vertically by layout instead of by measuring DOM tops
+// (the old branchHandleTops approach collapsed every handle to the node center).
+const ROW_HANDLE_RIGHT_OFFSET = -16;
 
 function normalizedChoiceKey(text: string): string {
   return text.trim().toLowerCase();
@@ -323,8 +325,10 @@ const WEIGHT_PRESETS = {
   equal: { icon: '=', title: 'Equal weights' },
   favorFirst: { icon: '↗', title: 'Favor first' },
   favorLast: { icon: '↘', title: 'Favor last' },
-  rampUp: { icon: '📈', title: 'Ramp up' },
-  rampDown: { icon: '📉', title: 'Ramp down' }
+  // Block-bar glyphs render reliably (unlike the old 📈/📉 emoji, which showed
+  // as missing-glyph boxes) and read as an ascending / descending distribution.
+  rampUp: { icon: '▁▄▇', title: 'Ramp up' },
+  rampDown: { icon: '▇▄▁', title: 'Ramp down' }
 };
 
 const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeData>) => {
@@ -364,7 +368,8 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 : `option-${index + 1}`,
             text: opt.text ?? '',
             weight: typeof opt.weight === 'number' ? opt.weight : 50,
-            hasBranch: opt.hasBranch === true
+            hasBranch: opt.hasBranch === true,
+            locked: opt.locked === true
           }));
         }
       } catch (error) {
@@ -602,6 +607,17 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     setOptions(newOptions);
   };
 
+  // Lock ("fixed DNA") is exclusive: locking an option clears every other
+  // lock so the node has at most one pinned choice.
+  const toggleLock = (index: number) => {
+    const willLock = !options[index].locked;
+    setOptions(
+      options.map((opt, i) => ({ ...opt, locked: willLock && i === index }))
+    );
+  };
+
+  const lockedIndex = options.findIndex(opt => opt.locked);
+
   const updateOptionText = (index: number, text: string) => {
     const newOptions = [...options];
     newOptions[index] = { ...newOptions[index], text };
@@ -727,7 +743,27 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 {/* Front side - normal editor */}
                 <div className="card-face node-front">
               {/* Title section with edit capability */}
-              <div className="enhanced-title-section">
+              <div className="enhanced-title-section" style={{ position: 'relative' }}>
+                {hasBranching && (
+                  <Handle
+                    type="source"
+                    position={Position.Right}
+                    id="source"
+                    className="epic1-handle enhanced-handle main-output"
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      right: `${ROW_HANDLE_RIGHT_OFFSET}px`,
+                      transform: 'translateY(-50%)',
+                      zIndex: 1000,
+                      background: '#10b981',
+                      border: '2px solid #fff',
+                      width: '14px',
+                      height: '14px',
+                      borderRadius: '50%'
+                    }}
+                  />
+                )}
                 {isEditingTitle ? (
                   <input
                     type="text"
@@ -881,6 +917,23 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       onChange={val => updateOptionWeight(index, val)}
                     />
 
+                    {/* Lock toggle (fixed DNA) */}
+                    <button
+                      className={`lock-toggle nodrag ${option.locked ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleLock(index);
+                      }}
+                      onMouseDown={(e) => e.stopPropagation()}
+                      title={
+                        option.locked
+                          ? 'Locked: always selected. Click to unlock.'
+                          : 'Lock this choice (always selected)'
+                      }
+                    >
+                      {option.locked ? '🔒' : '🔓'}
+                    </button>
+
                     {/* Branch toggle */}
                     <button
                       className={`branch-toggle nodrag ${option.hasBranch ? 'active' : ''}`}
@@ -909,14 +962,45 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       </button>
                     )}
 
-                    {/* Branch handle indicator - actual handle rendered at node level */}
+                    {/* This option's branch output handle, aligned to its row. */}
                     {option.hasBranch && (
-                      <span style={{
-                        position: 'absolute',
-                        right: '10px',
-                        color: '#f59e0b',
-                        fontSize: '10px'
-                      }}>●</span>
+                      <>
+                        <Handle
+                          type="source"
+                          position={Position.Right}
+                          id={`branch-${index}`}
+                          className="epic1-handle enhanced-handle branch-output"
+                          style={{
+                            position: 'absolute',
+                            top: '50%',
+                            right: `${ROW_HANDLE_RIGHT_OFFSET}px`,
+                            transform: 'translateY(-50%)',
+                            zIndex: 1000,
+                            background: '#f59e0b',
+                            border: '2px solid #fff',
+                            width: '14px',
+                            height: '14px',
+                            borderRadius: '50%'
+                          }}
+                        />
+                        <Handle
+                          type="source"
+                          position={Position.Right}
+                          id={`option-${index}`}
+                          className="epic1-handle enhanced-handle branch-output legacy-branch-output"
+                          style={{
+                            position: 'absolute',
+                            top: '50%',
+                            right: `${ROW_HANDLE_RIGHT_OFFSET}px`,
+                            transform: 'translateY(-50%)',
+                            zIndex: 999,
+                            opacity: 0,
+                            pointerEvents: 'none',
+                            width: '12px',
+                            height: '12px'
+                          }}
+                        />
+                      </>
                     )}
                   </div>
                 ))}
@@ -1069,100 +1153,58 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 </div>
               </div>
 
-              {/* Render all branch handles at node level */}
-              {options.map((option, index) =>
-                option.hasBranch && (
-                  <React.Fragment key={`branch-group-${index}`}>
-                    <Handle
-                      type="source"
-                      position={Position.Right}
-                      id={`branch-${index}`}
-                      className="epic1-handle enhanced-handle branch-output"
-                      style={{
-                        position: 'absolute',
-                        top: branchHandleTops[index] ?? 0,
-                        right: `${BRANCH_HANDLE_RIGHT_OFFSET}px`,
-                        transform: 'translateY(-50%)',
-                        zIndex: 1000,
-                        background: '#f59e0b',
-                        border: '2px solid #fff',
-                        width: '14px',
-                        height: '14px',
-                        borderRadius: '50%'
-                      }}
-                    />
-                    <Handle
-                      type="source"
-                      position={Position.Right}
-                      id={`option-${index}`}
-                      className="epic1-handle enhanced-handle branch-output legacy-branch-output"
-                      style={{
-                        position: 'absolute',
-                        top: branchHandleTops[index] ?? 0,
-                        right: `${BRANCH_HANDLE_RIGHT_OFFSET}px`,
-                        transform: 'translateY(-50%)',
-                        zIndex: 999,
-                        opacity: 0,
-                        pointerEvents: 'none',
-                        width: '12px',
-                        height: '12px'
-                      }}
-                    />
-                  </React.Fragment>
-                )
-              )}
-
-              {/* Main output on right edge when branching enabled */}
-              {hasBranching && (
-                <Handle
-                  type="source"
-                  position={Position.Right}
-                  id="main"
-                  className="epic1-handle enhanced-handle main-output"
-                style={{
-                  position: 'absolute',
-                  top: mainHandleTop,
-                  right: `${MAIN_HANDLE_RIGHT_OFFSET}px`,
-                  transform: 'translateY(-50%)',
-                  zIndex: 1000,
-                  background: '#10b981',
-                  border: '2px solid #fff',
-                  width: '14px',
-                  height: '14px',
-                  borderRadius: '50%'
-                }}
-                />
-              )}
-              {/* Note: Main output when no branching is handled by BaseEditableNode */}
+              {/* Branch output handles are rendered inside their option rows
+                  (auto-aligned). The default output is in the title section
+                  above; when nothing branches, BaseEditableNode owns it. */}
                   </div>
 
                   {/* Back side - metadata view */}
                   <div className="card-face metadata-view">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: '#10b981' }}>
+                  {/* Small circular red close tucked into the top-right corner */}
+                  <button
+                    className="metadata-close-btn nodrag"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowMetadata(false);
+                    }}
+                    title="Close metadata"
+                    aria-label="Close metadata"
+                    style={{
+                      position: 'absolute',
+                      top: '7px',
+                      right: '7px',
+                      width: '18px',
+                      height: '18px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 0,
+                      borderRadius: '50%',
+                      background: '#ef4444',
+                      border: '1px solid rgba(0, 0, 0, 0.35)',
+                      color: '#fff',
+                      fontSize: '10px',
+                      lineHeight: 1,
+                      cursor: 'pointer',
+                      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.45)',
+                      transition: 'background 0.15s, transform 0.1s',
+                      zIndex: 11
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#dc2626';
+                      e.currentTarget.style.transform = 'scale(1.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#ef4444';
+                      e.currentTarget.style.transform = 'scale(1)';
+                    }}
+                  >
+                    ✕
+                  </button>
+                  <div style={{ marginBottom: '10px' }}>
+                    <h3 style={{ margin: 0, paddingRight: '22px', fontSize: '14px', fontWeight: 'bold', color: '#10b981' }}>
                       Metadata Analysis
                     </h3>
-                    <button
-                      className="metadata-close-btn nodrag"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowMetadata(false);
-                      }}
-                      style={{
-                        background: '#374151',
-                        border: '1px solid #4b5563',
-                        borderRadius: '4px',
-                        color: '#e5e7eb',
-                        padding: '4px 8px',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        transition: 'background 0.2s'
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = '#4b5563'}
-                      onMouseLeave={(e) => e.currentTarget.style.background = '#374151'}
-                    >
-                      ✕ Close
-                    </button>
                   </div>
                   {isExtractingMetadata ? (
                     <div style={{ textAlign: 'center', padding: '20px' }}>
@@ -1283,7 +1325,32 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
           <div ref={nodeRef} className="enhanced-branching-display" style={{ position: 'relative' }}>
             {/* Main output is handled by BaseEditableNode in display mode */}
 
-            <div className="display-title">{title}</div>
+            <div className="display-title" style={{ position: 'relative' }}>
+              {title}
+              {/* Default ("otherwise") output — only when at least one option
+                  branches; aligned to the title row. When nothing branches,
+                  BaseEditableNode renders the single default output instead. */}
+              {hasBranching && (
+                <Handle
+                  type="source"
+                  position={Position.Right}
+                  id="source"
+                  className="epic1-handle enhanced-handle main-output"
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: `${ROW_HANDLE_RIGHT_OFFSET}px`,
+                    transform: 'translateY(-50%)',
+                    zIndex: 1000,
+                    background: '#10b981',
+                    border: '2px solid #fff',
+                    width: '14px',
+                    height: '14px',
+                    borderRadius: '50%'
+                  }}
+                />
+              )}
+            </div>
 
             <div className="display-options">
               {options.map((option, index) => (
@@ -1294,77 +1361,59 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   ref={(el) => { optionRefs.current[index] = el; }}
                 >
                   <span className="option-text">
+                    {option.locked ? '🔒 ' : ''}
                     {option.text || 'Empty option'}
                   </span>
-                  <span className="option-percentage">{percentages[index]}%</span>
+                  <span className="option-percentage">
+                    {lockedIndex >= 0
+                      ? option.locked
+                        ? 'fixed'
+                        : '—'
+                      : `${percentages[index]}%`}
+                  </span>
+                  {/* This option's branch output, aligned to its own row. */}
+                  {option.hasBranch && (
+                    <>
+                      <Handle
+                        type="source"
+                        position={Position.Right}
+                        id={`branch-${index}`}
+                        className="epic1-handle enhanced-handle branch-output"
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          right: `${ROW_HANDLE_RIGHT_OFFSET}px`,
+                          transform: 'translateY(-50%)',
+                          zIndex: 1000,
+                          background: '#f59e0b',
+                          border: '2px solid #fff',
+                          width: '14px',
+                          height: '14px',
+                          borderRadius: '50%'
+                        }}
+                      />
+                      <Handle
+                        type="source"
+                        position={Position.Right}
+                        id={`option-${index}`}
+                        className="epic1-handle enhanced-handle branch-output legacy-branch-output"
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          right: `${ROW_HANDLE_RIGHT_OFFSET}px`,
+                          transform: 'translateY(-50%)',
+                          zIndex: 999,
+                          opacity: 0,
+                          pointerEvents: 'none',
+                          width: '12px',
+                          height: '12px'
+                        }}
+                      />
+                    </>
+                  )}
                 </div>
               ))}
             </div>
-
-            {/* Render all handles at node level, not inside option divs */}
-            {options.map((option, index) =>
-              option.hasBranch && (
-                <React.Fragment key={`branch-group-${index}`}>
-                  <Handle
-                    type="source"
-                    position={Position.Right}
-                    id={`branch-${index}`}
-                    className="epic1-handle enhanced-handle branch-output"
-                    style={{
-                      position: 'absolute',
-                      top: branchHandleTops[index] ?? 0,
-                      right: `${BRANCH_HANDLE_RIGHT_OFFSET}px`,
-                      transform: 'translateY(-50%)',
-                      zIndex: 1000,
-                      background: '#f59e0b',
-                      border: '2px solid #fff',
-                      width: '14px',
-                      height: '14px',
-                      borderRadius: '50%'
-                    }}
-                  />
-                  <Handle
-                    type="source"
-                    position={Position.Right}
-                    id={`option-${index}`}
-                    className="epic1-handle enhanced-handle branch-output legacy-branch-output"
-                    style={{
-                      position: 'absolute',
-                      top: branchHandleTops[index] ?? 0,
-                      right: `${BRANCH_HANDLE_RIGHT_OFFSET}px`,
-                      transform: 'translateY(-50%)',
-                      zIndex: 999,
-                      opacity: 0,
-                      pointerEvents: 'none',
-                      width: '12px',
-                      height: '12px'
-                    }}
-                  />
-                </React.Fragment>
-              )
-            )}
-
-            {/* Main output on right edge when branching is enabled */}
-            {hasBranching && (
-              <Handle
-                type="source"
-                position={Position.Right}
-                id="main"
-                className="epic1-handle enhanced-handle main-output"
-                style={{
-                  position: 'absolute',
-                  top: mainHandleTop,
-                  right: `${MAIN_HANDLE_RIGHT_OFFSET}px`,
-                  transform: 'translateY(-50%)',
-                  zIndex: 1000,
-                  background: '#10b981',
-                  border: '2px solid #fff',
-                  width: '14px',
-                  height: '14px',
-                  borderRadius: '50%'
-                }}
-              />
-            )}
             {/* Note: Main output when no branching is handled by BaseEditableNode */}
           </div>
         );

@@ -91,7 +91,7 @@
 
 /* Connection line styling */
 .react-flow__connection {
-  stroke: #f4c64d;
+  stroke: #e6a23c;
   stroke-width: 3;
 }
 
@@ -108,7 +108,7 @@
 
 /* Error state for connection path */
 .react-flow__connection-path {
-  stroke: #f4c64d;
+  stroke: #e6a23c;
   stroke-width: 2;
   fill: none;
 }
