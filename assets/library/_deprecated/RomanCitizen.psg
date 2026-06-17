@@ -16,7 +16,8 @@
       "final_prompt",
       "final_negative_prompt"
     ],
-    "conformed_from": "full-document (Output nodes removed)"
+    "deprecated": true,
+    "deprecation_note": "Full-document form (contains Output nodes); superseded by the conformed RomanCitizen fragment. Not published."
   },
   "nodes": [
     {
@@ -343,9 +344,97 @@
           "weight": 100
         }
       ]
+    },
+    {
+      "id": "final_prompt",
+      "type": "Output",
+      "x": 440,
+      "y": 660,
+      "template": "A single {{gender}} {{age_band}} {{social_class}} Roman {{role}} standing full-body on a clean greenscreen background. The clothing is {{base_wardrobe}} with {{outer_layer}}. The face is {{face_world_wear}}. The hair is {{hair_description}}. The person has {{small_props}}. The pose is {{pose_description}}. Lighting is {{lighting_description}} and {{camera_description}}. High detail in fabric weave, leather texture, skin texture, and edges for clean compositing.",
+      "data": {
+        "label": "Final Prompt"
+      },
+      "name": "Final Prompt"
+    },
+    {
+      "id": "final_negative_prompt",
+      "type": "Output",
+      "x": 660,
+      "y": 660,
+      "template": "{{negative_prompt}}",
+      "data": {
+        "label": "Negative Prompt"
+      },
+      "name": "Final Negative Prompt"
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "edge-gender-final",
+      "source": "gender",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-social-final",
+      "source": "social_class",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-age-final",
+      "source": "age_band",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-role-final",
+      "source": "role",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-wardrobe-final",
+      "source": "base_wardrobe",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-outer-final",
+      "source": "outer_layer",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-face-final",
+      "source": "face_world_wear",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-hair-final",
+      "source": "hair_description",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-props-final",
+      "source": "small_props",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-pose-final",
+      "source": "pose_description",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-light-final",
+      "source": "lighting_description",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-camera-final",
+      "source": "camera_description",
+      "target": "final_prompt"
+    },
+    {
+      "id": "edge-negative-final",
+      "source": "negative_prompt",
+      "target": "final_negative_prompt"
+    }
+  ],
   "regions": [
     {
       "id": "region-roman-citizen",
@@ -364,7 +453,9 @@
         "pose_description",
         "lighting_description",
         "camera_description",
-        "negative_prompt"
+        "negative_prompt",
+        "final_prompt",
+        "final_negative_prompt"
       ],
       "description": "Complete fragment for generating Automa-style Roman citizen prompts",
       "metadata": {

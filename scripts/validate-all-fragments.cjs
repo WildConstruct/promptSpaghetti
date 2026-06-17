@@ -5,6 +5,7 @@ const { execSync } = require('child_process');
 function walk(d) {
   let r = [];
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+    if (e.name.startsWith('_')) continue; // skip _deprecated / archive dirs
     const p = path.join(d, e.name);
     if (e.isDirectory()) r = r.concat(walk(p));
     else if (e.name.endsWith('.psg')) r.push(p);

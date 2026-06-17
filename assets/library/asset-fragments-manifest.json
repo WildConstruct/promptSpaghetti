@@ -8,6 +8,27 @@
   "author": "Aspen (Asset Generator)",
   "fragments": [
     {
+      "id": "fragment-RomanCitizen",
+      "name": "Roman Citizen Automa Greenscreen",
+      "description": "Randomizable Roman citizen prompts for Automa-style greenscreen generation.",
+      "path": "./RomanCitizen.psg",
+      "category": "extras",
+      "tags": [
+        "roman",
+        "automa",
+        "greenscreen",
+        "extras"
+      ],
+      "nodeCount": 13,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
       "id": "fragment-aerial-motions",
       "name": "Aerial Motions",
       "description": "",
@@ -3137,17 +3158,18 @@
     }
   ],
   "statistics": {
-    "total_fragments": 160,
+    "total_fragments": 161,
     "categories": [
       "action-dynamics",
       "body-silhouette",
       "emotion-mood",
+      "extras",
       "facial-features",
       "hair",
       "setting-environment",
       "vehicles-mobility",
       "weapons-armor-combat"
     ],
-    "total_nodes": 164
+    "total_nodes": 177
   }
 }
