@@ -990,10 +990,320 @@ const gangsterTemplate: QuickStartTemplate = {
   ]
 };
 
+// Baseball Game Attendees — locked era "DNA", multi-branch fan type (superfan
+// -> gear, vendor -> cart), nested branch (superfan painted-face -> team colors).
+const baseballTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('bb-dna', 80, 100, 'Spectator DNA', 'Baseball game spectator, single full-body card, sunny afternoon at the ballpark, candid documentary photo'),
+    weightedChoiceNode('bb-era', 80, 320, 'Era (locked DNA)', [
+      { id: 'be-1', text: 'in the 1950s', weight: 25 },
+      { id: 'be-2', text: 'in the 1970s', weight: 25, locked: true },
+      { id: 'be-3', text: 'in the 1990s', weight: 25 },
+      { id: 'be-4', text: 'in the present day', weight: 25 }
+    ]),
+    weightedChoiceNode('bb-fan', 480, 180, 'Fan Type', [
+      { id: 'bf-1', text: 'a casual weekend fan', weight: 28 },
+      { id: 'bf-2', text: 'a die-hard superfan', weight: 24, hasBranch: true },
+      { id: 'bf-3', text: 'a roving stadium vendor', weight: 24, hasBranch: true },
+      { id: 'bf-4', text: 'a parent with two kids', weight: 24 }
+    ]),
+    weightedChoiceNode('bb-gear', 900, 60, 'Superfan Gear', [
+      { id: 'bg-1', text: 'waving a giant foam finger', weight: 34 },
+      { id: 'bg-2', text: 'with a fully painted face', weight: 33, hasBranch: true },
+      { id: 'bg-3', text: 'in a replica jersey and cap', weight: 33 }
+    ]),
+    textNode('bb-colors', 1320, 20, 'Team Colors', 'in bold home-team colors of red, white, and navy'),
+    concatNode('bb-gear-merge', 1320, 140, 'Gear Merge'),
+    weightedChoiceNode('bb-cart', 900, 320, 'Vendor Cart', [
+      { id: 'bc-1', text: 'hawking hot dogs from a steam cart', weight: 34 },
+      { id: 'bc-2', text: 'selling peanuts and Cracker Jack', weight: 33 },
+      { id: 'bc-3', text: 'balancing a tray of cold beer', weight: 33 }
+    ]),
+    concatNode('bb-fan-merge', 1720, 240, 'Fan Merge'),
+    weightedChoiceNode('bb-attire', 480, 460, 'Attire', [
+      { id: 'ba-1', text: 'in a short-sleeve button-up and ballcap', weight: 34 },
+      { id: 'ba-2', text: 'in a team windbreaker', weight: 33 },
+      { id: 'ba-3', text: 'in a sun hat and sunglasses', weight: 33 }
+    ]),
+    weightedChoiceNode('bb-seat', 480, 640, 'Vantage', [
+      { id: 'bs-1', text: 'in the lower-bowl box seats', weight: 34 },
+      { id: 'bs-2', text: 'up in the bleachers', weight: 33 },
+      { id: 'bs-3', text: 'leaning on the outfield rail', weight: 33 }
+    ]),
+    concatNode('bb-main', 2120, 320, 'Assemble Spectator'),
+    outputNode('bb-output', 2480, 320, 'baseball_spectator')
+  ],
+  edges: [
+    { id: 'b-e1', source: 'bb-dna', target: 'bb-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'b-e2', source: 'bb-era', target: 'bb-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'b-e3', source: 'bb-fan', target: 'bb-fan-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'b-e4', source: 'bb-fan', target: 'bb-gear', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'b-e5', source: 'bb-fan', target: 'bb-cart', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'b-e6', source: 'bb-gear', target: 'bb-gear-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'b-e7', source: 'bb-gear', target: 'bb-colors', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'b-e8', source: 'bb-colors', target: 'bb-gear-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'b-e9', source: 'bb-gear-merge', target: 'bb-fan-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'b-e10', source: 'bb-cart', target: 'bb-fan-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'b-e11', source: 'bb-fan-merge', target: 'bb-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'b-e12', source: 'bb-attire', target: 'bb-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'b-e13', source: 'bb-seat', target: 'bb-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'b-e14', source: 'bb-main', target: 'bb-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// Punk Concert Goers — locked scene "DNA", multi-branch look (mohawk -> color,
+// spikes -> texture), nested branch (mohawk -> bleached -> roots detail).
+const punkTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('pk-dna', 80, 100, 'Punk DNA', '1980s punk concert goer at a sweaty basement show, gritty on-camera flash photography'),
+    weightedChoiceNode('pk-scene', 80, 320, 'Scene (locked DNA)', [
+      { id: 'ps-1', text: 'from the UK street-punk scene', weight: 25 },
+      { id: 'ps-2', text: 'from the US hardcore scene', weight: 25, locked: true },
+      { id: 'ps-3', text: 'from the deathrock scene', weight: 25 },
+      { id: 'ps-4', text: 'from the skate-punk scene', weight: 25 }
+    ]),
+    weightedChoiceNode('pk-look', 480, 180, 'Hair / Look', [
+      { id: 'pl-1', text: 'with a shaved head and a denim vest', weight: 28 },
+      { id: 'pl-2', text: 'sporting a tall mohawk', weight: 24, hasBranch: true },
+      { id: 'pl-3', text: 'with liberty spikes', weight: 24, hasBranch: true },
+      { id: 'pl-4', text: 'in a studded leather jacket', weight: 24 }
+    ]),
+    weightedChoiceNode('pk-color', 900, 60, 'Mohawk Color', [
+      { id: 'pc-1', text: 'bleached white-blond', weight: 34, hasBranch: true },
+      { id: 'pc-2', text: 'dyed electric green', weight: 33 },
+      { id: 'pc-3', text: 'kept jet black', weight: 33 }
+    ]),
+    textNode('pk-roots', 1320, 20, 'Roots Detail', 'with dark roots showing through the bleach'),
+    concatNode('pk-look-detail-merge', 1320, 140, 'Look Detail Merge'),
+    weightedChoiceNode('pk-spikes', 900, 320, 'Spike Texture', [
+      { id: 'pp-1', text: 'glued into razor-sharp points', weight: 34 },
+      { id: 'pp-2', text: 'tipped in fluorescent dye', weight: 33 },
+      { id: 'pp-3', text: 'wild and uneven', weight: 33 }
+    ]),
+    concatNode('pk-look-merge', 1720, 240, 'Look Merge'),
+    weightedChoiceNode('pk-act', 480, 460, 'Activity', [
+      { id: 'pa-1', text: 'thrashing in the mosh pit', weight: 34 },
+      { id: 'pa-2', text: 'mid stage-dive over the crowd', weight: 33 },
+      { id: 'pa-3', text: 'shouting along at the barricade', weight: 33 }
+    ]),
+    weightedChoiceNode('pk-extra', 480, 640, 'Detail', [
+      { id: 'px-1', text: 'covered in band-patch pins', weight: 34 },
+      { id: 'px-2', text: 'with smeared eyeliner and sweat', weight: 33 },
+      { id: 'px-3', text: 'gripping a crushed beer can', weight: 33 }
+    ]),
+    concatNode('pk-main', 2120, 320, 'Assemble Punk'),
+    outputNode('pk-output', 2480, 320, 'punk_concertgoer')
+  ],
+  edges: [
+    { id: 'p-e1', source: 'pk-dna', target: 'pk-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'p-e2', source: 'pk-scene', target: 'pk-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'p-e3', source: 'pk-look', target: 'pk-look-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'p-e4', source: 'pk-look', target: 'pk-color', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'p-e5', source: 'pk-look', target: 'pk-spikes', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'p-e6', source: 'pk-color', target: 'pk-look-detail-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'p-e7', source: 'pk-color', target: 'pk-roots', type: 'smoothstep', sourceHandle: 'branch-0', targetHandle: 'target' },
+    { id: 'p-e8', source: 'pk-roots', target: 'pk-look-detail-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'p-e9', source: 'pk-look-detail-merge', target: 'pk-look-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'p-e10', source: 'pk-spikes', target: 'pk-look-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'p-e11', source: 'pk-look-merge', target: 'pk-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'p-e12', source: 'pk-act', target: 'pk-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'p-e13', source: 'pk-extra', target: 'pk-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'p-e14', source: 'pk-main', target: 'pk-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// Diner Patrons — locked time-of-day "DNA", multi-branch patron (trucker -> meal,
+// teen -> milkshake), nested branch (trucker blue-plate -> gravy detail).
+const dinerTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('dn-dna', 80, 100, 'Diner DNA', '1950s American roadside diner patron, chrome-and-vinyl booth, warm tungsten light, candid photo'),
+    weightedChoiceNode('dn-time', 80, 320, 'Time of Day (locked DNA)', [
+      { id: 'dt-1', text: 'at the early-morning rush', weight: 25 },
+      { id: 'dt-2', text: 'in the dead of a late night', weight: 25, locked: true },
+      { id: 'dt-3', text: 'during the lunch rush', weight: 25 },
+      { id: 'dt-4', text: 'at a slow afternoon lull', weight: 25 }
+    ]),
+    weightedChoiceNode('dn-patron', 480, 180, 'Patron', [
+      { id: 'dp-1', text: 'a tired night-shift nurse', weight: 28 },
+      { id: 'dp-2', text: 'a long-haul trucker', weight: 24, hasBranch: true },
+      { id: 'dp-3', text: 'a teen couple on a date', weight: 24, hasBranch: true },
+      { id: 'dp-4', text: 'a traveling salesman', weight: 24 }
+    ]),
+    weightedChoiceNode('dn-meal', 900, 60, "Trucker's Meal", [
+      { id: 'dm-1', text: 'over a tall stack of pancakes', weight: 34 },
+      { id: 'dm-2', text: 'eating the blue-plate special', weight: 33, hasBranch: true },
+      { id: 'dm-3', text: 'nursing black coffee and pie', weight: 33 }
+    ]),
+    textNode('dn-gravy', 1320, 20, 'Gravy Detail', 'smothered in thick country gravy'),
+    concatNode('dn-meal-merge', 1320, 140, 'Meal Merge'),
+    weightedChoiceNode('dn-shake', 900, 320, 'Shared Milkshake', [
+      { id: 'dk-1', text: 'sharing a strawberry malt with two straws', weight: 34 },
+      { id: 'dk-2', text: 'splitting a hot-fudge sundae', weight: 33 },
+      { id: 'dk-3', text: 'over a single cherry cola', weight: 33 }
+    ]),
+    concatNode('dn-patron-merge', 1720, 240, 'Patron Merge'),
+    weightedChoiceNode('dn-attire', 480, 460, 'Attire', [
+      { id: 'da-1', text: 'in a worn work jacket', weight: 34 },
+      { id: 'da-2', text: 'in a letterman sweater', weight: 33 },
+      { id: 'da-3', text: 'in a rumpled suit and loosened tie', weight: 33 }
+    ]),
+    weightedChoiceNode('dn-mood', 480, 640, 'Mood', [
+      { id: 'do-1', text: 'looking weary under the neon', weight: 34 },
+      { id: 'do-2', text: 'laughing at the counter', weight: 33 },
+      { id: 'do-3', text: 'staring out at the rainy lot', weight: 33 }
+    ]),
+    concatNode('dn-main', 2120, 320, 'Assemble Patron'),
+    outputNode('dn-output', 2480, 320, 'diner_patron')
+  ],
+  edges: [
+    { id: 'd-e1', source: 'dn-dna', target: 'dn-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'd-e2', source: 'dn-time', target: 'dn-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'd-e3', source: 'dn-patron', target: 'dn-patron-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'd-e4', source: 'dn-patron', target: 'dn-meal', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'd-e5', source: 'dn-patron', target: 'dn-shake', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'd-e6', source: 'dn-meal', target: 'dn-meal-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'd-e7', source: 'dn-meal', target: 'dn-gravy', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'd-e8', source: 'dn-gravy', target: 'dn-meal-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'd-e9', source: 'dn-meal-merge', target: 'dn-patron-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'd-e10', source: 'dn-shake', target: 'dn-patron-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'd-e11', source: 'dn-patron-merge', target: 'dn-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'd-e12', source: 'dn-attire', target: 'dn-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'd-e13', source: 'dn-mood', target: 'dn-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'd-e14', source: 'dn-main', target: 'dn-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// Spaghetti Western Character — locked town "DNA", multi-branch archetype (bounty
+// hunter -> weapon, stranger -> poncho), nested branch (twin revolvers -> engraving).
+const westernTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('ws-dna', 80, 100, 'Western DNA', 'Spaghetti western character, sun-bleached frontier, Sergio Leone wide-angle grit, dust and heat haze'),
+    weightedChoiceNode('ws-town', 80, 320, 'Setting (locked DNA)', [
+      { id: 'wt-1', text: 'in a dusty border town', weight: 25, locked: true },
+      { id: 'wt-2', text: 'at a remote mining camp', weight: 25 },
+      { id: 'wt-3', text: 'by a lonely railroad outpost', weight: 25 },
+      { id: 'wt-4', text: 'at a sun-scorched crossroads', weight: 25 }
+    ]),
+    weightedChoiceNode('ws-arch', 480, 180, 'Archetype', [
+      { id: 'wa-1', text: 'a grizzled town sheriff', weight: 28 },
+      { id: 'wa-2', text: 'a hardened bounty hunter', weight: 24, hasBranch: true },
+      { id: 'wa-3', text: 'a mysterious stranger', weight: 24, hasBranch: true },
+      { id: 'wa-4', text: 'a swaggering bandido', weight: 24 }
+    ]),
+    weightedChoiceNode('ws-weapon', 900, 60, "Hunter's Weapon", [
+      { id: 'ww-1', text: 'shouldering a lever-action rifle', weight: 34 },
+      { id: 'ww-2', text: 'wearing twin revolvers', weight: 33, hasBranch: true },
+      { id: 'ww-3', text: 'with a sawed-off shotgun on a sling', weight: 33 }
+    ]),
+    textNode('ws-engrave', 1320, 20, 'Engraving', 'with mother-of-pearl grips and scrollwork engraving'),
+    concatNode('ws-weapon-merge', 1320, 140, 'Weapon Merge'),
+    weightedChoiceNode('ws-poncho', 900, 320, "Stranger's Poncho", [
+      { id: 'wp-1', text: 'draped in a faded striped serape', weight: 34 },
+      { id: 'wp-2', text: 'under a dust-caked riding cloak', weight: 33 },
+      { id: 'wp-3', text: 'in a weather-beaten duster coat', weight: 33 }
+    ]),
+    concatNode('ws-arch-merge', 1720, 240, 'Archetype Merge'),
+    weightedChoiceNode('ws-attire', 480, 460, 'Attire', [
+      { id: 'wr-1', text: 'in a sweat-stained hat and worn boots', weight: 34 },
+      { id: 'wr-2', text: 'with a tin star and leather vest', weight: 33 },
+      { id: 'wr-3', text: 'in a bandana and spurred boots', weight: 33 }
+    ]),
+    weightedChoiceNode('ws-scene', 480, 640, 'Stance', [
+      { id: 'wn-1', text: 'squinting down an empty main street', weight: 34 },
+      { id: 'wn-2', text: 'leaning in a saloon doorway', weight: 33 },
+      { id: 'wn-3', text: 'standing over a fresh grave', weight: 33 }
+    ]),
+    concatNode('ws-main', 2120, 320, 'Assemble Character'),
+    outputNode('ws-output', 2480, 320, 'spaghetti_western_character')
+  ],
+  edges: [
+    { id: 'w-e1', source: 'ws-dna', target: 'ws-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'w-e2', source: 'ws-town', target: 'ws-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'w-e3', source: 'ws-arch', target: 'ws-arch-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'w-e4', source: 'ws-arch', target: 'ws-weapon', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'w-e5', source: 'ws-arch', target: 'ws-poncho', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'w-e6', source: 'ws-weapon', target: 'ws-weapon-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'w-e7', source: 'ws-weapon', target: 'ws-engrave', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'w-e8', source: 'ws-engrave', target: 'ws-weapon-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'w-e9', source: 'ws-weapon-merge', target: 'ws-arch-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'w-e10', source: 'ws-poncho', target: 'ws-arch-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'w-e11', source: 'ws-arch-merge', target: 'ws-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'w-e12', source: 'ws-attire', target: 'ws-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'w-e13', source: 'ws-scene', target: 'ws-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'w-e14', source: 'ws-main', target: 'ws-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// Medieval Village Generator — locked era "DNA", multi-branch focal structure
+// (forge -> wares, tavern -> sign), nested branch (forge swords/armor -> quality).
+const villageTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('mv-dna', 80, 100, 'Village DNA', 'Medieval European village scene, muddy lanes, timber-framed buildings, overcast painterly light'),
+    weightedChoiceNode('mv-era', 80, 320, 'Era (locked DNA)', [
+      { id: 'mr-1', text: 'in the early medieval period', weight: 25 },
+      { id: 'mr-2', text: 'in the high medieval period', weight: 25, locked: true },
+      { id: 'mr-3', text: 'in the late medieval period', weight: 25 },
+      { id: 'mr-4', text: 'on a feast-day morning', weight: 25 }
+    ]),
+    weightedChoiceNode('mv-focus', 480, 180, 'Focal Structure', [
+      { id: 'mf-1', text: 'centered on a stone parish church', weight: 28 },
+      { id: 'mf-2', text: "centered on the blacksmith's forge", weight: 24, hasBranch: true },
+      { id: 'mf-3', text: 'centered on a busy tavern', weight: 24, hasBranch: true },
+      { id: 'mf-4', text: 'centered on an open market square', weight: 24 }
+    ]),
+    weightedChoiceNode('mv-wares', 900, 60, 'Forge Wares', [
+      { id: 'mw-1', text: 'hammering out horseshoes and nails', weight: 34 },
+      { id: 'mw-2', text: 'forging swords and armor', weight: 33, hasBranch: true },
+      { id: 'mw-3', text: 'mending plows and farm tools', weight: 33 }
+    ]),
+    textNode('mv-quality', 1320, 20, 'Quality Detail', 'fine enough for a lord’s retinue, gleaming on the rack'),
+    concatNode('mv-forge-merge', 1320, 140, 'Forge Merge'),
+    weightedChoiceNode('mv-sign', 900, 320, 'Tavern Sign', [
+      { id: 'mg-1', text: 'under a swinging Green Dragon sign', weight: 34 },
+      { id: 'mg-2', text: 'beneath a painted boar’s-head shingle', weight: 33 },
+      { id: 'mg-3', text: 'past a creaking wheat-sheaf sign', weight: 33 }
+    ]),
+    concatNode('mv-focus-merge', 1720, 240, 'Focus Merge'),
+    weightedChoiceNode('mv-folk', 480, 460, 'Inhabitants', [
+      { id: 'mk-1', text: 'with peasants hauling baskets to market', weight: 34 },
+      { id: 'mk-2', text: 'with children chasing a stray goose', weight: 33 },
+      { id: 'mk-3', text: 'with a friar crossing the square', weight: 33 }
+    ]),
+    weightedChoiceNode('mv-weather', 480, 640, 'Weather', [
+      { id: 'me-1', text: 'under a low grey drizzle', weight: 34 },
+      { id: 'me-2', text: 'in thin morning mist', weight: 33 },
+      { id: 'me-3', text: 'in pale watery sunlight', weight: 33 }
+    ]),
+    concatNode('mv-main', 2120, 320, 'Assemble Village'),
+    outputNode('mv-output', 2480, 320, 'medieval_village')
+  ],
+  edges: [
+    { id: 'm-e1', source: 'mv-dna', target: 'mv-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'm-e2', source: 'mv-era', target: 'mv-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'm-e3', source: 'mv-focus', target: 'mv-focus-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'm-e4', source: 'mv-focus', target: 'mv-wares', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'm-e5', source: 'mv-focus', target: 'mv-sign', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'm-e6', source: 'mv-wares', target: 'mv-forge-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'm-e7', source: 'mv-wares', target: 'mv-quality', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'm-e8', source: 'mv-quality', target: 'mv-forge-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'm-e9', source: 'mv-forge-merge', target: 'mv-focus-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'm-e10', source: 'mv-sign', target: 'mv-focus-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'm-e11', source: 'mv-focus-merge', target: 'mv-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'm-e12', source: 'mv-folk', target: 'mv-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'm-e13', source: 'mv-weather', target: 'mv-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'm-e14', source: 'mv-main', target: 'mv-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   tech_panel: techPanelTemplate,
   tile_builder: tileBuilderTemplate,
   gangsters: gangsterTemplate,
+  baseball_fans: baseballTemplate,
+  punk_fans: punkTemplate,
+  diner_patrons: dinerTemplate,
+  spaghetti_western: westernTemplate,
+  medieval_village: villageTemplate,
   character_variation: characterTemplate,
   indy_500_crowd_card: indyCrowdCardTemplate,
   vehicle_family: vehicleFamilyTemplate,

@@ -175,6 +175,61 @@ const templates: Template[] = [
     icon: <BranchIcon />
   },
   {
+    id: 'baseball_fans',
+    title: 'Baseball Game Attendees',
+    description:
+      'Ballpark spectator: locked era, fan-type branches (superfan/vendor), and a nested painted-face branch',
+    prompt:
+      'A baseball game spectator with a locked era, where the fan type branches into a superfan gear path and a vendor cart path, and the superfan painted-face branches again to team colors',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <CrowdIcon />
+  },
+  {
+    id: 'punk_fans',
+    title: 'Punk Concert Goers',
+    description:
+      'Basement-show punk: locked scene, look branches (mohawk/spikes), and a nested bleached-hair branch',
+    prompt:
+      'A 1980s punk concert goer with a locked scene, where the look branches into a mohawk color path and a liberty-spikes path, and the bleached mohawk branches again to a roots detail',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <CrowdIcon />
+  },
+  {
+    id: 'diner_patrons',
+    title: 'Diner Patrons',
+    description:
+      '1950s diner patron: locked time of day, patron branches (trucker/teen), and a nested blue-plate branch',
+    prompt:
+      'A 1950s roadside diner patron with a locked time of day, where the patron type branches into a trucker meal path and a teen milkshake path, and the blue-plate special branches again to a gravy detail',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <CharacterIcon />
+  },
+  {
+    id: 'spaghetti_western',
+    title: 'Spaghetti Western Character',
+    description:
+      'Frontier archetype: locked town, archetype branches (bounty hunter/stranger), and a nested revolver branch',
+    prompt:
+      'A spaghetti western character with a locked town setting, where the archetype branches into a bounty-hunter weapon path and a mysterious-stranger poncho path, and twin revolvers branch again to engraving',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <CharacterIcon />
+  },
+  {
+    id: 'medieval_village',
+    title: 'Medieval Village Generator',
+    description:
+      'Village scene: locked era, structure branches (forge/tavern), and a nested swords-and-armor branch',
+    prompt:
+      'A medieval village scene with a locked era, where the focal structure branches into a blacksmith forge path and a tavern sign path, and forging swords and armor branches again to a quality detail',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <SceneIcon />
+  },
+  {
     id: 'empty',
     title: 'Blank Canvas',
     description: 'Start from scratch in the editor with no template applied',
