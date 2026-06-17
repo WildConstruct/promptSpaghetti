@@ -1,0 +1,149 @@
+{
+  "version": "1.0.0",
+  "name": "Make-up Accents Asset Fragment",
+  "description": "Artistic makeup and cosmetic accent options for character generation",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "appearance-modifier",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "makeup",
+      "cosmetics",
+      "beauty",
+      "artistic",
+      "accents"
+    ],
+    "fragment_id": "makeup-accents",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "makeup-accent",
+      "type": "WeightedChoice",
+      "name": "Make-up Accents",
+      "description": "Cosmetic and artistic makeup choices",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "winged liner",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "style": "classic",
+            "location": "eyes"
+          }
+        },
+        {
+          "text": "metallic sheen",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "style": "glamorous",
+            "finish": "reflective"
+          }
+        },
+        {
+          "text": "glitter tear",
+          "weight": 6,
+          "meta": {
+            "original": true,
+            "style": "artistic",
+            "location": "under-eye"
+          }
+        },
+        {
+          "text": "no makeup",
+          "weight": 15,
+          "meta": {
+            "style": "natural",
+            "look": "bare-faced"
+          }
+        },
+        {
+          "text": "smoky eyes",
+          "weight": 9,
+          "meta": {
+            "style": "dramatic",
+            "location": "eyes"
+          }
+        },
+        {
+          "text": "bold red lips",
+          "weight": 9,
+          "meta": {
+            "style": "classic",
+            "location": "lips"
+          }
+        },
+        {
+          "text": "dewy highlight",
+          "weight": 8,
+          "meta": {
+            "style": "fresh",
+            "finish": "glowing"
+          }
+        },
+        {
+          "text": "graphic liner",
+          "weight": 7,
+          "meta": {
+            "style": "editorial",
+            "location": "eyes"
+          }
+        },
+        {
+          "text": "glossy nude lips",
+          "weight": 9,
+          "meta": {
+            "style": "natural",
+            "location": "lips"
+          }
+        },
+        {
+          "text": "colored mascara",
+          "weight": 6,
+          "meta": {
+            "style": "playful",
+            "location": "lashes"
+          }
+        },
+        {
+          "text": "contoured cheeks",
+          "weight": 8,
+          "meta": {
+            "style": "sculpted",
+            "location": "cheeks"
+          }
+        },
+        {
+          "text": "holographic accents",
+          "weight": 5,
+          "meta": {
+            "style": "futuristic",
+            "finish": "prismatic"
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "makeup-accent-fragment",
+      "name": "Make-up Accent Fragment",
+      "color": "#FF69B4",
+      "color_comment": "Hot Pink - Cosmetic enhancement",
+      "nodes": [
+        "makeup-accent"
+      ],
+      "description": "Makeup options as single unit",
+      "metadata": {
+        "fragment_type": "appearance_modifier",
+        "integration_priority": 5,
+        "style_note": "Can be combined with any character type"
+      }
+    }
+  ]
+}

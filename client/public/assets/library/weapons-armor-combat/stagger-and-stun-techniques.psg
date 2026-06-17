@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Stagger and Stun Techniques Asset Fragment",
+  "description": "Techniques that create brief incapacitation or openings",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "control",
+      "stun"
+    ],
+    "fragment_id": "weapons-stagger-and-stun-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "stagger-and-stun-techniques",
+      "type": "WeightedChoice",
+      "name": "Stagger and Stun Techniques",
+      "description": "Brief incapacitation and balance breaks",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "buttstock strike",
+          "weight": 12
+        },
+        {
+          "text": "shield bash",
+          "weight": 11
+        },
+        {
+          "text": "knee stomp",
+          "weight": 10
+        },
+        {
+          "text": "elbow crush",
+          "weight": 9
+        },
+        {
+          "text": "flash follow-up",
+          "weight": 8
+        },
+        {
+          "text": "low oblique kick",
+          "weight": 7
+        },
+        {
+          "text": "jaw hook slap",
+          "weight": 6
+        },
+        {
+          "text": "ear clap",
+          "weight": 5
+        },
+        {
+          "text": "shoulder check",
+          "weight": 4
+        },
+        {
+          "text": "ankle trip sweep",
+          "weight": 3
+        },
+        {
+          "text": "pommel stun",
+          "weight": 2
+        },
+        {
+          "text": "hilt rake",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-stagger-and-stun-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "stagger-and-stun-techniques"
+      ],
+      "description": "Stagger and stun techniques as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

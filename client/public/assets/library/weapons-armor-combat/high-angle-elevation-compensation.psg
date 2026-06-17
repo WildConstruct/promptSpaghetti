@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "High-Angle/Elevation Compensation Asset Fragment",
+  "description": "Angle cosine and aiming adjustments for steep shots",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "ballistics",
+      "angles"
+    ],
+    "fragment_id": "weapons-high-angle-compensation",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "high-angle-elevation-compensation",
+      "type": "WeightedChoice",
+      "name": "High-Angle/Elevation Compensation",
+      "description": "Ballistic and positional considerations",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "use cosine of angle to adjust effective distance",
+          "weight": 12
+        },
+        {
+          "text": "uphill vs downhill holds trend similarly",
+          "weight": 11
+        },
+        {
+          "text": "range-to-target vs horizontal distance distinction",
+          "weight": 10
+        },
+        {
+          "text": "confirm zero relevance at steep angles",
+          "weight": 9
+        },
+        {
+          "text": "reticle holds instead of dial for speed",
+          "weight": 8
+        },
+        {
+          "text": "body alignment to prevent canting error",
+          "weight": 7
+        },
+        {
+          "text": "stable support when prone on slope",
+          "weight": 6
+        },
+        {
+          "text": "monitor bipod/skid drift on incline",
+          "weight": 5
+        },
+        {
+          "text": "compensate for mechanical offset near cover",
+          "weight": 4
+        },
+        {
+          "text": "natural point of aim under tilt",
+          "weight": 3
+        },
+        {
+          "text": "verify dope with actual angle practice",
+          "weight": 2
+        },
+        {
+          "text": "post-shot correction using splash feedback",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-high-angle-compensation-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "high-angle-elevation-compensation"
+      ],
+      "description": "High-angle compensation as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

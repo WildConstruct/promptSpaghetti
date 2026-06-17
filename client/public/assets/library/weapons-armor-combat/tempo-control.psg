@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Tempo Control Asset Fragment",
+  "description": "Manipulating timing to create openings and disrupt opponents",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "timing",
+      "tempo"
+    ],
+    "fragment_id": "weapons-tempo-control",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "tempo-control",
+      "type": "WeightedChoice",
+      "name": "Tempo Control",
+      "description": "Timing manipulation techniques",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "slow-to-fast acceleration",
+          "weight": 12
+        },
+        {
+          "text": "fast-to-slow deceleration",
+          "weight": 11
+        },
+        {
+          "text": "break rhythm feint",
+          "weight": 10
+        },
+        {
+          "text": "half-beat insert",
+          "weight": 9
+        },
+        {
+          "text": "off-beat attack",
+          "weight": 8
+        },
+        {
+          "text": "pause to draw response",
+          "weight": 7
+        },
+        {
+          "text": "double-time press",
+          "weight": 6
+        },
+        {
+          "text": "delayed counter",
+          "weight": 5
+        },
+        {
+          "text": "sync with footwork",
+          "weight": 4
+        },
+        {
+          "text": "interrupt timing",
+          "weight": 3
+        },
+        {
+          "text": "reset distance",
+          "weight": 2
+        },
+        {
+          "text": "bait and wait",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-tempo-control-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "tempo-control"
+      ],
+      "description": "Tempo control as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

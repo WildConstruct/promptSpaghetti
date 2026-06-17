@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "name": "Combat Damage FX Asset Fragment",
+  "description": "Combat damage visual effects",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "fx",
+      "damage"
+    ],
+    "fragment_id": "weapons-combat-damage-fx",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "combat-damage-fx",
+      "type": "WeightedChoice",
+      "name": "Combat Damage FX",
+      "description": "Damage visual effects",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "scorch mark",
+          "weight": 10
+        },
+        {
+          "text": "frostbite crackle",
+          "weight": 9
+        },
+        {
+          "text": "EMP spark shower",
+          "weight": 8
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-combat-damage-fx-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "combat-damage-fx"
+      ],
+      "description": "Combat damage FX as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

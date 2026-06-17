@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Shooting Positions Asset Fragment",
+  "description": "Foundational and modified positions for stability and field use",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "positions",
+      "stability"
+    ],
+    "fragment_id": "weapons-shooting-positions",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "shooting-positions",
+      "type": "WeightedChoice",
+      "name": "Shooting Positions",
+      "description": "Positions for accuracy/stability",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "standing (isosceles)",
+          "weight": 12
+        },
+        {
+          "text": "standing (modern carbine)",
+          "weight": 11
+        },
+        {
+          "text": "kneeling supported",
+          "weight": 10
+        },
+        {
+          "text": "kneeling unsupported",
+          "weight": 9
+        },
+        {
+          "text": "squatting supported",
+          "weight": 8
+        },
+        {
+          "text": "seated supported",
+          "weight": 7
+        },
+        {
+          "text": "prone standard",
+          "weight": 6
+        },
+        {
+          "text": "prone modified (urban)",
+          "weight": 5
+        },
+        {
+          "text": "side prone",
+          "weight": 4
+        },
+        {
+          "text": "supine under-vehicle",
+          "weight": 3
+        },
+        {
+          "text": "barricade post support",
+          "weight": 2
+        },
+        {
+          "text": "tripod/bag support",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-shooting-positions-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "shooting-positions"
+      ],
+      "description": "Shooting positions as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

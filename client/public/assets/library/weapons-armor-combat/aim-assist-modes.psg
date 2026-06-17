@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Aim Assist Modes Asset Fragment",
+  "description": "Aiming aids and overlays",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "ranged",
+      "aim"
+    ],
+    "fragment_id": "weapons-aim-assist-modes",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "aim-assist-modes",
+      "type": "WeightedChoice",
+      "name": "Aim Assist Modes",
+      "description": "Aiming aids and overlays",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "red-dot",
+          "weight": 12
+        },
+        {
+          "text": "holographic",
+          "weight": 11
+        },
+        {
+          "text": "iron sights",
+          "weight": 10
+        },
+        {
+          "text": "laser assist",
+          "weight": 9
+        },
+        {
+          "text": "smart targeting",
+          "weight": 8
+        },
+        {
+          "text": "gyro stabilization",
+          "weight": 7
+        },
+        {
+          "text": "zoom scope",
+          "weight": 6
+        },
+        {
+          "text": "thermal overlay",
+          "weight": 5
+        },
+        {
+          "text": "night vision aim",
+          "weight": 4
+        },
+        {
+          "text": "auto-lead compute",
+          "weight": 3
+        },
+        {
+          "text": "wind drift compute",
+          "weight": 2
+        },
+        {
+          "text": "rangefinder ping",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-aim-assist-modes-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "aim-assist-modes"
+      ],
+      "description": "Aim assist modes as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

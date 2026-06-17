@@ -8,12 +8,526 @@
   "author": "Aspen (Asset Generator)",
   "fragments": [
     {
-      "id": "fragment-smile-simple",
-      "name": "Simple Smile Variations (Expanded)",
-      "description": "SIMPLE SYSTEM - Direct smile expressions without modifiers, expanded from 3 to 12 variations",
-      "path": "./facial-features/smile-variations-simple.psg",
+      "id": "fragment-RomanCitizen",
+      "name": "Roman Citizen Automa Greenscreen",
+      "description": "Randomizable Roman citizen prompts for Automa-style greenscreen generation.",
+      "path": "./RomanCitizen.psg",
+      "category": "extras",
+      "tags": [
+        "roman",
+        "automa",
+        "greenscreen",
+        "extras"
+      ],
+      "nodeCount": 15,
+      "edgeCount": 13,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-aerial-motions",
+      "name": "Aerial Motions",
+      "description": "",
+      "path": "./action-dynamics/aerial-motions.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-crowd-behaviors",
+      "name": "Crowd Behaviors",
+      "description": "",
+      "path": "./action-dynamics/crowd-behaviors.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-facial-micro-gestures",
+      "name": "Facial Micro-Gestures",
+      "description": "",
+      "path": "./action-dynamics/facial-micro-gestures.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-group-dynamics",
+      "name": "Emergent Group Dynamics",
+      "description": "",
+      "path": "./action-dynamics/group-dynamics.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-high-impact-moves",
+      "name": "High-Impact Moves",
+      "description": "",
+      "path": "./action-dynamics/high-impact-moves.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-object-interactions",
+      "name": "Object Interactions",
+      "description": "",
+      "path": "./action-dynamics/object-interactions.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-reaction-beats",
+      "name": "Reaction Beats",
+      "description": "",
+      "path": "./action-dynamics/reaction-beats.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-stealth-movements",
+      "name": "Stealth Movements",
+      "description": "",
+      "path": "./action-dynamics/stealth-movements.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-subtle-micro-actions",
+      "name": "Subtle Micro-Actions",
+      "description": "",
+      "path": "./action-dynamics/subtle-micro-actions.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-transformative-actions",
+      "name": "Transformative Actions",
+      "description": "",
+      "path": "./action-dynamics/transformative-actions.psg",
+      "category": "action-dynamics",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-accessory-silhouettes",
+      "name": "Accessory Silhouettes",
+      "description": "",
+      "path": "./body-silhouette/accessory-silhouettes.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-assistive-gear",
+      "name": "Assistive Gear",
+      "description": "",
+      "path": "./body-silhouette/assistive-gear.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-athletic-markers",
+      "name": "Athletic Markers",
+      "description": "",
+      "path": "./body-silhouette/athletic-markers.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-body-types",
+      "name": "Body Types",
+      "path": "./body-silhouette/body-types.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "body",
+        "types",
+        "build",
+        "physique"
+      ],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      },
+      "edgeCount": 0
+    },
+    {
+      "id": "fragment-clothing-fit",
+      "name": "Clothing Fit",
+      "description": "",
+      "path": "./body-silhouette/clothing-fit.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-gesture-starters",
+      "name": "Gesture Starters",
+      "description": "",
+      "path": "./body-silhouette/gesture-starters.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-movement-quality",
+      "name": "Movement Quality",
+      "description": "",
+      "path": "./body-silhouette/movement-quality.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-posture-keys",
+      "name": "Posture Keys",
+      "description": "",
+      "path": "./body-silhouette/posture-keys.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-scars-tattoos",
+      "name": "Scars & Tattoos",
+      "description": "",
+      "path": "./body-silhouette/scars-tattoos.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-stage-presence",
+      "name": "Stage Presence Flags",
+      "description": "",
+      "path": "./body-silhouette/stage-presence.psg",
+      "category": "body-silhouette",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-affect-masks",
+      "name": "Affect Masks",
+      "description": "",
+      "path": "./emotion-mood/affect-masks.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-conflict-escalation",
+      "name": "Conflict Escalation Stages",
+      "description": "",
+      "path": "./emotion-mood/conflict-escalation.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-empathetic-echoes",
+      "name": "Empathetic Echoes",
+      "description": "",
+      "path": "./emotion-mood/empathetic-echoes.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-energy-levels",
+      "name": "Energy Levels",
+      "description": "",
+      "path": "./emotion-mood/energy-levels.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-group-mood-fields",
+      "name": "Group Mood Fields",
+      "description": "",
+      "path": "./emotion-mood/group-mood-fields.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-intensity-modifiers",
+      "name": "Intensity Modifiers",
+      "description": "",
+      "path": "./emotion-mood/intensity-modifiers.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-nuanced-feels",
+      "name": "Nuanced Feels",
+      "description": "",
+      "path": "./emotion-mood/nuanced-feels.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-primary-emotions",
+      "name": "Primary Emotion Tags",
+      "path": "./emotion-mood/primary-emotions.psg",
+      "category": "emotion-mood",
+      "tags": [
+        "emotion",
+        "mood",
+        "feelings",
+        "primary"
+      ],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      },
+      "edgeCount": 0
+    },
+    {
+      "id": "fragment-subtext-signals",
+      "name": "Subtext Signals",
+      "description": "",
+      "path": "./emotion-mood/subtext-signals.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-temporal-mood-shifts",
+      "name": "Temporal Mood Shifts",
+      "description": "",
+      "path": "./emotion-mood/temporal-mood-shifts.psg",
+      "category": "emotion-mood",
+      "tags": [],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-age-indicators",
+      "name": "Age Indicators Asset Fragment",
+      "description": "Skin texture and age-related descriptors for character generation",
+      "path": "./facial-features/age-indicators.psg",
       "category": "facial-features",
-      "tags": ["face", "smile", "expression", "emotion"],
+      "tags": [
+        "face",
+        "age",
+        "wrinkles",
+        "features"
+      ],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -29,7 +543,12 @@
       "description": "Comprehensive eye descriptor system with shape, color/features, and positioning aspects",
       "path": "./facial-features/eye-descriptors-multi-aspect.psg",
       "category": "facial-features",
-      "tags": ["face", "eyes", "multi-aspect", "features"],
+      "tags": [
+        "face",
+        "eyes",
+        "multi-aspect",
+        "features"
+      ],
       "nodeCount": 3,
       "metadata": {
         "author": "Aspen",
@@ -40,12 +559,172 @@
       "edgeCount": 2
     },
     {
-      "id": "fragment-age-indicators",
-      "name": "Age Indicators Asset Fragment",
-      "description": "Skin texture and age-related descriptors for character generation",
-      "path": "./facial-features/age-indicators.psg",
+      "id": "fragment-facial-hair-styles",
+      "name": "Facial Hair Styles Asset Fragment",
+      "description": "Facial hair styles and grooming options for character generation",
+      "path": "./facial-features/facial-hair-styles.psg",
       "category": "facial-features",
-      "tags": ["face", "age", "wrinkles", "features"],
+      "tags": [
+        "facial-hair",
+        "beard",
+        "mustache",
+        "grooming",
+        "style"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-facial-symmetry",
+      "name": "Facial Symmetry Asset Fragment",
+      "description": "Facial balance and symmetry descriptors for character generation",
+      "path": "./facial-features/facial-symmetry.psg",
+      "category": "facial-features",
+      "tags": [
+        "symmetry",
+        "balance",
+        "facial-structure",
+        "proportion",
+        "aesthetic"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-iconic-features",
+      "name": "Iconic Features Asset Fragment",
+      "description": "Distinctive and memorable facial features for character generation",
+      "path": "./facial-features/iconic-features.psg",
+      "category": "facial-features",
+      "tags": [
+        "iconic",
+        "distinctive",
+        "memorable",
+        "unique",
+        "features"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-makeup-accents",
+      "name": "Make-up Accents Asset Fragment",
+      "description": "Artistic makeup and cosmetic accent options for character generation",
+      "path": "./facial-features/makeup-accents.psg",
+      "category": "facial-features",
+      "tags": [
+        "makeup",
+        "cosmetics",
+        "beauty",
+        "artistic",
+        "accents"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-piercings-mods",
+      "name": "Piercings & Mods Asset Fragment",
+      "description": "Body modifications and piercing options for character generation",
+      "path": "./facial-features/piercings-mods.psg",
+      "category": "facial-features",
+      "tags": [
+        "piercings",
+        "modifications",
+        "jewelry",
+        "alternative",
+        "accessories"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-skin-undertones",
+      "name": "Skin Undertones Asset Fragment",
+      "description": "Diverse skin tone and undertone descriptors for character generation",
+      "path": "./facial-features/skin-undertones.psg",
+      "category": "facial-features",
+      "tags": [
+        "skin",
+        "undertones",
+        "complexion",
+        "diversity",
+        "inclusive"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-smile-variations-contextual",
+      "name": "Contextual Smile Variations System",
+      "description": "CONTEXTUAL SYSTEM - Smile expressions with intensity modifiers for nuanced facial expressions",
+      "path": "./facial-features/smile-variations-contextual.psg",
+      "category": "facial-features",
+      "tags": [
+        "smile",
+        "expression",
+        "face",
+        "emotion",
+        "contextual",
+        "modifiers"
+      ],
+      "nodeCount": 3,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-smile-simple",
+      "name": "Simple Smile Variations (Expanded)",
+      "description": "SIMPLE SYSTEM - Direct smile expressions without modifiers, expanded from 3 to 12 variations",
+      "path": "./facial-features/smile-variations-simple.psg",
+      "category": "facial-features",
+      "tags": [
+        "face",
+        "smile",
+        "expression",
+        "emotion"
+      ],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -56,36 +735,48 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-hair-lengths",
-      "name": "Basic Hair Lengths Asset Fragment",
-      "description": "Hair length descriptors from buzzed to floor-length",
-      "path": "./hair/hair-lengths.psg",
+      "id": "fragment-hair-accessories",
+      "name": "Hair Accessories Asset Fragment",
+      "description": "Hair decoration and accessory options",
+      "path": "./hair/hair-accessories.psg",
       "category": "hair",
-      "tags": ["hair", "length", "style", "appearance"],
+      "tags": [
+        "hair",
+        "accessories",
+        "decoration",
+        "styling",
+        "adornment"
+      ],
       "nodeCount": 1,
+      "edgeCount": 0,
       "metadata": {
         "author": "Aspen",
         "created": "2025-01-15",
-        "updated": "2025-01-15",
+        "updated": "",
         "version": "1.0.0"
-      },
-      "edgeCount": 0
+      }
     },
     {
-      "id": "fragment-hair-textures",
-      "name": "Hair Textures Asset Fragment",
-      "description": "Hair texture patterns from straight to kinky coils",
-      "path": "./hair/hair-textures.psg",
+      "id": "fragment-hair-colors-fantasy",
+      "name": "Fantasy Hair Colors Asset Fragment",
+      "description": "Unnatural and fantasy hair color options",
+      "path": "./hair/hair-colors-fantasy.psg",
       "category": "hair",
-      "tags": ["hair", "texture", "curls", "waves"],
+      "tags": [
+        "hair",
+        "color",
+        "fantasy",
+        "unnatural",
+        "creative"
+      ],
       "nodeCount": 1,
+      "edgeCount": 0,
       "metadata": {
         "author": "Aspen",
         "created": "2025-01-15",
-        "updated": "2025-01-15",
+        "updated": "",
         "version": "1.0.0"
-      },
-      "edgeCount": 0
+      }
     },
     {
       "id": "fragment-hair-colors-natural",
@@ -93,7 +784,12 @@
       "description": "Natural hair color variations found in human populations",
       "path": "./hair/hair-colors-natural.psg",
       "category": "hair",
-      "tags": ["hair", "color", "natural", "shades"],
+      "tags": [
+        "hair",
+        "color",
+        "natural",
+        "shades"
+      ],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -104,11 +800,39 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-body-types",
-      "name": "Body Types",
-      "path": "./body-silhouette/body-types.psg",
-      "category": "body-silhouette",
-      "tags": ["body", "types", "build", "physique"],
+      "id": "fragment-hair-cuts-neutral",
+      "name": "Gender-Neutral Hair Cuts Asset Fragment",
+      "description": "Hair cuts and styles that work across gender presentations",
+      "path": "./hair/hair-cuts-neutral.psg",
+      "category": "hair",
+      "tags": [
+        "hair",
+        "haircut",
+        "gender-neutral",
+        "inclusive",
+        "style"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-lengths",
+      "name": "Basic Hair Lengths Asset Fragment",
+      "description": "Hair length descriptors from buzzed to floor-length",
+      "path": "./hair/hair-lengths.psg",
+      "category": "hair",
+      "tags": [
+        "hair",
+        "length",
+        "style",
+        "appearance"
+      ],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -119,11 +843,83 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-primary-emotions",
-      "name": "Primary Emotion Tags",
-      "path": "./emotion-mood/primary-emotions.psg",
-      "category": "emotion-mood",
-      "tags": ["emotion", "mood", "feelings", "primary"],
+      "id": "fragment-hair-motion-cues",
+      "name": "Motion-Oriented Hair Cues Asset Fragment",
+      "description": "Dynamic hair movement and motion descriptors",
+      "path": "./hair/hair-motion-cues.psg",
+      "category": "hair",
+      "tags": [
+        "hair",
+        "motion",
+        "movement",
+        "dynamic",
+        "action"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-styles-feminine",
+      "name": "Feminine-Coded Hair Styles Asset Fragment",
+      "description": "Traditionally feminine hair styling options",
+      "path": "./hair/hair-styles-feminine.psg",
+      "category": "hair",
+      "tags": [
+        "hair",
+        "feminine",
+        "traditional",
+        "salon",
+        "style"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-styles-masculine",
+      "name": "Masculine-Coded Hair Styles Asset Fragment",
+      "description": "Traditionally masculine hair styling options",
+      "path": "./hair/hair-styles-masculine.psg",
+      "category": "hair",
+      "tags": [
+        "hair",
+        "masculine",
+        "traditional",
+        "barbershop",
+        "style"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-textures",
+      "name": "Hair Textures Asset Fragment",
+      "description": "Hair texture patterns from straight to kinky coils",
+      "path": "./hair/hair-textures.psg",
+      "category": "hair",
+      "tags": [
+        "hair",
+        "texture",
+        "curls",
+        "waves"
+      ],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -134,41 +930,38 @@
       "edgeCount": 0
     },
     {
-      "id": "fragment-lighting-moods",
-      "name": "Lighting Moods",
-      "path": "./setting-environment/lighting-moods.psg",
-      "category": "setting-environment",
-      "tags": ["environment", "lighting", "atmosphere", "mood"],
+      "id": "fragment-hair-weathered-details",
+      "name": "Weathered Hair Details Asset Fragment",
+      "description": "Environmental and activity-based hair conditions",
+      "path": "./hair/hair-weathered-details.psg",
+      "category": "hair",
+      "tags": [
+        "hair",
+        "weathered",
+        "environmental",
+        "condition",
+        "texture"
+      ],
       "nodeCount": 1,
+      "edgeCount": 0,
       "metadata": {
         "author": "Aspen",
         "created": "2025-01-15",
-        "updated": "2025-01-15",
+        "updated": "",
         "version": "1.0.0"
-      },
-      "edgeCount": 0
-    },
-    {
-      "id": "fragment-weather-snapshots",
-      "name": "Weather Snapshots",
-      "path": "./setting-environment/weather-snapshots.psg",
-      "category": "setting-environment",
-      "tags": ["environment", "weather", "climate", "conditions"],
-      "nodeCount": 1,
-      "metadata": {
-        "author": "Aspen",
-        "created": "2025-01-15",
-        "updated": "2025-01-15",
-        "version": "1.0.0"
-      },
-      "edgeCount": 0
+      }
     },
     {
       "id": "fragment-architectural-styles",
       "name": "Architectural Styles",
       "path": "./setting-environment/architectural-styles.psg",
       "category": "setting-environment",
-      "tags": ["environment", "architecture", "buildings", "structures"],
+      "tags": [
+        "environment",
+        "architecture",
+        "buildings",
+        "structures"
+      ],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -179,11 +972,37 @@
       "edgeCount": 0
     },
     {
+      "id": "fragment-atmospherics",
+      "name": "Atmospherics",
+      "description": "",
+      "path": "./setting-environment/atmospherics.psg",
+      "category": "setting-environment",
+      "tags": [
+        "atmosphere",
+        "particles",
+        "effects",
+        "ambience"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
       "id": "fragment-backdrop-adjectives",
       "name": "Backdrop Adjectives",
       "path": "./setting-environment/backdrop-adjectives.psg",
       "category": "setting-environment",
-      "tags": ["environment", "backdrop", "scene", "descriptive"],
+      "tags": [
+        "environment",
+        "backdrop",
+        "scene",
+        "descriptive"
+      ],
       "nodeCount": 1,
       "metadata": {
         "author": "Aspen",
@@ -192,16 +1011,2165 @@
         "version": "1.0.0"
       },
       "edgeCount": 0
+    },
+    {
+      "id": "fragment-crowd-density",
+      "name": "Crowd Density Tags",
+      "description": "",
+      "path": "./setting-environment/crowd-density.psg",
+      "category": "setting-environment",
+      "tags": [
+        "crowd",
+        "density",
+        "population",
+        "people"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-geology-touches",
+      "name": "Geology Touches",
+      "description": "",
+      "path": "./setting-environment/geology-touches.psg",
+      "category": "setting-environment",
+      "tags": [
+        "geology",
+        "landscape",
+        "terrain",
+        "formations"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-lighting-moods",
+      "name": "Lighting Moods",
+      "path": "./setting-environment/lighting-moods.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "lighting",
+        "atmosphere",
+        "mood"
+      ],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      },
+      "edgeCount": 0
+    },
+    {
+      "id": "fragment-sound-snippets",
+      "name": "Sound Snippets",
+      "description": "",
+      "path": "./setting-environment/sound-snippets.psg",
+      "category": "setting-environment",
+      "tags": [
+        "sound",
+        "audio",
+        "ambience",
+        "noise"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-spatial-relations",
+      "name": "Spatial Relations",
+      "description": "",
+      "path": "./setting-environment/spatial-relations.psg",
+      "category": "setting-environment",
+      "tags": [
+        "spatial",
+        "dimensions",
+        "architecture",
+        "space"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-temporal-markers",
+      "name": "Temporal Markers",
+      "description": "",
+      "path": "./setting-environment/temporal-markers.psg",
+      "category": "setting-environment",
+      "tags": [
+        "time",
+        "temporal",
+        "daylight",
+        "atmosphere"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen (Asset Generator)",
+        "created": "2025-01-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-weather-snapshots",
+      "name": "Weather Snapshots",
+      "path": "./setting-environment/weather-snapshots.psg",
+      "category": "setting-environment",
+      "tags": [
+        "environment",
+        "weather",
+        "climate",
+        "conditions"
+      ],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      },
+      "edgeCount": 0
+    },
+    {
+      "id": "fragment-airframes",
+      "name": "Airframes Asset Fragment",
+      "description": "Airframe types and mounts",
+      "path": "./vehicles-mobility/airframes.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "air",
+        "mobility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-call-sign-decals",
+      "name": "Call-Sign Decals Asset Fragment",
+      "description": "Call-sign and nose-art decals",
+      "path": "./vehicles-mobility/call-sign-decals.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "decals",
+        "style"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-cockpit-vibes",
+      "name": "Cockpit Vibes Asset Fragment",
+      "description": "Cockpit vibe descriptors",
+      "path": "./vehicles-mobility/cockpit-vibes.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "cockpit",
+        "mobility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-damage-states",
+      "name": "Damage States Asset Fragment",
+      "description": "Damage states for vehicles",
+      "path": "./vehicles-mobility/damage-states.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "damage",
+        "mobility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-ground-rigs",
+      "name": "Ground Rigs Asset Fragment",
+      "description": "Ground vehicles and rigs",
+      "path": "./vehicles-mobility/ground-rigs.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "ground",
+        "mobility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-locomotion-traits",
+      "name": "Locomotion Traits Asset Fragment",
+      "description": "Locomotion traits and characteristics",
+      "path": "./vehicles-mobility/locomotion-traits.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "traits",
+        "mobility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-paint-job-styles",
+      "name": "Paint-Job Styles Asset Fragment",
+      "description": "Vehicle paint-job styles",
+      "path": "./vehicles-mobility/paint-job-styles.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "paint",
+        "style"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-signature-exhaust",
+      "name": "Signature Exhaust Asset Fragment",
+      "description": "Signature exhaust effects",
+      "path": "./vehicles-mobility/signature-exhaust.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "exhaust",
+        "mobility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-spacecraft-classes",
+      "name": "Spacecraft Classes Asset Fragment",
+      "description": "Spacecraft classes",
+      "path": "./vehicles-mobility/spacecraft-classes.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "space",
+        "mobility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-watercraft",
+      "name": "Watercraft Asset Fragment",
+      "description": "Watercraft archetypes",
+      "path": "./vehicles-mobility/watercraft.psg",
+      "category": "vehicles-mobility",
+      "tags": [
+        "vehicles",
+        "water",
+        "mobility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-aim-assist-modes",
+      "name": "Aim Assist Modes Asset Fragment",
+      "description": "Aiming aids and overlays",
+      "path": "./weapons-armor-combat/aim-assist-modes.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ranged",
+        "aim"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-axe-techniques",
+      "name": "Axe Techniques Asset Fragment",
+      "description": "Axe handling and attack variations",
+      "path": "./weapons-armor-combat/axe-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "axe",
+        "technique"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-barricade-shooting-positions",
+      "name": "Barricade Shooting Positions Asset Fragment",
+      "description": "Supported positions and angles when using cover or barricades",
+      "path": "./weapons-armor-combat/barricade-shooting-positions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "cover",
+        "positions"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-barricade-shooting-techniques",
+      "name": "Barricade Shooting Techniques Asset Fragment",
+      "description": "Building stable positions and angles around barricades",
+      "path": "./weapons-armor-combat/barricade-shooting-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "barricade",
+        "positions"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-bayonet-techniques",
+      "name": "Bayonet Techniques Asset Fragment",
+      "description": "Techniques for thrusts, buttstrokes, parries, and entries with bayonet",
+      "path": "./weapons-armor-combat/bayonet-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "bayonet",
+        "close-quarters"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-bind-and-wind",
+      "name": "Bind and Wind Asset Fragment",
+      "description": "Blade binding and winding actions",
+      "path": "./weapons-armor-combat/bind-and-wind.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "blade",
+        "bind"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-blade-forms",
+      "name": "Blade Forms Asset Fragment",
+      "description": "Blade forms and profiles",
+      "path": "./weapons-armor-combat/blade-forms.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "melee",
+        "blade"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-bow-draw-styles",
+      "name": "Bow Draw Styles Asset Fragment",
+      "description": "Archery draw and release styles",
+      "path": "./weapons-armor-combat/bow-draw-styles.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "archery",
+        "draw"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-breach-techniques",
+      "name": "Breach Techniques Asset Fragment",
+      "description": "Door, barrier, and window breach methods for entry",
+      "path": "./weapons-armor-combat/breach-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "breach",
+        "entry"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-close-quarters-techniques",
+      "name": "Close-Quarters Techniques Asset Fragment",
+      "description": "CQC strikes and controls in tight spaces",
+      "path": "./weapons-armor-combat/close-quarters-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "CQC",
+        "technique"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-combat-damage-fx",
+      "name": "Combat Damage FX Asset Fragment",
+      "description": "Combat damage visual effects",
+      "path": "./weapons-armor-combat/combat-damage-fx.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "fx",
+        "damage"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-counter-strikes",
+      "name": "Counter Strikes Asset Fragment",
+      "description": "Immediate counter-attacks and stops",
+      "path": "./weapons-armor-combat/counter-strikes.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "technique",
+        "counter"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-cover-transitions",
+      "name": "Cover Transitions Asset Fragment",
+      "description": "Transitions between covers and angles for ranged combat",
+      "path": "./weapons-armor-combat/cover-transitions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ranged",
+        "cover"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-cut-angle-sets",
+      "name": "Cut Angle Sets Asset Fragment",
+      "description": "Standardized cutting angles and flows",
+      "path": "./weapons-armor-combat/cut-angle-sets.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "blade",
+        "angles"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-defensive-gear",
+      "name": "Defensive Gear Asset Fragment",
+      "description": "Defensive gear and armor",
+      "path": "./weapons-armor-combat/defensive-gear.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "defense",
+        "armor"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-disarm-maneuvers",
+      "name": "Disarm Maneuvers Asset Fragment",
+      "description": "Weapon removal techniques",
+      "path": "./weapons-armor-combat/disarm-maneuvers.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "technique",
+        "disarm"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-distance-management",
+      "name": "Distance Management Asset Fragment",
+      "description": "Controlling measure, entries, exits, and off-line movement",
+      "path": "./weapons-armor-combat/distance-management.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "distance",
+        "movement"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-draw-techniques",
+      "name": "Draw Techniques Asset Fragment",
+      "description": "Sword and firearm draw techniques",
+      "path": "./weapons-armor-combat/draw-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "technique",
+        "draw"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-dry-fire-progression",
+      "name": "Dry Fire Progression Asset Fragment",
+      "description": "Safe setup and structured skill progression bridging to live fire",
+      "path": "./weapons-armor-combat/dry-fire-progression.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "dry-fire",
+        "training"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-edge-alignment-cues",
+      "name": "Edge Alignment Cues Asset Fragment",
+      "description": "Cutting edge alignment and angles",
+      "path": "./weapons-armor-combat/edge-alignment-cues.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "blade",
+        "alignment"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-evasion-moves",
+      "name": "Evasion Moves Asset Fragment",
+      "description": "Defensive evasions and body movement",
+      "path": "./weapons-armor-combat/evasion-moves.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "movement",
+        "evasion"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-explosives",
+      "name": "Explosives Asset Fragment",
+      "description": "Explosive types",
+      "path": "./weapons-armor-combat/explosives.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "explosives"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-feint-patterns",
+      "name": "Feint Patterns Asset Fragment",
+      "description": "Deceptive attacks and misdirection patterns",
+      "path": "./weapons-armor-combat/feint-patterns.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "technique",
+        "feint"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-finishing-moves",
+      "name": "Finishing Moves Asset Fragment",
+      "description": "Fight-ending maneuvers",
+      "path": "./weapons-armor-combat/finishing-moves.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "technique",
+        "finish"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-fire-and-maneuver",
+      "name": "Fire and Maneuver Asset Fragment",
+      "description": "Team movement coordinated with suppressive fire",
+      "path": "./weapons-armor-combat/fire-and-maneuver.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "tactics",
+        "movement"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-grapple-entries",
+      "name": "Grapple Entries Asset Fragment",
+      "description": "Entries into grappling range",
+      "path": "./weapons-armor-combat/grapple-entries.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "grapple",
+        "entry"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-grip-variations",
+      "name": "Grip Variations Asset Fragment",
+      "description": "Grip styles and variations for control across platforms",
+      "path": "./weapons-armor-combat/grip-variations.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "grip",
+        "control"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-guard-breakers",
+      "name": "Guard Breakers Asset Fragment",
+      "description": "Techniques to break or collapse an opponent's guard",
+      "path": "./weapons-armor-combat/guard-breakers.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "pressure",
+        "guard"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-guard-postures",
+      "name": "Guard Postures Asset Fragment",
+      "description": "Weapon guards and ready positions (bladed)",
+      "path": "./weapons-armor-combat/guard-postures.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "guard",
+        "posture"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-high-angle-elevation-compensation",
+      "name": "High-Angle/Elevation Compensation Asset Fragment",
+      "description": "Angle cosine and aiming adjustments for steep shots",
+      "path": "./weapons-armor-combat/high-angle-elevation-compensation.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ballistics",
+        "angles"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-historical-techniques",
+      "name": "Historical Techniques Asset Fragment",
+      "description": "Historical combat techniques",
+      "path": "./weapons-armor-combat/historical-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "historical",
+        "techniques"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-holster-styles",
+      "name": "Holster Styles Asset Fragment",
+      "description": "Holster and carry styles",
+      "path": "./weapons-armor-combat/holster-styles.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "holster",
+        "carry"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-improvised-weapons",
+      "name": "Improvised Weapons Asset Fragment",
+      "description": "Improvised weapons",
+      "path": "./weapons-armor-combat/improvised-weapons.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "improvised"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-laser-aiming-devices",
+      "name": "Laser Aiming Devices (IR/Visible) Asset Fragment",
+      "description": "Zeroing, offset, and activation discipline for lasers",
+      "path": "./weapons-armor-combat/laser-aiming-devices.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "laser",
+        "IR"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-low-light-techniques",
+      "name": "Low-Light Techniques Asset Fragment",
+      "description": "Light discipline, search methods, and PID under low-light conditions",
+      "path": "./weapons-armor-combat/low-light-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "low-light",
+        "flashlight"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-magazine-management",
+      "name": "Magazine Management Asset Fragment",
+      "description": "Retention policies, indexing, handling, and lifecycle checks",
+      "path": "./weapons-armor-combat/magazine-management.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "magazine",
+        "management"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-malfunction-clearance-framework",
+      "name": "Malfunction Clearance Framework Asset Fragment",
+      "description": "Immediate and remedial actions to restore weapon function",
+      "path": "./weapons-armor-combat/malfunction-clearance-framework.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "malfunction",
+        "clearance"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-malfunction-clears",
+      "name": "Malfunction Clears Asset Fragment",
+      "description": "Immediate and remedial actions for weapon malfunctions",
+      "path": "./weapons-armor-combat/malfunction-clears.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "reload",
+        "malfunction"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-martial-stances",
+      "name": "Martial Stances Asset Fragment",
+      "description": "Martial stances",
+      "path": "./weapons-armor-combat/martial-stances.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "martial",
+        "stances"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-mechanical-offset-techniques",
+      "name": "Mechanical Offset Techniques Asset Fragment",
+      "description": "Height-over-bore holds and offsets at near distances and around cover",
+      "path": "./weapons-armor-combat/mechanical-offset-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "offset",
+        "holds"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-muzzle-discipline",
+      "name": "Muzzle Discipline Asset Fragment",
+      "description": "Maintaining safe arcs and angles, preventing cross-cover and flags",
+      "path": "./weapons-armor-combat/muzzle-discipline.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "safety",
+        "discipline"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-offhand-utilities",
+      "name": "Offhand Utilities Asset Fragment",
+      "description": "Offhand tools, controls, and distractions",
+      "path": "./weapons-armor-combat/offhand-utilities.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "offhand",
+        "utility"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-one-handed-weapon-manipulation",
+      "name": "One-Handed Weapon Manipulation Asset Fragment",
+      "description": "Injured-limb protocols for reloads, malfunctions, and handling",
+      "path": "./weapons-armor-combat/one-handed-weapon-manipulation.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "one-handed",
+        "injury"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-one-handed-weapon-use",
+      "name": "One-Handed Weapon Use Asset Fragment",
+      "description": "Adaptations for operating weapons with one hand occupied or injured",
+      "path": "./weapons-armor-combat/one-handed-weapon-use.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "one-hand",
+        "adaptation"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-parry-techniques",
+      "name": "Parry Techniques Asset Fragment",
+      "description": "Parry types and deflections",
+      "path": "./weapons-armor-combat/parry-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "technique",
+        "parry"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-polearm-techniques",
+      "name": "Polearm Techniques Asset Fragment",
+      "description": "Polearm methods: spear, halberd, glaive",
+      "path": "./weapons-armor-combat/polearm-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "polearm",
+        "technique"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-pommel-butt-strikes",
+      "name": "Pommel & Butt Strikes Asset Fragment",
+      "description": "Strikes using pommel, butt, or haft",
+      "path": "./weapons-armor-combat/pommel-butt-strikes.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "pommel",
+        "butt"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-post-engagement-procedures",
+      "name": "Post-Engagement Procedures Asset Fragment",
+      "description": "Immediate actions after engagement: checks, comms, and safe reindex",
+      "path": "./weapons-armor-combat/post-engagement-procedures.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "post-engagement",
+        "procedures"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-presentation-drills",
+      "name": "Presentation Drills Asset Fragment",
+      "description": "From ready or draw to first accurate shot: indexing and extension drills",
+      "path": "./weapons-armor-combat/presentation-drills.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "drills",
+        "presentation"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-primary-to-secondary-transitions",
+      "name": "Primary-to-Secondary Transitions Asset Fragment",
+      "description": "Efficient, safe transitions from long gun to handgun and back",
+      "path": "./weapons-armor-combat/primary-to-secondary-transitions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "transition",
+        "pistol",
+        "rifle"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-projectile-trails",
+      "name": "Projectile Trails Asset Fragment",
+      "description": "Stylized trails and flight effects",
+      "path": "./weapons-armor-combat/projectile-trails.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "fx",
+        "projectile"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-range-estimation",
+      "name": "Range Estimation Asset Fragment",
+      "description": "Techniques for estimating distance to targets and landmarks",
+      "path": "./weapons-armor-combat/range-estimation.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "range",
+        "estimation"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-ranged-stances",
+      "name": "Ranged Stances Asset Fragment",
+      "description": "Shooting stances and ready positions",
+      "path": "./weapons-armor-combat/ranged-stances.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ranged",
+        "stance"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-ranged-tech",
+      "name": "Ranged Tech Asset Fragment",
+      "description": "Ranged weapon technologies",
+      "path": "./weapons-armor-combat/ranged-tech.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ranged",
+        "tech"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-ready-positions",
+      "name": "Ready Positions Asset Fragment",
+      "description": "Common weapons ready positions for rapid presentation and safety",
+      "path": "./weapons-armor-combat/ready-positions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ready",
+        "positions"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-recoil-management-cadence-control",
+      "name": "Recoil Management & Cadence Control Asset Fragment",
+      "description": "Grip, stance, and sight tracking to control recoil and splits",
+      "path": "./weapons-armor-combat/recoil-management-cadence-control.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "recoil",
+        "cadence"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-recoil-management",
+      "name": "Recoil Management Asset Fragment",
+      "description": "Methods to control muzzle rise and recover quickly",
+      "path": "./weapons-armor-combat/recoil-management.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ranged",
+        "control"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-red-dot-vs-iron-indexing",
+      "name": "Red Dot vs Iron Sight Indexing Asset Fragment",
+      "description": "Acquisition and indexing differences between optics and irons",
+      "path": "./weapons-armor-combat/red-dot-vs-iron-indexing.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "sights",
+        "optics"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-reload-techniques",
+      "name": "Reload Techniques Asset Fragment",
+      "description": "Reload methods for ranged weapons",
+      "path": "./weapons-armor-combat/reload-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "technique",
+        "reload"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-room-entry-techniques",
+      "name": "Room Entry Techniques Asset Fragment",
+      "description": "Stack and solo room entry techniques for CQB",
+      "path": "./weapons-armor-combat/room-entry-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "cqb",
+        "entry"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-safety-selector-manipulation",
+      "name": "Safety Selector Manipulation Asset Fragment",
+      "description": "Selector control from safe to fire and back under various contexts",
+      "path": "./weapons-armor-combat/safety-selector-manipulation.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "safety",
+        "selector"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-scan-and-assess",
+      "name": "Scan and Assess Asset Fragment",
+      "description": "Post-shot scanning, 360 awareness, and follow-through actions",
+      "path": "./weapons-armor-combat/scan-and-assess.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "scan",
+        "assess"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-shield-techniques",
+      "name": "Shield Techniques Asset Fragment",
+      "description": "Shield usage methods",
+      "path": "./weapons-armor-combat/shield-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "shield",
+        "technique"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-shooting-on-the-move",
+      "name": "Shooting on the Move Asset Fragment",
+      "description": "Techniques for engaging while moving in various directions",
+      "path": "./weapons-armor-combat/shooting-on-the-move.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "movement",
+        "ranged"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-shooting-positions",
+      "name": "Shooting Positions Asset Fragment",
+      "description": "Foundational and modified positions for stability and field use",
+      "path": "./weapons-armor-combat/shooting-positions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "positions",
+        "stability"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-shooting-through-barriers",
+      "name": "Shooting Through Barriers Asset Fragment",
+      "description": "Deflection, aiming adjustments, and hazards when engaging through materials",
+      "path": "./weapons-armor-combat/shooting-through-barriers.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "barriers",
+        "deflection"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-shoulder-transitions",
+      "name": "Shoulder Transitions Asset Fragment",
+      "description": "Transitions between strong and support shoulders for angle management",
+      "path": "./weapons-armor-combat/shoulder-transitions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "transitions",
+        "shoulder"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-sighting-methods",
+      "name": "Sighting Methods Asset Fragment",
+      "description": "Various sighting approaches for different engagement contexts",
+      "path": "./weapons-armor-combat/sighting-methods.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "aiming",
+        "sights"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-sling-techniques",
+      "name": "Sling Techniques Asset Fragment",
+      "description": "Sling setup, support, and transitions for control and retention",
+      "path": "./weapons-armor-combat/sling-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "sling",
+        "control"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-stagger-and-stun-techniques",
+      "name": "Stagger and Stun Techniques Asset Fragment",
+      "description": "Techniques that create brief incapacitation or openings",
+      "path": "./weapons-armor-combat/stagger-and-stun-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "control",
+        "stun"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-stance-transitions",
+      "name": "Stance Transitions Asset Fragment",
+      "description": "Transitions between stances and guards under pressure and movement",
+      "path": "./weapons-armor-combat/stance-transitions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "stances",
+        "transitions"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-strike-combinations",
+      "name": "Strike Combinations Asset Fragment",
+      "description": "Chained strikes to vary lines, tempo, and openings",
+      "path": "./weapons-armor-combat/strike-combinations.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "striking",
+        "combinations"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-suppressive-fire-patterns",
+      "name": "Suppressive Fire Patterns Asset Fragment",
+      "description": "Fire patterns for area control",
+      "path": "./weapons-armor-combat/suppressive-fire-patterns.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ranged",
+        "pattern"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-suppressor-techniques",
+      "name": "Suppressor Techniques Asset Fragment",
+      "description": "POI shift management, gas/backpressure tuning, and signature considerations",
+      "path": "./weapons-armor-combat/suppressor-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "suppressor",
+        "gas"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-target-prioritization",
+      "name": "Target Prioritization Asset Fragment",
+      "description": "Heuristic sets for selecting engagement order",
+      "path": "./weapons-armor-combat/target-prioritization.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "tactics",
+        "priority"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-target-transitions",
+      "name": "Target Transitions Asset Fragment",
+      "description": "Rapid transitions between multiple targets with efficient indexing",
+      "path": "./weapons-armor-combat/target-transitions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "transitions",
+        "targets"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-tempo-control",
+      "name": "Tempo Control Asset Fragment",
+      "description": "Manipulating timing to create openings and disrupt opponents",
+      "path": "./weapons-armor-combat/tempo-control.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "timing",
+        "tempo"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-throwing-techniques",
+      "name": "Throwing Techniques Asset Fragment",
+      "description": "Throwing methods for knives, axes, and objects",
+      "path": "./weapons-armor-combat/throwing-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "throwing",
+        "technique"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-trigger-control-techniques",
+      "name": "Trigger Control Techniques Asset Fragment",
+      "description": "Prep, break, reset, and cadence control",
+      "path": "./weapons-armor-combat/trigger-control-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "trigger",
+        "control"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-two-weapon-techniques",
+      "name": "Two-Weapon Techniques Asset Fragment",
+      "description": "Dual-wield coordination and patterns",
+      "path": "./weapons-armor-combat/two-weapon-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "dual-wield",
+        "technique"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-use-of-cover-vs-concealment",
+      "name": "Use of Cover vs Concealment Asset Fragment",
+      "description": "Exposure management and movement along cover",
+      "path": "./weapons-armor-combat/use-of-cover-vs-concealment.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "cover",
+        "concealment"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-victory-gestures",
+      "name": "Victory Gestures Asset Fragment",
+      "description": "Victory gestures",
+      "path": "./weapons-armor-combat/victory-gestures.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "gestures",
+        "victory"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-weapon-flourishes",
+      "name": "Weapon Flourishes Asset Fragment",
+      "description": "Stylistic flourishes and intimidation displays",
+      "path": "./weapons-armor-combat/weapon-flourishes.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "style",
+        "flourish"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-weapon-indexing",
+      "name": "Weapon Indexing Asset Fragment",
+      "description": "Consistent reference points for hands, stock, and sights",
+      "path": "./weapons-armor-combat/weapon-indexing.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "indexing",
+        "consistency"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-weapon-personalization",
+      "name": "Weapon Personalization Asset Fragment",
+      "description": "Customization flourishes and identity marks",
+      "path": "./weapons-armor-combat/weapon-personalization.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "style",
+        "custom"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-weapon-retention-and-clinch-fighting",
+      "name": "Weapon Retention & Clinch Fighting Asset Fragment",
+      "description": "Retention positions and close-quarters control to prevent disarm",
+      "path": "./weapons-armor-combat/weapon-retention-and-clinch-fighting.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "retention",
+        "clinch"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-weapon-retention-techniques",
+      "name": "Weapon Retention Techniques Asset Fragment",
+      "description": "Retention strategies to prevent disarm",
+      "path": "./weapons-armor-combat/weapon-retention-techniques.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "retention",
+        "defense"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-weapon-transitions",
+      "name": "Weapon Transitions Asset Fragment",
+      "description": "Transitions between weapon states and types",
+      "path": "./weapons-armor-combat/weapon-transitions.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "transition",
+        "manipulation"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-wind-and-drop-compensation",
+      "name": "Wind and Drop Compensation Asset Fragment",
+      "description": "Methods for compensating wind, bullet drop, and lead",
+      "path": "./weapons-armor-combat/wind-and-drop-compensation.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "ballistics",
+        "compensation"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-zeroing-procedures",
+      "name": "Zeroing Procedures Asset Fragment",
+      "description": "Procedures for common zero distances and validation",
+      "path": "./weapons-armor-combat/zeroing-procedures.psg",
+      "category": "weapons-armor-combat",
+      "tags": [
+        "weapons",
+        "zero",
+        "procedure"
+      ],
+      "nodeCount": 1,
+      "edgeCount": 0,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-08-15",
+        "updated": "",
+        "version": "1.0.0"
+      }
     }
   ],
   "statistics": {
-    "total_fragments": 12,
+    "total_fragments": 161,
     "categories": [
+      "action-dynamics",
       "body-silhouette",
       "emotion-mood",
+      "extras",
       "facial-features",
       "hair",
-      "setting-environment"
-    ]
+      "setting-environment",
+      "vehicles-mobility",
+      "weapons-armor-combat"
+    ],
+    "total_nodes": 179
   }
 }

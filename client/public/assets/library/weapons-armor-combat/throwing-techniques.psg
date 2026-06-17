@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Throwing Techniques Asset Fragment",
+  "description": "Throwing methods for knives, axes, and objects",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "throwing",
+      "technique"
+    ],
+    "fragment_id": "weapons-throwing-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "throwing-techniques",
+      "type": "WeightedChoice",
+      "name": "Throwing Techniques",
+      "description": "Throwing methods for knives, axes, and objects",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "overhand throw",
+          "weight": 12
+        },
+        {
+          "text": "underhand toss",
+          "weight": 11
+        },
+        {
+          "text": "spin throw",
+          "weight": 10
+        },
+        {
+          "text": "no-spin throw",
+          "weight": 9
+        },
+        {
+          "text": "half-spin",
+          "weight": 8
+        },
+        {
+          "text": "sidearm throw",
+          "weight": 7
+        },
+        {
+          "text": "reverse grip throw",
+          "weight": 6
+        },
+        {
+          "text": "vertical drop",
+          "weight": 5
+        },
+        {
+          "text": "skip throw",
+          "weight": 4
+        },
+        {
+          "text": "lob arc",
+          "weight": 3
+        },
+        {
+          "text": "bank shot",
+          "weight": 2
+        },
+        {
+          "text": "quick flick",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-throwing-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "throwing-techniques"
+      ],
+      "description": "Throwing techniques as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

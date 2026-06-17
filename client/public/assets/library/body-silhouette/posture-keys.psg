@@ -1,0 +1,107 @@
+{
+  "version": "1.0.0",
+  "name": "Posture Keys",
+  "metadata": {
+    "name": "Posture Keys",
+    "category": "body-silhouette",
+    "type": "SIMPLE",
+    "description": "Character posture and stance variations"
+  },
+  "nodes": [
+    {
+      "id": "posture-keys-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "ramrod straight military bearing",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "casual slouch with relaxed shoulders",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "predator lean-in ready to pounce",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "aristocratic upright elegance",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "defensive hunch protecting vitals",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "swagger lean with hip thrust",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "submissive shoulder drop",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "alert forward tilt on balls of feet",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "exhausted slump against support",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "coiled spring tension ready to explode",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Posture Keys",
+        "region": "steel-blue",
+        "collapsed": false
+      },
+      "name": "Posture Keys"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-posture-keys",
+      "name": "Posture Keys",
+      "color": "steel-blue",
+      "nodes": [
+        "posture-keys-main"
+      ]
+    }
+  ]
+}

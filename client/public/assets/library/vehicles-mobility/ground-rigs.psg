@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "name": "Ground Rigs Asset Fragment",
+  "description": "Ground vehicles and rigs",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "vehicles-mobility",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "vehicles",
+      "ground",
+      "mobility"
+    ],
+    "fragment_id": "vehicles-ground-rigs",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "ground-rigs",
+      "type": "WeightedChoice",
+      "name": "Ground Rigs",
+      "description": "Ground vehicle archetypes",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "dune buggy",
+          "weight": 10
+        },
+        {
+          "text": "armored tuk-tuk",
+          "weight": 9
+        },
+        {
+          "text": "maglev sled",
+          "weight": 8
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "vehicles-ground-rigs-fragment",
+      "name": "Vehicles & Mobility Fragment",
+      "color": "#4682B4",
+      "color_comment": "Steel Blue - Vehicles & Mobility",
+      "nodes": [
+        "ground-rigs"
+      ],
+      "description": "Ground rigs options as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

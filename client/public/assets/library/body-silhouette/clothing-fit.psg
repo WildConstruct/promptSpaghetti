@@ -1,0 +1,107 @@
+{
+  "version": "1.0.0",
+  "name": "Clothing Fit",
+  "metadata": {
+    "name": "Clothing Fit",
+    "category": "body-silhouette",
+    "type": "SIMPLE",
+    "description": "How clothing fits and drapes on the body"
+  },
+  "nodes": [
+    {
+      "id": "clothing-fit-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "perfectly tailored bespoke fit",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "oversized baggy streetwear",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "form-fitting tactical gear",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "flowing drape of loose fabric",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "skin-tight athletic compression",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "deliberately distressed and torn",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "layered asymmetrical wrapping",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "crisp uniform precision",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "vintage worn-in comfort",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "structured architectural silhouette",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Clothing Fit",
+        "region": "steel-blue",
+        "collapsed": false
+      },
+      "name": "Clothing Fit"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-clothing-fit",
+      "name": "Clothing Fit",
+      "color": "steel-blue",
+      "nodes": [
+        "clothing-fit-main"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Pommel & Butt Strikes Asset Fragment",
+  "description": "Strikes using pommel, butt, or haft",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "pommel",
+      "butt"
+    ],
+    "fragment_id": "weapons-pommel-butt-strikes",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "pommel-butt-strikes",
+      "type": "WeightedChoice",
+      "name": "Pommel & Butt Strikes",
+      "description": "Strikes using pommel, butt, or haft",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "pommel smash",
+          "weight": 12
+        },
+        {
+          "text": "pommel rake",
+          "weight": 11
+        },
+        {
+          "text": "buttstroke I",
+          "weight": 10
+        },
+        {
+          "text": "buttstroke II",
+          "weight": 9
+        },
+        {
+          "text": "rifle butt jab",
+          "weight": 8
+        },
+        {
+          "text": "haft jab",
+          "weight": 7
+        },
+        {
+          "text": "counterweight strike",
+          "weight": 6
+        },
+        {
+          "text": "butt hook",
+          "weight": 5
+        },
+        {
+          "text": "baseplate bash",
+          "weight": 4
+        },
+        {
+          "text": "pommel tap",
+          "weight": 3
+        },
+        {
+          "text": "butt smash",
+          "weight": 2
+        },
+        {
+          "text": "butt sweep",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-pommel-butt-strikes-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "pommel-butt-strikes"
+      ],
+      "description": "Pommel & butt strikes as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

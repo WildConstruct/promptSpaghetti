@@ -1,0 +1,107 @@
+{
+  "version": "1.0.0",
+  "name": "Empathetic Echoes",
+  "metadata": {
+    "name": "Empathetic Echoes",
+    "category": "emotion-mood",
+    "type": "SIMPLE",
+    "description": "Emotional mirroring and empathetic responses"
+  },
+  "nodes": [
+    {
+      "id": "empathetic-echoes-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "unconsciously mirroring posture",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "emotional contagion spreading",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "contrasted calm against chaos",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "sympathetic tears forming",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "matching energy levels",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "counter-balancing mood",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "absorbing ambient tension",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "reflecting back warmth",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "resonating with grief",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "amplifying excitement",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Empathetic Echoes",
+        "region": "light-coral",
+        "collapsed": false
+      },
+      "name": "Empathetic Echoes"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-empathetic-echoes",
+      "name": "Empathetic Echoes",
+      "color": "light-coral",
+      "nodes": [
+        "empathetic-echoes-main"
+      ]
+    }
+  ]
+}

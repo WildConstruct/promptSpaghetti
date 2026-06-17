@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "name": "Atmospherics",
+  "metadata": {
+    "id": "fragment-atmospherics",
+    "name": "Atmospherics",
+    "description": "Atmospheric particles and environmental effects",
+    "author": "Aspen (Asset Generator)",
+    "created": "2025-01-15",
+    "category": "setting-environment",
+    "tags": [
+      "atmosphere",
+      "particles",
+      "effects",
+      "ambience"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "atmospherics-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "drifting pollen spores",
+          "weight": 2
+        },
+        {
+          "text": "holographic signage buzz",
+          "weight": 2
+        },
+        {
+          "text": "cigar-smoke curls",
+          "weight": 2
+        },
+        {
+          "text": "steam vent hiss",
+          "weight": 2
+        },
+        {
+          "text": "dust motes floating",
+          "weight": 3
+        },
+        {
+          "text": "firefly light dance",
+          "weight": 2
+        },
+        {
+          "text": "exhaust fume shimmer",
+          "weight": 1
+        },
+        {
+          "text": "cherry blossom fall",
+          "weight": 2
+        },
+        {
+          "text": "ash flakes drifting",
+          "weight": 1
+        },
+        {
+          "text": "bubble streams rising",
+          "weight": 2
+        },
+        {
+          "text": "sparks cascading down",
+          "weight": 2
+        },
+        {
+          "text": "mist droplets hanging",
+          "weight": 2
+        }
+      ],
+      "data": {
+        "label": "Atmospherics",
+        "region": "light-green"
+      },
+      "name": "Atmospherics"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-atmospherics",
+      "name": "Region 1",
+      "color": "light-green",
+      "nodes": [
+        "atmospherics-main"
+      ]
+    }
+  ]
+}

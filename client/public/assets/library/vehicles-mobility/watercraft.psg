@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "name": "Watercraft Asset Fragment",
+  "description": "Watercraft archetypes",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "vehicles-mobility",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "vehicles",
+      "water",
+      "mobility"
+    ],
+    "fragment_id": "vehicles-watercraft",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "watercraft",
+      "type": "WeightedChoice",
+      "name": "Watercraft",
+      "description": "Watercraft archetypes",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "coracle",
+          "weight": 10
+        },
+        {
+          "text": "hydrofoil racer",
+          "weight": 9
+        },
+        {
+          "text": "junk rig sailer",
+          "weight": 8
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "vehicles-watercraft-fragment",
+      "name": "Vehicles & Mobility Fragment",
+      "color": "#4682B4",
+      "color_comment": "Steel Blue - Vehicles & Mobility",
+      "nodes": [
+        "watercraft"
+      ],
+      "description": "Watercraft as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

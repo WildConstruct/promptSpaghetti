@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "name": "Assistive Gear",
+  "metadata": {
+    "name": "Assistive Gear",
+    "category": "body-silhouette",
+    "type": "SIMPLE",
+    "description": "Disability aids and assistive equipment"
+  },
+  "nodes": [
+    {
+      "id": "assistive-gear-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "carbon-fiber prosthetic leg",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "service dog in working harness",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "electric wheelchair with controls",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "white mobility cane",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "hearing aid devices",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "forearm crutches",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "custom orthotic braces",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "communication device tablet",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "walker with tennis balls",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "compression garments",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "oxygen tank and nasal cannula",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "insulin pump attached",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Assistive Gear",
+        "region": "steel-blue",
+        "collapsed": false
+      },
+      "name": "Assistive Gear"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-assistive-gear",
+      "name": "Assistive Gear",
+      "color": "steel-blue",
+      "nodes": [
+        "assistive-gear-main"
+      ]
+    }
+  ]
+}

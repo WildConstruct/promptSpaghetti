@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "name": "Reaction Beats",
+  "metadata": {
+    "name": "Reaction Beats",
+    "category": "action-dynamics",
+    "type": "SIMPLE",
+    "description": "Physical reaction movements and responses"
+  },
+  "nodes": [
+    {
+      "id": "reaction-beats-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "recoils in horror",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "double-takes in surprise",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "slow nod of understanding",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "eye-roll of exasperation",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "flinches away sharply",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "head snap attention",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "staggers backward",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "blinks rapidly processing",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "jerks upright alert",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "freezes in disbelief",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "startles violently",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "sways unsteadily",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Reaction Beats",
+        "region": "amber",
+        "collapsed": false
+      },
+      "name": "Reaction Beats"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-reaction-beats",
+      "name": "Reaction Beats",
+      "color": "amber",
+      "nodes": [
+        "reaction-beats-main"
+      ]
+    }
+  ]
+}

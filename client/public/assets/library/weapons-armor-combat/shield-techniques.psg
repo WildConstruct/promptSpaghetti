@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Shield Techniques Asset Fragment",
+  "description": "Shield usage methods",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "shield",
+      "technique"
+    ],
+    "fragment_id": "weapons-shield-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "shield-techniques",
+      "type": "WeightedChoice",
+      "name": "Shield Techniques",
+      "description": "Shield usage methods",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "shield bash",
+          "weight": 12
+        },
+        {
+          "text": "wall guard",
+          "weight": 11
+        },
+        {
+          "text": "hook-and-cover",
+          "weight": 10
+        },
+        {
+          "text": "roof block",
+          "weight": 9
+        },
+        {
+          "text": "edge strike",
+          "weight": 8
+        },
+        {
+          "text": "shield bind",
+          "weight": 7
+        },
+        {
+          "text": "post-and-press",
+          "weight": 6
+        },
+        {
+          "text": "chase with shield",
+          "weight": 5
+        },
+        {
+          "text": "shield shove",
+          "weight": 4
+        },
+        {
+          "text": "catch-and-wrap",
+          "weight": 3
+        },
+        {
+          "text": "doorway wedge",
+          "weight": 2
+        },
+        {
+          "text": "pivot cover",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-shield-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "shield-techniques"
+      ],
+      "description": "Shield techniques as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

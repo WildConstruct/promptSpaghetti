@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "name": "Conflict Escalation Stages",
+  "metadata": {
+    "name": "Conflict Escalation Stages",
+    "category": "emotion-mood",
+    "type": "SIMPLE",
+    "description": "Stages of emotional conflict escalation"
+  },
+  "nodes": [
+    {
+      "id": "conflict-escalation-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "initial tension simmer",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "sudden temper snap",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "full-blown explosive outburst",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "cold fury building",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "passive-aggressive needling",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "volcanic eruption point",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "controlled burn intensity",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "breaking point reached",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "de-escalation attempt",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "aftermath exhaustion",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "reignition from embers",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "critical mass approaching",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Conflict Escalation",
+        "region": "red",
+        "collapsed": false
+      },
+      "name": "Conflict Escalation"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-conflict-escalation",
+      "name": "Conflict Escalation",
+      "color": "red",
+      "nodes": [
+        "conflict-escalation-main"
+      ]
+    }
+  ]
+}

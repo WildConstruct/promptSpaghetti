@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Two-Weapon Techniques Asset Fragment",
+  "description": "Dual-wield coordination and patterns",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "dual-wield",
+      "technique"
+    ],
+    "fragment_id": "weapons-two-weapon-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "two-weapon-techniques",
+      "type": "WeightedChoice",
+      "name": "Two-Weapon Techniques",
+      "description": "Dual-wield coordination and patterns",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "alternating strikes",
+          "weight": 12
+        },
+        {
+          "text": "scissor cut",
+          "weight": 11
+        },
+        {
+          "text": "cross-block",
+          "weight": 10
+        },
+        {
+          "text": "main-gauche parry",
+          "weight": 9
+        },
+        {
+          "text": "mirror slash",
+          "weight": 8
+        },
+        {
+          "text": "high-low split",
+          "weight": 7
+        },
+        {
+          "text": "trap-and-stab",
+          "weight": 6
+        },
+        {
+          "text": "hand switch",
+          "weight": 5
+        },
+        {
+          "text": "X-guard",
+          "weight": 4
+        },
+        {
+          "text": "double thrust",
+          "weight": 3
+        },
+        {
+          "text": "circular wind",
+          "weight": 2
+        },
+        {
+          "text": "beat-and-cut",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-two-weapon-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "two-weapon-techniques"
+      ],
+      "description": "Two-weapon techniques as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

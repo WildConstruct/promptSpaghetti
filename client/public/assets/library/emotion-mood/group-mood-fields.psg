@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "name": "Group Mood Fields",
+  "metadata": {
+    "name": "Group Mood Fields",
+    "category": "emotion-mood",
+    "type": "SIMPLE",
+    "description": "Collective emotional atmospheres and crowd moods"
+  },
+  "nodes": [
+    {
+      "id": "group-mood-fields-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "tense hush before storm",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "jubilant surge of celebration",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "riotous frenzy building",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "collective grief wave",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "contagious panic spreading",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "unified determination rising",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "awkward social tension",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "electric anticipation crackling",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "somber reverence settling",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "mob mentality emerging",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "shared euphoria rippling",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "collective exhaustion weighing",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Group Mood Fields",
+        "region": "orange",
+        "collapsed": false
+      },
+      "name": "Group Mood Fields"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-group-mood-fields",
+      "name": "Group Mood Fields",
+      "color": "orange",
+      "nodes": [
+        "group-mood-fields-main"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "version": "1.0.0",
+  "name": "Piercings & Mods Asset Fragment",
+  "description": "Body modifications and piercing options for character generation",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "appearance-modifier",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "piercings",
+      "modifications",
+      "jewelry",
+      "alternative",
+      "accessories"
+    ],
+    "fragment_id": "piercings-mods",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "piercing-mod",
+      "type": "WeightedChoice",
+      "name": "Piercings & Modifications",
+      "description": "Body modification and piercing choices",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "septum ring",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "location": "nose",
+            "style": "alternative"
+          }
+        },
+        {
+          "text": "dermal studs",
+          "weight": 6,
+          "meta": {
+            "original": true,
+            "location": "various",
+            "type": "implant"
+          }
+        },
+        {
+          "text": "eyebrow bar",
+          "weight": 7,
+          "meta": {
+            "original": true,
+            "location": "eyebrow",
+            "jewelry": "barbell"
+          }
+        },
+        {
+          "text": "no piercings",
+          "weight": 20,
+          "meta": {
+            "style": "unmodified",
+            "appearance": "natural"
+          }
+        },
+        {
+          "text": "nose stud",
+          "weight": 10,
+          "meta": {
+            "location": "nostril",
+            "style": "subtle"
+          }
+        },
+        {
+          "text": "multiple ear piercings",
+          "weight": 11,
+          "meta": {
+            "location": "ears",
+            "quantity": "3+"
+          }
+        },
+        {
+          "text": "lip ring",
+          "weight": 7,
+          "meta": {
+            "location": "lip",
+            "style": "edgy"
+          }
+        },
+        {
+          "text": "gauged ears",
+          "weight": 6,
+          "meta": {
+            "location": "earlobes",
+            "type": "stretched"
+          }
+        },
+        {
+          "text": "industrial bar",
+          "weight": 6,
+          "meta": {
+            "location": "ear cartilage",
+            "jewelry": "long barbell"
+          }
+        },
+        {
+          "text": "medusa piercing",
+          "weight": 5,
+          "meta": {
+            "location": "philtrum",
+            "style": "centered"
+          }
+        },
+        {
+          "text": "snake bites",
+          "weight": 5,
+          "meta": {
+            "location": "lower lip",
+            "quantity": "paired"
+          }
+        },
+        {
+          "text": "bridge piercing",
+          "weight": 4,
+          "meta": {
+            "location": "nose bridge",
+            "rarity": "uncommon"
+          }
+        },
+        {
+          "text": "cheek piercings",
+          "weight": 3,
+          "meta": {
+            "location": "dimples",
+            "style": "bold"
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "piercing-mod-fragment",
+      "name": "Piercings & Mods Fragment",
+      "color": "#C0C0C0",
+      "color_comment": "Silver - Metallic accessories",
+      "nodes": [
+        "piercing-mod"
+      ],
+      "description": "Body modification options as single unit",
+      "metadata": {
+        "fragment_type": "appearance_modifier",
+        "integration_priority": 6,
+        "cultural_note": "Varies by setting and culture"
+      }
+    }
+  ]
+}

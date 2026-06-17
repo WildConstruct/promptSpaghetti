@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "name": "Sound Snippets",
+  "metadata": {
+    "id": "fragment-sound-snippets",
+    "name": "Sound Snippets",
+    "description": "Audio cues and environmental sounds",
+    "author": "Aspen (Asset Generator)",
+    "created": "2025-01-15",
+    "category": "setting-environment",
+    "tags": [
+      "sound",
+      "audio",
+      "ambience",
+      "noise"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "sound-snippets-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "distant siren wail",
+          "weight": 2
+        },
+        {
+          "text": "crunching gravel steps",
+          "weight": 2
+        },
+        {
+          "text": "throat-singing drone",
+          "weight": 1
+        },
+        {
+          "text": "wind chime tinkle",
+          "weight": 2
+        },
+        {
+          "text": "hydraulic door hiss",
+          "weight": 2
+        },
+        {
+          "text": "crowd murmur hum",
+          "weight": 2
+        },
+        {
+          "text": "water drip echo",
+          "weight": 2
+        },
+        {
+          "text": "electric buzz static",
+          "weight": 2
+        },
+        {
+          "text": "bird song trill",
+          "weight": 3
+        },
+        {
+          "text": "metal clang reverb",
+          "weight": 2
+        },
+        {
+          "text": "paper rustle soft",
+          "weight": 2
+        },
+        {
+          "text": "bass thump pulse",
+          "weight": 2
+        }
+      ],
+      "data": {
+        "label": "Sound Snippets",
+        "region": "medium-purple"
+      },
+      "name": "Sound Snippets"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-sound-snippets",
+      "name": "Region 1",
+      "color": "medium-purple",
+      "nodes": [
+        "sound-snippets-main"
+      ]
+    }
+  ]
+}

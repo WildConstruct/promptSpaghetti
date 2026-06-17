@@ -1,0 +1,107 @@
+{
+  "version": "1.0.0",
+  "name": "Temporal Mood Shifts",
+  "metadata": {
+    "name": "Temporal Mood Shifts",
+    "category": "emotion-mood",
+    "type": "SIMPLE",
+    "description": "Time-based emotional transitions and states"
+  },
+  "nodes": [
+    {
+      "id": "temporal-mood-shifts-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "post-victory euphoric glow",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "pre-battle nervous dread",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "morning melancholy haze",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "twilight contemplative mood",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "midnight existential spiral",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "dawn renewal optimism",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "post-trauma numbness",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "pre-departure bittersweet",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "anniversary triggered memories",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "seasonal affective shift",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Temporal Mood Shifts",
+        "region": "gold",
+        "collapsed": false
+      },
+      "name": "Temporal Mood Shifts"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-temporal-mood-shifts",
+      "name": "Temporal Mood Shifts",
+      "color": "gold",
+      "nodes": [
+        "temporal-mood-shifts-main"
+      ]
+    }
+  ]
+}

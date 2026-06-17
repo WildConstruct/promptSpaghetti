@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "name": "Crowd Density Tags",
+  "metadata": {
+    "id": "fragment-crowd-density",
+    "name": "Crowd Density Tags",
+    "description": "Population density and crowd descriptions",
+    "author": "Aspen (Asset Generator)",
+    "created": "2025-01-15",
+    "category": "setting-environment",
+    "tags": [
+      "crowd",
+      "density",
+      "population",
+      "people"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "crowd-density-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "completely deserted",
+          "weight": 2
+        },
+        {
+          "text": "trickling pedestrians",
+          "weight": 3
+        },
+        {
+          "text": "shoulder-to-shoulder throng",
+          "weight": 2
+        },
+        {
+          "text": "scattered individuals",
+          "weight": 3
+        },
+        {
+          "text": "bustling market crowd",
+          "weight": 2
+        },
+        {
+          "text": "sparse foot traffic",
+          "weight": 3
+        },
+        {
+          "text": "packed sardine tight",
+          "weight": 1
+        },
+        {
+          "text": "moderate flow steady",
+          "weight": 3
+        },
+        {
+          "text": "ghost town empty",
+          "weight": 1
+        },
+        {
+          "text": "festival mob scene",
+          "weight": 1
+        },
+        {
+          "text": "rush hour stream",
+          "weight": 2
+        },
+        {
+          "text": "intimate gathering",
+          "weight": 2
+        }
+      ],
+      "data": {
+        "label": "Crowd Density Tags",
+        "region": "orange"
+      },
+      "name": "Crowd Density"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-crowd-density",
+      "name": "Region 1",
+      "color": "orange",
+      "nodes": [
+        "crowd-density-main"
+      ]
+    }
+  ]
+}

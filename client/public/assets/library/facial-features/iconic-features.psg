@@ -1,0 +1,165 @@
+{
+  "version": "1.0.0",
+  "name": "Iconic Features Asset Fragment",
+  "description": "Distinctive and memorable facial features for character generation",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "distinctive-features",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "iconic",
+      "distinctive",
+      "memorable",
+      "unique",
+      "features"
+    ],
+    "fragment_id": "iconic-features",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "iconic-feature",
+      "type": "WeightedChoice",
+      "name": "Iconic Features",
+      "description": "Memorable distinguishing characteristics",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "cleft chin",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "location": "chin",
+            "nickname": "butt chin"
+          }
+        },
+        {
+          "text": "beauty mark",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "location": "various",
+            "style": "classic Hollywood"
+          }
+        },
+        {
+          "text": "aquiline nose",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "shape": "Roman nose",
+            "profile": "distinctive"
+          }
+        },
+        {
+          "text": "no distinctive features",
+          "weight": 18,
+          "meta": {
+            "style": "average",
+            "memorability": "low"
+          }
+        },
+        {
+          "text": "prominent dimples",
+          "weight": 9,
+          "meta": {
+            "location": "cheeks",
+            "appearance": "when smiling"
+          }
+        },
+        {
+          "text": "widow's peak",
+          "weight": 8,
+          "meta": {
+            "location": "hairline",
+            "shape": "V-shaped"
+          }
+        },
+        {
+          "text": "gap-toothed smile",
+          "weight": 7,
+          "meta": {
+            "location": "front teeth",
+            "style": "charming"
+          }
+        },
+        {
+          "text": "high cheekbones",
+          "weight": 10,
+          "meta": {
+            "structure": "facial",
+            "aesthetic": "modelesque"
+          }
+        },
+        {
+          "text": "strong jawline",
+          "weight": 9,
+          "meta": {
+            "structure": "facial",
+            "impression": "determined"
+          }
+        },
+        {
+          "text": "cupid's bow lips",
+          "weight": 8,
+          "meta": {
+            "location": "lips",
+            "shape": "pronounced curve"
+          }
+        },
+        {
+          "text": "patrician nose",
+          "weight": 6,
+          "meta": {
+            "shape": "straight and narrow",
+            "impression": "aristocratic"
+          }
+        },
+        {
+          "text": "button nose",
+          "weight": 8,
+          "meta": {
+            "shape": "small and round",
+            "impression": "cute"
+          }
+        },
+        {
+          "text": "distinctive birthmark",
+          "weight": 5,
+          "meta": {
+            "location": "various",
+            "uniqueness": "high"
+          }
+        },
+        {
+          "text": "single raised eyebrow",
+          "weight": 7,
+          "meta": {
+            "ability": "expressive",
+            "impression": "skeptical"
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "iconic-feature-fragment",
+      "name": "Iconic Feature Fragment",
+      "color": "#FFD700",
+      "color_comment": "Gold - Standout memorable feature",
+      "nodes": [
+        "iconic-feature"
+      ],
+      "description": "Distinctive features as single unit",
+      "metadata": {
+        "fragment_type": "distinctive_feature",
+        "integration_priority": 7,
+        "usage_note": "Makes characters memorable and unique"
+      }
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Bow Draw Styles Asset Fragment",
+  "description": "Archery draw and release styles",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "archery",
+      "draw"
+    ],
+    "fragment_id": "weapons-bow-draw-styles",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "bow-draw-styles",
+      "type": "WeightedChoice",
+      "name": "Bow Draw Styles",
+      "description": "Archery draw and release styles",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "Mediterranean draw",
+          "weight": 12
+        },
+        {
+          "text": "Mongolian thumb draw",
+          "weight": 11
+        },
+        {
+          "text": "pinch draw",
+          "weight": 10
+        },
+        {
+          "text": "three-under",
+          "weight": 9
+        },
+        {
+          "text": "split-finger",
+          "weight": 8
+        },
+        {
+          "text": "static release",
+          "weight": 7
+        },
+        {
+          "text": "dynamic release",
+          "weight": 6
+        },
+        {
+          "text": "anchor high",
+          "weight": 5
+        },
+        {
+          "text": "anchor low",
+          "weight": 4
+        },
+        {
+          "text": "canted bow",
+          "weight": 3
+        },
+        {
+          "text": "overdraw technique",
+          "weight": 2
+        },
+        {
+          "text": "rapid nocking",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-bow-draw-styles-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "bow-draw-styles"
+      ],
+      "description": "Bow draw styles as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

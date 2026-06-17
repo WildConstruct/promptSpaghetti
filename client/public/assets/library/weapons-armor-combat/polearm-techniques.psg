@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Polearm Techniques Asset Fragment",
+  "description": "Polearm methods: spear, halberd, glaive",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "polearm",
+      "technique"
+    ],
+    "fragment_id": "weapons-polearm-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "polearm-techniques",
+      "type": "WeightedChoice",
+      "name": "Polearm Techniques",
+      "description": "Polearm methods: spear, halberd, glaive",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "long thrust",
+          "weight": 12
+        },
+        {
+          "text": "short haft jab",
+          "weight": 11
+        },
+        {
+          "text": "hook sweep",
+          "weight": 10
+        },
+        {
+          "text": "butt-end strike",
+          "weight": 9
+        },
+        {
+          "text": "shaft push",
+          "weight": 8
+        },
+        {
+          "text": "overhead chop",
+          "weight": 7
+        },
+        {
+          "text": "foot pin",
+          "weight": 6
+        },
+        {
+          "text": "trip pull",
+          "weight": 5
+        },
+        {
+          "text": "parry and thrust",
+          "weight": 4
+        },
+        {
+          "text": "cross-check",
+          "weight": 3
+        },
+        {
+          "text": "sliding thrust",
+          "weight": 2
+        },
+        {
+          "text": "spear cast",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-polearm-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "polearm-techniques"
+      ],
+      "description": "Polearm techniques as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

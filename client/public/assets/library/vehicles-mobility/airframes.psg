@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "name": "Airframes Asset Fragment",
+  "description": "Airframe types and mounts",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "vehicles-mobility",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "vehicles",
+      "air",
+      "mobility"
+    ],
+    "fragment_id": "vehicles-airframes",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "airframes",
+      "type": "WeightedChoice",
+      "name": "Airframes",
+      "description": "Airframe archetypes",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "gyrocopter",
+          "weight": 10
+        },
+        {
+          "text": "solar drone swarm",
+          "weight": 9
+        },
+        {
+          "text": "dragonback saddle",
+          "weight": 8
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "vehicles-airframes-fragment",
+      "name": "Vehicles & Mobility Fragment",
+      "color": "#4682B4",
+      "color_comment": "Steel Blue - Vehicles & Mobility",
+      "nodes": [
+        "airframes"
+      ],
+      "description": "Airframes as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Fire and Maneuver Asset Fragment",
+  "description": "Team movement coordinated with suppressive fire",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "tactics",
+      "movement"
+    ],
+    "fragment_id": "weapons-fire-and-maneuver",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "fire-and-maneuver",
+      "type": "WeightedChoice",
+      "name": "Fire and Maneuver",
+      "description": "Coordinated fire and movement patterns",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "bounding overwatch",
+          "weight": 12
+        },
+        {
+          "text": "leapfrog advance",
+          "weight": 11
+        },
+        {
+          "text": "peel back retreat",
+          "weight": 10
+        },
+        {
+          "text": "suppress then shift",
+          "weight": 9
+        },
+        {
+          "text": "smoke cover push",
+          "weight": 8
+        },
+        {
+          "text": "flank under cover",
+          "weight": 7
+        },
+        {
+          "text": "alternating fire",
+          "weight": 6
+        },
+        {
+          "text": "base-of-fire hold",
+          "weight": 5
+        },
+        {
+          "text": "buddy rush",
+          "weight": 4
+        },
+        {
+          "text": "break contact drill",
+          "weight": 3
+        },
+        {
+          "text": "cross-load ammo",
+          "weight": 2
+        },
+        {
+          "text": "cover callouts",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-fire-and-maneuver-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "fire-and-maneuver"
+      ],
+      "description": "Fire and maneuver as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

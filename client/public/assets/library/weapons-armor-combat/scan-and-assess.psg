@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Scan and Assess Asset Fragment",
+  "description": "Post-shot scanning, 360 awareness, and follow-through actions",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "scan",
+      "assess"
+    ],
+    "fragment_id": "weapons-scan-and-assess",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "scan-and-assess",
+      "type": "WeightedChoice",
+      "name": "Scan and Assess",
+      "description": "Scanning and follow-through components",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "immediate front scan",
+          "weight": 12
+        },
+        {
+          "text": "hard corners check",
+          "weight": 11
+        },
+        {
+          "text": "360 sweep awareness",
+          "weight": 10
+        },
+        {
+          "text": "vertical scan up/down",
+          "weight": 9
+        },
+        {
+          "text": "threat re-index to sights",
+          "weight": 8
+        },
+        {
+          "text": "top-off check as needed",
+          "weight": 7
+        },
+        {
+          "text": "malfunction quick check",
+          "weight": 6
+        },
+        {
+          "text": "team comms callouts",
+          "weight": 5
+        },
+        {
+          "text": "de-escalation assessment",
+          "weight": 4
+        },
+        {
+          "text": "PID reaffirmation",
+          "weight": 3
+        },
+        {
+          "text": "holster/sling when clear",
+          "weight": 2
+        },
+        {
+          "text": "breathing reset and posture",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-scan-and-assess-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "scan-and-assess"
+      ],
+      "description": "Scan and assess as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

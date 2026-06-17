@@ -1,0 +1,149 @@
+{
+  "version": "1.0.0",
+  "name": "Fantasy Hair Colors Asset Fragment",
+  "description": "Unnatural and fantasy hair color options",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "hair-appearance",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "hair",
+      "color",
+      "fantasy",
+      "unnatural",
+      "creative"
+    ],
+    "fragment_id": "hair-colors-fantasy",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "hair-color-fantasy",
+      "type": "WeightedChoice",
+      "name": "Fantasy Hair Colors",
+      "description": "Unnatural and creative hair colors",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "neon jade",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "vibrancy": "electric",
+            "glow": "UV reactive"
+          }
+        },
+        {
+          "text": "holographic gradient",
+          "weight": 7,
+          "meta": {
+            "original": true,
+            "effect": "prismatic shift",
+            "complexity": "high"
+          }
+        },
+        {
+          "text": "cosmic purple",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "depth": "galaxy deep",
+            "sparkle": "star-flecked"
+          }
+        },
+        {
+          "text": "electric blue",
+          "weight": 10,
+          "meta": {
+            "vibrancy": "high voltage",
+            "popularity": "common fantasy"
+          }
+        },
+        {
+          "text": "bubblegum pink",
+          "weight": 11,
+          "meta": {
+            "tone": "pastel sweet",
+            "style": "kawaii"
+          }
+        },
+        {
+          "text": "sunset ombre",
+          "weight": 8,
+          "meta": {
+            "gradient": "orange to pink",
+            "technique": "blended"
+          }
+        },
+        {
+          "text": "mint green",
+          "weight": 9,
+          "meta": {
+            "tone": "pastel cool",
+            "freshness": "spring-like"
+          }
+        },
+        {
+          "text": "oil slick",
+          "weight": 7,
+          "meta": {
+            "effect": "iridescent",
+            "colors": "rainbow shimmer"
+          }
+        },
+        {
+          "text": "lavender frost",
+          "weight": 9,
+          "meta": {
+            "tone": "pale purple",
+            "temperature": "cool"
+          }
+        },
+        {
+          "text": "cherry cola",
+          "weight": 8,
+          "meta": {
+            "depth": "deep red-brown",
+            "shine": "glossy"
+          }
+        },
+        {
+          "text": "titanium white",
+          "weight": 6,
+          "meta": {
+            "brightness": "stark",
+            "effect": "otherworldly"
+          }
+        },
+        {
+          "text": "galaxy blend",
+          "weight": 6,
+          "meta": {
+            "colors": "purple-blue-black",
+            "pattern": "nebula swirls"
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "hair-color-fantasy-fragment",
+      "name": "Fantasy Hair Color Fragment",
+      "color": "#9400D3",
+      "color_comment": "Violet - Fantasy/unnatural colors",
+      "nodes": [
+        "hair-color-fantasy"
+      ],
+      "description": "Fantasy hair colors as single unit",
+      "metadata": {
+        "fragment_type": "hair_color",
+        "integration_priority": 3,
+        "realism": "fantasy"
+      }
+    }
+  ]
+}

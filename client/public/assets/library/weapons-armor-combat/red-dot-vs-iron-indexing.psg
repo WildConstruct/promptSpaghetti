@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Red Dot vs Iron Sight Indexing Asset Fragment",
+  "description": "Acquisition and indexing differences between optics and irons",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "sights",
+      "optics"
+    ],
+    "fragment_id": "weapons-red-dot-iron-indexing",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "red-dot-vs-iron-indexing",
+      "type": "WeightedChoice",
+      "name": "Red Dot vs Iron Sight Indexing",
+      "description": "Acquisition cues and occlusion handling",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "target focus for red dot vs front sight focus for irons",
+          "weight": 12
+        },
+        {
+          "text": "dot brightness set to ambient and task",
+          "weight": 11
+        },
+        {
+          "text": "occluded dot technique with both eyes open",
+          "weight": 10
+        },
+        {
+          "text": "co-witness irons as an index, not a crutch",
+          "weight": 9
+        },
+        {
+          "text": "parallax minimal but not zero—center dot when possible",
+          "weight": 8
+        },
+        {
+          "text": "presentation path to find dot quickly",
+          "weight": 7
+        },
+        {
+          "text": "iron sight front-post clarity and alignment",
+          "weight": 6
+        },
+        {
+          "text": "manage astigmatism effects on dot",
+          "weight": 5
+        },
+        {
+          "text": "window size and frame occlusion awareness",
+          "weight": 4
+        },
+        {
+          "text": "dot size (MOA) vs precision at distance",
+          "weight": 3
+        },
+        {
+          "text": "transition between dot and irons on failure",
+          "weight": 2
+        },
+        {
+          "text": "confirm zero and offset for both systems",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-red-dot-iron-indexing-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "red-dot-vs-iron-indexing"
+      ],
+      "description": "Red dot vs irons indexing as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

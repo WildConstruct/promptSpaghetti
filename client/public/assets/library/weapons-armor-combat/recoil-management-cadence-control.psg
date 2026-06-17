@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "Recoil Management & Cadence Control Asset Fragment",
+  "description": "Grip, stance, and sight tracking to control recoil and splits",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "recoil",
+      "cadence"
+    ],
+    "fragment_id": "weapons-recoil-management-cadence",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "recoil-management-cadence-control",
+      "type": "WeightedChoice",
+      "name": "Recoil Management & Cadence Control",
+      "description": "Sight-driven cadence and control mechanics",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "high-tang grip with crush support",
+          "weight": 12
+        },
+        {
+          "text": "forward stance with athletic lean",
+          "weight": 11
+        },
+        {
+          "text": "stock weld and shoulder pocket consistency",
+          "weight": 10
+        },
+        {
+          "text": "drive gun back to sights, not sights to gun",
+          "weight": 9
+        },
+        {
+          "text": "cadence set by acceptable sight picture",
+          "weight": 8
+        },
+        {
+          "text": "track dot/front sight through recoil",
+          "weight": 7
+        },
+        {
+          "text": "trigger reset during recoil travel",
+          "weight": 6
+        },
+        {
+          "text": "grip pressure distribution (60/40)",
+          "weight": 5
+        },
+        {
+          "text": "mitigate sympathetic hand movement",
+          "weight": 4
+        },
+        {
+          "text": "rebuild grip if sights bounce unpredictably",
+          "weight": 3
+        },
+        {
+          "text": "call shots and adjust split times",
+          "weight": 2
+        },
+        {
+          "text": "follow-through and post-string assessment",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-recoil-management-cadence-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "recoil-management-cadence-control"
+      ],
+      "description": "Recoil and cadence control as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "name": "Call-Sign Decals Asset Fragment",
+  "description": "Call-sign and nose-art decals",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "vehicles-mobility",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "vehicles",
+      "decals",
+      "style"
+    ],
+    "fragment_id": "vehicles-call-sign-decals",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "call-sign-decals",
+      "type": "WeightedChoice",
+      "name": "Call-Sign Decals",
+      "description": "Call-sign and nose-art",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "shark teeth nose-art",
+          "weight": 10
+        },
+        {
+          "text": "rebel sigil",
+          "weight": 9
+        },
+        {
+          "text": "retro stripes",
+          "weight": 8
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "vehicles-call-sign-decals-fragment",
+      "name": "Vehicles & Mobility Fragment",
+      "color": "#4682B4",
+      "color_comment": "Steel Blue - Vehicles & Mobility",
+      "nodes": [
+        "call-sign-decals"
+      ],
+      "description": "Call-sign decals as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

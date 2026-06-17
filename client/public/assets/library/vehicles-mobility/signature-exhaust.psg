@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "name": "Signature Exhaust Asset Fragment",
+  "description": "Signature exhaust effects",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "vehicles-mobility",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "vehicles",
+      "exhaust",
+      "mobility"
+    ],
+    "fragment_id": "vehicles-signature-exhaust",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "signature-exhaust",
+      "type": "WeightedChoice",
+      "name": "Signature Exhaust",
+      "description": "Signature exhaust effects",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "blue ion plume",
+          "weight": 10
+        },
+        {
+          "text": "steam puff",
+          "weight": 9
+        },
+        {
+          "text": "gritty diesel cough",
+          "weight": 8
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "vehicles-signature-exhaust-fragment",
+      "name": "Vehicles & Mobility Fragment",
+      "color": "#4682B4",
+      "color_comment": "Steel Blue - Vehicles & Mobility",
+      "nodes": [
+        "signature-exhaust"
+      ],
+      "description": "Signature exhaust as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

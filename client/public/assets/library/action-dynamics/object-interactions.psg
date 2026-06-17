@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "name": "Object Interactions",
+  "metadata": {
+    "name": "Object Interactions",
+    "category": "action-dynamics",
+    "type": "SIMPLE",
+    "description": "How characters interact with objects"
+  },
+  "nodes": [
+    {
+      "id": "object-interactions-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "twirls pen between fingers",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "holsters weapon smoothly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "cradles cup tenderly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "fidgets with coin",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "clicks lighter repeatedly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "spins keys around finger",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "clutches book protectively",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "tosses phone carelessly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "grips railing tightly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "polishes blade methodically",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "shuffles cards expertly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "drums on table surface",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Object Interactions",
+        "region": "teal",
+        "collapsed": false
+      },
+      "name": "Object Interactions"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-object-interactions",
+      "name": "Object Interactions",
+      "color": "teal",
+      "nodes": [
+        "object-interactions-main"
+      ]
+    }
+  ]
+}

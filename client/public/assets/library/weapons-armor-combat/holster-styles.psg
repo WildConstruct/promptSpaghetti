@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "name": "Holster Styles Asset Fragment",
+  "description": "Holster and carry styles",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "weapons",
+      "holster",
+      "carry"
+    ],
+    "fragment_id": "weapons-holster-styles",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "holster-styles",
+      "type": "WeightedChoice",
+      "name": "Holster Styles",
+      "description": "Holster and carry styles",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "cross-draw rig",
+          "weight": 10
+        },
+        {
+          "text": "thigh drop-leg",
+          "weight": 9
+        },
+        {
+          "text": "back scabbard",
+          "weight": 8
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "weapons-holster-styles-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": [
+        "holster-styles"
+      ],
+      "description": "Holster styles as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

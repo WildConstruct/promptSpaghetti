@@ -1,0 +1,107 @@
+{
+  "version": "1.0.0",
+  "name": "Athletic Markers",
+  "metadata": {
+    "name": "Athletic Markers",
+    "category": "body-silhouette",
+    "type": "SIMPLE",
+    "description": "Physical signs of athletic activity and training"
+  },
+  "nodes": [
+    {
+      "id": "athletic-markers-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "calloused palms from weightlifting",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "defined marathoner calves",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "climber's chalk dust on hands",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "swimmer's broad shoulders",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "dancer's turned-out feet",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "boxer's taped knuckles",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "yoga practitioner's flexibility",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "cyclist's quad definition",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "tennis player's asymmetric arms",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "CrossFit athlete's overall conditioning",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Athletic Markers",
+        "region": "steel-blue",
+        "collapsed": false
+      },
+      "name": "Athletic Markers"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-athletic-markers",
+      "name": "Athletic Markers",
+      "color": "steel-blue",
+      "nodes": [
+        "athletic-markers-main"
+      ]
+    }
+  ]
+}

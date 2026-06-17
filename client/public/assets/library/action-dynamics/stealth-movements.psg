@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "name": "Stealth Movements",
+  "metadata": {
+    "name": "Stealth Movements",
+    "category": "action-dynamics",
+    "type": "SIMPLE",
+    "description": "Quiet and stealthy movement patterns"
+  },
+  "nodes": [
+    {
+      "id": "stealth-movements-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "sidles along wall silently",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "slinks through shadows",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "ghost steps without sound",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "holds breath completely still",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "creeps on tiptoes",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "melts into darkness",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "freezes mid-motion",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "inches forward carefully",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "ducks behind cover",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "slips through gap",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "crawls on belly",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "vanishes into crowd",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
+      "data": {
+        "label": "Stealth Movements",
+        "region": "dark-gray",
+        "collapsed": false
+      },
+      "name": "Stealth Movements"
+    }
+  ],
+  "edges": [],
+  "regions": [
+    {
+      "id": "region-stealth-movements",
+      "name": "Stealth Movements",
+      "color": "dark-gray",
+      "nodes": [
+        "stealth-movements-main"
+      ]
+    }
+  ]
+}
