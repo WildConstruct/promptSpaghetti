@@ -89,7 +89,8 @@
         "label": "Subtext Signals",
         "region": "salmon",
         "collapsed": false
-      }
+      },
+      "name": "Subtext Signals"
     }
   ],
   "edges": [],

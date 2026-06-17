@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Architectural Styles",
   "metadata": {
     "id": "fragment-architectural-styles",
     "name": "Architectural Styles",
@@ -8,37 +8,85 @@
     "author": "Aspen (Asset Generator)",
     "created": "2025-01-15",
     "category": "setting-environment",
-    "tags": ["architecture", "buildings", "urban", "structures"]
+    "tags": [
+      "architecture",
+      "buildings",
+      "urban",
+      "structures"
+    ]
   },
   "nodes": [
     {
       "id": "architectural-styles-main",
       "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "brutalist concrete slabs",
+          "weight": 2
+        },
+        {
+          "text": "neon izakaya alley",
+          "weight": 2
+        },
+        {
+          "text": "art-nouveau curved arcade",
+          "weight": 2
+        },
+        {
+          "text": "gothic cathedral spires",
+          "weight": 2
+        },
+        {
+          "text": "cyberpunk vertical sprawl",
+          "weight": 2
+        },
+        {
+          "text": "adobe pueblo terraces",
+          "weight": 2
+        },
+        {
+          "text": "Victorian gingerbread trim",
+          "weight": 2
+        },
+        {
+          "text": "minimalist glass boxes",
+          "weight": 2
+        },
+        {
+          "text": "pagoda tiered roofs",
+          "weight": 2
+        },
+        {
+          "text": "favela stacked chaos",
+          "weight": 1
+        },
+        {
+          "text": "art deco ziggurat",
+          "weight": 2
+        },
+        {
+          "text": "geodesic dome clusters",
+          "weight": 1
+        }
+      ],
       "data": {
         "label": "Architectural Styles",
-        "region": "slate-gray",
-        "options": [
-          { "text": "brutalist concrete slabs", "weight": 2 },
-          { "text": "neon izakaya alley", "weight": 2 },
-          { "text": "art-nouveau curved arcade", "weight": 2 },
-          { "text": "gothic cathedral spires", "weight": 2 },
-          { "text": "cyberpunk vertical sprawl", "weight": 2 },
-          { "text": "adobe pueblo terraces", "weight": 2 },
-          { "text": "Victorian gingerbread trim", "weight": 2 },
-          { "text": "minimalist glass boxes", "weight": 2 },
-          { "text": "pagoda tiered roofs", "weight": 2 },
-          { "text": "favela stacked chaos", "weight": 1 },
-          { "text": "art deco ziggurat", "weight": 2 },
-          { "text": "geodesic dome clusters", "weight": 1 }
-        ]
-      }
+        "region": "slate-gray"
+      },
+      "name": "Architectural Styles"
     }
   ],
-  "groups": [
+  "edges": [],
+  "regions": [
     {
       "id": "region-architectural-styles",
-      "nodeIds": ["architectural-styles-main"],
-      "color": "slate-gray"
+      "name": "Region 1",
+      "color": "slate-gray",
+      "nodes": [
+        "architectural-styles-main"
+      ]
     }
   ]
 }

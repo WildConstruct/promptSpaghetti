@@ -74,7 +74,8 @@
       "data": {
         "label": "Weather Snapshots",
         "region": "light-blue"
-      }
+      },
+      "name": "Weather Snapshots"
     }
   ],
   "edges": [],

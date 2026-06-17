@@ -103,7 +103,8 @@
         "label": "Reaction Beats",
         "region": "amber",
         "collapsed": false
-      }
+      },
+      "name": "Reaction Beats"
     }
   ],
   "edges": [],

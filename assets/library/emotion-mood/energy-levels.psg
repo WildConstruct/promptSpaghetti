@@ -103,7 +103,8 @@
         "label": "Energy Levels",
         "region": "yellow",
         "collapsed": false
-      }
+      },
+      "name": "Energy Levels"
     }
   ],
   "edges": [],

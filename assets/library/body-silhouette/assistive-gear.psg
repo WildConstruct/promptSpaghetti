@@ -103,7 +103,8 @@
         "label": "Assistive Gear",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Assistive Gear"
     }
   ],
   "edges": [],

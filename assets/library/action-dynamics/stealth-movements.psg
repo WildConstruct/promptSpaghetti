@@ -103,7 +103,8 @@
         "label": "Stealth Movements",
         "region": "dark-gray",
         "collapsed": false
-      }
+      },
+      "name": "Stealth Movements"
     }
   ],
   "edges": [],

@@ -103,7 +103,8 @@
         "label": "Facial Micro-Gestures",
         "region": "pink",
         "collapsed": false
-      }
+      },
+      "name": "Facial Micro Gestures"
     }
   ],
   "edges": [],

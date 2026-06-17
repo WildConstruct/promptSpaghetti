@@ -74,7 +74,8 @@
       "data": {
         "label": "Spatial Relations",
         "region": "teal"
-      }
+      },
+      "name": "Spatial Relations"
     }
   ],
   "edges": [],

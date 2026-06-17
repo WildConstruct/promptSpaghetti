@@ -103,7 +103,8 @@
         "label": "Affect Masks",
         "region": "coral",
         "collapsed": false
-      }
+      },
+      "name": "Affect Masks"
     }
   ],
   "edges": [],

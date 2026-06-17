@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Primary Emotion Tags",
   "metadata": {
     "name": "Primary Emotion Tags",
     "category": "emotion-mood",
@@ -13,106 +13,109 @@
       "type": "WeightedChoice",
       "x": 100,
       "y": 100,
+      "options": [
+        {
+          "id": "opt-1",
+          "text": "elated with unbridled joy",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-2",
+          "text": "crestfallen and deeply disappointed",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-3",
+          "text": "simmering with barely contained anger",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-4",
+          "text": "serene and peacefully content",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-5",
+          "text": "anxious with nervous energy",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-6",
+          "text": "melancholic and wistfully sad",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-7",
+          "text": "euphoric and intoxicated with happiness",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-8",
+          "text": "terrified with paralyzing fear",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-9",
+          "text": "disgusted and physically repulsed",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-10",
+          "text": "surprised with genuine shock",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-11",
+          "text": "contemptuous with cold disdain",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        },
+        {
+          "id": "opt-12",
+          "text": "hopeful with cautious optimism",
+          "weight": 10,
+          "mute": false,
+          "solo": false
+        }
+      ],
       "data": {
         "label": "Primary Emotions",
         "region": "gold",
-        "collapsed": false,
-        "options": [
-          {
-            "id": "opt-1",
-            "text": "elated with unbridled joy",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-2",
-            "text": "crestfallen and deeply disappointed",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-3",
-            "text": "simmering with barely contained anger",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-4",
-            "text": "serene and peacefully content",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-5",
-            "text": "anxious with nervous energy",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-6",
-            "text": "melancholic and wistfully sad",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-7",
-            "text": "euphoric and intoxicated with happiness",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-8",
-            "text": "terrified with paralyzing fear",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-9",
-            "text": "disgusted and physically repulsed",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-10",
-            "text": "surprised with genuine shock",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-11",
-            "text": "contemptuous with cold disdain",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          },
-          {
-            "id": "opt-12",
-            "text": "hopeful with cautious optimism",
-            "weight": 10,
-            "mute": false,
-            "solo": false
-          }
-        ]
-      }
+        "collapsed": false
+      },
+      "name": "Primary Emotions"
     }
   ],
   "edges": [],
-  "groups": [
+  "regions": [
     {
       "id": "region-primary-emotions",
-      "label": "Primary Emotions",
-      "nodeIds": ["primary-emotions-main"],
-      "color": "gold"
+      "name": "Primary Emotions",
+      "color": "gold",
+      "nodes": [
+        "primary-emotions-main"
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "type": "asset-fragment",
+  "name": "Lighting Moods",
   "metadata": {
     "id": "fragment-lighting-moods",
     "name": "Lighting Moods",
@@ -8,37 +8,85 @@
     "author": "Aspen (Asset Generator)",
     "created": "2025-01-15",
     "category": "setting-environment",
-    "tags": ["lighting", "atmosphere", "mood", "cinematic"]
+    "tags": [
+      "lighting",
+      "atmosphere",
+      "mood",
+      "cinematic"
+    ]
   },
   "nodes": [
     {
       "id": "lighting-moods-main",
       "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "golden hour warm glow",
+          "weight": 3
+        },
+        {
+          "text": "sodium vapor haze",
+          "weight": 2
+        },
+        {
+          "text": "noir chiaroscuro shadows",
+          "weight": 2
+        },
+        {
+          "text": "neon-lit rain slick",
+          "weight": 2
+        },
+        {
+          "text": "harsh fluorescent glare",
+          "weight": 1
+        },
+        {
+          "text": "moonlit silver wash",
+          "weight": 2
+        },
+        {
+          "text": "candlelit amber flicker",
+          "weight": 2
+        },
+        {
+          "text": "underwater caustic ripples",
+          "weight": 1
+        },
+        {
+          "text": "fire-glow orange dance",
+          "weight": 2
+        },
+        {
+          "text": "twilight blue hour",
+          "weight": 2
+        },
+        {
+          "text": "strobe-lit freeze frames",
+          "weight": 1
+        },
+        {
+          "text": "dusty light shafts",
+          "weight": 2
+        }
+      ],
       "data": {
         "label": "Lighting Moods",
-        "region": "amber",
-        "options": [
-          { "text": "golden hour warm glow", "weight": 3 },
-          { "text": "sodium vapor haze", "weight": 2 },
-          { "text": "noir chiaroscuro shadows", "weight": 2 },
-          { "text": "neon-lit rain slick", "weight": 2 },
-          { "text": "harsh fluorescent glare", "weight": 1 },
-          { "text": "moonlit silver wash", "weight": 2 },
-          { "text": "candlelit amber flicker", "weight": 2 },
-          { "text": "underwater caustic ripples", "weight": 1 },
-          { "text": "fire-glow orange dance", "weight": 2 },
-          { "text": "twilight blue hour", "weight": 2 },
-          { "text": "strobe-lit freeze frames", "weight": 1 },
-          { "text": "dusty light shafts", "weight": 2 }
-        ]
-      }
+        "region": "amber"
+      },
+      "name": "Lighting Moods"
     }
   ],
-  "groups": [
+  "edges": [],
+  "regions": [
     {
       "id": "region-lighting-moods",
-      "nodeIds": ["lighting-moods-main"],
-      "color": "amber"
+      "name": "Region 1",
+      "color": "amber",
+      "nodes": [
+        "lighting-moods-main"
+      ]
     }
   ]
 }

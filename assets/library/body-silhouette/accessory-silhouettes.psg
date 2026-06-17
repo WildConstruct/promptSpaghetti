@@ -103,7 +103,8 @@
         "label": "Accessory Silhouettes",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Accessory Silhouettes"
     }
   ],
   "edges": [],

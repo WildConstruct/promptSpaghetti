@@ -74,7 +74,8 @@
       "data": {
         "label": "Sound Snippets",
         "region": "medium-purple"
-      }
+      },
+      "name": "Sound Snippets"
     }
   ],
   "edges": [],

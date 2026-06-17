@@ -103,7 +103,8 @@
         "label": "Scars & Tattoos",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Scars & Tattoos"
     }
   ],
   "edges": [],

@@ -89,7 +89,8 @@
         "label": "Posture Keys",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Posture Keys"
     }
   ],
   "edges": [],

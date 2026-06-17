@@ -103,7 +103,8 @@
         "label": "Body Types",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Body Types"
     }
   ],
   "edges": [],

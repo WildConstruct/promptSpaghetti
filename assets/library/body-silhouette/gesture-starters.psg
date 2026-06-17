@@ -103,7 +103,8 @@
         "label": "Gesture Starters",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Gesture Starters"
     }
   ],
   "edges": [],

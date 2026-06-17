@@ -103,7 +103,8 @@
         "label": "Aerial Motions",
         "region": "sky-blue",
         "collapsed": false
-      }
+      },
+      "name": "Aerial Motions"
     }
   ],
   "edges": [],

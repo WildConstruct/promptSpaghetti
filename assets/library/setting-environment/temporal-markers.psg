@@ -74,7 +74,8 @@
       "data": {
         "label": "Temporal Markers",
         "region": "navy"
-      }
+      },
+      "name": "Temporal Markers"
     }
   ],
   "edges": [],
