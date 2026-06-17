@@ -312,6 +312,11 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     const newCollapsed = !isCollapsed;
     setIsCollapsed(newCollapsed);
 
+    // Child ids whose React Flow internals must be re-measured after toggling.
+    // Without this, un-hidden children render with stale/zero size (transparent
+    // or gone) because hidden→visible does not trigger a re-measure on its own.
+    let childIdsToRefresh: string[] = [];
+
     // Track performance
     perfMonitor.record('boundingBox.toggleCollapse', 1);
 
@@ -383,16 +388,19 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       const boxNode = getNodes().find(n => n.id === id);
       const storedIds: string[] = boxNode?.data?.collapsedNodeIds || [];
 
-      setNodes((nodes) => {
-        const allChildIds = new Set(storedIds);
-        for (const node of nodes) {
-          const directParent = (node as { parentNode?: string }).parentNode;
-          const dataParent = (node.data as { parentNode?: string } | undefined)?.parentNode;
-          if (directParent === id || dataParent === id) {
-            allChildIds.add(node.id);
-          }
+      // Resolve the full child set once, up front, so we can both un-hide them
+      // and refresh their internals afterwards.
+      const allChildIds = new Set(storedIds);
+      for (const node of getNodes()) {
+        const directParent = (node as { parentNode?: string }).parentNode;
+        const dataParent = (node.data as { parentNode?: string } | undefined)?.parentNode;
+        if (directParent === id || dataParent === id) {
+          allChildIds.add(node.id);
         }
+      }
+      childIdsToRefresh = Array.from(allChildIds);
 
+      setNodes((nodes) => {
         return nodes.map((node) => {
           if (allChildIds.has(node.id)) {
             return { ...node, hidden: false };
@@ -425,7 +433,11 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       });
       recalculate();
     }
-    requestAnimationFrame(() => updateNodeInternals(id));
+    requestAnimationFrame(() => {
+      updateNodeInternals(id);
+      // Re-measure un-hidden children so they don't render transparent/zero-size.
+      childIdsToRefresh.forEach(childId => updateNodeInternals(childId));
+    });
   }, [isCollapsed, containedNodes, data.height, data.width, getNodes, id, perfMonitor, recalculate, setNodes, updateNodeInternals]);
 
   /**

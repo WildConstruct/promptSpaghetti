@@ -1,21 +1,31 @@
 /* Additional node-specific styles - Dark Mode */
 
-/* Concat Node */
+/* Concat ("Merge") Node — neutral surface with a green accent, never a solid fill */
 .epic1-editable-node.concat {
   width: 124px;
   min-width: 124px;
   padding: 10px 12px;
-  background: #63d64c;
-  border-color: #63d64c;
-  color: #12310c;
-  box-shadow: 0 10px 24px rgba(99, 214, 76, 0.24);
+  background: #1f1f1f;
+  border: 1px solid rgba(70, 208, 127, 0.55);
+  color: #e7e9ee;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.epic1-editable-node.concat .epic1-node-type-label {
+  color: #5fe0a0;
+}
+
+/* Selected: expand the highlight (glow), don't fill */
+.epic1-editable-node.concat.selected {
+  border-color: #46d07f;
+  box-shadow: 0 0 0 2px rgba(70, 208, 127, 0.45), 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 /* Style all concat input handles with index labels */
 .concat-input::after {
   position: absolute;
   font-size: 10px;
-  color: rgba(18, 49, 12, 0.78);
+  color: rgba(95, 224, 160, 0.85);
   font-weight: 700;
   left: 18px;
   top: 50%;
