@@ -104,6 +104,13 @@ const VARIANTS: Array<(n: CardNormalization) => CardNormalization> = [
   })
 ];
 
+/**
+ * Real EraCrowd test renders served from client/public/eracrowd/. The canvas
+ * draws these in place of the vector placeholder; the overlay geometry seeds a
+ * roughly-right head/ground that the operator fine-tunes live.
+ */
+const DEMO_IMAGE_COUNT = 14;
+
 function buildCard(index: number): SeedCard {
   const num = String(40 + index).padStart(3, '0');
   const assetId = `ICR_1960s_RG_${num}_A001`;
@@ -112,20 +119,28 @@ function buildCard(index: number): SeedCard {
   const normalization = recomputeDerived(
     VARIANTS[index % VARIANTS.length](baseNormalization(assetId, heads))
   );
+  const imageUri =
+    index < DEMO_IMAGE_COUNT
+      ? `/eracrowd/card-${String(index + 1).padStart(2, '0')}.png`
+      : undefined;
   const asset: PsgAssetRef = {
     id: assetId,
     kind: 'render-output',
     role: 'crowd-card',
-    storage: { provider: 'local', uri: `local://eracrowd/${assetId}.png` },
+    storage: {
+      provider: 'local',
+      uri: imageUri ?? `local://eracrowd/${assetId}.png`
+    },
     provenance: { source: 'generated', vendor: 'EraCrowd' },
     tags: ['eracrowd', 'racegoer', '1960s'],
     metadata: { paletteIndex, heads, normalization }
   };
-  return { asset, paletteIndex, heads };
+  return { asset, paletteIndex, heads, imageUri };
 }
 
-export const SEED_CARDS: SeedCard[] = Array.from({ length: 12 }, (_, i) =>
-  buildCard(i)
+export const SEED_CARDS: SeedCard[] = Array.from(
+  { length: DEMO_IMAGE_COUNT },
+  (_, i) => buildCard(i)
 );
 
 export const SEED_TOTAL = 842;

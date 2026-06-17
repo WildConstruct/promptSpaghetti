@@ -43,7 +43,7 @@ function Meter({ label, value, accent }: { label: string; value: number; accent?
 export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const n = useCardNormalization();
   const [tool, setTool] = useState<NormTool>('head');
-  const [view, setView] = useState<ViewLayers>({ guide: true, mask: true, skeleton: false, grid: false });
+  const [view, setView] = useState<ViewLayers>({ guide: true, mask: false, skeleton: false, grid: false });
   const [showComposite, setShowComposite] = useState(false);
   const [showSplitter, setShowSplitter] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -176,7 +176,11 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
           {n.cards.map((card, i) => (
             <button key={card.asset.id} className={`cn-thumb ${i === n.index ? 'sel' : ''}`} onClick={() => n.goTo(i)} title={card.asset.id}>
               <span className="cn-thumb-dot" style={{ background: STATUS_COLOR[n.statuses[i]] }} />
-              <svg viewBox="0 0 512 768" width="34" height="51"><CardFigure paletteIndex={card.paletteIndex} heads={card.heads} /></svg>
+              {card.imageUri ? (
+                <img src={card.imageUri} width={34} height={51} alt="" style={{ objectFit: 'cover', display: 'block', borderRadius: 3 }} />
+              ) : (
+                <svg viewBox="0 0 512 768" width="34" height="51"><CardFigure paletteIndex={card.paletteIndex} heads={card.heads} /></svg>
+              )}
             </button>
           ))}
         </div>
