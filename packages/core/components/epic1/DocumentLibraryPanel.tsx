@@ -30,6 +30,7 @@ export const DocumentLibraryPanel: React.FC<DocumentLibraryPanelProps> = ({
   onOpenDocument
 }) => {
   const [activeCategory, setActiveCategory] = useState<string>(ALL);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const categories = useMemo(() => {
     const seen = new Map<string, string>();
@@ -100,29 +101,57 @@ export const DocumentLibraryPanel: React.FC<DocumentLibraryPanelProps> = ({
       </div>
 
       <div className="document-library-list">
-        {visible.map(doc => (
-          <button
-            key={doc.id}
-            type="button"
-            className={`document-library-card ${doc.branching ? 'is-branching' : ''}`}
-            onClick={() => onOpenDocument?.(doc.id)}
-            title={`Open “${doc.title}”`}
-            data-testid={`explore-document-${doc.id}`}
-          >
-            <span className="document-library-card-title">{doc.title}</span>
-            <span className="document-library-card-description">{doc.description}</span>
-            <span className="document-library-card-meta">
-              {doc.branching && (
-                <span className="document-library-tag document-library-tag-branching">
-                  ⑂ Branching
+        {visible.map(doc => {
+          const isExpanded = expandedId === doc.id;
+          return (
+            <div
+              key={doc.id}
+              className={`document-library-card ${isExpanded ? 'is-expanded' : ''}`}
+              data-testid={`explore-document-${doc.id}`}
+            >
+              <button
+                type="button"
+                className="document-library-card-header"
+                aria-expanded={isExpanded}
+                onClick={() =>
+                  setExpandedId(current => (current === doc.id ? null : doc.id))
+                }
+                title={isExpanded ? `Collapse “${doc.title}”` : `Preview “${doc.title}”`}
+              >
+                <span className="document-library-card-title">{doc.title}</span>
+                <span className="document-library-card-meta">
+                  {doc.branching && (
+                    <span className="document-library-tag document-library-tag-branching">
+                      ⑂ Branching
+                    </span>
+                  )}
+                  {typeof doc.nodeCount === 'number' && (
+                    <span className="document-library-tag">{doc.nodeCount} nodes</span>
+                  )}
                 </span>
+                <span className="document-library-card-chevron" aria-hidden>
+                  ›
+                </span>
+              </button>
+
+              {isExpanded && (
+                <div className="document-library-card-body">
+                  <p className="document-library-card-description">
+                    {doc.description}
+                  </p>
+                  <button
+                    type="button"
+                    className="document-library-open-btn"
+                    onClick={() => onOpenDocument?.(doc.id)}
+                  >
+                    Open in editor
+                    <span aria-hidden> →</span>
+                  </button>
+                </div>
               )}
-              {typeof doc.nodeCount === 'number' && (
-                <span className="document-library-tag">{doc.nodeCount} nodes</span>
-              )}
-            </span>
-          </button>
-        ))}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
