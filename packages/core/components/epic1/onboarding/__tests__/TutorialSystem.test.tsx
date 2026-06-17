@@ -50,7 +50,7 @@ describe('Tutorial system behaviour', () => {
 
     fireEvent.click(screen.getByTestId('start'));
 
-    expect(screen.getByText('Start With Structure')).toBeInTheDocument();
+    expect(screen.getByText('Start with structure')).toBeInTheDocument();
     expect(screen.getByText('Step 1 of 8')).toBeInTheDocument();
   });
 
