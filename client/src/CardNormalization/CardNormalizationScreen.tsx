@@ -4,12 +4,15 @@ import {
   POSE_CLASSES,
   getArchetypeOrDefault,
   isHeadCountInRange,
+  estimatedHeightM,
+  formatFeetInches,
   type PoseClass
 } from '@promptscape/core/services/cardNormalization';
 import { useCardNormalization } from './useCardNormalization';
 import { NormalizationCanvas, type NormTool, type ViewLayers } from './NormalizationCanvas';
 import { CardFigure } from './figures';
 import { SEED_TOTAL } from './seedAssets';
+import { ScenePreview } from './ScenePreview';
 import './CardNormalization.css';
 
 const STATUS_LABEL: Record<string, string> = {
@@ -40,6 +43,7 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
   const n = useCardNormalization();
   const [tool, setTool] = useState<NormTool>('head');
   const [view, setView] = useState<ViewLayers>({ guide: true, mask: true, skeleton: false, grid: false });
+  const [showComposite, setShowComposite] = useState(false);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -61,7 +65,8 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
   const c = w.confidence;
 
   return (
-    <div className="cn-screen">
+    <>
+    <div className="cn-screen" style={showComposite ? { display: 'none' } : undefined}>
       <div className="cn-header">
         <button className="cn-iconbtn" onClick={onBack} aria-label="Back to card assets">←</button>
         <span className="cn-title">Card normalization</span>
@@ -69,6 +74,7 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
         <span className="cn-pill" style={{ color: STATUS_COLOR[w.status], borderColor: STATUS_COLOR[w.status] }}>{STATUS_LABEL[w.status]}</span>
         {n.dirty && <span className="cn-dirty">Unsaved</span>}
         <span className="cn-spacer" />
+        <button className="cn-btn" onClick={() => setShowComposite(true)}>Composite preview</button>
         <button className="cn-btn" onClick={n.reset}>Reset</button>
         <button className="cn-btn" onClick={n.autoSolve}>Auto-solve</button>
         <button className="cn-btn cn-btn-primary" onClick={() => n.save(true)}>Save &amp; approve</button>
@@ -97,15 +103,15 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
         </div>
 
         <div className="cn-canvas-wrap">
-          <NormalizationCanvas value={w} onChange={n.change} paletteIndex={n.card.paletteIndex} view={view} />
+          <NormalizationCanvas value={w} onChange={n.change} paletteIndex={n.card.paletteIndex} heads={n.card.heads} view={view} />
           <div className="cn-readout">
+            <div className="cn-ro-lab">Estimated height</div>
+            <div className="cn-ro-big">{estimatedHeightM(w).toFixed(2)} m</div>
+            <div className="cn-ro-status" style={{ color: inRange ? '#46d07f' : '#f6b042' }}>{formatFeetInches(estimatedHeightM(w))} · {inRange ? 'in range' : 'out of range'}</div>
             <div className="cn-ro-lab">Observed head count</div>
-            <div className="cn-ro-big">{w.observedHeadCount.toFixed(2)}</div>
-            <div className="cn-ro-status" style={{ color: inRange ? '#46d07f' : '#f6b042' }}>{inRange ? 'Good' : 'Out of range'}</div>
-            <div className="cn-ro-lab">Target range</div>
-            <div className="cn-ro-val">{arche.headCountRange[0].toFixed(1)} – {arche.headCountRange[1].toFixed(1)}</div>
-            <div className="cn-ro-lab">Canonical</div>
-            <div className="cn-ro-val">{w.canonicalHeadCount.toFixed(1)} heads · {arche.targetHeightM.toFixed(2)} m</div>
+            <div className="cn-ro-val">{w.observedHeadCount.toFixed(2)} heads (range {arche.headCountRange[0].toFixed(1)}–{arche.headCountRange[1].toFixed(1)})</div>
+            <div className="cn-ro-lab">Head ruler</div>
+            <div className="cn-ro-val">1 head ≈ {(arche.targetHeightM / arche.canonicalHeadCount * 100).toFixed(1)} cm</div>
           </div>
         </div>
 
@@ -151,7 +157,7 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
           {n.cards.map((card, i) => (
             <button key={card.asset.id} className={`cn-thumb ${i === n.index ? 'sel' : ''}`} onClick={() => n.goTo(i)} title={card.asset.id}>
               <span className="cn-thumb-dot" style={{ background: STATUS_COLOR[n.statuses[i]] }} />
-              <svg viewBox="0 0 512 768" width="34" height="51"><CardFigure paletteIndex={card.paletteIndex} /></svg>
+              <svg viewBox="0 0 512 768" width="34" height="51"><CardFigure paletteIndex={card.paletteIndex} heads={card.heads} /></svg>
             </button>
           ))}
         </div>
@@ -159,6 +165,8 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
         <span className="cn-count">Asset {n.index + 1} of {SEED_TOTAL}</span>
       </div>
     </div>
+    {showComposite && <ScenePreview onClose={() => setShowComposite(false)} />}
+    </>
   );
 };
 

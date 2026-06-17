@@ -8,7 +8,7 @@ import {
 import { SEED_CARDS, type SeedCard } from './seedAssets';
 import { applyArchetype, finalize, heuristicSolve } from './geometry';
 
-const STORE_KEY = 'psg:card-norm-records';
+const STORE_KEY = 'psg:card-norm-records-v2';
 
 type RecordMap = Record<string, CardNormalization>;
 

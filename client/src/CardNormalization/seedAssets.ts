@@ -3,23 +3,39 @@ import {
   recomputeDerived,
   type CardNormalization
 } from '@promptscape/core/services/cardNormalization';
-import { CARD_IMAGE_WIDTH, CARD_IMAGE_HEIGHT, FIGURE_PALETTES } from './figures';
+import {
+  CARD_IMAGE_WIDTH,
+  CARD_IMAGE_HEIGHT,
+  FIGURE_PALETTES,
+  FIGURE_HEAD_TOP,
+  FIGURE_HEAD_UNIT,
+  figureFeetY
+} from './figures';
 
 /**
  * Seed card library for the normalization demo. These stand in for EraCrowd
  * render outputs (PsgAssetRef kind 'render-output') until that pipeline is
- * wired up. A few assets are intentionally un-normalized so the editor (and a
- * later Auto-solve) has something to correct.
+ * wired up. Each card is a person of a DIFFERENT real height (different head
+ * count) — that's the whole point: the head is a fixed-size ruler, so head
+ * count extrapolates to real height. A few cards are intentionally mis-measured
+ * so the editor (and a later Auto-solve) has something to correct.
  */
 
 export interface SeedCard {
   asset: PsgAssetRef;
   paletteIndex: number;
+  /** True rendered height of the figure, in head units. */
+  heads: number;
 }
 
 const SEED_DATE = '2026-06-16T00:00:00.000Z';
 
-function baseNormalization(assetId: string): CardNormalization {
+// Varied real heights (head units). ~6.8–8.1 ≈ 1.59–1.89 m for this archetype.
+const HEADS = [7.5, 8.0, 7.1, 7.85, 6.85, 7.35, 7.95, 7.0, 8.05, 7.6, 6.95, 7.7];
+
+function baseNormalization(assetId: string, heads: number): CardNormalization {
+  const headTop = FIGURE_HEAD_TOP;
+  const groundY = figureFeetY(heads);
   return {
     version: 'card-norm/1',
     assetId,
@@ -27,23 +43,23 @@ function baseNormalization(assetId: string): CardNormalization {
     imageHeight: CARD_IMAGE_HEIGHT,
     head: {
       centerX: 256,
-      centerY: 104,
+      centerY: headTop + FIGURE_HEAD_UNIT / 2,
       width: 80,
-      height: 88,
+      height: FIGURE_HEAD_UNIT,
       rotation: 0,
       mode: 'visual-oval',
       includesHeadwear: true,
       confidence: 0.9
     },
     ground: {
-      y: 720,
+      y: groundY,
       angle: 0,
-      leftContact: { x: 232, y: 720 },
-      rightContact: { x: 280, y: 720 },
+      leftContact: { x: 232, y: groundY },
+      rightContact: { x: 280, y: groundY },
       supportWidth: 48,
       confidence: 0.92
     },
-    pivot: { x: 256, y: 720, uv: { u: 0.5, v: 0.96 }, lockToGround: true },
+    pivot: { x: 256, y: groundY, uv: { u: 0.5, v: 0.96 }, lockToGround: true },
     crop: {
       x: 64,
       y: 24,
@@ -51,7 +67,7 @@ function baseNormalization(assetId: string): CardNormalization {
       height: 720,
       padding: { top: 6, right: 10, bottom: 2, left: 10 }
     },
-    observedHeadCount: 7.5,
+    observedHeadCount: heads,
     canonicalHeadCount: 7.5,
     archetype: 'adult-male-racegoer',
     poseClass: 'standing-relaxed',
@@ -62,29 +78,25 @@ function baseNormalization(assetId: string): CardNormalization {
   };
 }
 
+// Some cards arrive mis-measured (head box off, ground off) so there's work to do.
 const VARIANTS: Array<(n: CardNormalization) => CardNormalization> = [
   n => ({ ...n, status: 'approved' }),
   n => ({
     ...n,
-    head: { ...n.head, height: 76, width: 72, confidence: 0.72 },
+    head: { ...n.head, height: n.head.height * 0.86, width: n.head.width * 0.86, confidence: 0.72 },
     confidence: { ...n.confidence, head: 0.72 },
     status: 'unsolved'
   }),
   n => ({
     ...n,
-    ground: {
-      ...n.ground,
-      angle: 3,
-      rightContact: { x: 280, y: 727 },
-      confidence: 0.8
-    },
+    ground: { ...n.ground, y: n.ground.y - 26, angle: 3, confidence: 0.8 },
     confidence: { ...n.confidence, ground: 0.8 },
     status: 'edited'
   }),
   n => ({
     ...n,
     head: { ...n.head, centerX: 242, rotation: -4, confidence: 0.83 },
-    pivot: { ...n.pivot, x: 240, uv: { u: 0.47, v: 0.96 } },
+    pivot: { ...n.pivot, x: 240 },
     confidence: { ...n.confidence, head: 0.83 },
     status: 'edited'
   })
@@ -94,8 +106,9 @@ function buildCard(index: number): SeedCard {
   const num = String(40 + index).padStart(3, '0');
   const assetId = `ICR_1960s_RG_${num}_A001`;
   const paletteIndex = index % FIGURE_PALETTES.length;
+  const heads = HEADS[index % HEADS.length];
   const normalization = recomputeDerived(
-    VARIANTS[index % VARIANTS.length](baseNormalization(assetId))
+    VARIANTS[index % VARIANTS.length](baseNormalization(assetId, heads))
   );
   const asset: PsgAssetRef = {
     id: assetId,
@@ -104,9 +117,9 @@ function buildCard(index: number): SeedCard {
     storage: { provider: 'local', uri: `local://eracrowd/${assetId}.png` },
     provenance: { source: 'generated', vendor: 'EraCrowd' },
     tags: ['eracrowd', 'racegoer', '1960s'],
-    metadata: { paletteIndex, normalization }
+    metadata: { paletteIndex, heads, normalization }
   };
-  return { asset, paletteIndex };
+  return { asset, paletteIndex, heads };
 }
 
 export const SEED_CARDS: SeedCard[] = Array.from({ length: 12 }, (_, i) =>

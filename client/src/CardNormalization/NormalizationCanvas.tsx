@@ -21,6 +21,7 @@ interface Props {
   value: CardNormalization;
   onChange: (next: CardNormalization) => void;
   paletteIndex: number;
+  heads: number;
   view: ViewLayers;
 }
 
@@ -35,6 +36,7 @@ export const NormalizationCanvas: React.FC<Props> = ({
   value,
   onChange,
   paletteIndex,
+  heads,
   view
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -148,7 +150,7 @@ export const NormalizationCanvas: React.FC<Props> = ({
       <rect x="0" y="0" width={CARD_IMAGE_WIDTH} height={CARD_IMAGE_HEIGHT} fill="#0e1014" />
       {view.grid && <rect x="0" y="0" width={CARD_IMAGE_WIDTH} height={CARD_IMAGE_HEIGHT} fill="url(#cnGrid)" />}
 
-      <CardFigure paletteIndex={paletteIndex} />
+      <CardFigure paletteIndex={paletteIndex} heads={heads} />
 
       {view.mask && (
         <path opacity={0.22} fill="#7f77dd" d="M226 60 C228 46 284 46 286 60 C300 66 312 96 304 112 L320 168 C342 196 348 270 322 300 L322 420 L300 716 L266 716 L256 510 L246 716 L212 716 L214 420 L190 352 C176 300 178 220 194 184 L208 112 C200 96 212 66 226 60 Z" />

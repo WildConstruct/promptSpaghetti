@@ -57,6 +57,35 @@ export function computeOverallConfidence(
   );
 }
 
+/**
+ * Real-world height of one head unit for an archetype (metres), i.e. the known
+ * "ruler": canonical target height divided by canonical head count.
+ */
+export function headHeightMetres(archetypeId: string): number {
+  const a = getArchetypeOrDefault(archetypeId);
+  return a.targetHeightM / a.canonicalHeadCount;
+}
+
+/**
+ * Estimated real-world height extrapolated from the observed head count — the
+ * core payoff: head size is a known ruler, so head count → metres.
+ */
+export function estimatedHeightM(n: CardNormalization): number {
+  return n.observedHeadCount * headHeightMetres(n.archetype);
+}
+
+/** Format metres as feet/inches, e.g. 1.78 → "5′10″". */
+export function formatFeetInches(metres: number): string {
+  const totalInches = metres / 0.0254;
+  let feet = Math.floor(totalInches / 12);
+  let inches = Math.round(totalInches - feet * 12);
+  if (inches === 12) {
+    feet += 1;
+    inches = 0;
+  }
+  return `${feet}′${inches}″`;
+}
+
 /** Whether an observed head count sits within the archetype's acceptable range. */
 export function isHeadCountInRange(
   observedHeadCount: number,

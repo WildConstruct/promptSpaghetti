@@ -29,13 +29,27 @@ export const FIGURE_PALETTES: FigurePalette[] = [
   { hat: '#cdb072', hatBand: '#a4863e', shirt: '#dfd9c8', shirtShade: '#d0c9b4', pants: '#8a6f4a', skin: '#caa074', shoe: '#3a2a1a' }
 ];
 
-export const CardFigure: React.FC<{ paletteIndex: number }> = ({ paletteIndex }) => {
+/** Head-unit geometry shared with the normalization model. */
+export const FIGURE_HEAD_TOP = 60;
+export const FIGURE_HEAD_UNIT = 88;
+/** Feet (ground) Y for a figure of the given height in head units. */
+export const figureFeetY = (heads: number) =>
+  FIGURE_HEAD_TOP + heads * FIGURE_HEAD_UNIT;
+
+const WAIST = 352;
+
+export const CardFigure: React.FC<{ paletteIndex: number; heads?: number }> = ({
+  paletteIndex,
+  heads = 7.5
+}) => {
   const p = FIGURE_PALETTES[paletteIndex % FIGURE_PALETTES.length];
+  const fy = figureFeetY(heads);
+  const knee = WAIST + 0.62 * (fy - WAIST);
   return (
     <g>
-      <ellipse cx="230" cy="722" rx="30" ry="11" fill={p.shoe} />
-      <ellipse cx="282" cy="722" rx="30" ry="11" fill={p.shoe} />
-      <path d="M214 420 L208 716 L246 716 L256 500 L266 716 L304 716 L298 420 Z" fill={p.pants} />
+      <ellipse cx="230" cy={fy + 2} rx="30" ry="11" fill={p.shoe} />
+      <ellipse cx="282" cy={fy + 2} rx="30" ry="11" fill={p.shoe} />
+      <path d={`M214 ${WAIST} L208 ${fy} L246 ${fy} L256 ${knee} L266 ${fy} L304 ${fy} L298 ${WAIST} Z`} fill={p.pants} />
       <path d="M198 172 C176 214 174 300 188 352 L208 348 C198 300 204 224 220 184 Z" fill={p.shirtShade} />
       <path d="M198 168 Q256 150 314 168 L320 352 Q256 366 192 352 Z" fill={p.shirt} />
       <path d="M256 176 L256 350" stroke={p.shirtShade} strokeWidth="2" />

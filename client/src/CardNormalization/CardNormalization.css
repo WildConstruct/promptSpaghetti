@@ -98,3 +98,20 @@
 .cn-thumb.sel { border-color: #f5c84a; }
 .cn-thumb-dot { position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; }
 .cn-count { font-size: 11px; color: #9aa1ad; white-space: nowrap; }
+
+.cn-preview-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  background: #0b0c0f;
+  display: flex; flex-direction: column; gap: 12px; padding: 18px 24px;
+}
+.cn-preview-head { display: flex; align-items: center; gap: 14px; }
+.cn-preview-title { font-size: 15px; font-weight: 500; color: #f5c84a; }
+.cn-preview-sub { font-size: 12px; color: #9aa1ad; }
+.cn-preview-toggle { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #cfd3da; cursor: pointer; }
+.cn-preview-toggle input { width: 14px; height: 14px; accent-color: #f5c84a; }
+.cn-preview-stage {
+  flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
+  border: 0.5px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; background: #0e1014;
+}
+.cn-preview-stage > svg { max-height: 100%; }
+.cn-preview-caption { margin: 0; font-size: 12px; color: #aeb4be; text-align: center; }
