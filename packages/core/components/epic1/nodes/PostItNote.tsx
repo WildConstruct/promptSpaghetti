@@ -334,7 +334,8 @@ export const PostItNote: React.FC<Epic1NodeProps<PostItNoteData>> = ({
 
   // Handle keyboard shortcuts
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && e.metaKey) {
+    // Accept Ctrl+Enter (Windows/Linux) as well as Cmd+Enter (macOS)
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       handleSave();
     } else if (e.key === 'Escape') {
       handleCancel();
