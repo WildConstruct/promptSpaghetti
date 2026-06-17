@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './QuickActions.css';
+import { quickStartTemplates } from '../../templates/quickStartTemplates';
 
 interface QuickActionsProps {
   onSelectTemplate: (templateId: string) => void;
 }
+
+type LaunchCategory = 'characters' | 'crowds' | 'worlds' | 'start';
 
 interface Template {
   id: string;
@@ -14,6 +17,31 @@ interface Template {
   tier: 'primary' | 'advanced' | 'manual';
   icon: React.ReactNode;
 }
+
+const CATEGORY_TABS: { id: LaunchCategory | 'all'; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'characters', label: 'Characters' },
+  { id: 'crowds', label: 'Crowds & Scenes' },
+  { id: 'worlds', label: 'Worlds & Objects' },
+  { id: 'start', label: 'Start Fresh' }
+];
+
+const CATEGORY_BY_ID: Record<string, LaunchCategory> = {
+  character_variation: 'characters',
+  gangsters: 'characters',
+  diner_patrons: 'characters',
+  spaghetti_western: 'characters',
+  indy_500_crowd_card: 'crowds',
+  baseball_fans: 'crowds',
+  punk_fans: 'crowds',
+  medieval_village: 'crowds',
+  vehicle_family: 'worlds',
+  building_family: 'worlds',
+  tech_panel: 'worlds',
+  tile_builder: 'worlds',
+  branching_family: 'worlds',
+  empty: 'start'
+};
 
 // SVG Icons for consistent palette
 const CharacterIcon = () => (
@@ -243,52 +271,57 @@ const templates: Template[] = [
 export const QuickActions: React.FC<QuickActionsProps> = ({
   onSelectTemplate
 }) => {
-  const primaryTemplates = templates.filter(template => template.tier === 'primary');
-  const secondaryTemplates = templates.filter(template => template.tier !== 'primary');
+  const [activeCategory, setActiveCategory] = useState<LaunchCategory | 'all'>(
+    'all'
+  );
+
+  const visibleTemplates =
+    activeCategory === 'all'
+      ? templates
+      : templates.filter(
+          template => CATEGORY_BY_ID[template.id] === activeCategory
+        );
 
   return (
     <div className="quick-actions">
-      <div className="template-group">
-        <div className="template-group-header">
-          <span className="template-group-kicker">Primary Demos</span>
-          <p className="template-group-copy">
-            Start with reusable family graphs that show locked DNA and bounded variation.
-          </p>
-        </div>
-        <div className="template-grid">
-          {primaryTemplates.map(template => (
+      <div
+        className="template-nav"
+        role="tablist"
+        aria-label="Example categories"
+      >
+        {CATEGORY_TABS.map(tab => {
+          const count =
+            tab.id === 'all'
+              ? templates.length
+              : templates.filter(t => CATEGORY_BY_ID[t.id] === tab.id).length;
+          return (
             <button
-              key={template.id}
-              className={`template-card template-card-${template.tier}`}
-              onClick={() => onSelectTemplate(template.id)}
-              title={template.prompt}
-              data-testid={`quick-action-${template.id}`}
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={activeCategory === tab.id}
+              className={`template-nav-chip ${
+                activeCategory === tab.id ? 'active' : ''
+              }`}
+              onClick={() => setActiveCategory(tab.id)}
             >
-              <span className="template-icon">{template.icon}</span>
-              <span className="template-copy">
-                <span className="template-title">{template.title}</span>
-                <span className="template-description">{template.description}</span>
-              </span>
-              {template.badge && (
-                <span className="template-badge">{template.badge}</span>
-              )}
+              {tab.label}
+              <span className="template-nav-count">{count}</span>
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
-      <div className="template-group template-group-secondary">
-        <div className="template-group-header">
-          <span className="template-group-kicker">Advanced And Manual</span>
-          <p className="template-group-copy">
-            Use these when you want branching experiments or a blank PSG canvas.
-          </p>
-        </div>
-        <div className="template-grid template-grid-secondary">
-          {secondaryTemplates.map(template => (
+      <div className="template-grid template-grid-nav">
+        {visibleTemplates.map(template => {
+          const nodeCount = quickStartTemplates[template.id]?.nodes.length;
+          const isBranching = template.badge === 'Branching';
+          return (
             <button
               key={template.id}
-              className={`template-card template-card-${template.tier}`}
+              className={`template-card template-card-${template.tier} ${
+                isBranching ? 'is-branching' : ''
+              }`}
               onClick={() => onSelectTemplate(template.id)}
               title={template.prompt}
               data-testid={`quick-action-${template.id}`}
@@ -296,19 +329,32 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
               <span className="template-icon">{template.icon}</span>
               <span className="template-copy">
                 <span className="template-title">{template.title}</span>
-                <span className="template-description">{template.description}</span>
+                <span className="template-description">
+                  {template.description}
+                </span>
+                <span className="template-meta">
+                  {isBranching && (
+                    <span className="template-tag template-tag-branching">
+                      ⑂ Branching
+                    </span>
+                  )}
+                  {typeof nodeCount === 'number' && (
+                    <span className="template-tag">{nodeCount} nodes</span>
+                  )}
+                  {template.tier === 'manual' && (
+                    <span className="template-tag">Blank</span>
+                  )}
+                </span>
               </span>
-              {template.badge && (
-                <span className="template-badge">{template.badge}</span>
-              )}
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
       <div className="quick-actions-footer">
         <p className="hint">
-          Click a template to launch straight into PSG-first authoring with an archetype-oriented starter graph.
+          Pick a category, then click an example to launch it. Branching
+          examples show locked DNA, multi-branch choices, and nested branches.
         </p>
       </div>
     </div>
