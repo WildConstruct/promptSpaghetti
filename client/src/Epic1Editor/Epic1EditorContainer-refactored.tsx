@@ -38,6 +38,11 @@ import type {
   PsgSceneAssemblyPlan
 } from '@promptscape/core/services/psg';
 import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
+import {
+  TEMPLATE_CATALOG,
+  TEMPLATE_CATEGORY_LABELS
+} from '../templates/templateCatalog';
+import { quickStartTemplates } from '../templates/quickStartTemplates';
 
 const PromptDissector = lazy(async () => {
   const module = await import('../components/LaunchScreen/PromptDissector');
@@ -466,6 +471,51 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     handleNew([], []);
   }, [handleNew]);
 
+  // Explore tab: full PSG-document templates (the same catalog as the splash
+  // launcher), surfaced inside the editor so a document can be opened without
+  // going back to the launch screen.
+  const exploreDocuments = useMemo(
+    () =>
+      TEMPLATE_CATALOG.map(entry => ({
+        id: entry.id,
+        title: entry.title,
+        description: entry.description,
+        category: entry.category,
+        categoryLabel: TEMPLATE_CATEGORY_LABELS[entry.category],
+        branching: entry.branching,
+        nodeCount: quickStartTemplates[entry.id]?.nodes.length
+      })),
+    []
+  );
+
+  const handleOpenDocument = useCallback(
+    (id: string) => {
+      const tmpl = quickStartTemplates[id];
+      if (!tmpl) {
+        showToast('That document is unavailable', 'error');
+        return;
+      }
+      const title =
+        TEMPLATE_CATALOG.find(entry => entry.id === id)?.title ?? 'document';
+
+      // Close-before-open: only prompt when there is work that would be lost.
+      if (currentNodes.length > 0) {
+        const proceed = window.confirm(
+          `Open “${title}”? This replaces the current graph. Unsaved changes will be lost.`
+        );
+        if (!proceed) {
+          return;
+        }
+      }
+
+      handleNodesChange(tmpl.nodes as Node[]);
+      handleEdgesChange(tmpl.edges as Edge[]);
+      setEditorKey(prev => prev + 1);
+      showToast(`Opened “${title}”`, 'success');
+    },
+    [currentNodes.length, handleNodesChange, handleEdgesChange, showToast]
+  );
+
   const editorSurfacePolicy = useMemo(
     () =>
       buildEditorSurfacePolicy({
@@ -565,6 +615,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           showAssetLibrary={assetLibraryVisible}
           assetLibraryPosition={assetLibraryPosition}
           sidePanelTabDefinitions={editorSurfacePolicy.tabDefinitions}
+          exploreDocuments={exploreDocuments}
+          onOpenDocument={handleOpenDocument}
         />
 
         {/* Modals */}

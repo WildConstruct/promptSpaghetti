@@ -239,7 +239,7 @@ export const buildEditorSurfacePolicy = ({
     'tab.explore': createSurface(
       'tab.explore',
       'Explore',
-      'Advanced search and exploration support, not the primary authoring loop.',
+      'Browse and open full PSG-document templates — the same examples as the launch screen — without leaving the editor.',
       'advanced',
       'available',
       'tab'

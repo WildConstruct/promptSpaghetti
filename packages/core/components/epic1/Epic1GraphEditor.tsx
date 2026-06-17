@@ -61,6 +61,7 @@ import {
   TabbedSidePanel,
   type SidePanelTabDefinition
 } from './TabbedSidePanel';
+import type { DocumentSummary } from './DocumentLibraryPanel';
 import { GraphCommander, type GraphCommanderCommand } from './GraphCommander';
 import { NodeTetris } from './NodeTetris';
 import { NodeToolbar } from './NodeToolbar';
@@ -141,6 +142,8 @@ export interface Epic1GraphEditorProps {
   showAssetLibrary?: boolean;
   assetLibraryPosition?: 'left' | 'right';
   sidePanelTabDefinitions?: SidePanelTabDefinition[];
+  exploreDocuments?: DocumentSummary[];
+  onOpenDocument?: (id: string) => void;
 }
 
 function presetToAgentFragmentRecord(preset: Preset): AgentFragmentRecord {
@@ -257,7 +260,9 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   previewSeeds,
   showAssetLibrary = true,
   assetLibraryPosition = 'left',
-  sidePanelTabDefinitions
+  sidePanelTabDefinitions,
+  exploreDocuments,
+  onOpenDocument
 }) => {
   // Node types based on asset library visibility
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
@@ -1987,6 +1992,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             showAssets={true}
             showPreview={showPreview}
             tabDefinitions={sidePanelTabDefinitions}
+            exploreDocuments={exploreDocuments}
+            onOpenDocument={onOpenDocument}
             selectedNode={nodes.find(n => n.id === selectedNodeId)}
             nodes={nodes}
             edges={edges}
