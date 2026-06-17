@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Laser Aiming Devices (IR/Visible) Asset Fragment",
+  "name": "Laser Aiming Devices (IR/Visible)",
   "description": "Zeroing, offset, and activation discipline for lasers",
   "metadata": {
     "created": "2025-08-15",

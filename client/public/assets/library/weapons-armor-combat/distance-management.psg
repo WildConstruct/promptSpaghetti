@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Distance Management Asset Fragment",
+  "name": "Distance Management",
   "description": "Controlling measure, entries, exits, and off-line movement",
   "metadata": {
     "created": "2025-08-15",

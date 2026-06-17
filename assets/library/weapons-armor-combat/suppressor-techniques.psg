@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Suppressor Techniques Asset Fragment",
+  "name": "Suppressor Techniques",
   "description": "POI shift management, gas/backpressure tuning, and signature considerations",
   "metadata": {
     "created": "2025-08-15",

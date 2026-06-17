@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Barricade Shooting Positions Asset Fragment",
+  "name": "Barricade Shooting Positions",
   "description": "Supported positions and angles when using cover or barricades",
   "metadata": {
     "created": "2025-08-15",

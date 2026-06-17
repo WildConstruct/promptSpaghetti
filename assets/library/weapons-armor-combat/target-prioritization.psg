@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Target Prioritization Asset Fragment",
+  "name": "Target Prioritization",
   "description": "Heuristic sets for selecting engagement order",
   "metadata": {
     "created": "2025-08-15",

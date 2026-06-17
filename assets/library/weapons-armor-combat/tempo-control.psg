@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Tempo Control Asset Fragment",
+  "name": "Tempo Control",
   "description": "Manipulating timing to create openings and disrupt opponents",
   "metadata": {
     "created": "2025-08-15",

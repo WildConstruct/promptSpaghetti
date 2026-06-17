@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Recoil Management Asset Fragment",
+  "name": "Recoil Management",
   "description": "Methods to control muzzle rise and recover quickly",
   "metadata": {
     "created": "2025-08-15",

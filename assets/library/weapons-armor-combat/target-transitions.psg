@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Target Transitions Asset Fragment",
+  "name": "Target Transitions",
   "description": "Rapid transitions between multiple targets with efficient indexing",
   "metadata": {
     "created": "2025-08-15",

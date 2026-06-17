@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Safety Selector Manipulation Asset Fragment",
+  "name": "Safety Selector Manipulation",
   "description": "Selector control from safe to fire and back under various contexts",
   "metadata": {
     "created": "2025-08-15",

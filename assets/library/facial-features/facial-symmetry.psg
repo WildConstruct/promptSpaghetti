@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Facial Symmetry Asset Fragment",
+  "name": "Facial Symmetry",
   "description": "Facial balance and symmetry descriptors for character generation",
   "metadata": {
     "created": "2025-01-15",

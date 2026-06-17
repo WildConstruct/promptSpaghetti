@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "High-Angle/Elevation Compensation Asset Fragment",
+  "name": "High-Angle/Elevation Compensation",
   "description": "Angle cosine and aiming adjustments for steep shots",
   "metadata": {
     "created": "2025-08-15",

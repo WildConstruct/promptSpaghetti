@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Range Estimation Asset Fragment",
+  "name": "Range Estimation",
   "description": "Techniques for estimating distance to targets and landmarks",
   "metadata": {
     "created": "2025-08-15",

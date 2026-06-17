@@ -60,8 +60,15 @@ for (const rel of rels) {
   const existing = existingByPath.get(rel);
   if (existing) {
     usedIds.add(existing.id);
-    // Refresh derived counts but keep curated id/name/description/tags.
-    fragments.push({ ...existing, nodeCount, edgeCount });
+    // Keep the curated id/tags/metadata, but the .psg is the source of truth
+    // for the display name, description, and derived counts.
+    fragments.push({
+      ...existing,
+      name: d.name || existing.name,
+      description: d.description || existing.description,
+      nodeCount,
+      edgeCount
+    });
     preserved++;
     continue;
   }

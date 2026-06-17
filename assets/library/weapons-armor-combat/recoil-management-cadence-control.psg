@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Recoil Management & Cadence Control Asset Fragment",
+  "name": "Recoil Management & Cadence Control",
   "description": "Grip, stance, and sight tracking to control recoil and splits",
   "metadata": {
     "created": "2025-08-15",

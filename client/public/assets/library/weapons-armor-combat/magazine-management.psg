@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Magazine Management Asset Fragment",
+  "name": "Magazine Management",
   "description": "Retention policies, indexing, handling, and lifecycle checks",
   "metadata": {
     "created": "2025-08-15",

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Stance Transitions Asset Fragment",
+  "name": "Stance Transitions",
   "description": "Transitions between stances and guards under pressure and movement",
   "metadata": {
     "created": "2025-08-15",

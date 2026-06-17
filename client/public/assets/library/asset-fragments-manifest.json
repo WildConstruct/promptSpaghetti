@@ -541,7 +541,7 @@
     },
     {
       "id": "fragment-age-indicators",
-      "name": "Age Indicators Asset Fragment",
+      "name": "Age Indicators",
       "description": "Skin texture and age-related descriptors for character generation",
       "path": "./facial-features/age-indicators.psg",
       "category": "facial-features",
@@ -583,7 +583,7 @@
     },
     {
       "id": "fragment-facial-hair-styles",
-      "name": "Facial Hair Styles Asset Fragment",
+      "name": "Facial Hair Styles",
       "description": "Facial hair styles and grooming options for character generation",
       "path": "./facial-features/facial-hair-styles.psg",
       "category": "facial-features",
@@ -605,7 +605,7 @@
     },
     {
       "id": "fragment-facial-symmetry",
-      "name": "Facial Symmetry Asset Fragment",
+      "name": "Facial Symmetry",
       "description": "Facial balance and symmetry descriptors for character generation",
       "path": "./facial-features/facial-symmetry.psg",
       "category": "facial-features",
@@ -627,7 +627,7 @@
     },
     {
       "id": "fragment-iconic-features",
-      "name": "Iconic Features Asset Fragment",
+      "name": "Iconic Features",
       "description": "Distinctive and memorable facial features for character generation",
       "path": "./facial-features/iconic-features.psg",
       "category": "facial-features",
@@ -649,7 +649,7 @@
     },
     {
       "id": "fragment-makeup-accents",
-      "name": "Make-up Accents Asset Fragment",
+      "name": "Make-up Accents",
       "description": "Artistic makeup and cosmetic accent options for character generation",
       "path": "./facial-features/makeup-accents.psg",
       "category": "facial-features",
@@ -671,7 +671,7 @@
     },
     {
       "id": "fragment-piercings-mods",
-      "name": "Piercings & Mods Asset Fragment",
+      "name": "Piercings & Mods",
       "description": "Body modifications and piercing options for character generation",
       "path": "./facial-features/piercings-mods.psg",
       "category": "facial-features",
@@ -693,7 +693,7 @@
     },
     {
       "id": "fragment-skin-undertones",
-      "name": "Skin Undertones Asset Fragment",
+      "name": "Skin Undertones",
       "description": "Diverse skin tone and undertone descriptors for character generation",
       "path": "./facial-features/skin-undertones.psg",
       "category": "facial-features",
@@ -759,7 +759,7 @@
     },
     {
       "id": "fragment-hair-accessories",
-      "name": "Hair Accessories Asset Fragment",
+      "name": "Hair Accessories",
       "description": "Hair decoration and accessory options",
       "path": "./hair/hair-accessories.psg",
       "category": "hair",
@@ -781,7 +781,7 @@
     },
     {
       "id": "fragment-hair-colors-fantasy",
-      "name": "Fantasy Hair Colors Asset Fragment",
+      "name": "Fantasy Hair Colors",
       "description": "Unnatural and fantasy hair color options",
       "path": "./hair/hair-colors-fantasy.psg",
       "category": "hair",
@@ -803,7 +803,7 @@
     },
     {
       "id": "fragment-hair-colors-natural",
-      "name": "Natural Hair Colors Asset Fragment",
+      "name": "Natural Hair Colors",
       "description": "Natural hair color variations found in human populations",
       "path": "./hair/hair-colors-natural.psg",
       "category": "hair",
@@ -824,7 +824,7 @@
     },
     {
       "id": "fragment-hair-cuts-neutral",
-      "name": "Gender-Neutral Hair Cuts Asset Fragment",
+      "name": "Gender-Neutral Hair Cuts",
       "description": "Hair cuts and styles that work across gender presentations",
       "path": "./hair/hair-cuts-neutral.psg",
       "category": "hair",
@@ -846,7 +846,7 @@
     },
     {
       "id": "fragment-hair-lengths",
-      "name": "Basic Hair Lengths Asset Fragment",
+      "name": "Basic Hair Lengths",
       "description": "Hair length descriptors from buzzed to floor-length",
       "path": "./hair/hair-lengths.psg",
       "category": "hair",
@@ -867,7 +867,7 @@
     },
     {
       "id": "fragment-hair-motion-cues",
-      "name": "Motion-Oriented Hair Cues Asset Fragment",
+      "name": "Motion-Oriented Hair Cues",
       "description": "Dynamic hair movement and motion descriptors",
       "path": "./hair/hair-motion-cues.psg",
       "category": "hair",
@@ -889,7 +889,7 @@
     },
     {
       "id": "fragment-hair-styles-feminine",
-      "name": "Feminine-Coded Hair Styles Asset Fragment",
+      "name": "Feminine-Coded Hair Styles",
       "description": "Traditionally feminine hair styling options",
       "path": "./hair/hair-styles-feminine.psg",
       "category": "hair",
@@ -911,7 +911,7 @@
     },
     {
       "id": "fragment-hair-styles-masculine",
-      "name": "Masculine-Coded Hair Styles Asset Fragment",
+      "name": "Masculine-Coded Hair Styles",
       "description": "Traditionally masculine hair styling options",
       "path": "./hair/hair-styles-masculine.psg",
       "category": "hair",
@@ -933,7 +933,7 @@
     },
     {
       "id": "fragment-hair-textures",
-      "name": "Hair Textures Asset Fragment",
+      "name": "Hair Textures",
       "description": "Hair texture patterns from straight to kinky coils",
       "path": "./hair/hair-textures.psg",
       "category": "hair",
@@ -954,7 +954,7 @@
     },
     {
       "id": "fragment-hair-weathered-details",
-      "name": "Weathered Hair Details Asset Fragment",
+      "name": "Weathered Hair Details",
       "description": "Environmental and activity-based hair conditions",
       "path": "./hair/hair-weathered-details.psg",
       "category": "hair",
@@ -1182,7 +1182,7 @@
     },
     {
       "id": "fragment-airframes",
-      "name": "Airframes Asset Fragment",
+      "name": "Airframes",
       "description": "Airframe types and mounts",
       "path": "./vehicles-mobility/airframes.psg",
       "category": "vehicles-mobility",
@@ -1202,7 +1202,7 @@
     },
     {
       "id": "fragment-call-sign-decals",
-      "name": "Call-Sign Decals Asset Fragment",
+      "name": "Call-Sign Decals",
       "description": "Call-sign and nose-art decals",
       "path": "./vehicles-mobility/call-sign-decals.psg",
       "category": "vehicles-mobility",
@@ -1222,7 +1222,7 @@
     },
     {
       "id": "fragment-cockpit-vibes",
-      "name": "Cockpit Vibes Asset Fragment",
+      "name": "Cockpit Vibes",
       "description": "Cockpit vibe descriptors",
       "path": "./vehicles-mobility/cockpit-vibes.psg",
       "category": "vehicles-mobility",
@@ -1242,7 +1242,7 @@
     },
     {
       "id": "fragment-damage-states",
-      "name": "Damage States Asset Fragment",
+      "name": "Damage States",
       "description": "Damage states for vehicles",
       "path": "./vehicles-mobility/damage-states.psg",
       "category": "vehicles-mobility",
@@ -1262,7 +1262,7 @@
     },
     {
       "id": "fragment-ground-rigs",
-      "name": "Ground Rigs Asset Fragment",
+      "name": "Ground Rigs",
       "description": "Ground vehicles and rigs",
       "path": "./vehicles-mobility/ground-rigs.psg",
       "category": "vehicles-mobility",
@@ -1282,7 +1282,7 @@
     },
     {
       "id": "fragment-locomotion-traits",
-      "name": "Locomotion Traits Asset Fragment",
+      "name": "Locomotion Traits",
       "description": "Locomotion traits and characteristics",
       "path": "./vehicles-mobility/locomotion-traits.psg",
       "category": "vehicles-mobility",
@@ -1302,7 +1302,7 @@
     },
     {
       "id": "fragment-paint-job-styles",
-      "name": "Paint-Job Styles Asset Fragment",
+      "name": "Paint-Job Styles",
       "description": "Vehicle paint-job styles",
       "path": "./vehicles-mobility/paint-job-styles.psg",
       "category": "vehicles-mobility",
@@ -1322,7 +1322,7 @@
     },
     {
       "id": "fragment-signature-exhaust",
-      "name": "Signature Exhaust Asset Fragment",
+      "name": "Signature Exhaust",
       "description": "Signature exhaust effects",
       "path": "./vehicles-mobility/signature-exhaust.psg",
       "category": "vehicles-mobility",
@@ -1342,7 +1342,7 @@
     },
     {
       "id": "fragment-spacecraft-classes",
-      "name": "Spacecraft Classes Asset Fragment",
+      "name": "Spacecraft Classes",
       "description": "Spacecraft classes",
       "path": "./vehicles-mobility/spacecraft-classes.psg",
       "category": "vehicles-mobility",
@@ -1362,7 +1362,7 @@
     },
     {
       "id": "fragment-watercraft",
-      "name": "Watercraft Asset Fragment",
+      "name": "Watercraft",
       "description": "Watercraft archetypes",
       "path": "./vehicles-mobility/watercraft.psg",
       "category": "vehicles-mobility",
@@ -1382,7 +1382,7 @@
     },
     {
       "id": "fragment-aim-assist-modes",
-      "name": "Aim Assist Modes Asset Fragment",
+      "name": "Aim Assist Modes",
       "description": "Aiming aids and overlays",
       "path": "./weapons-armor-combat/aim-assist-modes.psg",
       "category": "weapons-armor-combat",
@@ -1402,7 +1402,7 @@
     },
     {
       "id": "fragment-axe-techniques",
-      "name": "Axe Techniques Asset Fragment",
+      "name": "Axe Techniques",
       "description": "Axe handling and attack variations",
       "path": "./weapons-armor-combat/axe-techniques.psg",
       "category": "weapons-armor-combat",
@@ -1422,7 +1422,7 @@
     },
     {
       "id": "fragment-barricade-shooting-positions",
-      "name": "Barricade Shooting Positions Asset Fragment",
+      "name": "Barricade Shooting Positions",
       "description": "Supported positions and angles when using cover or barricades",
       "path": "./weapons-armor-combat/barricade-shooting-positions.psg",
       "category": "weapons-armor-combat",
@@ -1442,7 +1442,7 @@
     },
     {
       "id": "fragment-barricade-shooting-techniques",
-      "name": "Barricade Shooting Techniques Asset Fragment",
+      "name": "Barricade Shooting Techniques",
       "description": "Building stable positions and angles around barricades",
       "path": "./weapons-armor-combat/barricade-shooting-techniques.psg",
       "category": "weapons-armor-combat",
@@ -1462,7 +1462,7 @@
     },
     {
       "id": "fragment-bayonet-techniques",
-      "name": "Bayonet Techniques Asset Fragment",
+      "name": "Bayonet Techniques",
       "description": "Techniques for thrusts, buttstrokes, parries, and entries with bayonet",
       "path": "./weapons-armor-combat/bayonet-techniques.psg",
       "category": "weapons-armor-combat",
@@ -1482,7 +1482,7 @@
     },
     {
       "id": "fragment-bind-and-wind",
-      "name": "Bind and Wind Asset Fragment",
+      "name": "Bind and Wind",
       "description": "Blade binding and winding actions",
       "path": "./weapons-armor-combat/bind-and-wind.psg",
       "category": "weapons-armor-combat",
@@ -1502,7 +1502,7 @@
     },
     {
       "id": "fragment-blade-forms",
-      "name": "Blade Forms Asset Fragment",
+      "name": "Blade Forms",
       "description": "Blade forms and profiles",
       "path": "./weapons-armor-combat/blade-forms.psg",
       "category": "weapons-armor-combat",
@@ -1522,7 +1522,7 @@
     },
     {
       "id": "fragment-bow-draw-styles",
-      "name": "Bow Draw Styles Asset Fragment",
+      "name": "Bow Draw Styles",
       "description": "Archery draw and release styles",
       "path": "./weapons-armor-combat/bow-draw-styles.psg",
       "category": "weapons-armor-combat",
@@ -1542,7 +1542,7 @@
     },
     {
       "id": "fragment-breach-techniques",
-      "name": "Breach Techniques Asset Fragment",
+      "name": "Breach Techniques",
       "description": "Door, barrier, and window breach methods for entry",
       "path": "./weapons-armor-combat/breach-techniques.psg",
       "category": "weapons-armor-combat",
@@ -1562,7 +1562,7 @@
     },
     {
       "id": "fragment-close-quarters-techniques",
-      "name": "Close-Quarters Techniques Asset Fragment",
+      "name": "Close-Quarters Techniques",
       "description": "CQC strikes and controls in tight spaces",
       "path": "./weapons-armor-combat/close-quarters-techniques.psg",
       "category": "weapons-armor-combat",
@@ -1582,7 +1582,7 @@
     },
     {
       "id": "fragment-combat-damage-fx",
-      "name": "Combat Damage FX Asset Fragment",
+      "name": "Combat Damage FX",
       "description": "Combat damage visual effects",
       "path": "./weapons-armor-combat/combat-damage-fx.psg",
       "category": "weapons-armor-combat",
@@ -1602,7 +1602,7 @@
     },
     {
       "id": "fragment-counter-strikes",
-      "name": "Counter Strikes Asset Fragment",
+      "name": "Counter Strikes",
       "description": "Immediate counter-attacks and stops",
       "path": "./weapons-armor-combat/counter-strikes.psg",
       "category": "weapons-armor-combat",
@@ -1622,7 +1622,7 @@
     },
     {
       "id": "fragment-cover-transitions",
-      "name": "Cover Transitions Asset Fragment",
+      "name": "Cover Transitions",
       "description": "Transitions between covers and angles for ranged combat",
       "path": "./weapons-armor-combat/cover-transitions.psg",
       "category": "weapons-armor-combat",
@@ -1642,7 +1642,7 @@
     },
     {
       "id": "fragment-cut-angle-sets",
-      "name": "Cut Angle Sets Asset Fragment",
+      "name": "Cut Angle Sets",
       "description": "Standardized cutting angles and flows",
       "path": "./weapons-armor-combat/cut-angle-sets.psg",
       "category": "weapons-armor-combat",
@@ -1662,7 +1662,7 @@
     },
     {
       "id": "fragment-defensive-gear",
-      "name": "Defensive Gear Asset Fragment",
+      "name": "Defensive Gear",
       "description": "Defensive gear and armor",
       "path": "./weapons-armor-combat/defensive-gear.psg",
       "category": "weapons-armor-combat",
@@ -1682,7 +1682,7 @@
     },
     {
       "id": "fragment-disarm-maneuvers",
-      "name": "Disarm Maneuvers Asset Fragment",
+      "name": "Disarm Maneuvers",
       "description": "Weapon removal techniques",
       "path": "./weapons-armor-combat/disarm-maneuvers.psg",
       "category": "weapons-armor-combat",
@@ -1702,7 +1702,7 @@
     },
     {
       "id": "fragment-distance-management",
-      "name": "Distance Management Asset Fragment",
+      "name": "Distance Management",
       "description": "Controlling measure, entries, exits, and off-line movement",
       "path": "./weapons-armor-combat/distance-management.psg",
       "category": "weapons-armor-combat",
@@ -1722,7 +1722,7 @@
     },
     {
       "id": "fragment-draw-techniques",
-      "name": "Draw Techniques Asset Fragment",
+      "name": "Draw Techniques",
       "description": "Sword and firearm draw techniques",
       "path": "./weapons-armor-combat/draw-techniques.psg",
       "category": "weapons-armor-combat",
@@ -1742,7 +1742,7 @@
     },
     {
       "id": "fragment-dry-fire-progression",
-      "name": "Dry Fire Progression Asset Fragment",
+      "name": "Dry Fire Progression",
       "description": "Safe setup and structured skill progression bridging to live fire",
       "path": "./weapons-armor-combat/dry-fire-progression.psg",
       "category": "weapons-armor-combat",
@@ -1762,7 +1762,7 @@
     },
     {
       "id": "fragment-edge-alignment-cues",
-      "name": "Edge Alignment Cues Asset Fragment",
+      "name": "Edge Alignment Cues",
       "description": "Cutting edge alignment and angles",
       "path": "./weapons-armor-combat/edge-alignment-cues.psg",
       "category": "weapons-armor-combat",
@@ -1782,7 +1782,7 @@
     },
     {
       "id": "fragment-evasion-moves",
-      "name": "Evasion Moves Asset Fragment",
+      "name": "Evasion Moves",
       "description": "Defensive evasions and body movement",
       "path": "./weapons-armor-combat/evasion-moves.psg",
       "category": "weapons-armor-combat",
@@ -1802,7 +1802,7 @@
     },
     {
       "id": "fragment-explosives",
-      "name": "Explosives Asset Fragment",
+      "name": "Explosives",
       "description": "Explosive types",
       "path": "./weapons-armor-combat/explosives.psg",
       "category": "weapons-armor-combat",
@@ -1821,7 +1821,7 @@
     },
     {
       "id": "fragment-feint-patterns",
-      "name": "Feint Patterns Asset Fragment",
+      "name": "Feint Patterns",
       "description": "Deceptive attacks and misdirection patterns",
       "path": "./weapons-armor-combat/feint-patterns.psg",
       "category": "weapons-armor-combat",
@@ -1841,7 +1841,7 @@
     },
     {
       "id": "fragment-finishing-moves",
-      "name": "Finishing Moves Asset Fragment",
+      "name": "Finishing Moves",
       "description": "Fight-ending maneuvers",
       "path": "./weapons-armor-combat/finishing-moves.psg",
       "category": "weapons-armor-combat",
@@ -1861,7 +1861,7 @@
     },
     {
       "id": "fragment-fire-and-maneuver",
-      "name": "Fire and Maneuver Asset Fragment",
+      "name": "Fire and Maneuver",
       "description": "Team movement coordinated with suppressive fire",
       "path": "./weapons-armor-combat/fire-and-maneuver.psg",
       "category": "weapons-armor-combat",
@@ -1881,7 +1881,7 @@
     },
     {
       "id": "fragment-grapple-entries",
-      "name": "Grapple Entries Asset Fragment",
+      "name": "Grapple Entries",
       "description": "Entries into grappling range",
       "path": "./weapons-armor-combat/grapple-entries.psg",
       "category": "weapons-armor-combat",
@@ -1901,7 +1901,7 @@
     },
     {
       "id": "fragment-grip-variations",
-      "name": "Grip Variations Asset Fragment",
+      "name": "Grip Variations",
       "description": "Grip styles and variations for control across platforms",
       "path": "./weapons-armor-combat/grip-variations.psg",
       "category": "weapons-armor-combat",
@@ -1921,7 +1921,7 @@
     },
     {
       "id": "fragment-guard-breakers",
-      "name": "Guard Breakers Asset Fragment",
+      "name": "Guard Breakers",
       "description": "Techniques to break or collapse an opponent's guard",
       "path": "./weapons-armor-combat/guard-breakers.psg",
       "category": "weapons-armor-combat",
@@ -1941,7 +1941,7 @@
     },
     {
       "id": "fragment-guard-postures",
-      "name": "Guard Postures Asset Fragment",
+      "name": "Guard Postures",
       "description": "Weapon guards and ready positions (bladed)",
       "path": "./weapons-armor-combat/guard-postures.psg",
       "category": "weapons-armor-combat",
@@ -1961,7 +1961,7 @@
     },
     {
       "id": "fragment-high-angle-elevation-compensation",
-      "name": "High-Angle/Elevation Compensation Asset Fragment",
+      "name": "High-Angle/Elevation Compensation",
       "description": "Angle cosine and aiming adjustments for steep shots",
       "path": "./weapons-armor-combat/high-angle-elevation-compensation.psg",
       "category": "weapons-armor-combat",
@@ -1981,7 +1981,7 @@
     },
     {
       "id": "fragment-historical-techniques",
-      "name": "Historical Techniques Asset Fragment",
+      "name": "Historical Techniques",
       "description": "Historical combat techniques",
       "path": "./weapons-armor-combat/historical-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2001,7 +2001,7 @@
     },
     {
       "id": "fragment-holster-styles",
-      "name": "Holster Styles Asset Fragment",
+      "name": "Holster Styles",
       "description": "Holster and carry styles",
       "path": "./weapons-armor-combat/holster-styles.psg",
       "category": "weapons-armor-combat",
@@ -2021,7 +2021,7 @@
     },
     {
       "id": "fragment-improvised-weapons",
-      "name": "Improvised Weapons Asset Fragment",
+      "name": "Improvised Weapons",
       "description": "Improvised weapons",
       "path": "./weapons-armor-combat/improvised-weapons.psg",
       "category": "weapons-armor-combat",
@@ -2040,7 +2040,7 @@
     },
     {
       "id": "fragment-laser-aiming-devices",
-      "name": "Laser Aiming Devices (IR/Visible) Asset Fragment",
+      "name": "Laser Aiming Devices (IR/Visible)",
       "description": "Zeroing, offset, and activation discipline for lasers",
       "path": "./weapons-armor-combat/laser-aiming-devices.psg",
       "category": "weapons-armor-combat",
@@ -2060,7 +2060,7 @@
     },
     {
       "id": "fragment-low-light-techniques",
-      "name": "Low-Light Techniques Asset Fragment",
+      "name": "Low-Light Techniques",
       "description": "Light discipline, search methods, and PID under low-light conditions",
       "path": "./weapons-armor-combat/low-light-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2080,7 +2080,7 @@
     },
     {
       "id": "fragment-magazine-management",
-      "name": "Magazine Management Asset Fragment",
+      "name": "Magazine Management",
       "description": "Retention policies, indexing, handling, and lifecycle checks",
       "path": "./weapons-armor-combat/magazine-management.psg",
       "category": "weapons-armor-combat",
@@ -2100,7 +2100,7 @@
     },
     {
       "id": "fragment-malfunction-clearance-framework",
-      "name": "Malfunction Clearance Framework Asset Fragment",
+      "name": "Malfunction Clearance Framework",
       "description": "Immediate and remedial actions to restore weapon function",
       "path": "./weapons-armor-combat/malfunction-clearance-framework.psg",
       "category": "weapons-armor-combat",
@@ -2120,7 +2120,7 @@
     },
     {
       "id": "fragment-malfunction-clears",
-      "name": "Malfunction Clears Asset Fragment",
+      "name": "Malfunction Clears",
       "description": "Immediate and remedial actions for weapon malfunctions",
       "path": "./weapons-armor-combat/malfunction-clears.psg",
       "category": "weapons-armor-combat",
@@ -2140,7 +2140,7 @@
     },
     {
       "id": "fragment-martial-stances",
-      "name": "Martial Stances Asset Fragment",
+      "name": "Martial Stances",
       "description": "Martial stances",
       "path": "./weapons-armor-combat/martial-stances.psg",
       "category": "weapons-armor-combat",
@@ -2160,7 +2160,7 @@
     },
     {
       "id": "fragment-mechanical-offset-techniques",
-      "name": "Mechanical Offset Techniques Asset Fragment",
+      "name": "Mechanical Offset Techniques",
       "description": "Height-over-bore holds and offsets at near distances and around cover",
       "path": "./weapons-armor-combat/mechanical-offset-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2180,7 +2180,7 @@
     },
     {
       "id": "fragment-muzzle-discipline",
-      "name": "Muzzle Discipline Asset Fragment",
+      "name": "Muzzle Discipline",
       "description": "Maintaining safe arcs and angles, preventing cross-cover and flags",
       "path": "./weapons-armor-combat/muzzle-discipline.psg",
       "category": "weapons-armor-combat",
@@ -2200,7 +2200,7 @@
     },
     {
       "id": "fragment-offhand-utilities",
-      "name": "Offhand Utilities Asset Fragment",
+      "name": "Offhand Utilities",
       "description": "Offhand tools, controls, and distractions",
       "path": "./weapons-armor-combat/offhand-utilities.psg",
       "category": "weapons-armor-combat",
@@ -2220,7 +2220,7 @@
     },
     {
       "id": "fragment-one-handed-weapon-manipulation",
-      "name": "One-Handed Weapon Manipulation Asset Fragment",
+      "name": "One-Handed Weapon Manipulation",
       "description": "Injured-limb protocols for reloads, malfunctions, and handling",
       "path": "./weapons-armor-combat/one-handed-weapon-manipulation.psg",
       "category": "weapons-armor-combat",
@@ -2240,7 +2240,7 @@
     },
     {
       "id": "fragment-one-handed-weapon-use",
-      "name": "One-Handed Weapon Use Asset Fragment",
+      "name": "One-Handed Weapon Use",
       "description": "Adaptations for operating weapons with one hand occupied or injured",
       "path": "./weapons-armor-combat/one-handed-weapon-use.psg",
       "category": "weapons-armor-combat",
@@ -2260,7 +2260,7 @@
     },
     {
       "id": "fragment-parry-techniques",
-      "name": "Parry Techniques Asset Fragment",
+      "name": "Parry Techniques",
       "description": "Parry types and deflections",
       "path": "./weapons-armor-combat/parry-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2280,7 +2280,7 @@
     },
     {
       "id": "fragment-polearm-techniques",
-      "name": "Polearm Techniques Asset Fragment",
+      "name": "Polearm Techniques",
       "description": "Polearm methods: spear, halberd, glaive",
       "path": "./weapons-armor-combat/polearm-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2300,7 +2300,7 @@
     },
     {
       "id": "fragment-pommel-butt-strikes",
-      "name": "Pommel & Butt Strikes Asset Fragment",
+      "name": "Pommel & Butt Strikes",
       "description": "Strikes using pommel, butt, or haft",
       "path": "./weapons-armor-combat/pommel-butt-strikes.psg",
       "category": "weapons-armor-combat",
@@ -2320,7 +2320,7 @@
     },
     {
       "id": "fragment-post-engagement-procedures",
-      "name": "Post-Engagement Procedures Asset Fragment",
+      "name": "Post-Engagement Procedures",
       "description": "Immediate actions after engagement: checks, comms, and safe reindex",
       "path": "./weapons-armor-combat/post-engagement-procedures.psg",
       "category": "weapons-armor-combat",
@@ -2340,7 +2340,7 @@
     },
     {
       "id": "fragment-presentation-drills",
-      "name": "Presentation Drills Asset Fragment",
+      "name": "Presentation Drills",
       "description": "From ready or draw to first accurate shot: indexing and extension drills",
       "path": "./weapons-armor-combat/presentation-drills.psg",
       "category": "weapons-armor-combat",
@@ -2360,7 +2360,7 @@
     },
     {
       "id": "fragment-primary-to-secondary-transitions",
-      "name": "Primary-to-Secondary Transitions Asset Fragment",
+      "name": "Primary-to-Secondary Transitions",
       "description": "Efficient, safe transitions from long gun to handgun and back",
       "path": "./weapons-armor-combat/primary-to-secondary-transitions.psg",
       "category": "weapons-armor-combat",
@@ -2381,7 +2381,7 @@
     },
     {
       "id": "fragment-projectile-trails",
-      "name": "Projectile Trails Asset Fragment",
+      "name": "Projectile Trails",
       "description": "Stylized trails and flight effects",
       "path": "./weapons-armor-combat/projectile-trails.psg",
       "category": "weapons-armor-combat",
@@ -2401,7 +2401,7 @@
     },
     {
       "id": "fragment-range-estimation",
-      "name": "Range Estimation Asset Fragment",
+      "name": "Range Estimation",
       "description": "Techniques for estimating distance to targets and landmarks",
       "path": "./weapons-armor-combat/range-estimation.psg",
       "category": "weapons-armor-combat",
@@ -2421,7 +2421,7 @@
     },
     {
       "id": "fragment-ranged-stances",
-      "name": "Ranged Stances Asset Fragment",
+      "name": "Ranged Stances",
       "description": "Shooting stances and ready positions",
       "path": "./weapons-armor-combat/ranged-stances.psg",
       "category": "weapons-armor-combat",
@@ -2441,7 +2441,7 @@
     },
     {
       "id": "fragment-ranged-tech",
-      "name": "Ranged Tech Asset Fragment",
+      "name": "Ranged Tech",
       "description": "Ranged weapon technologies",
       "path": "./weapons-armor-combat/ranged-tech.psg",
       "category": "weapons-armor-combat",
@@ -2461,7 +2461,7 @@
     },
     {
       "id": "fragment-ready-positions",
-      "name": "Ready Positions Asset Fragment",
+      "name": "Ready Positions",
       "description": "Common weapons ready positions for rapid presentation and safety",
       "path": "./weapons-armor-combat/ready-positions.psg",
       "category": "weapons-armor-combat",
@@ -2481,7 +2481,7 @@
     },
     {
       "id": "fragment-recoil-management-cadence-control",
-      "name": "Recoil Management & Cadence Control Asset Fragment",
+      "name": "Recoil Management & Cadence Control",
       "description": "Grip, stance, and sight tracking to control recoil and splits",
       "path": "./weapons-armor-combat/recoil-management-cadence-control.psg",
       "category": "weapons-armor-combat",
@@ -2501,7 +2501,7 @@
     },
     {
       "id": "fragment-recoil-management",
-      "name": "Recoil Management Asset Fragment",
+      "name": "Recoil Management",
       "description": "Methods to control muzzle rise and recover quickly",
       "path": "./weapons-armor-combat/recoil-management.psg",
       "category": "weapons-armor-combat",
@@ -2521,7 +2521,7 @@
     },
     {
       "id": "fragment-red-dot-vs-iron-indexing",
-      "name": "Red Dot vs Iron Sight Indexing Asset Fragment",
+      "name": "Red Dot vs Iron Sight Indexing",
       "description": "Acquisition and indexing differences between optics and irons",
       "path": "./weapons-armor-combat/red-dot-vs-iron-indexing.psg",
       "category": "weapons-armor-combat",
@@ -2541,7 +2541,7 @@
     },
     {
       "id": "fragment-reload-techniques",
-      "name": "Reload Techniques Asset Fragment",
+      "name": "Reload Techniques",
       "description": "Reload methods for ranged weapons",
       "path": "./weapons-armor-combat/reload-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2561,7 +2561,7 @@
     },
     {
       "id": "fragment-room-entry-techniques",
-      "name": "Room Entry Techniques Asset Fragment",
+      "name": "Room Entry Techniques",
       "description": "Stack and solo room entry techniques for CQB",
       "path": "./weapons-armor-combat/room-entry-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2581,7 +2581,7 @@
     },
     {
       "id": "fragment-safety-selector-manipulation",
-      "name": "Safety Selector Manipulation Asset Fragment",
+      "name": "Safety Selector Manipulation",
       "description": "Selector control from safe to fire and back under various contexts",
       "path": "./weapons-armor-combat/safety-selector-manipulation.psg",
       "category": "weapons-armor-combat",
@@ -2601,7 +2601,7 @@
     },
     {
       "id": "fragment-scan-and-assess",
-      "name": "Scan and Assess Asset Fragment",
+      "name": "Scan and Assess",
       "description": "Post-shot scanning, 360 awareness, and follow-through actions",
       "path": "./weapons-armor-combat/scan-and-assess.psg",
       "category": "weapons-armor-combat",
@@ -2621,7 +2621,7 @@
     },
     {
       "id": "fragment-shield-techniques",
-      "name": "Shield Techniques Asset Fragment",
+      "name": "Shield Techniques",
       "description": "Shield usage methods",
       "path": "./weapons-armor-combat/shield-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2641,7 +2641,7 @@
     },
     {
       "id": "fragment-shooting-on-the-move",
-      "name": "Shooting on the Move Asset Fragment",
+      "name": "Shooting on the Move",
       "description": "Techniques for engaging while moving in various directions",
       "path": "./weapons-armor-combat/shooting-on-the-move.psg",
       "category": "weapons-armor-combat",
@@ -2661,7 +2661,7 @@
     },
     {
       "id": "fragment-shooting-positions",
-      "name": "Shooting Positions Asset Fragment",
+      "name": "Shooting Positions",
       "description": "Foundational and modified positions for stability and field use",
       "path": "./weapons-armor-combat/shooting-positions.psg",
       "category": "weapons-armor-combat",
@@ -2681,7 +2681,7 @@
     },
     {
       "id": "fragment-shooting-through-barriers",
-      "name": "Shooting Through Barriers Asset Fragment",
+      "name": "Shooting Through Barriers",
       "description": "Deflection, aiming adjustments, and hazards when engaging through materials",
       "path": "./weapons-armor-combat/shooting-through-barriers.psg",
       "category": "weapons-armor-combat",
@@ -2701,7 +2701,7 @@
     },
     {
       "id": "fragment-shoulder-transitions",
-      "name": "Shoulder Transitions Asset Fragment",
+      "name": "Shoulder Transitions",
       "description": "Transitions between strong and support shoulders for angle management",
       "path": "./weapons-armor-combat/shoulder-transitions.psg",
       "category": "weapons-armor-combat",
@@ -2721,7 +2721,7 @@
     },
     {
       "id": "fragment-sighting-methods",
-      "name": "Sighting Methods Asset Fragment",
+      "name": "Sighting Methods",
       "description": "Various sighting approaches for different engagement contexts",
       "path": "./weapons-armor-combat/sighting-methods.psg",
       "category": "weapons-armor-combat",
@@ -2741,7 +2741,7 @@
     },
     {
       "id": "fragment-sling-techniques",
-      "name": "Sling Techniques Asset Fragment",
+      "name": "Sling Techniques",
       "description": "Sling setup, support, and transitions for control and retention",
       "path": "./weapons-armor-combat/sling-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2761,7 +2761,7 @@
     },
     {
       "id": "fragment-stagger-and-stun-techniques",
-      "name": "Stagger and Stun Techniques Asset Fragment",
+      "name": "Stagger and Stun Techniques",
       "description": "Techniques that create brief incapacitation or openings",
       "path": "./weapons-armor-combat/stagger-and-stun-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2781,7 +2781,7 @@
     },
     {
       "id": "fragment-stance-transitions",
-      "name": "Stance Transitions Asset Fragment",
+      "name": "Stance Transitions",
       "description": "Transitions between stances and guards under pressure and movement",
       "path": "./weapons-armor-combat/stance-transitions.psg",
       "category": "weapons-armor-combat",
@@ -2801,7 +2801,7 @@
     },
     {
       "id": "fragment-strike-combinations",
-      "name": "Strike Combinations Asset Fragment",
+      "name": "Strike Combinations",
       "description": "Chained strikes to vary lines, tempo, and openings",
       "path": "./weapons-armor-combat/strike-combinations.psg",
       "category": "weapons-armor-combat",
@@ -2821,7 +2821,7 @@
     },
     {
       "id": "fragment-suppressive-fire-patterns",
-      "name": "Suppressive Fire Patterns Asset Fragment",
+      "name": "Suppressive Fire Patterns",
       "description": "Fire patterns for area control",
       "path": "./weapons-armor-combat/suppressive-fire-patterns.psg",
       "category": "weapons-armor-combat",
@@ -2841,7 +2841,7 @@
     },
     {
       "id": "fragment-suppressor-techniques",
-      "name": "Suppressor Techniques Asset Fragment",
+      "name": "Suppressor Techniques",
       "description": "POI shift management, gas/backpressure tuning, and signature considerations",
       "path": "./weapons-armor-combat/suppressor-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2861,7 +2861,7 @@
     },
     {
       "id": "fragment-target-prioritization",
-      "name": "Target Prioritization Asset Fragment",
+      "name": "Target Prioritization",
       "description": "Heuristic sets for selecting engagement order",
       "path": "./weapons-armor-combat/target-prioritization.psg",
       "category": "weapons-armor-combat",
@@ -2881,7 +2881,7 @@
     },
     {
       "id": "fragment-target-transitions",
-      "name": "Target Transitions Asset Fragment",
+      "name": "Target Transitions",
       "description": "Rapid transitions between multiple targets with efficient indexing",
       "path": "./weapons-armor-combat/target-transitions.psg",
       "category": "weapons-armor-combat",
@@ -2901,7 +2901,7 @@
     },
     {
       "id": "fragment-tempo-control",
-      "name": "Tempo Control Asset Fragment",
+      "name": "Tempo Control",
       "description": "Manipulating timing to create openings and disrupt opponents",
       "path": "./weapons-armor-combat/tempo-control.psg",
       "category": "weapons-armor-combat",
@@ -2921,7 +2921,7 @@
     },
     {
       "id": "fragment-throwing-techniques",
-      "name": "Throwing Techniques Asset Fragment",
+      "name": "Throwing Techniques",
       "description": "Throwing methods for knives, axes, and objects",
       "path": "./weapons-armor-combat/throwing-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2941,7 +2941,7 @@
     },
     {
       "id": "fragment-trigger-control-techniques",
-      "name": "Trigger Control Techniques Asset Fragment",
+      "name": "Trigger Control Techniques",
       "description": "Prep, break, reset, and cadence control",
       "path": "./weapons-armor-combat/trigger-control-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2961,7 +2961,7 @@
     },
     {
       "id": "fragment-two-weapon-techniques",
-      "name": "Two-Weapon Techniques Asset Fragment",
+      "name": "Two-Weapon Techniques",
       "description": "Dual-wield coordination and patterns",
       "path": "./weapons-armor-combat/two-weapon-techniques.psg",
       "category": "weapons-armor-combat",
@@ -2981,7 +2981,7 @@
     },
     {
       "id": "fragment-use-of-cover-vs-concealment",
-      "name": "Use of Cover vs Concealment Asset Fragment",
+      "name": "Use of Cover vs Concealment",
       "description": "Exposure management and movement along cover",
       "path": "./weapons-armor-combat/use-of-cover-vs-concealment.psg",
       "category": "weapons-armor-combat",
@@ -3001,7 +3001,7 @@
     },
     {
       "id": "fragment-victory-gestures",
-      "name": "Victory Gestures Asset Fragment",
+      "name": "Victory Gestures",
       "description": "Victory gestures",
       "path": "./weapons-armor-combat/victory-gestures.psg",
       "category": "weapons-armor-combat",
@@ -3021,7 +3021,7 @@
     },
     {
       "id": "fragment-weapon-flourishes",
-      "name": "Weapon Flourishes Asset Fragment",
+      "name": "Weapon Flourishes",
       "description": "Stylistic flourishes and intimidation displays",
       "path": "./weapons-armor-combat/weapon-flourishes.psg",
       "category": "weapons-armor-combat",
@@ -3041,7 +3041,7 @@
     },
     {
       "id": "fragment-weapon-indexing",
-      "name": "Weapon Indexing Asset Fragment",
+      "name": "Weapon Indexing",
       "description": "Consistent reference points for hands, stock, and sights",
       "path": "./weapons-armor-combat/weapon-indexing.psg",
       "category": "weapons-armor-combat",
@@ -3061,7 +3061,7 @@
     },
     {
       "id": "fragment-weapon-personalization",
-      "name": "Weapon Personalization Asset Fragment",
+      "name": "Weapon Personalization",
       "description": "Customization flourishes and identity marks",
       "path": "./weapons-armor-combat/weapon-personalization.psg",
       "category": "weapons-armor-combat",
@@ -3081,7 +3081,7 @@
     },
     {
       "id": "fragment-weapon-retention-and-clinch-fighting",
-      "name": "Weapon Retention & Clinch Fighting Asset Fragment",
+      "name": "Weapon Retention & Clinch Fighting",
       "description": "Retention positions and close-quarters control to prevent disarm",
       "path": "./weapons-armor-combat/weapon-retention-and-clinch-fighting.psg",
       "category": "weapons-armor-combat",
@@ -3101,7 +3101,7 @@
     },
     {
       "id": "fragment-weapon-retention-techniques",
-      "name": "Weapon Retention Techniques Asset Fragment",
+      "name": "Weapon Retention Techniques",
       "description": "Retention strategies to prevent disarm",
       "path": "./weapons-armor-combat/weapon-retention-techniques.psg",
       "category": "weapons-armor-combat",
@@ -3121,7 +3121,7 @@
     },
     {
       "id": "fragment-weapon-transitions",
-      "name": "Weapon Transitions Asset Fragment",
+      "name": "Weapon Transitions",
       "description": "Transitions between weapon states and types",
       "path": "./weapons-armor-combat/weapon-transitions.psg",
       "category": "weapons-armor-combat",
@@ -3141,7 +3141,7 @@
     },
     {
       "id": "fragment-wind-and-drop-compensation",
-      "name": "Wind and Drop Compensation Asset Fragment",
+      "name": "Wind and Drop Compensation",
       "description": "Methods for compensating wind, bullet drop, and lead",
       "path": "./weapons-armor-combat/wind-and-drop-compensation.psg",
       "category": "weapons-armor-combat",
@@ -3161,7 +3161,7 @@
     },
     {
       "id": "fragment-zeroing-procedures",
-      "name": "Zeroing Procedures Asset Fragment",
+      "name": "Zeroing Procedures",
       "description": "Procedures for common zero distances and validation",
       "path": "./weapons-armor-combat/zeroing-procedures.psg",
       "category": "weapons-armor-combat",

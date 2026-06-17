@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Wind and Drop Compensation Asset Fragment",
+  "name": "Wind and Drop Compensation",
   "description": "Methods for compensating wind, bullet drop, and lead",
   "metadata": {
     "created": "2025-08-15",

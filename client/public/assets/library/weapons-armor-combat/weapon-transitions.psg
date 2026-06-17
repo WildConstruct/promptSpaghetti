@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "Weapon Transitions Asset Fragment",
+  "name": "Weapon Transitions",
   "description": "Transitions between weapon states and types",
   "metadata": {
     "created": "2025-08-15",
