@@ -15,6 +15,14 @@
   color: #5fe0a0;
 }
 
+/* The input handles are positioned by % (33% / 66% / …). Make their offset parent
+   the full node (not the short content box) by un-positioning the content, so the
+   percentages resolve against the node's real height and the handles spread evenly
+   and stay vertically centered. */
+.epic1-editable-node.concat .epic1-node-content {
+  position: static;
+}
+
 /* Selected: expand the highlight (glow), don't fill */
 .epic1-editable-node.concat.selected {
   border-color: #46d07f;
