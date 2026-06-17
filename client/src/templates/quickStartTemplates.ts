@@ -95,6 +95,30 @@ function outputNode(id: string, x: number, y: number, outputName: string): Node<
 // Custom template for character generation with choices - improved layout
 const characterTemplate: QuickStartTemplate = {
   nodes: [
+    // Region box wrapping the whole archetype pipeline (UI-only; the runtime
+    // skips it). Placed first so it renders behind the nodes it contains.
+    {
+      id: 'region-archetype',
+      type: 'enhancedBoundingBox',
+      position: { x: 20, y: -24 },
+      width: 1720,
+      height: 460,
+      style: { width: 1720, height: 460 },
+      data: {
+        nodeType: 'enhancedBoundingBox',
+        title: 'Character Archetype',
+        description: 'Base prompt + class + trait, joined into one character line',
+        backgroundColor: '#26262e',
+        opacity: 0.12,
+        borderColor: '#e6a23c',
+        borderStyle: 'dashed',
+        borderWidth: 2,
+        locked: false,
+        isCollapsed: false,
+        width: 1720,
+        height: 460
+      }
+    },
     {
       id: 'prompt-0',
       position: { x: 100, y: 50 },
