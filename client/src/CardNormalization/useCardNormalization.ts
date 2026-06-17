@@ -170,17 +170,23 @@ export function useCardNormalization() {
       if (nextIndex < 0 || nextIndex >= cards.length) {
         return;
       }
-      if (
-        dirty &&
-        !window.confirm('Discard unsaved changes to this card?')
-      ) {
-        return;
+      // Non-jarring: silently persist unsaved edits instead of a blocking warning.
+      if (dirty) {
+        const saved: CardNormalization = {
+          ...working,
+          updatedAt: new Date().toISOString()
+        };
+        setRecords(prev => {
+          const next = { ...prev, [saved.assetId]: saved };
+          persist(next);
+          return next;
+        });
       }
       setIndex(nextIndex);
       setWorking(clone(records[cards[nextIndex].asset.id]));
       setDirty(false);
     },
-    [cards, dirty, records]
+    [cards, dirty, records, working]
   );
 
   const next = useCallback(() => goTo(index + 1), [goTo, index]);
