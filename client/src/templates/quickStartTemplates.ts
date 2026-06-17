@@ -1018,7 +1018,7 @@ const underworldTemplate: QuickStartTemplate = {
       { id: 'ds-1', text: 'a steel cargo hook hanging from his belt', weight: 50 },
       { id: 'ds-2', text: 'two dockside goons at his back', weight: 50 }
     ]),
-    concatNode('uw-dock-merge', 1320, 160, 'Dock Merge'),
+    concatNode('uw-dock-merge', 1700, 90, 'Dock Merge'),
     weightedChoiceNode('uw-heist-role', 900, 300, 'Heist Role', [
       { id: 'hk-1', text: 'as the steady wheelman at the curb', weight: 34 },
       { id: 'hk-2', text: 'as the safecracker with the golden touch', weight: 33, hasBranch: true },
@@ -1029,7 +1029,7 @@ const underworldTemplate: QuickStartTemplate = {
       { id: 'hs-2', text: 'blowing the door with nitroglycerin', weight: 33 },
       { id: 'hs-3', text: 'punching the dial clean off the safe', weight: 33 }
     ]),
-    concatNode('uw-heist-merge', 1320, 440, 'Heist Merge'),
+    concatNode('uw-heist-merge', 1700, 360, 'Heist Merge'),
     weightedChoiceNode('uw-boot-role', 900, 560, 'Bootleg Role', [
       { id: 'bk-1', text: 'as a backwoods still-runner', weight: 34 },
       { id: 'bk-2', text: 'as a speakeasy fixer greasing the law', weight: 33, hasBranch: true },
@@ -1039,8 +1039,8 @@ const underworldTemplate: QuickStartTemplate = {
       { id: 'bs-1', text: 'slipping envelopes to the beat cop', weight: 50 },
       { id: 'bs-2', text: 'with the precinct captain on his payroll', weight: 50 }
     ]),
-    concatNode('uw-boot-merge', 1320, 700, 'Bootleg Merge'),
-    concatNode('uw-trade-merge', 1720, 380, 'Trade Merge'),
+    concatNode('uw-boot-merge', 1700, 620, 'Bootleg Merge'),
+    concatNode('uw-trade-merge', 2000, 360, 'Trade Merge'),
     weightedChoiceNode('uw-build', 480, 520, 'Build', [
       { id: 'bd-1', text: 'lean and wiry', weight: 34 },
       { id: 'bd-2', text: 'thick-necked and heavy-set', weight: 33 },
@@ -1056,8 +1056,8 @@ const underworldTemplate: QuickStartTemplate = {
       { id: 'sw-2', text: 'on a foggy dockside at dawn', weight: 33 },
       { id: 'sw-3', text: 'in a smoke-filled speakeasy backroom', weight: 33 }
     ]),
-    concatNode('uw-main', 2120, 420, 'Assemble Character'),
-    outputNode('uw-output', 2480, 420, 'underworld_character')
+    concatNode('uw-main', 2360, 380, 'Assemble Character'),
+    outputNode('uw-output', 2720, 380, 'underworld_character')
   ],
   edges: [
     { id: 'u-e1', source: 'uw-dna', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
