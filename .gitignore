@@ -73,3 +73,6 @@ packages/core/runtime/**/*.map
 packages/core/types/**/*.map
 packages/core/utils/**/*.map
 server/src/**/*.map
+
+# Claude Code agent memory (local state)
+memory/
