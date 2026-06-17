@@ -89,7 +89,8 @@
         "label": "Temporal Mood Shifts",
         "region": "gold",
         "collapsed": false
-      }
+      },
+      "name": "Temporal Mood Shifts"
     }
   ],
   "edges": [],

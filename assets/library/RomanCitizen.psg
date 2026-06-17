@@ -351,7 +351,8 @@
       "template": "A single {{gender}} {{age_band}} {{social_class}} Roman {{role}} standing full-body on a clean greenscreen background. The clothing is {{base_wardrobe}} with {{outer_layer}}. The face is {{face_world_wear}}. The hair is {{hair_description}}. The person has {{small_props}}. The pose is {{pose_description}}. Lighting is {{lighting_description}} and {{camera_description}}. High detail in fabric weave, leather texture, skin texture, and edges for clean compositing.",
       "data": {
         "label": "Final Prompt"
-      }
+      },
+      "name": "Final Prompt"
     },
     {
       "id": "final_negative_prompt",
@@ -361,7 +362,8 @@
       "template": "{{negative_prompt}}",
       "data": {
         "label": "Negative Prompt"
-      }
+      },
+      "name": "Final Negative Prompt"
     }
   ],
   "edges": [

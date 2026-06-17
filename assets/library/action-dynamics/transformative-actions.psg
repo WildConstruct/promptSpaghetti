@@ -103,7 +103,8 @@
         "label": "Transformative Actions",
         "region": "violet",
         "collapsed": false
-      }
+      },
+      "name": "Transformative Actions"
     }
   ],
   "edges": [],

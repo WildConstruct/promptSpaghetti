@@ -103,7 +103,8 @@
         "label": "High-Impact Moves",
         "region": "dark-red",
         "collapsed": false
-      }
+      },
+      "name": "High Impact Moves"
     }
   ],
   "edges": [],

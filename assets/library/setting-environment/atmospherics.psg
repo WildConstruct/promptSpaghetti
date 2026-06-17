@@ -74,7 +74,8 @@
       "data": {
         "label": "Atmospherics",
         "region": "light-green"
-      }
+      },
+      "name": "Atmospherics"
     }
   ],
   "edges": [],

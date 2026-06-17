@@ -89,7 +89,8 @@
         "label": "Clothing Fit",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Clothing Fit"
     }
   ],
   "edges": [],

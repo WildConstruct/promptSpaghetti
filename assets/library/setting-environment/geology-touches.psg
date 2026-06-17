@@ -74,7 +74,8 @@
       "data": {
         "label": "Geology Touches",
         "region": "sienna"
-      }
+      },
+      "name": "Geology Touches"
     }
   ],
   "edges": [],

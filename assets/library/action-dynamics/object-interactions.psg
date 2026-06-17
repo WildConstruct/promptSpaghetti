@@ -103,7 +103,8 @@
         "label": "Object Interactions",
         "region": "teal",
         "collapsed": false
-      }
+      },
+      "name": "Object Interactions"
     }
   ],
   "edges": [],

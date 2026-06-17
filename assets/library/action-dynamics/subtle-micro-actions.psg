@@ -103,7 +103,8 @@
         "label": "Subtle Micro-Actions",
         "region": "light-blue",
         "collapsed": false
-      }
+      },
+      "name": "Subtle Micro Actions"
     }
   ],
   "edges": [],

@@ -74,7 +74,8 @@
       "data": {
         "label": "Architectural Styles",
         "region": "slate-gray"
-      }
+      },
+      "name": "Architectural Styles"
     }
   ],
   "edges": [],

@@ -89,7 +89,8 @@
         "label": "Empathetic Echoes",
         "region": "light-coral",
         "collapsed": false
-      }
+      },
+      "name": "Empathetic Echoes"
     }
   ],
   "edges": [],

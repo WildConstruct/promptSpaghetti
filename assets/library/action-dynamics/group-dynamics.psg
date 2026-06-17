@@ -103,7 +103,8 @@
         "label": "Group Dynamics",
         "region": "indigo",
         "collapsed": false
-      }
+      },
+      "name": "Group Dynamics"
     }
   ],
   "edges": [],

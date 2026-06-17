@@ -103,7 +103,8 @@
         "label": "Conflict Escalation",
         "region": "red",
         "collapsed": false
-      }
+      },
+      "name": "Conflict Escalation"
     }
   ],
   "edges": [],

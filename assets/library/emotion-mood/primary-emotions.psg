@@ -103,7 +103,8 @@
         "label": "Primary Emotions",
         "region": "gold",
         "collapsed": false
-      }
+      },
+      "name": "Primary Emotions"
     }
   ],
   "edges": [],

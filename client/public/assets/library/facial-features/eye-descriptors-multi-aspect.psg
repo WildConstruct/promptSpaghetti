@@ -7,6 +7,8 @@
     "author": "Aspen",
     "category": "facial-features",
     "type": "MULTI-ASPECT",
+    "exampleStatus": "legacy-compatible-rich-example",
+    "authoringContract": "For the minimal canonical PSG authoring shape, copy docs/examples/psg-weekend-mvp-canonical-example.psg and see docs/psg-weekend-mvp-contract.md.",
     "tags": ["eyes", "facial-features", "descriptors", "multi-aspect", "modular"],
     "totalCombinations": "~40-50 variations",
     "collapsible": true

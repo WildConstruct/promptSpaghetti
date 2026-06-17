@@ -89,7 +89,8 @@
         "label": "Intensity Modifiers",
         "region": "crimson",
         "collapsed": false
-      }
+      },
+      "name": "Intensity Modifiers"
     }
   ],
   "edges": [],

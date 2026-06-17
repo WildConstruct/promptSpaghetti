@@ -103,7 +103,8 @@
         "label": "Crowd Behaviors",
         "region": "purple",
         "collapsed": false
-      }
+      },
+      "name": "Crowd Behaviors"
     }
   ],
   "edges": [],

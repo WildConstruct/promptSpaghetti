@@ -89,7 +89,8 @@
         "label": "Athletic Markers",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Athletic Markers"
     }
   ],
   "edges": [],

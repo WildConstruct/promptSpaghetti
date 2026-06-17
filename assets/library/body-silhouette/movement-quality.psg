@@ -103,7 +103,8 @@
         "label": "Movement Quality",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Movement Quality"
     }
   ],
   "edges": [],

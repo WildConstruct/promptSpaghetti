@@ -89,7 +89,8 @@
         "label": "Stage Presence",
         "region": "steel-blue",
         "collapsed": false
-      }
+      },
+      "name": "Stage Presence"
     }
   ],
   "edges": [],
