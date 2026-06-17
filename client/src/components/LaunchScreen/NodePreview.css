@@ -88,7 +88,7 @@
 }
 
 .preview-node.selected {
-  box-shadow: 0 0 0 3px rgba(248, 200, 74, 0.24);
+  box-shadow: 0 0 0 3px rgba(230, 162, 60, 0.24);
 }
 
 .preview-node-type {
@@ -123,9 +123,9 @@
 }
 
 .preview-node-family-badge.preview-node-variable {
-  color: #ffe49a;
-  background: rgba(248, 200, 74, 0.1);
-  border-color: rgba(248, 200, 74, 0.28);
+  color: #f0bd6e;
+  background: rgba(230, 162, 60, 0.1);
+  border-color: rgba(230, 162, 60, 0.28);
 }
 
 .preview-node-family-badge.preview-node-resolved {
@@ -157,7 +157,7 @@
 .react-flow__handle {
   width: 8px;
   height: 8px;
-  background: #f4c64d;
+  background: #e6a23c;
   border: 2px solid #1a1a1a;
 }
 

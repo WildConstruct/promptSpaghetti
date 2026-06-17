@@ -114,7 +114,7 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
           <Meter label="Pose" value={c.pose} />
           <Meter label="Head" value={c.head} />
           <Meter label="Ground" value={c.ground} />
-          <Meter label="Overall" value={c.overall} accent="#f5c84a" />
+          <Meter label="Overall" value={c.overall} accent="#e6a23c" />
         </div>
 
         <div

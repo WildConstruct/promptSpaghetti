@@ -99,8 +99,8 @@
 
 .graph-outline-node:hover {
   background: rgba(54, 48, 31, 0.55);
-  border-color: rgba(248, 200, 74, 0.45);
-  color: #ffe49a;
+  border-color: rgba(230, 162, 60, 0.45);
+  color: #f0bd6e;
 }
 
 .graph-outline-empty {

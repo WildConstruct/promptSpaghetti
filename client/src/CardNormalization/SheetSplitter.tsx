@@ -102,7 +102,7 @@ export const SheetSplitter: React.FC<{
             onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerLeave={onUp}>
             <img ref={imgRef} src={src} alt="Sheet" style={{ display: 'block', maxHeight: '74vh', maxWidth: '100%', userSelect: 'none', pointerEvents: 'none' }} draggable={false} />
             {[...boxes, ...(draft ? [draft] : [])].map((b, i) => (
-              <div key={i} style={{ position: 'absolute', left: b.x, top: b.y, width: b.w, height: b.h, border: '2px solid #f5c84a', background: 'rgba(245,200,74,0.12)', pointerEvents: 'none' }} />
+              <div key={i} style={{ position: 'absolute', left: b.x, top: b.y, width: b.w, height: b.h, border: '2px solid #e6a23c', background: 'rgba(230, 162, 60,0.12)', pointerEvents: 'none' }} />
             ))}
           </div>
         )}

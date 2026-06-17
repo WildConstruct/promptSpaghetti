@@ -99,21 +99,21 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
           margin: '0 0 16px 0',
           fontSize: '22px',
           fontWeight: 600,
-          color: '#f5c84a'
+          color: '#e6a23c'
         }}>
           Paste your prompt
         </h2>
 
         {isTutorial && (
           <div style={{
-            background: 'rgba(245, 200, 74, 0.07)',
-            border: '1px solid rgba(245, 200, 74, 0.28)',
+            background: 'rgba(230, 162, 60, 0.07)',
+            border: '1px solid rgba(230, 162, 60, 0.28)',
             borderRadius: '8px',
             padding: '12px 14px',
             marginBottom: '18px'
           }}>
             <p style={{ margin: '0 0 10px 0', color: '#9aa1ad', fontSize: '13px', lineHeight: 1.5 }}>
-              We pre-filled an example below. Words in <code style={{ color: '#f5d77a' }}>{'{a|b|c}'}</code> become weighted-choice branches. Edit it or just press Create nodes.
+              We pre-filled an example below. Words in <code style={{ color: '#f0bd6e' }}>{'{a|b|c}'}</code> become weighted-choice branches. Edit it or just press Create nodes.
             </p>
             <div style={{
               background: '#0e1014',
@@ -178,7 +178,7 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
               outline: 'none',
               transition: 'border-color 0.2s'
             }}
-            onFocus={(e) => (e.currentTarget.style.borderColor = '#f5c84a')}
+            onFocus={(e) => (e.currentTarget.style.borderColor = '#e6a23c')}
             onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)')}
           />
         </div>
@@ -210,8 +210,8 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
             disabled={!prompt.trim()}
             style={{
               padding: '9px 18px',
-              background: prompt.trim() ? '#f5c84a' : '#3a3f49',
-              color: prompt.trim() ? '#2a2207' : '#8b919c',
+              background: prompt.trim() ? '#e6a23c' : '#3a3f49',
+              color: prompt.trim() ? '#1a1206' : '#8b919c',
               border: 'none',
               borderRadius: '6px',
               fontSize: '15px',
@@ -220,12 +220,12 @@ export const PromptPasteDialog: React.FC<PromptPasteDialogProps> = ({
             }}
             onMouseOver={(e) => {
               if (prompt.trim()) {
-                e.currentTarget.style.background = '#f8d264';
+                e.currentTarget.style.background = '#f0bd6e';
               }
             }}
             onMouseOut={(e) => {
               if (prompt.trim()) {
-                e.currentTarget.style.background = '#f5c84a';
+                e.currentTarget.style.background = '#e6a23c';
               }
             }}
           >

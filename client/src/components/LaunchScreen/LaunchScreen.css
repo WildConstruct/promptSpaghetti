@@ -3,7 +3,7 @@
   width: 100vw;
   height: 100vh;
   background:
-    radial-gradient(circle at 22% 0%, rgba(248, 200, 74, 0.08), transparent 28%),
+    radial-gradient(circle at 22% 0%, rgba(230, 162, 60, 0.08), transparent 28%),
     linear-gradient(135deg, #090b0e 0%, #12161c 100%);
   color: #e1e1e1;
   display: flex;
@@ -101,9 +101,9 @@
 
 .tutorial-button:hover {
   background: rgba(54, 48, 31, 0.92);
-  border-color: rgba(248, 200, 74, 0.42);
+  border-color: rgba(230, 162, 60, 0.42);
   transform: none;
-  box-shadow: inset 3px 0 0 rgba(248, 200, 74, 0.78);
+  box-shadow: inset 3px 0 0 rgba(230, 162, 60, 0.78);
 }
 
 .tutorial-button:active {
@@ -227,17 +227,17 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  background: rgba(248, 200, 74, 0.1);
-  border: 1px solid rgba(248, 200, 74, 0.3);
+  background: rgba(230, 162, 60, 0.1);
+  border: 1px solid rgba(230, 162, 60, 0.3);
   border-radius: 8px;
-  color: #f4c64d;
+  color: #e6a23c;
 }
 
 .analysis-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(248, 200, 74, 0.3);
-  border-top-color: #f4c64d;
+  border: 2px solid rgba(230, 162, 60, 0.3);
+  border-top-color: #e6a23c;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -263,7 +263,7 @@
   padding: 0 1rem;
   font-size: 0.86rem;
   font-weight: 760;
-  background: linear-gradient(180deg, #f8c84a 0%, #d99a18 100%);
+  background: linear-gradient(180deg, #e6a23c 0%, #d99a18 100%);
   color: #15130d;
   border: 1px solid rgba(255, 223, 130, 0.38);
   border-radius: 4px;
@@ -278,7 +278,7 @@
   transform: none;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 0 0 2px rgba(248, 200, 74, 0.15),
+    0 0 0 2px rgba(230, 162, 60, 0.15),
     0 12px 24px rgba(0, 0, 0, 0.34);
 }
 
@@ -336,8 +336,8 @@
   margin-top: 0.5rem;
   padding: 0.7rem 0.9rem;
   border-radius: 8px;
-  background: rgba(248, 200, 74, 0.08);
-  border: 1px solid rgba(248, 200, 74, 0.2);
+  background: rgba(230, 162, 60, 0.08);
+  border: 1px solid rgba(230, 162, 60, 0.2);
   color: #e9d99f;
   font-size: 0.9rem;
   line-height: 1.35;
@@ -376,7 +376,7 @@
 
 .launch-family-kicker {
   font-size: 0.78rem;
-  color: #f4c64d;
+  color: #e6a23c;
   font-weight: 600;
 }
 
@@ -403,9 +403,9 @@
 }
 
 .launch-family-tag.variable {
-  color: #ffe49a;
-  background: rgba(248, 200, 74, 0.1);
-  border-color: rgba(248, 200, 74, 0.28);
+  color: #f0bd6e;
+  background: rgba(230, 162, 60, 0.1);
+  border-color: rgba(230, 162, 60, 0.28);
 }
 
 .launch-family-empty {
@@ -463,7 +463,7 @@
   content: '>';
   position: absolute;
   left: 0;
-  color: #f4c64d;
+  color: #e6a23c;
 }
 
 /* Footer */
@@ -507,7 +507,7 @@
 
 .launch-button-secondary:hover {
   background: rgba(54, 48, 31, 0.92);
-  border-color: rgba(248, 200, 74, 0.42);
+  border-color: rgba(230, 162, 60, 0.42);
 }
 
 .launch-inline-actions-row .launch-button-secondary,
@@ -588,10 +588,10 @@
 }
 
 .preview-section.needs-update {
-  border-color: rgba(248, 200, 74, 0.35);
+  border-color: rgba(230, 162, 60, 0.35);
   box-shadow:
-    0 0 0 2px rgba(248, 200, 74, 0.15),
-    0 0 24px rgba(248, 200, 74, 0.12);
+    0 0 0 2px rgba(230, 162, 60, 0.15),
+    0 0 24px rgba(230, 162, 60, 0.12);
   animation: glowPulse 2.4s ease-in-out infinite;
 }
 
@@ -599,13 +599,13 @@
   0%,
   100% {
     box-shadow:
-      0 0 0 2px rgba(248, 200, 74, 0.12),
-      0 0 16px rgba(248, 200, 74, 0.1);
+      0 0 0 2px rgba(230, 162, 60, 0.12),
+      0 0 16px rgba(230, 162, 60, 0.1);
   }
   50% {
     box-shadow:
       0 0 0 2px rgba(95, 214, 121, 0.15),
-      0 0 28px rgba(248, 200, 74, 0.16);
+      0 0 28px rgba(230, 162, 60, 0.16);
   }
 }
 
@@ -665,8 +665,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(248, 200, 74, 0.1);
-  border: 1px solid rgba(248, 200, 74, 0.34);
+  background: rgba(230, 162, 60, 0.1);
+  border: 1px solid rgba(230, 162, 60, 0.34);
   border-radius: 8px;
 }
 
@@ -688,7 +688,7 @@
   }
   50% {
     opacity: 1;
-    box-shadow: 0 0 14px rgba(248, 200, 74, 0.52);
+    box-shadow: 0 0 14px rgba(230, 162, 60, 0.52);
   }
 }
 

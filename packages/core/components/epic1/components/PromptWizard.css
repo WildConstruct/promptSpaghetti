@@ -38,8 +38,8 @@
 
 /* Tutorial focus highlight */
 .prompt-wizard-modal.tutorial-focus {
-  border: 2px solid #f5c84a !important;
-  box-shadow: 0 0 0 4px rgba(245, 200, 74, 0.3), 0 20px 25px -5px rgba(0, 0, 0, 0.3) !important;
+  border: 2px solid #e6a23c !important;
+  box-shadow: 0 0 0 4px rgba(230, 162, 60, 0.3), 0 20px 25px -5px rgba(0, 0, 0, 0.3) !important;
 }
 
 @keyframes slideUp {
@@ -65,7 +65,7 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #f5c84a;
+  color: #e6a23c;
 }
 
 .prompt-wizard-close {
@@ -115,7 +115,7 @@
 
 .prompt-wizard-input:focus {
   outline: none;
-  border-color: #f5c84a;
+  border-color: #e6a23c;
 }
 
 .prompt-wizard-input::placeholder {
@@ -135,14 +135,14 @@
 .prompt-wizard-tips {
   margin-top: 20px;
   padding: 15px;
-  background: rgba(245, 200, 74, 0.06);
-  border: 1px solid rgba(245, 200, 74, 0.25);
+  background: rgba(230, 162, 60, 0.06);
+  border: 1px solid rgba(230, 162, 60, 0.25);
   border-radius: 8px;
 }
 
 .prompt-wizard-tips h4 {
   margin: 0 0 10px 0;
-  color: #f5d77a;
+  color: #f0bd6e;
   font-size: 14px;
   font-weight: 600;
 }
@@ -189,12 +189,12 @@
 }
 
 .prompt-wizard-analyze {
-  background: linear-gradient(135deg, #f5c84a 0%, #e0a93a 100%);
-  color: #2a2207;
+  background: linear-gradient(135deg, #e6a23c 0%, #c8852a 100%);
+  color: #1a1206;
 }
 
 .prompt-wizard-analyze:hover:not(:disabled) {
-  background: linear-gradient(135deg, #f8d264 0%, #ecb441 100%);
+  background: linear-gradient(135deg, #f0bd6e 0%, #d99a36 100%);
 }
 
 .prompt-wizard-analyze:disabled {
@@ -226,8 +226,8 @@
 }
 
 .prompt-wizard-dissector-wrapper .prompt-dissector-textarea:focus {
-  border-color: #f5c84a;
-  box-shadow: 0 0 0 3px rgba(245, 200, 74, 0.12);
+  border-color: #e6a23c;
+  box-shadow: 0 0 0 3px rgba(230, 162, 60, 0.12);
 }
 
 .prompt-wizard-dissector-wrapper .prompt-dissector-overlay {

@@ -136,9 +136,9 @@ function App() {
             zIndex: 50,
             padding: '8px 12px',
             borderRadius: 8,
-            border: '0.5px solid rgba(245,200,74,0.5)',
+            border: '0.5px solid rgba(230, 162, 60,0.5)',
             background: 'rgba(31,35,42,0.92)',
-            color: '#f5c84a',
+            color: '#e6a23c',
             fontSize: 12,
             cursor: 'pointer'
           }}

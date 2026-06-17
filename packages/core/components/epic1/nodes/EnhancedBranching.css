@@ -225,7 +225,7 @@
 
 /* Title section - taller with edit button */
 .enhanced-title-section {
-  background: rgba(248, 200, 74, 0.1);
+  background: rgba(230, 162, 60, 0.1);
   border-radius: 6px;
   padding: 10px 12px;
   min-height: 40px;
@@ -246,7 +246,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 1px;
-  color: #f4c64d;
+  color: #e6a23c;
   text-align: center;
 }
 
@@ -262,14 +262,14 @@
 }
 
 .title-edit-btn:hover {
-  background: rgba(248, 200, 74, 0.16);
-  color: #f4c64d;
+  background: rgba(230, 162, 60, 0.16);
+  color: #e6a23c;
 }
 
 .title-edit-input {
   width: 100%;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid #f4c64d;
+  border: 1px solid #e6a23c;
   border-radius: 4px;
   padding: 6px 10px;
   color: #e0e0e0;
@@ -443,7 +443,7 @@
 }
 
 .enhanced-option-text:focus {
-  border-color: #f4c64d;
+  border-color: #e6a23c;
   background: rgba(0, 0, 0, 0.3);
   outline: none;
 }
@@ -683,11 +683,11 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #f4c64d;
+  color: #e6a23c;
   text-align: center;
   margin-bottom: 12px;
   padding: 8px;
-  background: rgba(248, 200, 74, 0.1);
+  background: rgba(230, 162, 60, 0.1);
   border-radius: 4px;
 }
 

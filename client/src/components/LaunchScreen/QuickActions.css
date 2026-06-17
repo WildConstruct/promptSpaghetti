@@ -34,7 +34,7 @@
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #f4c64d;
+  color: #e6a23c;
   font-weight: 700;
 }
 
@@ -80,13 +80,13 @@
 .template-card:hover {
   background: rgba(54, 48, 31, 0.92);
   transform: none;
-  box-shadow: inset 3px 0 0 rgba(248, 200, 74, 0.78);
+  box-shadow: inset 3px 0 0 rgba(230, 162, 60, 0.78);
 }
 
 .template-card-primary {
   background: linear-gradient(
     180deg,
-    rgba(248, 200, 74, 0.1),
+    rgba(230, 162, 60, 0.1),
     rgba(31, 35, 42, 0.82)
   );
 }
@@ -102,9 +102,9 @@
   margin-left: auto;
   padding: 2px 6px;
   border-radius: 3px;
-  background: rgba(248, 200, 74, 0.12);
-  border: 1px solid rgba(248, 200, 74, 0.3);
-  color: #ffe49a;
+  background: rgba(230, 162, 60, 0.12);
+  border: 1px solid rgba(230, 162, 60, 0.3);
+  color: #f0bd6e;
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -122,7 +122,7 @@
   width: 28px;
   height: 28px;
   margin-bottom: 0;
-  color: #f4c64d;
+  color: #e6a23c;
   transition: all 0.2s ease;
 }
 
@@ -135,7 +135,7 @@
 }
 
 .template-card:hover .template-icon {
-  color: #ffd76f;
+  color: #f0bd6e;
   transform: none;
 }
 
@@ -292,14 +292,14 @@
 }
 
 .template-nav-chip:hover {
-  color: #ffd76f;
-  border-color: rgba(248, 200, 74, 0.4);
+  color: #f0bd6e;
+  border-color: rgba(230, 162, 60, 0.4);
 }
 
 .template-nav-chip.active {
-  background: rgba(248, 200, 74, 0.16);
-  border-color: rgba(248, 200, 74, 0.65);
-  color: #ffe49a;
+  background: rgba(230, 162, 60, 0.16);
+  border-color: rgba(230, 162, 60, 0.65);
+  color: #f0bd6e;
 }
 
 .template-nav-count {
@@ -314,7 +314,7 @@
 }
 
 .template-nav-chip.active .template-nav-count {
-  background: rgba(248, 200, 74, 0.28);
+  background: rgba(230, 162, 60, 0.28);
 }
 
 /* Branching cards get a cyan accent so they read as "interactive" examples */

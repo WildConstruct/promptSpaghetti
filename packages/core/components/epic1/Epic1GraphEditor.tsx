@@ -221,8 +221,8 @@ const TutorialButton: React.FC = () => {
       onClick={handleClick}
       style={{
         padding: '10px 12px',
-        background: 'linear-gradient(135deg, rgba(245, 200, 74, 0.15) 0%, rgba(245, 200, 74, 0.25) 100%)',
-        border: '1px solid rgba(245, 200, 74, 0.3)',
+        background: 'linear-gradient(135deg, rgba(230, 162, 60, 0.15) 0%, rgba(230, 162, 60, 0.25) 100%)',
+        border: '1px solid rgba(230, 162, 60, 0.3)',
         borderRadius: '6px',
         color: '#e0e0e0',
         cursor: 'pointer',
@@ -2214,8 +2214,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                     }}
                     style={{
                       padding: '10px 12px',
-                      background: 'linear-gradient(135deg, rgba(245, 200, 74, 0.15) 0%, rgba(245, 200, 74, 0.25) 100%)',
-                      border: '1px solid rgba(245, 200, 74, 0.3)',
+                      background: 'linear-gradient(135deg, rgba(230, 162, 60, 0.15) 0%, rgba(230, 162, 60, 0.25) 100%)',
+                      border: '1px solid rgba(230, 162, 60, 0.3)',
                       borderRadius: '6px',
                       color: '#e0e0e0',
                       cursor: 'pointer',
@@ -2243,8 +2243,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                     }}
                     style={{
                       padding: '10px 12px',
-                      background: 'linear-gradient(135deg, rgba(245, 200, 74, 0.15) 0%, rgba(245, 200, 74, 0.25) 100%)',
-                      border: '1px solid rgba(245, 200, 74, 0.3)',
+                      background: 'linear-gradient(135deg, rgba(230, 162, 60, 0.15) 0%, rgba(230, 162, 60, 0.25) 100%)',
+                      border: '1px solid rgba(230, 162, 60, 0.3)',
                       borderRadius: '6px',
                       color: '#e0e0e0',
                       cursor: 'pointer',
@@ -2270,8 +2270,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                   onClick={() => setIsPromptWizardOpen(true)}
                   style={{
                     padding: '10px 12px',
-                    background: 'linear-gradient(135deg, rgba(245, 200, 74, 0.15) 0%, rgba(245, 200, 74, 0.25) 100%)',
-                    border: '1px solid rgba(245, 200, 74, 0.3)',
+                    background: 'linear-gradient(135deg, rgba(230, 162, 60, 0.15) 0%, rgba(230, 162, 60, 0.25) 100%)',
+                    border: '1px solid rgba(230, 162, 60, 0.3)',
                     borderRadius: '6px',
                     color: '#e0e0e0',
                     cursor: 'pointer',

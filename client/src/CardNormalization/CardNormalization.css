@@ -15,7 +15,7 @@
   padding: 10px 14px;
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.09);
 }
-.cn-title { font-weight: 500; color: #f5c84a; }
+.cn-title { font-weight: 500; color: #e6a23c; }
 .cn-asset { font-size: 12px; color: #9aa1ad; }
 .cn-pill { font-size: 11px; border: 0.5px solid; border-radius: 20px; padding: 1px 9px; }
 .cn-dirty { font-size: 11px; color: #f6b042; }
@@ -26,7 +26,7 @@
   border-radius: 8px; padding: 6px 11px; font-size: 12px; cursor: pointer;
 }
 .cn-btn:hover { background: #2a2f39; }
-.cn-btn-primary { background: #f5c84a; color: #2a2207; border-color: #f5c84a; }
+.cn-btn-primary { background: #e6a23c; color: #1a1206; border-color: #e6a23c; }
 .cn-iconbtn {
   border: 0.5px solid rgba(255, 255, 255, 0.12); background: #1b1e25;
   color: #cfd3da; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 15px;
@@ -45,10 +45,10 @@
   border: 0.5px solid rgba(255, 255, 255, 0.09); background: #1b1e25; color: #cfd3da;
   border-radius: 8px; cursor: pointer; font-size: 12px; text-align: left;
 }
-.cn-tool.active { border-color: #f5c84a; background: #2a2713; color: #f6d877; }
+.cn-tool.active { border-color: #e6a23c; background: #2a2713; color: #f0bd6e; }
 .cn-key { margin-left: auto; font-size: 10px; color: #8b919c; border: 0.5px solid rgba(255, 255, 255, 0.14); border-radius: 4px; padding: 0 5px; }
 .cn-chk { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #b9bec7; margin-bottom: 6px; cursor: pointer; }
-.cn-chk input { width: 14px; height: 14px; accent-color: #f5c84a; }
+.cn-chk input { width: 14px; height: 14px; accent-color: #e6a23c; }
 
 .cn-row { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
 .cn-lab { width: 46px; font-size: 11px; color: #9aa1ad; }
@@ -74,7 +74,7 @@
 .cn-ro-val { font-size: 12px; }
 
 .cn-pblk { border: 0.5px solid rgba(255, 255, 255, 0.07); border-radius: 8px; padding: 9px; margin-bottom: 8px; }
-.cn-pblk.active { border-color: rgba(245, 200, 74, 0.4); }
+.cn-pblk.active { border-color: rgba(230, 162, 60, 0.4); }
 .cn-pblk-h { font-size: 12px; color: #cfd3da; margin-bottom: 5px; }
 .cn-pr { display: flex; justify-content: space-between; font-size: 11px; margin: 3px 0; }
 .cn-pr .k { color: #9aa1ad; }
@@ -95,7 +95,7 @@
   border-radius: 6px; border: 0.5px solid rgba(255, 255, 255, 0.1); background: #1b2027;
   cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding: 0; overflow: hidden;
 }
-.cn-thumb.sel { border-color: #f5c84a; }
+.cn-thumb.sel { border-color: #e6a23c; }
 .cn-thumb-dot { position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; }
 .cn-count { font-size: 11px; color: #9aa1ad; white-space: nowrap; }
 
@@ -105,10 +105,10 @@
   display: flex; flex-direction: column; gap: 12px; padding: 18px 24px;
 }
 .cn-preview-head { display: flex; align-items: center; gap: 14px; }
-.cn-preview-title { font-size: 15px; font-weight: 500; color: #f5c84a; }
+.cn-preview-title { font-size: 15px; font-weight: 500; color: #e6a23c; }
 .cn-preview-sub { font-size: 12px; color: #9aa1ad; }
 .cn-preview-toggle { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #cfd3da; cursor: pointer; }
-.cn-preview-toggle input { width: 14px; height: 14px; accent-color: #f5c84a; }
+.cn-preview-toggle input { width: 14px; height: 14px; accent-color: #e6a23c; }
 .cn-preview-stage {
   flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
   border: 0.5px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; background: #0e1014;
