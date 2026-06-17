@@ -60,13 +60,14 @@ export function applyArchetype(
  */
 export function heuristicSolve(n: CardNormalization): CardNormalization {
   const canonical = n.canonicalHeadCount;
-  const headTop = n.head.centerY - n.head.height / 2;
-  const targetHeight = Math.max(
-    8,
-    (n.ground.y - headTop) / canonical
-  );
-  const ratio = targetHeight / n.head.height;
   const centerX = n.imageWidth / 2;
+  // Keep the head near the top of the figure (where heads actually sit), then
+  // size it so the figure reads exactly `canonical` heads down to the ground,
+  // re-centre, and level. Clamping head-top to the upper region snaps a head
+  // that was dragged too far down back into place.
+  const headTop = clamp(n.head.centerY - n.head.height / 2, 16, n.ground.y * 0.28);
+  const targetHeight = clamp((n.ground.y - headTop) / canonical, 40, 220);
+  const ratio = targetHeight / n.head.height;
   const head = {
     ...n.head,
     centerX,
