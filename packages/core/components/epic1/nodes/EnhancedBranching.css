@@ -21,11 +21,19 @@
    is intentionally compact, but the editor and metadata back-face are wider, so
    widen the node while editing / flipped instead of letting them overflow the
    ~104px footprint (the bug where the Separator editor escaped the node). */
-.epic1-editable-node.concat.editing,
-.epic1-editable-node.concat.node-flipped {
+.epic1-editable-node.concat.editing {
   width: 260px !important;
   min-width: 260px !important;
   max-width: 260px !important;
+}
+
+/* The metadata back-face holds only a few short lines, so keep it snugger than
+   the editor — at the 260px editor width it read too wide and the green node
+   border around the dark card looked oversized. */
+.epic1-editable-node.concat.node-flipped {
+  width: 220px !important;
+  min-width: 220px !important;
+  max-width: 220px !important;
 }
 
 /* 3D Flip Animation - Apply to ANY flippable node */
@@ -39,6 +47,13 @@
 
 .epic1-editable-node.flippable.node-flipped {
   transform: rotateY(180deg) !important;
+}
+
+/* When flipped to the metadata back-face, drop the node's own padding so the
+   dark metadata card fills the node edge-to-edge. Otherwise the green node
+   background shows through the padding as a thick border around the card. */
+.epic1-editable-node.node-flipped {
+  padding: 0 !important;
 }
 
 /* Add perspective to parent container */

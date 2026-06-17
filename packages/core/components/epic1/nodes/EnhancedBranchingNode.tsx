@@ -1158,31 +1158,51 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
 
                   {/* Back side - metadata view */}
                   <div className="card-face metadata-view">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                    <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: '#10b981' }}>
+                  {/* Small circular red close tucked into the top-right corner */}
+                  <button
+                    className="metadata-close-btn nodrag"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowMetadata(false);
+                    }}
+                    title="Close metadata"
+                    aria-label="Close metadata"
+                    style={{
+                      position: 'absolute',
+                      top: '7px',
+                      right: '7px',
+                      width: '18px',
+                      height: '18px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 0,
+                      borderRadius: '50%',
+                      background: '#ef4444',
+                      border: '1px solid rgba(0, 0, 0, 0.35)',
+                      color: '#fff',
+                      fontSize: '10px',
+                      lineHeight: 1,
+                      cursor: 'pointer',
+                      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.45)',
+                      transition: 'background 0.15s, transform 0.1s',
+                      zIndex: 11
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#dc2626';
+                      e.currentTarget.style.transform = 'scale(1.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#ef4444';
+                      e.currentTarget.style.transform = 'scale(1)';
+                    }}
+                  >
+                    ✕
+                  </button>
+                  <div style={{ marginBottom: '10px' }}>
+                    <h3 style={{ margin: 0, paddingRight: '22px', fontSize: '14px', fontWeight: 'bold', color: '#10b981' }}>
                       Metadata Analysis
                     </h3>
-                    <button
-                      className="metadata-close-btn nodrag"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowMetadata(false);
-                      }}
-                      style={{
-                        background: '#374151',
-                        border: '1px solid #4b5563',
-                        borderRadius: '4px',
-                        color: '#e5e7eb',
-                        padding: '4px 8px',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        transition: 'background 0.2s'
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = '#4b5563'}
-                      onMouseLeave={(e) => e.currentTarget.style.background = '#374151'}
-                    >
-                      ✕ Close
-                    </button>
                   </div>
                   {isExtractingMetadata ? (
                     <div style={{ textAlign: 'center', padding: '20px' }}>
