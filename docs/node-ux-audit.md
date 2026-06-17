@@ -66,6 +66,11 @@ Method: read each node component (the source of truth for what renders) + in-bro
 | Metadata card: circular red X + edge-to-edge fill + snug width | `useMetadataFlip.tsx`, `EnhancedBranchingNode.tsx`, `EnhancedBranching.css` | uncommitted |
 | PostItNote save shortcut accepts Ctrl+Enter | `PostItNote.tsx` | uncommitted |
 
-## Open for direction
-- Metadata-flip relevance (cross-cutting #1) — pick (a) or (b).
-- Right-sidebar LINKED / EXPLORE / GRAPH tabs — investigation in progress (separate note).
+## Resolved since this audit
+- **Metadata-flip relevance** — resolved with option (b): the flip is now
+  node-type-aware (Concat → join style / separator / dedupe; Variable → name /
+  mode; etc.) in `useMetadataFlip.tsx`. The Concat card fixes and PostItNote
+  Ctrl+Enter above also landed.
+- **Right-sidebar tabs** — investigated and rebuilt; Explore is now a
+  full-document browser and Graph a node-graph outline. See
+  [`sidebar-tabs-investigation.md`](sidebar-tabs-investigation.md).
