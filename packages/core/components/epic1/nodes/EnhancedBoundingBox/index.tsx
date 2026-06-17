@@ -169,6 +169,88 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     isResizing
   ]);
 
+  // After a collapse/expand size animation settles, re-assert member visibility.
+  // The animation drives a React Flow dimension re-render that can clobber the
+  // members' `hidden` state — leaving an expanded region visually empty ("open
+  // the region and the nodes are gone"). Running once the animation finishes
+  // (no more dimension churn) makes this correction stick.
+  const wasAnimatingRef = useRef(isAnimating);
+  useEffect(() => {
+    const justFinished = wasAnimatingRef.current && !isAnimating;
+    wasAnimatingRef.current = isAnimating;
+    if (!justFinished) {
+      return;
+    }
+    setNodes(nodes => {
+      const boxNode = nodes.find(n => n.id === id);
+      if (!boxNode) {
+        return nodes;
+      }
+      const bx = boxNode.position?.x ?? xPos ?? 0;
+      const by = boxNode.position?.y ?? yPos ?? 0;
+      const bw =
+        expandedSizeRef.current.width ||
+        (boxNode.data?.width as number) ||
+        DEFAULT_WIDTH;
+      const bh =
+        expandedSizeRef.current.height ||
+        (boxNode.data?.height as number) ||
+        DEFAULT_HEIGHT;
+      const storedIds = new Set<string>(
+        (boxNode.data?.collapsedNodeIds as string[] | undefined) || []
+      );
+      let changed = false;
+      const next = nodes.map(node => {
+        if (node.id === id) {
+          // Keep the box's own collapsed flag consistent with the rendered state.
+          if (Boolean(node.data?.isCollapsed) !== isCollapsed) {
+            changed = true;
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                isCollapsed,
+                collapsedNodeIds: isCollapsed
+                  ? node.data?.collapsedNodeIds
+                  : undefined
+              }
+            };
+          }
+          return node;
+        }
+        const isContainer =
+          node.type === 'enhancedBoundingBox' ||
+          node.type === 'boundingBox' ||
+          node.type === 'fragmentContainer';
+        if (isContainer) {
+          return node;
+        }
+        const directParent = (node as { parentNode?: string }).parentNode;
+        const dataParent = (node.data as { parentNode?: string } | undefined)
+          ?.parentNode;
+        let isMember =
+          directParent === id || dataParent === id || storedIds.has(node.id);
+        if (!isMember) {
+          const nx = node.position?.x ?? 0;
+          const ny = node.position?.y ?? 0;
+          const nw = node.width ?? 0;
+          const nh = node.height ?? 0;
+          isMember =
+            nx >= bx - 1 &&
+            nx + nw <= bx + bw + 1 &&
+            ny >= by - 1 &&
+            ny + nh <= by + bh + 1;
+        }
+        if (isMember && Boolean(node.hidden) !== isCollapsed) {
+          changed = true;
+          return { ...node, hidden: isCollapsed };
+        }
+        return node;
+      });
+      return changed ? next : nodes;
+    });
+  }, [isAnimating, isCollapsed, id, xPos, yPos, setNodes]);
+
   // Keep React Flow internals in sync with the rendered size (both initial load and during resize)
   useEffect(() => {
     if (isResizing) {
@@ -311,134 +393,120 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const handleCollapseToggle = useCallback(() => {
     const newCollapsed = !isCollapsed;
     setIsCollapsed(newCollapsed);
-
-    // Child ids whose React Flow internals must be re-measured after toggling.
-    // Without this, un-hidden children render with stale/zero size (transparent
-    // or gone) because hidden→visible does not trigger a re-measure on its own.
-    let childIdsToRefresh: string[] = [];
-
-    // Track performance
     perfMonitor.record('boundingBox.toggleCollapse', 1);
 
-    // Update nodes with new collapsed state
-    if (newCollapsed) {
-      // Store which nodes we're hiding
-      const hiddenNodeIds = Array.from(
-        new Set([
-          ...containedNodes.map(n => n.id),
-          ...getNodes()
-            .filter(node => {
-              const directParent = (node as { parentNode?: string }).parentNode;
-              const dataParent = (
-                node.data as { parentNode?: string } | undefined
-              )?.parentNode;
-              return directParent === id || dataParent === id;
-            })
-            .map(node => node.id)
-        ])
-      );
-
-      setNodes((nodes) =>
-        nodes.map((node) => {
-          if (hiddenNodeIds.includes(node.id)) {
-            return { ...node, hidden: true };
-          }
-          if (node.id === id) {
-            return {
-              ...node,
-              width: COLLAPSED_WIDTH,
-              height: COLLAPSED_HEIGHT,
-              measured: {
-                width: COLLAPSED_WIDTH,
-                height: COLLAPSED_HEIGHT
-              },
-              style: {
-                ...(node.style ?? {}),
-                width: COLLAPSED_WIDTH,
-                height: COLLAPSED_HEIGHT
-              },
-              data: {
-                ...node.data,
-                isCollapsed: true,
-                collapsedNodeIds: hiddenNodeIds
-              }
-            };
-          }
-          return node;
-        })
-      );
-      recalculate();
-    } else {
-      const restoredSize = {
-        width: Math.max(
-          MIN_EXPANDED_WIDTH,
-          expandedSizeRef.current.width || data.width || DEFAULT_WIDTH
-        ),
-        height: Math.max(
-          MIN_EXPANDED_HEIGHT,
-          expandedSizeRef.current.height || data.height || DEFAULT_HEIGHT
-        )
-      };
+    const restoredSize = {
+      width: Math.max(
+        MIN_EXPANDED_WIDTH,
+        expandedSizeRef.current.width || data.width || DEFAULT_WIDTH
+      ),
+      height: Math.max(
+        MIN_EXPANDED_HEIGHT,
+        expandedSizeRef.current.height || data.height || DEFAULT_HEIGHT
+      )
+    };
+    if (!newCollapsed) {
       sizeRef.current = restoredSize;
       setCurrentSize(restoredSize);
-
-      // Restore hidden nodes — use BOTH the stored list AND any node whose
-      // parentNode matches this box. This prevents nodes vanishing when the
-      // collapse path failed to capture them into collapsedNodeIds.
-      const boxNode = getNodes().find(n => n.id === id);
-      const storedIds: string[] = boxNode?.data?.collapsedNodeIds || [];
-
-      // Resolve the full child set once, up front, so we can both un-hide them
-      // and refresh their internals afterwards.
-      const allChildIds = new Set(storedIds);
-      for (const node of getNodes()) {
-        const directParent = (node as { parentNode?: string }).parentNode;
-        const dataParent = (node.data as { parentNode?: string } | undefined)?.parentNode;
-        if (directParent === id || dataParent === id) {
-          allChildIds.add(node.id);
-        }
-      }
-      childIdsToRefresh = Array.from(allChildIds);
-
-      setNodes((nodes) => {
-        return nodes.map((node) => {
-          if (allChildIds.has(node.id)) {
-            return { ...node, hidden: false };
-          }
-          if (node.id === id) {
-            return {
-              ...node,
-              width: restoredSize.width,
-              height: restoredSize.height,
-              measured: {
-                width: restoredSize.width,
-                height: restoredSize.height
-              },
-              style: {
-                ...(node.style ?? {}),
-                width: restoredSize.width,
-                height: restoredSize.height
-              },
-              data: {
-                ...node.data,
-                isCollapsed: false,
-                width: restoredSize.width,
-                height: restoredSize.height,
-                collapsedNodeIds: undefined
-              }
-            };
-          }
-          return node;
-        });
-      });
-      recalculate();
     }
+
+    // Resolve members from the CURRENT nodes: explicit parent links, the stored
+    // collapsed list, and geometric containment within the expanded bounds.
+    const liveNodes = getNodes();
+    const boxNode = liveNodes.find(n => n.id === id);
+    const boxX = boxNode?.position?.x ?? xPos ?? 0;
+    const boxY = boxNode?.position?.y ?? yPos ?? 0;
+    const storedIds = new Set<string>(
+      (boxNode?.data?.collapsedNodeIds as string[] | undefined) || []
+    );
+    const memberIds = new Set<string>();
+    for (const node of liveNodes) {
+      if (node.id === id) {
+        continue;
+      }
+      const isContainer =
+        node.type === 'enhancedBoundingBox' ||
+        node.type === 'boundingBox' ||
+        node.type === 'fragmentContainer';
+      if (isContainer) {
+        continue;
+      }
+      const directParent = (node as { parentNode?: string }).parentNode;
+      const dataParent = (node.data as { parentNode?: string } | undefined)
+        ?.parentNode;
+      if (directParent === id || dataParent === id || storedIds.has(node.id)) {
+        memberIds.add(node.id);
+        continue;
+      }
+      const nx = node.position?.x ?? 0;
+      const ny = node.position?.y ?? 0;
+      const nw = node.width ?? 0;
+      const nh = node.height ?? 0;
+      if (
+        nx >= boxX - 1 &&
+        nx + nw <= boxX + restoredSize.width + 1 &&
+        ny >= boxY - 1 &&
+        ny + nh <= boxY + restoredSize.height + 1
+      ) {
+        memberIds.add(node.id);
+      }
+    }
+    const memberList = Array.from(memberIds);
+    const targetW = newCollapsed ? COLLAPSED_WIDTH : restoredSize.width;
+    const targetH = newCollapsed ? COLLAPSED_HEIGHT : restoredSize.height;
+
+    // Idempotent toggle: hide/show members + resize the box together.
+    const applyToggle = (nodes: typeof liveNodes) =>
+      nodes.map(node => {
+        if (memberIds.has(node.id)) {
+          return Boolean(node.hidden) === newCollapsed
+            ? node
+            : { ...node, hidden: newCollapsed };
+        }
+        if (node.id === id) {
+          return {
+            ...node,
+            width: targetW,
+            height: targetH,
+            measured: { width: targetW, height: targetH },
+            style: { ...(node.style ?? {}), width: targetW, height: targetH },
+            data: {
+              ...node.data,
+              isCollapsed: newCollapsed,
+              collapsedNodeIds: newCollapsed ? memberList : undefined,
+              ...(newCollapsed
+                ? {}
+                : { width: restoredSize.width, height: restoredSize.height })
+            }
+          };
+        }
+        return node;
+      });
+
+    setNodes(applyToggle);
+    recalculate();
+
+    // The expand re-render (size animation) can clobber the members' hidden
+    // state, leaving children stuck hidden ("open the region and the nodes are
+    // gone"). Re-assert the toggle on the next frame so it always wins.
     requestAnimationFrame(() => {
+      setNodes(applyToggle);
       updateNodeInternals(id);
-      // Re-measure un-hidden children so they don't render transparent/zero-size.
-      childIdsToRefresh.forEach(childId => updateNodeInternals(childId));
+      memberList.forEach(childId => updateNodeInternals(childId));
     });
-  }, [isCollapsed, containedNodes, data.height, data.width, getNodes, id, perfMonitor, recalculate, setNodes, updateNodeInternals]);
+  }, [
+    isCollapsed,
+    data.height,
+    data.width,
+    getNodes,
+    id,
+    perfMonitor,
+    recalculate,
+    setNodes,
+    updateNodeInternals,
+    xPos,
+    yPos
+  ]);
 
   /**
    * Handle lock toggle
