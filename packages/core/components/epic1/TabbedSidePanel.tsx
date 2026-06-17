@@ -13,9 +13,9 @@ import type { PreviewEngine } from './preview/PreviewEngine';
 import type { Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import type { EditableNodeData } from './nodes';
-import RelationshipView from './components/RelationshipView';
 import { ComponentLibraryPanel } from './ComponentLibraryPanel';
 import { DocumentLibraryPanel, type DocumentSummary } from './DocumentLibraryPanel';
+import { GraphOutlinePanel } from './GraphOutlinePanel';
 import './TabbedSidePanel.css';
 import type {
   ComponentDefinition,
@@ -64,6 +64,8 @@ export interface TabbedSidePanelProps {
   exploreDocuments?: DocumentSummary[];
   /** Open a full PSG document by id (host handles confirm-if-dirty + load). */
   onOpenDocument?: (id: string) => void;
+  /** Select + center the editor on a node (Graph outline tab). */
+  onFocusNode?: (id: string) => void;
 }
 
 type TabType = SidePanelTabId | null;
@@ -182,7 +184,8 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   onRefreshSelectedComponent,
   onRefreshOutdatedComponents,
   exploreDocuments = [],
-  onOpenDocument
+  onOpenDocument,
+  onFocusNode
 }: TabbedSidePanelProps) => {
   const defaultWidth = 520;
   const minWidth = 360;
@@ -369,7 +372,11 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         )}
         {activeTab === 'relationships' && (
           <div className="assets-container">
-            <RelationshipView />
+            <GraphOutlinePanel
+              nodes={nodes}
+              edges={edges}
+              onFocusNode={onFocusNode}
+            />
           </div>
         )}
         {activeTab === 'preview' && hasPreviewTab && previewEngine && (

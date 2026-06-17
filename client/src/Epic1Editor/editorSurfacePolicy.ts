@@ -247,7 +247,7 @@ export const buildEditorSurfacePolicy = ({
     'tab.graph': createSurface(
       'tab.graph',
       'Graph',
-      'Advanced relationship tooling for inspecting graph structure.',
+      'Outline of the current document — every node grouped by type; click one to jump to it on the canvas.',
       'advanced',
       'available',
       'tab'

@@ -361,6 +361,20 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       maxZoom: 4
     });
 
+  // Graph outline (Graph tab): center on a node and highlight it.
+  const handleFocusNode = useCallback(
+    (nodeId: string) => {
+      panToNode(nodeId);
+      setNodes(currentNodes =>
+        currentNodes.map(node => ({
+          ...node,
+          selected: node.id === nodeId
+        }))
+      );
+    },
+    [panToNode, setNodes]
+  );
+
   // Node interactions and drag-drop helpers
   const { addNodeWithBounce } = useNodeInteractions();
   const { insertPresetByMeta } = useDragDropHandlers({
@@ -1994,6 +2008,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             tabDefinitions={sidePanelTabDefinitions}
             exploreDocuments={exploreDocuments}
             onOpenDocument={onOpenDocument}
+            onFocusNode={handleFocusNode}
             selectedNode={nodes.find(n => n.id === selectedNodeId)}
             nodes={nodes}
             edges={edges}
