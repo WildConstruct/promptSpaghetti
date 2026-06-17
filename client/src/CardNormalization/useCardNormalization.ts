@@ -1,12 +1,59 @@
 import { useCallback, useMemo, useState } from 'react';
+import type { PsgAssetRef } from '@promptscape/core/services/psg';
 import {
   readNormalization,
+  recomputeDerived,
   type CardNormalization,
   type NormalizationStatus,
   type PoseClass
 } from '@promptscape/core/services/cardNormalization';
 import { SEED_CARDS, type SeedCard } from './seedAssets';
+import {
+  CARD_IMAGE_WIDTH,
+  CARD_IMAGE_HEIGHT,
+  FIGURE_HEAD_TOP,
+  FIGURE_HEAD_UNIT
+} from './figures';
 import { applyArchetype, finalize, heuristicSolve } from './geometry';
+
+/** Generic starting normalization for an imported image — user calibrates from here. */
+function importNormalization(assetId: string): CardNormalization {
+  const groundY = CARD_IMAGE_HEIGHT * 0.92;
+  return recomputeDerived({
+    version: 'card-norm/1',
+    assetId,
+    imageWidth: CARD_IMAGE_WIDTH,
+    imageHeight: CARD_IMAGE_HEIGHT,
+    head: {
+      centerX: CARD_IMAGE_WIDTH / 2,
+      centerY: FIGURE_HEAD_TOP + FIGURE_HEAD_UNIT / 2,
+      width: 72,
+      height: FIGURE_HEAD_UNIT,
+      rotation: 0,
+      mode: 'visual-oval',
+      includesHeadwear: true,
+      confidence: 0.5
+    },
+    ground: {
+      y: groundY,
+      angle: 0,
+      leftContact: { x: 232, y: groundY },
+      rightContact: { x: 280, y: groundY },
+      supportWidth: 48,
+      confidence: 0.5
+    },
+    pivot: { x: CARD_IMAGE_WIDTH / 2, y: groundY, uv: { u: 0.5, v: 0.92 }, lockToGround: true },
+    crop: { x: 0, y: 0, width: CARD_IMAGE_WIDTH, height: CARD_IMAGE_HEIGHT, padding: { top: 0, right: 0, bottom: 0, left: 0 } },
+    observedHeadCount: 0,
+    canonicalHeadCount: 7.5,
+    archetype: 'adult-male-racegoer',
+    poseClass: 'standing-relaxed',
+    targetHeightM: 1.75,
+    confidence: { mask: 0.5, pose: 0.5, head: 0.5, ground: 0.5, overall: 0.5 },
+    status: 'unsolved',
+    updatedAt: new Date().toISOString()
+  });
+}
 
 const STORE_KEY = 'psg:card-norm-records-v2';
 
@@ -42,8 +89,8 @@ const clone = (n: CardNormalization): CardNormalization =>
   JSON.parse(JSON.stringify(n));
 
 export function useCardNormalization() {
-  const cards = SEED_CARDS;
-  const [records, setRecords] = useState<RecordMap>(() => loadRecords(cards));
+  const [cards, setCards] = useState<SeedCard[]>(SEED_CARDS);
+  const [records, setRecords] = useState<RecordMap>(() => loadRecords(SEED_CARDS));
   const [index, setIndex] = useState(0);
   const [working, setWorking] = useState<CardNormalization>(() =>
     clone(loadRecords(cards)[cards[0].asset.id])
@@ -96,6 +143,28 @@ export function useCardNormalization() {
     [working]
   );
 
+  const importImage = useCallback(
+    (dataUrl: string) => {
+      const id = `import-${new Date().getTime()}`;
+      const norm = importNormalization(id);
+      const asset: PsgAssetRef = {
+        id,
+        kind: 'render-output',
+        role: 'crowd-card',
+        storage: { provider: 'local', uri: dataUrl },
+        provenance: { source: 'upload' },
+        metadata: {}
+      };
+      const card: SeedCard = { asset, paletteIndex: 0, heads: 7.5, imageUri: dataUrl };
+      setRecords(prev => ({ ...prev, [id]: norm }));
+      setCards(prev => [...prev, card]);
+      setIndex(cards.length);
+      setWorking(clone(norm));
+      setDirty(false);
+    },
+    [cards.length]
+  );
+
   const goTo = useCallback(
     (nextIndex: number) => {
       if (nextIndex < 0 || nextIndex >= cards.length) {
@@ -138,6 +207,7 @@ export function useCardNormalization() {
     save,
     goTo,
     next,
-    prev
+    prev,
+    importImage
   };
 }

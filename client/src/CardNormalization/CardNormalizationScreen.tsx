@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ARCHETYPES,
   POSE_CLASSES,
@@ -44,6 +44,16 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
   const [tool, setTool] = useState<NormTool>('head');
   const [view, setView] = useState<ViewLayers>({ guide: true, mask: true, skeleton: false, grid: false });
   const [showComposite, setShowComposite] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const importFile = (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') n.importImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -74,6 +84,8 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
         <span className="cn-pill" style={{ color: STATUS_COLOR[w.status], borderColor: STATUS_COLOR[w.status] }}>{STATUS_LABEL[w.status]}</span>
         {n.dirty && <span className="cn-dirty">Unsaved</span>}
         <span className="cn-spacer" />
+        <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files?.[0]; if (f) importFile(f); e.target.value = ''; }} />
+        <button className="cn-btn" onClick={() => fileRef.current?.click()}>Import image</button>
         <button className="cn-btn" onClick={() => setShowComposite(true)}>Composite preview</button>
         <button className="cn-btn" onClick={n.reset}>Reset</button>
         <button className="cn-btn" onClick={n.autoSolve}>Auto-solve</button>
@@ -102,8 +114,12 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
           <Meter label="Overall" value={c.overall} accent="#f5c84a" />
         </div>
 
-        <div className="cn-canvas-wrap">
-          <NormalizationCanvas value={w} onChange={n.change} paletteIndex={n.card.paletteIndex} heads={n.card.heads} view={view} />
+        <div
+          className="cn-canvas-wrap"
+          onDragOver={e => e.preventDefault()}
+          onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) importFile(f); }}
+        >
+          <NormalizationCanvas value={w} onChange={n.change} paletteIndex={n.card.paletteIndex} heads={n.card.heads} imageUri={n.card.imageUri} view={view} />
           <div className="cn-readout">
             <div className="cn-ro-lab">Estimated height</div>
             <div className="cn-ro-big">{estimatedHeightM(w).toFixed(2)} m</div>

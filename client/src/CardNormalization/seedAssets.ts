@@ -26,6 +26,8 @@ export interface SeedCard {
   paletteIndex: number;
   /** True rendered height of the figure, in head units. */
   heads: number;
+  /** Real image (data URL) for imported cards; absent → drawn placeholder. */
+  imageUri?: string;
 }
 
 const SEED_DATE = '2026-06-16T00:00:00.000Z';
