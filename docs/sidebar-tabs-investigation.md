@@ -24,7 +24,7 @@ Your question — *"I'm not sure what we're doing with the sections on the right
   - Wired `exploreDocuments` + `onOpenDocument` through `TabbedSidePanel` → `Epic1GraphEditor` → `Epic1EditorContainer`.
   - `onOpenDocument` does **close-before-open**: `window.confirm` when the current graph is non-empty, then loads the template. (This also closes the gap where `handleOpen` replaced the graph with no prompt.)
   - Verified: 13 documents by category, clicking "1930s Chicago Gangsters" loaded its 12-node graph and produced preview output.
-- **Graph** — **build a node-graph outline.** Decision: replace the misnamed asset-cluster prototype with an outline of the *current document* — nodes grouped by type, click to select/zoom-to-node, basic structure. ⏳ Next up (not yet started).
+- **Graph** — **build a node-graph outline.** Decision: replace the misnamed asset-cluster prototype with an outline of the *current document*. ✅ **Built and verified:** new `GraphOutlinePanel` (core) replaces `RelationshipView` in the `relationships` slot — summary stats (nodes / connections / outputs, plus a no-Output warning), nodes grouped by type with readable labels, and click-to-focus (`onFocusNode` → `panToNode` selects + centers). `RelationshipView.tsx` is now orphaned and can be removed in a later cleanup.
 
 ## Follow-ups
 - `templateCatalog.ts` should eventually also back `QuickActions` (the splash) so the splash and Explore can't drift; currently QuickActions still has its own copy of titles/descriptions.
