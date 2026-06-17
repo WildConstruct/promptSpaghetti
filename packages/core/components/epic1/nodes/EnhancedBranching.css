@@ -17,6 +17,17 @@
   width: 100% !important;
 }
 
+/* Concat reuses the flip-card faces (editor + metadata back). The display node
+   is intentionally compact, but the editor and metadata back-face are wider, so
+   widen the node while editing / flipped instead of letting them overflow the
+   ~104px footprint (the bug where the Separator editor escaped the node). */
+.epic1-editable-node.concat.editing,
+.epic1-editable-node.concat.node-flipped {
+  width: 260px !important;
+  min-width: 260px !important;
+  max-width: 260px !important;
+}
+
 /* 3D Flip Animation - Apply to ANY flippable node */
 .epic1-editable-node.flippable {
   transform-style: preserve-3d !important;
@@ -68,13 +79,15 @@
   top: 0 !important;
   left: 0 !important;
   min-width: 100% !important;
-  width: max-content !important;
-  max-width: 400px !important; /* Reasonable max width */
+  /* Fill the node instead of sizing to content (max-content) — that let the
+     back-face escape narrow nodes (e.g. Concat) and overflow off-canvas. */
+  width: 100% !important;
+  max-width: 100% !important;
   height: auto !important;
   min-height: 100% !important;
   padding: 15px !important;
   color: #e5e7eb !important;
-  overflow: visible !important;
+  overflow: auto !important;
   /* Pre-rotate 180° so it appears correct when container flips */
   transform: rotateY(180deg) !important;
   opacity: 0 !important;
