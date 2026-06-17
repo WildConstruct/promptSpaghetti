@@ -325,8 +325,10 @@ const WEIGHT_PRESETS = {
   equal: { icon: '=', title: 'Equal weights' },
   favorFirst: { icon: '↗', title: 'Favor first' },
   favorLast: { icon: '↘', title: 'Favor last' },
-  rampUp: { icon: '📈', title: 'Ramp up' },
-  rampDown: { icon: '📉', title: 'Ramp down' }
+  // Block-bar glyphs render reliably (unlike the old 📈/📉 emoji, which showed
+  // as missing-glyph boxes) and read as an ascending / descending distribution.
+  rampUp: { icon: '▁▄▇', title: 'Ramp up' },
+  rampDown: { icon: '▇▄▁', title: 'Ramp down' }
 };
 
 const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeData>) => {
