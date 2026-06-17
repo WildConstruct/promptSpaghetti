@@ -164,6 +164,17 @@ const templates: Template[] = [
     icon: <BranchIcon />
   },
   {
+    id: 'gangsters',
+    title: '1930s Chicago Gangsters',
+    description:
+      'Prohibition-era gangster: locked rank, role branches (enforcer/speakeasy), and a nested Tommy-gun branch',
+    prompt:
+      'A 1930s Chicago gangster with a locked rank, where the role branches into an enforcer weapon path and a speakeasy venue path, and the enforcer Tommy gun branches again to a drum magazine',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <BranchIcon />
+  },
+  {
     id: 'empty',
     title: 'Blank Canvas',
     description: 'Start from scratch in the editor with no template applied',

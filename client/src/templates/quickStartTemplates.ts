@@ -916,9 +916,84 @@ const tileBuilderTemplate: QuickStartTemplate = {
   ]
 };
 
+// 1930s Chicago Gangsters — locked rank "DNA", multi-branch role (enforcer →
+// weapon, speakeasy owner → venue), and a nested branch (Tommy gun → drum mag).
+const gangsterTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode(
+      'gang-dna',
+      80,
+      100,
+      'Gangster DNA',
+      '1930s Chicago gangster, Prohibition era, sharp period detail, cinematic film-noir lighting'
+    ),
+    weightedChoiceNode('gang-rank', 80, 320, 'Rank (locked DNA)', [
+      { id: 'rk-1', text: 'a low street tough', weight: 25 },
+      { id: 'rk-2', text: 'a made man', weight: 25, locked: true },
+      { id: 'rk-3', text: 'a ranking capo', weight: 25 },
+      { id: 'rk-4', text: 'the crime boss himself', weight: 25 }
+    ]),
+    weightedChoiceNode('gang-role', 480, 180, 'Role', [
+      { id: 'ro-1', text: 'working as a bootlegger', weight: 28 },
+      { id: 'ro-2', text: 'serving as an enforcer', weight: 24, hasBranch: true },
+      { id: 'ro-3', text: 'running a speakeasy', weight: 24, hasBranch: true },
+      { id: 'ro-4', text: 'driving the getaway car', weight: 24 }
+    ]),
+    weightedChoiceNode('gang-weapon', 900, 60, 'Enforcer Weapon', [
+      { id: 'wp-1', text: 'cradling a Thompson submachine gun', weight: 34, hasBranch: true },
+      { id: 'wp-2', text: 'with brass knuckles and a switchblade', weight: 33 },
+      { id: 'wp-3', text: 'holding a sawed-off shotgun', weight: 33 }
+    ]),
+    textNode(
+      'gang-mag',
+      1320,
+      20,
+      'Magazine Detail',
+      'fed by a fat 50-round drum magazine'
+    ),
+    concatNode('gang-weapon-merge', 1320, 140, 'Weapon Merge'),
+    weightedChoiceNode('gang-venue', 900, 320, 'Speakeasy Venue', [
+      { id: 'vn-1', text: 'a smoky backroom jazz club', weight: 34 },
+      { id: 'vn-2', text: 'a basement card den', weight: 33 },
+      { id: 'vn-3', text: 'a hotel-suite blind pig', weight: 33 }
+    ]),
+    concatNode('gang-role-merge', 1720, 240, 'Role Merge'),
+    weightedChoiceNode('gang-attire', 480, 460, 'Attire', [
+      { id: 'at-1', text: 'in a double-breasted pinstripe suit', weight: 34 },
+      { id: 'at-2', text: 'in a fedora and long wool overcoat', weight: 33 },
+      { id: 'at-3', text: 'in a waistcoat with sleeves rolled up', weight: 33 }
+    ]),
+    weightedChoiceNode('gang-scene', 480, 640, 'Scene', [
+      { id: 'sn-1', text: 'on a rain-slicked brick alley at night', weight: 34 },
+      { id: 'sn-2', text: 'in a dim speakeasy backroom', weight: 33 },
+      { id: 'sn-3', text: 'on a snow-dusted street outside a flophouse', weight: 33 }
+    ]),
+    concatNode('gang-main', 2120, 320, 'Assemble Gangster'),
+    outputNode('gang-output', 2480, 320, 'chicago_gangster')
+  ],
+  edges: [
+    { id: 'g-e1', source: 'gang-dna', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'g-e2', source: 'gang-rank', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'g-e3', source: 'gang-role', target: 'gang-role-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'g-e4', source: 'gang-role', target: 'gang-weapon', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'g-e5', source: 'gang-role', target: 'gang-venue', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    // Nested: Tommy gun branches to the drum-mag detail.
+    { id: 'g-e6', source: 'gang-weapon', target: 'gang-weapon-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'g-e7', source: 'gang-weapon', target: 'gang-mag', type: 'smoothstep', sourceHandle: 'branch-0', targetHandle: 'target' },
+    { id: 'g-e8', source: 'gang-mag', target: 'gang-weapon-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'g-e9', source: 'gang-weapon-merge', target: 'gang-role-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'g-e10', source: 'gang-venue', target: 'gang-role-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'g-e11', source: 'gang-role-merge', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'g-e12', source: 'gang-attire', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'g-e13', source: 'gang-scene', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'g-e14', source: 'gang-main', target: 'gang-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   tech_panel: techPanelTemplate,
   tile_builder: tileBuilderTemplate,
+  gangsters: gangsterTemplate,
   character_variation: characterTemplate,
   indy_500_crowd_card: indyCrowdCardTemplate,
   vehicle_family: vehicleFamilyTemplate,
