@@ -32,6 +32,18 @@ This is a deliberately small, executable node vocabulary. `WeightedChoiceNode`
 supports weight distributions (linear / exponential / gaussian) via
 `packages/core/runtime/nodes/epic1/weightDistribution.ts`.
 
+### Concat vs Merge (text joining)
+
+Two distinct join modes — see [`docs/concat-merge-semantics.md`](docs/concat-merge-semantics.md):
+
+- **Implicit concat:** wiring one content node (Text / Weighted Choice /
+  Variable) into another's input auto-joins — the upstream value is a
+  space-separated **prefix**. The engine already does this
+  (`executeTextBlock` / `executeWeightedChoice` prepend their inputs). **Do not
+  put a Merge between two content nodes** — wire them directly.
+- **Explicit Merge** (PSG `Concat`): for multi-branch fan-in with a styled join
+  (space / comma / Oxford / sentence / bullet / JSON, via `runtime/assembly.ts`).
+
 ### Older / parked runtime (do not assume it's the product path)
 
 - `packages/core/runtime/index.ts` — older general `ExecutionContext` / `RuntimeNode`.
@@ -222,5 +234,6 @@ parked-implementations doc for the captured algorithms).
 - [`docs/card-normalization-plan.md`](docs/card-normalization-plan.md) — the Card Normalization feature (data model, milestones, scene-composition payoff)
 - [`docs/node-ux-audit.md`](docs/node-ux-audit.md) — per-node usability audit + cross-cutting fixes
 - [`docs/sidebar-tabs-investigation.md`](docs/sidebar-tabs-investigation.md) — what the Library / Linked / Explore / Graph tabs do
+- [`docs/concat-merge-semantics.md`](docs/concat-merge-semantics.md) — implicit concat vs explicit Merge; join styles; parts-of-speech pattern
 - `packages/core/graphSchema.ts` — authoritative executable node vocabulary
 - Memory: Wild Construct brand tokens + Card Normalization purpose are saved in `memory/`.

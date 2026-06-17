@@ -183,13 +183,16 @@ export const BaseEditableNode = memo(({
         ...style,
       }}
     >
-      {/* Render input handle for non-concat nodes (concat manages its own) */}
+      {/* Render input handle for non-concat nodes (concat manages its own).
+          Wiring another content node in here auto-concatenates: the upstream
+          value is prepended as a space-separated prefix (no Merge needed). */}
       {data.nodeType !== 'concat' && (
         <Handle
           type="target"
           position={Position.Left}
           id="target"
           className="epic1-handle target"
+          title="Prefix in — an incoming value is prepended (auto-concat, no Merge)"
         />
       )}
       
