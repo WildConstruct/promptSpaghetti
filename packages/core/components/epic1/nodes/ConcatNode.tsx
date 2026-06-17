@@ -17,6 +17,8 @@ const JOIN_STYLE_OPTIONS: { value: JoinStyle | ''; label: string }[] = [
   { value: 'comma', label: 'Comma list' },
   { value: 'and', label: 'Oxford list (a, b, and c)' },
   { value: 'sentence', label: 'Sentence' },
+  { value: 'bullet', label: 'Bullet list' },
+  { value: 'json', label: 'Structured JSON' },
 ];
 
 const MIN_HANDLES = 2;

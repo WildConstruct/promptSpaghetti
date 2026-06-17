@@ -12,7 +12,9 @@ export type JoinStyle =
   | 'space' // simple space-joined words
   | 'comma' // comma list: "a, b, c"
   | 'and' // Oxford list: "a, b, and c"
-  | 'sentence'; // space-joined, capitalized, terminal punctuation
+  | 'sentence' // space-joined, capitalized, terminal punctuation
+  | 'bullet' // markdown bullet list, one part per line ("- a\n- b")
+  | 'json'; // structured JSON: keyed by input labels when available, else { "parts": [...] }
 
 export interface AssembleOptions {
   /** Join strategy. Defaults to 'space'. */
@@ -27,6 +29,20 @@ export interface AssembleOptions {
   dedupe?: boolean;
   /** Capitalize the first letter of the result. Defaults to false (forced true for 'sentence'). */
   capitalize?: boolean;
+  /**
+   * Per-part labels (e.g. the source node names), aligned to `parts`. Used by
+   * the 'json' style to emit a keyed object. Ignored by every other style.
+   */
+  labels?: Array<string | undefined>;
+}
+
+/** Slugify a label into a stable JSON key: "Base Wardrobe" -> "base_wardrobe". */
+function jsonKey(label: string): string {
+  return label
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
 }
 
 const VOWELS = new Set(['a', 'e', 'i', 'o', 'u']);
@@ -112,6 +128,41 @@ export function assemble(parts: unknown[], opts: AssembleOptions = {}): string {
   const prepared = prepareParts(parts, opts);
 
   if (prepared.length === 0) return '';
+
+  // Structured styles emit non-prose output, so they bypass normalizePrompt.
+  if (style === 'bullet') {
+    return prepared.map(p => `- ${p}`).join('\n');
+  }
+
+  if (style === 'json') {
+    const labels = opts.labels;
+    if (Array.isArray(labels)) {
+      // Align labels to the original parts, then drop empties together so the
+      // keys stay paired with their values.
+      const trim = opts.trim !== false;
+      const dropEmpty = opts.dropEmpty !== false;
+      const pairs = parts
+        .map((p, i) => ({
+          value: trim ? String(p ?? '').trim() : String(p ?? ''),
+          key: typeof labels[i] === 'string' ? (labels[i] as string).trim() : ''
+        }))
+        .filter(pr => !dropEmpty || pr.value.length > 0);
+      const keys = pairs.map(pr => jsonKey(pr.key)).filter(Boolean);
+      const allKeyed =
+        pairs.length > 0 &&
+        keys.length === pairs.length &&
+        new Set(keys).size === keys.length;
+      if (allKeyed) {
+        const obj: Record<string, string> = {};
+        pairs.forEach(pr => {
+          obj[jsonKey(pr.key)] = pr.value;
+        });
+        return JSON.stringify(obj, null, 2);
+      }
+    }
+    // Fallback: ordered array of the prepared parts.
+    return JSON.stringify({ parts: prepared }, null, 2);
+  }
 
   let joined: string;
   switch (style) {

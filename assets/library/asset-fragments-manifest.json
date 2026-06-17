@@ -268,6 +268,29 @@
       }
     },
     {
+      "id": "fragment-headwear-conditioned",
+      "name": "Conditioned Headwear",
+      "description": "Parts-of-speech pattern: a randomized condition modifier feeds a hat choice and prepends to it (implicit concat, no Merge node) — e.g. \"worn and faded fedora\".",
+      "path": "./body-silhouette/headwear-conditioned.psg",
+      "category": "body-silhouette",
+      "tags": [
+        "headwear",
+        "hat",
+        "modifier",
+        "parts-of-speech",
+        "pattern",
+        "wardrobe"
+      ],
+      "nodeCount": 2,
+      "edgeCount": 1,
+      "metadata": {
+        "author": "Wild Construct",
+        "created": "2026-06-17",
+        "updated": "",
+        "version": "1.0.0"
+      }
+    },
+    {
       "id": "fragment-movement-quality",
       "name": "Movement Quality",
       "description": "",
@@ -3158,7 +3181,7 @@
     }
   ],
   "statistics": {
-    "total_fragments": 161,
+    "total_fragments": 162,
     "categories": [
       "action-dynamics",
       "body-silhouette",
@@ -3170,6 +3193,6 @@
       "vehicles-mobility",
       "weapons-armor-combat"
     ],
-    "total_nodes": 177
+    "total_nodes": 179
   }
 }

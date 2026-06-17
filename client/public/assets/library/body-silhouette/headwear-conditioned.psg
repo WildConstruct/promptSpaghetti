@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0",
+  "name": "Conditioned Headwear",
+  "description": "Parts-of-speech pattern: a randomized condition modifier feeds a hat choice and prepends to it (implicit concat, no Merge node) — e.g. \"worn and faded fedora\".",
+  "metadata": {
+    "created": "2026-06-17",
+    "author": "Wild Construct",
+    "category": "body-silhouette",
+    "type": "ASSET_FRAGMENT",
+    "tags": [
+      "headwear",
+      "hat",
+      "modifier",
+      "parts-of-speech",
+      "pattern",
+      "wardrobe"
+    ],
+    "fragment_id": "headwear-conditioned",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "headwear-condition",
+      "type": "WeightedChoice",
+      "name": "Condition",
+      "description": "Adjective modifier that prepends to the hat",
+      "x": 160,
+      "y": 200,
+      "options": [
+        { "id": "cond-worn", "text": "worn and faded", "weight": 12 },
+        { "id": "cond-clean", "text": "clean and structured", "weight": 12 },
+        { "id": "cond-new", "text": "crisp and new", "weight": 10 },
+        { "id": "cond-dusty", "text": "dusty", "weight": 9 },
+        { "id": "cond-mud", "text": "mud-covered", "weight": 8 },
+        { "id": "cond-sun", "text": "sun-bleached", "weight": 8 },
+        { "id": "cond-rain", "text": "rain-soaked", "weight": 6 }
+      ]
+    },
+    {
+      "id": "headwear-hat",
+      "type": "WeightedChoice",
+      "name": "Hat",
+      "description": "The headwear noun; receives the condition as a prefix",
+      "x": 540,
+      "y": 200,
+      "options": [
+        { "id": "hat-fedora", "text": "fedora", "weight": 12 },
+        { "id": "hat-flatcap", "text": "flat cap", "weight": 12 },
+        { "id": "hat-baseball", "text": "baseball cap", "weight": 12 },
+        { "id": "hat-widebrim", "text": "wide-brim hat", "weight": 10 },
+        { "id": "hat-beanie", "text": "beanie", "weight": 10 },
+        { "id": "hat-knit", "text": "knit cap", "weight": 8 },
+        { "id": "hat-bowler", "text": "bowler hat", "weight": 8 }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-condition-hat",
+      "source": "headwear-condition",
+      "target": "headwear-hat"
+    }
+  ],
+  "regions": [
+    {
+      "id": "region-headwear-conditioned",
+      "name": "Conditioned Headwear",
+      "color": "#C7CEEA",
+      "nodes": ["headwear-condition", "headwear-hat"],
+      "description": "Condition modifier wired into the hat choice; the modifier auto-concatenates as a prefix.",
+      "metadata": {
+        "fragment_type": "parts_of_speech",
+        "pattern": "modifier -> noun (implicit concat)"
+      }
+    }
+  ]
+}

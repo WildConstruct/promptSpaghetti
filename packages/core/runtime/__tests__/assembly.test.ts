@@ -153,3 +153,44 @@ describe('templateSlots', () => {
     expect(templateSlots('a plain prompt')).toEqual([]);
   });
 });
+
+describe('assemble — bullet style', () => {
+  it('renders one markdown bullet per part', () => {
+    expect(assemble(['a', 'b', 'c'], { style: 'bullet' })).toBe('- a\n- b\n- c');
+  });
+  it('drops empty parts', () => {
+    expect(assemble(['a', '', 'c'], { style: 'bullet' })).toBe('- a\n- c');
+  });
+});
+
+describe('assemble — json style', () => {
+  it('emits an ordered array when no labels are given', () => {
+    expect(JSON.parse(assemble(['a', 'b'], { style: 'json' }))).toEqual({
+      parts: ['a', 'b']
+    });
+  });
+  it('keys by label (slugified) when labels are usable', () => {
+    expect(
+      JSON.parse(
+        assemble(['fedora', 'leather jacket'], {
+          style: 'json',
+          labels: ['Hat', 'Outer Layer']
+        })
+      )
+    ).toEqual({ hat: 'fedora', outer_layer: 'leather jacket' });
+  });
+  it('falls back to an array when labels are duplicated', () => {
+    expect(
+      JSON.parse(
+        assemble(['x', 'y'], { style: 'json', labels: ['Hat', 'Hat'] })
+      )
+    ).toEqual({ parts: ['x', 'y'] });
+  });
+  it('keeps labels aligned with values after dropping empties', () => {
+    expect(
+      JSON.parse(
+        assemble(['', 'boots'], { style: 'json', labels: ['Hat', 'Boots'] })
+      )
+    ).toEqual({ boots: 'boots' });
+  });
+});

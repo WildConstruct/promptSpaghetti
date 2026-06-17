@@ -47,8 +47,8 @@ Join styles (the Merge dropdown):
 | Comma list | `a, b, c` | exists |
 | Oxford list | `a, b, and c` | exists |
 | Sentence | `A b c.` (capitalized, terminal punctuation) | exists |
-| **Bullet list** | `- a`⏎`- b`⏎`- c` | **proposed** |
-| **Structured JSON** | `{ "parts": ["a","b","c"] }` (shape TBD) | **proposed** |
+| **Bullet list** | `- a`⏎`- b`⏎`- c` | **added** |
+| **Structured JSON** | keyed by node name when available (`{ "hat": "...", ... }`), else `{ "parts": [...] }` | **added** (array now; keyed pending name plumbing) |
 | Separator (legacy) | custom separator string | exists, de-emphasize |
 
 ### Why the split
@@ -126,15 +126,30 @@ discoverability, not the engine.
 7. **Docs.** Update `CLAUDE.md`, the user guide, and the examples catalog with
    the two-mode model and the rule of thumb.
 
-## 5. Open decisions (need product input)
+## 5. Decisions (locked)
 
-- **Structured JSON shape.** `{ "parts": [...] }`, or labeled keys derived from
-  node names (`{ "hat": "...", "shirt": "..." }`), or both via a sub-option?
-- **Separator policy.** Keep "space-only for implicit chains, Merge for
-  everything else" (recommended — keeps the two modes clean), or expose a
-  per-node separator override on content nodes?
-- **Prefix vs suffix.** Default **prefix** (locked); ship the suffix toggle now
-  or defer?
+- **Structured JSON shape** → **keyed by node name (slugified) when usable,
+  ordered `{ "parts": [...] }` array as the fallback** (missing or duplicate
+  labels fall back to the array). Implemented in `assemble()`; keyed output
+  activates once source-node names are threaded into the Concat executor.
+- **Separator policy** → **space-only for implicit chains; Merge for everything
+  else.** Keeps the two modes clean; no per-node separator override.
+- **Prefix vs suffix** → **prefix only.** Chain order controls position
+  (flow = reading order); suffix toggle deferred until a concrete need appears.
+
+## 5a. Status
+
+- [x] Lock + document the model (this file).
+- [x] `bullet` and `json` join styles in `assemble()` + the Merge dropdown
+      (`runtime/assembly.ts`, `components/epic1/nodes/ConcatNode.tsx`).
+- [x] Tests: `runtime/__tests__/assembly.test.ts` (bullet/json), and
+      `runtime/nodes/epic1/__tests__/implicitConcat.test.ts` proves the
+      Condition→Hat parts-of-speech pattern (prefix concat, deterministic).
+- [x] Canonical example fragment: `assets/library/body-silhouette/headwear-conditioned.psg`.
+- [ ] Thread source-node names through the engine so `json` emits keyed output.
+- [ ] UX: label the content-node input handle; distinct implicit-concat edge style.
+- [ ] Docs: fold the rule of thumb into `CLAUDE.md` + user guide; audit
+      templates to drop unnecessary Merges.
 
 ## 6. Related work
 - Backdrop convention: characters/extraction docs should default to a neutral
