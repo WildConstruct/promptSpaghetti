@@ -39,10 +39,17 @@ const rels = files
   .map(f => f.split(path.sep).join('/').replace(SRC + '/', ''))
   .sort();
 
+const skipped = [];
+const publishable = [];
 for (const rel of rels) {
   const full = path.join(SRC, rel);
   let d;
   try { d = JSON.parse(fs.readFileSync(full, 'utf8')); } catch (e) { console.log('SKIP (parse):', rel); continue; }
+  // Fragments must not contain Output nodes — those are full documents, not
+  // reusable fragments (the asset validator rejects them). Skip + report.
+  const hasOutput = (d.nodes || []).some(n => String(n.type || '').toLowerCase() === 'output');
+  if (hasOutput) { skipped.push(rel + ' (contains Output nodes)'); continue; }
+  publishable.push(rel);
   const parts = rel.split('/');
   const category = parts.length > 1 ? parts[0] : (d.metadata && d.metadata.category) || 'misc';
   catSet.add(category);
@@ -98,6 +105,10 @@ const outManifest = {
 
 console.log('Fragments total:', fragments.length, '(preserved', preserved, '+ added', added, ')');
 console.log('Categories (' + catSet.size + '):', [...catSet].sort().join(', '));
+if (skipped.length) {
+  console.log('Skipped (' + skipped.length + ' non-conforming):');
+  skipped.forEach(s => console.log('  ' + s));
+}
 console.log('Sample new entries:');
 fragments.filter(f => !existingByPath.has(f.path.replace(/^\.\//, ''))).slice(0, 4)
   .forEach(f => console.log('  ', JSON.stringify({ id: f.id, name: f.name, category: f.category, path: f.path, nodeCount: f.nodeCount })));
@@ -110,7 +121,7 @@ fs.mkdirSync(PUB, { recursive: true });
 fs.writeFileSync(path.join(PUB, MANIFEST), manifestStr);
 
 let mirrored = 0;
-for (const rel of rels) {
+for (const rel of publishable) {
   const from = path.join(SRC, rel);
   const to = path.join(PUB, rel);
   const content = fs.readFileSync(from, 'utf8');
@@ -120,4 +131,11 @@ for (const rel of rels) {
     mirrored++;
   }
 }
-console.log('\nAPPLIED. Manifest written (src + public). Mirrored', mirrored, '.psg file(s) to public.');
+// Remove any previously-mirrored fragments that are now skipped.
+let removed = 0;
+for (const s of skipped) {
+  const rel = s.split(' ')[0];
+  const to = path.join(PUB, rel);
+  if (fs.existsSync(to)) { fs.unlinkSync(to); removed++; }
+}
+console.log('\nAPPLIED. Manifest written (src + public). Mirrored', mirrored, '+ removed', removed, 'public .psg file(s).');
