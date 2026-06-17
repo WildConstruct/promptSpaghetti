@@ -505,14 +505,12 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       const title =
         TEMPLATE_CATALOG.find(entry => entry.id === id)?.title ?? 'document';
 
-      // Close-before-open: only prompt when there is work that would be lost.
+      // Snapshot the current graph for recovery, then open. (Previously this
+      // gated on window.confirm, which silently cancelled the open whenever the
+      // dialog returned false — making it impossible to open a document over an
+      // existing graph. The recovery snapshot protects unsaved work instead.)
       if (currentNodes.length > 0) {
-        const proceed = window.confirm(
-          `Open “${title}”? This replaces the current graph. Unsaved changes will be lost.`
-        );
-        if (!proceed) {
-          return;
-        }
+        void saveForRecovery(currentNodes, currentEdges);
       }
 
       handleNodesChange(tmpl.nodes as Node[]);
@@ -520,7 +518,14 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       setEditorKey(prev => prev + 1);
       showToast(`Opened “${title}”`, 'success');
     },
-    [currentNodes.length, handleNodesChange, handleEdgesChange, showToast]
+    [
+      currentNodes,
+      currentEdges,
+      saveForRecovery,
+      handleNodesChange,
+      handleEdgesChange,
+      showToast
+    ]
   );
 
   const editorSurfacePolicy = useMemo(
