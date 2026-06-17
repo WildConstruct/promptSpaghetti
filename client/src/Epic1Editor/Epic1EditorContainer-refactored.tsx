@@ -100,6 +100,11 @@ const ChangelogModal = lazy(
   () => import('@promptscape/core/components/ChangelogModal/ChangelogModal')
 );
 
+const GuideModal = lazy(async () => {
+  const module = await import('./components/GuideModal');
+  return { default: module.GuideModal };
+});
+
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
   showAssetLibrary?: boolean;
@@ -166,6 +171,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
 
   const [showChangelog, setShowChangelog] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
+  const [guideTab, setGuideTab] = useState<'getting-started' | 'user-guide'>('getting-started');
   const [showBugReportDialog, setShowBugReportDialog] = useState(false);
   const [showComfyExportDialog, setShowComfyExportDialog] = useState(false);
   const [showPsgSceneAssetsDialog, setShowPsgSceneAssetsDialog] = useState(false);
@@ -550,7 +557,15 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
               }
             ).__EPIC1_ORGANIZE_NODES__?.(),
           onReportBug: () => setShowBugReportDialog(true),
-          onChangelog: () => setShowChangelog(true)
+          onChangelog: () => setShowChangelog(true),
+          onGettingStarted: () => {
+            setGuideTab('getting-started');
+            setShowGuide(true);
+          },
+          onUserGuide: () => {
+            setGuideTab('user-guide');
+            setShowGuide(true);
+          }
         }
       }),
     [
@@ -645,6 +660,15 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             <ChangelogModal
               isOpen={showChangelog}
               onClose={() => setShowChangelog(false)}
+            />
+          )}
+
+        {showGuide &&
+          renderDeferredSurface(
+            <GuideModal
+              isOpen={showGuide}
+              onClose={() => setShowGuide(false)}
+              initial={guideTab}
             />
           )}
 

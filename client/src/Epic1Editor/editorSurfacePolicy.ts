@@ -63,6 +63,8 @@ interface EditorSurfacePolicyActions {
   onOrganizeNodes?: () => void;
   onReportBug?: () => void;
   onChangelog?: () => void;
+  onGettingStarted?: () => void;
+  onUserGuide?: () => void;
 }
 
 interface EditorSurfacePolicyArgs {
@@ -471,6 +473,28 @@ export const buildEditorSurfacePolicy = ({
   );
 
   const helpItems: MenuSectionModel['items'] = [];
+  pushAction(
+    helpItems,
+    actions.onGettingStarted
+      ? {
+          type: 'action',
+          id: 'gettingStarted',
+          label: 'Getting started',
+          onClick: actions.onGettingStarted
+        }
+      : null
+  );
+  pushAction(
+    helpItems,
+    actions.onUserGuide
+      ? {
+          type: 'action',
+          id: 'userGuide',
+          label: 'User guide',
+          onClick: actions.onUserGuide
+        }
+      : null
+  );
   pushAction(
     helpItems,
     actions.onReportBug
