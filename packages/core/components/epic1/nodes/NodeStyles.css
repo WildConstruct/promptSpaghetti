@@ -11,8 +11,42 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
+/* Unified node header chip — one shape on every node, tinted its own accent
+   colour (Weighted Choice keeps its own gold .display-title). */
+.epic1-editable-node.text-block .epic1-node-type-label,
+.epic1-editable-node.variable .epic1-node-type-label,
+.epic1-editable-node.concat .epic1-node-type-label,
+.epic1-editable-node.output .epic1-node-type-label {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 7px 8px;
+  border-radius: 4px;
+  margin-bottom: 9px;
+}
+
+.epic1-editable-node.text-block .epic1-node-type-label {
+  color: #a3a5f7;
+  background: rgba(124, 127, 242, 0.15);
+}
+.epic1-editable-node.variable .epic1-node-type-label {
+  color: #bba0ff;
+  background: rgba(157, 112, 247, 0.16);
+}
 .epic1-editable-node.concat .epic1-node-type-label {
-  color: #5fe0a0;
+  color: #6fe6ad;
+  background: rgba(70, 208, 127, 0.15);
+  margin-bottom: 0;
+}
+.epic1-editable-node.output .epic1-node-type-label {
+  color: #5fdcef;
+  background: rgba(34, 211, 238, 0.15);
+  margin-bottom: 6px;
 }
 
 /* The input handles are positioned by % (33% / 66% / …). Make their offset parent
@@ -27,22 +61,6 @@
    a full-width, centered header chip + a subtle content row (no left indent). */
 .epic1-editable-node.text-block .epic1-text-display {
   width: 100%;
-}
-
-.epic1-editable-node.text-block .epic1-node-type-label {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #e6a23c;
-  text-align: center;
-  padding: 8px;
-  margin-bottom: 10px;
-  background: rgba(230, 162, 60, 0.1);
-  border-radius: 4px;
 }
 
 .epic1-editable-node.text-block .epic1-text-content {
@@ -205,10 +223,10 @@
 .epic1-output-label {
   font-size: 14px;
   font-weight: 600;
-  color: #f15656;
+  color: #e7e9ee;
 }
 
 .epic1-output-icon {
   font-size: 20px;
-  color: #f15656;
+  color: #22d3ee;
 }
