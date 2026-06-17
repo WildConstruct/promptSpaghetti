@@ -13,6 +13,7 @@ import { NormalizationCanvas, type NormTool, type ViewLayers } from './Normaliza
 import { CardFigure } from './figures';
 import { SEED_TOTAL } from './seedAssets';
 import { ScenePreview } from './ScenePreview';
+import { SheetSplitter } from './SheetSplitter';
 import './CardNormalization.css';
 
 const STATUS_LABEL: Record<string, string> = {
@@ -44,6 +45,7 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
   const [tool, setTool] = useState<NormTool>('head');
   const [view, setView] = useState<ViewLayers>({ guide: true, mask: true, skeleton: false, grid: false });
   const [showComposite, setShowComposite] = useState(false);
+  const [showSplitter, setShowSplitter] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const importFile = (file: File) => {
@@ -76,7 +78,7 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
 
   return (
     <>
-    <div className="cn-screen" style={showComposite ? { display: 'none' } : undefined}>
+    <div className="cn-screen" style={showComposite || showSplitter ? { display: 'none' } : undefined}>
       <div className="cn-header">
         <button className="cn-iconbtn" onClick={onBack} aria-label="Back to card assets">←</button>
         <span className="cn-title">Card normalization</span>
@@ -86,6 +88,7 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
         <span className="cn-spacer" />
         <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files?.[0]; if (f) importFile(f); e.target.value = ''; }} />
         <button className="cn-btn" onClick={() => fileRef.current?.click()}>Import image</button>
+        <button className="cn-btn" onClick={() => setShowSplitter(true)}>Split sheet</button>
         <button className="cn-btn" onClick={() => setShowComposite(true)}>Composite preview</button>
         <button className="cn-btn" onClick={n.reset}>Reset</button>
         <button className="cn-btn" onClick={n.autoSolve}>Auto-solve</button>
@@ -182,6 +185,7 @@ export const CardNormalizationScreen: React.FC<{ onBack: () => void }> = ({ onBa
       </div>
     </div>
     {showComposite && <ScenePreview onClose={() => setShowComposite(false)} />}
+    {showSplitter && <SheetSplitter onClose={() => setShowSplitter(false)} onCrop={n.importImage} />}
     </>
   );
 };
