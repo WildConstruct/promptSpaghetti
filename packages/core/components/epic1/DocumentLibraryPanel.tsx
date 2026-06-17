@@ -67,8 +67,8 @@ export const DocumentLibraryPanel: React.FC<DocumentLibraryPanelProps> = ({
   return (
     <div className="document-library">
       <div className="document-library-intro">
-        Open a full PSG document. This replaces the current graph, so you’ll be
-        asked to confirm if you have unsaved work.
+        Click a document to open it (the chevron previews it first). Opening
+        replaces the current graph; your previous work is kept for recovery.
       </div>
 
       <div className="document-library-nav" role="tablist" aria-label="Document categories">
@@ -109,30 +109,42 @@ export const DocumentLibraryPanel: React.FC<DocumentLibraryPanelProps> = ({
               className={`document-library-card ${isExpanded ? 'is-expanded' : ''}`}
               data-testid={`explore-document-${doc.id}`}
             >
-              <button
-                type="button"
-                className="document-library-card-header"
-                aria-expanded={isExpanded}
-                onClick={() =>
-                  setExpandedId(current => (current === doc.id ? null : doc.id))
-                }
-                title={isExpanded ? `Collapse “${doc.title}”` : `Preview “${doc.title}”`}
-              >
-                <span className="document-library-card-title">{doc.title}</span>
-                <span className="document-library-card-meta">
-                  {doc.branching && (
-                    <span className="document-library-tag document-library-tag-branching">
-                      ⑂ Branching
-                    </span>
-                  )}
-                  {typeof doc.nodeCount === 'number' && (
-                    <span className="document-library-tag">{doc.nodeCount} nodes</span>
-                  )}
-                </span>
-                <span className="document-library-card-chevron" aria-hidden>
-                  ›
-                </span>
-              </button>
+              <div className="document-library-card-header">
+                {/* Primary action: open the document. */}
+                <button
+                  type="button"
+                  className="document-library-card-main"
+                  onClick={() => onOpenDocument?.(doc.id)}
+                  title={`Open “${doc.title}”`}
+                >
+                  <span className="document-library-card-title">{doc.title}</span>
+                  <span className="document-library-card-meta">
+                    {doc.branching && (
+                      <span className="document-library-tag document-library-tag-branching">
+                        ⑂ Branching
+                      </span>
+                    )}
+                    {typeof doc.nodeCount === 'number' && (
+                      <span className="document-library-tag">{doc.nodeCount} nodes</span>
+                    )}
+                  </span>
+                </button>
+                {/* Secondary action: toggle the inline preview. */}
+                <button
+                  type="button"
+                  className="document-library-card-toggle"
+                  aria-expanded={isExpanded}
+                  aria-label={isExpanded ? `Hide preview of ${doc.title}` : `Preview ${doc.title}`}
+                  onClick={() =>
+                    setExpandedId(current => (current === doc.id ? null : doc.id))
+                  }
+                  title={isExpanded ? 'Hide preview' : 'Preview'}
+                >
+                  <span className="document-library-card-chevron" aria-hidden>
+                    ›
+                  </span>
+                </button>
+              </div>
 
               {isExpanded && (
                 <div className="document-library-card-body">
