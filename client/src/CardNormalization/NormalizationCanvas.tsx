@@ -119,29 +119,34 @@ export const NormalizationCanvas: React.FC<Props> = ({
   const py = value.pivot.lockToGround ? groundYAt(g, value.pivot.x) : value.pivot.y;
   const obs = value.observedHeadCount;
 
+  // Measure from zero at the baseline (the ground beneath the head) UPWARD, so
+  // height = head-units from the feet up to the top of the head. Dragging the
+  // head down toward the baseline shrinks the reading.
+  const baseY = groundYAt(g, h.centerX);
   const ticks = [];
   for (let i = 0; i <= 8; i++) {
-    const y = headTop + i * unit;
-    if (y > 766) {
+    const y = baseY - i * unit;
+    if (y < 8) {
       break;
     }
     ticks.push(
       <g key={i}>
-        <line x1={36} y1={y} x2={66} y2={y} stroke="#5b9bf5" strokeDasharray="4 4" strokeWidth={1} opacity={i === 8 ? 0.5 : 0.85} />
+        <line x1={36} y1={y} x2={66} y2={y} stroke="#5b9bf5" strokeDasharray="4 4" strokeWidth={1} opacity={i === 0 ? 0.5 : 0.85} />
         <text x={30} y={y + 4} fontSize={13} fill="#7fb0f0" textAnchor="end">{i}</text>
       </g>
     );
-    const y2 = headTop + (i + 0.5) * unit;
-    if (i === 7 && y2 < 766) {
+    const yHalf = baseY - (i + 0.5) * unit;
+    if (i === 7 && yHalf > 8) {
       ticks.push(
         <g key="t75">
-          <line x1={36} y1={y2} x2={72} y2={y2} stroke="#5b9bf5" strokeWidth={2} />
-          <text x={30} y={y2 + 4} fontSize={13} fill="#9cc6ff" textAnchor="end">7.5</text>
+          <line x1={36} y1={yHalf} x2={72} y2={yHalf} stroke="#5b9bf5" strokeWidth={2} />
+          <text x={30} y={yHalf + 4} fontSize={13} fill="#9cc6ff" textAnchor="end">7.5</text>
         </g>
       );
     }
   }
-  const obsY = headTop + obs * unit;
+  // The observed-height marker points at the top of the figure (baseline + obs heads).
+  const obsY = baseY - obs * unit;
 
   return (
     <svg ref={svgRef} viewBox={`0 0 ${CARD_IMAGE_WIDTH} ${CARD_IMAGE_HEIGHT}`} style={{ width: '100%', display: 'block', touchAction: 'none' }} role="img" aria-label="Card normalization canvas">
@@ -175,7 +180,7 @@ export const NormalizationCanvas: React.FC<Props> = ({
       {view.guide && (
         <>
           <g>{ticks}</g>
-          <line x1={58} y1={headTop} x2={58} y2={Math.min(headTop + 8 * unit, 764)} stroke="#5b9bf5" strokeWidth={2} />
+          <line x1={58} y1={baseY} x2={58} y2={Math.max(baseY - 8 * unit, 8)} stroke="#5b9bf5" strokeWidth={2} />
           <polygon points={`48,${obsY} 62,${obsY - 6} 62,${obsY + 6}`} fill="#5b9bf5" />
         </>
       )}
@@ -188,7 +193,8 @@ export const NormalizationCanvas: React.FC<Props> = ({
       <text x={rx + 8} y={rY - 6} fontSize={13} fill="#46d07f">Ground plane</text>
 
       <g transform={`rotate(${h.rotation} ${h.centerX} ${h.centerY})`}>
-        <ellipse cx={h.centerX} cy={h.centerY} rx={h.width / 2} ry={h.height / 2} fill="none" stroke="#b07cff" strokeWidth={2.5} style={{ cursor: 'move' }} onPointerDown={startDrag('head')} />
+        {/* fill (even transparent) makes the whole interior draggable, not just the ring */}
+        <ellipse cx={h.centerX} cy={h.centerY} rx={h.width / 2} ry={h.height / 2} fill="rgba(176,124,255,0.08)" stroke="#b07cff" strokeWidth={2.5} style={{ cursor: 'move', pointerEvents: 'all' }} onPointerDown={startDrag('head')} />
       </g>
       <circle cx={h.centerX} cy={h.centerY} r={4} fill="#b07cff" />
       <rect x={h.centerX + h.width / 2 - 6} y={h.centerY + h.height / 2 - 6} width={12} height={12} rx={2} fill="#b07cff" style={{ cursor: 'nwse-resize' }} onPointerDown={startDrag('headSize')} />
