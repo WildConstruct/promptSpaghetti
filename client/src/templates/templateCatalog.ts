@@ -44,6 +44,14 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     branching: true
   },
   {
+    id: 'underworld_skilltree',
+    title: 'Chicago Underworld — Skill Trees',
+    description:
+      'Advanced branching-on-branching: employment splits into dock / heist / bootleg skill trees, each with its own nested specialty — three levels deep',
+    category: 'characters',
+    branching: true
+  },
+  {
     id: 'diner_patrons',
     title: 'Diner Patrons',
     description:

@@ -29,6 +29,7 @@ const CATEGORY_TABS: { id: LaunchCategory | 'all'; label: string }[] = [
 const CATEGORY_BY_ID: Record<string, LaunchCategory> = {
   character_variation: 'characters',
   gangsters: 'characters',
+  underworld_skilltree: 'characters',
   diner_patrons: 'characters',
   spaghetti_western: 'characters',
   indy_500_crowd_card: 'crowds',
@@ -198,6 +199,17 @@ const templates: Template[] = [
       'Prohibition-era gangster: locked rank, role branches (enforcer/speakeasy), and a nested Tommy-gun branch',
     prompt:
       'A 1930s Chicago gangster with a locked rank, where the role branches into an enforcer weapon path and a speakeasy venue path, and the enforcer Tommy gun branches again to a drum magazine',
+    badge: 'Branching',
+    tier: 'advanced',
+    icon: <BranchIcon />
+  },
+  {
+    id: 'underworld_skilltree',
+    title: 'Chicago Underworld — Skill Trees',
+    description:
+      'Advanced: employment branches into dock/heist/bootleg skill trees, each with a nested specialty — three levels of branching',
+    prompt:
+      'A 1930s Chicago underworld character whose trade (docks, bank-robbing, bootlegging) opens its own skill tree, each branching again into a specialty',
     badge: 'Branching',
     tier: 'advanced',
     icon: <BranchIcon />

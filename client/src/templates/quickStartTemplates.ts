@@ -990,6 +990,102 @@ const gangsterTemplate: QuickStartTemplate = {
   ]
 };
 
+// Chicago Underworld — Skill Trees. Advanced branching-on-branching: a locked
+// era, then employment (Trade) where EVERY option opens its own skill tree, and
+// inside each tree a role can branch AGAIN into a specialty. Three levels deep:
+// trade -> role -> specialty. One graph that randomizes every kind of person in
+// the world.
+const underworldTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('uw-dna', 80, 120, 'Underworld DNA', '1930s Chicago underworld, Prohibition era, gritty film-noir period photograph, single full-body character'),
+    weightedChoiceNode('uw-era', 80, 340, 'Era (locked DNA)', [
+      { id: 'er-1', text: 'in the early Prohibition years', weight: 25 },
+      { id: 'er-2', text: 'at the height of the bootleg wars', weight: 25, locked: true },
+      { id: 'er-3', text: 'in the last days before Repeal', weight: 25 },
+      { id: 'er-4', text: 'in the lean years after the Crash', weight: 25 }
+    ]),
+    weightedChoiceNode('uw-trade', 480, 300, 'Trade', [
+      { id: 'tr-1', text: 'working the river docks', weight: 33, hasBranch: true },
+      { id: 'tr-2', text: 'in a bank-robbing crew', weight: 34, hasBranch: true },
+      { id: 'tr-3', text: 'running bootleg liquor', weight: 33, hasBranch: true }
+    ]),
+    weightedChoiceNode('uw-dock-role', 900, 60, 'Dock Role', [
+      { id: 'dk-1', text: 'as a brawny stevedore hauling crates', weight: 34 },
+      { id: 'dk-2', text: 'as a pier union enforcer', weight: 33, hasBranch: true },
+      { id: 'dk-3', text: 'as a smuggler-handler waving cargo through', weight: 33 }
+    ]),
+    weightedChoiceNode('uw-dock-spec', 1320, 20, 'Enforcer Edge', [
+      { id: 'ds-1', text: 'a steel cargo hook hanging from his belt', weight: 50 },
+      { id: 'ds-2', text: 'two dockside goons at his back', weight: 50 }
+    ]),
+    concatNode('uw-dock-merge', 1320, 160, 'Dock Merge'),
+    weightedChoiceNode('uw-heist-role', 900, 300, 'Heist Role', [
+      { id: 'hk-1', text: 'as the steady wheelman at the curb', weight: 34 },
+      { id: 'hk-2', text: 'as the safecracker with the golden touch', weight: 33, hasBranch: true },
+      { id: 'hk-3', text: 'as the lookout posted across the street', weight: 33 }
+    ]),
+    weightedChoiceNode('uw-heist-spec', 1320, 300, 'Cracking Method', [
+      { id: 'hs-1', text: 'reading the tumblers by ear', weight: 34 },
+      { id: 'hs-2', text: 'blowing the door with nitroglycerin', weight: 33 },
+      { id: 'hs-3', text: 'punching the dial clean off the safe', weight: 33 }
+    ]),
+    concatNode('uw-heist-merge', 1320, 440, 'Heist Merge'),
+    weightedChoiceNode('uw-boot-role', 900, 560, 'Bootleg Role', [
+      { id: 'bk-1', text: 'as a backwoods still-runner', weight: 34 },
+      { id: 'bk-2', text: 'as a speakeasy fixer greasing the law', weight: 33, hasBranch: true },
+      { id: 'bk-3', text: 'as a rum-row pilot meeting the ships offshore', weight: 33 }
+    ]),
+    weightedChoiceNode('uw-boot-spec', 1320, 560, 'Payoff', [
+      { id: 'bs-1', text: 'slipping envelopes to the beat cop', weight: 50 },
+      { id: 'bs-2', text: 'with the precinct captain on his payroll', weight: 50 }
+    ]),
+    concatNode('uw-boot-merge', 1320, 700, 'Bootleg Merge'),
+    concatNode('uw-trade-merge', 1720, 380, 'Trade Merge'),
+    weightedChoiceNode('uw-build', 480, 520, 'Build', [
+      { id: 'bd-1', text: 'lean and wiry', weight: 34 },
+      { id: 'bd-2', text: 'thick-necked and heavy-set', weight: 33 },
+      { id: 'bd-3', text: 'average and forgettable', weight: 33 }
+    ]),
+    weightedChoiceNode('uw-attire', 480, 680, 'Attire', [
+      { id: 'aw-1', text: 'in a rumpled three-piece suit', weight: 34 },
+      { id: 'aw-2', text: 'in a flat cap and rough work clothes', weight: 33 },
+      { id: 'aw-3', text: 'in shirtsleeves and suspenders', weight: 33 }
+    ]),
+    weightedChoiceNode('uw-scene', 480, 840, 'Scene', [
+      { id: 'sw-1', text: 'in a rain-slicked brick alley', weight: 34 },
+      { id: 'sw-2', text: 'on a foggy dockside at dawn', weight: 33 },
+      { id: 'sw-3', text: 'in a smoke-filled speakeasy backroom', weight: 33 }
+    ]),
+    concatNode('uw-main', 2120, 420, 'Assemble Character'),
+    outputNode('uw-output', 2480, 420, 'underworld_character')
+  ],
+  edges: [
+    { id: 'u-e1', source: 'uw-dna', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'u-e2', source: 'uw-era', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'u-e3', source: 'uw-trade', target: 'uw-trade-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'u-e4', source: 'uw-trade', target: 'uw-dock-role', type: 'smoothstep', sourceHandle: 'branch-0', targetHandle: 'target' },
+    { id: 'u-e5', source: 'uw-trade', target: 'uw-heist-role', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'u-e6', source: 'uw-trade', target: 'uw-boot-role', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'u-e7', source: 'uw-dock-role', target: 'uw-dock-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'u-e8', source: 'uw-dock-role', target: 'uw-dock-spec', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'u-e9', source: 'uw-dock-spec', target: 'uw-dock-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'u-e10', source: 'uw-dock-merge', target: 'uw-trade-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'u-e11', source: 'uw-heist-role', target: 'uw-heist-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'u-e12', source: 'uw-heist-role', target: 'uw-heist-spec', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'u-e13', source: 'uw-heist-spec', target: 'uw-heist-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'u-e14', source: 'uw-heist-merge', target: 'uw-trade-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'u-e15', source: 'uw-boot-role', target: 'uw-boot-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'u-e16', source: 'uw-boot-role', target: 'uw-boot-spec', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'u-e17', source: 'uw-boot-spec', target: 'uw-boot-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'u-e18', source: 'uw-boot-merge', target: 'uw-trade-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'u-e19', source: 'uw-trade-merge', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'u-e20', source: 'uw-build', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'u-e21', source: 'uw-attire', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'u-e22', source: 'uw-scene', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input6' },
+    { id: 'u-e23', source: 'uw-main', target: 'uw-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
 // Baseball Game Attendees — locked era "DNA", multi-branch fan type (superfan
 // -> gear, vendor -> cart), nested branch (superfan painted-face -> team colors).
 const baseballTemplate: QuickStartTemplate = {
@@ -1299,6 +1395,7 @@ export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   tech_panel: techPanelTemplate,
   tile_builder: tileBuilderTemplate,
   gangsters: gangsterTemplate,
+  underworld_skilltree: underworldTemplate,
   baseball_fans: baseballTemplate,
   punk_fans: punkTemplate,
   diner_patrons: dinerTemplate,
