@@ -23,6 +23,43 @@
   position: static;
 }
 
+/* Text Block collapsed look — mirror the Weighted Choice display:
+   a full-width, centered header chip + a subtle content row (no left indent). */
+.epic1-editable-node.text-block .epic1-text-display {
+  width: 100%;
+}
+
+.epic1-editable-node.text-block .epic1-node-type-label {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #e6a23c;
+  text-align: center;
+  padding: 8px;
+  margin-bottom: 10px;
+  background: rgba(230, 162, 60, 0.1);
+  border-radius: 4px;
+}
+
+.epic1-editable-node.text-block .epic1-text-content {
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #e0e0e0;
+  text-align: left;
+}
+
+.epic1-editable-node.text-block .epic1-text-content .epic1-placeholder {
+  color: #8b8b8b;
+  font-style: italic;
+}
+
 /* Selected: expand the highlight (glow), don't fill */
 .epic1-editable-node.concat.selected {
   border-color: #46d07f;
