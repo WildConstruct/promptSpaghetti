@@ -3,7 +3,7 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  background: #14161b;
+  background: #181818;
   color: #e7e9ee;
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 13px;
@@ -22,13 +22,13 @@
 .cn-spacer { flex: 1; }
 .cn-btn {
   border: 0.5px solid rgba(255, 255, 255, 0.14);
-  background: #20242c; color: #e1e4ea;
+  background: #262626; color: #e1e4ea;
   border-radius: 8px; padding: 6px 11px; font-size: 12px; cursor: pointer;
 }
-.cn-btn:hover { background: #2a2f39; }
+.cn-btn:hover { background: #2e2e2e; }
 .cn-btn-primary { background: #e6a23c; color: #1a1206; border-color: #e6a23c; }
 .cn-iconbtn {
-  border: 0.5px solid rgba(255, 255, 255, 0.12); background: #1b1e25;
+  border: 0.5px solid rgba(255, 255, 255, 0.12); background: #1f1f1f;
   color: #cfd3da; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 15px;
 }
 .cn-iconbtn:hover { background: #262b34; }
@@ -42,7 +42,7 @@
 
 .cn-tool {
   display: flex; align-items: center; width: 100%; padding: 7px 9px; margin-bottom: 5px;
-  border: 0.5px solid rgba(255, 255, 255, 0.09); background: #1b1e25; color: #cfd3da;
+  border: 0.5px solid rgba(255, 255, 255, 0.09); background: #1f1f1f; color: #cfd3da;
   border-radius: 8px; cursor: pointer; font-size: 12px; text-align: left;
 }
 .cn-tool.active { border-color: #e6a23c; background: #2a2713; color: #f0bd6e; }
@@ -58,7 +58,7 @@
 
 .cn-canvas-wrap {
   position: relative; min-height: 0;
-  background: #0e1014; border: 0.5px solid rgba(255, 255, 255, 0.07); border-radius: 10px;
+  background: #111111; border: 0.5px solid rgba(255, 255, 255, 0.07); border-radius: 10px;
   display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 .cn-canvas-wrap > svg { max-height: 100%; width: auto; }
@@ -81,7 +81,7 @@
 .cn-pr .v { color: #dfe2e8; }
 .cn-field { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: #9aa1ad; margin-bottom: 8px; }
 .cn-field select {
-  background: #20242c; color: #dfe2e8; border: 0.5px solid rgba(255, 255, 255, 0.14);
+  background: #262626; color: #dfe2e8; border: 0.5px solid rgba(255, 255, 255, 0.14);
   border-radius: 7px; font-size: 12px; padding: 5px 6px;
 }
 
@@ -111,7 +111,7 @@
 .cn-preview-toggle input { width: 14px; height: 14px; accent-color: #e6a23c; }
 .cn-preview-stage {
   flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
-  border: 0.5px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; background: #0e1014;
+  border: 0.5px solid rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; background: #111111;
 }
 .cn-preview-stage > svg { max-height: 100%; }
 .cn-preview-caption { margin: 0; font-size: 12px; color: #aeb4be; text-align: center; }

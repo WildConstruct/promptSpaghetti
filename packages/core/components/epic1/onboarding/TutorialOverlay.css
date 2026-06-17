@@ -137,7 +137,7 @@
 }
 
 .tutorial-back-button {
-  background-color: #20242c;
+  background-color: #262626;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 6px;
   padding: 8px 16px;
@@ -150,7 +150,7 @@
 }
 
 .tutorial-back-button:hover {
-  background-color: #2a2f38;
+  background-color: #2e2e2e;
 }
 
 .tutorial-continue-button {

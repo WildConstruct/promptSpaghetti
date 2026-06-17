@@ -296,7 +296,7 @@
 }
 
 .epic1-editable-node.weighted-choice {
-  border-color: #475569; /* Dark blue-gray for normal/deselected state */
+  border-color: #4a4a4a; /* Dark blue-gray for normal/deselected state */
   border-radius: 12px; /* Maintain rounded corners */
 }
 

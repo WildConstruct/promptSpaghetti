@@ -150,7 +150,7 @@ export const NormalizationCanvas: React.FC<Props> = ({
           <path d="M32 0H0V32" fill="none" stroke="rgba(255,255,255,.06)" strokeWidth="1" />
         </pattern>
       </defs>
-      <rect x="0" y="0" width={CARD_IMAGE_WIDTH} height={CARD_IMAGE_HEIGHT} fill="#0e1014" />
+      <rect x="0" y="0" width={CARD_IMAGE_WIDTH} height={CARD_IMAGE_HEIGHT} fill="#111111" />
       {view.grid && <rect x="0" y="0" width={CARD_IMAGE_WIDTH} height={CARD_IMAGE_HEIGHT} fill="url(#cnGrid)" />}
 
       {imageUri ? (
@@ -183,8 +183,8 @@ export const NormalizationCanvas: React.FC<Props> = ({
       <line x1={lx} y1={lY} x2={rx} y2={rY} stroke="#46d07f" strokeWidth={2.5} style={{ cursor: 'ns-resize' }} onPointerDown={startDrag('ground')} />
       <circle cx={lx} cy={lY} r={9} fill="#46d07f" style={{ cursor: 'grab' }} onPointerDown={startDrag('groundL')} />
       <circle cx={rx} cy={rY} r={9} fill="#46d07f" style={{ cursor: 'grab' }} onPointerDown={startDrag('groundR')} />
-      <circle cx={g.leftContact.x} cy={g.leftContact.y} r={6} fill="#0e1014" stroke="#46d07f" strokeWidth={2} />
-      <circle cx={g.rightContact.x} cy={g.rightContact.y} r={6} fill="#0e1014" stroke="#46d07f" strokeWidth={2} />
+      <circle cx={g.leftContact.x} cy={g.leftContact.y} r={6} fill="#111111" stroke="#46d07f" strokeWidth={2} />
+      <circle cx={g.rightContact.x} cy={g.rightContact.y} r={6} fill="#111111" stroke="#46d07f" strokeWidth={2} />
       <text x={rx + 8} y={rY - 6} fontSize={13} fill="#46d07f">Ground plane</text>
 
       <g transform={`rotate(${h.rotation} ${h.centerX} ${h.centerY})`}>

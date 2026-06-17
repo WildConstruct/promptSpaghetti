@@ -108,7 +108,7 @@ function App() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: '#14161b',
+                background: '#181818',
                 color: '#9aa1ad'
               }}
             >

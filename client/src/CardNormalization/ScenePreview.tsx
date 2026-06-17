@@ -92,7 +92,7 @@ export const ScenePreview: React.FC<{ onClose: () => void }> = ({ onClose }) => 
       </div>
       <div className="cn-preview-stage">
         <svg viewBox={`0 0 ${SCENE.width} ${SCENE.height + 40}`} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block' }} role="img" aria-label="Scene composite preview">
-          <rect x="0" y="0" width={SCENE.width} height={SCENE.height + 40} fill="#0e1014" />
+          <rect x="0" y="0" width={SCENE.width} height={SCENE.height + 40} fill="#111111" />
           {normalized && metreLines.map(m => {
             const y = SCENE.groundY - m * PX_PER_M;
             if (y < 16) return null;
