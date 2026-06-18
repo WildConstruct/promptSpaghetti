@@ -52,7 +52,10 @@ describe('node visual theme', () => {
   it('exports the React Flow minimap prop contract used by the editor', () => {
     expect(epic1MinimapProps.nodeColor).toBe(getMinimapNodeColor);
     expect(epic1MinimapProps.nodeStrokeColor).toBe(getMinimapNodeStrokeColor);
-    expect(epic1MinimapProps.nodeStrokeWidth).toBe(getMinimapNodeStrokeWidth);
+    // React Flow's built-in MiniMap only accepts a number for nodeStrokeWidth
+    // (a function would be forwarded to <rect strokeWidth> and rejected by the
+    // DOM). The per-node helper is still used by CustomMinimap's own rects.
+    expect(epic1MinimapProps.nodeStrokeWidth).toBe(1);
     expect(epic1MinimapProps.nodeBorderRadius).toBe(3);
   });
 });

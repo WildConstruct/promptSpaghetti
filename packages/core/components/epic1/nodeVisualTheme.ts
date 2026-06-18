@@ -42,6 +42,10 @@ export function getMinimapNodeBorderRadius(node: Pick<Node, 'type'>): number {
 export const epic1MinimapProps = {
   nodeColor: getMinimapNodeColor,
   nodeStrokeColor: getMinimapNodeStrokeColor,
-  nodeStrokeWidth: getMinimapNodeStrokeWidth,
+  // React Flow's built-in <MiniMap> types nodeStrokeWidth as a plain number
+  // (only nodeColor/nodeStrokeColor accept a per-node function). Passing a
+  // function here makes RF forward it to <rect strokeWidth={fn}>, which React
+  // rejects. Use a constant; CustomMinimap still uses the per-node helper.
+  nodeStrokeWidth: 1,
   nodeBorderRadius: 3
 } as const;
