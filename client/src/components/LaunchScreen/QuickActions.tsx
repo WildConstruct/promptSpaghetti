@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import './QuickActions.css';
 import { quickStartTemplates } from '../../templates/quickStartTemplates';
+import {
+  FEATURED_TEMPLATE_IDS,
+  TEMPLATE_CATALOG
+} from '../../templates/templateCatalog';
 
 interface QuickActionsProps {
   onSelectTemplate: (templateId: string) => void;
@@ -280,6 +284,12 @@ const templates: Template[] = [
   }
 ];
 
+// The splash shows a curated subset; the rest live in the Explore browser.
+const FEATURED_ID_SET = new Set<string>([...FEATURED_TEMPLATE_IDS, 'empty']);
+const MORE_IN_EXPLORE = TEMPLATE_CATALOG.filter(
+  entry => !FEATURED_ID_SET.has(entry.id)
+).length;
+
 export const QuickActions: React.FC<QuickActionsProps> = ({
   onSelectTemplate
 }) => {
@@ -287,10 +297,13 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
     'all'
   );
 
+  // Curated launcher: only featured demos (+ Blank Canvas) surface here.
+  const featuredTemplates = templates.filter(t => FEATURED_ID_SET.has(t.id));
+
   const visibleTemplates =
     activeCategory === 'all'
-      ? templates
-      : templates.filter(
+      ? featuredTemplates
+      : featuredTemplates.filter(
           template => CATEGORY_BY_ID[template.id] === activeCategory
         );
 
@@ -304,8 +317,9 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         {CATEGORY_TABS.map(tab => {
           const count =
             tab.id === 'all'
-              ? templates.length
-              : templates.filter(t => CATEGORY_BY_ID[t.id] === tab.id).length;
+              ? featuredTemplates.length
+              : featuredTemplates.filter(t => CATEGORY_BY_ID[t.id] === tab.id)
+                  .length;
           return (
             <button
               key={tab.id}
@@ -368,6 +382,12 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
           Pick a category, then click an example to launch it. Branching
           examples show locked DNA, multi-branch choices, and nested branches.
         </p>
+        {MORE_IN_EXPLORE > 0 && (
+          <p className="hint hint-explore">
+            Looking for more? {MORE_IN_EXPLORE} additional demos live in the{' '}
+            <strong>Explore</strong> tab inside the editor.
+          </p>
+        )}
       </div>
     </div>
   );

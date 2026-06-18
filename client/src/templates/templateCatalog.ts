@@ -19,6 +19,11 @@ export interface TemplateCatalogEntry {
   category: TemplateCategory;
   /** True when the graph demonstrates WeightedChoice branching. */
   branching: boolean;
+  /**
+   * True for the curated subset shown on the splash launcher. The full set is
+   * always available in the in-editor "Explore" browser.
+   */
+  featured?: boolean;
 }
 
 export const TEMPLATE_CATEGORY_LABELS: Record<TemplateCategory, string> = {
@@ -33,7 +38,8 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     title: 'Character Archetype',
     description: 'Define shared character DNA with controlled trait variation',
     category: 'characters',
-    branching: false
+    branching: false,
+    featured: true
   },
   {
     id: 'gangsters',
@@ -41,7 +47,8 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     description:
       'Prohibition-era gangster: locked rank, role branches (enforcer/speakeasy), and a nested Tommy-gun branch',
     category: 'characters',
-    branching: true
+    branching: true,
+    featured: true
   },
   {
     id: 'underworld_skilltree',
@@ -72,7 +79,8 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     title: 'Indy 500 Crowd Card',
     description: 'Author race-day spectator card prompts for EraCrowd layout review',
     category: 'crowds',
-    branching: false
+    branching: false,
+    featured: true
   },
   {
     id: 'baseball_fans',
@@ -80,7 +88,8 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     description:
       'Ballpark spectator: locked era, fan-type branches (superfan/vendor), and a nested painted-face branch',
     category: 'crowds',
-    branching: true
+    branching: true,
+    featured: true
   },
   {
     id: 'punk_fans',
@@ -111,14 +120,16 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     description:
       'Environmental archetype with bounded facade and clutter variation',
     category: 'worlds',
-    branching: false
+    branching: false,
+    featured: true
   },
   {
     id: 'branching_family',
     title: 'Monster Truck Branching',
     description: 'Branch a creature-truck family into different scenario arcs',
     category: 'worlds',
-    branching: true
+    branching: true,
+    featured: true
   },
   {
     id: 'tech_panel',
@@ -137,6 +148,14 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     branching: true
   }
 ];
+
+/**
+ * Curated subset shown on the splash launcher. Everything not in this list
+ * stays discoverable in the in-editor "Explore" browser.
+ */
+export const FEATURED_TEMPLATE_IDS: string[] = TEMPLATE_CATALOG.filter(
+  entry => entry.featured
+).map(entry => entry.id);
 
 export const TEMPLATE_CATALOG_BY_ID: Record<string, TemplateCatalogEntry> =
   TEMPLATE_CATALOG.reduce(
