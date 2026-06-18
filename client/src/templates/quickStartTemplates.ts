@@ -98,12 +98,12 @@ function outputNode(id: string, x: number, y: number, outputName: string): Node<
 // Semantic region-box colours — Nuke/Substance-style documentation backdrops.
 // The same colour means the same technique in every Explore document.
 const REGION = {
-  dna: '#e6a23c', // Locked DNA (brand gold)
-  branch: '#4ecdc4', // Branching / branch-on-branch (teal)
-  prefix: '#7ed957', // Parts-of-speech prefix (green)
-  backdrop: '#ff8c42', // Extraction backdrop (orange)
-  merge: '#b794f6', // Styled merge / assembly (violet)
-  trait: '#c7ceea' // Subject traits / finish (neutral periwinkle)
+  dna: '#b87410', // Locked DNA (deep amber/gold)
+  branch: '#0f7d74', // Branching / branch-on-branch (deep teal)
+  prefix: '#1f8a39', // Parts-of-speech prefix (deep green)
+  backdrop: '#c25a14', // Extraction backdrop (rust orange)
+  merge: '#5b2fb0', // Styled merge / assembly (deep violet)
+  trait: '#39477f' // Subject traits / finish (deep slate-indigo)
 } as const;
 
 // A labelled, coloured region box that visually documents a section of a graph.
@@ -126,12 +126,14 @@ function regionBox(
     width,
     height,
     style: { width, height },
+    // Keep the backdrop behind the content nodes it groups.
+    zIndex: -10,
     data: {
       nodeType: 'enhancedBoundingBox',
       title,
       description,
       backgroundColor: color,
-      opacity: 0.08,
+      opacity: 0.32,
       borderColor: color,
       borderStyle: 'solid',
       borderWidth: 2,

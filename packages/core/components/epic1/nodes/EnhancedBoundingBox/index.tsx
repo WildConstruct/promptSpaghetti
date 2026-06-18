@@ -800,7 +800,11 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       `${effectiveSize.height}px`,
       'important'
     );
-  }, [effectiveSize]);
+    // Keep the region behind the content nodes it groups (it is a backdrop).
+    // React Flow elevates selected nodes, so pin this with priority — otherwise
+    // selecting a box would lift its translucent fill in front of the nodes.
+    wrapper.style.setProperty('z-index', '-1', 'important');
+  }, [effectiveSize, selected]);
 
   return (
     <div
@@ -838,7 +842,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
             data.backgroundColor || DEFAULT_REGION_COLORS[0],
             Math.max(data.opacity || 0.3, 0.15)
           ),
-          border: '2px dashed rgba(255, 100, 100, 0.8)',
+          border: 'none',
           borderRadius: `${BORDER_RADIUS}px`,
           zIndex: BACKGROUND,
           pointerEvents: 'none'
