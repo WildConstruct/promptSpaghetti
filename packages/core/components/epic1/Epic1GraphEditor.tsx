@@ -2311,6 +2311,19 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                     : { x: 0, y: 0 };
                   createNode('postItNote', flow);
                 }}
+                onAddBoundingBox={() => {
+                  const flow = reactFlowInstance
+                    ? reactFlowInstance.screenToFlowPosition({
+                        x: paneContextMenu.x,
+                        y: paneContextMenu.y
+                      })
+                    : { x: 0, y: 0 };
+                  // Center the default 400x300 region box on the click point.
+                  createNode('enhancedBoundingBox', {
+                    x: flow.x - 200,
+                    y: flow.y - 150
+                  });
+                }}
               />
             )}
 
