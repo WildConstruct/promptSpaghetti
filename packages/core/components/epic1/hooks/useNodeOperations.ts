@@ -283,11 +283,18 @@ export function useNodeOperations<NodeData = unknown>(
     [onNodeSelect]
   );
 
-  // Handle pane click (deselect)
+  // Handle pane click (deselect). Clear the editor-local id AND React Flow's
+  // own node.selected — the enhancedNodes derivation keeps a node visually
+  // selected if either is set, so both must be reset to truly deselect.
   const handlePaneClick = useCallback(() => {
     setSelectedNodeId(null);
+    setNodes(nds =>
+      nds.some(n => n.selected)
+        ? nds.map(n => (n.selected ? { ...n, selected: false } : n))
+        : nds
+    );
     onNodeSelect?.(null);
-  }, [onNodeSelect]);
+  }, [onNodeSelect, setNodes]);
 
   // Handle connection creation with single-input constraint
   const onConnect = useCallback(

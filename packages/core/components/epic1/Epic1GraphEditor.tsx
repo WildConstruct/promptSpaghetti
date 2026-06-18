@@ -2243,7 +2243,13 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               deleteKeyCode={['Delete', 'Backspace']}
               multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
               panOnScroll={false}
-              panOnDrag
+              // Left button selects (click) / marquee (drag); pan with
+              // middle/right drag or Space+drag. Previously panOnDrag={true}
+              // made every small left-drag a pan, so clicks-with-motion never
+              // registered as a select, and empty-pane clicks never deselected.
+              panOnDrag={[1, 2]}
+              selectionOnDrag
+              selectNodesOnDrag={false}
               panActivationKeyCode="Space"
               zoomOnScroll={true}
               zoomOnDoubleClick

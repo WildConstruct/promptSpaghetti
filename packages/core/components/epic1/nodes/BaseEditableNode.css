@@ -30,6 +30,17 @@
   min-width: 220px;
 }
 
+/* While editing, let the card grow to fit the inline editor instead of
+   cramping/clipping it inside the fixed 220px display width. Height already
+   grows with content (no fixed height; min-height is only a floor). */
+.epic1-editable-node.editing {
+  width: auto;
+  min-width: 280px;
+  max-width: 380px;
+  align-items: stretch;
+  cursor: default;
+}
+
 /* Remove ALL ReactFlow selection outlines and borders */
 .react-flow__node:focus,
 .react-flow__node:focus-visible,

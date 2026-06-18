@@ -66,9 +66,12 @@
   z-index: 1;
 }
 
-/* Fix dragging deadspots - ensure pane is interactive */
+/* The pane no longer pans on left-drag (left = select/marquee; pan is
+   middle/right-drag or Space+drag), so it must not force a grab cursor — the
+   old `grab !important` also bled through the pointer-events:none nodes layer
+   and showed the pan-hand over nodes. */
 .epic1-graph-editor .react-flow__pane {
-  cursor: grab !important;
+  cursor: default;
 }
 
 .epic1-graph-editor .react-flow__pane.dragging {

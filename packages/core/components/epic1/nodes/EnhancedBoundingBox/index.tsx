@@ -842,10 +842,17 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       `${effectiveSize.height}px`,
       'important'
     );
-    // Keep the region behind the content nodes it groups (it is a backdrop).
-    // React Flow elevates selected nodes, so pin this with priority — otherwise
-    // selecting a box would lift its translucent fill in front of the nodes.
-    wrapper.style.setProperty('z-index', '-1', 'important');
+    // When UNSELECTED, sit behind the content nodes it groups (it's a backdrop;
+    // the translucent fill reads behind the nodes). When SELECTED, lift above
+    // the nodes so the box is clickable and its resize handles/border are
+    // reachable — otherwise the whole box (handles included) is trapped behind
+    // the nodes and can't be grabbed. The fill briefly tinting nodes while the
+    // box is actively selected is an acceptable trade for being able to edit it.
+    wrapper.style.setProperty(
+      'z-index',
+      selected ? '1000' : '-1',
+      'important'
+    );
   }, [effectiveSize, selected]);
 
   const headerLayer = (
