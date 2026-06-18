@@ -505,23 +505,84 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       const title =
         TEMPLATE_CATALOG.find(entry => entry.id === id)?.title ?? 'document';
 
-      // Snapshot the current graph for recovery, then open. (Previously this
-      // gated on window.confirm, which silently cancelled the open whenever the
-      // dialog returned false — making it impossible to open a document over an
-      // existing graph. The recovery snapshot protects unsaved work instead.)
-      if (currentNodes.length > 0) {
-        void saveForRecovery(currentNodes, currentEdges);
+      const load = () => {
+        handleNodesChange(tmpl.nodes as Node[]);
+        handleEdgesChange(tmpl.edges as Edge[]);
+        setEditorKey(prev => prev + 1);
+        showToast(`Opened “${title}”`, 'success');
+      };
+
+      // Nothing on the canvas — nothing to lose, open straight away.
+      if (currentNodes.length === 0) {
+        load();
+        return;
       }
 
-      handleNodesChange(tmpl.nodes as Node[]);
-      handleEdgesChange(tmpl.edges as Edge[]);
-      setEditorKey(prev => prev + 1);
-      showToast(`Opened “${title}”`, 'success');
+      // Otherwise offer to save the current work before it's replaced.
+      // (A three-way Save / Discard / Cancel modal — unlike the old binary
+      // window.confirm, both Save and Discard open the document, so the common
+      // case never silently fails; Cancel is the only abort.)
+      const overlay = document.createElement('div');
+      overlay.className = 'confirm-modal-overlay';
+      overlay.style.cssText =
+        'position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:10001;';
+      const dialog = document.createElement('div');
+      dialog.style.cssText =
+        'background:#1b1e24;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:22px;min-width:420px;max-width:90vw;box-shadow:0 16px 40px rgba(0,0,0,0.55);color:#e8edf4;';
+      dialog.innerHTML = `
+        <h3 style="margin:0 0 10px;font-size:17px;color:#f1f6f9;">Open &ldquo;${title}&rdquo;?</h3>
+        <p style="margin:0 0 20px;font-size:13.5px;line-height:1.5;color:#c1cad3;">This replaces the current graph. Save your current work first, or discard it &mdash; it&rsquo;s kept for recovery either way.</p>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button data-act="cancel" style="padding:8px 14px;background:transparent;border:1px solid rgba(255,255,255,0.16);color:#c9d2db;border-radius:7px;cursor:pointer;font-size:13px;">Cancel</button>
+          <button data-act="discard" style="padding:8px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);color:#e8edf4;border-radius:7px;cursor:pointer;font-size:13px;">Discard &amp; open</button>
+          <button data-act="save" style="padding:8px 14px;background:#e6a23c;border:none;color:#1a1206;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;">Save &amp; open</button>
+        </div>`;
+      overlay.appendChild(dialog);
+      document.body.appendChild(overlay);
+      (dialog.querySelector('[data-act="save"]') as HTMLButtonElement)?.focus();
+
+      const close = () => {
+        document.removeEventListener('keydown', onKey);
+        if (overlay.parentNode) {
+          document.body.removeChild(overlay);
+        }
+      };
+      const choose = (act: string | undefined) => {
+        close();
+        if (act === 'cancel' || !act) {
+          return;
+        }
+        if (act === 'save') {
+          void handleSave(currentNodes, currentEdges);
+        } else {
+          void saveForRecovery(currentNodes, currentEdges);
+        }
+        load();
+      };
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          choose('cancel');
+        } else if (e.key === 'Enter') {
+          choose('save');
+        }
+      };
+      document.addEventListener('keydown', onKey);
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) {
+          choose('cancel');
+        }
+      });
+      dialog.querySelectorAll('button').forEach(btn =>
+        btn.addEventListener('click', () =>
+          choose((btn as HTMLElement).dataset.act)
+        )
+      );
     },
     [
       currentNodes,
       currentEdges,
       saveForRecovery,
+      handleSave,
       handleNodesChange,
       handleEdgesChange,
       showToast
