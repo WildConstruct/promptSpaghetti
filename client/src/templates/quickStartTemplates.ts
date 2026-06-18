@@ -95,6 +95,54 @@ function outputNode(id: string, x: number, y: number, outputName: string): Node<
   };
 }
 
+// Semantic region-box colours — Nuke/Substance-style documentation backdrops.
+// The same colour means the same technique in every Explore document.
+const REGION = {
+  dna: '#e6a23c', // Locked DNA (brand gold)
+  branch: '#4ecdc4', // Branching / branch-on-branch (teal)
+  prefix: '#7ed957', // Parts-of-speech prefix (green)
+  backdrop: '#ff8c42', // Extraction backdrop (orange)
+  merge: '#b794f6', // Styled merge / assembly (violet)
+  trait: '#c7ceea' // Subject traits / finish (neutral periwinkle)
+} as const;
+
+// A labelled, coloured region box that visually documents a section of a graph.
+// Containment is geometric, so nodes positioned inside the bounds become its
+// members automatically — no explicit child wiring needed.
+function regionBox(
+  id: string,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  color: string,
+  title: string,
+  description: string
+): Node<TemplateNodeData> {
+  return {
+    id,
+    type: 'enhancedBoundingBox',
+    position: { x, y },
+    width,
+    height,
+    style: { width, height },
+    data: {
+      nodeType: 'enhancedBoundingBox',
+      title,
+      description,
+      backgroundColor: color,
+      opacity: 0.08,
+      borderColor: color,
+      borderStyle: 'solid',
+      borderWidth: 2,
+      locked: false,
+      isCollapsed: false,
+      width,
+      height
+    }
+  };
+}
+
 // Custom template for character generation with choices - improved layout
 const characterTemplate: QuickStartTemplate = {
   nodes: [
@@ -257,6 +305,12 @@ const characterTemplate: QuickStartTemplate = {
 
 const vehicleFamilyTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('vehicle-region-dna', 52, 64, 336, 254, REGION.dna, 'Family DNA',
+      'The fixed design language every family member inherits.'),
+    regionBox('vehicle-region-traits', 402, -6, 336, 475, REGION.trait, 'Controlled variation',
+      'Paint and wear vary while the family design language stays fixed.'),
+    regionBox('vehicle-region-merge', 792, 79, 656, 214, REGION.merge, 'Assembly',
+      'The varied traits resolve into one family-member prompt.'),
     textNode(
       'vehicle-dna',
       80,
@@ -315,6 +369,12 @@ const vehicleFamilyTemplate: QuickStartTemplate = {
 
 const buildingFamilyTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('building-region-dna', 52, 74, 336, 254, REGION.dna, 'Family DNA',
+      'The fixed era and material language every facade inherits.'),
+    regionBox('building-region-traits', 402, 4, 336, 485, REGION.trait, 'Controlled variation',
+      'Signage and window dressing vary while the facade design stays fixed.'),
+    regionBox('building-region-merge', 792, 99, 656, 214, REGION.merge, 'Assembly',
+      'The varied traits resolve into one family-member prompt.'),
     textNode(
       'building-dna',
       80,
@@ -373,6 +433,12 @@ const buildingFamilyTemplate: QuickStartTemplate = {
 
 const branchingFamilyTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('monster-region-dna', 52, 234, 336, 254, REGION.dna, 'Archetype DNA',
+      'The shared monster-truck creature base every scenario branch inherits.'),
+    regionBox('monster-region-branch', 472, -26, 2156, 1025, REGION.branch, 'Scenario branching',
+      'The truck family branches into swamp / graveyard / desert arcs, each with its own details, scenario, and variant merge.'),
+    regionBox('monster-region-merge', 2632, 324, 676, 214, REGION.merge, 'Styled merge / assembly',
+      'Each arc resolves to a variant, then the final merge selects the monster-truck output.'),
     textNode(
       'monster-dna',
       80,
@@ -647,6 +713,12 @@ const branchingFamilyTemplate: QuickStartTemplate = {
 
 const indyCrowdCardTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('indy-region-dna', 52, 74, 336, 250, REGION.dna, 'Era / Venue DNA',
+      'The fixed 1960s Indy 500 card setting every spectator inherits.'),
+    regionBox('indy-region-traits', 492, -26, 336, 762, REGION.trait, 'Subject traits',
+      'Spectator role, wardrobe, and pose cue — varied per card.'),
+    regionBox('indy-region-merge', 892, 64, 1016, 460, REGION.merge, 'Styled merge / assembly',
+      'Person and card constraints resolve into one EraCrowd card prompt.'),
     textNode(
       'indy-dna',
       80,
@@ -753,6 +825,12 @@ const indyCrowdCardTemplate: QuickStartTemplate = {
 // phosphor choice itself branches on "amber"). Exactly one path fires per roll.
 const techPanelTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('tp-region-dna', 52, 74, 336, 552, REGION.dna, 'Locked DNA',
+      'Panel DNA plus a locked aesthetic, so the retro-futuristic look never drifts.'),
+    regionBox('tp-region-branch', 452, -6, 1616, 902, REGION.branch, 'Multi-branch + nested',
+      'Screen type branches into CRT / vector / LED / no-screen, and the CRT path branches again on phosphor colour.'),
+    regionBox('tp-region-merge', 2132, 254, 696, 214, REGION.merge, 'Styled merge / assembly',
+      'Archetype and screen branches fan in, then Assemble joins everything into one comma-separated prompt.'),
     textNode(
       'tp-dna',
       80,
@@ -865,6 +943,14 @@ const techPanelTemplate: QuickStartTemplate = {
 // derelict row → decay), and a nested branch (decay → fire-gutted → scorch).
 const tileBuilderTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('tile-region-dna', 52, 74, 336, 552, REGION.dna, 'Locked DNA',
+      'Tile DNA plus a locked block scale, so tiles stay grid-compatible.'),
+    regionBox('tile-region-branch', 452, 14, 1616, 614, REGION.branch, 'Multi-branch + nested',
+      'Structure branches into skyscraper / derelict paths; the decay path branches again on fire damage.'),
+    regionBox('tile-region-traits', 452, 634, 336, 505, REGION.trait, 'Subject traits',
+      'Height and urban context that finish the tile.'),
+    regionBox('tile-region-merge', 2132, 314, 696, 214, REGION.merge, 'Styled merge / assembly',
+      'Structure branches fan in, then Assemble joins everything into one comma-separated prompt.'),
     textNode(
       'tile-dna',
       80,
@@ -909,13 +995,13 @@ const tileBuilderTemplate: QuickStartTemplate = {
     ),
     concatNode('tile-decay-merge', 1320, 460, 'Decay Merge'),
     concatNode('tile-type-merge', 1760, 300, 'Structure Merge'),
-    weightedChoiceNode('tile-height', 480, 480, 'Height', [
+    weightedChoiceNode('tile-height', 480, 680, 'Height', [
       { id: 'ht-1', text: '2 stories tall', weight: 30 },
       { id: 'ht-2', text: '5 stories tall', weight: 30 },
       { id: 'ht-3', text: '20 stories tall', weight: 25 },
       { id: 'ht-4', text: '50+ stories tall', weight: 15 }
     ]),
-    weightedChoiceNode('tile-context', 480, 660, 'Urban Context', [
+    weightedChoiceNode('tile-context', 480, 900, 'Urban Context', [
       { id: 'cx-1', text: 'in a busy downtown core', weight: 34 },
       { id: 'cx-2', text: 'on a quiet residential street', weight: 33 },
       { id: 'cx-3', text: 'along a gritty industrial edge', weight: 33 }
@@ -948,6 +1034,17 @@ const tileBuilderTemplate: QuickStartTemplate = {
 // weapon, speakeasy owner → venue), and a nested branch (Tommy gun → drum mag).
 const gangsterTemplate: QuickStartTemplate = {
   nodes: [
+    // Documentation backdrops (UI-only; colour = technique, see REGION legend).
+    regionBox('gang-region-dna', 52, 56, 336, 548, REGION.dna, 'Locked DNA',
+      'Fixed identity — base prompt plus a rank where one option is locked, so it never varies.'),
+    regionBox('gang-region-branch', 452, -24, 1576, 589, REGION.branch, 'Branch → sub-branch',
+      'Role reveals an Enforcer Weapon or a Tell; the Tommy gun reveals a drum-magazine detail — branching on branching.'),
+    regionBox('gang-region-prefix', 52, 616, 736, 289, REGION.prefix, 'Parts-of-speech prefix',
+      'A Wear modifier wires into Attire and prepends to it (implicit concat, no Merge) — “rumpled pinstripe suit”.'),
+    regionBox('gang-region-backdrop', 452, 916, 336, 386, REGION.backdrop, 'Extraction backdrop',
+      'Neutral light-gray plate so the subject mattes cleanly; the real location is composited later.'),
+    regionBox('gang-region-merge', 2092, 276, 696, 212, REGION.merge, 'Styled merge / assembly',
+      'Merge nodes fan the branches together, then Assemble joins everything into one comma-separated prompt.'),
     textNode(
       'gang-dna',
       80,
@@ -991,19 +1088,19 @@ const gangsterTemplate: QuickStartTemplate = {
     // Prefix setup (parts-of-speech): a Wear modifier wires straight into the
     // Attire choice and prepends to it (implicit concat, no Merge) — e.g.
     // "rumpled double-breasted pinstripe suit".
-    weightedChoiceNode('gang-attire-wear', 80, 460, 'Wear', [
+    weightedChoiceNode('gang-attire-wear', 80, 660, 'Wear', [
       { id: 'aw-1', text: 'crisp', weight: 34 },
       { id: 'aw-2', text: 'rumpled', weight: 33 },
       { id: 'aw-3', text: 'rain-damp', weight: 33 }
     ]),
-    weightedChoiceNode('gang-attire', 480, 460, 'Attire', [
+    weightedChoiceNode('gang-attire', 480, 660, 'Attire', [
       { id: 'at-1', text: 'double-breasted pinstripe suit', weight: 34 },
       { id: 'at-2', text: 'fedora and long wool overcoat', weight: 33 },
       { id: 'at-3', text: 'waistcoat with sleeves rolled up', weight: 33 }
     ]),
     // Extraction plate: neutral gray backdrop (the location is composited later),
     // not a described environment.
-    weightedChoiceNode('gang-backdrop', 480, 640, 'Backdrop', [
+    weightedChoiceNode('gang-backdrop', 480, 960, 'Backdrop', [
       { id: 'bd-1', text: 'against a flat neutral light-gray studio backdrop, soft even lighting, no harsh shadows', weight: 34 },
       { id: 'bd-2', text: 'on a seamless pale-gray sweep, soft even lighting, clean edges for extraction', weight: 33 },
       { id: 'bd-3', text: 'before an even mid-gray cyclorama, diffuse lighting, full body in frame', weight: 33 }
@@ -1039,6 +1136,16 @@ const gangsterTemplate: QuickStartTemplate = {
 // the world.
 const underworldTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('uw-region-dna', 52, 74, 336, 552, REGION.dna, 'Locked DNA',
+      'Underworld DNA plus a locked era, so the period never drifts.'),
+    regionBox('uw-region-branch', 452, -26, 1856, 855, REGION.branch, 'Three-level branching',
+      'Trade opens dock / heist / bootleg skill trees, each branching again into its own specialty — branching on branching on branching.'),
+    regionBox('uw-region-traits', 52, 834, 736, 285, REGION.trait, 'Subject traits',
+      'Build and attire that finish the character.'),
+    regionBox('uw-region-backdrop', 852, 834, 336, 405, REGION.backdrop, 'Extraction backdrop',
+      'Neutral light-gray plate; the location is composited later.'),
+    regionBox('uw-region-merge', 2332, 308, 724, 284, REGION.merge, 'Styled merge / assembly',
+      'Each tree merges, the trade merge fans them in, then Assemble joins everything into one prompt.'),
     textNode('uw-dna', 80, 120, 'Underworld DNA', '1930s Chicago underworld, Prohibition era, gritty film-noir period photograph, single full-body character'),
     weightedChoiceNode('uw-era', 80, 340, 'Era (locked DNA)', [
       { id: 'er-1', text: 'in the early Prohibition years', weight: 25 },
@@ -1083,18 +1190,18 @@ const underworldTemplate: QuickStartTemplate = {
     ]),
     concatNode('uw-boot-merge', 1700, 620, 'Bootleg Merge'),
     concatNode('uw-trade-merge', 2000, 360, 'Trade Merge'),
-    weightedChoiceNode('uw-build', 480, 520, 'Build', [
+    weightedChoiceNode('uw-build', 80, 880, 'Build', [
       { id: 'bd-1', text: 'lean and wiry', weight: 34 },
       { id: 'bd-2', text: 'thick-necked and heavy-set', weight: 33 },
       { id: 'bd-3', text: 'average and forgettable', weight: 33 }
     ]),
-    weightedChoiceNode('uw-attire', 480, 680, 'Attire', [
+    weightedChoiceNode('uw-attire', 480, 880, 'Attire', [
       { id: 'aw-1', text: 'in a rumpled three-piece suit', weight: 34 },
       { id: 'aw-2', text: 'in a flat cap and rough work clothes', weight: 33 },
       { id: 'aw-3', text: 'in shirtsleeves and suspenders', weight: 33 }
     ]),
     // Extraction plate: neutral gray backdrop (location composited later).
-    weightedChoiceNode('uw-backdrop', 480, 840, 'Backdrop', [
+    weightedChoiceNode('uw-backdrop', 880, 880, 'Backdrop', [
       { id: 'sw-1', text: 'against a flat neutral light-gray studio backdrop, soft even lighting, no harsh shadows', weight: 34 },
       { id: 'sw-2', text: 'on a seamless pale-gray sweep, soft even lighting, clean edges for extraction', weight: 33 },
       { id: 'sw-3', text: 'before an even mid-gray cyclorama, diffuse lighting, full body in frame', weight: 33 }
@@ -1133,6 +1240,16 @@ const underworldTemplate: QuickStartTemplate = {
 // -> gear, vendor -> cart), nested branch (superfan painted-face -> team colors).
 const baseballTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('bb-region-dna', 52, 54, 336, 552, REGION.dna, 'Locked DNA',
+      'Spectator DNA plus a locked era, so the period never drifts.'),
+    regionBox('bb-region-branch', 452, -26, 1576, 585, REGION.branch, 'Branch → sub-branch',
+      'Fan type reveals a Superfan Gear path or a Vendor Cart; superfan gear reveals a team-colors detail.'),
+    regionBox('bb-region-traits', 452, 594, 336, 285, REGION.trait, 'Subject traits',
+      'Wardrobe variation layered on top of the fan identity.'),
+    regionBox('bb-region-backdrop', 452, 894, 336, 405, REGION.backdrop, 'Extraction backdrop',
+      'Neutral light-gray plate; the ballpark is composited later.'),
+    regionBox('bb-region-merge', 2092, 274, 696, 214, REGION.merge, 'Styled merge / assembly',
+      'Fan branches fan in, then Assemble joins everything into one comma-separated prompt.'),
     textNode('bb-dna', 80, 100, 'Spectator DNA', 'Baseball game spectator, single full-body card, sunny afternoon at the ballpark, candid documentary photo'),
     weightedChoiceNode('bb-era', 80, 320, 'Era (locked DNA)', [
       { id: 'be-1', text: 'in the 1950s', weight: 25 },
@@ -1159,13 +1276,13 @@ const baseballTemplate: QuickStartTemplate = {
       { id: 'bc-3', text: 'balancing a tray of cold beer', weight: 33 }
     ]),
     concatNode('bb-fan-merge', 1720, 240, 'Fan Merge'),
-    weightedChoiceNode('bb-attire', 480, 460, 'Attire', [
+    weightedChoiceNode('bb-attire', 480, 640, 'Attire', [
       { id: 'ba-1', text: 'in a short-sleeve button-up and ballcap', weight: 34 },
       { id: 'ba-2', text: 'in a team windbreaker', weight: 33 },
       { id: 'ba-3', text: 'in a sun hat and sunglasses', weight: 33 }
     ]),
     // Extraction plate: neutral gray backdrop (stadium composited later).
-    weightedChoiceNode('bb-seat', 480, 640, 'Backdrop', [
+    weightedChoiceNode('bb-seat', 480, 940, 'Backdrop', [
       { id: 'bs-1', text: 'against a flat neutral light-gray studio backdrop, soft even lighting, no harsh shadows', weight: 34 },
       { id: 'bs-2', text: 'on a seamless pale-gray sweep, soft even lighting, clean edges for extraction', weight: 33 },
       { id: 'bs-3', text: 'before an even mid-gray cyclorama, diffuse lighting, full body in frame', weight: 33 }
@@ -1195,6 +1312,14 @@ const baseballTemplate: QuickStartTemplate = {
 // spikes -> texture), nested branch (mohawk -> bleached -> roots detail).
 const punkTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('pk-region-dna', 52, 54, 336, 552, REGION.dna, 'Locked DNA',
+      'Punk DNA plus a locked basement-show scene that never drifts.'),
+    regionBox('pk-region-branch', 452, -26, 1576, 585, REGION.branch, 'Branch → sub-branch',
+      'Look branches into a Mohawk Color path or Liberty Spikes; the bleached mohawk reveals a roots detail.'),
+    regionBox('pk-region-traits', 452, 594, 336, 545, REGION.trait, 'Subject traits',
+      'Activity and extra detail that finish the character.'),
+    regionBox('pk-region-merge', 2092, 274, 696, 214, REGION.merge, 'Styled merge / assembly',
+      'Look branches fan in, then Assemble joins everything into one comma-separated prompt.'),
     textNode('pk-dna', 80, 100, 'Punk DNA', '1980s punk concert goer at a sweaty basement show, gritty on-camera flash photography'),
     weightedChoiceNode('pk-scene', 80, 320, 'Scene (locked DNA)', [
       { id: 'ps-1', text: 'from the UK street-punk scene', weight: 25 },
@@ -1221,12 +1346,12 @@ const punkTemplate: QuickStartTemplate = {
       { id: 'pp-3', text: 'wild and uneven', weight: 33 }
     ]),
     concatNode('pk-look-merge', 1720, 240, 'Look Merge'),
-    weightedChoiceNode('pk-act', 480, 460, 'Activity', [
+    weightedChoiceNode('pk-act', 480, 640, 'Activity', [
       { id: 'pa-1', text: 'thrashing in the mosh pit', weight: 34 },
       { id: 'pa-2', text: 'mid stage-dive over the crowd', weight: 33 },
       { id: 'pa-3', text: 'shouting along at the barricade', weight: 33 }
     ]),
-    weightedChoiceNode('pk-extra', 480, 640, 'Detail', [
+    weightedChoiceNode('pk-extra', 480, 900, 'Detail', [
       { id: 'px-1', text: 'covered in band-patch pins', weight: 34 },
       { id: 'px-2', text: 'with smeared eyeliner and sweat', weight: 33 },
       { id: 'px-3', text: 'gripping a crushed beer can', weight: 33 }
@@ -1256,6 +1381,14 @@ const punkTemplate: QuickStartTemplate = {
 // teen -> milkshake), nested branch (trucker blue-plate -> gravy detail).
 const dinerTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('dn-region-dna', 52, 54, 336, 552, REGION.dna, 'Locked DNA',
+      'Diner DNA plus a locked time of day, so the lighting never drifts.'),
+    regionBox('dn-region-branch', 452, -26, 1576, 610, REGION.branch, 'Branch → sub-branch',
+      'Patron type reveals a trucker-meal path or a teen-milkshake path; the blue-plate special reveals a gravy detail.'),
+    regionBox('dn-region-traits', 452, 594, 336, 545, REGION.trait, 'Subject traits',
+      'Attire and mood that finish the patron.'),
+    regionBox('dn-region-merge', 2092, 274, 696, 214, REGION.merge, 'Styled merge / assembly',
+      'Patron branches fan in, then Assemble joins everything into one comma-separated prompt.'),
     textNode('dn-dna', 80, 100, 'Diner DNA', '1950s American roadside diner patron, chrome-and-vinyl booth, warm tungsten light, candid photo'),
     weightedChoiceNode('dn-time', 80, 320, 'Time of Day (locked DNA)', [
       { id: 'dt-1', text: 'at the early-morning rush', weight: 25 },
@@ -1282,12 +1415,12 @@ const dinerTemplate: QuickStartTemplate = {
       { id: 'dk-3', text: 'over a single cherry cola', weight: 33 }
     ]),
     concatNode('dn-patron-merge', 1720, 240, 'Patron Merge'),
-    weightedChoiceNode('dn-attire', 480, 460, 'Attire', [
+    weightedChoiceNode('dn-attire', 480, 640, 'Attire', [
       { id: 'da-1', text: 'in a worn work jacket', weight: 34 },
       { id: 'da-2', text: 'in a letterman sweater', weight: 33 },
       { id: 'da-3', text: 'in a rumpled suit and loosened tie', weight: 33 }
     ]),
-    weightedChoiceNode('dn-mood', 480, 640, 'Mood', [
+    weightedChoiceNode('dn-mood', 480, 900, 'Mood', [
       { id: 'do-1', text: 'looking weary under the neon', weight: 34 },
       { id: 'do-2', text: 'laughing at the counter', weight: 33 },
       { id: 'do-3', text: 'staring out at the rainy lot', weight: 33 }
@@ -1317,10 +1450,20 @@ const dinerTemplate: QuickStartTemplate = {
 // hunter -> weapon, stranger -> poncho), nested branch (twin revolvers -> engraving).
 const westernTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('ws-region-dna', 52, 54, 336, 254, REGION.dna, 'Locked DNA',
+      'Western DNA — the sun-bleached frontier look the whole card inherits.'),
+    regionBox('ws-region-backdrop', 52, 334, 336, 405, REGION.backdrop, 'Extraction backdrop (locked)',
+      'Locked neutral gray plate; the frontier location is composited later.'),
+    regionBox('ws-region-branch', 452, -26, 1576, 585, REGION.branch, 'Branch → sub-branch',
+      'Archetype branches into a bounty-hunter weapon path or a stranger’s poncho; twin revolvers reveal an engraving detail.'),
+    regionBox('ws-region-traits', 452, 594, 336, 625, REGION.trait, 'Subject traits',
+      'Attire and stance that finish the character — pose only, no environment.'),
+    regionBox('ws-region-merge', 2092, 274, 696, 214, REGION.merge, 'Styled merge / assembly',
+      'Archetype branches fan in, then Assemble joins everything into one comma-separated prompt.'),
     textNode('ws-dna', 80, 100, 'Western DNA', 'Spaghetti western character, sun-bleached frontier, Sergio Leone wide-angle grit, dust and heat haze'),
     // Extraction plate: neutral gray backdrop (frontier location composited
     // later). Locked so the plate stays consistent for clean extraction.
-    weightedChoiceNode('ws-town', 80, 320, 'Backdrop (locked)', [
+    weightedChoiceNode('ws-town', 80, 380, 'Backdrop (locked)', [
       { id: 'wt-1', text: 'against a flat neutral light-gray studio backdrop, soft even lighting, no harsh shadows', weight: 25, locked: true },
       { id: 'wt-2', text: 'on a seamless pale-gray sweep, soft even lighting, clean edges for extraction', weight: 25 },
       { id: 'wt-3', text: 'before an even mid-gray cyclorama, diffuse lighting, full body in frame', weight: 25 }
@@ -1344,13 +1487,13 @@ const westernTemplate: QuickStartTemplate = {
       { id: 'wp-3', text: 'in a weather-beaten duster coat', weight: 33 }
     ]),
     concatNode('ws-arch-merge', 1720, 240, 'Archetype Merge'),
-    weightedChoiceNode('ws-attire', 480, 460, 'Attire', [
+    weightedChoiceNode('ws-attire', 480, 640, 'Attire', [
       { id: 'wr-1', text: 'in a sweat-stained hat and worn boots', weight: 34 },
       { id: 'wr-2', text: 'with a tin star and leather vest', weight: 33 },
       { id: 'wr-3', text: 'in a bandana and spurred boots', weight: 33 }
     ]),
     // Pose only — no environment (location composited later).
-    weightedChoiceNode('ws-scene', 480, 640, 'Stance', [
+    weightedChoiceNode('ws-scene', 480, 920, 'Stance', [
       { id: 'wn-1', text: 'squinting hard, hand hovering over the holster', weight: 34 },
       { id: 'wn-2', text: 'thumbs hooked in the gun belt, weight on one hip', weight: 33 },
       { id: 'wn-3', text: 'coat swept back, ready to draw', weight: 33 }
@@ -1380,6 +1523,14 @@ const westernTemplate: QuickStartTemplate = {
 // (forge -> wares, tavern -> sign), nested branch (forge swords/armor -> quality).
 const villageTemplate: QuickStartTemplate = {
   nodes: [
+    regionBox('mv-region-dna', 52, 54, 336, 552, REGION.dna, 'Locked DNA',
+      'Village DNA plus a locked era, so the period never drifts.'),
+    regionBox('mv-region-branch', 452, -26, 1576, 585, REGION.branch, 'Branch → sub-branch',
+      'Focal structure branches into a forge path or a tavern path; the forge reveals a swords-and-armor quality detail.'),
+    regionBox('mv-region-traits', 452, 594, 336, 545, REGION.trait, 'Scene dressing',
+      'Inhabitants and weather that populate and light the scene.'),
+    regionBox('mv-region-merge', 2092, 274, 696, 214, REGION.merge, 'Styled merge / assembly',
+      'Structure branches fan in, then Assemble joins everything into one comma-separated prompt.'),
     textNode('mv-dna', 80, 100, 'Village DNA', 'Medieval European village scene, muddy lanes, timber-framed buildings, overcast painterly light'),
     weightedChoiceNode('mv-era', 80, 320, 'Era (locked DNA)', [
       { id: 'mr-1', text: 'in the early medieval period', weight: 25 },
@@ -1406,12 +1557,12 @@ const villageTemplate: QuickStartTemplate = {
       { id: 'mg-3', text: 'past a creaking wheat-sheaf sign', weight: 33 }
     ]),
     concatNode('mv-focus-merge', 1720, 240, 'Focus Merge'),
-    weightedChoiceNode('mv-folk', 480, 460, 'Inhabitants', [
+    weightedChoiceNode('mv-folk', 480, 640, 'Inhabitants', [
       { id: 'mk-1', text: 'with peasants hauling baskets to market', weight: 34 },
       { id: 'mk-2', text: 'with children chasing a stray goose', weight: 33 },
       { id: 'mk-3', text: 'with a friar crossing the square', weight: 33 }
     ]),
-    weightedChoiceNode('mv-weather', 480, 640, 'Weather', [
+    weightedChoiceNode('mv-weather', 480, 900, 'Weather', [
       { id: 'me-1', text: 'under a low grey drizzle', weight: 34 },
       { id: 'me-2', text: 'in thin morning mist', weight: 33 },
       { id: 'me-3', text: 'in pale watery sunlight', weight: 33 }
