@@ -1,14 +1,14 @@
 {
   "version": "1.0.0",
-  "name": "Roman Citizen Automa Greenscreen",
-  "description": "Randomizable Roman citizen prompts for Automa-style greenscreen generation.",
+  "name": "Roman Citizen Automa",
+  "description": "Randomizable Roman citizen prompts for Automa-style neutral-backdrop generation.",
   "metadata": {
     "type": "ASSET_FRAGMENT",
     "category": "characters",
     "tags": [
       "roman",
       "automa",
-      "greenscreen",
+      "neutral-backdrop",
       "extras"
     ],
     "original_version": "0.3.0",
@@ -309,7 +309,7 @@
       "options": [
         {
           "id": "lighting-soft",
-          "text": "soft, even studio lighting with minimal shadows, flat greenscreen background for clean matte extraction",
+          "text": "soft, even studio lighting with minimal shadows, neutral light-gray seamless backdrop for clean matte extraction",
           "weight": 100
         }
       ]

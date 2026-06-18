@@ -356,8 +356,8 @@
     },
     {
       "id": "fragment-roman-citizen",
-      "name": "Roman Citizen Automa Greenscreen",
-      "description": "Randomizable Roman citizen prompts for Automa-style greenscreen generation.",
+      "name": "Roman Citizen Automa",
+      "description": "Randomizable Roman citizen prompts for Automa-style neutral-backdrop generation.",
       "path": "./characters/roman-citizen.psg",
       "category": "characters",
       "tags": [
