@@ -10,7 +10,7 @@ export interface DocumentSummary {
   id: string;
   title: string;
   description: string;
-  /** Category key used for the filter chips. */
+  /** Category key used for the folder tree. */
   category: string;
   /** Human-readable category label (falls back to the key). */
   categoryLabel?: string;
@@ -25,12 +25,17 @@ export interface DocumentLibraryPanelProps {
 
 const ALL = '__all__';
 
+/**
+ * Kontakt-style document browser: a category folder tree on top, a Name list
+ * in the middle, and a description pane at the bottom. Single-click selects a
+ * row (populating the description); double-click or the Open button loads it.
+ */
 export const DocumentLibraryPanel: React.FC<DocumentLibraryPanelProps> = ({
   documents,
   onOpenDocument
 }) => {
   const [activeCategory, setActiveCategory] = useState<string>(ALL);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const categories = useMemo(() => {
     const seen = new Map<string, string>();
@@ -50,11 +55,18 @@ export const DocumentLibraryPanel: React.FC<DocumentLibraryPanelProps> = ({
     [documents, activeCategory]
   );
 
+  const selectedDoc = useMemo(
+    () => documents.find(doc => doc.id === selectedId) ?? null,
+    [documents, selectedId]
+  );
+
   if (documents.length === 0) {
     return (
-      <div className="document-library">
-        <div className="document-library-empty">
-          <strong className="document-library-empty-title">No documents available</strong>
+      <div className="doc-browser">
+        <div className="doc-browser-empty">
+          <strong className="doc-browser-empty-title">
+            No documents available
+          </strong>
           <span>
             Full PSG-document templates will appear here — the same examples you
             see on the launch screen, ready to open without leaving the editor.
@@ -65,22 +77,23 @@ export const DocumentLibraryPanel: React.FC<DocumentLibraryPanelProps> = ({
   }
 
   return (
-    <div className="document-library">
-      <div className="document-library-intro">
-        Click a document to open it (the chevron previews it first). Opening
-        replaces the current graph; your previous work is kept for recovery.
-      </div>
-
-      <div className="document-library-nav" role="tablist" aria-label="Document categories">
+    <div className="doc-browser">
+      {/* Folder tree */}
+      <div className="doc-browser-tree" role="tree" aria-label="Document folders">
         <button
           type="button"
-          role="tab"
+          role="treeitem"
           aria-selected={activeCategory === ALL}
-          className={`document-library-chip ${activeCategory === ALL ? 'active' : ''}`}
+          className={`doc-tree-item doc-tree-root ${
+            activeCategory === ALL ? 'active' : ''
+          }`}
           onClick={() => setActiveCategory(ALL)}
         >
-          All
-          <span className="document-library-count">{documents.length}</span>
+          <span className="doc-tree-icon" aria-hidden>
+            ▾
+          </span>
+          <span className="doc-tree-label">All Documents</span>
+          <span className="doc-tree-count">{documents.length}</span>
         </button>
         {categories.map(cat => {
           const count = documents.filter(d => d.category === cat.id).length;
@@ -88,82 +101,91 @@ export const DocumentLibraryPanel: React.FC<DocumentLibraryPanelProps> = ({
             <button
               key={cat.id}
               type="button"
-              role="tab"
+              role="treeitem"
               aria-selected={activeCategory === cat.id}
-              className={`document-library-chip ${activeCategory === cat.id ? 'active' : ''}`}
+              className={`doc-tree-item doc-tree-child ${
+                activeCategory === cat.id ? 'active' : ''
+              }`}
               onClick={() => setActiveCategory(cat.id)}
             >
-              {cat.label}
-              <span className="document-library-count">{count}</span>
+              <span className="doc-tree-icon" aria-hidden>
+                🗀
+              </span>
+              <span className="doc-tree-label">{cat.label}</span>
+              <span className="doc-tree-count">{count}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="document-library-list">
-        {visible.map(doc => {
-          const isExpanded = expandedId === doc.id;
-          return (
-            <div
-              key={doc.id}
-              className={`document-library-card ${isExpanded ? 'is-expanded' : ''}`}
-              data-testid={`explore-document-${doc.id}`}
-            >
-              <div className="document-library-card-header">
-                {/* Primary action: open the document. */}
-                <button
-                  type="button"
-                  className="document-library-card-main"
-                  onClick={() => onOpenDocument?.(doc.id)}
-                  title={`Open “${doc.title}”`}
-                >
-                  <span className="document-library-card-title">{doc.title}</span>
-                  <span className="document-library-card-meta">
-                    {doc.branching && (
-                      <span className="document-library-tag document-library-tag-branching">
-                        ⑂ Branching
-                      </span>
-                    )}
-                    {typeof doc.nodeCount === 'number' && (
-                      <span className="document-library-tag">{doc.nodeCount} nodes</span>
-                    )}
-                  </span>
-                </button>
-                {/* Secondary action: toggle the inline preview. */}
-                <button
-                  type="button"
-                  className="document-library-card-toggle"
-                  aria-expanded={isExpanded}
-                  aria-label={isExpanded ? `Hide preview of ${doc.title}` : `Preview ${doc.title}`}
-                  onClick={() =>
-                    setExpandedId(current => (current === doc.id ? null : doc.id))
-                  }
-                  title={isExpanded ? 'Hide preview' : 'Preview'}
-                >
-                  <span className="document-library-card-chevron" aria-hidden>
-                    ›
-                  </span>
-                </button>
-              </div>
+      {/* File list */}
+      <div className="doc-browser-list-wrap">
+        <div className="doc-browser-list-head">
+          <span className="doc-col-name">Name</span>
+          <span className="doc-col-type">Type</span>
+        </div>
+        <div className="doc-browser-list" role="listbox" aria-label="Documents">
+          {visible.map(doc => {
+            const isSelected = selectedId === doc.id;
+            return (
+              <button
+                key={doc.id}
+                type="button"
+                role="option"
+                aria-selected={isSelected}
+                className={`doc-row ${isSelected ? 'selected' : ''}`}
+                onClick={() => setSelectedId(doc.id)}
+                onDoubleClick={() => onOpenDocument?.(doc.id)}
+                title={`Double-click to open “${doc.title}”`}
+                data-testid={`explore-document-${doc.id}`}
+              >
+                <span className="doc-row-icon" aria-hidden>
+                  ▤
+                </span>
+                <span className="doc-row-name">{doc.title}</span>
+                <span className="doc-row-tags">
+                  {doc.branching && (
+                    <span className="doc-tag doc-tag-branching">⑂</span>
+                  )}
+                  {typeof doc.nodeCount === 'number' && (
+                    <span className="doc-tag">{doc.nodeCount}</span>
+                  )}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-              {isExpanded && (
-                <div className="document-library-card-body">
-                  <p className="document-library-card-description">
-                    {doc.description}
-                  </p>
-                  <button
-                    type="button"
-                    className="document-library-open-btn"
-                    onClick={() => onOpenDocument?.(doc.id)}
-                  >
-                    Open in editor
-                    <span aria-hidden> →</span>
-                  </button>
-                </div>
-              )}
+      {/* Description pane */}
+      <div className="doc-browser-detail">
+        {selectedDoc ? (
+          <>
+            <div className="doc-detail-head">
+              <span className="doc-detail-title">{selectedDoc.title}</span>
+              <span className="doc-detail-meta">
+                {selectedDoc.categoryLabel ?? selectedDoc.category}
+                {selectedDoc.branching ? ' · Branching' : ''}
+                {typeof selectedDoc.nodeCount === 'number'
+                  ? ` · ${selectedDoc.nodeCount} nodes`
+                  : ''}
+              </span>
             </div>
-          );
-        })}
+            <p className="doc-detail-desc">{selectedDoc.description}</p>
+            <button
+              type="button"
+              className="doc-detail-open"
+              onClick={() => onOpenDocument?.(selectedDoc.id)}
+            >
+              Open in editor<span aria-hidden> →</span>
+            </button>
+          </>
+        ) : (
+          <p className="doc-detail-empty">
+            Select a document to preview its description, then double-click the
+            row or press <strong>Open in editor</strong>.
+          </p>
+        )}
       </div>
     </div>
   );
