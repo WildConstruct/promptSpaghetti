@@ -160,6 +160,19 @@ export const SERVER_ROUTE_CATALOG: ServerRouteSurface[] = [
       'Output access for the local-only sandbox lane. Generated files stay on the local machine.'
   },
   {
+    id: 'local-fragments-save',
+    paths: ['/api/local-fragments/save', '/api/local-fragments/list'],
+    methods: ['GET', 'POST'],
+    purpose: 'List and save user-authored PSG fragments in a local documents folder.',
+    storyRole: 'storage',
+    accessTier: 'local-only',
+    visibility: 'local-only',
+    authRequired: false,
+    rateLimit: 'none',
+    notes:
+      'Local-first fragment persistence. The hosted Supabase path can later mirror this user-fragment contract.'
+  },
+  {
     id: 'agent-draft-graph',
     paths: ['/api/agent/draft-graph'],
     methods: ['POST'],

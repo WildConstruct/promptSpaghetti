@@ -13,6 +13,7 @@ type EditorSurfaceId =
   | 'document.open'
   | 'document.save'
   | 'document.saveAs'
+  | 'document.saveRegionFragment'
   | 'document.localOpen'
   | 'document.exportPsg'
   | 'handoff.comfy'
@@ -49,6 +50,7 @@ interface EditorSurfacePolicyActions {
   onOpen?: () => void;
   onSave?: () => void;
   onSaveAs?: () => void;
+  onSaveRegionFragment?: () => void;
   onImport?: () => void;
   onExport?: () => void;
   onExportComfy?: () => void;
@@ -64,6 +66,7 @@ interface EditorSurfacePolicyActions {
   onReportBug?: () => void;
   onChangelog?: () => void;
   onGettingStarted?: () => void;
+  onAdvancedTutorial?: () => void;
   onUserGuide?: () => void;
 }
 
@@ -156,6 +159,14 @@ export const buildEditorSurfacePolicy = ({
       'document.saveAs',
       'Save PSG As...',
       'Save the active graph as a new PSG document.',
+      'core',
+      'available',
+      'document'
+    ),
+    'document.saveRegionFragment': createSurface(
+      'document.saveRegionFragment',
+      'Save Region Box as Fragment...',
+      'Save the selected Region Box and enclosed nodes to the local user fragment library.',
       'core',
       'available',
       'document'
@@ -308,6 +319,18 @@ export const buildEditorSurfacePolicy = ({
           id: 'saveAs',
           label: surfaces['document.saveAs'].label,
           onClick: actions.onSaveAs
+        }
+      : null
+  );
+  pushAction(
+    fileItems,
+    actions.onSaveRegionFragment
+      ? {
+          type: 'action',
+          id: 'saveRegionFragment',
+          label: surfaces['document.saveRegionFragment'].label,
+          onClick: actions.onSaveRegionFragment,
+          title: surfaces['document.saveRegionFragment'].helperText
         }
       : null
   );
@@ -486,6 +509,17 @@ export const buildEditorSurfacePolicy = ({
   );
   pushAction(
     helpItems,
+    actions.onAdvancedTutorial
+      ? {
+          type: 'action',
+          id: 'advancedTutorial',
+          label: 'Advanced Tutorial',
+          onClick: actions.onAdvancedTutorial
+        }
+      : null
+  );
+  pushAction(
+    helpItems,
     actions.onUserGuide
       ? {
           type: 'action',
@@ -518,13 +552,17 @@ export const buildEditorSurfacePolicy = ({
       : null
   );
 
+  const menuSections: MenuSectionModel[] = [
+    { id: 'file', title: 'File', items: fileItems },
+    { id: 'edit', title: 'Edit', items: editItems },
+    { id: 'view', title: 'View', items: viewItems },
+    { id: 'help', title: 'Help', items: helpItems }
+  ];
+
   const menuModel: MenuModel = {
-    sections: [
-      { id: 'file', title: 'File', items: fileItems },
-      { id: 'edit', title: 'Edit', items: editItems },
-      { id: 'view', title: 'View', items: viewItems },
-      { id: 'help', title: 'Help', items: helpItems }
-    ].filter(section => section.items.some(item => item.type === 'action'))
+    sections: menuSections.filter(section =>
+      section.items.some(item => item.type === 'action')
+    )
   };
 
   const tabDefinitions: SidePanelTabDefinition[] = [];

@@ -542,6 +542,22 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           onOpen: handleOpen,
           onSave: () => handleSave(currentNodes, currentEdges),
           onSaveAs: () => handleSaveAs(currentNodes, currentEdges),
+          onSaveRegionFragment: () => {
+            const saveRegionFragment = (
+              window as typeof window & {
+                __EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__?:
+                  | (() => Promise<void>)
+                  | null;
+              }
+            ).__EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__;
+
+            if (!saveRegionFragment) {
+              showToast('Select a Region Box to save as a fragment', 'info');
+              return;
+            }
+
+            void saveRegionFragment();
+          },
           onImport: handleLocalOpen,
           onExport: () => handleExportPsg(currentNodes, currentEdges),
           onExportComfy: () => setShowComfyExportDialog(true),
@@ -567,6 +583,13 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             setGuideTab('getting-started');
             setShowGuide(true);
           },
+          onAdvancedTutorial: () => {
+            window.dispatchEvent(
+              new CustomEvent('epic1:startTutorial', {
+                detail: { sequenceId: 'advanced' }
+              })
+            );
+          },
           onUserGuide: () => {
             setGuideTab('user-guide');
             setShowGuide(true);
@@ -591,6 +614,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       handleSaveAs,
       handleUndo,
       onBackToLaunch,
+      setGuideTab,
+      setShowGuide,
+      showToast,
       showPreview
     ]
   );

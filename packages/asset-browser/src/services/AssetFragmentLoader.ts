@@ -8,6 +8,7 @@ export type FragmentEntry = {
   combinations?: number;
   region: string;
   collapsible: boolean;
+  content?: string;
 };
 
 export type FragmentCategory = {
@@ -63,4 +64,26 @@ export async function loadAssetFragments(
   }
 
   return null;
+}
+
+export async function loadUserAssetFragments(
+  folderPath: string
+): Promise<FragmentEntry[]> {
+  if (!folderPath.trim()) {
+    return [];
+  }
+
+  const res = await fetch(
+    `/api/local-fragments/list?folderPath=${encodeURIComponent(folderPath)}`,
+    { cache: 'no-cache' }
+  );
+
+  if (!res.ok) {
+    return [];
+  }
+
+  const data = await res.json();
+  return Array.isArray(data?.fragments)
+    ? (data.fragments as FragmentEntry[])
+    : [];
 }

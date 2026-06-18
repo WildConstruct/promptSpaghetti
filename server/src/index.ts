@@ -18,6 +18,7 @@ import { agentRoutes } from './routes/agent';
 import { llmRoutes } from './routes/llm';
 import { psgRoutes } from './routes/psg';
 import { localImageRoutes } from './routes/localImage';
+import { localFragmentRoutes } from './routes/localFragments';
 import { themeRoutes } from './theme';
 import { rateLimiter } from './utils/rateLimit';
 import { metrics } from './utils/metrics';
@@ -170,6 +171,9 @@ server.register(async app => psgRoutes(app));
 
 // Register local-only sandbox image generation routes
 server.register(async app => localImageRoutes(app));
+
+// Register local-only user fragment persistence routes
+server.register(async app => localFragmentRoutes(app));
 
 // Register bounded agent routes
 server.register(async app => agentRoutes(app));

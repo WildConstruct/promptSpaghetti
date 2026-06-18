@@ -26,15 +26,20 @@ describe('SERVER_ROUTE_CATALOG', () => {
     expect(localOnlyRoutes.map(route => route.id)).toEqual([
       'local-image-status',
       'local-image-batch',
-      'local-image-files'
+      'local-image-files',
+      'local-fragments-save'
     ]);
     expect(
       localOnlyRoutes.every(
         route =>
           route.visibility === 'local-only' &&
-          route.authRequired === false &&
-          route.storyRole === 'sandbox-generation'
+          route.authRequired === false
       )
+    ).toBe(true);
+    expect(
+      localOnlyRoutes
+        .filter(route => route.id.startsWith('local-image-'))
+        .every(route => route.storyRole === 'sandbox-generation')
     ).toBe(true);
   });
 
