@@ -50,6 +50,9 @@ function weightedChoiceNode(
     type: 'weightedChoice',
     data: {
       nodeType: 'weightedChoice',
+      // `title` drives the editable node header (EnhancedBranchingNode reads
+      // data.title); `label` is kept for other consumers.
+      title: label,
       label,
       options,
       value: JSON.stringify({ options, title: label })
