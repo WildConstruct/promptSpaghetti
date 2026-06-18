@@ -7,6 +7,11 @@ interface HistoryEntry<N = unknown, E = unknown> {
   timestamp: number;
 }
 
+interface HistoryState<N = unknown, E = unknown> {
+  entries: HistoryEntry<N, E>[];
+  index: number;
+}
+
 interface UseGraphHistoryOptions {
   maxHistorySize?: number;
   debounceMs?: number;
@@ -24,7 +29,14 @@ interface UseGraphHistoryReturn<N = unknown, E = unknown> {
 }
 
 /**
- * Custom hook for managing graph history with undo/redo functionality
+ * Undo/redo history for the graph.
+ *
+ * History entries and the current index are kept in a SINGLE state object and
+ * mutated together, so they can never desync (an earlier implementation tracked
+ * them as two separate `useState`s updated from stale closures, which made
+ * `redo()` a no-op even when `canRedo` was true). `undo`/`redo` read the latest
+ * state through a ref rather than a captured closure, and they cancel any
+ * pending debounced snapshot so a late snapshot can't truncate the redo stack.
  */
 export function useGraphHistory<N = unknown, E = unknown>(
   nodes: Node<N>[],
@@ -35,122 +47,126 @@ export function useGraphHistory<N = unknown, E = unknown>(
 ): UseGraphHistoryReturn<N, E> {
   const { maxHistorySize = 50, debounceMs = 300 } = options;
 
-  const [history, setHistory] = useState<HistoryEntry<N, E>[]>([]);
-  const [historyIndex, setHistoryIndex] = useState<number>(-1);
-  const debounceTimerRef = useRef<NodeJS.Timeout>();
+  const [state, setState] = useState<HistoryState<N, E>>({
+    entries: [],
+    index: -1
+  });
+  // Mirror of `state` so undo/redo always read the current value, not a closure.
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const isInternalUpdateRef = useRef(false);
 
-  // Push a new snapshot to history
+  const cancelPendingSnapshot = useCallback(() => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = undefined;
+    }
+  }, []);
+
+  // Push a new snapshot (debounced) onto the history, dropping any redo-able
+  // future and capping the total size.
   const pushSnapshot = useCallback(
     (nodesSnap: Node<N>[], edgesSnap: Edge<E>[]) => {
-      // Skip if this is an internal update from undo/redo
       if (isInternalUpdateRef.current) {
         return;
       }
-
-      // Clear any pending debounce
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-
-      // Debounce the snapshot
+      cancelPendingSnapshot();
       debounceTimerRef.current = setTimeout(() => {
-        setHistory(prev => {
-          // Remove any history after current index (branching)
-          const base = historyIndex >= 0 ? prev.slice(0, historyIndex + 1) : [];
+        debounceTimerRef.current = undefined;
+        // Re-check: an undo/redo may have started after this was scheduled.
+        if (isInternalUpdateRef.current) {
+          return;
+        }
+        setState(prev => {
           const entry: HistoryEntry<N, E> = {
-            nodes: JSON.parse(JSON.stringify(nodesSnap)), // Deep clone
-            edges: JSON.parse(JSON.stringify(edgesSnap)), // Deep clone
+            nodes: JSON.parse(JSON.stringify(nodesSnap)),
+            edges: JSON.parse(JSON.stringify(edgesSnap)),
             timestamp: Date.now()
           };
-          const next = [...base, entry];
 
-          // Limit history size
-          if (next.length > maxHistorySize) {
-            return next.slice(next.length - maxHistorySize);
+          // Skip if this is identical to the current entry (avoids piling up
+          // no-op history from re-renders that don't change the graph).
+          const current = prev.index >= 0 ? prev.entries[prev.index] : null;
+          if (
+            current &&
+            JSON.stringify(current.nodes) === JSON.stringify(entry.nodes) &&
+            JSON.stringify(current.edges) === JSON.stringify(entry.edges)
+          ) {
+            return prev;
           }
-          return next;
-        });
 
-        setHistoryIndex(() => {
-          const newLength = Math.min(history.length + 1, maxHistorySize);
-          return newLength - 1;
+          let entries = [...prev.entries.slice(0, prev.index + 1), entry];
+          if (entries.length > maxHistorySize) {
+            entries = entries.slice(entries.length - maxHistorySize);
+          }
+          return { entries, index: entries.length - 1 };
         });
       }, debounceMs);
     },
-    [historyIndex, history.length, maxHistorySize, debounceMs]
+    [cancelPendingSnapshot, maxHistorySize, debounceMs]
   );
 
-  // Undo to previous state
+  const restoreTo = useCallback(
+    (target: HistoryEntry<N, E>, nextIndex: number) => {
+      cancelPendingSnapshot();
+      isInternalUpdateRef.current = true;
+      setNodes(target.nodes);
+      setEdges(target.edges);
+      setState(prev => ({ ...prev, index: nextIndex }));
+      // Release the guard after React has applied the setNodes/setEdges and the
+      // auto-snapshot effect has run (and skipped).
+      setTimeout(() => {
+        isInternalUpdateRef.current = false;
+      }, 0);
+    },
+    [cancelPendingSnapshot, setNodes, setEdges]
+  );
+
   const undo = useCallback(() => {
-    if (historyIndex <= 0 || history.length === 0) {return;}
+    const { entries, index } = stateRef.current;
+    if (index <= 0 || entries.length === 0) {
+      return;
+    }
+    restoreTo(entries[index - 1], index - 1);
+  }, [restoreTo]);
 
-    isInternalUpdateRef.current = true;
-    const targetIndex = historyIndex - 1;
-    const target = history[targetIndex];
-
-    setNodes(target.nodes);
-    setEdges(target.edges);
-    setHistoryIndex(targetIndex);
-
-    // Reset flag after React updates
-    setTimeout(() => {
-      isInternalUpdateRef.current = false;
-    }, 0);
-  }, [history, historyIndex, setNodes, setEdges]);
-
-  // Redo to next state
   const redo = useCallback(() => {
-    if (historyIndex >= history.length - 1) {return;}
+    const { entries, index } = stateRef.current;
+    if (index >= entries.length - 1) {
+      return;
+    }
+    restoreTo(entries[index + 1], index + 1);
+  }, [restoreTo]);
 
-    isInternalUpdateRef.current = true;
-    const targetIndex = historyIndex + 1;
-    const target = history[targetIndex];
-
-    setNodes(target.nodes);
-    setEdges(target.edges);
-    setHistoryIndex(targetIndex);
-
-    // Reset flag after React updates
-    setTimeout(() => {
-      isInternalUpdateRef.current = false;
-    }, 0);
-  }, [history, historyIndex, setNodes, setEdges]);
-
-  // Clear all history
   const clearHistory = useCallback(() => {
-    setHistory([]);
-    setHistoryIndex(-1);
-  }, []);
+    cancelPendingSnapshot();
+    setState({ entries: [], index: -1 });
+  }, [cancelPendingSnapshot]);
 
-  // Auto-snapshot when nodes/edges change
+  // Auto-snapshot when nodes/edges change (skipping internal undo/redo writes).
   useEffect(() => {
-    // Skip empty graphs
-    if ((nodes?.length || 0) + (edges?.length || 0) === 0) {return;}
-
-    // Skip if this is an internal update
-    if (isInternalUpdateRef.current) {return;}
-
+    if ((nodes?.length || 0) + (edges?.length || 0) === 0) {
+      return;
+    }
+    if (isInternalUpdateRef.current) {
+      return;
+    }
     pushSnapshot(nodes, edges);
   }, [nodes, edges, pushSnapshot]);
 
-  // Cleanup debounce timer
-  useEffect(() => {
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-    };
-  }, []);
+  // Cleanup debounce timer on unmount.
+  useEffect(() => () => cancelPendingSnapshot(), [cancelPendingSnapshot]);
 
   return {
     pushSnapshot,
     undo,
     redo,
-    canUndo: historyIndex > 0 && history.length > 0,
-    canRedo: historyIndex < history.length - 1,
-    historySize: history.length,
-    currentIndex: historyIndex,
+    canUndo: state.index > 0 && state.entries.length > 0,
+    canRedo: state.index < state.entries.length - 1,
+    historySize: state.entries.length,
+    currentIndex: state.index,
     clearHistory
   };
 }
