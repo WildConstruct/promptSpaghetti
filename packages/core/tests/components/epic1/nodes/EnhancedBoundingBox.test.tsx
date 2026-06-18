@@ -141,13 +141,17 @@ describe('EnhancedBoundingBox', () => {
         </ReactFlowProvider>
       );
 
-      expect(screen.getByText('Test Description')).toBeInTheDocument();
+      // The description stays in the DOM (so it can animate); visibility is
+      // driven by data-visible on its wrapper.
+      const descWrapper = () =>
+        screen.getByText('Test Description').closest('.bounding-box-description');
+      expect(descWrapper()).toHaveAttribute('data-visible', 'true');
 
       fireEvent.click(screen.getByText('Test Region'));
-      expect(screen.queryByText('Test Description')).not.toBeInTheDocument();
+      expect(descWrapper()).toHaveAttribute('data-visible', 'false');
 
       fireEvent.click(screen.getByText('Test Region'));
-      expect(screen.getByText('Test Description')).toBeInTheDocument();
+      expect(descWrapper()).toHaveAttribute('data-visible', 'true');
     });
 
     it('should display node count when expanded', () => {
@@ -254,9 +258,13 @@ describe('EnhancedBoundingBox', () => {
         minHeight: '64px',
         padding: '18px 20px 20px'
       });
+      // Auto-compacted: the description stays mounted (to animate) but its
+      // wrapper is marked hidden.
       expect(
-        screen.queryByText('The fixed era and material language every facade inherits.')
-      ).not.toBeInTheDocument();
+        screen
+          .getByText('The fixed era and material language every facade inherits.')
+          .closest('.bounding-box-description')
+      ).toHaveAttribute('data-visible', 'false');
     });
 
     it('keeps the definition visible for an empty short Region Box', () => {

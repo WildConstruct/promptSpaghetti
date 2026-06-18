@@ -300,9 +300,15 @@ const BoundingBoxHeaderComponent: React.FC<BoundingBoxHeaderProps> = ({
         </h3>
       )}
       
-      {/* Description */}
-      {shouldShowDefinition && (
-        <div className="bounding-box-description">
+      {/* Description — always rendered so it can animate in/out (a quick
+          slide-down reveal + the text fading up) instead of popping on/off.
+          Visibility is driven by data-visible (see EnhancedBoundingBox.css). */}
+      <div
+        className="bounding-box-description"
+        data-visible={shouldShowDefinition ? 'true' : 'false'}
+        aria-hidden={!shouldShowDefinition}
+        style={{ pointerEvents: shouldShowDefinition ? 'auto' : 'none' }}
+      >
           {isEditingDescription ? (
             <textarea
               ref={descriptionInputRef}
@@ -335,7 +341,7 @@ const BoundingBoxHeaderComponent: React.FC<BoundingBoxHeaderProps> = ({
                 lineHeight: 1.35,
                 margin: `0 ${textReserve} 0 0`,
                 cursor: 'text',
-                minHeight: `${layout.descriptionMinHeight}px`,
+                minHeight: `${shouldShowDefinition ? layout.descriptionMinHeight : 0}px`,
                 display: '-webkit-box',
                 WebkitBoxOrient: 'vertical',
                 WebkitLineClamp: layout.descriptionLines,
@@ -346,7 +352,6 @@ const BoundingBoxHeaderComponent: React.FC<BoundingBoxHeaderProps> = ({
             </div>
           )}
         </div>
-      )}
     </div>
   );
 };
