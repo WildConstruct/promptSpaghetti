@@ -13,6 +13,7 @@ interface NodeContextMenuProps {
   onClose: () => void;
   onSaveAsPreset: () => void;
   onDuplicate?: () => void;
+  onDisconnect?: () => void;
   onDelete?: () => void;
   onAttachNote?: () => void;
   onConvertToWeightedChoice?: () => void;
@@ -24,6 +25,7 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
   onClose,
   onSaveAsPreset,
   onDuplicate,
+  onDisconnect,
   onDelete,
   onAttachNote,
   onConvertToWeightedChoice
@@ -118,7 +120,7 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
         )}
         
         {onDuplicate && (
-          <button 
+          <button
             className="context-menu-item"
             onClick={() => handleAction(onDuplicate)}
           >
@@ -126,7 +128,17 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
             Duplicate
           </button>
         )}
-        
+
+        {onDisconnect && (
+          <button
+            className="context-menu-item"
+            onClick={() => handleAction(onDisconnect)}
+          >
+            <span className="icon">🔌</span>
+            Disconnect
+          </button>
+        )}
+
         {onDelete && (
           <>
             <div className="context-menu-separator" />

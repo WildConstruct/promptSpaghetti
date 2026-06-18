@@ -31,6 +31,7 @@ import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
 import { CanvasContextMenu } from './nodes/CanvasContextMenu';
+import { NodeContextMenu } from './nodes/NodeContextMenu';
 import { applyDagreLayout } from '../../utils/layoutAlgorithms';
 
 import { useKonamiCode } from './hooks/useKonamiCode';
@@ -323,6 +324,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     createNode,
     handleNodeEdit,
     duplicateNodes,
+    disconnectNodes,
     deleteSelectedNodes,
     alignNodes,
     distributeNodes,
@@ -730,6 +732,13 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   const [paneContextMenu, setPaneContextMenu] = useState<{
     x: number;
     y: number;
+  } | null>(null);
+
+  // Right-click node menu (Duplicate / Disconnect / Delete).
+  const [nodeContextMenu, setNodeContextMenu] = useState<{
+    x: number;
+    y: number;
+    nodeId: string;
   } | null>(null);
 
   // Organize: run a left-to-right hierarchical layout. Uses the editor's own
@@ -2096,6 +2105,19 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                 event.preventDefault();
                 setPaneContextMenu({ x: event.clientX, y: event.clientY });
               }}
+              onNodeContextMenu={(event, node) => {
+                event.preventDefault();
+                // Select the right-clicked node so selection-based ops
+                // (duplicate / disconnect / delete) act on it.
+                setNodes(nds =>
+                  nds.map(n => ({ ...n, selected: n.id === node.id }))
+                );
+                setNodeContextMenu({
+                  x: event.clientX,
+                  y: event.clientY,
+                  nodeId: node.id
+                });
+              }}
               onNodesDelete={onNodesDelete}
               onEdgesDelete={onEdgesDelete}
               onDragOver={onDragOver}
@@ -2188,6 +2210,23 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                     } as unknown as Node<EditableNodeData>
                   ]);
                 }}
+              />
+            )}
+
+            {nodeContextMenu && (
+              <NodeContextMenu
+                nodeType={
+                  nodes.find(n => n.id === nodeContextMenu.nodeId)?.type ||
+                  'textBlock'
+                }
+                position={{ x: nodeContextMenu.x, y: nodeContextMenu.y }}
+                onClose={() => setNodeContextMenu(null)}
+                onSaveAsPreset={() =>
+                  setSaveAsPresetNodeId(nodeContextMenu.nodeId)
+                }
+                onDuplicate={() => duplicateNodes()}
+                onDisconnect={() => disconnectNodes([nodeContextMenu.nodeId])}
+                onDelete={() => deleteSelectedNodes()}
               />
             )}
           </SafeReactFlowWrapper>
