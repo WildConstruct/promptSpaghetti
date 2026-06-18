@@ -67,6 +67,14 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     branching: true
   },
   {
+    id: 'phrase_grammar_branching',
+    title: 'Phrase Grammar Branching',
+    description:
+      'A clothing branch that teaches prefixes, branch commitments, and safe merge points.',
+    category: 'characters',
+    branching: true
+  },
+  {
     id: 'spaghetti_western',
     title: 'Spaghetti Western Character',
     description:

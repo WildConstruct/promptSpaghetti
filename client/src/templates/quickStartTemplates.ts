@@ -131,6 +131,7 @@ function regionBox(
     data: {
       nodeType: 'enhancedBoundingBox',
       title,
+      label: title,
       description,
       backgroundColor: color,
       opacity: 0.32,
@@ -1590,6 +1591,100 @@ const villageTemplate: QuickStartTemplate = {
   ]
 };
 
+const phraseGrammarBranchingTemplate: QuickStartTemplate = {
+  nodes: [
+    regionBox(
+      'pg-region-branch',
+      440,
+      -28,
+      960,
+      510,
+      REGION.branch,
+      'Branch commitment',
+      'Once a branch chooses jacket or casual clothing, downstream detail must respect that decision.'
+    ),
+    regionBox(
+      'pg-region-glue',
+      50,
+      170,
+      330,
+      220,
+      REGION.prefix,
+      'Grammar glue',
+      'Small text nodes keep fragments readable without burying structure inside a choice.'
+    ),
+    regionBox(
+      'pg-region-merge',
+      1460,
+      92,
+      660,
+      260,
+      REGION.merge,
+      'Complete phrase merge',
+      'Branches merge only after each path has become a coherent phrase.'
+    ),
+    regionBox(
+      'pg-region-fix',
+      50,
+      430,
+      760,
+      250,
+      REGION.backdrop,
+      'Bad-output fix',
+      'The t-shirt path includes its own color internally, so it never receives a black-shirt suffix meant for jackets.'
+    ),
+    textNode(
+      'pg-character-base',
+      80,
+      40,
+      'Character base',
+      'a weary back-alley character'
+    ),
+    textNode('pg-with-a', 100, 235, 'Glue: with a', 'with a'),
+    weightedChoiceNode('pg-wardrobe', 500, 95, 'Wardrobe branch', [
+      { id: 'pg-jacket', text: 'rumpled suit coat', weight: 34, hasBranch: true },
+      { id: 'pg-tshirt', text: 'rumpled black t-shirt', weight: 33 },
+      { id: 'pg-open-collar', text: 'open-collar long-sleeved shirt', weight: 33 }
+    ]),
+    weightedChoiceNode('pg-visible-shirt', 940, 48, 'Visible shirt beneath jacket', [
+      { id: 'pg-black-shirt', text: 'over a black shirt', weight: 34 },
+      { id: 'pg-red-shirt', text: 'over a red shirt', weight: 33 },
+      { id: 'pg-brown-shirt', text: 'over a brown shirt', weight: 33 }
+    ]),
+    concatNode('pg-jacket-phrase', 940, 270, 'Complete jacket phrase', {
+      separator: ' ',
+      requireAllInputs: true
+    }),
+    concatNode('pg-safe-merge', 1500, 180, 'Merge after complete clothing phrase', {
+      separator: ' ',
+      requireAllInputs: false
+    }),
+    weightedChoiceNode('pg-pose', 1500, 430, 'Finish detail', [
+      { id: 'pg-pose-1', text: 'leaning in doorway light', weight: 34 },
+      { id: 'pg-pose-2', text: 'half-turned toward the alley', weight: 33 },
+      { id: 'pg-pose-3', text: 'hands tucked into pockets', weight: 33 }
+    ]),
+    concatNode('pg-output-merge', 1860, 430, 'Final prompt merge', {
+      separator: ', ',
+      requireAllInputs: true
+    }),
+    outputNode('pg-output', 2200, 430, 'phrase_grammar_branching')
+  ],
+  edges: [
+    { id: 'pg-e1', source: 'pg-with-a', target: 'pg-safe-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'pg-e2', source: 'pg-wardrobe', target: 'pg-jacket-phrase', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'pg-e3', source: 'pg-wardrobe', target: 'pg-visible-shirt', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'pg-e4', source: 'pg-wardrobe', target: 'pg-safe-merge', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'input2' },
+    { id: 'pg-e5', source: 'pg-wardrobe', target: 'pg-safe-merge', type: 'smoothstep', sourceHandle: 'branch-3', targetHandle: 'input3' },
+    { id: 'pg-e6', source: 'pg-visible-shirt', target: 'pg-jacket-phrase', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'pg-e7', source: 'pg-jacket-phrase', target: 'pg-safe-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'pg-e8', source: 'pg-character-base', target: 'pg-output-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'pg-e9', source: 'pg-safe-merge', target: 'pg-output-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'pg-e10', source: 'pg-pose', target: 'pg-output-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'pg-e11', source: 'pg-output-merge', target: 'pg-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   tech_panel: techPanelTemplate,
   tile_builder: tileBuilderTemplate,
@@ -1598,6 +1693,7 @@ export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   baseball_fans: baseballTemplate,
   punk_fans: punkTemplate,
   diner_patrons: dinerTemplate,
+  phrase_grammar_branching: phraseGrammarBranchingTemplate,
   spaghetti_western: westernTemplate,
   medieval_village: villageTemplate,
   character_variation: characterTemplate,

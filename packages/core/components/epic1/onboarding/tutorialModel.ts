@@ -1,3 +1,5 @@
+import { advancedTutorialSteps } from './advancedTutorialModel';
+
 export type TutorialPlacement =
   | 'top'
   | 'right'
@@ -12,7 +14,11 @@ export type TutorialAnchorId =
   | 'wizard-modal'
   | 'graph-nodes'
   | 'node-palette'
-  | 'preview-button';
+  | 'preview-button'
+  | 'region-box'
+  | 'template-library';
+
+export type TutorialSequenceId = 'basic' | 'advanced';
 
 export interface TutorialStepDefinition {
   id: string;
@@ -44,7 +50,18 @@ export const TUTORIAL_ANCHOR_SELECTORS: Record<TutorialAnchorId, string[]> = {
   'wizard-modal': ['[data-tutorial-anchor="wizard-modal"]', '.prompt-wizard-modal'],
   'graph-nodes': ['.react-flow__node', '[data-id^="reactflow__node"]'],
   'node-palette': ['[data-tutorial-anchor="node-palette"]', '.node-palette', '.node-toolbar'],
-  'preview-button': ['[data-tutorial-anchor="preview-button"]', '.preview-button']
+  'preview-button': ['[data-tutorial-anchor="preview-button"]', '.preview-button'],
+  'region-box': [
+    '[data-tutorial-anchor="region-box"]',
+    '.react-flow__node-enhancedBoundingBox',
+    '.react-flow__node-boundingBox'
+  ],
+  'template-library': [
+    '[data-tutorial-anchor="template-library"]',
+    '[data-tutorial-anchor="asset-library"]',
+    '.asset-browser',
+    '.document-library-panel'
+  ]
 };
 
 export const tutorialSteps: TutorialStepDefinition[] = [
@@ -130,3 +147,8 @@ export const tutorialSteps: TutorialStepDefinition[] = [
     spotlight: false
   }
 ];
+
+export const tutorialSequences: Record<TutorialSequenceId, TutorialStepDefinition[]> = {
+  basic: tutorialSteps,
+  advanced: advancedTutorialSteps,
+};
