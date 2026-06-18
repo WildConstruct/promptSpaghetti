@@ -11,7 +11,6 @@ import React, {
   useLayoutEffect,
   useMemo
 } from 'react';
-import { createPortal } from 'react-dom';
 import {
   useReactFlow,
   Position,
@@ -96,10 +95,6 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const [isDefinitionExpanded, setIsDefinitionExpanded] = useState(true);
   const [ports] = useState<Port[]>(data.ports || []);
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const [headerPortalHost, setHeaderPortalHost] = useState<HTMLElement | null>(
-    null
-  );
-
   // Size refs for maintaining state between collapsed/expanded
   const expandedSizeRef = useRef<Size>({
     width: data.width || DEFAULT_WIDTH,
@@ -808,12 +803,6 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     const wrapper = rootRef.current?.closest<HTMLElement>('.react-flow__node');
     if (!wrapper) { return; }
 
-    const viewport =
-      wrapper.closest<HTMLElement>('.react-flow__viewport') ||
-      wrapper.parentElement?.closest<HTMLElement>('.react-flow__viewport') ||
-      null;
-    setHeaderPortalHost(current => (current === viewport ? current : viewport));
-
     // React Flow may rewrite these dimensions from cached measurements.
     // Use priority here so manual resize/collapse state remains visible.
     wrapper.style.setProperty('width', `${effectiveSize.width}px`, 'important');
@@ -857,14 +846,13 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
 
   const headerLayer = (
     <div
-      className="bounding-box-header-layer nodrag nopan"
+      className="bounding-box-header-layer nopan"
       style={{
         position: 'absolute',
         left: 0,
         top: 0,
         width: effectiveSize.width,
         minWidth: effectiveSize.width,
-        transform: `translate(${xPos}px, ${yPos}px)`,
         zIndex: HEADER_OVERLAY_Z_INDEX,
         pointerEvents: 'none',
         boxSizing: 'border-box'
@@ -935,8 +923,11 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         }}
       />
 
-      {/* Header with controls */}
-      {headerPortalHost ? createPortal(headerLayer, headerPortalHost) : headerLayer}
+      {/* Header rendered IN the box (not portaled to the viewport) so React
+          Flow's node-drag works from the header bar, and the resize handles
+          (z {HANDLE}) stack above the header (z {HEADER}) in the box's own
+          stacking context instead of being hidden behind a viewport overlay. */}
+      {headerLayer}
 
       {selected && !isCollapsed && (
         <div

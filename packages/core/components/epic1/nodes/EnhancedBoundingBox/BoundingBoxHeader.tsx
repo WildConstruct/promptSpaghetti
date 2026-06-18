@@ -169,8 +169,9 @@ const BoundingBoxHeaderComponent: React.FC<BoundingBoxHeaderProps> = ({
         boxSizing: 'border-box'
       }}
     >
-      {/* Control Buttons */}
-      <div className="control-buttons">
+      {/* Control Buttons (nodrag: clicking lock/collapse/edit must not start a
+          box drag — the header bar itself is the drag handle). */}
+      <div className="control-buttons nodrag">
         {/* Lock Button */}
         <button
           className="control-button lock-button"

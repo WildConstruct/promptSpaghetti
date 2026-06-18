@@ -411,7 +411,7 @@ describe('EnhancedBoundingBox', () => {
   });
 
   describe('Styling', () => {
-    it('renders the header in an above-node overlay while the region wrapper stays behind nodes', () => {
+    it('renders the header inside the box (draggable, not portaled) with its dark styling', () => {
       const wideHeaderProps = {
         ...defaultProps,
         data: {
@@ -448,7 +448,13 @@ describe('EnhancedBoundingBox', () => {
         expect(background).toBeTruthy();
         expect(headerLayer).toBeTruthy();
         expect(header).toBeTruthy();
-        expect(header?.closest('.react-flow__node-enhancedBoundingBox')).toBeNull();
+        // The header is rendered INSIDE the region's node wrapper (so React
+        // Flow's node-drag works from it), not portaled out to the viewport.
+        expect(
+          header?.closest('.react-flow__node-enhancedBoundingBox')
+        ).not.toBeNull();
+        // It must not be marked nodrag — the header bar is the drag handle.
+        expect(headerLayer?.classList.contains('nodrag')).toBe(false);
         expect(headerLayer).toHaveStyle({ zIndex: '2200' });
         expect(header).toHaveStyle({
           backgroundColor: 'rgba(31, 34, 34, 0.98)',
