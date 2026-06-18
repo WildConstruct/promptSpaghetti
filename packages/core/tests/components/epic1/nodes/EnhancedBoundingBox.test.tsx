@@ -10,6 +10,7 @@ const mockSetNodes = jest.fn();
 const mockGetNodes = jest.fn();
 const mockGetEdges = jest.fn();
 const mockSetEdges = jest.fn();
+const mockNodeInternals = new Map();
 
 jest.mock('reactflow', () => ({
   ...jest.requireActual('reactflow'),
@@ -26,10 +27,13 @@ jest.mock('reactflow', () => ({
     Top: 'top',
     Bottom: 'bottom',
   },
-  useStore: () => ({
-    nodeInternals: new Map(),
-    edges: [],
-  }),
+  useStore: (selector: any) => {
+    const state = {
+      nodeInternals: mockNodeInternals,
+      edges: [],
+    };
+    return typeof selector === 'function' ? selector(state) : state;
+  },
 }));
 
 // Mock PerformanceMonitor
@@ -70,6 +74,7 @@ describe('EnhancedBoundingBox', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockNodeInternals.clear();
     mockGetNodes.mockReturnValue([
       { id: 'test-box', position: { x: 100, y: 100 }, type: 'enhancedBoundingBox' },
       { id: 'node-1', position: { x: 150, y: 150 }, width: 100, height: 50 },
@@ -125,8 +130,24 @@ describe('EnhancedBoundingBox', () => {
           <EnhancedBoundingBox {...defaultProps} />
         </ReactFlowProvider>
       );
-      
+
       expect(screen.getByText('Test Region')).toBeInTheDocument();
+    });
+
+    it('toggles the definition when clicking the Region Box headline', () => {
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...defaultProps} />
+        </ReactFlowProvider>
+      );
+
+      expect(screen.getByText('Test Description')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByText('Test Region'));
+      expect(screen.queryByText('Test Description')).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getByText('Test Region'));
+      expect(screen.getByText('Test Description')).toBeInTheDocument();
     });
 
     it('should display node count when expanded', () => {
@@ -139,6 +160,103 @@ describe('EnhancedBoundingBox', () => {
       // Look for the node count text (might be "0 nodes" since containment calc may not work in test)
       const nodeCountElement = screen.queryByText(/\d+ node/i);
       expect(nodeCountElement).toBeInTheDocument();
+    });
+
+    it('counts direct React Flow children from subscribed node internals', () => {
+      mockGetNodes.mockReturnValue([
+        { id: 'test-box', position: { x: 100, y: 100 }, type: 'enhancedBoundingBox' },
+      ]);
+      mockNodeInternals.set('test-box', {
+        id: 'test-box',
+        type: 'enhancedBoundingBox',
+        position: { x: 100, y: 100 },
+        width: 400,
+        height: 300,
+        data: {},
+      });
+      mockNodeInternals.set('text-1', {
+        id: 'text-1',
+        type: 'textBlock',
+        parentNode: 'test-box',
+        position: { x: 42, y: 120 },
+        width: 220,
+        height: 150,
+        data: {},
+      });
+
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...defaultProps} />
+        </ReactFlowProvider>
+      );
+
+      expect(screen.getByText('1 node')).toBeInTheDocument();
+    });
+
+    it('uses compact header sizing for narrow Region Boxes', () => {
+      const narrowProps = {
+        ...defaultProps,
+        data: {
+          ...defaultProps.data,
+          title: 'Extraction backdrop (locked)',
+          description: 'Locked neutral gray plate; the frontier location is composited later.',
+          width: 314,
+          height: 420
+        }
+      };
+
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...narrowProps} />
+        </ReactFlowProvider>
+      );
+
+      const header = document.querySelector(
+        '.bounding-box-header'
+      ) as HTMLElement | null;
+      const title = header?.querySelector('.bounding-box-title');
+      const description = header?.querySelector('.bounding-box-description div');
+
+      expect(header).toHaveAttribute('data-header-density', 'narrow');
+      expect(header).toHaveStyle({
+        minHeight: '86px',
+        padding: '18px 20px 20px'
+      });
+      expect(title).toHaveStyle({ fontSize: '20px' });
+      expect(description).toHaveStyle({ fontSize: '18px' });
+    });
+
+    it('auto-compacts the definition when the Region Box is not tall enough to leave a node viewport', () => {
+      const shortProps = {
+        ...defaultProps,
+        data: {
+          ...defaultProps.data,
+          title: 'Family DNA',
+          description: 'The fixed era and material language every facade inherits.',
+          width: 560,
+          height: 260
+        }
+      };
+
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...shortProps} />
+        </ReactFlowProvider>
+      );
+
+      const header = document.querySelector(
+        '.bounding-box-header'
+      ) as HTMLElement | null;
+
+      expect(header).toHaveAttribute('data-header-density', 'narrow');
+      expect(header).toHaveAttribute('data-definition-state', 'auto-compact');
+      expect(header).toHaveStyle({
+        minHeight: '64px',
+        padding: '18px 20px 20px'
+      });
+      expect(
+        screen.queryByText('The fixed era and material language every facade inherits.')
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -259,6 +377,57 @@ describe('EnhancedBoundingBox', () => {
   });
 
   describe('Styling', () => {
+    it('renders the header in an above-node overlay while the region wrapper stays behind nodes', () => {
+      const wideHeaderProps = {
+        ...defaultProps,
+        data: {
+          ...defaultProps.data,
+          width: 560,
+          height: 520
+        }
+      };
+      const viewport = document.createElement('div');
+      viewport.className = 'react-flow__viewport';
+      const wrapper = document.createElement('div');
+      wrapper.className = 'react-flow__node react-flow__node-enhancedBoundingBox';
+      const mount = document.createElement('div');
+      wrapper.appendChild(mount);
+      viewport.appendChild(wrapper);
+      document.body.appendChild(viewport);
+
+      try {
+        render(
+          <ReactFlowProvider>
+            <EnhancedBoundingBox {...wideHeaderProps} />
+          </ReactFlowProvider>,
+          { container: mount }
+        );
+
+        const headerLayer = document.querySelector(
+          '.bounding-box-header-layer'
+        ) as HTMLElement | null;
+        const header = document.querySelector(
+          '.bounding-box-header'
+        ) as HTMLElement | null;
+        const background = mount.querySelector('.bounding-box-background');
+
+        expect(background).toBeTruthy();
+        expect(headerLayer).toBeTruthy();
+        expect(header).toBeTruthy();
+        expect(header?.closest('.react-flow__node-enhancedBoundingBox')).toBeNull();
+        expect(headerLayer).toHaveStyle({ zIndex: '2200' });
+        expect(header).toHaveStyle({
+          backgroundColor: 'rgba(31, 34, 34, 0.98)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          minHeight: '132px',
+          padding: '32px 36px 34px'
+        });
+        expect(header?.style.boxShadow).toContain('inset 0 1px 0');
+      } finally {
+        document.body.removeChild(viewport);
+      }
+    });
+
     it('should apply border radius and color from data', () => {
       const { container } = render(
         <ReactFlowProvider>

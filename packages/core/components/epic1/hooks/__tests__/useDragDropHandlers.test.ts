@@ -14,6 +14,8 @@ import {
   splicePresetIntoEdge
 } from '../../services/FragmentExecution';
 import type { EditableNodeData } from '../../nodes';
+import { getDefaultNodeData } from '../../utils/nodeDefaults';
+import { BOUNDING_BOX_CONSTANTS } from '../../nodes/EnhancedBoundingBox/utils/constants';
 
 type FlowNode = Node<EditableNodeData>;
 
@@ -75,6 +77,17 @@ const createEdge = (
 });
 
 describe('useDragDropHandlers helpers', () => {
+  it('uses the larger region dimensions for freshly created Region Boxes', () => {
+    const regionDefaults = getDefaultNodeData('enhancedBoundingBox');
+
+    expect(regionDefaults.width).toBe(
+      BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_WIDTH
+    );
+    expect(regionDefaults.height).toBe(
+      BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_HEIGHT
+    );
+  });
+
   it('accepts only first-party preset roots for fetched sources', () => {
     expect(ALLOWED_PRESET_SOURCE_ROOTS).toEqual([
       '/assets/library/',

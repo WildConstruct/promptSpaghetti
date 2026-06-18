@@ -11,11 +11,14 @@ import React, {
   useLayoutEffect,
   useMemo
 } from 'react';
+import { createPortal } from 'react-dom';
 import {
   useReactFlow,
   Position,
+  useStore,
   useUpdateNodeInternals
 } from 'reactflow';
+import type { Node } from 'reactflow';
 
 // Import types and constants
 import {
@@ -53,6 +56,14 @@ const {
 
 const { BOUNDING_BOX, BACKGROUND } = BOUNDING_BOX_CONSTANTS.zIndex;
 const { BORDER_RADIUS } = BOUNDING_BOX_CONSTANTS.ui;
+const HEADER_OVERLAY_Z_INDEX = 2200;
+const MIN_VISIBLE_REGION_CHILD_HEIGHT = 128;
+const REGION_STATUS_RESERVE_HEIGHT = 72;
+const COMPACT_HEADER_TARGET_HEIGHT = 64;
+
+type ReactFlowNodeStoreState = {
+  nodeInternals?: Map<string, Node>;
+};
 
 /**
  * Enhanced Bounding Box with modular architecture
@@ -69,6 +80,9 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const perfMonitor = PerformanceMonitor.getInstance();
   const { setNodes, getNodes, getEdges } = useReactFlow();
   const updateNodeInternals = useUpdateNodeInternals();
+  const subscribedNodes = useStore((state: ReactFlowNodeStoreState) =>
+    Array.from(state.nodeInternals?.values() ?? [])
+  );
 
   // State management
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -79,8 +93,12 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const [isResizing, setIsResizing] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(data.isCollapsed || false);
   const [isLocked, setIsLocked] = useState(data.locked || false);
+  const [isDefinitionExpanded, setIsDefinitionExpanded] = useState(true);
   const [ports] = useState<Port[]>(data.ports || []);
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const [headerPortalHost, setHeaderPortalHost] = useState<HTMLElement | null>(
+    null
+  );
 
   // Size refs for maintaining state between collapsed/expanded
   const expandedSizeRef = useRef<Size>({
@@ -94,11 +112,12 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
 
   // State for current size to trigger re-renders during resize
   const [currentSize, setCurrentSize] = useState<Size>(sizeRef.current);
+  const allNodes = subscribedNodes.length > 0 ? subscribedNodes : getNodes();
 
   // Use performance-optimized hooks
   const { containedNodes, cacheHitRate, recalculate } = useNodeContainment(
     id,
-    getNodes(),
+    allNodes,
     { x: xPos, y: yPos },
     currentSize,
     expandedSizeRef.current,
@@ -735,6 +754,22 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
         : currentSize,
     [currentSize, isCollapsed]
   );
+  const isDefinitionAutoCompacted = useMemo(
+    () =>
+      !isCollapsed &&
+      effectiveSize.height -
+        REGION_STATUS_RESERVE_HEIGHT -
+        COMPACT_HEADER_TARGET_HEIGHT <
+        MIN_VISIBLE_REGION_CHILD_HEIGHT,
+    [effectiveSize.height, isCollapsed]
+  );
+
+  const handleDefinitionToggle = useCallback(() => {
+    if (isDefinitionAutoCompacted) {
+      return;
+    }
+    setIsDefinitionExpanded(current => !current);
+  }, [isDefinitionAutoCompacted]);
 
   const boxStyle: React.CSSProperties = {
     width: effectiveSize.width,
@@ -772,6 +807,12 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     const wrapper = rootRef.current?.closest<HTMLElement>('.react-flow__node');
     if (!wrapper) { return; }
 
+    const viewport =
+      wrapper.closest<HTMLElement>('.react-flow__viewport') ||
+      wrapper.parentElement?.closest<HTMLElement>('.react-flow__viewport') ||
+      null;
+    setHeaderPortalHost(current => (current === viewport ? current : viewport));
+
     // React Flow may rewrite these dimensions from cached measurements.
     // Use priority here so manual resize/collapse state remains visible.
     wrapper.style.setProperty('width', `${effectiveSize.width}px`, 'important');
@@ -805,6 +846,43 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
     // selecting a box would lift its translucent fill in front of the nodes.
     wrapper.style.setProperty('z-index', '-1', 'important');
   }, [effectiveSize, selected]);
+
+  const headerLayer = (
+    <div
+      className="bounding-box-header-layer nodrag nopan"
+      style={{
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: effectiveSize.width,
+        minWidth: effectiveSize.width,
+        transform: `translate(${xPos}px, ${yPos}px)`,
+        zIndex: HEADER_OVERLAY_Z_INDEX,
+        pointerEvents: 'none',
+        boxSizing: 'border-box'
+      }}
+    >
+      <BoundingBoxHeader
+        title={title}
+        description={description}
+        width={effectiveSize.width}
+        height={effectiveSize.height}
+        isCollapsed={isCollapsed}
+        isLocked={isLocked}
+        isDefinitionExpanded={isDefinitionExpanded}
+        isDefinitionAutoCompacted={isDefinitionAutoCompacted}
+        isEditingTitle={isEditingTitle}
+        isEditingDescription={isEditingDescription}
+        onTitleChange={setTitle}
+        onDescriptionChange={setDescription}
+        onDefinitionToggle={handleDefinitionToggle}
+        onLockToggle={handleLockToggle}
+        onCollapseToggle={handleCollapseToggle}
+        onEditStart={handleEditStart}
+        onEditEnd={handleEditEnd}
+      />
+    </div>
+  );
 
   return (
     <div
@@ -850,20 +928,7 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       />
 
       {/* Header with controls */}
-      <BoundingBoxHeader
-        title={title}
-        description={description}
-        isCollapsed={isCollapsed}
-        isLocked={isLocked}
-        isEditingTitle={isEditingTitle}
-        isEditingDescription={isEditingDescription}
-        onTitleChange={setTitle}
-        onDescriptionChange={setDescription}
-        onLockToggle={handleLockToggle}
-        onCollapseToggle={handleCollapseToggle}
-        onEditStart={handleEditStart}
-        onEditEnd={handleEditEnd}
-      />
+      {headerPortalHost ? createPortal(headerLayer, headerPortalHost) : headerLayer}
 
       {selected && !isCollapsed && (
         <div
@@ -956,10 +1021,15 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
       {!isCollapsed && (
         <div className="bounding-box-status" style={{
           position: 'absolute',
-          bottom: '8px',
-          left: '12px',
-          fontSize: '11px',
-          color: 'rgba(255, 255, 255, 0.6)',
+          bottom: '16px',
+          left: '28px',
+          right: '28px',
+          padding: '9px 14px',
+          fontSize: '16px',
+          color: 'rgba(255, 255, 255, 0.84)',
+          background: 'rgba(34, 35, 35, 0.92)',
+          borderRadius: '6px',
+          boxSizing: 'border-box',
         }}>
           {containedNodes.length} node{containedNodes.length !== 1 ? 's' : ''}
           {isLayouting && ' (arranging...)'}

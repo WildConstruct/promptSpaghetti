@@ -76,12 +76,17 @@ export interface GroupHierarchy {
 export interface BoundingBoxHeaderProps {
   title: string;
   description?: string;
+  width?: number;
+  height?: number;
   isCollapsed: boolean;
   isLocked: boolean;
+  isDefinitionExpanded: boolean;
+  isDefinitionAutoCompacted: boolean;
   isEditingTitle: boolean;
   isEditingDescription: boolean;
   onTitleChange: (title: string) => void;
   onDescriptionChange: (description: string) => void;
+  onDefinitionToggle: () => void;
   onLockToggle: () => void;
   onCollapseToggle: () => void;
   onEditStart: (type: 'title' | 'description') => void;

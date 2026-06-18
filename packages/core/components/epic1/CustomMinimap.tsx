@@ -1,5 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Node, Edge, useViewport, useReactFlow } from 'reactflow';
+import {
+  getMinimapNodeColor,
+  getMinimapNodeBorderRadius,
+  getMinimapNodeStrokeColor,
+  getMinimapNodeStrokeWidth
+} from './nodeVisualTheme';
 import './CustomMinimap.css';
 
 interface CustomMinimapProps {
@@ -196,19 +202,6 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
           const nodeWidth = 280 * scale;
           const nodeHeight = 140 * scale;
           
-          // Choose color based on node type
-          let color = '#666';
-          switch (node.type) {
-            case 'textBlock': color = '#7c7ff2'; break;
-            case 'weightedChoice': color = '#f6a723'; break;
-            case 'concat': color = '#22c493'; break;
-            case 'variable': color = '#9d70f7'; break;
-            case 'output': color = '#f15656'; break;
-            case 'enhancedBoundingBox': color = '#4ECDC4'; break; // Teal for bounding boxes
-            case 'boundingBox': color = '#4ECDC4'; break; // Same for regular bounding boxes
-            default: color = '#666'; break;
-          }
-          
           return (
             <rect
               key={node.id}
@@ -216,10 +209,10 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
               y={Number.isFinite(sy) ? sy : 0}
               width={nodeWidth}
               height={nodeHeight}
-              fill={color}
-              stroke="#fff"
-              strokeWidth={0.5}
-              rx={2}
+              fill={getMinimapNodeColor(node)}
+              stroke={getMinimapNodeStrokeColor(node)}
+              strokeWidth={getMinimapNodeStrokeWidth(node)}
+              rx={getMinimapNodeBorderRadius(node)}
               opacity={0.8}
             />
           );

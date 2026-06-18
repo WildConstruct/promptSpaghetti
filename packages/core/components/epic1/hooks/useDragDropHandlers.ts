@@ -13,6 +13,7 @@ import {
 } from './dragDropContainerUtils';
 import { debugLogEpic1 } from '../../../utils/debug';
 import { createNodeId as sharedCreateNodeId } from '../utils/nodeDefaults';
+import { BOUNDING_BOX_CONSTANTS } from '../nodes/EnhancedBoundingBox/utils/constants';
 import {
   getInlinePresetDocument,
   isSafePresetSourcePath
@@ -82,7 +83,7 @@ const getNodeWidth = (node: FlowNode): number =>
     ? node.width
     : typeof (node.data as Record<string, unknown>)?.width === 'number'
       ? ((node.data as Record<string, unknown>).width as number)
-      : 400;
+      : BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_WIDTH;
 
 const getNodeHeight = (node: FlowNode): number =>
   (() => {
@@ -657,8 +658,8 @@ export function useDragDropHandlers({
             borderWidth: 2,
             locked: false,
             isCollapsed: false,
-            width: 400,
-            height: 300
+            width: BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_WIDTH,
+            height: BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_HEIGHT
           })
         }
       };
@@ -666,12 +667,12 @@ export function useDragDropHandlers({
       if (nodeType === 'enhancedBoundingBox') {
         newNode = {
           ...newNode,
-          width: 400,
-          height: 300,
+          width: BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_WIDTH,
+          height: BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_HEIGHT,
           style: {
             ...(newNode.style ?? {}),
-            width: 400,
-            height: 300
+            width: BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_WIDTH,
+            height: BOUNDING_BOX_CONSTANTS.dimensions.DEFAULT_HEIGHT
           }
         };
       }

@@ -278,9 +278,6 @@ textarea,
 
 /* Ensure minimap nodes are visible */
 .react-flow__minimap-node {
-  fill: var(--color-accent-orange) !important;
-  stroke: var(--color-ui-border) !important;
-  stroke-width: 1px !important;
   opacity: 0.9 !important;
 }
 
