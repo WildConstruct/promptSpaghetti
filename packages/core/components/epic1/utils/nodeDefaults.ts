@@ -49,6 +49,12 @@ export function getDefaultNodeData(type: string): Record<string, unknown> {
         width: REGION_DEFAULT_WIDTH,
         height: REGION_DEFAULT_HEIGHT
       };
+    case 'postItNote':
+      return {
+        nodeType: 'postItNote',
+        text: '',
+        value: ''
+      };
     default:
       return {};
   }

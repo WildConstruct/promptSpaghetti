@@ -226,41 +226,53 @@ export const ProgressTracker: React.FC = () => {
 // Mini progress widget for header
 export const ProgressWidget: React.FC = () => {
   const { onboardingState } = useTutorial();
+  const sequenceProgress = onboardingState.sequenceProgress ?? { basic: 0, advanced: 0 };
+  const items = [
+    { id: 'basic', label: 'Basic', progress: sequenceProgress.basic ?? 0, color: '#22c55e' },
+    { id: 'advanced', label: 'Advanced', progress: sequenceProgress.advanced ?? 0, color: '#38bdf8' },
+  ];
 
   return (
     <div
       style={{
-        display: 'flex',
-        alignItems: 'center',
+        display: 'grid',
         gap: '8px',
-        padding: '8px 16px',
-        backgroundColor: '#f3f4f6',
+        width: '220px',
+        padding: '10px 12px',
+        backgroundColor: 'rgba(24, 25, 25, 0.94)',
+        border: '1px solid rgba(148, 163, 184, 0.2)',
         borderRadius: '8px',
-        fontSize: '14px',
+        color: '#e5e7eb',
+        fontSize: '12px',
+        boxShadow: '0 12px 32px rgba(0, 0, 0, 0.28)',
       }}
     >
-      <span style={{ color: '#6b7280' }}>Progress:</span>
-      <div
-        style={{
-          width: '100px',
-          height: '4px',
-          backgroundColor: '#e5e7eb',
-          borderRadius: '2px',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            height: '100%',
-            width: `${onboardingState.tutorialProgress}%`,
-            backgroundColor: '#6366f1',
-            transition: 'width 0.3s ease',
-          }}
-        />
-      </div>
-      <span style={{ color: '#374151', fontWeight: 500 }}>
-        {Math.round(onboardingState.tutorialProgress)}%
-      </span>
+      <span style={{ color: '#a3a3a3', fontSize: '11px' }}>Tutorial progress</span>
+      {items.map(item => (
+        <div key={item.id}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span>{item.label}</span>
+            <span>{Math.round(item.progress)}%</span>
+          </div>
+          <div
+            style={{
+              height: '4px',
+              backgroundColor: 'rgba(229, 231, 235, 0.14)',
+              borderRadius: '2px',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                height: '100%',
+                width: `${Math.max(0, Math.min(item.progress, 100))}%`,
+                backgroundColor: item.color,
+                transition: 'width 0.3s ease',
+              }}
+            />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

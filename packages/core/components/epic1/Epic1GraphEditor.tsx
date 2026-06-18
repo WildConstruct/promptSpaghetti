@@ -83,6 +83,8 @@ import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { AuthModal } from '../auth/AuthModal';
 import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
 import { TutorialOverlay } from './onboarding/TutorialOverlay';
+import { CanvasTipPanel } from './onboarding/CanvasTipPanel';
+import { ProgressWidget } from './onboarding/ProgressTracker';
 import type { AgentFragmentRecord, Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import { getSupabase } from '../../utils/supabaseClient';
@@ -107,6 +109,16 @@ import {
 import { ComponentLibraryService } from './services/ComponentLibraryService';
 import { GraphReferenceService } from './services/GraphReferenceService';
 import { validateClosedComponentSelection } from './services/ComponentValidationService';
+import {
+  buildRegionBoxFragment,
+  createRegionFragmentFilename
+} from './services/RegionBoxFragmentExport';
+import {
+  getUserFragmentFolderFromCookie,
+  saveLocalUserFragment,
+  setUserFragmentFolderCookie
+} from './services/LocalUserFragmentStorage';
+import { buildGraphCommands } from './services/GraphCommandRegistry';
 import {
   ComponentSaveDialog,
   type ComponentSaveDraft
@@ -273,6 +285,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
   const [isCommanderOpen, setIsCommanderOpen] = useState(false);
+  const [canvasTipsForceKey, setCanvasTipsForceKey] = useState(0);
+  const { startTutorial } = useTutorial();
 
   // Initial props remain the source of truth for this editor mount.
   const { persistedState } = useGraphPersistence([], [], {
@@ -650,6 +664,12 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
     window.addEventListener('keydown', handleCommanderKeyDown);
     return () => window.removeEventListener('keydown', handleCommanderKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const handleOpenCommander = () => setIsCommanderOpen(true);
+    window.addEventListener('epic1:openCommander', handleOpenCommander);
+    return () => window.removeEventListener('epic1:openCommander', handleOpenCommander);
   }, []);
 
   // Keyboard shortcuts
@@ -1159,6 +1179,112 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     onExecute?.(enhancedNodes, edges);
   };
 
+  const saveSelectedRegionBoxAsUserFragment = useCallback(async () => {
+    const selectedRegion =
+      enhancedNodes.find(
+        (node: Node<EditableNodeData>) =>
+          node.selected && node.type === 'enhancedBoundingBox'
+      ) ??
+      (selectedNodeId
+        ? enhancedNodes.find(
+            (node: Node<EditableNodeData>) =>
+              node.id === selectedNodeId && node.type === 'enhancedBoundingBox'
+          )
+        : null);
+
+    if (!selectedRegion) {
+      showToast('info', 'Select a Region Box to save as a fragment');
+      return;
+    }
+
+    const selectedRegionData = selectedRegion.data as
+      | (EditableNodeData & { title?: unknown })
+      | undefined;
+    const defaultName =
+      typeof selectedRegionData?.title === 'string' &&
+      selectedRegionData.title.trim().length > 0
+        ? selectedRegionData.title.trim()
+        : 'Region Fragment';
+
+    // eslint-disable-next-line no-alert
+    const requestedName = window.prompt('Name this fragment:', defaultName);
+    if (requestedName === null) {
+      return;
+    }
+
+    const fragmentName = requestedName.trim() || defaultName;
+    let folderPath = getUserFragmentFolderFromCookie();
+
+    if (!folderPath) {
+      // eslint-disable-next-line no-alert
+      const requestedFolder = window.prompt(
+        'Enter the folder path to use as your Prompt Spaghetti documents folder. Fragments will be saved under a "fragments" subfolder.',
+        ''
+      );
+
+      if (!requestedFolder?.trim()) {
+        showToast('info', 'Choose a documents folder before saving fragments');
+        return;
+      }
+
+      folderPath = requestedFolder.trim();
+      setUserFragmentFolderCookie(folderPath);
+    }
+
+    try {
+      const fragment = buildRegionBoxFragment({
+        regionNodeId: selectedRegion.id,
+        nodes: enhancedNodes,
+        edges,
+        name: fragmentName
+      });
+      const filename = createRegionFragmentFilename(fragmentName);
+      const result = await saveLocalUserFragment({
+        folderPath,
+        filename,
+        content: JSON.stringify(fragment, null, 2)
+      });
+
+      window.dispatchEvent(
+        new CustomEvent('epic1:userFragmentsChanged', {
+          detail: {
+            folderPath,
+            filename: result.filename,
+            savedPath: result.savedPath
+          }
+        })
+      );
+      showToast('success', `Saved "${fragmentName}" to user fragments`);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to save fragment';
+      showToast('error', message);
+    }
+  }, [edges, enhancedNodes, selectedNodeId, showToast]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const win = window as typeof window & {
+      __EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__?:
+        | (() => Promise<void>)
+        | null;
+    };
+    win.__EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__ =
+      saveSelectedRegionBoxAsUserFragment;
+
+    return () => {
+      if (
+        win.__EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__ ===
+        saveSelectedRegionBoxAsUserFragment
+      ) {
+        win.__EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__ = null;
+      }
+    };
+  }, [saveSelectedRegionBoxAsUserFragment]);
+
   const saveSelectionAsComponent = useCallback(() => {
     const selectedNodes = nodes.filter((node: Node<EditableNodeData>) => node.selected);
     if (selectedNodes.length === 0) {
@@ -1544,6 +1670,12 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   const commandPaletteCommands = useMemo<GraphCommanderCommand[]>(() => {
     const spawnPosition = getCommandSpawnPosition();
+    const registryCommands = buildGraphCommands({
+      createNode,
+      openCanvasTips: () => setCanvasTipsForceKey(key => key + 1),
+      spawnPosition,
+      startTutorial
+    });
 
     return [
       {
@@ -1640,47 +1772,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         description: 'Delete the selected nodes',
         execute: () => deleteSelectedNodes()
       },
-      {
-        id: 'nodes.create_text_block',
-        label: 'Add Text Block Node',
-        aliases: ['text', 'text block'],
-        category: 'Nodes',
-        description: 'Create a new text block node',
-        execute: () => createNode('textBlock', spawnPosition)
-      },
-      {
-        id: 'nodes.create_weighted_choice',
-        label: 'Add Weighted Choice Node',
-        aliases: ['choice', 'branch', 'weighted choice'],
-        category: 'Nodes',
-        description: 'Create a new weighted choice node',
-        execute: () => createNode('weightedChoice', spawnPosition)
-      },
-      {
-        id: 'nodes.create_concat',
-        label: 'Add Concatenate Node',
-        aliases: ['concat', 'merge text'],
-        category: 'Nodes',
-        description: 'Create a concatenate node',
-        execute: () => createNode('concat', spawnPosition)
-      },
-      {
-        id: 'nodes.create_output',
-        label: 'Add Output Node',
-        aliases: ['output', 'result'],
-        category: 'Nodes',
-        description: 'Create a new output node',
-        execute: () => createNode('output', spawnPosition)
-      },
-      {
-        id: 'nodes.create_region_box',
-        label: 'Create Region Box',
-        aliases: ['region', 'box', 'group'],
-        category: 'Nodes',
-        shortcut: 'R',
-        description: 'Create a region box at the viewport center',
-        execute: () => createNode('enhancedBoundingBox', spawnPosition)
-      },
+      ...registryCommands,
       {
         id: 'layout.align_horizontal',
         label: 'Align Horizontal',
@@ -1789,6 +1881,16 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         execute: () => saveSelectionAsComponent()
       },
       {
+        id: 'fragments.save_selected_region',
+        label: 'Save Region Box as Fragment',
+        aliases: ['save region fragment', 'region to fragment', 'user fragment'],
+        category: 'Fragments',
+        description: 'Save the selected Region Box and enclosed nodes to the local user fragment library',
+        execute: () => {
+          void saveSelectedRegionBoxAsUserFragment();
+        }
+      },
+      {
         id: 'components.insert_latest',
         label: 'Insert Latest Component',
         aliases: ['insert component', 'component library'],
@@ -1859,6 +1961,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     insertComponentDefinition,
     neatenAll,
     saveSelectionAsComponent,
+    saveSelectedRegionBoxAsUserFragment,
     pasteFromClipboard,
     previewTrayIsOpen,
     refreshOutdatedComponentInstances,
@@ -1866,6 +1969,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     resetZoom,
     selectAll,
     selectConnectedNodes,
+    startTutorial,
     togglePreview,
     triggerImport,
     zoomIn,
@@ -2205,15 +2309,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                         y: paneContextMenu.y
                       })
                     : { x: 0, y: 0 };
-                  setNodes(current => [
-                    ...current,
-                    {
-                      id: `note-${Date.now()}`,
-                      type: 'postItNote',
-                      position: flow,
-                      data: { nodeType: 'postItNote', text: '' }
-                    } as unknown as Node<EditableNodeData>
-                  ]);
+                  createNode('postItNote', flow);
                 }}
               />
             )}
@@ -2235,6 +2331,18 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               />
             )}
           </SafeReactFlowWrapper>
+
+          <CanvasTipPanel
+            key={canvasTipsForceKey}
+            forceOpen={canvasTipsForceKey > 0}
+            onDismiss={() => setCanvasTipsForceKey(0)}
+            onOpenCommander={() => setIsCommanderOpen(true)}
+            onStartTutorial={startTutorial}
+          />
+
+          <div style={{ position: 'absolute', right: 24, top: 24, zIndex: 120 }}>
+            <ProgressWidget />
+          </div>
 
           {/* NodePalette - positioned outside ReactFlow */}
           <div style={{            position: 'absolute',            top: 0,            left: 0,            bottom: 0,
