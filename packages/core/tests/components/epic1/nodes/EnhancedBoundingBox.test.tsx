@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { ReactFlowProvider } from 'reactflow';
+import { ReactFlowProvider, Position } from 'reactflow';
 import { EnhancedBoundingBox } from '../../../../components/epic1/nodes/EnhancedBoundingBox';
-import { NodeProps } from 'reactflow';
+import { NodeProps, Node } from 'reactflow';
 import '@testing-library/jest-dom';
 
 // Mock React Flow hooks
@@ -258,6 +258,42 @@ describe('EnhancedBoundingBox', () => {
         screen.queryByText('The fixed era and material language every facade inherits.')
       ).not.toBeInTheDocument();
     });
+
+    it('keeps the definition visible for an empty short Region Box', () => {
+      mockGetNodes.mockReturnValue([
+        {
+          id: 'test-box',
+          position: { x: 100, y: 100 },
+          type: 'enhancedBoundingBox'
+        },
+      ]);
+      const emptyShortProps = {
+        ...defaultProps,
+        data: {
+          ...defaultProps.data,
+          title: 'Empty Region',
+          description: 'No child nodes need vertical breathing room yet.',
+          width: 560,
+          height: 260
+        }
+      };
+
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...emptyShortProps} />
+        </ReactFlowProvider>
+      );
+
+      const header = document.querySelector(
+        '.bounding-box-header'
+      ) as HTMLElement | null;
+
+      expect(header).toHaveAttribute('data-header-density', 'narrow');
+      expect(header).toHaveAttribute('data-definition-state', 'expanded');
+      expect(
+        screen.getByText('No child nodes need vertical breathing room yet.')
+      ).toBeInTheDocument();
+    });
   });
 
   describe('Resize Functionality', () => {
@@ -269,10 +305,8 @@ describe('EnhancedBoundingBox', () => {
         </ReactFlowProvider>
       );
       
-      // Look for resize handle elements with the resize-handle class
       const resizeHandles = container.querySelectorAll('[class*="resize-handle"]');
-      // The refactored version should have resize handles when selected
-      expect(resizeHandles.length).toBeGreaterThanOrEqual(0); // Changed to allow 0 as the component may render differently
+      expect(resizeHandles).toHaveLength(8);
     });
 
     it('should not show resize handles when collapsed', () => {
@@ -308,17 +342,17 @@ describe('EnhancedBoundingBox', () => {
       
       const callbacks = mockSetNodes.mock.calls
         .map(call => call[0])
-        .filter((fn): fn is (nodes: any[]) => any[] => typeof fn === 'function');
+        .filter((fn): fn is (nodes: Node[]) => Node[] => typeof fn === 'function');
       expect(callbacks.length).toBeGreaterThan(0);
 
       const candidateResults = callbacks.map(fn =>
         fn([
-          { id: 'test-box', position: { x: 100, y: 100 } },
-          { id: 'node-1', position: { x: 150, y: 150 }, hidden: false },
+          { id: 'test-box', position: { x: 100, y: 100 }, data: {} },
+          { id: 'node-1', position: { x: 150, y: 150 }, hidden: false, data: {} },
         ])
       );
       const resultWithHiddenNode = candidateResults.find(updatedNodes =>
-        updatedNodes.find((n: any) => n.id === 'node-1')?.hidden === true
+        updatedNodes.find(n => n.id === 'node-1')?.hidden === true
       );
       expect(resultWithHiddenNode).toBeDefined();
     });
@@ -332,8 +366,8 @@ describe('EnhancedBoundingBox', () => {
           ...defaultProps.data,
           isCollapsed: true,
           ports: [
-            { id: 'input-1', label: 'Input 1', type: 'string' as const, direction: 'input' as const, nodeId: 'test-box', position: 'left' as any },
-            { id: 'output-1', label: 'Output 1', type: 'string' as const, direction: 'output' as const, nodeId: 'test-box', position: 'right' as any },
+            { id: 'input-1', label: 'Input 1', type: 'string' as const, direction: 'input' as const, nodeId: 'test-box', position: Position.Left },
+            { id: 'output-1', label: 'Output 1', type: 'string' as const, direction: 'output' as const, nodeId: 'test-box', position: Position.Right },
           ],
         },
       };
@@ -356,7 +390,7 @@ describe('EnhancedBoundingBox', () => {
           ...defaultProps.data,
           isCollapsed: true,
           ports: [
-            { id: 'input-1', label: 'Input 1', type: 'string' as const, direction: 'input' as const, nodeId: 'test-box', position: 'left' as any },
+            { id: 'input-1', label: 'Input 1', type: 'string' as const, direction: 'input' as const, nodeId: 'test-box', position: Position.Left },
           ],
         },
       };

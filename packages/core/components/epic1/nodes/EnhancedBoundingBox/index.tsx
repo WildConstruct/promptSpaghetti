@@ -757,11 +757,12 @@ export const EnhancedBoundingBox: React.FC<Epic1NodeProps<EnhancedBoundingBoxDat
   const isDefinitionAutoCompacted = useMemo(
     () =>
       !isCollapsed &&
+      containedNodes.length > 0 &&
       effectiveSize.height -
         REGION_STATUS_RESERVE_HEIGHT -
         COMPACT_HEADER_TARGET_HEIGHT <
         MIN_VISIBLE_REGION_CHILD_HEIGHT,
-    [effectiveSize.height, isCollapsed]
+    [containedNodes.length, effectiveSize.height, isCollapsed]
   );
 
   const handleDefinitionToggle = useCallback(() => {
