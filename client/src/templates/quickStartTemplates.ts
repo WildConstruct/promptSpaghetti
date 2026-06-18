@@ -652,9 +652,9 @@ const indyCrowdCardTemplate: QuickStartTemplate = {
       '1960s Indianapolis 500 spectator card, documentary race-day realism, full-body single person, neutral card background, clean silhouette for EraCrowd layout'
     ),
     weightedChoiceNode('indy-spectator-role', 520, 20, 'Spectator Role', [
-      { id: 'indy-role-1', text: 'grandstand race fan', weight: 35 },
-      { id: 'indy-role-2', text: 'pit-lane crew observer', weight: 25 },
-      { id: 'indy-role-3', text: 'trackside photographer', weight: 20 },
+      { id: 'indy-role-1', text: 'race fan', weight: 35 },
+      { id: 'indy-role-2', text: 'crew observer', weight: 25 },
+      { id: 'indy-role-3', text: 'race photographer', weight: 20 },
       { id: 'indy-role-4', text: 'family spectator with program', weight: 20 }
     ]),
     weightedChoiceNode('indy-wardrobe', 520, 220, 'Wardrobe Variation', [
@@ -663,11 +663,12 @@ const indyCrowdCardTemplate: QuickStartTemplate = {
       { id: 'indy-wardrobe-3', text: 'crew coveralls, headset around neck', weight: 20 },
       { id: 'indy-wardrobe-4', text: 'summer dress, gloves, small handbag', weight: 15 }
     ]),
-    weightedChoiceNode('indy-zone', 520, 420, 'Layout Zone Cue', [
-      { id: 'indy-zone-1', text: 'grandstand seated, facing track', weight: 45 },
-      { id: 'indy-zone-2', text: 'concourse standing, mid-distance', weight: 25 },
-      { id: 'indy-zone-3', text: 'pit wall background extra, three-quarter view', weight: 20 },
-      { id: 'indy-zone-4', text: 'VIP box seated, relaxed posture', weight: 10 }
+    // Pose/framing cue only (track/grandstand removed — composited later).
+    weightedChoiceNode('indy-zone', 520, 420, 'Pose Cue', [
+      { id: 'indy-zone-1', text: 'seated, facing camera, relaxed posture', weight: 45 },
+      { id: 'indy-zone-2', text: 'standing, three-quarter view, weight on one leg', weight: 25 },
+      { id: 'indy-zone-3', text: 'seated, leaning forward, hands on knees', weight: 20 },
+      { id: 'indy-zone-4', text: 'standing, hands in pockets, casual', weight: 10 }
     ]),
     textNode(
       'indy-card-constraints',
@@ -976,21 +977,33 @@ const gangsterTemplate: QuickStartTemplate = {
       'fed by a fat 50-round drum magazine'
     ),
     concatNode('gang-weapon-merge', 1320, 140, 'Weapon Merge'),
-    weightedChoiceNode('gang-venue', 900, 320, 'Speakeasy Venue', [
-      { id: 'vn-1', text: 'a smoky backroom jazz club', weight: 34 },
-      { id: 'vn-2', text: 'a basement card den', weight: 33 },
-      { id: 'vn-3', text: 'a hotel-suite blind pig', weight: 33 }
+    // Character prop/tell, not a place (the venue was environment — extraction
+    // keeps the subject clean).
+    weightedChoiceNode('gang-venue', 900, 320, 'Tell', [
+      { id: 'vn-1', text: 'palming a thick roll of cash', weight: 34 },
+      { id: 'vn-2', text: 'lighting a fat cigar', weight: 33 },
+      { id: 'vn-3', text: 'flashing a gold pinky ring', weight: 33 }
     ]),
     concatNode('gang-role-merge', 1720, 240, 'Role Merge'),
-    weightedChoiceNode('gang-attire', 480, 460, 'Attire', [
-      { id: 'at-1', text: 'in a double-breasted pinstripe suit', weight: 34 },
-      { id: 'at-2', text: 'in a fedora and long wool overcoat', weight: 33 },
-      { id: 'at-3', text: 'in a waistcoat with sleeves rolled up', weight: 33 }
+    // Prefix setup (parts-of-speech): a Wear modifier wires straight into the
+    // Attire choice and prepends to it (implicit concat, no Merge) — e.g.
+    // "rumpled double-breasted pinstripe suit".
+    weightedChoiceNode('gang-attire-wear', 80, 460, 'Wear', [
+      { id: 'aw-1', text: 'crisp', weight: 34 },
+      { id: 'aw-2', text: 'rumpled', weight: 33 },
+      { id: 'aw-3', text: 'rain-damp', weight: 33 }
     ]),
-    weightedChoiceNode('gang-scene', 480, 640, 'Scene', [
-      { id: 'sn-1', text: 'on a rain-slicked brick alley at night', weight: 34 },
-      { id: 'sn-2', text: 'in a dim speakeasy backroom', weight: 33 },
-      { id: 'sn-3', text: 'on a snow-dusted street outside a flophouse', weight: 33 }
+    weightedChoiceNode('gang-attire', 480, 460, 'Attire', [
+      { id: 'at-1', text: 'double-breasted pinstripe suit', weight: 34 },
+      { id: 'at-2', text: 'fedora and long wool overcoat', weight: 33 },
+      { id: 'at-3', text: 'waistcoat with sleeves rolled up', weight: 33 }
+    ]),
+    // Extraction plate: neutral gray backdrop (the location is composited later),
+    // not a described environment.
+    weightedChoiceNode('gang-backdrop', 480, 640, 'Backdrop', [
+      { id: 'bd-1', text: 'against a flat neutral light-gray studio backdrop, soft even lighting, no harsh shadows', weight: 34 },
+      { id: 'bd-2', text: 'on a seamless pale-gray sweep, soft even lighting, clean edges for extraction', weight: 33 },
+      { id: 'bd-3', text: 'before an even mid-gray cyclorama, diffuse lighting, full body in frame', weight: 33 }
     ]),
     concatNode('gang-main', 2120, 320, 'Assemble Gangster'),
     outputNode('gang-output', 2480, 320, 'chicago_gangster')
@@ -1008,8 +1021,10 @@ const gangsterTemplate: QuickStartTemplate = {
     { id: 'g-e9', source: 'gang-weapon-merge', target: 'gang-role-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
     { id: 'g-e10', source: 'gang-venue', target: 'gang-role-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
     { id: 'g-e11', source: 'gang-role-merge', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    // Wear prepends into Attire (implicit concat), then the result joins the prompt.
+    { id: 'g-e12a', source: 'gang-attire-wear', target: 'gang-attire', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' },
     { id: 'g-e12', source: 'gang-attire', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
-    { id: 'g-e13', source: 'gang-scene', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'g-e13', source: 'gang-backdrop', target: 'gang-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
     { id: 'g-e14', source: 'gang-main', target: 'gang-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
   ]
 };
@@ -1075,10 +1090,11 @@ const underworldTemplate: QuickStartTemplate = {
       { id: 'aw-2', text: 'in a flat cap and rough work clothes', weight: 33 },
       { id: 'aw-3', text: 'in shirtsleeves and suspenders', weight: 33 }
     ]),
-    weightedChoiceNode('uw-scene', 480, 840, 'Scene', [
-      { id: 'sw-1', text: 'in a rain-slicked brick alley', weight: 34 },
-      { id: 'sw-2', text: 'on a foggy dockside at dawn', weight: 33 },
-      { id: 'sw-3', text: 'in a smoke-filled speakeasy backroom', weight: 33 }
+    // Extraction plate: neutral gray backdrop (location composited later).
+    weightedChoiceNode('uw-backdrop', 480, 840, 'Backdrop', [
+      { id: 'sw-1', text: 'against a flat neutral light-gray studio backdrop, soft even lighting, no harsh shadows', weight: 34 },
+      { id: 'sw-2', text: 'on a seamless pale-gray sweep, soft even lighting, clean edges for extraction', weight: 33 },
+      { id: 'sw-3', text: 'before an even mid-gray cyclorama, diffuse lighting, full body in frame', weight: 33 }
     ]),
     concatNode('uw-main', 2360, 380, 'Assemble Character'),
     outputNode('uw-output', 2720, 380, 'underworld_character')
@@ -1105,7 +1121,7 @@ const underworldTemplate: QuickStartTemplate = {
     { id: 'u-e19', source: 'uw-trade-merge', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
     { id: 'u-e20', source: 'uw-build', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
     { id: 'u-e21', source: 'uw-attire', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
-    { id: 'u-e22', source: 'uw-scene', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input6' },
+    { id: 'u-e22', source: 'uw-backdrop', target: 'uw-main', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input6' },
     { id: 'u-e23', source: 'uw-main', target: 'uw-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
   ]
 };
@@ -1145,10 +1161,11 @@ const baseballTemplate: QuickStartTemplate = {
       { id: 'ba-2', text: 'in a team windbreaker', weight: 33 },
       { id: 'ba-3', text: 'in a sun hat and sunglasses', weight: 33 }
     ]),
-    weightedChoiceNode('bb-seat', 480, 640, 'Vantage', [
-      { id: 'bs-1', text: 'in the lower-bowl box seats', weight: 34 },
-      { id: 'bs-2', text: 'up in the bleachers', weight: 33 },
-      { id: 'bs-3', text: 'leaning on the outfield rail', weight: 33 }
+    // Extraction plate: neutral gray backdrop (stadium composited later).
+    weightedChoiceNode('bb-seat', 480, 640, 'Backdrop', [
+      { id: 'bs-1', text: 'against a flat neutral light-gray studio backdrop, soft even lighting, no harsh shadows', weight: 34 },
+      { id: 'bs-2', text: 'on a seamless pale-gray sweep, soft even lighting, clean edges for extraction', weight: 33 },
+      { id: 'bs-3', text: 'before an even mid-gray cyclorama, diffuse lighting, full body in frame', weight: 33 }
     ]),
     concatNode('bb-main', 2120, 320, 'Assemble Spectator'),
     outputNode('bb-output', 2480, 320, 'baseball_spectator')
@@ -1298,11 +1315,12 @@ const dinerTemplate: QuickStartTemplate = {
 const westernTemplate: QuickStartTemplate = {
   nodes: [
     textNode('ws-dna', 80, 100, 'Western DNA', 'Spaghetti western character, sun-bleached frontier, Sergio Leone wide-angle grit, dust and heat haze'),
-    weightedChoiceNode('ws-town', 80, 320, 'Setting (locked DNA)', [
-      { id: 'wt-1', text: 'in a dusty border town', weight: 25, locked: true },
-      { id: 'wt-2', text: 'at a remote mining camp', weight: 25 },
-      { id: 'wt-3', text: 'by a lonely railroad outpost', weight: 25 },
-      { id: 'wt-4', text: 'at a sun-scorched crossroads', weight: 25 }
+    // Extraction plate: neutral gray backdrop (frontier location composited
+    // later). Locked so the plate stays consistent for clean extraction.
+    weightedChoiceNode('ws-town', 80, 320, 'Backdrop (locked)', [
+      { id: 'wt-1', text: 'against a flat neutral light-gray studio backdrop, soft even lighting, no harsh shadows', weight: 25, locked: true },
+      { id: 'wt-2', text: 'on a seamless pale-gray sweep, soft even lighting, clean edges for extraction', weight: 25 },
+      { id: 'wt-3', text: 'before an even mid-gray cyclorama, diffuse lighting, full body in frame', weight: 25 }
     ]),
     weightedChoiceNode('ws-arch', 480, 180, 'Archetype', [
       { id: 'wa-1', text: 'a grizzled town sheriff', weight: 28 },
@@ -1328,10 +1346,11 @@ const westernTemplate: QuickStartTemplate = {
       { id: 'wr-2', text: 'with a tin star and leather vest', weight: 33 },
       { id: 'wr-3', text: 'in a bandana and spurred boots', weight: 33 }
     ]),
+    // Pose only — no environment (location composited later).
     weightedChoiceNode('ws-scene', 480, 640, 'Stance', [
-      { id: 'wn-1', text: 'squinting down an empty main street', weight: 34 },
-      { id: 'wn-2', text: 'leaning in a saloon doorway', weight: 33 },
-      { id: 'wn-3', text: 'standing over a fresh grave', weight: 33 }
+      { id: 'wn-1', text: 'squinting hard, hand hovering over the holster', weight: 34 },
+      { id: 'wn-2', text: 'thumbs hooked in the gun belt, weight on one hip', weight: 33 },
+      { id: 'wn-3', text: 'coat swept back, ready to draw', weight: 33 }
     ]),
     concatNode('ws-main', 2120, 320, 'Assemble Character'),
     outputNode('ws-output', 2480, 320, 'spaghetti_western_character')
