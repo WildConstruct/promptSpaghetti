@@ -111,11 +111,7 @@ import {
   ComponentSaveDialog,
   type ComponentSaveDraft
 } from './ComponentSaveDialog';
-import {
-  getMinimapNodeColor,
-  getMinimapNodeStrokeColor,
-  getMinimapNodeStrokeWidth
-} from './nodeVisualTheme';
+import { epic1MinimapProps } from './nodeVisualTheme';
 
 import './ReactFlowOverrides.css';
 import './Epic1GraphEditor.css';
@@ -2154,10 +2150,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               <MiniMap
                 pannable
                 zoomable
-                nodeColor={getMinimapNodeColor}
-                nodeStrokeColor={getMinimapNodeStrokeColor}
-                nodeStrokeWidth={getMinimapNodeStrokeWidth}
-                nodeBorderRadius={3}
+                {...epic1MinimapProps}
               />
 
               {/* Additional UI Elements moved outside due to React Flow rendering issues */}

@@ -38,3 +38,10 @@ export function getMinimapNodeStrokeWidth(node: Pick<Node, 'type'>): number {
 export function getMinimapNodeBorderRadius(node: Pick<Node, 'type'>): number {
   return node.type && MINIMAP_REGION_TYPES.has(node.type) ? 3 : 2;
 }
+
+export const epic1MinimapProps = {
+  nodeColor: getMinimapNodeColor,
+  nodeStrokeColor: getMinimapNodeStrokeColor,
+  nodeStrokeWidth: getMinimapNodeStrokeWidth,
+  nodeBorderRadius: 3
+} as const;

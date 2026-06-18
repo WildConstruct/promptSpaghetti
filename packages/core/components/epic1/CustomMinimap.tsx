@@ -28,6 +28,17 @@ interface DragState {
   viewportY: number;
 }
 
+const DEFAULT_NODE_WIDTH = 280;
+const DEFAULT_NODE_HEIGHT = 140;
+
+const getNodeDimensions = (node: Node) => {
+  const dataSize = node.data as { width?: number; height?: number } | undefined;
+  return {
+    width: node.width ?? dataSize?.width ?? DEFAULT_NODE_WIDTH,
+    height: node.height ?? dataSize?.height ?? DEFAULT_NODE_HEIGHT
+  };
+};
+
 export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, style }) => {
   const viewport = useViewport();
   const { getViewport, setViewport } = useReactFlow();
@@ -47,8 +58,7 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
     nodes.forEach(node => {
       const x = node.position.x;
       const y = node.position.y;
-      const width = 280; // Default width
-      const height = 140; // Default height
+      const { width, height } = getNodeDimensions(node);
       
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
@@ -76,8 +86,9 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
     if (!node) {
       return null;
     }
-    const x = (node.position.x - bounds.minX + 140) * scale; // 140 is half of node width
-    const y = (node.position.y - bounds.minY + 70) * scale; // 70 is half of node height
+    const { width, height } = getNodeDimensions(node);
+    const x = (node.position.x - bounds.minX + width / 2) * scale;
+    const y = (node.position.y - bounds.minY + height / 2) * scale;
     return { x, y };
   };
   
@@ -199,8 +210,9 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
           const y = (node?.position?.y ?? 0) - bounds.minY;
           const sx = x * scale;
           const sy = y * scale;
-          const nodeWidth = 280 * scale;
-          const nodeHeight = 140 * scale;
+          const { width, height } = getNodeDimensions(node);
+          const nodeWidth = width * scale;
+          const nodeHeight = height * scale;
           
           return (
             <rect

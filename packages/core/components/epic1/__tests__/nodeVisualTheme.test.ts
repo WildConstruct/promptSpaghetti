@@ -1,5 +1,6 @@
 import type { Node } from 'reactflow';
 import {
+  epic1MinimapProps,
   getMinimapNodeColor,
   getMinimapNodeBorderRadius,
   getMinimapNodeStrokeColor,
@@ -46,5 +47,12 @@ describe('node visual theme', () => {
 
   it('falls back to a visible neutral color for unknown node types', () => {
     expect(getMinimapNodeColor(node('unknownNode'))).toBe('#94a3b8');
+  });
+
+  it('exports the React Flow minimap prop contract used by the editor', () => {
+    expect(epic1MinimapProps.nodeColor).toBe(getMinimapNodeColor);
+    expect(epic1MinimapProps.nodeStrokeColor).toBe(getMinimapNodeStrokeColor);
+    expect(epic1MinimapProps.nodeStrokeWidth).toBe(getMinimapNodeStrokeWidth);
+    expect(epic1MinimapProps.nodeBorderRadius).toBe(3);
   });
 });
