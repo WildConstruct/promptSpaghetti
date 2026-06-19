@@ -75,6 +75,14 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     branching: true
   },
   {
+    id: 'televangelist_saga',
+    title: 'Televangelist Saga (Variables)',
+    description:
+      'Capture a preacher’s identity once into variables, then reuse it across four eras — rise, peak, scandal branch, and comeback — assembled into one life story. The Variable-node showcase.',
+    category: 'characters',
+    branching: true
+  },
+  {
     id: 'spaghetti_western',
     title: 'Spaghetti Western Character',
     description:

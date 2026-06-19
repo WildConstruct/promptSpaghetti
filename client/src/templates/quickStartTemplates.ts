@@ -146,6 +146,36 @@ function regionBox(
   };
 }
 
+// A Variable node. In the canonical engine a variable is a named bucket:
+//   - mode 'set'  → stores its incoming value (or `defaultValue` if unwired)
+//                   under `name` in the run's variable namespace.
+//   - read it back anywhere by writing `{{name}}` inside a Text Block or a
+//     Weighted Choice option (the engine substitutes at run time).
+// Capturing a roll: wire a Weighted Choice into a 'set' variable and the single
+// roll is frozen for that run, so every `{{name}}` echoes the SAME pick.
+function variableNode(
+  id: string,
+  x: number,
+  y: number,
+  name: string,
+  opts?: { mode?: 'set' | 'get' | 'both'; defaultValue?: string; label?: string }
+): Node<TemplateNodeData> {
+  const mode = opts?.mode ?? 'set';
+  return {
+    id,
+    position: { x, y },
+    type: 'variable',
+    data: {
+      nodeType: 'variable',
+      label: opts?.label ?? `$${name}`,
+      variableName: name,
+      name,
+      mode,
+      defaultValue: opts?.defaultValue ?? ''
+    }
+  };
+}
+
 // Custom template for character generation with choices - improved layout
 const characterTemplate: QuickStartTemplate = {
   nodes: [
@@ -1685,8 +1715,261 @@ const phraseGrammarBranchingTemplate: QuickStartTemplate = {
   ]
 };
 
+// Televangelist Saga — the canonical Variable-node showcase.
+//
+// THE LESSON: capture a character's identity ONCE into variables, then reuse it
+// across many lanes so the same man is recognizable through the decades. Three
+// rolls (name / ministry / signature tell) are frozen into $preacher, $ministry
+// and $tell; every era lane references {{preacher}} / {{ministry}} / {{tell}},
+// so a given seed yields one consistent televangelist across his whole rise and
+// fall — change the seed and you get a brand-new preacher, still consistent.
+//
+// PROMPTING DISCIPLINE: appearance is never jammed into one choice. Each era
+// breaks the wardrobe into independent fragments — top / bottom / footwear /
+// condition — each its own Weighted Choice, glued by small prefix/suffix text
+// and assembled by a Concat. The Fall lane additionally BRANCHES by scandal
+// type, each branch routing to its own fallout fragment.
+const televangelistSagaTemplate: QuickStartTemplate = {
+  nodes: [
+    // --- Region documentation -------------------------------------------------
+    regionBox(
+      'tv-region-dna',
+      40,
+      -40,
+      700,
+      640,
+      REGION.dna,
+      'Locked identity — captured once',
+      'Three rolls are frozen into variables. Every era below reuses {{preacher}}, {{ministry}} and {{tell}}, so the same man is recognizable across the decades. New seed → new preacher, still consistent.'
+    ),
+    regionBox(
+      'tv-region-era1',
+      780,
+      -40,
+      1980,
+      250,
+      REGION.backdrop,
+      'The Rise · 1974 — fragment assembly',
+      'Appearance is broken into separate fragments — top, bottom, footwear, condition — never one combined choice. A Concat glues them into the era line.'
+    ),
+    regionBox(
+      'tv-region-era2',
+      780,
+      250,
+      1980,
+      250,
+      REGION.backdrop,
+      'The Peak · 1986 — same pattern, new wardrobe',
+      'Identical fragment structure, different options. Reusing the locked identity keeps it the same preacher in his gold-age finery.'
+    ),
+    regionBox(
+      'tv-region-era3',
+      780,
+      520,
+      1980,
+      380,
+      REGION.branch,
+      'The Fall · 1991 — branch by scandal',
+      'A branching Weighted Choice commits to a scandal type; each branch routes to its own fallout fragment. Inactive branches drop out of the merge automatically.'
+    ),
+    regionBox(
+      'tv-region-era4',
+      780,
+      900,
+      1980,
+      250,
+      REGION.backdrop,
+      'The Comeback · 2004 — fragment assembly',
+      'Tanned and rebranded for cable, still the same locked identity underneath.'
+    ),
+    regionBox(
+      'tv-region-history',
+      2800,
+      -40,
+      640,
+      1190,
+      REGION.merge,
+      'Assemble the life story',
+      'A final Concat stitches the four era lines into one multi-prompt history of a single man across forty years.'
+    ),
+
+    // --- Identity capture (rolls → set variables) ----------------------------
+    weightedChoiceNode('tv-name-roll', 100, 30, 'Name roll → $preacher', [
+      { id: 'tv-name-1', text: 'Brother Lyle Goodwine', weight: 34 },
+      { id: 'tv-name-2', text: 'Reverend Dewey Crumpler', weight: 33 },
+      { id: 'tv-name-3', text: 'Pastor Sonny Vance', weight: 33 }
+    ]),
+    weightedChoiceNode('tv-ministry-roll', 100, 230, 'Ministry roll → $ministry', [
+      { id: 'tv-min-1', text: 'the Glory Tabernacle Hour', weight: 34 },
+      { id: 'tv-min-2', text: 'the Rapture Roundup Network', weight: 33 },
+      { id: 'tv-min-3', text: 'Sunrise Salvation Television', weight: 33 }
+    ]),
+    weightedChoiceNode('tv-tell-roll', 100, 430, 'Signature tell → $tell', [
+      { id: 'tv-tell-1', text: 'mops his brow with a monogrammed handkerchief', weight: 34 },
+      { id: 'tv-tell-2', text: 'jabs a trembling finger at the camera', weight: 33 },
+      { id: 'tv-tell-3', text: 'drops to one knee mid-sermon', weight: 33 }
+    ]),
+    variableNode('tv-var-preacher', 470, 50, 'preacher', {
+      mode: 'set',
+      defaultValue: 'Brother Lyle Goodwine',
+      label: '$preacher = name'
+    }),
+    variableNode('tv-var-ministry', 470, 250, 'ministry', {
+      mode: 'set',
+      defaultValue: 'the Glory Tabernacle Hour',
+      label: '$ministry'
+    }),
+    variableNode('tv-var-tell', 470, 450, 'tell', {
+      mode: 'set',
+      defaultValue: 'mops his brow with a monogrammed handkerchief',
+      label: '$tell'
+    }),
+
+    // --- Era 1 · The Rise -----------------------------------------------------
+    textNode('tv1-lead', 800, 30, 'Era lead (reuses identity)', '1974 · tent revival — {{preacher}} of {{ministry}}'),
+    weightedChoiceNode('tv1-top', 1080, 20, 'Top', [
+      { id: 'tv1-top-1', text: 'in a secondhand suit two sizes too big', weight: 50 },
+      { id: 'tv1-top-2', text: 'in a borrowed white preacher’s shirt', weight: 50 }
+    ]),
+    weightedChoiceNode('tv1-bottom', 1340, 20, 'Bottom', [
+      { id: 'tv1-bot-1', text: 'with frayed brown trousers', weight: 50 },
+      { id: 'tv1-bot-2', text: 'with patched work slacks', weight: 50 }
+    ]),
+    weightedChoiceNode('tv1-feet', 1600, 20, 'Footwear', [
+      { id: 'tv1-feet-1', text: 'and scuffed wingtips', weight: 50 },
+      { id: 'tv1-feet-2', text: 'and dusty field boots', weight: 50 }
+    ]),
+    weightedChoiceNode('tv1-cond', 1860, 20, 'Condition', [
+      { id: 'tv1-cond-1', text: 'sweating through every word', weight: 50 },
+      { id: 'tv1-cond-2', text: 'hoarse and electric with conviction', weight: 50 }
+    ]),
+    textNode('tv1-tail', 2120, 30, 'Suffix (reuses $tell)', 'who {{tell}}'),
+    concatNode('tv1-line', 2420, 30, 'The Rise line', { separator: ', ' }),
+
+    // --- Era 2 · The Peak -----------------------------------------------------
+    textNode('tv2-lead', 800, 310, 'Era lead', '1986 · the gold years — {{preacher}} of {{ministry}}'),
+    weightedChoiceNode('tv2-top', 1080, 300, 'Top', [
+      { id: 'tv2-top-1', text: 'in a powder-blue three-piece suit', weight: 50 },
+      { id: 'tv2-top-2', text: 'in a sequined ivory dinner jacket', weight: 50 }
+    ]),
+    weightedChoiceNode('tv2-bottom', 1340, 300, 'Bottom', [
+      { id: 'tv2-bot-1', text: 'with sharply creased slacks', weight: 50 },
+      { id: 'tv2-bot-2', text: 'with gold-piped trousers', weight: 50 }
+    ]),
+    weightedChoiceNode('tv2-feet', 1600, 300, 'Footwear', [
+      { id: 'tv2-feet-1', text: 'and white patent-leather loafers', weight: 50 },
+      { id: 'tv2-feet-2', text: 'and tasseled crocodile shoes', weight: 50 }
+    ]),
+    weightedChoiceNode('tv2-cond', 1860, 300, 'Condition', [
+      { id: 'tv2-cond-1', text: 'groomed to a television sheen', weight: 50 },
+      { id: 'tv2-cond-2', text: 'backlit by stained-glass spotlights', weight: 50 }
+    ]),
+    textNode('tv2-tail', 2120, 310, 'Suffix (reuses $tell)', 'who {{tell}}'),
+    concatNode('tv2-line', 2420, 310, 'The Peak line', { separator: ', ' }),
+
+    // --- Era 3 · The Fall (branch by scandal) --------------------------------
+    textNode('tv3-lead', 800, 560, 'Era lead', '1991 · the fall — {{preacher}} of {{ministry}}'),
+    weightedChoiceNode('tv3-top', 1080, 550, 'Top', [
+      { id: 'tv3-top-1', text: 'in a rumpled jacket thrown over yesterday’s shirt', weight: 50 },
+      { id: 'tv3-top-2', text: 'in a sweat-darkened dress shirt, collar undone', weight: 50 }
+    ]),
+    weightedChoiceNode('tv3-bottom', 1340, 550, 'Bottom', [
+      { id: 'tv3-bot-1', text: 'with a wrinkled, slept-in suit', weight: 50 },
+      { id: 'tv3-bot-2', text: 'with trousers creased from the courtroom bench', weight: 50 }
+    ]),
+    weightedChoiceNode('tv3-feet', 1600, 550, 'Setting', [
+      { id: 'tv3-feet-1', text: 'on the courthouse steps', weight: 50 },
+      { id: 'tv3-feet-2', text: 'hounded across the parking lot', weight: 50 }
+    ]),
+    weightedChoiceNode('tv3-scandal', 1860, 550, 'Scandal branch', [
+      { id: 'tv3-scan-fraud', text: 'exposed in a ministry-funds scandal', weight: 34, hasBranch: true },
+      { id: 'tv3-scan-affair', text: 'trailed by a tabloid affair', weight: 33, hasBranch: true },
+      { id: 'tv3-scan-expose', text: 'debunked in a faith-healing exposé', weight: 33, hasBranch: true }
+    ]),
+    textNode('tv3-fallout-fraud', 2180, 540, 'Fraud fallout', 'while his accountants are led away in handcuffs'),
+    textNode('tv3-fallout-affair', 2180, 660, 'Affair fallout', 'while the congregation weeps in the pews'),
+    textNode('tv3-fallout-expose', 2180, 780, 'Exposé fallout', 'while the “healed” rise to testify against him'),
+    concatNode('tv3-line', 2480, 620, 'The Fall line', { separator: ', ' }),
+
+    // --- Era 4 · The Comeback -------------------------------------------------
+    textNode('tv4-lead', 800, 940, 'Era lead', '2004 · the comeback — {{preacher}} of {{ministry}}'),
+    weightedChoiceNode('tv4-top', 1080, 930, 'Top', [
+      { id: 'tv4-top-1', text: 'in an open-collar linen shirt', weight: 50 },
+      { id: 'tv4-top-2', text: 'in a tailored charcoal henley', weight: 50 }
+    ]),
+    weightedChoiceNode('tv4-bottom', 1340, 930, 'Bottom', [
+      { id: 'tv4-bot-1', text: 'with relaxed designer jeans', weight: 50 },
+      { id: 'tv4-bot-2', text: 'with pressed travel slacks', weight: 50 }
+    ]),
+    weightedChoiceNode('tv4-feet', 1600, 930, 'Footwear', [
+      { id: 'tv4-feet-1', text: 'and minimalist white sneakers', weight: 50 },
+      { id: 'tv4-feet-2', text: 'and suede driving shoes', weight: 50 }
+    ]),
+    weightedChoiceNode('tv4-cond', 1860, 930, 'Condition', [
+      { id: 'tv4-cond-1', text: 'tanned and unrepentant', weight: 50 },
+      { id: 'tv4-cond-2', text: 'lit by ring-light forgiveness', weight: 50 }
+    ]),
+    textNode('tv4-tail', 2120, 940, 'Suffix (reuses $tell)', 'who still {{tell}}'),
+    concatNode('tv4-line', 2420, 940, 'The Comeback line', { separator: ', ' }),
+
+    // --- Assemble the life story ---------------------------------------------
+    concatNode('tv-history', 2860, 480, 'Forty-year history', { separator: '\n\n' }),
+    outputNode('tv-output', 3180, 480, 'televangelist_saga')
+  ],
+  edges: [
+    // identity capture
+    { id: 'tv-e-name', source: 'tv-name-roll', target: 'tv-var-preacher', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' },
+    { id: 'tv-e-min', source: 'tv-ministry-roll', target: 'tv-var-ministry', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' },
+    { id: 'tv-e-tell', source: 'tv-tell-roll', target: 'tv-var-tell', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' },
+
+    // era 1
+    { id: 'tv1-1', source: 'tv1-lead', target: 'tv1-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tv1-2', source: 'tv1-top', target: 'tv1-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tv1-3', source: 'tv1-bottom', target: 'tv1-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'tv1-4', source: 'tv1-feet', target: 'tv1-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'tv1-5', source: 'tv1-cond', target: 'tv1-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'tv1-6', source: 'tv1-tail', target: 'tv1-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input6' },
+
+    // era 2
+    { id: 'tv2-1', source: 'tv2-lead', target: 'tv2-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tv2-2', source: 'tv2-top', target: 'tv2-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tv2-3', source: 'tv2-bottom', target: 'tv2-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'tv2-4', source: 'tv2-feet', target: 'tv2-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'tv2-5', source: 'tv2-cond', target: 'tv2-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'tv2-6', source: 'tv2-tail', target: 'tv2-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input6' },
+
+    // era 3 (branch by scandal)
+    { id: 'tv3-1', source: 'tv3-lead', target: 'tv3-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tv3-2', source: 'tv3-top', target: 'tv3-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tv3-3', source: 'tv3-bottom', target: 'tv3-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'tv3-4', source: 'tv3-feet', target: 'tv3-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'tv3-b0', source: 'tv3-scandal', target: 'tv3-fallout-fraud', type: 'smoothstep', sourceHandle: 'branch-0', targetHandle: 'target' },
+    { id: 'tv3-b1', source: 'tv3-scandal', target: 'tv3-fallout-affair', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'tv3-b2', source: 'tv3-scandal', target: 'tv3-fallout-expose', type: 'smoothstep', sourceHandle: 'branch-2', targetHandle: 'target' },
+    { id: 'tv3-5', source: 'tv3-fallout-fraud', target: 'tv3-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'tv3-6', source: 'tv3-fallout-affair', target: 'tv3-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input6' },
+    { id: 'tv3-7', source: 'tv3-fallout-expose', target: 'tv3-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input7' },
+
+    // era 4
+    { id: 'tv4-1', source: 'tv4-lead', target: 'tv4-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tv4-2', source: 'tv4-top', target: 'tv4-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tv4-3', source: 'tv4-bottom', target: 'tv4-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'tv4-4', source: 'tv4-feet', target: 'tv4-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'tv4-5', source: 'tv4-cond', target: 'tv4-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input5' },
+    { id: 'tv4-6', source: 'tv4-tail', target: 'tv4-line', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input6' },
+
+    // assemble history
+    { id: 'tv-h1', source: 'tv1-line', target: 'tv-history', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'tv-h2', source: 'tv2-line', target: 'tv-history', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'tv-h3', source: 'tv3-line', target: 'tv-history', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'tv-h4', source: 'tv4-line', target: 'tv-history', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input4' },
+    { id: 'tv-out', source: 'tv-history', target: 'tv-output', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   tech_panel: techPanelTemplate,
+  televangelist_saga: televangelistSagaTemplate,
   tile_builder: tileBuilderTemplate,
   gangsters: gangsterTemplate,
   underworld_skilltree: underworldTemplate,
