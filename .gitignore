@@ -76,3 +76,6 @@ server/src/**/*.map
 
 # Claude Code agent memory (local state)
 memory/
+
+# Superpowers / codex agent scratch (brainstorm + server state)
+.superpowers/
