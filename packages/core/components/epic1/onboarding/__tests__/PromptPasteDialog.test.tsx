@@ -4,27 +4,14 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { jest } from '@jest/globals';
 import { PromptPasteDialog } from '../PromptPasteDialog';
 
-// Mock navigator.clipboard
-Object.defineProperty(navigator, 'clipboard', {
-  value: {
-    writeText: jest.fn(() => Promise.resolve()),
-    readText: jest.fn(() => Promise.resolve(''))
-  },
-  writable: true
-});
-
-// Mock document.getElementById
-const mockGetElementById = jest.fn();
-Object.defineProperty(document, 'getElementById', {
-  value: mockGetElementById,
-  writable: true
-});
-
 describe('PromptPasteDialog', () => {
+  const examplePrompt =
+    'A {weathered|grinning|stoic} 1960s {racegoer|mechanic|vendor} in a {flat cap|straw boater|fedora}, watching from the grandstand';
+
   const defaultProps = {
     isOpen: true,
     onClose: jest.fn(),
@@ -40,71 +27,46 @@ describe('PromptPasteDialog', () => {
     it('should render dialog when open', () => {
       render(<PromptPasteDialog {...defaultProps} />);
 
-      expect(screen.getByText('🍝 Paste Your Prompt')).toBeInTheDocument();
+      expect(screen.getByText('Paste your prompt')).toBeInTheDocument();
       expect(screen.getByText('Paste or type your prompt here:')).toBeInTheDocument();
-      expect(screen.getByText('Create Nodes')).toBeInTheDocument();
+      expect(screen.getByText('Create nodes')).toBeInTheDocument();
     });
 
     it('should not render when closed', () => {
       render(<PromptPasteDialog {...defaultProps} isOpen={false} />);
 
-      expect(screen.queryByText('🍝 Paste Your Prompt')).not.toBeInTheDocument();
+      expect(screen.queryByText('Paste your prompt')).not.toBeInTheDocument();
     });
 
-    it('should show tutorial tip for paste-prompt step', () => {
+    it('should show tutorial helper for tutorial steps', () => {
       render(<PromptPasteDialog {...defaultProps} />);
 
-      expect(screen.getByText('Tutorial Tip:')).toBeInTheDocument();
-      expect(screen.getByText(/Copy the example below/)).toBeInTheDocument();
+      expect(screen.getByText(/We pre-filled an example below/)).toBeInTheDocument();
+      expect(screen.getByText('Use example')).toBeInTheDocument();
     });
 
-    it('should not show tutorial tip for other steps', () => {
-      render(<PromptPasteDialog {...defaultProps} tutorialStep="other-step" />);
+    it('should not show tutorial helper outside tutorial steps', () => {
+      render(<PromptPasteDialog {...defaultProps} tutorialStep={undefined} />);
 
-      expect(screen.queryByText('Tutorial Tip:')).not.toBeInTheDocument();
+      expect(screen.queryByText(/We pre-filled an example below/)).not.toBeInTheDocument();
     });
   });
 
   describe('Example prompt handling', () => {
-    it('should display the correct example prompt', () => {
+    it('should display the current example prompt', () => {
       render(<PromptPasteDialog {...defaultProps} />);
 
-      const expectedPrompt = 'A {brave|cunning|wise} {knight|wizard|rogue} ventures into the {dark forest|ancient ruins|dragon\'s lair}';
-      expect(screen.getByText(expectedPrompt)).toBeInTheDocument();
+      expect(screen.getAllByText(examplePrompt)).toHaveLength(2);
     });
 
-    it('should copy example to clipboard when button clicked', async () => {
-      const mockButton = { textContent: 'Copy Example' };
-      mockGetElementById.mockReturnValue(mockButton);
-
+    it('should use example prompt when button clicked', () => {
       render(<PromptPasteDialog {...defaultProps} />);
 
-      const copyButton = screen.getByText('Copy Example');
-      fireEvent.click(copyButton);
+      const textarea = screen.getByPlaceholderText('Paste your prompt here (Ctrl+V or Cmd+V)...');
+      fireEvent.change(textarea, { target: { value: 'Custom draft' } });
+      fireEvent.click(screen.getByText('Use example'));
 
-      await waitFor(() => {
-        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-          'A {brave|cunning|wise} {knight|wizard|rogue} ventures into the {dark forest|ancient ruins|dragon\'s lair}'
-        );
-      });
-
-      // Check that button text changes temporarily
-      expect(mockButton.textContent).toBe('Copied!');
-    });
-
-    it('should handle clipboard write errors gracefully', async () => {
-      const mockClipboard = navigator.clipboard as any;
-      mockClipboard.writeText.mockRejectedValueOnce(new Error('Clipboard error'));
-
-      render(<PromptPasteDialog {...defaultProps} />);
-
-      const copyButton = screen.getByText('Copy Example');
-      fireEvent.click(copyButton);
-
-      // Should not throw error, should handle gracefully
-      await waitFor(() => {
-        expect(mockClipboard.writeText).toHaveBeenCalled();
-      });
+      expect(textarea).toHaveValue(examplePrompt);
     });
   });
 
@@ -179,48 +141,42 @@ describe('PromptPasteDialog', () => {
   });
 
   describe('Form submission', () => {
-    it('should call onPaste with prompt text when Create Nodes clicked', () => {
+    it('should call onPaste with prompt text when Create nodes clicked', () => {
       const mockOnPaste = jest.fn();
       render(<PromptPasteDialog {...defaultProps} onPaste={mockOnPaste} />);
 
       const textarea = screen.getByPlaceholderText('Paste your prompt here (Ctrl+V or Cmd+V)...');
       fireEvent.change(textarea, { target: { value: 'Test prompt' } });
 
-      const createButton = screen.getByText('Create Nodes');
-      fireEvent.click(createButton);
+      fireEvent.click(screen.getByText('Create nodes'));
 
       expect(mockOnPaste).toHaveBeenCalledWith('Test prompt');
     });
 
-    it('should enable Create Nodes button when text is present', () => {
-      render(<PromptPasteDialog {...defaultProps} />);
+    it('should enable Create nodes button when text is present', () => {
+      render(<PromptPasteDialog {...defaultProps} tutorialStep={undefined} />);
 
       const textarea = screen.getByPlaceholderText('Paste your prompt here (Ctrl+V or Cmd+V)...');
-      const createButton = screen.getByText('Create Nodes');
+      const createButton = screen.getByText('Create nodes');
 
-      // Initially disabled (empty text)
       expect(createButton).toBeDisabled();
 
-      // Enable when text is added
       fireEvent.change(textarea, { target: { value: 'Test prompt' } });
       expect(createButton).not.toBeDisabled();
     });
 
-    it('should disable Create Nodes button when text is empty or whitespace', () => {
-      render(<PromptPasteDialog {...defaultProps} />);
+    it('should disable Create nodes button when text is empty or whitespace', () => {
+      render(<PromptPasteDialog {...defaultProps} tutorialStep={undefined} />);
 
       const textarea = screen.getByPlaceholderText('Paste your prompt here (Ctrl+V or Cmd+V)...');
-      const createButton = screen.getByText('Create Nodes');
+      const createButton = screen.getByText('Create nodes');
 
-      // Test empty
       fireEvent.change(textarea, { target: { value: '' } });
       expect(createButton).toBeDisabled();
 
-      // Test whitespace only
       fireEvent.change(textarea, { target: { value: '   \n\t  ' } });
       expect(createButton).toBeDisabled();
 
-      // Test with actual content
       fireEvent.change(textarea, { target: { value: 'Valid prompt' } });
       expect(createButton).not.toBeDisabled();
     });
@@ -232,8 +188,7 @@ describe('PromptPasteDialog', () => {
       const textarea = screen.getByPlaceholderText('Paste your prompt here (Ctrl+V or Cmd+V)...');
       fireEvent.change(textarea, { target: { value: '  Test prompt  ' } });
 
-      const createButton = screen.getByText('Create Nodes');
-      fireEvent.click(createButton);
+      fireEvent.click(screen.getByText('Create nodes'));
 
       expect(mockOnPaste).toHaveBeenCalledWith('Test prompt');
     });
@@ -244,8 +199,7 @@ describe('PromptPasteDialog', () => {
       const mockOnClose = jest.fn();
       render(<PromptPasteDialog {...defaultProps} onClose={mockOnClose} />);
 
-      const cancelButton = screen.getByText('Cancel');
-      fireEvent.click(cancelButton);
+      fireEvent.click(screen.getByText('Cancel'));
 
       expect(mockOnClose).toHaveBeenCalled();
     });
@@ -254,7 +208,6 @@ describe('PromptPasteDialog', () => {
       const mockOnClose = jest.fn();
       render(<PromptPasteDialog {...defaultProps} onClose={mockOnClose} />);
 
-      // Click on overlay (outside dialog)
       const container = document.body.firstChild as HTMLElement;
       const overlay = container.firstChild as HTMLElement;
       fireEvent.click(overlay);
@@ -263,17 +216,6 @@ describe('PromptPasteDialog', () => {
   });
 
   describe('Keyboard shortcuts', () => {
-    it('should handle Enter key to submit', () => {
-      const mockOnPaste = jest.fn();
-      render(<PromptPasteDialog {...defaultProps} onPaste={mockOnPaste} />);
-
-      const textarea = screen.getByPlaceholderText('Paste your prompt here (Ctrl+V or Cmd+V)...');
-      fireEvent.change(textarea, { target: { value: 'Test prompt' } });
-
-      fireEvent.keyDown(textarea, { key: 'Enter' });
-      // Note: Enter key handling might need to be implemented in the component
-    });
-
     it('should handle Escape key to close', () => {
       const mockOnClose = jest.fn();
       render(<PromptPasteDialog {...defaultProps} onClose={mockOnClose} />);
@@ -286,14 +228,13 @@ describe('PromptPasteDialog', () => {
   });
 
   describe('Accessibility', () => {
-    it('should have proper ARIA labels', () => {
+    it('should have proper label and placeholder', () => {
       render(<PromptPasteDialog {...defaultProps} />);
 
       const textarea = screen.getByPlaceholderText('Paste your prompt here (Ctrl+V or Cmd+V)...');
       expect(textarea).toHaveAttribute('placeholder');
 
-      const label = screen.getByText('Paste or type your prompt here:');
-      expect(label).toBeInTheDocument();
+      expect(screen.getByText('Paste or type your prompt here:')).toBeInTheDocument();
     });
 
     it('should have focus management', () => {

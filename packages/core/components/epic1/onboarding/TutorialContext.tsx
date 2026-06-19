@@ -23,6 +23,7 @@ export interface TutorialStep {
   hint?: string;
   position?: TutorialPlacement;
   spotlight?: boolean;
+  loadTemplateId?: string;
 }
 
 export interface OnboardingState {
@@ -207,16 +208,7 @@ export const TutorialProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const skipTutorial = useCallback(() => {
     setIsActive(false);
-    setOnboardingState(prev => ({
-      ...prev,
-      completedSteps: activeTutorialSteps.map(s => s.id),
-      tutorialProgress: 100,
-      sequenceProgress: {
-        ...prev.sequenceProgress,
-        [activeSequenceId]: 100,
-      },
-    }));
-  }, [activeSequenceId, activeTutorialSteps]);
+  }, []);
 
   const completeTutorial = useCallback(() => {
     setTutorialCompletionCookie(activeSequenceId);

@@ -66,7 +66,7 @@ interface EditorSurfacePolicyActions {
   onReportBug?: () => void;
   onChangelog?: () => void;
   onGettingStarted?: () => void;
-  onAdvancedTutorial?: () => void;
+  onTutorials?: () => void;
   onUserGuide?: () => void;
 }
 
@@ -509,12 +509,12 @@ export const buildEditorSurfacePolicy = ({
   );
   pushAction(
     helpItems,
-    actions.onAdvancedTutorial
+    actions.onTutorials
       ? {
           type: 'action',
-          id: 'advancedTutorial',
-          label: 'Advanced Tutorial',
-          onClick: actions.onAdvancedTutorial
+          id: 'tutorials',
+          label: 'Tutorials...',
+          onClick: actions.onTutorials
         }
       : null
   );

@@ -31,6 +31,9 @@ export interface TutorialStepDefinition {
   anchorId?: TutorialAnchorId;
   target?: string;
   targetSelectors?: string[];
+  /** When set, entering this step loads that example graph (by
+   *  quickStartTemplates id) so later steps can point at real nodes. */
+  loadTemplateId?: string;
 }
 
 export const TUTORIAL_STEP_IDS = {
@@ -151,4 +154,31 @@ export const tutorialSteps: TutorialStepDefinition[] = [
 export const tutorialSequences: Record<TutorialSequenceId, TutorialStepDefinition[]> = {
   basic: tutorialSteps,
   advanced: advancedTutorialSteps,
+};
+
+/** Display metadata for each tutorial sequence, used by the Tutorials panel.
+ *  Adding a new tutorial = add its steps to tutorialSequences and an entry
+ *  here; the panel lists everything in `order`. */
+export interface TutorialSequenceMeta {
+  title: string;
+  summary: string;
+  order: number;
+}
+
+export const TUTORIAL_SEQUENCE_META: Record<
+  TutorialSequenceId,
+  TutorialSequenceMeta
+> = {
+  basic: {
+    title: 'Getting Started',
+    summary:
+      'Open the wizard, turn a prompt into a small graph, and preview the result.',
+    order: 1
+  },
+  advanced: {
+    title: 'Phrase Grammar & Branching',
+    summary:
+      'Walk a real example graph: phrase parts, glue nodes, branch commitments, conditional detail, safe merges, and region boxes.',
+    order: 2
+  }
 };

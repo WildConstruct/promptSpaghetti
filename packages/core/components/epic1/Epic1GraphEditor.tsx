@@ -84,7 +84,6 @@ import { AuthModal } from '../auth/AuthModal';
 import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
 import { TutorialOverlay } from './onboarding/TutorialOverlay';
 import { CanvasTipPanel } from './onboarding/CanvasTipPanel';
-import { ProgressWidget } from './onboarding/ProgressTracker';
 import type { AgentFragmentRecord, Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import { getSupabase } from '../../utils/supabaseClient';
@@ -313,6 +312,27 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
       setEdges(initialEdges);
     }
   }, [initialNodes, initialEdges]);
+
+  // Apply a graph pushed in live (e.g. a tutorial loading its demo) without a
+  // remount, so a running tutorial's provider/overlay survive the load.
+  React.useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (
+        event as CustomEvent<{ nodes?: Node<EditableNodeData>[]; edges?: Edge[] }>
+      ).detail;
+      if (!detail?.nodes) {
+        return;
+      }
+      setNodes(detail.nodes);
+      setEdges(detail.edges ?? []);
+      window.setTimeout(
+        () => reactFlowInstance?.fitView?.({ padding: 0.2 }),
+        60
+      );
+    };
+    window.addEventListener('epic1:applyGraph', handler);
+    return () => window.removeEventListener('epic1:applyGraph', handler);
+  }, [setNodes, setEdges, reactFlowInstance]);
 
   // Toast notifications
   const { toasts, showToast, dismissToast } = useToast();
@@ -2358,10 +2378,6 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             onOpenCommander={() => setIsCommanderOpen(true)}
             onStartTutorial={startTutorial}
           />
-
-          <div style={{ position: 'absolute', right: 24, top: 24, zIndex: 120 }}>
-            <ProgressWidget />
-          </div>
 
           {/* NodePalette - positioned outside ReactFlow */}
           <div style={{            position: 'absolute',            top: 0,            left: 0,            bottom: 0,

@@ -160,19 +160,25 @@ describe('TutorialContext', () => {
     expect(result.current.currentStep).toBe(0);
   });
 
-  it('skipTutorial marks every step as completed and stops the flow', () => {
+  it('skipTutorial stops the flow without counting as completion', () => {
     const { result } = renderTutorialHook(() => useTutorial());
 
     act(() => {
       result.current.startTutorial();
+      result.current.nextStep();
+    });
+
+    const progressBeforeSkip = result.current.onboardingState.tutorialProgress;
+    const completedBeforeSkip = result.current.onboardingState.completedSteps;
+
+    act(() => {
       result.current.skipTutorial();
     });
 
     expect(result.current.isActive).toBe(false);
-    expect(result.current.onboardingState.tutorialProgress).toBe(100);
-    expect(result.current.onboardingState.completedSteps).toEqual(
-      result.current.tutorialSteps.map(step => step.id)
-    );
+    expect(result.current.onboardingState.tutorialProgress).toBe(progressBeforeSkip);
+    expect(result.current.onboardingState.sequenceProgress.basic).toBe(progressBeforeSkip);
+    expect(result.current.onboardingState.completedSteps).toEqual(completedBeforeSkip);
     expect(result.current.onboardingState.completedSequences).not.toContain('basic');
     expect(document.cookie).not.toContain('psg_tutorial_completed_basic=true');
   });

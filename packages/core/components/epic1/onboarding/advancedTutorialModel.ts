@@ -11,86 +11,98 @@ export const ADVANCED_TUTORIAL_STEP_IDS = {
   DEBUG_BAD_OUTPUT: 'advanced-debug-bad-output',
 } as const;
 
+// Each step points at a real node in the `phrase_grammar_branching` example
+// graph (loaded by the first step) so the concept is shown, not just described.
+const pgNode = (id: string): string[] => [`.react-flow__node[data-id="${id}"]`];
+
 export const advancedTutorialSteps: TutorialStepDefinition[] = [
   {
     id: ADVANCED_TUTORIAL_STEP_IDS.PHRASE_MACHINES,
     title: 'Prompts Are Phrase Machines',
     description:
-      'Think of the graph as a system for assembling language. Each node should make a phrase decision that the next node can safely inherit.',
+      'We just loaded a small clothing-character system. Think of this graph as a machine for assembling language — every node makes a phrase decision the next node can safely inherit. We will walk through it piece by piece.',
     action: 'observe',
     position: 'center',
     spotlight: false,
     anchorId: 'canvas',
+    loadTemplateId: 'phrase_grammar_branching',
   },
   {
     id: ADVANCED_TUTORIAL_STEP_IDS.PHRASE_PARTS,
     title: 'Complete Phrases vs Phrase Parts',
     description:
-      'Some nodes should output complete phrases, while others are useful fragments. The trick is knowing whether the next node expects a finished thought or a part of one.',
+      'This Text Block outputs a complete phrase ("a weary back-alley character"). Other nodes, like the Wardrobe branch, output parts that still need gluing. The skill is knowing whether the next node expects a finished thought or a fragment.',
     action: 'observe',
     position: 'right',
     spotlight: true,
+    targetSelectors: pgNode('pg-character-base'),
     anchorId: 'graph-nodes',
   },
   {
     id: ADVANCED_TUTORIAL_STEP_IDS.GLUE_NODES,
     title: 'Glue Nodes',
     description:
-      'Small Text Block nodes such as "with a", "wearing", "under", and "beside" keep branches grammatically stable without hiding the structure.',
+      'This tiny "with a" Text Block is a glue node — it keeps the branches downstream grammatically stable without burying connective words inside a choice. Glue nodes are small, but they make bad grammar easy to spot and fix.',
     action: 'observe',
-    hint: 'Glue nodes are often tiny, but they make bad prompt grammar much easier to debug.',
+    hint: 'Glue lives in the green "Grammar glue" region box.',
     position: 'right',
     spotlight: true,
-    anchorId: 'node-palette',
+    targetSelectors: pgNode('pg-with-a'),
+    anchorId: 'graph-nodes',
   },
   {
     id: ADVANCED_TUTORIAL_STEP_IDS.BRANCH_COMMITMENTS,
     title: 'Branches as Commitments',
     description:
-      'A branch is a promise. Once a branch chooses a suit coat, downstream detail should respect that choice instead of attaching generic suffixes to every path.',
+      'This Wardrobe branch is a promise. Once it chooses the suit coat, the downstream detail must respect that — instead of bolting a generic suffix onto every path. The teal "Branch commitment" box marks where that promise is made.',
     action: 'observe',
     position: 'right',
     spotlight: true,
+    targetSelectors: pgNode('pg-wardrobe'),
     anchorId: 'graph-nodes',
   },
   {
     id: ADVANCED_TUTORIAL_STEP_IDS.CONDITIONAL_DETAIL,
     title: 'Conditional Detail',
     description:
-      'Attach detail downstream only when it applies to that branch. Shirt colors can follow the jacket path, while a t-shirt branch should carry its own complete wording.',
+      'This "visible shirt beneath jacket" choice only fires on the jacket branch — conditional detail attached where it applies. The t-shirt branch already carries its own complete wording, so it never needs it.',
     action: 'observe',
     position: 'right',
     spotlight: true,
+    targetSelectors: pgNode('pg-visible-shirt'),
     anchorId: 'graph-nodes',
   },
   {
     id: ADVANCED_TUTORIAL_STEP_IDS.SAFE_MERGE,
     title: 'Merge When The Phrase Is Whole',
     description:
-      'Merge branches after each active path has become a coherent phrase. That avoids broken outputs like a t-shirt branch receiving a separate black-shirt suffix.',
+      'This Merge fires only after each active path has become a coherent phrase. Merging too early is what produces broken output — like a t-shirt branch receiving a separate black-shirt suffix meant for jackets.',
     action: 'observe',
     position: 'left',
     spotlight: true,
-    anchorId: 'preview-button',
+    targetSelectors: pgNode('pg-safe-merge'),
+    anchorId: 'graph-nodes',
   },
   {
     id: ADVANCED_TUTORIAL_STEP_IDS.REGION_BOXES,
     title: 'Region Boxes As Thought Labels',
     description:
-      'Use Region Boxes to name intent: fixed DNA, controlled variation, branch group, merge zone, cleanup zone. They make the graph readable before anyone inspects a node.',
+      'The colored Region Boxes name intent — branch commitment, grammar glue, complete-phrase merge, bad-output fix. They make the graph readable at a glance, before anyone inspects a single node.',
     action: 'observe',
     position: 'top-right',
     spotlight: true,
+    targetSelectors: pgNode('pg-region-branch'),
     anchorId: 'region-box',
   },
   {
     id: ADVANCED_TUTORIAL_STEP_IDS.DEBUG_BAD_OUTPUT,
     title: 'Debugging Bad Output',
     description:
-      'When output sounds wrong, find the node that made the grammar ambiguous. Move the prefix, suffix, or merge point until each branch can stand on its own.',
+      'When output sounds wrong, find the node that made the grammar ambiguous. The orange "Bad-output fix" box shows the rule: the t-shirt path includes its own color internally, so it never receives a suffix meant for the jacket path.',
     action: 'observe',
     position: 'right',
     spotlight: true,
-    anchorId: 'template-library',
+    targetSelectors: pgNode('pg-region-fix'),
+    anchorId: 'graph-nodes',
   },
 ];

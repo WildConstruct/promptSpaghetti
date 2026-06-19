@@ -21,7 +21,7 @@ describe('buildEditorSurfacePolicy', () => {
     onToggleAssetLibrary: jest.fn(),
     onReportBug: jest.fn(),
     onChangelog: jest.fn(),
-    onAdvancedTutorial: jest.fn()
+    onTutorials: jest.fn()
   };
 
   it('keeps Comfy as the primary handoff and marks crowd expansion hosted-only in local mode', () => {
@@ -166,8 +166,8 @@ describe('buildEditorSurfacePolicy', () => {
         }),
         expect.objectContaining({
           type: 'action',
-          id: 'advancedTutorial',
-          label: 'Advanced Tutorial'
+          id: 'tutorials',
+          label: 'Tutorials...'
         }),
         expect.objectContaining({
           type: 'action',

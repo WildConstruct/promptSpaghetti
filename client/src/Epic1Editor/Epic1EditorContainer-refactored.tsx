@@ -100,6 +100,10 @@ const ChangelogModal = lazy(
   () => import('@promptscape/core/components/ChangelogModal/ChangelogModal')
 );
 
+const TutorialsModal = lazy(async () => {
+  const module = await import('./components/TutorialsModal');
+  return { default: module.TutorialsModal };
+});
 const GuideModal = lazy(async () => {
   const module = await import('./components/GuideModal');
   return { default: module.GuideModal };
@@ -171,6 +175,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
 
   const [showChangelog, setShowChangelog] = useState(false);
+  const [showTutorials, setShowTutorials] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [guideTab, setGuideTab] = useState<'getting-started' | 'user-guide'>('getting-started');
   const [showBugReportDialog, setShowBugReportDialog] = useState(false);
@@ -589,6 +594,43 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     ]
   );
 
+  // A running tutorial can ask to load an example graph (so its steps can point
+  // at real nodes). This force-loads without the Save/Discard prompt — the user
+  // explicitly started a guided tutorial — but still snapshots for recovery.
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const templateId = (event as CustomEvent<{ templateId?: string }>).detail
+        ?.templateId;
+      const tmpl = templateId ? quickStartTemplates[templateId] : undefined;
+      if (!tmpl) {
+        return;
+      }
+      if (currentNodes.length > 0) {
+        void saveForRecovery(currentNodes, currentEdges);
+      }
+      // Keep container state in sync...
+      handleNodesChange(tmpl.nodes as Node[]);
+      handleEdgesChange(tmpl.edges as Edge[]);
+      // ...and push the graph into the LIVE editor without a remount (setEditorKey
+      // would remount Epic1GraphEditor, and the TutorialProvider lives inside it —
+      // remounting would reset a tutorial the moment it loads its demo graph).
+      window.dispatchEvent(
+        new CustomEvent('epic1:applyGraph', {
+          detail: { nodes: tmpl.nodes, edges: tmpl.edges }
+        })
+      );
+    };
+    window.addEventListener('epic1:loadTutorialGraph', handler);
+    return () =>
+      window.removeEventListener('epic1:loadTutorialGraph', handler);
+  }, [
+    currentNodes,
+    currentEdges,
+    saveForRecovery,
+    handleNodesChange,
+    handleEdgesChange
+  ]);
+
   const editorSurfacePolicy = useMemo(
     () =>
       buildEditorSurfacePolicy({
@@ -644,13 +686,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             setGuideTab('getting-started');
             setShowGuide(true);
           },
-          onAdvancedTutorial: () => {
-            window.dispatchEvent(
-              new CustomEvent('epic1:startTutorial', {
-                detail: { sequenceId: 'advanced' }
-              })
-            );
-          },
+          onTutorials: () => setShowTutorials(true),
           onUserGuide: () => {
             setGuideTab('user-guide');
             setShowGuide(true);
@@ -752,6 +788,14 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             <ChangelogModal
               isOpen={showChangelog}
               onClose={() => setShowChangelog(false)}
+            />
+          )}
+
+        {showTutorials &&
+          renderDeferredSurface(
+            <TutorialsModal
+              isOpen={showTutorials}
+              onClose={() => setShowTutorials(false)}
             />
           )}
 

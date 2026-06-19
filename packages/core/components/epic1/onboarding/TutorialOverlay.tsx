@@ -55,6 +55,16 @@ export const TutorialOverlay: React.FC = () => {
     };
   }, [currentStep, step.action]);
 
+  useEffect(() => {
+    if (!isActive || !step.loadTemplateId) {
+      return;
+    }
+    window.dispatchEvent(
+      new CustomEvent('epic1:loadTutorialGraph', {
+        detail: { templateId: step.loadTemplateId }
+      })
+    );
+  }, [isActive, currentStep, step.loadTemplateId]);
   // Find target element and trigger position recalculation
   useEffect(() => {
     if (!isActive) {return;}
