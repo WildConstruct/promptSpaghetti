@@ -1967,9 +1967,131 @@ const televangelistSagaTemplate: QuickStartTemplate = {
   ]
 };
 
+// ---------------------------------------------------------------------------
+// Lesson graphs — tiny, single-concept teaching graphs for the tutorial ladder.
+// Each is small enough to read at a glance and runs cleanly through the engine.
+// Tutorials load these to demonstrate one building block, then drop the learner
+// onto the same graph as a "lab bench" to try the concept themselves.
+// ---------------------------------------------------------------------------
+
+// 1 · Text → Output. The smallest possible graph: a subject that ends in Output.
+const lessonTextOutputTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('lt-text', 160, 120, 'Text Block', 'a lone lighthouse at dusk'),
+    outputNode('lt-out', 560, 120, 'first_prompt')
+  ],
+  edges: [
+    { id: 'lt-e1', source: 'lt-text', target: 'lt-out', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// 2 · One Weighted Choice → Output. Introduces options, weights, and seeds.
+const lessonWeightedChoiceTemplate: QuickStartTemplate = {
+  nodes: [
+    weightedChoiceNode('lw-weather', 160, 120, 'Weather', [
+      { id: 'lw-1', text: 'under clear skies', weight: 40 },
+      { id: 'lw-2', text: 'wrapped in heavy fog', weight: 30 },
+      { id: 'lw-3', text: 'lit by golden hour', weight: 30 }
+    ]),
+    outputNode('lw-out', 560, 130, 'weather_prompt')
+  ],
+  edges: [
+    { id: 'lw-e1', source: 'lw-weather', target: 'lw-out', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// 3 · Two fragments → Concat → Output. Ordered assembly with a separator.
+const lessonConcatTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('lc-subj', 120, 60, 'Subject', 'a red barn'),
+    weightedChoiceNode('lc-detail', 120, 240, 'Detail', [
+      { id: 'lc-d1', text: 'standing in tall grass', weight: 50 },
+      { id: 'lc-d2', text: 'under a stormy sky', weight: 50 }
+    ]),
+    concatNode('lc-merge', 520, 150, 'Merge (“, ”)', { separator: ', ' }),
+    outputNode('lc-out', 860, 150, 'barn_prompt')
+  ],
+  edges: [
+    { id: 'lc-e1', source: 'lc-subj', target: 'lc-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'lc-e2', source: 'lc-detail', target: 'lc-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'lc-e3', source: 'lc-merge', target: 'lc-out', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// 4 · The Variable building block: capture one roll, reuse it twice.
+const lessonVariableTemplate: QuickStartTemplate = {
+  nodes: [
+    regionBox('lv-region', 60, -20, 360, 260, REGION.dna, 'Capture once', 'The color roll is frozen into $hue. Both phrases below read {{hue}} — so they always match.'),
+    weightedChoiceNode('lv-color', 120, 40, 'Color roll → $hue', [
+      { id: 'lv-c1', text: 'crimson', weight: 34 },
+      { id: 'lv-c2', text: 'cobalt', weight: 33 },
+      { id: 'lv-c3', text: 'amber', weight: 33 }
+    ]),
+    variableNode('lv-hue', 120, 230, 'hue', { mode: 'set', defaultValue: 'crimson', label: '$hue' }),
+    textNode('lv-frame', 520, 60, 'Reads {{hue}}', 'a {{hue}} bicycle'),
+    textNode('lv-basket', 520, 240, 'Reads {{hue}} again', 'with a matching {{hue}} basket'),
+    concatNode('lv-merge', 900, 150, 'Merge', { separator: ', ' }),
+    outputNode('lv-out', 1240, 150, 'variable_prompt')
+  ],
+  edges: [
+    { id: 'lv-e1', source: 'lv-color', target: 'lv-hue', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' },
+    { id: 'lv-e2', source: 'lv-frame', target: 'lv-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'lv-e3', source: 'lv-basket', target: 'lv-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'lv-e4', source: 'lv-merge', target: 'lv-out', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// 5 · Prefix glue: a connective word held in its own node, not baked into a choice.
+const lessonPrefixTemplate: QuickStartTemplate = {
+  nodes: [
+    textNode('lp-subj', 120, 40, 'Subject', 'a wandering merchant'),
+    textNode('lp-prefix', 120, 200, 'Prefix glue', 'wearing'),
+    weightedChoiceNode('lp-garment', 120, 360, 'Garment', [
+      { id: 'lp-g1', text: 'a wide-brimmed hat', weight: 50 },
+      { id: 'lp-g2', text: 'a tattered travelling cloak', weight: 50 }
+    ]),
+    concatNode('lp-merge', 520, 200, 'Merge (space)', { separator: ' ' }),
+    outputNode('lp-out', 860, 200, 'prefix_prompt')
+  ],
+  edges: [
+    { id: 'lp-e1', source: 'lp-subj', target: 'lp-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'lp-e2', source: 'lp-prefix', target: 'lp-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'lp-e3', source: 'lp-garment', target: 'lp-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input3' },
+    { id: 'lp-e4', source: 'lp-merge', target: 'lp-out', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
+// 6 · Branching: a choice commits to a path, and downstream detail respects it.
+const lessonBranchingTemplate: QuickStartTemplate = {
+  nodes: [
+    regionBox('lb-region', 60, 0, 700, 320, REGION.branch, 'One choice, two paths', 'Each option carries its own branch. Only the chosen path’s detail flows on; the other drops out.'),
+    weightedChoiceNode('lb-class', 120, 100, 'Class branch', [
+      { id: 'lb-knight', text: 'a hardened knight', weight: 50, hasBranch: true },
+      { id: 'lb-wizard', text: 'a hedge wizard', weight: 50, hasBranch: true }
+    ]),
+    textNode('lb-knight-detail', 480, 60, 'Knight path', 'clad in dented plate armor'),
+    textNode('lb-wizard-detail', 480, 200, 'Wizard path', 'draped in star-flecked robes'),
+    concatNode('lb-merge', 840, 120, 'Merge active path', { separator: ', ' }),
+    outputNode('lb-out', 1180, 120, 'branching_prompt')
+  ],
+  edges: [
+    { id: 'lb-b0', source: 'lb-class', target: 'lb-knight-detail', type: 'smoothstep', sourceHandle: 'branch-0', targetHandle: 'target' },
+    { id: 'lb-b1', source: 'lb-class', target: 'lb-wizard-detail', type: 'smoothstep', sourceHandle: 'branch-1', targetHandle: 'target' },
+    { id: 'lb-e1', source: 'lb-knight-detail', target: 'lb-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input1' },
+    { id: 'lb-e2', source: 'lb-wizard-detail', target: 'lb-merge', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'input2' },
+    { id: 'lb-e3', source: 'lb-merge', target: 'lb-out', type: 'smoothstep', sourceHandle: 'source', targetHandle: 'target' }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   tech_panel: techPanelTemplate,
   televangelist_saga: televangelistSagaTemplate,
+  lesson_text_output: lessonTextOutputTemplate,
+  lesson_weighted_choice: lessonWeightedChoiceTemplate,
+  lesson_concat: lessonConcatTemplate,
+  lesson_variable: lessonVariableTemplate,
+  lesson_prefix: lessonPrefixTemplate,
+  lesson_branching: lessonBranchingTemplate,
   tile_builder: tileBuilderTemplate,
   gangsters: gangsterTemplate,
   underworld_skilltree: underworldTemplate,
