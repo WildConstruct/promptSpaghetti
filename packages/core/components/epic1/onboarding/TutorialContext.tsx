@@ -18,7 +18,7 @@ export interface TutorialStep {
   target?: string; // CSS selector
   targetSelectors?: string[];
   anchorId?: TutorialAnchorId;
-  action: 'click' | 'drag' | 'type' | 'observe' | 'paste';
+  action: 'click' | 'drag' | 'type' | 'observe' | 'paste' | 'lab';
   validation?: () => boolean;
   hint?: string;
   position?: TutorialPlacement;
@@ -64,10 +64,13 @@ export interface TutorialContextType {
 const defaultOnboardingState: OnboardingState = {
   activeSequenceId: 'basic',
   tutorialProgress: 0,
-  sequenceProgress: {
-    basic: 0,
-    advanced: 0,
-  },
+  sequenceProgress: (Object.keys(tutorialSequences) as TutorialSequenceId[]).reduce(
+    (acc, id) => {
+      acc[id] = 0;
+      return acc;
+    },
+    {} as Record<TutorialSequenceId, number>
+  ),
   completedSequences: [],
   completedSteps: [],
   achievementsUnlocked: [],
@@ -82,7 +85,8 @@ const defaultOnboardingState: OnboardingState = {
 const TutorialContext = createContext<TutorialContextType | null>(null);
 
 const isTutorialSequenceId = (value: unknown): value is TutorialSequenceId =>
-  value === 'basic' || value === 'advanced';
+  typeof value === 'string' &&
+  Object.prototype.hasOwnProperty.call(tutorialSequences, value);
 
 const getTutorialCompletionCookieName = (sequenceId: TutorialSequenceId) =>
   `psg_tutorial_completed_${sequenceId}`;
@@ -101,10 +105,15 @@ const normalizeSequenceProgress = (value: unknown): Record<TutorialSequenceId, n
     ? value as Partial<Record<TutorialSequenceId, unknown>>
     : {};
 
-  return {
-    basic: typeof candidate.basic === 'number' ? candidate.basic : 0,
-    advanced: typeof candidate.advanced === 'number' ? candidate.advanced : 0,
-  };
+  // Build progress for every registered sequence so new tutorials are covered
+  // automatically (and stale persisted progress for removed ones is dropped).
+  return (Object.keys(tutorialSequences) as TutorialSequenceId[]).reduce(
+    (acc, id) => {
+      acc[id] = typeof candidate[id] === 'number' ? (candidate[id] as number) : 0;
+      return acc;
+    },
+    {} as Record<TutorialSequenceId, number>
+  );
 };
 
 const normalizeOnboardingState = (state: unknown): OnboardingState => {

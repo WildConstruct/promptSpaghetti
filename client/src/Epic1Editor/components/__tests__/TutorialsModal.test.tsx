@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { jest } from '@jest/globals';
 import { TutorialsModal } from '../TutorialsModal';
 
@@ -31,9 +31,14 @@ describe('TutorialsModal', () => {
     const listener = jest.fn();
     window.addEventListener('epic1:startTutorial', listener);
 
-    render(<TutorialsModal isOpen onClose={onClose} />);
+    const { container } = render(<TutorialsModal isOpen onClose={onClose} />);
 
-    fireEvent.click(screen.getAllByText('Start tutorial')[1]);
+    // Click the Start button inside the advanced sequence's card specifically,
+    // so the assertion is independent of how many tutorials are listed.
+    const advancedCard = container.querySelector(
+      '[data-sequence-id="advanced"]'
+    ) as HTMLElement;
+    fireEvent.click(within(advancedCard).getByRole('button'));
 
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(listener).toHaveBeenCalledTimes(1);

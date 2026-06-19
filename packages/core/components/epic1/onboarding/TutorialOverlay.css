@@ -24,6 +24,21 @@
   pointer-events: none;
 }
 
+/* Lab bench: hand the canvas back to the learner — no dim, no click capture. */
+.tutorial-backdrop.lab {
+  background-color: transparent;
+  pointer-events: none;
+}
+
+/* Parked, smaller instruction card so the canvas stays usable beneath it. */
+.tutorial-tooltip.lab {
+  width: 340px;
+  max-width: 340px;
+  padding: 22px 24px;
+  border: 1px solid rgba(230, 162, 60, 0.45);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+}
+
 .tutorial-backdrop.light-overlay {
   background-color: rgba(0, 0, 0, 0.3);
 }
