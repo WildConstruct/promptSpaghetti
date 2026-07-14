@@ -1,8 +1,17 @@
 import type { Node, Edge } from 'reactflow';
 
+export type NestedTemplateDocument = {
+  id: string;
+  name: string;
+  nodes: Node<TemplateNodeData>[];
+  edges: Edge[];
+};
+
 export type QuickStartTemplate = {
   nodes: Node<TemplateNodeData>[];
   edges: Edge[];
+  /** Embedded nested precomp documents for SubPSG (optional). */
+  documents?: NestedTemplateDocument[];
 };
 
 interface TemplateNodeData extends Record<string, unknown> {
@@ -91,6 +100,50 @@ function outputNode(id: string, x: number, y: number, outputName: string): Node<
       nodeType: 'output',
       outputName,
       label: 'Output'
+    }
+  };
+}
+
+function templateNode(
+  id: string,
+  x: number,
+  y: number,
+  label: string,
+  template: string,
+  options?: { capitalize?: boolean; terminate?: boolean }
+): Node<TemplateNodeData> {
+  return {
+    id,
+    position: { x, y },
+    type: 'template',
+    data: {
+      nodeType: 'template',
+      label,
+      template,
+      value: template,
+      capitalize: options?.capitalize !== false,
+      terminate: options?.terminate === true
+    }
+  };
+}
+
+function subPsgNode(
+  id: string,
+  x: number,
+  y: number,
+  documentId: string,
+  documentName: string
+): Node<TemplateNodeData> {
+  return {
+    id,
+    position: { x, y },
+    type: 'subPsg',
+    data: {
+      nodeType: 'subPsg',
+      label: documentName,
+      documentId,
+      documentName,
+      outputMode: 'first-output'
     }
   };
 }
@@ -2083,6 +2136,93 @@ const lessonBranchingTemplate: QuickStartTemplate = {
   ]
 };
 
+// 7 · Nested PSG precomp: parent Template fills {wares} from a SubPSG child composition.
+// Double-click the Sub PSG node (or use document tabs) to open "Forge Wares".
+const NESTED_FORGE_DOC_ID = 'doc-forge-wares';
+
+const nestedPsgIntroTemplate: QuickStartTemplate = {
+  nodes: [
+    regionBox(
+      'npsg-region',
+      40,
+      -10,
+      980,
+      280,
+      REGION.merge,
+      'Nested PSG (precomp)',
+      'Sub PSG runs a child document and returns its Output. Double-click the Sub PSG node to open the child tab without replacing this parent graph.'
+    ),
+    templateNode(
+      'npsg-template',
+      100,
+      60,
+      'Village sentence',
+      'A quiet village where {wares} are traded at the market',
+      { capitalize: true, terminate: true }
+    ),
+    subPsgNode(
+      'npsg-sub',
+      100,
+      180,
+      NESTED_FORGE_DOC_ID,
+      'Forge Wares'
+    ),
+    outputNode('npsg-out', 720, 100, 'village_prompt')
+  ],
+  edges: [
+    {
+      id: 'npsg-e1',
+      source: 'npsg-sub',
+      target: 'npsg-template',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'slot-wares'
+    },
+    {
+      id: 'npsg-e2',
+      source: 'npsg-template',
+      target: 'npsg-out',
+      type: 'smoothstep',
+      sourceHandle: 'source',
+      targetHandle: 'target'
+    }
+  ],
+  documents: [
+    {
+      id: NESTED_FORGE_DOC_ID,
+      name: 'Forge Wares',
+      nodes: [
+        regionBox(
+          'forge-region',
+          40,
+          0,
+          720,
+          240,
+          REGION.trait,
+          'Child composition',
+          'This graph lives inside the parent PSG as an embedded document. Its Output is what the Sub PSG node returns.'
+        ),
+        weightedChoiceNode('forge-wares', 120, 80, 'Wares on the anvil', [
+          { id: 'fw-1', text: 'iron tools', weight: 40 },
+          { id: 'fw-2', text: 'ornate blades', weight: 30 },
+          { id: 'fw-3', text: 'horseshoes and nails', weight: 30 }
+        ]),
+        outputNode('forge-out', 520, 90, 'forge_wares')
+      ],
+      edges: [
+        {
+          id: 'forge-e1',
+          source: 'forge-wares',
+          target: 'forge-out',
+          type: 'smoothstep',
+          sourceHandle: 'source',
+          targetHandle: 'target'
+        }
+      ]
+    }
+  ]
+};
+
 export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   tech_panel: techPanelTemplate,
   televangelist_saga: televangelistSagaTemplate,
@@ -2092,6 +2232,7 @@ export const quickStartTemplates: Record<string, QuickStartTemplate> = {
   lesson_variable: lessonVariableTemplate,
   lesson_prefix: lessonPrefixTemplate,
   lesson_branching: lessonBranchingTemplate,
+  nested_psg_intro: nestedPsgIntroTemplate,
   tile_builder: tileBuilderTemplate,
   gangsters: gangsterTemplate,
   underworld_skilltree: underworldTemplate,

@@ -3,7 +3,10 @@ import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
 import { getSupabase } from '@promptscape/core/utils/supabaseClient';
 import { looksLikeLegacyGraphWrapper } from '@promptscape/core/utils/psgCodec';
-import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
+import {
+  exportGraphToPSG,
+  type PSGNestedDocument
+} from '@promptscape/core/fileFormats/psg';
 import {
   ApiPsgClient,
   type PsgAssetRef,
@@ -13,6 +16,10 @@ import {
   type PsgComfyWorkflow,
   type PsgSceneAssemblyPlan
 } from '@promptscape/core/services/psg';
+import {
+  MAIN_DOCUMENT_ID,
+  useDocumentProjectStore
+} from '@promptscape/core/stores/documentProjectStore';
 import { loadReactFlowFromPsgContent } from '../utils/psgDocument';
 import { validateEditorGraphPayload } from '../utils/graphValidation';
 
@@ -61,6 +68,34 @@ function downloadTextFile(
   URL.revokeObjectURL(url);
 }
 
+function nestedDocumentsFromProjectStore(): PSGNestedDocument[] | undefined {
+  try {
+    const store = useDocumentProjectStore.getState();
+    const nested = Object.values(store.documents).filter(
+      doc => doc.id !== store.mainDocumentId
+    );
+    if (nested.length === 0) {
+      return undefined;
+    }
+    return nested.map(doc => {
+      const exported = exportGraphToPSG(
+        doc.nodes as Parameters<typeof exportGraphToPSG>[0],
+        doc.edges as Parameters<typeof exportGraphToPSG>[1],
+        { name: doc.name }
+      );
+      return {
+        id: doc.id,
+        name: doc.name,
+        nodes: exported.nodes,
+        edges: exported.edges,
+        regions: exported.regions
+      };
+    });
+  } catch {
+    return undefined;
+  }
+}
+
 function createPsgDocument(
   nodes: Node[],
   edges: Edge[],
@@ -76,9 +111,9 @@ function createPsgDocument(
     metadata:
       options.tags && options.tags.length > 0
         ? { tags: options.tags }
-        : undefined
-    }
-  );
+        : undefined,
+    documents: nestedDocumentsFromProjectStore()
+  });
 }
 
 function createPsgProtocolDocument(
@@ -510,9 +545,24 @@ export const useSupabaseFileOperations = ({
   const loadFromPsgContent = useCallback(
     (psgText: string, strictValidation = true) => {
       try {
-        const { nodes, edges } = loadReactFlowFromPsgContent(
+        const { nodes, edges, documents } = loadReactFlowFromPsgContent(
           psgText,
           strictValidation
+        );
+        // Seed nested precomp store so SubPSG + document tabs work after open.
+        useDocumentProjectStore.getState().resetProject(
+          {
+            id: MAIN_DOCUMENT_ID,
+            name: 'Main',
+            nodes,
+            edges
+          },
+          (documents ?? []).map(doc => ({
+            id: doc.id,
+            name: doc.name,
+            nodes: doc.nodes,
+            edges: doc.edges
+          }))
         );
         onNodesChange(nodes);
         onEdgesChange(edges);

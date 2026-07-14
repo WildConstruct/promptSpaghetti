@@ -12,6 +12,8 @@ import { applyWeightDistribution } from './weightDistribution';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode, VariableMode } from './VariableNode';
 import { OutputNode } from './OutputNode';
+import { TemplateNode } from './TemplateNode';
+import { SubPsgNode } from './SubPsgNode';
 import { validateGraph } from './validation';
 import { debugLogExecution } from '../../../utils/debug';
 
@@ -32,6 +34,21 @@ export interface Epic1Edge {
 export interface Epic1Graph {
   nodes: Map<string, BaseInlineEditableNode>;
   edges: Epic1Edge[];
+  /**
+   * Embedded nested documents keyed by document id (precomp model).
+   * Shared across parent and child engines so SubPSG can resolve siblings.
+   */
+  nestedDocuments?: Record<string, Epic1Graph>;
+}
+
+export interface Epic1ExecutionEngineOptions {
+  /** Document ids already on the call stack (cycle detection). */
+  documentStack?: string[];
+  /**
+   * Nested documents available for SubPSG resolution. Defaults to
+   * `graph.nestedDocuments` when omitted.
+   */
+  nestedDocuments?: Record<string, Epic1Graph>;
 }
 
 /**
@@ -74,14 +91,25 @@ export class Epic1ExecutionEngine {
   // WeightedChoice nodes whose *selected* option carries its own branch. Their
   // default output is suppressed (router semantics): the branch takes over.
   private readonly branchedSelections: Set<string>;
+  /** Document ids already executing (for recursive SubPSG cycle guards). */
+  private readonly documentStack: string[];
+  /** Flat map of nested precomp graphs available to SubPSG nodes. */
+  private readonly nestedDocuments: Record<string, Epic1Graph>;
 
-  constructor(graph: Epic1Graph, seed?: string | number) {
+  constructor(
+    graph: Epic1Graph,
+    seed?: string | number,
+    options: Epic1ExecutionEngineOptions = {}
+  ) {
     this.graph = graph;
     this.context = new Epic1ExecutionContext(seed);
     this.results = new Map();
     this.executionOrder = [];
     this.selectedBranches = new Map();
     this.branchedSelections = new Set();
+    this.documentStack = options.documentStack ? [...options.documentStack] : [];
+    this.nestedDocuments =
+      options.nestedDocuments ?? graph.nestedDocuments ?? {};
   }
 
   /**
@@ -289,6 +317,14 @@ export class Epic1ExecutionEngine {
 
         case Epic1NodeType.Output:
           output = await this.executeOutput(node as OutputNode, inputs);
+          break;
+
+        case Epic1NodeType.Template:
+          output = await this.executeTemplate(node as TemplateNode, nodeId);
+          break;
+
+        case Epic1NodeType.SubPSG:
+          output = await this.executeSubPsg(node as SubPsgNode, nodeId);
           break;
 
         default:
@@ -560,6 +596,128 @@ export class Epic1ExecutionEngine {
     const result = await node.run(this.context.getExecutionContext());
     debugLogExecution('[ExecutionEngine] Output node result:', result);
     return result;
+  }
+
+  /**
+   * Execute a Template node — fill skeleton from slot-* handle inputs.
+   */
+  private async executeTemplate(
+    node: TemplateNode,
+    nodeId: string
+  ): Promise<string> {
+    const slots = this.getSlotInputs(nodeId);
+    node.setSlotValues(slots);
+    const result = await node.run(this.context.getExecutionContext());
+    debugLogExecution(
+      `[ExecutionEngine] Template ${nodeId} filled with slots`,
+      slots,
+      '→',
+      result
+    );
+    return result;
+  }
+
+  /**
+   * Execute a SubPSG node — run the referenced nested document and return its Output.
+   */
+  private async executeSubPsg(
+    node: SubPsgNode,
+    nodeId: string
+  ): Promise<string> {
+    const documentId = node.getDocumentId();
+    if (!documentId) {
+      this.context.addWarning(nodeId, 'SubPSG has no documentId');
+      return '[SubPSG: no documentId]';
+    }
+
+    if (this.documentStack.includes(documentId)) {
+      const cycle = [...this.documentStack, documentId].join(' → ');
+      throw new Error(`Nested PSG cycle detected: ${cycle}`);
+    }
+
+    const nestedGraph = this.nestedDocuments[documentId];
+    if (!nestedGraph) {
+      this.context.addWarning(
+        nodeId,
+        `Missing nested document: ${documentId}`
+      );
+      return `[SubPSG: missing document ${documentId}]`;
+    }
+
+    // Child seed is derived from parent seed + SubPSG node id for determinism.
+    const childSeed = this.context.getNodeSeed(nodeId);
+    const childEngine = new Epic1ExecutionEngine(nestedGraph, childSeed, {
+      documentStack: [...this.documentStack, documentId],
+      nestedDocuments: this.nestedDocuments
+    });
+
+    const childResult = await childEngine.execute();
+
+    // Propagate cycle errors so recursive document graphs fail loudly.
+    const cycleError = childResult.stats.errors.find(entry =>
+      /cycle/i.test(entry.error.message)
+    );
+    if (cycleError) {
+      throw cycleError.error;
+    }
+
+    if (!childResult.success && childResult.stats.errors.length > 0) {
+      const first = childResult.stats.errors[0];
+      this.context.addWarning(
+        nodeId,
+        `Nested document "${documentId}" error: ${first.error.message}`
+      );
+    }
+
+    const output =
+      typeof childResult.output === 'string'
+        ? childResult.output
+        : childResult.output == null
+          ? ''
+          : String(childResult.output);
+
+    debugLogExecution(
+      `[ExecutionEngine] SubPSG ${nodeId} document=${documentId} →`,
+      output
+    );
+    return output;
+  }
+
+  /**
+   * Collect slot values from edges targeting slot-{name} handles.
+   * Multiple edges into the same slot are space-joined.
+   */
+  private getSlotInputs(nodeId: string): Record<string, string> {
+    const slots: Record<string, string> = {};
+    const incomingEdges = this.graph.edges.filter(
+      edge => edge.target === nodeId
+    );
+
+    for (const edge of incomingEdges) {
+      if (!this.isActiveEdge(edge)) {
+        continue;
+      }
+      const handle = edge.targetHandle || '';
+      if (!handle.startsWith('slot-')) {
+        continue;
+      }
+      const name = handle.slice('slot-'.length);
+      if (!name) {
+        continue;
+      }
+      const sourceResult = this.results.get(edge.source);
+      if (!sourceResult || sourceResult.error) {
+        continue;
+      }
+      const piece = String(sourceResult.output ?? '');
+      if (slots[name]) {
+        slots[name] = `${slots[name]} ${piece}`.trim();
+      } else {
+        slots[name] = piece;
+      }
+    }
+
+    return slots;
   }
 
   /**

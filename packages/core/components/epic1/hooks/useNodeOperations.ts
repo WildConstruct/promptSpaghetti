@@ -74,13 +74,43 @@ export function useNodeOperations<NodeData = unknown>(
                 })()
                 : {};
 
+            // Template node: structured { template, capitalize, terminate }
+            const templateExtras: Record<string, unknown> =
+              node.type === 'template'
+                ? (() => {
+                    try {
+                      const parsed = JSON.parse(newValue) as Record<
+                        string,
+                        unknown
+                      >;
+                      if (
+                        parsed &&
+                        typeof parsed === 'object' &&
+                        'template' in parsed
+                      ) {
+                        return {
+                          template: String(parsed.template ?? ''),
+                          capitalize: parsed.capitalize !== false,
+                          terminate: parsed.terminate === true
+                        };
+                      }
+                    } catch {
+                      // plain skeleton string
+                    }
+                    return { template: newValue };
+                  })()
+                : {};
+
             return {
               ...node,
               data: {
                 ...node.data,
-                value: node.type === 'concat'
-                  ? String(concatExtras.separator ?? newValue)
-                  : newValue,
+                value:
+                  node.type === 'concat'
+                    ? String(concatExtras.separator ?? newValue)
+                    : node.type === 'template'
+                      ? String(templateExtras.template ?? newValue)
+                      : newValue,
                 text: newValue, // For TextBlock nodes
                 variableName: newValue, // For Variable nodes
                 separator: node.type === 'concat'
@@ -88,6 +118,7 @@ export function useNodeOperations<NodeData = unknown>(
                   : newValue, // For Concat nodes
                 label: newValue, // For Output nodes
                 ...(node.type === 'concat' ? concatExtras : {}),
+                ...(node.type === 'template' ? templateExtras : {}),
                 // For WeightedChoice nodes, parse the JSON
                 options:
                   node.type === 'weightedChoice'
