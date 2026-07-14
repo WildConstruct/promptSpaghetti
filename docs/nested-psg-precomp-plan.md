@@ -13,12 +13,13 @@ Nested PSG precomps are implemented as a first vertical slice:
 | SubPSG UI (double-click open) | ✅ | `packages/core/components/epic1/nodes/SubPsgNode.tsx` |
 | Teaching graph | ✅ | `nested_psg_intro` in quick-start templates + catalog |
 
-Still thin / follow-ups:
+Follow-ups (Track D in `docs/audit-work-loop.md`):
 
-- Saving multi-document projects through Supabase/local export needs to pass
-  `exportGraphToPSG(..., { documents })` from the full project store.
-- Creating a new nested document from an empty SubPSG node (authoring UX).
-- Per-document undo stacks and viewports.
+| Item | Status |
+| --- | --- |
+| Create nested doc from empty SubPSG (authoring UX) | ✅ D1 — Create composition + starter Text→Output + open tab |
+| Multi-doc export via project store `documents[]` | ✅ D2 — local + Supabase + bug-report export |
+| Per-document undo stacks and viewports | ✅ D3 — history + viewport restored on composition tab switch |
 
 Branch handles inside one graph remain a separate feature (not nested PSG).
 

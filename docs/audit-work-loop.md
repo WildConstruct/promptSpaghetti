@@ -35,9 +35,9 @@ advance the cursor.
 
 | Field | Value |
 | --- | --- |
-| **Active section** | *(Track B complete)* |
+| **Active section** | *(Track D complete)* |
 | **Status** | `pending` (paused for check-in) |
-| **Track** | B done — next product work unscoped or B backlog |
+| **Track** | D done — Nested PSG product follow-ups |
 | **Started** | 2026-07-14 |
 
 ## Section board
@@ -73,6 +73,17 @@ advance the cursor.
 | **C4** | Supabase RLS verification checklist runbook | `done` | Runnable steps from existing checklist; no fake “verified” claim without evidence |
 | **C5** | Deploy convergence note refresh | `done` | `deployment-current-state.md` / vercel decision still accurate |
 
+### Track D — Nested PSG product follow-ups
+
+Vertical slice landed (format, runtime, tabs, teaching graph). Remaining product depth:
+
+| ID | Section | Status | Acceptance criteria |
+| --- | --- | --- | --- |
+| **D1** | Author new nested doc from empty SubPSG | `done` | Create composition on empty SubPSG; bind `documentId`; open child tab with starter Text→Output; name editable |
+| **D2** | Multi-document export/open path | `done` | Local + Supabase export embed `documents[]` from project store; open seeds store |
+| **D3** | Per-document undo / viewport | `done` | Undo stack + viewport saved/restored per composition on tab switch; suppress cross-doc snapshot bleed |
+| **D4** | Nested PSG docs + work-loop log | `done` | Plan + work-loop reflect shipped vs deferred |
+
 ## Session log
 
 | When | Section | Result | Evidence |
@@ -107,6 +118,14 @@ advance the cursor.
 | 2026-07-14 | (pause) | — | Next **B5** (prose-join default product call). Say `continue work loop` to proceed. |
 | 2026-07-14 | B5 | done | New Merge defaults to joinStyle sentence; engine keeps legacy when field absent; decision doc |
 | 2026-07-14 | (pause) | — | **Track B complete** (B1–B5). Optional: smoke UI, commit, or pick next epic. |
+| 2026-07-14 | Nested PSG | done (vertical) | documents[] + SubPsg + tabs + nested_psg_intro; stacked PRs #23–#26; #27 → stabilize |
+| 2026-07-14 | (resume) | — | **Track D** opened for Nested PSG product follow-ups; active **D1** authoring UX |
+| 2026-07-14 | D1 | done | SubPSG Create composition; store.createNestedDocument; starter Text→Output; open child tab |
+| 2026-07-14 | D2 | done | Local export + Supabase createPsgDocument + bug-report export pass documents[] from store |
+| 2026-07-14 | D4 | done | audit-work-loop Track D + nested-psg plan follow-up table |
+| 2026-07-14 | (pause) | — | **D3 deferred** (per-doc undo/viewport). Smoke Create composition or commit when ready. |
+| 2026-07-14 | D3 | done | Per-doc history + viewport on ProjectDocument; useGraphHistory export/import/suppress; Epic1GraphEditor switch restore |
+| 2026-07-14 | (pause) | — | **Track D complete** (D1–D4). Smoke Nested PSG tabs/undo or structured commit. |
 
 ## Notes from the audit (context)
 
