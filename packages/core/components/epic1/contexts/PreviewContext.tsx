@@ -9,6 +9,7 @@ import { Node, Edge } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
 import { GraphConverter } from '../services/GraphConverter';
 import { Epic1ExecutionEngine } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
+import { useDocumentProjectStore } from '../../../stores/documentProjectStore';
 
 export interface PreviewResult {
   seed: string | number;
@@ -56,9 +57,12 @@ export const PreviewProvider: React.FC<PreviewProviderProps> = ({
     previewNodes: Node<EditableNodeData>[],
     previewEdges: Edge[]
   ) => {
+    const nestedDocuments =
+      useDocumentProjectStore.getState().getNestedDocumentsForRuntime();
     const runtimeGraph = GraphConverter.convertToRuntimeGraph(
       previewNodes,
-      previewEdges
+      previewEdges,
+      nestedDocuments
     );
 
     if (!runtimeGraph) {

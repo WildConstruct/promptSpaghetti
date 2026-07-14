@@ -21,6 +21,7 @@ import {
 } from '../../../runtime/nodes/epic1/VariableNode';
 import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
 import { TemplateNode } from '../../../runtime/nodes/epic1/TemplateNode';
+import { SubPsgNode } from '../../../runtime/nodes/epic1/SubPsgNode';
 import { debugLogEpic1 } from '../../../utils/debug';
 
 /**
@@ -250,6 +251,28 @@ export function nodeDataToRuntimeNode(
           template: templateText,
           capitalize: (data as { capitalize?: unknown }).capitalize !== false,
           terminate: (data as { terminate?: unknown }).terminate === true
+        });
+      }
+
+      case 'subPsg': {
+        const documentId =
+          typeof (data as { documentId?: unknown }).documentId === 'string'
+            ? String((data as { documentId: string }).documentId)
+            : '';
+        const documentName =
+          typeof (data as { documentName?: unknown }).documentName === 'string'
+            ? String((data as { documentName: string }).documentName)
+            : typeof data.label === 'string'
+              ? data.label
+              : documentId || 'Nested PSG';
+        const outputMode =
+          (data as { outputMode?: unknown }).outputMode === 'first-output'
+            ? 'first-output'
+            : 'first-output';
+        return new SubPsgNode(id, {
+          documentId,
+          documentName,
+          outputMode
         });
       }
 

@@ -3,13 +3,20 @@ import { Epic1Graph } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { nodeDataToRuntimeNode } from '../nodes/nodeFactory';
 import type { EditableNodeData } from '../nodes';
 
+export type NestedDocumentSource = {
+  nodes: Node<EditableNodeData>[];
+  edges: Edge[];
+};
+
 export class GraphConverter {
   /**
-   * Convert React Flow graph to runtime graph format
+   * Convert React Flow graph to runtime graph format.
+   * Optional `nestedDocuments` embeds child precomp graphs for SubPSG resolution.
    */
   static convertToRuntimeGraph(
     flowNodes: Node<EditableNodeData>[],
-    flowEdges: Edge[]
+    flowEdges: Edge[],
+    nestedDocuments?: Record<string, NestedDocumentSource>
   ): Epic1Graph | null {
     try {
       const runtimeNodes = new Map();
@@ -33,6 +40,27 @@ export class GraphConverter {
         }
       }
 
+      const nestedRuntime: Record<string, Epic1Graph> = {};
+      if (nestedDocuments) {
+        for (const [docId, doc] of Object.entries(nestedDocuments)) {
+          // Nested docs share the same flat document map; convert without
+          // re-nesting to avoid recursive expansion of the same map.
+          const child = GraphConverter.convertToRuntimeGraph(
+            doc.nodes,
+            doc.edges
+          );
+          if (child) {
+            nestedRuntime[docId] = child;
+          }
+        }
+        // Share the flat map on every child so sibling SubPSG refs resolve.
+        if (Object.keys(nestedRuntime).length > 0) {
+          for (const child of Object.values(nestedRuntime)) {
+            child.nestedDocuments = nestedRuntime;
+          }
+        }
+      }
+
       return {
         nodes: runtimeNodes,
         edges: flowEdges.map(edge => ({
@@ -41,7 +69,9 @@ export class GraphConverter {
           target: edge.target,
           sourceHandle: edge.sourceHandle ?? undefined,
           targetHandle: edge.targetHandle ?? undefined
-        }))
+        })),
+        nestedDocuments:
+          Object.keys(nestedRuntime).length > 0 ? nestedRuntime : undefined
       };
     } catch (error) {
       console.error(

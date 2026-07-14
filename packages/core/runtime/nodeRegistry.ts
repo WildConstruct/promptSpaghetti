@@ -532,6 +532,44 @@ class NodeTypeRegistry {
       tags: ['include', 'subgraph', 'import', 'format-only']
     });
 
+    // Sub PSG — nested precomp document reference (docs/nested-psg-precomp-plan.md)
+    this.register({
+      id: 'subPsg',
+      displayName: 'Sub PSG',
+      category: NodeCategory.FLOW,
+      version: '1.0.0',
+      psgType: 'SubPSG',
+      reactFlowType: 'subPsg',
+      className: 'SubPsgNode',
+      description: 'Execute an embedded nested PSG document (precomp)',
+      documentation:
+        'References a child PSG composition by documentId. Runtime runs the child graph and returns its Output. Double-click opens the child in a document tab.',
+      icon: '📁',
+      inputs: [
+        { id: 'target', label: 'Input', type: 'input', dataType: 'any' }
+      ],
+      outputs: [
+        { id: 'main', label: 'Output', type: 'output', dataType: 'string' }
+      ],
+      configOptions: [
+        {
+          id: 'documentId',
+          label: 'Document ID',
+          type: 'text',
+          required: true
+        },
+        {
+          id: 'outputMode',
+          label: 'Output Mode',
+          type: 'select',
+          defaultValue: 'first-output',
+          options: [{ value: 'first-output', label: 'First Output node' }]
+        }
+      ],
+      isExecutable: true,
+      tags: ['nested', 'precomp', 'subpsg', 'document', 'composition']
+    });
+
     // Subject/Action legacy types removed (C1 P1) — never on Epic1 product path.
 
     // Enhanced Bounding Box (Visual Only)

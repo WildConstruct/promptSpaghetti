@@ -467,9 +467,51 @@ function convertToRuntimeGraph<NodeData>(
   edges: Edge[]
 ): Epic1Graph | null {
   try {
-    // Convert React Flow nodes to runtime nodes
-    const runtimeNodes = new Map();
+    // Prefer GraphConverter so nested precomp documents from the project store
+    // are available to SubPSG nodes during preview.
+    // Lazy require avoids circular import issues in some Jest setups.
+    const { GraphConverter } = require('../services/GraphConverter') as {
+      GraphConverter: {
+        convertToRuntimeGraph: (
+          n: Node[],
+          e: Edge[],
+          nested?: Record<string, { nodes: Node[]; edges: Edge[] }>
+        ) => Epic1Graph | null;
+      };
+    };
+    let nestedDocuments:
+      | Record<string, { nodes: Node[]; edges: Edge[] }>
+      | undefined;
+    try {
+      const {
+        useDocumentProjectStore
+      } = require('../../../stores/documentProjectStore') as {
+        useDocumentProjectStore: {
+          getState: () => {
+            getNestedDocumentsForRuntime: () => Record<
+              string,
+              { nodes: Node[]; edges: Edge[] }
+            >;
+          };
+        };
+      };
+      nestedDocuments =
+        useDocumentProjectStore.getState().getNestedDocumentsForRuntime();
+    } catch {
+      nestedDocuments = undefined;
+    }
 
+    const converted = GraphConverter.convertToRuntimeGraph(
+      nodes as Node[],
+      edges,
+      nestedDocuments
+    );
+    if (converted) {
+      return converted;
+    }
+
+    // Fallback: local conversion without nested docs
+    const runtimeNodes = new Map();
     for (const node of nodes) {
       const runtimeNode = nodeDataToRuntimeNode(node as Node);
       if (runtimeNode) {
@@ -479,7 +521,6 @@ function convertToRuntimeGraph<NodeData>(
       }
     }
 
-    // Return Epic1Graph format
     return {
       nodes: runtimeNodes,
       edges: edges.map(e => ({

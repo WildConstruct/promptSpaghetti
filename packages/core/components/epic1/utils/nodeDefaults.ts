@@ -46,6 +46,14 @@ export function getDefaultNodeData(type: string): Record<string, unknown> {
         capitalize: true,
         terminate: true
       };
+    case 'subPsg':
+      return {
+        nodeType: 'subPsg',
+        documentId: '',
+        documentName: 'Nested PSG',
+        outputMode: 'first-output',
+        label: 'Nested PSG'
+      };
     case 'variable':
     case 'setVariable':
     case 'getVariable':

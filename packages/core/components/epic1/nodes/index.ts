@@ -9,6 +9,7 @@ import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
 import { TemplateNode } from './TemplateNode';
+import { SubPsgNode } from './SubPsgNode';
 import { ComponentInstanceNode } from './ComponentInstanceNode';
 import { NodeContextMenu } from './NodeContextMenu';
 import { PostItNote } from './PostItNote';
@@ -46,6 +47,9 @@ export type { OutputNodeData } from './OutputNode';
 export { TemplateNode };
 export type { TemplateNodeData } from './TemplateNode';
 
+export { SubPsgNode };
+export type { SubPsgNodeData } from './SubPsgNode';
+
 export { ComponentInstanceNode };
 export type { ComponentInstanceNodeData } from './ComponentInstanceNode';
 
@@ -73,6 +77,7 @@ export const epic1NodeTypes = {
   getVariable: VariableNode,
   output: OutputNode,
   template: TemplateNode,
+  subPsg: SubPsgNode,
   componentInstance: ComponentInstanceNode,
   postItNote: PostItNote,
   boundingBox: BoundingBox,

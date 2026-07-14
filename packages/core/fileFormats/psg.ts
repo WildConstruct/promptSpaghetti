@@ -64,6 +64,16 @@ export const PSGRegionSchema = z.object({
     .optional()
 });
 
+/** Nested precomp document (optional; absent on classic PSG). */
+export const PSGNestedDocumentSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  nodes: z.array(PSGNodeSchema),
+  edges: z.array(PSGEdgeSchema),
+  regions: z.array(PSGRegionSchema).optional()
+});
+
 export const PSGFileSchema = z.object({
   version: z.string(),
   name: z.string(),
@@ -71,13 +81,16 @@ export const PSGFileSchema = z.object({
   metadata: z.record(z.any()).optional(),
   nodes: z.array(PSGNodeSchema),
   edges: z.array(PSGEdgeSchema),
-  regions: z.array(PSGRegionSchema).optional()
+  regions: z.array(PSGRegionSchema).optional(),
+  /** Embedded child PSG compositions (nested precomp model). */
+  documents: z.array(PSGNestedDocumentSchema).optional()
 });
 
 export type PSGFile = z.infer<typeof PSGFileSchema>;
 export type PSGNode = z.infer<typeof PSGNodeSchema>;
 export type PSGEdge = z.infer<typeof PSGEdgeSchema>;
 export type PSGRegion = z.infer<typeof PSGRegionSchema>;
+export type PSGNestedDocument = z.infer<typeof PSGNestedDocumentSchema>;
 
 type EditorLikeNode = {
   id: string;
@@ -101,6 +114,8 @@ type ExportGraphToPSGOptions = {
   name?: string;
   description?: string;
   metadata?: Record<string, unknown>;
+  /** Nested precomp documents to embed (optional). */
+  documents?: PSGNestedDocument[];
 };
 
 const EDITOR_TO_PSG_NODE_TYPE: Record<string, string> = {
@@ -112,7 +127,8 @@ const EDITOR_TO_PSG_NODE_TYPE: Record<string, string> = {
   setVariable: 'SetVariable',
   getVariable: 'GetVariable',
   include: 'Include',
-  template: 'Template'
+  template: 'Template',
+  subPsg: 'SubPSG'
 };
 
 const stripUndefined = <T extends Record<string, unknown>>(value: T): T =>
@@ -325,6 +341,33 @@ export function exportGraphToPSG(
             ? nodeData.value
             : '';
       exportedNode.value = separator;
+    } else if (nodeType === 'SubPSG') {
+      const documentId =
+        typeof nodeData.documentId === 'string'
+          ? nodeData.documentId
+          : typeof (node as { documentId?: unknown }).documentId === 'string'
+            ? String((node as { documentId: string }).documentId)
+            : '';
+      if (documentId) {
+        (exportedNode as PSGNode & { documentId?: string }).documentId =
+          documentId;
+      }
+      const outputMode =
+        typeof nodeData.outputMode === 'string'
+          ? nodeData.outputMode
+          : undefined;
+      if (outputMode) {
+        (exportedNode as PSGNode & { outputMode?: string }).outputMode =
+          outputMode;
+      }
+    } else if (nodeType === 'Template') {
+      const templateText =
+        typeof nodeData.template === 'string'
+          ? nodeData.template
+          : typeof nodeData.value === 'string'
+            ? nodeData.value
+            : '';
+      exportedNode.template = templateText;
     }
 
     const sanitizedData = sanitizeNodeDataForPSG(nodeType, nodeData);
@@ -448,7 +491,12 @@ export function exportGraphToPSG(
     metadata: options.metadata,
     nodes: exportedNodes,
     edges: exportedEdges,
-    regions: exportedRegions.length > 0 ? exportedRegions : undefined
+    regions: exportedRegions.length > 0 ? exportedRegions : undefined,
+    // Nested precomp documents (absent on classic PSG)
+    documents:
+      options.documents && options.documents.length > 0
+        ? options.documents
+        : undefined
   };
 }
 
@@ -830,7 +878,13 @@ function convertParsedPsgToPSGLib(
                 ? 'textBlock'
                 : node.type === 'Variable'
                   ? 'variable'
-                  : node.type;
+                  : node.type === 'Template'
+                    ? 'template'
+                    : node.type === 'SubPSG'
+                      ? 'subPsg'
+                      : node.type === 'Include'
+                        ? 'include'
+                        : node.type;
     }
 
     // Build proper data structure based on node type
@@ -891,6 +945,43 @@ function convertParsedPsgToPSGLib(
           : '');
       nodeData.value = textValue;
       nodeData.text = textValue;
+    }
+
+    if (node.type === 'Template') {
+      const templateText =
+        (typeof node.template === 'string' ? node.template : '') ||
+        (typeof (node.data as any)?.template === 'string'
+          ? (node.data as any).template
+          : '') ||
+        (typeof node.value === 'string' ? node.value : '') ||
+        'a {subject} in {setting}';
+      nodeData.template = templateText;
+      nodeData.value = templateText;
+      nodeData.nodeType = 'template';
+    }
+
+    if (node.type === 'SubPSG') {
+      const documentId =
+        (typeof (node as any).documentId === 'string'
+          ? (node as any).documentId
+          : '') ||
+        (typeof (node.data as any)?.documentId === 'string'
+          ? (node.data as any).documentId
+          : '');
+      nodeData.documentId = documentId;
+      nodeData.documentName =
+        node.name ||
+        (typeof (node.data as any)?.documentName === 'string'
+          ? (node.data as any).documentName
+          : documentId || 'Nested PSG');
+      nodeData.outputMode =
+        typeof (node as any).outputMode === 'string'
+          ? (node as any).outputMode
+          : typeof (node.data as any)?.outputMode === 'string'
+            ? (node.data as any).outputMode
+            : 'first-output';
+      nodeData.nodeType = 'subPsg';
+      nodeData.label = nodeData.documentName;
     }
 
     // Build the node with proper parent relationship
