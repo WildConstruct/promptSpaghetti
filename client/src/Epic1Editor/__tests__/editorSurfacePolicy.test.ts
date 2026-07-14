@@ -9,6 +9,7 @@ describe('buildEditorSurfacePolicy', () => {
     onSaveAs: jest.fn(),
     onImport: jest.fn(),
     onExport: jest.fn(),
+    onSaveRegionFragment: jest.fn(),
     onExportComfy: jest.fn(),
     onPsgSceneAssets: jest.fn(),
     onLocalSandboxGeneration: jest.fn(),
@@ -19,7 +20,8 @@ describe('buildEditorSurfacePolicy', () => {
     onPaste: jest.fn(),
     onToggleAssetLibrary: jest.fn(),
     onReportBug: jest.fn(),
-    onChangelog: jest.fn()
+    onChangelog: jest.fn(),
+    onTutorials: jest.fn()
   };
 
   it('keeps Comfy as the primary handoff and marks crowd expansion hosted-only in local mode', () => {
@@ -102,6 +104,76 @@ describe('buildEditorSurfacePolicy', () => {
         expect.objectContaining({ id: 'components', tier: 'advanced' }),
         expect.objectContaining({ id: 'search', tier: 'advanced' }),
         expect.objectContaining({ id: 'relationships', tier: 'advanced' })
+      ])
+    );
+  });
+
+  it('exposes local region fragment save as a local-first library action', () => {
+    const policy = buildEditorSurfacePolicy({
+      canExportComfy: true,
+      canUseLocalSandboxGeneration: false,
+      canExpandCrowdHosted: false,
+      showPreview: true,
+      showAssetLibrary: true,
+      actions
+    });
+
+    expect(policy.surfaces['document.saveRegionFragment']).toMatchObject({
+      label: 'Save Region Box as Fragment...',
+      tier: 'core',
+      availability: 'available'
+    });
+
+    const fileSection = policy.menuModel.sections.find(
+      section => section.id === 'file'
+    );
+
+    expect(fileSection?.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'action',
+          id: 'saveRegionFragment',
+          label: 'Save Region Box as Fragment...'
+        })
+      ])
+    );
+  });
+
+  it('exposes advanced tutorial from the help menu without replacing first-run help', () => {
+    const policy = buildEditorSurfacePolicy({
+      canExportComfy: true,
+      canUseLocalSandboxGeneration: false,
+      canExpandCrowdHosted: false,
+      showPreview: true,
+      showAssetLibrary: true,
+      actions: {
+        ...actions,
+        onGettingStarted: jest.fn(),
+        onUserGuide: jest.fn()
+      }
+    });
+
+    const helpSection = policy.menuModel.sections.find(
+      section => section.id === 'help'
+    );
+
+    expect(helpSection?.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'action',
+          id: 'gettingStarted',
+          label: 'Getting started'
+        }),
+        expect.objectContaining({
+          type: 'action',
+          id: 'tutorials',
+          label: 'Tutorials...'
+        }),
+        expect.objectContaining({
+          type: 'action',
+          id: 'userGuide',
+          label: 'User guide'
+        })
       ])
     );
   });

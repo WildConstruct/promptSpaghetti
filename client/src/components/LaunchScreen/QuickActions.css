@@ -176,6 +176,16 @@
   color: #666;
 }
 
+.quick-actions-footer .hint-explore {
+  margin-top: 0.4rem;
+  color: #9aa4ad;
+}
+
+.quick-actions-footer .hint-explore strong {
+  color: #f0bd6e;
+  font-weight: 600;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .template-grid {

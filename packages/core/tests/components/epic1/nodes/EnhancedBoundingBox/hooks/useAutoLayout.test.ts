@@ -97,9 +97,12 @@ describe('useAutoLayout', () => {
     const getChild = (id: string) =>
       nodesState.find(node => node.id === id) as Node;
 
-    expect(getChild('child-1').position).toEqual({ x: 120, y: 260 });
-    expect(getChild('child-2').position).toEqual({ x: 270, y: 260 });
-    expect(getChild('child-3').position).toEqual({ x: 120, y: 370 });
+    // Children sit below the header band: y = boxTop + HEADER_HEIGHT + row.
+    // HEADER_HEIGHT grew 40 -> 132 (taller header with title + description),
+    // shifting every child down by 92px.
+    expect(getChild('child-1').position).toEqual({ x: 120, y: 352 });
+    expect(getChild('child-2').position).toEqual({ x: 270, y: 352 });
+    expect(getChild('child-3').position).toEqual({ x: 120, y: 462 });
     [1, 2, 3].forEach(i =>
       expect(getChild(`child-${i}`).style?.transition).toBe('all 0.3s ease-out')
     );

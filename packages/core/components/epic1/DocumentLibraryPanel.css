@@ -1,238 +1,230 @@
-.document-library {
+/*
+ * Kontakt-style Explore document browser.
+ * Three stacked regions: folder tree (top), Name list (middle), description
+ * pane (bottom). Wild Construct palette: gold #e6a23c / #f0bd6e on charcoal.
+ */
+
+.doc-browser {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   height: 100%;
   min-height: 0;
-  overflow-y: auto;
-  padding: 4px 2px;
+  color: #e8edf4;
+  font-size: 12.5px;
 }
 
-.document-library-intro {
-  font-size: 12px;
-  line-height: 1.45;
-  color: rgba(226, 232, 240, 0.72);
-}
-
-.document-library-nav {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+/* ---- Empty state ---- */
+.doc-browser-empty {
+  margin: auto;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 6px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-}
-
-.document-library-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: rgba(226, 232, 240, 0.78);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.document-library-chip:hover {
-  border-color: rgba(230, 162, 60, 0.45);
-  color: #f0bd6e;
-}
-
-.document-library-chip.active {
-  background: rgba(230, 162, 60, 0.16);
-  border-color: rgba(230, 162, 60, 0.65);
-  color: #f0bd6e;
-}
-
-.document-library-count {
-  min-width: 16px;
-  padding: 0 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: inherit;
-  font-size: 10.5px;
-  line-height: 16px;
+  padding: 24px;
   text-align: center;
+  color: #9aa4ad;
+}
+.doc-browser-empty-title {
+  color: #e8edf4;
+  font-size: 13px;
 }
 
-.document-library-chip.active .document-library-count {
-  background: rgba(230, 162, 60, 0.28);
+/* ---- Region 1: folder tree ---- */
+.doc-browser-tree {
+  flex: 0 0 auto;
+  max-height: 34%;
+  overflow-y: auto;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.document-library-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-height: 0;
-}
-
-/* App-styled rows: neutral surface, gold accent on hover/active — no colored
-   left edges. Collapsed = compact header row; click expands details inline. */
-.document-library-card {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  overflow: hidden;
-  transition: border-color 0.15s ease, background 0.15s ease;
-}
-
-.document-library-card:hover {
-  border-color: rgba(230, 162, 60, 0.4);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.document-library-card.is-expanded {
-  border-color: rgba(230, 162, 60, 0.6);
-  background: rgba(230, 162, 60, 0.08);
-}
-
-.document-library-card-header {
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-}
-
-/* Primary open button fills the row. */
-.document-library-card-main {
+.doc-tree-item {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #c9d2db;
+  cursor: pointer;
   text-align: left;
-  padding: 9px 4px 9px 11px;
-  background: transparent;
-  border: none;
-  color: inherit;
-  cursor: pointer;
+  font-size: 12.5px;
+  transition: background 0.12s ease, color 0.12s ease;
 }
-
-/* Secondary chevron button toggles the inline preview. */
-.document-library-card-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 30px;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-left: 1px solid rgba(255, 255, 255, 0.07);
-  color: inherit;
-  cursor: pointer;
-}
-
-.document-library-card-toggle:hover {
+.doc-tree-item:hover {
   background: rgba(255, 255, 255, 0.05);
+  color: #f1f6f9;
 }
-
-.document-library-card-title {
-  flex: 1;
-  min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #e8edf4;
+.doc-tree-item.active {
+  background: rgba(230, 162, 60, 0.16);
+  color: #f0bd6e;
+}
+.doc-tree-child {
+  padding-left: 22px;
+}
+.doc-tree-icon {
+  flex: 0 0 auto;
+  opacity: 0.85;
+  font-size: 12px;
+}
+.doc-tree-label {
+  flex: 1 1 auto;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.document-library-card-chevron {
-  flex-shrink: 0;
-  font-size: 16px;
-  line-height: 1;
-  color: rgba(226, 232, 240, 0.5);
-  transition: transform 0.15s ease, color 0.15s ease;
-}
-
-.document-library-card.is-expanded .document-library-card-chevron {
-  transform: rotate(90deg);
-  color: #e6a23c;
-}
-
-.document-library-card-body {
-  padding: 0 11px 11px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 10px;
-}
-
-.document-library-card-description {
-  margin: 0;
-  font-size: 11.5px;
-  line-height: 1.45;
-  color: rgba(226, 232, 240, 0.72);
-}
-
-.document-library-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  flex-shrink: 0;
-}
-
-.document-library-tag {
+.doc-tree-count {
+  flex: 0 0 auto;
+  min-width: 18px;
   padding: 1px 6px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(226, 232, 240, 0.7);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #9aa4ad;
+  font-size: 10.5px;
+  text-align: center;
 }
-
-.document-library-tag-branching {
-  background: rgba(230, 162, 60, 0.14);
-  border-color: rgba(230, 162, 60, 0.4);
+.doc-tree-item.active .doc-tree-count {
+  background: rgba(230, 162, 60, 0.25);
   color: #f0bd6e;
 }
 
-.document-library-open-btn {
-  align-self: flex-start;
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: 1px solid rgba(230, 162, 60, 0.5);
-  background: rgba(230, 162, 60, 0.16);
-  color: #f0bd6e;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.document-library-open-btn:hover {
-  background: #e6a23c;
-  border-color: #e6a23c;
-  color: #1a1206;
-}
-
-.document-library-empty {
+/* ---- Region 2: file list ---- */
+.doc-browser-list-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px dashed rgba(255, 255, 255, 0.16);
+}
+.doc-browser-list-head {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 6px 12px;
   background: rgba(255, 255, 255, 0.03);
-  color: rgba(226, 232, 240, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7f8a94;
+}
+.doc-browser-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.doc-row {
+  display: grid;
+  grid-template-columns: 16px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 12px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  background: transparent;
+  color: #d7dee6;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12.5px;
+  transition: background 0.1s ease;
+}
+.doc-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.doc-row.selected {
+  background: rgba(230, 162, 60, 0.16);
+  color: #f6efe2;
+  box-shadow: inset 2px 0 0 #e6a23c;
+}
+.doc-row-icon {
+  opacity: 0.55;
+  font-size: 12px;
+}
+.doc-row-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+.doc-row-tags {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.doc-tag {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #aeb7c0;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.doc-tag-branching {
+  background: rgba(230, 162, 60, 0.18);
+  color: #f0bd6e;
+}
+
+/* ---- Region 3: description pane ---- */
+.doc-browser-detail {
+  flex: 0 0 auto;
+  max-height: 32%;
+  min-height: 92px;
+  overflow-y: auto;
+  padding: 10px 12px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.doc-detail-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+.doc-detail-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #f1f6f9;
+}
+.doc-detail-meta {
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #7f8a94;
+}
+.doc-detail-desc {
+  margin: 0 0 10px;
   font-size: 12px;
   line-height: 1.5;
+  color: #c1cad3;
 }
-
-.document-library-empty-title {
-  color: rgba(226, 232, 240, 0.95);
-  font-weight: 700;
+.doc-detail-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 14px;
+  border: 1px solid rgba(230, 162, 60, 0.5);
+  border-radius: 7px;
+  background: rgba(230, 162, 60, 0.16);
+  color: #f0bd6e;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.doc-detail-open:hover {
+  background: rgba(230, 162, 60, 0.28);
+  border-color: #e6a23c;
+}
+.doc-detail-empty {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #8b95a0;
+}
+.doc-detail-empty strong {
+  color: #c9d2db;
 }

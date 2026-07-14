@@ -100,6 +100,10 @@ const ChangelogModal = lazy(
   () => import('@promptscape/core/components/ChangelogModal/ChangelogModal')
 );
 
+const TutorialsModal = lazy(async () => {
+  const module = await import('./components/TutorialsModal');
+  return { default: module.TutorialsModal };
+});
 const GuideModal = lazy(async () => {
   const module = await import('./components/GuideModal');
   return { default: module.GuideModal };
@@ -171,6 +175,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
 
   const [showChangelog, setShowChangelog] = useState(false);
+  const [showTutorials, setShowTutorials] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [guideTab, setGuideTab] = useState<'getting-started' | 'user-guide'>('getting-started');
   const [showBugReportDialog, setShowBugReportDialog] = useState(false);
@@ -505,28 +510,126 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       const title =
         TEMPLATE_CATALOG.find(entry => entry.id === id)?.title ?? 'document';
 
-      // Snapshot the current graph for recovery, then open. (Previously this
-      // gated on window.confirm, which silently cancelled the open whenever the
-      // dialog returned false — making it impossible to open a document over an
-      // existing graph. The recovery snapshot protects unsaved work instead.)
-      if (currentNodes.length > 0) {
-        void saveForRecovery(currentNodes, currentEdges);
+      const load = () => {
+        handleNodesChange(tmpl.nodes as Node[]);
+        handleEdgesChange(tmpl.edges as Edge[]);
+        setEditorKey(prev => prev + 1);
+        showToast(`Opened “${title}”`, 'success');
+      };
+
+      // Nothing on the canvas — nothing to lose, open straight away.
+      if (currentNodes.length === 0) {
+        load();
+        return;
       }
 
-      handleNodesChange(tmpl.nodes as Node[]);
-      handleEdgesChange(tmpl.edges as Edge[]);
-      setEditorKey(prev => prev + 1);
-      showToast(`Opened “${title}”`, 'success');
+      // Otherwise offer to save the current work before it's replaced.
+      // (A three-way Save / Discard / Cancel modal — unlike the old binary
+      // window.confirm, both Save and Discard open the document, so the common
+      // case never silently fails; Cancel is the only abort.)
+      const overlay = document.createElement('div');
+      overlay.className = 'confirm-modal-overlay';
+      overlay.style.cssText =
+        'position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:10001;';
+      const dialog = document.createElement('div');
+      dialog.style.cssText =
+        'background:#1b1e24;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:22px;min-width:420px;max-width:90vw;box-shadow:0 16px 40px rgba(0,0,0,0.55);color:#e8edf4;';
+      dialog.innerHTML = `
+        <h3 style="margin:0 0 10px;font-size:17px;color:#f1f6f9;">Open &ldquo;${title}&rdquo;?</h3>
+        <p style="margin:0 0 20px;font-size:13.5px;line-height:1.5;color:#c1cad3;">This replaces the current graph. Save your current work first, or discard it &mdash; it&rsquo;s kept for recovery either way.</p>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button data-act="cancel" style="padding:8px 14px;background:transparent;border:1px solid rgba(255,255,255,0.16);color:#c9d2db;border-radius:7px;cursor:pointer;font-size:13px;">Cancel</button>
+          <button data-act="discard" style="padding:8px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);color:#e8edf4;border-radius:7px;cursor:pointer;font-size:13px;">Discard &amp; open</button>
+          <button data-act="save" style="padding:8px 14px;background:#e6a23c;border:none;color:#1a1206;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;">Save &amp; open</button>
+        </div>`;
+      overlay.appendChild(dialog);
+      document.body.appendChild(overlay);
+      (dialog.querySelector('[data-act="save"]') as HTMLButtonElement)?.focus();
+
+      const close = () => {
+        document.removeEventListener('keydown', onKey);
+        if (overlay.parentNode) {
+          document.body.removeChild(overlay);
+        }
+      };
+      const choose = (act: string | undefined) => {
+        close();
+        if (act === 'cancel' || !act) {
+          return;
+        }
+        if (act === 'save') {
+          void handleSave(currentNodes, currentEdges);
+        } else {
+          void saveForRecovery(currentNodes, currentEdges);
+        }
+        load();
+      };
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          choose('cancel');
+        } else if (e.key === 'Enter') {
+          choose('save');
+        }
+      };
+      document.addEventListener('keydown', onKey);
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) {
+          choose('cancel');
+        }
+      });
+      dialog.querySelectorAll('button').forEach(btn =>
+        btn.addEventListener('click', () =>
+          choose((btn as HTMLElement).dataset.act)
+        )
+      );
     },
     [
       currentNodes,
       currentEdges,
       saveForRecovery,
+      handleSave,
       handleNodesChange,
       handleEdgesChange,
       showToast
     ]
   );
+
+  // A running tutorial can ask to load an example graph (so its steps can point
+  // at real nodes). This force-loads without the Save/Discard prompt — the user
+  // explicitly started a guided tutorial — but still snapshots for recovery.
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const templateId = (event as CustomEvent<{ templateId?: string }>).detail
+        ?.templateId;
+      const tmpl = templateId ? quickStartTemplates[templateId] : undefined;
+      if (!tmpl) {
+        return;
+      }
+      if (currentNodes.length > 0) {
+        void saveForRecovery(currentNodes, currentEdges);
+      }
+      // Keep container state in sync...
+      handleNodesChange(tmpl.nodes as Node[]);
+      handleEdgesChange(tmpl.edges as Edge[]);
+      // ...and push the graph into the LIVE editor without a remount (setEditorKey
+      // would remount Epic1GraphEditor, and the TutorialProvider lives inside it —
+      // remounting would reset a tutorial the moment it loads its demo graph).
+      window.dispatchEvent(
+        new CustomEvent('epic1:applyGraph', {
+          detail: { nodes: tmpl.nodes, edges: tmpl.edges }
+        })
+      );
+    };
+    window.addEventListener('epic1:loadTutorialGraph', handler);
+    return () =>
+      window.removeEventListener('epic1:loadTutorialGraph', handler);
+  }, [
+    currentNodes,
+    currentEdges,
+    saveForRecovery,
+    handleNodesChange,
+    handleEdgesChange
+  ]);
 
   const editorSurfacePolicy = useMemo(
     () =>
@@ -542,6 +645,22 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           onOpen: handleOpen,
           onSave: () => handleSave(currentNodes, currentEdges),
           onSaveAs: () => handleSaveAs(currentNodes, currentEdges),
+          onSaveRegionFragment: () => {
+            const saveRegionFragment = (
+              window as typeof window & {
+                __EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__?:
+                  | (() => Promise<void>)
+                  | null;
+              }
+            ).__EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__;
+
+            if (!saveRegionFragment) {
+              showToast('Select a Region Box to save as a fragment', 'info');
+              return;
+            }
+
+            void saveRegionFragment();
+          },
           onImport: handleLocalOpen,
           onExport: () => handleExportPsg(currentNodes, currentEdges),
           onExportComfy: () => setShowComfyExportDialog(true),
@@ -567,6 +686,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             setGuideTab('getting-started');
             setShowGuide(true);
           },
+          onTutorials: () => setShowTutorials(true),
           onUserGuide: () => {
             setGuideTab('user-guide');
             setShowGuide(true);
@@ -591,6 +711,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       handleSaveAs,
       handleUndo,
       onBackToLaunch,
+      setGuideTab,
+      setShowGuide,
+      showToast,
       showPreview
     ]
   );
@@ -665,6 +788,14 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             <ChangelogModal
               isOpen={showChangelog}
               onClose={() => setShowChangelog(false)}
+            />
+          )}
+
+        {showTutorials &&
+          renderDeferredSurface(
+            <TutorialsModal
+              isOpen={showTutorials}
+              onClose={() => setShowTutorials(false)}
             />
           )}
 

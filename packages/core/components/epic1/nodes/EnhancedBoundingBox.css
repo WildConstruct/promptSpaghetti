@@ -121,6 +121,36 @@
   transform: scale(1.05);
 }
 
+/* Region-box description reveal: a quick slide-down (grid-rows 0fr -> 1fr) of
+   the description area while the text fades up into place — instead of popping
+   on/off when the box is resized past the show/hide threshold. */
+.bounding-box-description {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition:
+    grid-template-rows 0.16s ease-out,
+    opacity 0.16s ease-out;
+}
+.bounding-box-description > * {
+  overflow: hidden;
+  min-height: 0;
+  transform: translateY(0);
+  transition: transform 0.16s ease-out;
+}
+.bounding-box-description[data-visible='false'] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+.bounding-box-description[data-visible='false'] > * {
+  transform: translateY(6px);
+}
+
+/* Smooth the header's own height change that accompanies the reveal. */
+.bounding-box-header {
+  transition: min-height 0.16s ease-out;
+}
+
 /* Collapsed State Specific */
 .enhanced-bounding-box.collapsed .bounding-box-header {
   border-bottom: none;

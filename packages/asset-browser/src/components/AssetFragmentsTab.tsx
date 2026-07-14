@@ -1,11 +1,71 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import {
   loadAssetFragments,
+  loadUserAssetFragments,
   type AssetFragmentManifest,
   type FragmentEntry
 } from '../services/AssetFragmentLoader';
 import { EmptyState } from './ui/EmptyState';
 import { ErrorState } from './ui/ErrorState';
+
+const USER_FRAGMENT_FOLDER_COOKIE = 'psg_user_documents_folder';
+
+const getCookieValue = (name: string): string | null => {
+  const prefix = `${name}=`;
+  const entry = document.cookie
+    .split(';')
+    .map(cookie => cookie.trim())
+    .find(cookie => cookie.startsWith(prefix));
+
+  return entry ? decodeURIComponent(entry.slice(prefix.length)) : null;
+};
+
+const mergeUserFragments = (
+  manifest: AssetFragmentManifest | null,
+  userFragments: FragmentEntry[]
+): AssetFragmentManifest | null => {
+  if (userFragments.length === 0) {
+    return manifest;
+  }
+
+  const baseManifest: AssetFragmentManifest =
+    manifest ?? {
+      version: '1.0.0',
+      type: 'asset-fragments',
+      name: 'Prompt Spaghetti fragments',
+      description: 'Available prompt fragments',
+      categories: {}
+    };
+
+  const existingStats = baseManifest.statistics;
+  const userNodeCount = userFragments.reduce(
+    (total, fragment) => total + (fragment.nodes || 0),
+    0
+  );
+
+  return {
+    ...baseManifest,
+    categories: {
+      ...baseManifest.categories,
+      user: {
+        name: 'User Fragments',
+        description: 'Fragments saved from local Region Boxes',
+        icon: 'â˜…',
+        path: '',
+        fragments: userFragments
+      }
+    },
+    statistics: existingStats
+      ? {
+          ...existingStats,
+          total_fragments:
+            existingStats.total_fragments + userFragments.length,
+          total_nodes: existingStats.total_nodes + userNodeCount,
+          categories: (existingStats.categories || 0) + 1
+        }
+      : undefined
+  };
+};
 
 export function AssetFragmentsTab(): JSX.Element {
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>(
@@ -21,8 +81,13 @@ export function AssetFragmentsTab(): JSX.Element {
     setError(null);
     try {
       const data = await loadAssetFragments();
-      if (data) {
-        setManifest(data);
+      const userFolder = getCookieValue(USER_FRAGMENT_FOLDER_COOKIE);
+      const userFragments = userFolder
+        ? await loadUserAssetFragments(userFolder)
+        : [];
+      const merged = mergeUserFragments(data, userFragments);
+      if (merged) {
+        setManifest(merged);
         setStatus('done');
       } else {
         setError('No asset fragments manifest found');
@@ -38,6 +103,11 @@ export function AssetFragmentsTab(): JSX.Element {
 
   useEffect(() => {
     void load();
+  }, [load]);
+
+  useEffect(() => {
+    window.addEventListener('epic1:userFragmentsChanged', load);
+    return () => window.removeEventListener('epic1:userFragmentsChanged', load);
   }, [load]);
 
   // Get all fragments across categories
@@ -93,16 +163,20 @@ export function AssetFragmentsTab(): JSX.Element {
     if (!category) return;
 
     // Create drag payload with path to the PSG file
+    const fragmentPath = fragment.content
+      ? ''
+      : `${category.path}${fragment.file}`.replace(
+          /^\.?\/*/,
+          '/assets/library/'
+        );
     const payload = {
       type: 'asset-fragment',
       id: fragment.id,
       name: fragment.name,
-      path: `${category.path}${fragment.file}`.replace(
-        /^\.?\/*/,
-        '/assets/library/'
-      ),
+      path: fragmentPath,
       fragmentType: fragment.type,
-      nodes: fragment.nodes
+      nodes: fragment.nodes,
+      content: fragment.content
     };
 
     const serialized = JSON.stringify(payload);
@@ -115,7 +189,8 @@ export function AssetFragmentsTab(): JSX.Element {
         id: fragment.id,
         name: fragment.name,
         path: payload.path,
-        metadata: { file: payload.path }
+        content: fragment.content,
+        metadata: fragment.content ? {} : { file: payload.path }
       })
     );
     // Fallback plain text for any generic handlers

@@ -66,9 +66,12 @@
   z-index: 1;
 }
 
-/* Fix dragging deadspots - ensure pane is interactive */
+/* The pane no longer pans on left-drag (left = select/marquee; pan is
+   middle/right-drag or Space+drag), so it must not force a grab cursor — the
+   old `grab !important` also bled through the pointer-events:none nodes layer
+   and showed the pan-hand over nodes. */
 .epic1-graph-editor .react-flow__pane {
-  cursor: grab !important;
+  cursor: default;
 }
 
 .epic1-graph-editor .react-flow__pane.dragging {
@@ -382,19 +385,7 @@
 /* Ensure minimap nodes are visible with proper styling */
 .epic1-graph-editor .react-flow__minimap-node {
   opacity: 1 !important;
-  fill: #8b5cf6 !important; /* Purple color for all nodes */
   fill-opacity: 1 !important;
-  stroke: #6d28d9 !important; /* Darker purple stroke */
-  stroke-width: 1px !important;
-}
-
-/* Override any red fill that might be applied */
-.epic1-graph-editor .react-flow__minimap rect {
-  fill: inherit !important;
-}
-
-.epic1-graph-editor .react-flow__minimap-node[fill='#4ECDC4'] {
-  fill: #4ecdc4 !important;
 }
 
 /* Controls styling */

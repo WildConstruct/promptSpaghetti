@@ -31,6 +31,7 @@ import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
 import { CanvasContextMenu } from './nodes/CanvasContextMenu';
+import { NodeContextMenu } from './nodes/NodeContextMenu';
 import { applyDagreLayout } from '../../utils/layoutAlgorithms';
 
 import { useKonamiCode } from './hooks/useKonamiCode';
@@ -82,6 +83,7 @@ import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { AuthModal } from '../auth/AuthModal';
 import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
 import { TutorialOverlay } from './onboarding/TutorialOverlay';
+import { CanvasTipPanel } from './onboarding/CanvasTipPanel';
 import type { AgentFragmentRecord, Preset } from '@prompt/asset-browser';
 import type { Asset } from '../../services/assetMatcher';
 import { getSupabase } from '../../utils/supabaseClient';
@@ -107,9 +109,20 @@ import { ComponentLibraryService } from './services/ComponentLibraryService';
 import { GraphReferenceService } from './services/GraphReferenceService';
 import { validateClosedComponentSelection } from './services/ComponentValidationService';
 import {
+  buildRegionBoxFragment,
+  createRegionFragmentFilename
+} from './services/RegionBoxFragmentExport';
+import {
+  getUserFragmentFolderFromCookie,
+  saveLocalUserFragment,
+  setUserFragmentFolderCookie
+} from './services/LocalUserFragmentStorage';
+import { buildGraphCommands } from './services/GraphCommandRegistry';
+import {
   ComponentSaveDialog,
   type ComponentSaveDraft
 } from './ComponentSaveDialog';
+import { epic1MinimapProps } from './nodeVisualTheme';
 
 import './ReactFlowOverrides.css';
 import './Epic1GraphEditor.css';
@@ -271,6 +284,8 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
   const [isCommanderOpen, setIsCommanderOpen] = useState(false);
+  const [canvasTipsForceKey, setCanvasTipsForceKey] = useState(0);
+  const { startTutorial } = useTutorial();
 
   // Initial props remain the source of truth for this editor mount.
   const { persistedState } = useGraphPersistence([], [], {
@@ -298,6 +313,27 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     }
   }, [initialNodes, initialEdges]);
 
+  // Apply a graph pushed in live (e.g. a tutorial loading its demo) without a
+  // remount, so a running tutorial's provider/overlay survive the load.
+  React.useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (
+        event as CustomEvent<{ nodes?: Node<EditableNodeData>[]; edges?: Edge[] }>
+      ).detail;
+      if (!detail?.nodes) {
+        return;
+      }
+      setNodes(detail.nodes);
+      setEdges(detail.edges ?? []);
+      window.setTimeout(
+        () => reactFlowInstance?.fitView?.({ padding: 0.2 }),
+        60
+      );
+    };
+    window.addEventListener('epic1:applyGraph', handler);
+    return () => window.removeEventListener('epic1:applyGraph', handler);
+  }, [setNodes, setEdges, reactFlowInstance]);
+
   // Toast notifications
   const { toasts, showToast, dismissToast } = useToast();
 
@@ -323,6 +359,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     createNode,
     handleNodeEdit,
     duplicateNodes,
+    disconnectNodes,
     deleteSelectedNodes,
     alignNodes,
     distributeNodes,
@@ -649,6 +686,12 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     return () => window.removeEventListener('keydown', handleCommanderKeyDown);
   }, []);
 
+  useEffect(() => {
+    const handleOpenCommander = () => setIsCommanderOpen(true);
+    window.addEventListener('epic1:openCommander', handleOpenCommander);
+    return () => window.removeEventListener('epic1:openCommander', handleOpenCommander);
+  }, []);
+
   // Keyboard shortcuts
   useGraphKeyboardShortcuts(
     undo,
@@ -730,6 +773,13 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
   const [paneContextMenu, setPaneContextMenu] = useState<{
     x: number;
     y: number;
+  } | null>(null);
+
+  // Right-click node menu (Duplicate / Disconnect / Delete).
+  const [nodeContextMenu, setNodeContextMenu] = useState<{
+    x: number;
+    y: number;
+    nodeId: string;
   } | null>(null);
 
   // Organize: run a left-to-right hierarchical layout. Uses the editor's own
@@ -1149,6 +1199,112 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     onExecute?.(enhancedNodes, edges);
   };
 
+  const saveSelectedRegionBoxAsUserFragment = useCallback(async () => {
+    const selectedRegion =
+      enhancedNodes.find(
+        (node: Node<EditableNodeData>) =>
+          node.selected && node.type === 'enhancedBoundingBox'
+      ) ??
+      (selectedNodeId
+        ? enhancedNodes.find(
+            (node: Node<EditableNodeData>) =>
+              node.id === selectedNodeId && node.type === 'enhancedBoundingBox'
+          )
+        : null);
+
+    if (!selectedRegion) {
+      showToast('info', 'Select a Region Box to save as a fragment');
+      return;
+    }
+
+    const selectedRegionData = selectedRegion.data as
+      | (EditableNodeData & { title?: unknown })
+      | undefined;
+    const defaultName =
+      typeof selectedRegionData?.title === 'string' &&
+      selectedRegionData.title.trim().length > 0
+        ? selectedRegionData.title.trim()
+        : 'Region Fragment';
+
+    // eslint-disable-next-line no-alert
+    const requestedName = window.prompt('Name this fragment:', defaultName);
+    if (requestedName === null) {
+      return;
+    }
+
+    const fragmentName = requestedName.trim() || defaultName;
+    let folderPath = getUserFragmentFolderFromCookie();
+
+    if (!folderPath) {
+      // eslint-disable-next-line no-alert
+      const requestedFolder = window.prompt(
+        'Enter the folder path to use as your Prompt Spaghetti documents folder. Fragments will be saved under a "fragments" subfolder.',
+        ''
+      );
+
+      if (!requestedFolder?.trim()) {
+        showToast('info', 'Choose a documents folder before saving fragments');
+        return;
+      }
+
+      folderPath = requestedFolder.trim();
+      setUserFragmentFolderCookie(folderPath);
+    }
+
+    try {
+      const fragment = buildRegionBoxFragment({
+        regionNodeId: selectedRegion.id,
+        nodes: enhancedNodes,
+        edges,
+        name: fragmentName
+      });
+      const filename = createRegionFragmentFilename(fragmentName);
+      const result = await saveLocalUserFragment({
+        folderPath,
+        filename,
+        content: JSON.stringify(fragment, null, 2)
+      });
+
+      window.dispatchEvent(
+        new CustomEvent('epic1:userFragmentsChanged', {
+          detail: {
+            folderPath,
+            filename: result.filename,
+            savedPath: result.savedPath
+          }
+        })
+      );
+      showToast('success', `Saved "${fragmentName}" to user fragments`);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to save fragment';
+      showToast('error', message);
+    }
+  }, [edges, enhancedNodes, selectedNodeId, showToast]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const win = window as typeof window & {
+      __EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__?:
+        | (() => Promise<void>)
+        | null;
+    };
+    win.__EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__ =
+      saveSelectedRegionBoxAsUserFragment;
+
+    return () => {
+      if (
+        win.__EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__ ===
+        saveSelectedRegionBoxAsUserFragment
+      ) {
+        win.__EPIC1_SAVE_SELECTED_REGION_AS_FRAGMENT__ = null;
+      }
+    };
+  }, [saveSelectedRegionBoxAsUserFragment]);
+
   const saveSelectionAsComponent = useCallback(() => {
     const selectedNodes = nodes.filter((node: Node<EditableNodeData>) => node.selected);
     if (selectedNodes.length === 0) {
@@ -1534,6 +1690,12 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
 
   const commandPaletteCommands = useMemo<GraphCommanderCommand[]>(() => {
     const spawnPosition = getCommandSpawnPosition();
+    const registryCommands = buildGraphCommands({
+      createNode,
+      openCanvasTips: () => setCanvasTipsForceKey(key => key + 1),
+      spawnPosition,
+      startTutorial
+    });
 
     return [
       {
@@ -1630,47 +1792,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         description: 'Delete the selected nodes',
         execute: () => deleteSelectedNodes()
       },
-      {
-        id: 'nodes.create_text_block',
-        label: 'Add Text Block Node',
-        aliases: ['text', 'text block'],
-        category: 'Nodes',
-        description: 'Create a new text block node',
-        execute: () => createNode('textBlock', spawnPosition)
-      },
-      {
-        id: 'nodes.create_weighted_choice',
-        label: 'Add Weighted Choice Node',
-        aliases: ['choice', 'branch', 'weighted choice'],
-        category: 'Nodes',
-        description: 'Create a new weighted choice node',
-        execute: () => createNode('weightedChoice', spawnPosition)
-      },
-      {
-        id: 'nodes.create_concat',
-        label: 'Add Concatenate Node',
-        aliases: ['concat', 'merge text'],
-        category: 'Nodes',
-        description: 'Create a concatenate node',
-        execute: () => createNode('concat', spawnPosition)
-      },
-      {
-        id: 'nodes.create_output',
-        label: 'Add Output Node',
-        aliases: ['output', 'result'],
-        category: 'Nodes',
-        description: 'Create a new output node',
-        execute: () => createNode('output', spawnPosition)
-      },
-      {
-        id: 'nodes.create_region_box',
-        label: 'Create Region Box',
-        aliases: ['region', 'box', 'group'],
-        category: 'Nodes',
-        shortcut: 'R',
-        description: 'Create a region box at the viewport center',
-        execute: () => createNode('enhancedBoundingBox', spawnPosition)
-      },
+      ...registryCommands,
       {
         id: 'layout.align_horizontal',
         label: 'Align Horizontal',
@@ -1779,6 +1901,16 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
         execute: () => saveSelectionAsComponent()
       },
       {
+        id: 'fragments.save_selected_region',
+        label: 'Save Region Box as Fragment',
+        aliases: ['save region fragment', 'region to fragment', 'user fragment'],
+        category: 'Fragments',
+        description: 'Save the selected Region Box and enclosed nodes to the local user fragment library',
+        execute: () => {
+          void saveSelectedRegionBoxAsUserFragment();
+        }
+      },
+      {
         id: 'components.insert_latest',
         label: 'Insert Latest Component',
         aliases: ['insert component', 'component library'],
@@ -1849,6 +1981,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     insertComponentDefinition,
     neatenAll,
     saveSelectionAsComponent,
+    saveSelectedRegionBoxAsUserFragment,
     pasteFromClipboard,
     previewTrayIsOpen,
     refreshOutdatedComponentInstances,
@@ -1856,6 +1989,7 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     resetZoom,
     selectAll,
     selectConnectedNodes,
+    startTutorial,
     togglePreview,
     triggerImport,
     zoomIn,
@@ -2096,6 +2230,19 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                 event.preventDefault();
                 setPaneContextMenu({ x: event.clientX, y: event.clientY });
               }}
+              onNodeContextMenu={(event, node) => {
+                event.preventDefault();
+                // Select the right-clicked node so selection-based ops
+                // (duplicate / disconnect / delete) act on it.
+                setNodes(nds =>
+                  nds.map(n => ({ ...n, selected: n.id === node.id }))
+                );
+                setNodeContextMenu({
+                  x: event.clientX,
+                  y: event.clientY,
+                  nodeId: node.id
+                });
+              }}
               onNodesDelete={onNodesDelete}
               onEdgesDelete={onEdgesDelete}
               onDragOver={onDragOver}
@@ -2116,7 +2263,13 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
               deleteKeyCode={['Delete', 'Backspace']}
               multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
               panOnScroll={false}
-              panOnDrag
+              // Left button selects (click) / marquee (drag); pan with
+              // middle/right drag or Space+drag. Previously panOnDrag={true}
+              // made every small left-drag a pan, so clicks-with-motion never
+              // registered as a select, and empty-pane clicks never deselected.
+              panOnDrag={[1, 2]}
+              selectionOnDrag
+              selectNodesOnDrag={false}
               panActivationKeyCode="Space"
               zoomOnScroll={true}
               zoomOnDoubleClick
@@ -2124,7 +2277,11 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
             >
               <Background variant={BackgroundVariant.Dots} gap={15} size={1} />
               <Controls showInteractive={false} />
-              <MiniMap pannable zoomable />
+              <MiniMap
+                pannable
+                zoomable
+                {...epic1MinimapProps}
+              />
 
               {/* Additional UI Elements moved outside due to React Flow rendering issues */}
 
@@ -2178,19 +2335,49 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
                         y: paneContextMenu.y
                       })
                     : { x: 0, y: 0 };
-                  setNodes(current => [
-                    ...current,
-                    {
-                      id: `note-${Date.now()}`,
-                      type: 'postItNote',
-                      position: flow,
-                      data: { nodeType: 'postItNote', text: '' }
-                    } as unknown as Node<EditableNodeData>
-                  ]);
+                  createNode('postItNote', flow);
+                }}
+                onAddBoundingBox={() => {
+                  const flow = reactFlowInstance
+                    ? reactFlowInstance.screenToFlowPosition({
+                        x: paneContextMenu.x,
+                        y: paneContextMenu.y
+                      })
+                    : { x: 0, y: 0 };
+                  // Center the default 400x300 region box on the click point.
+                  createNode('enhancedBoundingBox', {
+                    x: flow.x - 200,
+                    y: flow.y - 150
+                  });
                 }}
               />
             )}
+
+            {nodeContextMenu && (
+              <NodeContextMenu
+                nodeType={
+                  nodes.find(n => n.id === nodeContextMenu.nodeId)?.type ||
+                  'textBlock'
+                }
+                position={{ x: nodeContextMenu.x, y: nodeContextMenu.y }}
+                onClose={() => setNodeContextMenu(null)}
+                onSaveAsPreset={() =>
+                  setSaveAsPresetNodeId(nodeContextMenu.nodeId)
+                }
+                onDuplicate={() => duplicateNodes()}
+                onDisconnect={() => disconnectNodes([nodeContextMenu.nodeId])}
+                onDelete={() => deleteSelectedNodes()}
+              />
+            )}
           </SafeReactFlowWrapper>
+
+          <CanvasTipPanel
+            key={canvasTipsForceKey}
+            forceOpen={canvasTipsForceKey > 0}
+            onDismiss={() => setCanvasTipsForceKey(0)}
+            onOpenCommander={() => setIsCommanderOpen(true)}
+            onStartTutorial={startTutorial}
+          />
 
           {/* NodePalette - positioned outside ReactFlow */}
           <div style={{            position: 'absolute',            top: 0,            left: 0,            bottom: 0,

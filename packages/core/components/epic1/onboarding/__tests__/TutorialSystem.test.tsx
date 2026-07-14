@@ -73,7 +73,7 @@ describe('Tutorial system behaviour', () => {
     await waitFor(() => expect(screen.getByText('Step 1 of 8')).toBeInTheDocument());
   });
 
-  it('skipTutorial marks tutorial complete and hides overlay', async () => {
+  it('skipTutorial hides the overlay without marking progress complete', async () => {
     renderWithTutorial(
       <>
         <TutorialControls />
@@ -89,7 +89,37 @@ describe('Tutorial system behaviour', () => {
     await waitFor(() =>
       expect(screen.queryByText('Step 1 of 8')).not.toBeInTheDocument()
     );
-    expect(screen.getByTestId('status').textContent).toContain('100%');
+    expect(screen.getByTestId('status').textContent).toContain('0%');
+  });
+
+  it('dispatches the advanced tutorial graph load event', async () => {
+    const graphLoadListener = jest.fn();
+    window.addEventListener('epic1:loadTutorialGraph', graphLoadListener);
+
+    renderWithTutorial(
+      <>
+        <div data-tutorial-anchor="canvas" />
+        <TutorialControls />
+        <TutorialOverlay />
+      </>
+    );
+
+    act(() => {
+      window.dispatchEvent(
+        new CustomEvent('epic1:startTutorial', {
+          detail: { sequenceId: 'advanced' }
+        })
+      );
+    });
+
+    await waitFor(() => {
+      expect(graphLoadListener).toHaveBeenCalledTimes(1);
+    });
+    expect(graphLoadListener.mock.calls[0][0]).toMatchObject({
+      detail: { templateId: 'phrase_grammar_branching' }
+    });
+
+    window.removeEventListener('epic1:loadTutorialGraph', graphLoadListener);
   });
 
   it('uses a spotlight cutout and anchored tooltip for the wizard step', async () => {

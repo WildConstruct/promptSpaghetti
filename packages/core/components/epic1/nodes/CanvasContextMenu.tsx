@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './NodeContextMenu.css';
 import './CanvasContextMenu.css';
 import { useNeatenSettings } from '../contexts/NeatenSettingsContext';
@@ -22,6 +22,28 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
   onClose
 }) => {
   const { setGridSize, setRowSnap } = useNeatenSettings();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close on a click anywhere outside the menu, or on Escape.
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [onClose]);
+
   const handleAddNote = () => {
     // Get the graph position from the click position
     const graphPosition = {
@@ -46,9 +68,9 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
 
   return (
     <div
+      ref={menuRef}
       className="node-context-menu canvas-context-menu"
       style={{ position: 'fixed', left: position.x, top: position.y, zIndex: 10000 }}
-      onMouseLeave={onClose}
     >
       <div className="context-menu-items">
         <button className="context-menu-item" onClick={handleAddNote}>

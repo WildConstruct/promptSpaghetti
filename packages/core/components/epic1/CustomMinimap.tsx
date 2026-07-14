@@ -1,5 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Node, Edge, useViewport, useReactFlow } from 'reactflow';
+import {
+  getMinimapNodeColor,
+  getMinimapNodeBorderRadius,
+  getMinimapNodeStrokeColor,
+  getMinimapNodeStrokeWidth
+} from './nodeVisualTheme';
 import './CustomMinimap.css';
 
 interface CustomMinimapProps {
@@ -22,6 +28,17 @@ interface DragState {
   viewportY: number;
 }
 
+const DEFAULT_NODE_WIDTH = 280;
+const DEFAULT_NODE_HEIGHT = 140;
+
+const getNodeDimensions = (node: Node) => {
+  const dataSize = node.data as { width?: number; height?: number } | undefined;
+  return {
+    width: node.width ?? dataSize?.width ?? DEFAULT_NODE_WIDTH,
+    height: node.height ?? dataSize?.height ?? DEFAULT_NODE_HEIGHT
+  };
+};
+
 export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, style }) => {
   const viewport = useViewport();
   const { getViewport, setViewport } = useReactFlow();
@@ -41,8 +58,7 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
     nodes.forEach(node => {
       const x = node.position.x;
       const y = node.position.y;
-      const width = 280; // Default width
-      const height = 140; // Default height
+      const { width, height } = getNodeDimensions(node);
       
       minX = Math.min(minX, x);
       minY = Math.min(minY, y);
@@ -70,8 +86,9 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
     if (!node) {
       return null;
     }
-    const x = (node.position.x - bounds.minX + 140) * scale; // 140 is half of node width
-    const y = (node.position.y - bounds.minY + 70) * scale; // 70 is half of node height
+    const { width, height } = getNodeDimensions(node);
+    const x = (node.position.x - bounds.minX + width / 2) * scale;
+    const y = (node.position.y - bounds.minY + height / 2) * scale;
     return { x, y };
   };
   
@@ -193,21 +210,9 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
           const y = (node?.position?.y ?? 0) - bounds.minY;
           const sx = x * scale;
           const sy = y * scale;
-          const nodeWidth = 280 * scale;
-          const nodeHeight = 140 * scale;
-          
-          // Choose color based on node type
-          let color = '#666';
-          switch (node.type) {
-            case 'textBlock': color = '#7c7ff2'; break;
-            case 'weightedChoice': color = '#f6a723'; break;
-            case 'concat': color = '#22c493'; break;
-            case 'variable': color = '#9d70f7'; break;
-            case 'output': color = '#f15656'; break;
-            case 'enhancedBoundingBox': color = '#4ECDC4'; break; // Teal for bounding boxes
-            case 'boundingBox': color = '#4ECDC4'; break; // Same for regular bounding boxes
-            default: color = '#666'; break;
-          }
+          const { width, height } = getNodeDimensions(node);
+          const nodeWidth = width * scale;
+          const nodeHeight = height * scale;
           
           return (
             <rect
@@ -216,10 +221,10 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
               y={Number.isFinite(sy) ? sy : 0}
               width={nodeWidth}
               height={nodeHeight}
-              fill={color}
-              stroke="#fff"
-              strokeWidth={0.5}
-              rx={2}
+              fill={getMinimapNodeColor(node)}
+              stroke={getMinimapNodeStrokeColor(node)}
+              strokeWidth={getMinimapNodeStrokeWidth(node)}
+              rx={getMinimapNodeBorderRadius(node)}
               opacity={0.8}
             />
           );

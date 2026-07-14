@@ -55,6 +55,16 @@ export const TutorialOverlay: React.FC = () => {
     };
   }, [currentStep, step.action]);
 
+  useEffect(() => {
+    if (!isActive || !step.loadTemplateId) {
+      return;
+    }
+    window.dispatchEvent(
+      new CustomEvent('epic1:loadTutorialGraph', {
+        detail: { templateId: step.loadTemplateId }
+      })
+    );
+  }, [isActive, currentStep, step.loadTemplateId]);
   // Find target element and trigger position recalculation
   useEffect(() => {
     if (!isActive) {return;}
@@ -191,6 +201,10 @@ export const TutorialOverlay: React.FC = () => {
   }
 
   const spotlightRect = step.spotlight ? getSpotlightRect(targetElement) : null;
+  // A "lab bench" step hands the canvas back to the learner: no dimming and no
+  // click-blocking backdrop, so they can drag/connect/edit freely while the
+  // instructions stay parked in the corner.
+  const isLab = step.action === 'lab';
   const isWizardStep = step.anchorId === 'wizard-button' || step.target === '.prompt-wizard-button';
   // Only allow clicking through backdrop when we have a specific target with spotlight
   // For 'empty-canvas' or steps without spotlight, keep backdrop clickable
@@ -216,14 +230,15 @@ export const TutorialOverlay: React.FC = () => {
     >
       {/* Dark overlay with spotlight */}
       <div
-        className={`tutorial-backdrop ${isWizardStep ? 'light-overlay' : ''} ${shouldAllowClick ? 'allow-clicks' : ''}`}
+        className={`tutorial-backdrop ${isWizardStep ? 'light-overlay' : ''} ${shouldAllowClick || isLab ? 'allow-clicks' : ''} ${isLab ? 'lab' : ''}`}
         data-testid="tutorial-backdrop"
-        style={{ 
+        style={{
           clipPath: step.spotlight ? getSpotlightClipPath(spotlightRect) : 'none'
         }}
         onClick={(e) => {
-          // Allow clicking to continue for observe steps or specific click steps
-          if (step.action === 'observe' || (step.action === 'click' && !step.spotlight)) {
+          // Allow clicking to continue for observe steps or specific click steps.
+          // Lab steps never advance on backdrop click — the canvas is live there.
+          if (!isLab && (step.action === 'observe' || (step.action === 'click' && !step.spotlight))) {
             e.stopPropagation();
             nextStep();
           }
@@ -232,9 +247,13 @@ export const TutorialOverlay: React.FC = () => {
 
       {/* Tooltip */}
       <div
-        className="tutorial-tooltip"
+        className={`tutorial-tooltip ${isLab ? 'lab' : ''}`}
         data-testid="tutorial-tooltip"
-        style={getTooltipPosition()}
+        style={
+          isLab
+            ? { right: 24, bottom: 24, left: 'auto', top: 'auto' }
+            : getTooltipPosition()
+        }
       >
         {/* Progress */}
         <div className="tutorial-progress">

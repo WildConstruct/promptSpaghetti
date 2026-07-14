@@ -1,16 +1,37 @@
 .canvas-context-menu {
+  min-width: 240px;
 }
-.presets-subtext {
-  font-size: 11px;
-  opacity: 0.8;
-  padding: 2px 12px;
+
+/* "Neaten Presets" kicker — uppercase tracked, muted, on-brand. */
+.presets-subtext,
+.context-menu-subtext {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7f8a94;
+  padding: 8px 10px 4px;
 }
+
 .presets-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 6px;
-  padding: 0 12px 8px;
+  padding: 0 6px 6px;
 }
+
 .context-menu-item.compact {
-  padding: 6px;
+  justify-content: center;
+  padding: 7px 6px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #c9d2db;
+}
+
+.context-menu-item.compact:hover {
+  background: rgba(230, 162, 60, 0.16);
+  border-color: rgba(230, 162, 60, 0.45);
+  color: #f0bd6e;
 }

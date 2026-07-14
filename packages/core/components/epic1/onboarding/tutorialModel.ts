@@ -1,3 +1,15 @@
+import { advancedTutorialSteps } from './advancedTutorialModel';
+import {
+  foundationsTutorialSteps,
+  weightedChoiceTutorialSteps,
+  concatTutorialSteps,
+  variablesTutorialSteps,
+  prefixesTutorialSteps,
+  branchingTutorialSteps,
+  regionBoxesTutorialSteps,
+  televangelistTutorialSteps
+} from './lessonTutorials';
+
 export type TutorialPlacement =
   | 'top'
   | 'right'
@@ -12,19 +24,36 @@ export type TutorialAnchorId =
   | 'wizard-modal'
   | 'graph-nodes'
   | 'node-palette'
-  | 'preview-button';
+  | 'preview-button'
+  | 'region-box'
+  | 'template-library';
+
+export type TutorialSequenceId =
+  | 'basic'
+  | 'foundations'
+  | 'weighted-choice'
+  | 'concat'
+  | 'variables'
+  | 'prefixes'
+  | 'branching'
+  | 'region-boxes'
+  | 'advanced'
+  | 'televangelist';
 
 export interface TutorialStepDefinition {
   id: string;
   title: string;
   description: string;
-  action: 'click' | 'drag' | 'type' | 'observe' | 'paste';
+  action: 'click' | 'drag' | 'type' | 'observe' | 'paste' | 'lab';
   hint?: string;
   position?: TutorialPlacement;
   spotlight?: boolean;
   anchorId?: TutorialAnchorId;
   target?: string;
   targetSelectors?: string[];
+  /** When set, entering this step loads that example graph (by
+   *  quickStartTemplates id) so later steps can point at real nodes. */
+  loadTemplateId?: string;
 }
 
 export const TUTORIAL_STEP_IDS = {
@@ -44,7 +73,18 @@ export const TUTORIAL_ANCHOR_SELECTORS: Record<TutorialAnchorId, string[]> = {
   'wizard-modal': ['[data-tutorial-anchor="wizard-modal"]', '.prompt-wizard-modal'],
   'graph-nodes': ['.react-flow__node', '[data-id^="reactflow__node"]'],
   'node-palette': ['[data-tutorial-anchor="node-palette"]', '.node-palette', '.node-toolbar'],
-  'preview-button': ['[data-tutorial-anchor="preview-button"]', '.preview-button']
+  'preview-button': ['[data-tutorial-anchor="preview-button"]', '.preview-button'],
+  'region-box': [
+    '[data-tutorial-anchor="region-box"]',
+    '.react-flow__node-enhancedBoundingBox',
+    '.react-flow__node-boundingBox'
+  ],
+  'template-library': [
+    '[data-tutorial-anchor="template-library"]',
+    '[data-tutorial-anchor="asset-library"]',
+    '.asset-browser',
+    '.document-library-panel'
+  ]
 };
 
 export const tutorialSteps: TutorialStepDefinition[] = [
@@ -130,3 +170,91 @@ export const tutorialSteps: TutorialStepDefinition[] = [
     spotlight: false
   }
 ];
+
+export const tutorialSequences: Record<TutorialSequenceId, TutorialStepDefinition[]> = {
+  basic: tutorialSteps,
+  foundations: foundationsTutorialSteps,
+  'weighted-choice': weightedChoiceTutorialSteps,
+  concat: concatTutorialSteps,
+  variables: variablesTutorialSteps,
+  prefixes: prefixesTutorialSteps,
+  branching: branchingTutorialSteps,
+  'region-boxes': regionBoxesTutorialSteps,
+  advanced: advancedTutorialSteps,
+  televangelist: televangelistTutorialSteps,
+};
+
+/** Display metadata for each tutorial sequence, used by the Tutorials panel.
+ *  Adding a new tutorial = add its steps to tutorialSequences and an entry
+ *  here; the panel lists everything in `order`. */
+export interface TutorialSequenceMeta {
+  title: string;
+  summary: string;
+  order: number;
+}
+
+export const TUTORIAL_SEQUENCE_META: Record<
+  TutorialSequenceId,
+  TutorialSequenceMeta
+> = {
+  basic: {
+    title: 'Getting Started',
+    summary:
+      'Open the wizard, turn a prompt into a small graph, and preview the result.',
+    order: 1
+  },
+  foundations: {
+    title: 'Your First Prompt',
+    summary:
+      'The smallest graph: a Text Block flowing into an Output node, previewed.',
+    order: 2
+  },
+  'weighted-choice': {
+    title: 'Weighted Choice & Determinism',
+    summary:
+      'Roll one option from many by weight — and see why the same seed always gives the same pick.',
+    order: 3
+  },
+  concat: {
+    title: 'Concatenate',
+    summary:
+      'Join separate fragments into one phrase, in order, with a separator.',
+    order: 4
+  },
+  variables: {
+    title: 'Variables',
+    summary:
+      'Capture one decision into a named bucket and reuse it with {{name}} so everything stays consistent.',
+    order: 5
+  },
+  prefixes: {
+    title: 'Prefixes & Glue',
+    summary:
+      'Keep connective words in their own nodes so choices stay clean and swappable.',
+    order: 6
+  },
+  branching: {
+    title: 'Branching',
+    summary:
+      'Let one choice commit to a path, with downstream detail that respects it.',
+    order: 7
+  },
+  'region-boxes': {
+    title: 'Region Boxes',
+    summary:
+      'Document a graph by grouping nodes into named, coloured zones — visual only.',
+    order: 8
+  },
+  advanced: {
+    title: 'Phrase Grammar & Branching',
+    summary:
+      'Walk a real example graph: phrase parts, glue nodes, branch commitments, conditional detail, safe merges, and region boxes.',
+    order: 9
+  },
+  televangelist: {
+    title: 'Televangelist Saga',
+    summary:
+      'The capstone: capture a character once and carry him across four eras — variables, fragments, branching and merges together.',
+    order: 10
+  }
+};

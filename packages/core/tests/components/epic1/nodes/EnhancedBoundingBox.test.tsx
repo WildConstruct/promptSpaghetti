@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { ReactFlowProvider } from 'reactflow';
+import { ReactFlowProvider, Position } from 'reactflow';
 import { EnhancedBoundingBox } from '../../../../components/epic1/nodes/EnhancedBoundingBox';
-import { NodeProps } from 'reactflow';
+import { NodeProps, Node } from 'reactflow';
 import '@testing-library/jest-dom';
 
 // Mock React Flow hooks
@@ -10,6 +10,7 @@ const mockSetNodes = jest.fn();
 const mockGetNodes = jest.fn();
 const mockGetEdges = jest.fn();
 const mockSetEdges = jest.fn();
+const mockNodeInternals = new Map();
 
 jest.mock('reactflow', () => ({
   ...jest.requireActual('reactflow'),
@@ -26,10 +27,13 @@ jest.mock('reactflow', () => ({
     Top: 'top',
     Bottom: 'bottom',
   },
-  useStore: () => ({
-    nodeInternals: new Map(),
-    edges: [],
-  }),
+  useStore: (selector: any) => {
+    const state = {
+      nodeInternals: mockNodeInternals,
+      edges: [],
+    };
+    return typeof selector === 'function' ? selector(state) : state;
+  },
 }));
 
 // Mock PerformanceMonitor
@@ -70,6 +74,7 @@ describe('EnhancedBoundingBox', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockNodeInternals.clear();
     mockGetNodes.mockReturnValue([
       { id: 'test-box', position: { x: 100, y: 100 }, type: 'enhancedBoundingBox' },
       { id: 'node-1', position: { x: 150, y: 150 }, width: 100, height: 50 },
@@ -125,8 +130,28 @@ describe('EnhancedBoundingBox', () => {
           <EnhancedBoundingBox {...defaultProps} />
         </ReactFlowProvider>
       );
-      
+
       expect(screen.getByText('Test Region')).toBeInTheDocument();
+    });
+
+    it('toggles the definition when clicking the Region Box headline', () => {
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...defaultProps} />
+        </ReactFlowProvider>
+      );
+
+      // The description stays in the DOM (so it can animate); visibility is
+      // driven by data-visible on its wrapper.
+      const descWrapper = () =>
+        screen.getByText('Test Description').closest('.bounding-box-description');
+      expect(descWrapper()).toHaveAttribute('data-visible', 'true');
+
+      fireEvent.click(screen.getByText('Test Region'));
+      expect(descWrapper()).toHaveAttribute('data-visible', 'false');
+
+      fireEvent.click(screen.getByText('Test Region'));
+      expect(descWrapper()).toHaveAttribute('data-visible', 'true');
     });
 
     it('should display node count when expanded', () => {
@@ -140,6 +165,143 @@ describe('EnhancedBoundingBox', () => {
       const nodeCountElement = screen.queryByText(/\d+ node/i);
       expect(nodeCountElement).toBeInTheDocument();
     });
+
+    it('counts direct React Flow children from subscribed node internals', () => {
+      mockGetNodes.mockReturnValue([
+        { id: 'test-box', position: { x: 100, y: 100 }, type: 'enhancedBoundingBox' },
+      ]);
+      mockNodeInternals.set('test-box', {
+        id: 'test-box',
+        type: 'enhancedBoundingBox',
+        position: { x: 100, y: 100 },
+        width: 400,
+        height: 300,
+        data: {},
+      });
+      mockNodeInternals.set('text-1', {
+        id: 'text-1',
+        type: 'textBlock',
+        parentNode: 'test-box',
+        position: { x: 42, y: 120 },
+        width: 220,
+        height: 150,
+        data: {},
+      });
+
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...defaultProps} />
+        </ReactFlowProvider>
+      );
+
+      expect(screen.getByText('1 node')).toBeInTheDocument();
+    });
+
+    it('uses compact header sizing for narrow Region Boxes', () => {
+      const narrowProps = {
+        ...defaultProps,
+        data: {
+          ...defaultProps.data,
+          title: 'Extraction backdrop (locked)',
+          description: 'Locked neutral gray plate; the frontier location is composited later.',
+          width: 314,
+          height: 420
+        }
+      };
+
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...narrowProps} />
+        </ReactFlowProvider>
+      );
+
+      const header = document.querySelector(
+        '.bounding-box-header'
+      ) as HTMLElement | null;
+      const title = header?.querySelector('.bounding-box-title');
+      const description = header?.querySelector('.bounding-box-description div');
+
+      expect(header).toHaveAttribute('data-header-density', 'narrow');
+      expect(header).toHaveStyle({
+        minHeight: '86px',
+        padding: '18px 20px 20px'
+      });
+      expect(title).toHaveStyle({ fontSize: '20px' });
+      expect(description).toHaveStyle({ fontSize: '18px' });
+    });
+
+    it('auto-compacts the definition when the Region Box is not tall enough to leave a node viewport', () => {
+      const shortProps = {
+        ...defaultProps,
+        data: {
+          ...defaultProps.data,
+          title: 'Family DNA',
+          description: 'The fixed era and material language every facade inherits.',
+          width: 560,
+          height: 260
+        }
+      };
+
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...shortProps} />
+        </ReactFlowProvider>
+      );
+
+      const header = document.querySelector(
+        '.bounding-box-header'
+      ) as HTMLElement | null;
+
+      expect(header).toHaveAttribute('data-header-density', 'narrow');
+      expect(header).toHaveAttribute('data-definition-state', 'auto-compact');
+      expect(header).toHaveStyle({
+        minHeight: '64px',
+        padding: '18px 20px 20px'
+      });
+      // Auto-compacted: the description stays mounted (to animate) but its
+      // wrapper is marked hidden.
+      expect(
+        screen
+          .getByText('The fixed era and material language every facade inherits.')
+          .closest('.bounding-box-description')
+      ).toHaveAttribute('data-visible', 'false');
+    });
+
+    it('keeps the definition visible for an empty short Region Box', () => {
+      mockGetNodes.mockReturnValue([
+        {
+          id: 'test-box',
+          position: { x: 100, y: 100 },
+          type: 'enhancedBoundingBox'
+        },
+      ]);
+      const emptyShortProps = {
+        ...defaultProps,
+        data: {
+          ...defaultProps.data,
+          title: 'Empty Region',
+          description: 'No child nodes need vertical breathing room yet.',
+          width: 560,
+          height: 260
+        }
+      };
+
+      render(
+        <ReactFlowProvider>
+          <EnhancedBoundingBox {...emptyShortProps} />
+        </ReactFlowProvider>
+      );
+
+      const header = document.querySelector(
+        '.bounding-box-header'
+      ) as HTMLElement | null;
+
+      expect(header).toHaveAttribute('data-header-density', 'narrow');
+      expect(header).toHaveAttribute('data-definition-state', 'expanded');
+      expect(
+        screen.getByText('No child nodes need vertical breathing room yet.')
+      ).toBeInTheDocument();
+    });
   });
 
   describe('Resize Functionality', () => {
@@ -151,10 +313,8 @@ describe('EnhancedBoundingBox', () => {
         </ReactFlowProvider>
       );
       
-      // Look for resize handle elements with the resize-handle class
       const resizeHandles = container.querySelectorAll('[class*="resize-handle"]');
-      // The refactored version should have resize handles when selected
-      expect(resizeHandles.length).toBeGreaterThanOrEqual(0); // Changed to allow 0 as the component may render differently
+      expect(resizeHandles).toHaveLength(8);
     });
 
     it('should not show resize handles when collapsed', () => {
@@ -190,17 +350,17 @@ describe('EnhancedBoundingBox', () => {
       
       const callbacks = mockSetNodes.mock.calls
         .map(call => call[0])
-        .filter((fn): fn is (nodes: any[]) => any[] => typeof fn === 'function');
+        .filter((fn): fn is (nodes: Node[]) => Node[] => typeof fn === 'function');
       expect(callbacks.length).toBeGreaterThan(0);
 
       const candidateResults = callbacks.map(fn =>
         fn([
-          { id: 'test-box', position: { x: 100, y: 100 } },
-          { id: 'node-1', position: { x: 150, y: 150 }, hidden: false },
+          { id: 'test-box', position: { x: 100, y: 100 }, data: {} },
+          { id: 'node-1', position: { x: 150, y: 150 }, hidden: false, data: {} },
         ])
       );
       const resultWithHiddenNode = candidateResults.find(updatedNodes =>
-        updatedNodes.find((n: any) => n.id === 'node-1')?.hidden === true
+        updatedNodes.find(n => n.id === 'node-1')?.hidden === true
       );
       expect(resultWithHiddenNode).toBeDefined();
     });
@@ -214,8 +374,8 @@ describe('EnhancedBoundingBox', () => {
           ...defaultProps.data,
           isCollapsed: true,
           ports: [
-            { id: 'input-1', label: 'Input 1', type: 'string' as const, direction: 'input' as const, nodeId: 'test-box', position: 'left' as any },
-            { id: 'output-1', label: 'Output 1', type: 'string' as const, direction: 'output' as const, nodeId: 'test-box', position: 'right' as any },
+            { id: 'input-1', label: 'Input 1', type: 'string' as const, direction: 'input' as const, nodeId: 'test-box', position: Position.Left },
+            { id: 'output-1', label: 'Output 1', type: 'string' as const, direction: 'output' as const, nodeId: 'test-box', position: Position.Right },
           ],
         },
       };
@@ -238,7 +398,7 @@ describe('EnhancedBoundingBox', () => {
           ...defaultProps.data,
           isCollapsed: true,
           ports: [
-            { id: 'input-1', label: 'Input 1', type: 'string' as const, direction: 'input' as const, nodeId: 'test-box', position: 'left' as any },
+            { id: 'input-1', label: 'Input 1', type: 'string' as const, direction: 'input' as const, nodeId: 'test-box', position: Position.Left },
           ],
         },
       };
@@ -259,6 +419,63 @@ describe('EnhancedBoundingBox', () => {
   });
 
   describe('Styling', () => {
+    it('renders the header inside the box (draggable, not portaled) with its dark styling', () => {
+      const wideHeaderProps = {
+        ...defaultProps,
+        data: {
+          ...defaultProps.data,
+          width: 560,
+          height: 520
+        }
+      };
+      const viewport = document.createElement('div');
+      viewport.className = 'react-flow__viewport';
+      const wrapper = document.createElement('div');
+      wrapper.className = 'react-flow__node react-flow__node-enhancedBoundingBox';
+      const mount = document.createElement('div');
+      wrapper.appendChild(mount);
+      viewport.appendChild(wrapper);
+      document.body.appendChild(viewport);
+
+      try {
+        render(
+          <ReactFlowProvider>
+            <EnhancedBoundingBox {...wideHeaderProps} />
+          </ReactFlowProvider>,
+          { container: mount }
+        );
+
+        const headerLayer = document.querySelector(
+          '.bounding-box-header-layer'
+        ) as HTMLElement | null;
+        const header = document.querySelector(
+          '.bounding-box-header'
+        ) as HTMLElement | null;
+        const background = mount.querySelector('.bounding-box-background');
+
+        expect(background).toBeTruthy();
+        expect(headerLayer).toBeTruthy();
+        expect(header).toBeTruthy();
+        // The header is rendered INSIDE the region's node wrapper (so React
+        // Flow's node-drag works from it), not portaled out to the viewport.
+        expect(
+          header?.closest('.react-flow__node-enhancedBoundingBox')
+        ).not.toBeNull();
+        // It must not be marked nodrag — the header bar is the drag handle.
+        expect(headerLayer?.classList.contains('nodrag')).toBe(false);
+        expect(headerLayer).toHaveStyle({ zIndex: '2200' });
+        expect(header).toHaveStyle({
+          backgroundColor: 'rgba(31, 34, 34, 0.98)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          minHeight: '132px',
+          padding: '32px 36px 34px'
+        });
+        expect(header?.style.boxShadow).toContain('inset 0 1px 0');
+      } finally {
+        document.body.removeChild(viewport);
+      }
+    });
+
     it('should apply border radius and color from data', () => {
       const { container } = render(
         <ReactFlowProvider>

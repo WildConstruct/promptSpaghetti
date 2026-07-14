@@ -5,6 +5,13 @@
  * useNodeOperations and useGraphDragDrop (see forensic cleanup ledger).
  */
 
+import { BOUNDING_BOX_CONSTANTS } from '../nodes/EnhancedBoundingBox/utils/constants';
+
+const {
+  DEFAULT_WIDTH: REGION_DEFAULT_WIDTH,
+  DEFAULT_HEIGHT: REGION_DEFAULT_HEIGHT
+} = BOUNDING_BOX_CONSTANTS.dimensions;
+
 /**
  * Default `data` payload for a freshly created node of the given type.
  * Superset of the two former copies — also covers set/getVariable and the
@@ -39,8 +46,14 @@ export function getDefaultNodeData(type: string): Record<string, unknown> {
         borderWidth: 2,
         locked: false,
         isCollapsed: false,
-        width: 400,
-        height: 300
+        width: REGION_DEFAULT_WIDTH,
+        height: REGION_DEFAULT_HEIGHT
+      };
+    case 'postItNote':
+      return {
+        nodeType: 'postItNote',
+        text: '',
+        value: ''
       };
     default:
       return {};

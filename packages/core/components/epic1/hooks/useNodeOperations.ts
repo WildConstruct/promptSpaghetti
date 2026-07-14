@@ -217,6 +217,45 @@ export function useNodeOperations<NodeData = unknown>(
     showToast?.('success', `Duplicated ${newNodes.length} nodes`);
   }, [nodes, edges, setNodes, setEdges, createNodeId, showToast]);
 
+  // Disconnect node(s): remove every edge touching the given nodes (or the
+  // current selection), but keep the nodes themselves. Convention follows
+  // node tools' "break all links" (Unreal) / right-click disconnect (n8n).
+  const disconnectNodes = useCallback(
+    (nodeIds?: string[]) => {
+      const targetIds =
+        nodeIds && nodeIds.length > 0
+          ? nodeIds
+          : nodes.filter(n => n.selected).map(n => n.id);
+      if (targetIds.length === 0) {
+        showToast?.('info', 'Select a node to disconnect');
+        return;
+      }
+
+      const targetSet = new Set(targetIds);
+      const removedEdgeIds: string[] = [];
+      setEdges(eds =>
+        eds.filter(e => {
+          const touches = targetSet.has(e.source) || targetSet.has(e.target);
+          if (touches) {
+            removedEdgeIds.push(e.id);
+          }
+          return !touches;
+        })
+      );
+
+      if (removedEdgeIds.length > 0) {
+        onEdgeDelete?.(removedEdgeIds);
+        showToast?.(
+          'info',
+          `Disconnected ${removedEdgeIds.length} link${removedEdgeIds.length === 1 ? '' : 's'}`
+        );
+      } else {
+        showToast?.('info', 'No links to disconnect');
+      }
+    },
+    [nodes, setEdges, onEdgeDelete, showToast]
+  );
+
   // Delete selected nodes
   const deleteSelectedNodes = useCallback(() => {
     const nodesToDelete = nodes.filter(n => n.selected).map(n => n.id);
@@ -244,11 +283,18 @@ export function useNodeOperations<NodeData = unknown>(
     [onNodeSelect]
   );
 
-  // Handle pane click (deselect)
+  // Handle pane click (deselect). Clear the editor-local id AND React Flow's
+  // own node.selected — the enhancedNodes derivation keeps a node visually
+  // selected if either is set, so both must be reset to truly deselect.
   const handlePaneClick = useCallback(() => {
     setSelectedNodeId(null);
+    setNodes(nds =>
+      nds.some(n => n.selected)
+        ? nds.map(n => (n.selected ? { ...n, selected: false } : n))
+        : nds
+    );
     onNodeSelect?.(null);
-  }, [onNodeSelect]);
+  }, [onNodeSelect, setNodes]);
 
   // Handle connection creation with single-input constraint
   const onConnect = useCallback(
@@ -400,6 +446,7 @@ export function useNodeOperations<NodeData = unknown>(
     handleNodeEdit,
     addNodeWithAnimation,
     duplicateNodes,
+    disconnectNodes,
     deleteSelectedNodes,
     alignNodes,
     distributeNodes,

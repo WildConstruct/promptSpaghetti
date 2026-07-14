@@ -189,10 +189,15 @@ export function useGraphKeyboardShortcuts(
       // File operations
       { key: 's', meta: true, action: saveGraph, description: 'Save graph' },
 
-      // Edit operations
-      { key: 'z', meta: true, action: undo, description: 'Undo' },
+      // Edit operations. Register both Cmd (meta) and Ctrl variants so undo/redo
+      // work on macOS and Windows. Redo (with shift) is listed BEFORE undo so
+      // Ctrl/Cmd+Shift+Z isn't captured by the no-shift undo entry — modifier
+      // matching treats an unset `shift` as "don't care", so order decides.
       { key: 'z', meta: true, shift: true, action: redo, description: 'Redo' },
+      { key: 'z', ctrl: true, shift: true, action: redo, description: 'Redo (Windows)' },
       { key: 'y', ctrl: true, action: redo, description: 'Redo (Windows)' },
+      { key: 'z', meta: true, action: undo, description: 'Undo' },
+      { key: 'z', ctrl: true, action: undo, description: 'Undo (Windows)' },
 
       // Selection
       { key: 'a', meta: true, action: selectAll, description: 'Select all' },

@@ -31,6 +31,9 @@ export function renderTutorialHook<Result, Props>(
 
 export function resetOnboardingStorage() {
   localStorage.removeItem('onboardingState');
+  document.cookie = 'psg_tutorial_completed_basic=; Max-Age=0; path=/';
+  document.cookie = 'psg_tutorial_completed_advanced=; Max-Age=0; path=/';
+  document.cookie = 'psg_canvas_tips_dismissed=; Max-Age=0; path=/';
 }
 
 export function seedOnboardingState(state: unknown) {

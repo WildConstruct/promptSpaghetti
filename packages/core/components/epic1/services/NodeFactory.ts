@@ -102,6 +102,17 @@ export class NodeFactory {
           label: 'output'
         }
       }
+    ],
+    [
+      'postItNote',
+      {
+        type: 'postItNote',
+        defaultData: {
+          nodeType: 'postItNote',
+          value: '',
+          text: ''
+        }
+      }
     ]
   ]);
 
