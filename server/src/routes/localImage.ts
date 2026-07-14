@@ -5,12 +5,15 @@ import {
   LocalImageBatchRequestSchema
 } from '../../../packages/core/services/localImage/contracts';
 import { LocalImageSandboxService } from '../services/LocalImageSandboxService';
+import { requireLocalSandboxAccess } from '../utils/localSandboxAccess';
 import { metrics } from '../utils/metrics';
 
 export async function localImageRoutes(
   app: FastifyInstance,
   service = new LocalImageSandboxService()
 ) {
+  app.addHook('preHandler', requireLocalSandboxAccess);
+
   app.get('/api/local-image/status', async () => {
     metrics.mark('local-image.status');
     return await service.getStatus();

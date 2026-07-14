@@ -22,6 +22,7 @@ import { localFragmentRoutes } from './routes/localFragments';
 import { themeRoutes } from './theme';
 import { rateLimiter } from './utils/rateLimit';
 import { metrics } from './utils/metrics';
+import { resolveListenHost } from './utils/localSandboxAccess';
 import {
   getAdminDisableReason,
   isAdminSurfaceEnabled,
@@ -181,9 +182,12 @@ server.register(async app => agentRoutes(app));
 // Start server
 const start = async () => {
   try {
-    const port = process.env.PORT ? parseInt(process.env.PORT) : 8000;
-    await server.listen({ port, host: '0.0.0.0' });
-    console.log(`Server running on port ${port}`);
+    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 8000;
+    // Default HOST=127.0.0.1 so local sandbox routes are not LAN-exposed.
+    // Set HOST=0.0.0.0 only when intentionally binding all interfaces.
+    const host = resolveListenHost();
+    await server.listen({ port, host });
+    console.log(`Server running on http://${host}:${port}`);
   } catch (err) {
     const error = err instanceof Error ? err : new Error(String(err));
     if (Sentry && typeof Sentry.captureException === 'function') {

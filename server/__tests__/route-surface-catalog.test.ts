@@ -9,12 +9,15 @@ describe('SERVER_ROUTE_CATALOG', () => {
     expect(publicRoutes.map(route => route.id)).toEqual([
       'health',
       'api-healthz',
-      'preview',
       'llm-status',
       'psg-capabilities'
     ]);
     expect(publicRoutes.every(route => route.authRequired === false)).toBe(
       true
+    );
+    // Graph preview is client-side (Epic1ExecutionEngine); no public /preview route.
+    expect(SERVER_ROUTE_CATALOG.some(route => route.id === 'preview')).toBe(
+      false
     );
   });
 
