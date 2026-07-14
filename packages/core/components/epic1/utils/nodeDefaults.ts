@@ -1,8 +1,9 @@
 /**
  * Shared node-creation helpers for the Epic 1 editor.
  *
- * Consolidates logic that previously lived as divergent copies inside
- * useNodeOperations and useGraphDragDrop (see forensic cleanup ledger).
+ * Single source for default node data + id generation. Call sites:
+ * useNodeOperations, useGraphDragDrop, useDragDropHandlers, NodeFactory,
+ * useGraphKeyboardShortcuts (paste). See forensic cleanup ledger / work-loop C2.
  */
 
 import { BOUNDING_BOX_CONSTANTS } from '../nodes/EnhancedBoundingBox/utils/constants';
@@ -28,9 +29,23 @@ export function getDefaultNodeData(type: string): Record<string, unknown> {
         ]
       };
     case 'concat':
-      return { separator: ' ' };
+      // B5: new Merge nodes default to natural-language sentence join.
+      // Graphs that omit joinStyle still use legacy space-join in the engine.
+      return {
+        separator: ' ',
+        joinStyle: 'sentence',
+        dedupe: false
+      };
     case 'output':
       return { label: 'Output' };
+    case 'template':
+      return {
+        nodeType: 'template',
+        template: 'a {subject} in {setting}',
+        value: 'a {subject} in {setting}',
+        capitalize: true,
+        terminate: true
+      };
     case 'variable':
     case 'setVariable':
     case 'getVariable':

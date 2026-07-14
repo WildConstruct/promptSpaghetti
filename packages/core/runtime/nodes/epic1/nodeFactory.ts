@@ -5,6 +5,7 @@ import { OutputNode } from './OutputNode';
 import { TextBlockNode } from './TextBlockNode';
 import { VariableNode } from './VariableNode';
 import { WeightedChoiceNode } from './WeightedChoiceNode';
+import { TemplateNode } from './TemplateNode';
 
 export function createNodeFromData(data: any): BaseInlineEditableNode {
   const { type, id, data: nodeData } = data;
@@ -43,6 +44,25 @@ export function createNodeFromData(data: any): BaseInlineEditableNode {
       const outputNode = new OutputNode(id, nodeData.value, runtimeConfig);
       outputNode.setData(nodeData);
       return outputNode;
+    }
+
+    case Epic1NodeType.Template: {
+      const templateNode = new TemplateNode(
+        id,
+        {
+          template:
+            typeof nodeData?.template === 'string'
+              ? nodeData.template
+              : typeof nodeData?.value === 'string'
+                ? nodeData.value
+                : 'a {subject} in {setting}',
+          capitalize: nodeData?.capitalize !== false,
+          terminate: nodeData?.terminate === true
+        },
+        runtimeConfig
+      );
+      templateNode.setData(nodeData);
+      return templateNode;
     }
 
     default:

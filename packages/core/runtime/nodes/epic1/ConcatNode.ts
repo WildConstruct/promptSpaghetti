@@ -70,7 +70,9 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
       return '';
     }
 
-    // Natural-language assembly path (opt-in via joinStyle).
+    // Natural-language assembly when joinStyle is set (new nodes default to
+    // 'sentence' in the editor — B5). Absent joinStyle keeps legacy separator join
+    // so saved graphs without the field do not change meaning.
     if (config.joinStyle && config.joinStyle !== 'separator') {
       return assemble(this.inputs, {
         style: config.joinStyle,

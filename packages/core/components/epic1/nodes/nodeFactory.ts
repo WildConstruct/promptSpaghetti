@@ -20,6 +20,7 @@ import {
   VariableNodeConfig
 } from '../../../runtime/nodes/epic1/VariableNode';
 import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
+import { TemplateNode } from '../../../runtime/nodes/epic1/TemplateNode';
 import { debugLogEpic1 } from '../../../utils/debug';
 
 /**
@@ -237,6 +238,27 @@ export function nodeDataToRuntimeNode(
         );
         return node;
       }
+
+      case 'template': {
+        const templateText =
+          typeof (data as { template?: unknown }).template === 'string'
+            ? String((data as { template: string }).template)
+            : typeof data.value === 'string'
+              ? data.value
+              : 'a {subject} in {setting}';
+        return new TemplateNode(id, {
+          template: templateText,
+          capitalize: (data as { capitalize?: unknown }).capitalize !== false,
+          terminate: (data as { terminate?: unknown }).terminate === true
+        });
+      }
+
+      // Format-only / non-executable (B4: Include is not run by Epic1)
+      case 'include':
+        debugLogEpic1(
+          `[nodeFactory] Skipping format-only Include node ${id} (not executed by Epic1; see docs/include-node-decision.md)`
+        );
+        return null;
 
       // UI-only nodes that don't need runtime conversion
       case 'boundingBox':

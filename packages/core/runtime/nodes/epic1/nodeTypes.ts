@@ -8,5 +8,7 @@ export enum Epic1NodeType {
   WeightedChoice = 'WeightedChoice',
   Concat = 'Concat',
   Variable = 'Variable',
-  Output = 'Output'
+  Output = 'Output',
+  /** Sentence skeleton with {slot} fill — see docs/template-slot-node-design.md */
+  Template = 'Template'
 }

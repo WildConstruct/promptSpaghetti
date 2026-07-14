@@ -22,6 +22,7 @@ const nodeIcons = {
   setVariable: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/></svg>',
   getVariable: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 3a2.5 2.5 0 0 1 5 0V4h5v10a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V4h3.5v-.5zm1 0v.5h3V3a1.5 1.5 0 0 0-3 0z"/></svg>',
   output: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/></svg>',
+  template: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2zm1 2h10v1H3V4zm0 3h6v1H3V7zm0 3h8v1H3v-1z"/></svg>',
   enhancedBoundingBox: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/></svg>',
   postItNote: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M3 1.5A1.5 1.5 0 0 0 1.5 3v10A1.5 1.5 0 0 0 3 14.5h6.2c.4 0 .78-.16 1.06-.44l4.3-4.3c.28-.28.44-.66.44-1.06V3A1.5 1.5 0 0 0 13.5 1.5H3zm8 10.8V9.5h2.8L11 12.3z"/></svg>',
 };
@@ -30,6 +31,7 @@ export const nodeTypes: NodeTypeInfo[] = [
   { type: 'textBlock', label: 'Text Block', icon: nodeIcons.textBlock, category: 'Basic' },
   { type: 'weightedChoice', label: 'Weighted Choice', icon: nodeIcons.weightedChoice, category: 'Logic' },
   { type: 'concat', label: 'Concatenate', icon: nodeIcons.concat, category: 'Text' },
+  { type: 'template', label: 'Template', icon: nodeIcons.template, category: 'Text' },
   { type: 'setVariable', label: 'Set Variable', icon: nodeIcons.setVariable, category: 'Variables' },
   { type: 'getVariable', label: 'Get Variable', icon: nodeIcons.getVariable, category: 'Variables' },
   { type: 'output', label: 'Output', icon: nodeIcons.output, category: 'Output' },

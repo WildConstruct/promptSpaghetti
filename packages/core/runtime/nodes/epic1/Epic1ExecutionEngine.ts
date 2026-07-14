@@ -12,6 +12,7 @@ import { applyWeightDistribution } from './weightDistribution';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode, VariableMode } from './VariableNode';
 import { OutputNode } from './OutputNode';
+import { TemplateNode } from './TemplateNode';
 import { validateGraph } from './validation';
 import { debugLogExecution } from '../../../utils/debug';
 
@@ -291,6 +292,10 @@ export class Epic1ExecutionEngine {
           output = await this.executeOutput(node as OutputNode, inputs);
           break;
 
+        case Epic1NodeType.Template:
+          output = await this.executeTemplate(node as TemplateNode, nodeId);
+          break;
+
         default:
           throw new Error(`Unknown node type: ${node.getNodeType()}`);
       }
@@ -560,6 +565,62 @@ export class Epic1ExecutionEngine {
     const result = await node.run(this.context.getExecutionContext());
     debugLogExecution('[ExecutionEngine] Output node result:', result);
     return result;
+  }
+
+  /**
+   * Execute a Template node — fill skeleton from slot-* handle inputs.
+   */
+  private async executeTemplate(
+    node: TemplateNode,
+    nodeId: string
+  ): Promise<string> {
+    const slots = this.getSlotInputs(nodeId);
+    node.setSlotValues(slots);
+    const result = await node.run(this.context.getExecutionContext());
+    debugLogExecution(
+      `[ExecutionEngine] Template ${nodeId} filled with slots`,
+      slots,
+      '→',
+      result
+    );
+    return result;
+  }
+
+  /**
+   * Collect slot values from edges targeting slot-{name} handles.
+   * Multiple edges into the same slot are space-joined.
+   */
+  private getSlotInputs(nodeId: string): Record<string, string> {
+    const slots: Record<string, string> = {};
+    const incomingEdges = this.graph.edges.filter(
+      edge => edge.target === nodeId
+    );
+
+    for (const edge of incomingEdges) {
+      if (!this.isActiveEdge(edge)) {
+        continue;
+      }
+      const handle = edge.targetHandle || '';
+      if (!handle.startsWith('slot-')) {
+        continue;
+      }
+      const name = handle.slice('slot-'.length);
+      if (!name) {
+        continue;
+      }
+      const sourceResult = this.results.get(edge.source);
+      if (!sourceResult || sourceResult.error) {
+        continue;
+      }
+      const piece = String(sourceResult.output ?? '');
+      if (slots[name]) {
+        slots[name] = `${slots[name]} ${piece}`.trim();
+      } else {
+        slots[name] = piece;
+      }
+    }
+
+    return slots;
   }
 
   /**

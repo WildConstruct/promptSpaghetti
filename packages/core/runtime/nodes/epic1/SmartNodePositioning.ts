@@ -69,7 +69,8 @@ export class SmartNodePositioner {
     [Epic1NodeType.WeightedChoice]: { width: 240, height: 120 },
     [Epic1NodeType.Concat]: { width: 150, height: 60 },
     [Epic1NodeType.Variable]: { width: 180, height: 70 },
-    [Epic1NodeType.Output]: { width: 120, height: 60 }
+    [Epic1NodeType.Output]: { width: 120, height: 60 },
+    [Epic1NodeType.Template]: { width: 220, height: 90 }
   };
 
   /**
