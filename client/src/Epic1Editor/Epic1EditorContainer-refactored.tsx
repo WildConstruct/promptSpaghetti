@@ -42,6 +42,7 @@ import {
   MAIN_DOCUMENT_ID,
   useDocumentProjectStore
 } from '@promptscape/core/stores/documentProjectStore';
+import { buildNestedDocumentStarter } from '@promptscape/core/components/epic1/utils/nestedDocumentStarter';
 import {
   TEMPLATE_CATALOG,
   TEMPLATE_CATEGORY_LABELS
@@ -375,11 +376,75 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       applyDocumentFromStore(documentId);
     };
 
+    /** Author a new nested composition from an empty SubPSG node. */
+    const onCreateNested = (event: Event) => {
+      const detail = (
+        event as CustomEvent<{ nodeId?: string; documentName?: string }>
+      ).detail;
+      const nodeId = detail?.nodeId;
+      if (!nodeId) {
+        return;
+      }
+      const compositionName =
+        typeof detail?.documentName === 'string' &&
+        detail.documentName.trim().length > 0
+          ? detail.documentName.trim()
+          : 'New Composition';
+
+      const starter = buildNestedDocumentStarter(compositionName);
+      const store = useDocumentProjectStore.getState();
+      const created = store.createNestedDocument({
+        name: compositionName,
+        nodes: starter.nodes as Node[],
+        edges: starter.edges as Edge[]
+      });
+
+      // Bind the SubPSG node on the *current* composition to the new document.
+      const parentNodes = currentNodes.map(node => {
+        if (node.id !== nodeId) {
+          return node;
+        }
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            documentId: created.id,
+            documentName: created.name,
+            label: created.name,
+            outputMode: 'first-output',
+            nodeType: 'subPsg'
+          }
+        };
+      });
+
+      const activeId = store.activeDocumentId;
+      store.updateDocumentGraph(activeId, parentNodes, currentEdges);
+      setCurrentNodes(parentNodes);
+      window.dispatchEvent(
+        new CustomEvent('epic1:applyGraph', {
+          detail: { nodes: parentNodes, edges: currentEdges }
+        })
+      );
+
+      // Open the new child tab so the user can edit it immediately.
+      store.openDocument(created.id);
+      setCurrentNodes(created.nodes as Node[]);
+      setCurrentEdges(created.edges as Edge[]);
+      window.dispatchEvent(
+        new CustomEvent('epic1:applyGraph', {
+          detail: { nodes: created.nodes, edges: created.edges }
+        })
+      );
+      showToast(`Created “${created.name}” — edit the nested composition`, 'success');
+    };
+
     window.addEventListener('epic1:openNestedDocument', onOpenNested);
     window.addEventListener('epic1:switchDocument', onSwitchDocument);
+    window.addEventListener('epic1:createNestedDocument', onCreateNested);
     return () => {
       window.removeEventListener('epic1:openNestedDocument', onOpenNested);
       window.removeEventListener('epic1:switchDocument', onSwitchDocument);
+      window.removeEventListener('epic1:createNestedDocument', onCreateNested);
     };
   }, [currentNodes, currentEdges, showToast]);
 
@@ -520,10 +585,30 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       ];
 
       if (includePsg) {
+        const store = useDocumentProjectStore.getState();
+        const nestedDocs = Object.values(store.documents)
+          .filter(doc => doc.id !== store.mainDocumentId)
+          .map(doc => {
+            const exported = exportGraphToPSG(
+              doc.nodes as Parameters<typeof exportGraphToPSG>[0],
+              doc.edges as Parameters<typeof exportGraphToPSG>[1],
+              { name: doc.name }
+            );
+            return {
+              id: doc.id,
+              name: doc.name,
+              nodes: exported.nodes,
+              edges: exported.edges,
+              regions: exported.regions
+            };
+          });
         const psg = exportGraphToPSG(
           currentNodes as Parameters<typeof exportGraphToPSG>[0],
           currentEdges as Parameters<typeof exportGraphToPSG>[1],
-          { name: 'bug-report-graph' }
+          {
+            name: 'bug-report-graph',
+            documents: nestedDocs.length > 0 ? nestedDocs : undefined
+          }
         );
         lines.push('', 'PSG:', '```json', JSON.stringify(psg, null, 2), '```');
       }

@@ -1,8 +1,8 @@
 /**
  * SubPSG node UI — nested precomp document reference.
- * Double-click opens the child document tab (epic1:openNestedDocument).
+ * Double-click / Open opens the child tab; empty nodes can Create a composition.
  */
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { NodeProps, Handle, Position } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
 import {
@@ -29,31 +29,47 @@ const openNestedDocument = (documentId: string, documentName?: string) => {
   );
 };
 
+const createNestedDocument = (
+  nodeId: string,
+  documentName: string
+) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  window.dispatchEvent(
+    new CustomEvent('epic1:createNestedDocument', {
+      detail: { nodeId, documentName }
+    })
+  );
+};
+
 export const SubPsgNode = memo((props: NodeProps<SubPsgNodeData>) => {
   const { showMetadata, setShowMetadata, metadata, flipClassName } =
     useMetadataFlip(props);
 
   const documentId =
     typeof props.data.documentId === 'string' ? props.data.documentId : '';
-  const documentName =
+  const initialName =
     typeof props.data.documentName === 'string' &&
     props.data.documentName.trim().length > 0
       ? props.data.documentName
       : typeof props.data.label === 'string' && props.data.label.trim().length > 0
         ? props.data.label
-        : documentId || 'Nested PSG';
+        : 'New Composition';
 
+  const [localName, setLocalName] = useState(initialName);
   const missing = !documentId;
 
   const handleDoubleClick = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation();
-      if (!documentId) {
+      if (documentId) {
+        openNestedDocument(documentId, localName);
         return;
       }
-      openNestedDocument(documentId, documentName);
+      createNestedDocument(props.id, localName || 'New Composition');
     },
-    [documentId, documentName]
+    [documentId, localName, props.id]
   );
 
   const handleOpenClick = useCallback(
@@ -62,10 +78,31 @@ export const SubPsgNode = memo((props: NodeProps<SubPsgNodeData>) => {
       if (!documentId) {
         return;
       }
-      openNestedDocument(documentId, documentName);
+      openNestedDocument(documentId, localName);
     },
-    [documentId, documentName]
+    [documentId, localName]
   );
+
+  const handleCreateClick = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      createNestedDocument(props.id, localName || 'New Composition');
+    },
+    [localName, props.id]
+  );
+
+  const handleNameBlur = useCallback(() => {
+    const name = localName.trim() || 'New Composition';
+    setLocalName(name);
+    // Persist display name on the node even before a document exists.
+    props.data.onEdit?.(
+      JSON.stringify({
+        documentId,
+        documentName: name,
+        outputMode: props.data.outputMode || 'first-output'
+      })
+    );
+  }, [documentId, localName, props.data]);
 
   const inputHandle = (
     <Handle
@@ -103,13 +140,13 @@ export const SubPsgNode = memo((props: NodeProps<SubPsgNodeData>) => {
     <BaseEditableNode
       {...props}
       className={`text-block sub-psg ${flipClassName}${missing ? ' sub-psg-missing' : ''}`}
-      minWidth={200}
-      minHeight={72}
+      minWidth={220}
+      minHeight={88}
       data={{
         ...props.data,
-        value: documentName,
+        value: localName,
         nodeType: 'subPsg',
-        label: documentName
+        label: localName
       }}
     >
       <div
@@ -117,24 +154,36 @@ export const SubPsgNode = memo((props: NodeProps<SubPsgNodeData>) => {
         onDoubleClick={handleDoubleClick}
         title={
           documentId
-            ? `Double-click to open “${documentName}”`
-            : 'Set a documentId to open a nested PSG'
+            ? `Double-click to open “${localName}”`
+            : 'Double-click or Create to author a nested composition'
         }
       >
         <div className={`flip-card ${showMetadata ? 'flipped' : ''}`}>
           <div className="card-face node-front">
             <div className="epic1-text-editor">
               <div className="epic1-node-type-label">Sub PSG</div>
-              <div
+              <input
+                type="text"
+                value={localName}
+                onChange={e => setLocalName(e.target.value)}
+                onBlur={handleNameBlur}
+                onClick={e => e.stopPropagation()}
+                onDoubleClick={e => e.stopPropagation()}
+                className="nodrag"
                 style={{
+                  width: '100%',
+                  boxSizing: 'border-box',
                   fontSize: 13,
                   fontWeight: 600,
                   color: missing ? '#f0a0a0' : '#f1f6f9',
-                  marginBottom: 6
+                  marginBottom: 6,
+                  padding: '4px 6px',
+                  borderRadius: 4,
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  background: 'rgba(0,0,0,0.25)'
                 }}
-              >
-                {documentName}
-              </div>
+                aria-label="Composition name"
+              />
               <div
                 style={{
                   fontSize: 11,
@@ -143,27 +192,43 @@ export const SubPsgNode = memo((props: NodeProps<SubPsgNodeData>) => {
                   wordBreak: 'break-all'
                 }}
               >
-                {missing ? 'Missing document reference' : documentId}
+                {missing ? 'No nested document yet' : documentId}
               </div>
-              <button
-                type="button"
-                onClick={handleOpenClick}
-                disabled={missing}
-                style={{
-                  padding: '4px 10px',
-                  fontSize: 11,
-                  borderRadius: 6,
-                  border: '1px solid rgba(230,162,60,0.45)',
-                  background: missing
-                    ? 'rgba(255,255,255,0.04)'
-                    : 'rgba(230,162,60,0.18)',
-                  color: missing ? 'rgba(241,246,249,0.4)' : '#e6a23c',
-                  cursor: missing ? 'not-allowed' : 'pointer',
-                  fontWeight: 600
-                }}
-              >
-                Open document
-              </button>
+              {missing ? (
+                <button
+                  type="button"
+                  onClick={handleCreateClick}
+                  style={{
+                    padding: '4px 10px',
+                    fontSize: 11,
+                    borderRadius: 6,
+                    border: '1px solid rgba(230,162,60,0.45)',
+                    background: 'rgba(230,162,60,0.18)',
+                    color: '#e6a23c',
+                    cursor: 'pointer',
+                    fontWeight: 600
+                  }}
+                >
+                  Create composition
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleOpenClick}
+                  style={{
+                    padding: '4px 10px',
+                    fontSize: 11,
+                    borderRadius: 6,
+                    border: '1px solid rgba(230,162,60,0.45)',
+                    background: 'rgba(230,162,60,0.18)',
+                    color: '#e6a23c',
+                    cursor: 'pointer',
+                    fontWeight: 600
+                  }}
+                >
+                  Open document
+                </button>
+              )}
             </div>
             <MetadataToggleButton
               showMetadata={showMetadata}
