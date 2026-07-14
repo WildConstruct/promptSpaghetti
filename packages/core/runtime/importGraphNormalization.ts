@@ -50,6 +50,8 @@ export function canonicalizeImportedNodeType(type: string | undefined): string {
     getVariable: 'getVariable',
     Include: 'include',
     include: 'include',
+    Template: 'template',
+    template: 'template',
     boundingBox: 'boundingBox',
     enhancedBoundingBox: 'enhancedBoundingBox'
   };

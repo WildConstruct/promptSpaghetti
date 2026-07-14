@@ -111,7 +111,8 @@ const EDITOR_TO_PSG_NODE_TYPE: Record<string, string> = {
   variable: 'Variable',
   setVariable: 'SetVariable',
   getVariable: 'GetVariable',
-  include: 'Include'
+  include: 'Include',
+  template: 'Template'
 };
 
 const stripUndefined = <T extends Record<string, unknown>>(value: T): T =>

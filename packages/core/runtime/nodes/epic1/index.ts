@@ -55,6 +55,10 @@ export type {
 
 export { OutputNode } from './OutputNode';
 
+export { TemplateNode } from './TemplateNode';
+
+export type { TemplateConfig } from './TemplateNode';
+
 // Node type enum (moved to separate file to avoid circular deps)
 export { Epic1NodeType } from './nodeTypes';
 
@@ -85,6 +89,12 @@ export function isVariableNode(
 
 export function isOutputNode(node: BaseInlineEditableNode): node is OutputNode {
   return node.getNodeType() === Epic1NodeType.Output;
+}
+
+export function isTemplateNode(
+  node: BaseInlineEditableNode
+): node is TemplateNode {
+  return node.getNodeType() === Epic1NodeType.Template;
 }
 
 // Execution engine exports
