@@ -10,22 +10,16 @@ const baseNodeSchema = z.object({
   category: z.string().default('general')
 });
 
-// Enhanced schemas for each node type
+/**
+ * UI-oriented schemas for product / format-adjacent node types.
+ * Advanced Epic 7 schemas (WeightedAdvanced/Conditional/Sequential/Markov) and
+ * Subject/Action ghosts were removed in C1 P1 — see docs/parked-tier-disposition.md
+ * and docs/parked-implementations/README.md for design intent.
+ *
+ * Note: GraphSchema and Epic1 executable sets still diverge; see
+ * docs/schema-epic1-vocabulary-inventory.md.
+ */
 export const nodeSchemas: Record<string, z.ZodTypeAny> = {
-  Subject: baseNodeSchema.extend({
-    type: z.literal('Subject').default('Subject'),
-    subjects: z.array(z.string()).default(['subject']),
-    singularForm: z.string().default('subject'),
-    pluralForm: z.string().default('subjects')
-  }),
-  
-  Action: baseNodeSchema.extend({
-    type: z.literal('Action').default('Action'),
-    actions: z.array(z.string()).default(['action']),
-    singularForm: z.string().default('action'),
-    pluralForm: z.string().default('actions')
-  }),
-  
   WeightedChoice: baseNodeSchema.extend({
     type: z.literal('WeightedChoice').default('WeightedChoice'),
     choices: z
@@ -39,67 +33,34 @@ export const nodeSchemas: Record<string, z.ZodTypeAny> = {
       )
       .default([{ text: 'choice', weight: 1, muted: false, solo: false }])
   }),
-  
+
   Concat: baseNodeSchema.extend({
     type: z.literal('Concat').default('Concat'),
     separator: z.string().default(' '),
     inputs: z.array(z.string()).default([])
   }),
-  
+
   Output: baseNodeSchema.extend({
     type: z.literal('Output').default('Output'),
     outputName: z.string().default('output')
   }),
-  
+
+  // Format-only (B4) — not on Epic1 canvas/engine. docs/include-node-decision.md
   Include: baseNodeSchema.extend({
     type: z.literal('Include').default('Include'),
     graphPath: z.string().default('')
   }),
-  
+
   SetVariable: baseNodeSchema.extend({
     type: z.literal('SetVariable').default('SetVariable'),
     variableName: z.string().default('variable'),
     value: z.string().default('')
   }),
-  
+
   GetVariable: baseNodeSchema.extend({
     type: z.literal('GetVariable').default('GetVariable'),
     variableName: z.string().default('variable'),
     fallback: z.string().default('')
-  }),
-  
-  // Epic 7 Advanced Node Types
-  WeightedAdvanced: baseNodeSchema.extend({
-    type: z.literal('WeightedAdvanced').default('WeightedAdvanced'),
-    choices: z.array(z.object({
-      text: z.string(),
-      weight: z.number().min(0).default(1)
-    })).default([]),
-    distribution: z.enum(['uniform', 'exponential', 'gaussian', 'custom']).default('uniform'),
-    customWeights: z.array(z.number()).optional()
-  }),
-  
-  Conditional: baseNodeSchema.extend({
-    type: z.literal('Conditional').default('Conditional'),
-    condition: z.string().default(''),
-    trueBranch: z.string().optional(),
-    falseBranch: z.string().optional(),
-    expressionMode: z.enum(['simple', 'javascript']).default('simple')
-  }),
-  
-  Sequential: baseNodeSchema.extend({
-    type: z.literal('Sequential').default('Sequential'),
-    sequence: z.array(z.string()).default([]),
-    currentIndex: z.number().default(0),
-    loopMode: z.enum(['once', 'loop', 'random']).default('once')
-  }),
-  
-  Markov: baseNodeSchema.extend({
-    type: z.literal('Markov').default('Markov'),
-    states: z.array(z.string()).default([]),
-    transitions: z.record(z.record(z.number())).default({}),
-    currentState: z.string().optional(),
-    maxIterations: z.number().default(100)
   })
 };
 
@@ -118,15 +79,9 @@ export function validateNodeData(nodeType: string, data: unknown): unknown {
 }
 
 // Export individual schemas for direct use
-export const SubjectSchema = nodeSchemas.Subject;
-export const ActionSchema = nodeSchemas.Action;
 export const WeightedChoiceSchema = nodeSchemas.WeightedChoice;
 export const ConcatSchema = nodeSchemas.Concat;
 export const OutputSchema = nodeSchemas.Output;
 export const IncludeSchema = nodeSchemas.Include;
 export const SetVariableSchema = nodeSchemas.SetVariable;
 export const GetVariableSchema = nodeSchemas.GetVariable;
-export const WeightedAdvancedSchema = nodeSchemas.WeightedAdvanced;
-export const ConditionalSchema = nodeSchemas.Conditional;
-export const SequentialSchema = nodeSchemas.Sequential;
-export const MarkovSchema = nodeSchemas.Markov;

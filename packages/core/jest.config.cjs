@@ -9,12 +9,9 @@ module.exports = {
     '<rootDir>/hooks'
   ],
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
-  // The advanced-node tier (advanced.ts, io-system.ts, Conditional/Sequential/
-  // Markov/WeightedAdvanced) is intentionally parked off the product schema
-  // surface (see graphSchema.ts and docs/engine-unification-design.md). Its
-  // broken, never-run test suites were removed in the forensic cleanup; the
-  // parked source modules remain. Re-add testPathIgnorePatterns here only if
-  // those suites are revived.
+  // Advanced-node tier source was deleted in C1 P1 (see docs/parked-tier-disposition.md).
+  // Algorithms live in docs/parked-implementations/README.md. runtime/advanced.ts remains
+  // for custom-node-sdk.
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
