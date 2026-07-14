@@ -45,6 +45,7 @@ import {
   type SidePanelTabDefinition
 } from '../TabbedSidePanel';
 import type { DocumentSummary } from '../DocumentLibraryPanel';
+import { DocumentTabs } from '../DocumentTabs';
 import { epic1MinimapProps } from '../nodeVisualTheme';
 import { getSupabase } from '../../../utils/supabaseClient';
 import { useTutorial } from '../onboarding/TutorialContext';
@@ -237,12 +238,19 @@ export function Epic1GraphEditorShell(props: Epic1GraphEditorShellProps) {
         <div
           className="graph-canvas-container"
           data-tutorial-anchor="canvas"
-          style={{ flex: 1, minWidth: 0, position: 'relative' }}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
           onDrop={onDrop}
           onDragOver={onDragOver}
           onDragEnter={onDragEnter}
           onDragLeave={onDragLeave}
         >
+          <DocumentTabs />
           {isDraggingOver && (
             <div className="drop-indicator" aria-live="polite">
               {dropTarget?.kind === 'replace-node'

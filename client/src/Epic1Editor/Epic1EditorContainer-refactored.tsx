@@ -39,6 +39,10 @@ import type {
 } from '@promptscape/core/services/psg';
 import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 import {
+  MAIN_DOCUMENT_ID,
+  useDocumentProjectStore
+} from '@promptscape/core/stores/documentProjectStore';
+import {
   TEMPLATE_CATALOG,
   TEMPLATE_CATEGORY_LABELS
 } from '../templates/templateCatalog';
@@ -267,6 +271,127 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
   // Editor key for force refresh
   const [editorKey, setEditorKey] = useState(0);
+
+  /** Load a graph into the editor and document project store (nested precomps). */
+  const loadProjectGraph = useCallback(
+    (
+      nodes: Node[],
+      edges: Edge[],
+      options?: {
+        name?: string;
+        documents?: Array<{
+          id: string;
+          name: string;
+          nodes: Node[];
+          edges: Edge[];
+        }>;
+        remount?: boolean;
+      }
+    ) => {
+      const mainId = MAIN_DOCUMENT_ID;
+      const nested = (options?.documents ?? []).map(doc => ({
+        id: doc.id,
+        name: doc.name,
+        nodes: doc.nodes as Node[],
+        edges: doc.edges as Edge[]
+      }));
+      useDocumentProjectStore.getState().resetProject(
+        {
+          id: mainId,
+          name: options?.name ?? 'Main',
+          nodes: nodes as Node[],
+          edges: edges as Edge[]
+        },
+        nested
+      );
+      setCurrentNodes(nodes);
+      setCurrentEdges(edges);
+      if (options?.remount !== false) {
+        setEditorKey(prev => prev + 1);
+      }
+      window.dispatchEvent(
+        new CustomEvent('epic1:applyGraph', {
+          detail: { nodes, edges }
+        })
+      );
+    },
+    []
+  );
+
+  // Nested PSG: open child tab / switch composition without replacing project.
+  useEffect(() => {
+    const applyDocumentFromStore = (documentId: string) => {
+      const store = useDocumentProjectStore.getState();
+      const doc = store.documents[documentId];
+      if (!doc) {
+        return;
+      }
+      // Persist the graph currently shown before swapping.
+      const activeId = store.activeDocumentId;
+      if (activeId && activeId !== documentId && store.documents[activeId]) {
+        store.updateDocumentGraph(activeId, currentNodes, currentEdges);
+      }
+      store.openDocument(documentId);
+      const next = useDocumentProjectStore.getState().documents[documentId];
+      if (!next) {
+        return;
+      }
+      setCurrentNodes(next.nodes as Node[]);
+      setCurrentEdges(next.edges as Edge[]);
+      window.dispatchEvent(
+        new CustomEvent('epic1:applyGraph', {
+          detail: { nodes: next.nodes, edges: next.edges }
+        })
+      );
+    };
+
+    const onOpenNested = (event: Event) => {
+      const detail = (event as CustomEvent<{ documentId?: string }>).detail;
+      const documentId = detail?.documentId;
+      if (!documentId) {
+        return;
+      }
+      const store = useDocumentProjectStore.getState();
+      if (!store.documents[documentId]) {
+        showToast(
+          `Nested document “${documentId}” is not in this project`,
+          'error'
+        );
+        return;
+      }
+      applyDocumentFromStore(documentId);
+      showToast(
+        `Opened “${store.documents[documentId]?.name ?? documentId}”`,
+        'success'
+      );
+    };
+
+    const onSwitchDocument = (event: Event) => {
+      const detail = (event as CustomEvent<{ documentId?: string }>).detail;
+      const documentId = detail?.documentId;
+      if (!documentId) {
+        return;
+      }
+      applyDocumentFromStore(documentId);
+    };
+
+    window.addEventListener('epic1:openNestedDocument', onOpenNested);
+    window.addEventListener('epic1:switchDocument', onSwitchDocument);
+    return () => {
+      window.removeEventListener('epic1:openNestedDocument', onOpenNested);
+      window.removeEventListener('epic1:switchDocument', onSwitchDocument);
+    };
+  }, [currentNodes, currentEdges, showToast]);
+
+  // Keep the active project document graph in sync while editing.
+  useEffect(() => {
+    const store = useDocumentProjectStore.getState();
+    const activeId = store.activeDocumentId;
+    if (!store.documents[activeId]) {
+      return;
+    }
+    store.updateDocumentGraph(activeId, currentNodes, currentEdges);
+  }, [currentNodes, currentEdges]);
 
   // Handle editor state changes
   const handleNodesChange = useCallback(
@@ -511,9 +636,17 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         TEMPLATE_CATALOG.find(entry => entry.id === id)?.title ?? 'document';
 
       const load = () => {
-        handleNodesChange(tmpl.nodes as Node[]);
-        handleEdgesChange(tmpl.edges as Edge[]);
-        setEditorKey(prev => prev + 1);
+        loadProjectGraph(tmpl.nodes as Node[], tmpl.edges as Edge[], {
+          name: title,
+          documents: tmpl.documents as
+            | Array<{
+                id: string;
+                name: string;
+                nodes: Node[];
+                edges: Edge[];
+              }>
+            | undefined
+        });
         showToast(`Opened “${title}”`, 'success');
       };
 
@@ -588,8 +721,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       currentEdges,
       saveForRecovery,
       handleSave,
-      handleNodesChange,
-      handleEdgesChange,
+      loadProjectGraph,
       showToast
     ]
   );
@@ -608,28 +740,27 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       if (currentNodes.length > 0) {
         void saveForRecovery(currentNodes, currentEdges);
       }
-      // Keep container state in sync...
-      handleNodesChange(tmpl.nodes as Node[]);
-      handleEdgesChange(tmpl.edges as Edge[]);
-      // ...and push the graph into the LIVE editor without a remount (setEditorKey
-      // would remount Epic1GraphEditor, and the TutorialProvider lives inside it —
-      // remounting would reset a tutorial the moment it loads its demo graph).
-      window.dispatchEvent(
-        new CustomEvent('epic1:applyGraph', {
-          detail: { nodes: tmpl.nodes, edges: tmpl.edges }
-        })
-      );
+      // Keep container + project store in sync without remounting the editor
+      // (TutorialProvider lives inside Epic1GraphEditor).
+      loadProjectGraph(tmpl.nodes as Node[], tmpl.edges as Edge[], {
+        name:
+          TEMPLATE_CATALOG.find(entry => entry.id === templateId)?.title ??
+          'Tutorial',
+        documents: tmpl.documents as
+          | Array<{
+              id: string;
+              name: string;
+              nodes: Node[];
+              edges: Edge[];
+            }>
+          | undefined,
+        remount: false
+      });
     };
     window.addEventListener('epic1:loadTutorialGraph', handler);
     return () =>
       window.removeEventListener('epic1:loadTutorialGraph', handler);
-  }, [
-    currentNodes,
-    currentEdges,
-    saveForRecovery,
-    handleNodesChange,
-    handleEdgesChange
-  ]);
+  }, [currentNodes, currentEdges, saveForRecovery, loadProjectGraph]);
 
   const editorSurfacePolicy = useMemo(
     () =>

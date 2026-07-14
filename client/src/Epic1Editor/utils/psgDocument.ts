@@ -38,10 +38,19 @@ const isPositionsMap = (
   return true;
 };
 
+export type NestedLoadedDocument = {
+  id: string;
+  name: string;
+  nodes: Node[];
+  edges: Edge[];
+};
+
 export type LoadedPsgDocument = {
   nodes: Node[];
   edges: Edge[];
   source: 'flat' | 'legacy';
+  /** Embedded nested precomp documents, if present on the PSG. */
+  documents?: NestedLoadedDocument[];
 };
 
 export function convertGraphToReactFlow(graph: Graph): {
@@ -202,9 +211,46 @@ export function loadReactFlowFromPsgContent(
     if (!validated.ok) {
       throw new Error(validated.error);
     }
+
+    const documents: NestedLoadedDocument[] | undefined = Array.isArray(
+      fragment.documents
+    )
+      ? fragment.documents
+          .map(doc => {
+            try {
+              const childLib = convertPSGToPSGLib({
+                version: fragment.version,
+                name: doc.name,
+                description: doc.description,
+                nodes: doc.nodes,
+                edges: doc.edges,
+                regions: doc.regions
+              });
+              const childRf = convertGraphToReactFlow(
+                childLib.graph as Graph
+              );
+              const childValidated = validateEditorGraphPayload(childRf);
+              if (!childValidated.ok) {
+                return null;
+              }
+              return {
+                id: doc.id,
+                name: doc.name,
+                nodes: childValidated.data.nodes,
+                edges: childValidated.data.edges
+              };
+            } catch {
+              return null;
+            }
+          })
+          .filter((entry): entry is NestedLoadedDocument => entry !== null)
+      : undefined;
+
     return {
       ...validated.data,
-      source: 'flat'
+      source: 'flat',
+      documents:
+        documents && documents.length > 0 ? documents : undefined
     };
   } catch {
     return loadLegacyGraphWrapper(psgText, strictValidation);

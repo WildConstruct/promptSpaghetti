@@ -162,6 +162,15 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
       'City tile generator: locked block scale, structure type branches (skyscraper/derelict), and a nested decay branch',
     category: 'worlds',
     branching: true
+  },
+  {
+    id: 'nested_psg_intro',
+    title: 'Nested PSG Intro',
+    description:
+      'Teaching graph: a parent Template fills {wares} from a Sub PSG precomp. Double-click Sub PSG to open the Forge Wares child tab.',
+    category: 'worlds',
+    branching: true,
+    featured: true
   }
 ];
 
