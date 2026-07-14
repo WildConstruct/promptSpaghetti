@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef, useState } from 'react';
+import React, { useEffect, useCallback, useMemo, useRef, useState } from 'react';
 import { PreviewResult } from '../epic1/contexts/PreviewContext';
 import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { usePreviewTrayKeyboardShortcuts } from './useKeyboardShortcuts';
@@ -6,6 +6,11 @@ import { usePreviewTrayKeyboardShortcuts } from './useKeyboardShortcuts';
 import { LLMToggleInline } from '../LLMToggle/LLMToggleInline';
 import { PreviewRefinement } from './PreviewRefinement';
 import { useIntelligence } from '../epic1/contexts/IntelligenceContext';
+import {
+  OUTPUT_TEMPLATE_OPTIONS,
+  formatPreviewResultsForTemplate,
+} from './outputTemplates';
+import type { OutputTemplateId } from './outputTemplates';
 import './PreviewTray.css';
 
 export interface PreviewTrayProps {
@@ -44,6 +49,22 @@ const TRAY_MIN_HEIGHT = 100;
 const TRAY_DEFAULT_HEIGHT = 250;
 const TRAY_MAX_HEIGHT_PERCENT = 0.6;
 const TRAY_HEADER_HEIGHT = 40; // keep in sync with CSS
+
+function getComparableSeed(seed: number | string): number | string {
+  if (typeof seed !== 'string') {
+    return seed;
+  }
+
+  const numericSeed = parseInt(seed, 10);
+  return Number.isNaN(numericSeed) ? seed : numericSeed;
+}
+
+function previewSeedMatches(
+  resultSeed: number | string,
+  currentSeed: number | string
+): boolean {
+  return getComparableSeed(resultSeed) === getComparableSeed(currentSeed);
+}
 
 export const PreviewTray: React.FC<PreviewTrayProps> = ({
   seeds,
@@ -134,6 +155,8 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   const [refinedResults, setRefinedResults] = useState<Map<string, string>>(
     new Map()
   );
+  const [selectedOutputTemplate, setSelectedOutputTemplate] =
+    useState<OutputTemplateId>('plain');
   // const [currentRefinementSeed, setCurrentRefinementSeed] = useState<
   //   number | null
   // >(null); // Not used currently
@@ -168,15 +191,19 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   }, [toggleTray]);
 
   const handleCopyAll = useCallback(() => {
-    const allResults = results
-      .map(r => {
-        const refined = refinedResults.get(`${r.seed}`);
-        const text = llmMode === 'llm-enhanced' && refined ? refined : r.result;
-        return `Seed ${r.seed}: ${text}`;
-      })
-      .join('\n');
+    const resultsToCopy = results.map(r => {
+      const refined = refinedResults.get(`${r.seed}`);
+      const text = llmMode === 'llm-enhanced' && refined ? refined : r.result;
+      return {
+        ...r,
+        result: text
+      };
+    });
+    const allResults = formatPreviewResultsForTemplate(resultsToCopy, {
+      templateId: selectedOutputTemplate
+    });
     onCopy?.(allResults);
-  }, [results, onCopy, llmMode, refinedResults]);
+  }, [results, onCopy, llmMode, refinedResults, selectedOutputTemplate]);
 
   const handleSeedEdit = useCallback(
     (index: number) => {
@@ -302,6 +329,15 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
     prevExecRef.current = isExecuting;
     prevResultsCountRef.current = currentResultsLength;
   }, [isExecuting, results?.length, isOpen, setOpen, setMinimized]);
+
+  const hasCurrentSeedResult = useMemo(
+    () =>
+      seeds.some(seed =>
+        results.some(result => previewSeedMatches(result.seed, seed))
+      ),
+    [results, seeds]
+  );
+  const showGlobalLoading = isExecuting && !hasCurrentSeedResult;
 
   const getTrayHeight = () => {
     // Since parent controls visibility through conditional rendering,
@@ -450,7 +486,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
 
       {isOpen && !minimized && (
         <div className="preview-tray-content">
-          {isExecuting && (
+          {showGlobalLoading && (
             <div className="preview-loading">
               <div className="loading-spinner" />
               <span>Generating preview...</span>
@@ -467,7 +503,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
             </div>
           )}
 
-          {!isExecuting && !error && (
+          {!showGlobalLoading && !error && (
             <div
               className="preview-results-container"
               style={{
@@ -542,13 +578,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                       // Convert both to numbers for consistent comparison
                       const seedNum =
                         typeof seed === 'string' ? parseInt(seed, 10) : seed;
-                      const result = results.find(r => {
-                        const resultSeedNum =
-                          typeof r.seed === 'string'
-                            ? parseInt(r.seed, 10)
-                            : r.seed;
-                        return resultSeedNum === seedNum;
-                      });
+                      const result = results.find(r =>
+                        previewSeedMatches(r.seed, seedNum)
+                      );
                       return (
                         <div
                           key={`seed-${seed}-${index}`}
@@ -926,6 +958,60 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                     background: '#3a3a3a'
                   }}
                 />
+                <label
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px',
+                    color: '#b8b8b8',
+                    fontSize: '12px',
+                    fontWeight: 500
+                  }}
+                >
+                  Output template
+                  <select
+                    value={selectedOutputTemplate}
+                    onChange={event =>
+                      setSelectedOutputTemplate(
+                        event.target.value as OutputTemplateId
+                      )
+                    }
+                    style={{
+                      width: '100%',
+                      padding: '9px 10px',
+                      background: '#1a1a1a',
+                      border: '1px solid #444',
+                      borderRadius: '6px',
+                      color: '#e8e8e8',
+                      fontSize: '13px'
+                    }}
+                    title={
+                      OUTPUT_TEMPLATE_OPTIONS.find(
+                        o => o.id === selectedOutputTemplate
+                      )?.description
+                    }
+                  >
+                    {OUTPUT_TEMPLATE_OPTIONS.map(option => (
+                      <option key={option.id} value={option.id}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {selectedOutputTemplate === 'three-up-image-prompt' &&
+                    results.length < 3 && (
+                      <span
+                        style={{
+                          color: '#a08040',
+                          fontSize: '11px',
+                          fontWeight: 400,
+                          lineHeight: 1.35
+                        }}
+                      >
+                        Needs at least 3 seed results (incomplete triples are
+                        skipped).
+                      </span>
+                    )}
+                </label>
                 <button
                   onClick={handleCopyAll}
                   style={{

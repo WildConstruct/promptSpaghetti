@@ -12,11 +12,11 @@ export interface ConcatNodeData extends EditableNodeData {
 }
 
 const JOIN_STYLE_OPTIONS: { value: JoinStyle | ''; label: string }[] = [
-  { value: '', label: 'Separator (legacy)' },
-  { value: 'space', label: 'Space' },
-  { value: 'comma', label: 'Comma list' },
-  { value: 'and', label: 'Oxford list (a, b, and c)' },
   { value: 'sentence', label: 'Sentence' },
+  { value: 'and', label: 'Oxford list (a, b, and c)' },
+  { value: 'comma', label: 'Comma list' },
+  { value: 'space', label: 'Space' },
+  { value: '', label: 'Separator (legacy)' },
 ];
 
 const MIN_HANDLES = 2;
@@ -40,8 +40,9 @@ function handlePositions(count: number): number[] {
 export const ConcatNode = memo((props: NodeProps<ConcatNodeData>) => {
   const { id } = props;
   const { showMetadata, setShowMetadata, metadata, flipClassName } = useMetadataFlip(props);
+  // Absent joinStyle (legacy graphs) → show Separator; new nodes ship with 'sentence'.
   const [localJoinStyle, setLocalJoinStyle] = useState<JoinStyle | ''>(
-    props.data.joinStyle || ''
+    props.data.joinStyle ?? ''
   );
   const [localDedupe, setLocalDedupe] = useState<boolean>(
     props.data.dedupe || false
