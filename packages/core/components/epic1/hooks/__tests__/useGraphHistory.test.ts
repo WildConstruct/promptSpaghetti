@@ -88,6 +88,36 @@ describe('useGraphHistory', () => {
     expect(lastIds(setNodes)).toEqual(['A', 'B', 'C']);
   });
 
+  it('exportHistory / importHistory round-trip for per-document stacks', () => {
+    const { result, push, flush } = setup();
+    push([n('A'), n('B')]);
+    push([n('A'), n('B'), n('C')]);
+    act(() => result.current.undo());
+    flush();
+
+    const snap = result.current.exportHistory();
+    expect(snap.entries).toHaveLength(3);
+    expect(snap.index).toBe(1);
+
+    act(() => result.current.clearHistory());
+    expect(result.current.historySize).toBe(0);
+
+    act(() => result.current.importHistory(snap));
+    expect(result.current.historySize).toBe(3);
+    expect(result.current.currentIndex).toBe(1);
+    expect(result.current.canUndo).toBe(true);
+    expect(result.current.canRedo).toBe(true);
+  });
+
+  it('suppressSnapshotsFor blocks debounced pushes', () => {
+    const { result, push } = setup();
+    act(() => result.current.suppressSnapshotsFor(10_000));
+    push([n('A'), n('Z')]);
+    // Still only the initial mount snapshot
+    expect(result.current.historySize).toBe(1);
+    expect(result.current.currentIndex).toBe(0);
+  });
+
   it('truncates the redo stack when a new change follows an undo', () => {
     const { result, push, flush } = setup();
     push([n('A'), n('B')]);

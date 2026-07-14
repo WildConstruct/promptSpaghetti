@@ -44,6 +44,11 @@ import { useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { useMicroInteractions } from './animations/MicroInteractions';
 import { PromptParser, ParsedPromptResult } from './utils/promptParser';
 import { usePreviewTrayStore } from '../../stores/previewTrayStore';
+import {
+  useDocumentProjectStore,
+  type DocumentHistoryState,
+  type DocumentViewport
+} from '../../stores/documentProjectStore';
 import { TutorialProvider, useTutorial } from './onboarding/TutorialContext';
 import { TutorialOverlay } from './onboarding/TutorialOverlay';
 import type { Preset } from '@prompt/asset-browser';
@@ -151,38 +156,140 @@ const Epic1GraphEditorClean: React.FC<Epic1GraphEditorProps> = ({
     }
   }, [initialNodes, initialEdges]);
 
-  // Apply a graph pushed in live (e.g. a tutorial loading its demo) without a
-  // remount, so a running tutorial's provider/overlay survive the load.
+  // Toast notifications
+  const { toasts, showToast, dismissToast } = useToast();
+
+  // Graph history (undo/redo) — per Nested PSG composition via document store
+  const {
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    clearHistory,
+    exportHistory,
+    importHistory,
+    suppressSnapshotsFor,
+    captureSnapshotNow
+  } = useGraphHistory(nodes, edges, setNodes, setEdges, {
+    maxHistorySize: 50,
+    debounceMs: 500
+  });
+
+  const activeDocumentId = useDocumentProjectStore(s => s.activeDocumentId);
+  const prevActiveDocumentIdRef = useRef(activeDocumentId);
+  const graphRef = useRef({ nodes, edges });
+  graphRef.current = { nodes, edges };
+  const historyApiRef = useRef({
+    exportHistory,
+    importHistory,
+    suppressSnapshotsFor,
+    clearHistory,
+    captureSnapshotNow
+  });
+  historyApiRef.current = {
+    exportHistory,
+    importHistory,
+    suppressSnapshotsFor,
+    clearHistory,
+    captureSnapshotNow
+  };
+
+  // When the active Nested PSG composition changes: save leaving session
+  // (undo stack + viewport), then restore the incoming session.
+  React.useEffect(() => {
+    const leavingId = prevActiveDocumentIdRef.current;
+    if (leavingId === activeDocumentId) {
+      return;
+    }
+
+    const store = useDocumentProjectStore.getState();
+    const api = historyApiRef.current;
+    const { nodes: leaveNodes, edges: leaveEdges } = graphRef.current;
+
+    // Persist undo stack + camera for the composition we are leaving.
+    if (store.documents[leavingId]) {
+      const viewport = reactFlowInstance?.getViewport?.() as
+        | DocumentViewport
+        | undefined;
+      // Flush pending edits into the stack before export.
+      api.captureSnapshotNow(leaveNodes, leaveEdges);
+      api.suppressSnapshotsFor(800);
+      store.updateDocumentSession(leavingId, {
+        history: api.exportHistory() as DocumentHistoryState,
+        viewport: viewport
+          ? { x: viewport.x, y: viewport.y, zoom: viewport.zoom }
+          : undefined
+      });
+    }
+
+    // Restore undo stack for the composition we are entering.
+    const incoming = store.documents[activeDocumentId];
+    api.suppressSnapshotsFor(800);
+    api.importHistory(
+      (incoming?.history as DocumentHistoryState | undefined) ?? null
+    );
+
+    // Restore camera if we have one; otherwise fit after applyGraph.
+    const vp = incoming?.viewport;
+    if (vp && reactFlowInstance?.setViewport) {
+      window.setTimeout(() => {
+        reactFlowInstance.setViewport(
+          { x: vp.x, y: vp.y, zoom: vp.zoom },
+          { duration: 0 }
+        );
+      }, 80);
+    }
+
+    prevActiveDocumentIdRef.current = activeDocumentId;
+  }, [activeDocumentId, reactFlowInstance]);
+
+  // Apply a graph pushed in live (tutorial / document switch) without remount.
   React.useEffect(() => {
     const handler = (event: Event) => {
       const detail = (
-        event as CustomEvent<{ nodes?: Node<EditableNodeData>[]; edges?: Edge[] }>
+        event as CustomEvent<{
+          nodes?: Node<EditableNodeData>[];
+          edges?: Edge[];
+          /** When true, skip fitView (viewport already restored for the tab). */
+          skipFitView?: boolean;
+          history?: DocumentHistoryState | null;
+        }>
       ).detail;
       if (!detail?.nodes) {
         return;
       }
+
+      const api = historyApiRef.current;
+      api.suppressSnapshotsFor(800);
+      if ('history' in (detail as object) && detail.history !== undefined) {
+        api.importHistory(detail.history);
+      }
+
       setNodes(detail.nodes);
       setEdges(detail.edges ?? []);
-      window.setTimeout(
-        () => reactFlowInstance?.fitView?.({ padding: 0.2 }),
-        60
-      );
+
+      const store = useDocumentProjectStore.getState();
+      const active = store.documents[store.activeDocumentId];
+      const hasViewport = Boolean(active?.viewport);
+
+      if (!detail.skipFitView && !hasViewport) {
+        window.setTimeout(
+          () => reactFlowInstance?.fitView?.({ padding: 0.2 }),
+          60
+        );
+      } else if (hasViewport && active?.viewport && reactFlowInstance?.setViewport) {
+        const vp = active.viewport;
+        window.setTimeout(() => {
+          reactFlowInstance.setViewport(
+            { x: vp.x, y: vp.y, zoom: vp.zoom },
+            { duration: 0 }
+          );
+        }, 60);
+      }
     };
     window.addEventListener('epic1:applyGraph', handler);
     return () => window.removeEventListener('epic1:applyGraph', handler);
   }, [setNodes, setEdges, reactFlowInstance]);
-
-  // Toast notifications
-  const { toasts, showToast, dismissToast } = useToast();
-
-  // Graph history (undo/redo)
-  const { undo, redo, canUndo, canRedo, clearHistory } = useGraphHistory(
-    nodes,
-    edges,
-    setNodes,
-    setEdges,
-    { maxHistorySize: 50, debounceMs: 500 }
-  );
 
   // Auto-save
   useGraphPersistence(nodes, edges, {
