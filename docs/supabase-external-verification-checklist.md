@@ -2,6 +2,9 @@
 
 This checklist is the next gate for proving cloud-object isolation against the deployed Supabase project.
 
+**Prefer the ordered runbook:** [`supabase-rls-verification-runbook.md`](./supabase-rls-verification-runbook.md)
+(phases, SQL probes, live A/B steps, verdict template).
+
 ## RLS Policy Review
 
 - Confirm the `graphs` table has explicit `select`, `insert`, `update`, and `delete` policies.

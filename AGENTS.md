@@ -1,18 +1,64 @@
 # AGENTS.md
 
-## MULTI-AGENT COMMUNICATION
+Guidance for coding agents working in this repository.
 
-For multi-agent communication history and ticket instructions, see [Codex-TICKETS.md](./Codex-TICKETS.md)
+> **Source of truth order:** live code (`Epic1ExecutionEngine`, `server/src/index.ts`,
+> mounted routes) → [`CLAUDE.md`](./CLAUDE.md) → [`ACTIVE_SURFACE.md`](./ACTIVE_SURFACE.md)
+> → this file. If a doc contradicts the engine or mounted server routes, **prefer the code**.
+>
+> Work-loop tracker for the post-audit hardening/roadmap pass:
+> [`docs/audit-work-loop.md`](./docs/audit-work-loop.md).
+
+For multi-agent ticket history (legacy), see [Codex-TICKETS.md](./Codex-TICKETS.md).
+Do not assume a live `src/finish-task.js` / grab-tasks system — it does not exist.
 
 ---
 
-This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
+## What this product is
 
-## FILE FORMAT STANDARDS (Critical - Story 1.28)
+A node-based, **deterministic** prompt-generation tool. Users build a graph on a React Flow
+canvas; the graph executes with a seeded PRNG so the same graph + seed always yields the same
+prompt(s).
 
-### Node Type Naming Conventions
+## Canonical execution path (do not invent alternatives)
 
-**ALWAYS use these exact mappings to avoid "node type not found" errors:**
+| Layer | Location |
+| --- | --- |
+| Engine | `packages/core/runtime/nodes/epic1/Epic1ExecutionEngine.ts` |
+| Context | `packages/core/runtime/nodes/epic1/Epic1ExecutionContext.ts` |
+| Node classes | `packages/core/runtime/nodes/epic1/` — `TextBlockNode`, `WeightedChoiceNode`, `ConcatNode`, `VariableNode`, `OutputNode` |
+| Editor canvas | `packages/core/components/epic1/Epic1GraphEditor.tsx` |
+| Editor shell | `client/src/Epic1Editor/Epic1EditorContainer-refactored.tsx` |
+| Preview | `packages/core/components/PreviewTray/PreviewTray.tsx` (not a `PreviewModal` product path) |
+| Local API | `server/src/index.ts` (Fastify 5) |
+| Hosted API (deploy) | `api/**` on Vercel — compatibility surface; not the same as Fastify |
+
+**Executable Epic1 vocabulary:** `TextBlock`, `WeightedChoice`, `Concat`, `Variable`, `Output`.
+
+There is **no** live server graph engine (`server/src/engine.ts` is gone) and **no** mounted
+`POST /preview` on the Fastify runtime. Preview runs **client-side** on the same graph the user
+edits. Do not reintroduce a second executor for the product path.
+
+### Parked / non-product (do not treat as MVP)
+
+- Advanced node *source* (`Conditional`, `Sequential`, `Markov`, `WeightedAdvanced`,
+  `io-system.ts`) was **deleted** (C1 P1). Specs: [`docs/parked-implementations/README.md`](./docs/parked-implementations/README.md).
+- `runtime/advanced.ts` is **live** only because `@promptscape/custom-node-sdk` depends on it.
+  **Do not delete.**
+- `packages/custom-node-sdk/`, `python-executor/` — support / research, not the launch wedge.
+- Professional Command Palette / Cinema 4D “professional features” UI — **does not exist**.
+- `packages/cli` — removed; do not document or depend on it.
+
+To revive a parked capability, rebuild it as a **native Epic1 node**, not by reactivating the
+old advanced runtime for the product path.
+
+---
+
+## File format standards
+
+### Node type naming conventions
+
+Use these exact mappings to avoid “node type not found” errors:
 
 | Display Name    | PSG Type       | React Flow Type | Class Name         |
 | --------------- | -------------- | --------------- | ------------------ |
@@ -22,30 +68,28 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 | Text Block      | TextBlock      | textBlock       | TextBlockNode      |
 | Variable        | Variable       | variable        | VariableNode       |
 
-**Use the Node Registry:** `packages/core/runtime/nodeRegistry.ts`
+**Node Registry:** `packages/core/runtime/nodeRegistry.ts`
 
 - Convert types: `convertNodeType(type, 'psg' | 'reactflow')`
 - Get node info: `nodeRegistry.get(id)`
 
-### PSG vs PSGLib Formats
+### Schema note (known divergence)
 
-**PSG Files (.psg) - Fragments:**
+`packages/core/graphSchema.ts` still lists `Include`, `SetVariable`, and `GetVariable` and
+**omits** some Epic1 product types. The **canonical engine** executes
+`TextBlock | WeightedChoice | Concat | Variable | Template | Output`.
+**Include is format-only** ([`docs/include-node-decision.md`](./docs/include-node-decision.md)).
+Crosswalk: [`docs/schema-epic1-vocabulary-inventory.md`](./docs/schema-epic1-vocabulary-inventory.md).
+Do not assume GraphSchema membership means a node runs in preview.
 
-- Use for reusable component groups
-- Should NOT contain Output nodes
-- Uses x/y coordinates: `{ x: 100, y: 200 }`
-- May contain regions for grouping
+### PSG vs PSGLib
 
-**PSGLib Files (.psglib) - Complete Presets:**
+| Format | Role | Notes |
+| --- | --- | --- |
+| `.psg` | Fragments / reusable groups | Prefer no Output nodes; `{ x, y }` coords; may have regions. Parser: `packages/core/fileFormats/psg.ts` |
+| `.psglib` | Complete presets | `{ position: { x, y } }`; metadata; may include Output. Parser: `packages/core/fileFormats/psglib.ts` |
 
-- Use for full graph templates
-- Uses position objects: `{ position: { x: 100, y: 200 } }`
-- Includes metadata and usage stats
-- Can contain Output nodes
-
-### Asset Validation
-
-**Before adding assets to library, validate with:**
+### Asset validation
 
 ```typescript
 import { validateAsset } from '@/packages/core/validation/assetValidator';
@@ -55,435 +99,108 @@ if (!result.valid) {
 }
 ```
 
-### Important Files
+---
 
-- **Format Spec:** `docs/technical-specs/file-format-specification.md`
-- **Node Registry:** `packages/core/runtime/nodeRegistry.ts`
-- **Asset Validator:** `packages/core/validation/assetValidator.ts`
-- **PSG Parser:** `packages/core/fileFormats/psg.ts`
-- **PSGLib Parser:** `packages/core/fileFormats/psglib.ts`
-
-## PROFESSIONAL FEATURES (Phase 2 Complete - July 25, 2025)
-
-### NEW: Cinema 4D-Level Professional Interface ✅ COMPLETE
-
-**UX Transformation:** 6.3/10 → 9.2/10 (Professional Grade)
-
-**Professional Components Available:**
-
-- `packages/core/components/CommandPalette/ProfessionalIntegration.tsx` - **Main integration component**
-- `packages/core/components/CommandPalette/CommandPalette.tsx` - **Advanced command interface (⌘K)**
-- `packages/core/components/CommandPalette/UndoRedoManager.tsx` - **Professional undo/redo system (⌘Z)**
-- `packages/core/components/CommandPalette/MultiSelectionManager.tsx` - **Advanced selection tools**
-- `packages/core/components/CommandPalette/AutosaveManager.tsx` - **Intelligent autosave system**
-- `packages/core/components/CommandPalette/KeyboardShortcutsManager.tsx` - **Complete shortcuts (? for help)**
-
-**Quick Integration:**
-
-```typescript
-import { ProfessionalIntegration } from './packages/core/components/CommandPalette/ProfessionalIntegration';
-import './client/src/professional-theme.css';
-
-<ProfessionalIntegration
-  nodes={nodes} edges={edges} selectedNodes={selectedNodes} selectedEdges={selectedEdges}
-  onNodesChange={onNodesChange} onEdgesChange={onEdgesChange}
-  onNodesSelect={onNodesSelect} onEdgesSelect={onEdgesSelect}
-  onNodeCreate={onNodeCreate} onNodeDelete={onNodeDelete}
-  onExport={onExport} onSave={onSave} onLoad={onLoad} theme="cinema"
-/>
-```
-
-**Professional Keyboard Shortcuts:**
-
-- `⌘K` - Command Palette | `⌘Z` - Undo | `⌘⇧Z` - Redo | `⌘S` - Save | `⌘A` - Select All
-- `⌘D` - Duplicate | `⌘0` - Fit View | `⌘G` - Generate Character | `?` - Help
-
-**Documentation:**
-
-- `docs/professional-features.md` - **Complete feature documentation**
-- `docs/professional-features-quick-reference.md` - **Developer quick reference**
-- `docs/ux-transformation-summary.md` - **Transformation summary and metrics**
-
-## Common Commands
+## Common commands
 
 ### Development
 
-- `pnpm install` - Install dependencies for all workspaces
-- `pnpm dev` - Start client (port 3000) and server (port 8000)
-- `pnpm --filter client dev` - Start only the React client
-- `pnpm --filter server dev` - Start only the Fastify server
-- `pnpm build` - Build production bundle for client
+- `pnpm install` — all workspaces
+- `pnpm dev` — client (:3000) + server (:8000)
+- `pnpm --filter client dev` / `pnpm --filter server dev`
+- `pnpm build` — client production bundle
+- `pnpm run validate:active` — preferred active-surface confidence lane (when available)
 
 ### Testing
 
-- `pnpm test` - Run all Jest tests with coverage
-- `pnpm test -- --coverage` - Run tests with detailed coverage report
-- `pnpm test -- --watch` - Run tests in watch mode
-- `pnpm test --testPathPattern="ComponentName"` - Run specific component tests
-- `pnpm --filter client test` - Run only client tests
-- `pnpm --filter server test` - Run only server tests
-- `pnpm --filter core test` - Run only core package tests
-- Coverage thresholds: 80% global, 90% for core engine files
+- `pnpm test` — root Jest
+- `pnpm --filter core test` / `npx jest --config packages/core/jest.config.cjs`
+- `npx jest --config server/jest.config.cjs`
+- Per-area configs under `packages/core/components/epic1/` and `runtime/nodes/epic1/`
 
-### Code Quality
+Some legacy suites are stale; **`pnpm typecheck`** is the reliable green signal after changes.
 
-- `pnpm lint` - Run ESLint across all packages
-- Uses Airbnb ESLint config with TypeScript support
+### Code quality
 
-### **NEW: Enterprise Automation Infrastructure (2025-01-25)**
+- `pnpm lint`
+- `npx knip` — unused files/deps/exports (`knip.json`)
 
-- `node scripts/setup-dev-environment.js` - **Complete development environment setup**
-- `node scripts/dev-quality-check.js` - **Comprehensive quality validation**
-- `node scripts/automation-orchestrator.js qa-full` - **Complete QA pipeline**
-- `node scripts/automation-orchestrator.js pre-commit` - **Fast pre-commit validation**
-- `node scripts/quality-monitoring-dashboard.js` - **Real-time quality dashboard**
-- `node scripts/smart-test-selector.js` - **Intelligent test selection (60-80% faster)**
-- `node scripts/security-scanner.js` - **Security vulnerability scanning**
-- `node scripts/performance-regression-detector.js` - **Performance baseline monitoring**
-- `node scripts/intelligent-dependency-manager.js` - **Smart dependency management**
-- **Dashboard**: `http://localhost:3001` (real-time monitoring)
-- **Quick Reference**: `docs/agent-tips/automation-quick-reference-2025-01-25.md`
-- **Full Guide**: `docs/agent-tips/comprehensive-automation-workflows-2025-01-25.md`
+### Automation
 
-### CLI Usage
+Real scripts live under `scripts/` (e.g. `automation-orchestrator.js`, `dev-quality-check.js`).
+There is no `src/` multi-agent task dashboard.
 
-- `npx promptgraph exec <graph.json> --seed 1234` - Execute a graph via CLI
-- `pnpm --filter cli exec <graph.json>` - Execute using local CLI package
+---
 
-### Task Management (CRITICAL)
+## Git workflow
 
-- `node src/finish-task.js <task-id>` - **MUST be called when implementation is complete**
-- Failing to call finish-task.js leaves tasks stuck in IN_PROGRESS state
+**NEVER commit or push unless the user explicitly asks** (e.g. “create a PR”, “commit this”,
+“push it”). During regular development, make file changes and stop; let the user decide when to
+commit. Prefer a feature branch over the default branch when they do ask.
 
-### Git Workflow (IMPORTANT)
+---
 
-**DO NOT commit individual files immediately during development.**
+## Architecture (monorepo)
 
-**Correct workflow:**
+| Package / dir | Role |
+| --- | --- |
+| `client/` | React 18 + Vite app shell, launch screen, editor container |
+| `server/` | Fastify 5 local API (files, LLM, PSG, agent, local image/fragments) |
+| `packages/core/` | Shared types, Zod, Epic1 engine, editor UI |
+| `packages/asset-browser/` | Asset/preset browser used by the side panel |
+| `packages/custom-node-sdk/` | SDK on `runtime/advanced.ts` — not MVP path |
+| `api/` | Vercel serverless handlers (deploy compatibility) |
 
-1. Work on task implementation
-2. Call `node src/finish-task.js <task-id>` when complete
-3. **Only then** create PR for review and approval
-4. Commits happen during PR merge, not during individual file work
+### Editor surface (right panel tabs)
 
-**NEVER commit unless explicitly asked to create a PR or the user specifically requests it.**
+Defined in `client/src/Epic1Editor/editorSurfacePolicy.ts`:
 
-## CRITICAL DEVELOPMENT AGENT INSTRUCTIONS
+- **Library** — fragments / assets
+- **Linked** — reusable linked components
+- **Explore** — full PSG-document templates
+- **Graph** — outline of current document
 
-### When User Says "Check This In" or "Finish Task":
+### Branding
 
-1. ✅ **FIRST**: Call `node src/finish-task.js <task-id>`
-2. ✅ **THEN**: Ask if they want you to create a PR
-3. ❌ **DO NOT**: Immediately commit files
-4. ❌ **DO NOT**: Use git commit during regular development
+Wild Construct palette: gold `#e6a23c`, neutral charcoal backgrounds (no blue tint), near-white
+text `#f1f6f9`. Do not reintroduce old purple/indigo accents.
 
-### Git Commits Only Happen When:
+---
 
-- User explicitly requests PR creation
-- User says "create a pull request"
-- User says "commit this for review"
-- **NOT** when they say "check this in" or "finish the task"
+## Adding a product node type (Epic1 path)
 
-### The Correct Workflow Is:
+1. Node class under `packages/core/runtime/nodes/epic1/`
+2. `case` in `Epic1ExecutionEngine.ts`
+3. Schema / registry updates as appropriate (`graphSchema.ts`, `nodeRegistry.ts`)
+4. React Flow component + inspector / inline edit
+5. Deterministic tests (same seed ⇒ same output)
 
-```
-Development Work → finish-task.js → PR Creation → Git Commits
-```
+New options must **default to existing behavior** so saved graphs do not shift.
 
-**The issue**: Dev agents were committing immediately when told to "check in" work, but the proper workflow is to finish the task FIRST, then handle git workflow separately for PR creation.
+---
 
-### Agent Coordination Commands
+## Security posture (agents)
 
-- `node src/monitor-available-tasks.js` - See team coordination dashboard and available tasks
-- `node src/grab-tasks.js <agent-id> 2 --epic=8` - Grab Epic 8 tasks (PRIORITY 1)
-- `node src/grab-tasks.js <agent-id> 2 --priority-only` - Grab any high priority tasks
+- Authenticated cloud routes use `server/src/utils/routeAccess.ts` (bearer + capability + quota).
+- Admin is opt-in (`ENABLE_ADMIN`). Legacy Vercel admin/debug handlers return 410 via `_disabled.js`.
+- Local sandbox routes (`/api/local-image/*`, `/api/local-fragments/*`) are **dev/demo**:
+  default bind `HOST=127.0.0.1`, loopback-only preHandler, optional `LOCAL_FRAGMENT_ROOTS`.
+  See `server/src/utils/localSandboxAccess.ts` and `.env.example`.
+- Cloud tenant isolation still depends on **deployed Supabase RLS** — not fully verified in-repo.
+  See `docs/security-posture-pre-beta.md`.
 
-### Unified Automation System (NEW)
+---
 
-The automation infrastructure has been completely unified and consolidated:
+## Reference docs
 
-- **System Health**: `node src/fix-system.js --health-check` - Comprehensive health monitoring (96/100 health score)
-- **System Repair**: `node src/fix-system.js --all` - Automated violation fixes and maintenance
-- **QA Processing**: `node src/workflow-orchestrator.js --workflow qa-pipeline` - Complete QA automation
-- **Daily Maintenance**: `node src/workflow-orchestrator.js --workflow daily-maintenance` - Automated daily operations
-- **Real-time Monitoring**: `node src/monitor-system.js` - Unified monitoring dashboard with 5 modes
-- **Epic Management**: `node src/create-epic-tasks-unified.js` - Consolidated epic task creation
-- **Analytics**: `node src/analyze-system.js overview` - Comprehensive system analysis
-
-### Key Automation Improvements
-
-- **99.7% Code Reduction**: Epic creation scripts (23 → 2)
-- **95% Code Reduction**: Fix scripts (5+ → 1 modular system)
-- **90% Code Reduction**: Analysis scripts (6+ → 1 dashboard)
-- **85% Code Reduction**: Monitoring scripts (3+ → 1 unified system)
-- **Workflow Orchestration**: 6 predefined workflows with conditional execution
-- **Database v2.0.0**: Enhanced indexing for 5,906 tasks with epic/story metadata
-
-### Cost Tracking (NEW)
-
-Enhanced Codex API cost tracking with ccusage integration:
-
-- `node src/Codex-cost-integration.js report` - Generate detailed cost report with actual usage
-- `node src/Codex-cost-integration.js install` - Install ccusage for accurate tracking
-- `node src/Codex-cost-integration.js check` - Verify ccusage availability
-- **Dashboard integration**: Real-time cost widget shows actual vs estimated costs
-- **Automatic detection**: Uses actual ccusage data when available, falls back to estimates
-
-### tmux-cli Command to interact with CLI applications
-
-`tmux-cli` is a bash command that enables Codex to control CLI applications
-running in separate tmux panes - launch programs, send input, capture output,
-and manage interactive sessions. Run `tmux-cli --help` for detailed usage
-instructions.
-
-Example uses:
-
-- Interact with a script that waits for user input
-- Launch another Codex instance to have it perform some analysis or review or
-  debugging etc
-- Run a Python script with the Pdb debugger to step thru its execution, for
-  code-understanding and debugging
-- Launch web apps and test them with browser automation MCP tools like Puppeteer
-
-## Architecture Overview
-
-### Monorepo Structure
-
-This is a pnpm workspace monorepo with:
-
-- `client/` - React + Vite frontend (React-Flow canvas)
-- `server/` - Node.js Fastify API (executor, preview routes)
-- `packages/core/` - Shared TypeScript library (types, schemas, engine)
-- `packages/cli/` - CLI wrapper for batch execution
-
-### Key Technologies
-
-- **Frontend**: React 18, Vite, React Flow (for node-based UI)
-- **Backend**: Node.js 18, Fastify, TypeScript
-- **Validation**: Zod schemas for runtime and compile-time safety
-- **State Management**: Zustand for React state
-- **Testing**: Jest with ts-jest, React Testing Library
-- **Deterministic Execution**: seedrandom for reproducible outputs
-
-## Core Package Architecture
-
-The `packages/core` module is the heart of the system:
-
-### Runtime Engine (`runtime/index.ts`)
-
-- **ExecutionContext**: Manages variables, seeds, and deterministic PRNG
-- **RuntimeNode**: Abstract base class for all executable nodes
-- **Node Types**: WeightedChoice, Concat, Output, Include, SetVariable, GetVariable
-- Uses seeded random number generation for deterministic execution
-
-### Advanced Runtime Architecture (Epic 7) (`runtime/advanced.ts`)
-
-- **AdvancedRuntimeNode**: Enhanced base class with state management, caching, and performance metrics
-- **AdvancedExecutionContext**: Extended context with node states, evaluation depth, and performance cache
-- **Validation Framework**: ValidationHelpers for comprehensive input/output validation
-- **Serialization System**: SerializationHelpers for complex node data persistence
-
-### I/O System (Epic 7) (`runtime/io-system.ts`)
-
-- **AdvancedIOHandler**: Type-safe input/output handling with validation and coercion
-- **IOSpecBuilder**: Fluent API for defining node input/output specifications
-- **TypedInputs**: Type-safe access to resolved input values with metadata
-- **Constraint System**: Comprehensive validation (length, range, pattern, custom)
-
-### Schema Layer
-
-- **`graphSchema.ts`**: Zod schemas for graph structure validation
-- **`nodeSchemas.ts`**: UI-focused schemas for form generation
-- **`validation.ts`**: Graph connection validation (detects cycles, invalid edges)
-
-### UI Components
-
-- **`GraphEditor.tsx`**: Main React-Flow editor with autosave and validation (refactored to use modular components)
-- **`InspectorPanel.tsx`**: Modern inspector system with resize/collapse functionality
-- **`PreviewModal.tsx`**: Shows execution results with multiple seeds
-- **`Palette.tsx`**: Draggable node type palette
-
-### Inspector System Architecture
-
-- **Modular Editor Components**: `BaseNodeEditor`, `TextFieldEditor`, `TextAreaEditor`, `SelectEditor`
-- **Node-Type Specific Editors**: `WeightedChoiceEditor`, `OutputEditor`, `ConcatEditor`, `VariableEditor`, `SubjectEditor`, `ActionEditor`
-- **Context Management**: `InspectorContext` for state management across inspector components
-- **Reusable UI Components**: `CollapsibleSection`, `VariationList` for consistent UX
-
-### State Management
-
-- **`graphStore.ts`**: Zustand store for centralized graph state
-- **`usePreviewSeeds.ts`**: Hook for async graph execution with cancellation
-
-## Development Patterns
-
-### Adding New Node Types
-
-#### Basic Nodes (Epic 3 Pattern)
-
-1. Define runtime class in `packages/core/runtime/index.ts`
-2. Add Zod schema in `packages/core/graphSchema.ts`
-3. Add UI schema in `packages/core/nodeSchemas.ts`
-4. Create node-specific editor in `packages/core/components/Inspector/editors/`
-5. Update node type detection logic in inspector components
-6. Add icon in `packages/core/icons.tsx`
-7. Update type unions and editor selection logic
-
-#### Advanced Nodes (Epic 7 Pattern)
-
-1. **Extend AdvancedRuntimeNode** in `packages/core/runtime/advanced.ts`
-2. **Define I/O Specification** using IOSpecBuilder for type-safe inputs/outputs
-3. **Implement Validation** using ValidationHelpers for complex constraints
-4. **Add Zod Schema** in `packages/core/graphSchema.ts` for data persistence
-5. **Create Advanced Editor** extending BaseNodeEditor with specialized UI
-6. **Implement Serialization** for complex state and configuration data
-7. **Add Comprehensive Tests** with deterministic validation and edge cases
-
-### Testing Strategy
-
-- **Unit tests**: For schemas, validation, and runtime engine
-- **Integration tests**: For React components and API endpoints
-- **Determinism tests**: Golden-file snapshots across multiple seeds
-- **Coverage requirements**: 80% global, 90% for critical engine files
-
-### Graph Execution Flow
-
-1. Graph validation using Zod schemas
-2. Deterministic execution with seeded PRNG
-3. Depth-first traversal of connected nodes
-4. Variable context passed between nodes
-5. Output generation with reproducible results
-
-## API Endpoints
-
-### Server Routes (`server/src/index.ts`)
-
-- `POST /preview` - Execute graph with multiple seeds for preview
-- `POST /export` - Convert graphs to GeneratorBundle format
-- `GET /health` - Health check endpoint
-- Graph validation and execution handled by `server/src/engine.ts`
-
-### Vercel API Functions (`api/`)
-
-- `api/preview.js` - Serverless graph execution endpoint
-- `api/export.js` - Serverless export endpoint
-- `api/health.js` - Serverless health check
-
-### Deterministic Execution
-
-- All execution uses seeded random number generation
-- Same graph + seed = identical output across runs
-- Sub-seeds generated via `hash(nodeId + parentSeed)`
-
-## File Locations
-
-### Core Engine
-
-- Runtime: `packages/core/runtime/index.ts`
-- Advanced Runtime: `packages/core/runtime/advanced.ts`
-- I/O System: `packages/core/runtime/io-system.ts`
-- Validation: `packages/core/validation.ts`
-- Schema: `packages/core/graphSchema.ts`
-
-### UI Components
-
-- Main Editor: `packages/core/GraphEditor.tsx`
-- Inspector System: `packages/core/components/Inspector/` (modular architecture)
-- Node Editors: `packages/core/components/Inspector/editors/`
-- Preview: `packages/core/PreviewModal.tsx`
-
-### Server
-
-- Engine: `server/src/engine.ts`
-- API: `server/src/index.ts`
-- Exporter: `server/src/exporter.ts`
-
-## Current Development Status
-
-This codebase is currently on branch `epic-3` with **Epic 7 Advanced Node Capabilities** in progress. Epic 2 (Editor MVP), Epic 3 (Executor & Integration), and Epic 5 (Inspector Panel & Text Variation System) are complete. See `docs/plan.md` for current sprint progress and `docs/prd.md` for full requirements.
-
-### Epic 7 Progress - Advanced Node Capabilities ✅ COMPLETE
-
-- **Advanced Runtime Architecture**: `packages/core/runtime/advanced.ts` with AdvancedRuntimeNode base class
-- **I/O System**: `packages/core/runtime/io-system.ts` with comprehensive type-safe input/output handling
-- **Test Coverage**: 80+ tests with 93%+ coverage across all advanced nodes
-- **Documentation**: Complete architecture and implementation docs in `docs/epic7-*.md`
-
-### Epic 7 Implementation Complete - All 4 Advanced Nodes ✅ COMPLETE
-
-**✅ COMPLETED (93%+ test coverage):**
-
-- **WeightedAdvanced**: `packages/core/runtime/nodes/WeightedAdvanced.ts` - Complex weight distributions with exponential, gaussian, and custom patterns
-- **Conditional**: `packages/core/runtime/nodes/Conditional.ts` - Expression-based branching with variable access and custom functions
-- **Sequential**: `packages/core/runtime/nodes/Sequential.ts` - Stateful sequence processing with linear, cyclical, random, and weighted patterns
-- **Markov**: `packages/core/runtime/nodes/Markov.ts` - State transition matrices with termination conditions and loop detection
-
-### Epic 7 Foundation Complete ✅ COMPLETE
-
-- **Engine Integration**: All advanced nodes fully integrated with automatic context detection
-- **Schema Validation**: Complete Zod schemas for all advanced node types
-- **Serialization System**: Full serialization/deserialization for advanced node states
-- **Test Coverage**: Comprehensive test suites for all nodes with deterministic validation
-- **Performance Tracking**: Built-in performance monitoring and caching systems
-
-### Advanced Node Features Complete ✅
-
-- **Security Framework**: Dangerous pattern detection (eval, constructor, prototype, etc.)
-- **Expression Evaluation**: Safe JavaScript with utility functions (startsWith, includes, getType, etc.)
-- **Stateful Processing**: Maintains execution state between runs with history tracking
-- **Pattern Systems**: Multiple traversal strategies (linear, cyclical, random, weighted)
-- **Performance Tracking**: Integrated with `measureExecution` for metrics collection
-- **Engine Integration**: Full support in `server/src/engine.ts` with automatic context detection
-- **Schema Integration**: Zod validation for all Epic 7 advanced node types
-- **Test Coverage**: 90%+ statement coverage with comprehensive test suites (100+ tests total)
-
-### Key Recent Changes
-
-- ✅ Epic 7 Markov: Complete implementation with state transition matrices, termination conditions, and loop detection (93% test coverage)
-- ✅ Epic 7 Sequential: Complete implementation with 4 pattern types, state management, and 32 passing tests
-- ✅ Epic 7 Conditional: Complete implementation with expression evaluation, security framework, and 36 passing tests
-- ✅ Epic 7 WeightedAdvanced: Complete implementation with distribution algorithms and performance tracking
-- ✅ **Epic 7 COMPLETE**: All 4 advanced nodes implemented with full engine integration and comprehensive test coverage
-- ✅ Advanced Node Framework: State management, caching, performance tracking, and serialization systems
-- ✅ Expression Security: Blocks eval, constructor, prototype pollution, and other dangerous patterns
-- Complete inspector system with modular components
-- Preview modal with multi-seed execution
-- Graph validation and error display
-- Deterministic execution engine
-- Export/import functionality
-
-## Development Notes
-
-### Inspector System Refactoring
-
-- GraphEditor.tsx has been refactored from 686 to 383 lines using modular components
-- Inspector components use React Context (`InspectorContext`) for state management
-- Node editors follow a consistent pattern with `BaseNodeEditor` as foundation
-- Custom hooks (`useValidation`, `useAutosave`, `useNodeUtils`) extract common logic
-
-### Graph Export/Import
-
-- Graphs export to GeneratorBundle format for compatibility
-- Round-trip conversion: graph → bundle → graph
-- Exporter located in `server/src/exporter.ts`
-
-### Validation Rules
-
-- No self-loops or duplicate edges
-- Type-safe node connections
-- Real-time validation feedback in UI
-- Validation errors displayed in status bar
-
-### Performance Considerations
-
-- Debounced autosave (5 seconds)
-- Debounced validation (300ms)
-- Debounced preview triggers (500ms)
-- Target: Generate 5 prompt variants in <1 second
-
-### Component Architecture Guidelines
-
-- Use `BaseNodeEditor` for new node-type editors
-- Follow `CollapsibleSection` pattern for organized UI
-- Implement proper TypeScript interfaces for all components
-- Use `VariationList` component for managing text variations
+| Doc | Topic |
+| --- | --- |
+| [`CLAUDE.md`](./CLAUDE.md) | Primary accurate project guide |
+| [`ACTIVE_SURFACE.md`](./ACTIVE_SURFACE.md) | Supported vs quarantined surface |
+| [`docs/audit-work-loop.md`](./docs/audit-work-loop.md) | Section-by-section audit execution |
+| [`docs/parked-implementations/README.md`](./docs/parked-implementations/README.md) | Parked advanced nodes / UX |
+| [`docs/launch-known-limitations.md`](./docs/launch-known-limitations.md) | Honest launch limits |
+| [`docs/examples-catalog.md`](./docs/examples-catalog.md) | Examples + branch-handle model |
+| [`docs/card-normalization-plan.md`](./docs/card-normalization-plan.md) | Card normalization |
+| [`docs/server-route-access-policy.md`](./docs/server-route-access-policy.md) | Route access policy |
+| `packages/core/graphSchema.ts` | Graph schema (check vs Epic1 engine) |
