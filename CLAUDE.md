@@ -38,9 +38,10 @@ supports weight distributions (linear / exponential / gaussian) via
 - `packages/core/runtime/advanced.ts` — **live**, but only because
   `packages/custom-node-sdk` consumes it (`AdvancedRuntimeNode`,
   `AdvancedExecutionContext`). **Do not delete.**
-- `packages/core/runtime/io-system.ts` and the advanced node classes
-  (`WeightedAdvanced`, `Conditional`, `Sequential`, `Markov`) are **parked** —
-  not registered, not on the product schema surface. See the parked-implementations doc.
+- Advanced node *implementations* (`WeightedAdvanced`, `Conditional`, `Sequential`,
+  `Markov`, `io-system.ts`) were **deleted** in C1 P1. Design intent remains in
+  [`docs/parked-implementations/README.md`](docs/parked-implementations/README.md).
+  Rebuild as native Epic1 if needed; do not reintroduce on AdvancedRuntime for product.
 
 ## File format standards
 
@@ -128,9 +129,10 @@ branch over the default branch.
 - **Determinism:** seeded PRNG (same graph + seed ⇒ identical output)
 
 ### packages/core schema layer
-- `graphSchema.ts` — Zod schema for graph structure (the product node vocabulary;
-  source of truth for what is executable)
-- `nodeSchemas.ts` — UI-focused schemas for form generation
+- **Executable vocabulary** is `Epic1NodeType` / `Epic1ExecutionEngine`, not
+  `graphSchema.ts` alone. See [`docs/schema-epic1-vocabulary-inventory.md`](docs/schema-epic1-vocabulary-inventory.md).
+- `graphSchema.ts` — Zod graph shape (diverges: has Include/Set/Get; missing TextBlock/Variable)
+- `nodeSchemas.ts` — UI-focused schemas (still contains parked advanced types)
 - `validation.ts` — connection validation (cycles, invalid edges)
 
 ### UI components & editor surfaces

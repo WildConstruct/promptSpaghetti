@@ -20,7 +20,6 @@ export type ServerRouteQuotaBucket =
 
 export type ServerRouteStoryRole =
   | 'status'
-  | 'preview'
   | 'sandbox-generation'
   | 'primary-ai-path'
   | 'secondary-authoring-helper'
@@ -40,7 +39,6 @@ export interface ServerRouteSurface {
   capability?: RouteCapability;
   rateLimit:
     | 'none'
-    | 'preview'
     | 'llm:route'
     | 'agent:draft-graph'
     | 'psg:route'
@@ -86,18 +84,9 @@ export const SERVER_ROUTE_CATALOG: ServerRouteSurface[] = [
     authRequired: false,
     rateLimit: 'none'
   },
-  {
-    id: 'preview',
-    paths: ['/preview'],
-    methods: ['POST'],
-    purpose: 'Public read-only preview execution against the graph runtime.',
-    storyRole: 'preview',
-    accessTier: 'public-readonly',
-    visibility: 'public',
-    authRequired: false,
-    rateLimit: 'preview',
-    notes: 'Execution-focused, but intentionally non-persistent.'
-  },
+  // NOTE: POST /preview and the server graph engine were removed. Graph
+  // preview/export runs client-side via Epic1ExecutionEngine. Do not re-add a
+  // public execution endpoint here without an explicit product decision.
   {
     id: 'llm-status',
     paths: ['/api/llm/status'],
@@ -131,7 +120,7 @@ export const SERVER_ROUTE_CATALOG: ServerRouteSurface[] = [
     authRequired: false,
     rateLimit: 'none',
     notes:
-      'Local-only capability probe for the optional sandbox demo lane. Not part of the hosted public API story.'
+      'Loopback-only by default (requireLocalSandboxAccess). Not part of the hosted public API. Set LOCAL_SANDBOX_ALLOW_REMOTE=true only if intentional.'
   },
   {
     id: 'local-image-batch',
@@ -144,7 +133,7 @@ export const SERVER_ROUTE_CATALOG: ServerRouteSurface[] = [
     authRequired: false,
     rateLimit: 'route-specific',
     notes:
-      'Optional local demo lane for deterministic seed-driven batches such as tree-family generation.'
+      'Optional local demo lane. Loopback-gated; drives local Comfy when configured. Not a hosted generation product.'
   },
   {
     id: 'local-image-files',
@@ -157,7 +146,7 @@ export const SERVER_ROUTE_CATALOG: ServerRouteSurface[] = [
     authRequired: false,
     rateLimit: 'route-specific',
     notes:
-      'Output access for the local-only sandbox lane. Generated files stay on the local machine.'
+      'Loopback-gated file read for local sandbox outputs. Files stay on the local machine.'
   },
   {
     id: 'local-fragments-save',
@@ -170,7 +159,7 @@ export const SERVER_ROUTE_CATALOG: ServerRouteSurface[] = [
     authRequired: false,
     rateLimit: 'none',
     notes:
-      'Local-first fragment persistence. The hosted Supabase path can later mirror this user-fragment contract.'
+      'Loopback-gated. Optional LOCAL_FRAGMENT_ROOTS path.delimiter allowlist restricts folderPath. Default HOST is 127.0.0.1.'
   },
   {
     id: 'agent-draft-graph',

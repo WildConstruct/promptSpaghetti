@@ -1,6 +1,6 @@
 # Server Route Access Policy
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-07-14_
 
 This file describes the active Fastify route surface for the MVP/beta hardening
 phase.
@@ -19,12 +19,12 @@ product-story classification. This document mirrors that contract in human form.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `/health` | Basic process health | status | public-readonly | No | None | None | Public |
 | `/api/healthz` | API/platform health | status | public-readonly | No | None | None | Public |
-| `/preview` | Read-only graph preview execution | preview | public-readonly | No | None | `preview` rate limit only | Public |
 | `/api/llm/status` | Server LLM availability and capabilities | status | public-readonly | No | None | None | Public |
 | `/api/psg/capabilities` | Hosted PSG capability report | psg-protocol | public-readonly | No | None | None | Public |
-| `/api/local-image/status` | Local sandbox image runtime status | sandbox-generation | local-only | No | None | None | Local only |
-| `/api/local-image/batch` | Local-only Comfy-compatible batch generation | sandbox-generation | local-only | No | None | route-specific | Local only |
-| `/api/local-image/files/:runId/:filename` | Local generated image file access | sandbox-generation | local-only | No | None | route-specific | Local only |
+| `/api/local-image/status` | Local sandbox image runtime status | sandbox-generation | local-only | No | None | None | Local only (loopback) |
+| `/api/local-image/batch` | Local-only Comfy-compatible batch generation | sandbox-generation | local-only | No | None | route-specific | Local only (loopback) |
+| `/api/local-image/files/:runId/:filename` | Local generated image file access | sandbox-generation | local-only | No | None | route-specific | Local only (loopback) |
+| `/api/local-fragments/*` | List/save user PSG fragments under a documents folder | storage | local-only | No | None | none | Local only (loopback) |
 | `/api/agent/draft-graph` | Prompt -> Graph Draft | primary-ai-path | authenticated | Bearer Supabase JWT | `cloud-agent` | `agent:draft-graph` + `cloud-agent` quota | Private |
 | `/api/llm/complete` and `/api/llm-complete` | Secondary authenticated completion helper | secondary-authoring-helper | authenticated | Bearer Supabase JWT | `cloud-llm` | `llm:route` + `cloud-llm` quota | Private |
 | `/api/ai/parse`, `/api/llm/parse`, `/api/ai-parse`, `/api/llm-parse` | Secondary authenticated parsing helper and compatibility aliases | secondary-authoring-helper | authenticated | Bearer Supabase JWT | `cloud-llm` | `llm:route` + `cloud-llm` quota | Private |
@@ -53,8 +53,12 @@ product-story classification. This document mirrors that contract in human form.
   not the MVP headline.
 - PSG routes remain the durable protocol center for validation, normalization,
   export, and hosted upgrade helpers.
-- Local sandbox image generation is a separate local-only demo lane. It should
-  not be described as part of the hosted public API surface.
+- Local sandbox image generation and local fragment routes are a **local-only
+  demo lane**, not hosted product API. Enforcement:
+  - process bind defaults to `HOST=127.0.0.1` (`resolveListenHost`)
+  - routes reject non-loopback clients unless `LOCAL_SANDBOX_ALLOW_REMOTE=true`
+  - optional `LOCAL_FRAGMENT_ROOTS` allowlists fragment `folderPath` roots
+  - there is **no** mounted `POST /preview`; graph preview is client-side
 - Admin and theme routes are opt-in internal surfaces, not product-facing API.
 
 ## Notes

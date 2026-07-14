@@ -1,11 +1,13 @@
 # Active Surface
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-07-14_
 
 This file defines the supported product surface for Prompt Spaghetti.
 
 If a change does not clearly affect one of the areas below, treat it as
 support-only or non-core until proven otherwise.
+
+Related: [`docs/audit-work-loop.md`](./docs/audit-work-loop.md), [`CLAUDE.md`](./CLAUDE.md), [`AGENTS.md`](./AGENTS.md).
 
 ## Supported Product Surface
 
@@ -14,14 +16,16 @@ support-only or non-core until proven otherwise.
   - launch screen and prompt bootstrap in `client/src/components/LaunchScreen/*`
   - active editor shell in `client/src/Epic1Editor/Epic1EditorContainer-refactored.tsx`
   - local document UX, Supabase dialogs, and MVP export dialogs
+  - optional Card Normalization surface (`/#/card-normalization`)
 - `server/`
-  - canonical Fastify server runtime in `server/src/index.ts`
-  - mounted file, LLM, PSG, bounded agent, and local sandbox image routes from `server/src/routes/*`
+  - canonical Fastify server runtime in `server/src/index.ts` (local / dev)
+  - mounted route families: files, LLM, PSG, agent, local image, local fragments
   - server-owned route surface contract in `server/src/routeSurfaceCatalog.ts`
-  - execution-facing preview and health endpoints
+  - health endpoints (`/health`, `/api/healthz`); **not** a server-side graph preview executor
 - `packages/core/`
   - canonical Epic 1 graph editor in `packages/core/components/epic1/Epic1GraphEditor.tsx`
-  - tabbed side-panel integration, preview logic, and graph editing primitives
+  - tabbed side-panel integration, PreviewTray, and graph editing primitives
+  - client-side `Epic1ExecutionEngine` (canonical graph execution)
   - PSG codec and flat PSG file contract in `packages/core/fileFormats/psg.ts`
   - shared runtime, assistant, and API contracts re-exported from `packages/core/public.ts`
 - `packages/asset-browser/`
@@ -39,12 +43,15 @@ support-only or non-core until proven otherwise.
 - prompt/template bootstrap from `client/src/components/LaunchScreen/LaunchScreen.tsx`
 - editor shell in `client/src/Epic1Editor/Epic1EditorContainer-refactored.tsx`
 - graph canvas/editor in `packages/core/components/epic1/Epic1GraphEditor.tsx`
-- preview and PSG export from the editor surface
-- canonical API runtime in `server/src/index.ts`
-- bounded backend routes in `server/src/routes/llm.ts`, `psg.ts`, `agent.ts`, and `files.ts`
-- small public runtime surface: `/health`, `/api/healthz`, `/preview`, `/api/llm/status`, `/api/psg/capabilities`
+- **preview and export run client-side** via `Epic1ExecutionEngine` on the same React Flow graph
+- PSG import/export from the editor surface
+- canonical local API runtime in `server/src/index.ts`
+- bounded backend routes in `server/src/routes/` (`llm.ts`, `psg.ts`, `agent.ts`, `files.ts`, `localImage.ts`, `localFragments.ts`)
+- small public runtime surface: `/health`, `/api/healthz`, `/api/llm/status`, `/api/psg/capabilities`
 - authenticated cloud helper surface for LLM, PSG, agent draft, and files
-- optional local-only sandbox generation surface for `/api/local-image/*`
+- optional local-only sandbox surfaces: `/api/local-image/*`, `/api/local-fragments/*`
+  (loopback-gated; default bind `127.0.0.1`; see `server/src/utils/localSandboxAccess.ts`)
+- hosted deploy backend remains the Vercel `api/**` surface until hosting is converged (see deployment docs)
 
 ## Source Of Truth Owners
 
@@ -58,7 +65,9 @@ support-only or non-core until proven otherwise.
   `client/src/Epic1Editor/editorSurfacePolicy.ts`
 - graph canvas, side panel, and node primitives:
   `packages/core/components/epic1/*`
-- canonical server runtime:
+- graph execution:
+  `packages/core/runtime/nodes/epic1/Epic1ExecutionEngine.ts`
+- canonical local server runtime:
   `server/src/index.ts`
 - server route surface contract:
   `server/src/routeSurfaceCatalog.ts`
@@ -75,13 +84,13 @@ These remain in the repo but are not part of the supported launch wedge unless
 explicitly pulled into scope.
 
 - `packages/custom-node-sdk/`
-  - publishable SDK surface that depends on core, but is not part of the MVP app flow
-- `packages/cli/`
-  - support tooling and historical CLI surface, not part of the active launch path
+  - publishable SDK surface that depends on core (`runtime/advanced.ts`), not MVP app flow
 - `python-executor/`
   - adjacent execution research/infrastructure, not part of the current MVP story
 - broad root `tests/`, `performance-baselines/`, and QA report files
   - useful for recovery and later stabilization, but not canonical product surface
+
+> `packages/cli` was removed and must not be treated as an active surface.
 
 ## PSG Rule
 
@@ -106,7 +115,8 @@ reactivated:
 - `docs/obsidian-vault/`
 - `temp-build/`
 - `api/`
-  - keep as a deployment compatibility surface only while Vercel still points at legacy serverless handlers
+  - deployment compatibility surface while Vercel still points at serverless handlers
+- advanced node implementations (deleted C1 P1; specs in `docs/parked-implementations/`)
 - alternate or exploratory editor/runtime implementations such as:
   - `packages/core/components/epic1/Epic1GraphEditorRefactored.tsx`
   - `packages/core/components/epic1/Epic1GraphEditorFinal.tsx`
@@ -134,7 +144,8 @@ when safe:
 ## Current Recovery Priorities
 
 1. Keep one supported build and typecheck path green.
-2. Make local document flow PSG-first.
-3. Remove visible no-op or stub-only product actions.
-4. Narrow AI to graph-aware workflows rather than generic completion endpoints.
-5. Keep source-of-truth docs aligned to the active runtime before trimming repo surface.
+2. Keep source-of-truth docs aligned to the active runtime (see audit work loop Track A).
+3. Make local document flow PSG-first.
+4. Remove visible no-op or stub-only product actions.
+5. Narrow AI to graph-aware workflows rather than generic completion endpoints.
+6. Harden local-only routes before any non-loopback exposure.

@@ -40,6 +40,9 @@ Before wider beta or paid API exposure, the deployed Supabase environment must b
 - Storage policy review for uploaded assets
 - Live cross-user access tests confirming read, update, and delete isolation
 
+**Runnable procedure:** [`docs/supabase-rls-verification-runbook.md`](./supabase-rls-verification-runbook.md)  
+Until that runbook is executed with verdict **VERIFIED**, cloud tenant isolation remains **unverified**.
+
 ## Non-Goals For This Phase
 
 - This phase does not implement full billing-aware capability enforcement.

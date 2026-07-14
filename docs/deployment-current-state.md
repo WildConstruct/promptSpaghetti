@@ -1,82 +1,91 @@
 # Deployment Current State
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-07-14_ (work-loop **C5**)
 
-This is the current deployment truth for the MVP branch.
+This is the current deployment truth for the active product surface.
+See also [`vercel-convergence-decision.md`](./vercel-convergence-decision.md) and
+[`ACTIVE_SURFACE.md`](../ACTIVE_SURFACE.md).
 
 ## What is currently aligned
 
-- Netlify is the practical frontend hosting target.
-- The frontend build path is:
+- **Netlify** is the practical frontend hosting target.
+- Frontend build path:
   - `pnpm --filter @prompt/asset-browser prebuild`
   - `pnpm --filter client build`
-- The combined shortcut is:
-  - `pnpm run build:netlify`
-- `client/public/_redirects` proxies `/api/*` to:
-  - `https://prompt-spaghetti-client.vercel.app/api/:splat`
+- Combined shortcut: `pnpm run build:netlify`
+- API proxy from the static client:
+  - `client/public/_redirects` and `netlify.toml` proxy `/api/*` →
+    `https://prompt-spaghetti-client.vercel.app/api/:splat`
+- **Local Fastify** (`server/src/index.ts`) is the canonical **dev** backend:
+  - default bind **`HOST=127.0.0.1`** (loopback) as of local-sandbox hardening
+  - set `HOST=0.0.0.0` only when intentionally exposing the process
+- Graph **preview/export** is **client-side** (`Epic1ExecutionEngine`). There is no
+  mounted Fastify `POST /preview`.
 
 ## What is currently misaligned
 
-- The canonical server runtime is [server/src/index.ts](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/server/src/index.ts).
-- The root Vercel project is still configured through [vercel.json](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/vercel.json) as an API-only deployment around the legacy `api/` serverless surface.
-- That means Vercel is not yet aligned with the canonical Fastify runtime.
+- Hosted backend on Vercel is still the legacy **`api/**` serverless surface**
+  (`vercel.json` API-only style deploy), **not** the Fastify app in `server/src`.
+- That means production `/api/*` behavior can diverge from local Fastify routes
+  (local-image / local-fragments exist only on Fastify; do not assume they exist
+  on Vercel).
+- Local sandbox routes are **dev-machine only** (loopback + optional
+  `LOCAL_FRAGMENT_ROOTS`); they are not part of the hosted product API story.
 
-## Practical MVP reading
+## Practical confidence lanes
 
-- MVP ship confidence should be based on `pnpm run validate:mvp:ship`.
-- Local validation confidence should be based on `pnpm run validate:active`.
-- Frontend deploy packaging confidence should be based on `pnpm run build:netlify`.
-- Backend deploy packaging confidence should be based on `pnpm run build:vercel-api` for now.
-- Full local deploy packaging confidence should be based on `pnpm run validate:deploy:active`.
-- Do not claim that Vercel is already serving the canonical `server/src/index.ts` runtime until the deployment surface is explicitly migrated.
+| Goal | Command / signal |
+| --- | --- |
+| MVP ship (when scripted) | `pnpm run validate:mvp:ship` |
+| Active local product | `pnpm run validate:active` |
+| Deploy packaging | `pnpm run validate:deploy:active` |
+| Frontend package | `pnpm run build:netlify` |
+| Vercel API package | `pnpm run build:vercel-api` |
+| Artifacts | `pnpm run validate:artifacts:active` |
+| Type safety | `pnpm typecheck` |
 
-## Phase 4a local validation truth
+Do **not** claim Vercel serves `server/src/index.ts` until convergence is executed.
 
-- `validate:active` is the canonical developer-machine confidence lane for the
-  active MVP surface.
-- That lane covers active typecheck, client build, server build, focused server
-  runtime smoke, and focused client MVP smoke.
-- This improves local confidence only. It does not imply deploy convergence
-  between Netlify, Vercel, and the canonical Fastify runtime.
+## Phase notes (still valid)
 
-## Phase 4b deploy packaging truth
+### Local validation
 
-- `validate:deploy:active` is the canonical local packaging lane for the frozen
-  Netlify-plus-Vercel MVP deploy model.
-- The canonical hosted backend origin is:
-  - `https://prompt-spaghetti-client.vercel.app`
-- That lane proves local packaging and config consistency only.
-- It does not prove remote deploy credentials, remote site state, or runtime
-  convergence.
+`validate:active` covers active typecheck, client build, server build, and focused
+smoke for the MVP surface on a developer machine. It does not prove remote deploy
+state or hosting convergence.
 
-## Phase 4c generated artifact truth
+### Deploy packaging
 
-- `validate:artifacts:active` is the canonical generated-artifact hygiene
-  check.
-- `packages/asset-browser/public/graphs/manifest.json` is active runtime-generated input and is expected to be deterministic.
-- `packages/core/dist/**` is publish-compat output, not the source of truth for local MVP validation or deploy packaging.
-- `refresh:publish-compat` is the explicit tracked-output refresh workflow and stays outside the normal MVP confidence lanes.
+`validate:deploy:active` proves local packaging/config consistency for the frozen
+Netlify + Vercel split. Canonical hosted backend origin for the proxy model:
 
-## Current blockers
+`https://prompt-spaghetti-client.vercel.app`
 
-- The local shell Vercel token is invalid, so remote Vercel project verification is blocked until credentials are refreshed.
-- Netlify CLI monorepo selection is noisy in this repo; use the explicit build script above as the reliable MVP check.
+### Generated artifacts
 
-## MVP deployment bar
+- `packages/asset-browser/public/graphs/manifest.json` — deterministic runtime input
+- `packages/core/dist/**` — publish-compat only; not source of truth for MVP validation
+- `refresh:publish-compat` — optional; outside normal MVP lanes
 
-The branch is deployment-ready enough for MVP handoff when these are true:
+## Known blockers / caveats
 
-- `pnpm run validate:mvp:ship` passes
-- `pnpm run validate:active` passes
-- `pnpm run validate:deploy:active` passes
-- `pnpm run validate:artifacts:active` passes
-- `pnpm run build:netlify` passes
-- `pnpm run build:vercel-api` passes
-- launch/demo flows pass manual verification
-- docs describe the Netlify frontend + Vercel backend split honestly
+- Remote Vercel project verification may be blocked without valid CLI credentials
+  (historically noted; re-check when converging).
+- Netlify monorepo CLI can be noisy; prefer explicit `build:netlify`.
+- Supabase RLS for cloud isolation remains an **external** verification gate
+  ([runbook](./supabase-rls-verification-runbook.md)) — not a deploy packaging concern,
+  but blocks “cloud is safe” claims.
 
 ## Deferred deployment work
 
-- migrate Vercel from legacy `api/` functions to the canonical Fastify runtime
-- refresh Vercel CLI auth and verify the linked remote project directly
-- decide whether Vercel remains backend-only or becomes a unified hosting target
+1. Migrate Vercel from `api/**` to canonical Fastify **or** formally document `api/**`
+   as the permanent hosted backend (see convergence options).
+2. Refresh Vercel CLI auth and verify linked project.
+3. Decide unified hosting vs permanent split.
+
+## Honest external wording
+
+**Say:** Netlify (or static) frontend; Vercel serverless `api/**` backend; local
+Fastify for development; client-side graph execution.
+
+**Do not say:** unified backend, Fastify-on-Vercel, or “server preview API” for graphs.

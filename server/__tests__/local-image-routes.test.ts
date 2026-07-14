@@ -43,6 +43,21 @@ describe('localImageRoutes', () => {
     await app.close();
   });
 
+  it('rejects non-loopback clients for local image routes', async () => {
+    const { app } = await buildApp();
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/api/local-image/status',
+      remoteAddress: '192.168.1.50'
+    });
+
+    expect(response.statusCode).toBe(403);
+    expect(response.json().error).toMatch(/loopback/i);
+
+    await app.close();
+  });
+
   it('rejects invalid batch payloads', async () => {
     const { app } = await buildApp();
 
