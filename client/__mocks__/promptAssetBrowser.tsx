@@ -10,10 +10,12 @@ export interface AgentFragmentRecord {
   tags?: string[];
   roles?: string[];
   domains?: string[];
+  slotTypes?: string[];
   nodeTypes?: string[];
   placementHints?: string[];
   tone?: string[];
   nodeCount: number;
+  userCreated?: boolean;
   preferredInsertion?: string;
   entryStrategy?: string;
   exitStrategy?: string;

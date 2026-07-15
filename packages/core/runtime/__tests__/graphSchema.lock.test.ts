@@ -1,7 +1,12 @@
 /**
- * Schema-lock guard: the canonical graph schema must accept exactly the executable
- * node vocabulary and reject the retired advanced/Python tier. Keeps the schema
- * from silently re-diverging from what the engine can actually run.
+ * Schema-lock guard for graphSchema.ts NodeTypeEnum.
+ *
+ * This locks the *current* GraphSchema surface (including Include / Set / Get).
+ * It is NOT the Epic1 executable set (TextBlock | WeightedChoice | Concat |
+ * Variable | Output). See docs/schema-epic1-vocabulary-inventory.md.
+ *
+ * Also rejects the retired advanced/Python tier so it cannot re-enter GraphSchema
+ * without an intentional test change.
  */
 import { GraphSchema, NodeTypeEnum } from '../../graphSchema';
 
@@ -14,7 +19,7 @@ const RETIRED = [
 ];
 
 describe('graph schema lock', () => {
-  it('enumerates exactly the executable node types', () => {
+  it('enumerates the current GraphSchema node types (not Epic1 executable set)', () => {
     expect([...NodeTypeEnum.options].sort()).toEqual(
       ['Concat', 'GetVariable', 'Include', 'Output', 'SetVariable', 'WeightedChoice'].sort()
     );

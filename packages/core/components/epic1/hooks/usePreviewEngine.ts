@@ -2,7 +2,8 @@ import { useRef, useEffect, useCallback } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PreviewEngine } from '../preview/PreviewEngine';
 import { Epic1Graph } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
-import { nodeDataToRuntimeNode } from '../nodes/nodeFactory';
+import { GraphConverter } from '../services/GraphConverter';
+import { useDocumentProjectStore } from '../../../stores/documentProjectStore';
 import type { EditableNodeData } from '../nodes';
 
 interface UsePreviewEngineProps {
@@ -37,47 +38,19 @@ export function usePreviewEngine({
     });
   }
 
-  // Convert React Flow graph to runtime graph format
+  // Convert React Flow graph to runtime graph format (includes nested precomps)
   const convertToRuntimeGraph = useCallback(
     (
       flowNodes: Node<EditableNodeData>[],
       flowEdges: Edge[]
     ): Epic1Graph | null => {
-      try {
-        const runtimeNodes = new Map();
-
-        for (const node of flowNodes) {
-          if (!node.type || !node.position) {
-            console.warn(
-              'Skipping invalid node:',
-              node.id,
-              'type:',
-              node.type,
-              'position:',
-              node.position
-            );
-            continue;
-          }
-          const runtimeNode = nodeDataToRuntimeNode(node);
-          if (runtimeNode) {
-            runtimeNodes.set(node.id, runtimeNode);
-          }
-        }
-
-        return {
-          nodes: runtimeNodes,
-          edges: flowEdges.map(edge => ({
-            id: edge.id,
-            source: edge.source,
-            target: edge.target,
-            sourceHandle: edge.sourceHandle ?? undefined,
-            targetHandle: edge.targetHandle ?? undefined
-          }))
-        };
-      } catch (error) {
-        console.error('Error converting to runtime graph:', error);
-        return null;
-      }
+      const nestedDocuments =
+        useDocumentProjectStore.getState().getNestedDocumentsForRuntime();
+      return GraphConverter.convertToRuntimeGraph(
+        flowNodes,
+        flowEdges,
+        nestedDocuments
+      );
     },
     []
   );

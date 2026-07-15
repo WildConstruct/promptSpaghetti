@@ -74,20 +74,104 @@ export function useNodeOperations<NodeData = unknown>(
                 })()
                 : {};
 
+            // Template node: structured { template, capitalize, terminate }
+            const templateExtras: Record<string, unknown> =
+              node.type === 'template'
+                ? (() => {
+                    try {
+                      const parsed = JSON.parse(newValue) as Record<
+                        string,
+                        unknown
+                      >;
+                      if (
+                        parsed &&
+                        typeof parsed === 'object' &&
+                        'template' in parsed
+                      ) {
+                        return {
+                          template: String(parsed.template ?? ''),
+                          capitalize: parsed.capitalize !== false,
+                          terminate: parsed.terminate === true
+                        };
+                      }
+                    } catch {
+                      // plain skeleton string
+                    }
+                    return { template: newValue };
+                  })()
+                : {};
+
+            // SubPSG node: structured { documentId, documentName, outputMode }
+            const subPsgExtras: Record<string, unknown> =
+              node.type === 'subPsg'
+                ? (() => {
+                    try {
+                      const parsed = JSON.parse(newValue) as Record<
+                        string,
+                        unknown
+                      >;
+                      if (parsed && typeof parsed === 'object') {
+                        return {
+                          documentId:
+                            typeof parsed.documentId === 'string'
+                              ? parsed.documentId
+                              : '',
+                          documentName:
+                            typeof parsed.documentName === 'string'
+                              ? parsed.documentName
+                              : 'New Composition',
+                          outputMode:
+                            parsed.outputMode === 'first-output'
+                              ? 'first-output'
+                              : 'first-output',
+                          label:
+                            typeof parsed.documentName === 'string'
+                              ? parsed.documentName
+                              : 'New Composition'
+                        };
+                      }
+                    } catch {
+                      // plain name string
+                    }
+                    return {
+                      documentName: newValue,
+                      label: newValue
+                    };
+                  })()
+                : {};
+
             return {
               ...node,
               data: {
                 ...node.data,
-                value: node.type === 'concat'
-                  ? String(concatExtras.separator ?? newValue)
-                  : newValue,
+                value:
+                  node.type === 'concat'
+                    ? String(concatExtras.separator ?? newValue)
+                    : node.type === 'template'
+                      ? String(templateExtras.template ?? newValue)
+                      : node.type === 'subPsg'
+                        ? String(
+                            subPsgExtras.documentName ??
+                              subPsgExtras.label ??
+                              newValue
+                          )
+                        : newValue,
                 text: newValue, // For TextBlock nodes
                 variableName: newValue, // For Variable nodes
                 separator: node.type === 'concat'
                   ? String(concatExtras.separator ?? newValue)
                   : newValue, // For Concat nodes
-                label: newValue, // For Output nodes
+                label:
+                  node.type === 'subPsg'
+                    ? String(
+                        subPsgExtras.documentName ??
+                          subPsgExtras.label ??
+                          newValue
+                      )
+                    : newValue, // For Output nodes
                 ...(node.type === 'concat' ? concatExtras : {}),
+                ...(node.type === 'template' ? templateExtras : {}),
+                ...(node.type === 'subPsg' ? subPsgExtras : {}),
                 // For WeightedChoice nodes, parse the JSON
                 options:
                   node.type === 'weightedChoice'

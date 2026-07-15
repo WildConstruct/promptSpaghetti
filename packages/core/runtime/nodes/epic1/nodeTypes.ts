@@ -8,5 +8,9 @@ export enum Epic1NodeType {
   WeightedChoice = 'WeightedChoice',
   Concat = 'Concat',
   Variable = 'Variable',
-  Output = 'Output'
+  Output = 'Output',
+  /** Sentence skeleton with {slot} fill — see docs/template-slot-node-design.md */
+  Template = 'Template',
+  /** Nested precomp document — see docs/nested-psg-precomp-plan.md */
+  SubPSG = 'SubPSG'
 }

@@ -99,6 +99,18 @@ const SWEETENING_STYLES: SweeteningStyle[] = [
   }
 ];
 
+type DraftSlotAnalysis = {
+  id: string;
+  sourceText: string;
+  startIndex?: number;
+  endIndex?: number;
+  slotType: string;
+  domainHints?: string[];
+  toneHints?: string[];
+  classificationConfidence: number;
+  segmentKind?: string;
+};
+
 type DraftGraphResponse = {
   ok?: boolean;
   summary?: string;
@@ -110,6 +122,8 @@ type DraftGraphResponse = {
   notes?: string[];
   model?: string;
   fallback?: boolean;
+  /** Additive: semantic slots for fragment swap review */
+  slots?: DraftSlotAnalysis[];
 };
 
 const mapDraftNodeType = (type: unknown): GeneratedNode['node']['nodeType'] => {
@@ -216,7 +230,9 @@ const analysisFromDraftGraphResponse = (
       summary: response.summary,
       notes: response.notes || [],
       model: response.model || 'heuristic-segmentation-v1',
-      fallback: response.fallback !== false
+      fallback: response.fallback !== false,
+      // Preserve for upcoming review-first swap UI (F3)
+      slots: Array.isArray(response.slots) ? response.slots : undefined
     }
   };
 };

@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "agent-fragment-shard",
   "groupBy": "category",
   "key": "setting-environment",
-  "generatedAt": "2026-03-09T16:43:25.683Z",
+  "generatedAt": "2026-07-15T00:54:15.174Z",
   "totalFragments": 10,
   "fragments": [
     {
@@ -11,44 +11,14 @@
       "name": "Architectural Styles",
       "path": "/assets/library/setting-environment/architectural-styles.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Architectural Styles (setting-environment).",
       "tags": [
         "environment",
         "architecture",
-        "building"
-      ],
-      "roles": [
-        "scenario",
-        "output-finisher",
-        "branch-extension"
-      ],
-      "domains": [
-        "environment",
-        "building"
-      ],
-      "nodeTypes": [
-        "weighted-choice"
-      ],
-      "placementHints": [
-        "branch-lane",
-        "before-output"
-      ],
-      "tone": [],
-      "nodeCount": 1,
-      "preferredInsertion": "insert-edge",
-      "entryStrategy": "single-node",
-      "exitStrategy": "single-node",
-      "suggestionWeight": 0,
-      "requiresBranchLane": true
-    },
-    {
-      "id": "setting-atmospherics",
-      "name": "Atmospherics",
-      "path": "/assets/library/setting-environment/atmospherics.psg",
-      "category": "setting-environment",
-      "tags": [
-        "environment",
-        "atmosphere",
-        "scene"
+        "building",
+        "architectural",
+        "styles",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -61,7 +31,55 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-atmospherics",
+      "name": "Atmospherics",
+      "path": "/assets/library/setting-environment/atmospherics.psg",
+      "category": "setting-environment",
+      "description": "Library fragment: Atmospherics (setting-environment).",
+      "tags": [
+        "environment",
+        "atmosphere",
+        "scene",
+        "atmospherics",
+        "setting-environment"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -70,6 +88,11 @@
       "tone": [
         "cinematic",
         "moody"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -83,10 +106,13 @@
       "name": "Backdrop Adjectives",
       "path": "/assets/library/setting-environment/backdrop-adjectives.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Backdrop Adjectives (setting-environment).",
       "tags": [
         "environment",
         "backdrop",
-        "scene"
+        "scene",
+        "adjectives",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -99,13 +125,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -118,10 +151,12 @@
       "name": "Crowd Density",
       "path": "/assets/library/setting-environment/crowd-density.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Crowd Density (setting-environment).",
       "tags": [
         "environment",
         "crowd",
-        "density"
+        "density",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -130,16 +165,25 @@
       ],
       "domains": [
         "environment",
-        "crowd"
+        "crowd",
+        "building",
+        "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -152,10 +196,13 @@
       "name": "Geology Touches",
       "path": "/assets/library/setting-environment/geology-touches.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Geology Touches (setting-environment).",
       "tags": [
         "environment",
         "geology",
-        "terrain"
+        "terrain",
+        "touches",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -164,16 +211,24 @@
       ],
       "domains": [
         "environment",
-        "vehicle"
+        "vehicle",
+        "building"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -186,10 +241,13 @@
       "name": "Lighting Moods",
       "path": "/assets/library/setting-environment/lighting-moods.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Lighting Moods (setting-environment).",
       "tags": [
         "environment",
         "lighting",
-        "mood"
+        "mood",
+        "moods",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -202,7 +260,9 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -211,6 +271,11 @@
       "tone": [
         "cinematic",
         "moody"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -224,10 +289,13 @@
       "name": "Sound Snippets",
       "path": "/assets/library/setting-environment/sound-snippets.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Sound Snippets (setting-environment).",
       "tags": [
         "environment",
         "sound",
-        "scene"
+        "scene",
+        "snippets",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -237,16 +305,24 @@
       "domains": [
         "environment",
         "vehicle",
-        "crowd"
+        "crowd",
+        "building"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -259,10 +335,13 @@
       "name": "Spatial Relations",
       "path": "/assets/library/setting-environment/spatial-relations.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Spatial Relations (setting-environment).",
       "tags": [
         "environment",
         "spatial",
-        "composition"
+        "composition",
+        "relations",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -275,13 +354,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -294,10 +380,13 @@
       "name": "Temporal Markers",
       "path": "/assets/library/setting-environment/temporal-markers.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Temporal Markers (setting-environment).",
       "tags": [
         "environment",
         "time",
-        "temporal"
+        "temporal",
+        "markers",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -310,13 +399,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -329,10 +425,13 @@
       "name": "Weather Snapshots",
       "path": "/assets/library/setting-environment/weather-snapshots.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Weather Snapshots (setting-environment).",
       "tags": [
         "environment",
         "weather",
-        "climate"
+        "climate",
+        "snapshots",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -345,7 +444,9 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -353,6 +454,11 @@
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",

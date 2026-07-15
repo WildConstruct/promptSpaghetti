@@ -14,9 +14,29 @@
       "appearance"
     ],
     "fragment_id": "hair-textures",
-    "collapsible": true
+    "collapsible": true,
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
+    ]
   },
   "nodes": [
+    {
+      "id": "hair-texture-prefix",
+      "type": "TextBlock",
+      "x": -80,
+      "y": 200,
+      "value": "with",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "with",
+        "value": "with"
+      }
+    },
     {
       "id": "hair-texture",
       "type": "WeightedChoice",
@@ -126,9 +146,36 @@
           }
         }
       ]
+    },
+    {
+      "id": "hair-texture-output",
+      "type": "Output",
+      "x": 520,
+      "y": 200,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "hair-texture-prefix-to-hair-texture",
+      "source": "hair-texture-prefix",
+      "target": "hair-texture",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "hair-texture-to-hair-texture-output",
+      "source": "hair-texture",
+      "target": "hair-texture-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "hair-texture-fragment",
@@ -136,7 +183,9 @@
       "color": "#D2691E",
       "color_comment": "Chocolate - Hair texture attribute",
       "nodes": [
-        "hair-texture"
+        "hair-texture",
+        "hair-texture-prefix",
+        "hair-texture-output"
       ],
       "description": "Hair texture patterns as single unit",
       "metadata": {

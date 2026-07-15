@@ -1,9 +1,44 @@
 import { useCallback } from 'react';
 import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
-import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
+import {
+  exportGraphToPSG,
+  type PSGNestedDocument
+} from '@promptscape/core/fileFormats/psg';
+import {
+  MAIN_DOCUMENT_ID,
+  useDocumentProjectStore
+} from '@promptscape/core/stores/documentProjectStore';
 import { loadReactFlowFromAnyPsgContent } from '../utils/psgDocument';
 import { validateEditorGraphPayload } from '../utils/graphValidation';
+
+function nestedDocumentsFromProjectStore(): PSGNestedDocument[] | undefined {
+  try {
+    const store = useDocumentProjectStore.getState();
+    const nested = Object.values(store.documents).filter(
+      doc => doc.id !== store.mainDocumentId && doc.id !== MAIN_DOCUMENT_ID
+    );
+    if (nested.length === 0) {
+      return undefined;
+    }
+    return nested.map(doc => {
+      const exported = exportGraphToPSG(
+        doc.nodes as Parameters<typeof exportGraphToPSG>[0],
+        doc.edges as Parameters<typeof exportGraphToPSG>[1],
+        { name: doc.name }
+      );
+      return {
+        id: doc.id,
+        name: doc.name,
+        nodes: exported.nodes,
+        edges: exported.edges,
+        regions: exported.regions
+      };
+    });
+  } catch {
+    return undefined;
+  }
+}
 
 interface FileOperationsConfig {
   onNodesChange: (nodes: Node[]) => void;
@@ -20,7 +55,10 @@ export const useFileOperations = ({
 }: FileOperationsConfig) => {
   const exportPsg = useCallback(
     (nodes: Node[], edges: Edge[], name = 'Prompt Spaghetti Graph') => {
-      const psg = exportGraphToPSG(nodes, edges, { name });
+      const psg = exportGraphToPSG(nodes, edges, {
+        name,
+        documents: nestedDocumentsFromProjectStore()
+      });
       const blob = new Blob([JSON.stringify(psg, null, 2)], {
         type: 'application/x-promptspaghetti-graph'
       });

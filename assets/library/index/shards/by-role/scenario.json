@@ -1,20 +1,23 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "agent-fragment-shard",
   "groupBy": "role",
   "key": "scenario",
-  "generatedAt": "2026-03-09T16:43:25.683Z",
-  "totalFragments": 20,
+  "generatedAt": "2026-07-15T00:54:15.174Z",
+  "totalFragments": 30,
   "fragments": [
     {
       "id": "action-aerial-motions",
       "name": "Aerial Motions",
       "path": "/assets/library/action-dynamics/aerial-motions.psg",
       "category": "action-dynamics",
+      "description": "Library fragment: Aerial Motions (action-dynamics).",
       "tags": [
         "action",
         "aerial",
-        "motion"
+        "motion",
+        "motions",
+        "action-dynamics"
       ],
       "roles": [
         "scenario",
@@ -27,7 +30,9 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -35,6 +40,9 @@
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -48,10 +56,13 @@
       "name": "Crowd Behaviors",
       "path": "/assets/library/action-dynamics/crowd-behaviors.psg",
       "category": "action-dynamics",
+      "description": "Library fragment: Crowd Behaviors (action-dynamics).",
       "tags": [
         "action",
         "crowd",
-        "behavior"
+        "behavior",
+        "behaviors",
+        "action-dynamics"
       ],
       "roles": [
         "scenario",
@@ -60,16 +71,23 @@
       ],
       "domains": [
         "crowd",
-        "character"
+        "character",
+        "creature",
+        "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "action"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -82,79 +100,14 @@
       "name": "Facial Micro Gestures",
       "path": "/assets/library/action-dynamics/facial-micro-gestures.psg",
       "category": "action-dynamics",
+      "description": "Library fragment: Facial Micro Gestures (action-dynamics).",
       "tags": [
         "action",
         "facial",
-        "micro-gesture"
-      ],
-      "roles": [
-        "scenario",
-        "branch-extension",
-        "modifier"
-      ],
-      "domains": [
-        "character",
-        "creature"
-      ],
-      "nodeTypes": [
-        "weighted-choice"
-      ],
-      "placementHints": [
-        "branch-lane",
-        "downstream-of-choice",
-        "before-output"
-      ],
-      "tone": [],
-      "nodeCount": 1,
-      "preferredInsertion": "insert-edge",
-      "entryStrategy": "single-node",
-      "exitStrategy": "single-node",
-      "suggestionWeight": 0,
-      "requiresBranchLane": true
-    },
-    {
-      "id": "action-group-dynamics",
-      "name": "Group Dynamics",
-      "path": "/assets/library/action-dynamics/group-dynamics.psg",
-      "category": "action-dynamics",
-      "tags": [
-        "action",
-        "group",
-        "dynamics"
-      ],
-      "roles": [
-        "scenario",
-        "branch-extension",
-        "modifier"
-      ],
-      "domains": [
-        "crowd",
-        "character"
-      ],
-      "nodeTypes": [
-        "weighted-choice"
-      ],
-      "placementHints": [
-        "branch-lane",
-        "downstream-of-choice"
-      ],
-      "tone": [],
-      "nodeCount": 1,
-      "preferredInsertion": "insert-edge",
-      "entryStrategy": "single-node",
-      "exitStrategy": "single-node",
-      "suggestionWeight": 0,
-      "requiresBranchLane": true
-    },
-    {
-      "id": "action-high-impact-moves",
-      "name": "High Impact Moves",
-      "path": "/assets/library/action-dynamics/high-impact-moves.psg",
-      "category": "action-dynamics",
-      "tags": [
-        "action",
-        "impact",
-        "move"
+        "micro-gesture",
+        "micro",
+        "gestures",
+        "action-dynamics"
       ],
       "roles": [
         "scenario",
@@ -167,7 +120,97 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-group-dynamics",
+      "name": "Group Dynamics",
+      "path": "/assets/library/action-dynamics/group-dynamics.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Group Dynamics (action-dynamics).",
+      "tags": [
+        "action",
+        "group",
+        "dynamics",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "crowd",
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-high-impact-moves",
+      "name": "High Impact Moves",
+      "path": "/assets/library/action-dynamics/high-impact-moves.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: High Impact Moves (action-dynamics).",
+      "tags": [
+        "action",
+        "impact",
+        "move",
+        "high",
+        "moves",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -176,6 +219,9 @@
       "tone": [
         "heroic",
         "brutal"
+      ],
+      "slotTypes": [
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -189,10 +235,13 @@
       "name": "Object Interactions",
       "path": "/assets/library/action-dynamics/object-interactions.psg",
       "category": "action-dynamics",
+      "description": "Library fragment: Object Interactions (action-dynamics).",
       "tags": [
         "action",
         "object",
-        "interaction"
+        "interaction",
+        "interactions",
+        "action-dynamics"
       ],
       "roles": [
         "scenario",
@@ -205,13 +254,19 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "action",
+        "subject"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -224,10 +279,13 @@
       "name": "Reaction Beats",
       "path": "/assets/library/action-dynamics/reaction-beats.psg",
       "category": "action-dynamics",
+      "description": "Library fragment: Reaction Beats (action-dynamics).",
       "tags": [
         "action",
         "reaction",
-        "beat"
+        "beat",
+        "beats",
+        "action-dynamics"
       ],
       "roles": [
         "scenario",
@@ -237,10 +295,13 @@
       "domains": [
         "character",
         "creature",
-        "crowd"
+        "crowd",
+        "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -248,6 +309,9 @@
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -261,10 +325,13 @@
       "name": "Stealth Movements",
       "path": "/assets/library/action-dynamics/stealth-movements.psg",
       "category": "action-dynamics",
+      "description": "Library fragment: Stealth Movements (action-dynamics).",
       "tags": [
         "action",
         "stealth",
-        "movement"
+        "movement",
+        "movements",
+        "action-dynamics"
       ],
       "roles": [
         "scenario",
@@ -273,10 +340,13 @@
       ],
       "domains": [
         "character",
-        "creature"
+        "creature",
+        "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -285,6 +355,9 @@
       "tone": [
         "gritty",
         "moody"
+      ],
+      "slotTypes": [
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -298,45 +371,13 @@
       "name": "Subtle Micro Actions",
       "path": "/assets/library/action-dynamics/subtle-micro-actions.psg",
       "category": "action-dynamics",
+      "description": "Library fragment: Subtle Micro Actions (action-dynamics).",
       "tags": [
         "action",
         "subtle",
-        "micro"
-      ],
-      "roles": [
-        "scenario",
-        "branch-extension",
-        "modifier"
-      ],
-      "domains": [
-        "character",
-        "creature"
-      ],
-      "nodeTypes": [
-        "weighted-choice"
-      ],
-      "placementHints": [
-        "branch-lane",
-        "downstream-of-choice",
-        "before-output"
-      ],
-      "tone": [],
-      "nodeCount": 1,
-      "preferredInsertion": "insert-edge",
-      "entryStrategy": "single-node",
-      "exitStrategy": "single-node",
-      "suggestionWeight": 0,
-      "requiresBranchLane": true
-    },
-    {
-      "id": "action-transformative-actions",
-      "name": "Transformative Actions",
-      "path": "/assets/library/action-dynamics/transformative-actions.psg",
-      "category": "action-dynamics",
-      "tags": [
-        "action",
-        "transformative",
-        "sequence"
+        "micro",
+        "actions",
+        "action-dynamics"
       ],
       "roles": [
         "scenario",
@@ -349,7 +390,53 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-transformative-actions",
+      "name": "Transformative Actions",
+      "path": "/assets/library/action-dynamics/transformative-actions.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Transformative Actions (action-dynamics).",
+      "tags": [
+        "action",
+        "transformative",
+        "sequence",
+        "actions",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -358,6 +445,9 @@
       "tone": [
         "surreal",
         "cinematic"
+      ],
+      "slotTypes": [
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -371,44 +461,14 @@
       "name": "Architectural Styles",
       "path": "/assets/library/setting-environment/architectural-styles.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Architectural Styles (setting-environment).",
       "tags": [
         "environment",
         "architecture",
-        "building"
-      ],
-      "roles": [
-        "scenario",
-        "output-finisher",
-        "branch-extension"
-      ],
-      "domains": [
-        "environment",
-        "building"
-      ],
-      "nodeTypes": [
-        "weighted-choice"
-      ],
-      "placementHints": [
-        "branch-lane",
-        "before-output"
-      ],
-      "tone": [],
-      "nodeCount": 1,
-      "preferredInsertion": "insert-edge",
-      "entryStrategy": "single-node",
-      "exitStrategy": "single-node",
-      "suggestionWeight": 0,
-      "requiresBranchLane": true
-    },
-    {
-      "id": "setting-atmospherics",
-      "name": "Atmospherics",
-      "path": "/assets/library/setting-environment/atmospherics.psg",
-      "category": "setting-environment",
-      "tags": [
-        "environment",
-        "atmosphere",
-        "scene"
+        "building",
+        "architectural",
+        "styles",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -421,7 +481,55 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-atmospherics",
+      "name": "Atmospherics",
+      "path": "/assets/library/setting-environment/atmospherics.psg",
+      "category": "setting-environment",
+      "description": "Library fragment: Atmospherics (setting-environment).",
+      "tags": [
+        "environment",
+        "atmosphere",
+        "scene",
+        "atmospherics",
+        "setting-environment"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -430,6 +538,11 @@
       "tone": [
         "cinematic",
         "moody"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -443,10 +556,13 @@
       "name": "Backdrop Adjectives",
       "path": "/assets/library/setting-environment/backdrop-adjectives.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Backdrop Adjectives (setting-environment).",
       "tags": [
         "environment",
         "backdrop",
-        "scene"
+        "scene",
+        "adjectives",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -459,13 +575,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -478,10 +601,12 @@
       "name": "Crowd Density",
       "path": "/assets/library/setting-environment/crowd-density.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Crowd Density (setting-environment).",
       "tags": [
         "environment",
         "crowd",
-        "density"
+        "density",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -490,16 +615,25 @@
       ],
       "domains": [
         "environment",
-        "crowd"
+        "crowd",
+        "building",
+        "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -512,10 +646,13 @@
       "name": "Geology Touches",
       "path": "/assets/library/setting-environment/geology-touches.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Geology Touches (setting-environment).",
       "tags": [
         "environment",
         "geology",
-        "terrain"
+        "terrain",
+        "touches",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -524,16 +661,24 @@
       ],
       "domains": [
         "environment",
-        "vehicle"
+        "vehicle",
+        "building"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -546,10 +691,13 @@
       "name": "Lighting Moods",
       "path": "/assets/library/setting-environment/lighting-moods.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Lighting Moods (setting-environment).",
       "tags": [
         "environment",
         "lighting",
-        "mood"
+        "mood",
+        "moods",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -562,7 +710,9 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -571,6 +721,11 @@
       "tone": [
         "cinematic",
         "moody"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -584,10 +739,13 @@
       "name": "Sound Snippets",
       "path": "/assets/library/setting-environment/sound-snippets.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Sound Snippets (setting-environment).",
       "tags": [
         "environment",
         "sound",
-        "scene"
+        "scene",
+        "snippets",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -597,16 +755,24 @@
       "domains": [
         "environment",
         "vehicle",
-        "crowd"
+        "crowd",
+        "building"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -619,10 +785,13 @@
       "name": "Spatial Relations",
       "path": "/assets/library/setting-environment/spatial-relations.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Spatial Relations (setting-environment).",
       "tags": [
         "environment",
         "spatial",
-        "composition"
+        "composition",
+        "relations",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -635,13 +804,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -654,10 +830,13 @@
       "name": "Temporal Markers",
       "path": "/assets/library/setting-environment/temporal-markers.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Temporal Markers (setting-environment).",
       "tags": [
         "environment",
         "time",
-        "temporal"
+        "temporal",
+        "markers",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -670,13 +849,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -689,10 +875,13 @@
       "name": "Weather Snapshots",
       "path": "/assets/library/setting-environment/weather-snapshots.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Weather Snapshots (setting-environment).",
       "tags": [
         "environment",
         "weather",
-        "climate"
+        "climate",
+        "snapshots",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -705,7 +894,9 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -713,6 +904,414 @@
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-airframes",
+      "name": "Airframes Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/airframes.psg",
+      "category": "vehicles-mobility",
+      "description": "Airframe types and mounts",
+      "tags": [
+        "airframes",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-call-sign-decals",
+      "name": "Call-Sign Decals Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/call-sign-decals.psg",
+      "category": "vehicles-mobility",
+      "description": "Call-sign and nose-art decals",
+      "tags": [
+        "call",
+        "sign",
+        "decals",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-cockpit-vibes",
+      "name": "Cockpit Vibes Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/cockpit-vibes.psg",
+      "category": "vehicles-mobility",
+      "description": "Cockpit vibe descriptors",
+      "tags": [
+        "cockpit",
+        "vibes",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-damage-states",
+      "name": "Damage States Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/damage-states.psg",
+      "category": "vehicles-mobility",
+      "description": "Damage states for vehicles",
+      "tags": [
+        "damage",
+        "states",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-ground-rigs",
+      "name": "Ground Rigs Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/ground-rigs.psg",
+      "category": "vehicles-mobility",
+      "description": "Ground vehicles and rigs",
+      "tags": [
+        "ground",
+        "rigs",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-locomotion-traits",
+      "name": "Locomotion Traits Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/locomotion-traits.psg",
+      "category": "vehicles-mobility",
+      "description": "Locomotion traits and characteristics",
+      "tags": [
+        "locomotion",
+        "traits",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object",
+        "character"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-paint-job-styles",
+      "name": "Paint-Job Styles Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/paint-job-styles.psg",
+      "category": "vehicles-mobility",
+      "description": "Vehicle paint-job styles",
+      "tags": [
+        "paint",
+        "job",
+        "styles",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-signature-exhaust",
+      "name": "Signature Exhaust Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/signature-exhaust.psg",
+      "category": "vehicles-mobility",
+      "description": "Signature exhaust effects",
+      "tags": [
+        "signature",
+        "exhaust",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-spacecraft-classes",
+      "name": "Spacecraft Classes Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/spacecraft-classes.psg",
+      "category": "vehicles-mobility",
+      "description": "Spacecraft classes",
+      "tags": [
+        "spacecraft",
+        "classes",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-watercraft",
+      "name": "Watercraft Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/watercraft.psg",
+      "category": "vehicles-mobility",
+      "description": "Watercraft archetypes",
+      "tags": [
+        "watercraft",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",

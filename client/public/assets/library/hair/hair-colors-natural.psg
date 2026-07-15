@@ -14,9 +14,29 @@
       "realistic"
     ],
     "fragment_id": "hair-colors-natural",
-    "collapsible": true
+    "collapsible": true,
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
+    ]
   },
   "nodes": [
+    {
+      "id": "hair-color-natural-prefix",
+      "type": "TextBlock",
+      "x": -80,
+      "y": 200,
+      "value": "with",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "with",
+        "value": "with"
+      }
+    },
     {
       "id": "hair-color-natural",
       "type": "WeightedChoice",
@@ -126,9 +146,36 @@
           }
         }
       ]
+    },
+    {
+      "id": "hair-color-natural-output",
+      "type": "Output",
+      "x": 520,
+      "y": 200,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "hair-color-natural-prefix-to-hair-color-natural",
+      "source": "hair-color-natural-prefix",
+      "target": "hair-color-natural",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "hair-color-natural-to-hair-color-natural-output",
+      "source": "hair-color-natural",
+      "target": "hair-color-natural-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "hair-color-natural-fragment",
@@ -136,7 +183,9 @@
       "color": "#8B4513",
       "color_comment": "Saddle Brown - Natural hair colors",
       "nodes": [
-        "hair-color-natural"
+        "hair-color-natural",
+        "hair-color-natural-prefix",
+        "hair-color-natural-output"
       ],
       "description": "Natural hair colors as single unit",
       "metadata": {

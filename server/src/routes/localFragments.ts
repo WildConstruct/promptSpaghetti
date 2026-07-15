@@ -2,6 +2,10 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
+import {
+  assertFragmentFolderAllowed,
+  requireLocalSandboxAccess
+} from '../utils/localSandboxAccess';
 
 const LocalFragmentSaveRequestSchema = z.object({
   folderPath: z.string().min(1),
@@ -26,6 +30,8 @@ const createFragmentId = (filename: string): string => {
 };
 
 export async function localFragmentRoutes(app: FastifyInstance) {
+  app.addHook('preHandler', requireLocalSandboxAccess);
+
   app.get('/api/local-fragments/list', async (req, reply) => {
     const parsed = LocalFragmentListQuerySchema.safeParse(req.query);
     if (!parsed.success) {
@@ -34,14 +40,12 @@ export async function localFragmentRoutes(app: FastifyInstance) {
         .send({ error: 'Invalid local fragment list payload' });
     }
 
-    const root = path.resolve(parsed.data.folderPath);
-    if (!path.isAbsolute(root)) {
-      return reply
-        .status(400)
-        .send({ error: 'Folder path must be absolute' });
+    const folderCheck = assertFragmentFolderAllowed(parsed.data.folderPath);
+    if (folderCheck.ok === false) {
+      return reply.status(400).send({ error: folderCheck.error });
     }
 
-    const fragmentsDir = path.join(root, 'fragments');
+    const fragmentsDir = path.join(folderCheck.root, 'fragments');
 
     try {
       const files = (await readdir(fragmentsDir))
@@ -112,14 +116,12 @@ export async function localFragmentRoutes(app: FastifyInstance) {
       return reply.status(400).send({ error: 'Fragment content must be JSON' });
     }
 
-    const root = path.resolve(parsed.data.folderPath);
-    if (!path.isAbsolute(root)) {
-      return reply
-        .status(400)
-        .send({ error: 'Folder path must be absolute' });
+    const folderCheck = assertFragmentFolderAllowed(parsed.data.folderPath);
+    if (folderCheck.ok === false) {
+      return reply.status(400).send({ error: folderCheck.error });
     }
 
-    const fragmentsDir = path.join(root, 'fragments');
+    const fragmentsDir = path.join(folderCheck.root, 'fragments');
     const outputPath = path.join(fragmentsDir, parsed.data.filename);
 
     if (path.dirname(outputPath) !== fragmentsDir) {

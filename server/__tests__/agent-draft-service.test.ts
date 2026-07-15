@@ -36,5 +36,18 @@ describe('AgentDraftService', () => {
     expect(insertOperation.nodes.some(node => node.type === 'output')).toBe(true);
     expect(insertOperation.edges.length).toBeGreaterThan(0);
     expect(insertOperation.edges.every(edge => edge.target)).toBe(true);
+
+    // Additive slot analysis for fragment review (F1)
+    expect(Array.isArray(result.slots)).toBe(true);
+    expect(result.slots!.length).toBeGreaterThan(0);
+    expect(result.slots![0]).toMatchObject({
+      id: expect.stringMatching(/^slot-/),
+      sourceText: expect.any(String),
+      slotType: expect.any(String),
+      classificationConfidence: expect.any(Number)
+    });
+    // Source wording preserved somewhere in slots
+    const allText = result.slots!.map(s => s.sourceText).join(' ').toLowerCase();
+    expect(allText).toMatch(/city|neon|rain|portrait|moody/);
   });
 });

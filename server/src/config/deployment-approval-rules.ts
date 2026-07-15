@@ -193,7 +193,7 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
       },
       performanceRegression: {
         maxRegressionPercent: 5,
-        checkEndpoints: ['/api/health', '/api/preview', '/']
+        checkEndpoints: ['/api/health', '/api/healthz', '/']
       },
       breakingChanges: {
         allowed: false,

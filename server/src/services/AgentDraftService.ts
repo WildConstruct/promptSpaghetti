@@ -1,8 +1,10 @@
 import { z } from 'zod';
 import { segmentPrompt } from '../../../packages/core/runtime/prompting/PromptSegmentation';
+import { slotsFromSegments } from '../../../packages/core/runtime/prompting/slotClassification';
 import type {
   DraftGraphFromPromptRequest,
-  DraftGraphFromPromptResponse
+  DraftGraphFromPromptResponse,
+  DraftSlotAnalysis
 } from '../../../packages/core/services/agenticGraph';
 import { LLMService } from './LLMService';
 
@@ -27,7 +29,26 @@ const AgentDraftSegmentSchema = z
     kind: z.enum(['text', 'choice', 'variable']),
     text: z.string().min(1).max(600),
     variableName: z.string().min(1).max(64).optional(),
-    options: z.array(z.string().min(1).max(200)).max(8).optional()
+    options: z.array(z.string().min(1).max(200)).max(8).optional(),
+    // Optional model-supplied slot metadata (additive)
+    slotType: z
+      .enum([
+        'subject',
+        'appearance',
+        'action',
+        'setting',
+        'composition',
+        'camera',
+        'lighting',
+        'style-medium',
+        'mood',
+        'constraint',
+        'unknown'
+      ])
+      .optional(),
+    domainHints: z.array(z.string()).max(6).optional(),
+    toneHints: z.array(z.string()).max(6).optional(),
+    classificationConfidence: z.number().min(0).max(1).optional()
   })
   .superRefine((segment, ctx) => {
     if (segment.kind === 'choice' && (!segment.options || segment.options.length < 2)) {
@@ -199,8 +220,55 @@ function createFallbackPlan(prompt: string): AgentDraftPlan {
     ],
     segments: segments.length > 0
       ? segments
-      : [{ kind: 'text', text: prompt.trim() }]
+      : [{ kind: 'text' as const, text: prompt.trim() || ' ' }]
   };
+}
+
+/** Build additive slot analysis; prefer model fields, else heuristic classification. */
+function buildSlotsFromPlan(
+  prompt: string,
+  plan: AgentDraftPlan
+): DraftSlotAnalysis[] {
+  const segmented = segmentPrompt(prompt);
+  const heuristic = slotsFromSegments(segmented.segments);
+
+  return plan.segments.map((segment, index) => {
+    const fallback = heuristic[index] ?? {
+      id: `slot-${index + 1}`,
+      sourceText: segment.text,
+      slotType: 'unknown' as const,
+      domainHints: [] as DraftSlotAnalysis['domainHints'],
+      toneHints: [] as string[],
+      classificationConfidence: 0.3,
+      segmentKind: segment.kind
+    };
+
+    const slotType = segment.slotType ?? fallback.slotType;
+    const domainHints = (
+      segment.domainHints && segment.domainHints.length > 0
+        ? segment.domainHints
+        : fallback.domainHints
+    ) as DraftSlotAnalysis['domainHints'];
+    const toneHints =
+      segment.toneHints && segment.toneHints.length > 0
+        ? segment.toneHints
+        : fallback.toneHints;
+
+    return {
+      id: `slot-${index + 1}`,
+      sourceText: segment.text,
+      startIndex: fallback.startIndex,
+      endIndex: fallback.endIndex,
+      slotType,
+      domainHints: domainHints ?? [],
+      toneHints: toneHints ?? [],
+      classificationConfidence:
+        typeof segment.classificationConfidence === 'number'
+          ? segment.classificationConfidence
+          : fallback.classificationConfidence,
+      segmentKind: segment.kind
+    };
+  });
 }
 
 function buildDraftPrompt(
@@ -210,11 +278,13 @@ function buildDraftPrompt(
   const guidance = [
     'You are designing a PSG graph draft for a prompt-randomization editor.',
     'Return only JSON matching this shape:',
-    '{"summary":"string","notes":["string"],"segments":[{"kind":"text|choice|variable","text":"string","variableName":"string?","options":["string"]?}]}',
+    '{"summary":"string","notes":["string"],"segments":[{"kind":"text|choice|variable","text":"string","variableName":"string?","options":["string"]?,"slotType":"subject|appearance|action|setting|composition|camera|lighting|style-medium|mood|constraint|unknown?","domainHints":["character|environment|..."]?,"toneHints":["string"]?,"classificationConfidence":0.0}]}',
     'Rules:',
     '- Prefer 3 to 12 segments unless the prompt is extremely short or long.',
     '- Use "choice" only when the prompt implies alternatives or branches.',
     '- Use "variable" for placeholders, assignments, or reusable slots.',
+    '- Optionally label each segment with slotType (subject, appearance, action, setting, composition, camera, lighting, style-medium, mood, constraint).',
+    '- Keep segment text as substrings of the user prompt when possible — never discard source wording.',
     '- Keep segment text concise and editor-friendly.',
     '- Do not invent story content unrelated to the prompt.',
     '- Do not emit markdown or commentary outside the JSON object.'
@@ -279,7 +349,8 @@ export class AgentDraftService {
     if (!this.llm.available()) {
       return this.createFallbackResponse(fallbackPlan, {
         model: 'heuristic-segmentation-v1',
-        note: 'Model-backed drafting unavailable: missing API key.'
+        note: 'Model-backed drafting unavailable: missing API key.',
+        prompt: request.prompt
       });
     }
 
@@ -301,6 +372,7 @@ export class AgentDraftService {
         segments: plan.segments.slice(0, request.options?.maxNewNodes ?? 24)
       };
       const draftGraph = createDraftGraphFromSegments(limitedPlan.segments);
+      const slots = buildSlotsFromPlan(request.prompt, limitedPlan);
 
       return {
         ok: true,
@@ -314,7 +386,8 @@ export class AgentDraftService {
         ],
         notes: limitedPlan.notes,
         model: completion.model,
-        fallback: false
+        fallback: false,
+        slots
       };
     } catch (error) {
       const message =
@@ -322,16 +395,22 @@ export class AgentDraftService {
 
       return this.createFallbackResponse(fallbackPlan, {
         model: 'heuristic-segmentation-v1',
-        note: `Model-backed draft failed: ${message}`
+        note: `Model-backed draft failed: ${message}`,
+        prompt: request.prompt
       });
     }
   }
 
   private createFallbackResponse(
     plan: AgentDraftPlan,
-    options: { model: string; note: string }
+    options: { model: string; note: string; prompt?: string }
   ): DraftGraphFromPromptResponse {
     const draftGraph = createDraftGraphFromSegments(plan.segments);
+    const promptForSlots =
+      options.prompt ||
+      plan.segments.map(s => s.text).join(', ') ||
+      '';
+    const slots = buildSlotsFromPlan(promptForSlots, plan);
 
     return {
       ok: true,
@@ -345,7 +424,8 @@ export class AgentDraftService {
       ],
       notes: [...plan.notes, options.note],
       model: options.model,
-      fallback: true
+      fallback: true,
+      slots
     };
   }
 }

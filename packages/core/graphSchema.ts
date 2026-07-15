@@ -1,6 +1,11 @@
 // packages/core/graphSchema.ts
-// Shared Zod schema for a graph JSON used by both UI and executor.
-// Nodes are stored in an object keyed by node id for O(1) lookup.
+// Shared Zod schema for a graph JSON used by some validation / export paths.
+//
+// IMPORTANT: This enum is NOT the full product executable vocabulary.
+// Preview runs via Epic1ExecutionEngine (TextBlock | WeightedChoice | Concat |
+// Variable | Output). This schema still lists Include / SetVariable / GetVariable
+// and omits TextBlock / Variable — see docs/schema-epic1-vocabulary-inventory.md.
+// Do not silently “fix” the enum without migration tests and a product decision.
 import { z } from 'zod';
 import { SecurityValidation } from './validation/security';
 
@@ -45,6 +50,8 @@ export const OutputNodeSchema = BaseNode.extend({
   type: z.literal('Output')
 });
 
+// Format-only: accepted by GraphSchema for forward-compat; NOT executed by
+// Epic1ExecutionEngine. See docs/include-node-decision.md (B4).
 export const IncludeNodeSchema = BaseNode.extend({
   type: z.literal('Include'),
   name: SecurityValidation.safePropertyKey()
@@ -62,10 +69,9 @@ export const GetVariableNodeSchema = BaseNode.extend({
 });
 
 // NOTE: The Epic 7 advanced tier (WeightedAdvanced/Conditional/Sequential/Markov) and the Epic 8
-// PythonTransform node were retired from the product schema surface — they were never registered,
-// never executed by either engine, and read as ML "circuit diagram" plumbing (Compact Principle II).
-// Their implementations remain parked under runtime/ for potential future use; see
-// docs/engine-unification-design.md.
+// PythonTransform node were retired from the product schema surface. Source implementations were
+// deleted in C1 P1 (algorithms retained in docs/parked-implementations/README.md). Do not re-add
+// them to this schema without a native Epic1 design.
 
 export const AnyNodeSchema = z.discriminatedUnion('type', [
   WeightedChoiceNodeSchema,

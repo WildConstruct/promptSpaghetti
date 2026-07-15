@@ -1,5 +1,6 @@
 import { Node } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
+import { createNodeId as sharedCreateNodeId } from '../utils/nodeDefaults';
 
 interface NodeTemplate {
   type: string;
@@ -52,7 +53,9 @@ export class NodeFactory {
         defaultData: {
           nodeType: 'concat',
           value: ' ',
-          separator: ' '
+          separator: ' ',
+          joinStyle: 'sentence',
+          dedupe: false
         }
       }
     ],
@@ -117,10 +120,10 @@ export class NodeFactory {
   ]);
 
   /**
-   * Create a unique node ID
+   * Create a unique node ID (shared util — see utils/nodeDefaults.ts).
    */
-  static createNodeId(): string {
-    return `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  static createNodeId(type?: string): string {
+    return sharedCreateNodeId(type);
   }
 
   /**
@@ -142,7 +145,7 @@ export class NodeFactory {
     };
 
     return {
-      id: this.createNodeId(),
+      id: this.createNodeId(template.type),
       type: template.type,
       position: validPosition,
       data: {
@@ -161,7 +164,9 @@ export class NodeFactory {
   ): Node<EditableNodeData> {
     return {
       ...node,
-      id: this.createNodeId(),
+      id: this.createNodeId(
+        typeof node.type === 'string' ? node.type : undefined
+      ),
       position: {
         x: node.position.x + offset.x,
         y: node.position.y + offset.y

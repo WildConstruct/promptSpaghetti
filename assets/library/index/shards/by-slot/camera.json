@@ -1,0 +1,353 @@
+{
+  "version": "1.1.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "slotTypes",
+  "key": "camera",
+  "generatedAt": "2026-07-15T00:54:15.174Z",
+  "totalFragments": 8,
+  "fragments": [
+    {
+      "id": "weapons-armor-combat-barricade-shooting-positions",
+      "name": "Barricade Shooting Positions Asset Fragment",
+      "path": "/assets/library/weapons-armor-combat/barricade-shooting-positions.psg",
+      "category": "weapons-armor-combat",
+      "description": "Supported positions and angles when using cover or barricades",
+      "tags": [
+        "barricade",
+        "shooting",
+        "positions",
+        "weapons-armor-combat"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "weapons-armor-combat-barricade-shooting-techniques",
+      "name": "Barricade Shooting Techniques Asset Fragment",
+      "path": "/assets/library/weapons-armor-combat/barricade-shooting-techniques.psg",
+      "category": "weapons-armor-combat",
+      "description": "Building stable positions and angles around barricades",
+      "tags": [
+        "barricade",
+        "shooting",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "domains": [
+        "character",
+        "object",
+        "building"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "weapons-armor-combat-cover-transitions",
+      "name": "Cover Transitions Asset Fragment",
+      "path": "/assets/library/weapons-armor-combat/cover-transitions.psg",
+      "category": "weapons-armor-combat",
+      "description": "Transitions between covers and angles for ranged combat",
+      "tags": [
+        "cover",
+        "transitions",
+        "weapons-armor-combat"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "weapons-armor-combat-cut-angle-sets",
+      "name": "Cut Angle Sets Asset Fragment",
+      "path": "/assets/library/weapons-armor-combat/cut-angle-sets.psg",
+      "category": "weapons-armor-combat",
+      "description": "Standardized cutting angles and flows",
+      "tags": [
+        "cut",
+        "angle",
+        "sets",
+        "weapons-armor-combat"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "weapons-armor-combat-edge-alignment-cues",
+      "name": "Edge Alignment Cues Asset Fragment",
+      "path": "/assets/library/weapons-armor-combat/edge-alignment-cues.psg",
+      "category": "weapons-armor-combat",
+      "description": "Cutting edge alignment and angles",
+      "tags": [
+        "edge",
+        "alignment",
+        "cues",
+        "weapons-armor-combat"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "weapons-armor-combat-high-angle-elevation-compensation",
+      "name": "High-Angle/Elevation Compensation Asset Fragment",
+      "path": "/assets/library/weapons-armor-combat/high-angle-elevation-compensation.psg",
+      "category": "weapons-armor-combat",
+      "description": "Angle cosine and aiming adjustments for steep shots",
+      "tags": [
+        "high",
+        "angle",
+        "elevation",
+        "compensation",
+        "weapons-armor-combat"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "weapons-armor-combat-muzzle-discipline",
+      "name": "Muzzle Discipline Asset Fragment",
+      "path": "/assets/library/weapons-armor-combat/muzzle-discipline.psg",
+      "category": "weapons-armor-combat",
+      "description": "Maintaining safe arcs and angles, preventing cross-cover and flags",
+      "tags": [
+        "muzzle",
+        "discipline",
+        "weapons-armor-combat"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "weapons-armor-combat-shoulder-transitions",
+      "name": "Shoulder Transitions Asset Fragment",
+      "path": "/assets/library/weapons-armor-combat/shoulder-transitions.psg",
+      "category": "weapons-armor-combat",
+      "description": "Transitions between strong and support shoulders for angle management",
+      "tags": [
+        "shoulder",
+        "transitions",
+        "weapons-armor-combat"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    }
+  ]
+}

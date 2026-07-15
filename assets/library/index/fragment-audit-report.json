@@ -1,0 +1,6937 @@
+{
+  "version": "1.0.0",
+  "type": "fragment-audit-report",
+  "generatedAt": "2026-07-15T00:54:15.121Z",
+  "libraryRoot": "assets/library",
+  "summary": {
+    "scanned": 161,
+    "previouslyIndexed": 161,
+    "expandedIndexed": 161,
+    "invalid": 0,
+    "empty": 0,
+    "thin": 0,
+    "rich": 1,
+    "duplicates": 0,
+    "byCategory": {
+      "action-dynamics": 10,
+      "body-silhouette": 10,
+      "emotion-mood": 10,
+      "facial-features": 10,
+      "hair": 10,
+      "extras": 1,
+      "setting-environment": 10,
+      "vehicles-mobility": 10,
+      "weapons-armor-combat": 90
+    },
+    "bySlotType": {
+      "action": 113,
+      "subject": 119,
+      "appearance": 141,
+      "mood": 20,
+      "style-medium": 10,
+      "constraint": 1,
+      "setting": 11,
+      "lighting": 12,
+      "camera": 8
+    }
+  },
+  "fragments": [
+    {
+      "path": "/assets/library/action-dynamics/aerial-motions.psg",
+      "relPath": "action-dynamics/aerial-motions.psg",
+      "id": "action-aerial-motions",
+      "name": "Aerial Motions",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "tags": [
+        "action",
+        "aerial",
+        "motion",
+        "motions",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/crowd-behaviors.psg",
+      "relPath": "action-dynamics/crowd-behaviors.psg",
+      "id": "action-crowd-behaviors",
+      "name": "Crowd Behaviors",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "crowd",
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [],
+      "tags": [
+        "action",
+        "crowd",
+        "behavior",
+        "behaviors",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/facial-micro-gestures.psg",
+      "relPath": "action-dynamics/facial-micro-gestures.psg",
+      "id": "action-facial-micro-gestures",
+      "name": "Facial Micro Gestures",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [],
+      "tags": [
+        "action",
+        "facial",
+        "micro-gesture",
+        "micro",
+        "gestures",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/group-dynamics.psg",
+      "relPath": "action-dynamics/group-dynamics.psg",
+      "id": "action-group-dynamics",
+      "name": "Group Dynamics",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "crowd",
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [],
+      "tags": [
+        "action",
+        "group",
+        "dynamics",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/high-impact-moves.psg",
+      "relPath": "action-dynamics/high-impact-moves.psg",
+      "id": "action-high-impact-moves",
+      "name": "High Impact Moves",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [
+        "heroic",
+        "brutal"
+      ],
+      "tags": [
+        "action",
+        "impact",
+        "move",
+        "high",
+        "moves",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/object-interactions.psg",
+      "relPath": "action-dynamics/object-interactions.psg",
+      "id": "action-object-interactions",
+      "name": "Object Interactions",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [],
+      "tags": [
+        "action",
+        "object",
+        "interaction",
+        "interactions",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/reaction-beats.psg",
+      "relPath": "action-dynamics/reaction-beats.psg",
+      "id": "action-reaction-beats",
+      "name": "Reaction Beats",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "tags": [
+        "action",
+        "reaction",
+        "beat",
+        "beats",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/stealth-movements.psg",
+      "relPath": "action-dynamics/stealth-movements.psg",
+      "id": "action-stealth-movements",
+      "name": "Stealth Movements",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [
+        "gritty",
+        "moody"
+      ],
+      "tags": [
+        "action",
+        "stealth",
+        "movement",
+        "movements",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/subtle-micro-actions.psg",
+      "relPath": "action-dynamics/subtle-micro-actions.psg",
+      "id": "action-subtle-micro-actions",
+      "name": "Subtle Micro Actions",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [],
+      "tags": [
+        "action",
+        "subtle",
+        "micro",
+        "actions",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/action-dynamics/transformative-actions.psg",
+      "relPath": "action-dynamics/transformative-actions.psg",
+      "id": "action-transformative-actions",
+      "name": "Transformative Actions",
+      "category": "action-dynamics",
+      "slotTypes": [
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "tone": [
+        "surreal",
+        "cinematic"
+      ],
+      "tags": [
+        "action",
+        "transformative",
+        "sequence",
+        "actions",
+        "action-dynamics"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/accessory-silhouettes.psg",
+      "relPath": "body-silhouette/accessory-silhouettes.psg",
+      "id": "body-accessory-silhouettes",
+      "name": "Accessory Silhouettes",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "body",
+        "silhouette",
+        "accessories",
+        "accessory",
+        "silhouettes",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/assistive-gear.psg",
+      "relPath": "body-silhouette/assistive-gear.psg",
+      "id": "body-assistive-gear",
+      "name": "Assistive Gear",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "body",
+        "gear",
+        "assistive",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/athletic-markers.psg",
+      "relPath": "body-silhouette/athletic-markers.psg",
+      "id": "body-athletic-markers",
+      "name": "Athletic Markers",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "tags": [
+        "body",
+        "athletic",
+        "markers",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/body-types.psg",
+      "relPath": "body-silhouette/body-types.psg",
+      "id": "body-types",
+      "name": "Body Types",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "body",
+        "types",
+        "physique",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/clothing-fit.psg",
+      "relPath": "body-silhouette/clothing-fit.psg",
+      "id": "body-clothing-fit",
+      "name": "Clothing Fit",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "body",
+        "clothing",
+        "fit",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/gesture-starters.psg",
+      "relPath": "body-silhouette/gesture-starters.psg",
+      "id": "body-gesture-starters",
+      "name": "Gesture Starters",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "body",
+        "gesture",
+        "pose",
+        "starters",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/movement-quality.psg",
+      "relPath": "body-silhouette/movement-quality.psg",
+      "id": "body-movement-quality",
+      "name": "Movement Quality",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "body",
+        "movement",
+        "quality",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/posture-keys.psg",
+      "relPath": "body-silhouette/posture-keys.psg",
+      "id": "body-posture-keys",
+      "name": "Posture Keys",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "body",
+        "posture",
+        "silhouette",
+        "keys",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/scars-tattoos.psg",
+      "relPath": "body-silhouette/scars-tattoos.psg",
+      "id": "body-scars-tattoos",
+      "name": "Scars Tattoos",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [
+        "gritty"
+      ],
+      "tags": [
+        "body",
+        "scars",
+        "tattoos",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/body-silhouette/stage-presence.psg",
+      "relPath": "body-silhouette/stage-presence.psg",
+      "id": "body-stage-presence",
+      "name": "Stage Presence",
+      "category": "body-silhouette",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "tags": [
+        "body",
+        "presence",
+        "performance",
+        "stage",
+        "body-silhouette"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/affect-masks.psg",
+      "relPath": "emotion-mood/affect-masks.psg",
+      "id": "emotion-affect-masks",
+      "name": "Affect Masks",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "tags": [
+        "emotion",
+        "mask",
+        "subtext",
+        "affect",
+        "masks",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/conflict-escalation.psg",
+      "relPath": "emotion-mood/conflict-escalation.psg",
+      "id": "emotion-conflict-escalation",
+      "name": "Conflict Escalation",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [
+        "gritty",
+        "brutal"
+      ],
+      "tags": [
+        "emotion",
+        "conflict",
+        "escalation",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/empathetic-echoes.psg",
+      "relPath": "emotion-mood/empathetic-echoes.psg",
+      "id": "emotion-empathetic-echoes",
+      "name": "Empathetic Echoes",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "tags": [
+        "emotion",
+        "empathy",
+        "echo",
+        "empathetic",
+        "echoes",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/energy-levels.psg",
+      "relPath": "emotion-mood/energy-levels.psg",
+      "id": "emotion-energy-levels",
+      "name": "Energy Levels",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "emotion",
+        "energy",
+        "intensity",
+        "levels",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/group-mood-fields.psg",
+      "relPath": "emotion-mood/group-mood-fields.psg",
+      "id": "emotion-group-mood-fields",
+      "name": "Group Mood Fields",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "crowd",
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "emotion",
+        "group",
+        "crowd",
+        "mood",
+        "fields",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/intensity-modifiers.psg",
+      "relPath": "emotion-mood/intensity-modifiers.psg",
+      "id": "emotion-intensity-modifiers",
+      "name": "Intensity Modifiers",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "emotion",
+        "intensity",
+        "modifier",
+        "modifiers",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/nuanced-feels.psg",
+      "relPath": "emotion-mood/nuanced-feels.psg",
+      "id": "emotion-nuanced-feels",
+      "name": "Nuanced Feels",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "tags": [
+        "emotion",
+        "nuance",
+        "feelings",
+        "nuanced",
+        "feels",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/primary-emotions.psg",
+      "relPath": "emotion-mood/primary-emotions.psg",
+      "id": "emotion-primary-emotions",
+      "name": "Primary Emotions",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "emotion",
+        "primary",
+        "feelings",
+        "emotions",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/subtext-signals.psg",
+      "relPath": "emotion-mood/subtext-signals.psg",
+      "id": "emotion-subtext-signals",
+      "name": "Subtext Signals",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "tags": [
+        "emotion",
+        "subtext",
+        "signals",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/emotion-mood/temporal-mood-shifts.psg",
+      "relPath": "emotion-mood/temporal-mood-shifts.psg",
+      "id": "emotion-temporal-mood-shifts",
+      "name": "Temporal Mood Shifts",
+      "category": "emotion-mood",
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "tags": [
+        "emotion",
+        "temporal",
+        "shift",
+        "mood",
+        "shifts",
+        "emotion-mood"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/age-indicators.psg",
+      "relPath": "facial-features/age-indicators.psg",
+      "id": "facial-features-age-indicators",
+      "name": "Age Indicators Asset Fragment",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "age",
+        "indicators",
+        "facial-features"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/eye-descriptors-multi-aspect.psg",
+      "relPath": "facial-features/eye-descriptors-multi-aspect.psg",
+      "id": "face-eye-descriptors-multi",
+      "name": "Eye Descriptors Multi Aspect",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "face",
+        "eyes",
+        "multi-aspect",
+        "eye",
+        "descriptors",
+        "multi",
+        "aspect",
+        "facial-features"
+      ],
+      "nodeCount": 3,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/facial-hair-styles.psg",
+      "relPath": "facial-features/facial-hair-styles.psg",
+      "id": "facial-features-facial-hair-styles",
+      "name": "Facial Hair Styles Asset Fragment",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance",
+        "style-medium",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "facial",
+        "hair",
+        "styles",
+        "facial-features"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/facial-symmetry.psg",
+      "relPath": "facial-features/facial-symmetry.psg",
+      "id": "facial-features-facial-symmetry",
+      "name": "Facial Symmetry Asset Fragment",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "facial",
+        "symmetry",
+        "facial-features"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/iconic-features.psg",
+      "relPath": "facial-features/iconic-features.psg",
+      "id": "facial-features-iconic-features",
+      "name": "Iconic Features Asset Fragment",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "iconic",
+        "features",
+        "facial-features"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/makeup-accents.psg",
+      "relPath": "facial-features/makeup-accents.psg",
+      "id": "facial-features-makeup-accents",
+      "name": "Make-up Accents Asset Fragment",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "makeup",
+        "accents",
+        "facial-features"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/piercings-mods.psg",
+      "relPath": "facial-features/piercings-mods.psg",
+      "id": "facial-features-piercings-mods",
+      "name": "Piercings & Mods Asset Fragment",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "piercings",
+        "mods",
+        "facial-features"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/skin-undertones.psg",
+      "relPath": "facial-features/skin-undertones.psg",
+      "id": "facial-features-skin-undertones",
+      "name": "Skin Undertones Asset Fragment",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "skin",
+        "undertones",
+        "facial-features"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/smile-variations-contextual.psg",
+      "relPath": "facial-features/smile-variations-contextual.psg",
+      "id": "facial-features-smile-variations-contextual",
+      "name": "Contextual Smile Variations System",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "smile",
+        "variations",
+        "contextual",
+        "facial-features"
+      ],
+      "nodeCount": 3,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/facial-features/smile-variations-simple.psg",
+      "relPath": "facial-features/smile-variations-simple.psg",
+      "id": "face-smile-variations-simple",
+      "name": "Smile Variations Simple",
+      "category": "facial-features",
+      "slotTypes": [
+        "appearance",
+        "constraint"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "tone": [],
+      "tags": [
+        "face",
+        "smile",
+        "expression",
+        "variations",
+        "simple",
+        "facial-features"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-accessories.psg",
+      "relPath": "hair/hair-accessories.psg",
+      "id": "hair-hair-accessories",
+      "name": "Hair Accessories Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "accessories"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-colors-fantasy.psg",
+      "relPath": "hair/hair-colors-fantasy.psg",
+      "id": "hair-hair-colors-fantasy",
+      "name": "Fantasy Hair Colors Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "colors",
+        "fantasy"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-colors-natural.psg",
+      "relPath": "hair/hair-colors-natural.psg",
+      "id": "hair-hair-colors-natural",
+      "name": "Natural Hair Colors Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "colors",
+        "natural"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-cuts-neutral.psg",
+      "relPath": "hair/hair-cuts-neutral.psg",
+      "id": "hair-hair-cuts-neutral",
+      "name": "Gender-Neutral Hair Cuts Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "cuts",
+        "neutral"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-lengths.psg",
+      "relPath": "hair/hair-lengths.psg",
+      "id": "hair-hair-lengths",
+      "name": "Basic Hair Lengths Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "lengths"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-motion-cues.psg",
+      "relPath": "hair/hair-motion-cues.psg",
+      "id": "hair-hair-motion-cues",
+      "name": "Motion-Oriented Hair Cues Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "motion",
+        "cues"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-styles-feminine.psg",
+      "relPath": "hair/hair-styles-feminine.psg",
+      "id": "hair-hair-styles-feminine",
+      "name": "Feminine-Coded Hair Styles Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "styles",
+        "feminine"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-styles-masculine.psg",
+      "relPath": "hair/hair-styles-masculine.psg",
+      "id": "hair-hair-styles-masculine",
+      "name": "Masculine-Coded Hair Styles Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "styles",
+        "masculine"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-textures.psg",
+      "relPath": "hair/hair-textures.psg",
+      "id": "hair-hair-textures",
+      "name": "Hair Textures Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "textures"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/hair/hair-weathered-details.psg",
+      "relPath": "hair/hair-weathered-details.psg",
+      "id": "hair-hair-weathered-details",
+      "name": "Weathered Hair Details Asset Fragment",
+      "category": "hair",
+      "slotTypes": [
+        "appearance",
+        "setting"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "environment"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "hair",
+        "weathered",
+        "details"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/RomanCitizen.psg",
+      "relPath": "RomanCitizen.psg",
+      "id": "roman-citizen",
+      "name": "Roman Citizen",
+      "category": "extras",
+      "slotTypes": [
+        "subject",
+        "appearance",
+        "style-medium"
+      ],
+      "domains": [
+        "character",
+        "crowd"
+      ],
+      "roles": [
+        "archetype"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "tags": [
+        "roman",
+        "citizen",
+        "extras",
+        "archetype",
+        "RomanCitizen"
+      ],
+      "nodeCount": 12,
+      "qualityStatus": "rich",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/architectural-styles.psg",
+      "relPath": "setting-environment/architectural-styles.psg",
+      "id": "setting-architectural-styles",
+      "name": "Architectural Styles",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood",
+        "style-medium"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "environment",
+        "architecture",
+        "building",
+        "architectural",
+        "styles",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/atmospherics.psg",
+      "relPath": "setting-environment/atmospherics.psg",
+      "id": "setting-atmospherics",
+      "name": "Atmospherics",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [
+        "cinematic",
+        "moody"
+      ],
+      "tags": [
+        "environment",
+        "atmosphere",
+        "scene",
+        "atmospherics",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/backdrop-adjectives.psg",
+      "relPath": "setting-environment/backdrop-adjectives.psg",
+      "id": "setting-backdrop-adjectives",
+      "name": "Backdrop Adjectives",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "environment",
+        "backdrop",
+        "scene",
+        "adjectives",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/crowd-density.psg",
+      "relPath": "setting-environment/crowd-density.psg",
+      "id": "setting-crowd-density",
+      "name": "Crowd Density",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "crowd",
+        "building",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "environment",
+        "crowd",
+        "density",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/geology-touches.psg",
+      "relPath": "setting-environment/geology-touches.psg",
+      "id": "setting-geology-touches",
+      "name": "Geology Touches",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "vehicle",
+        "building"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "environment",
+        "geology",
+        "terrain",
+        "touches",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/lighting-moods.psg",
+      "relPath": "setting-environment/lighting-moods.psg",
+      "id": "setting-lighting-moods",
+      "name": "Lighting Moods",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [
+        "cinematic",
+        "moody"
+      ],
+      "tags": [
+        "environment",
+        "lighting",
+        "mood",
+        "moods",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/sound-snippets.psg",
+      "relPath": "setting-environment/sound-snippets.psg",
+      "id": "setting-sound-snippets",
+      "name": "Sound Snippets",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "vehicle",
+        "crowd",
+        "building"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "environment",
+        "sound",
+        "scene",
+        "snippets",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/spatial-relations.psg",
+      "relPath": "setting-environment/spatial-relations.psg",
+      "id": "setting-spatial-relations",
+      "name": "Spatial Relations",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "environment",
+        "spatial",
+        "composition",
+        "relations",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/temporal-markers.psg",
+      "relPath": "setting-environment/temporal-markers.psg",
+      "id": "setting-temporal-markers",
+      "name": "Temporal Markers",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "environment",
+        "time",
+        "temporal",
+        "markers",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/setting-environment/weather-snapshots.psg",
+      "relPath": "setting-environment/weather-snapshots.psg",
+      "id": "setting-weather-snapshots",
+      "name": "Weather Snapshots",
+      "category": "setting-environment",
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "tags": [
+        "environment",
+        "weather",
+        "climate",
+        "snapshots",
+        "setting-environment"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/airframes.psg",
+      "relPath": "vehicles-mobility/airframes.psg",
+      "id": "vehicles-mobility-airframes",
+      "name": "Airframes Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "airframes",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/call-sign-decals.psg",
+      "relPath": "vehicles-mobility/call-sign-decals.psg",
+      "id": "vehicles-mobility-call-sign-decals",
+      "name": "Call-Sign Decals Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "call",
+        "sign",
+        "decals",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/cockpit-vibes.psg",
+      "relPath": "vehicles-mobility/cockpit-vibes.psg",
+      "id": "vehicles-mobility-cockpit-vibes",
+      "name": "Cockpit Vibes Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "cockpit",
+        "vibes",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/damage-states.psg",
+      "relPath": "vehicles-mobility/damage-states.psg",
+      "id": "vehicles-mobility-damage-states",
+      "name": "Damage States Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "damage",
+        "states",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/ground-rigs.psg",
+      "relPath": "vehicles-mobility/ground-rigs.psg",
+      "id": "vehicles-mobility-ground-rigs",
+      "name": "Ground Rigs Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "ground",
+        "rigs",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/locomotion-traits.psg",
+      "relPath": "vehicles-mobility/locomotion-traits.psg",
+      "id": "vehicles-mobility-locomotion-traits",
+      "name": "Locomotion Traits Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance",
+        "action"
+      ],
+      "domains": [
+        "vehicle",
+        "object",
+        "character"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "locomotion",
+        "traits",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/paint-job-styles.psg",
+      "relPath": "vehicles-mobility/paint-job-styles.psg",
+      "id": "vehicles-mobility-paint-job-styles",
+      "name": "Paint-Job Styles Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance",
+        "style-medium"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "paint",
+        "job",
+        "styles",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/signature-exhaust.psg",
+      "relPath": "vehicles-mobility/signature-exhaust.psg",
+      "id": "vehicles-mobility-signature-exhaust",
+      "name": "Signature Exhaust Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "signature",
+        "exhaust",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/spacecraft-classes.psg",
+      "relPath": "vehicles-mobility/spacecraft-classes.psg",
+      "id": "vehicles-mobility-spacecraft-classes",
+      "name": "Spacecraft Classes Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "spacecraft",
+        "classes",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/vehicles-mobility/watercraft.psg",
+      "relPath": "vehicles-mobility/watercraft.psg",
+      "id": "vehicles-mobility-watercraft",
+      "name": "Watercraft Asset Fragment",
+      "category": "vehicles-mobility",
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "tone": [],
+      "tags": [
+        "watercraft",
+        "vehicles-mobility"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/aim-assist-modes.psg",
+      "relPath": "weapons-armor-combat/aim-assist-modes.psg",
+      "id": "weapons-armor-combat-aim-assist-modes",
+      "name": "Aim Assist Modes Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "aim",
+        "assist",
+        "modes",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/axe-techniques.psg",
+      "relPath": "weapons-armor-combat/axe-techniques.psg",
+      "id": "weapons-armor-combat-axe-techniques",
+      "name": "Axe Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "axe",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/barricade-shooting-positions.psg",
+      "relPath": "weapons-armor-combat/barricade-shooting-positions.psg",
+      "id": "weapons-armor-combat-barricade-shooting-positions",
+      "name": "Barricade Shooting Positions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "barricade",
+        "shooting",
+        "positions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/barricade-shooting-techniques.psg",
+      "relPath": "weapons-armor-combat/barricade-shooting-techniques.psg",
+      "id": "weapons-armor-combat-barricade-shooting-techniques",
+      "name": "Barricade Shooting Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "domains": [
+        "character",
+        "object",
+        "building"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "barricade",
+        "shooting",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/bayonet-techniques.psg",
+      "relPath": "weapons-armor-combat/bayonet-techniques.psg",
+      "id": "weapons-armor-combat-bayonet-techniques",
+      "name": "Bayonet Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "bayonet",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/bind-and-wind.psg",
+      "relPath": "weapons-armor-combat/bind-and-wind.psg",
+      "id": "weapons-armor-combat-bind-and-wind",
+      "name": "Bind and Wind Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "bind",
+        "and",
+        "wind",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/blade-forms.psg",
+      "relPath": "weapons-armor-combat/blade-forms.psg",
+      "id": "weapons-armor-combat-blade-forms",
+      "name": "Blade Forms Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "blade",
+        "forms",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/bow-draw-styles.psg",
+      "relPath": "weapons-armor-combat/bow-draw-styles.psg",
+      "id": "weapons-armor-combat-bow-draw-styles",
+      "name": "Bow Draw Styles Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "style-medium"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "bow",
+        "draw",
+        "styles",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/breach-techniques.psg",
+      "relPath": "weapons-armor-combat/breach-techniques.psg",
+      "id": "weapons-armor-combat-breach-techniques",
+      "name": "Breach Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "breach",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/close-quarters-techniques.psg",
+      "relPath": "weapons-armor-combat/close-quarters-techniques.psg",
+      "id": "weapons-armor-combat-close-quarters-techniques",
+      "name": "Close-Quarters Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "close",
+        "quarters",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/combat-damage-fx.psg",
+      "relPath": "weapons-armor-combat/combat-damage-fx.psg",
+      "id": "weapons-armor-combat-combat-damage-fx",
+      "name": "Combat Damage FX Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "combat",
+        "damage",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/counter-strikes.psg",
+      "relPath": "weapons-armor-combat/counter-strikes.psg",
+      "id": "weapons-armor-combat-counter-strikes",
+      "name": "Counter Strikes Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "counter",
+        "strikes",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/cover-transitions.psg",
+      "relPath": "weapons-armor-combat/cover-transitions.psg",
+      "id": "weapons-armor-combat-cover-transitions",
+      "name": "Cover Transitions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "cover",
+        "transitions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/cut-angle-sets.psg",
+      "relPath": "weapons-armor-combat/cut-angle-sets.psg",
+      "id": "weapons-armor-combat-cut-angle-sets",
+      "name": "Cut Angle Sets Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "cut",
+        "angle",
+        "sets",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/defensive-gear.psg",
+      "relPath": "weapons-armor-combat/defensive-gear.psg",
+      "id": "weapons-armor-combat-defensive-gear",
+      "name": "Defensive Gear Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "defensive",
+        "gear",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/disarm-maneuvers.psg",
+      "relPath": "weapons-armor-combat/disarm-maneuvers.psg",
+      "id": "weapons-armor-combat-disarm-maneuvers",
+      "name": "Disarm Maneuvers Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "disarm",
+        "maneuvers",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/distance-management.psg",
+      "relPath": "weapons-armor-combat/distance-management.psg",
+      "id": "weapons-armor-combat-distance-management",
+      "name": "Distance Management Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "distance",
+        "management",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/draw-techniques.psg",
+      "relPath": "weapons-armor-combat/draw-techniques.psg",
+      "id": "weapons-armor-combat-draw-techniques",
+      "name": "Draw Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "draw",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/dry-fire-progression.psg",
+      "relPath": "weapons-armor-combat/dry-fire-progression.psg",
+      "id": "weapons-armor-combat-dry-fire-progression",
+      "name": "Dry Fire Progression Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object",
+        "building"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "dry",
+        "fire",
+        "progression",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/edge-alignment-cues.psg",
+      "relPath": "weapons-armor-combat/edge-alignment-cues.psg",
+      "id": "weapons-armor-combat-edge-alignment-cues",
+      "name": "Edge Alignment Cues Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "edge",
+        "alignment",
+        "cues",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/evasion-moves.psg",
+      "relPath": "weapons-armor-combat/evasion-moves.psg",
+      "id": "weapons-armor-combat-evasion-moves",
+      "name": "Evasion Moves Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "evasion",
+        "moves",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/explosives.psg",
+      "relPath": "weapons-armor-combat/explosives.psg",
+      "id": "weapons-armor-combat-explosives",
+      "name": "Explosives Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "explosives",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/feint-patterns.psg",
+      "relPath": "weapons-armor-combat/feint-patterns.psg",
+      "id": "weapons-armor-combat-feint-patterns",
+      "name": "Feint Patterns Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "feint",
+        "patterns",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/finishing-moves.psg",
+      "relPath": "weapons-armor-combat/finishing-moves.psg",
+      "id": "weapons-armor-combat-finishing-moves",
+      "name": "Finishing Moves Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "finishing",
+        "moves",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/fire-and-maneuver.psg",
+      "relPath": "weapons-armor-combat/fire-and-maneuver.psg",
+      "id": "weapons-armor-combat-fire-and-maneuver",
+      "name": "Fire and Maneuver Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "fire",
+        "and",
+        "maneuver",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/grapple-entries.psg",
+      "relPath": "weapons-armor-combat/grapple-entries.psg",
+      "id": "weapons-armor-combat-grapple-entries",
+      "name": "Grapple Entries Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "grapple",
+        "entries",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/grip-variations.psg",
+      "relPath": "weapons-armor-combat/grip-variations.psg",
+      "id": "weapons-armor-combat-grip-variations",
+      "name": "Grip Variations Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "style-medium"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "grip",
+        "variations",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/guard-breakers.psg",
+      "relPath": "weapons-armor-combat/guard-breakers.psg",
+      "id": "weapons-armor-combat-guard-breakers",
+      "name": "Guard Breakers Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "guard",
+        "breakers",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/guard-postures.psg",
+      "relPath": "weapons-armor-combat/guard-postures.psg",
+      "id": "weapons-armor-combat-guard-postures",
+      "name": "Guard Postures Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "guard",
+        "postures",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/high-angle-elevation-compensation.psg",
+      "relPath": "weapons-armor-combat/high-angle-elevation-compensation.psg",
+      "id": "weapons-armor-combat-high-angle-elevation-compensation",
+      "name": "High-Angle/Elevation Compensation Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "high",
+        "angle",
+        "elevation",
+        "compensation",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/historical-techniques.psg",
+      "relPath": "weapons-armor-combat/historical-techniques.psg",
+      "id": "weapons-armor-combat-historical-techniques",
+      "name": "Historical Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "historical",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/holster-styles.psg",
+      "relPath": "weapons-armor-combat/holster-styles.psg",
+      "id": "weapons-armor-combat-holster-styles",
+      "name": "Holster Styles Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "style-medium"
+      ],
+      "domains": [
+        "character",
+        "object",
+        "vehicle"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "holster",
+        "styles",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/improvised-weapons.psg",
+      "relPath": "weapons-armor-combat/improvised-weapons.psg",
+      "id": "weapons-armor-combat-improvised-weapons",
+      "name": "Improvised Weapons Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "improvised",
+        "weapons",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/laser-aiming-devices.psg",
+      "relPath": "weapons-armor-combat/laser-aiming-devices.psg",
+      "id": "weapons-armor-combat-laser-aiming-devices",
+      "name": "Laser Aiming Devices (IR/Visible) Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "laser",
+        "aiming",
+        "devices",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/low-light-techniques.psg",
+      "relPath": "weapons-armor-combat/low-light-techniques.psg",
+      "id": "weapons-armor-combat-low-light-techniques",
+      "name": "Low-Light Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "lighting"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "low",
+        "light",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/magazine-management.psg",
+      "relPath": "weapons-armor-combat/magazine-management.psg",
+      "id": "weapons-armor-combat-magazine-management",
+      "name": "Magazine Management Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "magazine",
+        "management",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/malfunction-clearance-framework.psg",
+      "relPath": "weapons-armor-combat/malfunction-clearance-framework.psg",
+      "id": "weapons-armor-combat-malfunction-clearance-framework",
+      "name": "Malfunction Clearance Framework Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "malfunction",
+        "clearance",
+        "framework",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/malfunction-clears.psg",
+      "relPath": "weapons-armor-combat/malfunction-clears.psg",
+      "id": "weapons-armor-combat-malfunction-clears",
+      "name": "Malfunction Clears Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "malfunction",
+        "clears",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/martial-stances.psg",
+      "relPath": "weapons-armor-combat/martial-stances.psg",
+      "id": "weapons-armor-combat-martial-stances",
+      "name": "Martial Stances Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "martial",
+        "stances",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/mechanical-offset-techniques.psg",
+      "relPath": "weapons-armor-combat/mechanical-offset-techniques.psg",
+      "id": "weapons-armor-combat-mechanical-offset-techniques",
+      "name": "Mechanical Offset Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "mechanical",
+        "offset",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/muzzle-discipline.psg",
+      "relPath": "weapons-armor-combat/muzzle-discipline.psg",
+      "id": "weapons-armor-combat-muzzle-discipline",
+      "name": "Muzzle Discipline Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "muzzle",
+        "discipline",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/offhand-utilities.psg",
+      "relPath": "weapons-armor-combat/offhand-utilities.psg",
+      "id": "weapons-armor-combat-offhand-utilities",
+      "name": "Offhand Utilities Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "offhand",
+        "utilities",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/one-handed-weapon-manipulation.psg",
+      "relPath": "weapons-armor-combat/one-handed-weapon-manipulation.psg",
+      "id": "weapons-armor-combat-one-handed-weapon-manipulation",
+      "name": "One-Handed Weapon Manipulation Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "one",
+        "handed",
+        "weapon",
+        "manipulation",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/one-handed-weapon-use.psg",
+      "relPath": "weapons-armor-combat/one-handed-weapon-use.psg",
+      "id": "weapons-armor-combat-one-handed-weapon-use",
+      "name": "One-Handed Weapon Use Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "one",
+        "handed",
+        "weapon",
+        "use",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/parry-techniques.psg",
+      "relPath": "weapons-armor-combat/parry-techniques.psg",
+      "id": "weapons-armor-combat-parry-techniques",
+      "name": "Parry Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "parry",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/polearm-techniques.psg",
+      "relPath": "weapons-armor-combat/polearm-techniques.psg",
+      "id": "weapons-armor-combat-polearm-techniques",
+      "name": "Polearm Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "polearm",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/pommel-butt-strikes.psg",
+      "relPath": "weapons-armor-combat/pommel-butt-strikes.psg",
+      "id": "weapons-armor-combat-pommel-butt-strikes",
+      "name": "Pommel & Butt Strikes Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "pommel",
+        "butt",
+        "strikes",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/post-engagement-procedures.psg",
+      "relPath": "weapons-armor-combat/post-engagement-procedures.psg",
+      "id": "weapons-armor-combat-post-engagement-procedures",
+      "name": "Post-Engagement Procedures Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "post",
+        "engagement",
+        "procedures",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/presentation-drills.psg",
+      "relPath": "weapons-armor-combat/presentation-drills.psg",
+      "id": "weapons-armor-combat-presentation-drills",
+      "name": "Presentation Drills Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "presentation",
+        "drills",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/primary-to-secondary-transitions.psg",
+      "relPath": "weapons-armor-combat/primary-to-secondary-transitions.psg",
+      "id": "weapons-armor-combat-primary-to-secondary-transitions",
+      "name": "Primary-to-Secondary Transitions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "primary",
+        "secondary",
+        "transitions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/projectile-trails.psg",
+      "relPath": "weapons-armor-combat/projectile-trails.psg",
+      "id": "weapons-armor-combat-projectile-trails",
+      "name": "Projectile Trails Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "lighting"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "projectile",
+        "trails",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/range-estimation.psg",
+      "relPath": "weapons-armor-combat/range-estimation.psg",
+      "id": "weapons-armor-combat-range-estimation",
+      "name": "Range Estimation Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "range",
+        "estimation",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/ranged-stances.psg",
+      "relPath": "weapons-armor-combat/ranged-stances.psg",
+      "id": "weapons-armor-combat-ranged-stances",
+      "name": "Ranged Stances Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "ranged",
+        "stances",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/ranged-tech.psg",
+      "relPath": "weapons-armor-combat/ranged-tech.psg",
+      "id": "weapons-armor-combat-ranged-tech",
+      "name": "Ranged Tech Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "ranged",
+        "tech",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/ready-positions.psg",
+      "relPath": "weapons-armor-combat/ready-positions.psg",
+      "id": "weapons-armor-combat-ready-positions",
+      "name": "Ready Positions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "ready",
+        "positions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/recoil-management-cadence-control.psg",
+      "relPath": "weapons-armor-combat/recoil-management-cadence-control.psg",
+      "id": "weapons-armor-combat-recoil-management-cadence-control",
+      "name": "Recoil Management & Cadence Control Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "recoil",
+        "management",
+        "cadence",
+        "control",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/recoil-management.psg",
+      "relPath": "weapons-armor-combat/recoil-management.psg",
+      "id": "weapons-armor-combat-recoil-management",
+      "name": "Recoil Management Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "recoil",
+        "management",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/red-dot-vs-iron-indexing.psg",
+      "relPath": "weapons-armor-combat/red-dot-vs-iron-indexing.psg",
+      "id": "weapons-armor-combat-red-dot-vs-iron-indexing",
+      "name": "Red Dot vs Iron Sight Indexing Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "red",
+        "dot",
+        "iron",
+        "indexing",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/reload-techniques.psg",
+      "relPath": "weapons-armor-combat/reload-techniques.psg",
+      "id": "weapons-armor-combat-reload-techniques",
+      "name": "Reload Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "reload",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/room-entry-techniques.psg",
+      "relPath": "weapons-armor-combat/room-entry-techniques.psg",
+      "id": "weapons-armor-combat-room-entry-techniques",
+      "name": "Room Entry Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "room",
+        "entry",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/safety-selector-manipulation.psg",
+      "relPath": "weapons-armor-combat/safety-selector-manipulation.psg",
+      "id": "weapons-armor-combat-safety-selector-manipulation",
+      "name": "Safety Selector Manipulation Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "safety",
+        "selector",
+        "manipulation",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/scan-and-assess.psg",
+      "relPath": "weapons-armor-combat/scan-and-assess.psg",
+      "id": "weapons-armor-combat-scan-and-assess",
+      "name": "Scan and Assess Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "scan",
+        "and",
+        "assess",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/shield-techniques.psg",
+      "relPath": "weapons-armor-combat/shield-techniques.psg",
+      "id": "weapons-armor-combat-shield-techniques",
+      "name": "Shield Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "shield",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/shooting-on-the-move.psg",
+      "relPath": "weapons-armor-combat/shooting-on-the-move.psg",
+      "id": "weapons-armor-combat-shooting-on-the-move",
+      "name": "Shooting on the Move Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "shooting",
+        "the",
+        "move",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/shooting-positions.psg",
+      "relPath": "weapons-armor-combat/shooting-positions.psg",
+      "id": "weapons-armor-combat-shooting-positions",
+      "name": "Shooting Positions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "shooting",
+        "positions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/shooting-through-barriers.psg",
+      "relPath": "weapons-armor-combat/shooting-through-barriers.psg",
+      "id": "weapons-armor-combat-shooting-through-barriers",
+      "name": "Shooting Through Barriers Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "shooting",
+        "through",
+        "barriers",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/shoulder-transitions.psg",
+      "relPath": "weapons-armor-combat/shoulder-transitions.psg",
+      "id": "weapons-armor-combat-shoulder-transitions",
+      "name": "Shoulder Transitions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action",
+        "camera"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "shoulder",
+        "transitions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/sighting-methods.psg",
+      "relPath": "weapons-armor-combat/sighting-methods.psg",
+      "id": "weapons-armor-combat-sighting-methods",
+      "name": "Sighting Methods Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "sighting",
+        "methods",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/sling-techniques.psg",
+      "relPath": "weapons-armor-combat/sling-techniques.psg",
+      "id": "weapons-armor-combat-sling-techniques",
+      "name": "Sling Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "sling",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/stagger-and-stun-techniques.psg",
+      "relPath": "weapons-armor-combat/stagger-and-stun-techniques.psg",
+      "id": "weapons-armor-combat-stagger-and-stun-techniques",
+      "name": "Stagger and Stun Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "stagger",
+        "and",
+        "stun",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/stance-transitions.psg",
+      "relPath": "weapons-armor-combat/stance-transitions.psg",
+      "id": "weapons-armor-combat-stance-transitions",
+      "name": "Stance Transitions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "stance",
+        "transitions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/strike-combinations.psg",
+      "relPath": "weapons-armor-combat/strike-combinations.psg",
+      "id": "weapons-armor-combat-strike-combinations",
+      "name": "Strike Combinations Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "strike",
+        "combinations",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/suppressive-fire-patterns.psg",
+      "relPath": "weapons-armor-combat/suppressive-fire-patterns.psg",
+      "id": "weapons-armor-combat-suppressive-fire-patterns",
+      "name": "Suppressive Fire Patterns Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "suppressive",
+        "fire",
+        "patterns",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/suppressor-techniques.psg",
+      "relPath": "weapons-armor-combat/suppressor-techniques.psg",
+      "id": "weapons-armor-combat-suppressor-techniques",
+      "name": "Suppressor Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "suppressor",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/target-prioritization.psg",
+      "relPath": "weapons-armor-combat/target-prioritization.psg",
+      "id": "weapons-armor-combat-target-prioritization",
+      "name": "Target Prioritization Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "target",
+        "prioritization",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/target-transitions.psg",
+      "relPath": "weapons-armor-combat/target-transitions.psg",
+      "id": "weapons-armor-combat-target-transitions",
+      "name": "Target Transitions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "target",
+        "transitions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/tempo-control.psg",
+      "relPath": "weapons-armor-combat/tempo-control.psg",
+      "id": "weapons-armor-combat-tempo-control",
+      "name": "Tempo Control Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "tempo",
+        "control",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/throwing-techniques.psg",
+      "relPath": "weapons-armor-combat/throwing-techniques.psg",
+      "id": "weapons-armor-combat-throwing-techniques",
+      "name": "Throwing Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "throwing",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/trigger-control-techniques.psg",
+      "relPath": "weapons-armor-combat/trigger-control-techniques.psg",
+      "id": "weapons-armor-combat-trigger-control-techniques",
+      "name": "Trigger Control Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "trigger",
+        "control",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/two-weapon-techniques.psg",
+      "relPath": "weapons-armor-combat/two-weapon-techniques.psg",
+      "id": "weapons-armor-combat-two-weapon-techniques",
+      "name": "Two-Weapon Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "two",
+        "weapon",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/use-of-cover-vs-concealment.psg",
+      "relPath": "weapons-armor-combat/use-of-cover-vs-concealment.psg",
+      "id": "weapons-armor-combat-use-of-cover-vs-concealment",
+      "name": "Use of Cover vs Concealment Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "use",
+        "cover",
+        "concealment",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/victory-gestures.psg",
+      "relPath": "weapons-armor-combat/victory-gestures.psg",
+      "id": "weapons-armor-combat-victory-gestures",
+      "name": "Victory Gestures Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "victory",
+        "gestures",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/weapon-flourishes.psg",
+      "relPath": "weapons-armor-combat/weapon-flourishes.psg",
+      "id": "weapons-armor-combat-weapon-flourishes",
+      "name": "Weapon Flourishes Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "weapon",
+        "flourishes",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/weapon-indexing.psg",
+      "relPath": "weapons-armor-combat/weapon-indexing.psg",
+      "id": "weapons-armor-combat-weapon-indexing",
+      "name": "Weapon Indexing Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "weapon",
+        "indexing",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/weapon-personalization.psg",
+      "relPath": "weapons-armor-combat/weapon-personalization.psg",
+      "id": "weapons-armor-combat-weapon-personalization",
+      "name": "Weapon Personalization Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "weapon",
+        "personalization",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/weapon-retention-and-clinch-fighting.psg",
+      "relPath": "weapons-armor-combat/weapon-retention-and-clinch-fighting.psg",
+      "id": "weapons-armor-combat-weapon-retention-and-clinch-fighting",
+      "name": "Weapon Retention & Clinch Fighting Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "weapon",
+        "retention",
+        "and",
+        "clinch",
+        "fighting",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/weapon-retention-techniques.psg",
+      "relPath": "weapons-armor-combat/weapon-retention-techniques.psg",
+      "id": "weapons-armor-combat-weapon-retention-techniques",
+      "name": "Weapon Retention Techniques Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "weapon",
+        "retention",
+        "techniques",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/weapon-transitions.psg",
+      "relPath": "weapons-armor-combat/weapon-transitions.psg",
+      "id": "weapons-armor-combat-weapon-transitions",
+      "name": "Weapon Transitions Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "weapon",
+        "transitions",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/wind-and-drop-compensation.psg",
+      "relPath": "weapons-armor-combat/wind-and-drop-compensation.psg",
+      "id": "weapons-armor-combat-wind-and-drop-compensation",
+      "name": "Wind and Drop Compensation Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "wind",
+        "and",
+        "drop",
+        "compensation",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    },
+    {
+      "path": "/assets/library/weapons-armor-combat/zeroing-procedures.psg",
+      "relPath": "weapons-armor-combat/zeroing-procedures.psg",
+      "id": "weapons-armor-combat-zeroing-procedures",
+      "name": "Zeroing Procedures Asset Fragment",
+      "category": "weapons-armor-combat",
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "domains": [
+        "character",
+        "object"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support",
+        "branch-extension"
+      ],
+      "tone": [],
+      "tags": [
+        "zeroing",
+        "procedures",
+        "weapons-armor-combat"
+      ],
+      "nodeCount": 1,
+      "qualityStatus": "ok",
+      "parseOk": true,
+      "parseError": null,
+      "duplicateGroup": null,
+      "previouslyIndexed": true,
+      "indexEligible": true,
+      "recommendedAction": "keep-indexed",
+      "userCreated": false,
+      "metadataCoverage": {
+        "hasDescription": true,
+        "hasSlotTypes": true,
+        "hasDomains": true,
+        "hasRoles": true
+      }
+    }
+  ]
+}

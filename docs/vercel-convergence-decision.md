@@ -1,64 +1,62 @@
 # Vercel Convergence Decision
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-07-14_ (work-loop **C5**)
 
-This note exists to remove ambiguity around Vercel for the MVP branch.
+This note removes ambiguity around Vercel vs the canonical Fastify runtime.
 
 ## Current truth
 
-- The canonical backend runtime is [server/src/index.ts](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/server/src/index.ts).
-- The root Vercel surface is still configured by [vercel.json](/mnt/c/Users/Owner/CascadeProjects/prompt-spaghetti/vercel.json) as a legacy API-only deployment around the `api/` directory.
-- The frontend build/deploy path is currently better represented by Netlify plus `client/public/_redirects`.
-- The canonical hosted backend origin for the current split deploy model is:
-  - `https://prompt-spaghetti-client.vercel.app`
+| Surface | Role |
+| --- | --- |
+| `server/src/index.ts` | Canonical **local/dev** Fastify backend (Node ≥ 20) |
+| `api/**` + root `vercel.json` | **Hosted** backend (serverless); production `/api/*` target |
+| Netlify + `client/public/_redirects` | Frontend; proxies `/api/*` to Vercel origin |
+| Client `Epic1ExecutionEngine` | Graph preview/export (not on Vercel/Fastify) |
 
-## Decision for MVP
+Hosted backend origin (proxy model):
 
-Do not migrate Vercel to the canonical Fastify runtime during MVP closeout.
+`https://prompt-spaghetti-client.vercel.app`
 
-Reason:
+## Decision (still in force)
 
-- it changes deployment architecture, not just implementation
-- current remote verification is blocked by invalid Vercel CLI credentials
-- the MVP already has a working deploy check through:
-  - `pnpm run validate:artifacts:active`
-  - `pnpm run validate:deploy:active`
-  - `pnpm run build:netlify`
-  - `pnpm run build:vercel-api`
+**Do not migrate Vercel onto Fastify as part of routine product work** until:
+
+1. Product/ops explicitly choose a convergence option below, and  
+2. Deploy credentials and a cutover plan exist.
+
+Reasons unchanged from MVP freeze:
+
+- architecture change, not a small implementation tweak
+- dual surfaces already work for Lab-style deploys if docs stay honest
+- local Fastify can iterate (e.g. sandbox hardening) without forcing a prod cutover
 
 ## What to say externally
 
-For MVP handoff:
+- Frontend: Netlify-style static client  
+- Backend: Vercel `api/**` (or equivalent)  
+- Dev backend: Fastify in `server/src`  
+- Graph execution: **browser / client engine**
 
-- frontend deploy target: Netlify-style static client build
-- backend deploy target: current Vercel/backend surface or equivalent server hosting
-- canonical runtime in code: `server/src/index.ts`
+Do **not** say Vercel already runs Fastify or that deploy is fully unified.
 
-Do not say:
+## Post-freeze options
 
-- that Vercel already serves the canonical Fastify runtime
-- that deployment has been fully unified
+| # | Option | When to pick |
+| --- | --- | --- |
+| 1 | **Keep Vercel backend-only** — treat `api/**` as permanent hosted API; mirror critical route policy there | Lowest ops risk; accept dual implementation |
+| 2 | **Migrate Vercel → Fastify** — replace serverless with Fastify (or adapter); one runtime | Want one codebase for local + prod API |
+| 3 | **Move backend off Vercel** — Netlify static + Fly/Railway/etc. for Fastify | Prefer long-running Node over serverless |
 
-## Post-MVP options
+**Recommendation until a written choice is made:** Option behaviorally **#1** (honest dual surface), with optional later move to **#2** when credentials and appetite exist.
 
-Only after MVP handoff, choose one:
+## Interaction with local-only routes
 
-1. Keep Vercel backend-only
-- Treat `api/` as the supported hosted backend surface.
-- Update docs so the legacy serverless path becomes explicit instead of accidental.
+Routes such as `/api/local-image/*` and `/api/local-fragments/*` are Fastify
+dev/demo lanes (loopback-gated). They are **not** part of the hosted Vercel story
+and must not be required for production frontend flows.
 
-2. Migrate Vercel to canonical runtime
-- Replace the legacy `api/` surface with a deployment that serves `server/src/index.ts`.
-- Update `vercel.json`, env handling, health checks, and routing accordingly.
+## Related
 
-3. Move backend off Vercel
-- Keep Netlify/static frontend and deploy the Fastify runtime somewhere more natural.
-- Leave Vercel out of the active deployment story.
-
-## Recommendation
-
-For MVP:
-
-- freeze Vercel architecture changes
-- keep the deployment story honest
-- defer convergence until product direction settles and Vercel credentials are available
+- [`deployment-current-state.md`](./deployment-current-state.md)
+- [`server-route-access-policy.md`](./server-route-access-policy.md)
+- [`ACTIVE_SURFACE.md`](../ACTIVE_SURFACE.md)

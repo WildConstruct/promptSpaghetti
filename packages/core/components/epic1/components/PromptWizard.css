@@ -132,6 +132,12 @@
   font-size: 14px;
 }
 
+.prompt-wizard-assembled-hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: rgba(241, 246, 249, 0.55);
+}
+
 .prompt-wizard-tips {
   margin-top: 20px;
   padding: 15px;
@@ -158,8 +164,32 @@
   margin: 5px 0;
 }
 
+.prompt-wizard-secondary {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8edf4;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.prompt-wizard-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.prompt-wizard-secondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .prompt-wizard-footer {
   padding: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
   border-top: 1px solid #3a3a3a;
   display: flex;
   justify-content: flex-end;

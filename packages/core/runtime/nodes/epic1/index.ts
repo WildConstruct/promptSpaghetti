@@ -12,6 +12,7 @@ import { WeightedChoiceNode } from './WeightedChoiceNode';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
+import { SubPsgNode } from './SubPsgNode';
 import { BaseInlineEditableNode } from './BaseInlineEditableNode';
 import { createNodeFromData } from './nodeFactory';
 
@@ -55,6 +56,14 @@ export type {
 
 export { OutputNode } from './OutputNode';
 
+export { TemplateNode } from './TemplateNode';
+
+export type { TemplateConfig } from './TemplateNode';
+
+export { SubPsgNode } from './SubPsgNode';
+
+export type { SubPsgConfig } from './SubPsgNode';
+
 // Node type enum (moved to separate file to avoid circular deps)
 export { Epic1NodeType } from './nodeTypes';
 
@@ -85,6 +94,18 @@ export function isVariableNode(
 
 export function isOutputNode(node: BaseInlineEditableNode): node is OutputNode {
   return node.getNodeType() === Epic1NodeType.Output;
+}
+
+export function isTemplateNode(
+  node: BaseInlineEditableNode
+): node is TemplateNode {
+  return node.getNodeType() === Epic1NodeType.Template;
+}
+
+export function isSubPsgNode(
+  node: BaseInlineEditableNode
+): node is SubPsgNode {
+  return node.getNodeType() === Epic1NodeType.SubPSG;
 }
 
 // Execution engine exports

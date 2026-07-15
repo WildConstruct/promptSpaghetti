@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useMemo } from 'react';
 import { Node, Edge, ReactFlowInstance } from 'reactflow';
+import { createNodeId } from '../utils/nodeDefaults';
 
 interface KeyboardShortcut {
   key: string;
@@ -105,7 +106,9 @@ export function useGraphKeyboardShortcuts(
 
       // Paste nodes with offset
       clipNodes.forEach((node: Node) => {
-        const newId = `${node.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const newId = createNodeId(
+          typeof node.type === 'string' ? node.type : undefined
+        );
         idMap.set(node.id, newId);
 
         pastedNodes.push({

@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "agent-fragment-shard",
   "groupBy": "category",
   "key": "body-silhouette",
-  "generatedAt": "2026-03-09T16:43:25.683Z",
+  "generatedAt": "2026-07-15T00:54:15.174Z",
   "totalFragments": 10,
   "fragments": [
     {
@@ -11,10 +11,14 @@
       "name": "Accessory Silhouettes",
       "path": "/assets/library/body-silhouette/accessory-silhouettes.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Accessory Silhouettes (body-silhouette).",
       "tags": [
         "body",
         "silhouette",
-        "accessories"
+        "accessories",
+        "accessory",
+        "silhouettes",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -25,12 +29,18 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -43,10 +53,12 @@
       "name": "Assistive Gear",
       "path": "/assets/library/body-silhouette/assistive-gear.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Assistive Gear (body-silhouette).",
       "tags": [
         "body",
         "gear",
-        "assistive"
+        "assistive",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -54,15 +66,22 @@
       ],
       "domains": [
         "character",
-        "creature"
+        "creature",
+        "object"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -75,10 +94,12 @@
       "name": "Athletic Markers",
       "path": "/assets/library/body-silhouette/athletic-markers.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Athletic Markers (body-silhouette).",
       "tags": [
         "body",
         "athletic",
-        "markers"
+        "markers",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -89,13 +110,18 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice"
       ],
       "tone": [
         "heroic"
+      ],
+      "slotTypes": [
+        "appearance",
+        "subject"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -109,10 +135,12 @@
       "name": "Body Types",
       "path": "/assets/library/body-silhouette/body-types.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Body Types (body-silhouette).",
       "tags": [
         "body",
         "types",
-        "physique"
+        "physique",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -123,12 +151,18 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -141,10 +175,12 @@
       "name": "Clothing Fit",
       "path": "/assets/library/body-silhouette/clothing-fit.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Clothing Fit (body-silhouette).",
       "tags": [
         "body",
         "clothing",
-        "fit"
+        "fit",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -155,12 +191,17 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -173,10 +214,13 @@
       "name": "Gesture Starters",
       "path": "/assets/library/body-silhouette/gesture-starters.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Gesture Starters (body-silhouette).",
       "tags": [
         "body",
         "gesture",
-        "pose"
+        "pose",
+        "starters",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -187,13 +231,20 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice",
         "branch-lane"
       ],
       "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -206,10 +257,12 @@
       "name": "Movement Quality",
       "path": "/assets/library/body-silhouette/movement-quality.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Movement Quality (body-silhouette).",
       "tags": [
         "body",
         "movement",
-        "quality"
+        "quality",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -220,13 +273,19 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice",
         "branch-lane"
       ],
       "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -239,10 +298,13 @@
       "name": "Posture Keys",
       "path": "/assets/library/body-silhouette/posture-keys.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Posture Keys (body-silhouette).",
       "tags": [
         "body",
         "posture",
-        "silhouette"
+        "silhouette",
+        "keys",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -253,12 +315,17 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -271,10 +338,12 @@
       "name": "Scars Tattoos",
       "path": "/assets/library/body-silhouette/scars-tattoos.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Scars Tattoos (body-silhouette).",
       "tags": [
         "body",
         "scars",
-        "tattoos"
+        "tattoos",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -282,10 +351,13 @@
       ],
       "domains": [
         "character",
-        "creature"
+        "creature",
+        "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice",
@@ -293,6 +365,10 @@
       ],
       "tone": [
         "gritty"
+      ],
+      "slotTypes": [
+        "appearance",
+        "subject"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -306,10 +382,13 @@
       "name": "Stage Presence",
       "path": "/assets/library/body-silhouette/stage-presence.psg",
       "category": "body-silhouette",
+      "description": "Library fragment: Stage Presence (body-silhouette).",
       "tags": [
         "body",
         "presence",
-        "performance"
+        "performance",
+        "stage",
+        "body-silhouette"
       ],
       "roles": [
         "modifier",
@@ -320,7 +399,8 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice",
@@ -328,6 +408,10 @@
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "appearance",
+        "subject"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",

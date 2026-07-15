@@ -12,6 +12,7 @@ export interface GraphOutlinePanelProps {
 /** Friendly labels for the node types we surface. */
 const TYPE_LABELS: Record<string, string> = {
   textBlock: 'Text Block',
+  template: 'Template',
   weightedChoice: 'Weighted Choice',
   concat: 'Merge',
   variable: 'Variable',

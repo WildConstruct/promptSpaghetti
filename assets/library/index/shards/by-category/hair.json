@@ -1,0 +1,392 @@
+{
+  "version": "1.1.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "category",
+  "key": "hair",
+  "generatedAt": "2026-07-15T00:54:15.174Z",
+  "totalFragments": 10,
+  "fragments": [
+    {
+      "id": "hair-hair-lengths",
+      "name": "Basic Hair Lengths Asset Fragment",
+      "path": "/assets/library/hair/hair-lengths.psg",
+      "category": "hair",
+      "description": "Hair length descriptors from buzzed to floor-length",
+      "tags": [
+        "hair",
+        "lengths"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-colors-fantasy",
+      "name": "Fantasy Hair Colors Asset Fragment",
+      "path": "/assets/library/hair/hair-colors-fantasy.psg",
+      "category": "hair",
+      "description": "Unnatural and fantasy hair color options",
+      "tags": [
+        "hair",
+        "colors",
+        "fantasy"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-styles-feminine",
+      "name": "Feminine-Coded Hair Styles Asset Fragment",
+      "path": "/assets/library/hair/hair-styles-feminine.psg",
+      "category": "hair",
+      "description": "Traditionally feminine hair styling options",
+      "tags": [
+        "hair",
+        "styles",
+        "feminine"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-cuts-neutral",
+      "name": "Gender-Neutral Hair Cuts Asset Fragment",
+      "path": "/assets/library/hair/hair-cuts-neutral.psg",
+      "category": "hair",
+      "description": "Hair cuts and styles that work across gender presentations",
+      "tags": [
+        "hair",
+        "cuts",
+        "neutral"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-accessories",
+      "name": "Hair Accessories Asset Fragment",
+      "path": "/assets/library/hair/hair-accessories.psg",
+      "category": "hair",
+      "description": "Hair decoration and accessory options",
+      "tags": [
+        "hair",
+        "accessories"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-textures",
+      "name": "Hair Textures Asset Fragment",
+      "path": "/assets/library/hair/hair-textures.psg",
+      "category": "hair",
+      "description": "Hair texture patterns from straight to kinky coils",
+      "tags": [
+        "hair",
+        "textures"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-styles-masculine",
+      "name": "Masculine-Coded Hair Styles Asset Fragment",
+      "path": "/assets/library/hair/hair-styles-masculine.psg",
+      "category": "hair",
+      "description": "Traditionally masculine hair styling options",
+      "tags": [
+        "hair",
+        "styles",
+        "masculine"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-motion-cues",
+      "name": "Motion-Oriented Hair Cues Asset Fragment",
+      "path": "/assets/library/hair/hair-motion-cues.psg",
+      "category": "hair",
+      "description": "Dynamic hair movement and motion descriptors",
+      "tags": [
+        "hair",
+        "motion",
+        "cues"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-colors-natural",
+      "name": "Natural Hair Colors Asset Fragment",
+      "path": "/assets/library/hair/hair-colors-natural.psg",
+      "category": "hair",
+      "description": "Natural hair color variations found in human populations",
+      "tags": [
+        "hair",
+        "colors",
+        "natural"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-weathered-details",
+      "name": "Weathered Hair Details Asset Fragment",
+      "path": "/assets/library/hair/hair-weathered-details.psg",
+      "category": "hair",
+      "description": "Environmental and activity-based hair conditions",
+      "tags": [
+        "hair",
+        "weathered",
+        "details"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "environment"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "setting"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    }
+  ]
+}

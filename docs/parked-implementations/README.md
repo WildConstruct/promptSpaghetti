@@ -1,15 +1,14 @@
 # Parked Node Implementations — Reference & Revival Guide
 
-> **Status:** these node types are **not on the product surface.** They are not in
-> `AnyNodeSchema`, not in the node registry, and not executed by the canonical
-> engine. This document preserves their **design intent and algorithms** so they
-> can be revived deliberately later, because the source files themselves have
-> **bit-rotted** (missing braces, `string` where `string[]` belongs, JSDoc spliced
-> mid-declaration — almost certainly damage from the now-deleted `scripts/maintenance/`
-> auto-fixers). Treat the code as a lossy artifact; treat **this doc as the spec.**
+> **Status:** these node types are **not on the product surface.** Source
+> implementations were **deleted in C1 P1** (2026-07). This document is now the
+> **only in-repo home** for design intent and algorithms so they can be revived
+> deliberately as **native Epic1 nodes** later. Do not reintroduce files on the
+> old AdvancedRuntime product path.
 >
-> See also: [`docs/engine-unification-design.md`](../engine-unification-design.md)
-> (why the advanced tier was retired) and the note in `packages/core/graphSchema.ts`.
+> See also: [`docs/parked-tier-disposition.md`](../parked-tier-disposition.md),
+> [`docs/engine-unification-design.md`](../engine-unification-design.md), and
+> `packages/core/graphSchema.ts`.
 
 ## Why these are parked
 
@@ -19,17 +18,13 @@ which executes a small, deliberately simple node vocabulary: `TextBlock`,
 `WeightedChoice`, `Concat`, `Variable`, `Output`.
 
 The nodes below were built on an **older, parallel runtime** —
-`AdvancedRuntimeNode` + `AdvancedExecutionContext` (`runtime/advanced.ts`) plus the
-typed-IO framework (`runtime/io-system.ts`). That runtime is **not interoperable**
-with the Epic1 engine: the engine cannot execute an `AdvancedRuntimeNode`. So these
-nodes are stranded — present in the tree, reachable by nothing.
+`AdvancedRuntimeNode` + `AdvancedExecutionContext` (`runtime/advanced.ts`) plus a
+typed-IO framework (`io-system.ts`, now deleted). That runtime is **not
+interoperable** with the Epic1 engine.
 
-**Important — do not delete `runtime/advanced.ts`.** Unlike the nodes, `advanced.ts`
-is **live**: the `@promptscape/custom-node-sdk` package depends on it
-(`CustomNodeAdapter extends AdvancedRuntimeNode`; `SecurityManager`, `MockContext`,
-`TestHarness` all consume `AdvancedExecutionContext`). It is exported from the core
-barrel and is part of the active surface. Only the **concrete advanced nodes** and
-**`io-system.ts`** (which only those nodes use) are dead weight.
+**Important — do not delete `runtime/advanced.ts`.** It remains **live**: the
+`@promptscape/custom-node-sdk` package depends on it. Concrete advanced nodes and
+`io-system.ts` were removed in C1 P1.
 
 ## Revival principle
 
@@ -109,29 +104,27 @@ generation.
 
 ## Multimodal remnants (separate, Epic 8)
 
-`runtime/nodes/ImageGenerationNode.ts` (~375 ln) is orphaned, and its siblings
-(`AudioProcessingNode`, `VideoProcessingNode`, `CrossModalNode`) were already
-source-deleted — only stale `.d.ts`/maps lingered (cleaned up in the forensic pass).
-These are a different feature line (genAI multimodal) with no live consumers. No
-revival design captured here; start fresh against current model APIs if pursued.
+`ImageGenerationNode` and sibling multimodal stubs were deleted (forensic pass +
+C1 P1). No revival design captured here; start fresh against current model APIs
+if pursued. Optional local image sandbox is a separate Fastify/Comfy lane.
 
 ---
 
-## Inventory & disposition
+## Inventory & disposition (post C1 P1)
 
-| Path | Lines | Live? | Disposition |
-|---|---|---|---|
-| `runtime/advanced.ts` | 330 | **Yes (custom-node-sdk)** | **Keep.** Do not delete. |
-| `runtime/io-system.ts` | 518 | No (only parked nodes) | Delete with the nodes, or keep if a future advanced node will use typed IO. |
-| `runtime/nodes/WeightedAdvanced.ts` | 267 | No | Mined → see live `weightDistribution.ts`. Safe to delete after. |
-| `runtime/nodes/Conditional.ts` | 336 | No | Captured. Delete or keep-as-reference. |
-| `runtime/nodes/Sequential.ts` | 307 | No | Captured. Delete or keep-as-reference. |
-| `runtime/nodes/Markov.ts` | 398 | No | Captured. Delete or keep-as-reference. |
-| `runtime/nodes/ImageGenerationNode.ts` | 375 | No | Orphaned Epic 8 remnant. |
-| `nodeSchemas.ts` advanced schemas | ~60 | No | Delete with the nodes. |
+| Path | Status |
+|---|---|
+| `runtime/advanced.ts` | **Kept** — custom-node-sdk |
+| `runtime/io-system.ts` | **Deleted** C1 P1 |
+| `runtime/nodes/WeightedAdvanced.ts` | **Deleted** C1 P1 (mined → `epic1/weightDistribution.ts`) |
+| `runtime/nodes/Conditional.ts` | **Deleted** C1 P1 — algorithms above |
+| `runtime/nodes/Sequential.ts` | **Deleted** C1 P1 — algorithms above |
+| `runtime/nodes/Markov.ts` | **Deleted** C1 P1 — algorithms above |
+| `runtime/nodes/ImageGenerationNode.ts` | **Deleted** C1 P1 |
+| Multimodal orphan `.d.ts` stubs | **Deleted** C1 P1 |
+| `nodeSchemas.ts` advanced + Subject/Action | **Stripped** C1 P1 |
 
-> Everything above is recoverable from git history regardless — this doc exists so the
-> *intent* survives even when the files don't.
+Recoverable from **git history**. This doc remains the revival design source.
 
 ---
 

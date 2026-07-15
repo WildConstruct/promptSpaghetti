@@ -13,9 +13,29 @@
       "buildings",
       "urban",
       "structures"
+    ],
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
     ]
   },
   "nodes": [
+    {
+      "id": "architectural-styles-main-prefix",
+      "type": "TextBlock",
+      "x": -180,
+      "y": 100,
+      "value": "set in",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "set in",
+        "value": "set in"
+      }
+    },
     {
       "id": "architectural-styles-main",
       "type": "WeightedChoice",
@@ -76,16 +96,45 @@
         "region": "slate-gray"
       },
       "name": "Architectural Styles"
+    },
+    {
+      "id": "architectural-styles-main-output",
+      "type": "Output",
+      "x": 420,
+      "y": 100,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "architectural-styles-main-prefix-to-architectural-styles-main",
+      "source": "architectural-styles-main-prefix",
+      "target": "architectural-styles-main",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "architectural-styles-main-to-architectural-styles-main-output",
+      "source": "architectural-styles-main",
+      "target": "architectural-styles-main-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "region-architectural-styles",
       "name": "Region 1",
       "color": "slate-gray",
       "nodes": [
-        "architectural-styles-main"
+        "architectural-styles-main",
+        "architectural-styles-main-prefix",
+        "architectural-styles-main-output"
       ]
     }
   ]

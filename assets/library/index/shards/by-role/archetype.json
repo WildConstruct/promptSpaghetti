@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "agent-fragment-shard",
   "groupBy": "role",
   "key": "archetype",
-  "generatedAt": "2026-03-09T16:43:25.683Z",
+  "generatedAt": "2026-07-15T00:54:15.174Z",
   "totalFragments": 1,
   "fragments": [
     {
@@ -16,7 +16,8 @@
         "roman",
         "citizen",
         "extras",
-        "archetype"
+        "archetype",
+        "RomanCitizen"
       ],
       "roles": [
         "archetype"
@@ -35,6 +36,11 @@
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "subject",
+        "appearance",
+        "style-medium"
       ],
       "nodeCount": 12,
       "preferredInsertion": "free-place",

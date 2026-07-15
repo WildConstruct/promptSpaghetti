@@ -413,6 +413,44 @@ class NodeTypeRegistry {
       tags: ['text', 'static', 'content']
     });
 
+    // Template / slot node (sentence skeleton)
+    this.register({
+      id: 'template',
+      displayName: 'Template',
+      category: NodeCategory.TEXT,
+      version: '1.0.0',
+      psgType: 'Template',
+      reactFlowType: 'template',
+      className: 'TemplateNode',
+      description: 'Sentence skeleton with {slot} inputs',
+      documentation:
+        'Fills a human-authored template string from named slot handles using fillTemplate.',
+      icon: '🧾',
+      inputs: [
+        {
+          id: 'slots',
+          label: 'Slots',
+          type: 'input',
+          dataType: 'string',
+          multiple: true
+        }
+      ],
+      outputs: [
+        { id: 'main', label: 'Output', type: 'output', dataType: 'string' }
+      ],
+      configOptions: [
+        {
+          id: 'template',
+          label: 'Template',
+          type: 'text',
+          defaultValue: 'a {subject} in {setting}',
+          required: true
+        }
+      ],
+      isExecutable: true,
+      tags: ['text', 'template', 'slots', 'natural-language']
+    });
+
     // Variable Node
     this.register({
       id: 'variable',
@@ -461,7 +499,9 @@ class NodeTypeRegistry {
       tags: ['variable', 'state', 'memory']
     });
 
-    // Include Node
+    // Include — format-only (B4 decision). Not on palette; not executed by Epic1.
+    // Fragment reuse is authoring-time (Library/Explore), not runtime expansion.
+    // See docs/include-node-decision.md
     this.register({
       id: 'include',
       displayName: 'Include',
@@ -470,8 +510,9 @@ class NodeTypeRegistry {
       psgType: 'Include',
       reactFlowType: 'include',
       className: 'IncludeNode',
-      description: 'Include another graph',
-      documentation: 'Includes and executes another graph as a subgraph.',
+      description: 'Format-only fragment reference (not executed)',
+      documentation:
+        'Retained for PSG/schema forward-compat. Epic1 does not expand Include at runtime. Use Library/Explore for fragments. See docs/include-node-decision.md.',
       icon: '📥',
       inputs: [
         { id: 'target', label: 'Input', type: 'input', dataType: 'any' }
@@ -487,49 +528,49 @@ class NodeTypeRegistry {
           required: true
         }
       ],
-      isExecutable: true,
-      tags: ['include', 'subgraph', 'import']
+      isExecutable: false,
+      tags: ['include', 'subgraph', 'import', 'format-only']
     });
 
-    // Subject Node
+    // Sub PSG — nested precomp document reference (docs/nested-psg-precomp-plan.md)
     this.register({
-      id: 'subject',
-      displayName: 'Subject',
-      category: NodeCategory.TEXT,
+      id: 'subPsg',
+      displayName: 'Sub PSG',
+      category: NodeCategory.FLOW,
       version: '1.0.0',
-      psgType: 'Subject',
-      reactFlowType: 'subject',
-      className: 'SubjectNode',
-      description: 'Character or subject generator',
-      documentation: 'Generates character descriptions or subjects.',
-      icon: '👤',
-      inputs: [],
+      psgType: 'SubPSG',
+      reactFlowType: 'subPsg',
+      className: 'SubPsgNode',
+      description: 'Execute an embedded nested PSG document (precomp)',
+      documentation:
+        'References a child PSG composition by documentId. Runtime runs the child graph and returns its Output. Double-click opens the child in a document tab.',
+      icon: '📁',
+      inputs: [
+        { id: 'target', label: 'Input', type: 'input', dataType: 'any' }
+      ],
       outputs: [
         { id: 'main', label: 'Output', type: 'output', dataType: 'string' }
       ],
-      isExecutable: true,
-      tags: ['character', 'subject', 'person']
-    });
-
-    // Action Node
-    this.register({
-      id: 'action',
-      displayName: 'Action',
-      category: NodeCategory.TEXT,
-      version: '1.0.0',
-      psgType: 'Action',
-      reactFlowType: 'action',
-      className: 'ActionNode',
-      description: 'Action or verb generator',
-      documentation: 'Generates actions or verbs for characters.',
-      icon: '🎬',
-      inputs: [],
-      outputs: [
-        { id: 'main', label: 'Output', type: 'output', dataType: 'string' }
+      configOptions: [
+        {
+          id: 'documentId',
+          label: 'Document ID',
+          type: 'text',
+          required: true
+        },
+        {
+          id: 'outputMode',
+          label: 'Output Mode',
+          type: 'select',
+          defaultValue: 'first-output',
+          options: [{ value: 'first-output', label: 'First Output node' }]
+        }
       ],
       isExecutable: true,
-      tags: ['action', 'verb', 'movement']
+      tags: ['nested', 'precomp', 'subpsg', 'document', 'composition']
     });
+
+    // Subject/Action legacy types removed (C1 P1) — never on Epic1 product path.
 
     // Enhanced Bounding Box (Visual Only)
     this.register({

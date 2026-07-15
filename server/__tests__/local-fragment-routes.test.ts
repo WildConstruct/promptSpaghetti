@@ -6,13 +6,17 @@ import { localFragmentRoutes } from '../src/routes/localFragments';
 
 describe('localFragmentRoutes', () => {
   let outputRoot: string;
+  const originalEnv = { ...process.env };
 
   beforeEach(async () => {
     outputRoot = await mkdtemp(path.join(tmpdir(), 'psg-local-fragments-'));
+    delete process.env.LOCAL_FRAGMENT_ROOTS;
+    delete process.env.LOCAL_SANDBOX_ALLOW_REMOTE;
   });
 
   afterEach(async () => {
     await rm(outputRoot, { recursive: true, force: true });
+    process.env = { ...originalEnv };
   });
 
   it('writes a PSG fragment into the user fragments folder', async () => {
@@ -125,5 +129,51 @@ describe('localFragmentRoutes', () => {
     });
 
     await app.close();
+  });
+
+  it('rejects non-loopback clients for local fragment routes', async () => {
+    const app = Fastify();
+    await localFragmentRoutes(app);
+
+    const response = await app.inject({
+      method: 'POST',
+      url: '/api/local-fragments/save',
+      remoteAddress: '10.0.0.8',
+      payload: {
+        folderPath: outputRoot,
+        filename: 'family-dna.psg',
+        content: '{}'
+      }
+    });
+
+    expect(response.statusCode).toBe(403);
+    expect(response.json().error).toMatch(/loopback/i);
+
+    await app.close();
+  });
+
+  it('rejects folder paths outside LOCAL_FRAGMENT_ROOTS', async () => {
+    process.env.LOCAL_FRAGMENT_ROOTS = outputRoot;
+    const app = Fastify();
+    await localFragmentRoutes(app);
+
+    const outside = await mkdtemp(path.join(tmpdir(), 'psg-outside-'));
+    try {
+      const response = await app.inject({
+        method: 'POST',
+        url: '/api/local-fragments/save',
+        payload: {
+          folderPath: outside,
+          filename: 'family-dna.psg',
+          content: '{}'
+        }
+      });
+
+      expect(response.statusCode).toBe(400);
+      expect(response.json().error).toMatch(/LOCAL_FRAGMENT_ROOTS/i);
+    } finally {
+      await rm(outside, { recursive: true, force: true });
+      await app.close();
+    }
   });
 });
