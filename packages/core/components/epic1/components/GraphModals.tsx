@@ -71,9 +71,19 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
         <PromptWizard
           isOpen={isPromptWizardOpen}
           onClose={() => setIsPromptWizardOpen(false)}
-          onComplete={(nodes: Node[], edges: Edge[]) => {
-            setNodes(prevNodes => [...prevNodes, ...nodes]);
-            setEdges(prevEdges => [...prevEdges, ...edges]);
+          hasExistingGraph={nodes.length > 0}
+          onComplete={(
+            nextNodes: Node[],
+            nextEdges: Edge[],
+            mode: 'add' | 'replace'
+          ) => {
+            if (mode === 'replace') {
+              setNodes(nextNodes);
+              setEdges(nextEdges);
+            } else {
+              setNodes(prevNodes => [...prevNodes, ...nextNodes]);
+              setEdges(prevEdges => [...prevEdges, ...nextEdges]);
+            }
             setIsPromptWizardOpen(false);
           }}
         />

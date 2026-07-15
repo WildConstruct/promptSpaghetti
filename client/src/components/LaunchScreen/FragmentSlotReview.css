@@ -1,0 +1,218 @@
+.fragment-slot-review {
+  margin-top: 16px;
+  padding: 14px 16px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(12, 14, 18, 0.92);
+  color: #f1f6f9;
+}
+
+.fragment-slot-review__header h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f0bd6e;
+}
+
+.fragment-slot-review__header p {
+  margin: 0 0 12px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: rgba(241, 246, 249, 0.7);
+}
+
+.fragment-slot-review__prompt {
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(230, 162, 60, 0.25);
+  background: rgba(230, 162, 60, 0.08);
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.fragment-slot-review__status {
+  font-size: 12px;
+  color: rgba(241, 246, 249, 0.6);
+  margin-bottom: 10px;
+}
+
+.fragment-slot-review__status--error {
+  color: #f0a0a0;
+}
+
+.fragment-slot-review__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.fragment-slot-row {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.fragment-slot-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.fragment-slot-row__type {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(230, 162, 60, 0.2);
+  color: #f0bd6e;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fragment-slot-row__domains {
+  color: rgba(241, 246, 249, 0.55);
+}
+
+.fragment-slot-row__conf {
+  margin-left: auto;
+  color: rgba(241, 246, 249, 0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+.fragment-slot-row__source {
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #f1f6f9;
+}
+
+.fragment-slot-row__choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fragment-slot-choice {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 12.5px;
+}
+
+.fragment-slot-choice:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.fragment-slot-choice.is-selected {
+  border-color: rgba(230, 162, 60, 0.45);
+  background: rgba(230, 162, 60, 0.1);
+}
+
+.fragment-slot-choice input {
+  margin-right: 8px;
+  accent-color: #e6a23c;
+}
+
+.fragment-slot-choice__label {
+  display: inline;
+}
+
+.fragment-slot-choice__label em {
+  display: block;
+  margin: 2px 0 0 22px;
+  font-style: normal;
+  color: rgba(241, 246, 249, 0.55);
+  font-size: 11.5px;
+}
+
+.fragment-slot-choice__user {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(241, 246, 249, 0.7);
+}
+
+.fragment-slot-choice__why {
+  margin-left: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #e6a23c;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.fragment-slot-choice__reasons {
+  margin: 4px 0 0 22px;
+  padding-left: 14px;
+  color: rgba(241, 246, 249, 0.55);
+  font-size: 11px;
+}
+
+.fragment-slot-row__no-match {
+  margin-left: 22px;
+  font-size: 12px;
+  color: rgba(241, 246, 249, 0.45);
+  font-style: italic;
+}
+
+.fragment-slot-choice--mute {
+  opacity: 0.75;
+}
+
+.fragment-slot-row__restore {
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(230, 162, 60, 0.35);
+  background: transparent;
+  color: #e6a23c;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fragment-slot-row__restore:hover {
+  background: rgba(230, 162, 60, 0.12);
+}
+
+.fragment-slot-review__preview {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fragment-slot-review__preview-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(241, 246, 249, 0.5);
+  margin-bottom: 6px;
+}
+
+.fragment-slot-review__preview-body {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #f1f6f9;
+  min-height: 1.5em;
+}
+
+.fragment-slot-review__preview-empty {
+  color: rgba(241, 246, 249, 0.4);
+  font-style: italic;
+}
