@@ -35,10 +35,14 @@ advance the cursor.
 
 | Field | Value |
 | --- | --- |
-| **Active section** | **G5** |
-| **Status** | `pending` (paused for check-in) |
-| **Track** | G — Post-merge productization & truth |
+| **Active section** | **—** |
+| **Status** | **Track G complete** (paused) |
+| **Track** | G — Post-merge productization & truth (done) |
+| **Branch tip** | `fix/stabilize-functional-baseline` (see root [`HANDOFF.md`](../HANDOFF.md)) |
 | **Started** | 2026-07-15 |
+
+**Tip for the next agent:** open [`HANDOFF.md`](../HANDOFF.md) first, then this file’s session log.
+No Track H is defined yet — ship Track G commits/PR, smoke Nested PSG + Wizard, or add a new track.
 
 ## Section board
 
@@ -107,8 +111,8 @@ After #27 on `fix/stabilize-functional-baseline`. Make Nested PSG + Fragment Wiz
 | **G2** | Vocabulary inventory refresh | `done` | Schema inventory updated for Template + SubPSG; Epic1 executable set accurate |
 | **G3** | Wizard fragment-load reliability | `done` | User-visible status + toast: success / partial warning / total fail; progress while loading |
 | **G4** | Nested PSG save path smoke + doc | `done` | Project export roots on main + documents[]; tests; limitations note autosave gap |
-| **G5** | Teaching surface for new features | `pending` | Explore/docs pointer or one-line Tips for Nested PSG Intro + Wizard fragment review (no big tutorial rewrite) |
-| **G6** | Work-loop / HANDOFF tip refresh | `pending` | HANDOFF or work-loop points at stabilize tip + Track G; drop stale branch names where easy |
+| **G5** | Teaching surface for new features | `done` | Canvas tips + Launch Pro Tips + Wizard copy + catalog/examples pointers for Nested PSG Intro and fragment review |
+| **G6** | Work-loop / HANDOFF tip refresh | `done` | Root `HANDOFF.md` → stabilize tip + Track G complete; work-loop cursor free; dropped stale `claude/…` / PR #17 branch guidance |
 
 ## Session log
 
@@ -171,6 +175,10 @@ After #27 on `fix/stabilize-functional-baseline`. Make Nested PSG + Fragment Wiz
 | 2026-07-15 | (pause) | — | Next **G4** Nested PSG save path smoke + doc. Say `continue work loop`. |
 | 2026-07-15 | G4 | done | exportActiveProjectToPSG; local+Supabase use it; tests for main-root when child active; limitations autosave gap |
 | 2026-07-15 | (pause) | — | Next **G5** teaching surface pointers. Say `continue work loop`. |
+| 2026-07-15 | G5 | done | CanvasTipPanel nested-psg + wizard-fragments; Launch Pro Tips; PromptWizard description/tips; templateCatalog + examples-catalog Nested PSG / Wizard |
+| 2026-07-15 | (pause) | — | Next **G6** HANDOFF / work-loop tip refresh. Say `continue work loop`. |
+| 2026-07-15 | G6 | done | Rewrote `HANDOFF.md` for `fix/stabilize-functional-baseline` + Tracks A–G; work-loop tip/cursor; no more PR #17 / claude/* branch |
+| 2026-07-15 | (pause) | — | **Track G complete** (G1–G6). Commit/push G, smoke Nested+Wizard, or open a new track. |
 
 ## Notes from the audit (context)
 

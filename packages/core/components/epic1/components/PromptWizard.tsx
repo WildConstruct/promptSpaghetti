@@ -264,8 +264,11 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
 
         <div className="prompt-wizard-content" onKeyDown={handleKeyDown}>
           <p className="prompt-wizard-description">
-            Enter a prompt below. Review fragment matches, then create a graph.
-            Original text stays selected until you swap a library fragment.
+            Paste a prompt, analyze it, then use <strong>Fragment review</strong>{' '}
+            below: each semantic slot defaults to your original wording. Swap a
+            library match only when you want variation — Create expands selected
+            .psg fragments into real nodes (Add or Replace if the canvas already
+            has work).
           </p>
 
           <div className="prompt-wizard-dissector-wrapper">
@@ -326,7 +329,12 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
               <li>Use &quot;or&quot; to create weighted choices</li>
               <li>Separate concepts with commas</li>
               <li>
-                Swap fragments in the review list — Create loads their PSG graphs
+                Fragment review appears after analyze — original stays selected
+                until you pick a match or Skip
+              </li>
+              <li>
+                Prefer AI-Enhanced when you want draft slot labels; Standard still
+                runs heuristic slots client-side
               </li>
               {hasExistingGraph && (
                 <li>
@@ -334,6 +342,10 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
                   <strong>Replace</strong>
                 </li>
               )}
+              <li>
+                Nested compositions (Sub PSG) are separate: open Explore → Nested
+                PSG Intro after you leave the Wizard
+              </li>
             </ul>
           </div>
         </div>

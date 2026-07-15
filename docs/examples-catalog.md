@@ -55,3 +55,15 @@ Determinism holds throughout: same graph + seed ⇒ identical prompt.
 
 Non-branching reference families: `character_variation`, `vehicle_family`,
 `building_family`, `indy_500_crowd_card`.
+
+## Nested PSG (precomp) teaching graph
+| id | title | What it teaches |
+| --- | --- | --- |
+| `nested_psg_intro` | Nested PSG Intro | Parent Template `{wares}` filled by a **Sub PSG** that runs child composition “Forge Wares”. Double-click Sub PSG or use document tabs — not the same as `branch-N` handles. Featured on splash + Explore. |
+
+See `docs/nested-psg-precomp-plan.md`.
+
+## Prompt Wizard fragment review
+Authoring path (not an Explore graph): paste → analyze → **Fragment review** rows
+(original default + up to 3 library matches) → Create expands selected `.psg`
+files. Design: `docs/fragment-dissection-swap-flow.md`.

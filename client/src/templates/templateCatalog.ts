@@ -167,7 +167,7 @@ export const TEMPLATE_CATALOG: TemplateCatalogEntry[] = [
     id: 'nested_psg_intro',
     title: 'Nested PSG Intro',
     description:
-      'Teaching graph: a parent Template fills {wares} from a Sub PSG precomp. Double-click Sub PSG to open the Forge Wares child tab.',
+      'Learn Nested PSG precomps: Template {wares} ← Sub PSG child “Forge Wares”. Double-click Sub PSG or use composition tabs (undo is per-tab). Not the same as branch handles.',
     category: 'worlds',
     branching: true,
     featured: true

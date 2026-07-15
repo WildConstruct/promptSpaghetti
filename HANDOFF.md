@@ -1,100 +1,106 @@
-# HANDOFF — Prompt Spaghetti launch-readiness work
+# HANDOFF — Prompt Spaghetti (current tip)
 
-_You are picking up an in-progress effort on branch `claude/codebase-review-refactor-b9xznd`
-(PR #17). Read this first, then `docs/compact-readiness-review.md`. Everything below is committed and
-pushed; `pnpm typecheck` is green._
+_Last updated: 2026-07-15_
 
-## Mission
+You are picking up product work on **`fix/stabilize-functional-baseline`**.
+Read this first, then the links under **Sources of truth**. Do **not** resume
+stale Claude branch names (e.g. `claude/codebase-review-refactor-b9xznd` / PR #17)
+or epic-task scripts under a phantom `src/` tree — those are gone.
 
-Get **Prompt Spaghetti** ready for a Wild Construct "Lab" launch: a small, fun, deterministic tool
-that turns a node graph into **natural-language prompts** (not tag lists). Reviewed against three
-docs — the **Artist's Compact (v003)**, the **"First Two Signals" launch strategy**, and the
-**Riggable Production Systems** memo.
+## Branch & merge state
 
-### Guiding decisions (don't relitigate)
-- Match EraCrowd's *finish*, stay radically simpler. Avoid the Compact's "circuit diagram" warning.
-- "Branching" = **constrained variation within a production envelope**, not control flow.
-- Fragments are **first-class and meant to grow**; the PSG format carries depth, not the UI.
-- Prompts must read as natural language → primary mechanism is a **Template/slot node**
-  (sentence skeleton with `{slots}` filled by variation), with smart join rules as a secondary layer.
-- The canonical engine is **`Epic1ExecutionEngine`** (client-side). The server `engine-basic` +
-  `POST /preview` and the `@promptscape/cli` package are **unused legacy** — do not build on them.
+| Item | Value |
+| --- | --- |
+| **Active tip branch** | `fix/stabilize-functional-baseline` |
+| **Recent integration** | PR **#27** (`feat/explore-browser-and-node-actions` stack) merged here (`caab78a81`) |
+| **Work loop** | [`docs/audit-work-loop.md`](./docs/audit-work-loop.md) — **Track G complete** (G1–G6) |
+| **Known limitations** | [`docs/launch-known-limitations.md`](./docs/launch-known-limitations.md) |
 
-## What's been accomplished (all verified, ~18 commits)
+Local tip may be **ahead of origin** with unpushed Track G commits (docs + wizard
+reliability + Nested PSG export + teaching pointers). Push/PR only when the human asks.
 
-- **Phase 1 — strip-out:** removed ~40 files — junk/temp, the multi-agent ticketing scaffolding,
-  dated QA reports, dead code (`client/src/core.tsx`'s missing `ProfessionalIntegration`, the dead
-  `usePreviewSeeds` hook, orphaned `node-adapter.ts`), quarantined editor variants, `.bak` files,
-  the broken `build-handbook` CI workflow, and duplicate vercel/eslint configs.
-- **Phase 2 — engine + schema:**
-  - Retired the never-executed **advanced tier** (WeightedAdvanced/Conditional/Sequential/Markov)
-    and **PythonTransform** from `packages/core/graphSchema.ts`. Impl files remain parked under
-    `runtime/` (still imported by `custom-node-sdk`); only the *schema surface* was cut.
-  - Added a **schema-lock guard test** (`runtime/__tests__/graphSchema.lock.test.ts`) pinning the
-    node vocabulary to the six executable types.
-  - Resolved **"preview == export"** for launch: the UI runs `Epic1ExecutionEngine` client-side on
-    the same ReactFlow graph it exports, so parity already holds. The full two-engine merge is
-    deferred post-launch — see `docs/engine-unification-design.md`.
-- **Phase 3b — natural-language assembly (engine layer, DONE + tested):**
-  - `packages/core/runtime/assembly.ts` — pure helpers: `assemble()` (space/comma/Oxford/sentence
-    joins, a/an articles, punctuation+whitespace normalization, empty-slot cleanup, dedupe) and
-    `fillTemplate()` (the slot-fill primary mechanism). Exported from `packages/core/public.ts`.
-  - Wired opt-in `joinStyle`/`dedupe` into `runtime/nodes/epic1/ConcatNode.ts` — **legacy
-    space-join stays the default**; prose styles activate only when set.
-  - `nodeFactory` carries `joinStyle`/`dedupe` from node data into the runtime.
-  - **Proven end-to-end** in `runtime/nodes/epic1/__tests__/naturalLanguage.integration.test.ts`:
-    fragments → Concat(`sentence`) → Output yields `"Fierce knight."`, deterministic per seed,
-    varying across seeds.
-- **Tests:** parked 8 suites that exercise retired/dead tiers. Baseline ≈ **1000/1102** unit tests
-  pass. `pnpm typecheck` is the reliable green signal.
-- **Docs:** `compact-readiness-review.md` (phased plan), `engine-unification-design.md`,
-  `launch-known-limitations.md`.
+## Mission (unchanged)
 
-## Where the roadmap goes next
+**Prompt Spaghetti** is a Lab-grade, deterministic node tool: graphs produce
+**natural-language prompts** (not tag lists). Engine of record is the client-side
+**`Epic1ExecutionEngine`**. There is no Fastify `POST /preview` and no
+`packages/cli` package in this repo.
 
-These were NOT done because they need either a product decision or verification against the running
-app (the previous session was headless and couldn't click the UI).
+### Guiding decisions (don’t relitigate)
 
-### Decisions needed from Brian (blockers)
-1. **Canonical file format:** exported ReactFlow-graph JSON vs. the documented PSG `inputs[]` format
-   — they diverge on edges/handles and the variable model (`SetVariable`/`GetVariable` vs unified
-   `Variable`). Needed before the full engine merge and before `Include`.
-2. **Fragment source for `Include`:** where do included fragments resolve at runtime (library store?
-   inline?). The canonical engine does not execute `Include` today.
-3. **Default vs opt-in prose join:** should a Merge node default to a natural-language `joinStyle`,
-   or stay opt-in (current)? Changing the default affects existing graphs.
+- Match EraCrowd’s *finish*, stay radically simpler.
+- “Branching” = constrained variation in a production envelope, not control flow.
+- Fragments are first-class at **authoring** time (library / Explore / Wizard).
+- Primary NL path = **Template** `{slots}` + variation; Merge prose join is secondary.
+- Nested PSG / SubPSG = precomp (child composition), **not** `branch-N` handles.
 
-### Next implementation slices (verify each against `pnpm dev` preview)
-- **Concat join-style inspector control** — smallest UI step; surfaces the existing tested
-  `joinStyle`/`dedupe` on the Merge node. (UI lives in `components/epic1/nodes/ConcatNode.tsx`; the
-  node uses a single inline edit buffer today, so this needs a small structured-config UI.)
-- **Template/slot node** — the chosen primary NL mechanism; runtime helper `fillTemplate` already
-  exists and is tested. Needs: `Epic1NodeType` entry, node class, `nodeFactory` case, palette +
-  inspector. Follow the "Adding New Node Types" steps in `CLAUDE.md`.
-- **Variation node** — vary a fragment across seeds within an envelope.
-- **Real `Include`** — once decision #2 is made.
-- **Phase 5/6** — cohesive dark theme + inspector polish; showcase template `.psglib` files, a short
-  tutorial, and keep `docs/launch-known-limitations.md` current.
+## What’s already on stabilize (post-audit tracks)
+
+| Track | Outcome |
+| --- | --- |
+| **A** | Trust docs, surface honesty, local sandbox loopback, vocabulary inventory |
+| **B** | Template node, output templates, Include = format-only, Merge defaults to `sentence` for new nodes |
+| **C** | Parked-tier disposition + P1 deletes; Epic1GraphEditor split plan + extractions |
+| **D** | Nested PSG: `documents[]`, SubPSG, tabs, per-doc undo/viewport, Create composition, project export |
+| **F** | Fragment Wizard: 161-fragment index, slots[], match top-3, review UI, PSG expand, Add/Replace |
+| **G** | Post-#27 productization: limitations + vocabulary truth, wizard load toasts, main-root export, teaching tips, this HANDOFF |
+
+### Product surfaces to know
+
+- **Editor:** `Epic1GraphEditor` / client `Epic1EditorContainer-refactored`
+- **Explore:** Nested PSG Intro (`nested_psg_intro`); splash + Explore featured
+- **Wizard:** paste → analyze → **Fragment review** → Create (expand `.psg` when available)
+- **Save/export:** `exportActiveProjectToPSG` — **main as root** + nested `documents[]`
+  (not “active tab as root”). Autosave/recovery may still be single-graph — see limitations.
+
+## Where to look next
+
+There is **no Track H** in the work loop yet. Sensible follow-ups (product pick):
+
+1. **Ship Track G** — structured commit(s) of uncommitted G5/G6 (and push G1–G4 if still local-only); PR if desired.
+2. **Smoke** Nested PSG tabs + Wizard review→swap→Create on a clean `pnpm dev`.
+3. **Product depth** only if requested: richer Nested PSG authoring, match quality, autosave project export, Supabase RLS external verify (`docs/supabase-rls-verification-runbook.md`).
+4. **Do not** rebuild parked advanced nodes on `AdvancedRuntimeNode` — revive as native Epic1 if ever needed.
+
+Operational loop for sectioned work: say `continue work loop` after a new track is added to
+`docs/audit-work-loop.md`, or name a slice explicitly.
+
+## Sources of truth
+
+| Doc | Use |
+| --- | --- |
+| [`CLAUDE.md`](./CLAUDE.md) | Canonical agent architecture (prefer over stale AGENTS legends) |
+| [`AGENTS.md`](./AGENTS.md) | Short agent rules + work-loop pointer |
+| [`docs/audit-work-loop.md`](./docs/audit-work-loop.md) | Section board + session log |
+| [`docs/launch-known-limitations.md`](./docs/launch-known-limitations.md) | Honest launch framing |
+| [`docs/schema-epic1-vocabulary-inventory.md`](./docs/schema-epic1-vocabulary-inventory.md) | Executable node set |
+| [`docs/nested-psg-precomp-plan.md`](./docs/nested-psg-precomp-plan.md) | Nested PSG design |
+| [`docs/fragment-dissection-swap-flow.md`](./docs/fragment-dissection-swap-flow.md) | Wizard fragment flow |
+| [`docs/examples-catalog.md`](./docs/examples-catalog.md) | Teaching graphs + Wizard path |
+| [`ACTIVE_SURFACE.md`](./ACTIVE_SURFACE.md) | Mounted product surface |
+| `packages/core/graphSchema.ts` | Schema truth for vocabulary |
 
 ## Conventions & gotchas
-- **Always keep `pnpm typecheck` green**; run it after each change. It covers core/asset-browser/
-  custom-node-sdk (note: `custom-node-sdk` typecheck is effectively a no-op).
-- **Backward compatibility:** new node options must default to existing behavior (see how `joinStyle`
-  was added) so saved graphs and golden tests don't shift.
-- **Stale tests:** several legacy component/node suites (e.g. `ConcatNode.test.ts` calls a
-  non-existent `node.validate()`, TextBlock/Output/Variable assert drifted internal APIs). These are
-  pre-existing failures — don't assume your change broke them; verify against HEAD first. Don't
-  rewrite them just to go green (it can mask real issues) without a reason.
-- **`dependency-checks` CI is red** on pre-existing `pnpm audit` debt (129 vulns). Left intentionally
-  red — it belongs with the dependabot PRs, not a gate-weakening hack. Don't "fix" it by loosening
-  the audit.
-- **Vercel** deploys the client only; its PR comments are deploy-status noise.
-- **Git:** develop on `claude/codebase-review-refactor-b9xznd`; commit + push; PR #17 already exists
-  (draft).
+
+- **Git:** never commit/push unless the human asks. Prefer feature branches off stabilize when opening PRs.
+- **Typecheck:** keep `pnpm typecheck` green after engine/UI changes.
+- **Defaults:** new node options must not silently rewrite old graphs (see Merge `joinStyle` legacy).
+- **Tests:** some legacy suites are red against drifted APIs; prefer targeted Jest + typecheck over “fix the world.”
+- **`dependency-checks` / audit debt:** pre-existing; don’t weaken gates to greenwash.
+- **Deploy:** Netlify client + Vercel `api/**`; Fastify `server/src` is local-dev only.
 
 ## Quick start
+
 ```bash
-git checkout claude/codebase-review-refactor-b9xznd && pnpm install
-pnpm typecheck      # should be green
-pnpm dev            # client :3000, server :8000 — needed to verify UI work
+git checkout fix/stabilize-functional-baseline
+pnpm install
+pnpm typecheck
+pnpm dev            # client :3000, server :8000
+```
+
+Targeted smokes (examples):
+
+```bash
+# Nested export + wizard / slot utils (paths vary; use package jest configs)
+npx jest --config packages/core/jest.config.cjs --testPathPattern="psgProjectExport|slotFragmentMatch|applySlotSelections" --coverage=false
 ```

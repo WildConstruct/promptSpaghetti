@@ -643,7 +643,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             <h3>Pro Tips</h3>
             <ul>
               <li>Start with a quick-start family graph when you want the cleanest MVP walkthrough</li>
-              <li>Use prompt bootstrap when you want a first PSG graph drafted from text</li>
+              <li>Use the Wizard to draft from text, then review fragment matches before Create (original text stays until you swap)</li>
+              <li>Open Explore → Nested PSG Intro to learn Sub PSG precomps (child tabs, not branch handles)</li>
               <li>Lock shared traits first, then make only the details you want variable</li>
               <li>Treat Comfy export as the main downstream handoff and sidecar tools as advanced follow-on work</li>
             </ul>

@@ -21,6 +21,16 @@ export const canvasTips: CanvasTip[] = [
     body: 'A small glue node like "with a" can keep clothing, props, and suffixes from colliding.',
   },
   {
+    id: 'nested-psg',
+    title: 'Nested PSG is a precomp, not a branch',
+    body: 'Explore “Nested PSG Intro”: a Sub PSG runs a child composition. Double-click it or use the document tabs — undo stays per tab.',
+  },
+  {
+    id: 'wizard-fragments',
+    title: 'Wizard reviews before it swaps',
+    body: 'Open Wizard, analyze a prompt, then use Fragment review: original text stays selected until you pick a library match. Create expands real .psg graphs.',
+  },
+  {
     id: 'notes',
     title: 'Leave notes for future you',
     body: 'Canvas notes are documentation-only: use them to explain decisions without changing output.',
