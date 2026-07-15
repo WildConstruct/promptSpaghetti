@@ -1,10 +1,14 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 import { EditableNodeData } from '../nodes';
-import { PromptWizard } from './PromptWizard';
+import {
+  PromptWizard,
+  type WizardFragmentLoadStatus
+} from './PromptWizard';
 import { AuthModal } from '../../auth/AuthModal';
 import { SaveAsPresetDialog } from '../asset-library/SaveAsPresetDialog';
 import type { Preset } from '../asset-library/types';
+import type { ToastMessage } from '../ConnectionToast';
 
 export interface WizardPreviewResult {
   nodes: Node<EditableNodeData>[];
@@ -38,11 +42,61 @@ interface GraphModalsProps {
 
   // Custom presets
   setCustomPresets: React.Dispatch<React.SetStateAction<Preset[]>>;
+
+  /** Editor toast for fragment-load outcomes after wizard closes. */
+  showToast?: (
+    type: ToastMessage['type'],
+    message: string,
+    duration?: number
+  ) => void;
 }
 
 /**
  * Container for all graph-related modals and dialogs
  */
+function toastFromFragmentStatus(
+  status: WizardFragmentLoadStatus | undefined,
+  mode: 'add' | 'replace'
+): { type: ToastMessage['type']; message: string; duration?: number } | null {
+  if (!status) {
+    return {
+      type: 'success',
+      message:
+        mode === 'add' ? 'Added wizard graph to canvas.' : 'Created graph from wizard.'
+    };
+  }
+  if (status.attempted === 0) {
+    return {
+      type: 'success',
+      message:
+        mode === 'add'
+          ? 'Added graph to canvas (no library fragments selected).'
+          : 'Created graph (no library fragments selected).'
+    };
+  }
+  if (status.expandedCount > 0 && status.failedPaths.length === 0) {
+    return {
+      type: 'success',
+      message: `Loaded ${status.expandedCount} library fragment${
+        status.expandedCount === 1 ? '' : 's'
+      } into the graph.`
+    };
+  }
+  if (status.expandedCount > 0 && status.failedPaths.length > 0) {
+    return {
+      type: 'warning',
+      message: `Loaded ${status.expandedCount} fragment(s); ${status.failedPaths.length} failed and stayed as text.`,
+      duration: 6000
+    };
+  }
+  return {
+    type: 'error',
+    message:
+      'Selected fragments could not be loaded from the library. Text placeholders were used instead.',
+    duration: 7000
+  };
+}
+
 export const GraphModals: React.FC<GraphModalsProps> = ({
   isPromptWizardOpen,
   setIsPromptWizardOpen,
@@ -56,7 +110,8 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
   setEdges,
   pendingWizardNodes,
   setPendingWizardNodes,
-  setCustomPresets
+  setCustomPresets,
+  showToast
 }) => {
   const presetNode = saveAsPresetNodeId
     ? nodes.find(node => node.id === saveAsPresetNodeId) ?? null
@@ -75,7 +130,8 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
           onComplete={(
             nextNodes: Node[],
             nextEdges: Edge[],
-            mode: 'add' | 'replace'
+            mode: 'add' | 'replace',
+            fragmentStatus
           ) => {
             if (mode === 'replace') {
               setNodes(nextNodes);
@@ -85,6 +141,10 @@ export const GraphModals: React.FC<GraphModalsProps> = ({
               setEdges(prevEdges => [...prevEdges, ...nextEdges]);
             }
             setIsPromptWizardOpen(false);
+            const toast = toastFromFragmentStatus(fragmentStatus, mode);
+            if (toast && showToast) {
+              showToast(toast.type, toast.message, toast.duration);
+            }
           }}
         />
       )}

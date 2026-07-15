@@ -581,6 +581,7 @@ export function Epic1GraphEditorShell(props: Epic1GraphEditorShellProps) {
             setEdges={setEdges}
             setCustomPresets={setCustomPresets}
             setCurrentUser={setCurrentUser}
+            showToast={showToast}
           />
 
           <ComponentSaveDialog

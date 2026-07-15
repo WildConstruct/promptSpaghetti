@@ -14,6 +14,16 @@ import './PromptWizard.css';
 
 export type WizardCompleteMode = 'add' | 'replace';
 
+/** Fragment expand outcome for user-visible status (G3). */
+export type WizardFragmentLoadStatus = {
+  /** Placeholders that requested a library fragment. */
+  attempted: number;
+  /** Successfully spliced into the graph. */
+  expandedCount: number;
+  /** Paths that failed to fetch/parse (left as text). */
+  failedPaths: string[];
+};
+
 interface PromptWizardProps {
   isOpen: boolean;
   onClose: () => void;
@@ -21,7 +31,8 @@ interface PromptWizardProps {
   onComplete: (
     nodes: Node[],
     edges: Edge[],
-    mode: WizardCompleteMode
+    mode: WizardCompleteMode,
+    fragmentStatus?: WizardFragmentLoadStatus
   ) => void;
   /** When true, show Add vs Replace instead of a single Create. */
   hasExistingGraph?: boolean;
@@ -42,10 +53,15 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
   const [slotRows, setSlotRows] = useState<SlotReviewRow[]>([]);
   const [assembledPreview, setAssembledPreview] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<{
+    type: 'success' | 'warning' | 'error' | 'info';
+    text: string;
+  } | null>(null);
 
   const handleAnalysisComplete = useCallback((newAnalysis: PromptAnalysis) => {
     setAnalysis(newAnalysis);
     setIsAnalyzing(false);
+    setStatusMessage(null);
   }, []);
 
   const handleAnalysisStart = useCallback(() => {
@@ -93,6 +109,11 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
     };
   }, [isOpen]);
 
+  const fragmentSwapAttempted = useMemo(
+    () => slotRows.filter(row => row.selection.kind === 'fragment').length,
+    [slotRows]
+  );
+
   const buildGraphFromReview = useCallback(async () => {
     if (!analysis) {
       throw new Error('Please enter and analyze a prompt first');
@@ -113,44 +134,101 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
       );
     }
 
-    return {
-      nodes: expanded.nodes as Node[],
-      edges: expanded.edges,
+    const fragmentStatus: WizardFragmentLoadStatus = {
+      attempted: fragmentSwapAttempted,
       expandedCount: expanded.expandedCount,
       failedPaths: expanded.failedPaths
     };
-  }, [analysis, slotRows]);
+
+    return {
+      nodes: expanded.nodes as Node[],
+      edges: expanded.edges,
+      fragmentStatus
+    };
+  }, [analysis, fragmentSwapAttempted, slotRows]);
+
+  const formatFragmentStatus = (
+    status: WizardFragmentLoadStatus
+  ): { type: 'success' | 'warning' | 'error' | 'info'; text: string } | null => {
+    if (status.attempted === 0) {
+      return {
+        type: 'success',
+        text: 'Graph created from your prompt (no library fragments selected).'
+      };
+    }
+    if (status.expandedCount > 0 && status.failedPaths.length === 0) {
+      return {
+        type: 'success',
+        text: `Loaded ${status.expandedCount} library fragment${
+          status.expandedCount === 1 ? '' : 's'
+        } into the graph.`
+      };
+    }
+    if (status.expandedCount > 0 && status.failedPaths.length > 0) {
+      const sample = status.failedPaths
+        .slice(0, 2)
+        .map(p => p.split('/').pop() || p)
+        .join(', ');
+      return {
+        type: 'warning',
+        text: `Loaded ${status.expandedCount} fragment(s); ${status.failedPaths.length} failed and stayed as text (${sample}).`
+      };
+    }
+    // attempted > 0, expanded 0
+    const sample = status.failedPaths
+      .slice(0, 3)
+      .map(p => p.split('/').pop() || p)
+      .join(', ');
+    return {
+      type: 'error',
+      text: `Could not load selected fragment file(s). Graph uses text placeholders${
+        sample ? `: ${sample}` : ''
+      }.`
+    };
+  };
 
   const finishWithMode = useCallback(
     async (mode: WizardCompleteMode) => {
       if (!analysis) {
         setError('Please enter and analyze a prompt first');
+        setStatusMessage(null);
         return;
       }
 
       setIsCreating(true);
       setError(null);
+      setStatusMessage({
+        type: 'info',
+        text:
+          fragmentSwapAttempted > 0
+            ? `Building graph and loading ${fragmentSwapAttempted} fragment${
+                fragmentSwapAttempted === 1 ? '' : 's'
+              }…`
+            : 'Building graph…'
+      });
       try {
         const result = await buildGraphFromReview();
-        if (result.failedPaths.length > 0 && result.expandedCount === 0) {
-          setError(
-            `Could not load fragment file(s). Graph uses text placeholders. Missing: ${result.failedPaths
-              .slice(0, 3)
-              .join(', ')}`
-          );
+        const statusUi = formatFragmentStatus(result.fragmentStatus);
+        if (statusUi) {
+          setStatusMessage(statusUi);
         }
-        onComplete(result.nodes, result.edges, mode);
+
+        // Always apply the graph; surface load outcome via status + parent toast.
+        onComplete(result.nodes, result.edges, mode, result.fragmentStatus);
+
         setPromptText('');
         setAnalysis(null);
         setSlotRows([]);
         setAssembledPreview('');
+        setStatusMessage(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to create nodes');
+        setStatusMessage(null);
       } finally {
         setIsCreating(false);
       }
     },
-    [analysis, buildGraphFromReview, onComplete]
+    [analysis, buildGraphFromReview, fragmentSwapAttempted, onComplete]
   );
 
   const handleKeyDown = useCallback(
@@ -218,7 +296,29 @@ export const PromptWizard: React.FC<PromptWizardProps> = ({
             </p>
           )}
 
-          {error && <div className="prompt-wizard-error">{error}</div>}
+          {error && (
+            <div className="prompt-wizard-error" role="alert">
+              {error}
+            </div>
+          )}
+
+          {statusMessage && !error && (
+            <div
+              className={`prompt-wizard-status prompt-wizard-status--${statusMessage.type}`}
+              role="status"
+              data-testid="wizard-fragment-status"
+            >
+              {statusMessage.text}
+            </div>
+          )}
+
+          {fragmentSwapAttempted > 0 && analysis && !isCreating && (
+            <p className="prompt-wizard-assembled-hint">
+              {fragmentSwapAttempted} library fragment
+              {fragmentSwapAttempted === 1 ? '' : 's'} selected — Create will
+              load their .psg files from the asset library.
+            </p>
+          )}
 
           <div className="prompt-wizard-tips">
             <h4>Tips:</h4>
