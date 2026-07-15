@@ -15,9 +15,29 @@
       "experience"
     ],
     "fragment_id": "age-indicators",
-    "collapsible": true
+    "collapsible": true,
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
+    ]
   },
   "nodes": [
+    {
+      "id": "age-indicator-prefix",
+      "type": "TextBlock",
+      "x": -80,
+      "y": 200,
+      "value": "with",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "with",
+        "value": "with"
+      }
+    },
     {
       "id": "age-indicator",
       "type": "WeightedChoice",
@@ -126,9 +146,36 @@
           }
         }
       ]
+    },
+    {
+      "id": "age-indicator-output",
+      "type": "Output",
+      "x": 520,
+      "y": 200,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "age-indicator-prefix-to-age-indicator",
+      "source": "age-indicator-prefix",
+      "target": "age-indicator",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "age-indicator-to-age-indicator-output",
+      "source": "age-indicator",
+      "target": "age-indicator-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "age-indicator-fragment",
@@ -136,7 +183,9 @@
       "color": "#F0E68C",
       "color_comment": "Khaki - Time/experience modifier",
       "nodes": [
-        "age-indicator"
+        "age-indicator",
+        "age-indicator-prefix",
+        "age-indicator-output"
       ],
       "description": "Age and texture descriptors as single unit",
       "metadata": {

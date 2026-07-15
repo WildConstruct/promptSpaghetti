@@ -1,0 +1,413 @@
+{
+  "version": "1.1.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "category",
+  "key": "vehicles-mobility",
+  "generatedAt": "2026-07-15T00:54:15.174Z",
+  "totalFragments": 10,
+  "fragments": [
+    {
+      "id": "vehicles-mobility-airframes",
+      "name": "Airframes Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/airframes.psg",
+      "category": "vehicles-mobility",
+      "description": "Airframe types and mounts",
+      "tags": [
+        "airframes",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-call-sign-decals",
+      "name": "Call-Sign Decals Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/call-sign-decals.psg",
+      "category": "vehicles-mobility",
+      "description": "Call-sign and nose-art decals",
+      "tags": [
+        "call",
+        "sign",
+        "decals",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-cockpit-vibes",
+      "name": "Cockpit Vibes Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/cockpit-vibes.psg",
+      "category": "vehicles-mobility",
+      "description": "Cockpit vibe descriptors",
+      "tags": [
+        "cockpit",
+        "vibes",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-damage-states",
+      "name": "Damage States Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/damage-states.psg",
+      "category": "vehicles-mobility",
+      "description": "Damage states for vehicles",
+      "tags": [
+        "damage",
+        "states",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-ground-rigs",
+      "name": "Ground Rigs Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/ground-rigs.psg",
+      "category": "vehicles-mobility",
+      "description": "Ground vehicles and rigs",
+      "tags": [
+        "ground",
+        "rigs",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-locomotion-traits",
+      "name": "Locomotion Traits Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/locomotion-traits.psg",
+      "category": "vehicles-mobility",
+      "description": "Locomotion traits and characteristics",
+      "tags": [
+        "locomotion",
+        "traits",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object",
+        "character"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-paint-job-styles",
+      "name": "Paint-Job Styles Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/paint-job-styles.psg",
+      "category": "vehicles-mobility",
+      "description": "Vehicle paint-job styles",
+      "tags": [
+        "paint",
+        "job",
+        "styles",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-signature-exhaust",
+      "name": "Signature Exhaust Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/signature-exhaust.psg",
+      "category": "vehicles-mobility",
+      "description": "Signature exhaust effects",
+      "tags": [
+        "signature",
+        "exhaust",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-spacecraft-classes",
+      "name": "Spacecraft Classes Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/spacecraft-classes.psg",
+      "category": "vehicles-mobility",
+      "description": "Spacecraft classes",
+      "tags": [
+        "spacecraft",
+        "classes",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "vehicles-mobility-watercraft",
+      "name": "Watercraft Asset Fragment",
+      "path": "/assets/library/vehicles-mobility/watercraft.psg",
+      "category": "vehicles-mobility",
+      "description": "Watercraft archetypes",
+      "tags": [
+        "watercraft",
+        "vehicles-mobility"
+      ],
+      "roles": [
+        "scenario",
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "vehicle",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "subject",
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    }
+  ]
+}

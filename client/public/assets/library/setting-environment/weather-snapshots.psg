@@ -13,9 +13,29 @@
       "atmosphere",
       "environment",
       "conditions"
+    ],
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
     ]
   },
   "nodes": [
+    {
+      "id": "weather-snapshots-main-prefix",
+      "type": "TextBlock",
+      "x": -180,
+      "y": 100,
+      "value": "set in",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "set in",
+        "value": "set in"
+      }
+    },
     {
       "id": "weather-snapshots-main",
       "type": "WeightedChoice",
@@ -76,16 +96,45 @@
         "region": "light-blue"
       },
       "name": "Weather Snapshots"
+    },
+    {
+      "id": "weather-snapshots-main-output",
+      "type": "Output",
+      "x": 420,
+      "y": 100,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "weather-snapshots-main-prefix-to-weather-snapshots-main",
+      "source": "weather-snapshots-main-prefix",
+      "target": "weather-snapshots-main",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "weather-snapshots-main-to-weather-snapshots-main-output",
+      "source": "weather-snapshots-main",
+      "target": "weather-snapshots-main-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "region-weather-snapshots",
       "name": "Region 1",
       "color": "light-blue",
       "nodes": [
-        "weather-snapshots-main"
+        "weather-snapshots-main",
+        "weather-snapshots-main-prefix",
+        "weather-snapshots-main-output"
       ]
     }
   ]

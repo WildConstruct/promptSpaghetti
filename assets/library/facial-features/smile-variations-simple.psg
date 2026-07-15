@@ -17,9 +17,29 @@
       "simple",
       "direct"
     ],
-    "totalOptions": 12
+    "totalOptions": 12,
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
+    ]
   },
   "nodes": [
+    {
+      "id": "smile-variations-simple-prefix",
+      "type": "TextBlock",
+      "x": -80,
+      "y": 200,
+      "value": "with",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "with",
+        "value": "with"
+      }
+    },
     {
       "id": "smile-variations-simple",
       "type": "WeightedChoice",
@@ -128,9 +148,36 @@
           }
         }
       ]
+    },
+    {
+      "id": "smile-variations-simple-output",
+      "type": "Output",
+      "x": 520,
+      "y": 200,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "smile-variations-simple-prefix-to-smile-variations-simple",
+      "source": "smile-variations-simple-prefix",
+      "target": "smile-variations-simple",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "smile-variations-simple-to-smile-variations-simple-output",
+      "source": "smile-variations-simple",
+      "target": "smile-variations-simple-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "region-simple-system",
@@ -138,7 +185,9 @@
       "color": "#98FB98",
       "color_comment": "Pale Green - Simple/basic system",
       "nodes": [
-        "smile-variations-simple"
+        "smile-variations-simple",
+        "smile-variations-simple-prefix",
+        "smile-variations-simple-output"
       ],
       "description": "Simple, direct smile selection without modifiers"
     }

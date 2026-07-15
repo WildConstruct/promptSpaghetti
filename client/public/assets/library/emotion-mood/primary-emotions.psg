@@ -5,9 +5,29 @@
     "name": "Primary Emotion Tags",
     "category": "emotion-mood",
     "type": "SIMPLE",
-    "description": "Core emotional states for characters"
+    "description": "Core emotional states for characters",
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
+    ]
   },
   "nodes": [
+    {
+      "id": "primary-emotions-main-prefix",
+      "type": "TextBlock",
+      "x": -180,
+      "y": 100,
+      "value": "with a",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "with a",
+        "value": "with a"
+      }
+    },
     {
       "id": "primary-emotions-main",
       "type": "WeightedChoice",
@@ -105,16 +125,45 @@
         "collapsed": false
       },
       "name": "Primary Emotions"
+    },
+    {
+      "id": "primary-emotions-main-output",
+      "type": "Output",
+      "x": 420,
+      "y": 100,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "primary-emotions-main-prefix-to-primary-emotions-main",
+      "source": "primary-emotions-main-prefix",
+      "target": "primary-emotions-main",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "primary-emotions-main-to-primary-emotions-main-output",
+      "source": "primary-emotions-main",
+      "target": "primary-emotions-main-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "region-primary-emotions",
       "name": "Primary Emotions",
       "color": "gold",
       "nodes": [
-        "primary-emotions-main"
+        "primary-emotions-main",
+        "primary-emotions-main-prefix",
+        "primary-emotions-main-output"
       ]
     }
   ]

@@ -14,7 +14,13 @@
       "appearance"
     ],
     "fragment_id": "hair-lengths",
-    "collapsible": true
+    "collapsible": true,
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-output",
+      "updated-region"
+    ]
   },
   "nodes": [
     {
@@ -118,9 +124,29 @@
           }
         }
       ]
+    },
+    {
+      "id": "hair-length-output",
+      "type": "Output",
+      "x": 520,
+      "y": 200,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "hair-length-to-hair-length-output",
+      "source": "hair-length",
+      "target": "hair-length-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "hair-length-fragment",
@@ -128,7 +154,8 @@
       "color": "#CD853F",
       "color_comment": "Peru - Hair base attribute",
       "nodes": [
-        "hair-length"
+        "hair-length",
+        "hair-length-output"
       ],
       "description": "Hair length options as single collapsible unit",
       "metadata": {

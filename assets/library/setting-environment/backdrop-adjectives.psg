@@ -13,9 +13,29 @@
       "adjectives",
       "descriptive",
       "scene"
+    ],
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
     ]
   },
   "nodes": [
+    {
+      "id": "backdrop-adjectives-main-prefix",
+      "type": "TextBlock",
+      "x": -180,
+      "y": 100,
+      "value": "set in",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "set in",
+        "value": "set in"
+      }
+    },
     {
       "id": "backdrop-adjectives-main",
       "type": "WeightedChoice",
@@ -76,16 +96,45 @@
         "region": "forest-green"
       },
       "name": "Backdrop Adjectives"
+    },
+    {
+      "id": "backdrop-adjectives-main-output",
+      "type": "Output",
+      "x": 420,
+      "y": 100,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "backdrop-adjectives-main-prefix-to-backdrop-adjectives-main",
+      "source": "backdrop-adjectives-main-prefix",
+      "target": "backdrop-adjectives-main",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "backdrop-adjectives-main-to-backdrop-adjectives-main-output",
+      "source": "backdrop-adjectives-main",
+      "target": "backdrop-adjectives-main-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "region-backdrop-adjectives",
       "name": "Region 1",
       "color": "forest-green",
       "nodes": [
-        "backdrop-adjectives-main"
+        "backdrop-adjectives-main",
+        "backdrop-adjectives-main-prefix",
+        "backdrop-adjectives-main-output"
       ]
     }
   ]

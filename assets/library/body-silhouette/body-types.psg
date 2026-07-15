@@ -5,9 +5,29 @@
     "name": "Body Types",
     "category": "body-silhouette",
     "type": "SIMPLE",
-    "description": "Various body types for character generation"
+    "description": "Various body types for character generation",
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
+    ]
   },
   "nodes": [
+    {
+      "id": "body-types-main-prefix",
+      "type": "TextBlock",
+      "x": -180,
+      "y": 100,
+      "value": "with",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "with",
+        "value": "with"
+      }
+    },
     {
       "id": "body-types-main",
       "type": "WeightedChoice",
@@ -105,16 +125,45 @@
         "collapsed": false
       },
       "name": "Body Types"
+    },
+    {
+      "id": "body-types-main-output",
+      "type": "Output",
+      "x": 420,
+      "y": 100,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "body-types-main-prefix-to-body-types-main",
+      "source": "body-types-main-prefix",
+      "target": "body-types-main",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "body-types-main-to-body-types-main-output",
+      "source": "body-types-main",
+      "target": "body-types-main-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "region-body-types",
       "name": "Body Types",
       "color": "steel-blue",
       "nodes": [
-        "body-types-main"
+        "body-types-main",
+        "body-types-main-prefix",
+        "body-types-main-output"
       ]
     }
   ]

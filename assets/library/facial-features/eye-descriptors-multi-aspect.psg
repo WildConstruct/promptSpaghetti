@@ -9,9 +9,21 @@
     "type": "MULTI-ASPECT",
     "exampleStatus": "legacy-compatible-rich-example",
     "authoringContract": "For the minimal canonical PSG authoring shape, copy docs/examples/psg-weekend-mvp-canonical-example.psg and see docs/psg-weekend-mvp-contract.md.",
-    "tags": ["eyes", "facial-features", "descriptors", "multi-aspect", "modular"],
+    "tags": [
+      "eyes",
+      "facial-features",
+      "descriptors",
+      "multi-aspect",
+      "modular"
+    ],
     "totalCombinations": "~40-50 variations",
-    "collapsible": true
+    "collapsible": true,
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-output",
+      "updated-region"
+    ]
   },
   "nodes": [
     {
@@ -106,7 +118,7 @@
     },
     {
       "id": "eye-color-feature",
-      "type": "WeightedChoice", 
+      "type": "WeightedChoice",
       "name": "Eye Color/Features",
       "description": "Color and special characteristics",
       "x": 100,
@@ -239,6 +251,18 @@
           }
         }
       ]
+    },
+    {
+      "id": "eye-shape-output",
+      "type": "Output",
+      "x": 420,
+      "y": 100,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
   "edges": [
@@ -251,6 +275,13 @@
       "id": "edge-color-to-position",
       "source": "eye-color-feature",
       "target": "eye-size-position"
+    },
+    {
+      "id": "eye-shape-to-eye-shape-output",
+      "source": "eye-shape",
+      "target": "eye-shape-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
     }
   ],
   "regions": [
@@ -262,7 +293,8 @@
       "nodes": [
         "eye-shape",
         "eye-color-feature",
-        "eye-size-position"
+        "eye-size-position",
+        "eye-shape-output"
       ],
       "description": "Complete eye description system as a single collapsible unit",
       "metadata": {

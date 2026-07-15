@@ -1,0 +1,2135 @@
+{
+  "version": "1.1.0",
+  "type": "agent-fragment-shard",
+  "groupBy": "domains",
+  "key": "creature",
+  "generatedAt": "2026-07-15T00:54:15.174Z",
+  "totalFragments": 50,
+  "fragments": [
+    {
+      "id": "action-aerial-motions",
+      "name": "Aerial Motions",
+      "path": "/assets/library/action-dynamics/aerial-motions.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Aerial Motions (action-dynamics).",
+      "tags": [
+        "action",
+        "aerial",
+        "motion",
+        "motions",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-crowd-behaviors",
+      "name": "Crowd Behaviors",
+      "path": "/assets/library/action-dynamics/crowd-behaviors.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Crowd Behaviors (action-dynamics).",
+      "tags": [
+        "action",
+        "crowd",
+        "behavior",
+        "behaviors",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "crowd",
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-facial-micro-gestures",
+      "name": "Facial Micro Gestures",
+      "path": "/assets/library/action-dynamics/facial-micro-gestures.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Facial Micro Gestures (action-dynamics).",
+      "tags": [
+        "action",
+        "facial",
+        "micro-gesture",
+        "micro",
+        "gestures",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-group-dynamics",
+      "name": "Group Dynamics",
+      "path": "/assets/library/action-dynamics/group-dynamics.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Group Dynamics (action-dynamics).",
+      "tags": [
+        "action",
+        "group",
+        "dynamics",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "crowd",
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-high-impact-moves",
+      "name": "High Impact Moves",
+      "path": "/assets/library/action-dynamics/high-impact-moves.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: High Impact Moves (action-dynamics).",
+      "tags": [
+        "action",
+        "impact",
+        "move",
+        "high",
+        "moves",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "heroic",
+        "brutal"
+      ],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-object-interactions",
+      "name": "Object Interactions",
+      "path": "/assets/library/action-dynamics/object-interactions.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Object Interactions (action-dynamics).",
+      "tags": [
+        "action",
+        "object",
+        "interaction",
+        "interactions",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "action",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-reaction-beats",
+      "name": "Reaction Beats",
+      "path": "/assets/library/action-dynamics/reaction-beats.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Reaction Beats (action-dynamics).",
+      "tags": [
+        "action",
+        "reaction",
+        "beat",
+        "beats",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-stealth-movements",
+      "name": "Stealth Movements",
+      "path": "/assets/library/action-dynamics/stealth-movements.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Stealth Movements (action-dynamics).",
+      "tags": [
+        "action",
+        "stealth",
+        "movement",
+        "movements",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "gritty",
+        "moody"
+      ],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-subtle-micro-actions",
+      "name": "Subtle Micro Actions",
+      "path": "/assets/library/action-dynamics/subtle-micro-actions.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Subtle Micro Actions (action-dynamics).",
+      "tags": [
+        "action",
+        "subtle",
+        "micro",
+        "actions",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "action-transformative-actions",
+      "name": "Transformative Actions",
+      "path": "/assets/library/action-dynamics/transformative-actions.psg",
+      "category": "action-dynamics",
+      "description": "Library fragment: Transformative Actions (action-dynamics).",
+      "tags": [
+        "action",
+        "transformative",
+        "sequence",
+        "actions",
+        "action-dynamics"
+      ],
+      "roles": [
+        "scenario",
+        "branch-extension",
+        "modifier"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "surreal",
+        "cinematic"
+      ],
+      "slotTypes": [
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "body-accessory-silhouettes",
+      "name": "Accessory Silhouettes",
+      "path": "/assets/library/body-silhouette/accessory-silhouettes.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Accessory Silhouettes (body-silhouette).",
+      "tags": [
+        "body",
+        "silhouette",
+        "accessories",
+        "accessory",
+        "silhouettes",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-assistive-gear",
+      "name": "Assistive Gear",
+      "path": "/assets/library/body-silhouette/assistive-gear.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Assistive Gear (body-silhouette).",
+      "tags": [
+        "body",
+        "gear",
+        "assistive",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "object"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-athletic-markers",
+      "name": "Athletic Markers",
+      "path": "/assets/library/body-silhouette/athletic-markers.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Athletic Markers (body-silhouette).",
+      "tags": [
+        "body",
+        "athletic",
+        "markers",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-types",
+      "name": "Body Types",
+      "path": "/assets/library/body-silhouette/body-types.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Body Types (body-silhouette).",
+      "tags": [
+        "body",
+        "types",
+        "physique",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-clothing-fit",
+      "name": "Clothing Fit",
+      "path": "/assets/library/body-silhouette/clothing-fit.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Clothing Fit (body-silhouette).",
+      "tags": [
+        "body",
+        "clothing",
+        "fit",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-gesture-starters",
+      "name": "Gesture Starters",
+      "path": "/assets/library/body-silhouette/gesture-starters.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Gesture Starters (body-silhouette).",
+      "tags": [
+        "body",
+        "gesture",
+        "pose",
+        "starters",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "body-movement-quality",
+      "name": "Movement Quality",
+      "path": "/assets/library/body-silhouette/movement-quality.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Movement Quality (body-silhouette).",
+      "tags": [
+        "body",
+        "movement",
+        "quality",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "branch-lane"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "body-posture-keys",
+      "name": "Posture Keys",
+      "path": "/assets/library/body-silhouette/posture-keys.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Posture Keys (body-silhouette).",
+      "tags": [
+        "body",
+        "posture",
+        "silhouette",
+        "keys",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-scars-tattoos",
+      "name": "Scars Tattoos",
+      "path": "/assets/library/body-silhouette/scars-tattoos.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Scars Tattoos (body-silhouette).",
+      "tags": [
+        "body",
+        "scars",
+        "tattoos",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [
+        "gritty"
+      ],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "body-stage-presence",
+      "name": "Stage Presence",
+      "path": "/assets/library/body-silhouette/stage-presence.psg",
+      "category": "body-silhouette",
+      "description": "Library fragment: Stage Presence (body-silhouette).",
+      "tags": [
+        "body",
+        "presence",
+        "performance",
+        "stage",
+        "body-silhouette"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "emotion-affect-masks",
+      "name": "Affect Masks",
+      "path": "/assets/library/emotion-mood/affect-masks.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Affect Masks (emotion-mood).",
+      "tags": [
+        "emotion",
+        "mask",
+        "subtext",
+        "affect",
+        "masks",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-conflict-escalation",
+      "name": "Conflict Escalation",
+      "path": "/assets/library/emotion-mood/conflict-escalation.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Conflict Escalation (emotion-mood).",
+      "tags": [
+        "emotion",
+        "conflict",
+        "escalation",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "gritty",
+        "brutal"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-empathetic-echoes",
+      "name": "Empathetic Echoes",
+      "path": "/assets/library/emotion-mood/empathetic-echoes.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Empathetic Echoes (emotion-mood).",
+      "tags": [
+        "emotion",
+        "empathy",
+        "echo",
+        "empathetic",
+        "echoes",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-energy-levels",
+      "name": "Energy Levels",
+      "path": "/assets/library/emotion-mood/energy-levels.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Energy Levels (emotion-mood).",
+      "tags": [
+        "emotion",
+        "energy",
+        "intensity",
+        "levels",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-group-mood-fields",
+      "name": "Group Mood Fields",
+      "path": "/assets/library/emotion-mood/group-mood-fields.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Group Mood Fields (emotion-mood).",
+      "tags": [
+        "emotion",
+        "group",
+        "crowd",
+        "mood",
+        "fields",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "crowd",
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-intensity-modifiers",
+      "name": "Intensity Modifiers",
+      "path": "/assets/library/emotion-mood/intensity-modifiers.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Intensity Modifiers (emotion-mood).",
+      "tags": [
+        "emotion",
+        "intensity",
+        "modifier",
+        "modifiers",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-nuanced-feels",
+      "name": "Nuanced Feels",
+      "path": "/assets/library/emotion-mood/nuanced-feels.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Nuanced Feels (emotion-mood).",
+      "tags": [
+        "emotion",
+        "nuance",
+        "feelings",
+        "nuanced",
+        "feels",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-primary-emotions",
+      "name": "Primary Emotions",
+      "path": "/assets/library/emotion-mood/primary-emotions.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Primary Emotions (emotion-mood).",
+      "tags": [
+        "emotion",
+        "primary",
+        "feelings",
+        "emotions",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-subtext-signals",
+      "name": "Subtext Signals",
+      "path": "/assets/library/emotion-mood/subtext-signals.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Subtext Signals (emotion-mood).",
+      "tags": [
+        "emotion",
+        "subtext",
+        "signals",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "moody"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "emotion-temporal-mood-shifts",
+      "name": "Temporal Mood Shifts",
+      "path": "/assets/library/emotion-mood/temporal-mood-shifts.psg",
+      "category": "emotion-mood",
+      "description": "Library fragment: Temporal Mood Shifts (emotion-mood).",
+      "tags": [
+        "emotion",
+        "temporal",
+        "shift",
+        "mood",
+        "shifts",
+        "emotion-mood"
+      ],
+      "roles": [
+        "modifier",
+        "branch-extension",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "crowd"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
+      ],
+      "tone": [
+        "cinematic"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "facial-features-age-indicators",
+      "name": "Age Indicators Asset Fragment",
+      "path": "/assets/library/facial-features/age-indicators.psg",
+      "category": "facial-features",
+      "description": "Skin texture and age-related descriptors for character generation",
+      "tags": [
+        "age",
+        "indicators",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-smile-variations-contextual",
+      "name": "Contextual Smile Variations System",
+      "path": "/assets/library/facial-features/smile-variations-contextual.psg",
+      "category": "facial-features",
+      "description": "CONTEXTUAL SYSTEM - Smile expressions with intensity modifiers for nuanced facial expressions",
+      "tags": [
+        "smile",
+        "variations",
+        "contextual",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 3,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "auto-boundary",
+      "exitStrategy": "auto-boundary",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "face-eye-descriptors-multi",
+      "name": "Eye Descriptors Multi Aspect",
+      "path": "/assets/library/facial-features/eye-descriptors-multi-aspect.psg",
+      "category": "facial-features",
+      "description": "Comprehensive eye descriptor system with shape, color/features, and positioning aspects",
+      "tags": [
+        "face",
+        "eyes",
+        "multi-aspect",
+        "eye",
+        "descriptors",
+        "multi",
+        "aspect",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "region",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 3,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "manual",
+      "exitStrategy": "manual",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-facial-hair-styles",
+      "name": "Facial Hair Styles Asset Fragment",
+      "path": "/assets/library/facial-features/facial-hair-styles.psg",
+      "category": "facial-features",
+      "description": "Facial hair styles and grooming options for character generation",
+      "tags": [
+        "facial",
+        "hair",
+        "styles",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "style-medium",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-facial-symmetry",
+      "name": "Facial Symmetry Asset Fragment",
+      "path": "/assets/library/facial-features/facial-symmetry.psg",
+      "category": "facial-features",
+      "description": "Facial balance and symmetry descriptors for character generation",
+      "tags": [
+        "facial",
+        "symmetry",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-iconic-features",
+      "name": "Iconic Features Asset Fragment",
+      "path": "/assets/library/facial-features/iconic-features.psg",
+      "category": "facial-features",
+      "description": "Distinctive and memorable facial features for character generation",
+      "tags": [
+        "iconic",
+        "features",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-makeup-accents",
+      "name": "Make-up Accents Asset Fragment",
+      "path": "/assets/library/facial-features/makeup-accents.psg",
+      "category": "facial-features",
+      "description": "Artistic makeup and cosmetic accent options for character generation",
+      "tags": [
+        "makeup",
+        "accents",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-piercings-mods",
+      "name": "Piercings & Mods Asset Fragment",
+      "path": "/assets/library/facial-features/piercings-mods.psg",
+      "category": "facial-features",
+      "description": "Body modifications and piercing options for character generation",
+      "tags": [
+        "piercings",
+        "mods",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-skin-undertones",
+      "name": "Skin Undertones Asset Fragment",
+      "path": "/assets/library/facial-features/skin-undertones.psg",
+      "category": "facial-features",
+      "description": "Diverse skin tone and undertone descriptors for character generation",
+      "tags": [
+        "skin",
+        "undertones",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "face-smile-variations-simple",
+      "name": "Smile Variations Simple",
+      "path": "/assets/library/facial-features/smile-variations-simple.psg",
+      "category": "facial-features",
+      "description": "SIMPLE SYSTEM - Direct smile expressions without modifiers, expanded from 3 to 12 variations",
+      "tags": [
+        "face",
+        "smile",
+        "expression",
+        "variations",
+        "simple",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "constraint"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-lengths",
+      "name": "Basic Hair Lengths Asset Fragment",
+      "path": "/assets/library/hair/hair-lengths.psg",
+      "category": "hair",
+      "description": "Hair length descriptors from buzzed to floor-length",
+      "tags": [
+        "hair",
+        "lengths"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-colors-fantasy",
+      "name": "Fantasy Hair Colors Asset Fragment",
+      "path": "/assets/library/hair/hair-colors-fantasy.psg",
+      "category": "hair",
+      "description": "Unnatural and fantasy hair color options",
+      "tags": [
+        "hair",
+        "colors",
+        "fantasy"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-styles-feminine",
+      "name": "Feminine-Coded Hair Styles Asset Fragment",
+      "path": "/assets/library/hair/hair-styles-feminine.psg",
+      "category": "hair",
+      "description": "Traditionally feminine hair styling options",
+      "tags": [
+        "hair",
+        "styles",
+        "feminine"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-cuts-neutral",
+      "name": "Gender-Neutral Hair Cuts Asset Fragment",
+      "path": "/assets/library/hair/hair-cuts-neutral.psg",
+      "category": "hair",
+      "description": "Hair cuts and styles that work across gender presentations",
+      "tags": [
+        "hair",
+        "cuts",
+        "neutral"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-accessories",
+      "name": "Hair Accessories Asset Fragment",
+      "path": "/assets/library/hair/hair-accessories.psg",
+      "category": "hair",
+      "description": "Hair decoration and accessory options",
+      "tags": [
+        "hair",
+        "accessories"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-textures",
+      "name": "Hair Textures Asset Fragment",
+      "path": "/assets/library/hair/hair-textures.psg",
+      "category": "hair",
+      "description": "Hair texture patterns from straight to kinky coils",
+      "tags": [
+        "hair",
+        "textures"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-styles-masculine",
+      "name": "Masculine-Coded Hair Styles Asset Fragment",
+      "path": "/assets/library/hair/hair-styles-masculine.psg",
+      "category": "hair",
+      "description": "Traditionally masculine hair styling options",
+      "tags": [
+        "hair",
+        "styles",
+        "masculine"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-motion-cues",
+      "name": "Motion-Oriented Hair Cues Asset Fragment",
+      "path": "/assets/library/hair/hair-motion-cues.psg",
+      "category": "hair",
+      "description": "Dynamic hair movement and motion descriptors",
+      "tags": [
+        "hair",
+        "motion",
+        "cues"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "action"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-colors-natural",
+      "name": "Natural Hair Colors Asset Fragment",
+      "path": "/assets/library/hair/hair-colors-natural.psg",
+      "category": "hair",
+      "description": "Natural hair color variations found in human populations",
+      "tags": [
+        "hair",
+        "colors",
+        "natural"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "hair-hair-weathered-details",
+      "name": "Weathered Hair Details Asset Fragment",
+      "path": "/assets/library/hair/hair-weathered-details.psg",
+      "category": "hair",
+      "description": "Environmental and activity-based hair conditions",
+      "tags": [
+        "hair",
+        "weathered",
+        "details"
+      ],
+      "roles": [
+        "modifier",
+        "archetype-support"
+      ],
+      "domains": [
+        "character",
+        "creature",
+        "environment"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "setting"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    }
+  ]
+}

@@ -1,20 +1,24 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "agent-fragment-shard",
   "groupBy": "role",
   "key": "output-finisher",
-  "generatedAt": "2026-03-09T16:43:25.683Z",
-  "totalFragments": 22,
+  "generatedAt": "2026-07-15T00:54:15.174Z",
+  "totalFragments": 30,
   "fragments": [
     {
       "id": "emotion-affect-masks",
       "name": "Affect Masks",
       "path": "/assets/library/emotion-mood/affect-masks.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Affect Masks (emotion-mood).",
       "tags": [
         "emotion",
         "mask",
-        "subtext"
+        "subtext",
+        "affect",
+        "masks",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -27,14 +31,22 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [
         "moody"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -48,10 +60,12 @@
       "name": "Conflict Escalation",
       "path": "/assets/library/emotion-mood/conflict-escalation.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Conflict Escalation (emotion-mood).",
       "tags": [
         "emotion",
         "conflict",
-        "escalation"
+        "escalation",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -64,14 +78,23 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
-        "branch-lane"
+        "branch-lane",
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [
         "gritty",
         "brutal"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -85,10 +108,14 @@
       "name": "Empathetic Echoes",
       "path": "/assets/library/emotion-mood/empathetic-echoes.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Empathetic Echoes (emotion-mood).",
       "tags": [
         "emotion",
         "empathy",
-        "echo"
+        "echo",
+        "empathetic",
+        "echoes",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -101,14 +128,21 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -122,10 +156,13 @@
       "name": "Energy Levels",
       "path": "/assets/library/emotion-mood/energy-levels.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Energy Levels (emotion-mood).",
       "tags": [
         "emotion",
         "energy",
-        "intensity"
+        "intensity",
+        "levels",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -138,13 +175,21 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -157,10 +202,14 @@
       "name": "Group Mood Fields",
       "path": "/assets/library/emotion-mood/group-mood-fields.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Group Mood Fields (emotion-mood).",
       "tags": [
         "emotion",
         "group",
-        "crowd"
+        "crowd",
+        "mood",
+        "fields",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -169,16 +218,25 @@
       ],
       "domains": [
         "crowd",
-        "character"
+        "character",
+        "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -191,10 +249,13 @@
       "name": "Intensity Modifiers",
       "path": "/assets/library/emotion-mood/intensity-modifiers.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Intensity Modifiers (emotion-mood).",
       "tags": [
         "emotion",
         "intensity",
-        "modifier"
+        "modifier",
+        "modifiers",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -207,13 +268,20 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -226,10 +294,14 @@
       "name": "Nuanced Feels",
       "path": "/assets/library/emotion-mood/nuanced-feels.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Nuanced Feels (emotion-mood).",
       "tags": [
         "emotion",
         "nuance",
-        "feelings"
+        "feelings",
+        "nuanced",
+        "feels",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -242,14 +314,22 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [
         "moody"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -263,10 +343,13 @@
       "name": "Primary Emotions",
       "path": "/assets/library/emotion-mood/primary-emotions.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Primary Emotions (emotion-mood).",
       "tags": [
         "emotion",
         "primary",
-        "feelings"
+        "feelings",
+        "emotions",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -279,13 +362,21 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -298,10 +389,12 @@
       "name": "Subtext Signals",
       "path": "/assets/library/emotion-mood/subtext-signals.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Subtext Signals (emotion-mood).",
       "tags": [
         "emotion",
         "subtext",
-        "signals"
+        "signals",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -314,14 +407,21 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [
         "moody"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -335,10 +435,14 @@
       "name": "Temporal Mood Shifts",
       "path": "/assets/library/emotion-mood/temporal-mood-shifts.psg",
       "category": "emotion-mood",
+      "description": "Library fragment: Temporal Mood Shifts (emotion-mood).",
       "tags": [
         "emotion",
         "temporal",
-        "shift"
+        "shift",
+        "mood",
+        "shifts",
+        "emotion-mood"
       ],
       "roles": [
         "modifier",
@@ -351,14 +455,21 @@
         "crowd"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
-        "before-output"
+        "before-output",
+        "downstream-of-choice"
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "mood",
+        "appearance",
+        "action"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -368,14 +479,15 @@
       "requiresBranchLane": true
     },
     {
-      "id": "face-eye-descriptors-multi",
-      "name": "Eye Descriptors Multi Aspect",
-      "path": "/assets/library/facial-features/eye-descriptors-multi-aspect.psg",
+      "id": "facial-features-age-indicators",
+      "name": "Age Indicators Asset Fragment",
+      "path": "/assets/library/facial-features/age-indicators.psg",
       "category": "facial-features",
+      "description": "Skin texture and age-related descriptors for character generation",
       "tags": [
-        "face",
-        "eyes",
-        "multi-aspect"
+        "age",
+        "indicators",
+        "facial-features"
       ],
       "roles": [
         "modifier",
@@ -387,29 +499,36 @@
       ],
       "nodeTypes": [
         "weighted-choice",
-        "region"
+        "text",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice",
         "before-output"
       ],
       "tone": [],
-      "nodeCount": 3,
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
       "preferredInsertion": "insert-edge",
-      "entryStrategy": "manual",
-      "exitStrategy": "manual",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
       "suggestionWeight": 0,
       "requiresBranchLane": false
     },
     {
-      "id": "face-smile-variations-simple",
-      "name": "Smile Variations Simple",
-      "path": "/assets/library/facial-features/smile-variations-simple.psg",
+      "id": "facial-features-smile-variations-contextual",
+      "name": "Contextual Smile Variations System",
+      "path": "/assets/library/facial-features/smile-variations-contextual.psg",
       "category": "facial-features",
+      "description": "CONTEXTUAL SYSTEM - Smile expressions with intensity modifiers for nuanced facial expressions",
       "tags": [
-        "face",
         "smile",
-        "expression"
+        "variations",
+        "contextual",
+        "facial-features"
       ],
       "roles": [
         "modifier",
@@ -420,13 +539,345 @@
         "creature"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "output"
       ],
       "placementHints": [
         "downstream-of-choice",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 3,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "auto-boundary",
+      "exitStrategy": "auto-boundary",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "face-eye-descriptors-multi",
+      "name": "Eye Descriptors Multi Aspect",
+      "path": "/assets/library/facial-features/eye-descriptors-multi-aspect.psg",
+      "category": "facial-features",
+      "description": "Comprehensive eye descriptor system with shape, color/features, and positioning aspects",
+      "tags": [
+        "face",
+        "eyes",
+        "multi-aspect",
+        "eye",
+        "descriptors",
+        "multi",
+        "aspect",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "region",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance"
+      ],
+      "nodeCount": 3,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "manual",
+      "exitStrategy": "manual",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-facial-hair-styles",
+      "name": "Facial Hair Styles Asset Fragment",
+      "path": "/assets/library/facial-features/facial-hair-styles.psg",
+      "category": "facial-features",
+      "description": "Facial hair styles and grooming options for character generation",
+      "tags": [
+        "facial",
+        "hair",
+        "styles",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "style-medium",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-facial-symmetry",
+      "name": "Facial Symmetry Asset Fragment",
+      "path": "/assets/library/facial-features/facial-symmetry.psg",
+      "category": "facial-features",
+      "description": "Facial balance and symmetry descriptors for character generation",
+      "tags": [
+        "facial",
+        "symmetry",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-iconic-features",
+      "name": "Iconic Features Asset Fragment",
+      "path": "/assets/library/facial-features/iconic-features.psg",
+      "category": "facial-features",
+      "description": "Distinctive and memorable facial features for character generation",
+      "tags": [
+        "iconic",
+        "features",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-makeup-accents",
+      "name": "Make-up Accents Asset Fragment",
+      "path": "/assets/library/facial-features/makeup-accents.psg",
+      "category": "facial-features",
+      "description": "Artistic makeup and cosmetic accent options for character generation",
+      "tags": [
+        "makeup",
+        "accents",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-piercings-mods",
+      "name": "Piercings & Mods Asset Fragment",
+      "path": "/assets/library/facial-features/piercings-mods.psg",
+      "category": "facial-features",
+      "description": "Body modifications and piercing options for character generation",
+      "tags": [
+        "piercings",
+        "mods",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "facial-features-skin-undertones",
+      "name": "Skin Undertones Asset Fragment",
+      "path": "/assets/library/facial-features/skin-undertones.psg",
+      "category": "facial-features",
+      "description": "Diverse skin tone and undertone descriptors for character generation",
+      "tags": [
+        "skin",
+        "undertones",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "subject"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": false
+    },
+    {
+      "id": "face-smile-variations-simple",
+      "name": "Smile Variations Simple",
+      "path": "/assets/library/facial-features/smile-variations-simple.psg",
+      "category": "facial-features",
+      "description": "SIMPLE SYSTEM - Direct smile expressions without modifiers, expanded from 3 to 12 variations",
+      "tags": [
+        "face",
+        "smile",
+        "expression",
+        "variations",
+        "simple",
+        "facial-features"
+      ],
+      "roles": [
+        "modifier",
+        "output-finisher"
+      ],
+      "domains": [
+        "character",
+        "creature"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "downstream-of-choice",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "appearance",
+        "constraint"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -439,44 +890,14 @@
       "name": "Architectural Styles",
       "path": "/assets/library/setting-environment/architectural-styles.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Architectural Styles (setting-environment).",
       "tags": [
         "environment",
         "architecture",
-        "building"
-      ],
-      "roles": [
-        "scenario",
-        "output-finisher",
-        "branch-extension"
-      ],
-      "domains": [
-        "environment",
-        "building"
-      ],
-      "nodeTypes": [
-        "weighted-choice"
-      ],
-      "placementHints": [
-        "branch-lane",
-        "before-output"
-      ],
-      "tone": [],
-      "nodeCount": 1,
-      "preferredInsertion": "insert-edge",
-      "entryStrategy": "single-node",
-      "exitStrategy": "single-node",
-      "suggestionWeight": 0,
-      "requiresBranchLane": true
-    },
-    {
-      "id": "setting-atmospherics",
-      "name": "Atmospherics",
-      "path": "/assets/library/setting-environment/atmospherics.psg",
-      "category": "setting-environment",
-      "tags": [
-        "environment",
-        "atmosphere",
-        "scene"
+        "building",
+        "architectural",
+        "styles",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -489,7 +910,55 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
+      ],
+      "placementHints": [
+        "branch-lane",
+        "before-output"
+      ],
+      "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood",
+        "style-medium"
+      ],
+      "nodeCount": 1,
+      "preferredInsertion": "insert-edge",
+      "entryStrategy": "single-node",
+      "exitStrategy": "single-node",
+      "suggestionWeight": 0,
+      "requiresBranchLane": true
+    },
+    {
+      "id": "setting-atmospherics",
+      "name": "Atmospherics",
+      "path": "/assets/library/setting-environment/atmospherics.psg",
+      "category": "setting-environment",
+      "description": "Library fragment: Atmospherics (setting-environment).",
+      "tags": [
+        "environment",
+        "atmosphere",
+        "scene",
+        "atmospherics",
+        "setting-environment"
+      ],
+      "roles": [
+        "scenario",
+        "output-finisher",
+        "branch-extension"
+      ],
+      "domains": [
+        "environment",
+        "building",
+        "vehicle"
+      ],
+      "nodeTypes": [
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -498,6 +967,11 @@
       "tone": [
         "cinematic",
         "moody"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -511,10 +985,13 @@
       "name": "Backdrop Adjectives",
       "path": "/assets/library/setting-environment/backdrop-adjectives.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Backdrop Adjectives (setting-environment).",
       "tags": [
         "environment",
         "backdrop",
-        "scene"
+        "scene",
+        "adjectives",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -527,13 +1004,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -546,10 +1030,12 @@
       "name": "Crowd Density",
       "path": "/assets/library/setting-environment/crowd-density.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Crowd Density (setting-environment).",
       "tags": [
         "environment",
         "crowd",
-        "density"
+        "density",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -558,16 +1044,25 @@
       ],
       "domains": [
         "environment",
-        "crowd"
+        "crowd",
+        "building",
+        "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -580,10 +1075,13 @@
       "name": "Geology Touches",
       "path": "/assets/library/setting-environment/geology-touches.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Geology Touches (setting-environment).",
       "tags": [
         "environment",
         "geology",
-        "terrain"
+        "terrain",
+        "touches",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -592,16 +1090,24 @@
       ],
       "domains": [
         "environment",
-        "vehicle"
+        "vehicle",
+        "building"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -614,10 +1120,13 @@
       "name": "Lighting Moods",
       "path": "/assets/library/setting-environment/lighting-moods.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Lighting Moods (setting-environment).",
       "tags": [
         "environment",
         "lighting",
-        "mood"
+        "mood",
+        "moods",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -630,7 +1139,9 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -639,6 +1150,11 @@
       "tone": [
         "cinematic",
         "moody"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
@@ -652,10 +1168,13 @@
       "name": "Sound Snippets",
       "path": "/assets/library/setting-environment/sound-snippets.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Sound Snippets (setting-environment).",
       "tags": [
         "environment",
         "sound",
-        "scene"
+        "scene",
+        "snippets",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -665,16 +1184,24 @@
       "domains": [
         "environment",
         "vehicle",
-        "crowd"
+        "crowd",
+        "building"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -687,10 +1214,13 @@
       "name": "Spatial Relations",
       "path": "/assets/library/setting-environment/spatial-relations.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Spatial Relations (setting-environment).",
       "tags": [
         "environment",
         "spatial",
-        "composition"
+        "composition",
+        "relations",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -703,13 +1233,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -722,10 +1259,13 @@
       "name": "Temporal Markers",
       "path": "/assets/library/setting-environment/temporal-markers.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Temporal Markers (setting-environment).",
       "tags": [
         "environment",
         "time",
-        "temporal"
+        "temporal",
+        "markers",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -738,13 +1278,20 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
         "before-output"
       ],
       "tone": [],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
+      ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",
       "entryStrategy": "single-node",
@@ -757,10 +1304,13 @@
       "name": "Weather Snapshots",
       "path": "/assets/library/setting-environment/weather-snapshots.psg",
       "category": "setting-environment",
+      "description": "Library fragment: Weather Snapshots (setting-environment).",
       "tags": [
         "environment",
         "weather",
-        "climate"
+        "climate",
+        "snapshots",
+        "setting-environment"
       ],
       "roles": [
         "scenario",
@@ -773,7 +1323,9 @@
         "vehicle"
       ],
       "nodeTypes": [
-        "weighted-choice"
+        "weighted-choice",
+        "text",
+        "output"
       ],
       "placementHints": [
         "branch-lane",
@@ -781,6 +1333,11 @@
       ],
       "tone": [
         "cinematic"
+      ],
+      "slotTypes": [
+        "setting",
+        "lighting",
+        "mood"
       ],
       "nodeCount": 1,
       "preferredInsertion": "insert-edge",

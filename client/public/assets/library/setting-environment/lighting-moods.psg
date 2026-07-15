@@ -13,9 +13,29 @@
       "atmosphere",
       "mood",
       "cinematic"
+    ],
+    "enriched": true,
+    "enrichedAt": "2026-07-15",
+    "enrichNotes": [
+      "added-text-prefix",
+      "added-output",
+      "updated-region"
     ]
   },
   "nodes": [
+    {
+      "id": "lighting-moods-main-prefix",
+      "type": "TextBlock",
+      "x": -180,
+      "y": 100,
+      "value": "set in",
+      "name": "Prefix",
+      "data": {
+        "label": "Prefix",
+        "text": "set in",
+        "value": "set in"
+      }
+    },
     {
       "id": "lighting-moods-main",
       "type": "WeightedChoice",
@@ -76,16 +96,45 @@
         "region": "amber"
       },
       "name": "Lighting Moods"
+    },
+    {
+      "id": "lighting-moods-main-output",
+      "type": "Output",
+      "x": 420,
+      "y": 100,
+      "template": "",
+      "name": "Output",
+      "data": {
+        "label": "Output",
+        "outputName": "fragment_output"
+      }
     }
   ],
-  "edges": [],
+  "edges": [
+    {
+      "id": "lighting-moods-main-prefix-to-lighting-moods-main",
+      "source": "lighting-moods-main-prefix",
+      "target": "lighting-moods-main",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    },
+    {
+      "id": "lighting-moods-main-to-lighting-moods-main-output",
+      "source": "lighting-moods-main",
+      "target": "lighting-moods-main-output",
+      "sourceHandle": "source",
+      "targetHandle": "target"
+    }
+  ],
   "regions": [
     {
       "id": "region-lighting-moods",
       "name": "Region 1",
       "color": "amber",
       "nodes": [
-        "lighting-moods-main"
+        "lighting-moods-main",
+        "lighting-moods-main-prefix",
+        "lighting-moods-main-output"
       ]
     }
   ]
