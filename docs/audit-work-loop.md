@@ -35,9 +35,9 @@ advance the cursor.
 
 | Field | Value |
 | --- | --- |
-| **Active section** | *(Track D complete)* |
+| **Active section** | *(Track F complete)* |
 | **Status** | `pending` (paused for check-in) |
-| **Track** | D done — Nested PSG product follow-ups |
+| **Track** | F — Fragment dissection / swap flow |
 | **Started** | 2026-07-14 |
 
 ## Section board
@@ -84,6 +84,19 @@ Vertical slice landed (format, runtime, tabs, teaching graph). Remaining product
 | **D3** | Per-document undo / viewport | `done` | Undo stack + viewport saved/restored per composition on tab switch; suppress cross-doc snapshot bleed |
 | **D4** | Nested PSG docs + work-loop log | `done` | Plan + work-loop reflect shipped vs deferred |
 
+### Track F — Fragment dissection & swap flow
+
+Design: `docs/fragment-dissection-swap-flow.md`. Review-first wizard: paste → slots → match → swap → graph.
+
+| ID | Section | Status | Acceptance criteria |
+| --- | --- | --- | --- |
+| **F0** | Library audit + manifest expand | `done` | All library `.psg` audited; agent index 43→161; `slotTypes` on records; audit report generated; indexes rebuildable |
+| **F1** | Draft-graph slot metadata | `done` | Additive `slots[]` on draft response; heuristic classification; model optional fields |
+| **F2** | Deterministic top-3 matching | `done` | `matchFragmentsForSlot` with reasons; empty = no library match |
+| **F2b** | Enrich thin fragments | `done` | Output (+ prefix when warranted); re-audit 0 thin |
+| **F3** | Review UI in Prompt Wizard | `done` | FragmentSlotReview: rows, swap/restore/skip, live preview; wizard Create Graph applies selections |
+| **F4** | Create Graph from approvals | `done` | Expand selected fragments via PSG load; Add vs Replace when canvas dirty; mirror library to public |
+
 ## Session log
 
 | When | Section | Result | Evidence |
@@ -126,6 +139,16 @@ Vertical slice landed (format, runtime, tabs, teaching graph). Remaining product
 | 2026-07-14 | (pause) | — | **D3 deferred** (per-doc undo/viewport). Smoke Create composition or commit when ready. |
 | 2026-07-14 | D3 | done | Per-doc history + viewport on ProjectDocument; useGraphHistory export/import/suppress; Epic1GraphEditor switch restore |
 | 2026-07-14 | (pause) | — | **Track D complete** (D1–D4). Smoke Nested PSG tabs/undo or structured commit. |
+| 2026-07-14 | F0 | done | 161 scanned, 161 indexed (was 43), 0 invalid; slotTypes + by-slot/by-domain shards; design doc |
+| 2026-07-14 | (pause) | — | Next **F1** draft-graph additive slot metadata. Retrieval contract stable for review UI. |
+| 2026-07-14 | F1 | done | slots[] on AgentDraftService + agenticGraph schema; PromptDissector preserves slots |
+| 2026-07-14 | F2 | done | slotClassification + slotFragmentMatch utils + tests |
+| 2026-07-14 | F2b | done | enrich-thin-fragments: 160 enriched (Output; 48 with prefix); thin→0 |
+| 2026-07-14 | (pause) | — | Next **F3** review UI (swap candidates against stable match API). |
+| 2026-07-14 | F3 | done | FragmentSlotReview + PromptWizard wiring; applySlotSelections tests; Create Graph uses choices |
+| 2026-07-14 | (pause) | — | Next **F4** full PSG expand for fragment swaps + dirty-canvas Add/Replace. |
+| 2026-07-14 | F4 | done | expandFragmentSwaps load+splice; wizard async Create; GraphModals Add/Replace; public library mirror |
+| 2026-07-14 | (pause) | — | **Track F complete** (F0–F4). Smoke Wizard review → swap → Create; structured commits optional. |
 
 ## Notes from the audit (context)
 
