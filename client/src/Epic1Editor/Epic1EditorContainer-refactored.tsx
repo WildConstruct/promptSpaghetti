@@ -37,7 +37,6 @@ import type {
   PsgAssetRef,
   PsgSceneAssemblyPlan
 } from '@promptscape/core/services/psg';
-import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 import {
   MAIN_DOCUMENT_ID,
   useDocumentProjectStore
@@ -48,6 +47,7 @@ import {
   TEMPLATE_CATEGORY_LABELS
 } from '../templates/templateCatalog';
 import { quickStartTemplates } from '../templates/quickStartTemplates';
+import { exportActiveProjectToPSG } from './utils/psgProjectExport';
 
 const PromptDissector = lazy(async () => {
   const module = await import('../components/LaunchScreen/PromptDissector');
@@ -585,31 +585,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       ];
 
       if (includePsg) {
-        const store = useDocumentProjectStore.getState();
-        const nestedDocs = Object.values(store.documents)
-          .filter(doc => doc.id !== store.mainDocumentId)
-          .map(doc => {
-            const exported = exportGraphToPSG(
-              doc.nodes as Parameters<typeof exportGraphToPSG>[0],
-              doc.edges as Parameters<typeof exportGraphToPSG>[1],
-              { name: doc.name }
-            );
-            return {
-              id: doc.id,
-              name: doc.name,
-              nodes: exported.nodes,
-              edges: exported.edges,
-              regions: exported.regions
-            };
-          });
-        const psg = exportGraphToPSG(
-          currentNodes as Parameters<typeof exportGraphToPSG>[0],
-          currentEdges as Parameters<typeof exportGraphToPSG>[1],
-          {
-            name: 'bug-report-graph',
-            documents: nestedDocs.length > 0 ? nestedDocs : undefined
-          }
-        );
+        const psg = exportActiveProjectToPSG(currentNodes, currentEdges, {
+          name: 'bug-report-graph'
+        });
         lines.push('', 'PSG:', '```json', JSON.stringify(psg, null, 2), '```');
       }
 

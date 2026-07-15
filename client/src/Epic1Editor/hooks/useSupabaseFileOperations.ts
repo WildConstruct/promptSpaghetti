@@ -3,10 +3,7 @@ import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
 import { getSupabase } from '@promptscape/core/utils/supabaseClient';
 import { looksLikeLegacyGraphWrapper } from '@promptscape/core/utils/psgCodec';
-import {
-  exportGraphToPSG,
-  type PSGNestedDocument
-} from '@promptscape/core/fileFormats/psg';
+import { exportGraphToPSG } from '@promptscape/core/fileFormats/psg';
 import {
   ApiPsgClient,
   type PsgAssetRef,
@@ -22,6 +19,7 @@ import {
 } from '@promptscape/core/stores/documentProjectStore';
 import { loadReactFlowFromPsgContent } from '../utils/psgDocument';
 import { validateEditorGraphPayload } from '../utils/graphValidation';
+import { exportActiveProjectToPSG } from '../utils/psgProjectExport';
 
 // Resolve Supabase client lazily at call sites to avoid capturing null
 
@@ -68,34 +66,6 @@ function downloadTextFile(
   URL.revokeObjectURL(url);
 }
 
-function nestedDocumentsFromProjectStore(): PSGNestedDocument[] | undefined {
-  try {
-    const store = useDocumentProjectStore.getState();
-    const nested = Object.values(store.documents).filter(
-      doc => doc.id !== store.mainDocumentId
-    );
-    if (nested.length === 0) {
-      return undefined;
-    }
-    return nested.map(doc => {
-      const exported = exportGraphToPSG(
-        doc.nodes as Parameters<typeof exportGraphToPSG>[0],
-        doc.edges as Parameters<typeof exportGraphToPSG>[1],
-        { name: doc.name }
-      );
-      return {
-        id: doc.id,
-        name: doc.name,
-        nodes: exported.nodes,
-        edges: exported.edges,
-        regions: exported.regions
-      };
-    });
-  } catch {
-    return undefined;
-  }
-}
-
 function createPsgDocument(
   nodes: Node[],
   edges: Edge[],
@@ -105,14 +75,11 @@ function createPsgDocument(
     tags?: string[];
   } = {}
 ) {
-  return exportGraphToPSG(nodes, edges, {
+  // Nested PSG project: root = main composition; children in documents[].
+  return exportActiveProjectToPSG(nodes, edges, {
     name: options.name || 'Prompt Spaghetti Graph',
     description: options.description,
-    metadata:
-      options.tags && options.tags.length > 0
-        ? { tags: options.tags }
-        : undefined,
-    documents: nestedDocumentsFromProjectStore()
+    tags: options.tags
   });
 }
 
