@@ -1,6 +1,6 @@
 # Audit Work Loop
 
-_Last updated: 2026-07-14_
+_Last updated: 2026-07-15_
 
 Operational loop for executing the [codebase vs documentation audit](./) recommendations
 section by section. One section is **active** at a time. Complete it, log evidence, then
@@ -22,7 +22,7 @@ advance the cursor.
 | `skip section` | Mark current section `skipped` with reason; advance |
 | `pause loop` | Leave cursor where it is; do not start the next section |
 | `status` | Report cursor + table only |
-| `run track A` / `B` / `C` | Prefer that track when picking the next section |
+| `run track A` / `B` / … / `G` | Prefer that track when picking the next section |
 
 **Rules:**
 
@@ -35,10 +35,10 @@ advance the cursor.
 
 | Field | Value |
 | --- | --- |
-| **Active section** | *(Track F complete)* |
+| **Active section** | **G5** |
 | **Status** | `pending` (paused for check-in) |
-| **Track** | F — Fragment dissection / swap flow |
-| **Started** | 2026-07-14 |
+| **Track** | G — Post-merge productization & truth |
+| **Started** | 2026-07-15 |
 
 ## Section board
 
@@ -97,6 +97,19 @@ Design: `docs/fragment-dissection-swap-flow.md`. Review-first wizard: paste → 
 | **F3** | Review UI in Prompt Wizard | `done` | FragmentSlotReview: rows, swap/restore/skip, live preview; wizard Create Graph applies selections |
 | **F4** | Create Graph from approvals | `done` | Expand selected fragments via PSG load; Add vs Replace when canvas dirty; mirror library to public |
 
+### Track G — Post-merge productization & truth
+
+After #27 on `fix/stabilize-functional-baseline`. Make Nested PSG + Fragment Wizard honest in docs, tighten vocabulary inventory, and land small reliability polish from the integrated branch.
+
+| ID | Section | Status | Acceptance criteria |
+| --- | --- | --- | --- |
+| **G1** | Launch limitations refresh | `done` | `launch-known-limitations.md` covers Nested PSG, SubPSG, Template, Fragment Wizard review/swap; date stamp |
+| **G2** | Vocabulary inventory refresh | `done` | Schema inventory updated for Template + SubPSG; Epic1 executable set accurate |
+| **G3** | Wizard fragment-load reliability | `done` | User-visible status + toast: success / partial warning / total fail; progress while loading |
+| **G4** | Nested PSG save path smoke + doc | `done` | Project export roots on main + documents[]; tests; limitations note autosave gap |
+| **G5** | Teaching surface for new features | `pending` | Explore/docs pointer or one-line Tips for Nested PSG Intro + Wizard fragment review (no big tutorial rewrite) |
+| **G6** | Work-loop / HANDOFF tip refresh | `pending` | HANDOFF or work-loop points at stabilize tip + Track G; drop stale branch names where easy |
+
 ## Session log
 
 | When | Section | Result | Evidence |
@@ -149,6 +162,15 @@ Design: `docs/fragment-dissection-swap-flow.md`. Review-first wizard: paste → 
 | 2026-07-14 | (pause) | — | Next **F4** full PSG expand for fragment swaps + dirty-canvas Add/Replace. |
 | 2026-07-14 | F4 | done | expandFragmentSwaps load+splice; wizard async Create; GraphModals Add/Replace; public library mirror |
 | 2026-07-14 | (pause) | — | **Track F complete** (F0–F4). Smoke Wizard review → swap → Create; structured commits optional. |
+| 2026-07-15 | (merge) | — | #27 merged to `fix/stabilize-functional-baseline` (`caab78a81`); local smoke 26 unit tests green |
+| 2026-07-15 | (bootstrap) | — | **Track G** opened — post-merge productization & truth; cursor **G1** |
+| 2026-07-15 | G1 | done | launch-known-limitations: Nested PSG, Fragment Wizard, public library, match quality |
+| 2026-07-15 | G2 | done | schema-epic1-vocabulary-inventory: Template + SubPSG rows; executable set updated |
+| 2026-07-15 | (pause) | — | Next **G3** wizard fragment-load reliability (toasts). Say `continue work loop`. |
+| 2026-07-15 | G3 | done | PromptWizard status banner + GraphModals showToast; attempted/expanded/failedPaths; tests |
+| 2026-07-15 | (pause) | — | Next **G4** Nested PSG save path smoke + doc. Say `continue work loop`. |
+| 2026-07-15 | G4 | done | exportActiveProjectToPSG; local+Supabase use it; tests for main-root when child active; limitations autosave gap |
+| 2026-07-15 | (pause) | — | Next **G5** teaching surface pointers. Say `continue work loop`. |
 
 ## Notes from the audit (context)
 

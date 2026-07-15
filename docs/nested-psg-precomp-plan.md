@@ -18,7 +18,7 @@ Follow-ups (Track D in `docs/audit-work-loop.md`):
 | Item | Status |
 | --- | --- |
 | Create nested doc from empty SubPSG (authoring UX) | ✅ D1 — Create composition + starter Text→Output + open tab |
-| Multi-doc export via project store `documents[]` | ✅ D2 — local + Supabase + bug-report export |
+| Multi-doc export via project store `documents[]` | ✅ D2 + **G4** — `exportActiveProjectToPSG` flushes active tab, roots on main, embeds nested docs |
 | Per-document undo stacks and viewports | ✅ D3 — history + viewport restored on composition tab switch |
 
 Branch handles inside one graph remain a separate feature (not nested PSG).

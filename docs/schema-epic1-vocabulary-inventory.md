@@ -1,13 +1,13 @@
 # Schema ↔ Epic1 Vocabulary Inventory
 
-_Last updated: 2026-07-14_  
-_Work-loop section: **A5** — inventory only; no silent schema rewrites._
+_Last updated: 2026-07-15_  
+_Work-loop: **A5** (original) + **G2** refresh after Template / Nested PSG / Fragment F._
 
 ## Purpose
 
 Several “sources of truth” disagree about which node types exist and which run in
-preview. This document freezes the gap analysis so later work (B2 Template, B4
-Include, schema-lock repair) can decide deliberately.
+preview. This document freezes the gap analysis so later work (schema-lock repair,
+GraphSchema migration) can decide deliberately.
 
 **Executable truth for product preview/export today:**
 
@@ -47,8 +47,9 @@ Legend: **Y** = present · **N** = absent · **P** = parked / non-product · **A
 | SetVariable | **N** | **A** → VariableNode | Y | Y | **N** as own id | Y | Legacy split type |
 | GetVariable | **N** | **A** → VariableNode | Y | Y | **N** as own id | Y | Legacy split type |
 | Output | **Y** | Y | Y | Y | Y | Y | Aligns |
-| Include | **N** | **N** | Y | Y | Y (`isExecutable: true` **false claim**) | Y | Format/schema only; not executed |
-| Template / slot | **N** | **N** | Partial (`template` on BaseNode only) | **N** | **N** | **N** | Runtime helper `fillTemplate` exists; no node (B1/B2) |
+| Include | **N** | **N** | Y | Y | Y (`isExecutable: false`) | Y | Format-only (B4); not executed |
+| Template / slot | **Y** | Y (`template`) | Partial (`template` field on BaseNode only; no Template type) | Y | Y | **N** | B2 shipped; still missing dedicated GraphSchema type |
+| SubPSG / Nested | **Y** | Y (`subPsg`) | **N** | Y (`SubPSG` + `documents[]`) | Y | **N** | Nested precomp; child graphs in project store |
 | PostItNote | N | Y | N | (region/visual) | Y visual | N | Annotation only |
 | Bounding box / group | N | Y | N | regions | Y visual | N | Layout chrome |
 | componentInstance | N | Y | N | N | N | N | Linked components UI |
@@ -59,7 +60,7 @@ Legend: **Y** = present · **N** = absent · **P** = parked / non-product · **A
 ### Epic1 executable set (authoritative for preview)
 
 ```
-TextBlock | WeightedChoice | Concat | Variable | Output
+TextBlock | WeightedChoice | Concat | Variable | Template | SubPSG | Output
 ```
 
 ### `graphSchema` enum (authoritative only for GraphSchema.safeParse)
@@ -70,11 +71,12 @@ WeightedChoice | Concat | Output | Include | SetVariable | GetVariable
 
 **Intersection with Epic1:** `WeightedChoice`, `Concat`, `Output` only.  
 **In GraphSchema but not Epic1-executable:** `Include`, `SetVariable`, `GetVariable`.  
-**In Epic1 but not GraphSchema:** `TextBlock`, `Variable`.
+**In Epic1 but not GraphSchema:** `TextBlock`, `Variable`, **Template**, **SubPSG**.
 
 This is the core inconsistency. The schema-lock test name/comments claim the
 GraphSchema enum is the “executable node vocabulary”; that is **incorrect** relative
-to `Epic1ExecutionEngine`.
+to `Epic1ExecutionEngine`. Do not “fix” by expanding the enum without a migration plan
+(G2 documents only; schema rewrite is a separate product decision).
 
 ---
 
