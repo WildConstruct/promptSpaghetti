@@ -342,11 +342,12 @@ export function exportGraphToPSG(
             : '';
       exportedNode.value = separator;
     } else if (nodeType === 'SubPSG') {
+      const topLevelDocumentId = (node as { documentId?: unknown }).documentId;
       const documentId =
         typeof nodeData.documentId === 'string'
           ? nodeData.documentId
-          : typeof (node as { documentId?: unknown }).documentId === 'string'
-            ? String((node as { documentId: string }).documentId)
+          : typeof topLevelDocumentId === 'string'
+            ? topLevelDocumentId
             : '';
       if (documentId) {
         (exportedNode as PSGNode & { documentId?: string }).documentId =
