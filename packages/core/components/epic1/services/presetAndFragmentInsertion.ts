@@ -60,6 +60,13 @@ export function presetToAgentFragmentRecord(
       : 0;
   const requiresBranchLane = metadata.requiresBranchLane === true;
 
+  const slotTypes = Array.isArray(metadata.slotTypes)
+    ? (metadata.slotTypes.filter(
+        (value): value is AgentFragmentRecord['slotTypes'][number] =>
+          typeof value === 'string'
+      ) as AgentFragmentRecord['slotTypes'])
+    : (['subject'] as AgentFragmentRecord['slotTypes']);
+
   return {
     id: preset.id,
     name: preset.name,
@@ -74,6 +81,7 @@ export function presetToAgentFragmentRecord(
     tags: preset.tags ?? [],
     roles,
     domains,
+    slotTypes,
     nodeTypes: [],
     placementHints,
     tone: [],

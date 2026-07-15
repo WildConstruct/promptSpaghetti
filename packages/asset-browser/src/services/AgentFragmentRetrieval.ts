@@ -18,7 +18,22 @@ export type FragmentDomain =
   | 'vehicle'
   | 'building'
   | 'environment'
-  | 'crowd';
+  | 'crowd'
+  | 'object'
+  | 'abstract';
+
+/** Semantic slots used by Prompt Wizard dissection / fragment swap. */
+export type FragmentSlotType =
+  | 'subject'
+  | 'appearance'
+  | 'action'
+  | 'setting'
+  | 'composition'
+  | 'camera'
+  | 'lighting'
+  | 'style-medium'
+  | 'mood'
+  | 'constraint';
 
 export type FragmentNodeType =
   | 'weighted-choice'
@@ -53,6 +68,8 @@ export type AgentFragmentRecord = {
   tags: string[];
   roles: FragmentRole[];
   domains: FragmentDomain[];
+  /** Semantic slot facets for dissection / swap matching. */
+  slotTypes: FragmentSlotType[];
   nodeTypes: FragmentNodeType[];
   placementHints: PlacementHint[];
   tone: string[];
@@ -63,6 +80,8 @@ export type AgentFragmentRecord = {
   exitStrategy: FragmentBoundaryStrategy;
   suggestionWeight: number;
   requiresBranchLane: boolean;
+  /** True when this record came from a user-saved fragment (not curated library). */
+  userCreated?: boolean;
 };
 
 type AgentFragmentManifest = {
@@ -74,6 +93,7 @@ type AgentFragmentManifest = {
 export type FragmentQuery = {
   roles?: FragmentRole[];
   domains?: FragmentDomain[];
+  slotTypes?: FragmentSlotType[];
   nodeTypes?: FragmentNodeType[];
   placementHints?: PlacementHint[];
   tone?: string[];
@@ -92,44 +112,52 @@ export type SelectionContext = {
   insideRegion?: boolean;
   domainHints?: FragmentDomain[];
   toneHints?: string[];
+  slotTypeHints?: FragmentSlotType[];
 };
 
 type CategoryDefaults = {
   roles: FragmentRole[];
   domains: FragmentDomain[];
   placementHints: PlacementHint[];
+  slotTypes: FragmentSlotType[];
 };
 
 const CATEGORY_DEFAULTS: Record<string, CategoryDefaults> = {
   'body-silhouette': {
     roles: ['modifier', 'archetype-support'],
     domains: ['character', 'creature'],
-    placementHints: ['downstream-of-choice']
+    placementHints: ['downstream-of-choice'],
+    slotTypes: ['appearance', 'subject']
   },
   'emotion-mood': {
     roles: ['modifier', 'branch-extension', 'output-finisher'],
     domains: ['character', 'creature', 'crowd'],
-    placementHints: ['branch-lane', 'before-output', 'downstream-of-choice']
+    placementHints: ['branch-lane', 'before-output', 'downstream-of-choice'],
+    slotTypes: ['mood', 'appearance']
   },
   'action-dynamics': {
     roles: ['scenario', 'branch-extension', 'modifier'],
     domains: ['character', 'creature', 'vehicle'],
-    placementHints: ['branch-lane', 'downstream-of-choice']
+    placementHints: ['branch-lane', 'downstream-of-choice'],
+    slotTypes: ['action']
   },
   'setting-environment': {
     roles: ['scenario', 'output-finisher', 'branch-extension'],
     domains: ['environment', 'building', 'vehicle'],
-    placementHints: ['branch-lane', 'before-output']
+    placementHints: ['branch-lane', 'before-output'],
+    slotTypes: ['setting', 'lighting', 'mood']
   },
   'facial-features': {
     roles: ['modifier', 'output-finisher'],
     domains: ['character', 'creature'],
-    placementHints: ['downstream-of-choice', 'before-output']
+    placementHints: ['downstream-of-choice', 'before-output'],
+    slotTypes: ['appearance']
   },
   hair: {
     roles: ['modifier', 'archetype-support'],
     domains: ['character', 'creature'],
-    placementHints: ['downstream-of-choice']
+    placementHints: ['downstream-of-choice'],
+    slotTypes: ['appearance']
   }
 };
 
@@ -224,10 +252,19 @@ function inferBoundaryStrategy(
 }
 
 function normalizeMetadata(
-  record: Omit<AgentFragmentRecord, 'priority'> & Partial<Pick<
-    AgentFragmentRecord,
-    'preferredInsertion' | 'entryStrategy' | 'exitStrategy' | 'suggestionWeight' | 'requiresBranchLane'
-  >>
+  record: Omit<AgentFragmentRecord, 'priority'> &
+    Partial<
+      Pick<
+        AgentFragmentRecord,
+        | 'preferredInsertion'
+        | 'entryStrategy'
+        | 'exitStrategy'
+        | 'suggestionWeight'
+        | 'requiresBranchLane'
+        | 'slotTypes'
+        | 'userCreated'
+      >
+    >
 ): Omit<AgentFragmentRecord, 'priority'> {
   const preferredInsertion =
     record.preferredInsertion ?? inferPreferredInsertion(record);
@@ -247,14 +284,20 @@ function normalizeMetadata(
     record.requiresBranchLane ??
     (record.placementHints.includes('branch-lane') ||
       record.roles.includes('branch-extension'));
+  const slotTypes =
+    Array.isArray(record.slotTypes) && record.slotTypes.length > 0
+      ? record.slotTypes
+      : (['subject'] as FragmentSlotType[]);
 
   return {
     ...record,
+    slotTypes,
     preferredInsertion,
     entryStrategy,
     exitStrategy,
     suggestionWeight: record.suggestionWeight ?? 0,
-    requiresBranchLane
+    requiresBranchLane,
+    userCreated: record.userCreated === true ? true : undefined
   };
 }
 
@@ -271,6 +314,7 @@ function toAgentRecord(
       tags: fragment.tags ?? [],
       roles: ['archetype'],
       domains: ['character'],
+      slotTypes: ['subject', 'appearance'],
       nodeTypes: ['weighted-choice', 'region', 'output'],
       placementHints: ['inside-region'],
       tone: inferTone(fragment.tags ?? [], fragment.description),
@@ -286,9 +330,10 @@ function toAgentRecord(
   }
 
   const defaults = CATEGORY_DEFAULTS[fragment.category] ?? {
-    roles: ['modifier'],
-    domains: ['character'],
-    placementHints: ['downstream-of-choice']
+    roles: ['modifier'] as FragmentRole[],
+    domains: ['character'] as FragmentDomain[],
+    placementHints: ['downstream-of-choice'] as PlacementHint[],
+    slotTypes: ['subject'] as FragmentSlotType[]
   };
   const tags = fragment.tags ?? [];
   const record: AgentFragmentRecord = {
@@ -300,6 +345,9 @@ function toAgentRecord(
     tags,
     roles: defaults.roles,
     domains: inferDomains(tags, fragment.category),
+    slotTypes: (CATEGORY_DEFAULTS[fragment.category]?.slotTypes ?? [
+      'subject'
+    ]) as FragmentSlotType[],
     nodeTypes: inferNodeTypes(fragment.nodeCount),
     placementHints: defaults.placementHints,
     tone: inferTone(tags, fragment.description),
@@ -339,6 +387,13 @@ function scoreRecord(
   }
   if (context.domainHints?.some(domain => record.domains.includes(domain))) {
     score += 6;
+  }
+  if (
+    context.slotTypeHints?.some(slot =>
+      (record.slotTypes ?? []).includes(slot)
+    )
+  ) {
+    score += 10;
   }
   if (context.toneHints?.some(tone => record.tone.includes(tone))) {
     score += 3;
@@ -421,6 +476,7 @@ export class AgentFragmentRetrievalService {
       return (
         matchesList(record.roles, query.roles) &&
         matchesList(record.domains, query.domains) &&
+        matchesList(record.slotTypes ?? [], query.slotTypes) &&
         matchesList(record.nodeTypes, query.nodeTypes) &&
         matchesList(record.placementHints, query.placementHints) &&
         matchesList(record.tone, query.tone) &&

@@ -30,6 +30,7 @@ export type {
   SelectionContext,
   FragmentRole,
   FragmentDomain,
+  FragmentSlotType,
   FragmentNodeType,
   PlacementHint
 } from './services/AgentFragmentRetrieval';

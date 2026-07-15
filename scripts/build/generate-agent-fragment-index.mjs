@@ -165,6 +165,39 @@ async function main() {
     );
   }
 
+  // Facet shards for dissection / swap matching (slotTypes, domains)
+  const slotGroups = groupBy(fragments, 'slotTypes');
+  for (const [slot, records] of slotGroups.entries()) {
+    await writeJson(
+      path.join(outputRoot, 'shards', 'by-slot', `${slot}.json`),
+      {
+        version: manifest.version,
+        type: 'agent-fragment-shard',
+        groupBy: 'slotTypes',
+        key: slot,
+        generatedAt,
+        totalFragments: records.length,
+        fragments: stableSort(records)
+      }
+    );
+  }
+
+  const domainGroups = groupBy(fragments, 'domains');
+  for (const [domain, records] of domainGroups.entries()) {
+    await writeJson(
+      path.join(outputRoot, 'shards', 'by-domain', `${domain}.json`),
+      {
+        version: manifest.version,
+        type: 'agent-fragment-shard',
+        groupBy: 'domains',
+        key: domain,
+        generatedAt,
+        totalFragments: records.length,
+        fragments: stableSort(records)
+      }
+    );
+  }
+
   console.log(
     `[agent-index] Wrote ${fragments.length} records to ${path.relative(
       repoRoot,
