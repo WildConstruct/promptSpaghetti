@@ -32,7 +32,7 @@
     "ws": "^8.18.3",
     "@supabase/supabase-js": "^2.45.4",
     "@sentry/node": "^7.120.0",
-    "zod": "^3.25.76"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
