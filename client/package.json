@@ -15,7 +15,7 @@
   "dependencies": {
     "@prompt/asset-browser": "workspace:^",
     "@promptscape/core": "workspace:^",
-    "@sentry/react": "^7.120.0",
+    "@sentry/react": "^10.50.0",
     "@supabase/supabase-js": "^2.54.0",
     "framer-motion": "^12.23.12",
     "react": "^18.3.1",
